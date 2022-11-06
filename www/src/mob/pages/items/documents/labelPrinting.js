@@ -42,6 +42,7 @@ export default class labelPrinting extends React.Component
             barcode: "",
             code:""
         }
+        this.itemData = []
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
@@ -216,8 +217,9 @@ export default class labelPrinting extends React.Component
             this.setState({tbDocument:"visible"})
         }
     }    
-    async addItem()
+    async addItem(pData)
     {
+        console.log(pData)
         if(this.txtBarcode.value == "")
         {
             let tmpConfObj = 
@@ -259,6 +261,15 @@ export default class labelPrinting extends React.Component
         tmpDocItems.CODE = this.barcode.code
         tmpDocItems.BARCODE = this.barcode.barcode
         tmpDocItems.PRICE = this.barcode.price
+        tmpDocItems.MULTICODE = pData.MULTICODE
+        tmpDocItems.ITEM_GRP = pData.ITEM_GRP
+        tmpDocItems.ITEM_GRP_NAME = pData.ITEM_GRP_NAME
+        tmpDocItems.CUSTOMER_NAME = pData.CUSTOMER_NAME
+        tmpDocItems.UNDER_UNIT_VALUE = pData.UNDER_UNIT_VALUE
+        tmpDocItems.UNDER_UNIT_PRICE = pData.UNDER_UNIT_PRICE
+        tmpDocItems.UNDER_UNIT_SYMBOL = pData.UNDER_UNIT_SYMBOL
+        tmpDocItems.ORGINS = pData.ORGINS
+
         this.lblObj.addEmpty(tmpDocItems)
         this.barcodeReset()
         let Data = {data:this.lblObj.dt().toArray()}
@@ -298,7 +309,28 @@ export default class labelPrinting extends React.Component
                     this.txtBarcode.value = result.text;
                     let tmpQuery = 
                     {
-                        query : "SELECT ITEM_CODE AS CODE,ITEM_NAME AS NAME,ITEM_GUID AS GUID,BARCODE,[dbo].[FN_PRICE_SALE](ITEM_GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000') AS PRICE FROM ITEM_BARCODE_VW_01  WHERE BARCODE = @BARCODE OR ITEM_CODE = @BARCODE ",
+                        query : "SELECT  *, " +
+                        "CASE WHEN UNDER_UNIT_VALUE =0 " +
+                        "THEN 0 " +
+                        "ELSE " +
+                        "ROUND((PRICE / UNDER_UNIT_VALUE),2) " +
+                        "END AS UNDER_UNIT_PRICE " +
+                        "FROM ( SELECT ITEMS.GUID, " +
+                        "ITEM_BARCODE.CDATE, " +
+                        "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS.GUID ORDER BY LDATE DESC),ITEMS.CODE) AS MULTICODE,   " +
+                        "ISNULL((SELECT NAME FROM COUNTRY WHERE COUNTRY.CODE = ITEMS.ORGINS),'') AS ORGINS, " +
+                        "ITEMS.CODE, " +
+                        "ITEMS.NAME, " +
+                        "ITEM_BARCODE.BARCODE, " +
+                        "MAIN_GRP AS ITEM_GRP, " +
+                        "MAIN_GRP_NAME AS ITEM_GRP_NAME, " +
+                        "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS.GUID),'') AS CUSTOMER_NAME, " +
+                        "(SELECT [dbo].[FN_PRICE_SALE](ITEMS.GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000')) AS PRICE  ,  " +
+                        "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 1 AND ITEM_UNIT.ITEM = ITEMS.GUID),0) AS UNDER_UNIT_VALUE, " +
+                        "ISNULL((SELECT TOP 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE TYPE = 1 AND ITEM_UNIT_VW_01.ITEM_GUID = ITEMS.GUID),0) AS UNDER_UNIT_SYMBOL " +
+                        "FROM ITEMS_VW_01 AS ITEMS LEFT OUTER  JOIN ITEM_BARCODE ON ITEMS.GUID = ITEM_BARCODE.ITEM  " +
+                        "WHERE ((ITEMS.CODE = @BARCODE) OR (ITEM_BARCODE.BARCODE = @BARCODE))  " +
+                        " ) AS TMP ORDER BY CDATE DESC ",
                         param : ['BARCODE:string|50'],
                         value : [result.text]
                     }
@@ -310,9 +342,10 @@ export default class labelPrinting extends React.Component
                         this.barcode.code = tmpData.result.recordset[0].CODE 
                         this.barcode.price = tmpData.result.recordset[0].PRICE 
                         this.numPrice.value = parseFloat(tmpData.result.recordset[0].PRICE)
+                        this.itemData=tmpData.result.recordset[0]
                         if(this.chkAutoAdd.value == true)
                         {
-                            this.addItem()
+                            this.addItem(this.itemData)
                         }
                         else
                         {
@@ -584,6 +617,7 @@ export default class labelPrinting extends React.Component
                                                             price:data[0].PRICE
                                                         }
                                                         this.numPrice.value = data[0].PRICE
+                                                        this.itemData = data[0]
                                                         this.setState({tbBarcode:"visible"})
                                                     }
                                                     else if(data.length > 1)
@@ -597,7 +631,9 @@ export default class labelPrinting extends React.Component
                                                                 barcode:data[i].BARCODE,
                                                                 price:data[i].PRICE
                                                             }
-                                                            await this.addItem()
+                                                            this.itemData = data[i]
+
+                                                            await this.addItem(this.itemData)
                                                         }
                                                         let tmpConfObj = 
                                                         {
@@ -628,7 +664,28 @@ export default class labelPrinting extends React.Component
                                         }
                                         let tmpQuery = 
                                         {
-                                            query : "SELECT ITEM_CODE AS CODE,ITEM_NAME AS NAME,ITEM_GUID AS GUID,BARCODE,[dbo].[FN_PRICE_SALE](ITEM_GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000') AS PRICE FROM ITEM_BARCODE_VW_01  WHERE BARCODE = @BARCODE OR ITEM_CODE = @BARCODE ",
+                                            query :"SELECT  *, " +
+                                            "CASE WHEN UNDER_UNIT_VALUE =0 " +
+                                            "THEN 0 " +
+                                            "ELSE " +
+                                            "ROUND((PRICE / UNDER_UNIT_VALUE),2) " +
+                                            "END AS UNDER_UNIT_PRICE " +
+                                            "FROM ( SELECT ITEMS.GUID, " +
+                                            "ITEM_BARCODE.CDATE, " +
+                                            "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS.GUID ORDER BY LDATE DESC),ITEMS.CODE) AS MULTICODE,   " +
+                                            "ISNULL((SELECT NAME FROM COUNTRY WHERE COUNTRY.CODE = ITEMS.ORGINS),'') AS ORGINS, " +
+                                            "ITEMS.CODE, " +
+                                            "ITEMS.NAME, " +
+                                            "ITEM_BARCODE.BARCODE, " +
+                                            "MAIN_GRP AS ITEM_GRP, " +
+                                            "MAIN_GRP_NAME AS ITEM_GRP_NAME, " +
+                                            "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS.GUID),'') AS CUSTOMER_NAME, " +
+                                            "(SELECT [dbo].[FN_PRICE_SALE](ITEMS.GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000')) AS PRICE  ,  " +
+                                            "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 1 AND ITEM_UNIT.ITEM = ITEMS.GUID),0) AS UNDER_UNIT_VALUE, " +
+                                            "ISNULL((SELECT TOP 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE TYPE = 1 AND ITEM_UNIT_VW_01.ITEM_GUID = ITEMS.GUID),0) AS UNDER_UNIT_SYMBOL " +
+                                            "FROM ITEMS_VW_01 AS ITEMS LEFT OUTER  JOIN ITEM_BARCODE ON ITEMS.GUID = ITEM_BARCODE.ITEM  " +
+                                            "WHERE ((ITEMS.CODE = @BARCODE) OR (ITEM_BARCODE.BARCODE = @BARCODE))  " +
+                                            " ) AS TMP ORDER BY CDATE DESC ",
                                             param : ['BARCODE:string|50'],
                                             value : [e.component._changedValue]
                                         }
@@ -640,9 +697,10 @@ export default class labelPrinting extends React.Component
                                             this.barcode.code = tmpData.result.recordset[0].CODE 
                                             this.barcode.price = tmpData.result.recordset[0].PRICE 
                                             this.numPrice.value = parseFloat(tmpData.result.recordset[0].PRICE)
+                                            this.itemData = tmpData.result.recordset[0]
                                             if(this.chkAutoAdd.value == true)
                                             {
-                                                this.addItem()
+                                                this.addItem(this.itemData)
                                             }
                                             else
                                             {
@@ -713,7 +771,7 @@ export default class labelPrinting extends React.Component
                             access={this.access.filter({ELEMENT:'numPrice',USERS:this.user.CODE})}
                             onEnterKey={(async(e)=>
                                 {
-                                    this.addItem()
+                                    this.addItem(this.itemData)
                                 }).bind(this)}
                             >
                             </NdNumberBox>
@@ -721,7 +779,7 @@ export default class labelPrinting extends React.Component
                         <Item>
                             <div className="row">
                                 <div className="col-12">
-                                    <NdButton text={this.t("btnItemAdd")} type="default" width="100%" onClick={()=>this.addItem()}></NdButton>
+                                    <NdButton text={this.t("btnItemAdd")} type="default" width="100%" onClick={()=>this.addItem(this.itemData)}></NdButton>
                                 </div>
                             </div>
                         </Item>
@@ -791,21 +849,25 @@ export default class labelPrinting extends React.Component
                             select:
                             {
                                 query : "SELECT  *,  " +
-                                        "CASE WHEN UNDER_UNIT_VALUE =0  " +
-                                        "THEN 0 " +
-                                        "ELSE " +
-                                        "ROUND((PRICE * UNDER_UNIT_VALUE),2) " +
-                                        "END AS UNDER_UNIT_PRICE " +
-                                        "FROM  (  SELECT GUID,   " +
-                                        "CODE,   " +
-                                        "NAME,   " +
-                                        "ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE,   " +
-                                        "MAIN_GRP AS ITEM_GRP,   " +
-                                        "MAIN_GRP_NAME AS ITEM_GRP_NAME,   " +
-                                        "(SELECT [dbo].[FN_PRICE_SALE](GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000')) AS PRICE  , " +
-                                        "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 1 AND ITEM_UNIT.ITEM = ITEMS_VW_01.GUID),0) AS UNDER_UNIT_VALUE " +
-                                        "FROM ITEMS_VW_01 WHERE ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID),'') <> '') AS TMP " +
-                                        "WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL) " ,
+                                "CASE WHEN UNDER_UNIT_VALUE =0  " +
+                                "THEN 0 " +
+                                "ELSE " +
+                                "ROUND((PRICE / UNDER_UNIT_VALUE),2) " +
+                                "END AS UNDER_UNIT_PRICE " +
+                                "FROM  (  SELECT GUID,   " +
+                                "CODE,   " +
+                                "NAME,   " +
+                                "ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE,   " +
+                                "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),ITEMS_VW_01.CODE) AS MULTICODE,   " +
+                                "MAIN_GRP AS ITEM_GRP,   " +
+                                "ISNULL((SELECT NAME FROM COUNTRY WHERE COUNTRY.CODE = ITEMS_VW_01.ORGINS),'') AS ORGINS, " +
+                                "MAIN_GRP_NAME AS ITEM_GRP_NAME, " +
+                                "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID),'') AS CUSTOMER_NAME, " +
+                                "(SELECT [dbo].[FN_PRICE_SALE](GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000')) AS PRICE  , " +
+                                "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 1 AND ITEM_UNIT.ITEM = ITEMS_VW_01.GUID),0) AS UNDER_UNIT_VALUE, " +
+                                "ISNULL((SELECT TOP 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE TYPE = 1 AND ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID),0) AS UNDER_UNIT_SYMBOL " +
+                                "FROM ITEMS_VW_01 WHERE  STATUS = 1) AS TMP " +
+                                "WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)" ,
                                 param : ['VAL:string|50']
                             },
                             sql:this.core.sql

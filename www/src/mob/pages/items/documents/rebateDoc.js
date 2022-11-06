@@ -473,7 +473,7 @@ export default class rebateDoc extends React.Component
                         height={'90%'}
                         title={this.t("pg_Docs.title")} 
                         selection={{mode:"single"}}
-                        data={{source:{select:{query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME FROM DOC_VW_01 WHERE TYPE = 2 AND DOC_TYPE = 2 AND REBATE = 1"},sql:this.core.sql}}}
+                        data={{source:{select:{query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,DOC_DATE_CONVERT FROM DOC_VW_01 WHERE TYPE = 2 AND DOC_TYPE = 2 AND REBATE = 1 ORDER BY DOC_DATE DESC"},sql:this.core.sql}}}
                         button=
                         {
                             [
@@ -489,8 +489,9 @@ export default class rebateDoc extends React.Component
                             
                         }
                         >
-                            <Column dataField="REF" caption={this.t("pg_Docs.clmRef")} width={70} defaultSortOrder="asc"/>
-                            <Column dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={50} defaultSortOrder="asc" />
+                            <Column dataField="REF" caption={this.t("pg_Docs.clmRef")} width={70} />
+                            <Column dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={50}  />
+                            <Column dataField="DOC_DATE_CONVERT" caption={this.t("pg_Docs.clmDocDate")} width={300}  />
                         </NdPopGrid>
                     </Item>
                     {/* dtDocDate */}
