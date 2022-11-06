@@ -63,7 +63,7 @@ export default class posSalesDetailReport extends React.PureComponent
                                     "(SELECT SUM(TOTAL) FROM POS_VW_01 WHERE TYPE = 1 AND DOC_DATE >= @START AND DOC_DATE <= @END) AS RETURN_TOTAL, " +
                                     "(SELECT COUNT(DISCOUNT) FROM POS_VW_01 WHERE TYPE = 0 AND DISCOUNT > 0 AND DOC_DATE >= @START AND DOC_DATE <= @END) AS DISCOUNT_COUNT, " +
                                     "(SELECT SUM(DISCOUNT) FROM POS_VW_01 WHERE TYPE = 0 AND DOC_DATE >= @START AND DOC_DATE <= @END) AS DISCOUNT_TOTAL " +
-                                    "FROM POS_SALE_VW_01 WHERE DOC_DATE >= @START AND DOC_DATE <= @END  GROUP BY ITEM_GRP_CODE,ITEM_GRP_NAME ORDER BY SUM(TOTAL) ASC ",
+                                    "FROM POS_SALE_VW_01 WHERE DOC_DATE >= @START AND DOC_DATE <= @END AND DEVICE <> '9999' GROUP BY ITEM_GRP_CODE,ITEM_GRP_NAME ORDER BY SUM(TOTAL) ASC ",
                                     param : ['START:date','END:date'],
                                     value : [this.dtDate.startDate,this.dtDate.endDate]
                                 }

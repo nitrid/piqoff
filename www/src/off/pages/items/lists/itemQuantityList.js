@@ -111,7 +111,7 @@ export default class QuantityList extends React.PureComponent
     }
     async _btnGetirClick()
     {
-        if(this.chkZeroQuantity == true)
+        if(this.chkZeroQuantity.value == true)
         {
             let tmpSource =
             {
@@ -121,7 +121,7 @@ export default class QuantityList extends React.PureComponent
                     select : 
                     {
                         query : "SELECT NAME,CODE,ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM_BARCODE.ITEM = ITEMS.GUID ORDER BY LDATE DESC),'') AS BARCODE,[dbo].[FN_DEPOT_QUANTITY](GUID,@DEPOT,GETDATE()) AS QUANTITY FROM ITEMS " +
-                                "WHERE  " +
+                                "WHERE  DELETED = 0 AND " +
                                 "((NAME like @NAME + '%') OR (@NAME = ''))",
                         param : ['NAME:string|250','DEPOT:string|50'],
                         value : [this.txtUrunAdi.value,this.cmbDepot.value]
@@ -132,6 +132,7 @@ export default class QuantityList extends React.PureComponent
             App.instance.setState({isExecute:true})
             await this.grdListe.dataRefresh(tmpSource)
             App.instance.setState({isExecute:false})
+            console.log(this.grdListe)
         }
         else
         {
@@ -143,7 +144,7 @@ export default class QuantityList extends React.PureComponent
                     select : 
                     {
                         query : "SELECT NAME,CODE,ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM_BARCODE.ITEM = ITEMS.GUID ORDER BY LDATE DESC),'') AS BARCODE,[dbo].[FN_DEPOT_QUANTITY](GUID,@DEPOT,GETDATE()) AS QUANTITY FROM ITEMS " +
-                                "WHERE [dbo].[FN_DEPOT_QUANTITY](GUID,@DEPOT,GETDATE()) <> 0 AND " +
+                                "WHERE [dbo].[FN_DEPOT_QUANTITY](GUID,@DEPOT,GETDATE()) <> 0 AND DELETED = 0 AND " +
                                 "((NAME like @NAME + '%') OR (@NAME = ''))",
                         param : ['NAME:string|250','DEPOT:string|50'],
                         value : [this.txtUrunAdi.value,this.cmbDepot.value]

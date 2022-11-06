@@ -8617,6 +8617,7 @@ export const langTr =
         txtCheck : "Çek",
         txtRestorant : "Tike Restorant",
         txtReal : "Doğru",
+        payTransfer : "Tutarları Aktar",
         popFinish : 
         {
             title :"Sonuç"

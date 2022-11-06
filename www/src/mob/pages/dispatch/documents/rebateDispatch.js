@@ -560,7 +560,7 @@ export default class rebateDispatch extends React.PureComponent
                                 height={'90%'}
                                 selection={{mode:"single"}}
                                 title={this.t("pg_Docs.title")} 
-                                data={{source:{select:{query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME FROM DOC_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 40 AND REBATE = 1"},sql:this.core.sql}}}
+                                data={{source:{select:{query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME FROM DOC_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 40 AND REBATE = 1 ORDER BY DOC_DATE DESC"},sql:this.core.sql}}}
                                 button=
                                 {
                                     [
@@ -575,10 +575,11 @@ export default class rebateDispatch extends React.PureComponent
                                     ]
                                 }
                                 >
-                                <Column dataField="REF" caption={this.t("pg_Docs.clmRef")} width={150} defaultSortOrder="asc"/>
-                                <Column dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={100} defaultSortOrder="asc" />
-                                <Column dataField="INPUT_NAME" caption={this.t("pg_Docs.clmInputName")} width={300} defaultSortOrder="asc" />
-                                <Column dataField="INPUT_CODE" caption={this.t("pg_Docs.clmInputCode")} width={300} defaultSortOrder="asc" />
+                                <Column dataField="REF" caption={this.t("pg_Docs.clmRef")} width={150}/>
+                                <Column dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={100} />
+                                <Column dataField="DOC_DATE_CONVERT" caption={this.t("pg_Docs.clmDocDate")} width={150}  />
+                                <Column dataField="INPUT_NAME" caption={this.t("pg_Docs.clmInputName")} width={300} />
+                                <Column dataField="INPUT_CODE" caption={this.t("pg_Docs.clmInputCode")} width={300} />
                                 </NdPopGrid>
                             </Item>
                             {/* cmbDepot */}

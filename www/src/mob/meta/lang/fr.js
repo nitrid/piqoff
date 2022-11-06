@@ -1910,6 +1910,7 @@ export const langFr =
             clmRefNo : "Séquence",
             clmInputName : "Nom du fournisseur",
             clmInputCode  : "Code du fournsseur",
+            clmDocDate : "Date",
         },
         pg_txtCustomerCode : 
         {

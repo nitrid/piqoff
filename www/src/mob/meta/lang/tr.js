@@ -1911,6 +1911,7 @@ export const langTr =
             clmRefNo : "SIRA",
             clmInputName : "CARİ ADI",
             clmInputCode  : "CARİ KODU",
+            clmDocDate : "TARIH",
         },
         pg_txtCustomerCode : 
         {

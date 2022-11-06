@@ -8617,6 +8617,7 @@ export const langFr =
         txtCheck : "Chèque",
         txtRestorant : "T. Restaurant",
         txtReal : "Ok",
+        payTransfer : "Tutarları Aktar", // BAK
         popFinish : 
         {
             title :"Resultat"
