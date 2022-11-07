@@ -631,60 +631,60 @@ export const langFr =
     },
     msgSaveFailAlert : //BAK
     {
-        title : "Uyarı",
-        msg : "Kayıt işleminiz başarısız !",
-        btn01 : "Tamam",
-        btn02 : "Tekrar Gönder",
+        title : "Attention",
+        msg : "Votre enregistrement a échoué!",
+        btn01 : "OK",
+        btn02 : "Ressayez l'enregistrement",
     },
     msgCheckRecord : //BAK
     {
-        title : "Uyarı",
-        msg1 : "Henüz tamamlanmamış kayıtlar var. Lütfen bekleyiniz !",
-        msg2 : "Tamamlanmayan kayıt : ",
-        btn01 : "Tamam",
+        title : "Attention",
+        msg1 : "Tous les articles saisis ne sont pas enregistrés. SVP Patientez !",
+        msg2 : "Article non enregistré : ",
+        btn01 : "OK",
     },
     popCustomerAdd : //BAK
     {
-        title : "Müşteri Ekle",
-        txtPopCustomerCode : "Kodu",
-        txtPopCustomerFirmName : "Unvan",
-        txtPopCustomerName : "Adı",
-        txtPopCustomerSurname : "Soyadı",
-        txtPopCustomerAddress : "Adres",
-        txtPopCustomerCountry : "Ülke",
-        txtPopCustomerCity : "Şehir",
-        txtPopCustomerZipCode : "Posta Kodu",
+        title : "Ajout Client",
+        txtPopCustomerCode : "Code",
+        txtPopCustomerFirmName : "Société",
+        txtPopCustomerName : "Prénom",
+        txtPopCustomerSurname : "Nom",
+        txtPopCustomerAddress : "Adresse",
+        txtPopCustomerCountry : "Pays",
+        txtPopCustomerCity : "Ville",
+        txtPopCustomerZipCode : "Code Postal",
         txtPopCustomerEmail : "Email",
-        txtPopCustomerTel : "Telefon",
+        txtPopCustomerTel : "Téléphone",
     },
     popCustomerAddList : //BAK
     {
-        title : "Müşteri Seçim",
+        title : "Recherche Client",
     },
     popCustomerAddCountry : //BAK
     {
-        title : "Ülke Seçim",
+        title : "Choissir Pays",
     },
     popCustomerAddCity : //BAK
     {
-        title : "Şehir Seçim",
+        title : "Choissir Ville",
     },
     popCustomerAddZipCode : //BAK
     {
-        title : "Posta Kodu Seçim",
+        title : "Choissir Code Postal",
     },
     msgPrintFacAlert: //BAK
     {
-        title : "Uyarı",
-        msg : "Fiş mi Fatura mı yazdırmak istersiniz ?",
-        btn01 : "Fatura",
-        btn02 : "Fiş"
+        title : "Attention",
+        msg : "Souhaitez vous imprimer un Ticket ou une Facture ?",
+        btn01 : "Facture",
+        btn02 : "Ticket"
     },
     msgPrintCustomerAlert: //BAK
     {
-        title : "Uyarı",
-        msg : "Fatura olarak yazdırmak için müşteri saeçmelisiniz !",
-        btn01 : "Müşteri Seç",
-        btn02 : "İptal"
+        title : "Attention",
+        msg : "Vous devez choisir ou saisir un client pour l'impression de la Facture !",
+        btn01 : "Choisir Cleint",
+        btn02 : "Abandonner"
     },
 }
