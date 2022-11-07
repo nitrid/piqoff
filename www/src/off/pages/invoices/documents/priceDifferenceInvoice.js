@@ -127,15 +127,20 @@ export default class priceDifferenceInvoice extends React.PureComponent
         this.docObj.docCustomer.addEmpty(tmpDocCustomer)
 
         this.txtRef.readOnly = false
-        this.txtRefno.readOnly = false
         this.docLocked = false
         
         this.frmDocItems.option('disabled',true)
         await this.grdDiffInv.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
         await this.grdInvoicePayment.dataRefresh({source:this.paymentObj.docCustomer.dt()});
-        if(this.sysParam.filter({ID:'randomRefNo',USERS:this.user.CODE}).getValue().value == true)
+        let tmpQuery = 
         {
-            this.txtRefno.value = Math.floor(Date.now() / 1000)
+            query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 21 ",
+        }
+        let tmpData = await this.core.sql.execute(tmpQuery) 
+        if(tmpData.result.recordset.length > 0)
+        {
+            this.txtRefno.value = tmpData.result.recordset[0].REF_NO
+            this.docObj.docCustomer.dt()[0].REF_NO = tmpData.result.recordset[0].REF_NO
         }
     }
     async getDoc(pGuid,pRef,pRefno)
@@ -1094,21 +1099,7 @@ export default class priceDifferenceInvoice extends React.PureComponent
                                             maxLength={32}
                                             onValueChanged={(async()=>
                                             {
-                                                if(this.sysParam.filter({ID:'randomRefNo',USERS:this.user.CODE}).getValue().value == false)
-                                                {
-                                                    let tmpQuery = 
-                                                    {
-                                                        query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 21 AND REF = @REF ",
-                                                        param : ['REF:string|25'],
-                                                        value : [this.txtRef.value]
-                                                    }
-                                                    let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                    if(tmpData.result.recordset.length > 0)
-                                                    {
-                                                        this.txtRefno.value = tmpData.result.recordset[0].REF_NO
-                                                        this.docObj.docCustomer.dt()[0].REF_NO = tmpData.result.recordset[0].REF_NO
-                                                    }
-                                                }
+                                                this.docObj.docCustomer.dt()[0].REF = this.txtRef.value
                                             }).bind(this)}
                                             param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
@@ -1132,14 +1123,6 @@ export default class priceDifferenceInvoice extends React.PureComponent
                                                            this.getDocs(0)
                                                         }
                                                     },
-                                                    {
-                                                        id:'02',
-                                                        icon:'arrowdown',
-                                                        onClick:()=>
-                                                        {
-                                                            this.txtRefno.value = Math.floor(Date.now() / 1000)
-                                                        }
-                                                    }
                                                 ]
                                             }
                                             onChange={(async()=>
@@ -1418,8 +1401,42 @@ export default class priceDifferenceInvoice extends React.PureComponent
                                 </Item> 
                                 {/* Boş */}
                                 <EmptyItem />
-                                 {/* BARKOD EKLEME */}
-                                 <Item>
+                                {/* dtDocDate */}
+                                <Item>
+                                    <Label text={this.t("dtDocDate")} alignment="right" />
+                                    <NdDatePicker simple={true}  parent={this} id={"dtDocDate"}
+                                    dt={{data:this.docObj.dt('DOC'),field:"DOC_DATE"}}
+                                    onValueChanged={(async()=>
+                                    {
+                                        this.docObj.docCustomer.dt()[0].DOC_DATE = moment(this.dtDocDate.value).format("DD/MM/YYYY") 
+                                        this.checkRow()
+                                    }).bind(this)}
+                                    >
+                                        <Validator validationGroup={"frmPriceDiffInv"  + this.tabIndex}>
+                                            <RequiredRule message={this.t("validDocDate")} />
+                                        </Validator> 
+                                    </NdDatePicker>
+                                </Item>
+                                {/* Vade Tarih */}
+                                <Item>
+                                    <Label text={this.t("dtExpDate")} alignment="right" />
+                                    <NdDatePicker simple={true}  parent={this} id={"dtExpDate"}
+                                    dt={{data:this.docObj.docCustomer.dt('DOC_CUSTOMER'),field:"EXPIRY_DATE"}}
+                                    onValueChanged={(async()=>
+                                    {
+                                        
+                                    }).bind(this)}
+                                    >
+                                        <Validator validationGroup={"frmPurcInv"  + this.tabIndex}>
+                                            <RequiredRule message={this.t("validDocDate")} />
+                                        </Validator> 
+                                    </NdDatePicker>
+                                </Item>
+                                  {/* Boş */}
+                                  <EmptyItem />
+
+                                {/* BARKOD EKLEME */}
+                                <Item>
                                     <Label text={this.t("txtBarcode")} alignment="right" />
                                     <NdTextBox id="txtBarcode" parent={this} simple={true}  placeholder={this.t("txtBarcodePlace")}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
@@ -1585,39 +1602,6 @@ export default class priceDifferenceInvoice extends React.PureComponent
                                     >
                                     </NdTextBox>
                                 </Item>
-                                {/* Vade Tarih */}
-                                <Item>
-                                    <Label text={this.t("dtExpDate")} alignment="right" />
-                                    <NdDatePicker simple={true}  parent={this} id={"dtExpDate"}
-                                    dt={{data:this.docObj.docCustomer.dt('DOC_CUSTOMER'),field:"EXPIRY_DATE"}}
-                                    onValueChanged={(async()=>
-                                    {
-                                        
-                                    }).bind(this)}
-                                    >
-                                        <Validator validationGroup={"frmPurcInv"  + this.tabIndex}>
-                                            <RequiredRule message={this.t("validDocDate")} />
-                                        </Validator> 
-                                    </NdDatePicker>
-                                </Item>
-                                {/* dtDocDate */}
-                                <Item>
-                                    <Label text={this.t("dtDocDate")} alignment="right" />
-                                    <NdDatePicker simple={true}  parent={this} id={"dtDocDate"}
-                                    dt={{data:this.docObj.dt('DOC'),field:"DOC_DATE"}}
-                                    onValueChanged={(async()=>
-                                    {
-                                        this.docObj.docCustomer.dt()[0].DOC_DATE = moment(this.dtDocDate.value).format("DD/MM/YYYY") 
-                                        this.checkRow()
-                                    }).bind(this)}
-                                    >
-                                        <Validator validationGroup={"frmPriceDiffInv"  + this.tabIndex}>
-                                            <RequiredRule message={this.t("validDocDate")} />
-                                        </Validator> 
-                                    </NdDatePicker>
-                                </Item>
-                                {/* Boş */}
-                                <EmptyItem />
                             </Form>
                         </div>
                     </div>

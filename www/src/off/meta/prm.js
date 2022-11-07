@@ -941,7 +941,7 @@ export const prm =
         ID :"txtRef",
         VALUE : 
         {
-            value : "0"
+            value : ""
         },
         SPECIAL : "",
         PAGE : "ftr_02_002",
@@ -1058,7 +1058,7 @@ export const prm =
         ID :"txtRef",
         VALUE : 
         {
-            value : "0"
+            value : ""
         },
         SPECIAL : "",
         PAGE : "ftr_02_005",
@@ -1175,7 +1175,7 @@ export const prm =
         ID :"txtRef",
         VALUE : 
         {
-            value : "0"
+            value : ""
         },
         SPECIAL : "",
         PAGE : "ftr_02_001",

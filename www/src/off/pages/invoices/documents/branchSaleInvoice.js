@@ -135,7 +135,6 @@ export default class branchSaleInvoice extends React.PureComponent
         this.docObj.docCustomer.addEmpty(tmpDocCustomer)
 
         this.txtRef.readOnly = false
-        this.txtRefno.readOnly = false
         this.docLocked = false
         
         this.frmSalesInv.option('disabled',true)
@@ -143,9 +142,15 @@ export default class branchSaleInvoice extends React.PureComponent
         await this.grdInvoicePayment.dataRefresh({source:this.paymentObj.docCustomer.dt()});
         await this.grdMultiItem.dataRefresh({source:this.multiItemData});
         await this.grdUnit2.dataRefresh({source:this.unitDetailData})
-        if(this.sysParam.filter({ID:'randomRefNo',USERS:this.user.CODE}).getValue().value == true)
+        let tmpQuery = 
         {
-            this.txtRefno.value = Math.floor(Date.now() / 1000)
+            query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 22",
+        }
+        let tmpData = await this.core.sql.execute(tmpQuery) 
+        if(tmpData.result.recordset.length > 0)
+        {
+            this.txtRefno.value = tmpData.result.recordset[0].REF_NO
+            this.docObj.docCustomer.dt()[0].REF_NO = tmpData.result.recordset[0].REF_NO
         }
     }
     async getDoc(pGuid,pRef,pRefno)
@@ -1280,26 +1285,11 @@ export default class branchSaleInvoice extends React.PureComponent
                                         <div className="col-4 pe-0">
                                             <NdTextBox id="txtRef" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF"}}
                                             upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                            readOnly={true}
                                             maxLength={32}
                                             onValueChanged={(async(e)=>
                                             {
                                                 this.docObj.docCustomer.dt()[0].REF = this.txtRef.value
-                                                if(this.sysParam.filter({ID:'randomRefNo',USERS:this.user.CODE}).getValue().value == false)
-                                                {
-                                                    let tmpQuery = 
-                                                {
-                                                    query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 22 AND REF = @REF ",
-                                                    param : ['REF:string|25'],
-                                                    value : [this.txtRef.value]
-                                                    }
-                                                    let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                    if(tmpData.result.recordset.length > 0)
-                                                    {
-                                                        this.txtRefno.value = tmpData.result.recordset[0].REF_NO
-                                                        this.docObj.docCustomer.dt()[0].REF_NO = tmpData.result.recordset[0].REF_NO
-                                                    }
-                                                }
+                                               
                                             }).bind(this)}
                                             param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
@@ -1324,47 +1314,11 @@ export default class branchSaleInvoice extends React.PureComponent
                                                            this.getDocs(0)
                                                         }
                                                     },
-                                                    {
-                                                        id:'02',
-                                                        icon:'arrowdown',
-                                                        onClick:()=>
-                                                        {
-                                                            this.txtRefno.value = Math.floor(Date.now() / 1000)
-                                                        }
-                                                    }
                                                 ]
                                             }
                                             onChange={(async()=>
                                             {
-                                                let tmpQuery = 
-                                                {
-                                                    query : "SELECT DELETED FROM DOC WHERE REF = @REF AND REF_NO = @REF_NO AND  TYPE = 1 AND DOC_TYPE = 22 ",
-                                                    param : ['REF:string|50','REF_NO:int'],
-                                                    value : [this.txtRef.value,this.txtRefno.value]
-                                                }
-                                                let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                if(tmpData.result.recordset.length > 0)
-                                                {   
-                                                    if(tmpData.result.recordset[0].DELETED == 1)
-                                                    {
-                                                        let tmpConfObj =
-                                                        {
-                                                            id:'msgDocDeleted',showTitle:true,title:this.lang.t("msgDocDeleted.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                            button:[{id:"btn01",caption:this.lang.t("msgDocDeleted.btn01"),location:'after'}],
-                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgDocDeleted.msg")}</div>)
-                                                        }
-                                                        this.txtRefno.value = 0
-                                                        await dialog(tmpConfObj);
-                                                        return
-                                                    }
-                                                }
-                                                this.docObj.docCustomer.dt()[0].REF_NO = this.txtRefno.value
-                                                let tmpResult = await this.checkDoc('00000000-0000-0000-0000-000000000000',this.txtRef.value,this.txtRefno.value)
-                                                if(tmpResult == 3)
-                                                {
-                                                    this.txtRefno.value = "";
-                                                    this.docObj.docCustomer.dt()[0].REF_NO = this.txtRefno.value
-                                                }
+                                               
                                             }).bind(this)}
                                             param={this.param.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
@@ -1459,7 +1413,6 @@ export default class branchSaleInvoice extends React.PureComponent
                                                     if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                     {
                                                         this.txtRef.value = data[0].CODE
-                                                        this.txtRef.props.onValueChanged()
                                                     }
                                                     if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
                                                     {
@@ -1513,7 +1466,6 @@ export default class branchSaleInvoice extends React.PureComponent
                                                             if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                             {
                                                                 this.txtRef.value = data[0].CODE
-                                                                this.txtRef.props.onValueChanged()
                                                             }
                                                             if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
                                                             {

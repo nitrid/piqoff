@@ -135,7 +135,7 @@ export default class salesInvoice extends React.PureComponent
         this.docObj.docCustomer.addEmpty(tmpDocCustomer)
 
         this.txtRef.readOnly = false
-        this.txtRefno.readOnly = false
+        this.txtRefno.readOnly = true
         this.docLocked = false
         
         this.frmSalesInv.option('disabled',true)
@@ -143,9 +143,15 @@ export default class salesInvoice extends React.PureComponent
         await this.grdInvoicePayment.dataRefresh({source:this.paymentObj.docCustomer.dt()});
         await this.grdMultiItem.dataRefresh({source:this.multiItemData});
         await this.grdUnit2.dataRefresh({source:this.unitDetailData})
-        if(this.sysParam.filter({ID:'randomRefNo',USERS:this.user.CODE}).getValue().value == true)
+        let tmpQuery = 
         {
-            this.txtRefno.value = Math.floor(Date.now() / 1000)
+            query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 20  ",
+        }
+        let tmpData = await this.core.sql.execute(tmpQuery) 
+        if(tmpData.result.recordset.length > 0)
+        {
+            this.txtRefno.value = tmpData.result.recordset[0].REF_NO
+            this.docObj.docCustomer.dt()[0].REF_NO = tmpData.result.recordset[0].REF_NO
         }
     }
     async getDoc(pGuid,pRef,pRefno)
@@ -1276,21 +1282,6 @@ export default class salesInvoice extends React.PureComponent
                                             onValueChanged={(async(e)=>
                                             {
                                                 this.docObj.docCustomer.dt()[0].REF = this.txtRef.value
-                                                if(this.sysParam.filter({ID:'randomRefNo',USERS:this.user.CODE}).getValue().value == false)
-                                                {
-                                                    let tmpQuery = 
-                                                    {
-                                                        query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 20 AND REF = @REF ",
-                                                        param : ['REF:string|25'],
-                                                        value : [this.txtRef.value]
-                                                    }
-                                                    let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                    if(tmpData.result.recordset.length > 0)
-                                                    {
-                                                        this.txtRefno.value = tmpData.result.recordset[0].REF_NO
-                                                        this.docObj.docCustomer.dt()[0].REF_NO = tmpData.result.recordset[0].REF_NO
-                                                    }
-                                                }
                                             }).bind(this)}
                                             param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
@@ -1315,14 +1306,6 @@ export default class salesInvoice extends React.PureComponent
                                                            this.getDocs(0)
                                                         }
                                                     },
-                                                    {
-                                                        id:'02',
-                                                        icon:'arrowdown',
-                                                        onClick:()=>
-                                                        {
-                                                            this.txtRefno.value = Math.floor(Date.now() / 1000)
-                                                        }
-                                                    }
                                                 ]
                                             }
                                             onChange={(async()=>
@@ -1452,7 +1435,6 @@ export default class salesInvoice extends React.PureComponent
                                                         if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                         {
                                                             this.txtRef.value = data[0].CODE
-                                                            this.txtRef.props.onValueChanged()
                                                         }
                                                         if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
                                                         {
@@ -1507,7 +1489,6 @@ export default class salesInvoice extends React.PureComponent
                                                             if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                             {
                                                                 this.txtRef.value = data[0].CODE
-                                                                this.txtRef.props.onValueChanged()
                                                             }
                                                             if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
                                                             {

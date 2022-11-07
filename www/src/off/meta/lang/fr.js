@@ -4,7 +4,7 @@ export const langFr =
     serverConnection : "Établissement de la connexion avec le serveur",
     loading : "Connexion En Cours",
     btnSave: "Enregistre",
-    btnCancel: "Supprime",
+    btnCancel: "Supprimer",
     btnPrint :"Imprime",
     btnOk: "OK",
     msgWarning: "Attention",
