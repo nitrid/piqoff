@@ -2103,6 +2103,7 @@ export const langFr =
             clmSirenID : "Siren No",
             clmRcs : "RCS",
             clmCapital : "Capital",
+            clmInsurance : "Sigorta No" // BAK
         },
         grdOffical : 
         {
@@ -2396,6 +2397,7 @@ export const langFr =
             clmSirenID : "Siren No",
             clmRcs : "RCS",
             clmCapital : "Capital",
+            clmInsurance : "Sigorta No" // BAK
         },
         grdOffical : 
         {
@@ -8618,6 +8620,7 @@ export const langFr =
         txtRestorant : "T. Restaurant",
         txtReal : "Ok",
         payTransfer : "Tutarları Aktar", // BAK
+        validPriceFloat : "Avans 0'dan büyük olmalıdır", // BAK
         popFinish : 
         {
             title :"Resultat"
