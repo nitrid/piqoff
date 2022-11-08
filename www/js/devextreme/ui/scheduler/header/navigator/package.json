@@ -1,5 +1,0 @@
-{
-  "sideEffects": false,
-  "main": "../../../../cjs/ui/scheduler/header/navigator.js",
-  "module": "../../../../esm/ui/scheduler/header/navigator.js"
-}

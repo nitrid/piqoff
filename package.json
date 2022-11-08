@@ -1,6 +1,10 @@
 {
     "type": "module",
+    "name": "piqsoft",
+    "version": "1.0.1",
     "dependencies": {
-        "gensrv": "^1.0.72"
+        "gensrv": "^1.0.93",
+        "node-windows": "^1.0.0-beta.6",
+        "xlsx": "^0.18.5"
     }
 }
