@@ -514,7 +514,7 @@ export const langFr =
         msg : "Veuillez ne pas laisser le code de l'appareil vide !",
         btn01 : "OK",
     },
-    popTitleDevice : "Code de sécurité", 
+    popTitleDevice : "Entrer Numéro de Caisse", 
     msgDeviceNotChange : 
     {
         title : "Attention",
@@ -684,7 +684,7 @@ export const langFr =
     {
         title : "Attention",
         msg : "Vous devez choisir ou saisir un client pour l'impression de la Facture !",
-        btn01 : "Choisir Cleint",
+        btn01 : "Choisir Client",
         btn02 : "Abandonner"
     },
 }
