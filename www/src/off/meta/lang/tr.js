@@ -2103,6 +2103,7 @@ export const langTr =
             clmSirenID : "Tic. Sicil No",
             clmRcs : "Ticaret Odası",
             clmCapital : "Sermaye",
+            clmInsurance : "Sigorta No"
         },
         grdOffical : 
         {
@@ -2396,6 +2397,7 @@ export const langTr =
             clmSirenID : "Tic. Sicil No",
             clmRcs : "Ticaret Odası",
             clmCapital : "Sermaye",
+            clmInsurance : "Sigorta No"
         },
         grdOffical : 
         {
@@ -2709,6 +2711,7 @@ export const langTr =
         txtTotalQuantity : "Toplam Miktar",
         txtExpFee : "Gecikme Cezası",
         dtExpDate : "Vade Tarihi", 
+        getOffers : "Teklif Getir",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -3100,6 +3103,16 @@ export const langTr =
             btn01: "Evrağa Git",
             msg: "Evrak Bulundu"
         },
+        pg_offersGrid : 
+        {
+            title : "Sipariş Seçimi",
+            clmReferans : "Seri - Sıra",
+            clmCode : "Kodu",
+            clmName : "Adı",
+            clmQuantity : "Adet",
+            clmTotal : "Tutar",
+            clmPrice : "Fiyat",
+        },
     },
     ftr_02_002 : // "Satış Faturası"
     {
@@ -3142,6 +3155,7 @@ export const langTr =
         txtTotalQuantity : "Toplam Miktar",
         txtExpFee : "Gecikme Cezası",
         dtExpDate : "Vade Tarihi", 
+        getOffers : "Teklif Getir", 
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -3481,6 +3495,16 @@ export const langTr =
             title: "Dikkat",
             btn01: "Evrağa Git",
             msg: "Evrak Bulundu"
+        },
+        pg_offersGrid : 
+        {
+            title : "Teklif Seçimi",
+            clmReferans : "Seri - Sıra",
+            clmCode : "Kodu",
+            clmName : "Adı",
+            clmQuantity : "Adet",
+            clmTotal : "Tutar",
+            clmPrice : "Fiyat",
         },
     },
     ftr_02_003 : // "İade Faturası"
@@ -8618,6 +8642,7 @@ export const langTr =
         txtRestorant : "Tike Restorant",
         txtReal : "Doğru",
         payTransfer : "Tutarları Aktar",
+        validPriceFloat : "Avans 0'dan büyük olmalıdır",
         popFinish : 
         {
             title :"Sonuç"

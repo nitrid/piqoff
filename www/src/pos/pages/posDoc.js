@@ -141,6 +141,8 @@ export default class posDoc extends React.PureComponent
         {               
             if(!this.state.isConnected)
             {
+                this.sendJet({CODE:"120",NAME:"Kasa offline dan online a döndü."})
+
                 let tmpConfObj =
                 {
                     id:'msgOnlineAlert',showTitle:true,title:this.lang.t("msgOnlineAlert.title"),showCloseButton:true,width:'500px',height:'200px',
@@ -150,6 +152,9 @@ export default class posDoc extends React.PureComponent
                 await dialog(tmpConfObj);
 
                 await this.transferLocal();
+
+                this.sendJet({CODE:"123",NAME:"Eldeki kayıtlar online a gönderildi."})
+                
                 window.location.reload()
             }
             this.setState({isConnected:true})            
@@ -161,6 +166,8 @@ export default class posDoc extends React.PureComponent
         });
         this.core.socket.on('disconnect',async () => 
         {
+            this.sendJet({CODE:"120",NAME:"Kasa offline dan online a döndü."})
+
             this.setState({isConnected:false})
             let tmpConfObj =
             {
@@ -231,6 +238,8 @@ export default class posDoc extends React.PureComponent
             setTimeout(()=>{window.location.reload()},500)
             //*************************************************************************** */
         })
+
+        this.sendJet({CODE:"80",NAME:"Kasa işleme başladı."})
     }
     async init()
     {     
@@ -505,16 +514,16 @@ export default class posDoc extends React.PureComponent
         if(this.state.isBtnGetCustomer)
         {       
             //PRODORPLUS İÇİN YAPILDI. #CUSTOM1453# 
-            if(pCode.toString().substring(0,6) == "202012")
-            {
-                pCode = pCode.toString().substring(0,6) + pCode.toString().substring(7,pCode.toString().length -1) 
-            }
+            // if(pCode.toString().substring(0,6) == "202012")
+            // {
+            //     pCode = pCode.toString().substring(0,6) + pCode.toString().substring(7,pCode.toString().length -1) 
+            // }
             //************************ */
 
             let tmpCustomerDt = new datatable(); 
             tmpCustomerDt.selectCmd = 
             {
-                query : "SELECT GUID,CODE,TITLE,ADRESS,dbo.FN_CUSTOMER_TOTAL_POINT(GUID,GETDATE()) AS CUSTOMER_POINT FROM [dbo].[CUSTOMER_VW_02] WHERE CODE LIKE @CODE + '%'",
+                query : "SELECT GUID,CODE,TITLE,ADRESS,dbo.FN_CUSTOMER_TOTAL_POINT(GUID,GETDATE()) AS CUSTOMER_POINT FROM [dbo].[CUSTOMER_VW_02] WHERE CODE LIKE SUBSTRING(@CODE,0,14) + '%'",
                 param : ['CODE:string|50'],
                 local : 
                 {
@@ -986,7 +995,7 @@ export default class posDoc extends React.PureComponent
             {
                 let tmpClose = await this.saleClosed(true,tmpPayRest,tmpPayChange)
                 let tmpSaveResult = await this.posObj.save()
-                console.log(tmpSaveResult)
+                
                 if(tmpSaveResult == 0)
                 {
                     if(tmpClose)
@@ -996,6 +1005,7 @@ export default class posDoc extends React.PureComponent
                 }
                 else
                 {
+                    this.sendJet({CODE:"90",NAME:"Kayıt işlemi başarısız."})
                     //KAYIT BAŞARISIZ İSE UYARI AÇILIYOR VE KULLANICI İSTERSE KAYIT İŞLEMİNİ TEKRARLIYOR
                     let tmpConfObj =
                     {
@@ -1221,7 +1231,7 @@ export default class posDoc extends React.PureComponent
                     }                    
                 }
                 //EĞER MÜŞTERİ KARTI İSE PUAN KAYIT EDİLİYOR.
-                if(this.posObj.dt()[0].CUSTOMER_GUID != '00000000-0000-0000-0000-000000000000')
+                if(this.posObj.dt()[0].CUSTOMER_GUID != '00000000-0000-0000-0000-000000000000' && this.posObj.dt()[0].CUSTOMER_TYPE == 0)
                 {
                     if(this.posObj.dt()[0].TYPE == 0)
                     {
@@ -1308,7 +1318,7 @@ export default class posDoc extends React.PureComponent
                     await this.core.sql.execute(tmpInsertQuery)
                     //***************************************************/
                     //FİŞ Mİ FATURAMI SORULUYOR
-                    if(this.posObj.dt()[0].CUSTOMER_CODE != '')
+                    if(this.posObj.dt()[0].CUSTOMER_CODE != '' && this.posObj.dt()[0].CUSTOMER_TYPE == 1)
                     {
                         let tmpConfObj =
                         {
@@ -2357,6 +2367,19 @@ export default class posDoc extends React.PureComponent
         //     }
         // }
         return
+    }
+    sendJet(pData)
+    {
+        let tmpJetData =
+        {
+            CUSER:this.core.auth.data.CODE,            
+            DEVICE:window.localStorage.getItem('device') == null ? '' : window.localStorage.getItem('device'),
+            CODE:typeof pData.CODE != 'undefined' ? pData.CODE : '',
+            NAME:typeof pData.NAME != 'undefined' ? pData.NAME : '',
+            DESCRIPTION:typeof pData.DESCRIPTION != 'undefined' ? pData.DESCRIPTION : '',
+            APP_VERSION:this.core.appInfo.version
+        }
+        this.core.socket.emit('nf525',{cmd:"jet",data:tmpJetData})
     }
     render()
     {
@@ -3572,6 +3595,15 @@ export default class posDoc extends React.PureComponent
                                             if(!tmpResult)
                                             {
                                                 return
+                                            }
+
+                                            if(this.state.isFormation == false)
+                                            {
+                                                this.sendJet({CODE:"100",NAME:"Formasyon başladı."})
+                                            }
+                                            else
+                                            {
+                                                this.sendJet({CODE:"105",NAME:"Formasyon sonlandı."})
                                             }
 
                                             this.setState({isFormation:this.state.isFormation ? false : true})
@@ -5116,6 +5148,8 @@ export default class posDoc extends React.PureComponent
                                                                 customerGrowPoint : tmpLastPos[0].CUSTOMER_POINT - Math.floor(tmpLastPos[0].TOTAL)
                                                             }
                                                         }
+
+                                                        this.sendJet({CODE:"155",NAME:"Duplicate fiş yazdırıldı."})
                                                         await this.print(tmpData)
                                                     } 
                                                 }
@@ -5786,6 +5820,7 @@ export default class posDoc extends React.PureComponent
                     param={this.prmObj.filter({ID:'DocDelDescription',TYPE:0})}
                     onClick={async (e)=>
                     {
+                        this.sendJet({CODE:"320",NAME:"Beklemedeki fiş silindi.",DESCRIPTION:e})
                         if(typeof e != 'undefined')
                         {
                             await this.descSave("FULL DELETE",e,'00000000-0000-0000-0000-000000000000')
@@ -5799,6 +5834,7 @@ export default class posDoc extends React.PureComponent
                     param={this.prmObj.filter({ID:'DocRowDelDescription',TYPE:0})}
                     onClick={async (e)=>
                     {
+                        this.sendJet({CODE:"323",NAME:"Beklemedeki fiş satırı silindi.",DESCRIPTION:e})
                         if(typeof e != 'undefined')
                         {
                             await this.descSave("ROW DELETE",e,this.grdList.devGrid.getSelectedRowKeys()[0].GUID)
@@ -5814,6 +5850,8 @@ export default class posDoc extends React.PureComponent
                     {        
                         if(typeof e != 'undefined')
                         {
+                            this.sendJet({CODE:"326",NAME:"İade alınd.",DESCRIPTION:e})
+
                             let tmpResult = await this.msgItemReturnType.show();
                         
                             if(tmpResult == 'btn01') //Nakit
@@ -6684,17 +6722,17 @@ export default class posDoc extends React.PureComponent
 
                                     let tmpConfObj1 =
                                     {
-                                        id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
-                                        button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
+                                        id:'msgCustomerSaveResult',showTitle:true,title:this.t("msgCustomerSaveResult.title"),showCloseButton:true,width:'500px',height:'200px',
+                                        button:[{id:"btn01",caption:this.t("msgCustomerSaveResult.btn01"),location:'after'}],
                                     }
                                     if((await this.customerObj.save()) == 0)
                                     {                                                    
-                                        tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
+                                        tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgCustomerSaveResult.msgSuccess")}</div>)
                                         await dialog(tmpConfObj1);
                                     }
                                     else
                                     {
-                                        tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
+                                        tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgCustomerSaveResult.msgFailed")}</div>)
                                         await dialog(tmpConfObj1);
                                     }
                                     console.log(this.customerObj)

@@ -1556,14 +1556,14 @@ export default class salesOrder extends React.PureComponent
                                     filterRow={{visible:true}}
                                     onRowPrepared={(e) =>
                                     {
-                                        if(e.rowType == 'data' && e.data.ORDER_GUID  != '00000000-0000-0000-0000-000000000000')
+                                        if(e.rowType == 'data' && (e.data.ORDER_GUID  != '00000000-0000-0000-0000-000000000000' || e.key.SHIPMENT_GUID != '00000000-0000-0000-0000-000000000000'))
                                         {
                                             e.rowElement.style.color ="Silver"
                                         }
                                     }}
                                     onRowUpdating={async (e)=>
                                     {
-                                        if(e.key.ORDER_GUID != '00000000-0000-0000-0000-000000000000')
+                                        if(e.key.ORDER_GUID != '00000000-0000-0000-0000-000000000000' || e.key.SHIPMENT_GUID != '00000000-0000-0000-0000-000000000000')
                                         {
                                             e.cancel = true
                                             let tmpConfObj =
@@ -1579,7 +1579,7 @@ export default class salesOrder extends React.PureComponent
                                     }}
                                     onRowRemoving={async (e)=>
                                     {
-                                        if(e.key.ORDER_GUID != '00000000-0000-0000-0000-000000000000')
+                                        if(e.key.ORDER_GUID != '00000000-0000-0000-0000-000000000000' || e.key.SHIPMENT_GUID != '00000000-0000-0000-0000-000000000000')
                                         {
                                             e.cancel = true
                                             let tmpConfObj =

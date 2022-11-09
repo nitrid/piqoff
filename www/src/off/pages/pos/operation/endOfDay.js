@@ -567,7 +567,6 @@ export default class endOfDay extends React.PureComponent
                   <div>
                         <NdPopUp parent={this} id={"popFinish"} 
                         visible={false}
-                        showCloseButton={true}
                         showTitle={true}
                         title={this.t("popFinish.title")}
                         container={"#root"} 
@@ -701,7 +700,7 @@ export default class endOfDay extends React.PureComponent
                       height={'250'}
                       position={{of:'#root'}}
                       >
-                          <Form colCount={1} height={'fit-content'}>
+                          <Form colCount={1} height={'fit-content'} id={"frmAdvance"}>
                             <Item>
                               <div className='row px-4'>
                                 <div className='col-12'>
@@ -713,6 +712,10 @@ export default class endOfDay extends React.PureComponent
                               <Label text={this.t("txtPopAdvance")} alignment="right" />
                               <NdNumberBox id="txtPopAdvance" parent={this} simple={true} 
                               >
+                                 <Validator validationGroup={"frmAdvance"}>
+                                 <RangeRule min={0.9} message={this.t("validPriceFloat")}/>
+
+                                 </Validator>
                               </NdNumberBox>
                             </Item>
                             <Item>
@@ -720,106 +723,109 @@ export default class endOfDay extends React.PureComponent
                                       <div className='col-6'>
                                       </div>
                                       <div className='col-6'>
-                                          <NdButton text={this.t("btnPopAdd")} type="normal" stylingMode="contained" width={'100%'}
-                                          onClick={async ()=>
+                                          <NdButton text={this.t("btnPopAdd")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"frmAdvance"}
+                                          onClick={async (e)=>
                                           {
-                                            if(this.txtPopAdvance.value == 0)
-                                            {
-                                              let tmpConfObj =
+                                            if(e.validationGroup.validate().status == "valid")
+                                            {  
+                                              if(this.txtPopAdvance.value == 0)
                                               {
-                                                id:'msgZeroQuantity',showTitle:true,title:this.t("msgZeroQuantity.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgZeroQuantity.btn01"),location:'before'},{id:"btn02",caption:this.t("msgZeroQuantity.btn02"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgZeroQuantity.msg")}</div>)
+                                                let tmpConfObj =
+                                                {
+                                                  id:'msgZeroQuantity',showTitle:true,title:this.t("msgZeroQuantity.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                  button:[{id:"btn01",caption:this.t("msgZeroQuantity.btn01"),location:'before'},{id:"btn02",caption:this.t("msgZeroQuantity.btn02"),location:'after'}],
+                                                  content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgZeroQuantity.msg")}</div>)
+                                                }
+                                                
+                                                let pResult = await dialog(tmpConfObj);
+                                                if(pResult == 'btn01')
+                                                {
+                                                  return
+                                                }
+                                              }
+                                              else if(this.txtPopAdvance.value > 600)
+                                              {
+                                                let tmpConfObj =
+                                                {
+                                                  id:'msgBigAmount',showTitle:true,title:this.t("msgBigAmount.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                  button:[{id:"btn01",caption:this.t("msgBigAmount.btn01"),location:'before'}],
+                                                  content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgBigAmount.msg")}</div>)
+                                                }
+                                                
+                                                let pResult = await dialog(tmpConfObj);
+                                                if(pResult == 'btn01')
+                                                {
+                                                  return
+                                                }
+                                              }
+                                              let tmpQuery = 
+                                              {
+                                                  query : "SELECT GUID FROM SAFE_VW_01 WHERE CODE = @INPUT_CODE",
+                                                  param : ['INPUT_CODE:string|50'],
+                                                  value : [this.cmbSafe.value]
+                                              }
+                                              let tmpData = await this.core.sql.execute(tmpQuery) 
+                                              let tmpSafe = tmpData.result.recordset[0].GUID
+                                              let tmpAmountQuery = 
+                                              {
+                                                  query : "SELECT ROUND((SUM(AMOUNT) - ISNULL((SELECT SUM(AMOUNT) FROM DOC_CUSTOMER_VW_01 AS DOCOUT WHERE DOCOUT.OUTPUT = DOCIN.INPUT AND TYPE = 2 AND DOC_TYPE = 201 AND PAY_TYPE = 20),0)),2) AS AMOUNT FROM DOC_CUSTOMER_VW_01 AS DOCIN " + 
+                                                  "WHERE INPUT_CODE = @INPUT_CODE  AND TYPE = 2 AND DOC_TYPE = 201 AND PAY_TYPE = 20 GROUP BY INPUT", 
+                                                  param : ['INPUT_CODE:string|50'],
+                                                  value : [this.cmbSafe.value]
+                                              }
+                                              let tmpAmountData = await this.core.sql.execute(tmpAmountQuery) 
+                                              let tmpOutAmount = 0
+                                              if(tmpAmountData.result.recordset.length > 0)
+                                              {
+                                                tmpOutAmount = tmpAmountData.result.recordset[0].AMOUNT
                                               }
                                               
-                                              let pResult = await dialog(tmpConfObj);
-                                              if(pResult == 'btn01')
+                                              if(this.docObj.dt().length == 0)
                                               {
-                                                return
+                                                this.docObj.addEmpty()
+                                                this.docObj.dt()[0].TYPE = 2
+                                                this.docObj.dt()[0].DOC_TYPE = 201
+                                                this.docObj.dt()[0].REF = 'POS'
+                                                this.docObj.dt()[0].REF_NO = Math.floor(Date.now() / 1000)
+                                                this.docObj.dt()[0].DOC_DATE = this.dtDocDate.value
+                                                this.docObj.dt()[0].INPUT = tmpSafe
+                                                this.docObj.dt()[0].OUTPUT = this.prmObj.filter({ID:'SafeCenter',TYPE:1}).getValue()
+                                                this.docObj.dt()[0].AMOUNT = this.txtPopAdvance.value
+                                                this.docObj.dt()[0].TOTAL = this.txtPopAdvance.value
                                               }
+                                                
+                                                this.docObj.docCustomer.addEmpty()
+                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].TYPE = 2
+                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_GUID = this.docObj.dt()[0].GUID
+                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_TYPE = 201
+                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_DATE = this.dtDocDate.value
+                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].REF = 'POS'
+                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].REF_NO = this.docObj.dt()[0].REF_NO
+                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].INPUT =tmpSafe
+                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].INPUT_NAME =  this.cmbSafe.displayValue
+                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].OUTPUT = this.docObj.dt()[0].OUTPUT
+                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].PAY_TYPE = 20
+                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].AMOUNT = this.txtPopAdvance.value
+                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DESCRIPTION = ''
+                                                
+                                                this.docObj.docCustomer.addEmpty()
+                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].TYPE = 2
+                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_GUID = this.docObj.dt()[0].GUID
+                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_TYPE = 201
+                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_DATE = this.dtDocDate.value
+                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].REF = 'POS'
+                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].REF_NO = this.docObj.dt()[0].REF_NO
+                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].INPUT = this.docObj.dt()[0].OUTPUT
+                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].INPUT_NAME =  this.cmbSafe.displayValue
+                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].OUTPUT = tmpSafe
+                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].PAY_TYPE = 20
+                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].AMOUNT = tmpOutAmount
+                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DESCRIPTION = ''
+                                                
+                                                await this.docObj.save()
+                                                this.popAdvance.hide()
+                                                this.popFinish.hide()
                                             }
-                                            else if(this.txtPopAdvance.value > 600)
-                                            {
-                                              let tmpConfObj =
-                                              {
-                                                id:'msgBigAmount',showTitle:true,title:this.t("msgBigAmount.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgBigAmount.btn01"),location:'before'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgBigAmount.msg")}</div>)
-                                              }
-                                              
-                                              let pResult = await dialog(tmpConfObj);
-                                              if(pResult == 'btn01')
-                                              {
-                                                return
-                                              }
-                                            }
-                                            let tmpQuery = 
-                                            {
-                                                query : "SELECT GUID FROM SAFE_VW_01 WHERE CODE = @INPUT_CODE",
-                                                param : ['INPUT_CODE:string|50'],
-                                                value : [this.cmbSafe.value]
-                                            }
-                                            let tmpData = await this.core.sql.execute(tmpQuery) 
-                                            let tmpSafe = tmpData.result.recordset[0].GUID
-                                            let tmpAmountQuery = 
-                                            {
-                                                query : "SELECT ROUND((SUM(AMOUNT) - ISNULL((SELECT SUM(AMOUNT) FROM DOC_CUSTOMER_VW_01 AS DOCOUT WHERE DOCOUT.OUTPUT = DOCIN.INPUT AND TYPE = 2 AND DOC_TYPE = 201 AND PAY_TYPE = 20),0)),2) AS AMOUNT FROM DOC_CUSTOMER_VW_01 AS DOCIN " + 
-                                                "WHERE INPUT_CODE = @INPUT_CODE  AND TYPE = 2 AND DOC_TYPE = 201 AND PAY_TYPE = 20 GROUP BY INPUT", 
-                                                param : ['INPUT_CODE:string|50'],
-                                                value : [this.cmbSafe.value]
-                                            }
-                                            let tmpAmountData = await this.core.sql.execute(tmpAmountQuery) 
-                                            let tmpOutAmount = 0
-                                            if(tmpAmountData.result.recordset.length > 0)
-                                            {
-                                              tmpOutAmount = tmpAmountData.result.recordset[0].AMOUNT
-                                            }
-                                            
-                                            if(this.docObj.dt().length == 0)
-                                            {
-                                              this.docObj.addEmpty()
-                                              this.docObj.dt()[0].TYPE = 2
-                                              this.docObj.dt()[0].DOC_TYPE = 201
-                                              this.docObj.dt()[0].REF = 'POS'
-                                              this.docObj.dt()[0].REF_NO = Math.floor(Date.now() / 1000)
-                                              this.docObj.dt()[0].DOC_DATE = this.dtDocDate.value
-                                              this.docObj.dt()[0].INPUT = tmpSafe
-                                              this.docObj.dt()[0].OUTPUT = this.prmObj.filter({ID:'SafeCenter',TYPE:1}).getValue()
-                                              this.docObj.dt()[0].AMOUNT = this.txtPopAdvance.value
-                                              this.docObj.dt()[0].TOTAL = this.txtPopAdvance.value
-                                            }
-                                              
-                                              this.docObj.docCustomer.addEmpty()
-                                              this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].TYPE = 2
-                                              this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_GUID = this.docObj.dt()[0].GUID
-                                              this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_TYPE = 201
-                                              this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_DATE = this.dtDocDate.value
-                                              this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].REF = 'POS'
-                                              this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].REF_NO = this.docObj.dt()[0].REF_NO
-                                              this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].INPUT =tmpSafe
-                                              this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].INPUT_NAME =  this.cmbSafe.displayValue
-                                              this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].OUTPUT = this.docObj.dt()[0].OUTPUT
-                                              this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].PAY_TYPE = 20
-                                              this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].AMOUNT = this.txtPopAdvance.value
-                                              this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DESCRIPTION = ''
-                                              
-                                              this.docObj.docCustomer.addEmpty()
-                                              this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].TYPE = 2
-                                              this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_GUID = this.docObj.dt()[0].GUID
-                                              this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_TYPE = 201
-                                              this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_DATE = this.dtDocDate.value
-                                              this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].REF = 'POS'
-                                              this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].REF_NO = this.docObj.dt()[0].REF_NO
-                                              this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].INPUT = this.docObj.dt()[0].OUTPUT
-                                              this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].INPUT_NAME =  this.cmbSafe.displayValue
-                                              this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].OUTPUT = tmpSafe
-                                              this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].PAY_TYPE = 20
-                                              this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].AMOUNT = tmpOutAmount
-                                              this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DESCRIPTION = ''
-                                              
-                                              await this.docObj.save()
-                                              this.popAdvance.hide()
-                                              this.popFinish.hide()
                                           }}/>
                                       </div>
                                   </div>

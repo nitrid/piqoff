@@ -337,7 +337,7 @@ export default class salesDisList extends React.PureComponent
                                 {
                                     App.instance.menuClick(
                                         {
-                                            id: 'irs_01_002',
+                                            id: 'irs_02_002',
                                             text: this.t('menu'),
                                             path: 'dispatch/documents/salesDispatch.js',
                                             pagePrm:{GUID:e.data.GUID}

@@ -2103,6 +2103,7 @@ export const langFr =
             clmSirenID : "Siren No",
             clmRcs : "RCS",
             clmCapital : "Capital",
+            clmInsurance : "Sigorta No" // BAK
         },
         grdOffical : 
         {
@@ -2396,6 +2397,7 @@ export const langFr =
             clmSirenID : "Siren No",
             clmRcs : "RCS",
             clmCapital : "Capital",
+            clmInsurance : "Sigorta No" // BAK
         },
         grdOffical : 
         {
@@ -2709,6 +2711,7 @@ export const langFr =
         txtTotalQuantity : "Quantité totale",  
         txtExpFee : "Pénalités de Retard ", 
         dtExpDate : "Date d'Echéance", 
+        getOffers : "Teklif Getir", //BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -3100,6 +3103,16 @@ export const langFr =
             btn01:"Aller au document",
             msg: "Document trouvé !"
         },
+        pg_offersGrid : 
+        {  
+            title : "Teklif Seçimi", // BAK  
+            clmReferans : "Réf.-Réf no:",  
+            clmCode : "Code",  
+            clmName : "Nom",  
+            clmQuantity : "Quantité",  
+            clmTotal : "Total",  
+            clmPrice : "Prix",  
+        },
     },
     ftr_02_002 : // "Satış Faturası"
     {
@@ -3142,6 +3155,7 @@ export const langFr =
         txtTotalQuantity : "Quantité totale",  
         txtExpFee : "Pénalités de Retard", 
         dtExpDate : "Date d'Echéance", 
+        getOffers : "Teklif Getir",  // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -3481,6 +3495,16 @@ export const langFr =
             title: "Attention",
             btn01:"Aller au document",
             msg: "Document trouvé !"
+        },
+        pg_offersGrid : 
+        {
+            title : "Teklif Seçimi" ,  //BAK  
+            clmReferans : "Réf.-Réf no:",  
+            clmCode : "Code",  
+            clmName : "Nom",  
+            clmQuantity : "Quantité",  
+            clmTotal : "Total",  
+            clmPrice : "Prix",  
         },
     },
     ftr_02_003 : // "İade Faturası"
@@ -8618,6 +8642,7 @@ export const langFr =
         txtRestorant : "T. Restaurant",
         txtReal : "Ok",
         payTransfer : "Tutarları Aktar", // BAK
+        validPriceFloat : "Avans 0'dan büyük olmalıdır", // BAK
         popFinish : 
         {
             title :"Resultat"

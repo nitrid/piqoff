@@ -687,4 +687,11 @@ export const langTr =
         btn01 : "Müşteri Seç",
         btn02 : "İptal"
     },
+    msgCustomerSaveResult:
+    {
+        title: "Dikkat",
+        btn01: "Tamam",
+        msgSuccess: "Kayıt işleminiz başarılı !",
+        msgFailed: "Kayıt işleminiz başarısız !"
+    },
 }

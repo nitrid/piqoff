@@ -742,6 +742,7 @@ export default class CustomerCard extends React.PureComponent
                                                     <Column dataField="TAX_OFFICE" caption={this.t("grdLegal.clmTaxOffice")}/>
                                                     <Column dataField="TAX_NO" caption={this.t("grdLegal.clmTaxNo")}/>
                                                     <Column dataField="INT_VAT_NO" caption={this.t("grdLegal.clmIntVatNo")}/>
+                                                    <Column dataField="INSURANCE_NO" caption={this.t("grdLegal.clmInsurance")}/>
                                                     <Column dataField="CAPITAL" caption={this.t("grdLegal.clmCapital")}/>
                                                     <Column dataField="TAX_TYPE" caption={this.t("grdLegal.clmTaxType")} editCellRender={this._cellRoleRender}/>
                                                 </NdGrid>
