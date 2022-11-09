@@ -2711,6 +2711,7 @@ export const langTr =
         txtTotalQuantity : "Toplam Miktar",
         txtExpFee : "Gecikme Cezası",
         dtExpDate : "Vade Tarihi", 
+        getOffers : "Teklif Getir",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -3102,6 +3103,16 @@ export const langTr =
             btn01: "Evrağa Git",
             msg: "Evrak Bulundu"
         },
+        pg_offersGrid : 
+        {
+            title : "Sipariş Seçimi",
+            clmReferans : "Seri - Sıra",
+            clmCode : "Kodu",
+            clmName : "Adı",
+            clmQuantity : "Adet",
+            clmTotal : "Tutar",
+            clmPrice : "Fiyat",
+        },
     },
     ftr_02_002 : // "Satış Faturası"
     {
@@ -3144,6 +3155,7 @@ export const langTr =
         txtTotalQuantity : "Toplam Miktar",
         txtExpFee : "Gecikme Cezası",
         dtExpDate : "Vade Tarihi", 
+        getOffers : "Teklif Getir", 
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -3483,6 +3495,16 @@ export const langTr =
             title: "Dikkat",
             btn01: "Evrağa Git",
             msg: "Evrak Bulundu"
+        },
+        pg_offersGrid : 
+        {
+            title : "Teklif Seçimi",
+            clmReferans : "Seri - Sıra",
+            clmCode : "Kodu",
+            clmName : "Adı",
+            clmQuantity : "Adet",
+            clmTotal : "Tutar",
+            clmPrice : "Fiyat",
         },
     },
     ftr_02_003 : // "İade Faturası"

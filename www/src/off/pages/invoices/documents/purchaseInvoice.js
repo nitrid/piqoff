@@ -58,7 +58,7 @@ export default class purchaseInvoice extends React.PureComponent
         this.combineControl = true
         this.combineNew = false
 
-        this.rightItems = [{ text: this.t("getDispatch")},{ text: this.t("getOrders")},{ text: this.t("getPayment")}]
+        this.rightItems = [{ text: this.t("getDispatch")},{ text: this.t("getOrders")},{ text: this.t("getOffers")}]
         this.multiItemData = new datatable
         this.unitDetailData = new datatable
         this.newPrice = new datatable
@@ -850,6 +850,83 @@ export default class purchaseInvoice extends React.PureComponent
                     tmpDocItems.VAT_RATE = data[i].VAT_RATE
                     tmpDocItems.DISCOUNT_RATE = data[i].DISCOUNT_RATE
                     tmpDocItems.ORDER_GUID = data[i].GUID
+                    tmpDocItems.VAT_RATE = data[i].VAT_RATE
+                    tmpDocItems.OLD_VAT = data[i].VAT_RATE
+
+                    await this.docObj.docItems.addEmpty(tmpDocItems)
+                    await this.core.util.waitUntil(100)
+                }
+                this._calculateTotal()
+                App.instance.setState({isExecute:false})
+
+            }
+        }
+
+    }
+    async _getOffers()
+    {
+        if(this.docObj.dt()[0].OUTPUT == '' || this.docObj.dt()[0].OUTPUT == '00000000-0000-0000-0000-000000000000')
+        {
+            let tmpConfObj =
+            {
+                id:'msgCustomerSelect',showTitle:true,title:this.t("msgCustomerSelect.title"),showCloseButton:true,width:'500px',height:'200px',
+                button:[{id:"btn01",caption:this.t("msgCustomerSelect.btn01"),location:'after'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerSelect.msg")}</div>)
+            }
+
+            await dialog(tmpConfObj);
+            return
+        }
+        else
+        {
+            let tmpQuery = 
+            {
+                query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_OFFERS_VW_01 WHERE OUTPUT = @OUTPUT AND SHIPMENT_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 0 AND DOC_TYPE IN(61)",
+                param : ['OUTPUT:string|50'],
+                value : [this.docObj.dt()[0].OUTPUT]
+            }
+            let tmpData = await this.core.sql.execute(tmpQuery) 
+            if(tmpData.result.recordset.length > 0)
+            {   
+                await this.pg_offersGrid.setData(tmpData.result.recordset)
+            }
+            else
+            {
+                await this.pg_offersGrid.setData([])
+            }
+    
+            this.pg_offersGrid.show()
+            this.pg_offersGrid.onClick = async(data) =>
+            {
+                App.instance.setState({isExecute:true})
+                for (let i = 0; i < data.length; i++) 
+                {
+                    let tmpDocItems = {...this.docObj.docItems.empty}
+                    tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+                    tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+                    tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                    tmpDocItems.LINE_NO = data[i].LINE_NO
+                    tmpDocItems.REF = this.docObj.dt()[0].REF
+                    tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+                    tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                    tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+                    tmpDocItems.INPUT_CODE = this.docObj.dt()[0].INPUT_CODE
+                    tmpDocItems.INPUT_NAME = this.docObj.dt()[0].INPUT_NAME
+                    tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+                    tmpDocItems.OUTPUT_CODE = this.docObj.dt()[0].OUTPUT_CODE
+                    tmpDocItems.OUTPUT_NAME = this.docObj.dt()[0].OUTPUT_NAME
+                    tmpDocItems.ITEM = data[i].ITEM
+                    tmpDocItems.ITEM_CODE = data[i].ITEM_CODE
+                    tmpDocItems.ITEM_NAME = data[i].ITEM_NAME
+                    tmpDocItems.PRICE = data[i].PRICE
+                    tmpDocItems.QUANTITY = data[i].QUANTITY
+                    tmpDocItems.VAT = data[i].VAT
+                    tmpDocItems.AMOUNT = data[i].AMOUNT
+                    tmpDocItems.TOTAL = data[i].TOTAL
+                    tmpDocItems.DESCRIPTION = data[i].DESCRIPTION
+                    tmpDocItems.VAT_RATE = data[i].VAT_RATE
+                    tmpDocItems.DISCOUNT_RATE = data[i].DISCOUNT_RATE
+                    tmpDocItems.OFFER_GUID = data[i].GUID
                     tmpDocItems.VAT_RATE = data[i].VAT_RATE
                     tmpDocItems.OLD_VAT = data[i].VAT_RATE
 
@@ -2519,6 +2596,10 @@ export default class purchaseInvoice extends React.PureComponent
                                         {
                                             this._getOrders()
                                         }
+                                        else if(e.itemData.text == this.t("getOffers"))
+                                        {
+                                            this._getOffers()
+                                        }
                                     }).bind(this)} />
                                 </React.Fragment>     
                                 </Item>
@@ -3734,7 +3815,7 @@ export default class purchaseInvoice extends React.PureComponent
                         <Column dataField="NAME" caption={this.t("pg_txtBarcode.clmName")} width={300} defaultSortOrder="asc" />
                         <Column dataField="MULTICODE" caption={this.t("pg_txtBarcode.clmMulticode")} width={200}/>
                     </NdPopGrid>
-                      {/* Sipariş Grid */}
+                    {/* Sipariş Grid */}
                     <NdPopGrid id={"pg_ordersGrid"} parent={this} container={"#root"}
                     visible={false}
                     position={{of:'#root'}} 
@@ -3752,6 +3833,25 @@ export default class purchaseInvoice extends React.PureComponent
                         <Column dataField="QUANTITY" caption={this.t("pg_ordersGrid.clmQuantity")} width={200} />
                         <Column dataField="PRICE" caption={this.t("pg_ordersGrid.clmPrice")} width={200} format={{ style: "currency", currency: "EUR",precision: 2}} />
                         <Column dataField="TOTAL" caption={this.t("pg_ordersGrid.clmTotal")} width={200} format={{ style: "currency", currency: "EUR",precision: 2}} />
+                    </NdPopGrid>
+                    {/* Teklif Grid */}
+                    <NdPopGrid id={"pg_offersGrid"} parent={this} container={"#root"}
+                    visible={false}
+                    position={{of:'#root'}} 
+                    showTitle={true} 
+                    showBorders={true}
+                    width={'90%'}
+                    height={'90%'}
+                    selection={{mode:"multiple"}}
+                    title={this.t("pg_offersGrid.title")} //
+                    >
+                        <Paging defaultPageSize={22} />
+                        <Column dataField="REFERANS" caption={this.t("pg_offersGrid.clmReferans")} width={200} defaultSortOrder="asc"/>
+                        <Column dataField="ITEM_CODE" caption={this.t("pg_offersGrid.clmCode")} width={200}/>
+                        <Column dataField="ITEM_NAME" caption={this.t("pg_offersGrid.clmName")} width={500} />
+                        <Column dataField="QUANTITY" caption={this.t("pg_offersGrid.clmQuantity")} width={200} />
+                        <Column dataField="PRICE" caption={this.t("pg_offersGrid.clmPrice")} width={200} format={{ style: "currency", currency: "EUR",precision: 2}} />
+                        <Column dataField="TOTAL" caption={this.t("pg_offersGrid.clmTotal")} width={200} format={{ style: "currency", currency: "EUR",precision: 2}} />
                     </NdPopGrid>
                     {/* Excel PopUp */}
                     <div>
