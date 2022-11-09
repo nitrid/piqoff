@@ -689,9 +689,9 @@ export const langFr =
     },
     msgCustomerSaveResult: //BAK
     {
-        title: "Dikkat",
-        btn01: "Tamam",
-        msgSuccess: "Kayıt işleminiz başarılı !",
-        msgFailed: "Kayıt işleminiz başarısız !"
+        title: "Attention",
+        btn01: "OK",
+        msgSuccess: "Enregistrement effectué avec succès!",
+        msgFailed: "Votre enregistrement a échoué!"
     },
 }
