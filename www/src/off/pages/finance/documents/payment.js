@@ -434,6 +434,31 @@ export default class payment extends React.PureComponent
             this.invoices = data
         }
     }
+    async getDocumant()
+    {
+        let tmpQuery = 
+        {
+            query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_VW_01 WHERE OUTPUT = @OUTPUT AND DOC_TYPE IN(22) AND TYPE = 0 AND  " + 
+            "TOTAL - ISNULL((SELECT SUM(AMOUNT) FROM DOC_VW_01 WHERE ),0) > 0 ",
+            param : ['OUTPUT:string|50'],
+            value : [this.docObj.dt()[0].INPUT]
+        }
+        let tmpData = await this.core.sql.execute(tmpQuery) 
+        if(tmpData.result.recordset.length > 0)
+        {   
+            await this.pg_invoices.setData(tmpData.result.recordset)
+        }
+        else
+        {
+            await this.pg_invoices.setData([])
+        }
+
+        this.pg_invoices.show()
+        this.pg_invoices.onClick = async(data) =>
+        {
+            this.invoices = data
+        }
+    }
     render()
     {
         return(
@@ -1094,6 +1119,17 @@ export default class payment extends React.PureComponent
                                 </Item>
                                 <Item>
                                     <div className='row'>
+                                        <div className='col-12'>
+                                            <NdButton text={this.t("prePaymentSelect")} type="normal" stylingMode="contained" width={'100%'} 
+                                            onClick={async (e)=>
+                                            {       
+                                                this.getDocumant()
+                                            }}/>
+                                        </div>
+                                    </div>
+                                </Item>
+                                <Item>
+                                    <div className='row'>
                                         <div className='col-6'>
                                             <NdButton text={this.t("popCash.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
                                             validationGroup={"frmPayCash"  + this.tabIndex}
@@ -1193,6 +1229,23 @@ export default class payment extends React.PureComponent
                         <Column dataField="TOTAL" caption={this.t("pg_invoices.clmTotal")} width={200} />
                         <Column dataField="REMAINING" caption={this.t("pg_invoices.clmRemaining")} width={200} />
                     </NdPopGrid>
+                    {/* ÖN ÖDEME EVRAKI SEÇİM */}
+                    <NdPopGrid id={"pre_document"} parent={this} container={"#root"}
+                    visible={false}
+                    position={{of:'#root'}} 
+                    showTitle={true} 
+                    showBorders={true}
+                    width={'90%'}
+                    height={'90%'}
+                    selection={{mode:"single"}}
+                    title={this.t("pre_document.title")} //
+                    >
+                        <Column dataField="REFERANS" caption={this.t("pre_document.clmReferans")} width={200} defaultSortOrder="asc"/>
+                        <Column dataField="OUTPUT_NAME" caption={this.t("pre_document.clmOutputName")} width={300}/>
+                        <Column dataField="DOC_DATE_CONVERT" caption={this.t("pre_document.clmDate")} width={250} />
+                        <Column dataField="TOTAL" caption={this.t("pre_document.clmTotal")} width={200} />
+                    </NdPopGrid>
+                    
                 </ScrollView>     
             </div>
         )
