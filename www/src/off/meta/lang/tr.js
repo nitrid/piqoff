@@ -2103,6 +2103,7 @@ export const langTr =
             clmSirenID : "Tic. Sicil No",
             clmRcs : "Ticaret Odası",
             clmCapital : "Sermaye",
+            clmInsurance : "Sigorta No"
         },
         grdOffical : 
         {
@@ -2396,6 +2397,7 @@ export const langTr =
             clmSirenID : "Tic. Sicil No",
             clmRcs : "Ticaret Odası",
             clmCapital : "Sermaye",
+            clmInsurance : "Sigorta No"
         },
         grdOffical : 
         {
@@ -8618,6 +8620,7 @@ export const langTr =
         txtRestorant : "Tike Restorant",
         txtReal : "Doğru",
         payTransfer : "Tutarları Aktar",
+        validPriceFloat : "Avans 0'dan büyük olmalıdır",
         popFinish : 
         {
             title :"Sonuç"
