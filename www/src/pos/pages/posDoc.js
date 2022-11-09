@@ -514,16 +514,16 @@ export default class posDoc extends React.PureComponent
         if(this.state.isBtnGetCustomer)
         {       
             //PRODORPLUS İÇİN YAPILDI. #CUSTOM1453# 
-            if(pCode.toString().substring(0,6) == "202012")
-            {
-                pCode = pCode.toString().substring(0,6) + pCode.toString().substring(7,pCode.toString().length -1) 
-            }
+            // if(pCode.toString().substring(0,6) == "202012")
+            // {
+            //     pCode = pCode.toString().substring(0,6) + pCode.toString().substring(7,pCode.toString().length -1) 
+            // }
             //************************ */
 
             let tmpCustomerDt = new datatable(); 
             tmpCustomerDt.selectCmd = 
             {
-                query : "SELECT GUID,CODE,TITLE,ADRESS,dbo.FN_CUSTOMER_TOTAL_POINT(GUID,GETDATE()) AS CUSTOMER_POINT FROM [dbo].[CUSTOMER_VW_02] WHERE CODE LIKE @CODE + '%'",
+                query : "SELECT GUID,CODE,TITLE,ADRESS,dbo.FN_CUSTOMER_TOTAL_POINT(GUID,GETDATE()) AS CUSTOMER_POINT FROM [dbo].[CUSTOMER_VW_02] WHERE CODE LIKE SUBSTRING(@CODE,0,14) + '%'",
                 param : ['CODE:string|50'],
                 local : 
                 {
@@ -1231,7 +1231,7 @@ export default class posDoc extends React.PureComponent
                     }                    
                 }
                 //EĞER MÜŞTERİ KARTI İSE PUAN KAYIT EDİLİYOR.
-                if(this.posObj.dt()[0].CUSTOMER_GUID != '00000000-0000-0000-0000-000000000000')
+                if(this.posObj.dt()[0].CUSTOMER_GUID != '00000000-0000-0000-0000-000000000000' && this.posObj.dt()[0].CUSTOMER_TYPE == 0)
                 {
                     if(this.posObj.dt()[0].TYPE == 0)
                     {
@@ -1318,7 +1318,7 @@ export default class posDoc extends React.PureComponent
                     await this.core.sql.execute(tmpInsertQuery)
                     //***************************************************/
                     //FİŞ Mİ FATURAMI SORULUYOR
-                    if(this.posObj.dt()[0].CUSTOMER_CODE != '')
+                    if(this.posObj.dt()[0].CUSTOMER_CODE != '' && this.posObj.dt()[0].CUSTOMER_TYPE == 1)
                     {
                         let tmpConfObj =
                         {
