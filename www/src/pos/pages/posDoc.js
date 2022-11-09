@@ -6722,17 +6722,17 @@ export default class posDoc extends React.PureComponent
 
                                     let tmpConfObj1 =
                                     {
-                                        id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
-                                        button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
+                                        id:'msgCustomerSaveResult',showTitle:true,title:this.t("msgCustomerSaveResult.title"),showCloseButton:true,width:'500px',height:'200px',
+                                        button:[{id:"btn01",caption:this.t("msgCustomerSaveResult.btn01"),location:'after'}],
                                     }
                                     if((await this.customerObj.save()) == 0)
                                     {                                                    
-                                        tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
+                                        tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgCustomerSaveResult.msgSuccess")}</div>)
                                         await dialog(tmpConfObj1);
                                     }
                                     else
                                     {
-                                        tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
+                                        tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgCustomerSaveResult.msgFailed")}</div>)
                                         await dialog(tmpConfObj1);
                                     }
                                     console.log(this.customerObj)

@@ -687,4 +687,11 @@ export const langFr =
         btn01 : "Choisir Cleint",
         btn02 : "Abandonner"
     },
+    msgCustomerSaveResult: //BAK
+    {
+        title: "Dikkat",
+        btn01: "Tamam",
+        msgSuccess: "Kayıt işleminiz başarılı !",
+        msgFailed: "Kayıt işleminiz başarısız !"
+    },
 }
