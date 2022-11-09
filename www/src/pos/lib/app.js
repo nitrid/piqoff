@@ -1,13 +1,3 @@
-import 'devextreme/dist/css/dx.light.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../css/custom.css';
-
-import moment from 'moment';
-import io from "socket.io-client";
-
-import "@fortawesome/fontawesome-free/js/all.js";
-import "@fortawesome/fontawesome-free/css/all.css";
-
 import React from 'react';
 import {core, datatable} from '../../core/core.js'
 import enMessages from '../meta/lang/devexpress/en.js';
@@ -18,16 +8,12 @@ import i18n from './i18n.js'
 import TextBox from 'devextreme-react/text-box';
 import Button from 'devextreme-react/button';
 import { LoadPanel } from 'devextreme-react/load-panel';
+
 import HTMLReactParser from 'html-react-parser';
 
 import Login from './login.js'
 import Pos from '../pages/posDoc.js'
-import transferCls from './transfer.js'
-import NdDialog,{dialog} from '../../core/react/devex/dialog';
-
-import * as appInfo from '../../../package.json'
-
-export default class App extends React.Component
+export default class App extends React.PureComponent
 {
     static instance = null;
 
@@ -42,7 +28,7 @@ export default class App extends React.Component
         i18n.changeLanguage(localStorage.getItem('lang') == null ? 'en' : localStorage.getItem('lang'))
         this.lang = i18n;  
         moment.locale(localStorage.getItem('lang') == null ? 'en' : localStorage.getItem('lang'));
-        
+
         this.style =
         {
             splash_body : 
@@ -63,7 +49,13 @@ export default class App extends React.Component
         {
             opened : true,
             logined : false,
-            splash : true,
+            connected : false,
+            splash : 
+            {
+                type : 0,
+                headers : 'Warning',
+                title : 'Sunucu ile bağlantı kuruluyor.',
+            },
             vtadi : ''
         }
         this.toolbarItems = 
@@ -107,79 +99,76 @@ export default class App extends React.Component
             }
         ];
         
-        let tmpHost = window.location.origin
-        if(localStorage.getItem('local') != null && localStorage.getItem('local'))
-        {
-            tmpHost = localStorage.getItem('host')
-        }
-        
-        this.core = new core(io(tmpHost,{timeout:100000,transports : ['websocket']}));
-        this.transfer = new transferCls()
-        this.core.appInfo = appInfo
-
+        this.core = new core(io(window.location.origin,{timeout:100000}));
         this.textValueChanged = this.textValueChanged.bind(this)
-        
+        this.onDbClick = this.onDbClick.bind(this)
+
         if(!App.instance)
         {
             App.instance = this;
-        }        
+        }
 
-        this.core.socket.on('connect',async () => 
-        {   
-            this.core.offline = false;                     
-            this.login()
-        })
-        let tmpOneShoot = false;
-        this.core.socket.on('connect_error',async(error) => 
+        this.core.on('connect',async () => 
         {
-            this.core.offline = true;
-            if(!tmpOneShoot)
-            {                
-                tmpOneShoot = true
-                if(window.sessionStorage.getItem('auth') == null)
+            if((await this.core.sql.try()).status == 1)
+            {
+                let tmpSplash = 
                 {
-                    App.instance.setState({logined:false,splash:false});
+                    type : 0,
+                    headers : 'Warning',
+                    title: 'Sql sunucuya bağlanılamıyor.',
+                }
+                App.instance.setState({logined:false,connected:false,splash:tmpSplash});
+            }
+            else if((await this.core.sql.try()).status == 2)
+            {
+                let tmpSplash = 
+                {
+                    type : 1,
+                    headers : 'Veritabanı yok. Oluşturmak istermisiniz.',
+                    title: '',
+                }
+
+                App.instance.setState({logined:false,connected:false,splash:tmpSplash});
+            }
+            else
+            {
+                let tmpSplash = 
+                {
+                    type : 0,
+                    headers : 'Warning',
+                    title : 'Sunucu ile bağlantı kuruluyor.',
+                }
+                App.instance.setState({splash:tmpSplash});
+            }
+            //SUNUCUYA BAĞLANDIKDAN SONRA AUTH ILE LOGIN DENETLENIYOR
+            if((await this.core.auth.login(window.sessionStorage.getItem('auth'),'ADMIN')))
+            {
+                //ADMIN PANELINE YANLIZCA ADMINISTRATOR ROLUNDEKİ KULLANICILAR GİREBİLİR...
+                if(this.core.auth.data.ROLE == 'Administrator')
+                {
+                    App.instance.setState({logined:true,connected:true});
                 }
                 else
                 {
-                    this.login()
-                }                
-            }
-        })
-        this.core.socket.on('disconnect',async () => 
-        {
-            App.instance.setState({splash:false});
-            this.core.offline = true;
-        })
-        this.core.socket.on('general',async(e)=>
-        {
-            if(typeof e.id != 'undefined' && e.id == 'M004')
-            {
-                let tmpConfObj =
-                {
-                    id:'msgAnotherUserAlert',showTitle:true,title:this.lang.t("msgAnotherUserAlert.title"),showCloseButton:true,width:'500px',height:'200px',
-                    button:[{id:"btn01",caption:this.lang.t("msgAnotherUserAlert.btn01"),location:'after'}],
-                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgAnotherUserAlert.msg")}</div>)
+                    App.instance.setState({logined:false,connected:true});
                 }
-                await dialog(tmpConfObj);
-
-                this.core.auth.logout()
-                window.location.reload()
             }
-        })        
-    }
-    async login()
-    {
-        //SUNUCUYA BAĞLANDIKDAN SONRA AUTH ILE LOGIN DENETLENIYOR
-        if((await this.core.auth.login(window.sessionStorage.getItem('auth'),'POS')))
+            else
+            {
+                App.instance.setState({logined:false,connected:true});
+            }
+        })
+        this.core.on('connect_error',(error) => 
         {
-            App.instance.setState({logined:true,splash:false});
-        }
-        else
+            this.setState({connected:false});
+        })
+        this.core.on('disconnect',async () => 
         {
-            App.instance.setState({logined:false,splash:false});
-        }
-    }
+            App.instance.setState({connected:false});
+            this.core.auth.logout()
+        })
+    }    
     menuClick(data)
     {
         if(typeof data.path != 'undefined')
@@ -194,31 +183,94 @@ export default class App extends React.Component
             this.setState({vtadi: e.value});
         } 
     }
-    async componentDidMount()
+    async onDbClick(e)
     {
-        await this.core.util.waitUntil(0)
-        await this.transfer.init('POS')
+        if(this.state.vtadi == '')
+        {
+            return;
+        }
+
+        let tmpResult = await this.core.sql.createDb(this.state.vtadi)
+        if(tmpResult.msg == "")
+        {
+            let tmpSplash = 
+            {
+                type : 1,
+                headers : 'Veritabanı yok. Oluşturmak istermisiniz.',
+                title: 'Vt kurulumu başarılı.Lütfen config dosyasını kontrol edip sunucuyu restart ediniz.',
+            }
+            App.instance.setState({logined:false,connected:false,splash:tmpSplash});
+        }
+        else
+        {
+            let tmpSplash = 
+            {
+                type : 1,
+                headers : 'Veritabanı yok. Oluşturmak istermisiniz.',
+                title: tmpResult.msg,
+            }
+            App.instance.setState({logined:false,connected:false,splash:tmpSplash});
+        }
     }
     render() 
     {
-        const { logined,splash } = this.state;
+        const { opened,logined,connected,splash } = this.state;
 
-        if(splash)
+        if(!connected)
         {
-            return(
-                <div style={this.style.splash_body}>
-                    <div className="card" style={this.style.splash_box}>
-                        <div className="card-header">{this.lang.t("loading")}</div>
-                        <div className="card-body">
-                            <div className="row">
-                                <div className="col-12 pb-2">
-                                    <h5 className="text-center">{this.lang.t("serverConnection")}</h5>
+            //SPLASH EKRANI
+            if(splash.type == 0)
+            {
+                //BAĞLANTI YOKSA YA DA SQL SUNUCUYA BAĞLANAMIYORSA...
+                return(
+                    <div style={this.style.splash_body}>
+                        <div className="card" style={this.style.splash_box}>
+                            <div className="card-header">{splash.headers}</div>
+                            <div className="card-body">
+                                <div className="row">
+                                    <div className="col-12 pb-2">
+                                        <h5 className="text-center">{splash.title}</h5>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>                        
+                            </div>                        
+                        </div>
                     </div>
-                </div>
-            )           
+                )                
+            }
+            else
+            {
+                //VERITABANI OLUŞTURMAK İÇİN AÇILAN EKRAN.
+                return(
+                    <div style={this.style.splash_body}>
+                        <div className="card" style={this.style.splash_box}>
+                            <div className="card-header" style={{height:'40px'}}>{splash.headers}</div>
+                            <div className="card-body">
+                                <div className="row">
+                                    <div className="col-12 pb-2">
+                                        <h6 className="text-center">{splash.title}</h6>
+                                    </div>
+                                </div>
+                                <div className="dx-field">
+                                    <div className="dx-field-label">Veritabanı Adı</div>
+                                    <div className="dx-field-value">
+                                        <TextBox id="VtAdi" showClearButton={true} height='fit-content' valueChangeEvent="keyup" onValueChanged={this.textValueChanged} />
+                                    </div>
+                                </div>
+                                <div className="dx-field">
+                                    <Button
+                                        width={'100%'}
+                                        height='fit-content'
+                                        text="Oluştur"
+                                        type="default"
+                                        stylingMode="contained"
+                                        onClick={this.onDbClick}
+                                    />
+                                </div>
+                            </div>                        
+                        </div>
+                    </div>
+                )                
+            }
         }
         if(!logined)
         {
