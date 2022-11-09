@@ -66,15 +66,18 @@ class nf525
         })
         pSocket.on('disconnect',async() => 
         {
-            await this.insertJet(
+            if(typeof pSocket.userInfo != 'undefined' && pSocket.userInfo.APP == 'POS')
             {
-                CUSER:pSocket.userInfo.CODE,            
-                DEVICE:'',
-                CODE:'40',
-                NAME:'Kasa ile bağlantı kesildi.',
-                DESCRIPTION:'',
-                APP_VERSION:'1.0.0'
-            })
+                await this.insertJet(
+                {
+                    CUSER:pSocket.userInfo.CODE,            
+                    DEVICE:'',
+                    CODE:'40',
+                    NAME:'Kasa ile bağlantı kesildi.',
+                    DESCRIPTION:'',
+                    APP_VERSION:'1.0.0'
+                })
+            }
         })
     }
     async insertJet(pData)

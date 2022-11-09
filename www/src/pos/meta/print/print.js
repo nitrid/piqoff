@@ -44,10 +44,9 @@ export function print()
                 tmpArr.push({font:"a",align:"ct",data:"FACTURE"})
                 tmpArr.push({font:"a",align:"ct",data:"------------------------------------------------"})
                 tmpArr.push({font:"b",style:"b",align:"ct",data: " ".space(64)})
-                tmpArr.push({font:"b",style:"b",align:"lt",data: "Nom:.........................................................."})
-                tmpArr.push({font:"b",style:"b",align:"lt",data: "Adresse:......................................................"})
-                tmpArr.push({font:"b",style:"b",align:"lt",data: ".............................................................."})
-                tmpArr.push({font:"b",style:"b",align:"lt",data: ".............................................................."})
+                tmpArr.push({font:"b",style:"b",align:"lt",data: "Nom:" + data.pos[0].CUSTOMER_NAME.toString().substring(0,60)})
+                tmpArr.push({font:"b",style:"b",align:"lt",data: data.pos[0].CUSTOMER_ADRESS.toString().substring(0,60)})
+                tmpArr.push({font:"b",style:"b",align:"lt",data: data.pos[0].CUSTOMER_ZIPCODE.toString().substring(0,5) + " - " + data.pos[0].CUSTOMER_CITY.toString().substring(0,35) + " - " + data.pos[0].CUSTOMER_COUNTRY.toString().substring(0,20)})
                 tmpArr.push({font:"b",style:"b",align:"ct",data: " ".space(64)})
             }   
             return tmpArr.length > 0 ? tmpArr : undefined
@@ -361,7 +360,7 @@ export function print()
         ()=>
         {
             let tmpArr = [];
-            if(data.pos[0].CUSTOMER_CODE != '')
+            if(data.pos[0].CUSTOMER_CODE != '' && data.special.type != 'Fatura')
             {            
                 tmpArr.push({align:"ct",barcode:data.pos[0].CUSTOMER_CODE,options:{width: 1,height:30}});
                 tmpArr.push({font:"b",style:"b",align:"lt",data:"****************************************************************".space(64)});
