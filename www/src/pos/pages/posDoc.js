@@ -523,7 +523,9 @@ export default class posDoc extends React.PureComponent
             let tmpCustomerDt = new datatable(); 
             tmpCustomerDt.selectCmd = 
             {
-                query : "SELECT GUID,CODE,TITLE,ADRESS,dbo.FN_CUSTOMER_TOTAL_POINT(GUID,GETDATE()) AS CUSTOMER_POINT FROM [dbo].[CUSTOMER_VW_02] WHERE CODE LIKE SUBSTRING(@CODE,0,14) + '%'",
+                query : "SELECT GUID,CUSTOMER_TYPE,CODE,TITLE,ADRESS,ZIPCODE,CITY,COUNTRY_NAME,dbo.FN_CUSTOMER_TOTAL_POINT(GUID,GETDATE()) AS CUSTOMER_POINT, " +
+                        "ISNULL((SELECT COUNT(TYPE) FROM CUSTOMER_POINT WHERE TYPE = 0 AND CUSTOMER = CUSTOMER_VW_02.GUID AND CONVERT(DATE,LDATE) = CONVERT(DATE,GETDATE())),0) AS POINT_COUNT " + 
+                        "FROM [dbo].[CUSTOMER_VW_02] WHERE CODE LIKE SUBSTRING(@CODE,0,14) + '%'",
                 param : ['CODE:string|50'],
                 local : 
                 {
@@ -540,17 +542,47 @@ export default class posDoc extends React.PureComponent
 
             if(tmpCustomerDt.length > 0)
             {
+                if(tmpCustomerDt[0].POINT_COUNT > 3)
+                {
+                    let tmpConfObj =
+                    {
+                        id:'msgCustomerPointCount',showTitle:true,title:this.lang.t("msgCustomerPointCount.title"),showCloseButton:true,width:'450px',height:'250px',
+                        button:[{id:"btn01",caption:this.lang.t("msgCustomerPointCount.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgCustomerPointCount.btn02"),location:'after'}],
+                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgCustomerPointCount.msg")}</div>)
+                    }
+                    let tmpConfResult = await dialog(tmpConfObj)
+                    if(tmpConfResult == 'btn01')
+                    {
+                        let tmpResult = await acsDialog({id:"AcsDialog",parent:this,type:0})
+
+                        if(!tmpResult)
+                        {
+                            return
+                        }
+                    }
+                    else
+                    {
+                        return
+                    }
+                }
+                
                 this.posObj.dt()[0].CUSTOMER_GUID = tmpCustomerDt[0].GUID
+                this.posObj.dt()[0].CUSTOMER_TYPE = tmpCustomerDt[0].CUSTOMER_TYPE
                 this.posObj.dt()[0].CUSTOMER_CODE = tmpCustomerDt[0].CODE
                 this.posObj.dt()[0].CUSTOMER_NAME = tmpCustomerDt[0].TITLE
+                this.posObj.dt()[0].CUSTOMER_ADRESS = tmpCustomerDt[0].ADRESS
+                this.posObj.dt()[0].CUSTOMER_ZIPCODE = tmpCustomerDt[0].ZIPCODE
+                this.posObj.dt()[0].CUSTOMER_CITY = tmpCustomerDt[0].CITY
+                this.posObj.dt()[0].CUSTOMER_COUNTRY = tmpCustomerDt[0].COUNTRY_NAME
                 this.posObj.dt()[0].CUSTOMER_POINT = tmpCustomerDt[0].CUSTOMER_POINT
-
-                this.calcGrandTotal(true);
-                this.setState({isBtnGetCustomer:false})
 
                 //PROMOSYON GETİR.
                 await this.getPromoDb()
+                this.promoApply()
                 //************************************************** */
+
+                this.calcGrandTotal(true);
+                this.setState({isBtnGetCustomer:false})                
             }
             else
             {
@@ -822,6 +854,23 @@ export default class posDoc extends React.PureComponent
                     let tmpResult = await this.popNumber.show('Miktar',0)
                     if(typeof tmpResult != 'undefined' && tmpResult != '')
                     {
+                        if(tmpResult <= 0)
+                        {
+                            let tmpConfObj =
+                            {
+                                id:'msgZeroValidation',
+                                showTitle:true,
+                                title:this.lang.t("msgZeroValidation.title"),
+                                showCloseButton:true,
+                                width:'500px',
+                                height:'200px',
+                                button:[{id:"btn01",caption:"Tamam",location:'after'}],
+                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgZeroValidation.msg")}</div>)
+                            }
+                            await dialog(tmpConfObj);
+                            resolve()
+                        }
+
                         resolve(tmpResult)
                     }
                     else
@@ -1299,7 +1348,8 @@ export default class posDoc extends React.PureComponent
                 await this.posPromoObj.save()
                 //******************************** */
                 if(typeof pPrint == 'undefined' || pPrint)
-                {                    
+                {       
+                    console.log(this.posObj.dt()[0].CUSTOMER_ADRESS)             
                     let tmpType = 'Fis'
                     //POS_EXTRA TABLOSUNA YAZDIRMA BİLDİRİMİ GÖNDERİLİYOR                    
                     let tmpInsertQuery = 
@@ -1467,6 +1517,7 @@ export default class posDoc extends React.PureComponent
                     }
                     else
                     {
+                        this.payAdd(pType,pAmount)
                         return
                     }
                 }
@@ -2242,7 +2293,6 @@ export default class posDoc extends React.PureComponent
         this.promoObj.dt('PROMO').forEach(promoItem => 
         {
             let tmpIsCond = isCond(promoItem.GUID)
-            
             if(tmpIsCond.result)
             {
                 let tmpWithal = this.promoObj.app.dt().where({PROMO : promoItem.GUID}).groupBy('WITHAL')
@@ -2482,13 +2532,20 @@ export default class posDoc extends React.PureComponent
                                             if(tmpResult == "btn01")
                                             {
                                                 this.posObj.dt()[0].CUSTOMER_GUID = '00000000-0000-0000-0000-000000000000'
+                                                this.posObj.dt()[0].CUSTOMER_TYPE = 0
                                                 this.posObj.dt()[0].CUSTOMER_CODE = ''
                                                 this.posObj.dt()[0].CUSTOMER_NAME = ''
+                                                this.posObj.dt()[0].CUSTOMER_ADRESS = ''
+                                                this.posObj.dt()[0].CUSTOMER_ZIPCODE = ''
+                                                this.posObj.dt()[0].CUSTOMER_CITY = ''
+                                                this.posObj.dt()[0].CUSTOMER_COUNTRY = ''
                                                 this.posObj.dt()[0].CUSTOMER_POINT = 0
+
                                                 this.btnPopLoyaltyDel.props.onClick()
 
                                                 //PROMOSYON GETİR.
                                                 await this.getPromoDb()
+                                                this.promoApply()
                                                 //************************************************** */
                                                 this.calcGrandTotal(true);
                                             }
@@ -4150,7 +4207,9 @@ export default class posDoc extends React.PureComponent
                     {
                         select:
                         {
-                            query : "SELECT GUID,CODE,TITLE,ADRESS,dbo.FN_CUSTOMER_TOTAL_POINT(GUID,GETDATE()) AS CUSTOMER_POINT FROM [dbo].[CUSTOMER_VW_02] WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)",
+                            query : "SELECT GUID,CUSTOMER_TYPE,CODE,TITLE,ADRESS,ZIPCODE,CITY,COUNTRY_NAME,dbo.FN_CUSTOMER_TOTAL_POINT(GUID,GETDATE()) AS CUSTOMER_POINT, " +
+                                    "ISNULL((SELECT COUNT(TYPE) FROM CUSTOMER_POINT WHERE TYPE = 0 AND CUSTOMER = CUSTOMER_VW_02.GUID AND CONVERT(DATE,LDATE) = CONVERT(DATE,GETDATE())),0) AS POINT_COUNT " + 
+                                    "FROM [dbo].[CUSTOMER_VW_02] WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)",
                             param : ['VAL:string|50'],
                             local : 
                             {
@@ -4172,13 +4231,42 @@ export default class posDoc extends React.PureComponent
                     {
                         if(pData.length > 0)
                         {
+                            if(pData[0].POINT_COUNT > 3)
+                            {
+                                let tmpConfObj =
+                                {
+                                    id:'msgCustomerPointCount',showTitle:true,title:this.lang.t("msgCustomerPointCount.title"),showCloseButton:true,width:'450px',height:'250px',
+                                    button:[{id:"btn01",caption:this.lang.t("msgCustomerPointCount.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgCustomerPointCount.btn02"),location:'after'}],
+                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgCustomerPointCount.msg")}</div>)
+                                }
+                                let tmpConfResult = await dialog(tmpConfObj)
+                                if(tmpConfResult == 'btn01')
+                                {
+                                    let tmpResult = await acsDialog({id:"AcsDialog",parent:this,type:0})
+
+                                    if(!tmpResult)
+                                    {
+                                        return
+                                    }
+                                }
+                                else
+                                {
+                                    return
+                                }
+                            }
+
                             this.posObj.dt()[0].CUSTOMER_GUID = pData[0].GUID
+                            this.posObj.dt()[0].CUSTOMER_TYPE = pData[0].CUSTOMER_TYPE
                             this.posObj.dt()[0].CUSTOMER_CODE = pData[0].CODE
                             this.posObj.dt()[0].CUSTOMER_NAME = pData[0].TITLE
+                            this.posObj.dt()[0].CUSTOMER_ADRESS = pData[0].ADRESS
+                            this.posObj.dt()[0].CUSTOMER_ZIPCODE = pData[0].ZIPCODE
+                            this.posObj.dt()[0].CUSTOMER_CITY = pData[0].CITY
+                            this.posObj.dt()[0].CUSTOMER_COUNTRY = pData[0].COUNTRY_NAME
                             this.posObj.dt()[0].CUSTOMER_POINT = pData[0].CUSTOMER_POINT
-
                             //PROMOSYON GETİR.
                             await this.getPromoDb()
+                            this.promoApply()
                             //************************************************** */
                             this.calcGrandTotal(false);
                         }

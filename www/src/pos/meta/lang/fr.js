@@ -629,21 +629,21 @@ export const langFr =
         msg : "Vous ne pouvez pas passer de commande si vente en attente",
         btn01 : "OK"
     },
-    msgSaveFailAlert : //BAK
+    msgSaveFailAlert : 
     {
         title : "Attention",
         msg : "Votre enregistrement a échoué!",
         btn01 : "OK",
         btn02 : "Ressayez l'enregistrement",
     },
-    msgCheckRecord : //BAK
+    msgCheckRecord : 
     {
         title : "Attention",
         msg1 : "Tous les articles saisis ne sont pas enregistrés. SVP Patientez !",
         msg2 : "Article non enregistré : ",
         btn01 : "OK",
     },
-    popCustomerAdd : //BAK
+    popCustomerAdd :
     {
         title : "Ajout Client",
         txtPopCustomerCode : "Code",
@@ -657,41 +657,48 @@ export const langFr =
         txtPopCustomerEmail : "Email",
         txtPopCustomerTel : "Téléphone",
     },
-    popCustomerAddList : //BAK
+    popCustomerAddList :
     {
         title : "Recherche Client",
     },
-    popCustomerAddCountry : //BAK
+    popCustomerAddCountry :
     {
         title : "Choissir Pays",
     },
-    popCustomerAddCity : //BAK
+    popCustomerAddCity : 
     {
         title : "Choissir Ville",
     },
-    popCustomerAddZipCode : //BAK
+    popCustomerAddZipCode :
     {
         title : "Choissir Code Postal",
     },
-    msgPrintFacAlert: //BAK
+    msgPrintFacAlert:
     {
         title : "Attention",
         msg : "Souhaitez vous imprimer un Ticket ou une Facture ?",
         btn01 : "Facture",
         btn02 : "Ticket"
     },
-    msgPrintCustomerAlert: //BAK
+    msgPrintCustomerAlert: 
     {
         title : "Attention",
         msg : "Vous devez choisir ou saisir un client pour l'impression de la Facture !",
         btn01 : "Choisir Client",
         btn02 : "Abandonner"
     },
-    msgCustomerSaveResult: //BAK
+    msgCustomerSaveResult:
     {
         title: "Attention",
         btn01: "OK",
         msgSuccess: "Enregistrement effectué avec succès!",
         msgFailed: "Votre enregistrement a échoué!"
+    },
+    msgCustomerPointCount: //BAK
+    {
+        title: "Dikkat",
+        btn01: "Tamam",
+        btn02: "İptal",
+        msg: "Gün içerisinde aynı müşteriye 3 den fazla puan avantajı sağlayabilmeniz için lütfen yetkili şifresi giriniz !"
     },
 }

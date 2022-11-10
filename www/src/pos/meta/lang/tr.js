@@ -694,4 +694,11 @@ export const langTr =
         msgSuccess: "Kayıt işleminiz başarılı !",
         msgFailed: "Kayıt işleminiz başarısız !"
     },
+    msgCustomerPointCount:
+    {
+        title: "Dikkat",
+        btn01: "Tamam",
+        btn02: "İptal",
+        msg: "Gün içerisinde aynı müşteriye 3 den fazla puan avantajı sağlayabilmeniz için lütfen yetkili şifresi giriniz !"
+    },
 }
