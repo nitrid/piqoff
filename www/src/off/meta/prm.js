@@ -766,7 +766,6 @@ export const prm =
         }
     },
     //#endregion
-
     //#region Stok Liste
     {
         TYPE : 1,
@@ -903,8 +902,8 @@ export const prm =
             CAPTION : "Adı"
         }
     },
-     //txtCustomerLastname
-     {
+    //txtCustomerLastname
+    {
         TYPE : 2,
         ID :"txtCustomerLastname",
         VALUE : 
@@ -933,7 +932,6 @@ export const prm =
         }
     },
     //#endregion
-
     //#region Satış Faturası
     //txtRef
     {
@@ -1032,25 +1030,24 @@ export const prm =
     },
     // negativeQuantity
     {
-    TYPE : 1,
-    ID :"negativeQuantity",
-    VALUE : 
-    {
-        value : false
-    },
-    SPECIAL : "",
-    PAGE : "ftr_02_002",
-    ELEMENT : "",
-    APP : "OFF",
-    VIEW : 
-    {
-        TYPE : "checkbox",
-        PAGE_NAME : "Satış Faturası",
-        CAPTION : "Eksiye Düşemeye İzin Verme"
-    }
+        TYPE : 1,
+        ID :"negativeQuantity",
+        VALUE : 
+        {
+            value : false
+        },
+        SPECIAL : "",
+        PAGE : "ftr_02_002",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Satış Faturası",
+            CAPTION : "Eksiye Düşemeye İzin Verme"
+        }
     },
     //#endregion
-
     //#region Şubeler ArasıSatış Faturası
     //txtRef
     {
@@ -1149,25 +1146,24 @@ export const prm =
     },
     // negativeQuantity
     {
-    TYPE : 1,
-    ID :"negativeQuantity",
-    VALUE : 
-    {
-        value : false
-    },
-    SPECIAL : "",
-    PAGE : "ftr_02_005",
-    ELEMENT : "",
-    APP : "OFF",
-    VIEW : 
-    {
-        TYPE : "checkbox",
-        PAGE_NAME : "Şubeler Arası Satış Faturası",
-        CAPTION : "Eksiye Düşemeye İzin Verme"
-    }
+        TYPE : 1,
+        ID :"negativeQuantity",
+        VALUE : 
+        {
+            value : false
+        },
+        SPECIAL : "",
+        PAGE : "ftr_02_005",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Şubeler Arası Satış Faturası",
+            CAPTION : "Eksiye Düşemeye İzin Verme"
+        }
     },
     //#endregion
-
     //#region Alış Faturası
     //txtRef
     {
@@ -1284,7 +1280,6 @@ export const prm =
         }
     },
        //#endregion
-    
     //#region Promosyon
     //txtRef
     {
@@ -1315,7 +1310,6 @@ export const prm =
         }
     },
     //#endregion
-
     //#region Satış Anlaşması
     // maxDiscount
     {
@@ -1337,6 +1331,7 @@ export const prm =
         }
     },
     //#endregion
+<<<<<<< HEAD
 
     //#region Proforma  Satış Faturası
     //txtRef
@@ -1454,6 +1449,8 @@ export const prm =
     }
     },
     //#endregion
+=======
+>>>>>>> 4758781ea138dcbd3d8b275ba32cdfe996307b8e
     //#region Depo Miktar Listesi
     // maxDiscount
     {
@@ -1475,9 +1472,8 @@ export const prm =
         }
     },
         //#endregion
-
     //#region Depo Sevk
-     // negativeQuantity
+    // negativeQuantity
     {
         TYPE : 1,
         ID :"negativeQuantity",
@@ -1498,8 +1494,8 @@ export const prm =
     },
     //#endregion
     //#region İade Ürün Toplama
-     // negativeQuantity
-     {
+    // negativeQuantity
+    {
         TYPE : 1,
         ID :"negativeQuantity",
         VALUE : 
@@ -1519,47 +1515,46 @@ export const prm =
     },
     //cmbDepot1
     {
-    TYPE : 2,
-    ID :"cmbDepot1",
-    VALUE : 
-    {
-        value : "1A428DFC-48A9-4AC6-AF20-4D0A4D33F316"
-    },
-    SPECIAL : "",
-    PAGE : "stk_02_005",
-    ELEMENT : "cmbDepot1",
-    APP : "OFF",
-    VIEW : 
-    {
-        TYPE : "text",
-        PAGE_NAME : "İade Ürün Toplama",
-        CAPTION : "Çıkış Depo"
-    }
+        TYPE : 2,
+        ID :"cmbDepot1",
+        VALUE : 
+        {
+            value : "1A428DFC-48A9-4AC6-AF20-4D0A4D33F316"
+        },
+        SPECIAL : "",
+        PAGE : "stk_02_005",
+        ELEMENT : "cmbDepot1",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "İade Ürün Toplama",
+            CAPTION : "Çıkış Depo"
+        }
     },
     //cmbDepot2
     {
-    TYPE : 2,
-    ID :"cmbDepot2",
-    VALUE : 
-    {
-        value : "1A428DFC-48A9-4AC6-AF20-4D0A4D33F816"
-    },
-    SPECIAL : "",
-    PAGE : "stk_02_005",
-    ELEMENT : "cmbDepot2",
-    APP : "OFF",
-    VIEW : 
-    {
-        TYPE : "text",
-        PAGE_NAME : "İade Ürün Toplama",
-        CAPTION : "Giriş Depo"
-    }
+        TYPE : 2,
+        ID :"cmbDepot2",
+        VALUE : 
+        {
+            value : "1A428DFC-48A9-4AC6-AF20-4D0A4D33F816"
+        },
+        SPECIAL : "",
+        PAGE : "stk_02_005",
+        ELEMENT : "cmbDepot2",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "İade Ürün Toplama",
+            CAPTION : "Giriş Depo"
+        }
     },
     //#endregion
-
     //#region Kayıp Ürün
-     // Zorunlu Açıklama
-     {
+    // Zorunlu Açıklama
+    {
         TYPE : 1,
         ID :"descriptionControl",
         VALUE : 
@@ -1578,7 +1573,7 @@ export const prm =
         }
     },
      // negativeQuantity
-     {
+    {
         TYPE : 1,
         ID :"negativeQuantity",
         VALUE : 
@@ -1648,22 +1643,22 @@ export const prm =
     },
     // Çek Kasası 
     {
-    TYPE : 1,
-    ID :"CheckSafe",
-    VALUE : "3848A862-D4FF-4BAD-9AB1-C1A29D9BC7F3",
-    SPECIAL : "",
-    PAGE : "pos_03_001",
-    ELEMENT : "",
-    APP : "OFF",
-    VIEW : 
+        TYPE : 1,
+        ID :"CheckSafe",
+        VALUE : "3848A862-D4FF-4BAD-9AB1-C1A29D9BC7F3",
+        SPECIAL : "",
+        PAGE : "pos_03_001",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Pos",
+            CAPTION : "Çek Kasası"
+        }
+    },
+    // Anavas Tutar
     {
-        TYPE : "text",
-        PAGE_NAME : "Pos",
-        CAPTION : "Çek Kasası"
-    }
-},
-     // Anavas Tutar
-     {
         TYPE : 1,
         ID :"advanceAmount",
         VALUE : "450",
@@ -1680,7 +1675,7 @@ export const prm =
     },
     //#endregion
     //#region Satış İrsaliye
-     // negativeQuantity
+    // negativeQuantity
     {
         TYPE : 1,
         ID :"negativeQuantity",
@@ -1701,8 +1696,8 @@ export const prm =
     },
     //#endregion
     //#region Şube Satış İrsaliye
-     // negativeQuantity
-     {
+    //negativeQuantity
+    {
         TYPE : 1,
         ID :"negativeQuantity",
         VALUE : 
@@ -1721,10 +1716,9 @@ export const prm =
         }
     },
     //#endregion
-    
     //#region Alış Anlaşması
-     //cmbDepot
-     {
+    //cmbDepot
+    {
         TYPE : 2,
         ID :"cmbDepot",
         VALUE : 
@@ -1744,8 +1738,8 @@ export const prm =
     },
     //#endregion
     //#region Satış Anlaşması
-     //cmbDepot
-     {
+    //cmbDepot
+    {
         TYPE : 2,
         ID :"cmbDepot",
         VALUE : 

@@ -443,7 +443,7 @@ export default class promotionCard extends React.PureComponent
                                         ]}>
                                             <Validator validationGroup={"frmPromo"  + this.tabIndex}>
                                                 <RequiredRule message={this.t("validation.txtPrmQuantityValid")} />
-                                                <RangeRule min={0.001} message={this.t("validation.txtPrmQuantityMinValid")}/>
+                                                <RangeRule min={0} message={this.t("validation.txtPrmQuantityMinValid")}/>
                                             </Validator> 
                                         </NdTextBox>     
                                     </Item>

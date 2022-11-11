@@ -2137,9 +2137,9 @@ export default class salesInvoice extends React.PureComponent
                                     width={'100%'}
                                     dbApply={false}
                                     onRowPrepared={async(e)=>
-                                        {
+                                    {
 
-                                        }}
+                                    }}
                                     onRowUpdating={async(e)=>
                                     {
                                         if(this.quantityControl == true)
@@ -2194,7 +2194,6 @@ export default class salesInvoice extends React.PureComponent
                                         }
                                     }}
                                     onRowUpdated={async(e)=>{
-                                        let rowIndex = e.component.getRowIndexByKey(e.key)
 
                                         if(typeof e.data.QUANTITY != 'undefined')
                                         {

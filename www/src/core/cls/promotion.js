@@ -40,8 +40,8 @@ export class promoCls
         let tmpDt = new datatable('PROMO');            
         tmpDt.selectCmd = 
         {
-            query : "SELECT * FROM [dbo].[PROMO_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND ((CODE = @CODE) OR (@CODE = '')) AND " + 
-                    "((CUSTOMER_GUID = @CUSTOMER_GUID) OR (CUSTOMER_GUID = '00000000-0000-0000-0000-000000000000') OR (@CUSTOMER_GUID = '00000000-0000-0000-0000-000000000000')) AND ((DEPOT_GUID = @DEPOT_GUID) OR (@DEPOT_GUID = '00000000-0000-0000-0000-000000000000')) AND " + 
+            query : "SELECT * FROM [dbo].[PROMO_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND " + 
+                    "((CUSTOMER_GUID = @CUSTOMER_GUID) OR (CUSTOMER_GUID = '00000000-0000-0000-0000-000000000000')) AND ((DEPOT_GUID = @DEPOT_GUID) OR (@DEPOT_GUID = '00000000-0000-0000-0000-000000000000')) AND " + 
                     "((START_DATE <= @START_DATE) OR (@START_DATE = '19700101')) AND ((FINISH_DATE >= @FINISH_DATE) OR (@FINISH_DATE = '19700101')) AND STATUS = 1 ORDER BY TYPE ASC",
             param : ['GUID:string|50','CODE:string|25','START_DATE:date','FINISH_DATE:date','CUSTOMER_GUID:string|50','DEPOT_GUID:string|50']
         } 
@@ -145,15 +145,24 @@ export class promoCls
 
             if(arguments.length > 0)
             {
-                tmpPrm.GUID = typeof arguments[0].GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].GUID;
-                tmpPrm.CODE = typeof arguments[0].CODE == 'undefined' ? '' : arguments[0].CODE;
-                tmpPrm.START_DATE = typeof arguments[0].START_DATE == 'undefined' ? '19700101' : arguments[0].START_DATE;
-                tmpPrm.FINISH_DATE = typeof arguments[0].FINISH_DATE == 'undefined' ? '19700101' : arguments[0].FINISH_DATE;
-                tmpPrm.CUSTOMER_GUID = typeof arguments[0].CUSTOMER_GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].CUSTOMER_GUID;
-                tmpPrm.DEPOT_GUID = typeof arguments[0].DEPOT_GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].DEPOT_GUID;
+                if(typeof arguments[0].CODE == 'undefined')
+                {
+                    tmpPrm.GUID = typeof arguments[0].GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].GUID;
+                    tmpPrm.START_DATE = typeof arguments[0].START_DATE == 'undefined' ? '19700101' : arguments[0].START_DATE;
+                    tmpPrm.FINISH_DATE = typeof arguments[0].FINISH_DATE == 'undefined' ? '19700101' : arguments[0].FINISH_DATE;
+                    tmpPrm.CUSTOMER_GUID = typeof arguments[0].CUSTOMER_GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].CUSTOMER_GUID;
+                    tmpPrm.DEPOT_GUID = typeof arguments[0].DEPOT_GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].DEPOT_GUID;
+                }
+                else
+                {
+                    tmpPrm = {CODE:arguments[0].CODE}
+                    this.ds.get('PROMO').selectCmd.query = "SELECT * FROM [dbo].[PROMO_VW_01] WHERE ((CODE = @CODE) OR (@CODE = '')) AND STATUS = 1 ORDER BY TYPE ASC"
+                    this.ds.get('PROMO').selectCmd.param = ['CODE:string|25']
+                }
             }
+            
             this.ds.get('PROMO').selectCmd.value = Object.values(tmpPrm)
-
+            
             await this.ds.get('PROMO').refresh();
 
             let tmpGuids = ''
@@ -161,7 +170,6 @@ export class promoCls
             {
                 tmpGuids = tmpGuids + this.ds.get('PROMO')[i].GUID + ","
             }
-            
             await this.cond.load({PROMO:tmpGuids.substring(0,tmpGuids.length - 1)})
             await this.app.load({PROMO:tmpGuids.substring(0,tmpGuids.length - 1)})
 
@@ -192,7 +200,7 @@ export class promoCondCls
             ITEM_GUID : '00000000-0000-0000-0000-000000000000',
             ITEM_CODE : '',
             ITEM_NAME : '',
-            QUANTITY : '',
+            QUANTITY : 0,
             AMOUNT : 0,
             WITHAL : 0,
             SECTOR : 'COND'
