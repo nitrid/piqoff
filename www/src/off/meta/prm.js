@@ -1331,8 +1331,6 @@ export const prm =
         }
     },
     //#endregion
-<<<<<<< HEAD
-
     //#region Proforma  Satış Faturası
     //txtRef
     {
@@ -1449,8 +1447,6 @@ export const prm =
     }
     },
     //#endregion
-=======
->>>>>>> 4758781ea138dcbd3d8b275ba32cdfe996307b8e
     //#region Depo Miktar Listesi
     // maxDiscount
     {
