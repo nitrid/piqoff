@@ -471,6 +471,11 @@ export const menu = (e) =>
                             text: e.t('menu.irs_02_004'),//'Şubeler Arası Sevk',
                             path: 'dispatch/documents/branchSaleDispatch'
                         },
+                        {
+                            id: 'irs_02_005',
+                            text: e.t('menu.irs_02_005'),//'Şubeler Arası Sevk',
+                            path: 'dispatch/lists/rebatePurcDispatch'
+                        }
                     ]
                 },
                 {
@@ -498,7 +503,12 @@ export const menu = (e) =>
                             id: 'irs_01_004',
                             text: e.t('menu.irs_01_004'),//'Şubeler Arası Sevk',
                             path: 'dispatch/lists/bransSaleDisLİst'
-                        }
+                        },
+                        // {
+                        //     id: 'irs_01_005',
+                        //     text: e.t('menu.irs_01_005'),//'İade Alış İrsaliiye',
+                        //     path: 'dispatch/lists/rebatePurcDispatch'
+                        // }
                     ]
                 },
                 {
@@ -546,7 +556,17 @@ export const menu = (e) =>
                             id: 'ftr_02_005',
                             text: e.t('menu.ftr_02_005'),//'Şubeler Arası Satış',
                             path: 'invoices/documents/branchSaleInvoice'
-                        }
+                        },
+                        {
+                            id: 'ftr_02_006',
+                            text: e.t('menu.ftr_02_006'),//'Fiyat Farkı Alış Faturası',
+                            path: 'invoices/proforma/priceDifferencePurcInvoice'
+                        },
+                        {
+                            id: 'ftr_02_007',
+                            text: e.t('menu.ftr_02_007'),//'İade Alış Faturası',
+                            path: 'invoices/proforma/branchSaleProInvoice'
+                        },
                     ]
                 },
                 {
