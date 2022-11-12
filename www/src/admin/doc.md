@@ -1,6 +1,4 @@
 ## PARAMETRE VIEW
-    
-    ``` js
     {
         TYPE : 0,
         ID :"onlyBigChar",
@@ -16,7 +14,6 @@
             CAPTION : "Sadece Büyük Harf Kullanımı"
         }
     },
-    ```
 ### TYPE -> CHECK
 - Meta param dosyasında iki tip VALUE olabilir.
     - true/false
