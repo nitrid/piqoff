@@ -48,7 +48,7 @@ export default class rebateInvoice extends React.PureComponent
         this.combineControl = true
         this.combineNew = false
 
-        this.rightItems = [{ text: this.t("getDispatch"),}]
+        this.rightItems = [{ text: this.t("getDispatch")},{ text: this.t("getProforma")}]
         this.unitDetailData = new datatable
 
     }
@@ -136,7 +136,7 @@ export default class rebateInvoice extends React.PureComponent
         await this.grdUnit2.dataRefresh({source:this.unitDetailData})
         let tmpQuery = 
         {
-            query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 20 ",
+            query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 20 AND REBATE = 1 ",
         }
         let tmpData = await this.core.sql.execute(tmpQuery) 
         if(tmpData.result.recordset.length > 0)
@@ -719,25 +719,6 @@ export default class rebateInvoice extends React.PureComponent
         }
 
     }
-    async close()
-    {
-        App.instance.panel.onClose = async () =>
-        {
-          
-            let tmpConfObj =
-            {
-                id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'200px',
-                button:[{id:"btn01",caption:this.t("msgDelete.btn01"),location:'before'},{id:"btn02",caption:this.t("msgDelete.btn02"),location:'after'}],
-                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDelete.msg")}</div>)
-            }
-            
-            let pResult = await dialog(tmpConfObj);
-            if(pResult == 'btn01')
-            {
-                App.instance.panel.closePage()
-            }
-        }
-    }
     async checkRow()
     {
         for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
@@ -797,6 +778,91 @@ export default class rebateInvoice extends React.PureComponent
             if(data.length > 0)
             {
                 this.getDoc(data[0].GUID,data[0].REF,data[0].REF_NO)
+            }
+        }
+    }
+    async _getProforma()
+    {
+        if(this.docObj.dt()[0].INPUT == '' || this.docObj.dt()[0].INPUT == '00000000-0000-0000-0000-000000000000')
+        {
+            let tmpConfObj =
+            {
+                id:'msgCustomerSelect',showTitle:true,title:this.t("msgCustomerSelect.title"),showCloseButton:true,width:'500px',height:'200px',
+                button:[{id:"btn01",caption:this.t("msgCustomerSelect.btn01"),location:'after'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerSelect.msg")}</div>)
+            }
+
+            await dialog(tmpConfObj);
+            return
+        }
+        else
+        {
+            let tmpQuery = 
+            {
+                query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ITEMS_VW_01 WHERE INPUT = @INPUT AND INVOICE_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 1 AND DOC_TYPE IN(120) AND REBATE = 1",
+                param : ['INPUT:string|50'],
+                value : [this.docObj.dt()[0].INPUT]
+            }
+            let tmpData = await this.core.sql.execute(tmpQuery) 
+            if(tmpData.result.recordset.length > 0)
+            {   
+                await this.pg_proformaGrid.setData(tmpData.result.recordset)
+            }
+            else
+            {
+                await this.pg_proformaGrid.setData([])
+            }
+    
+            this.pg_proformaGrid.show()
+            this.pg_proformaGrid.onClick = async(data) =>
+            {
+                App.instance.setState({isExecute:true})
+                for (let i = 0; i < data.length; i++) 
+                {
+                    let tmpDocItems = {...this.docObj.docItems.empty}
+                    tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+                    tmpDocItems.TYPE = data[i].TYPE
+                    tmpDocItems.DOC_TYPE = 20
+                    tmpDocItems.REBATE = data[i].REBATE
+                    tmpDocItems.LINE_NO = data[i].LINE_NO
+                    tmpDocItems.REF = data[i].REF
+                    tmpDocItems.REF_NO = data[i].REF_NO
+                    tmpDocItems.DOC_DATE = data[i].DOC_DATE
+                    tmpDocItems.SHIPMENT_DATE = data[i].SHIPMENT_DATE
+                    tmpDocItems.INPUT = data[i].INPUT
+                    tmpDocItems.INPUT_CODE = data[i].INPUT_CODE
+                    tmpDocItems.INPUT_NAME = data[i].INPUT_NAME
+                    tmpDocItems.OUTPUT = data[i].OUTPUT
+                    tmpDocItems.OUTPUT_CODE = data[i].OUTPUT_CODE
+                    tmpDocItems.OUTPUT_NAME = data[i].OUTPUT_NAME
+                    tmpDocItems.ITEM = data[i].ITEM
+                    tmpDocItems.ITEM_CODE = data[i].ITEM_CODE
+                    tmpDocItems.ITEM_NAME = data[i].ITEM_NAME
+                    tmpDocItems.PRICE = data[i].PRICE
+                    tmpDocItems.QUANTITY = data[i].QUANTITY
+                    tmpDocItems.VAT = data[i].VAT
+                    tmpDocItems.AMOUNT = data[i].AMOUNT
+                    tmpDocItems.TOTAL = data[i].TOTAL
+                    tmpDocItems.DESCRIPTION = data[i].DESCRIPTION
+                    tmpDocItems.PROFORMA_GUID = data[i].GUID
+                    tmpDocItems.VAT_RATE = data[i].VAT_RATE
+                    tmpDocItems.DISCOUNT_RATE = data[i].DISCOUNT_RATE
+                    tmpDocItems.CONNECT_REF = data[i].CONNECT_REF
+                    tmpDocItems.ORDER_GUID = data[i].ORDER_GUID
+                    tmpDocItems.OLD_VAT = data[i].VAT_RATE
+                    tmpDocItems.VAT_RATE = data[i].VAT_RATE
+                    tmpDocItems.DEPOT_QUANTITY = data[i].DEPOT_QUANTITY
+                    tmpDocItems.CUSTOMER_PRICE = data[i].CUSTOMER_PRICE
+
+                    await this.docObj.docItems.addEmpty(tmpDocItems)
+                    await this.core.util.waitUntil(100)
+                }
+              
+                this._calculateTotal()
+                App.instance.setState({isExecute:false})
+                setTimeout(() => {
+                    this.btnSave.setState({disabled:false});
+                    }, 500);
             }
         }
     }
@@ -1834,10 +1900,9 @@ export default class rebateInvoice extends React.PureComponent
                                         {
                                             this._getDispatch()
                                         }
-                                        else if(e.itemData.text == this.t("getPayment"))
+                                        else if(e.itemData.text == this.t("getProforma"))
                                         {
-                                            await this._getPayment()
-                                            this.popPayment.show()
+                                            this._getProforma()
                                         }
                                         
                                     }).bind(this)} />
@@ -2773,7 +2838,7 @@ export default class rebateInvoice extends React.PureComponent
                             </Form>
                         </NdPopUp>
                     </div>
-                     {/* Adres Seçim POPUP */}
+                     {/* Adres Seçim Grid */}
                      <NdPopGrid id={"pg_adress"} parent={this} container={"#root"}
                         visible={false}
                         position={{of:'#root'}} 
@@ -2787,64 +2852,82 @@ export default class rebateInvoice extends React.PureComponent
                             <Column dataField="CITY" caption={this.t("pg_adress.clmCiyt")} width={150} />
                             <Column dataField="ZIPCODE" caption={this.t("pg_adress.clmZipcode")} width={300} defaultSortOrder="asc" />
                             <Column dataField="COUNTRY" caption={this.t("pg_adress.clmCountry")} width={200}/>
-                        </NdPopGrid>
-                        {/* Birim PopUp */}
-                        <div>
-                            <NdDialog parent={this} id={"msgUnit"} 
-                            visible={false}
-                            showCloseButton={true}
-                            showTitle={true}
-                            title={this.t("msgUnit.title")}
-                            container={"#root"} 
-                            width={'500'}
-                            height={'400'}
-                            position={{of:'#root'}}
-                            button={[{id:"btn01",caption:this.t("msgUnit.btn01"),location:'after'}]}
-                            >
-                                <Form colCount={1} height={'fit-content'}>
-                                    <Item>
-                                        <NdSelectBox simple={true} parent={this} id="cmbUnit"
-                                        displayExpr="NAME"                       
-                                        valueExpr="GUID"
-                                        value=""
-                                        searchEnabled={true}
-                                        onValueChanged={(async(e)=>
-                                        {
-                                            this.txtUnitFactor.setState({value:this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].FACTOR});
-                                            this.txtTotalQuantity.value = this.txtUnitQuantity.value * this.txtUnitFactor.value;
-                                        }).bind(this)}
-                                        >
-                                        </NdSelectBox>
-                                    </Item>
-                                    <Item>
-                                        <Label text={this.t("txtUnitFactor")} alignment="right" />
-                                        <NdNumberBox id="txtUnitFactor" parent={this} simple={true}
-                                        readOnly={true}
-                                        maxLength={32}
-                                        >
-                                        </NdNumberBox>
-                                    </Item>
-                                    <Item>
-                                        <Label text={this.t("txtUnitQuantity")} alignment="right" />
-                                        <NdNumberBox id="txtUnitQuantity" parent={this} simple={true}
-                                        maxLength={32}
-                                        onValueChanged={(async(e)=>
-                                        {
-                                        this.txtTotalQuantity.value = this.txtUnitQuantity.value * this.txtUnitFactor.value
-                                        }).bind(this)}
-                                        >
-                                        </NdNumberBox>
-                                    </Item>
-                                    <Item>
-                                        <Label text={this.t("txtTotalQuantity")} alignment="right" />
-                                        <NdNumberBox id="txtTotalQuantity" parent={this} simple={true}  readOnly={true}
-                                        maxLength={32}
-                                        >
-                                        </NdNumberBox>
-                                    </Item>
-                                </Form>
-                            </NdDialog>
-                        </div>
+                    </NdPopGrid>
+                    {/* Birim PopUp */}
+                    <div>
+                        <NdDialog parent={this} id={"msgUnit"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.t("msgUnit.title")}
+                        container={"#root"} 
+                        width={'500'}
+                        height={'400'}
+                        position={{of:'#root'}}
+                        button={[{id:"btn01",caption:this.t("msgUnit.btn01"),location:'after'}]}
+                        >
+                            <Form colCount={1} height={'fit-content'}>
+                                <Item>
+                                    <NdSelectBox simple={true} parent={this} id="cmbUnit"
+                                    displayExpr="NAME"                       
+                                    valueExpr="GUID"
+                                    value=""
+                                    searchEnabled={true}
+                                    onValueChanged={(async(e)=>
+                                    {
+                                        this.txtUnitFactor.setState({value:this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].FACTOR});
+                                        this.txtTotalQuantity.value = this.txtUnitQuantity.value * this.txtUnitFactor.value;
+                                    }).bind(this)}
+                                    >
+                                    </NdSelectBox>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("txtUnitFactor")} alignment="right" />
+                                    <NdNumberBox id="txtUnitFactor" parent={this} simple={true}
+                                    readOnly={true}
+                                    maxLength={32}
+                                    >
+                                    </NdNumberBox>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("txtUnitQuantity")} alignment="right" />
+                                    <NdNumberBox id="txtUnitQuantity" parent={this} simple={true}
+                                    maxLength={32}
+                                    onValueChanged={(async(e)=>
+                                    {
+                                    this.txtTotalQuantity.value = this.txtUnitQuantity.value * this.txtUnitFactor.value
+                                    }).bind(this)}
+                                    >
+                                    </NdNumberBox>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("txtTotalQuantity")} alignment="right" />
+                                    <NdNumberBox id="txtTotalQuantity" parent={this} simple={true}  readOnly={true}
+                                    maxLength={32}
+                                    >
+                                    </NdNumberBox>
+                                </Item>
+                            </Form>
+                        </NdDialog>
+                    </div>
+                    {/* Proforma Grid */}
+                    <NdPopGrid id={"pg_proformaGrid"} parent={this} container={"#root"}
+                    visible={false}
+                    position={{of:'#root'}} 
+                    showTitle={true} 
+                    showBorders={true}
+                    width={'90%'}
+                    height={'90%'}
+                    selection={{mode:"multiple"}}
+                    title={this.t("pg_proformaGrid.title")} //
+                    >
+                        <Column dataField="REFERANS" caption={this.t("pg_proformaGrid.clmReferans")} width={200} defaultSortOrder="asc"/>
+                        <Column dataField="ITEM_CODE" caption={this.t("pg_proformaGrid.clmCode")} width={200}/>
+                        <Column dataField="ITEM_NAME" caption={this.t("pg_proformaGrid.clmName")} width={450} />
+                        <Column dataField="QUANTITY" caption={this.t("pg_proformaGrid.clmQuantity")} width={200} />
+                        <Column dataField="PRICE" caption={this.t("pg_proformaGrid.clmPrice")} width={200} />
+                        <Column dataField="TOTAL" caption={this.t("pg_proformaGrid.clmTotal")} width={200} />
+                    </NdPopGrid>
                 </ScrollView>
             </div>
         )

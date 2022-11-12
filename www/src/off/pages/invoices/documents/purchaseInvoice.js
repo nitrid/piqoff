@@ -58,7 +58,7 @@ export default class purchaseInvoice extends React.PureComponent
         this.combineControl = true
         this.combineNew = false
 
-        this.rightItems = [{ text: this.t("getDispatch")},{ text: this.t("getOrders")},{ text: this.t("getOffers")}]
+        this.rightItems = [{ text: this.t("getDispatch")},{ text: this.t("getOrders")},{ text: this.t("getOffers")},{ text: this.t("getProforma")}]
         this.multiItemData = new datatable
         this.unitDetailData = new datatable
         this.newPrice = new datatable
@@ -1400,6 +1400,91 @@ export default class purchaseInvoice extends React.PureComponent
             }
         }
     }
+    async _getProforma()
+    {
+        if(this.docObj.dt()[0].OUTPUT == '' || this.docObj.dt()[0].OUTPUT == '00000000-0000-0000-0000-000000000000')
+        {
+            let tmpConfObj =
+            {
+                id:'msgCustomerSelect',showTitle:true,title:this.t("msgCustomerSelect.title"),showCloseButton:true,width:'500px',height:'200px',
+                button:[{id:"btn01",caption:this.t("msgCustomerSelect.btn01"),location:'after'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerSelect.msg")}</div>)
+            }
+
+            await dialog(tmpConfObj);
+            return
+        }
+        else
+        {
+            let tmpQuery = 
+            {
+                query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ITEMS_VW_01 WHERE OUTPUT = @OUTPUT AND INVOICE_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 0 AND DOC_TYPE IN(120) AND REBATE = 0",
+                param : ['OUTPUT:string|50'],
+                value : [this.docObj.dt()[0].OUTPUTV]
+            }
+            let tmpData = await this.core.sql.execute(tmpQuery) 
+            if(tmpData.result.recordset.length > 0)
+            {   
+                await this.pg_proformaGrid.setData(tmpData.result.recordset)
+            }
+            else
+            {
+                await this.pg_proformaGrid.setData([])
+            }
+    
+            this.pg_proformaGrid.show()
+            this.pg_proformaGrid.onClick = async(data) =>
+            {
+                App.instance.setState({isExecute:true})
+                for (let i = 0; i < data.length; i++) 
+                {
+                    let tmpDocItems = {...this.docObj.docItems.empty}
+                    tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+                    tmpDocItems.TYPE = data[i].TYPE
+                    tmpDocItems.DOC_TYPE = 20
+                    tmpDocItems.REBATE = data[i].REBATE
+                    tmpDocItems.LINE_NO = data[i].LINE_NO
+                    tmpDocItems.REF = data[i].REF
+                    tmpDocItems.REF_NO = data[i].REF_NO
+                    tmpDocItems.DOC_DATE = data[i].DOC_DATE
+                    tmpDocItems.SHIPMENT_DATE = data[i].SHIPMENT_DATE
+                    tmpDocItems.INPUT = data[i].INPUT
+                    tmpDocItems.INPUT_CODE = data[i].INPUT_CODE
+                    tmpDocItems.INPUT_NAME = data[i].INPUT_NAME
+                    tmpDocItems.OUTPUT = data[i].OUTPUT
+                    tmpDocItems.OUTPUT_CODE = data[i].OUTPUT_CODE
+                    tmpDocItems.OUTPUT_NAME = data[i].OUTPUT_NAME
+                    tmpDocItems.ITEM = data[i].ITEM
+                    tmpDocItems.ITEM_CODE = data[i].ITEM_CODE
+                    tmpDocItems.ITEM_NAME = data[i].ITEM_NAME
+                    tmpDocItems.PRICE = data[i].PRICE
+                    tmpDocItems.QUANTITY = data[i].QUANTITY
+                    tmpDocItems.VAT = data[i].VAT
+                    tmpDocItems.AMOUNT = data[i].AMOUNT
+                    tmpDocItems.TOTAL = data[i].TOTAL
+                    tmpDocItems.DESCRIPTION = data[i].DESCRIPTION
+                    tmpDocItems.PROFORMA_GUID = data[i].GUID
+                    tmpDocItems.VAT_RATE = data[i].VAT_RATE
+                    tmpDocItems.DISCOUNT_RATE = data[i].DISCOUNT_RATE
+                    tmpDocItems.CONNECT_REF = data[i].CONNECT_REF
+                    tmpDocItems.ORDER_GUID = data[i].ORDER_GUID
+                    tmpDocItems.OLD_VAT = data[i].VAT_RATE
+                    tmpDocItems.VAT_RATE = data[i].VAT_RATE
+                    tmpDocItems.DEPOT_QUANTITY = data[i].DEPOT_QUANTITY
+                    tmpDocItems.CUSTOMER_PRICE = data[i].CUSTOMER_PRICE
+
+                    await this.docObj.docItems.addEmpty(tmpDocItems)
+                    await this.core.util.waitUntil(100)
+                }
+              
+                this._calculateTotal()
+                App.instance.setState({isExecute:false})
+                setTimeout(() => {
+                    this.btnSave.setState({disabled:false});
+                    }, 500);
+            }
+        }
+    }
     render()
     {
         return(
@@ -2587,10 +2672,9 @@ export default class purchaseInvoice extends React.PureComponent
                                         {
                                             this._getDispatch()
                                         }
-                                        else if(e.itemData.text == this.t("getPayment"))
+                                        else if(e.itemData.text == this.t("getProforma"))
                                         {
-                                            await this._getPayment()
-                                            this.popPayment.show()
+                                            this._getProforma()
                                         }
                                         else if(e.itemData.text == this.t("getOrders"))
                                         {
@@ -4033,6 +4117,24 @@ export default class purchaseInvoice extends React.PureComponent
                             </Form>
                         </NdDialog>
                     </div>  
+                    {/* Proforma Grid */}
+                    <NdPopGrid id={"pg_proformaGrid"} parent={this} container={"#root"}
+                    visible={false}
+                    position={{of:'#root'}} 
+                    showTitle={true} 
+                    showBorders={true}
+                    width={'90%'}
+                    height={'90%'}
+                    selection={{mode:"multiple"}}
+                    title={this.t("pg_proformaGrid.title")} //
+                    >
+                        <Column dataField="REFERANS" caption={this.t("pg_proformaGrid.clmReferans")} width={200} defaultSortOrder="asc"/>
+                        <Column dataField="ITEM_CODE" caption={this.t("pg_proformaGrid.clmCode")} width={200}/>
+                        <Column dataField="ITEM_NAME" caption={this.t("pg_proformaGrid.clmName")} width={450} />
+                        <Column dataField="QUANTITY" caption={this.t("pg_proformaGrid.clmQuantity")} width={200} />
+                        <Column dataField="PRICE" caption={this.t("pg_proformaGrid.clmPrice")} width={200} />
+                        <Column dataField="TOTAL" caption={this.t("pg_proformaGrid.clmTotal")} width={200} />
+                    </NdPopGrid>
                 </ScrollView>     
             </div>
         )

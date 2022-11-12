@@ -471,6 +471,11 @@ export const menu = (e) =>
                             text: e.t('menu.irs_02_004'),//'Şubeler Arası Sevk',
                             path: 'dispatch/documents/branchSaleDispatch'
                         },
+                        {
+                            id: 'irs_02_005',
+                            text: e.t('menu.irs_02_005'),//'Şubeler Arası Sevk',
+                            path: 'dispatch/lists/rebatePurcDispatch'
+                        }
                     ]
                 },
                 {
@@ -498,7 +503,12 @@ export const menu = (e) =>
                             id: 'irs_01_004',
                             text: e.t('menu.irs_01_004'),//'Şubeler Arası Sevk',
                             path: 'dispatch/lists/bransSaleDisLİst'
-                        }
+                        },
+                        // {
+                        //     id: 'irs_01_005',
+                        //     text: e.t('menu.irs_01_005'),//'İade Alış İrsaliiye',
+                        //     path: 'dispatch/lists/rebatePurcDispatch'
+                        // }
                     ]
                 },
                 {
@@ -546,7 +556,17 @@ export const menu = (e) =>
                             id: 'ftr_02_005',
                             text: e.t('menu.ftr_02_005'),//'Şubeler Arası Satış',
                             path: 'invoices/documents/branchSaleInvoice'
-                        }
+                        },
+                        {
+                            id: 'ftr_02_006',
+                            text: e.t('menu.ftr_02_006'),//'Fiyat Farkı Alış Faturası',
+                            path: 'invoices/proforma/priceDifferencePurcInvoice'
+                        },
+                        {
+                            id: 'ftr_02_007',
+                            text: e.t('menu.ftr_02_007'),//'İade Alış Faturası',
+                            path: 'invoices/proforma/branchSaleProInvoice'
+                        },
                     ]
                 },
                 {
@@ -577,7 +597,7 @@ export const menu = (e) =>
                         },
                         {
                             id: 'ftr_01_005',
-                            text: e.t('menu.ftr_01_005'),//'ŞubeS atış  Fatura Listesi',
+                            text: e.t('menu.ftr_01_005'),//'Şube satış  Fatura Listesi',
                             path: 'invoices/lists/brancSaleInvList'
                         }
                     ]
@@ -592,6 +612,26 @@ export const menu = (e) =>
                             id: 'ftr_04_001',
                             text: e.t('menu.ftr_04_001'),//'proforma fiyat farkı',
                             path: 'invoices/proforma/priceDifferenceProInvoice'
+                        },
+                        {
+                            id: 'ftr_04_002',
+                            text: e.t('menu.ftr_04_002'),//'proforma Satış Faturası',
+                            path: 'invoices/proforma/salesProInvoice'
+                        },
+                        {
+                            id: 'ftr_04_003',
+                            text: e.t('menu.ftr_04_003'),//'proforma Alış Faturası',
+                            path: 'invoices/proforma/purchaseProInvoice'
+                        },
+                        {
+                            id: 'ftr_04_004',
+                            text: e.t('menu.ftr_04_004'),//'proforma İade Faturası',
+                            path: 'invoices/proforma/rebateProInvoice'
+                        },
+                        {
+                            id: 'ftr_04_005',
+                            text: e.t('menu.ftr_04_005'),//'proforma Şube Satış Faturası',
+                            path: 'invoices/proforma/branchSaleProInvoice'
                         },
                     ]
                 },
