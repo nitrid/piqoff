@@ -33,7 +33,6 @@
     - combobox
 - Meta param dosyasındaki VIEW.TYPE = 'popInput'
 - VIEW.FORM içerisinde açılacak popup ın içeriği ve stili belirlenebilir.    
-    ``` js
     VIEW : 
     {
         TYPE : "popInput",
@@ -51,4 +50,3 @@
             ]
         }
     }
-    ```
