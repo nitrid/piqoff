@@ -81,9 +81,50 @@ export const prm =
         APP : "OFF",
         VIEW : 
         {
-            TYPE : "text",
-            PAGE_NAME : "Pos",
-            CAPTION : "Para Sembolü"
+            TYPE : "popInput",
+            PAGE_NAME : "Sistem",
+            CAPTION : "Para Sembolü",
+            DISPLAY : "code",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                item:
+                [
+                    {type:"text",caption:"Code",field:"code",id:"txtPopMoneySymbolCode"},
+                    {type:"text",caption:"Sign",field:"sign",id:"txtPopMoneySymbolSign"}
+                ]
+            }
+        }
+    },
+    //Stok
+    {
+        TYPE : 0,
+        ID :"Stoks",
+        VALUE : "001", //{CODE:"EUR",NAME:"€"},
+        SPECIAL : "",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "popSelect",
+            PAGE_NAME : "Sistem",
+            CAPTION : "Stok",
+            DISPLAY : "CODE",
+            FIELD : "CODE",
+            FORM: 
+            {
+                selection:{mode:"single"},
+                width:"600",
+                height:"500",
+                data:
+                {
+                    select:
+                    {
+                        query : "SELECT CODE,NAME FROM USERS ORDER BY CODE ASC"
+                    },
+                },
+            }
         }
     },
     //Para Sembolu
@@ -99,7 +140,7 @@ export const prm =
         APP : "OFF",
         VIEW : 
         {
-            TYPE : "text",
+            TYPE : "checkbox",
             PAGE_NAME : "Sistem",
             CAPTION : "Daha Düşük Fiyatlı Tedarikçi Uyarısı"
         }
@@ -119,7 +160,7 @@ export const prm =
         {
             TYPE : "checkbox",
             PAGE_NAME : "Sistem",
-            CAPTION : "aturadaki Hizmetten maliyet ekle"
+            CAPTION : "Faturadaki Hizmetten Maliyet Ekle"
         }
     },
     //#endregion
