@@ -193,6 +193,7 @@ export const langFr =
         pos_02_003 : "Rapport de Vente",
         pos_02_004 : "Rapport de Mouvement Ticket",
         pos_02_005 : "Rapport de tickets modifiés", 
+        pos_02_006 : "Gün Sonu Raporu", // BAK
         pos_03 :"Traitements", 
         pos_03_001 : "Opérations de fin de journée",
         promo: "Promotion",
@@ -11141,6 +11142,25 @@ export const langFr =
             clmTotal : "Total",
             clmDescription :"Motif",
         }
+    },
+    pos_02_006 : // "Satış Fiş Raporu",
+    {
+        btnGet :"Getir",
+        dtFirst : "İlk Tarih",
+        dtLast : "Son Tarih",
+        cmbDevice :"Kasa",
+        grdEnddaData: 
+        {
+            clmDate: "Tarih",
+            clmTime: "Saat",
+            clmUser: "Kullanıcı",
+            clmCash: "Nakit",
+            clmCredit : "Kredi Kartı",
+            clmCheck : "Çek",
+            clmTicket : "T. Restorant",
+            clmAdvance : "Avans",
+            clmSafe : "Kasa"
+        },
     },
     pos_03_001 : // "B"
     {

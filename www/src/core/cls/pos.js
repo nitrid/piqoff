@@ -2072,3 +2072,115 @@ export class posPromoCls
         });
     }
 }
+export class posEnddayCls
+{
+    constructor()
+    {
+        this.core = core.instance;
+        this.ds = new dataset();
+        this.empty = 
+        {
+            GUID : '00000000-0000-0000-0000-000000000000',
+            CUSER : this.core.auth.data.CODE,
+            CUSER_NAME : '',
+            CASH : 0,
+            CREDIT : 0,
+            CHECK : 0,
+            TICKET: 0,
+            ADVANCE : 0,
+            SAFE: '00000000-0000-0000-0000-000000000000',
+            SAFE_NAME : '',
+            SAFE_CODE : ''
+        }
+
+        this._initDs();
+    }
+    //#region Private
+    _initDs()
+    {
+        let tmpDt = new datatable('ENDDAY_DATE');            
+        tmpDt.selectCmd = 
+        {
+            query :"SELECT * FROM ENDDAY_DATA_VW_01 WHERE ((GUID= @GUID) OR (@GUID =  '00000000-0000-0000-0000-000000000000')) ",
+            param : ['GUID:string|50']
+        } 
+        tmpDt.insertCmd = 
+        {
+            query : "EXEC [dbo].[PRD_ENDDAY_DATA_INSERT] " + 
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " + 
+                    "@CASH =@PCASH, " +
+                    "@CREDIT = @PCREDIT, " +
+                    "@CHECK = @PCHECK , " +
+                    "@TICKET = @PTICKET , " +
+                    "@ADVANCE = @PADVANCE , " +
+                    "@SAFE = @PSAFE ",
+            param : ['PGUID:string|50','PCUSER:string|25','PCASH:string|25','PCREDIT:float','PCHECK:float','PTICKET:float','PADVANCE:float','PSAFE:string|50'],
+            dataprm : ['GUID','CUSER','CASH','CREDIT','CHECK','TICKET','ADVANCE','SAFE']
+          
+        } 
+
+        this.ds.add(tmpDt);
+    }
+    //#endregion
+    dt()
+    {
+        if(arguments.length > 0)
+        {
+            return this.ds.get(arguments[0]);
+        }
+
+        return this.ds.get(0)
+    }
+    addEmpty()
+    {
+        if(typeof this.dt('ENDDAY_DATE') == 'undefined')
+        {
+            return;
+        }
+        let tmp = {}
+        if(arguments.length > 0)
+        {
+            tmp = {...arguments[0]}            
+        }
+        else
+        {
+            tmp = {...this.empty}
+        }
+        tmp.GUID = datatable.uuidv4();
+        this.dt('ENDDAY_DATE').push(tmp)
+    }
+    clearAll()
+    {
+        for (let i = 0; i < this.ds.length; i++) 
+        {
+            this.dt(i).clear()
+        }
+    }
+    load()
+    {
+        //PARAMETRE OLARAK OBJE GÖNDERİLİR YADA PARAMETRE BOŞ İSE TÜMÜ GETİRİLİ ÖRN: {GUID:''}
+        return new Promise(async resolve => 
+        {
+            let tmpPrm = {GUID:''}
+            if(arguments.length > 0)
+            {
+                tmpPrm.GUID = typeof arguments[0].GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].GUID;
+            }
+            
+            this.ds.get('ENDDAY_DATE').selectCmd.value = Object.values(tmpPrm);
+              
+            await this.ds.get('ENDDAY_DATE').refresh();
+
+            resolve(this.ds.get('ENDDAY_DATE'));    
+        });
+    }
+    save()
+    {
+        return new Promise(async resolve => 
+        {
+            this.ds.delete()
+            resolve(await this.ds.update()); 
+        });
+    }
+}

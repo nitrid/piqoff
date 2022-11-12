@@ -3502,7 +3502,7 @@ export default class posDoc extends React.PureComponent
                                             tmpOrderList.selectCmd = 
                                             {
                                                 query : "SELECT REF,REF_NO,DOC_DATE,INPUT_CODE,INPUT_NAME,DOC_GUID,SUM(TOTAL) AS TOTAL " +
-                                                        "FROM DOC_ORDERS_VW_01 WHERE TYPE = 1 GROUP BY REF,REF_NO,DOC_DATE,INPUT_CODE,INPUT_NAME,DOC_GUID ",
+                                                        "FROM DOC_ORDERS_VW_01 WHERE TYPE = 1 AND CLOSED < 2 GROUP BY REF,REF_NO,DOC_DATE,INPUT_CODE,INPUT_NAME,DOC_GUID ",
                                             }
                                             await tmpOrderList.refresh()
                                             await this.grdPopOrderList.dataRefresh({source:tmpOrderList});
@@ -4517,14 +4517,39 @@ export default class posDoc extends React.PureComponent
                                             let tmpOrderList = new datatable();
                                             tmpOrderList.selectCmd = 
                                             {
-                                                query : "SELECT * FROM DOC_ORDERS_VW_01 WHERE DOC_GUID = @DOC_GUID",
+                                                query : "SELECT * FROM DOC_ORDERS_VW_01 WHERE DOC_GUID = @DOC_GUID AND CLOSED < 2 ",
                                                 param : ['DOC_GUID:string|50'],
                                                 value : [this.grdPopOrderList.devGrid.getSelectedRowsData()[0].DOC_GUID]
                                             }
+                                            tmpOrderList.updateCmd = 
+                                            {
+                                                query : "EXEC [dbo].[PRD_DOC_ORDERS_UPDATE] " +
+                                                "@GUID = @PGUID, " +
+                                                "@CUSER = @PCUSER, " +
+                                                "@DOC_GUID = @PDOC_GUID, " + 
+                                                "@CLOSED  = @PCLOSED " ,
+                                                param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PCLOSED:int'],
+                                                dataprm : ['GUID','CUSER','DOC_GUID','CLOSED']
+                                            }
                                             await tmpOrderList.refresh()
+                                            if(tmpOrderList[0].CLOSED == 1)
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgGetOrder',showTitle:true,title:this.lang.t("msgGetOrder.title"),showCloseButton:true,width:'500px',height:'250px',
+                                                    button:[{id:"btn01",caption:this.lang.t("msgGetOrder.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgGetOrder.btn02"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgGetOrder.msg")}</div>)
+                                                }
+                                                if((await dialog(tmpConfObj)) == 'btn02')
+                                                {
+                                                    return
+                                                }
+                                            }
                                             this.posObj.dt()[0].ORDER_GUID = tmpOrderList[0].DOC_GUID
                                             tmpOrderList.forEach((items)=>
                                             {
+                                                items.CLOSED = 1
+                                                items.CUSER = this.core.auth.data.CODE
                                                 let tmpData = 
                                                 {
                                                     BARCODE: items.ITEM_BARCODE,
@@ -4559,6 +4584,7 @@ export default class posDoc extends React.PureComponent
                                                 }
                                                 this.saleAdd(tmpData)
                                             })
+                                            tmpOrderList.update()
                                             this.popOrderList.hide()
                                         }
                                     }

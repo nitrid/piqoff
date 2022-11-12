@@ -701,4 +701,11 @@ export const langTr =
         btn02: "İptal",
         msg: "Gün içerisinde aynı müşteriye 3 den fazla puan avantajı sağlayabilmeniz için lütfen yetkili şifresi giriniz !"
     },
+    msgGetOrder : 
+    {
+        title : "Uyarı",
+        msg : "Bu sipariş daha önce pos ekranına çağırılmış devam etmek istediğinize eminmisiniz?",
+        btn01 : "Evet",
+        btn02 : "Hayır"
+    },
 }

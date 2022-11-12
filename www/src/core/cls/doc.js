@@ -772,6 +772,7 @@ export class docOrdersCls
             UNIT_SHORT : '',
             QUANTITY : 1,
             COMP_QUANTITY : 0,
+            CLOSED : 0,
             PRICE : 0,
             DISCOUNT : 0,
             VAT: 0,
@@ -819,6 +820,7 @@ export class docOrdersCls
                     "@UNIT  = @PUNIT, " +
                     "@QUANTITY  = @PQUANTITY, " +
                     "@COMP_QUANTITY  = @PCOMP_QUANTITY, " +
+                    "@CLOSED  = @PCLOSED, " +
                     "@PRICE  = @PPRICE, " +
                     "@DISCOUNT = @PDISCOUNT, " +
                     "@VAT = @PVAT, " +
@@ -828,8 +830,8 @@ export class docOrdersCls
                     "@SHIPMENT_GUID  = @PSHIPMENT_GUID, " +
                     "@OFFER_GUID  = @POFFER_GUID ",
             param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PTYPE:int','PDOC_TYPE:int','PREF:string|25','PREF_NO:int','PDOC_DATE:date','PINPUT:string|50',
-                        'POUTPUT:string|50','PITEM:string|50','PITEM_NAME:string|250','PLINE_NO:int','PUNIT:string|50','PQUANTITY:float','PCOMP_QUANTITY:float','PPRICE:float','PDISCOUNT:float','PVAT:float','PAMOUNT:float','PTOTAL:float','PDESCRIPTION:string|100','PSHIPMENT_GUID:string|50','POFFER_GUID:string|50'],
-            dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REF','REF_NO','DOC_DATE','INPUT','OUTPUT','ITEM','ITEM_NAME','LINE_NO','UNIT','QUANTITY','COMP_QUANTITY','PRICE','DISCOUNT','VAT','AMOUNT','TOTAL','DESCRIPTION','SHIPMENT_GUID','OFFER_GUID']
+                        'POUTPUT:string|50','PITEM:string|50','PITEM_NAME:string|250','PLINE_NO:int','PUNIT:string|50','PQUANTITY:float','PCOMP_QUANTITY:float','PCLOSED:int','PPRICE:float','PDISCOUNT:float','PVAT:float','PAMOUNT:float','PTOTAL:float','PDESCRIPTION:string|100','PSHIPMENT_GUID:string|50','POFFER_GUID:string|50'],
+            dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REF','REF_NO','DOC_DATE','INPUT','OUTPUT','ITEM','ITEM_NAME','LINE_NO','UNIT','QUANTITY','COMP_QUANTITY','CLOSED','PRICE','DISCOUNT','VAT','AMOUNT','TOTAL','DESCRIPTION','SHIPMENT_GUID','OFFER_GUID']
         }
         tmpDt.updateCmd = 
         {
@@ -850,6 +852,7 @@ export class docOrdersCls
                     "@UNIT  = @PUNIT, " +
                     "@QUANTITY  = @PQUANTITY, " +
                     "@COMP_QUANTITY  = @PCOMP_QUANTITY, " +
+                    "@CLOSED  = @PCLOSED, " +
                     "@PRICE  = @PPRICE, " +
                     "@DISCOUNT = @PDISCOUNT, " +
                     "@VAT = @PVAT, " +
@@ -859,8 +862,8 @@ export class docOrdersCls
                     "@SHIPMENT_GUID  = @PSHIPMENT_GUID, " +
                     "@OFFER_GUID  = @POFFER_GUID ",
             param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PTYPE:int','PDOC_TYPE:int','PREF:string|25','PREF_NO:int','PDOC_DATE:date','PINPUT:string|50',
-                        'POUTPUT:string|50','PITEM:string|50','PITEM_NAME:string|250','PLINE_NO:int','PUNIT:string|50','PQUANTITY:float','PCOMP_QUANTITY:float','PPRICE:float','PDISCOUNT:float','PVAT:float','PAMOUNT:float','PTOTAL:float','PDESCRIPTION:string|100','PSHIPMENT_GUID:string|50','POFFER_GUID:string|50'],
-            dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REF','REF_NO','DOC_DATE','INPUT','OUTPUT','ITEM','ITEM_NAME','LINE_NO','UNIT','QUANTITY','COMP_QUANTITY','PRICE','DISCOUNT','VAT','AMOUNT','TOTAL','DESCRIPTION','SHIPMENT_GUID','OFFER_GUID']
+                        'POUTPUT:string|50','PITEM:string|50','PITEM_NAME:string|250','PLINE_NO:int','PUNIT:string|50','PQUANTITY:float','PCOMP_QUANTITY:float','PCLOSED:int','PPRICE:float','PDISCOUNT:float','PVAT:float','PAMOUNT:float','PTOTAL:float','PDESCRIPTION:string|100','PSHIPMENT_GUID:string|50','POFFER_GUID:string|50'],
+            dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REF','REF_NO','DOC_DATE','INPUT','OUTPUT','ITEM','ITEM_NAME','LINE_NO','UNIT','QUANTITY','COMP_QUANTITY','CLOSED','PRICE','DISCOUNT','VAT','AMOUNT','TOTAL','DESCRIPTION','SHIPMENT_GUID','OFFER_GUID']
         }
         tmpDt.deleteCmd = 
         {

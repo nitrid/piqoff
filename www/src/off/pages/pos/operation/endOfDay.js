@@ -3,6 +3,8 @@ import App from '../../../lib/app.js';
 import ReactWizard from 'react-bootstrap-wizard';
 import moment from 'moment';
 
+import { posEnddayCls } from '../../../../core/cls/pos.js';
+
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
 import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
@@ -36,6 +38,7 @@ export default class endOfDay extends React.PureComponent
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
         this.docObj = new docCls()
+        this.enddayObj = new posEnddayCls()
         this.btnGetDetail = this.btnGetDetail.bind(this)
         this.message = ''
         this.Advance = 0
@@ -311,7 +314,27 @@ export default class endOfDay extends React.PureComponent
         this.TicketRest = tmpTicketValue
         this.setState({TicketRest:tmpTikcet})
       }
+      this.enddayObj.clearAll()
+      let tmpSafeQuery = 
+      {
+          query : "SELECT GUID FROM SAFE_VW_01 WHERE CODE = @INPUT_CODE",
+          param : ['INPUT_CODE:string|50'],
+          value : [this.cmbSafe.value]
+      }
+      let tmpSafeData = await this.core.sql.execute(tmpSafeQuery) 
+      let tmpSafe = tmpSafeData.result.recordset[0].GUID
+      let tmpEndday = {...this.enddayObj.empty}
+      tmpEndday.CASH = this.txtCash.value
+      tmpEndday.CREDIT = this.txtCreditCard.value
+      tmpEndday.CHECK = this.txtCheck.value
+      tmpEndday.TICKET = this.txtRestorant.value
+      tmpEndday.ADVANCE = this.txtAdvance.value
+      tmpEndday.SAFE = tmpSafe
       
+      this.enddayObj.addEmpty(tmpEndday)
+      console.log(this.enddayObj.dt())
+      this.enddayObj.save()
+
       this.popFinish.show()
     }
     stepStart()
@@ -568,6 +591,7 @@ export default class endOfDay extends React.PureComponent
                         <NdPopUp parent={this} id={"popFinish"} 
                         visible={false}
                         showTitle={true}
+                        showCloseButton={true}
                         title={this.t("popFinish.title")}
                         container={"#root"} 
                         width={'500'}
@@ -623,15 +647,15 @@ export default class endOfDay extends React.PureComponent
                               </div>
                             </div>
                             <div>
-                              <Form colCount={2}>
-                                <Item>
+                              <Form colCount={1}>
+                                {/* <Item>
                                   <NdButton text={this.t("payTransfer")}
                                   onClick={async ()=>
                                     {       
                                       this.safeTransfer()
                                     }}
                                   />
-                                  </Item>
+                                  </Item> */}
                                 <Item>
                                 <NdButton text={this.t("addAdvance")}
                                 onClick={async ()=>

@@ -193,6 +193,7 @@ export const langTr =
         pos_02_003 : "Pos Satış Raporu",
         pos_02_004 : "Pos Satış Detay Raporu",
         pos_02_005 : "Değişmiş Fişler Raporu",
+        pos_02_006 : "Gün Sonu Raporu",
         pos_03 :"Operasyonlar",
         pos_03_001 : "Gün Sonu",
         promo: "Promosyon",
@@ -11141,6 +11142,25 @@ export const langTr =
             clmTotal : "Tutar",
             clmDescription :"Açıklama",
         }
+    },
+    pos_02_006 : // "Satış Fiş Raporu",
+    {
+        btnGet :"Getir",
+        dtFirst : "İlk Tarih",
+        dtLast : "Son Tarih",
+        cmbDevice :"Kasa",
+        grdEnddaData: 
+        {
+            clmDate: "Tarih",
+            clmTime: "Saat",
+            clmUser: "Kullanıcı",
+            clmCash: "Nakit",
+            clmCredit : "Kredi Kartı",
+            clmCheck : "Çek",
+            clmTicket : "T. Restorant",
+            clmAdvance : "Avans",
+            clmSafe : "Kasa"
+        },
     },
     pos_03_001 : // "Gün Sonu",
     {

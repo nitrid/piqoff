@@ -701,4 +701,11 @@ export const langFr =
         btn02: "Abandonner",
         msg: "Dans la même journée si vous souhaitez passer plus de 3 fois la même carte de fidélité veuillez saisir le code responsable!"
     },
+    msgGetOrder : 
+    {
+        title : "Uyarı", // BAK
+        msg : "Bu sipariş daha önce pos ekranına çağırılmış devam etmek istediğinize eminmisiniz?",   // BAK
+        btn01 : "Evet",  // BAK
+        btn02 : "Hayır"  // BAK
+    },
 }
