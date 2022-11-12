@@ -51,9 +51,9 @@
     - **VIEW.FORM.data :** Grid içerisine gelecek datanın kaynağı belirtilir.
         - Veritabanı kullanımı : {select:{query : 'SELECT CODE,NAME FROM USERS ORDER BY CODE ASC'}},
         - Statik data : [{CODE:'001',NAME:'XXX'}]
-    ```
-    NOT : Obje ve dizi kullanımında FIELD elemanını kaldırın. FIELD yanlızca string değer için geçerlidir.
-    ```
+    
+    **NOT : Obje ve dizi kullanımında FIELD elemanını kaldırın. FIELD yanlızca string değer için geçerlidir.**
+    
     EXAMPLE : 
     ``` js
     {
