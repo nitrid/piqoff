@@ -1,4 +1,21 @@
 ## PARAMETRE VIEW
+    ``` js
+    {
+        TYPE : 0,
+        ID :"onlyBigChar",
+        VALUE : 
+        {
+            value : true
+        },
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Sistem",
+            CAPTION : "Sadece Büyük Harf Kullanımı"
+        }
+    },
+    ```
 ### TYPE -> CHECK
 - Meta param dosyasında iki tip VALUE olabilir.
     - true/false
@@ -17,5 +34,23 @@
     - popSelect
     - combobox
 - Meta param dosyasındaki VIEW.TYPE = 'popInput'
-- VIEW.FORM içerisinde açılacak popup ın içeriği ve stili belirlenebilir.
-     
+- VIEW.FORM içerisinde açılacak popup ın içeriği ve stili belirlenebilir.    
+    ``` js
+    VIEW : 
+    {
+        TYPE : "popInput",
+        PAGE_NAME : "System",
+        CAPTION : "Money Sign",
+        DISPLAY : "code",
+        FORM: 
+        {
+            width:"400",
+            height:"180",
+            item:
+            [
+                {type:"text",caption:"Code",field:"code",id:"txtPopMoneySymbolCode"},
+                {type:"text",caption:"Sign",field:"sign",id:"txtPopMoneySymbolSign"}
+            ]
+        }
+    }
+    ```
