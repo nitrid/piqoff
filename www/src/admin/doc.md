@@ -1,4 +1,5 @@
 ## PARAMETRE VIEW
+    
     ``` js
     {
         TYPE : 0,
