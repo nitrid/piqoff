@@ -11143,23 +11143,27 @@ export const langFr =
             clmDescription :"Motif",
         }
     },
-    pos_02_006 : // "Satış Fiş Raporu",
+    pos_02_006 : // "Satış Fiş Raporu", 
     {
-        btnGet :"Getir",
-        dtFirst : "İlk Tarih",
-        dtLast : "Son Tarih",
-        cmbDevice :"Kasa",
+        btnGet :"Getir",   // BAK
+        dtFirst : "İlk Tarih",   // BAK
+        dtLast : "Son Tarih",   // BAK
+        cmbDevice :"Kasa",   // BAK
         grdEnddaData: 
         {
-            clmDate: "Tarih",
-            clmTime: "Saat",
-            clmUser: "Kullanıcı",
-            clmCash: "Nakit",
-            clmCredit : "Kredi Kartı",
-            clmCheck : "Çek",
-            clmTicket : "T. Restorant",
-            clmAdvance : "Avans",
-            clmSafe : "Kasa"
+            clmDate: "Tarih",   // BAK
+            clmTime: "Saat",   // BAK
+            clmUser: "Kullanıcı",   // BAK
+            clmCash: "Girilen Nakit",   // BAK
+            clmCredit : "Girilen Kredi Kartı",   // BAK
+            clmCheck : "Girilen Çek",   // BAK
+            clmTicket : "Girilen T. Restorant",   // BAK
+            clmPosCash: "Nakit",   // BAK
+            clmPosCredit : "Kredi Kartı",   // BAK
+            clmPosCheck : "Çek",   // BAK
+            clmPosTicket : "T. Restorant",   // BAK
+            clmAdvance : "Avans",   // BAK
+            clmSafe : "Kasa"   // BAK
         },
     },
     pos_03_001 : // "B"
