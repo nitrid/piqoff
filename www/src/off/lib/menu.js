@@ -811,11 +811,17 @@ export const menu = (e) =>
                             text: e.t('menu.pos_02_005'),
                             path: 'pos/report/changeTicketReport'
                         },
-                          //Pos Gün sonu raporu
-                          {
+                        //Pos Gün sonu raporu
+                        {
                             id: 'pos_02_006',
                             text: e.t('menu.pos_02_006'),
                             path: 'pos/report/enddayReport'
+                        },
+                        //Pos Avans Raporu
+                        {
+                            id: 'pos_02_007',
+                            text: e.t('menu.pos_02_007'),
+                            path: 'pos/report/posAdvanceReport'
                         },
                     ]
                 },

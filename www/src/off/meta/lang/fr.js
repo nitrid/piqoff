@@ -194,6 +194,7 @@ export const langFr =
         pos_02_004 : "Rapport de Mouvement Ticket",
         pos_02_005 : "Rapport de tickets modifiés", 
         pos_02_006 : "Gün Sonu Raporu", // BAK
+        pos_02_007 : "Pos Abas Raporu", // BAK
         pos_03 :"Traitements", 
         pos_03_001 : "Opérations de fin de journée",
         promo: "Promotion",
@@ -11143,7 +11144,7 @@ export const langFr =
             clmDescription :"Motif",
         }
     },
-    pos_02_006 : // "Satış Fiş Raporu", 
+    pos_02_006 : // "Gün Sonu Raporu", 
     {
         btnGet :"Getir",   // BAK
         dtFirst : "İlk Tarih",   // BAK
@@ -11164,6 +11165,27 @@ export const langFr =
             clmPosTicket : "T. Restorant",   // BAK
             clmAdvance : "Avans",   // BAK
             clmSafe : "Kasa"   // BAK
+        },
+    },
+    pos_02_006 : // "Pos Avans Raporu", 
+    {
+        btnGet :"Getir",   // BAK
+        dtFirst : "İlk Tarih",   // BAK
+        dtLast : "Son Tarih",   // BAK
+        cmbDevice :"Kasa",   // BAK
+        grdAdvanceData: 
+        {
+            clmDate: "Tarih",  // BAK
+            clmTime: "Saat",  // BAK
+            clmUser: "Kullanıcı",  // BAK
+            clmCash: "Avans Tutarı",  // BAK
+            clmSafe : "Kasa"  // BAK
+        },
+        msgDeviceSelect:
+        {
+            title: "Dikkat",  // BAK
+            btn01: "Tamam",  // BAK
+            msg: "Lütfen Kasa Seçiniz !"  // BAK
         },
     },
     pos_03_001 : // "B"

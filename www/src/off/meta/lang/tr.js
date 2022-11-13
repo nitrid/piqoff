@@ -194,6 +194,7 @@ export const langTr =
         pos_02_004 : "Pos Satış Detay Raporu",
         pos_02_005 : "Değişmiş Fişler Raporu",
         pos_02_006 : "Gün Sonu Raporu",
+        pos_02_007 : "Pos Avans Raporu",
         pos_03 :"Operasyonlar",
         pos_03_001 : "Gün Sonu",
         promo: "Promosyon",
@@ -11143,7 +11144,7 @@ export const langTr =
             clmDescription :"Açıklama",
         }
     },
-    pos_02_006 : // "Satış Fiş Raporu",
+    pos_02_006 : // "Gün Sonu Raporu",
     {
         btnGet :"Getir",
         dtFirst : "İlk Tarih",
@@ -11164,6 +11165,27 @@ export const langTr =
             clmPosTicket : "T. Restorant",
             clmAdvance : "Avans",
             clmSafe : "Kasa"
+        },
+    },
+    pos_02_007 : // "POS Avans Raporu",
+    {
+        btnGet :"Getir",
+        dtFirst : "İlk Tarih",
+        dtLast : "Son Tarih",
+        cmbDevice :"Kasa",
+        grdAdvanceData: 
+        {
+            clmDate: "Tarih",
+            clmTime: "Saat",
+            clmUser: "Kullanıcı",
+            clmCash: "Avans Tutarı",
+            clmSafe : "Kasa"
+        },
+        msgDeviceSelect:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen Kasa Seçiniz !"
         },
     },
     pos_03_001 : // "Gün Sonu",
