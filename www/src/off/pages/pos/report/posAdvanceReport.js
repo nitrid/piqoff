@@ -53,6 +53,7 @@ export default class enddayReport extends React.PureComponent
             await dialog(tmpConfObj);
             return
         }
+        console.log(this.dtFirst.value)
         let tmpSource =
         {
             source : 
@@ -60,7 +61,7 @@ export default class enddayReport extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT * FROM DOC_CUSTOMER_VW_01 WHERE REF= 'POS' AND PAY_TYPE =20 AND ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND ((CONVERT(NVARCHAR,CDATE,112) <= @START_DATE) OR (@START_DATE = '19700101')) " +
+                    query : "SELECT * FROM DOC_CUSTOMER_VW_01 WHERE REF= 'POS' AND PAY_TYPE =20 AND ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND ((CONVERT(NVARCHAR,CDATE,112) >= @START_DATE) OR (@START_DATE = '19700101')) " +
                             "AND ((CONVERT(NVARCHAR,CDATE,112) <= @FINISH_DATE) OR (@FINISH_DATE = '19700101')) ORDER BY CDATE DESC",
                     param : ['INPUT_CODE:string|50','START_DATE:date','FINISH_DATE:date'],
                     value : [this.cmbDevice.value,this.dtFirst.value,this.dtLast.value]

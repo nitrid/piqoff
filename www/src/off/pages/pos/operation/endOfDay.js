@@ -591,7 +591,6 @@ export default class endOfDay extends React.PureComponent
                         <NdPopUp parent={this} id={"popFinish"} 
                         visible={false}
                         showTitle={true}
-                        showCloseButton={true}
                         title={this.t("popFinish.title")}
                         container={"#root"} 
                         width={'500'}
