@@ -11,12 +11,11 @@
     - object
     - array
 - **SPECIAL :** Özel değer yada serbest alan. istenirse kullanılabilir.
-- **ELEMENT ** : Ekran üzerindeki textbox,combobox,label vs. gibi elementlerin id si burada tutulur TYPE => 2 olan element
+- **ELEMENT :** Ekran üzerindeki textbox,combobox,label vs. gibi elementlerin id si burada tutulur TYPE => 2 olan element
   parametreleri için kullanılır.
-- **APP ** : Parametrenin geçerli olduğu uygulama kısa kodu. Örn:OFF yada POS
-- **VIEW ** : Admin sayfasındaki parametre düzenleme ekranındaki sayfa düzeni ve içeriği buradan belirlenir. 
-- **VIEW.CAPTION ** : Parametre düzenleme ekranındaki parametrenin görünen adı.
-
+- **APP :** Parametrenin geçerli olduğu uygulama kısa kodu. Örn:OFF yada POS
+- **VIEW :** Admin sayfasındaki parametre düzenleme ekranındaki sayfa düzeni ve içeriği buradan belirlenir. 
+- **VIEW.CAPTION :** Parametre düzenleme ekranındaki parametrenin görünen adı.
 ### VIEW.TYPE -> CHECK
 - Meta param dosyasında iki tip VALUE olabilir.
     - true/false
@@ -27,6 +26,16 @@
     - 'text değeri'
     - {value : 'text değeri'}
 - Meta param dosyasındaki VIEW.TYPE = 'text'
+### VIEW.TYPE -> COMBOBOX
+- Meta param dosyasında iki tip VALUE olabilir.
+    - 'text değeri'
+    - {value : 'text değeri'}
+- Meta param dosyasındaki VIEW.TYPE = 'combobox'
+- **VIEW.DISPLAY :** Combobox içerisinde gözükecek değerin datadaki field adı belirtilir.
+- **VIEW.FIELD :** VALUE ya atanacak değerin datadaki kolon adı.
+- **VIEW.DATA :** Combobox içerisine gelecek datanın kaynağı belirtilir.
+    - Veritabanı kullanımı : {select:{query : 'SELECT CODE,NAME FROM USERS ORDER BY CODE ASC'}},
+    - Statik data : [{CODE:'001',NAME:'XXX'}]
 ### VIEW.TYPE -> POPSELECT
 - Meta param dosyasında 3 tip VALUE olabilir.
     - 'text değeri'
@@ -92,7 +101,7 @@
     - checkbox
     - text
     - popSelect
-    - combobox
+    - popInput
 - Meta param dosyasındaki VIEW.TYPE = 'popInput'
 - Textbox şeklinde olan element içerisindeki butona bastığında popup şeklinde form açılır. Girilen değerler textbox 
   nesnesine obj elemanına aktarılır.
@@ -100,6 +109,7 @@
     - **VIEW.DISPLAY :** Textbox içerisinde gözükecek değerin datadaki field adı belirtilir.
     - **VIEW.FORM.width :** Açılan popup ın genişliği.
     - **VIEW.FORM.height :** Açılan popup in yüksekliği.
+    - **VIEW.FORM.colCount :** Form üzerindeki elemanların dizilmesi için formun kaç kolon olacağı belirlenir.default 2 kolondur.
     - **VIEW.FORM.item :** Dizi içerisinde form elemanlarının tipi,başlığı vs. şeklinde özellikleri belirlenir.
     - **VIEW.FORM.item.type :** text - checkbox - popSelect - combobox
     - **VIEW.FORM.item.caption :** Form elemanın label başlığı.
@@ -123,6 +133,7 @@
             {
                 width:"400",
                 height:"180",
+                colCount:2,
                 item:
                 [
                     {type:"text",caption:"Code",field:"code",id:"txtPopMoneySymbolCode"},
@@ -132,3 +143,52 @@
         }
      }
     ```
+    **popInput içerisinde item olarak popInput kullanımı :**
+    ``` js
+    {type:"popInput",caption:"Validation",field:"validation",id:"txtPopTxtRefValidation",display:"grp",
+        form : 
+        {
+            width:"400",
+            height:"230",
+            colCount:1,
+            item:
+            [
+                {type:"text",caption:"Grp",field:"grp",id:"txtPopTxtRefGrp"},
+                {type:"popObjectList",caption:"Validation",field:"val",id:"lstPopTxtRefVal",
+                    form:
+                    {
+                        width:"800",
+                        height:"600",
+                        formWidth:"600",
+                        formHeight:"260",
+                        allowAdding : false,
+                        allowUpdating : true,
+                        allowDeleting : false
+                    }
+                }
+            ]
+        }
+    },
+    ```
+### VIEW.TYPE -> POPTEXTLIST
+- popTextList dizi şeklinde tutulan datalar için kullanılır. bu dizinin içerisinde obje bulunamaz.
+- VIEW.TYPE = 'popTextList' şeklinde tip belirtilmelidir.
+- Textbox şeklinde olan element içerisindeki butona bastığında popup şeklinde form açılır. Girilen değerler textbox 
+  nesnesine obj elemanına dizi olarak aktarılır.
+- VIEW.FORM içerisinde açılacak popup ın içeriği ve stili belirlenebilir.
+    - **VIEW.FORM.width :** Açılan popup ın genişliği.
+    - **VIEW.FORM.height :** Açılan popup in yüksekliği.
+    - **VIEW.FORM.textHeight :** Açılan popup in içerisindeki textarea nın yüksekliği.
+### VIEW.TYPE -> POPOBJECTLIST
+- popTextList dizi şeklinde tutulan datalar için kullanılır. bu dizinin içerisinde sadece obje bulunur.
+- VIEW.TYPE = 'popObjectList' şeklinde tip belirtilmelidir.
+- Buton şeklinde olan elemente bastığında popup şeklinde form açılır. bu formun içerisindeki grid de 
+  obje içeriği listelenir bu listeye ekleme çıkarma yada silme yapılabilir.
+- VIEW.FORM içerisinde açılacak popup ın içeriği ve stili belirlenebilir.
+    - **VIEW.FORM.width :** Açılan popup ın genişliği.
+    - **VIEW.FORM.height :** Açılan popup in yüksekliği.
+    - **VIEW.FORM.formWidth :** Grid içerisindeki datayı düzenlemek için kullanılacak formun genişliği.
+    - **VIEW.FORM.formHeight :** Grid içerisindeki datayı düzenlemek için kullanılacak formun yüksekliği.
+    - **VIEW.FORM.allowAdding :** Grid e data eklemeye izin ver.
+    - **VIEW.FORM.allowUpdating :** Grid e data düzenlemeye izin ver.
+    - **VIEW.FORM.allowDeleting :** Grid e data silmeye izin ver.
