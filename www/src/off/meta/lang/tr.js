@@ -67,6 +67,12 @@ export const langTr =
         btn02: "Ürünleri gör",
         msg : "Son kullanma tarihi yaklaşan ürünler var lütfen kontrol ediniz !"
     },
+    msgNotRow:
+    {
+        title: "Dikkat",
+        btn01: "Tamam",
+        msg: "Kaydetmek istediğiniz evrakta en az bir satır bulunmalıdır! Yaptığınız diğişiklikler geri alındı."
+    },
     menu:
     {
         stk: "Stok",                
@@ -1140,6 +1146,7 @@ export const langTr =
             clmName : "Adı",
             clmQuantity : "Adet",
             clmCuStomer : "Cari",
+            clmDate : "Tarih",
         },
         popPassword : 
         {
@@ -2754,7 +2761,8 @@ export const langTr =
             clmName : "Adı",
             clmQuantity : "Adet",
             clmPrice : "Fiyat",
-            clmTotal : "Tutar"
+            clmTotal : "Tutar",
+            clmDate : "Tarih",
         },
         grdPurcInv: 
         {
@@ -3208,7 +3216,8 @@ export const langTr =
             clmName : "Adı",
             clmQuantity : "Adet",
             clmPrice : "Fiyat",
-            clmTotal : "Tutar"
+            clmTotal : "Tutar",
+            clmDate : "Tarih",
         },
         grdSlsInv: 
         {
@@ -3610,7 +3619,8 @@ export const langTr =
             clmName : "Adı",
             clmQuantity : "Adet",
             clmPrice : "Fiyat",
-            clmTotal : "Tutar"
+            clmTotal : "Tutar",
+            clmDate : "Tarih",
         },
         grdRebtInv: 
         {
@@ -4262,7 +4272,8 @@ export const langTr =
             clmName : "Adı",
             clmQuantity : "Adet",
             clmPrice : "Fiyat",
-            clmTotal : "Tutar"
+            clmTotal : "Tutar",
+            clmDate : "Tarih",
         },
         grdSlsInv: 
         {
@@ -4958,7 +4969,8 @@ export const langTr =
             clmName : "Adı",
             clmQuantity : "Adet",
             clmPrice : "Fiyat",
-            clmTotal : "Tutar"
+            clmTotal : "Tutar",
+            clmDate : "Tarih",
         },
         grdRebtInv: 
         {
@@ -5615,7 +5627,8 @@ export const langTr =
             clmName : "Adı",
             clmQuantity : "Adet",
             clmPrice : "Fiyat",
-            clmTotal : "Tutar"
+            clmTotal : "Tutar",
+            clmDate : "Tarih",
         },
         grdSlsInv: 
         {
@@ -6016,7 +6029,8 @@ export const langTr =
             clmName : "Adı",
             clmQuantity : "Adet",
             clmPrice : "Fiyat",
-            clmTotal : "Tutar"
+            clmTotal : "Tutar",
+            clmDate : "Tarih",
         },
         grdPurcInv: 
         {
@@ -6457,7 +6471,8 @@ export const langTr =
             clmName : "Adı",
             clmQuantity : "Adet",
             clmPrice : "Fiyat",
-            clmTotal : "Tutar"
+            clmTotal : "Tutar",
+            clmDate : "Tarih",
         },
         grdRebtInv: 
         {
@@ -6785,7 +6800,8 @@ export const langTr =
             clmName : "Adı",
             clmQuantity : "Adet",
             clmPrice : "Fiyat",
-            clmTotal : "Tutar"
+            clmTotal : "Tutar",
+            clmDate : "Tarih",
         },
         grdSlsInv: 
         {

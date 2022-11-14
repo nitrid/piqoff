@@ -807,6 +807,19 @@ export default class salesOrder extends React.PureComponent
                                             await dialog(tmpConfObj);
                                             return
                                         }
+                                        if(typeof this.docObj.docOrders.dt()[0] == 'undefined')
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgNotRow',showTitle:true,title:this.lang.t("msgNotRow.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.lang.t("msgNotRow.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgNotRow.msg")}</div>)
+                                            }
+
+                                            await dialog(tmpConfObj);
+                                            this.getDoc(this.docObj.dt()[0].GUID,this.docObj.dt()[0].REF,this.docObj.dt()[0].REF_NO)
+                                            return
+                                        }
                                         if(this.docObj.docOrders.dt()[this.docObj.docOrders.dt().length - 1].ITEM_CODE == '')
                                         {
                                             await this.grdSlsOrder.devGrid.deleteRow(this.docObj.docOrders.dt().length - 1)
@@ -1811,7 +1824,6 @@ export default class salesOrder extends React.PureComponent
                                     }}
                                     onRowRemoved={async (e)=>{
                                         this._calculateTotal()
-                                        await this.docObj.save()
                                     }}
                                     >
                                         <Paging defaultPageSize={10} />

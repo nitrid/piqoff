@@ -880,6 +880,19 @@ export default class purchaseOrder extends React.PureComponent
                                             await dialog(tmpConfObj);
                                             return
                                         }
+                                        if(typeof this.docObj.docOrders.dt()[0] == 'undefined')
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgNotRow',showTitle:true,title:this.lang.t("msgNotRow.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.lang.t("msgNotRow.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgNotRow.msg")}</div>)
+                                            }
+
+                                            await dialog(tmpConfObj);
+                                            this.getDoc(this.docObj.dt()[0].GUID,this.docObj.dt()[0].REF,this.docObj.dt()[0].REF_NO)
+                                            return
+                                        }
                                         let tmpPricePrm = this.sysParam.filter({ID:'pruchasePriceAlert',USERS:this.user.CODE}).getValue()
                                         if(typeof tmpPricePrm != 'undefined' && tmpPricePrm.value == true)
                                         {

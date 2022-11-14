@@ -585,6 +585,19 @@ export default class itemCount extends React.PureComponent
                                             await dialog(tmpConfObj);
                                             return
                                         }
+                                        if(typeof this.countObj.dt()[0] == 'undefined')
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgNotRow',showTitle:true,title:this.lang.t("msgNotRow.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.lang.t("msgNotRow.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgNotRow.msg")}</div>)
+                                            }
+
+                                            await dialog(tmpConfObj);
+                                            this.getDoc('00000000-0000-0000-0000-000000000000',this.countObj.dt()[0].REF,this.countObj.dt()[0].REF_NO)
+                                            return
+                                        }
                                         if(this.countObj.dt()[this.countObj.dt().length - 1].ITEM_CODE == '')
                                         {
                                             await this.grdItemCount.devGrid.deleteRow(this.countObj.dt().length - 1)

@@ -67,6 +67,12 @@ export const langFr =
         btn02: "Produits",
         msg : "Produits DLC Courte Veuillez Vérifier !"   
     },
+    msgNotRow:
+    {
+        title: "Dikkat",   // BAK
+        btn01: "Tamam",   // BAK
+        msg: "Kaydetmek istediğiniz evrakta en az bir satır bulunmalıdır! Yaptığınız diğişiklikler geri alındı."   // BAK
+    },
     menu:
     {
         stk: "Produit",                
@@ -1140,6 +1146,7 @@ export const langFr =
             clmName : "Nom",
             clmQuantity : "Quantité",
             clmCuStomer : "Fournisseur",
+            clmDate : "Date",
         },
         popPassword : 
         {
@@ -2754,7 +2761,8 @@ export const langFr =
             clmName : "Nom",
             clmQuantity : "Quantité",
             clmPrice : "Prix ",
-            clmTotal : "Total" 
+            clmTotal : "Total" ,
+            clmDate : "Date",
         },
         grdPurcInv: 
         {
@@ -3208,7 +3216,8 @@ export const langFr =
             clmName : "Nom",
             clmQuantity : "Quantité",
             clmPrice : "Prix ",
-            clmTotal : "Total" 
+            clmTotal : "Total",
+            clmDate : "Date",
         },
         grdSlsInv: 
         {
@@ -3610,7 +3619,8 @@ export const langFr =
             clmName : "Nom",
             clmQuantity : "Quantité",
             clmPrice : "Prix ",
-            clmTotal : "Total" 
+            clmTotal : "Total",
+            clmDate : "Date",
         },
         grdRebtInv: 
         {
@@ -4262,7 +4272,8 @@ export const langFr =
             clmName : "Nom",
             clmQuantity : "Quantité",
             clmPrice : "Prix ",
-            clmTotal : "Total" 
+            clmTotal : "Total",
+            clmDate : "Date",
         },
         grdSlsInv: 
         {
@@ -4958,7 +4969,8 @@ export const langFr =
             clmName : "Nom",
             clmQuantity : "Quantité",
             clmPrice : "Prix ",
-            clmTotal : "Total" 
+            clmTotal : "Total" ,
+            clmDate : "Date",
         },
         grdRebtInv: 
         {
@@ -5615,7 +5627,8 @@ export const langFr =
             clmName : "Nom",
             clmQuantity : "Quantité",
             clmPrice : "Prix ",
-            clmTotal : "Total" 
+            clmTotal : "Total" ,
+            clmDate : "Date",
         },
         grdSlsInv: 
         {
@@ -6016,7 +6029,8 @@ export const langFr =
             clmName : "Nom",
             clmQuantity : "Quantité",
             clmPrice : "Prix ",
-            clmTotal : "Total" 
+            clmTotal : "Total" ,
+            clmDate : "Date",
         },
         grdPurcInv: 
         {
@@ -6457,7 +6471,8 @@ export const langFr =
             clmName : "Nom",
             clmQuantity : "Quantité",
             clmPrice : "Prix ",
-            clmTotal : "Total" 
+            clmTotal : "Total" ,
+            clmDate : "Date",
         },
         grdRebtInv: 
         {
@@ -6785,7 +6800,8 @@ export const langFr =
             clmName : "Nom",
             clmQuantity : "Quantité",
             clmPrice : "Prix ",
-            clmTotal : "Total" 
+            clmTotal : "Total",
+            clmDate : "Date",
         },
         grdSlsInv: 
         {
