@@ -112,7 +112,24 @@ export const menu =
         id: 'acs',
         text: 'Yetkilendirme',
         expanded: false,
-        items: []
+        items: 
+        [
+            {
+                id: 'acs_01',
+                text: 'Off Yetkileri',
+                path: 'access/accessOff'
+            },
+            {
+                id: 'acs_02',
+                text: 'Pos Yetkileri',
+                path: 'access/accessPos'
+            },
+            {
+                id: 'acs_03',
+                text: 'Mob Yetkileri',
+                path: 'access/accessMob'
+            },
+        ]
     },
     {
         id: 'menu',

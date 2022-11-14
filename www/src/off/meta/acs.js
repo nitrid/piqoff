@@ -12,9 +12,20 @@ export const acs =
         APP : "OFF",
         VIEW : 
         {
-            TYPE : "boolean",
+            TYPE : "popInput",
             PAGE_NAME : "Stok Tanımları",
-            CAPTION : "Referans"
+            CAPTION : "Referans",
+            DISPLAY : "visible",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                item:
+                [
+                    {type:"checkbox",caption:"Visible",field:"visible",id:"chkPopTxtRefVisible"},
+                    {type:"checkbox",caption:"Editable",field:"editable",id:"chkPopTxtRefEditable"}
+                ]
+            }
         }
     },
     //cmbItemGrp
@@ -28,9 +39,20 @@ export const acs =
         APP : "OFF",
         VIEW : 
         {
-            TYPE : "boolean",
+            TYPE : "popInput",
             PAGE_NAME : "Stok Tanımları",
-            CAPTION : "Urun Grubu"
+            CAPTION : "Urun Grubu",
+            DISPLAY : "visible",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                item:
+                [
+                    {type:"checkbox",caption:"Visible",field:"visible",id:"chkPopCmbItemGrpVisible"},
+                    {type:"checkbox",caption:"Editable",field:"editable",id:"chkPopCmbItemGrpEditable"}
+                ]
+            }
         }
     },
     //txtCustomer
@@ -44,9 +66,20 @@ export const acs =
         APP : "OFF",
         VIEW : 
         {
-            TYPE : "boolean",
+            TYPE : "popInput",
             PAGE_NAME : "Stok Tanımları",
-            CAPTION : "Tedarikçi"
+            CAPTION : "Tedarikçi",
+            DISPLAY : "visible",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                item:
+                [
+                    {type:"checkbox",caption:"Visible",field:"visible",id:"chkPopTxtCustomerVisible"},
+                    {type:"checkbox",caption:"Editable",field:"editable",id:"chkPopTxtCustomerEditable"}
+                ]
+            }
         }
     },
     //cmbItemGenus
@@ -60,9 +93,20 @@ export const acs =
         APP : "OFF",
         VIEW : 
         {
-            TYPE : "boolean",
+            TYPE : "popInput",
             PAGE_NAME : "Stok Tanımları",
-            CAPTION : "Urun Cinsi"
+            CAPTION : "Urun Cinsi",
+            DISPLAY : "visible",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                item:
+                [
+                    {type:"checkbox",caption:"Visible",field:"visible",id:"chkPopCmbUrunCinsVisible"},
+                    {type:"checkbox",caption:"Editable",field:"editable",id:"chkPopCmbUrunCinsEditable"}
+                ]
+            }
         }
     },
     //txtBarcode
@@ -76,9 +120,20 @@ export const acs =
         APP : "OFF",
         VIEW : 
         {
-            TYPE : "boolean",
+            TYPE : "popInput",
             PAGE_NAME : "Stok Tanımları",
-            CAPTION : "Barkod"
+            CAPTION : "Barkod",
+            DISPLAY : "visible",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                item:
+                [
+                    {type:"checkbox",caption:"Visible",field:"visible",id:"chkPopTxtBarcodeVisible"},
+                    {type:"checkbox",caption:"Editable",field:"editable",id:"chkPopTxtBarcodeEditable"}
+                ]
+            }
         }
     },
     //cmbTax
@@ -92,9 +147,20 @@ export const acs =
         APP : "OFF",
         VIEW : 
         {
-            TYPE : "boolean",
+            TYPE : "popInput",
             PAGE_NAME : "Stok Tanımları",
-            CAPTION : "Vergi"
+            CAPTION : "Vergi",
+            DISPLAY : "visible",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                item:
+                [
+                    {type:"checkbox",caption:"Visible",field:"visible",id:"chkPopCmbTaxVisible"},
+                    {type:"checkbox",caption:"Editable",field:"editable",id:"chkPopCmbTaxEditable"}
+                ]
+            }
         }
     },
     //cmbMainUnit
@@ -108,9 +174,20 @@ export const acs =
         APP : "OFF",
         VIEW : 
         {
-            TYPE : "boolean",
+            TYPE : "popInput",
             PAGE_NAME : "Stok Tanımları",
-            CAPTION : "Ana Birim"
+            CAPTION : "Ana Birim",
+            DISPLAY : "visible",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                item:
+                [
+                    {type:"checkbox",caption:"Visible",field:"visible",id:"chkPopCmbMainUnitVisible"},
+                    {type:"checkbox",caption:"Editable",field:"editable",id:"chkPopCmbMainUnitEditable"}
+                ]
+            }
         }
     },
     //txtMainUnit
@@ -124,9 +201,20 @@ export const acs =
         APP : "OFF",
         VIEW : 
         {
-            TYPE : "boolean",
+            TYPE : "popInput",
             PAGE_NAME : "Stok Tanımları",
-            CAPTION : "Ana Birim Carpan"
+            CAPTION : "Ana Birim Carpan",
+            DISPLAY : "visible",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                item:
+                [
+                    {type:"checkbox",caption:"Visible",field:"visible",id:"chkPopTxtMainUnitVisible"},
+                    {type:"checkbox",caption:"Editable",field:"editable",id:"chkPopTxtMainUnitEditable"}
+                ]
+            }
         }
     },
     //cmbOrigin
@@ -140,9 +228,20 @@ export const acs =
         APP : "OFF",
         VIEW : 
         {
-            TYPE : "boolean",
+            TYPE : "popInput",
             PAGE_NAME : "Stok Tanımları",
-            CAPTION : "Menşei"
+            CAPTION : "Menşei",
+            DISPLAY : "visible",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                item:
+                [
+                    {type:"checkbox",caption:"Visible",field:"visible",id:"chkPopCmbOriginVisible"},
+                    {type:"checkbox",caption:"Editable",field:"editable",id:"chkPopCmbOriginEditable"}
+                ]
+            }
         }
     },
     //cmbUnderUnit
@@ -156,9 +255,20 @@ export const acs =
         APP : "OFF",
         VIEW : 
         {
-            TYPE : "boolean",
+            TYPE : "popInput",
             PAGE_NAME : "Stok Tanımları",
-            CAPTION : "Alt Birim"
+            CAPTION : "Alt Birim",
+            DISPLAY : "visible",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                item:
+                [
+                    {type:"checkbox",caption:"Visible",field:"visible",id:"chkPopCmbUnderUnitVisible"},
+                    {type:"checkbox",caption:"Editable",field:"editable",id:"chkPopCmbUnderUnitEditable"}
+                ]
+            }
         }
     },
     //txtUnderUnit
@@ -172,9 +282,20 @@ export const acs =
         APP : "OFF",
         VIEW : 
         {
-            TYPE : "boolean",
+            TYPE : "popInput",
             PAGE_NAME : "Stok Tanımları",
-            CAPTION : "Alt Birim Carpan"
+            CAPTION : "Alt Birim Carpan",
+            DISPLAY : "visible",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                item:
+                [
+                    {type:"checkbox",caption:"Visible",field:"visible",id:"chkPopTxtUnderUnitVisible"},
+                    {type:"checkbox",caption:"Editable",field:"editable",id:"chkPopTxtUnderUnitEditable"}
+                ]
+            }
         }
     },
     //txtItemName
@@ -188,9 +309,20 @@ export const acs =
         APP : "OFF",
         VIEW : 
         {
-            TYPE : "boolean",
+            TYPE : "popInput",
             PAGE_NAME : "Stok Tanımları",
-            CAPTION : "Urun Adı"
+            CAPTION : "Urun Adı",
+            DISPLAY : "visible",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                item:
+                [
+                    {type:"checkbox",caption:"Visible",field:"visible",id:"chkPopTxtItemNameVisible"},
+                    {type:"checkbox",caption:"Editable",field:"editable",id:"chkPopTxtItemNameEditable"}
+                ]
+            }
         }
     },
     //txtShortName
@@ -204,9 +336,20 @@ export const acs =
         APP : "OFF",
         VIEW : 
         {
-            TYPE : "boolean",
+            TYPE : "popInput",
             PAGE_NAME : "Stok Tanımları",
-            CAPTION : "Kısa Adı"
+            CAPTION : "Kısa Adı",
+            DISPLAY : "visible",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                item:
+                [
+                    {type:"checkbox",caption:"Visible",field:"visible",id:"chkPopTxtShortNameVisible"},
+                    {type:"checkbox",caption:"Editable",field:"editable",id:"chkPopTxtShortNameEditable"}
+                ]
+            }
         }
     },
     //chkActive
@@ -220,9 +363,20 @@ export const acs =
         APP : "OFF",
         VIEW : 
         {
-            TYPE : "boolean",
+            TYPE : "popInput",
             PAGE_NAME : "Stok Tanımları",
-            CAPTION : "Aktif"
+            CAPTION : "Aktif",
+            DISPLAY : "visible",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                item:
+                [
+                    {type:"checkbox",caption:"Visible",field:"visible",id:"chkPopChkActiveVisible"},
+                    {type:"checkbox",caption:"Editable",field:"editable",id:"chkPopChkActiveEditable"}
+                ]
+            }
         }
     },
     //chkCaseWeighed
@@ -236,9 +390,20 @@ export const acs =
         APP : "OFF",
         VIEW : 
         {
-            TYPE : "boolean",
+            TYPE : "popInput",
             PAGE_NAME : "Stok Tanımları",
-            CAPTION : "Kasada Tartılsın"
+            CAPTION : "Kasada Tartılsın",
+            DISPLAY : "visible",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                item:
+                [
+                    {type:"checkbox",caption:"Visible",field:"visible",id:"chkPopChkCaseWeighedVisible"},
+                    {type:"checkbox",caption:"Editable",field:"editable",id:"chkPopChkCaseWeighedEditable"}
+                ]
+            }
         }
     },
     //chkLineMerged
@@ -252,9 +417,20 @@ export const acs =
         APP : "OFF",
         VIEW : 
         {
-            TYPE : "boolean",
+            TYPE : "popInput",
             PAGE_NAME : "Stok Tanımları",
-            CAPTION : "Satır Birleştir"
+            CAPTION : "Satır Birleştir",
+            DISPLAY : "visible",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                item:
+                [
+                    {type:"checkbox",caption:"Visible",field:"visible",id:"chkPopChkLineMergedVisible"},
+                    {type:"checkbox",caption:"Editable",field:"editable",id:"chkPopChkLineMergedEditable"}
+                ]
+            }
         }
     },
     //chkTicketRest
@@ -268,9 +444,20 @@ export const acs =
         APP : "OFF",
         VIEW : 
         {
-            TYPE : "boolean",
+            TYPE : "popInput",
             PAGE_NAME : "Stok Tanımları",
-            CAPTION : "Ticket Rest"
+            CAPTION : "Ticket Rest",
+            DISPLAY : "visible",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                item:
+                [
+                    {type:"checkbox",caption:"Visible",field:"visible",id:"chkPopChkTicketRestVisible"},
+                    {type:"checkbox",caption:"Editable",field:"editable",id:"chkPopChkTicketRestEditable"}
+                ]
+            }
         }
     },
     //txtCostPrice
@@ -353,71 +540,7 @@ export const acs =
             CAPTION : "Son Satış Fiyatı"
         }
     },
-    {
-        TYPE : 2,
-        ID :"popgrid",
-        VALUE : 
-        {
-            btn:
-            {
-                visible: true
-            },
-            grid:
-            {
-                visible : true,
-                columns :
-                {
-                    VALUE : 
-                    {
-                        visible : true
-                    },
-                    ID : 
-                    {
-                        visible : false
-                    }
-                }
-            }
-        },
-        SPECIAL : "",
-        PAGE : "P0002",
-        ELEMENT : "popgrid",
-        APP : "ADMIN"
-    },
-    {
-        TYPE : 2,
-        ID :"StokGrid",
-        VIEW : {PAGE_NAME :'STOK GRID'},
-        VALUE : 
-        {
-            btn:
-            {
-                CAPTION :"Buton Görünürlüğü",
-                visible: true
-            },
-            grid:
-            {
-                CAPTION : "GRİD Görünürlüğü",
-                visible : true,
-                columns :
-                {
-                    VALUE : 
-                    {
-                        visible : true
-                    },
-                    ID : 
-                    {
-                        visible : false
-                    }
-                }
-            }
-        },
-        SPECIAL : "",
-        PAGE : "stk_03_001",
-        ELEMENT : "popgrid",
-        APP : "OFF  "
-    },
     //#endregion
-
     //#region Cari Tanıtım
     //cmbType
     {
@@ -430,9 +553,20 @@ export const acs =
         APP : "OFF",
         VIEW : 
         {
-            TYPE : "boolean",
+            TYPE : "popInput",
             PAGE_NAME : "Cari Tanımları",
-            CAPTION : "Tip"
+            CAPTION : "Tip",
+            DISPLAY : "visible",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                item:
+                [
+                    {type:"checkbox",caption:"Visible",field:"visible",id:"chkPopCmbTypeVisible"},
+                    {type:"checkbox",caption:"Editable",field:"editable",id:"chkPopCmbTypeEditable"}
+                ]
+            }
         }
     },
     //cmbGenus

@@ -250,5 +250,41 @@ export const langTr =
             clmCode : "KODU",
             clmName : "ADI"
         }
+    },
+    acs_01 :
+    {
+        lblUser : "Kullanıcı",
+        lblDoc : "Evrak",
+        btnSave : "Kaydet",
+        pg_UserList :
+        {
+            title : "Kullanıcı Seçimi",
+            clmCode : "KODU",
+            clmName : "ADI"
+        }
+    },
+    acs_02 :
+    {
+        lblUser : "Kullanıcı",
+        lblDoc : "Evrak",
+        btnSave : "Kaydet",
+        pg_UserList :
+        {
+            title : "Kullanıcı Seçimi",
+            clmCode : "KODU",
+            clmName : "ADI"
+        }
+    },
+    acs_03 :
+    {
+        lblUser : "Kullanıcı",
+        lblDoc : "Evrak",
+        btnSave : "Kaydet",
+        pg_UserList :
+        {
+            title : "Kullanıcı Seçimi",
+            clmCode : "KODU",
+            clmName : "ADI"
+        }
     }
 }

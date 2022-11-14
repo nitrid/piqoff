@@ -12,7 +12,7 @@ export const prm =
         APP : "OFF",
         VIEW : 
         {
-            TYPE : "text",
+            TYPE : "checkbox",
             PAGE_NAME : "Sistem",
             CAPTION : "Sadece Büyük Harf Kullanımı"
         }
