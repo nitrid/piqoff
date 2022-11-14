@@ -1468,9 +1468,9 @@ export class param extends datatable
     {
         if(arguments.length == 1 && typeof arguments[0] == 'object')
         {
-            if(this.filter({ID:arguments[0].ID}).length > 0)
+            if(this.filter({ID:arguments[0].ID,USERS:arguments[0].USERS}).length > 0)
             {
-                this.filter({ID:arguments[0].ID}).setValue(arguments[0].VALUE)
+                this.filter({ID:arguments[0].ID,USERS:arguments[0].USERS}).setValue(arguments[0].VALUE)
             }
             else
             {

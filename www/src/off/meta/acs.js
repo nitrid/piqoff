@@ -596,7 +596,6 @@ export const acs =
         }
     },
     //#endregion
-    
     //#region Satış Faturası
     //txtRef
     {
@@ -679,7 +678,6 @@ export const acs =
         }
     },
     //#endregion
-    
     //#region Alış Faturası
     //txtRef
     {
@@ -762,7 +760,6 @@ export const acs =
         }
     },
     //#endregion
-
     //#region Satış İrsaliyesi
     //txtRef
     {
@@ -845,7 +842,6 @@ export const acs =
         }
     },
     //#endregion
-        
     //#region Alış Faturası
     //txtRef
     {
@@ -927,24 +923,23 @@ export const acs =
             CAPTION : "Cari Adı"
         }
     },
-    
     //#region Kullanıcı Yetkileri
-        // underMinCostPrice
+    // underMinCostPrice
+    {
+        TYPE : 1,
+        ID :"underMinCostPrice",
+        VALUE : true,
+        SPECIAL : "",
+        PAGE : "irs_02_002",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
         {
-            TYPE : 1,
-            ID :"underMinCostPrice",
-            VALUE : true,
-            SPECIAL : "",
-            PAGE : "irs_02_002",
-            ELEMENT : "",
-            APP : "OFF",
-            VIEW : 
-            {
-                TYPE : "boolean",
-                PAGE_NAME : "Satış İrsaliyesi",
-                CAPTION : "Maliyetten Düşük Fiyata Satış Yapabilir"
-            }
-        },
+            TYPE : "boolean",
+            PAGE_NAME : "Satış İrsaliyesi",
+            CAPTION : "Maliyetten Düşük Fiyata Satış Yapabilir"
+        }
+    },
     //#endregion
 
 ]

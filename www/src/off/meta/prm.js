@@ -12,7 +12,7 @@ export const prm =
         APP : "OFF",
         VIEW : 
         {
-            TYPE : "checkbox",
+            TYPE : "text",
             PAGE_NAME : "Sistem",
             CAPTION : "Sadece Büyük Harf Kullanımı"
         }
@@ -97,36 +97,6 @@ export const prm =
             }
         }
     },
-    //Stok
-    {
-        TYPE : 0,
-        ID :"Stoks",
-        VALUE : "001", //{CODE:"EUR",NAME:"€"},
-        SPECIAL : "",
-        ELEMENT : "",
-        APP : "OFF",
-        VIEW : 
-        {
-            TYPE : "popSelect",
-            PAGE_NAME : "Sistem",
-            CAPTION : "Stok",
-            DISPLAY : "CODE",
-            FIELD : "CODE",
-            FORM: 
-            {
-                selection:{mode:"single"},
-                width:"600",
-                height:"500",
-                data:
-                {
-                    select:
-                    {
-                        query : "SELECT CODE,NAME FROM USERS ORDER BY CODE ASC"
-                    },
-                },
-            }
-        }
-    },
     //Para Sembolu
     {
         TYPE : 0,
@@ -188,9 +158,42 @@ export const prm =
         APP : "OFF",
         VIEW : 
         {
-            TYPE : "text",
+            TYPE : "popInput",
             PAGE_NAME : "Stok Tanımları",
-            CAPTION : "Referans"
+            CAPTION : "Referans",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                colCount : 1,
+                item:
+                [
+                    {type:"popInput",caption:"Validation",field:"validation",id:"txtPopTxtRefValidation",display:"grp",
+                        form : 
+                        {
+                            width:"400",
+                            height:"230",
+                            colCount:1,
+                            item:
+                            [
+                                {type:"text",caption:"Grp",field:"grp",id:"txtPopTxtRefGrp"},
+                                {type:"popObjectList",caption:"Validation",field:"val",id:"lstPopTxtRefVal",
+                                    form:
+                                    {
+                                        width:"800",
+                                        height:"600",
+                                        formWidth:"600",
+                                        formHeight:"260",
+                                        allowAdding : false,
+                                        allowUpdating : true,
+                                        allowDeleting : false
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                ]
+            }
         }
     },
     //cmbItemGrp
@@ -217,9 +220,44 @@ export const prm =
         APP : "OFF",
         VIEW : 
         {
-            TYPE : "text",
+            TYPE : "popInput",
             PAGE_NAME : "Stok Tanımları",
-            CAPTION : "Ürün Grup"
+            CAPTION : "Ürün Grup",
+            DISPLAY : "value",
+            FORM: 
+            {
+                width:"400",
+                height:"200",
+                colCount : 1,
+                item:
+                [
+                    {type:"text",caption:"Value",field:"value",id:"txtPopCmbItemGrpValue"},
+                    {type:"popInput",caption:"Validation",field:"validation",id:"txtPopCmbItemGrpValidation",display:"grp",
+                        form : 
+                        {
+                            width:"400",
+                            height:"230",
+                            colCount:1,
+                            item:
+                            [
+                                {type:"text",caption:"Grp",field:"grp",id:"txtPopCmbItemGrpGrp"},
+                                {type:"popObjectList",caption:"Validation",field:"val",id:"lstPopCmbItemGrpVal",
+                                    form:
+                                    {
+                                        width:"800",
+                                        height:"600",
+                                        formWidth:"600",
+                                        formHeight:"260",
+                                        allowAdding : false,
+                                        allowUpdating : true,
+                                        allowDeleting : false
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                ]
+            }
         }
     },
     //txtCustomer
@@ -246,9 +284,44 @@ export const prm =
         APP : "OFF",
         VIEW : 
         {
-            TYPE : "text",
+            TYPE : "popInput",
             PAGE_NAME : "Stok Tanımları",
-            CAPTION : "Tedarikçi"
+            CAPTION : "Tedarikçi",
+            DISPLAY : "value",
+            FORM: 
+            {
+                width:"400",
+                height:"200",
+                colCount : 1,
+                item:
+                [
+                    {type:"text",caption:"Value",field:"value",id:"txtPopTxtCustomerValue"},
+                    {type:"popInput",caption:"Validation",field:"validation",id:"txtPopTxtCustomerValidation",display:"grp",
+                        form : 
+                        {
+                            width:"400",
+                            height:"230",
+                            colCount:1,
+                            item:
+                            [
+                                {type:"text",caption:"Grp",field:"grp",id:"txtPopTxtCustomerGrp"},
+                                {type:"popObjectList",caption:"Validation",field:"val",id:"lstPopTxtCustomerVal",
+                                    form:
+                                    {
+                                        width:"800",
+                                        height:"600",
+                                        formWidth:"600",
+                                        formHeight:"260",
+                                        allowAdding : false,
+                                        allowUpdating : true,
+                                        allowDeleting : false
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                ]
+            }
         }
     },
     //cmbItemGenus
@@ -359,9 +432,44 @@ export const prm =
         APP : "OFF",
         VIEW : 
         {
-            TYPE : "text",
+            TYPE : "popInput",
             PAGE_NAME : "Stok Tanımları",
-            CAPTION : "Ana Birim Çarpan"
+            CAPTION : "Ana Birim Çarpan",
+            DISPLAY : "value",
+            FORM: 
+            {
+                width:"400",
+                height:"200",
+                colCount : 1,
+                item:
+                [
+                    {type:"text",caption:"Value",field:"value",id:"txtPopTxtMainUnitValue"},
+                    {type:"popInput",caption:"Validation",field:"validation",id:"txtPopTxtMainUnitValidation",display:"grp",
+                        form : 
+                        {
+                            width:"400",
+                            height:"230",
+                            colCount:1,
+                            item:
+                            [
+                                {type:"text",caption:"Grp",field:"grp",id:"txtPopTxtMainUnitGrp"},
+                                {type:"popObjectList",caption:"Validation",field:"val",id:"lstPopTxtMainUnitVal",
+                                    form:
+                                    {
+                                        width:"800",
+                                        height:"600",
+                                        formWidth:"600",
+                                        formHeight:"260",
+                                        allowAdding : false,
+                                        allowUpdating : true,
+                                        allowDeleting : false
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                ]
+            }
         }
     },
     //cmbOrigin
@@ -434,9 +542,44 @@ export const prm =
         APP : "OFF",
         VIEW : 
         {
-            TYPE : "text",
+            TYPE : "popInput",
             PAGE_NAME : "Stok Tanımları",
-            CAPTION : "Alt Birim Çarpan"
+            CAPTION : "Alt Birim Çarpan",
+            DISPLAY : "value",
+            FORM: 
+            {
+                width:"400",
+                height:"200",
+                colCount : 1,
+                item:
+                [
+                    {type:"text",caption:"Value",field:"value",id:"txtPopTxtUnderUnitValue"},
+                    {type:"popInput",caption:"Validation",field:"validation",id:"txtPopTxtUnderUnitValidation",display:"grp",
+                        form : 
+                        {
+                            width:"400",
+                            height:"230",
+                            colCount:1,
+                            item:
+                            [
+                                {type:"text",caption:"Grp",field:"grp",id:"txtPopTxtUnderUnitGrp"},
+                                {type:"popObjectList",caption:"Validation",field:"val",id:"lstPopTxtUnderUnitVal",
+                                    form:
+                                    {
+                                        width:"800",
+                                        height:"600",
+                                        formWidth:"600",
+                                        formHeight:"260",
+                                        allowAdding : false,
+                                        allowUpdating : true,
+                                        allowDeleting : false
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                ]
+            }
         }
     },
     //txtItemName
@@ -491,7 +634,7 @@ export const prm =
         APP : "OFF",
         VIEW : 
         {
-            TYPE : "text",
+            TYPE : "checkbox",
             PAGE_NAME : "Stok Tanımları",
             CAPTION : "Aktif"
         }
@@ -510,7 +653,7 @@ export const prm =
         APP : "OFF",
         VIEW : 
         {
-            TYPE : "text",
+            TYPE : "checkbox",
             PAGE_NAME : "Stok Tanımları",
             CAPTION : "Kasada Tartılsın"
         }
@@ -529,7 +672,7 @@ export const prm =
         APP : "OFF",
         VIEW : 
         {
-            TYPE : "text",
+            TYPE : "checkbox",
             PAGE_NAME : "Stok Tanımları",
             CAPTION : "Satır Birleştir"
         }
@@ -548,7 +691,7 @@ export const prm =
         APP : "OFF",
         VIEW : 
         {
-            TYPE : "text",
+            TYPE : "checkbox",
             PAGE_NAME : "Stok Tanımları",
             CAPTION : "Ticket Rest."
         }
@@ -579,9 +722,44 @@ export const prm =
         APP : "OFF",
         VIEW : 
         {
-            TYPE : "text",
+            TYPE : "popInput",
             PAGE_NAME : "Stok Tanımları",
-            CAPTION : "Ticket Rest."
+            CAPTION : "Ticket Rest.",
+            DISPLAY : "value",
+            FORM: 
+            {
+                width:"400",
+                height:"200",
+                colCount : 1,
+                item:
+                [
+                    {type:"text",caption:"Value",field:"value",id:"txtPopTxtCostPriceValue"},
+                    {type:"popInput",caption:"Validation",field:"validation",id:"txtPopTxtCostPriceValidation",display:"grp",
+                        form : 
+                        {
+                            width:"400",
+                            height:"230",
+                            colCount:1,
+                            item:
+                            [
+                                {type:"text",caption:"Grp",field:"grp",id:"txtPopTxtCostPriceGrp"},
+                                {type:"popObjectList",caption:"Validation",field:"val",id:"lstPopTxtCostPriceVal",
+                                    form:
+                                    {
+                                        width:"800",
+                                        height:"600",
+                                        formWidth:"600",
+                                        formHeight:"260",
+                                        allowAdding : false,
+                                        allowUpdating : true,
+                                        allowDeleting : false
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                ]
+            }
         }
     },
     //txtMinSalePrice
@@ -610,9 +788,44 @@ export const prm =
         APP : "OFF",
         VIEW : 
         {
-            TYPE : "text",
+            TYPE : "popInput",
             PAGE_NAME : "Stok Tanımları",
-            CAPTION : "Min. Satış Fiyatı"
+            CAPTION : "Min. Satış Fiyatı",
+            DISPLAY : "value",
+            FORM: 
+            {
+                width:"400",
+                height:"200",
+                colCount : 1,
+                item:
+                [
+                    {type:"text",caption:"Value",field:"value",id:"txtPopTxtMinSalePriceValue"},
+                    {type:"popInput",caption:"Validation",field:"validation",id:"txtPopTxtMinSalePriceValidation",display:"grp",
+                        form : 
+                        {
+                            width:"400",
+                            height:"230",
+                            colCount:1,
+                            item:
+                            [
+                                {type:"text",caption:"Grp",field:"grp",id:"txtPopTxtMinSalePriceGrp"},
+                                {type:"popObjectList",caption:"Validation",field:"val",id:"lstPopTxtMinSalePriceVal",
+                                    form:
+                                    {
+                                        width:"800",
+                                        height:"600",
+                                        formWidth:"600",
+                                        formHeight:"260",
+                                        allowAdding : false,
+                                        allowUpdating : true,
+                                        allowDeleting : false
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                ]
+            }
         }
     },
     //txtMaxSalePrice
@@ -641,9 +854,44 @@ export const prm =
         APP : "OFF",
         VIEW : 
         {
-            TYPE : "text",
+            TYPE : "popInput",
             PAGE_NAME : "Stok Tanımları",
-            CAPTION : "Max. Satış Fiyatı"
+            CAPTION : "Max. Satış Fiyatı",
+            DISPLAY : "value",
+            FORM: 
+            {
+                width:"400",
+                height:"200",
+                colCount : 1,
+                item:
+                [
+                    {type:"text",caption:"Value",field:"value",id:"txtPopTxtMaxSalePriceValue"},
+                    {type:"popInput",caption:"Validation",field:"validation",id:"txtPopTxtMaxSalePriceValidation",display:"grp",
+                        form : 
+                        {
+                            width:"400",
+                            height:"230",
+                            colCount:1,
+                            item:
+                            [
+                                {type:"text",caption:"Grp",field:"grp",id:"txtPopTxtMaxSalePriceGrp"},
+                                {type:"popObjectList",caption:"Validation",field:"val",id:"lstPopTxtMaxSalePriceVal",
+                                    form:
+                                    {
+                                        width:"800",
+                                        height:"600",
+                                        formWidth:"600",
+                                        formHeight:"260",
+                                        allowAdding : false,
+                                        allowUpdating : true,
+                                        allowDeleting : false
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                ]
+            }
         }
     },
     //txtLastBuyPrice
@@ -689,9 +937,15 @@ export const prm =
         APP : "OFF",
         VIEW : 
         {
-            TYPE : "text",
+            TYPE : "popTextList",
             PAGE_NAME : "Stok Tanımları",
-            CAPTION : "Ürün Grubuna Göre Menşei Validation"
+            CAPTION : "Ürün Grubuna Göre Menşei Validation",
+            FORM: 
+            {
+                width:"400",
+                height:"400",
+                textHeight:"260"
+            }
         }
     },
     //Urun Grubuna Göre Min Max Yetki
@@ -705,9 +959,15 @@ export const prm =
         APP : "OFF",
         VIEW : 
         {
-            TYPE : "text",
+            TYPE : "popTextList",
             PAGE_NAME : "Stok Tanımları",
-            CAPTION : "Ürün Grubuna Göre Min Max Yetki"
+            CAPTION : "Ürün Grubuna Göre Min Max Yetki",
+            FORM: 
+            {
+                width:"400",
+                height:"400",
+                textHeight:"260"
+            }
         }
     },
     //Urun Grubuna Fiyatsız Girebilme
@@ -721,9 +981,15 @@ export const prm =
         APP : "OFF",
         VIEW : 
         {
-            TYPE : "text",
+            TYPE : "popTextList",
             PAGE_NAME : "Stok Tanımları",
-            CAPTION : "Ürün Grubuna Göre Fiyatsız Kayıt"
+            CAPTION : "Ürün Grubuna Göre Fiyatsız Kayıt",
+            FORM: 
+            {
+                width:"400",
+                height:"400",
+                textHeight:"260"
+            }
         }
     },
     //Otomatik Min Fiyat Atama
@@ -755,7 +1021,7 @@ export const prm =
         {
             TYPE : "text",
             PAGE_NAME : "Stok Tanımları",
-            CAPTION : "Ürün MAximum Satış Yüzdesi"
+            CAPTION : "Ürün Maximum Satış Yüzdesi"
         }
     },
     //Satış Fiyatı Maliyet Kontrolü
@@ -769,7 +1035,7 @@ export const prm =
         APP : "OFF",
         VIEW : 
         {
-            TYPE : "text",
+            TYPE : "checkbox",
             PAGE_NAME : "Stok Tanımları",
             CAPTION : "Satış Fiyatı Maliyet Kontrolü"
         }
@@ -785,7 +1051,7 @@ export const prm =
         APP : "OFF",
         VIEW : 
         {
-            TYPE : "text",
+            TYPE : "checkbox",
             PAGE_NAME : "Stok Tanımları",
             CAPTION : "Ted. Fiyatı Yüksek Olamaz Kontrolü"
         }
@@ -801,9 +1067,15 @@ export const prm =
         APP : "OFF",
         VIEW : 
         {
-            TYPE : "text",
+            TYPE : "popTextList",
             PAGE_NAME : "Stok Tanımları",
-            CAPTION : "Tax Sugar Uygulanacak Gruplar"
+            CAPTION : "Tax Sugar Uygulanacak Gruplar",
+            FORM: 
+            {
+                width:"400",
+                height:"400",
+                textHeight:"260"
+            }
         }
     },
     //#endregion
@@ -890,19 +1162,49 @@ export const prm =
         APP : "OFF",
         VIEW : 
         {
-            TYPE : "text",
+            TYPE : "popInput",
             PAGE_NAME : "Cari Tanımları",
-            CAPTION : "Cinsi"
+            CAPTION : "Kodu",
+            FORM: 
+            {
+                width:"400",
+                height:"200",
+                colCount : 1,
+                item:
+                [
+                    {type:"popInput",caption:"Validation",field:"validation",id:"txtPopTxtCodeValidation",display:"grp",
+                        form : 
+                        {
+                            width:"400",
+                            height:"230",
+                            colCount:1,
+                            item:
+                            [
+                                {type:"text",caption:"Grp",field:"grp",id:"txtPopTxtCodeGrp"},
+                                {type:"popObjectList",caption:"Validation",field:"val",id:"lstPopTxtCodeVal",
+                                    form:
+                                    {
+                                        width:"800",
+                                        height:"600",
+                                        formWidth:"600",
+                                        formHeight:"260",
+                                        allowAdding : false,
+                                        allowUpdating : true,
+                                        allowDeleting : false
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                ]
+            }
         }
     },
     //txtTitle
     {
         TYPE : 2,
         ID :"txtTitle",
-        VALUE : 
-        {
-            
-        },
+        VALUE : "",
         SPECIAL : "",
         PAGE : "cri_01_001",
         ELEMENT : "txtTitle",
@@ -938,9 +1240,42 @@ export const prm =
         APP : "OFF",
         VIEW : 
         {
-            TYPE : "text",
+            TYPE : "popInput",
             PAGE_NAME : "Cari Tanımları",
-            CAPTION : "Adı"
+            CAPTION : "Adı",
+            FORM: 
+            {
+                width:"400",
+                height:"200",
+                colCount : 1,
+                item:
+                [
+                    {type:"popInput",caption:"Validation",field:"validation",id:"txtPopTxtCustomerNameValidation",display:"grp",
+                        form : 
+                        {
+                            width:"400",
+                            height:"230",
+                            colCount:1,
+                            item:
+                            [
+                                {type:"text",caption:"Grp",field:"grp",id:"txtPopTxtCustomerNameGrp"},
+                                {type:"popObjectList",caption:"Validation",field:"val",id:"lstPopTxtCustomerNameVal",
+                                    form:
+                                    {
+                                        width:"800",
+                                        height:"600",
+                                        formWidth:"600",
+                                        formHeight:"260",
+                                        allowAdding : false,
+                                        allowUpdating : true,
+                                        allowDeleting : false
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                ]
+            }
         }
     },
     //txtCustomerLastname
@@ -967,9 +1302,42 @@ export const prm =
         APP : "OFF",
         VIEW : 
         {
-            TYPE : "text",
+            TYPE : "popInput",
             PAGE_NAME : "Cari Tanımları",
-            CAPTION : "Soyadı"
+            CAPTION : "Soyadı",
+            FORM: 
+            {
+                width:"400",
+                height:"200",
+                colCount : 1,
+                item:
+                [
+                    {type:"popInput",caption:"Validation",field:"validation",id:"txtPopTxtCustomerLastnameValidation",display:"grp",
+                        form : 
+                        {
+                            width:"400",
+                            height:"230",
+                            colCount:1,
+                            item:
+                            [
+                                {type:"text",caption:"Grp",field:"grp",id:"txtPopTxtCustomerLastnameGrp"},
+                                {type:"popObjectList",caption:"Validation",field:"val",id:"lstPopTxtCustomerLastnameVal",
+                                    form:
+                                    {
+                                        width:"800",
+                                        height:"600",
+                                        formWidth:"600",
+                                        formHeight:"260",
+                                        allowAdding : false,
+                                        allowUpdating : true,
+                                        allowDeleting : false
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                ]
+            }
         }
     },
     //#endregion
@@ -1007,7 +1375,7 @@ export const prm =
         APP : "OFF",
         VIEW : 
         {
-            TYPE : "number",
+            TYPE : "text",
             PAGE_NAME : "Satış Faturası",
             CAPTION : "Sıra"
         }
@@ -1123,7 +1491,7 @@ export const prm =
         APP : "OFF",
         VIEW : 
         {
-            TYPE : "number",
+            TYPE : "text",
             PAGE_NAME : "Şubeler Arası Satış Faturası",
             CAPTION : "Sıra"
         }
@@ -1239,7 +1607,7 @@ export const prm =
         APP : "OFF",
         VIEW : 
         {
-            TYPE : "number",
+            TYPE : "text",
             PAGE_NAME : "Alış Faturası",
             CAPTION : "Sıra"
         }
@@ -1301,7 +1669,7 @@ export const prm =
             CAPTION : "Cari Adı"
         }
     },
-    // txtCustomerName
+    // excelFormat
     {
         TYPE : 1,
         ID :"excelFormat",
@@ -1311,13 +1679,28 @@ export const prm =
         },
         SPECIAL : "",
         PAGE : "ftr_02_001",
-        ELEMENT : "txtCustomerName",
+        ELEMENT : "",
         APP : "OFF",
         VIEW : 
         {
-            TYPE : "text",
+            TYPE : "popInput",
             PAGE_NAME : "Alış Faturası",
-            CAPTION : "Cari Adı"
+            CAPTION : "Excel Formatı",
+            DISPLAY : "CODE",
+            FORM: 
+            {
+                width:"400",
+                height:"280",
+                item:
+                [
+                    {type:"text",caption:"CODE",field:"CODE",id:"txtPopExcelFormatCode"},
+                    {type:"text",caption:"QTY",field:"QTY",id:"txtPopExcelFormatQty"},
+                    {type:"text",caption:"PRICE",field:"PRICE",id:"txtPopExcelFormatPrice"},
+                    {type:"text",caption:"DISC",field:"DISC",id:"txtPopExcelFormatDisc"},
+                    {type:"text",caption:"DISC_PER",field:"DISC_PER",id:"txtPopExcelFormatDiscPer"},
+                    {type:"text",caption:"TVA",field:"TVA",id:"txtPopExcelFormatTva"},
+                ]
+            }
         }
     },
        //#endregion
@@ -1345,9 +1728,42 @@ export const prm =
         APP : "OFF",
         VIEW : 
         {
-            TYPE : "text",
+            TYPE : "popInput",
             PAGE_NAME : "Promosyon Tanımları",
-            CAPTION : "Kodu"
+            CAPTION : "Kodu",
+            FORM: 
+            {
+                width:"400",
+                height:"200",
+                colCount : 1,
+                item:
+                [
+                    {type:"popInput",caption:"Validation",field:"validation",id:"txtPopTxtCodeValidation",display:"grp",
+                        form : 
+                        {
+                            width:"400",
+                            height:"230",
+                            colCount:1,
+                            item:
+                            [
+                                {type:"text",caption:"Grp",field:"grp",id:"txtPopTxtCodeGrp"},
+                                {type:"popObjectList",caption:"Validation",field:"val",id:"lstPopTxtCodeVal",
+                                    form:
+                                    {
+                                        width:"800",
+                                        height:"600",
+                                        formWidth:"600",
+                                        formHeight:"260",
+                                        allowAdding : false,
+                                        allowUpdating : true,
+                                        allowDeleting : false
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                ]
+            }
         }
     },
     //#endregion
@@ -1406,7 +1822,7 @@ export const prm =
         APP : "OFF",
         VIEW : 
         {
-            TYPE : "number",
+            TYPE : "text",
             PAGE_NAME : "Proforma Satış Faturası",
             CAPTION : "Sıra"
         }
@@ -1503,9 +1919,18 @@ export const prm =
         APP : "OFF",
         VIEW : 
         {
-            TYPE : "text",
+            TYPE : "combobox",
             PAGE_NAME : "Depo Miktar Listesi",
-            CAPTION : "Varsayılan Depo"
+            CAPTION : "Varsayılan Depo",
+            DISPLAY : "NAME",
+            FIELD : "GUID",
+            DATA :
+            {
+                select:
+                {
+                    query : "SELECT GUID,CODE,NAME FROM DEPOT WHERE STATUS = 1 AND DELETED = 0 ORDER BY CODE ASC"
+                },
+            }
         }
     },
         //#endregion
@@ -1564,9 +1989,18 @@ export const prm =
         APP : "OFF",
         VIEW : 
         {
-            TYPE : "text",
+            TYPE : "combobox",
             PAGE_NAME : "İade Ürün Toplama",
-            CAPTION : "Çıkış Depo"
+            CAPTION : "Çıkış Depo",
+            DISPLAY : "NAME",
+            FIELD : "GUID",
+            DATA :
+            {
+                select:
+                {
+                    query : "SELECT GUID,CODE,NAME FROM DEPOT WHERE STATUS = 1 AND DELETED = 0 ORDER BY CODE ASC"
+                },
+            }
         }
     },
     //cmbDepot2
@@ -1583,9 +2017,18 @@ export const prm =
         APP : "OFF",
         VIEW : 
         {
-            TYPE : "text",
+            TYPE : "combobox",
             PAGE_NAME : "İade Ürün Toplama",
-            CAPTION : "Giriş Depo"
+            CAPTION : "Giriş Depo",
+            DISPLAY : "NAME",
+            FIELD : "GUID",
+            DATA :
+            {
+                select:
+                {
+                    query : "SELECT GUID,CODE,NAME FROM DEPOT WHERE STATUS = 1 AND DELETED = 0 ORDER BY CODE ASC"
+                },
+            }
         }
     },
     //#endregion
@@ -1641,9 +2084,18 @@ export const prm =
         APP : "OFF",
         VIEW : 
         {
-            TYPE : "text",
+            TYPE : "combobox",
             PAGE_NAME : "Pos",
-            CAPTION : "Merkez Kasa"
+            CAPTION : "Merkez Kasa",
+            DISPLAY : "NAME",
+            FIELD : "GUID",
+            DATA :
+            {
+                select:
+                {
+                    query : "SELECT GUID,CODE,NAME FROM SAFE WHERE TYPE = 0 AND STATUS = 1 AND DELETED = 1 ORDER BY CODE ASC"
+                },
+            }
         }
     },
     // Kredi Kartı kasa 
@@ -1657,9 +2109,18 @@ export const prm =
         APP : "OFF",
         VIEW : 
         {
-            TYPE : "text",
+            TYPE : "combobox",
             PAGE_NAME : "Pos",
-            CAPTION : "Kredi Kartı Kasası"
+            CAPTION : "Kredi Kartı Kasası",
+            DISPLAY : "NAME",
+            FIELD : "GUID",
+            DATA :
+            {
+                select:
+                {
+                    query : "SELECT GUID,CODE,NAME FROM SAFE WHERE TYPE = 0 AND STATUS = 1 AND DELETED = 1 ORDER BY CODE ASC"
+                },
+            }
         }
     },
     // Ticket Restorant Kasası kasa 
@@ -1673,9 +2134,18 @@ export const prm =
         APP : "OFF",
         VIEW : 
         {
-            TYPE : "text",
+            TYPE : "combobox",
             PAGE_NAME : "Pos",
-            CAPTION : "Ticket Restorant Kasası"
+            CAPTION : "Ticket Restorant Kasası",
+            DISPLAY : "NAME",
+            FIELD : "GUID",
+            DATA :
+            {
+                select:
+                {
+                    query : "SELECT GUID,CODE,NAME FROM SAFE WHERE TYPE = 0 AND STATUS = 1 AND DELETED = 1 ORDER BY CODE ASC"
+                },
+            }
         }
     },
     // Çek Kasası 
@@ -1689,9 +2159,18 @@ export const prm =
         APP : "OFF",
         VIEW : 
         {
-            TYPE : "text",
+            TYPE : "combobox",
             PAGE_NAME : "Pos",
-            CAPTION : "Çek Kasası"
+            CAPTION : "Çek Kasası",
+            DISPLAY : "NAME",
+            FIELD : "GUID",
+            DATA :
+            {
+                select:
+                {
+                    query : "SELECT GUID,CODE,NAME FROM SAFE WHERE TYPE = 1 AND STATUS = 1 AND DELETED = 1 ORDER BY CODE ASC"
+                },
+            }
         }
     },
     // Anavas Tutar
@@ -1725,10 +2204,10 @@ export const prm =
         ELEMENT : "",
         APP : "OFF",
         VIEW : 
-    {
-        TYPE : "checkbox",
-        PAGE_NAME : "Satış İrsaliye",
-        CAPTION : "Eksiye Düşemeye İzin Verme"
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Satış İrsaliye",
+            CAPTION : "Eksiye Düşemeye İzin Verme"
         }
     },
     //#endregion
@@ -1746,10 +2225,10 @@ export const prm =
         ELEMENT : "",
         APP : "OFF",
         VIEW : 
-    {
-        TYPE : "checkbox",
-        PAGE_NAME : "Şube Satış İrsaliye",
-        CAPTION : "Eksiye Düşemeye İzin Verme"
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Şube Satış İrsaliye",
+            CAPTION : "Eksiye Düşemeye İzin Verme"
         }
     },
     //#endregion
@@ -1768,9 +2247,18 @@ export const prm =
         APP : "OFF",
         VIEW : 
         {
-            TYPE : "text",
+            TYPE : "combobox",
             PAGE_NAME : "Alış Anlaşması",
-            CAPTION : "Depo"
+            CAPTION : "Depo",
+            DISPLAY : "NAME",
+            FIELD : "GUID",
+            DATA :
+            {
+                select:
+                {
+                    query : "SELECT GUID,CODE,NAME FROM DEPOT WHERE STATUS = 1 AND DELETED = 0 ORDER BY CODE ASC"
+                },
+            }
         }
     },
     //#endregion
@@ -1789,9 +2277,18 @@ export const prm =
         APP : "OFF",
         VIEW : 
         {
-            TYPE : "text",
+            TYPE : "combobox",
             PAGE_NAME : "Satış Anlaşması",
-            CAPTION : "Depo"
+            CAPTION : "Depo",
+            DISPLAY : "NAME",
+            FIELD : "GUID",
+            DATA :
+            {
+                select:
+                {
+                    query : "SELECT GUID,CODE,NAME FROM DEPOT WHERE STATUS = 1 AND DELETED = 0 ORDER BY CODE ASC"
+                },
+            }
         }
     },
     //#endregion

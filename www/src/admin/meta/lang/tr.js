@@ -1,6 +1,6 @@
 export const langTr = 
 {
-    popGrid: {btnSelection:"Kaydet",btnSearch:"Listele"},
+    popGrid: {btnSelection:"Seç",btnSearch:"Listele"},
     menu:
     {
         stk: "Stok",                
@@ -156,6 +156,99 @@ export const langTr =
             clmName : "Adı",
             title : "Toplu Kaydet",
             btnSelection: "Kaydet"
+        }
+    },
+    prm_01_001 :
+    {
+        lblUser : "Kullanıcı",
+        btnSave : "Kaydet",
+        pg_UserList :
+        {
+            title : "Kullanıcı Seçimi",
+            clmCode : "KODU",
+            clmName : "ADI"
+        }
+    },
+    prm_01_002 :
+    {
+        lblUser : "Kullanıcı",
+        btnSave : "Kaydet",
+        pg_UserList :
+        {
+            title : "Kullanıcı Seçimi",
+            clmCode : "KODU",
+            clmName : "ADI"
+        }
+    },
+    prm_01_003 :
+    {
+        lblUser : "Kullanıcı",
+        btnSave : "Kaydet",
+        pg_UserList :
+        {
+            title : "Kullanıcı Seçimi",
+            clmCode : "KODU",
+            clmName : "ADI"
+        }
+    },
+    prm_02_001 :
+    {
+        lblUser : "Kullanıcı",
+        lblDoc : "Evrak",
+        btnSave : "Kaydet",
+        pg_UserList :
+        {
+            title : "Kullanıcı Seçimi",
+            clmCode : "KODU",
+            clmName : "ADI"
+        }
+    },
+    prm_02_003 :
+    {
+        lblUser : "Kullanıcı",
+        lblDoc : "Evrak",
+        btnSave : "Kaydet",
+        pg_UserList :
+        {
+            title : "Kullanıcı Seçimi",
+            clmCode : "KODU",
+            clmName : "ADI"
+        }
+    },
+    prm_03_001 :
+    {
+        lblUser : "Kullanıcı",
+        lblDoc : "Evrak",
+        btnSave : "Kaydet",
+        pg_UserList :
+        {
+            title : "Kullanıcı Seçimi",
+            clmCode : "KODU",
+            clmName : "ADI"
+        }
+    },
+    prm_03_002 :
+    {
+        lblUser : "Kullanıcı",
+        lblDoc : "Evrak",
+        btnSave : "Kaydet",
+        pg_UserList :
+        {
+            title : "Kullanıcı Seçimi",
+            clmCode : "KODU",
+            clmName : "ADI"
+        }
+    },
+    prm_03_003 :
+    {
+        lblUser : "Kullanıcı",
+        lblDoc : "Evrak",
+        btnSave : "Kaydet",
+        pg_UserList :
+        {
+            title : "Kullanıcı Seçimi",
+            clmCode : "KODU",
+            clmName : "ADI"
         }
     }
 }

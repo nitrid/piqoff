@@ -262,39 +262,39 @@ export default class menuEdit extends React.Component
                         </div>
                     </div>
                     <NdPopGrid id={"pg_CltvSave"} parent={this} container={"#root"}
-                                    visible={false}
-                                    position={{of:'#root'}}
-                                    showTitle={true}
-                                    showBorders={true}
-                                    width={'90%'}
-                                    height={'90%'}
-                                    title={this.t("pg_CltvSave.title")}
-                                    data =
-                                    {{
-                                        source:
-                                        {
-                                            select:
-                                            {
-                                                query : "SELECT CODE,NAME FROM USERS ORDER BY CODE ASC"
-                                            },
-                                            sql:this.core.sql
-                                        }
-                                    }}
-                                    onRowPrepared={(async(e)=>
-                                    {
-                                        this.SaveRow = e;
-                                        if(typeof this.SaveRow.data != "undefined")
-                                        {
-                                            if(this.cmbUser.value == e.data.CODE)
-                                            {
-                                                await this.core.util.waitUntil(200)
-                                                this.pg_CltvSave.grid.devGrid.selectRowsByIndexes(e.dataIndex)
-                                            }
-                                        }
-                                    })}
-                                    >
-                                    <Column dataField="CODE" caption={this.t("pg_CltvSave.clmCode")} width={300} />
-                                    <Column dataField="NAME" caption={this.t("pg_CltvSave.clmName")} width={300} defaultSortOrder="asc" />
+                    visible={false}
+                    position={{of:'#root'}}
+                    showTitle={true}
+                    showBorders={true}
+                    width={'90%'}
+                    height={'90%'}
+                    title={this.t("pg_CltvSave.title")}
+                    data =
+                    {{
+                        source:
+                        {
+                            select:
+                            {
+                                query : "SELECT CODE,NAME FROM USERS ORDER BY CODE ASC"
+                            },
+                            sql:this.core.sql
+                        }
+                    }}
+                    onRowPrepared={(async(e)=>
+                    {
+                        this.SaveRow = e;
+                        if(typeof this.SaveRow.data != "undefined")
+                        {
+                            if(this.cmbUser.value == e.data.CODE)
+                            {
+                                await this.core.util.waitUntil(200)
+                                this.pg_CltvSave.grid.devGrid.selectRowsByIndexes(e.dataIndex)
+                            }
+                        }
+                    })}
+                    >
+                    <Column dataField="CODE" caption={this.t("pg_CltvSave.clmCode")} width={300} />
+                    <Column dataField="NAME" caption={this.t("pg_CltvSave.clmName")} width={300} defaultSortOrder="asc" />
                     </NdPopGrid>
                 </ScrollView>
             </div>

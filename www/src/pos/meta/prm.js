@@ -12,9 +12,20 @@ export const prm =
         APP : "POS",
         VIEW : 
         {
-            TYPE : "text",
+            TYPE : "popInput",
             PAGE_NAME : "Pos",
-            CAPTION : "Para Sembolü"
+            CAPTION : "Para Sembolü",
+            DISPLAY : "code",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                item:
+                [
+                    {type:"text",caption:"Code",field:"code",id:"txtPopMoneySymbolCode"},
+                    {type:"text",caption:"Sign",field:"sign",id:"txtPopMoneySymbolSign"}
+                ]
+            }
         }
     },
     //BarcodePattern
@@ -36,9 +47,15 @@ export const prm =
         APP : "POS",
         VIEW : 
         {
-            TYPE : "text",
+            TYPE : "popTextList",
             PAGE_NAME : "Pos",
-            CAPTION : "Barkod Desenleri"
+            CAPTION : "Barkod Desenleri",
+            FORM: 
+            {
+                width:"400",
+                height:"400",
+                textHeight:"260"
+            }
         }
     },
     //Ticket Rest. Sadakat Puan Kullanımı
@@ -52,9 +69,12 @@ export const prm =
         APP : "POS",
         VIEW : 
         {
-            TYPE : "text",
+            TYPE : "combobox",
             PAGE_NAME : "Pos",
-            CAPTION : "Ticket Rest. Puan Kullanımı"
+            CAPTION : "Ticket Rest. Puan Kullanımı",
+            DISPLAY : "NAME",
+            FIELD : "CODE",
+            DATA :[{CODE:0,NAME:"Kullanılmaz"},{CODE:1,NAME:"Kullanılır Puan İşlemez"},{CODE:2,NAME:"Kullanılır"}]
         }
     },
     //Ticket Rest. Kullanım Süresi
@@ -151,9 +171,33 @@ export const prm =
         APP : "POS",
         VIEW : 
         {
-            TYPE : "text",
+            TYPE : "popInput",
             PAGE_NAME : "Pos",
-            CAPTION : "İade Açıklama"
+            CAPTION : "Fiyat Açıklama",
+            DISPLAY : "disable",
+            FORM: 
+            {
+                width:"400",
+                height:"280",
+                colCount:1,
+                item:
+                [
+                    {type:"checkbox",caption:"Pasif",field:"disable",id:"chkPopPriceDescriptionDisable"},
+                    {type:"text",caption:"Min.Karakter",field:"minCharSize",id:"txtPopPriceDescriptionMinChar"},
+                    {type:"popObjectList",caption:"Açıklama",field:"buttons",id:"lstPopPriceDescriptionDesc",
+                        form:
+                        {
+                            width:"800",
+                            height:"600",
+                            formWidth:"600",
+                            formHeight:"260",
+                            allowAdding : false,
+                            allowUpdating : true,
+                            allowDeleting : false
+                        }
+                    }
+                ]
+            }
         }
     },
     //İade Açıklama
@@ -234,9 +278,33 @@ export const prm =
         APP : "POS",
         VIEW : 
         {
-            TYPE : "text",
+            TYPE : "popInput",
             PAGE_NAME : "Pos",
-            CAPTION : "İade Açıklama"
+            CAPTION : "İade Açıklama",
+            DISPLAY : "disable",
+            FORM: 
+            {
+                width:"400",
+                height:"280",
+                colCount:1,
+                item:
+                [
+                    {type:"checkbox",caption:"Pasif",field:"disable",id:"chkPopRebateDescriptionDisable"},
+                    {type:"text",caption:"Min.Karakter",field:"minCharSize",id:"txtPopRebateDescriptionMinChar"},
+                    {type:"popObjectList",caption:"Açıklama",field:"buttons",id:"lstPopRebateDescriptionDesc",
+                        form:
+                        {
+                            width:"800",
+                            height:"600",
+                            formWidth:"600",
+                            formHeight:"260",
+                            allowAdding : false,
+                            allowUpdating : true,
+                            allowDeleting : false
+                        }
+                    }
+                ]
+            }
         }
     },
     //Evrak Sil Açıklama
@@ -317,9 +385,33 @@ export const prm =
         APP : "POS",
         VIEW : 
         {
-            TYPE : "text",
+            TYPE : "popInput",
             PAGE_NAME : "Pos",
-            CAPTION : "Evrak Sil Açıklama"
+            CAPTION : "Evrak Sil Açıklama",
+            DISPLAY : "disable",
+            FORM: 
+            {
+                width:"400",
+                height:"280",
+                colCount:1,
+                item:
+                [
+                    {type:"checkbox",caption:"Pasif",field:"disable",id:"chkPopDocDelDescriptionDisable"},
+                    {type:"text",caption:"Min.Karakter",field:"minCharSize",id:"txtPopDocDelDescriptionMinChar"},
+                    {type:"popObjectList",caption:"Açıklama",field:"buttons",id:"lstPopDocDelDescriptionDesc",
+                        form:
+                        {
+                            width:"800",
+                            height:"600",
+                            formWidth:"600",
+                            formHeight:"260",
+                            allowAdding : false,
+                            allowUpdating : true,
+                            allowDeleting : false
+                        }
+                    }
+                ]
+            }
         }
     },
     //Evrak Satır Sil Açıklama
@@ -400,9 +492,33 @@ export const prm =
         APP : "POS",
         VIEW : 
         {
-            TYPE : "text",
+            TYPE : "popInput",
             PAGE_NAME : "Pos",
-            CAPTION : "Satır Sil Açıklama"
+            CAPTION : "Satır Sil Açıklama",
+            DISPLAY : "disable",
+            FORM: 
+            {
+                width:"400",
+                height:"280",
+                colCount:1,
+                item:
+                [
+                    {type:"checkbox",caption:"Pasif",field:"disable",id:"chkPopDocRowDelDescriptionDisable"},
+                    {type:"text",caption:"Min.Karakter",field:"minCharSize",id:"txtPopDocRowDelDescriptionMinChar"},
+                    {type:"popObjectList",caption:"Açıklama",field:"buttons",id:"lstPopDocRowDelDescriptionDesc",
+                        form:
+                        {
+                            width:"800",
+                            height:"600",
+                            formWidth:"600",
+                            formHeight:"260",
+                            allowAdding : false,
+                            allowUpdating : true,
+                            allowDeleting : false
+                        }
+                    }
+                ]
+            }
         }
     },
     //Park Açıklama
@@ -483,9 +599,33 @@ export const prm =
         APP : "POS",
         VIEW : 
         {
-            TYPE : "text",
+            TYPE : "popInput",
             PAGE_NAME : "Pos",
-            CAPTION : "Park Açıklama"
+            CAPTION : "Park Açıklama",
+            DISPLAY : "disable",
+            FORM: 
+            {
+                width:"400",
+                height:"280",
+                colCount:1,
+                item:
+                [
+                    {type:"checkbox",caption:"Pasif",field:"disable",id:"chkPopParkDelDescriptionDisable"},
+                    {type:"text",caption:"Min.Karakter",field:"minCharSize",id:"txtPopParkDelDescriptionMinChar"},
+                    {type:"popObjectList",caption:"Açıklama",field:"buttons",id:"lstPopParkDelDescriptionDesc",
+                        form:
+                        {
+                            width:"800",
+                            height:"600",
+                            formWidth:"600",
+                            formHeight:"260",
+                            allowAdding : false,
+                            allowUpdating : true,
+                            allowDeleting : false
+                        }
+                    }
+                ]
+            }
         }
     },
     //Avans Açıklama
@@ -566,9 +706,33 @@ export const prm =
         APP : "POS",
         VIEW : 
         {
-            TYPE : "text",
+            TYPE : "popInput",
             PAGE_NAME : "Pos",
-            CAPTION : "Avans Açıklama"
+            CAPTION : "Avans Açıklama",
+            DISPLAY : "disable",
+            FORM: 
+            {
+                width:"400",
+                height:"280",
+                colCount:1,
+                item:
+                [
+                    {type:"checkbox",caption:"Pasif",field:"disable",id:"chkPopAdvanceDescriptionDisable"},
+                    {type:"text",caption:"Min.Karakter",field:"minCharSize",id:"txtPopAdvanceDescriptionMinChar"},
+                    {type:"popObjectList",caption:"Açıklama",field:"buttons",id:"lstPopAdvanceDescriptionDesc",
+                        form:
+                        {
+                            width:"800",
+                            height:"600",
+                            formWidth:"600",
+                            formHeight:"260",
+                            allowAdding : false,
+                            allowUpdating : true,
+                            allowDeleting : false
+                        }
+                    }
+                ]
+            }
         }
     },
     //RePrint Açıklama
@@ -649,9 +813,33 @@ export const prm =
         APP : "POS",
         VIEW : 
         {
-            TYPE : "text",
+            TYPE : "popInput",
             PAGE_NAME : "Pos",
-            CAPTION : "Park Açıklama"
+            CAPTION : "RePrint Açıklama",
+            DISPLAY : "disable",
+            FORM: 
+            {
+                width:"400",
+                height:"280",
+                colCount:1,
+                item:
+                [
+                    {type:"checkbox",caption:"Pasif",field:"disable",id:"chkPopRePrintDescriptionDisable"},
+                    {type:"text",caption:"Min.Karakter",field:"minCharSize",id:"txtPopRePrintDescriptionMinChar"},
+                    {type:"popObjectList",caption:"Açıklama",field:"buttons",id:"lstPopRePrintDescriptionDesc",
+                        form:
+                        {
+                            width:"800",
+                            height:"600",
+                            formWidth:"600",
+                            formHeight:"260",
+                            allowAdding : false,
+                            allowUpdating : true,
+                            allowDeleting : false
+                        }
+                    }
+                ]
+            }
         }
     },
     //Açılış da Park Getir
@@ -665,7 +853,7 @@ export const prm =
         APP : "POS",
         VIEW : 
         {
-            TYPE : "text",
+            TYPE : "checkbox",
             PAGE_NAME : "Pos",
             CAPTION : "Açılış Park Getir"
         }
@@ -681,7 +869,7 @@ export const prm =
         APP : "POS",
         VIEW : 
         {
-            TYPE : "text",
+            TYPE : "checkbox",
             PAGE_NAME : "Pos",
             CAPTION : "Miktar Düzenle"
         }
@@ -697,7 +885,7 @@ export const prm =
         APP : "POS",
         VIEW : 
         {
-            TYPE : "text",
+            TYPE : "checkbox",
             PAGE_NAME : "Pos",
             CAPTION : "Fiyat Düzenle"
         }
@@ -713,7 +901,7 @@ export const prm =
         APP : "POS",
         VIEW : 
         {
-            TYPE : "text",
+            TYPE : "checkbox",
             PAGE_NAME : "Pos",
             CAPTION : "Sıfır Miktar Kontrolü"
         }
@@ -729,7 +917,7 @@ export const prm =
         APP : "POS",
         VIEW : 
         {
-            TYPE : "text",
+            TYPE : "checkbox",
             PAGE_NAME : "Pos",
             CAPTION : "Sıfır Fiyat Kontrolü"
         }
@@ -745,7 +933,7 @@ export const prm =
         APP : "POS",
         VIEW : 
         {
-            TYPE : "text",
+            TYPE : "checkbox",
             PAGE_NAME : "Pos",
             CAPTION : "Min. Fiyat Kontrolü"
         }
@@ -761,7 +949,7 @@ export const prm =
         APP : "POS",
         VIEW : 
         {
-            TYPE : "text",
+            TYPE : "checkbox",
             PAGE_NAME : "Pos",
             CAPTION : "Maliyet Fiyat Kontrolü"
         }
@@ -799,9 +987,19 @@ export const prm =
         APP : "POS",
         VIEW : 
         {
-            TYPE : "text",
+            TYPE : "popObjectList",
             PAGE_NAME : "Pos",
-            CAPTION : "Merkez Kasa"
+            CAPTION : "Barkod Okutma Uyarısı",
+            FORM: 
+            {
+                width:"800",
+                height:"600",
+                formWidth:"600",
+                formHeight:"260",
+                allowAdding : true,
+                allowUpdating : true,
+                allowDeleting : false
+            }
         }
     },
     //Avans vs İşlemleri İçin Merkez Kasa
@@ -815,9 +1013,23 @@ export const prm =
         APP : "POS",
         VIEW : 
         {
-            TYPE : "text",
+            TYPE : "popSelect",
             PAGE_NAME : "Pos",
-            CAPTION : "Merkez Kasa"
+            CAPTION : "Merkez Kasa",
+            FIELD : "GUID",
+            FORM: 
+            {
+                selection:{mode:"single"},
+                width:"600",
+                height:"500",
+                data:
+                {
+                    select:
+                    {
+                        query : "SELECT GUID,CODE,NAME FROM SAFE WHERE TYPE = 0 AND STATUS = 1 AND DELETED = 1 ORDER BY CODE ASC"
+                    },
+                },
+            }
         }
     },
     //Aktarım Süresi
@@ -863,7 +1075,7 @@ export const prm =
         APP : "POS",
         VIEW : 
         {
-            TYPE : "text",
+            TYPE : "checkbox",
             PAGE_NAME : "Pos",
             CAPTION : "Fiş Çıktısı Sorulsun"
         }

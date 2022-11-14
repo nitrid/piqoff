@@ -37,15 +37,74 @@ export const menu =
         ]
     },
     {
-        id: 'prm_01',
+        id: 'prm',
         text: 'Parametre',
         expanded: false,
         items: 
         [
             {
-                id: 'prm_01_001',
+                id: 'prm_01',
                 text: 'Sistem Parametreleri',
-                path: 'systemParameter'
+                expanded: false,
+                items:
+                [
+                    {
+                        id: 'prm_01_001',
+                        text: 'Off',
+                        path: 'parameters/systemParamOff'
+                    },
+                    {
+                        id: 'prm_01_002',
+                        text: 'Pos',
+                        path: 'parameters/systemParamPos'
+                    },
+                    {
+                        id: 'prm_01_003',
+                        text: 'Mob',
+                        path: 'parameters/systemParamMob'
+                    }
+                ]
+            },
+            {
+                id: 'prm_02',
+                text: 'Evrak Parametreleri',
+                expanded: false,
+                items:
+                [
+                    {
+                        id: 'prm_02_001',
+                        text: 'Off',
+                        path: 'parameters/docParamOff'
+                    },
+                    {
+                        id: 'prm_02_003',
+                        text: 'Mob',
+                        path: 'parameters/docParamMob'
+                    }
+                ]
+            },
+            {
+                id: 'prm_03',
+                text: 'Element Parametreleri',
+                expanded: false,
+                items:
+                [
+                    {
+                        id: 'prm_03_001',
+                        text: 'Off',
+                        path: 'parameters/elementParamOff'
+                    },
+                    {
+                        id: 'prm_03_002',
+                        text: 'Pos',
+                        path: 'parameters/elementParamPos'
+                    },
+                    {
+                        id: 'prm_03_003',
+                        text: 'Mob',
+                        path: 'parameters/elementParamMob'
+                    }
+                ]
             },
         ]
     },
