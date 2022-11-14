@@ -861,7 +861,6 @@ export default class purchaseDispatch extends React.PureComponent
                                     <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup={"frmPurcDispatch"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
-                                        console.log(this.docObj.docItems.dt())
                                         if(this.docLocked == true)
                                         {
                                             let tmpConfObj =
@@ -872,6 +871,19 @@ export default class purchaseDispatch extends React.PureComponent
                                             }
                                 
                                             await dialog(tmpConfObj);
+                                            return
+                                        }
+                                        if(typeof this.docObj.docItems.dt()[0] == 'undefined')
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgNotRow',showTitle:true,title:this.lang.t("msgNotRow.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.lang.t("msgNotRow.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgNotRow.msg")}</div>)
+                                            }
+
+                                            await dialog(tmpConfObj);
+                                            this.getDoc(this.docObj.dt()[0].GUID,this.docObj.dt()[0].REF,this.docObj.dt()[0].REF_NO)
                                             return
                                         }
                                         if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
@@ -1834,7 +1846,6 @@ export default class purchaseDispatch extends React.PureComponent
                                     }}
                                     onRowRemoved={async (e)=>{
                                         this._calculateTotal()
-                                        await this.docObj.save()
                                     }}
                                     >
                                         <Paging defaultPageSize={10} />
