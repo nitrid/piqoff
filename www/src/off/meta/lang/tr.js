@@ -3565,18 +3565,6 @@ export const langTr =
             clmPrice : "Fiyat",
             clmTotal : "Tutar"
         },
-        msgDelDesc:
-        {
-            title: "Açıklama Girişi",
-            btn01: "Kaydet",
-            msg: "Lütfen Evrak Silme Sebebini Yazınız"
-        },
-        msgDelDescEmpty :
-        {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Lütfen Açıklama Giriniz"
-        },
     },
     ftr_02_003 : // "İade Faturası"
     {

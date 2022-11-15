@@ -73,6 +73,24 @@ export const langFr =
         btn01: "Tamam",   // BAK
         msg: "Kaydetmek istediğiniz evrakta en az bir satır bulunmalıdır! Yaptığınız diğişiklikler geri alındı."   // BAK
     },
+    popDescbordValidation :
+    {
+        title : "Attention",
+        msg : "Vous ne pouvez pas laisser le champ information vide !",
+        btn01 : "OK",
+    },
+    popDescbordValidation2 :
+    {
+        title : "Attention",
+        msg1 : "İnformation saisie",
+        msg2 : " Ne peut être inférieur à ... caractères ", 
+        btn01 : "Ok",
+    },
+    popDeleteDesc : 
+    {
+        head : "Silme İşlemi Açıklaması",    // BAK
+        title : "Lütfen Silme Nedeninizi Giriniz"    // BAK
+    },
     menu:
     {
         stk: "Produit",                
