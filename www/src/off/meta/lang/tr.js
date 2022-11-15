@@ -240,6 +240,7 @@ export const langTr =
         set_02_007 : "Destek Talebi Geçmişi",
         set_03 : "Evrak Ayarları",
         set_03_001 : "Silinmiş Evraklar",
+        set_03_002 : "Silinmiş Satırlar",
         proces : "Toplu işlemler",
         proces_01 : "Stok İşlemleri",
         proces_01_001 : "Ürün Grubu Güncelleme",
@@ -10832,7 +10833,57 @@ export const langTr =
             clmRefNo : "SIRA",
             clmCustomer : "CARI",
             clmDate : "TARIH",
-            clmDescription : "AÇIKLAMA"
+            clmDescription : "AÇIKLAMA",
+            clmUser : "KULLANICI",
+            clmTotal : "TUTAR" 
+        },
+        cmbTypeData : 
+        {
+            purchaseDispatch : "Alış İrsaliyesi",
+            salesDispatch : "Satış İrsaliyesi",
+            rebateDispatch : "İade İrsaliyesi",
+            branchSaleDispatch : "Şube Satış İrsaliyesi",
+            purchaseInvoice : "Alış Faturası",
+            salesInvoice : "Satış Faturası",
+            priceDifferenceInvoice : "Fiyat Farkı Faturası",
+            rebateInvoice : "İade Faturası",
+            branchSaleInvoice : "Şube Satış Faturası",
+            purchaseOrder : "Alış Sipariş",
+            salesOrder : "Satış Sipariş",
+            purchaseOffer : "Alış Teklif",
+            salesOffer : "Satış Sipariş",
+        },
+        msgSuccess:
+        {
+            title: "Başarılı",
+            btn01: "Tamam",
+            msg: "Evrak Yeniden Oluşturuldu.."
+        },
+    },
+    set_03_002 : // Silinmiş Satırlar
+    {
+        cmbType : "Evrak Tipi",
+        btnGet : "Satırları Getir",
+        chkDoc : "Evrakı Silinenleri Göster",
+        mgsUnlock:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Seçili evrakı tekrar oluşturmak istediğinize eminmisiniz ?"
+        },
+        grdDeleteList : 
+        {
+            clmRef : "SERI",
+            clmRefNo : "SIRA",
+            clmCustomer : "CARI",
+            clmDate : "TARIH",
+            clmDescription : "AÇIKLAMA",
+            clmItemCode : "KODU",
+            clmItemName : "ADI",
+            clmQuantity : "MİKTAR",
+            clmPrice : "FİYAT",
+            clmTotal : "TOPLAM"
         },
         cmbTypeData : 
         {

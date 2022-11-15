@@ -221,7 +221,8 @@ export const langFr =
         set_02_006 : "Destek Talebi Oluştur",   // BAK
         set_02_007 : "Destek Talebi Geçmişi",   // BAK
         set_03 : "Evrak Ayarları",   
-        set_03_001 : "Silinmiş Evraklar",   
+        set_03_001 : "Silinmiş Evraklar",   // BAK
+        set_03_002 : "Silinmiş Satırlar",  // BAK
         proces : "Saisie groupée",
         proces_01 : "Traitement Produit",
         proces_01_001 : "MAJ Famille produit",
@@ -10784,7 +10785,7 @@ export const langFr =
             notValid: "Veuillez remplir les champs obligatoires !",
         },
     },
-        set_03_001 : // Silinmiş Evraklar
+    set_03_001 : // Silinmiş Evraklar   YENI EKLENDI KOMPLE BAK
     {
         cmbType : "Evrak Tipi",  
         btnGet : "Evrakları Getir",  
@@ -10802,7 +10803,9 @@ export const langFr =
             clmRefNo : "SIRA",  
             clmCustomer : "CARI",  
             clmDate : "TARIH" ,
-            clmDescription : "AÇIKLAMA" // BAK
+            clmDescription : "AÇIKLAMA" ,// BAK
+            clmUser : "KULLANICI" ,// BAK
+            clmTotal : "TUTAR" // BAK
         },
         cmbTypeData : 
         {
@@ -10825,6 +10828,54 @@ export const langFr =
             title: "Başarılı",  
             btn01: "Tamam",  
             msg: "Evrak Yeniden Oluşturuldu.."  
+        },
+    },
+    set_03_002 : // Silinmiş Satırlar YENI EKLENDI KOMPLE BAK
+    {
+        cmbType : "Evrak Tipi",
+        btnGet : "Satırları Getir",
+        chkDoc : "Evrakı Silinenleri Göster",
+        mgsUnlock:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Seçili evrakı tekrar oluşturmak istediğinize eminmisiniz ?"
+        },
+        grdDeleteList : 
+        {
+            clmRef : "SERI",
+            clmRefNo : "SIRA",
+            clmCustomer : "CARI",
+            clmDate : "TARIH",
+            clmDescription : "AÇIKLAMA",
+            clmItemCode : "KODU",
+            clmItemName : "ADI",
+            clmQuantity : "MİKTAR",
+            clmPrice : "FİYAT",
+            clmTotal : "TOPLAM"
+        },
+        cmbTypeData : 
+        {
+            purchaseDispatch : "Alış İrsaliyesi",
+            salesDispatch : "Satış İrsaliyesi",
+            rebateDispatch : "İade İrsaliyesi",
+            branchSaleDispatch : "Şube Satış İrsaliyesi",
+            purchaseInvoice : "Alış Faturası",
+            salesInvoice : "Satış Faturası",
+            priceDifferenceInvoice : "Fiyat Farkı Faturası",
+            rebateInvoice : "İade Faturası",
+            branchSaleInvoice : "Şube Satış Faturası",
+            purchaseOrder : "Alış Sipariş",
+            salesOrder : "Satış Sipariş",
+            purchaseOffer : "Alış Teklif",
+            salesOffer : "Satış Sipariş",
+        },
+        msgSuccess:
+        {
+            title: "Başarılı",
+            btn01: "Tamam",
+            msg: "Evrak Yeniden Oluşturuldu.."
         },
     },
     pos_01_001 : // "Pos Cihaz Tanıtım",
