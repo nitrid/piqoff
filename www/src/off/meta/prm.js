@@ -133,6 +133,131 @@ export const prm =
             CAPTION : "Faturadaki Hizmetten Maliyet Ekle"
         }
     },
+    //Faturadaki Hizmetten maliyet ekle
+    {
+        TYPE : 0,
+        ID :"docDeleteDesc",
+        VALUE : 
+        {
+            value : true
+        },
+        SPECIAL : "",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Sistem",
+            CAPTION : "Zorunlu Evrak Silme Açıklaması"
+        }
+    },
+    //Evrak Sil Açıklama
+    {
+        TYPE : 0,
+        ID :"DocDelDescription",
+        VALUE : 
+        {
+            disable:false,
+            minCharSize:25,
+            buttons:
+            [
+                {
+                    id:"btn01",
+                    title:"Course annulé.",
+                    text:"Le client ne veux plus son produit."
+                },
+                {
+                    id:"btn02",
+                    title:"Montant insuffisant!",
+                    text:"Le client n'a pas le montant requis pour payer ses produits."
+                },
+                {
+                    id:"btn03",
+                    title:"Refus CB.",
+                    text:"Paiement Refusée de la banque CB du client."
+                },
+                {
+                    id:"btn04",
+                    title:"La responsable teste.",
+                    text:"La responsable teste des produits."
+                },
+                {
+                    id:"btn05",
+                    title:"Description vide.",
+                    text:"Description non saisie."
+                },
+                {
+                    id:"btn06",
+                    title:"Description vide.",
+                    text:"Description non saisie."
+                },
+                {
+                    id:"btn07",
+                    title:"Description vide.",
+                    text:"Description non saisie."
+                },
+                {
+                    id:"btn08",
+                    title:"Description vide.",
+                    text:"Description non saisie."
+                },
+                {
+                    id:"btn09",
+                    title:"Description vide.",
+                    text:"Description non saisie."
+                },
+                {
+                    id:"btn10",
+                    title:"Description vide.",
+                    text:"Description non saisie."
+                },
+                {
+                    id:"btn11",
+                    title:"Description vide.",
+                    text:"Description non saisie."
+                },
+                {
+                    id:"btn12",
+                    title:"TEST.",
+                    text:"Produit scanné suite à test pour une mise à jour."
+                }
+            ]
+        },
+        SPECIAL : "",
+        PAGE : "",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "popInput",
+            PAGE_NAME : "Sistem",
+            CAPTION : "Evrak Sil Açıklama",
+            DISPLAY : "disable",
+            FORM: 
+            {
+                width:"400",
+                height:"280",
+                colCount:1,
+                item:
+                [
+                    {type:"checkbox",caption:"Pasif",field:"disable",id:"chkPopDocDelDescriptionDisable"},
+                    {type:"text",caption:"Min.Karakter",field:"minCharSize",id:"txtPopDocDelDescriptionMinChar"},
+                    {type:"popObjectList",caption:"Açıklama",field:"buttons",id:"lstPopDocDelDescriptionDesc",
+                        form:
+                        {
+                            width:"800",
+                            height:"600",
+                            formWidth:"600",
+                            formHeight:"260",
+                            allowAdding : false,
+                            allowUpdating : true,
+                            allowDeleting : false
+                        }
+                    }
+                ]
+            }
+        }
+    },
     //#endregion
     //#region Stok Tanıtım
     //txtRef

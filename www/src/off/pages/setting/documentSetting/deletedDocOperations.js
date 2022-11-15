@@ -139,7 +139,8 @@ export default class rebateOperation extends React.PureComponent
             {
                 select : 
                 { 
-                    query :"SELECT *,CONVERT(NVARCHAR,DOC_DATE,104) AS DOC_DATE_CONVERT,CASE TYPE WHEN 0 THEN (SELECT TOP 1 TITLE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC.OUTPUT) " +
+                    query :"SELECT *,CONVERT(NVARCHAR,DOC_DATE,104) AS DOC_DATE_CONVERT,ISNULL((SELECT TOP 1 DESCRIPTION FROM DOC_EXTRA WHERE DOC_EXTRA.DOC = DOC.GUID),'') AS DEL_DESCRIPTION, " +
+                    "CASE TYPE WHEN 0 THEN (SELECT TOP 1 TITLE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC.OUTPUT) " +
                     "WHEN 1 THEN (SELECT TOP 1 TITLE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC.INPUT) END AS CUSTOMER " +
                     " FROM DOC WHERE TYPE = @TYPE AND DOC_TYPE = @DOC_TYPE  AND REBATE = @REBATE AND DELETED = 1 ORDER BY CDATE DESC",
                     param : ['TYPE:int','DOC_TYPE:int','REBATE:int'],
@@ -278,6 +279,7 @@ export default class rebateOperation extends React.PureComponent
                                 <Column dataField="REF_NO" caption={this.t("grdDeleteList.clmRefNo")} visible={true} width={300}/> 
                                 <Column dataField="CUSTOMER" caption={this.t("grdDeleteList.clmCustomer")} visible={true}/> 
                                 <Column dataField="DOC_DATE_CONVERT" caption={this.t("grdDeleteList.clmDate")} visible={true}/> 
+                                <Column dataField="DEL_DESCRIPTION" caption={this.t("grdDeleteList.clmDescription")} visible={true}/> 
                             </NdGrid>
                         </div>
                     </div>

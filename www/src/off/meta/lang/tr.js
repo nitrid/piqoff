@@ -73,6 +73,24 @@ export const langTr =
         btn01: "Tamam",
         msg: "Kaydetmek istediğiniz evrakta en az bir satır bulunmalıdır! Yaptığınız diğişiklikler geri alındı."
     },
+    popDescbordValidation :
+    {
+        title : "Dikkat",
+        msg : "Açıklama alanını boş geçemezsiniz !",
+        btn01 : "Tamam",
+    },
+    popDescbordValidation2 :
+    {
+        title : "Dikkat",
+        msg1 : "Girmiş olduğunuz açıklama ",
+        msg2 : " karakterden az olamaz..",
+        btn01 : "Tamam",
+    },
+    popDeleteDesc : 
+    {
+        head : "Silme İşlemi Açıklaması",
+        title : "Lütfen Silme Nedeninizi Giriniz"
+    },
     menu:
     {
         stk: "Stok",                
@@ -3545,6 +3563,18 @@ export const langTr =
             clmQuantity : "Adet",
             clmPrice : "Fiyat",
             clmTotal : "Tutar"
+        },
+        msgDelDesc:
+        {
+            title: "Açıklama Girişi",
+            btn01: "Kaydet",
+            msg: "Lütfen Evrak Silme Sebebini Yazınız"
+        },
+        msgDelDescEmpty :
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen Açıklama Giriniz"
         },
     },
     ftr_02_003 : // "İade Faturası"
@@ -10801,7 +10831,8 @@ export const langTr =
             clmRef : "SERI",
             clmRefNo : "SIRA",
             clmCustomer : "CARI",
-            clmDate : "TARIH"
+            clmDate : "TARIH",
+            clmDescription : "AÇIKLAMA"
         },
         cmbTypeData : 
         {

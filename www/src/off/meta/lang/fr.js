@@ -10801,7 +10801,8 @@ export const langFr =
             clmRef : "SERI",  
             clmRefNo : "SIRA",  
             clmCustomer : "CARI",  
-            clmDate : "TARIH"  
+            clmDate : "TARIH" ,
+            clmDescription : "AÇIKLAMA" // BAK
         },
         cmbTypeData : 
         {
