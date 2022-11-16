@@ -4,6 +4,7 @@ import NdGrid,{Column,Editing,Popup,Paging,Scrolling,KeyboardNavigation,Lookup} 
 import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
 import NdSelectBox from '../../core/react/devex/selectbox.js';
 import { userCls } from '../../core/cls/users.js';
+import ScrollView from 'devextreme-react/scroll-view.js';
 
 export default class userPage extends React.Component
 {
@@ -33,88 +34,90 @@ export default class userPage extends React.Component
     render()
     {
         return(
-            <div className="row p-2">
-                <div className="col-12">
-                    <NdGrid id="grdUserList" parent={this} onSelectionChanged={this.onSelectionChanged} 
-                    showBorders={true}
-                    allowColumnResizing={true}
-                    selection={{mode:"single"}} 
-                    width={'100%'}
-                    height={'100%'}
-                    data={this.data}
-                    dbApply={false}
-                    filterRow={{visible:true}} headerFilter={{visible:true}}
-                    param={this.param.filter({ELEMENT:'grdUserList',USERS:this.user.CODE})} 
-                    access={this.access.filter({ELEMENT:'grdUserList',USERS:this.user.CODE})}
-                    onRowUpdating={async (e)=>
-                    {
-                        if(typeof e.newData.PWD != 'undefined')
+            <ScrollView>            
+                <div className="row p-2">
+                    <div className="col-12">
+                        <NdGrid id="grdUserList" parent={this} onSelectionChanged={this.onSelectionChanged} 
+                        showBorders={true}
+                        allowColumnResizing={true}
+                        selection={{mode:"single"}} 
+                        width={'100%'}
+                        height={'100%'}
+                        data={this.data}
+                        dbApply={false}
+                        filterRow={{visible:true}} headerFilter={{visible:true}}
+                        param={this.param.filter({ELEMENT:'grdUserList',USERS:this.user.CODE})} 
+                        access={this.access.filter({ELEMENT:'grdUserList',USERS:this.user.CODE})}
+                        onRowUpdating={async (e)=>
                         {
-                            e.newData.PWD = btoa(e.newData.PWD)
-                        }
-                    }}
-                    onRowPrepared={async (e)=>
-                    {
-                       
-                    }}
-                    onRowUpdated={async (e)=>
-                    {
-                        await this.userObj.save()
-                    }}
-                    onRowInserted={async (e)=>
-                    {
-                        let data = this.userObj.dt().where({CODE:e.data.CODE})
-                        if(data.length > 0)
+                            if(typeof e.newData.PWD != 'undefined')
+                            {
+                                e.newData.PWD = btoa(e.newData.PWD)
+                            }
+                        }}
+                        onRowPrepared={async (e)=>
                         {
-                            this.userObj.dt()[this.userObj.dt().length - 1].PWD = btoa(data[0].PWD)
+                        
+                        }}
+                        onRowUpdated={async (e)=>
+                        {
                             await this.userObj.save()
-                            
-                            let tmpQuery = 
+                        }}
+                        onRowInserted={async (e)=>
+                        {
+                            let data = this.userObj.dt().where({CODE:e.data.CODE})
+                            if(data.length > 0)
                             {
-                                query :"SELECT GUID,CODE FROM USERS WHERE CODE = @CODE " ,
-                                param : ['CODE:string|50'],
-                                value : [e.data.CODE]
-                            }
+                                this.userObj.dt()[this.userObj.dt().length - 1].PWD = btoa(data[0].PWD)
+                                await this.userObj.save()
+                                
+                                let tmpQuery = 
+                                {
+                                    query :"SELECT GUID,CODE FROM USERS WHERE CODE = @CODE " ,
+                                    param : ['CODE:string|50'],
+                                    value : [e.data.CODE]
+                                }
 
-                            let tmpData = await this.core.sql.execute(tmpQuery) 
-                            
-                            if(tmpData.result.recordset.length > 0)
-                            {
-                                await this.core.auth.refreshToken(tmpData.result.recordset[0].GUID)
+                                let tmpData = await this.core.sql.execute(tmpQuery) 
+                                
+                                if(tmpData.result.recordset.length > 0)
+                                {
+                                    await this.core.auth.refreshToken(tmpData.result.recordset[0].GUID)
+                                }
                             }
-                        }
-                    }}
-                    >
-                        <Editing
-                        mode="popup"
-                        allowUpdating={true}
-                        allowAdding={true}
-                        allowDeleting={false}
+                        }}
                         >
-                        <Popup title={this.t("UserEdit")} showTitle={true} width={700} height={525} />
-                        <Form>
-                        <Item itemType="group" colCount={2}>
-                            <Item dataField="CODE" />
-                            <Item dataField="NAME" />
-                            <Item dataField="LAST_NAME" />
-                            <Item dataField="PWD"/>
-                            <Item dataField="ROLE" />
-                            <Item dataField="SHA" />
-                            <Item dataField="STATUS" editorType="boolean" />
-                        </Item>
-                        </Form>
-                        </Editing>
-                        <Column dataField="CODE" caption={this.t("grdUserList.clmCode")}/>
-                        <Column dataField="NAME" caption={this.t("grdUserList.clmName")} />
-                        <Column dataField="LAST_NAME" caption={this.t("grdUserList.clmLastName")} />
-                        <Column dataField="PWD" editorOptions={{mode:"password"}} caption={this.t("grdUserList.clmPwd")} visible={false}/>
-                        <Column dataField="CARDID" caption={this.t("grdUserList.clmCardId")}/>
-                        <Column dataField="ROLE" caption={this.t("grdUserList.clmRole")} >
-                        <Lookup dataSource={this.RoleCmb} valueExpr="CODE" displayExpr="CODE" /> </Column>
-                        <Column dataField="STATUS" caption={this.t("grdUserList.clmStatus")} dataType="boolean" />
-                    </NdGrid>
+                            <Editing
+                            mode="popup"
+                            allowUpdating={true}
+                            allowAdding={true}
+                            allowDeleting={false}
+                            >
+                            <Popup title={this.t("UserEdit")} showTitle={true} width={700} height={525} />
+                            <Form>
+                            <Item itemType="group" colCount={2}>
+                                <Item dataField="CODE" />
+                                <Item dataField="NAME" />
+                                <Item dataField="LAST_NAME" />
+                                <Item dataField="PWD"/>
+                                <Item dataField="ROLE" />
+                                <Item dataField="SHA" />
+                                <Item dataField="STATUS" editorType="boolean" />
+                            </Item>
+                            </Form>
+                            </Editing>
+                            <Column dataField="CODE" caption={this.t("grdUserList.clmCode")}/>
+                            <Column dataField="NAME" caption={this.t("grdUserList.clmName")} />
+                            <Column dataField="LAST_NAME" caption={this.t("grdUserList.clmLastName")} />
+                            <Column dataField="PWD" editorOptions={{mode:"password"}} caption={this.t("grdUserList.clmPwd")} visible={false}/>
+                            <Column dataField="CARDID" caption={this.t("grdUserList.clmCardId")}/>
+                            <Column dataField="ROLE" caption={this.t("grdUserList.clmRole")} >
+                            <Lookup dataSource={this.RoleCmb} valueExpr="CODE" displayExpr="CODE" /> </Column>
+                            <Column dataField="STATUS" caption={this.t("grdUserList.clmStatus")} dataType="boolean" />
+                        </NdGrid>
+                    </div>
                 </div>
-            </div>
+            </ScrollView>
         )
     }
 }

@@ -1237,3 +1237,81 @@ export class quickDescCls
         });
     }
 }
+export class docExtraCls 
+{
+    constructor()
+    {
+        this.core = core.instance;
+        this.ds =  new dataset()
+        this.empty = {
+            GUID : '00000000-0000-0000-0000-000000000000',
+            CUSER : this.core.auth.data.CODE,
+            TAG : '',
+            DOC : '00000000-0000-0000-0000-000000000000',
+            DESCRIPTION : '00000000-0000-0000-0000-000000000000',
+        }
+
+        this._initDs();
+    }
+    //#region Private
+    _initDs()
+    {
+        let tmpDt = new datatable('DOC_EXTRA');
+      
+        tmpDt.insertCmd = 
+        {
+            query : "EXEC [dbo].[PRD_DOC_EXTRA_INSERT] " +
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " +
+                    "@TAG = @PTAG, " +
+                    "@DOC = @PDOC, " +
+                    "@DESCRIPTION = @PDESCRIPTION " ,
+            param : ['PGUID:string|50','PCUSER:string|25','PTAG:string|25','PDOC:string|50','PDESCRIPTION:string|500'],
+            dataprm : ['GUID','CUSER','TAG','DOC','DESCRIPTION']
+        }
+        this.ds.add(tmpDt);
+    }
+    //#region
+    dt()
+    {
+        if(arguments.length > 0)
+        {
+            return this.ds.get(arguments[0])
+        }
+
+        return this.ds.get(0)
+    }
+    addEmpty()
+    {
+        if(typeof this.dt('DOC_EXTRA') == 'undefined')
+        {
+            return;
+        }
+        let tmp = {};
+        if(arguments.length > 0)
+        {
+            tmp = {...arguments[0]}
+        }
+        else
+        {
+            tmp = {...this.empty}
+        }
+        tmp.GUID = datatable.uuidv4()
+        this.dt('DOC_EXTRA').push(tmp)
+    }
+    clearAll()
+    {
+        for(let i = 0; i < this.ds.length; i++)
+        {
+            this.dt(i).clear()
+        }
+    }
+    save()
+    {
+        return new Promise(async resolve => 
+        {
+            this.ds.delete()
+            resolve(await this.ds.update()); 
+        });
+    }
+}

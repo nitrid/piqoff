@@ -131,13 +131,13 @@ export default class NdPopGrid extends Base
         {
             return (
                 <div className="row">
-                <div className="col-12 py-2">
-                    <NdButton parent={this} id={"btn2_" + this.props.id} text={this.lang.t('popGrid.btnSelection')} width={'100%'} type={"default"}
-                        onClick={this._onClick}
-                        param={this.param.btn} 
-                        access={this.access.btn} 
-                    />
-                </div>
+                    <div className="col-12 py-2">
+                        <NdButton parent={this} id={"btn2_" + this.props.id} text={this.lang.t('popGrid.btnSelection')} width={'100%'} type={"default"}
+                            onClick={this._onClick}
+                            param={this.param.btn} 
+                            access={this.access.btn} 
+                        />
+                    </div>
                 </div>
             )
         }

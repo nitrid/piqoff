@@ -9,7 +9,7 @@ export const prm =
         {
             value : true
         },
-        APP : "OFF",
+        APP : "MOB",
         VIEW : 
         {
             TYPE : "checkbox",
@@ -25,9 +25,9 @@ export const prm =
             value : true
         },
         SPECIAL : "",
-        PAGE : "ftr_02_002",
+        PAGE : "",
         ELEMENT : "",
-        APP : "OFF",
+        APP : "MOB",
         VIEW : 
         {
             TYPE : "checkbox",
@@ -36,11 +36,9 @@ export const prm =
         }
     },
     //#endregion
-
-
-     //#region Depo Sevk
-     // negativeQuantity
-     {
+    //#region Depo Sevk
+    // negativeQuantity
+    {
         TYPE : 1,
         ID :"negativeQuantity",
         VALUE : 
@@ -50,7 +48,7 @@ export const prm =
         SPECIAL : "",
         PAGE : "stk_02_002",
         ELEMENT : "",
-        APP : "OFF",
+        APP : "MOB",
         VIEW : 
         {
             TYPE : "checkbox",
@@ -60,8 +58,8 @@ export const prm =
     },
     //#endregion
     //#region İade Ürün Toplama
-     // negativeQuantity
-     {
+    // negativeQuantity
+    {
         TYPE : 1,
         ID :"negativeQuantity",
         VALUE : 
@@ -71,7 +69,7 @@ export const prm =
         SPECIAL : "",
         PAGE : "stk_02_005",
         ELEMENT : "",
-        APP : "OFF",
+        APP : "MOB",
         VIEW : 
         {
             TYPE : "checkbox",
@@ -93,9 +91,18 @@ export const prm =
         APP : "MOB",
         VIEW : 
         {
-            TYPE : "text",
+            TYPE : "combobox",
             PAGE_NAME : "İade Ürün Toplama",
-            CAPTION : "Çıkış Depo"
+            CAPTION : "Çıkış Depo",
+            DISPLAY : "NAME",
+            FIELD : "GUID",
+            DATA :
+            {
+                select:
+                {
+                    query : "SELECT GUID,CODE,NAME FROM DEPOT WHERE STATUS = 1 AND DELETED = 0 ORDER BY CODE ASC"
+                },
+            }
         }
     },
      // cmbDepot2
@@ -112,31 +119,37 @@ export const prm =
         APP : "MOB",
         VIEW : 
         {
-            TYPE : "text",
+            TYPE : "combobox",
             PAGE_NAME : "İade Ürün Toplama",
-            CAPTION : "İade Depo"
+            CAPTION : "İade Depo",
+            DISPLAY : "NAME",
+            FIELD : "GUID",
+            DATA :
+            {
+                select:
+                {
+                    query : "SELECT GUID,CODE,NAME FROM DEPOT WHERE STATUS = 1 AND DELETED = 0 ORDER BY CODE ASC"
+                },
+            }
         }
     },
     //#endregion
-
     //#region Fiyat Değiştir
-     //Satış Fiyatı Maliyet Kontrolü
-     {
+    //Satış Fiyatı Maliyet Kontrolü
+    {
         TYPE : 1,
         ID :"SalePriceCostCtrl",
         VALUE : true,
         SPECIAL : "",
         PAGE : "stk_01_005",
         ELEMENT : "",
-        APP : "OFF",
+        APP : "MOB",
         VIEW : 
         {
-            TYPE : "text",
+            TYPE : "checkbox",
             PAGE_NAME : "Fiyat Değiştir",
             CAPTION : "Satış Fiyatı Maliyet Kontrolü"
         }
     },
     //#endregion
-
-
 ]

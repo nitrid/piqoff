@@ -43,3 +43,7 @@
 {
     height: fit-content;
 }
+.form-label-bold
+{
+    font-weight: 500;
+}

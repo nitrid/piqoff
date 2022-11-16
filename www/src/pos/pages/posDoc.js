@@ -28,6 +28,7 @@ import NdPosBarBox from "../tools/posbarbox.js";
 import NdAcsDialog,{acsDialog} from "../../core/react/devex/acsdialog.js";
 import NbKeyboard from "../../core/react/bootstrap/keyboard.js";
 import IdleTimer from 'react-idle-timer'
+import NdButton from "../../core/react/devex/button.js";
 
 import { posCls,posSaleCls,posPaymentCls,posPluCls,posDeviceCls,posPromoCls, posExtraCls } from "../../core/cls/pos.js";
 import { docCls} from "../../core/cls/doc.js"
@@ -5388,7 +5389,7 @@ export default class posDoc extends React.PureComponent
                                     {
                                         this.lastPosSaleDt.selectCmd = 
                                         {
-                                            query:  "SELECT * FROM POS_SALE_VW_01 WHERE POS_GUID = @GUID ",
+                                            query:  "SELECT * FROM POS_SALE_VW_01 WHERE POS_GUID = @GUID ORDER BY LDATE DESC",
                                             param:  ["GUID:string|50"],
                                             value:  [e.selectedRowKeys[0].GUID]
                                         }
@@ -6680,7 +6681,11 @@ export default class posDoc extends React.PureComponent
                                         {                                    
                                             this.keyPopCustomerAdd.inputName = "txtPopCustomerCode"
                                             this.keyPopCustomerAdd.setInput(this.txtPopCustomerCode.value)
-                                        }}/>
+                                        }}>
+                                            <Validator validationGroup={"frmCustomerAdd"}>
+                                                <RequiredRule message={this.lang.t("popCustomerAdd.validTxtPopCustomerCode")}/>
+                                            </Validator>
+                                        </NdTextBox>
                                     </Item>
                                     {/* txtPopCustomerFirmName */}
                                     <Item>
@@ -6822,37 +6827,49 @@ export default class posDoc extends React.PureComponent
                         </div>
                         <div className="row py-1">
                             <div className="col-12">                            
-                                <NbButton id={"btnCustomerAddSave"} parent={this} className="form-group btn btn-success btn-block" style={{height:"50px",width:"100%",fontSize:"24px"}}
-                                onClick={async ()=>
-                                {                                    
-                                    this.customerObj.customerAdress.dt()[0].CUSTOMER = this.customerObj.dt()[0].GUID
-                                    this.customerObj.customerOffical.dt()[0].CUSTOMER = this.customerObj.dt()[0].GUID
-
-                                    if(this.txtPopCustomerFirmName.value != '')
+                                <NdButton id={"btnCustomerAddSave"} parent={this} icon={"floppy"} validationGroup={"frmCustomerAdd"} type="success" stylingMode="contained" width={"100%"} height={"50px"}
+                                onClick={async (e)=>
+                                {
+                                    if(e.validationGroup.validate().status == "valid")
                                     {
-                                        this.customerObj.dt()[0].TYPE = 1
-                                        this.customerObj.dt()[0].TITLE = this.txtPopCustomerFirmName.value
-                                    }
-
-                                    let tmpConfObj1 =
-                                    {
-                                        id:'msgCustomerSaveResult',showTitle:true,title:this.t("msgCustomerSaveResult.title"),showCloseButton:true,width:'500px',height:'200px',
-                                        button:[{id:"btn01",caption:this.t("msgCustomerSaveResult.btn01"),location:'after'}],
-                                    }
-                                    if((await this.customerObj.save()) == 0)
-                                    {                                                    
-                                        tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgCustomerSaveResult.msgSuccess")}</div>)
-                                        await dialog(tmpConfObj1);
+                                        this.customerObj.customerAdress.dt()[0].CUSTOMER = this.customerObj.dt()[0].GUID
+                                        this.customerObj.customerOffical.dt()[0].CUSTOMER = this.customerObj.dt()[0].GUID
+    
+                                        if(this.txtPopCustomerFirmName.value != '')
+                                        {
+                                            this.customerObj.dt()[0].TYPE = 1
+                                            this.customerObj.dt()[0].TITLE = this.txtPopCustomerFirmName.value
+                                        }
+    
+                                        let tmpConfObj1 =
+                                        {
+                                            id:'msgCustomerSaveResult',showTitle:true,title:this.lang.t("popCustomerAdd.msgCustomerSaveResult.title"),showCloseButton:true,width:'500px',height:'200px',
+                                            button:[{id:"btn01",caption:this.lang.t("popCustomerAdd.msgCustomerSaveResult.btn01"),location:'after'}],
+                                        }
+                                        if((await this.customerObj.save()) == 0)
+                                        {                                                    
+                                            tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.lang.t("popCustomerAdd.msgCustomerSaveResult.msgSuccess")}</div>)
+                                            await dialog(tmpConfObj1);
+                                        }
+                                        else
+                                        {
+                                            tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.lang.t("popCustomerAdd.msgCustomerSaveResult.msgFailed")}</div>)
+                                            await dialog(tmpConfObj1);
+                                        }
                                     }
                                     else
                                     {
-                                        tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgCustomerSaveResult.msgFailed")}</div>)
-                                        await dialog(tmpConfObj1);
+                                        let tmpConfObj =
+                                        {
+                                            id:'msgCustomerSaveValid',showTitle:true,title:this.lang.t("popCustomerAdd.msgCustomerSaveValid.title"),showCloseButton:true,width:'500px',height:'200px',
+                                            button:[{id:"btn01",caption:this.lang.t("popCustomerAdd.msgCustomerSaveValid.btn01"),location:'after'}],
+                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("popCustomerAdd.msgCustomerSaveValid.msg")}</div>)
+                                        }
+                                        
+                                        await dialog(tmpConfObj);
                                     }
-                                    console.log(this.customerObj)
                                 }}>
-                                    <i className="fa-solid fa-floppy-disk"></i>
-                                </NbButton>
+                                </NdButton>
                             </div>
                         </div>
                         <div className="row py-1">

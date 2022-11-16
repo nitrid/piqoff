@@ -963,6 +963,11 @@ export const menu = (e) =>
                             id: 'set_03_001',
                             text: e.t('menu.set_03_001'),//'Silinmiş Evrak Operasyonları',
                             path: 'setting/documentSetting/deletedDocOperations'
+                        },
+                        {
+                            id: 'set_03_002',
+                            text: e.t('menu.set_03_002'),//'Silinmiş Satırlar',
+                            path: 'setting/documentSetting/deletedDocRows'
                         }
                     ]
                 },

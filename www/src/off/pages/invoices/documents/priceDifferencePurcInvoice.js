@@ -2,7 +2,7 @@ import moment from 'moment';
 
 import React from 'react';
 import App from '../../../lib/app.js';
-import { docCls,docItemsCls, docCustomerCls } from '../../../../core/cls/doc.js';
+import { docCls,docItemsCls, docCustomerCls,docExtraCls } from '../../../../core/cls/doc.js';
 
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
@@ -18,6 +18,7 @@ import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
 import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export} from '../../../../core/react/devex/grid.js';
+import NbPopDescboard from "../../../tools/popdescboard.js";
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdImageUpload from '../../../../core/react/devex/imageupload.js';
@@ -35,6 +36,7 @@ export default class priceDifferenceInvoice extends React.PureComponent
         this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
         this.docObj = new docCls();
         this.paymentObj = new docCls();
+        this.extraObj = new docExtraCls();
         this.tabIndex = props.data.tabkey
 
         this._cellRoleRender = this._cellRoleRender.bind(this)
@@ -935,9 +937,16 @@ export default class priceDifferenceInvoice extends React.PureComponent
                                         let pResult = await dialog(tmpConfObj);
                                         if(pResult == 'btn01')
                                         {
-                                            this.docObj.dt('DOC').removeAt(0)
-                                            await this.docObj.dt('DOC').delete();
-                                            this.init(); 
+                                            if(this.sysParam.filter({ID:'docDeleteDesc',USERS:this.user.CODE}).getValue().value == true)
+                                            {
+                                                this.popDeleteDesc.show()
+                                            }
+                                            else
+                                            {
+                                                this.docObj.dt('DOC').removeAt(0)
+                                                await this.docObj.dt('DOC').delete();
+                                                this.init(); 
+                                            }
                                         }
                                         
                                     }}/>
@@ -2634,78 +2643,95 @@ export default class priceDifferenceInvoice extends React.PureComponent
                         <Column dataField="PRICE" caption={this.t("pg_proformaGrid.clmPrice")} width={200} />
                         <Column dataField="TOTAL" caption={this.t("pg_proformaGrid.clmTotal")} width={200} />
                     </NdPopGrid>
-                     {/* Adres Seçim POPUP */}
-                     <NdPopGrid id={"pg_adress"} parent={this} container={"#root"}
+                    {/* Adres Seçim POPUP */}
+                    <NdPopGrid id={"pg_adress"} parent={this} container={"#root"}
+                    visible={false}
+                    position={{of:'#root'}} 
+                    showTitle={true} 
+                    showBorders={true}
+                    width={'90%'}
+                    height={'90%'}
+                    title={this.t("pg_adress.title")} //
+                    >
+                        <Column dataField="ADRESS" caption={this.t("pg_adress.clmAdress")} width={250} />
+                        <Column dataField="CITY" caption={this.t("pg_adress.clmCiyt")} width={150} />
+                        <Column dataField="ZIPCODE" caption={this.t("pg_adress.clmZipcode")} width={300} defaultSortOrder="asc" />
+                        <Column dataField="COUNTRY" caption={this.t("pg_adress.clmCountry")} width={200}/>
+                    </NdPopGrid>
+                    {/* Birim PopUp */}
+                    <div>
+                        <NdDialog parent={this} id={"msgUnit"} 
                         visible={false}
-                        position={{of:'#root'}} 
-                        showTitle={true} 
-                        showBorders={true}
-                        width={'90%'}
-                        height={'90%'}
-                        title={this.t("pg_adress.title")} //
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.t("msgUnit.title")}
+                        container={"#root"} 
+                        width={'500'}
+                        height={'400'}
+                        position={{of:'#root'}}
+                        button={[{id:"btn01",caption:this.t("msgUnit.btn01"),location:'after'}]}
                         >
-                            <Column dataField="ADRESS" caption={this.t("pg_adress.clmAdress")} width={250} />
-                            <Column dataField="CITY" caption={this.t("pg_adress.clmCiyt")} width={150} />
-                            <Column dataField="ZIPCODE" caption={this.t("pg_adress.clmZipcode")} width={300} defaultSortOrder="asc" />
-                            <Column dataField="COUNTRY" caption={this.t("pg_adress.clmCountry")} width={200}/>
-                        </NdPopGrid>
-                        {/* Birim PopUp */}
-                        <div>
-                            <NdDialog parent={this} id={"msgUnit"} 
-                            visible={false}
-                            showCloseButton={true}
-                            showTitle={true}
-                            title={this.t("msgUnit.title")}
-                            container={"#root"} 
-                            width={'500'}
-                            height={'400'}
-                            position={{of:'#root'}}
-                            button={[{id:"btn01",caption:this.t("msgUnit.btn01"),location:'after'}]}
-                            >
-                                <Form colCount={1} height={'fit-content'}>
-                                    <Item>
-                                        <NdSelectBox simple={true} parent={this} id="cmbUnit"
-                                        displayExpr="NAME"                       
-                                        valueExpr="GUID"
-                                        value=""
-                                        searchEnabled={true}
-                                        onValueChanged={(async(e)=>
-                                        {
-                                            this.txtUnitFactor.setState({value:this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].FACTOR});
-                                            this.txtTotalQuantity.value = this.txtUnitQuantity.value * this.txtUnitFactor.value;
-                                        }).bind(this)}
-                                        >
-                                        </NdSelectBox>
-                                    </Item>
-                                    <Item>
-                                        <Label text={this.t("txtUnitFactor")} alignment="right" />
-                                        <NdNumberBox id="txtUnitFactor" parent={this} simple={true}
-                                        readOnly={true}
-                                        maxLength={32}
-                                        >
-                                        </NdNumberBox>
-                                    </Item>
-                                    <Item>
-                                        <Label text={this.t("txtUnitQuantity")} alignment="right" />
-                                        <NdNumberBox id="txtUnitQuantity" parent={this} simple={true}
-                                        maxLength={32}
-                                        onValueChanged={(async(e)=>
-                                        {
-                                        this.txtTotalQuantity.value = this.txtUnitQuantity.value * this.txtUnitFactor.value
-                                        }).bind(this)}
-                                        >
-                                        </NdNumberBox>
-                                    </Item>
-                                    <Item>
-                                        <Label text={this.t("txtTotalQuantity")} alignment="right" />
-                                        <NdNumberBox id="txtTotalQuantity" parent={this} simple={true}  readOnly={true}
-                                        maxLength={32}
-                                        >
-                                        </NdNumberBox>
-                                    </Item>
-                                </Form>
-                            </NdDialog>
-                        </div>  
+                            <Form colCount={1} height={'fit-content'}>
+                                <Item>
+                                    <NdSelectBox simple={true} parent={this} id="cmbUnit"
+                                    displayExpr="NAME"                       
+                                    valueExpr="GUID"
+                                    value=""
+                                    searchEnabled={true}
+                                    onValueChanged={(async(e)=>
+                                    {
+                                        this.txtUnitFactor.setState({value:this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].FACTOR});
+                                        this.txtTotalQuantity.value = this.txtUnitQuantity.value * this.txtUnitFactor.value;
+                                    }).bind(this)}
+                                    >
+                                    </NdSelectBox>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("txtUnitFactor")} alignment="right" />
+                                    <NdNumberBox id="txtUnitFactor" parent={this} simple={true}
+                                    readOnly={true}
+                                    maxLength={32}
+                                    >
+                                    </NdNumberBox>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("txtUnitQuantity")} alignment="right" />
+                                    <NdNumberBox id="txtUnitQuantity" parent={this} simple={true}
+                                    maxLength={32}
+                                    onValueChanged={(async(e)=>
+                                    {
+                                    this.txtTotalQuantity.value = this.txtUnitQuantity.value * this.txtUnitFactor.value
+                                    }).bind(this)}
+                                    >
+                                    </NdNumberBox>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("txtTotalQuantity")} alignment="right" />
+                                    <NdNumberBox id="txtTotalQuantity" parent={this} simple={true}  readOnly={true}
+                                    maxLength={32}
+                                    >
+                                    </NdNumberBox>
+                                </Item>
+                            </Form>
+                        </NdDialog>
+                    </div>  
+                    {/* Delete Description Popup */} 
+                    <div>
+                    <NbPopDescboard id={"popDeleteDesc"} parent={this} width={"900"} height={"500"} position={"#root"} head={this.lang.t("popDeleteDesc.head")} title={this.lang.t("popDeleteDesc.title")} 
+                    param={this.sysParam.filter({ID:'DocDelDescription',TYPE:0})}
+                    onClick={async (e)=>
+                    {
+                        let tmpExtra = {...this.extraObj.empty}
+                        tmpExtra.DOC = this.docObj.dt()[0].GUID
+                        tmpExtra.DESCRIPTION = e
+                        tmpExtra.TAG = 'DOC_DELETE'
+                        this.extraObj.addEmpty(tmpExtra);
+                        this.extraObj.save()
+                        this.docObj.dt('DOC').removeAt(0)
+                        await this.docObj.dt('DOC').delete();
+                        this.init()
+                    }}></NbPopDescboard>
+                    </div>
                 </ScrollView>                
             </div>
         )
