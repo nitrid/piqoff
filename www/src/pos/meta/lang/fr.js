@@ -656,6 +656,20 @@ export const langFr =
         txtPopCustomerZipCode : "Code Postal",
         txtPopCustomerEmail : "Email",
         txtPopCustomerTel : "Téléphone",
+        validTxtPopCustomerCode : "Lütfen boş geçmeyiniz.", //BAK
+        msgCustomerSaveResult:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msgSuccess: "Enregistrement effectué avec succès!",
+            msgFailed: "Votre enregistrement a échoué!"
+        },
+        msgCustomerSaveValid:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Veuillez saisir les zones nécessaire !"
+        },
     },
     popCustomerAddList :
     {
@@ -686,14 +700,7 @@ export const langFr =
         msg : "Vous devez choisir ou saisir un client pour l'impression de la Facture !",
         btn01 : "Choisir Client",
         btn02 : "Abandonner"
-    },
-    msgCustomerSaveResult:
-    {
-        title: "Attention",
-        btn01: "OK",
-        msgSuccess: "Enregistrement effectué avec succès!",
-        msgFailed: "Votre enregistrement a échoué!"
-    },
+    }, 
     msgCustomerPointCount: //BAK
     {
         title: "Attention",

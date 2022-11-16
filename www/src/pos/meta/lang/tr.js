@@ -656,6 +656,20 @@ export const langTr =
         txtPopCustomerZipCode : "Posta Kodu",
         txtPopCustomerEmail : "Email",
         txtPopCustomerTel : "Telefon",
+        validTxtPopCustomerCode : "Lütfen boş geçmeyiniz.",
+        msgCustomerSaveResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Kayıt işleminiz başarılı !",
+            msgFailed: "Kayıt işleminiz başarısız !"
+        },
+        msgCustomerSaveValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen gerekli alanları doldurunuz !"
+        },
     },
     popCustomerAddList : 
     {
@@ -686,13 +700,6 @@ export const langTr =
         msg : "Fatura olarak yazdırmak için müşteri saeçmelisiniz !",
         btn01 : "Müşteri Seç",
         btn02 : "İptal"
-    },
-    msgCustomerSaveResult:
-    {
-        title: "Dikkat",
-        btn01: "Tamam",
-        msgSuccess: "Kayıt işleminiz başarılı !",
-        msgFailed: "Kayıt işleminiz başarısız !"
     },
     msgCustomerPointCount:
     {
