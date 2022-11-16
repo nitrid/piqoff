@@ -142,7 +142,7 @@ export default class posDoc extends React.PureComponent
         {               
             if(!this.state.isConnected)
             {
-                this.sendJet({CODE:"120",NAME:"Kasa offline dan online a döndü."})
+                this.sendJet({CODE:"120",NAME:"Le système est online"}) ///Kasa offline dan online a döndü.
 
                 let tmpConfObj =
                 {
@@ -154,7 +154,7 @@ export default class posDoc extends React.PureComponent
 
                 await this.transferLocal();
 
-                this.sendJet({CODE:"123",NAME:"Eldeki kayıtlar online a gönderildi."})
+                this.sendJet({CODE:"123",NAME:"Les saisies ont été enregistrés dans la base suite à online."}) ////Eldeki kayıtlar online a gönderildi.
                 
                 window.location.reload()
             }
@@ -167,7 +167,7 @@ export default class posDoc extends React.PureComponent
         });
         this.core.socket.on('disconnect',async () => 
         {
-            this.sendJet({CODE:"120",NAME:"Kasa offline dan online a döndü."})
+            this.sendJet({CODE:"120",NAME:"Le système est offline."}) ///Kasa offline dan online a döndü.
 
             this.setState({isConnected:false})
             let tmpConfObj =
@@ -240,7 +240,7 @@ export default class posDoc extends React.PureComponent
             //*************************************************************************** */
         })
 
-        this.sendJet({CODE:"80",NAME:"Kasa işleme başladı."})
+        this.sendJet({CODE:"80",NAME:"Démarrage terminal lancé."}) ////Kasa işleme başladı.
     }
     async init()
     {     
@@ -1055,7 +1055,7 @@ export default class posDoc extends React.PureComponent
                 }
                 else
                 {
-                    this.sendJet({CODE:"90",NAME:"Kayıt işlemi başarısız."})
+                    this.sendJet({CODE:"90",NAME:"Enregistrement échoué."}) /// Kayıt işlemi başarısız.
                     //KAYIT BAŞARISIZ İSE UYARI AÇILIYOR VE KULLANICI İSTERSE KAYIT İŞLEMİNİ TEKRARLIYOR
                     let tmpConfObj =
                     {
@@ -3657,11 +3657,11 @@ export default class posDoc extends React.PureComponent
 
                                             if(this.state.isFormation == false)
                                             {
-                                                this.sendJet({CODE:"100",NAME:"Formasyon başladı."})
+                                                this.sendJet({CODE:"100",NAME:"Mode formation lancé."}) ////Formasyon başladı.
                                             }
                                             else
                                             {
-                                                this.sendJet({CODE:"105",NAME:"Formasyon sonlandı."})
+                                                this.sendJet({CODE:"105",NAME:"Mode formation terminé."}) //// Formasyon sonlandı.
                                             }
 
                                             this.setState({isFormation:this.state.isFormation ? false : true})
@@ -5264,7 +5264,7 @@ export default class posDoc extends React.PureComponent
                                                             }
                                                         }
 
-                                                        this.sendJet({CODE:"155",NAME:"Duplicate fiş yazdırıldı."})
+                                                        this.sendJet({CODE:"155",NAME:"Duplicata imprimé."}) //// Duplicate fiş yazdırıldı.
                                                         await this.print(tmpData)
                                                     } 
                                                 }
@@ -5935,7 +5935,7 @@ export default class posDoc extends React.PureComponent
                     param={this.prmObj.filter({ID:'DocDelDescription',TYPE:0})}
                     onClick={async (e)=>
                     {
-                        this.sendJet({CODE:"320",NAME:"Beklemedeki fiş silindi.",DESCRIPTION:e})
+                        this.sendJet({CODE:"320",NAME:"Ticket en attente annulé et supprimé.",DESCRIPTION:e}) //// Beklemedeki fiş silindi.
                         if(typeof e != 'undefined')
                         {
                             await this.descSave("FULL DELETE",e,'00000000-0000-0000-0000-000000000000')
@@ -5949,7 +5949,7 @@ export default class posDoc extends React.PureComponent
                     param={this.prmObj.filter({ID:'DocRowDelDescription',TYPE:0})}
                     onClick={async (e)=>
                     {
-                        this.sendJet({CODE:"323",NAME:"Beklemedeki fiş satırı silindi.",DESCRIPTION:e})
+                        this.sendJet({CODE:"323",NAME:"Ligne supprimé sur ticket en attente.",DESCRIPTION:e})  //// Beklemedeki fiş satırı silindi.
                         if(typeof e != 'undefined')
                         {
                             await this.descSave("ROW DELETE",e,this.grdList.devGrid.getSelectedRowKeys()[0].GUID)

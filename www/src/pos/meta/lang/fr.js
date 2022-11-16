@@ -439,7 +439,7 @@ export const langFr =
     },
     grdPopParkList : 
     {
-        LUSER_NAME : "Saissie Utilisateur",
+        LUSER_NAME : "Saisie Utilisateur",
         LDATE : "Saisie Date",
         TOTAL :"Total",
         DESCRIPTION : "Motif",
@@ -576,9 +576,9 @@ export const langFr =
     msgPrintAlert: 
     {
         title : "Avertissement",
-        msg : "Souhaitez-vous imprimer le reçu  ?",
+        msg : "Souhaitez-vous imprimer le reçu ?",
         btn01 : "OK",
-        btn02 : "Annulez"
+        btn02 : "Annuler"
     },
     msgRePrint: 
     {
@@ -677,15 +677,15 @@ export const langFr =
     },
     popCustomerAddCountry :
     {
-        title : "Choissir Pays",
+        title : "Choisir Pays",
     },
     popCustomerAddCity : 
     {
-        title : "Choissir Ville",
+        title : "Choisir Ville",
     },
     popCustomerAddZipCode :
     {
-        title : "Choissir Code Postal",
+        title : "Choisir Code Postal",
     },
     msgPrintFacAlert:
     {
@@ -700,19 +700,26 @@ export const langFr =
         msg : "Vous devez choisir ou saisir un client pour l'impression de la Facture !",
         btn01 : "Choisir Client",
         btn02 : "Abandonner"
-    }, 
+    },
+    msgCustomerSaveResult:
+    {
+        title: "Attention",
+        btn01: "OK",
+        msgSuccess: "Enregistrement client effectué avec succès!",
+        msgFailed: "Votre enregistrement client échoué!"
+    },
     msgCustomerPointCount: //BAK
     {
         title: "Attention",
         btn01: "OK",
         btn02: "Abandonner",
-        msg: "Dans la même journée si vous souhaitez passer plus de 3 fois la même carte de fidélité veuillez saisir le code responsable!"
+        msg: "Dans la même journée si vous souhaitez passer plus de 3 fois la même carte de fidélité il faut l'accord du responsable!"
     },
     msgGetOrder : 
     {
-        title : "Uyarı", // BAK
-        msg : "Bu sipariş daha önce pos ekranına çağırılmış devam etmek istediğinize eminmisiniz?",   // BAK
-        btn01 : "Evet",  // BAK
-        btn02 : "Hayır"  // BAK
+        title : "Attention", // BAK
+        msg : "Cette commande à déjà été traité?",   // BAK
+        btn01 : "OK",  // BAK
+        btn02 : "Abandonner"  // BAK
     },
 }
