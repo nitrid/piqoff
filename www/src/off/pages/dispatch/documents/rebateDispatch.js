@@ -1,6 +1,6 @@
 import React from 'react';
 import App from '../../../lib/app.js';
-import { docCls,docItemsCls, docCustomerCls } from '../../../../core/cls/doc.js';
+import { docCls,docItemsCls, docCustomerCls,docExtraCls } from '../../../../core/cls/doc.js';
 import moment from 'moment';
 
 import ScrollView from 'devextreme-react/scroll-view';
@@ -17,6 +17,7 @@ import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
 import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export} from '../../../../core/react/devex/grid.js';
+import NbPopDescboard from "../../../tools/popdescboard.js";
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdImageUpload from '../../../../core/react/devex/imageupload.js';
@@ -33,6 +34,7 @@ export default class rebateDispatch extends React.PureComponent
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
         this.docObj = new docCls();
+        this.extraObj = new docExtraCls();
         this.tabIndex = props.data.tabkey
 
         this._cellRoleRender = this._cellRoleRender.bind(this)
@@ -61,6 +63,7 @@ export default class rebateDispatch extends React.PureComponent
     async init()
     {
         this.docObj.clearAll()
+        this.extraObj.clearAll()
 
         this.docObj.ds.on('onAddRow',(pTblName,pData) =>
         {
@@ -823,9 +826,16 @@ export default class rebateDispatch extends React.PureComponent
                                         let pResult = await dialog(tmpConfObj);
                                         if(pResult == 'btn01')
                                         {
-                                            this.docObj.dt('DOC').removeAt(0)
-                                            await this.docObj.dt('DOC').delete();
-                                            this.init(); 
+                                            if(this.sysParam.filter({ID:'docDeleteDesc',USERS:this.user.CODE}).getValue().value == true)
+                                            {
+                                                this.popDeleteDesc.show()
+                                            }
+                                            else
+                                            {
+                                                this.docObj.dt('DOC').removeAt(0)
+                                                await this.docObj.dt('DOC').delete();
+                                                this.init(); 
+                                            }
                                         }
                                         
                                     }}/>
@@ -2304,6 +2314,23 @@ export default class rebateDispatch extends React.PureComponent
                             </Form>
                         </NdDialog>
                     </div>  
+                    {/* Delete Description Popup */} 
+                    <div>
+                    <NbPopDescboard id={"popDeleteDesc"} parent={this} width={"900"} height={"500"} position={"#root"} head={this.lang.t("popDeleteDesc.head")} title={this.lang.t("popDeleteDesc.title")} 
+                    param={this.sysParam.filter({ID:'DocDelDescription',TYPE:0})}
+                    onClick={async (e)=>
+                    {
+                        let tmpExtra = {...this.extraObj.empty}
+                        tmpExtra.DOC = this.docObj.dt()[0].GUID
+                        tmpExtra.DESCRIPTION = e
+                        tmpExtra.TAG = 'DOC_DELETE'
+                        this.extraObj.addEmpty(tmpExtra);
+                        this.extraObj.save()
+                        this.docObj.dt('DOC').removeAt(0)
+                        await this.docObj.dt('DOC').delete();
+                        this.init()
+                    }}></NbPopDescboard>
+                    </div>
                 </ScrollView>                
             </div>
         )

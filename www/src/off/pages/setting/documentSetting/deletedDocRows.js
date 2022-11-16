@@ -133,26 +133,151 @@ export default class rebateOperation extends React.PureComponent
             tmpRebate = 0
         }
         
-        let tmpSource =
+        if(this.chkDoc.value == true)
         {
-            source : 
+            if(tmpDocType == 60)
             {
-                select : 
-                { 
-                    query :"SELECT *,CONVERT(NVARCHAR,DOC_DATE,104) AS DOC_DATE_CONVERT,ISNULL((SELECT TOP 1 DESCRIPTION FROM DOC_EXTRA WHERE DOC_EXTRA.DOC = DOC.GUID),'') AS DEL_DESCRIPTION, " +
-                    "ISNULL((SELECT TOP 1 CUSER_NAME FROM DOC_EXTRA_VW_01 WHERE DOC_EXTRA_VW_01.DOC = DOC.GUID),'') AS DEL_USER, " +
-                    "CASE TYPE WHEN 0 THEN (SELECT TOP 1 TITLE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC.OUTPUT) " +
-                    "WHEN 1 THEN (SELECT TOP 1 TITLE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC.INPUT) END AS CUSTOMER " +
-                    " FROM DOC WHERE TYPE = @TYPE AND DOC_TYPE = @DOC_TYPE  AND REBATE = @REBATE AND DELETED = 1 ORDER BY CDATE DESC",
-                    param : ['TYPE:int','DOC_TYPE:int','REBATE:int'],
-                    value : [tmpType,tmpDocType,tmpRebate]
-                },
-                sql : this.core.sql
+                let tmpSource =
+                {
+                    source : 
+                    {
+                        select : 
+                        { 
+                            query :"SELECT *,CONVERT(NVARCHAR,CDATE,104) AS DOC_DATE_CONVERT, " +
+                            "CASE TYPE WHEN 0 THEN (SELECT TOP 1 TITLE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_ORDERS.OUTPUT) " +
+                            "WHEN 1 THEN (SELECT TOP 1 TITLE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_ORDERS.INPUT) END AS CUSTOMER " +
+                            " FROM DOC_ORDERS WHERE TYPE = @TYPE AND DOC_TYPE = @DOC_TYPE  AND DELETED = 1 ORDER BY CDATE DESC",
+                            param : ['TYPE:int','DOC_TYPE:int','REBATE:int'],
+                            value : [tmpType,tmpDocType,tmpRebate]
+                        },
+                        sql : this.core.sql
+                    }
+                }
+                App.instance.setState({isExecute:true})
+                await this.grdDeleteList.dataRefresh(tmpSource)
+                App.instance.setState({isExecute:false})
+            }
+            else if (tmpDocType == 61)
+            {
+                let tmpSource =
+                {
+                    source : 
+                    {
+                        select : 
+                        { 
+                            query :"SELECT *,CONVERT(NVARCHAR,CDATE,104) AS DOC_DATE_CONVERT, " +
+                            "CASE TYPE WHEN 0 THEN (SELECT TOP 1 TITLE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_OFFERS.OUTPUT) " +
+                            "WHEN 1 THEN (SELECT TOP 1 TITLE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_OFFERS.INPUT) END AS CUSTOMER " +
+                            " FROM DOC_OFFERS WHERE TYPE = @TYPE AND DOC_TYPE = @DOC_TYPE  AND DELETED = 1 ORDER BY CDATE DESC",
+                            param : ['TYPE:int','DOC_TYPE:int','REBATE:int'],
+                            value : [tmpType,tmpDocType,tmpRebate]
+                        },
+                        sql : this.core.sql
+                    }
+                }
+                App.instance.setState({isExecute:true})
+                await this.grdDeleteList.dataRefresh(tmpSource)
+                App.instance.setState({isExecute:false})
+            }
+            else
+            {
+                console.log(111)
+                let tmpSource =
+                {
+                    source : 
+                    {
+                        select : 
+                        { 
+                            query :"SELECT *,CONVERT(NVARCHAR,CDATE,104) AS DOC_DATE_CONVERT, " +
+                            "CASE TYPE WHEN 0 THEN (SELECT TOP 1 TITLE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_ITEMS.OUTPUT) " +
+                            "WHEN 1 THEN (SELECT TOP 1 TITLE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_ITEMS.INPUT) END AS CUSTOMER " +
+                            " FROM DOC_ITEMS WHERE TYPE = @TYPE AND DOC_TYPE = @DOC_TYPE  AND REBATE = @REBATE AND DELETED = 1 ORDER BY CDATE DESC",
+                            param : ['TYPE:int','DOC_TYPE:int','REBATE:int'],
+                            value : [tmpType,tmpDocType,tmpRebate]
+                        },
+                        sql : this.core.sql
+                    }
+                }
+                App.instance.setState({isExecute:true})
+                await this.grdDeleteList.dataRefresh(tmpSource)
+                App.instance.setState({isExecute:false})
             }
         }
-        App.instance.setState({isExecute:true})
-        await this.grdDeleteList.dataRefresh(tmpSource)
-        App.instance.setState({isExecute:false})
+        else
+        {
+            if(tmpDocType == 60)
+            {
+                let tmpSource =
+                {
+                    source : 
+                    {
+                        select : 
+                        { 
+                            query :"SELECT *,CONVERT(NVARCHAR,CDATE,104) AS DOC_DATE_CONVERT, " +
+                            "CASE TYPE WHEN 0 THEN (SELECT TOP 1 TITLE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_ORDERS.OUTPUT) " +
+                            "WHEN 1 THEN (SELECT TOP 1 TITLE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_ORDERS.INPUT) END AS CUSTOMER " +
+                            " FROM DOC_ORDERS WHERE TYPE = @TYPE AND DOC_TYPE = @DOC_TYPE  AND " + 
+                            " DELETED = 1 AND ISNULL((SELECT TOP 1 DELETED FROM DOC WHERE DOC.GUID = DOC_ORDERS.DOC_GUID),0) = 0 ORDER BY CDATE DESC",
+                            param : ['TYPE:int','DOC_TYPE:int','REBATE:int'],
+                            value : [tmpType,tmpDocType,tmpRebate]
+                        },
+                        sql : this.core.sql
+                    }
+                }
+                App.instance.setState({isExecute:true})
+                await this.grdDeleteList.dataRefresh(tmpSource)
+                App.instance.setState({isExecute:false})
+            }
+            else if (tmpDocType == 61)
+            {
+                let tmpSource =
+                {
+                    source : 
+                    {
+                        select : 
+                        { 
+                            query :"SELECT *,CONVERT(NVARCHAR,CDATE,104) AS DOC_DATE_CONVERT, " +
+                            "CASE TYPE WHEN 0 THEN (SELECT TOP 1 TITLE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_OFFERS.OUTPUT) " +
+                            "WHEN 1 THEN (SELECT TOP 1 TITLE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_OFFERS.INPUT) END AS CUSTOMER " +
+                            " FROM DOC_OFFERS WHERE TYPE = @TYPE AND DOC_TYPE = @DOC_TYPE  AND " +
+                             "DELETED = 1 AND ISNULL((SELECT TOP 1 DELETED FROM DOC WHERE DOC.GUID = DOC_OFFERS.DOC_GUID),0) = 0 ORDER BY CDATE DESC",
+                            param : ['TYPE:int','DOC_TYPE:int','REBATE:int'],
+                            value : [tmpType,tmpDocType,tmpRebate]
+                        },
+                        sql : this.core.sql
+                    }
+                }
+                App.instance.setState({isExecute:true})
+                await this.grdDeleteList.dataRefresh(tmpSource)
+                App.instance.setState({isExecute:false})
+            }
+            else
+            {
+                let tmpSource =
+                {
+                    source : 
+                    {
+                        select : 
+                        { 
+                            query :"SELECT *,CONVERT(NVARCHAR,CDATE,104) AS DOC_DATE_CONVERT, " +
+                            "CASE TYPE WHEN 0 THEN (SELECT TOP 1 TITLE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_ITEMS.OUTPUT) " +
+                            "WHEN 1 THEN (SELECT TOP 1 TITLE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_ITEMS.INPUT) END AS CUSTOMER " +
+                            " FROM DOC_ITEMS WHERE TYPE = @TYPE AND DOC_TYPE = @DOC_TYPE  AND REBATE = @REBATE AND" +
+                            " DELETED = 1 AND ISNULL((SELECT TOP 1 DELETED FROM DOC WHERE DOC.GUID = DOC_ITEMS.DOC_GUID),0) = 0 ORDER BY CDATE DESC",
+                            param : ['TYPE:int','DOC_TYPE:int','REBATE:int'],
+                            value : [tmpType,tmpDocType,tmpRebate]
+                        },
+                        sql : this.core.sql
+                    }
+                }
+                App.instance.setState({isExecute:true})
+                await this.grdDeleteList.dataRefresh(tmpSource)
+                App.instance.setState({isExecute:false})
+            }
+        }
+       
+       
+       
     }
     async _btnSave()
     {
@@ -244,6 +369,14 @@ export default class rebateOperation extends React.PureComponent
                                     >
                                     </NdSelectBox>
                                 </Item>
+                                 {/* chkDoc */}
+                                 <Item>
+                                    <Label text={this.t("chkDoc")} alignment="right" />
+                                    <NdCheckBox id="chkDoc" parent={this} simple={true}  
+                                    value ={false}
+                                    >
+                                    </NdCheckBox>
+                                </Item>
                             </Form>
                         </div>
                     </div>
@@ -257,9 +390,9 @@ export default class rebateOperation extends React.PureComponent
                         <div className="col-3">
                             
                         </div>
-                        <div className="col-3">
+                        {/* <div className="col-3">
                            <NdButton text={this.t("btnUnlock")} type="default" width="100%" onClick={()=>{this._btnSave()}}></NdButton>
-                        </div>
+                        </div> */}
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
@@ -275,14 +408,14 @@ export default class rebateOperation extends React.PureComponent
                             >                            
                                 <Paging defaultPageSize={20} />
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
-
+                                <Column dataField="DOC_DATE_CONVERT" caption={this.t("grdDeleteList.clmDate")} visible={true}/> 
                                 <Column dataField="REF" caption={this.t("grdDeleteList.clmRef")} visible={true} width={200}/> 
                                 <Column dataField="REF_NO" caption={this.t("grdDeleteList.clmRefNo")} visible={true} width={300}/> 
                                 <Column dataField="CUSTOMER" caption={this.t("grdDeleteList.clmCustomer")} visible={true}/> 
-                                <Column dataField="DOC_DATE_CONVERT" caption={this.t("grdDeleteList.clmDate")} visible={true}/> 
+                                <Column dataField="ITEM_NAME" caption={this.t("grdDeleteList.clmItemName")} visible={true}/> 
+                                <Column dataField="QUANTITY" caption={this.t("grdDeleteList.clmQuantity")} visible={true}/> 
+                                <Column dataField="PRICE" caption={this.t("grdDeleteList.clmPrice")} visible={true}/> 
                                 <Column dataField="TOTAL" caption={this.t("grdDeleteList.clmTotal")} visible={true}/> 
-                                <Column dataField="DEL_USER" caption={this.t("grdDeleteList.clmUser")} visible={true}/> 
-                                <Column dataField="DEL_DESCRIPTION" caption={this.t("grdDeleteList.clmDescription")} visible={true}/> 
                             </NdGrid>
                         </div>
                     </div>
