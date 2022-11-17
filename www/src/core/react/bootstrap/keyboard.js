@@ -73,14 +73,14 @@ export default class NbKeyboard extends NbBase
                     "q w e r t y u i o p ü .",
                     "a s d f g h j k l ş - ,",
                     "z x c v b n m ö ç * / %",
-                    "{numbers} {space} {backspace}"
+                    "{numbers} {space} {backspace} @"
                     ],
                     default: 
                     [
                     "Q W E R T Y U I O P Ü .",
                     "A S D F G H J K L Ş - ,",
                     "Z X C V B N M Ö Ç * / %",
-                    "{numbers} {space} {backspace}"
+                    "{numbers} {space} {backspace} @"
                     ],
                     numbers: ["1 2 3", "4 5 6", "7 8 9", "{abc} 0 {backspace}"]
                 }}

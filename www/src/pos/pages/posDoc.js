@@ -28,6 +28,7 @@ import NdPosBarBox from "../tools/posbarbox.js";
 import NdAcsDialog,{acsDialog} from "../../core/react/devex/acsdialog.js";
 import NbKeyboard from "../../core/react/bootstrap/keyboard.js";
 import IdleTimer from 'react-idle-timer'
+import NdButton from "../../core/react/devex/button.js";
 
 import { posCls,posSaleCls,posPaymentCls,posPluCls,posDeviceCls,posPromoCls, posExtraCls } from "../../core/cls/pos.js";
 import { docCls} from "../../core/cls/doc.js"
@@ -141,7 +142,7 @@ export default class posDoc extends React.PureComponent
         {               
             if(!this.state.isConnected)
             {
-                this.sendJet({CODE:"120",NAME:"Kasa offline dan online a döndü."})
+                this.sendJet({CODE:"120",NAME:"Le système est online"}) ///Kasa offline dan online a döndü.
 
                 let tmpConfObj =
                 {
@@ -153,7 +154,7 @@ export default class posDoc extends React.PureComponent
 
                 await this.transferLocal();
 
-                this.sendJet({CODE:"123",NAME:"Eldeki kayıtlar online a gönderildi."})
+                this.sendJet({CODE:"123",NAME:"Les saisies ont été enregistrés dans la base suite à online."}) ////Eldeki kayıtlar online a gönderildi.
                 
                 window.location.reload()
             }
@@ -166,7 +167,7 @@ export default class posDoc extends React.PureComponent
         });
         this.core.socket.on('disconnect',async () => 
         {
-            this.sendJet({CODE:"120",NAME:"Kasa offline dan online a döndü."})
+            this.sendJet({CODE:"120",NAME:"Le système est offline."}) ///Kasa offline dan online a döndü.
 
             this.setState({isConnected:false})
             let tmpConfObj =
@@ -239,7 +240,7 @@ export default class posDoc extends React.PureComponent
             //*************************************************************************** */
         })
 
-        this.sendJet({CODE:"80",NAME:"Kasa işleme başladı."})
+        this.sendJet({CODE:"80",NAME:"Démarrage terminal lancé."}) ////Kasa işleme başladı.
     }
     async init()
     {     
@@ -1054,7 +1055,7 @@ export default class posDoc extends React.PureComponent
                 }
                 else
                 {
-                    this.sendJet({CODE:"90",NAME:"Kayıt işlemi başarısız."})
+                    this.sendJet({CODE:"90",NAME:"Enregistrement échoué."}) /// Kayıt işlemi başarısız.
                     //KAYIT BAŞARISIZ İSE UYARI AÇILIYOR VE KULLANICI İSTERSE KAYIT İŞLEMİNİ TEKRARLIYOR
                     let tmpConfObj =
                     {
@@ -3656,11 +3657,11 @@ export default class posDoc extends React.PureComponent
 
                                             if(this.state.isFormation == false)
                                             {
-                                                this.sendJet({CODE:"100",NAME:"Formasyon başladı."})
+                                                this.sendJet({CODE:"100",NAME:"Mode formation lancé."}) ////Formasyon başladı.
                                             }
                                             else
                                             {
-                                                this.sendJet({CODE:"105",NAME:"Formasyon sonlandı."})
+                                                this.sendJet({CODE:"105",NAME:"Mode formation terminé."}) //// Formasyon sonlandı.
                                             }
 
                                             this.setState({isFormation:this.state.isFormation ? false : true})
@@ -5263,7 +5264,7 @@ export default class posDoc extends React.PureComponent
                                                             }
                                                         }
 
-                                                        this.sendJet({CODE:"155",NAME:"Duplicate fiş yazdırıldı."})
+                                                        this.sendJet({CODE:"155",NAME:"Duplicata imprimé."}) //// Duplicate fiş yazdırıldı.
                                                         await this.print(tmpData)
                                                     } 
                                                 }
@@ -5388,7 +5389,7 @@ export default class posDoc extends React.PureComponent
                                     {
                                         this.lastPosSaleDt.selectCmd = 
                                         {
-                                            query:  "SELECT * FROM POS_SALE_VW_01 WHERE POS_GUID = @GUID ",
+                                            query:  "SELECT * FROM POS_SALE_VW_01 WHERE POS_GUID = @GUID ORDER BY LDATE DESC",
                                             param:  ["GUID:string|50"],
                                             value:  [e.selectedRowKeys[0].GUID]
                                         }
@@ -5934,7 +5935,7 @@ export default class posDoc extends React.PureComponent
                     param={this.prmObj.filter({ID:'DocDelDescription',TYPE:0})}
                     onClick={async (e)=>
                     {
-                        this.sendJet({CODE:"320",NAME:"Beklemedeki fiş silindi.",DESCRIPTION:e})
+                        this.sendJet({CODE:"320",NAME:"Ticket en attente annulé et supprimé.",DESCRIPTION:e}) //// Beklemedeki fiş silindi.
                         if(typeof e != 'undefined')
                         {
                             await this.descSave("FULL DELETE",e,'00000000-0000-0000-0000-000000000000')
@@ -5948,7 +5949,7 @@ export default class posDoc extends React.PureComponent
                     param={this.prmObj.filter({ID:'DocRowDelDescription',TYPE:0})}
                     onClick={async (e)=>
                     {
-                        this.sendJet({CODE:"323",NAME:"Beklemedeki fiş satırı silindi.",DESCRIPTION:e})
+                        this.sendJet({CODE:"323",NAME:"Ligne supprimé sur ticket en attente.",DESCRIPTION:e})  //// Beklemedeki fiş satırı silindi.
                         if(typeof e != 'undefined')
                         {
                             await this.descSave("ROW DELETE",e,this.grdList.devGrid.getSelectedRowKeys()[0].GUID)
@@ -6680,7 +6681,11 @@ export default class posDoc extends React.PureComponent
                                         {                                    
                                             this.keyPopCustomerAdd.inputName = "txtPopCustomerCode"
                                             this.keyPopCustomerAdd.setInput(this.txtPopCustomerCode.value)
-                                        }}/>
+                                        }}>
+                                            <Validator validationGroup={"frmCustomerAdd"}>
+                                                <RequiredRule message={this.lang.t("popCustomerAdd.validTxtPopCustomerCode")}/>
+                                            </Validator>
+                                        </NdTextBox>
                                     </Item>
                                     {/* txtPopCustomerFirmName */}
                                     <Item>
@@ -6822,37 +6827,49 @@ export default class posDoc extends React.PureComponent
                         </div>
                         <div className="row py-1">
                             <div className="col-12">                            
-                                <NbButton id={"btnCustomerAddSave"} parent={this} className="form-group btn btn-success btn-block" style={{height:"50px",width:"100%",fontSize:"24px"}}
-                                onClick={async ()=>
-                                {                                    
-                                    this.customerObj.customerAdress.dt()[0].CUSTOMER = this.customerObj.dt()[0].GUID
-                                    this.customerObj.customerOffical.dt()[0].CUSTOMER = this.customerObj.dt()[0].GUID
-
-                                    if(this.txtPopCustomerFirmName.value != '')
+                                <NdButton id={"btnCustomerAddSave"} parent={this} icon={"floppy"} validationGroup={"frmCustomerAdd"} type="success" stylingMode="contained" width={"100%"} height={"50px"}
+                                onClick={async (e)=>
+                                {
+                                    if(e.validationGroup.validate().status == "valid")
                                     {
-                                        this.customerObj.dt()[0].TYPE = 1
-                                        this.customerObj.dt()[0].TITLE = this.txtPopCustomerFirmName.value
-                                    }
-
-                                    let tmpConfObj1 =
-                                    {
-                                        id:'msgCustomerSaveResult',showTitle:true,title:this.t("msgCustomerSaveResult.title"),showCloseButton:true,width:'500px',height:'200px',
-                                        button:[{id:"btn01",caption:this.t("msgCustomerSaveResult.btn01"),location:'after'}],
-                                    }
-                                    if((await this.customerObj.save()) == 0)
-                                    {                                                    
-                                        tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgCustomerSaveResult.msgSuccess")}</div>)
-                                        await dialog(tmpConfObj1);
+                                        this.customerObj.customerAdress.dt()[0].CUSTOMER = this.customerObj.dt()[0].GUID
+                                        this.customerObj.customerOffical.dt()[0].CUSTOMER = this.customerObj.dt()[0].GUID
+    
+                                        if(this.txtPopCustomerFirmName.value != '')
+                                        {
+                                            this.customerObj.dt()[0].TYPE = 1
+                                            this.customerObj.dt()[0].TITLE = this.txtPopCustomerFirmName.value
+                                        }
+    
+                                        let tmpConfObj1 =
+                                        {
+                                            id:'msgCustomerSaveResult',showTitle:true,title:this.lang.t("popCustomerAdd.msgCustomerSaveResult.title"),showCloseButton:true,width:'500px',height:'200px',
+                                            button:[{id:"btn01",caption:this.lang.t("popCustomerAdd.msgCustomerSaveResult.btn01"),location:'after'}],
+                                        }
+                                        if((await this.customerObj.save()) == 0)
+                                        {                                                    
+                                            tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.lang.t("popCustomerAdd.msgCustomerSaveResult.msgSuccess")}</div>)
+                                            await dialog(tmpConfObj1);
+                                        }
+                                        else
+                                        {
+                                            tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.lang.t("popCustomerAdd.msgCustomerSaveResult.msgFailed")}</div>)
+                                            await dialog(tmpConfObj1);
+                                        }
                                     }
                                     else
                                     {
-                                        tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgCustomerSaveResult.msgFailed")}</div>)
-                                        await dialog(tmpConfObj1);
+                                        let tmpConfObj =
+                                        {
+                                            id:'msgCustomerSaveValid',showTitle:true,title:this.lang.t("popCustomerAdd.msgCustomerSaveValid.title"),showCloseButton:true,width:'500px',height:'200px',
+                                            button:[{id:"btn01",caption:this.lang.t("popCustomerAdd.msgCustomerSaveValid.btn01"),location:'after'}],
+                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("popCustomerAdd.msgCustomerSaveValid.msg")}</div>)
+                                        }
+                                        
+                                        await dialog(tmpConfObj);
                                     }
-                                    console.log(this.customerObj)
                                 }}>
-                                    <i className="fa-solid fa-floppy-disk"></i>
-                                </NbButton>
+                                </NdButton>
                             </div>
                         </div>
                         <div className="row py-1">

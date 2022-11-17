@@ -9,10 +9,10 @@ class nf525
     {
         this.socket = null;
         this.core = core.instance;
-
+        this.timer = null
         this.connEvt = this.connEvt.bind(this)
         this.core.socket.on('connection',this.connEvt)
-        this.core.on('onSqlConnected',this.onSqlConnected)
+        this.core.on('onSqlConnected',this.onSqlConnected.bind(this))
     }
     async onSqlConnected(pStatus)
     {
@@ -33,27 +33,8 @@ class nf525
         // const workbook = xlsx.read(buf);
         // console.log(workbook)
 
-        // console.log(1)
-        // let tmpResult = await getGrandTotalData(0)
-        // console.log(tmpResult.length)
-        // // DAY
-        // for (let i = 0; i < tmpResult.length; i++) 
-        // {
-        //     await insertGrandTotal(0,tmpResult[i])
-        // }    
-        // // MONTH
-        // tmpResult = await getGrandTotalData(1)
-        // for (let i = 0; i < tmpResult.length; i++) 
-        // {
-        //     await insertGrandTotal(1,tmpResult[i])
-        // } 
-        // //console.log(tmpResult)
-        // // YEAR
-        // tmpResult = await getGrandTotalData(2)
-        // for (let i = 0; i < tmpResult.length; i++) 
-        // {
-        //     await insertGrandTotal(2,tmpResult[i])
-        // }
+        setTimeout(this.processGrandTotal.bind(this), 1000);
+        setTimeout(this.processArchive.bind(this), 1000);
     }
     connEvt(pSocket)
     {
@@ -79,6 +60,101 @@ class nf525
                 })
             }
         })
+    }
+    async processGrandTotal()
+    {        
+        // DAY
+        core.instance.log.msg("Grand total transfer started","Nf525");
+        let tmpResult = await this.getGrandTotalData(0)
+        for (let i = 0; i < tmpResult.length; i++) 
+        {
+            await this.insertGrandTotal(0,tmpResult[i])
+        }    
+        // MONTH
+        tmpResult = await this.getGrandTotalData(1)
+        for (let i = 0; i < tmpResult.length; i++) 
+        {
+            await this.insertGrandTotal(1,tmpResult[i])
+        } 
+        // YEAR
+        tmpResult = await this.getGrandTotalData(2)
+        for (let i = 0; i < tmpResult.length; i++) 
+        {
+            await this.insertGrandTotal(2,tmpResult[i])
+        }
+        core.instance.log.msg("Grand total transfer completed","Nf525");
+
+        let tmpMin = moment.utc('02:00:00', 'HH:mm:ss').diff(moment.utc(moment(new Date).utc(true), 'HH:mm:ss'), 'minutes')
+        tmpMin = tmpMin < 0 ? 1440 + tmpMin : tmpMin
+        setTimeout(this.processGrandTotal.bind(this),tmpMin * 60000)
+    }
+    async processArchive()
+    {
+        await this.archiveJet()
+        await this.archiveGrandTotal(0)
+        await this.archiveGrandTotal(1)
+        await this.archiveGrandTotal(2)
+
+        let tmpMin = moment.utc('02:00:00', 'HH:mm:ss').diff(moment.utc(moment(new Date).utc(true), 'HH:mm:ss'), 'minutes')
+        tmpMin = tmpMin < 0 ? 1440 + tmpMin : tmpMin
+        setTimeout(this.processArchive.bind(this),tmpMin * 60000)
+    }
+    async archiveGrandTotal(pType)
+    {
+        return new Promise(async resolve =>
+        {
+            let tmpQuery = 
+            {
+                query : "SELECT * FROM NF525_GRAND_TOTAL WHERE TYPE = @TYPE ORDER BY CDATE ASC",
+                param : ['TYPE:int'],
+                value : [pType]
+            }
+
+            let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
+            if(tmpResult.length > 0)
+            {
+                let tmpFName = ""
+                if(pType == 0)
+                {
+                    tmpFName = "DAY_GRAND_TOTAL"
+                }
+                else if(pType == 1)
+                {
+                    tmpFName = "MOUNTH_GRAND_TOTAL"
+                }
+                else if(pType == 2)
+                {
+                    tmpFName = "YEAR_GRAND_TOTAL"
+                }
+                this.exportExcel(tmpResult,tmpFName)
+            }
+            resolve()
+        });
+    }
+    async archiveJet()
+    {
+        return new Promise(async resolve =>
+        {
+            let tmpQuery = 
+            {
+                query : "SELECT * FROM NF525_JET ORDER BY CDATE ASC"
+            }
+
+            let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
+            if(tmpResult.length > 0)
+            {
+                this.exportExcel(tmpResult,"JET")
+            }
+            resolve()
+        });
+    }
+    exportExcel(pData,pFileName)
+    {
+        fs.mkdirSync('./archiveFiscal', { recursive: true })
+        let xlsxData = xlsx.utils.json_to_sheet(pData);
+        let workBook = xlsx.utils.book_new();
+        xlsx.utils.book_append_sheet(workBook,xlsxData,"Data")
+        xlsx.writeFile(workBook,'./archiveFiscal/' + pFileName + '.xlsx')
     }
     async insertJet(pData)
     {
@@ -166,7 +242,7 @@ class nf525
                             "CASE WHEN TYPE = 0 THEN FAMOUNT ELSE FAMOUNT * -1 END AS FAMOUNT, " +
                             "CASE WHEN TYPE = 0 THEN TOTAL ELSE TOTAL * -1 END AS TOTAL " +
                             "FROM NF525_POS_VAT_VW_02 AS NF525 " +
-                            "WHERE {0} AND DOC_DATE <= '20220930' AND DOC_TYPE = 0 " +
+                            "WHERE {0} AND DOC_DATE <= CONVERT(NVARCHAR(10),GETDATE(),112) AND DOC_TYPE = 0 " +
                             ") AS TMP " +
                             "GROUP BY DOC_DATE ORDER BY DOC_DATE"
                 }
@@ -185,6 +261,7 @@ class nf525
                 {
                     tmpResult = []
                 }
+                
                 resolve(tmpResult)            
             }
             else if(pType == 1) //month
@@ -336,7 +413,7 @@ class nf525
     
             if(tmpCtrlResult.result.recordset.length == 0)
             {            
-                let tmpLastData = await getLastGrandTotal(pType,pData.DOC_DATE)
+                let tmpLastData = await this.getLastGrandTotal(pType,pData.DOC_DATE)
                 let tmpLastTotal = 0
     
                 if(typeof tmpLastData != 'undefined')
@@ -384,7 +461,7 @@ class nf525
                             'SIGNATURE:string|max'],
                     value : [pType,tmpPeriod,pData.HT_A.toFixed(2),pData.TTC_A.toFixed(2),pData.HT_B.toFixed(2),pData.TTC_B.toFixed(2),pData.HT_C.toFixed(2),
                                 pData.TTC_C.toFixed(2),pData.HT_D.toFixed(2),pData.TTC_D.toFixed(2),pData.TOTAL_HT.toFixed(2),pData.TOTAL_TTC.toFixed(2),
-                                (pData.TOTAL_TTC + tmpLastTotal).toFixed(2),signatureGrandTotal(tmpLastData)]
+                                (pData.TOTAL_TTC + tmpLastTotal).toFixed(2),this.signatureGrandTotal(tmpLastData)]
                 }
                 await core.instance.sql.execute(tmpInsertQuery)
             }  
