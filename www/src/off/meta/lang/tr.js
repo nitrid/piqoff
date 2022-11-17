@@ -10839,7 +10839,7 @@ export const langTr =
             purchaseOrder : "Alış Sipariş",
             salesOrder : "Satış Sipariş",
             purchaseOffer : "Alış Teklif",
-            salesOffer : "Satış Sipariş",
+            salesOffer : "Satış Teklif",
         },
         msgSuccess:
         {
@@ -10887,13 +10887,7 @@ export const langTr =
             purchaseOrder : "Alış Sipariş",
             salesOrder : "Satış Sipariş",
             purchaseOffer : "Alış Teklif",
-            salesOffer : "Satış Sipariş",
-        },
-        msgSuccess:
-        {
-            title: "Başarılı",
-            btn01: "Tamam",
-            msg: "Evrak Yeniden Oluşturuldu.."
+            salesOffer : "Satış Teklif",
         },
     },
     pos_01_001 : // "Pos Cihaz Tanıtım",

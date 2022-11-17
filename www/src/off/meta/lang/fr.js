@@ -73,6 +73,24 @@ export const langFr =
         btn01: "Tamam",   
         msg: "Le document doit comporter au minimum une ligne pour enregistrer!Modifications effectués non enregistrées."   
     },
+    popDescbordValidation :
+    {
+        title : "Attention",
+        msg : "Vous ne pouvez pas laisser le champ information vide !",
+        btn01 : "OK",
+    },
+    popDescbordValidation2 :
+    {
+        title : "Attention",
+        msg1 : "İnformation saisie",
+        msg2 : " Ne peut être inférieur à ... caractères ", 
+        btn01 : "Ok",
+    },
+    popDeleteDesc : 
+    {
+        head : "Silme İşlemi Açıklaması",   // BAK
+        title : "Lütfen Silme Nedeninizi Giriniz"   // BAK
+    },
     menu:
     {
         stk: "Produit",                
@@ -222,6 +240,7 @@ export const langFr =
         set_02_007 : "Historique Demande de Soutien",   
         set_03 : "Réglages Documents",   
         set_03_001 : "Documents Effacés",   
+        set_03_002 : "Silinmiş Satırlar", // BAK
         proces : "Saisie groupée",
         proces_01 : "Traitement Produit",
         proces_01_001 : "MAJ Famille Produit",
@@ -10784,7 +10803,7 @@ export const langFr =
             notValid: "Veuillez remplir les champs obligatoires !",
         },
     },
-        set_03_001 : // Silinmiş Evraklar
+    set_03_001 : // Silinmiş Evraklar
     {
         cmbType : "Type Document",  
         btnGet : "Recherche Document",  
@@ -10801,7 +10820,10 @@ export const langFr =
             clmRef : "REF.",  
             clmRefNo : "REF.NO.",  
             clmCustomer : "CLIENT",  
-            clmDate : "DATE"  
+            clmDate : "DATE",
+            clmDescription : "AÇIKLAMA", // BAK
+            clmUser : "KULLANICI",  // BAK
+            clmTotal : "TUTAR"   // BAK
         },
         cmbTypeData : 
         {
@@ -10824,6 +10846,48 @@ export const langFr =
             title: "Réussi",  
             btn01: "OK",  
             msg: "Document créé à nouveau.."  
+        },
+    },
+    set_03_002 : // Silinmiş Satırlar
+    {
+        cmbType : "Evrak Tipi",   // BAK
+        btnGet : "Satırları Getir",   // BAK
+        chkDoc : "Evrakı Silinenleri Göster",   // BAK
+        mgsUnlock:
+        {
+            title: "Dikkat",   // BAK
+            btn01: "Tamam",   // BAK
+            btn02: "Vazgeç",   // BAK
+            msg: "Seçili evrakı tekrar oluşturmak istediğinize eminmisiniz ?"   // BAK
+        },
+        grdDeleteList : 
+        {
+            clmRef : "SERI",    // BAK
+            clmRefNo : "SIRA",   // BAK
+            clmCustomer : "CARI",   // BAK
+            clmDate : "TARIH",   // BAK
+            clmDescription : "AÇIKLAMA",   // BAK
+            clmItemCode : "KODU",   // BAK
+            clmItemName : "ADI",   // BAK
+            clmQuantity : "MİKTAR",   // BAK
+            clmPrice : "FİYAT",   // BAK
+            clmTotal : "TOPLAM"   // BAK
+        },
+        cmbTypeData : 
+        {
+            purchaseDispatch : "Bon de Livraison d'Achat",   
+            salesDispatch : "Bon de Livraison de Vente",   
+            rebateDispatch : "Bon de Livraison de Retour",   
+            branchSaleDispatch : "Bon de Livraison Interne",   
+            purchaseInvoice : "Facture d'Achat",   
+            salesInvoice : "Facture de Vente",   
+            priceDifferenceInvoice : "Facture de Différence de Prix",   
+            rebateInvoice : "Facture Retour",   
+            branchSaleInvoice : "Facture Vente Interne",   
+            purchaseOrder : "Commande d'Achat",   
+            salesOrder : "Commande de Vente",   
+            purchaseOffer : "Proposition d'Achat",   
+            salesOffer : "Offre de Vente",   
         },
     },
     pos_01_001 : // "Pos Cihaz Tanıtım",
@@ -11204,7 +11268,7 @@ export const langFr =
             msg: "Veuillez Sélectionner une Caisse !"  
         },
     },
-    pos_03_001 : // "B"
+    pos_03_001 : // "Gün sonu"
     {
         TicketId :"Ticket No",
         title : "Opérations de fin de journée",
