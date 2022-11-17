@@ -2964,7 +2964,7 @@ export default class rebateInvoice extends React.PureComponent
                         <Column dataField="PRICE" caption={this.t("pg_proformaGrid.clmPrice")} width={200} />
                         <Column dataField="TOTAL" caption={this.t("pg_proformaGrid.clmTotal")} width={200} />
                     </NdPopGrid>
-                    <NbPopDescboard id={"popDeleteDesc"} parent={this} width={"900"} height={"400"} position={"#root"} head={this.lang.t("popDeleteDesc.head")} title={this.lang.t("popDeleteDesc.title")} 
+                    <NbPopDescboard id={"popDeleteDesc"} parent={this} width={"900"} height={"450"} position={"#root"} head={this.lang.t("popDeleteDesc.head")} title={this.lang.t("popDeleteDesc.title")} 
                     param={this.sysParam.filter({ID:'DocDelDescription',TYPE:0})}
                     onClick={async (e)=>
                     {
