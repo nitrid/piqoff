@@ -3,9 +3,9 @@ export const langFr =
     popGrid: {btnSelection:"Choix",btnSearch:"Listes"},
     btnSave: "Enregistrez",
     btnCancel: "Abandonner",
-    btnPrint :"Ecrire",
+    btnPrint :"Imprimer",
     btnOk: "OK",
-    btnGet: "Ramenez",
+    btnGet: "Recherche",
     msgWarning: "Attention",
     btnYes : "Oui",
     btnNo : "Nom",
@@ -19,7 +19,7 @@ export const langFr =
     btnLogout : "Sortie",
     msgNotAccess :"L'utilisateur n'est pas autorisé à se connecter.",
     msgInvalidUser : "Le nom d'utilisateur ou le mot de passe est incorrect.",
-    txtCardRead :"Veuillez lire votre carte d'utilisateur.",
+    txtCardRead :"Veuillez scanner votre carte d'utilisateur.",
     checkAll :"Appliquer tout",
     msgAnotherUserAlert: 
     {
@@ -38,34 +38,34 @@ export const langFr =
         stk_01_005: "M.A.J. le Prix",
         stk_01_006: "Ajoutez Code-barre",
         stk_01_007: "MAJ Famille Produit",
-        stk_02: "Documents Saissie",
+        stk_02: "Documents",
         stk_02_001: "Imprimer Etiquette",
-        stk_02_002: "Saisie Retour Ensemble Produit ",
-        stk_02_003: "Saisie Inventaire",
+        stk_02_002: "Saisi Retour Produit ",
+        stk_02_003: "Saisi Inventaire",
         stk_02_004: "Saisie DLC",
         stk_02_005 : "Transfert Interne Dépot",
         ord: "Commande",                
-        ord_01: "Document Saissie",
-        ord_01_001: "Saissie Vente",
-        ord_01_002: "Saissir Commande",
-        ord_01_003: "Saissir Commande Groupée",
+        ord_01: "Document Saisi",
+        ord_01_001: "Saisie Vente",
+        ord_01_002: "Saisir Commande",
+        ord_01_003: "Saisir Commande Groupée",
         irs: "BL et Retour",
-        irs_01: "Document Saissie",
-        irs_01_001: "Saissie Retour",
-        irs_01_002 : "Saisie BL. d'Achat",
-        irs_01_003 : "Saisie BL de Vente",
-        irs_01_004 : "Saisie BL Interne Magasin"
+        irs_01: "Document Saisi",
+        irs_01_001: "Saisi Retour",
+        irs_01_002 : "Saisi BL. d'Achat",
+        irs_01_003 : "Saisi BL de Vente",
+        irs_01_004 : "Saisi BL Interne Magasin"
     },
     login:
     {
         login:"Connexion",
-        logout : "Sortir",
+        logout : "Quitter",
         selectUser : "Sélection de l'utilisateur",
     },
     stk_01_001 : // "Fiyat Gör"
     {
         btnDropmenu : "Transactions",
-        txtRefRefno : "Serie-Séquence",
+        txtRefRefno : "Série-Séquence",
         design : "Design",
         txtPage : "Page",
         txtFreeLabel : "Espace libre",
@@ -83,17 +83,17 @@ export const langFr =
         btnNew : "Nouveau",
         btnDelete : "Efface",
         btnDeleteRow : "Effacer la ligne",
-        btnBarcodeEntry : "Saisie de code-barres",
+        btnBarcodeEntry : "Saisi de code-barres",
         validDesign : "Veuillez sélectionner le modèle",
         numPrice :"Prix",
         btnAddPrice: "Ajoutez prix",
         btnChangePrice: "Change le prix",
         txtNewBarcode : "Nouveau code-barres",
         txtOldBarcode : "Code-barres valide",
-        btnAddBarcode : "Ajoutez code barre ",
+        btnAddBarcode : "Ajoutez code-barres ",
         popBarcodeAdd : 
         {
-            title : "Ajoutez barre code"
+            title : "Ajoutez barre-codes"
         },
         popItemCode : 
         {
@@ -143,20 +143,20 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonnez",
-            msg: "Êtes-vous sûr de vouloir vous inscrire?"
+            msg: "Êtes-vous sûr de vouloir vous enregistrer?"
         },
         msgSaveResult:
         {
             title: "Attention",
             btn01: "OK",
-            msgSuccess: "Votre inscription est réussie !",
-            msgFailed: "Votre inscription a échoué !"
+            msgSuccess: "Votre enregistrement est réussie !",
+            msgFailed: "Votre enregistrement a échoué !"
         },
         msgSaveValid:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "S'il vous plaît remplir les champs obligatoires !"
+            msg: "Veuillez remplir les champs obligatoires !"
         },
         msgItemNotSelect:
         {
@@ -171,7 +171,7 @@ export const langFr =
             btn02: "OK",
             msg: "Code-barres introuvable !"
         },
-        txtDepot : "Depôt",
+        txtDepot : "Dépôt",
 
     },
     stk_01_002 : // "Tedarikçi Gör"
@@ -201,7 +201,7 @@ export const langFr =
     },
     stk_01_003:  // "Barkod Tanımlama"
     {
-        txtBarcode: "Barre code",
+        txtBarcode: "Code-barres",
         txtItem: "Code de stock",
         txtItemName: "Nom de stock",
         cmbBarUnit: "Unité",
@@ -243,7 +243,7 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Êtes-vous sûr de vouloir vous inscrire?"
+            msg: "Êtes-vous sûr de vouloir vous enregistrer?"
         },
         msgSaveResult:
         {
@@ -256,7 +256,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "S'il vous plaît remplir les champs obligatoires !"
+            msg: "Veuillez remplir les champs obligatoires !"
         },
         msgDelete:
         {
@@ -265,7 +265,7 @@ export const langFr =
             btn02: "Abandonne",
             msg: "Voulez-vous vraiment supprimer l'enregistrement ?"
         },
-        validCode :"Doit choisir le stock",
+        validCode :"Veuillez choisir le stock",
     },
     stk_01_004 : // Ü.Grubu Gör-Değiştir",
     {
@@ -274,7 +274,7 @@ export const langFr =
         txtBarcode : "Barre code",
         txtBarcodePlace : "Veuillez lire le code-barres",
         btnItemEntry : "Réception de stock",
-        txtBarcodeEnter: "Saisie de code-barre",
+        txtBarcodeEnter: "Saisi Code-barres",
         cmbItemGrp: "Groupe de produits",
         thisGrp :"Groupe disponible",
         popItemCode : 
@@ -293,8 +293,8 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msgSuccess: "Votre inscription est réussie !",
-            msgFailed: "Votre inscription a échoué !"
+            msgSuccess: "Votre enregistrement est réussie !",
+            msgFailed: "Votre enregistrement a échoué !"
         },
         msgItemNotSelect:
         {
@@ -312,17 +312,17 @@ export const langFr =
     stk_01_005 : // Fiyat Değiştir",
     {
         btnDropmenu : "Transactions",
-        txtRefRefno : "Serie-Séquence",
+        txtRefRefno : "Réf.No",
         chkAutoAdd : "Ajout automatique",
         AddItems : "Ajout",
-        txtBarcode : "Ajout de code barre",
+        txtBarcode : "Ajout de Code-barres",
         txtBarcodePlace : "Veuillez scanner le code-barres",
         btnSave : "Enregistrez",
         btnNew : "Nouveau",
         btnDelete : "Effacez",
         btnDeleteRow : "Supprimer la ligne",
         btnBarcodeEntry : "Saisie de code-barres",
-        validDesign : "S'il vous plaît choisisez le design",
+        validDesign : "Veuillez choisir le design",
         numPrice :"Prix",
         btnAddPrice: "Ajouter un nouveau prix",
         btnChangePrice: "Change le prix",
@@ -370,14 +370,14 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msgSuccess: "Votre inscription est réussie !",
-            msgFailed: "Votre inscription a échoué !"
+            msgSuccess: "Votre enregistrement est réussie !",
+            msgFailed: "Votre enregistrement a échoué !"
         },
         msgSaveValid:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "S'il vous plaît remplir les champs obligatoires !"
+            msg: "Veuillez remplir les champs obligatoires !"
         },
         msgItemNotSelect:
         {
@@ -391,7 +391,7 @@ export const langFr =
             btn01: "OK",
             msg: "Code-barres introuvable !"
         },
-        txtDepot : "Depôt",
+        txtDepot : "Dépôt",
         msgCostPriceValid:
         {
             title: "Attention",
@@ -402,7 +402,7 @@ export const langFr =
     stk_01_006 : // "Ajoutez code barre",
     {
         btnDropmenu : "Transactions",
-        txtRefRefno : "Serie-Séquence",
+        txtRefRefno : "Réf.-Réf.No.",
         chkAutoAdd : "Ajout auto",
         AddItems : "Ajoutez",
         txtBarcode : "Ajouter un code-barres",
@@ -411,7 +411,7 @@ export const langFr =
         btnNew : "Nouveau",
         btnDelete : "Effacez",
         btnDeleteRow : "Supprimer la ligne",
-        btnBarcodeEntry : "Saisie de code-barres",
+        btnBarcodeEntry : "Saisi de code-barres",
         validDesign : "Veuillez sélectionner le modèle",
         numPrice :"Prix",
         btnAddPrice: "Ajouter un nouveau prix",
@@ -433,39 +433,39 @@ export const langFr =
         },
         grdBarcode :
         {
-           clmBarcode : "Barre code"
+           clmBarcode : "Code-Barres"
         },
         msgDoubleBarcode :
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Le code-barres que vous avez ajouté est disponible dans le système ! Vérifiez s'il vous plaît.."
+            msg: "Le code-barres que vous avez ajouté est présent dans le système ! Veuillez vérifier .."
         },
         msgSave:
         {
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonnez",
-            msg: "Êtes-vous sûr de vouloir vous inscrire?"
+            msg: "Êtes-vous sûr de vouloir vous enregistrer?"
         },
         msgSaveResult:
         {
             title: "Attention",
             btn01: "OK",
-            msgSuccess: "Votre inscription est réussie !",
-            msgFailed: "Votre inscription a échoué !"
+            msgSuccess: "Votre enregistrement est réussi !",
+            msgFailed: "Votre enregistrement a échoué !"
         },
         msgSaveValid:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "S'il vous plaît remplir les champs obligatoires !"
+            msg: "Veuillez remplir les champs obligatoires !"
         },
         msgItemNotSelect:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Sélectionnez Stock !"
+            msg: "Sélectionner Stock !"
         },
         msgBarcodeNotFound:
         {
@@ -479,12 +479,12 @@ export const langFr =
     stk_01_007 : // "Ü.Grubu Güncelle",
     {
         chkAllItems : "Tous les produits",
-        chkAutoAdd : "Ajout autmatique",
+        chkAutoAdd : "Ajout automatique",
         btnChangeGroup : "Changer de groupe de produits",
-        txtBarcode : "Barre code",
+        txtBarcode : "Code-barres",
         txtBarcodePlace : "Veuillez scanner le code-barres",
         btnItemEntry : "Réception de stock",
-        txtBarcodeEnter: "Saisie de code-barres",
+        txtBarcodeEnter: "Saisi de code-barres",
         cmbItemGrp: "Groupe de produits",
         thisGrp :"Groupe sélectionné",
         btnUpdate :"Mettre à jour",
@@ -506,14 +506,14 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msgSuccess: "Votre inscription est réussie !",
-            msgFailed: "Votre inscription a échoué !"
+            msgSuccess: "Votre enregistrement est réussie !",
+            msgFailed: "Votre enregistrement a échoué !"
         },
         msgItemNotSelect:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Sélectionnez Stock !"
+            msg: "Sélectionner Stock !"
         },
         msgBarcodeNotFound:
         {
@@ -529,40 +529,40 @@ export const langFr =
     stk_02_001 : // "Etiket Basımı",
     {
         btnDropmenu : "Transactions",
-        txtRefRefno : "Série Séquences",
+        txtRefRefno : "Réf.-Réf.No.",
         design : "Design",
         txtPage : "Page",
         txtFreeLabel : "Espace libre",
-        txtLineCount : "Lire la ligne",
+        txtLineCount : "Ligne scannée",
         chkLastChange : "Modifications depuis la dernière date d'impression",
         chkSelectChange : "Changements depuis la date sélectionnée",
         chkGroup : "Groupe",
-        chkCustomer : "Produits du fournisseur",
+        chkCustomer : "Produits fournisseur",
         chkAllItems : "Tous les produits",
-        chkAutoAdd : "Ajoutez automatiquement",
-        AddItems : "Ajoutez",
-        txtBarcode : "Ajoutez code barre",
+        chkAutoAdd : "Ajouter automatiquement",
+        AddItems : "Ajouter",
+        txtBarcode : "Ajouter code-barres",
         txtBarcodePlace : "Veuillez scanner le code-barres",
-        btnSave : "Enregistrez",
+        btnSave : "Enregistrer",
         btnNew : "Nouveau",
-        btnDelete : "Effacez",
+        btnDelete : "Effacer",
         btnDeleteRow : "Effacer la ligne",
-        btnBarcodeEntry : "Saisie de code-barres",
+        btnBarcodeEntry : "Saisi de code-barres",
         btnDocument : "Lignes de transaction",
         validDesign : "Veuillez sélectionner le modèle",
         numPrice :"Prix",
-        btnItemAdd: "Ajoutez",
+        btnItemAdd: "Ajouter",
         msgDesignSelect:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez sélectionner la conception.."
+            msg: "Veuillez sélectionner le design.."
         },
         pg_Docs : 
         {
             title : "Sélection de documents",
-            clmRef : "Série",
-            clmRefNo : "Séquence",
+            clmRef : "Réf.",
+            clmRefNo : "Réf.No.",
         },
         pg_txtItemsCode : 
         {
@@ -573,7 +573,7 @@ export const langFr =
         grdLblPrinting :
         {
             clmItemCode: "Code",
-            clmBarcode : "Barre code",
+            clmBarcode : "Code-Barres",
             clmItemName: "Nom",
             clmPrice :"Prix",
         },
@@ -587,13 +587,13 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "L'inventaire ne peut pas être saisi avant que les en-têtes de document ne soient terminés !"
+            msg: "L'inventaire ne peut pas être saisi avant que les en-têtes de document ne soient terminées !"
         },
         msgNotSave:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Le document a été modifié ! Veuillez enregistrer ou annuler les modifications"
+            msg: "Le document à été modifié ! Veuillez enregistrer ou annuler les modifications"
         },
         msgAddItems:
         {
@@ -607,20 +607,20 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Êtes-vous sûr de vouloir vous inscrire?"
+            msg: "Êtes-vous sûr de vouloir vous enregistrer?"
         },
         msgSaveResult:
         {
             title: "Attention",
             btn01: "OK",
-            msgSuccess: "Votre inscription est réussie !",
-            msgFailed: "Votre inscription a échoué !"
+            msgSuccess: "Votre enregistrement est réussie !",
+            msgFailed: "Votre enregistrement a échoué !"
         },
         msgSaveValid:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "S'il vous plaît remplir les champs obligatoires !"
+            msg: "Veuillez remplir les champs obligatoires !"
         },
         msgDelete:
         {
@@ -678,10 +678,10 @@ export const langFr =
         },
         popBarcodeEntry : 
         {
-            title : "Saisie de code-barres"
+            title : "Saisi de code-barres"
         },
-        validRef :"La série ne peut pas être vide",
-        validRefNo : "La Séquence ne peut pas être vide",
+        validRef :"La réf. ne peut pas être vide",
+        validRefNo : "Réf.No. ne peut pas être vide",
         validDepot : "Vous devez choisir l'entrepôt",
         validCustomerCode : "Le code actuel ne peut pas être vide",
         validDocDate : "Vous devez choisir une date",
@@ -689,22 +689,22 @@ export const langFr =
     },
     stk_02_002 : //"İade Ürün Toplama",
     {
-        btnBarcodeEntry :"Saisie de code-barres",
+        btnBarcodeEntry :"Saisi de code-barres",
         btnDocument : "Lignes de transaction",
         btnNew : "Nouveau document",
-        btnSave : "Enregistrez",
+        btnSave : "Enregistrer",
         btnDropmenu : "Transactions",
-        txtRefRefno : "Série Séquence",
+        txtRefRefno : "Réf.-Réf.No.",
         cmbDepot1: "Entrepôt de sortie",
         cmbDepot2: "Entrepôt de retour",
         dtDocDate : "Date",
-        getRebate :"Obtenir de l'entrepôt de retour",
+        getRebate :"Recherche de l'entrepôt de retour",
         txtBarcode : "Ajouter un code-barres",
         pg_Docs : 
         {
             title : "Sélection de documents",
-            clmRef : "Série",
-            clmRefNo : "Séquence",
+            clmRef : "Réf.",
+            clmRefNo : "Réf.No.",
             clmDocDate : "Date",
             clmInputName : "Entrée",
             clmOutputName : "Sortie",
@@ -721,11 +721,11 @@ export const langFr =
             clmItemName: "Nom",
             clmQuantity : "Quantité",
             clmCreateDate: "Date d'enregistrement",
-            clmDescription :"Explication"
+            clmDescription :"Information"
         },
         popPassword : 
         {
-            title: "Vous devez entrer le mot de passe administrateur pour ouvrir le document.",
+            title: "Vous devez entrer le mot de passe administrateur pour accéder au document.",
             Password :"Code",
             btnApprove : "Approuver"
         },
@@ -753,20 +753,20 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Êtes-vous sûr de vouloir vous inscrire?"
+            msg: "Êtes-vous sûr de vouloir vous enregistrer?"
         },
         msgSaveResult:
         {
             title: "Attention",
             btn01: "OK",
-            msgSuccess: "Votre inscription est réussie !",
-            msgFailed: "Votre inscription a échoué !"
+            msgSuccess: "Votre enregistrement est réussie !",
+            msgFailed: "Votre enregistrement a échoué !"
         },
         msgSaveValid:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "S'il vous plaît remplir les champs obligatoires !"
+            msg: "Veuillez remplir les champs obligatoires !"
         },
         msgDelete:
         {
@@ -783,7 +783,7 @@ export const langFr =
         },
         msgPasswordSucces:
         {
-            title: "Réussis !",
+            title: "Réussi !",
             btn01: "OK",
             msg: "Document déverrouillé !",
         },
@@ -818,12 +818,12 @@ export const langFr =
             btn02: "Changer",
             msg: "Le produit que vous souhaitez ajouter est dans le document ! Fusionner les lignes ?"
         },
-        validRef :"La série ne peut pas être vide",
-        validRefNo : "Séquence ne peut pas être vide",
+        validRef :"La réf. ne peut pas être vide",
+        validRefNo : "Réf.No. ne peut pas être vide",
         validDepot : "Vous devez sélectionner Entrepôt",
         validCustomerCode : "Le code actuel ne peut pas être vide",
         validDocDate : "Vous devez choisir une date",
-        btnItemAdd: "Ajoutez",
+        btnItemAdd: "Ajouter",
         msgDepotSelect:
         {
             title: "Attention",
@@ -838,30 +838,30 @@ export const langFr =
         },
         txtBarcodePlace : "Veuillez scanner le code-barres",
         txtQuantity : "Quantité",
-        chkAutoAdd : "Ajoutez automatiquement",
+        chkAutoAdd : "Ajouter automatiquement",
     },
     stk_02_003 : //"Depolar Arası Sevk",
     {
-        btnBarcodeEntry :"Saisie de code-barres",
+        btnBarcodeEntry :"Saisi de code-barres",
         btnDocument :"Lignes d'opération",
         btnNew : "Nouveau document",
-        btnSave : "Enregistrez",
+        btnSave : "Enregistrer",
         btnDropmenu : "Transactions",
-        txtRefRefno : "Série Séquence",
-        cmbDepot: "Depôt",
+        txtRefRefno : "Réf.Réf.No.",
+        cmbDepot: "Dépôt",
         dtDocDate : "Date",
-        txtBarcode : "Ajoutez code barre",
+        txtBarcode : "Ajouter code-barres",
         pg_Docs : 
         {
             title : "Sélection de documents",
-            clmRef : "Série",
-            clmRefNo : "Séquence",
+            clmRef : "Réf.",
+            clmRefNo : "Réf.No.",
             clmDocDate : "Date",
         },
         pg_txtItemsCode : 
         {
             title : "Choix de stock",
-            clmCode :  "COde se sttock",
+            clmCode :  "Code se stock",
             clmName : "Nom de stock",
         },
         grdItemCount: 
@@ -884,27 +884,27 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Barre code introuvable !"
+            msg: "Code-barres introuvable !"
         },
         msgSave:
         {
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Êtes-vous sûr de vouloir vous inscrire?"
+            msg: "Êtes-vous sûr de vouloir vous enregistrer?"
         },
         msgSaveResult:
         {
             title: "Attention",
             btn01: "OK",
-            msgSuccess: "Votre inscription est réussie !",
-            msgFailed: "Votre inscription a échoué !"
+            msgSuccess: "Votre enregistrement est réussie !",
+            msgFailed: "Votre enregistrement a échoué !"
         },
         msgSaveValid:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "S'il vous plaît remplir les champs obligatoires !"
+            msg: "Veuillez remplir les champs obligatoires !"
         },
         msgDelete:
         {
@@ -921,7 +921,7 @@ export const langFr =
         },
         msgPasswordSucces:
         {
-            title: "Réussis",
+            title: "Réussi",
             btn01: "OK",
             msg: "Document déverrouillé !",
         },
@@ -960,14 +960,14 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Les entrepôts d'entrée et de sortie ne peuvent pas être les mêmes !"
+            msg: "Les entrepôts d'entrée et de sortie ne peuvent pas être identiques !"
         },
         validRef :"La série ne peut pas être vide",
         validRefNo : "La file d'attente ne peut pas être vide",
         validDepot : "Vous devez choisir l'entrepôt",
         validCustomerCode : "Le code actuel ne peut pas être vide",
         validDocDate : "Vous devez choisir une date",
-        btnItemAdd: "Ajoutez",
+        btnItemAdd: "Ajouter",
         msgDepotSelect:
         {
             title: "Attention",
@@ -982,18 +982,18 @@ export const langFr =
         },
         txtBarcodePlace : "Veuillez scanner le code-barres",
         txtQuantity : "Quantité",
-        chkAutoAdd : "Ajoutez automatiquement",
+        chkAutoAdd : "Ajouter automatiquement",
     },
     stk_02_004 : // "Skt Girişi",
     {
         txtBarcodePlace : "Veuillez scanner le code-barres",
-        btnSave : "Enregistrez",
+        btnSave : "Enregistrer",
         btnNew : "Nouveau",
-        btnDelete : "Effacez",
+        btnDelete : "Effacer",
         btnDropmenu : "Transactions",
         txtQuantity : "Quantité",
         dtlastDate :"Date DLC",
-        btnItemAdd : "Ajoutez",
+        btnItemAdd : "Ajouter",
         grdExpDate:
         {
             clmDate: "Date DLC",
@@ -1005,26 +1005,26 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Êtes-vous sûr de vouloir vous inscrire?"
+            msg: "Êtes-vous sûr de vouloir vous enregistrer?"
         },
         msgSaveResult:
         {
             title: "Attention",
             btn01: "OK",
-            msgSuccess: "Votre inscription est réussie !",
-            msgFailed: "Votre inscription a échoué !"
+            msgSuccess: "Votre enregistrement est réussie !",
+            msgFailed: "Votre enregistrement a échoué !"
         },
         msgItemNotSelect:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Sélectionnez le stock !"
+            msg: "Sélectionner le stock !"
         },
         msgBarcodeNotFound:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Barre code introuvable"
+            msg: "Code-barres introuvable"
         },
         msgZeroQuantity:
         {
@@ -1053,17 +1053,17 @@ export const langFr =
         btnNew : "Nouveau document",
         btnSave : "Enregistrez",
         btnDropmenu : "Transactions",
-        txtRefRefno : "Série Séquence",
+        txtRefRefno : "Réf.-Réf.No",
         cmbDepot1: "Entrepôt de sortie",
         cmbDepot2: "Entrepôt d'entrée",
         dtDocDate : "Date",
         getRebate :"Obtenir de l'entrepôt de retour",
-        txtBarcode : "Ajoutez code barre",
+        txtBarcode : "Ajouter code barre",
         pg_Docs : 
         {
             title : "Sélection de documents",
-            clmRef : "Série",
-            clmRefNo : "Séquence",
+            clmRef : "Réf.",
+            clmRefNo : "Réf.No.",
             clmDocDate : "Date",
             clmInputName : "Entrée",
             clmOutputName : "Sortie",
@@ -1080,11 +1080,11 @@ export const langFr =
             clmItemName: "Nom",
             clmQuantity : "Quantité",
             clmCreateDate: "Date d'enregistrement",
-            clmDescription :"Explication"
+            clmDescription :"Information"
         },
         popPassword : 
         {
-            title: "Vous devez entrer le mot de passe administrateur pour ouvrir le document.",
+            title: "Vous devez entrer le mot de passe administrateur accéder au document.",
             Password :"Code",
             btnApprove : "Approuver"
         },
@@ -1097,7 +1097,7 @@ export const langFr =
         msgBigQuantity:
         {
             title: "Attention",
-            btn01: "Ajoutez",
+            btn01: "Ajouter",
             btn02: "Abandonner",
             msg: "Voulez-vous vraiment ajouter un montant ?"
         },
@@ -1105,27 +1105,27 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Barre code introuvable"
+            msg: "Code-barres introuvable"
         },
         msgSave:
         {
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Êtes-vous sûr de vouloir vous inscrire?"
+            msg: "Êtes-vous sûr de vouloir vous enregistrer?"
         },
         msgSaveResult:
         {
             title: "Attention",
             btn01: "OK",
-            msgSuccess: "Votre inscription est réussie !",
-            msgFailed: "Votre inscription a échoué !"
+            msgSuccess: "Votre enregistrement est réussie !",
+            msgFailed: "Votre enregistrement a échoué !"
         },
         msgSaveValid:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "S'il vous plaît remplir les champs obligatoires !"
+            msg: "Veuillez remplir les champs obligatoires !"
         },
         msgDelete:
         {
@@ -1142,7 +1142,7 @@ export const langFr =
         },
         msgPasswordSucces:
         {
-            title: "Réussite",
+            title: "Réussi",
             btn01: "OK",
             msg: "Document déverrouillé !",
         },
@@ -1181,14 +1181,14 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Les entrepôts d'entrée et de sortie ne peuvent pas être les mêmes !"
+            msg: "Les entrepôts d'entrée et de sortie ne peuvent pas être identiques !"
         },
-        validRef :"Série ne peut pasêtre vide",
-        validRefNo : "Séquence ne peut pas être vide",
-        validDepot : "Choisisez l'entrepôt",
+        validRef :"Réf. ne peut pas être vide",
+        validRefNo : "Réf.No. ne peut pas être vide",
+        validDepot : "Choisissez l'entrepôt",
         validCustomerCode : "Le code actuel ne peut pas être vide",
         validDocDate : "Choisissez une date",
-        btnItemAdd: "Ajoutez",
+        btnItemAdd: "Ajouter",
         msgDepotSelect:
         {
             title: "Attention",
@@ -1208,11 +1208,11 @@ export const langFr =
     ord_01_001 : // "Satış Sipariş
     {
         btnDropmenu : "Transactions",
-        txtRefRefno : "Série Séquence",
-        txtCustomerCode : "Cari Kodu",
-        txtCustomerName : "Cari Adı",
+        txtRefRefno : "Réf.-Réf.No.",
+        txtCustomerCode : "Code client",
+        txtCustomerName : "Nom client",
         txtPage : "Page",
-        txtDepot : "Depôt",
+        txtDepot : "Dépôt",
         txtDate : "Date",
         txtAmount : "Montant",
         txtDiscount : "Promotion",
@@ -1222,18 +1222,18 @@ export const langFr =
         chkGroup : "Groupe",
         chkCustomer : "Produits du fournisseur",
         chkAllItems : "Tous les produits",
-        chkAutoAdd : "Ajouter automatiqueme",
-        AddItems : "Ajoutez",
-        txtBarcode : "Ajoutez code barre",
+        chkAutoAdd : "Ajouter automatiquement",
+        AddItems : "Ajouter",
+        txtBarcode : "Ajouter Code-barreS",
         txtBarcodePlace : "Veuillez scanner le code-barres",
-        btnSave : "Enregistrez",
+        btnSave : "Enregistrer",
         btnNew : "Nouveau",
         btnDelete : "Effacer",
         btnDeleteRow : "Effacer ligne",
         btnBarcodeEntry : "Saisie de code-barres",
         btnDocument :"Lignes d'opération",
-        btnItemAdd: "Ajoutez",
-        txtGrandTotal : "le total général",
+        btnItemAdd: "AjouteR",
+        txtGrandTotal : "Total général",
         msgCustomerSelect:
         {
             title: "Attention",
@@ -1243,7 +1243,7 @@ export const langFr =
         msgQuantity:
         {
             title: "Quantité",
-            btn01: "Ajoutez",
+            btn01: "AjouteR",
             msg: "Entrée une quantité"
         },
         msgDepotSelect:
@@ -1255,8 +1255,8 @@ export const langFr =
         pg_Docs : 
         {
             title : "Sélection de documents",
-            clmRef : "Série",
-            clmRefNo : "Séquence",
+            clmRef : "Réf.",
+            clmRefNo : "Réf.No.",
             clmInputName : "Nom de fournisseur",
             clmInputCode  : "Code de fournisseur",
         },
@@ -1286,7 +1286,7 @@ export const langFr =
             clmAmount : "Montant",
             clmTotal : "Total général",
             clmCreateDate: "Date d'enregistrement",
-            clmMargin :"Marje"
+            clmMargin :"Marge"
         },
         popItemCode : 
         {
@@ -1318,20 +1318,20 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Êtes-vous sûr de vouloir vous inscrire?"
+            msg: "Êtes-vous sûr de vouloir vous enregistrer?"
         },
         msgSaveResult:
         {
             title: "Attention",
             btn01: "OK",
-            msgSuccess: "Votre inscription est réussie !",
-            msgFailed: "Votre inscription a échoué !"
+            msgSuccess: "Votre enregistrement est réussie !",
+            msgFailed: "Votre enregistrement a échoué !"
         },
         msgSaveValid:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "S'il vous plaît remplir les champs obligatoires !"
+            msg: "Veuillez remplir les champs obligatoires !"
         },
         msgDelete:
         {
@@ -1362,7 +1362,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vos produits sélectionnés ont été ajoutés !"
+            msg: "Vos produits sélectionnés ont été ajouté !"
         },
         msgDoclocked:
         {
@@ -1389,11 +1389,11 @@ export const langFr =
         },
         popBarcodeEntry : 
         {
-            title : "Saisie de code-barres"
+            title : "Saisi de code-barres"
         },
-        validRef :"Série ne peut pas être vide",
-        validRefNo : "Séquence ne peut pas être vide",
-        validDepot : "Choisisez l'entrepôt",
+        validRef :"Réf. ne peut pas être vide",
+        validRefNo : "Réf.No. ne peut pas être vide",
+        validDepot : "Choisissez l'entrepôt",
         validCustomerCode : "Le code actuel ne peut pas être vide",
         validDocDate : "Vous devez choisir une date",
         popDiscount : 
@@ -1406,30 +1406,30 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Aucune grande remise ne peut être faite à partir du montant !"
+            msg: "La remise ne peut être supérieure au montant total !"
         },
         msgDiscountPercent:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Aucune grande remise ne peut être faite à partir du montant !"
+            msg: "La remise ne peut être supérieure au montant total!"
         },
         msgVatDelete:
         {
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Voulez-vous vraiment réinitialiser la taxe ?!"
+            msg: "Voulez-vous vraiment réinitialiser la taxe ?"
         },
     },
     ord_01_002 : // "Alış Sipariş",
     {
         btnDropmenu : "Transactions",
-        txtRefRefno : "Série Séquence",
+        txtRefRefno : "Réf.-Réf.No.",
         txtCustomerCode : "Code de fournisseur",
         txtCustomerName : "Nom de fournisseur",
         txtPage : "Page",
-        txtDepot : "Depôt",
+        txtDepot : "Dépôt",
         txtDate : "Date",
         txtAmount : "Montant",
         txtDiscount : "Promotion",
@@ -1439,18 +1439,18 @@ export const langFr =
         chkGroup : "Groupe",
         chkCustomer : "Produits du fournisseur",
         chkAllItems : "Tous les produits",
-        chkAutoAdd : "Ajoutez automatiquement",
-        AddItems : "Ajoutez",
-        txtBarcode : "Ajoutez code barre",
+        chkAutoAdd : "Ajouter automatiquement",
+        AddItems : "Ajouter",
+        txtBarcode : "Ajouter code-barres",
         txtBarcodePlace : "Veuillez scanner le code-barres",
-        btnSave : "Enregistrez",
+        btnSave : "Enregistrer",
         btnNew : "Nouveau",
-        btnDelete : "Effacez",
-        btnDeleteRow : "Effacez la ligne",
-        btnBarcodeEntry : "Saisie de code-barres",
+        btnDelete : "Effacer",
+        btnDeleteRow : "Effacer la ligne",
+        btnBarcodeEntry : "Saisi de code-barres",
         btnDocument :"Lignes d'opération",
-        btnItemAdd: "Ajoutez",
-        txtGrandTotal : "le total général",
+        btnItemAdd: "Ajouter",
+        txtGrandTotal : "Total général",
         msgCustomerSelect:
         {
             title: "Attention",
@@ -1459,7 +1459,7 @@ export const langFr =
         },
         popUnderPrice:
         {
-            title: "Prix ​​des fournisseurs",
+            title: "Prix ​​fournisseurs",
         },
         msgDepotSelect:
         {
@@ -1470,8 +1470,8 @@ export const langFr =
         pg_Docs : 
         {
             title : "Sélection de documents",
-            clmRef : "Série",
-            clmRefNo : "Séquence",
+            clmRef : "Réf.",
+            clmRefNo : "Réf.No.",
             clmOutputName : "Nom du fourniseur",
             clmOutputCode  : "Code du fournisseur",
         },
@@ -1483,17 +1483,17 @@ export const langFr =
         },
         pg_CustomerSelect :
         {
-            title : "Sélection actuelle",
-            clmCode :  "Code du fournisseur",
-            clmTitle : "Nom du fournisseur",
+            title : "Sélection client",
+            clmCode :  "Code fournisseur",
+            clmTitle : "Nom fournisseur",
             clmTypeName : "Type",
-            clmGenusName : "Type"
+            clmGenusName : "Genre"
         },
         msgQuantity:
         {
             title: "Quantité",
-            btn01: "Ajoutez",
-            msg: "Entrez la quantité"
+            btn01: "Ajouter",
+            msg: "Entrer la quantité"
         },
         pg_txtItemsCode : 
         {
@@ -1511,9 +1511,9 @@ export const langFr =
             clmDiscountRate : "Promotion %",
             clmVat : "TVA",
             clmAmount : "Montant",
-            clmTotal : "TOtal général",
+            clmTotal : "Total général",
             clmCreateDate: "Date d'enregistrement",
-            clmMargin :"Marje"
+            clmMargin :"Marge"
         },
         popItemCode : 
         {
@@ -1545,20 +1545,20 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Êtes-vous sûr de vouloir vous inscrire?"
+            msg: "Êtes-vous sûr de vouloir vous enregistrer?"
         },
         msgSaveResult:
         {
             title: "Attention",
             btn01: "OK",
-            msgSuccess: "Votre inscription est réussie !",
-            msgFailed: "Votre inscription a échoué !"
+            msgSuccess: "Votre enregistrement est réussie !",
+            msgFailed: "Votre enregistrement a échoué !"
         },
         msgSaveValid:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "S'il vous plaît remplir les champs obligatoires !"
+            msg: "Veuillez remplir les champs obligatoires !"
         },
         msgDelete:
         {
@@ -1589,7 +1589,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vos produits sélectionnés ont été ajoutés !"
+            msg: "Vos produits sélectionnés ont été ajouté !"
         },
         msgDoclocked:
         {
@@ -1618,28 +1618,28 @@ export const langFr =
         {
             title : "Saisie de code-barres"
         },
-        validRef :"La série ne peut pas être vide",
-        validRefNo : "Séquence ne peut pas être vide",
+        validRef :"La réf. ne peut pas être vide",
+        validRefNo : "Réf.No. ne peut pas être vide",
         validDepot : "Veuillez choisir l'entrepôt",
         validCustomerCode : "Le code fournisseur ne peut pas être vide",
         validDocDate : "Vous devez choisir une date",
         popDiscount : 
         {
             title: "Remise sur les documents",
-            Percent : "Purcentage",
+            Percent : "Pourcentage",
             Price : "Montant"
         },
         msgDiscountPrice:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Aucune grande remise ne peut être faite à partir du montant !"
+            msg: "La remise ne peut être supérieure au montant total!"
         },
         msgDiscountPercent:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Aucune grande remise ne peut être faite à partir du montant !"
+            msg: "La remise ne peut être supérieure au montant total !"
         },
         msgVatDelete:
         {
@@ -1653,17 +1653,17 @@ export const langFr =
             title: "Attention",
             btn01: "Continuez",
             btn02: "Abandonner",
-            msg: "La concubine du produit sélectionné n'est pas définie ! Voulez-vous continuer ?"
+            msg: "Le fournisseur du produit sélectionné n'est pas défini ! Voulez-vous continuer ?"
         },
     },
     ord_01_003 : // "Toplu Sipariş",
     {
         btnDropmenu : "Transactions",
-        txtRefRefno : "Série Séquence",
-        txtCustomerCode : "Cari Kodu",
-        txtCustomerName : "Cari Adı",
+        txtRefRefno : "Réf.-Réf.No.",
+        txtCustomerCode : "Code client",
+        txtCustomerName : "Nom client",
         txtPage : "Page",
-        txtDepot : "Depôt",
+        txtDepot : "Dépôt",
         txtDate : "Date",
         txtAmount : "Montant",
         txtDiscount : "Promotion",
@@ -1673,18 +1673,18 @@ export const langFr =
         chkGroup : "Groupe",
         chkCustomer : "Produits du fournisseur",
         chkAllItems : "Tous les produits",
-        chkAutoAdd : "Ajout autmatique",
-        AddItems : "Ajoutez",
-        txtBarcode : "Ajoutez code barre",
+        chkAutoAdd : "Ajout automatique",
+        AddItems : "Ajouter",
+        txtBarcode : "Ajouter code barre",
         txtBarcodePlace : "Veuillez scanner le code-barres",
-        btnSave : "Enregistrez",
+        btnSave : "Enregistrer",
         btnNew : "Nouveau",
         btnDelete : "Effacer",
         btnDeleteRow : "Effacer la ligne",
-        btnBarcodeEntry : "Entrée de barre code",
+        btnBarcodeEntry : "Entrée de code-barres",
         btnDocument :"Lignes d'opération",
-        btnItemAdd: "Ajoutez",
-        txtGrandTotal : "total générale",
+        btnItemAdd: "Ajouter",
+        txtGrandTotal : "Total général",
         msgCustomerSelect:
         {
             title: "Attention",
@@ -1700,8 +1700,8 @@ export const langFr =
         pg_Docs : 
         {
             title : "Sélection de documents",
-            clmRef : "Série",
-            clmRefNo : "Séquence",
+            clmRef : "r2F.",
+            clmRefNo : "Réf.No.",
             clmOutputName : "Nom de stock",
             clmOutputCode  : "Code de stock",
         },
@@ -1713,17 +1713,17 @@ export const langFr =
         },
         pg_CustomerSelect :
         {
-            title : "Sélection actuelle",
-            clmCode :  "Code de fournisseur",
-            clmTitle : "Nom du fournisseur",
+            title : "Sélection actuel",
+            clmCode :  "Code fournisseur",
+            clmTitle : "Nom fournisseur",
             clmTypeName : "Type",
-            clmGenusName : "Type"
+            clmGenusName : "Genre"
         },
         msgQuantity:
         {
             title: "Quantité",
-            btn01: "Ajoutez",
-            msg: "Ajoutez une quantité"
+            btn01: "Ajouter",
+            msg: "Ajouter une quantité"
         },
         pg_txtItemsCode : 
         {
@@ -1743,12 +1743,12 @@ export const langFr =
             clmAmount : "Montant",
             clmTotal : "Total général",
             clmCreateDate: "Date d'enregistrement",
-            clmMargin :"Marje"
+            clmMargin :"Marge"
         },
         popItemCode : 
         {
             title : "Choix de stock",
-            clmCode :  "Code de stck",
+            clmCode :  "Code de stock",
             clmName : "Nom de stock",
         },
         msgDocValid:
@@ -1775,20 +1775,20 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Êtes-vous sûr de vouloir vous inscrire?"
+            msg: "Êtes-vous sûr de vouloir vous enregistrer?"
         },
         msgSaveResult:
         {
             title: "Attention",
             btn01: "OK",
-            msgSuccess: "Votre inscription est réussie !",
-            msgFailed: "Votre inscription a échoué !"
+            msgSuccess: "Votre enregistrement est réussi !",
+            msgFailed: "Votre enregistrement a échoué !"
         },
         msgSaveValid:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "S'il vous plaît remplir les champs obligatoires !"
+            msg: "Veuillez remplir les champs obligatoires !"
         },
         msgDelete:
         {
@@ -1819,7 +1819,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vos produits sélectionnés ont été ajoutés !"
+            msg: "Vos produits sélectionnés ont été ajouté !"
         },
         msgDoclocked:
         {
@@ -1846,16 +1846,16 @@ export const langFr =
         },
         popBarcodeEntry : 
         {
-            title : "Saisie de code-barres"
+            title : "Saisi de code-barres"
         },
-        validRef :"Série ne peut pas être vide",
-        validRefNo : "Séquence ne peut pas être vide",
+        validRef :"Réf. ne peut pas être vide",
+        validRefNo : "Réf.No. ne peut pas être vide",
         validDepot : "Veuillez choisir l'entrepôt",
         validCustomerCode : "Le code fournisseur ne peut pas être vide",
         validDocDate : "Vous devez choisir une date",
         popDiscount : 
         {
-            title: "Remise sur les documents",
+            title: "Remise sur documents",
             Percent : "Pourcentage",
             Price : "Montant"
         },
@@ -1863,13 +1863,13 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Aucune grande remise ne peut être faite à partir du montant !"
+            msg: "La remise ne peut être supérieure au montant total !"
         },
         msgDiscountPercent:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Aucune grande remise ne peut être faite à partir du montant !"
+            msg: "La remise ne peut être supérieure au montant total !"
         },
         msgVatDelete:
         {
@@ -1881,44 +1881,44 @@ export const langFr =
         msgCustomerNotFound:
         {
             title: "Attention",
-            btn01: "Continuez",
+            btn01: "Continuer",
             btn02: "Abandonner",
-            msg: "La concubine du produit sélectionné n'est pas définie ! Voulez-vous continuer"
+            msg: "Le fournisseur du produit sélectionné n'est pas défini ! Voulez-vous continuer? "
         },
     },
     irs_01_001 : // "İade İrsaliyesi"
     {
         btnDropmenu : "Transactions",
-        getRebate : "Obtenir de l'entrepôt de retour",
-        txtRefRefno : "Série Séquence",
-        cmbDepot: "Depôt",
+        getRebate : "Recherche de l'entrepôt de retour",
+        txtRefRefno : "Réf.-Réf.No.",
+        cmbDepot: "Dépôt",
         txtCustomerCode : "Code du fournisseur",
         txtCustomerName : "Nom du fournisseur",
         dtDocDate : "Date",
         txtAmount : "Montant",
         txtDiscount : "Promotion",
-        txtMargin : "Marje",
+        txtMargin : "Marge",
         txtVat : "TVA",
-        txtTotal : "Total générale",
+        txtTotal : "Total général",
         txtQuantity : "Quantité",
         txtPrice :"Prix",
-        dtShipDate :"La date d'expédition",
+        dtShipDate :"Date d'expédition",
         pg_Docs : 
         {
             title : "Sélection de documents",
-            clmRef : "Série",
-            clmRefNo : "Séquence",
-            clmInputName : "Nom du fournisseur",
-            clmInputCode  : "Code du fournsseur",
+            clmRef : "Réf.",
+            clmRefNo : "Réf.No.",
+            clmInputName : "Nom fournisseur",
+            clmInputCode  : "Code fournisseur",
             clmDocDate : "Date",
         },
         pg_txtCustomerCode : 
         {
             title : "Choix du fournisseur",
-            clmCode :  "Code du fournsseur",
-            clmTitle : "Nom du fournisseur",
+            clmCode :  "Code fournisseur",
+            clmTitle : "Nom fournisseur",
             clmTypeName : "Type",
-            clmGenusName : "Type"
+            clmGenusName : "Genre"
         },
         pg_txtItemsCode : 
         {
@@ -1944,19 +1944,19 @@ export const langFr =
             clmDiscountRate : "Pourcentage",
             clmVat : "TVA",
             clmAmount : "Montant",
-            clmTotal : "Total générale",
+            clmTotal : "Total général",
             clmCreateDate: "Date d'enregistrement",
-            clmMargin :"Marje"
+            clmMargin :"Marge"
         },
         popDiscount : 
         {
-            title: "Remise sur les documents",
-            Percent : "Pourrcentage",
+            title: "Remise sur documents",
+            Percent : "Pourcentage",
             Price : "Montant"
         },
         popPassword : 
         {
-            title: "Vous devez entrer le mot de passe administrateur pour ouvrir le document.",
+            title: "Vous devez entrer le mot de passe administrateur pour accéder au document.",
             Password :"Code",
             btnApprove : "Approuver"
         },
@@ -1971,20 +1971,20 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Êtes-vous sûr de vouloir vous inscrire?"
+            msg: "Êtes-vous sûr de vouloir vous enregister?"
         },
         msgSaveResult:
         {
             title: "Attention",
             btn01: "OK",
-            msgSuccess: "Votre inscription est réussie !",
-            msgFailed: "Votre inscription a échoué !"
+            msgSuccess: "Votre enregistrement est réussie !",
+            msgFailed: "Votre enregistrement a échoué !"
         },
         msgSaveValid:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "S'il vous plaît remplir les champs obligatoires !"
+            msg: "Veuillez remplir les champs obligatoires !"
         },
         msgDelete:
         {
@@ -2004,13 +2004,13 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Aucune grande remise ne peut être faite à partir du montant !"
+            msg: "La remise ne peut être supérieure au montant total !"
         },
         msgDiscountPercent:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Aucune grande remise ne peut être faite à partir du montant!"
+            msg: "La remise ne peut être supérieure au montant total!"
         },
         msgLocked:
         {
@@ -2083,17 +2083,17 @@ export const langFr =
         {
             title: "Attention",
             btn01: "Assembler",
-            btn02: "Ajoutez a nouveau",
-            msg: "Le produit que vous souhaitez ajouter est dans le document ! Fusionner les lignes ?"
+            btn02: "Ajoutez à nouveau",
+            msg: "Le produit que vous souhaitez ajouter se trouve dans le document ! Fusionner les lignes ?"
         },
         popDesign : 
         {
-            title: " choix du Design",
+            title: " Choix du Design",
             design : "Design",
             lang : "Langue du document"
         },
-        validRef :"La série ne peut pas être vide",
-        validRefNo : "Séquence ne peut pas être vide",
+        validRef :"Réf. ne peut pas être vide",
+        validRefNo : "Réf.-Réf.No. ne peut pas être vide",
         validDepot : "Vous devez choisir l'entrepôt",
         validCustomerCode : "Le code fornisseur ne peut pas être vide",
         validDocDate : "Vous devez choisir une date",
@@ -2107,23 +2107,23 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez sélectionner Actuel.."
+            msg: "Veuillez sélectionner client.."
         },
         txtGrandTotal : "Total",
-        btnBarcodeEntry : "Saisie de code-barres",
+        btnBarcodeEntry : "Saisi de code-barres",
         btnDocument :"Lignes d'opération",
         chkAutoAdd : "Ajout automatique",
         txtBarcodePlace : "Veuillez scanner le code-barres",
-        btnSave : "Enregistrez",
+        btnSave : "Enregistrer",
         btnNew : "Nouveau",
-        btnDelete : "Effacez",
-        btnItemAdd : "Ajoutez",
+        btnDelete : "Effacer",
+        btnItemAdd : "Ajouter",
         msgCustomerNotFound:
         {
             title: "Attention",
-            btn01: "Continuez",
+            btn01: "Continuer",
             btn02: "Abandonner",
-            msg: "La concubine du produit sélectionné n'est pas définie ! Voulez-vous continuer"
+            msg: "Le fournisseur du produit sélectionné n'est pas définie ! Voulez-vous continuer"
         },
         msgQuantity:
         {
@@ -2148,35 +2148,35 @@ export const langFr =
     irs_01_002 : // "Alış İrsaliyesi"
     {
         btnDropmenu : "Transactions",
-        getRebate : "Obtenir de l'entrepôt de retour",
-        txtRefRefno : "Série Séquence",
-        cmbDepot: "Depôt",
-        txtCustomerCode : "Code de fournisseur",
-        txtCustomerName : "Nom de fournisseur",
+        getRebate : "Recherche de l'entrepôt de retour",
+        txtRefRefno : "Réf.-Réf.No.",
+        cmbDepot: "Dépôt",
+        txtCustomerCode : "Code fournisseur",
+        txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
         txtAmount : "Montant",
         txtDiscount : "Promotion",
-        txtMargin : "Marje",
+        txtMargin : "Marge",
         txtVat : "TVA",
-        txtTotal : "Total générale",
+        txtTotal : "Total général",
         txtQuantity : "Quantité",
         txtPrice :"Prix",
-        dtShipDate :"La date d'expédition",
+        dtShipDate :"Date d'expédition",
         pg_Docs : 
         {
             title : "Sélection de documents",
-            clmRef : "Série",
-            clmRefNo : "Séquence",
-            clmInputName : "Nom du fournisseur",
-            clmInputCode  : "Code du fournsseur",
+            clmRef : "Réf.",
+            clmRefNo : "Réf.No.",
+            clmInputName : "Nom fournisseur",
+            clmInputCode  : "Code fournisseur",
         },
         pg_txtCustomerCode : 
         {
             title : "Sélection actuelle",
-            clmCode :  "Code du fournsseur",
-            clmTitle : "Nom du fournisseur",
+            clmCode :  "Code fournisseur",
+            clmTitle : "Nom fournisseur",
             clmTypeName : "Type",
-            clmGenusName : "Type"
+            clmGenusName : "Genre"
         },
         pg_txtItemsCode : 
         {
@@ -2202,19 +2202,19 @@ export const langFr =
             clmDiscountRate : "Promotion %",
             clmVat : "TVA",
             clmAmount : "Montant",
-            clmTotal : "Total General",
+            clmTotal : "Total Général",
             clmCreateDate: "Date d'enregistrement",
-            clmMargin :"Marje"
+            clmMargin :"Marge"
         },
         popDiscount : 
         {
-            title: "Remise sur les documents",
+            title: "Remise sur documents",
             Percent : "Pourcentage",
             Price : "Montant"
         },
         popPassword : 
         {
-            title: "Vous devez saisir le mot de passe administrateur pour ouvrir le document",
+            title: "Vous devez saisir le mot de passe administrateur accéder au document",
             Password :"Code",
             btnApprove : "Approuver"
         },
@@ -2229,20 +2229,20 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Êtes-vous sûr de vouloir vous inscrire?"
+            msg: "Êtes-vous sûr de vouloir vous enregistrer?"
         },
         msgSaveResult:
         {
             title: "Attention",
             btn01: "OK",
-            msgSuccess: "Votre inscription est réussie !",
-            msgFailed: "Votre inscription a échoué !"
+            msgSuccess: "Votre enregistrement est réussie !",
+            msgFailed: "Votre enregistrement a échoué !"
         },
         msgSaveValid:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "S'il vous plaît remplir les champs obligatoires !"
+            msg: "Veuillez remplir les champs obligatoires !"
         },
         msgDelete:
         {
@@ -2262,13 +2262,13 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Aucune grande remise ne peut être faite à partir du montant !"
+            msg: "La remise ne peut être supérieure au montant total !"
         },
         msgDiscountPercent:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Aucune grande remise ne peut être faite à partir du montant !"
+            msg: "La remise ne peut être supérieure au montant total !"
         },
         msgLocked:
         {
@@ -2278,7 +2278,7 @@ export const langFr =
         },
         msgPasswordSucces:
         {
-            title: "Réussis !",
+            title: "Réussi !",
             btn01: "OK",
             msg: "Document déverrouillé !",
         },
@@ -2329,7 +2329,7 @@ export const langFr =
             title: "Attention",
             btn01: "Oui",
             btn02: "Abandonner",
-            msg: "Prix ​​le plus bas !! Voulez-vous continuer"
+            msg: "Prix ​​le plus bas !! Voulez-vous continuer?"
         },
         msgUnderPrice2:
         {
@@ -2341,7 +2341,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "Assembler",
-            btn02: "Ajoutez a nouveau",
+            btn02: "Ajouter à nouveau",
             msg: "Le produit que vous souhaitez ajouter est dans le document ! Fusionner les lignes ?"
         },
         popDesign : 
@@ -2350,9 +2350,9 @@ export const langFr =
             design : "Design",
             lang : "Langue du document"
         },
-        validRef :"La série ne peut pas être vide",
-        validRefNo : "La séquence ne peut pas être vide",
-        validDepot : "Choisissez le Depôt ",
+        validRef :"Réf. ne peut pas être vide",
+        validRefNo : "Réf.-Réf.No. ne peut pas être vide",
+        validDepot : "Choisissez le dépôt ",
         validCustomerCode : "Le code actuel ne peut pas être vide",
         validDocDate : "Vous devez choisir une date",
         msgDepotSelect:
@@ -2368,25 +2368,25 @@ export const langFr =
             msg: "Veuillez sélectionnerle fournisseur.."
         },
         txtGrandTotal : "Total",
-        btnBarcodeEntry : "Entrée de barre code",
+        btnBarcodeEntry : "Entrée de code-barres",
         btnDocument :"Lignes d'opération",
         chkAutoAdd : "Ajout automatique",
         txtBarcodePlace : "Veuillez scanner le code-barres",
-        btnSave : "Enregistrez",
+        btnSave : "Enregistrer",
         btnNew : "Nouveau",
-        btnDelete : "Efface",
-        btnItemAdd : "Ajoutez",
+        btnDelete : "Effacer",
+        btnItemAdd : "Ajouter",
         msgCustomerNotFound:
         {
             title: "Attention",
-            btn01: "Ajoutez",
+            btn01: "Ajouter",
             btn02: "Abandonner",
-            msg: "La concubine du produit sélectionné n'est pas définie ! Voulez-vous continuer"
+            msg: "Le fournisseur du produit sélectionné n'est pas défini ! Voulez-vous continuer?"
         },
         msgQuantity:
         {
             title: "Entrée de quantité",
-            btn01: "Ajoutez",
+            btn01: "Ajouter",
             msg: "Entrer le montant !"
         },
         msgBarcodeNotFound:
@@ -2398,42 +2398,42 @@ export const langFr =
         popItemCode : 
         {
             title : "Choix de stock",
-            clmCode :  "Code de stock",
-            clmName : "Nom de stock",
+            clmCode :  "Code stock",
+            clmName : "Nom stock",
         },
     },
     irs_01_003 : // "Satış İrsaliyesi"
     {
         btnDropmenu : "Transactions",
-        getRebate : "Obtenir de l'entrepôt de retour",
-        txtRefRefno : "Série Séquence",
-        cmbDepot: "Depôt",
-        txtCustomerCode : "Code de fournisseur",
-        txtCustomerName : "Nom de fournisseur",
+        getRebate : "Recherche de l'entrepôt de retour",
+        txtRefRefno : "Réf.-Réf.No.",
+        cmbDepot: "Dépôt",
+        txtCustomerCode : "Code fournisseur",
+        txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
         txtAmount : "Montant",
         txtDiscount : "Promotion",
-        txtMargin : "Marje",
+        txtMargin : "Marge",
         txtVat : "TVA",
         txtTotal : "Total général",
         txtQuantity : "Quantité",
         txtPrice :"Prix",
-        dtShipDate :"La date d'expédition",
+        dtShipDate :"Date d'expédition",
         pg_Docs : 
         {
             title : "Sélection de documents",
-            clmRef : "Série",
-            clmRefNo : "Séquence",
-            clmInputName : "Nom du fournisseur",
-            clmInputCode  : "Code du fournsseur",
+            clmRef : "Réf.",
+            clmRefNo : "Réf.-Réf.No.",
+            clmInputName : "Nom fournisseur",
+            clmInputCode  : "Code fournisseur",
         },
         pg_txtCustomerCode : 
         {
-            title : "Choix du fournisseur",
-            clmCode :  "Code du fournsseur",
+            title : "Choix fournisseur",
+            clmCode :  "Code fournisseur",
             clmTitle : "Nom du fournisseur",
             clmTypeName : "Type",
-            clmGenusName : "Type"
+            clmGenusName : "Genre"
         },
         pg_txtItemsCode : 
         {
@@ -2461,11 +2461,11 @@ export const langFr =
             clmAmount : "Montant",
             clmTotal : "Total général",
             clmCreateDate: "Date d'enregistrement",
-            clmMargin :"Marje"
+            clmMargin :"Marge"
         },
         popDiscount : 
         {
-            title: "Remise sur les documents",
+            title: "Remise sur documents",
             Percent : "Pourcentage",
             Price : "Montant"
         },
@@ -2486,20 +2486,20 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Êtes-vous sûr de vouloir vous inscrire?"
+            msg: "Êtes-vous sûr de vouloir vous enregistrer?"
         },
         msgSaveResult:
         {
             title: "Attention",
             btn01: "OK",
-            msgSuccess: "Votre inscription est réussie !",
-            msgFailed: "Votre inscription a échoué !"
+            msgSuccess: "Votre enregistrement est réussi !",
+            msgFailed: "Votre enregistrement a échoué !"
         },
         msgSaveValid:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "S'il vous plaît remplir les champs obligatoires !"
+            msg: "Veuillez remplir les champs obligatoires !"
         },
         msgDelete:
         {
@@ -2519,13 +2519,13 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: " Aucune grande remise ne peut être faite à partir du montant!"
+            msg: "La remise ne peut être supérieure au montant total!"
         },
         msgDiscountPercent:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Aucune grande remise ne peut être faite à partir du montant !"
+            msg: "La remise ne peut être supérieure au montant total!"
         },
         msgLocked:
         {
@@ -2535,7 +2535,7 @@ export const langFr =
         },
         msgPasswordSucces:
         {
-            title: "Réussis",
+            title: "Réussi",
             btn01: "OK",
             msg: "Document déverrouillé !",
         },
@@ -2598,8 +2598,8 @@ export const langFr =
         {
             title: "Attention",
             btn01: "Assembler",
-            btn02: "Ajoutez nouveau",
-            msg: "Le produit que vous souhaitez ajouter est dans le document ! Fusionner les lignes ?"
+            btn02: "Ajouter nouveau",
+            msg: "Le produit que vous souhaitez ajouter se trouve dans le document ! Fusionner les lignes ?"
         },
         popDesign : 
         {
@@ -2607,9 +2607,9 @@ export const langFr =
             design : "design",
             lang : "Langue du document"
         },
-        validRef :"La série ne peut pas être vide",
-        validRefNo : "Séquence ne peut pas être vide",
-        validDepot : "Choisissez le Depôt",
+        validRef :"Réf. ne peut pas être vide",
+        validRefNo : "Réf.-Réf.No. ne peut pas être vide",
+        validDepot : "Choisissez le Dépôt",
         validCustomerCode : "Le code fournisseur ne peut pas être vide",
         validDocDate : "Vous devez choisir une date",
         msgDepotSelect:
@@ -2625,25 +2625,25 @@ export const langFr =
             msg: "Veuillez sélectionner le fournisseur.."
         },
         txtGrandTotal : "Total",
-        btnBarcodeEntry : "Entrée de barre code",
+        btnBarcodeEntry : "Entrée de code-barres",
         btnDocument :"Lignes d'opération",
         chkAutoAdd : "Ajoutez automatiquement",
         txtBarcodePlace : "Veuillez scanner le code-barres",
-        btnSave : "Enregistrez",
+        btnSave : "Enregistrer",
         btnNew : "Nouveau",
         btnDelete : "Effacer",
-        btnItemAdd : "Ajoutez",
+        btnItemAdd : "Ajouter",
         msgCustomerNotFound:
         {
             title: "Attention",
-            btn01: "Continuez",
+            btn01: "Continuer",
             btn02: "Abandonner",
-            msg: "La concubine du produit sélectionné n'est pas définie ! Voulez-vous continuer ?"
+            msg: "Le fournisseur du produit sélectionné n'est pas défini ! Voulez-vous continuer ?"
         },
         msgQuantity:
         {
             title: "Entrée de quantité",
-            btn01: "Ajoutez",
+            btn01: "Ajouter",
             msg: "Entrer le montant !"
         },
         msgBarcodeNotFound:
@@ -2662,41 +2662,41 @@ export const langFr =
     irs_01_004 : // "Satış İrsaliyesi"
     {
         btnDropmenu : "Transactions",
-        getRebate : "Obtenir de l'entrepôt de retour",
-        txtRefRefno : "Série Séquence",
-        cmbDepot: "Depôt",
-        txtCustomerCode : "Code de fournisseur",
-        txtCustomerName : "Nom de fournisseur",
+        getRebate : "Recherche de l'entrepôt de retour",
+        txtRefRefno : "Réf.-Réf.No.",
+        cmbDepot: "Dépôt",
+        txtCustomerCode : "Code fournisseur",
+        txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
         txtAmount : "Montant",
         txtDiscount : "Promotion",
-        txtMargin : "Marje",
+        txtMargin : "Marge",
         txtVat : "TVA",
         txtTotal : "Total général",
         txtQuantity : "Quantité",
         txtPrice :"Prix",
-        dtShipDate :"La date d'expédition",
+        dtShipDate :"Date d'expédition",
         pg_Docs : 
         {
             title : "Sélection de documents",
-            clmRef : "Série",
-            clmRefNo : "Séquence",
-            clmInputName : "Nom du fournisseur",
-            clmInputCode  : "Code du fournsseur",
+            clmRef : "Réf.",
+            clmRefNo : "Réf.No.",
+            clmInputName : "Nom fournisseur",
+            clmInputCode  : "Code fournisseur",
         },
         pg_txtCustomerCode : 
         {
             title : "Sélection fournisseur",
-            clmCode :  "Code du fournsseur",
-            clmTitle : "Nom du fournisseur",
+            clmCode :  "Code fournisseur",
+            clmTitle : "Nom fournisseur",
             clmTypeName : "Type",
-            clmGenusName : "Type"
+            clmGenusName : "Genre"
         },
         pg_txtItemsCode : 
         {
-            title : "Choix de stock",
-            clmCode :  "Code de stock",
-            clmName : "Nom de stock",
+            title : "Choix stock",
+            clmCode :  "Code stock",
+            clmName : "Nom stock",
            
         },
         pg_RebateGrid : 
@@ -2718,7 +2718,7 @@ export const langFr =
             clmAmount : "Montant",
             clmTotal : "Total général",
             clmCreateDate: "Date d'enregistrement",
-            clmMargin :"Marje"
+            clmMargin :"Marge"
         },
         popDiscount : 
         {
@@ -2743,20 +2743,20 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Êtes-vous sûr de vouloir vous inscrire?"
+            msg: "Êtes-vous sûr de vouloir vous enregistrer?"
         },
         msgSaveResult:
         {
             title: "Attention",
             btn01: "OK",
-            msgSuccess: "Votre inscription est réussie !",
-            msgFailed: "Votre inscription a échoué !"
+            msgSuccess: "Votre enregistrement est réussi !",
+            msgFailed: "Votre enregistrement a échoué !"
         },
         msgSaveValid:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "S'il vous plaît remplir les champs obligatoires !"
+            msg: "Veuillez remplir les champs obligatoires !"
         },
         msgDelete:
         {
@@ -2776,13 +2776,13 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Aucune grande remise ne peut être faite à partir du montant !"
+            msg: "La remise ne peut être supérieure au montant total !"
         },
         msgDiscountPercent:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Aucune grande remise ne peut être faite à partir du montant !"
+            msg: "La remise ne peut être supérieure au montant total !"
         },
         msgLocked:
         {
@@ -2792,7 +2792,7 @@ export const langFr =
         },
         msgPasswordSucces:
         {
-            title: "Réussis",
+            title: "Réussi",
             btn01: "OK",
             msg: "Document déverrouillé !",
         },
@@ -2855,8 +2855,8 @@ export const langFr =
         {
             title: "Attention",
             btn01: "Assembler",
-            btn02: "Ajoutez nouveau",
-            msg: "Le produit que vous souhaitez ajouter est dans le document ! Fusionner les lignes ?"
+            btn02: "Ajouter nouveau",
+            msg: "Le produit que vous souhaitez ajouter se trouve dans le document ! Fusionner les lignes ?"
         },
         popDesign : 
         {
@@ -2864,8 +2864,8 @@ export const langFr =
             design : "Design",
             lang : "Langue du document"
         },
-        validRef :"La série ne peut pas être vide",
-        validRefNo : "Séquence ne peut pas être vide",
+        validRef :"Réf. ne peut pas être vide",
+        validRefNo : "Réf.No. ne peut pas être vide",
         validDepot : "Choix du Depôt",
         validCustomerCode : "Le code actuel ne peut pas être vide",
         validDocDate : "Vous devez choisir une date",
@@ -2886,21 +2886,21 @@ export const langFr =
         btnDocument :"Lignes d'opération",
         chkAutoAdd : "Ajoutez automatiquement",
         txtBarcodePlace : "Veuillez scanner le code-barres",
-        btnSave : "Enregistrez",
+        btnSave : "Enregistrer",
         btnNew : "Nouveau",
         btnDelete : "Effacer",
-        btnItemAdd : "Ajoutez",
+        btnItemAdd : "Ajouter",
         msgCustomerNotFound:
         {
             title: "Attention",
             btn01: "Continuez",
             btn02: "Abandonner",
-            msg: "La concubine du produit sélectionné n'est pas définie ! Voulez-vous continuer ?"
+            msg: "Le fournisseur du produit sélectionné n'est pas défini ! Voulez-vous continuer ?"
         },
         msgQuantity:
         {
             title: "Entrée de quantité",
-            btn01: "Ajoutez",
+            btn01: "Ajouter",
             msg: "Entrer le montant !"
         },
         msgBarcodeNotFound:

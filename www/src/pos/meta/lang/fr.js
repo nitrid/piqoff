@@ -546,7 +546,7 @@ export const langFr =
     msgOfflineAlert: 
     {
         title : "Attention",
-        msg : "Votre connexion au serveur a été perdue ! Vous pouvez poursuivre votre transaction hors ligne.",
+        msg : "Votre connexion au serveur a été perdu ! Vous pouvez poursuivre votre transaction hors ligne.",
         btn01 : "OK"
     },
     msgOnlineAlert: 
@@ -634,7 +634,7 @@ export const langFr =
         title : "Attention",
         msg : "Votre enregistrement a échoué!",
         btn01 : "OK",
-        btn02 : "Ressayez l'enregistrement",
+        btn02 : "Réessayez l'enregistrement",
     },
     msgCheckRecord : 
     {
@@ -701,14 +701,7 @@ export const langFr =
         btn01 : "Choisir Client",
         btn02 : "Abandonner"
     },
-    msgCustomerSaveResult:
-    {
-        title: "Attention",
-        btn01: "OK",
-        msgSuccess: "Enregistrement client effectué avec succès!",
-        msgFailed: "Votre enregistrement client échoué!"
-    },
-    msgCustomerPointCount: //BAK
+    msgCustomerPointCount: 
     {
         title: "Attention",
         btn01: "OK",
@@ -717,9 +710,9 @@ export const langFr =
     },
     msgGetOrder : 
     {
-        title : "Attention", // BAK
-        msg : "Cette commande à déjà été traité?",   // BAK
-        btn01 : "OK",  // BAK
-        btn02 : "Abandonner"  // BAK
+        title : "Attention", 
+        msg : "Cette commande à déjà été traité?",
+        btn01 : "OK",
+        btn02 : "Abandonner"
     },
 }
