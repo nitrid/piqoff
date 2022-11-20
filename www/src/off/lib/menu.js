@@ -320,328 +320,780 @@ export const menu = (e) =>
                 }
             ]
         },
-        //Teklif
+        //Satın Alma İşlemleri
         {
-            id: 'tkf',
-            text: e.t('menu.tkf'),
+            id: 'purchase',
+            text: e.t('menu.purchase'),
             expanded: false,
             items: 
             [
-               
                 {
-                    id: 'tkf_02',
-                    text : e.t('menu.tkf_02'),//'Evraklar',
+                    id: 'purcoffer',
+                    text : e.t('menu.purcoffer'),//'Teklif',
                     expanded: false,
                     items: 
-                    [
+                    [ 
                         {
-                            id: 'tkf_02_001',
-                            text: e.t('menu.tkf_02_001'),//'Alış Sİpariş',
-                            path: 'offers/documents/purchaseOffer'
+                            id: 'purcoffer_01',
+                            text : e.t('menu.purcoffer_01'),//'Evraklar',
+                            expanded: false,
+                            items: 
+                            [
+                                {
+                                    id: 'tkf_02_001',
+                                    text: e.t('menu.tkf_02_001'),//'Alış Teklif',
+                                    path: 'offers/documents/purchaseOffer'
+                                },
+                    
+                            ]
                         },
                         {
-                            id: 'tkf_02_002',
-                            text: e.t('menu.tkf_02_002'),//'Satış tkfariş',
-                            path: 'offers/documents/salesOffer'
+                            id: 'purcoffer_02',
+                            text : e.t('menu.purcoffer_02'),//'Listeler',
+                            expanded: false,
+                            items: 
+                            [
+                                {
+                                    id: 'tkf_01_001',
+                                    text: e.t('menu.tkf_01_001'),//'Alış tkfariş Listesi',
+                                    path: 'offers/lists/purchaseOrdList'
+                                },
+                            ]
                         },
+                        {
+                            id: 'purcoffer_03',
+                            text : e.t('menu.purcoffer_03'),//'Raporlar',
+                            expanded: false,
+                        }
+                    ]
+                },
+                {
+                    id: 'purcorder',
+                    text : e.t('menu.purcorder'),//'Teklif',
+                    expanded: false,
+                    items: 
+                    [ 
+                        {
+                            id: 'purcorder_01',
+                            text : e.t('menu.purcorder_01'),//'Evraklar',
+                            expanded: false,
+                            items: 
+                            [
+                                {
+                                    id: 'sip_02_001',
+                                    text: e.t('menu.sip_02_001'),//'Alış Sİpariş',
+                                    path: 'orders/documents/purchaseOrder'
+                                },
+                            ]
+                        },
+                        {
+                            id: 'purcorder_02',
+                            text : e.t('menu.purcorder_02'),//'Listeler',
+                            expanded: false,
+                            items: 
+                            [
+                                {
+                                    id: 'sip_01_001',
+                                    text: e.t('menu.sip_01_001'),//'Alış Sipariş Listesi',
+                                    path: 'orders/lists/purchaseOrdList'
+                                },
+                            ]
+                        },
+                        {
+                            id: 'purcorder_03',
+                            text : e.t('menu.purcorder_03'),//'Operasyonlar',
+                            expanded: false,
+                            items: 
+                            [
+                                {
+                                    id: 'sip_04_001',
+                                    text: e.t('menu.sip_04_001'),//'Toplu Sipariş Ayrıştırma',
+                                    path: 'orders/operations/orderParsing'
+                                },
+                            ]
+                        },
+                        {
+                            id: 'purcorder_04',
+                            text : e.t('menu.purcorder_04'),//'Raporlar',
+                            expanded: false,
+                        }
+                    ]
+                },
+                {
+                    id: 'purcDispatch',
+                    text : e.t('menu.purcDispatch'),//'İrsaliyeler',
+                    expanded: false,
+                    items: 
+                    [   {
+                            id: 'purcDispatch_01',
+                            text : e.t('menu.purcDispatch_01'),//'Evraklar',
+                            expanded: false,
+                            items: 
+                            [
+                                {
+                                    id: 'irs_02_001',
+                                    text: e.t('menu.irs_02_001'),//'Alış İrsaliye',
+                                    path: 'dispatch/documents/purchaseDispatch'
+                                },
+                                {
+                                    id: 'irs_02_003',
+                                    text: e.t('menu.irs_02_003'),//'İade İrsaliyesi',
+                                    path: 'dispatch/documents/rebateDispatch'
+                                },
+                            ]
+                        },
+                        {
+                            id: 'purcDispatch_02',
+                            text : e.t('menu.purcDispatch_02'),//'Listeler',
+                            expanded: false,
+                            items: 
+                            [
+                                {
+                                    id: 'irs_01_001',
+                                    text: e.t('menu.irs_01_001'),//'Alış İrsaliye Listesi',
+                                    path: 'dispatch/lists/purchaseDisList'
+                                },
+                                {
+                                    id: 'irs_01_003',
+                                    text: e.t('menu.irs_01_003'),//'İade İrsaliye Listesi',
+                                    path: 'dispatch/lists/rebateDisList'
+                                },
+                            ]
+                        },
+                        {
+                            id: 'purcDispatch_03',
+                            text : e.t('menu.purcDispatch_03'),//'Raporlar',
+                            expanded: false,
+                        }
+                    ]
+                },
+                {
+                    id: 'invoices',
+                    text : e.t('menu.purcinvoices'),//'Faturalar',
+                    expanded: false,
+                    items: 
+                    [   {
+                            id: 'purcinvoices_01',
+                            text : e.t('menu.purcinvoices_01'),//'Evraklar',
+                            expanded: false,
+                            items: 
+                            [
+                                {
+                                    id: 'ftr_02_001',
+                                    text: e.t('menu.ftr_02_001'),//'Alış Faturası',
+                                    path: 'invoices/documents/purchaseInvoice'
+                                },
+                                {
+                                    id: 'ftr_02_003',
+                                    text: e.t('menu.ftr_02_003'),//'İade Faturası',
+                                    path: 'invoices/documents/rebateInvoice'
+                                },
+                                {
+                                    id: 'ftr_02_004',
+                                    text: e.t('menu.ftr_02_004'),//'Fiyat Farkı Faturası',
+                                    path: 'invoices/documents/priceDifferenceInvoice'
+                                },
+                            ]
+                        },
+                        {
+                            id: 'purcinvoices_02',
+                            text : e.t('menu.purcinvoices_02'),//'Listeler',
+                            expanded: false,
+                            items: 
+                            [
+                                {
+                                    id: 'ftr_01_001',
+                                    text: e.t('menu.ftr_01_001'),//'Alış Fatura Listesi',
+                                    path: 'invoices/lists/purchaseInvList'
+                                },
+                                {
+                                    id: 'ftr_01_003',
+                                    text: e.t('menu.ftr_01_003'),//'iade Fatura Listesi',
+                                    path: 'invoices/lists/rebateInvList'
+                                },
+                                {
+                                    id: 'ftr_01_004',
+                                    text: e.t('menu.ftr_01_004'),//'Fiyat Farkı Fatura Listesi',
+                                    path: 'invoices/lists/priceDiffInvList'
+                                },
+                            ]
+                        },
+                        {
+                            id: 'purcinvoices_03',
+                            text : e.t('menu.purcinvoices_03'),//'Proforma',
+                            expanded: false,
+                            items: 
+                            [
+                                {
+                                    id: 'ftr_04_003',
+                                    text: e.t('menu.ftr_04_003'),//'proforma Alış Faturası',
+                                    path: 'invoices/proforma/purchaseProInvoice'
+                                },
+                                {
+                                    id: 'ftr_04_004',
+                                    text: e.t('menu.ftr_04_004'),//'proforma İade Faturası',
+                                    path: 'invoices/proforma/rebateProInvoice'
+                                },
+                                {
+                                    id: 'ftr_04_001',
+                                    text: e.t('menu.ftr_04_001'),//'proforma fiyat farkı',
+                                    path: 'invoices/proforma/priceDifferenceProInvoice'
+                                },
+                            ]
+                        },
+                        {
+                            id: 'purcinvoices_04',
+                            text : e.t('menu.purcinvoices_04'),//'Raporlar',
+                            expanded: false,
+                        }
+                    ]
+                },
+            ]
+        },
+         //Satış İşlemleri
+        {
+            id: 'sales',
+            text: e.t('menu.sales'),
+            expanded: false,
+            items: 
+            [
+                {
+                    id: 'salesoffer',
+                    text : e.t('menu.salesoffer'),//'Teklif',
+                    expanded: false,
+                    items: 
+                    [ 
+                        {
+                            id: 'salesoffer_01',
+                            text : e.t('menu.salesoffer_01'),//'Evraklar',
+                            expanded: false,
+                            items: 
+                            [
+                                {
+                                    id: 'tkf_02_002',
+                                    text: e.t('menu.tkf_02_002'),//'Satış teklif',
+                                    path: 'offers/documents/salesOffer'
+                                },
+                    
+                            ]
+                        },
+                        {
+                            id: 'salesoffer_02',
+                            text : e.t('menu.salesoffer_02'),//'Listeler',
+                            expanded: false,
+                            items: 
+                            [
+                                {
+                                    id: 'tkf_01_002',
+                                    text: e.t('menu.tkf_01_002'),//'Satış teklif Listesi',
+                                    path: 'offers/lists/salesOrdList'
+                                },
+                            ]
+                        },
+                        {
+                            id: 'salesoffer_03',
+                            text : e.t('menu.salesoffer_03'),//'Raporlar',
+                            expanded: false,
+                        }
+                    ]
+                },
+                {
+                    id: 'salesorder',
+                    text : e.t('menu.salesorder'),//'Sipariş',
+                    expanded: false,
+                    items: 
+                    [ 
+                        {
+                            id: 'salesorder_01',
+                            text : e.t('menu.salesorder_01'),//'Evraklar',
+                            expanded: false,
+                            items: 
+                            [
+                                {
+                                    id: 'sip_02_002',
+                                    text: e.t('menu.sip_02_002'),//'Satış Sipariş',
+                                    path: 'orders/documents/salesOrder'
+                                },
+                            ]
+                        },
+                        {
+                            id: 'salesorder_02',
+                            text : e.t('menu.salesorder_02'),//'Listeler',
+                            expanded: false,
+                            items: 
+                            [
+                                {
+                                    id: 'sip_01_002',
+                                    text: e.t('menu.sip_01_002'),//'Satış Sipariş Listesi',
+                                    path: 'orders/lists/salesOrdList'
+                                },
+                            ]
+                        },
+                        {
+                            id: 'salesorder_03',
+                            text : e.t('menu.salesorder_03'),//'Raporlar',
+                            expanded: false,
+                        }
+                    ]
+                },
+                {
+                    id: 'salesDispatch',
+                    text : e.t('menu.salesDispatch'),//'İrsaliyeler',
+                    expanded: false,
+                    items: 
+                    [   {
+                            id: 'salesDispatch_01',
+                            text : e.t('menu.salesDispatch_01'),//'Evraklar',
+                            expanded: false,
+                            items: 
+                            [
+                                {
+                                    id: 'irs_02_002',
+                                    text: e.t('menu.irs_02_002'),//'Satış İrsaliye',
+                                    path: 'dispatch/documents/salesDispatch'
+                                },
+                                {
+                                    id: 'irs_02_004',
+                                    text: e.t('menu.irs_02_004'),//'Şubeler Arası Sevk',
+                                    path: 'dispatch/documents/branchSaleDispatch'
+                                },
+                                {
+                                    id: 'irs_02_005',
+                                    text: e.t('menu.irs_02_005'),//'Şubeler Arası Sevk',
+                                    path: 'dispatch/lists/rebatePurcDispatch'
+                                }
+                            ]
+                        },
+                        {
+                            id: 'salesDispatch_02',
+                            text : e.t('menu.salesDispatch_02'),//'Listeler',
+                            expanded: false,
+                            items: 
+                            [
+                                {
+                                    id: 'irs_01_002',
+                                    text: e.t('menu.irs_01_002'),//'Satış İrsaliye Listesi',
+                                    path: 'dispatch/lists/salesDisList'
+                                },
+                                {
+                                    id: 'irs_01_004',
+                                    text: e.t('menu.irs_01_004'),//'Şubeler Arası Sevk',
+                                    path: 'dispatch/lists/bransSaleDisLİst'
+                                },
+                                // {
+                                //     id: 'irs_01_005',
+                                //     text: e.t('menu.irs_01_005'),//'İade Alış İrsaliye',
+                                //     path: 'dispatch/lists/rebatePurcDispatch'
+                                // }
+                            ]
+                        },
+                        {
+                            id: 'salesDispatch_03',
+                            text : e.t('menu.salesDispatch_03'),//'Raporlar',
+                            expanded: false,
+                        }
+                    ]
+                },
+                {
+                    id: 'salesinvoices',
+                    text : e.t('menu.salesinvoices'),//'Faturalar',
+                    expanded: false,
+                    items: 
+                    [   {
+                            id: 'salesinvoices_01',
+                            text : e.t('menu.salesinvoices_01'),//'Evraklar',
+                            expanded: false,
+                            items: 
+                            [
+                                {
+                                    id: 'ftr_02_002',
+                                    text: e.t('menu.ftr_02_002'),//'Satış Faturası',
+                                    path: 'invoices/documents/salesInvoice'
+                                },
+                                {
+                                    id: 'ftr_02_005',
+                                    text: e.t('menu.ftr_02_005'),//'Şubeler Arası Satış',
+                                    path: 'invoices/documents/branchSaleInvoice'
+                                },
+                                {
+                                    id: 'ftr_02_006',
+                                    text: e.t('menu.ftr_02_006'),//'Fiyat Farkı Alış Faturası',
+                                    path: 'invoices/proforma/priceDifferencePurcInvoice'
+                                },
+                                {
+                                    id: 'ftr_02_007',
+                                    text: e.t('menu.ftr_02_007'),//'İade Alış Faturası',
+                                    path: 'invoices/proforma/branchSaleProInvoice'
+                                },
+                            ]
+                        },
+                        {
+                            id: 'salesinvoices_02',
+                            text : e.t('menu.salesinvoices_02'),//'Listeler',
+                            expanded: false,
+                            items: 
+                            [
+                                {
+                                    id: 'ftr_01_002',
+                                    text: e.t('menu.ftr_01_002'),//'Satış Fatura Listesi',
+                                    path: 'invoices/lists/salesInvList'
+                                },
+                                                              {
+                                    id: 'ftr_01_005',
+                                    text: e.t('menu.ftr_01_005'),//'Şube satış  Fatura Listesi',
+                                    path: 'invoices/lists/brancSaleInvList'
+                                }
+                            ]
+                        },
+                        {
+                            id: 'salesinvoices_03',
+                            text : e.t('menu.salesinvoices_03'),//'Proforma',
+                            expanded: false,
+                            items: 
+                            [
+                                {
+                                    id: 'ftr_04_002',
+                                    text: e.t('menu.ftr_04_002'),//'proforma Satış Faturası',
+                                    path: 'invoices/proforma/salesProInvoice'
+                                },
+                                {
+                                    id: 'ftr_04_005',
+                                    text: e.t('menu.ftr_04_005'),//'proforma Şube Satış Faturası',
+                                    path: 'invoices/proforma/branchSaleProInvoice'
+                                },
+                            ]
+                        },
+                        {
+                            id: 'salesinvoices_04',
+                            text : e.t('menu.salesinvoices_04'),//'Raporlar',
+                            expanded: false,
+                        }
+                    ]
+                },
+            ]
+        },
+        // //Teklif
+        // {
+        //     id: 'tkf',
+        //     text: e.t('menu.tkf'),
+        //     expanded: false,
+        //     items: 
+        //     [
+               
+        //         {
+        //             id: 'tkf_02',
+        //             text : e.t('menu.tkf_02'),//'Evraklar',
+        //             expanded: false,
+        //             items: 
+        //             [
+        //                 {
+        //                     id: 'tkf_02_001',
+        //                     text: e.t('menu.tkf_02_001'),//'Alış Sİpariş',
+        //                     path: 'offers/documents/purchaseOffer'
+        //                 },
+        //                 {
+        //                     id: 'tkf_02_002',
+        //                     text: e.t('menu.tkf_02_002'),//'Satış tkfariş',
+        //                     path: 'offers/documents/salesOffer'
+        //                 },
     
             
-                    ]
-                },
-                {
-                    id: 'tkf_01',
-                    text : e.t('menu.tkf_01'),//'Listeler',
-                    expanded: false,
-                    items: 
-                    [
-                        {
-                            id: 'tkf_01_001',
-                            text: e.t('menu.tkf_01_001'),//'Alış tkfariş Listesi',
-                            path: 'offers/lists/purchaseOrdList'
-                        },
-                        {
-                            id: 'tkf_01_002',
-                            text: e.t('menu.tkf_01_002'),//'Satış tkfariş Listesi',
-                            path: 'offers/lists/salesOrdList'
-                        },
-                    ]
-                },
-                {
-                    id: 'tkf_03',
-                    text : e.t('menu.tkf_03'),//'Raporlar',
-                    expanded: false,
-                }
-            ]
-        },
-        //Sipariş
-        {
-            id: 'sip',
-            text: e.t('menu.sip'),
-            expanded: false,
-            items: 
-            [
+        //             ]
+        //         },
+        //         {
+        //             id: 'tkf_01',
+        //             text : e.t('menu.tkf_01'),//'Listeler',
+        //             expanded: false,
+        //             items: 
+        //             [
+        //                 {
+        //                     id: 'tkf_01_001',
+        //                     text: e.t('menu.tkf_01_001'),//'Alış tkfariş Listesi',
+        //                     path: 'offers/lists/purchaseOrdList'
+        //                 },
+        //                 {
+        //                     id: 'tkf_01_002',
+        //                     text: e.t('menu.tkf_01_002'),//'Satış tkfariş Listesi',
+        //                     path: 'offers/lists/salesOrdList'
+        //                 },
+        //             ]
+        //         },
+        //         {
+        //             id: 'tkf_03',
+        //             text : e.t('menu.tkf_03'),//'Raporlar',
+        //             expanded: false,
+        //         }
+        //     ]
+        // },
+        // //Sipariş
+        // {
+        //     id: 'sip',
+        //     text: e.t('menu.sip'),
+        //     expanded: false,
+        //     items: 
+        //     [
                
-                {
-                    id: 'sip_02',
-                    text : e.t('menu.sip_02'),//'Evraklar',
-                    expanded: false,
-                    items: 
-                    [
-                        {
-                            id: 'sip_02_001',
-                            text: e.t('menu.sip_02_001'),//'Alış Sİpariş',
-                            path: 'orders/documents/purchaseOrder'
-                        },
-                        {
-                            id: 'sip_02_002',
-                            text: e.t('menu.sip_02_002'),//'Satış Sipariş',
-                            path: 'orders/documents/salesOrder'
-                        },
-                    ]
-                },
-                {
-                    id: 'sip_01',
-                    text : e.t('menu.sip_01'),//'Listeler',
-                    expanded: false,
-                    items: 
-                    [
-                        {
-                            id: 'sip_01_001',
-                            text: e.t('menu.sip_01_001'),//'Alış Sipariş Listesi',
-                            path: 'orders/lists/purchaseOrdList'
-                        },
-                        {
-                            id: 'sip_01_002',
-                            text: e.t('menu.sip_01_002'),//'Satış Sipariş Listesi',
-                            path: 'orders/lists/salesOrdList'
-                        },
-                    ]
-                },
-                {
-                    id: 'sip_03',
-                    text : e.t('menu.sip_03'),//'Raporlar',
-                    expanded: false,
-                },
-                {
-                    id: 'sip_04',
-                    text : e.t('menu.sip_04'),//'Operasyonlar',
-                    expanded: false,
-                    items: 
-                    [
-                        {
-                            id: 'sip_04_001',
-                            text: e.t('menu.sip_04_001'),//'Toplu Sipariş Ayrıştırma',
-                            path: 'orders/operations/orderParsing'
-                        },
-                    ]
-                }
-            ]
-        },
-        //İrsaliye
-        {
-            id: 'irs',
-            text: e.t('menu.irs'),
-            expanded: false,
-            items: 
-            [
+        //         {
+        //             id: 'sip_02',
+        //             text : e.t('menu.sip_02'),//'Evraklar',
+        //             expanded: false,
+        //             items: 
+        //             [
+        //                 {
+        //                     id: 'sip_02_001',
+        //                     text: e.t('menu.sip_02_001'),//'Alış Sİpariş',
+        //                     path: 'orders/documents/purchaseOrder'
+        //                 },
+        //                 {
+        //                     id: 'sip_02_002',
+        //                     text: e.t('menu.sip_02_002'),//'Satış Sipariş',
+        //                     path: 'orders/documents/salesOrder'
+        //                 },
+        //             ]
+        //         },
+        //         {
+        //             id: 'sip_01',
+        //             text : e.t('menu.sip_01'),//'Listeler',
+        //             expanded: false,
+        //             items: 
+        //             [
+        //                 {
+        //                     id: 'sip_01_001',
+        //                     text: e.t('menu.sip_01_001'),//'Alış Sipariş Listesi',
+        //                     path: 'orders/lists/purchaseOrdList'
+        //                 },
+        //                 {
+        //                     id: 'sip_01_002',
+        //                     text: e.t('menu.sip_01_002'),//'Satış Sipariş Listesi',
+        //                     path: 'orders/lists/salesOrdList'
+        //                 },
+        //             ]
+        //         },
+        //         {
+        //             id: 'sip_03',
+        //             text : e.t('menu.sip_03'),//'Raporlar',
+        //             expanded: false,
+        //         },
+        //         {
+        //             id: 'sip_04',
+        //             text : e.t('menu.sip_04'),//'Operasyonlar',
+        //             expanded: false,
+        //             items: 
+        //             [
+        //                 {
+        //                     id: 'sip_04_001',
+        //                     text: e.t('menu.sip_04_001'),//'Toplu Sipariş Ayrıştırma',
+        //                     path: 'orders/operations/orderParsing'
+        //                 },
+        //             ]
+        //         }
+        //     ]
+        // },
+        // //İrsaliye
+        // {
+        //     id: 'irs',
+        //     text: e.t('menu.irs'),
+        //     expanded: false,
+        //     items: 
+        //     [
                
-                {
-                    id: 'irs_02',
-                    text : e.t('menu.irs_02'),//'Evraklar',
-                    expanded: false,
-                    items: 
-                    [
-                        {
-                            id: 'irs_02_001',
-                            text: e.t('menu.irs_02_001'),//'Alış İrsaliye',
-                            path: 'dispatch/documents/purchaseDispatch'
-                        },
-                        {
-                            id: 'irs_02_002',
-                            text: e.t('menu.irs_02_002'),//'Satış İrsaliye',
-                            path: 'dispatch/documents/salesDispatch'
-                        },
-                        {
-                            id: 'irs_02_003',
-                            text: e.t('menu.irs_02_003'),//'İade İrsaliyesi',
-                            path: 'dispatch/documents/rebateDispatch'
-                        },
-                        {
-                            id: 'irs_02_004',
-                            text: e.t('menu.irs_02_004'),//'Şubeler Arası Sevk',
-                            path: 'dispatch/documents/branchSaleDispatch'
-                        },
-                        {
-                            id: 'irs_02_005',
-                            text: e.t('menu.irs_02_005'),//'Şubeler Arası Sevk',
-                            path: 'dispatch/lists/rebatePurcDispatch'
-                        }
-                    ]
-                },
-                {
-                    id: 'irs_01',
-                    text : e.t('menu.irs_01'),//'Listeler',
-                    expanded: false,
-                    items: 
-                    [
-                        {
-                            id: 'irs_01_001',
-                            text: e.t('menu.irs_01_001'),//'Alış İrsaliye Listesi',
-                            path: 'dispatch/lists/purchaseDisList'
-                        },
-                        {
-                            id: 'irs_01_002',
-                            text: e.t('menu.irs_01_002'),//'Satış İrsaliye Listesi',
-                            path: 'dispatch/lists/salesDisList'
-                        },
-                        {
-                            id: 'irs_01_003',
-                            text: e.t('menu.irs_01_003'),//'İade İrsaliye Listesi',
-                            path: 'dispatch/lists/rebateDisList'
-                        },
-                        {
-                            id: 'irs_01_004',
-                            text: e.t('menu.irs_01_004'),//'Şubeler Arası Sevk',
-                            path: 'dispatch/lists/bransSaleDisLİst'
-                        },
-                        // {
-                        //     id: 'irs_01_005',
-                        //     text: e.t('menu.irs_01_005'),//'İade Alış İrsaliiye',
-                        //     path: 'dispatch/lists/rebatePurcDispatch'
-                        // }
-                    ]
-                },
-                {
-                    id: 'irs_03',
-                    text : e.t('menu.irs_03'),//'Raporlar',
-                    expanded: false,
-                }
-            ]
-        },
-        //Fatura
-        {
-            id: 'ftr',
-            text: e.t('menu.ftr'),
-            expanded: false,
-            items: 
-            [
+        //         {
+        //             id: 'irs_02',
+        //             text : e.t('menu.irs_02'),//'Evraklar',
+        //             expanded: false,
+        //             items: 
+        //             [
+        //                 {
+        //                     id: 'irs_02_001',
+        //                     text: e.t('menu.irs_02_001'),//'Alış İrsaliye',
+        //                     path: 'dispatch/documents/purchaseDispatch'
+        //                 },
+        //                 {
+        //                     id: 'irs_02_002',
+        //                     text: e.t('menu.irs_02_002'),//'Satış İrsaliye',
+        //                     path: 'dispatch/documents/salesDispatch'
+        //                 },
+        //                 {
+        //                     id: 'irs_02_003',
+        //                     text: e.t('menu.irs_02_003'),//'İade İrsaliyesi',
+        //                     path: 'dispatch/documents/rebateDispatch'
+        //                 },
+        //                 {
+        //                     id: 'irs_02_004',
+        //                     text: e.t('menu.irs_02_004'),//'Şubeler Arası Sevk',
+        //                     path: 'dispatch/documents/branchSaleDispatch'
+        //                 },
+        //                 {
+        //                     id: 'irs_02_005',
+        //                     text: e.t('menu.irs_02_005'),//'Şubeler Arası Sevk',
+        //                     path: 'dispatch/lists/rebatePurcDispatch'
+        //                 }
+        //             ]
+        //         },
+        //         {
+        //             id: 'irs_01',
+        //             text : e.t('menu.irs_01'),//'Listeler',
+        //             expanded: false,
+        //             items: 
+        //             [
+        //                 {
+        //                     id: 'irs_01_001',
+        //                     text: e.t('menu.irs_01_001'),//'Alış İrsaliye Listesi',
+        //                     path: 'dispatch/lists/purchaseDisList'
+        //                 },
+        //                 {
+        //                     id: 'irs_01_002',
+        //                     text: e.t('menu.irs_01_002'),//'Satış İrsaliye Listesi',
+        //                     path: 'dispatch/lists/salesDisList'
+        //                 },
+        //                 {
+        //                     id: 'irs_01_003',
+        //                     text: e.t('menu.irs_01_003'),//'İade İrsaliye Listesi',
+        //                     path: 'dispatch/lists/rebateDisList'
+        //                 },
+        //                 {
+        //                     id: 'irs_01_004',
+        //                     text: e.t('menu.irs_01_004'),//'Şubeler Arası Sevk',
+        //                     path: 'dispatch/lists/bransSaleDisLİst'
+        //                 },
+        //                 // {
+        //                 //     id: 'irs_01_005',
+        //                 //     text: e.t('menu.irs_01_005'),//'İade Alış İrsaliiye',
+        //                 //     path: 'dispatch/lists/rebatePurcDispatch'
+        //                 // }
+        //             ]
+        //         },
+        //         {
+        //             id: 'irs_03',
+        //             text : e.t('menu.irs_03'),//'Raporlar',
+        //             expanded: false,
+        //         }
+        //     ]
+        // },
+        // //Fatura
+        // {
+        //     id: 'ftr',
+        //     text: e.t('menu.ftr'),
+        //     expanded: false,
+        //     items: 
+        //     [
                
-                {
-                    id: 'ftr_02',
-                    text : e.t('menu.ftr_02'),//'Evraklar',
-                    expanded: false,
-                    items: 
-                    [
-                        {
-                            id: 'ftr_02_001',
-                            text: e.t('menu.ftr_02_001'),//'Alış Faturası',
-                            path: 'invoices/documents/purchaseInvoice'
-                        },
-                        {
-                            id: 'ftr_02_002',
-                            text: e.t('menu.ftr_02_002'),//'Satış Faturası',
-                            path: 'invoices/documents/salesInvoice'
-                        },
-                        {
-                            id: 'ftr_02_003',
-                            text: e.t('menu.ftr_02_003'),//'İade Faturası',
-                            path: 'invoices/documents/rebateInvoice'
-                        },
-                        {
-                            id: 'ftr_02_004',
-                            text: e.t('menu.ftr_02_004'),//'Fiyat Farkı Faturası',
-                            path: 'invoices/documents/priceDifferenceInvoice'
-                        },
-                        {
-                            id: 'ftr_02_005',
-                            text: e.t('menu.ftr_02_005'),//'Şubeler Arası Satış',
-                            path: 'invoices/documents/branchSaleInvoice'
-                        },
-                        {
-                            id: 'ftr_02_006',
-                            text: e.t('menu.ftr_02_006'),//'Fiyat Farkı Alış Faturası',
-                            path: 'invoices/proforma/priceDifferencePurcInvoice'
-                        },
-                        {
-                            id: 'ftr_02_007',
-                            text: e.t('menu.ftr_02_007'),//'İade Alış Faturası',
-                            path: 'invoices/proforma/branchSaleProInvoice'
-                        },
-                    ]
-                },
-                {
-                    id: 'ftr_01',
-                    text : e.t('menu.ftr_01'),//'Listeler',
-                    expanded: false,
-                    items: 
-                    [
-                        {
-                            id: 'ftr_01_001',
-                            text: e.t('menu.ftr_01_001'),//'Alış Fatura Listesi',
-                            path: 'invoices/lists/purchaseInvList'
-                        },
-                        {
-                            id: 'ftr_01_002',
-                            text: e.t('menu.ftr_01_002'),//'Satış Fatura Listesi',
-                            path: 'invoices/lists/salesInvList'
-                        },
-                        {
-                            id: 'ftr_01_003',
-                            text: e.t('menu.ftr_01_003'),//'iade Fatura Listesi',
-                            path: 'invoices/lists/rebateInvList'
-                        },
-                        {
-                            id: 'ftr_01_004',
-                            text: e.t('menu.ftr_01_004'),//'Fiyat Farkı Fatura Listesi',
-                            path: 'invoices/lists/priceDiffInvList'
-                        },
-                        {
-                            id: 'ftr_01_005',
-                            text: e.t('menu.ftr_01_005'),//'Şube satış  Fatura Listesi',
-                            path: 'invoices/lists/brancSaleInvList'
-                        }
-                    ]
-                },
-                {
-                    id: 'ftr_04',
-                    text : e.t('menu.ftr_04'),//'Proforma',
-                    expanded: false,
-                    items: 
-                    [
-                        {
-                            id: 'ftr_04_001',
-                            text: e.t('menu.ftr_04_001'),//'proforma fiyat farkı',
-                            path: 'invoices/proforma/priceDifferenceProInvoice'
-                        },
-                        {
-                            id: 'ftr_04_002',
-                            text: e.t('menu.ftr_04_002'),//'proforma Satış Faturası',
-                            path: 'invoices/proforma/salesProInvoice'
-                        },
-                        {
-                            id: 'ftr_04_003',
-                            text: e.t('menu.ftr_04_003'),//'proforma Alış Faturası',
-                            path: 'invoices/proforma/purchaseProInvoice'
-                        },
-                        {
-                            id: 'ftr_04_004',
-                            text: e.t('menu.ftr_04_004'),//'proforma İade Faturası',
-                            path: 'invoices/proforma/rebateProInvoice'
-                        },
-                        {
-                            id: 'ftr_04_005',
-                            text: e.t('menu.ftr_04_005'),//'proforma Şube Satış Faturası',
-                            path: 'invoices/proforma/branchSaleProInvoice'
-                        },
-                    ]
-                },
-                {
-                    id: 'ftr_03',
-                    text : e.t('menu.ftr_03'),//'Raporlar',
-                    expanded: false,
-                }
-            ]
-        },
+        //         {
+        //             id: 'ftr_02',
+        //             text : e.t('menu.ftr_02'),//'Evraklar',
+        //             expanded: false,
+        //             items: 
+        //             [
+        //                 {
+        //                     id: 'ftr_02_001',
+        //                     text: e.t('menu.ftr_02_001'),//'Alış Faturası',
+        //                     path: 'invoices/documents/purchaseInvoice'
+        //                 },
+        //                 {
+        //                     id: 'ftr_02_002',
+        //                     text: e.t('menu.ftr_02_002'),//'Satış Faturası',
+        //                     path: 'invoices/documents/salesInvoice'
+        //                 },
+        //                 {
+        //                     id: 'ftr_02_003',
+        //                     text: e.t('menu.ftr_02_003'),//'İade Faturası',
+        //                     path: 'invoices/documents/rebateInvoice'
+        //                 },
+        //                 {
+        //                     id: 'ftr_02_004',
+        //                     text: e.t('menu.ftr_02_004'),//'Fiyat Farkı Faturası',
+        //                     path: 'invoices/documents/priceDifferenceInvoice'
+        //                 },
+        //                 {
+        //                     id: 'ftr_02_005',
+        //                     text: e.t('menu.ftr_02_005'),//'Şubeler Arası Satış',
+        //                     path: 'invoices/documents/branchSaleInvoice'
+        //                 },
+        //                 {
+        //                     id: 'ftr_02_006',
+        //                     text: e.t('menu.ftr_02_006'),//'Fiyat Farkı Alış Faturası',
+        //                     path: 'invoices/proforma/priceDifferencePurcInvoice'
+        //                 },
+        //                 {
+        //                     id: 'ftr_02_007',
+        //                     text: e.t('menu.ftr_02_007'),//'İade Alış Faturası',
+        //                     path: 'invoices/proforma/branchSaleProInvoice'
+        //                 },
+        //             ]
+        //         },
+        //         {
+        //             id: 'ftr_01',
+        //             text : e.t('menu.ftr_01'),//'Listeler',
+        //             expanded: false,
+        //             items: 
+        //             [
+        //                 {
+        //                     id: 'ftr_01_001',
+        //                     text: e.t('menu.ftr_01_001'),//'Alış Fatura Listesi',
+        //                     path: 'invoices/lists/purchaseInvList'
+        //                 },
+        //                 {
+        //                     id: 'ftr_01_002',
+        //                     text: e.t('menu.ftr_01_002'),//'Satış Fatura Listesi',
+        //                     path: 'invoices/lists/salesInvList'
+        //                 },
+        //                 {
+        //                     id: 'ftr_01_003',
+        //                     text: e.t('menu.ftr_01_003'),//'iade Fatura Listesi',
+        //                     path: 'invoices/lists/rebateInvList'
+        //                 },
+        //                 {
+        //                     id: 'ftr_01_004',
+        //                     text: e.t('menu.ftr_01_004'),//'Fiyat Farkı Fatura Listesi',
+        //                     path: 'invoices/lists/priceDiffInvList'
+        //                 },
+        //                 {
+        //                     id: 'ftr_01_005',
+        //                     text: e.t('menu.ftr_01_005'),//'Şube satış  Fatura Listesi',
+        //                     path: 'invoices/lists/brancSaleInvList'
+        //                 }
+        //             ]
+        //         },
+        //         {
+        //             id: 'ftr_04',
+        //             text : e.t('menu.ftr_04'),//'Proforma',
+        //             expanded: false,
+        //             items: 
+        //             [
+        //                 {
+        //                     id: 'ftr_04_001',
+        //                     text: e.t('menu.ftr_04_001'),//'proforma fiyat farkı',
+        //                     path: 'invoices/proforma/priceDifferenceProInvoice'
+        //                 },
+        //                 {
+        //                     id: 'ftr_04_002',
+        //                     text: e.t('menu.ftr_04_002'),//'proforma Satış Faturası',
+        //                     path: 'invoices/proforma/salesProInvoice'
+        //                 },
+        //                 {
+        //                     id: 'ftr_04_003',
+        //                     text: e.t('menu.ftr_04_003'),//'proforma Alış Faturası',
+        //                     path: 'invoices/proforma/purchaseProInvoice'
+        //                 },
+        //                 {
+        //                     id: 'ftr_04_004',
+        //                     text: e.t('menu.ftr_04_004'),//'proforma İade Faturası',
+        //                     path: 'invoices/proforma/rebateProInvoice'
+        //                 },
+        //                 {
+        //                     id: 'ftr_04_005',
+        //                     text: e.t('menu.ftr_04_005'),//'proforma Şube Satış Faturası',
+        //                     path: 'invoices/proforma/branchSaleProInvoice'
+        //                 },
+        //             ]
+        //         },
+        //         {
+        //             id: 'ftr_03',
+        //             text : e.t('menu.ftr_03'),//'Raporlar',
+        //             expanded: false,
+        //         }
+        //     ]
+        // },
         //Finans
         {
             id: 'fns',
