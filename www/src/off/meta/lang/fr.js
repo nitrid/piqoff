@@ -88,8 +88,8 @@ export const langFr =
     },
     popDeleteDesc : 
     {
-        head : "Silme İşlemi Açıklaması",   // BAK
-        title : "Lütfen Silme Nedeninizi Giriniz"   // BAK
+        head : "Description du Processus de Suppression",   // BAK
+        title : "Veuillez Saisir la Raison de la Suppression"   // BAK
     },
     menu:
     {
@@ -147,7 +147,7 @@ export const langFr =
         ftr_01_001: "Liste facture d'achat",
         ftr_01_002: "Liste facture de vente",
         ftr_01_003: "Liste facture retour",
-        ftr_01_004:"Liste facture différence de prix",
+        ftr_01_004: "Liste facture différence de prix",
         ftr_01_005: "Liste des factures de vente interne", 
         ftr_02_001: "Saisie Facture d'achat",
         ftr_02_002: "Saisie Facture de vente",
@@ -165,11 +165,11 @@ export const langFr =
         irs_01: "Listes",
         irs_02: "Document",
         irs_03: "Rapports",
-        irs_01_001: "Saisie Bon de livraison d'achat",
-        irs_01_002: "Saisie Bon de livraison de vente",
-        irs_01_003: "Saisie Bon de livraison de retour",
+        irs_01_001: "Liste Bon de livraison d'achat",
+        irs_01_002: "Liste Bon de livraison de vente",
+        irs_01_003: "Liste Bon de livraison de retour",
         irs_01_004: "Liste des bordereaux de vente interne", 
-        irs_02_001: "Saisie Bon de livraison d'achat",
+        irs_02_001: " Bon de livraison d'achat",
         irs_02_002: "Saisie Bon de livraison de vente",
         irs_02_003: "Saisie Bon de Retour de livraison",
         irs_02_004: "Saisie Bon de livraison interne", 
@@ -240,7 +240,7 @@ export const langFr =
         set_02_007 : "Historique Demande de Soutien",   
         set_03 : "Réglages Documents",   
         set_03_001 : "Documents Effacés",   
-        set_03_002 : "Silinmiş Satırlar", // BAK
+        set_03_002 : "Lignes Effacées", // BAK
         proces : "Saisie groupée",
         proces_01 : "Traitement Produit",
         proces_01_001 : "MAJ Famille Produit",
@@ -10821,9 +10821,9 @@ export const langFr =
             clmRefNo : "REF.NO.",  
             clmCustomer : "CLIENT",  
             clmDate : "DATE",
-            clmDescription : "AÇIKLAMA", // BAK
-            clmUser : "KULLANICI",  // BAK
-            clmTotal : "TUTAR"   // BAK
+            clmDescription : "Description", // BAK
+            clmUser : "Utilisateur",  // BAK
+            clmTotal : "Total"   // BAK
         },
         cmbTypeData : 
         {
@@ -10850,9 +10850,9 @@ export const langFr =
     },
     set_03_002 : // Silinmiş Satırlar
     {
-        cmbType : "Evrak Tipi",   // BAK
-        btnGet : "Satırları Getir",   // BAK
-        chkDoc : "Evrakı Silinenleri Göster",   // BAK
+        cmbType : "Type Document",   // BAK
+        btnGet : "Recherche Ligne",   // BAK
+        chkDoc : "Aperçu Document Effacé",   // BAK
         mgsUnlock:
         {
             title: "Dikkat",   // BAK
@@ -10862,16 +10862,16 @@ export const langFr =
         },
         grdDeleteList : 
         {
-            clmRef : "SERI",    // BAK
-            clmRefNo : "SIRA",   // BAK
-            clmCustomer : "CARI",   // BAK
-            clmDate : "TARIH",   // BAK
-            clmDescription : "AÇIKLAMA",   // BAK
-            clmItemCode : "KODU",   // BAK
-            clmItemName : "ADI",   // BAK
-            clmQuantity : "MİKTAR",   // BAK
-            clmPrice : "FİYAT",   // BAK
-            clmTotal : "TOPLAM"   // BAK
+            clmRef : "Réf.",    // BAK
+            clmRefNo : "Ligne",   // BAK
+            clmCustomer : "Client",   // BAK
+            clmDate : "Date",   // BAK
+            clmDescription : "Description",   // BAK
+            clmItemCode : "Code",   // BAK
+            clmItemName : "Nom",   // BAK
+            clmQuantity : "Montant",   // BAK
+            clmPrice : "Prix",   // BAK
+            clmTotal : "Total"   // BAK
         },
         cmbTypeData : 
         {
