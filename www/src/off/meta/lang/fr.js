@@ -2152,6 +2152,7 @@ export const langFr =
         chkRebate :"Retour Reprise",
         txtExpiryDay : "Vade",  // BAK
         txtRiskLimit : "Risk Limiti",  // BAK
+        expDay : "(Gün)", // BAK
         pg_txtCode : 
         {
             title : "Sélectionner Client",

@@ -2152,6 +2152,7 @@ export const langTr =
         chkRebate :"İade Alır",
         txtExpiryDay : "Vade",
         txtRiskLimit : "Risk Limiti",
+        expDay : "(Gün)",
         pg_txtCode : 
         {
             title : "Cari Seçim",

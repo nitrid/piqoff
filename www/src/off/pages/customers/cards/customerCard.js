@@ -856,18 +856,29 @@ export default class CustomerCard extends React.PureComponent
                                                <Form colCount={6}>
                                                {/* txtExpiryDay */}
                                                <Item>
-                                                    <Label text={this.t("txtExpiryDay")} alignment="right" />
-                                                    <NdNumberBox id="txtExpiryDay" parent={this} simple={true} 
-                                                    dt={{data:this.customerObj.dt('CUSTOMERS'),field:"EXPIRY_DAY"}} 
-                                                    onChange={()=>
-                                                    {
-                                                    }}>
-                                                    </NdNumberBox>
+                                                <div className='row'>
+                                                    <div className='col-2 py-2'>
+                                                       {this.t("txtExpiryDay")}
+                                                    </div>
+                                                    <div className='col-4 px-0'>
+                                                        <NdNumberBox id="txtExpiryDay" parent={this} simple={true} 
+                                                        dt={{data:this.customerObj.dt('CUSTOMERS'),field:"EXPIRY_DAY"}} 
+                                                        onChange={()=>
+                                                        {
+                                                        }}>
+                                                        </NdNumberBox>
+                                                    </div>
+                                                    <div className='col-1 py-2 px-0'>
+                                                       {this.t("expDay")}
+                                                    </div>
+                                                </div>
+                                                   
                                                 </Item>        
                                                 {/* txtRiskLimit */}    
                                                 <Item>
                                                     <Label text={this.t("txtRiskLimit")} alignment="right" />
                                                     <NdNumberBox id="txtRiskLimit" parent={this} simple={true} 
+                                                    format={{ style: "currency", currency: "EUR",precision: 2}}
                                                     dt={{data:this.customerObj.dt('CUSTOMERS'),field:"RISK_LIMIT"}} 
                                                     onChange={()=>
                                                     {
