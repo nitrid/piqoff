@@ -269,7 +269,8 @@ export const langFr =
         purcinvoices : "Facture",
         purcinvoices_01 : "Document",
         purcinvoices_02 : "Listes",
-        purcinvoices_04 : "Proforma",
+        purcinvoices_03 : "Proforma",
+        purcinvoices_04 : "Rapports",
         sales : "Processus de vente",  // BAK Satış işlemleri
         salesoffer : "Proposition",
         salesoffer_01 : "Document",
@@ -286,7 +287,8 @@ export const langFr =
         salesinvoices : "Facture",
         salesinvoices_01 : "Document",
         salesinvoices_02 : "Listes",
-        salesinvoices_04 : "Proforma",
+        salesinvoices_03 : "Proforma",
+        salesinvoices_04 : "Rapports",
     },
     login:
     {

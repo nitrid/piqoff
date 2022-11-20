@@ -269,7 +269,8 @@ export const langTr =
         purcinvoices : "Fatura",
         purcinvoices_01 : "Evraklar",
         purcinvoices_02 : "Listeler",
-        purcinvoices_04 : "Proforma",
+        purcinvoices_03 : "Proforma",
+        purcinvoices_04 : "Raporlar",
         sales : "Satış İşlemleri",
         salesoffer : "Teklif",
         salesoffer_01 : "Evraklar",
@@ -286,7 +287,8 @@ export const langTr =
         salesinvoices : "Fatura",
         salesinvoices_01 : "Evraklar",
         salesinvoices_02 : "Listeler",
-        salesinvoices_04 : "Proforma",
+        salesinvoices_03 : "Proforma",
+        salesinvoices_04 : "Raporlar",
     },
     login:
     {
