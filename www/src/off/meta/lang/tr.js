@@ -2147,8 +2147,11 @@ export const langTr =
         tabTitleLegal : "Yasal",
         tabTitleOffical : "Yetkili",
         tabCustomerBank : "Banka Bilgileri",
+        tabTitleFinanceDetail : "Finans Bilgileri",
         txtLegal :"Yasal Bilgiler",
         chkRebate :"İade Alır",
+        txtExpiryDay : "Vade",
+        txtRiskLimit : "Risk Limiti",
         pg_txtCode : 
         {
             title : "Cari Seçim",

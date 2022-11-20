@@ -1630,6 +1630,7 @@ export default class salesInvoice extends React.PureComponent
                                                         this.docObj.docCustomer.dt()[0].INPUT = data[0].GUID
                                                         this.docObj.dt()[0].INPUT_CODE = data[0].CODE
                                                         this.docObj.dt()[0].INPUT_NAME = data[0].TITLE
+                                                        this.dtExpDate.value = moment(new Date()).add(data[0].EXPIRY_DAY, 'days')
                                                         let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
                                                         if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                         {
@@ -1684,6 +1685,7 @@ export default class salesInvoice extends React.PureComponent
                                                             this.docObj.docCustomer.dt()[0].INPUT = data[0].GUID
                                                             this.docObj.dt()[0].INPUT_CODE = data[0].CODE
                                                             this.docObj.dt()[0].INPUT_NAME = data[0].TITLE
+                                                            this.dtExpDate.value = moment(new Date()).add(data[0].EXPIRY_DAY, 'days')
                                                             let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
                                                             if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                             {
@@ -1746,7 +1748,7 @@ export default class salesInvoice extends React.PureComponent
                                         {
                                             select:
                                             {
-                                                query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)",
+                                                query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME],EXPIRY_DAY FROM CUSTOMER_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)",
                                                 param : ['VAL:string|50']
                                             },
                                             sql:this.core.sql

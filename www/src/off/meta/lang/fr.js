@@ -2147,8 +2147,11 @@ export const langFr =
         tabTitleLegal : "Légal",
         tabTitleOffical : "Administrateur",
         tabCustomerBank : "Données Bancaire",
+        tabTitleFinanceDetail : "Finans Bilgileri", // BAK
         txtLegal :"Données Légales",
         chkRebate :"Retour Reprise",
+        txtExpiryDay : "Vade",  // BAK
+        txtRiskLimit : "Risk Limiti",  // BAK
         pg_txtCode : 
         {
             title : "Sélectionner Client",

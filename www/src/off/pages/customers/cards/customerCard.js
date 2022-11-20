@@ -850,6 +850,34 @@ export default class CustomerCard extends React.PureComponent
                                             </div>
                                         </div>
                                     </Item>  
+                                    <Item title={this.t("tabTitleFinanceDetail")}>
+                                        <div className='row px-2 py-2'>
+                                            <div className='col-12'>
+                                               <Form colCount={6}>
+                                               {/* txtExpiryDay */}
+                                               <Item>
+                                                    <Label text={this.t("txtExpiryDay")} alignment="right" />
+                                                    <NdNumberBox id="txtExpiryDay" parent={this} simple={true} 
+                                                    dt={{data:this.customerObj.dt('CUSTOMERS'),field:"EXPIRY_DAY"}} 
+                                                    onChange={()=>
+                                                    {
+                                                    }}>
+                                                    </NdNumberBox>
+                                                </Item>        
+                                                {/* txtRiskLimit */}    
+                                                <Item>
+                                                    <Label text={this.t("txtRiskLimit")} alignment="right" />
+                                                    <NdNumberBox id="txtRiskLimit" parent={this} simple={true} 
+                                                    dt={{data:this.customerObj.dt('CUSTOMERS'),field:"RISK_LIMIT"}} 
+                                                    onChange={()=>
+                                                    {
+                                                    }}>
+                                                    </NdNumberBox>
+                                                </Item>         
+                                               </Form>
+                                            </div>
+                                        </div>
+                                    </Item>  
                                                                  
                                 </TabPanel>
                             </div>
