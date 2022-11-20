@@ -1089,7 +1089,7 @@ export default class payment extends React.PureComponent
                                         access={this.access.filter({ELEMENT:'numCash',USERS:this.user.CODE})}
                                         >
                                         <Validator validationGroup={"frmPayCash"  + this.tabIndex}>
-                                            <RequiredRule message={this.t("ValidCash")} />
+                                        <RangeRule min={0.1} message={this.t("ValidCash")} />
                                         </Validator>  
                                         </NdNumberBox>
                                     </div>
