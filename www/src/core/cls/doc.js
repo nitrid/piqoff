@@ -453,7 +453,9 @@ export class docCustomerCls
             INVOICE_GUID : '00000000-0000-0000-0000-000000000000',
             INVOICE_REF : '',
             EXPIRY_DATE :  moment(new Date()).format("YYYY-MM-DD"),
-            EXPIRY_FEE : 0
+            EXPIRY_FEE : 0,
+            INPUT_BALANCE  : 0,
+            OUTPUT_BALANCE  : 0
         }
 
         this._initDs();

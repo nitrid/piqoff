@@ -10206,6 +10206,7 @@ export const langFr =
         btnAddPay : "Entrée de paiement",
         invoiceSelect : "Sélection de facture",
         btnCash : "Entrée de paiement",
+        ValidCash : "0'dan büyük bir tutar giriniz", // BAK
         cmbPayType : {
             title : "Mode de paiement",
             cash : "Espèce",
@@ -10358,6 +10359,7 @@ export const langFr =
         checkReference : "Référence",
         btnCash : "Saisie Réglement",
         invoiceSelect : "Sélectionner Facture",
+        ValidCash : "0'dan büyük bir tutar giriniz", // BAK
         cmbPayType : {
             title : "Mode de paiement",
             cash : "Espèce",

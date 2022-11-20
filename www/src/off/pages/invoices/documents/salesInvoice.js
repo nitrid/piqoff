@@ -835,14 +835,24 @@ export default class salesInvoice extends React.PureComponent
             let tmpRemainder = (this.docObj.dt()[0].TOTAL - this.paymentObj.dt()[0].TOTAL).toFixed(2)
             this.txtRemainder.setState({value:tmpRemainder});
             this.txtMainRemainder.setState({value:tmpRemainder});
-            
         }
         else
         {
             this.txtRemainder.setState({value:this.docObj.dt()[0].TOTAL});
             this.txtMainRemainder.setState({value:this.docObj.dt()[0].TOTAL});
+           
         }
-       
+        let tmpQuery = 
+        {
+            query :"SELECT ROUND(BALANCE,2) AS BALANCE FROM  ACCOUNT_BALANCE WHERE ACCOUNT_GUID = @GUID ",
+            param : ['GUID:string|50'],
+            value : [this.docObj.dt()[0].INPUT]
+        }
+        let tmpData = await this.core.sql.execute(tmpQuery) 
+        if(tmpData.result.recordset.length > 0)
+        {
+            this.txtbalance.value = tmpData.result.recordset[0].BALANCE
+        }
     }
     async _addPayment(pType,pAmount)
     {
@@ -2494,16 +2504,16 @@ export default class salesInvoice extends React.PureComponent
                                             <EmptyItem colSpan={3}/>
                                             <Item>
                                             <Label text={this.t("txtRemainder")} alignment="right" />
-                                                <NdTextBox id="txtRemainder" parent={this} simple={true} readOnly={true}
+                                                <NdNumberBox id="txtRemainder" parent={this} simple={true} readOnly={true}
                                                 maxLength={32}
-                                                ></NdTextBox>
+                                                ></NdNumberBox>
                                             </Item>
                                             <EmptyItem colSpan={3}/>
                                             <Item>
                                             <Label text={this.t("txtbalance")} alignment="right" />
-                                                <NdTextBox id="txtbalance" format={{ style: "currency", currency: "EUR",precision: 2}} parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC_CUSTOMER'),field:"INPUT_BALANCE"}}
+                                                <NdNumberBox id="txtbalance" format={{ style: "currency", currency: "EUR",precision: 2}} parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC_CUSTOMER'),field:"INPUT_BALANCE"}}
                                                 maxLength={32}
-                                                ></NdTextBox>
+                                                ></NdNumberBox>
                                             </Item>
                                             <EmptyItem colSpan={3}/>
                                             <Item>
