@@ -3244,6 +3244,7 @@ export const langFr =
         dtExpDate : "Date d'Echéance", 
         getOffers : "Recherche Proposition",  
         getProforma : "Rechercher Proforma ", 
+        btnView : "Görüntüle", // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -3647,6 +3648,7 @@ export const langFr =
         txtExpFee : "Pénalités de Retard", 
         dtExpDate : "Date d'Echéance", 
         getProforma : "Rechercher Proforma ", 
+        btnView : "Görüntüle", // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -3986,6 +3988,7 @@ export const langFr =
         txtTotalQuantity : "Quantité totale",  
         txtExpFee : "Pénalités de Retard", 
         dtExpDate : "Date d'Echéance", 
+        btnView : "Görüntüle", // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -4300,6 +4303,7 @@ export const langFr =
         txtTotalQuantity : "Quantité unitaire",  
         txtExpFee : "Pénalités de Retard", 
         dtExpDate : "Date d'Echéance", 
+        btnView : "Görüntüle", // BAK
         pg_Docs : 
         {
             title : "Sélection Document",

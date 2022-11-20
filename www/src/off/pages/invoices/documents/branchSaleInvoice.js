@@ -1439,6 +1439,7 @@ export default class branchSaleInvoice extends React.PureComponent
                                                     this.docObj.docCustomer.dt()[0].INPUT = data[0].GUID
                                                     this.docObj.dt()[0].INPUT_CODE = data[0].CODE
                                                     this.docObj.dt()[0].INPUT_NAME = data[0].TITLE
+                                                    this.dtExpDate.value = moment(new Date()).add(data[0].EXPIRY_DAY, 'days')
                                                     let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
                                                     if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                     {
@@ -1492,6 +1493,7 @@ export default class branchSaleInvoice extends React.PureComponent
                                                             this.docObj.docCustomer.dt()[0].INPUT = data[0].GUID
                                                             this.docObj.dt()[0].INPUT_CODE = data[0].CODE
                                                             this.docObj.dt()[0].INPUT_NAME = data[0].TITLE
+                                                            this.dtExpDate.value = moment(new Date()).add(data[0].EXPIRY_DAY, 'days')
                                                             let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
                                                             if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                             {
@@ -1554,7 +1556,7 @@ export default class branchSaleInvoice extends React.PureComponent
                                         {
                                             select:
                                             {
-                                                query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND GENUS = 3",
+                                                query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME],EXPIRY_DAY FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND GENUS = 3",
                                                 param : ['VAL:string|50']
                                             },
                                             sql:this.core.sql
@@ -2838,7 +2840,7 @@ export default class branchSaleInvoice extends React.PureComponent
                     title={this.t("popDesign.title")}
                     container={"#root"} 
                     width={'500'}
-                    height={'250'}
+                    height={'280'}
                     position={{of:'#root'}}
                     >
                         <Form colCount={1} height={'fit-content'}>
@@ -2891,8 +2893,15 @@ export default class branchSaleInvoice extends React.PureComponent
                                             console.log(JSON.stringify(tmpData.result.recordset))
                                             this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
                                             {
+                                                
                                                 if(pResult.split('|')[0] != 'ERR')
                                                 {
+                                                    let tmpExtra = {...this.extraObj.empty}
+                                                    tmpExtra.DOC = this.docObj.dt()[0].GUID
+                                                    tmpExtra.DESCRIPTION = ''
+                                                    tmpExtra.TAG = 'PRINT'
+                                                    this.extraObj.addEmpty(tmpExtra);
+                                                    this.extraObj.save()
                                                     var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
                                                     mywindow.onload = function() 
                                                     {
@@ -2912,7 +2921,36 @@ export default class branchSaleInvoice extends React.PureComponent
                                             this.popDesign.hide();  
                                         }}/>
                                     </div>
-                            </div>
+                                </div>
+                                <div className='row py-2'>
+                                    <div className='col-6'>
+                                        <NdButton text={this.t("btnView")} type="normal" stylingMode="contained" width={'100%'} 
+                                        onClick={async ()=>
+                                        {       
+                                            let tmpQuery = 
+                                            {
+                                                query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID) ORDER BY LINE_NO " ,
+                                                param:  ['DOC_GUID:string|50','DESIGN:string|25'],
+                                                value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value]
+                                            }
+                                            let tmpData = await this.core.sql.execute(tmpQuery) 
+                                            this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
+                                            {
+                                                
+                                                if(pResult.split('|')[0] != 'ERR')
+                                                {
+                                                    var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
+                                                    mywindow.onload = function() 
+                                                    {
+                                                        mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
+                                                    } 
+                                                    // let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
+                                                    // mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
+                                                }
+                                            });
+                                        }}/>
+                                    </div>
+                                </div>
                         </Item>
                     </Form>
                 </NdPopUp>

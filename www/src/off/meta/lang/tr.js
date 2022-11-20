@@ -3244,6 +3244,7 @@ export const langTr =
         dtExpDate : "Vade Tarihi", 
         getOffers : "Teklif Getir", 
         getProforma : "Proforma Getir",
+        btnView : "Görüntüle",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -3647,6 +3648,7 @@ export const langTr =
         txtExpFee : "Gecikme Cezası",
         dtExpDate : "Vade Tarihi", 
         getProforma : "Proforma Getir",
+        btnView : "Görüntüle",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -3986,6 +3988,7 @@ export const langTr =
         txtTotalQuantity : "Toplam Miktar",
         txtExpFee : "Gecikme Cezası",
         dtExpDate : "Vade Tarihi", 
+        btnView : "Görüntüle",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -4300,6 +4303,7 @@ export const langTr =
         txtTotalQuantity : "Toplam Miktar",
         txtExpFee : "Gecikme Cezası",
         dtExpDate : "Vade Tarihi", 
+        btnView : "Görüntüle",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
