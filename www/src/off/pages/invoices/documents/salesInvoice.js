@@ -197,7 +197,7 @@ export default class salesInvoice extends React.PureComponent
         {
             if(pRef !== '')
             {
-                let tmpData = await new docCls().load({GUID:pGuid,REF:pRef,REF_NO:pRefno});
+                let tmpData = await new docCls().load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:1,DOC_TYPE:20});
 
                 if(tmpData.length > 0)
                 {

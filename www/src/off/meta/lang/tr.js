@@ -7499,7 +7499,7 @@ export const langTr =
             clmName : "STOK ADI",
             clmMulticode : "TEDARİKÇİ KODU"
         },
-        grdpurcinvoices: 
+        grdPurcDispatch: 
         {
             clmItemCode: "Kodu",
             clmItemName: "Adı",
