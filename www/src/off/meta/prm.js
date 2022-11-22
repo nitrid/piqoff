@@ -133,7 +133,22 @@ export const prm =
             CAPTION : "Faturadaki Hizmetten Maliyet Ekle"
         }
     },
-    //Faturadaki Hizmetten maliyet ekle
+    // underMinCostPrice
+    {
+        TYPE : 0,
+        ID :"underMinCostPrice",
+        VALUE : false,
+        SPECIAL : "",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Sistem",
+            CAPTION : "Maliyetten Düşük Fiyata Satış Yapabilir"
+        }
+    },
+    //Zorunlu Evrak Silme Açıklaması
     {
         TYPE : 0,
         ID :"docDeleteDesc",
@@ -2414,6 +2429,23 @@ export const prm =
                     query : "SELECT GUID,CODE,NAME FROM DEPOT WHERE STATUS = 1 AND DELETED = 0 ORDER BY CODE ASC"
                 },
             }
+        }
+    },
+    //#endregion
+    //#region Özel Etiket Basımı 
+    //
+    {
+        TYPE : 1,
+        ID :"underMinCostPrice",
+        VALUE : false,
+        SPECIAL : "",
+        PAGE : "stk_02_006",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Özel Etiket Basımı",
+            CAPTION : "Maliyet Fiyatından Düşük Etikete İzin Verme"
         }
     },
     //#endregion

@@ -1057,23 +1057,4 @@ export const acs =
             CAPTION : "Cari Adı"
         }
     },
-    //#region Kullanıcı Yetkileri
-    // underMinCostPrice
-    {
-        TYPE : 1,
-        ID :"underMinCostPrice",
-        VALUE : true,
-        SPECIAL : "",
-        PAGE : "irs_02_002",
-        ELEMENT : "",
-        APP : "OFF",
-        VIEW : 
-        {
-            TYPE : "boolean",
-            PAGE_NAME : "Satış İrsaliyesi",
-            CAPTION : "Maliyetten Düşük Fiyata Satış Yapabilir"
-        }
-    },
-    //#endregion
-
 ]

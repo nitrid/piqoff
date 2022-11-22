@@ -48,13 +48,13 @@ export default class NbPluButtonGrp extends NbBase
         let tmpArr = []
         for (let i = 0; i < this.pluObj.dt().where({TYPE:2}).length; i++) 
         {
-            tmpArr.push(this.pluObj.dt().where({TYPE:2})[i].LINK_CODE)
+            tmpArr.push(this.pluObj.dt().where({TYPE:2})[i].LINK)
         }
         
         this.pluImageDt.selectCmd = 
         {
-            query : "SELECT * FROM PLU_IMAGE_VW_01 WHERE MAIN_CODE IN (SELECT value FROM STRING_SPLIT(@MAIN_CODE,',')) ORDER BY ITEM_NAME ASC",
-            param : ['MAIN_CODE:string|250'],
+            query : "SELECT * FROM PLU_IMAGE_VW_01 WHERE MAIN_GUID IN (SELECT value FROM STRING_SPLIT(@MAIN_GUID,',')) ORDER BY ITEM_NAME ASC",
+            param : ['MAIN_GUID:string|250'],
             value : [tmpArr.toString()],
             local : 
             {
@@ -92,7 +92,7 @@ export default class NbPluButtonGrp extends NbBase
         this["popPluGroup" + this.props.id].show()        
         this.setState(
         {
-            btnPluImageGrp:this.pluImageDt.where({MAIN_CODE:pCode}),
+            btnPluImageGrp:this.pluImageDt.where({MAIN_GUID:pCode}),
             pluImageCurrentPage:1
         })
     }
@@ -299,7 +299,7 @@ export default class NbPluButtonGrp extends NbBase
     {
         if(this.parent.clickData.data.TYPE == 2)
         {
-            let tmpData = this.parent.pluImageDt.where({MAIN_CODE:this.parent.clickData.data.LINK_CODE})
+            let tmpData = this.parent.pluImageDt.where({MAIN_GUID:this.parent.clickData.data.LINK})
             if(this.children != "ALL")
             {
                 tmpData = tmpData.filter(x => x.ITEM_NAME.indexOf(this.children) == 0)
@@ -482,7 +482,7 @@ export default class NbPluButtonGrp extends NbBase
                 }
                 else if(pData.TYPE == 2)
                 {
-                    this.pluImageShow(pData.LINK_CODE)
+                    this.pluImageShow(pData.LINK)
                 }
             }
         }                
