@@ -1200,7 +1200,7 @@ export const prm =
     {
         TYPE : 1,
         ID :"taxSugarGroupValidation",
-        VALUE : ['DA5704B6-D1A3-490B-BE86-E3FBCAF2EA29','1E4E0371-11E4-4FB3-828D-9D6E408EE0C9'],
+        VALUE : ['DA5704B6-D1A3-490B-BE86-E3FBCAF2EA29','1E4E0371-11E4-4FB3-828D-9D6E408EE0C9','60fe2360-029b-4284-b7fb-6d5dd842ea58'],
         SPECIAL : "",
         PAGE : "stk_01_001",
         ELEMENT : "",
