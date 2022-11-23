@@ -448,9 +448,9 @@ export default class salesInvoice extends React.PureComponent
                                 }
                                 await this.msgUnit.show().then(async () =>
                                 {
-                                    this.grdSlsInv.devGrid.cellValue(e.rowIndex,"QUANTITY",this.txtTotalQuantity.value)
-                                    this.grdSlsInv.devGrid.cellValue(e.rowIndex,"UNIT",this.cmbUnit.value)
-                                    this.grdSlsInv.devGrid.cellValue(e.rowIndex,"UNIT_FACTOR",this.txtUnitFactor.value )
+                                    e.data.UNIT = this.cmbUnit.value
+                                    e.data.QUANTITY = this.txtTotalQuantity.value
+                                    e.data.UNIT_FACTOR = this.txtUnitFactor.value
                                 });  
                             }
                         },
