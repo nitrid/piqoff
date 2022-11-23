@@ -2989,9 +2989,9 @@ export const langFr =
         msgUnderPrice1:
         {
             title: "Attention",
-            btn01: "Oui",
+            btn01: "OK",
             btn02: "Abandonne",
-            msg: "Prix Inférieur à l'Achat ! ! Voulez Vous Continuer"
+            msg: "Prix Inférieur à l'Achat ! !"
         },
         msgUnderPrice2:
         {
@@ -3606,6 +3606,19 @@ export const langFr =
             clmQuantity : "Quantité",   
             clmPrice : "Prix",   
             clmTotal : "Total"   
+        },
+        msgUnderPrice1:
+        {
+            title: "Attention",
+            btn01: "OK",
+            btn02: "Abandonne",
+            msg: "Prix Inférieur à l'Achat ! !"
+        },
+        msgUnderPrice2:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Vous ne Pouvez Vendre en Dessous du Prix d'Achat ! !"
         },
     },
     ftr_02_003 : // "İade Faturası"
@@ -6261,9 +6274,9 @@ export const langFr =
         msgUnderPrice1:
         {
             title: "Attention",
-            btn01: "Oui",
+            btn01: "OK",
             btn02: "Abandonne",
-            msg: "Prix Inférieur à l'Achat ! ! Voulez Vous Continuer"
+            msg: "Prix Inférieur à l'Achat ! !"
         },
         msgUnderPrice2:
         {
@@ -7952,9 +7965,9 @@ export const langFr =
         msgUnderPrice1:
         {
             title: "Attention",
-            btn01: "Oui",
+            btn01: "OK",
             btn02: "Abandonne",
-            msg: "Prix Inférieur à l'Achat ! ! Voulez Vous Continuer"
+            msg: "Prix Inférieur à l'Achat ! !"
         },
         msgUnderPrice2:
         {
@@ -8284,9 +8297,9 @@ export const langFr =
         msgUnderPrice1:
         {
             title: "Attention",
-            btn01: "Oui",
+            btn01: "OK",
             btn02: "Abandonne",
-            msg: "Prix Inférieur à l'Achat ! ! Voulez Vous Continuer"
+            msg: "Prix Inférieur à l'Achat ! !"
         },
         msgUnderPrice2:
         {
@@ -8554,9 +8567,9 @@ export const langFr =
         msgUnderPrice1:
         {
             title: "Attention",
-            btn01: "Oui",
+            btn01: "OK",
             btn02: "Abandonne",
-            msg: "Prix Inférieur à l'Achat ! ! Voulez Vous Continuer"
+            msg: "Prix Inférieur à l'Achat ! !"
         },
         msgUnderPrice2:
         {
@@ -8886,9 +8899,9 @@ export const langFr =
         msgUnderPrice1:
         {
             title: "Attention",
-            btn01: "Oui",
+            btn01: "OK",
             btn02: "Abandonne",
-            msg: "Prix Inférieur à l'Achat ! ! Voulez Vous Continuer"
+            msg: "Prix Inférieur à l'Achat ! !"
         },
         msgUnderPrice2:
         {
@@ -9543,9 +9556,9 @@ export const langFr =
         msgUnderPrice1:
         {
             title: "Attention",
-            btn01: "Oui",
+            btn01: "OK",
             btn02: "Abandonne",
-            msg: "Prix Inférieur à l'Achat ! ! Voulez Vous Continuer"
+            msg: "Prix Inférieur à l'Achat ! !"
         },
         msgUnderPrice2:
         {
@@ -11943,7 +11956,7 @@ export const langFr =
         msgUnderPrice1:
         {
             title: "Attention",
-            btn01: "Oui",
+            btn01: "OK",
             btn02: "Abandonne",
             msg: "Prix Inférieur à l'Achat ! ! Voulez Vous Continuer ?"
         },

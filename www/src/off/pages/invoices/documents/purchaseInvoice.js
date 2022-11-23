@@ -215,7 +215,7 @@ export default class purchaseInvoice extends React.PureComponent
         {
             if(pRef !== '')
             {
-                let tmpData = await new docCls().load({GUID:pGuid,REF:pRef,REF_NO:pRefno});
+                let tmpData = await new docCls().load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:0,DOC_TYPE:20});
 
                 if(tmpData.length > 0)
                 {

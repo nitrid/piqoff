@@ -2989,9 +2989,9 @@ export const langTr =
         msgUnderPrice1:
         {
             title: "Dikkat",
-            btn01: "Evet",
+            btn01: "Tamam",
             btn02: "Vazgeç",
-            msg: "Maliyetten Düşük Fiyat !! Devam Etmek İstiyormusunuz"
+            msg: "Maliyetten düşük satış yapıyorsunuz !! "
         },
         msgUnderPrice2:
         {
@@ -3606,6 +3606,19 @@ export const langTr =
             clmQuantity : "Adet",
             clmPrice : "Fiyat",
             clmTotal : "Tutar"
+        },
+        msgUnderPrice1:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Maliyetten düşük satış yapıyorsunuz !! "
+        },
+        msgUnderPrice2:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Maliyet Fiyatından Daha Düşük Satılamaz !!"
         },
     },
     ftr_02_003 : // "İade Faturası"
@@ -6261,9 +6274,9 @@ export const langTr =
         msgUnderPrice1:
         {
             title: "Dikkat",
-            btn01: "Evet",
+            btn01: "Tamam",
             btn02: "Vazgeç",
-            msg: "Maliyetten Düşük Fiyat !! Devam Etmek İstiyormusunuz"
+            msg: "Maliyetten düşük satış yapıyorsunuz !! "
         },
         msgUnderPrice2:
         {
@@ -7499,7 +7512,7 @@ export const langTr =
             clmName : "STOK ADI",
             clmMulticode : "TEDARİKÇİ KODU"
         },
-        grdpurcinvoices: 
+        grdPurcDispatch: 
         {
             clmItemCode: "Kodu",
             clmItemName: "Adı",
@@ -7952,9 +7965,9 @@ export const langTr =
         msgUnderPrice1:
         {
             title: "Dikkat",
-            btn01: "Evet",
+            btn01: "Tamam",
             btn02: "Vazgeç",
-            msg: "Maliyetten Düşük Fiyat !! Devam Etmek İstiyormusunuz"
+            msg: "Maliyetten düşük satış yapıyorsunuz !! "
         },
         msgUnderPrice2:
         {
@@ -8284,9 +8297,9 @@ export const langTr =
         msgUnderPrice1:
         {
             title: "Dikkat",
-            btn01: "Evet",
+            btn01: "Tamam",
             btn02: "Vazgeç",
-            msg: "Maliyetten Düşük Fiyat !! Devam Etmek İstiyormusunuz"
+            msg: "Maliyetten düşük satış yapıyorsunuz !! "
         },
         msgUnderPrice2:
         {
@@ -8554,9 +8567,9 @@ export const langTr =
         msgUnderPrice1:
         {
             title: "Dikkat",
-            btn01: "Evet",
+            btn01: "Tamam",
             btn02: "Vazgeç",
-            msg: "Maliyetten Düşük Fiyat !! Devam Etmek İstiyormusunuz"
+            msg: "Maliyetten düşük satış yapıyorsunuz !! "
         },
         msgUnderPrice2:
         {
@@ -8886,9 +8899,9 @@ export const langTr =
         msgUnderPrice1:
         {
             title: "Dikkat",
-            btn01: "Evet",
+            btn01: "Tamam",
             btn02: "Vazgeç",
-            msg: "Maliyetten Düşük Fiyat !! Devam Etmek İstiyormusunuz"
+            msg: "Maliyetten düşük satış yapıyorsunuz !! "
         },
         msgUnderPrice2:
         {
@@ -9543,9 +9556,9 @@ export const langTr =
         msgUnderPrice1:
         {
             title: "Dikkat",
-            btn01: "Evet",
+            btn01: "Tamam",
             btn02: "Vazgeç",
-            msg: "Maliyetten Düşük Fiyat !! Devam Etmek İstiyormusunuz"
+            msg: "Maliyetten düşük satış yapıyorsunuz !! "
         },
         msgUnderPrice2:
         {
@@ -11943,9 +11956,9 @@ export const langTr =
         msgUnderPrice1:
         {
             title: "Dikkat",
-            btn01: "Evet",
+            btn01: "Tamam",
             btn02: "Vazgeç",
-            msg: "Maliyetten Düşük Fiyat !! Devam Etmek İstiyormusunuz"
+            msg: "Maliyetten düşük satış yapıyorsunuz !! "
         },
         msgUnderPrice2:
         {

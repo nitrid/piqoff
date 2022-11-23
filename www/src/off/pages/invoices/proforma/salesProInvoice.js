@@ -2067,42 +2067,6 @@ export default class salesInvoice extends React.PureComponent
                                                 e.key.QUANTITY = e.oldData.DEPOT_QUANTITY
                                             }
                                         }
-                                        if(e.newData.COST_PRICE > e.newData.PRICE )
-                                        {
-                                            let tmpData = this.acsobj.filter({ID:'underMinCostPrice',USERS:this.user.CODE}).getValue()
-                                            if(typeof tmpData != 'undefined' && tmpData ==  true)
-                                            {
-                                                let tmpConfObj =
-                                                {
-                                                    id:'msgUnderPrice1',showTitle:true,title:this.t("msgUnderPrice1.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:this.t("msgUnderPrice1.btn01"),location:'before'},{id:"btn02",caption:this.t("msgUnderPrice1.btn02"),location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgUnderPrice1.msg")}</div>)
-                                                }
-                                                
-                                                let pResult = await dialog(tmpConfObj);
-                                                if(pResult == 'btn01')
-                                                {
-                                                    
-                                                }
-                                                else if(pResult == 'btn02')
-                                                {
-                                                    return
-                                                }
-                                            }
-                                            else
-                                            {
-                                                e.cancel = true
-                                                let tmpConfObj =
-                                                {
-                                                    id:'msgUnderPrice2',showTitle:true,title:this.t("msgUnderPrice2.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:this.t("msgUnderPrice2.btn01"),location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgUnderPrice2.msg")}</div>)
-                                                }
-                                                dialog(tmpConfObj);
-                                                e.component.cancelEditData()
-                                                return
-                                            }
-                                        }
                                     }}
                                     onRowUpdated={async(e)=>{
                                         let rowIndex = e.component.getRowIndexByKey(e.key)
@@ -2126,41 +2090,6 @@ export default class salesInvoice extends React.PureComponent
                                         if(typeof e.data.DISCOUNT_RATE != 'undefined')
                                         {
                                             e.key.DISCOUNT = parseFloat((((e.key.AMOUNT * e.data.DISCOUNT_RATE) / 100)).toFixed(2))
-                                        }
-                                        if(e.key.COST_PRICE > e.key.PRICE )
-                                        {
-                                            let tmpData = this.acsobj.filter({ID:'underMinCostPrice',USERS:this.user.CODE}).getValue()
-                                            if(typeof tmpData != 'undefined' && tmpData ==  true)
-                                            {
-                                                let tmpConfObj =
-                                                {
-                                                    id:'msgUnderPrice1',showTitle:true,title:this.t("msgUnderPrice1.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:this.t("msgUnderPrice1.btn01"),location:'before'},{id:"btn02",caption:this.t("msgUnderPrice1.btn02"),location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgUnderPrice1.msg")}</div>)
-                                                }
-                                                
-                                                let pResult = await dialog(tmpConfObj);
-                                                if(pResult == 'btn01')
-                                                {
-                                                    
-                                                }
-                                                else if(pResult == 'btn02')
-                                                {
-                                                    e.component.cancelEditData()
-                                                    return
-                                                }
-                                            }
-                                            else
-                                            {
-                                                let tmpConfObj =
-                                                {
-                                                    id:'msgUnderPrice2',showTitle:true,title:this.t("msgUnderPrice2.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:this.t("msgUnderPrice2.btn01"),location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"msgUnderPrice2.msg"}</div>)
-                                                }
-                                                dialog(tmpConfObj);
-                                                return
-                                            }
                                         }
                                         if(e.key.DISCOUNT > (e.key.PRICE * e.key.QUANTITY))
                                         {

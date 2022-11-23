@@ -197,7 +197,7 @@ export default class salesInvoice extends React.PureComponent
         {
             if(pRef !== '')
             {
-                let tmpData = await new docCls().load({GUID:pGuid,REF:pRef,REF_NO:pRefno});
+                let tmpData = await new docCls().load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:1,DOC_TYPE:20});
 
                 if(tmpData.length > 0)
                 {
@@ -2205,15 +2205,15 @@ export default class salesInvoice extends React.PureComponent
                                                 e.key.QUANTITY = e.oldData.DEPOT_QUANTITY
                                             }
                                         }
-                                        if(e.newData.COST_PRICE > e.newData.PRICE )
+                                        if(typeof e.newData.PRICE != 'undefined' && e.key.COST_PRICE > e.newData.PRICE )
                                         {
-                                            let tmpData = this.acsobj.filter({ID:'underMinCostPrice',USERS:this.user.CODE}).getValue()
+                                            let tmpData = this.sysParam.filter({ID:'underMinCostPrice',USERS:this.user.CODE}).getValue()
                                             if(typeof tmpData != 'undefined' && tmpData ==  true)
                                             {
                                                 let tmpConfObj =
                                                 {
                                                     id:'msgUnderPrice1',showTitle:true,title:this.t("msgUnderPrice1.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:this.t("msgUnderPrice1.btn01"),location:'before'},{id:"btn02",caption:this.t("msgUnderPrice1.btn02"),location:'after'}],
+                                                    button:[{id:"btn01",caption:this.t("msgUnderPrice1.btn01"),location:'before'}],
                                                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgUnderPrice1.msg")}</div>)
                                                 }
                                                 
@@ -2221,10 +2221,6 @@ export default class salesInvoice extends React.PureComponent
                                                 if(pResult == 'btn01')
                                                 {
                                                     
-                                                }
-                                                else if(pResult == 'btn02')
-                                                {
-                                                    return
                                                 }
                                             }
                                             else
@@ -2263,54 +2259,6 @@ export default class salesInvoice extends React.PureComponent
                                         if(typeof e.data.DISCOUNT_RATE != 'undefined')
                                         {
                                             e.key.DISCOUNT = parseFloat((((e.key.AMOUNT * e.data.DISCOUNT_RATE) / 100)).toFixed(2))
-                                        }
-                                        if(e.key.COST_PRICE > e.key.PRICE )
-                                        {
-                                            let tmpData = this.acsobj.filter({ID:'underMinCostPrice',USERS:this.user.CODE}).getValue()
-                                            if(typeof tmpData != 'undefined' && tmpData ==  true)
-                                            {
-                                                let tmpConfObj =
-                                                {
-                                                    id:'msgUnderPrice1',showTitle:true,title:this.t("msgUnderPrice1.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:this.t("msgUnderPrice1.btn01"),location:'before'},{id:"btn02",caption:this.t("msgUnderPrice1.btn02"),location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgUnderPrice1.msg")}</div>)
-                                                }
-                                                
-                                                let pResult = await dialog(tmpConfObj);
-                                                if(pResult == 'btn01')
-                                                {
-                                                    
-                                                }
-                                                else if(pResult == 'btn02')
-                                                {
-                                                    e.component.cancelEditData()
-                                                    return
-                                                }
-                                            }
-                                            else
-                                            {
-                                                let tmpConfObj =
-                                                {
-                                                    id:'msgUnderPrice2',showTitle:true,title:this.t("msgUnderPrice2.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:this.t("msgUnderPrice2.btn01"),location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"msgUnderPrice2.msg"}</div>)
-                                                }
-                                                dialog(tmpConfObj);
-                                                return
-                                            }
-                                        }
-                                        if(e.key.DISCOUNT > (e.key.PRICE * e.key.QUANTITY))
-                                        {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgDiscount',showTitle:true,title:this.t("msgDiscount.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgDiscount.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscount.msg")}</div>)
-                                            }
-                                        
-                                            dialog(tmpConfObj);
-                                            e.key.DISCOUNT = 0 
-                                            return
                                         }
                                         
                                         e.key.VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100)).toFixed(3));
