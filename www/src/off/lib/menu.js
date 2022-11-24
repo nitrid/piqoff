@@ -718,12 +718,12 @@ export const menu = (e) =>
                                 {
                                     id: 'ftr_02_006',
                                     text: e.t('menu.ftr_02_006'),//'Fiyat Farkı Alış Faturası',
-                                    path: 'invoices/proforma/priceDifferencePurcInvoice'
+                                    path: 'invoices/documents/priceDifferencePurcInvoice'
                                 },
                                 {
                                     id: 'ftr_02_007',
                                     text: e.t('menu.ftr_02_007'),//'İade Alış Faturası',
-                                    path: 'invoices/proforma/branchSaleProInvoice'
+                                    path: 'invoices/documents/rebatePurcInvoice'
                                 },
                             ]
                         },

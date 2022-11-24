@@ -237,7 +237,7 @@ export default class payment extends React.PureComponent
                         tmpCheck.CHECK_DATE =  this.docObj.dt()[0].DOC_DATE
                         tmpCheck.CUSTOMER =   this.docObj.dt()[0].INPUT
                         tmpCheck.AMOUNT =  this.invoices[i].REMAINING
-                        tmpCheck.SAFE =  this.cmbCheckSafe.value
+                        tmpCheck.SAFE =  this.cmbCashSafe.value
                         this.docObj.checkCls.addEmpty(tmpCheck)
                     }
                     else if (pType == 2)

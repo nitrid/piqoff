@@ -481,8 +481,8 @@ export const prm =
                 },
                 {
                     id:"btn12",
-                    title:"TEST.",
-                    text:"Produit scanné suite à test pour une mise à jour."
+                    title:"Le client ne veut plus",
+                    text:"Le client ne ne veut plus du produit."
                 }
             ]
         },
