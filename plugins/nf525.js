@@ -2,7 +2,8 @@ import {core} from 'gensrv'
 import moment from 'moment'
 import * as xlsx from 'xlsx'
 import fs from 'fs'
-
+import rsa from 'jsrsasign';
+import { pem } from '../pem.js'
 class nf525
 {
     constructor()
@@ -484,7 +485,7 @@ class nf525
             tmpSignature = tmpSignature + "," + pData.GUID
             tmpSignature = tmpSignature + "," + (pData.SIGNATURE == "" ? "N" : "O")
 
-            return btoa(tmpSignature)
+            return this.sign(tmpSignature)
         }
         else
         {
@@ -505,12 +506,20 @@ class nf525
             tmpSignature = tmpSignature + "," + pData.DEVICE
             tmpSignature = tmpSignature + "," + (pData.SIGNATURE == "" ? "N" : "O")
 
-            return btoa(tmpSignature)
+            return this.sign(tmpSignature)
         }
         else
         {
             return tmpSignature
         }
+    }
+    sign(pData)
+    {
+        return rsa.KJUR.jws.JWS.sign("ES256", JSON.stringify({alg: "ES256"}),pData, pem.private)
+    }
+    verify(pJWS)
+    {
+        return rsa.KJUR.jws.JWS.verify(pJWS, pem.public, ["ES256"])
     }
 }
 

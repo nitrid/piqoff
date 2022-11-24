@@ -69,7 +69,7 @@ export default class NdAcsDialog extends NdBase
                         {
                             type : "select",
                             from : "USERS",
-                            where : {PWD:tmpPass}
+                            where : {PWD:tmpPass,ROLE:'Administrator',STATUS:true}
                         }
                     }
                 }
@@ -84,12 +84,13 @@ export default class NdAcsDialog extends NdBase
                         {
                             type : "select",
                             from : "USERS",
-                            where : {CODE:tmpCode,PWD:tmpPass}
+                            where : {CODE:tmpCode,PWD:tmpPass,STATUS:true}
                         }
                     }
                 }
                 
                 let tmpData = await this.core.sql.execute(tmpQuery)
+                
                 if(tmpData.result.recordset.length > 0)
                 {
                     this[this.props.id].hide()

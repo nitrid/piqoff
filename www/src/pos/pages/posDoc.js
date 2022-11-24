@@ -35,13 +35,11 @@ import { docCls} from "../../core/cls/doc.js"
 import transferCls from "../lib/transfer.js";
 import { promoCls } from "../../core/cls/promotion.js";
 import { nf525Cls } from "../lib/nf525.js";
+import { customersCls } from "../../core/cls/customers.js";
 
-import { itemsCls } from "../../core/cls/items.js";
 import { dataset,datatable,param,access } from "../../core/core.js";
 import {prm} from '../meta/prm.js'
 import {acs} from '../meta/acs.js'
-import { ThemeProvider } from "react-bootstrap";
-import { customersCls } from "../../core/cls/customers.js";
 
 export default class posDoc extends React.PureComponent
 {
@@ -281,6 +279,11 @@ export default class posDoc extends React.PureComponent
         this.firm.selectCmd = 
         {
             query : "SELECT TOP 1 * FROM COMPANY_VW_01",
+            local : 
+            {
+                type : "select",
+                from : "COMPANY_VW_01"
+            }
         }
         await this.firm.refresh();
         
@@ -429,7 +432,7 @@ export default class posDoc extends React.PureComponent
                     }
                 }
             }
-            await tmpDt.refresh();
+            await tmpDt.refresh();            
             //UNIQ BARKOD
             if(tmpDt.length == 0)
             {
@@ -460,8 +463,9 @@ export default class posDoc extends React.PureComponent
                     }
                 }
                 await tmpDt.refresh();
+                console.log(tmpDt)
                 //BURASI 7 HANELI UNIQLER BİTTİĞİNDE KALDIRILACAK //BAK
-                if(tmpDt.length == 0)
+                if(tmpDt.length == 0 && pCode.length > 6)
                 {
                     tmpDt.selectCmd = 
                     {
@@ -511,6 +515,7 @@ export default class posDoc extends React.PureComponent
         {
             pCode = pCode.substring(1,pCode.length)
         }
+        
         //EĞER CARİ SEÇ BUTONUNA BASILDIYSA CARİ BARKODDAN SEÇİLECEK.
         if(this.state.isBtnGetCustomer)
         {       
@@ -640,7 +645,7 @@ export default class posDoc extends React.PureComponent
         pCode = tmpBarPattern.barcode     
         //console.log("1 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))    
         this.loading.current.instance.show()
-        //ÜRÜN GETİRME        
+        //ÜRÜN GETİRME    
         let tmpItemsDt = await this.getItemDb(pCode)
         if(tmpItemsDt.length > 0)
         {     
@@ -1204,10 +1209,10 @@ export default class posDoc extends React.PureComponent
                     from : "ITEMS_POS_VW_01",
                     where : 
                     {
-                        GUID : pItemData.ITEM_GUID
+                        GUID : pRowData.ITEM_GUID
                     },
                 }
-            }        
+            }     
             tmpPriceDt.selectCmd.value = [pRowData.ITEM_GUID,pItemData.QUANTITY,pRowData.CUSTOMER_GUID]
             await tmpPriceDt.refresh();  
     
@@ -1258,7 +1263,7 @@ export default class posDoc extends React.PureComponent
 
                 this.posObj.dt()[0].STATUS = 1
                 //***** TICKET İMZALAMA *****/
-                let tmpSignedData = await this.nf525.signatureSale(this.posObj.dt()[0])
+                let tmpSignedData = await this.nf525.signatureSale(this.posObj.dt()[0],this.posObj.posSale.dt())                
                 this.posObj.dt()[0].REF = tmpSignedData.REF
                 this.posObj.dt()[0].SIGNATURE = tmpSignedData.SIGNATURE
 
@@ -1350,7 +1355,6 @@ export default class posDoc extends React.PureComponent
                 //******************************** */
                 if(typeof pPrint == 'undefined' || pPrint)
                 {       
-                    console.log(this.posObj.dt()[0].CUSTOMER_ADRESS)             
                     let tmpType = 'Fis'
                     //POS_EXTRA TABLOSUNA YAZDIRMA BİLDİRİMİ GÖNDERİLİYOR                    
                     let tmpInsertQuery = 
@@ -1364,7 +1368,25 @@ export default class posDoc extends React.PureComponent
                                 "@APP_VERSION =@PAPP_VERSION, " +
                                 "@DESCRIPTION = @PDESCRIPTION ", 
                         param : ['PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|250','PAPP_VERSION:string|25','PDESCRIPTION:string|max'],
-                        value : [this.posObj.dt()[0].CUSER,"REPRINT",this.posObj.dt()[0].GUID,"00000000-0000-0000-0000-000000000000","",this.core.appInfo.version,""]
+                        value : [this.posObj.dt()[0].CUSER,"REPRINT",this.posObj.dt()[0].GUID,"00000000-0000-0000-0000-000000000000","",this.core.appInfo.version,""],
+                        local : 
+                        {
+                            type : "insert",
+                            into : "POS_EXTRA_VW_01",
+                            values : 
+                            [
+                                {
+                                    GUID : datatable.uuidv4(),
+                                    CUSER : this.posObj.dt()[0].CUSER,
+                                    TAG : "REPRINT",
+                                    POS_GUID : this.posObj.dt()[0].GUID,
+                                    LINE_GUID : "00000000-0000-0000-0000-000000000000",
+                                    DATA : "",
+                                    APP_VERSION : this.core.appInfo.version,
+                                    DESCRIPTION : ""
+                                }
+                            ]
+                        }
                     }
                     await this.core.sql.execute(tmpInsertQuery)
                     //***************************************************/
@@ -1538,7 +1560,7 @@ export default class posDoc extends React.PureComponent
             //NAKİT ALDIĞINDA KASA AÇMA İŞLEMİ 
             if(pType == 0)
             {
-                await this.posDevice.caseOpen();
+                this.posDevice.caseOpen();
             }            
             //SATIR BİRLEŞTİR        
             if(typeof tmpRowData != 'undefined')
@@ -1689,10 +1711,16 @@ export default class posDoc extends React.PureComponent
         {
             let tmpDt = this.posObj.posExtra.dt().where({TAG:pTag})
             //LOCAL DB İÇİN YAPILDI
-            this.posObj.dt()[0].DESCRIPTION = pDesc
-
+            if(this.core.offline)
+            {
+                this.posObj.dt()[0].DESCRIPTION = pDesc
+                console.log(11)
+                this.calcGrandTotal()
+            }
+            
             if(tmpDt.length > 0 && pTag == 'PARK DESC')
             {
+
                 tmpDt[0].DESCRIPTION = pDesc
             }
             else
@@ -1703,7 +1731,6 @@ export default class posDoc extends React.PureComponent
                 this.posObj.posExtra.dt()[this.posObj.posExtra.dt().length - 1].LINE_GUID = pLineGuid
                 this.posObj.posExtra.dt()[this.posObj.posExtra.dt().length - 1].DESCRIPTION = pDesc
                 this.posObj.posExtra.dt()[this.posObj.posExtra.dt().length - 1].DATA = pData
-
             }
             await this.posObj.save()
             resolve()
@@ -1726,6 +1753,7 @@ export default class posDoc extends React.PureComponent
             await this.posObj.posSale.dt().delete()
             this.promoApply()
             await this.calcGrandTotal()
+            console.log(this.posObj.posSale.dt())
         }
         else
         {
@@ -2259,7 +2287,6 @@ export default class posDoc extends React.PureComponent
             {
                 return {result : true,count : tmpResult.sum('COUNT'),items : tmpItems}
             }
-            
         }
         let addPosPromo = (pType,pAmount,pPromoGuid,pPosGuid,pPosSaleGuid) => 
         {
@@ -3498,7 +3525,20 @@ export default class posDoc extends React.PureComponent
                                     <div className="col px-1">
                                         <NbButton id={"btnOrderList"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt"}}
                                         onClick={async()=>
-                                        {          
+                                        {
+                                            //LOCAL DB İÇİN YAPILDI - ALI KEMAL KARACA 24.08.2022
+                                            if(this.core.offline)
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgOfflineWarning',showTitle:true,title:this.lang.t("msgOfflineWarning.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.lang.t("msgOfflineWarning.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgOfflineWarning.msg")}</div>)
+                                                }
+                                                await dialog(tmpConfObj);
+                                                return
+                                            }
+                                                      
                                             let tmpOrderList = new datatable();
                                             tmpOrderList.selectCmd = 
                                             {
@@ -3619,8 +3659,21 @@ export default class posDoc extends React.PureComponent
                                     {/* Customer Add */}
                                     <div className="col px-1">
                                         <NbButton id={"btnCustomerAdd"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt"}}
-                                        onClick={()=>
+                                        onClick={async()=>
                                         {
+                                            //LOCAL DB İÇİN YAPILDI - ALI KEMAL KARACA 24.08.2022
+                                            if(this.core.offline)
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgOfflineWarning',showTitle:true,title:this.lang.t("msgOfflineWarning.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.lang.t("msgOfflineWarning.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgOfflineWarning.msg")}</div>)
+                                                }
+                                                await dialog(tmpConfObj);
+                                                return
+                                            }
+
                                             this.customerObj.clearAll()
 
                                             this.customerObj.addEmpty()
@@ -3774,8 +3827,21 @@ export default class posDoc extends React.PureComponent
                                     {/* Advance */}
                                     <div className="col px-1">
                                         <NbButton id={"btnAdvance"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}
-                                        onClick={()=>
+                                        onClick={async()=>
                                         {
+                                            //LOCAL DB İÇİN YAPILDI - ALI KEMAL KARACA 24.08.2022
+                                            if(this.core.offline)
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgOfflineWarning',showTitle:true,title:this.lang.t("msgOfflineWarning.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.lang.t("msgOfflineWarning.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgOfflineWarning.msg")}</div>)
+                                                }
+                                                await dialog(tmpConfObj);
+                                                return
+                                            }
+
                                             this.rbtnAdvanceType.value = 0
                                             this.txtPopAdvance.value = 0
                                             this.txtPopAdvance.newStart = true

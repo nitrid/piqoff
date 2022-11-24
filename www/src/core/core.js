@@ -213,6 +213,10 @@ export class local
                 {
                     resolve({result:{state:true}})
                 }
+                else
+                {
+                    console.log(tmpResult)
+                }
             }
             else
             {
@@ -301,11 +305,11 @@ export class local
                                 await this.insert(pItem);
                             } 
                             else if(pItem.type == 'update')
-                            {                                        
+                            {          
                                 await this.update(pItem);
                             } 
                             else if(pItem.type == 'delete')
-                            {                     
+                            {                                               
                                 await this.remove(pItem);
                             }      
                         });

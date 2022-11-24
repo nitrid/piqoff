@@ -102,10 +102,12 @@ export class posCls
                 type : "insert",
                 into : "POS_VW_01",
                 values : [{GUID : {map:'GUID'},CDATE : {map:'CDATE',type:'date_time'},CUSER : {map:'CUSER'},CUSER_NAME : {map:'CUSER_NAME'},LDATE : {map:'LDATE',type:'date_time'},LUSER : {map:'LUSER'},
-                LUSER_NAME : {map:'LUSER_NAME'},DEVICE : {map:'DEVICE'},DEPOT_GUID : {map:'DEPOT_GUID'},DEPOT_CODE : {map:'DEPOT_CODE'},DEPOT_NAME : {map:'DEPOT_NAME'},TYPE : {map:'TYPE'},
-                DOC_DATE : {map:'DOC_DATE',type:'date_time'},CUSTOMER_GUID : {map:'CUSTOMER_GUID'},CUSTOMER_CODE : {map:'CUSTOMER_CODE'},CUSTOMER_NAME : {map:'CUSTOMER_NAME'},CUSTOMER_POINT : {map:'CUSTOMER_POINT'},
-                FAMOUNT : {map:'FAMOUNT'},AMOUNT : {map:'AMOUNT'},DISCOUNT : {map:'DISCOUNT'},LOYALTY : {map:'LOYALTY'},VAT : {map:'VAT'},TOTAL : {map:'TOTAL'},TICKET : {map:'TICKET'},
-                REBATE_CHEQPAY : {map:'REBATE_CHEQPAY'},STATUS : {map:'STATUS'},DESCRIPTION : '',REF : {map:'REF'},DELETED:false,ORDER_GUID : {map:'ORDER_GUID'}}]
+                LUSER_NAME : {map:'LUSER_NAME'},FIRM : {map:'FIRM'},DEVICE : {map:'DEVICE'},DEPOT_GUID : {map:'DEPOT_GUID'},DEPOT_CODE : {map:'DEPOT_CODE'},DEPOT_NAME : {map:'DEPOT_NAME'},TYPE : {map:'TYPE'},TYPE_NAME : {map:'TYPE_NAME'},
+                DOC_TYPE : {map:'DOC_TYPE'},DOC_DATE : {map:'DOC_DATE',type:'date_time'},REF : {map:'REF'},CUSTOMER_GUID : {map:'CUSTOMER_GUID'},CUSTOMER_TYPE : {map:'CUSTOMER_TYPE'},CUSTOMER_CODE : {map:'CUSTOMER_CODE'},
+                CUSTOMER_NAME : {map:'CUSTOMER_NAME'},CUSTOMER_TAX_NO : {map:'CUSTOMER_TAX_NO'},CUSTOMER_ADRESS : {map:'CUSTOMER_ADRESS'},CUSTOMER_ZIPCODE : {map:'CUSTOMER_ZIPCODE'},CUSTOMER_COUNTRY : {map:'CUSTOMER_COUNTRY'},
+                CUSTOMER_CITY : {map:'CUSTOMER_CITY'},CUSTOMER_POINT : {map:'CUSTOMER_POINT'},FAMOUNT : {map:'FAMOUNT'},AMOUNT : {map:'AMOUNT'},DISCOUNT : {map:'DISCOUNT'},LOYALTY : {map:'LOYALTY'},
+                VAT : {map:'VAT'},TOTAL : {map:'TOTAL'},TICKET : {map:'TICKET'},REBATE_CHEQPAY : {map:'REBATE_CHEQPAY'},STATUS : {map:'STATUS'},DESCRIPTION : {map:'DESCRIPTION'},DELETED:false,
+                CERTIFICATE : {map:'CERTIFICATE'},ORDER_GUID : {map:'ORDER_GUID'},SIGNATURE : {map:'SIGNATURE'}}]
             }
         } 
         tmpDt.updateCmd = 
@@ -141,10 +143,12 @@ export class posCls
                 type : "update",
                 in : "POS_VW_01",
                 set : {CDATE : {map:'CDATE',type:'date_time'},CUSER : {map:'CUSER'},CUSER_NAME : {map:'CUSER_NAME'},LDATE : {map:'LDATE',type:'date_time'},LUSER : {map:'LUSER'},
-                LUSER_NAME : {map:'LUSER_NAME'},DEVICE : {map:'DEVICE'},DEPOT_GUID : {map:'DEPOT_GUID'},DEPOT_CODE : {map:'DEPOT_CODE'},DEPOT_NAME : {map:'DEPOT_NAME'},TYPE : {map:'TYPE'},
-                DOC_DATE : {map:'DOC_DATE',type:'date_time'},CUSTOMER_GUID : {map:'CUSTOMER_GUID'},CUSTOMER_CODE : {map:'CUSTOMER_CODE'},CUSTOMER_NAME : {map:'CUSTOMER_NAME'},CUSTOMER_POINT : {map:'CUSTOMER_POINT'},
-                FAMOUNT : {map:'FAMOUNT'},AMOUNT : {map:'AMOUNT'},DISCOUNT : {map:'DISCOUNT'},LOYALTY : {map:'LOYALTY'},VAT : {map:'VAT'},TOTAL : {map:'TOTAL'},TICKET : {map:'TICKET'},
-                REBATE_CHEQPAY : {map:'REBATE_CHEQPAY'},STATUS : {map:'STATUS'},DESCRIPTION : {map:'DESCRIPTION'},REF : {map:'REF'},DELETED:false,ORDER_GUID : {map:'ORDER_GUID'}},
+                LUSER_NAME : {map:'LUSER_NAME'},DEVICE : {map:'DEVICE'},DEPOT_GUID : {map:'DEPOT_GUID'},DEPOT_CODE : {map:'DEPOT_CODE'},DEPOT_NAME : {map:'DEPOT_NAME'},TYPE : {map:'TYPE'},TYPE_NAME : {map:'TYPE_NAME'},
+                DOC_TYPE : {map:'DOC_TYPE'},DOC_DATE : {map:'DOC_DATE',type:'date_time'},REF : {map:'REF'},CUSTOMER_GUID : {map:'CUSTOMER_GUID'},CUSTOMER_TYPE : {map:'CUSTOMER_TYPE'},CUSTOMER_CODE : {map:'CUSTOMER_CODE'},
+                CUSTOMER_NAME : {map:'CUSTOMER_NAME'},CUSTOMER_TAX_NO : {map:'CUSTOMER_TAX_NO'},CUSTOMER_ADRESS : {map:'CUSTOMER_ADRESS'},CUSTOMER_ZIPCODE : {map:'CUSTOMER_ZIPCODE'},CUSTOMER_COUNTRY : {map:'CUSTOMER_COUNTRY'},
+                CUSTOMER_CITY : {map:'CUSTOMER_CITY'},CUSTOMER_POINT : {map:'CUSTOMER_POINT'},FAMOUNT : {map:'FAMOUNT'},AMOUNT : {map:'AMOUNT'},DISCOUNT : {map:'DISCOUNT'},LOYALTY : {map:'LOYALTY'},
+                VAT : {map:'VAT'},TOTAL : {map:'TOTAL'},TICKET : {map:'TICKET'},REBATE_CHEQPAY : {map:'REBATE_CHEQPAY'},STATUS : {map:'STATUS'},DESCRIPTION : {map:'DESCRIPTION'},DELETED:false,
+                CERTIFICATE : {map:'CERTIFICATE'},ORDER_GUID : {map:'ORDER_GUID'},SIGNATURE : {map:'SIGNATURE'}},
                 where : {GUID : {map:'GUID'}}
             }
         } 
@@ -438,7 +442,7 @@ export class posSaleCls
                 type : "update",
                 in : "POS_SALE_VW_01",
                 set : {DELETED:true},
-                where : {POS_GUID : {map:'GUID'}}
+                where : {GUID : {map:'GUID'}}
             }
         }
 
@@ -668,7 +672,7 @@ export class posPaymentCls
                 type : "update",
                 in : "POS_PAYMENT_VW_01",
                 set : {DELETED:true},
-                where : {POS_GUID : {map:'GUID'}}
+                where : {GUID : {map:'GUID'}}
             }
         }
 
@@ -990,7 +994,7 @@ export class posExtraCls
                     "@POS_GUID = @PPOS_GUID, " +
                     "@LINE_GUID = @PLINE_GUID, " +
                     "@DATA =@PDATA, " +
-                    "@APP_VERSION =@PAPP_VERSION, " +
+                    "@APP_VERSION = @PAPP_VERSION, " +
                     "@DESCRIPTION = @PDESCRIPTION ", 
             param : ['PGUID:string|50','PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|50','PAPP_VERSION:string|25','PDESCRIPTION:string|max'],
             dataprm : ['GUID','CUSER','TAG','POS_GUID','LINE_GUID','DATA','APP_VERSION','DESCRIPTION'],
@@ -1007,6 +1011,7 @@ export class posExtraCls
                         POS_GUID : {map:'POS_GUID'},
                         LINE_GUID : {map:'LINE_GUID'},
                         DATA : {map:'DATA'},
+                        APP_VERSION : {map:'APP_VERSION'},
                         DESCRIPTION : {map:'DESCRIPTION'}
                     }
                 ]
@@ -1021,7 +1026,7 @@ export class posExtraCls
                     "@POS_GUID = @PPOS_GUID, " +
                     "@LINE_GUID = @PLINE_GUID, " +
                     "@DATA =@PDATA, " +
-                    "@APP_VERSION =@PAPP_VERSION, " +
+                    "@APP_VERSION = @PAPP_VERSION, " +
                     "@DESCRIPTION = @PDESCRIPTION ", 
             param : ['PGUID:string|50','PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|50','PAPP_VERSION:string|25','PDESCRIPTION:string|max'],
             dataprm : ['GUID','CUSER','TAG','POS_GUID','LINE_GUID','DATA','APP_VERSION','DESCRIPTION'],
@@ -1036,6 +1041,7 @@ export class posExtraCls
                     POS_GUID : {map:'POS_GUID'},
                     LINE_GUID : {map:'LINE_GUID'},
                     DATA : {map:'DATA'},
+                    APP_VERSION : {map:'APP_VERSION'},
                     DESCRIPTION : {map:'DESCRIPTION'}
                 },
                 where : {GUID : {map:'GUID'}}
