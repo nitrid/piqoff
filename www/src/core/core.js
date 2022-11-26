@@ -938,20 +938,31 @@ export class datatable
                 //LOCAL DB İÇİN YAPILDI. WHERE ŞARTINDA {index} ŞEKLİNDE DEĞER ATAMASI... ALI KEMAL KARACA - 22.08.2022 
                 if(typeof tmpQuery.local != 'undefined' && typeof tmpQuery.local.where != 'undefined' && typeof tmpQuery.param != 'undefined')
                 {
-                    let tmpLocStr = JSON.stringify(tmpQuery.local.where)
+                    let tmpFindObj = (pVals,pIndex,pVal) =>
+                    {
+                        for (let i = 0; i < Object.values(pVals).length; i++) 
+                        {
+                            let tmpItem = Object.values(pVals)[i]
+                            if(typeof tmpItem == 'object')
+                            {
+                                tmpFindObj(tmpItem,pIndex,pVal)
+                            }
+                            else if(typeof tmpItem == 'string' && tmpItem.indexOf('{' + pIndex + '}') > -1)
+                            {                                
+                                pVals[Object.keys(pVals)[i]] = pVal
+                            }
+                            else if(typeof tmpItem == 'string' && tmpItem.toString().split('|').length > 0 && tmpItem.toString().split('|')[1] == 'date') //TARIH DENETİMİ
+                            {
+                                pVals[Object.keys(pVals)[i]] = new Date(tmpItem.split('|')[0])
+                            }
+                        }
+                    }
+                                        
                     for (let i = 0; i < tmpQuery.param.length; i++) 
                     {
-                        tmpLocStr = tmpLocStr.replace("{" + i + "}",tmpQuery.value[i])
-                        tmpLocStr = tmpLocStr.replace("{" + i + "}",tmpQuery.value[i])
-                        tmpLocStr = tmpLocStr.replace("{" + i + "}",tmpQuery.value[i])
-                        tmpLocStr = tmpLocStr.replace("{" + i + "}",tmpQuery.value[i])
-                        tmpLocStr = tmpLocStr.replace("{" + i + "}",tmpQuery.value[i])
-                        tmpLocStr = tmpLocStr.replace("{" + i + "}",tmpQuery.value[i])
-                        tmpLocStr = tmpLocStr.replace("{" + i + "}",tmpQuery.value[i])
+                        tmpFindObj(tmpQuery.local.where,i,tmpQuery.value[i])
                     }
-                    tmpQuery.local.where = JSON.parse(tmpLocStr)
                 }                
-                
                 let TmpData = await this.sql.execute(tmpQuery)
                 
                 if(typeof TmpData.result.err == 'undefined') 

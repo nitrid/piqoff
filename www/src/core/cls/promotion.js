@@ -43,7 +43,12 @@ export class promoCls
             query : "SELECT * FROM [dbo].[PROMO_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND " + 
                     "((CUSTOMER_GUID = @CUSTOMER_GUID) OR (CUSTOMER_GUID = '00000000-0000-0000-0000-000000000000')) AND ((DEPOT_GUID = @DEPOT_GUID) OR (@DEPOT_GUID = '00000000-0000-0000-0000-000000000000')) AND " + 
                     "((START_DATE <= @START_DATE) OR (@START_DATE = '19700101')) AND ((FINISH_DATE >= @FINISH_DATE) OR (@FINISH_DATE = '19700101')) AND STATUS = 1 ORDER BY TYPE ASC",
-            param : ['GUID:string|50','CODE:string|25','START_DATE:date','FINISH_DATE:date','CUSTOMER_GUID:string|50','DEPOT_GUID:string|50']
+            param : ['GUID:string|50','CODE:string|25','START_DATE:date','FINISH_DATE:date','CUSTOMER_GUID:string|50','DEPOT_GUID:string|50'],
+            local : 
+            {
+                type : "select",
+                from : "PROMO_VW_01",
+            }
         } 
         tmpDt.insertCmd = 
         {
@@ -162,9 +167,28 @@ export class promoCls
             }
             
             this.ds.get('PROMO').selectCmd.value = Object.values(tmpPrm)
-            
-            await this.ds.get('PROMO').refresh();
 
+            this.ds.get('PROMO').selectCmd.local =
+            {
+                type : "select",
+                from : "PROMO_VW_01",
+                where : 
+                {
+                    START_DATE : {'<=' : arguments[0].START_DATE + "|date"},
+                    FINISH_DATE : {'>=' : arguments[0].FINISH_DATE + "|date"},                    
+                }
+            }
+
+            if(tmpPrm.DEPOT_GUID != '00000000-0000-0000-0000-000000000000')
+            {
+                this.ds.get('PROMO').selectCmd.local.where.DEPOT_GUID = arguments[0].DEPOT_GUID
+            }
+            if(tmpPrm.CUSTOMER_GUID != '00000000-0000-0000-0000-000000000000')
+            {
+                this.ds.get('PROMO').selectCmd.local.where.CUSTOMER_GUID = arguments[0].CUSTOMER_GUID
+            }
+            await this.ds.get('PROMO').refresh();
+            
             let tmpGuids = ''
             for (let i = 0; i < this.ds.get('PROMO').length; i++) 
             {
@@ -314,6 +338,22 @@ export class promoCondCls
                 tmpPrm.PROMO = typeof arguments[0].PROMO == 'undefined' ? '' : arguments[0].PROMO;
             }
             this.ds.get('PROMO_CONDITION').selectCmd.value = Object.values(tmpPrm)
+
+            this.ds.get('PROMO_CONDITION').selectCmd.local =
+            {
+                type : "select",
+                from : "PROMO_CONDITION_VW_01",
+                where : {}
+            }
+            if(tmpPrm.GUID != '00000000-0000-0000-0000-000000000000')
+            {
+                this.ds.get('PROMO_CONDITION').selectCmd.local.where.GUID = arguments[0].GUID
+            }
+            if(tmpPrm.PROMO != '00000000-0000-0000-0000-000000000000')
+            {
+                this.ds.get('PROMO_CONDITION').selectCmd.local.where.PROMO = { in : arguments[0].PROMO.split(',')}
+            }
+
             await this.ds.get('PROMO_CONDITION').refresh();
             resolve(this.ds.get('PROMO_CONDITION'));    
         });
@@ -453,9 +493,26 @@ export class promoAppCls
                 tmpPrm.GUID = typeof arguments[0].GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].GUID;
                 tmpPrm.PROMO = typeof arguments[0].PROMO == 'undefined' ? '' : arguments[0].PROMO;
             }
+
             this.ds.get('PROMO_APPLICATION').selectCmd.value = Object.values(tmpPrm)
 
+            this.ds.get('PROMO_APPLICATION').selectCmd.local =
+            {
+                type : "select",
+                from : "PROMO_APPLICATION_VW_01",
+                where : {}
+            }
+            if(tmpPrm.GUID != '00000000-0000-0000-0000-000000000000')
+            {
+                this.ds.get('PROMO_APPLICATION').selectCmd.local.where.GUID = arguments[0].GUID
+            }
+            if(tmpPrm.PROMO != '00000000-0000-0000-0000-000000000000')
+            {
+                this.ds.get('PROMO_APPLICATION').selectCmd.local.where.PROMO = { in : arguments[0].PROMO.split(',')}
+            }
+
             await this.ds.get('PROMO_APPLICATION').refresh();
+            
             resolve(this.ds.get('PROMO_APPLICATION'));    
         });
     }
