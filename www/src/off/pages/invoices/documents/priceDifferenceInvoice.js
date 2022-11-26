@@ -2,7 +2,7 @@ import moment from 'moment';
 
 import React from 'react';
 import App from '../../../lib/app.js';
-import { docCls,docItemsCls, docCustomerCls } from '../../../../core/cls/doc.js';
+import { docCls,docItemsCls, docCustomerCls,docExtraCls } from '../../../../core/cls/doc.js';
 
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
@@ -36,6 +36,7 @@ export default class priceDifferenceInvoice extends React.PureComponent
         this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
         this.docObj = new docCls();
         this.paymentObj = new docCls();
+        this.extraObj = new docExtraCls();
         this.tabIndex = props.data.tabkey
 
         this._cellRoleRender = this._cellRoleRender.bind(this)
