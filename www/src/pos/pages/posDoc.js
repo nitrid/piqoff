@@ -170,9 +170,18 @@ export default class posDoc extends React.PureComponent
             this.setState({isConnected:false})
             let tmpConfObj =
             {
-                id:'msgOfflineAlert',showTitle:true,title:this.lang.t("msgOfflineAlert.title"),showCloseButton:true,width:'500px',height:'200px',
+                id:'msgOfflineAlert',showTitle:true,title:this.lang.t("msgOfflineAlert.title"),showCloseButton:true,width:'650px',height:'220px',
                 button:[{id:"btn01",caption:this.lang.t("msgOfflineAlert.btn01"),location:'after'}],
-                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgOfflineAlert.msg")}</div>)
+                content:(
+                    <div>
+                        <div className="row">
+                            <div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgOfflineAlert.msg1")}</div>
+                        </div>
+                        <div className="row">
+                            <div style={{textAlign:"center",fontSize:"20px",fontWeight:"bold",color:"red"}}>{this.lang.t("msgOfflineAlert.msg2")}</div>
+                        </div>
+                    </div>
+                )
             }
             await dialog(tmpConfObj);
 
@@ -845,7 +854,6 @@ export default class posDoc extends React.PureComponent
                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgBarcodeNotFound.msg")}</div>)
             }
             await dialog(tmpConfObj);
-            
         }
         //******************************************************** */    
     }

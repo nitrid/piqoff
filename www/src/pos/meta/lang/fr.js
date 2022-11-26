@@ -546,7 +546,8 @@ export const langFr =
     msgOfflineAlert: 
     {
         title : "Attention",
-        msg : "Votre connexion au serveur a été perdu ! Vous pouvez poursuivre votre transaction hors ligne.",
+        msg1 : "Votre connexion au serveur a été perdu ! Vous pouvez poursuivre votre transaction hors ligne.",
+        msg2 : "!! LÜTFEN SON OKUTTUĞUNUZ ÜRÜNLERİ KONTROL EDİNİZ !!",
         btn01 : "OK"
     },
     msgOnlineAlert: 
