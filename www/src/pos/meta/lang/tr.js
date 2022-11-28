@@ -553,7 +553,8 @@ export const langTr =
     msgOnlineAlert: 
     {
         title : "Dikkat",
-        msg : "Sunucu ile bağlantı kuruldu ! Online olarak işleminize devam edebilirsiniz.",
+        msg1 : "Sunucu ile bağlantı kuruldu ! Online olarak işleminize devam edebilirsiniz.",
+        msg2 : "!! LÜTFEN SON OKUTTUĞUNUZ ÜRÜNLERİ KONTROL EDİNİZ !!",
         btn01 : "Tamam"
     },
     msgNotWeighing: 

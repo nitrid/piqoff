@@ -553,7 +553,8 @@ export const langFr =
     msgOnlineAlert: 
     {
         title : "Attention",
-        msg : "Connexion au serveur établie ! Vous pouvez poursuivre votre transaction en ligne.",
+        msg1 : "Connexion au serveur établie ! Vous pouvez poursuivre votre transaction en ligne.",
+        msg2 : "!!!! Veuillez vérifier les derniers articles scannés !!!!",
         btn01 : "OK"
     },
     msgNotWeighing: 

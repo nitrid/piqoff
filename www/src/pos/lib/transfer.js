@@ -1204,8 +1204,9 @@ export default class transferCls
         return new Promise(async resolve => 
         {
             let tmpValues = [];
+            console.log("1 - " + pTemp.to.into)
             let tmpData = await this.core.sql.execute(pTemp.from)
-            
+            console.log("2 - " + pTemp.to.into)
             if(typeof tmpData.result.err == 'undefined')
             {
                 //await this.clearTbl(pTemp.to.into)
@@ -1317,8 +1318,10 @@ export default class transferCls
                             await this.core.local.insert(tmpLocQuery)
                         }
                     }
+                    this.emit('onState',{tag:'progress',count:tmpData.length,index:i})
                 } 
             }
+            this.emit('onState',{tag:'progress',count:0,index:0})
             resolve()
         });
     }
@@ -1385,9 +1388,9 @@ export default class transferCls
         {
             let tmpSchema = this.fetchSchema()
             for (let i = 0; i < tmpSchema.length; i++) 
-            {
+            {                
                 this.emit('onState',{tag:'',text: tmpSchema[i].to.into})
-                await this.fetchToSql(tmpSchema[i])
+                await this.fetchToSql(tmpSchema[i])             
             }
             resolve()
         });
