@@ -134,7 +134,7 @@ export default class posDoc extends React.PureComponent
         {
             if(pParam.tag == 'progress')
             {
-                console.log(pParam.count + " - " + pParam.index)
+                this.transProgress.value = pParam.index + " / " + pParam.count
             }
             else
             {
@@ -6719,6 +6719,11 @@ export default class posDoc extends React.PureComponent
                         <div className="row">
                             <div className="col-12">
                                 <h3 className="text-center">{this.state.msgTransfer2}</h3>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-12">
+                                <h3 className="text-center"><NbLabel id="transProgress" parent={this} value={""}/></h3>
                             </div>
                         </div>
                     </NdPopUp>
