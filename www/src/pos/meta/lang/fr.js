@@ -547,7 +547,7 @@ export const langFr =
     {
         title : "Attention",
         msg1 : "Votre connexion au serveur a été perdu ! Vous pouvez poursuivre votre transaction hors ligne.",
-        msg2 : "!! LÜTFEN SON OKUTTUĞUNUZ ÜRÜNLERİ KONTROL EDİNİZ !!",
+        msg2 : "!!!! Veuillez vérifier les derniers articles scannés !!!!",
         btn01 : "OK"
     },
     msgOnlineAlert: 
