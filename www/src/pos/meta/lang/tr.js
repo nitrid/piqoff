@@ -546,7 +546,8 @@ export const langTr =
     msgOfflineAlert: 
     {
         title : "Dikkat",
-        msg : "Sunucu ile bağlantınız kesildi ! Offline olarak işleminize devam edebilirsiniz.",
+        msg1 : "Sunucu ile bağlantınız kesildi ! Offline olarak işleminize devam edebilirsiniz.",
+        msg2 : "!! LÜTFEN SON OKUTTUĞUNUZ ÜRÜNLERİ KONTROL EDİNİZ !!",
         btn01 : "Tamam"
     },
     msgOnlineAlert: 
