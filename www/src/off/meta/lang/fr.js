@@ -7195,7 +7195,7 @@ export const langFr =
         dtStartDate: "Date Début",
         dtFinishDate: "Date Fin",
         cmbDepot: "Réserve",
-        txtCustomerCode: "Sélection Document",
+        txtCustomerCode: "Sélectionner Client",
         txtCustomerName: "Nom fournisseur",
         cmbPrmType: "Type de Promotion",
         txtPrmItem:  "Produit",
