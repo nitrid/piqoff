@@ -1806,7 +1806,7 @@ export const langFr =
         btnGet :"Rechercher",
         chkMasterBarcode : "Regrouper code-barres ",
         chkLastCustomer : "Recherche dernier fournisseur", 
-        txtMulticode : "Sélection Document",
+        txtMulticode : "Référence Fournisseur",
         multicodePlaceHolder : "Veuillez Entrer les Codes Fournisseur Recherchés" ,
         barkodPlaceHolder :"Veuillez Entrer Le ou Les Codes Produits ou Codes Barres",
         ItemNamePlaceHolder :"Veuillez Entrer le Nom Complet ou une Syllabe",
@@ -1939,7 +1939,7 @@ export const langFr =
             clmCode: "Code",
             clmName : "Nom",
             clmBarcode : "Code barre",
-            clmMulticode : "Multicode",
+            clmMulticode : "FRN.Code",
             clmCustomerName : "Fournisseur",
             clmCustomerPrice : "Prix T.",
             clmPriceSale : "Prix Vente",
@@ -7510,7 +7510,7 @@ export const langFr =
             title : "Sélectionner Produit",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
-            clmMulticode : "Sélection Document"
+            clmMulticode : "FRN.Code"
         },
         grdPurcDispatch: 
         {
@@ -9088,7 +9088,7 @@ export const langFr =
             title : "Sélectionner Produit",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
-            clmMulticode : "Sélection Document"
+            clmMulticode : "Référence Fournisseur"
         },
         pg_txtBarcode : 
         {
@@ -9825,7 +9825,7 @@ export const langFr =
             title : "Sélectionner Produit",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
-            clmMulticode : "Sélection Document"
+            clmMulticode : "Référence Fournisseur"
         },
         msgContractValid:
         {
@@ -11527,7 +11527,7 @@ export const langFr =
             title : "Sélectionner Produit",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
-            clmMulticode : "Sélection Document"
+            clmMulticode : "Référence Fournisseur"
         },
         grdPurcoffers: 
         {
@@ -11779,7 +11779,7 @@ export const langFr =
     {
         txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
-        txtCustomerCode : "Sélection Document",
+        txtCustomerCode : "Sélection Document:",
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
         txtAmount : "Total" ,
