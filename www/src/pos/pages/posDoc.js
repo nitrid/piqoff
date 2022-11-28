@@ -132,7 +132,14 @@ export default class posDoc extends React.PureComponent
         //DATA TRANSFER İÇİN EVENT.
         this.transfer.on('onState',(pParam)=>
         {
-            this.setState({msgTransfer2:pParam.text + " " + this.lang.t("popTransfer.msg3")})
+            if(pParam.tag == 'progress')
+            {
+                console.log(pParam.count + " - " + pParam.index)
+            }
+            else
+            {
+                this.setState({msgTransfer2:pParam.text + " " + this.lang.t("popTransfer.msg3")})
+            }
         })
         //****************************** */
 
@@ -144,9 +151,18 @@ export default class posDoc extends React.PureComponent
 
                 let tmpConfObj =
                 {
-                    id:'msgOnlineAlert',showTitle:true,title:this.lang.t("msgOnlineAlert.title"),showCloseButton:true,width:'500px',height:'200px',
+                    id:'msgOnlineAlert',showTitle:true,title:this.lang.t("msgOnlineAlert.title"),showCloseButton:true,width:'650px',height:'220px',
                     button:[{id:"btn01",caption:this.lang.t("msgOnlineAlert.btn01"),location:'after'}],
-                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgOnlineAlert.msg")}</div>)
+                    content:(
+                        <div>
+                            <div className="row">
+                                <div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgOnlineAlert.msg1")}</div>
+                            </div>
+                            <div className="row">
+                                <div style={{textAlign:"center",fontSize:"20px",fontWeight:"bold",color:"red"}}>{this.lang.t("msgOnlineAlert.msg2")}</div>
+                            </div>
+                        </div>
+                    )
                 }
                 await dialog(tmpConfObj);
 
