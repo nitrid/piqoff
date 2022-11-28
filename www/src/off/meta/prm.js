@@ -2449,4 +2449,24 @@ export const prm =
         }
     },
     //#endregion
+    //#region Stok Çıkış Fişi
+    //negativeQuantity
+    {
+        TYPE : 1,
+        ID :"negativeQuantity",
+        VALUE : 
+        {
+            value : false
+        },
+        SPECIAL : "",
+        PAGE : "stk_02_009",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Şube Satış İrsaliye",
+            CAPTION : "Eksiye Düşemeye İzin Verme"
+        }
+    },
 ]

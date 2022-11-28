@@ -589,7 +589,12 @@ export default class itemCard extends React.PureComponent
         {
             this.setState({isTaxSugar:false})
             this.txtTaxSugar.readOnly = true
+            if(typeof this.itemsObj.itemMultiCode.dt()[0] != 'undefined')
+            {
+                this.txtTaxSugar.value = 0
+            }
         }
+        this.taxSugarCalculate()
     }
     async taxSugarCalculate()
     {
@@ -622,8 +627,8 @@ export default class itemCard extends React.PureComponent
                         {
                           
                         }
-                        this.extraCostCalculate()
                     }
+                    this.extraCostCalculate()
                 }
                 else
                 {
@@ -636,6 +641,7 @@ export default class itemCard extends React.PureComponent
     }
     async extraCostCalculate()
     {
+        console.log(1)
         this.extraCostData.clear()
         if(this.txtTaxSugar.value > 0)
         {
@@ -648,7 +654,7 @@ export default class itemCard extends React.PureComponent
                 this.extraCostData.push({TYPE_NAME:this.t("clmtaxSugar"),PRICE:this.taxSugarPrice,CUSTOMER:this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')[0].CUSTOMER_NAME,CUSTOMER_PRICE:this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')[0].CUSTOMER_PRICE})
             }
         }
-        if(this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value)
+        if(this.sysParam.filter({ID:'costForInvoıces',USERS:this.user.CODE}).getValue().value)
         {
             let tmpQuery = 
             {

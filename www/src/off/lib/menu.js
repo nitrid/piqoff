@@ -101,7 +101,17 @@ export const menu = (e) =>
                             id: 'stk_02_007',
                             text: e.t('menu.stk_02_007'),//'SKT Girişi',
                             path: 'items/documents/expdateEntry'
-                        }
+                        },
+                        {
+                            id: 'stk_02_008',
+                            text: e.t('menu.stk_02_008'),//'Stok Giriş  ',
+                            path: 'items/documents/itemEntryDoc'
+                        },
+                        {
+                            id: 'stk_02_009',
+                            text: e.t('menu.stk_02_009'),//'Stok  Çıkış ',
+                            path: 'items/documents/itemOutDoc'
+                        },
                     ]
                 },
                 {
