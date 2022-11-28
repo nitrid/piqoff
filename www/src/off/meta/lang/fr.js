@@ -69,8 +69,8 @@ export const langFr =
     },
     msgNotRow:
     {
-        title: "Dikkat",   
-        btn01: "Tamam",   
+        title: "Attention",   
+        btn01: "OK",   
         msg: "Le document doit comporter au minimum une ligne pour enregistrer!Modifications effectués non enregistrées."   
     },
     popDescbordValidation :
@@ -1000,7 +1000,7 @@ export const langFr =
             title : "Sélectionner Barre",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
-            clmMulticode : "Sélection Document",
+            clmMulticode : "Référence Fournisseur",
             clmBarcode : "Code Barre"
         },
         msgCode : 
@@ -1147,7 +1147,7 @@ export const langFr =
             title : "Sélectionner Code-Barres",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
-            clmMulticode : "Sélection Document",
+            clmMulticode : "Référence Fournisseur",
             clmBarcode : "Code-Barres"
         },
         msgQuantity:
@@ -1337,7 +1337,7 @@ export const langFr =
             title : "Sélectionner Barre",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
-            clmMulticode : "Sélection Document",
+            clmMulticode : "Référence Fournisseur",
             clmBarcode : "Code Barre"
         },
         msgCode : 
@@ -1519,7 +1519,7 @@ export const langFr =
             title : "Sélectionner Code Barre",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
-            clmMulticode : "Sélection Document",
+            clmMulticode : "Référence Fournisseur",
             clmBarcode : "Code Barres"
         },
     },
@@ -1660,7 +1660,7 @@ export const langFr =
             title : "Sélectionner Barre",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
-            clmMulticode : "Sélection Document",
+            clmMulticode : "Référence Fournisseur",
             clmBarcode : "Code Barre"
         },
         msgCode : 
@@ -2152,7 +2152,7 @@ export const langFr =
         chkRebate :"Retour Reprise",
         txtExpiryDay : "Vade",  // BAK
         txtRiskLimit : "Risk Limiti",  // BAK
-        expDay : "(Gün)", // BAK
+        expDay : "(Jour)", // BAK
         pg_txtCode : 
         {
             title : "Sélectionner Client",
@@ -3118,7 +3118,7 @@ export const langFr =
             title : "Sélectionner Barre",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
-            clmMulticode : "Sélection Document",
+            clmMulticode : "Référence Fournisseur",
             clmBarcode : "Code Barre"
         },
         msgQuantity:
@@ -3245,7 +3245,7 @@ export const langFr =
         dtExpDate : "Date d'Echéance", 
         getOffers : "Recherche Proposition",  
         getProforma : "Rechercher Proforma ", 
-        btnView : "Görüntüle", // BAK
+        btnView : "Aperçu", // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -3529,7 +3529,7 @@ export const langFr =
             title : "Sélectionner Code-Barres",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
-            clmMulticode : "Sélection Document",
+            clmMulticode : "Référence Fournisseur",
             clmBarcode : "Code-Barres"
         },
         msgQuantity:
@@ -3902,7 +3902,7 @@ export const langFr =
             title : "Sélectionner Barre",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
-            clmMulticode : "Sélection Document",
+            clmMulticode : "Référence Fournisseur",
             clmBarcode : "Code Barre"
         },
         msgQuantity:
@@ -4233,7 +4233,7 @@ export const langFr =
             title : "Sélectionner Barre",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
-            clmMulticode : "Sélection Document",
+            clmMulticode : "Référence Fournisseur",
             clmBarcode : "Code-Barres"
         },
         msgQuantity:
@@ -4601,7 +4601,7 @@ export const langFr =
             title : "Sélectionner Barre",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
-            clmMulticode : "Sélection Document",
+            clmMulticode : "Référence Fournisseur",
             clmBarcode : "Code-Barres"
         },
         msgQuantity:
@@ -4931,7 +4931,7 @@ export const langFr =
             title : "Sélectionner Barre",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
-            clmMulticode : "Sélection Document",
+            clmMulticode : "Référence Fournisseur",
             clmBarcode : "Code Barre"
         },
         msgQuantity:
@@ -5254,7 +5254,7 @@ export const langFr =
             title : "Sélectionner Code-Barres",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
-            clmMulticode : "Sélection Document",
+            clmMulticode : "Référence Fournisseur",
             clmBarcode : "Code-Barres"
         },
         msgQuantity:
@@ -5956,7 +5956,7 @@ export const langFr =
             title : "Sélectionner Barre",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
-            clmMulticode : "Sélection Document",
+            clmMulticode : "Référence Fournisseur",
             clmBarcode : "Code Barre"
         },
         msgQuantity:
@@ -6403,7 +6403,7 @@ export const langFr =
             title : "Sélectionner Barre",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
-            clmMulticode : "Sélection Document",
+            clmMulticode : "Référence Fournisseur",
             clmBarcode : "Code Barre"
         },
         msgQuantity:
@@ -6756,7 +6756,7 @@ export const langFr =
             title : "Sélectionner Barre",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
-            clmMulticode : "Sélection Document",
+            clmMulticode : "Référence Fournisseur",
             clmBarcode : "Code Barre"
         },
         msgQuantity:
@@ -7129,7 +7129,7 @@ export const langFr =
             title : "Sélectionner Barre",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
-            clmMulticode : "Sélection Document",
+            clmMulticode : "Référence Fournisseur",
             clmBarcode : "Code Barre"
         },
         msgQuantity:
@@ -7724,7 +7724,7 @@ export const langFr =
             title : "Sélectionner Barre",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
-            clmMulticode : "Sélection Document",
+            clmMulticode : "Référence Fournisseur",
             clmBarcode : "Code Barre"
         },
         msgQuantity:
@@ -8055,7 +8055,7 @@ export const langFr =
             title : "Sélectionner Barre",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
-            clmMulticode : "Sélection Document",
+            clmMulticode : "Référence Fournisseur",
             clmBarcode : "Code-Barres"
         },
         pg_ordersGrid : 
@@ -8173,7 +8173,7 @@ export const langFr =
             clmMargin :"Marge",
             clmDescription :"Motif",
             clmCuser :"Utilisateur",
-            clmMulticode : "Sélection Document",
+            clmMulticode : "Référence Fournisseur",
             clmBarcode : "Code-Barres"
         },
         popDiscount : 
@@ -8341,7 +8341,7 @@ export const langFr =
             title : "Sélectionner Barre",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
-            clmMulticode : "Sélection Document",
+            clmMulticode : "Référence Fournisseur",
             clmBarcode : "Code Barre"
         },
         msgRowNotUpdate:
@@ -8657,7 +8657,7 @@ export const langFr =
             title : "Sélectionner Barre",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
-            clmMulticode : "Sélection Document",
+            clmMulticode : "Référence Fournisseur",
             clmBarcode : "Code Barre"
         },
         pg_ordersGrid : 
@@ -8775,7 +8775,7 @@ export const langFr =
             clmMargin :"Marge",
             clmDescription :"Motif",
             clmCuser :"Utilisateur",
-            clmMulticode : "Sélection Document",
+            clmMulticode : "Référence Fournisseur",
             clmBarcode : "Code Barre"
         },
         popDiscount : 
@@ -8943,7 +8943,7 @@ export const langFr =
             title : "Sélectionner Barre",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
-            clmMulticode : "Sélection Document",
+            clmMulticode : "Référence Fournisseur",
             clmBarcode : "Code Barre"
         },
         msgRowNotUpdate:
@@ -9095,7 +9095,7 @@ export const langFr =
             title : "Sélectionner Barre",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
-            clmMulticode : "Sélection Document",
+            clmMulticode : "Référence Fournisseur",
             clmBarcode : "Code Barre"
         },
         grdPurcOrders: 
@@ -9640,7 +9640,7 @@ export const langFr =
             title : "Sélectionner Barre",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
-            clmMulticode : "Sélection Document",
+            clmMulticode : "Référence Fournisseur",
             clmBarcode : "Code Barre"
         },
         pg_offersGrid : 
@@ -11747,7 +11747,7 @@ export const langFr =
             title : "Sélectionner Barre",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
-            clmMulticode : "Sélection Document",
+            clmMulticode : "Référence Fournisseur",
             clmBarcode : "Code Barre"
         },
         msgRowNotUpdate:
@@ -12047,7 +12047,7 @@ export const langFr =
             title : "Sélectionner Code-Barres",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
-            clmMulticode : "Sélection Document",
+            clmMulticode : "Référence Fournisseur",
             clmBarcode : "Code Barre"
         },
         msgRowNotUpdate:
