@@ -35,41 +35,6 @@ export default class transferCls
             resolve()
         });
     }
-    dateFormat(pDate)
-    {
-        let numbers = pDate.match(/\d+/g); 
-        
-        let yyyy = 0
-        let mm = 0
-        let dd = 0
-        let hh = 0
-        let mmm = 0
-        let ss = 0
-        let sss = 0
-        
-        if(numbers[0].length > 2)
-        {
-            yyyy = numbers[0];
-            mm = numbers[1];
-            dd = numbers[2];
-            hh = numbers[3];
-            mmm = numbers[4];
-            ss = typeof numbers[5] == 'undefined' ? "00" : numbers[5]
-            sss = typeof numbers[6] == 'undefined' ? "000" : numbers[6]
-        }
-        else if(numbers[2].length > 2)
-        {
-            yyyy = numbers[2];
-            mm = numbers[1];
-            dd = numbers[0];
-            hh = numbers[3];
-            mmm = numbers[4];
-            ss = typeof numbers[5] == 'undefined' ? "00" : numbers[5]
-            sss = typeof numbers[6] == 'undefined' ? "000" : numbers[6]
-        }
-        let date = moment(yyyy + "-" + mm + "-" + dd + "T" + hh + ":" + mmm + ":" + ss + "." + sss).utcOffset(0, false);
-        return date
-    }
     tableSchema()
     {
         let tmpTbl =
@@ -710,196 +675,196 @@ export default class transferCls
                     where : {GUID : {map:'GUID'}}
                 }
             },
-            // //ITEMS_VW_01
-            // {
-            //     from : 
-            //     {
-            //         query : "SELECT *,dbo.FN_PRICE_SALE(GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000') AS PRICE FROM ITEMS_VW_01"
-            //     },
-            //     to : 
-            //     {
-            //         into : "ITEMS_VW_01",
-            //         values : [{GUID : {map:'GUID'},CDATE : {map:'CDATE',type:'date_time'},CUSER : {map:'CUSER'},CUSER_NAME : {map:'CUSER_NAME'},LDATE : {map:'LDATE',type:'date_time'},LUSER : {map:'LUSER'},
-            //         LUSER_NAME : {map:'LUSER_NAME'},TYPE : {map:'TYPE'},SPECIAL : {map:'SPECIAL'},CODE : {map:'CODE'},NAME : {map:'NAME'},SNAME : {map:'SNAME'},VAT : {map:'VAT'},COST_PRICE : {map:'COST_PRICE'},
-            //         MIN_PRICE : {map:'MIN_PRICE'},MAX_PRICE : {map:'MAX_PRICE'},STATUS : {map:'STATUS'},SUGAR_RATE : {map:'SUGAR_RATE'},MAIN_GRP : {map:'MAIN_GRP'},MAIN_GRP_NAME : {map:'MAIN_GRP_NAME'},
-            //         SUB_GRP : {map:'SUB_GRP'},ORGINS : {map:'ORGINS'},ORGINS_NAME : {map:'ORGINS_NAME'},RAYON : {map:'RAYON'},SHELF : {map:'SHELF'},SECTOR : {map:'SECTOR'},SALE_JOIN_LINE : {map:'SALE_JOIN_LINE'},
-            //         TICKET_REST : {map:'TICKET_REST'},WEIGHING : {map:'WEIGHING'},PRICE : {map:'PRICE'}}]
-            //     },
-            //     update : 
-            //     {
-            //         in : "ITEMS_VW_01",
-            //         set : {CDATE : {map:'CDATE',type:'date_time'},CUSER : {map:'CUSER'},CUSER_NAME : {map:'CUSER_NAME'},LDATE : {map:'LDATE',type:'date_time'},LUSER : {map:'LUSER'},
-            //         LUSER_NAME : {map:'LUSER_NAME'},TYPE : {map:'TYPE'},SPECIAL : {map:'SPECIAL'},CODE : {map:'CODE'},NAME : {map:'NAME'},SNAME : {map:'SNAME'},VAT : {map:'VAT'},COST_PRICE : {map:'COST_PRICE'},
-            //         MIN_PRICE : {map:'MIN_PRICE'},MAX_PRICE : {map:'MAX_PRICE'},STATUS : {map:'STATUS'},SUGAR_RATE : {map:'SUGAR_RATE'},MAIN_GRP : {map:'MAIN_GRP'},MAIN_GRP_NAME : {map:'MAIN_GRP_NAME'},
-            //         SUB_GRP : {map:'SUB_GRP'},ORGINS : {map:'ORGINS'},ORGINS_NAME : {map:'ORGINS_NAME'},RAYON : {map:'RAYON'},SHELF : {map:'SHELF'},SECTOR : {map:'SECTOR'},SALE_JOIN_LINE : {map:'SALE_JOIN_LINE'},
-            //         TICKET_REST : {map:'TICKET_REST'},WEIGHING : {map:'WEIGHING'},PRICE : {map:'PRICE'}},
-            //         where : {GUID : {map:'GUID'}}
-            //     }
-            // },
-            // //ITEMS_POS_VW_01
-            // {
-            //     from : 
-            //     {
-            //         query : "SELECT *,dbo.FN_PRICE_SALE(GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000') AS PRICE FROM ITEMS_POS_VW_01"
-            //     },
-            //     to : 
-            //     {
-            //         into : "ITEMS_POS_VW_01",
-            //         values : [{GUID : {map:'GUID'},SPECIAL : {map:'SPECIAL'},CODE : {map:'CODE'},NAME : {map:'NAME'},SNAME : {map:'SNAME'},VAT : {map:'VAT'},VAT_TYPE : {map:'VAT_TYPE'},COST_PRICE : {map:'COST_PRICE'},
-            //         MIN_PRICE : {map:'MIN_PRICE'},MAX_PRICE : {map:'MAX_PRICE'},SALE_JOIN_LINE : {map:'SALE_JOIN_LINE'},TICKET_REST : {map:'TICKET_REST'},WEIGHING : {map:'WEIGHING'},BARCODE : {map:'BARCODE'},
-            //         BARCODE_GUID : {map:'BARCODE_GUID'},UNIT_GUID : {map:'UNIT_GUID'},UNIT_ID : {map:'UNIT_ID'},UNIT_NAME : {map:'UNIT_NAME'},UNIT_SHORT : {map:'UNIT_SHORT'},UNIT_FACTOR : {map:'UNIT_FACTOR'},
-            //         UNIQ_CODE : {map:'UNIQ_CODE'},UNIQ_QUANTITY : {map:'UNIQ_QUANTITY'},UNIQ_PRICE : {map:'UNIQ_PRICE'},STATUS : {map:'STATUS'},PRICE : {map:'PRICE'},INPUT : ''}]
-            //     },
-            //     update : 
-            //     {
-            //         in : "ITEMS_POS_VW_01",
-            //         set : {SPECIAL : {map:'SPECIAL'},CODE : {map:'CODE'},NAME : {map:'NAME'},SNAME : {map:'SNAME'},VAT : {map:'VAT'},VAT_TYPE : {map:'VAT_TYPE'},COST_PRICE : {map:'COST_PRICE'},
-            //         MIN_PRICE : {map:'MIN_PRICE'},MAX_PRICE : {map:'MAX_PRICE'},SALE_JOIN_LINE : {map:'SALE_JOIN_LINE'},TICKET_REST : {map:'TICKET_REST'},WEIGHING : {map:'WEIGHING'},BARCODE : {map:'BARCODE'},
-            //         BARCODE_GUID : {map:'BARCODE_GUID'},UNIT_GUID : {map:'UNIT_GUID'},UNIT_ID : {map:'UNIT_ID'},UNIT_NAME : {map:'UNIT_NAME'},UNIT_SHORT : {map:'UNIT_SHORT'},UNIT_FACTOR : {map:'UNIT_FACTOR'},
-            //         UNIQ_CODE : {map:'UNIQ_CODE'},UNIQ_QUANTITY : {map:'UNIQ_QUANTITY'},UNIQ_PRICE : {map:'UNIQ_PRICE'},STATUS : {map:'STATUS'},PRICE : {map:'PRICE'},INPUT : ''},
-            //         where : {GUID : {map:'GUID'},BARCODE_GUID : {map:'BARCODE_GUID'},UNIQ_CODE : {map:'UNIQ_CODE'}}
-            //     }
-            // },
-            // //ITEMS_BARCODE_MULTICODE_VW_01
-            // {
-            //     from : 
-            //     {
-            //         query : "SELECT * FROM ITEMS_BARCODE_MULTICODE_VW_01"
-            //     },
-            //     to : 
-            //     {
-            //         into : "ITEMS_BARCODE_MULTICODE_VW_01",
-            //         values : [{GUID : {map:'GUID'},CDATE : {map:'CDATE',type:'date_time'},CUSER : {map:'CUSER'},CUSER_NAME : {map:'CUSER_NAME'},LDATE : {map:'LDATE',type:'date_time'},LUSER : {map:'LUSER'},
-            //         LUSER_NAME : {map:'LUSER_NAME'},TYPE : {map:'TYPE'},SPECIAL : {map:'SPECIAL'},CODE : {map:'CODE'},NAME : {map:'NAME'},SNAME : {map:'SNAME'},VAT : {map:'VAT'},COST_PRICE : {map:'COST_PRICE'},
-            //         MIN_PRICE : {map:'MIN_PRICE'},MAX_PRICE : {map:'MAX_PRICE'},STATUS : {map:'STATUS'},MAIN_GRP : {map:'MAIN_GRP'},MAIN_GRP_NAME : {map:'MAIN_GRP_NAME'},SUB_GRP : {map:'SUB_GRP'},
-            //         ORGINS : {map:'ORGINS'},ITEMS_GRP_GUID : {map:'ITEMS_GRP_GUID'},ORGINS_NAME : {map:'ORGINS_NAME'},RAYON : {map:'RAYON'},SHELF : {map:'SHELF'},SECTOR : {map:'SECTOR'},
-            //         SALE_JOIN_LINE : {map:'SALE_JOIN_LINE'},TICKET_REST : {map:'TICKET_REST'},WEIGHING : {map:'WEIGHING'},BARCODE : {map:'BARCODE'},BARCODE_GUID : {map:'BARCODE_GUID'},UNIT_ID : {map:'UNIT_ID'},
-            //         UNIT_NAME : {map:'UNIT_NAME'},UNIT_FACTOR : {map:'UNIT_FACTOR'},MULTICODE : {map:'MULTICODE'},CUSTOMER_GUID : {map:'CUSTOMER_GUID'},CUSTOMER_CODE : {map:'CUSTOMER_CODE'},
-            //         CUSTOMER_NAME : {map:'CUSTOMER_NAME'},CUSTOMER_PRICE : {map:'CUSTOMER_PRICE'},CUSTOMER_PRICE_GUID : {map:'CUSTOMER_PRICE_GUID'},PRICE_SALE : {map:'PRICE_SALE'},PRICE_SALE_GUID : {map:'PRICE_SALE_GUID'}}]
-            //     },
-            //     update : 
-            //     {
-            //         in : "ITEMS_BARCODE_MULTICODE_VW_01",
-            //         set : {CDATE : {map:'CDATE',type:'date_time'},CUSER : {map:'CUSER'},CUSER_NAME : {map:'CUSER_NAME'},LDATE : {map:'LDATE',type:'date_time'},LUSER : {map:'LUSER'},
-            //         LUSER_NAME : {map:'LUSER_NAME'},TYPE : {map:'TYPE'},SPECIAL : {map:'SPECIAL'},CODE : {map:'CODE'},NAME : {map:'NAME'},SNAME : {map:'SNAME'},VAT : {map:'VAT'},COST_PRICE : {map:'COST_PRICE'},
-            //         MIN_PRICE : {map:'MIN_PRICE'},MAX_PRICE : {map:'MAX_PRICE'},STATUS : {map:'STATUS'},MAIN_GRP : {map:'MAIN_GRP'},MAIN_GRP_NAME : {map:'MAIN_GRP_NAME'},SUB_GRP : {map:'SUB_GRP'},
-            //         ORGINS : {map:'ORGINS'},ITEMS_GRP_GUID : {map:'ITEMS_GRP_GUID'},ORGINS_NAME : {map:'ORGINS_NAME'},RAYON : {map:'RAYON'},SHELF : {map:'SHELF'},SECTOR : {map:'SECTOR'},
-            //         SALE_JOIN_LINE : {map:'SALE_JOIN_LINE'},TICKET_REST : {map:'TICKET_REST'},WEIGHING : {map:'WEIGHING'},BARCODE : {map:'BARCODE'},BARCODE_GUID : {map:'BARCODE_GUID'},UNIT_ID : {map:'UNIT_ID'},
-            //         UNIT_NAME : {map:'UNIT_NAME'},UNIT_FACTOR : {map:'UNIT_FACTOR'},MULTICODE : {map:'MULTICODE'},CUSTOMER_GUID : {map:'CUSTOMER_GUID'},CUSTOMER_CODE : {map:'CUSTOMER_CODE'},
-            //         CUSTOMER_NAME : {map:'CUSTOMER_NAME'},CUSTOMER_PRICE : {map:'CUSTOMER_PRICE'},CUSTOMER_PRICE_GUID : {map:'CUSTOMER_PRICE_GUID'},PRICE_SALE : {map:'PRICE_SALE'},PRICE_SALE_GUID : {map:'PRICE_SALE_GUID'}},
-            //         where : {GUID : {map:'GUID'},BARCODE_GUID : {map:'BARCODE_GUID'},MULTICODE : {map:'MULTICODE'}}
-            //     }
-            // },
-            // //CHEQPAY_VW_01
-            // {
-            //     from : 
-            //     {
-            //         query : "SELECT *,DATEDIFF(DAY,CDATE,GETDATE()) AS EXDAY FROM CHEQPAY_VW_01 WHERE [YEAR] = 2"
-            //     },
-            //     to : 
-            //     {
-            //         into : "CHEQPAY_VW_01",
-            //         values : [{GUID : {map:'GUID'},CDATE : {map:'CDATE',type:'date_time'},CUSER : {map:'CUSER'},CUSER_NAME : {map:'CUSER_NAME'},LDATE : {map:'LDATE',type:'date_time'},LUSER : {map:'LUSER'},
-            //         LUSER_NAME : {map:'LUSER_NAME'},TYPE : {map:'TYPE'},DOC : {map:'DOC'},CODE : {map:'CODE'},AMOUNT : {map:'AMOUNT'},STATUS : {map:'STATUS'},REFERENCE : {map:'REFERENCE'},RANDOM1 : {map:'RANDOM1'},
-            //         PRICE : {map:'PRICE'},TICKET_TYPE : {map:'TICKET_TYPE'},TICKET_NAME : {map:'TICKET_NAME'},RANDOM2 : {map:'RANDOM2'},YEAR : {map:'YEAR'},EXDAY : {map:'EXDAY'}}]
-            //     },
-            //     update : 
-            //     {
-            //         in : "CHEQPAY_VW_01",
-            //         set : {CDATE : {map:'CDATE',type:'date_time'},CUSER : {map:'CUSER'},CUSER_NAME : {map:'CUSER_NAME'},LDATE : {map:'LDATE',type:'date_time'},LUSER : {map:'LUSER'},
-            //         LUSER_NAME : {map:'LUSER_NAME'},TYPE : {map:'TYPE'},DOC : {map:'DOC'},CODE : {map:'CODE'},AMOUNT : {map:'AMOUNT'},STATUS : {map:'STATUS'},REFERENCE : {map:'REFERENCE'},RANDOM1 : {map:'RANDOM1'},
-            //         PRICE : {map:'PRICE'},TICKET_TYPE : {map:'TICKET_TYPE'},TICKET_NAME : {map:'TICKET_NAME'},RANDOM2 : {map:'RANDOM2'},YEAR : {map:'YEAR'},EXDAY : {map:'EXDAY'}},
-            //         where : {GUID : {map:'GUID'}}
-            //     }
-            // },
-            // //COMPANY_VW_01
-            // {
-            //     from : 
-            //     {
-            //         query : "SELECT * FROM COMPANY_VW_01"
-            //     },
-            //     to : 
-            //     {
-            //         into : "COMPANY_VW_01",
-            //         values : [{GUID : {map:'GUID'},CUSER : {map:'CUSER'},LUSER : {map:'LUSER'},NAME : {map:'NAME'},ADDRESS1 : {map:'ADDRESS1'},ADDRESS2 : {map:'ADDRESS2'},ZIPCODE : {map:'ZIPCODE'},
-            //         COUNTRY : {map:'COUNTRY'},CITY : {map:'CITY'},TEL : {map:'TEL'},MAIL : {map:'MAIL'},SIRET_ID : {map:'SIRET_ID'},APE_CODE : {map:'APE_CODE'},TAX_OFFICE : {map:'TAX_OFFICE'},
-            //         TAX_NO : {map:'TAX_NO'},INT_VAT_NO : {map:'INT_VAT_NO'},OFFICIAL_NAME : {map:'OFFICIAL_NAME'},OFFICIAL_SURNAME : {map:'OFFICIAL_SURNAME'},COMPANY_TYPE : {map:'COMPANY_TYPE'},
-            //         SIREN_NO : {map:'SIREN_NO'},RCS : {map:'RCS'},CAPITAL : {map:'CAPITAL'},COUNTRY_NAME : {map:'COUNTRY_NAME'}}]
-            //     },
-            //     update : 
-            //     {
-            //         in : "COMPANY_VW_01",
-            //         set : {CUSER : {map:'CUSER'},LUSER : {map:'LUSER'},NAME : {map:'NAME'},ADDRESS1 : {map:'ADDRESS1'},ADDRESS2 : {map:'ADDRESS2'},ZIPCODE : {map:'ZIPCODE'},
-            //         COUNTRY : {map:'COUNTRY'},CITY : {map:'CITY'},TEL : {map:'TEL'},MAIL : {map:'MAIL'},SIRET_ID : {map:'SIRET_ID'},APE_CODE : {map:'APE_CODE'},TAX_OFFICE : {map:'TAX_OFFICE'},
-            //         TAX_NO : {map:'TAX_NO'},INT_VAT_NO : {map:'INT_VAT_NO'},OFFICIAL_NAME : {map:'OFFICIAL_NAME'},OFFICIAL_SURNAME : {map:'OFFICIAL_SURNAME'},COMPANY_TYPE : {map:'COMPANY_TYPE'},
-            //         SIREN_NO : {map:'SIREN_NO'},RCS : {map:'RCS'},CAPITAL : {map:'CAPITAL'},COUNTRY_NAME : {map:'COUNTRY_NAME'}},
-            //         where : {GUID : {map:'GUID'}}
-            //     }
-            // },
-            // //PLU_VW_01
-            // {
-            //     from : 
-            //     {
-            //         query : "SELECT * FROM PLU_VW_01"
-            //     },
-            //     to : 
-            //     {
-            //         into : "PLU_VW_01",
-            //         values : [{GUID : {map:'GUID'},CDATE : {map:'CDATE',type:'date_time'},CUSER : {map:'CUSER'},LDATE : {map:'LDATE',type:'date_time'},LUSER : {map:'LUSER'},TYPE : {map:'TYPE'},
-            //         TYPE_NAME : {map:'TYPE_NAME'},NAME : {map:'NAME'},LINK : {map:'LINK'},LINK_CODE : {map:'LINK_CODE'},LINK_NAME : {map:'LINK_NAME'},LOCATION : {map:'LOCATION'},
-            //         GROUP_INDEX : {map:'GROUP_INDEX'}}]
-            //     },
-            //     update : 
-            //     {
-            //         in : "PLU_VW_01",
-            //         set : {CDATE : {map:'CDATE',type:'date_time'},CUSER : {map:'CUSER'},LDATE : {map:'LDATE',type:'date_time'},LUSER : {map:'LUSER'},TYPE : {map:'TYPE'},
-            //         TYPE_NAME : {map:'TYPE_NAME'},NAME : {map:'NAME'},LINK : {map:'LINK'},LINK_CODE : {map:'LINK_CODE'},LINK_NAME : {map:'LINK_NAME'},LOCATION : {map:'LOCATION'},
-            //         GROUP_INDEX : {map:'GROUP_INDEX'}},
-            //         where : {GUID : {map:'GUID'}}
-            //     }
-            // },
-            // //PLU_IMAGE_VW_01
-            // {
-            //     from : 
-            //     {
-            //         query : "SELECT * FROM PLU_IMAGE_VW_01"
-            //     },
-            //     to : 
-            //     {
-            //         into : "PLU_IMAGE_VW_01",
-            //         values : [{GUID : {map:'GUID'},MAIN_CODE : {map:'MAIN_CODE'},MAIN_NAME : {map:'MAIN_NAME'},ORGINS_CODE : {map:'ORGINS_CODE'},ORGINS_NAME : {map:'ORGINS_NAME'},
-            //         ITEM_GUID : {map:'ITEM_GUID'},ITEM_CODE : {map:'ITEM_CODE'},ITEM_NAME : {map:'ITEM_NAME'},PRICE : {map:'PRICE'},IMAGE : {map:'IMAGE'}}]
-            //     },
-            //     update : 
-            //     {
-            //         in : "PLU_VW_01",
-            //         set : {MAIN_CODE : {map:'MAIN_CODE'},MAIN_NAME : {map:'MAIN_NAME'},ORGINS_CODE : {map:'ORGINS_CODE'},ORGINS_NAME : {map:'ORGINS_NAME'},
-            //         ITEM_GUID : {map:'ITEM_GUID'},ITEM_CODE : {map:'ITEM_CODE'},ITEM_NAME : {map:'ITEM_NAME'},PRICE : {map:'PRICE'},IMAGE : {map:'IMAGE'}},
-            //         where : {GUID : {map:'GUID'}}
-            //     }
-            // },
-            // //POS_DEVICE_VW_01
-            // {
-            //     from : 
-            //     {
-            //         query : "SELECT * FROM POS_DEVICE_VW_01"
-            //     },
-            //     to : 
-            //     {
-            //         into : "POS_DEVICE_VW_01",
-            //         values : [{GUID : {map:'GUID'},CDATE : {map:'CDATE',type:'date_time'},CUSER : {map:'CUSER'},LDATE : {map:'LDATE',type:'date_time'},LUSER : {map:'LUSER'},
-            //         CODE : {map:'CODE'},NAME : {map:'NAME'},LCD_PORT : {map:'LCD_PORT'},SCALE_PORT : {map:'SCALE_PORT'},PAY_CARD_PORT : {map:'PAY_CARD_PORT'},SCANNER_PORT : {map:'SCANNER_PORT'},
-            //         PRINT_DESING : {map:'PRINT_DESING'},SAFE_GUID : {map:'SAFE_GUID'}}]
-            //     },
-            //     update : 
-            //     {
-            //         in : "POS_DEVICE_VW_01",
-            //         set : {CDATE : {map:'CDATE',type:'date_time'},CUSER : {map:'CUSER'},LDATE : {map:'LDATE',type:'date_time'},LUSER : {map:'LUSER'},
-            //         CODE : {map:'CODE'},NAME : {map:'NAME'},LCD_PORT : {map:'LCD_PORT'},SCALE_PORT : {map:'SCALE_PORT'},PAY_CARD_PORT : {map:'PAY_CARD_PORT'},SCANNER_PORT : {map:'SCANNER_PORT'},
-            //         PRINT_DESING : {map:'PRINT_DESING'},SAFE_GUID : {map:'SAFE_GUID'}},
-            //         where : {GUID : {map:'GUID'}}
-            //     }
-            // },
+            //ITEMS_VW_01
+            {
+                from : 
+                {
+                    query : "SELECT *,dbo.FN_PRICE_SALE(GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000') AS PRICE FROM ITEMS_VW_01"
+                },
+                to : 
+                {
+                    into : "ITEMS_VW_01",
+                    values : [{GUID : {map:'GUID'},CDATE : {map:'CDATE',type:'date_time'},CUSER : {map:'CUSER'},CUSER_NAME : {map:'CUSER_NAME'},LDATE : {map:'LDATE',type:'date_time'},LUSER : {map:'LUSER'},
+                    LUSER_NAME : {map:'LUSER_NAME'},TYPE : {map:'TYPE'},SPECIAL : {map:'SPECIAL'},CODE : {map:'CODE'},NAME : {map:'NAME'},SNAME : {map:'SNAME'},VAT : {map:'VAT'},COST_PRICE : {map:'COST_PRICE'},
+                    MIN_PRICE : {map:'MIN_PRICE'},MAX_PRICE : {map:'MAX_PRICE'},STATUS : {map:'STATUS'},SUGAR_RATE : {map:'SUGAR_RATE'},MAIN_GRP : {map:'MAIN_GRP'},MAIN_GRP_NAME : {map:'MAIN_GRP_NAME'},
+                    SUB_GRP : {map:'SUB_GRP'},ORGINS : {map:'ORGINS'},ORGINS_NAME : {map:'ORGINS_NAME'},RAYON : {map:'RAYON'},SHELF : {map:'SHELF'},SECTOR : {map:'SECTOR'},SALE_JOIN_LINE : {map:'SALE_JOIN_LINE'},
+                    TICKET_REST : {map:'TICKET_REST'},WEIGHING : {map:'WEIGHING'},PRICE : {map:'PRICE'}}]
+                },
+                update : 
+                {
+                    in : "ITEMS_VW_01",
+                    set : {CDATE : {map:'CDATE',type:'date_time'},CUSER : {map:'CUSER'},CUSER_NAME : {map:'CUSER_NAME'},LDATE : {map:'LDATE',type:'date_time'},LUSER : {map:'LUSER'},
+                    LUSER_NAME : {map:'LUSER_NAME'},TYPE : {map:'TYPE'},SPECIAL : {map:'SPECIAL'},CODE : {map:'CODE'},NAME : {map:'NAME'},SNAME : {map:'SNAME'},VAT : {map:'VAT'},COST_PRICE : {map:'COST_PRICE'},
+                    MIN_PRICE : {map:'MIN_PRICE'},MAX_PRICE : {map:'MAX_PRICE'},STATUS : {map:'STATUS'},SUGAR_RATE : {map:'SUGAR_RATE'},MAIN_GRP : {map:'MAIN_GRP'},MAIN_GRP_NAME : {map:'MAIN_GRP_NAME'},
+                    SUB_GRP : {map:'SUB_GRP'},ORGINS : {map:'ORGINS'},ORGINS_NAME : {map:'ORGINS_NAME'},RAYON : {map:'RAYON'},SHELF : {map:'SHELF'},SECTOR : {map:'SECTOR'},SALE_JOIN_LINE : {map:'SALE_JOIN_LINE'},
+                    TICKET_REST : {map:'TICKET_REST'},WEIGHING : {map:'WEIGHING'},PRICE : {map:'PRICE'}},
+                    where : {GUID : {map:'GUID'}}
+                }
+            },
+            //ITEMS_POS_VW_01
+            {
+                from : 
+                {
+                    query : "SELECT *,dbo.FN_PRICE_SALE(GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000') AS PRICE FROM ITEMS_POS_VW_01"
+                },
+                to : 
+                {
+                    into : "ITEMS_POS_VW_01",
+                    values : [{GUID : {map:'GUID'},SPECIAL : {map:'SPECIAL'},CODE : {map:'CODE'},NAME : {map:'NAME'},SNAME : {map:'SNAME'},VAT : {map:'VAT'},VAT_TYPE : {map:'VAT_TYPE'},COST_PRICE : {map:'COST_PRICE'},
+                    MIN_PRICE : {map:'MIN_PRICE'},MAX_PRICE : {map:'MAX_PRICE'},SALE_JOIN_LINE : {map:'SALE_JOIN_LINE'},TICKET_REST : {map:'TICKET_REST'},WEIGHING : {map:'WEIGHING'},BARCODE : {map:'BARCODE'},
+                    BARCODE_GUID : {map:'BARCODE_GUID'},UNIT_GUID : {map:'UNIT_GUID'},UNIT_ID : {map:'UNIT_ID'},UNIT_NAME : {map:'UNIT_NAME'},UNIT_SHORT : {map:'UNIT_SHORT'},UNIT_FACTOR : {map:'UNIT_FACTOR'},
+                    UNIQ_CODE : {map:'UNIQ_CODE'},UNIQ_QUANTITY : {map:'UNIQ_QUANTITY'},UNIQ_PRICE : {map:'UNIQ_PRICE'},STATUS : {map:'STATUS'},PRICE : {map:'PRICE'},INPUT : ''}]
+                },
+                update : 
+                {
+                    in : "ITEMS_POS_VW_01",
+                    set : {SPECIAL : {map:'SPECIAL'},CODE : {map:'CODE'},NAME : {map:'NAME'},SNAME : {map:'SNAME'},VAT : {map:'VAT'},VAT_TYPE : {map:'VAT_TYPE'},COST_PRICE : {map:'COST_PRICE'},
+                    MIN_PRICE : {map:'MIN_PRICE'},MAX_PRICE : {map:'MAX_PRICE'},SALE_JOIN_LINE : {map:'SALE_JOIN_LINE'},TICKET_REST : {map:'TICKET_REST'},WEIGHING : {map:'WEIGHING'},BARCODE : {map:'BARCODE'},
+                    BARCODE_GUID : {map:'BARCODE_GUID'},UNIT_GUID : {map:'UNIT_GUID'},UNIT_ID : {map:'UNIT_ID'},UNIT_NAME : {map:'UNIT_NAME'},UNIT_SHORT : {map:'UNIT_SHORT'},UNIT_FACTOR : {map:'UNIT_FACTOR'},
+                    UNIQ_CODE : {map:'UNIQ_CODE'},UNIQ_QUANTITY : {map:'UNIQ_QUANTITY'},UNIQ_PRICE : {map:'UNIQ_PRICE'},STATUS : {map:'STATUS'},PRICE : {map:'PRICE'},INPUT : ''},
+                    where : {GUID : {map:'GUID'},BARCODE_GUID : {map:'BARCODE_GUID'},UNIQ_CODE : {map:'UNIQ_CODE'}}
+                }
+            },
+            //ITEMS_BARCODE_MULTICODE_VW_01
+            {
+                from : 
+                {
+                    query : "SELECT * FROM ITEMS_BARCODE_MULTICODE_VW_01"
+                },
+                to : 
+                {
+                    into : "ITEMS_BARCODE_MULTICODE_VW_01",
+                    values : [{GUID : {map:'GUID'},CDATE : {map:'CDATE',type:'date_time'},CUSER : {map:'CUSER'},CUSER_NAME : {map:'CUSER_NAME'},LDATE : {map:'LDATE',type:'date_time'},LUSER : {map:'LUSER'},
+                    LUSER_NAME : {map:'LUSER_NAME'},TYPE : {map:'TYPE'},SPECIAL : {map:'SPECIAL'},CODE : {map:'CODE'},NAME : {map:'NAME'},SNAME : {map:'SNAME'},VAT : {map:'VAT'},COST_PRICE : {map:'COST_PRICE'},
+                    MIN_PRICE : {map:'MIN_PRICE'},MAX_PRICE : {map:'MAX_PRICE'},STATUS : {map:'STATUS'},MAIN_GRP : {map:'MAIN_GRP'},MAIN_GRP_NAME : {map:'MAIN_GRP_NAME'},SUB_GRP : {map:'SUB_GRP'},
+                    ORGINS : {map:'ORGINS'},ITEMS_GRP_GUID : {map:'ITEMS_GRP_GUID'},ORGINS_NAME : {map:'ORGINS_NAME'},RAYON : {map:'RAYON'},SHELF : {map:'SHELF'},SECTOR : {map:'SECTOR'},
+                    SALE_JOIN_LINE : {map:'SALE_JOIN_LINE'},TICKET_REST : {map:'TICKET_REST'},WEIGHING : {map:'WEIGHING'},BARCODE : {map:'BARCODE'},BARCODE_GUID : {map:'BARCODE_GUID'},UNIT_ID : {map:'UNIT_ID'},
+                    UNIT_NAME : {map:'UNIT_NAME'},UNIT_FACTOR : {map:'UNIT_FACTOR'},MULTICODE : {map:'MULTICODE'},CUSTOMER_GUID : {map:'CUSTOMER_GUID'},CUSTOMER_CODE : {map:'CUSTOMER_CODE'},
+                    CUSTOMER_NAME : {map:'CUSTOMER_NAME'},CUSTOMER_PRICE : {map:'CUSTOMER_PRICE'},CUSTOMER_PRICE_GUID : {map:'CUSTOMER_PRICE_GUID'},PRICE_SALE : {map:'PRICE_SALE'},PRICE_SALE_GUID : {map:'PRICE_SALE_GUID'}}]
+                },
+                update : 
+                {
+                    in : "ITEMS_BARCODE_MULTICODE_VW_01",
+                    set : {CDATE : {map:'CDATE',type:'date_time'},CUSER : {map:'CUSER'},CUSER_NAME : {map:'CUSER_NAME'},LDATE : {map:'LDATE',type:'date_time'},LUSER : {map:'LUSER'},
+                    LUSER_NAME : {map:'LUSER_NAME'},TYPE : {map:'TYPE'},SPECIAL : {map:'SPECIAL'},CODE : {map:'CODE'},NAME : {map:'NAME'},SNAME : {map:'SNAME'},VAT : {map:'VAT'},COST_PRICE : {map:'COST_PRICE'},
+                    MIN_PRICE : {map:'MIN_PRICE'},MAX_PRICE : {map:'MAX_PRICE'},STATUS : {map:'STATUS'},MAIN_GRP : {map:'MAIN_GRP'},MAIN_GRP_NAME : {map:'MAIN_GRP_NAME'},SUB_GRP : {map:'SUB_GRP'},
+                    ORGINS : {map:'ORGINS'},ITEMS_GRP_GUID : {map:'ITEMS_GRP_GUID'},ORGINS_NAME : {map:'ORGINS_NAME'},RAYON : {map:'RAYON'},SHELF : {map:'SHELF'},SECTOR : {map:'SECTOR'},
+                    SALE_JOIN_LINE : {map:'SALE_JOIN_LINE'},TICKET_REST : {map:'TICKET_REST'},WEIGHING : {map:'WEIGHING'},BARCODE : {map:'BARCODE'},BARCODE_GUID : {map:'BARCODE_GUID'},UNIT_ID : {map:'UNIT_ID'},
+                    UNIT_NAME : {map:'UNIT_NAME'},UNIT_FACTOR : {map:'UNIT_FACTOR'},MULTICODE : {map:'MULTICODE'},CUSTOMER_GUID : {map:'CUSTOMER_GUID'},CUSTOMER_CODE : {map:'CUSTOMER_CODE'},
+                    CUSTOMER_NAME : {map:'CUSTOMER_NAME'},CUSTOMER_PRICE : {map:'CUSTOMER_PRICE'},CUSTOMER_PRICE_GUID : {map:'CUSTOMER_PRICE_GUID'},PRICE_SALE : {map:'PRICE_SALE'},PRICE_SALE_GUID : {map:'PRICE_SALE_GUID'}},
+                    where : {GUID : {map:'GUID'},BARCODE_GUID : {map:'BARCODE_GUID'},MULTICODE : {map:'MULTICODE'}}
+                }
+            },
+            //CHEQPAY_VW_01
+            {
+                from : 
+                {
+                    query : "SELECT *,DATEDIFF(DAY,CDATE,GETDATE()) AS EXDAY FROM CHEQPAY_VW_01 WHERE [YEAR] = 2"
+                },
+                to : 
+                {
+                    into : "CHEQPAY_VW_01",
+                    values : [{GUID : {map:'GUID'},CDATE : {map:'CDATE',type:'date_time'},CUSER : {map:'CUSER'},CUSER_NAME : {map:'CUSER_NAME'},LDATE : {map:'LDATE',type:'date_time'},LUSER : {map:'LUSER'},
+                    LUSER_NAME : {map:'LUSER_NAME'},TYPE : {map:'TYPE'},DOC : {map:'DOC'},CODE : {map:'CODE'},AMOUNT : {map:'AMOUNT'},STATUS : {map:'STATUS'},REFERENCE : {map:'REFERENCE'},RANDOM1 : {map:'RANDOM1'},
+                    PRICE : {map:'PRICE'},TICKET_TYPE : {map:'TICKET_TYPE'},TICKET_NAME : {map:'TICKET_NAME'},RANDOM2 : {map:'RANDOM2'},YEAR : {map:'YEAR'},EXDAY : {map:'EXDAY'}}]
+                },
+                update : 
+                {
+                    in : "CHEQPAY_VW_01",
+                    set : {CDATE : {map:'CDATE',type:'date_time'},CUSER : {map:'CUSER'},CUSER_NAME : {map:'CUSER_NAME'},LDATE : {map:'LDATE',type:'date_time'},LUSER : {map:'LUSER'},
+                    LUSER_NAME : {map:'LUSER_NAME'},TYPE : {map:'TYPE'},DOC : {map:'DOC'},CODE : {map:'CODE'},AMOUNT : {map:'AMOUNT'},STATUS : {map:'STATUS'},REFERENCE : {map:'REFERENCE'},RANDOM1 : {map:'RANDOM1'},
+                    PRICE : {map:'PRICE'},TICKET_TYPE : {map:'TICKET_TYPE'},TICKET_NAME : {map:'TICKET_NAME'},RANDOM2 : {map:'RANDOM2'},YEAR : {map:'YEAR'},EXDAY : {map:'EXDAY'}},
+                    where : {GUID : {map:'GUID'}}
+                }
+            },
+            //COMPANY_VW_01
+            {
+                from : 
+                {
+                    query : "SELECT * FROM COMPANY_VW_01"
+                },
+                to : 
+                {
+                    into : "COMPANY_VW_01",
+                    values : [{GUID : {map:'GUID'},CUSER : {map:'CUSER'},LUSER : {map:'LUSER'},NAME : {map:'NAME'},ADDRESS1 : {map:'ADDRESS1'},ADDRESS2 : {map:'ADDRESS2'},ZIPCODE : {map:'ZIPCODE'},
+                    COUNTRY : {map:'COUNTRY'},CITY : {map:'CITY'},TEL : {map:'TEL'},MAIL : {map:'MAIL'},SIRET_ID : {map:'SIRET_ID'},APE_CODE : {map:'APE_CODE'},TAX_OFFICE : {map:'TAX_OFFICE'},
+                    TAX_NO : {map:'TAX_NO'},INT_VAT_NO : {map:'INT_VAT_NO'},OFFICIAL_NAME : {map:'OFFICIAL_NAME'},OFFICIAL_SURNAME : {map:'OFFICIAL_SURNAME'},COMPANY_TYPE : {map:'COMPANY_TYPE'},
+                    SIREN_NO : {map:'SIREN_NO'},RCS : {map:'RCS'},CAPITAL : {map:'CAPITAL'},COUNTRY_NAME : {map:'COUNTRY_NAME'}}]
+                },
+                update : 
+                {
+                    in : "COMPANY_VW_01",
+                    set : {CUSER : {map:'CUSER'},LUSER : {map:'LUSER'},NAME : {map:'NAME'},ADDRESS1 : {map:'ADDRESS1'},ADDRESS2 : {map:'ADDRESS2'},ZIPCODE : {map:'ZIPCODE'},
+                    COUNTRY : {map:'COUNTRY'},CITY : {map:'CITY'},TEL : {map:'TEL'},MAIL : {map:'MAIL'},SIRET_ID : {map:'SIRET_ID'},APE_CODE : {map:'APE_CODE'},TAX_OFFICE : {map:'TAX_OFFICE'},
+                    TAX_NO : {map:'TAX_NO'},INT_VAT_NO : {map:'INT_VAT_NO'},OFFICIAL_NAME : {map:'OFFICIAL_NAME'},OFFICIAL_SURNAME : {map:'OFFICIAL_SURNAME'},COMPANY_TYPE : {map:'COMPANY_TYPE'},
+                    SIREN_NO : {map:'SIREN_NO'},RCS : {map:'RCS'},CAPITAL : {map:'CAPITAL'},COUNTRY_NAME : {map:'COUNTRY_NAME'}},
+                    where : {GUID : {map:'GUID'}}
+                }
+            },
+            //PLU_VW_01
+            {
+                from : 
+                {
+                    query : "SELECT * FROM PLU_VW_01"
+                },
+                to : 
+                {
+                    into : "PLU_VW_01",
+                    values : [{GUID : {map:'GUID'},CDATE : {map:'CDATE',type:'date_time'},CUSER : {map:'CUSER'},LDATE : {map:'LDATE',type:'date_time'},LUSER : {map:'LUSER'},TYPE : {map:'TYPE'},
+                    TYPE_NAME : {map:'TYPE_NAME'},NAME : {map:'NAME'},LINK : {map:'LINK'},LINK_CODE : {map:'LINK_CODE'},LINK_NAME : {map:'LINK_NAME'},LOCATION : {map:'LOCATION'},
+                    GROUP_INDEX : {map:'GROUP_INDEX'}}]
+                },
+                update : 
+                {
+                    in : "PLU_VW_01",
+                    set : {CDATE : {map:'CDATE',type:'date_time'},CUSER : {map:'CUSER'},LDATE : {map:'LDATE',type:'date_time'},LUSER : {map:'LUSER'},TYPE : {map:'TYPE'},
+                    TYPE_NAME : {map:'TYPE_NAME'},NAME : {map:'NAME'},LINK : {map:'LINK'},LINK_CODE : {map:'LINK_CODE'},LINK_NAME : {map:'LINK_NAME'},LOCATION : {map:'LOCATION'},
+                    GROUP_INDEX : {map:'GROUP_INDEX'}},
+                    where : {GUID : {map:'GUID'}}
+                }
+            },
+            //PLU_IMAGE_VW_01
+            {
+                from : 
+                {
+                    query : "SELECT * FROM PLU_IMAGE_VW_01"
+                },
+                to : 
+                {
+                    into : "PLU_IMAGE_VW_01",
+                    values : [{GUID : {map:'GUID'},MAIN_CODE : {map:'MAIN_CODE'},MAIN_NAME : {map:'MAIN_NAME'},ORGINS_CODE : {map:'ORGINS_CODE'},ORGINS_NAME : {map:'ORGINS_NAME'},
+                    ITEM_GUID : {map:'ITEM_GUID'},ITEM_CODE : {map:'ITEM_CODE'},ITEM_NAME : {map:'ITEM_NAME'},PRICE : {map:'PRICE'},IMAGE : {map:'IMAGE'}}]
+                },
+                update : 
+                {
+                    in : "PLU_VW_01",
+                    set : {MAIN_CODE : {map:'MAIN_CODE'},MAIN_NAME : {map:'MAIN_NAME'},ORGINS_CODE : {map:'ORGINS_CODE'},ORGINS_NAME : {map:'ORGINS_NAME'},
+                    ITEM_GUID : {map:'ITEM_GUID'},ITEM_CODE : {map:'ITEM_CODE'},ITEM_NAME : {map:'ITEM_NAME'},PRICE : {map:'PRICE'},IMAGE : {map:'IMAGE'}},
+                    where : {GUID : {map:'GUID'}}
+                }
+            },
+            //POS_DEVICE_VW_01
+            {
+                from : 
+                {
+                    query : "SELECT * FROM POS_DEVICE_VW_01"
+                },
+                to : 
+                {
+                    into : "POS_DEVICE_VW_01",
+                    values : [{GUID : {map:'GUID'},CDATE : {map:'CDATE',type:'date_time'},CUSER : {map:'CUSER'},LDATE : {map:'LDATE',type:'date_time'},LUSER : {map:'LUSER'},
+                    CODE : {map:'CODE'},NAME : {map:'NAME'},LCD_PORT : {map:'LCD_PORT'},SCALE_PORT : {map:'SCALE_PORT'},PAY_CARD_PORT : {map:'PAY_CARD_PORT'},SCANNER_PORT : {map:'SCANNER_PORT'},
+                    PRINT_DESING : {map:'PRINT_DESING'},SAFE_GUID : {map:'SAFE_GUID'}}]
+                },
+                update : 
+                {
+                    in : "POS_DEVICE_VW_01",
+                    set : {CDATE : {map:'CDATE',type:'date_time'},CUSER : {map:'CUSER'},LDATE : {map:'LDATE',type:'date_time'},LUSER : {map:'LUSER'},
+                    CODE : {map:'CODE'},NAME : {map:'NAME'},LCD_PORT : {map:'LCD_PORT'},SCALE_PORT : {map:'SCALE_PORT'},PAY_CARD_PORT : {map:'PAY_CARD_PORT'},SCANNER_PORT : {map:'SCANNER_PORT'},
+                    PRINT_DESING : {map:'PRINT_DESING'},SAFE_GUID : {map:'SAFE_GUID'}},
+                    where : {GUID : {map:'GUID'}}
+                }
+            },
             //PROMO_VW_01
             {
                 from : 
