@@ -2,7 +2,7 @@ import {core} from 'gensrv'
 import moment from 'moment'
 import * as xlsx from 'xlsx'
 import fs from 'fs'
-import rsa from 'jsrsasign';
+import rsa from 'jsrsasign'
 import { pem } from '../pem.js'
 class nf525
 {
@@ -34,8 +34,8 @@ class nf525
         // const workbook = xlsx.read(buf);
         // console.log(workbook)
 
-        setTimeout(this.processGrandTotal.bind(this), 1000);
-        setTimeout(this.processArchive.bind(this), 1000);
+        //setTimeout(this.processGrandTotal.bind(this), 1000);
+        //setTimeout(this.processArchive.bind(this), 1000);
     }
     connEvt(pSocket)
     {
@@ -485,7 +485,7 @@ class nf525
             tmpSignature = tmpSignature + "," + pData.GUID
             tmpSignature = tmpSignature + "," + (pData.SIGNATURE == "" ? "N" : "O")
 
-            return this.sign(tmpSignature)
+            //return this.sign(tmpSignature)
         }
         else
         {
@@ -506,7 +506,7 @@ class nf525
             tmpSignature = tmpSignature + "," + pData.DEVICE
             tmpSignature = tmpSignature + "," + (pData.SIGNATURE == "" ? "N" : "O")
 
-            return this.sign(tmpSignature)
+            //return this.sign(tmpSignature)
         }
         else
         {
@@ -515,11 +515,20 @@ class nf525
     }
     sign(pData)
     {
-        return rsa.KJUR.jws.JWS.sign("ES256", JSON.stringify({alg: "ES256"}),pData, pem.private)
+        let sig = new rsa.KJUR.crypto.Signature({"alg": "SHA256withECDSA", "prov": "cryptojs/jsrsa"});
+        sig.init(pem.private);
+        sig.updateString(pData);
+        let sigValueHex = rsa.hextob64u(sig.sign());
+
+        return sigValueHex
     }
-    verify(pJWS)
+    verify(pData,pSig)
     {
-        return rsa.KJUR.jws.JWS.verify(pJWS, pem.public, ["ES256"])
+        let sig = new rsa.KJUR.crypto.Signature({'alg':'SHA256withECDSA', "prov": "cryptojs/jsrsa"});
+        sig.init(pem.public);
+        sig.updateString(pData);
+        let isValid = sig.verify(rsa.b64tohex(pSig));
+        return isValid
     }
 }
 
