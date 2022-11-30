@@ -425,7 +425,8 @@ export default class transferCls
                     DESCRIPTION : {dataType: "string"},  
                     CERTIFICATE : {dataType: "string"},
                     ORDER_GUID : {dataType: "string"}, 
-                    SIGNATURE : {dataType: "string"},                      
+                    SIGNATURE : {dataType: "string"},
+                    SIGNATURE_SUM : {dataType: "string"},
                 }
             },
             //POS_SALE_VW_01
@@ -985,12 +986,13 @@ export default class transferCls
                                 "@CERTIFICATE = @PCERTIFICATE, " +
                                 "@ORDER_GUID = @PORDER_GUID, " +
                                 "@SIGNATURE = @PSIGNATURE, " +
+                                "@SIGNATURE_SUM = @PSIGNATURE_SUM, " +
                                 "@DELETED = @PDELETED ",
                         param : ['PGUID:string|50','PCUSER:string|25','PFIRM:string|50','PDEVICE:string|25','PDEPOT:string|50','PTYPE:int','PDOC_TYPE:int','PDOC_DATE:date','PREF:int',
                                 'PCUSTOMER:string|50','PFAMOUNT:float','PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float','PTICKET:string|50','PSTATUS:int',
-                                'PCERTIFICATE:string|250','PORDER_GUID:string|50','PSIGNATURE:string|max','PDELETED:bit'],
+                                'PCERTIFICATE:string|250','PORDER_GUID:string|50','PSIGNATURE:string|max','PSIGNATURE_SUM:string|max','PDELETED:bit'],
                         dataprm : ['GUID','CUSER','FIRM','DEVICE','DEPOT_GUID','TYPE','DOC_TYPE','DOC_DATE','REF','CUSTOMER_GUID','FAMOUNT','AMOUNT','DISCOUNT','LOYALTY','VAT','TOTAL','TICKET',
-                                'STATUS','CERTIFICATE','ORDER_GUID','SIGNATURE','DELETED'],
+                                'STATUS','CERTIFICATE','ORDER_GUID','SIGNATURE','SIGNATURE_SUM','DELETED'],
                     },
                     update : 
                     {
@@ -1015,12 +1017,13 @@ export default class transferCls
                                 "@CERTIFICATE = @PCERTIFICATE, " +
                                 "@ORDER_GUID = @PORDER_GUID, " +
                                 "@SIGNATURE = @PSIGNATURE, " +
+                                "@SIGNATURE_SUM = @PSIGNATURE_SUM, " +
                                 "@DELETED = @PDELETED ",
                         param : ['PGUID:string|50','PCUSER:string|25','PFIRM:string|50','PDEVICE:string|25','PDEPOT:string|50','PTYPE:int','PDOC_TYPE:int','PDOC_DATE:date','PREF:int',
                                 'PCUSTOMER:string|50','PFAMOUNT:float','PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float','PTICKET:string|50','PSTATUS:int',
-                                'PCERTIFICATE:string|250','PORDER_GUID:string|50','PSIGNATURE:string|max','PDELETED:bit'],
+                                'PCERTIFICATE:string|250','PORDER_GUID:string|50','PSIGNATURE:string|max','PSIGNATURE_SUM:string|max','PDELETED:bit'],
                         dataprm : ['GUID','CUSER','FIRM','DEVICE','DEPOT_GUID','TYPE','DOC_TYPE','DOC_DATE','REF','CUSTOMER_GUID','FAMOUNT','AMOUNT','DISCOUNT','LOYALTY','VAT','TOTAL','TICKET',
-                                'STATUS','CERTIFICATE','ORDER_GUID','SIGNATURE','DELETED'],
+                                'STATUS','CERTIFICATE','ORDER_GUID','SIGNATURE','SIGNATURE_SUM','DELETED'],
                     },
                     control :
                     {
@@ -1198,128 +1201,182 @@ export default class transferCls
         ]
         return tmpSchema
     }
+    ctrlFetchToSql(pLocData,pSqlData,pUpdate)
+    {
+        let isDate = (pName) =>
+        {
+            if(typeof pUpdate.set[pName] != 'undefined' && typeof pUpdate.set[pName].type != 'undefined' && pUpdate.set[pName].type == 'date_time')
+            {
+                return true
+            }
+            else
+            {
+                return false
+            }
+        }
+        let tmpUpdate = JSON.parse(JSON.stringify(pUpdate))
+        //WHERE
+        for (let x = 0; x < Object.keys(tmpUpdate.where).length; x++) 
+        {
+            let tmpKey = Object.keys(tmpUpdate.where)[x]
+            let tmpMap = Object.values(tmpUpdate.where)[x]
+
+            if(typeof tmpMap.map != 'undefined')
+            {
+                if(typeof tmpMap.type != 'undefined' && tmpMap.type == 'date_time')
+                {
+                    tmpUpdate.where[tmpKey] = new Date(pSqlData[tmpMap.map])
+                }
+                else
+                {
+                    tmpUpdate.where[tmpKey] = pSqlData[tmpMap.map] 
+                }
+            }
+            else
+            {
+                tmpUpdate.where[tmpKey] = tmpMap
+            }
+        }
+
+        if(pLocData.where(tmpUpdate.where).length > 0)
+        {
+            return true
+            // let tmpDt = pLocData.where(tmpUpdate.where)
+            
+            // for (let i = 0; i < Object.keys(pSqlData).length; i++) 
+            // {
+            //     let tmpColumn = Object.keys(pSqlData)[i]
+            //     let tmpLocVal = tmpDt[0][tmpColumn]
+            //     let tmpSqlVal = pSqlData[tmpColumn]
+            //     if(isDate(tmpColumn))
+            //     {
+            //         tmpLocVal = moment(tmpLocVal).format('YYYY-MM-DD')
+            //         tmpSqlVal = moment(tmpLocVal).format('YYYY-MM-DD')
+            //     }
+            //     //console.log(tmpLocVal + " - " + tmpSqlVal + " - " + tmpColumn)
+            //     if(typeof tmpLocVal != 'undefined' && typeof tmpSqlVal != 'undefined')
+            //     {
+            //         if(tmpLocVal != tmpSqlVal)
+            //         {
+            //             return true
+            //         }                    
+            //     }
+            // }
+        }
+        else
+        {
+            return false
+        }
+    }
     //SQL DEN LOCAL E GETİR 
     fetchToSql(pTemp)
     {
         return new Promise(async resolve => 
         {
             let tmpValues = [];
-            console.log("1 - " + pTemp.to.into)
             let tmpData = await this.core.sql.execute(pTemp.from)
-            console.log("2 - " + pTemp.to.into)
+            let tmpCtrlData = await this.core.local.select({from:pTemp.update.in})
+            let tmpCtrlDt = new datatable()
+            
+            if(typeof tmpCtrlData.result.err == 'undefined')
+            {
+                tmpCtrlDt.import(tmpCtrlData.result)
+            }
+
             if(typeof tmpData.result.err == 'undefined')
             {
-                //await this.clearTbl(pTemp.to.into)
                 tmpData = tmpData.result.recordset 
                 for (let i = 0; i < tmpData.length; i++) 
                 {   
-                    let tmpCtrlQuery = JSON.parse(JSON.stringify({from:pTemp.update.in,where:pTemp.update.where}))
-                    //WHERE
-                    for (let x = 0; x < Object.keys(tmpCtrlQuery.where).length; x++) 
-                    {
-                        let tmpKey = Object.keys(tmpCtrlQuery.where)[x]
-                        let tmpMap = Object.values(tmpCtrlQuery.where)[x]
+                    let tmpCtrl = this.ctrlFetchToSql(tmpCtrlDt,tmpData[i],{...pTemp.update})
 
-                        if(typeof tmpMap.map != 'undefined')
+                    if(tmpCtrl == true)
+                    {
+                        let tmpLocQuery = JSON.parse(JSON.stringify(pTemp.update))
+                        //SET
+                        for (let x = 0; x < Object.keys(tmpLocQuery.set).length; x++) 
                         {
-                            if(typeof tmpMap.type != 'undefined' && tmpMap.type == 'date_time')
+                            let tmpKey = Object.keys(tmpLocQuery.set)[x]
+                            let tmpMap = Object.values(tmpLocQuery.set)[x]
+                            
+                            if(typeof tmpMap.map != 'undefined')
                             {
-                                tmpCtrlQuery.where[tmpKey] = new Date(tmpData[i][tmpMap.map])
+                                if(typeof tmpMap.type != 'undefined' && tmpMap.type == 'date_time')
+                                {
+                                    tmpLocQuery.set[tmpKey] = new Date(tmpData[i][tmpMap.map])
+                                }
+                                else
+                                {
+                                    tmpLocQuery.set[tmpKey] = tmpData[i][tmpMap.map] 
+                                }
                             }
                             else
                             {
-                                tmpCtrlQuery.where[tmpKey] = tmpData[i][tmpMap.map] 
+                                tmpLocQuery.set[tmpKey] = tmpMap
                             }
                         }
-                        else
+                        //WHERE
+                        for (let x = 0; x < Object.keys(tmpLocQuery.where).length; x++) 
                         {
-                            tmpCtrlQuery.where[tmpKey] = tmpMap
-                        }
-                    }
-                    
-                    let tmpCtrlData = await this.core.local.select(tmpCtrlQuery)
-                    
-                    if(typeof tmpCtrlData.result.err == 'undefined')
-                    {
-                        if(tmpCtrlData.result.length > 0)
-                        {
-                            let tmpLocQuery = JSON.parse(JSON.stringify(pTemp.update))
-                            //SET
-                            for (let x = 0; x < Object.keys(tmpLocQuery.set).length; x++) 
-                            {
-                                let tmpKey = Object.keys(tmpLocQuery.set)[x]
-                                let tmpMap = Object.values(tmpLocQuery.set)[x]
-                                
-                                if(typeof tmpMap.map != 'undefined')
-                                {
-                                    if(typeof tmpMap.type != 'undefined' && tmpMap.type == 'date_time')
-                                    {
-                                        tmpLocQuery.set[tmpKey] = new Date(tmpData[i][tmpMap.map])
-                                    }
-                                    else
-                                    {
-                                        tmpLocQuery.set[tmpKey] = tmpData[i][tmpMap.map] 
-                                    }
-                                }
-                                else
-                                {
-                                    tmpLocQuery.set[tmpKey] = tmpMap
-                                }
-                            }
-                            //WHERE
-                            for (let x = 0; x < Object.keys(tmpLocQuery.where).length; x++) 
-                            {
-                                let tmpKey = Object.keys(tmpLocQuery.where)[x]
-                                let tmpMap = Object.values(tmpLocQuery.where)[x]
+                            let tmpKey = Object.keys(tmpLocQuery.where)[x]
+                            let tmpMap = Object.values(tmpLocQuery.where)[x]
 
-                                if(typeof tmpMap.map != 'undefined')
-                                {
-                                    if(typeof tmpMap.type != 'undefined' && tmpMap.type == 'date_time')
-                                    {
-                                        tmpLocQuery.where[tmpKey] = new Date(tmpData[i][tmpMap.map])
-                                    }
-                                    else
-                                    {
-                                        tmpLocQuery.where[tmpKey] = tmpData[i][tmpMap.map] 
-                                    }        
-                                }
-                                else
-                                {
-                                    tmpLocQuery.where[tmpKey] = tmpMap
-                                }
-                            }
-                            await this.core.local.update(tmpLocQuery)
-                        }
-                        else
-                        {
-                            let tmpLocQuery = JSON.parse(JSON.stringify(pTemp.to))
-                            
-                            for (let x = 0; x < Object.keys(tmpLocQuery.values[0]).length; x++) 
+                            if(typeof tmpMap.map != 'undefined')
                             {
-                                let tmpKey = Object.keys(tmpLocQuery.values[0])[x]
-                                let tmpMap = Object.values(tmpLocQuery.values[0])[x]
-                                
-                                if(typeof tmpMap.map != 'undefined')
+                                if(typeof tmpMap.type != 'undefined' && tmpMap.type == 'date_time')
                                 {
-                                    if(typeof tmpMap.type != 'undefined' && tmpMap.type == 'date_time')
-                                    {
-                                        tmpLocQuery.values[0][tmpKey] = new Date(tmpData[i][tmpMap.map])
-                                    }
-                                    else
-                                    {
-                                        tmpLocQuery.values[0][tmpKey] = tmpData[i][tmpMap.map]    
-                                    }
+                                    tmpLocQuery.where[tmpKey] = new Date(tmpData[i][tmpMap.map])
                                 }
                                 else
                                 {
-                                    tmpLocQuery.values[0][tmpKey] = tmpMap
+                                    tmpLocQuery.where[tmpKey] = tmpData[i][tmpMap.map] 
+                                }        
+                            }
+                            else
+                            {
+                                tmpLocQuery.where[tmpKey] = tmpMap
+                            }
+                        }
+                        await this.core.local.update(tmpLocQuery)
+                    }
+                    else if(tmpCtrl == false)
+                    {
+                        let tmpLocQuery = JSON.parse(JSON.stringify(pTemp.to))
+                        
+                        for (let x = 0; x < Object.keys(tmpLocQuery.values[0]).length; x++) 
+                        {
+                            let tmpKey = Object.keys(tmpLocQuery.values[0])[x]
+                            let tmpMap = Object.values(tmpLocQuery.values[0])[x]
+                            
+                            if(typeof tmpMap.map != 'undefined')
+                            {
+                                if(typeof tmpMap.type != 'undefined' && tmpMap.type == 'date_time')
+                                {
+                                    tmpLocQuery.values[0][tmpKey] = new Date(tmpData[i][tmpMap.map])
+                                }
+                                else
+                                {
+                                    tmpLocQuery.values[0][tmpKey] = tmpData[i][tmpMap.map]    
                                 }
                             }
-                            await this.core.local.insert(tmpLocQuery)
-                        }
+                            else
+                            {
+                                tmpLocQuery.values[0][tmpKey] = tmpMap
+                            }                                
+                        }    
+                        tmpValues.push(tmpLocQuery.values[0])
                     }
+                    else if(typeof tmpCtrl == 'undefined')
+                    {
+                        await this.core.util.waitUntil(0)
+                    }
+                    //console.log(tmpCtrl)
+                    //
                     this.emit('onState',{tag:'progress',count:tmpData.length,index:i})
-                } 
+                }
+                
+                pTemp.to.values = tmpValues
+                await this.core.local.insert(pTemp.to)
             }
             this.emit('onState',{tag:'progress',count:0,index:0})
             resolve()

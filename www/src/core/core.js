@@ -213,10 +213,10 @@ export class local
                 {
                     resolve({result:{state:true}})
                 }
-                else
-                {
-                    console.log(tmpResult)
-                }
+                // else
+                // {
+                //     console.log(tmpResult)
+                // }
             }
             else
             {

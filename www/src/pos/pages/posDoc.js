@@ -120,7 +120,14 @@ export default class posDoc extends React.PureComponent
         
         this.posDevice.on('scanner',(tmpBarkod)=>
         {
-            this.getItem(tmpBarkod)
+            if(document.getElementsByClassName("dx-overlay-wrapper").length > 0)
+            {
+                document.getElementById("Sound").play(); 
+            }
+            else
+            {
+                this.getItem(tmpBarkod)
+            }
         })
 
         this.init();
@@ -266,13 +273,13 @@ export default class posDoc extends React.PureComponent
         this.sendJet({CODE:"80",NAME:"Démarrage terminal lancé."}) ////Kasa işleme başladı.
     }
     async init()
-    {     
+    {
         setInterval(()=>
         {
             this.lblTime.value = moment(new Date(),"HH:mm:ss").format("HH:mm:ss")
             this.lblDate.value = new Date().toLocaleDateString('tr-TR',{ year: 'numeric', month: 'numeric', day: 'numeric' })
-        },1000)             
-        
+        },1000)
+
         this.posObj.clearAll()        
 
         await this.prmObj.load({APP:'POS'})
@@ -1071,10 +1078,10 @@ export default class posDoc extends React.PureComponent
             }, 100);
             
             if(typeof pSave == 'undefined' || pSave)
-            {
+            {                
                 let tmpClose = await this.saleClosed(true,tmpPayRest,tmpPayChange)
                 let tmpSaveResult = await this.posObj.save()
-                
+
                 if(tmpSaveResult == 0)
                 {
                     if(tmpClose)
@@ -1290,6 +1297,7 @@ export default class posDoc extends React.PureComponent
                 let tmpSignedData = await this.nf525.signatureSale(this.posObj.dt()[0],this.posObj.posSale.dt())                
                 this.posObj.dt()[0].REF = tmpSignedData.REF
                 this.posObj.dt()[0].SIGNATURE = tmpSignedData.SIGNATURE
+                this.posObj.dt()[0].SIGNATURE_SUM = tmpSignedData.SIGNATURE_SUM
 
                 let tmpSigned = "-"
                 if(this.posObj.dt()[0].SIGNATURE != '')
@@ -1579,6 +1587,7 @@ export default class posDoc extends React.PureComponent
                     return
                 }
             }
+
             this.loadingPay.current.instance.show()
             let tmpRowData = this.isRowMerge('PAY',{TYPE:pType})
             //NAKİT ALDIĞINDA KASA AÇMA İŞLEMİ 

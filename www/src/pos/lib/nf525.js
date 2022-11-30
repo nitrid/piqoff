@@ -8,6 +8,7 @@ export class nf525Cls
     constructor()
     {
         this.core = core.instance;
+        //console.log(this.generatePem())
     }
     generatePem()
     {
@@ -33,23 +34,31 @@ export class nf525Cls
           });
         
         return {
-            private : rsa.KEYUTIL.getPEM(keyObj.prvKeyObj, "PKCS1PRV"),
+            private : rsa.KEYUTIL.getPEM(keyObj.prvKeyObj),
             public : rsa.KEYUTIL.getPEM(keyObj.pubKeyObj),
             certificate : cert.getPEM()
         }
     }
     sign(pData)
     {
-        return rsa.KJUR.jws.JWS.sign("ES256", JSON.stringify({alg: "ES256"}),pData, pem.private)
+        let sig = new rsa.KJUR.crypto.Signature({"alg": "SHA256withECDSA", "prov": "cryptojs/jsrsa"});
+        sig.init(pem.private);
+        sig.updateString(pData);
+        let sigValueHex = rsa.hextob64u(sig.sign());
+        // console.log(pData)
+        // console.log(sigValueHex)
+        // console.log(rsa.hextob64u(sigValueHex))
+        // console.log(rsa.b64tohex(rsa.hextob64u(sigValueHex)))
+        // this.verify(pData,rsa.b64tohex(rsa.hextob64u(sigValueHex)))
+        return sigValueHex
     }
-    verify(pJWS)
+    verify(pData,pSig)
     {
-        return rsa.KJUR.jws.JWS.verify(pJWS, pem.public, ["ES256"])
-    }
-    getParseSign(pJWS)
-    {
-        //İMZALANMIŞ DATANIN DECRYPTE İŞLEMİ.
-        return rsa.KJUR.jws.JWS.parse(pJWS)
+        let sig = new rsa.KJUR.crypto.Signature({'alg':'SHA256withECDSA', "prov": "cryptojs/jsrsa"});
+        sig.init(pem.public);
+        sig.updateString(pData);
+        let isValid = sig.verify(rsa.b64tohex(pSig));
+        return isValid
     }
     async lastSaleSignData(pData)
     {
@@ -77,36 +86,11 @@ export class nf525Cls
                     }
                     if(tmpResult.result.recordset[0].SIGNATURE != null)
                     {
-                        let tmpDt = new datatable()
-                        tmpDt.selectCmd = 
-                        {
-                            query : "SELECT * FROM [dbo].[POS_SALE_VW_01] WHERE POS_GUID = @POS_GUID",
-                            param : ['POS_GUID:string|50'],
-                            value : [tmpResult.result.recordset[0].GUID]
-                        }
-                        
-                        await tmpDt.refresh()
-                        
-                        if(tmpDt.length > 0)
-                        {
-                            let tmpVatLst = tmpDt.where({GUID:{'<>':'00000000-0000-0000-0000-000000000000'}}).groupBy('VAT_RATE');
-                            
-                            for (let i = 0; i < tmpVatLst.length; i++) 
-                            {
-                                tmpLastSignature = tmpLastSignature + parseInt(Number(tmpVatLst[i].VAT_RATE) * 100).toString().padStart(4,'0') + ":" + parseInt(Number(tmpDt.where({VAT_TYPE:tmpVatLst[i].VAT_TYPE}).sum('TOTAL',2)) * 100).toString() + "|"
-                            }
-                            
-                            tmpLastSignature = tmpLastSignature.toString().substring(0,tmpLastSignature.length - 1)
-                            tmpLastSignature = tmpLastSignature + "," + parseInt(Number(Number(tmpResult.result.recordset[0].TOTAL).toFixed(2)) * 100).toString()
-                            tmpLastSignature = tmpLastSignature + "," + moment(tmpResult.result.recordset[0].LDATE).format("YYYYMMDDHHmmss")
-                            tmpLastSignature = tmpLastSignature + "," + tmpResult.result.recordset[0].DEVICE + "" + tmpResult.result.recordset[0].REF.toString().padStart(8,'0') 
-                            tmpLastSignature = tmpLastSignature + "," + tmpResult.result.recordset[0].TYPE_NAME
-                            tmpLastSignature = tmpLastSignature + "," + (tmpResult.result.recordset[0].SIGNATURE == "" ? "N" : "O")
-                        }
+                        tmpLastSignature = tmpResult.result.recordset[0].SIGNATURE
                     }
                 }
                 localStorage.setItem('REF_SALE',tmpLastRef)
-                localStorage.setItem('SIG_SALE',this.sign(tmpLastSignature))
+                localStorage.setItem('SIG_SALE',tmpLastSignature)
             }
             
             resolve (
@@ -122,7 +106,8 @@ export class nf525Cls
         {
             let tmpLastData = await this.lastSaleSignData(pData)
             let tmpSignature = ''
-
+            let tmpSignatureSum = ''
+            
             if(pSaleData.length > 0)
             {
                 let tmpVatLst = pSaleData.where({GUID:{'<>':'00000000-0000-0000-0000-000000000000'}}).groupBy('VAT_RATE');
@@ -138,14 +123,15 @@ export class nf525Cls
                 tmpSignature = tmpSignature + "," + pData.DEVICE + "" + (Number(tmpLastData.REF) + 1).toString().padStart(8,'0') 
                 tmpSignature = tmpSignature + "," + pData.TYPE_NAME
                 tmpSignature = tmpSignature + "," + (tmpLastData.LAST_SIGN == "" ? "N" : "O")
-
-                localStorage.setItem('REF_SALE',Number(tmpLastData.REF) + 1)
-                localStorage.setItem('SIG_SALE',this.sign(tmpSignature))
-
                 tmpSignature = tmpSignature + "," + tmpLastData.LAST_SIGN
+                tmpSignatureSum = tmpSignature
+                tmpSignature = this.sign(tmpSignature)
+                
+                localStorage.setItem('REF_SALE',Number(tmpLastData.REF) + 1)
+                localStorage.setItem('SIG_SALE',tmpSignature)
             }
 
-            resolve({REF:Number(tmpLastData.REF) + 1,SIGNATURE:this.sign(tmpSignature)})
+            resolve({REF:Number(tmpLastData.REF) + 1,SIGNATURE:tmpSignature,SIGNATURE_SUM:tmpSignatureSum})
         })
     }
     signatureDuplicate(pGuid)

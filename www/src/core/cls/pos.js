@@ -45,7 +45,8 @@ export class posCls
             DESCRIPTION : '',
             CERTIFICATE : '',
             ORDER_GUID : '00000000-0000-0000-0000-000000000000',
-            SIGNATURE : ''
+            SIGNATURE : '',
+            SIGNATURE_SUM : ''
         }
 
         this.posSale = new posSaleCls();
@@ -91,12 +92,13 @@ export class posCls
                     "@STATUS = @PSTATUS, " +
                     "@CERTIFICATE = @PCERTIFICATE, " +
                     "@ORDER_GUID = @PORDER_GUID, " +
-                    "@SIGNATURE = @PSIGNATURE ",
+                    "@SIGNATURE = @PSIGNATURE, " +
+                    "@SIGNATURE_SUM = @PSIGNATURE_SUM ",
             param : ['PGUID:string|50','PCUSER:string|25','PFIRM:string|50','PDEVICE:string|25','PDEPOT:string|50','PTYPE:int','PDOC_TYPE:int','PDOC_DATE:date','PREF:int',
                      'PCUSTOMER:string|50','PFAMOUNT:float','PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float','PTICKET:string|50','PSTATUS:int',
-                     'PCERTIFICATE:string|250','PORDER_GUID:string|50','PSIGNATURE:string|max'],
+                     'PCERTIFICATE:string|250','PORDER_GUID:string|50','PSIGNATURE:string|max','PSIGNATURE_SUM:string|max'],
             dataprm : ['GUID','CUSER','FIRM','DEVICE','DEPOT_GUID','TYPE','DOC_TYPE','DOC_DATE','REF','CUSTOMER_GUID','FAMOUNT','AMOUNT','DISCOUNT','LOYALTY','VAT','TOTAL','TICKET',
-                       'STATUS','CERTIFICATE','ORDER_GUID','SIGNATURE'],
+                       'STATUS','CERTIFICATE','ORDER_GUID','SIGNATURE','SIGNATURE_SUM'],
             local : 
             {
                 type : "insert",
@@ -107,7 +109,7 @@ export class posCls
                 CUSTOMER_NAME : {map:'CUSTOMER_NAME'},CUSTOMER_TAX_NO : {map:'CUSTOMER_TAX_NO'},CUSTOMER_ADRESS : {map:'CUSTOMER_ADRESS'},CUSTOMER_ZIPCODE : {map:'CUSTOMER_ZIPCODE'},CUSTOMER_COUNTRY : {map:'CUSTOMER_COUNTRY'},
                 CUSTOMER_CITY : {map:'CUSTOMER_CITY'},CUSTOMER_POINT : {map:'CUSTOMER_POINT'},FAMOUNT : {map:'FAMOUNT'},AMOUNT : {map:'AMOUNT'},DISCOUNT : {map:'DISCOUNT'},LOYALTY : {map:'LOYALTY'},
                 VAT : {map:'VAT'},TOTAL : {map:'TOTAL'},TICKET : {map:'TICKET'},REBATE_CHEQPAY : {map:'REBATE_CHEQPAY'},STATUS : {map:'STATUS'},DESCRIPTION : {map:'DESCRIPTION'},DELETED:false,
-                CERTIFICATE : {map:'CERTIFICATE'},ORDER_GUID : {map:'ORDER_GUID'},SIGNATURE : {map:'SIGNATURE'}}]
+                CERTIFICATE : {map:'CERTIFICATE'},ORDER_GUID : {map:'ORDER_GUID'},SIGNATURE : {map:'SIGNATURE'},SIGNATURE_SUM : {map:'SIGNATURE_SUM'}}]
             }
         } 
         tmpDt.updateCmd = 
@@ -132,12 +134,13 @@ export class posCls
                     "@STATUS = @PSTATUS, " +
                     "@CERTIFICATE = @PCERTIFICATE, " +
                     "@ORDER_GUID = @PORDER_GUID, " +
-                    "@SIGNATURE = @PSIGNATURE ",
+                    "@SIGNATURE = @PSIGNATURE, " +
+                    "@SIGNATURE_SUM = @PSIGNATURE_SUM ",
             param : ['PGUID:string|50','PCUSER:string|25','PFIRM:string|50','PDEVICE:string|25','PDEPOT:string|50','PTYPE:int','PDOC_TYPE:int','PDOC_DATE:date','PREF:int',
                      'PCUSTOMER:string|50','PFAMOUNT:float','PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float','PTICKET:string|50','PSTATUS:int',
-                     'PCERTIFICATE:string|250','PORDER_GUID:string|50','PSIGNATURE:string|max'],
+                     'PCERTIFICATE:string|250','PORDER_GUID:string|50','PSIGNATURE:string|max','PSIGNATURE_SUM:string|max'],
             dataprm : ['GUID','CUSER','FIRM','DEVICE','DEPOT_GUID','TYPE','DOC_TYPE','DOC_DATE','REF','CUSTOMER_GUID','FAMOUNT','AMOUNT','DISCOUNT','LOYALTY','VAT','TOTAL','TICKET',
-                       'STATUS','CERTIFICATE','ORDER_GUID','SIGNATURE'],
+                       'STATUS','CERTIFICATE','ORDER_GUID','SIGNATURE','SIGNATURE_SUM'],
             local : 
             {
                 type : "update",
@@ -148,7 +151,7 @@ export class posCls
                 CUSTOMER_NAME : {map:'CUSTOMER_NAME'},CUSTOMER_TAX_NO : {map:'CUSTOMER_TAX_NO'},CUSTOMER_ADRESS : {map:'CUSTOMER_ADRESS'},CUSTOMER_ZIPCODE : {map:'CUSTOMER_ZIPCODE'},CUSTOMER_COUNTRY : {map:'CUSTOMER_COUNTRY'},
                 CUSTOMER_CITY : {map:'CUSTOMER_CITY'},CUSTOMER_POINT : {map:'CUSTOMER_POINT'},FAMOUNT : {map:'FAMOUNT'},AMOUNT : {map:'AMOUNT'},DISCOUNT : {map:'DISCOUNT'},LOYALTY : {map:'LOYALTY'},
                 VAT : {map:'VAT'},TOTAL : {map:'TOTAL'},TICKET : {map:'TICKET'},REBATE_CHEQPAY : {map:'REBATE_CHEQPAY'},STATUS : {map:'STATUS'},DESCRIPTION : {map:'DESCRIPTION'},DELETED:false,
-                CERTIFICATE : {map:'CERTIFICATE'},ORDER_GUID : {map:'ORDER_GUID'},SIGNATURE : {map:'SIGNATURE'}},
+                CERTIFICATE : {map:'CERTIFICATE'},ORDER_GUID : {map:'ORDER_GUID'},SIGNATURE : {map:'SIGNATURE'},SIGNATURE_SUM : {map:'SIGNATURE_SUM'}},
                 where : {GUID : {map:'GUID'}}
             }
         } 
@@ -1177,6 +1180,7 @@ export class posDeviceCls
         this.listeners = Object();
         this.payPort = null;
         this.scannerPort = null;
+        this.scannerStatus = true;
         this._initDs();
     }
     //#region  "EVENT"
@@ -1871,7 +1875,14 @@ export class posDeviceCls
                     tmpBarcode = tmpBarcode.substring(1,14)
                 }
                 
-                this.emit('scanner',tmpBarcode);   
+                if(this.scannerStatus)
+                {
+                    this.emit('scanner',tmpBarcode);
+                }
+                else
+                {
+                    this.emit('scanner',"error");
+                }
                 tmpSerialCount = 0;
                 tmpBarcode = "";            
             }
