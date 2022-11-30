@@ -221,6 +221,7 @@ export const langTr =
         pos_02_005 : "Değişmiş Fişler Raporu",
         pos_02_006 : "Gün Sonu Raporu",
         pos_02_007 : "Pos Avans Raporu",
+        pos_02_008 : "Ürün Satış Raporu",
         pos_03 :"Operasyonlar",
         pos_03_001 : "Gün Sonu",
         promo: "Promosyon",
@@ -11717,6 +11718,47 @@ export const langTr =
             title: "Dikkat",
             btn01: "Tamam",
             msg: "Lütfen Kasa Seçiniz !"
+        },
+    },
+    pos_02_008 : // "Ürün Satış Raporu",
+    {
+        txtRef : "Ürün",
+        cmbCustomer :"Cari",
+        btnGet :"Getir",
+        dtFirst : "İlk Tarih",
+        dtLast : "Son Tarih",
+        txtCustomerCode : "Cari",
+        cmbDevice :"Cihaz",
+        txtTicketno : "Fiş I.D",
+        numFirstTicketAmount : "Alt Tutar",
+        numLastTicketAmount : "Üst Tutar",
+        cmbUser :"Kulanıcı",
+        txtItem :"Ürün Kodu",
+        ckhDoublePay : "Birden Fazla Ödeme",
+        cmbType :"Açıklama Tipi",
+        dtDate : "Tarih",
+        txtTotal : "Toplam Satış",
+        grdItemSaleReport: 
+        {
+            itemName: "Ürün Adı",
+            clmFirstDate: "İlk Tarih",
+            clmLastDate: "Son Tarih",
+            clmQuantity: "Miktar",
+            clmPrice : "Fiyat",
+            clmTotal : "Toplam"
+        },
+        pg_txtRef:
+        {
+            title: "Ürün Seçim",
+            clmCode: "KODU",
+            clmName: "ADI", 
+        },
+        cancel : "Vazgeç",
+        msgItemSelect:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen Ürün Seçiniz !"
         },
     },
     pos_03_001 : // "Gün Sonu",

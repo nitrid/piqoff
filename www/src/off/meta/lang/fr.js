@@ -221,6 +221,7 @@ export const langFr =
         pos_02_005 : "Rapport de tickets modifiés", 
         pos_02_006 : "Rapport de Vente Fin de Journée", 
         pos_02_007 : "Rapport Pos Fond de Caisse ", 
+        pos_02_008 : "Ürün Satış Raporu", // BAK
         pos_03 :"Traitements", 
         pos_03_001 : "Opérations de fin de journée",
         promo: "Promotion",
@@ -11698,7 +11699,7 @@ export const langFr =
             clmSafe : "Caisse"   
         },
     },
-    pos_02_006 : // "Pos Avans Raporu", 
+    pos_02_007 : // "Pos Avans Raporu", 
     {
         btnGet :"Recherche",   
         dtFirst : "Date Début",   
@@ -11717,6 +11718,47 @@ export const langFr =
             title: "Attention",  
             btn01: "OK",  
             msg: "Veuillez Sélectionner une Caisse !"  
+        },
+    },
+    pos_02_008 : // "Ürün Satış Raporu",
+    {
+        txtRef : "Ürün",    // BAK
+        cmbCustomer :"Cari",    // BAK
+        btnGet :"Getir",    // BAK
+        dtFirst : "İlk Tarih",    // BAK
+        dtLast : "Son Tarih",    // BAK
+        txtCustomerCode : "Cari",    // BAK
+        cmbDevice :"Cihaz",    // BAK
+        txtTicketno : "Fiş I.D",    // BAK
+        numFirstTicketAmount : "Alt Tutar",    // BAK
+        numLastTicketAmount : "Üst Tutar",    // BAK
+        cmbUser :"Kulanıcı",    // BAK
+        txtItem :"Ürün Kodu",    // BAK
+        ckhDoublePay : "Birden Fazla Ödeme",    // BAK
+        cmbType :"Açıklama Tipi",    // BAK
+        dtDate : "Tarih",    // BAK
+        txtTotal : "Toplam Satış",    // BAK
+        grdItemSaleReport: 
+        {
+            itemName: "Ürün Adı",   // BAK
+            clmFirstDate: "İlk Tarih",   // BAK
+            clmLastDate: "Son Tarih",   // BAK
+            clmQuantity: "Miktar",   // BAK
+            clmPrice : "Fiyat",   // BAK
+            clmTotal : "Toplam"   // BAK
+        },
+        pg_txtRef:
+        {
+            title: "Ürün Seçim",   // BAK
+            clmCode: "KODU",   // BAK
+            clmName: "ADI",    // BAK
+        },
+        cancel : "Vazgeç", // BAK
+        msgItemSelect:
+        {
+            title: "Dikkat",   // BAK
+            btn01: "Tamam",   // BAK
+            msg: "Lütfen Ürün Seçiniz !"   // BAK
         },
     },
     pos_03_001 : // "Gün sonu"
