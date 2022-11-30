@@ -11752,6 +11752,7 @@ export const langTr =
             title: "Ürün Seçim",
             clmCode: "KODU",
             clmName: "ADI", 
+            clmStatus : "DURUM"
         },
         cancel : "Vazgeç",
         msgItemSelect:

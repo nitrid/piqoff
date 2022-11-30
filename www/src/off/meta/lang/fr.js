@@ -11752,6 +11752,7 @@ export const langFr =
             title: "Ürün Seçim",   // BAK
             clmCode: "KODU",   // BAK
             clmName: "ADI",    // BAK
+            clmStatus : "DURUM" // BAK
         },
         cancel : "Vazgeç", // BAK
         msgItemSelect:

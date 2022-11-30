@@ -187,6 +187,7 @@ export default class itemSaleReport extends React.PureComponent
                                     width={'90%'}
                                     height={'90%'}
                                     title={this.t("pg_txtRef.title")} 
+                                    selection={{mode:"single"}}
                                     search={true}
                                     data = 
                                     {{
