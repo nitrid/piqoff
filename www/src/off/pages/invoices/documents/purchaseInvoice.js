@@ -3490,6 +3490,7 @@ export default class purchaseInvoice extends React.PureComponent
                                             <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'} 
                                             onClick={async ()=>
                                             {       
+                                                App.instance.setState({isExecute:true})
                                                 let tmpQuery = 
                                                 {
                                                     query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID) ORDER BY LINE_NO " ,
@@ -3500,6 +3501,7 @@ export default class purchaseInvoice extends React.PureComponent
                                                 console.log(JSON.stringify(tmpData.result.recordset))
                                                 this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
                                                 {
+                                                    App.instance.setState({isExecute:false})
                                                     if(pResult.split('|')[0] != 'ERR')
                                                     {
                                                         var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");                                                         
