@@ -560,7 +560,7 @@ export default class rebateDispatch extends React.PureComponent
                                 height={'90%'}
                                 selection={{mode:"single"}}
                                 title={this.t("pg_Docs.title")} 
-                                data={{source:{select:{query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME FROM DOC_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 40 AND REBATE = 1 ORDER BY DOC_DATE DESC"},sql:this.core.sql}}}
+                                data={{source:{select:{query : "SELECT GUID,REF,REF_NO,INPUT_CODE,DOC_DATE_CONVERT,INPUT_NAME FROM DOC_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 40 AND REBATE = 1 ORDER BY DOC_DATE DESC"},sql:this.core.sql}}}
                                 button=
                                 {
                                     [
