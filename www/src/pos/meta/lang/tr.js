@@ -535,6 +535,7 @@ export const langTr =
         msg2 : "Aktarım Başlatıldı.",
         msg3 : "Tablosu Aktarılıyor.",
         btnPopTransferManuel : "Manuel Başlat",
+        btnPopTransferClear : "Temizle Aktar",
         btnPopTransferStop : "Durdur"
     },
     msgOfflineWarning: 

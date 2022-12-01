@@ -1250,7 +1250,6 @@ export default class posDoc extends React.PureComponent
             pItemData.PRICE = tmpPriceDt.length > 0 && tmpPriceDt[0].PRICE > 0 ? tmpPriceDt[0].PRICE : pItemData.PRICE
             /************************************************************************************ */
         }
-        
 
         let tmpCalc = this.calcSaleTotal(pItemData.PRICE,pItemData.QUANTITY,pRowData.DISCOUNT,pRowData.LOYALTY,pRowData.VAT_RATE)
         
@@ -2205,7 +2204,7 @@ export default class posDoc extends React.PureComponent
             })
         });
     }
-    transferStart(pTime)
+    transferStart(pTime,pClear)
     {
         let tmpCounter = 0
         let tmpPrmTime = typeof pTime != 'undefined' ? pTime : this.prmObj.filter({ID:'TransferTime',TYPE:0}).getValue()
@@ -2218,9 +2217,9 @@ export default class posDoc extends React.PureComponent
             {
                 this.setState({msgTransfer1:this.lang.t("popTransfer.msg2")})
                 this.transferStop()
-                await this.transfer.transferSql()
+                await this.transfer.transferSql(pClear)
                 await this.transfer.transferLocal()
-                this.transferStart()
+                this.transferStart()                
             }
         },1000)
     }
@@ -2244,13 +2243,20 @@ export default class posDoc extends React.PureComponent
             resolve()
         });
     }
-    getPromoDb()
+    getPromoDb(pFirstDate,pLastDate)
     {
         return new Promise(async resolve => 
         {
+            let tmpFirstDate = new Date()
+            let tmpLastDate = new Date()
             //this.posPromoObj.clearAll()
+            if(typeof pFirstDate != 'undefined')
+            {
+                tmpFirstDate = pFirstDate
+                tmpLastDate = pLastDate
+            }
             this.promoObj.clearAll()
-            await this.promoObj.load({START_DATE:moment(new Date()).format("YYYY-MM-DD"),FINISH_DATE:moment(new Date()).format("YYYY-MM-DD"),CUSTOMER_GUID:this.posObj.dt()[0].CUSTOMER_GUID,DEPOT_GUID:this.posObj.dt()[0].DEPOT_GUID})
+            await this.promoObj.load({START_DATE:moment(tmpFirstDate).format("YYYY-MM-DD"),FINISH_DATE:moment(tmpLastDate).format("YYYY-MM-DD"),CUSTOMER_GUID:this.posObj.dt()[0].CUSTOMER_GUID,DEPOT_GUID:this.posObj.dt()[0].DEPOT_GUID})
             resolve()
         })
     }
@@ -4646,6 +4652,9 @@ export default class posDoc extends React.PureComponent
                                                 }
                                             }
                                             this.posObj.dt()[0].ORDER_GUID = tmpOrderList[0].DOC_GUID
+                                            //PROMOSYON GETİR.
+                                            await this.getPromoDb(tmpOrderList[0].DOC_DATE,tmpOrderList[0].DOC_DATE)
+                                            //************************************************** */
                                             tmpOrderList.forEach((items)=>
                                             {
                                                 items.CLOSED = 1
@@ -6697,7 +6706,7 @@ export default class posDoc extends React.PureComponent
                         {/* Button Group */}
                         <div className="row pb-2">
                             {/* btnPopTransferManuel */}
-                            <div className="col-6">
+                            <div className="col-4">
                                 <NbButton id={"btnPopTransferManuel"} parent={this} className="form-group btn btn-success btn-block" style={{height:"50px",width:"100%"}}
                                 onClick={()=>
                                 {
@@ -6707,8 +6716,19 @@ export default class posDoc extends React.PureComponent
                                     {this.lang.t("popTransfer.btnPopTransferManuel")}
                                 </NbButton>
                             </div>
+                            {/* btnPopTransferClear */}
+                            <div className="col-4">
+                                <NbButton id={"btnPopTransferClear"} parent={this} className="form-group btn btn-success btn-block" style={{height:"50px",width:"100%"}}
+                                onClick={()=>
+                                {
+                                    this.transferStop();
+                                    this.transferStart(1,true)
+                                }}>
+                                    {this.lang.t("popTransfer.btnPopTransferClear")}
+                                </NbButton>
+                            </div>
                             {/* btnPopTransferStop */}
-                            <div className="col-6">
+                            <div className="col-4">
                                 <NbButton id={"btnPopTransferStop"} parent={this} className="form-group btn btn-success btn-block" style={{height:"50px",width:"100%"}}
                                 onClick={()=>
                                 {

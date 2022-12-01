@@ -34,8 +34,8 @@ class nf525
         // const workbook = xlsx.read(buf);
         // console.log(workbook)
 
-        //setTimeout(this.processGrandTotal.bind(this), 1000);
-        //setTimeout(this.processArchive.bind(this), 1000);
+        setTimeout(this.processGrandTotal.bind(this), 1000);
+        setTimeout(this.processArchive.bind(this), 1000);
     }
     connEvt(pSocket)
     {
@@ -254,7 +254,7 @@ class nf525
                 }
                 else
                 {
-                    tmpQuery.query = tmpQuery.query.replace("{0}","DOC_DATE >= CONVERT(NVARCHAR(10),GETDATE() - 1,112)")
+                    tmpQuery.query = tmpQuery.query.replace("{0}","DOC_DATE >= CONVERT(NVARCHAR(10),GETDATE() - 120,112)")
                 }
     
                 let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
@@ -485,7 +485,7 @@ class nf525
             tmpSignature = tmpSignature + "," + pData.GUID
             tmpSignature = tmpSignature + "," + (pData.SIGNATURE == "" ? "N" : "O")
 
-            //return this.sign(tmpSignature)
+            return this.sign(tmpSignature)
         }
         else
         {

@@ -559,6 +559,7 @@ export default class transferCls
                 {
                     DBID : {dataType:"number",primaryKey: true, autoIncrement: true},
                     GUID : {dataType: "string"},
+                    MAIN_GUID : {dataType: "string"},
                     MAIN_CODE : {dataType: "string"},
                     MAIN_NAME : {dataType: "string"},
                     ORGINS_CODE : {dataType: "string"},
@@ -680,7 +681,8 @@ export default class transferCls
             {
                 from : 
                 {
-                    query : "SELECT *,dbo.FN_PRICE_SALE(GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000') AS PRICE FROM ITEMS_VW_01"
+                    query : "SELECT *,dbo.FN_PRICE_SALE(GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000') AS PRICE FROM ITEMS_VW_01 ",
+                    where : "WHERE LDATE >= GETDATE() - 10"
                 },
                 to : 
                 {
@@ -706,7 +708,8 @@ export default class transferCls
             {
                 from : 
                 {
-                    query : "SELECT *,dbo.FN_PRICE_SALE(GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000') AS PRICE FROM ITEMS_POS_VW_01"
+                    query : "SELECT *,dbo.FN_PRICE_SALE(GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000') AS PRICE FROM ITEMS_POS_VW_01 ",
+                    where : "WHERE LDATE >= GETDATE() - 10"
                 },
                 to : 
                 {
@@ -730,7 +733,8 @@ export default class transferCls
             {
                 from : 
                 {
-                    query : "SELECT * FROM ITEMS_BARCODE_MULTICODE_VW_01"
+                    query : "SELECT * FROM ITEMS_BARCODE_MULTICODE_VW_01 ",
+                    where : "WHERE LDATE >= GETDATE() - 10"
                 },
                 to : 
                 {
@@ -760,7 +764,8 @@ export default class transferCls
             {
                 from : 
                 {
-                    query : "SELECT *,DATEDIFF(DAY,CDATE,GETDATE()) AS EXDAY FROM CHEQPAY_VW_01 WHERE [YEAR] = 2"
+                    query : "SELECT *,DATEDIFF(DAY,CDATE,GETDATE()) AS EXDAY FROM CHEQPAY_VW_01 WHERE [YEAR] = 2 ",
+                    where : "WHERE LDATE >= GETDATE() - 10"
                 },
                 to : 
                 {
@@ -828,18 +833,19 @@ export default class transferCls
             {
                 from : 
                 {
-                    query : "SELECT * FROM PLU_IMAGE_VW_01"
+                    query : "SELECT * FROM PLU_IMAGE_VW_01 ",
+                    where : "WHERE LDATE >= GETDATE() - 10"
                 },
                 to : 
                 {
                     into : "PLU_IMAGE_VW_01",
-                    values : [{GUID : {map:'GUID'},MAIN_CODE : {map:'MAIN_CODE'},MAIN_NAME : {map:'MAIN_NAME'},ORGINS_CODE : {map:'ORGINS_CODE'},ORGINS_NAME : {map:'ORGINS_NAME'},
+                    values : [{GUID : {map:'GUID'},MAIN_GUID : {map:'MAIN_GUID'},MAIN_CODE : {map:'MAIN_CODE'},MAIN_NAME : {map:'MAIN_NAME'},ORGINS_CODE : {map:'ORGINS_CODE'},ORGINS_NAME : {map:'ORGINS_NAME'},
                     ITEM_GUID : {map:'ITEM_GUID'},ITEM_CODE : {map:'ITEM_CODE'},ITEM_NAME : {map:'ITEM_NAME'},PRICE : {map:'PRICE'},IMAGE : {map:'IMAGE'}}]
                 },
                 update : 
                 {
-                    in : "PLU_VW_01",
-                    set : {MAIN_CODE : {map:'MAIN_CODE'},MAIN_NAME : {map:'MAIN_NAME'},ORGINS_CODE : {map:'ORGINS_CODE'},ORGINS_NAME : {map:'ORGINS_NAME'},
+                    in : "PLU_IMAGE_VW_01",
+                    set : {MAIN_GUID : {map:'MAIN_GUID'},MAIN_CODE : {map:'MAIN_CODE'},MAIN_NAME : {map:'MAIN_NAME'},ORGINS_CODE : {map:'ORGINS_CODE'},ORGINS_NAME : {map:'ORGINS_NAME'},
                     ITEM_GUID : {map:'ITEM_GUID'},ITEM_CODE : {map:'ITEM_CODE'},ITEM_NAME : {map:'ITEM_NAME'},PRICE : {map:'PRICE'},IMAGE : {map:'IMAGE'}},
                     where : {GUID : {map:'GUID'}}
                 }
@@ -1203,17 +1209,6 @@ export default class transferCls
     }
     ctrlFetchToSql(pLocData,pSqlData,pUpdate)
     {
-        let isDate = (pName) =>
-        {
-            if(typeof pUpdate.set[pName] != 'undefined' && typeof pUpdate.set[pName].type != 'undefined' && pUpdate.set[pName].type == 'date_time')
-            {
-                return true
-            }
-            else
-            {
-                return false
-            }
-        }
         let tmpUpdate = JSON.parse(JSON.stringify(pUpdate))
         //WHERE
         for (let x = 0; x < Object.keys(tmpUpdate.where).length; x++) 
@@ -1241,27 +1236,6 @@ export default class transferCls
         if(pLocData.where(tmpUpdate.where).length > 0)
         {
             return true
-            // let tmpDt = pLocData.where(tmpUpdate.where)
-            
-            // for (let i = 0; i < Object.keys(pSqlData).length; i++) 
-            // {
-            //     let tmpColumn = Object.keys(pSqlData)[i]
-            //     let tmpLocVal = tmpDt[0][tmpColumn]
-            //     let tmpSqlVal = pSqlData[tmpColumn]
-            //     if(isDate(tmpColumn))
-            //     {
-            //         tmpLocVal = moment(tmpLocVal).format('YYYY-MM-DD')
-            //         tmpSqlVal = moment(tmpLocVal).format('YYYY-MM-DD')
-            //     }
-            //     //console.log(tmpLocVal + " - " + tmpSqlVal + " - " + tmpColumn)
-            //     if(typeof tmpLocVal != 'undefined' && typeof tmpSqlVal != 'undefined')
-            //     {
-            //         if(tmpLocVal != tmpSqlVal)
-            //         {
-            //             return true
-            //         }                    
-            //     }
-            // }
         }
         else
         {
@@ -1269,22 +1243,36 @@ export default class transferCls
         }
     }
     //SQL DEN LOCAL E GETİR 
-    fetchToSql(pTemp)
+    fetchToSql(pTemp,pClear)
     {
         return new Promise(async resolve => 
         {
+            if(typeof pClear != 'undefined' && pClear == true)
+            {
+                await this.clearTbl(pTemp.to.into)
+            }
+
             let tmpValues = [];
-            let tmpData = await this.core.sql.execute(pTemp.from)
+            let tmpData = []
             let tmpCtrlData = await this.core.local.select({from:pTemp.update.in})
-            let tmpCtrlDt = new datatable()
-            
+            let tmpCtrlDt = new datatable()                        
+
             if(typeof tmpCtrlData.result.err == 'undefined')
             {
                 tmpCtrlDt.import(tmpCtrlData.result)
+                if(tmpCtrlDt.length > 0)
+                {
+                    let tmpQ = {...pTemp.from}
+                    tmpQ.query = tmpQ.query + tmpQ.where
+                    tmpData = await this.core.sql.execute(tmpQ)
+                }
+                else
+                {
+                    tmpData = await this.core.sql.execute(pTemp.from)
+                }
             }
-
             if(typeof tmpData.result.err == 'undefined')
-            {
+            {                                
                 tmpData = tmpData.result.recordset 
                 for (let i = 0; i < tmpData.length; i++) 
                 {   
@@ -1366,12 +1354,6 @@ export default class transferCls
                         }    
                         tmpValues.push(tmpLocQuery.values[0])
                     }
-                    else if(typeof tmpCtrl == 'undefined')
-                    {
-                        await this.core.util.waitUntil(0)
-                    }
-                    //console.log(tmpCtrl)
-                    //
                     this.emit('onState',{tag:'progress',count:tmpData.length,index:i})
                 }
                 
@@ -1439,7 +1421,7 @@ export default class transferCls
         });
     }
     //SQL DEN LOCAL E ŞEMA AKTARIMI.
-    transferSql()
+    transferSql(pClear)
     {
         return new Promise(async resolve => 
         {
@@ -1447,7 +1429,7 @@ export default class transferCls
             for (let i = 0; i < tmpSchema.length; i++) 
             {                
                 this.emit('onState',{tag:'',text: tmpSchema[i].to.into})
-                await this.fetchToSql(tmpSchema[i])             
+                await this.fetchToSql(tmpSchema[i],pClear)             
             }
             resolve()
         });

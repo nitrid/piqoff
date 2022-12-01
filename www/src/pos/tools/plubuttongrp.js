@@ -60,7 +60,7 @@ export default class NbPluButtonGrp extends NbBase
             {
                 type : "select",
                 from : "PLU_IMAGE_VW_01",
-                where : {MAIN_CODE:{in:tmpArr}},
+                where : {MAIN_GUID:{in:tmpArr}},
                 order: {by: "ITEM_NAME",type: "asc"}
             }
         }        

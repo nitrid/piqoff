@@ -1036,7 +1036,7 @@ export const prm =
     {
         TYPE : 0,
         ID :"TransferTime",
-        VALUE : 1800,
+        VALUE : 500,
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "",

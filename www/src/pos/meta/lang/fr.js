@@ -535,6 +535,7 @@ export const langFr =
         msg2 : "Transfert commencé.",
         msg3 : "Table de transfert.",
         btnPopTransferManuel : "Démarrage manuel",
+        btnPopTransferClear : "Temizle Aktar", //BAK
         btnPopTransferStop : "Arrêter"
     },
     msgOfflineWarning: 
