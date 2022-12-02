@@ -1263,7 +1263,7 @@ export default class transferCls
                 if(tmpCtrlDt.length > 0)
                 {
                     let tmpQ = {...pTemp.from}
-                    tmpQ.query = tmpQ.query + tmpQ.where
+                    tmpQ.query = tmpQ.query + (typeof tmpQ.where != 'undefined' ? tmpQ.where : "")
                     tmpData = await this.core.sql.execute(tmpQ)
                 }
                 else
