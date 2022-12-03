@@ -11,7 +11,8 @@ export class companyCls
         {
             GUID : '00000000-0000-0000-0000-000000000000',
             CUSER : this.core.auth.data == null ? '' : this.core.auth.data.CODE,
-            ADRESS1  :'',
+            BRAND_NAME : '',
+            ADRESS1 : '',
             ADRESS2 : '',
             ZIPCODE : '',
             COUNTRY : '',
@@ -50,6 +51,7 @@ export class companyCls
                     "@GUID  = @PGUID," +
                     "@CUSER = @PCUSER, " +
                     "@NAME = @PNAME, " +
+                    "@BRAND_NAME = @PBRAND_NAME, " +
                     "@ADDRESS1 = @PADDRESS1, " +
                     "@ADDRESS2 = @PADDRESS2, " +
                     "@ZIPCODE = @PZIPCODE, " +
@@ -69,10 +71,10 @@ export class companyCls
                     "@SIREN_NO = @PSIREN_NO, " +
                     "@RCS = @PRCS, " +
                     "@CAPITAL  =@PCAPITAL ",
-            param : ['PGUID:string|50','PCUSER:string|50','PNAME:string|50','PADDRESS1:string|50','PADDRESS2:string|50','PZIPCODE:string|50','PCOUNTRY:string|50','PCITY:string|50',
+            param : ['PGUID:string|50','PCUSER:string|50','PNAME:string|50','PBRAND_NAME:string|50','PADDRESS1:string|50','PADDRESS2:string|50','PZIPCODE:string|50','PCOUNTRY:string|50','PCITY:string|50',
                      'PTEL:string|50','PMAIL:string|50','PWEB:string|50','PSIRET_ID:string|50','PAPE_CODE:string|50','PTAX_OFFICE:string|50','PTAX_NO:string|50','PINT_VAT_NO:string|50','POFFICIAL_NAME:string|50',
                      'POFFICIAL_SURNAME:string|50','PCOMPANY_TYPE:string|50','PSIREN_NO:string|50','PRCS:string|50','PCAPITAL:float'],
-            dataprm : ['GUID','CUSER','NAME','ADDRESS1','ADDRESS2','ZIPCODE','COUNTRY','CITY','TEL','MAIL','WEB','SIRET_ID','APE_CODE','TAX_OFFICE','TAX_NO','INT_VAT_NO','OFFICIAL_NAME',
+            dataprm : ['GUID','CUSER','NAME','BRAND_NAME','ADDRESS1','ADDRESS2','ZIPCODE','COUNTRY','CITY','TEL','MAIL','WEB','SIRET_ID','APE_CODE','TAX_OFFICE','TAX_NO','INT_VAT_NO','OFFICIAL_NAME',
                        'OFFICIAL_SURNAME','COMPANY_TYPE','SIREN_NO','RCS','CAPITAL']
         } 
         tmpDt.updateCmd = 
@@ -81,6 +83,7 @@ export class companyCls
                     "@GUID  = @PGUID," +
                     "@CUSER = @PCUSER, " +
                     "@NAME = @PNAME, " +
+                    "@BRAND_NAME = @PBRAND_NAME, " +
                     "@ADDRESS1 = @PADDRESS1, " +
                     "@ADDRESS2 = @PADDRESS2, " +
                     "@ZIPCODE = @PZIPCODE, " +
@@ -100,10 +103,10 @@ export class companyCls
                     "@SIREN_NO = @PSIREN_NO, " +
                     "@RCS = @PRCS, " +
                     "@CAPITAL  =@PCAPITAL ",
-            param : ['PGUID:string|50','PCUSER:string|50','PNAME:string|50','PADDRESS1:string|50','PADDRESS2:string|50','PZIPCODE:string|50','PCOUNTRY:string|50','PCITY:string|50',
+            param : ['PGUID:string|50','PCUSER:string|50','PNAME:string|50','PBRAND_NAME:string|50','PADDRESS1:string|50','PADDRESS2:string|50','PZIPCODE:string|50','PCOUNTRY:string|50','PCITY:string|50',
                      'PTEL:string|50','PMAIL:string|50','PWEB:string|50','PSIRET_ID:string|50','PAPE_CODE:string|50','PTAX_OFFICE:string|50','PTAX_NO:string|50','PINT_VAT_NO:string|50','POFFICIAL_NAME:string|50',
                      'POFFICIAL_SURNAME:string|50','PCOMPANY_TYPE:string|50','PSIREN_NO:string|50','PRCS:string|50','PCAPITAL:float'],
-            dataprm : ['GUID','CUSER','NAME','ADDRESS1','ADDRESS2','ZIPCODE','COUNTRY','CITY','TEL','MAIL','WEB','SIRET_ID','APE_CODE','TAX_OFFICE','TAX_NO','INT_VAT_NO','OFFICIAL_NAME',
+            dataprm : ['GUID','CUSER','NAME','BRAND_NAME','ADDRESS1','ADDRESS2','ZIPCODE','COUNTRY','CITY','TEL','MAIL','WEB','SIRET_ID','APE_CODE','TAX_OFFICE','TAX_NO','INT_VAT_NO','OFFICIAL_NAME',
                        'OFFICIAL_SURNAME','COMPANY_TYPE','SIREN_NO','RCS','CAPITAL']
         } 
         this.ds.add(tmpDt);

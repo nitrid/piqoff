@@ -42,7 +42,7 @@ export default class CustomerCard extends React.PureComponent
         {
             console.log(this.pagePrm.GUID)
             this.companyObj.clearAll()
-            await this.companyObj.load({GUID:this.pagePrm.GUID});
+            await this.companyObj.load({GUID:this.pagePrm.GUID});            
         }
     }
     async init()
@@ -91,6 +91,7 @@ export default class CustomerCard extends React.PureComponent
         })
 
         await this.companyObj.load()
+        console.log(this.companyObj)
         if(this.companyObj.dt().length == 0)
         {
             this.companyObj.addEmpty();
@@ -119,7 +120,7 @@ export default class CustomerCard extends React.PureComponent
     async getCustomer(pCode)
     {
         this.companyObj.clearAll()
-        await this.companyObj.load({CODE:pCode});
+        await this.companyObj.load({CODE:pCode});        
     }
     render()
     {
@@ -235,6 +236,16 @@ export default class CustomerCard extends React.PureComponent
                                         <Validator validationGroup={"frmCompany"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validation.notValid")} />
                                         </Validator> 
+                                    </NdTextBox>
+                                </Item>
+                                {/* txtBrandName */}
+                                <Item colSpan={2}>
+                                    <Label text={this.t("txtBrandName")} alignment="right" />
+                                    <NdTextBox id="txtBrandName" parent={this} simple={true} tabIndex={this.tabIndex} 
+                                    dt={{data:this.companyObj.dt('COMPANY'),field:"BRAND_NAME"}}
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                    maxLength={32}
+                                    >
                                     </NdTextBox>
                                 </Item>
                                 {/* txtCustomerName */}
