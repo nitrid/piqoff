@@ -327,7 +327,7 @@ export default class posDoc extends React.PureComponent
         //********************************************* */
         this.cheqDt.selectCmd = 
         {
-            query : "SELECT * FROM CHEQPAY_VW_01 WHERE DOC = @DOC ORDER BY CDATE DESC",
+            query : "SELECT *,ROW_NUMBER() OVER (ORDER BY LDATE ASC) AS NO FROM CHEQPAY_VW_01 WHERE DOC = @DOC ORDER BY CDATE DESC",
             param : ['DOC:string|50'], 
             value : [this.posObj.dt()[0].GUID],
             local : 
@@ -4794,6 +4794,7 @@ export default class posDoc extends React.PureComponent
                                     e.cellElement.style.padding = "4px"
                                 }}
                                 >
+                                    <Column dataField="NO" alignment={"center"} caption={"NO"} width={100} />
                                     <Column dataField="CODE" alignment={"center"} caption={this.lang.t("grdPopCheqpayList.CODE")} width={550} />
                                     <Column dataField="AMOUNT" alignment={"center"} caption={this.lang.t("grdPopCheqpayList.AMOUNT")} width={100} format={"#,##0.00" + Number.money.sign}/>
                                 </NdGrid>
