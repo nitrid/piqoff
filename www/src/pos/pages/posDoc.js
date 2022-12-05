@@ -1113,7 +1113,8 @@ export default class posDoc extends React.PureComponent
     calcSaleTotal(pPrice,pQuantity,pDiscount,pLoyalty,pVatRate)
     {
         let tmpAmount = Number(parseFloat((pPrice * pQuantity)).toFixed(2))
-        let tmpFAmount = Number(parseFloat((pPrice * pQuantity) - (pDiscount)).toFixed(2))
+        let tmpFAmount = Number(Number(Number(tmpAmount).toFixed(2)) - Number(Number(pDiscount).toFixed(2))).toFixed(2)
+        //let tmpFAmount = Number(parseFloat((pPrice * pQuantity) - (pDiscount)).toFixed(2))
         tmpFAmount = Number(tmpFAmount - pLoyalty)
         let tmpVat = Number(parseFloat(tmpFAmount - (tmpFAmount / ((pVatRate / 100) + 1))).toFixed(2))
     
@@ -2788,7 +2789,7 @@ export default class posDoc extends React.PureComponent
                                                 }
                                                 tmpDt.selectCmd.value = [this.txtBarcode.value]
                                                 await tmpDt.refresh();
-                                                
+                                                this.grdBarcodeList.devGrid.clearSelection()
                                                 await this.grdBarcodeList.dataRefresh({source:tmpDt});
                                                 this.popBarcodeList.show()
                                                 this.txtBarcode.value = ""
@@ -4495,6 +4496,7 @@ export default class posDoc extends React.PureComponent
                                 }}
                                 onSelectionChanged={(e)=>
                                 {
+                                    console.log(e.currentSelectedRowKeys[0])
                                     if(typeof e.currentSelectedRowKeys[0] != 'undefined')
                                     {
                                         this.getItem(this.txtBarcode.value + e.currentSelectedRowKeys[0].BARCODE)
@@ -4504,7 +4506,7 @@ export default class posDoc extends React.PureComponent
                                 >
                                     <Column dataField="BARCODE" caption={this.lang.t("grdBarcodeList.BARCODE")} width={150}/>
                                     <Column dataField="NAME" caption={this.lang.t("grdBarcodeList.NAME")} width={500} />
-                                    <Column dataField="PRICE_SALE" caption={this.lang.t("grdgrdBarcodeListList.PRICE_SALE")} width={100} format={"#,##0.00" + Number.money.sign}/>
+                                    <Column dataField="PRICE_SALE" caption={this.lang.t("grdBarcodeList.PRICE_SALE")} width={100} format={"#,##0.00" + Number.money.sign}/>
                                 </NdGrid>
                             </div>
                         </div>
@@ -5182,14 +5184,14 @@ export default class posDoc extends React.PureComponent
                                     }
 
                                     let tmpLoyalty = Number(parseFloat(this.txtPopLoyalty.value / 100).toFixed(2))
-                                    let tmpLoyaltyRate = Number(this.posObj.dt()[0].AMOUNT - this.posObj.dt()[0].DISCOUNT).rate2Num(tmpLoyalty)
-
+                                    let tmpLoyaltyRate = Number(Number(Number(this.posObj.dt()[0].AMOUNT).toFixed(2)) - Number(Number(this.posObj.dt()[0].DISCOUNT).toFixed(2))).rate2Num(tmpLoyalty)
+                                    
                                     for (let i = 0; i < this.posObj.posSale.dt().length; i++) 
                                     {                                        
                                         let tmpData = this.posObj.posSale.dt()[i]
-                                        let tmpRowLoyalty = Number(tmpData.AMOUNT - tmpData.DISCOUNT).rateInc(tmpLoyaltyRate,2)
+                                        let tmpRowLoyalty = Number(Number(Number(tmpData.AMOUNT).toFixed(2)) - Number(Number(tmpData.DISCOUNT).toFixed(2))).rateInc(tmpLoyaltyRate,2)
                                         let tmpCalc = this.calcSaleTotal(tmpData.PRICE,tmpData.QUANTITY,tmpData.DISCOUNT,tmpRowLoyalty,tmpData.VAT_RATE)
-                                        
+
                                         this.posObj.posSale.dt()[i].FAMOUNT = tmpCalc.FAMOUNT
                                         this.posObj.posSale.dt()[i].AMOUNT = tmpCalc.AMOUNT
                                         this.posObj.posSale.dt()[i].DISCOUNT = tmpCalc.DISCOUNT
@@ -5801,7 +5803,7 @@ export default class posDoc extends React.PureComponent
                                                 <NbButton id={"btnPopLastTotalTRDetail"} parent={this} className="form-group btn btn-danger btn-block" style={{height:"60px",width:"100%"}}
                                                 onClick={async ()=>
                                                 {
-                                                    if(this.lastPosPayDt.where({PAY_TYPE:4}).length > 0)
+                                                    if(this.lastPosPayDt.where({PAY_TYPE:3}).length > 0)
                                                     {
                                                         let tmpDt = new datatable(); 
                                                         tmpDt.selectCmd = 
