@@ -11205,6 +11205,7 @@ export const langFr =
     set_02_001 : // "Firma Bilgileri"
     {
         txtTitle : "Nom de l'entreprise",
+        txtBrandName : "Nom d'enseigne",
         txtCustomerName : "Nom autorisé",
         txtCustomerLastname : "Nom de famille autorisé",
         txtAddress1 : "Adresse",

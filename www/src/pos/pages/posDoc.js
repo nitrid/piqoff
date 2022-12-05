@@ -43,6 +43,7 @@ import {acs} from '../meta/acs.js'
 
 export default class posDoc extends React.PureComponent
 {
+    //CHECKRECORD İŞLEMİ KALDIRILACAK. ŞİMDİLİK BEKLEMEDE.
     constructor()
     {
         super() 
@@ -421,10 +422,10 @@ export default class posDoc extends React.PureComponent
             this.cheqDt.selectCmd.value = [pGuid] 
             await this.cheqDt.refresh(); 
             //checkRecord İŞLEMİ İÇİN YAPILDI
-            for (let i = 0; i < this.posObj.posSale.dt().length; i++) 
-            {
-                Object.setPrototypeOf(this.posObj.posSale.dt()[i],{stat:''})
-            }
+            // for (let i = 0; i < this.posObj.posSale.dt().length; i++) 
+            // {
+            //     Object.setPrototypeOf(this.posObj.posSale.dt()[i],{stat:''})
+            // }
             await this.calcGrandTotal(false)
             resolve();
         });        
@@ -1386,41 +1387,7 @@ export default class posDoc extends React.PureComponent
                 //******************************** */
                 if(typeof pPrint == 'undefined' || pPrint)
                 {       
-                    let tmpType = 'Fis'
-                    //POS_EXTRA TABLOSUNA YAZDIRMA BİLDİRİMİ GÖNDERİLİYOR                    
-                    let tmpInsertQuery = 
-                    {
-                        query : "EXEC [dbo].[PRD_POS_EXTRA_INSERT] " + 
-                                "@CUSER = @PCUSER, " + 
-                                "@TAG = @PTAG, " +
-                                "@POS_GUID = @PPOS_GUID, " +
-                                "@LINE_GUID = @PLINE_GUID, " +
-                                "@DATA =@PDATA, " +
-                                "@APP_VERSION =@PAPP_VERSION, " +
-                                "@DESCRIPTION = @PDESCRIPTION ", 
-                        param : ['PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|250','PAPP_VERSION:string|25','PDESCRIPTION:string|max'],
-                        value : [this.posObj.dt()[0].CUSER,"REPRINT",this.posObj.dt()[0].GUID,"00000000-0000-0000-0000-000000000000","",this.core.appInfo.version,""],
-                        local : 
-                        {
-                            type : "insert",
-                            into : "POS_EXTRA_VW_01",
-                            values : 
-                            [
-                                {
-                                    GUID : datatable.uuidv4(),
-                                    CUSER : this.posObj.dt()[0].CUSER,
-                                    TAG : "REPRINT",
-                                    POS_GUID : this.posObj.dt()[0].GUID,
-                                    LINE_GUID : "00000000-0000-0000-0000-000000000000",
-                                    DATA : "",
-                                    APP_VERSION : this.core.appInfo.version,
-                                    DESCRIPTION : ""
-                                }
-                            ]
-                        }
-                    }
-                    await this.core.sql.execute(tmpInsertQuery)
-                    //***************************************************/
+                    let tmpType = 'Fis'                    
                     //FİŞ Mİ FATURAMI SORULUYOR
                     if(this.posObj.dt()[0].CUSTOMER_CODE != '' && this.posObj.dt()[0].CUSTOMER_TYPE == 1)
                     {
@@ -1466,11 +1433,79 @@ export default class posDoc extends React.PureComponent
                         
                         if((await dialog(tmpConfObj)) == 'btn01')
                         {
+                            //POS_EXTRA TABLOSUNA YAZDIRMA BİLDİRİMİ GÖNDERİLİYOR                    
+                            let tmpInsertQuery = 
+                            {
+                                query : "EXEC [dbo].[PRD_POS_EXTRA_INSERT] " + 
+                                        "@CUSER = @PCUSER, " + 
+                                        "@TAG = @PTAG, " +
+                                        "@POS_GUID = @PPOS_GUID, " +
+                                        "@LINE_GUID = @PLINE_GUID, " +
+                                        "@DATA =@PDATA, " +
+                                        "@APP_VERSION =@PAPP_VERSION, " +
+                                        "@DESCRIPTION = @PDESCRIPTION ", 
+                                param : ['PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|250','PAPP_VERSION:string|25','PDESCRIPTION:string|max'],
+                                value : [this.posObj.dt()[0].CUSER,"REPRINT",this.posObj.dt()[0].GUID,"00000000-0000-0000-0000-000000000000","",this.core.appInfo.version,""],
+                                local : 
+                                {
+                                    type : "insert",
+                                    into : "POS_EXTRA_VW_01",
+                                    values : 
+                                    [
+                                        {
+                                            GUID : datatable.uuidv4(),
+                                            CUSER : this.posObj.dt()[0].CUSER,
+                                            TAG : "REPRINT",
+                                            POS_GUID : this.posObj.dt()[0].GUID,
+                                            LINE_GUID : "00000000-0000-0000-0000-000000000000",
+                                            DATA : "",
+                                            APP_VERSION : this.core.appInfo.version,
+                                            DESCRIPTION : ""
+                                        }
+                                    ]
+                                }
+                            }
+                            await this.core.sql.execute(tmpInsertQuery)
+                            //***************************************************/
                             await this.print(tmpData)
                         }
                     }
                     else
                     {
+                        //POS_EXTRA TABLOSUNA YAZDIRMA BİLDİRİMİ GÖNDERİLİYOR                    
+                        let tmpInsertQuery = 
+                        {
+                            query : "EXEC [dbo].[PRD_POS_EXTRA_INSERT] " + 
+                                    "@CUSER = @PCUSER, " + 
+                                    "@TAG = @PTAG, " +
+                                    "@POS_GUID = @PPOS_GUID, " +
+                                    "@LINE_GUID = @PLINE_GUID, " +
+                                    "@DATA =@PDATA, " +
+                                    "@APP_VERSION =@PAPP_VERSION, " +
+                                    "@DESCRIPTION = @PDESCRIPTION ", 
+                            param : ['PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|250','PAPP_VERSION:string|25','PDESCRIPTION:string|max'],
+                            value : [this.posObj.dt()[0].CUSER,"REPRINT",this.posObj.dt()[0].GUID,"00000000-0000-0000-0000-000000000000","",this.core.appInfo.version,""],
+                            local : 
+                            {
+                                type : "insert",
+                                into : "POS_EXTRA_VW_01",
+                                values : 
+                                [
+                                    {
+                                        GUID : datatable.uuidv4(),
+                                        CUSER : this.posObj.dt()[0].CUSER,
+                                        TAG : "REPRINT",
+                                        POS_GUID : this.posObj.dt()[0].GUID,
+                                        LINE_GUID : "00000000-0000-0000-0000-000000000000",
+                                        DATA : "",
+                                        APP_VERSION : this.core.appInfo.version,
+                                        DESCRIPTION : ""
+                                    }
+                                ]
+                            }
+                        }
+                        await this.core.sql.execute(tmpInsertQuery)
+                        //***************************************************/
                         await this.print(tmpData)
                     }
                     //***************************************************/
@@ -1481,6 +1516,11 @@ export default class posDoc extends React.PureComponent
                     }
                 }
                 
+                //POS_SALE DEKİ TÜM KAYITLARI TEKRAR SQL E DURUMU NEW OLARAK GÖNDERİYORUZ. PRD_POS_SALE_INSERT PROSEDÜRÜNÜN İÇERİSİNE UPDATE İŞLEMİNİ DE YERLEŞTİRDİK.
+                for (let i = 0; i < this.posObj.posSale.dt().length; i++) 
+                {
+                    Object.setPrototypeOf(this.posObj.posSale.dt()[i],{stat:'new'})
+                }
                 resolve(true)
             }
             else
@@ -1854,7 +1894,7 @@ export default class posDoc extends React.PureComponent
             let tmpTicket = pCode.substring(11,16)
             let tmpYear = pCode.substring(pCode.length - 1, pCode.length);
             let tmpCtrlCode = pCode.substring(16,17)
-            
+
             if(tmpCtrlCode != '1' && tmpCtrlCode != '2' && tmpCtrlCode != '3' && tmpCtrlCode != '4')
             {
                 this.txtPopCheqpay.value = "";
@@ -1875,10 +1915,10 @@ export default class posDoc extends React.PureComponent
             {
                 tmpTicket = pCode.substring(9,14)
             }    
-
             tmpAmount = Number(parseFloat(tmpTicket / 100).toFixed(2))
-            tmpYear = (parseInt(parseFloat(moment(new Date(),"YY").format("YY")) / 10) * 10) + parseInt(tmpYear)                                            
-            if(moment(new Date()).diff(moment('20' + tmpYear + '0101'),"day") > 395 || moment(new Date()).diff(moment('20' + tmpYear + '0101'),"day") < 0)
+            tmpYear = (parseInt(parseFloat(moment(new Date(),"YY").format("YY")) / 10) * 10) + parseInt(tmpYear)
+
+            if(moment(new Date()).diff(moment('20' + tmpYear + '0101'),"day") > 395 || moment(new Date()).diff(moment('20' + tmpYear + '0101'),"day") < -365)
             {
                 this.txtPopCheqpay.value = "";
                 document.getElementById("Sound").play(); 
@@ -2466,25 +2506,17 @@ export default class posDoc extends React.PureComponent
             }            
         });
     }
-    checkRecord()
-    {
-        for (let i = 0; i < this.posObj.posSale.dt().length; i++) 
-        {
-            if(typeof this.posObj.posSale.dt()[i].stat != 'undefined' && this.posObj.posSale.dt()[i].stat != '')
-            {
-                return {table:'POS_SALE',item:this.posObj.posSale.dt()[i].ITEM_NAME}
-            }
-        }
-        // for (let i = 0; i < this.posObj.dt().length; i++) 
-        // {
-        //     console.log(this.posObj.dt()[i].stat)
-        //     if(typeof this.posObj.dt()[i].stat != 'undefined' && this.posObj.dt()[i].stat != '')
-        //     {
-        //         return {table:'POS'}
-        //     }
-        // }
-        return
-    }
+    // checkRecord()
+    // {
+    //     for (let i = 0; i < this.posObj.posSale.dt().length; i++) 
+    //     {
+    //         if(typeof this.posObj.posSale.dt()[i].stat != 'undefined' && this.posObj.posSale.dt()[i].stat != '')
+    //         {
+    //             return {table:'POS_SALE',item:this.posObj.posSale.dt()[i].ITEM_NAME}
+    //         }
+    //     }
+    //     return
+    // }
     sendJet(pData)
     {
         let tmpJetData =
@@ -2935,43 +2967,43 @@ export default class posDoc extends React.PureComponent
                                                 }
                                             }  
                                             //* SATIŞI KAPATMADAN ÖNCE KAYITLAR KONTROL EDİLİYOR */
-                                            let tmpCheckRecord = this.checkRecord()
-                                            if(typeof tmpCheckRecord != 'undefined')
-                                            {
-                                                let tmpConfObj = {}
-                                                if(tmpCheckRecord.table == 'POS')
-                                                {
-                                                    tmpConfObj =
-                                                    {
-                                                        id:'msgCheckRecord',showTitle:true,title:this.lang.t("msgCheckRecord.title"),showCloseButton:false,width:'500px',height:'250px',
-                                                        button:[{id:"btn01",caption:this.lang.t("msgCheckRecord.btn01"),location:'after'}],
-                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgCheckRecord.msg1")}</div>)
-                                                    }
-                                                }
-                                                else if(tmpCheckRecord.table == 'POS_SALE')
-                                                {
-                                                    tmpConfObj =
-                                                    {
-                                                        id:'msgCheckRecord',showTitle:true,title:this.lang.t("msgCheckRecord.title"),showCloseButton:false,width:'500px',height:'250px',
-                                                        button:[{id:"btn01",caption:this.lang.t("msgCheckRecord.btn01"),location:'after'}],
-                                                        content:(
-                                                        <div style={{textAlign:"center",fontSize:"20px"}}>
-                                                            <div className="row">
-                                                                <div className="col-12">{this.lang.t("msgCheckRecord.msg1")}</div>
-                                                            </div>
-                                                            <div className="row">
-                                                                <div className="col-12">{this.lang.t("msgCheckRecord.msg2")} {tmpCheckRecord.item}</div>
-                                                            </div>
-                                                        </div>)
-                                                    }
-                                                }
+                                            // let tmpCheckRecord = this.checkRecord()
+                                            // if(typeof tmpCheckRecord != 'undefined')
+                                            // {
+                                            //     let tmpConfObj = {}
+                                            //     if(tmpCheckRecord.table == 'POS')
+                                            //     {
+                                            //         tmpConfObj =
+                                            //         {
+                                            //             id:'msgCheckRecord',showTitle:true,title:this.lang.t("msgCheckRecord.title"),showCloseButton:false,width:'500px',height:'250px',
+                                            //             button:[{id:"btn01",caption:this.lang.t("msgCheckRecord.btn01"),location:'after'}],
+                                            //             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgCheckRecord.msg1")}</div>)
+                                            //         }
+                                            //     }
+                                            //     else if(tmpCheckRecord.table == 'POS_SALE')
+                                            //     {
+                                            //         tmpConfObj =
+                                            //         {
+                                            //             id:'msgCheckRecord',showTitle:true,title:this.lang.t("msgCheckRecord.title"),showCloseButton:false,width:'500px',height:'250px',
+                                            //             button:[{id:"btn01",caption:this.lang.t("msgCheckRecord.btn01"),location:'after'}],
+                                            //             content:(
+                                            //             <div style={{textAlign:"center",fontSize:"20px"}}>
+                                            //                 <div className="row">
+                                            //                     <div className="col-12">{this.lang.t("msgCheckRecord.msg1")}</div>
+                                            //                 </div>
+                                            //                 <div className="row">
+                                            //                     <div className="col-12">{this.lang.t("msgCheckRecord.msg2")} {tmpCheckRecord.item}</div>
+                                            //                 </div>
+                                            //             </div>)
+                                            //         }
+                                            //     }
 
-                                                let tmpMsgResult = await dialog(tmpConfObj);
-                                                if(tmpMsgResult == 'btn01')
-                                                {
-                                                    return
-                                                }
-                                            } 
+                                            //     let tmpMsgResult = await dialog(tmpConfObj);
+                                            //     if(tmpMsgResult == 'btn01')
+                                            //     {
+                                            //         return
+                                            //     }
+                                            // }
                                             //*************************************************** */
                                             this.rbtnPayType.value = 0                                                                       
                                             this.popTotal.show();
@@ -3000,43 +3032,43 @@ export default class posDoc extends React.PureComponent
                                                 }
                                             }
                                             //* SATIŞI KAPATMADAN ÖNCE KAYITLAR KONTROL EDİLİYOR */
-                                            let tmpCheckRecord = this.checkRecord()
-                                            if(typeof tmpCheckRecord != 'undefined')
-                                            {
-                                                let tmpConfObj = {}
-                                                if(tmpCheckRecord.table == 'POS')
-                                                {
-                                                    tmpConfObj =
-                                                    {
-                                                        id:'msgCheckRecord',showTitle:true,title:this.lang.t("msgCheckRecord.title"),showCloseButton:false,width:'500px',height:'250px',
-                                                        button:[{id:"btn01",caption:this.lang.t("msgCheckRecord.btn01"),location:'after'}],
-                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgCheckRecord.msg1")}</div>)
-                                                    }
-                                                }
-                                                else if(tmpCheckRecord.table == 'POS_SALE')
-                                                {
-                                                    tmpConfObj =
-                                                    {
-                                                        id:'msgCheckRecord',showTitle:true,title:this.lang.t("msgCheckRecord.title"),showCloseButton:false,width:'500px',height:'250px',
-                                                        button:[{id:"btn01",caption:this.lang.t("msgCheckRecord.btn01"),location:'after'}],
-                                                        content:(
-                                                        <div style={{textAlign:"center",fontSize:"20px"}}>
-                                                            <div className="row">
-                                                                <div className="col-12">{this.lang.t("msgCheckRecord.msg1")}</div>
-                                                            </div>
-                                                            <div className="row">
-                                                                <div className="col-12">{this.lang.t("msgCheckRecord.msg2")} {tmpCheckRecord.item}</div>
-                                                            </div>
-                                                        </div>)
-                                                    }
-                                                }
+                                            // let tmpCheckRecord = this.checkRecord()
+                                            // if(typeof tmpCheckRecord != 'undefined')
+                                            // {
+                                            //     let tmpConfObj = {}
+                                            //     if(tmpCheckRecord.table == 'POS')
+                                            //     {
+                                            //         tmpConfObj =
+                                            //         {
+                                            //             id:'msgCheckRecord',showTitle:true,title:this.lang.t("msgCheckRecord.title"),showCloseButton:false,width:'500px',height:'250px',
+                                            //             button:[{id:"btn01",caption:this.lang.t("msgCheckRecord.btn01"),location:'after'}],
+                                            //             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgCheckRecord.msg1")}</div>)
+                                            //         }
+                                            //     }
+                                            //     else if(tmpCheckRecord.table == 'POS_SALE')
+                                            //     {
+                                            //         tmpConfObj =
+                                            //         {
+                                            //             id:'msgCheckRecord',showTitle:true,title:this.lang.t("msgCheckRecord.title"),showCloseButton:false,width:'500px',height:'250px',
+                                            //             button:[{id:"btn01",caption:this.lang.t("msgCheckRecord.btn01"),location:'after'}],
+                                            //             content:(
+                                            //             <div style={{textAlign:"center",fontSize:"20px"}}>
+                                            //                 <div className="row">
+                                            //                     <div className="col-12">{this.lang.t("msgCheckRecord.msg1")}</div>
+                                            //                 </div>
+                                            //                 <div className="row">
+                                            //                     <div className="col-12">{this.lang.t("msgCheckRecord.msg2")} {tmpCheckRecord.item}</div>
+                                            //                 </div>
+                                            //             </div>)
+                                            //         }
+                                            //     }
 
-                                                let tmpMsgResult = await dialog(tmpConfObj);
-                                                if(tmpMsgResult == 'btn01')
-                                                {
-                                                    return
-                                                }
-                                            } 
+                                            //     let tmpMsgResult = await dialog(tmpConfObj);
+                                            //     if(tmpMsgResult == 'btn01')
+                                            //     {
+                                            //         return
+                                            //     }
+                                            // } 
                                             //*************************************************** */
                                             this.popCardPay.show();
                                             this.txtPopCardPay.newStart = true;
@@ -3110,43 +3142,43 @@ export default class posDoc extends React.PureComponent
                                                 }
                                             }   
                                             //* SATIŞI KAPATMADAN ÖNCE KAYITLAR KONTROL EDİLİYOR */
-                                            let tmpCheckRecord = this.checkRecord()
-                                            if(typeof tmpCheckRecord != 'undefined')
-                                            {
-                                                let tmpConfObj = {}
-                                                if(tmpCheckRecord.table == 'POS')
-                                                {
-                                                    tmpConfObj =
-                                                    {
-                                                        id:'msgCheckRecord',showTitle:true,title:this.lang.t("msgCheckRecord.title"),showCloseButton:false,width:'500px',height:'250px',
-                                                        button:[{id:"btn01",caption:this.lang.t("msgCheckRecord.btn01"),location:'after'}],
-                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgCheckRecord.msg1")}</div>)
-                                                    }
-                                                }
-                                                else if(tmpCheckRecord.table == 'POS_SALE')
-                                                {
-                                                    tmpConfObj =
-                                                    {
-                                                        id:'msgCheckRecord',showTitle:true,title:this.lang.t("msgCheckRecord.title"),showCloseButton:false,width:'500px',height:'250px',
-                                                        button:[{id:"btn01",caption:this.lang.t("msgCheckRecord.btn01"),location:'after'}],
-                                                        content:(
-                                                        <div style={{textAlign:"center",fontSize:"20px"}}>
-                                                            <div className="row">
-                                                                <div className="col-12">{this.lang.t("msgCheckRecord.msg1")}</div>
-                                                            </div>
-                                                            <div className="row">
-                                                                <div className="col-12">{this.lang.t("msgCheckRecord.msg2")} {tmpCheckRecord.item}</div>
-                                                            </div>
-                                                        </div>)
-                                                    }
-                                                }
+                                            // let tmpCheckRecord = this.checkRecord()
+                                            // if(typeof tmpCheckRecord != 'undefined')
+                                            // {
+                                            //     let tmpConfObj = {}
+                                            //     if(tmpCheckRecord.table == 'POS')
+                                            //     {
+                                            //         tmpConfObj =
+                                            //         {
+                                            //             id:'msgCheckRecord',showTitle:true,title:this.lang.t("msgCheckRecord.title"),showCloseButton:false,width:'500px',height:'250px',
+                                            //             button:[{id:"btn01",caption:this.lang.t("msgCheckRecord.btn01"),location:'after'}],
+                                            //             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgCheckRecord.msg1")}</div>)
+                                            //         }
+                                            //     }
+                                            //     else if(tmpCheckRecord.table == 'POS_SALE')
+                                            //     {
+                                            //         tmpConfObj =
+                                            //         {
+                                            //             id:'msgCheckRecord',showTitle:true,title:this.lang.t("msgCheckRecord.title"),showCloseButton:false,width:'500px',height:'250px',
+                                            //             button:[{id:"btn01",caption:this.lang.t("msgCheckRecord.btn01"),location:'after'}],
+                                            //             content:(
+                                            //             <div style={{textAlign:"center",fontSize:"20px"}}>
+                                            //                 <div className="row">
+                                            //                     <div className="col-12">{this.lang.t("msgCheckRecord.msg1")}</div>
+                                            //                 </div>
+                                            //                 <div className="row">
+                                            //                     <div className="col-12">{this.lang.t("msgCheckRecord.msg2")} {tmpCheckRecord.item}</div>
+                                            //                 </div>
+                                            //             </div>)
+                                            //         }
+                                            //     }
 
-                                                let tmpMsgResult = await dialog(tmpConfObj);
-                                                if(tmpMsgResult == 'btn01')
-                                                {
-                                                    return
-                                                }
-                                            } 
+                                            //     let tmpMsgResult = await dialog(tmpConfObj);
+                                            //     if(tmpMsgResult == 'btn01')
+                                            //     {
+                                            //         return
+                                            //     }
+                                            // } 
                                             //****************************************************************************************************************************************** */                
                                             this.popCashPay.show();
                                             this.txtPopCashPay.newStart = true;

@@ -11205,6 +11205,7 @@ export const langTr =
     set_02_001 : // "Firma Bilgileri"
     {
         txtTitle : "Firma Adı",
+        txtBrandName : "Marka Adı",
         txtCustomerName : "Yetkili Adı",
         txtCustomerLastname : "Yetkili Soyadı",
         txtAddress1 : "Adres",
