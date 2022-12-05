@@ -45,6 +45,10 @@
 {
     height: fit-content;
 }
+.dx-htmleditor-content
+{
+    background-color: white;
+}
 /* NdImageUpload */ 
 #dropzone-external 
 {
