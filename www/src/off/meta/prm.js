@@ -2469,4 +2469,5 @@ export const prm =
             CAPTION : "Eksiye Düşemeye İzin Verme"
         }
     },
+    //#endregion
 ]

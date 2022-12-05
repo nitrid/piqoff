@@ -294,8 +294,9 @@ export default class itemCard extends React.PureComponent
         {
             if(pCode !== '')
             {
+                App.instance.setState({isExecute:true})
                 let tmpData = await new itemsCls().load({CODE:pCode});
-    
+                App.instance.setState({isExecute:false})
                 if(tmpData.length > 0)
                 {
                     let tmpConfObj =

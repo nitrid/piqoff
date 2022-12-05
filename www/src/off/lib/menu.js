@@ -1393,12 +1393,12 @@ export const menu = (e) =>
                         {
                             id: 'set_02_006',
                             text: e.t('menu.set_02_006'),//'Destek Talebi Oluştur',
-                            path: 'construction.js',
+                            path: 'setting/officialSettings/serviceContact'
                         },
                         {
                             id: 'set_02_007',
                             text: e.t('menu.set_02_007'),//'Destek Talebi Geçmişi',
-                            path: 'construction.js',
+                            path: 'setting/officialSettings/serviceHistory'
                         },
                         {
                             id: 'set_02_003',

@@ -172,3 +172,123 @@ export class companyCls
         });
     }
 }
+export class supportCls
+{
+    constructor()
+    {
+        this.core = core.instance;
+        this.ds = new dataset();
+        this.empty = 
+        {
+            GUID : '00000000-0000-0000-0000-000000000000',
+            CUSER : this.core.auth.data == null ? '' : this.core.auth.data.CODE,
+            SUBJECT : '',
+            HTML : '',
+            PROCESS : '',
+            PROCESS_USER : '',
+            REPLY_MAIL : ''
+        }
+
+        this._initDs();
+    }
+    //#region Private
+    _initDs()
+    {
+        let tmpDt = new datatable('SUPPORT_DETAIL');            
+        tmpDt.selectCmd = 
+        {
+            query :"SELECT * FROM SUPPORT_DETAIL_VW_01 WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000'))",
+            param : ['GUID:string|50']
+        } 
+        tmpDt.insertCmd = 
+        {
+            query : "EXEC [dbo].[PRD_SUPPORT_DETAIL_INSERT] " + 
+                    "@GUID  = @PGUID," +
+                    "@CUSER = @PCUSER, " +
+                    "@SUBJECT = @PSUBJECT, " +
+                    "@HTML = @PHTML, " +
+                    "@PROCESS = @PPROCESS, " +
+                    "@PROCESS_USER = @PPROCESS_USER, " +
+                    "@REPLY_MAIL = @PREPLY_MAIL " ,
+            param : ['PGUID:string|50','PCUSER:string|50','PSUBJECT:string|100','PHTML:string|max','PPROCESS:string|max','PPROCESS_USER:string|50','PREPLY_MAIL:string|50'],
+            dataprm : ['GUID','CUSER','SUBJECT','HTML','PROCESS','PROCESS_USER','REPLY_MAIL']
+        } 
+        tmpDt.updateCmd = 
+        {
+            query : "EXEC [dbo].[PRD_SUPPORT_DETAIL_UPDATE] " + 
+                    "@GUID  = @PGUID," +
+                    "@CUSER = @PCUSER, " +
+                    "@SUBJECT = @PSUBJECT, " +
+                    "@HTML = @PHTML, " +
+                    "@PROCESS = @PPROCESS, " +
+                    "@PROCESS_USER = @PPROCESS_USER, " +
+                    "@REPLY_MAIL = @PREPLY_MAIL " ,
+            param : ['PGUID:string|50','PCUSER:string|50','PSUBJECT:string|100','PHTML:string|max','PPROCESS:string|max','PPROCESS_USER:string|50','PREPLY_MAIL:string|50'],
+            dataprm : ['GUID','CUSER','SUBJECT','HTML','PROCESS','PROCESS_USER','REPLY_MAIL']
+        } 
+        this.ds.add(tmpDt);
+    }
+    //#endregion
+    dt()
+    {
+        if(arguments.length > 0)
+        {
+            return this.ds.get(arguments[0]);
+        }
+
+        return this.ds.get(0)
+    }
+    addEmpty()
+    {
+        if(typeof this.dt('SUPPORT_DETAIL') == 'undefined')
+        {
+            return;
+        }
+        let tmp = {}
+        if(arguments.length > 0)
+        {
+            tmp = {...arguments[0]}            
+        }
+        else
+        {
+            tmp = {...this.empty}
+        }
+        tmp.GUID = datatable.uuidv4();
+        this.dt('SUPPORT_DETAIL').push(tmp)
+    }
+    clearAll()
+    {
+        for (let i = 0; i < this.ds.length; i++) 
+        {
+            this.dt(i).clear()
+        }
+    }
+    load()
+    {
+        //PARAMETRE OLARAK OBJE GÖNDERİLİR YADA PARAMETRE BOŞ İSE TÜMÜ GETİRİLİ.
+        return new Promise(async resolve => 
+        {
+            let tmpPrm = 
+            {
+                GUID : '00000000-0000-0000-0000-000000000000',
+            }          
+
+            if(arguments.length > 0)
+            {
+                tmpPrm.GUID = typeof arguments[0].GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].GUID;
+            }
+            this.ds.get('SUPPORT_DETAIL').selectCmd.value = Object.values(tmpPrm)
+
+            await this.ds.get('SUPPORT_DETAIL').refresh();
+            resolve(this.ds.get('SUPPORT_DETAIL'));    
+        });
+    }
+    save()
+    {
+        return new Promise(async resolve => 
+        {
+            this.ds.delete()
+            resolve(await this.ds.update()); 
+        });
+    }
+}

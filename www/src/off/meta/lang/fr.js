@@ -12703,4 +12703,29 @@ export const langFr =
         btnAdd : "Ajoute", 
         descriptionPlace : "Veuillez Saisir au moins 15 Caractères.."
     },
+    set_02_006 : // "Destek Talebi Oluştur"
+    {
+        sendMail : "Mail",    // BAK
+        sendMailPlace : "Lütfen Mail Adresinizi Giriniz..",    // BAK
+        mailSubject : "Başlık",    // BAK
+        mailSubjectPlace: "Lütfen Destek Mail Başlığı Giriniz..",    // BAK
+        btnApprove : "Gönder",    // BAK
+        msgSaveResult:    // BAK
+        {    // BAK
+            title: "Dikkat",    // BAK
+            btn01: "Tamam",    // BAK
+            msgSuccess: "Gönderme işleminiz başarılı !",    // BAK
+            msgFailed: "Gönderme işleminiz başarısız !"    // BAK
+        },
+    },
+    set_02_007 : // "Destek Talebi Geçmişi"
+    {
+        grdServiceList:
+        {
+            clmDate:"Tarih",  // BAK
+            clmUser : "Kullanıcı",  // BAK
+            clmSubject : "Konu",  // BAK
+            clmProcess : "Yapılan İşlem",  // BAK
+        }
+    }
 }
