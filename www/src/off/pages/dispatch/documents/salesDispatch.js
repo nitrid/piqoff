@@ -1773,6 +1773,7 @@ export default class salesDispatch extends React.PureComponent
                                     columnsAutoWidth={true} 
                                     allowColumnReordering={true} 
                                     allowColumnResizing={true} 
+                                    filterRow={{visible:true}}
                                     height={'450'} 
                                     width={'100%'}
                                     dbApply={false}

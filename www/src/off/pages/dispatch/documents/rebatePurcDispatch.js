@@ -1575,6 +1575,7 @@ export default class rebateDispatch extends React.PureComponent
                                     columnsAutoWidth={true} 
                                     allowColumnReordering={true} 
                                     allowColumnResizing={true} 
+                                    filterRow={{visible:true}}
                                     height={'450'} 
                                     width={'100%'}
                                     dbApply={false}

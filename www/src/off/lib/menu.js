@@ -670,7 +670,7 @@ export const menu = (e) =>
                                 {
                                     id: 'irs_02_005',
                                     text: e.t('menu.irs_02_005'),//'Şubeler Arası Sevk',
-                                    path: 'dispatch/lists/rebatePurcDispatch'
+                                    path: 'dispatch/documents/rebatePurcDispatch'
                                 }
                             ]
                         },
