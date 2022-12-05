@@ -53,7 +53,7 @@ export default class NbPluButtonGrp extends NbBase
         
         this.pluImageDt.selectCmd = 
         {
-            query : "SELECT * FROM PLU_IMAGE_VW_01 WHERE MAIN_GUID IN (SELECT value FROM STRING_SPLIT(@MAIN_GUID,',')) ORDER BY ITEM_NAME ASC",
+            query : "SELECT *,ISNULL((SELECT TOP 1 1 FROM PROMO_COND_APP_VW_01 WHERE COND_ITEM_GUID = ITEM_GUID AND START_DATE <= CONVERT(NVARCHAR(10),GETDATE(),112) AND FINISH_DATE >= CONVERT(NVARCHAR(10),GETDATE(),112)),0) AS PROMO FROM PLU_IMAGE_VW_01 WHERE MAIN_GUID IN (SELECT value FROM STRING_SPLIT(@MAIN_GUID,',')) ORDER BY ITEM_NAME ASC",
             param : ['MAIN_GUID:string|250'],
             value : [tmpArr.toString()],
             local : 
@@ -264,6 +264,13 @@ export default class NbPluButtonGrp extends NbBase
         for (let i = tmpPageStart; i < tmpPageEnd; i++) 
         {
             let tmpImg = "url(" + this.state.btnPluImageGrp[i].IMAGE + ")"
+            let tmpColor = "rgba(47, 198, 26, 0.5)"
+            let tmpTxtPromo = ""
+            if(this.state.btnPluImageGrp[i].PROMO == 1)
+            {
+                tmpTxtPromo = " - PROMO"
+                tmpColor = "rgba(255,0,0,0.8)"
+            }
             tmpColumn.push(
                 <div key={i} className='col-2 ps-0 pe-1'>
                     <NbButton id={"btnPopPluGroup" + i} parent={this} className="form-group btn btn-success btn-block" 
@@ -273,10 +280,10 @@ export default class NbPluButtonGrp extends NbBase
                         this["popPluGroup" + this.props.id].hide();
                         this._onSelection(this.state.btnPluImageGrp[i].ITEM_CODE);
                     }}>
-                        <div style={{backgroundColor:"rgba(47, 198, 26, 0.5)",position:"relative",bottom:"32px",height:"35px",borderBottomRightRadius:"0.215rem",
+                        <div style={{backgroundColor:tmpColor,position:"relative",bottom:"32px",height:"35px",borderBottomRightRadius:"0.215rem",
                         borderBottomLeftRadius:"0.215rem"}}>
                             <div style={{fontSize:"12px",color:"black",fontWeight:"bold"}}>
-                                {this.state.btnPluImageGrp[i].ITEM_NAME}
+                                {this.state.btnPluImageGrp[i].ITEM_NAME + tmpTxtPromo}
                             </div>                                            
                         </div>
                         <div style={{position:"absolute",bottom:"0",right:"5px",fontSize:"12px",color:"black",fontWeight:"bold"}}>
