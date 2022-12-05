@@ -21,6 +21,7 @@ import NdGrid,{Column,Editing,Paging,Scrolling,Pager,KeyboardNavigation} from '.
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdImageUpload from '../../../../core/react/devex/imageupload.js';
+import HTMLReactParser from 'html-react-parser';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
 import tr from '../../../meta/lang/devexpress/tr.js';
@@ -35,11 +36,8 @@ export default class rebateOperation extends React.PureComponent
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
         this.supportObj = new supportCls()       
-        this.state = 
-        {
-            html:"",
-        },
         this.serviceGuid = '00000000-0000-0000-0000-000000000000'
+        this.serviceHtml = ''
 
     }
     componentDidMount()
@@ -110,8 +108,9 @@ export default class rebateOperation extends React.PureComponent
                                    this.txtPopSubject.value = e.data.SUBJECT
                                    this.txtPopProcess.value = e.data.PROCESS
                                    this.serviceGuid = e.data.GUID
+                                   this.serviceHtml = e.data.HTML
                                    setTimeout(() => {
-                                    this.popService.show()                                   
+                                    this.popService.show()           
                                    }, 500);
                                 }}
                             >                            
@@ -168,6 +167,9 @@ export default class rebateOperation extends React.PureComponent
                             maxLength={32}
                         
                             ></NdTextBox>
+                        </Item>
+                        <Item>
+                        {HTMLReactParser(this.serviceHtml)}
                         </Item>
                     </Form>
                     <Form colCount={2}>

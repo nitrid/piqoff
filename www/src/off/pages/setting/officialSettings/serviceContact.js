@@ -130,6 +130,9 @@ export default class serviceContact extends React.PureComponent
                                         await this.supportObj.save()
                                         tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
                                         await dialog(tmpConfObj1);
+                                        this.htmlEditor.value = '',
+                                        this.mailSubject.value = '',
+                                        this.sendMail.value = ''
                                     }
                                     else
                                     {
@@ -141,63 +144,6 @@ export default class serviceContact extends React.PureComponent
                         </Item>
                     </Form>
                 </div>
-                {/* Yönetici PopUp */}
-                <div>
-                    <NdPopUp parent={this} id={"popSetting"} 
-                    visible={false}
-                    showCloseButton={true}
-                    showTitle={true}
-                    title={this.t("popSetting.title")}
-                    container={"#root"} 
-                    width={'500'}
-                    height={'300'}
-                    position={{of:'#root'}}
-                    >
-                        <Form colCount={1} height={'fit-content'}>
-                            <Item>
-                                <Label text={this.t("popSetting.eMail")} alignment="right" />
-                                <NdTextBox id="txtEmail" mode="email" parent={this} simple={true}
-                                maxLength={32}
-                                >
-                                    <Validator validationGroup={"frmSetting"  + this.tabIndex}>
-                                        <EmailRule message={this.t("validMail")} />
-                                    </Validator>   
-                                </NdTextBox>
-                            </Item>
-                            <Item>
-                                <Label text={this.t("popSetting.Password")} alignment="right" />
-                                <NdTextBox id="txtPassword" mode="password" parent={this} simple={true}
-                                        maxLength={32}
-                                >
-                                <Validator validationGroup={"frmSetting"  + this.tabIndex}>
-                                    <RequiredRule message={this.t("passwordValid")} />
-                                </Validator>  
-                                </NdTextBox>
-                            </Item>
-                            <Item>
-                                <div className='row'>
-                                    <div className='col-6'>
-                                        <NdButton text={this.t("popPassword.btnApprove")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"validRef"  + this.tabIndex} 
-                                        onClick={async ()=>
-                                        {       
-                                            if(e.validationGroup.validate().status == "valid")
-                                            {
-                                                
-                                            }
-                                        }}/>
-                                    </div>
-                                    <div className='col-6'>
-                                        <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
-                                        onClick={()=>
-                                        {
-                                            this.popPassword.hide();  
-                                        }}/>
-                                    </div>
-                                </div>
-                            </Item>
-                        </Form>
-                    </NdPopUp>
-                </div>  
             </ScrollView>               
             </div>
         )
