@@ -3204,6 +3204,7 @@ export const langTr =
             clmCode :  "STOK KODU",
             clmName : "STOK ADI",
             clmMulticode : "TEDARİKÇİ KODU",
+            clmPrice : "ALIŞ FİYATI"
         },
         pg_dispatchGrid : 
         {
@@ -3660,6 +3661,7 @@ export const langTr =
             title : "Stok Seçimi",
             clmCode :  "STOK KODU",
             clmName : "STOK ADI",
+            clmPrice : "SATIŞ FİYATI"
         },
         pg_dispatchGrid : 
         {
@@ -4077,6 +4079,7 @@ export const langTr =
             title : "Stok Seçimi",
             clmCode :  "STOK KODU",
             clmName : "STOK ADI",
+            clmPrice : "ALIŞ FİYATI"
         },
         pg_dispatchGrid : 
         {
@@ -5115,6 +5118,7 @@ export const langTr =
             title : "Stok Seçimi",
             clmCode :  "STOK KODU",
             clmName : "STOK ADI",
+            clmPrice : "SATIŞ FİYATI"
         },
         pg_contractGrid : 
         {
@@ -5429,6 +5433,7 @@ export const langTr =
             title : "Stok Seçimi",
             clmCode :  "STOK KODU",
             clmName : "STOK ADI",
+            clmPrice : "SATIŞ FİYATI"
         },
         pg_dispatchGrid : 
         {
@@ -7902,7 +7907,8 @@ export const langTr =
             title : "Stok Seçimi",
             clmCode :  "STOK KODU",
             clmName : "STOK ADI",
-            clmMulticode : "TEDARİKÇİ KODU"
+            clmMulticode : "TEDARİKÇİ KODU",
+            clmPrice : "ALIŞ FİYATI"
         },
         grdPurcDispatch: 
         {
@@ -8216,6 +8222,7 @@ export const langTr =
             title : "Stok Seçimi",
             clmCode :  "STOK KODU",
             clmName : "STOK ADI",
+            clmPrice : "SATIŞ FİYATI"
         },
         grdSlsDispatch: 
         {
@@ -8541,7 +8548,7 @@ export const langTr =
             title : "Stok Seçimi",
             clmCode :  "STOK KODU",
             clmName : "STOK ADI",
-           
+            clmPrice : "ALIŞ FİYATI"
         },
         pg_RebateGrid : 
         {
@@ -9143,7 +9150,7 @@ export const langTr =
             title : "Stok Seçimi",
             clmCode :  "STOK KODU",
             clmName : "STOK ADI",
-           
+            clmPrice : "SATIŞ FİYATI"
         },
         pg_RebateGrid : 
         {
@@ -9480,7 +9487,8 @@ export const langTr =
             title : "Stok Seçimi",
             clmCode :  "STOK KODU",
             clmName : "STOK ADI",
-            clmMulticode : "TEDARİKÇİ KODU"
+            clmMulticode : "TEDARİKÇİ KODU",
+            clmPrice : "ALIŞ FİYATI"
         },
         pg_txtBarcode : 
         {
@@ -9807,6 +9815,7 @@ export const langTr =
             title : "Stok Seçimi",
             clmCode :  "STOK KODU",
             clmName : "STOK ADI",
+            clmPrice : "SATIŞ FİYATI"
         },
         grdSlsOrder: 
         {
@@ -11962,7 +11971,8 @@ export const langTr =
             title : "Stok Seçimi",
             clmCode :  "STOK KODU",
             clmName : "STOK ADI",
-            clmMulticode : "TEDARİKÇİ KODU"
+            clmMulticode : "TEDARİKÇİ KODU",
+            clmPrice : "ALIŞ FİYATI"
         },
         grdPurcoffers: 
         {
@@ -12251,6 +12261,7 @@ export const langTr =
             title : "Stok Seçimi",
             clmCode :  "STOK KODU",
             clmName : "STOK ADI",
+            clmPrice : "SATIŞ FİYATI"
         },
         grdSlsOffer: 
         {
@@ -12738,6 +12749,5 @@ export const langTr =
         btnApprove : "Kaydet",
         btnCancel : "Kapat",
         txtPopUser : "Oluşturan Kullanıcı"
-        
     }
 }

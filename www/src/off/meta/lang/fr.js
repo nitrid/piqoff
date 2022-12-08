@@ -3204,6 +3204,7 @@ export const langFr =
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
             clmMulticode : "FRN.Code",
+            clmPrice : "Alış Fiyatı" // BAK
         },
         pg_dispatchGrid : 
         {
@@ -3660,6 +3661,7 @@ export const langFr =
             title : "Sélectionner Produit",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
+            clmPrice : "Satış Fiyatı" // BAK
         },
         pg_dispatchGrid : 
         {
@@ -4077,6 +4079,7 @@ export const langFr =
             title : "Sélectionner Produit",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
+            clmPrice : "Alış Fiyatı" // BAK
         },
         pg_dispatchGrid : 
         {
@@ -5115,6 +5118,7 @@ export const langFr =
             title : "Sélectionner Produit",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
+            clmPrice : "Satış Fiyatı" // BAK
         },
         pg_contractGrid : 
         {
@@ -5429,6 +5433,7 @@ export const langFr =
             title : "Sélectionner Produit",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
+            clmPrice : "Satış Fiyatı" // BAK
         },
         pg_dispatchGrid : 
         {
@@ -7902,7 +7907,8 @@ export const langFr =
             title : "Sélectionner Produit",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
-            clmMulticode : "FRN.Code"
+            clmMulticode : "FRN.Code",
+            clmPrice : "Alış Fiyatı" // BAK
         },
         grdPurcDispatch: 
         {
@@ -8216,6 +8222,7 @@ export const langFr =
             title : "Sélectionner Produit",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
+            clmPrice : "Satış Fiyatı" // BAK
         },
         grdSlsDispatch: 
         {
@@ -8541,7 +8548,7 @@ export const langFr =
             title : "Sélectionner Produit",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
-           
+            clmPrice : "Alış Fiyatı" // BAK
         },
         pg_RebateGrid : 
         {
@@ -9143,7 +9150,7 @@ export const langFr =
             title : "Sélectionner Produit",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
-           
+            clmPrice : "Satış Fiyatı" // BAK
         },
         pg_RebateGrid : 
         {
@@ -9480,7 +9487,8 @@ export const langFr =
             title : "Sélectionner Produit",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
-            clmMulticode : "Référence Fournisseur"
+            clmMulticode : "Référence Fournisseur",
+            clmPrice : "Alış Fiyatı" // BAK
         },
         pg_txtBarcode : 
         {
@@ -9807,6 +9815,7 @@ export const langFr =
             title : "Sélectionner Produit",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
+            clmPrice : "Satış Fiyatı" // BAK
         },
         grdSlsOrder: 
         {
@@ -11962,7 +11971,8 @@ export const langFr =
             title : "Sélectionner Produit",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
-            clmMulticode : "Référence Fournisseur"
+            clmMulticode : "Référence Fournisseur",
+            clmPrice : "Alış Fiyatı" // BAK
         },
         grdPurcoffers: 
         {
@@ -12251,6 +12261,7 @@ export const langFr =
             title : "Sélectionner Produit",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
+            clmPrice : "Satış Fiyatı" // BAK
         },
         grdSlsOffer: 
         {
@@ -12727,6 +12738,16 @@ export const langFr =
             clmUser : "Kullanıcı",  // BAK
             clmSubject : "Konu",  // BAK
             clmProcess : "Yapılan İşlem",  // BAK
-        }
+        },
+        popService : 
+        {
+            title : "Servis Detayı" // BAK
+        },
+        txtPopDate : "Tarih",    // BAK
+        txtPopSubject : "Konu",    // BAK
+        txtPopProcess : "Yapılan İşlem",    // BAK
+        btnApprove : "Kaydet",    // BAK
+        btnCancel : "Kapat",    // BAK
+        txtPopUser : "Oluşturan Kullanıcı"    // BAK
     }
 }

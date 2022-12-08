@@ -1184,7 +1184,7 @@ export default class priceDifferenceInvoice extends React.PureComponent
                                     <Label text={this.t("txtCustomerCode")} alignment="right" />
                                     <NdTextBox id="txtCustomerCode" parent={this} simple={true}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    dt={{data:this.docObj.dt('DOC'),field:"INPUT_CODE"}} 
+                                    dt={{data:this.docObj.dt('DOC'),field:"OUTPUT_CODE"}} 
                                     onEnterKey={(async(r)=>
                                         {
                                             await this.pg_txtCustomerCode.setVal(this.txtCustomerCode.value)
@@ -1344,7 +1344,7 @@ export default class priceDifferenceInvoice extends React.PureComponent
                                     <Label text={this.t("txtCustomerName")} alignment="right" />
                                     <NdTextBox id="txtCustomerName" parent={this} simple={true}  
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    dt={{data:this.docObj.dt('DOC'),field:"INPUT_NAME"}} 
+                                    dt={{data:this.docObj.dt('DOC'),field:"OUTPUT_NAME"}} 
                                     readOnly={true}
                                     param={this.param.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
@@ -2146,7 +2146,7 @@ export default class priceDifferenceInvoice extends React.PureComponent
                         {
                             select:
                             {
-                                query : "SELECT GUID,CODE,NAME,VAT,UNIT FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
+                                query : "SELECT GUID,CODE,NAME,VAT,UNIT,(SELECT [dbo].[FN_PRICE_SALE_VAT_EXT](GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000')) AS PRICE FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
                                 param : ['VAL:string|50']
                             },
                             sql:this.core.sql
@@ -2154,7 +2154,8 @@ export default class priceDifferenceInvoice extends React.PureComponent
                     }}
                     >
                         <Column dataField="CODE" caption={this.t("pg_txtItemsCode.clmCode")} width={150} />
-                        <Column dataField="NAME" caption={this.t("pg_txtItemsCode.clmName")} width={300} defaultSortOrder="asc" />
+                        <Column dataField="NAME" caption={this.t("pg_txtItemsCode.clmName")} width={450} defaultSortOrder="asc" />
+                        <Column dataField="PRICE" caption={this.t("pg_txtItemsCode.clmPrice")} width={200}  format={{ style: "currency", currency: "EUR",precision: 2}}/>
                     </NdPopGrid>
                     {/* Finans PopUp */}
                     <div>
