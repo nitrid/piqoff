@@ -23,8 +23,8 @@ export default class Navigation extends React.PureComponent
             },
             treeview :
             {
-                padding:'3px',
-                fontSize:'20px'
+                padding:'6px',
+                fontSize:'17px'
             }
         }
         this.menu = menu(App.instance.lang);        

@@ -1,8 +1,8 @@
 export const menu = (e) => 
 {
     return [
-          //Stok
-          {
+        //Stok
+        {
             id: 'stk',
             text: e.t('menu.stk'),
             expanded: false,
