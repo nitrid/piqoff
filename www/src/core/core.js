@@ -1465,6 +1465,18 @@ export class datatable
             return tmpVal;
         }
     }
+    min()
+    {
+        let tmpVal = 0;
+        if(arguments.length > 0)
+        {       
+            if(this.length > 0)
+            {
+                tmpVal = this.reduce((a,b) =>(b[arguments[0]] < a[arguments[0]] ? b : a))[arguments[0]]
+            }     
+            return tmpVal;
+        }
+    }
 }
 export class param extends datatable
 {
