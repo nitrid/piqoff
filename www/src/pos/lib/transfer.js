@@ -239,6 +239,7 @@ export default class transferCls
                     RANDOM2 : {dataType: "string"},
                     YEAR : {dataType: "string"},
                     EXDAY : {dataType: "number"},
+                    TRANSFER : {dataType: "number"}
                 }
             },
             //COMPANY_VW_01
@@ -273,48 +274,48 @@ export default class transferCls
                 }
             },
             //CUSTOMER_VW_02
-            // {
-            //     name : "CUSTOMER_VW_02",
-            //     columns :
-            //     {
-            //         DBID : {dataType:"number",primaryKey: true, autoIncrement: true},
-            //         GUID : {dataType: "string",primaryKey: true},
-            //         CDATE : {dataType: "date_time"},
-            //         CUSER : {dataType: "string"},
-            //         CUSER_NAME : {dataType: "string"},
-            //         LDATE : {dataType: "date_time"},
-            //         LUSER : {dataType: "string"},
-            //         LUSER_NAME : {dataType: "string"},
-            //         CODE : {dataType: "string"},
-            //         TITLE : {dataType: "string"},
-            //         TYPE_NAME : {dataType: "string"},
-            //         GENUS_NAME : {dataType: "string"},
-            //         CUSTOMER_TYPE : {dataType: "number"},
-            //         GENUS : {dataType: "number"},
-            //         CUSTOMER_GRP : {dataType: "string"},
-            //         WEB : {dataType: "string"},
-            //         NOTE : {dataType: "string"},
-            //         SIRET_ID : {dataType: "string"},
-            //         APE_CODE : {dataType: "string"},
-            //         TAX_OFFICE : {dataType: "string"},
-            //         TAX_NO : {dataType: "string"},
-            //         INT_VAT_NO : {dataType: "string"},
-            //         TAX_TYPE : {dataType: "number"},
-            //         ADRESS : {dataType: "string"},
-            //         ZIPCODE : {dataType: "string"},
-            //         COUNTRY : {dataType: "string"},
-            //         CITY : {dataType: "string"},
-            //         NAME : {dataType: "string"},
-            //         LAST_NAME : {dataType: "string"},
-            //         PHONE1 : {dataType: "string"},
-            //         PHONE2 : {dataType: "string"},
-            //         GSM_PHONE : {dataType: "string"},
-            //         OTHER_PHONE : {dataType: "string"},
-            //         EMAIL : {dataType: "string"},
-            //         IBAN : {dataType: "string"},
-            //         CUSTOMER_POINT : {dataType: "number"},
-            //     }
-            // },
+            {
+                name : "CUSTOMER_VW_02",
+                columns :
+                {
+                    DBID : {dataType:"number",primaryKey: true, autoIncrement: true},
+                    GUID : {dataType: "string",primaryKey: true},
+                    CDATE : {dataType: "date_time"},
+                    CUSER : {dataType: "string"},
+                    CUSER_NAME : {dataType: "string"},
+                    LDATE : {dataType: "date_time"},
+                    LUSER : {dataType: "string"},
+                    LUSER_NAME : {dataType: "string"},
+                    CODE : {dataType: "string"},
+                    TITLE : {dataType: "string"},
+                    TYPE_NAME : {dataType: "string"},
+                    GENUS_NAME : {dataType: "string"},
+                    CUSTOMER_TYPE : {dataType: "number"},
+                    GENUS : {dataType: "number"},
+                    CUSTOMER_GRP : {dataType: "string"},
+                    WEB : {dataType: "string"},
+                    NOTE : {dataType: "string"},
+                    SIRET_ID : {dataType: "string"},
+                    APE_CODE : {dataType: "string"},
+                    TAX_OFFICE : {dataType: "string"},
+                    TAX_NO : {dataType: "string"},
+                    INT_VAT_NO : {dataType: "string"},
+                    TAX_TYPE : {dataType: "number"},
+                    ADRESS : {dataType: "string"},
+                    ZIPCODE : {dataType: "string"},
+                    COUNTRY : {dataType: "string"},
+                    CITY : {dataType: "string"},
+                    NAME : {dataType: "string"},
+                    LAST_NAME : {dataType: "string"},
+                    PHONE1 : {dataType: "string"},
+                    PHONE2 : {dataType: "string"},
+                    GSM_PHONE : {dataType: "string"},
+                    OTHER_PHONE : {dataType: "string"},
+                    EMAIL : {dataType: "string"},
+                    IBAN : {dataType: "string"},
+                    CUSTOMER_POINT : {dataType: "number"},
+                }
+            },
             //PROMO_VW_01
             {
                 name : "PROMO_VW_01",
@@ -612,6 +613,24 @@ export default class transferCls
                     PRINT_DESING : {dataType: "string"},
                     SAFE_GUID : {dataType: "string"},
                 }
+            },
+            //CUSTOMER_POINT_VW_01
+            {
+                name : "CUSTOMER_POINT_VW_01",
+                columns :
+                {
+                    DBID : {dataType:"number",primaryKey: true, autoIncrement: true},
+                    GUID : {dataType: "string"},
+                    CDATE : {dataType: "date_time"},
+                    CUSER : {dataType: "string"},
+                    LDATE : {dataType: "date_time"},
+                    LUSER : {dataType: "string"},
+                    TYPE : {dataType: "number"},
+                    CUSTOMER : {dataType: "string"},
+                    DOC : {dataType: "string"},
+                    POINT : {dataType: "number"},
+                    DESCRIPTION : {dataType: "string"},
+                }
             }
         ]
 
@@ -765,21 +784,21 @@ export default class transferCls
                 from : 
                 {
                     query : "SELECT *,DATEDIFF(DAY,CDATE,GETDATE()) AS EXDAY FROM CHEQPAY_VW_01 WHERE [YEAR] = 2 ",
-                    where : "WHERE LDATE >= GETDATE() - 10"
+                    where : "AND LDATE >= GETDATE() - 10"
                 },
                 to : 
                 {
                     into : "CHEQPAY_VW_01",
                     values : [{GUID : {map:'GUID'},CDATE : {map:'CDATE',type:'date_time'},CUSER : {map:'CUSER'},CUSER_NAME : {map:'CUSER_NAME'},LDATE : {map:'LDATE',type:'date_time'},LUSER : {map:'LUSER'},
                     LUSER_NAME : {map:'LUSER_NAME'},TYPE : {map:'TYPE'},DOC : {map:'DOC'},CODE : {map:'CODE'},AMOUNT : {map:'AMOUNT'},STATUS : {map:'STATUS'},REFERENCE : {map:'REFERENCE'},RANDOM1 : {map:'RANDOM1'},
-                    PRICE : {map:'PRICE'},TICKET_TYPE : {map:'TICKET_TYPE'},TICKET_NAME : {map:'TICKET_NAME'},RANDOM2 : {map:'RANDOM2'},YEAR : {map:'YEAR'},EXDAY : {map:'EXDAY'}}]
+                    PRICE : {map:'PRICE'},TICKET_TYPE : {map:'TICKET_TYPE'},TICKET_NAME : {map:'TICKET_NAME'},RANDOM2 : {map:'RANDOM2'},YEAR : {map:'YEAR'},EXDAY : {map:'EXDAY'},TRANSFER : 0}]
                 },
                 update : 
                 {
                     in : "CHEQPAY_VW_01",
                     set : {CDATE : {map:'CDATE',type:'date_time'},CUSER : {map:'CUSER'},CUSER_NAME : {map:'CUSER_NAME'},LDATE : {map:'LDATE',type:'date_time'},LUSER : {map:'LUSER'},
                     LUSER_NAME : {map:'LUSER_NAME'},TYPE : {map:'TYPE'},DOC : {map:'DOC'},CODE : {map:'CODE'},AMOUNT : {map:'AMOUNT'},STATUS : {map:'STATUS'},REFERENCE : {map:'REFERENCE'},RANDOM1 : {map:'RANDOM1'},
-                    PRICE : {map:'PRICE'},TICKET_TYPE : {map:'TICKET_TYPE'},TICKET_NAME : {map:'TICKET_NAME'},RANDOM2 : {map:'RANDOM2'},YEAR : {map:'YEAR'},EXDAY : {map:'EXDAY'}},
+                    PRICE : {map:'PRICE'},TICKET_TYPE : {map:'TICKET_TYPE'},TICKET_NAME : {map:'TICKET_NAME'},RANDOM2 : {map:'RANDOM2'},YEAR : {map:'YEAR'},EXDAY : {map:'EXDAY'},TRANSFER : 0},
                     where : {GUID : {map:'GUID'}}
                 }
             },
@@ -936,23 +955,35 @@ export default class transferCls
                     where : {GUID : {map:'GUID'}}
                 }
             },
-            // //CUSTOMER_VW_02
-            // {
-            //     from : 
-            //     {
-            //         query : "SELECT *,dbo.FN_CUSTOMER_TOTAL_POINT(GUID,GETDATE()) AS CUSTOMER_POINT FROM CUSTOMER_VW_02"
-            //     },
-            //     to : 
-            //     {
-            //         into : "CUSTOMER_VW_02",
-            //         values : [{GUID : {map:'GUID'},CDATE : {map:'CDATE',type:'date_time'},CUSER : {map:'CUSER'},CUSER_NAME : {map:'CUSER_NAME'},LDATE : {map:'LDATE',type:'date_time'},LUSER : {map:'LUSER'},
-            //         LUSER_NAME : {map:'LUSER_NAME'},CODE : {map:'CODE'},TITLE : {map:'TITLE'},TYPE_NAME : {map:'TYPE_NAME'},GENUS_NAME : {map:'GENUS_NAME'},CUSTOMER_TYPE : {map:'CUSTOMER_TYPE'},
-            //         GENUS : {map:'GENUS'},CUSTOMER_GRP : {map:'CUSTOMER_GRP'},WEB : {map:'WEB'},NOTE : {map:'NOTE'},SIRET_ID : {map:'SIRET_ID'},APE_CODE : {map:'APE_CODE'},TAX_OFFICE : {map:'TAX_OFFICE'},
-            //         TAX_NO : {map:'TAX_NO'},INT_VAT_NO : {map:'INT_VAT_NO'},TAX_TYPE : {map:'TAX_TYPE'},ADRESS : {map:'ADRESS'},ZIPCODE : {map:'ZIPCODE'},COUNTRY : {map:'COUNTRY'},CITY : {map:'CITY'},
-            //         NAME : {map:'NAME'},LAST_NAME : {map:'LAST_NAME'},PHONE1 : {map:'PHONE1'},PHONE2 : {map:'PHONE2'},GSM_PHONE : {map:'GSM_PHONE'},OTHER_PHONE : {map:'OTHER_PHONE'},EMAIL : {map:'EMAIL'},
-            //         IBAN : {map:'IBAN'},CUSTOMER_POINT : {map:'CUSTOMER_POINT'}}]
-            //     }
-            // },
+            //CUSTOMER_VW_02
+            {
+                from : 
+                {
+                    query : "SELECT * FROM CUSTOMER_VW_02 ",
+                    where : "WHERE LDATE >= GETDATE() - 10"
+                },
+                to : 
+                {
+                    into : "CUSTOMER_VW_02",
+                    values : [{GUID : {map:'GUID'},CDATE : {map:'CDATE',type:'date_time'},CUSER : {map:'CUSER'},CUSER_NAME : {map:'CUSER_NAME'},LDATE : {map:'LDATE',type:'date_time'},LUSER : {map:'LUSER'},
+                    LUSER_NAME : {map:'LUSER_NAME'},CODE : {map:'CODE'},TITLE : {map:'TITLE'},TYPE_NAME : {map:'TYPE_NAME'},GENUS_NAME : {map:'GENUS_NAME'},CUSTOMER_TYPE : {map:'CUSTOMER_TYPE'},
+                    GENUS : {map:'GENUS'},CUSTOMER_GRP : {map:'CUSTOMER_GRP'},WEB : {map:'WEB'},NOTE : {map:'NOTE'},SIRET_ID : {map:'SIRET_ID'},APE_CODE : {map:'APE_CODE'},TAX_OFFICE : {map:'TAX_OFFICE'},
+                    TAX_NO : {map:'TAX_NO'},INT_VAT_NO : {map:'INT_VAT_NO'},TAX_TYPE : {map:'TAX_TYPE'},ADRESS : {map:'ADRESS'},ZIPCODE : {map:'ZIPCODE'},COUNTRY : {map:'COUNTRY'},CITY : {map:'CITY'},
+                    NAME : {map:'NAME'},LAST_NAME : {map:'LAST_NAME'},PHONE1 : {map:'PHONE1'},PHONE2 : {map:'PHONE2'},GSM_PHONE : {map:'GSM_PHONE'},OTHER_PHONE : {map:'OTHER_PHONE'},EMAIL : {map:'EMAIL'},
+                    IBAN : {map:'IBAN'},CUSTOMER_POINT : {map:'CUSTOMER_POINT'}}]
+                },
+                update : 
+                {
+                    in : "CUSTOMER_VW_02",
+                    set : {CDATE : {map:'CDATE',type:'date_time'},CUSER : {map:'CUSER'},CUSER_NAME : {map:'CUSER_NAME'},LDATE : {map:'LDATE',type:'date_time'},LUSER : {map:'LUSER'},
+                    LUSER_NAME : {map:'LUSER_NAME'},CODE : {map:'CODE'},TITLE : {map:'TITLE'},TYPE_NAME : {map:'TYPE_NAME'},GENUS_NAME : {map:'GENUS_NAME'},CUSTOMER_TYPE : {map:'CUSTOMER_TYPE'},
+                    GENUS : {map:'GENUS'},CUSTOMER_GRP : {map:'CUSTOMER_GRP'},WEB : {map:'WEB'},NOTE : {map:'NOTE'},SIRET_ID : {map:'SIRET_ID'},APE_CODE : {map:'APE_CODE'},TAX_OFFICE : {map:'TAX_OFFICE'},
+                    TAX_NO : {map:'TAX_NO'},INT_VAT_NO : {map:'INT_VAT_NO'},TAX_TYPE : {map:'TAX_TYPE'},ADRESS : {map:'ADRESS'},ZIPCODE : {map:'ZIPCODE'},COUNTRY : {map:'COUNTRY'},CITY : {map:'CITY'},
+                    NAME : {map:'NAME'},LAST_NAME : {map:'LAST_NAME'},PHONE1 : {map:'PHONE1'},PHONE2 : {map:'PHONE2'},GSM_PHONE : {map:'GSM_PHONE'},OTHER_PHONE : {map:'OTHER_PHONE'},EMAIL : {map:'EMAIL'},
+                    IBAN : {map:'IBAN'},CUSTOMER_POINT : {map:'CUSTOMER_POINT'}},
+                    where : {GUID : {map:'GUID'}}
+                }
+            },
         ]
         return tmpSchema
     }
@@ -1203,6 +1234,91 @@ export default class transferCls
                         dataprm : ['GUID'],
                     }
                 }
+            },
+            //CUSTOMER_POINT_VW_01
+            {
+                from : 
+                {
+                    from : "CUSTOMER_POINT_VW_01"
+                },
+                to : 
+                {
+                    insert : 
+                    {
+                        query : "EXEC [dbo].[PRD_CUSTOMER_POINT_INSERT] " + 
+                                "@GUID = @PGUID, " + 
+                                "@CUSER = @PCUSER, " + 
+                                "@TYPE = @PTYPE, " +     
+                                "@CUSTOMER = @PCUSTOMER, " +                  
+                                "@DOC = @PDOC, " + 
+                                "@POINT = @PPOINT, " + 
+                                "@DESCRIPTION = @PDESCRIPTION ", 
+                        param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PCUSTOMER:string|50','PDOC:string|50','PPOINT:float','PDESCRIPTION:string|250'],
+                        dataprm : ['GUID','CUSER','TYPE','CUSTOMER','DOC','POINT','DESCRIPTION'],
+                    },
+                    update : 
+                    {
+                        query : "EXEC [dbo].[PRD_CUSTOMER_POINT_UPDATE] " + 
+                                "@GUID = @PGUID, " + 
+                                "@CUSER = @PCUSER, " + 
+                                "@TYPE = @PTYPE, " +     
+                                "@CUSTOMER = @PCUSTOMER, " +                  
+                                "@DOC = @PDOC, " + 
+                                "@POINT = @PPOINT, " + 
+                                "@DESCRIPTION = @PDESCRIPTION ", 
+                        param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PCUSTOMER:string|50','PDOC:string|50','PPOINT:float','PDESCRIPTION:string|250'],
+                        dataprm : ['GUID','CUSER','TYPE','CUSTOMER','DOC','POINT','DESCRIPTION'],
+                    },
+                    control :
+                    {
+                        query : "SELECT * FROM [dbo].[CUSTOMER_POINT_VW_01] WHERE GUID = @GUID",
+                        param : ['GUID:string|50'],
+                        dataprm : ['GUID'],
+                    }
+                }
+            },
+            //CHEQPAY_VW_01
+            {
+                from : 
+                {
+                    from : "CHEQPAY_VW_01",
+                    where : {TRANSFER : 1}
+                },
+                to : 
+                {
+                    insert : 
+                    {
+                        query : "EXEC [dbo].[PRD_CHEQPAY_INSERT] " + 
+                                "@GUID = @PGUID, " +
+                                "@CUSER = @PCUSER, " + 
+                                "@TYPE = @PTYPE, " +                      
+                                "@DOC = @PDOC, " + 
+                                "@CODE = @PCODE, " + 
+                                "@AMOUNT = @PAMOUNT, " + 
+                                "@STATUS = @PSTATUS ", 
+                        param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PDOC:string|50','PCODE:string|25','PAMOUNT:float','PSTATUS:int'],
+                        dataprm : ['GUID','CUSER','TYPE','DOC','CODE','AMOUNT','STATUS'],
+                    },
+                    update : 
+                    {
+                        query : "EXEC [dbo].[PRD_CHEQPAY_UPDATE] " + 
+                                "@GUID = @PGUID, " +
+                                "@CUSER = @PCUSER, " + 
+                                "@TYPE = @PTYPE, " +                      
+                                "@DOC = @PDOC, " + 
+                                "@CODE = @PCODE, " + 
+                                "@AMOUNT = @PAMOUNT, " + 
+                                "@STATUS = @PSTATUS ", 
+                        param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PDOC:string|50','PCODE:string|25','PAMOUNT:float','PSTATUS:int'],
+                        dataprm : ['GUID','CUSER','TYPE','DOC','CODE','AMOUNT','STATUS'],
+                    },
+                    control :
+                    {
+                        query : "SELECT * FROM [dbo].[CHEQPAY_VW_01] WHERE GUID = @GUID",
+                        param : ['GUID:string|50'],
+                        dataprm : ['GUID'],
+                    }
+                }
             }
         ]
         return tmpSchema
@@ -1256,7 +1372,7 @@ export default class transferCls
             let tmpData = []
             let tmpCtrlData = await this.core.local.select({from:pTemp.update.in})
             let tmpCtrlDt = new datatable()                        
-
+            
             if(typeof tmpCtrlData.result.err == 'undefined')
             {
                 tmpCtrlDt.import(tmpCtrlData.result)
@@ -1378,15 +1494,16 @@ export default class transferCls
                 {
                     let tmpCtrlQuery = JSON.parse(JSON.stringify(pTemp.to.control))
                     tmpCtrlQuery.value = this.setSqlValues(tmpCtrlQuery,tmpData[i])
-
+                    
                     let tmpCtrlData = await this.core.sql.execute(tmpCtrlQuery)
+                    
                     if(typeof tmpCtrlData.result.err == 'undefined')
                     {
                         if(tmpCtrlData.result.recordset.length > 0)
-                        {                        
+                        {               
                             let tmpQuery = JSON.parse(JSON.stringify(pTemp.to.update))
                             tmpQuery.value = this.setSqlValues(tmpQuery,tmpData[i])
-    
+                            
                             let tmpResult = await this.core.sql.execute(tmpQuery)
                             if(typeof tmpResult.result.err != 'undefined')
                             {
