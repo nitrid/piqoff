@@ -24,18 +24,14 @@ import { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
 import tr from '../../../meta/lang/devexpress/tr.js';
 import { triggerHandler } from 'devextreme/events';
+import NdPagerTab from '../../../../core/react/devex/pagertab.js';
+import NbLabel from '../../../../core/react/bootstrap/label.js';
 
 export default class depotTransfer extends React.Component
 {
     constructor()
     {
         super()
-        this.state = 
-        {
-            tbMain:"visible",
-            tbBarcode:"hidden",
-            tbDocument: "hidden"
-        }     
         this.barcode = 
         {
             guid:"00000000-0000-0000-0000-000000000000",
@@ -51,16 +47,10 @@ export default class depotTransfer extends React.Component
 
         this.dropmenuMainItems = [this.t("btnNew"),this.t("btnSave")]
         this.dropmenuDocItems = [this.t("btnSave")]
-        this.pageChange = this.pageChange.bind(this)
+        this._onItemRendered = this._onItemRendered.bind(this)
         this.dropmenuClick = this.dropmenuClick.bind(this)
         this.barcodeScan = this.barcodeScan.bind(this)
         this.quantityControl = this.prmObj.filter({ID:'negativeQuantity',USERS:this.user.CODE}).getValue().value
-
-    }
-    async componentDidMount()
-    {
-        await this.core.util.waitUntil(0)
-        this.init()
     }
     async init()
     {
@@ -79,7 +69,6 @@ export default class depotTransfer extends React.Component
         this.txtRefno.readOnly = true
         this.docLocked = false
         
-        await this.grdRebItems.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
         this.txtRef.props.onChange()
     }
     async getDoc(pGuid,pRef,pRefno)
@@ -171,50 +160,6 @@ export default class depotTransfer extends React.Component
             }
         });
     }
-    async pageChange(pPage)
-    {
-        if(pPage == "Main")
-        {
-            this.setState({tbMain:"visible"})
-            this.setState({tbBarcode:"hidden"})
-            this.setState({tbDocument:"hidden"})
-        }
-        if(pPage == "Barcode")
-        {
-            if(this.cmbDepot1.value == "")
-            {
-                let tmpConfObj = 
-                {
-                    id:'msgDepotSelect',showTitle:true,title:this.t("msgDepotSelect.title"),showCloseButton:true,width:'350px',height:'200px',
-                    button:[{id:"btn01",caption:this.t("msgDepotSelect.btn01"),location:'after'}],
-                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDepotSelect.msg")}</div>)
-                }
-                await dialog(tmpConfObj);
-                return
-            }
-            else if(this.cmbDepot2.value == "")
-            {
-                let tmpConfObj = 
-                {
-                    id:'msgDepotSelect',showTitle:true,title:this.t("msgDepotSelect.title"),showCloseButton:true,width:'350px',height:'200px',
-                    button:[{id:"btn01",caption:this.t("msgDepotSelect.btn01"),location:'after'}],
-                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDepotSelect.msg")}</div>)
-                }
-                await dialog(tmpConfObj);
-                return
-            }
-            this.setState({tbMain:"hidden"})
-            this.setState({tbBarcode:"visible"})
-            this.setState({tbDocument:"hidden"})
-            this.txtBarcode.focus()
-        }
-        if(pPage == "Document")
-        {
-            this.setState({tbMain:"hidden"})
-            this.setState({tbBarcode:"hidden"})
-            this.setState({tbDocument:"visible"})
-        }
-    }    
     barcodeReset()
     {
         
@@ -227,7 +172,7 @@ export default class depotTransfer extends React.Component
         }
         this.txtBarcode.value = ""
         this.txtQuantity.value=1
-        this.setState({tbBarcode:"visible"})
+        this.itemName.value = this.barcode.name
         this.txtBarcode.focus()
     }
     async addItem(pQuantity)
@@ -375,7 +320,6 @@ export default class depotTransfer extends React.Component
     }
     async barcodeScan()
     {
-        
         cordova.plugins.barcodeScanner.scan(
             async function (result) 
             {
@@ -395,9 +339,8 @@ export default class depotTransfer extends React.Component
                         this.barcode.barcode = tmpData.result.recordset[0].BARCODE 
                         this.barcode.code = tmpData.result.recordset[0].CODE 
                         this.barcode.guid = tmpData.result.recordset[0].GUID 
-                        
+                        this.itemName.value =  tmpData.result.recordset[0].NAME
                         this.txtQuantity.focus()
-                        this.setState({tbBarcode:"visible"})
                     }
                     else
                     {
@@ -409,7 +352,6 @@ export default class depotTransfer extends React.Component
                             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgBarcodeNotFound.msg")}</div>)
                         }
                         await dialog(tmpConfObj);
-                        document.getElementById("Sound").play(); 
                         this.barcodeReset()
                     }
                 }
@@ -424,475 +366,525 @@ export default class depotTransfer extends React.Component
             }
         );
     }
-    async checkRow()
+    async _onItemRendered(e)
     {
-        for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
+        await this.core.util.waitUntil(700)
+        
+        if(e.itemData.name == "Main")
         {
-            this.docObj.docItems.dt()[i].INPUT = this.docObj.dt()[0].INPUT
-            this.docObj.docItems.dt()[i].OUTPUT = this.docObj.dt()[0].OUTPUT
-            this.docObj.docItems.dt()[i].DOC_DATE = this.docObj.dt()[0].DOC_DATE
+            this.init()
+        }
+        else if(e.itemData.name == "Barcode")
+        {
+            
+        }
+        else if(e.itemData.name == "Document")
+        {
+            await this.grdDepotTransfer.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
         }
     }
     render()
     {
         return(
         <ScrollView>
-        <div className="row px-1 pt-1">
-            <div className="row px-1 pt-1" style={{visibility:this.state.tbMain,position:"absolute"}}>
-                <Form colCount={1}>
-                    {/* <Item>
-                        <div className="row">
-                            <div className="col-8"></div>
-                            <div className="col-4">
-                                <DropDownButton text={this.t("btnDropmenu")} icon="menu" items={this.dropmenuMainItems}  onItemClick={this.dropmenuClick}/>
-                            </div>
-                        </div>
-                    </Item> */}
-                   {/* txtRef-Refno */}
-                   <Item>
-                        <Label text={this.t("txtRefRefno")} alignment="right" />
-                        <div className="row">
-                            <div className="col-4 pe-0">
-                                <NdTextBox id="txtRef" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF"}}
-                                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                readOnly={true}
-                                maxLength={32}
-                                onChange={(async(e)=>
-                                {
-                                    let tmpQuery = 
-                                    {
-                                        query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 2 AND DOC_TYPE = 2 AND REF = @REF ",
-                                        param : ['REF:string|25'],
-                                        value : [this.txtRef.value]
-                                    }
-                                    let tmpData = await this.core.sql.execute(tmpQuery) 
-                                    if(tmpData.result.recordset.length > 0)
-                                    {
-                                        this.txtRefno.value = tmpData.result.recordset[0].REF_NO
-                                    }
-                                }).bind(this)}
-                                param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
-                                access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
+        <div className="row p-2">
+            <div className="row px-1 py-1">
+                <NdPagerTab id={"page"} parent={this} onItemRendered={this._onItemRendered}>
+                <Item name={"Main"}>
+                    <div className="row px-1 py-1">
+                        <Form colCount={1}>
+                            {/* <Item>
+                                <div className="row">
+                                    <div className="col-8"></div>
+                                    <div className="col-4">
+                                        <DropDownButton text={this.t("btnDropmenu")} icon="menu" items={this.dropmenuMainItems}  onItemClick={this.dropmenuClick}/>
+                                    </div>
+                                </div>
+                            </Item> */}
+                        {/* txtRef-Refno */}
+                            <Item>
+                                <Label text={this.t("txtRefRefno")} alignment="right" />
+                                <div className="row">
+                                    <div className="col-4 pe-0">
+                                        <NdTextBox id="txtRef" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF"}}
+                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                        readOnly={true}
+                                        maxLength={32}
+                                        onChange={(async(e)=>
+                                        {
+                                            let tmpQuery = 
+                                            {
+                                                query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 2 AND DOC_TYPE = 2 AND REF = @REF ",
+                                                param : ['REF:string|25'],
+                                                value : [this.txtRef.value]
+                                            }
+                                            let tmpData = await this.core.sql.execute(tmpQuery) 
+                                            if(tmpData.result.recordset.length > 0)
+                                            {
+                                                this.txtRefno.value = tmpData.result.recordset[0].REF_NO
+                                            }
+                                        }).bind(this)}
+                                        param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
+                                        access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
+                                        >
+                                        <Validator validationGroup={"frmRbtDoc"}>
+                                                <RequiredRule message={this.t("validRef")} />
+                                            </Validator>  
+                                        </NdTextBox>
+                                    </div>
+                                    <div className="col-8 ps-0">
+                                        <NdTextBox id="txtRefno" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF_NO"}}
+                                        readOnly={true}
+                                        button=
+                                        {
+                                            [
+                                                {
+                                                    id:'01',
+                                                    icon:'more',
+                                                    onClick:()=>
+                                                    {
+                                                        this.pg_Docs.show()
+                                                        this.pg_Docs.onClick = (data) =>
+                                                        {
+                                                            if(data.length > 0)
+                                                            {
+                                                                this.getDoc(data[0].GUID,data[0].REF,data[0].REF_NO)
+                                                            }
+                                                        }
+                                                                
+                                                    }
+                                                },
+                                                {
+                                                    id:'02',
+                                                    icon:'arrowdown',
+                                                    onClick:()=>
+                                                    {
+                                                        this.txtRefno.value = Math.floor(Date.now() / 1000)
+                                                    }
+                                                },
+                                                {
+                                                    id:'03',
+                                                    icon:'revert',
+                                                    onClick:()=>
+                                                    {
+                                                        this.init()
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                        onChange={(async()=>
+                                        {
+                                            let tmpResult = await this.checkDoc('00000000-0000-0000-0000-000000000000',this.txtRef.value,this.txtRefno.value)
+                                            if(tmpResult == 3)
+                                            {
+                                                this.txtRefno.value = "";
+                                            }
+                                        }).bind(this)}
+                                        param={this.param.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
+                                        access={this.access.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
+                                        >
+                                        <Validator validationGroup={"frmRbtDoc"}>
+                                                <RequiredRule message={this.t("validRefNo")} />
+                                            </Validator> 
+                                        </NdTextBox>
+                                    </div>
+                                </div>
+                                {/*EVRAK SEÇİM */}
+                                <NdPopGrid id={"pg_Docs"} parent={this} container={"#root"}
+                                visible={false}
+                                position={{of:'#root'}} 
+                                showTitle={true} 
+                                showBorders={true}
+                                width={'90%'}
+                                height={'90%'}
+                                title={this.t("pg_Docs.title")} 
+                                selection={{mode:"single"}}
+                                data={{source:{select:{query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME FROM DOC_VW_01 WHERE TYPE = 2 AND DOC_TYPE = 2 AND REBATE = 0"},sql:this.core.sql}}}
                                 >
-                                <Validator validationGroup={"frmRbtDoc"}>
-                                        <RequiredRule message={this.t("validRef")} />
-                                    </Validator>  
-                                </NdTextBox>
+                                    <Column dataField="REF" caption={this.t("pg_Docs.clmRef")} width={70} defaultSortOrder="asc"/>
+                                    <Column dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={50} defaultSortOrder="asc" />
+                                </NdPopGrid>
+                            </Item>
+                            {/* dtDocDate */}
+                            <Item>
+                                <Label text={this.t("dtDocDate")} alignment="right" />
+                                <NdDatePicker simple={true}  parent={this} id={"dtDocDate"} pickerType={"rollers"}
+                                dt={{data:this.docObj.dt('DOC'),field:"DOC_DATE"}}
+                                onValueChanged={(async()=>
+                                    {
+                                }).bind(this)}
+                                >
+                                    <Validator validationGroup={"frmRbtDoc"}>
+                                        <RequiredRule message={this.t("validDocDate")} />
+                                    </Validator> 
+                                </NdDatePicker>
+                            </Item>
+                            {/* cmbDepot */}
+                            <Item>
+                                <Label text={this.t("cmbDepot1")} alignment="right" />
+                                <NdSelectBox simple={true} parent={this} id="cmbDepot1"
+                                dt={{data:this.docObj.dt('DOC'),field:"OUTPUT"}}  
+                                displayExpr="NAME"                       
+                                valueExpr="GUID"
+                                value=""
+                                searchEnabled={true}
+                                onValueChanged={(async(e)=>
+                                    {
+                                        if(this.cmbDepot2.value == e.value)
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgDblDepot',showTitle:true,title:this.t("msgDblDepot.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgDblDepot.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDblDepot.msg")}</div>)
+                                            }
+                                        
+                                            await dialog(tmpConfObj);
+                                            this.cmbDepot1.setState({value:''});
+                                            return
+                                        }
+                                    }).bind(this)}
+                                data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01"},sql:this.core.sql}}}
+                                param={this.param.filter({ELEMENT:'cmbDepot1',USERS:this.user.CODE})}
+                                access={this.access.filter({ELEMENT:'cmbDepot1',USERS:this.user.CODE})}
+                                >
+                                    <Validator validationGroup={"frmRbtDoc"}>
+                                        <RequiredRule message={this.t("validDepot")} />
+                                    </Validator> 
+                                </NdSelectBox>
+                            </Item>
+                            {/* cmbDepot */}
+                            <Item>
+                                <Label text={this.t("cmbDepot2")} alignment="right" />
+                                <NdSelectBox simple={true} parent={this} id="cmbDepot2"
+                                dt={{data:this.docObj.dt('DOC'),field:"INPUT"}}  
+                                displayExpr="NAME"                       
+                                valueExpr="GUID"
+                                value=""
+                                searchEnabled={true}
+                                onValueChanged={(async(e)=>
+                                    {
+                                        if(this.cmbDepot1.value == e.value)
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgDblDepot',showTitle:true,title:this.t("msgDblDepot.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgDblDepot.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDblDepot.msg")}</div>)
+                                            }
+                                        
+                                            await dialog(tmpConfObj);
+                                            this.cmbDepot2.setState({value:''});
+                                            return
+                                        }
+                                    }).bind(this)}
+                                data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01"},sql:this.core.sql}}}
+                                param={this.param.filter({ELEMENT:'cmbDepot2',USERS:this.user.CODE})}
+                                access={this.access.filter({ELEMENT:'cmbDepot2',USERS:this.user.CODE})}
+                                >
+                                    <Validator validationGroup={"frmRbtDoc"}>
+                                        <RequiredRule message={this.t("validDepot")} />
+                                    </Validator> 
+                                </NdSelectBox>
+                            </Item>
+                            <Item>
+                                <div className="row">
+                                    <div className="col-6 px-2 pt-2">
+                                        <NdButton text={this.t("btnBarcodeEntry")} type="default" width="100%" onClick={async()=>{
+                                            if(this.cmbDepot1.value == "")
+                                            {
+                                                let tmpConfObj = 
+                                                {
+                                                    id:'msgDepotSelect',showTitle:true,title:this.t("msgDepotSelect.title"),showCloseButton:true,width:'350px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgDepotSelect.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDepotSelect.msg")}</div>)
+                                                }
+                                                await dialog(tmpConfObj);
+                                                return
+                                            }
+                                            else if(this.cmbDepot2.value == "")
+                                            {
+                                                let tmpConfObj = 
+                                                {
+                                                    id:'msgDepotSelect',showTitle:true,title:this.t("msgDepotSelect.title"),showCloseButton:true,width:'350px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgDepotSelect.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDepotSelect.msg")}</div>)
+                                                }
+                                                await dialog(tmpConfObj);
+                                                return
+                                            }
+                                            this.txtBarcode.focus()
+                                            this.page.pageSelect("Barcode")
+                                        }}></NdButton>
+                                    </div>
+                                    <div className="col-6 px-2 pt-2">
+                                        <NdButton text={this.t("btnDocument")} type="default" width="100%" onClick={()=>this.page.pageSelect("Document")}></NdButton>
+                                    </div>
+                                </div>
+                            </Item>
+                        </Form>
+                    </div>
+                </Item>
+                <Item name={"Barcode"}>
+                    <div className="row px-1 py-1">
+                        <Form colCount={1}>
+                            <Item>
+                            <div className="row">
+                                <div className="col-4">
+                                    <NdButton icon="arrowleft" type="default" width="100%" onClick={()=>this.page.pageSelect("Main")}></NdButton>
+                                </div>
+                                <div className="col-4">
+                                    <NdButton icon="detailslayout" type="default" width="100%" onClick={()=>this.page.pageSelect("Document")}></NdButton>
+                                </div>
+                                <div className="col-4">
+                                    
+                                </div>
                             </div>
-                            <div className="col-8 ps-0">
-                                <NdTextBox id="txtRefno" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF_NO"}}
-                                readOnly={true}
-                                button=
-                                {
+                            </Item>
+                            <Item>
+                            <div className="col-12 px-1 pt-1">
+                                    <NdTextBox id="txtBarcode" parent={this} placeholder={this.t("txtBarcodePlace")}
+                                    button=
+                                    {
                                     [
                                         {
                                             id:'01',
                                             icon:'more',
-                                            onClick:()=>
+                                            onClick:async()=>
                                             {
-                                                this.pg_Docs.show()
-                                                this.pg_Docs.onClick = (data) =>
+                                                this.barcodeReset()
+                                                this.popItemCode.show()
+                                                this.popItemCode.onClick = async(data) =>
                                                 {
-                                                    if(data.length > 0)
+                                                    if(data.length == 1)
                                                     {
-                                                        this.getDoc(data[0].GUID,data[0].REF,data[0].REF_NO)
+                                                        this.txtBarcode.value = data[0].CODE
+                                                        this.barcode = {
+                                                            name:data[0].NAME,
+                                                            code:data[0].CODE,
+                                                            barcode:data[0].BARCODE,
+                                                            guid:data[0].GUID
+                                                        }
+                                                        this.itemName.value = data[0].NAME
+                                                        this.txtQuantity.focus()
+                                                    }
+                                                    else if(data.length > 1)
+                                                    {
+                                                        for (let i = 0; i < data.length; i++) 
+                                                        {
+                                                            this.txtBarcode.value = data[i].CODE
+                                                            this.barcode = {
+                                                                name:data[i].NAME,
+                                                                code:data[i].CODE,
+                                                                barcode:data[i].BARCODE,
+                                                                guid:data[0].GUID
+                                                            }
+                                                            await this.addItem()
+                                                        }
+                                                        let tmpConfObj = 
+                                                        {
+                                                            id:'msgItemsAdd',showTitle:true,title:this.t("msgItemsAdd.title"),showCloseButton:true,width:'350px',height:'200px',
+                                                            button:[{id:"btn01",caption:this.t("msgItemsAdd.btn01"),location:'after'}],
+                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemsAdd.msg")}</div>)
+                                                        }
+                                                        await dialog(tmpConfObj);
                                                     }
                                                 }
-                                                        
                                             }
                                         },
                                         {
                                             id:'02',
-                                            icon:'arrowdown',
-                                            onClick:()=>
+                                            icon:'photo',
+                                            onClick:async()=>
                                             {
-                                                this.txtRefno.value = Math.floor(Date.now() / 1000)
-                                            }
-                                        },
-                                        {
-                                            id:'03',
-                                            icon:'revert',
-                                            onClick:()=>
-                                            {
-                                                this.init()
+                                                this.barcodeScan()
                                             }
                                         }
                                     ]
-                                }
-                                onChange={(async()=>
-                                {
-                                    let tmpResult = await this.checkDoc('00000000-0000-0000-0000-000000000000',this.txtRef.value,this.txtRefno.value)
-                                    if(tmpResult == 3)
-                                    {
-                                        this.txtRefno.value = "";
                                     }
-                                }).bind(this)}
-                                param={this.param.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
-                                access={this.access.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
-                                >
-                                <Validator validationGroup={"frmRbtDoc"}>
-                                        <RequiredRule message={this.t("validRefNo")} />
-                                    </Validator> 
-                                </NdTextBox>
-                            </div>
-                        </div>
-                        {/*EVRAK SEÇİM */}
-                        <NdPopGrid id={"pg_Docs"} parent={this} container={"#root"}
-                        visible={false}
-                        position={{of:'#root'}} 
-                        showTitle={true} 
-                        showBorders={true}
-                        width={'90%'}
-                        height={'90%'}
-                        title={this.t("pg_Docs.title")} 
-                        selection={{mode:"single"}}
-                        data={{source:{select:{query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME FROM DOC_VW_01 WHERE TYPE = 2 AND DOC_TYPE = 2 AND REBATE = 0"},sql:this.core.sql}}}
-                        button=
-                        {
-                            [
-                                {
-                                    id:'01',
-                                    icon:'more',
-                                    onClick:()=>
-                                    {
-                                        
-                                    }
-                                }
-                            ]
-                            
-                        }
-                        >
-                            <Column dataField="REF" caption={this.t("pg_Docs.clmRef")} width={70} defaultSortOrder="asc"/>
-                            <Column dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={50} defaultSortOrder="asc" />
-                        </NdPopGrid>
-                    </Item>
-                    {/* dtDocDate */}
-                    <Item>
-                        <Label text={this.t("dtDocDate")} alignment="right" />
-                        <NdDatePicker simple={true}  parent={this} id={"dtDocDate"} pickerType={"rollers"}
-                        dt={{data:this.docObj.dt('DOC'),field:"DOC_DATE"}}
-                        onValueChanged={(async()=>
-                            {
-                        }).bind(this)}
-                        >
-                            <Validator validationGroup={"frmRbtDoc"}>
-                                <RequiredRule message={this.t("validDocDate")} />
-                            </Validator> 
-                        </NdDatePicker>
-                    </Item>
-                    {/* cmbDepot */}
-                    <Item>
-                        <Label text={this.t("cmbDepot1")} alignment="right" />
-                        <NdSelectBox simple={true} parent={this} id="cmbDepot1"
-                        dt={{data:this.docObj.dt('DOC'),field:"OUTPUT"}}  
-                        displayExpr="NAME"                       
-                        valueExpr="GUID"
-                        value=""
-                        searchEnabled={true}
-                        onValueChanged={(async(e)=>
-                            {
-                                if(this.cmbDepot2.value == e.value)
-                                {
-                                    let tmpConfObj =
-                                    {
-                                        id:'msgDblDepot',showTitle:true,title:this.t("msgDblDepot.title"),showCloseButton:true,width:'500px',height:'200px',
-                                        button:[{id:"btn01",caption:this.t("msgDblDepot.btn01"),location:'after'}],
-                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDblDepot.msg")}</div>)
-                                    }
-                                
-                                    await dialog(tmpConfObj);
-                                    this.cmbDepot1.setState({value:''});
-                                    return
-                                }
-                                this.checkRow()
-                            }).bind(this)}
-                        data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01"},sql:this.core.sql}}}
-                        param={this.param.filter({ELEMENT:'cmbDepot1',USERS:this.user.CODE})}
-                        access={this.access.filter({ELEMENT:'cmbDepot1',USERS:this.user.CODE})}
-                        >
-                            <Validator validationGroup={"frmRbtDoc"}>
-                                <RequiredRule message={this.t("validDepot")} />
-                            </Validator> 
-                        </NdSelectBox>
-                    </Item>
-                    {/* cmbDepot */}
-                    <Item>
-                        <Label text={this.t("cmbDepot2")} alignment="right" />
-                        <NdSelectBox simple={true} parent={this} id="cmbDepot2"
-                        dt={{data:this.docObj.dt('DOC'),field:"INPUT"}}  
-                        displayExpr="NAME"                       
-                        valueExpr="GUID"
-                        value=""
-                        searchEnabled={true}
-                        onValueChanged={(async(e)=>
-                            {
-                                if(this.cmbDepot1.value == e.value)
-                                {
-                                    let tmpConfObj =
-                                    {
-                                        id:'msgDblDepot',showTitle:true,title:this.t("msgDblDepot.title"),showCloseButton:true,width:'500px',height:'200px',
-                                        button:[{id:"btn01",caption:this.t("msgDblDepot.btn01"),location:'after'}],
-                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDblDepot.msg")}</div>)
-                                    }
-                                
-                                    await dialog(tmpConfObj);
-                                    this.cmbDepot2.setState({value:''});
-                                    return
-                                }
-                                this.checkRow()
-                            }).bind(this)}
-                        data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01"},sql:this.core.sql}}}
-                        param={this.param.filter({ELEMENT:'cmbDepot2',USERS:this.user.CODE})}
-                        access={this.access.filter({ELEMENT:'cmbDepot2',USERS:this.user.CODE})}
-                        
-                        >
-                            <Validator validationGroup={"frmRbtDoc"}>
-                                <RequiredRule message={this.t("validDepot")} />
-                            </Validator> 
-                        </NdSelectBox>
-                    </Item>
-                    <Item>
-                        <div className="row">
-                            <div className="col-6 px-2 pt-2">
-                                <NdButton text={this.t("btnBarcodeEntry")} type="default" width="100%" onClick={()=>this.pageChange("Barcode")}></NdButton>
-                            </div>
-                            <div className="col-6 px-2 pt-2">
-                                <NdButton text={this.t("btnDocument")} type="default" width="100%" onClick={()=>this.pageChange("Document")}></NdButton>
-                            </div>
-                        </div>
-                    </Item>
-                </Form>
-            </div>
-            <div className="row px-1 pt-1" style={{visibility:this.state.tbBarcode,position:"absolute"}}>
-                <Form colCount={1}>
-                    <Item>
-                    <div className="row" style={{height:"25px"}}>
-                        <div className="col-4">
-                            <NdButton icon="arrowleft" type="default" width="100%" onClick={()=>this.pageChange("Main")}></NdButton>
-                        </div>
-                        <div className="col-4">
-                            <NdButton icon="detailslayout" type="default" width="100%" onClick={()=>this.pageChange("Document")}></NdButton>
-                        </div>
-                        <div className="col-4">
-                            
-                        </div>
-                    </div>
-                    </Item>
-                    <Item>
-                    <div className="col-12 px-1 pt-1">
-                            <NdTextBox id="txtBarcode" parent={this} placeholder={this.t("txtBarcodePlace")}
-                            button=
-                            {
-                            [
-                                {
-                                    id:'01',
-                                    icon:'more',
-                                    onClick:async()=>
-                                    {
-                                        this.barcodeReset()
-                                        this.popItemCode.show()
-                                        this.popItemCode.onClick = async(data) =>
+                                    onEnterKey={(async(e)=>
                                         {
-                                            if(data.length == 1)
+                                            if(e.component._changedValue == "")
                                             {
-                                                this.txtBarcode.value = data[0].CODE
-                                                this.barcode = {
-                                                    name:data[0].NAME,
-                                                    code:data[0].CODE,
-                                                    barcode:data[0].BARCODE,
-                                                    guid:data[0].GUID
-                                                }
-                                                this.setState({tbBarcode:"visible"})
+                                                return
                                             }
-                                            else if(data.length > 1)
+                                            let tmpQuery = 
                                             {
-                                                for (let i = 0; i < data.length; i++) 
-                                                {
-                                                    this.txtBarcode.value = data[i].CODE
-                                                    this.barcode = {
-                                                        name:data[i].NAME,
-                                                        code:data[i].CODE,
-                                                        barcode:data[i].BARCODE,
-                                                        guid:data[0].GUID
-                                                    }
-                                                    await this.addItem()
-                                                }
+                                                query : "SELECT ITEM_CODE AS CODE,ITEM_NAME AS NAME,ITEM_GUID AS GUID,BARCODE,[dbo].[FN_PRICE_SALE](ITEM_GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000') AS PRICE FROM ITEM_BARCODE_VW_01  WHERE BARCODE = @BARCODE OR ITEM_CODE = @BARCODE ",
+                                                param : ['BARCODE:string|50'],
+                                                value : [e.component._changedValue]
+                                            }
+                                            let tmpData = await this.core.sql.execute(tmpQuery) 
+                                            if(tmpData.result.recordset.length >0)
+                                            {
+                                                this.barcode.name = tmpData.result.recordset[0].NAME
+                                                this.barcode.barcode = tmpData.result.recordset[0].BARCODE 
+                                                this.barcode.code = tmpData.result.recordset[0].CODE 
+                                                this.barcode.guid = tmpData.result.recordset[0].GUID 
+                                                this.itemName.value = tmpData.result.recordset[0].NAME
+                                                this.txtQuantity.focus()
+                                            }
+                                            else
+                                            {
+                                                document.getElementById("Sound").play(); 
                                                 let tmpConfObj = 
                                                 {
-                                                    id:'msgItemsAdd',showTitle:true,title:this.t("msgItemsAdd.title"),showCloseButton:true,width:'350px',height:'200px',
-                                                    button:[{id:"btn01",caption:this.t("msgItemsAdd.btn01"),location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemsAdd.msg")}</div>)
+                                                    id:'msgBarcodeNotFound',showTitle:true,title:this.t("msgBarcodeNotFound.title"),showCloseButton:true,width:'350px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgBarcodeNotFound.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgBarcodeNotFound.msg")}</div>)
                                                 }
                                                 await dialog(tmpConfObj);
+                                                this.barcodeReset()
                                             }
-                                        }
-                                    }
-                                },
-                                {
-                                    id:'02',
-                                    icon:'photo',
-                                    onClick:async()=>
-                                    {
-                                        this.barcodeScan()
-                                    }
-                                }
-                            ]
-                            }
-                            onEnterKey={(async(e)=>
-                                {
-                                    if(e.component._changedValue == "")
-                                    {
-                                        return
-                                    }
-                                    let tmpQuery = 
-                                    {
-                                        query : "SELECT ITEM_CODE AS CODE,ITEM_NAME AS NAME,ITEM_GUID AS GUID,BARCODE,[dbo].[FN_PRICE_SALE](ITEM_GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000') AS PRICE FROM ITEM_BARCODE_VW_01  WHERE BARCODE = @BARCODE OR ITEM_CODE = @BARCODE ",
-                                        param : ['BARCODE:string|50'],
-                                        value : [e.component._changedValue]
-                                    }
-                                    let tmpData = await this.core.sql.execute(tmpQuery) 
-                                    if(tmpData.result.recordset.length >0)
-                                    {
-                                        this.barcode.name = tmpData.result.recordset[0].NAME
-                                        this.barcode.barcode = tmpData.result.recordset[0].BARCODE 
-                                        this.barcode.code = tmpData.result.recordset[0].CODE 
-                                        this.barcode.guid = tmpData.result.recordset[0].GUID 
-                                        
-                                        this.txtQuantity.focus()
-                                        this.setState({tbBarcode:"visible"})
-                                    }
-                                    else
-                                    {
-                                        document.getElementById("Sound").play(); 
-                                        let tmpConfObj = 
+                                            
+                                        }).bind(this)}></NdTextBox>
+                                </div>
+                            </Item>
+                            <Item> 
+                                <div>
+                                    <h5 className="text-center">
+                                        <NbLabel id="itemName" parent={this} value={""}/>
+                                    </h5>
+                                </div>
+                            </Item>
+                            {/* txtQuantity */}
+                            <Item>
+                                <Label text={this.t("txtQuantity")}/>
+                                <NdTextBox id="txtQuantity" parent={this} simple={true}  value={1}
+                                    param={this.param.filter({ELEMENT:'txtQuantity',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'txtQuantity',USERS:this.user.CODE})}
+                                    onEnterKey={(async(e)=>
                                         {
-                                            id:'msgBarcodeNotFound',showTitle:true,title:this.t("msgBarcodeNotFound.title"),showCloseButton:true,width:'350px',height:'200px',
-                                            button:[{id:"btn01",caption:this.t("msgBarcodeNotFound.btn01"),location:'after'}],
-                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgBarcodeNotFound.msg")}</div>)
-                                        }
-                                        await dialog(tmpConfObj);
-                                        document.getElementById("Sound").play(); 
-                                        this.barcodeReset()
-                                    }
-                                    
-                                }).bind(this)}></NdTextBox>
-                        </div>
-                    </Item>
-                    <Item> 
-                        <div>
-                            <h4 className="text-center">
-                                {this.barcode.name}
-                            </h4>
-                        </div>
-                    </Item>
-                    {/* txtQuantity */}
-                    <Item>
-                        <Label text={this.t("txtQuantity")}/>
-                        <NdTextBox id="txtQuantity" parent={this} simple={true}  value={1}
-                            param={this.param.filter({ELEMENT:'txtQuantity',USERS:this.user.CODE})}
-                            access={this.access.filter({ELEMENT:'txtQuantity',USERS:this.user.CODE})}
-                            onEnterKey={(async(e)=>
-                                {
-                                    this.addItem(this.txtQuantity.value)
-                                }).bind(this)}></NdTextBox>
-                    </Item>
-                    <Item>
-                        <div className="row">
-                            <div className="col-12 px-4 pt-4">
-                                <NdButton text={this.t("btnItemAdd")} type="default" width="100%" onClick={()=>this.addItem(this.txtQuantity.value)}></NdButton>
-                            </div>
-                        </div>
-                    </Item>
-                </Form>
-            </div>
-            <div className="row px-1 pt-1" style={{visibility:this.state.tbDocument,position:"absolute"}}>
-                <Form>
-                <Item>
-                    <div className="row" style={{height:"25px"}}>
-                        <div className="col-4">
-                            <NdButton icon="arrowleft" type="default" width="100%" onClick={()=>this.pageChange("Main")}></NdButton>
-                        </div>
-                        <div className="col-4">
-                            <NdButton icon="plus" type="default" width="100%" onClick={()=>this.pageChange("Barcode")}></NdButton>
-                        </div>
-                        <div className="col-4">
-                                {/* <DropDownButton text={this.t("btnDropmenu")} icon="menu" items={this.dropmenuDocItems}  onItemClick={this.dropmenuClick}/> */}
-                        </div>
+                                            this.addItem(this.txtQuantity.value)
+                                        }).bind(this)}></NdTextBox>
+                            </Item>
+                            <Item>
+                                <div className="row">
+                                    <div className="col-12 px-4 pt-4">
+                                        <NdButton text={this.t("btnItemAdd")} type="default" width="100%" onClick={()=>this.addItem(this.txtQuantity.value)}></NdButton>
+                                    </div>
+                                </div>
+                            </Item>
+                        </Form>
                     </div>
                 </Item>
-                <Item>
-                    <NdGrid parent={this} id={"grdRebItems"} 
-                    showBorders={true} 
-                    columnsAutoWidth={true} 
-                    allowColumnReordering={true} 
-                    allowColumnResizing={true} 
-                    height={'400'} 
-                    width={'100%'}
-                    dbApply={false}
-                    loadPanel={{enabled:true}}
-                    onContentReady={async(e)=>{
-                        e.component.columnOption("command:edit", 'visibleIndex', -1)
-                    }}
-                    onRowUpdated={async(e)=>{
-                        await this.docObj.save()
-                    }}
-                    onRowRemoved={async(e)=>{
-                        await this.docObj.save()
+                <Item name={"Document"}>
+                    <div className="row px-1 py-1">
+                        <Form>
+                        <Item>
+                            <div className="row">
+                                <div className="col-4">
+                                    <NdButton icon="arrowleft" type="default" width="100%" onClick={()=>this.page.pageSelect("Main")}></NdButton>
+                                </div>
+                                <div className="col-4">
+                                    <NdButton icon="plus" type="default" width="100%"  onClick={async()=>{
+                                        if(this.cmbDepot1.value == "")
+                                        {
+                                            let tmpConfObj = 
+                                            {
+                                                id:'msgDepotSelect',showTitle:true,title:this.t("msgDepotSelect.title"),showCloseButton:true,width:'350px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgDepotSelect.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDepotSelect.msg")}</div>)
+                                            }
+                                            await dialog(tmpConfObj);
+                                            return
+                                        }
+                                        else if(this.cmbDepot2.value == "")
+                                        {
+                                            let tmpConfObj = 
+                                            {
+                                                id:'msgDepotSelect',showTitle:true,title:this.t("msgDepotSelect.title"),showCloseButton:true,width:'350px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgDepotSelect.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDepotSelect.msg")}</div>)
+                                            }
+                                            await dialog(tmpConfObj);
+                                            return
+                                        }
+                                        this.txtBarcode.focus()
+                                        this.page.pageSelect("Barcode")
+                                    }}></NdButton>
+                                </div>
+                                <div className="col-4">
+                                        {/* <DropDownButton text={this.t("btnDropmenu")} icon="menu" items={this.dropmenuDocItems}  onItemClick={this.dropmenuClick}/> */}
+                                </div>
+                            </div>
+                        </Item>
+                        <Item>
+                            <NdGrid parent={this} id={"grdDepotTransfer"} 
+                            showBorders={true} 
+                            columnsAutoWidth={true} 
+                            allowColumnReordering={true} 
+                            allowColumnResizing={true} 
+                            height={'400'} 
+                            width={'100%'}
+                            dbApply={false}
+                            loadPanel={{enabled:true}}
+                            onContentReady={async(e)=>{
+                                e.component.columnOption("command:edit", 'visibleIndex', -1)
+                            }}
+                            onRowUpdated={async(e)=>{
+                                await this.docObj.save()
+                            }}
+                            onRowRemoved={async(e)=>{
+                                await this.docObj.save()
+                            }}
+                            >
+                                <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
+                                <Scrolling mode="standard" />
+                                <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
+                                <Column dataField="ITEM_CODE" caption={this.t("grdDepotTransfer.clmItemCode")} width={150} allowEditing={false}/>
+                                <Column dataField="ITEM_NAME" caption={this.t("grdDepotTransfer.clmItemName")} width={350} allowEditing={false}/>
+                                <Column dataField="QUANTITY" caption={this.t("grdDepotTransfer.clmQuantity")} dataType={'number'} width={150}/>
+                                <Column dataField="DESCRIPTION" caption={this.t("grdDepotTransfer.clmDescription")} />
+                            </NdGrid>
+                        </Item>
+                        </Form>
+                    </div>
+                </Item>
+                </NdPagerTab>
+                {/* Stok Seçim */}
+                <NdPopGrid id={"popItemCode"} parent={this} container={"#root"}
+                    visible={false}
+                    position={{of:'#root'}} 
+                    showTitle={true} 
+                    showBorders={true}
+                    width={'90%'}
+                    height={'90%'}
+                    title={this.t("popItemCode.title")} //
+                    selection={{mode:"single"}}
+                    search={true}
+                    data = 
+                    {{
+                        source:
+                        {
+                            select:
+                            {
+                                query : "SELECT  *,  " +
+                                        "CASE WHEN UNDER_UNIT_VALUE =0  " +
+                                        "THEN 0 " +
+                                        "ELSE " +
+                                        "ROUND((PRICE * UNDER_UNIT_VALUE),2) " +
+                                        "END AS UNDER_UNIT_PRICE " +
+                                        "FROM  (  SELECT GUID,   " +
+                                        "CODE,   " +
+                                        "NAME,   " +
+                                        "ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE,   " +
+                                        "MAIN_GRP AS ITEM_GRP,   " +
+                                        "MAIN_GRP_NAME AS ITEM_GRP_NAME,   " +
+                                        "(SELECT [dbo].[FN_PRICE_SALE](GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000')) AS PRICE  , " +
+                                        "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 1 AND ITEM_UNIT.ITEM = ITEMS_VW_01.GUID),0) AS UNDER_UNIT_VALUE " +
+                                        "FROM ITEMS_VW_01 WHERE ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID),'') <> '') AS TMP " +
+                                        "WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL) " ,
+                                param : ['VAL:string|50']
+                            },
+                            sql:this.core.sql
+                        }
                     }}
                     >
-                        <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
-                        <Scrolling mode="standard" />
-                        <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
-                        <Column dataField="ITEM_CODE" caption={this.t("grdRebItems.clmItemCode")} width={150} allowEditing={false}/>
-                        <Column dataField="ITEM_NAME" caption={this.t("grdRebItems.clmItemName")} width={350} allowEditing={false}/>
-                        <Column dataField="QUANTITY" caption={this.t("grdRebItems.clmQuantity")} dataType={'number'} width={150}/>
-                        <Column dataField="DESCRIPTION" caption={this.t("grdRebItems.clmDescription")} />
-                    </NdGrid>
-                </Item>
-                </Form>
+                        <Column dataField="CODE" caption={this.t("popItemCode.clmCode")} width={100} />
+                        <Column dataField="NAME" caption={this.t("popItemCode.clmName")} defaultSortOrder="asc" />
+                </NdPopGrid>
             </div>
-            {/* Stok Seçim */}
-            <NdPopGrid id={"popItemCode"} parent={this} container={"#root"}
-                visible={false}
-                position={{of:'#root'}} 
-                showTitle={true} 
-                showBorders={true}
-                width={'90%'}
-                height={'90%'}
-                title={this.t("popItemCode.title")} //
-                selection={{mode:"single"}}
-                search={true}
-                data = 
-                {{
-                    source:
-                    {
-                        select:
-                        {
-                            query : "SELECT  *,  " +
-                                    "CASE WHEN UNDER_UNIT_VALUE =0  " +
-                                    "THEN 0 " +
-                                    "ELSE " +
-                                    "ROUND((PRICE * UNDER_UNIT_VALUE),2) " +
-                                    "END AS UNDER_UNIT_PRICE " +
-                                    "FROM  (  SELECT GUID,   " +
-                                    "CODE,   " +
-                                    "NAME,   " +
-                                    "ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE,   " +
-                                    "MAIN_GRP AS ITEM_GRP,   " +
-                                    "MAIN_GRP_NAME AS ITEM_GRP_NAME,   " +
-                                    "(SELECT [dbo].[FN_PRICE_SALE](GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000')) AS PRICE  , " +
-                                    "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 1 AND ITEM_UNIT.ITEM = ITEMS_VW_01.GUID),0) AS UNDER_UNIT_VALUE " +
-                                    "FROM ITEMS_VW_01 WHERE ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID),'') <> '') AS TMP " +
-                                    "WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL) " ,
-                            param : ['VAL:string|50']
-                        },
-                        sql:this.core.sql
-                    }
-                }}
-                >
-                    <Column dataField="CODE" caption={this.t("popItemCode.clmCode")} width={100} />
-                    <Column dataField="NAME" caption={this.t("popItemCode.clmName")} defaultSortOrder="asc" />
-            </NdPopGrid>
         </div>
         </ScrollView>
 

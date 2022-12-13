@@ -3639,6 +3639,10 @@ export const langFr =
         getOffers : "Recherche Proposition",  
         getProforma : "Rechercher Proforma ", 
         btnView : "Aperçu", // BAK
+        btnMailsend : "Mail Gönder", // BAK
+        placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.", // BAK
+        validDesign : "Lütfen Dizayn seçiniz.",  // BAK
+        validMail : "Lütfen Boş Geçmeyin.",  // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -4014,6 +4018,20 @@ export const langFr =
             btn01: "OK",
             msg: "Vous ne Pouvez Vendre en Dessous du Prix d'Achat ! !"
         },
+        popMailSend : 
+        {
+            title :"E-Mail Gönder",   // BAK
+            txtMailSubject : "E-Mail Başlığı",   // BAK
+            txtSendMail : "E-Mail Adresi",   // BAK
+            btnSend : "Gönder"   // BAK
+        },
+        msgMailSendResult:
+        {
+            title: "Dikkat",   // BAK
+            btn01: "Tamam",   // BAK
+            msgSuccess: "Mail gönderimi başarılı !",   // BAK
+            msgFailed: "Mail gönderimi başarısız !"   // BAK
+        },
     },
     ftr_02_003 : // "İade Faturası"
     {
@@ -4056,7 +4074,11 @@ export const langFr =
         txtExpFee : "Pénalités de Retard", 
         dtExpDate : "Date d'Echéance", 
         getProforma : "Rechercher Proforma ", 
-        btnView : "Görüntüle", // BAK
+        btnView : "Aperçu", // BAK
+        btnMailsend : "Mail Gönder", // BAK
+        placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.", // BAK
+        validDesign : "Lütfen Dizayn seçiniz.",  // BAK
+        validMail : "Lütfen Boş Geçmeyin.",  // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -4355,6 +4377,20 @@ export const langFr =
             clmPrice : "Prix",   
             clmTotal : "Total"   
         },
+        popMailSend : 
+        {
+            title :"E-Mail Gönder",   // BAK
+            txtMailSubject : "E-Mail Başlığı",   // BAK
+            txtSendMail : "E-Mail Adresi",   // BAK
+            btnSend : "Gönder"   // BAK
+        },
+        msgMailSendResult:
+        {
+            title: "Dikkat",   // BAK
+            btn01: "Tamam",   // BAK
+            msgSuccess: "Mail gönderimi başarılı !",   // BAK
+            msgFailed: "Mail gönderimi başarısız !"   // BAK
+        },
     },
     ftr_02_004 : // "Fiyat Farkı Faturası"
     {
@@ -4397,7 +4433,11 @@ export const langFr =
         txtTotalQuantity : "Quantité totale",  
         txtExpFee : "Pénalités de Retard", 
         dtExpDate : "Date d'Echéance", 
-        btnView : "Görüntüle", // BAK
+        btnView : "Aperçu", // BAK
+        btnMailsend : "Mail Gönder", // BAK
+        placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.", // BAK
+        validDesign : "Lütfen Dizayn seçiniz.",  // BAK
+        validMail : "Lütfen Boş Geçmeyin.",  // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -4670,6 +4710,20 @@ export const langFr =
             btn01:"Aller au document",
             msg: "Document trouvé !"
         },
+        popMailSend : 
+        {
+            title :"E-Mail Gönder",   // BAK
+            txtMailSubject : "E-Mail Başlığı",   // BAK
+            txtSendMail : "E-Mail Adresi",   // BAK
+            btnSend : "Gönder"   // BAK
+        },
+        msgMailSendResult:
+        {
+            title: "Dikkat",   // BAK
+            btn01: "Tamam",   // BAK
+            msgSuccess: "Mail gönderimi başarılı !",   // BAK
+            msgFailed: "Mail gönderimi başarısız !"   // BAK
+        },
     },
     ftr_02_005 : // "Şube Satış Faturası"
     {
@@ -4712,7 +4766,11 @@ export const langFr =
         txtTotalQuantity : "Quantité unitaire",  
         txtExpFee : "Pénalités de Retard", 
         dtExpDate : "Date d'Echéance", 
-        btnView : "Görüntüle", // BAK
+        btnView : "Aperçu", // BAK
+        btnMailsend : "Mail Gönder", // BAK
+        placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.", // BAK
+        validDesign : "Lütfen Dizayn seçiniz.",  // BAK
+        validMail : "Lütfen Boş Geçmeyin.",  // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -5053,6 +5111,20 @@ export const langFr =
             title: "Attention",
             btn01:"Aller au document",
             msg: "Document trouvé !"
+        },
+        popMailSend : 
+        {
+            title :"E-Mail Gönder",   // BAK
+            txtMailSubject : "E-Mail Başlığı",   // BAK
+            txtSendMail : "E-Mail Adresi",   // BAK
+            btnSend : "Gönder"   // BAK
+        },
+        msgMailSendResult:
+        {
+            title: "Dikkat",   // BAK
+            btn01: "Tamam",   // BAK
+            msgSuccess: "Mail gönderimi başarılı !",   // BAK
+            msgFailed: "Mail gönderimi başarısız !"   // BAK
         },
     },
     ftr_02_006 : // "Fiyat Farkı Alış Faturası"
@@ -8200,6 +8272,11 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
+        btnView : "Aperçu", // BAK
+        btnMailsend : "Mail Gönder", // BAK
+        placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.", // BAK
+        validDesign : "Lütfen Dizayn seçiniz.",  // BAK
+        validMail : "Lütfen Boş Geçmeyin.",  // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -8505,6 +8582,20 @@ export const langFr =
             btn01:"Aller au document",
             msg: "Document trouvé !"
         },
+        popMailSend : 
+        {
+            title :"E-Mail Gönder",   // BAK
+            txtMailSubject : "E-Mail Başlığı",   // BAK
+            txtSendMail : "E-Mail Adresi",   // BAK
+            btnSend : "Gönder"   // BAK
+        },
+        msgMailSendResult:
+        {
+            title: "Dikkat",   // BAK
+            btn01: "Tamam",   // BAK
+            msgSuccess: "Mail gönderimi başarılı !",   // BAK
+            msgFailed: "Mail gönderimi başarısız !"   // BAK
+        },
     },
     irs_02_003 : // "İade İrsaliyesi"
     {
@@ -8526,6 +8617,11 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
+        btnView : "Aperçu", // BAK
+        btnMailsend : "Mail Gönder", // BAK
+        placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.", // BAK
+        validDesign : "Lütfen Dizayn seçiniz.",  // BAK
+        validMail : "Lütfen Boş Geçmeyin.",  // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -8782,6 +8878,20 @@ export const langFr =
             btn01:"Aller au document",
             msg: "Document trouvé !"
         },
+        popMailSend : 
+        {
+            title :"E-Mail Gönder",   // BAK
+            txtMailSubject : "E-Mail Başlığı",   // BAK
+            txtSendMail : "E-Mail Adresi",   // BAK
+            btnSend : "Gönder"   // BAK
+        },
+        msgMailSendResult:
+        {
+            title: "Dikkat",   // BAK
+            btn01: "Tamam",   // BAK
+            msgSuccess: "Mail gönderimi başarılı !",   // BAK
+            msgFailed: "Mail gönderimi başarısız !"   // BAK
+        },
     },
     irs_02_004 : // Şube Satış İrsaliyesi"
     {
@@ -8803,6 +8913,11 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
+        btnView : "Aperçu", // BAK
+        btnMailsend : "Mail Gönder", // BAK
+        placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.", // BAK
+        validDesign : "Lütfen Dizayn seçiniz.",  // BAK
+        validMail : "Lütfen Boş Geçmeyin.",  // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -9106,6 +9221,20 @@ export const langFr =
             title: "Attention",
             btn01:"Aller au document",
             msg: "Document trouvé !"
+        },
+        popMailSend : 
+        {
+            title :"E-Mail Gönder",   // BAK
+            txtMailSubject : "E-Mail Başlığı",   // BAK
+            txtSendMail : "E-Mail Adresi",   // BAK
+            btnSend : "Gönder"   // BAK
+        },
+        msgMailSendResult:
+        {
+            title: "Dikkat",   // BAK
+            btn01: "Tamam",   // BAK
+            msgSuccess: "Mail gönderimi başarılı !",   // BAK
+            msgFailed: "Mail gönderimi başarısız !"   // BAK
         },
     },
     irs_02_005 : // "İade Alış İrsaliyesi"
@@ -9793,6 +9922,11 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
+        btnView : "Aperçu", // BAK
+        btnMailsend : "Mail Gönder", // BAK
+        placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.", // BAK
+        validDesign : "Lütfen Dizayn seçiniz.",  // BAK
+        validMail : "Lütfen Boş Geçmeyin.",  // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -10091,6 +10225,20 @@ export const langFr =
             title: "Attention",
             btn01:"Aller au document",
             msg: "Document trouvé !"
+        },
+        popMailSend : 
+        {
+            title :"E-Mail Gönder",   // BAK
+            txtMailSubject : "E-Mail Başlığı",   // BAK
+            txtSendMail : "E-Mail Adresi",   // BAK
+            btnSend : "Gönder"   // BAK
+        },
+        msgMailSendResult:
+        {
+            title: "Dikkat",   // BAK
+            btn01: "Tamam",   // BAK
+            msgSuccess: "Mail gönderimi başarılı !",   // BAK
+            msgFailed: "Mail gönderimi başarısız !"   // BAK
         },
     },
     sip_04_001 : // "Sipariş Ayrıştırma"
@@ -12239,6 +12387,11 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
+        btnView : "Aperçu", // BAK
+        btnMailsend : "Mail Gönder", // BAK
+        placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.", // BAK
+        validDesign : "Lütfen Dizayn seçiniz.",  // BAK
+        validMail : "Lütfen Boş Geçmeyin.",  // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -12519,6 +12672,20 @@ export const langFr =
             title: "Attention",
             btn01:"Aller au document",
             msg: "Document trouvé !"
+        },
+        popMailSend : 
+        {
+            title :"E-Mail Gönder",   // BAK
+            txtMailSubject : "E-Mail Başlığı",   // BAK
+            txtSendMail : "E-Mail Adresi",   // BAK
+            btnSend : "Gönder"   // BAK
+        },
+        msgMailSendResult:
+        {
+            title: "Dikkat",   // BAK
+            btn01: "Tamam",   // BAK
+            msgSuccess: "Mail gönderimi başarılı !",   // BAK
+            msgFailed: "Mail gönderimi başarısız !"   // BAK
         },
     },
     proces_01_001 : // "Ürün Grubu Güncelleme" 

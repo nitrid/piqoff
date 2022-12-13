@@ -23,6 +23,7 @@ import { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
 import tr from '../../../meta/lang/devexpress/tr.js';
 import { triggerHandler } from 'devextreme/events';
+import NbLabel from '../../../../core/react/bootstrap/label.js';
 
 export default class salesOrder extends React.Component
 {
@@ -63,7 +64,6 @@ export default class salesOrder extends React.Component
     }
     async barcodeScan()
     {
-        
         cordova.plugins.barcodeScanner.scan(
             async function (result) 
             {
@@ -86,7 +86,7 @@ export default class salesOrder extends React.Component
                             guid:tmpData.result.recordset[0].GUID
                         }
                         await this.itemBarcodeObj.load({ITEM_GUID:tmpData.result.recordset[0].GUID});
-                        this.setState({tbBarcode:"visible"})
+                        this.itemName.value = this.barcode.name
                     }
                     else
                     {
@@ -144,62 +144,109 @@ export default class salesOrder extends React.Component
     {
         return(
             <ScrollView>
-                <div className="row px-2 pt-2">
-                    <Form colCount={2}>
-                        <Item>
-                        <div className="row">
-                        <div className="col-9 px-1 pt-2">
-                                <NdTextBox id="txtBarcode" parent={this} placeholder={this.t("txtBarcodePlace")}
-                                button=
-                                {
-                                [
+                <div className="row p-2">
+                    <div className="row px-2 pt-2">
+                        <Form colCount={2}>
+                            <Item>
+                            <div className="row">
+                            <div className="col-9 px-1 pt-2">
+                                    <NdTextBox id="txtBarcode" parent={this} placeholder={this.t("txtBarcodePlace")}
+                                    button=
                                     {
-                                        id:'01',
-                                        icon:'more',
-                                        onClick:async()=>
+                                    [
                                         {
-                                            this.popItemCode.show()
-                                            this.popItemCode.onClick = async(data) =>
+                                            id:'01',
+                                            icon:'more',
+                                            onClick:async()=>
                                             {
-                                                if(data.length > 0)
+                                                this.popItemCode.show()
+                                                this.popItemCode.onClick = async(data) =>
                                                 {
-                                                    this.txtBarcode.value = data[0].CODE
-                                                    this.barcode = {
-                                                        name:data[0].NAME,
-                                                        code:data[0].CODE,
-                                                        barcode:data[0].BARCODE,
-                                                        unit:data[0].UNIT,
-                                                        guid:data[0].GUID
+                                                    if(data.length > 0)
+                                                    {
+                                                        this.txtBarcode.value = data[0].CODE
+                                                        this.barcode = {
+                                                            name:data[0].NAME,
+                                                            code:data[0].CODE,
+                                                            barcode:data[0].BARCODE,
+                                                            unit:data[0].UNIT,
+                                                            guid:data[0].GUID
+                                                        }
+                                                        await this.itemBarcodeObj.load({ITEM_GUID:data[0].GUID});
+                                                        this.txtBarcode.value = ""
+                                                        this.txtNewBarcode.focus()
+                                                        this.itemName.value = this.barcode.name
                                                     }
-                                                    await this.itemBarcodeObj.load({ITEM_GUID:data[0].GUID});
-                                                    this.txtBarcode.value = ""
-                                                    this.txtNewBarcode.focus()
-                                                    this.setState({tbBarcode:"visible"})
                                                 }
                                             }
-                                        }
-                                    },
-                                    {
-                                        id:'02',
-                                        icon:'photo',
-                                        onClick:async()=>
+                                        },
                                         {
-                                            this.barcodeScan()
+                                            id:'02',
+                                            icon:'photo',
+                                            onClick:async()=>
+                                            {
+                                                this.barcodeScan()
+                                            }
                                         }
+                                    ]
                                     }
-                                ]
-                                }
-                                onEnterKey={(async(e)=>
-                                    {
-                                        if(e.component._changedValue == "")
+                                    onEnterKey={(async(e)=>
                                         {
-                                            return
-                                        }
+                                            if(e.component._changedValue == "")
+                                            {
+                                                return
+                                            }
+                                            let tmpQuery = 
+                                            {
+                                                query : "SELECT ITEM_CODE AS CODE,ITEM_NAME AS NAME,ITEM_GUID AS GUID,BARCODE,ISNULL((SELECT TOP 1 GUID FROM ITEM_UNIT WHERE ITEM = ITEM_GUID AND TYPE = 0),'00000000-0000-0000-0000-000000000000') AS UNIT FROM ITEM_BARCODE_VW_01  WHERE BARCODE = @BARCODE OR ITEM_CODE = @BARCODE ",
+                                                param : ['BARCODE:string|50'],
+                                                value : [e.component._changedValue]
+                                            }
+                                            let tmpData = await this.core.sql.execute(tmpQuery) 
+                                            if(tmpData.result.recordset.length >0)
+                                            {
+                                                this.barcode.name = tmpData.result.recordset[0].NAME
+                                                this.barcode.barcode = tmpData.result.recordset[0].BARCODE 
+                                                this.barcode.code = tmpData.result.recordset[0].CODE 
+                                                this.barcode.unit = tmpData.result.recordset[0].UNIT 
+                                                this.barcode.guid = tmpData.result.recordset[0].GUID 
+                                                await this.itemBarcodeObj.load({ITEM_GUID:tmpData.result.recordset[0].GUID});
+                                                this.txtBarcode.value = ""
+                                                this.txtNewBarcode.focus()
+                                                this.itemName.value = this.barcode.name
+                                            }
+                                            else
+                                            {
+
+                                                document.getElementById("Sound").play(); 
+                                                let tmpConfObj = 
+                                                {
+                                                    id:'msgBarcodeNotFound',showTitle:true,title:this.t("msgBarcodeNotFound.title"),showCloseButton:true,width:'350px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgBarcodeNotFound.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgBarcodeNotFound.msg")}</div>)
+                                                }
+                                                await dialog(tmpConfObj);
+                                                this.txtBarcode.value = ""
+                                                this.barcode = 
+                                                {
+                                                    name:"",
+                                                    price:0,
+                                                    barcode: "",
+                                                    code:"",
+                                                    guid:"00000000-0000-0000-0000-000000000000"
+                                                }
+                                            }
+                                            
+                                        }).bind(this)}></NdTextBox>
+                                </div>
+                                <div className="col-3 px-1 pt-2">
+                                <NdButton text={this.lang.t("btnGet")} type="default" width="100%" onClick={async()=>
+                                    {
                                         let tmpQuery = 
                                         {
                                             query : "SELECT ITEM_CODE AS CODE,ITEM_NAME AS NAME,ITEM_GUID AS GUID,BARCODE,ISNULL((SELECT TOP 1 GUID FROM ITEM_UNIT WHERE ITEM = ITEM_GUID AND TYPE = 0),'00000000-0000-0000-0000-000000000000') AS UNIT FROM ITEM_BARCODE_VW_01  WHERE BARCODE = @BARCODE OR ITEM_CODE = @BARCODE ",
                                             param : ['BARCODE:string|50'],
-                                            value : [e.component._changedValue]
+                                            value : [this.txtBarcode.value]
                                         }
                                         let tmpData = await this.core.sql.execute(tmpQuery) 
                                         if(tmpData.result.recordset.length >0)
@@ -212,7 +259,7 @@ export default class salesOrder extends React.Component
                                             await this.itemBarcodeObj.load({ITEM_GUID:tmpData.result.recordset[0].GUID});
                                             this.txtBarcode.value = ""
                                             this.txtNewBarcode.focus()
-                                            this.setState({tbBarcode:"visible"})
+                                            this.itemName.value = this.barcode.name
                                         }
                                         else
                                         {
@@ -235,152 +282,107 @@ export default class salesOrder extends React.Component
                                                 guid:"00000000-0000-0000-0000-000000000000"
                                             }
                                         }
-                                        
-                                    }).bind(this)}></NdTextBox>
-                            </div>
-                            <div className="col-3 px-1 pt-2">
-                            <NdButton text={this.lang.t("btnGet")} type="default" width="100%" onClick={async()=>
-                                {
-                                    let tmpQuery = 
-                                    {
-                                        query : "SELECT ITEM_CODE AS CODE,ITEM_NAME AS NAME,ITEM_GUID AS GUID,BARCODE,ISNULL((SELECT TOP 1 GUID FROM ITEM_UNIT WHERE ITEM = ITEM_GUID AND TYPE = 0),'00000000-0000-0000-0000-000000000000') AS UNIT FROM ITEM_BARCODE_VW_01  WHERE BARCODE = @BARCODE OR ITEM_CODE = @BARCODE ",
-                                        param : ['BARCODE:string|50'],
-                                        value : [this.txtBarcode.value]
-                                    }
-                                    let tmpData = await this.core.sql.execute(tmpQuery) 
-                                    if(tmpData.result.recordset.length >0)
-                                    {
-                                        this.barcode.name = tmpData.result.recordset[0].NAME
-                                        this.barcode.barcode = tmpData.result.recordset[0].BARCODE 
-                                        this.barcode.code = tmpData.result.recordset[0].CODE 
-                                        this.barcode.unit = tmpData.result.recordset[0].UNIT 
-                                        this.barcode.guid = tmpData.result.recordset[0].GUID 
-                                        await this.itemBarcodeObj.load({ITEM_GUID:tmpData.result.recordset[0].GUID});
-                                        this.txtBarcode.value = ""
-                                        this.txtNewBarcode.focus()
-                                        this.setState({tbBarcode:"visible"})
-                                    }
-                                    else
-                                    {
-
-                                        document.getElementById("Sound").play(); 
-                                        let tmpConfObj = 
-                                        {
-                                            id:'msgBarcodeNotFound',showTitle:true,title:this.t("msgBarcodeNotFound.title"),showCloseButton:true,width:'350px',height:'200px',
-                                            button:[{id:"btn01",caption:this.t("msgBarcodeNotFound.btn01"),location:'after'}],
-                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgBarcodeNotFound.msg")}</div>)
-                                        }
-                                        await dialog(tmpConfObj);
-                                        this.txtBarcode.value = ""
-                                        this.barcode = 
-                                        {
-                                            name:"",
-                                            price:0,
-                                            barcode: "",
-                                            code:"",
-                                            guid:"00000000-0000-0000-0000-000000000000"
-                                        }
-                                    }
-                                }}></NdButton>
-                            </div>
-                            </div>
-                        </Item>
-                        <Item> 
-                            <div>
-                                <h4 className="text-center">
-                                    {this.barcode.name}
-                                </h4>
-                            </div>
-                        </Item>
-                        <Item>
-                            <NdTextBox id="txtNewBarcode" parent={this} placeholder={this.t("txtNewBarcodePlace")}
-                            onEnterKey={(async(e)=>
-                                {
-                                this.addItem()
-                                }).bind(this)}>
-                                
-                            </NdTextBox>
-                        </Item>
-                        <Item>
-                            <div className="row">
-                                <div className="col-12 px-4 pt-4">
-                                <NdButton text={this.t("btnAdd")} type="default" width="100%" onClick={async()=>
-                                {
-                                    if(this.barcode.code == "")
-                                    {
-                                        let tmpConfObj = 
-                                        {
-                                            id:'msgItemNotSelect',showTitle:true,title:this.t("msgItemNotSelect.title"),showCloseButton:true,width:'350px',height:'200px',
-                                            button:[{id:"btn01",caption:this.t("msgItemNotSelect.btn01"),location:'after'}],
-                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemNotSelect.msg")}</div>)
-                                        }
-                                        await dialog(tmpConfObj);
-                                        return
-                                    }
-                                    this.addItem()
-                                
-                                }}></NdButton>
+                                    }}></NdButton>
                                 </div>
-                            </div>
-                        </Item>
-                        <Item>
-                            <NdGrid parent={this} id={"grdBarcode"} 
-                            showBorders={true} 
-                            columnsAutoWidth={true} 
-                            allowColumnReordering={true} 
-                            allowColumnResizing={true} 
-                            height={'100%'} 
+                                </div>
+                            </Item>
+                            <Item> 
+                                <div>
+                                    <h5 className="text-center">
+                                        <NbLabel id="itemName" parent={this} value={""}/>
+                                    </h5>
+                                </div>
+                            </Item>
+                            <Item>
+                                <NdTextBox id="txtNewBarcode" parent={this} placeholder={this.t("txtNewBarcodePlace")}
+                                onEnterKey={(async(e)=>
+                                    {
+                                    this.addItem()
+                                    }).bind(this)}>
+                                    
+                                </NdTextBox>
+                            </Item>
+                            <Item>
+                                <div className="row">
+                                    <div className="col-12 px-4 pt-4">
+                                    <NdButton text={this.t("btnAdd")} type="default" width="100%" onClick={async()=>
+                                    {
+                                        if(this.barcode.code == "")
+                                        {
+                                            let tmpConfObj = 
+                                            {
+                                                id:'msgItemNotSelect',showTitle:true,title:this.t("msgItemNotSelect.title"),showCloseButton:true,width:'350px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgItemNotSelect.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemNotSelect.msg")}</div>)
+                                            }
+                                            await dialog(tmpConfObj);
+                                            return
+                                        }
+                                        this.addItem()
+                                    
+                                    }}></NdButton>
+                                    </div>
+                                </div>
+                            </Item>
+                            <Item>
+                                <NdGrid parent={this} id={"grdBarcode"} 
+                                showBorders={true} 
+                                columnsAutoWidth={true} 
+                                allowColumnReordering={true} 
+                                allowColumnResizing={true} 
+                                height={'100%'} 
+                                width={'100%'}
+                                dbApply={false}
+                                >
+                                    <Paging defaultPageSize={5} />
+                                    <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
+                                    <Column dataField="BARCODE" caption={this.t("grdBarcode.clmBarcode")}/>
+                                </NdGrid>
+                            </Item>
+                        </Form>
+                        {/* Stok Seçim */}
+                        <NdPopGrid id={"popItemCode"} parent={this} container={"#root"}
+                            visible={false}
+                            position={{of:'#root'}} 
+                            showTitle={true} 
+                            showBorders={true}
                             width={'100%'}
-                            dbApply={false}
-                            >
-                                <Paging defaultPageSize={5} />
-                                <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
-                                <Column dataField="BARCODE" caption={this.t("grdBarcode.clmBarcode")}/>
-                            </NdGrid>
-                        </Item>
-                    </Form>
-                    {/* Stok Seçim */}
-                    <NdPopGrid id={"popItemCode"} parent={this} container={"#root"}
-                        visible={false}
-                        position={{of:'#root'}} 
-                        showTitle={true} 
-                        showBorders={true}
-                        width={'90%'}
-                        height={'90%'}
-                        title={this.t("popItemCode.title")} //
-                        selection={{mode:"single"}}
-                        search={true}
-                        data = 
-                        {{
-                            source:
-                            {
-                                select:
+                            height={'100%'}
+                            title={this.t("popItemCode.title")} //
+                            selection={{mode:"single"}}
+                            search={true}
+                            data = 
+                            {{
+                                source:
                                 {
-                                    query : "SELECT  *,  " +
-                                            "CASE WHEN UNDER_UNIT_VALUE =0  " +
-                                            "THEN 0 " +
-                                            "ELSE " +
-                                            "ROUND((PRICE * UNDER_UNIT_VALUE),2) " +
-                                            "END AS UNDER_UNIT_PRICE " +
-                                            "FROM  (  SELECT GUID,   " +
-                                            "CODE,   " +
-                                            "NAME,   " +
-                                            "ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE,   " +
-                                            "MAIN_GRP AS ITEM_GRP,   " +
-                                            "MAIN_GRP_NAME AS ITEM_GRP_NAME,   " +
-                                            "(SELECT [dbo].[FN_PRICE_SALE](GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000')) AS PRICE  , " +
-                                            "ISNULL((SELECT TOP 1 GUID FROM ITEM_UNIT WHERE ITEM = ITEMS_VW_01.GUID AND TYPE = 0),'') AS UNIT " +
-                                            "FROM ITEMS_VW_01 WHERE ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID),'00000000-0000-0000-0000-000000000000') <> '') AS TMP " +
-                                            "WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL) " ,
-                                    param : ['VAL:string|50']
-                                },
-                                sql:this.core.sql
-                            }
-                        }}
-                        >
-                            <Column dataField="CODE" caption={this.t("popItemCode.clmCode")} width={100} />
-                            <Column dataField="NAME" caption={this.t("popItemCode.clmName")} defaultSortOrder="asc" />
-                    </NdPopGrid>
+                                    select:
+                                    {
+                                        query : "SELECT  *,  " +
+                                                "CASE WHEN UNDER_UNIT_VALUE =0  " +
+                                                "THEN 0 " +
+                                                "ELSE " +
+                                                "ROUND((PRICE * UNDER_UNIT_VALUE),2) " +
+                                                "END AS UNDER_UNIT_PRICE " +
+                                                "FROM  (  SELECT GUID,   " +
+                                                "CODE,   " +
+                                                "NAME,   " +
+                                                "ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE,   " +
+                                                "MAIN_GRP AS ITEM_GRP,   " +
+                                                "MAIN_GRP_NAME AS ITEM_GRP_NAME,   " +
+                                                "(SELECT [dbo].[FN_PRICE_SALE](GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000')) AS PRICE  , " +
+                                                "ISNULL((SELECT TOP 1 GUID FROM ITEM_UNIT WHERE ITEM = ITEMS_VW_01.GUID AND TYPE = 0),'') AS UNIT " +
+                                                "FROM ITEMS_VW_01 WHERE ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID),'00000000-0000-0000-0000-000000000000') <> '') AS TMP " +
+                                                "WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL) " ,
+                                        param : ['VAL:string|50']
+                                    },
+                                    sql:this.core.sql
+                                }
+                            }}
+                            >
+                                <Column dataField="CODE" caption={this.t("popItemCode.clmCode")} width={100} />
+                                <Column dataField="NAME" caption={this.t("popItemCode.clmName")} defaultSortOrder="asc" />
+                        </NdPopGrid>
+                    </div>
                 </div>
             </ScrollView>
       

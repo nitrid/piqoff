@@ -59,7 +59,7 @@ export default class posDoc extends React.PureComponent
         
         this.posObj = new posCls()
         this.posDevice = new posDeviceCls();
-        this.parkDt = new datatable();
+        this.parkDt = new datatable();        
         this.cheqDt = new datatable();
         this.lastPosDt = new datatable();
         this.lastPosSaleDt = new datatable();
@@ -72,7 +72,7 @@ export default class posDoc extends React.PureComponent
         this.posPromoObj = new posPromoCls();
 
         this.loading = React.createRef();
-        this.loadingPay = React.createRef();
+        this.loadingPay = React.createRef();        
 
         this.state =
         {
@@ -267,6 +267,64 @@ export default class posDoc extends React.PureComponent
                 }
             }
             await this.posObj.save()
+            //CHEQPAY AKTARIMI İÇİN ÖZEL YAPILDI.
+            for (let i = 0; i < this.cheqDt.length; i++) 
+            {
+                let tmpCtrl = await this.core.local.select({from:"CHEQPAY_VW_01",where:{GUID:this.cheqDt[i].GUID}})
+                
+                this.cheqDt.insertCmd = 
+                {
+                    local : 
+                    {
+                        type : "insert",
+                        into : "CHEQPAY_VW_01",
+                        values : [{GUID : {map:'GUID'},CDATE : {map:'CDATE',type:'date_time'},CUSER : {map:'CUSER'},CUSER_NAME : {map:'CUSER_NAME'},LDATE : {map:'LDATE',type:'date_time'},LUSER : {map:'LUSER'},
+                        LUSER_NAME : {map:'LUSER_NAME'},TYPE : {map:'TYPE'},DOC : {map:'DOC'},CODE : {map:'CODE'},AMOUNT : {map:'AMOUNT'},STATUS : {map:'STATUS'},REFERENCE : {map:'REFERENCE'},RANDOM1 : {map:'RANDOM1'},
+                        PRICE : {map:'PRICE'},TICKET_TYPE : {map:'TICKET_TYPE'},TICKET_NAME : {map:'TICKET_NAME'},RANDOM2 : {map:'RANDOM2'},YEAR : {map:'YEAR'},EXDAY : {map:'EXDAY'},TRANSFER : 1}]
+                    }
+                }
+                this.cheqDt.updateCmd = 
+                {
+                    local : 
+                    {
+                        type : "update",
+                        in : "CHEQPAY_VW_01",
+                        set : {CDATE : {map:'CDATE',type:'date_time'},CUSER : {map:'CUSER'},CUSER_NAME : {map:'CUSER_NAME'},LDATE : {map:'LDATE',type:'date_time'},LUSER : {map:'LUSER'},
+                        LUSER_NAME : {map:'LUSER_NAME'},TYPE : {map:'TYPE'},DOC : {map:'DOC'},CODE : {map:'CODE'},AMOUNT : {map:'AMOUNT'},STATUS : {map:'STATUS'},REFERENCE : {map:'REFERENCE'},RANDOM1 : {map:'RANDOM1'},
+                        PRICE : {map:'PRICE'},TICKET_TYPE : {map:'TICKET_TYPE'},TICKET_NAME : {map:'TICKET_NAME'},RANDOM2 : {map:'RANDOM2'},YEAR : {map:'YEAR'},EXDAY : {map:'EXDAY'},TRANSFER : 1},
+                        where : {GUID : {map:'GUID'}}
+                    }
+                }
+
+                if(tmpCtrl.result.length > 0)
+                {
+                    let tmpQuery = 
+                    {
+                        type : "update",
+                        in : "CHEQPAY_VW_01",
+                        set : {GUID : this.cheqDt[i].GUID,CDATE : new Date(this.cheqDt[i].CDATE),CUSER : this.cheqDt[i].CUSER,CUSER_NAME : this.cheqDt[i].CUSER_NAME,LDATE : new Date(this.cheqDt[i].LDATE),LUSER : this.cheqDt[i].LUSER,
+                        LUSER_NAME : this.cheqDt[i].LUSER_NAME,TYPE : this.cheqDt[i].TYPE,DOC : this.cheqDt[i].DOC,CODE : this.cheqDt[i].CODE,AMOUNT : this.cheqDt[i].AMOUNT,STATUS : this.cheqDt[i].STATUS,
+                        REFERENCE : this.cheqDt[i].REFERENCE,RANDOM1 : this.cheqDt[i].RANDOM1,PRICE : this.cheqDt[i].PRICE,TICKET_TYPE : this.cheqDt[i].TICKET_TYPE,TICKET_NAME : this.cheqDt[i].TICKET_NAME,
+                        RANDOM2 : this.cheqDt[i].RANDOM2,YEAR : this.cheqDt[i].YEAR,EXDAY : this.cheqDt[i].EXDAY,TRANSFER : 0},
+                        where : {GUID : this.cheqDt[i].GUID}
+                    }
+                    await this.core.local.update(tmpQuery)
+                }
+                else
+                {
+                    let tmpQuery = 
+                    {
+                        type : "insert",
+                        into : "CHEQPAY_VW_01",
+                        values : [{GUID : this.cheqDt[i].GUID,CDATE : new Date(this.cheqDt[i].CDATE),CUSER : this.cheqDt[i].CUSER,CUSER_NAME : this.cheqDt[i].CUSER_NAME,LDATE : new Date(this.cheqDt[i].LDATE),LUSER : this.cheqDt[i].LUSER,
+                        LUSER_NAME : this.cheqDt[i].LUSER_NAME,TYPE : this.cheqDt[i].TYPE,DOC : this.cheqDt[i].DOC,CODE : this.cheqDt[i].CODE,AMOUNT : this.cheqDt[i].AMOUNT,STATUS : this.cheqDt[i].STATUS,
+                        REFERENCE : this.cheqDt[i].REFERENCE,RANDOM1 : this.cheqDt[i].RANDOM1,PRICE : this.cheqDt[i].PRICE,TICKET_TYPE : this.cheqDt[i].TICKET_TYPE,TICKET_NAME : this.cheqDt[i].TICKET_NAME,
+                        RANDOM2 : this.cheqDt[i].RANDOM2,YEAR : this.cheqDt[i].YEAR,EXDAY : this.cheqDt[i].EXDAY,TRANSFER : 0}]                        
+                    }
+                    await this.core.local.insert(tmpQuery)
+                }
+            }
+            await this.cheqDt.update()
             setTimeout(()=>{window.location.reload()},500)
             //*************************************************************************** */
         })
@@ -337,6 +395,23 @@ export default class posDoc extends React.PureComponent
                 where : {DOC:this.posObj.dt()[0].GUID}
             }
         }
+        this.cheqDt.deleteCmd = 
+        {
+            query : "EXEC [dbo].[PRD_CHEQPAY_DELETE] @GUID = @PGUID, @DOC = @PDOC" ,
+            param : ['PGUID:string|50','PDOC:string|50'], 
+            dataprm : ['GUID','DOC'],
+            local : 
+            {
+                type : "delete",
+                from : "CHEQPAY_VW_01",
+                where : 
+                {
+                    GUID : {map:'GUID'},
+                    DOC : {map:'DOC'}
+                }
+            }
+        }
+
         await this.cheqDt.refresh();         
 
         this.parkDt.selectCmd =
@@ -382,6 +457,7 @@ export default class posDoc extends React.PureComponent
             if(typeof this.parkDt[i].DESCRIPTION == 'undefined' || this.parkDt[i].DESCRIPTION == '')
             {                
                 this.cheqDt.selectCmd.value = [this.parkDt[i].GUID] 
+                this.cheqDt.selectCmd.local.where.DOC = this.parkDt[i].GUID
                 await this.cheqDt.refresh();  
 
                 await this.getDoc(this.parkDt[i].GUID)                 
@@ -562,7 +638,7 @@ export default class posDoc extends React.PureComponent
             let tmpCustomerDt = new datatable(); 
             tmpCustomerDt.selectCmd = 
             {
-                query : "SELECT GUID,CUSTOMER_TYPE,CODE,TITLE,ADRESS,ZIPCODE,CITY,COUNTRY_NAME,dbo.FN_CUSTOMER_TOTAL_POINT(GUID,GETDATE()) AS CUSTOMER_POINT, " +
+                query : "SELECT GUID,CUSTOMER_TYPE,CODE,TITLE,ADRESS,ZIPCODE,CITY,COUNTRY_NAME,CUSTOMER_POINT, " +
                         "ISNULL((SELECT COUNT(TYPE) FROM CUSTOMER_POINT WHERE TYPE = 0 AND CUSTOMER = CUSTOMER_VW_02.GUID AND CONVERT(DATE,LDATE) = CONVERT(DATE,GETDATE())),0) AS POINT_COUNT " + 
                         "FROM [dbo].[CUSTOMER_VW_02] WHERE CODE LIKE SUBSTRING(@CODE,0,14) + '%'",
                 param : ['CODE:string|50'],
@@ -2068,7 +2144,13 @@ export default class posDoc extends React.PureComponent
                         "@AMOUNT = @PAMOUNT, " + 
                         "@STATUS = @PSTATUS ", 
                 param : ['PCUSER:string|25','PTYPE:int','PDOC:string|50','PCODE:string|25','PAMOUNT:float','PSTATUS:int'],
-                value : [this.core.auth.data.CODE,pType,this.posObj.dt()[0].GUID,pCode,pAmount,pStatus]
+                value : [this.core.auth.data.CODE,pType,this.posObj.dt()[0].GUID,pCode,pAmount,pStatus],
+                local : 
+                {
+                    type : "insert",
+                    into : "CHEQPAY_VW_01",
+                    values : [{GUID : datatable.uuidv4(),CUSER : this.core.auth.data.CODE,TYPE : pType,DOC : this.posObj.dt()[0].GUID,CODE : pCode,AMOUNT : pAmount,STATUS : pStatus,TRANSFER : 1}]
+                }
             }
             await this.core.sql.execute(tmpQuery)
             resolve()
@@ -2088,7 +2170,13 @@ export default class posDoc extends React.PureComponent
                         "@POINT = @PPOINT, " + 
                         "@DESCRIPTION = @PDESCRIPTION ", 
                 param : ['PCUSER:string|25','PTYPE:int','PCUSTOMER:string|50','PDOC:string|50','PPOINT:float','PDESCRIPTION:string|250'],
-                value : [this.core.auth.data.CODE,pType,this.posObj.dt()[0].CUSTOMER_GUID,this.posObj.dt()[0].GUID,pPoint,'']
+                value : [this.core.auth.data.CODE,pType,this.posObj.dt()[0].CUSTOMER_GUID,this.posObj.dt()[0].GUID,pPoint,''],
+                local : 
+                {
+                    type : "insert",
+                    into : "CUSTOMER_POINT_VW_01",
+                    values : [{GUID : datatable.uuidv4(),CUSER : this.core.auth.data.CODE,TYPE : pType,CUSTOMER : this.posObj.dt()[0].CUSTOMER_GUID,DOC : this.posObj.dt()[0].GUID,POINT : pPoint,DESCRIPTION : ''}]
+                }
             }
             await this.core.sql.execute(tmpQuery)
             resolve()
@@ -2279,6 +2367,7 @@ export default class posDoc extends React.PureComponent
                 await this.transfer.clearTbl("POS_SALE_VW_01")
                 await this.transfer.clearTbl("POS_PAYMENT_VW_01")
                 await this.transfer.clearTbl("POS_EXTRA_VW_01")
+                await this.core.local.remove({from:"CHEQPAY_VW_01",where:{TRANSFER:1}})
             }
 
             resolve()
@@ -2318,10 +2407,11 @@ export default class posDoc extends React.PureComponent
                     //MIKTAR KRITERLİ
                     if(tmpCond.length > 0 && tmpCond[0].QUANTITY > 0)
                     {
+                        
                         if(tmpSale.where({ITEM_GUID : {'in' : tmpCond.toColumnArr('ITEM_GUID')}}).sum('QUANTITY') >= tmpCond[0].QUANTITY)
                         {
                             //POS_SALE TABLOSUNDAKİ ÜRÜNLERİN HANGİLERİNİN PROMOSYON KOŞULUNA UYDUĞU GETİRİLİYOR.BUNUN İÇİN KOŞULDAKİ ITEM_GUID LİSTESİ POS_SALE TABLOSUNA "IN" ŞEKLİNDE VERİLİYOR.
-                            let tmpCondCount = Math.floor(tmpSale.where({ITEM_GUID : {'in' : tmpCond.toColumnArr('ITEM_GUID')}}).sum('QUANTITY') / tmpCond[0].QUANTITY)
+                            let tmpCondCount = Math.floor(tmpSale.where({ITEM_GUID : {'in' : tmpCond.toColumnArr('ITEM_GUID')}}).sum('QUANTITY') / tmpCond.sum('QUANTITY'))
                             tmpResult[tmpResult.length - 1].WITHAL = true
                             tmpResult[tmpResult.length - 1].COUNT = tmpCondCount
                             tmpResult[tmpResult.length - 1].ITEMS = tmpCond.toColumnArr('ITEM_GUID')
@@ -2358,7 +2448,7 @@ export default class posDoc extends React.PureComponent
                     tmpItems.push(items)
                 })
             })
-
+            
             if(tmpResult.where({WITHAL:false}).length > 0)
             {
                 return {result : false}
@@ -2369,6 +2459,7 @@ export default class posDoc extends React.PureComponent
                 return {result : true,count : tmpResult.groupBy('COUNT').min('COUNT'),items : tmpItems}
             }
         }
+
         let addPosPromo = (pType,pAmount,pPromoGuid,pPosGuid,pPosSaleGuid) => 
         {
             let tmpPosPromoDt = {...this.posPromoObj.empty}
@@ -2405,7 +2496,6 @@ export default class posDoc extends React.PureComponent
             if(tmpIsCond.result)
             {
                 let tmpWithal = this.promoObj.app.dt().where({PROMO : promoItem.GUID}).groupBy('WITHAL')
-
                 tmpWithal.forEach((withal)=>
                 {
                     let tmpApp = this.promoObj.app.dt().where({PROMO : promoItem.GUID}).where({WITHAL : withal.WITHAL})
@@ -4023,6 +4113,15 @@ export default class posDoc extends React.PureComponent
                                                 }}
                                                 onRowRemoved={async (e) =>
                                                 {
+                                                    if(this.core.offline && e.data.PAY_TYPE == 3)
+                                                    {
+                                                        let tmpCount = this.cheqDt.length
+                                                        for (let i = 0; i < tmpCount; i++) 
+                                                        {
+                                                            await this.core.util.waitUntil(100)
+                                                            this.grdPopCheqpayList.devGrid.deleteRow(0)
+                                                        }
+                                                    }
                                                     await this.calcGrandTotal();
                                                 }}
                                                 >
@@ -4347,7 +4446,7 @@ export default class posDoc extends React.PureComponent
                     {
                         select:
                         {
-                            query : "SELECT GUID,CUSTOMER_TYPE,CODE,TITLE,ADRESS,ZIPCODE,CITY,COUNTRY_NAME,dbo.FN_CUSTOMER_TOTAL_POINT(GUID,GETDATE()) AS CUSTOMER_POINT, " +
+                            query : "SELECT GUID,CUSTOMER_TYPE,CODE,TITLE,ADRESS,ZIPCODE,CITY,COUNTRY_NAME,CUSTOMER_POINT, " +
                                     "ISNULL((SELECT COUNT(TYPE) FROM CUSTOMER_POINT WHERE TYPE = 0 AND CUSTOMER = CUSTOMER_VW_02.GUID AND CONVERT(DATE,LDATE) = CONVERT(DATE,GETDATE())),0) AS POINT_COUNT " + 
                                     "FROM [dbo].[CUSTOMER_VW_02] WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)",
                             param : ['VAL:string|50'],
@@ -4747,7 +4846,7 @@ export default class posDoc extends React.PureComponent
                     container={"#root"} 
                     width={"900"}
                     height={"585"}
-                    position={{of:"#root"}}
+                    position={{of:"#root"}}                    
                     onShowed={()=>
                     {
                         this.txtPopCheqpay.value = ""
@@ -4781,7 +4880,7 @@ export default class posDoc extends React.PureComponent
                                 allowColumnResizing={true} 
                                 height={"280px"} 
                                 width={"100%"}
-                                dbApply={false}
+                                dbApply={true}
                                 onRowPrepared={(e)=>
                                 {
                                     if(e.rowType == "header")
@@ -4794,7 +4893,16 @@ export default class posDoc extends React.PureComponent
                                 {
                                     e.cellElement.style.padding = "4px"
                                 }}
+                                onRowRemoved={async(e)=>
+                                {
+                                    let tmpRowData = this.isRowMerge('PAY',{TYPE:3})
+                                    if(typeof e.data.AMOUNT != 'undefined' && typeof tmpRowData != 'undefined' && typeof tmpRowData.AMOUNT != 'undefined')
+                                    {
+                                        await this.payRowUpdate(tmpRowData,{AMOUNT:Number(parseFloat(Number(tmpRowData.AMOUNT) - Number(e.data.AMOUNT)).toFixed(2)),CHANGE:0})
+                                    }
+                                }}
                                 >
+                                    <Editing allowDeleting={true} confirmDelete={false}/>
                                     <Column dataField="NO" alignment={"center"} caption={"NO"} width={100} />
                                     <Column dataField="CODE" alignment={"center"} caption={this.lang.t("grdPopCheqpayList.CODE")} width={550} />
                                     <Column dataField="AMOUNT" alignment={"center"} caption={this.lang.t("grdPopCheqpayList.AMOUNT")} width={100} format={"#,##0.00" + Number.money.sign}/>
