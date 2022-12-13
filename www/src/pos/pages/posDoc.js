@@ -2365,7 +2365,8 @@ export default class posDoc extends React.PureComponent
             }
             else
             {
-                return {result : true,count : tmpResult.sum('COUNT'),items : tmpItems}
+                //return {result : true,count : tmpResult.sum('COUNT'),items : tmpItems} - X VE Y ÜRÜNÜNDEN ALANA X VE YE ÜRÜNÜ XXX İNDİRİMLİ ŞEKLİNDE ÇALŞIŞMIYORDU DEĞİŞTİRİLDİ.
+                return {result : true,count : tmpResult.groupBy('COUNT').min('COUNT'),items : tmpItems}
             }
         }
         let addPosPromo = (pType,pAmount,pPromoGuid,pPosGuid,pPosSaleGuid) => 
