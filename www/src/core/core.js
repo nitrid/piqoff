@@ -213,10 +213,10 @@ export class local
                 {
                     resolve({result:{state:true}})
                 }
-                // else
-                // {
-                //     console.log(tmpResult)
-                // }
+                else
+                {
+                    console.log(tmpResult)
+                }
             }
             else
             {
@@ -256,6 +256,10 @@ export class local
                 if(tmpResult > 0)
                 {
                     resolve({result:{state:true}})
+                }
+                else
+                {
+                    console.log(tmpResult)
                 }
             }
             else
