@@ -45,6 +45,14 @@
 {
     height: fit-content;
 }
+.dx-popup-title .dx-closebutton {
+    display: block;
+    position: relative;
+    left: 0px;
+    border-radius: 0;
+    border-width: 1px;
+    border-style: solid;
+}
 /* NdImageUpload */ 
 #dropzone-external 
 {

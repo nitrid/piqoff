@@ -9,6 +9,7 @@ import Form, { Label,Item } from 'devextreme-react/form';
 import DropDownButton from 'devextreme-react/drop-down-button';
 import TabPanel from 'devextreme-react/tab-panel';
 import { Button } from 'devextreme-react/button';
+import NbLabel from '../../../../core/react/bootstrap/label.js';
 
 import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
 import NdNumberBox from '../../../../core/react/devex/numberbox.js';
@@ -28,12 +29,6 @@ export default class labelPrinting extends React.Component
     constructor()
     {
         super()
-        this.state = 
-        {
-            tbMain:"visible",
-            tbBarcode:"hidden",
-            tbDocument: "hidden"
-        }     
         this.barcode = 
         {
             name:"",
@@ -64,7 +59,6 @@ export default class labelPrinting extends React.Component
         this.barcodeReset()
         this.dtlastDate.value = moment(new Date()).format("YYYY-MM-DD")
         await this.grdExpDate.dataRefresh({source:this.expObj.dt('ITEM_EXPDATE')});
-        this.setState({tbBarcode:"visible"})
     }
     async barcodeScan()
     {
@@ -91,7 +85,7 @@ export default class labelPrinting extends React.Component
                         this.barcode.guid = tmpData.result.recordset[0].GUID 
                         this.txtBarcode.value= ''
                         this.txtPopQuantity.focus()
-                        this.setState({tbBarcode:"visible"})
+                        this.itemName.value = this.barcode.name
                     }
                     else
                     {
@@ -218,6 +212,7 @@ export default class labelPrinting extends React.Component
         this.txtPopQuantity.value = 1
         this.dtlastDate.value = moment(new Date()).format("YYYY-MM-DD")
         this.txtBarcode.focus()
+        this.itemName.value = this.barcode.name
     }
     render()
     {
@@ -258,7 +253,7 @@ export default class labelPrinting extends React.Component
                                             this.barcode.guid = data[0].GUID 
                                             this.txtBarcode.value= ''
                                             this.txtPopQuantity.focus()
-                                            this.setState({tbBarcode:"visible"})
+                                            this.itemName.value = this.barcode.name
                                         }
                                     }
                                 }
@@ -295,7 +290,7 @@ export default class labelPrinting extends React.Component
                                     this.barcode.guid = tmpData.result.recordset[0].GUID 
                                     this.txtBarcode.value= ''
                                     this.txtPopQuantity.focus()
-                                    this.setState({tbBarcode:"visible"})
+                                    this.itemName.value = this.barcode.name
                                 }
                                 else
                                 {
@@ -315,9 +310,9 @@ export default class labelPrinting extends React.Component
                 </Item>
                 <Item> 
                     <div>
-                        <h4 className="text-center">
-                            {this.barcode.name}
-                        </h4>
+                        <h5 className="text-center">
+                            <NbLabel id="itemName" parent={this} value={""}/>
+                        </h5>
                     </div>
                 </Item>
                 <Item>

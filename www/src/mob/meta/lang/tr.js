@@ -851,6 +851,7 @@ export const langTr =
         cmbDepot: "Depo",
         dtDocDate : "Tarih",
         txtBarcode : "Barkod Ekle",
+        txtAmount : "Toplam Tutar",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -955,6 +956,7 @@ export const langTr =
             title: "Dikkat",
             btn01: "Birleştir",
             btn02: "Değiştir",
+            btn03: "Vazgeç",
             msg: "Eklemek İstediğiniz Ürün Evrakta Mevcut ! Satırlar Birleştirilsin mi ?"
         },
         msgDblDepot:
@@ -1075,7 +1077,7 @@ export const langTr =
             clmCode :  "STOK KODU",
             clmName : "STOK ADI",
         },
-        grdRebItems: 
+        grdDepotTransfer: 
         {
             clmItemCode: "Kodu",
             clmItemName: "Adı",
@@ -2450,7 +2452,7 @@ export const langTr =
             clmName : "STOK ADI",
             clmQuantity :"MİKTAR"
         },
-        grdRebtDispatch: 
+        grdSlsDispatch: 
         {
             clmItemCode: "Kodu",
             clmItemName: "Adı",

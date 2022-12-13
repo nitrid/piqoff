@@ -840,7 +840,7 @@ export const langFr =
         txtQuantity : "Quantité",
         chkAutoAdd : "Ajouter automatiquement",
     },
-    stk_02_003 : //"Depolar Arası Sevk",
+    stk_02_003 : //"Sayım Evrakı",
     {
         btnBarcodeEntry :"Saisi de code-barres",
         btnDocument :"Lignes d'opération",
@@ -851,6 +851,7 @@ export const langFr =
         cmbDepot: "Dépôt",
         dtDocDate : "Date",
         txtBarcode : "Ajouter code-barres",
+        txtAmount : "Montant Total",
         pg_Docs : 
         {
             title : "Sélection de documents",
@@ -954,6 +955,7 @@ export const langFr =
             title: "Attention",
             btn01: "Assembler",
             btn02: "Changer",
+            btn03: "Abandonner",
             msg: "Le produit que vous souhaitez ajouter est dans le document ! Assembler les lignes ?"
         },
         msgDblDepot:
@@ -1074,7 +1076,7 @@ export const langFr =
             clmCode :  "Code de stock",
             clmName : "Nom de stock",
         },
-        grdRebItems: 
+        grdDepotTransfer: 
         {
             clmItemCode: "Code",
             clmItemName: "Nom",
@@ -2449,7 +2451,7 @@ export const langFr =
             clmName : "Nom de stock",
             clmQuantity :"Quantité"
         },
-        grdRebtDispatch: 
+        grdSlsDispatch: 
         {
             clmItemCode: "Code",
             clmItemName: "Nom",

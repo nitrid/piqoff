@@ -25,6 +25,7 @@ class mailer
     }
     mailSend(pData)
     {
+        console.log(pData.html)
         return new Promise(resolve =>
         {
             var transporter = nodemailer.createTransport({
@@ -39,10 +40,18 @@ class mailer
                 tls : { rejectUnauthorized: false }
               });
               var mailOptions = {
-                from: pData.mail,
-                to: 'rcpgs1905@gmail.com',
+                from: "receeep7@gmail.com",
+                to: pData.sendMail,
                 subject: pData.subject,
-                html:pData.html
+                html:pData.html,
+                attachments: [
+                    {  
+                        filename: pData.attachName,
+                        content: pData.attachData,
+                        encoding: 'base64'
+                    },
+                  
+                ]
               };
               transporter.sendMail(mailOptions, function(error, info){
                 if (error) {

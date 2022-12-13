@@ -22,6 +22,7 @@ import NdImageUpload from '../../../../core/react/devex/imageupload.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
 import tr from '../../../meta/lang/devexpress/tr.js';
+import NbLabel from '../../../../core/react/bootstrap/label.js';
 
 export default class outageDoc extends React.Component
 {

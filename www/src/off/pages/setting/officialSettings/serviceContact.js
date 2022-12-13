@@ -110,7 +110,7 @@ export default class serviceContact extends React.PureComponent
                         <NdButton text={this.t("btnApprove")} type="success" stylingMode="contained" width={'100%'} parent={this}
                         onClick={async (e)=>
                         {       
-                                let tmpData = {html:this.htmlEditor.value,subject:this.mailSubject.value + '-' + this.sendMail.value}
+                                let tmpData = {html:this.htmlEditor.value,subject:this.mailSubject.value + '-' + this.sendMail.value,sendMail:"receeep7@gmail.com",}
                                 this.core.socket.emit('mailer',tmpData,async(pResult) => 
                                 {
                                     let tmpConfObj1 =

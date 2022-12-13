@@ -24,6 +24,7 @@ import NdTagBox from '../../../../core/react/devex/tagbox.js';
 import NdDialog, { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
 import tr from '../../../meta/lang/devexpress/tr.js';
+import NdHtmlEditor from '../../../../core/react/devex/htmlEditor.js';
 
 export default class branchSaleDispatch extends React.PureComponent
 {
@@ -291,7 +292,7 @@ export default class branchSaleDispatch extends React.PureComponent
             {
                 let tmpQuery = 
                 {
-                    query :"SELECT GUID,CODE,NAME,VAT,1 AS QUANTITY,ITEMS_VW_01.UNIT," + 
+                    query :"SELECT GUID,CODE,NAME,VAT,1 AS QUANTITY,ITEMS_VW_01.UNIT,ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE DELETED = 0 AND ITEM_BARCODE.ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE," + 
                     "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].INPUT+"'),'') AS MULTICODE"+
                     " FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VALUE) OR UPPER(NAME) LIKE UPPER(@VALUE) " ,
                     param : ['VALUE:string|50'],
@@ -421,13 +422,13 @@ export default class branchSaleDispatch extends React.PureComponent
                     {
                         e.value = v.value
                     }}
-                onChange={(async(r)=>
+                    onChange={(async(r)=>
                     {
                         if(typeof r.event.isTrusted == 'undefined')
                         {
                             let tmpQuery = 
                             {
-                                query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,VAT,COST_PRICE,ITEMS_VW_01.UNIT, FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE",
+                                query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,VAT,COST_PRICE,ITEMS_VW_01.UNIT,ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE DELETED = 0 AND ITEM_BARCODE.ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE",
                                 param : ['CODE:string|50'],
                                 value : [r.component._changedValue]
                             }
@@ -562,6 +563,7 @@ export default class branchSaleDispatch extends React.PureComponent
     }
     async addItem(pData,pIndex,pQuantity)
     {
+        console.log(pData)
         App.instance.setState({isExecute:true})
         if(typeof pQuantity == 'undefined')
         {
@@ -659,6 +661,7 @@ export default class branchSaleDispatch extends React.PureComponent
         this.docObj.docItems.dt()[pIndex].VAT_RATE = pData.VAT
         this.docObj.docItems.dt()[pIndex].ITEM_NAME = pData.NAME
         this.docObj.docItems.dt()[pIndex].COST_PRICE = pData.COST_PRICE
+        this.docObj.docItems.dt()[pIndex].ITEM_BARCODE = pData.BARCODE
         this.docObj.docItems.dt()[pIndex].UNIT = pData.UNIT
         this.docObj.docItems.dt()[pIndex].DISCOUNT = 0
         this.docObj.docItems.dt()[pIndex].DISCOUNT_RATE = 0
@@ -1544,7 +1547,8 @@ export default class branchSaleDispatch extends React.PureComponent
                                         }
                                         let tmpQuery = 
                                         {   query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,COST_PRICE,VAT,ITEMS_VW_01.UNIT,ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_01.GUID AND ITEM_MULTICODE.CUSTOMER = @CUSTOMER AND DELETED = 0 ORDER BY LDATE DESC),'') AS MULTICODE,  " + 
-                                            "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_MULTICODE_VW_01.ITEM_GUID = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS CUSTOMER_NAME " + 
+                                            "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_MULTICODE_VW_01.ITEM_GUID = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS CUSTOMER_NAME, " +
+                                            "ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE DELETED = 0 AND ITEM_BARCODE.ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE " + 
                                             " FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE",
                                             param : ['CODE:string|50','CUSTOMER:string|50'],
                                             value : [this.txtBarcode.value,this.docObj.dt()[0].INPUT]
@@ -2184,7 +2188,7 @@ export default class branchSaleDispatch extends React.PureComponent
                         {
                             select:
                             {
-                                query : "SELECT GUID,CODE,NAME,VAT,COST_PRICE,UNIT FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
+                                query : "SELECT GUID,CODE,NAME,VAT,COST_PRICE,UNIT,ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE DELETED = 0 AND ITEM_BARCODE.ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
                                 param : ['VAL:string|50']
                             },
                             sql:this.core.sql
@@ -2204,7 +2208,7 @@ export default class branchSaleDispatch extends React.PureComponent
                         title={this.t("popDesign.title")}
                         container={"#root"} 
                         width={'500'}
-                        height={'250'}
+                        height={'280'}
                         position={{of:'#root'}}
                         >
                             <Form colCount={1} height={'fit-content'}>
@@ -2222,7 +2226,7 @@ export default class branchSaleDispatch extends React.PureComponent
                                     param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmPurcOrderPrint"  + this.tabIndex}>
+                                        <Validator validationGroup={"frmBrachSaleDispatch"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validDesign")} />
                                         </Validator> 
                                     </NdSelectBox>
@@ -2244,32 +2248,35 @@ export default class branchSaleDispatch extends React.PureComponent
                                 <Item>
                                     <div className='row'>
                                         <div className='col-6'>
-                                            <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'} 
-                                            onClick={async ()=>
+                                            <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"frmBrachSaleDispatch"  + this.tabIndex}
+                                            onClick={async (e)=>
                                             {       
-                                                let tmpQuery = 
+                                                if(e.validationGroup.validate().status == "valid")
                                                 {
-                                                    query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID) ORDER BY LINE_NO " ,
-                                                    param:  ['DOC_GUID:string|50','DESIGN:string|25'],
-                                                    value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value]
-                                                }
-                                                let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                console.log(JSON.stringify(tmpData.result.recordset)) // BAK
-                                                this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
-                                                {
-                                                    var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");                                                         
-
-                                                    mywindow.onload = function() 
+                                                    let tmpQuery = 
                                                     {
-                                                        mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
-                                                    } 
-                                                    // if(pResult.split('|')[0] != 'ERR')
-                                                    // {
-                                                    //     let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
-                                                    //     mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
-                                                    // }
-                                                });
-                                                this.popDesign.hide();  
+                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID) ORDER BY LINE_NO " ,
+                                                        param:  ['DOC_GUID:string|50','DESIGN:string|25'],
+                                                        value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value]
+                                                    }
+                                                    let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                    console.log(JSON.stringify(tmpData.result.recordset)) // BAK
+                                                    this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
+                                                    {
+                                                        var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");                                                         
+
+                                                        mywindow.onload = function() 
+                                                        {
+                                                            mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
+                                                        } 
+                                                        // if(pResult.split('|')[0] != 'ERR')
+                                                        // {
+                                                        //     let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
+                                                        //     mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
+                                                        // }
+                                                    });
+                                                    this.popDesign.hide();  
+                                                }
                                             }}/>
                                         </div>
                                         <div className='col-6'>
@@ -2277,6 +2284,64 @@ export default class branchSaleDispatch extends React.PureComponent
                                             onClick={()=>
                                             {
                                                 this.popDesign.hide();  
+                                            }}/>
+                                        </div>
+                                    </div>
+                                    <div className='row py-2'>
+                                        <div className='col-6'>
+                                            <NdButton text={this.t("btnView")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmBrachSaleDispatch" + this.tabIndex}
+                                            onClick={async (e)=>
+                                            {       
+                                                if(e.validationGroup.validate().status == "valid")
+                                                {
+                                                    let tmpQuery = 
+                                                    {
+                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID) ORDER BY LINE_NO " ,
+                                                        param:  ['DOC_GUID:string|50','DESIGN:string|25'],
+                                                        value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value]
+                                                    }
+                                                    App.instance.setState({isExecute:true})
+                                                    let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                    App.instance.setState({isExecute:false})
+                                                    this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
+                                                    {
+                                                        if(pResult.split('|')[0] != 'ERR')
+                                                        {
+                                                            var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
+                                                            mywindow.onload = function() 
+                                                            { 
+                                                                mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
+                                                            } 
+                                                            // let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
+                                                            // mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
+                                                        }
+                                                    });
+                                                }
+                                            }}/>
+                                        </div>
+                                        <div className='col-6'>
+                                            <NdButton text={this.t("btnMailsend")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmBrachSaleDispatch" + this.tabIndex}
+                                            onClick={async (e)=>
+                                            {    
+                                                if(e.validationGroup.validate().status == "valid")
+                                                {
+                                                    let tmpQuery = 
+                                                    {
+                                                        query :"SELECT EMAIL FROM CUSTOMER_VW_02 WHERE GUID = @GUID",
+                                                        param:  ['GUID:string|50'],
+                                                        value:  [this.docObj.dt()[0].INPUT]
+                                                    }
+                                                    let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                    if(tmpData.result.recordset.length > 0)
+                                                    {
+                                                        this.txtSendMail.value = tmpData.result.recordset[0].EMAIL
+                                                        this.popMailSend.show()
+                                                    }
+                                                    else
+                                                    {
+                                                        this.popMailSend.show()
+                                                    }
+                                                }
                                             }}/>
                                         </div>
                                     </div>
@@ -2563,6 +2628,117 @@ export default class branchSaleDispatch extends React.PureComponent
                         this.init()
                     }}></NbPopDescboard>
                     </div>
+                    {/* Mail Send PopUp */}
+                    <div>
+                        <NdPopUp parent={this} id={"popMailSend"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.t("popMailSend.title")}
+                        container={"#root"} 
+                        width={'600'}
+                        height={'600'}
+                        position={{of:'#root'}}
+                        >
+                            <Form colCount={1} height={'fit-content'}>
+                                <Item>
+                                    <Label text={this.t("popMailSend.txtMailSubject")} alignment="right" />
+                                    <NdTextBox id="txtMailSubject" parent={this} simple={true}
+                                    maxLength={32}
+                                    >
+                                        <Validator validationGroup={"frmMailsend" + this.tabIndex}>
+                                            <RequiredRule message={this.t("validMail")} />
+                                        </Validator> 
+                                    </NdTextBox>
+                                </Item>
+                                <Item>
+                                <Label text={this.t("popMailSend.txtSendMail")} alignment="right" />
+                                    <NdTextBox id="txtSendMail" parent={this} simple={true}
+                                    maxLength={32}
+                                    >
+                                        <Validator validationGroup={"frmMailsend" + this.tabIndex}>
+                                            <RequiredRule message={this.t("validMail")} />
+                                        </Validator> 
+                                    </NdTextBox>
+                                </Item>
+                                <Item>
+                                    <NdHtmlEditor id="htmlEditor" parent={this} height={300} placeholder={this.t("placeMailHtmlEditor")}>
+                                    </NdHtmlEditor>
+                                </Item>
+                                <Item>
+                                    <div className='row'>
+                                        <div className='col-6'>
+                                            <NdButton text={this.t("popMailSend.btnSend")} type="normal" stylingMode="contained" width={'100%'}  
+                                            validationGroup={"frmMailsend"  + this.tabIndex}
+                                            onClick={async (e)=>
+                                            {       
+                                                if(e.validationGroup.validate().status == "valid")
+                                                {
+                                                    let tmpQuery = 
+                                                    {
+                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID) ORDER BY DOC_DATE,LINE_NO " ,
+                                                        param:  ['DOC_GUID:string|50','DESIGN:string|25'],
+                                                        value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value]
+                                                    }
+                                                    App.instance.setState({isExecute:true})
+                                                    let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                    App.instance.setState({isExecute:false})
+                                                    this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
+                                                    {
+                                                        App.instance.setState({isExecute:true})
+                                                        let tmpAttach = pResult.split('|')[1]
+                                                        let tmpHtml = this.htmlEditor.value
+                                                        if(this.htmlEditor.value.length == 0)
+                                                        {
+                                                            tmpHtml = ''
+                                                        }
+                                                        if(pResult.split('|')[0] != 'ERR')
+                                                        {
+                                                        }
+                                                        let tmpMailData = {html:tmpHtml,subject:this.txtMailSubject.value,sendMail:this.txtSendMail.value,attachName:"livraison.pdf",attachData:tmpAttach}
+                                                        this.core.socket.emit('mailer',tmpMailData,async(pResult1) => 
+                                                        {
+                                                            App.instance.setState({isExecute:false})
+                                                            let tmpConfObj1 =
+                                                            {
+                                                                id:'msgMailSendResult',showTitle:true,title:this.t("msgMailSendResult.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                                button:[{id:"btn01",caption:this.t("msgMailSendResult.btn01"),location:'after'}],
+                                                            }
+                                                            
+                                                            if((pResult1) == 0)
+                                                            {  
+                                                                tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgMailSendResult.msgSuccess")}</div>)
+                                                                await dialog(tmpConfObj1);
+                                                                this.htmlEditor.value = '',
+                                                                this.txtMailSubject.value = '',
+                                                                this.txtSendMail.value = ''
+                                                                this.popMailSend.hide();  
+
+                                                            }
+                                                            else
+                                                            {
+                                                                tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgMailSendResult.msgFailed")}</div>)
+                                                                await dialog(tmpConfObj1);
+                                                                this.popMailSend.hide(); 
+                                                            }
+                                                        });
+                                                    });
+                                                }
+                                                    
+                                            }}/>
+                                        </div>
+                                        <div className='col-6'>
+                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                            onClick={()=>
+                                            {
+                                                this.popMailSend.hide();  
+                                            }}/>
+                                        </div>
+                                    </div>
+                                </Item>
+                            </Form>
+                        </NdPopUp>
+                    </div>  
                 </ScrollView>
             </div>
         )

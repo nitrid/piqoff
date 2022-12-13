@@ -116,7 +116,7 @@ export default class NdPopGrid extends Base
             }   
             return (
             <div className="row">
-                <div className="col-12 py-2">
+                <div className="col-12 py-1">
                     <Toolbar>
                         {tmp}
                     </Toolbar>
@@ -130,7 +130,7 @@ export default class NdPopGrid extends Base
         if(typeof this.props.search == 'undefined' || this.props.search == false)
         {
             return (
-                <div className="row">
+                <div className="row p-2">
                     <div className="col-12 py-2">
                         <NdButton parent={this} id={"btn2_" + this.props.id} text={this.lang.t('popGrid.btnSelection')} width={'100%'} type={"default"}
                             onClick={this._onClick}
@@ -144,7 +144,7 @@ export default class NdPopGrid extends Base
         else
         {
             return (
-                <div className="row pb-1">
+                <div className="row p-2">
                     <div className='col-12'>
                         <div className="row pb-1">
                             <div className="col-12">
@@ -322,7 +322,7 @@ export default class NdPopGrid extends Base
                 >
                     {this._buttonView()}
                     {this._formView()}      
-                    <div className="row" style={{height:"85%"}}>
+                    <div className="row p-2" style={{height:"85%"}}>
                         <div className="col-12">
                             <NdGrid parent={this} id={"grid_" + this.props.id} 
                             dataSource={typeof this.state.data == 'undefined' ? undefined : this.state.data.store} 
