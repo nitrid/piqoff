@@ -167,7 +167,7 @@ export default class menuEdit extends React.Component
                             <div className="col-6">
                                 <div className="row">
                                     <div className="col-3">
-                                        <Label text={"Uygulama"} alignment="right" />
+                                        <Label text={this.t("cmbApp")} alignment="right" />
                                         <NdSelectBox simple={true} parent={this} id="cmbApp"
                                         displayExpr="VALUE"
                                         valueExpr="VALUE"
@@ -196,7 +196,7 @@ export default class menuEdit extends React.Component
                                         />
                                     </div>
                                     <div className="col-3">
-                                        <Label text={"Kullanıcı"} alignment="right" />
+                                        <Label text={this.t("cmbUser")} alignment="right" />
                                         <NdSelectBox simple={true} parent={this} id="cmbUser"
                                         displayExpr="CODE"
                                         valueExpr="CODE"
@@ -225,7 +225,7 @@ export default class menuEdit extends React.Component
                                         />
                                     </div>
                                     <div className="col-6">
-                                        <NdButton text={"Kaydet"} type="default" width="100%"
+                                        <NdButton text={this.t("btnSave")} type="default" width="100%"
                                         onClick={async()=>
                                         {
                                             // await this.menuSave()

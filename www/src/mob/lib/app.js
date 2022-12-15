@@ -99,7 +99,7 @@ export default class App extends React.PureComponent
                     items: [{id:"en",text:"EN"},{id:"fr",text:"FR"},{id:"tr",text:"TR"}],
                     valueExpr: 'id',
                     displayExpr: 'text',
-                    value: localStorage.getItem('lang') == null ? 'en' : localStorage.getItem('lang'),
+                    value: localStorage.getItem('lang') == null ? 'tr' : localStorage.getItem('lang'),
                     onValueChanged: (args) => 
                     {
                         localStorage.setItem('lang',args.value)

@@ -79,8 +79,6 @@ export default class salesOrdList extends React.PureComponent
     }
     async _btnGetClick()
     {
-        console.log(this.dtFirst.value)
-        console.log(this.dtLast.value)
         let tmpSource =
         {
             source : 
@@ -229,7 +227,7 @@ export default class salesOrdList extends React.PureComponent
                                     valueExpr="ID"
                                     showClearButton={true}
                                     notRefresh={true}
-                                    data={{source:[{ID:"PARK DESC",VALUE:this.t("cmbTypeData.parkDesc")},{ID:"FULL DELETE",VALUE:this.t("cmbTypeData.fullDelete")},{ID:"ROW DELETE",VALUE:this.t("cmbTypeData.rowDelete")},{ID:"PRICE DESC",VALUE:this.t("cmbTypeData.priceChange")}]}}
+                                    data={{source:[{ID:"PARK DESC",VALUE:this.t("cmbTypeData.parkDesc")},{ID:"FULL DELETE",VALUE:this.t("cmbTypeData.fullDelete")},{ID:"ROW DELETE",VALUE:this.t("cmbTypeData.rowDelete")},{ID:"PRICE DESC",VALUE:this.t("cmbTypeData.priceChange")},{ID:"REBATE",VALUE:this.t("cmbTypeData.rebate")}]}}
                                     param={this.param.filter({ELEMENT:'PARK DESC',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'PARK DESC',USERS:this.user.CODE})}
                                     />

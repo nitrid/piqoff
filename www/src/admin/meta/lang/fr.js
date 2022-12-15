@@ -1,4 +1,4 @@
-export const langTr = 
+export const langFr = 
 {
     popGrid: {btnSelection:"Seç",btnSearch:"Listele"},
     serverConnection : "Sunucu İle Bağlantı Kuruluyor",

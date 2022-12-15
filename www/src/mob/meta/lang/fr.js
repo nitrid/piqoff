@@ -27,7 +27,7 @@ export const langFr =
         msg : "Connectez-vous à partir d'un autre appareil avec vos informations d'utilisateur",
         btn01 : "OK"
     },
-    menu:
+    menuMob:
     {
         stk: "Stock",                
         stk_01: "Définitions",

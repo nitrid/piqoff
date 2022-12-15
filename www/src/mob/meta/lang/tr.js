@@ -27,7 +27,7 @@ export const langTr =
         msg : "Sizin kullanıcı bilgileriniz ile başka bir cihazdan giriş yapıldı",
         btn01 : "Tamam"
     },
-    menu:
+    menuMob:
     {
         stk: "Stok",                
         stk_01: "Tanımlar",

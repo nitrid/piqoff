@@ -32,7 +32,6 @@ export default class Navigation extends React.PureComponent
         }
         
         this.menu = menu(App.instance.lang);   
-        console.log(this.menu)
         //  SADECE ADMİNDE GÖKZÜKMESİ İÇİN GEÇİCİ OLARAK YAPILDI BURAYA BAKILACAK
         if(this.core.auth.data.ROLE != 'Administrator')
         {

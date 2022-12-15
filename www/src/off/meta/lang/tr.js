@@ -91,7 +91,7 @@ export const langTr =
         head : "Silme İşlemi Açıklaması",
         title : "Lütfen Silme Nedeninizi Giriniz"
     },
-    menu:
+    menuOff:
     {
         stk: "Stok",                
         stk_01: "Tanımlar",
@@ -11769,6 +11769,7 @@ export const langTr =
             fullDelete : "Satış İptali",
             rowDelete : "Satır İptali",
             priceChange : "Fiyat Değişikliği",
+            rebate : "İade Fişleri"
         },
         pg_txtCustomerCode : 
         {

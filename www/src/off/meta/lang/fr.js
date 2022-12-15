@@ -91,7 +91,7 @@ export const langFr =
         head : "Description du Processus de Suppression",   // BAK
         title : "Veuillez Saisir la Raison de la Suppression"   // BAK
     },
-    menu:
+    menuOff:
     {
         stk: "Produit",                
         stk_01: "Définition",
@@ -11755,6 +11755,7 @@ export const langFr =
             fullDelete : "Annulation de vente",
             rowDelete : "Annulation de ligne",
             priceChange : "Changement de prix",
+            rebate : "İade Fişleri"       // BAK
         },
         pg_txtCustomerCode : 
         {
