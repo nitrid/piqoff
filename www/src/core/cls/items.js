@@ -642,10 +642,10 @@ export class itemBarcodeCls
         tmpDt.selectCmd = 
         {
             query : "SELECT * FROM [dbo].[ITEM_BARCODE_VW_01] " + 
-                    "WHERE " + 
+                    "WHERE ((BARCODE = @BARCODE) OR (@BARCODE = '')) AND" + 
                     "((TYPE = @TYPE) OR (@TYPE = -1)) AND " + 
                     "((ITEM_GUID = @ITEM_GUID) OR (@ITEM_GUID = '00000000-0000-0000-0000-000000000000')) AND " + 
-                    "((ITEM_CODE = @ITEM_CODE) OR (@ITEM_CODE = '')) AND ((BARCODE = @BARCODE) OR (@BARCODE = ''))",
+                    "((ITEM_CODE = @ITEM_CODE) OR (@ITEM_CODE = '')) ",
             param : ['BARCODE:string|50','TYPE:int','ITEM_GUID:string|50','ITEM_CODE:string|25']
         }
         tmpDt.insertCmd = 
