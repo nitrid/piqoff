@@ -91,7 +91,7 @@ export const langTr =
         head : "Silme İşlemi Açıklaması",
         title : "Lütfen Silme Nedeninizi Giriniz"
     },
-    menu:
+    menuOff:
     {
         stk: "Stok",                
         stk_01: "Tanımlar",
@@ -3639,6 +3639,10 @@ export const langTr =
         getOffers : "Teklif Getir", 
         getProforma : "Proforma Getir",
         btnView : "Görüntüle",
+        btnMailsend : "Mail Gönder",
+        placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.",
+        validDesign : "Lütfen Dizayn seçiniz.",
+        validMail : "Lütfen Boş Geçmeyin.",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -4014,6 +4018,20 @@ export const langTr =
             btn01: "Tamam",
             msg: "Maliyet Fiyatından Daha Düşük Satılamaz !!"
         },
+        popMailSend : 
+        {
+            title :"E-Mail Gönder",
+            txtMailSubject : "E-Mail Başlığı",
+            txtSendMail : "E-Mail Adresi",
+            btnSend : "Gönder"
+        },
+        msgMailSendResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Mail gönderimi başarılı !",
+            msgFailed: "Mail gönderimi başarısız !"
+        },
     },
     ftr_02_003 : // "İade Faturası"
     {
@@ -4057,6 +4075,10 @@ export const langTr =
         dtExpDate : "Vade Tarihi", 
         getProforma : "Proforma Getir",
         btnView : "Görüntüle",
+        btnMailsend : "Mail Gönder",
+        placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.",
+        validDesign : "Lütfen Dizayn seçiniz.",
+        validMail : "Lütfen Boş Geçmeyin.",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -4355,6 +4377,20 @@ export const langTr =
             clmPrice : "Fiyat",
             clmTotal : "Tutar"
         },
+        popMailSend : 
+        {
+            title :"E-Mail Gönder",
+            txtMailSubject : "E-Mail Başlığı",
+            txtSendMail : "E-Mail Adresi",
+            btnSend : "Gönder"
+        },
+        msgMailSendResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Mail gönderimi başarılı !",
+            msgFailed: "Mail gönderimi başarısız !"
+        },
     },
     ftr_02_004 : // "Fiyat Farkı Faturası"
     {
@@ -4398,6 +4434,10 @@ export const langTr =
         txtExpFee : "Gecikme Cezası",
         dtExpDate : "Vade Tarihi", 
         btnView : "Görüntüle",
+        btnMailsend : "Mail Gönder",
+        placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.",
+        validDesign : "Lütfen Dizayn seçiniz.",
+        validMail : "Lütfen Boş Geçmeyin.",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -4670,6 +4710,20 @@ export const langTr =
             btn01: "Evrağa Git",
             msg: "Evrak Bulundu"
         },
+        popMailSend : 
+        {
+            title :"E-Mail Gönder",
+            txtMailSubject : "E-Mail Başlığı",
+            txtSendMail : "E-Mail Adresi",
+            btnSend : "Gönder"
+        },
+        msgMailSendResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Mail gönderimi başarılı !",
+            msgFailed: "Mail gönderimi başarısız !"
+        },
     },
     ftr_02_005 : // "Şube Satış Faturası"
     {
@@ -4713,6 +4767,10 @@ export const langTr =
         txtExpFee : "Gecikme Cezası",
         dtExpDate : "Vade Tarihi", 
         btnView : "Görüntüle",
+        btnMailsend : "Mail Gönder",
+        placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.",
+        validDesign : "Lütfen Dizayn seçiniz.",
+        validMail : "Lütfen Boş Geçmeyin.",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -5053,6 +5111,34 @@ export const langTr =
             title: "Dikkat",
             btn01: "Evrağa Git",
             msg: "Evrak Bulundu"
+        },
+        popMailSend : 
+        {
+            title :"E-Mail Gönder",
+            txtMailSubject : "E-Mail Başlığı",
+            txtSendMail : "E-Mail Adresi",
+            btnSend : "Gönder"
+        },
+        msgMailSendResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Mail gönderimi başarılı !",
+            msgFailed: "Mail gönderimi başarısız !"
+        },
+        popMailSend : 
+        {
+            title :"E-Mail Gönder",
+            txtMailSubject : "E-Mail Başlığı",
+            txtSendMail : "E-Mail Adresi",
+            btnSend : "Gönder"
+        },
+        msgMailSendResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Mail gönderimi başarılı !",
+            msgFailed: "Mail gönderimi başarısız !"
         },
     },
     ftr_02_006 : // "Fiyat Farkı Alış Faturası"
@@ -8206,6 +8292,11 @@ export const langTr =
         txtUnitFactor : "Birim Katsayısı",
         txtUnitQuantity : "Birim Miktarı",
         txtTotalQuantity : "Toplam Miktar",
+        btnView : "Görüntüle",
+        btnMailsend : "Mail Gönder",
+        placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.",
+        validDesign : "Lütfen Dizayn seçiniz.",
+        validMail : "Lütfen Boş Geçmeyin.",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -8511,6 +8602,20 @@ export const langTr =
             btn01: "Evrağa Git",
             msg: "Evrak Bulundu"
         },
+        popMailSend : 
+        {
+            title :"E-Mail Gönder",
+            txtMailSubject : "E-Mail Başlığı",
+            txtSendMail : "E-Mail Adresi",
+            btnSend : "Gönder"
+        },
+        msgMailSendResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Mail gönderimi başarılı !",
+            msgFailed: "Mail gönderimi başarısız !"
+        },
     },
     irs_02_003 : // "İade İrsaliyesi"
     {
@@ -8532,6 +8637,11 @@ export const langTr =
         txtUnitFactor : "Birim Katsayısı",
         txtUnitQuantity : "Birim Miktarı",
         txtTotalQuantity : "Toplam Miktar",
+        btnView : "Görüntüle",
+        btnMailsend : "Mail Gönder",
+        placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.",
+        validDesign : "Lütfen Dizayn seçiniz.",
+        validMail : "Lütfen Boş Geçmeyin.",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -8788,6 +8898,20 @@ export const langTr =
             btn01: "Evrağa Git",
             msg: "Evrak Bulundu"
         },
+        popMailSend : 
+        {
+            title :"E-Mail Gönder",
+            txtMailSubject : "E-Mail Başlığı",
+            txtSendMail : "E-Mail Adresi",
+            btnSend : "Gönder"
+        },
+        msgMailSendResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Mail gönderimi başarılı !",
+            msgFailed: "Mail gönderimi başarısız !"
+        },
     },
     irs_02_004 : // Şube Satış İrsaliyesi"
     {
@@ -8809,6 +8933,11 @@ export const langTr =
         txtUnitFactor : "Birim Katsayısı",
         txtUnitQuantity : "Birim Miktarı",
         txtTotalQuantity : "Toplam Miktar",
+        btnView : "Görüntüle",
+        btnMailsend : "Mail Gönder",
+        placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.",
+        validDesign : "Lütfen Dizayn seçiniz.",
+        validMail : "Lütfen Boş Geçmeyin.",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -9112,6 +9241,20 @@ export const langTr =
             title: "Dikkat",
             btn01: "Evrağa Git",
             msg: "Evrak Bulundu"
+        },
+        popMailSend : 
+        {
+            title :"E-Mail Gönder",
+            txtMailSubject : "E-Mail Başlığı",
+            txtSendMail : "E-Mail Adresi",
+            btnSend : "Gönder"
+        },
+        msgMailSendResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Mail gönderimi başarılı !",
+            msgFailed: "Mail gönderimi başarısız !"
         },
     },
     irs_02_005 : // "İade Alış İrsaliyesi"
@@ -9799,6 +9942,11 @@ export const langTr =
         txtUnitFactor : "Birim Katsayısı",
         txtUnitQuantity : "Birim Miktarı",
         txtTotalQuantity : "Toplam Miktar",
+        btnView : "Görüntüle",
+        btnMailsend : "Mail Gönder",
+        placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.",
+        validDesign : "Lütfen Dizayn seçiniz.",
+        validMail : "Lütfen Boş Geçmeyin.",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -10097,6 +10245,20 @@ export const langTr =
             title: "Dikkat",
             btn01: "Evrağa Git",
             msg: "Evrak Bulundu"
+        },
+        popMailSend : 
+        {
+            title :"E-Mail Gönder",
+            txtMailSubject : "E-Mail Başlığı",
+            txtSendMail : "E-Mail Adresi",
+            btnSend : "Gönder"
+        },
+        msgMailSendResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Mail gönderimi başarılı !",
+            msgFailed: "Mail gönderimi başarısız !"
         },
     },
     sip_04_001 : // "Sipariş Ayrıştırma" 
@@ -11613,6 +11775,7 @@ export const langTr =
             fullDelete : "Satış İptali",
             rowDelete : "Satır İptali",
             priceChange : "Fiyat Değişikliği",
+            rebate : "İade Fişleri"
         },
         pg_txtCustomerCode : 
         {
@@ -12245,6 +12408,11 @@ export const langTr =
         txtUnitFactor : "Birim Katsayısı",
         txtUnitQuantity : "Birim Miktarı",
         txtTotalQuantity : "Toplam Miktar",
+        btnView : "Görüntüle",
+        btnMailsend : "Mail Gönder",
+        placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.",
+        validDesign : "Lütfen Dizayn seçiniz.",
+        validMail : "Lütfen Boş Geçmeyin.",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -12525,6 +12693,20 @@ export const langTr =
             title: "Dikkat",
             btn01: "Evrağa Git",
             msg: "Evrak Bulundu"
+        },
+        popMailSend : 
+        {
+            title :"E-Mail Gönder",
+            txtMailSubject : "E-Mail Başlığı",
+            txtSendMail : "E-Mail Adresi",
+            btnSend : "Gönder"
+        },
+        msgMailSendResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Mail gönderimi başarılı !",
+            msgFailed: "Mail gönderimi başarısız !"
         },
     },
     proces_01_001 : // "Ürün Grubu Güncelleme"

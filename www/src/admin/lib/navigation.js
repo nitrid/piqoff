@@ -26,7 +26,8 @@ export default class Navigation extends React.Component
                 padding:'8px'
             }
         }
-        this.menu = menu;        
+        this.menu = menu(App.instance.lang);   
+
         //PLUGIN MENU EKLEME İŞLEMİ ***************/
         // for (let i = 0; i < plugin_menu.length; i++) 
         // {

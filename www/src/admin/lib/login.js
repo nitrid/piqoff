@@ -34,6 +34,7 @@ export default class Login extends React.Component
             Users:[]
         }  
         this.core = App.instance.core;    
+        this.lang = App.instance.lang;
         
         this.onLoginClick = this.onLoginClick.bind(this)
         this.textValueChanged = this.textValueChanged.bind(this)
@@ -84,12 +85,12 @@ export default class Login extends React.Component
             }
             else
             {
-                this.setState({logined:false,alert:'Kullanıcının giriş yetkisi yok !'})
+                this.setState({logined:false,alert:this.lang.t('notAccess')})
             }
         }
         else
         {
-            this.setState({logined:false,alert:'Kullanıcı yada şifre geçersiz !'})
+            this.setState({logined:false,alert:this.lang.t('msgInvalidUser')})
         }
     }
     render()
@@ -97,7 +98,7 @@ export default class Login extends React.Component
         return (
             <div style={this.style.body}>
                 <div className="card" style={this.style.login_box}>
-                   <div className="card-header">Login</div>
+                   <div className="card-header">{this.lang.t('login')}</div>
                    <div className="card-body">
                         <div className="row">
                             <div className="col-12 pb-2">
@@ -105,7 +106,7 @@ export default class Login extends React.Component
                             </div>
                         </div>
                         <div className="dx-field">
-                            <div className="dx-field-label">{"Kullanıcı"}</div>
+                            <div className="dx-field-label">{this.lang.t('user')}</div>
                             <div className="dx-field-value">
                             <NdSelectBox simple={true} parent={this} id="cmbkullanici" height='fit-content'
                                     displayExpr="NAME"                       
@@ -121,7 +122,7 @@ export default class Login extends React.Component
                             </div>
                         </div>
                         <div className="dx-field">
-                            <div className="dx-field-label">Şifre</div>
+                            <div className="dx-field-label">{this.lang.t('pwd')}</div>
                             <div className="dx-field-value">
                                 <TextBox id="Sifre" mode="password" showClearButton={true} height='fit-content' valueChangeEvent="keyup" onValueChanged={this.textValueChanged} />
                             </div>
@@ -130,7 +131,7 @@ export default class Login extends React.Component
                             <Button
                                 width={'100%'}
                                 height='fit-content'
-                                text="Login"
+                                text={this.lang.t('login')}
                                 type="default"
                                 stylingMode="contained"
                                 onClick={this.onLoginClick}

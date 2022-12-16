@@ -11,6 +11,7 @@ export default class NdHtmlEditor extends Base
         super(props)
         
         this.state.value = typeof props.value == 'undefined' ? [] : props.value;
+        this.state.placeholder = typeof props.placeholder == 'undefined' ? '' : props.placeholder
 
         this._onValueChanged = this._onValueChanged.bind(this);
         this.sizeValues = ['8pt', '10pt', '12pt', '14pt', '18pt', '24pt', '36pt'];
@@ -56,6 +57,7 @@ export default class NdHtmlEditor extends Base
             value={this.state.value}
             dataSource={typeof this.state.data == 'undefined' ? undefined : this.state.data.store} 
             onValueChanged={this._onValueChanged} 
+            placeholder={this.state.placeholder}
             id={this.props.id}
             height={this.props.height}
             >
