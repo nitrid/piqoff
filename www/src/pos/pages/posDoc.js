@@ -54,6 +54,7 @@ export default class posDoc extends React.PureComponent
         this.prmObj = new param(prm)
         this.acsObj = new access(acs);   
         this.nf525 = new nf525Cls();
+        this.isFirstOpen = false
         // NUMBER İÇİN PARAMETREDEN PARA SEMBOLÜ ATANIYOR.
         Number.money = this.prmObj.filter({ID:'MoneySymbol',TYPE:0}).getValue()
         
@@ -360,7 +361,39 @@ export default class posDoc extends React.PureComponent
         this.device.value = this.posObj.dt()[this.posObj.dt().length - 1].DEVICE
         
         await this.posDevice.load({CODE:this.posObj.dt()[this.posObj.dt().length - 1].DEVICE})        
-        this.posDevice.scanner();
+        this.posDevice.scanner();       
+         
+        if(!this.isFirstOpen)
+        {
+            this.isFirstOpen = true
+            let tmpDetect = await this.posDevice.detectPort()
+            if(tmpDetect.isElectron && tmpDetect.isData)
+            {
+                let tmpConfObj =
+                {
+                    id:'msgDeviceDetectAlert',showTitle:true,title:this.lang.t("msgDeviceDetectAlert.title"),showCloseButton:true,width:'400px',height:'200px',
+                    button:[{id:"btn01",caption:this.lang.t("msgDeviceDetectAlert.btn01"),location:'before'}],
+                }
+
+                if(!tmpDetect.isLcdPort)
+                {
+                    tmpConfObj.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgDeviceDetectAlert.msgLcd")}</div>)
+                }
+                else if(!tmpDetect.isPayPort)
+                {
+                    tmpConfObj.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgDeviceDetectAlert.msgPay")}</div>)
+                }
+                else if(!tmpDetect.isScalePort)
+                {
+                    tmpConfObj.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgDeviceDetectAlert.msgScale")}</div>)
+                }
+                else if(!tmpDetect.isScanPort)
+                {
+                    tmpConfObj.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgDeviceDetectAlert.msgScan")}</div>)
+                }
+                await dialog(tmpConfObj);
+            }
+        }
 
         await this.grdList.dataRefresh({source:this.posObj.posSale.dt()});
         await this.grdPay.dataRefresh({source:this.posObj.posPay.dt()});
@@ -464,7 +497,11 @@ export default class posDoc extends React.PureComponent
                 return
             }
         }
-    }    
+    }
+    async deviceInit()
+    {
+
+    }
     async deviceEntry()
     {
         let tmpResult = await this.popNumber.show(this.lang.t("popTitleDevice"),window.localStorage.getItem('device') == null ? '' : window.localStorage.getItem('device'),false)
@@ -1395,7 +1432,7 @@ export default class posDoc extends React.PureComponent
                     }                    
                 }
                 //EĞER MÜŞTERİ KARTI İSE PUAN KAYIT EDİLİYOR.
-                if(this.posObj.dt()[0].CUSTOMER_GUID != '00000000-0000-0000-0000-000000000000' && this.posObj.dt()[0].CUSTOMER_TYPE == 0)
+                if(this.posObj.dt()[0].CUSTOMER_GUID != '00000000-0000-0000-0000-000000000000')
                 {
                     if(this.posObj.dt()[0].TYPE == 0)
                     {
@@ -6217,7 +6254,7 @@ export default class posDoc extends React.PureComponent
                     {        
                         if(typeof e != 'undefined')
                         {
-                            this.sendJet({CODE:"326",NAME:"İade alınd.",DESCRIPTION:e})
+                            this.sendJet({CODE:"326",NAME:"Retour(s) d'article(s).",DESCRIPTION:e})
 
                             let tmpResult = await this.msgItemReturnType.show();
                         
@@ -6589,7 +6626,7 @@ export default class posDoc extends React.PureComponent
                                 if(this.rbtnAdvanceType.value == 0)
                                 {
                                     tmpInput = this.posDevice.dt().length > 0 ? this.posDevice.dt()[0].SAFE_GUID : '00000000-0000-0000-0000-000000000000'
-                                    tmpOutput = this.prmObj.filter({ID:'SafeCenter',TYPE:0}).getValue()
+                                    tmpOutput = this.prmObj.filter({ID:'SafeCenter',TYPE:0}).getValue()                                    
                                 }
                                 else
                                 {
@@ -6621,6 +6658,9 @@ export default class posDoc extends React.PureComponent
                                 tmpDoc.docCustomer.dt()[0].DESCRIPTION = e
 
                                 await tmpDoc.save()
+
+                                this.sendJet({CODE:"170",NAME:"Avans giriş çıkış işlemi yapıldı"}) //BAK
+                                
                                 this.popAdvance.hide()
 
                                 let tmpConfObj =
@@ -6949,6 +6989,10 @@ export default class posDoc extends React.PureComponent
                                         {                                    
                                             this.keyPopCustomerAdd.inputName = "txtPopCustomerCode"
                                             this.keyPopCustomerAdd.setInput(this.txtPopCustomerCode.value)
+                                        }}
+                                        onChange={async(e)=>
+                                        {                                    
+                                            
                                         }}>
                                             <Validator validationGroup={"frmCustomerAdd"}>
                                                 <RequiredRule message={this.lang.t("popCustomerAdd.validTxtPopCustomerCode")}/>
@@ -7165,7 +7209,6 @@ export default class posDoc extends React.PureComponent
                         {
                             this.customerObj.clearAll()
                             await this.customerObj.load({CODE:pData[0].CODE});
-                            
                             if(this.customerObj.dt().length > 0 && this.customerObj.dt()[0].TYPE == 1)
                             {
                                 this.txtPopCustomerFirmName.value = this.customerObj.dt()[0].TITLE

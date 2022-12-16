@@ -366,7 +366,7 @@ export function print()
         ()=>
         {
             let tmpArr = [];
-            if(data.pos[0].CUSTOMER_CODE != '' && data.pos[0].CUSTOMER_TYPE == 0)
+            if(data.pos[0].CUSTOMER_CODE != '')
             {            
                 tmpArr.push({align:"ct",barcode:data.pos[0].CUSTOMER_CODE,options:{width: 1,height:30}});
                 tmpArr.push({font:"b",style:"b",align:"lt",data:"****************************************************************".space(64)});
