@@ -9,3 +9,5 @@
 - Doc tablosuna signature ve signature_sum kolonları eklendi
 - Doc VE DOC_UPDATE prosedürleri güncellendi
 - DOC_VIEW_01 güncellendi
+- DOC_EXTRA tablosune SIGNATURE kolonu ekledi,
+- DOC_EXTRA_INSERT ve DOC_EXRA_vw_01 güncellendi
