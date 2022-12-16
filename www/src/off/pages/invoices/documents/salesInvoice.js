@@ -3,7 +3,7 @@ import moment from 'moment';
 import React from 'react';
 import App from '../../../lib/app.js';
 import { docCls,docItemsCls, docCustomerCls,docExtraCls } from '../../../../core/cls/doc.js';
-
+import { nf525Cls } from '../../../../core/cls/nf525.js';
 
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
@@ -11,7 +11,6 @@ import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
 import ContextMenu from 'devextreme-react/context-menu';
 import TabPanel from 'devextreme-react/tab-panel';
 import { Button } from 'devextreme-react/button';
-
 
 import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
 import NdNumberBox from '../../../../core/react/devex/numberbox.js';
@@ -30,7 +29,6 @@ import { datatable } from '../../../../core/core.js';
 import tr from '../../../meta/lang/devexpress/tr.js';
 import NdHtmlEditor from '../../../../core/react/devex/htmlEditor.js';
 
-
 export default class salesInvoice extends React.PureComponent
 {
     constructor(props)
@@ -42,6 +40,7 @@ export default class salesInvoice extends React.PureComponent
         this.docObj = new docCls();
         this.paymentObj = new docCls();
         this.extraObj = new docExtraCls();
+        this.nf525 = new nf525Cls();
         this.tabIndex = props.data.tabkey
         this.quantityControl = false
 
@@ -1391,6 +1390,12 @@ export default class salesInvoice extends React.PureComponent
                                             {
                                                 await this.grdSlsInv.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
                                             }
+                                            
+                                            //***** TICKET İMZALAMA *****/
+                                            let tmpSignedData = await this.nf525.signatureDoc(this.docObj.dt()[0],this.docObj.docItems.dt())                
+                                            this.docObj.dt()[0].SIGNATURE = tmpSignedData.SIGNATURE
+                                            this.docObj.dt()[0].SIGNATURE_SUM = tmpSignedData.SIGNATURE_SUM
+                                            
                                             if((await this.docObj.save()) == 0)
                                             {                                                    
                                                 let tmpConfObj =
