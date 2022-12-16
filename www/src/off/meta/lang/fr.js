@@ -4032,6 +4032,12 @@ export const langFr =
             msgSuccess: "Mail gönderimi başarılı !",   // BAK
             msgFailed: "Mail gönderimi başarısız !"   // BAK
         },
+        msgPrintforLocked:
+        {
+            title: "Dikkat",   // BAK
+            btn01: "Tamam",   // BAK
+            msg: "Evrak Kilitlenmeden Yazdırılamaz !"   // BAK
+        },
     },
     ftr_02_003 : // "İade Faturası"
     {
@@ -4391,6 +4397,13 @@ export const langFr =
             msgSuccess: "Mail gönderimi başarılı !",   // BAK
             msgFailed: "Mail gönderimi başarısız !"   // BAK
         },
+        msgMailSendResult:
+        {
+            title: "Dikkat",   // BAK
+            btn01: "Tamam",   // BAK
+            msgSuccess: "Mail gönderimi başarılı !",   // BAK
+            msgFailed: "Mail gönderimi başarısız !"   // BAK
+        },
     },
     ftr_02_004 : // "Fiyat Farkı Faturası"
     {
@@ -4716,6 +4729,13 @@ export const langFr =
             txtMailSubject : "E-Mail Başlığı",   // BAK
             txtSendMail : "E-Mail Adresi",   // BAK
             btnSend : "Gönder"   // BAK
+        },
+        msgMailSendResult:
+        {
+            title: "Dikkat",   // BAK
+            btn01: "Tamam",   // BAK
+            msgSuccess: "Mail gönderimi başarılı !",   // BAK
+            msgFailed: "Mail gönderimi başarısız !"   // BAK
         },
         msgMailSendResult:
         {
@@ -5118,6 +5138,13 @@ export const langFr =
             txtMailSubject : "E-Mail Başlığı",   // BAK
             txtSendMail : "E-Mail Adresi",   // BAK
             btnSend : "Gönder"   // BAK
+        },
+        msgMailSendResult:
+        {
+            title: "Dikkat",   // BAK
+            btn01: "Tamam",   // BAK
+            msgSuccess: "Mail gönderimi başarılı !",   // BAK
+            msgFailed: "Mail gönderimi başarısız !"   // BAK
         },
         msgMailSendResult:
         {

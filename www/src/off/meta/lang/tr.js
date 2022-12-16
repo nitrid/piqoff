@@ -4032,6 +4032,12 @@ export const langTr =
             msgSuccess: "Mail gönderimi başarılı !",
             msgFailed: "Mail gönderimi başarısız !"
         },
+        msgPrintforLocked:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrak Kilitlenmeden Yazdırılamaz !"
+        },
     },
     ftr_02_003 : // "İade Faturası"
     {

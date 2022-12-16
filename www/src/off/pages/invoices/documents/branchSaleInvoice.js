@@ -1272,9 +1272,22 @@ export default class branchSaleInvoice extends React.PureComponent
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnPrint" parent={this} icon="print" type="default"
-                                    onClick={()=>
+                                    onClick={async()=>
                                     {
-                                        this.popDesign.show()
+                                        if(this.docLocked == true)
+                                        {
+                                            this.popDesign.show()
+                                        }
+                                        else
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgPrintforLocked',showTitle:true,title:this.t("msgPrintforLocked.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgPrintforLocked.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgPrintforLocked.msg")}</div>)
+                                            }
+                                            await dialog(tmpConfObj);
+                                        }
                                     }}/>
                                 </Item>
                                 <Item location="after"
