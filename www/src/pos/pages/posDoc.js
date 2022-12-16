@@ -5391,7 +5391,7 @@ export default class posDoc extends React.PureComponent
                                                         let tmpRePrintResult = await this.popRePrintDesc.show()
                                                         if(typeof tmpRePrintResult != 'undefined')
                                                         {
-                                                            let tmpLastSignature = await this.nf525.signatureDuplicate(tmpLastPos[0].GUID)
+                                                            let tmpLastSignature = await this.nf525.signaturePosDuplicate(tmpLastPos[0])
                                                             let tmpInsertQuery = 
                                                             {
                                                                 query : "EXEC [dbo].[PRD_POS_EXTRA_INSERT] " + 
@@ -5518,7 +5518,7 @@ export default class posDoc extends React.PureComponent
 
                                                     if(typeof tmpRePrintResult != 'undefined')
                                                     {
-                                                        let tmpLastSignature = await this.nf525.signatureDuplicate(tmpLastPos[0].GUID)
+                                                        let tmpLastSignature = await this.nf525.signaturePosDuplicate(tmpLastPos[0])
                                                         let tmpInsertQuery = 
                                                         {
                                                             query : "EXEC [dbo].[PRD_POS_EXTRA_INSERT] " + 

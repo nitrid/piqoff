@@ -34,7 +34,8 @@ export class docCls
             PAYMENT_DOC_GUID : '00000000-0000-0000-0000-000000000000',
             CERTIFICATE : this.core.appInfo.name + " version : " + this.core.appInfo.version,
             SIGNATURE : '',
-            SIGNATURE_SUM : ''
+            SIGNATURE_SUM : '',
+            TYPE_NAME: ''
         }
 
         this.docItems = new docItemsCls();
@@ -1261,6 +1262,7 @@ export class docExtraCls
             TAG : '',
             DOC : '00000000-0000-0000-0000-000000000000',
             DESCRIPTION : '00000000-0000-0000-0000-000000000000',
+            SIGNATURE : ''
         }
 
         this._initDs();
