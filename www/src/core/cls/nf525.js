@@ -64,7 +64,7 @@ export class nf525Cls
     {
         return new Promise(async resolve => 
         {
-            let tmpLastRef = 1
+            let tmpLastRef = 0
             let tmpLastSignature = ''
 
             let tmpQuery = 
@@ -87,8 +87,6 @@ export class nf525Cls
                     tmpLastSignature = tmpResult.result.recordset[0].SIGNATURE
                 }
             }
-            localStorage.setItem('REF_SALE',tmpLastRef)
-            localStorage.setItem('SIG_SALE',tmpLastSignature)
 
             resolve (
             {
@@ -117,7 +115,7 @@ export class nf525Cls
                 tmpSignature = tmpSignature.toString().substring(0,tmpSignature.length - 1)
                 tmpSignature = tmpSignature + "," + parseInt(Number(Number(pData.TOTAL).toFixed(2)) * 100).toString()
                 tmpSignature = tmpSignature + "," + moment(pData.LDATE).format("YYYYMMDDHHmmss")
-                tmpSignature = tmpSignature + "," + (Number(tmpLastData.REF_NO) + 1).toString().padStart(8,'0') 
+                tmpSignature = tmpSignature + "," + (Number(tmpLastData.REF) + 1).toString().padStart(8,'0') 
                 tmpSignature = tmpSignature + "," + pData.TYPE_NAME
                 tmpSignature = tmpSignature + "," + (tmpLastData.LAST_SIGN == "" ? "N" : "O")
                 tmpSignature = tmpSignature + "," + tmpLastData.LAST_SIGN
