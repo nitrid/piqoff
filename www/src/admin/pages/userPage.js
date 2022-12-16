@@ -61,6 +61,17 @@ export default class userPage extends React.Component
                         }}
                         onRowUpdated={async (e)=>
                         {
+                            let tmpJetData =
+                            {
+                                CUSER:this.core.auth.data.CODE,            
+                                DEVICE:'',
+                                CODE:'130',
+                                NAME:"Kullanıcı bilgis ve yetkisi değiştirildi.", //BAK
+                                DESCRIPTION:'',
+                                APP_VERSION:this.core.appInfo.version
+                            }
+                            this.core.socket.emit('nf525',{cmd:"jet",data:tmpJetData})
+
                             await this.userObj.save()
                         }}
                         onRowInserted={async (e)=>

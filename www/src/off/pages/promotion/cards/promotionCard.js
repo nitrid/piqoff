@@ -320,16 +320,26 @@ export default class promotionCard extends React.PureComponent
                                                     this["pg_txtPrmItem" + pItem.WITHAL].show()
                                                     this["pg_txtPrmItem" + pItem.WITHAL].onClick = async(data) =>
                                                     {         
-                                                        this.promo.cond.dt().where({WITHAL:pItem.WITHAL}).forEach((item)=>
+                                                        for (let i = 0; i < data.length; i++) 
                                                         {
-                                                            this.promo.cond.dt().removeAt(item)
-                                                        })
-
-                                                        //this["itemList" + pItem.WITHAL] = []
-
+                                                            if(this["itemList" + pItem.WITHAL].where({ITEM_GUID:data[i].GUID}).length > 0)
+                                                            {
+                                                                let tmpConfObj =
+                                                                {
+                                                                    id:'msgItemAlert',showTitle:true,title:this.t("msgItemAlert.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                                    button:[{id:"btn01",caption:this.t("msgItemAlert.btn01"),location:'after'}],
+                                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemAlert.msg")}</div>)
+                                                                }
+                                                                await dialog(tmpConfObj)
+                                                                return
+                                                            }
+                                                        }
+                                                        
                                                         for (let i = 0; i < data.length; i++) 
                                                         {
                                                             let tmpData = {...this.promo.cond.empty}
+
+                                                            console.log(this["itemList" + pItem.WITHAL].where({ITEM_GUID:data[i].GUID}))
                                                             
                                                             tmpData.GUID = datatable.uuidv4();
                                                             tmpData.ITEM_GUID = data[i].GUID;

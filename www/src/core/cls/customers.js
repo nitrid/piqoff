@@ -172,23 +172,13 @@ export class customersCls
 
             this.ds.get('CUSTOMERS').selectCmd.value = Object.values(tmpPrm);
 
-            console.log(1)
             await this.ds.get('CUSTOMERS').refresh()
-            console.log(2)
 
             if(this.ds.get('CUSTOMERS').length > 0)
             {  
-            console.log(3)
-
                 await this.customerAdress.load({CUSTOMER:this.ds.get('CUSTOMERS')[0].GUID})
-            console.log(4)
-
                 await this.customerOffical.load({CUSTOMER:this.ds.get('CUSTOMERS')[0].GUID})
-            console.log(5)
-
                 await this.customerBank.load({CUSTOMER:this.ds.get('CUSTOMERS')[0].GUID})
-            console.log(6)
-
             }
             resolve(this.ds.get('CUSTOMERS'))
         });

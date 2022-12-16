@@ -514,6 +514,15 @@ export const langFr =
         msg : "Veuillez ne pas laisser le code de l'appareil vide !",
         btn01 : "OK",
     },
+    msgDeviceDetectAlert : //BAK
+    {
+        title : "Uyarı",
+        msgLcd : "Lcd ekran ile iletişim kurulamadı.",
+        msgPay : "Ödeme cihazı ile iletişim kurulamadı.",
+        msgScale : "Terazi ile iletişim kurulamadı.",
+        msgScan : "Barkod cihazı ile iletişim kurulamadı.",
+        btn01 : "Tamam",
+    },
     popTitleDevice : "Entrer Numéro de Caisse", 
     msgDeviceNotChange : 
     {

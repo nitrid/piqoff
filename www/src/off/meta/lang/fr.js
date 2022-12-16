@@ -7713,6 +7713,12 @@ export const langFr =
             btn02: "Non",
             msg: "Voulez-vous vraiment tout supprimer ?",
         },
+        msgItemAlert: //BAK
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Eklemeye çalıştığınız ürün zaten listenizde var !",
+        },
     },
     promo_02_001: //  "Promosyon Listesi"
     {

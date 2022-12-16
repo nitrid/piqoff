@@ -7713,6 +7713,12 @@ export const langTr =
             btn02: "Hayır",
             msg: "Tümünü silmek istediğinize eminmisiniz ?",
         },
+        msgItemAlert:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Eklemeye çalıştığınız ürün zaten listenizde var !",
+        },
     },
     promo_02_001: //  "Promosyon Listesi"
     {
