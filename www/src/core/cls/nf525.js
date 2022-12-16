@@ -1,4 +1,4 @@
-import { core,dataset,datatable } from '../../core/core.js';
+import { core,dataset,datatable } from '../core.js';
 import moment from 'moment';
 import rsa from 'jsrsasign';
 import { pem } from '../../../../pem.js';
@@ -59,6 +59,74 @@ export class nf525Cls
         sig.updateString(pData);
         let isValid = sig.verify(rsa.b64tohex(pSig));
         return isValid
+    }
+    async lastDocSignData(pData)
+    {
+        return new Promise(async resolve => 
+        {
+            let tmpLastRef = 1
+            let tmpLastSignature = ''
+
+            let tmpQuery = 
+            {
+                query : "SELECT TOP 1 * FROM DOC_VW_01 WHERE DOC_TYPE IN (20,21) AND GUID <> @GUID AND TYPE = 1 AND SIGNATURE <> '' ORDER BY CDATE DESC",
+                param : ['GUID:string|50'],
+                value : [pData.GUID]
+            }
+            
+            let tmpResult = await this.core.sql.execute(tmpQuery)
+
+            if(typeof tmpResult.result.err == 'undefined' && tmpResult.result.recordset.length > 0)
+            {
+                if(tmpResult.result.recordset[0].REF_NO != null)
+                {
+                    tmpLastRef = tmpResult.result.recordset[0].REF_NO
+                }
+                if(tmpResult.result.recordset[0].SIGNATURE != null)
+                {
+                    tmpLastSignature = tmpResult.result.recordset[0].SIGNATURE
+                }
+            }
+            localStorage.setItem('REF_SALE',tmpLastRef)
+            localStorage.setItem('SIG_SALE',tmpLastSignature)
+
+            resolve (
+            {
+                REF : tmpLastRef,
+                LAST_SIGN : tmpLastSignature
+            })
+        })
+    }
+    signatureDoc(pData,pSaleData)
+    {
+        return new Promise(async resolve => 
+        {
+            let tmpLastData = await this.lastDocSignData(pData)
+            let tmpSignature = ''
+            let tmpSignatureSum = ''
+            
+            if(pSaleData.length > 0)
+            {
+                let tmpVatLst = pSaleData.where({GUID:{'<>':'00000000-0000-0000-0000-000000000000'}}).groupBy('VAT_RATE');
+                    
+                for (let i = 0; i < tmpVatLst.length; i++) 
+                {
+                    tmpSignature = tmpSignature + parseInt(Number(tmpVatLst[i].VAT_RATE) * 100).toString().padStart(4,'0') + ":" + parseInt(Number(pSaleData.where({VAT_TYPE:tmpVatLst[i].VAT_TYPE}).sum('TOTAL',2)) * 100).toString() + "|"
+                }
+                
+                tmpSignature = tmpSignature.toString().substring(0,tmpSignature.length - 1)
+                tmpSignature = tmpSignature + "," + parseInt(Number(Number(pData.TOTAL).toFixed(2)) * 100).toString()
+                tmpSignature = tmpSignature + "," + moment(pData.LDATE).format("YYYYMMDDHHmmss")
+                tmpSignature = tmpSignature + "," + (Number(tmpLastData.REF_NO) + 1).toString().padStart(8,'0') 
+                tmpSignature = tmpSignature + "," + pData.TYPE_NAME
+                tmpSignature = tmpSignature + "," + (tmpLastData.LAST_SIGN == "" ? "N" : "O")
+                tmpSignature = tmpSignature + "," + tmpLastData.LAST_SIGN
+                tmpSignatureSum = tmpSignature
+                tmpSignature = this.sign(tmpSignature)
+            }
+
+            resolve({REF:Number(tmpLastData.REF) + 1,SIGNATURE:tmpSignature,SIGNATURE_SUM:tmpSignatureSum})
+        })
     }
     async lastSaleSignData(pData)
     {

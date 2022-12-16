@@ -34,7 +34,7 @@ import { posCls,posSaleCls,posPaymentCls,posPluCls,posDeviceCls,posPromoCls, pos
 import { docCls} from "../../core/cls/doc.js"
 import transferCls from "../lib/transfer.js";
 import { promoCls } from "../../core/cls/promotion.js";
-import { nf525Cls } from "../lib/nf525.js";
+import { nf525Cls } from "../../core/cls/nf525.js";
 import { customersCls } from "../../core/cls/customers.js";
 
 import { dataset,datatable,param,access } from "../../core/core.js";
