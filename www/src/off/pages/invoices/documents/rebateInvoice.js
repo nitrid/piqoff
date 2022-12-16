@@ -1046,6 +1046,7 @@ export default class rebateInvoice extends React.PureComponent
                                         if(this.docObj.dt()[0].LOCKED == 0)
                                         {
                                             this.docObj.dt()[0].LOCKED = 1
+                                            this.docLocked = true
                                             if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
                                             {
                                                 await this.grdRebtInv.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
