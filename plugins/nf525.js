@@ -15,8 +15,8 @@ class nf525
         this.connEvt = this.connEvt.bind(this)
         this.core.socket.on('connection',this.connEvt)
         this.core.on('onSqlConnected',this.onSqlConnected.bind(this))
-
-        this.appInfo = JSON.parse(fs.readFileSync('./www/package.json', 'utf8'))
+        
+        this.appInfo = JSON.parse(fs.readFileSync(this.core.root_path + '/www/package.json', 'utf8'))
     }
     async onSqlConnected(pStatus)
     {
@@ -35,7 +35,8 @@ class nf525
         // xlsx.writeFile(myWorkBook,'test.xlsx')
         // const buf = fs.readFileSync('test.xlsx');
         // const workbook = xlsx.read(buf);
-        // console.log(workbook)                
+        // console.log(workbook)   
+
         setTimeout(this.processGrandTotal.bind(this), 1000);
         setTimeout(this.processArchive.bind(this), 1000);
     }
@@ -66,42 +67,56 @@ class nf525
     }
     async processGrandTotal()
     {        
-        // DAY
-        core.instance.log.msg("Grand total transfer started","Nf525");
-        let tmpResult = await this.getGrandTotalData(0)
-        for (let i = 0; i < tmpResult.length; i++) 
+        try
         {
-            await this.insertGrandTotal(0,tmpResult[i])
-        }    
-        // MONTH
-        tmpResult = await this.getGrandTotalData(1)
-        for (let i = 0; i < tmpResult.length; i++) 
-        {
-            await this.insertGrandTotal(1,tmpResult[i])
-        } 
-        // YEAR
-        tmpResult = await this.getGrandTotalData(2)
-        for (let i = 0; i < tmpResult.length; i++) 
-        {
-            await this.insertGrandTotal(2,tmpResult[i])
-        }
-        core.instance.log.msg("Grand total transfer completed","Nf525");
+            // DAY
+            core.instance.log.msg("Grand total transfer started","Nf525");
+            let tmpResult = await this.getGrandTotalData(0)
+            for (let i = 0; i < tmpResult.length; i++) 
+            {
+                await this.insertGrandTotal(0,tmpResult[i])
+            }    
+            // MONTH
+            tmpResult = await this.getGrandTotalData(1)
+            for (let i = 0; i < tmpResult.length; i++) 
+            {
+                await this.insertGrandTotal(1,tmpResult[i])
+            } 
+            // YEAR
+            tmpResult = await this.getGrandTotalData(2)
+            for (let i = 0; i < tmpResult.length; i++) 
+            {
+                await this.insertGrandTotal(2,tmpResult[i])
+            }
+            core.instance.log.msg("Grand total transfer completed","Nf525");
 
-        let tmpMin = moment.utc('02:00:00', 'HH:mm:ss').diff(moment.utc(moment(new Date).utc(true), 'HH:mm:ss'), 'minutes')
-        tmpMin = tmpMin < 0 ? 1440 + tmpMin : tmpMin
-        setTimeout(this.processGrandTotal.bind(this),tmpMin * 60000)
+            let tmpMin = moment.utc('02:00:00', 'HH:mm:ss').diff(moment.utc(moment(new Date).utc(true), 'HH:mm:ss'), 'minutes')
+            tmpMin = tmpMin < 0 ? 1440 + tmpMin : tmpMin
+            setTimeout(this.processGrandTotal.bind(this),tmpMin * 60000)
+        }
+        catch (err) 
+        {
+            console.log(err);
+        }        
     }
     async processArchive()
     {
-        await this.archiveJet()
-        await this.archiveGrandTotal(0)
-        await this.archiveGrandTotal(1)
-        await this.archiveGrandTotal(2)
-        await this.archiveDayTicket()
-        
-        let tmpMin = moment.utc('02:00:00', 'HH:mm:ss').diff(moment.utc(moment(new Date).utc(true), 'HH:mm:ss'), 'minutes')
-        tmpMin = tmpMin < 0 ? 1440 + tmpMin : tmpMin
-        setTimeout(this.processArchive.bind(this),tmpMin * 60000)
+        try
+        {
+            await this.archiveJet()
+            await this.archiveGrandTotal(0)
+            await this.archiveGrandTotal(1)
+            await this.archiveGrandTotal(2)
+            await this.archiveDayTicket()
+            
+            let tmpMin = moment.utc('02:00:00', 'HH:mm:ss').diff(moment.utc(moment(new Date).utc(true), 'HH:mm:ss'), 'minutes')
+            tmpMin = tmpMin < 0 ? 1440 + tmpMin : tmpMin
+            setTimeout(this.processArchive.bind(this),tmpMin * 60000)
+        }
+        catch (err) 
+        {
+            console.log(err);
+        }
     }
     async archiveGrandTotal(pType)
     {
@@ -199,7 +214,7 @@ class nf525
                         param : ['FIRST_DATE:string|10','LAST_DATE:string|10'],
                         value : [tmpFirstDate,tmpLastDate]
                     }
-        
+                    
                     let tmpMasterResult = (await core.instance.sql.execute(tmpMasterQuery)).result.recordset
                     if(tmpMasterResult.length > 0)
                     {
@@ -211,22 +226,21 @@ class nf525
                             param : ['FIRST_DATE:string|10','LAST_DATE:string|10'],
                             value : [tmpFirstDate,tmpLastDate]
                         }
-
+                        
                         let tmpLineResult = (await core.instance.sql.execute(tmpLineQuery)).result.recordset
-
+                        
                         let tmpRepQuery = 
                         {
                             query : "SELECT * FROM NF525_ARCHIVE_DONNES_RECUPITULATIVES_VW_01 WHERE ENC_TIK_HOR_GDH >= @FIRST_DATE AND ENC_TIK_HOR_GDH <= @LAST_DATE ORDER BY ENC_TIK_ORI_NUM,ENC_TIK_CAI_NID ASC",
                             param : ['FIRST_DATE:string|10','LAST_DATE:string|10'],
                             value : [tmpFirstDate,tmpLastDate]
                         }
-
+                        
                         let tmpRepResult = (await core.instance.sql.execute(tmpRepQuery)).result.recordset
-
+                        
                         this.exportExcel({DENTETE:tmpMasterResult,LIGNES:tmpLineResult,RECUP:tmpRepResult},tmpFileName)
                     }
                 }
-                console.log(tmpFirstDate + " - " + tmpLastDate + " - " + fs.existsSync('./archiveFiscal/' + tmpFileName + '.xlsx'))
             }
             
             resolve()
