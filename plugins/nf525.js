@@ -16,7 +16,7 @@ class nf525
         this.core.socket.on('connection',this.connEvt)
         this.core.on('onSqlConnected',this.onSqlConnected.bind(this))
 
-        this.appInfo = JSON.parse(fs.readFileSync('./www/package.json', 'utf8'))
+        this.appInfo = JSON.parse(fs.readFileSync(this.core.root_path + '/www/package.json', 'utf8'))
     }
     async onSqlConnected(pStatus)
     {
@@ -226,7 +226,6 @@ class nf525
                         this.exportExcel({DENTETE:tmpMasterResult,LIGNES:tmpLineResult,RECUP:tmpRepResult},tmpFileName)
                     }
                 }
-                console.log(tmpFirstDate + " - " + tmpLastDate + " - " + fs.existsSync('./archiveFiscal/' + tmpFileName + '.xlsx'))
             }
             
             resolve()
