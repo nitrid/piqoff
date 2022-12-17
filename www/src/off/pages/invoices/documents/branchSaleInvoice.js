@@ -1463,6 +1463,8 @@ export default class branchSaleInvoice extends React.PureComponent
                                                     this.docObj.docCustomer.dt()[0].INPUT = data[0].GUID
                                                     this.docObj.dt()[0].INPUT_CODE = data[0].CODE
                                                     this.docObj.dt()[0].INPUT_NAME = data[0].TITLE
+                                                    this.docObj.dt()[0].ZIPCODE = data[0].ZIPCODE
+                                                    this.docObj.dt()[0].TAX_NO = data[0].TAX_NO
                                                     this.dtExpDate.value = moment(new Date()).add(data[0].EXPIRY_DAY, 'days')
                                                     let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
                                                     if(typeof tmpData != 'undefined' && tmpData.value ==  true)
@@ -1488,7 +1490,8 @@ export default class branchSaleInvoice extends React.PureComponent
                                                         {
                                                             if(pdata.length > 0)
                                                             {
-                                                                this.docObj.dt()[0].ADDRESS = pdata[0].TYPE
+                                                                this.docObj.dt()[0].ADDRESS = pdata[0].ADRESS_NO
+                                                                this.docObj.dt()[0].ZIPCODE = pdata[0].ZIPCODE
                                                             }
                                                         }
                                                     }
@@ -1517,6 +1520,8 @@ export default class branchSaleInvoice extends React.PureComponent
                                                             this.docObj.docCustomer.dt()[0].INPUT = data[0].GUID
                                                             this.docObj.dt()[0].INPUT_CODE = data[0].CODE
                                                             this.docObj.dt()[0].INPUT_NAME = data[0].TITLE
+                                                            this.docObj.dt()[0].ZIPCODE = data[0].ZIPCODE
+                                                            this.docObj.dt()[0].TAX_NO = data[0].TAX_NO
                                                             this.dtExpDate.value = moment(new Date()).add(data[0].EXPIRY_DAY, 'days')
                                                             let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
                                                             if(typeof tmpData != 'undefined' && tmpData.value ==  true)
@@ -1542,7 +1547,8 @@ export default class branchSaleInvoice extends React.PureComponent
                                                                 {
                                                                     if(pdata.length > 0)
                                                                     {
-                                                                        this.docObj.dt()[0].ADDRESS = pdata[0].TYPE
+                                                                        this.docObj.dt()[0].ADDRESS = pdata[0].ADRESS_NO
+                                                                        this.docObj.dt()[0].ZIPCODE = pdata[0].ZIPCODE
                                                                     }
                                                                 }
                                                             }
@@ -1580,7 +1586,7 @@ export default class branchSaleInvoice extends React.PureComponent
                                         {
                                             select:
                                             {
-                                                query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME],EXPIRY_DAY FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND GENUS = 3",
+                                                query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME],EXPIRY_DAY,TAX_NO,ISNULL((SELECT TOP 1 ZIPCODE FROM CUSTOMER_ADRESS_VW_01 WHERE ADRESS_NO = 0),'') AS ZIPCODE FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND GENUS = 3",
                                                 param : ['VAL:string|50']
                                             },
                                             sql:this.core.sql

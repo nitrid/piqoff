@@ -35,7 +35,9 @@ export class docCls
             CERTIFICATE : this.core.appInfo.name + " version : " + this.core.appInfo.version,
             SIGNATURE : '',
             SIGNATURE_SUM : '',
-            TYPE_NAME: ''
+            TYPE_NAME: '',
+            TAX_NO : '',
+            ZIPCODE : '',
         }
 
         this.docItems = new docItemsCls();
