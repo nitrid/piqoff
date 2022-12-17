@@ -3,6 +3,7 @@
 - Şube satış irsaliyesinde ürün ekleyince gride barkod gelmiyordu düzeltildi.
 - Pos değişenler raporuna iade seçeneği eklendi
 - Satış faturalarına kilitlenmeden yazdırılamaz eklendi
+- Stok Kayır edildikten sonra tekrar getirme işlemi kaldırıldı
 ### ADMIN   
 - Evraklara dilyapısı eklendi
 ### DB
