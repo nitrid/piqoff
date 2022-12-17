@@ -716,7 +716,7 @@ export default class CustomerCard extends React.PureComponent
                                                     <Column dataField="ADRESS" caption={this.t("grdAdress.clmAdress")} />
                                                     <Column dataField="ZIPCODE" caption={this.t("grdAdress.clmZipcode")} />
                                                     <Column dataField="CITY" caption={this.t("grdAdress.clmCity")}/>
-                                                    <Column dataField="COUNTRY" caption={this.t("grdAdress.clmCountry")}/>
+                                                    <Column dataField="COUNTRY" caption={this.t("grdAdress.clmCountry")} allowEditing={false}/>
                                                 </NdGrid>
                                             </div>
                                         </div>
