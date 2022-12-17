@@ -1279,9 +1279,10 @@ export class docExtraCls
                     "@CUSER = @PCUSER, " +
                     "@TAG = @PTAG, " +
                     "@DOC = @PDOC, " +
-                    "@DESCRIPTION = @PDESCRIPTION " ,
-            param : ['PGUID:string|50','PCUSER:string|25','PTAG:string|25','PDOC:string|50','PDESCRIPTION:string|500'],
-            dataprm : ['GUID','CUSER','TAG','DOC','DESCRIPTION']
+                    "@DESCRIPTION = @PDESCRIPTION, " +
+                    "@SIGNATURE = @PSIGNATURE ",
+            param : ['PGUID:string|50','PCUSER:string|25','PTAG:string|25','PDOC:string|50','PDESCRIPTION:string|500','PSIGNATURE:string|max'],
+            dataprm : ['GUID','CUSER','TAG','DOC','DESCRIPTION','SIGNATURE']
         }
         this.ds.add(tmpDt);
     }

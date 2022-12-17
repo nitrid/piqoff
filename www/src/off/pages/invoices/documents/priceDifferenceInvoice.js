@@ -3,6 +3,7 @@ import moment from 'moment';
 import React from 'react';
 import App from '../../../lib/app.js';
 import { docCls,docItemsCls, docCustomerCls,docExtraCls } from '../../../../core/cls/doc.js';
+import { nf525Cls } from '../../../../core/cls/nf525.js';
 
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
@@ -39,6 +40,8 @@ export default class priceDifferenceInvoice extends React.PureComponent
         this.docObj = new docCls();
         this.paymentObj = new docCls();
         this.extraObj = new docExtraCls();
+        this.nf525 = new nf525Cls();
+        
         this.tabIndex = props.data.tabkey
 
         this._cellRoleRender = this._cellRoleRender.bind(this)
@@ -1054,10 +1057,16 @@ export default class priceDifferenceInvoice extends React.PureComponent
                                         if(this.docObj.dt()[0].LOCKED == 0)
                                         {
                                             this.docObj.dt()[0].LOCKED = 1
+                                            this.docLocked = true
                                             if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
                                             {
                                                 await this.grdDiffInv.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
                                             }
+
+                                            //***** TICKET İMZALAMA *****/
+                                            let tmpSignedData = await this.nf525.signatureDoc(this.docObj.dt()[0],this.docObj.docItems.dt())                
+                                            this.docObj.dt()[0].SIGNATURE = tmpSignedData.SIGNATURE
+                                            this.docObj.dt()[0].SIGNATURE_SUM = tmpSignedData.SIGNATURE_SUM
                                             if((await this.docObj.save()) == 0)
                                             {                                                    
                                                 let tmpConfObj =
@@ -2618,14 +2627,16 @@ export default class priceDifferenceInvoice extends React.PureComponent
                                                     }
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
                                                     console.log(JSON.stringify(tmpData.result.recordset[0]))
-                                                    this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
+                                                    this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",async(pResult) => 
                                                     {
                                                         if(pResult.split('|')[0] != 'ERR')
                                                         {
+                                                            let tmpLastSignature = await this.nf525.signaturePosDuplicate(this.docObj.dt()[0])
                                                             let tmpExtra = {...this.extraObj.empty}
                                                             tmpExtra.DOC = this.docObj.dt()[0].GUID
                                                             tmpExtra.DESCRIPTION = ''
                                                             tmpExtra.TAG = 'PRINT'
+                                                            tmpExtra.SIGNATURE = tmpLastSignature
                                                             this.extraObj.addEmpty(tmpExtra);
                                                             this.extraObj.save()
                                                             var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");                                                         
