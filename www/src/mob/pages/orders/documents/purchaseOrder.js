@@ -603,7 +603,7 @@ export default class salesOrder extends React.Component
                                         <Column dataField="CODE" caption={this.t("pg_CustomerSelect.clmCode")} width={150} />
                                         <Column dataField="TITLE" caption={this.t("pg_CustomerSelect.clmTitle")} width={200} defaultSortOrder="asc" />
                                         <Column dataField="TYPE_NAME" caption={this.t("pg_CustomerSelect.clmTypeName")} width={100} />
-                                        <Column dataField="GENUS_NAME" caption={this.t("pg_CustomerSelect.clmGenusName")} width={100} filterValues={['Tedarikçi','Her Ikisi']}/>
+                                        <Column dataField="GENUS_NAME" caption={this.t("pg_CustomerSelect.clmGenusName")} width={100}/>
                                     </NdPopGrid>
                                 </Item> 
                                 {/* txtCustomerName */}

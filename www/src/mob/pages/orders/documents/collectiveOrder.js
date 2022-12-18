@@ -52,13 +52,7 @@ export default class salesOrder extends React.Component
         this._calculateTotal = this._calculateTotal.bind(this)
         this.dropmenuClick = this.dropmenuClick.bind(this)
         this.barcodeScan = this.barcodeScan.bind(this)
-
-    }
-    async componentDidMount()
-    {
-        await this.core.util.waitUntil(0)
-        this.init()
-    }
+    } 
     async init()
     {
         this.docObj.clearAll()
@@ -302,7 +296,7 @@ export default class salesOrder extends React.Component
     }
     async _onItemRendered(e)
     {
-        await this.core.util.waitUntil(500)
+        await this.core.util.waitUntil(900)
         
         if(e.itemData.name == "Main")
         {
