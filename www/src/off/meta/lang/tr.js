@@ -4032,6 +4032,12 @@ export const langTr =
             msgSuccess: "Mail gönderimi başarılı !",
             msgFailed: "Mail gönderimi başarısız !"
         },
+        msgPrintforLocked:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrak Kilitlenmeden Yazdırılamaz !"
+        },
     },
     ftr_02_003 : // "İade Faturası"
     {
@@ -7798,6 +7804,12 @@ export const langTr =
             btn01: "Evet",
             btn02: "Hayır",
             msg: "Tümünü silmek istediğinize eminmisiniz ?",
+        },
+        msgItemAlert:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Eklemeye çalıştığınız ürün zaten listenizde var !",
         },
     },
     promo_02_001: //  "Promosyon Listesi"

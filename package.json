@@ -1,7 +1,7 @@
 {
     "type": "module",
     "name": "piqsoft",
-    "version": "1.0.1",
+    "version": "1.0.1f",
     "dependencies": {
         "gensrv": "^1.0.93",
         "jsrsasign": "10.6.1",

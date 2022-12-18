@@ -854,7 +854,6 @@ export default class itemCard extends React.PureComponent
                                                     await dialog(tmpConfObj1);
                                                     this.btnSave.setState({disabled:true});
                                                     this.btnNew.setState({disabled:false});
-                                                    this.getItem(this.itemsObj.dt()[0].CODE)
                                                 }
                                                 else
                                                 {

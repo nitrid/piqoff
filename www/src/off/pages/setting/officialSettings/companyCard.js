@@ -91,7 +91,7 @@ export default class CustomerCard extends React.PureComponent
         })
 
         await this.companyObj.load()
-        console.log(this.companyObj)
+        
         if(this.companyObj.dt().length == 0)
         {
             this.companyObj.addEmpty();
@@ -160,7 +160,18 @@ export default class CustomerCard extends React.PureComponent
                                                 }
                                                 
                                                 if((await this.companyObj.save()) == 0)
-                                                {                                                    
+                                                {          
+                                                    let tmpJetData =
+                                                    {
+                                                        CUSER:this.core.auth.data.CODE,            
+                                                        DEVICE:'',
+                                                        CODE:'128',
+                                                        NAME:"Changement d'assujetti utilisant le logiciel", //BAK
+                                                        DESCRIPTION:'',
+                                                        APP_VERSION:this.core.appInfo.version
+                                                    }
+                                                    this.core.socket.emit('nf525',{cmd:"jet",data:tmpJetData})
+
                                                     tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
                                                     await dialog(tmpConfObj1);
                                                     this.btnSave.setState({disabled:true});

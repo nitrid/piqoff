@@ -1180,7 +1180,7 @@ export class posDeviceCls
         this.listeners = Object();
         this.payPort = null;
         this.scannerPort = null;
-        this.scannerStatus = true;
+        
         this._initDs();
     }
     //#region  "EVENT"
@@ -1333,6 +1333,32 @@ export class posDeviceCls
             resolve(await this.ds.update()); 
         });
     }
+    detectPort()
+    {
+        return new Promise(async(resolve) =>
+        {
+            if(!core.instance.util.isElectron())
+            {
+                resolve({isElectron:false})
+            }
+    
+            let tmpPorts = await this.serialport.list();
+    
+            if(this.dt().length > 0)
+            {
+                let tmpLcdCheck = this.dt()[0].LCD_PORT == "" ? true : typeof tmpPorts.find(e => e.path == this.dt()[0].LCD_PORT) == 'undefined' ? false : true
+                let tmpPayCheck = this.dt()[0].PAY_CARD_PORT == "" ? true : typeof tmpPorts.find(e => e.path == this.dt()[0].PAY_CARD_PORT) == 'undefined' ? false : true
+                let tmpScaleCheck = this.dt()[0].SCALE_PORT == "" ? true : typeof tmpPorts.find(e => e.path == this.dt()[0].SCALE_PORT) == 'undefined' ? false : true
+                let tmpScanCheck = this.dt()[0].SCANNER_PORT == "" ? true : typeof tmpPorts.find(e => e.path == this.dt()[0].SCANNER_PORT) == 'undefined' ? false : true
+                
+                resolve({isElectron:true,isData:true,isLcdPort:tmpLcdCheck,isPayPort:tmpPayCheck,isScalePort:tmpScaleCheck,isScanPort:tmpScanCheck})
+            }
+            else
+            {
+                resolve({isElectron:true,isData:false})
+            }
+        })
+    }
     lcdPrint(pData)
     {
         if(!core.instance.util.isElectron())
@@ -1425,7 +1451,7 @@ export class posDeviceCls
             //TERAZİYE FİYAT GÖNDERİLİYOR.
             port.write('01' + TmpPrice +'');
             let ReciveBuffer = '';
-
+            
             //TERAZİDEN DÖNEN DEĞERLERİN OKUNMASI
             port.on('data',line =>
             {         
@@ -1772,11 +1798,6 @@ export class posDeviceCls
             }
             device.open(async function(error)
             {   
-                if(error != null)
-                {
-                    console.log(error)
-                }
-    
                 let tmpArr = [];
                 for (let i = 0; i < pData.length; i++) 
                 {
@@ -1849,7 +1870,7 @@ export class posDeviceCls
         }
         if(this.scannerPort == null || !this.scannerPort.isOpen)
         {
-            this.scannerPort = new this.serialport(this.dt().length > 0 ? this.dt()[0].SCANNER_PORT : "")               
+            this.scannerPort = new this.serialport(this.dt().length > 0 ? this.dt()[0].SCANNER_PORT : "")    
         }
         else
         {
@@ -1875,14 +1896,8 @@ export class posDeviceCls
                     tmpBarcode = tmpBarcode.substring(1,14)
                 }
                 
-                if(this.scannerStatus)
-                {
-                    this.emit('scanner',tmpBarcode);
-                }
-                else
-                {
-                    this.emit('scanner',"error");
-                }
+                this.emit('scanner',tmpBarcode);
+                
                 tmpSerialCount = 0;
                 tmpBarcode = "";            
             }

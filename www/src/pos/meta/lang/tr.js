@@ -514,6 +514,15 @@ export const langTr =
         msg : "Lütfen cihaz kodunu boş geçmeyiniz !",
         btn01 : "Tamam",
     },
+    msgDeviceDetectAlert : 
+    {
+        title : "Uyarı",
+        msgLcd : "Lcd ekran ile iletişim kurulamadı.",
+        msgPay : "Ödeme cihazı ile iletişim kurulamadı.",
+        msgScale : "Terazi ile iletişim kurulamadı.",
+        msgScan : "Barkod cihazı ile iletişim kurulamadı.",
+        btn01 : "Tamam",
+    },
     popTitleDevice : "Kasa Kodu Giriş",
     msgDeviceNotChange : 
     {

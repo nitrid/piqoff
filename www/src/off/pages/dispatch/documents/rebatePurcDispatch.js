@@ -1089,7 +1089,7 @@ export default class rebateDispatch extends React.PureComponent
                                                         {
                                                             if(pdata.length > 0)
                                                             {
-                                                                this.docObj.dt()[0].ADDRESS = pdata[0].TYPE
+                                                                this.docObj.dt()[0].ADDRESS = pdata[0].ADRESS_NO
                                                             }
                                                         }
                                                     }
@@ -1142,7 +1142,7 @@ export default class rebateDispatch extends React.PureComponent
                                                                 {
                                                                     if(pdata.length > 0)
                                                                     {
-                                                                        this.docObj.dt()[0].ADDRESS = pdata[0].TYPE
+                                                                        this.docObj.dt()[0].ADDRESS = pdata[0].ADRESS_NO
                                                                     }
                                                                 }
                                                             }

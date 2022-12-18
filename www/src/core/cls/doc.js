@@ -32,7 +32,12 @@ export class docCls
             LOCKED : 0,
             MARGIN : '',
             PAYMENT_DOC_GUID : '00000000-0000-0000-0000-000000000000',
-            CERTIFICATE : this.core.appInfo.name + " version : " + this.core.appInfo.version
+            CERTIFICATE : this.core.appInfo.name + " version : " + this.core.appInfo.version,
+            SIGNATURE : '',
+            SIGNATURE_SUM : '',
+            TYPE_NAME: '',
+            TAX_NO : '',
+            ZIPCODE : '',
         }
 
         this.docItems = new docItemsCls();
@@ -75,10 +80,14 @@ export class docCls
                     "@DESCRIPTION  = @PDESCRIPTION, " +
                     "@ADDRESS  = @PADDRESS, " +
                     "@LOCKED  = @PLOCKED, " +
-                    "@CERTIFICATE = @PCERTIFICATE ",
+                    "@CERTIFICATE = @PCERTIFICATE, " +
+                    "@SIGNATURE = @PSIGNATURE, " +
+                    "@SIGNATURE_SUM = @PSIGNATURE_SUM ",
             param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PDOC_TYPE:int','PREBATE:int','PREF:string|25','PREF_NO:int','PDOC_DATE:date','PSHIPMENT_DATE:date','PINPUT:string|50',
-                        'POUTPUT:string|50','PAMOUNT:float','PDISCOUNT:float','PVAT:float','PTOTAL:float','PDESCRIPTION:string|100','PADDRESS:int','PLOCKED:int','PCERTIFICATE:string|250'],
-            dataprm : ['GUID','CUSER','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','SHIPMENT_DATE','INPUT','OUTPUT','AMOUNT','DISCOUNT','VAT','TOTAL','DESCRIPTION','ADDRESS','LOCKED','CERTIFICATE']
+                        'POUTPUT:string|50','PAMOUNT:float','PDISCOUNT:float','PVAT:float','PTOTAL:float','PDESCRIPTION:string|100','PADDRESS:int','PLOCKED:int','PCERTIFICATE:string|250',
+                        'PSIGNATURE:string|max','PSIGNATURE_SUM:string|max'],
+            dataprm : ['GUID','CUSER','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','SHIPMENT_DATE','INPUT','OUTPUT','AMOUNT','DISCOUNT','VAT','TOTAL','DESCRIPTION','ADDRESS','LOCKED',
+                        'CERTIFICATE','SIGNATURE','SIGNATURE_SUM']
         }
         tmpDt.updateCmd = 
         {
@@ -100,10 +109,13 @@ export class docCls
                     "@TOTAL  = @PTOTAL, " +
                     "@DESCRIPTION  = @PDESCRIPTION, " +
                     "@ADDRESS  = @PADDRESS, " +
-                    "@LOCKED  = @PLOCKED ",
+                    "@LOCKED  = @PLOCKED, " +
+                    "@SIGNATURE = @PSIGNATURE, " +
+                    "@SIGNATURE_SUM = @PSIGNATURE_SUM ",
             param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PDOC_TYPE:int','PREBATE:int','PREF:string|25','PREF_NO:int','PDOC_DATE:date','PSHIPMENT_DATE:date','PINPUT:string|50',
-                        'POUTPUT:string|50','PAMOUNT:float','PDISCOUNT:float','PVAT:float','PTOTAL:float','PDESCRIPTION:string|100','PADDRESS:int','PLOCKED:int'],
-            dataprm : ['GUID','CUSER','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','SHIPMENT_DATE','INPUT','OUTPUT','AMOUNT','DISCOUNT','VAT','TOTAL','DESCRIPTION','ADDRESS','LOCKED']
+                        'POUTPUT:string|50','PAMOUNT:float','PDISCOUNT:float','PVAT:float','PTOTAL:float','PDESCRIPTION:string|100','PADDRESS:int','PLOCKED:int','PSIGNATURE:string|max','PSIGNATURE_SUM:string|max'],
+            dataprm : ['GUID','CUSER','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','SHIPMENT_DATE','INPUT','OUTPUT','AMOUNT','DISCOUNT','VAT','TOTAL','DESCRIPTION','ADDRESS',
+                    'LOCKED','SIGNATURE','SIGNATURE_SUM']
         }
         tmpDt.deleteCmd = 
         {
@@ -1252,6 +1264,7 @@ export class docExtraCls
             TAG : '',
             DOC : '00000000-0000-0000-0000-000000000000',
             DESCRIPTION : '00000000-0000-0000-0000-000000000000',
+            SIGNATURE : ''
         }
 
         this._initDs();
@@ -1268,9 +1281,10 @@ export class docExtraCls
                     "@CUSER = @PCUSER, " +
                     "@TAG = @PTAG, " +
                     "@DOC = @PDOC, " +
-                    "@DESCRIPTION = @PDESCRIPTION " ,
-            param : ['PGUID:string|50','PCUSER:string|25','PTAG:string|25','PDOC:string|50','PDESCRIPTION:string|500'],
-            dataprm : ['GUID','CUSER','TAG','DOC','DESCRIPTION']
+                    "@DESCRIPTION = @PDESCRIPTION, " +
+                    "@SIGNATURE = @PSIGNATURE ",
+            param : ['PGUID:string|50','PCUSER:string|25','PTAG:string|25','PDOC:string|50','PDESCRIPTION:string|500','PSIGNATURE:string|max'],
+            dataprm : ['GUID','CUSER','TAG','DOC','DESCRIPTION','SIGNATURE']
         }
         this.ds.add(tmpDt);
     }

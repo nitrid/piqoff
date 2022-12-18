@@ -172,23 +172,13 @@ export class customersCls
 
             this.ds.get('CUSTOMERS').selectCmd.value = Object.values(tmpPrm);
 
-            console.log(1)
             await this.ds.get('CUSTOMERS').refresh()
-            console.log(2)
 
             if(this.ds.get('CUSTOMERS').length > 0)
             {  
-            console.log(3)
-
                 await this.customerAdress.load({CUSTOMER:this.ds.get('CUSTOMERS')[0].GUID})
-            console.log(4)
-
                 await this.customerOffical.load({CUSTOMER:this.ds.get('CUSTOMERS')[0].GUID})
-            console.log(5)
-
                 await this.customerBank.load({CUSTOMER:this.ds.get('CUSTOMERS')[0].GUID})
-            console.log(6)
-
             }
             resolve(this.ds.get('CUSTOMERS'))
         });
@@ -364,8 +354,9 @@ export class customerAdressCls
             CUSTOMER : '00000000-0000-0000-0000-000000000000',
             ADRESS : '',
             ZIPCODE : '',
-            CIYT : '',
-            COUNTRY : ''
+            CITY : '',
+            COUNTRY : '',
+            ADRESS_NO : 0
         }
 
         this._initDs()
@@ -389,9 +380,10 @@ export class customerAdressCls
                     "@ADRESS = @PADRESS, " +
                     "@ZIPCODE = @PZIPCODE, " +
                     "@CITY = @PCITY, " +
-                    "@COUNTRY = @PCOUNTRY ",
-            param : ['PGUID:string|50','PCUSER:string|50','PTYPE:int','PCUSTOMER:string|50','PADRESS:string|500','PZIPCODE:string|10','PCITY:string|25','PCOUNTRY:string|5'],
-            dataprm : ['GUID','CUSER','TYPE','CUSTOMER','ADRESS','ZIPCODE','CITY','COUNTRY']
+                    "@COUNTRY = @PCOUNTRY, " +
+                    "@ADRESS_NO = @PADRESS_NO ",
+            param : ['PGUID:string|50','PCUSER:string|50','PTYPE:int','PCUSTOMER:string|50','PADRESS:string|500','PZIPCODE:string|10','PCITY:string|25','PCOUNTRY:string|5','PADRESS_NO:int'],
+            dataprm : ['GUID','CUSER','TYPE','CUSTOMER','ADRESS','ZIPCODE','CITY','COUNTRY','ADRESS_NO']
         }
         tmpDt.updateCmd = 
         {
@@ -403,9 +395,10 @@ export class customerAdressCls
                     "@ADRESS = @PADRESS, " +
                     "@ZIPCODE = @PZIPCODE, " +
                     "@CITY = @PCITY, " +
-                    "@COUNTRY = @PCOUNTRY ",
-            param : ['PGUID:string|50','PCUSER:string|50','PTYPE:int','PCUSTOMER:string|50','PADRESS:string|500','PZIPCODE:string|10','PCITY:string|25','PCOUNTRY:string|5'],
-            dataprm : ['GUID','CUSER','TYPE','CUSTOMER','ADRESS','ZIPCODE','CITY','COUNTRY']
+                    "@COUNTRY = @PCOUNTRY, " +
+                    "@ADRESS_NO = @PADRESS_NO ",
+            param : ['PGUID:string|50','PCUSER:string|50','PTYPE:int','PCUSTOMER:string|50','PADRESS:string|500','PZIPCODE:string|10','PCITY:string|25','PCOUNTRY:string|5','PADRESS_NO:int'],
+            dataprm : ['GUID','CUSER','TYPE','CUSTOMER','ADRESS','ZIPCODE','CITY','COUNTRY','ADRESS_NO']
         }
         tmpDt.deleteCmd = 
         {

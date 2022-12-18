@@ -4,6 +4,7 @@ import * as xlsx from 'xlsx'
 import fs from 'fs'
 import rsa from 'jsrsasign'
 import { pem } from '../pem.js'
+
 class nf525
 {
     constructor()
@@ -14,6 +15,8 @@ class nf525
         this.connEvt = this.connEvt.bind(this)
         this.core.socket.on('connection',this.connEvt)
         this.core.on('onSqlConnected',this.onSqlConnected.bind(this))
+        
+        this.appInfo = JSON.parse(fs.readFileSync(this.core.root_path + '/www/package.json', 'utf8'))
     }
     async onSqlConnected(pStatus)
     {
@@ -32,7 +35,7 @@ class nf525
         // xlsx.writeFile(myWorkBook,'test.xlsx')
         // const buf = fs.readFileSync('test.xlsx');
         // const workbook = xlsx.read(buf);
-        // console.log(workbook)
+        // console.log(workbook)   
 
         setTimeout(this.processGrandTotal.bind(this), 1000);
         setTimeout(this.processArchive.bind(this), 1000);
@@ -55,50 +58,65 @@ class nf525
                     CUSER:pSocket.userInfo.CODE,            
                     DEVICE:'',
                     CODE:'40',
-                    NAME:'Kasa ile bağlantı kesildi.',
+                    NAME:'Arret du terminal, deconnexion, fermeture de session.',
                     DESCRIPTION:'',
-                    APP_VERSION:'1.0.0'
+                    APP_VERSION:this.appInfo.version
                 })
             }
         })
     }
     async processGrandTotal()
     {        
-        // DAY
-        core.instance.log.msg("Grand total transfer started","Nf525");
-        let tmpResult = await this.getGrandTotalData(0)
-        for (let i = 0; i < tmpResult.length; i++) 
+        try
         {
-            await this.insertGrandTotal(0,tmpResult[i])
-        }    
-        // MONTH
-        tmpResult = await this.getGrandTotalData(1)
-        for (let i = 0; i < tmpResult.length; i++) 
-        {
-            await this.insertGrandTotal(1,tmpResult[i])
-        } 
-        // YEAR
-        tmpResult = await this.getGrandTotalData(2)
-        for (let i = 0; i < tmpResult.length; i++) 
-        {
-            await this.insertGrandTotal(2,tmpResult[i])
-        }
-        core.instance.log.msg("Grand total transfer completed","Nf525");
+            // DAY
+            core.instance.log.msg("Grand total transfer started","Nf525");
+            let tmpResult = await this.getGrandTotalData(0)
+            for (let i = 0; i < tmpResult.length; i++) 
+            {
+                await this.insertGrandTotal(0,tmpResult[i])
+            }    
+            // MONTH
+            tmpResult = await this.getGrandTotalData(1)
+            for (let i = 0; i < tmpResult.length; i++) 
+            {
+                await this.insertGrandTotal(1,tmpResult[i])
+            } 
+            // YEAR
+            tmpResult = await this.getGrandTotalData(2)
+            for (let i = 0; i < tmpResult.length; i++) 
+            {
+                await this.insertGrandTotal(2,tmpResult[i])
+            }
+            core.instance.log.msg("Grand total transfer completed","Nf525");
 
-        let tmpMin = moment.utc('02:00:00', 'HH:mm:ss').diff(moment.utc(moment(new Date).utc(true), 'HH:mm:ss'), 'minutes')
-        tmpMin = tmpMin < 0 ? 1440 + tmpMin : tmpMin
-        setTimeout(this.processGrandTotal.bind(this),tmpMin * 60000)
+            let tmpMin = moment.utc('02:00:00', 'HH:mm:ss').diff(moment.utc(moment(new Date).utc(true), 'HH:mm:ss'), 'minutes')
+            tmpMin = tmpMin < 0 ? 1440 + tmpMin : tmpMin
+            setTimeout(this.processGrandTotal.bind(this),tmpMin * 60000)
+        }
+        catch (err) 
+        {
+            console.log(err);
+        }        
     }
     async processArchive()
     {
-        await this.archiveJet()
-        await this.archiveGrandTotal(0)
-        await this.archiveGrandTotal(1)
-        await this.archiveGrandTotal(2)
-
-        let tmpMin = moment.utc('02:00:00', 'HH:mm:ss').diff(moment.utc(moment(new Date).utc(true), 'HH:mm:ss'), 'minutes')
-        tmpMin = tmpMin < 0 ? 1440 + tmpMin : tmpMin
-        setTimeout(this.processArchive.bind(this),tmpMin * 60000)
+        try
+        {
+            await this.archiveJet()
+            await this.archiveGrandTotal(0)
+            await this.archiveGrandTotal(1)
+            await this.archiveGrandTotal(2)
+            await this.archiveDayTicket()
+            
+            let tmpMin = moment.utc('02:00:00', 'HH:mm:ss').diff(moment.utc(moment(new Date).utc(true), 'HH:mm:ss'), 'minutes')
+            tmpMin = tmpMin < 0 ? 1440 + tmpMin : tmpMin
+            setTimeout(this.processArchive.bind(this),tmpMin * 60000)
+        }
+        catch (err) 
+        {
+            console.log(err);
+        }
     }
     async archiveGrandTotal(pType)
     {
@@ -106,7 +124,7 @@ class nf525
         {
             let tmpQuery = 
             {
-                query : "SELECT * FROM NF525_GRAND_TOTAL WHERE TYPE = @TYPE ORDER BY CDATE ASC",
+                query : "SELECT * FROM NF525_ARCHIVE_GRAND_TOTAL_VW_01 WHERE TYPE = @TYPE ORDER BY ENC_GTP_HOR_GDH ASC",
                 param : ['TYPE:int'],
                 value : [pType]
             }
@@ -118,16 +136,44 @@ class nf525
                 if(pType == 0)
                 {
                     tmpFName = "DAY_GRAND_TOTAL"
+                    await this.insertJet(
+                    {
+                        CUSER:'System Auto',            
+                        DEVICE:'',
+                        CODE:'20',
+                        NAME:"Archivage fiscal period jour.", //BAK
+                        DESCRIPTION:'',
+                        APP_VERSION:this.appInfo.version
+                    })
                 }
                 else if(pType == 1)
                 {
-                    tmpFName = "MOUNTH_GRAND_TOTAL"
+                    tmpFName = "MONTH_GRAND_TOTAL"
+                    await this.insertJet(
+                    {
+                        CUSER:'System Auto',            
+                        DEVICE:'',
+                        CODE:'20',
+                        NAME:"Archivage fiscal period mois.", //BAK
+                        DESCRIPTION:'',
+                        APP_VERSION:this.appInfo.version
+                    })
                 }
                 else if(pType == 2)
                 {
                     tmpFName = "YEAR_GRAND_TOTAL"
+
+                    await this.insertJet(
+                    {
+                        CUSER:'System Auto',            
+                        DEVICE:'',
+                        CODE:'30',
+                        NAME:"Archivage fiscal d'annee ou d'exercice.", //BAK
+                        DESCRIPTION:'',
+                        APP_VERSION:this.appInfo.version
+                    })
                 }
-                this.exportExcel(tmpResult,tmpFName)
+                this.exportExcel(tmpResult,tmpFName,"DATA")
             }
             resolve()
         });
@@ -138,23 +184,88 @@ class nf525
         {
             let tmpQuery = 
             {
-                query : "SELECT * FROM NF525_JET ORDER BY CDATE ASC"
+                query : "SELECT * FROM NF525_ARCHIVE_JET_VW_01 ORDER BY JET_GDH ASC"
             }
 
             let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
             if(tmpResult.length > 0)
             {
-                this.exportExcel(tmpResult,"JET")
+                this.exportExcel(tmpResult,"JET","JET")
             }
             resolve()
         });
     }
-    exportExcel(pData,pFileName)
+    archiveDayTicket()
+    {
+        return new Promise(async resolve =>
+        {
+            
+            for (let i = -20; i < 0; i++) 
+            {
+                let tmpFirstDate = moment().add(i,'day').format("YYYYMMDD")
+                let tmpLastDate = moment().add(i + 1,'day').format("YYYYMMDD")
+                let tmpFileName = "TICKET_" + tmpFirstDate
+    
+                if(!fs.existsSync('./archiveFiscal/' + tmpFileName + '.xlsx'))
+                {
+                    let tmpMasterQuery = 
+                    {
+                        query : "SELECT * FROM NF525_ARCHIVE_DONNES_DENTETE_VW_01 WHERE ENC_TIK_HOR_GDH >= @FIRST_DATE AND ENC_TIK_HOR_GDH <= @LAST_DATE ORDER BY ENC_TIK_NUM,ENC_TIK_CAI_NID ASC",
+                        param : ['FIRST_DATE:string|10','LAST_DATE:string|10'],
+                        value : [tmpFirstDate,tmpLastDate]
+                    }
+                    
+                    let tmpMasterResult = (await core.instance.sql.execute(tmpMasterQuery)).result.recordset
+                    if(tmpMasterResult.length > 0)
+                    {
+                        this.exportExcel(tmpMasterResult,tmpFileName,"DENTETE")
+
+                        let tmpLineQuery = 
+                        {
+                            query : "SELECT * FROM NF525_ARCHIVE_DONNES_DES_LIGNES_VW_01 WHERE ENC_TIK_LIG_HOR_GDH >= @FIRST_DATE AND ENC_TIK_LIG_HOR_GDH <= @LAST_DATE ORDER BY ENC_TIK_ORI_NUM,ENC_TIK_LIG_CAI_NID ASC",
+                            param : ['FIRST_DATE:string|10','LAST_DATE:string|10'],
+                            value : [tmpFirstDate,tmpLastDate]
+                        }
+                        
+                        let tmpLineResult = (await core.instance.sql.execute(tmpLineQuery)).result.recordset
+                        
+                        let tmpRepQuery = 
+                        {
+                            query : "SELECT * FROM NF525_ARCHIVE_DONNES_RECUPITULATIVES_VW_01 WHERE ENC_TIK_HOR_GDH >= @FIRST_DATE AND ENC_TIK_HOR_GDH <= @LAST_DATE ORDER BY ENC_TIK_ORI_NUM,ENC_TIK_CAI_NID ASC",
+                            param : ['FIRST_DATE:string|10','LAST_DATE:string|10'],
+                            value : [tmpFirstDate,tmpLastDate]
+                        }
+                        
+                        let tmpRepResult = (await core.instance.sql.execute(tmpRepQuery)).result.recordset
+                        
+                        this.exportExcel({DENTETE:tmpMasterResult,LIGNES:tmpLineResult,RECUP:tmpRepResult},tmpFileName)
+                    }
+                }
+            }
+            
+            resolve()
+        })
+    }
+    exportExcel(pData,pFileName,pSheetName)
     {
         fs.mkdirSync('./archiveFiscal', { recursive: true })
-        let xlsxData = xlsx.utils.json_to_sheet(pData);
         let workBook = xlsx.utils.book_new();
-        xlsx.utils.book_append_sheet(workBook,xlsxData,"Data")
+
+        if(Array.isArray(pData))
+        {
+            let xlsxData = xlsx.utils.json_to_sheet(pData);
+            xlsx.utils.book_append_sheet(workBook,xlsxData,pSheetName)
+        }
+        else
+        {
+            for (let i = 0; i < Object.keys(pData).length; i++) 
+            {
+                let tmpObjName = Object.keys(pData)[i]
+                let xlsxData = xlsx.utils.json_to_sheet(pData[tmpObjName]);
+                xlsx.utils.book_append_sheet(workBook,xlsxData,tmpObjName)
+            }
+        }
+
         xlsx.writeFile(workBook,'./archiveFiscal/' + pFileName + '.xlsx')
     }
     async insertJet(pData)
@@ -162,7 +273,6 @@ class nf525
         return new Promise(async resolve =>
         {
             let tmpNo = 0
-            let tmpSignature = ''
 
             let tmpLastQuery =
             {
@@ -174,7 +284,10 @@ class nf525
             if(typeof tmpLastData != 'undefined' && tmpLastData.length > 0)
             {
                 tmpNo = tmpLastData[0].NO
-                tmpSignature = this.signatureJet(tmpLastData[0])
+            }
+            else
+            {
+                tmpLastData = []
             }
             
             let tmpInsertQuery = 
@@ -189,7 +302,7 @@ class nf525
                         "@APP_VERSION = @PAPP_VERSION, " +                       
                         "@SIGNATURE = @PSIGNATURE ",
                 param : ['PCUSER:string|25','PNO:int','PDEVICE:string|25','PCODE:string|50','PNAME:string|250','PDESCRIPTION:string|max','PAPP_VERSION:string|10','PSIGNATURE:string|max'],
-                value : [pData.CUSER,tmpNo + 1,pData.DEVICE,pData.CODE,pData.NAME,pData.DESCRIPTION,pData.APP_VERSION,tmpSignature]
+                value : [pData.CUSER,tmpNo + 1,pData.DEVICE,pData.CODE,pData.NAME,pData.DESCRIPTION,pData.APP_VERSION,this.signatureJet(pData,tmpLastData.length > 0 ? tmpLastData[0].SIGNATURE : '')]
             }
             await this.core.sql.execute(tmpInsertQuery)
             resolve()
@@ -247,7 +360,7 @@ class nf525
                             ") AS TMP " +
                             "GROUP BY DOC_DATE ORDER BY DOC_DATE"
                 }
-    
+                
                 if(tmpPeriodResult.length > 0)
                 {
                     tmpQuery.query = tmpQuery.query.replace("{0}","DOC_DATE >= '" + tmpPeriodResult[0].PERIOD + "'")
@@ -379,14 +492,41 @@ class nf525
             if(pType == 0)
             {
                 tmpPeriod = Number(moment(pData.DOC_DATE).format("YYYYMMDD"))
+                await this.insertJet(
+                {
+                    CUSER:'System Auto',            
+                    DEVICE:'',
+                    CODE:'50',
+                    NAME:"Cloture de periode jour.", //BAK
+                    DESCRIPTION:'',
+                    APP_VERSION:this.appInfo.version
+                })
             }
             else if(pType == 1)
             {
                 tmpPeriod = Number(moment(pData.DOC_DATE,"YYYYMMDD").format("MM"))
+                await this.insertJet(
+                {
+                    CUSER:'System Auto',            
+                    DEVICE:'',
+                    CODE:'50',
+                    NAME:"Cloture de periode mois.", //BAK
+                    DESCRIPTION:'',
+                    APP_VERSION:this.appInfo.version
+                })
             }
             else if(pType == 2)
             {
                 tmpPeriod = Number(moment(pData.DOC_DATE,"YYYYMMDD").format("YYYY"))
+                await this.insertJet(
+                {
+                    CUSER:'System Auto',            
+                    DEVICE:'',
+                    CODE:'60',
+                    NAME:"Cloture annuelle.", //BAK
+                    DESCRIPTION:'',
+                    APP_VERSION:this.appInfo.version
+                })
             }
             
             let tmpCtrlQuery = {}
@@ -462,14 +602,14 @@ class nf525
                             'SIGNATURE:string|max'],
                     value : [pType,tmpPeriod,pData.HT_A.toFixed(2),pData.TTC_A.toFixed(2),pData.HT_B.toFixed(2),pData.TTC_B.toFixed(2),pData.HT_C.toFixed(2),
                                 pData.TTC_C.toFixed(2),pData.HT_D.toFixed(2),pData.TTC_D.toFixed(2),pData.TOTAL_HT.toFixed(2),pData.TOTAL_TTC.toFixed(2),
-                                (pData.TOTAL_TTC + tmpLastTotal).toFixed(2),this.signatureGrandTotal(tmpLastData)]
+                                (pData.TOTAL_TTC + tmpLastTotal).toFixed(2),this.signatureGrandTotal(pData,typeof tmpLastData == 'undefined' ? '' : tmpLastData.SIGNATURE)]
                 }
                 await core.instance.sql.execute(tmpInsertQuery)
             }  
             resolve()   
         });
     }
-    signatureGrandTotal(pData)
+    signatureGrandTotal(pData,pLastSignature)
     {
         let tmpSignature = ""
 
@@ -483,7 +623,8 @@ class nf525
             tmpSignature = tmpSignature + "," + parseInt(Number(Number(pData.GTPCA).toFixed(2)) * 100).toString()
             tmpSignature = tmpSignature + "," + moment(pData.CDATE).format("YYYYMMDDHHmmss")
             tmpSignature = tmpSignature + "," + pData.GUID
-            tmpSignature = tmpSignature + "," + (pData.SIGNATURE == "" ? "N" : "O")
+            tmpSignature = tmpSignature + "," + (pLastSignature == "" ? "N" : "O")
+            tmpSignature = tmpSignature + "," + pLastSignature
 
             return this.sign(tmpSignature)
         }
@@ -492,7 +633,7 @@ class nf525
             return tmpSignature
         }
     }
-    signatureJet(pData)
+    signatureJet(pData,pLastSignature)
     {
         let tmpSignature = ""
 
@@ -504,9 +645,10 @@ class nf525
             tmpSignature = tmpSignature + "," + moment(pData.CDATE).format("YYYYMMDDHHmmss")
             tmpSignature = tmpSignature + "," + pData.CUSER
             tmpSignature = tmpSignature + "," + pData.DEVICE
-            tmpSignature = tmpSignature + "," + (pData.SIGNATURE == "" ? "N" : "O")
+            tmpSignature = tmpSignature + "," + (pLastSignature == "" ? "N" : "O")
+            tmpSignature = tmpSignature + "," + pLastSignature
 
-            //return this.sign(tmpSignature)
+            return this.sign(tmpSignature)
         }
         else
         {

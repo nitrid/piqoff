@@ -3,6 +3,7 @@ import moment from 'moment';
 import React from 'react';
 import App from '../../../lib/app.js';
 import { docCls,docItemsCls, docCustomerCls,docExtraCls } from '../../../../core/cls/doc.js';
+import { nf525Cls } from '../../../../core/cls/nf525.js';
 
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
@@ -39,6 +40,8 @@ export default class priceDifferenceInvoice extends React.PureComponent
         this.docObj = new docCls();
         this.paymentObj = new docCls();
         this.extraObj = new docExtraCls();
+        this.nf525 = new nf525Cls();
+        
         this.tabIndex = props.data.tabkey
 
         this._cellRoleRender = this._cellRoleRender.bind(this)
@@ -1054,10 +1057,16 @@ export default class priceDifferenceInvoice extends React.PureComponent
                                         if(this.docObj.dt()[0].LOCKED == 0)
                                         {
                                             this.docObj.dt()[0].LOCKED = 1
+                                            this.docLocked = true
                                             if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
                                             {
                                                 await this.grdDiffInv.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
                                             }
+
+                                            //***** TICKET İMZALAMA *****/
+                                            let tmpSignedData = await this.nf525.signatureDoc(this.docObj.dt()[0],this.docObj.docItems.dt())                
+                                            this.docObj.dt()[0].SIGNATURE = tmpSignedData.SIGNATURE
+                                            this.docObj.dt()[0].SIGNATURE_SUM = tmpSignedData.SIGNATURE_SUM
                                             if((await this.docObj.save()) == 0)
                                             {                                                    
                                                 let tmpConfObj =
@@ -1087,9 +1096,22 @@ export default class priceDifferenceInvoice extends React.PureComponent
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnPrint" parent={this} icon="print" type="default"
-                                       onClick={async ()=>
+                                       onClick={async()=>
                                         {       
-                                            this.popDesign.show()
+                                            if(this.docLocked == true)
+                                            {
+                                                this.popDesign.show()
+                                            }
+                                            else
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgPrintforLocked',showTitle:true,title:this.t("msgPrintforLocked.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgPrintforLocked.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgPrintforLocked.msg")}</div>)
+                                                }
+                                                await dialog(tmpConfObj);
+                                            }
                                         }}/>
                                 </Item>
                                 <Item location="after"
@@ -1281,6 +1303,8 @@ export default class priceDifferenceInvoice extends React.PureComponent
                                                     this.docObj.docCustomer.dt()[0].INPUT = data[0].GUID
                                                     this.docObj.dt()[0].INPUT_CODE = data[0].CODE
                                                     this.docObj.dt()[0].INPUT_NAME = data[0].TITLE
+                                                    this.docObj.dt()[0].ZIPCODE = data[0].ZIPCODE
+                                                    this.docObj.dt()[0].TAX_NO = data[0].TAX_NO
                                                     this.dtExpDate.value = moment(new Date()).add(data[0].EXPIRY_DAY, 'days')
                                                     let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
                                                     if(typeof tmpData != 'undefined' && tmpData.value ==  true)
@@ -1307,7 +1331,8 @@ export default class priceDifferenceInvoice extends React.PureComponent
                                                         {
                                                             if(pdata.length > 0)
                                                             {
-                                                                this.docObj.dt()[0].ADDRESS = pdata[0].TYPE
+                                                                this.docObj.dt()[0].ADDRESS = pdata[0].ADRESS_NO
+                                                                this.docObj.dt()[0].ZIPCODE = pdata[0].ZIPCODE
                                                             }
                                                         }
                                                     }
@@ -1336,6 +1361,8 @@ export default class priceDifferenceInvoice extends React.PureComponent
                                                             this.docObj.docCustomer.dt()[0].INPUT = data[0].GUID
                                                             this.docObj.dt()[0].INPUT_CODE = data[0].CODE
                                                             this.docObj.dt()[0].INPUT_NAME = data[0].TITLE
+                                                            this.docObj.dt()[0].ZIPCODE = data[0].ZIPCODE
+                                                            this.docObj.dt()[0].TAX_NO = data[0].TAX_NO
                                                             this.dtExpDate.value = moment(new Date()).add(data[0].EXPIRY_DAY, 'days')
                                                             let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
                                                             if(typeof tmpData != 'undefined' && tmpData.value ==  true)
@@ -1362,7 +1389,8 @@ export default class priceDifferenceInvoice extends React.PureComponent
                                                                 {
                                                                     if(pdata.length > 0)
                                                                     {
-                                                                        this.docObj.dt()[0].ADDRESS = pdata[0].TYPE
+                                                                        this.docObj.dt()[0].ADDRESS = pdata[0].ADRESS_NO
+                                                                        this.docObj.dt()[0].ZIPCODE = pdata[0].ZIPCODE
                                                                     }
                                                                 }
                                                             }
@@ -1400,7 +1428,7 @@ export default class priceDifferenceInvoice extends React.PureComponent
                                         {
                                             select:
                                             {
-                                                query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME],EXPIRY_DAY FROM CUSTOMER_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)",
+                                                query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME],EXPIRY_DAY,TAX_NO,ISNULL((SELECT TOP 1 ZIPCODE FROM CUSTOMER_ADRESS_VW_01 WHERE ADRESS_NO = 0),'') AS ZIPCODE FROM CUSTOMER_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)",
                                                 param : ['VAL:string|50']
                                             },
                                             sql:this.core.sql
@@ -2605,14 +2633,16 @@ export default class priceDifferenceInvoice extends React.PureComponent
                                                     }
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
                                                     console.log(JSON.stringify(tmpData.result.recordset[0]))
-                                                    this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
+                                                    this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",async(pResult) => 
                                                     {
                                                         if(pResult.split('|')[0] != 'ERR')
                                                         {
+                                                            let tmpLastSignature = await this.nf525.signaturePosDuplicate(this.docObj.dt()[0])
                                                             let tmpExtra = {...this.extraObj.empty}
                                                             tmpExtra.DOC = this.docObj.dt()[0].GUID
                                                             tmpExtra.DESCRIPTION = ''
                                                             tmpExtra.TAG = 'PRINT'
+                                                            tmpExtra.SIGNATURE = tmpLastSignature
                                                             this.extraObj.addEmpty(tmpExtra);
                                                             this.extraObj.save()
                                                             var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");                                                         

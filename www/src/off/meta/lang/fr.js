@@ -4032,6 +4032,12 @@ export const langFr =
             msgSuccess: "Mail envoyé avec succès !",   
             msgFailed: "Echec envoie mail  !"   
         },
+        msgPrintforLocked:
+        {
+            title: "Dikkat",   // BAK
+            btn01: "Tamam",   // BAK
+            msg: "Evrak Kilitlenmeden Yazdırılamaz !"   // BAK
+        },
     },
     ftr_02_003 : // "İade Faturası"
     {
@@ -4391,6 +4397,13 @@ export const langFr =
             msgSuccess: "Mail envoyé avec succès!",   
             msgFailed: "Echec Envoi Mail!"   
         },
+        msgMailSendResult:
+        {
+            title: "Dikkat",   // BAK
+            btn01: "Tamam",   // BAK
+            msgSuccess: "Mail gönderimi başarılı !",   // BAK
+            msgFailed: "Mail gönderimi başarısız !"   // BAK
+        },
     },
     ftr_02_004 : // "Fiyat Farkı Faturası"
     {
@@ -4723,6 +4736,13 @@ export const langFr =
             btn01: "OK",   
             msgSuccess: "Mail envoyé avec succès  !",   
             msgFailed: "Echec envoie Mail  !"   
+        },
+        msgMailSendResult:
+        {
+            title: "Dikkat",   // BAK
+            btn01: "Tamam",   // BAK
+            msgSuccess: "Mail gönderimi başarılı !",   // BAK
+            msgFailed: "Mail gönderimi başarısız !"   // BAK
         },
     },
     ftr_02_005 : // "Şube Satış Faturası"
@@ -5125,6 +5145,13 @@ export const langFr =
             btn01: "OK",   
             msgSuccess: "Mail envoyé avec succès  !",   
             msgFailed: "Echec envoie Mail  !"   
+        },
+        msgMailSendResult:
+        {
+            title: "Dikkat",   // BAK
+            btn01: "Tamam",   // BAK
+            msgSuccess: "Mail gönderimi başarılı !",   // BAK
+            msgFailed: "Mail gönderimi başarısız !"   // BAK
         },
     },
     ftr_02_006 : // "Fiyat Farkı Alış Faturası"
@@ -7784,6 +7811,12 @@ export const langFr =
             btn01: "Oui",
             btn02: "Non",
             msg: "Voulez-vous vraiment tout supprimer ?",
+        },
+        msgItemAlert: //BAK
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Eklemeye çalıştığınız ürün zaten listenizde var !",
         },
     },
     promo_02_001: //  "Promosyon Listesi"
