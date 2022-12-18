@@ -52,8 +52,7 @@ export default class salesOrder extends React.Component
         this._calculateTotal = this._calculateTotal.bind(this)
         this.dropmenuClick = this.dropmenuClick.bind(this)
         this.barcodeScan = this.barcodeScan.bind(this)
-
-    }
+    } 
     async init()
     {
         this.docObj.clearAll()
