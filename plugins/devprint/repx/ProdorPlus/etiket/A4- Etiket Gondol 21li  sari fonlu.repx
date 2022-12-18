@@ -6,10 +6,14 @@
       <HierarchyPrintOptions Ref="3" Indent="50.8" />
       <MultiColumn Ref="4" ColumnCount="3" ColumnWidth="620" ColumnSpacing="60" Layout="AcrossThenDown" Mode="UseColumnWidth" />
       <Controls>
+<<<<<<< HEAD
         <Item1 Ref="5" ControlType="XRLabel" Name="label10" TextFormatString="{0:dd/MM/yyyy}" Multiline="true" CanGrow="false" AnchorVertical="Bottom" TextAlignment="BottomCenter" SizeF="267.4693,26.5207825" LocationFloat="15.0000134, 236.625092" Dpi="254" Font="Arial, 7pt" Padding="5,5,0,0,254">
           <ExpressionBindings>
             <Item1 Ref="6" EventName="BeforePrint" PropertyName="Text" Expression="Now()" />
           </ExpressionBindings>
+=======
+        <Item1 Ref="6" ControlType="XRLabel" Name="label10" Multiline="true" CanGrow="false" AnchorVertical="Bottom" TextAlignment="BottomCenter" SizeF="267.4693,26.5207825" LocationFloat="15.0000134, 236.625092" Dpi="254" Font="Arial, 7pt" Padding="5,5,0,0,254">
+>>>>>>> 934022ef87e6b82f6b39241a1d78fa5aafe6c1fb
           <StylePriority Ref="7" UseFont="false" UseTextAlignment="false" />
         </Item1>
         <Item2 Ref="8" ControlType="XRLabel" Name="label3" Multiline="true" Text="€" TextAlignment="BottomLeft" SizeF="21.1666565,34.4376526" LocationFloat="479.146454, 308.45813" Dpi="254" Font="Arial, 7pt" Padding="5,5,0,0,254">
