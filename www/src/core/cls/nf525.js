@@ -117,6 +117,9 @@ export class nf525Cls
                 tmpSignature = tmpSignature + "," + moment(pData.LDATE).format("YYYYMMDDHHmmss")
                 tmpSignature = tmpSignature + "," + (Number(tmpLastData.REF) + 1).toString().padStart(8,'0') 
                 tmpSignature = tmpSignature + "," + pData.TYPE_NAME
+                tmpSignature = tmpSignature + "," + pData.INPUT_NAME
+                tmpSignature = tmpSignature + "," + pData.ZIPCODE
+                tmpSignature = tmpSignature + "," + pData.TAX_NO
                 tmpSignature = tmpSignature + "," + (tmpLastData.LAST_SIGN == "" ? "N" : "O")
                 tmpSignature = tmpSignature + "," + tmpLastData.LAST_SIGN
                 tmpSignatureSum = tmpSignature
@@ -267,21 +270,16 @@ export class nf525Cls
             let tmpQuery = 
             {
                 query : "SELECT TOP 1 " +
-                        "NF203.GUID, " +
-                        "NF203.DOC, " +
-                        "NF203.PRINT_NO, " +
-                        "NF203.LUSER, " +
-                        "NF203.LDATE, " +
-                        "NF203.SIGNATURE, " +
-                        "NF203.APP_VERSION, " +
-                        "NF203.DESCRIPTION, " +
-                        "DOC.REF_NO, " +
-                        "DOC.TYPE_NAME, " +
-                        "DOC.DEVICE " +
+                        "NF203.FAC_DUP_NID AS GUID, " +
+                        "NF203.FAC_DUP_ORI_NUM AS DOC, " +
+                        "NF203.FAC_DUP_PRN_NUM AS PRINT_NO, " +
+                        "NF203.FAC_DUP_OPS_NID AS LUSER, " +
+                        "NF203.FAC_DUP_HOR_GDH AS LDATE, " +
+                        "NF203.FAC_DUP_SIG AS SIGNATURE, " +
+                        "NF203.FAC_DUP_VER AS APP_VERSION, " +
+                        "NF203.FAC_DUP_TYP AS TYPE_NAME " +
                         "FROM NF203_DOC_DUPLICATE_VW_01 AS NF203 " +
-                        "INNER JOIN DOC_VW_01 AS DOC ON " +
-                        "NF203.DOC = DOC.GUID " +
-                        "WHERE NF203.DOC = @DOC ORDER BY NF203.PRINT_NO DESC",
+                        "WHERE NF203.FAC_DUP_ORI_NUM = @DOC ORDER BY NF203.FAC_DUP_PRN_NUM DESC",
                 param : ['POS:string|50'],
                 value : [pData.GUID]
             }
@@ -305,7 +303,7 @@ export class nf525Cls
             tmpSignature = tmpSignature + "," + tmpPrintCount + 1
             tmpSignature = tmpSignature + "," + pData.LUSER
             tmpSignature = tmpSignature + "," + moment(pData.LDATE).format("YYYYMMDDHHmmss")
-            tmpSignature = tmpSignature + "," + pData.DEVICE + "" + pData.REF_NO.toString().padStart(8,'0') 
+            tmpSignature = tmpSignature + "," + pData.FAC_DUP_NID
             tmpSignature = tmpSignature + "," + (tmpLastSignature == "" ? "N" : "O")
             tmpSignature = tmpSignature + "," + tmpLastSignature
 
