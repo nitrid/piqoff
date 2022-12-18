@@ -88,8 +88,8 @@ export const langFr =
     },
     popDeleteDesc : 
     {
-        head : "Description du Processus de Suppression",   // BAK
-        title : "Veuillez Saisir la Raison de la Suppression"   // BAK
+        head : "Description du Processus de Suppression",   
+        title : "Veuillez Saisir le motif de la Suppression"   
     },
     menuOff:
     {
@@ -115,8 +115,8 @@ export const langFr =
         stk_02_005: "Saisie multi produit retour",
         stk_02_006: "Imprimer étiquette spéciale",
         stk_02_007: "Entrée DLC",
-        stk_02_008 : "Stok Giriş Fişi",  // BAK
-        stk_02_009 : "Stok Çıkış Fişi",  // BAK
+        stk_02_008 : "Ticket Entrée Stock",  
+        stk_02_009 : "Ticket Sortie Stock",  
         stk_03_001: "Liste Produit",
         stk_03_002: "Liste prix",
         stk_03_003: "Liste code barre",
@@ -221,7 +221,7 @@ export const langFr =
         pos_02_005 : "Rapport de tickets modifiés", 
         pos_02_006 : "Rapport de Vente Fin de Journée", 
         pos_02_007 : "Rapport Pos Fond de Caisse ", 
-        pos_02_008 : "Ürün Satış Raporu", // BAK
+        pos_02_008 : "Rapport de Vente Produit", 
         pos_03 :"Traitements", 
         pos_03_001 : "Opérations de fin de journée",
         promo: "Promotion",
@@ -243,7 +243,7 @@ export const langFr =
         set_02_007 : "Historique Demande de Soutien",   
         set_03 : "Réglages Documents",   
         set_03_001 : "Documents Effacés",   
-        set_03_002 : "Lignes Effacées", // BAK
+        set_03_002 : "Lignes Effacées", 
         proces : "Saisie groupée",
         proces_01 : "Traitement Produit",
         proces_01_001 : "MAJ Famille Produit",
@@ -255,7 +255,7 @@ export const langFr =
         tkf_01_002: "Liste accord de Vente",
         tkf_02_001: "Saisie Proposition d'Achat",
         tkf_02_002: "Saisie Proposition de Vente",
-        purchase : "Processus d'achat", // BAK Satın Alma işlemleri
+        purchase : "Processus d'achat",
         purcoffer : "Proposition",
         purcoffer_01 : "Document",
         purcoffer_02 : "Listes",
@@ -274,7 +274,7 @@ export const langFr =
         purcinvoices_02 : "Listes",
         purcinvoices_03 : "Proforma",
         purcinvoices_04 : "Rapports",
-        sales : "Processus de vente",  // BAK Satış işlemleri
+        sales : "Processus de vente", 
         salesoffer : "Proposition",
         salesoffer_01 : "Document",
         salesoffer_02 : "Listes",
@@ -849,7 +849,7 @@ export const langFr =
             btn02: "OK",
             msg : "Caisse Saisie déjà Enregistré dans le sysytème !"
         },
-        chkActive: "Aktif",
+        chkActive: "Actif",
     },
     stk_02_001 : // Sayım Evrakı"
     {
@@ -900,7 +900,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les en-tête avant l'achèvement !"
+            msg: "Veuillez saisir les en-têtes avant l'achèvement !"
         },
         msgSave:
         {
@@ -941,7 +941,7 @@ export const langFr =
             title: "Attention",
             btn01: "Continue",
             btn02: "Abandonne",
-            msg: "Chiffre Saisi Supérieur à 1000 Voulez Vous Continuer ?",
+            msg: "Chiffre Saisi Supérieur à 1000 Voulez Voulez vous Continuer ?",
         },
         msgLocked:
         {
@@ -1229,7 +1229,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les en-tête avant l'achèvement !"
+            msg: "Veuillez saisir les en-têtes avant l'achèvement !"
         },
         msgEmpDescription:
         {
@@ -2539,12 +2539,12 @@ export const langFr =
         tabTitleLegal : "Légal",
         tabTitleOffical : "Administrateur",
         tabCustomerBank : "Données Bancaire",
-        tabTitleFinanceDetail : "Finans Bilgileri", // BAK
+        tabTitleFinanceDetail : "Information Financières", 
         txtLegal :"Données Légales",
         chkRebate :"Retour Reprise",
-        txtExpiryDay : "Vade",  // BAK
-        txtRiskLimit : "Risk Limiti",  // BAK
-        expDay : "(Jour)", // BAK
+        txtExpiryDay : "Echéance",  
+        txtRiskLimit : "Limite de Risque",  
+        expDay : "(Jour)", 
         pg_txtCode : 
         {
             title : "Sélectionner Client",
@@ -2644,9 +2644,9 @@ export const langFr =
         },
         msgTaxNo:
         {
-            title: "Dikkat",   
-            btn01: "Tamam",   
-            msg: "Lütfen vergi numarasını doldurunuz !"   
+            title: "Attention",   
+            btn01: "OK",   
+            msg: "Veuillez Saisir le Numéro TVA !"   
         },
         msgAdressNotValid:
         {
@@ -2681,7 +2681,7 @@ export const langFr =
         msgCode : 
         {
             title: "Attention",
-            btn01: "Aller Client",
+            btn01: "Recherche Client",
             btn02: "OK",
             msg : "Client déjà existant!"
         },
@@ -2752,7 +2752,7 @@ export const langFr =
         msgCode : 
         {
             title: "Attention",
-            btn01: "Aller Client",
+            btn01: "Recherche Client",
             btn02: "OK",
             msg : "Client déja existant !"
         },
@@ -3204,7 +3204,7 @@ export const langFr =
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
             clmMulticode : "FRN.Code",
-            clmPrice : "Alış Fiyatı" // BAK
+            clmPrice : "Prix d'Achat" 
         },
         pg_dispatchGrid : 
         {
@@ -3231,7 +3231,7 @@ export const langFr =
             clmDispatch : "No Bon de Livraison",
             clmCreateDate: "Date d'Enregistrement",
             clmMargin :"Marge",
-            clmDiffPrice : "Difference",
+            clmDiffPrice : "Différence",
             clmCustomerPrice : "Prix F.",
             clmDescription :"Motif",
             clmCuser :"Utilisateur",
@@ -3638,11 +3638,11 @@ export const langFr =
         dtExpDate : "Date d'Echéance", 
         getOffers : "Recherche Proposition",  
         getProforma : "Rechercher Proforma ", 
-        btnView : "Aperçu", // BAK
-        btnMailsend : "Mail Gönder", // BAK
-        placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.", // BAK
-        validDesign : "Lütfen Dizayn seçiniz.",  // BAK
-        validMail : "Lütfen Boş Geçmeyin.",  // BAK
+        btnView : "Aperçu", 
+        btnMailsend : "Envoyer Mail", 
+        placeMailHtmlEditor : "Veuillez saisir votre texte.", 
+        validDesign : "Veuillez séléctionner le design.",  
+        validMail : "Veuillez ne pas laisser le champs vide.",  
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -3665,7 +3665,7 @@ export const langFr =
             title : "Sélectionner Produit",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
-            clmPrice : "Satış Fiyatı" // BAK
+            clmPrice : "Prix de Vente" 
         },
         pg_dispatchGrid : 
         {
@@ -4020,17 +4020,17 @@ export const langFr =
         },
         popMailSend : 
         {
-            title :"E-Mail Gönder",   // BAK
-            txtMailSubject : "E-Mail Başlığı",   // BAK
-            txtSendMail : "E-Mail Adresi",   // BAK
-            btnSend : "Gönder"   // BAK
+            title :"Envoyer E-Mail",   
+            txtMailSubject : "Objet E-Mail",   
+            txtSendMail : "Adresse E-Mail ",   
+            btnSend : "Envoyer"   
         },
         msgMailSendResult:
         {
-            title: "Dikkat",   // BAK
-            btn01: "Tamam",   // BAK
-            msgSuccess: "Mail gönderimi başarılı !",   // BAK
-            msgFailed: "Mail gönderimi başarısız !"   // BAK
+            title: "Attention",   
+            btn01: "OK",   
+            msgSuccess: "Mail envoyé avec succès !",   
+            msgFailed: "Echec envoie mail  !"   
         },
         msgPrintforLocked:
         {
@@ -4080,11 +4080,11 @@ export const langFr =
         txtExpFee : "Pénalités de Retard", 
         dtExpDate : "Date d'Echéance", 
         getProforma : "Rechercher Proforma ", 
-        btnView : "Aperçu", // BAK
-        btnMailsend : "Mail Gönder", // BAK
-        placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.", // BAK
-        validDesign : "Lütfen Dizayn seçiniz.",  // BAK
-        validMail : "Lütfen Boş Geçmeyin.",  // BAK
+        btnView : "Aperçu", 
+        btnMailsend : "Envoyer Mail", 
+        placeMailHtmlEditor : "Veuillez saisir votre texte .", 
+        validDesign : "Veuillez choisir un design.",  
+        validMail : "Veuillez ne pas laisser le champs vide.",  
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -4107,7 +4107,7 @@ export const langFr =
             title : "Sélectionner Produit",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
-            clmPrice : "Alış Fiyatı" // BAK
+            clmPrice : "Prix d'Achat" 
         },
         pg_dispatchGrid : 
         {
@@ -4214,13 +4214,13 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez Appliquer de Remise Supérieur au Montant Total !"
+            msg: "Vous ne Pouvez Appliquer de Remise Supérieure au Montant Total !"
         },
         msgDiscountPercent:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez Appliquer de Remise Supérieur au Montant Total !"
+            msg: "Vous ne Pouvez Appliquer de Remise Supérieure au Montant Total !"
         },
         msgLocked:
         {
@@ -4385,17 +4385,17 @@ export const langFr =
         },
         popMailSend : 
         {
-            title :"E-Mail Gönder",   // BAK
-            txtMailSubject : "E-Mail Başlığı",   // BAK
-            txtSendMail : "E-Mail Adresi",   // BAK
-            btnSend : "Gönder"   // BAK
+            title :"Envoyer E-Mail",   
+            txtMailSubject : "Objet E-Mail",   
+            txtSendMail : "Adresse E-Mail",   
+            btnSend : "Envoyer"   
         },
         msgMailSendResult:
         {
-            title: "Dikkat",   // BAK
-            btn01: "Tamam",   // BAK
-            msgSuccess: "Mail gönderimi başarılı !",   // BAK
-            msgFailed: "Mail gönderimi başarısız !"   // BAK
+            title: "Attention",   
+            btn01: "OK",   
+            msgSuccess: "Mail envoyé avec succès!",   
+            msgFailed: "Echec Envoi Mail!"   
         },
         msgMailSendResult:
         {
@@ -4446,11 +4446,11 @@ export const langFr =
         txtTotalQuantity : "Quantité totale",  
         txtExpFee : "Pénalités de Retard", 
         dtExpDate : "Date d'Echéance", 
-        btnView : "Aperçu", // BAK
-        btnMailsend : "Mail Gönder", // BAK
-        placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.", // BAK
-        validDesign : "Lütfen Dizayn seçiniz.",  // BAK
-        validMail : "Lütfen Boş Geçmeyin.",  // BAK
+        btnView : "Aperçu", 
+        btnMailsend : "Envoyer Mail", 
+        placeMailHtmlEditor : "Veuillez saisir votre texte au mail.", 
+        validDesign : "Veuillez sélectionner le design.",  
+        validMail : "Veuillez ne pas laisser le champs vide.",  
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -4725,17 +4725,17 @@ export const langFr =
         },
         popMailSend : 
         {
-            title :"E-Mail Gönder",   // BAK
-            txtMailSubject : "E-Mail Başlığı",   // BAK
-            txtSendMail : "E-Mail Adresi",   // BAK
-            btnSend : "Gönder"   // BAK
+            title :"Envoyer E-Mail ",   
+            txtMailSubject : "Objet E-Mail ",   
+            txtSendMail : "Adresse E-Mail ",   
+            btnSend : "Envoyer"   
         },
         msgMailSendResult:
         {
-            title: "Dikkat",   // BAK
-            btn01: "Tamam",   // BAK
-            msgSuccess: "Mail gönderimi başarılı !",   // BAK
-            msgFailed: "Mail gönderimi başarısız !"   // BAK
+            title: "Attention",   
+            btn01: "OK",   
+            msgSuccess: "Mail envoyé avec succès  !",   
+            msgFailed: "Echec envoie Mail  !"   
         },
         msgMailSendResult:
         {
@@ -4786,11 +4786,11 @@ export const langFr =
         txtTotalQuantity : "Quantité unitaire",  
         txtExpFee : "Pénalités de Retard", 
         dtExpDate : "Date d'Echéance", 
-        btnView : "Aperçu", // BAK
-        btnMailsend : "Mail Gönder", // BAK
-        placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.", // BAK
-        validDesign : "Lütfen Dizayn seçiniz.",  // BAK
-        validMail : "Lütfen Boş Geçmeyin.",  // BAK
+        btnView : "Aperçu", 
+        btnMailsend : "Envoyer E-Mail", 
+        placeMailHtmlEditor : "Veuillez saisir votre texte .", 
+        validDesign : "Veuillez sélectionner le design.",  
+        validMail : "Veuillez ne pas laisser le champs vide.",  
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -5134,17 +5134,17 @@ export const langFr =
         },
         popMailSend : 
         {
-            title :"E-Mail Gönder",   // BAK
-            txtMailSubject : "E-Mail Başlığı",   // BAK
-            txtSendMail : "E-Mail Adresi",   // BAK
-            btnSend : "Gönder"   // BAK
+            title :"Envoyer Mail ",   
+            txtMailSubject : "Objet E-Mail ",   
+            txtSendMail : "Adresse E-Mail ",   
+            btnSend : "Envoyer"   
         },
         msgMailSendResult:
         {
-            title: "Dikkat",   // BAK
-            btn01: "Tamam",   // BAK
-            msgSuccess: "Mail gönderimi başarılı !",   // BAK
-            msgFailed: "Mail gönderimi başarısız !"   // BAK
+            title: "Attention",   
+            btn01: "OK",   
+            msgSuccess: "Mail envoyé avec succès  !",   
+            msgFailed: "Echec envoie Mail  !"   
         },
         msgMailSendResult:
         {
@@ -5217,7 +5217,7 @@ export const langFr =
             title : "Sélectionner Produit",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
-            clmPrice : "Satış Fiyatı" // BAK
+            clmPrice : "Prix de Vente" 
         },
         pg_contractGrid : 
         {
@@ -5267,7 +5267,7 @@ export const langFr =
         },
         popPassword : 
         {
-            title: "Veuillez Saisir MDP Administrateur pour Acces au Document ",
+            title: "Veuillez Saisir MDP Administrateur pour Accès au Document ",
             Password : "Mot de passe",
             btnApprove : "Valide"
         },
@@ -5275,7 +5275,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les en-tête avant l'achèvement !"
+            msg: "Veuillez saisir les en-têtes avant l'achèvement !"
         },
         msgSave:
         {
@@ -5315,7 +5315,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Le montant saisie ne peut être supérieur au total !"
+            msg: "Le montant saisi ne peut être supérieur au total !"
         },
         msgDiscountPrice:
         {
@@ -5532,7 +5532,7 @@ export const langFr =
             title : "Sélectionner Produit",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
-            clmPrice : "Satış Fiyatı" // BAK
+            clmPrice : "Prix de Vente" 
         },
         pg_dispatchGrid : 
         {
@@ -5822,7 +5822,7 @@ export const langFr =
         txtVat : "TVA",
         txtTotal : "Total Général",
         dtShipDate :"Date de Livraison",
-        getContract : "Sélectionne la Date d'Achat",
+        getContract : "Sélectionner la Date d'Achat",
         getPayment : "Entrée Paiement",
         cash : "Total",
         description :"Remarque",
@@ -7087,7 +7087,7 @@ export const langFr =
         },
         popPassword : 
         {
-            title: "Veuillez Saisir MDP Administrateur pour Acces au Document ",
+            title: "Veuillez Saisir MDP Administrateur pour Accès au Document ",
             Password : "Mot de passe",
             btnApprove : "Valide"
         },
@@ -7095,13 +7095,13 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les en-tête avant l'achèvement !"
+            msg: "Veuillez saisir les en-têtes avant l'achèvement !"
         },
         msgMoreAmount:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Le Montant restant ne peux être supérieure au total !"
+            msg: "Le Montant restant ne peux être supérieur au total !"
         },
         msgSave:
         {
@@ -7141,7 +7141,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez Appliquer de Remise Supérieur au Montant Total !"
+            msg: "Vous ne Pouvez Appliquer de Remise Supérieure au Montant Total !"
         },
         msgDiscountPercent:
         {
@@ -7177,7 +7177,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Le document ne peut être supprimé car règlement saisie!" 
+            msg: "Le document ne peut être supprimé car règlement saisi!" 
         },
         msgDoclocked:
         {
@@ -7802,7 +7802,7 @@ export const langFr =
         validation: 
         {
             txtPrmQuantityValid: "Vous ne pouvez pas ignorer le montant",
-            txtPrmQuantityMinValid: "Minimum değer en az 0.001 olmalıdır !", 
+            txtPrmQuantityMinValid: "La Valeur Doit Etre au Minimum 0.001 !", 
             txtRstItemQuantityValid: "le montant ne peut pas être inférieur à zéro",
         },
         msgDeleteAll: 
@@ -8013,7 +8013,7 @@ export const langFr =
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
             clmMulticode : "FRN.Code",
-            clmPrice : "Alış Fiyatı" // BAK
+            clmPrice : "Prix d'Achat" 
         },
         grdPurcDispatch: 
         {
@@ -8050,7 +8050,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les en-tête avant l'achèvement !"
+            msg: "Veuillez saisir les en-têtes avant l'achèvement !"
         },
         msgSave:
         {
@@ -8090,13 +8090,13 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez Appliquer de Remise Supérieur au Montant Total !"
+            msg: "Vous ne Pouvez Appliquer de Remise Supérieure au Montant Total !"
         },
         msgDiscountPercent:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez Appliquer de Remise Supérieur au Montant Total !"
+            msg: "Vous ne Pouvez Appliquer de Remise Supérieure au Montant Total !"
         },
         msgLocked:
         {
@@ -8268,7 +8268,7 @@ export const langFr =
         {
             title: "Attention", 
             btn01: "OK", 
-            msg: "Une ligne de votre document a été convertie en facture. Ce document ne peut pas être supprimé !"  
+            msg: "Une ligne de votre document a été converti en facture. Ce document ne peut pas être supprimé !"  
         },
         pg_adress : 
         {
@@ -8305,11 +8305,11 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
-        btnView : "Aperçu", // BAK
-        btnMailsend : "Mail Gönder", // BAK
-        placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.", // BAK
-        validDesign : "Lütfen Dizayn seçiniz.",  // BAK
-        validMail : "Lütfen Boş Geçmeyin.",  // BAK
+        btnView : "Aperçu", 
+        btnMailsend : "Envoyer E-Mail", 
+        placeMailHtmlEditor : "Veuillez saisir votre texte .", 
+        validDesign : "Veuillez sélectionner le design.",  
+        validMail : "Veuillez ne pas laisser le champs vide.",  
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -8332,7 +8332,7 @@ export const langFr =
             title : "Sélectionner Produit",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
-            clmPrice : "Satış Fiyatı" // BAK
+            clmPrice : "Prix de Vente" 
         },
         grdSlsDispatch: 
         {
@@ -8587,19 +8587,19 @@ export const langFr =
         {
             title: "Attention",  
             btn01: "OK",  
-            msg: "Cette ligne a été convertie en facture, vous ne pouvez effectuer aucune modification !"  
+            msg: "Cette ligne a été converti en facture, vous ne pouvez effectuer aucune modification !"  
         },
         msgRowNotDelete :
         {
             title: "Attention",  
             btn01: "OK",  
-            msg: "Cette ligne a été convertie en facture, vous ne pouvez pas la supprimer !"  
+            msg: "Cette ligne a été converti en facture, vous ne pouvez pas la supprimer !"  
         },
         msgdocNotDelete : 
         {
             title: "Attention", 
             btn01: "OK", 
-            msg: "Une ligne a été convertie en facture dans votre document. Ce document ne peut pas être supprimé.!"  
+            msg: "Une ligne a été converti en facture dans votre document. Ce document ne peut pas être supprimé.!"  
         },
         pg_adress : 
         {
@@ -8617,17 +8617,17 @@ export const langFr =
         },
         popMailSend : 
         {
-            title :"E-Mail Gönder",   // BAK
-            txtMailSubject : "E-Mail Başlığı",   // BAK
-            txtSendMail : "E-Mail Adresi",   // BAK
-            btnSend : "Gönder"   // BAK
+            title :"Envoyer Mail ",   
+            txtMailSubject : "Objet E-Mail ",   
+            txtSendMail : "Adresse E-Mail ",   
+            btnSend : "Envoyer"   
         },
         msgMailSendResult:
         {
-            title: "Dikkat",   // BAK
-            btn01: "Tamam",   // BAK
-            msgSuccess: "Mail gönderimi başarılı !",   // BAK
-            msgFailed: "Mail gönderimi başarısız !"   // BAK
+            title: "Attention",   
+            btn01: "OK",   
+            msgSuccess: "Mail envoyé avec succès  !",   
+            msgFailed: "Echec envoi Mail  !"   
         },
     },
     irs_02_003 : // "İade İrsaliyesi"
@@ -8650,11 +8650,11 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
-        btnView : "Aperçu", // BAK
-        btnMailsend : "Mail Gönder", // BAK
-        placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.", // BAK
-        validDesign : "Lütfen Dizayn seçiniz.",  // BAK
-        validMail : "Lütfen Boş Geçmeyin.",  // BAK
+        btnView : "Aperçu", 
+        btnMailsend : "Envoyer E-Mail", 
+        placeMailHtmlEditor : "Veuillez saisir votre texte .", 
+        validDesign : "Veuillez sélectionner le design.",  
+        validMail : "Veuillez ne pas laisser le champs vide.",  
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -8677,7 +8677,7 @@ export const langFr =
             title : "Sélectionner Produit",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
-            clmPrice : "Alış Fiyatı" // BAK
+            clmPrice : "Prix d'Achat" 
         },
         pg_RebateGrid : 
         {
@@ -8720,7 +8720,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les en-tête avant l'achèvement !"
+            msg: "Veuillez saisir les en-têtes avant l'achèvement !"
         },
         msgSave:
         {
@@ -8876,19 +8876,19 @@ export const langFr =
         {
             title: "Attention",  
             btn01: "OK",  
-            msg: "Cette ligne a été convertie en facture, vous ne pouvez effectuer aucune modification !"
+            msg: "Cette ligne a été converti en facture, vous ne pouvez effectuer aucune modification !"
         },
         msgRowNotDelete :
         {
             title: "Attention",  
             btn01: "OK",  
-            msg: "Cette ligne a été convertie en facture, vous ne pouvez pas la supprimer !"  
+            msg: "Cette ligne a été converti en facture, vous ne pouvez pas la supprimer !"  
         },
         msgdocNotDelete : 
         {
             title: "Attention", 
             btn01: "OK", 
-            msg: "Une ligne a été convertie en facture dans votre document. Ce document ne peut pas être supprimé !"  
+            msg: "Une ligne a été converti en facture dans votre document. Ce document ne peut pas être supprimé !"  
         },
         pg_adress : 
         {
@@ -8913,17 +8913,17 @@ export const langFr =
         },
         popMailSend : 
         {
-            title :"E-Mail Gönder",   // BAK
-            txtMailSubject : "E-Mail Başlığı",   // BAK
-            txtSendMail : "E-Mail Adresi",   // BAK
-            btnSend : "Gönder"   // BAK
+            title :"Envoyer E-Mail ",   
+            txtMailSubject : "Objet E-Mail ",   
+            txtSendMail : "Adresse E-Mail ",   
+            btnSend : "Envoyer"   
         },
         msgMailSendResult:
         {
-            title: "Dikkat",   // BAK
-            btn01: "Tamam",   // BAK
-            msgSuccess: "Mail gönderimi başarılı !",   // BAK
-            msgFailed: "Mail gönderimi başarısız !"   // BAK
+            title: "Attention",   
+            btn01: "OK",   
+            msgSuccess: "Mail envoyé avec succès  !",   
+            msgFailed: "Echec envoie Mail  !"   
         },
     },
     irs_02_004 : // Şube Satış İrsaliyesi"
@@ -8946,11 +8946,11 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
-        btnView : "Aperçu", // BAK
-        btnMailsend : "Mail Gönder", // BAK
-        placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.", // BAK
-        validDesign : "Lütfen Dizayn seçiniz.",  // BAK
-        validMail : "Lütfen Boş Geçmeyin.",  // BAK
+        btnView : "Aperçu", 
+        btnMailsend : "Envoyer E-Mail", 
+        placeMailHtmlEditor : "Veuillez saisir votre texte .", 
+        validDesign : "Veuillez sélectionner le design.",  
+        validMail : "Veuillez ne pas laisser le champs vide.",  
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -9227,19 +9227,19 @@ export const langFr =
         {
             title: "Attention",  
             btn01: "OK",  
-            msg: "Cette ligne a été convertie en facture, vous ne pouvez effectuer aucune modification !"  
+            msg: "Cette ligne a été converti en facture, vous ne pouvez effectuer aucune modification !"  
         },
         msgRowNotDelete :
         {
             title: "Attention",  
             btn01: "OK",  
-            msg: "Cette ligne a été convertie en facture, vous ne pouvez pas la supprimer !"  
+            msg: "Cette ligne a été converti en facture, vous ne pouvez pas la supprimer !"  
         },
         msgdocNotDelete : 
         {
             title: "Attention", 
             btn01: "OK", 
-            msg: "Une ligne a été convertie en facture dans votre document. Ce document ne peut pas être supprimé.!"  
+            msg: "Une ligne a été converti en facture dans votre document. Ce document ne peut pas être supprimé.!"  
         },
         pg_adress : 
         {
@@ -9257,17 +9257,17 @@ export const langFr =
         },
         popMailSend : 
         {
-            title :"E-Mail Gönder",   // BAK
-            txtMailSubject : "E-Mail Başlığı",   // BAK
-            txtSendMail : "E-Mail Adresi",   // BAK
-            btnSend : "Gönder"   // BAK
+            title :"Envoyer E-Mail ",   
+            txtMailSubject : "Objet E-Mail ",   
+            txtSendMail : "Adresse E-Mail ",   
+            btnSend : "Envoyer"   
         },
         msgMailSendResult:
         {
-            title: "Dikkat",   // BAK
-            btn01: "Tamam",   // BAK
-            msgSuccess: "Mail gönderimi başarılı !",   // BAK
-            msgFailed: "Mail gönderimi başarısız !"   // BAK
+            title: "Attention",   
+            btn01: "OK",   
+            msgSuccess: "Mail envoyé avec succès  !",   
+            msgFailed: "Echec envoi Mail  !"   
         },
     },
     irs_02_005 : // "İade Alış İrsaliyesi"
@@ -9312,7 +9312,7 @@ export const langFr =
             title : "Sélectionner Produit",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
-            clmPrice : "Satış Fiyatı" // BAK
+            clmPrice : "Prix de Vente" 
         },
         pg_RebateGrid : 
         {
@@ -9511,19 +9511,19 @@ export const langFr =
         {
             title: "Attention",  
             btn01: "OK",  
-            msg: "Cette ligne a été convertie en facture, vous ne pouvez effectuer aucune modification !"
+            msg: "Cette ligne a été converti en facture, vous ne pouvez effectuer aucune modification !"
         },
         msgRowNotDelete :
         {
             title: "Attention",  
             btn01: "OK",  
-            msg: "Cette ligne a été convertie en facture, vous ne pouvez pas la supprimer !"  
+            msg: "Cette ligne a été converti en facture, vous ne pouvez pas la supprimer !"  
         },
         msgdocNotDelete : 
         {
             title: "Attention", 
             btn01: "OK", 
-            msg: "Une ligne a été convertie en facture dans votre document. Ce document ne peut pas être supprimé !"  
+            msg: "Une ligne a été converti en facture dans votre document. Ce document ne peut pas être supprimé !"  
         },
         pg_adress : 
         {
@@ -9650,7 +9650,7 @@ export const langFr =
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
             clmMulticode : "Référence Fournisseur",
-            clmPrice : "Alış Fiyatı" // BAK
+            clmPrice : "Prix d'Achat" 
         },
         pg_txtBarcode : 
         {
@@ -9906,19 +9906,19 @@ export const langFr =
         {
             title: "Attention",  
             btn01: "OK",  
-            msg: "Cette ligne a été convertie en bordereau d'expédition ou en facture. Vous ne pouvez effectuer aucune modification !"  
+            msg: "Cette ligne a été converti en bordereau d'expédition ou en facture. Vous ne pouvez effectuer aucune modification !"  
         },
         msgRowNotDelete :
         {
             title: "Attention",  
             btn01: "OK",  
-            msg: "Cette ligne a été convertie en bordereau d'expédition ou en facture, vous ne pouvez pas la supprimer !"  
+            msg: "Cette ligne a été converti en bordereau d'expédition ou en facture, vous ne pouvez pas la supprimer !"  
         },
         msgdocNotDelete : 
         {
             title: "Attention",   
             btn01: "OK",   
-            msg: "Votre document comporte une ligne qui a été convertie en bordereau d'expédition ou en facture. Ce document ne peut pas être supprimé !"   
+            msg: "Votre document comporte une ligne qui a été converti en bordereau d'expédition ou en facture. Ce document ne peut pas être supprimé !"   
         },
         pg_adress : 
         {
@@ -9955,11 +9955,11 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
-        btnView : "Aperçu", // BAK
-        btnMailsend : "Mail Gönder", // BAK
-        placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.", // BAK
-        validDesign : "Lütfen Dizayn seçiniz.",  // BAK
-        validMail : "Lütfen Boş Geçmeyin.",  // BAK
+        btnView : "Aperçu", 
+        btnMailsend : "Envoyer E-Mail", 
+        placeMailHtmlEditor : "Veuillez saisir votre texte .", 
+        validDesign : "Veuillez sélectionner le design.",  
+        validMail : "Veuillez ne pas laisser le champs vide.",  
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -9982,7 +9982,7 @@ export const langFr =
             title : "Sélectionner Produit",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
-            clmPrice : "Satış Fiyatı" // BAK
+            clmPrice : "Prix de Vente" 
         },
         grdSlsOrder: 
         {
@@ -10231,19 +10231,19 @@ export const langFr =
         {
             title: "Attention",  
             btn01: "OK",  
-            msg: "Cette ligne a été convertie en bordereau d'expédition ou en facture. Vous ne pouvez effectuer aucune modification !"  
+            msg: "Cette ligne a été converti en bordereau d'expédition ou en facture. Vous ne pouvez effectuer aucune modification !"  
         },
         msgRowNotDelete :
         {
             title: "Attention",  
             btn01: "OK",  
-            msg: "Cette ligne a été convertie en bordereau d'expédition ou en facture, vous ne pouvez pas la supprimer !"  
+            msg: "Cette ligne a été converti en bordereau d'expédition ou en facture, vous ne pouvez pas la supprimer !"  
         },
         msgdocNotDelete : 
         {
             title: "Attention",   
             btn01: "OK",   
-            msg: "Votre document comporte une ligne qui a été convertie en bordereau d'expédition ou en facture. Ce document ne peut pas être supprimé !"   
+            msg: "Votre document comporte une ligne qui a été converti en bordereau d'expédition ou en facture. Ce document ne peut pas être supprimé !"   
         },
         pg_adress : 
         {
@@ -10261,17 +10261,17 @@ export const langFr =
         },
         popMailSend : 
         {
-            title :"E-Mail Gönder",   // BAK
-            txtMailSubject : "E-Mail Başlığı",   // BAK
-            txtSendMail : "E-Mail Adresi",   // BAK
-            btnSend : "Gönder"   // BAK
+            title :"Envoyer Mail ",   
+            txtMailSubject : "Objet E-Mail ",   
+            txtSendMail : "Adresse E-Mail ",   
+            btnSend : "Envoyer"   
         },
         msgMailSendResult:
         {
-            title: "Dikkat",   // BAK
-            btn01: "Tamam",   // BAK
-            msgSuccess: "Mail gönderimi başarılı !",   // BAK
-            msgFailed: "Mail gönderimi başarısız !"   // BAK
+            title: "Attention",   
+            btn01: "OK",   
+            msgSuccess: "Mail envoyé avec succès  !",   
+            msgFailed: "Echec envoie Mail  !"   
         },
     },
     sip_04_001 : // "Sipariş Ayrıştırma"
@@ -10618,7 +10618,7 @@ export const langFr =
         },
         popItems: 
         {
-            title: "Inclus un Accord",
+            title: "Inclu un Accord",
             txtPopItemsCode : "Référence Produit",
             txtPopItemsName: "Nom Produit",
             txtPopItemsPrice : "Prix ",
@@ -10681,7 +10681,7 @@ export const langFr =
         {   
             title: "Attention",   
             btn01: "OK",   
-            msg: "Veuillez saisir les en-tête avant l'achèvement !"   
+            msg: "Veuillez saisir les en-têtes avant l'achèvement !"   
         },
     },
     fns_01_001 : // "Ödeme Listesi",
@@ -10806,7 +10806,7 @@ export const langFr =
         btnAddPay : "Entrée de paiement",
         invoiceSelect : "Sélection de facture",
         btnCash : "Entrée de paiement",
-        ValidCash : "0'dan büyük bir tutar giriniz", // BAK
+        ValidCash : "Veuillez saisir un montant supérieur à 0", 
         cmbPayType : {
             title : "Mode de paiement",
             cash : "Espèce",
@@ -10818,7 +10818,7 @@ export const langFr =
         },
         pg_Docs : 
         {
-            title : "Sélection de documents",
+            title : "Sélection de document",
             clmDate : "Date",
             clmRef : "Référence",
             clmRefNo : "Séquence",
@@ -10832,7 +10832,7 @@ export const langFr =
             clmOutputName : "Nom Client",
             clmDate : "Date",
             clmTotal : "Total",
-            clmRemaining  : "RESTE",
+            clmRemaining  : "Reste",
         },
         pg_txtCustomerCode : 
         {
@@ -10959,7 +10959,7 @@ export const langFr =
         checkReference : "Référence",
         btnCash : "Saisie Réglement",
         invoiceSelect : "Sélectionner Facture",
-        ValidCash : "0'dan büyük bir tutar giriniz", // BAK
+        ValidCash : "Veuillez saisir un montant supérieur à 0", 
         cmbPayType : {
             title : "Mode de paiement",
             cash : "Espèce",
@@ -11143,7 +11143,7 @@ export const langFr =
             title: "Attention",
             btn01: "Sélection Coffre",
             btn02: "OK",
-            msg : "Coffre Saisie déjà enregistré  dans notre base ! "
+            msg : "Coffre Saisie déjà enregistré dans notre base ! "
         }
       
     },
@@ -11198,7 +11198,7 @@ export const langFr =
             title: "Attention",
             btn01: "Sélection Coffre",
             btn02: "OK",
-            msg : "Coffre Saisie déjà enregistré  dans notre base ! "
+            msg : "Coffre Saisi déjà enregistré dans notre base ! "
         }
       
     },
@@ -11464,9 +11464,9 @@ export const langFr =
             clmRefNo : "REF.NO.",  
             clmCustomer : "CLIENT",  
             clmDate : "DATE",
-            clmDescription : "Description", // BAK
-            clmUser : "Utilisateur",  // BAK
-            clmTotal : "Total"   // BAK
+            clmDescription : "Description", 
+            clmUser : "Utilisateur",  
+            clmTotal : "Total"   
         },
         cmbTypeData : 
         {
@@ -11493,28 +11493,28 @@ export const langFr =
     },
     set_03_002 : // Silinmiş Satırlar
     {
-        cmbType : "Type Document",   // BAK
-        btnGet : "Recherche Ligne",   // BAK
-        chkDoc : "Aperçu Document Effacé",   // BAK
+        cmbType : "Type Document",   
+        btnGet : "Recherche Ligne",   
+        chkDoc : "Aperçu Document Effacé",   
         mgsUnlock:
         {
-            title: "Dikkat",   // BAK
-            btn01: "Tamam",   // BAK
-            btn02: "Vazgeç",   // BAK
-            msg: "Seçili evrakı tekrar oluşturmak istediğinize eminmisiniz ?"   // BAK
+            title: "Attention",   
+            btn01: "OK",   
+            btn02: "Abandonner",   
+            msg: "Etes vous sur de vouloir saisir à nouveau le document sélectionné ?"   
         },
         grdDeleteList : 
         {
-            clmRef : "Réf.",    // BAK
-            clmRefNo : "Ligne",   // BAK
-            clmCustomer : "Client",   // BAK
-            clmDate : "Date",   // BAK
-            clmDescription : "Description",   // BAK
-            clmItemCode : "Code",   // BAK
-            clmItemName : "Nom",   // BAK
-            clmQuantity : "Montant",   // BAK
-            clmPrice : "Prix",   // BAK
-            clmTotal : "Total"   // BAK
+            clmRef : "Réf.",    
+            clmRefNo : "Ligne",   
+            clmCustomer : "Client",   
+            clmDate : "Date",   
+            clmDescription : "Description",   
+            clmItemCode : "Code",   
+            clmItemName : "Nom",   
+            clmQuantity : "Montant",   
+            clmPrice : "Prix",   
+            clmTotal : "Total"   
         },
         cmbTypeData : 
         {
@@ -11542,7 +11542,7 @@ export const langFr =
         txtScalePort : "Balance Port",
         txtLcdPort : "LCD Port",
         txtPayCardPort : "TPE Port",
-        txtPrintDesing : "Design Tickets Imp.",
+        txtPrintDesing : "Design Ticket Imp.",
         pg_txtCode : 
         {
             title : "Sélection Caisse",
@@ -11596,10 +11596,10 @@ export const langFr =
         cmbDevice :"Appareil",
         txtTicketno : "Numéro de ticket",
         numFirstTicketAmount : "Contenu", 
-        numLastTicketAmount : "Unité supérieur", 
+        numLastTicketAmount : "Unité supérieure", 
         cmbUser :"Utilisateur",
         txtItem :"Référence Produit",
-        ckhDoublePay : "Paiements multiples",
+        ckhDoublePay : "Paiement multiple",
         pg_txtCustomerCode : 
         {
             title : "Choix Fournisseur",
@@ -11746,11 +11746,11 @@ export const langFr =
         btnAddpoint : "Entrée et Sortie Points",     
         popPointEntry :     
         {    
-            title : "PEntrée et Sortie Points"     
+            title : "Entrée et Sortie Points"     
         },    
         txtPoint : "Points",     
         txtPointAmount : "Equivalent Somme",     
-        cmbPointType : "Type de Saisie",     
+        cmbPointType : "Type de Saisi",     
         cmbTypeData :    
         {     
             in : "Entrée Point",     
@@ -11788,7 +11788,7 @@ export const langFr =
             fullDelete : "Annulation de vente",
             rowDelete : "Annulation de ligne",
             priceChange : "Changement de prix",
-            rebate : "İade Fişleri"       // BAK
+            rebate : "Ticket Retour"       
         },
         pg_txtCustomerCode : 
         {
@@ -11828,7 +11828,7 @@ export const langFr =
         },
         popDetail : 
         {
-            title : "Détaille de fiche"
+            title : "Détaille de ticket"
         },
         cmbPayType : 
         {
@@ -11914,50 +11914,50 @@ export const langFr =
     },
     pos_02_008 : // "Ürün Satış Raporu",
     {
-        txtRef : "Ürün",    // BAK
-        cmbCustomer :"Cari",    // BAK
-        btnGet :"Getir",    // BAK
-        dtFirst : "İlk Tarih",    // BAK
-        dtLast : "Son Tarih",    // BAK
-        txtCustomerCode : "Cari",    // BAK
-        cmbDevice :"Cihaz",    // BAK
-        txtTicketno : "Fiş I.D",    // BAK
-        numFirstTicketAmount : "Alt Tutar",    // BAK
-        numLastTicketAmount : "Üst Tutar",    // BAK
-        cmbUser :"Kulanıcı",    // BAK
-        txtItem :"Ürün Kodu",    // BAK
-        ckhDoublePay : "Birden Fazla Ödeme",    // BAK
-        cmbType :"Açıklama Tipi",    // BAK
-        dtDate : "Tarih",    // BAK
-        txtTotal : "Toplam Satış",    // BAK
+        txtRef : "Produit",    
+        cmbCustomer :"Client",    
+        btnGet :"Recherche",    
+        dtFirst : "Date Début",    
+        dtLast : "Date Fin",    
+        txtCustomerCode : "Client",    
+        cmbDevice :"Appareil",    
+        txtTicketno : "I.D Ticket",    
+        numFirstTicketAmount : "Unité Principale ",    
+        numLastTicketAmount : "Contenu Principal ",    
+        cmbUser :"Utilisateur",    
+        txtItem :"Code Produit",    
+        ckhDoublePay : "Paiement Multiple",    
+        cmbType :"Type de Description",    
+        dtDate : "Date",    
+        txtTotal : "Vente Totale",    
         grdItemSaleReport: 
         {
-            itemName: "Ürün Adı",   // BAK
-            clmFirstDate: "İlk Tarih",   // BAK
-            clmLastDate: "Son Tarih",   // BAK
-            clmQuantity: "Miktar",   // BAK
-            clmPrice : "Fiyat",   // BAK
-            clmTotal : "Toplam"   // BAK
+            itemName: "Nom Produit",   
+            clmFirstDate: "Date Début",   
+            clmLastDate: "Date Fin",   
+            clmQuantity: "Quantité",   
+            clmPrice : "Prix",   
+            clmTotal : "Total"   
         },
         pg_txtRef:
         {
-            title: "Ürün Seçim",   // BAK
-            clmCode: "KODU",   // BAK
-            clmName: "ADI",    // BAK
-            clmStatus : "DURUM" // BAK
+            title: "Choix Produit",   
+            clmCode: "Code",   
+            clmName: "NOM",    
+            clmStatus : "Statut" 
         },
-        cancel : "Vazgeç", // BAK
+        cancel : "Abandonne", 
         msgItemSelect:
         {
-            title: "Dikkat",   // BAK
-            btn01: "Tamam",   // BAK
-            msg: "Lütfen Ürün Seçiniz !"   // BAK
+            title: "Attention",   
+            btn01: "OK",   
+            msg: "Veuillez Sélectionner le Produit !"   
         },
     },
     pos_03_001 : // "Gün sonu"
     {
         TicketId :"Ticket No",
-        title : "Opérations de fin de journée",
+        title : "Opération de fin de journée",
         start :"Démarrer",
         advance : "Fond De Caisse",
         cash : "Espece ",
@@ -12016,7 +12016,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Le fond de caisse est déjà saisie. Il faut modifier ceci à partir du tableau."
+            msg: "Le fond de caisse est déjà saisi. Il faut modifier ceci à partir du tableau."
         },
         advanceMsg1 : "Soyez sûr que le fond de caisse est de",
         advanceMsg2 : "Etre sûr!!!",
@@ -12154,7 +12154,7 @@ export const langFr =
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
             clmMulticode : "Référence Fournisseur",
-            clmPrice : "Alış Fiyatı" // BAK
+            clmPrice : "Prix d'Achat" 
         },
         grdPurcoffers: 
         {
@@ -12381,19 +12381,19 @@ export const langFr =
         {
             title: "Attention",    
             btn01: "OK",    
-            msg: "Cette ligne a été convertie en commande. Vous ne pouvez effectuer aucune modification !"    
+            msg: "Cette ligne a été converti en commande. Vous ne pouvez effectuer aucune modification !"    
         },  
         msgRowNotDelete :
         {
             title: "Attention",  
             btn01: "OK",  
-            msg: "Cette ligne a été convertie en commande. Vous ne pouvez pas la supprimer !"  
+            msg: "Cette ligne a été converti en commande. Vous ne pouvez pas la supprimer !"  
         },
         msgdocNotDelete : 
         {
             title: "Attention",   
             btn01: "OK",   
-            msg: "Il y a une ligne dans votre document qui a été convertie en commande. Ce document ne peut pas être supprimé !"   
+            msg: "Il y a une ligne dans votre document qui a été converti en commande. Ce document ne peut pas être supprimé !"   
         },
         msgCode : 
         {
@@ -12421,11 +12421,11 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
-        btnView : "Aperçu", // BAK
-        btnMailsend : "Mail Gönder", // BAK
-        placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.", // BAK
-        validDesign : "Lütfen Dizayn seçiniz.",  // BAK
-        validMail : "Lütfen Boş Geçmeyin.",  // BAK
+        btnView : "Aperçu", 
+        btnMailsend : "Envoyer E-Mail", 
+        placeMailHtmlEditor : "Veuillez saisir votre texte .", 
+        validDesign : "Veuillez sélectionner le design.",  
+        validMail : "Veuillez ne pas laisser le champs vide.",  
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -12448,7 +12448,7 @@ export const langFr =
             title : "Sélectionner Produit",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
-            clmPrice : "Satış Fiyatı" // BAK
+            clmPrice : "Prix de Vente" 
         },
         grdSlsOffer: 
         {
@@ -12524,13 +12524,13 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez Appliquer de Remise Supérieur au Montant Total !"
+            msg: "Vous ne Pouvez Appliquer de Remise Supérieure au Montant Total !"
         },
         msgDiscountPercent:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez Appliquer de Remise Supérieur au Montant Total !"
+            msg: "Vous ne Pouvez Appliquer de Remise Supérieure au Montant Total !"
         },
         msgLocked:
         {
@@ -12709,17 +12709,17 @@ export const langFr =
         },
         popMailSend : 
         {
-            title :"E-Mail Gönder",   // BAK
-            txtMailSubject : "E-Mail Başlığı",   // BAK
-            txtSendMail : "E-Mail Adresi",   // BAK
-            btnSend : "Gönder"   // BAK
+            title :"Envoyer E-Mail ",   
+            txtMailSubject : "Objet E-Mail ",   
+            txtSendMail : "Adresse E-Mail ",   
+            btnSend : "Envoyer"   
         },
         msgMailSendResult:
         {
-            title: "Dikkat",   // BAK
-            btn01: "Tamam",   // BAK
-            msgSuccess: "Mail gönderimi başarılı !",   // BAK
-            msgFailed: "Mail gönderimi başarısız !"   // BAK
+            title: "Attention",   
+            btn01: "OK",   
+            msgSuccess: "E-Mail envoyé avec succès  !",   
+            msgFailed: "Echec envoie E-Mail  !"   
         },
     },
     proces_01_001 : // "Ürün Grubu Güncelleme" 
@@ -12826,7 +12826,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Nom du produit trop long. Veuillez le corriger et le réinscrire !"
+            msg: "Nom du produit trop long. Veuillez le corriger et le résaisir !"
         },
     },
     pos_02_003 : // "Pos Satış Raporu"
@@ -12858,12 +12858,12 @@ export const langFr =
         },
         popPointDetail : 
         {
-            title: "Détail de points"
+            title: "Détail de point"
         },
         grdPointDetail : 
         {
             clmDate : "Date",
-            clmPoint : "Poitns",
+            clmPoint : "Point",
             clmPointType : "Type",
             clmDescription :"Motif",
             clmPosId :"Numéro de ticket",
@@ -12918,37 +12918,37 @@ export const langFr =
     },
     set_02_006 : // "Destek Talebi Oluştur"
     {
-        sendMail : "Mail",    // BAK
-        sendMailPlace : "Lütfen Mail Adresinizi Giriniz..",    // BAK
-        mailSubject : "Başlık",    // BAK
-        mailSubjectPlace: "Lütfen Destek Mail Başlığı Giriniz..",    // BAK
-        btnApprove : "Gönder",    // BAK
-        msgSaveResult:    // BAK
-        {    // BAK
-            title: "Dikkat",    // BAK
-            btn01: "Tamam",    // BAK
-            msgSuccess: "Gönderme işleminiz başarılı !",    // BAK
-            msgFailed: "Gönderme işleminiz başarısız !"    // BAK
+        sendMail : "Mail",    
+        sendMailPlace : "Veuillez saisir votre adresse mail.",    
+        mailSubject : "Objet",    
+        mailSubjectPlace: "Objet de demande du support mail.",    
+        btnApprove : "Envoyer",    
+        msgSaveResult:    
+        {    
+            title: "Attention",    
+            btn01: "OK",    
+            msgSuccess: "Envoi effectué !",    
+            msgFailed: "Envoi non effectué !"    
         },
     },
     set_02_007 : // "Destek Talebi Geçmişi"
     {
         grdServiceList:
         {
-            clmDate:"Tarih",  // BAK
-            clmUser : "Kullanıcı",  // BAK
-            clmSubject : "Konu",  // BAK
-            clmProcess : "Yapılan İşlem",  // BAK
+            clmDate:"Date",  
+            clmUser : "Utilisateur",  
+            clmSubject : "Sujet",  
+            clmProcess : "Saisie effectué",  
         },
         popService : 
         {
-            title : "Servis Detayı" // BAK
+            title : "Détail Service " 
         },
-        txtPopDate : "Tarih",    // BAK
-        txtPopSubject : "Konu",    // BAK
-        txtPopProcess : "Yapılan İşlem",    // BAK
-        btnApprove : "Kaydet",    // BAK
-        btnCancel : "Kapat",    // BAK
-        txtPopUser : "Oluşturan Kullanıcı"    // BAK
+        txtPopDate : "Date",    
+        txtPopSubject : "Sujet",    
+        txtPopProcess : "Saisie effectué",    
+        btnApprove : "Enregistre",    
+        btnCancel : "Fermer",    
+        txtPopUser : "Utilisateur ayant saisi"    
     }
 }
