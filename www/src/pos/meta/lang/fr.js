@@ -535,7 +535,7 @@ export const langFr =
         msg2 : "Transfert commencé.",
         msg3 : "Table de transfert.",
         btnPopTransferManuel : "Démarrage manuel",
-        btnPopTransferClear : "Temizle Aktar", //BAK
+        btnPopTransferClear : "Transfert Supprime ", 
         btnPopTransferStop : "Arrêter"
     },
     msgOfflineWarning: 
@@ -659,7 +659,7 @@ export const langFr =
         txtPopCustomerZipCode : "Code Postal",
         txtPopCustomerEmail : "Email",
         txtPopCustomerTel : "Téléphone",
-        validTxtPopCustomerCode : "Lütfen boş geçmeyiniz.", //BAK
+        validTxtPopCustomerCode : "Ne pas laisser les champs vide.", 
         msgCustomerSaveResult:
         {
             title: "Attention",

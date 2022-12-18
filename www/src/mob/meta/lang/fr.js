@@ -11,7 +11,7 @@ export const langFr =
     btnNo : "Nom",
     msgClose : "Voulez-vous vraiment fermer la page ?",
     txtLangSelect : "Sélection de la langue",
-    userListTitle : "Liste d'utilisateurs", //BAK
+    userListTitle : "Liste d'utilisateurs", 
     txtUser : "Utilisateur",
     txtPass :"Code",
     btnUserSelect : "Choix d'Utilisateur",
