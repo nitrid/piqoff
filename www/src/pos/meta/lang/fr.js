@@ -428,6 +428,7 @@ export const langFr =
         LDATE : "Date MAJ",
         ITEM_NAME :"Nom",
         QUANTITY : "Qte.",
+        DISCOUNT : "Prix Promo",
         PRICE : "Prix",
         AMOUNT : "Total"
     },

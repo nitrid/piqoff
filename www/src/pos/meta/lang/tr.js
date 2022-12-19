@@ -428,6 +428,7 @@ export const langTr =
         LDATE : "LDATE",
         ITEM_NAME :"ADI",
         QUANTITY : "ADET",
+        DISCOUNT : "IND.FIYAT",
         PRICE : "FIYAT",
         AMOUNT : "TUTAR"
     },

@@ -378,20 +378,23 @@ export default class posDoc extends React.PureComponent
                 if(!tmpDetect.isLcdPort)
                 {
                     tmpConfObj.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgDeviceDetectAlert.msgLcd")}</div>)
+                    await dialog(tmpConfObj);
                 }
                 else if(!tmpDetect.isPayPort)
                 {
                     tmpConfObj.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgDeviceDetectAlert.msgPay")}</div>)
+                    await dialog(tmpConfObj);
                 }
                 else if(!tmpDetect.isScalePort)
                 {
                     tmpConfObj.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgDeviceDetectAlert.msgScale")}</div>)
+                    await dialog(tmpConfObj);
                 }
                 else if(!tmpDetect.isScanPort)
                 {
                     tmpConfObj.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgDeviceDetectAlert.msgScan")}</div>)
-                }
-                await dialog(tmpConfObj);
+                    await dialog(tmpConfObj);
+                }                
             }
         }
 
@@ -497,10 +500,6 @@ export default class posDoc extends React.PureComponent
                 return
             }
         }
-    }
-    async deviceInit()
-    {
-
     }
     async deviceEntry()
     {
@@ -1178,7 +1177,7 @@ export default class posDoc extends React.PureComponent
                     ({
                         blink : 0,
                         text :  tmpPosSale[tmpPosSale.length - 1].ITEM_NAME.toString().space(11) + " " + 
-                                (parseFloat(tmpPosSale[tmpPosSale.length - 1].PRICE).toFixed(2) + "EUR").space(8,"s") +
+                                (parseFloat(Number(tmpPosSale[tmpPosSale.length - 1].PRICE) - (Number(tmpPosSale[tmpPosSale.length - 1].DISCOUNT) / Number(tmpPosSale[tmpPosSale.length - 1].QUANTITY))).toFixed(2) + "EUR").space(8,"s") +
                                 "TOTAL : " + (parseFloat(tmpPayRest).toFixed(2) + "EUR").space(12,"s")
                     })
                 }
@@ -2346,24 +2345,24 @@ export default class posDoc extends React.PureComponent
             {
                 let tmpPrint = e.print(pData)
 
-                // let tmpArr = [];
-                // for (let i = 0; i < tmpPrint.length; i++) 
-                // {
-                //     let tmpObj = tmpPrint[i]
-                //     if(typeof tmpPrint[i] == 'function')
-                //     {
-                //         tmpObj = tmpPrint[i]()
-                //     }
-                //     if(Array.isArray(tmpObj))
-                //     {
-                //         tmpArr.push(...tmpObj)
-                //     }
-                //     else if(typeof tmpObj == 'object')
-                //     {
-                //         tmpArr.push(tmpObj)
-                //     }
-                // }
-                // console.log(JSON.stringify(tmpArr))
+                let tmpArr = [];
+                for (let i = 0; i < tmpPrint.length; i++) 
+                {
+                    let tmpObj = tmpPrint[i]
+                    if(typeof tmpPrint[i] == 'function')
+                    {
+                        tmpObj = tmpPrint[i]()
+                    }
+                    if(Array.isArray(tmpObj))
+                    {
+                        tmpArr.push(...tmpObj)
+                    }
+                    else if(typeof tmpObj == 'object')
+                    {
+                        tmpArr.push(tmpObj)
+                    }
+                }
+                console.log(JSON.stringify(tmpArr))
                 
                 await this.posDevice.escPrinter(tmpPrint)
                 resolve()
@@ -3802,7 +3801,20 @@ export default class posDoc extends React.PureComponent
                                         <NbButton id={"btnGrdList"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt"}}
                                         onClick={async()=>
                                         {          
-                                            await this.grdPopGrdList.dataRefresh({source:this.posObj.posSale.dt()});
+                                            let tmpDt = this.posObj.posSale.dt().toArray()
+                                            for (let i = 0; i < tmpDt.length; i++) 
+                                            {
+                                                if(tmpDt[i].DISCOUNT > 0)
+                                                {
+                                                    tmpDt[i].DISCPRICE = tmpDt[i].PRICE - (tmpDt[i].DISCOUNT / tmpDt[i].QUANTITY)    
+                                                }
+                                                else
+                                                {
+                                                    tmpDt[i].DISCPRICE = 0
+                                                }
+                                            }
+
+                                            await this.grdPopGrdList.dataRefresh({source:tmpDt});
                                             this.popGridList.show();
                                         }}>
                                             <i className="text-white fa-solid fa-bars" style={{fontSize: "24px"}} />
@@ -6868,8 +6880,9 @@ export default class posDoc extends React.PureComponent
                                     alignment={"center"}/>                                    
                                     <Column dataField="ITEM_SNAME" caption={this.lang.t("grdList.ITEM_NAME")} width={290}/>
                                     <Column dataField="QUANTITY" caption={this.lang.t("grdList.QUANTITY")} width={50}/>
+                                    <Column dataField="DISCPRICE" caption={this.lang.t("grdList.DISCOUNT")} width={100} format={"#,##0.00" + Number.money.sign}/>
                                     <Column dataField="PRICE" caption={this.lang.t("grdList.PRICE")} width={70} format={"#,##0.00" + Number.money.sign}/>
-                                    <Column dataField="AMOUNT" alignment={"right"} caption={this.lang.t("grdList.AMOUNT")} width={60} format={"#,##0.00" + Number.money.sign}/>                                                
+                                    <Column dataField="TOTAL" alignment={"right"} caption={this.lang.t("grdList.AMOUNT")} width={60} format={"#,##0.00" + Number.money.sign}/>                                                
                                 </NdGrid>
                             </div>
                         </div>
