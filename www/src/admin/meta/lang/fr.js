@@ -1,6 +1,6 @@
 export const langFr = 
 {
-    popGrid: {btnSelection:"Seç",btnSearch:"Listele"},
+    popGrid: {btnSelection:"Choisir",btnSearch:"Recharcher"},
     serverConnection : "Connexion avec le serveur",
     notAccess : "Non autorisé à accéder",
     msgInvalidUser : "Nom utilisateur ou MDP erroné",
