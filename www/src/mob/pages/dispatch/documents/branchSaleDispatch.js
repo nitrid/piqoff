@@ -577,7 +577,7 @@ export default class salesDispartch extends React.PureComponent
                                             <Column dataField="CODE" caption={this.t("pg_txtCustomerCode.clmCode")} width={150} />
                                             <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmTitle")} width={500} defaultSortOrder="asc" />
                                             <Column dataField="TYPE_NAME" caption={this.t("pg_txtCustomerCode.clmTypeName")} width={150} />
-                                            <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150} filterType={"include"} filterValues={['Tedarikçi']}/>
+                                            <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150} filterType={"include"} filterValues={['Fournisseur']}/>
                                             
                                         </NdPopGrid>
                                     </Item> 
