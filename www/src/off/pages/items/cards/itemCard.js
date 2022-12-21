@@ -179,7 +179,6 @@ export default class itemCard extends React.PureComponent
 
         this.itemsObj.addEmpty();
         
-        console.log( this.itemsObj.dt()[0].GUID )
         this.txtRef.value = Math.floor(Date.now() / 1000)
         this.txtCustomer.value = "";
         this.txtCustomer.displayValue = "";   
@@ -216,6 +215,7 @@ export default class itemCard extends React.PureComponent
             this.itemsObj.itemUnit.addEmpty(tmpUnderUnitObj);
         }
 
+        this.core.util.logPath = "\\www\\log\\off_" + this.core.auth.data.CODE + ".txt"
 
         this.itemGrpForOrginsValidCheck();   
         this.itemGrpForMinMaxAccessCheck();  
@@ -771,7 +771,6 @@ export default class itemCard extends React.PureComponent
     }
     render()
     {           
-        console.log("3 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
         return (
             <React.Fragment>                
                 <ScrollView>                    
@@ -799,8 +798,9 @@ export default class itemCard extends React.PureComponent
                                     <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup={"frmItems" + this.tabIndex}
                                     onClick={async (e)=>
                                     {
+                                        this.core.util.writeLog("Kaydet butonuna basıldı. " + this.itemsObj.dt()[0].CODE + " " + this.itemsObj.dt()[0].NAME)
                                         if(e.validationGroup.validate().status == "valid")
-                                        {
+                                        {                                            
                                             if(typeof this.itemsObj.itemBarcode.dt()[0] != 'undefined')
                                             {
                                                 if(this.itemsObj.itemBarcode.dt()[0].BARCODE == '')
@@ -849,7 +849,8 @@ export default class itemCard extends React.PureComponent
                                                 }
                                                 
                                                 if((await this.itemsObj.save()) == 0)
-                                                {                                                    
+                                                {         
+                                                    this.core.util.writeLog("Kaydet başarılı. " + this.itemsObj.dt()[0].CODE + " " + this.itemsObj.dt()[0].NAME)                                           
                                                     tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
                                                     await dialog(tmpConfObj1);
                                                     this.btnSave.setState({disabled:true});
@@ -857,13 +858,19 @@ export default class itemCard extends React.PureComponent
                                                 }
                                                 else
                                                 {
+                                                    this.core.util.writeLog("Kaydet başarısız. " + this.itemsObj.dt()[0].CODE + " " + this.itemsObj.dt()[0].NAME) 
                                                     tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
                                                     await dialog(tmpConfObj1);
                                                 }
                                             }
+                                            else
+                                            {
+                                                this.core.util.writeLog("Kayıtdan vazgeçildi. " + this.itemsObj.dt()[0].CODE + " " + this.itemsObj.dt()[0].NAME) 
+                                            }
                                         }                              
                                         else
                                         {
+                                            this.core.util.writeLog("Kaydet validasyon başarısız. " + this.itemsObj.dt()[0].CODE + " " + this.itemsObj.dt()[0].NAME) 
                                             let tmpConfObj =
                                             {
                                                 id:'msgSaveValid',showTitle:true,title:this.t("msgSaveValid.title"),showCloseButton:true,width:'500px',height:'200px',
