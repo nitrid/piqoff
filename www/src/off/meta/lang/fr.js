@@ -158,6 +158,7 @@ export const langFr =
         ftr_02_005: "Saisie Vente interne",
         ftr_02_006: "Facture Différence Prix Achat", 
         ftr_02_007: "Facture Retour ", 
+        ftr_02_008: "Şubeler Arası Alış Faturası", // BAK
         ftr_04_001: "Différence de prix Facture Proforma", 
         ftr_04_002: "Facture Proforma de Vente",   
         ftr_04_003: "Facture Proforma d'Achat",   
@@ -176,6 +177,7 @@ export const langFr =
         irs_02_003: "Saisie Bon de Retour de livraison",
         irs_02_004: "Saisie Bon de livraison interne", 
         irs_02_005: "Bon de livraison Reprise Retour", 
+        irs_02_006: "Şube Alış İrsaliyesi", // BAK
         sip: "Commande",
         sip_01: "Listes",
         sip_02: "Document",
@@ -5809,6 +5811,415 @@ export const langFr =
             clmTotal : "Total"   
         },
     },
+    ftr_02_008 : // "Şube Alış Faturası"
+    {
+        txtRefRefno : "Réf.-Réf no:",
+        cmbDepot: "Réserve",
+        txtCustomerCode : "Sélection Document",
+        txtCustomerName : "Nom fournisseur",
+        dtDocDate : "Date",
+        txtAmount : "Total" ,
+        txtDiscount : "Remise",
+        txtMargin : "Marge",
+        txtVat : "TVA",
+        txtTotal : "Total Général",
+        dtShipDate :"Date Expédition",
+        getDispatch : "Recherche BL",
+        getPayment : "Ödeme Girişi", // BAK
+        cash : "Total" ,
+        description :"Motif",
+        checkReference : "Référence",
+        btnCash : "Ödeme Ekle", // BAK
+        btnCheck : "Chèque",
+        btnBank : "Virement",
+        cmbCashSafe : "Caisse Espèce",
+        cmbCheckSafe : "Caisse Chèque",
+        cmbBank : "Sélection Banque",
+        txtPayInvoıceTotal : "Total Facture",
+        txtPayTotal : "Ödeme Toplamı", // BAK
+        txtRemainder : "Reste",
+        txtBarcode: "Code barre",
+        txtBarcodePlace: "Scanner Code Barre...",
+        txtQuantity : "Quantité", 
+        getOrders : "Rechercher la commande", 
+        tabTitleSubtotal : "Totale de la facture",  
+        tabTitlePayments : "Informations de paiement",  
+        tabTitleOldInvoices : "Informations de facturation antérieure",  
+        getRemainder : "Recherche le montant restant",  
+        txtbalance : "Solde total restant",   
+        txtUnitFactor : "Coefficient unitaire",  
+        txtUnitQuantity : "Quantité unitaire",  
+        txtTotalQuantity : "Quantité unitaire",  
+        txtExpFee : "Pénalités de Retard", 
+        dtExpDate : "Date d'Echéance", 
+        btnView : "Aperçu", 
+        btnMailsend : "Envoyer E-Mail", 
+        placeMailHtmlEditor : "Veuillez saisir votre texte .", 
+        validDesign : "Veuillez sélectionner le design.",  
+        validMail : "Veuillez ne pas laisser le champs vide.",  
+        pg_Docs : 
+        {
+            title : "Sélection Document",
+            clmDate : "Date",
+            clmRef : "Référence",
+            clmRefNo : "Numéro",
+            clmInputName : "Nom Fournisseur",
+            clmInputCode  : "Code Client",
+        },
+        pg_txtCustomerCode : 
+        {
+            title : "Choix Fournisseur",
+            clmCode :  "Code Client",
+            clmTitle : "Nom Fournisseur",
+            clmTypeName : "Type",
+            clmGenusName : "Genre"
+        },
+        pg_txtItemsCode : 
+        {
+            title : "Sélectionner Produit",
+            clmCode :  "Référence Produit",
+            clmName : "Nom Produit",
+        },
+        pg_dispatchGrid : 
+        {
+            title : "Sélectionner Bon De Livraison" ,
+            clmReferans : "Réferences",
+            clmCode : "Code",
+            clmName : "Nom",
+            clmQuantity : "Quantité",
+            clmPrice : "Prix ",
+            clmTotal : "Total",
+            clmDate : "Date",
+        },
+        grdSlsInv: 
+        {
+            clmItemCode: "Code",
+            clmItemName: "Nom",
+            clmPrice: "Prix ",
+            clmQuantity : "Quantité",
+            clmDiscount : "Remise",
+            clmDiscountRate : "Remise %",
+            clmVat : "TVA",
+            clmAmount : "Total" ,
+            clmTotal : "Total Général",
+            clmDispatch : "No Bon de Livraison",
+            clmCreateDate: "Date d'Enregistrement",
+            clmMargin :"Marge",
+            clmDescription : "Motif",
+            clmCuser :"Utilisateur",
+            clmVatRate : "TVA %"
+        },
+        grdInvoicePayment: 
+        {
+            clmInputName: "Caisse",
+            clmTypeName: "Type",
+            clmPrice: "Prix ",
+            clmCreateDate: "Date d'Enregistrement",
+
+        },
+        popPayment:
+        {
+            title: "Encaissement",
+        },
+        popDiscount : 
+        {
+            title: "Télécharger Document",
+            Percent : "Pourcentage",
+            Price : "Total" 
+        },
+        popPassword : 
+        {
+            title: "Veuillez Saisir MDP Administrateur pour Acces au Document ",
+            Password : "Mot de passe",
+            btnApprove : "Valide"
+        },
+        msgDocValid:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Veuillez saisir les en-tête avant l'achèvement !"
+        },
+        msgMoreAmount:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Le Règlement ne peut être Supérieur au Montant Restant !"
+        },
+        msgSave:
+        {
+            title: "Attention",
+            btn01: "OK",
+            btn02: "Abandonne",
+            msg: "Etes-vous sur de vouloir enregistrer !"
+        },
+        msgSaveResult:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msgSuccess: "Enregistré avec succès !",
+            msgFailed: "Enregistrement échoué !"
+        },
+        msgSaveValid:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Veuillez saisir les zones nécessaire !"
+        },
+        msgDelete:
+        {
+            title: "Attention",
+            btn01: "OK",
+            btn02: "Abandonne",
+            msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
+        },
+        msgVatDelete:
+        {
+            title: "Attention",
+            btn01: "OK",
+            btn02: "Abandonne",
+            msg: "Etes-vous sur de Vouloir Mettre à Zéro la TVA !"
+        },
+        msgDiscountPrice:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Vous ne Pouvez Appliquer de Remise Supérieure au Montant Total !"
+        },
+        msgDiscountPercent:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Vous ne Pouvez Appliquer de Remise Supérieure au Montant Total !"
+        },
+        msgLocked:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Document Enregistré et Vérouillé !"
+        },
+        msgPasswordSucces:
+        {
+            title: "Succès",
+            btn01: "OK",
+            msg: "Document Déverouillé !",
+        },
+        msgPasswordWrong:
+        {
+            title: "Echec",
+            btn01: "OK",
+            msg: "Mot de Passe Erroné"
+        },
+        msgGetLocked:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrer les Modifications !"
+        },
+        msgPayNotDeleted:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Le document ne peut être supprimé car règlement saisi!" 
+        },
+        msgDoclocked:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Vous ne Pouvez Enregistrer Sans Dévérouiller !"
+        },
+        msgDiscount:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Remise ne peut être Supérieur au Total ! "
+        },
+        msgItemNotFound:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Produit Introuvable !!"
+        },
+        msgNotCustomer:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Fournisseur Inconnu"
+        },
+        msgCombineItem:
+        {
+            title: "Attention",
+            btn01: "Regroupe",
+            btn02: "Nouvel Ajout",
+            msg: "Produit Existant dans Document ! Voulez vous Regrouper ?"
+        },
+        msgCustomerSelect:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Veuillez Saisir un Client !"
+        },
+        popCash : 
+        {
+            title: "Entrée Espèce",
+            btnApprove : "Ajouter"
+        },
+        popCheck : 
+        {
+            title: "Entrée Chèque",
+            btnApprove : "Ajouter"
+        },
+        popBank : 
+        {
+            title: "Saisie Virement",
+            btnApprove : "Ajouter"
+        },
+        popDesign : 
+        {
+            title: "Choix du Désign",
+            design : "Design" ,
+            lang : "Langue Document" 
+        },
+        msgMissItemCode:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Code Non Retrouvé"
+        },
+        msgMultiCodeCount:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Nombre de Produit Ajouté"
+        },
+        popMultiItem:
+        {
+            title: "Ajout Groupé de Produit",
+            btnApprove: "Chercher Produit",
+            btnClear : "Vider",
+            btnSave : "Ajouter Lignes",
+        },
+        cmbMultiItemType : 
+        {
+            title : "Mode de Recherche",
+            customerCode : "En Fonction du Code Fournisseur",
+            ItemCode : "En Fonction du Code Produit"
+        },
+        grdMultiItem : 
+        {
+            clmCode : "Référence Produit",
+            clmMulticode : "FRN.Code",
+            clmName : "Nom du produit",
+            clmQuantity : "Quantité"
+        },
+        msgMultiData:
+        {
+            title: "Attention",
+            btn01: "Effacer Liste et Ajoute le Tout",
+            btn02: "Inclure Les Nouvelles Saisies à la Liste",
+            msg: "Produits Présents dans la Liste! "
+        },
+        msgUnit:
+        {
+            title: "Sélection de l'unité",
+            btn01: "Valider",
+        }, 
+        validRef :"Saisir Réf ",
+        validRefNo : "Saisir Réf No ",
+        validDepot : "Sélectionner Dépot",
+        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validDocDate : "Sélectionner Date" ,
+        tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
+        msgNotQuantity: 
+        {
+            title: "Attention",
+            btn01: "Ok",
+            msg: "Le document ne peut être supprimé car règlement saisie!" 
+        },
+        pg_txtBarcode : 
+        {
+            title : "Sélectionner Barre",
+            clmCode :  "Référence Produit",
+            clmName : "Nom Produit",
+            clmMulticode : "Référence Fournisseur",
+            clmBarcode : "Code-Barres"
+        },
+        msgQuantity:
+        {
+            title: "Quantité",
+            btn01: "Ajouter",
+            msg: "Ajoutez quantité"
+        },
+        pg_ordersGrid : 
+        {
+            title : "Sélection de la commande",  
+            clmReferans : "Réf.-Réf no:",  
+            clmCode : "Code",  
+            clmName : "Nom",  
+            clmQuantity : "Quantité",  
+            clmTotal : "Total",  
+            clmPrice : "Prix",  
+        },
+        cmbPayType : {
+            title : "Mode de paiement",   
+            cash : "Espèce",   
+            check : "Chèque",   
+            bankTransfer : "Virement Compte",   
+            otoTransfer : "Prélèvement",   
+            foodTicket : "T. Restaurant",   
+            bill : "Facture",   
+        },
+        popDetail:
+        {
+            title: "Contenu Document",
+            count:  "Quantité Ligne",
+            quantity: "Quantité Totale",
+            quantity2: "Total 2eme Unit "
+        },
+        popUnit2 : 
+        {
+            title : "Détail des Contenus"
+        },
+        grdUnit2 : 
+        {
+            clmName : "Nom",
+            clmQuantity : "Quantité"
+        },
+        pg_adress : 
+        {
+            title : "Choix d'adresse",   
+            clmAdress : "Adresse",   
+            clmCiyt : "Ville",   
+            clmZipcode : "Code Postal",   
+            clmCountry : "Pays",   
+        },
+        msgCode : 
+        {
+            title: "Attention",
+            btn01:"Aller au document",
+            msg: "Document trouvé !"
+        },
+        popMailSend : 
+        {
+            title :"Envoyer Mail ",   
+            txtMailSubject : "Objet E-Mail ",   
+            txtSendMail : "Adresse E-Mail ",   
+            btnSend : "Envoyer"   
+        },
+        msgMailSendResult:
+        {
+            title: "Attention",   
+            btn01: "OK",   
+            msgSuccess: "Mail envoyé avec succès  !",   
+            msgFailed: "Echec envoie Mail  !"   
+        },
+        msgMailSendResult:
+        {
+            title: "Dikkat",   // BAK
+            btn01: "Tamam",   // BAK
+            msgSuccess: "Mail gönderimi başarılı !",   // BAK
+            msgFailed: "Mail gönderimi başarısız !"   // BAK
+        },
+    },
     ftr_04_001 : // "Proforma Fiyat Farkı Faturası" 
     {
         txtRefRefno : "Réf.-Réf no:",
@@ -9545,6 +9956,350 @@ export const langFr =
             title: "Attention",
             btn01:"Aller au document",
             msg: "Document trouvé !"
+        },
+    },
+    irs_02_006 : // Şube Alış İrsaliyesi"
+    {
+        txtRefRefno : "Réf.-Réf no:",
+        cmbDepot: "Réserve",
+        txtCustomerCode : "Sélection Document",
+        txtCustomerName : "Nom fournisseur",
+        dtDocDate : "Date",
+        txtAmount : "Total" ,
+        txtDiscount : "Remise",
+        txtMargin : "Marge",
+        txtVat : "TVA",
+        txtTotal : "Total Général",
+        dtShipDate :"Date Expédition",
+        txtBarcode: "Code barre",
+        txtBarcodePlace: "Scanner Code Barre...",
+        txtQuantity : "Quantité", 
+        getOrders : "Sélection Commande", 
+        txtUnitFactor : "Coefficient unitaire",  
+        txtUnitQuantity : "Quantité unitaire",  
+        txtTotalQuantity : "Quantité totale",  
+        btnView : "Aperçu", 
+        btnMailsend : "Envoyer E-Mail", 
+        placeMailHtmlEditor : "Veuillez saisir votre texte .", 
+        validDesign : "Veuillez sélectionner le design.",  
+        validMail : "Veuillez ne pas laisser le champs vide.",  
+        pg_Docs : 
+        {
+            title : "Sélection Document",
+            clmDate : "Date",
+            clmRef : "Référence",
+            clmRefNo : "Numéro",
+            clmInputName : "Nom Fournisseur",
+            clmInputCode  : "Code Client",
+        },
+        pg_txtCustomerCode : 
+        {
+            title : "Choix Fournisseur",
+            clmCode :  "Code Client",
+            clmTitle : "Nom Fournisseur",
+            clmTypeName : "Type",
+            clmGenusName : "Genre"
+        },
+        pg_txtItemsCode : 
+        {
+            title : "Sélectionner Produit",
+            clmCode :  "Référence Produit",
+            clmName : "Nom Produit",
+        },
+        grdSlsDispatch: 
+        {
+            clmItemCode: "Code",
+            clmItemName: "Nom",
+            clmPrice: "Prix ",
+            clmQuantity : "Quantité",
+            clmDiscount : "Remise",
+            clmDiscountRate : "Remise %",
+            clmVat : "TVA",
+            clmAmount : "Total" ,
+            clmTotal : "Total Général",
+            clmCreateDate: "Date d'Enregistrement",
+            clmMargin :"Marge",
+            clmDescription :"Motif",
+            clmCuser :"Utilisateur",
+            clmOrder : "Commande No", 
+            clmVatRate : "TVA %",
+            clmBarcode : "Code Barre",
+        },
+        popDiscount : 
+        {
+            title: "Télécharger Document",
+            Percent : "Pourcentage",
+            Price : "Total" 
+        },
+        popPassword : 
+        {
+            title: "Veuillez Saisir MDP Administrateur pour Accès au Document ",
+            Password : "Mot de passe",
+            btnApprove : "Valide"
+        },
+        msgDocValid:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Veuillez saisir les en-tête avant l'achèvement !"
+        },
+        msgSave:
+        {
+            title: "Attention",
+            btn01: "OK",
+            btn02: "Abandonne",
+            msg: "Etes-vous sur de vouloir enregistrer !"
+        },
+        msgSaveResult:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msgSuccess: "Enregistré avec succès !",
+            msgFailed: "Enregistrement échoué !"
+        },
+        msgSaveValid:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Veuillez saisir les zones nécessaire !"
+        },
+        msgDelete:
+        {
+            title: "Attention",
+            btn01: "OK",
+            btn02: "Abandonne",
+            msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
+        },
+        msgVatDelete:
+        {
+            title: "Attention",
+            btn01: "OK",
+            btn02: "Abandonne",
+            msg: "Etes-vous sur de Vouloir Mettre à Zéro la TVA !"
+        },
+        msgDiscountPrice:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Vous ne Pouvez Appliquer de Remise Supérieur au Montant Total !"
+        },
+        msgDiscountPercent:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Vous ne Pouvez Appliquer de Remise Supérieur au Montant Total !"
+        },
+        msgLocked:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Document Enregistré et Vérouillé !"
+        },
+        msgPasswordSucces:
+        {
+            title: "Succès",
+            btn01: "OK",
+            msg: "Document Déverouillé !",
+        },
+        msgPasswordWrong:
+        {
+            title: "Echec",
+            btn01: "OK",
+            msg: "Mot de Passe Erroné"
+        },
+        msgLockedType2:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Document Transformé en Facture Vous ne Pouvez Dévérouiller"
+        },
+        msgGetLocked:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrer les Modifications !"
+        },
+        msgDoclocked:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Vous ne Pouvez Enregistrer Sans Dévérouiller !"
+        },
+        msgDiscount:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Remise ne peut être Supérieure au Total ! "
+        },
+        msgItemNotFound:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Produit Introuvable !!"
+        },
+        msgNotCustomer:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Fournisseur Inconnu"
+        },
+        msgUnderPrice1:
+        {
+            title: "Attention",
+            btn01: "OK",
+            btn02: "Abandonne",
+            msg: "Prix Inférieur à l'Achat ! !"
+        },
+        msgUnderPrice2:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Vous ne Pouvez Vendre en Dessous du Prix d'Achat ! !"
+        },
+        msgCombineItem:
+        {
+            title: "Attention",
+            btn01: "Regroupe",
+            btn02: "Nouvel Ajout",
+            msg: "Produit Existant dans Document ! Voulez vous Combiner ?"
+        },
+        popDesign : 
+        {
+            title: "Choix du Design",
+            design : "Design" ,
+            lang : "Langue Document" 
+        },
+        msgMissItemCode:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Code Non Retrouvé"
+        },
+        msgMultiCodeCount:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Nombre de Produit Ajouté"
+        },
+        popMultiItem:
+        {
+            title: "Ajout Groupé de Produit",
+            btnApprove: "Chercher Produits",
+            btnClear : "Vider",
+            btnSave : "Ajouter Lignes",
+        },
+        cmbMultiItemType : 
+        {
+            title : "Mode de Recherche",
+            customerCode : "En Fonction du Code Fournisseur ",
+            ItemCode : "En Fonction du Code Produit"
+        },
+        grdMultiItem : 
+        {
+            clmCode : "Référence Produit",
+            clmMulticode : "FRN.Code",
+            clmName : "Nom du produit",
+            clmQuantity : "Quantité"
+        },
+        msgMultiData:
+        {
+            title: "Attention",
+            btn01: "Effacer Liste et Ajoute le Tout",
+            btn02: "Inclure Les Nouvelles Saisies à la Liste",
+            msg: "Produits Présents dans la Liste! "
+        },
+        msgUnit:
+        {
+            title: "Sélection de l'unité",
+            btn01: "Valider",
+        },
+        validRef :"Saisir Réf ",
+        validRefNo : "Saisir Réf No ",
+        validDepot : "Sélectionner Dépôt",
+        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validDocDate : "Sélectionner Date" ,
+        tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
+        msgNotQuantity: 
+        {
+            title: "Attention",
+            btn01: "Ok",
+            msg: "La quantité de dépôt saisie ne peut être en négatif ! Quantité existante:"
+        },
+        msgQuantity:
+        {
+            title: "Quantité",
+            btn01: "Ajouter",
+            msg: "Ajoutez quantité"
+        },
+        pg_txtBarcode : 
+        {
+            title : "Sélectionner Barre",
+            clmCode :  "Référence Produit",
+            clmName : "Nom Produit",
+            clmMulticode : "Référence Fournisseur",
+            clmBarcode : "Code Barre"
+        },
+        pg_ordersGrid : 
+        {
+            title : "Sélection de la commande",   
+            clmReferans : "Réf.-Réf No:",   
+            clmCode : "Code",   
+            clmName : "Nom",   
+            clmQuantity : "Quantité",   
+            clmTotal : "Total",   
+            clmPrice : "Prix",   
+        },
+        msgCustomerSelect:
+        {
+            title: "Attention",  
+            btn01: "OK",  
+            msg: "Veuillez sélectionner Client !"  
+        },
+        msgRowNotUpdate:
+        {
+            title: "Attention",  
+            btn01: "OK",  
+            msg: "Cette ligne a été converti en facture, vous ne pouvez effectuer aucune modification !"  
+        },
+        msgRowNotDelete :
+        {
+            title: "Attention",  
+            btn01: "OK",  
+            msg: "Cette ligne a été converti en facture, vous ne pouvez pas la supprimer !"  
+        },
+        msgdocNotDelete : 
+        {
+            title: "Attention", 
+            btn01: "OK", 
+            msg: "Une ligne a été converti en facture dans votre document. Ce document ne peut pas être supprimé.!"  
+        },
+        pg_adress : 
+        {
+            title : "Sélection d'adresse",   
+            clmAdress : "Adresse",   
+            clmCiyt : "Ville",   
+            clmZipcode : "Code postal",   
+            clmCountry : "Pays",   
+        },
+        msgCode : 
+        {
+            title: "Attention",
+            btn01:"Aller au document",
+            msg: "Document trouvé !"
+        },
+        popMailSend : 
+        {
+            title :"Envoyer E-Mail ",   
+            txtMailSubject : "Objet E-Mail ",   
+            txtSendMail : "Adresse E-Mail ",   
+            btnSend : "Envoyer"   
+        },
+        msgMailSendResult:
+        {
+            title: "Attention",   
+            btn01: "OK",   
+            msgSuccess: "Mail envoyé avec succès  !",   
+            msgFailed: "Echec envoi Mail  !"   
         },
     },
     sip_01_001 : // "Alış Sipariş Listesi"

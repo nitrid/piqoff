@@ -450,6 +450,11 @@ export const menu = (e) =>
                                     text: e.t('menuOff.irs_02_003'),//'İade İrsaliyesi',
                                     path: 'dispatch/documents/rebateDispatch'
                                 },
+                                {
+                                    id: 'irs_02_006',
+                                    text: e.t('menuOff.irs_02_006'),//'Şubeler Arası Alış',
+                                    path: 'dispatch/documents/branchPurcDispatch'
+                                },
                             ]
                         },
                         {
@@ -502,6 +507,11 @@ export const menu = (e) =>
                                     id: 'ftr_02_004',
                                     text: e.t('menuOff.ftr_02_004'),//'Fiyat Farkı Faturası',
                                     path: 'invoices/documents/priceDifferenceInvoice'
+                                },
+                                {
+                                    id: 'ftr_02_008',
+                                    text: e.t('menuOff.ftr_02_008'),//'Şubeler Arası Alış',
+                                    path: 'invoices/documents/branchPurcInvoice'
                                 },
                             ]
                         },
@@ -664,12 +674,12 @@ export const menu = (e) =>
                                 },
                                 {
                                     id: 'irs_02_004',
-                                    text: e.t('menuOff.irs_02_004'),//'Şubeler Arası Sevk',
+                                    text: e.t('menuOff.irs_02_004'),//'Şubeler Arası Satış',
                                     path: 'dispatch/documents/branchSaleDispatch'
                                 },
                                 {
                                     id: 'irs_02_005',
-                                    text: e.t('menuOff.irs_02_005'),//'Şubeler Arası Sevk',
+                                    text: e.t('menuOff.irs_02_005'),//'İade Alış İrsaliye',
                                     path: 'dispatch/documents/rebatePurcDispatch'
                                 }
                             ]
