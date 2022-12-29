@@ -568,7 +568,7 @@ export default class priceDifferenceInvoice extends React.PureComponent
             {
                 let tmpQuery = 
                 {
-                    query :"SELECT * FROM DOC_ITEMS_VW_01 WHERE (((DOC_GUID = @DOC_GUID) OR (INVOICE_GUID = @DOC_GUID)) OR (@DOC_GUID = '00000000-0000-0000-0000-000000000000')) AND ISNULL((SELECT TOP 1 INVOICE_GUID FROM DOC_ITEMS_VW_01 AS DIF WHERE DIF.INVOICE_GUID = DOC_ITEMS_VW_01.GUID AND DIF.DOC_TYPE =21),'00000000-0000-0000-0000-000000000000') = '00000000-0000-0000-0000-000000000000' ",
+                    query :"SELECT * FROM DOC_ITEMS_VW_01 WHERE (((DOC_GUID = @DOC_GUID) OR (INVOICE_DOC_GUID = @DOC_GUID)) OR (@DOC_GUID = '00000000-0000-0000-0000-000000000000')) AND ISNULL((SELECT TOP 1 INVOICE_DOC_GUID FROM DOC_ITEMS_VW_01 AS DIF WHERE DIF.INVOICE_DOC_GUID = DOC_ITEMS_VW_01.GUID AND DIF.DOC_TYPE =21),'00000000-0000-0000-0000-000000000000') = '00000000-0000-0000-0000-000000000000' ",
                     param : ['DOC_GUID:string|50'],
                     value : [data[i].GUID]
                 }
@@ -614,7 +614,7 @@ export default class priceDifferenceInvoice extends React.PureComponent
                         tmpDocItems.AMOUNT = (tmpItems[i][x].PRICE - tmpData.result.recordset[0].PRICE) * tmpItems[i][x].QUANTITY
                         tmpDocItems.VAT = parseFloat((tmpDocItems.AMOUNT * (tmpItems[i][x].VAT_RATE / 100)).toFixed(3))
                         tmpDocItems.TOTAL = ((tmpItems[i][x].PRICE - tmpData.result.recordset[0].PRICE) * tmpItems[i][x].QUANTITY) + tmpDocItems.VAT
-                        tmpDocItems.INVOICE_GUID = tmpItems[i][x].GUID
+                        tmpDocItems.INVOICE_DOC_GUID = tmpItems[i][x].GUID
                         tmpDocItems.CONNECT_REF = tmpItems[i][x].REF + '-' +tmpItems[i][x].REF_NO
                         this.docObj.docItems.addEmpty(tmpDocItems)
                         await this.core.util.waitUntil(100)
@@ -686,7 +686,7 @@ export default class priceDifferenceInvoice extends React.PureComponent
             tmpPayment.DOC_TYPE = this.paymentObj.dt()[0].DOC_TYPE
             tmpPayment.DOC_DATE = this.paymentObj.dt()[0].DOC_DATE
             tmpPayment.OUTPUT = this.paymentObj.dt()[0].OUTPUT
-            tmpPayment.INVOICE_GUID = this.docObj.dt()[0].GUID                                   
+            tmpPayment.INVOICE_DOC_GUID = this.docObj.dt()[0].GUID                                   
 
             if(pType == 0)
             {
@@ -814,7 +814,7 @@ export default class priceDifferenceInvoice extends React.PureComponent
         {
             let tmpQuery = 
             {
-                query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ITEMS_VW_01 WHERE INPUT = @INPUT AND INVOICE_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 1 AND DOC_TYPE IN(121)",
+                query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ITEMS_VW_01 WHERE INPUT = @INPUT AND INVOICE_DOC_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 1 AND DOC_TYPE IN(121)",
                 param : ['INPUT:string|50'],
                 value : [this.docObj.dt()[0].INPUT]
             }
@@ -860,11 +860,13 @@ export default class priceDifferenceInvoice extends React.PureComponent
                     tmpDocItems.AMOUNT = data[i].AMOUNT
                     tmpDocItems.TOTAL = data[i].TOTAL
                     tmpDocItems.DESCRIPTION = data[i].DESCRIPTION
-                    tmpDocItems.PROFORMA_GUID = data[i].GUID
+                    tmpDocItems.PROFORMA_LINE_GUID = data[i].GUID
+                    tmpDocItems.PROFORMA_DOC_GUID = data[i].DOC_GUID
                     tmpDocItems.VAT_RATE = data[i].VAT_RATE
                     tmpDocItems.DISCOUNT_RATE = data[i].DISCOUNT_RATE
                     tmpDocItems.CONNECT_REF = data[i].CONNECT_REF
-                    tmpDocItems.ORDER_GUID = data[i].ORDER_GUID
+                    tmpDocItems.ORDER_LINE_GUID = data[i].ORDER_LINE_GUID
+                    tmpDocItems.ORDER_DOC_GUID = data[i].ORDER_DOC_GUID
                     tmpDocItems.OLD_VAT = data[i].VAT_RATE
                     tmpDocItems.VAT_RATE = data[i].VAT_RATE
                     tmpDocItems.DEPOT_QUANTITY = data[i].DEPOT_QUANTITY

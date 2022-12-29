@@ -752,7 +752,7 @@ export default class purchaseOrder extends React.PureComponent
         {
             let tmpQuery = 
             {
-                query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_OFFERS_VW_01 WHERE OUTPUT = @OUTPUT AND ORDER_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 0 AND DOC_TYPE IN(61)",
+                query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_OFFERS_VW_01 WHERE OUTPUT = @OUTPUT AND ORDER_LINE_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 0 AND DOC_TYPE IN(61)",
                 param : ['OUTPUT:string|50'],
                 value : [this.docObj.dt()[0].OUTPUT]
             }
@@ -799,7 +799,8 @@ export default class purchaseOrder extends React.PureComponent
                     tmpDocItems.DISCOUNT_RATE = data[i].DISCOUNT_RATE
                     tmpDocItems.MULTICODE = data[i].MULTICODE
                     tmpDocItems.ITEM_BARCODE = data[i].ITEM_BARCODE
-                    tmpDocItems.OFFER_GUID = data[i].GUID
+                    tmpDocItems.OFFER_LINE_GUID = data[i].GUID,
+                    tmpDocItems.OFFER_DOC_GUID = data[i].DOC_GUID,
                     tmpDocItems.OFFER_REF = data[i].REF + '-' + data[i].REF_NO
 
 
@@ -998,7 +999,7 @@ export default class purchaseOrder extends React.PureComponent
                                         }
                                         for (let i = 0; i < this.docObj.docOrders.dt().length; i++) 
                                         {
-                                            if(this.docObj.docOrders.dt()[i].SHIPMENT_GUID != '00000000-0000-0000-0000-000000000000')   
+                                            if(this.docObj.docOrders.dt()[i].SHIPMENT_LINE_GUID != '00000000-0000-0000-0000-000000000000')   
                                             {
                                                 let tmpConfObj =
                                                 {
@@ -1834,14 +1835,14 @@ export default class purchaseOrder extends React.PureComponent
                                     filterRow={{visible:true}}
                                     onRowPrepared={(e) =>
                                     {
-                                        if(e.rowType == 'data' && e.data.SHIPMENT_GUID  != '00000000-0000-0000-0000-000000000000')
+                                        if(e.rowType == 'data' && e.data.SHIPMENT_LINE_GUID  != '00000000-0000-0000-0000-000000000000')
                                         {
                                             e.rowElement.style.color ="Silver"
                                         }
                                     }}
                                     onRowUpdating={async (e)=>
                                     {
-                                        if(e.key.SHIPMENT_GUID != '00000000-0000-0000-0000-000000000000')
+                                        if(e.key.SHIPMENT_LINE_GUID != '00000000-0000-0000-0000-000000000000')
                                         {
                                             e.cancel = true
                                             let tmpConfObj =
@@ -1857,7 +1858,7 @@ export default class purchaseOrder extends React.PureComponent
                                     }}
                                     onRowRemoving={async (e)=>
                                     {
-                                        if(e.key.SHIPMENT_GUID != '00000000-0000-0000-0000-000000000000')
+                                        if(e.key.SHIPMENT_LINE_GUID != '00000000-0000-0000-0000-000000000000')
                                         {
                                             e.cancel = true
                                             let tmpConfObj =

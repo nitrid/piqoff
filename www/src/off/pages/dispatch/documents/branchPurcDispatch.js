@@ -698,7 +698,7 @@ export default class branchSaleDispatch extends React.PureComponent
         {
             let tmpQuery = 
             {
-                query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ORDERS_VW_01 WHERE OUTPUT = @OUTPUT AND SHIPMENT_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 0 AND DOC_TYPE IN(60)",
+                query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ORDERS_VW_01 WHERE OUTPUT = @OUTPUT AND SHIPMENT_LINE_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 0 AND DOC_TYPE IN(60)",
                 param : ['OUTPUT:string|50'],
                 value : [this.docObj.dt()[0].OUTPUT]
             }
@@ -743,7 +743,8 @@ export default class branchSaleDispatch extends React.PureComponent
                     tmpDocItems.DESCRIPTION = data[i].DESCRIPTION
                     tmpDocItems.VAT_RATE = data[i].VAT_RATE
                     tmpDocItems.DISCOUNT_RATE = data[i].DISCOUNT_RATE
-                    tmpDocItems.ORDER_GUID = data[i].GUID
+                    tmpDocItems.ORDER_LINE_GUID = data[i].GUID
+                    tmpDocItems.ORDER_DOC_GUID = data[i].DOC_GUID
 
                     await this.docObj.docItems.addEmpty(tmpDocItems)
                     await this.core.util.waitUntil(100)
@@ -909,7 +910,7 @@ export default class branchSaleDispatch extends React.PureComponent
                                         }
                                         for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
                                         {
-                                            if(this.docObj.docItems.dt()[i].INVOICE_GUID != '00000000-0000-0000-0000-000000000000')   
+                                            if(this.docObj.docItems.dt()[i].INVOICE_LINE_GUID != '00000000-0000-0000-0000-000000000000')   
                                             {
                                                 let tmpConfObj =
                                                 {
@@ -943,7 +944,6 @@ export default class branchSaleDispatch extends React.PureComponent
                                                 this.init(); 
                                             }
                                         }
-                                        
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
@@ -974,7 +974,6 @@ export default class branchSaleDispatch extends React.PureComponent
                                                 tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
                                                 await dialog(tmpConfObj1);
                                             }
-                                            
                                         }
                                         else if(this.docObj.dt()[0].LOCKED == 1)
                                         {
@@ -992,7 +991,6 @@ export default class branchSaleDispatch extends React.PureComponent
 
                                             await dialog(tmpConfObj);
                                         }
-                                        
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
@@ -1749,14 +1747,14 @@ export default class branchSaleDispatch extends React.PureComponent
                                     dbApply={false}
                                     onRowPrepared={(e) =>
                                     {
-                                        if(e.rowType == 'data' && e.data.INVOICE_GUID  != '00000000-0000-0000-0000-000000000000')
+                                        if(e.rowType == 'data' && e.data.INVOICE_LINE_GUID  != '00000000-0000-0000-0000-000000000000')
                                         {
                                             e.rowElement.style.color ="Silver"
                                         }
                                     }}
                                     onRowUpdating={async (e)=>
                                     {
-                                        if(e.key.INVOICE_GUID != '00000000-0000-0000-0000-000000000000')
+                                        if(e.key.INVOICE_LINE_GUID != '00000000-0000-0000-0000-000000000000')
                                         {
                                             e.cancel = true
                                             let tmpConfObj =
@@ -1774,7 +1772,7 @@ export default class branchSaleDispatch extends React.PureComponent
                                     }}
                                     onRowRemoving={async (e)=>
                                     {
-                                        if(e.key.INVOICE_GUID != '00000000-0000-0000-0000-000000000000')
+                                        if(e.key.INVOICE_LINE_GUID != '00000000-0000-0000-0000-000000000000')
                                         {
                                             e.cancel = true
                                             let tmpConfObj =

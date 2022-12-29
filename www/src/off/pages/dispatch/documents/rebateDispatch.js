@@ -805,7 +805,7 @@ export default class rebateDispatch extends React.PureComponent
                                         }
                                         for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
                                         {
-                                            if(this.docObj.docItems.dt()[i].INVOICE_GUID != '00000000-0000-0000-0000-000000000000')   
+                                            if(this.docObj.docItems.dt()[i].INVOICE_LINE_GUID != '00000000-0000-0000-0000-000000000000')   
                                             {
                                                 let tmpConfObj =
                                                 {
@@ -1629,14 +1629,14 @@ export default class rebateDispatch extends React.PureComponent
                                     dbApply={false}
                                     onRowPrepared={(e) =>
                                     {
-                                        if(e.rowType == 'data' && e.data.INVOICE_GUID  != '00000000-0000-0000-0000-000000000000')
+                                        if(e.rowType == 'data' && e.data.INVOICE_LINE_GUID  != '00000000-0000-0000-0000-000000000000')
                                         {
                                             e.rowElement.style.color ="Silver"
                                         }
                                     }}
                                     onRowUpdating={async (e)=>
                                     {
-                                        if(e.key.INVOICE_GUID != '00000000-0000-0000-0000-000000000000')
+                                        if(e.key.INVOICE_LINE_GUID != '00000000-0000-0000-0000-000000000000')
                                         {
                                             e.cancel = true
                                             let tmpConfObj =
@@ -1652,7 +1652,7 @@ export default class rebateDispatch extends React.PureComponent
                                     }}
                                     onRowRemoving={async (e)=>
                                     {
-                                        if(e.key.INVOICE_GUID != '00000000-0000-0000-0000-000000000000')
+                                        if(e.key.INVOICE_LINE_GUID != '00000000-0000-0000-0000-000000000000')
                                         {
                                             e.cancel = true
                                             let tmpConfObj =

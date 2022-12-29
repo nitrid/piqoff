@@ -195,7 +195,7 @@ export class docCls
 
             if(this.ds.get('DOC').length > 0)
             {  
-                await this.docItems.load({DOC_GUID:this.ds.get('DOC')[0].GUID,INVOICE_GUID:tmpPrm.INVOICE_GUID})
+                await this.docItems.load({DOC_GUID:this.ds.get('DOC')[0].GUID})
                 await this.docCustomer.load({GUID:this.ds.get('DOC')[0].GUID})
                 await this.docOrders.load({DOC_GUID:this.ds.get('DOC')[0].GUID})
                 await this.docOffers.load({DOC_GUID:this.ds.get('DOC')[0].GUID})
@@ -256,10 +256,14 @@ export class docItemsCls
             AMOUNT : 0,
             TOTAL : 0,
             DESCRIPTION : '',
-            INVOICE_GUID : '00000000-0000-0000-0000-000000000000',
-            ORDER_GUID : '00000000-0000-0000-0000-000000000000',
-            OFFER_GUID : '00000000-0000-0000-0000-000000000000',
-            PROFORMA_GUID : '00000000-0000-0000-0000-000000000000',
+            INVOICE_LINE_GUID : '00000000-0000-0000-0000-000000000000',
+            INVOICE_DOC_GUID : '00000000-0000-0000-0000-000000000000',
+            ORDER_LINE_GUID : '00000000-0000-0000-0000-000000000000',
+            ORDER_DOC_GUID : '00000000-0000-0000-0000-000000000000',
+            OFFER_LINE_GUID : '00000000-0000-0000-0000-000000000000',
+            OFFER_DOC_GUID : '00000000-0000-0000-0000-000000000000',
+            PROFORMA_LINE_GUID : '00000000-0000-0000-0000-000000000000',
+            PROFORMA_DOC_GUID : '00000000-0000-0000-0000-000000000000',
             VAT_RATE : 0 ,
             OLD_VAT : 0,
             DISCOUNT_RATE : 0,
@@ -279,7 +283,7 @@ export class docItemsCls
         let tmpDt = new datatable('DOC_ITEMS');
         tmpDt.selectCmd = 
         {
-            query : "SELECT * FROM [dbo].[DOC_ITEMS_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND (((DOC_GUID = @DOC_GUID) OR (INVOICE_GUID = @DOC_GUID AND DOC_TYPE IN(40,42))) OR (@DOC_GUID = '00000000-0000-0000-0000-000000000000'))  AND ((REF = @REF) OR (@REF = '')) AND ((REF_NO = @REF_NO) OR (@REF_NO = 0))",
+            query : "SELECT * FROM [dbo].[DOC_ITEMS_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND (((DOC_GUID = @DOC_GUID) OR (INVOICE_DOC_GUID = @DOC_GUID AND DOC_TYPE IN(40,42))) OR (@DOC_GUID = '00000000-0000-0000-0000-000000000000'))  AND ((REF = @REF) OR (@REF = '')) AND ((REF_NO = @REF_NO) OR (@REF_NO = 0))",
             param : ['GUID:string|50','DOC_GUID:string|50','REF:string|25','REF_NO:int']
         }
         tmpDt.insertCmd = 
@@ -309,13 +313,20 @@ export class docItemsCls
                     "@AMOUNT = @PAMOUNT, " +
                     "@TOTAL = @PTOTAL, " +
                     "@DESCRIPTION  = @PDESCRIPTION, " +
-                    "@INVOICE_GUID  = @PINVOICE_GUID, " +
-                    "@ORDER_GUID  = @PORDER_GUID, " +
-                    "@OFFER_GUID  = @POFFER_GUID, " +
-                    "@PROFORMA_GUID  = @PPROFORMA_GUID " ,
+                    "@INVOICE_LINE_GUID  = @PINVOICE_LINE_GUID, " +
+                    "@INVOICE_DOC_GUID  = @PINVOICE_DOC_GUID, " +
+                    "@ORDER_LINE_GUID  = @PORDER_LINE_GUID, " +
+                    "@ORDER_DOC_GUID  = @PORDER_DOC_GUID, " +
+                    "@OFFER_LINE_GUID  = @POFFER_LINE_GUID, " +
+                    "@OFFER_DOC_GUID  = @POFFER_DOC_GUID, " +
+                    "@PROFORMA_LINE_GUID  = @PPROFORMA_LINE_GUID, "  +
+                    "@PROFORMA_DOC_GUID  = @PPROFORMA_DOC_GUID " ,
             param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PTYPE:int','PDOC_TYPE:int','PREBATE:int','PREF:string|25','PREF_NO:int','PDOC_DATE:date','PSHIPMENT_DATE:date','PINPUT:string|50',
-                        'POUTPUT:string|50','PITEM:string|50','PITEM_NAME:string|250','PITEM_TYPE:int','PLINE_NO:int','PUNIT:string|50','PQUANTITY:float','PPRICE:float','PDISCOUNT:float','PVAT:float','PAMOUNT:float','PTOTAL:float','PDESCRIPTION:string|100','PINVOICE_GUID:string|50','PORDER_GUID:string|50','POFFER_GUID:string|50','PPROFORMA_GUID:string|50'],
-            dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','SHIPMENT_DATE','INPUT','OUTPUT','ITEM','ITEM_NAME','ITEM_TYPE','LINE_NO','UNIT','QUANTITY','PRICE','DISCOUNT','VAT','AMOUNT','TOTAL','DESCRIPTION','INVOICE_GUID','ORDER_GUID','OFFER_GUID','PROFORMA_GUID']
+                        'POUTPUT:string|50','PITEM:string|50','PITEM_NAME:string|250','PITEM_TYPE:int','PLINE_NO:int','PUNIT:string|50','PQUANTITY:float','PPRICE:float','PDISCOUNT:float','PVAT:float',
+                        'PAMOUNT:float','PTOTAL:float','PDESCRIPTION:string|100','PINVOICE_LINE_GUID:string|50','PINVOICE_DOC_GUID:string|50','PORDER_LINE_GUID:string|50','PORDER_DOC_GUID:string|50',
+                        'POFFER_LINE_GUID:string|50','POFFER_DOC_GUID:string|50','PPROFORMA_LINE_GUID:string|50','PPROFORMA_DOC_GUID:string|50'],
+            dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','SHIPMENT_DATE','INPUT','OUTPUT','ITEM','ITEM_NAME','ITEM_TYPE','LINE_NO','UNIT','QUANTITY','PRICE',
+                        'DISCOUNT','VAT','AMOUNT','TOTAL','DESCRIPTION','INVOICE_LINE_GUID','INVOICE_DOC_GUID','ORDER_LINE_GUID','ORDER_DOC_GUID','OFFER_LINE_GUID','OFFER_DOC_GUID','PROFORMA_LINE_GUID','PROFORMA_DOC_GUID']
         }
         tmpDt.updateCmd = 
         {
@@ -344,13 +355,20 @@ export class docItemsCls
                     "@AMOUNT = @PAMOUNT, " +
                     "@TOTAL = @PTOTAL, " +
                     "@DESCRIPTION  = @PDESCRIPTION, " +
-                    "@INVOICE_GUID  = @PINVOICE_GUID, " +
-                    "@ORDER_GUID  = @PORDER_GUID, " +
-                    "@OFFER_GUID  = @POFFER_GUID, " +
-                    "@PROFORMA_GUID  = @PPROFORMA_GUID " ,
+                    "@INVOICE_LINE_GUID  = @PINVOICE_LINE_GUID, " +
+                    "@INVOICE_DOC_GUID  = @PINVOICE_DOC_GUID, " +
+                    "@ORDER_LINE_GUID  = @PORDER_LINE_GUID, " +
+                    "@ORDER_DOC_GUID  = @PORDER_DOC_GUID, " +
+                    "@OFFER_LINE_GUID  = @POFFER_LINE_GUID, " +
+                    "@OFFER_DOC_GUID  = @POFFER_DOC_GUID, " +
+                    "@PROFORMA_LINE_GUID  = @PPROFORMA_LINE_GUID, "  +
+                    "@PROFORMA_DOC_GUID  = @PPROFORMA_DOC_GUID " ,
             param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PTYPE:int','PDOC_TYPE:int','PREBATE:int','PREF:string|25','PREF_NO:int','PDOC_DATE:date','PSHIPMENT_DATE:date','PINPUT:string|50',
-                        'POUTPUT:string|50','PITEM:string|50','PITEM_NAME:string|250','PITEM_TYPE:int','PLINE_NO:int','PUNIT:string|50','PQUANTITY:float','PPRICE:float','PDISCOUNT:float','PVAT:float','PAMOUNT:float','PTOTAL:float','PDESCRIPTION:string|100','PINVOICE_GUID:string|50','PORDER_GUID:string|50','POFFER_GUID:string|50','PPROFORMA_GUID:string|50'],
-            dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','SHIPMENT_DATE','INPUT','OUTPUT','ITEM','ITEM_NAME','ITEM_TYPE','LINE_NO','UNIT','QUANTITY','PRICE','DISCOUNT','VAT','AMOUNT','TOTAL','DESCRIPTION','INVOICE_GUID','ORDER_GUID','OFFER_GUID','PROFORMA_GUID']
+                        'POUTPUT:string|50','PITEM:string|50','PITEM_NAME:string|250','PITEM_TYPE:int','PLINE_NO:int','PUNIT:string|50','PQUANTITY:float','PPRICE:float','PDISCOUNT:float','PVAT:float',
+                        'PAMOUNT:float','PTOTAL:float','PDESCRIPTION:string|100','PINVOICE_LINE_GUID:string|50','PINVOICE_DOC_GUID:string|50','PORDER_LINE_GUID:string|50','PORDER_DOC_GUID:string|50',
+                        'POFFER_LINE_GUID:string|50','POFFER_DOC_GUID:string|50','PPROFORMA_LINE_GUID:string|50','PPROFORMA_DOC_GUID:string|50'],
+            dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','SHIPMENT_DATE','INPUT','OUTPUT','ITEM','ITEM_NAME','ITEM_TYPE','LINE_NO','UNIT','QUANTITY','PRICE',
+                        'DISCOUNT','VAT','AMOUNT','TOTAL','DESCRIPTION','INVOICE_LINE_GUID','INVOICE_DOC_GUID','ORDER_LINE_GUID','ORDER_DOC_GUID','OFFER_LINE_GUID','OFFER_DOC_GUID','PROFORMA_LINE_GUID','PROFORMA_DOC_GUID']
         }
         tmpDt.deleteCmd = 
         {
@@ -794,8 +812,10 @@ export class docOrdersCls
             AMOUNT : 0,
             TOTAL : 0,
             DESCRIPTION : '',
-            SHIPMENT_GUID : '00000000-0000-0000-0000-000000000000',
-            OFFER_GUID : '00000000-0000-0000-0000-000000000000',
+            SHIPMENT_LINE_GUID : '00000000-0000-0000-0000-000000000000',
+            SHIPMENT_DOC_GUID : '00000000-0000-0000-0000-000000000000',
+            OFFER_LINE_GUID : '00000000-0000-0000-0000-000000000000',
+            OFFER_DOC_GUID : '00000000-0000-0000-0000-000000000000',
             VAT_RATE : 0 ,
             DISCOUNT_RATE : 0,
             COST_PRICE : 0,
@@ -842,11 +862,15 @@ export class docOrdersCls
                     "@AMOUNT = @PAMOUNT, " +
                     "@TOTAL = @PTOTAL, " +
                     "@DESCRIPTION  = @PDESCRIPTION, " +
-                    "@SHIPMENT_GUID  = @PSHIPMENT_GUID, " +
-                    "@OFFER_GUID  = @POFFER_GUID ",
+                    "@SHIPMENT_LINE_GUID  = @PSHIPMENT_LINE_GUID, " +
+                    "@SHIPMENT_DOC_GUID  = @PSHIPMENT_DOC_GUID, " +
+                    "@OFFER_LINE_GUID  = @POFFER_LINE_GUID, " +
+                    "@OFFER_DOC_GUID  = @POFFER_DOC_GUID ",
             param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PTYPE:int','PDOC_TYPE:int','PREF:string|25','PREF_NO:int','PDOC_DATE:date','PINPUT:string|50',
-                        'POUTPUT:string|50','PITEM:string|50','PITEM_NAME:string|250','PLINE_NO:int','PUNIT:string|50','PQUANTITY:float','PCOMP_QUANTITY:float','PCLOSED:int','PPRICE:float','PDISCOUNT:float','PVAT:float','PAMOUNT:float','PTOTAL:float','PDESCRIPTION:string|100','PSHIPMENT_GUID:string|50','POFFER_GUID:string|50'],
-            dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REF','REF_NO','DOC_DATE','INPUT','OUTPUT','ITEM','ITEM_NAME','LINE_NO','UNIT','QUANTITY','COMP_QUANTITY','CLOSED','PRICE','DISCOUNT','VAT','AMOUNT','TOTAL','DESCRIPTION','SHIPMENT_GUID','OFFER_GUID']
+                        'POUTPUT:string|50','PITEM:string|50','PITEM_NAME:string|250','PLINE_NO:int','PUNIT:string|50','PQUANTITY:float','PCOMP_QUANTITY:float','PCLOSED:int','PPRICE:float',
+                        'PDISCOUNT:float','PVAT:float','PAMOUNT:float','PTOTAL:float','PDESCRIPTION:string|100','PSHIPMENT_LINE_GUID:string|50','PSHIPMENT_DOC_GUID:string|50','POFFER_LINE_GUID:string|50','POFFER_DOC_GUID:string|50'],
+            dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REF','REF_NO','DOC_DATE','INPUT','OUTPUT','ITEM','ITEM_NAME','LINE_NO','UNIT','QUANTITY','COMP_QUANTITY','CLOSED','PRICE',
+                        'DISCOUNT','VAT','AMOUNT','TOTAL','DESCRIPTION','SHIPMENT_LINE_GUID','SHIPMENT_DOC_GUID','OFFER_LINE_GUID','OFFER_DOC_GUID']
         }
         tmpDt.updateCmd = 
         {
@@ -874,11 +898,15 @@ export class docOrdersCls
                     "@AMOUNT = @PAMOUNT, " +
                     "@TOTAL = @PTOTAL, " +
                     "@DESCRIPTION  = @PDESCRIPTION, " +
-                    "@SHIPMENT_GUID  = @PSHIPMENT_GUID, " +
-                    "@OFFER_GUID  = @POFFER_GUID ",
+                    "@SHIPMENT_LINE_GUID  = @PSHIPMENT_LINE_GUID, " +
+                    "@SHIPMENT_DOC_GUID  = @PSHIPMENT_DOC_GUID, " +
+                    "@OFFER_LINE_GUID  = @POFFER_LINE_GUID, " +
+                    "@OFFER_DOC_GUID  = @POFFER_DOC_GUID ",
             param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PTYPE:int','PDOC_TYPE:int','PREF:string|25','PREF_NO:int','PDOC_DATE:date','PINPUT:string|50',
-                        'POUTPUT:string|50','PITEM:string|50','PITEM_NAME:string|250','PLINE_NO:int','PUNIT:string|50','PQUANTITY:float','PCOMP_QUANTITY:float','PCLOSED:int','PPRICE:float','PDISCOUNT:float','PVAT:float','PAMOUNT:float','PTOTAL:float','PDESCRIPTION:string|100','PSHIPMENT_GUID:string|50','POFFER_GUID:string|50'],
-            dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REF','REF_NO','DOC_DATE','INPUT','OUTPUT','ITEM','ITEM_NAME','LINE_NO','UNIT','QUANTITY','COMP_QUANTITY','CLOSED','PRICE','DISCOUNT','VAT','AMOUNT','TOTAL','DESCRIPTION','SHIPMENT_GUID','OFFER_GUID']
+                        'POUTPUT:string|50','PITEM:string|50','PITEM_NAME:string|250','PLINE_NO:int','PUNIT:string|50','PQUANTITY:float','PCOMP_QUANTITY:float','PCLOSED:int','PPRICE:float',
+                        'PDISCOUNT:float','PVAT:float','PAMOUNT:float','PTOTAL:float','PDESCRIPTION:string|100','PSHIPMENT_LINE_GUID:string|50','PSHIPMENT_DOC_GUID:string|50','POFFER_LINE_GUID:string|50','POFFER_DOC_GUID:string|50'],
+            dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REF','REF_NO','DOC_DATE','INPUT','OUTPUT','ITEM','ITEM_NAME','LINE_NO','UNIT','QUANTITY','COMP_QUANTITY','CLOSED','PRICE',
+                        'DISCOUNT','VAT','AMOUNT','TOTAL','DESCRIPTION','SHIPMENT_LINE_GUID','SHIPMENT_DOC_GUID','OFFER_LINE_GUID','OFFER_DOC_GUID']
         }
         tmpDt.deleteCmd = 
         {
@@ -1001,8 +1029,10 @@ export class docOffersCls
             AMOUNT : 0,
             TOTAL : 0,
             DESCRIPTION : '',
-            SHIPMENT_GUID : '00000000-0000-0000-0000-000000000000',
-            ORDER_GUID : '00000000-0000-0000-0000-000000000000',
+            SHIPMENT_LINE_GUID : '00000000-0000-0000-0000-000000000000',
+            SHIPMENT_DOC_GUID : '00000000-0000-0000-0000-000000000000',
+            ORDER_LINE_GUID : '00000000-0000-0000-0000-000000000000',
+            ORDER_DOC_GUID : '00000000-0000-0000-0000-000000000000',
             VAT_RATE : 0 ,
             DISCOUNT_RATE : 0,
             COST_PRICE : 0,
@@ -1047,12 +1077,10 @@ export class docOffersCls
                     "@VAT = @PVAT, " +
                     "@AMOUNT = @PAMOUNT, " +
                     "@TOTAL = @PTOTAL, " +
-                    "@DESCRIPTION  = @PDESCRIPTION, " +
-                    "@SHIPMENT_GUID  = @PSHIPMENT_GUID, " +
-                    "@ORDER_GUID  = @PORDER_GUID ",
+                    "@DESCRIPTION  = @PDESCRIPTION " ,
             param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PTYPE:int','PDOC_TYPE:int','PREF:string|25','PREF_NO:int','PDOC_DATE:date','PINPUT:string|50',
-                        'POUTPUT:string|50','PITEM:string|50','PITEM_NAME:string|250','PLINE_NO:int','PUNIT:string|50','PQUANTITY:float','PCOMP_QUANTITY:float','PPRICE:float','PDISCOUNT:float','PVAT:float','PAMOUNT:float','PTOTAL:float','PDESCRIPTION:string|100','PSHIPMENT_GUID:string|50','PORDER_GUID:string|50'],
-            dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REF','REF_NO','DOC_DATE','INPUT','OUTPUT','ITEM','ITEM_NAME','LINE_NO','UNIT','QUANTITY','COMP_QUANTITY','PRICE','DISCOUNT','VAT','AMOUNT','TOTAL','DESCRIPTION','SHIPMENT_GUID','ORDER_GUID']
+                        'POUTPUT:string|50','PITEM:string|50','PITEM_NAME:string|250','PLINE_NO:int','PUNIT:string|50','PQUANTITY:float','PCOMP_QUANTITY:float','PPRICE:float','PDISCOUNT:float','PVAT:float','PAMOUNT:float','PTOTAL:float','PDESCRIPTION:string|100'],
+            dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REF','REF_NO','DOC_DATE','INPUT','OUTPUT','ITEM','ITEM_NAME','LINE_NO','UNIT','QUANTITY','COMP_QUANTITY','PRICE','DISCOUNT','VAT','AMOUNT','TOTAL','DESCRIPTION']
         }
         tmpDt.updateCmd = 
         {
@@ -1078,12 +1106,10 @@ export class docOffersCls
                     "@VAT = @PVAT, " +
                     "@AMOUNT = @PAMOUNT, " +
                     "@TOTAL = @PTOTAL, " +
-                    "@DESCRIPTION  = @PDESCRIPTION, " +
-                    "@SHIPMENT_GUID  = @PSHIPMENT_GUID, " +
-                    "@ORDER_GUID  = @PORDER_GUID ",
+                    "@DESCRIPTION  = @PDESCRIPTION " ,
             param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PTYPE:int','PDOC_TYPE:int','PREF:string|25','PREF_NO:int','PDOC_DATE:date','PINPUT:string|50',
-                        'POUTPUT:string|50','PITEM:string|50','PITEM_NAME:string|250','PLINE_NO:int','PUNIT:string|50','PQUANTITY:float','PCOMP_QUANTITY:float','PPRICE:float','PDISCOUNT:float','PVAT:float','PAMOUNT:float','PTOTAL:float','PDESCRIPTION:string|100','PSHIPMENT_GUID:string|50','PORDER_GUID:string|50'],
-            dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REF','REF_NO','DOC_DATE','INPUT','OUTPUT','ITEM','ITEM_NAME','LINE_NO','UNIT','QUANTITY','COMP_QUANTITY','PRICE','DISCOUNT','VAT','AMOUNT','TOTAL','DESCRIPTION','SHIPMENT_GUID','ORDER_GUID']
+                        'POUTPUT:string|50','PITEM:string|50','PITEM_NAME:string|250','PLINE_NO:int','PUNIT:string|50','PQUANTITY:float','PCOMP_QUANTITY:float','PPRICE:float','PDISCOUNT:float','PVAT:float','PAMOUNT:float','PTOTAL:float','PDESCRIPTION:string|100'],
+            dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REF','REF_NO','DOC_DATE','INPUT','OUTPUT','ITEM','ITEM_NAME','LINE_NO','UNIT','QUANTITY','COMP_QUANTITY','PRICE','DISCOUNT','VAT','AMOUNT','TOTAL','DESCRIPTION']
         }
         tmpDt.deleteCmd = 
         {

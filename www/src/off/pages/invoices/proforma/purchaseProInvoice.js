@@ -761,7 +761,8 @@ export default class purchaseInvoice extends React.PureComponent
                     tmpDocItems.VAT_RATE = data[i].VAT_RATE
                     tmpDocItems.DISCOUNT_RATE = data[i].DISCOUNT_RATE
                     tmpDocItems.CONNECT_REF = data[i].CONNECT_REF
-                    tmpDocItems.ORDER_GUID = data[i].ORDER_GUID
+                    tmpDocItems.ORDER_LINE_GUID = data[i].ORDER_LINE_GUID
+                    tmpDocItems.ORDER_DOC_GUID = data[i].ORDER_DOC_GUID
                     tmpDocItems.OLD_VAT = data[i].VAT_RATE
                     tmpDocItems.VAT_RATE = data[i].VAT_RATE
                     tmpDocItems.DEPOT_QUANTITY = data[i].DEPOT_QUANTITY
@@ -802,7 +803,7 @@ export default class purchaseInvoice extends React.PureComponent
         {
             let tmpQuery = 
             {
-                query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ORDERS_VW_01 WHERE OUTPUT = @OUTPUT AND SHIPMENT_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 0 AND DOC_TYPE IN(60)",
+                query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ORDERS_VW_01 WHERE OUTPUT = @OUTPUT AND SHIPMENT_LINE_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 0 AND DOC_TYPE IN(60)",
                 param : ['OUTPUT:string|50'],
                 value : [this.docObj.dt()[0].OUTPUT]
             }
@@ -847,7 +848,8 @@ export default class purchaseInvoice extends React.PureComponent
                     tmpDocItems.DESCRIPTION = data[i].DESCRIPTION
                     tmpDocItems.VAT_RATE = data[i].VAT_RATE
                     tmpDocItems.DISCOUNT_RATE = data[i].DISCOUNT_RATE
-                    tmpDocItems.ORDER_GUID = data[i].GUID
+                    tmpDocItems.ORDER_LINE_GUID = data[i].GUID
+                    tmpDocItems.ORDER_DOC_GUID = data[i].DOC_GUID
                     tmpDocItems.VAT_RATE = data[i].VAT_RATE
                     tmpDocItems.OLD_VAT = data[i].VAT_RATE
 
@@ -879,7 +881,7 @@ export default class purchaseInvoice extends React.PureComponent
         {
             let tmpQuery = 
             {
-                query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_OFFERS_VW_01 WHERE OUTPUT = @OUTPUT AND SHIPMENT_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 0 AND DOC_TYPE IN(61)",
+                query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_OFFERS_VW_01 WHERE OUTPUT = @OUTPUT AND SHIPMENT_LINE_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 0 AND DOC_TYPE IN(61)",
                 param : ['OUTPUT:string|50'],
                 value : [this.docObj.dt()[0].OUTPUT]
             }

@@ -659,7 +659,7 @@ export default class itemCard extends React.PureComponent
         {
             let tmpQuery = 
             {
-                query : "SELECT TOP 1 DOC_GUID FROM DOC_ITEMS_VW_01 WHERE ITEM = @ITEM AND ISNULL((SELECT TOP 1 ITEM_TYPE FROM DOC_ITEMS WHERE ((DOC_ITEMS.DOC_GUID = DOC_ITEMS_VW_01.DOC_GUID) OR (DOC_ITEMS.DOC_GUID = DOC_ITEMS_VW_01.INVOICE_GUID)) AND ITEM_TYPE = 1),0) = 1 ORDER BY DOC_DATE DESC",
+                query : "SELECT TOP 1 DOC_GUID FROM DOC_ITEMS_VW_01 WHERE ITEM = @ITEM AND ISNULL((SELECT TOP 1 ITEM_TYPE FROM DOC_ITEMS WHERE ((DOC_ITEMS.DOC_GUID = DOC_ITEMS_VW_01.DOC_GUID) OR (DOC_ITEMS.DOC_GUID = DOC_ITEMS_VW_01.INVOICE_LINE_GUID)) AND ITEM_TYPE = 1),0) = 1 ORDER BY DOC_DATE DESC",
                 param : ['ITEM:string|50'],
                 value : [this.itemsObj.dt()[0].GUID]
             }
@@ -669,7 +669,7 @@ export default class itemCard extends React.PureComponent
                 console.log(tmpData.result.recordset[0].DOC_GUID)
                 let tmpItemQuery = 
                 {
-                    query : "SELECT * FROM DOC_ITEMS_VW_01 WHERE (DOC_GUID = @DOC_GUID OR INVOICE_GUID = @DOC_GUID) OR DOC_GUID IN (SELECT INVOICE_GUID FROM DOC_ITEMS_VW_01 WHERE DOC_GUID = @DOC_GUID)",
+                    query : "SELECT * FROM DOC_ITEMS_VW_01 WHERE (DOC_GUID = @DOC_GUID OR INVOICE_LINE_GUID = @DOC_GUID) OR DOC_GUID IN (SELECT INVOICE_LINE_GUID FROM DOC_ITEMS_VW_01 WHERE DOC_GUID = @DOC_GUID)",
                     param : ['DOC_GUID:string|50'],
                     value : [tmpData.result.recordset[0].DOC_GUID]
                 }

@@ -600,7 +600,7 @@ export default class rebateInvoice extends React.PureComponent
             tmpPayment.DOC_TYPE = this.paymentObj.dt()[0].DOC_TYPE
             tmpPayment.DOC_DATE = this.paymentObj.dt()[0].DOC_DATE
             tmpPayment.OUTPUT = this.paymentObj.dt()[0].OUTPUT
-            tmpPayment.INVOICE_GUID = this.docObj.dt()[0].GUID                                   
+            tmpPayment.INVOICE_DOC_GUID = this.docObj.dt()[0].GUID                                   
 
             if(pType == 0)
             {
@@ -666,7 +666,7 @@ export default class rebateInvoice extends React.PureComponent
         {
             let tmpQuery = 
             {
-                query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ITEMS_VW_01 WHERE OUTPUT = @OUTPUT AND INVOICE_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 0 AND REBATE = 1 AND DOC_TYPE IN(40)",
+                query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ITEMS_VW_01 WHERE OUTPUT = @OUTPUT AND INVOICE_DOC_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 0 AND REBATE = 1 AND DOC_TYPE IN(40)",
                 param : ['OUTPUT:string|50'],
                 value : [this.docObj.dt()[0].OUTPUT]
             }
@@ -706,7 +706,8 @@ export default class rebateInvoice extends React.PureComponent
                     tmpDocItems.AMOUNT = data[i].AMOUNT
                     tmpDocItems.TOTAL = data[i].TOTAL
                     tmpDocItems.DESCRIPTION = data[i].DESCRIPTION
-                    tmpDocItems.INVOICE_GUID = this.docObj.dt()[0].GUID
+                    tmpDocItems.INVOICE_DOC_GUID = this.docObj.dt()[0].GUID
+                    tmpDocItems.INVOICE_LINE_GUID = data[i].GUID
                     tmpDocItems.VAT_RATE = data[i].VAT_RATE
                     tmpDocItems.DISCOUNT_RATE = data[i].DISCOUNT_RATE
                     tmpDocItems.CONNECT_REF = data[i].CONNECT_REF
@@ -801,7 +802,7 @@ export default class rebateInvoice extends React.PureComponent
         {
             let tmpQuery = 
             {
-                query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ITEMS_VW_01 WHERE OUTPUT = @OUTPUT AND INVOICE_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 0 AND DOC_TYPE IN(120) AND REBATE = 1",
+                query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ITEMS_VW_01 WHERE OUTPUT = @OUTPUT AND INVOICE_DOC_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 0 AND DOC_TYPE IN(120) AND REBATE = 1",
                 param : ['OUTPUT:string|50'],
                 value : [this.docObj.dt()[0].OUTPUT]
             }
@@ -846,11 +847,13 @@ export default class rebateInvoice extends React.PureComponent
                     tmpDocItems.AMOUNT = data[i].AMOUNT
                     tmpDocItems.TOTAL = data[i].TOTAL
                     tmpDocItems.DESCRIPTION = data[i].DESCRIPTION
-                    tmpDocItems.PROFORMA_GUID = data[i].GUID
+                    tmpDocItems.PROFORMA_LINE_GUID = data[i].GUID
+                    tmpDocItems.PROFORMA_DOC_GUID = data[i].DOC_GUID
                     tmpDocItems.VAT_RATE = data[i].VAT_RATE
                     tmpDocItems.DISCOUNT_RATE = data[i].DISCOUNT_RATE
                     tmpDocItems.CONNECT_REF = data[i].CONNECT_REF
-                    tmpDocItems.ORDER_GUID = data[i].ORDER_GUID
+                    tmpDocItems.ORDER_LINE_GUID = data[i].ORDER_LINE_GUID
+                    tmpDocItems.ORDER_DOC_GUID = data[i].ORDER_DOC_GUID
                     tmpDocItems.OLD_VAT = data[i].VAT_RATE
                     tmpDocItems.VAT_RATE = data[i].VAT_RATE
                     tmpDocItems.DEPOT_QUANTITY = data[i].DEPOT_QUANTITY
@@ -2763,7 +2766,7 @@ export default class rebateInvoice extends React.PureComponent
                         "SELECT ITEM_CODE,QUANTITY, " +
                         "(SELECT TOP 1 NAME FROM ITEM_UNIT_VW_01 WHERE ITEM_GUID= ITEM AND TYPE = 1 ) AS NAME, " +
                         "(SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_GUID= ITEM AND TYPE = 1 ) AS UNIT_FACTOR " +
-                        "FROM DOC_ITEMS_VW_01 WHERE DOC_GUID = @DOC_GUID OR INVOICE_GUID = @DOC_GUID ) AS TMP GROUP BY NAME ",
+                        "FROM DOC_ITEMS_VW_01 WHERE DOC_GUID = @DOC_GUID OR INVOICE_DOC_GUID = @DOC_GUID ) AS TMP GROUP BY NAME ",
                         param : ['DOC_GUID:string|50'],
                         value : [this.docObj.dt()[0].GUID]
                         }

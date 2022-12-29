@@ -716,6 +716,7 @@ export default class salesOrder extends React.PureComponent
                                     <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup={"frmslsDoc" + this.tabIndex}
                                     onClick={async (e)=>
                                     {
+                                        console.log(this.docObj.docOffers.dt()[0])
                                         if(this.docLocked == true)
                                         {
                                             let tmpConfObj =
@@ -810,7 +811,7 @@ export default class salesOrder extends React.PureComponent
                                         }
                                         for (let i = 0; i < this.docObj.docOffers.dt().length; i++) 
                                         {
-                                          if(this.docObj.docOffers.dt()[i].ORDER_GUID != '00000000-0000-0000-0000-000000000000')   
+                                          if(this.docObj.docOffers.dt()[i].ORDER_LINE_GUID != '00000000-0000-0000-0000-000000000000')   
                                           {
                                             let tmpConfObj =
                                             {
@@ -1579,14 +1580,14 @@ export default class salesOrder extends React.PureComponent
                                     filterRow={{visible:true}}
                                     onRowPrepared={(e) =>
                                     {
-                                        if(e.rowType == 'data' && (e.data.ORDER_GUID  != '00000000-0000-0000-0000-000000000000' || e.key.SHIPMENT_GUID != '00000000-0000-0000-0000-000000000000'))
+                                        if(e.rowType == 'data' && (e.data.ORDER_LINE_GUID  != '00000000-0000-0000-0000-000000000000' || e.key.SHIPMENT_LINE_GUID != '00000000-0000-0000-0000-000000000000'))
                                         {
                                             e.rowElement.style.color ="Silver"
                                         }
                                     }}
                                     onRowUpdating={async (e)=>
                                     {
-                                        if(e.key.ORDER_GUID != '00000000-0000-0000-0000-000000000000' || e.key.SHIPMENT_GUID != '00000000-0000-0000-0000-000000000000')
+                                        if(e.key.ORDER_LINE_GUID != '00000000-0000-0000-0000-000000000000' || e.key.SHIPMENT_LINE_GUID != '00000000-0000-0000-0000-000000000000')
                                         {
                                             e.cancel = true
                                             let tmpConfObj =
@@ -1633,7 +1634,7 @@ export default class salesOrder extends React.PureComponent
                                     }}
                                     onRowRemoving={async (e)=>
                                     {
-                                        if(e.key.ORDER_GUID != '00000000-0000-0000-0000-000000000000' || e.key.SHIPMENT_GUID != '00000000-0000-0000-0000-000000000000')
+                                        if(e.key.ORDER_LINE_GUID != '00000000-0000-0000-0000-000000000000' || e.key.SHIPMENT_LINE_GUID != '00000000-0000-0000-0000-000000000000')
                                         {
                                             e.cancel = true
                                             let tmpConfObj =
