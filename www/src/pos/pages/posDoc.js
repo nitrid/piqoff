@@ -1119,8 +1119,7 @@ export default class posDoc extends React.PureComponent
         let tmpPayRest = 0;
         let tmpPayChange = 0;
         return new Promise(async resolve => 
-        {
-            
+        {            
             if(this.posObj.dt().length > 0)
             {                  
                 let tmpPosSale = this.posObj.posSale.dt().where({GUID:{'<>' : '00000000-0000-0000-0000-000000000000'}})  
@@ -1136,6 +1135,8 @@ export default class posDoc extends React.PureComponent
                 
                 tmpPayRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).toFixed(2)); 
                 tmpPayChange = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) >= 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).toFixed(2)) * -1
+
+                this.core.util.writeLog("calcGrandTotal : " + tmpPayRest + " - " + tmpPayChange)
 
                 this.customerName.value = this.posObj.dt()[0].CUSTOMER_NAME.toString()
                 this.customerPoint.value = this.posObj.dt()[0].CUSTOMER_POINT
@@ -1397,6 +1398,7 @@ export default class posDoc extends React.PureComponent
         return new Promise(async resolve => 
         {
             await this.core.util.waitUntil()
+            this.core.util.writeLog("saleClosed : " + pPayRest + " - " + this.posObj.dt().length + " - " + this.posObj.dt()[0].AMOUNT)
             if(pPayRest == 0 && this.posObj.dt().length > 0 && this.posObj.dt()[0].AMOUNT > 0) //FIYATSIZ VE MİKTAR SIFIR ÜRÜNLER İÇİN KONTROL EKLENDİ. BU ŞEKİLDE SATIŞIN KAPANMASI ENGELLENDİ.
             {
                 this.posDevice.lcdPrint
