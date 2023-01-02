@@ -873,7 +873,6 @@ export const langFr =
             clmCreateDate: "Date d'enregistrement",
             clmDescription :"Explication"
         },
-     
         msgBigQuantity:
         {
             title: "Attention",

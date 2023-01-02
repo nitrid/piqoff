@@ -69,7 +69,7 @@ export default class itemCount extends React.PureComponent
         this.txtRefno.readOnly = true
 
         let totalPrice= await this.countObj.dt().sum("TOTAL_COST",2)
-        this.txtAmount.setState({value :totalPrice})
+        // this.txtAmount.setState({value :totalPrice})
     }
     async checkDoc(pGuid,pRef,pRefno)
     {
@@ -172,7 +172,7 @@ export default class itemCount extends React.PureComponent
                 {
                     this.countObj.dt()[i].QUANTITY = parseFloat(this.countObj.dt()[i].QUANTITY) + parseFloat(pQuantity)
                     let totalPrice= await this.countObj.dt().sum("TOTAL_COST",2)
-                    this.txtAmount.setState({value :totalPrice})
+                    // this.txtAmount.value = totalPrice
                     if(this.countObj.dt()[this.countObj.dt().length - 1].ITEM_CODE == '')
                     {
                         await this.grdItemCount.devGrid.deleteRow(this.countObj.dt().length - 1)
@@ -184,7 +184,7 @@ export default class itemCount extends React.PureComponent
                 {
                     this.countObj.dt()[i].QUANTITY =  parseFloat(pQuantity)
                     let totalPrice= await this.countObj.dt().sum("TOTAL_COST",2)
-                    this.txtAmount.setState({value :totalPrice})
+                    // this.txtAmount.value = totalPrice
                     if(this.countObj.dt()[this.countObj.dt().length - 1].ITEM_CODE == '')
                     {
                         await this.grdItemCount.devGrid.deleteRow(this.countObj.dt().length - 1)
@@ -217,8 +217,18 @@ export default class itemCount extends React.PureComponent
         this.txtRefno.readOnly = true
         await this.countObj.addEmpty(tmpDocItems)
         let totalPrice= await this.countObj.dt().sum("TOTAL_COST",2)
-        this.txtAmount.setState({value :totalPrice})
-        await this.countObj.save()
+        // this.txtAmount.value = totalPrice
+        if((await this.countObj.save()) == 1)
+        {
+            document.getElementById("Sound").play(); 
+            let tmpConfObj = 
+            {
+                id:'msgSaveResult',showTitle:true,title:this.t("msgSaveResult.title"),showCloseButton:true,width:'350px',height:'200px',
+                button:[{id:"btn01",caption:this.t("msgSaveResult.btn01"),location:'after'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgFailed")}</div>)
+            }
+            await dialog(tmpConfObj);
+        }
         this.txtQuantity.value = 1
         this.barcodeReset()
     }
@@ -665,10 +675,16 @@ export default class itemCount extends React.PureComponent
                                             e.component.columnOption("command:edit", 'visibleIndex', -1)
                                         }}
                                         onRowUpdated={async(e)=>{
-                                            await this.countObj.save()
+                                            if((await this.countObj.save()) == 1)
+                                            {
+                                              
+                                            }
                                         }}
                                         onRowRemoved={async(e)=>{
-                                            await this.countObj.save()
+                                            if((await this.countObj.save()) == 1)
+                                            {
+                                              
+                                            }
                                         }}
                                         >
                                             <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
