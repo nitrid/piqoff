@@ -177,6 +177,17 @@ export default class itemCount extends React.PureComponent
                     {
                         await this.grdItemCount.devGrid.deleteRow(this.countObj.dt().length - 1)
                     }
+                    if((await this.countObj.save()) == 1)
+                    {
+                        document.getElementById("Sound").play(); 
+                        let tmpConfObj = 
+                        {
+                            id:'msgSaveResult',showTitle:true,title:this.t("msgSaveResult.title"),showCloseButton:true,width:'350px',height:'200px',
+                            button:[{id:"btn01",caption:this.t("msgSaveResult.btn01"),location:'after'}],
+                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgFailed")}</div>)
+                        }
+                        await dialog(tmpConfObj);
+                    }
                     this.barcodeReset()
                     return
                 }
@@ -188,6 +199,17 @@ export default class itemCount extends React.PureComponent
                     if(this.countObj.dt()[this.countObj.dt().length - 1].ITEM_CODE == '')
                     {
                         await this.grdItemCount.devGrid.deleteRow(this.countObj.dt().length - 1)
+                    }
+                    if((await this.countObj.save()) == 1)
+                    {
+                        document.getElementById("Sound").play(); 
+                        let tmpConfObj = 
+                        {
+                            id:'msgSaveResult',showTitle:true,title:this.t("msgSaveResult.title"),showCloseButton:true,width:'350px',height:'200px',
+                            button:[{id:"btn01",caption:this.t("msgSaveResult.btn01"),location:'after'}],
+                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgFailed")}</div>)
+                        }
+                        await dialog(tmpConfObj);
                     }
                     this.barcodeReset()
                     return
@@ -613,13 +635,14 @@ export default class itemCount extends React.PureComponent
                                         {/* txtQuantity */}
                                         <Item>
                                             <Label text={this.t("txtQuantity")}/>
-                                            <NdTextBox id="txtQuantity" parent={this} simple={true}  value={1}
+                                            <NdNumberBox id="txtQuantity" parent={this} simple={true}  value={1}
                                                 param={this.param.filter({ELEMENT:'txtQuantity',USERS:this.user.CODE})}
                                                 access={this.access.filter({ELEMENT:'txtQuantity',USERS:this.user.CODE})}
                                                 onEnterKey={(async(e)=>
                                                     {
                                                         this.addItem(this.txtQuantity.value)
-                                                    }).bind(this)}></NdTextBox>
+                                                    }).bind(this)}
+                                            ></NdNumberBox>
                                         </Item>
                                         <Item>
                                             <div className="row">
