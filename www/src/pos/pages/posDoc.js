@@ -1160,9 +1160,9 @@ export default class posDoc extends React.PureComponent
                 this.payRest1.value = tmpPayRest
                 this.payRest2.value = tmpPayRest
                 this.payRest3.value = tmpPayRest
-                this.txtTicRest.value = this.cheqDt.length + '/' + parseFloat(this.state.cheqTotalAmount).toFixed(2) + ' ' + Number.money.sign
-                this.cheqLastAmount.value = this.cheqDt.length > 0 ? this.cheqDt[0].AMOUNT : 0
                 this.cheqTotalAmount.value = this.cheqDt.sum('AMOUNT',2)
+                this.txtTicRest.value = this.cheqDt.length + '/' + parseFloat(this.cheqTotalAmount.value).toFixed(2) + ' ' + Number.money.sign
+                this.cheqLastAmount.value = this.cheqDt.length > 0 ? this.cheqDt[0].AMOUNT : 0
                 
                 if(tmpPosSale.length > 0)
                 {
