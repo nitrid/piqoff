@@ -82,8 +82,6 @@ export default class posDoc extends React.PureComponent
             isBtnGetCustomer:false,
             isBtnInfo:false,            
             isConnected:this.core.offline ? false : true,
-            msgTransfer1:"",
-            msgTransfer2:"",
             isFormation:false
         }   
         
@@ -141,7 +139,7 @@ export default class posDoc extends React.PureComponent
             }
             else
             {
-                this.setState({msgTransfer2:pParam.text + " " + this.lang.t("popTransfer.msg3")})
+                this.msgTransfer2.value = pParam.text + " " + this.lang.t("popTransfer.msg3")
             }
         })
         //****************************** */
@@ -2372,7 +2370,9 @@ export default class posDoc extends React.PureComponent
 
         this.interval = setInterval(async ()=>
         {
-            this.setState({msgTransfer1:this.lang.t("popTransfer.msg1") + (tmpPrmTime - tmpCounter).toString() + " Sn.",msgTransfer2:""})
+            this.msgTransfer1.value = this.lang.t("popTransfer.msg1") + (tmpPrmTime - tmpCounter).toString() + " Sn."
+            this.msgTransfer2.value = ""
+
             tmpCounter += 1
             if(tmpCounter == tmpPrmTime)
             {
@@ -6934,13 +6934,13 @@ export default class posDoc extends React.PureComponent
                         {/* msg1 */}
                         <div className="row">
                             <div className="col-12">
-                                <h3 className="text-center">{this.state.msgTransfer1}</h3>
+                                <h3 className="text-center"><NbLabel id="msgTransfer1" parent={this} value={""}/></h3>
                             </div>
                         </div>
                         {/* msg1 */}
                         <div className="row">
                             <div className="col-12">
-                                <h3 className="text-center">{this.state.msgTransfer2}</h3>
+                                <h3 className="text-center"><NbLabel id="msgTransfer2" parent={this} value={""}/></h3>
                             </div>
                         </div>
                         <div className="row">
