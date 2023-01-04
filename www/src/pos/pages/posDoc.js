@@ -81,15 +81,7 @@ export default class posDoc extends React.PureComponent
             isPluEdit:false,
             isBtnGetCustomer:false,
             isBtnInfo:false,            
-            payTotal:0,
-            payChange:0,
-            payRest:0,
-            cheqCount:0,
-            cheqTotalAmount:0,
-            cheqLastAmount:0,
             isConnected:this.core.offline ? false : true,
-            msgTransfer1:"",
-            msgTransfer2:"",
             isFormation:false
         }   
         
@@ -147,7 +139,7 @@ export default class posDoc extends React.PureComponent
             }
             else
             {
-                this.setState({msgTransfer2:pParam.text + " " + this.lang.t("popTransfer.msg3")})
+                this.msgTransfer2.value = pParam.text + " " + this.lang.t("popTransfer.msg3")
             }
         })
         //****************************** */
@@ -1163,15 +1155,15 @@ export default class posDoc extends React.PureComponent
                 this.txtPopCardPay.value = tmpPayRest
                 this.txtPopCashPay.value = tmpPayRest
                 
-                this.setState(
-                {
-                    payTotal:this.posObj.posPay.dt().sum('AMOUNT',2),
-                    payChange:tmpPayChange,
-                    payRest:tmpPayRest,
-                    cheqCount:this.cheqDt.length,
-                    cheqLastAmount:this.cheqDt.length > 0 ? this.cheqDt[0].AMOUNT : 0,
-                    cheqTotalAmount:this.cheqDt.sum('AMOUNT',2)
-                })       
+                this.payChange.value = tmpPayChange
+                this.payRest.value = tmpPayRest
+                this.payRest1.value = tmpPayRest
+                this.payRest2.value = tmpPayRest
+                this.payRest3.value = tmpPayRest
+                this.txtTicRest.value = this.cheqDt.length + '/' + parseFloat(this.state.cheqTotalAmount).toFixed(2) + ' ' + Number.money.sign
+                this.cheqLastAmount.value = this.cheqDt.length > 0 ? this.cheqDt[0].AMOUNT : 0
+                this.cheqTotalAmount.value = this.cheqDt.sum('AMOUNT',2)
+                
                 if(tmpPosSale.length > 0)
                 {
                     this.posDevice.lcdPrint
@@ -1645,8 +1637,8 @@ export default class posDoc extends React.PureComponent
         });
     }   
     async payAdd(pType,pAmount)
-    {        
-        if(this.state.payRest > 0)
+    {       
+        if(Number(this.payRest.value) > 0)
         {                    
             if(isNaN(Number(pAmount)) || Number(pAmount) == 0)
             {
@@ -1662,7 +1654,7 @@ export default class posDoc extends React.PureComponent
             //KREDİ KARTI İSE
             if(pType == 1)
             {
-                if(pAmount > this.state.payRest)
+                if(pAmount > Number(this.payRest.value))
                 {
                     let tmpConfObj =
                     {
@@ -1695,7 +1687,7 @@ export default class posDoc extends React.PureComponent
                     {
                         this.msgCardPayment.hide()
                         //EĞER ALINAN ÖDEME TOPLAM TUTAR KADAR İSE KALAN ÖDEME SORULMUYOR.
-                        if((this.state.payRest - pAmount) > 0)
+                        if((Number(this.payRest.value) - pAmount) > 0)
                         {
                             let tmpResult2 = await this.msgRePaymentType.show()
                             if(tmpResult2 == "btn01")
@@ -2378,7 +2370,9 @@ export default class posDoc extends React.PureComponent
 
         this.interval = setInterval(async ()=>
         {
-            this.setState({msgTransfer1:this.lang.t("popTransfer.msg1") + (tmpPrmTime - tmpCounter).toString() + " Sn.",msgTransfer2:""})
+            this.msgTransfer1.value = this.lang.t("popTransfer.msg1") + (tmpPrmTime - tmpCounter).toString() + " Sn."
+            this.msgTransfer2.value = ""
+
             tmpCounter += 1
             if(tmpCounter == tmpPrmTime)
             {
@@ -3045,7 +3039,7 @@ export default class posDoc extends React.PureComponent
                                 </div>
                                 <div className="row">
                                     <div className="col-12">
-                                        <p className="text-primary text-start m-0">{this.lang.t("ticketRect")}<span className="text-dark">{this.state.cheqCount + '/' + parseFloat(this.state.cheqTotalAmount).toFixed(2)} {Number.money.sign}</span></p>    
+                                        <p className="text-primary text-start m-0">{this.lang.t("ticketRect")}<span className="text-dark"><NbLabel id="txtTicRest" parent={this} value={""}/></span></p>    
                                     </div>
                                 </div>
                             </div>
@@ -4109,10 +4103,10 @@ export default class posDoc extends React.PureComponent
                                         <p className="text-primary text-start m-0">{this.lang.t("total")} <span className="text-dark"><NbLabel id="popTotalGrand" parent={this} value={"0.00"} format={"currency"}/></span></p>    
                                     </div>
                                     <div className="col-4">
-                                        <p className="text-primary text-start m-0">{this.lang.t("remainder")} <span className="text-dark">{Number(parseFloat(this.state.payRest).toFixed(2)).currency()} </span></p>    
+                                        <p className="text-primary text-start m-0">{this.lang.t("remainder")} <span className="text-dark"><NbLabel id="payRest" parent={this} value={""} format={"currency"}/></span></p>    
                                     </div>
                                     <div className="col-4">
-                                        <p className="text-primary text-start m-0">{this.lang.t("moneyChange")} <span className="text-dark">{Number(parseFloat(this.state.payChange).toFixed(2)).currency()}</span></p>    
+                                        <p className="text-primary text-start m-0">{this.lang.t("moneyChange")} <span className="text-dark"><NbLabel id="payChange" parent={this} value={""} format={"currency"}/></span></p>    
                                     </div>
                                 </div>
                                 <div className="row pt-2">
@@ -4342,7 +4336,7 @@ export default class posDoc extends React.PureComponent
                                         <p className="text-primary text-start m-0">{this.lang.t("total")} <span className="text-dark"><NbLabel id="popCardTotalGrand" parent={this} value={"0.00"} format={"currency"}/></span></p>    
                                     </div>
                                     <div className="col-6">
-                                        <p className="text-primary text-start m-0">{this.lang.t("remainder")} <span className="text-dark">{Number(parseFloat(this.state.payRest).toFixed(2)).currency()}</span></p>    
+                                        <p className="text-primary text-start m-0">{this.lang.t("remainder")} <span className="text-dark"><NbLabel id="payRest1" parent={this} value={""} format={"currency"}/></span></p>    
                                     </div>
                                 </div> 
                             </div>
@@ -4391,7 +4385,7 @@ export default class posDoc extends React.PureComponent
                                         <p className="text-primary text-start m-0">{this.lang.t("total")} <span className="text-dark"><NbLabel id="popCashTotalGrand" parent={this} value={"0.00"} format={"currency"}/></span></p>    
                                     </div>
                                     <div className="col-6">
-                                        <p className="text-primary text-start m-0">{this.lang.t("remainder")} <span className="text-dark">{Number(parseFloat(this.state.payRest).toFixed(2)).currency()}</span></p>
+                                        <p className="text-primary text-start m-0">{this.lang.t("remainder")} <span className="text-dark"><NbLabel id="payRest2" parent={this} value={""} format={"currency"}/></span></p>
                                     </div>
                                 </div>
                                 {/* txtPopCashPay */}
@@ -4963,19 +4957,19 @@ export default class posDoc extends React.PureComponent
                         {/* Last Read */}
                         <div className="row py-1">
                             <div className="col-12">
-                                <h3 className="text-primary text-center">{this.lang.t("lastRead")} <span className="text-dark">{Number(parseFloat(this.state.cheqLastAmount).toFixed(2)).currency()}</span></h3>    
+                                <h3 className="text-primary text-center">{this.lang.t("lastRead")} <span className="text-dark"><NbLabel id="cheqLastAmount" parent={this} value={""} format={"currency"}/></span></h3>    
                             </div>
                         </div>
                         {/* Total Read */}
                         <div className="row py-1">
                             <div className="col-12">
-                                <h3 className="text-primary text-center">{this.lang.t("totalRead")} <span className="text-dark">{Number(parseFloat(this.state.cheqTotalAmount).toFixed(2)).currency()}</span></h3>    
+                                <h3 className="text-primary text-center">{this.lang.t("totalRead")} <span className="text-dark"><NbLabel id="cheqTotalAmount" parent={this} value={""} format={"currency"}/></span></h3>    
                             </div>
                         </div>
                         {/* Rest */}
                         <div className="row py-1">
                             <div className="col-12">
-                                <h3 className="text-primary text-center">{this.lang.t("remainderPay")} <span className="text-dark">{Number(parseFloat(this.state.payRest).toFixed(2)).currency()}</span></h3>    
+                                <h3 className="text-primary text-center">{this.lang.t("remainderPay")} <span className="text-dark"><NbLabel id="payRest3" parent={this} value={""} format={"currency"}/></span></h3>    
                             </div>
                         </div>
                     </NdPopUp>
@@ -6940,13 +6934,13 @@ export default class posDoc extends React.PureComponent
                         {/* msg1 */}
                         <div className="row">
                             <div className="col-12">
-                                <h3 className="text-center">{this.state.msgTransfer1}</h3>
+                                <h3 className="text-center"><NbLabel id="msgTransfer1" parent={this} value={""}/></h3>
                             </div>
                         </div>
                         {/* msg1 */}
                         <div className="row">
                             <div className="col-12">
-                                <h3 className="text-center">{this.state.msgTransfer2}</h3>
+                                <h3 className="text-center"><NbLabel id="msgTransfer2" parent={this} value={""}/></h3>
                             </div>
                         </div>
                         <div className="row">
