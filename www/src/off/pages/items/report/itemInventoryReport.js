@@ -15,7 +15,7 @@ import NdButton from '../../../../core/react/devex/button.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 
-export default class QuantityList extends React.PureComponent
+export default class itemInventoryReport extends React.PureComponent
 {
     constructor(props)
     {
@@ -23,7 +23,7 @@ export default class QuantityList extends React.PureComponent
 
         this.state = 
         {
-            columnListValue : ['NAME','CODE','QUANTITY','BARCODE']
+            columnListValue : ['NAME','CODE','QUANTITY','BARCODE','COST_PRICE','TOTAL_COST']
         }
         
         this.core = App.instance.core;
@@ -32,7 +32,11 @@ export default class QuantityList extends React.PureComponent
             {CODE : "NAME",NAME : this.t("grdListe.clmName")},
             {CODE : "CODE",NAME : this.t("grdListe.clmCode")},                                   
             {CODE : "QUANTITY",NAME : this.t("grdListe.clmQuantity")},
-            {CODE : "BARCODE",NAME : this.t("grdListe.clmBarcode")},    
+            {CODE : "BARCODE",NAME : this.t("grdListe.clmBarcode")}, 
+            {CODE : "COST_PRICE",NAME : this.t("grdListe.clmCostPrice")},    
+            {CODE : "TOTAL_COST",NAME : this.t("grdListe.clmTotalCost")},    
+            {CODE : "SALE_PRICE",NAME : this.t("grdListe.clmSalePrice")},    
+            {CODE : "TOTAL_PRICE",NAME : this.t("grdListe.clmTotalPrice")},    
         ]
         this.groupList = [];
         this._btnGetirClick = this._btnGetirClick.bind(this)
@@ -73,6 +77,22 @@ export default class QuantityList extends React.PureComponent
                 if(typeof e.value.find(x => x == 'QUANTITY') != 'undefined')
                 {
                     this.groupList.push('QUANTITY')
+                }
+                if(typeof e.value.find(x => x == 'COST_PRICE') != 'undefined')
+                {
+                    this.groupList.push('COST_PRICE')
+                }
+                if(typeof e.value.find(x => x == 'TOTAL_COST') != 'undefined')
+                {
+                    this.groupList.push('TOTAL_COST')
+                }
+                if(typeof e.value.find(x => x == 'SALE_PRICE') != 'undefined')
+                {
+                    this.groupList.push('SALE_PRICE')
+                }
+                if(typeof e.value.find(x => x == 'TOTAL_SALE') != 'undefined')
+                {
+                    this.groupList.push('TOTAL_SALE')
                 }
                 
                 for (let i = 0; i < this.grdListe.devGrid.columnCount(); i++) 
@@ -120,11 +140,9 @@ export default class QuantityList extends React.PureComponent
                     groupBy : this.groupList,
                     select : 
                     {
-                        query : "SELECT NAME,CODE,ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM_BARCODE.ITEM = ITEMS.GUID ORDER BY LDATE DESC),'') AS BARCODE,[dbo].[FN_DEPOT_QUANTITY](GUID,@DEPOT,GETDATE()) AS QUANTITY FROM ITEMS " +
-                                "WHERE  DELETED = 0 AND " +
-                                "((NAME like @NAME + '%') OR (@NAME = ''))",
-                        param : ['NAME:string|250','DEPOT:string|50'],
-                        value : [this.txtUrunAdi.value,this.cmbDepot.value]
+                        query : "SELECT *,ROUND((COST_PRICE * QUANTITY),2) AS TOTAL_COST,ROUND((SALE_PRICE * QUANTITY),2) AS TOTAL_PRICE  FROM [dbo].[FN_ITEM_INVENTORY](@DEPOT) ",
+                        param : ['DEPOT:string|50'],
+                        value : [this.cmbDepot.value]
                     },
                     sql : this.core.sql
                 }
@@ -143,11 +161,10 @@ export default class QuantityList extends React.PureComponent
                     groupBy : this.groupList,
                     select : 
                     {
-                        query : "SELECT NAME,CODE,ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM_BARCODE.ITEM = ITEMS.GUID ORDER BY LDATE DESC),'') AS BARCODE,[dbo].[FN_DEPOT_QUANTITY](GUID,@DEPOT,GETDATE()) AS QUANTITY FROM ITEMS " +
-                                "WHERE [dbo].[FN_DEPOT_QUANTITY](GUID,@DEPOT,GETDATE()) <> 0 AND DELETED = 0 AND " +
-                                "((NAME like @NAME + '%') OR (@NAME = ''))",
-                        param : ['NAME:string|250','DEPOT:string|50'],
-                        value : [this.txtUrunAdi.value,this.cmbDepot.value]
+                        query : "SELECT *,ROUND((COST_PRICE * QUANTITY),2) AS TOTAL_COST,ROUND((SALE_PRICE * QUANTITY),2) AS TOTAL_PRICE FROM [dbo].[FN_ITEM_INVENTORY](@DEPOT) " +
+                                "WHERE QUANTITY <> 0  ",
+                        param : ['DEPOT:string|50'],
+                        value : [this.cmbDepot.value]
                     },
                     sql : this.core.sql
                 }
@@ -156,7 +173,10 @@ export default class QuantityList extends React.PureComponent
             await this.grdListe.dataRefresh(tmpSource)
         }
         let tmpQuantity = this.grdListe.data.datatable.sum("QUANTITY",2)
+        let tmpTotalCost = this.grdListe.data.datatable.sum("TOTAL_COST",2)
+
         this.txtTotalQuantity.setState({value:tmpQuantity})
+        this.txtTotalCost.setState({value:tmpTotalCost})
       
     }
     render()
@@ -167,25 +187,6 @@ export default class QuantityList extends React.PureComponent
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <Toolbar>
-                                <Item location="after"
-                                locateInMenu="auto"
-                                widget="dxButton"
-                                options=
-                                {
-                                    {
-                                        type: 'default',
-                                        icon: 'add',
-                                        onClick: async () => 
-                                        {
-                                            App.instance.menuClick(
-                                            {
-                                                id: 'stk_01_001',
-                                                text: 'Stok Tanımları',
-                                                path: 'items/cards/itemCard.js'
-                                            })
-                                        }
-                                    }    
-                                } />
                                  <Item location="after"
                                 locateInMenu="auto"
                                 widget="dxButton"
@@ -217,12 +218,6 @@ export default class QuantityList extends React.PureComponent
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <Form colCount={2} id="frmKriter">
-                                <Item>
-                                    <Label text={this.t("txtItemName")} alignment="right" />
-                                        <NdTextBox id="txtUrunAdi" parent={this} simple={true} placeholder={this.t("ItemNamePlaceHolder")}
-                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}/>
-                                </Item>
-                                <EmptyItem />
                                 <Item>
                                     <Label text={this.t("cmbDepot")} alignment="right" />
                                         <NdSelectBox simple={true} parent={this} id="cmbDepot" showClearButton={true} notRefresh={true}  searchEnabled={true}
@@ -273,20 +268,28 @@ export default class QuantityList extends React.PureComponent
                             >                            
                                 <Paging defaultPageSize={20} />
                                 <Pager visible={true} allowedPageSizes={[5,10,20,50]} showPageSizeSelector={true} />
-                                <Export fileName={this.lang.t("menu.stk_03_006")} enabled={true} allowExportSelectedData={true} />
+                                <Export fileName={this.lang.t("menu.stk_05_001")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="NAME" caption={this.t("grdListe.clmName")} visible={true}/> 
                                 <Column dataField="CODE" caption={this.t("grdListe.clmCode")} visible={true} /> 
                                 <Column dataField="QUANTITY" caption={this.t("grdListe.clmQuantity")} visible={true} defaultSortOrder="desc"/> 
                                 <Column dataField="BARCODE" caption={this.t("grdListe.clmBarcode")} visible={true}/> 
-
+                                <Column dataField="COST_PRICE" caption={this.t("grdListe.clmCostPrice")} visible={true}/> 
+                                <Column dataField="TOTAL_COST" caption={this.t("grdListe.clmTotalCost")} visible={true}/> 
+                                <Column dataField="SALE_PRICE" caption={this.t("grdListe.clmSalePrice")} visible={false}/> 
+                                <Column dataField="TOTAL_PRICE" caption={this.t("grdListe.clmTotalPrice")} visible={false}/> 
                             </NdGrid>
                         </div>
                     </div>
                     <Form colCount={4}>
-                        <EmptyItem colSpan={3}></EmptyItem>
+                        <EmptyItem colSpan={2}></EmptyItem>
                         <Item>
                             <Label text={this.t("txtTotalQuantity")} alignment="right" />
                                 <NdTextBox id="txtTotalQuantity" parent={this} simple={true} readOnly={true}
+                                />
+                        </Item>
+                        <Item>
+                            <Label text={this.t("txtTotalCost")} alignment="right" />
+                                <NdTextBox id="txtTotalCost" parent={this} simple={true} readOnly={true}
                                 />
                         </Item>
                     </Form>

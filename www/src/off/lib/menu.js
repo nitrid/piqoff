@@ -184,6 +184,14 @@ export const menu = (e) =>
                     id: 'stk_05',
                     text : e.t('menuOff.stk_05'),//'Raporlar',
                     expanded: false,
+                    items: 
+                    [
+                        {
+                            id: 'stk_05_001',
+                            text : e.t('menuOff.stk_05_001'),//'Toplu Stok Düzenleme',
+                            path: 'items/report/itemInventoryReport'
+                        },
+                    ]
                 }
             ]
         },
@@ -302,6 +310,11 @@ export const menu = (e) =>
                             id: 'cnt_02_002',
                             text: e.t('menuOff.cnt_02_002'),//'Şatış Anlaşma',
                             path: 'contracts/cards/salesContract'
+                        },
+                        {
+                            id: 'cnt_02_003',
+                            text: e.t('menuOff.cnt_02_003'),//'Şatış Siyat Listesi Tanımlama',
+                            path: 'contracts/cards/salePriceList'
                         },
                     ]
                 },

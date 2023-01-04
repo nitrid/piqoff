@@ -127,6 +127,7 @@ export const langFr =
         stk_04_002: "Traitement retour",
         stk_04_003 : "Traitement inventaire",
         stk_04_004 :"Traitement DLC",
+        stk_05_001 : "Depo Envanter Raporu", // BAK
         cri: "Fournisseur - Client",
         cri_01: "Saisie",
         cri_02: "Listes",
@@ -2522,6 +2523,26 @@ export const langFr =
             btn01: "OK",  
             msg: "Ne peut Imprimer Plus que la Quantité de Produit Restant.." 
         },
+    },
+    stk_05_001 : // "Depo Envanter Raporu"
+    {
+        chkZeroQuantity : "0 Miktarlar Gösterilsin", // BAK
+        cmbDepot : "Depo", // BAK
+        btnCheck : "Aktif", // BAK
+        btnGet :"Getir", // BAK
+        grdListe : 
+        {
+            clmCode: "Kodu", // BAK
+            clmName : "Adı",           // BAK
+            clmQuantity : "Adet", // BAK
+            clmBarcode : "Barkodu", // BAK
+            clmCostPrice : "Maliyet Fiyatı",    // BAK
+            clmTotalCost : "Envanter Değeri",    // BAK
+            clmSalePrice : "Satış Fiyatı",    // BAK
+            clmTotalPrice : "Toplam Satış Değeri"    // BAK
+        },
+        txtTotalQuantity : "Toplam Miktar",
+        txtTotalCost : "Envanter Değeri",
     },
     cri_01_001: // "Cari Tanımları"
     {

@@ -127,6 +127,7 @@ export const langTr =
         stk_04_002: "İade Operasyonları",
         stk_04_003 : "Sayım Kesinleştirme",
         stk_04_004 :"SKT Operasyonu",
+        stk_05_001 : "Depo Envanter Raporu",
         cri: "Cari",
         cri_01: "Tanımlar",
         cri_02: "Listeler",
@@ -195,6 +196,7 @@ export const langTr =
         cnt_02 : "Evraklar",
         cnt_02_001 : "Alış Anlaşması",
         cnt_02_002 : "Satış Anlaşması",
+        cnt_02_003 : "Satış Fiyat Listesi Tanımlama",
         cnt_03 : "Raporlar",
         fns : "Finans",
         fns_01 : "Listeler",
@@ -2522,6 +2524,26 @@ export const langTr =
             btn01: "Tamam",  
             msg: "Kalan üründen fazla etiket basamazsınız.." 
         },
+    },
+    stk_05_001 : // "Depo Envanter Raporu"
+    {
+        chkZeroQuantity : "0 Miktarlar Gösterilsin",
+        cmbDepot : "Depo",
+        btnCheck : "Aktif",
+        btnGet :"Getir",
+        grdListe : 
+        {
+            clmCode: "Kodu",
+            clmName : "Adı",           
+            clmQuantity : "Adet",
+            clmBarcode : "Barkodu",
+            clmCostPrice : "Maliyet Fiyatı", 
+            clmTotalCost : "Envanter Değeri", 
+            clmSalePrice : "Satış Fiyatı", 
+            clmTotalPrice : "Toplam Satış Değeri" 
+        },
+        txtTotalQuantity : "Toplam Miktar",
+        txtTotalCost : "Envanter Değeri",
     },
     cri_01_001: // "Cari Tanımları"
     {

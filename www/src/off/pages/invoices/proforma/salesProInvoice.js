@@ -726,7 +726,9 @@ export default class salesInvoice extends React.PureComponent
                     tmpDocItems.DESCRIPTION = data[i].DESCRIPTION
                     tmpDocItems.VAT_RATE = data[i].VAT_RATE
                     tmpDocItems.DISCOUNT_RATE = data[i].DISCOUNT_RATE
-                    tmpDocItems.ORDER_GUID = data[i].GUID
+                    tmpDocItems.ORDER_LINE_GUID = data[i].GUID
+                    tmpDocItems.ORDER_DOC_GUID = data[i].DOC_GUID
+
 
                     await this.docObj.docItems.addEmpty(tmpDocItems)
                     await this.core.util.waitUntil(100)
