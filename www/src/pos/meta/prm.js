@@ -1079,6 +1079,22 @@ export const prm =
             PAGE_NAME : "Pos",
             CAPTION : "Fiş Çıktısı Sorulsun"
         }
-    }
+    },
+    //Terazi Fiyat Çarpanı
+    {
+        TYPE : 0,
+        ID :"ScalePriceFactory",
+        VALUE : 1,
+        SPECIAL : "",
+        PAGE : "pos",
+        ELEMENT : "",
+        APP : "POS",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Pos",
+            CAPTION : "Terazi Fiyat Çarpanı"
+        }
+    },
     //#endregion
 ]
