@@ -66,7 +66,7 @@ export default class userPage extends React.Component
                                 CUSER:this.core.auth.data.CODE,            
                                 DEVICE:'',
                                 CODE:'130',
-                                NAME:"Kullanıcı bilgis ve yetkisi değiştirildi.", //BAK
+                                NAME:"information et autorisation de l'utilisateur modifier.", //BAK
                                 DESCRIPTION:'',
                                 APP_VERSION:this.core.appInfo.version
                             }

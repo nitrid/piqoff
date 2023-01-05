@@ -27,6 +27,8 @@ import Navigation from './navigation.js'
 import Panel from './panel.js'
 import Login from './login.js'
 
+import * as appInfo from '../../../package.json'
+
 export default class App extends React.Component
 {
     static instance = null;
@@ -130,6 +132,8 @@ export default class App extends React.Component
         this.core = new core(io(window.location.origin,{timeout:100000}));
         this.textValueChanged = this.textValueChanged.bind(this)
         this.onDbClick = this.onDbClick.bind(this)
+
+        this.core.appInfo = appInfo
 
         if(!App.instance)
         {
