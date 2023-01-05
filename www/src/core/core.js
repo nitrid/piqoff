@@ -1625,14 +1625,17 @@ export class param extends datatable
             // EĞER PARAMETRE OLARAK HİÇBİRŞEY GELMEDİYSE SIFIRINCI SATIRI.
             if(arguments.length == 0)
             {
-                return JSON.parse(JSON.stringify(this[0].VALUE))
+               // return JSON.parse(JSON.stringify(this[0].VALUE))
+               return JSON.parse(this[0].VALUE)
             }
             // EĞER PARAMETRE GELMİŞ İSE VE GELEN VERİ NUMBER İSE VERİLEN SATIR I DÖNDÜR.
             else if(arguments.length == 1 && typeof arguments[0] == 'number')
             {
                 try 
                 {
-                    return JSON.parse(JSON.stringify(this[arguments[0]].VALUE))
+                  //  return JSON.parse(JSON.stringify(this[arguments[0]].VALUE))
+                  return JSON.parse(this[arguments[0]].VALUE)
+
                 } catch (error) 
                 {
                     console.log('error param.toValue() : ' + error)
