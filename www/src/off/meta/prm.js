@@ -1070,7 +1070,7 @@ export const prm =
     {
         TYPE : 1,
         ID :"ItemGrpForOrginsValidation",
-        VALUE : ['017'],
+        VALUE : ['882CE752-8DE1-4574-8243-B74C8CE32B87'],
         SPECIAL : "",
         PAGE : "stk_01_001",
         ELEMENT : "",
