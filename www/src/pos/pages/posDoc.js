@@ -120,7 +120,7 @@ export default class posDoc extends React.PureComponent
             }
             else
             {
-                this.getItem(tmpBarkod)
+                this.getItem(this.txtBarcode.value + tmpBarkod)
             }
         })
 
