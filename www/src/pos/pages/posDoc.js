@@ -352,7 +352,10 @@ export default class posDoc extends React.PureComponent
         this.posObj.dt()[this.posObj.dt().length - 1].DEVICE = this.state.isFormation ? '9999' : window.localStorage.getItem('device') == null ? '' : window.localStorage.getItem('device')
         this.device.value = this.posObj.dt()[this.posObj.dt().length - 1].DEVICE
         
-        await this.posDevice.load({CODE:this.posObj.dt()[this.posObj.dt().length - 1].DEVICE})        
+        if(this.posObj.dt()[this.posObj.dt().length - 1].DEVICE != '9999')
+        {
+            await this.posDevice.load({CODE:this.posObj.dt()[this.posObj.dt().length - 1].DEVICE})        
+        }
         this.posDevice.scanner();       
          
         if(!this.isFirstOpen)
