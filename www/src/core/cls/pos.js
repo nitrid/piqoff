@@ -1882,7 +1882,12 @@ export class posDeviceCls
 
         this.scannerPort.on('data',(data) =>
         {
+            if(data.toString("utf8").substring(0,1) == 'F' || data.toString("utf8").substring(0,1) == 'A')
+            {
+                tmpSerialCount = 0
+            }
             tmpSerialCount++;
+
             tmpBarcode = tmpBarcode + data.toString("utf8")
 
             if(tmpSerialCount == 2)

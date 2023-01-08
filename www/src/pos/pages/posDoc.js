@@ -120,7 +120,7 @@ export default class posDoc extends React.PureComponent
             }
             else
             {
-                this.getItem(tmpBarkod)
+                this.getItem(this.txtBarcode.value + tmpBarkod)
             }
         })
 
@@ -1479,7 +1479,7 @@ export default class posDoc extends React.PureComponent
                             let tmpConfObj =
                             {
                                 id:'msgMoneyChange',
-                                timeout:10000,
+                                timeout:20000,
                                 showTitle:true,
                                 title:this.lang.t("msgMoneyChange.title"),
                                 showCloseButton:true,
