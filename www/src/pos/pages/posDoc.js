@@ -1180,8 +1180,9 @@ export default class posDoc extends React.PureComponent
             }            
             //console.log("100 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS")) 
             //HER EKLEME İŞLEMİNDEN SONRA İLK SATIR SEÇİLİYOR.
-            setTimeout(() => 
+            setTimeout(async() => 
             {
+                await this.grdList.dataRefresh({source:this.posObj.posSale.dt()});
                 this.grdList.devGrid.selectRowsByIndexes(0)
                 this.grdList.devGrid.option('focusedRowIndex',0)
             }, 100);
@@ -3854,7 +3855,7 @@ export default class posDoc extends React.PureComponent
                                     {/* Subtotal */}
                                     <div className="col px-1">
                                         <NbButton id={"btnSubtotal"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}
-                                        onClick={()=>
+                                        onClick={async()=>
                                         {
                                             let tmpData = this.posObj.posSale.dt().where({SUBTOTAL:0})
                                             let tmpMaxSub = this.posObj.posSale.dt().where({SUBTOTAL:{'<>':-1}}).max('SUBTOTAL') + 1
@@ -3863,6 +3864,7 @@ export default class posDoc extends React.PureComponent
                                                 tmpData[i].SUBTOTAL = tmpMaxSub
                                             }
                                             this.calcGrandTotal()
+                                            console.log(this.posObj.posSale.dt())
                                         }}>
                                             <i className="text-white fa-solid fa-square-root-variable" style={{fontSize: "24px"}} />
                                         </NbButton>
