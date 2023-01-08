@@ -200,7 +200,7 @@ export const langFr =
         fns : "Finance",
         fns_01 : "Listes",
         fns_01_001: "Liste paiement",
-        fns_01_002 : "Liste de paiment",
+        fns_01_002 : "Liste de encaissement",
         fns_01_003 : "Liste extrait bancaire",
         fns_01_004 : "Liste mouvement coffre",
         fns_02 : "Document",
