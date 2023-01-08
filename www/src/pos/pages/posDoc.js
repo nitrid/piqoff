@@ -6699,7 +6699,7 @@ export default class posDoc extends React.PureComponent
                     >
                         <Form colCount={2} height={'fit-content'} id={"frmSettings"}>
                             <Item>
-                                <Label text={"LCD Port"} alignment="right" />
+                                <Label text={this.lang.t("popSettings.lcdPort")} alignment="right" />
                                 <NdTextBox id={"txtPopSettingsLcd"} parent={this} simple={true} valueChangeEvent="keyup" 
                                 onValueChanging={(e)=>
                                 {       
@@ -6713,7 +6713,7 @@ export default class posDoc extends React.PureComponent
                                 }}/>
                             </Item>
                             <Item>
-                                <Label text={"Scale Port"} alignment="right" />
+                                <Label text={this.lang.t("popSettings.scalePort")} alignment="right" />
                                 <NdTextBox id={"txtPopSettingsScale"} parent={this} simple={true} valueChangeEvent="keyup" 
                                 onValueChanging={(e)=>
                                 {
@@ -6727,7 +6727,7 @@ export default class posDoc extends React.PureComponent
                                 }}/>
                             </Item>
                             <Item>
-                                <Label text={"Pay Card Port"} alignment="right" />
+                                <Label text={this.lang.t("popSettings.payCardPort")} alignment="right" />
                                 <NdTextBox id={"txtPopSettingsPayCard"} parent={this} simple={true} valueChangeEvent="keyup" 
                                 onValueChanging={(e)=>
                                 {
@@ -6741,7 +6741,7 @@ export default class posDoc extends React.PureComponent
                                 }}/>
                             </Item>
                             <Item>
-                                <Label text={"Yazdırma Dizayn"} alignment="right" />
+                                <Label text={this.lang.t("popSettings.printDesing")} alignment="right" />
                                 <NdTextBox id={"txtPopSettingsPrint"} parent={this} simple={true} valueChangeEvent="keyup" 
                                 onValueChanging={(e)=>
                                 {
