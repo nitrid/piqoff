@@ -125,24 +125,6 @@ export default class posDoc extends React.PureComponent
         })
 
         this.init();
-        //DATA TRANSFER İŞLEMİ
-        this.transfer = new transferCls();
-        this.interval = null;
-        this.transferStart();
-        this.transferLocal();
-        //DATA TRANSFER İÇİN EVENT.
-        this.transfer.on('onState',(pParam)=>
-        {
-            if(pParam.tag == 'progress')
-            {
-                this.transProgress.value = pParam.index + " / " + pParam.count
-            }
-            else
-            {
-                this.msgTransfer2.value = pParam.text + " " + this.lang.t("popTransfer.msg3")
-            }
-        })
-        //****************************** */
 
         this.core.socket.on('connect',async () => 
         {               
@@ -388,6 +370,24 @@ export default class posDoc extends React.PureComponent
                     await dialog(tmpConfObj);
                 }                
             }
+            //DATA TRANSFER İŞLEMİ
+            this.transfer = new transferCls();
+            this.interval = null;
+            this.transferStart();
+            this.transferLocal();
+            //DATA TRANSFER İÇİN EVENT.
+            this.transfer.on('onState',(pParam)=>
+            {
+                if(pParam.tag == 'progress')
+                {
+                    this.transProgress.value = pParam.index + " / " + pParam.count
+                }
+                else
+                {
+                    this.msgTransfer2.value = pParam.text + " " + this.lang.t("popTransfer.msg3")
+                }
+            })
+            //****************************** */
         }
 
         await this.grdList.dataRefresh({source:this.posObj.posSale.dt()});
@@ -2363,11 +2363,12 @@ export default class posDoc extends React.PureComponent
             })
         });
     }
-    transferStart(pTime,pClear)
+    async transferStart(pTime,pClear)
     {
         let tmpCounter = 0
         let tmpPrmTime = typeof pTime != 'undefined' ? pTime : this.prmObj.filter({ID:'TransferTime',TYPE:0}).getValue()
-
+        console.log(this.prmObj.filter({ID:'TransferTime',TYPE:0}))
+        console.log(this.prmObj)
         this.interval = setInterval(async ()=>
         {
             this.msgTransfer1.value = this.lang.t("popTransfer.msg1") + (tmpPrmTime - tmpCounter).toString() + " Sn."
