@@ -1843,7 +1843,26 @@ export const prm =
             }
         }
     },
-       //#endregion
+    // excelFormat
+    {
+        TYPE : 1,
+        ID :"compulsoryCustomer",
+        VALUE : 
+        {
+            value : true
+        },
+        SPECIAL : "",
+        PAGE : "ftr_02_001",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Alış Faturası",
+            CAPTION : "Tedarikçişi olmayan ürünü kaydetme"
+        }
+    },
+    //#endregion
     //#region Promosyon
     //txtRef
     {

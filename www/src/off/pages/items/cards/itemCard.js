@@ -646,7 +646,6 @@ export default class itemCard extends React.PureComponent
     }
     async extraCostCalculate()
     {
-        console.log(1)
         this.extraCostData.clear()
         if(this.txtTaxSugar.value > 0)
         {

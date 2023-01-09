@@ -4061,6 +4061,12 @@ export const langFr =
             btn01: "Tamam",   // BAK
             msg: "Evrak Kilitlenmeden Yazdırılamaz !"   // BAK
         },
+        msgCompulsoryCustomer:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Le Produit Sélectionné n'a pas de Fournisseur Enregistré !"
+        },
     },
     ftr_02_003 : // "İade Faturası"
     {
@@ -7324,7 +7330,9 @@ export const langFr =
             clmCode: "Code",     
             clmName: "Nom",     
             clmPrice: "Ancien Prix",     
-            clmPrice2: "Nouveau Prix",     
+            clmPrice2: "Nouveau Prix",    
+            clmSalePrice :"Satış Fiyatı",  // BAK
+            clmMargin : "Marj"  // BAK
         },
         pg_txtBarcode : 
         {
