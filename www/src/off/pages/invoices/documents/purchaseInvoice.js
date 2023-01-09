@@ -68,7 +68,7 @@ export default class purchaseInvoice extends React.PureComponent
     }
     async componentDidMount()
     {
-        await this.core.util.waitUntil(0)
+        await this.core.util.waitUntil(100)
         this.init()
         if(typeof this.pagePrm != 'undefined')
         {
@@ -527,6 +527,19 @@ export default class purchaseInvoice extends React.PureComponent
                         return 
                     }
                     App.instance.setState({isExecute:false})
+                    console.log(this.prmObj.filter({ID:'compulsoryCustomer',USERS:this.user.CODE}).getValue().value)
+                    if(this.prmObj.filter({ID:'compulsoryCustomer',USERS:this.user.CODE}).getValue().value == true)
+                    {
+                        await this.grdPurcInv.devGrid.deleteRow(0)
+                        let tmpConfObj =
+                        {
+                            id:'msgCompulsoryCustomer',showTitle:true,title:this.t("msgCompulsoryCustomer.title"),showCloseButton:true,width:'500px',height:'200px',
+                            button:[{id:"btn01",caption:this.t("msgCompulsoryCustomer.btn01"),location:'after'}],
+                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCompulsoryCustomer.msg")}</div>)
+                        }
+                        await dialog(tmpConfObj);
+                        return
+                    }
                     await this.msgCustomerNotFound.show().then(async (e) =>
                     {
     
@@ -1274,6 +1287,7 @@ export default class purchaseInvoice extends React.PureComponent
             let tmpData = this.sysParam.filter({ID:'purcInvoıcePriceSave',USERS:this.user.CODE}).getValue()
             if(typeof tmpData != 'undefined' && tmpData.value ==  true)
             {
+                App.instance.setState({isExecute:true})
                 this.newPrice.clear()
                 this.newVat.clear()
                 for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
@@ -1281,16 +1295,30 @@ export default class purchaseInvoice extends React.PureComponent
 
                     if(this.docObj.docItems.dt()[i].ITEM_TYPE == 0)
                     {
-                        if(typeof this.docObj.docItems.dt()[i].OLD_VAT != 'undefined' && this.docObj.docItems.dt()[i].VAT_RATE != this.docObj.docItems.dt()[i].OLD_VAT)
+                        if(typeof this.docObj.docItems.dt()[i].OLD_VAT != 'undefined' && this.docObj.docItems.dt()[i].VAT_RATE != this.docObj.docItems.dt()[i].OLD_VAT && this.docObj.docItems.dt()[i].VAT_RATE != 0)
                         {
                             this.newVat.push({...this.docObj.docItems.dt()[i]})
                         }
-                        if(this.docObj.docItems.dt()[i].CUSTOMER_PRICE != this.docObj.docItems.dt()[i].PRICE)
+                        if(this.docObj.docItems.dt()[i].CUSTOMER_PRICE != this.docObj.docItems.dt()[i].PRICE && this.docObj.docItems.dt()[i].CUSTOMER_PRICE != 0)
                         {
-                            this.newPrice.push({...this.docObj.docItems.dt()[i]})
+                            let tmpQuery = 
+                            {
+                                query : "SELECT TOP 1 GUID AS PRICE_GUID,PRICE AS SALE_PRICE FROM ITEM_PRICE WHERE TYPE = 0 AND DELETED = 0 AND START_DATE = '19700101' AND FINISH_DATE = '19700101' AND QUANTITY = 1 AND ITEM = @ITEM ",
+                                param : ['ITEM:string|50'],
+                                value : [this.docObj.docItems.dt()[i].ITEM]
+                            }
+                            let tmpData = await this.core.sql.execute(tmpQuery)
+                            console.log(tmpData)
+                            if(tmpData.result.recordset.length > 0)
+                            {
+                                let tmpItemData = [{...this.docObj.docItems.dt()[i]}]
+                                tmpItemData[0].SALE_PRICE_GUID = tmpData.result.recordset[0].PRICE_GUID
+                                tmpItemData[0].SALE_PRICE = tmpData.result.recordset[0].SALE_PRICE
+                                tmpItemData[0].PRICE_MARGIN = (parseFloat(tmpData.result.recordset[0].SALE_PRICE- tmpItemData[0].PRICE).toFixed(2) + '€ / %' + parseFloat(((tmpData.result.recordset[0].SALE_PRICE- tmpItemData[0].PRICE)/tmpData.result.recordset[0].SALE_PRICE) * 100).toFixed(2))
+                                this.newPrice.push(tmpItemData[0])
+                            } 
                         }
                     }
-                    
                 }
                 if(this.newPrice.length > 0)
                 {
@@ -1303,14 +1331,26 @@ export default class purchaseInvoice extends React.PureComponent
                         }
                         if(e == 'btn02')
                         {
+                            App.instance.setState({isExecute:true})
                             for (let i = 0; i < this.grdNewPrice.getSelectedData().length; i++) 
                             {
+                                console.log(this.grdNewPrice.getSelectedData()[i])
                                 let tmpMulticodeObj = new itemMultiCodeCls()
                                 await tmpMulticodeObj.load({ITEM_CODE:this.grdNewPrice.getSelectedData()[i].ITEM_CODE,CUSTOMER_CODE:this.grdNewPrice.getSelectedData()[i].CUSTOMER_CODE});
                                 tmpMulticodeObj.dt()[0].CUSTOMER_PRICE = this.grdNewPrice.getSelectedData()[i].PRICE
                                 tmpMulticodeObj.save()
+                                let tmpQuery = 
+                                {
+                                    query : "EXEC [dbo].[PRD_ITEM_PRICE_UPDATE] " +
+                                            "@GUID = @PGUID, " +
+                                            "@CUSER = @PCUSER, " +
+                                            "@PRICE = @PPRICE" ,
+                                    param : ['PGUID:string|50','PCUSER:string|25','PPRICE:float'],
+                                    value : [this.grdNewPrice.getSelectedData()[i].SALE_PRICE_GUID,this.user.CODE,this.grdNewPrice.getSelectedData()[i].SALE_PRICE]
+                                }
+                                await this.core.sql.execute(tmpQuery)
                             }
-                            
+                            App.instance.setState({isExecute:false})
                         }
                     })
                 }    
@@ -1325,6 +1365,7 @@ export default class purchaseInvoice extends React.PureComponent
                         }
                         if(e == 'btn02')
                         {
+                            App.instance.setState({isExecute:true})
                             for (let i = 0; i < this.grdNewVat.getSelectedData().length; i++) 
                             {
                                 let tmpQuery = 
@@ -1335,10 +1376,11 @@ export default class purchaseInvoice extends React.PureComponent
                                 }
                                 await this.core.sql.execute(tmpQuery) 
                             }
-                            
+                            App.instance.setState({isExecute:false})
                         }
                     })
                 }    
+                App.instance.setState({isExecute:false})
             }
             
             let tmpConfObj1 =
@@ -1427,7 +1469,7 @@ export default class purchaseInvoice extends React.PureComponent
             {
                 query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ITEMS_VW_01 WHERE OUTPUT = @OUTPUT AND INVOICE_DOC_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 0 AND DOC_TYPE IN(120) AND REBATE = 0",
                 param : ['OUTPUT:string|50'],
-                value : [this.docObj.dt()[0].OUTPUTV]
+                value : [this.docObj.dt()[0].OUTPUT]
             }
             let tmpData = await this.core.sql.execute(tmpQuery) 
             if(tmpData.result.recordset.length > 0)
@@ -3796,7 +3838,7 @@ export default class purchaseInvoice extends React.PureComponent
                             </div>
                         
                     </NdDialog>  
-                       {/* Yeni Fiyat Dialog  */}
+                    {/* Yeni Fiyat Dialog  */}
                     <NdDialog id={"msgNewPrice"} container={"#root"} parent={this}
                         position={{of:'#root'}} 
                         showTitle={true} 
@@ -3827,14 +3869,23 @@ export default class purchaseInvoice extends React.PureComponent
                                     selection={{mode:"multiple"}}
                                     onRowRemoved={async (e)=>{
                                     }}
+                                    onRowUpdated={async(e)=>{
+
+                                        let tmpMargin = e.key.SALE_PRICE - e.key.PRICE
+                                        let tmpMarginRate = (tmpMargin /(e.key.SALE_PRICE)) * 100
+                                        e.key.PRICE_MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
+                                        
+                                    }}
                                     >
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
                                         <Scrolling mode="standart" />
-                                        <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
-                                        <Column dataField="ITEM_CODE" caption={this.t("grdNewPrice.clmCode")} width={150} />
-                                        <Column dataField="ITEM_NAME" caption={this.t("grdNewPrice.clmName")} width={250} />
-                                        <Column dataField="CUSTOMER_PRICE" caption={this.t("grdNewPrice.clmPrice")} width={130}  />
-                                        <Column dataField="PRICE" caption={this.t("grdNewPrice.clmPrice2")} dataType={'number'} width={80}/>
+                                        <Editing mode="cell" allowUpdating={true} allowDeleting={false} />
+                                        <Column dataField="ITEM_CODE" caption={this.t("grdNewPrice.clmCode")} width={100} allowEditing={false}/>
+                                        <Column dataField="ITEM_NAME" caption={this.t("grdNewPrice.clmName")} width={180}  allowEditing={false}/>
+                                        <Column dataField="CUSTOMER_PRICE" caption={this.t("grdNewPrice.clmPrice")} width={130}   allowEditing={false}/>
+                                        <Column dataField="PRICE" caption={this.t("grdNewPrice.clmPrice2")} dataType={'number'} width={70}  allowEditing={false}/>
+                                        <Column dataField="SALE_PRICE" caption={this.t("grdNewPrice.clmSalePrice")} dataType={'number'} width={80}  format={{ style: "currency", currency: "EUR",precision: 2}}/>
+                                        <Column dataField="PRICE_MARGIN" caption={this.t("grdNewPrice.clmMargin")}width={100}  allowEditing={false}/>
                                     </NdGrid>
                                     </Item>
                                 </Form>
