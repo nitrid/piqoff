@@ -728,4 +728,11 @@ export const langFr =
         btn01 : "OK",
         btn02 : "Abandonner"
     },
+    popSettings: 
+    {
+        lcdPort : "Afficheur display port",
+        scalePort : "Balance port",
+        payCardPort : "TPE port",
+        printDesing : "Design d’imprimante"
+    }
 }

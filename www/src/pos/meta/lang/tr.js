@@ -728,4 +728,11 @@ export const langTr =
         btn01 : "Evet",
         btn02 : "Hayır"
     },
+    popSettings: 
+    {
+        lcdPort : "LCD port",
+        scalePort : "Scale port",
+        payCardPort : "Pay card port",
+        printDesing : "Yazdırma dizaynı"
+    }
 }
