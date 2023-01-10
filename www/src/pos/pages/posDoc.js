@@ -1182,7 +1182,6 @@ export default class posDoc extends React.PureComponent
             //HER EKLEME İŞLEMİNDEN SONRA İLK SATIR SEÇİLİYOR.
             setTimeout(async() => 
             {
-                await this.grdList.dataRefresh({source:this.posObj.posSale.dt()});
                 this.grdList.devGrid.selectRowsByIndexes(0)
                 this.grdList.devGrid.option('focusedRowIndex',0)
             }, 100);
