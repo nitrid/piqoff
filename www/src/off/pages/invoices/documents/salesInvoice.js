@@ -245,6 +245,7 @@ export default class salesInvoice extends React.PureComponent
         this.docObj.dt()[0].TOTAL = this.docObj.docItems.dt().sum("TOTAL",2)
 
         this.docObj.docCustomer.dt()[0].AMOUNT = this.docObj.dt()[0].TOTAL
+        this.docObj.docCustomer.dt()[0].ROUND = 0
     }
     async _calculateTotalMargin()
     {
@@ -830,34 +831,34 @@ export default class salesInvoice extends React.PureComponent
     }
     async _getPayment()
     {
-        if(typeof this.txtRemainder == 'undefined')
+        if(typeof this.txtRemainder != 'undefined')
         {
-            return
+             await this.paymentObj.load({PAYMENT_DOC_GUID:this.docObj.dt()[0].GUID});
+            if(this.paymentObj.dt().length > 0)
+            {
+                let tmpRemainder = (this.docObj.dt()[0].TOTAL - this.paymentObj.dt()[0].TOTAL).toFixed(2)
+                this.txtRemainder.setState({value:tmpRemainder});
+                this.txtMainRemainder.setState({value:tmpRemainder});
+            }
+            else
+            {
+                this.txtRemainder.setState({value:this.docObj.dt()[0].TOTAL});
+                this.txtMainRemainder.setState({value:this.docObj.dt()[0].TOTAL});
+            
+            }
+            let tmpQuery = 
+            {
+                query :"SELECT ROUND(BALANCE,2) AS BALANCE FROM  ACCOUNT_BALANCE WHERE ACCOUNT_GUID = @GUID ",
+                param : ['GUID:string|50'],
+                value : [this.docObj.dt()[0].INPUT]
+            }
+            let tmpData = await this.core.sql.execute(tmpQuery) 
+            if(tmpData.result.recordset.length > 0)
+            {
+                this.txtbalance.value = tmpData.result.recordset[0].BALANCE
+            }
         }
-        await this.paymentObj.load({PAYMENT_DOC_GUID:this.docObj.dt()[0].GUID});
-        if(this.paymentObj.dt().length > 0)
-        {
-            let tmpRemainder = (this.docObj.dt()[0].TOTAL - this.paymentObj.dt()[0].TOTAL).toFixed(2)
-            this.txtRemainder.setState({value:tmpRemainder});
-            this.txtMainRemainder.setState({value:tmpRemainder});
-        }
-        else
-        {
-            this.txtRemainder.setState({value:this.docObj.dt()[0].TOTAL});
-            this.txtMainRemainder.setState({value:this.docObj.dt()[0].TOTAL});
-           
-        }
-        let tmpQuery = 
-        {
-            query :"SELECT ROUND(BALANCE,2) AS BALANCE FROM  ACCOUNT_BALANCE WHERE ACCOUNT_GUID = @GUID ",
-            param : ['GUID:string|50'],
-            value : [this.docObj.dt()[0].INPUT]
-        }
-        let tmpData = await this.core.sql.execute(tmpQuery) 
-        if(tmpData.result.recordset.length > 0)
-        {
-            this.txtbalance.value = tmpData.result.recordset[0].BALANCE
-        }
+       
     }
     async _addPayment(pType,pAmount)
     {
@@ -1675,7 +1676,7 @@ export default class salesInvoice extends React.PureComponent
                                                         {
                                                             this.txtRef.value = data[0].CODE
                                                         }
-                                                        if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
+                                                        if(this.cmbDepot.value != '' && this.docLocked == false)
                                                         {
                                                             this.frmSalesInv.option('disabled',false)
                                                         }
@@ -1734,7 +1735,7 @@ export default class salesInvoice extends React.PureComponent
                                                             {
                                                                 this.txtRef.value = data[0].CODE
                                                             }
-                                                            if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
+                                                            if(this.cmbDepot.value != '' && this.docLocked == false)
                                                             {
                                                                 this.frmSalesInv.option('disabled',false)
                                                             }
@@ -2458,6 +2459,20 @@ export default class salesInvoice extends React.PureComponent
                                             <Label text={this.t("txtTotal")} alignment="right" />
                                                 <NdTextBox id="txtTotal" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"TOTAL"}}
                                                 maxLength={32}
+                                                button=
+                                                {
+                                                    [
+                                                        {
+                                                            id:'01',
+                                                            icon:'pulldown',
+                                                            onClick:()  =>
+                                                            {
+                                                                this.txtRoundTotal.value = this.docObj.dt()[0].TOTAL                                                                    
+                                                                this.popRound.show()
+                                                            }
+                                                        },
+                                                    ]
+                                                }
                                                 ></NdTextBox>
                                             </Item>
                                         </Form>
@@ -2605,6 +2620,66 @@ export default class salesInvoice extends React.PureComponent
                                             onClick={()=>
                                             {
                                                 this.popDiscount.hide();  
+                                            }}/>
+                                        </div>
+                                    </div>
+                                </Item>
+                            </Form>
+                        </NdPopUp>
+                    </div>  
+                    {/* Yuvarlama PopUp */}
+                    <div>
+                        <NdPopUp parent={this} id={"popRound"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.t("popRound.title")}
+                        container={"#root"} 
+                        width={'500'}
+                        height={'250'}
+                        position={{of:'#root'}}
+                        >
+                            <Form colCount={1} height={'fit-content'}>
+                                <Item>
+                                    <Label text={this.t("popRound.total")} alignment="right" />
+                                    <NdNumberBox id="txtRoundTotal" parent={this} simple={true}
+                                            maxLength={32}
+                                            onValueChanged={(async()=>
+                                                {
+                                                    if( this.txtDiscountPercent.value > 100)
+                                                    {
+                                                        let tmpConfObj =
+                                                        {
+                                                            id:'msgDiscountPercent',showTitle:true,title:this.t("msgDiscountPercent.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                            button:[{id:"btn01",caption:this.t("msgDiscountPercent.btn01"),location:'after'}],
+                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPercent.msg")}</div>)
+                                                        }
+                                            
+                                                        await dialog(tmpConfObj);
+                                                        this.txtDiscountPercent.value = 0;
+                                                        this.txtDiscountPrice.value = 0;
+                                                        return
+                                                    }
+                                                    this.txtDiscountPrice.value =  parseFloat((this.docObj.dt()[0].AMOUNT * this.txtDiscountPercent.value / 100).toFixed(3))
+                                            }).bind(this)}
+                                    ></NdNumberBox>
+                                </Item>
+                                <Item>
+                                    <div className='row'>
+                                        <div className='col-6'>
+                                            <NdButton text={this.lang.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} 
+                                            onClick={async ()=>
+                                            {       
+                                                this.docObj.dt()[0].TOTAL = this.txtRoundTotal.value
+                                                this.docObj.docCustomer.dt()[0].ROUND = parseFloat(this.txtRoundTotal.value - this.docObj.docCustomer.dt()[0].AMOUNT).toFixed(3)
+                                                this.popRound.hide(); 
+                                            }}/>
+                                        </div>
+                                        <div className='col-6'>
+                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                            onClick={()=>
+                                            {
+                                                this.popRound.hide();  
                                             }}/>
                                         </div>
                                     </div>

@@ -287,6 +287,7 @@ export default class itemCard extends React.PureComponent
         {
             this.imgFile.value = this.itemsObj.dt('ITEM_IMAGE')[0].IMAGE
         }
+        this.itemGrpForOrginsValidCheck();   
     }
     async checkItem(pCode)
     {
@@ -537,12 +538,15 @@ export default class itemCard extends React.PureComponent
     itemGrpForOrginsValidCheck()
     {
         let tmpData = this.prmObj.filter({ID:'ItemGrpForOrginsValidation'}).getValue()
+        console.log(tmpData)
         if(typeof tmpData != 'undefined' && Array.isArray(tmpData) && typeof tmpData.find(x => x == this.cmbItemGrp.value) != 'undefined')
         {
+            console.log(1)
             this.setState({isItemGrpForOrginsValid:true})
         }
         else
         {
+            console.log(2)
             this.setState({isItemGrpForOrginsValid:false})
         }
     }
@@ -642,7 +646,6 @@ export default class itemCard extends React.PureComponent
     }
     async extraCostCalculate()
     {
-        console.log(1)
         this.extraCostData.clear()
         if(this.txtTaxSugar.value > 0)
         {

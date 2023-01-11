@@ -3529,6 +3529,8 @@ export const langTr =
             clmName: "Adı",
             clmPrice: "Eski Fiyat",
             clmPrice2: "Yeni Fiyat",
+            clmSalePrice :"Satış Fiyatı", 
+            clmMargin : "Marj"
         },
         msgNewVat : 
         {
@@ -3617,6 +3619,11 @@ export const langTr =
             clmQuantity : "Adet",
             clmPrice : "Fiyat",
             clmTotal : "Tutar"
+        },
+        popRound : 
+        {
+            title : "Lütfen Tuvarlamak İstediğiniz Tutarı Giriniz",
+            total : "Tutar",
         },
     },
     ftr_02_002 : // "Satış Faturası"
@@ -4062,6 +4069,17 @@ export const langTr =
             btn01: "Tamam",
             msg: "Evrak Kilitlenmeden Yazdırılamaz !"
         },
+        msgCompulsoryCustomer:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Seçilen Ürün Cariye Tanımlı Değil !"
+        },
+        popRound : 
+        {
+            title : "Lütfen Tuvarlamak İstediğiniz Tutarı Giriniz",
+            total : "Tutar",
+        },
     },
     ftr_02_003 : // "İade Faturası"
     {
@@ -4421,6 +4439,11 @@ export const langTr =
             msgSuccess: "Mail gönderimi başarılı !",
             msgFailed: "Mail gönderimi başarısız !"
         },
+        popRound : 
+        {
+            title : "Lütfen Tuvarlamak İstediğiniz Tutarı Giriniz",
+            total : "Tutar",
+        },
     },
     ftr_02_004 : // "Fiyat Farkı Faturası"
     {
@@ -4753,6 +4776,11 @@ export const langTr =
             btn01: "Tamam",
             msgSuccess: "Mail gönderimi başarılı !",
             msgFailed: "Mail gönderimi başarısız !"
+        },
+        popRound : 
+        {
+            title : "Lütfen Tuvarlamak İstediğiniz Tutarı Giriniz",
+            total : "Tutar",
         },
     },
     ftr_02_005 : // "Şube Satış Faturası"
@@ -5170,6 +5198,11 @@ export const langTr =
             msgSuccess: "Mail gönderimi başarılı !",
             msgFailed: "Mail gönderimi başarısız !"
         },
+        popRound : 
+        {
+            title : "Lütfen Tuvarlamak İstediğiniz Tutarı Giriniz",
+            total : "Tutar",
+        },
     },
     ftr_02_006 : // "Fiyat Farkı Alış Faturası"
     {
@@ -5484,6 +5517,11 @@ export const langTr =
             title: "Dikkat",
             btn01: "Evrağa Git",
             msg: "Evrak Bulundu"
+        },
+        popRound : 
+        {
+            title : "Lütfen Tuvarlamak İstediğiniz Tutarı Giriniz",
+            total : "Tutar",
         },
     },
     ftr_02_007 : // "İade ALış Faturası"
@@ -5824,6 +5862,11 @@ export const langTr =
             clmQuantity : "Adet",
             clmPrice : "Fiyat",
             clmTotal : "Tutar"
+        },
+        popRound : 
+        {
+            title : "Lütfen Tuvarlamak İstediğiniz Tutarı Giriniz",
+            total : "Tutar",
         },
     },
     ftr_02_008 : // "Şube Satış Faturası"
@@ -6240,6 +6283,11 @@ export const langTr =
             btn01: "Tamam",
             msgSuccess: "Mail gönderimi başarılı !",
             msgFailed: "Mail gönderimi başarısız !"
+        },
+        popRound : 
+        {
+            title : "Lütfen Tuvarlamak İstediğiniz Tutarı Giriniz",
+            total : "Tutar",
         },
     },
     ftr_04_001 : // "Proforma Fiyat Farkı Faturası"
@@ -7326,6 +7374,8 @@ export const langTr =
             clmName: "Adı",
             clmPrice: "Eski Fiyat",
             clmPrice2: "Yeni Fiyat",
+            clmSalePrice :"Satış Fiyatı", 
+            clmMargin : "Marj"
         },
         msgNewVat : 
         {

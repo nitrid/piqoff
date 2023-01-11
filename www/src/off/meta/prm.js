@@ -1070,7 +1070,7 @@ export const prm =
     {
         TYPE : 1,
         ID :"ItemGrpForOrginsValidation",
-        VALUE : ['017'],
+        VALUE : ['882CE752-8DE1-4574-8243-B74C8CE32B87','75DF8E2B-D3D2-439A-A751-A2BA2D2A962A'],
         SPECIAL : "",
         PAGE : "stk_01_001",
         ELEMENT : "",
@@ -1843,7 +1843,26 @@ export const prm =
             }
         }
     },
-       //#endregion
+    // excelFormat
+    {
+        TYPE : 1,
+        ID :"compulsoryCustomer",
+        VALUE : 
+        {
+            value : true
+        },
+        SPECIAL : "",
+        PAGE : "ftr_02_001",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Alış Faturası",
+            CAPTION : "Tedarikçişi olmayan ürünü kaydetme"
+        }
+    },
+    //#endregion
     //#region Promosyon
     //txtRef
     {

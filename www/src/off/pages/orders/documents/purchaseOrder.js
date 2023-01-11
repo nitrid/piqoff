@@ -1303,7 +1303,7 @@ export default class purchaseOrder extends React.PureComponent
                                                         this.txtRef.value = data[0].CODE;
                                                         this.txtRef.props.onChange()
                                                     }
-                                                    if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
+                                                    if(this.cmbDepot.value != '' && this.docLocked == false)
                                                     {
                                                         this.frmdocOrders.option('disabled',false)
                                                     }
@@ -1359,7 +1359,7 @@ export default class purchaseOrder extends React.PureComponent
                                                                 this.txtRef.value = data[0].CODE;
                                                                 this.txtRef.props.onChange()
                                                             }
-                                                            if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
+                                                            if(this.cmbDepot.value != '' && this.docLocked == false)
                                                             {
                                                                 this.frmdocOrders.option('disabled',false)
                                                             }
@@ -1438,7 +1438,7 @@ export default class purchaseOrder extends React.PureComponent
                                         <Column dataField="CODE" caption={this.t("pg_txtCustomerCode.clmCode")} width={150} />
                                         <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmTitle")} width={500} defaultSortOrder="asc" />
                                         <Column dataField="TYPE_NAME" caption={this.t("pg_txtCustomerCode.clmTypeName")} width={150} />
-                                        <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150} filterType={"include"} filterValues={['Tedarikçi','Her Ikisi']}/>
+                                        <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150} filterType={"include"} filterValues={['Fournisseur','Her Ikisi']}/>
                                     </NdPopGrid>
                                 </Item> 
                                 {/* txtCustomerName */}

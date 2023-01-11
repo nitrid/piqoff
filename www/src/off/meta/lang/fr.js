@@ -200,7 +200,7 @@ export const langFr =
         fns : "Finance",
         fns_01 : "Listes",
         fns_01_001: "Liste paiement",
-        fns_01_002 : "Liste de paiment",
+        fns_01_002 : "Liste de encaissement",
         fns_01_003 : "Liste extrait bancaire",
         fns_01_004 : "Liste mouvement coffre",
         fns_02 : "Document",
@@ -3617,6 +3617,11 @@ export const langFr =
             clmPrice : "Prix",   
             clmTotal : "Total"   
         },
+        popRound : 
+        {
+            title : "Lütfen Tuvarlamak İstediğiniz Tutarı Giriniz",    // BAK
+            total : "Tutar",  // BAK
+        },
     },
     ftr_02_002 : // "Satış Faturası"
     {
@@ -4061,6 +4066,17 @@ export const langFr =
             btn01: "Tamam",   // BAK
             msg: "Evrak Kilitlenmeden Yazdırılamaz !"   // BAK
         },
+        msgCompulsoryCustomer:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Le Produit Sélectionné n'a pas de Fournisseur Enregistré !"
+        },
+        popRound : 
+        {
+            title : "Lütfen Tuvarlamak İstediğiniz Tutarı Giriniz",    // BAK
+            total : "Tutar",  // BAK
+        },
     },
     ftr_02_003 : // "İade Faturası"
     {
@@ -4427,6 +4443,11 @@ export const langFr =
             msgSuccess: "Mail gönderimi başarılı !",   // BAK
             msgFailed: "Mail gönderimi başarısız !"   // BAK
         },
+        popRound : 
+        {
+            title : "Lütfen Tuvarlamak İstediğiniz Tutarı Giriniz",    // BAK
+            total : "Tutar",  // BAK
+        },
     },
     ftr_02_004 : // "Fiyat Farkı Faturası"
     {
@@ -4766,6 +4787,11 @@ export const langFr =
             btn01: "Tamam",   // BAK
             msgSuccess: "Mail gönderimi başarılı !",   // BAK
             msgFailed: "Mail gönderimi başarısız !"   // BAK
+        },
+        popRound : 
+        {
+            title : "Lütfen Tuvarlamak İstediğiniz Tutarı Giriniz",    // BAK
+            total : "Tutar",  // BAK
         },
     },
     ftr_02_005 : // "Şube Satış Faturası"
@@ -5176,6 +5202,11 @@ export const langFr =
             msgSuccess: "Mail gönderimi başarılı !",   // BAK
             msgFailed: "Mail gönderimi başarısız !"   // BAK
         },
+        popRound : 
+        {
+            title : "Lütfen Tuvarlamak İstediğiniz Tutarı Giriniz",    // BAK
+            total : "Tutar",  // BAK
+        },
     },
     ftr_02_006 : // "Fiyat Farkı Alış Faturası"
     {
@@ -5490,6 +5521,11 @@ export const langFr =
             title: "Attention",
             btn01:"Aller au document",
             msg: "Document trouvé !"
+        },
+        popRound : 
+        {
+            title : "Lütfen Tuvarlamak İstediğiniz Tutarı Giriniz",    // BAK
+            total : "Tutar",  // BAK
         },
     },
     ftr_02_007 : // "İade Alış Faturası"
@@ -5830,6 +5866,11 @@ export const langFr =
             clmQuantity : "Quantité",   
             clmPrice : "Prix",   
             clmTotal : "Total"   
+        },
+        popRound : 
+        {
+            title : "Lütfen Tuvarlamak İstediğiniz Tutarı Giriniz",    // BAK
+            total : "Tutar",  // BAK
         },
     },
     ftr_02_008 : // "Şube Alış Faturası"
@@ -6239,6 +6280,11 @@ export const langFr =
             btn01: "Tamam",   // BAK
             msgSuccess: "Mail gönderimi başarılı !",   // BAK
             msgFailed: "Mail gönderimi başarısız !"   // BAK
+        },
+        popRound : 
+        {
+            title : "Lütfen Tuvarlamak İstediğiniz Tutarı Giriniz",    // BAK
+            total : "Tutar",  // BAK
         },
     },
     ftr_04_001 : // "Proforma Fiyat Farkı Faturası" 
@@ -7324,7 +7370,9 @@ export const langFr =
             clmCode: "Code",     
             clmName: "Nom",     
             clmPrice: "Ancien Prix",     
-            clmPrice2: "Nouveau Prix",     
+            clmPrice2: "Nouveau Prix",    
+            clmSalePrice :"Satış Fiyatı",  // BAK
+            clmMargin : "Marj"  // BAK
         },
         pg_txtBarcode : 
         {

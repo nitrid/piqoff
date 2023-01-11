@@ -120,29 +120,11 @@ export default class posDoc extends React.PureComponent
             }
             else
             {
-                this.getItem(tmpBarkod)
+                this.getItem(this.txtBarcode.value + tmpBarkod)
             }
         })
 
         this.init();
-        //DATA TRANSFER İŞLEMİ
-        this.transfer = new transferCls();
-        this.interval = null;
-        this.transferStart();
-        this.transferLocal();
-        //DATA TRANSFER İÇİN EVENT.
-        this.transfer.on('onState',(pParam)=>
-        {
-            if(pParam.tag == 'progress')
-            {
-                this.transProgress.value = pParam.index + " / " + pParam.count
-            }
-            else
-            {
-                this.msgTransfer2.value = pParam.text + " " + this.lang.t("popTransfer.msg3")
-            }
-        })
-        //****************************** */
 
         this.core.socket.on('connect',async () => 
         {               
@@ -352,7 +334,10 @@ export default class posDoc extends React.PureComponent
         this.posObj.dt()[this.posObj.dt().length - 1].DEVICE = this.state.isFormation ? '9999' : window.localStorage.getItem('device') == null ? '' : window.localStorage.getItem('device')
         this.device.value = this.posObj.dt()[this.posObj.dt().length - 1].DEVICE
         
-        await this.posDevice.load({CODE:this.posObj.dt()[this.posObj.dt().length - 1].DEVICE})        
+        if(this.posObj.dt()[this.posObj.dt().length - 1].DEVICE != '9999')
+        {
+            await this.posDevice.load({CODE:this.posObj.dt()[this.posObj.dt().length - 1].DEVICE})        
+        }
         this.posDevice.scanner();       
          
         if(!this.isFirstOpen)
@@ -388,6 +373,24 @@ export default class posDoc extends React.PureComponent
                     await dialog(tmpConfObj);
                 }                
             }
+            //DATA TRANSFER İŞLEMİ
+            this.transfer = new transferCls();
+            this.interval = null;
+            this.transferStart();
+            this.transferLocal();
+            //DATA TRANSFER İÇİN EVENT.
+            this.transfer.on('onState',(pParam)=>
+            {
+                if(pParam.tag == 'progress')
+                {
+                    this.transProgress.value = pParam.index + " / " + pParam.count
+                }
+                else
+                {
+                    this.msgTransfer2.value = pParam.text + " " + this.lang.t("popTransfer.msg3")
+                }
+            })
+            //****************************** */
         }
 
         await this.grdList.dataRefresh({source:this.posObj.posSale.dt()});
@@ -1177,7 +1180,7 @@ export default class posDoc extends React.PureComponent
             }            
             //console.log("100 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS")) 
             //HER EKLEME İŞLEMİNDEN SONRA İLK SATIR SEÇİLİYOR.
-            setTimeout(() => 
+            setTimeout(async() => 
             {
                 this.grdList.devGrid.selectRowsByIndexes(0)
                 this.grdList.devGrid.option('focusedRowIndex',0)
@@ -1476,7 +1479,7 @@ export default class posDoc extends React.PureComponent
                             let tmpConfObj =
                             {
                                 id:'msgMoneyChange',
-                                timeout:10000,
+                                timeout:20000,
                                 showTitle:true,
                                 title:this.lang.t("msgMoneyChange.title"),
                                 showCloseButton:true,
@@ -2363,11 +2366,12 @@ export default class posDoc extends React.PureComponent
             })
         });
     }
-    transferStart(pTime,pClear)
+    async transferStart(pTime,pClear)
     {
         let tmpCounter = 0
         let tmpPrmTime = typeof pTime != 'undefined' ? pTime : this.prmObj.filter({ID:'TransferTime',TYPE:0}).getValue()
-
+        console.log(this.prmObj.filter({ID:'TransferTime',TYPE:0}))
+        console.log(this.prmObj)
         this.interval = setInterval(async ()=>
         {
             this.msgTransfer1.value = this.lang.t("popTransfer.msg1") + (tmpPrmTime - tmpCounter).toString() + " Sn."
@@ -3851,7 +3855,7 @@ export default class posDoc extends React.PureComponent
                                     {/* Subtotal */}
                                     <div className="col px-1">
                                         <NbButton id={"btnSubtotal"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}
-                                        onClick={()=>
+                                        onClick={async()=>
                                         {
                                             let tmpData = this.posObj.posSale.dt().where({SUBTOTAL:0})
                                             let tmpMaxSub = this.posObj.posSale.dt().where({SUBTOTAL:{'<>':-1}}).max('SUBTOTAL') + 1
@@ -3860,6 +3864,7 @@ export default class posDoc extends React.PureComponent
                                                 tmpData[i].SUBTOTAL = tmpMaxSub
                                             }
                                             this.calcGrandTotal()
+                                            console.log(this.posObj.posSale.dt())
                                         }}>
                                             <i className="text-white fa-solid fa-square-root-variable" style={{fontSize: "24px"}} />
                                         </NbButton>
@@ -6729,7 +6734,7 @@ export default class posDoc extends React.PureComponent
                     >
                         <Form colCount={2} height={'fit-content'} id={"frmSettings"}>
                             <Item>
-                                <Label text={"LCD Port"} alignment="right" />
+                                <Label text={this.lang.t("popSettings.lcdPort")} alignment="right" />
                                 <NdTextBox id={"txtPopSettingsLcd"} parent={this} simple={true} valueChangeEvent="keyup" 
                                 onValueChanging={(e)=>
                                 {       
@@ -6743,7 +6748,7 @@ export default class posDoc extends React.PureComponent
                                 }}/>
                             </Item>
                             <Item>
-                                <Label text={"Scale Port"} alignment="right" />
+                                <Label text={this.lang.t("popSettings.scalePort")} alignment="right" />
                                 <NdTextBox id={"txtPopSettingsScale"} parent={this} simple={true} valueChangeEvent="keyup" 
                                 onValueChanging={(e)=>
                                 {
@@ -6757,7 +6762,7 @@ export default class posDoc extends React.PureComponent
                                 }}/>
                             </Item>
                             <Item>
-                                <Label text={"Pay Card Port"} alignment="right" />
+                                <Label text={this.lang.t("popSettings.payCardPort")} alignment="right" />
                                 <NdTextBox id={"txtPopSettingsPayCard"} parent={this} simple={true} valueChangeEvent="keyup" 
                                 onValueChanging={(e)=>
                                 {
@@ -6771,7 +6776,7 @@ export default class posDoc extends React.PureComponent
                                 }}/>
                             </Item>
                             <Item>
-                                <Label text={"Yazdırma Dizayn"} alignment="right" />
+                                <Label text={this.lang.t("popSettings.printDesing")} alignment="right" />
                                 <NdTextBox id={"txtPopSettingsPrint"} parent={this} simple={true} valueChangeEvent="keyup" 
                                 onValueChanging={(e)=>
                                 {

@@ -486,7 +486,8 @@ export class docCustomerCls
             EXPIRY_DATE :  moment(new Date()).format("YYYY-MM-DD"),
             EXPIRY_FEE : 0,
             INPUT_BALANCE  : 0,
-            OUTPUT_BALANCE  : 0
+            OUTPUT_BALANCE  : 0,
+            ROUND : 0
         }
 
         this._initDs();
@@ -520,10 +521,11 @@ export class docCustomerCls
                     "@DESCRIPTION  = @PDESCRIPTION, " +
                     "@INVOICE_GUID = @PINVOICE_GUID, "+
                     "@EXPIRY_DATE = @PEXPIRY_DATE, "+
-                    "@EXPIRY_FEE = @PEXPIRY_FEE ",
+                    "@EXPIRY_FEE = @PEXPIRY_FEE, " +
+                    "@ROUND = @PROUND",
             param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PTYPE:int','PDOC_TYPE:int','PREBATE:int','PREF:string|25','PREF_NO:int','PDOC_DATE:date','PINPUT:string|50',
-                        'POUTPUT:string|50','PPAY_TYPE:int','PAMOUNT:float','PDESCRIPTION:string|100','PINVOICE_GUID:string|50','PEXPIRY_DATE:date','PEXPIRY_FEE:float'],
-            dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','INPUT','OUTPUT','PAY_TYPE','AMOUNT','DESCRIPTION','INVOICE_GUID','EXPIRY_DATE','EXPIRY_FEE']
+                        'POUTPUT:string|50','PPAY_TYPE:int','PAMOUNT:float','PDESCRIPTION:string|100','PINVOICE_GUID:string|50','PEXPIRY_DATE:date','PEXPIRY_FEE:float','PROUND:float'],
+            dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','INPUT','OUTPUT','PAY_TYPE','AMOUNT','DESCRIPTION','INVOICE_GUID','EXPIRY_DATE','EXPIRY_FEE','ROUND']
         }
         tmpDt.updateCmd = 
         {
@@ -544,10 +546,11 @@ export class docCustomerCls
                     "@DESCRIPTION  = @PDESCRIPTION, " +
                     "@INVOICE_GUID = @PINVOICE_GUID, "+
                     "@EXPIRY_DATE = @PEXPIRY_DATE, "+
-                    "@EXPIRY_FEE = @PEXPIRY_FEE ",
+                    "@EXPIRY_FEE = @PEXPIRY_FEE, " +
+                    "@ROUND = @PROUND",
             param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PTYPE:int','PDOC_TYPE:int','PREBATE:int','PREF:string|25','PREF_NO:int','PDOC_DATE:date','PINPUT:string|50',
-                        'POUTPUT:string|50','PPAY_TYPE:int','PAMOUNT:float','PDESCRIPTION:string|100','PINVOICE_GUID:string|50','PEXPIRY_DATE:date','PEXPIRY_FEE:float'],
-            dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','INPUT','OUTPUT','PAY_TYPE','AMOUNT','DESCRIPTION','INVOICE_GUID','EXPIRY_DATE','EXPIRY_FEE']
+                        'POUTPUT:string|50','PPAY_TYPE:int','PAMOUNT:float','PDESCRIPTION:string|100','PINVOICE_GUID:string|50','PEXPIRY_DATE:date','PEXPIRY_FEE:float','PROUND:float'],
+            dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','INPUT','OUTPUT','PAY_TYPE','AMOUNT','DESCRIPTION','INVOICE_GUID','EXPIRY_DATE','EXPIRY_FEE','ROUND']
         }
         tmpDt.deleteCmd = 
         {
