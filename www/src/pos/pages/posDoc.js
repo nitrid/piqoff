@@ -4117,21 +4117,31 @@ export default class posDoc extends React.PureComponent
                                             [
                                                 {
                                                     id:"btn01",
-                                                    style:{height:'66px',width:'100%'},
+                                                    style:{height:'50px',width:'100%'},
                                                     icon:"fa-money-bill-1",
-                                                    text:"ESC"
+                                                    text:"ESC",
+                                                    index:0,
                                                 },
                                                 {
                                                     id:"btn02",
-                                                    style:{height:'66px',width:'100%'},
+                                                    style:{height:'50px',width:'100%'},
                                                     icon:"fa-credit-card",
-                                                    text:"CB"
+                                                    text:"CB",
+                                                    index:1,
                                                 },
                                                 {
                                                     id:"btn03",
-                                                    style:{height:'66px',width:'100%'},
+                                                    style:{height:'50px',width:'100%'},
                                                     icon:"fa-rectangle-list",
-                                                    text:"CHQ"
+                                                    text:"CHQ",
+                                                    index:2,
+                                                },
+                                                {
+                                                    id:"btn04",
+                                                    style:{height:'50px',width:'100%'},
+                                                    icon:"fa-file-invoice-dollar",
+                                                    text:"VIRM",
+                                                    index:6,
                                                 }
                                             ]
                                         }/>
@@ -5875,25 +5885,36 @@ export default class posDoc extends React.PureComponent
                                                 id:"btn01",
                                                 style:{height:'49px',width:'100%'},
                                                 icon:"fa-money-bill-1",
-                                                text:"ESC"
+                                                text:"ESC",
+                                                index:0,
                                             },
                                             {
                                                 id:"btn02",
                                                 style:{height:'49px',width:'100%'},
                                                 icon:"fa-credit-card",
-                                                text:"CB"
+                                                text:"CB",
+                                                index:1,
                                             },
                                             {
                                                 id:"btn03",
                                                 style:{height:'49px',width:'100%'},
                                                 icon:"fa-rectangle-list",
-                                                text:"CHQ"
+                                                text:"CHQ",
+                                                index:2,
                                             },
                                             {
                                                 id:"btn04",
                                                 style:{height:'49px',width:'100%'},
                                                 icon:"fa-rectangle-list",
-                                                text:"CHQe"
+                                                text:"CHQe",
+                                                index:3,
+                                            },
+                                            {
+                                                id:"btn05",
+                                                style:{height:'49px',width:'100%'},
+                                                icon:"fa-file-invoice-dollar",
+                                                text:"VIRM",
+                                                index:6,
                                             }
                                         ]}/>
                                     </div>
@@ -6048,10 +6069,22 @@ export default class posDoc extends React.PureComponent
                                                     {
                                                         tmpTypeName = "BON D'AVOIR"
                                                     }
-                                                        
+                                                    else if(this.rbtnTotalPayType.value == 5)
+                                                    {
+                                                        tmpTypeName = "AVOIR"
+                                                    }
+                                                    else if(this.rbtnTotalPayType.value == 6)
+                                                    {
+                                                        tmpTypeName = "VIRMENT"
+                                                    }
+                                                    else if(this.rbtnTotalPayType.value == 7)
+                                                    {
+                                                        tmpTypeName = "PRLV"
+                                                    }
+                                                    
                                                     if(tmpChange < 0)
                                                     {
-                                                        if(this.rbtnTotalPayType.value == 0)
+                                                        if(this.rbtnTotalPayType.value == 0 && (this.lastPosSaleDt[0].GRAND_TOTAL - this.lastPosPayDt.sum('AMOUNT')) > 0)
                                                         {
                                                             tmpChange = tmpChange * -1
                                                             tmpAmount = this.txtPopLastTotal.value  //- tmpChange

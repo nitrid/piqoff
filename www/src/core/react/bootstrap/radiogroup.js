@@ -93,8 +93,10 @@ export default class NbRadioButton extends NbBase
                             this.state.btnClass[x] = "-outline"
                         }
                         this.state.btnClass[i] = ""
+                        
+                        let tmpIndex = typeof this.props.button[i].index != 'undefined' ? this.props.button[i].index : i
 
-                        this.setState({btnClass:this.state.btnClass,value:i})
+                        this.setState({btnClass:this.state.btnClass,value:tmpIndex})
                         this._onClick(i)
                     }}>
                         {tmpIconFn(this.props.button[i].icon)}
