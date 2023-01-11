@@ -1075,7 +1075,7 @@ export default class salesOrder extends React.PureComponent
                                     onValueChanged={(async()=>
                                     {
                                         this.checkRow()
-                                        if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
+                                        if(this.cmbDepot.value != '' && this.docLocked == false)
                                         {
                                             this.frmdocOffers.option('disabled',false)
                                         }

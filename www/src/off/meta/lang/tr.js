@@ -3625,6 +3625,12 @@ export const langTr =
             title : "Lütfen Tuvarlamak İstediğiniz Tutarı Giriniz",
             total : "Tutar",
         },
+        msgCompulsoryCustomer:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Seçilen Ürün Cariye Tanımlı Değil !"
+        },
     },
     ftr_02_002 : // "Satış Faturası"
     {
@@ -4068,12 +4074,6 @@ export const langTr =
             title: "Dikkat",
             btn01: "Tamam",
             msg: "Evrak Kilitlenmeden Yazdırılamaz !"
-        },
-        msgCompulsoryCustomer:
-        {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Seçilen Ürün Cariye Tanımlı Değil !"
         },
         popRound : 
         {

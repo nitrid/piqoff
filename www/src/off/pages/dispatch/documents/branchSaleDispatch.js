@@ -1256,7 +1256,7 @@ export default class branchSaleDispatch extends React.PureComponent
                                                         this.txtRef.value = data[0].CODE;
                                                         this.txtRef.props.onChange()
                                                     }
-                                                    if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
+                                                    if(this.cmbDepot.value != '' && this.docLocked == false)
                                                     {
                                                         this.frmDocItems.option('disabled',false)
                                                     }
@@ -1309,7 +1309,7 @@ export default class branchSaleDispatch extends React.PureComponent
                                                                 this.txtRef.value = data[0].CODE;
                                                                 this.txtRef.props.onChange()
                                                             }
-                                                            if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
+                                                            if(this.cmbDepot.value != '' && this.docLocked == false)
                                                             {
                                                                 this.frmDocItems.option('disabled',false)
                                                             }

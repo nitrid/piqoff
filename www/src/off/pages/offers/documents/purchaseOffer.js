@@ -1177,7 +1177,7 @@ export default class purchaseoffer extends React.PureComponent
                                                         this.txtRef.value = data[0].CODE;
                                                         this.txtRef.props.onChange()
                                                     }
-                                                    if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
+                                                    if(this.docLocked == false)
                                                     {
                                                         this.frmdocOffers.option('disabled',false)
                                                     }

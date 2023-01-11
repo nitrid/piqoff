@@ -860,7 +860,22 @@ export default class posDoc extends React.PureComponent
                         {
                             if(tmpWResult.Type == "02")
                             {
-                                tmpQuantity = tmpWResult.Result.Scale
+                                if(tmpWResult.Result.Scale > 0)
+                                {
+                                    tmpQuantity = tmpWResult.Result.Scale
+                                }
+                                else
+                                {
+                                    document.getElementById("Sound").play();
+                                    let tmpConfObj =
+                                    {
+                                        id:'msgNotWeighing',showTitle:true,title:this.lang.t("msgNotWeighing.title"),showCloseButton:true,width:'400px',height:'200px',
+                                        button:[{id:"btn01",caption:this.lang.t("msgNotWeighing.btn01"),location:'before'}],
+                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgNotWeighing.msg")}</div>)
+                                    }
+                                    await dialog(tmpConfObj);
+                                    return
+                                }
                             }
                             else
                             {

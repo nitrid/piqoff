@@ -3622,6 +3622,12 @@ export const langFr =
             title : "Lütfen Tuvarlamak İstediğiniz Tutarı Giriniz",    // BAK
             total : "Tutar",  // BAK
         },
+        msgCompulsoryCustomer:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Le Produit Sélectionné n'a pas de Fournisseur Enregistré !"
+        },
     },
     ftr_02_002 : // "Satış Faturası"
     {
@@ -4065,12 +4071,6 @@ export const langFr =
             title: "Dikkat",   // BAK
             btn01: "Tamam",   // BAK
             msg: "Evrak Kilitlenmeden Yazdırılamaz !"   // BAK
-        },
-        msgCompulsoryCustomer:
-        {
-            title: "Attention",
-            btn01: "OK",
-            msg: "Le Produit Sélectionné n'a pas de Fournisseur Enregistré !"
         },
         popRound : 
         {
