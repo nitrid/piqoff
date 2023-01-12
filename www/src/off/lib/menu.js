@@ -188,7 +188,7 @@ export const menu = (e) =>
                     [
                         {
                             id: 'stk_05_001',
-                            text : e.t('menuOff.stk_05_001'),//'Toplu Stok Düzenleme',
+                            text : e.t('menuOff.stk_05_001'),//'',
                             path: 'items/report/itemInventoryReport'
                         },
                     ]

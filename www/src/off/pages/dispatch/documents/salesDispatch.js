@@ -2590,7 +2590,7 @@ export default class salesDispatch extends React.PureComponent
                             <Column dataField="ZIPCODE" caption={this.t("pg_adress.clmZipcode")} width={300} defaultSortOrder="asc" />
                             <Column dataField="COUNTRY" caption={this.t("pg_adress.clmCountry")} width={200}/>
                         </NdPopGrid>
-                           {/* Birim PopUp */}
+                    {/* Birim PopUp */}
                     <div>
                         <NdDialog parent={this} id={"msgUnit"} 
                         visible={false}
