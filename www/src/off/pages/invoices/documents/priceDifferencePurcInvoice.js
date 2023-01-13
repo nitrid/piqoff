@@ -450,7 +450,7 @@ export default class priceDifferenceInvoice extends React.PureComponent
                 value={e.value}
                 onChange={(r)=>
                 {
-                    this.grdPurcInv.devGrid.cellValue(e.rowIndex,"DISCOUNT",r.component._changedValue)
+                    this.grdDiffInv.devGrid.cellValue(e.rowIndex,"DISCOUNT",r.component._changedValue)
                 }}
                 button=
                 {
@@ -492,7 +492,7 @@ export default class priceDifferenceInvoice extends React.PureComponent
                 value={e.value}
                 onChange={(r)=>
                 {
-                    this.grdPurcInv.devGrid.cellValue(e.rowIndex,"DISCOUNT_RATE",r.component._changedValue)
+                    this.grdDiffInv.devGrid.cellValue(e.rowIndex,"DISCOUNT_RATE",r.component._changedValue)
                 }}
                 button=
                 {

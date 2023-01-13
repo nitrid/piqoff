@@ -4507,7 +4507,6 @@ export default class purchaseInvoice extends React.PureComponent
                             </Form>
                         </NdDialog>
                     </div> 
-                    {/* Profo
                     {/* Proforma Grid */}
                     <NdPopGrid id={"pg_proformaGrid"} parent={this} container={"#root"}
                     visible={false}
