@@ -471,7 +471,7 @@ export default class salesInvoice extends React.PureComponent
                 value={e.value}
                 onChange={(r)=>
                 {
-                    this.grdPurcInv.devGrid.cellValue(e.rowIndex,"DISCOUNT",r.component._changedValue)
+                    this.grdSlsInv.devGrid.cellValue(e.rowIndex,"DISCOUNT",r.component._changedValue)
                 }}
                 button=
                 {
@@ -513,7 +513,7 @@ export default class salesInvoice extends React.PureComponent
                 value={e.value}
                 onChange={(r)=>
                 {
-                    this.grdPurcInv.devGrid.cellValue(e.rowIndex,"DISCOUNT_RATE",r.component._changedValue)
+                    this.grdSlsInv.devGrid.cellValue(e.rowIndex,"DISCOUNT_RATE",r.component._changedValue)
                 }}
                 button=
                 {
