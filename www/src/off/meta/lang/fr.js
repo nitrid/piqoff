@@ -8359,7 +8359,7 @@ export const langFr =
         },
 
     },
-    irs_01_002 : //"Satış İrsaliye Listesi"
+    irs_01_002 : // "Satış İrsaliye Listesi"
     {
         cmbCustomer :"Fournisseur",
         btnGet :"Rechercher",
@@ -11213,8 +11213,8 @@ export const langFr =
         {
             title : "Sélection Documents",
             clmDate : "Date",
-            clmRef : "Serie",
-            clmRefNo : "Numéro",
+            clmCode : "Code",     
+            clmName : "Nom",
             clmOutputName : "Nom Fournisseur",
             clmOutputCode  : "Code Client",
         },
@@ -11304,7 +11304,8 @@ export const langFr =
             dtPopEndDate : "Fin "
         },
         validCustomerCode : "Le Code Produit ne peut être Vide ",
-        txtRefRefno : "Réf.-Réf.No:",    
+        txtCode : "Code",
+        txtName : "Nom",
         startDate :"Date Début",    
         finishDate : "Date Fin",    
         msgMissItemCode:    
@@ -11354,6 +11355,7 @@ export const langFr =
             btn01: "OK",    
             msg: "Veuillez saisir l'en-tête avant l'achèvement !"    
         },
+        validCode :"Code ne peut être vide !",
     },
     cnt_02_002 : // "Satış Anlaşması"
     {
@@ -11366,8 +11368,8 @@ export const langFr =
         {     
             title : "Sélection Documents",     
             clmDate : "Date",
-            clmRef : "Réf.",     
-            clmRefNo : "Réf. No:",     
+            clmCode : "Code",     
+            clmName : "Nom",     
             clmOutputName : "Nom Fournisseur",     
             clmOutputCode  : "Code Client",     
         },     
@@ -11457,7 +11459,8 @@ export const langFr =
             msg: "Ne Peut Etre Remisé plus que L'Autorisation.!! Montant Autorisé : "
         },
         validCustomerCode : "Le Code Produit ne peut être Vide ",
-        txtRefRefno : "Réf.-Réf. No:",   
+        txtCode : "Code",
+        txtName : "Nom",
         startDate :"Date Début",   
         finishDate : "Date Fin",   
         msgMissItemCode:   
@@ -11507,114 +11510,7 @@ export const langFr =
             btn01: "OK",   
             msg: "Veuillez saisir les en-têtes avant l'achèvement !"   
         },
-    },
-    cnt_02_003 : // "Satış Fiyat Listesi"
-    {
-        validItemsCode : "Sélectionner Produit",
-        txtCode : "Liste Kodu", // BAK
-        txtName : "Liste Adı", // BAK
-        pg_Docs : 
-        {
-            title : "Evrak Seçimi",
-            clmCode : "KODU",
-            clmName : "ADI",
-        },
-        pg_txtPopItemsCode : 
-        {
-            title : "Sélectionner Produit",
-            clmCode :  "Référence Produit",
-            clmName : "Nom Produit",
-            clmCostPrice :  "Prix D'Achat",
-            clmSalesPrice : "Prix De Vente"
-        },
-        msgSave:
-        {
-            title: "Attention",
-            btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes-vous sur de vouloir enregistrer !"
-        },
-        msgSaveResult:
-        {
-            title: "Attention",
-            btn01: "OK",
-            msgSuccess: "Enregistré avec succès !",
-            msgFailed: "Enregistrement échoué !"
-        },
-        msgSaveValid:
-        {
-            title: "Attention",
-            btn01: "OK",
-            msg: "Veuillez saisir les zones nécessaire !"
-        },
-        msgDelete:
-        {
-            title: "Attention",
-            btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
-        },
-        msgNotCustomer:
-        {
-            title: "Attention",
-            btn01: "OK",
-            msg: "Fournisseur Inconnu"
-        },
-        grpPriceList: 
-        {
-            clmItemCode: "Kodu",   // BAK
-            clmItemName: "Adı",   // BAK
-            clmPrice: "Fiyat",   // BAK
-            clmVatExtPrice : "Vergi Hariç Fiyat",   // BAK
-            clmCreateDate: "Kayıt Tarihi",   // BAK
-        },
-        msgMissItemCode:   
-        {   
-            title: "Attention",   
-            btn01: "OK",   
-            msg: "Code non trouvé :"   
-        },   
-        msgMultiCodeCount:   
-        {   
-            title: "Attention",   
-            btn01: "OK",   
-            msg: "Nombre de produit ajouté"   
-        },   
-        popMultiItem:   
-        {   
-            title: "Ajouté plusieurs produits",   
-            btnApprove: "Chercher Produits",   
-            btnClear : "Vider",   
-            btnSave : "Ajoutez les lignes",   
-        },   
-        cmbMultiItemType :    
-        {   
-            title : "Type de Recherche",   
-            customerCode : "En Fonction du Code Fournisseur ",   
-            ItemCode : "En fonction du code produit"   
-        },   
-        grdMultiItem :    
-        {   
-            clmCode : "Référence Produit",   
-            clmMulticode : "FRN.Code",   
-            clmName : "Nom Produit",   
-            clmQuantity : "Quantité",   
-            clmPrice : "Prix Achat"   
-        },   
-        msgMultiData:   
-        {   
-            title: "Attention",   
-            btn01: "Videz la liste et ajouter le tout",   
-            btn02: "Ajouter les nouveaux à la liste",   
-            msg: "Produits déja existant ! "   
-        },   
-        tagItemCodePlaceholder: "Saisir les codes que vous voulez rajouter",   
-        msgDocValid:   
-        {   
-            title: "Attention",   
-            btn01: "OK",   
-            msg: "Veuillez saisir les en-têtes avant l'achèvement !"   
-        },
+        validCode :"Code ne peut être vide !",
     },
     fns_01_001 : // "Ödeme Listesi",
     {
