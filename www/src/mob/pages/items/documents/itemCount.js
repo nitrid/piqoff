@@ -138,6 +138,17 @@ export default class itemCount extends React.PureComponent
     }
     async addItem(pQuantity)
     {    
+        if(this.txtBarcode.value == "")
+        {
+            let tmpConfObj = 
+            {
+                id:'msgBarcodeCheck',showTitle:true,title:this.t("msgBarcodeCheck.title"),showCloseButton:true,width:'350px',height:'200px',
+                button:[{id:"btn01",caption:this.t("msgBarcodeCheck.btn01"),location:'after'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgBarcodeCheck.msg")}</div>)
+            }
+            await dialog(tmpConfObj);
+            return
+        }
         if(pQuantity > 10001)
         {
             let tmpConfObj = 
