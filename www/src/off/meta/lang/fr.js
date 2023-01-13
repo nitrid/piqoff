@@ -104,7 +104,7 @@ export const langFr =
         stk_01_003: "Saisie prix",
         stk_01_004: "Saisie unité",
         stk_01_005: "Saisie multi code barre",
-        stk_01_006: "Saisie dépot/magasin",
+        stk_01_006: "Saisie dépôt/magasin",
         stk_01_007: "Description des services",  
         stk_01_008: "Désignation groupe produit", 
         stk_01_009: "Désignation Groupe Sous-Produit", 
@@ -127,7 +127,7 @@ export const langFr =
         stk_04_002: "Traitement retour",
         stk_04_003 : "Traitement inventaire",
         stk_04_004 :"Traitement DLC",
-        stk_05_001 : "Depo Envanter Raporu", // BAK
+        stk_05_001 : "Rapport Inventaire Dépôt", // BAK
         cri: "Fournisseur - Client",
         cri_01: "Saisie",
         cri_02: "Listes",
@@ -298,7 +298,7 @@ export const langFr =
     },
     login:
     {
-        login:"Valide",
+        login:"Valider",
         logout : "Annuler",
         selectUser : "Choix utilisateur",
     },
@@ -322,7 +322,7 @@ export const langFr =
         txtItemName: "Nom du produit",
         txtShortName: "Désignation Courte",
         chkActive: "Produit Actif",
-        chkCaseWeighed: "Peser Produit en caisse? ",
+        chkCaseWeighed: "Peser Produit en caisse",
         chkLineMerged: "Détacher les Lignes à la Caisse",
         chkTicketRest: "Ticket Rest.",
         txtCostPrice: "Prix de Revient",
@@ -517,8 +517,8 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes-vous sur de vouloir enregistrer !"
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de vouloir enregistrer !"
         },
         msgSaveResult:
         {
@@ -531,13 +531,13 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessaire !"
+            msg: "Veuillez saisir les zones nécessaires !"
         },
         msgDelete:
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
         },
         msgCostPriceValid:
@@ -550,7 +550,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessaire !"
+            msg: "Veuillez saisir les zones nécessaires !"
         },
         tabTitleSalesPriceHistory : "Historique Prix de Vente",
         grdSalesPrice : 
@@ -599,7 +599,7 @@ export const langFr =
         },
         dtFirstAnalysis : "Début",  
         dtLastAnalysis : "Fin", 
-        btnGet : "Validé", 
+        btnGet : "Valider", 
         msgNotDelete: 
         {
             title: "Attention",
@@ -624,7 +624,7 @@ export const langFr =
         MainUnit : "Code barre saisie à l'unité principale" , 
         SubUnit : "Code barre saisie au contenu principal",
         txtUnitTypeName :"Motif",
-        barcodePlace : "Entrez le code barre que vous souhaitez ajouter pour le stock sélectionné.", 
+        barcodePlace : "Entrer le code barre que vous souhaitez ajouter pour le stock sélectionné.", 
         pg_txtItem:
         {
             title: "Sélection Produit",
@@ -657,7 +657,7 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Etes-vous sur de vouloir enregistrer !"
+            msg: "Etes-vous sûr(e) de vouloir enregistrer !"
         },
         msgSaveResult:
         {
@@ -677,7 +677,7 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonne",
-            msg: "Etes-vous sur de vouloir supprimer l'enregistrement ?" ,
+            msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?" ,
         },
         validCode :"Veuillez Sélectionner le Produit",
     },
@@ -696,7 +696,7 @@ export const langFr =
         },
         pg_txtCode : 
         {
-            title : "Sélection Dépot",
+            title : "Sélection Dépôt",
             clmCode : "Code",
             clmName : "Nom",
             clmType : "Type",
@@ -705,8 +705,8 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes-vous sur de vouloir enregistrer !" ,
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de vouloir enregistrer !" ,
         },
         msgSaveResult:
         {
@@ -725,7 +725,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?" ,
         },
         msgCode : 
@@ -762,7 +762,7 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonne",
-            msg: "Êtes-vous sûr de vouloir enregistrer? "
+            msg: "Êtes-vous sûr(e) de vouloir enregistrer? "
         },
         msgSaveResult:
         {
@@ -781,13 +781,13 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Voulez-vous vraiment supprimer l'enregistrement ?"
         },
         msgCode : 
         {
             title: "Attention",
-            btn01: "Entrez la carte",
+            btn01: "Entrer la carte",
             btn02: "OK",
             msg : "Le code de service que vous avez saisi est enregistré dans le système !"
         },
@@ -822,8 +822,8 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes vous sur de vouloir enregistrer !"
+            btn02: "Abandonner",
+            msg: "Etes vous sûr(e) de vouloir enregistrer !"
         },
         msgSaveResult:
         {
@@ -842,8 +842,8 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes-vous sur de vouloir supprimer l'enregistrement ?"
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
         },
         msgCode : 
         {
@@ -857,7 +857,7 @@ export const langFr =
     stk_02_001 : // Sayım Evrakı"
     {
         txtRefRefno : "Réf.-Réf no:",
-        cmbDepot: "Dépot inventaire",
+        cmbDepot: "Dépôt inventaire",
         dtDocDate : "Date",
         txtBarcode : "Ajouter Code Barre",
         txtQuantity :"Quantité",
@@ -897,7 +897,7 @@ export const langFr =
         {
             title: "Veuillez Saisir MDP Administrateur pour Accès au Document ",
             Password : "Mot de passe",
-            btnApprove : "Valide" ,
+            btnApprove : "Valider" ,
         },
         msgDocValid:
         {
@@ -909,14 +909,14 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes-vous sur de vouloir enregistrer !" ,
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de vouloir enregistrer !" ,
         },
         msgQuantity:
         {
             title: "Attention",
             btn01: "Ajouter",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Veuillez Saisir la Quantité !" ,
         },
         msgSaveResult:
@@ -930,7 +930,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessaire !",
+            msg: "Veuillez saisir les zones nécessaires !",
         },
         msgDelete:
         {
@@ -943,7 +943,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "Continue",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Chiffre Saisi Supérieur à 1000 Voulez Voulez vous Continuer ?",
         },
         msgLocked:
@@ -987,7 +987,7 @@ export const langFr =
             title: "Attention",
             btn01: "Regroupe",
             btn02: "Modifier",
-            btn03: "Abandonne",
+            btn03: "Abandonner",
             msg: "Produit Existant dans Document ! Voulez vous Combiner ?"
         },
         validRef :"Saisir Réf ",
@@ -1076,7 +1076,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Etes-vous sur de vouloir enregistrer !"
         },
         msgSaveResult:
@@ -1096,7 +1096,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
         },
         msgLocked:
@@ -1244,7 +1244,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Etes-vous sur de vouloir enregistrer !"
         },
         msgSaveResult:
@@ -1264,7 +1264,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
         },
         msgLocked:
@@ -1432,15 +1432,15 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Ajout De Produit Selon Vos Critères.Validez-vous ?"
         },
         msgSave:
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes-vous sur de vouloir enregistrer !"
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de vouloir enregistrer !"
         },
         msgSaveResult:
         {
@@ -1459,7 +1459,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
         },
         msgLocked:
@@ -2526,22 +2526,22 @@ export const langFr =
     },
     stk_05_001 : // "Depo Envanter Raporu"
     {
-        chkZeroQuantity : "0 Miktarlar Gösterilsin", // BAK
-        cmbDepot : "Depo", // BAK
-        btnCheck : "Aktif", // BAK
-        btnGet :"Getir", // BAK
+        chkZeroQuantity : "Afficher quantité zéro", // BAK
+        cmbDepot : "Dépôt", // BAK
+        btnCheck : "Actif", // BAK
+        btnGet :"Rechercher", // BAK
         grdListe : 
         {
-            clmCode: "Kodu", // BAK
-            clmName : "Adı",           // BAK
-            clmQuantity : "Adet", // BAK
-            clmBarcode : "Barkodu", // BAK
-            clmCostPrice : "Maliyet Fiyatı",    // BAK
-            clmTotalCost : "Envanter Değeri",    // BAK
-            clmSalePrice : "Satış Fiyatı",    // BAK
-            clmTotalPrice : "Toplam Satış Değeri"    // BAK
+            clmCode: "Code", // BAK
+            clmName : "Nom",           // BAK
+            clmQuantity : "Quantité", // BAK
+            clmBarcode : "Code barre", // BAK
+            clmCostPrice : "Prix d'achat",    // BAK
+            clmTotalCost : "Valeur prix d'achat",    // BAK
+            clmSalePrice : "Prix de vente",    // BAK
+            clmTotalPrice : "Valeur total des ventes"    // BAK
         },
-        txtTotalQuantity : "Toplam Miktar",
+        txtTotalQuantity : "Total Quantité",
         txtTotalCost : "Envanter Değeri",
     },
     cri_01_001: // "Cari Tanımları"
@@ -2643,8 +2643,8 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes-vous sur de vouloir enregistrer !"
+            btn02: "Abandonner",
+            msg: "Etês-vous sûr(e) de vouloir enregistrer !"
         },
         msgSaveResult:
         {
@@ -2681,7 +2681,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
         },
         cmbTypeData : 
@@ -2749,8 +2749,8 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes-vous sur de vouloir enregistrer !"
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de vouloir enregistrer !"
         },
         msgSaveResult:
         {
@@ -2763,14 +2763,14 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessaire !"
+            msg: "Veuillez saisir les zones nécessaires !"
         },
         msgDelete:
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes-vous sur de vouloir supprimer l'enregistrement ?"
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
         },
         msgCode : 
         {
@@ -3619,8 +3619,8 @@ export const langFr =
         },
         popRound : 
         {
-            title : "Lütfen Tuvarlamak İstediğiniz Tutarı Giriniz",    // BAK
-            total : "Tutar",  // BAK
+            title : "Veuillez saisir le montant que vous souhaitez arrondir",    // BAK
+            total : "Montant",  // BAK
         },
         msgCompulsoryCustomer:
         {
@@ -4068,14 +4068,14 @@ export const langFr =
         },
         msgPrintforLocked:
         {
-            title: "Dikkat",   // BAK
-            btn01: "Tamam",   // BAK
+            title: "Attention",   // BAK
+            btn01: "OK",   // BAK
             msg: "Evrak Kilitlenmeden Yazdırılamaz !"   // BAK
         },
         popRound : 
         {
-            title : "Lütfen Tuvarlamak İstediğiniz Tutarı Giriniz",    // BAK
-            total : "Tutar",  // BAK
+            title : "Veuillez saisir le montant que vous souhaitez arrondir",    // BAK
+            total : "Montant",  // BAK
         },
     },
     ftr_02_003 : // "İade Faturası"
@@ -4438,15 +4438,15 @@ export const langFr =
         },
         msgMailSendResult:
         {
-            title: "Dikkat",   // BAK
-            btn01: "Tamam",   // BAK
-            msgSuccess: "Mail gönderimi başarılı !",   // BAK
-            msgFailed: "Mail gönderimi başarısız !"   // BAK
+            title: "Attention",   // BAK
+            btn01: "OK",   // BAK
+            msgSuccess: "Mail envoyé avec succès !",   // BAK
+            msgFailed: "Echec envoi de Mail !"   // BAK
         },
         popRound : 
         {
-            title : "Lütfen Tuvarlamak İstediğiniz Tutarı Giriniz",    // BAK
-            total : "Tutar",  // BAK
+            title : "Veuillez saisir le montant que vous souhaitez arrondir",    // BAK
+            total : "Montant",  // BAK
         },
     },
     ftr_02_004 : // "Fiyat Farkı Faturası"
@@ -4783,15 +4783,15 @@ export const langFr =
         },
         msgMailSendResult:
         {
-            title: "Dikkat",   // BAK
-            btn01: "Tamam",   // BAK
-            msgSuccess: "Mail gönderimi başarılı !",   // BAK
-            msgFailed: "Mail gönderimi başarısız !"   // BAK
+            title: "Attention",   // BAK
+            btn01: "OK",   // BAK
+            msgSuccess: "Mail envoyé avec succès !",   // BAK
+            msgFailed: "Echec envoie de Mail !"   // BAK
         },
         popRound : 
         {
-            title : "Lütfen Tuvarlamak İstediğiniz Tutarı Giriniz",    // BAK
-            total : "Tutar",  // BAK
+            title : "Veuillez saisir le montant que vous souhaitez arrondir",    // BAK
+            total : "Montant",  // BAK
         },
     },
     ftr_02_005 : // "Şube Satış Faturası"
@@ -5197,15 +5197,15 @@ export const langFr =
         },
         msgMailSendResult:
         {
-            title: "Dikkat",   // BAK
-            btn01: "Tamam",   // BAK
-            msgSuccess: "Mail gönderimi başarılı !",   // BAK
-            msgFailed: "Mail gönderimi başarısız !"   // BAK
+            title: "Attention",   // BAK
+            btn01: "OK",   // BAK
+            msgSuccess: "Mail envoyé avec succès !",   // BAK
+            msgFailed: "Echec d'envoi de Mail !"   // BAK
         },
         popRound : 
         {
-            title : "Lütfen Tuvarlamak İstediğiniz Tutarı Giriniz",    // BAK
-            total : "Tutar",  // BAK
+            title : "Veuillez saisir le montant que vous souhaitez arrondir",    // BAK
+            total : "Montant",  // BAK
         },
     },
     ftr_02_006 : // "Fiyat Farkı Alış Faturası"
@@ -5524,8 +5524,8 @@ export const langFr =
         },
         popRound : 
         {
-            title : "Lütfen Tuvarlamak İstediğiniz Tutarı Giriniz",    // BAK
-            total : "Tutar",  // BAK
+            title : "Veuillez saisir le montant que vous souhaitez arrondir",    // BAK
+            total : "Montant",  // BAK
         },
     },
     ftr_02_007 : // "İade Alış Faturası"
@@ -5869,8 +5869,8 @@ export const langFr =
         },
         popRound : 
         {
-            title : "Lütfen Tuvarlamak İstediğiniz Tutarı Giriniz",    // BAK
-            total : "Tutar",  // BAK
+            title : "Veuillez saisir le motant que vous souhaitez arrondir",    // BAK
+            total : "Montant",  // BAK
         },
     },
     ftr_02_008 : // "Şube Alış Faturası"
@@ -5887,18 +5887,18 @@ export const langFr =
         txtTotal : "Total Général",
         dtShipDate :"Date Expédition",
         getDispatch : "Recherche BL",
-        getPayment : "Ödeme Girişi", // BAK
+        getPayment : "Entrée paiement", // BAK
         cash : "Total" ,
         description :"Motif",
         checkReference : "Référence",
-        btnCash : "Ödeme Ekle", // BAK
+        btnCash : "Ajouter Paiement", // BAK
         btnCheck : "Chèque",
         btnBank : "Virement",
         cmbCashSafe : "Caisse Espèce",
         cmbCheckSafe : "Caisse Chèque",
         cmbBank : "Sélection Banque",
         txtPayInvoıceTotal : "Total Facture",
-        txtPayTotal : "Ödeme Toplamı", // BAK
+        txtPayTotal : "Total Paiement", // BAK
         txtRemainder : "Reste",
         txtBarcode: "Code barre",
         txtBarcodePlace: "Scanner Code Barre...",
@@ -6276,15 +6276,15 @@ export const langFr =
         },
         msgMailSendResult:
         {
-            title: "Dikkat",   // BAK
-            btn01: "Tamam",   // BAK
-            msgSuccess: "Mail gönderimi başarılı !",   // BAK
-            msgFailed: "Mail gönderimi başarısız !"   // BAK
+            title: "Attention",   // BAK
+            btn01: "OK",   // BAK
+            msgSuccess: "Mail envoyé avec succès !",   // BAK
+            msgFailed: "Echec envoie de Mail !"   // BAK
         },
         popRound : 
         {
-            title : "Lütfen Tuvarlamak İstediğiniz Tutarı Giriniz",    // BAK
-            total : "Tutar",  // BAK
+            title : "Veuillez saisir le montant que vous souhaitez arrondir",    // BAK
+            total : "Montant",  // BAK
         },
     },
     ftr_04_001 : // "Proforma Fiyat Farkı Faturası" 
@@ -7371,8 +7371,8 @@ export const langFr =
             clmName: "Nom",     
             clmPrice: "Ancien Prix",     
             clmPrice2: "Nouveau Prix",    
-            clmSalePrice :"Satış Fiyatı",  // BAK
-            clmMargin : "Marj"  // BAK
+            clmSalePrice :"Prix de Vente",  // BAK
+            clmMargin : "Marge"  // BAK
         },
         pg_txtBarcode : 
         {
