@@ -34,8 +34,6 @@ export default class purchaseContract extends React.PureComponent
 
         this._getItems = this._getItems.bind(this)
         this.multiItemData = new datatable
-
-        
     } 
     async componentDidMount()
     {
@@ -80,14 +78,17 @@ export default class purchaseContract extends React.PureComponent
             this.btnDelete.setState({disabled:false});
         })
         this.cmbDepot.value = ''
-        this.txtRef.value =this.user.CODE
         this.txtCustomerCode.value = ''
         this.txtCustomerName.value = ''
+        this.txtCode.value = ''
+        this.txtName.value = ''
+
         this.startDate.value = moment(new Date(0)).format("YYYY-MM-DD")
         this.finishDate.value = moment(new Date(0)).format("YYYY-MM-DD")
-        await this.grdContracts.dataRefresh({source:this.contractObj.dt('SALES_CONTRACT')});
+        await this.grdContracts.dataRefresh({source:this.contractObj.dt('CONTRACT')});
         await this.grdMultiItem.dataRefresh({source:this.multiItemData});
-        this.txtRef.props.onChange()
+
+        this._getItems()
     }
     async _getItems()
     {
@@ -114,8 +115,8 @@ export default class purchaseContract extends React.PureComponent
                                                     
         tmpEmpty.CUSER = this.core.auth.data.CODE,  
         tmpEmpty.CUSER_NAME = this.core.auth.data.NAME,
-        tmpEmpty.REF = this.txtRef.value
-        tmpEmpty.REF_NO = this.txtRefno.value
+        tmpEmpty.CODE = this.txtCode.value
+        tmpEmpty.NAME = this.txtName.value
         tmpEmpty.TYPE = 0,  
         tmpEmpty.ITEM = pData.GUID
         tmpEmpty.ITEM_CODE = pData.CODE
@@ -261,8 +262,8 @@ export default class purchaseContract extends React.PureComponent
             let tmpEmpty = {...this.contractObj.empty};
             
             tmpEmpty.CUSER = this.core.auth.data.CODE,  
-            tmpEmpty.REF = this.txtRef.value
-            tmpEmpty.REF_NO = this.txtRefno.value
+            tmpEmpty.CODE = this.txtCode.value
+            tmpEmpty.NAME = this.txtName.value
             tmpEmpty.TYPE = 0,  
             tmpEmpty.ITEM = this.multiItemData[i].GUID
             tmpEmpty.ITEM_CODE = this.multiItemData[i].CODE
@@ -404,90 +405,60 @@ export default class purchaseContract extends React.PureComponent
                             </Toolbar>
                         </div>
                     </div>
-                     {/* Form */}
-                     <div className="row px-2 pt-2">
+                    {/* Form */}
+                    <div className="row px-2 pt-2">
                         <div className="col-12">
                             <Form colCount={3} id="frmHeader">
-                                  {/* txtRef-Refno */}
-                                  <Item>
-                                    <Label text={this.t("txtRefRefno")} alignment="right" />
-                                    <div className="row">
-                                        <div className="col-4 pe-0">
-                                            <NdTextBox id="txtRef" parent={this} simple={true} dt={{data:this.contractObj.dt('SALES_CONTRACT'),field:"REF"}}
-                                            upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                            maxLength={32}
-                                            onChange={(async(e)=>
+                                {/* txtCode */}
+                                <Item>
+                                    <Label text={this.t("txtCode")} alignment="right" />
+                                    <NdTextBox id="txtCode" parent={this} simple={true} dt={{data:this.contractObj.dt('CONTRACT'),field:"CODE"}}
+                                    button=
+                                    {
+                                        [
                                             {
-                                                let tmpQuery = 
+                                                id:'01',
+                                                icon:'more',
+                                                onClick:()=>
                                                 {
-                                                    query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM SALES_CONTRACT WHERE TYPE = 0  AND REF = @REF ",
-                                                    param : ['REF:string|25'],
-                                                    value : [this.txtRef.value]
-                                                }
-                                                let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                if(tmpData.result.recordset.length > 0)
-                                                {
-                                                    this.txtRefno.value = tmpData.result.recordset[0].REF_NO
-                                                }
-                                            }).bind(this)}
-                                            param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
-                                            access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
-                                            >
-                                            <Validator validationGroup={"frmPurcOrder"  + this.tabIndex}>
-                                                    <RequiredRule message={this.t("validRef")} />
-                                                </Validator>  
-                                            </NdTextBox>
-                                        </div>
-                                        <div className="col-5 ps-0">
-                                            <NdTextBox id="txtRefno" parent={this} simple={true} dt={{data:this.contractObj.dt('SALES_CONTRACT'),field:"REF_NO"}}
-                                            button=
-                                            {
-                                                [
+                                                    this.pg_Docs.show()
+                                                    this.pg_Docs.onClick = async(data) =>
                                                     {
-                                                        id:'01',
-                                                        icon:'more',
-                                                        onClick:()=>
+                                                        if(data.length > 0)
                                                         {
-                                                            this.pg_Docs.show()
-                                                            this.pg_Docs.onClick = async(data) =>
-                                                            {
-                                                                if(data.length > 0)
-                                                                {
-                                                                    await this.contractObj.load({REF:data[0].REF,REF_NO:data[0].REF_NO,TYPE:0});
-                                                                    this.txtCustomerCode.GUID = this.contractObj.dt()[0].CUSTOMER
-                                                                    this._getItems()
-                                                                }
-                                                            }
-                                                                   
-                                                        }
-                                                    },
-                                                    {
-                                                        id:'02',
-                                                        icon:'arrowdown',
-                                                        onClick:()=>
-                                                        {
-                                                            this.txtRefno.value = Math.floor(Date.now() / 1000)
+                                                            await this.contractObj.load({CODE:data[0].CODE,TYPE:0});
+                                                            this.txtCustomerCode.GUID = this.contractObj.dt()[0].CUSTOMER
+                                                            this._getItems()
                                                         }
                                                     }
-                                                ]
-                                            }
-                                            onChange={(async()=>
-                                            {
-                                                let tmpResult = await this.checkDoc('00000000-0000-0000-0000-000000000000',this.txtRef.value,this.txtRefno.value)
-                                                if(tmpResult == 3)
-                                                {
-                                                    this.txtRefno.value = "";
+                                                            
                                                 }
-                                            }).bind(this)}
-                                            param={this.param.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
-                                            access={this.access.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
-                                            >
-                                            <Validator validationGroup={"frmPurcOrder"  + this.tabIndex}>
-                                                    <RequiredRule message={this.t("validRefNo")} />
-                                                </Validator> 
-                                            </NdTextBox>
-                                        </div>
-                                    </div>
+                                            },
+                                            {
+                                                id:'02',
+                                                icon:'arrowdown',
+                                                onClick:()=>
+                                                {
+                                                    this.txtCode.value = Math.floor(Date.now() / 1000)
+                                                }
+                                            }
+                                        ]
+                                    }
+                                    onChange={(async()=>
+                                    {
+                                        let tmpResult = await this.checkDoc('00000000-0000-0000-0000-000000000000',this.txtCode.value)
+                                        if(tmpResult == 3)
+                                        {
+                                            this.txtCode.value = "";
+                                        }
+                                    }).bind(this)}
+                                    param={this.param.filter({ELEMENT:'txtCode',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'txtCode',USERS:this.user.CODE})}
+                                    >
+                                        <Validator validationGroup={"frmPurcOrder"  + this.tabIndex}>
+                                            <RequiredRule message={this.t("validCode")} />
+                                        </Validator> 
+                                    </NdTextBox>                                    
                                     {/*EVRAK SEÇİM */}
                                     <NdPopGrid id={"pg_Docs"} parent={this} container={"#root"}
                                     visible={false}
@@ -497,53 +468,44 @@ export default class purchaseContract extends React.PureComponent
                                     width={'90%'}
                                     height={'90%'}
                                     title={this.t("pg_Docs.title")} 
-                                    data={{source:{select:{query : "SELECT REF,REF_NO,CUSTOMER,CUSTOMER_CODE,CUSTOMER_NAME FROM SALES_CONTRACT_VW_01 WHERE TYPE = 0 GROUP BY REF,REF_NO,CUSTOMER,CUSTOMER_CODE,CUSTOMER_NAME"},sql:this.core.sql}}}
-                                    button=
-                                    {
-                                        [
-                                            {
-                                                id:'01',
-                                                icon:'more',
-                                                onClick:()=>
-                                                {
-                                                   
-                                                }
-                                            }
-                                        ]
-                                        
-                                    }
+                                    data={{source:{select:{query : "SELECT CODE,NAME,CUSTOMER,CUSTOMER_CODE,CUSTOMER_NAME FROM CONTRACT_VW_01 WHERE TYPE = 0 GROUP BY CODE,NAME,CUSTOMER,CUSTOMER_CODE,CUSTOMER_NAME"},sql:this.core.sql}}}
                                     >
-                                        <Column dataField="REF" caption={this.t("pg_Docs.clmRef")} width={150} defaultSortOrder="asc"/>
-                                        <Column dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={300} defaultSortOrder="asc" />
+                                        <Column dataField="CODE" caption={this.t("pg_Docs.clmCode")} width={150} defaultSortOrder="asc"/>
+                                        <Column dataField="NAME" caption={this.t("pg_Docs.clmName")} width={300} defaultSortOrder="asc" />
                                         <Column dataField="CUSTOMER_NAME" caption={this.t("pg_Docs.clmOutputName")} width={300} defaultSortOrder="asc" />
                                         <Column dataField="CUSTOMER_CODE" caption={this.t("pg_Docs.clmOutputCode")} width={300} defaultSortOrder="asc" />
                                         
                                     </NdPopGrid>
                                 </Item>
-                                  {/* cmbDepot */}
-                                  <Item>
+                                {/* txtName */}
+                                <Item>
+                                    <NdTextBox id="txtName" parent={this} simple={true} dt={{data:this.contractObj.dt('CONTRACT'),field:"NAME"}}
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                    maxLength={32}
+                                    param={this.param.filter({ELEMENT:'txtName',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'txtName',USERS:this.user.CODE})}
+                                    >
+                                    </NdTextBox>
+                                </Item>
+                                {/* cmbDepot */}
+                                <Item>
                                     <Label text={this.t("cmbDepot")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbDepot"
                                     displayExpr="NAME"                       
                                     valueExpr="GUID"
                                     value=""
                                     searchEnabled={true}
-                                    onValueChanged={(async()=>
-                                        {
-                                        }).bind(this)}
                                     data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01 WHERE TYPE IN (0,2) AND STATUS = 1"},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     >
                                     </NdSelectBox>
                                 </Item>
-                                {/* Boş */}
-                                <EmptyItem />
-                                 {/* txtCustomerCode */}
-                                 <Item>
+                                {/* txtCustomerCode */}
+                                <Item>
                                     <Label text={this.t("txtCustomerCode")} alignment="right" />
                                     <NdTextBox id="txtCustomerCode" parent={this} simple={true}  
-                                    dt={{data:this.contractObj.dt('SALES_CONTRACT'),field:"CUSTOMER_CODE"}}
+                                    dt={{data:this.contractObj.dt('CONTRACT'),field:"CUSTOMER_CODE"}}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     onEnterKey={(async()=>
                                         {
@@ -638,7 +600,7 @@ export default class purchaseContract extends React.PureComponent
                                     <Label text={this.t("txtCustomerName")} alignment="right" />
                                     <NdTextBox id="txtCustomerName" parent={this} simple={true}  
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    dt={{data:this.contractObj.dt('SALES_CONTRACT'),field:"CUSTOMER_NAME"}}
+                                    dt={{data:this.contractObj.dt('CONTRACT'),field:"CUSTOMER_NAME"}}
                                     readOnly={true}
                                     param={this.param.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
@@ -651,7 +613,7 @@ export default class purchaseContract extends React.PureComponent
                                 <Item>
                                     <Label text={this.t("startDate")} alignment="right" />
                                     <NdDatePicker simple={true}  parent={this} id={"startDate"}
-                                    dt={{data:this.contractObj.dt('SALES_CONTRACT'),field:"START_DATE"}}
+                                    dt={{data:this.contractObj.dt('CONTRACT'),field:"START_DATE"}}
                                     readOnly={true}
                                     onValueChanged={(async(e)=>
                                         {
@@ -667,7 +629,7 @@ export default class purchaseContract extends React.PureComponent
                                 <Item>
                                     <Label text={this.t("finishDate")} alignment="right" />
                                     <NdDatePicker simple={true}  parent={this} id={"finishDate"}
-                                    dt={{data:this.contractObj.dt('SALES_CONTRACT'),field:"FINISH_DATE"}}
+                                    dt={{data:this.contractObj.dt('CONTRACT'),field:"FINISH_DATE"}}
                                     onValueChanged={(async()=>
                                     {
                                     }).bind(this)}
@@ -680,8 +642,8 @@ export default class purchaseContract extends React.PureComponent
                             </Form>
                         </div>
                     </div>
-                     {/* Grid */}
-                     <div className="row px-2 pt-2">
+                    {/* Grid */}
+                    <div className="row px-2 pt-2">
                         <div className="col-12">
                             <Form colCount={1} onInitialized={(e)=>
                             {
@@ -712,8 +674,8 @@ export default class purchaseContract extends React.PureComponent
                                                             }
                                                             else
                                                             {
-                                                                this.txtRef.readOnly = true
-                                                                this.txtRefno.readOnly = true
+                                                                this.txtCode.readOnly = true
+                                                                this.txtName.readOnly = true
                                                                 await this.core.util.waitUntil(100)
                                                                 await this.addItem(data[i])
                                                             }
@@ -836,8 +798,8 @@ export default class purchaseContract extends React.PureComponent
                             </Form>
                         </div>
                     </div>
-                     {/* STOK POPUP */}
-                     <div>
+                    {/* STOK POPUP */}
+                    <div>
                         <NdPopUp parent={this} id={"popItems"} 
                         visible={false}
                         showCloseButton={true}
@@ -1028,9 +990,9 @@ export default class purchaseContract extends React.PureComponent
                                             {       
                                                 let tmpQuery = 
                                                 {
-                                                    query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM SALES_CONTRACT_VW_01 WHERE REF = @REF AND REF_NO = @REF_NO AND TYPE  = 0 ORDER BY CDATE " ,
-                                                    param:  ['REF:string|50','REF_NO:int','DESIGN:string|25'],
-                                                    value:  [this.docObj.dt()[0].REF,this.docObj.dt()[0].REF_NO,this.cmbDesignList.value]
+                                                    query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM CONTRACT_VW_01 WHERE CODE = @CODE AND TYPE  = 0 ORDER BY CDATE " ,
+                                                    param:  ['CODE:string|50','DESIGN:string|25'],
+                                                    value:  [this.docObj.dt()[0].CODE,this.cmbDesignList.value]
                                                 }
                                                 let tmpData = await this.core.sql.execute(tmpQuery) 
                                                 console.log(JSON.stringify(tmpData.result.recordset)) //BAK
@@ -1064,96 +1026,96 @@ export default class purchaseContract extends React.PureComponent
                         </NdPopUp>
                     </div>    
                 </ScrollView>
-                   {/* Toplu Stok PopUp */}
-                   <div>
-                        <NdPopUp parent={this} id={"popMultiItem"} 
-                        visible={false}
-                        showCloseButton={true}
-                        showTitle={true}
-                        title={this.t("popMultiItem.title")}
-                        container={"#root"} 
-                        width={'900'}
-                        height={'700'}
-                        position={{of:'#root'}}
-                        >
-                            <Form colCount={2} height={'fit-content'}>
-                            <Item colSpan={2}>
-                                <Label  alignment="right" />
-                                    <NdTagBox id="tagItemCode" parent={this} simple={true} value={[]} placeholder={this.t("tagItemCodePlaceholder")}
-                                    />
-                            </Item>
-                            <EmptyItem />       
-                            <Item>
-                                <Label text={this.t("cmbMultiItemType.title")} alignment="right" />
-                                <NdSelectBox simple={true} parent={this} id="cmbMultiItemType" height='fit-content' 
-                                displayExpr="VALUE"                       
-                                valueExpr="ID"
-                                value={0}
-                                data={{source:[{ID:0,VALUE:this.t("cmbMultiItemType.customerCode")},{ID:1,VALUE:this.t("cmbMultiItemType.ItemCode")}]}}
+                {/* Toplu Stok PopUp */}
+                <div>
+                    <NdPopUp parent={this} id={"popMultiItem"} 
+                    visible={false}
+                    showCloseButton={true}
+                    showTitle={true}
+                    title={this.t("popMultiItem.title")}
+                    container={"#root"} 
+                    width={'900'}
+                    height={'700'}
+                    position={{of:'#root'}}
+                    >
+                        <Form colCount={2} height={'fit-content'}>
+                        <Item colSpan={2}>
+                            <Label  alignment="right" />
+                                <NdTagBox id="tagItemCode" parent={this} simple={true} value={[]} placeholder={this.t("tagItemCodePlaceholder")}
                                 />
-                            </Item>   
-                            <EmptyItem />   
-                            <Item>
-                                <div className='row'>
-                                    <div className='col-6'>
-                                        <NdButton text={this.t("popMultiItem.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
-                                        onClick={async (e)=>
-                                        {       
-                                           this.multiItemAdd()
-                                        }}/>
-                                    </div>
-                                    <div className='col-6'>
-                                        <NdButton text={this.t("popMultiItem.btnClear")} type="normal" stylingMode="contained" width={'100%'}
-                                        onClick={()=>
-                                        {
-                                            this.multiItemData.clear()
-                                        }}/>
-                                    </div>
+                        </Item>
+                        <EmptyItem />       
+                        <Item>
+                            <Label text={this.t("cmbMultiItemType.title")} alignment="right" />
+                            <NdSelectBox simple={true} parent={this} id="cmbMultiItemType" height='fit-content' 
+                            displayExpr="VALUE"                       
+                            valueExpr="ID"
+                            value={0}
+                            data={{source:[{ID:0,VALUE:this.t("cmbMultiItemType.customerCode")},{ID:1,VALUE:this.t("cmbMultiItemType.ItemCode")}]}}
+                            />
+                        </Item>   
+                        <EmptyItem />   
+                        <Item>
+                            <div className='row'>
+                                <div className='col-6'>
+                                    <NdButton text={this.t("popMultiItem.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
+                                    onClick={async (e)=>
+                                    {       
+                                        this.multiItemAdd()
+                                    }}/>
                                 </div>
-                            </Item>
-                            <Item colSpan={2} >
-                            <NdGrid parent={this} id={"grdMultiItem"} 
-                                    showBorders={true} 
-                                    columnsAutoWidth={true} 
-                                    allowColumnReordering={true} 
-                                    allowColumnResizing={true} 
-                                    headerFilter={{visible:true}}
-                                    filterRow = {{visible:true}}
-                                    height={400} 
-                                    width={'100%'}
-                                    dbApply={false}
-                                    onRowRemoved={async (e)=>{
-                                     
-                                    }}
-                                    >
-                                        <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
-                                        <Scrolling mode="standart" />
-                                        <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
-                                        <Column dataField="CODE" caption={this.t("grdMultiItem.clmCode")} width={150} allowEditing={false} />
-                                        <Column dataField="MULTICODE" caption={this.t("grdMultiItem.clmMulticode")} width={150} allowEditing={false} />
-                                        <Column dataField="NAME" caption={this.t("grdMultiItem.clmName")} width={300}  headerFilter={{visible:true}} allowEditing={false} />
-                                        <Column dataField="QUANTITY" caption={this.t("grdMultiItem.clmQuantity")} dataType={'number'} width={100} headerFilter={{visible:true}}/>
-                                        <Column dataField="PRICE" caption={this.t("grdMultiItem.clmPrice")} dataType={'number'} width={100} headerFilter={{visible:true}}/>
-                                </NdGrid>
-                            </Item>
-                            <EmptyItem />   
-                            <Item>
-                                <div className='row'>
-                                    <div className='col-6'>
-                                       
-                                    </div>
-                                    <div className='col-6'>
-                                        <NdButton text={this.t("popMultiItem.btnSave")} type="normal" stylingMode="contained" width={'100%'}
-                                        onClick={()=>
-                                        {
-                                            this.multiItemSave()
-                                        }}/>
-                                    </div>
+                                <div className='col-6'>
+                                    <NdButton text={this.t("popMultiItem.btnClear")} type="normal" stylingMode="contained" width={'100%'}
+                                    onClick={()=>
+                                    {
+                                        this.multiItemData.clear()
+                                    }}/>
                                 </div>
-                            </Item>
-                            </Form>
-                        </NdPopUp>
-                    </div> 
+                            </div>
+                        </Item>
+                        <Item colSpan={2} >
+                        <NdGrid parent={this} id={"grdMultiItem"} 
+                                showBorders={true} 
+                                columnsAutoWidth={true} 
+                                allowColumnReordering={true} 
+                                allowColumnResizing={true} 
+                                headerFilter={{visible:true}}
+                                filterRow = {{visible:true}}
+                                height={400} 
+                                width={'100%'}
+                                dbApply={false}
+                                onRowRemoved={async (e)=>{
+                                    
+                                }}
+                                >
+                                    <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
+                                    <Scrolling mode="standart" />
+                                    <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
+                                    <Column dataField="CODE" caption={this.t("grdMultiItem.clmCode")} width={150} allowEditing={false} />
+                                    <Column dataField="MULTICODE" caption={this.t("grdMultiItem.clmMulticode")} width={150} allowEditing={false} />
+                                    <Column dataField="NAME" caption={this.t("grdMultiItem.clmName")} width={300}  headerFilter={{visible:true}} allowEditing={false} />
+                                    <Column dataField="QUANTITY" caption={this.t("grdMultiItem.clmQuantity")} dataType={'number'} width={100} headerFilter={{visible:true}}/>
+                                    <Column dataField="PRICE" caption={this.t("grdMultiItem.clmPrice")} dataType={'number'} width={100} headerFilter={{visible:true}}/>
+                            </NdGrid>
+                        </Item>
+                        <EmptyItem />   
+                        <Item>
+                            <div className='row'>
+                                <div className='col-6'>
+                                    
+                                </div>
+                                <div className='col-6'>
+                                    <NdButton text={this.t("popMultiItem.btnSave")} type="normal" stylingMode="contained" width={'100%'}
+                                    onClick={()=>
+                                    {
+                                        this.multiItemSave()
+                                    }}/>
+                                </div>
+                            </div>
+                        </Item>
+                        </Form>
+                    </NdPopUp>
+                </div> 
             </div>
         )
     }

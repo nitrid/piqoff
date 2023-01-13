@@ -3631,6 +3631,30 @@ export const langTr =
             btn01: "Tamam",
             msg: "Seçilen Ürün Cariye Tanımlı Değil !"
         },
+        msgWorngRound:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg1: "Yuvarlamak istediğiniz tutarlar arasında en fazla ",
+            msg2: " fark olabilir !"
+        },
+        msgDiscountEntry : 
+        {
+            title : "Tutarsal İndirim Girişi",
+            btn01 : "Onayla"
+        },
+        txtDiscount1 : "1. İndirim Tutarı",
+        txtDiscount2 : "2. İndirim Tutarı",
+        txtDiscount3 : "3. İndirim Tutarı",
+        txtTotalDiscount :"Toplam İndirim Tutarı",
+        msgDiscountPerEntry : 
+        {
+            title : "Oransal İndirim Girişi",
+            btn01 : "Onayla"
+        },
+        txtDiscountPer1 : "1. İndirim Oranı",
+        txtDiscountPer2 : "2. İndirim Oranı",
+        txtDiscountPer3 : "3. İndirim Oranı",
     },
     ftr_02_002 : // "Satış Faturası"
     {
@@ -4080,6 +4104,30 @@ export const langTr =
             title : "Lütfen Tuvarlamak İstediğiniz Tutarı Giriniz",
             total : "Tutar",
         },
+        msgWorngRound:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg1: "Yuvarlamak istediğiniz tutarlar arasında en fazla ",
+            msg2: " fark olabilir !"
+        },
+        msgDiscountEntry : 
+        {
+            title : "Tutarsal İndirim Girişi",
+            btn01 : "Onayla"
+        },
+        txtDiscount1 : "1. İndirim Tutarı",
+        txtDiscount2 : "2. İndirim Tutarı",
+        txtDiscount3 : "3. İndirim Tutarı",
+        txtTotalDiscount :"Toplam İndirim Tutarı",
+        msgDiscountPerEntry : 
+        {
+            title : "Oransal İndirim Girişi",
+            btn01 : "Onayla"
+        },
+        txtDiscountPer1 : "1. İndirim Oranı",
+        txtDiscountPer2 : "2. İndirim Oranı",
+        txtDiscountPer3 : "3. İndirim Oranı",
     },
     ftr_02_003 : // "İade Faturası"
     {
@@ -4444,6 +4492,30 @@ export const langTr =
             title : "Lütfen Tuvarlamak İstediğiniz Tutarı Giriniz",
             total : "Tutar",
         },
+        msgWorngRound:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg1: "Yuvarlamak istediğiniz tutarlar arasında en fazla ",
+            msg2: " fark olabilir !"
+        },
+        msgDiscountEntry : 
+        {
+            title : "Tutarsal İndirim Girişi",
+            btn01 : "Onayla"
+        },
+        txtDiscount1 : "1. İndirim Tutarı",
+        txtDiscount2 : "2. İndirim Tutarı",
+        txtDiscount3 : "3. İndirim Tutarı",
+        txtTotalDiscount :"Toplam İndirim Tutarı",
+        msgDiscountPerEntry : 
+        {
+            title : "Oransal İndirim Girişi",
+            btn01 : "Onayla"
+        },
+        txtDiscountPer1 : "1. İndirim Oranı",
+        txtDiscountPer2 : "2. İndirim Oranı",
+        txtDiscountPer3 : "3. İndirim Oranı",
     },
     ftr_02_004 : // "Fiyat Farkı Faturası"
     {
@@ -4782,6 +4854,30 @@ export const langTr =
             title : "Lütfen Tuvarlamak İstediğiniz Tutarı Giriniz",
             total : "Tutar",
         },
+        msgWorngRound:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg1: "Yuvarlamak istediğiniz tutarlar arasında en fazla ",
+            msg2: " fark olabilir !"
+        },
+        msgDiscountEntry : 
+        {
+            title : "Tutarsal İndirim Girişi",
+            btn01 : "Onayla"
+        },
+        txtDiscount1 : "1. İndirim Tutarı",
+        txtDiscount2 : "2. İndirim Tutarı",
+        txtDiscount3 : "3. İndirim Tutarı",
+        txtTotalDiscount :"Toplam İndirim Tutarı",
+        msgDiscountPerEntry : 
+        {
+            title : "Oransal İndirim Girişi",
+            btn01 : "Onayla"
+        },
+        txtDiscountPer1 : "1. İndirim Oranı",
+        txtDiscountPer2 : "2. İndirim Oranı",
+        txtDiscountPer3 : "3. İndirim Oranı",
     },
     ftr_02_005 : // "Şube Satış Faturası"
     {
@@ -5203,6 +5299,30 @@ export const langTr =
             title : "Lütfen Tuvarlamak İstediğiniz Tutarı Giriniz",
             total : "Tutar",
         },
+        msgWorngRound:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg1: "Yuvarlamak istediğiniz tutarlar arasında en fazla ",
+            msg2: " fark olabilir !"
+        },
+        msgDiscountEntry : 
+        {
+            title : "Tutarsal İndirim Girişi",
+            btn01 : "Onayla"
+        },
+        txtDiscount1 : "1. İndirim Tutarı",
+        txtDiscount2 : "2. İndirim Tutarı",
+        txtDiscount3 : "3. İndirim Tutarı",
+        txtTotalDiscount :"Toplam İndirim Tutarı",
+        msgDiscountPerEntry : 
+        {
+            title : "Oransal İndirim Girişi",
+            btn01 : "Onayla"
+        },
+        txtDiscountPer1 : "1. İndirim Oranı",
+        txtDiscountPer2 : "2. İndirim Oranı",
+        txtDiscountPer3 : "3. İndirim Oranı",
     },
     ftr_02_006 : // "Fiyat Farkı Alış Faturası"
     {
@@ -5523,6 +5643,30 @@ export const langTr =
             title : "Lütfen Tuvarlamak İstediğiniz Tutarı Giriniz",
             total : "Tutar",
         },
+        msgWorngRound:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg1: "Yuvarlamak istediğiniz tutarlar arasında en fazla ",
+            msg2: " fark olabilir !"
+        },
+        msgDiscountEntry : 
+        {
+            title : "Tutarsal İndirim Girişi",
+            btn01 : "Onayla"
+        },
+        txtDiscount1 : "1. İndirim Tutarı",
+        txtDiscount2 : "2. İndirim Tutarı",
+        txtDiscount3 : "3. İndirim Tutarı",
+        txtTotalDiscount :"Toplam İndirim Tutarı",
+        msgDiscountPerEntry : 
+        {
+            title : "Oransal İndirim Girişi",
+            btn01 : "Onayla"
+        },
+        txtDiscountPer1 : "1. İndirim Oranı",
+        txtDiscountPer2 : "2. İndirim Oranı",
+        txtDiscountPer3 : "3. İndirim Oranı",
     },
     ftr_02_007 : // "İade ALış Faturası"
     {
@@ -5868,6 +6012,30 @@ export const langTr =
             title : "Lütfen Tuvarlamak İstediğiniz Tutarı Giriniz",
             total : "Tutar",
         },
+        msgWorngRound:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg1: "Yuvarlamak istediğiniz tutarlar arasında en fazla ",
+            msg2: " fark olabilir !"
+        },
+        msgDiscountEntry : 
+        {
+            title : "Tutarsal İndirim Girişi",
+            btn01 : "Onayla"
+        },
+        txtDiscount1 : "1. İndirim Tutarı",
+        txtDiscount2 : "2. İndirim Tutarı",
+        txtDiscount3 : "3. İndirim Tutarı",
+        txtTotalDiscount :"Toplam İndirim Tutarı",
+        msgDiscountPerEntry : 
+        {
+            title : "Oransal İndirim Girişi",
+            btn01 : "Onayla"
+        },
+        txtDiscountPer1 : "1. İndirim Oranı",
+        txtDiscountPer2 : "2. İndirim Oranı",
+        txtDiscountPer3 : "3. İndirim Oranı",
     },
     ftr_02_008 : // "Şube Satış Faturası"
     {
@@ -6289,6 +6457,30 @@ export const langTr =
             title : "Lütfen Tuvarlamak İstediğiniz Tutarı Giriniz",
             total : "Tutar",
         },
+        msgWorngRound:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg1: "Yuvarlamak istediğiniz tutarlar arasında en fazla ",
+            msg2: "€ fark olabilir !"
+        },
+        msgDiscountEntry : 
+        {
+            title : "Tutarsal İndirim Girişi",
+            btn01 : "Onayla"
+        },
+        txtDiscount1 : "1. İndirim Tutarı",
+        txtDiscount2 : "2. İndirim Tutarı",
+        txtDiscount3 : "3. İndirim Tutarı",
+        txtTotalDiscount :"Toplam İndirim Tutarı",
+        msgDiscountPerEntry : 
+        {
+            title : "Oransal İndirim Girişi",
+            btn01 : "Onayla"
+        },
+        txtDiscountPer1 : "1. İndirim Oranı",
+        txtDiscountPer2 : "2. İndirim Oranı",
+        txtDiscountPer3 : "3. İndirim Oranı",
     },
     ftr_04_001 : // "Proforma Fiyat Farkı Faturası"
     {
@@ -8767,6 +8959,23 @@ export const langTr =
             btn01: "Evrağa Git",
             msg: "Evrak Bulundu"
         },
+        msgDiscountEntry : 
+        {
+            title : "Tutarsal İndirim Girişi",
+            btn01 : "Onayla"
+        },
+        txtDiscount1 : "1. İndirim Tutarı",
+        txtDiscount2 : "2. İndirim Tutarı",
+        txtDiscount3 : "3. İndirim Tutarı",
+        txtTotalDiscount :"Toplam İndirim Tutarı",
+        msgDiscountPerEntry : 
+        {
+            title : "Oransal İndirim Girişi",
+            btn01 : "Onayla"
+        },
+        txtDiscountPer1 : "1. İndirim Oranı",
+        txtDiscountPer2 : "2. İndirim Oranı",
+        txtDiscountPer3 : "3. İndirim Oranı",
     },
     irs_02_002 : // Satış İrsaliyesi"
     {
@@ -9112,6 +9321,23 @@ export const langTr =
             msgSuccess: "Mail gönderimi başarılı !",
             msgFailed: "Mail gönderimi başarısız !"
         },
+        msgDiscountEntry : 
+        {
+            title : "Tutarsal İndirim Girişi",
+            btn01 : "Onayla"
+        },
+        txtDiscount1 : "1. İndirim Tutarı",
+        txtDiscount2 : "2. İndirim Tutarı",
+        txtDiscount3 : "3. İndirim Tutarı",
+        txtTotalDiscount :"Toplam İndirim Tutarı",
+        msgDiscountPerEntry : 
+        {
+            title : "Oransal İndirim Girişi",
+            btn01 : "Onayla"
+        },
+        txtDiscountPer1 : "1. İndirim Oranı",
+        txtDiscountPer2 : "2. İndirim Oranı",
+        txtDiscountPer3 : "3. İndirim Oranı",
     },
     irs_02_003 : // "İade İrsaliyesi"
     {
@@ -9408,6 +9634,23 @@ export const langTr =
             msgSuccess: "Mail gönderimi başarılı !",
             msgFailed: "Mail gönderimi başarısız !"
         },
+        msgDiscountEntry : 
+        {
+            title : "Tutarsal İndirim Girişi",
+            btn01 : "Onayla"
+        },
+        txtDiscount1 : "1. İndirim Tutarı",
+        txtDiscount2 : "2. İndirim Tutarı",
+        txtDiscount3 : "3. İndirim Tutarı",
+        txtTotalDiscount :"Toplam İndirim Tutarı",
+        msgDiscountPerEntry : 
+        {
+            title : "Oransal İndirim Girişi",
+            btn01 : "Onayla"
+        },
+        txtDiscountPer1 : "1. İndirim Oranı",
+        txtDiscountPer2 : "2. İndirim Oranı",
+        txtDiscountPer3 : "3. İndirim Oranı",
     },
     irs_02_004 : // Şube Satış İrsaliyesi"
     {
@@ -9752,6 +9995,23 @@ export const langTr =
             msgSuccess: "Mail gönderimi başarılı !",
             msgFailed: "Mail gönderimi başarısız !"
         },
+        msgDiscountEntry : 
+        {
+            title : "Tutarsal İndirim Girişi",
+            btn01 : "Onayla"
+        },
+        txtDiscount1 : "1. İndirim Tutarı",
+        txtDiscount2 : "2. İndirim Tutarı",
+        txtDiscount3 : "3. İndirim Tutarı",
+        txtTotalDiscount :"Toplam İndirim Tutarı",
+        msgDiscountPerEntry : 
+        {
+            title : "Oransal İndirim Girişi",
+            btn01 : "Onayla"
+        },
+        txtDiscountPer1 : "1. İndirim Oranı",
+        txtDiscountPer2 : "2. İndirim Oranı",
+        txtDiscountPer3 : "3. İndirim Oranı",
     },
     irs_02_005 : // "İade Alış İrsaliyesi"
     {
@@ -10029,6 +10289,23 @@ export const langTr =
             btn01: "Evrağa Git",
             msg: "Evrak Bulundu"
         },
+        msgDiscountEntry : 
+        {
+            title : "Tutarsal İndirim Girişi",
+            btn01 : "Onayla"
+        },
+        txtDiscount1 : "1. İndirim Tutarı",
+        txtDiscount2 : "2. İndirim Tutarı",
+        txtDiscount3 : "3. İndirim Tutarı",
+        txtTotalDiscount :"Toplam İndirim Tutarı",
+        msgDiscountPerEntry : 
+        {
+            title : "Oransal İndirim Girişi",
+            btn01 : "Onayla"
+        },
+        txtDiscountPer1 : "1. İndirim Oranı",
+        txtDiscountPer2 : "2. İndirim Oranı",
+        txtDiscountPer3 : "3. İndirim Oranı",
     },
     irs_02_006 : // Şube Alış İrsaliyesi"
     {
@@ -10373,6 +10650,23 @@ export const langTr =
             msgSuccess: "Mail gönderimi başarılı !",
             msgFailed: "Mail gönderimi başarısız !"
         },
+        msgDiscountEntry : 
+        {
+            title : "Tutarsal İndirim Girişi",
+            btn01 : "Onayla"
+        },
+        txtDiscount1 : "1. İndirim Tutarı",
+        txtDiscount2 : "2. İndirim Tutarı",
+        txtDiscount3 : "3. İndirim Tutarı",
+        txtTotalDiscount :"Toplam İndirim Tutarı",
+        msgDiscountPerEntry : 
+        {
+            title : "Oransal İndirim Girişi",
+            btn01 : "Onayla"
+        },
+        txtDiscountPer1 : "1. İndirim Oranı",
+        txtDiscountPer2 : "2. İndirim Oranı",
+        txtDiscountPer3 : "3. İndirim Oranı",
     },
     sip_01_001 : // "Alış Sipariş Listesi"
     {
@@ -11216,8 +11510,8 @@ export const langTr =
         {
             title : "Evrak Seçimi",
             clmDate : "TARIH",
-            clmRef : "SERİ",
-            clmRefNo : "SIRA",
+            clmCode : "KODU",
+            clmName : "ADI",
             clmOutputName : "CARİ ADI",
             clmOutputCode  : "CARİ KODU",
         },
@@ -11307,7 +11601,8 @@ export const langTr =
             dtPopEndDate : "Bitiş"
         },
         validCustomerCode : "Cari Kodu Boş Geçilemez",
-        txtRefRefno : 'Seri-Sıra',
+        txtCode : 'Kodu',
+        txtName : "Adı",
         startDate :'Başlangıç Tarihi',
         finishDate : 'Bitiş Tarihi',
         msgMissItemCode:
@@ -11357,6 +11652,7 @@ export const langTr =
             btn01: "Tamam",
             msg: "Evrak Üst Bilgileri Tamalanmadan Stok Girilemez !"
         },
+        validCode : "Kodu Boş Geçemezsiniz !",
     },
     cnt_02_002 : // "Satış Anlaşması"
     {
@@ -11369,8 +11665,8 @@ export const langTr =
         {
             title : "Evrak Seçimi",
             clmDate : "TARIH",
-            clmRef : "SERİ",
-            clmRefNo : "SIRA",
+            clmCode : "KODU",
+            clmName : "ADI",
             clmOutputName : "CARİ ADI",
             clmOutputCode  : "CARİ KODU",
         },
@@ -11460,7 +11756,8 @@ export const langTr =
             msg: "İzin Verilen Tutardan Yüksek İndirim Yapılamaz.!! İzin Verilen Tutar : "
         },
         validCustomerCode : "Cari Kodu Boş Geçilemez",
-        txtRefRefno : 'Seri-Sıra',
+        txtCode : 'Kodu',
+        txtName : "Adı",
         startDate :'Başlangıç Tarihi',
         finishDate : 'Bitiş Tarihi',
         msgMissItemCode:
@@ -11510,6 +11807,7 @@ export const langTr =
             btn01: "Tamam",
             msg: "Evrak Üst Bilgileri Tamalanmadan Stok Girilemez !"
         },
+        validCode : "Kodu Boş Geçemezsiniz !",
     },
     fns_01_001 : // "Ödeme Listesi",
     {
