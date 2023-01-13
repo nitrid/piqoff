@@ -3628,6 +3628,30 @@ export const langFr =
             btn01: "OK",
             msg: "Le Produit Sélectionné n'a pas de Fournisseur Enregistré !"
         },
+        msgWorngRound:
+        {  
+            title: "Dikkat",  // BAK
+            btn01: "Tamam",  // BAK
+            msg1: "Yuvarlamak istediğiniz tutarlar arasında en fazla ",  // BAK
+            msg2: " fark olabilir !"  // BAK
+        },
+        msgDiscountEntry : 
+        {
+            title : "Tutarsal İndirim Girişi",   // BAK
+            btn01 : "Onayla"  // BAK
+        },
+        txtDiscount1 : "1. İndirim Tutarı",  // BAK
+        txtDiscount2 : "2. İndirim Tutarı",  // BAK
+        txtDiscount3 : "3. İndirim Tutarı",  // BAK
+        txtTotalDiscount :"Toplam İndirim Tutarı",  // BAK
+        msgDiscountPerEntry : 
+        {
+            title : "Oransal İndirim Girişi",  // BAK
+            btn01 : "Onayla"  // BAK
+        },
+        txtDiscountPer1 : "1. İndirim Oranı",  // BAK
+        txtDiscountPer2 : "2. İndirim Oranı",  // BAK
+        txtDiscountPer3 : "3. İndirim Oranı",  // BAK
     },
     ftr_02_002 : // "Satış Faturası"
     {
@@ -4077,6 +4101,30 @@ export const langFr =
             title : "Veuillez saisir le montant que vous souhaitez arrondir",    // BAK
             total : "Montant",  // BAK
         },
+        msgWorngRound:
+        {  
+            title: "Dikkat",  // BAK
+            btn01: "Tamam",  // BAK
+            msg1: "Yuvarlamak istediğiniz tutarlar arasında en fazla ",  // BAK
+            msg2: " fark olabilir !"  // BAK
+        },
+        msgDiscountEntry : 
+        {
+            title : "Tutarsal İndirim Girişi",   // BAK
+            btn01 : "Onayla"  // BAK
+        },
+        txtDiscount1 : "1. İndirim Tutarı",  // BAK
+        txtDiscount2 : "2. İndirim Tutarı",  // BAK
+        txtDiscount3 : "3. İndirim Tutarı",  // BAK
+        txtTotalDiscount :"Toplam İndirim Tutarı",  // BAK
+        msgDiscountPerEntry : 
+        {
+            title : "Oransal İndirim Girişi",  // BAK
+            btn01 : "Onayla"  // BAK
+        },
+        txtDiscountPer1 : "1. İndirim Oranı",  // BAK
+        txtDiscountPer2 : "2. İndirim Oranı",  // BAK
+        txtDiscountPer3 : "3. İndirim Oranı",  // BAK
     },
     ftr_02_003 : // "İade Faturası"
     {
@@ -4448,6 +4496,30 @@ export const langFr =
             title : "Veuillez saisir le montant que vous souhaitez arrondir",    // BAK
             total : "Montant",  // BAK
         },
+        msgWorngRound:
+        {  
+            title: "Dikkat",  // BAK
+            btn01: "Tamam",  // BAK
+            msg1: "Yuvarlamak istediğiniz tutarlar arasında en fazla ",  // BAK
+            msg2: " fark olabilir !"  // BAK
+        },
+        msgDiscountEntry : 
+        {
+            title : "Tutarsal İndirim Girişi",   // BAK
+            btn01 : "Onayla"  // BAK
+        },
+        txtDiscount1 : "1. İndirim Tutarı",  // BAK
+        txtDiscount2 : "2. İndirim Tutarı",  // BAK
+        txtDiscount3 : "3. İndirim Tutarı",  // BAK
+        txtTotalDiscount :"Toplam İndirim Tutarı",  // BAK
+        msgDiscountPerEntry : 
+        {
+            title : "Oransal İndirim Girişi",  // BAK
+            btn01 : "Onayla"  // BAK
+        },
+        txtDiscountPer1 : "1. İndirim Oranı",  // BAK
+        txtDiscountPer2 : "2. İndirim Oranı",  // BAK
+        txtDiscountPer3 : "3. İndirim Oranı",  // BAK
     },
     ftr_02_004 : // "Fiyat Farkı Faturası"
     {
@@ -4793,6 +4865,30 @@ export const langFr =
             title : "Veuillez saisir le montant que vous souhaitez arrondir",    // BAK
             total : "Montant",  // BAK
         },
+        msgWorngRound:
+        {  
+            title: "Dikkat",  // BAK
+            btn01: "Tamam",  // BAK
+            msg1: "Yuvarlamak istediğiniz tutarlar arasında en fazla ",  // BAK
+            msg2: " fark olabilir !"  // BAK
+        },
+        msgDiscountEntry : 
+        {
+            title : "Tutarsal İndirim Girişi",   // BAK
+            btn01 : "Onayla"  // BAK
+        },
+        txtDiscount1 : "1. İndirim Tutarı",  // BAK
+        txtDiscount2 : "2. İndirim Tutarı",  // BAK
+        txtDiscount3 : "3. İndirim Tutarı",  // BAK
+        txtTotalDiscount :"Toplam İndirim Tutarı",  // BAK
+        msgDiscountPerEntry : 
+        {
+            title : "Oransal İndirim Girişi",  // BAK
+            btn01 : "Onayla"  // BAK
+        },
+        txtDiscountPer1 : "1. İndirim Oranı",  // BAK
+        txtDiscountPer2 : "2. İndirim Oranı",  // BAK
+        txtDiscountPer3 : "3. İndirim Oranı",  // BAK
     },
     ftr_02_005 : // "Şube Satış Faturası"
     {
@@ -5207,6 +5303,30 @@ export const langFr =
             title : "Veuillez saisir le montant que vous souhaitez arrondir",    // BAK
             total : "Montant",  // BAK
         },
+        msgWorngRound:
+        {  
+            title: "Dikkat",  // BAK
+            btn01: "Tamam",  // BAK
+            msg1: "Yuvarlamak istediğiniz tutarlar arasında en fazla ",  // BAK
+            msg2: " fark olabilir !"  // BAK
+        },
+        msgDiscountEntry : 
+        {
+            title : "Tutarsal İndirim Girişi",   // BAK
+            btn01 : "Onayla"  // BAK
+        },
+        txtDiscount1 : "1. İndirim Tutarı",  // BAK
+        txtDiscount2 : "2. İndirim Tutarı",  // BAK
+        txtDiscount3 : "3. İndirim Tutarı",  // BAK
+        txtTotalDiscount :"Toplam İndirim Tutarı",  // BAK
+        msgDiscountPerEntry : 
+        {
+            title : "Oransal İndirim Girişi",  // BAK
+            btn01 : "Onayla"  // BAK
+        },
+        txtDiscountPer1 : "1. İndirim Oranı",  // BAK
+        txtDiscountPer2 : "2. İndirim Oranı",  // BAK
+        txtDiscountPer3 : "3. İndirim Oranı",  // BAK
     },
     ftr_02_006 : // "Fiyat Farkı Alış Faturası"
     {
@@ -5527,6 +5647,30 @@ export const langFr =
             title : "Veuillez saisir le montant que vous souhaitez arrondir",    // BAK
             total : "Montant",  // BAK
         },
+        msgWorngRound:
+        {  
+            title: "Dikkat",  // BAK
+            btn01: "Tamam",  // BAK
+            msg1: "Yuvarlamak istediğiniz tutarlar arasında en fazla ",  // BAK
+            msg2: " fark olabilir !"  // BAK
+        },
+        msgDiscountEntry : 
+        {
+            title : "Tutarsal İndirim Girişi",   // BAK
+            btn01 : "Onayla"  // BAK
+        },
+        txtDiscount1 : "1. İndirim Tutarı",  // BAK
+        txtDiscount2 : "2. İndirim Tutarı",  // BAK
+        txtDiscount3 : "3. İndirim Tutarı",  // BAK
+        txtTotalDiscount :"Toplam İndirim Tutarı",  // BAK
+        msgDiscountPerEntry : 
+        {
+            title : "Oransal İndirim Girişi",  // BAK
+            btn01 : "Onayla"  // BAK
+        },
+        txtDiscountPer1 : "1. İndirim Oranı",  // BAK
+        txtDiscountPer2 : "2. İndirim Oranı",  // BAK
+        txtDiscountPer3 : "3. İndirim Oranı",  // BAK
     },
     ftr_02_007 : // "İade Alış Faturası"
     {
@@ -5872,6 +6016,30 @@ export const langFr =
             title : "Veuillez saisir le motant que vous souhaitez arrondir",    // BAK
             total : "Montant",  // BAK
         },
+        msgWorngRound:
+        {  
+            title: "Dikkat",  // BAK
+            btn01: "Tamam",  // BAK
+            msg1: "Yuvarlamak istediğiniz tutarlar arasında en fazla ",  // BAK
+            msg2: " fark olabilir !"  // BAK
+        },
+        msgDiscountEntry : 
+        {
+            title : "Tutarsal İndirim Girişi",   // BAK
+            btn01 : "Onayla"  // BAK
+        },
+        txtDiscount1 : "1. İndirim Tutarı",  // BAK
+        txtDiscount2 : "2. İndirim Tutarı",  // BAK
+        txtDiscount3 : "3. İndirim Tutarı",  // BAK
+        txtTotalDiscount :"Toplam İndirim Tutarı",  // BAK
+        msgDiscountPerEntry : 
+        {
+            title : "Oransal İndirim Girişi",  // BAK
+            btn01 : "Onayla"  // BAK
+        },
+        txtDiscountPer1 : "1. İndirim Oranı",  // BAK
+        txtDiscountPer2 : "2. İndirim Oranı",  // BAK
+        txtDiscountPer3 : "3. İndirim Oranı",  // BAK
     },
     ftr_02_008 : // "Şube Alış Faturası"
     {
@@ -6286,6 +6454,30 @@ export const langFr =
             title : "Veuillez saisir le montant que vous souhaitez arrondir",    // BAK
             total : "Montant",  // BAK
         },
+        msgWorngRound:
+        {  
+            title: "Dikkat",  // BAK
+            btn01: "Tamam",  // BAK
+            msg1: "Yuvarlamak istediğiniz tutarlar arasında en fazla ",  // BAK
+            msg2: " fark olabilir !"  // BAK
+        },
+        msgDiscountEntry : 
+        {
+            title : "Tutarsal İndirim Girişi",   // BAK
+            btn01 : "Onayla"  // BAK
+        },
+        txtDiscount1 : "1. İndirim Tutarı",  // BAK
+        txtDiscount2 : "2. İndirim Tutarı",  // BAK
+        txtDiscount3 : "3. İndirim Tutarı",  // BAK
+        txtTotalDiscount :"Toplam İndirim Tutarı",  // BAK
+        msgDiscountPerEntry : 
+        {
+            title : "Oransal İndirim Girişi",  // BAK
+            btn01 : "Onayla"  // BAK
+        },
+        txtDiscountPer1 : "1. İndirim Oranı",  // BAK
+        txtDiscountPer2 : "2. İndirim Oranı",  // BAK
+        txtDiscountPer3 : "3. İndirim Oranı",  // BAK
     },
     ftr_04_001 : // "Proforma Fiyat Farkı Faturası" 
     {
@@ -8764,6 +8956,23 @@ export const langFr =
             btn01:"Aller au document",
             msg: "Document trouvé !"
         },
+        msgDiscountEntry : 
+        {   
+            title : "Tutarsal İndirim Girişi",    // BAK
+            btn01 : "Onayla"    // BAK
+        },
+        txtDiscount1 : "1. İndirim Tutarı",  // BAK
+        txtDiscount2 : "2. İndirim Tutarı",  // BAK
+        txtDiscount3 : "3. İndirim Tutarı",  // BAK
+        txtTotalDiscount :"Toplam İndirim Tutarı",  // BAK
+        msgDiscountPerEntry : 
+        {
+            title : "Oransal İndirim Girişi",  // BAK
+            btn01 : "Onayla"  // BAK
+        },
+        txtDiscountPer1 : "1. İndirim Oranı",  // BAK
+        txtDiscountPer2 : "2. İndirim Oranı",  // BAK
+        txtDiscountPer3 : "3. İndirim Oranı",  // BAK
     },
     irs_02_002 : // Satış İrsaliyesi"
     {
@@ -9109,6 +9318,23 @@ export const langFr =
             msgSuccess: "Mail envoyé avec succès  !",   
             msgFailed: "Echec envoi Mail  !"   
         },
+        msgDiscountEntry : 
+        {   
+            title : "Tutarsal İndirim Girişi",    // BAK
+            btn01 : "Onayla"    // BAK
+        },
+        txtDiscount1 : "1. İndirim Tutarı",  // BAK
+        txtDiscount2 : "2. İndirim Tutarı",  // BAK
+        txtDiscount3 : "3. İndirim Tutarı",  // BAK
+        txtTotalDiscount :"Toplam İndirim Tutarı",  // BAK
+        msgDiscountPerEntry : 
+        {
+            title : "Oransal İndirim Girişi",  // BAK
+            btn01 : "Onayla"  // BAK
+        },
+        txtDiscountPer1 : "1. İndirim Oranı",  // BAK
+        txtDiscountPer2 : "2. İndirim Oranı",  // BAK
+        txtDiscountPer3 : "3. İndirim Oranı",  // BAK
     },
     irs_02_003 : // "İade İrsaliyesi"
     {
@@ -9405,6 +9631,23 @@ export const langFr =
             msgSuccess: "Mail envoyé avec succès  !",   
             msgFailed: "Echec envoie Mail  !"   
         },
+        msgDiscountEntry : 
+        {   
+            title : "Tutarsal İndirim Girişi",    // BAK
+            btn01 : "Onayla"    // BAK
+        },
+        txtDiscount1 : "1. İndirim Tutarı",  // BAK
+        txtDiscount2 : "2. İndirim Tutarı",  // BAK
+        txtDiscount3 : "3. İndirim Tutarı",  // BAK
+        txtTotalDiscount :"Toplam İndirim Tutarı",  // BAK
+        msgDiscountPerEntry : 
+        {
+            title : "Oransal İndirim Girişi",  // BAK
+            btn01 : "Onayla"  // BAK
+        },
+        txtDiscountPer1 : "1. İndirim Oranı",  // BAK
+        txtDiscountPer2 : "2. İndirim Oranı",  // BAK
+        txtDiscountPer3 : "3. İndirim Oranı",  // BAK
     },
     irs_02_004 : // Şube Satış İrsaliyesi"
     {
@@ -9749,6 +9992,23 @@ export const langFr =
             msgSuccess: "Mail envoyé avec succès  !",   
             msgFailed: "Echec envoi Mail  !"   
         },
+        msgDiscountEntry : 
+        {   
+            title : "Tutarsal İndirim Girişi",    // BAK
+            btn01 : "Onayla"    // BAK
+        },
+        txtDiscount1 : "1. İndirim Tutarı",  // BAK
+        txtDiscount2 : "2. İndirim Tutarı",  // BAK
+        txtDiscount3 : "3. İndirim Tutarı",  // BAK
+        txtTotalDiscount :"Toplam İndirim Tutarı",  // BAK
+        msgDiscountPerEntry : 
+        {
+            title : "Oransal İndirim Girişi",  // BAK
+            btn01 : "Onayla"  // BAK
+        },
+        txtDiscountPer1 : "1. İndirim Oranı",  // BAK
+        txtDiscountPer2 : "2. İndirim Oranı",  // BAK
+        txtDiscountPer3 : "3. İndirim Oranı",  // BAK
     },
     irs_02_005 : // "İade Alış İrsaliyesi"
     {
@@ -10026,6 +10286,23 @@ export const langFr =
             btn01:"Aller au document",
             msg: "Document trouvé !"
         },
+        msgDiscountEntry : 
+        {   
+            title : "Tutarsal İndirim Girişi",    // BAK
+            btn01 : "Onayla"    // BAK
+        },
+        txtDiscount1 : "1. İndirim Tutarı",  // BAK
+        txtDiscount2 : "2. İndirim Tutarı",  // BAK
+        txtDiscount3 : "3. İndirim Tutarı",  // BAK
+        txtTotalDiscount :"Toplam İndirim Tutarı",  // BAK
+        msgDiscountPerEntry : 
+        {
+            title : "Oransal İndirim Girişi",  // BAK
+            btn01 : "Onayla"  // BAK
+        },
+        txtDiscountPer1 : "1. İndirim Oranı",  // BAK
+        txtDiscountPer2 : "2. İndirim Oranı",  // BAK
+        txtDiscountPer3 : "3. İndirim Oranı",  // BAK
     },
     irs_02_006 : // Şube Alış İrsaliyesi"
     {
@@ -10370,6 +10647,23 @@ export const langFr =
             msgSuccess: "Mail envoyé avec succès  !",   
             msgFailed: "Echec envoi Mail  !"   
         },
+        msgDiscountEntry : 
+        {   
+            title : "Tutarsal İndirim Girişi",    // BAK
+            btn01 : "Onayla"    // BAK
+        },
+        txtDiscount1 : "1. İndirim Tutarı",  // BAK
+        txtDiscount2 : "2. İndirim Tutarı",  // BAK
+        txtDiscount3 : "3. İndirim Tutarı",  // BAK
+        txtTotalDiscount :"Toplam İndirim Tutarı",  // BAK
+        msgDiscountPerEntry : 
+        {
+            title : "Oransal İndirim Girişi",  // BAK
+            btn01 : "Onayla"  // BAK
+        },
+        txtDiscountPer1 : "1. İndirim Oranı",  // BAK
+        txtDiscountPer2 : "2. İndirim Oranı",  // BAK
+        txtDiscountPer3 : "3. İndirim Oranı",  // BAK
     },
     sip_01_001 : // "Alış Sipariş Listesi"
     {

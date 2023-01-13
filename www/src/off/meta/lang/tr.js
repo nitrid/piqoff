@@ -8959,6 +8959,23 @@ export const langTr =
             btn01: "Evrağa Git",
             msg: "Evrak Bulundu"
         },
+        msgDiscountEntry : 
+        {
+            title : "Tutarsal İndirim Girişi",
+            btn01 : "Onayla"
+        },
+        txtDiscount1 : "1. İndirim Tutarı",
+        txtDiscount2 : "2. İndirim Tutarı",
+        txtDiscount3 : "3. İndirim Tutarı",
+        txtTotalDiscount :"Toplam İndirim Tutarı",
+        msgDiscountPerEntry : 
+        {
+            title : "Oransal İndirim Girişi",
+            btn01 : "Onayla"
+        },
+        txtDiscountPer1 : "1. İndirim Oranı",
+        txtDiscountPer2 : "2. İndirim Oranı",
+        txtDiscountPer3 : "3. İndirim Oranı",
     },
     irs_02_002 : // Satış İrsaliyesi"
     {
@@ -9304,6 +9321,23 @@ export const langTr =
             msgSuccess: "Mail gönderimi başarılı !",
             msgFailed: "Mail gönderimi başarısız !"
         },
+        msgDiscountEntry : 
+        {
+            title : "Tutarsal İndirim Girişi",
+            btn01 : "Onayla"
+        },
+        txtDiscount1 : "1. İndirim Tutarı",
+        txtDiscount2 : "2. İndirim Tutarı",
+        txtDiscount3 : "3. İndirim Tutarı",
+        txtTotalDiscount :"Toplam İndirim Tutarı",
+        msgDiscountPerEntry : 
+        {
+            title : "Oransal İndirim Girişi",
+            btn01 : "Onayla"
+        },
+        txtDiscountPer1 : "1. İndirim Oranı",
+        txtDiscountPer2 : "2. İndirim Oranı",
+        txtDiscountPer3 : "3. İndirim Oranı",
     },
     irs_02_003 : // "İade İrsaliyesi"
     {
@@ -9600,6 +9634,23 @@ export const langTr =
             msgSuccess: "Mail gönderimi başarılı !",
             msgFailed: "Mail gönderimi başarısız !"
         },
+        msgDiscountEntry : 
+        {
+            title : "Tutarsal İndirim Girişi",
+            btn01 : "Onayla"
+        },
+        txtDiscount1 : "1. İndirim Tutarı",
+        txtDiscount2 : "2. İndirim Tutarı",
+        txtDiscount3 : "3. İndirim Tutarı",
+        txtTotalDiscount :"Toplam İndirim Tutarı",
+        msgDiscountPerEntry : 
+        {
+            title : "Oransal İndirim Girişi",
+            btn01 : "Onayla"
+        },
+        txtDiscountPer1 : "1. İndirim Oranı",
+        txtDiscountPer2 : "2. İndirim Oranı",
+        txtDiscountPer3 : "3. İndirim Oranı",
     },
     irs_02_004 : // Şube Satış İrsaliyesi"
     {
@@ -9944,6 +9995,23 @@ export const langTr =
             msgSuccess: "Mail gönderimi başarılı !",
             msgFailed: "Mail gönderimi başarısız !"
         },
+        msgDiscountEntry : 
+        {
+            title : "Tutarsal İndirim Girişi",
+            btn01 : "Onayla"
+        },
+        txtDiscount1 : "1. İndirim Tutarı",
+        txtDiscount2 : "2. İndirim Tutarı",
+        txtDiscount3 : "3. İndirim Tutarı",
+        txtTotalDiscount :"Toplam İndirim Tutarı",
+        msgDiscountPerEntry : 
+        {
+            title : "Oransal İndirim Girişi",
+            btn01 : "Onayla"
+        },
+        txtDiscountPer1 : "1. İndirim Oranı",
+        txtDiscountPer2 : "2. İndirim Oranı",
+        txtDiscountPer3 : "3. İndirim Oranı",
     },
     irs_02_005 : // "İade Alış İrsaliyesi"
     {
@@ -10221,6 +10289,23 @@ export const langTr =
             btn01: "Evrağa Git",
             msg: "Evrak Bulundu"
         },
+        msgDiscountEntry : 
+        {
+            title : "Tutarsal İndirim Girişi",
+            btn01 : "Onayla"
+        },
+        txtDiscount1 : "1. İndirim Tutarı",
+        txtDiscount2 : "2. İndirim Tutarı",
+        txtDiscount3 : "3. İndirim Tutarı",
+        txtTotalDiscount :"Toplam İndirim Tutarı",
+        msgDiscountPerEntry : 
+        {
+            title : "Oransal İndirim Girişi",
+            btn01 : "Onayla"
+        },
+        txtDiscountPer1 : "1. İndirim Oranı",
+        txtDiscountPer2 : "2. İndirim Oranı",
+        txtDiscountPer3 : "3. İndirim Oranı",
     },
     irs_02_006 : // Şube Alış İrsaliyesi"
     {
@@ -10565,6 +10650,23 @@ export const langTr =
             msgSuccess: "Mail gönderimi başarılı !",
             msgFailed: "Mail gönderimi başarısız !"
         },
+        msgDiscountEntry : 
+        {
+            title : "Tutarsal İndirim Girişi",
+            btn01 : "Onayla"
+        },
+        txtDiscount1 : "1. İndirim Tutarı",
+        txtDiscount2 : "2. İndirim Tutarı",
+        txtDiscount3 : "3. İndirim Tutarı",
+        txtTotalDiscount :"Toplam İndirim Tutarı",
+        msgDiscountPerEntry : 
+        {
+            title : "Oransal İndirim Girişi",
+            btn01 : "Onayla"
+        },
+        txtDiscountPer1 : "1. İndirim Oranı",
+        txtDiscountPer2 : "2. İndirim Oranı",
+        txtDiscountPer3 : "3. İndirim Oranı",
     },
     sip_01_001 : // "Alış Sipariş Listesi"
     {
