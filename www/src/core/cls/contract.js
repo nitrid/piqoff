@@ -168,3 +168,150 @@ export class contractCls
         });
     }
 }
+export class priceListCls
+{
+    constructor()
+    {
+        this.core = core.instance;
+        this.ds = new dataset();
+        this.empty = 
+        {
+            GUID : '00000000-0000-0000-0000-000000000000',
+            CDATE : moment(new Date()).format("YYYY-MM-DD"),
+            CUSER : this.core.auth.data.CODE,
+            CUSER_NAME : '',
+            LDATE : moment(new Date()).format("YYYY-MM-DD"),
+            LUSER : this.core.auth.data.CODE,
+            LUSER_NAME : '',
+            CODE : '',
+            NAME : '',
+            TYPE : 0,
+            ITEM : '00000000-0000-0000-0000-000000000000',
+            ITEM_CODE : '',
+            ITEM_NAME : '',
+            PRICE : 0,
+            PRICE_VAT_EXT: 0,
+            UNIT : '00000000-0000-0000-0000-000000000000',
+            UNIT_NAME : '',
+            VAT_RATE: 0
+        }
+
+        this._initDs();
+    }
+    //#region Private
+    _initDs()
+    {
+        let tmpDt = new datatable('PRICE_LIST');            
+        tmpDt.selectCmd = 
+        {
+            query : "SELECT * FROM [dbo].[PRICE_LIST_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND ((CODE = @CODE) OR (@CODE = '')) AND TYPE = @TYPE",
+            param : ['GUID:string|50','CODE:string|50','TYPE:int']
+        } 
+        tmpDt.insertCmd = 
+        {
+            query : "EXEC [dbo].[PRD_PRICE_LIST_INSERT] " + 
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " + 
+                    "@CODE = @PCODE, " +
+                    "@NAME = @PNAME, " +
+                    "@TYPE = @PTYPE, " + 
+                    "@ITEM = @PITEM, " + 
+                    "@PRICE = @PPRICE, " +
+                    "@UNIT = @PUNIT " ,
+            param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|50','PNAME:string|50','PTYPE:int','PITEM:string|50','PPRICE:float','PUNIT:string|50'],
+            dataprm : ['GUID','CUSER','CODE','NAME','TYPE','ITEM','PRICE','UNIT']
+        } 
+        tmpDt.updateCmd = 
+        {
+            query : "EXEC [dbo].[PRD_PRICE_LIST_UPDATE] " + 
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " + 
+                    "@CODE = @PCODE, " +
+                    "@NAME = @PNAME, " +
+                    "@TYPE = @PTYPE, " + 
+                    "@ITEM = @PITEM, " + 
+                    "@PRICE = @PPRICE, " +
+                    "@UNIT = @PUNIT " ,
+            param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|50','PNAME:string|50','PTYPE:int','PITEM:string|50','PPRICE:float','PUNIT:string|50'],
+            dataprm : ['GUID','CUSER','CODE','NAME','TYPE','ITEM','PRICE','UNIT']
+        } 
+        tmpDt.deleteCmd = 
+        {
+            query : "EXEC [dbo].[PRD_PRICE_LIST_DELETE] " + 
+                    "@CUSER = @PCUSER, " + 
+                    "@UPDATE = 1, " + 
+                    "@GUID = @PGUID " ,
+            param : ['PCUSER:string|25','PGUID:string|50'],
+            dataprm : ['CUSER','GUID']
+        }
+
+        this.ds.add(tmpDt);
+    }
+    //#endregion
+    dt()
+    {
+        if(arguments.length > 0)
+        {
+            return this.ds.get(arguments[0]);
+        }
+
+        return this.ds.get(0)
+    }
+    addEmpty()
+    {
+        if(typeof this.dt('PRICE_LIST') == 'undefined')
+        {
+            return;
+        }
+        let tmp = {}
+        if(arguments.length > 0)
+        {
+            tmp = {...arguments[0]}            
+        }
+        else
+        {
+            tmp = {...this.empty}
+        }
+        tmp.GUID = datatable.uuidv4();
+        this.dt('PRICE_LIST').push(tmp)
+    }
+    clearAll()
+    {
+        for (let i = 0; i < this.ds.length; i++) 
+        {
+            this.dt(i).clear()
+        }
+    }
+    load()
+    {
+        //PARAMETRE OLARAK OBJE GÖNDERİLİR YADA PARAMETRE BOŞ İSE TÜMÜ GETİRİLİ.
+        return new Promise(async resolve => 
+        {
+            let tmpPrm = 
+            {
+                GUID : '00000000-0000-0000-0000-000000000000',
+                CODE : '',
+                TYPE : 0
+            }          
+
+            if(arguments.length > 0)
+            {
+                tmpPrm.GUID = typeof arguments[0].GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].GUID;
+                tmpPrm.CODE = typeof arguments[0].CODE == 'undefined' ? '' : arguments[0].CODE;
+                tmpPrm.TYPE = typeof arguments[0].TYPE == 'undefined' ? 0 : arguments[0].TYPE;
+            }
+            this.ds.get('PRICE_LIST').selectCmd.value = Object.values(tmpPrm)
+
+            await this.ds.get('PRICE_LIST').refresh();
+            resolve(this.ds.get('PRICE_LIST'));    
+        });
+    }
+    save()
+    {
+        return new Promise(async resolve => 
+        {
+            this.ds.delete()
+            resolve(await this.ds.update()); 
+        });
+    }
+}

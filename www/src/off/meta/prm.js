@@ -148,6 +148,21 @@ export const prm =
             CAPTION : "Maliyetten Düşük Fiyata Satış Yapabilir"
         }
     },
+    // maxRoundAmount
+    {
+        TYPE : 0,
+        ID :"maxRoundAmount",
+        VALUE : 0.05,
+        SPECIAL : "",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Sistem",
+            CAPTION : "En fazla uygulanabilcek yuvarlama tutarı"
+        }
+    },
     //Zorunlu Evrak Silme Açıklaması
     {
         TYPE : 0,

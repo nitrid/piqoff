@@ -1254,7 +1254,7 @@ export default class salesDispatch extends React.PureComponent
                                                         this.txtRef.value = data[0].CODE;
                                                         this.txtRef.props.onChange()
                                                     }
-                                                    if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
+                                                    if(this.cmbDepot.value != '' && this.docLocked == false)
                                                     {
                                                         this.frmDocItems.option('disabled',false)
                                                     }
@@ -1307,7 +1307,7 @@ export default class salesDispatch extends React.PureComponent
                                                                 this.txtRef.value = data[0].CODE;
                                                                 this.txtRef.props.onChange()
                                                             }
-                                                            if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
+                                                            if(this.cmbDepot.value != '' && this.docLocked == false)
                                                             {
                                                                 this.frmDocItems.option('disabled',false)
                                                             }
@@ -2590,7 +2590,7 @@ export default class salesDispatch extends React.PureComponent
                             <Column dataField="ZIPCODE" caption={this.t("pg_adress.clmZipcode")} width={300} defaultSortOrder="asc" />
                             <Column dataField="COUNTRY" caption={this.t("pg_adress.clmCountry")} width={200}/>
                         </NdPopGrid>
-                           {/* Birim PopUp */}
+                    {/* Birim PopUp */}
                     <div>
                         <NdDialog parent={this} id={"msgUnit"} 
                         visible={false}

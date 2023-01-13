@@ -75,7 +75,7 @@ export default class Login extends React.Component
             return;
         }
         
-        if((await this.core.auth.login(this.state.kullanici,this.state.sifre,'OFF')))
+        if((await this.core.auth.login(this.state.kullanici,this.state.sifre,'MOB')))
         {
            
             App.instance.setState({logined:true});
@@ -144,7 +144,7 @@ export default class Login extends React.Component
         {
             if(tmpData[i].CARDID == pValue)
             {
-                if(await this.core.auth.login(tmpData[i].CODE,tmpData[i].PWD,'OFF'))
+                if(await this.core.auth.login(tmpData[i].CODE,tmpData[i].PWD,'MOB'))
                 {
                     App.instance.setState({logined:true});
                     idCheck = true

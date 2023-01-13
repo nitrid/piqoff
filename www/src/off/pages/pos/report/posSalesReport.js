@@ -101,6 +101,9 @@ export default class posSalesReport extends React.PureComponent
                                             "WHEN PAY_TYPE = 2 THEN 'CHQ' " +
                                             "WHEN PAY_TYPE = 3 THEN 'CHQe' " +
                                             "WHEN PAY_TYPE = 4 THEN 'BON D''AVOIR' " +
+                                            "WHEN PAY_TYPE = 5 THEN 'AVOIR' " +
+                                            "WHEN PAY_TYPE = 6 THEN 'VIRMENT' " +
+                                            "WHEN PAY_TYPE = 7 THEN 'PRLV' " +
                                             "END AS TYPE, " +
                                             "0 AS VAT_RATE, " +
                                             "CASE WHEN POS.TYPE = 0 THEN SUM(AMOUNT - CHANGE) ELSE SUM(AMOUNT - CHANGE) * -1 END AS AMOUNT  " +
