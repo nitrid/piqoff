@@ -234,7 +234,7 @@ export default class salesOrder extends React.PureComponent
                 button:[{id:"btn01",caption:this.t("msgBarcodeCheck.btn01"),location:'after'}],
                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgBarcodeCheck.msg")}</div>)
             }
-            let pResult = await dialog(tmpConfObj);
+            await dialog(tmpConfObj);
             return
         }
         for (let i = 0; i < this.docObj.docOrders.dt().length; i++) 
