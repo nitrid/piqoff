@@ -1114,7 +1114,7 @@ export const prm =
     {
         TYPE : 1,
         ID :"ItemGrpForNotPriceSave",
-        VALUE : ['209','210','002','033'],
+        VALUE : ['209','210','002','033','FFC7456F-D75B-4B54-800A-45C8C882137D'],
         SPECIAL : "",
         PAGE : "stk_01_001",
         ELEMENT : "",
