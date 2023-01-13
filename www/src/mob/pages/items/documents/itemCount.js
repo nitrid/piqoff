@@ -216,6 +216,10 @@ export default class itemCount extends React.PureComponent
                 }
                 if(pResult == 'btn03')
                 {
+                    if(this.countObj.dt()[this.countObj.dt().length - 1].ITEM_CODE == '')
+                    {
+                        await this.grdItemCount.devGrid.deleteRow(this.countObj.dt().length - 1)
+                    }
                     this.barcodeReset()
                     return
                 }

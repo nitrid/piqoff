@@ -301,7 +301,7 @@
       </Controls>
       <StylePriority Ref="155" UseBorders="false" />
     </Item5>
-    <Item6 Ref="156" ControlType="ReportFooterBand" Name="ReportFooter" PrintAtBottom="true" HeightF="81.45663" KeepTogether="true">
+    <Item6 Ref="156" ControlType="ReportFooterBand" Name="ReportFooter" PrintAtBottom="true" HeightF="105.079781" KeepTogether="true">
       <SubBands>
         <Item1 Ref="157" ControlType="SubBand" Name="SubBand1" HeightF="153.624084">
           <Controls>
@@ -328,66 +328,75 @@
         </Item1>
       </SubBands>
       <Controls>
-        <Item1 Ref="171" ControlType="XRLine" Name="line2" SizeF="807.5576,6" LocationFloat="0, 2.87501025" />
-        <Item2 Ref="172" ControlType="XRLabel" Name="label23" TextFormatString="{0:0.00KG}" Multiline="true" CanGrow="false" TextAlignment="TopCenter" SizeF="309.769531,18.0000267" LocationFloat="0, 62.87511" Font="Arial, 10pt, style=Bold" Padding="2,2,0,0,100">
+        <Item1 Ref="171" ControlType="XRLabel" Name="label31" Multiline="true" Text="Total de Bon de Livraison TTC :" TextAlignment="TopRight" SizeF="229.836609,18.00003" LocationFloat="433.454071, 26.875061" Font="Arial, 10pt" Padding="2,2,0,0,100">
+          <StylePriority Ref="172" UseFont="false" UseTextAlignment="false" />
+        </Item1>
+        <Item2 Ref="173" ControlType="XRLabel" Name="label32" TextFormatString="{0:#,#.00}€" Multiline="true" CanGrow="false" TextAlignment="TopRight" SizeF="162.485657,18.00003" LocationFloat="645.2804, 26.87505" Font="Arial, 10pt" Padding="2,2,0,0,100">
           <ExpressionBindings>
-            <Item1 Ref="173" EventName="BeforePrint" PropertyName="Text" Expression="[LUSER_NAME]" />
+            <Item1 Ref="174" EventName="BeforePrint" PropertyName="Text" Expression="SUM([TOTAL])" />
           </ExpressionBindings>
-          <StylePriority Ref="174" UseFont="false" UseTextAlignment="false" />
+          <StylePriority Ref="175" UseFont="false" UseTextAlignment="false" />
         </Item2>
-        <Item3 Ref="175" ControlType="XRLabel" Name="label22" TextFormatString="{0:0.00KG}" Multiline="true" CanGrow="false" Text="Nom de la Personne Saisissant Bon de Livraison" TextAlignment="TopCenter" SizeF="309.769531,21.5834312" LocationFloat="0, 44.87508" Font="Arial, 10pt, style=Underline" Padding="2,2,0,0,100">
-          <StylePriority Ref="176" UseFont="false" UseTextAlignment="false" />
-        </Item3>
-        <Item4 Ref="177" ControlType="XRLabel" Name="label21" Multiline="true" Text="Total Pois de Bon de Livraison :" TextAlignment="TopRight" SizeF="229.836548,18.0000343" LocationFloat="433.245728, 62.87511" Font="Arial, 10pt" Padding="2,2,0,0,100">
-          <StylePriority Ref="178" UseFont="false" UseTextAlignment="false" />
-        </Item4>
-        <Item5 Ref="179" ControlType="XRLabel" Name="label19" TextFormatString="{0:#,#.00KG/LT}" Multiline="true" CanGrow="false" TextAlignment="TopRight" SizeF="162.485657,18.00003" LocationFloat="645.07196, 62.8751" Font="Arial, 10pt" Padding="2,2,0,0,100">
+        <Item3 Ref="176" ControlType="XRLine" Name="line2" SizeF="807.5576,6" LocationFloat="0, 2.87501025" />
+        <Item4 Ref="177" ControlType="XRLabel" Name="label23" TextFormatString="{0:0.00KG}" Multiline="true" CanGrow="false" TextAlignment="TopCenter" SizeF="309.769531,18.0000267" LocationFloat="0.208330154, 80.87517" Font="Arial, 10pt, style=Bold" Padding="2,2,0,0,100">
           <ExpressionBindings>
-            <Item1 Ref="180" EventName="BeforePrint" PropertyName="Text" Expression="SUM([LITRE_FACTOR]*[QUANTITY])+SUM([KILOGRAMME_FACTOR]*[QUANTITY])" />
+            <Item1 Ref="178" EventName="BeforePrint" PropertyName="Text" Expression="[LUSER_NAME]" />
           </ExpressionBindings>
+          <StylePriority Ref="179" UseFont="false" UseTextAlignment="false" />
+        </Item4>
+        <Item5 Ref="180" ControlType="XRLabel" Name="label22" TextFormatString="{0:0.00KG}" Multiline="true" CanGrow="false" Text="Nom de la Personne Saisissant Bon de Livraison" TextAlignment="TopCenter" SizeF="309.769531,21.5834312" LocationFloat="0.208330154, 62.8751373" Font="Arial, 10pt, style=Underline" Padding="2,2,0,0,100">
           <StylePriority Ref="181" UseFont="false" UseTextAlignment="false" />
         </Item5>
-        <Item6 Ref="182" ControlType="XRLabel" Name="label18" TextFormatString="{0:#,#0.00LT}" Multiline="true" CanGrow="false" TextAlignment="TopRight" SizeF="162.485657,18.00003" LocationFloat="645.07196, 44.87507" Font="Arial, 10pt" Padding="2,2,0,0,100">
-          <ExpressionBindings>
-            <Item1 Ref="183" EventName="BeforePrint" PropertyName="Text" Expression="SUM([LITRE_FACTOR]*[QUANTITY])" />
-          </ExpressionBindings>
-          <StylePriority Ref="184" UseFont="false" UseTextAlignment="false" />
+        <Item6 Ref="182" ControlType="XRLabel" Name="label21" Multiline="true" Text="Total Poids de Bon de Livraison :" TextAlignment="TopRight" SizeF="229.836548,18.0000343" LocationFloat="433.454071, 80.87517" Font="Arial, 10pt" Padding="2,2,0,0,100">
+          <StylePriority Ref="183" UseFont="false" UseTextAlignment="false" />
         </Item6>
-        <Item7 Ref="185" ControlType="XRLabel" Name="label15" Multiline="true" Text="Total de Litre de Bon de Livraison :" TextAlignment="TopRight" SizeF="229.836609,18.00003" LocationFloat="433.245667, 44.87508" Font="Arial, 10pt" Padding="2,2,0,0,100">
+        <Item7 Ref="184" ControlType="XRLabel" Name="label19" TextFormatString="{0:#,#.00KG/LT}" Multiline="true" CanGrow="false" TextAlignment="TopRight" SizeF="162.485657,18.00003" LocationFloat="645.2803, 80.87515" Font="Arial, 10pt" Padding="2,2,0,0,100">
+          <ExpressionBindings>
+            <Item1 Ref="185" EventName="BeforePrint" PropertyName="Text" Expression="SUM([LITRE_FACTOR]*[QUANTITY])+SUM([KILOGRAMME_FACTOR]*[QUANTITY])" />
+          </ExpressionBindings>
           <StylePriority Ref="186" UseFont="false" UseTextAlignment="false" />
         </Item7>
-        <Item8 Ref="187" ControlType="XRLabel" Name="label14" TextFormatString="{0:#,#.00}€" Multiline="true" CanGrow="false" TextAlignment="TopRight" SizeF="162.485657,18.00003" LocationFloat="645.07196, 8.875008" Font="Arial, 10pt" Padding="2,2,0,0,100">
+        <Item8 Ref="187" ControlType="XRLabel" Name="label18" TextFormatString="{0:#,#0.00LT}" Multiline="true" CanGrow="false" TextAlignment="TopRight" SizeF="162.485657,18.00003" LocationFloat="645.2803, 62.8751221" Font="Arial, 10pt" Padding="2,2,0,0,100">
           <ExpressionBindings>
-            <Item1 Ref="188" EventName="BeforePrint" PropertyName="Text" Expression="SUM([AMOUNT])" />
+            <Item1 Ref="188" EventName="BeforePrint" PropertyName="Text" Expression="SUM([LITRE_FACTOR]*[QUANTITY])" />
           </ExpressionBindings>
           <StylePriority Ref="189" UseFont="false" UseTextAlignment="false" />
         </Item8>
-        <Item9 Ref="190" ControlType="XRLabel" Name="label13" Multiline="true" Text="Total de Bon de Livraison HT :" TextAlignment="TopRight" SizeF="229.836609,18.00003" LocationFloat="433.245667, 8.87502" Font="Arial, 10pt" Padding="2,2,0,0,100">
+        <Item9 Ref="190" ControlType="XRLabel" Name="label15" Multiline="true" Text="Total de Litre de Bon de Livraison :" TextAlignment="TopRight" SizeF="229.836609,18.00003" LocationFloat="433.454, 62.8751373" Font="Arial, 10pt" Padding="2,2,0,0,100">
           <StylePriority Ref="191" UseFont="false" UseTextAlignment="false" />
         </Item9>
-        <Item10 Ref="192" ControlType="XRLabel" Name="label12" TextFormatString="{0:#,#0.00KG}" Multiline="true" CanGrow="false" TextAlignment="TopRight" SizeF="162.485657,18.00003" LocationFloat="645.07196, 26.8750381" Font="Arial, 10pt" Padding="2,2,0,0,100">
+        <Item10 Ref="192" ControlType="XRLabel" Name="label14" TextFormatString="{0:#,#.00}€" Multiline="true" CanGrow="false" TextAlignment="TopRight" SizeF="162.485657,18.00003" LocationFloat="645.07196, 8.875008" Font="Arial, 10pt" Padding="2,2,0,0,100">
           <ExpressionBindings>
-            <Item1 Ref="193" EventName="BeforePrint" PropertyName="Text" Expression="SUM([KILOGRAMME_FACTOR]*[QUANTITY])" />
+            <Item1 Ref="193" EventName="BeforePrint" PropertyName="Text" Expression="SUM([AMOUNT])" />
           </ExpressionBindings>
           <StylePriority Ref="194" UseFont="false" UseTextAlignment="false" />
         </Item10>
-        <Item11 Ref="195" ControlType="XRLabel" Name="label11" Multiline="true" Text="Total de Pois Bon de Livraison :" TextAlignment="TopRight" SizeF="229.836609,18.0000286" LocationFloat="433.245667, 26.8750515" Font="Arial, 10pt" Padding="2,2,0,0,100">
+        <Item11 Ref="195" ControlType="XRLabel" Name="label13" Multiline="true" Text="Total de Bon de Livraison HT :" TextAlignment="TopRight" SizeF="229.836609,18.00003" LocationFloat="433.245667, 8.87502" Font="Arial, 10pt" Padding="2,2,0,0,100">
           <StylePriority Ref="196" UseFont="false" UseTextAlignment="false" />
         </Item11>
-        <Item12 Ref="197" ControlType="XRLabel" Name="label10" TextFormatString="{0:#,#0.U}(∑)Qte." Multiline="true" TextAlignment="TopLeft" SizeF="91.69052,13.9583263" LocationFloat="0, 13.8750076" Font="Arial, 8.25pt" Padding="2,2,0,0,100">
+        <Item12 Ref="197" ControlType="XRLabel" Name="label12" TextFormatString="{0:#,#0.00KG}" Multiline="true" CanGrow="false" TextAlignment="TopRight" SizeF="162.485657,18.00003" LocationFloat="645.2803, 44.87509" Font="Arial, 10pt" Padding="2,2,0,0,100">
           <ExpressionBindings>
-            <Item1 Ref="198" EventName="BeforePrint" PropertyName="Text" Expression="SUM([QUANTITY])" />
+            <Item1 Ref="198" EventName="BeforePrint" PropertyName="Text" Expression="SUM([KILOGRAMME_FACTOR]*[QUANTITY])" />
           </ExpressionBindings>
           <StylePriority Ref="199" UseFont="false" UseTextAlignment="false" />
         </Item12>
+        <Item13 Ref="200" ControlType="XRLabel" Name="label11" Multiline="true" Text="Total de Poids Bon de Livraison :" TextAlignment="TopRight" SizeF="229.836609,18.0000286" LocationFloat="433.454, 44.8751068" Font="Arial, 10pt" Padding="2,2,0,0,100">
+          <StylePriority Ref="201" UseFont="false" UseTextAlignment="false" />
+        </Item13>
+        <Item14 Ref="202" ControlType="XRLabel" Name="label10" TextFormatString="{0:#,#0.U}(∑)Qte." Multiline="true" TextAlignment="TopLeft" SizeF="91.69052,13.9583263" LocationFloat="0, 13.8750076" Font="Arial, 8.25pt" Padding="2,2,0,0,100">
+          <ExpressionBindings>
+            <Item1 Ref="203" EventName="BeforePrint" PropertyName="Text" Expression="SUM([QUANTITY])" />
+          </ExpressionBindings>
+          <StylePriority Ref="204" UseFont="false" UseTextAlignment="false" />
+        </Item14>
       </Controls>
     </Item6>
   </Bands>
   <StyleSheet>
-    <Item1 Ref="200" Name="Title" BorderStyle="Inset" Font="Arial, 14.25pt" ForeColor="255,75,75,75" BackColor="Transparent" BorderColor="Black" Sides="None" StringFormat="Near;Near;0;None;Character;Default" BorderWidthSerializable="1" />
-    <Item2 Ref="201" Name="DetailCaption1" BorderStyle="Inset" Padding="6,6,0,0,100" Font="Arial, 8.25pt, style=Bold" ForeColor="White" BackColor="255,75,75,75" BorderColor="White" Sides="None" StringFormat="Near;Center;0;None;Character;Default" TextAlignment="MiddleLeft" BorderWidthSerializable="2" />
-    <Item3 Ref="202" Name="DetailData1" BorderStyle="Inset" Padding="6,6,0,0,100" Font="Arial, 8.25pt" ForeColor="Black" BorderColor="Transparent" Sides="Left" StringFormat="Near;Center;0;None;Character;Default" TextAlignment="MiddleLeft" BorderWidthSerializable="2" />
-    <Item4 Ref="203" Name="DetailData3_Odd" BorderStyle="Inset" Padding="6,6,0,0,100" Font="Arial, 8.25pt" ForeColor="Black" BackColor="255,231,231,231" BorderColor="Transparent" Sides="None" StringFormat="Near;Center;0;None;Character;Default" TextAlignment="MiddleLeft" BorderWidthSerializable="1" />
-    <Item5 Ref="204" Name="PageInfo" BorderStyle="Inset" Padding="2,2,0,0,100" Font="Arial, 8.25pt, style=Bold" ForeColor="255,75,75,75" StringFormat="Near;Near;0;None;Character;Default" />
+    <Item1 Ref="205" Name="Title" BorderStyle="Inset" Font="Arial, 14.25pt" ForeColor="255,75,75,75" BackColor="Transparent" BorderColor="Black" Sides="None" StringFormat="Near;Near;0;None;Character;Default" BorderWidthSerializable="1" />
+    <Item2 Ref="206" Name="DetailCaption1" BorderStyle="Inset" Padding="6,6,0,0,100" Font="Arial, 8.25pt, style=Bold" ForeColor="White" BackColor="255,75,75,75" BorderColor="White" Sides="None" StringFormat="Near;Center;0;None;Character;Default" TextAlignment="MiddleLeft" BorderWidthSerializable="2" />
+    <Item3 Ref="207" Name="DetailData1" BorderStyle="Inset" Padding="6,6,0,0,100" Font="Arial, 8.25pt" ForeColor="Black" BorderColor="Transparent" Sides="Left" StringFormat="Near;Center;0;None;Character;Default" TextAlignment="MiddleLeft" BorderWidthSerializable="2" />
+    <Item4 Ref="208" Name="DetailData3_Odd" BorderStyle="Inset" Padding="6,6,0,0,100" Font="Arial, 8.25pt" ForeColor="Black" BackColor="255,231,231,231" BorderColor="Transparent" Sides="None" StringFormat="Near;Center;0;None;Character;Default" TextAlignment="MiddleLeft" BorderWidthSerializable="1" />
+    <Item5 Ref="209" Name="PageInfo" BorderStyle="Inset" Padding="2,2,0,0,100" Font="Arial, 8.25pt, style=Bold" ForeColor="255,75,75,75" StringFormat="Near;Near;0;None;Character;Default" />
   </StyleSheet>
 </XtraReportsLayoutSerializer>
