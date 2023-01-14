@@ -1129,7 +1129,7 @@ export const prm =
     {
         TYPE : 1,
         ID :"ItemGrpForNotPriceSave",
-        VALUE : ['209','210','002','033','FFC7456F-D75B-4B54-800A-45C8C882137D'],
+        VALUE : ['3b705ef0-aac8-4ed6-bae9-2718c8eb37a4','c667264f-d054-48c2-87ad-3d0eaf2a47d3','3b705ef0-aac8-4ed6-bae9-2718c8eb37a4','c667264f-d054-48c2-87ad-3d0eaf2a47d3','FFC7456F-D75B-4B54-800A-45C8C882137D'],
         SPECIAL : "",
         PAGE : "stk_01_001",
         ELEMENT : "",
