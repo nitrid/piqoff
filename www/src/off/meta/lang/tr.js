@@ -3279,8 +3279,13 @@ export const langTr =
         popDiscount : 
         {
             title: "Evrak İndirimi",
-            Percent : "Yüzde",
-            Price : "Tutar"
+            chkDocDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            Percent1 : "1. İnd. Yüzde",
+            Price1 : "1. İnd. Tutar",
+            Percent2 : "2. İnd. Yüzde",
+            Price2 : "2. İnd. Tutar",
+            Percent3 : "3. İnd. Yüzde",
+            Price3 : "3. İnd. Tutar"
         },
         popPassword : 
         {
