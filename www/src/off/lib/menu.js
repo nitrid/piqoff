@@ -270,12 +270,12 @@ export const menu = (e) =>
                         {
                             id: 'cri_04_001',
                             text: e.t('menuOff.cri_04_001'),//'Cari Ekstre Raporu',
-                            path: 'customers/operations/collectiveCustomer'
+                            path: 'construction.js',
                         },
                         {
                             id: 'cri_04_002',
                             text: e.t('menuOff.fns_04_002'),//'Cari Bakiye Bakiye Raporu',
-                            path: 'finance/lists/collectionList'
+                            path: 'construction.js',
                         },
                         //Müşteri Puan Raporu
                         {
@@ -890,7 +890,7 @@ export const menu = (e) =>
                         {
                             id: 'fns_04_002',
                             text: e.t('menuOff.fns_04_002'),//'Cari Bakiye Bakiye Raporu',
-                            path: 'finance/lists/collectionList'
+                            path: 'construction.js',
                         },
                     ]
                 }

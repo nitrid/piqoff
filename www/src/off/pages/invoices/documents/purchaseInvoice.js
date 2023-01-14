@@ -2947,11 +2947,40 @@ export default class purchaseInvoice extends React.PureComponent
                                                 ></NdTextBox>
                                             </Item>
                                             <Item  >
-                                            <Label text={this.t("txtAmount")} alignment="right" />
-                                                <NdTextBox id="txtAmount" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"AMOUNT"}}
-                                                maxLength={32}
-                                            
-                                                ></NdTextBox>
+                                                <Form colCount={2}>
+                                                    <Item>
+                                                        <Label text={this.t("txtAmount")} alignment="right" />
+                                                        <NdTextBox id="txtAmount" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"AMOUNT"}}
+                                                        maxLength={32}
+                                                    
+                                                        ></NdTextBox>
+                                                    </Item>
+                                                    <Item>
+                                                        <Label text={this.t("txtDiscount")} alignment="right" />
+                                                        <NdTextBox id="txtDiscount" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"DISCOUNT"}}
+                                                        maxLength={32}
+                                                        button=
+                                                        {
+                                                            [
+                                                                {
+                                                                    id:'01',
+                                                                    icon:'more',
+                                                                    onClick:()  =>
+                                                                    {
+                                                                        if(this.docObj.dt()[0].DISCOUNT > 0 )
+                                                                        {
+                                                                            this.txtDiscountPercent.value  = parseFloat((100 - (((this.docObj.dt()[0].AMOUNT - this.docObj.dt()[0].DISCOUNT) / this.docObj.dt()[0].AMOUNT) * 100)).toFixed(2))
+                                                                            this.txtDiscountPrice.value = this.docObj.dt()[0].DISCOUNT
+                                                                        }
+                                                                        this.popDiscount.show()
+                                                                    }
+                                                                },
+                                                            ]
+                                                        }
+                                                        ></NdTextBox>
+                                                    </Item>
+                                                </Form>
+                                              
                                             </Item>
                                             {/* İndirim */}
                                             <EmptyItem colSpan={2}/>
@@ -2963,27 +2992,9 @@ export default class purchaseInvoice extends React.PureComponent
                                                 ></NdTextBox>
                                             </Item>
                                             <Item>
-                                            <Label text={this.t("txtDiscount")} alignment="right" />
-                                                <NdTextBox id="txtDiscount" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"DISCOUNT"}}
+                                            <Label text={this.t("txtTotalHt")} alignment="right" />
+                                                <NdTextBox id="txtTotalHt" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"TOTALHT"}}
                                                 maxLength={32}
-                                                button=
-                                                {
-                                                    [
-                                                        {
-                                                            id:'01',
-                                                            icon:'more',
-                                                            onClick:()  =>
-                                                            {
-                                                                if(this.docObj.dt()[0].DISCOUNT > 0 )
-                                                                {
-                                                                    this.txtDiscountPercent.value  = parseFloat((100 - (((this.docObj.dt()[0].AMOUNT - this.docObj.dt()[0].DISCOUNT) / this.docObj.dt()[0].AMOUNT) * 100)).toFixed(2))
-                                                                    this.txtDiscountPrice.value = this.docObj.dt()[0].DISCOUNT
-                                                                }
-                                                                this.popDiscount.show()
-                                                            }
-                                                        },
-                                                    ]
-                                                }
                                                 ></NdTextBox>
                                             </Item>
                                             {/* KDV */}

@@ -27,6 +27,7 @@ export class docCls
             DISCOUNT : 0,
             VAT : 0,
             TOTAL : 0,
+            TOTALHT : 0,
             DESCRIPTION : '',
             ADDRESS : 0,
             LOCKED : 0,
