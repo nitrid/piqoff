@@ -3251,6 +3251,7 @@ export const langFr =
             clmVat : "TVA",
             clmAmount : "Total" ,
             clmTotal : "Total Général",
+            clmTotalHt : "Total HT",
             clmDispatch : "No Bon de Livraison",
             clmCreateDate: "Date d'Enregistrement",
             clmMargin :"Marge",
@@ -3258,6 +3259,7 @@ export const langFr =
             clmCustomerPrice : "Prix F.",
             clmDescription :"Motif",
             clmCuser :"Utilisateur",
+            clmMulticode : "FRN.Code",
         },
         grdInvoicePayment: 
         {
