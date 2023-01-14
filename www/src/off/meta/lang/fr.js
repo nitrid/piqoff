@@ -3204,6 +3204,7 @@ export const langFr =
         dtExpDate : "Date d'Echéance", 
         getOffers : "Recherche Proposition", 
         getProforma : "Rechercher Proforma ", 
+        txtTotalHt : "Total HT",
         pg_Docs : 
         {
             title : "Sélection Document",

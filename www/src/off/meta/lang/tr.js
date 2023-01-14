@@ -3162,7 +3162,7 @@ export const langTr =
         txtCustomerCode : "Cari Kodu",
         txtCustomerName : "Cari Adı",
         dtDocDate : "Tarih",
-        txtAmount : "Tutar",
+        txtAmount : "İndrimsiz Tutar",
         txtDiscount : "İndirim",
         txtMargin : "Marj",
         txtVat : "Kdv",
@@ -3205,6 +3205,7 @@ export const langTr =
         dtExpDate : "Vade Tarihi", 
         getOffers : "Teklif Getir",
         getProforma : "Proforma Getir",
+        txtTotalHt : "İndirimli Tutar",
         pg_Docs : 
         {
             title : "Evrak Seçimi",

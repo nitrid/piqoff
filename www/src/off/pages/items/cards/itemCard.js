@@ -46,7 +46,7 @@ export default class itemCard extends React.PureComponent
         this.salesContractObj = new datatable()
         this.salesContractObj.selectCmd =
         {
-            query :"SELECT * FROM [SALES_CONTRACT_Vw_01] WHERE ITEM = @ITEM_GUID AND TYPE = 1 AND START_DATE <= GETDATE() AND FINISH_DATE >= GETDATE()   ORDER BY LDATE DESC ",
+            query :"SELECT * FROM [CONTRACT_Vw_01] WHERE ITEM = @ITEM_GUID AND TYPE = 1 AND START_DATE <= GETDATE() AND FINISH_DATE >= GETDATE()   ORDER BY LDATE DESC ",
             param : ['ITEM_GUID:string|50']
         }
         this.otherShopObj = new datatable()
@@ -677,6 +677,7 @@ export default class itemCard extends React.PureComponent
                     value : [tmpData.result.recordset[0].DOC_GUID]
                 }
                 let tmpItemData = await this.core.sql.execute(tmpItemQuery)
+                console.log(tmpItemData)
                 if(tmpItemData.result.recordset.length >0)
                 {
                     let tmpServices = []
@@ -687,6 +688,7 @@ export default class itemCard extends React.PureComponent
                             tmpServices.push(tmpItemData.result.recordset[i])
                         }
                     }
+                    console.log(tmpServices)
                     for (let x = 0; x < tmpServices.length; x++) 
                     {
                         let tmpQuantity = 0
@@ -697,7 +699,9 @@ export default class itemCard extends React.PureComponent
                                 tmpQuantity = tmpQuantity + tmpItemData.result.recordset[i].QUANTITY
                             }
                         }
-                        let tmpTotal = parseFloat(Number(tmpServices[x].AMOUNT / tmpQuantity).toFixed(2))
+                        console.log(tmpServices[x].AMOUNT+'-'+tmpQuantity)
+                        let tmpTotal = parseFloat(Number(tmpServices[x].AMOUNT / tmpQuantity).toFixed(3))
+                        console.log(tmpTotal)
                         if(this.extraCostData.where({DESCRIPTION:tmpServices[x].ITEM_NAME}).length > 0)
                         {
                             this.extraCostData.where({DESCRIPTION:tmpServices[x].ITEM_NAME})[0].PRICE = tmpTotal

@@ -166,6 +166,7 @@ export default class purchaseInvoice extends React.PureComponent
         App.instance.setState({isExecute:true})
         await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:0,DOC_TYPE:20});
         App.instance.setState({isExecute:false})
+        this.frmDocItems.option('disabled',false)
 
         this.txtRef.readOnly = true
         this.txtRefno.readOnly = true
@@ -181,12 +182,10 @@ export default class purchaseInvoice extends React.PureComponent
             }
 
             await dialog(tmpConfObj);
-            this.frmDocItems.option('disabled',true)
         }
         else
         {
             this.docLocked = false
-            this.frmDocItems.option('disabled',false)
         }
         let tmpQuery = 
         {
@@ -1806,7 +1805,6 @@ export default class purchaseInvoice extends React.PureComponent
                                                 }
 
                                                 await dialog(tmpConfObj);
-                                                this.frmDocItems.option('disabled',true)
                                             }
                                             else
                                             {
@@ -2758,6 +2756,22 @@ export default class purchaseInvoice extends React.PureComponent
                                             e.rowElement.style.color ="#feaa2b"
                                         }
                                     }}
+                                    onRowUpdating={async (e)=>
+                                        {
+                                            if(this.docLocked == true)
+                                            {
+                                                e.cancel = true
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgGetLocked',showTitle:true,title:this.t("msgGetLocked.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgGetLocked.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgGetLocked.msg")}</div>)
+                                                }
+
+                                                dialog(tmpConfObj);
+                                                e.component.cancelEditData()
+                                            }
+                                        }}
                                     onCellPrepared={(e) =>
                                     {
                                         
@@ -2854,7 +2868,7 @@ export default class purchaseInvoice extends React.PureComponent
                                         <Scrolling mode="standart" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                         <Export fileName={this.lang.t("menu.ftr_02_001")} enabled={true} allowExportSelectedData={true} />
-                                        <Column dataField="LINE_NO" caption={this.t("grdPurcInv.clmLineNo")} visible={true} width={40} dataType={'number'} allowHeaderFiltering={false} defaultSortOrder="desc"/>
+                                        <Column dataField="LINE_NO" caption={this.t("grdPurcInv.clmLineNo")} visible={false} width={40} dataType={'number'} allowHeaderFiltering={false} defaultSortOrder="desc"/>
                                         <Column dataField="CDATE_FORMAT" caption={this.t("grdPurcInv.clmCreateDate")} width={80} allowEditing={false} allowHeaderFiltering={false}/>
                                         <Column dataField="CUSER_NAME" caption={this.t("grdPurcInv.clmCuser")} width={80} allowEditing={false} allowHeaderFiltering={false}/>
                                         <Column dataField="ITEM_CODE" caption={this.t("grdPurcInv.clmItemCode")} width={85} editCellRender={this._cellRoleRender} allowHeaderFiltering={false}/>
@@ -2950,41 +2964,40 @@ export default class purchaseInvoice extends React.PureComponent
                                                 }
                                                 ></NdTextBox>
                                             </Item>
-                                            <Item  >
-                                                <Form colCount={2}>
-                                                    <Item>
-                                                        <Label text={this.t("txtAmount")} alignment="right" />
-                                                        <NdTextBox id="txtAmount" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"AMOUNT"}}
-                                                        maxLength={32}
-                                                    
-                                                        ></NdTextBox>
-                                                    </Item>
-                                                    <Item>
-                                                        <Label text={this.t("txtDiscount")} alignment="right" />
-                                                        <NdTextBox id="txtDiscount" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"DISCOUNT"}}
-                                                        maxLength={32}
-                                                        button=
-                                                        {
-                                                            [
-                                                                {
-                                                                    id:'01',
-                                                                    icon:'more',
-                                                                    onClick:()  =>
+                                            <Item>
+                                                    <Form colCount={5}>
+                                                        <Item colSpan={3}>
+                                                            <Label text={this.t("txtAmount")} alignment="right" />
+                                                            <NdTextBox id="txtAmount" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"AMOUNT"}}
+                                                            maxLength={32}
+                                                        
+                                                            ></NdTextBox>
+                                                        </Item>
+                                                        <Item colSpan={2}>
+                                                            <Label text={this.t("txtDiscount")} alignment="right" />
+                                                            <NdTextBox id="txtDiscount" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"DISCOUNT"}}
+                                                            maxLength={32}
+                                                            button=
+                                                            {
+                                                                [
                                                                     {
-                                                                        if(this.docObj.dt()[0].DISCOUNT > 0 )
+                                                                        id:'01',
+                                                                        icon:'more',
+                                                                        onClick:()  =>
                                                                         {
-                                                                            this.txtDiscountPercent.value  = parseFloat((100 - (((this.docObj.dt()[0].AMOUNT - this.docObj.dt()[0].DISCOUNT) / this.docObj.dt()[0].AMOUNT) * 100)).toFixed(2))
-                                                                            this.txtDiscountPrice.value = this.docObj.dt()[0].DISCOUNT
+                                                                            if(this.docObj.dt()[0].DISCOUNT > 0 )
+                                                                            {
+                                                                                this.txtDiscountPercent.value  = parseFloat((100 - (((this.docObj.dt()[0].AMOUNT - this.docObj.dt()[0].DISCOUNT) / this.docObj.dt()[0].AMOUNT) * 100)).toFixed(2))
+                                                                                this.txtDiscountPrice.value = this.docObj.dt()[0].DISCOUNT
+                                                                            }
+                                                                            this.popDiscount.show()
                                                                         }
-                                                                        this.popDiscount.show()
-                                                                    }
-                                                                },
-                                                            ]
-                                                        }
-                                                        ></NdTextBox>
-                                                    </Item>
-                                                </Form>
-                                              
+                                                                    },
+                                                                ]
+                                                            }
+                                                            ></NdTextBox>
+                                                        </Item>
+                                                    </Form> 
                                             </Item>
                                             {/* İndirim */}
                                             <EmptyItem colSpan={2}/>
@@ -3307,7 +3320,6 @@ export default class purchaseInvoice extends React.PureComponent
                                                 if(tmpData.result.recordset.length > 0)
                                                 {
                                                     this.docObj.dt()[0].LOCKED = 0
-                                                    this.frmDocItems.option('disabled',false)
                                                     this.docLocked = false
                                                     let tmpConfObj =
                                                     {
