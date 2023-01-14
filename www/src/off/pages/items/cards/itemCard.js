@@ -699,9 +699,7 @@ export default class itemCard extends React.PureComponent
                                 tmpQuantity = tmpQuantity + tmpItemData.result.recordset[i].QUANTITY
                             }
                         }
-                        console.log(tmpServices[x].AMOUNT+'-'+tmpQuantity)
                         let tmpTotal = parseFloat(Number(tmpServices[x].AMOUNT / tmpQuantity).toFixed(3))
-                        console.log(tmpTotal)
                         if(this.extraCostData.where({DESCRIPTION:tmpServices[x].ITEM_NAME}).length > 0)
                         {
                             this.extraCostData.where({DESCRIPTION:tmpServices[x].ITEM_NAME})[0].PRICE = tmpTotal
@@ -714,11 +712,8 @@ export default class itemCard extends React.PureComponent
 
                     }
                 }
-
             }
         }
-
-
         if(this.extraCostData.length > 0)
         {
             let tmpTotal = parseFloat((this.extraCostData.sum("PRICE",3)))
