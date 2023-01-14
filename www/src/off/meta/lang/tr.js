@@ -3243,6 +3243,7 @@ export const langTr =
         },
         grdPurcInv: 
         {
+            clmLineNo : "No",
             clmItemCode: "Kodu",
             clmItemName: "Adı",
             clmPrice: "Fiyat",

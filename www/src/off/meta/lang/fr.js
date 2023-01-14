@@ -3242,6 +3242,7 @@ export const langFr =
         },
         grdPurcInv: 
         {
+            clmLineNo : "Nr",
             clmItemCode: "Code",
             clmItemName: "Nom",
             clmPrice: "Prix ",
