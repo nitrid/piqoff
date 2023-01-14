@@ -2814,6 +2814,7 @@ export default class purchaseInvoice extends React.PureComponent
                                         if(typeof e.data.DISCOUNT_RATE != 'undefined')
                                         {
                                             e.key.DISCOUNT = parseFloat((((e.key.AMOUNT * e.data.DISCOUNT_RATE) / 100)).toFixed(3))
+                                            e.key.DISCOUNT_1 = parseFloat((((e.key.AMOUNT * e.data.DISCOUNT_RATE) / 100)).toFixed(3))
                                         }
                                         if(typeof e.data.DISCOUNT != 'undefined')
                                         {
