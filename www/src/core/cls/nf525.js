@@ -203,6 +203,80 @@ export class nf525Cls
             resolve({REF:Number(tmpLastData.REF) + 1,SIGNATURE:tmpSignature,SIGNATURE_SUM:tmpSignatureSum})
         })
     }
+    async lastSaleFactSignData(pData)
+    {
+        return new Promise(async resolve => 
+        {
+            if(!this.core.offline)
+            {
+                let tmpLastRef = 0
+                let tmpLastSignature = ''
+    
+                let tmpQuery = 
+                {
+                    query : "SELECT TOP 1 * FROM [dbo].[POS_FACTURE_VW_01] WHERE DEVICE = @DEVICE ORDER BY LDATE DESC",
+                    param : ['DEVICE:string|25'],
+                    value : [pData.DEVICE]
+                }
+                
+                let tmpResult = await this.core.sql.execute(tmpQuery)
+    
+                if(typeof tmpResult.result.err == 'undefined' && tmpResult.result.recordset.length > 0)
+                {
+                    if(tmpResult.result.recordset[0].REF != null)
+                    {
+                        tmpLastRef = tmpResult.result.recordset[0].REF
+                    }
+                    if(tmpResult.result.recordset[0].SIGNATURE != null)
+                    {
+                        tmpLastSignature = tmpResult.result.recordset[0].SIGNATURE
+                    }
+                }
+                localStorage.setItem('REF_SALE_FACT',tmpLastRef)
+                localStorage.setItem('SIG_SALE_FACT',tmpLastSignature)
+            }
+            
+            resolve (
+            {
+                REF : typeof localStorage.getItem('REF_SALE_FACT') == 'undefined' ? 1 : localStorage.getItem('REF_SALE_FACT'),
+                LAST_SIGN : typeof localStorage.getItem('SIG_SALE_FACT') == 'undefined' ? '' : localStorage.getItem('SIG_SALE_FACT')
+            })
+        })
+    }
+    signatureSaleFact(pData,pSaleData)
+    {
+        return new Promise(async resolve => 
+        {
+            let tmpLastData = await this.lastSaleFactSignData(pData)
+            let tmpSignature = ''
+            let tmpSignatureSum = ''
+            
+            if(pSaleData.length > 0)
+            {
+                let tmpVatLst = pSaleData.where({GUID:{'<>':'00000000-0000-0000-0000-000000000000'}}).groupBy('VAT_RATE');
+                    
+                for (let i = 0; i < tmpVatLst.length; i++) 
+                {
+                    tmpSignature = tmpSignature + parseInt(Number(tmpVatLst[i].VAT_RATE) * 100).toString().padStart(4,'0') + ":" + parseInt(Number(pSaleData.where({VAT_TYPE:tmpVatLst[i].VAT_TYPE}).sum('TOTAL',2)) * 100).toString() + "|"
+                }
+                
+                tmpSignature = tmpSignature.toString().substring(0,tmpSignature.length - 1)
+                tmpSignature = tmpSignature + "," + parseInt(Number(Number(pData.TOTAL).toFixed(2)) * 100).toString()
+                tmpSignature = tmpSignature + "," + moment(pData.LDATE).format("YYYYMMDDHHmmss")
+                tmpSignature = tmpSignature + "," + pData.DEVICE + "" + (Number(tmpLastData.REF) + 1).toString().padStart(8,'0') 
+                tmpSignature = tmpSignature + "," + pData.TYPE_NAME
+                tmpSignature = tmpSignature + "," + (tmpLastData.LAST_SIGN == "" ? "N" : "O")
+                tmpSignature = tmpSignature + "," + tmpLastData.LAST_SIGN
+                tmpSignatureSum = tmpSignature
+                tmpSignature = this.sign(tmpSignature)
+                
+                localStorage.setItem('REF_SALE_FACT',Number(tmpLastData.REF) + 1)
+                localStorage.setItem('SIG_SALE_FACT',tmpSignature)
+            }
+
+            resolve({REF:Number(tmpLastData.REF) + 1,SIGNATURE:tmpSignature,SIGNATURE_SUM:tmpSignatureSum})
+        })
+    }
     signaturePosDuplicate(pData)
     {
         return new Promise(async resolve => 

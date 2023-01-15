@@ -1525,6 +1525,8 @@ export default class posDoc extends React.PureComponent
                         if((await dialog(tmpConfObj)) == 'btn01')
                         {
                             tmpType = 'Fatura'
+
+                            this.factureInsert()
                         }
                     }                    
                     //***************************************************/
@@ -2672,6 +2674,27 @@ export default class posDoc extends React.PureComponent
             APP_VERSION:this.core.appInfo.version
         }
         this.core.socket.emit('nf525',{cmd:"jet",data:tmpJetData})
+    }
+    async factureInsert()
+    {
+        //***** FACTURE İMZALAMA *****/
+        let tmpSignedData = await this.nf525.signatureSaleFact(this.posObj.dt()[0],this.posObj.posSale.dt())                
+        this.posObj.dt()[0].FACT_REF = tmpSignedData.REF
+
+        let tmpInsertQuery = 
+        {
+            query : "EXEC [dbo].[PRD_POS_FACTURE_INSERT] " + 
+                    "@CUSER = @PCUSER, " + 
+                    "@POS = @PPOS, " +
+                    "@REF = @PREF, " +
+                    "@SIGNATURE = @PSIGNATURE, " +
+                    "@SIGNATURE_SUM = @PSIGNATURE_SUM, " +
+                    "@APP_VERSION = @PAPP_VERSION ", 
+            param : ['PCUSER:string|25','PPOS:string|50','PREF:int','PSIGNATURE:string|max','PSIGNATURE_SUM:string|max','PAPP_VERSION:string|25'],
+            value : [this.posObj.dt()[0].CUSER,this.posObj.dt()[0].GUID,this.posObj.dt()[0].FACT_REF,tmpSignedData.SIGNATURE,tmpSignedData.SIGNATURE_SUM,this.core.appInfo.version],
+        }
+
+        await this.core.sql.execute(tmpInsertQuery)
     }
     render()
     {
