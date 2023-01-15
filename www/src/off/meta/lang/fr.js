@@ -11650,6 +11650,12 @@ export const langFr =
             msg: "Veuillez saisir l'en-tête avant l'achèvement !"    
         },
         validCode :"Code ne peut être vide !",
+        popDesign : 
+        {
+            title: "Choix du Design",
+            design : "Design" ,
+            lang : "Langue Document" 
+        },
     },
     cnt_02_002 : // "Satış Anlaşması"
     {
@@ -11680,6 +11686,7 @@ export const langFr =
             title : "Sélectionner Produit",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
+            clmGrpName : "Groupe",
             clmCostPrice :  "Prix D'Achat",
             clmSalesPrice : "Prix De Vente"
         },
@@ -11805,6 +11812,12 @@ export const langFr =
             msg: "Veuillez saisir les en-têtes avant l'achèvement !"   
         },
         validCode :"Code ne peut être vide !",
+        popDesign : 
+        {
+            title: "Choix du Design",
+            design : "Design" ,
+            lang : "Langue Document" 
+        },
     },
     fns_01_001 : // "Ödeme Listesi",
     {

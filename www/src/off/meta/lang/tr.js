@@ -11653,6 +11653,12 @@ export const langTr =
             msg: "Evrak Üst Bilgileri Tamalanmadan Stok Girilemez !"
         },
         validCode : "Kodu Boş Geçemezsiniz !",
+        popDesign : 
+        {
+            title: "Dizayn seçimi",
+            design : "Dizayn",
+            lang : "Evrak Dili"
+        },
     },
     cnt_02_002 : // "Satış Anlaşması"
     {
@@ -11683,6 +11689,7 @@ export const langTr =
             title : "Stok Seçimi",
             clmCode :  "STOK KODU",
             clmName : "STOK ADI",
+            clmGrpName : "GRUP ADI",
             clmCostPrice : "ALIŞ FİYATI",
             clmSalesPrice :"SATIŞ FİYATI"
         },
@@ -11808,6 +11815,12 @@ export const langTr =
             msg: "Evrak Üst Bilgileri Tamalanmadan Stok Girilemez !"
         },
         validCode : "Kodu Boş Geçemezsiniz !",
+        popDesign : 
+        {
+            title: "Dizayn seçimi",
+            design : "Dizayn",
+            lang : "Evrak Dili"
+        },
     },
     fns_01_001 : // "Ödeme Listesi",
     {
