@@ -36,7 +36,7 @@ class nf525
         // const buf = fs.readFileSync('test.xlsx');
         // const workbook = xlsx.read(buf);
         // console.log(workbook)   
-
+        console.log(2222)
         setTimeout(this.processGrandTotal.bind(this), 1000);
         setTimeout(this.processArchive.bind(this), 1000);
     }

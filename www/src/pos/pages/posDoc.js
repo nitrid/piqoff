@@ -1526,6 +1526,24 @@ export default class posDoc extends React.PureComponent
                         {
                             tmpType = 'Fatura'
 
+                            let tmpLastSignature = await this.nf525.signaturePosFactDuplicate(this.posObj.dt()[0])
+
+                            let tmpInsertQuery = 
+                            {
+                                query : "EXEC [dbo].[PRD_POS_EXTRA_INSERT] " + 
+                                        "@CUSER = @PCUSER, " + 
+                                        "@TAG = @PTAG, " +
+                                        "@POS_GUID = @PPOS_GUID, " +
+                                        "@LINE_GUID = @PLINE_GUID, " +
+                                        "@DATA =@PDATA, " +
+                                        "@APP_VERSION =@PAPP_VERSION, " +
+                                        "@DESCRIPTION = @PDESCRIPTION ", 
+                                param : ['PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|250','PAPP_VERSION:string|25','PDESCRIPTION:string|max'],
+                                value : [tmpLastPos[0].CUSER,"REPRINTFACT",tmpLastPos[0].GUID,"00000000-0000-0000-0000-000000000000",tmpLastSignature,this.core.appInfo.version,tmpRePrintResult]
+                            }
+
+                            await this.core.sql.execute(tmpInsertQuery)
+
                             this.factureInsert(this.posObj.dt(),this.posObj.posSale.dt())
                         }
                     }                    
