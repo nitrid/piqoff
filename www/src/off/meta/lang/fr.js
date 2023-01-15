@@ -115,8 +115,8 @@ export const langFr =
         stk_02_005: "Saisie multi produit retour",
         stk_02_006: "Imprimer étiquette spéciale",
         stk_02_007: "Entrée DLC",
-        stk_02_008 : "Ticket Entrée Stock",  
-        stk_02_009 : "Ticket Sortie Stock",  
+        stk_02_008 : "Entrée Stock",  
+        stk_02_009 : "Sortie Stock",  
         stk_03_001: "Liste Produit",
         stk_03_002: "Liste prix",
         stk_03_003: "Liste code barre",
@@ -3204,6 +3204,7 @@ export const langFr =
         dtExpDate : "Date d'Echéance", 
         getOffers : "Recherche Proposition", 
         getProforma : "Rechercher Proforma ", 
+        txtTotalHt : "Total HT",
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -3242,6 +3243,7 @@ export const langFr =
         },
         grdPurcInv: 
         {
+            clmLineNo : "Nr",
             clmItemCode: "Code",
             clmItemName: "Nom",
             clmPrice: "Prix ",
@@ -3251,6 +3253,7 @@ export const langFr =
             clmVat : "TVA",
             clmAmount : "Total" ,
             clmTotal : "Total Général",
+            clmTotalHt : "Total HT",
             clmDispatch : "No Bon de Livraison",
             clmCreateDate: "Date d'Enregistrement",
             clmMargin :"Marge",
@@ -3258,6 +3261,7 @@ export const langFr =
             clmCustomerPrice : "Prix F.",
             clmDescription :"Motif",
             clmCuser :"Utilisateur",
+            clmMulticode : "FRN.Code",
         },
         grdInvoicePayment: 
         {
