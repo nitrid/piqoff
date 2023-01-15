@@ -1526,7 +1526,7 @@ export default class posDoc extends React.PureComponent
                         {
                             tmpType = 'Fatura'
 
-                            this.factureInsert()
+                            this.factureInsert(this.posObj.dt(),this.posObj.posSale.dt())
                         }
                     }                    
                     //***************************************************/
@@ -2675,26 +2675,29 @@ export default class posDoc extends React.PureComponent
         }
         this.core.socket.emit('nf525',{cmd:"jet",data:tmpJetData})
     }
-    async factureInsert()
-    {
-        //***** FACTURE İMZALAMA *****/
-        let tmpSignedData = await this.nf525.signatureSaleFact(this.posObj.dt()[0],this.posObj.posSale.dt())                
-        this.posObj.dt()[0].FACT_REF = tmpSignedData.REF
-
-        let tmpInsertQuery = 
+    async factureInsert(pData,pSaleData)
+    {    
+        if(pData[0].FACT_REF == 0)
         {
-            query : "EXEC [dbo].[PRD_POS_FACTURE_INSERT] " + 
-                    "@CUSER = @PCUSER, " + 
-                    "@POS = @PPOS, " +
-                    "@REF = @PREF, " +
-                    "@SIGNATURE = @PSIGNATURE, " +
-                    "@SIGNATURE_SUM = @PSIGNATURE_SUM, " +
-                    "@APP_VERSION = @PAPP_VERSION ", 
-            param : ['PCUSER:string|25','PPOS:string|50','PREF:int','PSIGNATURE:string|max','PSIGNATURE_SUM:string|max','PAPP_VERSION:string|25'],
-            value : [this.posObj.dt()[0].CUSER,this.posObj.dt()[0].GUID,this.posObj.dt()[0].FACT_REF,tmpSignedData.SIGNATURE,tmpSignedData.SIGNATURE_SUM,this.core.appInfo.version],
-        }
+            //***** FACTURE İMZALAMA *****/
+            let tmpSignedData = await this.nf525.signatureSaleFact(pData[0],pSaleData)  
+            pData[0].FACT_REF = tmpSignedData.REF
 
-        await this.core.sql.execute(tmpInsertQuery)
+            let tmpInsertQuery = 
+            {
+                query : "EXEC [dbo].[PRD_POS_FACTURE_INSERT] " + 
+                        "@CUSER = @PCUSER, " + 
+                        "@POS = @PPOS, " +
+                        "@REF = @PREF, " +
+                        "@SIGNATURE = @PSIGNATURE, " +
+                        "@SIGNATURE_SUM = @PSIGNATURE_SUM, " +
+                        "@APP_VERSION = @PAPP_VERSION ", 
+                param : ['PCUSER:string|25','PPOS:string|50','PREF:int','PSIGNATURE:string|max','PSIGNATURE_SUM:string|max','PAPP_VERSION:string|25'],
+                value : [pData[0].CUSER,pData[0].GUID,pData[0].FACT_REF,tmpSignedData.SIGNATURE,tmpSignedData.SIGNATURE_SUM,this.core.appInfo.version],
+            }
+    
+            await this.core.sql.execute(tmpInsertQuery)
+        }
     }
     render()
     {
@@ -5529,6 +5532,42 @@ export default class posDoc extends React.PureComponent
                                             }
                                             else
                                             {
+                                                let tmpQuery = 
+                                                {
+                                                    query : "SELECT COUNT(TAG) AS PRINT_COUNT FROM POS_EXTRA WHERE POS_GUID = @POS_GUID AND TAG = @TAG", 
+                                                    param : ['POS_GUID:string|50','TAG:string|25'],
+                                                    value : [tmpLastPos[0].GUID,"REPRINTFACT"]
+                                                }
+
+                                                let tmpPrintCount = (await this.core.sql.execute(tmpQuery)).result.recordset[0].PRINT_COUNT
+
+                                                let tmpRePrintResult = await this.popRePrintDesc.show()
+
+                                                if(typeof tmpRePrintResult != 'undefined')
+                                                {
+                                                    let tmpLastSignature = await this.nf525.signaturePosFactDuplicate(tmpLastPos[0])
+
+                                                    let tmpInsertQuery = 
+                                                    {
+                                                        query : "EXEC [dbo].[PRD_POS_EXTRA_INSERT] " + 
+                                                                "@CUSER = @PCUSER, " + 
+                                                                "@TAG = @PTAG, " +
+                                                                "@POS_GUID = @PPOS_GUID, " +
+                                                                "@LINE_GUID = @PLINE_GUID, " +
+                                                                "@DATA =@PDATA, " +
+                                                                "@APP_VERSION =@PAPP_VERSION, " +
+                                                                "@DESCRIPTION = @PDESCRIPTION ", 
+                                                        param : ['PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|250','PAPP_VERSION:string|25','PDESCRIPTION:string|max'],
+                                                        value : [tmpLastPos[0].CUSER,"REPRINTFACT",tmpLastPos[0].GUID,"00000000-0000-0000-0000-000000000000",tmpLastSignature,this.core.appInfo.version,tmpRePrintResult]
+                                                    }
+
+                                                    await this.core.sql.execute(tmpInsertQuery)
+                                                }
+
+                                                this.sendJet({CODE:"155",NAME:"Duplicata facture imprimé."})
+
+                                                this.factureInsert(tmpLastPos,this.lastPosSaleDt)
+
                                                 let tmpData = 
                                                 {
                                                     pos : tmpLastPos,
@@ -5540,13 +5579,14 @@ export default class posDoc extends React.PureComponent
                                                     {
                                                         type : 'Fatura',
                                                         ticketCount : 0,
-                                                        reprint : 1,
+                                                        reprint : tmpPrintCount + 1,
                                                         repas : 0,
                                                         customerUsePoint : Math.floor(tmpLastPos[0].LOYALTY * 100),
                                                         customerPoint : (tmpLastPos[0].CUSTOMER_POINT + Math.floor(tmpLastPos[0].LOYALTY * 100)) - Math.floor(tmpLastPos[0].TOTAL),
                                                         customerGrowPoint : tmpLastPos[0].CUSTOMER_POINT - Math.floor(tmpLastPos[0].TOTAL)
                                                     }
                                                 }
+                                                
                                                 await this.print(tmpData)
                                             }
                                             
@@ -5563,7 +5603,7 @@ export default class posDoc extends React.PureComponent
                                             tmpLastPos.import(this.grdLastPos.devGrid.getSelectedRowKeys())
                                             
                                             if(tmpLastPos.length > 0)
-                                            {                                                
+                                            {
                                                 let tmpQuery = 
                                                 {
                                                     query : "SELECT COUNT(TAG) AS PRINT_COUNT FROM POS_EXTRA WHERE POS_GUID = @POS_GUID AND TAG = @TAG", 
@@ -5614,7 +5654,7 @@ export default class posDoc extends React.PureComponent
                                                             }
                                                         }
 
-                                                        this.sendJet({CODE:"155",NAME:"Duplicata imprimé."}) //// Duplicate fiş yazdırıldı.
+                                                        this.sendJet({CODE:"155",NAME:"Duplicata ticket imprimé."}) //// Duplicate fiş yazdırıldı.
                                                         await this.print(tmpData)
                                                     } 
                                                 }

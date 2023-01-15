@@ -223,9 +223,9 @@ export class nf525Cls
     
                 if(typeof tmpResult.result.err == 'undefined' && tmpResult.result.recordset.length > 0)
                 {
-                    if(tmpResult.result.recordset[0].REF != null)
+                    if(tmpResult.result.recordset[0].FACT_REF != null)
                     {
-                        tmpLastRef = tmpResult.result.recordset[0].REF
+                        tmpLastRef = tmpResult.result.recordset[0].FACT_REF
                     }
                     if(tmpResult.result.recordset[0].SIGNATURE != null)
                     {
@@ -327,6 +327,62 @@ export class nf525Cls
             tmpSignature = tmpSignature + "," + pData.LUSER
             tmpSignature = tmpSignature + "," + moment(pData.LDATE).format("YYYYMMDDHHmmss")
             tmpSignature = tmpSignature + "," + pData.DEVICE + "" + pData.REF.toString().padStart(8,'0') 
+            tmpSignature = tmpSignature + "," + (tmpLastSignature == "" ? "N" : "O")
+            tmpSignature = tmpSignature + "," + tmpLastSignature
+
+            resolve(this.sign(tmpSignature))
+        })
+    }
+    signaturePosFactDuplicate(pData)
+    {
+        return new Promise(async resolve => 
+        {
+            let tmpLastSignature = ''
+            let tmpSignature = ''
+            let tmpPrintCount = 0
+
+            let tmpQuery = 
+            {
+                query : "SELECT TOP 1 " +
+                        "NF525.GUID, " +
+                        "NF525.POS, " +
+                        "NF525.PRINT_NO, " +
+                        "NF525.LUSER, " +
+                        "NF525.LDATE, " +
+                        "NF525.SIGNATURE, " +
+                        "NF525.APP_VERSION, " +
+                        "NF525.DESCRIPTION, " +
+                        "POS.FACT_REF, " +
+                        "POS.TYPE_NAME, " +
+                        "POS.DEVICE " +
+                        "FROM NF525_POS_FACT_DUPLICATE_VW_01 AS NF525 " +
+                        "INNER JOIN POS_VW_01 AS POS ON " +
+                        "NF525.POS = POS.GUID " +
+                        "WHERE NF525.POS = @POS ORDER BY NF525.PRINT_NO DESC",
+                param : ['POS:string|50'],
+                value : [pData.GUID]
+            }
+            
+            let tmpResult = await this.core.sql.execute(tmpQuery)
+            
+            if(tmpResult.result.recordset.length > 0)
+            {
+                if(tmpResult.result.recordset[0].PRINT_NO != null)
+                {
+                    tmpPrintCount = tmpResult.result.recordset[0].PRINT_NO
+                }
+                if(tmpResult.result.recordset[0].SIGNATURE != null)
+                {
+                    tmpLastSignature = tmpResult.result.recordset[0].SIGNATURE
+                }
+            }
+            
+            tmpSignature = pData.GUID
+            tmpSignature = tmpSignature + "," + pData.TYPE_NAME
+            tmpSignature = tmpSignature + "," + tmpPrintCount + 1
+            tmpSignature = tmpSignature + "," + pData.LUSER
+            tmpSignature = tmpSignature + "," + moment(pData.LDATE).format("YYYYMMDDHHmmss")
+            tmpSignature = tmpSignature + "," + pData.DEVICE + "" + pData.FACT_REF.toString().padStart(8,'0') 
             tmpSignature = tmpSignature + "," + (tmpLastSignature == "" ? "N" : "O")
             tmpSignature = tmpSignature + "," + tmpLastSignature
 
