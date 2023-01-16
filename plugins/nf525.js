@@ -48,7 +48,7 @@ class nf525
     }
     async processRun()
     {
-        //await this.processGrandTotal()
+        await this.processGrandTotal()
         await this.processArchive()
 
         let tmpMin = moment.utc('02:00:00', 'HH:mm:ss').diff(moment.utc(moment(new Date).utc(true), 'HH:mm:ss'), 'minutes')
