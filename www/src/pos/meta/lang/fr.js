@@ -25,6 +25,11 @@ export const langFr =
     price : "Prix",
     quantity : "Quantité",
     nbCalculator : "Calculatrice", 
+    about : "à propos ",
+    abtCertificate : "Certificate: NF525",
+    abtNrCertificate : "Nr Certificate: B_XXXX",
+    abtLicence : "Licence: XXXXXXXXXXXXXXXXX",
+    abtVersion : "Version: ",
     msgCustomerNotFound : 
     {
         title : "Attention",
@@ -734,5 +739,5 @@ export const langFr =
         scalePort : "Balance port",
         payCardPort : "TPE port",
         printDesing : "Design d’imprimante"
-    }
+    },
 }

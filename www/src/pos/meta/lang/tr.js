@@ -25,6 +25,11 @@ export const langTr =
     price : "Fiyat",
     quantity : "Miktar",
     nbCalculator : "Hesap Makinesi",
+    about : "Hakkımızda",
+    abtCertificate : "Setifika: NF525",
+    abtNrCertificate : "Sertifika No: B_XXXX",
+    abtLicence : "Lisans: XXXXXXXXXXXXXXXXX",
+    abtVersion : "Versiyon: ",
     msgCustomerNotFound : 
     {
         title : "Dikkat",
@@ -734,5 +739,5 @@ export const langTr =
         scalePort : "Scale port",
         payCardPort : "Pay card port",
         printDesing : "Yazdırma dizaynı"
-    }
+    },
 }

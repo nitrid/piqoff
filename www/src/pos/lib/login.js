@@ -263,15 +263,27 @@ export default class Login extends React.Component
                                 </div>
                             </div> */}
                              <div className="row">
-                                <div className="col-2">
+                                <div className="col-5">
+                                  
                                 </div>
                                 <div className="col-4">
-                                    <img src="./css/img/logo piqsoft.jpg" height="100px"/>
+                                    <img src="./css/img/Logo_NF_525-e1569399608233.jpg" height="70px"/>
+                                </div>
+                            </div>     
+                            <div className="row">
+                                <div className="col-4">
                                 </div>
                                 <div className="col-4">
-                                    <img src="./css/img/Logo_NF_525-e1569399608233.jpg" height="100px"/>
+                                <Button
+                                        width={'100%'}
+                                        height='fit-content'
+                                        text={this.lang.t("about")}
+                                        type="default"
+                                        stylingMode="text"
+                                        onClick={()=> {this.popAbout.show()}}
+                                        />
                                 </div>
-                                <div className="col-2">         
+                                <div className="col-4">
                                 </div>
                             </div>     
                             <div>
@@ -327,6 +339,34 @@ export default class Login extends React.Component
                                         disabled={this.state.btnCardIdCancel}
                                         onClick={()=>{this.popCardId.hide()}}
                                         />
+                                    </Item>
+                                    </Form>
+                                </NdPopUp>
+                            </div>     
+                            {/* About PopUp */}
+                            <div>
+                                <NdPopUp parent={this} id={"popAbout"} 
+                                visible={false}
+                                showCloseButton={true}
+                                showTitle={true}
+                                container={"#root"} 
+                                width={'300'}
+                                height={'250'}
+                                title={this.lang.t("about")}
+                                position={{my:'bottom',of:'#root'}}
+                                >
+                                    <Form colCount={1} height={'fit-content'}>
+                                    <Item>
+                                        <NbLabel id="abtCertificate" parent={this} value={this.lang.t("abtCertificate")}/>
+                                    </Item>
+                                    <Item>
+                                        <NbLabel id="abtNrCertificate" parent={this} value={this.lang.t("abtNrCertificate")}/>
+                                    </Item>
+                                    <Item>
+                                        <NbLabel id="abtLicence" parent={this} value={this.lang.t("abtLicence")}/>
+                                    </Item>
+                                    <Item>
+                                        <NbLabel id="abtVersion" parent={this} value={this.lang.t("abtVersion") + this.core.appInfo.version}/>
                                     </Item>
                                     </Form>
                                 </NdPopUp>
