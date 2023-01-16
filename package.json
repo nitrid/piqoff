@@ -3,6 +3,7 @@
     "name": "piqsoft",
     "version": "1.0.1f",
     "dependencies": {
+        "adm-zip": "^0.5.10",
         "gensrv": "1.0.94",
         "jsrsasign": "10.6.1",
         "jsrsasign-util": "1.0.5",
