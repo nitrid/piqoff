@@ -14,34 +14,14 @@ class nf525
         this.timer = null
         this.connEvt = this.connEvt.bind(this)
         this.core.socket.on('connection',this.connEvt)
-        this.core.on('onSqlConnected',this.onSqlConnected.bind(this))
-        
+
         this.appInfo = JSON.parse(fs.readFileSync(this.core.root_path + '/www/package.json', 'utf8'))
-    }
-    async onSqlConnected(pStatus)
-    {
-        // let x = 
-        // [
-        //     {
-        //         adi : "ali kemal",
-        //         soyadi : "karaca",
-        //         yas : 42
-        //     }
-        // ]
-        // let m = xlsx.utils.json_to_sheet(x)
-        // let file = await xlsx.readFile('./test.xlsx')
-        // let myWorkBook = xlsx.utils.book_new();
-        // xlsx.utils.book_append_sheet(myWorkBook,m,"Sheet3")
-        // xlsx.writeFile(myWorkBook,'test.xlsx')
-        // const buf = fs.readFileSync('test.xlsx');
-        // const workbook = xlsx.read(buf);
-        // console.log(workbook)   
-        console.log(1111)
+
         setTimeout(this.processGrandTotal.bind(this), 1000);
         setTimeout(this.processArchive.bind(this), 1000);
     }
     connEvt(pSocket)
-    {
+    {       
         pSocket.on('nf525',async (pParam,pCallback) =>
         {
             if(pParam.cmd == 'jet')
@@ -130,6 +110,8 @@ class nf525
             await this.archiveNF203GrandTotal(0)
             await this.archiveNF203GrandTotal(1)
             await this.archiveNF203GrandTotal(2)
+            await this.archiveDuplicatePos()
+            await this.archiveDuplicatePosFact()
             await this.archiveDayTicket()
             
             let tmpMin = moment.utc('02:00:00', 'HH:mm:ss').diff(moment.utc(moment(new Date).utc(true), 'HH:mm:ss'), 'minutes')
@@ -267,13 +249,53 @@ class nf525
         {
             let tmpQuery = 
             {
-                query : "SELECT * FROM NF525_ARCHIVE_JET_VW_01 ORDER BY JET_GDH ASC"
+                query : "SELECT * FROM NF525_ARCHIVE_JET_VW_01 WHERE JET_GDH >= CONVERT(NVARCHAR(10),GETDATE()-1,112) AND JET_GDH <= CONVERT(NVARCHAR(10),GETDATE(),112) ORDER BY JET_GDH ASC"
             }
 
             let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
             if(tmpResult.length > 0)
             {
                 this.exportExcel(tmpResult,"JET","JET")
+            }
+            resolve()
+        });
+    }
+    async archiveDuplicatePos()
+    {
+        return new Promise(async resolve =>
+        {
+            let tmpQuery = 
+            {
+                query : "SELECT * FROM NF525_POS_DUPLICATE_VW_01 " +
+                        "WHERE LDATE >= CONVERT(NVARCHAR(10),GETDATE()-1,112) AND " +
+                        "LDATE <= CONVERT(NVARCHAR(10),GETDATE(),112) AND REPRINT_NO <> 0 " +
+                        "ORDER BY LDATE ASC"
+            }
+
+            let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
+            if(tmpResult.length > 0)
+            {
+                this.exportExcel(tmpResult,"NF525_POS_DUPLICATE","DUPLICATE")
+            }
+            resolve()
+        });
+    }
+    async archiveDuplicatePosFact()
+    {
+        return new Promise(async resolve =>
+        {
+            let tmpQuery = 
+            {
+                query : "SELECT * FROM NF525_POS_FACT_DUPLICATE_VW_01 " +
+                        "WHERE LDATE >= CONVERT(NVARCHAR(10),GETDATE()-1,112) AND " +
+                        "LDATE <= CONVERT(NVARCHAR(10),GETDATE(),112) AND PRINT_NO > 1 " +
+                        "ORDER BY LDATE ASC"
+            }
+
+            let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
+            if(tmpResult.length > 0)
+            {
+                this.exportExcel(tmpResult,"NF525_POS_FACT_DUPLICATE","DUPLICATE")
             }
             resolve()
         });
@@ -329,9 +351,15 @@ class nf525
             resolve()
         })
     }
-    exportExcel(pData,pFileName,pSheetName)
+    exportExcel(pData,pFileName,pSheetName,pFolder)
     {
         fs.mkdirSync('./archiveFiscal', { recursive: true })
+
+        if(typeof pFileName != 'undefined')
+        {
+            fs.mkdirSync('./archiveFiscal/' + pFolder, { recursive: true })
+        }
+        
         let workBook = xlsx.utils.book_new();
 
         if(Array.isArray(pData))

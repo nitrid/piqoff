@@ -318,7 +318,7 @@ export const langFr =
     popRePrintDesc : 
     {
         head : "Raison du duplicata",
-        title : "Veuillez renseigner la raison de l'impressıon du duplicata"
+        title : "Veuillez renseigner la raison de l'impressıon du duplicata ticket/facture"
     },
     msgItemReturnTicket: 
     {
@@ -589,14 +589,14 @@ export const langFr =
     msgPrintAlert: 
     {
         title : "Avertissement",
-        msg : "Souhaitez-vous imprimer le reçu ?",
+        msg : "Souhaitez-vous imprimer le ticket ?",
         btn01 : "OK",
         btn02 : "Annuler"
     },
     msgRePrint: 
     {
         title : "Avertissement",
-        msg : "Vous avez atteint la limite d'impression de reçu !",
+        msg : "Vous avez atteint la limite d'impression de ticket !",
         btn01 : "OK",
     },
     acsDialog: 
