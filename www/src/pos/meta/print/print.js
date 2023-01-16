@@ -61,7 +61,7 @@ export function print()
         ()=>{return {font:"b",align:"lt",data:" ".space(64)}},
         ()=>
         {
-            if(data.special.type == 'Fatura' || data.special.reprint > 1)
+            if(data.special.reprint > 1)
             {
                 return {font:"b",style:"b",align:"ct",data: "DUPLICATA"}
             }   

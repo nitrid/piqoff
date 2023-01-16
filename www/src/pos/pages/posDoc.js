@@ -1544,7 +1544,7 @@ export default class posDoc extends React.PureComponent
 
                             await this.core.sql.execute(tmpInsertQuery)
 
-                            this.factureInsert(this.posObj.dt(),this.posObj.posSale.dt())
+                            await this.factureInsert(this.posObj.dt(),this.posObj.posSale.dt())
                         }
                     }                    
                     //***************************************************/
@@ -2695,27 +2695,31 @@ export default class posDoc extends React.PureComponent
     }
     async factureInsert(pData,pSaleData)
     {    
-        if(pData[0].FACT_REF == 0)
+        return new Promise(async resolve => 
         {
-            //***** FACTURE İMZALAMA *****/
-            let tmpSignedData = await this.nf525.signatureSaleFact(pData[0],pSaleData)  
-            pData[0].FACT_REF = tmpSignedData.REF
-
-            let tmpInsertQuery = 
+            if(pData[0].FACT_REF == 0)
             {
-                query : "EXEC [dbo].[PRD_POS_FACTURE_INSERT] " + 
-                        "@CUSER = @PCUSER, " + 
-                        "@POS = @PPOS, " +
-                        "@REF = @PREF, " +
-                        "@SIGNATURE = @PSIGNATURE, " +
-                        "@SIGNATURE_SUM = @PSIGNATURE_SUM, " +
-                        "@APP_VERSION = @PAPP_VERSION ", 
-                param : ['PCUSER:string|25','PPOS:string|50','PREF:int','PSIGNATURE:string|max','PSIGNATURE_SUM:string|max','PAPP_VERSION:string|25'],
-                value : [pData[0].CUSER,pData[0].GUID,pData[0].FACT_REF,tmpSignedData.SIGNATURE,tmpSignedData.SIGNATURE_SUM,this.core.appInfo.version],
-            }
+                //***** FACTURE İMZALAMA *****/
+                let tmpSignedData = await this.nf525.signatureSaleFact(pData[0],pSaleData)  
+                pData[0].FACT_REF = tmpSignedData.REF
     
-            await this.core.sql.execute(tmpInsertQuery)
-        }
+                let tmpInsertQuery = 
+                {
+                    query : "EXEC [dbo].[PRD_POS_FACTURE_INSERT] " + 
+                            "@CUSER = @PCUSER, " + 
+                            "@POS = @PPOS, " +
+                            "@REF = @PREF, " +
+                            "@SIGNATURE = @PSIGNATURE, " +
+                            "@SIGNATURE_SUM = @PSIGNATURE_SUM, " +
+                            "@APP_VERSION = @PAPP_VERSION ", 
+                    param : ['PCUSER:string|25','PPOS:string|50','PREF:int','PSIGNATURE:string|max','PSIGNATURE_SUM:string|max','PAPP_VERSION:string|25'],
+                    value : [pData[0].CUSER,pData[0].GUID,pData[0].FACT_REF,tmpSignedData.SIGNATURE,tmpSignedData.SIGNATURE_SUM,this.core.appInfo.version],
+                }
+        
+                await this.core.sql.execute(tmpInsertQuery)
+            }
+            resolve()
+        })
     }
     render()
     {
@@ -5584,7 +5588,7 @@ export default class posDoc extends React.PureComponent
 
                                                 this.sendJet({CODE:"155",NAME:"Duplicata facture imprimé."})
 
-                                                this.factureInsert(tmpLastPos,this.lastPosSaleDt)
+                                                await this.factureInsert(tmpLastPos,this.lastPosSaleDt)
 
                                                 let tmpData = 
                                                 {
