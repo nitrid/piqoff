@@ -1539,7 +1539,7 @@ export default class posDoc extends React.PureComponent
                                         "@APP_VERSION =@PAPP_VERSION, " +
                                         "@DESCRIPTION = @PDESCRIPTION ", 
                                 param : ['PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|250','PAPP_VERSION:string|25','PDESCRIPTION:string|max'],
-                                value : [this.posObj.dt()[0].CUSER,"REPRINTFACT",this.posObj.dt()[0].GUID,"00000000-0000-0000-0000-000000000000",tmpLastSignature,this.core.appInfo.version,tmpRePrintResult]
+                                value : [this.posObj.dt()[0].CUSER,"REPRINTFACT",this.posObj.dt()[0].GUID,"00000000-0000-0000-0000-000000000000",tmpLastSignature,this.core.appInfo.version,'']
                             }
 
                             await this.core.sql.execute(tmpInsertQuery)
