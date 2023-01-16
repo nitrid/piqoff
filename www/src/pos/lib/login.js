@@ -33,7 +33,7 @@ export default class Login extends React.Component
                 margin:'auto',
                 top: '30%',
                 width: '490px',
-                height: '460px',
+                height: '480px',
             },
             keyboardBox :
             {
@@ -159,7 +159,10 @@ export default class Login extends React.Component
                 <div className="card" style={this.style.login_box}>
                     <div className="card-header">
                         <div className='row'>
-                            <div className='col-9'>Login</div>
+                            <div className='col-4'></div>
+                            <div className='col-8'>
+                                <img src="./css/img/Piqsoft_Logo.png" height="48px"/>
+                            </div>
                         </div>
                     </div>
                     <div className="card-body">
@@ -263,15 +266,26 @@ export default class Login extends React.Component
                                 </div>
                             </div> */}
                              <div className="row">
-                                <div className="col-2">
+                                <div className="col-5">
                                 </div>
                                 <div className="col-4">
-                                    <img src="./css/img/logo piqsoft.jpg" height="100px"/>
+                                    <img src="./css/img/Logo_NF_525-e1569399608233.jpg" height="70px"/>
+                                </div>
+                            </div>     
+                            <div className="row">
+                                <div className="col-4">
                                 </div>
                                 <div className="col-4">
-                                    <img src="./css/img/Logo_NF_525-e1569399608233.jpg" height="100px"/>
+                                <Button
+                                        width={'100%'}
+                                        height='fit-content'
+                                        text={this.lang.t("about")}
+                                        type="default"
+                                        stylingMode="text"
+                                        onClick={()=> {this.popAbout.show()}}
+                                        />
                                 </div>
-                                <div className="col-2">         
+                                <div className="col-4">
                                 </div>
                             </div>     
                             <div>
@@ -327,6 +341,34 @@ export default class Login extends React.Component
                                         disabled={this.state.btnCardIdCancel}
                                         onClick={()=>{this.popCardId.hide()}}
                                         />
+                                    </Item>
+                                    </Form>
+                                </NdPopUp>
+                            </div>     
+                            {/* About PopUp */}
+                            <div>
+                                <NdPopUp parent={this} id={"popAbout"} 
+                                visible={false}
+                                showCloseButton={true}
+                                showTitle={true}
+                                container={"#root"} 
+                                width={'300'}
+                                height={'250'}
+                                title={this.lang.t("about")}
+                                position={{my:'bottom',of:'#root'}}
+                                >
+                                    <Form colCount={1} height={'fit-content'}>
+                                    <Item>
+                                        <NbLabel id="abtCertificate" parent={this} value={this.lang.t("abtCertificate")} textSize={"28px"}/>
+                                    </Item>
+                                    <Item>
+                                        <NbLabel id="abtNrCertificate" parent={this} value={this.lang.t("abtNrCertificate")}/>
+                                    </Item>
+                                    <Item>
+                                        <NbLabel id="abtLicence" parent={this} value={this.lang.t("abtLicence")}/>
+                                    </Item>
+                                    <Item>
+                                        <NbLabel id="abtVersion" parent={this} value={this.lang.t("abtVersion") + this.core.appInfo.version}/>
                                     </Item>
                                     </Form>
                                 </NdPopUp>

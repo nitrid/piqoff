@@ -29,6 +29,11 @@ export const langTr =
     msgUserAccess : "Giriş Yetkiniz Yok",
     collectiveItemAdd: "Toplu Ürün Ekleme",
     constructionMsg : "Bu sayfa yapım aşamasındadır en kısa zamanda hizmetinize sunulacaktır.",
+    about : "Hakkımızda",
+    abtCertificate : "Setifika: NF525",
+    abtNrCertificate : "Sertifika No: B_XXXX",
+    abtLicence : "Lisans: XXXXXXXXXXXXXXXXX",
+    abtVersion : "Versiyon: ",
     popPassword : 
     {
         title: "Kullanıcı Şifrenizi Giriniz",

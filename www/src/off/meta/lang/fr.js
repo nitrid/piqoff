@@ -29,6 +29,11 @@ export const langFr =
     msgUserAccess : "Vous n'êtes pas autorisé",
     collectiveItemAdd: "Ajouter Multi Produit",
     constructionMsg : "Page en construction mise en service au plus vite.", 
+    about : "à propos ",
+    abtCertificate : "Certificate: NF525",
+    abtNrCertificate : "Nr Certificate: B_XXXX",
+    abtLicence : "Licence: XXXXXXXXXXXXXXXXX",
+    abtVersion : "Version: ",
     popPassword : 
     {
         title: "Entrez votre mot de passe utilisateur",  
