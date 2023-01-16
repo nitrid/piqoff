@@ -33,7 +33,7 @@ export default class Login extends React.Component
                 margin:'auto',
                 top: '30%',
                 width: '490px',
-                height: '460px',
+                height: '480px',
             },
             keyboardBox :
             {
@@ -159,7 +159,10 @@ export default class Login extends React.Component
                 <div className="card" style={this.style.login_box}>
                     <div className="card-header">
                         <div className='row'>
-                            <div className='col-9'>Login</div>
+                            <div className='col-3'></div>
+                            <div className='col-9'>
+                                <img src="./css/img/Piqsoft_Logo.png" height="48px"/>
+                            </div>
                         </div>
                     </div>
                     <div className="card-body">
@@ -264,7 +267,6 @@ export default class Login extends React.Component
                             </div> */}
                              <div className="row">
                                 <div className="col-5">
-                                  
                                 </div>
                                 <div className="col-4">
                                     <img src="./css/img/Logo_NF_525-e1569399608233.jpg" height="70px"/>
@@ -357,7 +359,7 @@ export default class Login extends React.Component
                                 >
                                     <Form colCount={1} height={'fit-content'}>
                                     <Item>
-                                        <NbLabel id="abtCertificate" parent={this} value={this.lang.t("abtCertificate")}/>
+                                        <NbLabel id="abtCertificate" parent={this} value={this.lang.t("abtCertificate")} textSize={"28px"}/>
                                     </Item>
                                     <Item>
                                         <NbLabel id="abtNrCertificate" parent={this} value={this.lang.t("abtNrCertificate")}/>

@@ -226,7 +226,14 @@ export default class Login extends React.Component
             <div style={this.style.body}>
                 <div className="p-5"></div>
                 <div className="card" style={this.style.login_box}>
-                   <div className="card-header">Login</div>
+                    <div className="card-header">
+                        <div className='row'>
+                            <div className='col-3'></div>
+                            <div className='col-9'>
+                                <img src="./css/img/Piqsoft_Logo.png" height="48px"/>
+                            </div>
+                        </div>
+                    </div>
                    <div className="card-body">
                         <div className="row">
                             <div className="col-12 pb-2">
