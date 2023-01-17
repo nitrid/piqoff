@@ -1575,6 +1575,7 @@ export default class posDoc extends React.PureComponent
                             reprint: 1,
                             repas: 0,
                             factCertificate : tmpFactCert,
+                            dupCertificate : '',
                             customerUsePoint:this.popCustomerUsePoint.value,
                             customerPoint:this.customerPoint.value,
                             customerGrowPoint:this.popCustomerGrowPoint.value
@@ -5593,11 +5594,16 @@ export default class posDoc extends React.PureComponent
                                                 let tmpPrintCount = (await this.core.sql.execute(tmpQuery)).result.recordset[0].PRINT_COUNT
 
                                                 let tmpRePrintResult = await this.popRePrintDesc.show()
+                                                let tmpDupSignature = await this.nf525.signaturePosFactDuplicate(tmpLastPos[0])
+                                                let tmpDupSign = ''
+
+                                                if(tmpDupSignature != '')
+                                                {
+                                                    tmpDupSign = tmpDupSignature.substring(2,3) + tmpDupSignature.substring(6,7) + tmpDupSignature.substring(12,13) + tmpDupSignature.substring(18,19)
+                                                }
 
                                                 if(typeof tmpRePrintResult != 'undefined')
                                                 {
-                                                    let tmpLastSignature = await this.nf525.signaturePosFactDuplicate(tmpLastPos[0])
-
                                                     let tmpInsertQuery = 
                                                     {
                                                         query : "EXEC [dbo].[PRD_POS_EXTRA_INSERT] " + 
@@ -5609,7 +5615,7 @@ export default class posDoc extends React.PureComponent
                                                                 "@APP_VERSION = @PAPP_VERSION, " +
                                                                 "@DESCRIPTION = @PDESCRIPTION ", 
                                                         param : ['PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|250','PAPP_VERSION:string|25','PDESCRIPTION:string|max'],
-                                                        value : [tmpLastPos[0].CUSER,"REPRINTFACT",tmpLastPos[0].GUID,"00000000-0000-0000-0000-000000000000",tmpLastSignature,this.core.appInfo.version,tmpRePrintResult]
+                                                        value : [tmpLastPos[0].CUSER,"REPRINTFACT",tmpLastPos[0].GUID,"00000000-0000-0000-0000-000000000000",tmpDupSignature,this.core.appInfo.version,tmpRePrintResult]
                                                     }
 
                                                     await this.core.sql.execute(tmpInsertQuery)
@@ -5645,12 +5651,12 @@ export default class posDoc extends React.PureComponent
                                                         reprint : tmpPrintCount + 1,
                                                         repas : 0,
                                                         factCertificate : this.core.appInfo.name + " version : " + tmpAppVers + " - " + this.core.appInfo.certificate + " - " + tmpSigned,
+                                                        dupCertificate : this.core.appInfo.name + " version : " + this.core.appInfo.version + " - " + this.core.appInfo.certificate + " - " + tmpDupSign,
                                                         customerUsePoint : Math.floor(tmpLastPos[0].LOYALTY * 100),
                                                         customerPoint : (tmpLastPos[0].CUSTOMER_POINT + Math.floor(tmpLastPos[0].LOYALTY * 100)) - Math.floor(tmpLastPos[0].TOTAL),
                                                         customerGrowPoint : tmpLastPos[0].CUSTOMER_POINT - Math.floor(tmpLastPos[0].TOTAL)
                                                     }
                                                 }
-                                                
                                                 await this.print(tmpData)
                                             }
                                             
@@ -5683,7 +5689,14 @@ export default class posDoc extends React.PureComponent
 
                                                     if(typeof tmpRePrintResult != 'undefined')
                                                     {
-                                                        let tmpLastSignature = await this.nf525.signaturePosDuplicate(tmpLastPos[0])
+                                                        let tmpDupSignature = await this.nf525.signaturePosDuplicate(tmpLastPos[0])
+                                                        let tmpDupSign = ''
+
+                                                        if(tmpDupSignature != '')
+                                                        {
+                                                            tmpDupSign = tmpDupSignature.substring(2,3) + tmpDupSignature.substring(6,7) + tmpDupSignature.substring(12,13) + tmpDupSignature.substring(18,19)
+                                                        }
+
                                                         let tmpInsertQuery = 
                                                         {
                                                             query : "EXEC [dbo].[PRD_POS_EXTRA_INSERT] " + 
@@ -5695,7 +5708,7 @@ export default class posDoc extends React.PureComponent
                                                                     "@APP_VERSION =@PAPP_VERSION, " +
                                                                     "@DESCRIPTION = @PDESCRIPTION ", 
                                                                     param : ['PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|250','PAPP_VERSION:string|25','PDESCRIPTION:string|max'],
-                                                            value : [tmpLastPos[0].CUSER,"REPRINT",tmpLastPos[0].GUID,"00000000-0000-0000-0000-000000000000",tmpLastSignature,this.core.appInfo.version,tmpRePrintResult]
+                                                            value : [tmpLastPos[0].CUSER,"REPRINT",tmpLastPos[0].GUID,"00000000-0000-0000-0000-000000000000",tmpDupSignature,this.core.appInfo.version,tmpRePrintResult]
                                                         }
 
                                                         await this.core.sql.execute(tmpInsertQuery)
@@ -5712,6 +5725,8 @@ export default class posDoc extends React.PureComponent
                                                                 ticketCount : 0,
                                                                 reprint : tmpPrintCount + 1,
                                                                 repas : 0,
+                                                                factCertificate : '',
+                                                                dupCertificate : this.core.appInfo.name + " version : " + this.core.appInfo.version + " - " + this.core.appInfo.certificate + " - " + tmpDupSign,
                                                                 customerUsePoint : Math.floor(tmpLastPos[0].LOYALTY * 100),
                                                                 customerPoint : (tmpLastPos[0].CUSTOMER_POINT + Math.floor(tmpLastPos[0].LOYALTY * 100)) - Math.floor(tmpLastPos[0].TOTAL),
                                                                 customerGrowPoint : tmpLastPos[0].CUSTOMER_POINT - Math.floor(tmpLastPos[0].TOTAL)
