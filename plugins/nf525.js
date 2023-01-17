@@ -118,7 +118,7 @@ class nf525
             try
             {
                 core.instance.log.msg("Archive started","Nf525");
-                for (let i = -10; i < 0; i++) 
+                for (let i = -20; i < 0; i++) 
                 {
                     this.folder = moment().add(i,'day').format("YYYYMMDD") + "_archivej"
 
@@ -137,6 +137,7 @@ class nf525
                         await this.archiveDuplicatePos(tmpFirstDate,tmpLastDate)
                         await this.archiveDuplicatePosFact(tmpFirstDate,tmpLastDate)
                         await this.archiveDayTicket(tmpFirstDate,tmpLastDate)
+                        await this.archiveDayFact(tmpFirstDate,tmpLastDate)
     
                         let zip = new AdmZip()
                         zip.addLocalFolder(this.core.root_path + '/archiveFiscal/' + this.folder);
@@ -381,6 +382,38 @@ class nf525
                 let tmpRepResult = (await core.instance.sql.execute(tmpRepQuery)).result.recordset
                 
                 this.exportExcel({DENTETE:tmpMasterResult,LIGNES:tmpLineResult,RECUP:tmpRepResult},tmpFileName,'',this.folder)
+            }
+            resolve()
+        })
+    }
+    archiveDayFact(pFirst,pLast)
+    {
+        return new Promise(async resolve =>
+        {
+            let tmpFileName = "FACTURE_" + pFirst
+
+            let tmpMasterQuery = 
+            {
+                query : "SELECT * FROM NF203_ARCHIVE_DONNES_DENTETE_VW_01 WHERE FAC_DAT >= @FIRST_DATE AND FAC_DAT <= @LAST_DATE ORDER BY FAC_NUM,FAC_OPS_NID ASC",
+                param : ['FIRST_DATE:string|10','LAST_DATE:string|10'],
+                value : [pFirst,pLast]
+            }
+            
+            let tmpMasterResult = (await core.instance.sql.execute(tmpMasterQuery)).result.recordset
+            if(tmpMasterResult.length > 0)
+            {
+                this.exportExcel(tmpMasterResult,tmpFileName,"DENTETE",this.folder)
+
+                let tmpLineQuery = 
+                {
+                    query : "SELECT * FROM NF203_ARCHIVE_DONNES_LIGNES_VW_01 WHERE FAC_DAT >= @FIRST_DATE AND FAC_DAT <= @LAST_DATE ORDER BY FAC_NUM,FAC_LIG_NUM ASC",
+                    param : ['FIRST_DATE:string|10','LAST_DATE:string|10'],
+                    value : [pFirst,pLast]
+                }
+                
+                let tmpLineResult = (await core.instance.sql.execute(tmpLineQuery)).result.recordset
+                
+                this.exportExcel({DENTETE:tmpMasterResult,LIGNES:tmpLineResult},tmpFileName,'',this.folder)
             }
             resolve()
         })
