@@ -1513,7 +1513,8 @@ export default class posDoc extends React.PureComponent
                 //******************************** */
                 if(typeof pPrint == 'undefined' || pPrint)
                 {       
-                    let tmpType = 'Fis'                    
+                    let tmpType = 'Fis'  
+                    let tmpFactCert = ''                  
                     //FİŞ Mİ FATURAMI SORULUYOR
                     if(this.posObj.dt()[0].CUSTOMER_CODE != '' && this.posObj.dt()[0].CUSTOMER_TYPE == 1)
                     {
@@ -1547,15 +1548,15 @@ export default class posDoc extends React.PureComponent
 
                             let tmpFactData = await this.factureInsert(this.posObj.dt(),this.posObj.posSale.dt())
                             let tmpSigned = "-"
-                            let tmpAppVers = ""
 
                             if(tmpFactData.length > 0)
                             {
-                                tmpAppVers = tmpFactData[0].APP_VERSION
                                 if(tmpFactData[0].SIGNATURE != '')
                                 {
                                     tmpSigned = tmpFactData[0].SIGNATURE.substring(2,3) + tmpFactData[0].SIGNATURE.substring(6,7) + tmpFactData[0].SIGNATURE.substring(12,13) + tmpFactData[0].SIGNATURE.substring(18,19)
                                 }
+
+                                tmpFactCert = this.core.appInfo.name + " version : " + tmpFactData[0].APP_VERSION + " - " + this.core.appInfo.certificate + " - " + tmpSigned
                             }
                         }
                     }                    
