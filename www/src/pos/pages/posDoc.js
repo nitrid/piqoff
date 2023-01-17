@@ -2742,7 +2742,7 @@ export default class posDoc extends React.PureComponent
                 }
 
                 let tmpResult = await this.core.sql.execute(tmpQuery)
-
+                console.log(tmpResult)
                 if(tmpResult.result.recordset.length > 0)
                 {
                     resolve(tmpResult.result.recordset)
