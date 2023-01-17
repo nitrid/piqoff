@@ -1574,7 +1574,7 @@ export default class posDoc extends React.PureComponent
                             ticketCount:0,
                             reprint: 1,
                             repas: 0,
-                            factCertificate : this.core.appInfo.name + " version : " + tmpAppVers + " - " + this.core.appInfo.certificate + " - " + tmpSigned,
+                            factCertificate : tmpFactCert,
                             customerUsePoint:this.popCustomerUsePoint.value,
                             customerPoint:this.customerPoint.value,
                             customerGrowPoint:this.popCustomerGrowPoint.value
