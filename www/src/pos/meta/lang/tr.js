@@ -26,10 +26,10 @@ export const langTr =
     quantity : "Miktar",
     nbCalculator : "Hesap Makinesi",
     about : "Hakkımızda",
-    abtCertificate : "Setifika: NF525",
-    abtNrCertificate : "Sertifika No: B_XXXX",
-    abtLicence : "Lisans: XXXXXXXXXXXXXXXXX",
-    abtVersion : "Versiyon: ",
+    abtCertificate : "Setifika : NF525",
+    abtNrCertificate : "Sertifika No : B_XXXX",
+    abtLicence : "Lisans : XXXXXXXXXXXXXXXXX",
+    abtVersion : "Versiyon : ",
     msgCustomerNotFound : 
     {
         title : "Dikkat",

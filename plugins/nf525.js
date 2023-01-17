@@ -110,7 +110,6 @@ class nf525
                 resolve();
             } 
         }); 
-               
     }
     async processArchive()
     {
@@ -162,15 +161,15 @@ class nf525
             }            
         })
     }
-    async archiveNF203GrandTotal(pType,pLast)
+    async archiveNF203GrandTotal(pType)
     {
         return new Promise(async resolve =>
         {
             let tmpQuery = 
             {
-                query : "SELECT * FROM NF203_ARCHIVE_GRAND_TOTAL_VW_01 WHERE TYPE = @TYPE AND FAC_GTP_HOR_GDH <= @LAST_DATE ORDER BY FAC_GTP_HOR_GDH ASC",
+                query : "SELECT * FROM NF203_ARCHIVE_GRAND_TOTAL_VW_01 WHERE TYPE = @TYPE ORDER BY FAC_GTP_HOR_GDH ASC",
                 param : ['TYPE:int','LAST_DATE:string|10'],
-                value : [pType,pLast]
+                value : [pType]
             }
 
             let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
@@ -222,17 +221,17 @@ class nf525
             resolve()
         });
     }
-    async archiveNF525GrandTotal(pType,pLast)
+    async archiveNF525GrandTotal(pType)
     {
         return new Promise(async resolve =>
         {
             let tmpQuery = 
             {
-                query : "SELECT * FROM NF525_ARCHIVE_GRAND_TOTAL_VW_01 WHERE TYPE = @TYPE AND ENC_GTP_HOR_GDH <= @LAST_DATE ORDER BY ENC_GTP_HOR_GDH ASC",
-                param : ['TYPE:int','LAST_DATE:string|10'],
-                value : [pType,pLast]
+                query : "SELECT * FROM NF525_ARCHIVE_GRAND_TOTAL_VW_01 WHERE TYPE = @TYPE ORDER BY ENC_GTP_HOR_GDH ASC",
+                param : ['TYPE:int'],
+                value : [pType]
             }
-
+            
             let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
             if(tmpResult.length > 0)
             {

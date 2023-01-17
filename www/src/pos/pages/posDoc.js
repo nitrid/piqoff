@@ -4,6 +4,7 @@ import moment from 'moment';
 
 import Form, { Label,Item } from "devextreme-react/form";
 import { ButtonGroup } from "devextreme-react/button-group";
+import { Button } from "react-bootstrap";
 import { LoadPanel } from 'devextreme-react/load-panel';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
@@ -3628,7 +3629,7 @@ export default class posDoc extends React.PureComponent
                     <div className="col-6">
                         <div className="row" style={{backgroundColor:this.state.isFormation ? 'coral' : 'white',marginLeft:'1px',marginRight:'0.5px',borderRadius:'5px'}}>
                             <div className="col-6">
-                                <NbLabel id="info" parent={this} value={this.core.appInfo.name + " version : " + this.core.appInfo.version}/>
+                                <a class="link-primary" onClick={()=>{this.popAbout.show()}} style={{textDecoration:'none'}}>{this.core.appInfo.name + " " + this.lang.t("about")}</a>
                             </div>
                             <div className="col-6 text-end">
                                 <NbLabel id="formation" parent={this} value={''}/>
@@ -7524,6 +7525,34 @@ export default class posDoc extends React.PureComponent
                         <Column dataField="TITLE" caption={"NAME"} width={250} />
                         <Column dataField="ADRESS" caption={"ADRESS"} width={350}/>
                     </NbPosPopGrid>
+                </div>
+                {/* About PopUp */}
+                <div>
+                    <NdPopUp parent={this} id={"popAbout"} 
+                    visible={false}
+                    showCloseButton={true}
+                    showTitle={true}
+                    container={"#root"} 
+                    width={'300'}
+                    height={'250'}
+                    title={this.lang.t("about")}
+                    position={{my:'bottom',of:'#root'}}
+                    >
+                        <Form colCount={1} height={'fit-content'}>
+                            <Item>
+                                <NbLabel id="abtCertificate" parent={this} value={this.lang.t("abtCertificate")} textSize={"28px"}/>
+                            </Item>
+                            <Item>
+                                <NbLabel id="abtNrCertificate" parent={this} value={this.lang.t("abtNrCertificate")}/>
+                            </Item>
+                            <Item>
+                                <NbLabel id="abtLicence" parent={this} value={this.lang.t("abtLicence")}/>
+                            </Item>
+                            <Item>
+                                <NbLabel id="abtVersion" parent={this} value={this.lang.t("abtVersion") + this.core.appInfo.version}/>
+                            </Item>
+                        </Form>
+                    </NdPopUp>
                 </div>
             </div>
         )

@@ -276,14 +276,14 @@ export default class Login extends React.Component
                                 <div className="col-4">
                                 </div>
                                 <div className="col-4">
-                                <Button
-                                        width={'100%'}
-                                        height='fit-content'
-                                        text={this.lang.t("about")}
-                                        type="default"
-                                        stylingMode="text"
-                                        onClick={()=> {this.popAbout.show()}}
-                                        />
+                                    <Button
+                                    width={'100%'}
+                                    height='fit-content'
+                                    text={this.lang.t("about")}
+                                    type="default"
+                                    stylingMode="text"
+                                    onClick={()=> {this.popAbout.show()}}
+                                    />
                                 </div>
                                 <div className="col-4">
                                 </div>
@@ -372,7 +372,7 @@ export default class Login extends React.Component
                                     </Item>
                                     </Form>
                                 </NdPopUp>
-                            </div>                        
+                            </div>
                     </div>
                 </div>
                 <div className="p-2"></div>
