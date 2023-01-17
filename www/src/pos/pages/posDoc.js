@@ -2732,22 +2732,21 @@ export default class posDoc extends React.PureComponent
         
                 await this.core.sql.execute(tmpInsertQuery)                                
             }
-            else
-            {
-                let tmpQuery = 
-                {
-                    query : "SELECT * FROM POS_FACTURE_VW_01 WHERE POS = @POS", 
-                    param : ['POS:string|50'],
-                    value : [pData[0].GUID],
-                }
 
-                let tmpResult = await this.core.sql.execute(tmpQuery)
-                console.log(tmpResult)
-                if(tmpResult.result.recordset.length > 0)
-                {
-                    resolve(tmpResult.result.recordset)
-                }                
+            let tmpQuery = 
+            {
+                query : "SELECT * FROM POS_FACTURE_VW_01 WHERE POS = @POS", 
+                param : ['POS:string|50'],
+                value : [pData[0].GUID],
             }
+
+            let tmpResult = await this.core.sql.execute(tmpQuery)
+            
+            if(tmpResult.result.recordset.length > 0)
+            {
+                resolve(tmpResult.result.recordset)
+            }        
+
             resolve([])
         })
     }
