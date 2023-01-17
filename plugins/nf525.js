@@ -146,8 +146,8 @@ class nf525
     
                         let buff = fs.readFileSync(this.core.root_path + '/archiveFiscal/' + this.folder + '.zip');
                         let hash = createHash("sha256").update(buff).digest("hex")
-    
-                        fs.writeFileSync(this.core.root_path + '/archiveFiscal/' + this.folder + '.txt',moment().format("DD/MM/YYYY HH:mm:ss") + " - " + hash)
+                        
+                        fs.writeFileSync(this.core.root_path + '/archiveFiscal/' + this.folder + '.txt',moment().format("DD/MM/YYYY HH:mm:ss") + " - " + this.sign(hash))
                     }
                 }
                 
@@ -934,9 +934,9 @@ class nf525
             {
                 tmpQuery = 
                 {
-                    query : "SELECT TOP 1 * FROM NF525_GRAND_TOTAL WHERE TYPE = @TYPE AND PERIOD = CONVERT(NVARCHAR(10),DATEADD(DD, -1, @DOC_DATE),112) AND YEAR(CDATE) = YEAR(@DOC_DATE)",
+                    query : "SELECT TOP 1 * FROM NF525_GRAND_TOTAL WHERE TYPE = @TYPE AND PERIOD = @DOC_DATE",
                     param : ['TYPE:int','DOC_DATE:string|10'],
-                    value : [pType,moment(pDocDate).format("YYYYMMDD")]
+                    value : [pType,moment(pDocDate).add(-1,'day').format("YYYYMMDD")]
                 }
             }
             else if(pType == 1)
@@ -957,7 +957,6 @@ class nf525
                     value : [pType,moment(pDocDate,"YYYYMMDD").format("YYYYMMDD")]
                 }
             }
-    
             let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
             
             if(typeof tmpResult != 'undefined' && tmpResult.length > 0)
@@ -1095,7 +1094,7 @@ class nf525
             resolve()   
         });
     }
-    signatureGrandTotal(pData,pLastSignature)
+    async signatureGrandTotal(pData,pLastSignature)
     {
         let tmpSignature = ""
 
@@ -1112,7 +1111,22 @@ class nf525
             tmpSignature = tmpSignature + "," + (pLastSignature == "" ? "N" : "O")
             tmpSignature = tmpSignature + "," + pLastSignature
 
-            return this.sign(tmpSignature)
+            let tmpSign = this.sign(tmpSignature)
+            let tmpVerify = this.verify(tmpSignature,tmpSign)
+
+            if(!tmpVerify)
+            {
+                await this.insertJet(
+                {
+                    CUSER:'System Auto',            
+                    DEVICE:'',
+                    CODE:'90',
+                    NAME:"Erreur integrite.",
+                    DESCRIPTION:'Grand total erreur verify',
+                    APP_VERSION:this.appInfo.version
+                })
+            }
+            return tmpSign
         }
         else
         {
@@ -1153,9 +1167,9 @@ class nf525
     verify(pData,pSig)
     {
         let sig = new rsa.KJUR.crypto.Signature({'alg':'SHA256withECDSA', "prov": "cryptojs/jsrsa"});
-        sig.init(pem.public);
+        sig.init(pem.certificate);
         sig.updateString(pData);
-        let isValid = sig.verify(rsa.b64tohex(pSig));
+        let isValid = sig.verify(rsa.b64utohex(pSig));
         return isValid
     }
 }

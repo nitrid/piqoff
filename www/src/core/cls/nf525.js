@@ -57,7 +57,7 @@ export class nf525Cls
         let sig = new rsa.KJUR.crypto.Signature({'alg':'SHA256withECDSA', "prov": "cryptojs/jsrsa"});
         sig.init(pem.public);
         sig.updateString(pData);
-        let isValid = sig.verify(rsa.b64tohex(pSig));
+        let isValid = sig.verify(rsa.b64utohex(pSig));
         return isValid
     }
     async lastDocSignData(pData)
@@ -123,7 +123,22 @@ export class nf525Cls
                 tmpSignature = tmpSignature + "," + (tmpLastData.LAST_SIGN == "" ? "N" : "O")
                 tmpSignature = tmpSignature + "," + tmpLastData.LAST_SIGN
                 tmpSignatureSum = tmpSignature
+
                 tmpSignature = this.sign(tmpSignature)
+                let tmpVerify = this.verify(tmpSignatureSum,tmpSignature)
+
+                if(!tmpVerify)
+                {
+                    await this.insertJet(
+                    {
+                        CUSER:'System Auto',            
+                        DEVICE:'',
+                        CODE:'90',
+                        NAME:"Erreur integrite.",
+                        DESCRIPTION:'Facture erreur verify',
+                        APP_VERSION:this.appInfo.version
+                    })
+                }
             }
 
             resolve({REF:Number(tmpLastData.REF) + 1,SIGNATURE:tmpSignature,SIGNATURE_SUM:tmpSignatureSum})
@@ -194,8 +209,23 @@ export class nf525Cls
                 tmpSignature = tmpSignature + "," + (tmpLastData.LAST_SIGN == "" ? "N" : "O")
                 tmpSignature = tmpSignature + "," + tmpLastData.LAST_SIGN
                 tmpSignatureSum = tmpSignature
-                tmpSignature = this.sign(tmpSignature)
                 
+                tmpSignature = this.sign(tmpSignature)
+                let tmpVerify = this.verify(tmpSignatureSum,tmpSignature)
+
+                if(!tmpVerify)
+                {
+                    await this.insertJet(
+                    {
+                        CUSER:'System Auto',            
+                        DEVICE:'',
+                        CODE:'90',
+                        NAME:"Erreur integrite.",
+                        DESCRIPTION:'Vente erreur verify',
+                        APP_VERSION:this.appInfo.version
+                    })
+                }
+
                 localStorage.setItem('REF_SALE',Number(tmpLastData.REF) + 1)
                 localStorage.setItem('SIG_SALE',tmpSignature)
             }
@@ -268,8 +298,23 @@ export class nf525Cls
                 tmpSignature = tmpSignature + "," + (tmpLastData.LAST_SIGN == "" ? "N" : "O")
                 tmpSignature = tmpSignature + "," + tmpLastData.LAST_SIGN
                 tmpSignatureSum = tmpSignature
-                tmpSignature = this.sign(tmpSignature)
                 
+                tmpSignature = this.sign(tmpSignature)
+                let tmpVerify = this.verify(tmpSignatureSum,tmpSignature)
+
+                if(!tmpVerify)
+                {
+                    await this.insertJet(
+                    {
+                        CUSER:'System Auto',            
+                        DEVICE:'',
+                        CODE:'90',
+                        NAME:"Erreur integrite.",
+                        DESCRIPTION:'Vente facture erreur verify',
+                        APP_VERSION:this.appInfo.version
+                    })
+                }
+
                 localStorage.setItem('REF_SALE_FACT',Number(tmpLastData.REF) + 1)
                 localStorage.setItem('SIG_SALE_FACT',tmpSignature)
             }
@@ -330,7 +375,22 @@ export class nf525Cls
             tmpSignature = tmpSignature + "," + (tmpLastSignature == "" ? "N" : "O")
             tmpSignature = tmpSignature + "," + tmpLastSignature
 
-            resolve(this.sign(tmpSignature))
+            let tmpSign = this.sign(tmpSignature)
+            let tmpVerify = this.verify(tmpSignature,tmpSign)
+
+            if(!tmpVerify)
+            {
+                await this.insertJet(
+                {
+                    CUSER:'System Auto',            
+                    DEVICE:'',
+                    CODE:'90',
+                    NAME:"Erreur integrite.",
+                    DESCRIPTION:'Vente duplicate erreur verify',
+                    APP_VERSION:this.appInfo.version
+                })
+            }
+            resolve(tmpSign)
         })
     }
     signaturePosFactDuplicate(pData)
@@ -386,7 +446,23 @@ export class nf525Cls
             tmpSignature = tmpSignature + "," + (tmpLastSignature == "" ? "N" : "O")
             tmpSignature = tmpSignature + "," + tmpLastSignature
 
-            resolve(this.sign(tmpSignature))
+            let tmpSign = this.sign(tmpSignature)
+            let tmpVerify = this.verify(tmpSignature,tmpSign)
+
+            if(!tmpVerify)
+            {
+                await this.insertJet(
+                {
+                    CUSER:'System Auto',            
+                    DEVICE:'',
+                    CODE:'90',
+                    NAME:"Erreur integrite.",
+                    DESCRIPTION:'Vente facture duplicate erreur verify',
+                    APP_VERSION:this.appInfo.version
+                })
+            }
+
+            resolve(tmpSign)
         })
     }
     signatureDocDuplicate(pData)
@@ -437,7 +513,23 @@ export class nf525Cls
             tmpSignature = tmpSignature + "," + (tmpLastSignature == "" ? "N" : "O")
             tmpSignature = tmpSignature + "," + tmpLastSignature
 
-            resolve(this.sign(tmpSignature))
+            let tmpSign = this.sign(tmpSignature)
+            let tmpVerify = this.verify(tmpSignature,tmpSign)
+
+            if(!tmpVerify)
+            {
+                await this.insertJet(
+                {
+                    CUSER:'System Auto',            
+                    DEVICE:'',
+                    CODE:'90',
+                    NAME:"Erreur integrite.",
+                    DESCRIPTION:'Vente facture duplicate erreur verify',
+                    APP_VERSION:this.appInfo.version
+                })
+            }
+            
+            resolve(tmpSign)
         })
     }
 }
