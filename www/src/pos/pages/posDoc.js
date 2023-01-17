@@ -533,6 +533,7 @@ export default class posDoc extends React.PureComponent
             // {
             //     Object.setPrototypeOf(this.posObj.posSale.dt()[i],{stat:''})
             // }
+            console.log(moment(new Date(this.posObj.dt()[0].LDATE).toISOString()))
             await this.calcGrandTotal(false)
             resolve();
         });        
@@ -1544,7 +1545,18 @@ export default class posDoc extends React.PureComponent
 
                             await this.core.sql.execute(tmpInsertQuery)
 
-                            await this.factureInsert(this.posObj.dt(),this.posObj.posSale.dt())
+                            let tmpFactData = await this.factureInsert(this.posObj.dt(),this.posObj.posSale.dt())
+                            let tmpSigned = "-"
+                            let tmpAppVers = ""
+
+                            if(tmpFactData.length > 0)
+                            {
+                                tmpAppVers = tmpFactData[0].APP_VERSION
+                                if(tmpFactData[0].SIGNATURE != '')
+                                {
+                                    tmpSigned = tmpFactData[0].SIGNATURE.substring(2,3) + tmpFactData[0].SIGNATURE.substring(6,7) + tmpFactData[0].SIGNATURE.substring(12,13) + tmpFactData[0].SIGNATURE.substring(18,19)
+                                }
+                            }
                         }
                     }                    
                     //***************************************************/
@@ -1561,6 +1573,7 @@ export default class posDoc extends React.PureComponent
                             ticketCount:0,
                             reprint: 1,
                             repas: 0,
+                            factCertificate : this.core.appInfo.name + " version : " + tmpAppVers + " - " + this.core.appInfo.certificate + " - " + tmpSigned,
                             customerUsePoint:this.popCustomerUsePoint.value,
                             customerPoint:this.customerPoint.value,
                             customerGrowPoint:this.popCustomerGrowPoint.value
@@ -2716,9 +2729,25 @@ export default class posDoc extends React.PureComponent
                     value : [pData[0].CUSER,pData[0].GUID,pData[0].FACT_REF,tmpSignedData.SIGNATURE,tmpSignedData.SIGNATURE_SUM,this.core.appInfo.version],
                 }
         
-                await this.core.sql.execute(tmpInsertQuery)
+                await this.core.sql.execute(tmpInsertQuery)                                
             }
-            resolve()
+            else
+            {
+                let tmpQuery = 
+                {
+                    query : "SELECT * FROM POS_FACTURE_VW_01 WHERE POS = @POS", 
+                    param : ['POS:string|50'],
+                    value : [pData[0].GUID],
+                }
+
+                let tmpResult = await this.core.sql.execute(tmpQuery)
+
+                if(tmpResult.result.recordset.length > 0)
+                {
+                    resolve(tmpResult.result.recordset)
+                }                
+            }
+            resolve([])
         })
     }
     render()
@@ -5576,8 +5605,8 @@ export default class posDoc extends React.PureComponent
                                                                 "@TAG = @PTAG, " +
                                                                 "@POS_GUID = @PPOS_GUID, " +
                                                                 "@LINE_GUID = @PLINE_GUID, " +
-                                                                "@DATA =@PDATA, " +
-                                                                "@APP_VERSION =@PAPP_VERSION, " +
+                                                                "@DATA = @PDATA, " +
+                                                                "@APP_VERSION = @PAPP_VERSION, " +
                                                                 "@DESCRIPTION = @PDESCRIPTION ", 
                                                         param : ['PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|250','PAPP_VERSION:string|25','PDESCRIPTION:string|max'],
                                                         value : [tmpLastPos[0].CUSER,"REPRINTFACT",tmpLastPos[0].GUID,"00000000-0000-0000-0000-000000000000",tmpLastSignature,this.core.appInfo.version,tmpRePrintResult]
@@ -5588,7 +5617,19 @@ export default class posDoc extends React.PureComponent
 
                                                 this.sendJet({CODE:"155",NAME:"Duplicata facture imprimé."})
 
-                                                await this.factureInsert(tmpLastPos,this.lastPosSaleDt)
+                                                let tmpFactData = await this.factureInsert(tmpLastPos,this.lastPosSaleDt)
+                                                let tmpSigned = "-"
+                                                let tmpAppVers = ""
+
+                                                if(tmpFactData.length > 0)
+                                                {
+                                                    tmpAppVers = tmpFactData[0].APP_VERSION
+
+                                                    if(tmpFactData[0].SIGNATURE != '')
+                                                    {
+                                                        tmpSigned = tmpFactData[0].SIGNATURE.substring(2,3) + tmpFactData[0].SIGNATURE.substring(6,7) + tmpFactData[0].SIGNATURE.substring(12,13) + tmpFactData[0].SIGNATURE.substring(18,19)
+                                                    }
+                                                }
 
                                                 let tmpData = 
                                                 {
@@ -5603,6 +5644,7 @@ export default class posDoc extends React.PureComponent
                                                         ticketCount : 0,
                                                         reprint : tmpPrintCount + 1,
                                                         repas : 0,
+                                                        factCertificate : this.core.appInfo.name + " version : " + tmpAppVers + " - " + this.core.appInfo.certificate + " - " + tmpSigned,
                                                         customerUsePoint : Math.floor(tmpLastPos[0].LOYALTY * 100),
                                                         customerPoint : (tmpLastPos[0].CUSTOMER_POINT + Math.floor(tmpLastPos[0].LOYALTY * 100)) - Math.floor(tmpLastPos[0].TOTAL),
                                                         customerGrowPoint : tmpLastPos[0].CUSTOMER_POINT - Math.floor(tmpLastPos[0].TOTAL)
