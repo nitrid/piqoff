@@ -4958,7 +4958,7 @@ export default class posDoc extends React.PureComponent
                                                     MAX_PRICE: 0.0,
                                                     MIN_PRICE: 0.0,
                                                     NAME: items.ITEM_NAME,
-                                                    PRICE: Number(items.PRICE).toFixed(2),
+                                                    PRICE: Number(items.TOTAL / items.QUANTITY).toFixed(2),
                                                     QUANTITY: Number(items.QUANTITY).toFixed(2),
                                                     SALE_JOIN_LINE: true,
                                                     SNAME: items.ITEM_NAME,
@@ -4974,7 +4974,7 @@ export default class posDoc extends React.PureComponent
                                                     UNIT_NAME: items.UNIT_NAME,
                                                     UNIT_SHORT: items.UNIT_SHORT,
                                                     VAT: items.VAT,
-                                                    VAT_TYPE: "",
+                                                    VAT_TYPE: items.VAT_RATE,
                                                     WEIGHING: false,
                                                     POS_SALE_ORDER: items.GUID,
                                                     DISCOUNT : items.DISCOUNT

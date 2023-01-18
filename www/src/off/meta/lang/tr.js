@@ -32,6 +32,7 @@ export const langTr =
     about : "Hakkımızda",
     abtCertificate : "Setifika: NF525",
     abtNrCertificate : "Sertifika No: B_XXXX",
+    abtNrCertificate2 : "Sertifika No: D_XXX",
     abtLicence : "Lisans: XXXXXXXXXXXXXXXXX",
     abtVersion : "Versiyon: ",
     popPassword : 
@@ -3834,6 +3835,18 @@ export const langTr =
             btn02: "Vazgeç",
             msg: "Kaydı silmek istediğinize eminmisiniz ?"
         },
+        msgMaxPriceAlert:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "€'dan fazla fiyat girme yetkiniz yok !"
+        },
+        msgRowNotUpdate:
+        {
+            title: "Dikkat",   
+            btn01: "Tamam",   
+            msg: "Bu satır irsaliyeden geldiği için miktarı değiştirilemez!"   
+        },  
         msgVatDelete:
         {
             title: "Dikkat",

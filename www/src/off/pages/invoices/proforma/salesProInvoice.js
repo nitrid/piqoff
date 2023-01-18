@@ -1668,7 +1668,7 @@ export default class salesInvoice extends React.PureComponent
                                     onValueChanged={(async()=>
                                     {
                                         this.checkRow()
-                                        this.docObj.docCustomer.dt()[0].DOC_DATE = moment(this.dtDocDate.value).format("DD/MM/YYYY") 
+                                        this.docObj.docCustomer.dt()[0].DOC_DATE = this.dtDocDate.value 
                                     }).bind(this)}
                                     >
                                         <Validator validationGroup={"frmSalesInv"  + this.tabIndex}>

@@ -1922,7 +1922,7 @@ export default class salesInvoice extends React.PureComponent
                                     onValueChanged={(async()=>
                                     {
                                         this.checkRow()
-                                        this.docObj.docCustomer.dt()[0].DOC_DATE = moment(this.dtDocDate.value).format("DD/MM/YYYY") 
+                                        this.docObj.docCustomer.dt()[0].DOC_DATE = this.dtDocDate.value 
                                     }).bind(this)}
                                     >
                                         <Validator validationGroup={"frmSalesInv"  + this.tabIndex}>
@@ -2307,6 +2307,37 @@ export default class salesInvoice extends React.PureComponent
                                     }}
                                     onRowUpdating={async(e)=>
                                     {
+                                        if(e.key.CONNECT_REF != '' && typeof e.newData.QUANTITY != 'undefined')
+                                        {
+                                            e.cancel = true
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgRowNotUpdate',showTitle:true,title:this.t("msgRowNotUpdate.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgRowNotUpdate.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgRowNotUpdate.msg")}</div>)
+                                            }
+                                        
+                                            dialog(tmpConfObj);
+                                            e.component.cancelEditData()
+                                            return
+                                        }
+                                        if(typeof e.newData.PRICE != 'undefined')
+                                        {
+                                            if(e.newData.PRICE > this.sysParam.filter({ID:'maxItemPrice'}).getValue())
+                                            {
+                                                e.cancel = true
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgMaxPriceAlert',showTitle:true,title:this.t("msgMaxPriceAlert.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgMaxPriceAlert.btn01"),location:'before'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.sysParam.filter({ID:'maxItemPrice'}).getValue() + this.t("msgMaxPriceAlert.msg")}</div>)
+                                                }
+                                                
+                                                dialog(tmpConfObj);
+                                                e.component.cancelEditData()
+                                                return
+                                            }
+                                        }
                                         if(this.quantityControl == true)
                                         {
                                             if(typeof e.newData.QUANTITY != 'undefined' && e.key.DEPOT_QUANTITY < e.newData.QUANTITY)
@@ -2355,7 +2386,6 @@ export default class salesInvoice extends React.PureComponent
                                         }
                                     }}
                                     onRowUpdated={async(e)=>{
-
                                         if(typeof e.data.QUANTITY != 'undefined')
                                         {
                                             let tmpQuery = 

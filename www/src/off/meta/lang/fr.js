@@ -32,6 +32,7 @@ export const langFr =
     about : "à propos ",
     abtCertificate : "Certificate: NF525",
     abtNrCertificate : "Nr Certificate: B_XXXX",
+    abtNrCertificate2 : "Nr Certificate: D_XXX",
     abtLicence : "Licence: XXXXXXXXXXXXXXXXX",
     abtVersion : "Version: ",
     popPassword : 
@@ -3826,6 +3827,18 @@ export const langFr =
             btn02: "Abandonne",
             msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
         },
+        msgMaxPriceAlert:
+        {
+            title: "Dikkat",    // BAK
+            btn01: "Tamam",    // BAK
+            msg: "€'dan fazla fiyat girme yetkiniz yok !"  // BAK
+        },
+        msgRowNotUpdate:
+        {
+            title: "Dikkat",   // BAK
+            btn01: "Tamam",   // BAK
+            msg: "Bu satır irsaliyeden geldiği için miktarı değiştirilemez!"   // BAK
+        },  
         msgVatDelete:
         {
             title: "Attention",

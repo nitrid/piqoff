@@ -425,6 +425,9 @@ export default class Login extends React.Component
                                     <NbLabel id="abtNrCertificate" parent={this} value={this.lang.t("abtNrCertificate")}/>
                                 </Item>
                                 <Item>
+                                    <NbLabel id="abtNrCertificate2" parent={this} value={this.lang.t("abtNrCertificate2")}/>
+                                </Item>
+                                <Item>
                                     <NbLabel id="abtLicence" parent={this} value={this.lang.t("abtLicence")}/>
                                 </Item>
                                 <Item>
