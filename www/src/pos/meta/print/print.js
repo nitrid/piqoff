@@ -71,6 +71,14 @@ export function print()
         },
         ()=>
         {
+            if(data.pos[0].DEVICE == '9999')
+            {
+                return {font:"b",style:"b",align:"ct",data: "FORMATION"}
+            }   
+            return
+        },
+        ()=>
+        {
             let tmpArr = []
             if(data.pos[0].TYPE == 0 && data.special.type != 'Fatura')
             {
