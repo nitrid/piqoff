@@ -7,6 +7,8 @@ import moment from "moment";
 //data.special.safe = 'Kasa Kodu'
 //data.special.ticketCount = 'Günlük Ticket Sayısı'
 //data.special.reprint = 1 Tekrar yazdırma sayısı
+//data.special.factCertificate = 'Fatura sertifika bilgisi' 
+//data.special.dupCertificate = 'Duplicate sertifika bilgisi' 
 //data.special.repas = 'TxtRepasMiktar'
 //data.special.customerUsePoint = 'Müşteri Kullanılan Puanı'
 //data.special.customerPoint = 'Müşteri Puanı'
@@ -369,7 +371,9 @@ export function print()
                     "TVA".space(10) + " " +
                     "TTC".space(10)
             })
+
             let tmpVatLst = data.possale.where({GUID:{'<>':'00000000-0000-0000-0000-000000000000'}}).groupBy('VAT_RATE');
+
             for (let i = 0; i < tmpVatLst.length; i++) 
             {
                 tmpArr.push(
@@ -462,12 +466,28 @@ export function print()
         ()=>{return {font:"b",style:"b",align:"ct",data:"AUCUN REMBOURSEMENT ESPECES NE SERA EFFECTUE"}},
         ()=>{return {font:"b",style:"b",align:"ct",data:"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"}},
         ()=>{return {font:"b",style:"b",align:"ct",data:"Merci de votre fidelite a tres bientot ..."}},
-        ()=>{return {font:"b",style:"b",align:"ct",data:data.pos[0].CERTIFICATE}},
+        ()=>
+        {
+            if(data.special.type == 'Fatura')
+            {
+                return {font:"b",style:"b",align:"ct",data:data.special.factCertificate}
+            }
+            else
+            {
+                return {font:"b",style:"b",align:"ct",data:data.pos[0].CERTIFICATE}
+            }
+        },
         ()=>
         {
             if(data.special.reprint > 1)
             {
-                return {font:"b",style:"b",align:"ct",data:"Numéro de Reimpression " + (data.special.reprint - 1)}
+                let tmpArr = []
+
+                tmpArr.push({font:"b",style:"b",align:"ct",data:"Numéro de Reimpression " + (data.special.reprint - 1)})
+                tmpArr.push({font:"b",align:"ct",data:moment(new Date()).locale('fr').format('dddd DD.MM.YYYY HH:mm:ss')})
+                tmpArr.push({font:"b",style:"b",align:"ct",data:data.special.dupCertificate})
+
+                return tmpArr.length > 0 ? tmpArr : undefined
             }
             else
             {
