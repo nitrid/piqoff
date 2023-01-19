@@ -2,7 +2,7 @@ import moment from 'moment';
 
 import React from 'react';
 import App from '../../../lib/app.js';
-import { docCls,docItemsCls, docCustomerCls } from '../../../../core/cls/doc.js';
+import { docCls,docItemsCls, docCustomerCls,docExtraCls } from '../../../../core/cls/doc.js';
 import { nf525Cls } from '../../../../core/cls/nf525.js';
 
 
@@ -40,6 +40,7 @@ export default class salesInvoice extends React.PureComponent
         this.docObj = new docCls();
         this.paymentObj = new docCls();
         this.nf525 = new nf525Cls();
+        this.extraObj = new docExtraCls();
         this.tabIndex = props.data.tabkey
         this.quantityControl = false
 
@@ -75,6 +76,7 @@ export default class salesInvoice extends React.PureComponent
     {
         this.docObj.clearAll()
         this.paymentObj.clearAll()
+        this.extraObj.clearAll()
 
         this.docObj.ds.on('onAddRow',(pTblName,pData) =>
         {
@@ -2905,10 +2907,18 @@ export default class salesInvoice extends React.PureComponent
                                             }
                                             let tmpData = await this.core.sql.execute(tmpQuery) 
                                             console.log(JSON.stringify(tmpData.result.recordset))
-                                            this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
+                                            this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",async (pResult) => 
                                             {
                                                 if(pResult.split('|')[0] != 'ERR')
                                                 {
+                                                    let tmpLastSignature = await this.nf525.signaturePosDuplicate(this.docObj.dt()[0])
+                                                    let tmpExtra = {...this.extraObj.empty}
+                                                    tmpExtra.DOC = this.docObj.dt()[0].GUID
+                                                    tmpExtra.DESCRIPTION = ''
+                                                    tmpExtra.TAG = 'PRINT'
+                                                    tmpExtra.SIGNATURE = tmpLastSignature
+                                                    this.extraObj.addEmpty(tmpExtra);
+                                                    this.extraObj.save()
                                                     var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
                                                     mywindow.onload = function() 
                                                     {
