@@ -50,6 +50,7 @@ class nf525
     {
         await this.processGrandTotal()
         await this.processArchive()
+        await this.processSignatureVerify()
 
         let tmpMin = moment.utc('02:00:00', 'HH:mm:ss').diff(moment.utc(moment(new Date).utc(true), 'HH:mm:ss'), 'minutes')
         tmpMin = tmpMin < 0 ? 1440 + tmpMin : tmpMin
@@ -150,16 +151,101 @@ class nf525
                         fs.writeFileSync(this.core.root_path + '/archiveFiscal/' + this.folder + '.txt',moment().format("DD/MM/YYYY HH:mm:ss") + " - " + this.sign(hash))
                     }
                 }
-                
-                resolve()
-
                 core.instance.log.msg("Archive completed","Nf525");
+
+                resolve()
             }
             catch (err) 
             {
                 console.log(err);
                 resolve()
             }            
+        })
+    }
+    async processSignatureVerify()
+    {
+        return new Promise(async resolve =>
+        {
+            try
+            {
+                core.instance.log.msg("Signature verify started","Nf525");
+
+                await this.grandTotalNf203SignatureVerify()
+                await this.grandTotalNf525SignatureVerify()
+
+                core.instance.log.msg("Signature verify completed","Nf525");
+
+                resolve()
+            }
+            catch (err) 
+            {
+                console.log(err);
+                resolve()
+            }
+        })
+    }
+    async grandTotalNf203SignatureVerify()
+    {
+        return new Promise(async resolve =>
+        {
+            let tmpQuery = 
+            {
+                query : "SELECT * FROM NF203_GRAND_TOTAL"
+            }
+
+            let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
+            
+            for (let i = 0; i < tmpResult.length; i++) 
+            {
+                let tmpVerify = this.verify(tmpResult[i].SIGNATURE_SUM,tmpResult[i].SIGNATURE)
+                
+                if(!tmpVerify)
+                {
+                    await this.insertJet(
+                    {
+                        CUSER:'System Auto',            
+                        DEVICE:'',
+                        CODE:'90',
+                        NAME:"Erreur integrite.",
+                        DESCRIPTION:'Grand total erreur verify',
+                        APP_VERSION:this.appInfo.version
+                    })
+                }
+            }
+
+            resolve()
+        })
+    }
+    async grandTotalNf525SignatureVerify()
+    {
+        return new Promise(async resolve =>
+        {
+            let tmpQuery = 
+            {
+                query : "SELECT * FROM NF525_GRAND_TOTAL"
+            }
+
+            let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
+            
+            for (let i = 0; i < tmpResult.length; i++) 
+            {
+                let tmpVerify = this.verify(tmpResult[i].SIGNATURE_SUM,tmpResult[i].SIGNATURE)
+                
+                if(!tmpVerify)
+                {
+                    await this.insertJet(
+                    {
+                        CUSER:'System Auto',            
+                        DEVICE:'',
+                        CODE:'90',
+                        NAME:"Erreur integrite.",
+                        DESCRIPTION:'Grand total erreur verify',
+                        APP_VERSION:this.appInfo.version
+                    })
+                }
+            }
+
+            resolve()
         })
     }
     async archiveNF203GrandTotal(pType)
@@ -508,7 +594,8 @@ class nf525
                 let tmpQuery = 
                 {
                     query : "SELECT " +
-                            "DOC_DATE AS DOC_DATE, " +
+                            "YEAR(DOC_DATE) AS YEAR, " +
+                            "CONVERT(NVARCHAR(10),DOC_DATE,112) AS PERIOD, " +
                             "MAX(VAT_RATE_A) AS VAT_RATE_A, " +
                             "SUM(HT_A) AS HT_A, " +
                             "SUM(TTC_A) AS TTC_A, " +
@@ -541,7 +628,7 @@ class nf525
                             "CASE WHEN TYPE = 1 THEN AMOUNT ELSE AMOUNT * -1 END AS FAMOUNT, " +
                             "CASE WHEN TYPE = 1 THEN TOTAL ELSE TOTAL * -1 END AS TOTAL " +
                             "FROM DOC_VAT_VW_01 AS DOC_VAT " +
-                            "WHERE {0} AND DOC_DATE <= CONVERT(NVARCHAR(10),GETDATE(),112) AND TYPE = 1 AND DOC_TYPE IN (20,21) " +
+                            "WHERE {0} AND DOC_DATE <= CONVERT(NVARCHAR(10),GETDATE()-1,112) AND TYPE = 1 AND DOC_TYPE IN (20,21) " +
                             ") AS TMP " +
                             "GROUP BY DOC_DATE ORDER BY DOC_DATE"
                 }
@@ -568,7 +655,8 @@ class nf525
                 let tmpQuery = 
                 {
                     query : "SELECT " +
-                            "MAX(PERIOD) AS DOC_DATE, " +
+                            "[YEAR] AS [YEAR], " +
+                            "MONTH(CONVERT(NVARCHAR(10),MAX(PERIOD),112)) AS PERIOD, " +
                             "SUM(HT_A) AS HT_A, " +
                             "SUM(TTC_A) AS TTC_A, " +
                             "SUM(HT_B) AS HT_B, " +
@@ -579,13 +667,14 @@ class nf525
                             "SUM(TTC_D) AS TTC_D, " +
                             "SUM(TOTAL_HT) AS TOTAL_HT, " +
                             "SUM(TOTAL_TTC) AS TOTAL_TTC " +
-                            "FROM NF203_GRAND_TOTAL WHERE PERIOD >= CONVERT(NVARCHAR(10),DATEADD(MONTH, DATEDIFF(MONTH, 0, DATEADD(MONTH, -1,GETDATE())),0),112) AND " +
-                            "PERIOD <= CONVERT(NVARCHAR(10),EOMONTH(DATEADD(MONTH, -1,GETDATE())),112) AND TYPE = 0" +
-                            "HAVING YEAR(GETDATE()) = YEAR(CONVERT(NVARCHAR(10),MAX(PERIOD),112))"
+                            "FROM NF203_GRAND_TOTAL WHERE TYPE = 0 " +
+                            "GROUP BY MONTH(CONVERT(NVARCHAR(10),PERIOD,112)),[YEAR] " +
+                            "HAVING MAX(PERIOD) < CONVERT(INTEGER,CONVERT(NVARCHAR(10),GETDATE(),112)) " +
+                            "ORDER BY [YEAR],MONTH(CONVERT(NVARCHAR(10),MAX(PERIOD),112)) ASC"
                 }
     
                 let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
-                if(typeof tmpResult != 'undefined' && tmpResult.length > 0 && tmpResult[0].DOC_DATE != null)
+                if(typeof tmpResult != 'undefined' && tmpResult.length > 0)
                 {
                     resolve(tmpResult)          
                 }
@@ -597,7 +686,8 @@ class nf525
                 let tmpQuery = 
                 {
                     query : "SELECT " +
-                            "MAX(CDATE) AS DOC_DATE, " +
+                            "[YEAR] AS [YEAR], " +
+                            "[YEAR] AS PERIOD, " +
                             "SUM(HT_A) AS HT_A, " +
                             "SUM(TTC_A) AS TTC_A, " +
                             "SUM(HT_B) AS HT_B, " +
@@ -608,13 +698,13 @@ class nf525
                             "SUM(TTC_D) AS TTC_D, " +
                             "SUM(TOTAL_HT) AS TOTAL_HT, " +
                             "SUM(TOTAL_TTC) AS TOTAL_TTC " +
-                            "FROM NF203_GRAND_TOTAL WHERE PERIOD >= 1 AND PERIOD <= 12 AND TYPE = 1 AND " +
-                            "YEAR(CDATE) = YEAR(GETDATE()) - 1"
+                            "FROM NF203_GRAND_TOTAL WHERE TYPE = 1 AND YEAR < YEAR(GETDATE()) " +
+                            "GROUP BY [YEAR] ORDER BY [YEAR] ASC"
                 }
     
                 let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
     
-                if(typeof tmpResult != 'undefined' &&  tmpResult.length > 0 && tmpResult[0].DOC_DATE != null)
+                if(typeof tmpResult != 'undefined' &&  tmpResult.length > 0)
                 {
                     resolve(tmpResult)          
                 }
@@ -623,40 +713,19 @@ class nf525
             }
         });
     }
-    getNF203LastGrandTotal(pType,pDocDate)
+    getNF203LastGrandTotal(pType,pPeriod,pYear)
     {
         return new Promise(async resolve =>
         {
-            let tmpQuery = {}
-    
-            if(pType == 0)
+            let tmpQuery = 
             {
-                tmpQuery = 
-                {
-                    query : "SELECT TOP 1 * FROM NF203_GRAND_TOTAL WHERE TYPE = @TYPE AND PERIOD = CONVERT(NVARCHAR(10),DATEADD(DD, -1, @DOC_DATE),112) AND YEAR(CDATE) = YEAR(@DOC_DATE)",
-                    param : ['TYPE:int','DOC_DATE:string|10'],
-                    value : [pType,moment(pDocDate).format("YYYYMMDD")]
-                }
+                query : "SELECT TOP 1 * FROM NF203_GRAND_TOTAL WHERE TYPE = @TYPE AND " + 
+                        "CONVERT(NVARCHAR(4),YEAR) + REPLACE(STR(PERIOD, 8), SPACE(1), '0') < CONVERT(NVARCHAR(4),@YEAR) + REPLACE(STR(@PERIOD, 8), SPACE(1), '0') " + 
+                        "ORDER BY CONVERT(NVARCHAR(4),YEAR) + REPLACE(STR(PERIOD, 8), SPACE(1), '0') DESC",
+                param : ['TYPE:int','PERIOD:int','YEAR:int'],
+                value : [pType,pPeriod,pYear]
             }
-            else if(pType == 1)
-            {
-                tmpQuery = 
-                {
-                    query : "SELECT TOP 1 * FROM NF203_GRAND_TOTAL WHERE TYPE = @TYPE AND PERIOD = MONTH(DATEADD(MM, -1, @DOC_DATE)) AND YEAR(CDATE) = YEAR(@DOC_DATE)",
-                    param : ['TYPE:int','DOC_DATE:string|10'],
-                    value : [pType,moment(pDocDate,"YYYYMMDD").format("YYYYMMDD")]
-                }
-            }
-            else if(pType == 2)
-            {
-                tmpQuery = 
-                {
-                    query : "SELECT TOP 1 * FROM NF203_GRAND_TOTAL WHERE TYPE = @TYPE AND PERIOD = YEAR(DATEADD(YYYY, -1, @DOC_DATE))",
-                    param : ['TYPE:int','DOC_DATE:string|10'],
-                    value : [pType,moment(pDocDate,"YYYYMMDD").format("YYYYMMDD")]
-                }
-            }
-    
+
             let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
             
             if(typeof tmpResult != 'undefined' && tmpResult.length > 0)
@@ -673,10 +742,8 @@ class nf525
     {
         return new Promise(async resolve =>
         {
-            let tmpPeriod = 0
             if(pType == 0)
             {
-                tmpPeriod = Number(moment(pData.DOC_DATE).format("YYYYMMDD"))
                 await this.insertJet(
                 {
                     CUSER:'System Auto',            
@@ -689,7 +756,6 @@ class nf525
             }
             else if(pType == 1)
             {
-                tmpPeriod = Number(moment(pData.DOC_DATE,"YYYYMMDD").format("MM"))
                 await this.insertJet(
                 {
                     CUSER:'System Auto',            
@@ -702,7 +768,6 @@ class nf525
             }
             else if(pType == 2)
             {
-                tmpPeriod = Number(moment(pData.DOC_DATE,"YYYYMMDD").format("YYYY"))
                 await this.insertJet(
                 {
                     CUSER:'System Auto',            
@@ -714,44 +779,33 @@ class nf525
                 })
             }
             
-            let tmpCtrlQuery = {}
-            if(pType < 2)
+            let tmpCtrlQuery = 
             {
-                tmpCtrlQuery = 
-                {
-                    query : "SELECT TOP 1 PERIOD FROM NF203_GRAND_TOTAL WHERE TYPE = @TYPE AND PERIOD = @PERIOD AND YEAR(CDATE) = YEAR(@DOC_DATE)",
-                    param : ['TYPE:int','PERIOD:int','DOC_DATE:string|10'],
-                    value : [pType,tmpPeriod,moment(pData.DOC_DATE,"YYYYMMDD").format("YYYYMMDD")]
-                }
+                query : "SELECT TOP 1 PERIOD FROM NF203_GRAND_TOTAL WHERE TYPE = @TYPE AND PERIOD = @PERIOD AND YEAR = @YEAR",
+                param : ['TYPE:int','PERIOD:int','YEAR:int'],
+                value : [pType,pData.PERIOD,pData.YEAR]
             }
-            else
-            {
-                tmpCtrlQuery = 
-                {
-                    query : "SELECT TOP 1 PERIOD FROM NF203_GRAND_TOTAL WHERE TYPE = @TYPE AND PERIOD = @PERIOD",
-                    param : ['TYPE:int','PERIOD:int'],
-                    value : [pType,tmpPeriod]
-                }
-    
-            }
-    
+
             let tmpCtrlResult = await core.instance.sql.execute(tmpCtrlQuery)
     
             if(tmpCtrlResult.result.recordset.length == 0)
             {            
-                let tmpLastData = await this.getNF525LastGrandTotal(pType,pData.DOC_DATE)
+                let tmpLastData = await this.getNF203LastGrandTotal(pType,pData.PERIOD,pData.YEAR)
                 let tmpLastTotal = 0
     
                 if(typeof tmpLastData != 'undefined')
                 {
                     tmpLastTotal = tmpLastData.GTPCA != null ? tmpLastData.GTPCA : 0
                 }
-    
+                
+                let tmpSign = await this.signatureGrandTotal(pData,typeof tmpLastData == 'undefined' ? '' : tmpLastData.SIGNATURE,tmpLastTotal)
+                
                 let tmpInsertQuery = 
                 {
                     query : "INSERT INTO [dbo].[NF203_GRAND_TOTAL] ( " + 
                             " [CDATE] " + 
                             ",[TYPE] " + 
+                            ",[YEAR] " +
                             ",[PERIOD] " + 
                             ",[HT_A] " + 
                             ",[TTC_A] " + 
@@ -765,9 +819,11 @@ class nf525
                             ",[TOTAL_TTC] " + 
                             ",[GTPCA] " + 
                             ",[SIGNATURE] " + 
+                            ",[SIGNATURE_SUM] " + 
                             ") VALUES ( " + 
                             " GETDATE() " + 
                             ",@TYPE " + 
+                            ",@YEAR " + 
                             ",@PERIOD " + 
                             ",@HT_A " + 
                             ",@TTC_A " + 
@@ -781,13 +837,14 @@ class nf525
                             ",@TOTAL_TTC " + 
                             ",@GTPCA " + 
                             ",@SIGNATURE " + 
+                            ",@SIGNATURE_SUM " + 
                             ")",
-                    param : ['TYPE:int','PERIOD:int','HT_A:float','TTC_A:float','HT_B:float','TTC_B:float',
+                    param : ['TYPE:int','YEAR:int','PERIOD:int','HT_A:float','TTC_A:float','HT_B:float','TTC_B:float',
                             'HT_C:float','TTC_C:float','HT_D:float','TTC_D:float','TOTAL_HT:float','TOTAL_TTC:float','GTPCA:float',
-                            'SIGNATURE:string|max'],
-                    value : [pType,tmpPeriod,pData.HT_A.toFixed(2),pData.TTC_A.toFixed(2),pData.HT_B.toFixed(2),pData.TTC_B.toFixed(2),pData.HT_C.toFixed(2),
-                                pData.TTC_C.toFixed(2),pData.HT_D.toFixed(2),pData.TTC_D.toFixed(2),pData.TOTAL_HT.toFixed(2),pData.TOTAL_TTC.toFixed(2),
-                                (pData.TOTAL_TTC + tmpLastTotal).toFixed(2),this.signatureGrandTotal(pData,typeof tmpLastData == 'undefined' ? '' : tmpLastData.SIGNATURE)]
+                            'SIGNATURE:string|max','SIGNATURE_SUM:string|max'],
+                    value : [pType,pData.YEAR,pData.PERIOD,pData.HT_A.toFixed(2),pData.TTC_A.toFixed(2),pData.HT_B.toFixed(2),pData.TTC_B.toFixed(2),pData.HT_C.toFixed(2),
+                            pData.TTC_C.toFixed(2),pData.HT_D.toFixed(2),pData.TTC_D.toFixed(2),pData.TOTAL_HT.toFixed(2),pData.TOTAL_TTC.toFixed(2),
+                            (pData.TOTAL_TTC + tmpLastTotal).toFixed(2),tmpSign.SIGNATURE,tmpSign.SIGNATURE_SUM]
                 }
                 await core.instance.sql.execute(tmpInsertQuery)
             }  
@@ -809,7 +866,8 @@ class nf525
                 let tmpQuery = 
                 {
                     query : "SELECT " +
-                            "DOC_DATE AS DOC_DATE, " +
+                            "YEAR(DOC_DATE) AS YEAR, " +
+                            "CONVERT(NVARCHAR(10),DOC_DATE,112) AS PERIOD, " +
                             "MAX(VAT_RATE_A) AS VAT_RATE_A, " +
                             "SUM(HT_A) AS HT_A, " +
                             "SUM(TTC_A) AS TTC_A, " +
@@ -842,9 +900,9 @@ class nf525
                             "CASE WHEN TYPE = 0 THEN FAMOUNT ELSE FAMOUNT * -1 END AS FAMOUNT, " +
                             "CASE WHEN TYPE = 0 THEN TOTAL ELSE TOTAL * -1 END AS TOTAL " +
                             "FROM POS_VAT_VW_01 AS NF525 " +
-                            "WHERE {0} AND DOC_DATE <= CONVERT(NVARCHAR(10),GETDATE(),112) AND DOC_TYPE = 0 " +
+                            "WHERE {0} AND DOC_DATE <= CONVERT(NVARCHAR(10),GETDATE()-1,112) AND DOC_TYPE = 0 " +
                             ") AS TMP " +
-                            "GROUP BY DOC_DATE ORDER BY DOC_DATE"
+                            "GROUP BY DOC_DATE ORDER BY DOC_DATE ASC"
                 }
                 
                 if(tmpPeriodResult.length > 0)
@@ -869,7 +927,8 @@ class nf525
                 let tmpQuery = 
                 {
                     query : "SELECT " +
-                            "MAX(PERIOD) AS DOC_DATE, " +
+                            "[YEAR] AS [YEAR], " +
+                            "MONTH(CONVERT(NVARCHAR(10),MAX(PERIOD),112)) AS PERIOD, " +
                             "SUM(HT_A) AS HT_A, " +
                             "SUM(TTC_A) AS TTC_A, " +
                             "SUM(HT_B) AS HT_B, " +
@@ -880,13 +939,14 @@ class nf525
                             "SUM(TTC_D) AS TTC_D, " +
                             "SUM(TOTAL_HT) AS TOTAL_HT, " +
                             "SUM(TOTAL_TTC) AS TOTAL_TTC " +
-                            "FROM NF525_GRAND_TOTAL WHERE PERIOD >= CONVERT(NVARCHAR(10),DATEADD(MONTH, DATEDIFF(MONTH, 0, DATEADD(MONTH, -1,GETDATE())),0),112) AND " +
-                            "PERIOD <= CONVERT(NVARCHAR(10),EOMONTH(DATEADD(MONTH, -1,GETDATE())),112) AND TYPE = 0" +
-                            "HAVING YEAR(GETDATE()) = YEAR(CONVERT(NVARCHAR(10),MAX(PERIOD),112))"
+                            "FROM NF525_GRAND_TOTAL WHERE TYPE = 0 " +
+                            "GROUP BY MONTH(CONVERT(NVARCHAR(10),PERIOD,112)),[YEAR] " +
+                            "HAVING MAX(PERIOD) < CONVERT(INTEGER,CONVERT(NVARCHAR(10),GETDATE(),112)) " +
+                            "ORDER BY [YEAR],MONTH(CONVERT(NVARCHAR(10),MAX(PERIOD),112)) ASC"
                 }
-    
+
                 let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
-                if(typeof tmpResult != 'undefined' && tmpResult.length > 0 && tmpResult[0].DOC_DATE != null)
+                if(typeof tmpResult != 'undefined' && tmpResult.length > 0)
                 {
                     resolve(tmpResult)          
                 }
@@ -898,7 +958,8 @@ class nf525
                 let tmpQuery = 
                 {
                     query : "SELECT " +
-                            "MAX(CDATE) AS DOC_DATE, " +
+                            "[YEAR] AS [YEAR], " +
+                            "[YEAR] AS PERIOD, " +
                             "SUM(HT_A) AS HT_A, " +
                             "SUM(TTC_A) AS TTC_A, " +
                             "SUM(HT_B) AS HT_B, " +
@@ -909,13 +970,13 @@ class nf525
                             "SUM(TTC_D) AS TTC_D, " +
                             "SUM(TOTAL_HT) AS TOTAL_HT, " +
                             "SUM(TOTAL_TTC) AS TOTAL_TTC " +
-                            "FROM NF525_GRAND_TOTAL WHERE PERIOD >= 1 AND PERIOD <= 12 AND TYPE = 1 AND " +
-                            "YEAR(CDATE) = YEAR(GETDATE()) - 1"
+                            "FROM NF525_GRAND_TOTAL WHERE TYPE = 1 AND YEAR < YEAR(GETDATE()) " +
+                            "GROUP BY [YEAR] ORDER BY [YEAR] ASC"
                 }
     
                 let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
     
-                if(typeof tmpResult != 'undefined' &&  tmpResult.length > 0 && tmpResult[0].DOC_DATE != null)
+                if(typeof tmpResult != 'undefined' &&  tmpResult.length > 0)
                 {
                     resolve(tmpResult)          
                 }
@@ -924,39 +985,19 @@ class nf525
             }
         });
     }
-    getNF525LastGrandTotal(pType,pDocDate)
+    getNF525LastGrandTotal(pType,pPeriod,pYear)
     {
         return new Promise(async resolve =>
         {
-            let tmpQuery = {}
-    
-            if(pType == 0)
+            let tmpQuery = 
             {
-                tmpQuery = 
-                {
-                    query : "SELECT TOP 1 * FROM NF525_GRAND_TOTAL WHERE TYPE = @TYPE AND PERIOD = @DOC_DATE",
-                    param : ['TYPE:int','DOC_DATE:string|10'],
-                    value : [pType,moment(pDocDate).add(-1,'day').format("YYYYMMDD")]
-                }
+                query : "SELECT TOP 1 * FROM NF525_GRAND_TOTAL WHERE TYPE = @TYPE AND " + 
+                        "CONVERT(NVARCHAR(4),YEAR) + REPLACE(STR(PERIOD, 8), SPACE(1), '0') < CONVERT(NVARCHAR(4),@YEAR) + REPLACE(STR(@PERIOD, 8), SPACE(1), '0') " + 
+                        "ORDER BY CONVERT(NVARCHAR(4),YEAR) + REPLACE(STR(PERIOD, 8), SPACE(1), '0') DESC",
+                param : ['TYPE:int','PERIOD:int','YEAR:int'],
+                value : [pType,pPeriod,pYear]
             }
-            else if(pType == 1)
-            {
-                tmpQuery = 
-                {
-                    query : "SELECT TOP 1 * FROM NF525_GRAND_TOTAL WHERE TYPE = @TYPE AND PERIOD = MONTH(DATEADD(MM, -1, @DOC_DATE)) AND YEAR(CDATE) = YEAR(@DOC_DATE)",
-                    param : ['TYPE:int','DOC_DATE:string|10'],
-                    value : [pType,moment(pDocDate,"YYYYMMDD").format("YYYYMMDD")]
-                }
-            }
-            else if(pType == 2)
-            {
-                tmpQuery = 
-                {
-                    query : "SELECT TOP 1 * FROM NF525_GRAND_TOTAL WHERE TYPE = @TYPE AND PERIOD = YEAR(DATEADD(YYYY, -1, @DOC_DATE))",
-                    param : ['TYPE:int','DOC_DATE:string|10'],
-                    value : [pType,moment(pDocDate,"YYYYMMDD").format("YYYYMMDD")]
-                }
-            }
+
             let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
             
             if(typeof tmpResult != 'undefined' && tmpResult.length > 0)
@@ -973,10 +1014,8 @@ class nf525
     {
         return new Promise(async resolve =>
         {
-            let tmpPeriod = 0
             if(pType == 0)
             {
-                tmpPeriod = Number(moment(pData.DOC_DATE).format("YYYYMMDD"))
                 await this.insertJet(
                 {
                     CUSER:'System Auto',            
@@ -989,7 +1028,6 @@ class nf525
             }
             else if(pType == 1)
             {
-                tmpPeriod = Number(moment(pData.DOC_DATE,"YYYYMMDD").format("MM"))
                 await this.insertJet(
                 {
                     CUSER:'System Auto',            
@@ -1002,7 +1040,6 @@ class nf525
             }
             else if(pType == 2)
             {
-                tmpPeriod = Number(moment(pData.DOC_DATE,"YYYYMMDD").format("YYYY"))
                 await this.insertJet(
                 {
                     CUSER:'System Auto',            
@@ -1013,45 +1050,34 @@ class nf525
                     APP_VERSION:this.appInfo.version
                 })
             }
-            
-            let tmpCtrlQuery = {}
-            if(pType < 2)
+
+            let tmpCtrlQuery = 
             {
-                tmpCtrlQuery = 
-                {
-                    query : "SELECT TOP 1 PERIOD FROM NF525_GRAND_TOTAL WHERE TYPE = @TYPE AND PERIOD = @PERIOD AND YEAR(CDATE) = YEAR(@DOC_DATE)",
-                    param : ['TYPE:int','PERIOD:int','DOC_DATE:string|10'],
-                    value : [pType,tmpPeriod,moment(pData.DOC_DATE,"YYYYMMDD").format("YYYYMMDD")]
-                }
+                query : "SELECT TOP 1 PERIOD FROM NF525_GRAND_TOTAL WHERE TYPE = @TYPE AND PERIOD = @PERIOD AND YEAR = @YEAR",
+                param : ['TYPE:int','PERIOD:int','YEAR:int'],
+                value : [pType,pData.PERIOD,pData.YEAR]
             }
-            else
-            {
-                tmpCtrlQuery = 
-                {
-                    query : "SELECT TOP 1 PERIOD FROM NF525_GRAND_TOTAL WHERE TYPE = @TYPE AND PERIOD = @PERIOD",
-                    param : ['TYPE:int','PERIOD:int'],
-                    value : [pType,tmpPeriod]
-                }
-    
-            }
-    
+
             let tmpCtrlResult = await core.instance.sql.execute(tmpCtrlQuery)
     
             if(tmpCtrlResult.result.recordset.length == 0)
             {            
-                let tmpLastData = await this.getNF525LastGrandTotal(pType,pData.DOC_DATE)
+                let tmpLastData = await this.getNF525LastGrandTotal(pType,pData.PERIOD,pData.YEAR)
                 let tmpLastTotal = 0
-    
+                
                 if(typeof tmpLastData != 'undefined')
                 {
                     tmpLastTotal = tmpLastData.GTPCA != null ? tmpLastData.GTPCA : 0
                 }
-    
+                
+                let tmpSign = await this.signatureGrandTotal(pData,typeof tmpLastData == 'undefined' ? '' : tmpLastData.SIGNATURE,tmpLastTotal)
+
                 let tmpInsertQuery = 
                 {
                     query : "INSERT INTO [dbo].[NF525_GRAND_TOTAL] ( " + 
                             " [CDATE] " + 
                             ",[TYPE] " + 
+                            ",[YEAR] " +
                             ",[PERIOD] " + 
                             ",[HT_A] " + 
                             ",[TTC_A] " + 
@@ -1064,10 +1090,12 @@ class nf525
                             ",[TOTAL_HT] " + 
                             ",[TOTAL_TTC] " + 
                             ",[GTPCA] " + 
-                            ",[SIGNATURE] " + 
+                            ",[SIGNATURE] " +
+                            ",[SIGNATURE_SUM] " + 
                             ") VALUES ( " + 
                             " GETDATE() " + 
                             ",@TYPE " + 
+                            ",@YEAR " + 
                             ",@PERIOD " + 
                             ",@HT_A " + 
                             ",@TTC_A " + 
@@ -1081,57 +1109,41 @@ class nf525
                             ",@TOTAL_TTC " + 
                             ",@GTPCA " + 
                             ",@SIGNATURE " + 
+                            ",@SIGNATURE_SUM " + 
                             ")",
-                    param : ['TYPE:int','PERIOD:int','HT_A:float','TTC_A:float','HT_B:float','TTC_B:float',
+                    param : ['TYPE:int','YEAR:int','PERIOD:int','HT_A:float','TTC_A:float','HT_B:float','TTC_B:float',
                             'HT_C:float','TTC_C:float','HT_D:float','TTC_D:float','TOTAL_HT:float','TOTAL_TTC:float','GTPCA:float',
-                            'SIGNATURE:string|max'],
-                    value : [pType,tmpPeriod,pData.HT_A.toFixed(2),pData.TTC_A.toFixed(2),pData.HT_B.toFixed(2),pData.TTC_B.toFixed(2),pData.HT_C.toFixed(2),
-                                pData.TTC_C.toFixed(2),pData.HT_D.toFixed(2),pData.TTC_D.toFixed(2),pData.TOTAL_HT.toFixed(2),pData.TOTAL_TTC.toFixed(2),
-                                (pData.TOTAL_TTC + tmpLastTotal).toFixed(2),this.signatureGrandTotal(pData,typeof tmpLastData == 'undefined' ? '' : tmpLastData.SIGNATURE)]
+                            'SIGNATURE:string|max','SIGNATURE_SUM:string|max'],
+                    value : [pType,pData.YEAR,pData.PERIOD,pData.HT_A.toFixed(2),pData.TTC_A.toFixed(2),pData.HT_B.toFixed(2),pData.TTC_B.toFixed(2),pData.HT_C.toFixed(2),
+                            pData.TTC_C.toFixed(2),pData.HT_D.toFixed(2),pData.TTC_D.toFixed(2),pData.TOTAL_HT.toFixed(2),pData.TOTAL_TTC.toFixed(2),
+                            (pData.TOTAL_TTC + tmpLastTotal).toFixed(2),tmpSign.SIGNATURE,tmpSign.SIGNATURE_SUM]
                 }
                 await core.instance.sql.execute(tmpInsertQuery)
             }  
             resolve()   
         });
     }
-    async signatureGrandTotal(pData,pLastSignature)
+    async signatureGrandTotal(pData,pLastSignature,pLastGTPCA)
     {
         let tmpSignature = ""
-
+        let tmpSignatureSum = ""
+        
         if(typeof pData != 'undefined')
         {
-            tmpSignature = "0000:" + parseInt(Number(Number(pData.TTC_A).toFixed(2)) * 100).toString()
-            tmpSignature = tmpSignature + "|" + "0550:" + parseInt(Number(Number(pData.TTC_B).toFixed(2)) * 100).toString()
-            tmpSignature = tmpSignature + "|" + "1000:" + parseInt(Number(Number(pData.TTC_C).toFixed(2)) * 100).toString()
-            tmpSignature = tmpSignature + "|" + "2000:" + parseInt(Number(Number(pData.TTC_D).toFixed(2)) * 100).toString()
-            tmpSignature = tmpSignature + "," + parseInt(Number(Number(pData.TOTAL_TTC).toFixed(2)) * 100).toString()
-            tmpSignature = tmpSignature + "," + parseInt(Number(Number(pData.GTPCA).toFixed(2)) * 100).toString()
-            tmpSignature = tmpSignature + "," + moment(pData.CDATE).format("YYYYMMDDHHmmss")
-            tmpSignature = tmpSignature + "," + pData.GUID
-            tmpSignature = tmpSignature + "," + (pLastSignature == "" ? "N" : "O")
-            tmpSignature = tmpSignature + "," + pLastSignature
-
-            let tmpSign = this.sign(tmpSignature)
-            let tmpVerify = this.verify(tmpSignature,tmpSign)
-
-            if(!tmpVerify)
-            {
-                await this.insertJet(
-                {
-                    CUSER:'System Auto',            
-                    DEVICE:'',
-                    CODE:'90',
-                    NAME:"Erreur integrite.",
-                    DESCRIPTION:'Grand total erreur verify',
-                    APP_VERSION:this.appInfo.version
-                })
-            }
-            return tmpSign
+            tmpSignatureSum = "0000:" + parseInt(Number(Number(pData.TTC_A).toFixed(2)) * 100).toString()
+            tmpSignatureSum = tmpSignatureSum + "|" + "0550:" + parseInt(Number(Number(pData.TTC_B).toFixed(2)) * 100).toString()
+            tmpSignatureSum = tmpSignatureSum + "|" + "1000:" + parseInt(Number(Number(pData.TTC_C).toFixed(2)) * 100).toString()
+            tmpSignatureSum = tmpSignatureSum + "|" + "2000:" + parseInt(Number(Number(pData.TTC_D).toFixed(2)) * 100).toString()
+            tmpSignatureSum = tmpSignatureSum + "," + parseInt(Number(Number(pData.TOTAL_TTC).toFixed(2)) * 100).toString()
+            tmpSignatureSum = tmpSignatureSum + "," + parseInt(Number(Number(pData.TOTAL_TTC + pLastGTPCA).toFixed(2)) * 100).toString()
+            tmpSignatureSum = tmpSignatureSum + "," + moment(pData.CDATE).format("YYYYMMDDHHmmss")
+            tmpSignatureSum = tmpSignatureSum + "," + (pLastSignature == "" ? "N" : "O")
+            tmpSignatureSum = tmpSignatureSum + "," + pLastSignature
+            
+            tmpSignature = this.sign(tmpSignatureSum)
         }
-        else
-        {
-            return tmpSignature
-        }
+
+        return {SIGNATURE:tmpSignature,SIGNATURE_SUM:tmpSignatureSum}
     }
     signatureJet(pData,pLastSignature)
     {
@@ -1161,7 +1173,7 @@ class nf525
         sig.init(pem.private);
         sig.updateString(pData);
         let sigValueHex = rsa.hextob64u(sig.sign());
-
+        
         return sigValueHex
     }
     verify(pData,pSig)
@@ -1173,5 +1185,4 @@ class nf525
         return isValid
     }
 }
-
 export const _nf525 = new nf525()
