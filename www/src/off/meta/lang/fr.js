@@ -3833,6 +3833,12 @@ export const langFr =
             btn01: "Tamam",    // BAK
             msg: "€'dan fazla fiyat girme yetkiniz yok !"  // BAK
         },
+        msgMaxUnitQuantity:
+        {
+            title: "Dikkat",   // BAK
+            btn01: "Tamam",   // BAK
+            msg: "'dan fazla miktar girme yetkiniz yok !"   // BAK
+        },
         msgRowNotUpdate:
         {
             title: "Dikkat",   // BAK

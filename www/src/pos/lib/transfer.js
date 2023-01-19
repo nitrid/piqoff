@@ -631,6 +631,22 @@ export default class transferCls
                     POINT : {dataType: "number"},
                     DESCRIPTION : {dataType: "string"},
                 }
+            },
+            //NF525_JET
+            {
+                name : "NF525_JET",
+                columns :
+                {
+                    DBID : {dataType:"number",primaryKey: true, autoIncrement: true},
+                    GUID : {dataType: "string"},
+                    CUSER : {dataType: "string"},
+                    DEVICE : {dataType: "string"},
+                    CODE : {dataType: "string"},
+                    NAME : {dataType: "string"},
+                    DESCRIPTION : {dataType: "string"},
+                    APP_VERSION : {dataType: "string"},
+                    SIGNATURE : {dataType: "string"},
+                }
             }
         ]
 
@@ -1319,7 +1335,7 @@ export default class transferCls
                         dataprm : ['GUID'],
                     }
                 }
-            }
+            },
         ]
         return tmpSchema
     }
@@ -1567,6 +1583,23 @@ export default class transferCls
                     return
                 }
             }
+
+            let tmpData = await this.core.local.select({from : "NF525_JET"})
+            console.log(tmpData)
+            for (let i = 0; i < tmpData.length; i++) 
+            {
+                let tmpJetData =
+                {
+                    CUSER:tmpData[i].CUSER,            
+                    DEVICE:tmpData[i].DEVICE,  
+                    CODE:tmpData[i].CODE,
+                    NAME:tmpData[i].NAME,
+                    DESCRIPTION:tmpData[i].DESCRIPTION,
+                    APP_VERSION:tmpData[i].APP_VERSION,
+                }
+                this.core.socket.emit('nf525',{cmd:"jet",data:tmpJetData})
+            }
+            await this.transfer.clearTbl("POS_EXTRA_VW_01")
             resolve(true)
         });
     }

@@ -3719,6 +3719,7 @@ export const langTr =
         placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.",
         validDesign : "Lütfen Dizayn seçiniz.",
         validMail : "Lütfen Boş Geçmeyin.",
+        getPreInvoice : "Ön Fatura Getir",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -3840,6 +3841,12 @@ export const langTr =
             title: "Dikkat",
             btn01: "Tamam",
             msg: "€'dan fazla fiyat girme yetkiniz yok !"
+        },
+        msgMaxUnitQuantity:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "'dan fazla miktar girme yetkiniz yok !"
         },
         msgRowNotUpdate:
         {

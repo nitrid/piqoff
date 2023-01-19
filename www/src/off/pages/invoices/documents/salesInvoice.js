@@ -87,7 +87,6 @@ export default class salesInvoice extends React.PureComponent
                 this.btnNew.setState({disabled:false});
                 this.btnBack.setState({disabled:true});
                 this.btnSave.setState({disabled:false});
-                this.btnDelete.setState({disabled:false});
                 this.btnPrint.setState({disabled:false});
             }
         })
@@ -98,7 +97,6 @@ export default class salesInvoice extends React.PureComponent
                 this.btnBack.setState({disabled:false});
                 this.btnNew.setState({disabled:true});
                 this.btnSave.setState({disabled:false});
-                this.btnDelete.setState({disabled:false});
                 this.btnPrint.setState({disabled:false});
 
                 pData.rowData.CUSER = this.user.CODE
@@ -109,7 +107,6 @@ export default class salesInvoice extends React.PureComponent
             this.btnBack.setState({disabled:true});
             this.btnNew.setState({disabled:false});
             this.btnSave.setState({disabled:true});
-            this.btnDelete.setState({disabled:false});
             this.btnPrint.setState({disabled:false});          
         })
         this.docObj.ds.on('onDelete',(pTblName) =>
@@ -117,7 +114,6 @@ export default class salesInvoice extends React.PureComponent
             this.btnBack.setState({disabled:false});
             this.btnNew.setState({disabled:false});
             this.btnSave.setState({disabled:false});
-            this.btnDelete.setState({disabled:false});
             this.btnPrint.setState({disabled:false});
         })
 
@@ -1370,19 +1366,29 @@ export default class salesInvoice extends React.PureComponent
                                             let pResult = await dialog(tmpConfObj);
                                             if(pResult == 'btn01')
                                             {
-                                                let tmpConfObj1 =
+                                                this.docObj.dt()[0].LOCKED = 1
+                                                this.docLocked = true
+                                                if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
                                                 {
-                                                    id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
+                                                    await this.grdSlsInv.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
                                                 }
                                                 
+                                                //***** FACTURE İMZALAMA *****/
+                                                let tmpSignedData = await this.nf525.signatureDoc(this.docObj.dt()[0],this.docObj.docItems.dt())                
+                                                this.docObj.dt()[0].SIGNATURE = tmpSignedData.SIGNATURE
+                                                this.docObj.dt()[0].SIGNATURE_SUM = tmpSignedData.SIGNATURE_SUM
+
                                                 if((await this.docObj.save()) == 0)
-                                                {       
-                                                    this._getPayment()   
-                                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
-                                                    await dialog(tmpConfObj1);
-                                                    this.btnSave.setState({disabled:true});
-                                                    this.btnNew.setState({disabled:false});
+                                                {                                                    
+                                                    let tmpConfObj =
+                                                    {
+                                                        id:'msgLocked',showTitle:true,title:this.t("msgLocked.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                        button:[{id:"btn01",caption:this.t("msgLocked.btn01"),location:'after'}],
+                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgLocked.msg")}</div>)
+                                                    }
+
+                                                    await dialog(tmpConfObj);
+                                                    this.frmSalesInv.option('disabled',true)
                                                 }
                                                 else
                                                 {
@@ -1402,59 +1408,6 @@ export default class salesInvoice extends React.PureComponent
                                             
                                             await dialog(tmpConfObj);
                                         }                                                 
-                                    }}/>
-                                </Item>
-                                <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnDelete" parent={this} icon="trash" type="default"
-                                    onClick={async()=>
-                                    {
-                                        if(this.paymentObj.docCustomer.dt().length > 0)
-                                        {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgPayNotDeleted',showTitle:true,title:this.t("msgPayNotDeleted.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgPayNotDeleted.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgPayNotDeleted.msg")}</div>)
-                                            }
-                                
-                                            await dialog(tmpConfObj);
-                                            return
-                                        }
-                                        if(this.docObj.dt()[0].LOCKED != 0)
-                                        {
-                                            this.docLocked = true
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgGetLocked',showTitle:true,title:this.t("msgGetLocked.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgGetLocked.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgGetLocked.msg")}</div>)
-                                            }
-                                
-                                            await dialog(tmpConfObj);
-                                            return
-                                        }
-                                        let tmpConfObj =
-                                        {
-                                            id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'200px',
-                                            button:[{id:"btn01",caption:this.t("msgDelete.btn01"),location:'before'},{id:"btn02",caption:this.t("msgDelete.btn02"),location:'after'}],
-                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDelete.msg")}</div>)
-                                        }
-                                        
-                                        let pResult = await dialog(tmpConfObj);
-                                        if(pResult == 'btn01')
-                                        {
-                                            if(this.sysParam.filter({ID:'docDeleteDesc',USERS:this.user.CODE}).getValue().value == true)
-                                            {
-                                                this.popDeleteDesc.show()
-                                            }
-                                            else
-                                            {
-                                                this.docObj.dt('DOC').removeAt(0)
-                                                await this.docObj.dt('DOC').delete();
-                                                this.init(); 
-                                            }
-                                        }
-                                        
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
@@ -2330,7 +2283,24 @@ export default class salesInvoice extends React.PureComponent
                                                 {
                                                     id:'msgMaxPriceAlert',showTitle:true,title:this.t("msgMaxPriceAlert.title"),showCloseButton:true,width:'500px',height:'200px',
                                                     button:[{id:"btn01",caption:this.t("msgMaxPriceAlert.btn01"),location:'before'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.sysParam.filter({ID:'maxItemPrice'}).getValue() + this.t("msgMaxPriceAlert.msg")}</div>)
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"(" + this.sysParam.filter({ID:'maxItemPrice'}).getValue() + ")" + this.t("msgMaxPriceAlert.msg")}</div>)
+                                                }
+                                                
+                                                dialog(tmpConfObj);
+                                                e.component.cancelEditData()
+                                                return
+                                            }
+                                        }
+                                        if(typeof e.newData.QUANTITY != 'undefined')
+                                        {
+                                            if(e.newData.QUANTITY > this.sysParam.filter({ID:'maxUnitQuantity'}).getValue())
+                                            {
+                                                e.cancel = true
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgMaxUnitQuantity',showTitle:true,title:this.t("msgMaxUnitQuantity.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgMaxUnitQuantity.btn01"),location:'before'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"(" + this.sysParam.filter({ID:'maxUnitQuantity'}).getValue() + ")" + this.t("msgMaxUnitQuantity.msg")}</div>)
                                                 }
                                                 
                                                 dialog(tmpConfObj);

@@ -2696,18 +2696,34 @@ export default class posDoc extends React.PureComponent
     //     }
     //     return
     // }
-    sendJet(pData)
+    async sendJet(pData)
     {
-        let tmpJetData =
+        if(this.core.offline)
         {
-            CUSER:this.core.auth.data.CODE,            
-            DEVICE:window.localStorage.getItem('device') == null ? '' : window.localStorage.getItem('device'),
-            CODE:typeof pData.CODE != 'undefined' ? pData.CODE : '',
-            NAME:typeof pData.NAME != 'undefined' ? pData.NAME : '',
-            DESCRIPTION:typeof pData.DESCRIPTION != 'undefined' ? pData.DESCRIPTION : '',
-            APP_VERSION:this.core.appInfo.version
+            let tmpQuery = 
+            {
+                type : "insert",
+                into : "NF525_JET",
+                values : [{CUSER : this.core.auth.data.CODE,CODE : typeof pData.CODE != 'undefined' ? pData.CODE : '',
+                NAME:typeof pData.NAME != 'undefined' ? pData.NAME : '',DESCRIPTION:typeof pData.DESCRIPTION != 'undefined' ? pData.DESCRIPTION : '',
+                APP_VERSION:this.core.appInfo.version}]                        
+            }
+            await this.core.local.insert(tmpQuery)
         }
-        this.core.socket.emit('nf525',{cmd:"jet",data:tmpJetData})
+        else
+        {
+            let tmpJetData =
+            {
+                CUSER:this.core.auth.data.CODE,            
+                DEVICE:window.localStorage.getItem('device') == null ? '' : window.localStorage.getItem('device'),
+                CODE:typeof pData.CODE != 'undefined' ? pData.CODE : '',
+                NAME:typeof pData.NAME != 'undefined' ? pData.NAME : '',
+                DESCRIPTION:typeof pData.DESCRIPTION != 'undefined' ? pData.DESCRIPTION : '',
+                APP_VERSION:this.core.appInfo.version
+            }
+            this.core.socket.emit('nf525',{cmd:"jet",data:tmpJetData})
+        }
+
     }
     async factureInsert(pData,pSaleData)
     {    
