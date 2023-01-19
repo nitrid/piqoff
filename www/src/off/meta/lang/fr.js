@@ -3044,13 +3044,13 @@ export const langFr =
     },
     ftr_01_002 : // "Satış Fatura Listesi"
     {
-        txtCustomerCode : "Fournisseur",
+        txtCustomerCode : "Client",
         menu:"Facture de vente",
         pg_txtCustomerCode : 
         {
-            title : "Choix Fournisseur",
+            title : "Choix Client",
             clmCode :  "Code Client",
-            clmTitle : "Nom Fournisseur",
+            clmTitle : "Nom Client",
             clmTypeName : "Type",
             clmGenusName : "Genre"
         },
@@ -3063,7 +3063,7 @@ export const langFr =
             clmRefNo: "Ligne",
             clmPrice: "Prix ",
             clmInputCode : "Sélection Document",
-            clmInputName : "Nom fournisseur",
+            clmInputName : "Nom Client",
             clmDate: "Date",
             clmVat : "TVA",
             clmAmount : "Total" ,
@@ -3136,9 +3136,9 @@ export const langFr =
         menu:"Liste Facture Vente interne",
         pg_txtCustomerCode : 
         {
-            title : "Choix client",
-            clmCode :  "Code Client",
-            clmTitle : "Nom Client",
+            title : "Choix Magasin",
+            clmCode :  "Code Magasin",
+            clmTitle : "Nom Magasin",
             clmTypeName : "Mode",
             clmGenusName : "Genre"
         },
@@ -3150,8 +3150,8 @@ export const langFr =
             clmRef: "Réf.",
             clmRefNo: "Réf.No:",
             clmPrice: "Prix",
-            clmInputCode : "Code Fournisseur",
-            clmInputName : "Nom Fournisseur",
+            clmInputCode : "Code Magasin",
+            clmInputName : "Nom Magasin",
             clmDate: "Date",
             clmVat : "TVA",
             clmAmount : "Total",
@@ -3640,35 +3640,35 @@ export const langFr =
         },
         msgWorngRound:
         {  
-            title: "Dikkat",  // BAK
-            btn01: "Tamam",  // BAK
+            title: "Attention",  // BAK
+            btn01: "OK",  // BAK
             msg1: "Yuvarlamak istediğiniz tutarlar arasında en fazla ",  // BAK
             msg2: " fark olabilir !"  // BAK
         },
         msgDiscountEntry : 
         {
-            title : "Tutarsal İndirim Girişi",   // BAK
-            btn01 : "Onayla"  // BAK
+            title : "Saisir de Remise Montant",   // BAK
+            btn01 : "Valide" // BAK
         },
-        txtDiscount1 : "1. İndirim Tutarı",  // BAK
-        txtDiscount2 : "2. İndirim Tutarı",  // BAK
-        txtDiscount3 : "3. İndirim Tutarı",  // BAK
-        txtTotalDiscount :"Toplam İndirim Tutarı",  // BAK
+        txtDiscount1 : "1. Remise ",  // BAK
+        txtDiscount2 : "2. Remise ",  // BAK
+        txtDiscount3 : "3. Remise ",  // BAK
+        txtTotalDiscount :"Total de Remise ",  // BAK
         msgDiscountPerEntry : 
         {
-            title : "Oransal İndirim Girişi",  // BAK
-            btn01 : "Onayla"  // BAK
+            title : "Saisir de Remise %",  // BAK
+            btn01 : "Valide" // BAK
         },
-        txtDiscountPer1 : "1. İndirim Oranı",  // BAK
-        txtDiscountPer2 : "2. İndirim Oranı",  // BAK
-        txtDiscountPer3 : "3. İndirim Oranı",  // BAK
+        txtDiscountPer1 : "1. Remise % ",  // BAK
+        txtDiscountPer2 : "2. Remise % ",  // BAK
+        txtDiscountPer3 : "3. Remise % ",  // BAK
     },
     ftr_02_002 : // "Satış Faturası"
     {
         txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
         txtCustomerCode : "Sélection Document",
-        txtCustomerName : "Nom fournisseur",
+        txtCustomerName : "Nom Client",
         dtDocDate : "Date",
         txtAmount : "Total" ,
         txtDiscount : "Remise",
@@ -3717,14 +3717,14 @@ export const langFr =
             clmDate : "Date",
             clmRef : "Référence",
             clmRefNo : "Numéro",
-            clmInputName : "Nom Fournisseur",
+            clmInputName : "Nom Client",
             clmInputCode  : "Code Client",
         },
         pg_txtCustomerCode : 
         {
-            title : "Choix Fournisseur",
+            title : "Choix Client",
             clmCode :  "Code Client",
-            clmTitle : "Nom Fournisseur",
+            clmTitle : "Nom Client",
             clmTypeName : "Type",
             clmGenusName : "Genre"
         },
@@ -3829,20 +3829,20 @@ export const langFr =
         },
         msgMaxPriceAlert:
         {
-            title: "Dikkat",    // BAK
-            btn01: "Tamam",    // BAK
+            title: "Attention",    // BAK
+            btn01: "OK",    // BAK
             msg: "€'dan fazla fiyat girme yetkiniz yok !"  // BAK
         },
         msgMaxUnitQuantity:
         {
-            title: "Dikkat",   // BAK
-            btn01: "Tamam",   // BAK
+            title: "Attention",   // BAK
+            btn01: "OK",   // BAK
             msg: "'dan fazla miktar girme yetkiniz yok !"   // BAK
         },
         msgRowNotUpdate:
         {
-            title: "Dikkat",   // BAK
-            btn01: "Tamam",   // BAK
+            title: "Attention",   // BAK
+            btn01: "OK",   // BAK
             msg: "Bu satır irsaliyeden geldiği için miktarı değiştirilemez!"   // BAK
         },  
         msgVatDelete:
@@ -3916,7 +3916,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Fournisseur Inconnu"
+            msg: "Client Inconnu"
         },
         msgCombineItem:
         {
@@ -4131,28 +4131,28 @@ export const langFr =
         },
         msgWorngRound:
         {  
-            title: "Dikkat",  // BAK
-            btn01: "Tamam",  // BAK
+            title: "Attention",  // BAK
+            btn01: "OK",  // BAK
             msg1: "Yuvarlamak istediğiniz tutarlar arasında en fazla ",  // BAK
             msg2: " fark olabilir !"  // BAK
         },
         msgDiscountEntry : 
         {
-            title : "Tutarsal İndirim Girişi",   // BAK
-            btn01 : "Onayla"  // BAK
+            title : "Saisir de Remise Montant",   // BAK
+            btn01 : "Valide" // BAK
         },
-        txtDiscount1 : "1. İndirim Tutarı",  // BAK
-        txtDiscount2 : "2. İndirim Tutarı",  // BAK
-        txtDiscount3 : "3. İndirim Tutarı",  // BAK
-        txtTotalDiscount :"Toplam İndirim Tutarı",  // BAK
+        txtDiscount1 : "1. Remise ",  // BAK
+        txtDiscount2 : "2. Remise ",  // BAK
+        txtDiscount3 : "3. Remise ",  // BAK
+        txtTotalDiscount :"Total de Remise ",  // BAK
         msgDiscountPerEntry : 
         {
-            title : "Oransal İndirim Girişi",  // BAK
-            btn01 : "Onayla"  // BAK
+            title : "Saisir de Remise %",  // BAK
+            btn01 : "Valide" // BAK
         },
-        txtDiscountPer1 : "1. İndirim Oranı",  // BAK
-        txtDiscountPer2 : "2. İndirim Oranı",  // BAK
-        txtDiscountPer3 : "3. İndirim Oranı",  // BAK
+        txtDiscountPer1 : "1. Remise % ",  // BAK
+        txtDiscountPer2 : "2. Remise % ",  // BAK
+        txtDiscountPer3 : "3. Remise % ",  // BAK
     },
     ftr_02_003 : // "İade Faturası"
     {
@@ -4526,28 +4526,28 @@ export const langFr =
         },
         msgWorngRound:
         {  
-            title: "Dikkat",  // BAK
-            btn01: "Tamam",  // BAK
+            title: "Attention",  // BAK
+            btn01: "OK",  // BAK
             msg1: "Yuvarlamak istediğiniz tutarlar arasında en fazla ",  // BAK
             msg2: " fark olabilir !"  // BAK
         },
         msgDiscountEntry : 
         {
-            title : "Tutarsal İndirim Girişi",   // BAK
-            btn01 : "Onayla"  // BAK
+            title : "Saisir de Remise Montant",   // BAK
+            btn01 : "Valide" // BAK
         },
-        txtDiscount1 : "1. İndirim Tutarı",  // BAK
-        txtDiscount2 : "2. İndirim Tutarı",  // BAK
-        txtDiscount3 : "3. İndirim Tutarı",  // BAK
-        txtTotalDiscount :"Toplam İndirim Tutarı",  // BAK
+        txtDiscount1 : "1. Remise ",  // BAK
+        txtDiscount2 : "2. Remise ",  // BAK
+        txtDiscount3 : "3. Remise ",  // BAK
+        txtTotalDiscount :"Total de Remise ",  // BAK
         msgDiscountPerEntry : 
         {
-            title : "Oransal İndirim Girişi",  // BAK
-            btn01 : "Onayla"  // BAK
+            title : "Saisir de Remise %",  // BAK
+            btn01 : "Valide" // BAK
         },
-        txtDiscountPer1 : "1. İndirim Oranı",  // BAK
-        txtDiscountPer2 : "2. İndirim Oranı",  // BAK
-        txtDiscountPer3 : "3. İndirim Oranı",  // BAK
+        txtDiscountPer1 : "1. Remise % ",  // BAK
+        txtDiscountPer2 : "2. Remise % ",  // BAK
+        txtDiscountPer3 : "3. Remise % ",  // BAK
     },
     ftr_02_004 : // "Fiyat Farkı Faturası"
     {
@@ -4895,35 +4895,35 @@ export const langFr =
         },
         msgWorngRound:
         {  
-            title: "Dikkat",  // BAK
-            btn01: "Tamam",  // BAK
+            title: "Attention",  // BAK
+            btn01: "OK",  // BAK
             msg1: "Yuvarlamak istediğiniz tutarlar arasında en fazla ",  // BAK
             msg2: " fark olabilir !"  // BAK
         },
         msgDiscountEntry : 
         {
-            title : "Tutarsal İndirim Girişi",   // BAK
-            btn01 : "Onayla"  // BAK
+            title : "Saisir de Remise Montant",   // BAK
+            btn01 : "Valide" // BAK
         },
-        txtDiscount1 : "1. İndirim Tutarı",  // BAK
-        txtDiscount2 : "2. İndirim Tutarı",  // BAK
-        txtDiscount3 : "3. İndirim Tutarı",  // BAK
-        txtTotalDiscount :"Toplam İndirim Tutarı",  // BAK
+        txtDiscount1 : "1. Remise ",  // BAK
+        txtDiscount2 : "2. Remise ",  // BAK
+        txtDiscount3 : "3. Remise ",  // BAK
+        txtTotalDiscount :"Total de Remise ",  // BAK
         msgDiscountPerEntry : 
         {
-            title : "Oransal İndirim Girişi",  // BAK
-            btn01 : "Onayla"  // BAK
+            title : "Saisir de Remise %",  // BAK
+            btn01 : "Valide" // BAK
         },
-        txtDiscountPer1 : "1. İndirim Oranı",  // BAK
-        txtDiscountPer2 : "2. İndirim Oranı",  // BAK
-        txtDiscountPer3 : "3. İndirim Oranı",  // BAK
+        txtDiscountPer1 : "1. Remise % ",  // BAK
+        txtDiscountPer2 : "2. Remise % ",  // BAK
+        txtDiscountPer3 : "3. Remise % ",  // BAK
     },
     ftr_02_005 : // "Şube Satış Faturası"
     {
         txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
         txtCustomerCode : "Sélection Document",
-        txtCustomerName : "Nom fournisseur",
+        txtCustomerName : "Nom Client",
         dtDocDate : "Date",
         txtAmount : "Total" ,
         txtDiscount : "Remise",
@@ -4975,9 +4975,9 @@ export const langFr =
         },
         pg_txtCustomerCode : 
         {
-            title : "Choix Fournisseur",
+            title : "Choix Client",
             clmCode :  "Code Client",
-            clmTitle : "Nom Fournisseur",
+            clmTitle : "Nom Client",
             clmTypeName : "Type",
             clmGenusName : "Genre"
         },
@@ -5333,28 +5333,28 @@ export const langFr =
         },
         msgWorngRound:
         {  
-            title: "Dikkat",  // BAK
-            btn01: "Tamam",  // BAK
+            title: "Attention",  // BAK
+            btn01: "OK",  // BAK
             msg1: "Yuvarlamak istediğiniz tutarlar arasında en fazla ",  // BAK
             msg2: " fark olabilir !"  // BAK
         },
         msgDiscountEntry : 
         {
-            title : "Tutarsal İndirim Girişi",   // BAK
-            btn01 : "Onayla"  // BAK
+            title : "Saisir de Remise Montant",   // BAK
+            btn01 : "Valide" // BAK
         },
-        txtDiscount1 : "1. İndirim Tutarı",  // BAK
-        txtDiscount2 : "2. İndirim Tutarı",  // BAK
-        txtDiscount3 : "3. İndirim Tutarı",  // BAK
-        txtTotalDiscount :"Toplam İndirim Tutarı",  // BAK
+        txtDiscount1 : "1. Remise ",  // BAK
+        txtDiscount2 : "2. Remise ",  // BAK
+        txtDiscount3 : "3. Remise ",  // BAK
+        txtTotalDiscount :"Total de Remise ",  // BAK
         msgDiscountPerEntry : 
         {
-            title : "Oransal İndirim Girişi",  // BAK
-            btn01 : "Onayla"  // BAK
+            title : "Saisir de Remise %",  // BAK
+            btn01 : "Valide" // BAK
         },
-        txtDiscountPer1 : "1. İndirim Oranı",  // BAK
-        txtDiscountPer2 : "2. İndirim Oranı",  // BAK
-        txtDiscountPer3 : "3. İndirim Oranı",  // BAK
+        txtDiscountPer1 : "1. Remise % ",  // BAK
+        txtDiscountPer2 : "2. Remise % ",  // BAK
+        txtDiscountPer3 : "3. Remise % ",  // BAK
     },
     ftr_02_006 : // "Fiyat Farkı Alış Faturası"
     {
@@ -5677,28 +5677,28 @@ export const langFr =
         },
         msgWorngRound:
         {  
-            title: "Dikkat",  // BAK
-            btn01: "Tamam",  // BAK
+            title: "Attention",  // BAK
+            btn01: "OK",  // BAK
             msg1: "Yuvarlamak istediğiniz tutarlar arasında en fazla ",  // BAK
             msg2: " fark olabilir !"  // BAK
         },
         msgDiscountEntry : 
         {
-            title : "Tutarsal İndirim Girişi",   // BAK
-            btn01 : "Onayla"  // BAK
+            title : "Saisir de Remise Montant",   // BAK
+            btn01 : "Valide" // BAK
         },
-        txtDiscount1 : "1. İndirim Tutarı",  // BAK
-        txtDiscount2 : "2. İndirim Tutarı",  // BAK
-        txtDiscount3 : "3. İndirim Tutarı",  // BAK
-        txtTotalDiscount :"Toplam İndirim Tutarı",  // BAK
+        txtDiscount1 : "1. Remise ",  // BAK
+        txtDiscount2 : "2. Remise ",  // BAK
+        txtDiscount3 : "3. Remise ",  // BAK
+        txtTotalDiscount :"Total de Remise ",  // BAK
         msgDiscountPerEntry : 
         {
-            title : "Oransal İndirim Girişi",  // BAK
-            btn01 : "Onayla"  // BAK
+            title : "Saisir de Remise %",  // BAK
+            btn01 : "Valide" // BAK
         },
-        txtDiscountPer1 : "1. İndirim Oranı",  // BAK
-        txtDiscountPer2 : "2. İndirim Oranı",  // BAK
-        txtDiscountPer3 : "3. İndirim Oranı",  // BAK
+        txtDiscountPer1 : "1. Remise % ",  // BAK
+        txtDiscountPer2 : "2. Remise % ",  // BAK
+        txtDiscountPer3 : "3. Remise % ",  // BAK
     },
     ftr_02_007 : // "İade Alış Faturası"
     {
@@ -6046,28 +6046,28 @@ export const langFr =
         },
         msgWorngRound:
         {  
-            title: "Dikkat",  // BAK
-            btn01: "Tamam",  // BAK
+            title: "Attention",  // BAK
+            btn01: "OK",  // BAK
             msg1: "Yuvarlamak istediğiniz tutarlar arasında en fazla ",  // BAK
             msg2: " fark olabilir !"  // BAK
         },
         msgDiscountEntry : 
         {
-            title : "Tutarsal İndirim Girişi",   // BAK
-            btn01 : "Onayla"  // BAK
+            title : "Saisir de Remise Montant",   // BAK
+            btn01 : "Valide" // BAK
         },
-        txtDiscount1 : "1. İndirim Tutarı",  // BAK
-        txtDiscount2 : "2. İndirim Tutarı",  // BAK
-        txtDiscount3 : "3. İndirim Tutarı",  // BAK
-        txtTotalDiscount :"Toplam İndirim Tutarı",  // BAK
+        txtDiscount1 : "1. Remise ",  // BAK
+        txtDiscount2 : "2. Remise ",  // BAK
+        txtDiscount3 : "3. Remise ",  // BAK
+        txtTotalDiscount :"Total de Remise ",  // BAK
         msgDiscountPerEntry : 
         {
-            title : "Oransal İndirim Girişi",  // BAK
-            btn01 : "Onayla"  // BAK
+            title : "Saisir de Remise %",  // BAK
+            btn01 : "Valide" // BAK
         },
-        txtDiscountPer1 : "1. İndirim Oranı",  // BAK
-        txtDiscountPer2 : "2. İndirim Oranı",  // BAK
-        txtDiscountPer3 : "3. İndirim Oranı",  // BAK
+        txtDiscountPer1 : "1. Remise % ",  // BAK
+        txtDiscountPer2 : "2. Remise % ",  // BAK
+        txtDiscountPer3 : "3. Remise % ",  // BAK
     },
     ftr_02_008 : // "Şube Alış Faturası"
     {
@@ -6484,28 +6484,28 @@ export const langFr =
         },
         msgWorngRound:
         {  
-            title: "Dikkat",  // BAK
-            btn01: "Tamam",  // BAK
+            title: "Attention",  // BAK
+            btn01: "OK",  // BAK
             msg1: "Yuvarlamak istediğiniz tutarlar arasında en fazla ",  // BAK
             msg2: " fark olabilir !"  // BAK
         },
         msgDiscountEntry : 
         {
-            title : "Tutarsal İndirim Girişi",   // BAK
-            btn01 : "Onayla"  // BAK
+            title : "Saisir de Remise Montant",   // BAK
+            btn01 : "Valide" // BAK
         },
-        txtDiscount1 : "1. İndirim Tutarı",  // BAK
-        txtDiscount2 : "2. İndirim Tutarı",  // BAK
-        txtDiscount3 : "3. İndirim Tutarı",  // BAK
-        txtTotalDiscount :"Toplam İndirim Tutarı",  // BAK
+        txtDiscount1 : "1. Remise ",  // BAK
+        txtDiscount2 : "2. Remise ",  // BAK
+        txtDiscount3 : "3. Remise ",  // BAK
+        txtTotalDiscount :"Total de Remise ",  // BAK
         msgDiscountPerEntry : 
         {
-            title : "Oransal İndirim Girişi",  // BAK
-            btn01 : "Onayla"  // BAK
+            title : "Saisir de Remise %",  // BAK
+            btn01 : "Valide" // BAK
         },
-        txtDiscountPer1 : "1. İndirim Oranı",  // BAK
-        txtDiscountPer2 : "2. İndirim Oranı",  // BAK
-        txtDiscountPer3 : "3. İndirim Oranı",  // BAK
+        txtDiscountPer1 : "1. Remise % ",  // BAK
+        txtDiscountPer2 : "2. Remise % ",  // BAK
+        txtDiscountPer3 : "3. Remise % ",  // BAK
     },
     ftr_04_001 : // "Proforma Fiyat Farkı Faturası" 
     {
@@ -6830,7 +6830,7 @@ export const langFr =
         txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
         txtCustomerCode : "Sélection Document",
-        txtCustomerName : "Nom fournisseur",
+        txtCustomerName : "Nom Client",
         dtDocDate : "Date",
         txtAmount : "Total" ,
         txtDiscount : "Remise",
@@ -6873,14 +6873,14 @@ export const langFr =
             clmDate : "Date",
             clmRef : "Référence",
             clmRefNo : "Numéro",
-            clmInputName : "Nom Fournisseur",
+            clmInputName : "Nom Client",
             clmInputCode  : "Code Client",
         },
         pg_txtCustomerCode : 
         {
-            title : "Choix Fournisseur",
+            title : "Choix Client",
             clmCode :  "Code Client",
-            clmTitle : "Nom Fournisseur",
+            clmTitle : "Nom Client",
             clmTypeName : "Type",
             clmGenusName : "Genre"
         },
@@ -8006,7 +8006,7 @@ export const langFr =
         txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
         txtCustomerCode : "Sélection Document",
-        txtCustomerName : "Nom fournisseur",
+        txtCustomerName : "Nom Client",
         dtDocDate : "Date",
         txtAmount : "Total" ,
         txtDiscount : "Remise",
@@ -8048,14 +8048,14 @@ export const langFr =
             clmDate : "Date",
             clmRef : "Référence",
             clmRefNo : "Numéro",
-            clmInputName : "Nom Fournisseur",
+            clmInputName : "Nom Client",
             clmInputCode  : "Code Client",
         },
         pg_txtCustomerCode : 
         {
-            title : "Choix Fournisseur",
+            title : "Choix Client",
             clmCode :  "Code Client",
-            clmTitle : "Nom Fournisseur",
+            clmTitle : "Nom Client",
             clmTypeName : "Type",
             clmGenusName : "Genre"
         },
@@ -8514,8 +8514,8 @@ export const langFr =
         },
         msgItemAlert: //BAK
         {
-            title: "Dikkat",
-            btn01: "Tamam",
+            title: "Attention",
+            btn01: "OK",
             msg: "Eklemeye çalıştığınız ürün zaten listenizde var !",
         },
     },
@@ -8581,17 +8581,17 @@ export const langFr =
     },
     irs_01_002 : // "Satış İrsaliye Listesi"
     {
-        cmbCustomer :"Fournisseur",
+        cmbCustomer :"Client",
         btnGet :"Rechercher",
         dtFirst : "Date Début",
         dtLast : "Date Fin",
-        txtCustomerCode : "Fournisseur",
+        txtCustomerCode : "Client",
         menu:"Bon de Livraison de Vente ",
         pg_txtCustomerCode : 
         {
-            title : "Choix Fournisseur",
+            title : "Choix Client",
             clmCode :  "Code Client",
-            clmTitle : "Nom Fournisseur",
+            clmTitle : "Nom Client",
             clmTypeName : "Type",
             clmGenusName : "Genre"
         },
@@ -8601,7 +8601,7 @@ export const langFr =
             clmRefNo: "Ligne",
             clmPrice: "Prix ",
             clmInputCode : "Sélection Document",
-            clmInputName : "Nom fournisseur",
+            clmInputName : "Nom Client",
             clmDate: "Date",
             clmVat : "TVA",
             clmAmount : "Total" ,
@@ -8650,8 +8650,8 @@ export const langFr =
         menu:"Saisie Bon de livraison interne",
         pg_txtCustomerCode : 
         {
-            title : "Sélection Client",
-            clmCode :  "Code Client",
+            title : "Sélection Magasin",
+            clmCode :  "Code Magasin",
             clmTitle : "Nom actuel",
             clmTypeName : "Type",
             clmGenusName : "Type"
@@ -8661,8 +8661,8 @@ export const langFr =
             clmRef: "Réf.",
             clmRefNo: "Séquence",
             clmPrice: "Prix",
-            clmInputCode : "Code Client",
-            clmInputName : "Nom Client",
+            clmInputCode : "Code Magasin",
+            clmInputName : "Nom Magasin",
             clmDate: "Date",
             clmVat : "TVA",
             clmAmount : "Total",
@@ -8986,21 +8986,21 @@ export const langFr =
         },
         msgDiscountEntry : 
         {   
-            title : "Tutarsal İndirim Girişi",    // BAK
-            btn01 : "Onayla"    // BAK
+            title : "Saisir de Remise Montant",    // BAK
+            btn01 : "Valide"   // BAK
         },
-        txtDiscount1 : "1. İndirim Tutarı",  // BAK
-        txtDiscount2 : "2. İndirim Tutarı",  // BAK
-        txtDiscount3 : "3. İndirim Tutarı",  // BAK
-        txtTotalDiscount :"Toplam İndirim Tutarı",  // BAK
+        txtDiscount1 : "1. Remise ",  // BAK
+        txtDiscount2 : "2. Remise ",  // BAK
+        txtDiscount3 : "3. Remise ",  // BAK
+        txtTotalDiscount :"Total de Remise ",  // BAK
         msgDiscountPerEntry : 
         {
-            title : "Oransal İndirim Girişi",  // BAK
-            btn01 : "Onayla"  // BAK
+            title : "Saisir de Remise %",  // BAK
+            btn01 : "Valide" // BAK
         },
-        txtDiscountPer1 : "1. İndirim Oranı",  // BAK
-        txtDiscountPer2 : "2. İndirim Oranı",  // BAK
-        txtDiscountPer3 : "3. İndirim Oranı",  // BAK
+        txtDiscountPer1 : "1. Remise % ",  // BAK
+        txtDiscountPer2 : "2. Remise % ",  // BAK
+        txtDiscountPer3 : "3. Remise % ",  // BAK
     },
     irs_02_002 : // Satış İrsaliyesi"
     {
@@ -9348,21 +9348,21 @@ export const langFr =
         },
         msgDiscountEntry : 
         {   
-            title : "Tutarsal İndirim Girişi",    // BAK
-            btn01 : "Onayla"    // BAK
+            title : "Saisir de Remise Montant",    // BAK
+            btn01 : "Valide"   // BAK
         },
-        txtDiscount1 : "1. İndirim Tutarı",  // BAK
-        txtDiscount2 : "2. İndirim Tutarı",  // BAK
-        txtDiscount3 : "3. İndirim Tutarı",  // BAK
-        txtTotalDiscount :"Toplam İndirim Tutarı",  // BAK
+        txtDiscount1 : "1. Remise ",  // BAK
+        txtDiscount2 : "2. Remise ",  // BAK
+        txtDiscount3 : "3. Remise ",  // BAK
+        txtTotalDiscount :"Total de Remise ",  // BAK
         msgDiscountPerEntry : 
         {
-            title : "Oransal İndirim Girişi",  // BAK
-            btn01 : "Onayla"  // BAK
+            title : "Saisir de Remise %",  // BAK
+            btn01 : "Valide" // BAK
         },
-        txtDiscountPer1 : "1. İndirim Oranı",  // BAK
-        txtDiscountPer2 : "2. İndirim Oranı",  // BAK
-        txtDiscountPer3 : "3. İndirim Oranı",  // BAK
+        txtDiscountPer1 : "1. Remise % ",  // BAK
+        txtDiscountPer2 : "2. Remise % ",  // BAK
+        txtDiscountPer3 : "3. Remise % ",  // BAK
     },
     irs_02_003 : // "İade İrsaliyesi"
     {
@@ -9661,28 +9661,28 @@ export const langFr =
         },
         msgDiscountEntry : 
         {   
-            title : "Tutarsal İndirim Girişi",    // BAK
-            btn01 : "Onayla"    // BAK
+            title : "Saisir de Remise Montant",    // BAK
+            btn01 : "Valide"   // BAK
         },
-        txtDiscount1 : "1. İndirim Tutarı",  // BAK
-        txtDiscount2 : "2. İndirim Tutarı",  // BAK
-        txtDiscount3 : "3. İndirim Tutarı",  // BAK
-        txtTotalDiscount :"Toplam İndirim Tutarı",  // BAK
+        txtDiscount1 : "1. Remise ",  // BAK
+        txtDiscount2 : "2. Remise ",  // BAK
+        txtDiscount3 : "3. Remise ",  // BAK
+        txtTotalDiscount :"Total de Remise ",  // BAK
         msgDiscountPerEntry : 
         {
-            title : "Oransal İndirim Girişi",  // BAK
-            btn01 : "Onayla"  // BAK
+            title : "Saisir de Remise %",  // BAK
+            btn01 : "Valide" // BAK
         },
-        txtDiscountPer1 : "1. İndirim Oranı",  // BAK
-        txtDiscountPer2 : "2. İndirim Oranı",  // BAK
-        txtDiscountPer3 : "3. İndirim Oranı",  // BAK
+        txtDiscountPer1 : "1. Remise % ",  // BAK
+        txtDiscountPer2 : "2. Remise % ",  // BAK
+        txtDiscountPer3 : "3. Remise % ",  // BAK
     },
     irs_02_004 : // Şube Satış İrsaliyesi"
     {
         txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
         txtCustomerCode : "Sélection Document",
-        txtCustomerName : "Nom fournisseur",
+        txtCustomerName : "Nom Magasin",
         dtDocDate : "Date",
         txtAmount : "Total" ,
         txtDiscount : "Remise",
@@ -9708,14 +9708,14 @@ export const langFr =
             clmDate : "Date",
             clmRef : "Référence",
             clmRefNo : "Numéro",
-            clmInputName : "Nom Fournisseur",
-            clmInputCode  : "Code Client",
+            clmInputName : "Nom Magasin",
+            clmInputCode  : "Code Magasin",
         },
         pg_txtCustomerCode : 
         {
-            title : "Choix Fournisseur",
+            title : "Choix Magasin",
             clmCode :  "Code Client",
-            clmTitle : "Nom Fournisseur",
+            clmTitle : "Nom Magasin",
             clmTypeName : "Type",
             clmGenusName : "Genre"
         },
@@ -10022,21 +10022,21 @@ export const langFr =
         },
         msgDiscountEntry : 
         {   
-            title : "Tutarsal İndirim Girişi",    // BAK
-            btn01 : "Onayla"    // BAK
+            title : "Saisir de Remise Montant",    // BAK
+            btn01 : "Valide"   // BAK
         },
-        txtDiscount1 : "1. İndirim Tutarı",  // BAK
-        txtDiscount2 : "2. İndirim Tutarı",  // BAK
-        txtDiscount3 : "3. İndirim Tutarı",  // BAK
-        txtTotalDiscount :"Toplam İndirim Tutarı",  // BAK
+        txtDiscount1 : "1. Remise ",  // BAK
+        txtDiscount2 : "2. Remise ",  // BAK
+        txtDiscount3 : "3. Remise ",  // BAK
+        txtTotalDiscount :"Total de Remise ",  // BAK
         msgDiscountPerEntry : 
         {
-            title : "Oransal İndirim Girişi",  // BAK
-            btn01 : "Onayla"  // BAK
+            title : "Saisir de Remise %",  // BAK
+            btn01 : "Valide" // BAK
         },
-        txtDiscountPer1 : "1. İndirim Oranı",  // BAK
-        txtDiscountPer2 : "2. İndirim Oranı",  // BAK
-        txtDiscountPer3 : "3. İndirim Oranı",  // BAK
+        txtDiscountPer1 : "1. Remise % ",  // BAK
+        txtDiscountPer2 : "2. Remise % ",  // BAK
+        txtDiscountPer3 : "3. Remise % ",  // BAK
     },
     irs_02_005 : // "İade Alış İrsaliyesi"
     {
@@ -10316,28 +10316,28 @@ export const langFr =
         },
         msgDiscountEntry : 
         {   
-            title : "Tutarsal İndirim Girişi",    // BAK
-            btn01 : "Onayla"    // BAK
+            title : "Saisir de Remise Montant",    // BAK
+            btn01 : "Valide"   // BAK
         },
-        txtDiscount1 : "1. İndirim Tutarı",  // BAK
-        txtDiscount2 : "2. İndirim Tutarı",  // BAK
-        txtDiscount3 : "3. İndirim Tutarı",  // BAK
-        txtTotalDiscount :"Toplam İndirim Tutarı",  // BAK
+        txtDiscount1 : "1. Remise ",  // BAK
+        txtDiscount2 : "2. Remise ",  // BAK
+        txtDiscount3 : "3. Remise ",  // BAK
+        txtTotalDiscount :"Total de Remise ",  // BAK
         msgDiscountPerEntry : 
         {
-            title : "Oransal İndirim Girişi",  // BAK
-            btn01 : "Onayla"  // BAK
+            title : "Saisir de Remise %",  // BAK
+            btn01 : "Valide" // BAK
         },
-        txtDiscountPer1 : "1. İndirim Oranı",  // BAK
-        txtDiscountPer2 : "2. İndirim Oranı",  // BAK
-        txtDiscountPer3 : "3. İndirim Oranı",  // BAK
+        txtDiscountPer1 : "1. Remise % ",  // BAK
+        txtDiscountPer2 : "2. Remise % ",  // BAK
+        txtDiscountPer3 : "3. Remise % ",  // BAK
     },
     irs_02_006 : // Şube Alış İrsaliyesi"
     {
         txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
         txtCustomerCode : "Sélection Document",
-        txtCustomerName : "Nom fournisseur",
+        txtCustomerName : "Nom Magasin",
         dtDocDate : "Date",
         txtAmount : "Total" ,
         txtDiscount : "Remise",
@@ -10363,14 +10363,14 @@ export const langFr =
             clmDate : "Date",
             clmRef : "Référence",
             clmRefNo : "Numéro",
-            clmInputName : "Nom Fournisseur",
-            clmInputCode  : "Code Client",
+            clmInputName : "Nom Magasin",
+            clmInputCode  : "Code Magasin",
         },
         pg_txtCustomerCode : 
         {
-            title : "Choix Fournisseur",
+            title : "Choix Magasin",
             clmCode :  "Code Client",
-            clmTitle : "Nom Fournisseur",
+            clmTitle : "Nom Magasin",
             clmTypeName : "Type",
             clmGenusName : "Genre"
         },
@@ -10677,21 +10677,21 @@ export const langFr =
         },
         msgDiscountEntry : 
         {   
-            title : "Tutarsal İndirim Girişi",    // BAK
-            btn01 : "Onayla"    // BAK
+            title : "Saisir de Remise Montant",    // BAK
+            btn01 : "Valide"   // BAK
         },
-        txtDiscount1 : "1. İndirim Tutarı",  // BAK
-        txtDiscount2 : "2. İndirim Tutarı",  // BAK
-        txtDiscount3 : "3. İndirim Tutarı",  // BAK
-        txtTotalDiscount :"Toplam İndirim Tutarı",  // BAK
+        txtDiscount1 : "1. Remise ",  // BAK
+        txtDiscount2 : "2. Remise ",  // BAK
+        txtDiscount3 : "3. Remise ",  // BAK
+        txtTotalDiscount :"Total de Remise ",  // BAK
         msgDiscountPerEntry : 
         {
-            title : "Oransal İndirim Girişi",  // BAK
-            btn01 : "Onayla"  // BAK
+            title : "Saisir de Remise %",  // BAK
+            btn01 : "Valide" // BAK
         },
-        txtDiscountPer1 : "1. İndirim Oranı",  // BAK
-        txtDiscountPer2 : "2. İndirim Oranı",  // BAK
-        txtDiscountPer3 : "3. İndirim Oranı",  // BAK
+        txtDiscountPer1 : "1. Remise % ",  // BAK
+        txtDiscountPer2 : "2. Remise % ",  // BAK
+        txtDiscountPer3 : "3. Remise % ",  // BAK
     },
     sip_01_001 : // "Alış Sipariş Listesi"
     {
@@ -12765,9 +12765,9 @@ export const langFr =
         ckhDoublePay : "Paiement multiple",
         pg_txtCustomerCode : 
         {
-            title : "Choix Fournisseur",
+            title : "Choix Client",
             clmCode :  "Code Client",
-            clmTitle : "Nom Fournisseur",
+            clmTitle : "Nom Client",
             clmTypeName : "Type",
             clmGenusName : "Genre"
         },
@@ -13246,17 +13246,17 @@ export const langFr =
     },
     tkf_01_002 : // "Satış Teklifi Listesi",
     {
-        cmbCustomer :"Fournisseur",
+        cmbCustomer :"Client",
         btnGet :"Rechercher",
         dtFirst : "Date Début",
         dtLast : "Date Fin",
-        txtCustomerCode : "Fournisseur",
+        txtCustomerCode : "Client",
         menu:"Proposition de vente",
         pg_txtCustomerCode : 
         {
-            title : "Choix Fournisseur",
+            title : "Choix Client",
             clmCode :  "Code Client",
-            clmTitle : "Nom Fournisseur",
+            clmTitle : "Nom Client",
             clmTypeName : "Type",
             clmGenusName : "Genre"
         },
@@ -13266,7 +13266,7 @@ export const langFr =
             clmRefNo: "Ligne",
             clmPrice: "Prix ",
             clmInputCode : "Sélection Document",
-            clmInputName : "Nom fournisseur",
+            clmInputName : "Nom Client",
             clmDate: "Date",
             clmVat : "TVA",
             clmAmount : "Total" ,
@@ -13570,7 +13570,7 @@ export const langFr =
         txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
         txtCustomerCode : "Sélection Document:",
-        txtCustomerName : "Nom fournisseur",
+        txtCustomerName : "Nom Client",
         dtDocDate : "Date",
         txtAmount : "Total" ,
         txtDiscount : "Remise",
@@ -13595,14 +13595,14 @@ export const langFr =
             clmDate : "Date",
             clmRef : "Référence",
             clmRefNo : "Numéro",
-            clmInputName : "Nom Fournisseur",
+            clmInputName : "Nom Client",
             clmInputCode  : "Code Client",
         },
         pg_txtCustomerCode : 
         {
-            title : "Choix Fournisseur",
+            title : "Choix Client",
             clmCode :  "Code Client",
-            clmTitle : "Nom Fournisseur",
+            clmTitle : "Nom Client",
             clmTypeName : "Type",
             clmGenusName : "Genre"
         },
