@@ -1302,7 +1302,8 @@ export class docExtraCls
             TAG : '',
             DOC : '00000000-0000-0000-0000-000000000000',
             DESCRIPTION : '00000000-0000-0000-0000-000000000000',
-            SIGNATURE : ''
+            SIGNATURE : '',
+            SIGNATURE_SUM : '',
         }
 
         this._initDs();
@@ -1320,9 +1321,10 @@ export class docExtraCls
                     "@TAG = @PTAG, " +
                     "@DOC = @PDOC, " +
                     "@DESCRIPTION = @PDESCRIPTION, " +
-                    "@SIGNATURE = @PSIGNATURE ",
-            param : ['PGUID:string|50','PCUSER:string|25','PTAG:string|25','PDOC:string|50','PDESCRIPTION:string|500','PSIGNATURE:string|max'],
-            dataprm : ['GUID','CUSER','TAG','DOC','DESCRIPTION','SIGNATURE']
+                    "@SIGNATURE = @PSIGNATURE, " + 
+                    "@SIGNATURE_SUM = @PSIGNATURE_SUM ",
+            param : ['PGUID:string|50','PCUSER:string|25','PTAG:string|25','PDOC:string|50','PDESCRIPTION:string|500','PSIGNATURE:string|max','PSIGNATURE_SUM:string|max'],
+            dataprm : ['GUID','CUSER','TAG','DOC','DESCRIPTION','SIGNATURE','SIGNATURE_SUM']
         }
         this.ds.add(tmpDt);
     }

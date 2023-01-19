@@ -137,9 +137,11 @@ class nf525
                         await this.archiveNF203GrandTotal(2,tmpLastDate)
                         await this.archiveDuplicatePos(tmpFirstDate,tmpLastDate)
                         await this.archiveDuplicatePosFact(tmpFirstDate,tmpLastDate)
+                        await this.archiveDuplicateFact(tmpFirstDate,tmpLastDate)
                         await this.archiveDayTicket(tmpFirstDate,tmpLastDate)
                         await this.archiveDayFact(tmpFirstDate,tmpLastDate)
-    
+                        await this.archiveDayProfFact(tmpFirstDate,tmpLastDate)
+                        
                         let zip = new AdmZip()
                         zip.addLocalFolder(this.core.root_path + '/archiveFiscal/' + this.folder);
                         zip.writeZip(this.core.root_path + '/archiveFiscal/' + this.folder + '.zip');
@@ -169,10 +171,13 @@ class nf525
             try
             {
                 core.instance.log.msg("Signature verify started","Nf525");
-
                 await this.grandTotalNf203SignatureVerify()
                 await this.grandTotalNf525SignatureVerify()
-
+                await this.ticketNf525SignatureVerify()
+                await this.factureNf203SignatureVerify()
+                await this.dupFactureNf203SignatureVerify()
+                await this.dupPosNf525SignatureVerify()
+                await this.jetSignatureVerify()
                 core.instance.log.msg("Signature verify completed","Nf525");
 
                 resolve()
@@ -197,19 +202,22 @@ class nf525
             
             for (let i = 0; i < tmpResult.length; i++) 
             {
-                let tmpVerify = this.verify(tmpResult[i].SIGNATURE_SUM,tmpResult[i].SIGNATURE)
-                
-                if(!tmpVerify)
+                if(tmpResult[i].SIGNATURE != '' && tmpResult[i].SIGNATURE_SUM != null)
                 {
-                    await this.insertJet(
+                    let tmpVerify = this.verify(tmpResult[i].SIGNATURE_SUM,tmpResult[i].SIGNATURE)
+                    
+                    if(!tmpVerify)
                     {
-                        CUSER:'System Auto',            
-                        DEVICE:'',
-                        CODE:'90',
-                        NAME:"Erreur integrite.",
-                        DESCRIPTION:'Grand total erreur verify',
-                        APP_VERSION:this.appInfo.version
-                    })
+                        await this.insertJet(
+                        {
+                            CUSER:'System Auto',            
+                            DEVICE:'',
+                            CODE:'90',
+                            NAME:"Erreur integrite.",
+                            DESCRIPTION:'Grand total erreur verify',
+                            APP_VERSION:this.appInfo.version
+                        })
+                    }
                 }
             }
 
@@ -229,19 +237,198 @@ class nf525
             
             for (let i = 0; i < tmpResult.length; i++) 
             {
-                let tmpVerify = this.verify(tmpResult[i].SIGNATURE_SUM,tmpResult[i].SIGNATURE)
-                
-                if(!tmpVerify)
+                if(tmpResult[i].SIGNATURE != '' && tmpResult[i].SIGNATURE_SUM != null)
                 {
-                    await this.insertJet(
+                    let tmpVerify = this.verify(tmpResult[i].SIGNATURE_SUM,tmpResult[i].SIGNATURE)
+                
+                    if(!tmpVerify)
                     {
-                        CUSER:'System Auto',            
-                        DEVICE:'',
-                        CODE:'90',
-                        NAME:"Erreur integrite.",
-                        DESCRIPTION:'Grand total erreur verify',
-                        APP_VERSION:this.appInfo.version
-                    })
+                        await this.insertJet(
+                        {
+                            CUSER:'System Auto',            
+                            DEVICE:'',
+                            CODE:'90',
+                            NAME:"Erreur integrite.",
+                            DESCRIPTION:'Grand total erreur verify',
+                            APP_VERSION:this.appInfo.version
+                        })
+                    }
+                }
+            }
+
+            resolve()
+        })
+    }
+    async ticketNf525SignatureVerify()
+    {
+        return new Promise(async resolve =>
+        {
+            let tmpQuery = 
+            {
+                query : "SELECT * FROM POS WHERE LDATE >= GETDATE() - 10 AND LDATE <= GETDATE() - 1 ORDER BY LDATE DESC"
+            }
+
+            let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
+            
+            for (let i = 0; i < tmpResult.length; i++) 
+            {
+                if(tmpResult[i].SIGNATURE != '' && tmpResult[i].SIGNATURE_SUM != null)
+                {
+                    let tmpVerify = this.verify(tmpResult[i].SIGNATURE_SUM,tmpResult[i].SIGNATURE)
+                    
+                    if(!tmpVerify)
+                    {
+                        await this.insertJet(
+                        {
+                            CUSER:'System Auto',            
+                            DEVICE:'',
+                            CODE:'90',
+                            NAME:"Erreur integrite.",
+                            DESCRIPTION:'Ticket erreur verify',
+                            APP_VERSION:this.appInfo.version
+                        })
+                    }
+                }
+            }
+
+            resolve()
+        })
+    }
+    async factureNf203SignatureVerify()
+    {
+        return new Promise(async resolve =>
+        {
+            let tmpQuery = 
+            {
+                query : "SELECT * FROM DOC WHERE LDATE >= GETDATE() - 10 AND LDATE <= GETDATE() - 1 ORDER BY LDATE DESC"
+            }
+
+            let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
+            
+            for (let i = 0; i < tmpResult.length; i++) 
+            {
+                if(tmpResult[i].SIGNATURE != '' && tmpResult[i].SIGNATURE_SUM != null)
+                {
+                    let tmpVerify = this.verify(tmpResult[i].SIGNATURE_SUM,tmpResult[i].SIGNATURE)
+                    
+                    if(!tmpVerify)
+                    {
+                        await this.insertJet(
+                        {
+                            CUSER:'System Auto',            
+                            DEVICE:'',
+                            CODE:'90',
+                            NAME:"Erreur integrite.",
+                            DESCRIPTION:'Facture erreur verify',
+                            APP_VERSION:this.appInfo.version
+                        })
+                    }
+                }
+            }
+
+            resolve()
+        })
+    }
+    async dupFactureNf203SignatureVerify()
+    {
+        return new Promise(async resolve =>
+        {
+            let tmpQuery = 
+            {
+                query : "SELECT * FROM DOC_EXTRA WHERE CDATE >= GETDATE() - 10 AND CDATE <= GETDATE() - 1 AND TAG = 'PRINT' ORDER BY CDATE DESC"
+            }
+
+            let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
+            
+            for (let i = 0; i < tmpResult.length; i++) 
+            {
+                if(tmpResult[i].SIGNATURE != '' && tmpResult[i].SIGNATURE_SUM != null)
+                {
+                    let tmpVerify = this.verify(tmpResult[i].SIGNATURE_SUM,tmpResult[i].SIGNATURE)
+                    
+                    if(!tmpVerify)
+                    {
+                        await this.insertJet(
+                        {
+                            CUSER:'System Auto',            
+                            DEVICE:'',
+                            CODE:'90',
+                            NAME:"Erreur integrite.",
+                            DESCRIPTION:'Facture duplicate erreur verify',
+                            APP_VERSION:this.appInfo.version
+                        })
+                    }
+                }
+            }
+
+            resolve()
+        })
+    }
+    async dupPosNf525SignatureVerify()
+    {
+        return new Promise(async resolve =>
+        {
+            let tmpQuery = 
+            {
+                query : "SELECT * FROM POS_EXTRA WHERE CDATE >= GETDATE() - 10 AND CDATE <= GETDATE() - 1 AND TAG IN ('REPRINT','REPRINTFACT') ORDER BY CDATE DESC"
+            }
+
+            let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
+            
+            for (let i = 0; i < tmpResult.length; i++) 
+            {
+                if(tmpResult[i].DATA != '' && tmpResult[i].DATA_EXTRA1 != null)
+                {
+                    console.log(tmpResult[i].DATA_EXTRA1 + " - " + tmpResult[i].DATA)
+                    let tmpVerify = this.verify(tmpResult[i].DATA_EXTRA1,tmpResult[i].DATA)
+                    
+                    if(!tmpVerify)
+                    {
+                        await this.insertJet(
+                        {
+                            CUSER:'System Auto',            
+                            DEVICE:'',
+                            CODE:'90',
+                            NAME:"Erreur integrite.",
+                            DESCRIPTION:'Pos duplicate erreur verify',
+                            APP_VERSION:this.appInfo.version
+                        })
+                    }
+                }
+            }
+
+            resolve()
+        })
+    }
+    async jetSignatureVerify()
+    {
+        return new Promise(async resolve =>
+        {
+            let tmpQuery = 
+            {
+                query : "SELECT * FROM NF525_JET WHERE CDATE >= GETDATE() - 10 AND CDATE <= GETDATE() + 2 ORDER BY CDATE DESC"
+            }
+
+            let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
+            
+            for (let i = 0; i < tmpResult.length; i++) 
+            {
+                if(tmpResult[i].SIGNATURE != '' && tmpResult[i].SIGNATURE_SUM != null)
+                {
+                    let tmpVerify = this.verify(tmpResult[i].SIGNATURE_SUM,tmpResult[i].SIGNATURE)
+                    
+                    if(!tmpVerify)
+                    {
+                        await this.insertJet(
+                        {
+                            CUSER:'System Auto',            
+                            DEVICE:'',
+                            CODE:'90',
+                            NAME:"Erreur integrite.",
+                            DESCRIPTION:'Jet erreur verify',
+                            APP_VERSION:this.appInfo.version
+                        })
+                    }
                 }
             }
 
@@ -431,6 +618,28 @@ class nf525
             resolve()
         });
     }
+    async archiveDuplicateFact(pFirst,pLast)
+    {
+        return new Promise(async resolve =>
+        {
+            let tmpQuery = 
+            {
+                query : "SELECT * FROM NF203_DOC_DUPLICATE_VW_01 " +
+                        "WHERE FAC_DUP_HOR_GDH >= @FIRST_DATE AND " +
+                        "FAC_DUP_HOR_GDH <= @LAST_DATE AND FAC_DUP_PRN_NUM > 1 " +
+                        "ORDER BY FAC_DUP_HOR_GDH ASC",
+                param : ['FIRST_DATE:string|10','LAST_DATE:string|10'],
+                value : [pFirst,pLast]
+            }
+
+            let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
+            if(tmpResult.length > 0)
+            {
+                this.exportExcel(tmpResult,"NF203_FACT_DUPLICATE","DUPLICATE",this.folder)
+            }
+            resolve()
+        });
+    }
     archiveDayTicket(pFirst,pLast)
     {
         return new Promise(async resolve =>
@@ -480,7 +689,7 @@ class nf525
 
             let tmpMasterQuery = 
             {
-                query : "SELECT * FROM NF203_ARCHIVE_DONNES_DENTETE_VW_01 WHERE FAC_DAT >= @FIRST_DATE AND FAC_DAT <= @LAST_DATE ORDER BY FAC_NUM,FAC_OPS_NID ASC",
+                query : "SELECT * FROM NF203_ARCHIVE_DONNES_DENTETE_VW_01 WHERE FAC_DAT >= @FIRST_DATE AND FAC_DAT <= @LAST_DATE AND FAC_TYP IN ('FAC','FAC-DIF','FAC-AVOIR') ORDER BY FAC_NUM,FAC_OPS_NID ASC",
                 param : ['FIRST_DATE:string|10','LAST_DATE:string|10'],
                 value : [pFirst,pLast]
             }
@@ -492,7 +701,39 @@ class nf525
 
                 let tmpLineQuery = 
                 {
-                    query : "SELECT * FROM NF203_ARCHIVE_DONNES_LIGNES_VW_01 WHERE FAC_DAT >= @FIRST_DATE AND FAC_DAT <= @LAST_DATE ORDER BY FAC_NUM,FAC_LIG_NUM ASC",
+                    query : "SELECT * FROM NF203_ARCHIVE_DONNES_LIGNES_VW_01 WHERE FAC_DAT >= @FIRST_DATE AND FAC_DAT <= @LAST_DATE AND FAC_TYP IN ('FAC','FAC-DIF','FAC-AVOIR') ORDER BY FAC_NUM,FAC_LIG_NUM ASC",
+                    param : ['FIRST_DATE:string|10','LAST_DATE:string|10'],
+                    value : [pFirst,pLast]
+                }
+                
+                let tmpLineResult = (await core.instance.sql.execute(tmpLineQuery)).result.recordset
+                
+                this.exportExcel({DENTETE:tmpMasterResult,LIGNES:tmpLineResult},tmpFileName,'',this.folder)
+            }
+            resolve()
+        })
+    }
+    archiveDayProfFact(pFirst,pLast)
+    {
+        return new Promise(async resolve =>
+        {
+            let tmpFileName = "FACTURE_PROF_" + pFirst
+
+            let tmpMasterQuery = 
+            {
+                query : "SELECT * FROM NF203_ARCHIVE_DONNES_DENTETE_VW_01 WHERE FAC_DAT >= @FIRST_DATE AND FAC_DAT <= @LAST_DATE AND FAC_TYP IN ('FAC-PROF') ORDER BY FAC_NUM,FAC_OPS_NID ASC",
+                param : ['FIRST_DATE:string|10','LAST_DATE:string|10'],
+                value : [pFirst,pLast]
+            }
+            
+            let tmpMasterResult = (await core.instance.sql.execute(tmpMasterQuery)).result.recordset
+            if(tmpMasterResult.length > 0)
+            {
+                this.exportExcel(tmpMasterResult,tmpFileName,"DENTETE",this.folder)
+
+                let tmpLineQuery = 
+                {
+                    query : "SELECT * FROM NF203_ARCHIVE_DONNES_LIGNES_VW_01 WHERE FAC_DAT >= @FIRST_DATE AND FAC_DAT <= @LAST_DATE AND FAC_TYP IN ('FAC-PROF') ORDER BY FAC_NUM,FAC_LIG_NUM ASC",
                     param : ['FIRST_DATE:string|10','LAST_DATE:string|10'],
                     value : [pFirst,pLast]
                 }
@@ -560,7 +801,9 @@ class nf525
             {
                 tmpLastData = []
             }
-            
+
+            let tmpSignature = this.signatureJet(pData,tmpLastData.length > 0 ? tmpLastData[0].SIGNATURE : '')
+
             let tmpInsertQuery = 
             {
                 query : "EXEC [dbo].[PRD_NF525_JET_INSERT] " + 
@@ -572,9 +815,10 @@ class nf525
                         "@NAME = @PNAME, " +
                         "@DESCRIPTION = @PDESCRIPTION, " +  
                         "@APP_VERSION = @PAPP_VERSION, " +                       
-                        "@SIGNATURE = @PSIGNATURE ",
-                param : ['PCUSER:string|25','PCDATE:datetime','PNO:int','PDEVICE:string|25','PCODE:string|50','PNAME:string|250','PDESCRIPTION:string|max','PAPP_VERSION:string|10','PSIGNATURE:string|max'],
-                value : [pData.CUSER,typeof pData.CDATE == 'undefined' ? moment(new Date()).format("YYYY-MM-DD HH:mm:ss") : pData.CDATE,tmpNo + 1,pData.DEVICE,pData.CODE,pData.NAME,pData.DESCRIPTION,pData.APP_VERSION,this.signatureJet(pData,tmpLastData.length > 0 ? tmpLastData[0].SIGNATURE : '')]
+                        "@SIGNATURE = @PSIGNATURE, " +
+                        "@SIGNATURE_SUM = @PSIGNATURE_SUM ",
+                param : ['PCUSER:string|25','PCDATE:datetime','PNO:int','PDEVICE:string|25','PCODE:string|50','PNAME:string|250','PDESCRIPTION:string|max','PAPP_VERSION:string|10','PSIGNATURE:string|max','PSIGNATURE_SUM:string|max'],
+                value : [pData.CUSER,typeof pData.CDATE == 'undefined' ? moment(new Date()).format("YYYY-MM-DD HH:mm:ss") : pData.CDATE,tmpNo + 1,pData.DEVICE,pData.CODE,pData.NAME,pData.DESCRIPTION,pData.APP_VERSION,tmpSignature.SIGNATURE,tmpSignature.SIGNATURE_SUM]
             }
             await this.core.sql.execute(tmpInsertQuery)
             resolve()
@@ -914,7 +1158,7 @@ class nf525
                 {
                     tmpQuery.query = tmpQuery.query.replace("{0}","DOC_DATE >= CONVERT(NVARCHAR(10),GETDATE() - 120,112)")
                 }
-    
+                
                 let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
                 if(typeof tmpResult == 'undefined')
                 {
@@ -1149,24 +1393,21 @@ class nf525
     signatureJet(pData,pLastSignature)
     {
         let tmpSignature = ""
+        let tmpSignatureSum = ""
 
         if(typeof pData != 'undefined')
         {
-            tmpSignature = pData.GUID
-            tmpSignature = tmpSignature + "," + pData.CODE
-            tmpSignature = tmpSignature + ",Recuperation Logiciel " + pData.APP_VERSION
-            tmpSignature = tmpSignature + "," + moment(pData.CDATE).format("YYYYMMDDHHmmss")
-            tmpSignature = tmpSignature + "," + pData.CUSER
-            tmpSignature = tmpSignature + "," + pData.DEVICE
-            tmpSignature = tmpSignature + "," + (pLastSignature == "" ? "N" : "O")
-            tmpSignature = tmpSignature + "," + pLastSignature
+            tmpSignatureSum = tmpSignatureSum + pData.CODE
+            tmpSignatureSum = tmpSignatureSum + ",Recuperation Logiciel " + pData.APP_VERSION
+            tmpSignatureSum = tmpSignatureSum + "," + moment(pData.CDATE).format("YYYYMMDDHHmmss")
+            tmpSignatureSum = tmpSignatureSum + "," + pData.CUSER
+            tmpSignatureSum = tmpSignatureSum + "," + pData.DEVICE
+            tmpSignatureSum = tmpSignatureSum + "," + (pLastSignature == "" ? "N" : "O")
+            tmpSignatureSum = tmpSignatureSum + "," + pLastSignature
 
-            return this.sign(tmpSignature)
+            tmpSignature = this.sign(tmpSignatureSum)
         }
-        else
-        {
-            return tmpSignature
-        }
+        return {SIGNATURE : tmpSignature,SIGNATURE_SUM : tmpSignatureSum}
     }
     sign(pData)
     {

@@ -1539,10 +1539,11 @@ export default class posDoc extends React.PureComponent
                                         "@POS_GUID = @PPOS_GUID, " +
                                         "@LINE_GUID = @PLINE_GUID, " +
                                         "@DATA =@PDATA, " +
-                                        "@APP_VERSION =@PAPP_VERSION, " +
+                                        "@DATA_EXTRA1 = @PDATA_EXTRA1, " +
+                                        "@APP_VERSION = @PAPP_VERSION, " +
                                         "@DESCRIPTION = @PDESCRIPTION ", 
-                                param : ['PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|250','PAPP_VERSION:string|25','PDESCRIPTION:string|max'],
-                                value : [this.posObj.dt()[0].CUSER,"REPRINTFACT",this.posObj.dt()[0].GUID,"00000000-0000-0000-0000-000000000000",tmpLastSignature,this.core.appInfo.version,'']
+                                param : ['PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|max','PDATA_EXTRA1:string|max','PAPP_VERSION:string|25','PDESCRIPTION:string|max'],
+                                value : [this.posObj.dt()[0].CUSER,"REPRINTFACT",this.posObj.dt()[0].GUID,"00000000-0000-0000-0000-000000000000",tmpLastSignature.SIGNATURE,tmpLastSignature.SIGNATURE_SUM,this.core.appInfo.version,'']
                             }
 
                             await this.core.sql.execute(tmpInsertQuery)
@@ -1602,11 +1603,12 @@ export default class posDoc extends React.PureComponent
                                         "@TAG = @PTAG, " +
                                         "@POS_GUID = @PPOS_GUID, " +
                                         "@LINE_GUID = @PLINE_GUID, " +
-                                        "@DATA =@PDATA, " +
-                                        "@APP_VERSION =@PAPP_VERSION, " +
+                                        "@DATA = @PDATA, " +
+                                        "@DATA_EXTRA1 = @PDATA_EXTRA1, " +
+                                        "@APP_VERSION = @PAPP_VERSION, " +
                                         "@DESCRIPTION = @PDESCRIPTION ", 
-                                param : ['PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|250','PAPP_VERSION:string|25','PDESCRIPTION:string|max'],
-                                value : [this.posObj.dt()[0].CUSER,"REPRINT",this.posObj.dt()[0].GUID,"00000000-0000-0000-0000-000000000000","",this.core.appInfo.version,""],
+                                param : ['PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|max','PDATA_EXTRA1:string|max','PAPP_VERSION:string|25','PDESCRIPTION:string|max'],
+                                value : [this.posObj.dt()[0].CUSER,"REPRINT",this.posObj.dt()[0].GUID,"00000000-0000-0000-0000-000000000000","","",this.core.appInfo.version,""],
                                 local : 
                                 {
                                     type : "insert",
@@ -1641,11 +1643,12 @@ export default class posDoc extends React.PureComponent
                                     "@TAG = @PTAG, " +
                                     "@POS_GUID = @PPOS_GUID, " +
                                     "@LINE_GUID = @PLINE_GUID, " +
-                                    "@DATA =@PDATA, " +
-                                    "@APP_VERSION =@PAPP_VERSION, " +
+                                    "@DATA = @PDATA, " +
+                                    "@DATA_EXTRA1 = @PDATA_EXTRA1, " +
+                                    "@APP_VERSION = @PAPP_VERSION, " +
                                     "@DESCRIPTION = @PDESCRIPTION ", 
-                            param : ['PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|250','PAPP_VERSION:string|25','PDESCRIPTION:string|max'],
-                            value : [this.posObj.dt()[0].CUSER,"REPRINT",this.posObj.dt()[0].GUID,"00000000-0000-0000-0000-000000000000","",this.core.appInfo.version,""],
+                            param : ['PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|max','PDATA_EXTRA1:string|max','PAPP_VERSION:string|25','PDESCRIPTION:string|max'],
+                            value : [this.posObj.dt()[0].CUSER,"REPRINT",this.posObj.dt()[0].GUID,"00000000-0000-0000-0000-000000000000","","",this.core.appInfo.version,""],
                             local : 
                             {
                                 type : "insert",
@@ -5534,10 +5537,11 @@ export default class posDoc extends React.PureComponent
                                                                         "@POS_GUID = @PPOS_GUID, " +
                                                                         "@LINE_GUID = @PLINE_GUID, " +
                                                                         "@DATA = @PDATA, " +
-                                                                        "@APP_VERSION =@PAPP_VERSION, " +
+                                                                        "@DATA_EXTRA1 = @PDATA_EXTRA1, " +
+                                                                        "@APP_VERSION = @PAPP_VERSION, " +
                                                                         "@DESCRIPTION = @PDESCRIPTION ", 
-                                                                param : ['PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|250','PAPP_VERSION:string|25','PDESCRIPTION:string|max'],
-                                                                value : [tmpLastPos[0].CUSER,"REPRINT",tmpLastPos[0].GUID,"00000000-0000-0000-0000-000000000000",tmpLastSignature,this.core.appInfo.version,tmpRePrintResult]
+                                                                param : ['PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|max','PDATA_EXTRA1:string|max','PAPP_VERSION:string|25','PDESCRIPTION:string|max'],
+                                                                value : [tmpLastPos[0].CUSER,"REPRINT",tmpLastPos[0].GUID,"00000000-0000-0000-0000-000000000000",tmpLastSignature.SIGNATURE,tmpLastSignature.SIGNATURE_SUM,this.core.appInfo.version,tmpRePrintResult]
                                                             }
     
                                                             await this.core.sql.execute(tmpInsertQuery)
@@ -5617,7 +5621,7 @@ export default class posDoc extends React.PureComponent
 
                                                 if(tmpDupSignature != '')
                                                 {
-                                                    tmpDupSign = tmpDupSignature.substring(2,3) + tmpDupSignature.substring(6,7) + tmpDupSignature.substring(12,13) + tmpDupSignature.substring(18,19)
+                                                    tmpDupSign = tmpDupSignature.SIGNATURE.substring(2,3) + tmpDupSignature.SIGNATURE.substring(6,7) + tmpDupSignature.SIGNATURE.substring(12,13) + tmpDupSignature.SIGNATURE.substring(18,19)
                                                 }
 
                                                 if(typeof tmpRePrintResult != 'undefined')
@@ -5630,10 +5634,11 @@ export default class posDoc extends React.PureComponent
                                                                 "@POS_GUID = @PPOS_GUID, " +
                                                                 "@LINE_GUID = @PLINE_GUID, " +
                                                                 "@DATA = @PDATA, " +
+                                                                "@DATA_EXTRA1 = @PDATA_EXTRA1, " +
                                                                 "@APP_VERSION = @PAPP_VERSION, " +
                                                                 "@DESCRIPTION = @PDESCRIPTION ", 
-                                                        param : ['PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|250','PAPP_VERSION:string|25','PDESCRIPTION:string|max'],
-                                                        value : [tmpLastPos[0].CUSER,"REPRINTFACT",tmpLastPos[0].GUID,"00000000-0000-0000-0000-000000000000",tmpDupSignature,this.core.appInfo.version,tmpRePrintResult]
+                                                        param : ['PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|max','PDATA_EXTRA1:string|max','PAPP_VERSION:string|25','PDESCRIPTION:string|max'],
+                                                        value : [tmpLastPos[0].CUSER,"REPRINTFACT",tmpLastPos[0].GUID,"00000000-0000-0000-0000-000000000000",tmpDupSignature.SIGNATURE,tmpDupSignature.SIGNATURE_SUM,this.core.appInfo.version,tmpRePrintResult]
                                                     }
 
                                                     await this.core.sql.execute(tmpInsertQuery)
@@ -5712,7 +5717,7 @@ export default class posDoc extends React.PureComponent
 
                                                         if(tmpDupSignature != '')
                                                         {
-                                                            tmpDupSign = tmpDupSignature.substring(2,3) + tmpDupSignature.substring(6,7) + tmpDupSignature.substring(12,13) + tmpDupSignature.substring(18,19)
+                                                            tmpDupSign = tmpDupSignature.SIGNATURE.substring(2,3) + tmpDupSignature.SIGNATURE.substring(6,7) + tmpDupSignature.SIGNATURE.substring(12,13) + tmpDupSignature.SIGNATURE.substring(18,19)
                                                         }
 
                                                         let tmpInsertQuery = 
@@ -5723,10 +5728,11 @@ export default class posDoc extends React.PureComponent
                                                                     "@POS_GUID = @PPOS_GUID, " +
                                                                     "@LINE_GUID = @PLINE_GUID, " +
                                                                     "@DATA =@PDATA, " +
-                                                                    "@APP_VERSION =@PAPP_VERSION, " +
+                                                                    "@DATA_EXTRA1 = @PDATA_EXTRA1, " +
+                                                                    "@APP_VERSION = @PAPP_VERSION, " +
                                                                     "@DESCRIPTION = @PDESCRIPTION ", 
-                                                                    param : ['PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|250','PAPP_VERSION:string|25','PDESCRIPTION:string|max'],
-                                                            value : [tmpLastPos[0].CUSER,"REPRINT",tmpLastPos[0].GUID,"00000000-0000-0000-0000-000000000000",tmpDupSignature,this.core.appInfo.version,tmpRePrintResult]
+                                                            param : ['PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|max','PDATA_EXTRA1:string|max','PAPP_VERSION:string|25','PDESCRIPTION:string|max'],
+                                                            value : [tmpLastPos[0].CUSER,"REPRINT",tmpLastPos[0].GUID,"00000000-0000-0000-0000-000000000000",tmpDupSignature.SIGNATURE,tmpDupSignature.SIGNATURE_SUM,this.core.appInfo.version,tmpRePrintResult]
                                                         }
 
                                                         await this.core.sql.execute(tmpInsertQuery)
