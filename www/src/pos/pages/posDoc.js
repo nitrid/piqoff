@@ -165,7 +165,6 @@ export default class posDoc extends React.PureComponent
         });
         this.core.socket.on('disconnect',async () => 
         {
-            this.sendJet({CODE:"120",NAME:"Le système est offline."}) ///Kasa offline dan online a döndü.
 
             this.setState({isConnected:false})
             let tmpConfObj =
@@ -306,6 +305,7 @@ export default class posDoc extends React.PureComponent
         })
 
         this.sendJet({CODE:"80",NAME:"Démarrage terminal lancé."}) ////Kasa işleme başladı.
+        this.sendJet({CODE:"120",NAME:"Le système est offline."}) ///Kasa offline dan online a döndü.
     }
     async init()
     {
@@ -2704,7 +2704,7 @@ export default class posDoc extends React.PureComponent
             {
                 type : "insert",
                 into : "NF525_JET",
-                values : [{CUSER : this.core.auth.data.CODE,CODE : typeof pData.CODE != 'undefined' ? pData.CODE : '',
+                values : [{CUSER : this.core.auth.data.CODE,CDATE:moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),CODE : typeof pData.CODE != 'undefined' ? pData.CODE : '',
                 NAME:typeof pData.NAME != 'undefined' ? pData.NAME : '',DESCRIPTION:typeof pData.DESCRIPTION != 'undefined' ? pData.DESCRIPTION : '',
                 APP_VERSION:this.core.appInfo.version}]                        
             }
@@ -2714,7 +2714,8 @@ export default class posDoc extends React.PureComponent
         {
             let tmpJetData =
             {
-                CUSER:this.core.auth.data.CODE,            
+                CUSER:this.core.auth.data.CODE,      
+                CDATE: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
                 DEVICE:window.localStorage.getItem('device') == null ? '' : window.localStorage.getItem('device'),
                 CODE:typeof pData.CODE != 'undefined' ? pData.CODE : '',
                 NAME:typeof pData.NAME != 'undefined' ? pData.NAME : '',

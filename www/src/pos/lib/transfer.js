@@ -640,6 +640,7 @@ export default class transferCls
                     DBID : {dataType:"number",primaryKey: true, autoIncrement: true},
                     GUID : {dataType: "string"},
                     CUSER : {dataType: "string"},
+                    CDATE : {dataType: "date_time"},
                     DEVICE : {dataType: "string"},
                     CODE : {dataType: "string"},
                     NAME : {dataType: "string"},
@@ -1586,20 +1587,22 @@ export default class transferCls
 
             let tmpData = await this.core.local.select({from : "NF525_JET"})
             console.log(tmpData)
-            for (let i = 0; i < tmpData.length; i++) 
+            for (let i = 0; i < tmpData.result.length; i++) 
             {
                 let tmpJetData =
                 {
-                    CUSER:tmpData[i].CUSER,            
-                    DEVICE:tmpData[i].DEVICE,  
-                    CODE:tmpData[i].CODE,
-                    NAME:tmpData[i].NAME,
-                    DESCRIPTION:tmpData[i].DESCRIPTION,
-                    APP_VERSION:tmpData[i].APP_VERSION,
+                    CUSER:tmpData.result[i].CUSER,    
+                    CDATE:tmpData.result[i].CDATE,            
+                    DEVICE:tmpData.result[i].DEVICE,  
+                    CODE:tmpData.result[i].CODE,
+                    NAME:tmpData.result[i].NAME,
+                    DESCRIPTION:tmpData.result[i].DESCRIPTION,
+                    APP_VERSION:tmpData.result[i].APP_VERSION,
                 }
+                console.log(tmpJetData)
                 this.core.socket.emit('nf525',{cmd:"jet",data:tmpJetData})
             }
-            await this.transfer.clearTbl("POS_EXTRA_VW_01")
+            await this.clearTbl("NF525_JET")
             resolve(true)
         });
     }
