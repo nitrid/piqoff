@@ -400,6 +400,7 @@ export class nf525Cls
             let tmpLastSignature = ''
             let tmpSignature = ''
             let tmpPrintCount = 0
+            let tmpFactRef = 0
 
             let tmpQuery = 
             {
@@ -427,6 +428,14 @@ export class nf525Cls
             
             if(tmpResult.result.recordset.length > 0)
             {
+                if(pData.DEVICE == '9999')
+                {
+                    tmpFactRef = 9999
+                }
+                else
+                {
+                    tmpFactRef = tmpResult.result.recordset[0].FACT_REF
+                }
                 if(tmpResult.result.recordset[0].PRINT_NO != null)
                 {
                     tmpPrintCount = tmpResult.result.recordset[0].PRINT_NO
@@ -442,7 +451,7 @@ export class nf525Cls
             tmpSignature = tmpSignature + "," + tmpPrintCount + 1
             tmpSignature = tmpSignature + "," + pData.LUSER
             tmpSignature = tmpSignature + "," + moment(pData.LDATE).format("YYYYMMDDHHmmss")
-            tmpSignature = tmpSignature + "," + pData.DEVICE + "" + pData.FACT_REF.toString().padStart(8,'0') 
+            tmpSignature = tmpSignature + "," + pData.DEVICE + "" + tmpFactRef.toString().padStart(8,'0') 
             tmpSignature = tmpSignature + "," + (tmpLastSignature == "" ? "N" : "O")
             tmpSignature = tmpSignature + "," + tmpLastSignature
 
