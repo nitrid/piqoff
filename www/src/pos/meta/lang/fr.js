@@ -25,6 +25,11 @@ export const langFr =
     price : "Prix",
     quantity : "Quantité",
     nbCalculator : "Calculatrice", 
+    about : "à propos ",
+    abtCertificate : "Certificate : NF525",
+    abtNrCertificate : "Nr Certificate : B_XXXX",
+    abtLicence : "Licence : XXXXXXXXXXXXXXXXX",
+    abtVersion : "Version : ",
     msgCustomerNotFound : 
     {
         title : "Attention",
@@ -318,7 +323,7 @@ export const langFr =
     popRePrintDesc : 
     {
         head : "Raison du duplicata",
-        title : "Veuillez renseigner la raison de l'impressıon du duplicata"
+        title : "Veuillez renseigner la raison de l'impressıon du duplicata ticket/facture"
     },
     msgItemReturnTicket: 
     {
@@ -589,14 +594,14 @@ export const langFr =
     msgPrintAlert: 
     {
         title : "Avertissement",
-        msg : "Souhaitez-vous imprimer le reçu ?",
+        msg : "Souhaitez-vous imprimer le ticket ?",
         btn01 : "OK",
         btn02 : "Annuler"
     },
     msgRePrint: 
     {
         title : "Avertissement",
-        msg : "Vous avez atteint la limite d'impression de reçu !",
+        msg : "Vous avez atteint la limite d'impression de ticket !",
         btn01 : "OK",
     },
     acsDialog: 
@@ -734,5 +739,5 @@ export const langFr =
         scalePort : "Balance port",
         payCardPort : "TPE port",
         printDesing : "Design d’imprimante"
-    }
+    },
 }

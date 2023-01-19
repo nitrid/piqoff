@@ -4,6 +4,8 @@ import * as xlsx from 'xlsx'
 import fs from 'fs'
 import rsa from 'jsrsasign'
 import { pem } from '../pem.js'
+import AdmZip from 'adm-zip'
+import { createHash } from 'crypto'
 
 class nf525
 {
@@ -14,34 +16,13 @@ class nf525
         this.timer = null
         this.connEvt = this.connEvt.bind(this)
         this.core.socket.on('connection',this.connEvt)
-        this.core.on('onSqlConnected',this.onSqlConnected.bind(this))
-        
-        this.appInfo = JSON.parse(fs.readFileSync(this.core.root_path + '/www/package.json', 'utf8'))
-    }
-    async onSqlConnected(pStatus)
-    {
-        // let x = 
-        // [
-        //     {
-        //         adi : "ali kemal",
-        //         soyadi : "karaca",
-        //         yas : 42
-        //     }
-        // ]
-        // let m = xlsx.utils.json_to_sheet(x)
-        // let file = await xlsx.readFile('./test.xlsx')
-        // let myWorkBook = xlsx.utils.book_new();
-        // xlsx.utils.book_append_sheet(myWorkBook,m,"Sheet3")
-        // xlsx.writeFile(myWorkBook,'test.xlsx')
-        // const buf = fs.readFileSync('test.xlsx');
-        // const workbook = xlsx.read(buf);
-        // console.log(workbook)   
 
-        setTimeout(this.processGrandTotal.bind(this), 1000);
-        setTimeout(this.processArchive.bind(this), 1000);
+        this.appInfo = JSON.parse(fs.readFileSync(this.core.root_path + '/www/package.json', 'utf8'))
+
+        setTimeout(this.processRun.bind(this), 1000);
     }
     connEvt(pSocket)
-    {
+    {       
         pSocket.on('nf525',async (pParam,pCallback) =>
         {
             if(pParam.cmd == 'jet')
@@ -65,81 +46,121 @@ class nf525
             }
         })
     }
-    async processGrandTotal()
-    {        
-        try
-        {
-            // POS İÇİN NF525
-            core.instance.log.msg("Grand total transfer started","Nf525");
-            let tmpResult = await this.getNF525GrandTotalData(0)
-            // DAY
-            for (let i = 0; i < tmpResult.length; i++) 
-            {
-                await this.insertNF525GrandTotal(0,tmpResult[i])
-            }    
-            // MONTH
-            tmpResult = await this.getNF525GrandTotalData(1)
-            for (let i = 0; i < tmpResult.length; i++) 
-            {
-                await this.insertNF525GrandTotal(1,tmpResult[i])
-            } 
-            // YEAR
-            tmpResult = await this.getNF525GrandTotalData(2)
-            for (let i = 0; i < tmpResult.length; i++) 
-            {
-                await this.insertNF525GrandTotal(2,tmpResult[i])
-            }
-            // FATURA İÇİN NF203
-            tmpResult = await this.getNF203GrandTotalData(0)
-            // DAY
-            for (let i = 0; i < tmpResult.length; i++) 
-            {
-                await this.insertNF203GrandTotal(0,tmpResult[i])
-            }    
-            // MONTH
-            tmpResult = await this.getNF203GrandTotalData(1)
-            for (let i = 0; i < tmpResult.length; i++) 
-            {
-                await this.insertNF203GrandTotal(1,tmpResult[i])
-            } 
-            // YEAR
-            tmpResult = await this.getNF203GrandTotalData(2)
-            for (let i = 0; i < tmpResult.length; i++) 
-            {
-                await this.insertNF203GrandTotal(2,tmpResult[i])
-            }
-            core.instance.log.msg("Grand total transfer completed","Nf525");
+    async processRun()
+    {
+        await this.processGrandTotal()
+        await this.processArchive()
 
-            let tmpMin = moment.utc('02:00:00', 'HH:mm:ss').diff(moment.utc(moment(new Date).utc(true), 'HH:mm:ss'), 'minutes')
-            tmpMin = tmpMin < 0 ? 1440 + tmpMin : tmpMin
-            setTimeout(this.processGrandTotal.bind(this),tmpMin * 60000)
-        }
-        catch (err) 
+        let tmpMin = moment.utc('02:00:00', 'HH:mm:ss').diff(moment.utc(moment(new Date).utc(true), 'HH:mm:ss'), 'minutes')
+        tmpMin = tmpMin < 0 ? 1440 + tmpMin : tmpMin
+        setTimeout(this.processRun.bind(this),tmpMin * 60000)
+    }
+    async processGrandTotal()
+    {       
+        return new Promise(async resolve =>
         {
-            console.log(err);
-        }        
+            try
+            {
+                // POS İÇİN NF525
+                core.instance.log.msg("Grand total transfer started","Nf525");
+                let tmpResult = await this.getNF525GrandTotalData(0)
+                // DAY
+                for (let i = 0; i < tmpResult.length; i++) 
+                {
+                    await this.insertNF525GrandTotal(0,tmpResult[i])
+                }    
+                // MONTH
+                tmpResult = await this.getNF525GrandTotalData(1)
+                for (let i = 0; i < tmpResult.length; i++) 
+                {
+                    await this.insertNF525GrandTotal(1,tmpResult[i])
+                } 
+                // YEAR
+                tmpResult = await this.getNF525GrandTotalData(2)
+                for (let i = 0; i < tmpResult.length; i++) 
+                {
+                    await this.insertNF525GrandTotal(2,tmpResult[i])
+                }
+                // FATURA İÇİN NF203
+                tmpResult = await this.getNF203GrandTotalData(0)
+                // DAY
+                for (let i = 0; i < tmpResult.length; i++) 
+                {
+                    await this.insertNF203GrandTotal(0,tmpResult[i])
+                }    
+                // MONTH
+                tmpResult = await this.getNF203GrandTotalData(1)
+                for (let i = 0; i < tmpResult.length; i++) 
+                {
+                    await this.insertNF203GrandTotal(1,tmpResult[i])
+                } 
+                // YEAR
+                tmpResult = await this.getNF203GrandTotalData(2)
+                for (let i = 0; i < tmpResult.length; i++) 
+                {
+                    await this.insertNF203GrandTotal(2,tmpResult[i])
+                }
+                core.instance.log.msg("Grand total transfer completed","Nf525");
+    
+                resolve();                
+            }
+            catch (err) 
+            {
+                console.log(err);
+                resolve();
+            } 
+        }); 
     }
     async processArchive()
     {
-        try
+        return new Promise(async resolve =>
         {
-            await this.archiveJet()
-            await this.archiveNF525GrandTotal(0)
-            await this.archiveNF525GrandTotal(1)
-            await this.archiveNF525GrandTotal(2)
-            await this.archiveNF203GrandTotal(0)
-            await this.archiveNF203GrandTotal(1)
-            await this.archiveNF203GrandTotal(2)
-            await this.archiveDayTicket()
-            
-            let tmpMin = moment.utc('02:00:00', 'HH:mm:ss').diff(moment.utc(moment(new Date).utc(true), 'HH:mm:ss'), 'minutes')
-            tmpMin = tmpMin < 0 ? 1440 + tmpMin : tmpMin
-            setTimeout(this.processArchive.bind(this),tmpMin * 60000)
-        }
-        catch (err) 
-        {
-            console.log(err);
-        }
+            try
+            {
+                core.instance.log.msg("Archive started","Nf525");
+                for (let i = -20; i < 0; i++) 
+                {
+                    this.folder = moment().add(i,'day').format("YYYYMMDD") + "_archivej"
+
+                    if(!fs.existsSync(this.core.root_path + '/archiveFiscal/' + this.folder + '.zip'))
+                    {
+                        let tmpFirstDate = moment().add(i,'day').format("YYYYMMDD")
+                        let tmpLastDate = moment().add(i + 1,'day').format("YYYYMMDD")
+        
+                        await this.archiveJet(tmpFirstDate,tmpLastDate)
+                        await this.archiveNF525GrandTotal(0,tmpLastDate)
+                        await this.archiveNF525GrandTotal(1,tmpLastDate)
+                        await this.archiveNF525GrandTotal(2,tmpLastDate)
+                        await this.archiveNF203GrandTotal(0,tmpLastDate)
+                        await this.archiveNF203GrandTotal(1,tmpLastDate)
+                        await this.archiveNF203GrandTotal(2,tmpLastDate)
+                        await this.archiveDuplicatePos(tmpFirstDate,tmpLastDate)
+                        await this.archiveDuplicatePosFact(tmpFirstDate,tmpLastDate)
+                        await this.archiveDayTicket(tmpFirstDate,tmpLastDate)
+                        await this.archiveDayFact(tmpFirstDate,tmpLastDate)
+    
+                        let zip = new AdmZip()
+                        zip.addLocalFolder(this.core.root_path + '/archiveFiscal/' + this.folder);
+                        zip.writeZip(this.core.root_path + '/archiveFiscal/' + this.folder + '.zip');
+                        fs.rmdirSync(this.core.root_path + '/archiveFiscal/' + this.folder, { recursive: true })
+    
+                        let buff = fs.readFileSync(this.core.root_path + '/archiveFiscal/' + this.folder + '.zip');
+                        let hash = createHash("sha256").update(buff).digest("hex")
+                        
+                        fs.writeFileSync(this.core.root_path + '/archiveFiscal/' + this.folder + '.txt',moment().format("DD/MM/YYYY HH:mm:ss") + " - " + this.sign(hash))
+                    }
+                }
+                
+                resolve()
+
+                core.instance.log.msg("Archive completed","Nf525");
+            }
+            catch (err) 
+            {
+                console.log(err);
+                resolve()
+            }            
+        })
     }
     async archiveNF203GrandTotal(pType)
     {
@@ -148,7 +169,7 @@ class nf525
             let tmpQuery = 
             {
                 query : "SELECT * FROM NF203_ARCHIVE_GRAND_TOTAL_VW_01 WHERE TYPE = @TYPE ORDER BY FAC_GTP_HOR_GDH ASC",
-                param : ['TYPE:int'],
+                param : ['TYPE:int','LAST_DATE:string|10'],
                 value : [pType]
             }
 
@@ -196,7 +217,7 @@ class nf525
                         APP_VERSION:this.appInfo.version
                     })
                 }
-                this.exportExcel(tmpResult,tmpFName,"DATA")
+                this.exportExcel(tmpResult,tmpFName,"DATA",this.folder)
             }
             resolve()
         });
@@ -211,7 +232,7 @@ class nf525
                 param : ['TYPE:int'],
                 value : [pType]
             }
-
+            
             let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
             if(tmpResult.length > 0)
             {
@@ -256,82 +277,156 @@ class nf525
                         APP_VERSION:this.appInfo.version
                     })
                 }
-                this.exportExcel(tmpResult,tmpFName,"DATA")
+                this.exportExcel(tmpResult,tmpFName,"DATA",this.folder)
             }
             resolve()
         });
     }
-    async archiveJet()
+    async archiveJet(pFirst,pLast)
     {
         return new Promise(async resolve =>
         {
             let tmpQuery = 
             {
-                query : "SELECT * FROM NF525_ARCHIVE_JET_VW_01 ORDER BY JET_GDH ASC"
+                query : "SELECT * FROM NF525_ARCHIVE_JET_VW_01 WHERE JET_GDH >= @FIRST_DATE AND JET_GDH <= @LAST_DATE ORDER BY JET_GDH ASC",
+                param : ['FIRST_DATE:string|10','LAST_DATE:string|10'],
+                value : [pFirst,pLast]
             }
 
             let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
             if(tmpResult.length > 0)
             {
-                this.exportExcel(tmpResult,"JET","JET")
+                this.exportExcel(tmpResult,"JET","JET",this.folder)
             }
             resolve()
         });
     }
-    archiveDayTicket()
+    async archiveDuplicatePos(pFirst,pLast)
     {
         return new Promise(async resolve =>
         {
-            
-            for (let i = -20; i < 0; i++) 
+            let tmpQuery = 
             {
-                let tmpFirstDate = moment().add(i,'day').format("YYYYMMDD")
-                let tmpLastDate = moment().add(i + 1,'day').format("YYYYMMDD")
-                let tmpFileName = "TICKET_" + tmpFirstDate
-    
-                if(!fs.existsSync('./archiveFiscal/' + tmpFileName + '.xlsx'))
-                {
-                    let tmpMasterQuery = 
-                    {
-                        query : "SELECT * FROM NF525_ARCHIVE_DONNES_DENTETE_VW_01 WHERE ENC_TIK_HOR_GDH >= @FIRST_DATE AND ENC_TIK_HOR_GDH <= @LAST_DATE ORDER BY ENC_TIK_NUM,ENC_TIK_CAI_NID ASC",
-                        param : ['FIRST_DATE:string|10','LAST_DATE:string|10'],
-                        value : [tmpFirstDate,tmpLastDate]
-                    }
-                    
-                    let tmpMasterResult = (await core.instance.sql.execute(tmpMasterQuery)).result.recordset
-                    if(tmpMasterResult.length > 0)
-                    {
-                        this.exportExcel(tmpMasterResult,tmpFileName,"DENTETE")
+                query : "SELECT * FROM NF525_POS_DUPLICATE_VW_01 " +
+                        "WHERE LDATE >= @FIRST_DATE AND " +
+                        "LDATE <= @LAST_DATE AND REPRINT_NO <> 0 " +
+                        "ORDER BY LDATE ASC",
+                param : ['FIRST_DATE:string|10','LAST_DATE:string|10'],
+                value : [pFirst,pLast]
+            }
 
-                        let tmpLineQuery = 
-                        {
-                            query : "SELECT * FROM NF525_ARCHIVE_DONNES_DES_LIGNES_VW_01 WHERE ENC_TIK_LIG_HOR_GDH >= @FIRST_DATE AND ENC_TIK_LIG_HOR_GDH <= @LAST_DATE ORDER BY ENC_TIK_ORI_NUM,ENC_TIK_LIG_CAI_NID ASC",
-                            param : ['FIRST_DATE:string|10','LAST_DATE:string|10'],
-                            value : [tmpFirstDate,tmpLastDate]
-                        }
-                        
-                        let tmpLineResult = (await core.instance.sql.execute(tmpLineQuery)).result.recordset
-                        
-                        let tmpRepQuery = 
-                        {
-                            query : "SELECT * FROM NF525_ARCHIVE_DONNES_RECUPITULATIVES_VW_01 WHERE ENC_TIK_HOR_GDH >= @FIRST_DATE AND ENC_TIK_HOR_GDH <= @LAST_DATE ORDER BY ENC_TIK_ORI_NUM,ENC_TIK_CAI_NID ASC",
-                            param : ['FIRST_DATE:string|10','LAST_DATE:string|10'],
-                            value : [tmpFirstDate,tmpLastDate]
-                        }
-                        
-                        let tmpRepResult = (await core.instance.sql.execute(tmpRepQuery)).result.recordset
-                        
-                        this.exportExcel({DENTETE:tmpMasterResult,LIGNES:tmpLineResult,RECUP:tmpRepResult},tmpFileName)
-                    }
-                }
+            let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
+            if(tmpResult.length > 0)
+            {
+                this.exportExcel(tmpResult,"NF525_POS_DUPLICATE","DUPLICATE",this.folder)
+            }
+            resolve()
+        });
+    }
+    async archiveDuplicatePosFact(pFirst,pLast)
+    {
+        return new Promise(async resolve =>
+        {
+            let tmpQuery = 
+            {
+                query : "SELECT * FROM NF525_POS_FACT_DUPLICATE_VW_01 " +
+                        "WHERE LDATE >= @FIRST_DATE AND " +
+                        "LDATE <= @LAST_DATE AND PRINT_NO > 1 " +
+                        "ORDER BY LDATE ASC",
+                param : ['FIRST_DATE:string|10','LAST_DATE:string|10'],
+                value : [pFirst,pLast]
+            }
+
+            let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
+            if(tmpResult.length > 0)
+            {
+                this.exportExcel(tmpResult,"NF525_POS_FACT_DUPLICATE","DUPLICATE",this.folder)
+            }
+            resolve()
+        });
+    }
+    archiveDayTicket(pFirst,pLast)
+    {
+        return new Promise(async resolve =>
+        {
+            let tmpFileName = "TICKET_" + pFirst
+
+            let tmpMasterQuery = 
+            {
+                query : "SELECT * FROM NF525_ARCHIVE_DONNES_DENTETE_VW_01 WHERE ENC_TIK_HOR_GDH >= @FIRST_DATE AND ENC_TIK_HOR_GDH <= @LAST_DATE ORDER BY ENC_TIK_NUM,ENC_TIK_CAI_NID ASC",
+                param : ['FIRST_DATE:string|10','LAST_DATE:string|10'],
+                value : [pFirst,pLast]
             }
             
+            let tmpMasterResult = (await core.instance.sql.execute(tmpMasterQuery)).result.recordset
+            if(tmpMasterResult.length > 0)
+            {
+                this.exportExcel(tmpMasterResult,tmpFileName,"DENTETE",this.folder)
+
+                let tmpLineQuery = 
+                {
+                    query : "SELECT * FROM NF525_ARCHIVE_DONNES_DES_LIGNES_VW_01 WHERE ENC_TIK_LIG_HOR_GDH >= @FIRST_DATE AND ENC_TIK_LIG_HOR_GDH <= @LAST_DATE ORDER BY ENC_TIK_ORI_NUM,ENC_TIK_LIG_CAI_NID ASC",
+                    param : ['FIRST_DATE:string|10','LAST_DATE:string|10'],
+                    value : [pFirst,pLast]
+                }
+                
+                let tmpLineResult = (await core.instance.sql.execute(tmpLineQuery)).result.recordset
+                
+                let tmpRepQuery = 
+                {
+                    query : "SELECT * FROM NF525_ARCHIVE_DONNES_RECUPITULATIVES_VW_01 WHERE ENC_TIK_HOR_GDH >= @FIRST_DATE AND ENC_TIK_HOR_GDH <= @LAST_DATE ORDER BY ENC_TIK_ORI_NUM,ENC_TIK_CAI_NID ASC",
+                    param : ['FIRST_DATE:string|10','LAST_DATE:string|10'],
+                    value : [pFirst,pLast]
+                }
+                
+                let tmpRepResult = (await core.instance.sql.execute(tmpRepQuery)).result.recordset
+                
+                this.exportExcel({DENTETE:tmpMasterResult,LIGNES:tmpLineResult,RECUP:tmpRepResult},tmpFileName,'',this.folder)
+            }
             resolve()
         })
     }
-    exportExcel(pData,pFileName,pSheetName)
+    archiveDayFact(pFirst,pLast)
     {
-        fs.mkdirSync('./archiveFiscal', { recursive: true })
+        return new Promise(async resolve =>
+        {
+            let tmpFileName = "FACTURE_" + pFirst
+
+            let tmpMasterQuery = 
+            {
+                query : "SELECT * FROM NF203_ARCHIVE_DONNES_DENTETE_VW_01 WHERE FAC_DAT >= @FIRST_DATE AND FAC_DAT <= @LAST_DATE ORDER BY FAC_NUM,FAC_OPS_NID ASC",
+                param : ['FIRST_DATE:string|10','LAST_DATE:string|10'],
+                value : [pFirst,pLast]
+            }
+            
+            let tmpMasterResult = (await core.instance.sql.execute(tmpMasterQuery)).result.recordset
+            if(tmpMasterResult.length > 0)
+            {
+                this.exportExcel(tmpMasterResult,tmpFileName,"DENTETE",this.folder)
+
+                let tmpLineQuery = 
+                {
+                    query : "SELECT * FROM NF203_ARCHIVE_DONNES_LIGNES_VW_01 WHERE FAC_DAT >= @FIRST_DATE AND FAC_DAT <= @LAST_DATE ORDER BY FAC_NUM,FAC_LIG_NUM ASC",
+                    param : ['FIRST_DATE:string|10','LAST_DATE:string|10'],
+                    value : [pFirst,pLast]
+                }
+                
+                let tmpLineResult = (await core.instance.sql.execute(tmpLineQuery)).result.recordset
+                
+                this.exportExcel({DENTETE:tmpMasterResult,LIGNES:tmpLineResult},tmpFileName,'',this.folder)
+            }
+            resolve()
+        })
+    }
+    exportExcel(pData,pFileName,pSheetName,pFolder)
+    {
+        fs.mkdirSync(this.core.root_path + '/archiveFiscal', { recursive: true })
+
+        if(typeof pFolder != 'undefined')
+        {
+            fs.mkdirSync(this.core.root_path + '/archiveFiscal/' + pFolder, { recursive: true })
+        }
+        
         let workBook = xlsx.utils.book_new();
 
         if(Array.isArray(pData))
@@ -348,8 +443,15 @@ class nf525
                 xlsx.utils.book_append_sheet(workBook,xlsxData,tmpObjName)
             }
         }
-
-        xlsx.writeFile(workBook,'./archiveFiscal/' + pFileName + '.xlsx')
+        
+        if(typeof pFolder != 'undefined')
+        {
+            xlsx.writeFile(workBook,this.core.root_path + '/archiveFiscal/' + pFolder + '/' + pFileName + '.xlsx')
+        }
+        else
+        {
+            xlsx.writeFile(workBook,this.core.root_path + '/archiveFiscal/' + pFileName + '.xlsx')
+        }
     }
     async insertJet(pData)
     {
@@ -832,9 +934,9 @@ class nf525
             {
                 tmpQuery = 
                 {
-                    query : "SELECT TOP 1 * FROM NF525_GRAND_TOTAL WHERE TYPE = @TYPE AND PERIOD = CONVERT(NVARCHAR(10),DATEADD(DD, -1, @DOC_DATE),112) AND YEAR(CDATE) = YEAR(@DOC_DATE)",
+                    query : "SELECT TOP 1 * FROM NF525_GRAND_TOTAL WHERE TYPE = @TYPE AND PERIOD = @DOC_DATE",
                     param : ['TYPE:int','DOC_DATE:string|10'],
-                    value : [pType,moment(pDocDate).format("YYYYMMDD")]
+                    value : [pType,moment(pDocDate).add(-1,'day').format("YYYYMMDD")]
                 }
             }
             else if(pType == 1)
@@ -855,7 +957,6 @@ class nf525
                     value : [pType,moment(pDocDate,"YYYYMMDD").format("YYYYMMDD")]
                 }
             }
-    
             let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
             
             if(typeof tmpResult != 'undefined' && tmpResult.length > 0)
@@ -993,7 +1094,7 @@ class nf525
             resolve()   
         });
     }
-    signatureGrandTotal(pData,pLastSignature)
+    async signatureGrandTotal(pData,pLastSignature)
     {
         let tmpSignature = ""
 
@@ -1010,7 +1111,22 @@ class nf525
             tmpSignature = tmpSignature + "," + (pLastSignature == "" ? "N" : "O")
             tmpSignature = tmpSignature + "," + pLastSignature
 
-            return this.sign(tmpSignature)
+            let tmpSign = this.sign(tmpSignature)
+            let tmpVerify = this.verify(tmpSignature,tmpSign)
+
+            if(!tmpVerify)
+            {
+                await this.insertJet(
+                {
+                    CUSER:'System Auto',            
+                    DEVICE:'',
+                    CODE:'90',
+                    NAME:"Erreur integrite.",
+                    DESCRIPTION:'Grand total erreur verify',
+                    APP_VERSION:this.appInfo.version
+                })
+            }
+            return tmpSign
         }
         else
         {
@@ -1051,9 +1167,9 @@ class nf525
     verify(pData,pSig)
     {
         let sig = new rsa.KJUR.crypto.Signature({'alg':'SHA256withECDSA', "prov": "cryptojs/jsrsa"});
-        sig.init(pem.public);
+        sig.init(pem.certificate);
         sig.updateString(pData);
-        let isValid = sig.verify(rsa.b64tohex(pSig));
+        let isValid = sig.verify(rsa.b64utohex(pSig));
         return isValid
     }
 }

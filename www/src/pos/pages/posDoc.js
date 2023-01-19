@@ -4,6 +4,7 @@ import moment from 'moment';
 
 import Form, { Label,Item } from "devextreme-react/form";
 import { ButtonGroup } from "devextreme-react/button-group";
+import { Button } from "react-bootstrap";
 import { LoadPanel } from 'devextreme-react/load-panel';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
@@ -533,6 +534,7 @@ export default class posDoc extends React.PureComponent
             // {
             //     Object.setPrototypeOf(this.posObj.posSale.dt()[i],{stat:''})
             // }
+            console.log(moment(new Date(this.posObj.dt()[0].LDATE).toISOString()))
             await this.calcGrandTotal(false)
             resolve();
         });        
@@ -1512,7 +1514,8 @@ export default class posDoc extends React.PureComponent
                 //******************************** */
                 if(typeof pPrint == 'undefined' || pPrint)
                 {       
-                    let tmpType = 'Fis'                    
+                    let tmpType = 'Fis'  
+                    let tmpFactCert = ''                  
                     //FİŞ Mİ FATURAMI SORULUYOR
                     if(this.posObj.dt()[0].CUSTOMER_CODE != '' && this.posObj.dt()[0].CUSTOMER_TYPE == 1)
                     {
@@ -1525,6 +1528,37 @@ export default class posDoc extends React.PureComponent
                         if((await dialog(tmpConfObj)) == 'btn01')
                         {
                             tmpType = 'Fatura'
+
+                            let tmpLastSignature = await this.nf525.signaturePosFactDuplicate(this.posObj.dt()[0])
+
+                            let tmpInsertQuery = 
+                            {
+                                query : "EXEC [dbo].[PRD_POS_EXTRA_INSERT] " + 
+                                        "@CUSER = @PCUSER, " + 
+                                        "@TAG = @PTAG, " +
+                                        "@POS_GUID = @PPOS_GUID, " +
+                                        "@LINE_GUID = @PLINE_GUID, " +
+                                        "@DATA =@PDATA, " +
+                                        "@APP_VERSION =@PAPP_VERSION, " +
+                                        "@DESCRIPTION = @PDESCRIPTION ", 
+                                param : ['PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|250','PAPP_VERSION:string|25','PDESCRIPTION:string|max'],
+                                value : [this.posObj.dt()[0].CUSER,"REPRINTFACT",this.posObj.dt()[0].GUID,"00000000-0000-0000-0000-000000000000",tmpLastSignature,this.core.appInfo.version,'']
+                            }
+
+                            await this.core.sql.execute(tmpInsertQuery)
+
+                            let tmpFactData = await this.factureInsert(this.posObj.dt(),this.posObj.posSale.dt())
+                            let tmpSigned = "-"
+
+                            if(tmpFactData.length > 0)
+                            {
+                                if(tmpFactData[0].SIGNATURE != '')
+                                {
+                                    tmpSigned = tmpFactData[0].SIGNATURE.substring(2,3) + tmpFactData[0].SIGNATURE.substring(6,7) + tmpFactData[0].SIGNATURE.substring(12,13) + tmpFactData[0].SIGNATURE.substring(18,19)
+                                }
+
+                                tmpFactCert = this.core.appInfo.name + " version : " + tmpFactData[0].APP_VERSION + " - " + this.core.appInfo.certificate + " - " + tmpSigned
+                            }
                         }
                     }                    
                     //***************************************************/
@@ -1541,6 +1575,8 @@ export default class posDoc extends React.PureComponent
                             ticketCount:0,
                             reprint: 1,
                             repas: 0,
+                            factCertificate : tmpFactCert,
+                            dupCertificate : '',
                             customerUsePoint:this.popCustomerUsePoint.value,
                             customerPoint:this.customerPoint.value,
                             customerGrowPoint:this.popCustomerGrowPoint.value
@@ -2660,18 +2696,77 @@ export default class posDoc extends React.PureComponent
     //     }
     //     return
     // }
-    sendJet(pData)
+    async sendJet(pData)
     {
-        let tmpJetData =
+        if(this.core.offline)
         {
-            CUSER:this.core.auth.data.CODE,            
-            DEVICE:window.localStorage.getItem('device') == null ? '' : window.localStorage.getItem('device'),
-            CODE:typeof pData.CODE != 'undefined' ? pData.CODE : '',
-            NAME:typeof pData.NAME != 'undefined' ? pData.NAME : '',
-            DESCRIPTION:typeof pData.DESCRIPTION != 'undefined' ? pData.DESCRIPTION : '',
-            APP_VERSION:this.core.appInfo.version
+            let tmpQuery = 
+            {
+                type : "insert",
+                into : "NF525_JET",
+                values : [{CUSER : this.core.auth.data.CODE,CODE : typeof pData.CODE != 'undefined' ? pData.CODE : '',
+                NAME:typeof pData.NAME != 'undefined' ? pData.NAME : '',DESCRIPTION:typeof pData.DESCRIPTION != 'undefined' ? pData.DESCRIPTION : '',
+                APP_VERSION:this.core.appInfo.version}]                        
+            }
+            await this.core.local.insert(tmpQuery)
         }
-        this.core.socket.emit('nf525',{cmd:"jet",data:tmpJetData})
+        else
+        {
+            let tmpJetData =
+            {
+                CUSER:this.core.auth.data.CODE,            
+                DEVICE:window.localStorage.getItem('device') == null ? '' : window.localStorage.getItem('device'),
+                CODE:typeof pData.CODE != 'undefined' ? pData.CODE : '',
+                NAME:typeof pData.NAME != 'undefined' ? pData.NAME : '',
+                DESCRIPTION:typeof pData.DESCRIPTION != 'undefined' ? pData.DESCRIPTION : '',
+                APP_VERSION:this.core.appInfo.version
+            }
+            this.core.socket.emit('nf525',{cmd:"jet",data:tmpJetData})
+        }
+
+    }
+    async factureInsert(pData,pSaleData)
+    {    
+        return new Promise(async resolve => 
+        {
+            if(pData[0].FACT_REF == 0)
+            {
+                //***** FACTURE İMZALAMA *****/
+                let tmpSignedData = await this.nf525.signatureSaleFact(pData[0],pSaleData)  
+                pData[0].FACT_REF = tmpSignedData.REF
+    
+                let tmpInsertQuery = 
+                {
+                    query : "EXEC [dbo].[PRD_POS_FACTURE_INSERT] " + 
+                            "@CUSER = @PCUSER, " + 
+                            "@POS = @PPOS, " +
+                            "@REF = @PREF, " +
+                            "@SIGNATURE = @PSIGNATURE, " +
+                            "@SIGNATURE_SUM = @PSIGNATURE_SUM, " +
+                            "@APP_VERSION = @PAPP_VERSION ", 
+                    param : ['PCUSER:string|25','PPOS:string|50','PREF:int','PSIGNATURE:string|max','PSIGNATURE_SUM:string|max','PAPP_VERSION:string|25'],
+                    value : [pData[0].CUSER,pData[0].GUID,pData[0].FACT_REF,tmpSignedData.SIGNATURE,tmpSignedData.SIGNATURE_SUM,this.core.appInfo.version],
+                }
+        
+                await this.core.sql.execute(tmpInsertQuery)                                
+            }
+
+            let tmpQuery = 
+            {
+                query : "SELECT * FROM POS_FACTURE_VW_01 WHERE POS = @POS", 
+                param : ['POS:string|50'],
+                value : [pData[0].GUID],
+            }
+
+            let tmpResult = await this.core.sql.execute(tmpQuery)
+            
+            if(tmpResult.result.recordset.length > 0)
+            {
+                resolve(tmpResult.result.recordset)
+            }        
+
+            resolve([])
+        })
     }
     render()
     {
@@ -3550,7 +3645,7 @@ export default class posDoc extends React.PureComponent
                     <div className="col-6">
                         <div className="row" style={{backgroundColor:this.state.isFormation ? 'coral' : 'white',marginLeft:'1px',marginRight:'0.5px',borderRadius:'5px'}}>
                             <div className="col-6">
-                                <NbLabel id="info" parent={this} value={this.core.appInfo.name + " version : " + this.core.appInfo.version}/>
+                                <a class="link-primary" onClick={()=>{this.popAbout.show()}} style={{textDecoration:'none'}}>{this.core.appInfo.name + " " + this.lang.t("about")}</a>
                             </div>
                             <div className="col-6 text-end">
                                 <NbLabel id="formation" parent={this} value={''}/>
@@ -4879,7 +4974,7 @@ export default class posDoc extends React.PureComponent
                                                     MAX_PRICE: 0.0,
                                                     MIN_PRICE: 0.0,
                                                     NAME: items.ITEM_NAME,
-                                                    PRICE: Number(items.PRICE).toFixed(2),
+                                                    PRICE: Number(items.TOTAL / items.QUANTITY).toFixed(2),
                                                     QUANTITY: Number(items.QUANTITY).toFixed(2),
                                                     SALE_JOIN_LINE: true,
                                                     SNAME: items.ITEM_NAME,
@@ -4895,7 +4990,7 @@ export default class posDoc extends React.PureComponent
                                                     UNIT_NAME: items.UNIT_NAME,
                                                     UNIT_SHORT: items.UNIT_SHORT,
                                                     VAT: items.VAT,
-                                                    VAT_TYPE: "",
+                                                    VAT_TYPE: items.VAT_RATE,
                                                     WEIGHING: false,
                                                     POS_SALE_ORDER: items.GUID,
                                                     DISCOUNT : items.DISCOUNT
@@ -5506,6 +5601,59 @@ export default class posDoc extends React.PureComponent
                                             }
                                             else
                                             {
+                                                let tmpQuery = 
+                                                {
+                                                    query : "SELECT COUNT(TAG) AS PRINT_COUNT FROM POS_EXTRA WHERE POS_GUID = @POS_GUID AND TAG = @TAG", 
+                                                    param : ['POS_GUID:string|50','TAG:string|25'],
+                                                    value : [tmpLastPos[0].GUID,"REPRINTFACT"]
+                                                }
+
+                                                let tmpPrintCount = (await this.core.sql.execute(tmpQuery)).result.recordset[0].PRINT_COUNT
+
+                                                let tmpRePrintResult = await this.popRePrintDesc.show()
+                                                let tmpDupSignature = await this.nf525.signaturePosFactDuplicate(tmpLastPos[0])
+                                                let tmpDupSign = ''
+
+                                                if(tmpDupSignature != '')
+                                                {
+                                                    tmpDupSign = tmpDupSignature.substring(2,3) + tmpDupSignature.substring(6,7) + tmpDupSignature.substring(12,13) + tmpDupSignature.substring(18,19)
+                                                }
+
+                                                if(typeof tmpRePrintResult != 'undefined')
+                                                {
+                                                    let tmpInsertQuery = 
+                                                    {
+                                                        query : "EXEC [dbo].[PRD_POS_EXTRA_INSERT] " + 
+                                                                "@CUSER = @PCUSER, " + 
+                                                                "@TAG = @PTAG, " +
+                                                                "@POS_GUID = @PPOS_GUID, " +
+                                                                "@LINE_GUID = @PLINE_GUID, " +
+                                                                "@DATA = @PDATA, " +
+                                                                "@APP_VERSION = @PAPP_VERSION, " +
+                                                                "@DESCRIPTION = @PDESCRIPTION ", 
+                                                        param : ['PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|250','PAPP_VERSION:string|25','PDESCRIPTION:string|max'],
+                                                        value : [tmpLastPos[0].CUSER,"REPRINTFACT",tmpLastPos[0].GUID,"00000000-0000-0000-0000-000000000000",tmpDupSignature,this.core.appInfo.version,tmpRePrintResult]
+                                                    }
+
+                                                    await this.core.sql.execute(tmpInsertQuery)
+                                                }
+
+                                                this.sendJet({CODE:"155",NAME:"Duplicata facture imprimé."})
+
+                                                let tmpFactData = await this.factureInsert(tmpLastPos,this.lastPosSaleDt)
+                                                let tmpSigned = "-"
+                                                let tmpAppVers = ""
+
+                                                if(tmpFactData.length > 0)
+                                                {
+                                                    tmpAppVers = tmpFactData[0].APP_VERSION
+
+                                                    if(tmpFactData[0].SIGNATURE != '')
+                                                    {
+                                                        tmpSigned = tmpFactData[0].SIGNATURE.substring(2,3) + tmpFactData[0].SIGNATURE.substring(6,7) + tmpFactData[0].SIGNATURE.substring(12,13) + tmpFactData[0].SIGNATURE.substring(18,19)
+                                                    }
+                                                }
+
                                                 let tmpData = 
                                                 {
                                                     pos : tmpLastPos,
@@ -5517,8 +5665,10 @@ export default class posDoc extends React.PureComponent
                                                     {
                                                         type : 'Fatura',
                                                         ticketCount : 0,
-                                                        reprint : 1,
+                                                        reprint : tmpPrintCount + 1,
                                                         repas : 0,
+                                                        factCertificate : this.core.appInfo.name + " version : " + tmpAppVers + " - " + this.core.appInfo.certificate + " - " + tmpSigned,
+                                                        dupCertificate : this.core.appInfo.name + " version : " + this.core.appInfo.version + " - " + this.core.appInfo.certificate + " - " + tmpDupSign,
                                                         customerUsePoint : Math.floor(tmpLastPos[0].LOYALTY * 100),
                                                         customerPoint : (tmpLastPos[0].CUSTOMER_POINT + Math.floor(tmpLastPos[0].LOYALTY * 100)) - Math.floor(tmpLastPos[0].TOTAL),
                                                         customerGrowPoint : tmpLastPos[0].CUSTOMER_POINT - Math.floor(tmpLastPos[0].TOTAL)
@@ -5540,7 +5690,7 @@ export default class posDoc extends React.PureComponent
                                             tmpLastPos.import(this.grdLastPos.devGrid.getSelectedRowKeys())
                                             
                                             if(tmpLastPos.length > 0)
-                                            {                                                
+                                            {
                                                 let tmpQuery = 
                                                 {
                                                     query : "SELECT COUNT(TAG) AS PRINT_COUNT FROM POS_EXTRA WHERE POS_GUID = @POS_GUID AND TAG = @TAG", 
@@ -5556,7 +5706,14 @@ export default class posDoc extends React.PureComponent
 
                                                     if(typeof tmpRePrintResult != 'undefined')
                                                     {
-                                                        let tmpLastSignature = await this.nf525.signaturePosDuplicate(tmpLastPos[0])
+                                                        let tmpDupSignature = await this.nf525.signaturePosDuplicate(tmpLastPos[0])
+                                                        let tmpDupSign = ''
+
+                                                        if(tmpDupSignature != '')
+                                                        {
+                                                            tmpDupSign = tmpDupSignature.substring(2,3) + tmpDupSignature.substring(6,7) + tmpDupSignature.substring(12,13) + tmpDupSignature.substring(18,19)
+                                                        }
+
                                                         let tmpInsertQuery = 
                                                         {
                                                             query : "EXEC [dbo].[PRD_POS_EXTRA_INSERT] " + 
@@ -5568,7 +5725,7 @@ export default class posDoc extends React.PureComponent
                                                                     "@APP_VERSION =@PAPP_VERSION, " +
                                                                     "@DESCRIPTION = @PDESCRIPTION ", 
                                                                     param : ['PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|250','PAPP_VERSION:string|25','PDESCRIPTION:string|max'],
-                                                            value : [tmpLastPos[0].CUSER,"REPRINT",tmpLastPos[0].GUID,"00000000-0000-0000-0000-000000000000",tmpLastSignature,this.core.appInfo.version,tmpRePrintResult]
+                                                            value : [tmpLastPos[0].CUSER,"REPRINT",tmpLastPos[0].GUID,"00000000-0000-0000-0000-000000000000",tmpDupSignature,this.core.appInfo.version,tmpRePrintResult]
                                                         }
 
                                                         await this.core.sql.execute(tmpInsertQuery)
@@ -5585,13 +5742,15 @@ export default class posDoc extends React.PureComponent
                                                                 ticketCount : 0,
                                                                 reprint : tmpPrintCount + 1,
                                                                 repas : 0,
+                                                                factCertificate : '',
+                                                                dupCertificate : this.core.appInfo.name + " version : " + this.core.appInfo.version + " - " + this.core.appInfo.certificate + " - " + tmpDupSign,
                                                                 customerUsePoint : Math.floor(tmpLastPos[0].LOYALTY * 100),
                                                                 customerPoint : (tmpLastPos[0].CUSTOMER_POINT + Math.floor(tmpLastPos[0].LOYALTY * 100)) - Math.floor(tmpLastPos[0].TOTAL),
                                                                 customerGrowPoint : tmpLastPos[0].CUSTOMER_POINT - Math.floor(tmpLastPos[0].TOTAL)
                                                             }
                                                         }
 
-                                                        this.sendJet({CODE:"155",NAME:"Duplicata imprimé."}) //// Duplicate fiş yazdırıldı.
+                                                        this.sendJet({CODE:"155",NAME:"Duplicata ticket imprimé."}) //// Duplicate fiş yazdırıldı.
                                                         await this.print(tmpData)
                                                     } 
                                                 }
@@ -7382,6 +7541,34 @@ export default class posDoc extends React.PureComponent
                         <Column dataField="TITLE" caption={"NAME"} width={250} />
                         <Column dataField="ADRESS" caption={"ADRESS"} width={350}/>
                     </NbPosPopGrid>
+                </div>
+                {/* About PopUp */}
+                <div>
+                    <NdPopUp parent={this} id={"popAbout"} 
+                    visible={false}
+                    showCloseButton={true}
+                    showTitle={true}
+                    container={"#root"} 
+                    width={'300'}
+                    height={'250'}
+                    title={this.lang.t("about")}
+                    position={{my:'bottom',of:'#root'}}
+                    >
+                        <Form colCount={1} height={'fit-content'}>
+                            <Item>
+                                <NbLabel id="abtCertificate" parent={this} value={this.lang.t("abtCertificate")} textSize={"28px"}/>
+                            </Item>
+                            <Item>
+                                <NbLabel id="abtNrCertificate" parent={this} value={this.lang.t("abtNrCertificate")}/>
+                            </Item>
+                            <Item>
+                                <NbLabel id="abtLicence" parent={this} value={this.lang.t("abtLicence")}/>
+                            </Item>
+                            <Item>
+                                <NbLabel id="abtVersion" parent={this} value={this.lang.t("abtVersion") + this.core.appInfo.version}/>
+                            </Item>
+                        </Form>
+                    </NdPopUp>
                 </div>
             </div>
         )

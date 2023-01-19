@@ -163,6 +163,36 @@ export const prm =
             CAPTION : "En fazla uygulanabilcek yuvarlama tutarı"
         }
     },
+    // maxUnitQuantity
+    {
+        TYPE : 0,
+        ID :"maxUnitQuantity",
+        VALUE : 100000,
+        SPECIAL : "",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Sistem",
+            CAPTION : "En fazla izin verilen miktar"
+        }
+    },
+    // maxItemPrice
+    {
+        TYPE : 0,
+        ID :"maxItemPrice",
+        VALUE : 100,
+        SPECIAL : "",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Sistem",
+            CAPTION : "En fazla izin verilen birim fiyatı."
+        }
+    },
     //Zorunlu Evrak Silme Açıklaması
     {
         TYPE : 0,
@@ -1129,7 +1159,7 @@ export const prm =
     {
         TYPE : 1,
         ID :"ItemGrpForNotPriceSave",
-        VALUE : ['3b705ef0-aac8-4ed6-bae9-2718c8eb37a4','c667264f-d054-48c2-87ad-3d0eaf2a47d3','3b705ef0-aac8-4ed6-bae9-2718c8eb37a4','c667264f-d054-48c2-87ad-3d0eaf2a47d3','FFC7456F-D75B-4B54-800A-45C8C882137D'],
+        VALUE : ['209','210','002','033','FFC7456F-D75B-4B54-800A-45C8C882137D'],
         SPECIAL : "",
         PAGE : "stk_01_001",
         ELEMENT : "",
@@ -1602,6 +1632,122 @@ export const prm =
         },
         SPECIAL : "",
         PAGE : "ftr_02_002",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Satış Faturası",
+            CAPTION : "Eksiye Düşemeye İzin Verme"
+        }
+    },
+    //#endregion
+    //#region Satış Faturası
+    //txtRef
+    {
+        TYPE : 2,
+        ID :"txtRef",
+        VALUE : 
+        {
+            value : ""
+        },
+        SPECIAL : "",
+        PAGE : "ftr_02_009",
+        ELEMENT : "txtRef",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Satış Faturası",
+            CAPTION : "Seri"
+        }
+    },
+    //txtRefno
+    {
+        TYPE : 2,
+        ID :"txtRefno",
+        VALUE : 
+        {
+            value : "0"
+        },
+        SPECIAL : "",
+        PAGE : "ftr_02_009",
+        ELEMENT : "txtRefno",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Satış Faturası",
+            CAPTION : "Sıra"
+        }
+    },
+    //cmbDepot
+    {
+        TYPE : 2,
+        ID :"cmbDepot",
+        VALUE : 
+        {
+            value : ""
+        },
+        SPECIAL : "",
+        PAGE : "ftr_02_009",
+        ELEMENT : "cmbDepot",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Satış Faturası",
+            CAPTION : "Depo"
+        }
+    },
+    //txtCustomerCode
+    {
+        TYPE : 2,
+        ID :"txtCustomerCode",
+        VALUE : 
+        {
+            value : ""
+        },
+        SPECIAL : "",
+        PAGE : "ftr_02_009",
+        ELEMENT : "txtCustomerCode",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Satış Faturası",
+            CAPTION : "Cari Kodu"
+        }
+    },
+    // txtCustomerName
+    {
+        TYPE : 2,
+        ID :"txtCustomerName",
+        VALUE : 
+        {
+            value : ""
+        },
+        SPECIAL : "",
+        PAGE : "ftr_02_009",
+        ELEMENT : "txtCustomerName",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Satış Faturası",
+            CAPTION : "Cari Adı"
+        }
+    },
+    // negativeQuantity
+    {
+        TYPE : 1,
+        ID :"negativeQuantity",
+        VALUE : 
+        {
+            value : false
+        },
+        SPECIAL : "",
+        PAGE : "ftr_02_009",
         ELEMENT : "",
         APP : "OFF",
         VIEW : 

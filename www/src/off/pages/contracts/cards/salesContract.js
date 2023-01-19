@@ -100,7 +100,7 @@ export default class purchaseContract extends React.PureComponent
             {
                 select:
                 {
-                    query : "SELECT GUID,CODE,NAME,VAT," + 
+                    query : "SELECT GUID,CODE,NAME,VAT,MAIN_GRP_NAME, " + 
                             "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '" + this.txtCustomerCode.GUID + "'),'') AS MULTICODE "+
                             "FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL) " ,
                     param : ['VAL:string|50']
@@ -919,7 +919,8 @@ export default class purchaseContract extends React.PureComponent
                     >           
                         <Paging defaultPageSize={22} />
                         <Column dataField="CODE" caption={this.t("pg_txtPopItemsCode.clmCode")} width={150} />
-                        <Column dataField="NAME" caption={this.t("pg_txtPopItemsCode.clmName")} width={300} defaultSortOrder="asc" />
+                        <Column dataField="NAME" caption={this.t("pg_txtPopItemsCode.clmName")} width={200} defaultSortOrder="asc" />
+                        <Column dataField="MAIN_GRP_NAME" caption={this.t("pg_txtPopItemsCode.clmGrpName")} width={100} />
                     </NdPopGrid>
                     {/* Dizayn Seçim PopUp */}
                     <div>

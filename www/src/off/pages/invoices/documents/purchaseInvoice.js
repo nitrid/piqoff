@@ -1358,6 +1358,8 @@ export default class purchaseInvoice extends React.PureComponent
     async saveDoc()
     {
         console.log(this.docObj.docItems.dt()[0])
+        console.log(this.docObj.docCustomer.dt()[0])
+        console.log(this.docObj.dt()[0].DOC_DATE)
         let tmpConfObj =
         {
             id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
@@ -2217,7 +2219,7 @@ export default class purchaseInvoice extends React.PureComponent
                                     onValueChanged={(async()=>
                                     {
                                         this.checkRow()
-                                        this.docObj.docCustomer.dt()[0].DOC_DATE = moment(this.dtDocDate.value).format("DD/MM/YYYY") 
+                                        this.docObj.docCustomer.dt()[0].DOC_DATE = this.dtDocDate.value
                                     }).bind(this)}
                                     >
                                         <Validator validationGroup={"frmPurcInv"  + this.tabIndex}>

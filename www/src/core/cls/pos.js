@@ -22,6 +22,7 @@ export class posCls
             DOC_TYPE : 0,
             DOC_DATE : moment(new Date()).format("YYYY-MM-DD"),
             REF : 0,
+            FACT_REF :0,
             CUSTOMER_GUID : '00000000-0000-0000-0000-000000000000',
             CUSTOMER_TYPE : 0,
             CUSTOMER_CODE : '',

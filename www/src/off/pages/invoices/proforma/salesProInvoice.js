@@ -3,6 +3,7 @@ import moment from 'moment';
 import React from 'react';
 import App from '../../../lib/app.js';
 import { docCls,docItemsCls, docCustomerCls } from '../../../../core/cls/doc.js';
+import { nf525Cls } from '../../../../core/cls/nf525.js';
 
 
 import ScrollView from 'devextreme-react/scroll-view';
@@ -38,6 +39,7 @@ export default class salesInvoice extends React.PureComponent
         this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
         this.docObj = new docCls();
         this.paymentObj = new docCls();
+        this.nf525 = new nf525Cls();
         this.tabIndex = props.data.tabkey
         this.quantityControl = false
 
@@ -1163,6 +1165,10 @@ export default class salesInvoice extends React.PureComponent
                                             let pResult = await dialog(tmpConfObj);
                                             if(pResult == 'btn01')
                                             {
+                                                //***** FACTURE İMZALAMA *****/
+                                                let tmpSignedData = await this.nf525.signatureDoc(this.docObj.dt()[0],this.docObj.docItems.dt())                
+                                                this.docObj.dt()[0].SIGNATURE = tmpSignedData.SIGNATURE
+                                                this.docObj.dt()[0].SIGNATURE_SUM = tmpSignedData.SIGNATURE_SUM
                                                 let tmpConfObj1 =
                                                 {
                                                     id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
@@ -1668,7 +1674,7 @@ export default class salesInvoice extends React.PureComponent
                                     onValueChanged={(async()=>
                                     {
                                         this.checkRow()
-                                        this.docObj.docCustomer.dt()[0].DOC_DATE = moment(this.dtDocDate.value).format("DD/MM/YYYY") 
+                                        this.docObj.docCustomer.dt()[0].DOC_DATE = this.dtDocDate.value 
                                     }).bind(this)}
                                     >
                                         <Validator validationGroup={"frmSalesInv"  + this.tabIndex}>

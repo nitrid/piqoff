@@ -29,6 +29,12 @@ export const langFr =
     msgUserAccess : "Vous n'êtes pas autorisé",
     collectiveItemAdd: "Ajouter Multi Produit",
     constructionMsg : "Page en construction mise en service au plus vite.", 
+    about : "à propos ",
+    abtCertificate : "Certificate: NF525",
+    abtNrCertificate : "Nr Certificate: B_XXXX",
+    abtNrCertificate2 : "Nr Certificate: D_XXX",
+    abtLicence : "Licence: XXXXXXXXXXXXXXXXX",
+    abtVersion : "Version: ",
     popPassword : 
     {
         title: "Entrez votre mot de passe utilisateur",  
@@ -3821,6 +3827,24 @@ export const langFr =
             btn02: "Abandonne",
             msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
         },
+        msgMaxPriceAlert:
+        {
+            title: "Dikkat",    // BAK
+            btn01: "Tamam",    // BAK
+            msg: "€'dan fazla fiyat girme yetkiniz yok !"  // BAK
+        },
+        msgMaxUnitQuantity:
+        {
+            title: "Dikkat",   // BAK
+            btn01: "Tamam",   // BAK
+            msg: "'dan fazla miktar girme yetkiniz yok !"   // BAK
+        },
+        msgRowNotUpdate:
+        {
+            title: "Dikkat",   // BAK
+            btn01: "Tamam",   // BAK
+            msg: "Bu satır irsaliyeden geldiği için miktarı değiştirilemez!"   // BAK
+        },  
         msgVatDelete:
         {
             title: "Attention",
@@ -11654,6 +11678,12 @@ export const langFr =
             msg: "Veuillez saisir l'en-tête avant l'achèvement !"    
         },
         validCode :"Code ne peut être vide !",
+        popDesign : 
+        {
+            title: "Choix du Design",
+            design : "Design" ,
+            lang : "Langue Document" 
+        },
     },
     cnt_02_002 : // "Satış Anlaşması"
     {
@@ -11684,6 +11714,7 @@ export const langFr =
             title : "Sélectionner Produit",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
+            clmGrpName : "Groupe",
             clmCostPrice :  "Prix D'Achat",
             clmSalesPrice : "Prix De Vente"
         },
@@ -11809,6 +11840,12 @@ export const langFr =
             msg: "Veuillez saisir les en-têtes avant l'achèvement !"   
         },
         validCode :"Code ne peut être vide !",
+        popDesign : 
+        {
+            title: "Choix du Design",
+            design : "Design" ,
+            lang : "Langue Document" 
+        },
     },
     fns_01_001 : // "Ödeme Listesi",
     {

@@ -57,7 +57,7 @@ export class nf525Cls
         let sig = new rsa.KJUR.crypto.Signature({'alg':'SHA256withECDSA', "prov": "cryptojs/jsrsa"});
         sig.init(pem.public);
         sig.updateString(pData);
-        let isValid = sig.verify(rsa.b64tohex(pSig));
+        let isValid = sig.verify(rsa.b64utohex(pSig));
         return isValid
     }
     async lastDocSignData(pData)
@@ -123,7 +123,22 @@ export class nf525Cls
                 tmpSignature = tmpSignature + "," + (tmpLastData.LAST_SIGN == "" ? "N" : "O")
                 tmpSignature = tmpSignature + "," + tmpLastData.LAST_SIGN
                 tmpSignatureSum = tmpSignature
+
                 tmpSignature = this.sign(tmpSignature)
+                let tmpVerify = this.verify(tmpSignatureSum,tmpSignature)
+
+                if(!tmpVerify)
+                {
+                    await this.insertJet(
+                    {
+                        CUSER:'System Auto',            
+                        DEVICE:'',
+                        CODE:'90',
+                        NAME:"Erreur integrite.",
+                        DESCRIPTION:'Facture erreur verify',
+                        APP_VERSION:this.appInfo.version
+                    })
+                }
             }
 
             resolve({REF:Number(tmpLastData.REF) + 1,SIGNATURE:tmpSignature,SIGNATURE_SUM:tmpSignatureSum})
@@ -194,10 +209,114 @@ export class nf525Cls
                 tmpSignature = tmpSignature + "," + (tmpLastData.LAST_SIGN == "" ? "N" : "O")
                 tmpSignature = tmpSignature + "," + tmpLastData.LAST_SIGN
                 tmpSignatureSum = tmpSignature
-                tmpSignature = this.sign(tmpSignature)
                 
+                tmpSignature = this.sign(tmpSignature)
+                let tmpVerify = this.verify(tmpSignatureSum,tmpSignature)
+
+                if(!tmpVerify)
+                {
+                    await this.insertJet(
+                    {
+                        CUSER:'System Auto',            
+                        DEVICE:'',
+                        CODE:'90',
+                        NAME:"Erreur integrite.",
+                        DESCRIPTION:'Vente erreur verify',
+                        APP_VERSION:this.appInfo.version
+                    })
+                }
+
                 localStorage.setItem('REF_SALE',Number(tmpLastData.REF) + 1)
                 localStorage.setItem('SIG_SALE',tmpSignature)
+            }
+
+            resolve({REF:Number(tmpLastData.REF) + 1,SIGNATURE:tmpSignature,SIGNATURE_SUM:tmpSignatureSum})
+        })
+    }
+    async lastSaleFactSignData(pData)
+    {
+        return new Promise(async resolve => 
+        {
+            if(!this.core.offline)
+            {
+                let tmpLastRef = 0
+                let tmpLastSignature = ''
+    
+                let tmpQuery = 
+                {
+                    query : "SELECT TOP 1 * FROM [dbo].[POS_FACTURE_VW_01] WHERE DEVICE = @DEVICE ORDER BY LDATE DESC",
+                    param : ['DEVICE:string|25'],
+                    value : [pData.DEVICE]
+                }
+                
+                let tmpResult = await this.core.sql.execute(tmpQuery)
+    
+                if(typeof tmpResult.result.err == 'undefined' && tmpResult.result.recordset.length > 0)
+                {
+                    if(tmpResult.result.recordset[0].FACT_REF != null)
+                    {
+                        tmpLastRef = tmpResult.result.recordset[0].FACT_REF
+                    }
+                    if(tmpResult.result.recordset[0].SIGNATURE != null)
+                    {
+                        tmpLastSignature = tmpResult.result.recordset[0].SIGNATURE
+                    }
+                }
+                localStorage.setItem('REF_SALE_FACT',tmpLastRef)
+                localStorage.setItem('SIG_SALE_FACT',tmpLastSignature)
+            }
+            
+            resolve (
+            {
+                REF : typeof localStorage.getItem('REF_SALE_FACT') == 'undefined' ? 1 : localStorage.getItem('REF_SALE_FACT'),
+                LAST_SIGN : typeof localStorage.getItem('SIG_SALE_FACT') == 'undefined' ? '' : localStorage.getItem('SIG_SALE_FACT')
+            })
+        })
+    }
+    signatureSaleFact(pData,pSaleData)
+    {
+        return new Promise(async resolve => 
+        {
+            let tmpLastData = await this.lastSaleFactSignData(pData)
+            let tmpSignature = ''
+            let tmpSignatureSum = ''
+            
+            if(pSaleData.length > 0)
+            {
+                let tmpVatLst = pSaleData.where({GUID:{'<>':'00000000-0000-0000-0000-000000000000'}}).groupBy('VAT_RATE');
+                    
+                for (let i = 0; i < tmpVatLst.length; i++) 
+                {
+                    tmpSignature = tmpSignature + parseInt(Number(tmpVatLst[i].VAT_RATE) * 100).toString().padStart(4,'0') + ":" + parseInt(Number(pSaleData.where({VAT_TYPE:tmpVatLst[i].VAT_TYPE}).sum('TOTAL',2)) * 100).toString() + "|"
+                }
+                
+                tmpSignature = tmpSignature.toString().substring(0,tmpSignature.length - 1)
+                tmpSignature = tmpSignature + "," + parseInt(Number(Number(pData.TOTAL).toFixed(2)) * 100).toString()
+                tmpSignature = tmpSignature + "," + moment(pData.LDATE).format("YYYYMMDDHHmmss")
+                tmpSignature = tmpSignature + "," + pData.DEVICE + "" + (Number(tmpLastData.REF) + 1).toString().padStart(8,'0') 
+                tmpSignature = tmpSignature + "," + pData.TYPE_NAME
+                tmpSignature = tmpSignature + "," + (tmpLastData.LAST_SIGN == "" ? "N" : "O")
+                tmpSignature = tmpSignature + "," + tmpLastData.LAST_SIGN
+                tmpSignatureSum = tmpSignature
+                
+                tmpSignature = this.sign(tmpSignature)
+                let tmpVerify = this.verify(tmpSignatureSum,tmpSignature)
+
+                if(!tmpVerify)
+                {
+                    await this.insertJet(
+                    {
+                        CUSER:'System Auto',            
+                        DEVICE:'',
+                        CODE:'90',
+                        NAME:"Erreur integrite.",
+                        DESCRIPTION:'Vente facture erreur verify',
+                        APP_VERSION:this.appInfo.version
+                    })
+                }
+
+                localStorage.setItem('REF_SALE_FACT',Number(tmpLastData.REF) + 1)
+                localStorage.setItem('SIG_SALE_FACT',tmpSignature)
             }
 
             resolve({REF:Number(tmpLastData.REF) + 1,SIGNATURE:tmpSignature,SIGNATURE_SUM:tmpSignatureSum})
@@ -256,7 +375,94 @@ export class nf525Cls
             tmpSignature = tmpSignature + "," + (tmpLastSignature == "" ? "N" : "O")
             tmpSignature = tmpSignature + "," + tmpLastSignature
 
-            resolve(this.sign(tmpSignature))
+            let tmpSign = this.sign(tmpSignature)
+            let tmpVerify = this.verify(tmpSignature,tmpSign)
+
+            if(!tmpVerify)
+            {
+                await this.insertJet(
+                {
+                    CUSER:'System Auto',            
+                    DEVICE:'',
+                    CODE:'90',
+                    NAME:"Erreur integrite.",
+                    DESCRIPTION:'Vente duplicate erreur verify',
+                    APP_VERSION:this.appInfo.version
+                })
+            }
+            resolve(tmpSign)
+        })
+    }
+    signaturePosFactDuplicate(pData)
+    {
+        return new Promise(async resolve => 
+        {
+            let tmpLastSignature = ''
+            let tmpSignature = ''
+            let tmpPrintCount = 0
+
+            let tmpQuery = 
+            {
+                query : "SELECT TOP 1 " +
+                        "NF525.GUID, " +
+                        "NF525.POS, " +
+                        "NF525.PRINT_NO, " +
+                        "NF525.LUSER, " +
+                        "NF525.LDATE, " +
+                        "NF525.SIGNATURE, " +
+                        "NF525.APP_VERSION, " +
+                        "NF525.DESCRIPTION, " +
+                        "POS.FACT_REF, " +
+                        "POS.TYPE_NAME, " +
+                        "POS.DEVICE " +
+                        "FROM NF525_POS_FACT_DUPLICATE_VW_01 AS NF525 " +
+                        "INNER JOIN POS_VW_01 AS POS ON " +
+                        "NF525.POS = POS.GUID " +
+                        "WHERE NF525.POS = @POS ORDER BY NF525.PRINT_NO DESC",
+                param : ['POS:string|50'],
+                value : [pData.GUID]
+            }
+            
+            let tmpResult = await this.core.sql.execute(tmpQuery)
+            
+            if(tmpResult.result.recordset.length > 0)
+            {
+                if(tmpResult.result.recordset[0].PRINT_NO != null)
+                {
+                    tmpPrintCount = tmpResult.result.recordset[0].PRINT_NO
+                }
+                if(tmpResult.result.recordset[0].SIGNATURE != null)
+                {
+                    tmpLastSignature = tmpResult.result.recordset[0].SIGNATURE
+                }
+            }
+            
+            tmpSignature = pData.GUID
+            tmpSignature = tmpSignature + "," + pData.TYPE_NAME
+            tmpSignature = tmpSignature + "," + tmpPrintCount + 1
+            tmpSignature = tmpSignature + "," + pData.LUSER
+            tmpSignature = tmpSignature + "," + moment(pData.LDATE).format("YYYYMMDDHHmmss")
+            tmpSignature = tmpSignature + "," + pData.DEVICE + "" + pData.FACT_REF.toString().padStart(8,'0') 
+            tmpSignature = tmpSignature + "," + (tmpLastSignature == "" ? "N" : "O")
+            tmpSignature = tmpSignature + "," + tmpLastSignature
+
+            let tmpSign = this.sign(tmpSignature)
+            let tmpVerify = this.verify(tmpSignature,tmpSign)
+
+            if(!tmpVerify)
+            {
+                await this.insertJet(
+                {
+                    CUSER:'System Auto',            
+                    DEVICE:'',
+                    CODE:'90',
+                    NAME:"Erreur integrite.",
+                    DESCRIPTION:'Vente facture duplicate erreur verify',
+                    APP_VERSION:this.appInfo.version
+                })
+            }
+
+            resolve(tmpSign)
         })
     }
     signatureDocDuplicate(pData)
@@ -307,7 +513,23 @@ export class nf525Cls
             tmpSignature = tmpSignature + "," + (tmpLastSignature == "" ? "N" : "O")
             tmpSignature = tmpSignature + "," + tmpLastSignature
 
-            resolve(this.sign(tmpSignature))
+            let tmpSign = this.sign(tmpSignature)
+            let tmpVerify = this.verify(tmpSignature,tmpSign)
+
+            if(!tmpVerify)
+            {
+                await this.insertJet(
+                {
+                    CUSER:'System Auto',            
+                    DEVICE:'',
+                    CODE:'90',
+                    NAME:"Erreur integrite.",
+                    DESCRIPTION:'Vente facture duplicate erreur verify',
+                    APP_VERSION:this.appInfo.version
+                })
+            }
+            
+            resolve(tmpSign)
         })
     }
 }
