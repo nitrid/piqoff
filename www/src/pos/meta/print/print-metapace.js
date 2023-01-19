@@ -73,7 +73,7 @@ export function print()
         {
             if(data.pos[0].DEVICE == '9999')
             {
-                return {font:"b",style:"b",align:"ct",data: "FORMATION"}
+                return {font:"b",style:"bu",align:"lt",data: "FORMATION"}
             }   
             return
         },
