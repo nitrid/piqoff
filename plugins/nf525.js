@@ -19,7 +19,7 @@ class nf525
 
         this.appInfo = JSON.parse(fs.readFileSync(this.core.root_path + '/www/package.json', 'utf8'))
 
-        setTimeout(this.processRun.bind(this), 1000);
+       setTimeout(this.processRun.bind(this), 1000);
     }
     connEvt(pSocket)
     {       
@@ -119,7 +119,7 @@ class nf525
             try
             {
                 core.instance.log.msg("Archive started","Nf525");
-                for (let i = -20; i < 0; i++) 
+                for (let i = -60; i < 0; i++) 
                 {
                     this.folder = moment().add(i,'day').format("YYYYMMDD") + "_archivej"
 
@@ -565,6 +565,7 @@ class nf525
             {
                 query : "EXEC [dbo].[PRD_NF525_JET_INSERT] " + 
                         "@CUSER = @PCUSER, " + 
+                        "@CDATE = @PCDATE, " + 
                         "@NO = @PNO, " +
                         "@DEVICE = @PDEVICE, " +
                         "@CODE = @PCODE, " +
@@ -572,8 +573,8 @@ class nf525
                         "@DESCRIPTION = @PDESCRIPTION, " +  
                         "@APP_VERSION = @PAPP_VERSION, " +                       
                         "@SIGNATURE = @PSIGNATURE ",
-                param : ['PCUSER:string|25','PNO:int','PDEVICE:string|25','PCODE:string|50','PNAME:string|250','PDESCRIPTION:string|max','PAPP_VERSION:string|10','PSIGNATURE:string|max'],
-                value : [pData.CUSER,tmpNo + 1,pData.DEVICE,pData.CODE,pData.NAME,pData.DESCRIPTION,pData.APP_VERSION,this.signatureJet(pData,tmpLastData.length > 0 ? tmpLastData[0].SIGNATURE : '')]
+                param : ['PCUSER:string|25','PCDATE:datetime','PNO:int','PDEVICE:string|25','PCODE:string|50','PNAME:string|250','PDESCRIPTION:string|max','PAPP_VERSION:string|10','PSIGNATURE:string|max'],
+                value : [pData.CUSER,typeof pData.CDATE == 'undefined' ? moment(new Date()).format("YYYY-MM-DD HH:mm:ss") : pData.CDATE,tmpNo + 1,pData.DEVICE,pData.CODE,pData.NAME,pData.DESCRIPTION,pData.APP_VERSION,this.signatureJet(pData,tmpLastData.length > 0 ? tmpLastData[0].SIGNATURE : '')]
             }
             await this.core.sql.execute(tmpInsertQuery)
             resolve()
