@@ -3831,7 +3831,7 @@ export const langFr =
         {
             title: "Attention",    // BAK
             btn01: "OK",    // BAK
-            msg: "€'dan fazla fiyat girme yetkiniz yok !"  // BAK
+            msg: "€'Vous n'êtes pas autorisé à saisir un prix supérieur !"  // BAK
         },
         msgMaxUnitQuantity:
         {
@@ -3843,7 +3843,7 @@ export const langFr =
         {
             title: "Attention",   // BAK
             btn01: "OK",   // BAK
-            msg: "Bu satır irsaliyeden geldiği için miktarı değiştirilemez!"   // BAK
+            msg: "Cette ligne étant transférée de la livraison, son montant ne peut pas être modifié."   // BAK
         },  
         msgVatDelete:
         {
@@ -10725,17 +10725,17 @@ export const langFr =
     },
     sip_01_002 : // "Satış Sipariş Listesi"
     {
-        cmbCustomer :"Fournisseur",
+        cmbCustomer :"Client",
         btnGet :"Rechercher",
         dtFirst : "Date Début",
         dtLast : "Date Fin",
-        txtCustomerCode : "Fournisseur",
+        txtCustomerCode : "Client",
         menu:"Liste de vente  ",
         pg_txtCustomerCode : 
         {
-            title : "Choix Fournisseur",
+            title : "Choix Client",
             clmCode :  "Code Client",
-            clmTitle : "Nom Fournisseur",
+            clmTitle : "Nom Client",
             clmTypeName : "Type",
             clmGenusName : "Genre"
         },
@@ -10745,7 +10745,7 @@ export const langFr =
             clmRefNo: "Ligne",
             clmPrice: "Prix ",
             clmInputCode : "Sélection Document",
-            clmInputName : "Nom fournisseur",
+            clmInputName : "Nom Client",
             clmDate: "Date",
             clmVat : "TVA",
             clmAmount : "Total" ,
@@ -11086,7 +11086,7 @@ export const langFr =
         txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
         txtCustomerCode : "Sélection Document",
-        txtCustomerName : "Nom fournisseur",
+        txtCustomerName : "Nom Client",
         dtDocDate : "Date",
         txtAmount : "Total" ,
         txtDiscount : "Remise",
@@ -11112,14 +11112,14 @@ export const langFr =
             clmDate : "Date",
             clmRef : "Référence",
             clmRefNo : "Numéro",
-            clmInputName : "Nom Fournisseur",
+            clmInputName : "Nom Client",
             clmInputCode  : "Code Client",
         },
         pg_txtCustomerCode : 
         {
-            title : "Choix Fournisseur",
+            title : "Choix Client",
             clmCode :  "Code Client",
-            clmTitle : "Nom Fournisseur",
+            clmTitle : "Nom Client",
             clmTypeName : "Type",
             clmGenusName : "Genre"
         },
@@ -11265,7 +11265,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Fournisseur Inconnu"
+            msg: "Client Inconnu"
         },
         msgUnderPrice1:
         {
