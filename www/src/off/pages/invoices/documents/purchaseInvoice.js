@@ -1253,6 +1253,7 @@ export default class purchaseInvoice extends React.PureComponent
         let tmpCounter = 0
         for (let i = 0; i < pdata.length; i++) 
         {
+            console.log(pdata[i][tmpShema.CODE])
             let tmpQuery = 
             { 
                 query :"SELECT GUID,CODE,NAME,VAT,UNIT,1 AS QUANTITY," + 
@@ -1262,6 +1263,7 @@ export default class purchaseInvoice extends React.PureComponent
                 value : [pdata[i][tmpShema.CODE]]
             }
             let tmpData = await this.core.sql.execute(tmpQuery) 
+            console.log(tmpData)
             if(tmpData.result.recordset.length > 0)
             {               
                 let tmpDocItems = {...this.docObj.docItems.empty}
@@ -3872,6 +3874,7 @@ export default class purchaseInvoice extends React.PureComponent
                                                     value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value]
                                                 }
                                                 let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                console.log(JSON.stringify(tmpData.result.recordset))
                                                 this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
                                                 {
                                                     App.instance.setState({isExecute:false})

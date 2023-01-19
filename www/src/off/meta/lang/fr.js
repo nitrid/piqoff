@@ -11477,13 +11477,13 @@ export const langFr =
     },
     cnt_01_002 : //  "Satış Anlaşmaları Listesi"
     {
-        txtCustomerCode : "Fournisseur",
+        txtCustomerCode : "Client",
         menu :  "Accord de Vente",
         pg_txtCustomerCode : 
         {
-            title : "Choix Fournisseur",
+            title : "Choix Client",
             clmCode :  "Code Client",
-            clmTitle : "Nom Fournisseur",
+            clmTitle : "Nom Client",
             clmTypeName : "Type",
             clmGenusName : "Genre"
         },
@@ -11493,7 +11493,7 @@ export const langFr =
             clmCreateDate: "Date d'Enregistrement",
             clmCode: "Référence Produit",
             clmName: "Nom Produit",
-            clmCustomerName : "Nom fournisseur",
+            clmCustomerName : "Nom Client",
             clmPrıce : "Prix ",
             clmQuantity: "Quantité",
             clmStartDate : "Début ",
@@ -11660,7 +11660,7 @@ export const langFr =
         validDate : "Sélection Date.",
         cmbDepot: "Réserve",
         txtCustomerCode : "Sélection Document",
-        txtCustomerName : "Nom fournisseur",
+        txtCustomerName : "Nom Client",
         validItemsCode : "Sélectionner Produit",
         pg_Docs :      
         {     
@@ -11668,14 +11668,14 @@ export const langFr =
             clmDate : "Date",
             clmCode : "Code",     
             clmName : "Nom",     
-            clmOutputName : "Nom Fournisseur",     
+            clmOutputName : "Nom Client",     
             clmOutputCode  : "Code Client",     
         },     
         pg_txtCustomerCode : 
         {
-            title : "Choix Fournisseur",
+            title : "Choix Client",
             clmCode :  "Code Client",
-            clmTitle : "Nom Fournisseur",
+            clmTitle : "Nom Client",
             clmTypeName : "Type",
             clmGenusName : "Genre"
         },
@@ -11691,7 +11691,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez choisir d'abord le fournisseur !"
+            msg: "Veuillez choisir d'abord le Client!"
         },
         msgSave:
         {
