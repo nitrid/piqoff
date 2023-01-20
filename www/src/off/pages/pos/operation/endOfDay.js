@@ -766,7 +766,7 @@ export default class endOfDay extends React.PureComponent
                                                   return
                                                 }
                                               }
-                                              else if(this.txtPopAdvance.value > 600)
+                                              else if(this.txtPopAdvance.value > 650)
                                               {
                                                 let tmpConfObj =
                                                 {
