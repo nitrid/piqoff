@@ -50,7 +50,7 @@ class nf525
     {
         await this.processGrandTotal()
         await this.processArchive()
-        await this.processSignatureVerify()
+        //await this.processSignatureVerify()
 
         let tmpMin = moment.utc('02:00:00', 'HH:mm:ss').diff(moment.utc(moment(new Date).utc(true), 'HH:mm:ss'), 'minutes')
         tmpMin = tmpMin < 0 ? 1440 + tmpMin : tmpMin

@@ -87,7 +87,6 @@ export default class salesInvoice extends React.PureComponent
                 this.btnNew.setState({disabled:false});
                 this.btnBack.setState({disabled:true});
                 this.btnSave.setState({disabled:false});
-                this.btnDelete.setState({disabled:false});
                 this.btnPrint.setState({disabled:false});
             }
         })
@@ -98,7 +97,6 @@ export default class salesInvoice extends React.PureComponent
                 this.btnBack.setState({disabled:false});
                 this.btnNew.setState({disabled:true});
                 this.btnSave.setState({disabled:false});
-                this.btnDelete.setState({disabled:false});
                 this.btnPrint.setState({disabled:false});
 
                 pData.rowData.CUSER = this.user.CODE
@@ -109,7 +107,6 @@ export default class salesInvoice extends React.PureComponent
             this.btnBack.setState({disabled:true});
             this.btnNew.setState({disabled:false});
             this.btnSave.setState({disabled:true});
-            this.btnDelete.setState({disabled:false});
             this.btnPrint.setState({disabled:false});          
         })
         this.docObj.ds.on('onDelete',(pTblName) =>
@@ -117,7 +114,6 @@ export default class salesInvoice extends React.PureComponent
             this.btnBack.setState({disabled:false});
             this.btnNew.setState({disabled:false});
             this.btnSave.setState({disabled:false});
-            this.btnDelete.setState({disabled:false});
             this.btnPrint.setState({disabled:false});
         })
 
@@ -609,7 +605,7 @@ export default class salesInvoice extends React.PureComponent
         {
             let tmpQuery = 
             {
-                query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ITEMS_VW_01 WHERE INPUT = @INPUT AND INVOICE_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 1 AND REBATE = 0 AND DOC_TYPE IN(40)",
+                query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ITEMS_VW_01 WHERE INPUT = @INPUT AND INVOICE_DOC_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 1 AND REBATE = 0 AND DOC_TYPE IN(40)",
                 param : ['INPUT:string|50'],
                 value : [this.docObj.dt()[0].INPUT]
             }
@@ -656,6 +652,8 @@ export default class salesInvoice extends React.PureComponent
                     tmpDocItems.VAT_RATE = data[i].VAT_RATE
                     tmpDocItems.DISCOUNT_RATE = data[i].DISCOUNT_RATE
                     tmpDocItems.CONNECT_REF = data[i].CONNECT_REF
+                    tmpDocItems.PROFORMA_DOC_GUID = this.docObj.dt()[0].GUID
+                    tmpDocItems.PROFORMA_LINE_GUID = data[i].GUID
     
                     await this.docObj.docItems.addEmpty(tmpDocItems)
                     await this.core.util.waitUntil(100)
@@ -663,6 +661,9 @@ export default class salesInvoice extends React.PureComponent
                 this.docObj.docItems.dt().emit('onRefresh')
                 this._calculateTotal()
                 App.instance.setState({isExecute:false})
+                setTimeout(() => {
+                    this.btnSave.setState({disabled:false});
+                    }, 500);
             }
         }
 
@@ -1203,90 +1204,6 @@ export default class salesInvoice extends React.PureComponent
                                             
                                             await dialog(tmpConfObj);
                                         }                                                 
-                                    }}/>
-                                </Item>
-                                <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnDelete" parent={this} icon="trash" type="default"
-                                    onClick={async()=>
-                                    {
-                                        if(this.paymentObj.docCustomer.dt().length > 0)
-                                        {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgPayNotDeleted',showTitle:true,title:this.t("msgPayNotDeleted.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgPayNotDeleted.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgPayNotDeleted.msg")}</div>)
-                                            }
-                                
-                                            await dialog(tmpConfObj);
-                                            return
-                                        }
-                                        if(this.docObj.dt()[0].LOCKED != 0)
-                                        {
-                                            this.docLocked = true
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgGetLocked',showTitle:true,title:this.t("msgGetLocked.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgGetLocked.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgGetLocked.msg")}</div>)
-                                            }
-                                
-                                            await dialog(tmpConfObj);
-                                            return
-                                        }
-                                        let tmpConfObj =
-                                        {
-                                            id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'200px',
-                                            button:[{id:"btn01",caption:this.t("msgDelete.btn01"),location:'before'},{id:"btn02",caption:this.t("msgDelete.btn02"),location:'after'}],
-                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDelete.msg")}</div>)
-                                        }
-                                        
-                                        let pResult = await dialog(tmpConfObj);
-                                        if(pResult == 'btn01')
-                                        {
-                                            this.docObj.dt('DOC').removeAt(0)
-                                            await this.docObj.dt('DOC').delete();
-                                            this.init(); 
-                                        }
-                                        
-                                    }}/>
-                                </Item>
-                                <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnLock" parent={this} icon="key" type="default"
-                                    onClick={async ()=>
-                                    {
-                                        if(this.docObj.dt()[0].LOCKED == 0)
-                                        {
-                                            this.docObj.dt()[0].LOCKED = 1
-                                            if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
-                                            {
-                                                await this.grdSlsInv.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
-                                            }
-                                            if((await this.docObj.save()) == 0)
-                                            {                                                    
-                                                let tmpConfObj =
-                                                {
-                                                    id:'msgLocked',showTitle:true,title:this.t("msgLocked.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:this.t("msgLocked.btn01"),location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgLocked.msg")}</div>)
-                                                }
-
-                                                await dialog(tmpConfObj);
-                                                this.frmSalesInv.option('disabled',true)
-                                            }
-                                            else
-                                            {
-                                                tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
-                                                await dialog(tmpConfObj1);
-                                            }
-                                            
-                                        }
-                                        else
-                                        {
-                                            this.popPassword.show()
-                                            this.txtPassword.value = ''
-                                        }
-                                        
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
@@ -2899,6 +2816,16 @@ export default class salesInvoice extends React.PureComponent
                                         <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'} 
                                         onClick={async ()=>
                                         {       
+                                            App.instance.setState({isExecute:true})
+                                            let tmpLastSignature = await this.nf525.signatureDocDuplicate(this.docObj.dt()[0])
+                                            let tmpExtra = {...this.extraObj.empty}
+                                            tmpExtra.DOC = this.docObj.dt()[0].GUID
+                                            tmpExtra.DESCRIPTION = ''
+                                            tmpExtra.TAG = 'PRINT'
+                                            tmpExtra.SIGNATURE = tmpLastSignature.SIGNATURE
+                                            tmpExtra.SIGNATURE_SUM = tmpLastSignature.SIGNATURE_SUM
+                                            this.extraObj.addEmpty(tmpExtra);
+                                            await this.extraObj.save()
                                             let tmpQuery = 
                                             {
                                                 query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID) ORDER BY LINE_NO " ,
@@ -2911,15 +2838,7 @@ export default class salesInvoice extends React.PureComponent
                                             {
                                                 if(pResult.split('|')[0] != 'ERR')
                                                 {
-                                                    let tmpLastSignature = await this.nf525.signatureDocDuplicate(this.docObj.dt()[0])
-                                                    let tmpExtra = {...this.extraObj.empty}
-                                                    tmpExtra.DOC = this.docObj.dt()[0].GUID
-                                                    tmpExtra.DESCRIPTION = ''
-                                                    tmpExtra.TAG = 'PRINT'
-                                                    tmpExtra.SIGNATURE = tmpLastSignature.SIGNATURE
-                                                    tmpExtra.SIGNATURE_SUM = tmpLastSignature.SIGNATURE_SUM
-                                                    this.extraObj.addEmpty(tmpExtra);
-                                                    this.extraObj.save()
+                                                   
                                                     var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
                                                     mywindow.onload = function() 
                                                     {
@@ -2930,6 +2849,7 @@ export default class salesInvoice extends React.PureComponent
                                                 }
                                             });
                                             this.popDesign.hide();  
+                                            App.instance.setState({isExecute:false})
                                         }}/>
                                     </div>
                                     <div className='col-6'>
@@ -3194,7 +3114,7 @@ export default class salesInvoice extends React.PureComponent
                                             "SELECT ITEM_CODE,QUANTITY, " +
                                             "(SELECT TOP 1 NAME FROM ITEM_UNIT_VW_01 WHERE ITEM_GUID= ITEM AND TYPE = 1 ) AS NAME, " +
                                             "(SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_GUID= ITEM AND TYPE = 1 ) AS UNIT_FACTOR " +
-                                            "FROM DOC_ITEMS_VW_01 WHERE DOC_GUID = @DOC_GUID OR INVOICE_GUID = @DOC_GUID ) AS TMP GROUP BY NAME ",
+                                            "FROM DOC_ITEMS_VW_01 WHERE DOC_GUID = @DOC_GUID OR INVOICE_DOC_GUID = @DOC_GUID ) AS TMP GROUP BY NAME ",
                                     param : ['DOC_GUID:string|50'],
                                     value : [this.docObj.dt()[0].GUID]
                                 }

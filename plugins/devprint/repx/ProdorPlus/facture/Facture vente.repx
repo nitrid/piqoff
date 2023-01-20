@@ -370,11 +370,11 @@
       </Controls>
       <StylePriority Ref="189" UseBorders="false" />
     </Item5>
-    <Item6 Ref="190" ControlType="ReportFooterBand" Name="ReportFooter" PrintAtBottom="true" HeightF="263.78656" KeepTogether="true">
+    <Item6 Ref="190" ControlType="ReportFooterBand" Name="ReportFooter" PrintAtBottom="true" HeightF="259.152374" KeepTogether="true">
       <Controls>
         <Item1 Ref="191" ControlType="XRLabel" Name="label49" Multiline="true" TextAlignment="TopCenter" SizeF="782.6699,17.00003" LocationFloat="2.33006477, 242.152344" Font="Arial, 10pt, style=Bold" Padding="2,2,0,0,100">
           <ExpressionBindings>
-            <Item1 Ref="192" EventName="BeforePrint" PropertyName="Text" Expression="[CERTIFICATE]" />
+            <Item1 Ref="192" EventName="BeforePrint" PropertyName="Text" Expression="[SIGNATURE]" />
           </ExpressionBindings>
           <StylePriority Ref="193" UseFont="false" UseTextAlignment="false" />
         </Item1>
