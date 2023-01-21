@@ -1411,62 +1411,6 @@ export default class salesInvoice extends React.PureComponent
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnLock" parent={this} icon="key" type="default"
-                                    onClick={async ()=>
-                                    {
-                                        if(typeof this.docObj.docItems.dt()[0] == 'undefined')
-                                        {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgNotRow',showTitle:true,title:this.lang.t("msgNotRow.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.lang.t("msgNotRow.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgNotRow.msg")}</div>)
-                                            }
-
-                                            await dialog(tmpConfObj);
-                                        }
-                                        if(this.docObj.dt()[0].LOCKED == 0)
-                                        {
-                                            this.docObj.dt()[0].LOCKED = 1
-                                            this.docLocked = true
-                                            if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
-                                            {
-                                                await this.grdSlsInv.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
-                                            }
-                                            
-                                            //***** TICKET İMZALAMA *****/
-                                            let tmpSignedData = await this.nf525.signatureDoc(this.docObj.dt()[0],this.docObj.docItems.dt())                
-                                            this.docObj.dt()[0].SIGNATURE = tmpSignedData.SIGNATURE
-                                            this.docObj.dt()[0].SIGNATURE_SUM = tmpSignedData.SIGNATURE_SUM
-
-                                            if((await this.docObj.save()) == 0)
-                                            {                                                    
-                                                let tmpConfObj =
-                                                {
-                                                    id:'msgLocked',showTitle:true,title:this.t("msgLocked.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:this.t("msgLocked.btn01"),location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgLocked.msg")}</div>)
-                                                }
-
-                                                await dialog(tmpConfObj);
-                                                this.frmSalesInv.option('disabled',true)
-                                            }
-                                            else
-                                            {
-                                                tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
-                                                await dialog(tmpConfObj1);
-                                            }
-                                            
-                                        }
-                                        else
-                                        {
-                                            this.popPassword.show()
-                                            this.txtPassword.value = ''
-                                        }
-                                        
-                                    }}/>
-                                </Item>
-                                <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnInfo" parent={this} icon="info" type="default"
                                     onClick={async()=>
                                     {
@@ -3259,6 +3203,16 @@ export default class salesInvoice extends React.PureComponent
                                         {       
                                             if(e.validationGroup.validate().status == "valid")
                                             {
+                                                App.instance.setState({isExecute:true})
+                                                let tmpLastSignature = await this.nf525.signatureDocDuplicate(this.docObj.dt()[0])
+                                                let tmpExtra = {...this.extraObj.empty}
+                                                tmpExtra.DOC = this.docObj.dt()[0].GUID
+                                                tmpExtra.DESCRIPTION = ''
+                                                tmpExtra.TAG = 'PRINT'
+                                                tmpExtra.SIGNATURE = tmpLastSignature.SIGNATURE
+                                                tmpExtra.SIGNATURE_SUM = tmpLastSignature.SIGNATURE_SUM
+                                                this.extraObj.addEmpty(tmpExtra);
+                                                await this.extraObj.save()
                                                 let tmpQuery = 
                                                 {
                                                     query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID) ORDER BY DOC_DATE,LINE_NO " ,
@@ -3273,15 +3227,6 @@ export default class salesInvoice extends React.PureComponent
                                                 {
                                                     if(pResult.split('|')[0] != 'ERR')
                                                     {
-                                                        let tmpLastSignature = await this.nf525.signatureDocDuplicate(this.docObj.dt()[0])
-                                                        let tmpExtra = {...this.extraObj.empty}
-                                                        tmpExtra.DOC = this.docObj.dt()[0].GUID
-                                                        tmpExtra.DESCRIPTION = ''
-                                                        tmpExtra.TAG = 'PRINT'
-                                                        tmpExtra.SIGNATURE = tmpLastSignature.SIGNATURE
-                                                        tmpExtra.SIGNATURE_SUM = tmpLastSignature.SIGNATURE_SUM
-                                                        this.extraObj.addEmpty(tmpExtra);
-                                                        this.extraObj.save()
                                                         var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
                                                         mywindow.onload = function() 
                                                         { 

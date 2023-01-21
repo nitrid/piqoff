@@ -427,7 +427,7 @@ export class nf525Cls
                         "NF203.FAC_DUP_TYP AS TYPE_NAME " +
                         "FROM NF203_DOC_DUPLICATE_VW_01 AS NF203 " +
                         "WHERE NF203.FAC_DUP_ORI_NUM = @DOC ORDER BY NF203.FAC_DUP_PRN_NUM DESC",
-                param : ['POS:string|50'],
+                param : ['DOC:string|50'],
                 value : [pData.GUID]
             }
             
