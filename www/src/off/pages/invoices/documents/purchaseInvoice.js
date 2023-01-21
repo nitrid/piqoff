@@ -2843,9 +2843,9 @@ export default class purchaseInvoice extends React.PureComponent
                                             return
                                         }
 
-                                        e.key.VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100)).toFixed(4));
-                                        e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(4))
-                                        e.key.TOTAL = parseFloat((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) +e.key.VAT).toFixed(4))
+                                        e.key.VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100)).toFixed(2));
+                                        e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(2))
+                                        e.key.TOTAL = parseFloat((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) +e.key.VAT).toFixed(2))
                                         e.key.TOTALHT = parseFloat((e.key.TOTAL - e.key.VAT).toFixed(2))
 
                                         e.key.DIFF_PRICE = e.key.PRICE - e.key.CUSTOMER_PRICE
@@ -2997,6 +2997,15 @@ export default class purchaseInvoice extends React.PureComponent
                                                                                 this.txtDiscountPrice2.value = this.docObj.docItems.dt().sum("DISCOUNT_2",2)
                                                                                 this.txtDiscountPercent3.value  = Number(this.docObj.dt()[0].AMOUNT-(parseFloat(this.docObj.docItems.dt().sum("DISCOUNT_1",3))+parseFloat(this.docObj.docItems.dt().sum("DISCOUNT_2",3)))).rate2Num(this.docObj.docItems.dt().sum("DISCOUNT_3",3),3)
                                                                                 this.txtDiscountPrice3.value = this.docObj.docItems.dt().sum("DISCOUNT_3",2)
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                this.txtDiscountPercent1.value  = 0;
+                                                                                this.txtDiscountPrice1.value = 0;
+                                                                                this.txtDiscountPercent2.value  =0;
+                                                                                this.txtDiscountPrice2.value = 0;
+                                                                                this.txtDiscountPercent3.value  = 0;
+                                                                                this.txtDiscountPrice3.value = 0;
                                                                             }
                                                                             this.popDiscount.show()
                                                                         }
@@ -3325,9 +3334,9 @@ export default class purchaseInvoice extends React.PureComponent
                                                         this.docObj.docItems.dt()[i].TOTALHT = parseFloat((this.docObj.docItems.dt()[i].AMOUNT - (this.docObj.docItems.dt()[i].DISCOUNT_1 + this.docObj.docItems.dt()[i].DISCOUNT_2 + this.docObj.docItems.dt()[i].DISCOUNT_3)).toFixed(2))
                                                         if(this.docObj.docItems.dt()[i].VAT > 0)
                                                         {
-                                                            this.docObj.docItems.dt()[i].VAT = parseFloat(((this.docObj.docItems.dt()[i].TOTALHT) * (this.docObj.docItems.dt()[i].VAT_RATE / 100)).toFixed(4))
+                                                            this.docObj.docItems.dt()[i].VAT = parseFloat(((this.docObj.docItems.dt()[i].AMOUNT - (this.docObj.docItems.dt()[i].DISCOUNT_1 + this.docObj.docItems.dt()[i].DISCOUNT_2 + this.docObj.docItems.dt()[i].DISCOUNT_3)) * (this.docObj.docItems.dt()[i].VAT_RATE / 100)).toFixed(2))
                                                         }
-                                                        this.docObj.docItems.dt()[i].TOTAL = parseFloat((this.docObj.docItems.dt()[i].TOTALHT + this.docObj.docItems.dt()[i].VAT).toFixed(4))
+                                                        this.docObj.docItems.dt()[i].TOTAL = parseFloat(((this.docObj.docItems.dt()[i].AMOUNT - (this.docObj.docItems.dt()[i].DISCOUNT_1 + this.docObj.docItems.dt()[i].DISCOUNT_2 + this.docObj.docItems.dt()[i].DISCOUNT_3)) +(this.docObj.docItems.dt()[i].AMOUNT - (this.docObj.docItems.dt()[i].DISCOUNT_1 + this.docObj.docItems.dt()[i].DISCOUNT_2 + this.docObj.docItems.dt()[i].DISCOUNT_3)) * (this.docObj.docItems.dt()[i].VAT_RATE / 100)).toFixed(2))
                                                         this.docObj.docItems.dt()[i].DISCOUNT_RATE = Number(this.docObj.docItems.dt()[i].AMOUNT).rate2Num((this.docObj.docItems.dt()[i].DISCOUNT_1 + this.docObj.docItems.dt()[i].DISCOUNT_2 + this.docObj.docItems.dt()[i].DISCOUNT_3),2)
                                                     }
                                                 this._calculateTotal()
