@@ -3220,6 +3220,7 @@ export const langTr =
             clmRefNo : "SIRA",
             clmOutputName : "CARİ ADI",
             clmOutputCode  : "CARİ KODU",
+            clmTotal : "KDVLİ TOPLAM"
         },
         pg_txtCustomerCode : 
         {

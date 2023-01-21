@@ -3219,6 +3219,7 @@ export const langFr =
             clmRefNo : "Numéro",
             clmOutputName : "Nom Fournisseur",
             clmOutputCode  : "Code Client",
+            clmTotal : "Total TTC"
         },
         pg_txtCustomerCode : 
         {
@@ -3284,8 +3285,13 @@ export const langFr =
         popDiscount : 
         {
             title: "Télécharger Document",
-            Percent : "Pourcentage",
-            Price : "Total" 
+            chkDocDiscount : "1. remises n'est pas indiqué sur les lignes",
+            Percent1 : "1. Remise % ",
+            Price1 : "1. Remise",
+            Percent2 : "2. Remise %",
+            Price2 : "2. Remise",
+            Percent3 : "3. Remise %",
+            Price3 : "3. Remise"
         },
         popPassword : 
         {
