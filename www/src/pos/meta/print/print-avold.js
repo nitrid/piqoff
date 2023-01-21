@@ -6,7 +6,9 @@ import moment from "moment";
 //data.special.type = 'Fatura'
 //data.special.safe = 'Kasa Kodu'
 //data.special.ticketCount = 'Günlük Ticket Sayısı'
-//data.special.reprint = 'true' Tekrar yazdırma
+//data.special.reprint = 1 Tekrar yazdırma sayısı
+//data.special.factCertificate = 'Fatura sertifika bilgisi' 
+//data.special.dupCertificate = 'Duplicate sertifika bilgisi' 
 //data.special.repas = 'TxtRepasMiktar'
 //data.special.customerUsePoint = 'Müşteri Kullanılan Puanı'
 //data.special.customerPoint = 'Müşteri Puanı'
@@ -69,6 +71,14 @@ export function print()
         },
         ()=>
         {
+            if(data.pos[0].DEVICE == '9999')
+            {
+                return {font:"b",size : [1,1],style:"bu",align:"ct",data: "FORMATION"}
+            }   
+            return
+        },
+        ()=>
+        {
             let tmpArr = []
             if(data.pos[0].TYPE == 0 && data.special.type != 'Fatura')
             {
@@ -78,6 +88,7 @@ export function print()
             else if(data.pos[0].TYPE == 0 && data.special.type == 'Fatura')
             {
                 tmpArr.push({font:"b",style:"b",align:"ct",data:"FACTURE DE VENTE"})
+                tmpArr.push({font:"a",style:"b",align:"ct",data:"Numero De Facture : " + data.pos[0].FACT_REF})
                 tmpArr.push({font:"b",style:"b",align:"ct",data: " ".space(64)})
             }
             else if(data.pospay.where({TYPE:0}).length > 0 && data.pos[0].TYPE == 1)
