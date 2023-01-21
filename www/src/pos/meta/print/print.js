@@ -118,7 +118,7 @@ export function print()
                     font: "b",
                     align: "lt",
                     data:   "  " +
-                            "Repas complet(s)".space(26) + " " +
+                            "Repas complet(s)".space(34) + " " +
                             data.special.repas.space(8,'s') + " " + 
                             tmpPrice.toString().space(7,'s') + " " + 
                             (decimal(data.possale.sum("AMOUNT",2)) + "EUR").space(10,"s")
