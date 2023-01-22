@@ -59,7 +59,7 @@ export default class mainPage extends React.PureComponent
                 App.instance.menuClick(
                 {
                     id: 'stk_04_004',
-                    text: this.lang.t('menu.stk_04_004'),
+                    text: this.lang.t('menuOff.stk_04_004'),
                     path: 'items/operations/expdateOperations',
                 })
             }
