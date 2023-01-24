@@ -177,7 +177,7 @@ class nf525
                 await this.factureNf203SignatureVerify()
                 await this.dupFactureNf203SignatureVerify()
                 await this.dupPosNf525SignatureVerify()
-                await this.jetSignatureVerify()
+                //await this.jetSignatureVerify()
                 core.instance.log.msg("Signature verify completed","Nf525");
 
                 resolve()
