@@ -3207,6 +3207,7 @@ export const langTr =
         txtUnitFactor : "Birim Katsayısı",
         txtUnitQuantity : "Birim Miktarı",
         txtTotalQuantity : "Toplam Miktar",
+        txtUnitPrice: "Birim Fiyatı",
         txtExpFee : "Gecikme Cezası",
         dtExpDate : "Vade Tarihi", 
         getOffers : "Teklif Getir",
@@ -3711,6 +3712,7 @@ export const langTr =
         txtUnitFactor : "Birim Katsayısı",
         txtUnitQuantity : "Birim Miktarı",
         txtTotalQuantity : "Toplam Miktar",
+        txtUnitPrice: "Birim Fiyatı",
         txtExpFee : "Gecikme Cezası",
         dtExpDate : "Vade Tarihi", 
         getOffers : "Teklif Getir", 
@@ -3721,6 +3723,7 @@ export const langTr =
         validDesign : "Lütfen Dizayn seçiniz.",
         validMail : "Lütfen Boş Geçmeyin.",
         getPreInvoice : "Ön Fatura Getir",
+        txtTotalHt : "İndirimli Tutar",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -3767,6 +3770,7 @@ export const langTr =
             clmVat : "KDV",
             clmAmount : "Tutar",
             clmTotal : "G.Toplam",
+            clmTotalHt : "Ver.Haric Top.",
             clmDispatch : "İrsaliye No",
             clmCreateDate: "Kayıt Tarihi",
             clmMargin :"Marj",
@@ -3789,8 +3793,13 @@ export const langTr =
         popDiscount : 
         {
             title: "Evrak İndirimi",
-            Percent : "Yüzde",
-            Price : "Tutar"
+            chkDocDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            Percent1 : "1. İnd. Yüzde",
+            Price1 : "1. İnd. Tutar",
+            Percent2 : "2. İnd. Yüzde",
+            Price2 : "2. İnd. Tutar",
+            Percent3 : "3. İnd. Yüzde",
+            Price3 : "3. İnd. Tutar"
         },
         popPassword : 
         {
@@ -4163,6 +4172,13 @@ export const langTr =
         txtDiscountPer1 : "1. İndirim Oranı",
         txtDiscountPer2 : "2. İndirim Oranı",
         txtDiscountPer3 : "3. İndirim Oranı",
+        serviceAdd : "Hizmet Ekle",
+        pg_service : 
+        {
+            title : "Hizmetler",
+            clmCode : "Kod",
+            clmName : "Adı"
+        },
     },
     ftr_02_003 : // "İade Faturası"
     {
@@ -4202,6 +4218,7 @@ export const langTr =
         txtUnitFactor : "Birim Katsayısı",
         txtUnitQuantity : "Birim Miktarı",
         txtTotalQuantity : "Toplam Miktar",
+        txtUnitPrice: "Birim Fiyatı",
         txtExpFee : "Gecikme Cezası",
         dtExpDate : "Vade Tarihi", 
         getProforma : "Proforma Getir",
@@ -4210,6 +4227,7 @@ export const langTr =
         placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.",
         validDesign : "Lütfen Dizayn seçiniz.",
         validMail : "Lütfen Boş Geçmeyin.",
+        txtTotalHt : "İndirimli Tutar",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -4256,6 +4274,7 @@ export const langTr =
             clmVat : "KDV",
             clmAmount : "Tutar",
             clmTotal : "G.Toplam",
+            clmTotalHt : "Ver.Haric Top.",
             clmDispatch : "İrsaliye No",
             clmCreateDate: "Kayıt Tarihi",
             clmMargin :"Marj",
@@ -4280,8 +4299,13 @@ export const langTr =
         popDiscount : 
         {
             title: "Evrak İndirimi",
-            Percent : "Yüzde",
-            Price : "Tutar"
+            chkDocDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            Percent1 : "1. İnd. Yüzde",
+            Price1 : "1. İnd. Tutar",
+            Percent2 : "2. İnd. Yüzde",
+            Price2 : "2. İnd. Tutar",
+            Percent3 : "3. İnd. Yüzde",
+            Price3 : "3. İnd. Tutar"
         },
         popPassword : 
         {
@@ -4551,6 +4575,53 @@ export const langTr =
         txtDiscountPer1 : "1. İndirim Oranı",
         txtDiscountPer2 : "2. İndirim Oranı",
         txtDiscountPer3 : "3. İndirim Oranı",
+        serviceAdd : "Hizmet Ekle",
+        pg_service : 
+        {
+            title : "Hizmetler",
+            clmCode : "Kod",
+            clmName : "Adı"
+        },
+        msgMissItemCode:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Bulunamayan Kodlar :"
+        },
+        msgMultiCodeCount:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Eklenen Ürün Sayısı"
+        },
+        popMultiItem:
+        {
+            title: "Toplu Ürün Ekleme",
+            btnApprove: "Ürünleri Getir",
+            btnClear : "Temizle",
+            btnSave : "Satırları Ekle",
+        },
+        cmbMultiItemType : 
+        {
+            title : "Arama Şekli",
+            customerCode : "Tedarikçi Koduna Göre",
+            ItemCode : "Ürün Koduna Göre"
+        },
+        grdMultiItem : 
+        {
+            clmCode : "Ürün Kodu",
+            clmMulticode : "Tedarikçi Kodu",
+            clmName : "Ürün Adı",
+            clmQuantity : "Adet"
+        },
+        msgMultiData:
+        {
+            title: "Dikkat",
+            btn01: "Listeyi Temizle ve Hepsini Ekle",
+            btn02: "Yeni Yazılanları Listeye Ekle",
+            msg: "Listede Ürünler Var! "
+        },
+        tagItemCodePlaceholder: "Lütfen Eklemek İstediğiniz Kodları Giriniz",
     },
     ftr_02_004 : // "Fiyat Farkı Faturası"
     {
@@ -4591,6 +4662,7 @@ export const langTr =
         txtUnitFactor : "Birim Katsayısı",
         txtUnitQuantity : "Birim Miktarı",
         txtTotalQuantity : "Toplam Miktar",
+        txtUnitPrice: "Birim Fiyatı",
         txtExpFee : "Gecikme Cezası",
         dtExpDate : "Vade Tarihi", 
         btnView : "Görüntüle",
@@ -4598,6 +4670,7 @@ export const langTr =
         placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.",
         validDesign : "Lütfen Dizayn seçiniz.",
         validMail : "Lütfen Boş Geçmeyin.",
+        txtTotalHt : "İndirimli Tutar",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -4639,6 +4712,7 @@ export const langTr =
             clmVat : "KDV",
             clmAmount : "Tutar",
             clmTotal : "G.Toplam",
+            clmTotalHt : "Ver.Haric Top.",
             clmCreateDate: "Kayıt Tarihi",
             clmInvNo : "Fatura No",
             clmInvDate : "Fatura Tarihi",
@@ -4664,8 +4738,13 @@ export const langTr =
         popDiscount : 
         {
             title: "Evrak İndirimi",
-            Percent : "Yüzde",
-            Price : "Tutar"
+            chkDocDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            Percent1 : "1. İnd. Yüzde",
+            Price1 : "1. İnd. Tutar",
+            Percent2 : "2. İnd. Yüzde",
+            Price2 : "2. İnd. Tutar",
+            Percent3 : "3. İnd. Yüzde",
+            Price3 : "3. İnd. Tutar"
         },
         popPassword : 
         {
@@ -4913,6 +4992,53 @@ export const langTr =
         txtDiscountPer1 : "1. İndirim Oranı",
         txtDiscountPer2 : "2. İndirim Oranı",
         txtDiscountPer3 : "3. İndirim Oranı",
+        serviceAdd : "Hizmet Ekle",
+        pg_service : 
+        {
+            title : "Hizmetler",
+            clmCode : "Kod",
+            clmName : "Adı"
+        },
+        msgMissItemCode:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Bulunamayan Kodlar :"
+        },
+        msgMultiCodeCount:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Eklenen Ürün Sayısı"
+        },
+        popMultiItem:
+        {
+            title: "Toplu Ürün Ekleme",
+            btnApprove: "Ürünleri Getir",
+            btnClear : "Temizle",
+            btnSave : "Satırları Ekle",
+        },
+        cmbMultiItemType : 
+        {
+            title : "Arama Şekli",
+            customerCode : "Tedarikçi Koduna Göre",
+            ItemCode : "Ürün Koduna Göre"
+        },
+        grdMultiItem : 
+        {
+            clmCode : "Ürün Kodu",
+            clmMulticode : "Tedarikçi Kodu",
+            clmName : "Ürün Adı",
+            clmQuantity : "Adet"
+        },
+        msgMultiData:
+        {
+            title: "Dikkat",
+            btn01: "Listeyi Temizle ve Hepsini Ekle",
+            btn02: "Yeni Yazılanları Listeye Ekle",
+            msg: "Listede Ürünler Var! "
+        },
+        tagItemCodePlaceholder: "Lütfen Eklemek İstediğiniz Kodları Giriniz",
     },
     ftr_02_005 : // "Şube Satış Faturası"
     {
@@ -4953,6 +5079,7 @@ export const langTr =
         txtUnitFactor : "Birim Katsayısı",
         txtUnitQuantity : "Birim Miktarı",
         txtTotalQuantity : "Toplam Miktar",
+        txtUnitPrice: "Birim Fiyatı",
         txtExpFee : "Gecikme Cezası",
         dtExpDate : "Vade Tarihi", 
         btnView : "Görüntüle",
@@ -5005,6 +5132,7 @@ export const langTr =
             clmVat : "KDV",
             clmAmount : "Tutar",
             clmTotal : "G.Toplam",
+            clmTotalHt : "Ver.Haric Top.",
             clmDispatch : "İrsaliye No",
             clmCreateDate: "Kayıt Tarihi",
             clmMargin :"Marj",
@@ -5027,8 +5155,13 @@ export const langTr =
         popDiscount : 
         {
             title: "Evrak İndirimi",
-            Percent : "Yüzde",
-            Price : "Tutar"
+            chkDocDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            Percent1 : "1. İnd. Yüzde",
+            Price1 : "1. İnd. Tutar",
+            Percent2 : "2. İnd. Yüzde",
+            Price2 : "2. İnd. Tutar",
+            Percent3 : "3. İnd. Yüzde",
+            Price3 : "3. İnd. Tutar"
         },
         popPassword : 
         {
@@ -5358,6 +5491,14 @@ export const langTr =
         txtDiscountPer1 : "1. İndirim Oranı",
         txtDiscountPer2 : "2. İndirim Oranı",
         txtDiscountPer3 : "3. İndirim Oranı",
+        serviceAdd : "Hizmet Ekle",
+        pg_service : 
+        {
+            title : "Hizmetler",
+            clmCode : "Kod",
+            clmName : "Adı"
+        },
+        txtTotalHt : "İndirimli Tutar",
     },
     ftr_02_006 : // "Fiyat Farkı Alış Faturası"
     {
@@ -5398,8 +5539,10 @@ export const langTr =
         txtUnitFactor : "Birim Katsayısı",
         txtUnitQuantity : "Birim Miktarı",
         txtTotalQuantity : "Toplam Miktar",
+        txtUnitPrice: "Birim Fiyatı",
         txtExpFee : "Gecikme Cezası",
         dtExpDate : "Vade Tarihi", 
+        txtTotalHt : "İndirimli Tutar",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -5442,6 +5585,7 @@ export const langTr =
             clmVat : "KDV",
             clmAmount : "Tutar",
             clmTotal : "G.Toplam",
+            clmTotalHt : "Ver.Haric Top.",
             clmCreateDate: "Kayıt Tarihi",
             clmInvNo : "Fatura No",
             clmInvDate : "Fatura Tarihi",
@@ -5467,8 +5611,13 @@ export const langTr =
         popDiscount : 
         {
             title: "Evrak İndirimi",
-            Percent : "Yüzde",
-            Price : "Tutar"
+            chkDocDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            Percent1 : "1. İnd. Yüzde",
+            Price1 : "1. İnd. Tutar",
+            Percent2 : "2. İnd. Yüzde",
+            Price2 : "2. İnd. Tutar",
+            Percent3 : "3. İnd. Yüzde",
+            Price3 : "3. İnd. Tutar"
         },
         popPassword : 
         {
@@ -5702,6 +5851,13 @@ export const langTr =
         txtDiscountPer1 : "1. İndirim Oranı",
         txtDiscountPer2 : "2. İndirim Oranı",
         txtDiscountPer3 : "3. İndirim Oranı",
+        serviceAdd : "Hizmet Ekle",
+        pg_service : 
+        {
+            title : "Hizmetler",
+            clmCode : "Kod",
+            clmName : "Adı"
+        },
     },
     ftr_02_007 : // "İade ALış Faturası"
     {
@@ -5741,9 +5897,11 @@ export const langTr =
         txtUnitFactor : "Birim Katsayısı",
         txtUnitQuantity : "Birim Miktarı",
         txtTotalQuantity : "Toplam Miktar",
+        txtUnitPrice: "Birim Fiyatı",
         txtExpFee : "Gecikme Cezası",
         dtExpDate : "Vade Tarihi", 
         getProforma : "Proforma Getir",
+        txtTotalHt : "İndirimli Tutar",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -5790,6 +5948,7 @@ export const langTr =
             clmVat : "KDV",
             clmAmount : "Tutar",
             clmTotal : "G.Toplam",
+            clmTotalHt : "Ver.Haric Top.",
             clmDispatch : "İrsaliye No",
             clmCreateDate: "Kayıt Tarihi",
             clmMargin :"Marj",
@@ -5814,8 +5973,13 @@ export const langTr =
         popDiscount : 
         {
             title: "Evrak İndirimi",
-            Percent : "Yüzde",
-            Price : "Tutar"
+            chkDocDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            Percent1 : "1. İnd. Yüzde",
+            Price1 : "1. İnd. Tutar",
+            Percent2 : "2. İnd. Yüzde",
+            Price2 : "2. İnd. Tutar",
+            Percent3 : "3. İnd. Yüzde",
+            Price3 : "3. İnd. Tutar"
         },
         popPassword : 
         {
@@ -6071,6 +6235,13 @@ export const langTr =
         txtDiscountPer1 : "1. İndirim Oranı",
         txtDiscountPer2 : "2. İndirim Oranı",
         txtDiscountPer3 : "3. İndirim Oranı",
+        serviceAdd : "Hizmet Ekle",
+        pg_service : 
+        {
+            title : "Hizmetler",
+            clmCode : "Kod",
+            clmName : "Adı"
+        },
     },
     ftr_02_008 : // "Şube Satış Faturası"
     {
@@ -6111,6 +6282,7 @@ export const langTr =
         txtUnitFactor : "Birim Katsayısı",
         txtUnitQuantity : "Birim Miktarı",
         txtTotalQuantity : "Toplam Miktar",
+        txtUnitPrice: "Birim Fiyatı",
         txtExpFee : "Gecikme Cezası",
         dtExpDate : "Vade Tarihi", 
         btnView : "Görüntüle",
@@ -6118,6 +6290,7 @@ export const langTr =
         placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.",
         validDesign : "Lütfen Dizayn seçiniz.",
         validMail : "Lütfen Boş Geçmeyin.",
+        txtTotalHt : "İndirimli Tutar",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -6163,6 +6336,7 @@ export const langTr =
             clmVat : "KDV",
             clmAmount : "Tutar",
             clmTotal : "G.Toplam",
+            clmTotalHt : "Ver.Haric Top.",
             clmDispatch : "İrsaliye No",
             clmCreateDate: "Kayıt Tarihi",
             clmMargin :"Marj",
@@ -6185,8 +6359,13 @@ export const langTr =
         popDiscount : 
         {
             title: "Evrak İndirimi",
-            Percent : "Yüzde",
-            Price : "Tutar"
+            chkDocDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            Percent1 : "1. İnd. Yüzde",
+            Price1 : "1. İnd. Tutar",
+            Percent2 : "2. İnd. Yüzde",
+            Price2 : "2. İnd. Tutar",
+            Percent3 : "3. İnd. Yüzde",
+            Price3 : "3. İnd. Tutar"
         },
         popPassword : 
         {
@@ -6516,6 +6695,13 @@ export const langTr =
         txtDiscountPer1 : "1. İndirim Oranı",
         txtDiscountPer2 : "2. İndirim Oranı",
         txtDiscountPer3 : "3. İndirim Oranı",
+        serviceAdd : "Hizmet Ekle",
+        pg_service : 
+        {
+            title : "Hizmetler",
+            clmCode : "Kod",
+            clmName : "Adı"
+        },
     },
     ftr_04_001 : // "Proforma Fiyat Farkı Faturası"
     {
@@ -6554,6 +6740,8 @@ export const langTr =
         txtUnitFactor : "Birim Katsayısı",
         txtUnitQuantity : "Birim Miktarı",
         txtTotalQuantity : "Toplam Miktar",
+        txtUnitPrice: "Birim Fiyatı",
+        txtTotalHt : "İndirimli Tutar",
         msgDiscount:
         {
             title: "Dikkat",
@@ -6601,6 +6789,7 @@ export const langTr =
             clmVat : "KDV",
             clmAmount : "Tutar",
             clmTotal : "G.Toplam",
+            clmTotalHt : "Ver.Haric Top.",
             clmCreateDate: "Kayıt Tarihi",
             clmInvNo : "Fatura No",
             clmInvDate : "Fatura Tarihi",
@@ -6626,8 +6815,13 @@ export const langTr =
         popDiscount : 
         {
             title: "Evrak İndirimi",
-            Percent : "Yüzde",
-            Price : "Tutar"
+            chkDocDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            Percent1 : "1. İnd. Yüzde",
+            Price1 : "1. İnd. Tutar",
+            Percent2 : "2. İnd. Yüzde",
+            Price2 : "2. İnd. Tutar",
+            Percent3 : "3. İnd. Yüzde",
+            Price3 : "3. İnd. Tutar"
         },
         popPassword : 
         {
@@ -6834,6 +7028,13 @@ export const langTr =
             btn01: "Evrağa Git",
             msg: "Evrak Bulundu"
         },
+        serviceAdd : "Hizmet Ekle",
+        pg_service : 
+        {
+            title : "Hizmetler",
+            clmCode : "Kod",
+            clmName : "Adı"
+        },
     },
     ftr_04_002 : // "Proforma Satış Faturası"
     {
@@ -6874,9 +7075,11 @@ export const langTr =
         txtUnitFactor : "Birim Katsayısı",
         txtUnitQuantity : "Birim Miktarı",
         txtTotalQuantity : "Toplam Miktar",
+        txtUnitPrice: "Birim Fiyatı",
         txtExpFee : "Gecikme Cezası",
         dtExpDate : "Vade Tarihi", 
         getOffers : "Teklif Getir", 
+        txtTotalHt : "İndirimli Tutar",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -6922,6 +7125,7 @@ export const langTr =
             clmVat : "KDV",
             clmAmount : "Tutar",
             clmTotal : "G.Toplam",
+            clmTotalHt : "Ver.Haric Top.",
             clmDispatch : "İrsaliye No",
             clmCreateDate: "Kayıt Tarihi",
             clmMargin :"Marj",
@@ -6944,8 +7148,13 @@ export const langTr =
         popDiscount : 
         {
             title: "Evrak İndirimi",
-            Percent : "Yüzde",
-            Price : "Tutar"
+            chkDocDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            Percent1 : "1. İnd. Yüzde",
+            Price1 : "1. İnd. Tutar",
+            Percent2 : "2. İnd. Yüzde",
+            Price2 : "2. İnd. Tutar",
+            Percent3 : "3. İnd. Yüzde",
+            Price3 : "3. İnd. Tutar"
         },
         popPassword : 
         {
@@ -7228,6 +7437,13 @@ export const langTr =
             clmTotal : "Tutar",
             clmPrice : "Fiyat",
         },
+        serviceAdd : "Hizmet Ekle",
+        pg_service : 
+        {
+            title : "Hizmetler",
+            clmCode : "Kod",
+            clmName : "Adı"
+        },
     },
     ftr_04_003 : // "Proforma Alış Faturası"
     {
@@ -7275,9 +7491,11 @@ export const langTr =
         txtUnitFactor : "Birim Katsayısı",
         txtUnitQuantity : "Birim Miktarı",
         txtTotalQuantity : "Toplam Miktar",
+        txtUnitPrice: "Birim Fiyatı",
         txtExpFee : "Gecikme Cezası",
         dtExpDate : "Vade Tarihi", 
         getOffers : "Teklif Getir",
+        txtTotalHt : "İndirimli Tutar",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -7324,6 +7542,7 @@ export const langTr =
             clmVat : "KDV",
             clmAmount : "Tutar",
             clmTotal : "G.Toplam",
+            clmTotalHt : "Ver.Haric Top.",
             clmDispatch : "İrsaliye No",
             clmCreateDate: "Kayıt Tarihi",
             clmMargin :"Marj",
@@ -7347,8 +7566,13 @@ export const langTr =
         popDiscount : 
         {
             title: "Evrak İndirimi",
-            Percent : "Yüzde",
-            Price : "Tutar"
+            chkDocDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            Percent1 : "1. İnd. Yüzde",
+            Price1 : "1. İnd. Tutar",
+            Percent2 : "2. İnd. Yüzde",
+            Price2 : "2. İnd. Tutar",
+            Percent3 : "3. İnd. Yüzde",
+            Price3 : "3. İnd. Tutar"
         },
         popPassword : 
         {
@@ -7721,8 +7945,10 @@ export const langTr =
         txtUnitFactor : "Birim Katsayısı",
         txtUnitQuantity : "Birim Miktarı",
         txtTotalQuantity : "Toplam Miktar",
+        txtUnitPrice: "Birim Fiyatı",
         txtExpFee : "Gecikme Cezası",
         dtExpDate : "Vade Tarihi", 
+        txtTotalHt : "İndirimli Tutar",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -7768,6 +7994,7 @@ export const langTr =
             clmVat : "KDV",
             clmAmount : "Tutar",
             clmTotal : "G.Toplam",
+            clmTotalHt : "Ver.Haric Top.",
             clmDispatch : "İrsaliye No",
             clmCreateDate: "Kayıt Tarihi",
             clmMargin :"Marj",
@@ -7792,8 +8019,13 @@ export const langTr =
         popDiscount : 
         {
             title: "Evrak İndirimi",
-            Percent : "Yüzde",
-            Price : "Tutar"
+            chkDocDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            Percent1 : "1. İnd. Yüzde",
+            Price1 : "1. İnd. Tutar",
+            Percent2 : "2. İnd. Yüzde",
+            Price2 : "2. İnd. Tutar",
+            Percent3 : "3. İnd. Yüzde",
+            Price3 : "3. İnd. Tutar"
         },
         popPassword : 
         {
@@ -8010,6 +8242,12 @@ export const langTr =
             btn01: "Evrağa Git",
             msg: "Evrak Bulundu"
         },
+        pg_service : 
+        {
+            title : "Hizmetler",
+            clmCode : "Kod",
+            clmName : "Adı"
+        },
     },
     ftr_04_005 : // "Şube Satış Faturası"
     {
@@ -8050,8 +8288,10 @@ export const langTr =
         txtUnitFactor : "Birim Katsayısı",
         txtUnitQuantity : "Birim Miktarı",
         txtTotalQuantity : "Toplam Miktar",
+        txtUnitPrice: "Birim Fiyatı",
         txtExpFee : "Gecikme Cezası",
         dtExpDate : "Vade Tarihi", 
+        txtTotalHt : "İndirimli Tutar",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -8097,6 +8337,7 @@ export const langTr =
             clmVat : "KDV",
             clmAmount : "Tutar",
             clmTotal : "G.Toplam",
+            clmTotalHt : "Ver.Haric Top.",
             clmDispatch : "İrsaliye No",
             clmCreateDate: "Kayıt Tarihi",
             clmMargin :"Marj",
@@ -8119,8 +8360,13 @@ export const langTr =
         popDiscount : 
         {
             title: "Evrak İndirimi",
-            Percent : "Yüzde",
-            Price : "Tutar"
+            chkDocDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            Percent1 : "1. İnd. Yüzde",
+            Price1 : "1. İnd. Tutar",
+            Percent2 : "2. İnd. Yüzde",
+            Price2 : "2. İnd. Tutar",
+            Percent3 : "3. İnd. Yüzde",
+            Price3 : "3. İnd. Tutar"
         },
         popPassword : 
         {
@@ -8392,6 +8638,12 @@ export const langTr =
             title: "Dikkat",
             btn01: "Evrağa Git",
             msg: "Evrak Bulundu"
+        },
+        pg_service : 
+        {
+            title : "Hizmetler",
+            clmCode : "Kod",
+            clmName : "Adı"
         },
     },
     promo_01_001: //  "Promosyon Tanımları"
@@ -8700,6 +8952,7 @@ export const langTr =
         txtUnitFactor : "Birim Katsayısı",
         txtUnitQuantity : "Birim Miktarı",
         txtTotalQuantity : "Toplam Miktar",
+        txtUnitPrice: "Birim Fiyatı",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -8736,6 +8989,7 @@ export const langTr =
             clmVat : "KDV",
             clmAmount : "Tutar",
             clmTotal : "G.Toplam",
+            clmTotalHt : "Ver.Haric Top.",
             clmCreateDate: "Kayıt Tarihi",
             clmMargin :"Marj",
             clmDescription :"Açıklama",
@@ -8747,8 +9001,13 @@ export const langTr =
         popDiscount : 
         {
             title: "Evrak İndirimi",
-            Percent : "Yüzde",
-            Price : "Tutar"
+            chkDocDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            Percent1 : "1. İnd. Yüzde",
+            Price1 : "1. İnd. Tutar",
+            Percent2 : "2. İnd. Yüzde",
+            Price2 : "2. İnd. Tutar",
+            Percent3 : "3. İnd. Yüzde",
+            Price3 : "3. İnd. Tutar"
         },
         popPassword : 
         {
@@ -9032,6 +9291,7 @@ export const langTr =
         txtUnitFactor : "Birim Katsayısı",
         txtUnitQuantity : "Birim Miktarı",
         txtTotalQuantity : "Toplam Miktar",
+        txtUnitPrice: "Birim Fiyatı",
         btnView : "Görüntüle",
         btnMailsend : "Mail Gönder",
         placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.",
@@ -9072,6 +9332,7 @@ export const langTr =
             clmVat : "KDV",
             clmAmount : "Tutar",
             clmTotal : "G.Toplam",
+            clmTotalHt : "Ver.Haric Top.",
             clmCreateDate: "Kayıt Tarihi",
             clmMargin :"Marj",
             clmDescription :"Açıklama",
@@ -9083,8 +9344,13 @@ export const langTr =
         popDiscount : 
         {
             title: "Evrak İndirimi",
-            Percent : "Yüzde",
-            Price : "Tutar"
+            chkDocDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            Percent1 : "1. İnd. Yüzde",
+            Price1 : "1. İnd. Tutar",
+            Percent2 : "2. İnd. Yüzde",
+            Price2 : "2. İnd. Tutar",
+            Percent3 : "3. İnd. Yüzde",
+            Price3 : "3. İnd. Tutar"
         },
         popPassword : 
         {
@@ -9441,6 +9707,7 @@ export const langTr =
             clmVat : "KDV",
             clmAmount : "Tutar",
             clmTotal : "G.Toplam",
+            clmTotalHt : "Ver.Haric Top.",
             clmCreateDate: "Kayıt Tarihi",
             clmMargin :"Marj",
             clmDescription :"Açıklama",
@@ -9451,8 +9718,13 @@ export const langTr =
         popDiscount : 
         {
             title: "Evrak İndirimi",
-            Percent : "Yüzde",
-            Price : "Tutar"
+            chkDocDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            Percent1 : "1. İnd. Yüzde",
+            Price1 : "1. İnd. Tutar",
+            Percent2 : "2. İnd. Yüzde",
+            Price2 : "2. İnd. Tutar",
+            Percent3 : "3. İnd. Yüzde",
+            Price3 : "3. İnd. Tutar"
         },
         popPassword : 
         {
@@ -9707,6 +9979,7 @@ export const langTr =
         txtUnitFactor : "Birim Katsayısı",
         txtUnitQuantity : "Birim Miktarı",
         txtTotalQuantity : "Toplam Miktar",
+        txtUnitPrice: "Birim Fiyatı",
         btnView : "Görüntüle",
         btnMailsend : "Mail Gönder",
         placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.",
@@ -9746,6 +10019,7 @@ export const langTr =
             clmVat : "KDV",
             clmAmount : "Tutar",
             clmTotal : "G.Toplam",
+            clmTotalHt : "Ver.Haric Top.",
             clmCreateDate: "Kayıt Tarihi",
             clmMargin :"Marj",
             clmDescription :"Açıklama",
@@ -9757,8 +10031,13 @@ export const langTr =
         popDiscount : 
         {
             title: "Evrak İndirimi",
-            Percent : "Yüzde",
-            Price : "Tutar"
+            chkDocDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            Percent1 : "1. İnd. Yüzde",
+            Price1 : "1. İnd. Tutar",
+            Percent2 : "2. İnd. Yüzde",
+            Price2 : "2. İnd. Tutar",
+            Percent3 : "3. İnd. Yüzde",
+            Price3 : "3. İnd. Tutar"
         },
         popPassword : 
         {
@@ -10068,6 +10347,7 @@ export const langTr =
         txtUnitFactor : "Birim Katsayısı",
         txtUnitQuantity : "Birim Miktarı",
         txtTotalQuantity : "Toplam Miktar",
+        txtUnitPrice: "Birim Fiyatı",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -10110,6 +10390,7 @@ export const langTr =
             clmVat : "KDV",
             clmAmount : "Tutar",
             clmTotal : "G.Toplam",
+            clmTotalHt : "Ver.Haric Top.",
             clmCreateDate: "Kayıt Tarihi",
             clmMargin :"Marj",
             clmDescription :"Açıklama",
@@ -10120,8 +10401,13 @@ export const langTr =
         popDiscount : 
         {
             title: "Evrak İndirimi",
-            Percent : "Yüzde",
-            Price : "Tutar"
+            chkDocDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            Percent1 : "1. İnd. Yüzde",
+            Price1 : "1. İnd. Tutar",
+            Percent2 : "2. İnd. Yüzde",
+            Price2 : "2. İnd. Tutar",
+            Percent3 : "3. İnd. Yüzde",
+            Price3 : "3. İnd. Tutar"
         },
         popPassword : 
         {
@@ -10362,6 +10648,7 @@ export const langTr =
         txtUnitFactor : "Birim Katsayısı",
         txtUnitQuantity : "Birim Miktarı",
         txtTotalQuantity : "Toplam Miktar",
+        txtUnitPrice: "Birim Fiyatı",
         btnView : "Görüntüle",
         btnMailsend : "Mail Gönder",
         placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.",
@@ -10401,6 +10688,7 @@ export const langTr =
             clmVat : "KDV",
             clmAmount : "Tutar",
             clmTotal : "G.Toplam",
+            clmTotalHt : "Ver.Haric Top.",
             clmCreateDate: "Kayıt Tarihi",
             clmMargin :"Marj",
             clmDescription :"Açıklama",
@@ -10412,8 +10700,13 @@ export const langTr =
         popDiscount : 
         {
             title: "Evrak İndirimi",
-            Percent : "Yüzde",
-            Price : "Tutar"
+            chkDocDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            Percent1 : "1. İnd. Yüzde",
+            Price1 : "1. İnd. Tutar",
+            Percent2 : "2. İnd. Yüzde",
+            Price2 : "2. İnd. Tutar",
+            Percent3 : "3. İnd. Yüzde",
+            Price3 : "3. İnd. Tutar"
         },
         popPassword : 
         {
@@ -10783,6 +11076,7 @@ export const langTr =
         txtUnitFactor : "Birim Katsayısı",
         txtUnitQuantity : "Birim Miktarı",
         txtTotalQuantity : "Toplam Miktar",
+        txtUnitPrice: "Birim Fiyatı",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -10827,6 +11121,7 @@ export const langTr =
             clmVat : "KDV",
             clmAmount : "Tutar",
             clmTotal : "G.Toplam",
+            clmTotalHt : "Ver.Haric Top.",
             clmCreateDate: "Kayıt Tarihi",
             clmMargin :"Marj",
             clmMulticode :"T.Kodu",
@@ -10839,8 +11134,13 @@ export const langTr =
         popDiscount : 
         {
             title: "Evrak İndirimi",
-            Percent : "Yüzde",
-            Price : "Tutar"
+            chkDocDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            Percent1 : "1. İnd. Yüzde",
+            Price1 : "1. İnd. Tutar",
+            Percent2 : "2. İnd. Yüzde",
+            Price2 : "2. İnd. Tutar",
+            Percent3 : "3. İnd. Yüzde",
+            Price3 : "3. İnd. Tutar"
         },
         popPassword : 
         {
@@ -11111,6 +11411,7 @@ export const langTr =
         txtUnitFactor : "Birim Katsayısı",
         txtUnitQuantity : "Birim Miktarı",
         txtTotalQuantity : "Toplam Miktar",
+        txtUnitPrice: "Birim Fiyatı",
         btnView : "Görüntüle",
         btnMailsend : "Mail Gönder",
         placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.",
@@ -11151,6 +11452,7 @@ export const langTr =
             clmVat : "KDV",
             clmAmount : "Tutar",
             clmTotal : "G.Toplam",
+            clmTotalHt : "Ver.Haric Top.",
             clmCreateDate: "Kayıt Tarihi",
             clmMargin :"Marj",
             clmDescription :"Açıklama",
@@ -11162,8 +11464,13 @@ export const langTr =
         popDiscount : 
         {
             title: "Evrak İndirimi",
-            Percent : "Yüzde",
-            Price : "Tutar"
+            chkDocDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            Percent1 : "1. İnd. Yüzde",
+            Price1 : "1. İnd. Tutar",
+            Percent2 : "2. İnd. Yüzde",
+            Price2 : "2. İnd. Tutar",
+            Percent3 : "3. İnd. Yüzde",
+            Price3 : "3. İnd. Tutar"
         },
         popPassword : 
         {
@@ -13304,6 +13611,7 @@ export const langTr =
         txtUnitFactor : "Birim Katsayısı",
         txtUnitQuantity : "Birim Miktarı",
         txtTotalQuantity : "Toplam Miktar",
+        txtUnitPrice: "Birim Fiyatı",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -13340,6 +13648,7 @@ export const langTr =
             clmVat : "KDV",
             clmAmount : "Tutar",
             clmTotal : "G.Toplam",
+            clmTotalHt : "Ver.Haric Top.",
             clmCreateDate: "Kayıt Tarihi",
             clmMargin :"Marj",
             clmMulticode :"T.Kodu",
@@ -13351,8 +13660,13 @@ export const langTr =
         popDiscount : 
         {
             title: "Evrak İndirimi",
-            Percent : "Yüzde",
-            Price : "Tutar"
+            chkDocDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            Percent1 : "1. İnd. Yüzde",
+            Price1 : "1. İnd. Tutar",
+            Percent2 : "2. İnd. Yüzde",
+            Price2 : "2. İnd. Tutar",
+            Percent3 : "3. İnd. Yüzde",
+            Price3 : "3. İnd. Tutar"
         },
         popPassword : 
         {
@@ -13594,6 +13908,7 @@ export const langTr =
         txtUnitFactor : "Birim Katsayısı",
         txtUnitQuantity : "Birim Miktarı",
         txtTotalQuantity : "Toplam Miktar",
+        txtUnitPrice: "Birim Fiyatı",
         btnView : "Görüntüle",
         btnMailsend : "Mail Gönder",
         placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.",
@@ -13634,6 +13949,7 @@ export const langTr =
             clmVat : "KDV",
             clmAmount : "Tutar",
             clmTotal : "G.Toplam",
+            clmTotalHt : "Ver.Haric Top.",
             clmCreateDate: "Kayıt Tarihi",
             clmMargin :"Marj",
             clmDescription :"Açıklama",
@@ -13644,8 +13960,13 @@ export const langTr =
         popDiscount : 
         {
             title: "Evrak İndirimi",
-            Percent : "Yüzde",
-            Price : "Tutar"
+            chkDocDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            Percent1 : "1. İnd. Yüzde",
+            Price1 : "1. İnd. Tutar",
+            Percent2 : "2. İnd. Yüzde",
+            Price2 : "2. İnd. Tutar",
+            Percent3 : "3. İnd. Yüzde",
+            Price3 : "3. İnd. Tutar"
         },
         popPassword : 
         {

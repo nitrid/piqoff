@@ -3206,6 +3206,7 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité Unitaire",  
         txtTotalQuantity : "Quantité totale",  
+        txtUnitPrice : "Birim Fiyatı", // BAK
         txtExpFee : "Pénalités de Retard ", 
         dtExpDate : "Date d'Echéance", 
         getOffers : "Recherche Proposition", 
@@ -3708,6 +3709,7 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire ",  
         txtUnitQuantity : "Quantité Unitaire",  
         txtTotalQuantity : "Quantité totale",  
+        txtUnitPrice : "Birim Fiyatı", // BAK
         txtExpFee : "Pénalités de Retard", 
         dtExpDate : "Date d'Echéance", 
         getOffers : "Recherche Proposition",  
@@ -3717,6 +3719,7 @@ export const langFr =
         placeMailHtmlEditor : "Veuillez saisir votre texte.", 
         validDesign : "Veuillez séléctionner le design.",  
         validMail : "Veuillez ne pas laisser le champs vide.",  
+        txtTotalHt : "Total HT",
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -3763,6 +3766,7 @@ export const langFr =
             clmVat : "TVA",
             clmAmount : "Total" ,
             clmTotal : "Total Général",
+            clmTotalHt : "Total HT",
             clmDispatch : "No Bon de Livraison",
             clmCreateDate: "Date d'Enregistrement",
             clmMargin :"Marge",
@@ -3785,8 +3789,13 @@ export const langFr =
         popDiscount : 
         {
             title: "Télécharger Document",
-            Percent : "Pourcentage",
-            Price : "Total" 
+            chkDocDiscount : "1. remises n'est pas indiqué sur les lignes",
+            Percent1 : "1. Remise % ",
+            Price1 : "1. Remise",
+            Percent2 : "2. Remise %",
+            Price2 : "2. Remise",
+            Percent3 : "3. Remise %",
+            Price3 : "3. Remise"
         },
         popPassword : 
         {
@@ -4159,6 +4168,13 @@ export const langFr =
         txtDiscountPer1 : "1. Remise % ",  // BAK
         txtDiscountPer2 : "2. Remise % ",  // BAK
         txtDiscountPer3 : "3. Remise % ",  // BAK
+        serviceAdd : "Ajouter un service",  
+        pg_service : 
+        {
+            title : "Prestations de service",   
+            clmCode : "Code",   
+            clmName : "Nom"   
+        },
     },
     ftr_02_003 : // "İade Faturası"
     {
@@ -4198,6 +4214,7 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
+        txtUnitPrice : "Birim Fiyatı", // BAK
         txtExpFee : "Pénalités de Retard", 
         dtExpDate : "Date d'Echéance", 
         getProforma : "Rechercher Proforma ", 
@@ -4206,6 +4223,7 @@ export const langFr =
         placeMailHtmlEditor : "Veuillez saisir votre texte .", 
         validDesign : "Veuillez choisir un design.",  
         validMail : "Veuillez ne pas laisser le champs vide.",  
+        txtTotalHt : "Total HT",
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -4252,6 +4270,7 @@ export const langFr =
             clmVat : "TVA",
             clmAmount : "Total" ,
             clmTotal : "Total Général",
+            clmTotalHt : "Total HT",
             clmDispatch : "No Bon de Livraison",
             clmCreateDate: "Date d'Enregistrement",
             clmMargin :"Marge",
@@ -4276,8 +4295,13 @@ export const langFr =
         popDiscount : 
         {
             title: "Télécharger Document",
-            Percent : "Pourcentage",
-            Price : "Total" 
+            chkDocDiscount : "1. remises n'est pas indiqué sur les lignes",
+            Percent1 : "1. Remise % ",
+            Price1 : "1. Remise",
+            Percent2 : "2. Remise %",
+            Price2 : "2. Remise",
+            Percent3 : "3. Remise %",
+            Price3 : "3. Remise"
         },
         popPassword : 
         {
@@ -4554,6 +4578,53 @@ export const langFr =
         txtDiscountPer1 : "1. Remise % ",  // BAK
         txtDiscountPer2 : "2. Remise % ",  // BAK
         txtDiscountPer3 : "3. Remise % ",  // BAK
+        serviceAdd : "Ajouter un service",  
+        pg_service : 
+        {
+            title : "Prestations de service",   
+            clmCode : "Code",   
+            clmName : "Nom"   
+        },
+        msgMissItemCode:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Code Non Retrouvé"
+        },
+        msgMultiCodeCount:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Nombre de Produit Ajouté"
+        },
+        popMultiItem:
+        {
+            title: "Ajout Groupé de Produit",
+            btnApprove: "Chercher Produits",
+            btnClear : "Vider Liste",
+            btnSave : "Ajouter Lignes",
+        },
+        cmbMultiItemType : 
+        {
+            title : "Mode de Recherche",
+            customerCode : "En Fonction du Code Fournisseur",
+            ItemCode : "En Fonction du Code Produit"
+        },
+        grdMultiItem : 
+        {
+            clmCode : "Référence Produit",
+            clmMulticode : "FRN.Code",
+            clmName : "Nom du produit",
+            clmQuantity : "Quantité"
+        },
+        msgMultiData:
+        {
+            title: "Attention",
+            btn01: "Effacer Liste et Ajoute le Tout",
+            btn02: "Inclure Les Nouvelles Saisies à la Liste",
+            msg: "Produits Présents dans la Liste! "
+        },
+        tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
     },
     ftr_02_004 : // "Fiyat Farkı Faturası"
     {
@@ -4594,6 +4665,7 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
+        txtUnitPrice : "Birim Fiyatı", // BAK
         txtExpFee : "Pénalités de Retard", 
         dtExpDate : "Date d'Echéance", 
         btnView : "Aperçu", 
@@ -4601,6 +4673,7 @@ export const langFr =
         placeMailHtmlEditor : "Veuillez saisir votre texte au mail.", 
         validDesign : "Veuillez sélectionner le design.",  
         validMail : "Veuillez ne pas laisser le champs vide.",  
+        txtTotalHt : "Total HT",
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -4642,6 +4715,7 @@ export const langFr =
             clmVat : "TVA",
             clmAmount : "Total" ,
             clmTotal : "Total Général",
+            clmTotalHt : "Total HT",
             clmCreateDate: "Date d'Enregistrement",
             clmInvNo : "No Facture",
             clmInvDate : "Date Facture",
@@ -4667,8 +4741,13 @@ export const langFr =
         popDiscount : 
         {
             title: "Télécharger Document",
-            Percent : "Pourcentage",
-            Price : "Total" 
+            chkDocDiscount : "1. remises n'est pas indiqué sur les lignes",
+            Percent1 : "1. Remise % ",
+            Price1 : "1. Remise",
+            Percent2 : "2. Remise %",
+            Price2 : "2. Remise",
+            Percent3 : "3. Remise %",
+            Price3 : "3. Remise"
         },
         popPassword : 
         {
@@ -4923,6 +5002,53 @@ export const langFr =
         txtDiscountPer1 : "1. Remise % ",  // BAK
         txtDiscountPer2 : "2. Remise % ",  // BAK
         txtDiscountPer3 : "3. Remise % ",  // BAK
+        serviceAdd : "Ajouter un service",  
+        pg_service : 
+        {
+            title : "Prestations de service",   
+            clmCode : "Code",   
+            clmName : "Nom"   
+        },
+        msgMissItemCode:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Code Non Retrouvé"
+        },
+        msgMultiCodeCount:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Nombre de Produit Ajouté"
+        },
+        popMultiItem:
+        {
+            title: "Ajout Groupé de Produit",
+            btnApprove: "Chercher Produits",
+            btnClear : "Vider Liste",
+            btnSave : "Ajouter Lignes",
+        },
+        cmbMultiItemType : 
+        {
+            title : "Mode de Recherche",
+            customerCode : "En Fonction du Code Fournisseur",
+            ItemCode : "En Fonction du Code Produit"
+        },
+        grdMultiItem : 
+        {
+            clmCode : "Référence Produit",
+            clmMulticode : "FRN.Code",
+            clmName : "Nom du produit",
+            clmQuantity : "Quantité"
+        },
+        msgMultiData:
+        {
+            title: "Attention",
+            btn01: "Effacer Liste et Ajoute le Tout",
+            btn02: "Inclure Les Nouvelles Saisies à la Liste",
+            msg: "Produits Présents dans la Liste! "
+        },
+        tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
     },
     ftr_02_005 : // "Şube Satış Faturası"
     {
@@ -4962,7 +5088,8 @@ export const langFr =
         txtbalance : "Solde total restant",   
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
-        txtTotalQuantity : "Quantité unitaire",  
+        txtTotalQuantity : "Quantité totale", 
+        txtUnitPrice : "Birim Fiyatı", // BAK
         txtExpFee : "Pénalités de Retard", 
         dtExpDate : "Date d'Echéance", 
         btnView : "Aperçu", 
@@ -5015,6 +5142,7 @@ export const langFr =
             clmVat : "TVA",
             clmAmount : "Total" ,
             clmTotal : "Total Général",
+            clmTotalHt : "Total HT",
             clmDispatch : "No Bon de Livraison",
             clmCreateDate: "Date d'Enregistrement",
             clmMargin :"Marge",
@@ -5037,8 +5165,13 @@ export const langFr =
         popDiscount : 
         {
             title: "Télécharger Document",
-            Percent : "Pourcentage",
-            Price : "Total" 
+            chkDocDiscount : "1. remises n'est pas indiqué sur les lignes",
+            Percent1 : "1. Remise % ",
+            Price1 : "1. Remise",
+            Percent2 : "2. Remise %",
+            Price2 : "2. Remise",
+            Percent3 : "3. Remise %",
+            Price3 : "3. Remise"
         },
         popPassword : 
         {
@@ -5361,6 +5494,14 @@ export const langFr =
         txtDiscountPer1 : "1. Remise % ",  // BAK
         txtDiscountPer2 : "2. Remise % ",  // BAK
         txtDiscountPer3 : "3. Remise % ",  // BAK
+        txtTotalHt : "Total HT",
+        serviceAdd : "Ajouter un service",  
+        pg_service : 
+        {
+            title : "Prestations de service",   
+            clmCode : "Code",   
+            clmName : "Nom"   
+        },
     },
     ftr_02_006 : // "Fiyat Farkı Alış Faturası"
     {
@@ -5401,8 +5542,10 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
+        txtUnitPrice : "Birim Fiyatı", // BAK
         txtExpFee : "Pénalités de Retard", 
         dtExpDate : "Date d'Echéance", 
+        txtTotalHt : "Total HT",
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -5445,6 +5588,7 @@ export const langFr =
             clmVat : "TVA",
             clmAmount : "Total" ,
             clmTotal : "Total Général",
+            clmTotalHt : "Total HT",
             clmCreateDate: "Date d'Enregistrement",
             clmInvNo : "No Facture",
             clmInvDate : "Date Facture",
@@ -5470,8 +5614,13 @@ export const langFr =
         popDiscount : 
         {
             title: "Télécharger Document",
-            Percent : "Pourcentage",
-            Price : "Total" 
+            chkDocDiscount : "1. remises n'est pas indiqué sur les lignes",
+            Percent1 : "1. Remise % ",
+            Price1 : "1. Remise",
+            Percent2 : "2. Remise %",
+            Price2 : "2. Remise",
+            Percent3 : "3. Remise %",
+            Price3 : "3. Remise"
         },
         popPassword : 
         {
@@ -5705,6 +5854,13 @@ export const langFr =
         txtDiscountPer1 : "1. Remise % ",  // BAK
         txtDiscountPer2 : "2. Remise % ",  // BAK
         txtDiscountPer3 : "3. Remise % ",  // BAK
+        serviceAdd : "Ajouter un service",  
+        pg_service : 
+        {
+            title : "Prestations de service",   
+            clmCode : "Code",   
+            clmName : "Nom"   
+        },
     },
     ftr_02_007 : // "İade Alış Faturası"
     {
@@ -5744,9 +5900,11 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
+        txtUnitPrice : "Birim Fiyatı", // BAK
         txtExpFee : "Pénalités de Retard", 
         dtExpDate : "Date d'Echéance", 
         getProforma : "Rechercher Proforma ", 
+        txtTotalHt : "Total HT",
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -5793,6 +5951,7 @@ export const langFr =
             clmVat : "TVA",
             clmAmount : "Total" ,
             clmTotal : "Total Général",
+            clmTotalHt : "Total HT",
             clmDispatch : "No Bon de Livraison",
             clmCreateDate: "Date d'Enregistrement",
             clmMargin :"Marge",
@@ -5817,8 +5976,13 @@ export const langFr =
         popDiscount : 
         {
             title: "Télécharger Document",
-            Percent : "Pourcentage",
-            Price : "Total" 
+            chkDocDiscount : "1. remises n'est pas indiqué sur les lignes",
+            Percent1 : "1. Remise % ",
+            Price1 : "1. Remise",
+            Percent2 : "2. Remise %",
+            Price2 : "2. Remise",
+            Percent3 : "3. Remise %",
+            Price3 : "3. Remise"
         },
         popPassword : 
         {
@@ -6074,6 +6238,13 @@ export const langFr =
         txtDiscountPer1 : "1. Remise % ",  // BAK
         txtDiscountPer2 : "2. Remise % ",  // BAK
         txtDiscountPer3 : "3. Remise % ",  // BAK
+        serviceAdd : "Ajouter un service",  
+        pg_service : 
+        {
+            title : "Prestations de service",   
+            clmCode : "Code",   
+            clmName : "Nom"   
+        },
     },
     ftr_02_008 : // "Şube Alış Faturası"
     {
@@ -6113,7 +6284,8 @@ export const langFr =
         txtbalance : "Solde total restant",   
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
-        txtTotalQuantity : "Quantité unitaire",  
+        txtTotalQuantity : "Quantité totale",  
+        txtUnitPrice : "Birim Fiyatı", // BAK
         txtExpFee : "Pénalités de Retard", 
         dtExpDate : "Date d'Echéance", 
         btnView : "Aperçu", 
@@ -6121,6 +6293,7 @@ export const langFr =
         placeMailHtmlEditor : "Veuillez saisir votre texte .", 
         validDesign : "Veuillez sélectionner le design.",  
         validMail : "Veuillez ne pas laisser le champs vide.",  
+        txtTotalHt : "Total HT",
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -6166,6 +6339,7 @@ export const langFr =
             clmVat : "TVA",
             clmAmount : "Total" ,
             clmTotal : "Total Général",
+            clmTotalHt : "Total HT",
             clmDispatch : "No Bon de Livraison",
             clmCreateDate: "Date d'Enregistrement",
             clmMargin :"Marge",
@@ -6188,8 +6362,13 @@ export const langFr =
         popDiscount : 
         {
             title: "Télécharger Document",
-            Percent : "Pourcentage",
-            Price : "Total" 
+            chkDocDiscount : "1. remises n'est pas indiqué sur les lignes",
+            Percent1 : "1. Remise % ",
+            Price1 : "1. Remise",
+            Percent2 : "2. Remise %",
+            Price2 : "2. Remise",
+            Percent3 : "3. Remise %",
+            Price3 : "3. Remise"
         },
         popPassword : 
         {
@@ -6512,6 +6691,13 @@ export const langFr =
         txtDiscountPer1 : "1. Remise % ",  // BAK
         txtDiscountPer2 : "2. Remise % ",  // BAK
         txtDiscountPer3 : "3. Remise % ",  // BAK
+        serviceAdd : "Ajouter un service",  
+        pg_service : 
+        {
+            title : "Prestations de service",   
+            clmCode : "Code",   
+            clmName : "Nom"   
+        },
     },
     ftr_04_001 : // "Proforma Fiyat Farkı Faturası" 
     {
@@ -6550,6 +6736,8 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
+        txtUnitPrice : "Birim Fiyatı", // BAK
+        txtTotalHt : "Total HT",
         msgDiscount:
         {
             title: "Attention",  
@@ -6597,6 +6785,7 @@ export const langFr =
             clmVat : "TVA",
             clmAmount : "Total",
             clmTotal : "Total Général",
+            clmTotalHt : "Total HT",
             clmCreateDate: "Date Enregistrement",
             clmInvNo : "No Facture",
             clmInvDate : "Date Facture",
@@ -6621,9 +6810,14 @@ export const langFr =
         },
         popDiscount : 
         {
-            title: "Remise Facture",
-            Percent : "Pourcentage",
-            Price : "Total"
+            title: "Télécharger Document",
+            chkDocDiscount : "1. remises n'est pas indiqué sur les lignes",
+            Percent1 : "1. Remise % ",
+            Price1 : "1. Remise",
+            Percent2 : "2. Remise %",
+            Price2 : "2. Remise",
+            Percent3 : "3. Remise %",
+            Price3 : "3. Remise"
         },
         popPassword : 
         {
@@ -6830,6 +7024,13 @@ export const langFr =
             btn01:"Aller au document",
             msg: "Document trouvé !"
         },
+        serviceAdd : "Ajouter un service",  
+        pg_service : 
+        {
+            title : "Prestations de service",   
+            clmCode : "Code",   
+            clmName : "Nom"   
+        },
     },
     ftr_04_002 : // "Proforma Satış Faturası" 
     {
@@ -6870,9 +7071,11 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire ",  
         txtUnitQuantity : "Quantité Unitaire",  
         txtTotalQuantity : "Quantité totale",  
+        txtUnitPrice : "Birim Fiyatı", // BAK
         txtExpFee : "Pénalités de Retard", 
         dtExpDate : "Date d'Echéance", 
         getOffers : "Teklif Getir",  
+        txtTotalHt : "Total HT",
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -6918,6 +7121,7 @@ export const langFr =
             clmVat : "TVA",
             clmAmount : "Total" ,
             clmTotal : "Total Général",
+            clmTotalHt : "Total HT",
             clmDispatch : "No Bon de Livraison",
             clmCreateDate: "Date d'Enregistrement",
             clmMargin :"Marge",
@@ -6940,8 +7144,13 @@ export const langFr =
         popDiscount : 
         {
             title: "Télécharger Document",
-            Percent : "Pourcentage",
-            Price : "Total" 
+            chkDocDiscount : "1. remises n'est pas indiqué sur les lignes",
+            Percent1 : "1. Remise % ",
+            Price1 : "1. Remise",
+            Percent2 : "2. Remise %",
+            Price2 : "2. Remise",
+            Percent3 : "3. Remise %",
+            Price3 : "3. Remise"
         },
         popPassword : 
         {
@@ -7224,6 +7433,13 @@ export const langFr =
             clmTotal : "Total",  
             clmPrice : "Prix",  
         },
+        serviceAdd : "Ajouter un service",  
+        pg_service : 
+        {
+            title : "Prestations de service",   
+            clmCode : "Code",   
+            clmName : "Nom"   
+        },
     },    
     ftr_04_003 : // "Proforma Alış Faturası"
     {
@@ -7271,9 +7487,11 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité Unitaire",  
         txtTotalQuantity : "Quantité totale",  
+        txtUnitPrice : "Birim Fiyatı", // BAK
         txtExpFee : "Pénalités de Retard ", 
         dtExpDate : "Date d'Echéance", 
         getOffers : "Recherche Proposition", 
+        txtTotalHt : "Total HT",
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -7320,6 +7538,7 @@ export const langFr =
             clmVat : "TVA",
             clmAmount : "Total" ,
             clmTotal : "Total Général",
+            clmTotalHt : "Total HT",
             clmDispatch : "No Bon de Livraison",
             clmCreateDate: "Date d'Enregistrement",
             clmMargin :"Marge",
@@ -7343,8 +7562,13 @@ export const langFr =
         popDiscount : 
         {
             title: "Télécharger Document",
-            Percent : "Pourcentage",
-            Price : "Total" 
+            chkDocDiscount : "1. remises n'est pas indiqué sur les lignes",
+            Percent1 : "1. Remise % ",
+            Price1 : "1. Remise",
+            Percent2 : "2. Remise %",
+            Price2 : "2. Remise",
+            Percent3 : "3. Remise %",
+            Price3 : "3. Remise"
         },
         popPassword : 
         {
@@ -7678,6 +7902,13 @@ export const langFr =
             clmTotal : "Total",  
             clmPrice : "Prix",  
         },
+        serviceAdd : "Ajouter un service",  
+        pg_service : 
+        {
+            title : "Prestations de service",   
+            clmCode : "Code",   
+            clmName : "Nom"   
+        },
     },
     ftr_04_004 : // "Proforma İade Faturası"
     {
@@ -7717,8 +7948,10 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
+        txtUnitPrice : "Birim Fiyatı", // BAK
         txtExpFee : "Pénalités de Retard", 
         dtExpDate : "Date d'Echéance", 
+        txtTotalHt : "Total HT",
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -7764,6 +7997,7 @@ export const langFr =
             clmVat : "TVA",
             clmAmount : "Total" ,
             clmTotal : "Total Général",
+            clmTotalHt : "Total HT",
             clmDispatch : "No Bon de Livraison",
             clmCreateDate: "Date d'Enregistrement",
             clmMargin :"Marge",
@@ -7788,8 +8022,13 @@ export const langFr =
         popDiscount : 
         {
             title: "Télécharger Document",
-            Percent : "Pourcentage",
-            Price : "Total" 
+            chkDocDiscount : "1. remises n'est pas indiqué sur les lignes",
+            Percent1 : "1. Remise % ",
+            Price1 : "1. Remise",
+            Percent2 : "2. Remise %",
+            Price2 : "2. Remise",
+            Percent3 : "3. Remise %",
+            Price3 : "3. Remise"
         },
         popPassword : 
         {
@@ -8006,6 +8245,13 @@ export const langFr =
             btn01:"Aller au document",
             msg: "Document trouvé !"
         },
+        serviceAdd : "Ajouter un service",  
+        pg_service : 
+        {
+            title : "Prestations de service",   
+            clmCode : "Code",   
+            clmName : "Nom"   
+        },
     },
     ftr_04_005 : // "Şube Satış Faturası"
     {
@@ -8045,9 +8291,11 @@ export const langFr =
         txtbalance : "Solde total restant",   
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
-        txtTotalQuantity : "Quantité unitaire",  
+        txtTotalQuantity : "Quantité totale",  
+        txtUnitPrice : "Birim Fiyatı", // BAK
         txtExpFee : "Pénalités de Retard", 
         dtExpDate : "Date d'Echéance", 
+        txtTotalHt : "Total HT",
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -8093,6 +8341,7 @@ export const langFr =
             clmVat : "TVA",
             clmAmount : "Total" ,
             clmTotal : "Total Général",
+            clmTotalHt : "Total HT",
             clmDispatch : "No Bon de Livraison",
             clmCreateDate: "Date d'Enregistrement",
             clmMargin :"Marge",
@@ -8115,8 +8364,13 @@ export const langFr =
         popDiscount : 
         {
             title: "Télécharger Document",
-            Percent : "Pourcentage",
-            Price : "Total" 
+            chkDocDiscount : "1. remises n'est pas indiqué sur les lignes",
+            Percent1 : "1. Remise % ",
+            Price1 : "1. Remise",
+            Percent2 : "2. Remise %",
+            Price2 : "2. Remise",
+            Percent3 : "3. Remise %",
+            Price3 : "3. Remise"
         },
         popPassword : 
         {
@@ -8388,6 +8642,13 @@ export const langFr =
             title: "Attention",
             btn01:"Aller au document",
             msg: "Document trouvé !"
+        },
+        serviceAdd : "Ajouter un service",  
+        pg_service : 
+        {
+            title : "Prestations de service",   
+            clmCode : "Code",   
+            clmName : "Nom"   
         },
     },
     promo_01_001: //  "Promosyon Tanımları"
@@ -8696,6 +8957,7 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
+        txtUnitPrice : "Birim Fiyatı", // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -8732,6 +8994,7 @@ export const langFr =
             clmVat : "TVA",
             clmAmount : "Total" ,
             clmTotal : "Total Général",
+            clmTotalHt : "Total HT",
             clmCreateDate: "Date d'Enregistrement",
             clmMargin :"Marge",
             clmDescription :"Motif",
@@ -8743,8 +9006,13 @@ export const langFr =
         popDiscount : 
         {
             title: "Télécharger Document",
-            Percent : "Pourcentage",
-            Price : "Total" 
+            chkDocDiscount : "1. remises n'est pas indiqué sur les lignes",
+            Percent1 : "1. Remise % ",
+            Price1 : "1. Remise",
+            Percent2 : "2. Remise %",
+            Price2 : "2. Remise",
+            Percent3 : "3. Remise %",
+            Price3 : "3. Remise"
         },
         popPassword : 
         {
@@ -9028,6 +9296,7 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
+        txtUnitPrice : "Birim Fiyatı", // BAK
         btnView : "Aperçu", 
         btnMailsend : "Envoyer E-Mail", 
         placeMailHtmlEditor : "Veuillez saisir votre texte .", 
@@ -9068,6 +9337,7 @@ export const langFr =
             clmVat : "TVA",
             clmAmount : "Total" ,
             clmTotal : "Total Général",
+            clmTotalHt : "Total HT",
             clmCreateDate: "Date d'Enregistrement",
             clmMargin :"Marge",
             clmDescription :"Motif",
@@ -9079,8 +9349,13 @@ export const langFr =
         popDiscount : 
         {
             title: "Télécharger Document",
-            Percent : "Pourcentage",
-            Price : "Total" 
+            chkDocDiscount : "1. remises n'est pas indiqué sur les lignes",
+            Percent1 : "1. Remise % ",
+            Price1 : "1. Remise",
+            Percent2 : "2. Remise %",
+            Price2 : "2. Remise",
+            Percent3 : "3. Remise %",
+            Price3 : "3. Remise"
         },
         popPassword : 
         {
@@ -9390,6 +9665,7 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
+        txtUnitPrice : "Birim Fiyatı", // BAK
         btnView : "Aperçu", 
         btnMailsend : "Envoyer E-Mail", 
         placeMailHtmlEditor : "Veuillez saisir votre texte .", 
@@ -9437,6 +9713,7 @@ export const langFr =
             clmVat : "TVA",
             clmAmount : "Total" ,
             clmTotal : "Total Général",
+            clmTotalHt : "Total HT",
             clmCreateDate: "Date d'Enregistrement",
             clmMargin :"Marge",
             clmDescription :"Motif",
@@ -9447,8 +9724,13 @@ export const langFr =
         popDiscount : 
         {
             title: "Télécharger Document",
-            Percent : "Pourcentage",
-            Price : "Total" 
+            chkDocDiscount : "1. remises n'est pas indiqué sur les lignes",
+            Percent1 : "1. Remise % ",
+            Price1 : "1. Remise",
+            Percent2 : "2. Remise %",
+            Price2 : "2. Remise",
+            Percent3 : "3. Remise %",
+            Price3 : "3. Remise"
         },
         popPassword : 
         {
@@ -9703,6 +9985,7 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
+        txtUnitPrice : "Birim Fiyatı", // BAK
         btnView : "Aperçu", 
         btnMailsend : "Envoyer E-Mail", 
         placeMailHtmlEditor : "Veuillez saisir votre texte .", 
@@ -9742,6 +10025,7 @@ export const langFr =
             clmVat : "TVA",
             clmAmount : "Total" ,
             clmTotal : "Total Général",
+            clmTotalHt : "Total HT",
             clmCreateDate: "Date d'Enregistrement",
             clmMargin :"Marge",
             clmDescription :"Motif",
@@ -9753,8 +10037,13 @@ export const langFr =
         popDiscount : 
         {
             title: "Télécharger Document",
-            Percent : "Pourcentage",
-            Price : "Total" 
+            chkDocDiscount : "1. remises n'est pas indiqué sur les lignes",
+            Percent1 : "1. Remise % ",
+            Price1 : "1. Remise",
+            Percent2 : "2. Remise %",
+            Price2 : "2. Remise",
+            Percent3 : "3. Remise %",
+            Price3 : "3. Remise"
         },
         popPassword : 
         {
@@ -10064,6 +10353,7 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
+        txtUnitPrice : "Birim Fiyatı", // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -10106,6 +10396,7 @@ export const langFr =
             clmVat : "TVA",
             clmAmount : "Total" ,
             clmTotal : "Total Général",
+            clmTotalHt : "Total HT",
             clmCreateDate: "Date d'Enregistrement",
             clmMargin :"Marge",
             clmDescription :"Motif",
@@ -10116,8 +10407,13 @@ export const langFr =
         popDiscount : 
         {
             title: "Télécharger Document",
-            Percent : "Pourcentage",
-            Price : "Total" 
+            chkDocDiscount : "1. remises n'est pas indiqué sur les lignes",
+            Percent1 : "1. Remise % ",
+            Price1 : "1. Remise",
+            Percent2 : "2. Remise %",
+            Price2 : "2. Remise",
+            Percent3 : "3. Remise %",
+            Price3 : "3. Remise"
         },
         popPassword : 
         {
@@ -10358,6 +10654,7 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
+        txtUnitPrice : "Birim Fiyatı", // BAK
         btnView : "Aperçu", 
         btnMailsend : "Envoyer E-Mail", 
         placeMailHtmlEditor : "Veuillez saisir votre texte .", 
@@ -10397,6 +10694,7 @@ export const langFr =
             clmVat : "TVA",
             clmAmount : "Total" ,
             clmTotal : "Total Général",
+            clmTotalHt : "Total HT",
             clmCreateDate: "Date d'Enregistrement",
             clmMargin :"Marge",
             clmDescription :"Motif",
@@ -10408,8 +10706,13 @@ export const langFr =
         popDiscount : 
         {
             title: "Télécharger Document",
-            Percent : "Pourcentage",
-            Price : "Total" 
+            chkDocDiscount : "1. remises n'est pas indiqué sur les lignes",
+            Percent1 : "1. Remise % ",
+            Price1 : "1. Remise",
+            Percent2 : "2. Remise %",
+            Price2 : "2. Remise",
+            Percent3 : "3. Remise %",
+            Price3 : "3. Remise"
         },
         popPassword : 
         {
@@ -10779,6 +11082,7 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
+        txtUnitPrice : "Birim Fiyatı", // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -10823,6 +11127,7 @@ export const langFr =
             clmVat : "TVA",
             clmAmount : "Total" ,
             clmTotal : "Total Général",
+            clmTotalHt : "Total HT",
             clmCreateDate: "Date d'Enregistrement",
             clmMargin :"Marge",
             clmMulticode :"FRN. Code",
@@ -10835,8 +11140,13 @@ export const langFr =
         popDiscount : 
         {
             title: "Télécharger Document",
-            Percent : "Pourcentage",
-            Price : "Total" 
+            chkDocDiscount : "1. remises n'est pas indiqué sur les lignes",
+            Percent1 : "1. Remise % ",
+            Price1 : "1. Remise",
+            Percent2 : "2. Remise %",
+            Price2 : "2. Remise",
+            Percent3 : "3. Remise %",
+            Price3 : "3. Remise"
         },
         popPassword : 
         {
@@ -11107,6 +11417,7 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
+        txtUnitPrice : "Birim Fiyatı", // BAK
         btnView : "Aperçu", 
         btnMailsend : "Envoyer E-Mail", 
         placeMailHtmlEditor : "Veuillez saisir votre texte .", 
@@ -11147,6 +11458,7 @@ export const langFr =
             clmVat : "TVA",
             clmAmount : "Total" ,
             clmTotal : "Total Général",
+            clmTotalHt : "Total HT",
             clmCreateDate: "Date d'Enregistrement",
             clmMargin :"Marge",
             clmDescription : "Motif",
@@ -11158,8 +11470,13 @@ export const langFr =
         popDiscount : 
         {
             title: "Télécharger Document",
-            Percent : "Pourcentage",
-            Price : "Total" 
+            chkDocDiscount : "1. remises n'est pas indiqué sur les lignes",
+            Percent1 : "1. Remise % ",
+            Price1 : "1. Remise",
+            Percent2 : "2. Remise %",
+            Price2 : "2. Remise",
+            Percent3 : "3. Remise %",
+            Price3 : "3. Remise"
         },
         popPassword : 
         {
@@ -13300,6 +13617,7 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
+        txtUnitPrice : "Birim Fiyatı", // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -13336,6 +13654,7 @@ export const langFr =
             clmVat : "TVA",
             clmAmount : "Total" ,
             clmTotal : "Total Général",
+            clmTotalHt : "Total HT",
             clmCreateDate: "Date d'Enregistrement",
             clmMargin :"Marge",
             clmMulticode :"FRN.Code",
@@ -13347,8 +13666,13 @@ export const langFr =
         popDiscount : 
         {
             title: "Télécharger Document",
-            Percent : "Pourcentage",
-            Price : "Total" 
+            chkDocDiscount : "1. remises n'est pas indiqué sur les lignes",
+            Percent1 : "1. Remise % ",
+            Price1 : "1. Remise",
+            Percent2 : "2. Remise %",
+            Price2 : "2. Remise",
+            Percent3 : "3. Remise %",
+            Price3 : "3. Remise"
         },
         popPassword : 
         {
@@ -13590,6 +13914,7 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
+        txtUnitPrice : "Birim Fiyatı", // BAK
         btnView : "Aperçu", 
         btnMailsend : "Envoyer E-Mail", 
         placeMailHtmlEditor : "Veuillez saisir votre texte .", 
@@ -13630,6 +13955,7 @@ export const langFr =
             clmVat : "TVA",
             clmAmount : "Total" ,
             clmTotal : "Total Général",
+            clmTotalHt : "Total HT",
             clmCreateDate: "Date d'Enregistrement",
             clmMargin :"Marge",
             clmDescription : "Motif",
@@ -13640,8 +13966,13 @@ export const langFr =
         popDiscount : 
         {
             title: "Télécharger Document",
-            Percent : "Pourcentage",
-            Price : "Total" 
+            chkDocDiscount : "1. remises n'est pas indiqué sur les lignes",
+            Percent1 : "1. Remise % ",
+            Price1 : "1. Remise",
+            Percent2 : "2. Remise %",
+            Price2 : "2. Remise",
+            Percent3 : "3. Remise %",
+            Price3 : "3. Remise"
         },
         popPassword : 
         {

@@ -461,13 +461,21 @@ export default class purchaseInvoice extends React.PureComponent
                                     this.txtUnitFactor.value = e.data.UNIT_FACTOR
                                     this.txtTotalQuantity.value =  e.data.QUANTITY
                                     this.txtUnitQuantity.value = e.data.QUANTITY / e.data.UNIT_FACTOR
-
+                                    this.txtUnitPrice.value = e.data.PRICE
                                 }
                                 await this.msgUnit.show().then(async () =>
                                 {
                                     e.key.UNIT = this.cmbUnit.value
                                     e.key.UNIT_FACTOR = this.txtUnitFactor.value
-                                    this.grdPurcInv.devGrid.cellValue(e.rowIndex,"QUANTITY",this.txtTotalQuantity.value)
+                                    e.data.PRICE = parseFloat((this.txtUnitPrice.value / this.txtUnitFactor.value).toFixed(4))
+                                    e.data.DIFF_PRICE = parseFloat((e.data.PRICE - e.data.CUSTOMER_PRICE).toFixed(3))
+                                    e.data.QUANTITY = this.txtTotalQuantity.value
+                                    e.data.VAT = parseFloat(((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) * (e.data.VAT_RATE) / 100)).toFixed(4));
+                                    e.data.AMOUNT = parseFloat((e.data.PRICE * e.data.QUANTITY).toFixed(4))
+                                    e.data.TOTALHT = parseFloat(((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT).toFixed(4))
+                                    e.data.TOTAL = parseFloat((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) +e.data.VAT).toFixed(4))
+                                    e.data.DISCOUNT_RATE = Number(e.data.AMOUNT).rate2Num(e.data.DISCOUNT,4)
+                                    this._calculateTotal()
                                 });  
                             }
                         },
@@ -509,7 +517,7 @@ export default class purchaseInvoice extends React.PureComponent
                                     e.data.AMOUNT = parseFloat((e.data.PRICE * e.data.QUANTITY).toFixed(4))
                                     e.data.TOTALHT = parseFloat(((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT).toFixed(4))
                                     e.data.TOTAL = parseFloat((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) +e.data.VAT).toFixed(4))
-                                    e.data.DISCOUNT_RATE = Number(e.data.AMOUNT).rate2Num(e.data.DISCOUNT,2)
+                                    e.data.DISCOUNT_RATE = Number(e.data.AMOUNT).rate2Num(e.data.DISCOUNT,4)
                                     this._calculateTotal()
                                 });  
                             }
@@ -551,7 +559,7 @@ export default class purchaseInvoice extends React.PureComponent
                                     e.data.AMOUNT = parseFloat((e.data.PRICE * e.data.QUANTITY).toFixed(4))
                                     e.data.TOTALHT = parseFloat(((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT).toFixed(4))
                                     e.data.TOTAL = parseFloat((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) +e.data.VAT).toFixed(4))
-                                    e.data.DISCOUNT_RATE = Number(e.data.AMOUNT).rate2Num(e.data.DISCOUNT,2)
+                                    e.data.DISCOUNT_RATE = Number(e.data.AMOUNT).rate2Num(e.data.DISCOUNT,4)
                                     this._calculateTotal()
                                 });  
                             }
@@ -665,6 +673,7 @@ export default class purchaseInvoice extends React.PureComponent
                                 this.docObj.docItems.dt()[i].VAT = parseFloat((this.docObj.docItems.dt()[i].VAT + (this.docObj.docItems.dt()[i].PRICE * (this.docObj.docItems.dt()[i].VAT_RATE / 100) * pQuantity)).toFixed(4))
                                 this.docObj.docItems.dt()[i].AMOUNT = parseFloat((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE).toFixed(4))
                                 this.docObj.docItems.dt()[i].TOTAL = parseFloat((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT).toFixed(4))
+                                this.docObj.docItems.dt()[i].TOTALHT = parseFloat((this.docObj.docItems.dt()[i].TOTAL - this.docObj.docItems.dt()[i].VAT).toFixed(4))
                                 this._calculateTotal()
                                 await this.grdPurcInv.devGrid.deleteRow(0)
                                 if(this.checkCombine.value == true)
@@ -695,6 +704,7 @@ export default class purchaseInvoice extends React.PureComponent
                         this.docObj.docItems.dt()[i].VAT = parseFloat((this.docObj.docItems.dt()[i].VAT + (this.docObj.docItems.dt()[i].PRICE * (this.docObj.docItems.dt()[i].VAT_RATE / 100) * pQuantity)).toFixed(4))
                         this.docObj.docItems.dt()[i].AMOUNT = parseFloat((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE).toFixed(4))
                         this.docObj.docItems.dt()[i].TOTAL = parseFloat((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT).toFixed(4))
+                        this.docObj.docItems.dt()[i].TOTALHT = parseFloat((this.docObj.docItems.dt()[i].TOTAL - this.docObj.docItems.dt()[i].VAT).toFixed(4))
                         this._calculateTotal()
                         await this.grdPurcInv.devGrid.deleteRow(0)
                         return
@@ -736,6 +746,7 @@ export default class purchaseInvoice extends React.PureComponent
                 this.docObj.docItems.dt()[pIndex].VAT = parseFloat((tmpData.result.recordset[0].PRICE * (this.docObj.docItems.dt()[pIndex].VAT_RATE / 100) * pQuantity).toFixed(4))
                 this.docObj.docItems.dt()[pIndex].AMOUNT = parseFloat((tmpData.result.recordset[0].PRICE  * pQuantity).toFixed(4))
                 this.docObj.docItems.dt()[pIndex].TOTAL = parseFloat(((tmpData.result.recordset[0].PRICE * pQuantity) + this.docObj.docItems.dt()[pIndex].VAT).toFixed(4))
+                this.docObj.docItems.dt()[pIndex].TOTALHT = parseFloat((this.docObj.docItems.dt()[pIndex].TOTAL - this.docObj.docItems.dt()[pIndex].VAT).toFixed(4))
                 this._calculateTotal()
             }
             else
@@ -743,7 +754,8 @@ export default class purchaseInvoice extends React.PureComponent
                 this.docObj.docItems.dt()[pIndex].PRICE =0
                 this.docObj.docItems.dt()[pIndex].VAT = 0
                 this.docObj.docItems.dt()[pIndex].AMOUNT = 0
-                this.docObj.docItems.dt()[pIndex].TOTAL = 0
+                this.docObj.docItems.dt()[pIndex].TOTAL = 
+                this.docObj.docItems.dt()[pIndex].TOTALHT = 0
                 this._calculateTotal()
             }
         }
@@ -766,6 +778,7 @@ export default class purchaseInvoice extends React.PureComponent
             this.docObj.docItems.dt()[pIndex].VAT = parseFloat((((pPrice * pQuantity) - this.docObj.docItems.dt()[pIndex].DISCOUNT) * (this.docObj.docItems.dt()[pIndex].VAT_RATE / 100) ).toFixed(4))
             this.docObj.docItems.dt()[pIndex].AMOUNT = parseFloat((pPrice  * pQuantity).toFixed(4))
             this.docObj.docItems.dt()[pIndex].TOTAL = parseFloat(((pPrice * pQuantity)- this.docObj.docItems.dt()[pIndex].DISCOUNT + this.docObj.docItems.dt()[pIndex].VAT).toFixed(4))
+            this.docObj.docItems.dt()[pIndex].TOTALHT = parseFloat((this.docObj.docItems.dt()[pIndex].TOTAL - this.docObj.docItems.dt()[pIndex].VAT).toFixed(4))
             this._calculateTotal()
         }
         if(tmpData.result.recordset.length > 0)
@@ -1177,7 +1190,7 @@ export default class purchaseInvoice extends React.PureComponent
             {
                 let tmpQuery = 
                 {
-                    query :"SELECT GUID,CODE,NAME,VAT,ITEMS_VW_01.UNIT,1 AS QUANTITY," + 
+                    query :"SELECT GUID,CODE,NAME,VAT,ITEMS_VW_01.UNIT,1 AS QUANTITY,0 AS ITEM_TYPE," + 
                     "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].OUTPUT+"'),'') AS MULTICODE"+
                     " FROM ITEMS_VW_01 WHERE ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].OUTPUT+"'),'') = @VALUE " ,
                     param : ['VALUE:string|50'],
@@ -1201,7 +1214,7 @@ export default class purchaseInvoice extends React.PureComponent
             {
                 let tmpQuery = 
                 {
-                    query :"SELECT GUID,CODE,NAME,VAT,UNIT,1 AS QUANTITY," + 
+                    query :"SELECT GUID,CODE,NAME,VAT,UNIT,1 AS QUANTITY,0 AS ITEM_TYPE," + 
                     "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].OUTPUT+"'),'') AS MULTICODE"+
                     " FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VALUE) OR UPPER(NAME) LIKE UPPER(@VALUE) " ,
                     param : ['VALUE:string|50'],
@@ -1255,10 +1268,9 @@ export default class purchaseInvoice extends React.PureComponent
         let tmpCounter = 0
         for (let i = 0; i < pdata.length; i++) 
         {
-            console.log(pdata[i][tmpShema.CODE])
             let tmpQuery = 
             { 
-                query :"SELECT GUID,CODE,NAME,VAT,UNIT,1 AS QUANTITY," + 
+                query :"SELECT GUID,CODE,NAME,VAT,UNIT,1 AS QUANTITY,0 AS ITEM_TYPE," + 
                 "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].OUTPUT+"'),'') AS MULTICODE"+
                 " FROM ITEMS_VW_01 WHERE ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].OUTPUT+"'),'') = @VALUE AND STATUS = 1 " ,
                 param : ['VALUE:string|50'],
@@ -2703,7 +2715,7 @@ export default class purchaseInvoice extends React.PureComponent
                                     {
                                         if(e.validationGroup.validate().status == "valid")
                                         {
-                                            this.multiItemData.clear
+                                            this.multiItemData.clear()
                                             this.popMultiItem.show()
                                             if( typeof this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1] != 'undefined' && this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
                                             {
@@ -2802,7 +2814,6 @@ export default class purchaseInvoice extends React.PureComponent
                                     }}
                                     onRowUpdated={async(e)=>{
 
-                                        console.log(e)
                                         if(typeof e.data.QUANTITY != 'undefined')
                                         {
                                             let tmpQuery = 
@@ -2974,64 +2985,64 @@ export default class purchaseInvoice extends React.PureComponent
                                                 ></NdTextBox>
                                             </Item>
                                             <Item>
-                                                    <Form colCount={5}>
-                                                        <Item colSpan={3}>
-                                                            <Label text={this.t("txtAmount")} alignment="right" />
-                                                            <NdTextBox id="txtAmount" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"AMOUNT"}}
-                                                            maxLength={32}
-                                                        
-                                                            ></NdTextBox>
-                                                        </Item>
-                                                        <Item colSpan={2}>
-                                                            <Label text={this.t("txtDiscount")} alignment="right" />
-                                                            <NdTextBox id="txtDiscount" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"DISCOUNT"}}
-                                                            maxLength={32}
-                                                            button=
-                                                            {
-                                                                [
+                                                <Form colCount={5}>
+                                                    <Item colSpan={3}>
+                                                        <Label text={this.t("txtAmount")} alignment="right" />
+                                                        <NdTextBox id="txtAmount" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"AMOUNT"}}
+                                                        maxLength={32}
+                                                    
+                                                        ></NdTextBox>
+                                                    </Item>
+                                                    <Item colSpan={2}>
+                                                        <Label text={this.t("txtDiscount")} alignment="right" />
+                                                        <NdTextBox id="txtDiscount" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"DISCOUNT"}}
+                                                        maxLength={32}
+                                                        button=
+                                                        {
+                                                            [
+                                                                {
+                                                                    id:'01',
+                                                                    icon:'more',
+                                                                    onClick:()  =>
                                                                     {
-                                                                        id:'01',
-                                                                        icon:'more',
-                                                                        onClick:()  =>
+                                                                        if(this.docObj.dt()[0].DISCOUNT > 0 )
                                                                         {
-                                                                            if(this.docObj.dt()[0].DISCOUNT > 0 )
-                                                                            {
-                                                                                this.txtDiscountPercent1.value  = Number(this.docObj.dt()[0].AMOUNT).rate2Num(this.docObj.docItems.dt().sum("DISCOUNT_1",3),3)
-                                                                                this.txtDiscountPrice1.value = this.docObj.docItems.dt().sum("DISCOUNT_1",2)
-                                                                                this.txtDiscountPercent2.value  = Number(this.docObj.dt()[0].AMOUNT-parseFloat(this.docObj.docItems.dt().sum("DISCOUNT_1",3))).rate2Num(this.docObj.docItems.dt().sum("DISCOUNT_2",3),3)
-                                                                                this.txtDiscountPrice2.value = this.docObj.docItems.dt().sum("DISCOUNT_2",2)
-                                                                                this.txtDiscountPercent3.value  = Number(this.docObj.dt()[0].AMOUNT-(parseFloat(this.docObj.docItems.dt().sum("DISCOUNT_1",3))+parseFloat(this.docObj.docItems.dt().sum("DISCOUNT_2",3)))).rate2Num(this.docObj.docItems.dt().sum("DISCOUNT_3",3),3)
-                                                                                this.txtDiscountPrice3.value = this.docObj.docItems.dt().sum("DISCOUNT_3",2)
-                                                                            }
-                                                                            else
-                                                                            {
-                                                                                this.txtDiscountPercent1.value  = 0
-                                                                                this.txtDiscountPrice1.value = 0
-                                                                                this.txtDiscountPercent2.value  = 0
-                                                                                this.txtDiscountPrice2.value = 0
-                                                                                this.txtDiscountPercent3.value  = 0
-                                                                                this.txtDiscountPrice3.value = 0
-                                                                            }
-                                                                            this.popDiscount.show()
+                                                                            this.txtDiscountPercent1.value  = Number(this.docObj.dt()[0].AMOUNT).rate2Num(this.docObj.docItems.dt().sum("DISCOUNT_1",3),3)
+                                                                            this.txtDiscountPrice1.value = this.docObj.docItems.dt().sum("DISCOUNT_1",2)
+                                                                            this.txtDiscountPercent2.value  = Number(this.docObj.dt()[0].AMOUNT-parseFloat(this.docObj.docItems.dt().sum("DISCOUNT_1",3))).rate2Num(this.docObj.docItems.dt().sum("DISCOUNT_2",3),3)
+                                                                            this.txtDiscountPrice2.value = this.docObj.docItems.dt().sum("DISCOUNT_2",2)
+                                                                            this.txtDiscountPercent3.value  = Number(this.docObj.dt()[0].AMOUNT-(parseFloat(this.docObj.docItems.dt().sum("DISCOUNT_1",3))+parseFloat(this.docObj.docItems.dt().sum("DISCOUNT_2",3)))).rate2Num(this.docObj.docItems.dt().sum("DISCOUNT_3",3),3)
+                                                                            this.txtDiscountPrice3.value = this.docObj.docItems.dt().sum("DISCOUNT_3",2)
                                                                         }
-                                                                    },
-                                                                ]
-                                                            }
-                                                            ></NdTextBox>
-                                                        </Item>
-                                                    </Form> 
+                                                                        else
+                                                                        {
+                                                                            this.txtDiscountPercent1.value  = 0
+                                                                            this.txtDiscountPrice1.value = 0
+                                                                            this.txtDiscountPercent2.value  = 0
+                                                                            this.txtDiscountPrice2.value = 0
+                                                                            this.txtDiscountPercent3.value  = 0
+                                                                            this.txtDiscountPrice3.value = 0
+                                                                        }
+                                                                        this.popDiscount.show()
+                                                                    }
+                                                                },
+                                                            ]
+                                                        }
+                                                        ></NdTextBox>
+                                                    </Item>
+                                                </Form> 
                                             </Item>
                                             {/* İndirim */}
                                             <EmptyItem colSpan={2}/>
                                             <Item  >
-                                            <Label text={this.t("txtDiffrentNegative")} alignment="right" />
+                                                <Label text={this.t("txtDiffrentNegative")} alignment="right" />
                                                 <NdTextBox id="txtDiffrentNegative" parent={this} simple={true} readOnly={true} 
                                                 maxLength={32}
                                             
                                                 ></NdTextBox>
                                             </Item>
                                             <Item>
-                                            <Label text={this.t("txtTotalHt")} alignment="right" />
+                                                <Label text={this.t("txtTotalHt")} alignment="right" />
                                                 <NdTextBox id="txtTotalHt" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"TOTALHT"}}
                                                 maxLength={32}
                                                 ></NdTextBox>
@@ -3039,14 +3050,14 @@ export default class purchaseInvoice extends React.PureComponent
                                             {/* KDV */}
                                             <EmptyItem colSpan={2}/>
                                             <Item  >
-                                            <Label text={this.t("txtDiffrentTotal")} alignment="right" />
+                                                <Label text={this.t("txtDiffrentTotal")} alignment="right" />
                                                 <NdTextBox id="txtDiffrentTotal" parent={this} simple={true} readOnly={true}
                                                 maxLength={32}
                                             
                                                 ></NdTextBox>
                                             </Item>
                                             <Item>
-                                            <Label text={this.t("txtVat")} alignment="right" />
+                                                <Label text={this.t("txtVat")} alignment="right" />
                                                 <NdTextBox id="txtVat" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"VAT"}}
                                                 maxLength={32}
                                                 button=
@@ -3085,13 +3096,13 @@ export default class purchaseInvoice extends React.PureComponent
                                             {/* KDV */}
                                             <EmptyItem colSpan={2}/>
                                             <Item  >
-                                            <Label text={this.t("txtDiffrentInv")} alignment="right" />
+                                                <Label text={this.t("txtDiffrentInv")} alignment="right" />
                                                 <NdTextBox id="txtDiffrentInv" parent={this} simple={true} readOnly={true}
                                                 maxLength={32}
                                                 ></NdTextBox>
                                             </Item>
                                             <Item>
-                                            <Label text={this.t("txtTotal")} alignment="right" />
+                                                <Label text={this.t("txtTotal")} alignment="right" />
                                                 <NdTextBox id="txtTotal" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"TOTAL"}}
                                                 maxLength={32}
                                                 ></NdTextBox>
@@ -3327,27 +3338,27 @@ export default class purchaseInvoice extends React.PureComponent
                                             onClick={async ()=>
                                             {           
                                                 
-                                                    for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
+                                                for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
+                                                {
+                                                    let tmpDocData = this.docObj.docItems.dt()[i]
+
+                                                    if(this.chkDocDiscount.value == false)
                                                     {
-                                                        let tmpDocData = this.docObj.docItems.dt()[i]
-
-                                                        if(this.chkDocDiscount.value == false)
-                                                        {
-                                                            tmpDocData.DISCOUNT_1 = Number(tmpDocData.PRICE * tmpDocData.QUANTITY).rateInc(this.txtDiscountPercent1.value,4)
-                                                        }
-                                                        tmpDocData.DISCOUNT_2 = Number(((tmpDocData.PRICE * tmpDocData.QUANTITY) - tmpDocData.DISCOUNT_1)).rateInc(this.txtDiscountPercent2.value,4)
-
-                                                        tmpDocData.DISCOUNT_3 =  Number(((tmpDocData.PRICE * tmpDocData.QUANTITY)-(tmpDocData.DISCOUNT_1+tmpDocData.DISCOUNT_2))).rateInc(this.txtDiscountPercent3.value,4)
-                                                       
-                                                        tmpDocData.DISCOUNT = parseFloat((tmpDocData.DISCOUNT_1 + tmpDocData.DISCOUNT_2 + tmpDocData.DISCOUNT_3).toFixed(4))
-                                                        tmpDocData.TOTALHT = parseFloat((Number((tmpDocData.PRICE * tmpDocData.QUANTITY)) - (Number(tmpDocData.DISCOUNT_1) + Number(tmpDocData.DISCOUNT_2) + Number(tmpDocData.DISCOUNT_3))).toFixed(4))
-                                                        if(tmpDocData.VAT > 0)
-                                                        {
-                                                            tmpDocData.VAT = parseFloat(((tmpDocData.TOTALHT) * (tmpDocData.VAT_RATE / 100)).toFixed(4))
-                                                        }
-                                                        tmpDocData.TOTAL = parseFloat((tmpDocData.TOTALHT + tmpDocData.VAT).toFixed(4))
-                                                        tmpDocData.DISCOUNT_RATE = Number((tmpDocData.PRICE * tmpDocData.QUANTITY)).rate2Num((tmpDocData.DISCOUNT_1 + tmpDocData.DISCOUNT_2 + tmpDocData.DISCOUNT_3),2)
+                                                        tmpDocData.DISCOUNT_1 = Number(tmpDocData.PRICE * tmpDocData.QUANTITY).rateInc(this.txtDiscountPercent1.value,4)
                                                     }
+                                                    tmpDocData.DISCOUNT_2 = Number(((tmpDocData.PRICE * tmpDocData.QUANTITY) - tmpDocData.DISCOUNT_1)).rateInc(this.txtDiscountPercent2.value,4)
+
+                                                    tmpDocData.DISCOUNT_3 =  Number(((tmpDocData.PRICE * tmpDocData.QUANTITY)-(tmpDocData.DISCOUNT_1+tmpDocData.DISCOUNT_2))).rateInc(this.txtDiscountPercent3.value,4)
+                                                    
+                                                    tmpDocData.DISCOUNT = parseFloat((tmpDocData.DISCOUNT_1 + tmpDocData.DISCOUNT_2 + tmpDocData.DISCOUNT_3).toFixed(4))
+                                                    tmpDocData.TOTALHT = parseFloat((Number((tmpDocData.PRICE * tmpDocData.QUANTITY)) - (Number(tmpDocData.DISCOUNT_1) + Number(tmpDocData.DISCOUNT_2) + Number(tmpDocData.DISCOUNT_3))).toFixed(4))
+                                                    if(tmpDocData.VAT > 0)
+                                                    {
+                                                        tmpDocData.VAT = parseFloat(((tmpDocData.TOTALHT) * (tmpDocData.VAT_RATE / 100)).toFixed(4))
+                                                    }
+                                                    tmpDocData.TOTAL = parseFloat((tmpDocData.TOTALHT + tmpDocData.VAT).toFixed(4))
+                                                    tmpDocData.DISCOUNT_RATE = Number((tmpDocData.PRICE * tmpDocData.QUANTITY)).rate2Num((tmpDocData.DISCOUNT_1 + tmpDocData.DISCOUNT_2 + tmpDocData.DISCOUNT_3),2)
+                                                }
                                                 this._calculateTotal()
                                                 this.popDiscount.hide(); 
                                             }}/>
@@ -4522,7 +4533,7 @@ export default class purchaseInvoice extends React.PureComponent
                                     searchEnabled={true}
                                     onValueChanged={(async(e)=>
                                     {
-                                        // this.txtUnitFactor.setState({value:this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].FACTOR});
+                                        this.txtUnitFactor.setState({value:this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].FACTOR});
                                         this.txtTotalQuantity.value = Number(this.txtUnitQuantity.value * this.txtUnitFactor.value);
                                     }).bind(this)}
                                     >
@@ -4550,6 +4561,13 @@ export default class purchaseInvoice extends React.PureComponent
                                 <Item>
                                     <Label text={this.t("txtTotalQuantity")} alignment="right" />
                                     <NdNumberBox id="txtTotalQuantity" parent={this} simple={true}  readOnly={true}
+                                    maxLength={32}
+                                    >
+                                    </NdNumberBox>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("txtUnitPrice")} alignment="right" />
+                                    <NdNumberBox id="txtUnitPrice" parent={this} simple={true} 
                                     maxLength={32}
                                     >
                                     </NdNumberBox>
