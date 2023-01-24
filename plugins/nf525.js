@@ -379,7 +379,6 @@ class nf525
             {
                 if(tmpResult[i].DATA != '' && tmpResult[i].DATA_EXTRA1 != null)
                 {
-                    console.log(tmpResult[i].DATA_EXTRA1 + " - " + tmpResult[i].DATA)
                     let tmpVerify = this.verify(tmpResult[i].DATA_EXTRA1,tmpResult[i].DATA)
                     
                     if(!tmpVerify)
