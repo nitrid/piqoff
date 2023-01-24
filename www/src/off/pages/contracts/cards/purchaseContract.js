@@ -363,7 +363,7 @@ export default class purchaseContract extends React.PureComponent
                                         let pResult = await dialog(tmpConfObj);
                                         if(pResult == 'btn01')
                                         {
-                                            this.contractObj.dt().removeAt(0)
+                                            this.contractObj.dt().removeAll()
                                             await this.contractObj.dt().delete();
                                             this.init(); 
                                         }
@@ -770,7 +770,7 @@ export default class purchaseContract extends React.PureComponent
                                         <Column dataField="PRICE" caption={this.t("grdContracts.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}}/>
                                         <Column dataField="PRICE_VAT_EXT" caption={this.t("grdContracts.clmVatExtPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}} />
                                         <Column dataField="QUANTITY" caption={this.t("grdContracts.clmQuantity")} dataType={'number'}/>
-                                        <Column dataField="START_DATE" caption={this.t("grdContracts.clmStartDate")} dataType={'date'}
+                                        <Column dataField="START_DATE" caption={this.t("grdContracts.clmStartDate")} dataType={'date'} visible={false}
                                         editorOptions={{value:null}}
                                         cellRender={(e) => 
                                         {
@@ -781,7 +781,7 @@ export default class purchaseContract extends React.PureComponent
                                             
                                             return
                                         }}/>
-                                        <Column dataField="FINISH_DATE" caption={this.t("grdContracts.clmFinishDate")} dataType={'date'}
+                                        <Column dataField="FINISH_DATE" caption={this.t("grdContracts.clmFinishDate")} dataType={'date'} visible={false}
                                          editorOptions={{value:null}}
                                          cellRender={(e) => 
                                          {
@@ -792,7 +792,7 @@ export default class purchaseContract extends React.PureComponent
                                              
                                              return
                                          }}/>
-                                        <Column dataField="DEPOT_NAME" caption={this.t("grdContracts.clmDepotName")} />
+                                        <Column dataField="DEPOT_NAME" caption={this.t("grdContracts.clmDepotName")} visible={false}/>
                                     </NdGrid>
                                 </Item>
                             </Form>

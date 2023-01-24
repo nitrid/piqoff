@@ -14,7 +14,7 @@ import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
-import NdGrid,{Column,Editing,Paging,Scrolling,KeyboardNavigation,Pager,Export} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Editing,Paging,Scrolling,KeyboardNavigation,Pager,Export, ColumnChooser} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdTagBox from '../../../../core/react/devex/tagbox.js';
@@ -84,6 +84,8 @@ export default class purchaseContract extends React.PureComponent
         this.txtCustomerCode.GUID = '00000000-0000-0000-0000-000000000000'
         this.txtCode.value = ''
         this.txtName.value = ''
+        this.txtCode.readOnly = false
+        this.txtName.readOnly = false
 
         this.startDate.value = moment(new Date(0)).format("YYYY-MM-DD")
         this.finishDate.value = moment(new Date(0)).format("YYYY-MM-DD")
@@ -366,7 +368,8 @@ export default class purchaseContract extends React.PureComponent
                                         let pResult = await dialog(tmpConfObj);
                                         if(pResult == 'btn01')
                                         {
-                                            this.contractObj.dt().removeAt(0)
+                                            
+                                            this.contractObj.dt().removeAll()
                                             await this.contractObj.dt().delete();
                                             this.init(); 
                                         }
@@ -449,11 +452,11 @@ export default class purchaseContract extends React.PureComponent
                                     }
                                     onChange={(async()=>
                                     {
-                                        let tmpResult = await this.checkDoc('00000000-0000-0000-0000-000000000000',this.txtCode.value)
-                                        if(tmpResult == 3)
-                                        {
-                                            this.txtCode.value = "";
-                                        }
+                                        // let tmpResult = await this.checkDoc('00000000-0000-0000-0000-000000000000',this.txtCode.value)
+                                        // if(tmpResult == 3)
+                                        // {
+                                        //     this.txtCode.value = "";
+                                        // }
                                     }).bind(this)}
                                     param={this.param.filter({ELEMENT:'txtCode',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtCode',USERS:this.user.CODE})}
@@ -725,7 +728,7 @@ export default class purchaseContract extends React.PureComponent
                                     allowColumnReordering={true} 
                                     allowColumnResizing={true} 
                                     filterRow={{visible:true}}
-                                    height={'650'} 
+                                    height={'400'} 
                                     width={'100%'}
                                     dbApply={false}
                                     onRowUpdated={async(e)=>
@@ -743,20 +746,22 @@ export default class purchaseContract extends React.PureComponent
                                     onRowRemoved={async (e)=>{
                                     }}
                                     >
+                                        <ColumnChooser enabled={true} />
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
                                         <Paging defaultPageSize={10} />
                                         <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
                                         <Export fileName={this.lang.t("menu.cnt_02_001")} enabled={true} allowExportSelectedData={true} />
-                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdContracts.clmCreateDate")} allowEditing={false} width={200}/>
+                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdContracts.clmCreateDate")} allowEditing={false} width={80}/>
                                         <Column dataField="ITEM_CODE" caption={this.t("grdContracts.clmItemCode")} width={150} allowEditing={false}/>
-                                        <Column dataField="ITEM_NAME" caption={this.t("grdContracts.clmItemName")} width={350} allowEditing={false}/>
+                                        <Column dataField="ITEM_NAME" caption={this.t("grdContracts.clmItemName")} width={200} allowEditing={false}/>
+                                        <Column dataField="ITEM_MAIN_GRP" caption={this.t("grdContracts.clmGrpName")} width={150} allowEditing={false}/>
                                         <Column dataField="COST_PRICE" caption={this.t("grdContracts.clmCostPrice")} width={80} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>
-                                        <Column dataField="PRICE" caption={this.t("grdContracts.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}}/>
-                                        <Column dataField="PRICE_VAT_EXT" caption={this.t("grdContracts.clmVatExtPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}} />
-                                        <Column dataField="QUANTITY" caption={this.t("grdContracts.clmQuantity")} dataType={'number'}/>
-                                        <Column dataField="MARGIN" caption={this.t("grdContracts.clmMargin")} allowEditing={false}/>
-                                        <Column dataField="START_DATE" caption={this.t("grdContracts.clmStartDate")} dataType={'date'}
+                                        <Column dataField="PRICE" caption={this.t("grdContracts.clmPrice")} dataType={'number'} width={80} format={{ style: "currency", currency: "EUR",precision: 2}}/>
+                                        <Column dataField="PRICE_VAT_EXT" caption={this.t("grdContracts.clmVatExtPrice")} width={80} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}} />
+                                        <Column dataField="QUANTITY" caption={this.t("grdContracts.clmQuantity")} width={80} dataType={'number'}/>
+                                        <Column dataField="MARGIN" caption={this.t("grdContracts.clmMargin")} width={80} allowEditing={false}/>
+                                        <Column dataField="START_DATE" caption={this.t("grdContracts.clmStartDate")} dataType={'date'} visible={false}
                                         editorOptions={{value:null}}
                                         cellRender={(e) => 
                                         {
@@ -767,7 +772,7 @@ export default class purchaseContract extends React.PureComponent
                                             
                                             return
                                         }}/>
-                                        <Column dataField="FINISH_DATE" caption={this.t("grdContracts.clmFinishDate")} dataType={'date'}
+                                        <Column dataField="FINISH_DATE" caption={this.t("grdContracts.clmFinishDate")} dataType={'date'} visible={false}
                                          editorOptions={{value:null}}
                                          cellRender={(e) => 
                                          {
@@ -778,7 +783,7 @@ export default class purchaseContract extends React.PureComponent
                                              
                                              return
                                          }}/>
-                                        <Column dataField="DEPOT_NAME" caption={this.t("grdContracts.clmDepotName")} allowEditing={false}/>
+                                        <Column dataField="DEPOT_NAME" caption={this.t("grdContracts.clmDepotName")} allowEditing={false} visible={false}/>
                                     </NdGrid>
                                 </Item>
                             </Form>
@@ -937,36 +942,35 @@ export default class purchaseContract extends React.PureComponent
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
                                     <Label text={this.t("popDesign.design")} alignment="right" />
-                                        <NdSelectBox simple={true} parent={this} id="cmbDesignList" notRefresh = {true}
-                                        displayExpr="DESIGN_NAME"                       
-                                        valueExpr="TAG"
-                                        value=""
-                                        searchEnabled={true}
-                                        onValueChanged={(async()=>
-                                            {
-                                            }).bind(this)}
-                                        data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '31'"},sql:this.core.sql}}}
-                                        param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
-                                        access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
-                                        >
-                                            <Validator validationGroup={"frmPurcOrderPrint"  + this.tabIndex}>
-                                                <RequiredRule message={this.t("validDesign")} />
-                                            </Validator> 
-                                        </NdSelectBox>
+                                    <NdSelectBox simple={true} parent={this} id="cmbDesignList" notRefresh = {true}
+                                    displayExpr="DESIGN_NAME"                       
+                                    valueExpr="TAG"
+                                    value=""
+                                    searchEnabled={true}
+                                    onValueChanged={(async()=>
+                                        {
+                                        }).bind(this)}
+                                    data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '31'"},sql:this.core.sql}}}
+                                    param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
+                                    >
+                                        <Validator validationGroup={"frmPurcOrderPrint"  + this.tabIndex}>
+                                            <RequiredRule message={this.t("validDesign")} />
+                                        </Validator> 
+                                    </NdSelectBox>
                                 </Item>
                                 <Item>
                                     <Label text={this.t("popDesign.lang")} alignment="right" />
-                                        <NdSelectBox simple={true} parent={this} id="cmbDesignLang" notRefresh = {true}
-                                            displayExpr="VALUE"                       
-                                            valueExpr="ID"
-                                            value=""
-                                            searchEnabled={true}
-                                            onValueChanged={(async()=>
-                                                {
-                                                }).bind(this)}
-                                            data={{source:[{ID:"FR",VALUE:"FR"},{ID:"TR",VALUE:"TR"}]}}
-                                            
-                                        ></NdSelectBox>
+                                    <NdSelectBox simple={true} parent={this} id="cmbDesignLang" notRefresh = {true}
+                                    displayExpr="VALUE"                       
+                                    valueExpr="ID"
+                                    value=""
+                                    searchEnabled={true}
+                                    onValueChanged={(async()=>
+                                        {
+                                        }).bind(this)}
+                                    data={{source:[{ID:"FR",VALUE:"FR"},{ID:"TR",VALUE:"TR"}]}}
+                                    ></NdSelectBox>
                                 </Item>
                                 <Item>
                                     <div className='row'>
@@ -978,7 +982,7 @@ export default class purchaseContract extends React.PureComponent
                                                 {
                                                     query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM CONTRACT_VW_01 WHERE CODE = @CODE AND TYPE  = 1 ORDER BY CDATE " ,
                                                     param:  ['CODE:string|25','DESIGN:string|25'],
-                                                    value:  [this.docObj.dt()[0].CODE,this.cmbDesignList.value]
+                                                    value:  [this.contractObj.dt()[0].CODE,this.cmbDesignList.value]
                                                 }
                                                 let tmpData = await this.core.sql.execute(tmpQuery) 
                                                 console.log(JSON.stringify(tmpData.result.recordset)) //BAK

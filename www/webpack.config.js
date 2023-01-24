@@ -80,7 +80,7 @@ module.exports =
         {
             "/socket.io": 
             {
-                target: 'http://localhost',
+                target: 'http://localhost:9091',
                 ws: true
             }
         }

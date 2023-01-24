@@ -11771,6 +11771,7 @@ export const langTr =
         {
             clmItemCode: "Kodu",
             clmItemName: "Adı",
+            clmGrpName: "Grup",
             clmPrice: "Fiyat",
             clmQuantity : "Adet",
             clmStartDate : "Başlangıç",
