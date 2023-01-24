@@ -7,7 +7,7 @@ import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import {datatable,access} from '../../../../core/core.js';
 import {acs} from '../../../../pos/meta/acs.js'
 
-export default class UserAccess extends React.Component
+export default class UserAccess extends React.PureComponent
 {
     constructor(props)
     {

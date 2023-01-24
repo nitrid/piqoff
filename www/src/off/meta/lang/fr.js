@@ -12084,6 +12084,7 @@ export const langFr =
         {
             clmItemCode: "Code",
             clmItemName: "Nom",
+            clmGrpName: "Grup", //BAK
             clmPrice: "Prix ",
             clmQuantity : "Quantité",
             clmStartDate : "Début ",

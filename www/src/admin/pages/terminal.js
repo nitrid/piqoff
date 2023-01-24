@@ -4,7 +4,7 @@ import TextBox from 'devextreme-react/text-box';
 import Button from 'devextreme-react/button';
 import App from '../lib/app.js';
 
-export default class Terminal extends React.Component
+export default class Terminal extends React.PureComponent
 {
     constructor(props)
     {
