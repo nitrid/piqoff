@@ -265,7 +265,7 @@ class nf525
         {
             let tmpQuery = 
             {
-                query : "SELECT * FROM POS WHERE LDATE >= GETDATE() - 10 AND LDATE <= GETDATE() - 1 ORDER BY LDATE DESC"
+                query : "SELECT * FROM POS WHERE LDATE >= GETDATE() - 2 AND LDATE <= GETDATE() - 1 ORDER BY LDATE DESC"
             }
 
             let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
@@ -300,7 +300,7 @@ class nf525
         {
             let tmpQuery = 
             {
-                query : "SELECT * FROM DOC WHERE LDATE >= GETDATE() - 10 AND LDATE <= GETDATE() - 1 ORDER BY LDATE DESC"
+                query : "SELECT * FROM DOC WHERE LDATE >= GETDATE() - 2 AND LDATE <= GETDATE() - 1 ORDER BY LDATE DESC"
             }
 
             let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
@@ -335,7 +335,7 @@ class nf525
         {
             let tmpQuery = 
             {
-                query : "SELECT * FROM DOC_EXTRA WHERE CDATE >= GETDATE() - 10 AND CDATE <= GETDATE() - 1 AND TAG = 'PRINT' ORDER BY CDATE DESC"
+                query : "SELECT * FROM DOC_EXTRA WHERE CDATE >= GETDATE() - 2 AND CDATE <= GETDATE() - 1 AND TAG = 'PRINT' ORDER BY CDATE DESC"
             }
 
             let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
@@ -370,7 +370,7 @@ class nf525
         {
             let tmpQuery = 
             {
-                query : "SELECT * FROM POS_EXTRA WHERE CDATE >= GETDATE() - 10 AND CDATE <= GETDATE() - 1 AND TAG IN ('REPRINT','REPRINTFACT') ORDER BY CDATE DESC"
+                query : "SELECT * FROM POS_EXTRA WHERE CDATE >= GETDATE() - 2 AND CDATE <= GETDATE() - 1 AND TAG IN ('REPRINT','REPRINTFACT') ORDER BY CDATE DESC"
             }
 
             let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset
@@ -405,7 +405,7 @@ class nf525
         {
             let tmpQuery = 
             {
-                query : "SELECT * FROM NF525_JET WHERE CDATE >= GETDATE() - 10 AND CDATE <= GETDATE() + 2 ORDER BY CDATE DESC"
+                query : "SELECT * FROM NF525_JET WHERE CDATE >= GETDATE() - 2 AND CDATE <= GETDATE() + 2 ORDER BY CDATE DESC"
             }
 
             let tmpResult = (await core.instance.sql.execute(tmpQuery)).result.recordset

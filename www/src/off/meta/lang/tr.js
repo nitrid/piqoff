@@ -3220,6 +3220,7 @@ export const langTr =
             clmRefNo : "SIRA",
             clmOutputName : "CARİ ADI",
             clmOutputCode  : "CARİ KODU",
+            clmTotal : "KDVLİ TOPLAM"
         },
         pg_txtCustomerCode : 
         {
@@ -13220,7 +13221,7 @@ export const langTr =
         {
             title: "Dikkat",
             btn01: "Tamam",
-            msg: "600€ dan yüksek avans giremezsiniz ! "
+            msg: "650€ dan yüksek avans giremezsiniz ! "
         },
     },
     tkf_01_001 : // "Alış Teklifi Listesi",
