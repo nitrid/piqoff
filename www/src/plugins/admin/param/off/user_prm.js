@@ -7,7 +7,7 @@ import NdTextBox from '../../../../core/react/devex/textbox.js';
 import {datatable,param} from '../../../../core/core.js';
 import {prm} from '../../../../off/meta/prm.js'
 
-export default class UserParam extends React.Component
+export default class UserParam extends React.PureComponent
 {
     constructor(props)
     {

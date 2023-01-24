@@ -5,7 +5,7 @@ import Button from 'devextreme-react/button';
 import NdSelectBox from '../../core/react/devex/selectbox.js';
 
 
-export default class Login extends React.Component
+export default class Login extends React.PureComponent
 {
     constructor()
     {

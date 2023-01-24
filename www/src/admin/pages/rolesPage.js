@@ -7,7 +7,7 @@ import NdPopUp from '../../core/react/devex/popup.js';
 import NdPopGrid from '../../core/react/devex/popgrid.js';
 import { roleCls } from '../../core/cls/roles.js';
 
-export default class userPage extends React.Component
+export default class userPage extends React.PureComponent
 {
     constructor(props)
     {

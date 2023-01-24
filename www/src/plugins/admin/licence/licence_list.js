@@ -4,7 +4,7 @@ import DataGrid, {Column,Grouping,GroupPanel,Pager,Paging,SearchPanel} from 'dev
 import DropDownButton from 'devextreme-react/drop-down-button';
 import { Popup, Position, ToolbarItem } from 'devextreme-react/popup';
 
-export default class LicenceList extends React.Component
+export default class LicenceList extends React.PureComponent
 {
     constructor()
     {

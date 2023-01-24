@@ -12,7 +12,7 @@ import i18n from './i18n.js'
 import { locale, loadMessages, formatMessage } from 'devextreme/localization';
 import { dialog } from '../../core/react/devex/dialog.js';
 
-export default class Login extends React.Component
+export default class Login extends React.PureComponent
 {
     constructor()
     {
