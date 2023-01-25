@@ -21,7 +21,7 @@ import NdTagBox from '../../../../core/react/devex/tagbox.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
 
-export default class purchaseContract extends React.PureComponent
+export default class salesContract extends React.PureComponent
 {
     constructor(props)
     {
@@ -114,7 +114,7 @@ export default class purchaseContract extends React.PureComponent
     }
     async addItem(pData)
     {
-       
+        App.instance.setState({isExecute:true})
         let tmpEmpty = {...this.contractObj.empty};
                                                     
         tmpEmpty.CUSER = this.core.auth.data.CODE,  
@@ -157,6 +157,7 @@ export default class purchaseContract extends React.PureComponent
         
         this.contractObj.addEmpty(tmpEmpty);
         this._calculateMargin()
+        App.instance.setState({isExecute:false})
     }
     async multiItemAdd()
     {
