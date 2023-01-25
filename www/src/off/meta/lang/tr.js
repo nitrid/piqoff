@@ -53,6 +53,12 @@ export const langTr =
         msg : "Sizin kullanıcı bilgileriniz ile başka bir cihazdan giriş yapıldı",
         btn01 : "Tamam"
     },
+    msgisExecuteClose: 
+    {
+        title : "Dikkat",
+        msg : "Database bağlantısında bir problem oluştu lütfen yaptığınız son işlemleri kontrol ediniz",
+        btn01 : "Tamam"
+    },
     popOpenTike :
     {
         title : "Tamamlanmamış Fişler"

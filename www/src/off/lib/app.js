@@ -363,6 +363,23 @@ export default class App extends React.PureComponent
     {
         const { opened,logined,connected,splash } = this.state;
 
+        if(this.state.isExecute == true)
+        {
+            setTimeout(async() => {
+                if(this.state.isExecute == true)
+                {
+                    this.setState({isExecute:false})
+                    let tmpConfObj =
+                    {
+                        id:'msgisExecuteClose',showTitle:true,title:this.lang.t("msgisExecuteClose.title"),showCloseButton:true,width:'500px',height:'200px',
+                        button:[{id:"btn01",caption:this.lang.t("msgisExecuteClose.btn01"),location:'after'}],
+                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgisExecuteClose.msg")}</div>)
+                    }
+                    await dialog(tmpConfObj);
+                }
+            }, 30000);
+        }
+
         if(!connected)
         {
             //SPLASH EKRANI

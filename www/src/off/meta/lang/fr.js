@@ -53,6 +53,12 @@ export const langFr =
         msg : "Connectez-vous à partir d'un autre appareil avec vos informations d'utilisateur.",
         btn01 : "OK"
     },
+    msgisExecuteClose: 
+    {
+        title : "Dikkat",   // BAK
+        msg : "Database bağlantısında bir problem oluştu lütfen yaptığınız son işlemleri kontrol ediniz",   // BAK
+        btn01 : "Tamam"   // BAK
+    },
     popOpenTike :
     {
         title : "Ticket En Attente" 

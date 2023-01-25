@@ -3758,7 +3758,7 @@ export default class salesInvoice extends React.PureComponent
                                 <Form>
                                     <Item>
                                         <Label text={this.t("txtQuantity")} alignment="right" />
-                                        <NdNumberBox id="txtPopQuantity" parent={this} simple={true}  
+                                        <NdNumberBox id="txtPopQuantity" value={1} parent={this} simple={true}  
                                         onEnterKey={(async(e)=>
                                         {
                                             this.msgQuantity._onClick()
