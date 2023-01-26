@@ -125,7 +125,7 @@ export default class salesOrder extends React.PureComponent
                     this.txtBarcode.value = result.text;
                     let tmpQuery = 
                     {
-                        query : "SELECT ITEM_CODE AS CODE,ITEM_NAME AS NAME,ITEM_GUID AS GUID,BARCODE, ISNULL((SELECT VAT FROM ITEMS WHERE ITEMS.GUID = ITEM_BARCODE_VW_01.ITEM_GUID),0) AS VAT FROM ITEM_BARCODE_VW_01  WHERE BARCODE = @BARCODE OR ITEM_CODE = @BARCODE ",
+                        query : "SELECT CODE AS CODE,NAME AS NAME,GUID AS GUID,BARCODE,VAT AS VAT FROM ITEMS_BARCODE_MULTICODE_VW_01  WHERE BARCODE = @BARCODE OR CODE = @BARCODE ",
                         param : ['BARCODE:string|50'],
                         value : [result.text]
                     }
@@ -717,7 +717,7 @@ export default class salesOrder extends React.PureComponent
                                                 }
                                                 let tmpQuery = 
                                                 {
-                                                    query : "SELECT ITEM_CODE AS CODE,ITEM_NAME AS NAME,ITEM_GUID AS GUID,BARCODE, ISNULL((SELECT VAT FROM ITEMS WHERE ITEMS.GUID = ITEM_BARCODE_VW_01.ITEM_GUID),0) AS VAT FROM ITEM_BARCODE_VW_01  WHERE BARCODE = @BARCODE OR ITEM_CODE = @BARCODE ",
+                                                    query : "SELECT CODE AS CODE,NAME AS NAME,GUID AS GUID,BARCODE,VAT AS VAT FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE BARCODE = @BARCODE OR CODE = @BARCODE ",
                                                     param : ['BARCODE:string|50'],
                                                     value : [e.component._changedValue]
                                                 }
@@ -1095,7 +1095,7 @@ export default class salesOrder extends React.PureComponent
                                         "MAIN_GRP_NAME AS ITEM_GRP_NAME,   " +
                                         "(SELECT [dbo].[FN_PRICE_SALE](GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000')) AS PRICE  , " +
                                         "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 1 AND ITEM_UNIT.ITEM = ITEMS_VW_01.GUID),0) AS UNDER_UNIT_VALUE " +
-                                        "FROM ITEMS_VW_01 WHERE ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID),'') <> '') AS TMP " +
+                                        "FROM ITEMS_VW_01) AS TMP " +
                                         "WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL) " ,
                                 param : ['VAL:string|50']
                             },
