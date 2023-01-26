@@ -4631,6 +4631,12 @@ export const langFr =
             msg: "Produits Présents dans la Liste! "
         },
         tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
+        msgPrintforLocked:
+        {
+            title: "Attention",   // BAK
+            btn01: "OK",   // BAK
+            msg: "Evrak Kilitlenmeden Yazdırılamaz !"   // BAK
+        },
     },
     ftr_02_004 : // "Fiyat Farkı Faturası"
     {
@@ -5055,6 +5061,12 @@ export const langFr =
             msg: "Produits Présents dans la Liste! "
         },
         tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
+        msgPrintforLocked:
+        {
+            title: "Attention",   // BAK
+            btn01: "OK",   // BAK
+            msg: "Evrak Kilitlenmeden Yazdırılamaz !"   // BAK
+        },
     },
     ftr_02_005 : // "Şube Satış Faturası"
     {
@@ -5507,6 +5519,12 @@ export const langFr =
             title : "Prestations de service",   
             clmCode : "Code",   
             clmName : "Nom"   
+        },
+        msgPrintforLocked:
+        {
+            title: "Attention",   // BAK
+            btn01: "OK",   // BAK
+            msg: "Evrak Kilitlenmeden Yazdırılamaz !"   // BAK
         },
     },
     ftr_02_006 : // "Fiyat Farkı Alış Faturası"

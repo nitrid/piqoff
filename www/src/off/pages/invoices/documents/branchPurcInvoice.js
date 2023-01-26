@@ -1345,20 +1345,7 @@ export default class branchSaleInvoice extends React.PureComponent
                                     <NdButton id="btnPrint" parent={this} icon="print" type="default"
                                     onClick={async()=>
                                     {
-                                        if(this.docLocked == true)
-                                        {
-                                            this.popDesign.show()
-                                        }
-                                        else
-                                        {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgPrintforLocked',showTitle:true,title:this.t("msgPrintforLocked.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgPrintforLocked.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgPrintforLocked.msg")}</div>)
-                                            }
-                                            await dialog(tmpConfObj);
-                                        }
+                                        this.popDesign.show()   
                                     }}/>
                                 </Item>
                                 <Item location="after"

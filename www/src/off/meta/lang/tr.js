@@ -4628,6 +4628,12 @@ export const langTr =
             msg: "Listede Ürünler Var! "
         },
         tagItemCodePlaceholder: "Lütfen Eklemek İstediğiniz Kodları Giriniz",
+        msgPrintforLocked:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrak Kilitlenmeden Yazdırılamaz !"
+        },
     },
     ftr_02_004 : // "Fiyat Farkı Faturası"
     {
@@ -5045,6 +5051,12 @@ export const langTr =
             msg: "Listede Ürünler Var! "
         },
         tagItemCodePlaceholder: "Lütfen Eklemek İstediğiniz Kodları Giriniz",
+        msgPrintforLocked:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrak Kilitlenmeden Yazdırılamaz !"
+        },
     },
     ftr_02_005 : // "Şube Satış Faturası"
     {
@@ -5505,6 +5517,12 @@ export const langTr =
             clmName : "Adı"
         },
         txtTotalHt : "İndirimli Tutar",
+        msgPrintforLocked:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrak Kilitlenmeden Yazdırılamaz !"
+        },
     },
     ftr_02_006 : // "Fiyat Farkı Alış Faturası"
     {
@@ -6329,7 +6347,7 @@ export const langTr =
         },
         tagItemCodePlaceholder: "Lütfen Eklemek İstediğiniz Kodları Giriniz",
     },
-    ftr_02_008 : // "Şube Satış Faturası"
+    ftr_02_008 : // "Şube Alış Faturası"
     {
         txtRefRefno : "Seri-Sıra",
         cmbDepot: "Depo",
