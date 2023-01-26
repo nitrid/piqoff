@@ -53,6 +53,12 @@ export const langFr =
         msg : "Connectez-vous à partir d'un autre appareil avec vos informations d'utilisateur.",
         btn01 : "OK"
     },
+    msgisExecuteClose: 
+    {
+        title : "Dikkat",   // BAK
+        msg : "Database bağlantısında bir problem oluştu lütfen yaptığınız son işlemleri kontrol ediniz",   // BAK
+        btn01 : "Tamam"   // BAK
+    },
     popOpenTike :
     {
         title : "Ticket En Attente" 
@@ -5861,6 +5867,46 @@ export const langFr =
             clmCode : "Code",   
             clmName : "Nom"   
         },
+        msgMissItemCode:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Code Non Retrouvé"
+        },
+        msgMultiCodeCount:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Nombre de Produit Ajouté"
+        },
+        popMultiItem:
+        {
+            title: "Ajout Groupé de Produit",
+            btnApprove: "Chercher Produits",
+            btnClear : "Vider Liste",
+            btnSave : "Ajouter Lignes",
+        },
+        cmbMultiItemType : 
+        {
+            title : "Mode de Recherche",
+            customerCode : "En Fonction du Code Fournisseur",
+            ItemCode : "En Fonction du Code Produit"
+        },
+        grdMultiItem : 
+        {
+            clmCode : "Référence Produit",
+            clmMulticode : "FRN.Code",
+            clmName : "Nom du produit",
+            clmQuantity : "Quantité"
+        },
+        msgMultiData:
+        {
+            title: "Attention",
+            btn01: "Effacer Liste et Ajoute le Tout",
+            btn02: "Inclure Les Nouvelles Saisies à la Liste",
+            msg: "Produits Présents dans la Liste! "
+        },
+        tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
     },
     ftr_02_007 : // "İade Alış Faturası"
     {
@@ -6245,6 +6291,46 @@ export const langFr =
             clmCode : "Code",   
             clmName : "Nom"   
         },
+        msgMissItemCode:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Code Non Retrouvé"
+        },
+        msgMultiCodeCount:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Nombre de Produit Ajouté"
+        },
+        popMultiItem:
+        {
+            title: "Ajout Groupé de Produit",
+            btnApprove: "Chercher Produits",
+            btnClear : "Vider Liste",
+            btnSave : "Ajouter Lignes",
+        },
+        cmbMultiItemType : 
+        {
+            title : "Mode de Recherche",
+            customerCode : "En Fonction du Code Fournisseur",
+            ItemCode : "En Fonction du Code Produit"
+        },
+        grdMultiItem : 
+        {
+            clmCode : "Référence Produit",
+            clmMulticode : "FRN.Code",
+            clmName : "Nom du produit",
+            clmQuantity : "Quantité"
+        },
+        msgMultiData:
+        {
+            title: "Attention",
+            btn01: "Effacer Liste et Ajoute le Tout",
+            btn02: "Inclure Les Nouvelles Saisies à la Liste",
+            msg: "Produits Présents dans la Liste! "
+        },
+        tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
     },
     ftr_02_008 : // "Şube Alış Faturası"
     {
@@ -10660,6 +10746,7 @@ export const langFr =
         placeMailHtmlEditor : "Veuillez saisir votre texte .", 
         validDesign : "Veuillez sélectionner le design.",  
         validMail : "Veuillez ne pas laisser le champs vide.",  
+        txtTotalHt : "Total HT",
         pg_Docs : 
         {
             title : "Sélection Document",

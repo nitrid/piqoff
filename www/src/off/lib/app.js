@@ -55,6 +55,7 @@ export default class App extends React.PureComponent
         moment.locale(localStorage.getItem('lang') == null ? 'tr' : localStorage.getItem('lang'));
         
         this.UserChange = this.UserChange.bind(this)
+        this.timeoutControl = this.timeoutControl.bind(this)
                 
         this.style =
         {
@@ -155,6 +156,7 @@ export default class App extends React.PureComponent
             changeUser : "",
             changePass : ""
         }
+        this.isExecuteTimeOut
                 
         this.core = new core(io(window.location.origin,{timeout:100000,transports : ['websocket']}));
         this.textValueChanged = this.textValueChanged.bind(this)
@@ -359,9 +361,31 @@ export default class App extends React.PureComponent
             }
         ]})
     }
+    async timeoutControl()
+    {
+       
+        this.setState({isExecute:false})
+        let tmpConfObj =
+        {
+            id:'msgisExecuteClose',showTitle:true,title:this.lang.t("msgisExecuteClose.title"),showCloseButton:true,width:'500px',height:'200px',
+            button:[{id:"btn01",caption:this.lang.t("msgisExecuteClose.btn01"),location:'after'}],
+            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgisExecuteClose.msg")}</div>)
+        }
+        await dialog(tmpConfObj);
+    }
     render() 
     {
         const { opened,logined,connected,splash } = this.state;
+
+        if(this.state.isExecute == true)
+        {
+            this.isExecuteTimeOut = setTimeout(this.timeoutControl, 30000);
+        }
+        else
+        {
+            clearTimeout(this.isExecuteTimeOut)
+        }
+           
 
         if(!connected)
         {
