@@ -12041,7 +12041,8 @@ export const langFr =
             clmMargin :"Marge", 
             clmVatExtPrice : "Hors Taxe", 
             clmCostPrice : "Coût", 
-            clmMulticode : "FRN. Code" 
+            clmMulticode : "FRN. Code" ,
+            clmUnit : "Unité",
         },
         popItems: 
         {
@@ -12112,6 +12113,15 @@ export const langFr =
             design : "Design" ,
             lang : "Langue Document" 
         },
+        msgUnit:
+        {
+            title: "Sélection de l'unité",
+            btn01: "Valider",
+        }, 
+        txtUnitFactor : "Coefficient unitaire",  
+        txtUnitQuantity : "Quantité unitaire",  
+        txtTotalQuantity : "Quantité totale",  
+        txtUnitPrice : "Birim Fiyatı", // BAK
     },
     cnt_02_002 : // "Satış Anlaşması"
     {
@@ -12199,6 +12209,7 @@ export const langFr =
             clmMargin :"Marge", 
             clmVatExtPrice : "Hors Taxe", 
             clmCostPrice : "Coût", 
+            clmUnit : "Unité",
         },
         popItems: 
         {
@@ -12275,6 +12286,15 @@ export const langFr =
             design : "Design" ,
             lang : "Langue Document" 
         },
+        msgUnit:
+        {
+            title: "Sélection de l'unité",
+            btn01: "Valider",
+        }, 
+        txtUnitFactor : "Coefficient unitaire",  
+        txtUnitQuantity : "Quantité unitaire",  
+        txtTotalQuantity : "Quantité totale",  
+        txtUnitPrice : "Birim Fiyatı", // BAK
     },
     fns_01_001 : // "Ödeme Listesi",
     {

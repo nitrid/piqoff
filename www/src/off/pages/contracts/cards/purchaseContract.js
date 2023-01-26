@@ -18,7 +18,7 @@ import NdGrid,{Column,Editing,Paging,Scrolling,KeyboardNavigation,Pager,Export} 
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdTagBox from '../../../../core/react/devex/tagbox.js';
-import { dialog } from '../../../../core/react/devex/dialog.js';
+import NdDialog, { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
 
 export default class purchaseContract extends React.PureComponent
@@ -32,6 +32,7 @@ export default class purchaseContract extends React.PureComponent
         this.contractObj = new contractCls();
         this.tabIndex = props.data.tabkey
 
+        this._cellRoleRender = this._cellRoleRender.bind(this)
         this._getItems = this._getItems.bind(this)
         this.multiItemData = new datatable
     } 

@@ -34,9 +34,13 @@ export class contractCls
             MULTICODE : '',
             QUANTITY : 0,
             PRICE : 0,
+            UNIT :'00000000-0000-0000-0000-000000000000',
+            UNIT_NAME: '',
             COST_PRICE : 0,
             PRICE_VAT_EXT : 0,
             VAT_RATE : 0, 
+            MAIN_GRP_NAME :'',
+            UNIT_FACTOR : 1
         }
 
         this._initDs();
@@ -64,10 +68,11 @@ export class contractCls
                     "@DEPOT = @PDEPOT, " +
                     "@ITEM = @PITEM, " +
                     "@QUANTITY = @PQUANTITY, " +
-                    "@PRICE = @PPRICE ",
+                    "@PRICE = @PPRICE, " +
+                    "@UNIT = @PUNIT ",
             param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|25','PNAME:string|250','PTYPE:int','PSTART_DATE:date','PFINISH_DATE:date',
-                     'PCUSTOMER:string|50','PDEPOT:string|50','PITEM:string|50','PQUANTITY:float','PPRICE:float'],
-            dataprm : ['GUID','CUSER','CODE','NAME','TYPE','START_DATE','FINISH_DATE','CUSTOMER','DEPOT','ITEM','QUANTITY','PRICE']
+                     'PCUSTOMER:string|50','PDEPOT:string|50','PITEM:string|50','PQUANTITY:float','PPRICE:float','PUNIT:string|50'],
+            dataprm : ['GUID','CUSER','CODE','NAME','TYPE','START_DATE','FINISH_DATE','CUSTOMER','DEPOT','ITEM','QUANTITY','PRICE','UNIT']
         } 
         tmpDt.updateCmd = 
         {
@@ -83,10 +88,11 @@ export class contractCls
                     "@DEPOT = @PDEPOT, " +
                     "@ITEM = @PITEM, " +
                     "@QUANTITY = @PQUANTITY, " +
-                    "@PRICE = @PPRICE ",
+                    "@PRICE = @PPRICE, " +
+                    "@UNIT = @PUNIT ",
             param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|25','PNAME:string|250','PTYPE:int','PSTART_DATE:date','PFINISH_DATE:date',
-                    'PCUSTOMER:string|50','PDEPOT:string|50','PITEM:string|50','PQUANTITY:float','PPRICE:float'],
-            dataprm : ['GUID','CUSER','CODE','NAME','TYPE','START_DATE','FINISH_DATE','CUSTOMER','DEPOT','ITEM','QUANTITY','PRICE']
+                     'PCUSTOMER:string|50','PDEPOT:string|50','PITEM:string|50','PQUANTITY:float','PPRICE:float','PUNIT:string|50'],
+            dataprm : ['GUID','CUSER','CODE','NAME','TYPE','START_DATE','FINISH_DATE','CUSTOMER','DEPOT','ITEM','QUANTITY','PRICE','UNIT']
         } 
         tmpDt.deleteCmd = 
         {

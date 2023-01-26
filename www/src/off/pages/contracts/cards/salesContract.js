@@ -18,7 +18,7 @@ import NdGrid,{Column,Editing,Paging,Scrolling,KeyboardNavigation,Pager,Export, 
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdTagBox from '../../../../core/react/devex/tagbox.js';
-import { dialog } from '../../../../core/react/devex/dialog.js';
+import NdDialog, { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
 
 export default class salesContract extends React.PureComponent
@@ -31,7 +31,8 @@ export default class salesContract extends React.PureComponent
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.contractObj = new contractCls();
         this.tabIndex = props.data.tabkey
-
+        
+        this._cellRoleRender = this._cellRoleRender.bind(this)
         this._getItems = this._getItems.bind(this)
         this.multiItemData = new datatable
     } 
@@ -138,7 +139,7 @@ export default class salesContract extends React.PureComponent
         }   
         let tmpCheckQuery = 
         {
-            query :"SELECT COST_PRICE,VAT,(SELECT [dbo].[FN_PRICE_SALE](@GUID,1,GETDATE(),@CUSTOMER_GUID)) AS PRICE FROM ITEMS WHERE ITEMS.GUID = @GUID",
+            query :"SELECT COST_PRICE,VAT,PRICE_SALE AS PRICE,UNIT_GUID,UNIT_NAME,UNIT_FACTOR,MAIN_GRP_NAME FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE ITEMS_BARCODE_MULTICODE_VW_01.GUID = @GUID",
             param : ['GUID:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
             value : [pData.GUID,this.txtCustomerCode.GUID,1]
         }
@@ -149,6 +150,10 @@ export default class salesContract extends React.PureComponent
             tmpEmpty.COST_PRICE = tmpCheckData.result.recordset[0].COST_PRICE
             tmpEmpty.PRICE_VAT_EXT = (tmpCheckData.result.recordset[0].PRICE / ((tmpCheckData.result.recordset[0].VAT / 100) + 1))
             tmpEmpty.VAT_RATE = tmpCheckData.result.recordset[0].VAT
+            tmpEmpty.UNIT = tmpCheckData.result.recordset[0].UNIT_GUID
+            tmpEmpty.UNIT_NAME = tmpCheckData.result.recordset[0].UNIT_NAME
+            tmpEmpty.UNIT_FACTOR = tmpCheckData.result.recordset[0].UNIT_FACTOR
+            tmpEmpty.MAIN_GRP_NAME = tmpCheckData.result.recordset[0].MAIN_GRP_NAME
         }
         else
         {
@@ -288,6 +293,57 @@ export default class salesContract extends React.PureComponent
             let tmpMargin = (this.contractObj.dt()[i].PRICE_VAT_EXT) - (this.contractObj.dt()[i].COST_PRICE )
             let tmpMarginRate = (tmpMargin ) * 100
             this.contractObj.dt()[i].MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
+        }
+    }
+    _cellRoleRender(e)
+    {
+        if(e.column.dataField == "UNIT_NAME")
+        {
+            return (
+                <NdTextBox id={"txtGrdUnitName"+e.rowIndex} parent={this} simple={true} 
+                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                value={e.value}
+                onChange={(r)=>
+                {
+                }}
+                button=
+                {
+                    [
+                        {
+                            id:'01',
+                            icon:'more',
+                            onClick:async ()  =>
+                            {
+                                let tmpQuery = 
+                                {
+                                    query: "SELECT GUID,ISNULL((SELECT NAME FROM UNIT WHERE UNIT.ID = ITEM_UNIT.ID),'') AS NAME,FACTOR FROM ITEM_UNIT WHERE DELETED = 0 AND ITEM = @ITEM ORDER BY TYPE" ,
+                                    param:  ['ITEM:string|50'],
+                                    value:  [e.data.ITEM]
+                                }
+                                let tmpData = await this.core.sql.execute(tmpQuery) 
+                                if(tmpData.result.recordset.length > 0)
+                                {   
+                                    this.cmbUnit.setData(tmpData.result.recordset)
+                                    this.cmbUnit.value = e.data.UNIT
+                                    this.txtUnitFactor.value = e.data.UNIT_FACTOR
+                                    this.txtTotalQuantity.value = e.data.QUANTITY
+                                    this.txtUnitQuantity.value = e.data.QUANTITY / e.data.UNIT_FACTOR
+                                    this.txtUnitPrice.value = parseFloat((e.data.PRICE * e.data.UNIT_FACTOR).toFixed(3))
+                                }
+                                await this.msgUnit.show().then(async () =>
+                                {
+                                    e.key.UNIT = this.cmbUnit.value
+                                    e.key.UNIT_FACTOR = this.txtUnitFactor.value
+                                    e.data.PRICE = parseFloat((this.txtUnitPrice.value / this.txtUnitFactor.value).toFixed(4))
+                                    e.data.QUANTITY = this.txtTotalQuantity.value
+                                });  
+                            }
+                        },
+                    ]
+                }
+                >  
+                </NdTextBox>
+            )
         }
     }
     render()
@@ -755,12 +811,13 @@ export default class salesContract extends React.PureComponent
                                         <Export fileName={this.lang.t("menu.cnt_02_001")} enabled={true} allowExportSelectedData={true} />
                                         <Column dataField="CDATE_FORMAT" caption={this.t("grdContracts.clmCreateDate")} allowEditing={false} width={80}/>
                                         <Column dataField="ITEM_CODE" caption={this.t("grdContracts.clmItemCode")} width={150} allowEditing={false}/>
-                                        <Column dataField="ITEM_NAME" caption={this.t("grdContracts.clmItemName")} width={200} allowEditing={false}/>
-                                        <Column dataField="ITEM_MAIN_GRP" caption={this.t("grdContracts.clmGrpName")} width={150} allowEditing={false}/>
+                                        <Column dataField="ITEM_NAME" caption={this.t("grdContracts.clmItemName")} width={300} allowEditing={false}/>
+                                        <Column dataField="MAIN_GRP_NAME" caption={this.t("grdContracts.clmGrpName")} width={150} allowEditing={false}/>
+                                        <Column dataField="QUANTITY" caption={this.t("grdContracts.clmQuantity")} width={80} dataType={'number'}/>
+                                        <Column dataField="UNIT_NAME" caption={this.t("grdContracts.clmUnit")} width={100} editCellRender={this._cellRoleRender}/>
                                         <Column dataField="COST_PRICE" caption={this.t("grdContracts.clmCostPrice")} width={80} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>
                                         <Column dataField="PRICE" caption={this.t("grdContracts.clmPrice")} dataType={'number'} width={80} format={{ style: "currency", currency: "EUR",precision: 2}}/>
                                         <Column dataField="PRICE_VAT_EXT" caption={this.t("grdContracts.clmVatExtPrice")} width={80} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}} />
-                                        <Column dataField="QUANTITY" caption={this.t("grdContracts.clmQuantity")} width={80} dataType={'number'}/>
                                         <Column dataField="MARGIN" caption={this.t("grdContracts.clmMargin")} width={80} allowEditing={false}/>
                                         <Column dataField="START_DATE" caption={this.t("grdContracts.clmStartDate")} dataType={'date'} visible={false}
                                         editorOptions={{value:null}}
@@ -1107,6 +1164,70 @@ export default class salesContract extends React.PureComponent
                         </Form>
                     </NdPopUp>
                 </div> 
+                {/* Birim PopUp */}
+                <div>
+                    <NdDialog parent={this} id={"msgUnit"} 
+                    visible={false}
+                    showCloseButton={true}
+                    showTitle={true}
+                    title={this.t("msgUnit.title")}
+                    container={"#root"} 
+                    width={'500'}
+                    height={'400'}
+                    position={{of:'#root'}}
+                    button={[{id:"btn01",caption:this.t("msgUnit.btn01"),location:'after'}]}
+                    >
+                        <Form colCount={1} height={'fit-content'}>
+                            <Item>
+                                <NdSelectBox simple={true} parent={this} id="cmbUnit"
+                                displayExpr="NAME"                       
+                                valueExpr="GUID"
+                                value=""
+                                searchEnabled={true}
+                                onValueChanged={(async(e)=>
+                                {
+                                    this.txtUnitFactor.setState({value:this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].FACTOR});
+                                    this.txtTotalQuantity.value = Number(this.txtUnitQuantity.value * this.txtUnitFactor.value);
+                                }).bind(this)}
+                                >
+                                </NdSelectBox>
+                            </Item>
+                            <Item>
+                                <Label text={this.t("txtUnitFactor")} alignment="right" />
+                                <NdNumberBox id="txtUnitFactor" parent={this} simple={true}
+                                readOnly={true}
+                                maxLength={32}
+                                >
+                                </NdNumberBox>
+                            </Item>
+                            <Item>
+                                <Label text={this.t("txtUnitQuantity")} alignment="right" />
+                                <NdNumberBox id="txtUnitQuantity" parent={this} simple={true}
+                                maxLength={32}
+                                onValueChanged={(async(e)=>
+                                {
+                                    this.txtTotalQuantity.value = Number(this.txtUnitQuantity.value * this.txtUnitFactor.value)
+                                }).bind(this)}
+                                >
+                                </NdNumberBox>
+                            </Item>
+                            <Item>
+                                <Label text={this.t("txtTotalQuantity")} alignment="right" />
+                                <NdNumberBox id="txtTotalQuantity" parent={this} simple={true}  readOnly={true}
+                                maxLength={32}
+                                >
+                                </NdNumberBox>
+                            </Item>
+                            <Item>
+                                <Label text={this.t("txtUnitPrice")} alignment="right" />
+                                <NdNumberBox id="txtUnitPrice" parent={this} simple={true} 
+                                maxLength={32}
+                                >
+                                </NdNumberBox>
+                            </Item>
+                        </Form>
+                    </NdDialog>
+                </div>  
             </div>
         )
     }

@@ -12036,7 +12036,8 @@ export const langTr =
             clmMargin :"Marj",
             clmVatExtPrice : "KDV Hariç",
             clmCostPrice : "Maliyet",
-            clmMulticode : "T.Kodu"
+            clmMulticode : "T.Kodu",
+            clmUnit : "Birim",
         },
         popItems: 
         {
@@ -12107,6 +12108,15 @@ export const langTr =
             design : "Dizayn",
             lang : "Evrak Dili"
         },
+        msgUnit:
+        {
+            title: "Birim Seçimi",
+            btn01: "Onayla",
+        },
+        txtUnitFactor : "Birim Katsayısı",
+        txtUnitQuantity : "Birim Miktarı",
+        txtTotalQuantity : "Toplam Miktar",
+        txtUnitPrice: "Birim Fiyatı",
     },
     cnt_02_002 : // "Satış Anlaşması"
     {
@@ -12194,6 +12204,7 @@ export const langTr =
             clmMargin :"Marj",
             clmVatExtPrice : "KDV Hariç",
             clmCostPrice : "Maliyet",
+            clmUnit : "Birim",
         },
         popItems: 
         {
@@ -12270,6 +12281,15 @@ export const langTr =
             design : "Dizayn",
             lang : "Evrak Dili"
         },
+        msgUnit:
+        {
+            title: "Birim Seçimi",
+            btn01: "Onayla",
+        },
+        txtUnitFactor : "Birim Katsayısı",
+        txtUnitQuantity : "Birim Miktarı",
+        txtTotalQuantity : "Toplam Miktar",
+        txtUnitPrice: "Birim Fiyatı",
     },
     fns_01_001 : // "Ödeme Listesi",
     {
