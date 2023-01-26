@@ -333,6 +333,7 @@ export default class salesContract extends React.PureComponent
                                 await this.msgUnit.show().then(async () =>
                                 {
                                     e.key.UNIT = this.cmbUnit.value
+                                    e.key.UNIT_NAME = this.cmbUnit.displayValue
                                     e.key.UNIT_FACTOR = this.txtUnitFactor.value
                                     e.data.PRICE = parseFloat((this.txtUnitPrice.value / this.txtUnitFactor.value).toFixed(4))
                                     e.data.QUANTITY = this.txtTotalQuantity.value
@@ -813,11 +814,11 @@ export default class salesContract extends React.PureComponent
                                         <Column dataField="ITEM_CODE" caption={this.t("grdContracts.clmItemCode")} width={150} allowEditing={false}/>
                                         <Column dataField="ITEM_NAME" caption={this.t("grdContracts.clmItemName")} width={300} allowEditing={false}/>
                                         <Column dataField="MAIN_GRP_NAME" caption={this.t("grdContracts.clmGrpName")} width={150} allowEditing={false}/>
-                                        <Column dataField="QUANTITY" caption={this.t("grdContracts.clmQuantity")} width={80} dataType={'number'}/>
                                         <Column dataField="UNIT_NAME" caption={this.t("grdContracts.clmUnit")} width={100} editCellRender={this._cellRoleRender}/>
                                         <Column dataField="COST_PRICE" caption={this.t("grdContracts.clmCostPrice")} width={80} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>
                                         <Column dataField="PRICE" caption={this.t("grdContracts.clmPrice")} dataType={'number'} width={80} format={{ style: "currency", currency: "EUR",precision: 2}}/>
                                         <Column dataField="PRICE_VAT_EXT" caption={this.t("grdContracts.clmVatExtPrice")} width={80} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}} />
+                                        <Column dataField="QUANTITY" caption={this.t("grdContracts.clmQuantity")} width={80} dataType={'number'}/>
                                         <Column dataField="MARGIN" caption={this.t("grdContracts.clmMargin")} width={80} allowEditing={false}/>
                                         <Column dataField="START_DATE" caption={this.t("grdContracts.clmStartDate")} dataType={'date'} visible={false}
                                         editorOptions={{value:null}}
