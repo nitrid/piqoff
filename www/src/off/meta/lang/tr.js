@@ -12455,7 +12455,8 @@ export const langTr =
             clmAmount : "Tutar",
             clmOutputName : "Kasa/Banka",
             clmDescription : "Açıklama",
-            clmInvoice : "Ödenen Fatura"
+            clmInvoice : "Ödenen Fatura",
+            clmFacDate : "Fatura Tarihi"
         },
         msgDocValid:
         {
@@ -12607,7 +12608,9 @@ export const langTr =
             clmCreateDate: "Kayıt Tarihi",
             clmAmount : "Tutar",
             clmInputName : "Kasa/Banka",
-            clmDescription : "Açıklama"
+            clmDescription : "Açıklama",
+            clmInvoice : "Ödenen Fatura",
+            clmFacDate : "Fatura Tarihi "
         },
         msgDocValid:
         {

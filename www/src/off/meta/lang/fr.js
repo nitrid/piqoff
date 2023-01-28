@@ -12460,7 +12460,8 @@ export const langFr =
             clmAmount : "Total",
             clmOutputName : "Coffre-fort/Banque",
             clmDescription : "Motif",
-            clmInvoice : "Facture payée"
+            clmInvoice : "Facture payée",
+            clmFacDate : "Date de facture "
         },
         msgDocValid:
         {
@@ -12612,7 +12613,9 @@ export const langFr =
             clmCreateDate: "Date d'enregistrement",
             clmAmount : "Total",
             clmInputName : "Caisse/Banque",
-            clmDescription : "Motif"
+            clmDescription : "Motif",
+            clmInvoice : "Facture payée",
+            clmFacDate : "Date de facture "
         },
         msgDocValid:
         {

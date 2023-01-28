@@ -432,6 +432,12 @@ export default class payment extends React.PureComponent
         this.pg_invoices.onClick = async(data) =>
         {
             this.invoices = data
+            let tmpTotal = 0
+            for (let i = 0; i < data.length; i++) 
+            {
+                tmpTotal = tmpTotal + data[i].REMAINING
+            }
+            this.numCash.value = parseFloat(tmpTotal.toFixed(2))
         }
     }
     async getDocumant()
@@ -959,6 +965,17 @@ export default class payment extends React.PureComponent
                                         <Column dataField="AMOUNT" caption={this.t("grdDocPayments.clmAmount")} format={{ style: "currency", currency: "EUR",precision: 2}} />
                                         <Column dataField="DESCRIPTION" caption={this.t("grdDocPayments.clmDescription")} />
                                         <Column dataField="INVOICE_REF" caption={this.t("grdDocPayments.clmInvoice")} />
+                                        <Column dataField="INVOICE_DATE" caption={this.t("grdDocPayments.clmFacDate")}  dataType="date" 
+                                                editorOptions={{value:null}}
+                                                cellRender={(e) => 
+                                                {
+                                                    if(moment(e.value).format("YYYY-MM-DD") != '1970-01-01')
+                                                    {
+                                                        return e.text
+                                                    }
+                                                    
+                                                    return
+                                                }}/>
                                     </NdGrid>
                                     <ContextMenu
                                     dataSource={this.rightItems}
