@@ -323,7 +323,7 @@ export default class salesDispartch extends React.PureComponent
     }
     async _onItemRendered(e)
     {
-        await this.core.util.waitUntil(500)
+        await this.core.util.waitUntil(1000)
         
         if(e.itemData.name == "Main")
         {

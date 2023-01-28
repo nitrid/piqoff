@@ -932,18 +932,19 @@ export default class salesInvoice extends React.PureComponent
     {
         if(typeof this.txtRemainder != 'undefined')
         {
-             await this.paymentObj.load({PAYMENT_DOC_GUID:this.docObj.dt()[0].GUID});
+            await this.paymentObj.docCustomer.load({INVOICE_GUID:this.docObj.dt()[0].GUID});
             if(this.paymentObj.dt().length > 0)
             {
+                this.txtPayTotal.value = parseFloat(this.paymentObj.docCustomer.dt().sum("AMOUNT",2))
                 let tmpRemainder = (this.docObj.dt()[0].TOTAL - this.paymentObj.dt()[0].TOTAL).toFixed(2)
                 this.txtRemainder.setState({value:tmpRemainder});
                 this.txtMainRemainder.setState({value:tmpRemainder});
             }
             else
             {
+                this.txtPayTotal.value = 0
                 this.txtRemainder.setState({value:this.docObj.dt()[0].TOTAL});
                 this.txtMainRemainder.setState({value:this.docObj.dt()[0].TOTAL});
-            
             }
             let tmpQuery = 
             {
@@ -1002,7 +1003,7 @@ export default class salesInvoice extends React.PureComponent
             tmpPayment.DOC_TYPE = this.paymentObj.dt()[0].DOC_TYPE
             tmpPayment.DOC_DATE = this.paymentObj.dt()[0].DOC_DATE
             tmpPayment.OUTPUT = this.paymentObj.dt()[0].OUTPUT
-            tmpPayment.INVOICE_DOC_GUID = this.docObj.dt()[0].GUID                                   
+            tmpPayment.INVOICE_GUID = this.docObj.dt()[0].GUID                                   
 
             if(pType == 0)
             {
@@ -3183,8 +3184,6 @@ export default class salesInvoice extends React.PureComponent
                                     dbApply={false}
                                     onRowRemoved={async (e)=>{
                                         this.popPayment.hide()
-                                        this.paymentObj.dt()[0].AMOUNT = this.paymentObj.docCustomer.dt().sum("AMOUNT",2)
-                                        this.paymentObj.dt()[0].TOTAL = this.paymentObj.docCustomer.dt().sum("AMOUNT",2)
                                         this.paymentObj.save()
                                         await this._getPayment()
                                         this.popPayment.show()

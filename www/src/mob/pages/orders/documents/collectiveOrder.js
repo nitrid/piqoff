@@ -296,7 +296,7 @@ export default class salesOrder extends React.Component
     }
     async _onItemRendered(e)
     {
-        await this.core.util.waitUntil(900)
+        await this.core.util.waitUntil(1000)
         
         if(e.itemData.name == "Main")
         {

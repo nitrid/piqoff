@@ -368,7 +368,7 @@ export default class depotTransfer extends React.Component
     }
     async _onItemRendered(e)
     {
-        await this.core.util.waitUntil(700)
+        await this.core.util.waitUntil(100)
         
         if(e.itemData.name == "Main")
         {
