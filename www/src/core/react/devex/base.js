@@ -523,9 +523,8 @@ export default class NdBase extends React.PureComponent
                     tmp.push (<RangeRule key={i} min={tmpValid.val[i].min} max={tmpValid.val[i].max} message={tmpValid.val[i].msg} />)
                 }
             }
-
             return (
-                <Validator validationGroup={tmpValid.grp + (this.props.tabIndex == 'undefined' ? '' : this.props.tabIndex)}>
+                <Validator validationGroup={tmpValid.grp + (typeof this.props.tabIndex == 'undefined' ? '' : this.props.tabIndex)}>
                     {tmp}        
                 </Validator>
             )
