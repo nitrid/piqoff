@@ -71,6 +71,24 @@ export const prm =
             CAPTION : "Alış Faturasından Alış Fiyatı Güncelleme"
         }
     },
+    // Ödeme ve tahsilat için fatura zorunluluğu
+    {
+        TYPE : 0,
+        ID :"invoicesForPayment",
+        VALUE : 
+        {
+            value : true
+        },
+        SPECIAL : "",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Sistem",
+            CAPTION : "Ödeme İşlemleir İçin Fatura Seçme Zorunluluğu"
+        }
+    },
     //Para Sembolu
     {
         TYPE : 0,
@@ -97,7 +115,7 @@ export const prm =
             }
         }
     },
-    //Para Sembolu
+    //Daha Düşük Fiyatlı Tedarikçi Uyarısı
     {
         TYPE : 0,
         ID :"pruchasePriceAlert",

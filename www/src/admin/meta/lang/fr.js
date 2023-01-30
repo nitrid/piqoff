@@ -7,6 +7,20 @@ export const langFr =
     login : "Entrée",
     user : "Utilisateur",
     pwd : "Mot de passe",
+    msgSaveResult:
+    {
+        title: "Attention",
+        btn01: "OK",
+        msgSuccess: "Enregistré avec succès !",
+        msgFailed: "Enregistrement échoué !"
+    },
+    msgSave:
+    {
+        title: "Attention",
+        btn01: "OK",
+        btn02: "Abandonner",
+        msg: "Etes-vous sûr(e) de vouloir enregistrer !"
+    },
     menuOff:
     {
         stk: "Produit",                

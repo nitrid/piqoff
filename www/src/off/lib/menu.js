@@ -270,12 +270,12 @@ export const menu = (e) =>
                         {
                             id: 'cri_04_001',
                             text: e.t('menuOff.cri_04_001'),//'Cari Ekstre Raporu',
-                            path: 'construction.js',
+                            path: 'customers/report/customerBalanceReport'
                         },
                         {
                             id: 'cri_04_002',
                             text: e.t('menuOff.fns_04_002'),//'Cari Bakiye Bakiye Raporu',
-                            path: 'construction.js',
+                            path: 'customers/report/customerBalanceReport'
                         },
                         //Müşteri Puan Raporu
                         {

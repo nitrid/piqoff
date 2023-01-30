@@ -9,6 +9,7 @@ import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
 import NdSelectBox from '../../core/react/devex/selectbox.js';
 import NdButton from '../../core/react/devex/button.js';
 import NdPopGrid from '../../core/react/devex/popgrid.js';
+import NdDialog, { dialog } from '../../core/react/devex/dialog.js';
 import {menu as menuOff} from '../../off/lib/menu.js'
 import {menu as menuMob} from '../../mob/lib/menu.js'
 import {menu} from '../../core/core'
@@ -236,6 +237,13 @@ export default class menuEdit extends React.Component
                                                 {
                                                     this.pg_CltvSaveData = data;
                                                     this.menuSave();
+                                                    let tmpConfObj1 =
+                                                    {
+                                                        id:'msgSaveResult',showTitle:true,title:this.lang.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                        button:[{id:"btn01",caption:this.lang.t("msgSave.btn01"),location:'after'}],
+                                                    }
+                                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.lang.t("msgSaveResult.msgSuccess")}</div>)
+                                                    await dialog(tmpConfObj1);
                                                 }
                                             }
                                         }}></NdButton>

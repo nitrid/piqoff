@@ -12460,7 +12460,8 @@ export const langFr =
             clmAmount : "Total",
             clmOutputName : "Coffre-fort/Banque",
             clmDescription : "Motif",
-            clmInvoice : "Facture payée"
+            clmInvoice : "Facture payée",
+            clmFacDate : "Date de facture "
         },
         msgDocValid:
         {
@@ -12551,6 +12552,12 @@ export const langFr =
         validDepot : "Vous devez choisir l'entrepôt",
         validCustomerCode : "Le code actuel ne peut pas être vide",
         validDocDate : "Vous devez choisir une date",
+        msgInvoiceSelect:
+        {
+            title: "Dikkat",    // BAK
+            btn01: "Tamam",    // BAK
+            msg: "Fatura seçmeden işlem yapamazsınız !"    // BAK
+        },
     },
     fns_02_002 : 
     {
@@ -12612,7 +12619,9 @@ export const langFr =
             clmCreateDate: "Date d'enregistrement",
             clmAmount : "Total",
             clmInputName : "Caisse/Banque",
-            clmDescription : "Motif"
+            clmDescription : "Motif",
+            clmInvoice : "Facture payée",
+            clmFacDate : "Date de facture "
         },
         msgDocValid:
         {
@@ -12703,6 +12712,12 @@ export const langFr =
         validDepot : "Vous devez choisir l'entrepôt",
         validCustomerCode : "Le code actuel ne peut pas être vide",
         validDocDate : "Vous devez choisir une date",
+        msgInvoiceSelect:
+        {
+            title: "Dikkat",    // BAK
+            btn01: "Tamam",    // BAK
+            msg: "Fatura seçmeden işlem yapamazsınız !"    // BAK
+        },
     },
     fns_03_001 : //  "Kasa Tanıtım"
     {

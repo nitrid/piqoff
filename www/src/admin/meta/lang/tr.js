@@ -7,6 +7,20 @@ export const langTr =
     login : "Giriş",
     user : "Kullanıcı",
     pwd : "Şifre",
+    msgSaveResult:
+    {
+        title: "Dikkat",
+        btn01: "Tamam",
+        msgSuccess: "Kayıt işleminiz başarılı !",
+        msgFailed: "Kayıt işleminiz başarısız !"
+    },
+    msgSave:
+    {
+        title: "Dikkat",
+        btn01: "Tamam",
+        btn02: "Vazgeç",
+        msg: "Kayıt etmek istediğinize eminmisiniz !"
+    },
     menuOff:
     {
         stk: "Stok",                

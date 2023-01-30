@@ -114,6 +114,14 @@ export default class collection extends React.PureComponent
         
         this.frmCollection.option('disabled',false)
         await this.grdDocPayments.dataRefresh({source:this.docObj.docCustomer.dt('DOC_CUSTOMER')});
+        if(this.sysParam.filter({ID:'invoicesForPayment',USERS:this.user.CODE}).getValue().value == true)
+        {
+            this.numCash.readOnly = true
+        }
+        else
+        {
+            this.numCash.readOnly = true
+        }
     }
     async getDoc(pGuid,pRef,pRefno)
     {
@@ -200,7 +208,7 @@ export default class collection extends React.PureComponent
             let tmpAmount  = pAmount
             for (let i = 0; i < this.invoices.length; i++) 
             {
-                if(tmpAmount > this.invoices[i].REMAINING)
+                if(tmpAmount >= this.invoices[i].REMAINING)
                 {
                     let tmpDocCustomer = {...this.docObj.docCustomer.empty}
                     tmpDocCustomer.DOC_GUID = this.docObj.dt()[0].GUID
@@ -212,7 +220,7 @@ export default class collection extends React.PureComponent
                     tmpDocCustomer.OUTPUT = this.docObj.dt()[0].OUTPUT
                     tmpDocCustomer.INVOICE_GUID = this.invoices[i].GUID 
                     tmpDocCustomer.INVOICE_REF = this.invoices[i].REFERANS 
-                    
+                    tmpDocCustomer.INVOICE_DATE = this.invoices[i].DOC_DATE 
                     if(pType == 0)
                     {
                         tmpDocCustomer.INPUT = this.cmbCashSafe.value
@@ -304,7 +312,6 @@ export default class collection extends React.PureComponent
                 }
             }
 
-            console.log(tmpAmount)
 
             if(tmpAmount > 0)
             {
@@ -358,6 +365,18 @@ export default class collection extends React.PureComponent
         }
         else
         {
+            if(this.sysParam.filter({ID:'invoicesForPayment',USERS:this.user.CODE}).getValue().value == true)
+            {
+                let tmpConfObj =
+                {
+                    id:'msgInvoiceSelect',showTitle:true,title:this.t("msgInvoiceSelect.title"),showCloseButton:true,width:'500px',height:'200px',
+                    button:[{id:"btn01",caption:this.t("msgInvoiceSelect.btn01"),location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgInvoiceSelect.msg")}</div>)
+                }
+    
+                await dialog(tmpConfObj);
+                return
+            }
             let tmpDocCustomer = {...this.docObj.docCustomer.empty}
             tmpDocCustomer.DOC_GUID = this.docObj.dt()[0].GUID
             tmpDocCustomer.TYPE = this.docObj.dt()[0].TYPE
@@ -430,6 +449,12 @@ export default class collection extends React.PureComponent
         this.pg_invoices.onClick = async(data) =>
         {
             this.invoices = data
+            let tmpTotal = 0
+            for (let i = 0; i < data.length; i++) 
+            {
+                tmpTotal = tmpTotal + data[i].REMAINING
+            }
+            this.numCash.value = parseFloat(tmpTotal.toFixed(2))
         }
     }
     render()
@@ -793,7 +818,7 @@ export default class collection extends React.PureComponent
                                                             let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
                                                             if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                             {
-                                                                this.txtRef.valuedata[0].CODE
+                                                                this.txtRef.value = data[0].CODE;
                                                                 this.txtRef.props.onChange()
                                                             }
                                                         }
@@ -931,6 +956,18 @@ export default class collection extends React.PureComponent
                                             <Column dataField="INPUT_NAME" caption={this.t("grdDocPayments.clmInputName")} allowEditing={false}/>
                                             <Column dataField="AMOUNT" caption={this.t("grdDocPayments.clmAmount")} format={{ style: "currency", currency: "EUR",precision: 2}} />
                                             <Column dataField="DESCRIPTION" caption={this.t("grdDocPayments.clmDescription")} />
+                                            <Column dataField="INVOICE_REF" caption={this.t("grdDocPayments.clmInvoice")} />
+                                            <Column dataField="INVOICE_DATE" caption={this.t("grdDocPayments.clmFacDate")}  dataType="date" 
+                                                editorOptions={{value:null}}
+                                                cellRender={(e) => 
+                                                {
+                                                    if(moment(e.value).format("YYYY-MM-DD") != '1970-01-01')
+                                                    {
+                                                        return e.text
+                                                    }
+                                                    
+                                                    return
+                                                }}/>
                                         </NdGrid>
                                         <ContextMenu
                                         dataSource={this.rightItems}

@@ -1060,17 +1060,30 @@ export default class purchaseInvoice extends React.PureComponent
     {
         if(typeof this.txtRemainder != 'undefined')
         {
-            await this.paymentObj.load({PAYMENT_DOC_GUID:this.docObj.dt()[0].GUID});
-            if(this.paymentObj.dt().length > 0)
+            await this.paymentObj.docCustomer.load({INVOICE_GUID:this.docObj.dt()[0].GUID});
+            if(this.paymentObj.docCustomer.dt().length > 0)
             {
-                let tmpRemainder = (this.docObj.dt()[0].TOTAL - this.paymentObj.dt()[0].TOTAL).toFixed(2)
+                this.txtPayTotal.value = parseFloat(this.paymentObj.docCustomer.dt().sum("AMOUNT",2))
+                let tmpRemainder = (this.docObj.dt()[0].TOTAL - this.txtPayTotal.value).toFixed(2)
                 this.txtRemainder.setState({value:tmpRemainder});
                 this.txtMainRemainder.setState({value:tmpRemainder});
             }
             else
             {
+                this.txtPayTotal.value = 0
                 this.txtRemainder.setState({value:this.docObj.dt()[0].TOTAL});
                 this.txtMainRemainder.setState({value:this.docObj.dt()[0].TOTAL});
+            }
+            let tmpQuery = 
+            {
+                query :"SELECT ROUND(BALANCE,2) AS BALANCE FROM  ACCOUNT_BALANCE WHERE ACCOUNT_GUID = @GUID ",
+                param : ['GUID:string|50'],
+                value : [this.docObj.dt()[0].OUTPUT]
+            }
+            let tmpData = await this.core.sql.execute(tmpQuery) 
+            if(tmpData.result.recordset.length > 0)
+            {
+                this.txtbalance.value = tmpData.result.recordset[0].BALANCE
             }
         }
     }
@@ -1118,7 +1131,7 @@ export default class purchaseInvoice extends React.PureComponent
             tmpPayment.DOC_TYPE = this.paymentObj.dt()[0].DOC_TYPE
             tmpPayment.DOC_DATE = this.paymentObj.dt()[0].DOC_DATE
             tmpPayment.INPUT = this.paymentObj.dt()[0].INPUT
-            tmpPayment.INVOICE_DOC_GUID = this.docObj.dt()[0].GUID                                   
+            tmpPayment.INVOICE_GUID = this.docObj.dt()[0].GUID                                   
 
             if(pType == 0)
             {
@@ -1395,6 +1408,7 @@ export default class purchaseInvoice extends React.PureComponent
 
                     if(this.docObj.docItems.dt()[i].ITEM_TYPE == 0)
                     {
+                        console.log(this.docObj.docItems.dt()[i])
                         if(typeof this.docObj.docItems.dt()[i].OLD_VAT != 'undefined' && this.docObj.docItems.dt()[i].VAT_RATE != this.docObj.docItems.dt()[i].OLD_VAT && this.docObj.docItems.dt()[i].VAT_RATE != 0)
                         {
                             this.newVat.push({...this.docObj.docItems.dt()[i]})
@@ -3125,7 +3139,7 @@ export default class purchaseInvoice extends React.PureComponent
                                             </Item>
                                             <Item>
                                             <Label text={this.t("txtPayTotal")} alignment="right" />
-                                                <NdTextBox id="txtPayTotal" format={{ style: "currency", currency: "EUR",precision: 2}} parent={this} simple={true} readOnly={true} dt={{data:this.paymentObj.dt('DOC'),field:"TOTAL"}}
+                                                <NdTextBox id="txtPayTotal" format={{ style: "currency", currency: "EUR",precision: 2}} parent={this} simple={true} readOnly={true}
                                                 maxLength={32}
                                                 ></NdTextBox>
                                             </Item>
@@ -3141,7 +3155,7 @@ export default class purchaseInvoice extends React.PureComponent
                                             <EmptyItem colSpan={3}/>
                                             <Item>
                                             <Label text={this.t("txtbalance")} alignment="right" />
-                                                <NdTextBox id="txtbalance" format={{ style: "currency", currency: "EUR",precision: 2}} parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC_CUSTOMER'),field:"OUTPUT_BALANCE"}}
+                                                <NdTextBox id="txtbalance" format={{ style: "currency", currency: "EUR",precision: 2}} parent={this} simple={true} readOnly={true}
                                                 maxLength={32}
                                                 ></NdTextBox>
                                             </Item>
@@ -3587,8 +3601,6 @@ export default class purchaseInvoice extends React.PureComponent
                                     dbApply={false}
                                     onRowRemoved={async (e)=>{
                                         this.popPayment.hide()
-                                        this.paymentObj.dt()[0].AMOUNT = this.paymentObj.docCustomer.dt().sum("AMOUNT",2)
-                                        this.paymentObj.dt()[0].TOTAL = this.paymentObj.docCustomer.dt().sum("AMOUNT",2)
                                         this.paymentObj.save()
                                         await this._getPayment()
                                         this.popPayment.show()

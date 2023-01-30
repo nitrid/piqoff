@@ -331,7 +331,7 @@ export default class itemCount extends React.PureComponent
     }
     async _onItemRendered(e)
     {
-        await this.core.util.waitUntil(700)
+        await this.core.util.waitUntil(1000)
         
         if(e.itemData.name == "Main")
         {

@@ -3019,6 +3019,29 @@ export const langTr =
         },
         btnGet : "Kaydet",
     },
+    cri_04_002 : // "Cari Bakiye Raporu"
+    {
+        chkZeroBalance : "0 Bakiyeler Gösterilsin",
+        txtCustomerCode : "Cari",
+        btnCheck : "Aktif",
+        btnGet :"Getir",
+        grdListe : 
+        {
+            clmCode: "Kodu",
+            clmName : "Adı",           
+            clmBalance : "Bakiye",
+            clmUpdate : "Güncellenme Tarihi",
+        },
+        txtTotalBalance : "Toplam Tutar",
+        pg_txtCustomerCode : 
+        {
+            title : "Cari Seçimi",
+            clmCode :  "CARİ KODU",
+            clmTitle : "CARİ ADI",
+            clmTypeName : "TİPİ",
+            clmGenusName : "CİNSİ"
+        },
+    },
     ftr_01_001 : // "Alış Fatura Listesi"
     {
         txtCustomerCode : "Cari",
@@ -12455,7 +12478,8 @@ export const langTr =
             clmAmount : "Tutar",
             clmOutputName : "Kasa/Banka",
             clmDescription : "Açıklama",
-            clmInvoice : "Ödenen Fatura"
+            clmInvoice : "Ödenen Fatura",
+            clmFacDate : "Fatura Tarihi"
         },
         msgDocValid:
         {
@@ -12546,6 +12570,12 @@ export const langTr =
         validDepot : "Depo Seçmelisiniz",
         validCustomerCode : "Cari Kodu Boş Geçilemez",
         validDocDate : "Tarih Seçmelisiniz",
+        msgInvoiceSelect:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Fatura seçmeden ödeme ekleyemezsiniz !"
+        },
     },
     fns_02_002 : // Tahsilat
     {
@@ -12607,7 +12637,9 @@ export const langTr =
             clmCreateDate: "Kayıt Tarihi",
             clmAmount : "Tutar",
             clmInputName : "Kasa/Banka",
-            clmDescription : "Açıklama"
+            clmDescription : "Açıklama",
+            clmInvoice : "Ödenen Fatura",
+            clmFacDate : "Fatura Tarihi "
         },
         msgDocValid:
         {
@@ -12698,6 +12730,12 @@ export const langTr =
         validDepot : "Depo Seçmelisiniz",
         validCustomerCode : "Cari Kodu Boş Geçilemez",
         validDocDate : "Tarih Seçmelisiniz",
+        msgInvoiceSelect:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Fatura seçmeden işlem yapamazsınız !"
+        },
     },
     fns_03_001 : //  "Kasa Tanıtım",
     {
