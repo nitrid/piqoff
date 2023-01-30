@@ -1408,6 +1408,7 @@ export default class purchaseInvoice extends React.PureComponent
 
                     if(this.docObj.docItems.dt()[i].ITEM_TYPE == 0)
                     {
+                        console.log(this.docObj.docItems.dt()[i])
                         if(typeof this.docObj.docItems.dt()[i].OLD_VAT != 'undefined' && this.docObj.docItems.dt()[i].VAT_RATE != this.docObj.docItems.dt()[i].OLD_VAT && this.docObj.docItems.dt()[i].VAT_RATE != 0)
                         {
                             this.newVat.push({...this.docObj.docItems.dt()[i]})

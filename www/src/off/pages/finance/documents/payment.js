@@ -115,6 +115,14 @@ export default class payment extends React.PureComponent
         
         this.frmPayment.option('disabled',false)
         await this.grdDocPayments.dataRefresh({source:this.docObj.docCustomer.dt('DOC_CUSTOMER')});
+        if(this.sysParam.filter({ID:'invoicesForPayment',USERS:this.user.CODE}).getValue().value == true)
+        {
+            this.numCash.readOnly = true
+        }
+        else
+        {
+            this.numCash.readOnly = true
+        }
     }
     async getDoc(pGuid,pRef,pRefno)
     {
@@ -201,7 +209,7 @@ export default class payment extends React.PureComponent
             let tmpAmount  = pAmount
             for (let i = 0; i < this.invoices.length; i++) 
             {
-                if(tmpAmount > this.invoices[i].REMAINING)
+                if(tmpAmount >= this.invoices[i].REMAINING)
                 {
                     let tmpDocCustomer = {...this.docObj.docCustomer.empty}
                     tmpDocCustomer.DOC_GUID = this.docObj.dt()[0].GUID
@@ -213,7 +221,7 @@ export default class payment extends React.PureComponent
                     tmpDocCustomer.INPUT = this.docObj.dt()[0].INPUT
                     tmpDocCustomer.INVOICE_GUID = this.invoices[i].GUID 
                     tmpDocCustomer.INVOICE_REF = this.invoices[i].REFERANS 
-                    
+                    tmpDocCustomer.INVOICE_DATE = this.invoices[i].DOC_DATE 
                     if(pType == 0)
                     {
                         tmpDocCustomer.OUTPUT = this.cmbCashSafe.value
@@ -306,8 +314,6 @@ export default class payment extends React.PureComponent
                 }
             }
 
-            console.log(tmpAmount)
-
             if(tmpAmount > 0)
             {
                 let tmpDocCustomer = {...this.docObj.docCustomer.empty}
@@ -360,6 +366,18 @@ export default class payment extends React.PureComponent
         }
         else
         {
+            if(this.sysParam.filter({ID:'invoicesForPayment',USERS:this.user.CODE}).getValue().value == true)
+            {
+                let tmpConfObj =
+                {
+                    id:'msgInvoiceSelect',showTitle:true,title:this.t("msgInvoiceSelect.title"),showCloseButton:true,width:'500px',height:'200px',
+                    button:[{id:"btn01",caption:this.t("msgInvoiceSelect.btn01"),location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgInvoiceSelect.msg")}</div>)
+                }
+    
+                await dialog(tmpConfObj);
+                return
+            }
             let tmpDocCustomer = {...this.docObj.docCustomer.empty}
             tmpDocCustomer.DOC_GUID = this.docObj.dt()[0].GUID
             tmpDocCustomer.TYPE = this.docObj.dt()[0].TYPE
@@ -1134,7 +1152,7 @@ export default class payment extends React.PureComponent
                                         </div>
                                     </div>
                                 </Item>
-                                <Item>
+                                {/* <Item>
                                     <div className='row'>
                                         <div className='col-12'>
                                             <NdButton text={this.t("prePaymentSelect")} type="normal" stylingMode="contained" width={'100%'} 
@@ -1144,7 +1162,7 @@ export default class payment extends React.PureComponent
                                             }}/>
                                         </div>
                                     </div>
-                                </Item>
+                                </Item> */}
                                 <Item>
                                     <div className='row'>
                                         <div className='col-6'>

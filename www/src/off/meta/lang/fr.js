@@ -12552,6 +12552,12 @@ export const langFr =
         validDepot : "Vous devez choisir l'entrepôt",
         validCustomerCode : "Le code actuel ne peut pas être vide",
         validDocDate : "Vous devez choisir une date",
+        msgInvoiceSelect:
+        {
+            title: "Dikkat",    // BAK
+            btn01: "Tamam",    // BAK
+            msg: "Fatura seçmeden işlem yapamazsınız !"    // BAK
+        },
     },
     fns_02_002 : 
     {
@@ -12706,6 +12712,12 @@ export const langFr =
         validDepot : "Vous devez choisir l'entrepôt",
         validCustomerCode : "Le code actuel ne peut pas être vide",
         validDocDate : "Vous devez choisir une date",
+        msgInvoiceSelect:
+        {
+            title: "Dikkat",    // BAK
+            btn01: "Tamam",    // BAK
+            msg: "Fatura seçmeden işlem yapamazsınız !"    // BAK
+        },
     },
     fns_03_001 : //  "Kasa Tanıtım"
     {

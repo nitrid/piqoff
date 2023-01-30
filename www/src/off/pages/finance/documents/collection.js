@@ -114,6 +114,14 @@ export default class collection extends React.PureComponent
         
         this.frmCollection.option('disabled',false)
         await this.grdDocPayments.dataRefresh({source:this.docObj.docCustomer.dt('DOC_CUSTOMER')});
+        if(this.sysParam.filter({ID:'invoicesForPayment',USERS:this.user.CODE}).getValue().value == true)
+        {
+            this.numCash.readOnly = true
+        }
+        else
+        {
+            this.numCash.readOnly = true
+        }
     }
     async getDoc(pGuid,pRef,pRefno)
     {
@@ -202,7 +210,6 @@ export default class collection extends React.PureComponent
             {
                 if(tmpAmount >= this.invoices[i].REMAINING)
                 {
-                    console.log(1)
                     let tmpDocCustomer = {...this.docObj.docCustomer.empty}
                     tmpDocCustomer.DOC_GUID = this.docObj.dt()[0].GUID
                     tmpDocCustomer.TYPE = this.docObj.dt()[0].TYPE
@@ -358,6 +365,18 @@ export default class collection extends React.PureComponent
         }
         else
         {
+            if(this.sysParam.filter({ID:'invoicesForPayment',USERS:this.user.CODE}).getValue().value == true)
+            {
+                let tmpConfObj =
+                {
+                    id:'msgInvoiceSelect',showTitle:true,title:this.t("msgInvoiceSelect.title"),showCloseButton:true,width:'500px',height:'200px',
+                    button:[{id:"btn01",caption:this.t("msgInvoiceSelect.btn01"),location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgInvoiceSelect.msg")}</div>)
+                }
+    
+                await dialog(tmpConfObj);
+                return
+            }
             let tmpDocCustomer = {...this.docObj.docCustomer.empty}
             tmpDocCustomer.DOC_GUID = this.docObj.dt()[0].GUID
             tmpDocCustomer.TYPE = this.docObj.dt()[0].TYPE
