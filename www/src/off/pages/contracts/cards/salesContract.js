@@ -1039,7 +1039,7 @@ export default class salesContract extends React.PureComponent
                                             {       
                                                 let tmpQuery = 
                                                 {
-                                                    query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM CONTRACT_VW_01 WHERE CODE = @CODE AND TYPE  = 1 ORDER BY CDATE " ,
+                                                    query: "SELECT *,CONVERT(NVARCHAR(10),PRICE) AS PRICES,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM CONTRACT_VW_01 WHERE CODE = @CODE AND TYPE  = 1 ORDER BY CDATE " ,
                                                     param:  ['CODE:string|25','DESIGN:string|25'],
                                                     value:  [this.contractObj.dt()[0].CODE,this.cmbDesignList.value]
                                                 }
