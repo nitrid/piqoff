@@ -1237,21 +1237,21 @@ export default class posDoc extends React.PureComponent
     }    
     calcSaleTotal(pPrice,pQuantity,pDiscount,pLoyalty,pVatRate)
     {
-        let tmpAmount = Number(parseFloat((pPrice * pQuantity)).toFixed(2))
-        let tmpFAmount = Number(Number(Number(tmpAmount).toFixed(2)) - Number(Number(pDiscount).toFixed(2))).toFixed(2)
+        let tmpAmount = Number(parseFloat((pPrice * pQuantity)))
+        let tmpFAmount = Number(Number(Number(tmpAmount)) - Number(Number(pDiscount)))
         //let tmpFAmount = Number(parseFloat((pPrice * pQuantity) - (pDiscount)).toFixed(2))
         tmpFAmount = Number(tmpFAmount - pLoyalty)
-        let tmpVat = Number(parseFloat(tmpFAmount - (tmpFAmount / ((pVatRate / 100) + 1))).toFixed(2))
+        let tmpVat = Number(parseFloat(tmpFAmount - (tmpFAmount / ((pVatRate / 100) + 1))))
     
         return {
             QUANTITY:pQuantity,
             PRICE:pPrice,
-            FAMOUNT:Number(parseFloat(tmpFAmount - tmpVat).toFixed(2)),
+            FAMOUNT:Number(parseFloat(tmpFAmount - tmpVat)),
             AMOUNT:Number(parseFloat(tmpAmount).toFixed(2)),
             DISCOUNT:pDiscount,
             LOYALTY:pLoyalty,
             VAT:tmpVat,
-            TOTAL:tmpFAmount
+            TOTAL:Number(parseFloat(tmpFAmount).toFixed(2))
         }
     }
     isRowMerge(pType,pData)
