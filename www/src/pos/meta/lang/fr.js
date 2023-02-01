@@ -26,8 +26,8 @@ export const langFr =
     quantity : "Quantité",
     nbCalculator : "Calculatrice", 
     about : "à propos ",
-    abtCertificate : "Certificate : NF525",
-    abtNrCertificate : "Nr Certificate : B_XXXX",
+    abtCertificate : "Certificat : NF525",
+    abtNrCertificate : "Numéro Certificat : B_0527-1",
     abtLicence : "Licence : XXXXXXXXXXXXXXXXX",
     abtVersion : "Version : ",
     msgCustomerNotFound : 

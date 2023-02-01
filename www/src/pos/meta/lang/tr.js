@@ -27,7 +27,7 @@ export const langTr =
     nbCalculator : "Hesap Makinesi",
     about : "Hakkımızda",
     abtCertificate : "Setifika : NF525",
-    abtNrCertificate : "Sertifika No : B_XXXX",
+    abtNrCertificate : "Sertifika No : B_0527-1",
     abtLicence : "Lisans : XXXXXXXXXXXXXXXXX",
     abtVersion : "Versiyon : ",
     msgCustomerNotFound : 

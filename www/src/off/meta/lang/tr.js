@@ -30,9 +30,9 @@ export const langTr =
     collectiveItemAdd: "Toplu Ürün Ekleme",
     constructionMsg : "Bu sayfa yapım aşamasındadır en kısa zamanda hizmetinize sunulacaktır.",
     about : "Hakkımızda",
-    abtCertificate : "Setifika: NF525",
-    abtNrCertificate : "Sertifika No: B_XXXX",
-    abtNrCertificate2 : "Sertifika No: D_XXX",
+    abtCertificate : "Setifika: NF525 - NF203",
+    abtNrCertificate : "Sertifika No: B_0527-1",
+    abtNrCertificate2 : "Sertifika No: D_452-1",
     abtLicence : "Lisans: XXXXXXXXXXXXXXXXX",
     abtVersion : "Versiyon: ",
     popPassword : 

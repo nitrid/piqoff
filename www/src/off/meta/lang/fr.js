@@ -30,9 +30,9 @@ export const langFr =
     collectiveItemAdd: "Ajouter Multi Produit",
     constructionMsg : "Page en construction mise en service au plus vite.", 
     about : "à propos ",
-    abtCertificate : "Certificate: NF525",
-    abtNrCertificate : "Nr Certificate: B_XXXX",
-    abtNrCertificate2 : "Nr Certificate: D_XXX",
+    abtCertificate : "Certificat: NF525 - NF203",
+    abtNrCertificate : "Numéro Certificat: B_0527-1",
+    abtNrCertificate2 : "Numéro Certificat: D_452-1",
     abtLicence : "Licence: XXXXXXXXXXXXXXXXX",
     abtVersion : "Version: ",
     popPassword : 
