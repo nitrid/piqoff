@@ -1237,7 +1237,7 @@ export default class posDoc extends React.PureComponent
     }    
     calcSaleTotal(pPrice,pQuantity,pDiscount,pLoyalty,pVatRate)
     {
-        let tmpAmount = Number(parseFloat((pPrice * pQuantity)))
+        let tmpAmount = Number(parseFloat((pPrice * pQuantity).toFixed(2)))
         let tmpFAmount = Number(Number(Number(tmpAmount)) - Number(Number(pDiscount)))
         //let tmpFAmount = Number(parseFloat((pPrice * pQuantity) - (pDiscount)).toFixed(2))
         tmpFAmount = Number(tmpFAmount - pLoyalty)
