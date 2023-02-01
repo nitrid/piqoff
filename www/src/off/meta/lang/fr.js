@@ -3550,7 +3550,9 @@ export const langFr =
             clmCode: "Code",     
             clmName: "Nom",     
             clmPrice: "Ancien Prix",     
-            clmPrice2: "Nouveau Prix",     
+            clmPrice2: "Nouveau Prix",   
+            clmSalePrice :"Prix de Vente",  // BAK
+            clmMargin : "Marge"  // BAK
         },
         pg_txtBarcode : 
         {
