@@ -681,7 +681,7 @@ export default class CustomerCard extends React.PureComponent
                         </div>
                         <div className='row px-2 pt-2'>
                             <div className='col-12'>
-                                <TabPanel height="100%" onItemRendered={this._onItemRendered}>
+                                <TabPanel height="100%" onItemRendered={this._onItemRendered} deferRendering={false}>
                                     <Item title={this.t("tabTitleAdress")}>
                                         <div className='row px-2 py-2'>
                                             <div className='col-12'>
