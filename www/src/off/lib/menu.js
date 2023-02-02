@@ -59,6 +59,16 @@ export const menu = (e) =>
                             text: e.t('menuOff.stk_01_009'),//'Ürün Alt Grup Tanımları',
                             path: 'construction.js',
                         },
+                        {
+                            id: 'stk_01_010',
+                            text: e.t('menuOff.stk_01_010'),//'Birim Tanımları',
+                            path: 'items/cards/unitCard.js',
+                        },
+                        {
+                            id: 'stk_01_011',
+                            text: e.t('menuOff.stk_01_011'),//'Vergi Tanımları',
+                            path: 'items/cards/vatCard.js',
+                        },
                     ]
                 },
                 {

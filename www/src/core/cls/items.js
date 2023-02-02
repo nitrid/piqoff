@@ -1064,6 +1064,28 @@ export class unitCls
                     "((NAME = @NAME) OR (@NAME = '')) AND ((SYMBOL = @SYMBOL) OR (@SYMBOL = '')) ORDER BY ID ASC ",
             param : ['ID:string|25','NAME:string|50','SYMBOL:string|10']
         }
+        tmpDt.insertCmd = 
+        {
+            query : "EXEC [dbo].[PRD_UNIT_INSERT] " + 
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " + 
+                    "@ID = @PID, " + 
+                    "@NAME = @PNAME, " +
+                    "@SYMBOL = @PSYMBOL " , 
+            param : ['PGUID:string|50','PCUSER:string|25','PID:string|25','PNAME:string|50','PSYMBOL:string|10'],
+            dataprm : ['GUID','CUSER','ID','NAME','SYMBOL']
+        } 
+        tmpDt.updateCmd = 
+        {
+            query : "EXEC [dbo].[PRD_UNIT_UPDATE] " + 
+            "@GUID = @PGUID, " +
+            "@CUSER = @PCUSER, " + 
+            "@ID = @PID, " + 
+            "@NAME = @PNAME, " +
+            "@SYMBOL = @PSYMBOL " , 
+            param : ['PGUID:string|50','PCUSER:string|25','PID:string|25','PNAME:string|50','PSYMBOL:string|10'],
+            dataprm : ['GUID','CUSER','ID','NAME','SYMBOL']
+        } 
 
         this.ds.add(tmpDt);
     }
@@ -2076,3 +2098,113 @@ export class itemSubGroupCls
         });
     }
 }
+export class vatCls 
+{
+    constructor()
+    {
+        this.core = core.instance;
+        this.ds = new dataset();
+        this.empty = 
+        {
+            GUID:'00000000-0000-0000-0000-000000000000',
+            ID : '',            
+            VAT : 0,
+            TYPE : '',
+        }
+
+        this._initDs();
+    }
+    //#region Private
+    _initDs()
+    {
+        let tmpDt = new datatable('VAT');            
+        tmpDt.selectCmd = 
+        {
+            query : "SELECT * FROM VAT WHERE ID = @ID ",
+            param : ['ID:string|25']
+        }
+        tmpDt.insertCmd = 
+        {
+            query : "EXEC [dbo].[PRD_VAT_INSERT] " + 
+                    "@GUID = @PGUID, " +
+                    "@ID = @PID, " + 
+                    "@VAT = @PVAT, " +
+                    "@TYPE = @PTYPE " , 
+            param : ['PGUID:string|50','PID:string|25','PVAT:float','PTYPE:string|10'],
+            dataprm : ['GUID','ID','VAT','TYPE']
+        } 
+        tmpDt.updateCmd = 
+        {
+            query : "EXEC [dbo].[PRD_VAT_UPDATE] " + 
+                    "@GUID = @PGUID, " +
+                    "@ID = @PID, " + 
+                    "@VAT = @PVAT, " +
+                    "@TYPE = @PTYPE " , 
+            param : ['PGUID:string|50','PID:string|25','PVAT:float','PTYPE:string|10'],
+            dataprm : ['GUID','ID','VAT','TYPE']
+        } 
+
+        this.ds.add(tmpDt);
+    }
+    //#endregion
+    dt()
+    {
+        if(arguments.length > 0)
+        {
+            return this.ds.get(arguments[0]);
+        }
+
+        return this.ds.get(0)
+    }
+    addEmpty()
+    {
+        if(typeof this.dt('VAT') == 'undefined')
+        {
+            return;
+        }
+        let tmp = {}
+        if(arguments.length > 0)
+        {
+            tmp = {...arguments[0]}
+        }
+        else
+        {
+            tmp = {...this.empty}
+        }
+        tmp.GUID = datatable.uuidv4();
+        this.dt('VAT').push(tmp)
+    }
+    clearAll()
+    {
+        for (let i = 0; i < this.ds.length; i++) 
+        {
+            this.dt(i).clear()
+        }
+    }
+    load()
+    {
+        //PARAMETRE OLARAK OBJE GÖNDERİLİR YADA PARAMETRE BOŞ İSE TÜMÜ GETİRİLİ ÖRN: {ID:'',NAME:'',SYMBOL:''}
+        return new Promise(async resolve => 
+        {
+            let tmpPrm = {ID:''}
+           
+            if(arguments.length > 0)
+            {
+                tmpPrm.ID = typeof arguments[0].ID == 'undefined' ? '' : arguments[0].ID;
+            }
+            
+            this.ds.get('VAT').selectCmd.value = Object.values(tmpPrm)
+            
+            await this.ds.get('VAT').refresh();
+            resolve(this.ds.get('VAT'));    
+        });
+    }
+    save()
+    {
+        return new Promise(async resolve => 
+        {
+            resolve(await this.ds.update()); 
+        });
+    }
+}
+
