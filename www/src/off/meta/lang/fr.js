@@ -120,6 +120,8 @@ export const langFr =
         stk_01_007: "Description des services",  
         stk_01_008: "Désignation groupe produit", 
         stk_01_009: "Désignation Groupe Sous-Produit", 
+        stk_01_010: "Birim Tanımlama",   // BAK
+        stk_01_011 : "Vergi Tanımlama",   // BAK
         stk_02_001: "Document inventaire",
         stk_02_002: "Transfert interne dépot/magasin",
         stk_02_003: "Sortie perte",
@@ -865,6 +867,106 @@ export const langFr =
             msg : "Caisse Saisie déjà Enregistré dans le sysytème !"
         },
         chkActive: "Actif",
+    },
+    stk_01_010 : // "Birim Tanımları"
+    {
+        txtId : "I.D",  //bak
+        txtName :"Adı",  //bak
+        txtSymbol : "Sembol",  //bak
+        cmbType :"Tip",  //bak
+        validCode :"Kodu Boş Geçemezsiniz !",  //bak
+        pg_txtCode :   //bak
+        {  //bak
+            title : "Ürün Grubu Seçimi",  //bak
+            clmId : "I.D",  //bak
+            clmName : "Adı",  //bak
+            clmSymbol : "Sembol",  //bak
+        },
+        msgSave:
+        {
+            title: "Attention",
+            btn01: "OK",
+            btn02: "Abandonner",
+            msg: "Etes vous sûr(e) de vouloir enregistrer !"
+        },
+        msgSaveResult:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msgSuccess: "Enregistré avec Succès !",
+            msgFailed: "Enregistrement Echoué !"
+        },
+        msgSaveValid:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Veuillez Saisir les Champs Nécessaires !"
+        },
+        msgDelete:
+        {
+            title: "Attention",
+            btn01: "OK",
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
+        },
+        msgCode : 
+        {
+            title: "Dikkat",   // BAK
+            btn01: "Kasaya Git",   // BAK
+            btn02: "Tamam",   // BAK
+            msg : "Girmiş olduğunuz I.D sistem de kayıtlı !"   // BAK
+        },
+        chkActive: "Aktif", // BAK
+    },
+    stk_01_011 : // "Birim Tanımları"
+    {
+        txtId : "I.D",   // BAK
+        txtVat :"Vergi Oranı",   // BAK
+        txtType : "Tipi",   // BAK
+        cmbType :"Tip",   // BAK
+        validCode :"Kodu Boş Geçemezsiniz !",   // BAK
+        pg_txtCode :    // BAK
+        {   // BAK
+            title : "Ürün Grubu Seçimi",   // BAK
+            clmId : "I.D",   // BAK
+            clmVat : "Oranı",   // BAK
+            clmType : "Tipi",   // BAK
+        },
+        msgSave:
+        {
+            title: "Attention",
+            btn01: "OK",
+            btn02: "Abandonner",
+            msg: "Etes vous sûr(e) de vouloir enregistrer !"
+        },
+        msgSaveResult:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msgSuccess: "Enregistré avec Succès !",
+            msgFailed: "Enregistrement Echoué !"
+        },
+        msgSaveValid:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Veuillez Saisir les Champs Nécessaires !"
+        },
+        msgDelete:
+        {
+            title: "Attention",
+            btn01: "OK",
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
+        },
+        msgCode : 
+        {
+            title: "Dikkat", // BAK
+            btn01: "Kasaya Git", // BAK
+            btn02: "Tamam", // BAK
+            msg : "Girmiş olduğunuz I.D sistem de kayıtlı !" // BAK
+        },
+        chkActive: "Aktif", // BAK
     },
     stk_02_001 : // Sayım Evrakı"
     {

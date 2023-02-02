@@ -120,6 +120,8 @@ export const langTr =
         stk_01_007: "Hizmet Tanımları",
         stk_01_008: "Ürün Grubu Tanımlama",
         stk_01_009: "Ürün Alt Grup Tanımlama",
+        stk_01_010: "Birim Tanımlama",
+        stk_01_011 : "Vergi Tanımlama",
         stk_02_001: "Sayım Evrakı",
         stk_02_002: "Depo/Mağaza Arası Sevk",
         stk_02_003: "Kayıp Ürün Çıkışı",
@@ -864,6 +866,106 @@ export const langTr =
             btn01: "Kasaya Git",
             btn02: "Tamam",
             msg : "Girmiş olduğunuz Kasa sistem de kayıtlı !"
+        },
+        chkActive: "Aktif",
+    },
+    stk_01_010 : // "Birim Tanımları"
+    {
+        txtId : "I.D",
+        txtName :"Adı",
+        txtSymbol : "Sembol",
+        cmbType :"Tip",
+        validCode :"Kodu Boş Geçemezsiniz !",
+        pg_txtCode : 
+        {
+            title : "Ürün Grubu Seçimi",
+            clmId : "I.D",
+            clmName : "Adı",
+            clmSymbol : "Sembol",
+        },
+        msgSave:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kayıt etmek istediğinize eminmisiniz !"
+        },
+        msgSaveResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Kayıt işleminiz başarılı !",
+            msgFailed: "Kayıt işleminiz başarısız !"
+        },
+        msgSaveValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen gerekli alanları doldurunuz !"
+        },
+        msgDelete:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        },
+        msgCode : 
+        {
+            title: "Dikkat",
+            btn01: "Kasaya Git",
+            btn02: "Tamam",
+            msg : "Girmiş olduğunuz I.D sistem de kayıtlı !"
+        },
+        chkActive: "Aktif",
+    },
+    stk_01_011 : // "Birim Tanımları"
+    {
+        txtId : "I.D",
+        txtVat :"Vergi Oranı",
+        txtType : "Tipi",
+        cmbType :"Tip",
+        validCode :"Kodu Boş Geçemezsiniz !",
+        pg_txtCode : 
+        {
+            title : "Ürün Grubu Seçimi",
+            clmId : "I.D",
+            clmVat : "Oranı",
+            clmType : "Tipi",
+        },
+        msgSave:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kayıt etmek istediğinize eminmisiniz !"
+        },
+        msgSaveResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Kayıt işleminiz başarılı !",
+            msgFailed: "Kayıt işleminiz başarısız !"
+        },
+        msgSaveValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen gerekli alanları doldurunuz !"
+        },
+        msgDelete:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        },
+        msgCode : 
+        {
+            title: "Dikkat",
+            btn01: "Kasaya Git",
+            btn02: "Tamam",
+            msg : "Girmiş olduğunuz I.D sistem de kayıtlı !"
         },
         chkActive: "Aktif",
     },
