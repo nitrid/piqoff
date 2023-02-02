@@ -32,7 +32,7 @@ export default class purchaseContract extends React.PureComponent
         this.contractObj = new contractCls();
         this.tabIndex = props.data.tabkey
 
-        this._cellRoleRender = this._cellRoleRender.bind(this)
+        //this._cellRoleRender = this._cellRoleRender.bind(this)
         this._getItems = this._getItems.bind(this)
         this.multiItemData = new datatable
     } 
