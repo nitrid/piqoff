@@ -74,7 +74,7 @@ export default class posSalesReport extends React.PureComponent
                                             "'SALES' AS TITLE, " +
                                             "'HT' AS TYPE, " +
                                             "POS.VAT_RATE AS VAT_RATE, " +
-                                            "CASE WHEN POS.TYPE = 0 THEN SUM(POS.FAMOUNT) ELSE SUM(POS.FAMOUNT) * -1 END AS AMOUNT " +
+                                            "CASE WHEN POS.TYPE = 0 THEN ROUND(SUM(POS.FAMOUNT),2) ELSE ROUND(SUM(POS.FAMOUNT),2) * -1 END AS AMOUNT " +
                                             "FROM POS_SALE_VW_01 AS POS " +
                                             "WHERE POS.STATUS = 1 AND POS.DOC_DATE >= @START AND POS.DOC_DATE <= @END AND POS.DEVICE <> '9999' " +
                                             "GROUP BY POS.DOC_DATE,POS.TYPE,POS.VAT_RATE,POS.DEVICE " +
@@ -86,7 +86,7 @@ export default class posSalesReport extends React.PureComponent
                                             "'SALES' AS TITLE, " +
                                             "'TVA' AS TYPE, " +
                                             "POS.VAT_RATE AS VAT_RATE, " +
-                                            "CASE WHEN POS.TYPE = 0 THEN SUM(POS.VAT) ELSE SUM(POS.VAT) * -1 END AS AMOUNT " +
+                                            "CASE WHEN POS.TYPE = 0 THEN ROUND(SUM(POS.VAT),2) ELSE ROUND(SUM(POS.VAT),2) * -1 END AS AMOUNT " +
                                             "FROM POS_SALE_VW_01 AS POS " +
                                             "WHERE POS.STATUS = 1 AND POS.DOC_DATE >= @START AND POS.DOC_DATE <= @END AND POS.DEVICE <> '9999' " +
                                             "GROUP BY POS.DOC_DATE,POS.TYPE,POS.VAT_RATE,POS.DEVICE " +
