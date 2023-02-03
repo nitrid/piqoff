@@ -104,7 +104,7 @@ export function print()
             return tmpArr.length > 0 ? tmpArr : undefined
         },
         // BAŞLIK
-        ()=>{return {font:"b",style:"bu",align:"lt",data:"T " + "Libelle".space(30) + " " + "Qte".space(8) + " " + "P/u".space(7) + "Remise".space(6) + " " + " " + "Prix".space(7)}},
+        ()=>{return {font:"b",style:"bu",align:"lt",data:"T " + "Libelle".space(33) + " " + "Qte".space(8) + " " + "P/u".space(7) + "Remise".space(6) + " " + " " + "Prix".space(4)}},
         // SATIŞ LİSTESİ
         ()=>
         {
@@ -185,8 +185,8 @@ export function print()
                     {
                         font: "b",
                         style: "b",
-                        align: "lt",
-                        data: "Remise ".space(45,"s") + ("  -" + parseFloat(tmpRemise).toFixed(2) + "EUR").space(10,"s")
+                        align: "rt",
+                        data: "Remise ".space(46,"s") + ("  -" + parseFloat(tmpRemise).toFixed(2) + "EUR").space(10,"s")
                     })
                 });
                 //SATIR DETAYI
@@ -372,7 +372,7 @@ export function print()
             {
                 font: "b",
                 style: "bu",
-                align: "lt",
+                align: "rt",
                 data: " ".space(5) + " " +
                     "Taux".space(10) + " " +
                     "HT".space(10) + " " +
@@ -387,7 +387,7 @@ export function print()
                 tmpArr.push(
                 {
                     font: "b",
-                    align: "lt",
+                    align: "rt",
                     data: tmpVatLst[i].VAT_TYPE.space(5) + " " +
                         (tmpVatLst[i].VAT_RATE + "%").space(10) + " " +
                         data.possale.where({VAT_TYPE:tmpVatLst[i].VAT_TYPE}).sum('FAMOUNT',2).space(10) + " " + 
@@ -399,8 +399,8 @@ export function print()
             tmpArr.push(
             {
                 font: "b",
-                align: "lt",
-                data: ("Total : ").space(15) +
+                align: "rt",
+                data: ("Total : ").space(18) +
                     data.possale.sum('FAMOUNT',2).space(10) + " " + 
                     data.possale.sum('VAT',2).space(10) + " " + 
                     data.possale.sum('TOTAL',2).space(10)
