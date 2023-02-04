@@ -62,9 +62,9 @@
         <Item6 Ref="31" ControlType="XRLabel" Name="label38" Multiline="true" TextAlignment="TopLeft" SizeF="286.932,40.208374" LocationFloat="269.984741, 135.166779" Font="Microsoft Sans Serif, 10pt" Padding="2,2,0,0,100">
           <StylePriority Ref="32" UseFont="false" UseBorders="false" UseTextAlignment="false" />
         </Item6>
-        <Item7 Ref="33" ControlType="XRLabel" Name="label40" Multiline="true" TextAlignment="TopLeft" SizeF="151.708618,23" LocationFloat="609.4166, 148.625183" Font="Arial, 10pt" Padding="2,2,0,0,100">
+        <Item7 Ref="33" ControlType="XRLabel" Name="label40" TextFormatString="{0:dd/MM/yyyy}" Multiline="true" TextAlignment="TopLeft" SizeF="151.708618,23" LocationFloat="609.4166, 148.625183" Font="Arial, 10pt" Padding="2,2,0,0,100">
           <ExpressionBindings>
-            <Item1 Ref="34" EventName="BeforePrint" PropertyName="Text" Expression="[CDATE]" />
+            <Item1 Ref="34" EventName="BeforePrint" PropertyName="Text" Expression="[DOC_DATE]" />
           </ExpressionBindings>
           <StylePriority Ref="35" UseFont="false" UseTextAlignment="false" />
         </Item7>

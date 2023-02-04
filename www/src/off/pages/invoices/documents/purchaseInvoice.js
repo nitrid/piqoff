@@ -255,7 +255,7 @@ export default class purchaseInvoice extends React.PureComponent
         this.docObj.dt()[0].AMOUNT = this.docObj.docItems.dt().sum("AMOUNT",2)
         this.docObj.dt()[0].DISCOUNT = this.docObj.docItems.dt().sum("DISCOUNT",2)
         this.docObj.dt()[0].VAT = this.docObj.docItems.dt().sum("VAT",2)
-        this.docObj.dt()[0].TOTAL = this.docObj.docItems.dt().sum("TOTAL",2)
+        this.docObj.dt()[0].TOTAL = (parseFloat(this.docObj.docItems.dt().sum("TOTALHT",2)) + parseFloat(this.docObj.docItems.dt().sum("VAT",2))).toFixed(2)
         this.docObj.dt()[0].TOTALHT = this.docObj.docItems.dt().sum("TOTALHT",2)
 
         this.docObj.docCustomer.dt()[0].AMOUNT = this.docObj.dt()[0].TOTAL
