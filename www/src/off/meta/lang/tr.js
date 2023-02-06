@@ -240,6 +240,7 @@ export const langTr =
         pos_02_006 : "Gün Sonu Raporu",
         pos_02_007 : "Pos Avans Raporu",
         pos_02_008 : "Ürün Satış Raporu",
+        pos_02_009 : "Grup Bazlı Satış Raporu",
         pos_03 :"Operasyonlar",
         pos_03_001 : "Gün Sonu",
         promo: "Promosyon",
@@ -13699,6 +13700,48 @@ export const langTr =
             title: "Dikkat",
             btn01: "Tamam",
             msg: "Lütfen Ürün Seçiniz !"
+        },
+    },
+    pos_02_009 : // "Ürün Grubu Raporu"
+    {
+        btnGet :"Getir",
+        txtAmount : "Toplam Tutar",
+        txtTotalTicket : "Toplam Fiş Sayısı",
+        txtTicketAvg : "Ortalama Fiş Tutarı",
+        txtTotalCost : "Toplam Maliyet",
+        txtFamount : "Vergisiz Toplam",
+        txtVat : "Toplam Vergi",
+        txtRestTotal : "Vergisiz Toplam Kar",
+        btnGetAnalysis : "Grafik Görünümü",
+        grdGroupSalesReport: 
+        {
+            clmGrpCode : "Ürün Grubu Kodu",
+            clmGrpName: "Ürün Grubu Adı",
+            clmTicket: "Fiş Sayısı",
+            clmTotalCost: "Toplam Maliyet",
+            clmFamount : "Vergisiz Tutar",
+            clmVat : "Vergi Tutarı",
+            clmTotal : "Toplam Tutar",
+            clmRestTotal : "Vergisiz Toplam Kar"
+        },
+        grpGrpDetail : 
+        {
+            clmCode : "Ürün Kodu",
+            clmName : "Ürün Adı",
+            clmQuantity : "Miktar",
+            clmTotalCost :"Toplam Maliyet",
+            clmFamount :"Vergisiz Tutar",
+            clmVat : "Vergi Tutarı",
+            clmTotal : "Toplam Tutar",
+            clmRestTotal : "Vergisiz Toplam Kar"
+        },
+        popGrpDetail : 
+        {
+            title : "Satış Detayı"
+        },
+        popAnalysis : 
+        {
+            title : "Satış Grafiği"
         },
     },
     pos_03_001 : // "Gün Sonu",

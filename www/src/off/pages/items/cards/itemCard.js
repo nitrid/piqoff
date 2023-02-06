@@ -688,7 +688,6 @@ export default class itemCard extends React.PureComponent
                             tmpServices.push(tmpItemData.result.recordset[i])
                         }
                     }
-                    console.log(tmpServices)
                     for (let x = 0; x < tmpServices.length; x++) 
                     {
                         let tmpQuantity = 0

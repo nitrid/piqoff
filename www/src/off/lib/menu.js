@@ -201,6 +201,11 @@ export const menu = (e) =>
                             text : e.t('menuOff.stk_05_001'),//'',
                             path: 'items/report/itemInventoryReport'
                         },
+                        {
+                            id: 'stk_05_002',
+                            text : e.t('menuOff.stk_05_002'),//'',
+                            path: 'items/report/itemPurcPriceReport'
+                        },
                     ]
                 }
             ]
@@ -995,6 +1000,12 @@ export const menu = (e) =>
                             id: 'pos_02_008',
                             text: e.t('menuOff.pos_02_008'),
                             path: 'pos/report/itemSaleReport'
+                        },
+                        //Ürün Grup Satış Raporu
+                        {
+                            id: 'pos_02_009',
+                            text: e.t('menuOff.pos_02_009'),
+                            path: 'pos/report/itemGrpSalesReport'
                         },
                     ]
                 },

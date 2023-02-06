@@ -379,7 +379,7 @@ export default class App extends React.PureComponent
 
         if(this.state.isExecute == true)
         {
-            this.isExecuteTimeOut = setTimeout(this.timeoutControl, 30000);
+            this.isExecuteTimeOut = setTimeout(this.timeoutControl, 60000);
         }
         else
         {
