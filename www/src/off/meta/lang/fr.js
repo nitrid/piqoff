@@ -55,9 +55,9 @@ export const langFr =
     },
     msgisExecuteClose: 
     {
-        title : "Dikkat",   // BAK
-        msg : "Database bağlantısında bir problem oluştu lütfen yaptığınız son işlemleri kontrol ediniz",   // BAK
-        btn01 : "Tamam"   // BAK
+        title : "Attention",   
+        msg : "Une erreur est survenue lors de la connexion à la base de données.Veuillez vérifier vos dernières opérations.",   
+        btn01 : "OK"   
     },
     popOpenTike :
     {
@@ -239,6 +239,7 @@ export const langFr =
         pos_02_006 : "Rapport de Vente Fin de Journée", 
         pos_02_007 : "Rapport Pos Fond de Caisse ", 
         pos_02_008 : "Rapport de Vente Produit", 
+        pos_02_009 :"Grup Bazlı Satış Raporu", // BAK
         pos_03 :"Traitements", 
         pos_03_001 : "Opérations de fin de journée",
         promo: "Promotion",
@@ -13683,6 +13684,48 @@ export const langFr =
             title: "Attention",   
             btn01: "OK",   
             msg: "Veuillez Sélectionner le Produit !"   
+        },
+    },
+    pos_02_009 : // "Ürün Grubu Raporu"
+    {
+        btnGet :"Getir",    // BAK
+        txtAmount : "Toplam Tutar",    // BAK
+        txtTotalTicket : "Toplam Fiş Sayısı",    // BAK
+        txtTicketAvg : "Ortalama Fiş Tutarı",    // BAK
+        txtTotalCost : "Toplam Maliyet",    // BAK
+        txtFamount : "Vergisiz Toplam",    // BAK
+        txtVat : "Toplam Vergi",    // BAK
+        txtRestTotal : "Vergisiz Toplam Kar",    // BAK
+        btnGetAnalysis : "Grafik Görünümü",    // BAK
+        grdGroupSalesReport:     // BAK
+        {    // BAK
+            clmGrpCode : "Ürün Grubu Kodu",    // BAK
+            clmGrpName: "Ürün Grubu Adı",    // BAK
+            clmTicket: "Fiş Sayısı",    // BAK
+            clmTotalCost: "Toplam Maliyet",    // BAK
+            clmFamount : "Vergisiz Tutar",    // BAK
+            clmVat : "Vergi Tutarı",    // BAK
+            clmTotal : "Toplam Tutar",    // BAK
+            clmRestTotal : "Vergisiz Toplam Kar"    // BAK
+        },    // BAK
+        grpGrpDetail :     // BAK
+        {    // BAK
+            clmCode : "Ürün Kodu",    // BAK
+            clmName : "Ürün Adı",    // BAK
+            clmQuantity : "Miktar",    // BAK
+            clmTotalCost :"Toplam Maliyet",    // BAK
+            clmFamount :"Vergisiz Tutar",    // BAK
+            clmVat : "Vergi Tutarı",    // BAK
+            clmTotal : "Toplam Tutar",    // BAK
+            clmRestTotal : "Vergisiz Toplam Kar"    // BAK
+        },    // BAK
+        popGrpDetail :     // BAK
+        {    // BAK
+            title : "Satış Detayı"    // BAK
+        },    // BAK
+        popAnalysis :     // BAK
+        {    // BAK
+            title : "Satış Grafiği"    // BAK
         },
     },
     pos_03_001 : // "Gün sonu"
