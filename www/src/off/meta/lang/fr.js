@@ -13697,6 +13697,7 @@ export const langFr =
         txtVat : "Toplam Vergi",    // BAK
         txtRestTotal : "Vergisiz Toplam Kar",    // BAK
         btnGetAnalysis : "Grafik Görünümü",    // BAK
+        chkTicket : "Grub bazında fiş sayılarını hesapla", // BAK
         grdGroupSalesReport:     // BAK
         {    // BAK
             clmGrpCode : "Ürün Grubu Kodu",    // BAK

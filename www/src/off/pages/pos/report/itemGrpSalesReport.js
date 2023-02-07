@@ -57,30 +57,61 @@ export default class itemGrpSalesReport extends React.PureComponent
             this.txtTotalTicket.value = tmpData.result.recordset[0].TICKET
             this.txtTicketAvg.value = tmpData.result.recordset[0].AVGTOTAL.toLocaleString('fr-FR', {style: 'currency',currency: 'EUR'});
         }
-        let tmpSource =
+        if(this.chkTicket.value == true)
         {
-            source : 
+            let tmpSource =
             {
-                groupBy : this.groupList,
-                select : 
+                source : 
                 {
-                    query : "SELECT ITEM_GRP_NAME,ITEM_GRP_CODE, " +
-                    "(SELECT COUNT(*) FROM (SELECT COUNT(POS_GUID) AS POS_GUID FROM POS_SALE_VW_01 AS PS WHERE PS.ITEM_GRP_NAME = POS_SALE_DATEIL_REPORT_VW_01.ITEM_GRP_NAME AND PS.DOC_DATE >= @FISRT_DATE AND PS.DOC_DATE <= @LAST_DATE GROUP BY POS_GUID) AS TMP) AS TICKET,  " +
-                    "ROUND(SUM(TOTAL),2) AS TOTAL,  " +
-                    "ROUND(SUM(FAMOUNT),2) AS FAMOUNT,  " +
-                    "ROUND(SUM(VAT),2) AS VAT,  " +
-                    "ROUND(SUM(COST_PRICE * QUANTITY),2) AS TOTAL_COST,  " +
-                    "(SUM(FAMOUNT) - SUM(COST_PRICE * QUANTITY)) AS REST_TOTAL  " +
-                    "FROM POS_SALE_DATEIL_REPORT_VW_01 WHERE DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE GROUP BY ITEM_GRP_NAME,ITEM_GRP_CODE ORDER BY ITEM_GRP_CODE ",
-                    param : ['FISRT_DATE:date','LAST_DATE:date'],
-                    value : [this.dtDate.startDate,this.dtDate.endDate]
-                },
-                sql : this.core.sql
+                    groupBy : this.groupList,
+                    select : 
+                    {
+                        query : "SELECT ITEM_GRP_NAME,ITEM_GRP_CODE, " +
+                        "(SELECT COUNT(*) FROM (SELECT COUNT(POS_GUID) AS POS_GUID FROM POS_SALE_VW_01 AS PS WHERE PS.ITEM_GRP_NAME = POS_SALE_DATEIL_REPORT_VW_01.ITEM_GRP_NAME AND PS.DOC_DATE >= @FISRT_DATE AND PS.DOC_DATE <= @LAST_DATE GROUP BY POS_GUID) AS TMP) AS TICKET,  " +
+                        "ROUND(SUM(TOTAL),2) AS TOTAL,  " +
+                        "ROUND(SUM(FAMOUNT),2) AS FAMOUNT,  " +
+                        "ROUND(SUM(VAT),2) AS VAT,  " +
+                        "ROUND(SUM(COST_PRICE * QUANTITY),2) AS TOTAL_COST,  " +
+                        "(SUM(FAMOUNT) - SUM(COST_PRICE * QUANTITY)) AS REST_TOTAL  " +
+                        "FROM POS_SALE_DATEIL_REPORT_VW_01 WHERE DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE GROUP BY ITEM_GRP_NAME,ITEM_GRP_CODE ORDER BY ITEM_GRP_CODE ",
+                        param : ['FISRT_DATE:date','LAST_DATE:date'],
+                        value : [this.dtDate.startDate,this.dtDate.endDate]
+                    },
+                    sql : this.core.sql
+                }
             }
+            App.instance.setState({isExecute:true})
+            await this.grdGroupSalesReport.dataRefresh(tmpSource)
+            App.instance.setState({isExecute:false})
         }
-        App.instance.setState({isExecute:true})
-        await this.grdGroupSalesReport.dataRefresh(tmpSource)
-        App.instance.setState({isExecute:false})
+        else
+        {
+            let tmpSource =
+            {
+                source : 
+                {
+                    groupBy : this.groupList,
+                    select : 
+                    {
+                        query : "SELECT ITEM_GRP_NAME,ITEM_GRP_CODE, " +
+                        "'' AS TICKET,  " +
+                        "ROUND(SUM(TOTAL),2) AS TOTAL,  " +
+                        "ROUND(SUM(FAMOUNT),2) AS FAMOUNT,  " +
+                        "ROUND(SUM(VAT),2) AS VAT,  " +
+                        "ROUND(SUM(COST_PRICE * QUANTITY),2) AS TOTAL_COST,  " +
+                        "(SUM(FAMOUNT) - SUM(COST_PRICE * QUANTITY)) AS REST_TOTAL  " +
+                        "FROM POS_SALE_DATEIL_REPORT_VW_01 WHERE DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE GROUP BY ITEM_GRP_NAME,ITEM_GRP_CODE ORDER BY ITEM_GRP_CODE ",
+                        param : ['FISRT_DATE:date','LAST_DATE:date'],
+                        value : [this.dtDate.startDate,this.dtDate.endDate]
+                    },
+                    sql : this.core.sql
+                }
+            }
+            App.instance.setState({isExecute:true})
+            await this.grdGroupSalesReport.dataRefresh(tmpSource)
+            App.instance.setState({isExecute:false})
+        }
+       
     }
     async getDetail(pGrp)
     {
@@ -188,7 +219,15 @@ export default class itemGrpSalesReport extends React.PureComponent
                             <NbDateRange id={"dtDate"} parent={this} startDate={moment(new Date())} endDate={moment(new Date())}/>
                         </div>
                         <div className="col-3">
-                            
+                            <Form>
+                                <Item>
+                                    <Label text={this.t("chkTicket")} alignment="right" />
+                                    <NdCheckBox id="chkTicket" parent={this} defaultValue={false}
+                                    onValueChanged={(e)=>
+                                    {
+                                    }}/>
+                                </Item>
+                            </Form>
                         </div>
                         <div className="col-3">
                             <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnGetClick}></NdButton>

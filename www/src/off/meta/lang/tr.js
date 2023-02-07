@@ -13714,6 +13714,7 @@ export const langTr =
         txtVat : "Toplam Vergi",
         txtRestTotal : "Vergisiz Toplam Kar",
         btnGetAnalysis : "Grafik Görünümü",
+        chkTicket : "Grub bazında fiş sayılarını hesapla",
         grdGroupSalesReport: 
         {
             clmGrpCode : "Ürün Grubu Kodu",
