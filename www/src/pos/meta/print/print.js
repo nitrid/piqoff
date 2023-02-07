@@ -54,7 +54,7 @@ export function print()
             }   
             return tmpArr.length > 0 ? tmpArr : undefined
         },
-        ()=>{return {font:"b",align:"lt",data:(moment(new Date()).locale('fr').format('dddd') + " " + moment(new Date()).format("DD.MM.YYYY")).space(56) + (moment(new Date()).format("LTS")).space(8)}},
+        ()=>{return {font:"b",align:"lt",data:moment(new Date(data.pos[0].LDATE).toISOString()).utcOffset(0,false).locale('fr').format('dddd DD.MM.YYYY HH:mm:ss')}},
         ()=>{return {font:"b",align:"lt",data:("Caissier: " + data.pos[0].CUSER).space(34,'e') + ("Caisse: " + data.pos[0].DEVICE).space(30,'s')}},
         //FIS NO BARKODU
         ()=>{return {align:"ct",barcode:data.pos[0].GUID.substring(19,36),options:{width: 1,height:40,position:'OFF'}}},
