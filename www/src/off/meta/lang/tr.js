@@ -142,6 +142,7 @@ export const langTr =
         stk_04_003 : "Sayım Kesinleştirme",
         stk_04_004 :"SKT Operasyonu",
         stk_05_001 : "Depo Envanter Raporu",
+        stk_05_002 : "Değişen alış Fiyatları Raporu",
         cri: "Cari",
         cri_01: "Tanımlar",
         cri_02: "Listeler",
