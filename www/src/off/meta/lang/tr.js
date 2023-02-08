@@ -142,7 +142,7 @@ export const langTr =
         stk_04_003 : "Sayım Kesinleştirme",
         stk_04_004 :"SKT Operasyonu",
         stk_05_001 : "Depo Envanter Raporu",
-        stk_05_002 : "Değişen alış Fiyatları Raporu",
+        stk_05_002 : "Değişen Alış Fiyatları Raporu",
         cri: "Cari",
         cri_01: "Tanımlar",
         cri_02: "Listeler",
@@ -2660,6 +2660,24 @@ export const langTr =
         },
         txtTotalQuantity : "Toplam Miktar",
         txtTotalCost : "Envanter Değeri",
+    },
+    stk_05_002 : // Alış Fiyatı Raporuu"
+    {
+        btnGet :"Getir",
+        dtFirst : "Başlangıç Tarihi",
+        graphicTitle : "Fiyat Değişim Grafiği",
+        typePurc : "Alış",
+        typeSale : "satış",
+        grdItemPurcPriceReport: 
+        {
+            clmCode : "Ürün Kodu",
+            clmName: "Ürün Adı",
+            clmCustomer: "Tedrikçi",
+            clmLdate: "Son Değişim Tarihi",
+            clmFamount : "Vergisiz Tutar",
+            clmTotalCost : "Son Alış Fiyatı",
+            clmSale : "Satış Fiyatı",
+        },
     },
     cri_01_001: // "Cari Tanımları"
     {

@@ -411,12 +411,12 @@ export default class itemGrpSalesReport extends React.PureComponent
                                             <Format type="fixedPoint" precision={1} />
                                         </Label>
                                         </CommonSeriesSettings>
-                                        <Series
-                                        valueField="TOTAL"
-                                        argumentField="ITEM_GRP_CODE"
-                                        name="Şatış"
-                                        type="bar"
-                                        color="#008000" />
+                                            <Series
+                                            valueField="TOTAL"
+                                            argumentField="ITEM_GRP_CODE"
+                                            name="Şatış"
+                                            type="bar"
+                                            color="#008000" />
                                     </Chart>
                                 </Item>
                             </Form>

@@ -142,6 +142,7 @@ export const langFr =
         stk_04_003 : "Traitement inventaire",
         stk_04_004 :"Traitement DLC",
         stk_05_001 : "Rapport Inventaire Dépôt", // BAK
+        stk_05_002 : "Değişen Alış Fiyatları Raporu", // BAK
         cri: "Fournisseur - Client",
         cri_01: "Saisie",
         cri_02: "Listes",
@@ -2658,6 +2659,24 @@ export const langFr =
         },
         txtTotalQuantity : "Total Quantité",
         txtTotalCost : "Envanter Değeri",
+    },
+    stk_05_002 : // Alış Fiyatı Raporuu"
+    {
+        btnGet :"Getir", // BAK
+        dtFirst : "Başlangıç Tarihi", // BAK
+        graphicTitle : "Fiyat Değişim Grafiği", // BAK
+        typePurc : "Alış", // BAK
+        typeSale : "satış", // BAK
+        grdItemPurcPriceReport: 
+        {
+            clmCode : "Ürün Kodu",   // BAK
+            clmName: "Ürün Adı",   // BAK
+            clmCustomer: "Tedrikçi",   // BAK
+            clmLdate: "Son Değişim Tarihi",   // BAK
+            clmFamount : "Vergisiz Tutar",   // BAK
+            clmTotalCost : "Son Alış Fiyatı",   // BAK
+            clmSale : "Satış Fiyatı",   // BAK
+        },
     },
     cri_01_001: // "Cari Tanımları"
     {
