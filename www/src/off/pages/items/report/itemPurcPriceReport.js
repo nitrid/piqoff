@@ -56,9 +56,7 @@ export default class itemPurcPriceReport extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT *," + 
-                            "CONVERT(nvarchar,ROUND((((PRICE_SALE / ((VAT / 100) + 1)) - PURC_PRICE) / (PURC_PRICE)) * 100,2)) + '% / €' + CONVERT(nvarchar,ROUND((PRICE_SALE / ((VAT / 100) + 1)) - PURC_PRICE,2))AS MARGIN," +
-                            "CONVERT(nvarchar,ROUND((ROUND(((PRICE_SALE / ((VAT / 100) + 1)) - PURC_PRICE) / 1.12,2) / (PURC_PRICE)) * 100,2)) +'% / €' + CONVERT(nvarchar,ROUND(((PRICE_SALE / ((VAT / 100) + 1)) - PURC_PRICE) / 1.12,2)) AS NETMARGIN " +
+                    query : "SELECT *" + 
                             " FROM " + 
                             "(SELECT   " +
                             "ITEMS.GUID,  " +
@@ -242,6 +240,27 @@ export default class itemPurcPriceReport extends React.PureComponent
                             onRowDblClick={async(e)=>
                                 {
                                     this.getDetail(e.data.GUID,e.data.CUSTOMER)
+                                }}
+                            onCellPrepared={(e) =>
+                                {
+                                    if(e.rowType === "data")
+                                    {
+                                        console.log(e)
+                                        let tmpExVat = e.data.PRICE_SALE / ((e.data.VAT / 100) + 1)
+                                        let tmpMargin = e.data.PURC_PRICE == 0 || tmpExVat == 0 ? 0 : tmpExVat - e.data.PURC_PRICE;
+                                        let tmpMarginRate = tmpMargin == 0 ? 0 : (tmpMargin /  e.data.PURC_PRICE) * 100   //((tmpExVat - e.data.CUSTOMER_PRICE)/tmpExVat) * 100
+                                        //e.data.MARGIN =  tmpMarginRate.toFixed(2) + "% / €" + tmpMargin.toFixed(2);        
+                                        //e.data.GROSS_MARGIN_RATE = tmpMarginRate.toFixed(2); 
+                                        e.values[7] = tmpMarginRate.toFixed(2) + "% / €" + tmpMargin.toFixed(2); 
+
+                                        // NET_MARGIN ANINDA ETKI ETSİN DİYE YAPILDI
+                                        let tmpNetExVat = e.data.PRICE_SALE / ((e.data.VAT / 100) + 1)
+                                        let tmpNetMargin = tmpNetExVat == 0 || e.data.PURC_PRICE == 0 ? 0 : (tmpNetExVat - e.data.PURC_PRICE) / 1.15;
+                                        let tmpNetMarginRate = tmpNetMargin == 0 ? 0 : (tmpNetMargin / e.data.PURC_PRICE) * 100
+                                        // e.data.NET_MARGIN = tmpNetMargin.toFixed(2) + "€ / %" +  tmpNetMarginRate.toFixed(2);
+                                        // e.data.NET_MARGIN_RATE = tmpNetMarginRate.toFixed(2);    
+                                        e.values[8] =   tmpNetMargin.toFixed(2) + "€  %" +  tmpNetMarginRate.toFixed(2);
+                                    }
                                 }}
                             >                            
                                 <Paging defaultPageSize={20} />
