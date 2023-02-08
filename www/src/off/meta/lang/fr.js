@@ -2666,7 +2666,8 @@ export const langFr =
         dtFirst : "Başlangıç Tarihi", // BAK
         graphicTitle : "Fiyat Değişim Grafiği", // BAK
         typePurc : "Alış", // BAK
-        typeSale : "satış", // BAK
+        typeSale : "Satış", // BAK
+        dlbClikMsg : "Detayı grafiğini görmek için satıra çift tıklayınız", // BAK
         grdItemPurcPriceReport: 
         {
             clmCode : "Ürün Kodu",   // BAK
