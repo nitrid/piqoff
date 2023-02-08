@@ -2669,6 +2669,8 @@ export const langTr =
         typePurc : "Alış",
         typeSale : "Satış",
         dlbClikMsg : "Detayı grafiğini görmek için satıra çift tıklayınız",
+        cmbCustomer : "Tedarikçi",
+        cmbMainGrp : "Ürün Grubu",
         grdItemPurcPriceReport: 
         {
             clmCode : "Ürün Kodu",
@@ -2678,6 +2680,9 @@ export const langTr =
             clmFamount : "Vergisiz Tutar",
             clmTotalCost : "Son Alış Fiyatı",
             clmSale : "Satış Fiyatı",
+            clmFisrtCost : "Önceki Alış Fiyatı",
+            clmMargin : "Brüt Marj",
+            clmNetMargin : "Net Marj",
         },
     },
     cri_01_001: // "Cari Tanımları"

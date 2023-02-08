@@ -56,22 +56,28 @@ export default class itemPurcPriceReport extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT   " +
+                    query : "SELECT *," + 
+                            "CONVERT(nvarchar,ROUND((((PRICE_SALE / ((VAT / 100) + 1)) - PURC_PRICE) / (PURC_PRICE)) * 100,2)) + '% / €' + CONVERT(nvarchar,ROUND((PRICE_SALE / ((VAT / 100) + 1)) - PURC_PRICE,2))AS MARGIN," +
+                            "CONVERT(nvarchar,ROUND((ROUND(((PRICE_SALE / ((VAT / 100) + 1)) - PURC_PRICE) / 1.12,2) / (PURC_PRICE)) * 100,2)) +'% / €' + CONVERT(nvarchar,ROUND(((PRICE_SALE / ((VAT / 100) + 1)) - PURC_PRICE) / 1.12,2)) AS NETMARGIN " +
+                            " FROM " + 
+                            "(SELECT   " +
                             "ITEMS.GUID,  " +
                             "ITEMS.NAME,  " +
                             "ITEMS.CODE,  " +
                             "PRICE.PRICE AS PURC_PRICE,  " +
+                            "ITEMS.VAT AS VAT, " +
+                            "ISNULL((SELECT TOP 1 PRICE FROM ITEM_PRICE_LOG_VW_01 WHERE ITEM_PRICE_LOG_VW_01.ITEM_GUID = PRICE.ITEM_GUID AND ITEM_PRICE_LOG_VW_01.CUSTOMER = PRICE.CUSTOMER_GUID AND TYPE = 1 ORDER BY CHANGE_DATE DESC),0) AS FISRT_PRICE," + 
                             "ISNULL((SELECT [dbo].[FN_PRICE_SALE](ITEMS.GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000')),0) AS PRICE_SALE,  " +
-                            "ISNULL((SELECT TOP 1 TITLE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = PRICE.CUSTOMER),'') AS CUSTOMER_NAME, " +
-                            "PRICE.CUSTOMER AS CUSTOMER, " + 
+                            "PRICE.CUSTOMER_NAME AS CUSTOMER_NAME, " +
+                            "PRICE.CUSTOMER_GUID AS CUSTOMER, " + 
                             "PRICE.LDATE AS LDATE " +
-                            "FROM ITEMS AS ITEMS   " +
+                            "FROM ITEMS_VW_01 AS ITEMS   " +
                             "INNER JOIN  " +
-                            "ITEM_PRICE AS PRICE  " +
-                            "ON ITEMS.GUID = PRICE.ITEM  " +
-                            "WHERE PRICE.LDATE > @FISRT_DATE AND PRICE.TYPE = 1  ORDER BY ITEMS.NAME",
-                    param : ['FISRT_DATE:date','LAST_DATE:date'],
-                    value : [this.dtFirst.value]
+                            "ITEM_PRICE_VW_01 AS PRICE  " +
+                            "ON ITEMS.GUID = PRICE.ITEM_GUID  " +
+                            "WHERE PRICE.LDATE > @FISRT_DATE AND PRICE.TYPE = 1 AND ((PRICE.CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = '')) AND ((ITEMS.MAIN_GRP = @MAIN_GRP) OR (@MAIN_GRP = ''))) AS TMP  ORDER BY NAME",
+                    param : ['FISRT_DATE:date','LAST_DATE:date','CUSTOMER_CODE:string|50','MAIN_GRP:string|50'],
+                    value : [this.dtDate.startDate,this.dtDate.endDate,this.cmbTedarikci.value,this.cmbUrunGrup.value]
                 },
                 sql : this.core.sql
             }
@@ -90,8 +96,8 @@ export default class itemPurcPriceReport extends React.PureComponent
                    "FROM [dbo].[ITEM_PRICE_LOG_VW_01] WHERE ITEM_GUID = @ITEM_GUID AND TYPE = 1 AND CUSTOMER = @CUSTOMER  " + 
                    "UNION ALL " + 
                    "SELECT CONVERT(NVARCHAR,LDATE,104) AS CONVERT_DATE,LDATE AS DATE,PRICE AS PURC FROM ITEM_PRICE_VW_01 WHERE ITEM_GUID = @ITEM_GUID AND TYPE = 1 AND CUSTOMER_GUID = @CUSTOMER ",
-            param : ['ITEM_GUID:string|50','CUSTOMER:string|50','FISRT_DATE:date'],
-            value : [pGuid,pCustomer,this.dtFirst.value]
+            param : ['ITEM_GUID:string|50','CUSTOMER:string|50'],
+            value : [pGuid,pCustomer]
         }
         let tmpData = await this.core.sql.execute(tmpQuery) 
         let tmpSaleQuery = 
@@ -101,8 +107,8 @@ export default class itemPurcPriceReport extends React.PureComponent
                    "FROM [dbo].[ITEM_PRICE_LOG_VW_01] WHERE ITEM_GUID = @ITEM_GUID AND TYPE = 0 " + 
                    "UNION ALL " + 
                    "SELECT CONVERT(NVARCHAR,LDATE,104) AS CONVERT_DATE,LDATE AS DATE,PRICE AS SALE FROM ITEM_PRICE_VW_01 WHERE ITEM_GUID = @ITEM_GUID AND TYPE = 0 ",
-            param : ['ITEM_GUID:string|50','CUSTOMER:string|50','FISRT_DATE:date'],
-            value : [pGuid,pCustomer,this.dtFirst.value]
+            param : ['ITEM_GUID:string|50','CUSTOMER:string|50'],
+            value : [pGuid,pCustomer]
         }
         let tmpSaleData = await this.core.sql.execute(tmpSaleQuery) 
         let tmpRecordset = []
@@ -180,12 +186,9 @@ export default class itemPurcPriceReport extends React.PureComponent
                     <div className="row px-2 pt-2">
                         <div className="col-6">
                            {/* dtFirst */}
-                           <Form>
-                                <Item>
-                                    <Label text={this.t("dtFirst")} alignment="right" />
-                                    <NdDatePicker simple={true}  parent={this} id={"dtFirst"}
-                                    >
-                                    </NdDatePicker>
+                           <Form colCount={2}>
+                                <Item colSpan={3}>
+                                    <NbDateRange id={"dtDate"} parent={this} startDate={moment(new Date())} endDate={moment(new Date())}/>
                                 </Item>
                            </Form>
                         </div>
@@ -195,6 +198,29 @@ export default class itemPurcPriceReport extends React.PureComponent
                         <div className="col-3">
                             <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnGetClick}></NdButton>
                         </div>
+                    </div>
+                    <div className="row px-2 pt-2">
+                        <div className="col-6">
+                           <Form colCount={2}>
+                                <Item>
+                                    <Label text={this.t("cmbCustomer")} alignment="right" />
+                                        <NdSelectBox simple={true} parent={this} id="cmbTedarikci" showClearButton={true} notRefresh={true}  searchEnabled={true} 
+                                        displayExpr="TITLE"                       
+                                        valueExpr="CODE"
+                                        data={{source: {select : {query:"SELECT CODE,TITLE FROM CUSTOMER_VW_01 WHERE GENUS IN(1) ORDER BY TITLE ASC"},sql : this.core.sql}}}
+                                        />
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("cmbMainGrp")} alignment="right" />
+                                        <NdSelectBox simple={true} parent={this} id="cmbUrunGrup" showClearButton={true} notRefresh={true}  searchEnabled={true}
+                                        displayExpr="NAME"                       
+                                        valueExpr="CODE"
+                                        data={{source: {select : {query:"SELECT CODE,NAME FROM ITEM_GROUP ORDER BY NAME ASC"},sql : this.core.sql}}}
+                                        />
+                                </Item>
+                           </Form>
+                        </div>
+                       
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
@@ -224,7 +250,7 @@ export default class itemPurcPriceReport extends React.PureComponent
                                 <Column dataField="CODE" caption={this.t("grdItemPurcPriceReport.clmCode")} visible={true} width={150}/> 
                                 <Column dataField="NAME" caption={this.t("grdItemPurcPriceReport.clmName")} visible={true} width={350}/> 
                                 <Column dataField="CUSTOMER_NAME" caption={this.t("grdItemPurcPriceReport.clmCustomer")} visible={true} width={250}/> 
-                                <Column dataField="LDATE" caption={this.t("grdItemPurcPriceReport.clmLdate")} dataType="date" width={250}
+                                <Column dataField="LDATE" caption={this.t("grdItemPurcPriceReport.clmLdate")} dataType="date" width={150}
                                     editorOptions={{value:null}}
                                     cellRender={(e) => 
                                     {
@@ -235,8 +261,11 @@ export default class itemPurcPriceReport extends React.PureComponent
                                         
                                         return
                                     }}/>
-                                <Column dataField="PURC_PRICE" caption={this.t("grdItemPurcPriceReport.clmTotalCost")} visible={true} format={{ style: "currency", currency: "EUR",precision: 2}}  width={150}/> 
-                                <Column dataField="PRICE_SALE" caption={this.t("grdItemPurcPriceReport.clmSale")} visible={true} format={{ style: "currency", currency: "EUR",precision: 2}}  width={150}/> 
+                                <Column dataField="FISRT_PRICE" caption={this.t("grdItemPurcPriceReport.clmFisrtCost")} visible={true} format={{ style: "currency", currency: "EUR",precision: 2}}  width={100}/> 
+                                <Column dataField="PURC_PRICE" caption={this.t("grdItemPurcPriceReport.clmTotalCost")} visible={true} format={{ style: "currency", currency: "EUR",precision: 2}}  width={100}/> 
+                                <Column dataField="PRICE_SALE" caption={this.t("grdItemPurcPriceReport.clmSale")} visible={true} format={{ style: "currency", currency: "EUR",precision: 2}}  width={100}/> 
+                                <Column dataField="MARGIN" caption={this.t("grdItemPurcPriceReport.clmMargin")} visible={true}/> 
+                                <Column dataField="NETMARGIN" caption={this.t("grdItemPurcPriceReport.clmNetMargin")} visible={true}/> 
                             </NdGrid>
                         </div>
                     </div>

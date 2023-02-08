@@ -2668,6 +2668,8 @@ export const langFr =
         typePurc : "Achat", // BAK
         typeSale : "Vente", // BAK
         dlbClikMsg : "Double-cliquez sur la ligne pour voir le graphique en détail.", // BAK
+        cmbCustomer : "Fournisseur",
+        cmbMainGrp : "Famille produit",
         grdItemPurcPriceReport: 
         {
             clmCode : "Code de Produit",   // BAK
@@ -2677,6 +2679,9 @@ export const langFr =
             clmFamount : "Montant hors taxe",   // BAK
             clmTotalCost : "Dernier prix d'achat",   // BAK
             clmSale : "Prix de Vente",   // BAK
+            clmFisrtCost : "Önceki Alış Fiyatı", // BAK
+            clmMargin : "Brüt Marj", // BAK
+            clmNetMargin : "Net Marj", // BAK
         },
     },
     cri_01_001: // "Cari Tanımları"
