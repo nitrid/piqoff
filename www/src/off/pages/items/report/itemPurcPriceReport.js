@@ -85,22 +85,22 @@ export default class itemPurcPriceReport extends React.PureComponent
 
         let tmpQuery = 
         {
-            query :"SELECT CONVERT(NVARCHAR,CONVERT(datetime,CHANGE_DATE),104) AS DATE, " +
+            query :"SELECT CONVERT(NVARCHAR,CONVERT(datetime,CHANGE_DATE),104) AS CONVERT_DATE, CHANGE_DATE AS DATE, " +
                    "PRICE AS PURC " +
                    "FROM [dbo].[ITEM_PRICE_LOG_VW_01] WHERE ITEM_GUID = @ITEM_GUID AND TYPE = 1 AND CUSTOMER = @CUSTOMER  " + 
                    "UNION ALL " + 
-                   "SELECT CONVERT(NVARCHAR,LDATE,104) AS DATE,PRICE AS PURC FROM ITEM_PRICE_VW_01 WHERE ITEM_GUID = @ITEM_GUID AND TYPE = 1 AND CUSTOMER_GUID = @CUSTOMER ",
+                   "SELECT CONVERT(NVARCHAR,LDATE,104) AS CONVERT_DATE,LDATE AS DATE,PRICE AS PURC FROM ITEM_PRICE_VW_01 WHERE ITEM_GUID = @ITEM_GUID AND TYPE = 1 AND CUSTOMER_GUID = @CUSTOMER ",
             param : ['ITEM_GUID:string|50','CUSTOMER:string|50','FISRT_DATE:date'],
             value : [pGuid,pCustomer,this.dtFirst.value]
         }
         let tmpData = await this.core.sql.execute(tmpQuery) 
         let tmpSaleQuery = 
         {
-            query :"SELECT CONVERT(NVARCHAR,CONVERT(datetime,CHANGE_DATE),104) AS DATE, " +
+            query :"SELECT CONVERT(NVARCHAR,CONVERT(datetime,CHANGE_DATE),104) AS CONVERT_DATE, CHANGE_DATE AS DATE, " +
                    "PRICE AS SALE " +
                    "FROM [dbo].[ITEM_PRICE_LOG_VW_01] WHERE ITEM_GUID = @ITEM_GUID AND TYPE = 0 " + 
                    "UNION ALL " + 
-                   "SELECT CONVERT(NVARCHAR,LDATE,104) AS DATE,PRICE AS SALE FROM ITEM_PRICE_VW_01 WHERE ITEM_GUID = @ITEM_GUID AND TYPE = 0 ",
+                   "SELECT CONVERT(NVARCHAR,LDATE,104) AS CONVERT_DATE,LDATE AS DATE,PRICE AS SALE FROM ITEM_PRICE_VW_01 WHERE ITEM_GUID = @ITEM_GUID AND TYPE = 0 ",
             param : ['ITEM_GUID:string|50','CUSTOMER:string|50','FISRT_DATE:date'],
             value : [pGuid,pCustomer,this.dtFirst.value]
         }
@@ -260,7 +260,7 @@ export default class itemPurcPriceReport extends React.PureComponent
                                     height={'700'}  
                                     >
                                     <CommonSeriesSettings
-                                        argumentField="DATE"
+                                        argumentField="CONVERT_DATE"
                                         type={"line"}
                                         hoverMode="allArgumentPoints"
                                         selectionMode="allArgumentPoints"
