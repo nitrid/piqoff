@@ -2667,7 +2667,8 @@ export const langTr =
         dtFirst : "Başlangıç Tarihi",
         graphicTitle : "Fiyat Değişim Grafiği",
         typePurc : "Alış",
-        typeSale : "satış",
+        typeSale : "Satış",
+        dlbClikMsg : "Detayı grafiğini görmek için satıra çift tıklayınız",
         grdItemPurcPriceReport: 
         {
             clmCode : "Ürün Kodu",

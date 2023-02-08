@@ -87,7 +87,7 @@ export default class itemPurcPriceReport extends React.PureComponent
         {
             query :"SELECT CONVERT(NVARCHAR,CONVERT(datetime,CHANGE_DATE),104) AS DATE, " +
                    "PRICE AS PURC " +
-                   "FROM [dbo].[ITEM_PRICE_LOG_VW_01] WHERE ITEM_GUID = @ITEM_GUID AND TYPE = 1 AND CUSTOMER = @CUSTOMER AND UPDATE_DATE > @FISRT_DATE " + 
+                   "FROM [dbo].[ITEM_PRICE_LOG_VW_01] WHERE ITEM_GUID = @ITEM_GUID AND TYPE = 1 AND CUSTOMER = @CUSTOMER  " + 
                    "UNION ALL " + 
                    "SELECT CONVERT(NVARCHAR,LDATE,104) AS DATE,PRICE AS PURC FROM ITEM_PRICE_VW_01 WHERE ITEM_GUID = @ITEM_GUID AND TYPE = 1 AND CUSTOMER_GUID = @CUSTOMER ",
             param : ['ITEM_GUID:string|50','CUSTOMER:string|50','FISRT_DATE:date'],
@@ -98,7 +98,7 @@ export default class itemPurcPriceReport extends React.PureComponent
         {
             query :"SELECT CONVERT(NVARCHAR,CONVERT(datetime,CHANGE_DATE),104) AS DATE, " +
                    "PRICE AS SALE " +
-                   "FROM [dbo].[ITEM_PRICE_LOG_VW_01] WHERE ITEM_GUID = @ITEM_GUID AND TYPE = 0 AND UPDATE_DATE > @FISRT_DATE " + 
+                   "FROM [dbo].[ITEM_PRICE_LOG_VW_01] WHERE ITEM_GUID = @ITEM_GUID AND TYPE = 0 " + 
                    "UNION ALL " + 
                    "SELECT CONVERT(NVARCHAR,LDATE,104) AS DATE,PRICE AS SALE FROM ITEM_PRICE_VW_01 WHERE ITEM_GUID = @ITEM_GUID AND TYPE = 0 ",
             param : ['ITEM_GUID:string|50','CUSTOMER:string|50','FISRT_DATE:date'],
@@ -189,6 +189,11 @@ export default class itemPurcPriceReport extends React.PureComponent
                         </div>
                         <div className="col-3">
                             <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnGetClick}></NdButton>
+                        </div>
+                    </div>
+                    <div className="row px-2 pt-2">
+                        <div className="col-12">
+                          {this.t("dlbClikMsg")}
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
