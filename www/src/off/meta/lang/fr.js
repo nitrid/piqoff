@@ -50,7 +50,7 @@ export const langFr =
     msgAnotherUserAlert: 
     {
         title : "Attention",
-        msg : "Connectez-vous à partir d'un autre appareil avec vos informations d'utilisateur.",
+        msg : "Vous êtes connecté à partir d'un autre appareil avec vos informations d'utilisateur.",
         btn01 : "OK"
     },
     msgisExecuteClose: 
