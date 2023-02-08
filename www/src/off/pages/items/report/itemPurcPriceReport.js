@@ -114,6 +114,11 @@ export default class itemPurcPriceReport extends React.PureComponent
         {
             tmpRecordset.push(tmpSaleData.result.recordset[i])
         }
+        function dateShot(a, b)
+        {
+            return new Date(a.DATE).getTime() - new Date(b.DATE).getTime();
+        }
+        tmpRecordset.sort(dateShot)
         if(tmpData.result.recordset.length > 0)
         {
             this.setState({dataSource:tmpRecordset})
