@@ -3,7 +3,7 @@ import moment from 'moment';
 
 export class itemsCls
 {
-    // RECEP
+    // karaca
     constructor()
     {
         this.core = core.instance;
