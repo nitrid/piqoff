@@ -3,7 +3,7 @@ import moment from 'moment';
 
 export class itemsCls
 {
-    // RECEP
+    // ALI KEMAL
     constructor()
     {
         this.core = core.instance;
