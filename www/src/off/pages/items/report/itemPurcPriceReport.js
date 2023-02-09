@@ -16,7 +16,7 @@ import NdPopUp from '../../../../core/react/devex/popup.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
-import { Chart, Series, CommonSeriesSettings,Format, Legend,Margin,ArgumentAxis,Grid,Title,Tooltip} from 'devextreme-react/chart';
+import { Chart,Tooltip, Series, CommonSeriesSettings,Format, Legend,Margin,ArgumentAxis,Grid,Title} from 'devextreme-react/chart';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
@@ -32,7 +32,8 @@ export default class itemPurcPriceReport extends React.PureComponent
         this.groupList = [];
         this._btnGetClick = this._btnGetClick.bind(this)
         this.getDetail = this.getDetail.bind(this)
-        this.detailData = []
+        this.detailData = [{value:"PURC",name :this.t("typePurc"),color:"#FF0000"},{value:"SALE", name:this.t("typeSale"),color:"#008000"}]
+
 
     }
     componentDidMount()
@@ -44,7 +45,6 @@ export default class itemPurcPriceReport extends React.PureComponent
     }
     async Init()
     {
-        this.detailData = [{value:"PURC",name :this.t("typePurc"),color:"#FF0000"},{value:"SALE", name:this.t("typeSale"),color:"#008000"}]
     }
     async _btnGetClick()
     {
@@ -302,17 +302,14 @@ export default class itemPurcPriceReport extends React.PureComponent
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
                                 <Chart
-                                    palette="Violet"
                                     dataSource={this.state.dataSource}
                                     width={'1150'}
-                                    height={'700'}  
+                                    height={'700'} 
+                                    tooltip={{"enabled":true}} 
                                     >
                                     <CommonSeriesSettings
                                         argumentField="CONVERT_DATE"
                                         type={"line"}
-                                        hoverMode="allArgumentPoints"
-                                        selectionMode="allArgumentPoints"
-                                        valueField={true}
                                     />
                                      {
                                         this.detailData.map((item) => <Series
@@ -321,7 +318,6 @@ export default class itemPurcPriceReport extends React.PureComponent
                                         name={item.name} 
                                         color={item.color}/>)
                                     }
-                                    <Margin bottom={20} />
                                     <ArgumentAxis
                                         valueMarginsEnabled={true}
                                         discreteAxisDivisionMode="crossLabels"
@@ -336,7 +332,6 @@ export default class itemPurcPriceReport extends React.PureComponent
                                     <Export enabled={true} />
                                     <Title text={this.t("graphicTitle")}>
                                     </Title>
-                                    <Tooltip enabled={true} />
                                     </Chart>
                                 </Item>
                             </Form>
