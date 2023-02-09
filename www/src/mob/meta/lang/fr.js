@@ -1235,6 +1235,7 @@ export const langFr =
         btnDocument :"Lignes d'opération",
         btnItemAdd: "AjouteR",
         txtGrandTotal : "Total général",
+        cmbPriceContract : "Fiyat Anlaşması", //BAK
         msgCustomerSelect:
         {
             title: "Attention",
@@ -1422,6 +1423,16 @@ export const langFr =
             btn02: "Abandonner",
             msg: "Voulez-vous vraiment réinitialiser la taxe ?"
         },
+        msgDetail: //BAK
+        {
+            title: "Detay",
+            btn01: "Tamam",
+        },
+        mnuDetail : //BAK
+        {
+            text: "İşlemler",
+            btn01: "Detay"
+        }
     },
     ord_01_002 : // "Alış Sipariş",
     {

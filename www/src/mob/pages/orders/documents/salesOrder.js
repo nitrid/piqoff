@@ -166,13 +166,16 @@ export default class salesOrder extends React.PureComponent
     async setBarcode()
     {
         this.txtQuantity.value = this.param.filter({ELEMENT:'txtQuantity',USERS:this.user.CODE}).getValue().value
+
         let tmpQuery = 
         {
-            query :"SELECT dbo.FN_PRICE_SALE_VAT_EXT(@GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000') AS PRICE",
-            param : ['GUID:string|50'],
-            value : [this.barcode.guid]
+            query :"SELECT dbo.FN_PRICE_SALE_VAT_EXT(@GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000',@CONTRACT_CODE) AS PRICE",
+            param : ['GUID:string|50','CONTRACT_CODE:string|25'],
+            value : [this.barcode.guid,this.cmbPriceContract.value]
         }
+        
         let tmpData = await this.core.sql.execute(tmpQuery) 
+
         if(tmpData.result.recordset.length > 0)
         {
             this.txtPrice.value = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(2))
@@ -588,6 +591,20 @@ export default class salesOrder extends React.PureComponent
                                             </Validator> 
                                         </NdDatePicker>
                                     </Item>
+                                    {/* cmbPriceContract */}
+                                    <Item>
+                                        <Label text={this.t("cmbPriceContract")} alignment="right" />
+                                        <NdSelectBox simple={true} parent={this} id="cmbPriceContract" notRefresh={true}
+                                        displayExpr="NAME"
+                                        valueExpr="CODE"
+                                        value=""
+                                        searchEnabled={true}
+                                        data={{source:{select:{query : "SELECT CODE,NAME FROM CONTRACT_VW_01 WHERE CUSTOMER = '00000000-0000-0000-0000-000000000000' GROUP BY CODE,NAME ORDER BY CODE ASC"},sql:this.core.sql}}}
+                                        param={this.param.filter({ELEMENT:'cmbPriceContract',USERS:this.user.CODE})}
+                                        access={this.access.filter({ELEMENT:'cmbPriceContract',USERS:this.user.CODE})}
+                                        >
+                                        </NdSelectBox>
+                                    </Item>
                                     <Item>
                                         <div className="row">
                                             <div className="col-6 px-2 pt-2">
@@ -638,10 +655,27 @@ export default class salesOrder extends React.PureComponent
                                                 <NdButton icon="detailslayout" type="default" width="100%" onClick={()=>this.page.pageSelect("Document")}></NdButton>
                                             </div>
                                             <div className="col-4 px-1 pt-1">
-                                                
-                                                <NdCheckBox id="chkAutoAdd" text={this.t("chkAutoAdd")} parent={this} defaultValue={true} value={true} 
-                                                param={this.param.filter({ELEMENT:'chkAutoAdd',USERS:this.user.CODE})}
-                                                access={this.access.filter({ELEMENT:'chkAutoAdd',USERS:this.user.CODE})}/>
+                                            <DropDownButton
+                                            text={this.t("mnuDetail.text")}
+                                            style={{width:'100%',backgroundColor:"#337ab7",borderRadius: "5px"}}
+                                            dropDownOptions={{width:'100%'}}
+                                            displayExpr="text"
+                                            keyExpr="id"
+                                            items={[{id:'btn01',text:this.t("mnuDetail.btn01")}]}
+                                            onItemClick={async (e)=>
+                                            {
+                                                if(e.itemData.id == 'btn01')
+                                                {
+                                                    let tmpConfObj = 
+                                                    {
+                                                        id:'msgDetail',showTitle:true,title:this.t("msgDetail.title"),showCloseButton:true,width:'350px',height:'200px',
+                                                        button:[{id:"btn01",caption:this.t("msgDetail.btn01"),location:'after'}],
+                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}></div>)
+                                                    }
+                                                    await dialog(tmpConfObj);
+                                                }
+                                            }}
+                                            />                                                
                                             </div>
                                         </div>
                                     </Item>
@@ -661,7 +695,8 @@ export default class salesOrder extends React.PureComponent
                                                             if(data.length == 1)
                                                             {
                                                                 this.txtBarcode.value = data[0].CODE
-                                                                this.barcode = {
+                                                                this.barcode = 
+                                                                {
                                                                     name:data[0].NAME,
                                                                     code:data[0].CODE,
                                                                     barcode:data[0].BARCODE,
@@ -763,6 +798,9 @@ export default class salesOrder extends React.PureComponent
                                         }).bind(this)}
                                         >
                                         </NdNumberBox>
+                                        <NdCheckBox id="chkAutoAdd" text={this.t("chkAutoAdd")} parent={this} defaultValue={true} value={true} 
+                                                param={this.param.filter({ELEMENT:'chkAutoAdd',USERS:this.user.CODE})}
+                                                access={this.access.filter({ELEMENT:'chkAutoAdd',USERS:this.user.CODE})}/>
                                     </Item>
                                     {/* txtPrice */}
                                     <Item>
@@ -771,9 +809,9 @@ export default class salesOrder extends React.PureComponent
                                         param={this.param.filter({ELEMENT:'txtPrice',USERS:this.user.CODE})}
                                         access={this.access.filter({ELEMENT:'txtPrice',USERS:this.user.CODE})}
                                         onValueChanged={(async(e)=>
-                                            {
+                                        {
                                             this.calculateItemPrice()
-                                            }).bind(this)}
+                                        }).bind(this)}
                                         >
                                         </NdNumberBox>
                                     </Item>

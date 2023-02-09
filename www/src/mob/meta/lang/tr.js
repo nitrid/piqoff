@@ -1237,6 +1237,7 @@ export const langTr =
         btnDocument : "İşlem Satırları",
         btnItemAdd: "Ekle",
         txtGrandTotal : "Genel Toplam",
+        cmbPriceContract : "Fiyat Anlaşması",        
         msgCustomerSelect:
         {
             title: "Dikkat",
@@ -1424,6 +1425,16 @@ export const langTr =
             btn02: "Vazgeç",
             msg: "Vergiyi Sıfırlamak istediğinize eminmisiniz !"
         },
+        msgDetail:
+        {
+            title: "Detay",
+            btn01: "Tamam",
+        },
+        mnuDetail :
+        {
+            text: "İşlemler",
+            btn01: "Detay"
+        }
     },
     ord_01_002 : // "Alış Sipariş",
     {
