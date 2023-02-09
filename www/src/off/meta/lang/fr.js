@@ -376,6 +376,7 @@ export const langFr =
         underUnitName : "Sous Unité",
         chkDayAnalysis : "Journalier",  
         chkMountAnalysis : "Mensuel",  
+        txtUnitFactor : "Birim Mikarı", // BAK
         pg_txtRef:
         {
             title: "Sélectionner Produit",
@@ -627,7 +628,12 @@ export const langFr =
             item : "Article",
             service : "Service",
             deposit : "Consigné"
-        }
+        },
+        msgUnit:
+        {
+            title: "Birim Hesaplama",   // BAK
+            btn01: "Onayla",   // BAK
+        },
     },
     stk_01_002:  //"Barkod Tanımları" 
     {

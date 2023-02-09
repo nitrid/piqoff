@@ -377,6 +377,7 @@ export const langTr =
         underUnitName : "Alt Birim",
         chkDayAnalysis : "Günlük",
         chkMountAnalysis : "Aylık",
+        txtUnitFactor : "Birim Mikarı",
         pg_txtRef:
         {
             title: "Stok Seçimi",
@@ -628,7 +629,12 @@ export const langTr =
             item : "Mal",
             service : "Hizmet",
             deposit : "Depozit"
-        }
+        },
+        msgUnit:
+        {
+            title: "Birim Hesaplama",
+            btn01: "Onayla",
+        },
     },
     stk_01_002:  //"Barkod Tanımları"
     {

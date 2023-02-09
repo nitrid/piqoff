@@ -21,7 +21,7 @@ import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
 import NdImageUpload from '../../../../core/react/devex/imageupload.js';
-import { dialog } from '../../../../core/react/devex/dialog.js';
+import NdDialog, { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
 
 export default class itemCard extends React.PureComponent
@@ -761,6 +761,40 @@ export default class itemCard extends React.PureComponent
                                 let tmpMAxPrice = e.data.CUSTOMER_PRICE + (e.data.CUSTOMER_PRICE * tmpMaxData) /100
                                 this.txtMaxSalePrice.value = Number((tmpMAxPrice).toFixed(2))
                                 this.taxSugarValidCheck()
+                            }
+                        },
+                    ]
+                }
+                >  
+                </NdTextBox>
+            )
+        }
+        if(e.column.dataField == "FACTOR")
+        {
+            console.log(e)
+            return (
+                <NdTextBox id={"txtGrdFactor"+e.rowIndex} parent={this} simple={true} 
+                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                value={e.value}
+                onChange={(r)=>
+                {
+                    this.grdUnit.devGrid.cellValue(e.rowIndex,"FACTOR",r.component._changedValue)
+                }}
+                button=
+                {
+                    [
+                        {
+                            id:'01',
+                            icon:'more',
+                            onClick:async ()  =>
+                            {
+                                this.txtUnitQuantity.value = 1
+                                this.txtUnitQuantity2.value = 1
+                                this.txtUnitFactor.value = 1
+                                await this.msgUnit.show().then(async () =>
+                                {
+                                    this.grdUnit.devGrid.cellValue(e.rowIndex,"FACTOR",this.txtUnitFactor.value)
+                                });  
                             }
                         },
                     ]
@@ -1632,7 +1666,7 @@ export default class itemCard extends React.PureComponent
                                                 <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
                                                 <Column dataField="TYPE_NAME" caption={this.t("grdUnit.clmType")} width={250} allowEditing={false}/>
                                                 <Column dataField="NAME" caption={this.t("grdUnit.clmName")} allowEditing={false}/>
-                                                <Column dataField="FACTOR" caption={this.t("grdUnit.clmFactor")}/>
+                                                <Column dataField="FACTOR" caption={this.t("grdUnit.clmFactor")} editCellRender={this._cellRoleRender}/>
                                                 <Column dataField="WEIGHT" caption={this.t("grdUnit.clmWeight")}/>
                                                 <Column dataField="VOLUME" caption={this.t("grdUnit.clmVolume")}/>
                                                 <Column dataField="WIDTH" caption={this.t("grdUnit.clmWidth")}/>
@@ -2581,7 +2615,55 @@ export default class itemCard extends React.PureComponent
                                 </Item>
                             </Form>
                         </NdPopUp>
-                    </div>                                
+                    </div>    
+                    {/* Birim PopUp */}
+                    <div>
+                        <NdDialog parent={this} id={"msgUnit"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.t("msgUnit.title")}
+                        container={"#root"} 
+                        width={'500'}
+                        height={'230'}
+                        position={{of:'#root'}}
+                        button={[{id:"btn01",caption:this.t("msgUnit.btn01"),location:'after'}]}
+                        >
+                            <div className='row py-2'>
+                                <div className='col-5'>
+                                    <NdNumberBox id="txtUnitQuantity" parent={this} simple={true}
+                                    maxLength={32}
+                                    onValueChanged={(async(e)=>
+                                    {
+                                        this.txtUnitFactor.value = parseFloat((this.txtUnitQuantity.value / this.txtUnitQuantity2.value).toFixed(3))
+                                    }).bind(this)}
+                                    >
+                                    </NdNumberBox>
+                                </div>
+                                <div className='col-1'><h5>/</h5></div>
+                                <div className='col-6'>
+                                    <NdNumberBox id="txtUnitQuantity2" parent={this} simple={true}  
+                                    maxLength={32}
+                                    onValueChanged={(async(e)=>
+                                    {
+                                        this.txtUnitFactor.value = parseFloat((this.txtUnitQuantity.value / this.txtUnitQuantity2.value).toFixed(3))
+                                    }).bind(this)}
+                                    >
+                                    </NdNumberBox>
+                                </div>
+                            </div>
+                            <Form colCount={2} height={'fit-content'}>
+                                <EmptyItem/>
+                                <Item>
+                                    <Label text={this.t("txtUnitFactor")} alignment="right" />
+                                    <NdTextBox id="txtUnitFactor" parent={this} simple={true} readOnly={true}
+                                    maxLength={32}
+                                    >
+                                    </NdTextBox>
+                                </Item>
+                            </Form>
+                        </NdDialog>
+                    </div>                              
                 </ScrollView>
             </React.Fragment>
         )
