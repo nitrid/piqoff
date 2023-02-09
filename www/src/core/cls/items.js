@@ -3,7 +3,6 @@ import moment from 'moment';
 
 export class itemsCls
 {
-    // ALI KEMAL
     constructor()
     {
         this.core = core.instance;
@@ -1482,7 +1481,6 @@ export class depotCls
         });
     }
 }
-//ALI KEMAL
 export class itemLogPriceCls
 {
     constructor()
