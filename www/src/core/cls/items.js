@@ -1481,6 +1481,7 @@ export class depotCls
         });
     }
 }
+//ALI KEMAL
 export class itemLogPriceCls
 {
     constructor()
