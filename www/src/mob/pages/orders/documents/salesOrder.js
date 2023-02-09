@@ -40,6 +40,9 @@ export default class salesOrder extends React.PureComponent
             barcode: "",
             code:"",
             guid : "00000000-0000-0000-0000-000000000000",
+            unit : "00000000-0000-0000-0000-000000000000",
+            factor : 0,
+            unit_id : ""
         }
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
@@ -115,7 +118,6 @@ export default class salesOrder extends React.PureComponent
     }
     async barcodeScan()
     {
-        
         cordova.plugins.barcodeScanner.scan(
             async function (result) 
             {
@@ -124,7 +126,7 @@ export default class salesOrder extends React.PureComponent
                     this.txtBarcode.value = result.text;
                     let tmpQuery = 
                     {
-                        query : "SELECT CODE AS CODE,NAME AS NAME,GUID AS GUID,BARCODE,VAT AS VAT FROM ITEMS_BARCODE_MULTICODE_VW_01  WHERE BARCODE = @BARCODE OR CODE = @BARCODE ",
+                        query : "SELECT GUID,CODE,NAME,BARCODE,VAT,UNIT_GUID,UNIT_ID,UNIT_FACTOR FROM ITEMS_BARCODE_MULTICODE_VW_01  WHERE BARCODE = @BARCODE OR CODE = @BARCODE ",
                         param : ['BARCODE:string|50'],
                         value : [result.text]
                     }
@@ -136,8 +138,10 @@ export default class salesOrder extends React.PureComponent
                         this.barcode.code = tmpData.result.recordset[0].CODE 
                         this.barcode.guid = tmpData.result.recordset[0].GUID 
                         this.barcode.vat = tmpData.result.recordset[0].VAT 
+                        this.barcode.unit = tmpData.result.recordset[0].UNIT_GUID
+                        this.barcode.factor = tmpData.result.recordset[0].UNIT_FACTOR
+                        this.barcode.unit_id = tmpData.result.recordset[0].UNIT_ID
                         this.setBarcode()
-                        
                     }
                     else
                     {
@@ -166,7 +170,9 @@ export default class salesOrder extends React.PureComponent
     async setBarcode()
     {
         this.txtQuantity.value = this.param.filter({ELEMENT:'txtQuantity',USERS:this.user.CODE}).getValue().value
-
+        this.txtFactor.value = this.barcode.factor
+        this.cmbUnit.value = this.barcode.unit_id
+        
         let tmpQuery = 
         {
             query :"SELECT dbo.FN_PRICE_SALE_VAT_EXT(@GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000',@CONTRACT_CODE) AS PRICE",
@@ -179,26 +185,34 @@ export default class salesOrder extends React.PureComponent
         if(tmpData.result.recordset.length > 0)
         {
             this.txtPrice.value = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(2))
-            this.txtVat.value = parseFloat((tmpData.result.recordset[0].PRICE * (this.barcode.vat / 100)).toFixed(2))
-            //this.txtDiscount.value = 0
-            this.txtAmount.value = parseFloat((Number(this.txtPrice.value) + Number(this.txtVat.value)).toFixed(2))
+            this.calculateItemPrice()
+            // this.txtVat.value = parseFloat((tmpData.result.recordset[0].PRICE * (this.barcode.vat / 100)).toFixed(2))
+            // this.txtAmount.value = parseFloat((Number(this.txtPrice.value) + Number(this.txtVat.value)).toFixed(2))
         }
         this.itemName.value = this.barcode.name
+
+        let tmpQueryUnit = 
+        {
+            query : "SELECT GUID,ID,NAME,SYMBOL,FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_GUID = @ITEM_GUID AND TYPE <> 1",
+            param : ['ITEM_GUID:string|50'],
+            value : [this.barcode.guid]
+        }
+        let tmpDataUnit = await this.core.sql.execute(tmpQueryUnit)
+        await this.cmbUnit.dataRefresh({source : tmpDataUnit.result.recordset})
+        
         if(this.chkAutoAdd.value == true)
         {
             setTimeout(async () => 
-                {
-                   this.txtPopQuantity.focus()
-                }, 500);
+            {
+                this.txtPopQuantity.focus()
+            }, 500);
             await this.msgQuantity.show().then(async (e) =>
             {
-                
                 if(e == 'btn01')
                 {
                     this.addItem(this.txtPopQuantity.value)
                 }
             })
-           
         }
         else
         {
@@ -221,6 +235,7 @@ export default class salesOrder extends React.PureComponent
         this.txtBarcode.value = ""
         this.txtAmount.value = 0
         this.txtVat.value = 0
+        this.txtFactor.value = 0
         this.txtQuantity.value = 0
         this.txtPrice.value = 0
         this.txtBarcode.focus()
@@ -256,7 +271,7 @@ export default class salesOrder extends React.PureComponent
                     let pResult = await dialog(tmpConfObj);
                     if(pResult == 'btn01')
                     {                   
-                        this.docObj.docOrders.dt()[i].QUANTITY = this.docObj.docOrders.dt()[i].QUANTITY + pQuantity
+                        this.docObj.docOrders.dt()[i].QUANTITY = this.docObj.docOrders.dt()[i].QUANTITY + (pQuantity * this.txtFactor.value)
                         this.docObj.docOrders.dt()[i].VAT = parseFloat((this.docObj.docOrders.dt()[i].VAT + (this.docObj.docOrders.dt()[i].PRICE * (this.docObj.docOrders.dt()[i].VAT_RATE / 100)) * pQuantity)).toFixed(3)
                         this.docObj.docOrders.dt()[i].AMOUNT = parseFloat((this.docObj.docOrders.dt()[i].QUANTITY * this.docObj.docOrders.dt()[i].PRICE)).toFixed(3)
                         this.docObj.docOrders.dt()[i].TOTAL = parseFloat((((this.docObj.docOrders.dt()[i].QUANTITY * this.docObj.docOrders.dt()[i].PRICE) - this.docObj.docOrders.dt()[i].DISCOUNT) + this.docObj.docOrders.dt()[i].VAT)).toFixed(3)
@@ -283,10 +298,12 @@ export default class salesOrder extends React.PureComponent
             tmpDocItems.LINE_NO = this.docObj.docOrders.dt().length
             tmpDocItems.REF = this.docObj.dt()[0].REF
             tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+            tmpDocItems.UNIT = this.barcode.unit
+            tmpDocItems.UNIT_FACTOR = this.barcode.factor
             tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
             tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
             tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-            tmpDocItems.QUANTITY = pQuantity
+            tmpDocItems.QUANTITY = pQuantity * this.txtFactor.value
             tmpDocItems.VAT_RATE = this.barcode.vat
             tmpDocItems.PRICE = this.txtPrice.value
             tmpDocItems.VAT = (this.txtVat.value * pQuantity).toFixed(2)
@@ -312,8 +329,8 @@ export default class salesOrder extends React.PureComponent
     }
     calculateItemPrice()
     {
-        this.txtVat.value =  parseFloat((this.txtPrice.value * (this.barcode.vat / 100) * this.txtQuantity.value).toFixed(2))
-        this.txtAmount.value = parseFloat(((this.txtPrice.value * this.txtQuantity.value) + this.txtVat.value)).toFixed(2)
+        this.txtVat.value =  parseFloat((this.txtPrice.value * (this.barcode.vat / 100) * (this.txtQuantity.value * this.txtFactor.value)).toFixed(2))
+        this.txtAmount.value = parseFloat(((this.txtPrice.value * (this.txtQuantity.value * this.txtFactor.value)) + this.txtVat.value)).toFixed(2)
     }
     async _calculateTotal()
     {
@@ -701,7 +718,10 @@ export default class salesOrder extends React.PureComponent
                                                                     code:data[0].CODE,
                                                                     barcode:data[0].BARCODE,
                                                                     guid : data[0].GUID,
-                                                                    vat : data[0].VAT
+                                                                    vat : data[0].VAT,
+                                                                    unit : data[0].UNIT_GUID,
+                                                                    factor : data[0].UNIT_FACTOR,
+                                                                    unit_id : data[0].UNIT_ID
                                                                 }
                                                                 await this.setBarcode()
                                                             }
@@ -710,12 +730,16 @@ export default class salesOrder extends React.PureComponent
                                                                 for (let i = 0; i < data.length; i++) 
                                                                 {
                                                                     this.txtBarcode.value = data[i].CODE
-                                                                    this.barcode = {
+                                                                    this.barcode = 
+                                                                    {
                                                                         name:data[i].NAME,
                                                                         code:data[i].CODE,
                                                                         barcode:data[i].BARCODE,
-                                                                        guid : data[0].GUID,
-                                                                        vat : data[0].VAT
+                                                                        guid : data[i].GUID,
+                                                                        vat : data[i].VAT,
+                                                                        unit : data[i].UNIT_GUID,
+                                                                        factor : data[i].UNIT_FACTOR,
+                                                                        unit_id : data[i].UNIT_ID
                                                                     }
                                                                     await this.setBarcode()
                                                                     await this.addItem()
@@ -748,7 +772,7 @@ export default class salesOrder extends React.PureComponent
                                                 }
                                                 let tmpQuery = 
                                                 {
-                                                    query : "SELECT CODE AS CODE,NAME AS NAME,GUID AS GUID,BARCODE,VAT AS VAT FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE BARCODE = @BARCODE OR CODE = @BARCODE ",
+                                                    query : "SELECT GUID,CODE,NAME,BARCODE,VAT,UNIT_GUID,UNIT_ID,UNIT_FACTOR FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE BARCODE = @BARCODE OR CODE = @BARCODE ",
                                                     param : ['BARCODE:string|50'],
                                                     value : [e.component._changedValue]
                                                 }
@@ -760,6 +784,9 @@ export default class salesOrder extends React.PureComponent
                                                     this.barcode.code = tmpData.result.recordset[0].CODE 
                                                     this.barcode.guid = tmpData.result.recordset[0].GUID 
                                                     this.barcode.vat = tmpData.result.recordset[0].VAT 
+                                                    this.barcode.unit = tmpData.result.recordset[0].UNIT_GUID
+                                                    this.barcode.factor = tmpData.result.recordset[0].UNIT_FACTOR
+                                                    this.barcode.unit_id = tmpData.result.recordset[0].UNIT_ID
                                                     this.setBarcode()
                                                     
                                                 }
@@ -785,22 +812,53 @@ export default class salesOrder extends React.PureComponent
                                             </h5>
                                         </div>
                                     </Item>
+                                    <Item>
+                                        <NdCheckBox id="chkAutoAdd" text={this.t("chkAutoAdd")} parent={this} defaultValue={true} value={true} 
+                                        param={this.param.filter({ELEMENT:'chkAutoAdd',USERS:this.user.CODE})}
+                                        access={this.access.filter({ELEMENT:'chkAutoAdd',USERS:this.user.CODE})}/>
+                                    </Item>
                                     {/* txtQuantity */}
                                     <Item>
                                         <Label text={this.t("txtQuantity")}/>
-                                        <NdNumberBox id="txtQuantity" parent={this} simple={true}  
-                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                        param={this.param.filter({ELEMENT:'txtQuantity',USERS:this.user.CODE})}
-                                        access={this.access.filter({ELEMENT:'txtQuantity',USERS:this.user.CODE})}
-                                        onValueChanged={(async(e)=>
-                                        {
-                                            this.calculateItemPrice()
-                                        }).bind(this)}
-                                        >
-                                        </NdNumberBox>
-                                        <NdCheckBox id="chkAutoAdd" text={this.t("chkAutoAdd")} parent={this} defaultValue={true} value={true} 
-                                                param={this.param.filter({ELEMENT:'chkAutoAdd',USERS:this.user.CODE})}
-                                                access={this.access.filter({ELEMENT:'chkAutoAdd',USERS:this.user.CODE})}/>
+                                        <div className='row'>
+                                            <div className='col-4'>
+                                                <NdNumberBox id="txtFactor" parent={this} simple={true} readOnly={true} 
+                                                param={this.param.filter({ELEMENT:'txtFactor',USERS:this.user.CODE})}
+                                                access={this.access.filter({ELEMENT:'txtFactor',USERS:this.user.CODE})}
+                                                >
+                                                </NdNumberBox>
+                                            </div>
+                                            <div className='col-4'>
+                                                <NdNumberBox id="txtQuantity" parent={this} simple={true}  
+                                                param={this.param.filter({ELEMENT:'txtQuantity',USERS:this.user.CODE})}
+                                                access={this.access.filter({ELEMENT:'txtQuantity',USERS:this.user.CODE})}
+                                                onValueChanged={(async(e)=>
+                                                {
+                                                    this.calculateItemPrice()
+                                                }).bind(this)}
+                                                >
+                                                </NdNumberBox>
+                                            </div>
+                                            <div className='col-4'>
+                                                <NdSelectBox simple={true} parent={this} id="cmbUnit" height='fit-content' 
+                                                style={{borderTopRightRadius:'0px',borderBottomRightRadius:'0px'}}
+                                                displayExpr="NAME"                       
+                                                valueExpr="ID"
+                                                param={this.param.filter({ELEMENT:'cmbUnit',USERS:this.user.CODE})}
+                                                access={this.access.filter({ELEMENT:'cmbUnit',USERS:this.user.CODE})}
+                                                onValueChanged={(e)=>
+                                                {
+                                                    let tmpDt = this.cmbUnit.data.datatable.where({ID:e.value})
+                                                    
+                                                    this.barcode.unit = tmpDt.length > 0 ? tmpDt[0].GUID : '00000000-0000-0000-0000-000000000000'
+                                                    this.barcode.factor = tmpDt.length > 0 ? tmpDt[0].FACTOR : 1
+                                                    this.txtFactor.value = this.barcode.factor
+
+                                                    this.calculateItemPrice()
+                                                }}
+                                                />
+                                            </div>
+                                        </div>
                                     </Item>
                                     {/* txtPrice */}
                                     <Item>
@@ -825,17 +883,6 @@ export default class salesOrder extends React.PureComponent
                                         >
                                         </NdTextBox>
                                     </Item>
-                                    {/* txtDiscount */}
-                                    {/* <Item>
-                                        <Label text={this.t("txtDiscount")} alignment="right" />
-                                        <NdTextBox id="txtDiscount" parent={this} simple={true}  
-                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                        readOnly={true}
-                                        param={this.param.filter({ELEMENT:'txtDiscount',USERS:this.user.CODE})}
-                                        access={this.access.filter({ELEMENT:'txtDiscount',USERS:this.user.CODE})}
-                                        >
-                                        </NdTextBox>
-                                    </Item> */}
                                     {/* txtAmount */}
                                     <Item>
                                         <Label text={this.t("txtAmount")} alignment="right" />
@@ -1127,7 +1174,10 @@ export default class salesOrder extends React.PureComponent
                                         "ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE,   " +
                                         "MAIN_GRP AS ITEM_GRP,   " +
                                         "MAIN_GRP_NAME AS ITEM_GRP_NAME,   " +
-                                        "(SELECT [dbo].[FN_PRICE_SALE](GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000')) AS PRICE  , " +
+                                        "(SELECT [dbo].[FN_PRICE_SALE](GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000')) AS PRICE, " +
+                                        "ISNULL((SELECT TOP 1 GUID FROM ITEM_UNIT WHERE TYPE = 0 AND ITEM_UNIT.ITEM = ITEMS_VW_01.GUID),'00000000-0000-0000-0000-000000000000') AS UNIT_GUID, " +
+                                        "ISNULL((SELECT TOP 1 ID FROM ITEM_UNIT WHERE TYPE = 0 AND ITEM_UNIT.ITEM = ITEMS_VW_01.GUID),0) AS UNIT_ID, " +
+                                        "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 0 AND ITEM_UNIT.ITEM = ITEMS_VW_01.GUID),0) AS UNIT_FACTOR, " +
                                         "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 1 AND ITEM_UNIT.ITEM = ITEMS_VW_01.GUID),0) AS UNDER_UNIT_VALUE " +
                                         "FROM ITEMS_VW_01) AS TMP " +
                                         "WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL) " ,
