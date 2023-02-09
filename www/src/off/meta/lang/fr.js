@@ -50,14 +50,14 @@ export const langFr =
     msgAnotherUserAlert: 
     {
         title : "Attention",
-        msg : "Connectez-vous à partir d'un autre appareil avec vos informations d'utilisateur.",
+        msg : "Vous êtes connecté à partir d'un autre appareil avec vos informations d'utilisateur.",
         btn01 : "OK"
     },
     msgisExecuteClose: 
     {
-        title : "Dikkat",   // BAK
-        msg : "Database bağlantısında bir problem oluştu lütfen yaptığınız son işlemleri kontrol ediniz",   // BAK
-        btn01 : "Tamam"   // BAK
+        title : "Attention",   
+        msg : "Une erreur est survenue lors de la connexion à la base de données.Veuillez vérifier vos dernières opérations.",   
+        btn01 : "OK"   
     },
     popOpenTike :
     {
@@ -120,8 +120,8 @@ export const langFr =
         stk_01_007: "Description des services",  
         stk_01_008: "Désignation groupe produit", 
         stk_01_009: "Désignation Groupe Sous-Produit", 
-        stk_01_010: "Birim Tanımlama",   // BAK
-        stk_01_011 : "Vergi Tanımlama",   // BAK
+        stk_01_010: "Définir unité",   // BAK
+        stk_01_011: "Définir taux de TVA",   // BAK
         stk_02_001: "Document inventaire",
         stk_02_002: "Transfert interne dépot/magasin",
         stk_02_003: "Sortie perte",
@@ -129,19 +129,20 @@ export const langFr =
         stk_02_005: "Saisie multi produit retour",
         stk_02_006: "Imprimer étiquette spéciale",
         stk_02_007: "Entrée DLC",
-        stk_02_008 : "Entrée Stock",  
-        stk_02_009 : "Sortie Stock",  
+        stk_02_008: "Entrée Stock",  
+        stk_02_009: "Sortie Stock",  
         stk_03_001: "Liste Produit",
         stk_03_002: "Liste prix",
         stk_03_003: "Liste code barre",
         stk_03_004: "Liste dépot/magasin",
         stk_03_005: "Liste multi code ",
-        stk_03_006 : "Liste produit réserve",
+        stk_03_006: "Liste produit réserve",
         stk_04_001: "Gerer multi produit",
         stk_04_002: "Traitement retour",
-        stk_04_003 : "Traitement inventaire",
-        stk_04_004 :"Traitement DLC",
-        stk_05_001 : "Rapport Inventaire Dépôt", // BAK
+        stk_04_003: "Traitement inventaire",
+        stk_04_004:"Traitement DLC",
+        stk_05_001: "Rapport Inventaire Dépôt", // BAK
+        stk_05_002: "Rapport sur la modification des prix d'achat", // BAK
         cri: "Fournisseur - Client",
         cri_01: "Saisie",
         cri_02: "Listes",
@@ -161,11 +162,11 @@ export const langFr =
         ftr_02: "Document",
         ftr_04: "Proforma", 
         ftr_03: "Rapports",
-        ftr_01_001: "Liste facture d'achat",
-        ftr_01_002: "Liste facture de vente",
-        ftr_01_003: "Liste facture retour",
-        ftr_01_004: "Liste facture différence de prix",
-        ftr_01_005: "Liste des factures de vente interne", 
+        ftr_01_001: "Liste Facture d'achat",
+        ftr_01_002: "Liste Facture de vente",
+        ftr_01_003: "Liste Facture retour",
+        ftr_01_004: "Liste Facture différence de prix",
+        ftr_01_005: "Liste Factures de vente interne", 
         ftr_02_001: "Saisie Facture d'achat",
         ftr_02_002: "Saisie Facture de vente",
         ftr_02_003: "Saisie Facture retour",
@@ -173,7 +174,7 @@ export const langFr =
         ftr_02_005: "Saisie Vente interne",
         ftr_02_006: "Facture Différence Prix Achat", 
         ftr_02_007: "Facture Retour ", 
-        ftr_02_008: "Şubeler Arası Alış Faturası", // BAK
+        ftr_02_008: "Facture D'achat magasin interne", // BAK
         ftr_04_001: "Différence de prix Facture Proforma", 
         ftr_04_002: "Facture Proforma de Vente",   
         ftr_04_003: "Facture Proforma d'Achat",   
@@ -192,7 +193,7 @@ export const langFr =
         irs_02_003: "Saisie Bon de Retour de livraison",
         irs_02_004: "Saisie Bon de livraison interne", 
         irs_02_005: "Bon de livraison Reprise Retour", 
-        irs_02_006: "Şube Alış İrsaliyesi", // BAK
+        irs_02_006: "Bon de livraison achat interne", // BAK
         sip: "Commande",
         sip_01: "Listes",
         sip_02: "Document",
@@ -239,7 +240,8 @@ export const langFr =
         pos_02_006 : "Rapport de Vente Fin de Journée", 
         pos_02_007 : "Rapport Pos Fond de Caisse ", 
         pos_02_008 : "Rapport de Vente Produit", 
-        pos_03 :"Traitements", 
+        pos_02_009 : "Rapport de Vente par famille de produits", // BAK
+        pos_03 : "Traitements", 
         pos_03_001 : "Opérations de fin de journée",
         promo: "Promotion",
         promo_01: "Saisie",
@@ -871,16 +873,16 @@ export const langFr =
     stk_01_010 : // "Birim Tanımları"
     {
         txtId : "I.D",  //bak
-        txtName :"Adı",  //bak
-        txtSymbol : "Sembol",  //bak
-        cmbType :"Tip",  //bak
-        validCode :"Kodu Boş Geçemezsiniz !",  //bak
+        txtName :"Nom",  //bak
+        txtSymbol : "Symbole",  //bak
+        cmbType :"Type",  //bak
+        validCode :"Vous ne pouvez pas laisser le code sans le saisir !",  //bak
         pg_txtCode :   //bak
         {  //bak
-            title : "Ürün Grubu Seçimi",  //bak
+            title : "Choix de groupe de produits",  //bak
             clmId : "I.D",  //bak
-            clmName : "Adı",  //bak
-            clmSymbol : "Sembol",  //bak
+            clmName : "Nom",  //bak
+            clmSymbol : "Symbole",  //bak
         },
         msgSave:
         {
@@ -911,26 +913,26 @@ export const langFr =
         },
         msgCode : 
         {
-            title: "Dikkat",   // BAK
-            btn01: "Kasaya Git",   // BAK
-            btn02: "Tamam",   // BAK
-            msg : "Girmiş olduğunuz I.D sistem de kayıtlı !"   // BAK
+            title: "Attention",   // BAK
+            btn01: "Aller à la caisse",   // BAK
+            btn02: "OK",   // BAK
+            msg : "L'ID que vous avez entré est enregistré dans le système !"   // BAK
         },
-        chkActive: "Aktif", // BAK
+        chkActive: "Actif", // BAK
     },
     stk_01_011 : // "Birim Tanımları"
     {
         txtId : "I.D",   // BAK
-        txtVat :"Vergi Oranı",   // BAK
-        txtType : "Tipi",   // BAK
-        cmbType :"Tip",   // BAK
-        validCode :"Kodu Boş Geçemezsiniz !",   // BAK
+        txtVat :"Valeur d'impôt",   // BAK
+        txtType : "Type",   // BAK
+        cmbType :"Type",   // BAK
+        validCode :"Vous ne pouvez pas laisser le code sans le saisir !",   // BAK
         pg_txtCode :    // BAK
         {   // BAK
-            title : "Ürün Grubu Seçimi",   // BAK
+            title : "Choix de groupe de produits",   // BAK
             clmId : "I.D",   // BAK
-            clmVat : "Oranı",   // BAK
-            clmType : "Tipi",   // BAK
+            clmVat : "Valeur",   // BAK
+            clmType : "Type",   // BAK
         },
         msgSave:
         {
@@ -961,10 +963,10 @@ export const langFr =
         },
         msgCode : 
         {
-            title: "Dikkat", // BAK
-            btn01: "Kasaya Git", // BAK
-            btn02: "Tamam", // BAK
-            msg : "Girmiş olduğunuz I.D sistem de kayıtlı !" // BAK
+            title: "Attention", // BAK
+            btn01: "Allez à la caisse", // BAK
+            btn02: "OK", // BAK
+            msg : "L'ID que vous avez entré est enregistré dans le système !" // BAK
         },
         chkActive: "Aktif", // BAK
     },
@@ -2658,6 +2660,30 @@ export const langFr =
         txtTotalQuantity : "Total Quantité",
         txtTotalCost : "Envanter Değeri",
     },
+    stk_05_002 : // Alış Fiyatı Raporuu"
+    {
+        btnGet :"Allez", // BAK
+        dtFirst : "Date de début", // BAK
+        graphicTitle : "Graphique de changement de prix", // BAK
+        typePurc : "Achat", // BAK
+        typeSale : "Vente", // BAK
+        dlbClikMsg : "Double-cliquez sur la ligne pour voir le graphique en détail.", // BAK
+        cmbCustomer : "Fournisseur",
+        cmbMainGrp : "Famille produit",
+        grdItemPurcPriceReport: 
+        {
+            clmCode : "Code de Produit",   // BAK
+            clmName: "Nom du Produit",   // BAK
+            clmCustomer: "Fournisseur",   // BAK
+            clmLdate: "Date du dernier changement",   // BAK
+            clmFamount : "Montant hors taxe",   // BAK
+            clmTotalCost : "Dernier prix d'achat",   // BAK
+            clmSale : "Prix de Vente",   // BAK
+            clmFisrtCost : "Önceki Alış Fiyatı", // BAK
+            clmMargin : "Brüt Marj", // BAK
+            clmNetMargin : "Net Marj", // BAK
+        },
+    },
     cri_01_001: // "Cari Tanımları"
     {
         cmbType :"Type",
@@ -3314,7 +3340,7 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité Unitaire",  
         txtTotalQuantity : "Quantité totale",  
-        txtUnitPrice : "Birim Fiyatı", // BAK
+        txtUnitPrice : "Prix ​​unitaire", // BAK
         txtExpFee : "Pénalités de Retard ", 
         dtExpDate : "Date d'Echéance", 
         getOffers : "Recherche Proposition", 
@@ -3759,8 +3785,8 @@ export const langFr =
         {  
             title: "Attention",  // BAK
             btn01: "OK",  // BAK
-            msg1: "Yuvarlamak istediğiniz tutarlar arasında en fazla ",  // BAK
-            msg2: " fark olabilir !"  // BAK
+            msg1: "Le montant que vous souhaitez arrondir est au maximum",  // BAK
+            msg2: " Il peut avoir une différence !"  // BAK
         },
         msgDiscountEntry : 
         {
@@ -3819,7 +3845,7 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire ",  
         txtUnitQuantity : "Quantité Unitaire",  
         txtTotalQuantity : "Quantité totale",  
-        txtUnitPrice : "Birim Fiyatı", // BAK
+        txtUnitPrice : "Prix unitaire", // BAK
         txtExpFee : "Pénalités de Retard", 
         dtExpDate : "Date d'Echéance", 
         getOffers : "Recherche Proposition",  
@@ -4247,7 +4273,7 @@ export const langFr =
         {
             title: "Attention",   // BAK
             btn01: "OK",   // BAK
-            msg: "Evrak Kilitlenmeden Yazdırılamaz !"   // BAK
+            msg: "Le document ne peut pas être imprimé sans verrouillage !"   // BAK
         },
         popRound : 
         {
@@ -4258,8 +4284,8 @@ export const langFr =
         {  
             title: "Attention",  // BAK
             btn01: "OK",  // BAK
-            msg1: "Yuvarlamak istediğiniz tutarlar arasında en fazla ",  // BAK
-            msg2: " fark olabilir !"  // BAK
+            msg1: "Le montant que vous voulez arrondir est au maximum ",  // BAK
+            msg2: " Il peut avoir une différence !"  // BAK
         },
         msgDiscountEntry : 
         {
@@ -4324,7 +4350,7 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
-        txtUnitPrice : "Birim Fiyatı", // BAK
+        txtUnitPrice : "Prix unitaire", // BAK
         txtExpFee : "Pénalités de Retard", 
         dtExpDate : "Date d'Echéance", 
         getProforma : "Rechercher Proforma ", 
@@ -4668,8 +4694,8 @@ export const langFr =
         {  
             title: "Attention",  // BAK
             btn01: "OK",  // BAK
-            msg1: "Yuvarlamak istediğiniz tutarlar arasında en fazla ",  // BAK
-            msg2: " fark olabilir !"  // BAK
+            msg1: "Le montant que vous voulez arrondir est au maximum ",  // BAK
+            msg2: " Il peut avoir une différence !"  // BAK
         },
         msgDiscountEntry : 
         {
@@ -4739,7 +4765,7 @@ export const langFr =
         {
             title: "Attention",   // BAK
             btn01: "OK",   // BAK
-            msg: "Evrak Kilitlenmeden Yazdırılamaz !"   // BAK
+            msg: "Le document ne peut pas être imprimé sans verrouillage !"   // BAK
         },
     },
     ftr_02_004 : // "Fiyat Farkı Faturası"
@@ -4781,7 +4807,7 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
-        txtUnitPrice : "Birim Fiyatı", // BAK
+        txtUnitPrice : "Prix unitaire", // BAK
         txtExpFee : "Pénalités de Retard", 
         dtExpDate : "Date d'Echéance", 
         btnView : "Aperçu", 
@@ -5098,8 +5124,8 @@ export const langFr =
         {  
             title: "Attention",  // BAK
             btn01: "OK",  // BAK
-            msg1: "Yuvarlamak istediğiniz tutarlar arasında en fazla ",  // BAK
-            msg2: " fark olabilir !"  // BAK
+            msg1: "Le montant que vous voulez arrondir est au maximum",  // BAK
+            msg2: " Il peut avoir une différence !"  // BAK
         },
         msgDiscountEntry : 
         {
@@ -5169,7 +5195,7 @@ export const langFr =
         {
             title: "Attention",   // BAK
             btn01: "OK",   // BAK
-            msg: "Evrak Kilitlenmeden Yazdırılamaz !"   // BAK
+            msg: "Le document ne peut pas être imprimé sans verrouillage !"   // BAK
         },
     },
     ftr_02_005 : // "Şube Satış Faturası"
@@ -5211,7 +5237,7 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale", 
-        txtUnitPrice : "Birim Fiyatı", // BAK
+        txtUnitPrice : "Prix unitaire", // BAK
         txtExpFee : "Pénalités de Retard", 
         dtExpDate : "Date d'Echéance", 
         btnView : "Aperçu", 
@@ -5596,8 +5622,8 @@ export const langFr =
         {  
             title: "Attention",  // BAK
             btn01: "OK",  // BAK
-            msg1: "Yuvarlamak istediğiniz tutarlar arasında en fazla ",  // BAK
-            msg2: " fark olabilir !"  // BAK
+            msg1: "Le montant que vous voulez arrondir est au maximum",  // BAK
+            msg2: "Il peut avoir une différence"  // BAK
         },
         msgDiscountEntry : 
         {
@@ -5628,7 +5654,7 @@ export const langFr =
         {
             title: "Attention",   // BAK
             btn01: "OK",   // BAK
-            msg: "Evrak Kilitlenmeden Yazdırılamaz !"   // BAK
+            msg: "Le document ne peut pas être imprimé sans verrouillage !"   // BAK
         },
     },
     ftr_02_006 : // "Fiyat Farkı Alış Faturası"
@@ -5670,7 +5696,7 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
-        txtUnitPrice : "Birim Fiyatı", // BAK
+        txtUnitPrice : "Prix unitaire", // BAK
         txtExpFee : "Pénalités de Retard", 
         dtExpDate : "Date d'Echéance", 
         txtTotalHt : "Total HT",
@@ -5962,8 +5988,8 @@ export const langFr =
         {  
             title: "Attention",  // BAK
             btn01: "OK",  // BAK
-            msg1: "Yuvarlamak istediğiniz tutarlar arasında en fazla ",  // BAK
-            msg2: " fark olabilir !"  // BAK
+            msg1: "Le montant que vous voulez arrondir est au maximum",  // BAK
+            msg2: "Il peut avoir une différence"  // BAK
         },
         msgDiscountEntry : 
         {
@@ -6068,7 +6094,7 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
-        txtUnitPrice : "Birim Fiyatı", // BAK
+        txtUnitPrice : "Prix unitaire", // BAK
         txtExpFee : "Pénalités de Retard", 
         dtExpDate : "Date d'Echéance", 
         getProforma : "Rechercher Proforma ", 
@@ -6386,8 +6412,8 @@ export const langFr =
         {  
             title: "Attention",  // BAK
             btn01: "OK",  // BAK
-            msg1: "Yuvarlamak istediğiniz tutarlar arasında en fazla ",  // BAK
-            msg2: " fark olabilir !"  // BAK
+            msg1: "Le montant que vous voulez arrondir est au maximum",  // BAK
+            msg2: "Il peut avoir une différence"  // BAK
         },
         msgDiscountEntry : 
         {
@@ -6493,7 +6519,7 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
-        txtUnitPrice : "Birim Fiyatı", // BAK
+        txtUnitPrice : "Prix unitaire", // BAK
         txtExpFee : "Pénalités de Retard", 
         dtExpDate : "Date d'Echéance", 
         btnView : "Aperçu", 
@@ -6879,8 +6905,8 @@ export const langFr =
         {  
             title: "Attention",  // BAK
             btn01: "OK",  // BAK
-            msg1: "Yuvarlamak istediğiniz tutarlar arasında en fazla ",  // BAK
-            msg2: " fark olabilir !"  // BAK
+            msg1: "Le montant que vous voulez arrondir est au maximum",  // BAK
+            msg2: "Il peut avoir une différence"  // BAK
         },
         msgDiscountEntry : 
         {
@@ -6944,7 +6970,7 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
-        txtUnitPrice : "Birim Fiyatı", // BAK
+        txtUnitPrice : "Prix unitaire", // BAK
         txtTotalHt : "Total HT",
         msgDiscount:
         {
@@ -7279,7 +7305,7 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire ",  
         txtUnitQuantity : "Quantité Unitaire",  
         txtTotalQuantity : "Quantité totale",  
-        txtUnitPrice : "Birim Fiyatı", // BAK
+        txtUnitPrice : "Prix unitaire", // BAK
         txtExpFee : "Pénalités de Retard", 
         dtExpDate : "Date d'Echéance", 
         getOffers : "Teklif Getir",  
@@ -7695,7 +7721,7 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité Unitaire",  
         txtTotalQuantity : "Quantité totale",  
-        txtUnitPrice : "Birim Fiyatı", // BAK
+        txtUnitPrice : "Prix unitaire", // BAK
         txtExpFee : "Pénalités de Retard ", 
         dtExpDate : "Date d'Echéance", 
         getOffers : "Recherche Proposition", 
@@ -8156,7 +8182,7 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
-        txtUnitPrice : "Birim Fiyatı", // BAK
+        txtUnitPrice : "Prix unitaire", // BAK
         txtExpFee : "Pénalités de Retard", 
         dtExpDate : "Date d'Echéance", 
         txtTotalHt : "Total HT",
@@ -8500,7 +8526,7 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
-        txtUnitPrice : "Birim Fiyatı", // BAK
+        txtUnitPrice : "Prix unitaire", // BAK
         txtExpFee : "Pénalités de Retard", 
         dtExpDate : "Date d'Echéance", 
         txtTotalHt : "Total HT",
@@ -8991,7 +9017,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Eklemeye çalıştığınız ürün zaten listenizde var !",
+            msg: "Le produit que vous essayez d'ajouter est déjà dans votre liste !",
         },
     },
     promo_02_001: //  "Promosyon Listesi"
@@ -9165,7 +9191,7 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
-        txtUnitPrice : "Birim Fiyatı", // BAK
+        txtUnitPrice : "Prix unitaire", // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -9504,7 +9530,7 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
-        txtUnitPrice : "Birim Fiyatı", // BAK
+        txtUnitPrice : "Prix unitaire", // BAK
         btnView : "Aperçu", 
         btnMailsend : "Envoyer E-Mail", 
         placeMailHtmlEditor : "Veuillez saisir votre texte .", 
@@ -9873,7 +9899,7 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
-        txtUnitPrice : "Birim Fiyatı", // BAK
+        txtUnitPrice : "Prix unitaire", // BAK
         btnView : "Aperçu", 
         btnMailsend : "Envoyer E-Mail", 
         placeMailHtmlEditor : "Veuillez saisir votre texte .", 
@@ -10193,7 +10219,7 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
-        txtUnitPrice : "Birim Fiyatı", // BAK
+        txtUnitPrice : "Prix unitaire", // BAK
         btnView : "Aperçu", 
         btnMailsend : "Envoyer E-Mail", 
         placeMailHtmlEditor : "Veuillez saisir votre texte .", 
@@ -10561,7 +10587,7 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
-        txtUnitPrice : "Birim Fiyatı", // BAK
+        txtUnitPrice : "Prix unitaire", // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -10862,7 +10888,7 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
-        txtUnitPrice : "Birim Fiyatı", // BAK
+        txtUnitPrice : "Prix unitaire", // BAK
         btnView : "Aperçu", 
         btnMailsend : "Envoyer E-Mail", 
         placeMailHtmlEditor : "Veuillez saisir votre texte .", 
@@ -11291,7 +11317,7 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
-        txtUnitPrice : "Birim Fiyatı", // BAK
+        txtUnitPrice : "Prix unitaire", // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -11626,7 +11652,7 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
-        txtUnitPrice : "Birim Fiyatı", // BAK
+        txtUnitPrice : "Prix unitaire", // BAK
         btnView : "Aperçu", 
         btnMailsend : "Envoyer E-Mail", 
         placeMailHtmlEditor : "Veuillez saisir votre texte .", 
@@ -12225,7 +12251,7 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
-        txtUnitPrice : "Birim Fiyatı", // BAK
+        txtUnitPrice : "Prix unitaire", // BAK
     },
     cnt_02_002 : // "Satış Anlaşması"
     {
@@ -12303,7 +12329,7 @@ export const langFr =
         {
             clmItemCode: "Code",
             clmItemName: "Nom",
-            clmGrpName: "Grup", //BAK
+            clmGrpName: "Groupe", //BAK
             clmPrice: "Prix ",
             clmQuantity : "Quantité",
             clmStartDate : "Début ",
@@ -12398,7 +12424,7 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
-        txtUnitPrice : "Birim Fiyatı", // BAK
+        txtUnitPrice : "Prix unitaire", // BAK
     },
     fns_01_001 : // "Ödeme Listesi",
     {
@@ -12658,9 +12684,9 @@ export const langFr =
         validDocDate : "Vous devez choisir une date",
         msgInvoiceSelect:
         {
-            title: "Dikkat",    // BAK
-            btn01: "Tamam",    // BAK
-            msg: "Fatura seçmeden işlem yapamazsınız !"    // BAK
+            title: "Attention",    // BAK
+            btn01: "OK",    // BAK
+            msg: "Vous ne pouvez pas effectuer le processus sans sélectionner une facture !"    // BAK
         },
     },
     fns_02_002 : 
@@ -12818,9 +12844,9 @@ export const langFr =
         validDocDate : "Vous devez choisir une date",
         msgInvoiceSelect:
         {
-            title: "Dikkat",    // BAK
-            btn01: "Tamam",    // BAK
-            msg: "Fatura seçmeden işlem yapamazsınız !"    // BAK
+            title: "Attention",    // BAK
+            btn01: "OK",    // BAK
+            msg: "Vous ne pouvez pas effectuer le processus sans sélectionner une facture !"    // BAK
         },
     },
     fns_03_001 : //  "Kasa Tanıtım"
@@ -13685,6 +13711,49 @@ export const langFr =
             msg: "Veuillez Sélectionner le Produit !"   
         },
     },
+    pos_02_009 : // "Ürün Grubu Raporu"
+    {
+        btnGet :"Ramenez",    // BAK
+        txtAmount : "Montant total",    // BAK
+        txtTotalTicket : "Total des ticket de caisse",    // BAK
+        txtTicketAvg : "Montant moyen des tickets de caisses",    // BAK
+        txtTotalCost : "Coût total",    // BAK
+        txtFamount : "Total hors taxes",    // BAK
+        txtVat : "Taxe total",    // BAK
+        txtRestTotal : "Bénéfice totale hors taxe",    // BAK
+        btnGetAnalysis : "Vue graphique",    // BAK
+        chkTicket : "Grub bazında fiş sayılarını hesapla", // BAK
+        grdGroupSalesReport:     // BAK
+        {    // BAK
+            clmGrpCode : "Code de groupe de produit",    // BAK
+            clmGrpName: "Nom de groupe de produit",    // BAK
+            clmTicket: "Compte de ticket de caisse",    // BAK
+            clmTotalCost: "Coût total",    // BAK
+            clmFamount : "Montant hors taxe",    // BAK
+            clmVat : "Montant de taxe",    // BAK
+            clmTotal : "Montant total",    // BAK
+            clmRestTotal : "Bénéfice total hors taxe"    // BAK
+        },    // BAK
+        grpGrpDetail :     // BAK
+        {    // BAK
+            clmCode : "Code de produit",    // BAK
+            clmName : "Nom de produit",    // BAK
+            clmQuantity : "Quantité",    // BAK
+            clmTotalCost :"Coût total",    // BAK
+            clmFamount :"Montant hors taxe",    // BAK
+            clmVat : "Montant de la taxe",    // BAK
+            clmTotal : "Montant total",    // BAK
+            clmRestTotal : "Bénéfice total hors taxe"    // BAK
+        },    // BAK
+        popGrpDetail :     // BAK
+        {    // BAK
+            title : "Detaille de vente"    // BAK
+        },    // BAK
+        popAnalysis :     // BAK
+        {    // BAK
+            title : "Graphique de vente"    // BAK
+        },
+    },
     pos_03_001 : // "Gün sonu"
     {
         TicketId :"Ticket No",
@@ -13862,7 +13931,7 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
-        txtUnitPrice : "Birim Fiyatı", // BAK
+        txtUnitPrice : "Prix unitaire", // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -14159,7 +14228,7 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
-        txtUnitPrice : "Birim Fiyatı", // BAK
+        txtUnitPrice : "Prix unitaire", // BAK
         btnView : "Aperçu", 
         btnMailsend : "Envoyer E-Mail", 
         placeMailHtmlEditor : "Veuillez saisir votre texte .", 

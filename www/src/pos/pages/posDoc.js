@@ -1248,8 +1248,8 @@ export default class posDoc extends React.PureComponent
             PRICE:pPrice,
             FAMOUNT:Number(parseFloat(tmpFAmount - tmpVat)),
             AMOUNT:Number(parseFloat(tmpAmount).toFixed(2)),
-            DISCOUNT:pDiscount,
-            LOYALTY:pLoyalty,
+            DISCOUNT:Number(parseFloat(pDiscount).toFixed(2)),
+            LOYALTY:Number(parseFloat(pLoyalty).toFixed(2)),
             VAT:tmpVat,
             TOTAL:Number(parseFloat(tmpFAmount).toFixed(2))
         }
@@ -4993,7 +4993,7 @@ export default class posDoc extends React.PureComponent
                                                     UNIT_ID: "",
                                                     UNIT_NAME: items.UNIT_NAME,
                                                     UNIT_SHORT: items.UNIT_SHORT,
-                                                    VAT: items.VAT,
+                                                    VAT: items.VAT_RATE,
                                                     VAT_TYPE: items.VAT_RATE,
                                                     WEIGHING: false,
                                                     POS_SALE_ORDER: items.GUID,

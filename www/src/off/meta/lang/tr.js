@@ -142,6 +142,7 @@ export const langTr =
         stk_04_003 : "Sayım Kesinleştirme",
         stk_04_004 :"SKT Operasyonu",
         stk_05_001 : "Depo Envanter Raporu",
+        stk_05_002 : "Değişen Alış Fiyatları Raporu",
         cri: "Cari",
         cri_01: "Tanımlar",
         cri_02: "Listeler",
@@ -240,6 +241,7 @@ export const langTr =
         pos_02_006 : "Gün Sonu Raporu",
         pos_02_007 : "Pos Avans Raporu",
         pos_02_008 : "Ürün Satış Raporu",
+        pos_02_009 : "Grup Bazlı Satış Raporu",
         pos_03 :"Operasyonlar",
         pos_03_001 : "Gün Sonu",
         promo: "Promosyon",
@@ -2658,6 +2660,30 @@ export const langTr =
         },
         txtTotalQuantity : "Toplam Miktar",
         txtTotalCost : "Envanter Değeri",
+    },
+    stk_05_002 : // Alış Fiyatı Raporuu"
+    {
+        btnGet :"Getir",
+        dtFirst : "Başlangıç Tarihi",
+        graphicTitle : "Fiyat Değişim Grafiği",
+        typePurc : "Alış",
+        typeSale : "Satış",
+        dlbClikMsg : "Detayı grafiğini görmek için satıra çift tıklayınız",
+        cmbCustomer : "Tedarikçi",
+        cmbMainGrp : "Ürün Grubu",
+        grdItemPurcPriceReport: 
+        {
+            clmCode : "Ürün Kodu",
+            clmName: "Ürün Adı",
+            clmCustomer: "Tedrikçi",
+            clmLdate: "Son Değişim Tarihi",
+            clmFamount : "Vergisiz Tutar",
+            clmTotalCost : "Son Alış Fiyatı",
+            clmSale : "Satış Fiyatı",
+            clmFisrtCost : "Önceki Alış Fiyatı",
+            clmMargin : "Brüt Marj",
+            clmNetMargin : "Net Marj",
+        },
     },
     cri_01_001: // "Cari Tanımları"
     {
@@ -13699,6 +13725,49 @@ export const langTr =
             title: "Dikkat",
             btn01: "Tamam",
             msg: "Lütfen Ürün Seçiniz !"
+        },
+    },
+    pos_02_009 : // "Ürün Grubu Raporu"
+    {
+        btnGet :"Getir",
+        txtAmount : "Toplam Tutar",
+        txtTotalTicket : "Toplam Fiş Sayısı",
+        txtTicketAvg : "Ortalama Fiş Tutarı",
+        txtTotalCost : "Toplam Maliyet",
+        txtFamount : "Vergisiz Toplam",
+        txtVat : "Toplam Vergi",
+        txtRestTotal : "Vergisiz Toplam Kar",
+        btnGetAnalysis : "Grafik Görünümü",
+        chkTicket : "Grub bazında fiş sayılarını hesapla",
+        grdGroupSalesReport: 
+        {
+            clmGrpCode : "Ürün Grubu Kodu",
+            clmGrpName: "Ürün Grubu Adı",
+            clmTicket: "Fiş Sayısı",
+            clmTotalCost: "Toplam Maliyet",
+            clmFamount : "Vergisiz Tutar",
+            clmVat : "Vergi Tutarı",
+            clmTotal : "Toplam Tutar",
+            clmRestTotal : "Vergisiz Toplam Kar"
+        },
+        grpGrpDetail : 
+        {
+            clmCode : "Ürün Kodu",
+            clmName : "Ürün Adı",
+            clmQuantity : "Miktar",
+            clmTotalCost :"Toplam Maliyet",
+            clmFamount :"Vergisiz Tutar",
+            clmVat : "Vergi Tutarı",
+            clmTotal : "Toplam Tutar",
+            clmRestTotal : "Vergisiz Toplam Kar"
+        },
+        popGrpDetail : 
+        {
+            title : "Satış Detayı"
+        },
+        popAnalysis : 
+        {
+            title : "Satış Grafiği"
         },
     },
     pos_03_001 : // "Gün Sonu",
