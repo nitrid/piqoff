@@ -10239,6 +10239,7 @@ export const langFr =
         placeMailHtmlEditor : "Veuillez saisir votre texte .", 
         validDesign : "Veuillez sélectionner le design.",  
         validMail : "Veuillez ne pas laisser le champs vide.",  
+        txtTotalHt : "Total HT",
         pg_Docs : 
         {
             title : "Sélection Document",
