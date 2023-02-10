@@ -1636,7 +1636,7 @@ export default class purchaseDispatch extends React.PureComponent
                                         this.txtbarcode.value = 0
                                         if(tmpData.result.recordset.length > 0)
                                         {
-                                            this.txtPopQuantity.value = ''
+                                            this.txtPopQuantity.value = 1
                                             setTimeout(async () => 
                                             {
                                                this.txtPopQuantity.focus()
