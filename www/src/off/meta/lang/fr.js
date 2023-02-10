@@ -120,8 +120,9 @@ export const langFr =
         stk_01_007: "Description des services",  
         stk_01_008: "Désignation groupe produit", 
         stk_01_009: "Désignation Groupe Sous-Produit", 
-        stk_01_010: "Définir unité",   // BAK
-        stk_01_011: "Définir taux de TVA",   // BAK
+        stk_01_010: "Définir unité",
+        stk_01_011: "Définir taux de TVA",
+        stk_01_012 : "Bağlı Ürün Tanımlama", // BAK
         stk_02_001: "Document inventaire",
         stk_02_002: "Transfert interne dépot/magasin",
         stk_02_003: "Sortie perte",
@@ -975,6 +976,61 @@ export const langFr =
             msg : "L'ID que vous avez entré est enregistré dans le système !" // BAK
         },
         chkActive: "Aktif", // BAK
+    },
+    stk_01_012 : // "Bağlı Ürün Tanımlama"
+    {
+        txtCode : "Kodu", //BAK
+        txtName :"Adı", //BAK
+        msgRelatedValid: //BAK
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Ürün Seçmeden Satır Eklenemez !"
+        },
+        grdRelated : //BAK
+        {
+            clmItemCode : "KODU",
+            clmItemName : "ADI",
+        },
+        popRelatedSelect : //BAK 
+        {
+            title : "Stok Seçimi",
+            clmCode : "KODU",
+            clmName : "ADI",
+        },
+        popItemSelect : //BAK
+        {
+            title : "Stok Seçimi",
+            clmCode : "KODU",
+            clmName : "ADI",
+        },
+        msgSave : //BAK
+        {
+            title : "Dikkat",
+            btn01 : "Tamam",
+            btn02 : "Vazgeç",
+            msg : "Kayıt etmek istediğinize eminmisiniz !"
+        },
+        msgSaveResult : //BAK
+        {
+            title : "Dikkat",
+            btn01 : "Tamam",
+            msgSuccess : "Kayıt işleminiz başarılı !",
+            msgFailed : "Kayıt işleminiz başarısız !"
+        },
+        msgSaveValid : //BAK
+        {
+            title : "Dikkat",
+            btn01 : "Tamam",
+            msg : "Lütfen gerekli alanları doldurunuz !"
+        },
+        msgDelete : //BAK
+        {
+            title : "Dikkat",
+            btn01 : "Tamam",
+            btn02 : "Vazgeç",
+            msg : "Kaydı silmek istediğinize eminmisiniz ?"
+        },
     },
     stk_02_001 : // Sayım Evrakı"
     {

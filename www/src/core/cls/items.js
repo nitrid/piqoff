@@ -2207,4 +2207,145 @@ export class vatCls
         });
     }
 }
+export class itemRelatedCls
+{
+    constructor()
+    {
+        this.core = core.instance;
+        this.ds = new dataset();
+        this.empty = 
+        {
+            GUID:'00000000-0000-0000-0000-000000000000',
+            CUSER: this.core.auth.data == null ? '' : this.core.auth.data.CODE,
+            LUSER: this.core.auth.data == null ? '' : this.core.auth.data.CODE,
+            ITEM_GUID : '00000000-0000-0000-0000-000000000000',            
+            ITEM_CODE : '',            
+            ITEM_NAME : '',
+            RELATED_GUID : '00000000-0000-0000-0000-000000000000',            
+            RELATED_CODE : '',            
+            RELATED_NAME : ''
+        }
+        
+        this._initDs();
+    }
+    //#region Private
+    _initDs()
+    {
+        let tmpDt = new datatable('ITEM_RELATED');            
+        tmpDt.selectCmd = 
+        {
+            query : "SELECT * FROM [dbo].[ITEM_RELATED_VW_01] " + 
+                    "WHERE ((ITEM_GUID = @ITEM_GUID) OR (@ITEM_GUID = '00000000-0000-0000-0000-000000000000')) AND " + 
+                    "((ITEM_CODE = @ITEM_CODE) OR (@ITEM_CODE = '')) AND " + 
+                    "((ITEM_NAME = @ITEM_NAME) OR (@ITEM_NAME = '')) AND " + 
+                    "((RELATED_GUID = @RELATED_GUID) OR (@RELATED_GUID = '00000000-0000-0000-0000-000000000000')) AND " + 
+                    "((RELATED_CODE = @RELATED_CODE) OR (@RELATED_CODE = '')) AND " + 
+                    "((RELATED_NAME = @RELATED_NAME) OR (@RELATED_NAME = ''))",
+            param : ['ITEM_GUID:string|50','ITEM_CODE:string|25','ITEM_NAME:string|250','RELATED_GUID:string|50',
+                     'RELATED_CODE:string|25','RELATED_NAME:string|250']
+        }
+        tmpDt.insertCmd = 
+        {
+            query : "EXEC [dbo].[PRD_ITEM_RELATED_INSERT] " + 
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " + 
+                    "@ITEM = @PITEM, " + 
+                    "@RELATED = @PRELATED",
+            param : ['PGUID:string|50','PCUSER:string|25','PITEM:string|50','PRELATED:string|50'],
+            dataprm : ['GUID','CUSER','ITEM_GUID','RELATED_GUID']
+        } 
+        tmpDt.updateCmd = 
+        {
+            query : "EXEC [dbo].[PRD_ITEM_RELATED_UPDATE] " + 
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " + 
+                    "@ITEM = @PITEM, " + 
+                    "@RELATED = @PRELATED ", 
+            param : ['PGUID:string|50','PCUSER:string|25','PITEM:string|50','PRELATED:string|50'],
+            dataprm : ['GUID','CUSER','ITEM_GUID','RELATED_GUID']
+        }
+        tmpDt.deleteCmd = 
+        {
+            query : "EXEC [dbo].[PRD_ITEM_RELATED_DELETE] " + 
+                    "@CUSER = @PCUSER, " + 
+                    "@UPDATE = 1, " + 
+                    "@GUID = @PGUID ", 
+            param : ['PCUSER:string|25','PGUID:string|50'],
+            dataprm : ['CUSER','GUID']
+        }
+        this.ds.add(tmpDt);
+    }
+    //#endregion
+    dt()
+    {
+        if(arguments.length > 0)
+        {
+            return this.ds.get(arguments[0]);
+        }
 
+        return this.ds.get(0)
+    }
+    addEmpty()
+    {
+        if(typeof this.dt('ITEM_RELATED') == 'undefined')
+        {
+            return;
+        }
+        let tmp = {}
+        if(arguments.length > 0)
+        {
+            tmp = {...arguments[0]}            
+        }
+        else
+        {
+            tmp = {...this.empty}
+        }
+        tmp.GUID = datatable.uuidv4();
+        this.dt('ITEM_RELATED').push(tmp)
+    }
+    clearAll()
+    {
+        for (let i = 0; i < this.ds.length; i++) 
+        {
+            this.dt(i).clear()
+        }
+    }
+    load()
+    {
+        //PARAMETRE OLARAK OBJE GÖNDERİLİR YADA PARAMETRE BOŞ İSE TÜMÜ GETİRİLİ.
+        return new Promise(async resolve => 
+        {
+            let tmpPrm = 
+            {
+                ITEM_GUID : '00000000-0000-0000-0000-000000000000',
+                ITEM_CODE : '',
+                ITEM_NAME : '',
+                RELATED_GUID : '00000000-0000-0000-0000-000000000000',
+                RELATED_CODE : '',
+                RELATED_NAME : ''
+            }
+           
+            if(arguments.length > 0)
+            {
+                tmpPrm.ITEM_GUID = typeof arguments[0].ITEM_GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].ITEM_GUID;
+                tmpPrm.ITEM_CODE = typeof arguments[0].ITEM_CODE == 'undefined' ? '' : arguments[0].ITEM_CODE;  
+                tmpPrm.ITEM_NAME = typeof arguments[0].ITEM_NAME == 'undefined' ? '' : arguments[0].ITEM_NAME;
+                tmpPrm.RELATED_GUID = typeof arguments[0].RELATED_GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].RELATED_GUID;  
+                tmpPrm.RELATED_CODE = typeof arguments[0].RELATED_CODE == 'undefined' ? '' : arguments[0].RELATED_CODE;
+                tmpPrm.RELATED_NAME = typeof arguments[0].RELATED_NAME == 'undefined' ? '' : arguments[0].RELATED_NAME;  
+            }
+            
+            this.ds.get('ITEM_RELATED').selectCmd.value = Object.values(tmpPrm)
+              
+            await this.ds.get('ITEM_RELATED').refresh();
+            resolve(this.ds.get('ITEM_RELATED'));    
+        });
+    }
+    save()
+    {
+        return new Promise(async resolve => 
+        {
+            resolve(await this.ds.update()); 
+        });
+    }
+}
