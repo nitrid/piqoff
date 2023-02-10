@@ -1403,7 +1403,7 @@ export default class purchaseoffer extends React.PureComponent
                                         this.txtBarcode.setState({value:""})
                                         if(tmpData.result.recordset.length > 0)
                                         {
-                                            this.txtPopQuantity.value = ''
+                                            this.txtPopQuantity.value = 1
                                             setTimeout(async () => 
                                             {
                                                this.txtPopQuantity.focus()

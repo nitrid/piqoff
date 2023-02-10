@@ -1717,7 +1717,7 @@ export default class branchSaleInvoice extends React.PureComponent
                                         console.log(tmpData)
                                         if(tmpData.result.recordset.length > 0)
                                         {
-                                            this.txtPopQuantity.value = ''
+                                            this.txtPopQuantity.value = 1
                                             setTimeout(async () => 
                                             {
                                                this.txtPopQuantity.focus()
