@@ -1488,7 +1488,7 @@ export default class branchSaleDispatch extends React.PureComponent
                                                         }
                                                         
                                                         await dialog(tmpConfObj);
-                                                        this.txtbarcode.value = 0
+                                                        this.txtBarcode.value = ''
                                                         return
                                                     }
                                                   
@@ -1496,7 +1496,7 @@ export default class branchSaleDispatch extends React.PureComponent
                                                     this.pg_txtBarcode.show()
                                                     this.pg_txtBarcode.onClick = async(data) =>
                                                     {
-                                                        this.txtbarcode.value = 0
+                                                        this.txtBarcode.value = ''
                                                         let tmpDocItems = {...this.docObj.docItems.empty}
                                                         tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
                                                         tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
@@ -1571,7 +1571,7 @@ export default class branchSaleDispatch extends React.PureComponent
                                             }
                                             
                                             await dialog(tmpConfObj);
-                                            this.txtbarcode.value = 0
+                                            this.txtBarcode.value = ''
                                             return
                                         }
                                         let tmpQuery = 
@@ -1672,7 +1672,7 @@ export default class branchSaleDispatch extends React.PureComponent
                                                 }
                                             }
                                         }
-                                        this.txtbarcode.value = ''
+                                        this.txtBarcode.value = ''
                                     }).bind(this)}
                                     param={this.param.filter({ELEMENT:'txtBarcode',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtBarcode',USERS:this.user.CODE})}

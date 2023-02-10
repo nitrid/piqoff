@@ -1537,7 +1537,7 @@ export default class purchaseDispatch extends React.PureComponent
                                                         }
                                                         
                                                         await dialog(tmpConfObj);
-                                                        this.txtbarcode.value = 0
+                                                        this.txtBarcode.value = ''
                                                         return
                                                     }
                                                   
@@ -1545,7 +1545,7 @@ export default class purchaseDispatch extends React.PureComponent
                                                     this.pg_txtBarcode.show()
                                                     this.pg_txtBarcode.onClick = async(data) =>
                                                     {
-                                                        this.txtbarcode.value = 0
+                                                        this.txtBarcode.value = ''
                                                         let tmpDocItems = {...this.docObj.docItems.empty}
                                                         tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
                                                         tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
@@ -1614,7 +1614,7 @@ export default class purchaseDispatch extends React.PureComponent
                                     }
                                     onEnterKey={(async(e)=>
                                     {
-                                        if(this.cmbDepot.value == '' || this.txtCustomerCode.value)
+                                        if(this.cmbDepot.value == '' || this.txtCustomerCode.value == '')
                                         {
                                             let tmpConfObj =
                                             {
@@ -1624,16 +1624,16 @@ export default class purchaseDispatch extends React.PureComponent
                                             }
                                             
                                             await dialog(tmpConfObj);
-                                            this.txtbarcode.value = 0
+                                            this.txtBarcode.value = ''
                                             return
                                         }
                                         let tmpQuery = 
-                                        {   query :"SELECT GUID,CODE,NAME,COST_PRICE,UNIT_GUID,VAT,MULTICODE,CUSTOMER_NAME,BARCODE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE BARCODE = @CODE OR (MULTICODE = @CODE AND CUSTOMER_GUID = @CUSTOMER)",
+                                        {  
+                                            query :"SELECT GUID,CODE,NAME,COST_PRICE,UNIT_GUID,VAT,MULTICODE,CUSTOMER_NAME,BARCODE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE BARCODE = @CODE OR CODE = @CODE OR (MULTICODE = @CODE AND CUSTOMER_GUID = @CUSTOMER)",
                                             param : ['CODE:string|50','CUSTOMER:string|50'],
                                             value : [this.txtBarcode.value,this.docObj.dt()[0].OUTPUT]
                                         }
                                         let tmpData = await this.core.sql.execute(tmpQuery) 
-                                        this.txtbarcode.value = 0
                                         if(tmpData.result.recordset.length > 0)
                                         {
                                             this.txtPopQuantity.value = 1
@@ -1666,16 +1666,70 @@ export default class purchaseDispatch extends React.PureComponent
                                         }
                                         else
                                         {
-                                            let tmpConfObj =
+                                            await this.pg_txtItemsCode.setVal(this.txtBarcode.value)
+                                            this.pg_txtItemsCode.show()
+                                            this.pg_txtItemsCode.onClick = async(data) =>
                                             {
-                                                id:'msgItemNotFound',showTitle:true,title:this.t("msgItemNotFound.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgItemNotFound.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemNotFound.msg")}</div>)
+                                                let tmpDocItems = {...this.docObj.docItems.empty}
+                                                tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+                                                tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+                                                tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                                tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
+                                                tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
+                                                tmpDocItems.REF = this.docObj.dt()[0].REF
+                                                tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+                                                tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                                tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+                                                tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                                                tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
+                                                this.txtRef.readOnly = true
+                                                this.txtRefno.readOnly = true
+                                                this.docObj.docItems.addEmpty(tmpDocItems)
+                                                await this.core.util.waitUntil(100)
+                                                this.customerControl = true
+                                                this.customerClear = false
+                                                this.combineControl = true
+                                                this.combineNew = false
+                                                if(data.length > 0)
+                                                {
+                                                    if(data.length == 1)
+                                                    {
+                                                        await this.addItem(data[0],this.docObj.docItems.dt().length -1)
+                                                    }
+                                                    else if(data.length > 1)
+                                                    {
+                                                        for (let i = 0; i < data.length; i++) 
+                                                        {
+                                                            if(i == 0)
+                                                            {
+                                                                await this.addItem(data[i],this.docObj.docItems.dt().length -1)
+                                                            }
+                                                            else
+                                                            {
+                                                                let tmpDocItems = {...this.docObj.docItems.empty}
+                                                                tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+                                                                tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+                                                                tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                                                tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
+                                                                tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
+                                                                tmpDocItems.REF = this.docObj.dt()[0].REF
+                                                                tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+                                                                tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                                                tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+                                                                tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                                                                tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
+                                                                this.txtRef.readOnly = true
+                                                                this.txtRefno.readOnly = true
+                                                                this.docObj.docItems.addEmpty(tmpDocItems)
+                                                                await this.core.util.waitUntil(100)
+                                                                await this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                                            }
+                                                        }
+                                                    }
+                                                }
                                             }
-                                
-                                            await dialog(tmpConfObj);
                                         }
-                                        
+                                        this.txtBarcode.value = ''
                                     }).bind(this)}
                                     param={this.param.filter({ELEMENT:'txtBarcode',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtBarcode',USERS:this.user.CODE})}
