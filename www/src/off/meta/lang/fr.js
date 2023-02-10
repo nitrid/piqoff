@@ -35,6 +35,14 @@ export const langFr =
     abtNrCertificate2 : "Numéro Certificat: D_452-1",
     abtLicence : "Licence: XXXXXXXXXXXXXXXXX",
     abtVersion : "Version: ",
+    dtToday : "Aujourd'hui",
+    tdLastDay : "Hier",
+    dtThisWeek : "Semaine Courante",
+    dtLastWeek : "Semaine Dernière",
+    dtMount : "Mois Courant",
+    dtLastMount : "Mois Dernier",
+    dtYear : "Année Courante",
+    dtLastYear : "Année Dernière",
     popPassword : 
     {
         title: "Entrez votre mot de passe utilisateur",  

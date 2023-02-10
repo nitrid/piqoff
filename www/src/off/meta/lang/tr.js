@@ -35,6 +35,14 @@ export const langTr =
     abtNrCertificate2 : "Sertifika No: D_452-1",
     abtLicence : "Lisans: XXXXXXXXXXXXXXXXX",
     abtVersion : "Versiyon: ",
+    dtToday : "Bugün",
+    tdLastDay : "Dün",
+    dtThisWeek : "Bu Hafta",
+    dtLastWeek : "Geçen Hafta",
+    dtMount : "Bu Ay",
+    dtLastMount : "Geçen Ay",
+    dtYear : "Bu Yıl",
+    dtLastYear : "Geçen Yıl",
     popPassword : 
     {
         title: "Kullanıcı Şifrenizi Giriniz",

@@ -40,14 +40,14 @@ export default class NbDateRange extends NbBase
             <DateRangePicker initialSettings={{ startDate: this.state.startDate, endDate: this.state.endDate, alwaysShowCalendars: true,             
             ranges:
             {
-                'Bugün' : [moment(), moment()],
-                'Dün': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                'Bu Hafta' : [moment().startOf('week'), moment().endOf('week')],
-                'Geçen Hafta' : [moment().subtract(1, 'week').startOf('week'), moment().subtract(1, 'week').endOf('week')],
-                'Bu Ay' : [moment().startOf('month'), moment().endOf('month')],
-                'Geçen Ay' : [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
-                'Bu Yıl' : [moment().startOf('year'), moment().endOf('year')],
-                'Geçen Yıl' : [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')]
+                [this.lang.t("dtToday")] : [moment(), moment()],
+                [this.lang.t("tdLastDay")] : [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                [this.lang.t("dtThisWeek")]  : [moment().startOf('week'), moment().endOf('week')],
+                [this.lang.t("dtLastWeek")]  : [moment().subtract(1, 'week').startOf('week'), moment().subtract(1, 'week').endOf('week')],
+                [this.lang.t("dtMount")]  : [moment().startOf('month'), moment().endOf('month')],
+                [this.lang.t("dtLastMount")]  : [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+                [this.lang.t("dtYear")]  : [moment().startOf('year'), moment().endOf('year')],
+                [this.lang.t("dtLastYear")]  : [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')]
             }}}
             onCallback={(start, end, label)=>
             {
