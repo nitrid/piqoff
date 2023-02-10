@@ -370,88 +370,88 @@ export default class salesDispatch extends React.PureComponent
                 upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                 value={e.value}
                 onKeyDown={async(k)=>
+                {
+                    if(k.event.key == 'F10' || k.event.key == 'ArrowRight')
                     {
-                        if(k.event.key == 'F10' || k.event.key == 'ArrowRight')
+                        await this.pg_txtItemsCode.setVal(e.value)
+                        this.pg_txtItemsCode.onClick = async(data) =>
                         {
-                            await this.pg_txtItemsCode.setVal(e.value)
-                            this.pg_txtItemsCode.onClick = async(data) =>
+                            this.combineControl = true
+                            this.combineNew = false
+                            if(data.length > 0)
                             {
-                                this.combineControl = true
-                                this.combineNew = false
-                                if(data.length > 0)
+                                if(data.length == 1)
                                 {
-                                    if(data.length == 1)
+                                    await this.addItem(data[0],e.rowIndex)
+                                }
+                                else if(data.length > 1)
+                                {
+                                    for (let i = 0; i < data.length; i++) 
                                     {
-                                        await this.addItem(data[0],e.rowIndex)
-                                    }
-                                    else if(data.length > 1)
-                                    {
-                                        for (let i = 0; i < data.length; i++) 
+                                        if(i == 0)
                                         {
-                                            if(i == 0)
-                                            {
-                                                await this.addItem(data[i],e.rowIndex)
-                                            }
-                                            else
-                                            {
-                                                let tmpDocItems = {...this.docObj.docItems.empty}
-                                                tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
-                                                tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
-                                                tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                                                tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
-                                                tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
-                                                tmpDocItems.REF = this.docObj.dt()[0].REF
-                                                tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
-                                                tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
-                                                tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
-                                                tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                                                tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
-                                                this.txtRef.readOnly = true
-                                                this.txtRefno.readOnly = true
-                                                this.docObj.docItems.addEmpty(tmpDocItems)
-                                                await this.core.util.waitUntil(100)
-                                                await this.addItem(data[i],this.docObj.docItems.dt().length-1)
-                                            }
+                                            await this.addItem(data[i],e.rowIndex)
+                                        }
+                                        else
+                                        {
+                                            let tmpDocItems = {...this.docObj.docItems.empty}
+                                            tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+                                            tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+                                            tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                            tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
+                                            tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
+                                            tmpDocItems.REF = this.docObj.dt()[0].REF
+                                            tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+                                            tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                            tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+                                            tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                                            tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
+                                            this.txtRef.readOnly = true
+                                            this.txtRefno.readOnly = true
+                                            this.docObj.docItems.addEmpty(tmpDocItems)
+                                            await this.core.util.waitUntil(100)
+                                            await this.addItem(data[i],this.docObj.docItems.dt().length-1)
                                         }
                                     }
                                 }
                             }
                         }
-                    }}
-                    onValueChanged={(v)=>
-                    {
-                        e.value = v.value
-                    }}
+                    }
+                }}
+                onValueChanged={(v)=>
+                {
+                    e.value = v.value
+                }}
                 onChange={(async(r)=>
+                {
+                    if(typeof r.event.isTrusted == 'undefined')
                     {
-                        if(typeof r.event.isTrusted == 'undefined')
+                        let tmpQuery = 
                         {
-                            let tmpQuery = 
-                            {
-                                query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,VAT,COST_PRICE,ITEMS_VW_01.UNIT, FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE",
-                                param : ['CODE:string|50'],
-                                value : [r.component._changedValue]
-                            }
-                            let tmpData = await this.core.sql.execute(tmpQuery) 
-                            if(tmpData.result.recordset.length > 0)
-                            {
-                                this.combineControl = true
-                                this.combineNew = false
-                                await this.addItem(tmpData.result.recordset[0],e.rowIndex)
-                            }
-                            else
-                            {
-                                let tmpConfObj =
-                                {
-                                    id:'msgItemNotFound',showTitle:true,title:this.t("msgItemNotFound.title"),showCloseButton:true,width:'500px',height:'200px',
-                                    button:[{id:"btn01",caption:this.t("msgItemNotFound.btn01"),location:'after'}],
-                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemNotFound.msg")}</div>)
-                                }
-                    
-                                await dialog(tmpConfObj);
-                            }
+                            query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,VAT,COST_PRICE,ITEMS_VW_01.UNIT, FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE",
+                            param : ['CODE:string|50'],
+                            value : [r.component._changedValue]
                         }
-                    }).bind(this)}
+                        let tmpData = await this.core.sql.execute(tmpQuery) 
+                        if(tmpData.result.recordset.length > 0)
+                        {
+                            this.combineControl = true
+                            this.combineNew = false
+                            await this.addItem(tmpData.result.recordset[0],e.rowIndex)
+                        }
+                        else
+                        {
+                            let tmpConfObj =
+                            {
+                                id:'msgItemNotFound',showTitle:true,title:this.t("msgItemNotFound.title"),showCloseButton:true,width:'500px',height:'200px',
+                                button:[{id:"btn01",caption:this.t("msgItemNotFound.btn01"),location:'after'}],
+                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemNotFound.msg")}</div>)
+                            }
+                
+                            await dialog(tmpConfObj);
+                        }
+                    }
+                }).bind(this)}
                 button=
                 {
                     [
@@ -689,7 +689,7 @@ export default class salesDispatch extends React.PureComponent
                     this.docObj.docItems.dt()[pIndex].DEPOT_QUANTITY = tmpQuantity.result.recordset[0].QUANTITY
                }
             }
-        }
+        }        
 
         for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
         {
@@ -758,7 +758,7 @@ export default class salesDispatch extends React.PureComponent
         this.docObj.docItems.dt()[pIndex].QUANTITY = pQuantity
         let tmpQuery = 
         {
-            query :"SELECT dbo.FN_PRICE_SALE_VAT_EXT(@GUID,@QUANTITY,GETDATE(),@CUSTOMER) AS PRICE",
+            query :"SELECT dbo.FN_PRICE_SALE_VAT_EXT(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,NULL) AS PRICE",
             param : ['GUID:string|50','QUANTITY:float','CUSTOMER:string|50'],
             value : [pData.GUID,pQuantity,this.docObj.dt()[0].INPUT]
         }
@@ -775,6 +775,53 @@ export default class salesDispatch extends React.PureComponent
             this.docObj.docItems.dt()[pIndex].TOTALHT =  parseFloat((this.docObj.docItems.dt()[pIndex].TOTAL - this.docObj.docItems.dt()[pIndex].VAT).toFixed(4))
             this._calculateTotal()
         }
+
+        //BAĞLI ÜRÜN İÇİN YAPILDI ********************************************************************************************************************
+        let tmpRelatedQuery = 
+        {
+            query :"SELECT ITEM_GUID,ITEM_CODE,ITEM_NAME,RELATED_GUID,RELATED_CODE,RELATED_NAME FROM ITEM_RELATED_VW_01 WHERE ITEM_GUID = @ITEM_GUID",
+            param : ['ITEM_GUID:string|50'],
+            value : [pData.GUID]
+        }
+
+        let tmpRelatedData = await this.core.sql.execute(tmpRelatedQuery)
+
+        if(tmpRelatedData.result.recordset.length > 0)
+        {
+            for (let i = 0; i < tmpRelatedData.result.recordset.length; i++) 
+            {
+                let tmpRelatedItemQuery = 
+                {   
+                    query :"SELECT GUID,CODE,NAME,COST_PRICE,UNIT_GUID,VAT,MULTICODE,CUSTOMER_NAME,BARCODE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE GUID = @GUID",
+                    param : ['GUID:string|50'],
+                    value : [tmpRelatedData.result.recordset[i].RELATED_GUID]
+                }
+
+                let tmpRelatedItemData = await this.core.sql.execute(tmpRelatedItemQuery)
+                
+                if(tmpRelatedItemData.result.recordset.length > 0)
+                {
+                    let tmpDocItems = {...this.docObj.docItems.empty}
+                    tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+                    tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+                    tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                    tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
+                    tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
+                    tmpDocItems.REF = this.docObj.dt()[0].REF
+                    tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+                    tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+                    tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+                    tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                    tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
+                    this.txtRef.readOnly = true
+                    this.txtRefno.readOnly = true
+                    this.docObj.docItems.addEmpty(tmpDocItems)
+                    await this.core.util.waitUntil(100)
+                    await this.addItem(tmpRelatedItemData.result.recordset[0],this.docObj.docItems.dt().length-1)
+                }
+            }
+        }
+        //************************************************************************************************************************************** */
         App.instance.setState({isExecute:false})
     }
     async checkRow()
@@ -1641,7 +1688,8 @@ export default class salesDispatch extends React.PureComponent
                                             return
                                         }
                                         let tmpQuery = 
-                                        {   query :"SELECT GUID,CODE,NAME,COST_PRICE,UNIT_GUID,VAT,MULTICODE,CUSTOMER_NAME,BARCODE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE BARCODE = @CODE OR (MULTICODE = @CODE AND CUSTOMER_GUID = @CUSTOMER)",
+                                        {   
+                                            query :"SELECT GUID,CODE,NAME,COST_PRICE,UNIT_GUID,VAT,MULTICODE,CUSTOMER_NAME,BARCODE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE BARCODE = @CODE OR (MULTICODE = @CODE AND CUSTOMER_GUID = @CUSTOMER)",
                                             param : ['CODE:string|50','CUSTOMER:string|50'],
                                             value : [this.txtBarcode.value,this.docObj.dt()[0].INPUT]
                                         }
@@ -1963,7 +2011,7 @@ export default class salesDispatch extends React.PureComponent
                                         {
                                             let tmpQuery = 
                                             {
-                                                query :"SELECT [dbo].[FN_PRICE_SALE_VAT_EXT](@ITEM_GUID,@QUANTITY,GETDATE(),@CUSTOMER_GUID) AS PRICE",
+                                                query :"SELECT [dbo].[FN_PRICE_SALE_VAT_EXT](@ITEM_GUID,@QUANTITY,GETDATE(),@CUSTOMER_GUID,NULL) AS PRICE",
                                                 param : ['ITEM_GUID:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
                                                 value : [e.key.ITEM,this.docObj.dt()[0].INPUT,e.data.QUANTITY]
                                             }
@@ -2481,7 +2529,7 @@ export default class salesDispatch extends React.PureComponent
                         {
                             select:
                             {
-                                query : "SELECT GUID,CODE,NAME,VAT,UNIT,COST_PRICE,(SELECT [dbo].[FN_PRICE_SALE_VAT_EXT](GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000')) AS PRICE FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
+                                query : "SELECT GUID,CODE,NAME,VAT,UNIT,COST_PRICE,(SELECT [dbo].[FN_PRICE_SALE_VAT_EXT](GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000',NULL)) AS PRICE FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
                                 param : ['VAL:string|50']
                             },
                             sql:this.core.sql
