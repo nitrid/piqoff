@@ -122,6 +122,7 @@ export const langTr =
         stk_01_009: "Ürün Alt Grup Tanımlama",
         stk_01_010: "Birim Tanımlama",
         stk_01_011 : "Vergi Tanımlama",
+        stk_01_012 : "Bağlı Ürün Tanımlama",
         stk_02_001: "Sayım Evrakı",
         stk_02_002: "Depo/Mağaza Arası Sevk",
         stk_02_003: "Kayıp Ürün Çıkışı",
@@ -976,6 +977,61 @@ export const langTr =
             msg : "Girmiş olduğunuz I.D sistem de kayıtlı !"
         },
         chkActive: "Aktif",
+    },
+    stk_01_012 : // "Bağlı Ürün Tanımlama"
+    {
+        txtCode : "Kodu",
+        txtName :"Adı",
+        msgRelatedValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Ürün Seçmeden Satır Eklenemez !"
+        },
+        grdRelated : 
+        {
+            clmItemCode : "KODU",
+            clmItemName : "ADI",
+        },
+        popRelatedSelect : 
+        {
+            title : "Stok Seçimi",
+            clmCode : "KODU",
+            clmName : "ADI",
+        },
+        popItemSelect : 
+        {
+            title : "Stok Seçimi",
+            clmCode : "KODU",
+            clmName : "ADI",
+        },
+        msgSave:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kayıt etmek istediğinize eminmisiniz !"
+        },
+        msgSaveResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Kayıt işleminiz başarılı !",
+            msgFailed: "Kayıt işleminiz başarısız !"
+        },
+        msgSaveValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen gerekli alanları doldurunuz !"
+        },
+        msgDelete:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        },
     },
     stk_02_001 : // Sayım Evrakı"
     {

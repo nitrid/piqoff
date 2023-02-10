@@ -736,7 +736,6 @@ export default class salesDispatch extends React.PureComponent
                 }
                 else if(this.combineNew == false)
                 {
-                
                     this.docObj.docItems.dt()[i].QUANTITY = this.docObj.docItems.dt()[i].QUANTITY + pQuantity
                     this.docObj.docItems.dt()[i].VAT = parseFloat((this.docObj.docItems.dt()[i].VAT + (this.docObj.docItems.dt()[i].PRICE * (this.docObj.docItems.dt()[i].VAT_RATE / 100) * pQuantity)).toFixed(3))
                     this.docObj.docItems.dt()[i].AMOUNT = parseFloat((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE).toFixed(3))
@@ -797,7 +796,7 @@ export default class salesDispatch extends React.PureComponent
                 select:
                 {   query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,COST_PRICE,VAT,BARCODE,ITEMS_VW_01.UNIT,ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_01.GUID AND ITEM_MULTICODE.CUSTOMER = '"+this.docObj.dt()[0].INPUT+"' AND DELETED = 0 ORDER BY LDATE DESC),'') AS MULTICODE,  " + 
                     "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_MULTICODE_VW_01.ITEM_GUID = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS CUSTOMER_NAME " + 
-                    " FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE  ITEM_BARCODE_VW_01.BARCODE LIKE  '%' +@BARCODE",
+                    "FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE  ITEM_BARCODE_VW_01.BARCODE LIKE  '%' + @BARCODE",
                     param : ['BARCODE:string|50'],
                 },
                 sql:this.core.sql
@@ -2393,8 +2392,8 @@ export default class salesDispatch extends React.PureComponent
                             </Form>
                         </NdPopUp>
                     </div> 
-                     {/* Yönetici PopUp */}
-                     <div>
+                    {/* Yönetici PopUp */}
+                    <div>
                         <NdPopUp parent={this} id={"popPassword"} 
                         visible={false}
                         showCloseButton={true}
@@ -2644,8 +2643,8 @@ export default class salesDispatch extends React.PureComponent
                             </Form>
                         </NdPopUp>
                     </div> 
-                     {/* Toplu Stok PopUp */}
-                     <div>
+                    {/* Toplu Stok PopUp */}
+                    <div>
                         <NdPopUp parent={this} id={"popMultiItem"} 
                         visible={false}
                         showCloseButton={true}
@@ -2765,17 +2764,17 @@ export default class salesDispatch extends React.PureComponent
                             </div>
                         
                     </NdDialog> 
-                     {/* BARKOD POPUP */}
-                     <NdPopGrid id={"pg_txtBarcode"} parent={this} container={"#root"}
-                        visible={false}
-                        position={{of:'#root'}} 
-                        showTitle={true} 
-                        showBorders={true}
-                        width={'90%'}
-                        height={'90%'}
-                        title={this.t("pg_txtBarcode.title")} //
-                        search={true}
-                        >
+                    {/* BARKOD POPUP */}
+                    <NdPopGrid id={"pg_txtBarcode"} parent={this} container={"#root"}
+                    visible={false}
+                    position={{of:'#root'}} 
+                    showTitle={true} 
+                    showBorders={true}
+                    width={'90%'}
+                    height={'90%'}
+                    title={this.t("pg_txtBarcode.title")} //
+                    search={true}
+                    >
                         <Column dataField="BARCODE" caption={this.t("pg_txtBarcode.clmBarcode")} width={150} />
                         <Column dataField="CODE" caption={this.t("pg_txtBarcode.clmCode")} width={150} />
                         <Column dataField="NAME" caption={this.t("pg_txtBarcode.clmName")} width={300} defaultSortOrder="asc" />
@@ -2834,8 +2833,8 @@ export default class salesDispatch extends React.PureComponent
                         <Column dataField="PRICE" caption={this.t("pg_ordersGrid.clmPrice")} width={200}  format={{ style: "currency", currency: "EUR",precision: 2}} />
                         <Column dataField="TOTAL" caption={this.t("pg_ordersGrid.clmTotal")} width={300}  format={{ style: "currency", currency: "EUR",precision: 2}}/>
                     </NdPopGrid>
-                     {/* Adres Seçim POPUP */}
-                     <NdPopGrid id={"pg_adress"} parent={this} container={"#root"}
+                    {/* Adres Seçim POPUP */}
+                    <NdPopGrid id={"pg_adress"} parent={this} container={"#root"}
                         visible={false}
                         position={{of:'#root'}} 
                         showTitle={true} 
@@ -2848,7 +2847,7 @@ export default class salesDispatch extends React.PureComponent
                             <Column dataField="CITY" caption={this.t("pg_adress.clmCiyt")} width={150} />
                             <Column dataField="ZIPCODE" caption={this.t("pg_adress.clmZipcode")} width={300} defaultSortOrder="asc" />
                             <Column dataField="COUNTRY" caption={this.t("pg_adress.clmCountry")} width={200}/>
-                        </NdPopGrid>
+                    </NdPopGrid>
                     {/* Birim PopUp */}
                     <div>
                         <NdDialog parent={this} id={"msgUnit"} 

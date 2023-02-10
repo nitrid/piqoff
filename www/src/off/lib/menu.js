@@ -69,6 +69,11 @@ export const menu = (e) =>
                             text: e.t('menuOff.stk_01_011'),//'Vergi Tanımları',
                             path: 'items/cards/vatCard.js',
                         },
+                        {
+                            id: 'stk_01_012',
+                            text: e.t('menuOff.stk_01_012'),//'Bağlı Ürün Tanımları',
+                            path: 'items/cards/itemRelated.js',
+                        },
                     ]
                 },
                 {
@@ -592,7 +597,7 @@ export const menu = (e) =>
                 },
             ]
         },
-         //Satış İşlemleri
+        //Satış İşlemleri
         {
             id: 'sales',
             text: e.t('menuOff.sales'),
