@@ -815,6 +815,7 @@ export default class salesInvoice extends React.PureComponent
                     tmpDocItems.VAT = data[i].VAT
                     tmpDocItems.AMOUNT = data[i].AMOUNT
                     tmpDocItems.TOTAL = data[i].TOTAL
+                    tmpDocItems.TOTALHT = data[i].TOTALHT
                     tmpDocItems.DESCRIPTION = data[i].DESCRIPTION
                     tmpDocItems.INVOICE_DOC_GUID = this.docObj.dt()[0].GUID
                     tmpDocItems.INVOICE_LINE_GUID = data[i].GUID
