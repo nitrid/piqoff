@@ -494,6 +494,9 @@ export default class purchaseOrder extends React.PureComponent
                             this.docObj.docOrders.dt()[i].TOTAL = parseFloat((((this.docObj.docOrders.dt()[i].QUANTITY * this.docObj.docOrders.dt()[i].PRICE) - this.docObj.docOrders.dt()[i].DISCOUNT) + this.docObj.docOrders.dt()[i].VAT).toFixed(9))
                             this._calculateTotal()
                             await this.grdPurcOrders.devGrid.deleteRow(0)
+                            //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
+                            await this.itemRelated(pData.GUID,pQuantity)
+                            //*****************************************/
                             if(this.checkCombine.value == true)
                             {
                                 this.combineControl = false
@@ -501,7 +504,6 @@ export default class purchaseOrder extends React.PureComponent
                             tmpCombineBtn = e
                             return
                         }
-
                         if(e == 'btn02')
                         {
                             if(this.checkCombine.value == true)
@@ -524,9 +526,12 @@ export default class purchaseOrder extends React.PureComponent
                     this.docObj.docOrders.dt()[i].VAT = parseFloat((this.docObj.docOrders.dt()[i].VAT + (this.docObj.docOrders.dt()[i].PRICE * (this.docObj.docOrders.dt()[i].VAT_RATE / 100)) * pQuantity).toFixed(9))
                     this.docObj.docOrders.dt()[i].AMOUNT = parseFloat((this.docObj.docOrders.dt()[i].QUANTITY * this.docObj.docOrders.dt()[i].PRICE).toFixed(9))
                     this.docObj.docOrders.dt()[i].TOTAL = parseFloat((((this.docObj.docOrders.dt()[i].QUANTITY * this.docObj.docOrders.dt()[i].PRICE) - this.docObj.docOrders.dt()[i].DISCOUNT) + this.docObj.docOrders.dt()[i].VAT).toFixed(9))
-                    this._calculateTotal()
-                    
+                    this._calculateTotal()                    
                     await this.grdPurcOrders.devGrid.deleteRow(0)
+                    //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
+                    await this.itemRelated(pData.GUID,pQuantity)
+                    //*****************************************/
+                    App.instance.setState({isExecute:false})
                     return
                 }
             }
@@ -567,7 +572,59 @@ export default class purchaseOrder extends React.PureComponent
             this.docObj.docOrders.dt()[pIndex].TOTAL = 0
             this._calculateTotal()
         }
+        //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
+        await this.itemRelated(pData.GUID,pQuantity)
+        //*****************************************/
         App.instance.setState({isExecute:false})
+    }
+    itemRelated(pGuid,pQuantity)
+    {
+        return new Promise(async resolve =>
+        {
+            let tmpRelatedQuery = 
+            {
+                query :"SELECT ITEM_GUID,ITEM_CODE,ITEM_NAME,RELATED_GUID,RELATED_CODE,RELATED_NAME FROM ITEM_RELATED_VW_01 WHERE ITEM_GUID = @ITEM_GUID",
+                param : ['ITEM_GUID:string|50'],
+                value : [pGuid]
+            }
+    
+            let tmpRelatedData = await this.core.sql.execute(tmpRelatedQuery)
+    
+            if(tmpRelatedData.result.recordset.length > 0)
+            {
+                for (let i = 0; i < tmpRelatedData.result.recordset.length; i++) 
+                {
+                    let tmpRelatedItemQuery = 
+                    {   
+                        query :"SELECT GUID,CODE,NAME,COST_PRICE,UNIT_GUID,VAT,MULTICODE,CUSTOMER_NAME,BARCODE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE GUID = @GUID",
+                        param : ['GUID:string|50'],
+                        value : [tmpRelatedData.result.recordset[i].RELATED_GUID]
+                    }
+    
+                    let tmpRelatedItemData = await this.core.sql.execute(tmpRelatedItemQuery)
+                    
+                    if(tmpRelatedItemData.result.recordset.length > 0)
+                    {
+                        let tmpDocOrders = {...this.docObj.docOrders.empty}
+                        tmpDocOrders.DOC_GUID = this.docObj.dt()[0].GUID
+                        tmpDocOrders.TYPE = this.docObj.dt()[0].TYPE
+                        tmpDocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                        tmpDocOrders.LINE_NO = this.docObj.docOrders.dt().length
+                        tmpDocOrders.REF = this.docObj.dt()[0].REF
+                        tmpDocOrders.REF_NO = this.docObj.dt()[0].REF_NO
+                        tmpDocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
+                        tmpDocOrders.INPUT = this.docObj.dt()[0].INPUT
+                        tmpDocOrders.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                        this.txtRef.readOnly = true
+                        this.txtRefno.readOnly = true
+                        this.docObj.docOrders.addEmpty(tmpDocItems)
+                        await this.core.util.waitUntil(100)
+                        await this.addItem(tmpRelatedItemData.result.recordset[0],this.docObj.docItems.dt().length-1,pQuantity)
+                    }
+                }
+            }
+            resolve()
+        })
     }
     async _getItems()
     {
@@ -705,20 +762,20 @@ export default class purchaseOrder extends React.PureComponent
 
         for (let i = 0; i < this.multiItemData.length; i++) 
         {
-            let tmpdocOrders = {...this.docObj.docOrders.empty}
-            tmpdocOrders.DOC_GUID = this.docObj.dt()[0].GUID
-            tmpdocOrders.TYPE = this.docObj.dt()[0].TYPE
-            tmpdocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-            tmpdocOrders.LINE_NO = this.docObj.docOrders.dt().length
-            tmpdocOrders.REF = this.docObj.dt()[0].REF
-            tmpdocOrders.REF_NO = this.docObj.dt()[0].REF_NO
-            tmpdocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
-            tmpdocOrders.INPUT = this.docObj.dt()[0].INPUT
-            tmpdocOrders.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+            let tmpDocOrders = {...this.docObj.docOrders.empty}
+            tmpDocOrders.DOC_GUID = this.docObj.dt()[0].GUID
+            tmpDocOrders.TYPE = this.docObj.dt()[0].TYPE
+            tmpDocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+            tmpDocOrders.LINE_NO = this.docObj.docOrders.dt().length
+            tmpDocOrders.REF = this.docObj.dt()[0].REF
+            tmpDocOrders.REF_NO = this.docObj.dt()[0].REF_NO
+            tmpDocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
+            tmpDocOrders.INPUT = this.docObj.dt()[0].INPUT
+            tmpDocOrders.DOC_DATE = this.docObj.dt()[0].DOC_DATE
 
             this.txtRef.readOnly = true
             this.txtRefno.readOnly = true
-            this.docObj.docOrders.addEmpty(tmpdocOrders)
+            this.docObj.docOrders.addEmpty(tmpDocOrders)
 
             await this.core.util.waitUntil(100)
             await this.addItem(this.multiItemData[i],this.docObj.docOrders.dt().length-1,this.multiItemData[i].QUANTITY)

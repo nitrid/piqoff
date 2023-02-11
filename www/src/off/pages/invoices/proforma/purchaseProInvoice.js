@@ -494,7 +494,6 @@ export default class purchaseInvoice extends React.PureComponent
     }
     async addItem(pData,pIndex,pQuantity,pPrice,pDiscount,pDiscountPer,pVat)
     {
-        console.log(pData.ITEM_TYPE)
         App.instance.setState({isExecute:true})
         if(typeof pData.ITEM_TYPE == 'undefined')
         {
@@ -560,8 +559,7 @@ export default class purchaseInvoice extends React.PureComponent
                         let tmpCombineBtn = ''
                         App.instance.setState({isExecute:false})
                         await this.msgCombineItem.show().then(async (e) =>
-                        {
-        
+                        {        
                             if(e == 'btn01')
                             {
                                 this.docObj.docItems.dt()[i].QUANTITY = this.docObj.docItems.dt()[i].QUANTITY + pQuantity
@@ -570,6 +568,9 @@ export default class purchaseInvoice extends React.PureComponent
                                 this.docObj.docItems.dt()[i].TOTAL = parseFloat((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT).toFixed(3))
                                 this._calculateTotal()
                                 await this.grdPurcInv.devGrid.deleteRow(0)
+                                //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
+                                await this.itemRelated(pData.GUID,pQuantity)
+                                //*****************************************/
                                 if(this.checkCombine.value == true)
                                 {
                                     this.combineControl = false
@@ -600,6 +601,10 @@ export default class purchaseInvoice extends React.PureComponent
                         this.docObj.docItems.dt()[i].TOTAL = parseFloat((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT).toFixed(3))
                         this._calculateTotal()
                         await this.grdPurcInv.devGrid.deleteRow(0)
+                        //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
+                        await this.itemRelated(pData.GUID,pQuantity)
+                        //*****************************************/
+                        App.instance.setState({isExecute:false})
                         return
                     }
                 }
@@ -675,7 +680,61 @@ export default class purchaseInvoice extends React.PureComponent
             this.docObj.docItems.dt()[pIndex].CUSTOMER_PRICE = tmpData.result.recordset[0].PRICE
             this.docObj.docItems.dt()[pIndex].DIFF_PRICE = this.docObj.docItems.dt()[pIndex].PRICE - this.docObj.docItems.dt()[pIndex].CUSTOMER_PRICE
         }
+        //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
+        await this.itemRelated(pData.GUID,pQuantity)
+        //*****************************************/
         App.instance.setState({isExecute:false})
+    }
+    itemRelated(pGuid,pQuantity)
+    {
+        return new Promise(async resolve =>
+        {
+            let tmpRelatedQuery = 
+            {
+                query :"SELECT ITEM_GUID,ITEM_CODE,ITEM_NAME,RELATED_GUID,RELATED_CODE,RELATED_NAME FROM ITEM_RELATED_VW_01 WHERE ITEM_GUID = @ITEM_GUID",
+                param : ['ITEM_GUID:string|50'],
+                value : [pGuid]
+            }
+    
+            let tmpRelatedData = await this.core.sql.execute(tmpRelatedQuery)
+    
+            if(tmpRelatedData.result.recordset.length > 0)
+            {
+                for (let i = 0; i < tmpRelatedData.result.recordset.length; i++) 
+                {
+                    let tmpRelatedItemQuery = 
+                    {   
+                        query :"SELECT GUID,CODE,NAME,COST_PRICE,UNIT_GUID,VAT,MULTICODE,CUSTOMER_NAME,BARCODE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE GUID = @GUID",
+                        param : ['GUID:string|50'],
+                        value : [tmpRelatedData.result.recordset[i].RELATED_GUID]
+                    }
+    
+                    let tmpRelatedItemData = await this.core.sql.execute(tmpRelatedItemQuery)
+                    
+                    if(tmpRelatedItemData.result.recordset.length > 0)
+                    {
+                        let tmpDocItems = {...this.docObj.docItems.empty}
+                        tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+                        tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+                        tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                        tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
+                        tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
+                        tmpDocItems.REF = this.docObj.dt()[0].REF
+                        tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+                        tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+                        tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+                        tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                        tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
+                        this.txtRef.readOnly = true
+                        this.txtRefno.readOnly = true
+                        this.docObj.docItems.addEmpty(tmpDocItems)
+                        await this.core.util.waitUntil(100)
+                        await this.addItem(tmpRelatedItemData.result.recordset[0],this.docObj.docItems.dt().length-1,pQuantity)
+                    }
+                }
+            }
+            resolve()
+        })
     }
     async _getItems()
     {
