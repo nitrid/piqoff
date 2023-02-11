@@ -1133,7 +1133,9 @@ export default class posDoc extends React.PureComponent
         return new Promise(async resolve => 
         {            
             if(this.posObj.dt().length > 0)
-            {                  
+            {   
+                await this.core.util.waitUntil()
+                               
                 let tmpPosSale = this.posObj.posSale.dt().where({GUID:{'<>' : '00000000-0000-0000-0000-000000000000'}})  
 
                 this.posObj.dt()[0].CDATE = moment(new Date()).utcOffset(0, true)
