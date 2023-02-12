@@ -151,11 +151,11 @@ export default class itemList extends React.PureComponent
                     {
                         query : "SELECT GUID,CDATE,CUSER,CUSER_NAME,LDATE,LUSER,LUSER_NAME,TYPE,SPECIAL,CODE,NAME,SNAME,VAT,COST_PRICE,MIN_PRICE,MAX_PRICE,STATUS,MAIN_GRP,MAIN_GRP_NAME,SUB_GRP,ORGINS,ITEMS_GRP_GUID,ORGINS_NAME,RAYON,SHELF,SECTOR, " +
                                 "SALE_JOIN_LINE,TICKET_REST,WEIGHING,MAX(BARCODE) AS BARCODE,MAX(BARCODE_GUID) AS BARCODE_GUID,UNIT_ID,UNIT_NAME,UNIT_FACTOR,MULTICODE,CUSTOMER_GUID,CUSTOMER_CODE,CUSTOMER_NAME,CUSTOMER_PRICE,PRICE_SALE, " +
-                                "CASE WHEN PRICE_SALE <> 0 THEN  " +
+                                "CASE WHEN PRICE_SALE <> 0 AND COST_PRICE <> 0 THEN  " +
                                 "CONVERT(nvarchar,ROUND((((PRICE_SALE / ((VAT / 100) + 1)) - COST_PRICE) / (COST_PRICE)) * 100,2)) + '% / €' + CONVERT(nvarchar,ROUND((PRICE_SALE / ((VAT / 100) + 1)) - COST_PRICE,2)) " +
                                 "ELSE '0'   " +
                                 "END AS MARGIN,  " +
-                                "CASE WHEN PRICE_SALE <> 0 THEN  " + 
+                                "CASE WHEN PRICE_SALE <> 0 AND COST_PRICE <> 0 THEN  " + 
                                 "CONVERT(nvarchar,ROUND((ROUND(((PRICE_SALE / ((VAT / 100) + 1)) - COST_PRICE) / 1.12,2) / (COST_PRICE)) * 100,2)) +'% / €' + CONVERT(nvarchar,ROUND(((PRICE_SALE / ((VAT / 100) + 1)) - COST_PRICE) / 1.12,2)) " +
                                 "ELSE '0'  " +
                                 "END AS NETMARGIN  " +
@@ -267,11 +267,11 @@ export default class itemList extends React.PureComponent
                                 "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEMS_BARCODE_MULTICODE_VW_01 AS ITEMS WHERE ITEMS.MULTICODE_LDATE = MAX(ITEMS_BARCODE_MULTICODE_VW_01.MULTICODE_LDATE) AND ITEMS.GUID = ITEMS_BARCODE_MULTICODE_VW_01.GUID),'') AS CUSTOMER_NAME," +
                                 "ISNULL((SELECT TOP 1 CUSTOMER_PRICE FROM ITEMS_BARCODE_MULTICODE_VW_01 AS ITEMS WHERE ITEMS.MULTICODE_LDATE = MAX(ITEMS_BARCODE_MULTICODE_VW_01.MULTICODE_LDATE) AND ITEMS.GUID = ITEMS_BARCODE_MULTICODE_VW_01.GUID),'') AS CUSTOMER_PRICE," +
                                 "PRICE_SALE, " +
-                                "CASE WHEN PRICE_SALE <> 0 THEN  " +
+                                "CASE WHEN PRICE_SALE <> 0 AND COST_PRICE <> 0 THEN  " +
                                 "CONVERT(nvarchar,ROUND((((PRICE_SALE / ((VAT / 100) + 1)) - COST_PRICE) / (PRICE_SALE / ((VAT / 100) + 1))) * 100,2)) + '% / €' + CONVERT(nvarchar,ROUND((PRICE_SALE / ((VAT / 100) + 1)) - COST_PRICE,2)) " +
                                 "ELSE '0'   " +
                                 "END AS MARGIN,  " +
-                                "CASE WHEN PRICE_SALE <> 0 THEN  " +
+                                "CASE WHEN PRICE_SALE <> 0 AND COST_PRICE <> 0 THEN  " +
                                 "CONVERT(nvarchar,ROUND(((PRICE_SALE / ((VAT / 100) + 1)) - COST_PRICE) / 1.12,2)) + '/ %' + CONVERT(nvarchar,ROUND(((((PRICE_SALE / ((VAT / 100) + 1)) - COST_PRICE) / 1.12) / (PRICE_SALE / ((VAT / 100) + 1))) * 100,2))  " +
                                 "ELSE '0'    " +
                                 "END AS NETMARGIN    " +
@@ -376,11 +376,11 @@ export default class itemList extends React.PureComponent
                     select : 
                     {
                         query : "SELECT *," +
-                                "CASE WHEN PRICE_SALE <> 0 THEN " +
+                                "CASE WHEN PRICE_SALE <> 0 AND COST_PRICE <> 0 THEN " +
                                 "CONVERT(nvarchar,ROUND((PRICE_SALE / ((VAT / 100) + 1)) - COST_PRICE,2)) + '/ %' + CONVERT(nvarchar,ROUND((((PRICE_SALE / ((VAT / 100) + 1)) - COST_PRICE) / (PRICE_SALE / ((VAT / 100) + 1))) * 100,2)) " +
                                 "ELSE '0'  " +
                                 "END AS MARGIN, " +
-                                "CASE WHEN PRICE_SALE <> 0 THEN " +
+                                "CASE WHEN PRICE_SALE <> 0 AND COST_PRICE <> 0 THEN " +
                                 "CONVERT(nvarchar,ROUND(((PRICE_SALE / ((VAT / 100) + 1)) - COST_PRICE) / 1.12,2)) + '/ %' + CONVERT(nvarchar,ROUND(((((PRICE_SALE / ((VAT / 100) + 1)) - COST_PRICE) / 1.12) / (PRICE_SALE / ((VAT / 100) + 1))) * 100,2)) " +
                                 "ELSE '0' " +
                                 "END AS NETMARGIN " +
