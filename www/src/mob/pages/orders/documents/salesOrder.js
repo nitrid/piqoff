@@ -27,6 +27,7 @@ import { triggerHandler } from 'devextreme/events';
 import NdPagerTab from '../../../../core/react/devex/pagertab.js';
 import NbLabel from '../../../../core/react/bootstrap/label.js';
 import validationEngine from "devextreme/ui/validation_engine"
+import { isArray } from 'jquery';
 
 export default class salesOrder extends React.PureComponent
 {
@@ -277,6 +278,9 @@ export default class salesOrder extends React.PureComponent
                         this.docObj.docOrders.dt()[i].TOTAL = parseFloat((((this.docObj.docOrders.dt()[i].QUANTITY * this.docObj.docOrders.dt()[i].PRICE) - this.docObj.docOrders.dt()[i].DISCOUNT) + this.docObj.docOrders.dt()[i].VAT)).toFixed(3)
                         this._calculateTotal()
                         this.barcodeReset()
+                        //BAĞLI ÜRÜN İÇİN YAPILDI ******************
+                        await this.itemRelated(this.docObj.docOrders.dt()[i].ITEM,pQuantity)
+                        //*****************************************/
                         return
                     }
                     else
@@ -312,6 +316,9 @@ export default class salesOrder extends React.PureComponent
             this.docObj.docOrders.addEmpty(tmpDocItems)
             this.barcodeReset()
             this._calculateTotal()
+            //BAĞLI ÜRÜN İÇİN YAPILDI ******************
+            await this.itemRelated(tmpDocItems.ITEM,pQuantity)
+            //*****************************************/
             await this.docObj.save()
             this.txtPopQuantity.value = 1
         }
@@ -326,6 +333,99 @@ export default class salesOrder extends React.PureComponent
             
             await dialog(tmpConfObj);
         }
+    }
+    itemRelated(pGuid,pQuantity)
+    {
+        return new Promise(async resolve =>
+        {
+            let tmpPrice = 0            
+            let tmpRelatedQuery = 
+            {
+                query :"SELECT ITEM_GUID,ITEM_CODE,ITEM_NAME,RELATED_GUID,RELATED_CODE,RELATED_NAME FROM ITEM_RELATED_VW_01 WHERE ITEM_GUID = @ITEM_GUID",
+                param : ['ITEM_GUID:string|50'],
+                value : [pGuid]
+            }
+
+            let tmpRelatedData = await this.core.sql.execute(tmpRelatedQuery)
+            
+            if(tmpRelatedData.result.recordset.length > 0)
+            {
+                for (let i = 0; i < tmpRelatedData.result.recordset.length; i++) 
+                {
+                    let tmpRelatedItemQuery = 
+                    {   
+                        query :"SELECT TOP 1 GUID,CODE,NAME,COST_PRICE,UNIT_GUID,VAT,MULTICODE,CUSTOMER_NAME,BARCODE,UNIT_GUID,UNIT_ID,UNIT_FACTOR FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE GUID = @GUID",
+                        param : ['GUID:string|50'],
+                        value : [tmpRelatedData.result.recordset[i].RELATED_GUID]
+                    }
+                    
+                    let tmpRelatedItemData = await this.core.sql.execute(tmpRelatedItemQuery)
+
+                    let tmpQuery = 
+                    {
+                        query :"SELECT dbo.FN_PRICE_SALE_VAT_EXT(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,NULL) AS PRICE",
+                        param : ['GUID:string|50','QUANTITY:float','CUSTOMER:string|50'],
+                        value : [tmpRelatedData.result.recordset[i].RELATED_GUID,pQuantity,this.docObj.dt()[0].INPUT]
+                    }
+
+                    let tmpData = await this.core.sql.execute(tmpQuery) 
+                    
+                    if(tmpData.result.recordset.length > 0)
+                    {
+                        tmpPrice = tmpData.result.recordset[0].PRICE
+                    }
+                    
+                    if(tmpRelatedItemData.result.recordset.length > 0)
+                    {      
+                        let tmpMerge = false
+
+                        for (let x = 0; x < this.docObj.docOrders.dt().length; x++) 
+                        {
+                            if(this.docObj.docOrders.dt()[x].ITEM_CODE == tmpRelatedItemData.result.recordset[0].CODE)
+                            {
+                                this.docObj.docOrders.dt()[x].QUANTITY = this.docObj.docOrders.dt()[x].QUANTITY + (pQuantity * tmpRelatedItemData.result.recordset[0].UNIT_FACTOR)
+                                this.docObj.docOrders.dt()[x].VAT = parseFloat((this.docObj.docOrders.dt()[x].VAT + (this.docObj.docOrders.dt()[x].PRICE * (this.docObj.docOrders.dt()[x].VAT_RATE / 100)) * pQuantity)).toFixed(3)
+                                this.docObj.docOrders.dt()[x].AMOUNT = parseFloat((this.docObj.docOrders.dt()[x].QUANTITY * this.docObj.docOrders.dt()[x].PRICE)).toFixed(3)
+                                this.docObj.docOrders.dt()[x].TOTAL = parseFloat((((this.docObj.docOrders.dt()[x].QUANTITY * this.docObj.docOrders.dt()[x].PRICE) - this.docObj.docOrders.dt()[x].DISCOUNT) + this.docObj.docOrders.dt()[x].VAT)).toFixed(3)
+                                this._calculateTotal()
+                                tmpMerge = true                                
+                            }
+                        }                        
+
+                        if(!tmpMerge)
+                        {
+                            let tmpDocItems = {...this.docObj.docOrders.empty}
+                            tmpDocItems.REF = this.docObj.dt()[0].REF
+                            tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+                            tmpDocItems.ITEM_NAME = tmpRelatedItemData.result.recordset[0].NAME
+                            tmpDocItems.ITEM_CODE = tmpRelatedItemData.result.recordset[0].CODE
+                            tmpDocItems.ITEM = tmpRelatedItemData.result.recordset[0].GUID
+                            tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+                            tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+                            tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                            tmpDocItems.LINE_NO = this.docObj.docOrders.dt().length
+                            tmpDocItems.REF = this.docObj.dt()[0].REF
+                            tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+                            tmpDocItems.UNIT = Array.isArray(tmpRelatedItemData.result.recordset[0].UNIT_GUID) ? tmpRelatedItemData.result.recordset[0].UNIT_GUID[0] : tmpRelatedItemData.result.recordset[0].UNIT_GUID
+                            tmpDocItems.UNIT_FACTOR = tmpRelatedItemData.result.recordset[0].UNIT_FACTOR
+                            tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+                            tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+                            tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                            tmpDocItems.QUANTITY = pQuantity * tmpRelatedItemData.result.recordset[0].UNIT_FACTOR
+                            tmpDocItems.VAT_RATE = tmpRelatedItemData.result.recordset[0].VAT
+                            tmpDocItems.PRICE = tmpPrice
+                            tmpDocItems.VAT = parseFloat((tmpPrice * (tmpRelatedItemData.result.recordset[0].VAT / 100)) * tmpDocItems.QUANTITY).toFixed(2)
+                            tmpDocItems.AMOUNT = (tmpPrice * tmpDocItems.QUANTITY).toFixed(2)
+                            tmpDocItems.TOTAL = parseFloat(((tmpPrice * tmpDocItems.QUANTITY) + (tmpDocItems.VAT * tmpDocItems.QUANTITY))).toFixed(2)
+                            this.docObj.docOrders.addEmpty(tmpDocItems)
+                            this._calculateTotal()
+                        }
+                        
+                    }
+                }
+            }
+            resolve()
+        })
     }
     calculateItemPrice()
     {

@@ -1181,7 +1181,8 @@ export class posDeviceCls
         this.listeners = Object();
         this.payPort = null;
         this.scannerPort = null;
-        
+        this.version = "v.1.0.1"
+
         this._initDs();
     }
     //#region  "EVENT"

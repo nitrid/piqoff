@@ -221,7 +221,6 @@ export default class salesDispartch extends React.PureComponent
                 {
                     break
                 }
-                
             }
         }
         let tmpDocItems = {...this.docObj.docItems.empty}
