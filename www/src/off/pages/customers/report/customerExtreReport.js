@@ -24,16 +24,17 @@ export default class customerBalanceReport extends React.PureComponent
 
         this.state = 
         {
-            columnListValue : ['TITLE','NAME','BALANCE','UPDATE_DATE']
+            columnListValue : ['DOC_DATE','TYPE_NAME','REF','REF_NO','AMOUNT']
         }
         
         this.core = App.instance.core;
         this.columnListData = 
         [
-            {CODE : "TITLE",NAME : this.t("grdListe.clmCode")},                                   
-            {CODE : "NAME",NAME : this.t("grdListe.clmName")},
-            {CODE : "BALANCE",NAME : this.t("grdListe.clmBalance")},
-            {CODE : "UPDATE_DATE",NAME : this.t("grdListe.clmUpdate")},
+            {CODE : "DOC_DATE",NAME : this.t("grdListe.clmDocDate")},                                   
+            {CODE : "TYPE_NAME",NAME : this.t("grdListe.clmTypeName")},
+            {CODE : "REF",NAME : this.t("grdListe.clmRef")},
+            {CODE : "REF_NO",NAME : this.t("grdListe.clmRefNo")},
+            {CODE : "AMOUNT",NAME : this.t("grdListe.clmAmount")},
         ]
         this.groupList = [];
         this._btnGetirClick = this._btnGetirClick.bind(this)
@@ -43,8 +44,8 @@ export default class customerBalanceReport extends React.PureComponent
     {
         setTimeout(async () => 
         {
-            this.txtCustomerCode.CODE = ''
-        }, 1000);
+            this.txtCustomerCode.GUID = ''
+        }, 500);
     }
     _columnListBox(e)
     {
@@ -53,21 +54,25 @@ export default class customerBalanceReport extends React.PureComponent
             if (e.name == 'selectedItemKeys') 
             {
                 this.groupList = [];
-                if(typeof e.value.find(x => x == 'TITLE') != 'undefined')
+                if(typeof e.value.find(x => x == 'DOC_DATE') != 'undefined')
                 {
-                    this.groupList.push('TITLE')
+                    this.groupList.push('DOC_DATE')
                 }
-                if(typeof e.value.find(x => x == 'BALANCE') != 'undefined')
+                if(typeof e.value.find(x => x == 'TYPE_NAME') != 'undefined')
                 {
-                    this.groupList.push('BALANCE')
+                    this.groupList.push('TYPE_NAME')
                 }                
-                if(typeof e.value.find(x => x == 'CODE') != 'undefined')
+                if(typeof e.value.find(x => x == 'REF') != 'undefined')
                 {
-                    this.groupList.push('CODE')
+                    this.groupList.push('REF')
                 }
-                if(typeof e.value.find(x => x == 'UPDATE_DATE') != 'undefined')
+                if(typeof e.value.find(x => x == 'REF_NO') != 'undefined')
                 {
-                    this.groupList.push('UPDATE_DATE')
+                    this.groupList.push('REF_NO')
+                }
+                if(typeof e.value.find(x => x == 'AMOUNT') != 'undefined')
+                {
+                    this.groupList.push('AMOUNT')
                 }
                 
                 for (let i = 0; i < this.grdListe.devGrid.columnCount(); i++) 
@@ -106,7 +111,7 @@ export default class customerBalanceReport extends React.PureComponent
     }
     async _btnGetirClick()
     {
-        if(this.chkZeroBalance.value == true)
+        if(this.txtCustomerCode.GUID != '')
         {
             let tmpSource =
             {
@@ -115,9 +120,16 @@ export default class customerBalanceReport extends React.PureComponent
                     groupBy : this.groupList,
                     select : 
                     {
-                        query : "SELECT * FROM CUSTOMER_BALANCE_VW_01 WHERE ((CODE = @CODE) OR (@CODE = '')) ",
-                        param : ['CODE:string|50'],
-                        value : [this.txtCustomerCode.CODE]
+                        query : "SELECT  " +
+                        "DOC_DATE, " +
+                        "REF, " +
+                        "REF_NO, " +
+                        "(SELECT TOP 1 VALUE FROM DB_LANGUAGE WHERE TAG = (SELECT [dbo].[FN_DOC_CUSTOMER_TYPE_NAME](TYPE,DOC_TYPE,REBATE,PAY_TYPE)) AND LANG = @LANG) AS TYPE_NAME, " +
+                        "(SELECT TOP 1 BALANCE FROM ACCOUNT_BALANCE WHERE ACCOUNT_GUID = @CUSTOMER) AS BALANCE, " +
+                        "AMOUNT " +
+                        "FROM DOC_CUSTOMER_VW_01 WHERE OUTPUT = @CUSTOMER OR INPUT = @CUSTOMER ORDER BY DOC_DATE DESC ",
+                        param : ['CUSTOMER:string|50','LANG:string|10'],
+                        value : [this.txtCustomerCode.GUID,localStorage.getItem('lang')]
                     },
                     sql : this.core.sql
                 }
@@ -125,31 +137,21 @@ export default class customerBalanceReport extends React.PureComponent
             App.instance.setState({isExecute:true})
             await this.grdListe.dataRefresh(tmpSource)
             App.instance.setState({isExecute:false})
-            console.log(this.grdListe)
+            let tmpBalance = parseFloat(this.grdListe.data.datatable[0].BALANCE.toFixed(2))
+
+            this.txtTotalBalance.setState({value:tmpBalance})
         }
         else
         {
-            let tmpSource =
+            let tmpConfObj =
             {
-                source : 
-                {
-                    groupBy : this.groupList,
-                    select : 
-                    {
-                        query : "SELECT * FROM CUSTOMER_BALANCE_VW_01 WHERE ((CODE = @CODE) OR (@CODE = '')) AND BALANCE <> 0",
-                        param : ['CODE:string|50'],
-                        value : [this.txtCustomerCode.CODE]
-                    },
-                    sql : this.core.sql
-                }
+                id:'msgNotCustomer',showTitle:true,title:this.t("msgNotCustomer.title"),showCloseButton:true,width:'500px',height:'200px',
+                button:[{id:"btn01",caption:this.t("msgNotCustomer.btn01"),location:'after'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNotCustomer.msg")}</div>)
             }
-
-            await this.grdListe.dataRefresh(tmpSource)
+            await dialog(tmpConfObj);
         }
-        let tmpBalance = this.grdListe.data.datatable.sum("BALANCE",2)
-
-        this.txtTotalBalance.setState({value:tmpBalance})
-      
+           
     }
     render()
     {
@@ -202,7 +204,7 @@ export default class customerBalanceReport extends React.PureComponent
                                         if(data.length > 0)
                                         {
                                             this.txtCustomerCode.setState({value:data[0].TITLE})
-                                            this.txtCustomerCode.CODE = data[0].CODE
+                                            this.txtCustomerCode.GUID = data[0].GUID
                                         }
                                     }
                                 }).bind(this)}
@@ -220,7 +222,7 @@ export default class customerBalanceReport extends React.PureComponent
                                                     if(data.length > 0)
                                                     {
                                                         this.txtCustomerCode.setState({value:data[0].TITLE})
-                                                        this.txtCustomerCode.CODE = data[0].CODE
+                                                        this.txtCustomerCode.GUID = data[0].GUID
                                                     }
                                                 }
                                             }
@@ -231,7 +233,7 @@ export default class customerBalanceReport extends React.PureComponent
                                             onClick:()=>
                                             {
                                                 this.txtCustomerCode.setState({value:''})
-                                                this.txtCustomerCode.CODE =''
+                                                this.txtCustomerCode.GUID = ''
                                             }
                                         },
                                     ]
@@ -293,7 +295,7 @@ export default class customerBalanceReport extends React.PureComponent
                             />
                         </div>
                         <div className="col-3">
-                        <NdCheckBox id="chkZeroBalance" parent={this} text={this.t("chkZeroBalance")}  value={false} ></NdCheckBox>
+
                         </div>
                         <div className="col-3">
                             
@@ -318,11 +320,8 @@ export default class customerBalanceReport extends React.PureComponent
                             >                            
                                 <Paging defaultPageSize={20} />
                                 <Pager visible={true} allowedPageSizes={[5,10,20,50]} showPageSizeSelector={true} />
-                                <Export fileName={this.lang.t("menu.cri_04_002")} enabled={true} allowExportSelectedData={true} />
-                                <Column dataField="TITLE" caption={this.t("grdListe.clmName")} visible={true}/> 
-                                <Column dataField="CODE" caption={this.t("grdListe.clmCode")} visible={true} /> 
-                                <Column dataField="BALANCE" caption={this.t("grdListe.clmBalance")} format={{ style: "currency", currency: "EUR",precision: 2}} visible={true} defaultSortOrder="desc"/> 
-                                <Column dataField="UPDATE_DATE" caption={this.t("grdListe.clmUpdate")} visible={true} dataType="date" 
+                                <Export fileName={this.lang.t("menu.cri_04_001")} enabled={true} allowExportSelectedData={true} />
+                                <Column dataField="DOC_DATE" caption={this.t("grdListe.clmDocDate")} visible={true} dataType="date" 
                                 editorOptions={{value:null}}
                                 cellRender={(e) => 
                                 {
@@ -333,6 +332,10 @@ export default class customerBalanceReport extends React.PureComponent
                                     
                                     return
                                 }}/>
+                                <Column dataField="TYPE_NAME" caption={this.t("grdListe.clmTypeName")} visible={true}/> 
+                                <Column dataField="REF" caption={this.t("grdListe.clmRef")} visible={true} /> 
+                                <Column dataField="REF_NO" caption={this.t("grdListe.clmRefNo")} visible={true} /> 
+                                <Column dataField="AMOUNT" caption={this.t("grdListe.clmAmount")} format={{ style: "currency", currency: "EUR",precision: 2}} visible={true}/> 
                             </NdGrid>
                         </div>
                     </div>
