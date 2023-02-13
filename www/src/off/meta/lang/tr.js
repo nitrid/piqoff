@@ -157,7 +157,9 @@ export const langTr =
         cri_02_003: "Grup Listesi",
         cri_03_001: "Toplu Cari Ekleme",
         cri_04_001 : "Cari Ekstre Raporu",
+        cri_04_002 : 'Cari Bakiye Raporu',
         cri_04_003 : "Müşteri Puanı Raporu",
+        cri_04_004 : "Cari Bakiyeli Ekstre Raporu",
         ftr: "Fatura",
         ftr_01: "Listeler",
         ftr_02: "Evraklar",
@@ -3208,6 +3210,28 @@ export const langTr =
             chkDigit : "EAN Digit"
         },
         btnGet : "Kaydet",
+    },
+    cri_04_001 : // "Cari Bakiye Raporu"
+    {
+        txtCustomerCode : "Cari",
+        btnGet :"Getir",
+        grdListe : 
+        {
+            clmDocDate: "Tarih",
+            clmTypeName : "Evrak Tipi",           
+            clmRef : "Evrak Seri",
+            clmRefNo : "Evrak Sıra",
+            clmAmount : "Tutar",
+        },
+        txtTotalBalance : "Bakiye",
+        pg_txtCustomerCode : 
+        {
+            title : "Cari Seçimi",
+            clmCode :  "CARİ KODU",
+            clmTitle : "CARİ ADI",
+            clmTypeName : "TİPİ",
+            clmGenusName : "CİNSİ"
+        },
     },
     cri_04_002 : // "Cari Bakiye Raporu"
     {

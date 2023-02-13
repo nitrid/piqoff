@@ -290,12 +290,18 @@ export const menu = (e) =>
                         {
                             id: 'cri_04_001',
                             text: e.t('menuOff.cri_04_001'),//'Cari Ekstre Raporu',
-                            path: 'customers/report/customerBalanceReport'
+                            path: 'customers/report/customerExtreReport'
                         },
                         {
                             id: 'cri_04_002',
-                            text: e.t('menuOff.fns_04_002'),//'Cari Bakiye Bakiye Raporu',
+                            text: e.t('menuOff.cri_04_002'),//'Cari Bakiye Bakiye Raporu',
                             path: 'customers/report/customerBalanceReport'
+                        },
+                        // Cari Bakiyeli Extre Raporu
+                        {
+                            id: 'cri_04_004',
+                            text: e.t('menuOff.cri_04_004'),
+                            path: 'construction.js',
                         },
                         //Müşteri Puan Raporu
                         {
@@ -303,6 +309,7 @@ export const menu = (e) =>
                             text: e.t('menuOff.cri_04_003'),
                             path: 'pos/report/customerPointReport'
                         },
+                        
                     ]
                 }
             ]
@@ -905,12 +912,12 @@ export const menu = (e) =>
                         {
                             id: 'fns_04_001',
                             text: e.t('menuOff.fns_04_001'),//'Banka Ekstre Raporu',
-                            path: 'finance/lists/paymentList'
+                            path: 'construction.js',
                         },
                         {
                             id: 'fns_04_002',
-                            text: e.t('menuOff.fns_04_002'),//'Cari Bakiye Bakiye Raporu',
-                            path: 'construction.js',
+                            text: e.t('menuOff.cri_04_002'),//'Cari Bakiye Bakiye Raporu',
+                            path: 'customers/report/customerBalanceReport'
                         },
                     ]
                 }
