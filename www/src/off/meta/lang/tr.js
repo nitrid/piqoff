@@ -3221,7 +3221,9 @@ export const langTr =
             clmTypeName : "Evrak Tipi",           
             clmRef : "Evrak Seri",
             clmRefNo : "Evrak Sıra",
-            clmAmount : "Tutar",
+            clmDebit : "Borç",
+            clmReceive : "Alacak",
+            clmBalance : "Bakiye",
         },
         txtTotalBalance : "Bakiye",
         pg_txtCustomerCode : 
