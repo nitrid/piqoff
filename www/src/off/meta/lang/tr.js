@@ -3240,7 +3240,8 @@ export const langTr =
             clmCode :  "CARİ KODU",
             clmTitle : "CARİ ADI",
             clmTypeName : "TİPİ",
-            clmGenusName : "CİNSİ"
+            clmGenusName : "CİNSİ",
+            clmBalance : "BAKIYE",
         },
         msgNotCustomer:
         {
@@ -3269,7 +3270,8 @@ export const langTr =
             clmCode :  "CARİ KODU",
             clmTitle : "CARİ ADI",
             clmTypeName : "TİPİ",
-            clmGenusName : "CİNSİ"
+            clmGenusName : "CİNSİ",
+            clmBalance : "BAKIYE",
         },
     },
     cri_04_003 : // "Müşteri Puanı Raporu"

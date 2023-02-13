@@ -3239,7 +3239,8 @@ export const langFr =
             clmCode :  "Code Client",
             clmTitle : "Nom Fournisseur",
             clmTypeName : "Type",
-            clmGenusName : "Genre"
+            clmGenusName : "Genre",
+            clmBalance : "Bakiye",   // BAK
         },
         msgNotCustomer:
         {
@@ -3268,7 +3269,8 @@ export const langFr =
             clmCode :  "Code Client",
             clmTitle : "Nom Fournisseur",
             clmTypeName : "Type",
-            clmGenusName : "Genre"
+            clmGenusName : "Genre",
+            clmBalance : "Bakiye",   // BAK
         },
     },
     cri_04_003 : // "Müşteri Puanı Raporu"

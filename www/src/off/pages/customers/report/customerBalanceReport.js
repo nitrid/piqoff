@@ -254,7 +254,7 @@ export default class customerBalanceReport extends React.PureComponent
                                     {
                                         select:
                                         {
-                                            query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)",
+                                            query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME],ISNULL((SELECT BALANCE FROM ACCOUNT_BALANCE WHERE ACCOUNT_GUID = CUSTOMER_VW_01.GUID),0) AS BALANCE FROM CUSTOMER_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)",
                                             param : ['VAL:string|50']
                                         },
                                         sql:this.core.sql
@@ -276,7 +276,7 @@ export default class customerBalanceReport extends React.PureComponent
                                     <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmTitle")} width={500} defaultSortOrder="asc" />
                                     <Column dataField="TYPE_NAME" caption={this.t("pg_txtCustomerCode.clmTypeName")} width={150} />
                                     <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150} />
-                                    
+                                    <Column dataField="BALANCE" caption={this.t("pg_txtCustomerCode.clmBalance")} format={{ style: "currency", currency: "EUR",precision: 2}} visible={true} defaultSortOrder="desc"/> 
                                 </NdPopGrid>
                                 </Item> 
                             </Form>
@@ -307,7 +307,7 @@ export default class customerBalanceReport extends React.PureComponent
                             <NdGrid id="grdListe" parent={this} 
                             selection={{mode:"multiple"}} 
                             showBorders={true}
-                            filterRow={{visible:true}} 
+                            filterRow={{visible:false}} 
                             headerFilter={{visible:true}}
                             height={'690'} 
                             width={'100%'}

@@ -6,7 +6,7 @@ import Toolbar,{Item} from 'devextreme-react/toolbar';
 import Form, { Label,EmptyItem } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 
-import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export, Summary, TotalItem} from '../../../../core/react/devex/grid.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js'
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
@@ -279,7 +279,7 @@ export default class customerBalanceReport extends React.PureComponent
                                         {
                                             select:
                                             {
-                                                query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)",
+                                                query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME],ISNULL((SELECT BALANCE FROM ACCOUNT_BALANCE WHERE ACCOUNT_GUID = CUSTOMER_VW_01.GUID),0) AS BALANCE FROM CUSTOMER_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)",
                                                 param : ['VAL:string|50']
                                             },
                                             sql:this.core.sql
@@ -301,7 +301,7 @@ export default class customerBalanceReport extends React.PureComponent
                                         <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmTitle")} width={500} defaultSortOrder="asc" />
                                         <Column dataField="TYPE_NAME" caption={this.t("pg_txtCustomerCode.clmTypeName")} width={150} />
                                         <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150} />
-                                        
+                                        <Column dataField="BALANCE" caption={this.t("pg_txtCustomerCode.clmBalance")} format={{ style: "currency", currency: "EUR",precision: 2}} visible={true} defaultSortOrder="desc"/> 
                                     </NdPopGrid>
                                 </Item> 
                                 <Item>
@@ -363,7 +363,17 @@ export default class customerBalanceReport extends React.PureComponent
                                 <Column dataField="REF_NO" caption={this.t("grdListe.clmRefNo")} visible={true} width={80}/> 
                                 <Column dataField="DEBIT" caption={this.t("grdListe.clmDebit")} format={{ style: "currency", currency: "EUR",precision: 2}} visible={true}/> 
                                 <Column dataField="RECEIVE" caption={this.t("grdListe.clmReceive")} format={{ style: "currency", currency: "EUR",precision: 2}} visible={true}/> 
-                                <Column dataField="BALANCE" caption={this.t("grdListe.clmBalance")} format={{ style: "currency", currency: "EUR",precision: 2}} visible={true}/> 
+                                <Column dataField="BALANCE" caption={this.t("grdListe.clmBalance")} format={{ style: "currency", currency: "EUR",precision: 2}} visible={true}/>
+                                <Summary>
+                                    <TotalItem
+                                    column="DEBIT"
+                                    summaryType="sum"
+                                    valueFormat={{ style: "currency", currency: "EUR",precision: 2}} />
+                                     <TotalItem
+                                    column="RECEIVE"
+                                    summaryType="sum"
+                                    valueFormat={{ style: "currency", currency: "EUR",precision: 2}} />
+                                </Summary> 
                             </NdGrid>
                         </div>
                     </div>
