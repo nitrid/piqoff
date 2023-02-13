@@ -282,7 +282,7 @@ export default class salesDispartch extends React.PureComponent
         this.txtQuantity.value = 1
         let tmpQuery = 
         {
-            query :"SELECT dbo.FN_PRICE_SALE_VAT_EXT(@GUID,1,GETDATE(),@CUSTOMER) AS PRICE",
+            query :"SELECT dbo.FN_PRICE_SALE_VAT_EXT(@GUID,1,GETDATE(),@CUSTOMER,NULL) AS PRICE",
             param : ['GUID:string|50','CUSTOMER:string|50'],
             value : [this.barcode.guid,this.docObj.dt()[0].INPUT]
         }

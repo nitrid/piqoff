@@ -157,7 +157,9 @@ export const langFr =
         cri_02_003: "Liste Catégorie ",
         cri_03_001: "Ajouter Multi Client",
         cri_04_001 : "Rapport Relevé Fournisseur", 
+        cri_04_002 : 'Cari Bakiye Raporu', // BAK
         cri_04_003 : "Rapport point fidelité client",
+        cri_04_004 : "Cari Bakiyeli Ekstre Raporu", // BAK
         ftr: "Facture ",
         ftr_01: "Listes",
         ftr_02: "Document",
@@ -3207,6 +3209,140 @@ export const langFr =
             chkDigit : "EAN Code"    
         },  
         btnGet : "Enregistrez"    
+    },
+    cri_04_001 : // "Cari Extre Raporu"
+    {
+        txtCustomerCode : "Cari", // BAK
+        btnGet :"Getir", // BAK
+        grdListe : 
+        {
+            clmDocDate: "Tarih",  // BAK
+            clmTypeName : "Evrak Tipi",   // BAK
+            clmRef : "Evrak Seri",  // BAK
+            clmRefNo : "Evrak Sıra",  // BAK
+            clmAmount : "Tutar",  // BAK
+        },
+        txtTotalBalance : "Bakiye", // BAK
+        pg_txtCustomerCode : 
+        {
+            title : "Choix Fournisseur",
+            clmCode :  "Code Client",
+            clmTitle : "Nom Fournisseur",
+            clmTypeName : "Type",
+            clmGenusName : "Genre"
+        },
+        msgNotCustomer:
+        {
+            title: "Dikkat",  // BAK
+            btn01: "Tamam",  // BAK
+            msg: "Lütfen Cari Seçiniz..!"  // BAK
+        },
+    },
+    cri_04_002 : // "Cari Bakiye Raporu"
+    {
+        chkZeroBalance : "0 Bakiyeler Gösterilsin",   // BAK
+        txtCustomerCode : "Cari",   // BAK
+        btnCheck : "Aktif",   // BAK
+        btnGet :"Rechercher",
+        grdListe : 
+        {
+            clmCode: "Kodu",  //BAK
+            clmName : "Adı",             //BAK
+            clmBalance : "Bakiye",  //BAK
+            clmUpdate : "Güncellenme Tarihi",  //BAK
+        },
+        txtTotalBalance : "Toplam Tutar",
+        pg_txtCustomerCode : 
+        {
+            title : "Choix Fournisseur",
+            clmCode :  "Code Client",
+            clmTitle : "Nom Fournisseur",
+            clmTypeName : "Type",
+            clmGenusName : "Genre"
+        },
+    },
+    cri_04_003 : // "Müşteri Puanı Raporu"
+    {
+        cmbCustomer :"Fournisseur",
+        btnGet :"Rechercher",
+        txtCustomerCode : "Sélection Document",
+        txtCustomerName : "Nom fournisseur",
+        txtAmount : "Total Points", 
+        pg_txtCustomerCode : 
+        {
+            title : "Choix Fournisseur",
+            clmCode :  "Code Client",
+            clmTitle : "Nom Fournisseur",
+            clmTypeName : "Type",
+            clmGenusName : "Genre"
+        },
+        grdCustomerPointReport: 
+        {
+            clmCode: "Code",
+            clmTitle: "Nom",
+            clmPoint: "Points",
+            clmLdate : "Dernière Date MAJ",
+            clmEur : "EURO"
+        },
+        popPointDetail : 
+        {
+            title: "Détail de point"
+        },
+        grdPointDetail : 
+        {
+            clmDate : "Date",
+            clmPoint : "Point",
+            clmPointType : "Type",
+            clmDescription :"Motif",
+            clmPosId :"Numéro de ticket",
+        },
+        grdSaleTicketItems :
+        {
+            clmBarcode : "Code barre",
+            clmName : "Nom produit ",
+            clmQuantity : "Quantité",
+            clmPrice : "Prix",
+            clmTotal : "Montant"
+        },
+        grdSaleTicketPays : 
+        {
+            clmPayName : "Mode de paiement", 
+            clmTotal : "Total",
+        },
+        popDetail : 
+        {
+            title : "Détail Ticket"
+        },
+        TicketId :"Ticket No", 
+        popLastTotal : 
+        {
+            title : "Règlement"
+        },
+        trDeatil: "T.R Détail", 
+        lineDelete :"Ligne annulé", 
+        cancel : "Abandonne", 
+        btnAddpoint : "Entrée et Sortie Point",     
+        popPointEntry :     
+        {    
+            title : "Entrée et Sortie Point"     
+        },    
+        txtPoint : "Point",     
+        txtPointAmount : "Equivalent Somme",     
+        cmbPointType : "Type de Saisie",     
+        cmbTypeData :    
+        {     
+            in : "Entrée Point",     
+            out : "Sortie Point"     
+        },     
+        txtDescription : "Information",
+        msgDescription:
+        {
+            title: "Attention",  
+            btn01: "OK",   
+            msg: "Veuillez Saisir au moins 15 Caractères.."  
+        },
+        btnAdd : "Ajoute", 
+        descriptionPlace : "Veuillez Saisir au moins 15 Caractères.."
     },
     ftr_01_001 : // "Alış Fatura Listesi"
     {
@@ -14708,89 +14844,6 @@ export const langFr =
     pos_02_003 : // "Pos Satış Raporu"
     {
         chkRowTotal : "Totaux des lignes." 
-    },
-    cri_04_003 : // "Müşteri Puanı Raporu"
-    {
-        cmbCustomer :"Fournisseur",
-        btnGet :"Rechercher",
-        txtCustomerCode : "Sélection Document",
-        txtCustomerName : "Nom fournisseur",
-        txtAmount : "Total Points", 
-        pg_txtCustomerCode : 
-        {
-            title : "Choix Fournisseur",
-            clmCode :  "Code Client",
-            clmTitle : "Nom Fournisseur",
-            clmTypeName : "Type",
-            clmGenusName : "Genre"
-        },
-        grdCustomerPointReport: 
-        {
-            clmCode: "Code",
-            clmTitle: "Nom",
-            clmPoint: "Points",
-            clmLdate : "Dernière Date MAJ",
-            clmEur : "EURO"
-        },
-        popPointDetail : 
-        {
-            title: "Détail de point"
-        },
-        grdPointDetail : 
-        {
-            clmDate : "Date",
-            clmPoint : "Point",
-            clmPointType : "Type",
-            clmDescription :"Motif",
-            clmPosId :"Numéro de ticket",
-        },
-        grdSaleTicketItems :
-        {
-            clmBarcode : "Code barre",
-            clmName : "Nom produit ",
-            clmQuantity : "Quantité",
-            clmPrice : "Prix",
-            clmTotal : "Montant"
-        },
-        grdSaleTicketPays : 
-        {
-            clmPayName : "Mode de paiement", 
-            clmTotal : "Total",
-        },
-        popDetail : 
-        {
-            title : "Détail Ticket"
-        },
-        TicketId :"Ticket No", 
-        popLastTotal : 
-        {
-            title : "Règlement"
-        },
-        trDeatil: "T.R Détail", 
-        lineDelete :"Ligne annulé", 
-        cancel : "Abandonne", 
-        btnAddpoint : "Entrée et Sortie Point",     
-        popPointEntry :     
-        {    
-            title : "Entrée et Sortie Point"     
-        },    
-        txtPoint : "Point",     
-        txtPointAmount : "Equivalent Somme",     
-        cmbPointType : "Type de Saisie",     
-        cmbTypeData :    
-        {     
-            in : "Entrée Point",     
-            out : "Sortie Point"     
-        },     
-        txtDescription : "Information",
-        msgDescription:
-        {
-            title: "Attention",  
-            btn01: "OK",   
-            msg: "Veuillez Saisir au moins 15 Caractères.."  
-        },
-        btnAdd : "Ajoute", 
-        descriptionPlace : "Veuillez Saisir au moins 15 Caractères.."
     },
     set_02_006 : // "Destek Talebi Oluştur"
     {

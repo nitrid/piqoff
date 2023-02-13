@@ -45,7 +45,7 @@ export default class customerBalanceReport extends React.PureComponent
         setTimeout(async () => 
         {
             this.txtCustomerCode.GUID = ''
-        }, 1000);
+        }, 500);
     }
     _columnListBox(e)
     {
@@ -124,12 +124,12 @@ export default class customerBalanceReport extends React.PureComponent
                         "DOC_DATE, " +
                         "REF, " +
                         "REF_NO, " +
-                        "(SELECT TOP 1 VALUE FROM DB_LANGUAGE WHERE TAG = (SELECT [dbo].[FN_DOC_CUSTOMER_TYPE_NAME](TYPE,DOC_TYPE,REBATE,PAY_TYPE)) AND LANG = 'TR') AS TYPE_NAME, " +
+                        "(SELECT TOP 1 VALUE FROM DB_LANGUAGE WHERE TAG = (SELECT [dbo].[FN_DOC_CUSTOMER_TYPE_NAME](TYPE,DOC_TYPE,REBATE,PAY_TYPE)) AND LANG = @LANG) AS TYPE_NAME, " +
                         "(SELECT TOP 1 BALANCE FROM ACCOUNT_BALANCE WHERE ACCOUNT_GUID = @CUSTOMER) AS BALANCE, " +
                         "AMOUNT " +
                         "FROM DOC_CUSTOMER_VW_01 WHERE OUTPUT = @CUSTOMER OR INPUT = @CUSTOMER ORDER BY DOC_DATE DESC ",
-                        param : ['CUSTOMER:string|50'],
-                        value : [this.txtCustomerCode.GUID]
+                        param : ['CUSTOMER:string|50','LANG:string|10'],
+                        value : [this.txtCustomerCode.GUID,localStorage.getItem('lang')]
                     },
                     sql : this.core.sql
                 }

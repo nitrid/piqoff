@@ -2063,7 +2063,7 @@ export default class salesInvoice extends React.PureComponent
                                         {
                                             let tmpQuery = 
                                             {
-                                                query :"SELECT [dbo].[FN_PRICE_SALE_VAT_EXT](@ITEM_GUID,@QUANTITY,GETDATE(),@CUSTOMER_GUID) AS PRICE",
+                                                query :"SELECT [dbo].[FN_PRICE_SALE_VAT_EXT](@ITEM_GUID,@QUANTITY,GETDATE(),@CUSTOMER_GUID,NULL) AS PRICE",
                                                 param : ['ITEM_GUID:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
                                                 value : [e.key.ITEM,this.docObj.dt()[0].INPUT,e.data.QUANTITY]
                                             }
