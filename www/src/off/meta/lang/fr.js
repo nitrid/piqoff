@@ -3216,11 +3216,13 @@ export const langFr =
         btnGet :"Getir", // BAK
         grdListe : 
         {
-            clmDocDate: "Tarih",  // BAK
-            clmTypeName : "Evrak Tipi",   // BAK
-            clmRef : "Evrak Seri",  // BAK
-            clmRefNo : "Evrak Sıra",  // BAK
-            clmAmount : "Tutar",  // BAK
+            clmDocDate: "Tarih",   // BAK
+            clmTypeName : "Evrak Tipi",              // BAK
+            clmRef : "Evrak Seri",   // BAK
+            clmRefNo : "Evrak Sıra",   // BAK
+            clmDebit : "Borç",   // BAK
+            clmReceive : "Alacak",   // BAK
+            clmBalance : "Bakiye",   // BAK
         },
         txtTotalBalance : "Bakiye", // BAK
         pg_txtCustomerCode : 
