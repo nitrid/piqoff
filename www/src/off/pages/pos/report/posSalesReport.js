@@ -14,7 +14,6 @@ import NdPivot,{FieldChooser,Export} from '../../../../core/react/devex/pivot.js
 import NdButton from '../../../../core/react/devex/button.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
 
-
 export default class posSalesReport extends React.PureComponent
 {
     constructor(props)
@@ -265,48 +264,48 @@ export default class posSalesReport extends React.PureComponent
                             </NdPivot>
                         </div>
                     </div>
-                        {/* Açık Fişler PopUp */}
-                        <NdPopUp parent={this} id={"popOpenTike"} 
-                            visible={false}
-                            showCloseButton={true}
-                            showTitle={true}
-                            title={this.lang.t("popOpenTike.title")}
-                            container={"#root"} 
-                            width={'900'}
-                            height={'500'}
-                            position={{of:'#root'}}
-                            >
-                            <Form colCount={1} height={'fit-content'}>
-                                <Item>
-                                <NdGrid parent={this} id={"grdOpenTike"} 
-                                        showBorders={true} 
-                                        columnsAutoWidth={true} 
-                                        allowColumnReordering={true} 
-                                        allowColumnResizing={true} 
-                                        filterRow={{visible:true}}
-                                        height={350} 
-                                        width={'100%'}
-                                        dbApply={false}
-                                        onRowDblClick={async(e)=>
-                                        {
-                                            this.btnGetDetail(e.data.GUID)
-                                            this.setState({ticketId:e.data.TICKET_ID})
-                                        }}
-                                        onRowRemoved={async (e)=>{
-                                        }}
-                                        >
-                                            <Scrolling mode="standart" />
-                                            <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
-                                            <Column dataField="CUSER_NAME" caption={this.lang.t("grdOpenTike.clmUser")} width={110}  headerFilter={{visible:true}}/>
-                                            <Column dataField="DEVICE" caption={this.lang.t("grdOpenTike.clmDevice")} width={60}  headerFilter={{visible:true}}/>
-                                            <Column dataField="DATE" caption={this.lang.t("grdOpenTike.clmDate")} width={90} allowEditing={false} />
-                                            <Column dataField="TICKET_ID" caption={this.lang.t("grdOpenTike.clmTicketId")} width={150}  headerFilter={{visible:true}}/>
-                                            <Column dataField="TOTAL" caption={this.lang.t("grdOpenTike.clmTotal")} width={100} format={{ style: "currency", currency: "EUR",precision: 2}} headerFilter={{visible:true}}/>
-                                            <Column dataField="DESCRIPTION" caption={this.lang.t("grdOpenTike.clmDescription")} width={250}  headerFilter={{visible:true}}/>
-                                    </NdGrid>
-                                </Item>
-                            </Form>
-                        </NdPopUp>
+                    {/* Açık Fişler PopUp */}
+                    <NdPopUp parent={this} id={"popOpenTike"} 
+                    visible={false}
+                    showCloseButton={true}
+                    showTitle={true}
+                    title={this.lang.t("popOpenTike.title")}
+                    container={"#root"} 
+                    width={'900'}
+                    height={'500'}
+                    position={{of:'#root'}}
+                    >
+                        <Form colCount={1} height={'fit-content'}>
+                            <Item>
+                            <NdGrid parent={this} id={"grdOpenTike"} 
+                                    showBorders={true} 
+                                    columnsAutoWidth={true} 
+                                    allowColumnReordering={true} 
+                                    allowColumnResizing={true} 
+                                    filterRow={{visible:true}}
+                                    height={350} 
+                                    width={'100%'}
+                                    dbApply={false}
+                                    onRowDblClick={async(e)=>
+                                    {
+                                        this.btnGetDetail(e.data.GUID)
+                                        this.setState({ticketId:e.data.TICKET_ID})
+                                    }}
+                                    onRowRemoved={async (e)=>{
+                                    }}
+                                    >
+                                        <Scrolling mode="standart" />
+                                        <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
+                                        <Column dataField="CUSER_NAME" caption={this.lang.t("grdOpenTike.clmUser")} width={110}  headerFilter={{visible:true}}/>
+                                        <Column dataField="DEVICE" caption={this.lang.t("grdOpenTike.clmDevice")} width={60}  headerFilter={{visible:true}}/>
+                                        <Column dataField="DATE" caption={this.lang.t("grdOpenTike.clmDate")} width={90} allowEditing={false} />
+                                        <Column dataField="TICKET_ID" caption={this.lang.t("grdOpenTike.clmTicketId")} width={150}  headerFilter={{visible:true}}/>
+                                        <Column dataField="TOTAL" caption={this.lang.t("grdOpenTike.clmTotal")} width={100} format={{ style: "currency", currency: "EUR",precision: 2}} headerFilter={{visible:true}}/>
+                                        <Column dataField="DESCRIPTION" caption={this.lang.t("grdOpenTike.clmDescription")} width={250}  headerFilter={{visible:true}}/>
+                                </NdGrid>
+                            </Item>
+                        </Form>
+                    </NdPopUp>
                 </ScrollView>
             </div>
         )

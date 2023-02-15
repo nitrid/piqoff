@@ -13641,7 +13641,13 @@ export const langTr =
             clmTicketId : "Fiş No",
             clmTotal : "Tutar",
             clmDescription :"Açıklama",
-        }
+        },
+        popDesign : 
+        {
+            title: "Dizayn seçimi",
+            design : "Dizayn",
+            lang : "Evrak Dili"
+        },
     },
     pos_02_002 : // "Müşteri Puanı Raporu"
     {

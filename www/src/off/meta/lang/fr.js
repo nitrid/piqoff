@@ -13649,7 +13649,13 @@ export const langFr =
             clmTicketId : "Ticket No",
             clmTotal : "Total",
             clmDescription :"Motif",
-        }
+        },
+        popDesign : 
+        {
+            title: "Choix du Design",
+            design : "Design" ,
+            lang : "Langue Document" 
+        },
     },
     pos_02_002 : // "Müşteri Puanı Raporu"
     {

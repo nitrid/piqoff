@@ -121,15 +121,34 @@ export default class promotionList extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT * FROM PROMO_COND_APP_VW_01 WHERE ((CODE LIKE '%' + @CODE + '%') OR (COND_ITEM_CODE LIKE '%' + @CODE + '%') OR " + 
+                    query : "SELECT " +
+                            "CODE AS CODE," +
+                            "MAX(NAME) AS NAME," +
+                            "MAX(START_DATE) AS START_DATE," +
+                            "MAX(FINISH_DATE) AS FINISH_DATE," +
+                            "MAX(COND_TYPE_NAME) AS COND_TYPE_NAME," +
+                            "MAX(COND_ITEM_CODE) AS COND_ITEM_CODE," +
+                            "MAX(COND_ITEM_NAME) AS COND_ITEM_NAME," +
+                            "MAX(COND_QUANTITY) AS COND_QUANTITY," +
+                            "MAX(COND_AMOUNT) AS COND_AMOUNT," +
+                            "MAX(APP_TYPE_NAME) AS APP_TYPE_NAME," +
+                            "MAX(APP_ITEM_CODE) AS APP_ITEM_CODE," +
+                            "MAX(APP_ITEM_NAME) AS APP_ITEM_NAME," +
+                            "MAX(APP_QUANTITY) AS APP_QUANTITY," +
+                            "MAX(APP_AMOUNT) AS APP_AMOUNT, " +
+                            "CASE WHEN MAX(START_DATE) <= GETDATE() AND MAX(FINISH_DATE) >= GETDATE() THEN 1 ELSE 0 END AS ACTIVE " +
+                            "FROM PROMO_COND_APP_VW_01 WHERE ((CODE LIKE '%' + @CODE + '%') OR (COND_ITEM_CODE LIKE '%' + @CODE + '%') OR " + 
                             "(COND_BARCODE LIKE '%' + @CODE + '%') OR (APP_ITEM_CODE LIKE '%' + @CODE + '%') OR (APP_BARCODE LIKE '%' + @CODE + '%') OR (@CODE = '')) AND " + 
-                            "((NAME LIKE '%' + @NAME + '%') OR (COND_ITEM_NAME LIKE '%' + @NAME + '%') OR (APP_ITEM_NAME LIKE '%' + @NAME + '%') OR (@NAME = '')) AND ((START_DATE >= @START_DATE) OR (@START_DATE = '19700101')) AND ((FINISH_DATE <= @FINISH_DATE) OR (@FINISH_DATE = '19700101'))",
+                            "((NAME LIKE '%' + @NAME + '%') OR (COND_ITEM_NAME LIKE '%' + @NAME + '%') OR (APP_ITEM_NAME LIKE '%' + @NAME + '%') OR (@NAME = '')) AND " + 
+                            "((START_DATE >= @START_DATE) OR (@START_DATE = '19700101')) AND ((FINISH_DATE <= @FINISH_DATE) OR (@FINISH_DATE = '19700101')) " +
+                            "GROUP BY CODE",
                     param : ['CODE:string|25','NAME:string|250','START_DATE:date','FINISH_DATE:date'],
                     value : [this.txtCode.value,this.txtName.value,this.dtStartDate.value,this.dtFinishDate.value]
                 },
                 sql : this.core.sql
             }
         }
+        
         App.instance.setState({isExecute:true})
         await this.grdListe.dataRefresh(tmpSource)
         App.instance.setState({isExecute:false})
@@ -209,12 +228,7 @@ export default class promotionList extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-9">
-                            <Form colCount={6} id={"frmChkBox" + this.tabIndex}>
-                                <Item>
-                                    <Label text={this.t("chkActive")} alignment="right" />
-                                    <NdCheckBox id="chkActive" parent={this} defaultValue={true}/>
-                                </Item>
-                            </Form>
+                            
                         </div>
                         <div className="col-3">
                             <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnGetirClick}></NdButton>
@@ -240,26 +254,41 @@ export default class promotionList extends React.PureComponent
                                     path: 'promotion/cards/promotionCard',
                                     pagePrm:{CODE:e.data.CODE}
                                 })
+                            }}
+                            onRowPrepared={(e)=>
+                            {
+                                if(e.rowType == "data")
+                                {
+                                    if(e.data.ACTIVE == 1)
+                                    {
+                                        e.rowElement.style.backgroundColor = "#00cec9";
+                                    }
+                                    else
+                                    {
+                                        e.rowElement.style.backgroundColor = "white";
+                                    }
+                                }
                             }}>
                                 <GroupPanel visible={true} allowColumnDragging={false}/>
                                 <Paging defaultPageSize={15} />
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
-                                <Column dataField="CODE" caption={this.t("grdListe.clmCode")} visible={true} groupIndex={0}/> 
+                                <Column dataField="ACTIVE" caption={this.t("grdListe.clmCode")} visible={false} defaultSortOrder="desc"/> 
+                                <Column dataField="CODE" caption={this.t("grdListe.clmCode")} visible={true}/> 
                                 <Column dataField="NAME" caption={this.t("grdListe.clmName")} visible={true}/> 
                                 <Column dataField="START_DATE" caption={this.t("grdListe.clmStartDate")} visible={true} dataType="date" /> 
                                 <Column dataField="FINISH_DATE" caption={this.t("grdListe.clmFinishDate")} visible={true} dataType="date" /> 
-                                <Column dataField="COND_TYPE_NAME" caption={this.t("grdListe.clmCondTypeName")} visible={true} groupIndex={1}/> 
+                                <Column dataField="COND_TYPE_NAME" caption={this.t("grdListe.clmCondTypeName")} visible={true}/> 
                                 <Column dataField="COND_ITEM_CODE" caption={this.t("grdListe.clmCondItemCode")} visible={true}/> 
                                 <Column dataField="COND_ITEM_NAME" caption={this.t("grdListe.clmCondItemName")} visible={true}/> 
-                                <Column dataField="COND_BARCODE" caption={this.t("grdListe.clmCondBarcode")} visible={true}/> 
-                                <Column dataField="COND_QUANTITY" caption={this.t("grdListe.clmCondQuantity")} visible={false}/> 
-                                <Column dataField="COND_AMOUNT" caption={this.t("grdListe.clmCondAmount")} visible={false}/> 
-                                <Column dataField="APP_TYPE_NAME" caption={this.t("grdListe.clmAppTypeName")} visible={true} groupIndex={2}/> 
+                                <Column dataField="COND_BARCODE" caption={this.t("grdListe.clmCondBarcode")} visible={false}/> 
+                                <Column dataField="COND_QUANTITY" caption={this.t("grdListe.clmCondQuantity")} visible={true}/> 
+                                <Column dataField="COND_AMOUNT" caption={this.t("grdListe.clmCondAmount")} visible={true}/> 
+                                <Column dataField="APP_TYPE_NAME" caption={this.t("grdListe.clmAppTypeName")} visible={true}/> 
                                 <Column dataField="APP_ITEM_CODE" caption={this.t("grdListe.clmAppItemCode")} visible={true}/> 
                                 <Column dataField="APP_ITEM_NAME" caption={this.t("grdListe.clmAppItemName")} visible={true}/> 
-                                <Column dataField="APP_BARCODE" caption={this.t("grdListe.clmAppBarcode")} visible={true}/> 
-                                <Column dataField="APP_QUANTITY" caption={this.t("grdListe.clmAppQuantity")} visible={false}/> 
-                                <Column dataField="APP_AMOUNT" caption={this.t("grdListe.clmAppAmount")} visible={false}/> 
+                                <Column dataField="APP_BARCODE" caption={this.t("grdListe.clmAppBarcode")} visible={false}/> 
+                                <Column dataField="APP_QUANTITY" caption={this.t("grdListe.clmAppQuantity")} visible={true}/> 
+                                <Column dataField="APP_AMOUNT" caption={this.t("grdListe.clmAppAmount")} visible={true}/> 
                             </NdGrid>
                         </div>
                     </div>
