@@ -1588,6 +1588,18 @@ export default class itemCard extends React.PureComponent
                                                     //********************************** */
                                                 }
                                             }}
+                                            onRowUpdated={async(e)=>
+                                            {
+
+                                                if(typeof e.data.PRICE != 'undefined')
+                                                {
+                                                    e.key.VAT_EXT = (e.key.PRICE / ((this.cmbTax.value/ 100) + 1))
+                                                }
+                                                if(typeof e.data.VAT_EXT != 'undefined')
+                                                {
+                                                    e.key.PRICE = (e.key.VAT_EXT + ((e.key.VAT_EXT * this.cmbTax.value) / 100))
+                                                }
+                                            }}
                                             >
                                                 <Paging defaultPageSize={6} />
                                                 <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
@@ -1617,7 +1629,7 @@ export default class itemCard extends React.PureComponent
                                                     return
                                                 }}/>
                                                 <Column dataField="QUANTITY" caption={this.t("grdPrice.clmQuantity")}/>
-                                                <Column dataField="VAT_EXT" caption={this.t("grdPrice.clmVatExt")} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>                                                
+                                                <Column dataField="VAT_EXT" caption={this.t("grdPrice.clmVatExt")} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>                                                
                                                 <Column dataField="PRICE" caption={this.t("grdPrice.clmPrice")} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>
                                                 <Column dataField="GROSS_MARGIN" caption={this.t("grdPrice.clmGrossMargin")} dataType="string" allowEditing={false}/>
                                                 <Column dataField="NET_MARGIN" caption={this.t("grdPrice.clmNetMargin")} dataType="string" format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>

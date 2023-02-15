@@ -11861,6 +11861,7 @@ export const langTr =
         placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.",
         validDesign : "Lütfen Dizayn seçiniz.",
         validMail : "Lütfen Boş Geçmeyin.",
+        txtTotalHt : "İndirimli Tutar",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -11903,7 +11904,7 @@ export const langTr =
             clmCuser :"Kullanıcı",
             clmOffer : "Teklif No",
             clmBarcode : "Barkodu",
-            clmVatRate : "KDV %"
+            clmVatRate : "KDV %",
         },
         popDiscount : 
         {
