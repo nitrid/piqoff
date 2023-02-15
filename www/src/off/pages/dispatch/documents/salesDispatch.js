@@ -3112,12 +3112,15 @@ export default class salesDispatch extends React.PureComponent
                                     maxLength={32}
                                     onValueChanged={(async(e)=>
                                     {
-                                        if(this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].TYPE = 1)
+                                        console.log(this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value}))
+                                        if(this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].TYPE == 1)
                                         {
+                                            console.log(this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].TYPE)
                                             this.txtTotalQuantity.value = Number((this.txtUnitQuantity.value / this.txtUnitFactor.value).toFixed(3))
                                         }
                                         else
                                         {
+                                            console.log(this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].TYPE)
                                             this.txtTotalQuantity.value = Number((this.txtUnitQuantity.value * this.txtUnitFactor.value).toFixed(3))
                                         }
                                     }).bind(this)}
