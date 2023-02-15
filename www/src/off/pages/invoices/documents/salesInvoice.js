@@ -830,16 +830,8 @@ export default class salesInvoice extends React.PureComponent
                     this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].stat = 'edit'
                 }
                 this.docObj.docItems.dt().emit('onRefresh')
-                this.docObj.dt()[0].INTERFEL = 
-                this.docObj.dt()[0].AMOUNT = this.docObj.docItems.dt().sum("AMOUNT",2)
-                this.docObj.dt()[0].DISCOUNT = this.docObj.docItems.dt().sum("DISCOUNT",2)
-                this.docObj.dt()[0].VAT = parseFloat(this.docObj.docItems.dt().sum("VAT",2)) +  parseFloat((this.docObj.dt()[0].INTERFEL * 20 /100).toFixed(2))
-                this.docObj.dt()[0].TOTALHT = parseFloat(this.docObj.docItems.dt().sum("TOTALHT",2))
-                this.docObj.dt()[0].TOTAL = parseFloat(this.docObj.docItems.dt().sum("TOTALHT",2)) + parseFloat(this.docObj.docItems.dt().sum("VAT",2)) + this.docObj.dt()[0].INTERFEL
-
-                this.docObj.docCustomer.dt()[0].AMOUNT = this.docObj.dt()[0].TOTAL
-                this._calculateTotalMargin()
-                this._calculateMargin()
+               
+                this._calculateTotal()
                 App.instance.setState({isExecute:false})
                 setTimeout(() => {
                     this.btnSave.setState({disabled:false});
@@ -1416,9 +1408,8 @@ export default class salesInvoice extends React.PureComponent
         {
             let tmpQuery = 
             {
-                query :"SELECT COUNTRY,ISNULL((SELECT TOP 1 FR FROM INTERFEL_TABLE_VW_01),0) AS FR, " +
-                "ISNULL((SELECT TOP 1 NOTFR FROM INTERFEL_TABLE_VW_01),0) AS NOTFR " +
-                "FROM CUSTOMER_ADRESS WHERE CUSTOMER = @CUSTOMER AND ADRESS_NO = 0 AND DELETED = 0 ",
+                query :"SELECT FR,NOTFR,ISNULL((SELECT TOP 1 COUNTRY FROM CUSTOMER_ADRESS WHERE CUSTOMER = @CUSTOMER AND ADRESS_NO = 0 AND DELETED = 0),'') AS COUNTRY " +
+                "FROM INTERFEL_TABLE_VW_01 ",
                 param : ['CUSTOMER:string|50'],
                 value : [this.docObj.dt()[0].INPUT]
             }

@@ -216,9 +216,9 @@ export default class salesDispatch extends React.PureComponent
     {        
         this.docObj.dt()[0].AMOUNT = this.docObj.docItems.dt().sum("AMOUNT",2)
         this.docObj.dt()[0].DISCOUNT = this.docObj.docItems.dt().sum("DISCOUNT",2)
-        this.docObj.dt()[0].VAT = parseFloat(this.docObj.docItems.dt().sum("VAT",2)) +  parseFloat((this.docObj.dt()[0].INTERFEL * 20 /100).toFixed(2))
+        this.docObj.dt()[0].VAT = (parseFloat(this.docObj.docItems.dt().sum("VAT",2)) +  parseFloat((this.docObj.dt()[0].INTERFEL * 20 /100).toFixed(2))).toFixed(2)
         this.docObj.dt()[0].TOTALHT = parseFloat(this.docObj.docItems.dt().sum("TOTALHT",2))
-        this.docObj.dt()[0].TOTAL = parseFloat(this.docObj.docItems.dt().sum("TOTALHT",2)) + parseFloat(this.docObj.docItems.dt().sum("VAT",2)) + this.docObj.dt()[0].INTERFEL
+        this.docObj.dt()[0].TOTAL = (parseFloat(this.docObj.docItems.dt().sum("TOTALHT",2)) + parseFloat(this.docObj.docItems.dt().sum("VAT",2)) + this.docObj.dt()[0].INTERFEL).toFixed(2)
         this._calculateTotalMargin()
     }
     async _calculateTotalMargin()
@@ -533,7 +533,7 @@ export default class salesDispatch extends React.PureComponent
                             {
                                 let tmpQuery = 
                                 {
-                                    query: "SELECT GUID,ISNULL((SELECT NAME FROM UNIT WHERE UNIT.ID = ITEM_UNIT.ID),'') AS NAME,FACTOR FROM ITEM_UNIT WHERE DELETED = 0 AND ITEM = @ITEM ORDER BY TYPE" ,
+                                    query: "SELECT GUID,ISNULL((SELECT NAME FROM UNIT WHERE UNIT.ID = ITEM_UNIT.ID),'') AS NAME,FACTOR,TYPE FROM ITEM_UNIT WHERE DELETED = 0 AND ITEM = @ITEM ORDER BY TYPE" ,
                                     param:  ['ITEM:string|50'],
                                     value:  [e.data.ITEM]
                                 }
@@ -924,6 +924,7 @@ export default class salesDispatch extends React.PureComponent
                     tmpDocItems.QUANTITY = data[i].QUANTITY
                     tmpDocItems.VAT = data[i].VAT
                     tmpDocItems.AMOUNT = data[i].AMOUNT
+                    tmpDocItems.TOTALHT = data[i].TOTALHT
                     tmpDocItems.TOTAL = data[i].TOTAL
                     tmpDocItems.DESCRIPTION = data[i].DESCRIPTION
                     tmpDocItems.VAT_RATE = data[i].VAT_RATE
@@ -996,13 +997,13 @@ export default class salesDispatch extends React.PureComponent
                 }
             }            
         }
+        console.log(tmpInterfelHt)
         if(tmpInterfelHt != 0)
         {
             let tmpQuery = 
             {
-                query :"SELECT COUNTRY,ISNULL((SELECT TOP 1 FR FROM INTERFEL_TABLE_VW_01),0) AS FR, " +
-                "ISNULL((SELECT TOP 1 NOTFR FROM INTERFEL_TABLE_VW_01),0) AS NOTFR " +
-                "FROM CUSTOMER_ADRESS WHERE CUSTOMER = @CUSTOMER AND ADRESS_NO = 0 AND DELETED = 0 ",
+                query :"SELECT FR,NOTFR,ISNULL((SELECT TOP 1 COUNTRY FROM CUSTOMER_ADRESS WHERE CUSTOMER = @CUSTOMER AND ADRESS_NO = 0 AND DELETED = 0),'') AS COUNTRY " +
+                "FROM INTERFEL_TABLE_VW_01 ",
                 param : ['CUSTOMER:string|50'],
                 value : [this.docObj.dt()[0].INPUT]
             }
@@ -1022,7 +1023,7 @@ export default class salesDispatch extends React.PureComponent
                 this.docObj.dt()[0].DISCOUNT = this.docObj.docItems.dt().sum("DISCOUNT",2)
                 this.docObj.dt()[0].VAT = parseFloat(this.docObj.docItems.dt().sum("VAT",2)) +  parseFloat((this.docObj.dt()[0].INTERFEL * 20 /100).toFixed(2))
                 this.docObj.dt()[0].TOTALHT = this.docObj.docItems.dt().sum("TOTALHT",2)
-                this.docObj.dt()[0].TOTAL = parseFloat(this.docObj.docItems.dt().sum("TOTALHT",2)) + parseFloat(this.docObj.dt()[0].VAT) + parseFloat(this.docObj.dt()[0].INTERFEL)
+                this.docObj.dt()[0].TOTAL = (parseFloat(this.docObj.docItems.dt().sum("TOTALHT",2)) + parseFloat(this.docObj.dt()[0].VAT) + parseFloat(this.docObj.dt()[0].INTERFEL)).toFixed(2)
             }        
             this.extraCost.value = this.docObj.dt()[0].INTERFEL
         }
@@ -3090,7 +3091,8 @@ export default class salesDispatch extends React.PureComponent
                                     searchEnabled={true}
                                     onValueChanged={(async(e)=>
                                     {
-                                        // this.txtUnitFactor.setState({value:this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].FACTOR});
+                                        console.log(this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0])
+                                        this.txtUnitFactor.setState({value:this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].FACTOR});
                                         this.txtTotalQuantity.value = Number(this.txtUnitQuantity.value * this.txtUnitFactor.value);
                                     }).bind(this)}
                                     >
@@ -3110,7 +3112,14 @@ export default class salesDispatch extends React.PureComponent
                                     maxLength={32}
                                     onValueChanged={(async(e)=>
                                     {
-                                       this.txtTotalQuantity.value = Number(this.txtUnitQuantity.value * this.txtUnitFactor.value)
+                                        if(this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].TYPE = 1)
+                                        {
+                                            this.txtTotalQuantity.value = Number((this.txtUnitQuantity.value / this.txtUnitFactor.value).toFixed(3))
+                                        }
+                                        else
+                                        {
+                                            this.txtTotalQuantity.value = Number((this.txtUnitQuantity.value * this.txtUnitFactor.value).toFixed(3))
+                                        }
                                     }).bind(this)}
                                     >
                                     </NdNumberBox>
