@@ -264,6 +264,7 @@ export const langTr =
         set : "Ayarlar",
         set_01 : "Maliyet ve Ek Vergiler",
         set_01_001 : "Tax Sugar",
+        set_01_002 : "Interfel",
         set_02 : "Genel Ayarlar",
         set_02_001 : "Firma Bilgileri",
         set_02_002 : "Hakkında",
@@ -353,6 +354,7 @@ export const langTr =
         chkCaseWeighed: "Kasada Tartılsın",
         chkLineMerged: "Satış da Satırları Ayır",
         chkTicketRest: "Ticket Rest.",
+        chkInterfel : "Interfel",
         txtCostPrice: "Maliyet Fiyatı",
         txtSalePrice : "Satış Fiyatı",
         txtMinSalePrice: "Min. Satış Fiyatı",
@@ -4068,6 +4070,7 @@ export const langTr =
         validMail : "Lütfen Boş Geçmeyin.",
         getPreInvoice : "Ön Fatura Getir",
         txtTotalHt : "İndirimli Tutar",
+        extraCost : "Ek Maliyet",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -4522,6 +4525,12 @@ export const langTr =
             title : "Hizmetler",
             clmCode : "Kod",
             clmName : "Adı"
+        },
+        popExtraCost: 
+        {
+            title : "Ek Maliyetler",
+            interfel : "Interfel",
+            calculateInterfel : "Interfeli Hesapla",
         },
     },
     ftr_02_003 : // "İade Faturası"
@@ -9395,6 +9404,7 @@ export const langTr =
         txtUnitQuantity : "Birim Miktarı",
         txtTotalQuantity : "Toplam Miktar",
         txtUnitPrice: "Birim Fiyatı",
+        txtTotalHt : "İndirimli Tutar",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -9739,6 +9749,8 @@ export const langTr =
         placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.",
         validDesign : "Lütfen Dizayn seçiniz.",
         validMail : "Lütfen Boş Geçmeyin.",
+        txtTotalHt : "İndirimli Tutar",
+        extraCost : "Ek Maliyet",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -10077,6 +10089,12 @@ export const langTr =
         {
             title : "Oransal İndirim Girişi",
             btn01 : "Onayla"
+        },
+        popExtraCost: 
+        {
+            title : "Ek Maliyetler",
+            interfel : "Interfel",
+            calculateInterfel : "Interfeli Hesapla",
         },
         txtDiscountPer1 : "1. İndirim Oranı",
         txtDiscountPer2 : "2. İndirim Oranı",
@@ -13290,39 +13308,10 @@ export const langTr =
         validAccount : "Hesap Seçmelisiniz",
         validDocDate : "Tarih Seçmelisiniz",
     },
-    set_01_001 : // "Tax Sugar"
+    set_01_002 : // "Interfel"
     {
-        pg_Docs : 
-        {
-            title : "Evrak Seçimi",
-            clmDate : "TARIH",
-            clmRef : "SERİ",
-            clmRefNo : "SIRA",
-            clmDocDate : "TARIH",
-            clmInputName : "GİRİŞ",
-            clmOutputName : "ÇIKIŞ",
-        },
-        pg_txtItemsCode : 
-        {
-            title : "Stok Seçimi",
-            clmCode :  "STOK KODU",
-            clmName : "STOK ADI",
-        },
-        grdTaxSugar: 
-        {
-            clmCreateDate: "Kayıt Tarihi",
-            clmMinValue : "Min. Şeker Oranı(100ML/GR)",
-            clmMaxvalue : "Max. Şeker Oranı(100ML/GR)",
-            clmPrice : "Çarpan Fiyat"
-        },
-        popTaxSugar : 
-        {
-            title: "Şeker Oranı Ekleme",
-            btnApprove : "Ekle",
-            minValue : "Min. Şeker Oranı(100ML/GR)",
-            maxValue : "Max.  Şeker Oranı(100ML/GR)",
-            price : "Çarpan Fiyat",
-        },
+        txtFrRate : "Fransa İçi Satışda Eklenecek Oran",
+        txtNotFrRate : "Fransa Dışı Satışda Eklenecek Oran",
         msgSave:
         {
             title: "Dikkat",
@@ -13342,15 +13331,6 @@ export const langTr =
             title: "Dikkat",
             btn01: "Tamam",
             msg: "Lütfen gerekli alanları doldurunuz !"
-        },
-        validValue :"Boş Geçilemez",
-        zeroValid : "0'dan Büyük Olmalıdır",
-        btnAdd: "Yeni Değer Ekle",
-        validation:
-        {
-            clmMinValue: "Oran sıfırdan küçük olamaz !",
-            clmMaxvalue: "Oran sıfırdan küçük olamaz !",
-            clmPrice: "Fiyat sıfırdan küçük olamaz !",
         },
     },
     set_02_001 : // "Firma Bilgileri"

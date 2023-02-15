@@ -988,6 +988,7 @@ export default class itemCard extends React.PureComponent
                                         this.itemsObj.dt()[0].CODE= Math.floor(Date.now() / 1000)
                                         this.itemsObj.dt()[0].WEIGHING = tmpItem.WEIGHING
                                         this.itemsObj.dt()[0].SALE_JOIN_LINE = tmpItem.SALE_JOIN_LINE
+                                        this.itemsObj.dt()[0].INTERFEL = tmpItem.INTERFEL
                                         this.itemsObj.dt()[0].TICKET_REST = tmpItem.TICKET_REST
                                         this.itemsObj.dt()[0].SNAME = tmpItem.SNAME
                                         let tmpUnit = new unitCls();
@@ -1469,6 +1470,12 @@ export default class itemCard extends React.PureComponent
                                     <NdCheckBox id="chkTicketRest" parent={this} defaultValue={false} dt={{data:this.itemsObj.dt('ITEMS'),field:"TICKET_REST"}}
                                     param={this.param.filter({ELEMENT:'chkTicketRest',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'chkTicketRest',USERS:this.user.CODE})}/>
+                                </Item>
+                                 {/* chkInterfel */}
+                                 <Item>
+                                    <Label text={this.t("chkInterfel")} alignment="right" />
+                                    <NdCheckBox id="chkInterfel" parent={this} defaultValue={false} dt={{data:this.itemsObj.dt('ITEMS'),field:"INTERFEL"}}
+                                    />
                                 </Item>
                             </Form>
                         </div>

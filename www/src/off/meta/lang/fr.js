@@ -352,6 +352,7 @@ export const langFr =
         chkCaseWeighed: "Peser Produit en caisse",
         chkLineMerged: "Détacher les Lignes à la Caisse",
         chkTicketRest: "Ticket Rest.",
+        chkInterfel : "Interfel",
         txtCostPrice: "Prix de Revient",
         txtSalePrice : "Prix Vente",
         txtMinSalePrice: "Prix Vente Min.",
@@ -4066,6 +4067,7 @@ export const langFr =
         validDesign : "Veuillez séléctionner le design.",  
         validMail : "Veuillez ne pas laisser le champs vide.",  
         txtTotalHt : "Total HT",
+        extraCost : "Ek Maliyet",
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -4521,6 +4523,12 @@ export const langFr =
             clmCode : "Code",   
             clmName : "Nom"   
         },
+        popExtraCost: 
+        {
+            title : "Ek Maliyetler",
+            interfel : "Interfel",
+            calculateInterfel : "Interfeli Hesapla",
+        }
     },
     ftr_02_003 : // "İade Faturası"
     {
@@ -9746,6 +9754,8 @@ export const langFr =
         placeMailHtmlEditor : "Veuillez saisir votre texte .", 
         validDesign : "Veuillez sélectionner le design.",  
         validMail : "Veuillez ne pas laisser le champs vide.",  
+        txtTotalHt : "Total HT",
+        extraCost : "Ek Maliyet",  // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -10088,6 +10098,12 @@ export const langFr =
         txtDiscountPer1 : "1. Remise % ",  // BAK
         txtDiscountPer2 : "2. Remise % ",  // BAK
         txtDiscountPer3 : "3. Remise % ",  // BAK
+        popExtraCost: 
+        {
+            title : "Ek Maliyetler",  // BAK
+            interfel : "Interfel",  // BAK
+            calculateInterfel : "Interfeli Hesapla",  // BAK
+        },
     },
     irs_02_003 : // "İade İrsaliyesi"
     {

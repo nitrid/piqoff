@@ -52,6 +52,7 @@ export default class salesInvoice extends React.PureComponent
         this._calculateMargin = this._calculateMargin.bind(this)
         this._addPayment = this._addPayment.bind(this)
         this._onItemRendered = this._onItemRendered.bind(this)
+        this._calculateInterfel = this._calculateInterfel.bind(this)
 
         this.frmSalesInv = undefined;
         this.docLocked = false;        
@@ -65,7 +66,7 @@ export default class salesInvoice extends React.PureComponent
     }
     async componentDidMount()
     {
-        await this.core.util.waitUntil(0)
+        await this.core.util.waitUntil(100)
         this.init()
         if(typeof this.pagePrm != 'undefined')
         {
@@ -154,6 +155,7 @@ export default class salesInvoice extends React.PureComponent
             this.txtRefno.value = tmpData.result.recordset[0].REF_NO
             this.docObj.docCustomer.dt()[0].REF_NO = tmpData.result.recordset[0].REF_NO
         }
+        this.extraCost.value = 0
     }
     async getDoc(pGuid,pRef,pRefno)
     {
@@ -188,6 +190,7 @@ export default class salesInvoice extends React.PureComponent
             this.frmSalesInv.option('disabled',false)
         }
         this._getPayment(this.docObj.dt()[0].GUID)
+        this.extraCost.value = this.docObj.dt()[0].INTERFEL
     }
     async checkDoc(pGuid,pRef,pRefno)
     {
@@ -237,12 +240,11 @@ export default class salesInvoice extends React.PureComponent
     {
         this.docObj.dt()[0].AMOUNT = this.docObj.docItems.dt().sum("AMOUNT",2)
         this.docObj.dt()[0].DISCOUNT = this.docObj.docItems.dt().sum("DISCOUNT",2)
-        this.docObj.dt()[0].VAT = this.docObj.docItems.dt().sum("VAT",2)
-        this.docObj.dt()[0].TOTAL = this.docObj.docItems.dt().sum("TOTAL",2)
-        this.docObj.dt()[0].TOTALHT = this.docObj.docItems.dt().sum("TOTALHT",2)
+        this.docObj.dt()[0].VAT = parseFloat(this.docObj.docItems.dt().sum("VAT",2)) +  parseFloat((this.docObj.dt()[0].INTERFEL * 20 /100).toFixed(2))
+        this.docObj.dt()[0].TOTALHT = parseFloat(this.docObj.docItems.dt().sum("TOTALHT",2))
+        this.docObj.dt()[0].TOTAL = parseFloat(this.docObj.docItems.dt().sum("TOTALHT",2)) + parseFloat(this.docObj.docItems.dt().sum("VAT",2)) + this.docObj.dt()[0].INTERFEL
 
         this.docObj.docCustomer.dt()[0].AMOUNT = this.docObj.dt()[0].TOTAL
-        this.docObj.docCustomer.dt()[0].ROUND = 0
         this._calculateTotalMargin()
         this._calculateMargin()
     }
@@ -828,7 +830,16 @@ export default class salesInvoice extends React.PureComponent
                     this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].stat = 'edit'
                 }
                 this.docObj.docItems.dt().emit('onRefresh')
-                this._calculateTotal()
+                this.docObj.dt()[0].INTERFEL = 
+                this.docObj.dt()[0].AMOUNT = this.docObj.docItems.dt().sum("AMOUNT",2)
+                this.docObj.dt()[0].DISCOUNT = this.docObj.docItems.dt().sum("DISCOUNT",2)
+                this.docObj.dt()[0].VAT = parseFloat(this.docObj.docItems.dt().sum("VAT",2)) +  parseFloat((this.docObj.dt()[0].INTERFEL * 20 /100).toFixed(2))
+                this.docObj.dt()[0].TOTALHT = parseFloat(this.docObj.docItems.dt().sum("TOTALHT",2))
+                this.docObj.dt()[0].TOTAL = parseFloat(this.docObj.docItems.dt().sum("TOTALHT",2)) + parseFloat(this.docObj.docItems.dt().sum("VAT",2)) + this.docObj.dt()[0].INTERFEL
+
+                this.docObj.docCustomer.dt()[0].AMOUNT = this.docObj.dt()[0].TOTAL
+                this._calculateTotalMargin()
+                this._calculateMargin()
                 App.instance.setState({isExecute:false})
                 setTimeout(() => {
                     this.btnSave.setState({disabled:false});
@@ -1378,6 +1389,60 @@ export default class salesInvoice extends React.PureComponent
                     this.btnSave.setState({disabled:false});
                     }, 500);
             }
+        }
+    }
+    async _calculateInterfel()
+    {
+        let tmpInterfelHt = 0
+        for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
+        {
+            let tmpQuery = 
+            {
+                query :"SELECT INTERFEL FROM ITEMS_SHOP WHERE ITEM = @ITEM ",
+                param : ['ITEM:string|50'],
+                value : [this.docObj.docItems.dt()[i].ITEM]
+            }
+            let tmpData = await this.core.sql.execute(tmpQuery) 
+            if(tmpData.result.recordset.length > 0)
+            {
+                console.log(tmpData.result.recordset[0])
+                if(tmpData.result.recordset[0].INTERFEL == true)
+                {
+                    tmpInterfelHt += this.docObj.docItems.dt()[i].TOTALHT
+                }
+            }            
+        }
+        if(tmpInterfelHt != 0)
+        {
+            let tmpQuery = 
+            {
+                query :"SELECT COUNTRY,ISNULL((SELECT TOP 1 FR FROM INTERFEL_TABLE_VW_01),0) AS FR, " +
+                "ISNULL((SELECT TOP 1 NOTFR FROM INTERFEL_TABLE_VW_01),0) AS NOTFR " +
+                "FROM CUSTOMER_ADRESS WHERE CUSTOMER = @CUSTOMER AND ADRESS_NO = 0 AND DELETED = 0 ",
+                param : ['CUSTOMER:string|50'],
+                value : [this.docObj.dt()[0].INPUT]
+            }
+            let tmpData = await this.core.sql.execute(tmpQuery) 
+            if(tmpData.result.recordset.length > 0)
+            {
+                console.log(tmpData.result.recordset[0].COUNTRY)
+                if(tmpData.result.recordset[0].COUNTRY == 'FR')
+                {
+                   this.docObj.dt()[0].INTERFEL = parseFloat(((tmpInterfelHt * tmpData.result.recordset[0].FR) / 100).toFixed(2))
+                }
+                else
+                {
+                    this.docObj.dt()[0].INTERFEL =  parseFloat(((tmpInterfelHt * tmpData.result.recordset[0].NOTFR) / 100).toFixed(2))
+                }
+                this.docObj.dt()[0].AMOUNT = this.docObj.docItems.dt().sum("AMOUNT",2)
+                this.docObj.dt()[0].DISCOUNT = this.docObj.docItems.dt().sum("DISCOUNT",2)
+                this.docObj.dt()[0].VAT = parseFloat(this.docObj.docItems.dt().sum("VAT",2)) +  parseFloat((this.docObj.dt()[0].INTERFEL * 20 /100).toFixed(2))
+                this.docObj.dt()[0].TOTALHT = this.docObj.docItems.dt().sum("TOTALHT",2)
+                this.docObj.dt()[0].TOTAL = parseFloat(this.docObj.docItems.dt().sum("TOTALHT",2)) + parseFloat(this.docObj.dt()[0].VAT) + parseFloat(this.docObj.dt()[0].INTERFEL)
+        
+                this.docObj.docCustomer.dt()[0].AMOUNT = this.docObj.dt()[0].TOTAL
+            }        
+            this.extraCost.value = this.docObj.dt()[0].INTERFEL
         }
     }
     render()
@@ -2755,6 +2820,28 @@ export default class salesInvoice extends React.PureComponent
                                                 maxLength={32}
                                                 ></NdTextBox>
                                             </Item>
+                                            {/* extraCost */}
+                                            <EmptyItem colSpan={3}/>
+                                            <Item>
+                                            <Label text={this.t("extraCost")} alignment="right" />
+                                                <NdTextBox id="extraCost" parent={this} simple={true} readOnly={true}
+                                                maxLength={32}
+                                                button=
+                                                {
+                                                    [
+                                                        {
+                                                            id:'01',
+                                                            icon:'menu',
+                                                            onClick:async ()  =>
+                                                            {
+                                                                this.txtInterfel.value = this.docObj.dt()[0].INTERFEL
+                                                                this.popExtraCost.show()
+                                                            }
+                                                        },
+                                                    ]
+                                                }
+                                                ></NdTextBox>
+                                            </Item>
                                             {/* KDV */}
                                             <EmptyItem colSpan={3}/>
                                             <Item>
@@ -3196,6 +3283,36 @@ export default class salesInvoice extends React.PureComponent
                                         </div>
                                     </div>
                                 </Item>
+                            </Form>
+                        </NdPopUp>
+                    </div> 
+                    {/* ExtraCost PopUp */}
+                    <div>
+                        <NdPopUp parent={this} id={"popExtraCost"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.t("popExtraCost.title")}
+                        container={"#root"} 
+                        width={'500'}
+                        height={'200'}
+                        position={{of:'#root'}}
+                        >
+                            <Form colCount={2} height={'fit-content'}>
+                                <Item>
+                                    <Label text={this.t("popExtraCost.interfel")} alignment="right" />
+                                    <NdNumberBox id="txtInterfel" parent={this} simple={true}
+                                        maxLength={32} readOnly={true}
+                                        dt={{data:this.docObj.dt('DOC'),field:"INTERFEL"}}
+                                    ></NdNumberBox>
+                                </Item>
+                                <Item>
+                                    <NdButton text={this.t("popExtraCost.calculateInterfel")} type="normal" stylingMode="contained" width={'100%'} 
+                                    onClick={async ()=>
+                                    {       
+                                        this._calculateInterfel()
+                                    }}/>
+                            </Item>
                             </Form>
                         </NdPopUp>
                     </div> 

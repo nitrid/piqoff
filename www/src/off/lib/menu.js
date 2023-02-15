@@ -1146,6 +1146,11 @@ export const menu = (e) =>
                             id: 'set_01_001',
                             text: e.t('menuOff.set_01_001'),//'Tax Sugar Oranları',
                             path: 'setting/costandtax/taxSugar'
+                        },
+                        {
+                            id: 'set_01_002',
+                            text: e.t('menuOff.set_01_002'),//'Tax Sugar Oranları',
+                            path: 'setting/costandtax/interfel'
                         }
                     ]
                 },
