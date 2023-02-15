@@ -8,7 +8,9 @@ export default class NbButton extends NbBase
     {
         super(props)
         this.state.disabled = this.props.disabled
-        
+        this.state.style = this.props.style
+        this.state.lock = typeof this.props.lock == 'undefined' ? false : this.props.lock        
+
         this._onClick = this._onClick.bind(this);
     }
     get disabled()
@@ -18,6 +20,26 @@ export default class NbButton extends NbBase
     set disabled(e)
     {
         this.setState({disabled:e})
+    }
+    get lock()
+    {
+        return this.state.lock
+    }
+    setLock(e)
+    {
+        if(typeof e != 'undefined')
+        {
+            this.setState({style:e})
+        }
+        this.setState({lock : true})
+    }
+    setUnLock(e)
+    {
+        if(typeof e != 'undefined')
+        {
+            this.setState({style:e})
+        }
+        this.setState({lock : false})
     }
     async _onClick()
     {
@@ -77,7 +99,7 @@ export default class NbButton extends NbBase
             className={this.props.className} 
             id={this.props.id}
             disabled={this.state.disabled}
-            style={this.props.style}
+            style={this.state.style}
             onClick={this._onClick}
             >
                 {this.props.children}

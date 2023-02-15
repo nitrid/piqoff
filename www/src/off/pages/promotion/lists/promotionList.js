@@ -14,6 +14,7 @@ import NdListBox from '../../../../core/react/devex/listbox.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
+import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 
 export default class promotionList extends React.PureComponent
 {
@@ -207,14 +208,13 @@ export default class promotionList extends React.PureComponent
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
-                        <div className="col-3">
-                            
-                        </div>
-                        <div className="col-3">
-                            
-                        </div>
-                        <div className="col-3">
-                            
+                        <div className="col-9">
+                            <Form colCount={6} id={"frmChkBox" + this.tabIndex}>
+                                <Item>
+                                    <Label text={this.t("chkActive")} alignment="right" />
+                                    <NdCheckBox id="chkActive" parent={this} defaultValue={true}/>
+                                </Item>
+                            </Form>
                         </div>
                         <div className="col-3">
                             <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnGetirClick}></NdButton>
@@ -240,8 +240,8 @@ export default class promotionList extends React.PureComponent
                                     path: 'promotion/cards/promotionCard',
                                     pagePrm:{CODE:e.data.CODE}
                                 })
-                            }}>              
-                                <GroupPanel visible={true} allowColumnDragging={false}/>              
+                            }}>
+                                <GroupPanel visible={true} allowColumnDragging={false}/>
                                 <Paging defaultPageSize={15} />
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
                                 <Column dataField="CODE" caption={this.t("grdListe.clmCode")} visible={true} groupIndex={0}/> 
