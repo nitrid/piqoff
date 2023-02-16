@@ -107,11 +107,11 @@ export function print()
         ()=>
         {
             let tmpTitle = {}
-            if(data.pos[0].TYPE == 0 && data.special.type != 'Fatura')
+            if(data.special.type != 'Fatura')
             {
                 tmpTitle = {font:"b",style:"bu",align:"lt",data:"T " + "Libelle".space(38) + " " + "Qte".space(6) + " " + "Prix/u".space(7) + " " + "Prix EUR".space(8)}
             }
-            else if(data.pos[0].TYPE == 0 && data.special.type == 'Fatura')
+            else if(data.special.type == 'Fatura')
             {
                 tmpTitle = {font:"b",style:"bu",align:"lt",data:"T " + "Libelle".space(38) + " " + "Qte".space(6) + " " + "P.HT/u".space(7) + " " + "T.HT EUR".space(8)}
             }
