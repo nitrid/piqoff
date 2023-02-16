@@ -400,7 +400,7 @@ export default class customerAddressCard extends React.PureComponent
                                         {
                                             select:
                                             {
-                                                query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)",
+                                                query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
                                                 param : ['VAL:string|50']
                                             },
                                             sql:this.core.sql
@@ -513,23 +513,36 @@ export default class customerAddressCard extends React.PureComponent
                                     data={{source:{select:{query : "SELECT CODE,NAME FROM COUNTRY ORDER BY NAME ASC"},sql:this.core.sql}}}
                                     onValueChanged={(async()=>
                                     {
-                                            let tmpQuery = 
-                                            {
-                                                query : "SELECT [COUNTRY_CODE],[ZIPCODE],[PLACE],ZIPCODE + ' ' + PLACE AS ZIPNAME  FROM [dbo].[ZIPCODE] WHERE COUNTRY_CODE = @COUNTRY_CODE",
-                                                param : ['COUNTRY_CODE:string|5'],
-                                                value : [this.cmbPopCountry.value]
-                                            }
-                                            let tmpData = await this.core.sql.execute(tmpQuery) 
-                                            if(tmpData.result.recordset.length > 0)
-                                            {   
-                                                await this.cmbPopZipcode.setData(tmpData.result.recordset)
-                                                await this.cmbPopCity.setData(tmpData.result.recordset)
-                                            }
-                                            else
-                                            {
-                                                await this.cmbPopZipcode.setData([])
-                                                await this.cmbPopCity.setData([])
-                                            }
+                                        let tmpQuery = 
+                                        {
+                                            query : "SELECT [ZIPCODE], ZIPCODE AS ZIPNAME  FROM [dbo].[ZIPCODE] WHERE COUNTRY_CODE = @COUNTRY_CODE GROUP BY ZIPCODE",
+                                            param : ['COUNTRY_CODE:string|5'],
+                                            value : [this.cmbPopCountry.value]
+                                        }
+                                        let tmpData = await this.core.sql.execute(tmpQuery) 
+                                        if(tmpData.result.recordset.length > 0)
+                                        {   
+                                            await this.cmbPopZipcode.setData(tmpData.result.recordset)
+                                        }
+                                        else
+                                        {
+                                            await this.cmbPopZipcode.setData([])
+                                        }
+                                        let tmpCityQuery = 
+                                        {
+                                            query : "SELECT [PLACE] FROM [dbo].[ZIPCODE] WHERE COUNTRY_CODE = @COUNTRY_CODE GROUP BY PLACE",
+                                            param : ['COUNTRY_CODE:string|5'],
+                                            value : [this.cmbPopCountry.value]
+                                        }
+                                        let tmpCityData = await this.core.sql.execute(tmpCityQuery) 
+                                        if(tmpCityData.result.recordset.length > 0)
+                                        {   
+                                            await this.cmbPopCity.setData(tmpCityData.result.recordset)
+                                        }
+                                        else
+                                        {
+                                            await this.cmbPopCity.setData([])
+                                        }
                                     }).bind(this)}
                                   
                                     />

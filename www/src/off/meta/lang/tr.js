@@ -2783,6 +2783,7 @@ export const langTr =
         txtExpiryDay : "Vade",
         txtRiskLimit : "Risk Limiti",
         expDay : "(Gün)",
+        chkActive: "Aktif",
         pg_txtCode : 
         {
             title : "Cari Seçim",

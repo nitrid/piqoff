@@ -2781,6 +2781,7 @@ export const langFr =
         txtExpiryDay : "Echéance",  
         txtRiskLimit : "Limite de Risque",  
         expDay : "(Jour)", 
+        chkActive: "Actif",
         pg_txtCode : 
         {
             title : "Sélectionner Client",

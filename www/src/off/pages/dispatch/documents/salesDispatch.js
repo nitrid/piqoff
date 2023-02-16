@@ -1572,7 +1572,7 @@ export default class salesDispatch extends React.PureComponent
                                         {
                                             select:
                                             {
-                                                query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)",
+                                                query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
                                                 param : ['VAL:string|50']
                                             },
                                             sql:this.core.sql
@@ -1616,8 +1616,9 @@ export default class salesDispatch extends React.PureComponent
                                     <Label text={this.t("dtDocDate")} alignment="right" />
                                     <NdDatePicker simple={true}  parent={this} id={"dtDocDate"}
                                     dt={{data:this.docObj.dt('DOC'),field:"DOC_DATE"}}
-                                    onValueChanged={(async()=>
+                                    onValueChanged={(async(e)=>
                                     {
+                                        console.log(e)
                                         this.checkRow()
                                     }).bind(this)}
                                     >
@@ -3091,9 +3092,15 @@ export default class salesDispatch extends React.PureComponent
                                     searchEnabled={true}
                                     onValueChanged={(async(e)=>
                                     {
-                                        console.log(this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0])
                                         this.txtUnitFactor.setState({value:this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].FACTOR});
-                                        this.txtTotalQuantity.value = Number(this.txtUnitQuantity.value * this.txtUnitFactor.value);
+                                        if(this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].TYPE == 1)
+                                        {
+                                            this.txtTotalQuantity.value = Number((this.txtUnitQuantity.value / this.txtUnitFactor.value).toFixed(3))
+                                        }
+                                        else
+                                        {
+                                            this.txtTotalQuantity.value = Number((this.txtUnitQuantity.value * this.txtUnitFactor.value).toFixed(3))
+                                        };
                                     }).bind(this)}
                                     >
                                     </NdSelectBox>
@@ -3112,15 +3119,12 @@ export default class salesDispatch extends React.PureComponent
                                     maxLength={32}
                                     onValueChanged={(async(e)=>
                                     {
-                                        console.log(this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value}))
                                         if(this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].TYPE == 1)
                                         {
-                                            console.log(this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].TYPE)
                                             this.txtTotalQuantity.value = Number((this.txtUnitQuantity.value / this.txtUnitFactor.value).toFixed(3))
                                         }
                                         else
                                         {
-                                            console.log(this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].TYPE)
                                             this.txtTotalQuantity.value = Number((this.txtUnitQuantity.value * this.txtUnitFactor.value).toFixed(3))
                                         }
                                     }).bind(this)}
