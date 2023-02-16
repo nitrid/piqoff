@@ -562,7 +562,7 @@ export default class CustomerCard extends React.PureComponent
                                         {
                                             select:
                                             {
-                                                query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)",
+                                                query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL))",
                                                 param : ['VAL:string|50']
                                             },
                                             sql:this.core.sql
@@ -676,6 +676,13 @@ export default class CustomerCard extends React.PureComponent
                                         maxLength={32}
                                          access={this.access.filter({ELEMENT:'txtWeb',USERS:this.user.CODE})}
                                         />
+                                </Item>
+                                {/* chkActive */}
+                                <Item>
+                                    <Label text={this.t("chkActive")} alignment="right" />
+                                    <NdCheckBox id="chkActive" parent={this} defaultValue={true} dt={{data:this.customerObj.dt('CUSTOMERS'),field:"STATUS"}}
+                                    param={this.param.filter({ELEMENT:'chkActive',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'chkActive',USERS:this.user.CODE})}/>
                                 </Item>
                             </Form>
                         </div>
@@ -926,7 +933,7 @@ export default class CustomerCard extends React.PureComponent
                                     {
                                         let tmpQuery = 
                                         {
-                                            query : "SELECT [COUNTRY_CODE],[ZIPCODE],[PLACE],ZIPCODE + ' ' + PLACE AS ZIPNAME  FROM [dbo].[ZIPCODE] WHERE COUNTRY_CODE = @COUNTRY_CODE",
+                                            query : "SELECT [ZIPCODE], ZIPCODE AS ZIPNAME  FROM [dbo].[ZIPCODE] WHERE COUNTRY_CODE = @COUNTRY_CODE GROUP BY ZIPCODE",
                                             param : ['COUNTRY_CODE:string|5'],
                                             value : [this.cmbPopCountry.value]
                                         }
@@ -934,13 +941,27 @@ export default class CustomerCard extends React.PureComponent
                                         if(tmpData.result.recordset.length > 0)
                                         {   
                                             await this.cmbPopZipcode.setData(tmpData.result.recordset)
-                                            await this.cmbPopCity.setData(tmpData.result.recordset)
                                         }
                                         else
                                         {
                                             await this.cmbPopZipcode.setData([])
+                                        }
+                                        let tmpCityQuery = 
+                                        {
+                                            query : "SELECT [PLACE] FROM [dbo].[ZIPCODE] WHERE COUNTRY_CODE = @COUNTRY_CODE GROUP BY PLACE",
+                                            param : ['COUNTRY_CODE:string|5'],
+                                            value : [this.cmbPopCountry.value]
+                                        }
+                                        let tmpCityData = await this.core.sql.execute(tmpCityQuery) 
+                                        if(tmpCityData.result.recordset.length > 0)
+                                        {   
+                                            await this.cmbPopCity.setData(tmpCityData.result.recordset)
+                                        }
+                                        else
+                                        {
                                             await this.cmbPopCity.setData([])
                                         }
+
                                     }).bind(this)}
                                     />
                                 </Item>

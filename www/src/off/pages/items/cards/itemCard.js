@@ -988,6 +988,7 @@ export default class itemCard extends React.PureComponent
                                         this.itemsObj.dt()[0].CODE= Math.floor(Date.now() / 1000)
                                         this.itemsObj.dt()[0].WEIGHING = tmpItem.WEIGHING
                                         this.itemsObj.dt()[0].SALE_JOIN_LINE = tmpItem.SALE_JOIN_LINE
+                                        this.itemsObj.dt()[0].INTERFEL = tmpItem.INTERFEL
                                         this.itemsObj.dt()[0].TICKET_REST = tmpItem.TICKET_REST
                                         this.itemsObj.dt()[0].SNAME = tmpItem.SNAME
                                         let tmpUnit = new unitCls();
@@ -1470,6 +1471,12 @@ export default class itemCard extends React.PureComponent
                                     param={this.param.filter({ELEMENT:'chkTicketRest',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'chkTicketRest',USERS:this.user.CODE})}/>
                                 </Item>
+                                 {/* chkInterfel */}
+                                 <Item>
+                                    <Label text={this.t("chkInterfel")} alignment="right" />
+                                    <NdCheckBox id="chkInterfel" parent={this} defaultValue={false} dt={{data:this.itemsObj.dt('ITEMS'),field:"INTERFEL"}}
+                                    />
+                                </Item>
                             </Form>
                         </div>
                     </div>
@@ -1588,6 +1595,18 @@ export default class itemCard extends React.PureComponent
                                                     //********************************** */
                                                 }
                                             }}
+                                            onRowUpdated={async(e)=>
+                                            {
+
+                                                if(typeof e.data.PRICE != 'undefined')
+                                                {
+                                                    e.key.VAT_EXT = (e.key.PRICE / ((this.cmbTax.value/ 100) + 1))
+                                                }
+                                                if(typeof e.data.VAT_EXT != 'undefined')
+                                                {
+                                                    e.key.PRICE = (e.key.VAT_EXT + ((e.key.VAT_EXT * this.cmbTax.value) / 100))
+                                                }
+                                            }}
                                             >
                                                 <Paging defaultPageSize={6} />
                                                 <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
@@ -1617,7 +1636,7 @@ export default class itemCard extends React.PureComponent
                                                     return
                                                 }}/>
                                                 <Column dataField="QUANTITY" caption={this.t("grdPrice.clmQuantity")}/>
-                                                <Column dataField="VAT_EXT" caption={this.t("grdPrice.clmVatExt")} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>                                                
+                                                <Column dataField="VAT_EXT" caption={this.t("grdPrice.clmVatExt")} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>                                                
                                                 <Column dataField="PRICE" caption={this.t("grdPrice.clmPrice")} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>
                                                 <Column dataField="GROSS_MARGIN" caption={this.t("grdPrice.clmGrossMargin")} dataType="string" allowEditing={false}/>
                                                 <Column dataField="NET_MARGIN" caption={this.t("grdPrice.clmNetMargin")} dataType="string" format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>
@@ -2635,7 +2654,7 @@ export default class itemCard extends React.PureComponent
                                     maxLength={32}
                                     onValueChanged={(async(e)=>
                                     {
-                                        this.txtUnitFactor.value = parseFloat((this.txtUnitQuantity.value / this.txtUnitQuantity2.value).toFixed(3))
+                                        this.txtUnitFactor.value = parseFloat((this.txtUnitQuantity.value / this.txtUnitQuantity2.value).toFixed(6))
                                     }).bind(this)}
                                     >
                                     </NdNumberBox>
@@ -2646,7 +2665,7 @@ export default class itemCard extends React.PureComponent
                                     maxLength={32}
                                     onValueChanged={(async(e)=>
                                     {
-                                        this.txtUnitFactor.value = parseFloat((this.txtUnitQuantity.value / this.txtUnitQuantity2.value).toFixed(3))
+                                        this.txtUnitFactor.value = parseFloat((this.txtUnitQuantity.value / this.txtUnitQuantity2.value).toFixed(6))
                                     }).bind(this)}
                                     >
                                     </NdNumberBox>

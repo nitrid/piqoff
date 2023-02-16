@@ -222,3 +222,96 @@ export class taxSugarCls
         });
     }
 }
+export class interfelCls
+{
+    constructor()
+    {
+        this.core = core.instance;
+        this.ds = new dataset();
+        this.empty = 
+        {
+            GUID : '00000000-0000-0000-0000-000000000000',
+            CUSER : this.core.auth.data == null ? '' : this.core.auth.data.CODE,
+            CDATE_FORMAT : moment(new Date()).format("YYYY-MM-DD - HH:mm:ss"),
+            FR : 0,
+            NOTFR : 0,
+        }
+
+        this._initDs();
+    }
+    //#region Private
+    _initDs()
+    {
+        let tmpDt = new datatable('INTERFEL_TABLE');            
+        tmpDt.selectCmd = 
+        {
+            query :"SELECT * FROM [dbo].[INTERFEL_TABLE_VW_01] ",
+            param : ['TYPE:int']
+        } 
+
+        this.ds.add(tmpDt);
+    }
+    //#endregion
+    dt()
+    {
+        if(arguments.length > 0)
+        {
+            return this.ds.get(arguments[0]);
+        }
+
+        return this.ds.get(0)
+    }
+    addEmpty()
+    {
+        if(typeof this.dt('INTERFEL_TABLE') == 'undefined')
+        {
+            return;
+        }
+        let tmp = {}
+        if(arguments.length > 0)
+        {
+            tmp = {...arguments[0]}            
+        }
+        else
+        {
+            tmp = {...this.empty}
+        }
+        tmp.GUID = datatable.uuidv4();
+        this.dt('INTERFEL_TABLE').push(tmp)
+    }
+    clearAll()
+    {
+        for (let i = 0; i < this.ds.length; i++) 
+        {
+            this.dt(i).clear()
+        }
+    }
+    load()
+    {
+        //PARAMETRE OLARAK OBJE GÖNDERİLİR YADA PARAMETRE BOŞ İSE TÜMÜ GETİRİLİ.
+        return new Promise(async resolve => 
+        {
+            let tmpPrm = 
+            {
+                TYPE : -1
+            }          
+
+            if(arguments.length > 0)
+            {
+                tmpPrm.TYPE = typeof arguments[0].TYPE == 'undefined' ? -1: arguments[0].TYPE;
+            }
+            this.ds.get('INTERFEL_TABLE').selectCmd.value = Object.values(tmpPrm)
+
+            await this.ds.get('INTERFEL_TABLE').refresh();
+            resolve(this.ds.get('INTERFEL_TABLE'));    
+        });
+    }
+    save()
+    {
+        return new Promise(async resolve => 
+        {
+            this.ds.delete()
+            resolve(await this.ds.update()); 
+        });
+    }
+}

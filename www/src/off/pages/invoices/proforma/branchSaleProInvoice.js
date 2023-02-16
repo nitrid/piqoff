@@ -430,7 +430,7 @@ export default class branchSaleInvoice extends React.PureComponent
                             {
                                 let tmpQuery = 
                                 {
-                                    query: "SELECT GUID,ISNULL((SELECT NAME FROM UNIT WHERE UNIT.ID = ITEM_UNIT.ID),'') AS NAME,FACTOR FROM ITEM_UNIT WHERE DELETED = 0 AND ITEM = @ITEM ORDER BY TYPE" ,
+                                    query: "SELECT GUID,ISNULL((SELECT NAME FROM UNIT WHERE UNIT.ID = ITEM_UNIT.ID),'') AS NAME,FACTOR,TYPE FROM ITEM_UNIT WHERE DELETED = 0 AND ITEM = @ITEM ORDER BY TYPE" ,
                                     param:  ['ITEM:string|50'],
                                     value:  [e.data.ITEM]
                                 }
@@ -3204,7 +3204,7 @@ export default class branchSaleInvoice extends React.PureComponent
                                     searchEnabled={true}
                                     onValueChanged={(async(e)=>
                                     {
-                                        // this.txtUnitFactor.setState({value:this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].FACTOR});
+                                        this.txtUnitFactor.setState({value:this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].FACTOR});
                                         this.txtTotalQuantity.value = Number(this.txtUnitQuantity.value * this.txtUnitFactor.value);
                                     }).bind(this)}
                                     >

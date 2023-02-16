@@ -18,12 +18,19 @@ export default class NdDatePicker extends Base
         this.state.type = typeof props.type == 'undefined' ? 'date' : props.type
         this.state.editorOptions = typeof props.editorOptions == 'undefined' ? undefined : props.editorOptions
         
+        this._onInitialized = this._onInitialized.bind(this);
         this._onValueChanged = this._onValueChanged.bind(this)
         this._onEnterKey = this._onEnterKey.bind(this)
+        this._onFocusIn = this._onFocusIn.bind(this);
     }
     //#region Private
+    _onInitialized(e) 
+    {
+        this.dev = e.component;    
+    }
     _onValueChanged(e) 
     {           
+        console.log(e)
         this.value = e.value;
         if(typeof this.props.onValueChanged != 'undefined')
         {
@@ -32,10 +39,18 @@ export default class NdDatePicker extends Base
     }
     _onEnterKey()
     {
+        console.log(this.value)
+        console.log(moment(this.value).format("YYYY-MM-DD"))
+        this.value = moment(this.value).format("YYYY-MM-DD")
         if(typeof this.props.onEnterKey != 'undefined')
         {
             this.props.onEnterKey();
         }
+    }
+    _onFocusIn(e)
+    {
+        console.log(this.dev.element().getElementsByTagName('input')[1].value)
+        this.dev.element().getElementsByTagName('input')[1].select()
     }
     _dateView()
     {
@@ -48,8 +63,9 @@ export default class NdDatePicker extends Base
             disabled={this.state.editable}
             type={this.state.type}
             dateSerializationFormat={"yyyy-MM-dd HH:mm"}
-            editorOptions={this.state.editorOptions} 
-            onEnterKey={this._onEnterKey} onValueChanged={this._onValueChanged}>
+            onInitialized={this._onInitialized}
+            editorOptions={this.state.editorOptions}  
+            onEnterKey={this._onEnterKey} onValueChanged={this._onValueChanged} onFocusIn={this._onFocusIn}>
                 {this.props.children}
                 {this.validationView()}
             </DateBox>

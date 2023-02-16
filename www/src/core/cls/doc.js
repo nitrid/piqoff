@@ -25,6 +25,7 @@ export class docCls
             OUTPUT_NAME : '',
             AMOUNT : 0,
             DISCOUNT : 0,
+            INTERFEL : 0,
             VAT : 0,
             TOTAL : 0,
             TOTALHT : 0,
@@ -76,6 +77,7 @@ export class docCls
                     "@OUTPUT = @POUTPUT, " +
                     "@AMOUNT  = @PAMOUNT, " +
                     "@DISCOUNT  = @PDISCOUNT, " +
+                    "@INTERFEL  = @PINTERFEL, " +
                     "@VAT  = @PVAT, " +
                     "@TOTAL  = @PTOTAL, " +
                     "@DESCRIPTION  = @PDESCRIPTION, " +
@@ -85,10 +87,10 @@ export class docCls
                     "@SIGNATURE = @PSIGNATURE, " +
                     "@SIGNATURE_SUM = @PSIGNATURE_SUM ",
             param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PDOC_TYPE:int','PREBATE:int','PREF:string|25','PREF_NO:int','PDOC_DATE:date','PSHIPMENT_DATE:date','PINPUT:string|50',
-                        'POUTPUT:string|50','PAMOUNT:float','PDISCOUNT:float','PVAT:float','PTOTAL:float','PDESCRIPTION:string|100','PADDRESS:int','PLOCKED:int','PCERTIFICATE:string|250',
+                        'POUTPUT:string|50','PAMOUNT:float','PDISCOUNT:float','PINTERFEL:float','PVAT:float','PTOTAL:float','PDESCRIPTION:string|100','PADDRESS:int','PLOCKED:int','PCERTIFICATE:string|250',
                         'PSIGNATURE:string|max','PSIGNATURE_SUM:string|max'],
-            dataprm : ['GUID','CUSER','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','SHIPMENT_DATE','INPUT','OUTPUT','AMOUNT','DISCOUNT','VAT','TOTAL','DESCRIPTION','ADDRESS','LOCKED',
-                        'CERTIFICATE','SIGNATURE','SIGNATURE_SUM']
+            dataprm : ['GUID','CUSER','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','SHIPMENT_DATE','INPUT','OUTPUT','AMOUNT','DISCOUNT','INTERFEL','VAT','TOTAL','DESCRIPTION','ADDRESS',
+                        'LOCKED','CERTIFICATE','SIGNATURE','SIGNATURE_SUM']
         }
         tmpDt.updateCmd = 
         {
@@ -106,6 +108,7 @@ export class docCls
                     "@OUTPUT = @POUTPUT, " +
                     "@AMOUNT  = @PAMOUNT, " +
                     "@DISCOUNT  = @PDISCOUNT, " +
+                    "@INTERFEL  = @PINTERFEL, " +
                     "@VAT  = @PVAT, " +
                     "@TOTAL  = @PTOTAL, " +
                     "@DESCRIPTION  = @PDESCRIPTION, " +
@@ -114,8 +117,8 @@ export class docCls
                     "@SIGNATURE = @PSIGNATURE, " +
                     "@SIGNATURE_SUM = @PSIGNATURE_SUM ",
             param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PDOC_TYPE:int','PREBATE:int','PREF:string|25','PREF_NO:int','PDOC_DATE:date','PSHIPMENT_DATE:date','PINPUT:string|50',
-                        'POUTPUT:string|50','PAMOUNT:float','PDISCOUNT:float','PVAT:float','PTOTAL:float','PDESCRIPTION:string|100','PADDRESS:int','PLOCKED:int','PSIGNATURE:string|max','PSIGNATURE_SUM:string|max'],
-            dataprm : ['GUID','CUSER','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','SHIPMENT_DATE','INPUT','OUTPUT','AMOUNT','DISCOUNT','VAT','TOTAL','DESCRIPTION','ADDRESS',
+                        'POUTPUT:string|50','PAMOUNT:float','PDISCOUNT:float','PINTERFEL:float','PVAT:float','PTOTAL:float','PDESCRIPTION:string|100','PADDRESS:int','PLOCKED:int','PSIGNATURE:string|max','PSIGNATURE_SUM:string|max'],
+            dataprm : ['GUID','CUSER','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','SHIPMENT_DATE','INPUT','OUTPUT','AMOUNT','DISCOUNT','INTERFEL','VAT','TOTAL','DESCRIPTION','ADDRESS',
                     'LOCKED','SIGNATURE','SIGNATURE_SUM']
         }
         tmpDt.deleteCmd = 
