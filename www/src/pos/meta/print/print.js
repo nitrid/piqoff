@@ -104,7 +104,19 @@ export function print()
             return tmpArr.length > 0 ? tmpArr : undefined
         },
         // BAŞLIK
-        ()=>{return {font:"b",style:"bu",align:"lt",data:"T " + "Libelle".space(38) + " " + "Qte".space(6) + " " + "Prix/u".space(7) + " " + "Prix EUR".space(8)}},
+        ()=>
+        {
+            let tmpTitle = {}
+            if(data.pos[0].TYPE == 0 && data.special.type != 'Fatura')
+            {
+                tmpTitle = {font:"b",style:"bu",align:"lt",data:"T " + "Libelle".space(38) + " " + "Qte".space(6) + " " + "Prix/u".space(7) + " " + "Prix EUR".space(8)}
+            }
+            else if(data.pos[0].TYPE == 0 && data.special.type == 'Fatura')
+            {
+                tmpTitle = {font:"b",style:"bu",align:"lt",data:"T " + "Libelle".space(38) + " " + "Qte".space(6) + " " + "P.HT/u".space(7) + " " + "T.HT EUR".space(8)}
+            }
+            return tmpTitle
+        },
         // SATIŞ LİSTESİ
         ()=>
         {
@@ -246,7 +258,7 @@ export function print()
 
             if(data.special.customerUsePoint > 0)
             {
-                tmpArr.push({font:"a",align:"lt",data:"Sous-Total ".space(33) + (tmpOperator + decimal(data.possale.sum("AMOUNT",2)) + "EUR").space(15,"s")});
+                tmpArr.push({font:"a",align:"lt",data:"Sous-Total TTC".space(33) + (tmpOperator + decimal(data.possale.sum("AMOUNT",2)) + "EUR").space(15,"s")});
                 tmpArr.push({font:"a",align:"lt",data:"Remise Fidelite ".space(33) + ((parseFloat(parseFloat(data.special.customerUsePoint) / 100) * -1).toFixed(2).toString() + ' EUR').space(15,"s")});
             }
 
@@ -254,7 +266,7 @@ export function print()
             {
                 if(data.special.customerUsePoint == 0)
                 {
-                    tmpArr.push({font:"a",align:"lt",data:"Sous-Total ".space(33) + (tmpOperator + decimal(data.possale.sum("AMOUNT",2)) + "EUR").space(15,"s")});
+                    tmpArr.push({font:"a",align:"lt",data:"Sous-Total TTC".space(33) + (tmpOperator + decimal(data.possale.sum("AMOUNT",2)) + "EUR").space(15,"s")});
                 }
                 tmpArr.push({font:"a",align:"lt",data:("Remise " + Number(data.possale.sum("AMOUNT",2)).rate2Num(data.possale.sum("DISCOUNT",2),2) + "%").space(33) + (decimal(data.possale.sum("DISCOUNT",2) * -1) + "EUR").space(15,"s")});
             }
