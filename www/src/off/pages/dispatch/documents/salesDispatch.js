@@ -3149,18 +3149,7 @@ export default class salesDispatch extends React.PureComponent
                                 <Item>
                                     <Label text={this.t("txtTotalQuantity")} alignment="right" />
                                     <NdNumberBox id="txtTotalQuantity" parent={this} simple={true} 
-                                    maxLength={32}
-                                    onValueChanged={(async(e)=>
-                                    {
-                                        if(this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].TYPE == 1)
-                                        {
-                                            this.txtUnitFactor.value = Number((this.txtUnitQuantity.value / this.txtTotalQuantity.value).toFixed(3))
-                                        }
-                                        else
-                                        {
-                                            this.txtUnitFactor.value = Number((this.txtTotalQuantity.value / this.txtUnitFactor.value).toFixed(3))
-                                        }
-                                    }).bind(this)}
+                                    maxLength={32} readOnly={true}
                                     >
                                     </NdNumberBox>
                                 </Item>
