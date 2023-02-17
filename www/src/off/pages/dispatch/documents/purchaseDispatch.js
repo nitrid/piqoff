@@ -2939,11 +2939,17 @@ export default class purchaseDispatch extends React.PureComponent
                                                 let tmpData = await this.core.sql.execute(tmpQuery) 
                                                 if(typeof tmpData.result.err == 'undefined')
                                                 {
-                                                    console.log('başarılı')
+                                                   
                                                 }
                                                 else
                                                 {
-                                                    console.log('hata')
+                                                    let tmpConfObj1 =
+                                                    {
+                                                        id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                        button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
+                                                    }
+                                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
+                                                    await dialog(tmpConfObj1);
                                                 }
                                             }}/>
                                         </Item>

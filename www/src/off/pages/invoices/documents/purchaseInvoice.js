@@ -460,14 +460,29 @@ export default class purchaseInvoice extends React.PureComponent
                                     this.cmbUnit.value = e.data.UNIT
                                     this.txtUnitFactor.value = e.data.UNIT_FACTOR
                                     this.txtTotalQuantity.value =  e.data.QUANTITY
-                                    this.txtUnitQuantity.value = e.data.QUANTITY / e.data.UNIT_FACTOR
-                                    this.txtUnitPrice.value = e.data.PRICE
+                                    if(this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].TYPE == 1)
+                                    {
+                                        this.txtUnitQuantity.value = e.data.QUANTITY * e.data.UNIT_FACTOR
+                                        this.txtUnitPrice.value = e.data.PRICE / e.data.UNIT_FACTOR
+                                    }
+                                    else
+                                    {
+                                        this.txtUnitQuantity.value = e.data.QUANTITY / e.data.UNIT_FACTOR
+                                        this.txtUnitPrice.value = e.data.PRICE * e.data.UNIT_FACTOR
+                                    }
                                 }
                                 await this.msgUnit.show().then(async () =>
                                 {
                                     e.key.UNIT = this.cmbUnit.value
                                     e.key.UNIT_FACTOR = this.txtUnitFactor.value
-                                    e.data.PRICE = parseFloat((this.txtUnitPrice.value / this.txtUnitFactor.value).toFixed(4))
+                                    if(this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].TYPE == 1)
+                                    {
+                                        e.data.PRICE = parseFloat((this.txtUnitPrice.value * this.txtUnitFactor.value).toFixed(4))
+                                    }
+                                    else
+                                    {
+                                        e.data.PRICE = parseFloat((this.txtUnitPrice.value / this.txtUnitFactor.value).toFixed(4))
+                                    }
                                     e.data.DIFF_PRICE = parseFloat((e.data.PRICE - e.data.CUSTOMER_PRICE).toFixed(3))
                                     e.data.QUANTITY = this.txtTotalQuantity.value
                                     e.data.VAT = parseFloat(((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) * (e.data.VAT_RATE) / 100)).toFixed(4));
@@ -4645,18 +4660,58 @@ export default class purchaseInvoice extends React.PureComponent
                                     onValueChanged={(async(e)=>
                                     {
                                         this.txtUnitFactor.setState({value:this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].FACTOR});
-                                        this.txtTotalQuantity.value = Number(this.txtUnitQuantity.value * this.txtUnitFactor.value);
+                                        if(this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].TYPE == 1)
+                                        {
+                                            this.txtTotalQuantity.value = Number((this.txtUnitQuantity.value / this.txtUnitFactor.value).toFixed(3))
+                                        }
+                                        else
+                                        {
+                                            this.txtTotalQuantity.value = Number((this.txtUnitQuantity.value * this.txtUnitFactor.value).toFixed(3))
+                                        };
                                     }).bind(this)}
                                     >
                                     </NdSelectBox>
                                 </Item>
                                 <Item>
-                                    <Label text={this.t("txtUnitFactor")} alignment="right" />
-                                    <NdNumberBox id="txtUnitFactor" parent={this} simple={true}
-                                    readOnly={true}
-                                    maxLength={32}
-                                    >
-                                    </NdNumberBox>
+                                    <Form colCount={2}>
+                                        <Item>
+                                            <Label text={this.t("txtUnitFactor")} alignment="right" />
+                                            <NdNumberBox id="txtUnitFactor" parent={this} simple={true}
+                                            readOnly={true}
+                                            maxLength={32}
+                                            >
+                                            </NdNumberBox>
+                                        </Item>
+                                        <Item>
+                                            <NdButton id="btnFactorSave" parent={this} text={this.t("msgUnit.btnFactorSave")} type="default"
+                                            onClick={async()=>
+                                            {
+                                                let tmpQuery = 
+                                                {
+                                                    query :"EXEC [dbo].[PRD_ITEM_UNIT_UPDATE] " +
+                                                            "@GUID = @PGUID, " + 
+                                                            "@CUSER = @PCUSER, " +
+                                                            "@FACTOR = @PFACTOR ", 
+                                                    param : ['PGUID:string|50','PCUSER:string|25','PFACTOR:float'],
+                                                    value : [this.cmbUnit.value,this.user.CODE,this.txtUnitFactor.value]
+                                                }
+                                                let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                if(typeof tmpData.result.err == 'undefined')
+                                                {
+                                                }
+                                                else
+                                                {
+                                                    let tmpConfObj1 =
+                                                    {
+                                                        id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                        button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
+                                                    }
+                                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
+                                                    await dialog(tmpConfObj1);
+                                                }
+                                            }}/>
+                                        </Item>
+                                    </Form>
                                 </Item>
                                 <Item>
                                     <Label text={this.t("txtUnitQuantity")} alignment="right" />
@@ -4664,15 +4719,33 @@ export default class purchaseInvoice extends React.PureComponent
                                     maxLength={32}
                                     onValueChanged={(async(e)=>
                                     {
-                                       this.txtTotalQuantity.value = Number(this.txtUnitQuantity.value * this.txtUnitFactor.value)
+                                        if(this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].TYPE == 1)
+                                        {
+                                            this.txtTotalQuantity.value = Number((this.txtUnitQuantity.value / this.txtUnitFactor.value).toFixed(3))
+                                        }
+                                        else
+                                        {
+                                            this.txtTotalQuantity.value = Number((this.txtUnitQuantity.value * this.txtUnitFactor.value).toFixed(3))
+                                        }
                                     }).bind(this)}
                                     >
                                     </NdNumberBox>
                                 </Item>
                                 <Item>
                                     <Label text={this.t("txtTotalQuantity")} alignment="right" />
-                                    <NdNumberBox id="txtTotalQuantity" parent={this} simple={true}  readOnly={true}
+                                    <NdNumberBox id="txtTotalQuantity" parent={this} simple={true}
                                     maxLength={32}
+                                    onValueChanged={(async(e)=>
+                                    {
+                                        if(this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].TYPE == 1)
+                                        {
+                                            this.txtUnitFactor.value = Number((this.txtUnitQuantity.value / this.txtTotalQuantity.value).toFixed(3))
+                                        }
+                                        else
+                                        {
+                                            this.txtUnitFactor.value = Number((this.txtTotalQuantity.value / this.txtUnitQuantity.value).toFixed(3))
+                                        }
+                                    }).bind(this)}
                                     >
                                     </NdNumberBox>
                                 </Item>
