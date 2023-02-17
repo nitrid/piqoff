@@ -440,6 +440,9 @@ export default class salesOrder extends React.PureComponent
                                     e.data.TOTALHT = parseFloat(((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT).toFixed(4))
                                     e.data.TOTAL = parseFloat((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) +e.data.VAT).toFixed(4))
                                     e.data.DISCOUNT_RATE = Number(e.data.AMOUNT).rate2Num(e.data.DISCOUNT,4)
+                                    //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
+                                    await this.itemRelatedUpdate(e.data.ITEM,this.txtTotalQuantity.value)
+                                    //*****************************************/
                                 });  
                             }
                         },
@@ -481,7 +484,7 @@ export default class salesOrder extends React.PureComponent
                             this._calculateTotal()
                             await this.grdSlsOrder.devGrid.deleteRow(0)
                             //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
-                            await this.itemRelated(pData.GUID,pQuantity)
+                            await this.itemRelated(pData.GUID,this.docObj.docOrders.dt()[i].QUANTITY)
                             //*****************************************/
                             if(this.checkCombine.value == true)
                             {
@@ -516,7 +519,7 @@ export default class salesOrder extends React.PureComponent
                     this._calculateTotal()
                     await this.grdSlsOrder.devGrid.deleteRow(0)
                     //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
-                    await this.itemRelated(pData.GUID,pQuantity)
+                    await this.itemRelated(pData.GUID,this.docObj.docOrders.dt()[i].QUANTITY)
                     //*****************************************/
                     App.instance.setState({isExecute:false})
                     return
@@ -564,16 +567,18 @@ export default class salesOrder extends React.PureComponent
         {
             let tmpRelatedQuery = 
             {
-                query :"SELECT ITEM_GUID,ITEM_CODE,ITEM_NAME,RELATED_GUID,RELATED_CODE,RELATED_NAME FROM ITEM_RELATED_VW_01 WHERE ITEM_GUID = @ITEM_GUID",
+                query :"SELECT ITEM_GUID,ITEM_CODE,ITEM_NAME,ITEM_QUANTITY,RELATED_GUID,RELATED_CODE,RELATED_NAME,RELATED_QUANTITY FROM ITEM_RELATED_VW_01 WHERE ITEM_GUID = @ITEM_GUID",
                 param : ['ITEM_GUID:string|50'],
                 value : [pGuid]
             }
     
-            let tmpRelatedData = await this.core.sql.execute(tmpRelatedQuery)
-    
-            if(tmpRelatedData.result.recordset.length > 0)
+            let tmpRelatedData = await this.core.sql.execute(tmpRelatedQuery)            
+            
+            for (let i = 0; i < tmpRelatedData.result.recordset.length; i++) 
             {
-                for (let i = 0; i < tmpRelatedData.result.recordset.length; i++) 
+                let tmpRelatedQt = Math.floor(pQuantity / tmpRelatedData.result.recordset[i].ITEM_QUANTITY) * tmpRelatedData.result.recordset[i].RELATED_QUANTITY
+                
+                if(tmpRelatedQt > 0)
                 {
                     let tmpRelatedItemQuery = 
                     {   
@@ -600,8 +605,50 @@ export default class salesOrder extends React.PureComponent
                         this.txtRefno.readOnly = true
                         this.docObj.docOrders.addEmpty(tmpDocOrders)
                         await this.core.util.waitUntil(100)
-                        await this.addItem(tmpRelatedItemData.result.recordset[0],this.docObj.docOrders.dt().length-1,pQuantity)
+                        await this.addItem(tmpRelatedItemData.result.recordset[0],this.docObj.docOrders.dt().length-1,tmpRelatedQt)
                     }
+                }
+            }
+            resolve()
+        })
+    }
+    itemRelatedUpdate(pGuid,pQuantity)
+    {
+        return new Promise(async resolve =>
+        {
+            await this.core.util.waitUntil()
+            let tmpRelatedQuery = 
+            {
+                query :"SELECT ITEM_GUID,ITEM_CODE,ITEM_NAME,ITEM_QUANTITY,RELATED_GUID,RELATED_CODE,RELATED_NAME,RELATED_QUANTITY FROM ITEM_RELATED_VW_01 WHERE ITEM_GUID = @ITEM_GUID",
+                param : ['ITEM_GUID:string|50'],
+                value : [pGuid]
+            }
+            
+            let tmpRelatedData = await this.core.sql.execute(tmpRelatedQuery)                        
+            
+            for (let i = 0; i < tmpRelatedData.result.recordset.length; i++) 
+            {
+                let tmpExist = false
+                for (let x = 0; x < this.docObj.docOrders.dt().length; x++) 
+                {
+                    if(this.docObj.docOrders.dt()[x].ITEM_CODE == tmpRelatedData.result.recordset[i].RELATED_CODE)
+                    {                
+                        let tmpRelatedQt = Math.floor(pQuantity / tmpRelatedData.result.recordset[i].ITEM_QUANTITY) * tmpRelatedData.result.recordset[i].RELATED_QUANTITY
+                        
+                        if(tmpRelatedQt > 0)
+                        {
+                            this.docObj.docOrders.dt()[x].QUANTITY = tmpRelatedQt
+                            this.docObj.docOrders.dt()[x].VAT = parseFloat((this.docObj.docOrders.dt()[x].VAT + (this.docObj.docOrders.dt()[x].PRICE * (this.docObj.docOrders.dt()[x].VAT_RATE / 100) * pQuantity)).toFixed(4))
+                            this.docObj.docOrders.dt()[x].AMOUNT = parseFloat((this.docObj.docOrders.dt()[x].QUANTITY * this.docObj.docOrders.dt()[x].PRICE).toFixed(4))
+                            this.docObj.docOrders.dt()[x].TOTAL = parseFloat((((this.docObj.docOrders.dt()[x].QUANTITY * this.docObj.docOrders.dt()[x].PRICE) - this.docObj.docOrders.dt()[x].DISCOUNT) + this.docObj.docOrders.dt()[x].VAT).toFixed(4))
+                            this.docObj.docOrders.dt()[x].TOTALHT =  parseFloat((this.docObj.docOrders.dt()[x].TOTAL - this.docObj.docOrders.dt()[x].VAT).toFixed(4))
+                        }
+                        tmpExist = true
+                    }
+                }
+                if(!tmpExist)
+                {
+                    await this.itemRelated(pGuid,pQuantity)
                 }
             }
             resolve()
@@ -1836,7 +1883,6 @@ export default class salesOrder extends React.PureComponent
                                     }}
                                     onRowUpdating={async (e)=>
                                     {
-                                        console.log(e)
                                         if(e.key.SHIPMENT_LINE_GUID != '00000000-0000-0000-0000-000000000000')
                                         {
                                             e.cancel = true
@@ -1880,6 +1926,12 @@ export default class salesOrder extends React.PureComponent
                                                 dialog(tmpConfObj);
                                                 e.component.cancelEditData()
                                             }
+                                        }
+                                        if(typeof e.newData.QUANTITY != 'undefined')
+                                        {
+                                            //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
+                                            await this.itemRelatedUpdate(e.key.ITEM,e.newData.QUANTITY)
+                                            //*****************************************/
                                         }
                                     }}
                                     onRowRemoving={async (e)=>

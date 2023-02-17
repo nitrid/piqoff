@@ -407,6 +407,9 @@ export default class purchaseOrder extends React.PureComponent
                                     e.data.UNIT = this.cmbUnit.value
                                     e.data.QUANTITY = this.txtTotalQuantity.value
                                     e.data.UNIT_FACTOR = this.txtUnitFactor.value
+                                    //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
+                                    await this.itemRelatedUpdate(e.data.ITEM,this.txtTotalQuantity.value)
+                                    //*****************************************/
                                 });  
                             }
                         },
@@ -495,7 +498,7 @@ export default class purchaseOrder extends React.PureComponent
                             this._calculateTotal()
                             await this.grdPurcOrders.devGrid.deleteRow(0)
                             //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
-                            await this.itemRelated(pData.GUID,pQuantity)
+                            await this.itemRelated(pData.GUID,this.docObj.docOrders.dt()[i].QUANTITY)
                             //*****************************************/
                             if(this.checkCombine.value == true)
                             {
@@ -529,7 +532,7 @@ export default class purchaseOrder extends React.PureComponent
                     this._calculateTotal()                    
                     await this.grdPurcOrders.devGrid.deleteRow(0)
                     //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
-                    await this.itemRelated(pData.GUID,pQuantity)
+                    await this.itemRelated(pData.GUID,this.docObj.docOrders.dt()[i].QUANTITY)
                     //*****************************************/
                     App.instance.setState({isExecute:false})
                     return
@@ -583,16 +586,18 @@ export default class purchaseOrder extends React.PureComponent
         {
             let tmpRelatedQuery = 
             {
-                query :"SELECT ITEM_GUID,ITEM_CODE,ITEM_NAME,RELATED_GUID,RELATED_CODE,RELATED_NAME FROM ITEM_RELATED_VW_01 WHERE ITEM_GUID = @ITEM_GUID",
+                query :"SELECT ITEM_GUID,ITEM_CODE,ITEM_NAME,ITEM_QUANTITY,RELATED_GUID,RELATED_CODE,RELATED_NAME,RELATED_QUANTITY FROM ITEM_RELATED_VW_01 WHERE ITEM_GUID = @ITEM_GUID",
                 param : ['ITEM_GUID:string|50'],
                 value : [pGuid]
             }
     
-            let tmpRelatedData = await this.core.sql.execute(tmpRelatedQuery)
-    
-            if(tmpRelatedData.result.recordset.length > 0)
+            let tmpRelatedData = await this.core.sql.execute(tmpRelatedQuery)            
+            
+            for (let i = 0; i < tmpRelatedData.result.recordset.length; i++) 
             {
-                for (let i = 0; i < tmpRelatedData.result.recordset.length; i++) 
+                let tmpRelatedQt = Math.floor(pQuantity / tmpRelatedData.result.recordset[i].ITEM_QUANTITY) * tmpRelatedData.result.recordset[i].RELATED_QUANTITY
+                
+                if(tmpRelatedQt > 0)
                 {
                     let tmpRelatedItemQuery = 
                     {   
@@ -617,10 +622,52 @@ export default class purchaseOrder extends React.PureComponent
                         tmpDocOrders.DOC_DATE = this.docObj.dt()[0].DOC_DATE
                         this.txtRef.readOnly = true
                         this.txtRefno.readOnly = true
-                        this.docObj.docOrders.addEmpty(tmpDocItems)
+                        this.docObj.docOrders.addEmpty(tmpDocOrders)
                         await this.core.util.waitUntil(100)
-                        await this.addItem(tmpRelatedItemData.result.recordset[0],this.docObj.docItems.dt().length-1,pQuantity)
+                        await this.addItem(tmpRelatedItemData.result.recordset[0],this.docObj.docOrders.dt().length-1,tmpRelatedQt)
                     }
+                }
+            }
+            resolve()
+        })
+    }
+    itemRelatedUpdate(pGuid,pQuantity)
+    {
+        return new Promise(async resolve =>
+        {
+            await this.core.util.waitUntil()
+            let tmpRelatedQuery = 
+            {
+                query :"SELECT ITEM_GUID,ITEM_CODE,ITEM_NAME,ITEM_QUANTITY,RELATED_GUID,RELATED_CODE,RELATED_NAME,RELATED_QUANTITY FROM ITEM_RELATED_VW_01 WHERE ITEM_GUID = @ITEM_GUID",
+                param : ['ITEM_GUID:string|50'],
+                value : [pGuid]
+            }
+            
+            let tmpRelatedData = await this.core.sql.execute(tmpRelatedQuery)                        
+            
+            for (let i = 0; i < tmpRelatedData.result.recordset.length; i++) 
+            {
+                let tmpExist = false
+                for (let x = 0; x < this.docObj.docOrders.dt().length; x++) 
+                {
+                    if(this.docObj.docOrders.dt()[x].ITEM_CODE == tmpRelatedData.result.recordset[i].RELATED_CODE)
+                    {                
+                        let tmpRelatedQt = Math.floor(pQuantity / tmpRelatedData.result.recordset[i].ITEM_QUANTITY) * tmpRelatedData.result.recordset[i].RELATED_QUANTITY
+                        
+                        if(tmpRelatedQt > 0)
+                        {
+                            this.docObj.docOrders.dt()[x].QUANTITY = tmpRelatedQt
+                            this.docObj.docOrders.dt()[x].VAT = parseFloat((this.docObj.docOrders.dt()[x].VAT + (this.docObj.docOrders.dt()[x].PRICE * (this.docObj.docOrders.dt()[x].VAT_RATE / 100) * pQuantity)).toFixed(4))
+                            this.docObj.docOrders.dt()[x].AMOUNT = parseFloat((this.docObj.docOrders.dt()[x].QUANTITY * this.docObj.docOrders.dt()[x].PRICE).toFixed(4))
+                            this.docObj.docOrders.dt()[x].TOTAL = parseFloat((((this.docObj.docOrders.dt()[x].QUANTITY * this.docObj.docOrders.dt()[x].PRICE) - this.docObj.docOrders.dt()[x].DISCOUNT) + this.docObj.docOrders.dt()[x].VAT).toFixed(4))
+                            this.docObj.docOrders.dt()[x].TOTALHT =  parseFloat((this.docObj.docOrders.dt()[x].TOTAL - this.docObj.docOrders.dt()[x].VAT).toFixed(4))
+                        }
+                        tmpExist = true
+                    }
+                }
+                if(!tmpExist)
+                {
+                    await this.itemRelated(pGuid,pQuantity)
                 }
             }
             resolve()
@@ -1958,6 +2005,12 @@ export default class purchaseOrder extends React.PureComponent
                                             dialog(tmpConfObj);
                                             e.component.cancelEditData()
                                         }
+                                        if(typeof e.newData.QUANTITY != 'undefined')
+                                        {
+                                            //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
+                                            await this.itemRelatedUpdate(e.key.ITEM,e.newData.QUANTITY)
+                                            //*****************************************/
+                                        }
                                     }}
                                     onRowRemoving={async (e)=>
                                     {
@@ -2316,38 +2369,38 @@ export default class purchaseOrder extends React.PureComponent
                             </Form>
                         </NdPopUp>
                     </div> 
-                        <NdPopGrid id={"pg_txtItemsCode"} parent={this} container={"#root"}
-                        visible={false}
-                        position={{of:'#root'}} 
-                        showTitle={true} 
-                        showBorders={true}
-                        width={'90%'}
-                        height={'90%'}
-                        title={this.t("pg_txtItemsCode.title")} //
-                        search={true}
-                        >
-                            <Paging defaultPageSize={22} />
-                            <Column dataField="CODE" caption={this.t("pg_txtItemsCode.clmCode")} width={150} />
-                            <Column dataField="MULTICODE" caption={this.t("pg_txtItemsCode.clmMulticode")} width={200}/>
-                            <Column dataField="NAME" caption={this.t("pg_txtItemsCode.clmName")} width={300} defaultSortOrder="asc" />
-                            <Column dataField="PURC_PRICE" caption={this.t("pg_txtItemsCode.clmPrice")} width={300}  />
-                        </NdPopGrid>
-                        {/* BARKOD POPUP */}
-                        <NdPopGrid id={"pg_txtBarcode"} parent={this} container={"#root"}
-                        visible={false}
-                        position={{of:'#root'}} 
-                        showTitle={true} 
-                        showBorders={true}
-                        width={'90%'}
-                        height={'90%'}
-                        title={this.t("pg_txtBarcode.title")} //
-                        search={true}
-                        >
-                            <Column dataField="BARCODE" caption={this.t("pg_txtBarcode.clmBarcode")} width={150} />
-                            <Column dataField="CODE" caption={this.t("pg_txtBarcode.clmCode")} width={150} />
-                            <Column dataField="NAME" caption={this.t("pg_txtBarcode.clmName")} width={300} defaultSortOrder="asc" />
-                            <Column dataField="MULTICODE" caption={this.t("pg_txtBarcode.clmMulticode")} width={200}/>
-                        </NdPopGrid>
+                    <NdPopGrid id={"pg_txtItemsCode"} parent={this} container={"#root"}
+                    visible={false}
+                    position={{of:'#root'}} 
+                    showTitle={true} 
+                    showBorders={true}
+                    width={'90%'}
+                    height={'90%'}
+                    title={this.t("pg_txtItemsCode.title")} //
+                    search={true}
+                    >
+                        <Paging defaultPageSize={22} />
+                        <Column dataField="CODE" caption={this.t("pg_txtItemsCode.clmCode")} width={150} />
+                        <Column dataField="MULTICODE" caption={this.t("pg_txtItemsCode.clmMulticode")} width={200}/>
+                        <Column dataField="NAME" caption={this.t("pg_txtItemsCode.clmName")} width={300} defaultSortOrder="asc" />
+                        <Column dataField="PURC_PRICE" caption={this.t("pg_txtItemsCode.clmPrice")} width={300}  />
+                    </NdPopGrid>
+                    {/* BARKOD POPUP */}
+                    <NdPopGrid id={"pg_txtBarcode"} parent={this} container={"#root"}
+                    visible={false}
+                    position={{of:'#root'}} 
+                    showTitle={true} 
+                    showBorders={true}
+                    width={'90%'}
+                    height={'90%'}
+                    title={this.t("pg_txtBarcode.title")} //
+                    search={true}
+                    >
+                        <Column dataField="BARCODE" caption={this.t("pg_txtBarcode.clmBarcode")} width={150} />
+                        <Column dataField="CODE" caption={this.t("pg_txtBarcode.clmCode")} width={150} />
+                        <Column dataField="NAME" caption={this.t("pg_txtBarcode.clmName")} width={300} defaultSortOrder="asc" />
+                        <Column dataField="MULTICODE" caption={this.t("pg_txtBarcode.clmMulticode")} width={200}/>
+                    </NdPopGrid>
                     {/* Dizayn Seçim PopUp */}
                     <div>
                         <NdPopUp parent={this} id={"popDesign"} 
