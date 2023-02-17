@@ -39,9 +39,13 @@ export default class NdDatePicker extends Base
     }
     _onEnterKey()
     {
-        console.log(this.value)
-        console.log(moment(this.value).format("YYYY-MM-DD"))
-        this.value = moment(this.value).format("YYYY-MM-DD")
+        let tmpDate = this.dev.element().getElementsByTagName('input')[1].value
+        let numbers = tmpDate.match(/[0-9]/g); 
+        let tmpDateFromat = numbers[2] + numbers[3] +  '.' + numbers[0] + numbers[1] + '.' + numbers[4] + numbers[5] + numbers[6] + numbers[7]
+        if(moment(tmpDateFromat).format("YYYY-MM-DD") != 'Invalid date')
+        {
+           this.value = moment(tmpDateFromat).format("YYYY-MM-DD")
+        }
         if(typeof this.props.onEnterKey != 'undefined')
         {
             this.props.onEnterKey();
@@ -49,7 +53,6 @@ export default class NdDatePicker extends Base
     }
     _onFocusIn(e)
     {
-        console.log(this.dev.element().getElementsByTagName('input')[1].value)
         this.dev.element().getElementsByTagName('input')[1].select()
     }
     _dateView()
@@ -83,6 +86,7 @@ export default class NdDatePicker extends Base
             e = '1970-01-01';
         }
         //VALUE DEĞİŞTİĞİNDE BU DEĞİŞİKLİK DATATABLE A YANSITMAK İÇİN YAPILDI.
+        console.log(123)
         if(typeof this.props.dt != 'undefined' && typeof this.props.dt.data != 'undefined' && this.props.dt.data.length > 0 && typeof this.props.dt.field != 'undefined')
         {            
             if(typeof this.props.dt.filter == 'undefined')
