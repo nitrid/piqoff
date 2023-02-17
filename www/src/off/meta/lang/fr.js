@@ -3871,6 +3871,7 @@ export const langFr =
         {
             title: "Sélection de l'unité",  
             btn01: "Valider",  
+            btnFactorSave : "Stok Kartını Güncelle" // BAK
         },
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
@@ -9642,6 +9643,7 @@ export const langFr =
         {
             title: "Sélection de l'unité",
             btn01: "Valider",
+            btnFactorSave : "Stok Kartını Güncelle" // BAK
         }, 
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",

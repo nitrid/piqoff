@@ -3873,6 +3873,7 @@ export const langTr =
         {
             title: "Birim Seçimi",
             btn01: "Onayla",
+            btnFactorSave : "Stok Kartını Güncelle"
         },
         validRef :"Seri Boş Geçilemez",
         validRefNo : "Sıra Boş Geçilemez",
