@@ -410,7 +410,8 @@ export const langTr =
             dtPopPriStartDate: "Baş.Tarih",
             dtPopPriEndDate: "Bit.Tarih", 
             txtPopPriQuantity: "Miktar",
-            txtPopPriPrice: "Fiyat"
+            txtPopPriPrice: "Fiyat",
+            txtPopPriPriceVatExt: "Vargisiz Fiyat"
         },
         popUnit:
         {

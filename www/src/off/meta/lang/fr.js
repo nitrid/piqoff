@@ -408,7 +408,8 @@ export const langFr =
             dtPopPriStartDate: "Date Début",
             dtPopPriEndDate: "Date Fin", 
             txtPopPriQuantity: "Quantité",
-            txtPopPriPrice: "Prix de Vente "
+            txtPopPriPrice: "Prix de Vente TTC",
+            txtPopPriPriceVatExt: "Prix de Vente HT"
         },
         popUnit:
         {
