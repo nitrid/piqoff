@@ -992,6 +992,7 @@ export const langFr =
     {
         txtCode : "Kodu", //BAK
         txtName :"Adı", //BAK
+        txtQuantity : "Miktar", //BAK
         msgRelatedValid: //BAK
         {
             title: "Dikkat",
@@ -1002,6 +1003,7 @@ export const langFr =
         {
             clmItemCode : "KODU",
             clmItemName : "ADI",
+            clmQuantity : "MIKTAR"
         },
         popRelatedSelect : //BAK 
         {

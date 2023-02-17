@@ -993,7 +993,8 @@ export const langTr =
     stk_01_012 : // "Bağlı Ürün Tanımlama"
     {
         txtCode : "Kodu",
-        txtName :"Adı",
+        txtName : "Adı",
+        txtQuantity : "Miktar",
         msgRelatedValid:
         {
             title: "Dikkat",
@@ -1004,6 +1005,7 @@ export const langTr =
         {
             clmItemCode : "KODU",
             clmItemName : "ADI",
+            clmQuantity : "MIKTAR"
         },
         popRelatedSelect : 
         {

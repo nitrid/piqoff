@@ -2224,9 +2224,11 @@ export class itemRelatedCls
             ITEM_GUID : '00000000-0000-0000-0000-000000000000',            
             ITEM_CODE : '',            
             ITEM_NAME : '',
+            ITEM_QUANTITY : 1,
             RELATED_GUID : '00000000-0000-0000-0000-000000000000',            
             RELATED_CODE : '',            
-            RELATED_NAME : ''
+            RELATED_NAME : '',
+            RELATED_QUANTITY : 1
         }
         
         this._initDs();
@@ -2253,9 +2255,11 @@ export class itemRelatedCls
                     "@GUID = @PGUID, " +
                     "@CUSER = @PCUSER, " + 
                     "@ITEM = @PITEM, " + 
-                    "@RELATED = @PRELATED",
-            param : ['PGUID:string|50','PCUSER:string|25','PITEM:string|50','PRELATED:string|50'],
-            dataprm : ['GUID','CUSER','ITEM_GUID','RELATED_GUID']
+                    "@ITEM_QUANTITY = @PITEM_QUANTITY, " + 
+                    "@RELATED = @PRELATED, " +
+                    "@RELATED_QUANTITY = @PRELATED_QUANTITY",
+            param : ['PGUID:string|50','PCUSER:string|25','PITEM:string|50','PITEM_QUANTITY:float','PRELATED:string|50','PRELATED_QUANTITY:float'],
+            dataprm : ['GUID','CUSER','ITEM_GUID','ITEM_QUANTITY','RELATED_GUID','RELATED_QUANTITY']
         } 
         tmpDt.updateCmd = 
         {
@@ -2263,9 +2267,11 @@ export class itemRelatedCls
                     "@GUID = @PGUID, " +
                     "@CUSER = @PCUSER, " + 
                     "@ITEM = @PITEM, " + 
-                    "@RELATED = @PRELATED ", 
-            param : ['PGUID:string|50','PCUSER:string|25','PITEM:string|50','PRELATED:string|50'],
-            dataprm : ['GUID','CUSER','ITEM_GUID','RELATED_GUID']
+                    "@ITEM_QUANTITY = @PITEM_QUANTITY, " + 
+                    "@RELATED = @PRELATED, " +
+                    "@RELATED_QUANTITY = @PRELATED_QUANTITY",
+            param : ['PGUID:string|50','PCUSER:string|25','PITEM:string|50','PITEM_QUANTITY:float','PRELATED:string|50','PRELATED_QUANTITY:float'],
+            dataprm : ['GUID','CUSER','ITEM_GUID','ITEM_QUANTITY','RELATED_GUID','RELATED_QUANTITY']
         }
         tmpDt.deleteCmd = 
         {
