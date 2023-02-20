@@ -481,7 +481,14 @@ export default class purchaseInvoice extends React.PureComponent
                                     }
                                     else
                                     {
+                                        if(this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].TYPE == 1)
+                                    {
+                                        e.data.PRICE = parseFloat((this.txtUnitPrice.value * this.txtUnitFactor.value).toFixed(4))
+                                    }
+                                    else
+                                    {
                                         e.data.PRICE = parseFloat((this.txtUnitPrice.value / this.txtUnitFactor.value).toFixed(4))
+                                    }
                                     }
                                     e.data.DIFF_PRICE = parseFloat((e.data.PRICE - e.data.CUSTOMER_PRICE).toFixed(3))
                                     e.data.QUANTITY = this.txtTotalQuantity.value
@@ -579,6 +586,57 @@ export default class purchaseInvoice extends React.PureComponent
                                     e.data.TOTAL = parseFloat((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) +e.data.VAT).toFixed(4))
                                     e.data.DISCOUNT_RATE = Number(e.data.AMOUNT).rate2Num(e.data.DISCOUNT,4)
                                     this._calculateTotal()
+                                });  
+                            }
+                        },
+                    ]
+                }
+                >  
+                </NdTextBox>
+            )
+        }
+        if(e.column.dataField == "ORIGIN")
+        {
+            return (
+                <NdTextBox id={"txtGrdOrigins"+e.rowIndex} parent={this} simple={true} 
+                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                value={e.value}
+                onChange={(r)=>
+                {
+                }}
+                button=
+                {
+                    [
+                        {
+                            id:'01',
+                            icon:'more',
+                            onClick:async ()  =>
+                            {
+                                this.cmbOrigin.value = e.data.ORIGIN
+                                await this.msgGrdOrigins.show().then(async () =>
+                                {
+                                  e.data.ORIGIN = this.cmbOrigin.value 
+                                  let tmpQuery = 
+                                  {
+                                      query :"UPDATE ITEMS_GRP SET LDATE = GETDATE(),LUSER = @PCUSER,ORGINS = @ORGINS WHERE ITEM = @ITEM ",
+                                      param : ['ITEM:string|50','PCUSER:string|25','ORGINS:string|25'],
+                                      value : [e.data.ITEM,this.user.CODE,e.data.ORIGIN]
+                                  }
+                                  let tmpData = await this.core.sql.execute(tmpQuery) 
+                                  if(typeof tmpData.result.err == 'undefined')
+                                  {
+                                     
+                                  }
+                                  else
+                                  {
+                                      let tmpConfObj1 =
+                                      {
+                                          id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                          button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
+                                      }
+                                      tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
+                                      await dialog(tmpConfObj1);
+                                  }
                                 });  
                             }
                         },
@@ -809,6 +867,17 @@ export default class purchaseInvoice extends React.PureComponent
         {
             this.docObj.docItems.dt()[pIndex].CUSTOMER_PRICE = tmpData.result.recordset[0].PRICE
             this.docObj.docItems.dt()[pIndex].DIFF_PRICE = this.docObj.docItems.dt()[pIndex].PRICE - this.docObj.docItems.dt()[pIndex].CUSTOMER_PRICE
+        }
+        let tmpGrpQuery = 
+        {
+            query :"SELECT ORGINS FROM ITEMS_VW_01 WHERE GUID = @GUID ",
+            param : ['GUID:string|50'],
+            value : [pData.GUID]
+        }
+        let tmpGrpData = await this.core.sql.execute(tmpGrpQuery) 
+        if(tmpGrpData.result.recordset.length > 0)
+        {
+            this.docObj.docItems.dt()[pIndex].ORIGIN = tmpGrpData.result.recordset[0].ORGINS
         }
         //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
         await this.itemRelated(pData.GUID,pQuantity)
@@ -3086,6 +3155,7 @@ export default class purchaseInvoice extends React.PureComponent
                                             <Column dataField="ITEM_CODE" caption={this.t("grdPurcInv.clmItemCode")} width={85} editCellRender={this._cellRoleRender} allowHeaderFiltering={false}/>
                                             <Column dataField="MULTICODE" caption={this.t("grdPurcInv.clmMulticode")} width={60} allowHeaderFiltering={false}/>
                                             <Column dataField="ITEM_NAME" caption={this.t("grdPurcInv.clmItemName")} width={200} allowHeaderFiltering={false}/>
+                                            <Column dataField="ORIGIN" caption={this.t("grdPurcInv.clmOrigin")} width={60} allowEditing={true}  allowHeaderFiltering={false} editCellRender={this._cellRoleRender} />
                                             <Column dataField="QUANTITY" caption={this.t("grdPurcInv.clmQuantity")} dataType={'number'} width={70} editCellRender={this._cellRoleRender} allowHeaderFiltering={false}/>
                                             <Column dataField="PRICE" caption={this.t("grdPurcInv.clmPrice")} dataType={'number'} format={'€#,##0.000'} width={70} allowHeaderFiltering={false}/>
                                             <Column dataField="CUSTOMER_PRICE" caption={this.t("grdPurcInv.clmCustomerPrice")} dataType={'number'} format={'€#,##0.000'} width={70} allowHeaderFiltering={false} allowEditing={false}/>
@@ -4676,7 +4746,7 @@ export default class purchaseInvoice extends React.PureComponent
                         </NdPopUp>
                     </div>  
                     {/* Adres Seçim POPUP */}
-                    <NdPopGrid id={"pg_adress"} parent={this} container={"#root"}
+                    <NdPopGrid id={"pg_adress"} showCloseButton={false} parent={this} container={"#root"}
                     visible={false}
                     position={{of:'#root'}} 
                     showTitle={true} 
@@ -4935,6 +5005,36 @@ export default class purchaseInvoice extends React.PureComponent
                         <Column dataField="PRICE" caption={this.t("pg_proformaGrid.clmPrice")} width={200} />
                         <Column dataField="TOTAL" caption={this.t("pg_proformaGrid.clmTotal")} width={200} />
                     </NdPopGrid>
+                    {/* Origins PopUp */}
+                    <div>
+                        <NdDialog parent={this} id={"msgGrdOrigins"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.t("msgGrdOrigins.title")}
+                        container={"#root"} 
+                        width={'500'}
+                        height={'200'}
+                        position={{of:'#root'}}
+                        button={[{id:"btn01",caption:this.t("msgGrdOrigins.btn01"),location:'after'}]}
+                        >
+                            <Form colCount={1} height={'fit-content'}>
+                            <Item>
+                                    <Label text={this.t("cmbOrigin")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbOrigin"
+                                    displayExpr="NAME"                       
+                                    valueExpr="CODE"
+                                    value=""
+                                    searchEnabled={true} showClearButton={true}
+                                    param={this.param.filter({ELEMENT:'cmbOrigin',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'cmbOrigin',USERS:this.user.CODE})}
+                                    data={{source:{select:{query : "SELECT CODE,NAME FROM COUNTRY ORDER BY CODE ASC"},sql:this.core.sql}}}
+                                    >
+                                    </NdSelectBox>                                    
+                                </Item>                    
+                            </Form>
+                        </NdDialog>
+                    </div> 
                     {/* Delete Description Popup */} 
                     <div>
                         <NbPopDescboard id={"popDeleteDesc"} parent={this} width={"900"} height={"450"} position={"#root"} head={this.lang.t("popDeleteDesc.head")} title={this.lang.t("popDeleteDesc.title")} 

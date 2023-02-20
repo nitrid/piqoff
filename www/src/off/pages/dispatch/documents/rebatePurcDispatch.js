@@ -2316,7 +2316,7 @@ export default class rebateDispatch extends React.PureComponent
                             </div>
                     </NdDialog>  
                      {/* Adres Seçim POPUP */}
-                     <NdPopGrid id={"pg_adress"} parent={this} container={"#root"}
+                     <NdPopGrid id={"pg_adress"} showCloseButton={false} parent={this} container={"#root"}
                         visible={false}
                         position={{of:'#root'}} 
                         showTitle={true} 
