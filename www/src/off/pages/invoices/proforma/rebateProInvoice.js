@@ -2799,7 +2799,7 @@ export default class rebateInvoice extends React.PureComponent
                         </NdPopUp>
                     </div>
                      {/* Adres Seçim POPUP */}
-                     <NdPopGrid id={"pg_adress"} parent={this} container={"#root"}
+                     <NdPopGrid id={"pg_adress"} showCloseButton={false} parent={this} container={"#root"}
                         visible={false}
                         position={{of:'#root'}} 
                         showTitle={true} 

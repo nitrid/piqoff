@@ -199,6 +199,7 @@ export const langFr =
         irs_01_002: "Liste Bon de livraison de vente",
         irs_01_003: "Liste Bon de livraison de retour",
         irs_01_004: "Liste des bordereaux de vente interne", 
+        irs_01_006 : "Faturası Kesilmemiş İrsaliye Listesi",   //BAK
         irs_02_001: " Bon de livraison d'achat",
         irs_02_002: "Saisie Bon de livraison de vente",
         irs_02_003: "Saisie Bon de Retour de livraison",
@@ -408,7 +409,8 @@ export const langFr =
             dtPopPriStartDate: "Date Début",
             dtPopPriEndDate: "Date Fin", 
             txtPopPriQuantity: "Quantité",
-            txtPopPriPrice: "Prix de Vente "
+            txtPopPriPrice: "Prix de Vente TTC",
+            txtPopPriPriceVatExt: "Prix de Vente HT"
         },
         popUnit:
         {
@@ -992,6 +994,7 @@ export const langFr =
     {
         txtCode : "Kodu", //BAK
         txtName :"Adı", //BAK
+        txtQuantity : "Miktar", //BAK
         msgRelatedValid: //BAK
         {
             title: "Dikkat",
@@ -1002,6 +1005,7 @@ export const langFr =
         {
             clmItemCode : "KODU",
             clmItemName : "ADI",
+            clmQuantity : "MIKTAR"
         },
         popRelatedSelect : //BAK 
         {
@@ -3558,6 +3562,7 @@ export const langFr =
         getOffers : "Recherche Proposition", 
         getProforma : "Rechercher Proforma ", 
         txtTotalHt : "Total HT",
+        cmbOrigin : "Origine",
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -3616,6 +3621,7 @@ export const langFr =
             clmDescription :"Motif",
             clmCuser :"Utilisateur",
             clmMulticode : "FRN.Code",
+            clmOrigin : "Origine",
         },
         grdInvoicePayment: 
         {
@@ -3871,6 +3877,7 @@ export const langFr =
         {
             title: "Sélection de l'unité",  
             btn01: "Valider",  
+            btnFactorSave : "Stok Kartını Güncelle" // BAK
         },
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
@@ -4004,6 +4011,11 @@ export const langFr =
         {
             title : "Saisir de Remise Montant",   // BAK
             btn01 : "Valide" // BAK
+        },
+        msgGrdOrigins:
+        {
+            title: "Menşei Değişimi",   // BAK
+            btn01: "Keydet",   // BAK
         },
         txtDiscount1 : "1. Remise ",  // BAK
         txtDiscount2 : "2. Remise ",  // BAK
@@ -9390,6 +9402,37 @@ export const langFr =
             clmOutputName :"Dépôt",
         },
     },
+    irs_01_006 : // "Satış İrsaliye Listesi"
+    {
+        cmbCustomer :"Client",
+        btnGet :"Rechercher",
+        dtFirst : "Date Début",
+        dtLast : "Date Fin",
+        txtCustomerCode : "Client",
+        menu:"Bon de Livraison de Vente ",
+        pg_txtCustomerCode : 
+        {
+            title : "Choix Client",
+            clmCode :  "Code Client",
+            clmTitle : "Nom Client",
+            clmTypeName : "Type",
+            clmGenusName : "Genre"
+        },
+        grdSlsDisList: 
+        {
+            clmRef: "Référence",
+            clmRefNo: "Ligne",
+            clmPrice: "Prix ",
+            clmInputCode : "Sélection Document",
+            clmInputName : "Nom Client",
+            clmDate: "Date",
+            clmVat : "TVA",
+            clmAmount : "Total" ,
+            clmTotal : "Total",
+            clmOutputName :"Réserve",
+        },
+
+    },
     irs_02_001 : // "Alış İrsaliyesi"
     {
         txtRefRefno : "Réf.-Réf no:",
@@ -9411,6 +9454,7 @@ export const langFr =
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
         txtUnitPrice : "Prix unitaire", // BAK
+        cmbOrigin: "Origine",
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -9455,6 +9499,7 @@ export const langFr =
             clmOrder : "Commande No", 
             clmVatRate : "TVA %", 
             clmMulticode : "FRN.Code", 
+            clmOrigin : "Origine"
         },
         popDiscount : 
         {
@@ -9642,7 +9687,13 @@ export const langFr =
         {
             title: "Sélection de l'unité",
             btn01: "Valider",
+            btnFactorSave : "Stok Kartını Güncelle" // BAK
         }, 
+        msgGrdOrigins:
+        {
+            title: "Menşei Değişimi",   // BAK
+            btn01: "Keydet",   // BAK
+        },
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
@@ -13667,7 +13718,13 @@ export const langFr =
             clmTicketId : "Ticket No",
             clmTotal : "Total",
             clmDescription :"Motif",
-        }
+        },
+        popDesign : 
+        {
+            title: "Choix du Design",
+            design : "Design" ,
+            lang : "Langue Document" 
+        },
     },
     pos_02_002 : // "Müşteri Puanı Raporu"
     {

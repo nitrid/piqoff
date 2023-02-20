@@ -1542,6 +1542,7 @@ export default class itemCard extends React.PureComponent
                                                             this.dtPopPriEndDate.value = "1970-01-01"
                                                             this.txtPopPriQuantity.value = 1
                                                             this.txtPopPriPrice.value = 0
+                                                            this.txtPopPriPriceVatExt.value = 0
 
                                                             this.popPrice.show();
                                                             setTimeout(async () => 
@@ -2004,7 +2005,7 @@ export default class itemCard extends React.PureComponent
                         title={this.t("popPrice.title")}
                         container={"#root"} 
                         width={'500'}
-                        height={'320'}
+                        height={'400'}
                         position={{of:'#root'}}
                         >
                             <Form colCount={1} height={'fit-content'} id={"frmPrice" + this.tabIndex}>
@@ -2026,8 +2027,24 @@ export default class itemCard extends React.PureComponent
                                     </NdNumberBox>
                                 </Item>
                                 <Item>
+                                    <Label text={this.t("popPrice.txtPopPriPriceVatExt")} alignment="right" />
+                                    <NdNumberBox id={"txtPopPriPriceVatExt"} parent={this} simple={true} format={"##0.000"}
+                                    onValueChanged={(async(e)=>
+                                    {
+                                        this.txtPopPriPrice.value = (this.txtPopPriPriceVatExt.value + ((this.txtPopPriPriceVatExt.value * this.cmbTax.value) / 100))
+                                    }).bind(this)}
+                                    >
+                                      
+                                    </NdNumberBox>
+                                </Item>
+                                <Item>
                                     <Label text={this.t("popPrice.txtPopPriPrice")} alignment="right" />
-                                    <NdNumberBox id={"txtPopPriPrice"} parent={this} simple={true}>
+                                    <NdNumberBox id={"txtPopPriPrice"} parent={this} simple={true}  format={"##0.000"}
+                                    onValueChanged={(async(e)=>
+                                    {
+                                        this.txtPopPriPriceVatExt.value = (this.txtPopPriPrice.value / ((this.cmbTax.value/ 100) + 1))
+                                    }).bind(this)}
+                                    >
                                         <Validator validationGroup={"frmPrice" + this.tabIndex}>
                                             <RequiredRule message={this.t("validPrice")}
                                              />

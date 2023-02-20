@@ -80,7 +80,6 @@ export default class posDoc extends React.PureComponent
         {
             date:"00.00.0000",
             isPluEdit:false,
-            isBtnGetCustomer:false,
             isBtnInfo:false,            
             isConnected:this.core.offline ? false : true,
             isFormation:false
@@ -534,7 +533,6 @@ export default class posDoc extends React.PureComponent
             // {
             //     Object.setPrototypeOf(this.posObj.posSale.dt()[i],{stat:''})
             // }
-            console.log(moment(new Date(this.posObj.dt()[0].LDATE).toISOString()))
             await this.calcGrandTotal(false)
             resolve();
         });        
@@ -659,7 +657,7 @@ export default class posDoc extends React.PureComponent
         }
         
         //EĞER CARİ SEÇ BUTONUNA BASILDIYSA CARİ BARKODDAN SEÇİLECEK.
-        if(this.state.isBtnGetCustomer)
+        if(this.btnGetCustomer.lock)
         {       
             //PRODORPLUS İÇİN YAPILDI. #CUSTOM1453# 
             // if(pCode.toString().substring(0,6) == "202012")
@@ -730,7 +728,7 @@ export default class posDoc extends React.PureComponent
                 //************************************************** */
 
                 this.calcGrandTotal(true);
-                this.setState({isBtnGetCustomer:false})                
+                this.btnGetCustomer.setUnLock({backgroundColor:"#0dcaf0",borderColor:"#0dcaf0",height:"70px",width:"100%"})
             }
             else
             {
@@ -2426,8 +2424,6 @@ export default class posDoc extends React.PureComponent
     {
         let tmpCounter = 0
         let tmpPrmTime = typeof pTime != 'undefined' ? pTime : this.prmObj.filter({ID:'TransferTime',TYPE:0}).getValue()
-        console.log(this.prmObj.filter({ID:'TransferTime',TYPE:0}))
-        console.log(this.prmObj)
         this.interval = setInterval(async ()=>
         {
             this.msgTransfer1.value = this.lang.t("popTransfer.msg1") + (tmpPrmTime - tmpCounter).toString() + " Sn."
@@ -2857,9 +2853,9 @@ export default class posDoc extends React.PureComponent
                                 </div>
                                 <div className="row" style={{height:"25px"}} onClick={async()=>
                                 {
-                                    if(this.state.isBtnGetCustomer)
+                                    if(this.btnGetCustomer.lock)
                                     {
-                                        this.setState({isBtnGetCustomer:false})                                                
+                                        this.btnGetCustomer.setUnLock({backgroundColor:"#0dcaf0",borderColor:"#0dcaf0",height:"70px",width:"100%"})
                                     }
                                     else
                                     {
@@ -3651,7 +3647,7 @@ export default class posDoc extends React.PureComponent
                     <div className="col-6">
                         <div className="row" style={{backgroundColor:this.state.isFormation ? 'coral' : 'white',marginLeft:'1px',marginRight:'0.5px',borderRadius:'5px'}}>
                             <div className="col-6">
-                                <a class="link-primary" onClick={()=>{this.popAbout.show()}} style={{textDecoration:'none'}}>{this.core.appInfo.name + " " + this.lang.t("about")}</a>
+                                <a className="link-primary" onClick={()=>{this.popAbout.show()}} style={{textDecoration:'none'}}>{this.core.appInfo.name + " " + this.lang.t("about")}</a>
                             </div>
                             <div className="col-6 text-end">
                                 <NbLabel id="formation" parent={this} value={''}/>
@@ -4093,12 +4089,12 @@ export default class posDoc extends React.PureComponent
                                     </div>
                                     {/* Get Customer */}
                                     <div className="col px-1">
-                                        <NbButton id={"btnGetCustomer"} parent={this} className={this.state.isBtnGetCustomer == true ? "form-group btn btn-danger btn-block my-1" : "form-group btn btn-info btn-block my-1"} style={{height:"70px",width:"100%"}}
+                                        <NbButton id={"btnGetCustomer"} parent={this} className={"form-group btn btn-info btn-block my-1"} style={{height:"70px",width:"100%"}}
                                         onClick={async ()=>
-                                        {
-                                            if(this.state.isBtnGetCustomer)
+                                        {          
+                                            if(this.btnGetCustomer.lock)
                                             {
-                                                this.setState({isBtnGetCustomer:false})                                                
+                                                this.btnGetCustomer.setUnLock({backgroundColor:"#0dcaf0",borderColor:"#0dcaf0",height:"70px",width:"100%"})
                                             }
                                             else
                                             {
@@ -4116,12 +4112,11 @@ export default class posDoc extends React.PureComponent
                                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgTicketForNotCustomer.msg")}</div>)
                                                             }
                                                             await dialog(tmpConfObj);
-                                                            this.setState({isBtnGetCustomer:false})
+                                                            this.btnGetCustomer.setUnLock({backgroundColor:"#0dcaf0",borderColor:"#0dcaf0",height:"70px",width:"100%"})
                                                             return
                                                         }
                                                     }
-
-                                                    this.setState({isBtnGetCustomer:true})
+                                                    this.btnGetCustomer.setLock({backgroundColor:"#dc3545",borderColor:"#dc3545",height:"70px",width:"100%"})
                                                 }
                                             }
                                         }}>
