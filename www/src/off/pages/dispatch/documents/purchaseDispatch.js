@@ -408,20 +408,45 @@ export default class purchaseDispatch extends React.PureComponent
                                     this.cmbUnit.value = e.data.UNIT
                                     this.txtUnitFactor.value = e.data.UNIT_FACTOR
                                     this.txtTotalQuantity.value =  e.data.QUANTITY
-                                    this.txtUnitQuantity.value = e.data.QUANTITY / e.data.UNIT_FACTOR
-                                    this.txtUnitPrice.value = e.data.PRICE
+                                    if(this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].TYPE == 1)
+                                    {
+                                        this.txtUnitQuantity.value = e.data.QUANTITY * e.data.UNIT_FACTOR
+                                        this.txtUnitPrice.value = e.data.PRICE / e.data.UNIT_FACTOR
+                                    }
+                                    else
+                                    {
+                                        this.txtUnitQuantity.value = e.data.QUANTITY / e.data.UNIT_FACTOR
+                                        this.txtUnitPrice.value = e.data.PRICE * e.data.UNIT_FACTOR
+                                    }
                                 }
                                 await this.msgUnit.show().then(async () =>
                                 {
                                     e.key.UNIT = this.cmbUnit.value
                                     e.key.UNIT_FACTOR = this.txtUnitFactor.value
-                                    e.data.PRICE = parseFloat((this.txtUnitPrice.value / this.txtUnitFactor.value).toFixed(4))
+                                    if(this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].TYPE == 1)
+                                    {
+                                        e.data.PRICE = parseFloat((this.txtUnitPrice.value * this.txtUnitFactor.value).toFixed(4))
+                                    }
+                                    else
+                                    {
+                                        if(this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].TYPE == 1)
+                                    {
+                                        e.data.PRICE = parseFloat((this.txtUnitPrice.value * this.txtUnitFactor.value).toFixed(4))
+                                    }
+                                    else
+                                    {
+                                        e.data.PRICE = parseFloat((this.txtUnitPrice.value / this.txtUnitFactor.value).toFixed(4))
+                                    }
+                                    }
                                     e.data.QUANTITY = this.txtTotalQuantity.value
                                     e.data.VAT = parseFloat(((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) * (e.data.VAT_RATE) / 100)).toFixed(4));
                                     e.data.AMOUNT = parseFloat((e.data.PRICE * e.data.QUANTITY).toFixed(4))
                                     e.data.TOTALHT = parseFloat(((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT).toFixed(4))
                                     e.data.TOTAL = parseFloat((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) +e.data.VAT).toFixed(4))
                                     e.data.DISCOUNT_RATE = Number(e.data.AMOUNT).rate2Num(e.data.DISCOUNT,4)
+                                    //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
+                                    await this.itemRelatedUpdate(e.data.ITEM,this.txtTotalQuantity.value)
+                                    //*****************************************/
                                     this._calculateTotal()
                                 });  
                             }
@@ -517,6 +542,57 @@ export default class purchaseDispatch extends React.PureComponent
                 </NdTextBox>
             )
         }
+        if(e.column.dataField == "ORIGIN")
+        {
+            return (
+                <NdTextBox id={"txtGrdOrigins"+e.rowIndex} parent={this} simple={true} 
+                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                value={e.value}
+                onChange={(r)=>
+                {
+                }}
+                button=
+                {
+                    [
+                        {
+                            id:'01',
+                            icon:'more',
+                            onClick:async ()  =>
+                            {
+                                this.cmbOrigin.value = e.data.ORIGIN
+                                await this.msgGrdOrigins.show().then(async () =>
+                                {
+                                  e.data.ORIGIN = this.cmbOrigin.value 
+                                  let tmpQuery = 
+                                  {
+                                      query :"UPDATE ITEMS_GRP SET LDATE = GETDATE(),LUSER = @PCUSER,ORGINS = @ORGINS WHERE ITEM = @ITEM ",
+                                      param : ['ITEM:string|50','PCUSER:string|25','ORGINS:string|25'],
+                                      value : [e.data.ITEM,this.user.CODE,e.data.ORIGIN]
+                                  }
+                                  let tmpData = await this.core.sql.execute(tmpQuery) 
+                                  if(typeof tmpData.result.err == 'undefined')
+                                  {
+                                     
+                                  }
+                                  else
+                                  {
+                                      let tmpConfObj1 =
+                                      {
+                                          id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                          button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
+                                      }
+                                      tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
+                                      await dialog(tmpConfObj1);
+                                  }
+                                });  
+                            }
+                        },
+                    ]
+                }
+                >  
+                </NdTextBox>
+            )
+        }
     }
     async addItem(pData,pIndex,pQuantity)
     {
@@ -589,7 +665,7 @@ export default class purchaseDispatch extends React.PureComponent
                             this._calculateTotal()
                             await this.grdPurcDispatch.devGrid.deleteRow(0)
                             //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
-                            await this.itemRelated(pData.GUID,pQuantity)
+                            await this.itemRelated(pData.GUID,this.docObj.docItems.dt()[i].QUANTITY)
                             //*****************************************/
                             if(this.checkCombine.value == true)
                             {
@@ -623,7 +699,7 @@ export default class purchaseDispatch extends React.PureComponent
                     this._calculateTotal()
                     await this.grdPurcDispatch.devGrid.deleteRow(0)
                     //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
-                    await this.itemRelated(pData.GUID,pQuantity)
+                    await this.itemRelated(pData.GUID,this.docObj.docItems.dt()[i].QUANTITY)
                     //*****************************************/
                     App.instance.setState({isExecute:false})
                     return
@@ -662,6 +738,17 @@ export default class purchaseDispatch extends React.PureComponent
             this.docObj.docItems.dt()[pIndex].TOTAL = 0
             this._calculateTotal()
         }
+        let tmpGrpQuery = 
+        {
+            query :"SELECT ORGINS FROM ITEMS_VW_01 WHERE GUID = @GUID ",
+            param : ['GUID:string|50'],
+            value : [pData.GUID]
+        }
+        let tmpGrpData = await this.core.sql.execute(tmpGrpQuery) 
+        if(tmpGrpData.result.recordset.length > 0)
+        {
+            this.docObj.docItems.dt()[pIndex].ORIGIN = tmpGrpData.result.recordset[0].ORGINS
+        }
         //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
         await this.itemRelated(pData.GUID,pQuantity)
         //*****************************************/
@@ -673,16 +760,18 @@ export default class purchaseDispatch extends React.PureComponent
         {
             let tmpRelatedQuery = 
             {
-                query :"SELECT ITEM_GUID,ITEM_CODE,ITEM_NAME,RELATED_GUID,RELATED_CODE,RELATED_NAME FROM ITEM_RELATED_VW_01 WHERE ITEM_GUID = @ITEM_GUID",
+                query :"SELECT ITEM_GUID,ITEM_CODE,ITEM_NAME,ITEM_QUANTITY,RELATED_GUID,RELATED_CODE,RELATED_NAME,RELATED_QUANTITY FROM ITEM_RELATED_VW_01 WHERE ITEM_GUID = @ITEM_GUID",
                 param : ['ITEM_GUID:string|50'],
                 value : [pGuid]
             }
     
-            let tmpRelatedData = await this.core.sql.execute(tmpRelatedQuery)
-    
-            if(tmpRelatedData.result.recordset.length > 0)
+            let tmpRelatedData = await this.core.sql.execute(tmpRelatedQuery)            
+            
+            for (let i = 0; i < tmpRelatedData.result.recordset.length; i++) 
             {
-                for (let i = 0; i < tmpRelatedData.result.recordset.length; i++) 
+                let tmpRelatedQt = Math.floor(pQuantity / tmpRelatedData.result.recordset[i].ITEM_QUANTITY) * tmpRelatedData.result.recordset[i].RELATED_QUANTITY
+                
+                if(tmpRelatedQt > 0)
                 {
                     let tmpRelatedItemQuery = 
                     {   
@@ -711,8 +800,50 @@ export default class purchaseDispatch extends React.PureComponent
                         this.txtRefno.readOnly = true
                         this.docObj.docItems.addEmpty(tmpDocItems)
                         await this.core.util.waitUntil(100)
-                        await this.addItem(tmpRelatedItemData.result.recordset[0],this.docObj.docItems.dt().length-1,pQuantity)
+                        await this.addItem(tmpRelatedItemData.result.recordset[0],this.docObj.docItems.dt().length-1,tmpRelatedQt)
                     }
+                }
+            }
+            resolve()
+        })
+    }
+    itemRelatedUpdate(pGuid,pQuantity)
+    {
+        return new Promise(async resolve =>
+        {
+            await this.core.util.waitUntil()
+            let tmpRelatedQuery = 
+            {
+                query :"SELECT ITEM_GUID,ITEM_CODE,ITEM_NAME,ITEM_QUANTITY,RELATED_GUID,RELATED_CODE,RELATED_NAME,RELATED_QUANTITY FROM ITEM_RELATED_VW_01 WHERE ITEM_GUID = @ITEM_GUID",
+                param : ['ITEM_GUID:string|50'],
+                value : [pGuid]
+            }
+            
+            let tmpRelatedData = await this.core.sql.execute(tmpRelatedQuery)                        
+            
+            for (let i = 0; i < tmpRelatedData.result.recordset.length; i++) 
+            {
+                let tmpExist = false
+                for (let x = 0; x < this.docObj.docItems.dt().length; x++) 
+                {
+                    if(this.docObj.docItems.dt()[x].ITEM_CODE == tmpRelatedData.result.recordset[i].RELATED_CODE)
+                    {                
+                        let tmpRelatedQt = Math.floor(pQuantity / tmpRelatedData.result.recordset[i].ITEM_QUANTITY) * tmpRelatedData.result.recordset[i].RELATED_QUANTITY
+                        
+                        if(tmpRelatedQt > 0)
+                        {
+                            this.docObj.docItems.dt()[x].QUANTITY = tmpRelatedQt
+                            this.docObj.docItems.dt()[x].VAT = parseFloat((this.docObj.docItems.dt()[x].VAT + (this.docObj.docItems.dt()[x].PRICE * (this.docObj.docItems.dt()[x].VAT_RATE / 100) * pQuantity)).toFixed(4))
+                            this.docObj.docItems.dt()[x].AMOUNT = parseFloat((this.docObj.docItems.dt()[x].QUANTITY * this.docObj.docItems.dt()[x].PRICE).toFixed(4))
+                            this.docObj.docItems.dt()[x].TOTAL = parseFloat((((this.docObj.docItems.dt()[x].QUANTITY * this.docObj.docItems.dt()[x].PRICE) - this.docObj.docItems.dt()[x].DISCOUNT) + this.docObj.docItems.dt()[x].VAT).toFixed(4))
+                            this.docObj.docItems.dt()[x].TOTALHT =  parseFloat((this.docObj.docItems.dt()[x].TOTAL - this.docObj.docItems.dt()[x].VAT).toFixed(4))
+                        }
+                        tmpExist = true
+                    }
+                }
+                if(!tmpExist)
+                {
+                    await this.itemRelated(pGuid,pQuantity)
                 }
             }
             resolve()
@@ -2000,6 +2131,12 @@ export default class purchaseDispatch extends React.PureComponent
                                             dialog(tmpConfObj);
                                             e.component.cancelEditData()
                                         }
+                                        if(typeof e.newData.QUANTITY != 'undefined')
+                                        {
+                                            //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
+                                            await this.itemRelatedUpdate(e.key.ITEM,e.newData.QUANTITY)
+                                            //*****************************************/
+                                        }
                                     }}
                                     onRowRemoving={async (e)=>
                                     {
@@ -2096,6 +2233,7 @@ export default class purchaseDispatch extends React.PureComponent
                                         <Column dataField="ITEM_CODE" caption={this.t("grdPurcDispatch.clmItemCode")} width={105} editCellRender={this._cellRoleRender}/>
                                         <Column dataField="MULTICODE" caption={this.t("grdPurcDispatch.clmMulticode")} width={105} allowEditing={false}/>
                                         <Column dataField="ITEM_NAME" caption={this.t("grdPurcDispatch.clmItemName")} width={330} />
+                                        <Column dataField="ORIGIN" caption={this.t("grdPurcDispatch.clmOrigin")} width={60} allowEditing={true} editCellRender={this._cellRoleRender} />
                                         <Column dataField="QUANTITY" caption={this.t("grdPurcDispatch.clmQuantity")} width={70} editCellRender={this._cellRoleRender} dataType={'number'}/>
                                         <Column dataField="PRICE" caption={this.t("grdPurcDispatch.clmPrice")} width={70} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}}/>
                                         <Column dataField="AMOUNT" caption={this.t("grdPurcDispatch.clmAmount")} width={90} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>
@@ -2849,7 +2987,7 @@ export default class purchaseDispatch extends React.PureComponent
                         <Column dataField="TOTAL" caption={this.t("pg_ordersGrid.clmTotal")} width={200} format={{ style: "currency", currency: "EUR",precision: 2}} />
                     </NdPopGrid>
                      {/* Adres Seçim POPUP */}
-                     <NdPopGrid id={"pg_adress"} parent={this} container={"#root"}
+                     <NdPopGrid id={"pg_adress"} showCloseButton={false} parent={this} container={"#root"}
                         visible={false}
                         position={{of:'#root'}} 
                         showTitle={true} 
@@ -2886,18 +3024,59 @@ export default class purchaseDispatch extends React.PureComponent
                                     onValueChanged={(async(e)=>
                                     {
                                         this.txtUnitFactor.setState({value:this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].FACTOR});
-                                        this.txtTotalQuantity.value = Number(this.txtUnitQuantity.value * this.txtUnitFactor.value);
+                                        if(this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].TYPE == 1)
+                                        {
+                                            this.txtTotalQuantity.value = Number((this.txtUnitQuantity.value / this.txtUnitFactor.value).toFixed(3))
+                                        }
+                                        else
+                                        {
+                                            this.txtTotalQuantity.value = Number((this.txtUnitQuantity.value * this.txtUnitFactor.value).toFixed(3))
+                                        };
                                     }).bind(this)}
                                     >
                                     </NdSelectBox>
                                 </Item>
                                 <Item>
-                                    <Label text={this.t("txtUnitFactor")} alignment="right" />
-                                    <NdNumberBox id="txtUnitFactor" parent={this} simple={true}
-                                    readOnly={true}
-                                    maxLength={32}
-                                    >
-                                    </NdNumberBox>
+                                    <Form colCount={2}>
+                                        <Item>
+                                            <Label text={this.t("txtUnitFactor")} alignment="right" />
+                                            <NdNumberBox id="txtUnitFactor" parent={this} simple={true}
+                                            readOnly={true}
+                                            maxLength={32}
+                                            >
+                                            </NdNumberBox>
+                                        </Item>
+                                        <Item>
+                                            <NdButton id="btnFactorSave" parent={this} text={this.t("msgUnit.btnFactorSave")} type="default"
+                                            onClick={async()=>
+                                            {
+                                                let tmpQuery = 
+                                                {
+                                                    query :"EXEC [dbo].[PRD_ITEM_UNIT_UPDATE] " +
+                                                            "@GUID = @PGUID, " + 
+                                                            "@CUSER = @PCUSER, " +
+                                                            "@FACTOR = @PFACTOR ", 
+                                                    param : ['PGUID:string|50','PCUSER:string|25','PFACTOR:float'],
+                                                    value : [this.cmbUnit.value,this.user.CODE,this.txtUnitFactor.value]
+                                                }
+                                                let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                if(typeof tmpData.result.err == 'undefined')
+                                                {
+                                                   
+                                                }
+                                                else
+                                                {
+                                                    let tmpConfObj1 =
+                                                    {
+                                                        id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                        button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
+                                                    }
+                                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
+                                                    await dialog(tmpConfObj1);
+                                                }
+                                            }}/>
+                                        </Item>
+                                    </Form>
                                 </Item>
                                 <Item>
                                     <Label text={this.t("txtUnitQuantity")} alignment="right" />
@@ -2905,15 +3084,33 @@ export default class purchaseDispatch extends React.PureComponent
                                     maxLength={32}
                                     onValueChanged={(async(e)=>
                                     {
-                                       this.txtTotalQuantity.value = Number(this.txtUnitQuantity.value * this.txtUnitFactor.value)
+                                        if(this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].TYPE == 1)
+                                        {
+                                            this.txtTotalQuantity.value = Number((this.txtUnitQuantity.value / this.txtUnitFactor.value).toFixed(3))
+                                        }
+                                        else
+                                        {
+                                            this.txtTotalQuantity.value = Number((this.txtUnitQuantity.value * this.txtUnitFactor.value).toFixed(3))
+                                        }
                                     }).bind(this)}
                                     >
                                     </NdNumberBox>
                                 </Item>
                                 <Item>
                                     <Label text={this.t("txtTotalQuantity")} alignment="right" />
-                                    <NdNumberBox id="txtTotalQuantity" parent={this} simple={true}  readOnly={true}
+                                    <NdNumberBox id="txtTotalQuantity" parent={this} simple={true}
                                     maxLength={32}
+                                    onValueChanged={(async(e)=>
+                                    {
+                                        if(this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].TYPE == 1)
+                                        {
+                                            this.txtUnitFactor.value = Number((this.txtUnitQuantity.value / this.txtTotalQuantity.value).toFixed(3))
+                                        }
+                                        else
+                                        {
+                                            this.txtUnitFactor.value = Number((this.txtTotalQuantity.value / this.txtUnitQuantity.value).toFixed(3))
+                                        }
+                                    }).bind(this)}
                                     >
                                     </NdNumberBox>
                                 </Item>
@@ -3029,6 +3226,36 @@ export default class purchaseDispatch extends React.PureComponent
                                     >
                                     </NdNumberBox>
                                 </Item>
+                            </Form>
+                        </NdDialog>
+                    </div> 
+                     {/* Origins PopUp */}
+                     <div>
+                        <NdDialog parent={this} id={"msgGrdOrigins"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.t("msgGrdOrigins.title")}
+                        container={"#root"} 
+                        width={'500'}
+                        height={'200'}
+                        position={{of:'#root'}}
+                        button={[{id:"btn01",caption:this.t("msgGrdOrigins.btn01"),location:'after'}]}
+                        >
+                            <Form colCount={1} height={'fit-content'}>
+                            <Item>
+                                    <Label text={this.t("cmbOrigin")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbOrigin"
+                                    displayExpr="NAME"                       
+                                    valueExpr="CODE"
+                                    value=""
+                                    searchEnabled={true} showClearButton={true}
+                                    param={this.param.filter({ELEMENT:'cmbOrigin',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'cmbOrigin',USERS:this.user.CODE})}
+                                    data={{source:{select:{query : "SELECT CODE,NAME FROM COUNTRY ORDER BY CODE ASC"},sql:this.core.sql}}}
+                                    >
+                                    </NdSelectBox>                                    
+                                </Item>                    
                             </Form>
                         </NdDialog>
                     </div> 

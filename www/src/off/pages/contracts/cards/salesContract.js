@@ -335,7 +335,14 @@ export default class salesContract extends React.PureComponent
                                     e.key.UNIT = this.cmbUnit.value
                                     e.key.UNIT_NAME = this.cmbUnit.displayValue
                                     e.key.UNIT_FACTOR = this.txtUnitFactor.value
-                                    e.data.PRICE = parseFloat((this.txtUnitPrice.value / this.txtUnitFactor.value).toFixed(4))
+                                    if(this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].TYPE == 1)
+                                    {
+                                        e.data.PRICE = parseFloat((this.txtUnitPrice.value * this.txtUnitFactor.value).toFixed(4))
+                                    }
+                                    else
+                                    {
+                                        e.data.PRICE = parseFloat((this.txtUnitPrice.value / this.txtUnitFactor.value).toFixed(4))
+                                    }
                                     e.data.QUANTITY = this.txtTotalQuantity.value
                                 });  
                             }

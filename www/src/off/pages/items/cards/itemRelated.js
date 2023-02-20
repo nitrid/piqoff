@@ -14,6 +14,7 @@ import NdGrid,{Column,Editing,Paging,Scrolling,KeyboardNavigation,Pager,Export, 
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDialog, { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
+import NdNumberBox from '../../../../core/react/devex/numberbox.js';
 
 export default class itemRelated extends React.PureComponent
 {
@@ -170,8 +171,8 @@ export default class itemRelated extends React.PureComponent
                                         if(pResult == 'btn01')
                                         {
                                             
-                                            this.contractObj.dt().removeAll()
-                                            await this.contractObj.dt().delete();
+                                            this.itemRelatedObj.dt().removeAll()
+                                            await this.itemRelatedObj.dt().delete();
                                             this.init(); 
                                         }
                                         
@@ -257,7 +258,7 @@ export default class itemRelated extends React.PureComponent
                                     </NdPopGrid>
                                 </Item>
                                 {/* txtName */}
-                                <Item colSpan={2}>                                
+                                <Item>                                
                                     <Label text={this.t("txtName")} alignment="right" />
                                     <NdTextBox id="txtName" parent={this} simple={true} dt={{data:this.itemRelatedObj.dt(),field:"ITEM_NAME"}} readOnly={true}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
@@ -265,6 +266,15 @@ export default class itemRelated extends React.PureComponent
                                     access={this.access.filter({ELEMENT:'txtName',USERS:this.user.CODE})}
                                     >
                                     </NdTextBox>
+                                </Item>
+                                <Item>                                
+                                    <Label text={this.t("txtQuantity")} alignment="right" />
+                                    <NdNumberBox id="txtQuantity" parent={this} simple={true} dt={{data:this.itemRelatedObj.dt(),field:"ITEM_QUANTITY"}}
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                    param={this.param.filter({ELEMENT:'txtQuantity',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'txtQuantity',USERS:this.user.CODE})}
+                                    >
+                                    </NdNumberBox>
                                 </Item>
                             </Form>
                         </div>
@@ -323,6 +333,7 @@ export default class itemRelated extends React.PureComponent
                                         <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
                                         <Column dataField="RELATED_CODE" caption={this.t("grdRelated.clmItemCode")} width={150} allowEditing={false}/>
                                         <Column dataField="RELATED_NAME" caption={this.t("grdRelated.clmItemName")} width={300} allowEditing={false}/>
+                                        <Column dataField="RELATED_QUANTITY" caption={this.t("grdRelated.clmQuantity")} width={100} allowEditing={false}/>
                                     </NdGrid>
                                 </Item>
                             </Form>

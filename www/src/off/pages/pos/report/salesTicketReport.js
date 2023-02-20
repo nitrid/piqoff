@@ -7,7 +7,7 @@ import Form, { Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 
 import NdGrid,{Column,Editing,ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export} from '../../../../core/react/devex/grid.js';
-import NdTextBox from '../../../../core/react/devex/textbox.js'
+import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdNumberBox from '../../../../core/react/devex/numberbox.js';
 import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
@@ -215,6 +215,13 @@ export default class salesOrdList extends React.PureComponent
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <Toolbar>
+                                <Item location="after" locateInMenu="auto">
+                                    <NdButton id="btnPrint" parent={this} icon="print" type="default"
+                                    onClick={()=>
+                                    {
+                                        this.popDesign.show()
+                                    }}/>
+                                </Item>
                                 <Item location="after"
                                 locateInMenu="auto"
                                 widget="dxButton"
@@ -239,7 +246,7 @@ export default class salesOrdList extends React.PureComponent
                                             }
                                         }
                                     }    
-                                } />
+                                } />                                
                             </Toolbar>
                         </div>
                     </div>
@@ -927,7 +934,7 @@ export default class salesOrdList extends React.PureComponent
                             </div>
                         </NdPopUp>
                         <div>
-                             {/* Açık Fişler PopUp */}
+                            {/* Açık Fişler PopUp */}
                             <NdPopUp parent={this} id={"popOpenTike"} 
                             visible={false}
                             showCloseButton={true}
@@ -938,9 +945,9 @@ export default class salesOrdList extends React.PureComponent
                             height={'500'}
                             position={{of:'#root'}}
                             >
-                            <Form colCount={1} height={'fit-content'}>
-                                <Item>
-                                <NdGrid parent={this} id={"grdOpenTike"} 
+                                <Form colCount={1} height={'fit-content'}>
+                                    <Item>
+                                        <NdGrid parent={this} id={"grdOpenTike"} 
                                         showBorders={true} 
                                         columnsAutoWidth={true} 
                                         allowColumnReordering={true} 
@@ -957,19 +964,112 @@ export default class salesOrdList extends React.PureComponent
                                         onRowRemoved={async (e)=>{
                                         }}
                                         >
-                                            <Scrolling mode="standart" />
-                                            <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
-                                            <Column dataField="CUSER_NAME" caption={this.lang.t("grdOpenTike.clmUser")} width={110}  headerFilter={{visible:true}}/>
-                                            <Column dataField="DEVICE" caption={this.lang.t("grdOpenTike.clmDevice")} width={60}  headerFilter={{visible:true}}/>
-                                            <Column dataField="DATE" caption={this.lang.t("grdOpenTike.clmDate")} width={90} allowEditing={false} />
-                                            <Column dataField="TICKET_ID" caption={this.lang.t("grdOpenTike.clmTicketId")} width={150}  headerFilter={{visible:true}}/>
-                                            <Column dataField="TOTAL" caption={this.lang.t("grdOpenTike.clmTotal")} width={100} format={{ style: "currency", currency: "EUR",precision: 2}} headerFilter={{visible:true}}/>
-                                            <Column dataField="DESCRIPTION" caption={this.lang.t("grdOpenTike.clmDescription")} width={250}  headerFilter={{visible:true}}/>
-                                    </NdGrid>
+                                                <Scrolling mode="standart" />
+                                                <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
+                                                <Column dataField="CUSER_NAME" caption={this.lang.t("grdOpenTike.clmUser")} width={110}  headerFilter={{visible:true}}/>
+                                                <Column dataField="DEVICE" caption={this.lang.t("grdOpenTike.clmDevice")} width={60}  headerFilter={{visible:true}}/>
+                                                <Column dataField="DATE" caption={this.lang.t("grdOpenTike.clmDate")} width={90} allowEditing={false} />
+                                                <Column dataField="TICKET_ID" caption={this.lang.t("grdOpenTike.clmTicketId")} width={150}  headerFilter={{visible:true}}/>
+                                                <Column dataField="TOTAL" caption={this.lang.t("grdOpenTike.clmTotal")} width={100} format={{ style: "currency", currency: "EUR",precision: 2}} headerFilter={{visible:true}}/>
+                                                <Column dataField="DESCRIPTION" caption={this.lang.t("grdOpenTike.clmDescription")} width={250}  headerFilter={{visible:true}}/>
+                                        </NdGrid>
+                                    </Item>
+                                </Form>
+                            </NdPopUp>
+                        </div>          
+                    </div>
+                    {/* Dizayn Seçim PopUp */}
+                    <div>
+                        <NdPopUp parent={this} id={"popDesign"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.t("popDesign.title")}
+                        container={"#root"} 
+                        width={'500'}
+                        height={'250'}
+                        position={{of:'#root'}}
+                        >
+                            <Form colCount={1} height={'fit-content'}>
+                                <Item>
+                                    <Label text={this.t("popDesign.design")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbDesignList" notRefresh = {true}
+                                    displayExpr="DESIGN_NAME"                       
+                                    valueExpr="TAG"
+                                    value=""
+                                    searchEnabled={true}
+                                    onValueChanged={(async()=>
+                                    {
+                                    }).bind(this)}
+                                    data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '71'"},sql:this.core.sql}}}
+                                    param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
+                                    >
+                                        <Validator validationGroup={"frmPurcOrderPrint"  + this.tabIndex}>
+                                            <RequiredRule message={this.t("validDesign")} />
+                                        </Validator> 
+                                    </NdSelectBox>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("popDesign.lang")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbDesignLang" notRefresh = {true}
+                                    displayExpr="VALUE"                       
+                                    valueExpr="ID"
+                                    value=""
+                                    searchEnabled={true}
+                                    onValueChanged={(async()=>
+                                    {
+                                    }).bind(this)}
+                                    data={{source:[{ID:"FR",VALUE:"FR"},{ID:"TR",VALUE:"TR"}]}}
+                                    >
+                                    </NdSelectBox>
+                                </Item>
+                                <Item>
+                                    <div className='row'>
+                                        <div className='col-6'>
+                                            <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'} 
+                                            onClick={async ()=>
+                                            {       
+                                                if(this.grdSaleTicketReport.devGrid.getSelectedRowsData().length > 0)
+                                                {
+                                                    App.instance.setState({isExecute:true})
+                                                    let tmpQuery = 
+                                                    {
+                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM POS_SALE_VW_01 WHERE POS_GUID = @POS_GUID ORDER BY LINE_NO " ,
+                                                        param:  ['POS_GUID:string|50','DESIGN:string|25'],
+                                                        value:  [this.grdSaleTicketReport.devGrid.getSelectedRowsData()[0].POS_GUID,this.cmbDesignList.value]
+                                                    }
+                                                    let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                    console.log(JSON.stringify(tmpData.result.recordset))
+                                                    this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
+                                                    {
+                                                        App.instance.setState({isExecute:false})
+                                                        if(pResult.split('|')[0] != 'ERR')
+                                                        {
+                                                            var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");                                                         
+    
+                                                            mywindow.onload = function() 
+                                                            {
+                                                                mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
+                                                            } 
+                                                        }
+                                                    });
+                                                    this.popDesign.hide();  
+                                                }
+                                                
+                                            }}/>
+                                        </div>
+                                        <div className='col-6'>
+                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                            onClick={()=>
+                                            {
+                                                this.popDesign.hide();  
+                                            }}/>
+                                        </div>
+                                    </div>
                                 </Item>
                             </Form>
                         </NdPopUp>
-                        </div>          
                     </div>
                 </ScrollView>
             </div>
