@@ -71,6 +71,24 @@ export const prm =
             CAPTION : "Alış Faturasından Alış Fiyatı Güncelleme"
         }
     },
+    // Alış Faturasından Fiyat Güncelleme
+    {
+        TYPE : 0,
+        ID :"negativeQuantityForPruchase",
+        VALUE : 
+        {
+            value : true
+        },
+        SPECIAL : "",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Sistem",
+            CAPTION : "Alış Faturasında Eksi Miktar Girişi"
+        }
+    },
     // Ödeme ve tahsilat için fatura zorunluluğu
     {
         TYPE : 0,

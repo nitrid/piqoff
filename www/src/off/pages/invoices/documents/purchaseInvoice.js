@@ -3105,23 +3105,29 @@ export default class purchaseInvoice extends React.PureComponent
                                                 e.key.DISCOUNT_3 = 0
                                                 e.key.DISCOUNT_RATE = Number(e.key.PRICE * e.key.QUANTITY).rate2Num(e.data.DISCOUNT)
                                             }
-                                            if(e.key.DISCOUNT > (e.key.PRICE * e.key.QUANTITY))
-                                            {
-                                                let tmpConfObj =
-                                                {
-                                                    id:'msgDiscount',showTitle:true,title:this.t("msgDiscount.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:this.t("msgDiscount.btn01"),location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscount.msg")}</div>)
-                                                }
                                             
-                                                dialog(tmpConfObj);
-                                                e.key.DISCOUNT = 0 
-                                                e.key.DISCOUNT_1 = 0
-                                                e.key.DISCOUNT_2 = 0
-                                                e.key.DISCOUNT_3 = 0
-                                                e.key.DISCOUNT_RATE = 0
-                                                return
+                                            let tmpData = this.sysParam.filter({ID:'negativeQuantityForPruchase',USERS:this.user.CODE}).getValue()
+                                            if(typeof tmpData != 'undefined' && tmpData.value ==  false)
+                                            {
+                                                if(e.key.DISCOUNT > (e.key.PRICE * e.key.QUANTITY))
+                                                {
+                                                    let tmpConfObj =
+                                                    {
+                                                        id:'msgDiscount',showTitle:true,title:this.t("msgDiscount.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                        button:[{id:"btn01",caption:this.t("msgDiscount.btn01"),location:'after'}],
+                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscount.msg")}</div>)
+                                                    }
+                                                
+                                                    dialog(tmpConfObj);
+                                                    e.key.DISCOUNT = 0 
+                                                    e.key.DISCOUNT_1 = 0
+                                                    e.key.DISCOUNT_2 = 0
+                                                    e.key.DISCOUNT_3 = 0
+                                                    e.key.DISCOUNT_RATE = 0
+                                                    return
+                                                }
                                             }
+                                           
 
                                             e.key.VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100)).toFixed(4));
                                             e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(4))
