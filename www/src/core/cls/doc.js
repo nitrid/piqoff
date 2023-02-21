@@ -264,6 +264,7 @@ export class docItemsCls
             TOTALHT : 0,
             TOTAL : 0,
             DESCRIPTION : '',
+            ORIGIN: '',
             INVOICE_LINE_GUID : '00000000-0000-0000-0000-000000000000',
             INVOICE_DOC_GUID : '00000000-0000-0000-0000-000000000000',
             ORDER_LINE_GUID : '00000000-0000-0000-0000-000000000000',

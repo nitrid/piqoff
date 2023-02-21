@@ -404,9 +404,20 @@ export default class purchaseOrder extends React.PureComponent
                                 }
                                 await this.msgUnit.show().then(async () =>
                                 {
-                                    e.data.UNIT = this.cmbUnit.value
+                                    if(this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].TYPE == 1)
+                                    {
+                                        e.data.PRICE = parseFloat((this.txtUnitPrice.value * this.txtUnitFactor.value).toFixed(4))
+                                    }
+                                    else
+                                    {
+                                        e.data.PRICE = parseFloat((this.txtUnitPrice.value / this.txtUnitFactor.value).toFixed(4))
+                                    }
                                     e.data.QUANTITY = this.txtTotalQuantity.value
-                                    e.data.UNIT_FACTOR = this.txtUnitFactor.value
+                                    e.data.VAT = parseFloat(((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) * (e.data.VAT_RATE) / 100)).toFixed(4));
+                                    e.data.AMOUNT = parseFloat((e.data.PRICE * e.data.QUANTITY).toFixed(4))
+                                    e.data.TOTALHT = parseFloat(((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT).toFixed(4))
+                                    e.data.TOTAL = parseFloat((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) +e.data.VAT).toFixed(4))
+                                    e.data.DISCOUNT_RATE = Number(e.data.AMOUNT).rate2Num(e.data.DISCOUNT,4)
                                     //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
                                     await this.itemRelatedUpdate(e.data.ITEM,this.txtTotalQuantity.value)
                                     //*****************************************/
@@ -2724,7 +2735,7 @@ export default class purchaseOrder extends React.PureComponent
                         <Column dataField="TOTAL" caption={this.t("pg_offersGrid.clmTotal")} width={300} format={{ style: "currency", currency: "EUR",precision: 2}}/>
                     </NdPopGrid>
                     {/* Adres Seçim POPUP */}
-                    <NdPopGrid id={"pg_adress"} parent={this} container={"#root"}
+                    <NdPopGrid id={"pg_adress"} showCloseButton={false} parent={this} container={"#root"}
                         visible={false}
                         position={{of:'#root'}} 
                         showTitle={true} 

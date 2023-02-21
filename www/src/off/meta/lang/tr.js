@@ -199,6 +199,7 @@ export const langTr =
         irs_01_002: "Satış İrsaliye Listesi",
         irs_01_003: "İade İrsaliye Listesi",
         irs_01_004: "Şubeler Arası Satış İrsaliye Listesi",
+        irs_01_006 : "Faturası Kesilmemiş İrsaliye Listesi",
         irs_02_001: "Alış İrsaliyesi",
         irs_02_002: "Satış İrsaliyesi",
         irs_02_003: "Gönderilen İade İrsaliyesi",
@@ -3563,6 +3564,7 @@ export const langTr =
         getOffers : "Teklif Getir",
         getProforma : "Proforma Getir",
         txtTotalHt : "İndirimli Tutar",
+        cmbOrigin: "Menşei",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -3620,7 +3622,8 @@ export const langTr =
             clmCustomerPrice : "T.Fiyat",
             clmDescription :"Açıklama",
             clmCuser :"Kullanıcı",
-            clmMulticode : "T.Kodu"
+            clmMulticode : "T.Kodu",
+            clmOrigin : "Menşei"
         },
         grdInvoicePayment: 
         {
@@ -4010,6 +4013,11 @@ export const langTr =
         {
             title : "Tutarsal İndirim Girişi",
             btn01 : "Onayla"
+        },
+        msgGrdOrigins:
+        {
+            title: "Menşei Değişimi",  
+            btn01: "Keydet",  
         },
         txtDiscount1 : "1. İndirim Tutarı",
         txtDiscount2 : "2. İndirim Tutarı",
@@ -9388,6 +9396,37 @@ export const langTr =
             clmOutputName :"Depo",
         },
     },
+    irs_01_006 : //"Satış İrsaliye Listesi"
+    {
+        cmbCustomer :"Cari",
+        btnGet :"Getir",
+        dtFirst : "İlk Tarih",
+        dtLast : "Son Tarih",
+        txtCustomerCode : "Cari",
+        menu:"Satış İrsaliyesi",
+        pg_txtCustomerCode : 
+        {
+            title : "Cari Seçimi",
+            clmCode :  "CARİ KODU",
+            clmTitle : "CARİ ADI",
+            clmTypeName : "TİPİ",
+            clmGenusName : "CİNSİ"
+        },
+        grdSlsDisList: 
+        {
+            clmRef: "Seri",
+            clmRefNo: "Sıra",
+            clmPrice: "Fiyat",
+            clmInputCode : "Cari Kodu",
+            clmInputName : "Cari Adı",
+            clmDate: "Tarih",
+            clmVat : "KDV",
+            clmAmount : "Tutar",
+            clmTotal : "Toplam",
+            clmOutputName :"Depo",
+        },
+
+    },
     irs_02_001 : // "Alış İrsaliyesi"
     {
         txtRefRefno : "Seri-Sıra",
@@ -9410,6 +9449,7 @@ export const langTr =
         txtTotalQuantity : "Toplam Miktar",
         txtUnitPrice: "Birim Fiyatı",
         txtTotalHt : "İndirimli Tutar",
+        cmbOrigin : "Menşei",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -9453,7 +9493,8 @@ export const langTr =
             clmOrder : "Sipariş No",
             clmCuser :"Kullanıcı",
             clmMulticode : "T.Kodu",
-            clmVatRate : "KDV %"
+            clmVatRate : "KDV %",
+            clmOrigin : "Menşei"
         },
         popDiscount : 
         {
@@ -9642,6 +9683,11 @@ export const langTr =
             title: "Birim Seçimi",
             btn01: "Onayla",
             btnFactorSave : "Stok Kartını Güncelle"
+        },
+        msgGrdOrigins:
+        {
+            title: "Menşei Değişimi",
+            btn01: "Keydet",
         },
         validRef :"Seri Boş Geçilemez",
         validRefNo : "Sıra Boş Geçilemez",

@@ -434,13 +434,29 @@ export default class rebateInvoice extends React.PureComponent
                                     this.txtUnitFactor.value = e.data.UNIT_FACTOR
                                     this.txtTotalQuantity.value =  e.data.QUANTITY
                                     this.txtUnitQuantity.value = e.data.QUANTITY / e.data.UNIT_FACTOR
-                                    this.txtUnitPrice.value = e.data.PRICE
+                                    if(this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].TYPE == 1)
+                                    {
+                                        this.txtUnitQuantity.value = e.data.QUANTITY * e.data.UNIT_FACTOR
+                                        this.txtUnitPrice.value = e.data.PRICE / e.data.UNIT_FACTOR
+                                    }
+                                    else
+                                    {
+                                        this.txtUnitQuantity.value = e.data.QUANTITY / e.data.UNIT_FACTOR
+                                        this.txtUnitPrice.value = e.data.PRICE * e.data.UNIT_FACTOR
+                                    }
                                 }
                                 await this.msgUnit.show().then(async () =>
                                 {
                                     e.key.UNIT = this.cmbUnit.value
                                     e.key.UNIT_FACTOR = this.txtUnitFactor.value
-                                    e.data.PRICE = parseFloat((this.txtUnitPrice.value / this.txtUnitFactor.value).toFixed(4))
+                                    if(this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].TYPE == 1)
+                                    {
+                                        e.data.PRICE = parseFloat((this.txtUnitPrice.value * this.txtUnitFactor.value).toFixed(4))
+                                    }
+                                    else
+                                    {
+                                        e.data.PRICE = parseFloat((this.txtUnitPrice.value / this.txtUnitFactor.value).toFixed(4))
+                                    }
                                     e.data.DIFF_PRICE = parseFloat((e.data.PRICE - e.data.CUSTOMER_PRICE).toFixed(3))
                                     e.data.QUANTITY = this.txtTotalQuantity.value
                                     e.data.VAT = parseFloat(((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) * (e.data.VAT_RATE) / 100)).toFixed(4));
@@ -3786,7 +3802,7 @@ export default class rebateInvoice extends React.PureComponent
                         </NdDialog>
                     </div> 
                      {/* Adres Seçim Grid */}
-                     <NdPopGrid id={"pg_adress"} parent={this} container={"#root"}
+                     <NdPopGrid id={"pg_adress"} showCloseButton={false} parent={this} container={"#root"}
                         visible={false}
                         position={{of:'#root'}} 
                         showTitle={true} 
