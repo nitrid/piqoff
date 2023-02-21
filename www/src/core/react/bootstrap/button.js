@@ -41,6 +41,13 @@ export default class NbButton extends NbBase
         }
         this.setState({lock : false})
     }
+    componentDidUpdate(prevProps) 
+    {
+        if(prevProps.style !== this.props.style) 
+        {
+            this.setState({style: this.props.style});
+        }
+    }
     async _onClick()
     {
         if(typeof this.props.onClick != 'undefined')
