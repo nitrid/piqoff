@@ -260,6 +260,7 @@ export const langTr =
         promo_01_001: "Promosyon Tanımlama",
         promo_02: "Listeler",
         promo_02_001: "Promosyon Listesi",
+        promo_02_002: "Promosyon Detay Listesi",
         promo_03: "Raporlar",
         set : "Ayarlar",
         set_01 : "Maliyet ve Ek Vergiler",
@@ -9259,6 +9260,35 @@ export const langTr =
         },
     },
     promo_02_001: //  "Promosyon Listesi"
+    {
+        txtCode: "Kodu",
+        txtName: "Adı",
+        dtStartDate: "Baş.Tarih",
+        dtFinishDate: "Bit.Tarih",
+        txtCodePlace: "Promosyon kodunu ya da ürün barkodunu giriniz", 
+        txtNamePlace: "Promosyon kodunu ya da ürün adını giriniz", 
+        btnGet: "Getir",
+        grdListe:
+        {
+            clmCode: "Kodu",
+            clmName: "Adı", 
+            clmStartDate: "İlk Tarih", 
+            clmFinishDate : "Son Tarih",
+            clmCondTypeName : "Koşul Tipi",
+            clmCondItemCode : "Koşul Kodu",
+            clmCondItemName : "Koşul Adı",
+            clmCondBarcode : "Koşul Barkodu",
+            clmCondQuantity : "Koşul Miktar",
+            clmCondAmount : "Koşul Tutar",
+            clmAppTypeName : "Uygulama Tipi",
+            clmAppItemCode : "Uygulama Kodu",
+            clmAppItemName : "Uygulama Adı",
+            clmAppBarcode : "Uygulama Barkodu",
+            clmAppQuantity : "Uygulama Miktarı",
+            clmAppAmount : "Uygulama Tutarı",
+        }
+    },
+    promo_02_002: //  "Promosyon Detay Listesi"
     {
         txtCode: "Kodu",
         txtName: "Adı",
