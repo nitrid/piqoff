@@ -325,6 +325,9 @@ export const langTr =
         salesinvoices_02 : "Listeler",
         salesinvoices_03 : "Proforma",
         salesinvoices_04 : "Raporlar",
+        salesReport : "Raporlar",
+        slsRpt_01_001 : "Evrak Kıyas Raporu",
+        slsRpt_01_002 : "Grup Bazlı Satış Raporu"
     },
     login:
     {
@@ -14972,5 +14975,61 @@ export const langTr =
         btnApprove : "Kaydet",
         btnCancel : "Kapat",
         txtPopUser : "Oluşturan Kullanıcı"
-    }
+    },
+    slsRpt_01_001 : // "Ürün Grubu Raporu"
+    {
+        chkZeroBalance : "0 Bakiyeler Gösterilsin",
+        txtCustomerCode : "Cari",
+        btnCheck : "Aktif",
+        btnGet :"Getir",
+        grdListe : 
+        {
+            clmCode: "Kodu",
+            clmName : "Adı",           
+            clmOrders : "Sipariş",
+            clmDispatch : "İrsaliye",
+            clmInvoice : "Fatura",
+        },
+    },
+    slsRpt_01_002 : // "Ürün Grubu Raporu"
+    {
+        btnGet :"Getir",
+        txtAmount : "Toplam Tutar",
+        txtTotalTicket : "Toplam Evrak Sayısı",
+        txtTicketAvg : "Ortalama Evrak Tutarı",
+        txtTotalCost : "Toplam Maliyet",
+        txtFamount : "Vergisiz Toplam",
+        txtVat : "Toplam Vergi",
+        txtRestTotal : "Vergisiz Toplam Kar",
+        btnGetAnalysis : "Grafik Görünümü",
+        grdGroupSalesReport: 
+        {
+            clmGrpCode : "Ürün Grubu Kodu",
+            clmGrpName: "Ürün Grubu Adı",
+            clmTotalCost: "Toplam Maliyet",
+            clmFamount : "Vergisiz Tutar",
+            clmVat : "Vergi Tutarı",
+            clmTotal : "Toplam Tutar",
+            clmRestTotal : "Vergisiz Toplam Kar"
+        },
+        grpGrpDetail : 
+        {
+            clmCode : "Ürün Kodu",
+            clmName : "Ürün Adı",
+            clmQuantity : "Miktar",
+            clmTotalCost :"Toplam Maliyet",
+            clmFamount :"Vergisiz Tutar",
+            clmVat : "Vergi Tutarı",
+            clmTotal : "Toplam Tutar",
+            clmRestTotal : "Vergisiz Toplam Kar"
+        },
+        popGrpDetail : 
+        {
+            title : "Satış Detayı"
+        },
+        popAnalysis : 
+        {
+            title : "Satış Grafiği"
+        },
+    },
 }

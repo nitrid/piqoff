@@ -826,18 +826,18 @@ export const menu = (e) =>
                 },
                 {
                     id: 'salesReport',
-                    text : e.t('menuOff.salesReport'),//'Teklif',
+                    text : e.t('menuOff.salesReport'),//'Raporlar',
                     expanded: false,
                     items: 
                     [ 
                         {
                             id: 'slsRpt_01_001',
-                            text: e.t('menuOff.slsRpt_01_001'),//'Satış teklif',
+                            text: e.t('menuOff.slsRpt_01_001'),//'Evrak Kıyas Raporu',
                             path: 'report/docComparisonReport'
                         },
                         {
                             id: 'slsRpt_01_002',
-                            text: e.t('menuOff.slsRpt_01_002'),//'Satış teklif',
+                            text: e.t('menuOff.slsRpt_01_002'),//'Ürün Grubu Satış',
                             path: 'report/itemGrpSalesReport'
                         },
                     ]
