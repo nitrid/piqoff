@@ -199,7 +199,6 @@ export const langFr =
         irs_01_002: "Liste Bon de livraison de vente",
         irs_01_003: "Liste Bon de livraison de retour",
         irs_01_004: "Liste des bordereaux de vente interne", 
-        irs_01_006 : "Faturası Kesilmemiş İrsaliye Listesi",   //BAK
         irs_02_001: " Bon de livraison d'achat",
         irs_02_002: "Saisie Bon de livraison de vente",
         irs_02_003: "Saisie Bon de Retour de livraison",
@@ -2501,7 +2500,8 @@ export const langFr =
             clmCode: "Code",
             clmName : "Nom",           
             clmQuantity : "Quantité",
-            clmBarcode : "Code-Barres"
+            clmBarcode : "Code-Barres",
+            clmUnit : "Birim", // BAK
         },
         txtTotalQuantity : "Quantité Totale",
         ItemNamePlaceHolder : "Veuillez Saisir le nom du Produit.."
@@ -3563,6 +3563,7 @@ export const langFr =
         getOffers : "Recherche Proposition", 
         getProforma : "Rechercher Proforma ", 
         txtTotalHt : "Total HT",
+        txtDocNo : "Belgo No", // BAK
         cmbOrigin : "Origine",
         pg_Docs : 
         {
@@ -4081,6 +4082,7 @@ export const langFr =
         validDesign : "Veuillez séléctionner le design.",  
         validMail : "Veuillez ne pas laisser le champs vide.",  
         txtTotalHt : "Total HT",
+        txtDocNo : "Belgo No", // BAK
         extraCost : "Ek Maliyet",
         pg_Docs : 
         {
@@ -4592,6 +4594,7 @@ export const langFr =
         validDesign : "Veuillez choisir un design.",  
         validMail : "Veuillez ne pas laisser le champs vide.",  
         txtTotalHt : "Total HT",
+        txtDocNo : "Belgo No", // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -5048,6 +5051,7 @@ export const langFr =
         validDesign : "Veuillez sélectionner le design.",  
         validMail : "Veuillez ne pas laisser le champs vide.",  
         txtTotalHt : "Total HT",
+        txtDocNo : "Belgo No", // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -5875,6 +5879,7 @@ export const langFr =
         txtDiscountPer2 : "2. Remise % ",  // BAK
         txtDiscountPer3 : "3. Remise % ",  // BAK
         txtTotalHt : "Total HT",
+        txtDocNo : "Belgo No", // BAK
         serviceAdd : "Ajouter un service",  
         pg_service : 
         {
@@ -5932,6 +5937,7 @@ export const langFr =
         txtExpFee : "Pénalités de Retard", 
         dtExpDate : "Date d'Echéance", 
         txtTotalHt : "Total HT",
+        txtDocNo : "Belgo No", // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -6331,6 +6337,7 @@ export const langFr =
         dtExpDate : "Date d'Echéance", 
         getProforma : "Rechercher Proforma ", 
         txtTotalHt : "Total HT",
+        txtDocNo : "Belgo No", // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -6760,6 +6767,7 @@ export const langFr =
         validDesign : "Veuillez sélectionner le design.",  
         validMail : "Veuillez ne pas laisser le champs vide.",  
         txtTotalHt : "Total HT",
+        txtDocNo : "Belgo No", // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -7204,6 +7212,7 @@ export const langFr =
         txtTotalQuantity : "Quantité totale",  
         txtUnitPrice : "Prix unitaire", // BAK
         txtTotalHt : "Total HT",
+        txtDocNo : "Belgo No", // BAK
         msgDiscount:
         {
             title: "Attention",  
@@ -7542,6 +7551,7 @@ export const langFr =
         dtExpDate : "Date d'Echéance", 
         getOffers : "Teklif Getir",  
         txtTotalHt : "Total HT",
+        txtDocNo : "Belgo No", // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -7958,6 +7968,7 @@ export const langFr =
         dtExpDate : "Date d'Echéance", 
         getOffers : "Recherche Proposition", 
         txtTotalHt : "Total HT",
+        txtDocNo : "Belgo No", // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -8418,6 +8429,7 @@ export const langFr =
         txtExpFee : "Pénalités de Retard", 
         dtExpDate : "Date d'Echéance", 
         txtTotalHt : "Total HT",
+        txtDocNo : "Belgo No", // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -8762,6 +8774,7 @@ export const langFr =
         txtExpFee : "Pénalités de Retard", 
         dtExpDate : "Date d'Echéance", 
         txtTotalHt : "Total HT",
+        txtDocNo : "Belgo No", // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -9349,6 +9362,7 @@ export const langFr =
         dtLast : "Date Fin",
         txtCustomerCode : "Client",
         menu:"Bon de Livraison de Vente ",
+        chkOpenDispatch : "Sadece Faturası Olmayanları Göster",  // BAK
         pg_txtCustomerCode : 
         {
             title : "Choix Client",
@@ -9431,37 +9445,6 @@ export const langFr =
             clmTotal : "Total",
             clmOutputName :"Dépôt",
         },
-    },
-    irs_01_006 : // "Satış İrsaliye Listesi"
-    {
-        cmbCustomer :"Client",
-        btnGet :"Rechercher",
-        dtFirst : "Date Début",
-        dtLast : "Date Fin",
-        txtCustomerCode : "Client",
-        menu:"Bon de Livraison de Vente ",
-        pg_txtCustomerCode : 
-        {
-            title : "Choix Client",
-            clmCode :  "Code Client",
-            clmTitle : "Nom Client",
-            clmTypeName : "Type",
-            clmGenusName : "Genre"
-        },
-        grdSlsDisList: 
-        {
-            clmRef: "Référence",
-            clmRefNo: "Ligne",
-            clmPrice: "Prix ",
-            clmInputCode : "Sélection Document",
-            clmInputName : "Nom Client",
-            clmDate: "Date",
-            clmVat : "TVA",
-            clmAmount : "Total" ,
-            clmTotal : "Total",
-            clmOutputName :"Réserve",
-        },
-
     },
     irs_02_001 : // "Alış İrsaliyesi"
     {
@@ -9837,6 +9820,7 @@ export const langFr =
         validDesign : "Veuillez sélectionner le design.",  
         validMail : "Veuillez ne pas laisser le champs vide.",  
         txtTotalHt : "Total HT",
+        txtDocNo : "Belgo No", // BAK
         extraCost : "Ek Maliyet",  // BAK
         pg_Docs : 
         {
@@ -10534,6 +10518,7 @@ export const langFr =
         validDesign : "Veuillez sélectionner le design.",  
         validMail : "Veuillez ne pas laisser le champs vide.",  
         txtTotalHt : "Total HT",
+        txtDocNo : "Belgo No", // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -11204,6 +11189,7 @@ export const langFr =
         validDesign : "Veuillez sélectionner le design.",  
         validMail : "Veuillez ne pas laisser le champs vide.",  
         txtTotalHt : "Total HT",
+        txtDocNo : "Belgo No", // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -11968,6 +11954,7 @@ export const langFr =
         validDesign : "Veuillez sélectionner le design.",  
         validMail : "Veuillez ne pas laisser le champs vide.",  
         txtTotalHt : "Total HT",
+        txtDocNo : "Belgo No", // BAK
         pg_Docs : 
         {
             title : "Sélection Document",

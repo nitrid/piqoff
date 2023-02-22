@@ -215,10 +215,15 @@ export default class purchaseDispatch extends React.PureComponent
     }
     async _calculateTotal()
     {
+        let tmpVat = 0
+        for (let i = 0; i < this.docObj.docItems.dt().groupBy('VAT_RATE').length; i++) 
+        {
+            tmpVat = tmpVat + parseFloat(this.docObj.docItems.dt().where({'VAT_RATE':this.docObj.docItems.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("VAT",2))
+        }
         this.docObj.dt()[0].AMOUNT = this.docObj.docItems.dt().sum("AMOUNT",2)
         this.docObj.dt()[0].DISCOUNT = this.docObj.docItems.dt().sum("DISCOUNT",2)
-        this.docObj.dt()[0].VAT = this.docObj.docItems.dt().sum("VAT",2)
-        this.docObj.dt()[0].TOTAL = this.docObj.docItems.dt().sum("TOTAL",2)
+        this.docObj.dt()[0].VAT = parseFloat(tmpVat.toFixed(2))
+        this.docObj.dt()[0].TOTAL = (parseFloat(this.docObj.docItems.dt().sum("TOTALHT",2)) + parseFloat(this.docObj.dt()[0].VAT)).toFixed(2)
         this.docObj.dt()[0].TOTALHT = this.docObj.docItems.dt().sum("TOTALHT",2)
     }
     _cellRoleRender(e)
@@ -857,7 +862,7 @@ export default class purchaseDispatch extends React.PureComponent
             {
                 select:
                 {
-                    query : "SELECT GUID,CODE,NAME,VAT,UNIT," + 
+                    query : "SELECT GUID,CODE,NAME,VAT,UNIT,STATUS," + 
                     "ISNULL((SELECT TOP 1 CUSTOMER_PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].OUTPUT+"'),COST_PRICE) AS PURC_PRICE,"+
                     "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].OUTPUT+"'),'') AS MULTICODE"+
                     " FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL) " ,
@@ -2669,6 +2674,17 @@ export default class purchaseDispatch extends React.PureComponent
                     height={'90%'}
                     title={this.t("pg_txtItemsCode.title")} //
                     search={true}
+                    onRowPrepared={(e) =>
+                        {
+                            if(e.rowType == 'data' && e.data.STATUS == false)
+                            {
+                                e.rowElement.style.color ="Silver"
+                            }
+                            else if(e.rowType == 'data' && e.data.STATUS == true)
+                            {
+                                e.rowElement.style.color ="Black"
+                            }
+                        }}
                     >
                         <Paging defaultPageSize={22} />
                         <Column dataField="CODE" caption={this.t("pg_txtItemsCode.clmCode")} width={150} />

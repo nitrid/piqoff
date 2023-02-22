@@ -199,7 +199,6 @@ export const langTr =
         irs_01_002: "Satış İrsaliye Listesi",
         irs_01_003: "İade İrsaliye Listesi",
         irs_01_004: "Şubeler Arası Satış İrsaliye Listesi",
-        irs_01_006 : "Faturası Kesilmemiş İrsaliye Listesi",
         irs_02_001: "Alış İrsaliyesi",
         irs_02_002: "Satış İrsaliyesi",
         irs_02_003: "Gönderilen İade İrsaliyesi",
@@ -2503,7 +2502,8 @@ export const langTr =
             clmCode: "Kodu",
             clmName : "Adı",           
             clmQuantity : "Adet",
-            clmBarcode : "Barkodu"
+            clmBarcode : "Barkodu",
+            clmUnit : "Birim",
         },
         txtTotalQuantity : "Toplam Miktar",
         ItemNamePlaceHolder : "Ürün Adı Giriniz.."
@@ -3565,6 +3565,7 @@ export const langTr =
         getOffers : "Teklif Getir",
         getProforma : "Proforma Getir",
         txtTotalHt : "İndirimli Tutar",
+        txtDocNo : "Belgo No",
         cmbOrigin: "Menşei",
         pg_Docs : 
         {
@@ -4084,6 +4085,7 @@ export const langTr =
         validMail : "Lütfen Boş Geçmeyin.",
         getPreInvoice : "Ön Fatura Getir",
         txtTotalHt : "İndirimli Tutar",
+        txtDocNo : "Belgo No",
         extraCost : "Ek Maliyet",
         pg_Docs : 
         {
@@ -4595,6 +4597,7 @@ export const langTr =
         validDesign : "Lütfen Dizayn seçiniz.",
         validMail : "Lütfen Boş Geçmeyin.",
         txtTotalHt : "İndirimli Tutar",
+        txtDocNo : "Belgo No",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -5044,6 +5047,7 @@ export const langTr =
         validDesign : "Lütfen Dizayn seçiniz.",
         validMail : "Lütfen Boş Geçmeyin.",
         txtTotalHt : "İndirimli Tutar",
+        txtDocNo : "Belgo No",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -5878,6 +5882,7 @@ export const langTr =
             clmName : "Adı"
         },
         txtTotalHt : "İndirimli Tutar",
+        txtDocNo : "Belgo No",
         msgPrintforLocked:
         {
             title: "Dikkat",
@@ -5928,6 +5933,7 @@ export const langTr =
         txtExpFee : "Gecikme Cezası",
         dtExpDate : "Vade Tarihi", 
         txtTotalHt : "İndirimli Tutar",
+        txtDocNo : "Belgo No",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -6327,6 +6333,7 @@ export const langTr =
         dtExpDate : "Vade Tarihi", 
         getProforma : "Proforma Getir",
         txtTotalHt : "İndirimli Tutar",
+        txtDocNo : "Belgo No",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -6756,6 +6763,7 @@ export const langTr =
         validDesign : "Lütfen Dizayn seçiniz.",
         validMail : "Lütfen Boş Geçmeyin.",
         txtTotalHt : "İndirimli Tutar",
+        txtDocNo : "Belgo No",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -7207,6 +7215,7 @@ export const langTr =
         txtTotalQuantity : "Toplam Miktar",
         txtUnitPrice: "Birim Fiyatı",
         txtTotalHt : "İndirimli Tutar",
+        txtDocNo : "Belgo No",
         msgDiscount:
         {
             title: "Dikkat",
@@ -7545,6 +7554,7 @@ export const langTr =
         dtExpDate : "Vade Tarihi", 
         getOffers : "Teklif Getir", 
         txtTotalHt : "İndirimli Tutar",
+        txtDocNo : "Belgo No",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -7961,6 +7971,7 @@ export const langTr =
         dtExpDate : "Vade Tarihi", 
         getOffers : "Teklif Getir",
         txtTotalHt : "İndirimli Tutar",
+        txtDocNo : "Belgo No",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -8414,6 +8425,7 @@ export const langTr =
         txtExpFee : "Gecikme Cezası",
         dtExpDate : "Vade Tarihi", 
         txtTotalHt : "İndirimli Tutar",
+        txtDocNo : "Belgo No",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -8757,6 +8769,7 @@ export const langTr =
         txtExpFee : "Gecikme Cezası",
         dtExpDate : "Vade Tarihi", 
         txtTotalHt : "İndirimli Tutar",
+        txtDocNo : "Belgo No",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -9343,6 +9356,7 @@ export const langTr =
         dtLast : "Son Tarih",
         txtCustomerCode : "Cari",
         menu:"Satış İrsaliyesi",
+        chkOpenDispatch : "Sadece Faturası Olmayanları Göster",
         pg_txtCustomerCode : 
         {
             title : "Cari Seçimi",
@@ -9479,6 +9493,7 @@ export const langTr =
         txtTotalQuantity : "Toplam Miktar",
         txtUnitPrice: "Birim Fiyatı",
         txtTotalHt : "İndirimli Tutar",
+        txtDocNo : "Belgo No",
         cmbOrigin : "Menşei",
         pg_Docs : 
         {
@@ -9832,6 +9847,7 @@ export const langTr =
         validDesign : "Lütfen Dizayn seçiniz.",
         validMail : "Lütfen Boş Geçmeyin.",
         txtTotalHt : "İndirimli Tutar",
+        txtDocNo : "Belgo No",
         extraCost : "Ek Maliyet",
         pg_Docs : 
         {
@@ -10528,6 +10544,7 @@ export const langTr =
         validDesign : "Lütfen Dizayn seçiniz.",
         validMail : "Lütfen Boş Geçmeyin.",
         txtTotalHt : "İndirimli Tutar",
+        txtDocNo : "Belgo No",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -11198,6 +11215,7 @@ export const langTr =
         validDesign : "Lütfen Dizayn seçiniz.",
         validMail : "Lütfen Boş Geçmeyin.",
         txtTotalHt : "İndirimli Tutar",
+        txtDocNo : "Belgo No",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -11962,6 +11980,7 @@ export const langTr =
         validDesign : "Lütfen Dizayn seçiniz.",
         validMail : "Lütfen Boş Geçmeyin.",
         txtTotalHt : "İndirimli Tutar",
+        txtDocNo : "Belgo No",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
