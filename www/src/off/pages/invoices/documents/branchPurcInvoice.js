@@ -1582,7 +1582,15 @@ export default class branchSaleInvoice extends React.PureComponent
                                     </NdSelectBox>
                                 </Item>
                                 {/* Boş */}
-                                <EmptyItem />
+                                <Item>
+                                    <Label text={this.t("txtDocNo")} alignment="right" />
+                                    <NdTextBox id="txtDocNo" parent={this} simple={true}  
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                    dt={{data:this.docObj.dt('DOC'),field:"DOC_NO"}} 
+                                    readOnly={false}
+                                    >
+                                    </NdTextBox>
+                                </Item>
                                 {/* txtCustomerCode */}
                                 <Item>
                                     <Label text={this.t("txtCustomerCode")} alignment="right" />
