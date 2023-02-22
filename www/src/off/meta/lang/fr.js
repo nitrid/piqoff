@@ -323,6 +323,9 @@ export const langFr =
         salesinvoices_02 : "Listes",
         salesinvoices_03 : "Proforma",
         salesinvoices_04 : "Rapports",
+        salesReport : "Raporlar",
+        slsRpt_01_001 : "Evrak Kıyas Raporu",  // BAK
+        slsRpt_01_002 : "Grup Bazlı Satış Raporu"  // BAK
     },
     login:
     {
@@ -14984,5 +14987,61 @@ export const langFr =
         btnApprove : "Enregistre",    
         btnCancel : "Fermer",    
         txtPopUser : "Utilisateur ayant saisi"    
-    }
+    },
+    slsRpt_01_001 : // "Ürün Grubu Raporu"
+    {
+        chkZeroBalance : "0 Bakiyeler Gösterilsin",  // BAK
+        txtCustomerCode : "Cari",  // BAK
+        btnCheck : "Aktif",  // BAK
+        btnGet :"Getir",  // BAK
+        grdListe : 
+        {
+            clmCode: "Kodu",  // BAK
+            clmName : "Adı",             // BAK
+            clmOrders : "Sipariş",  // BAK
+            clmDispatch : "İrsaliye",  // BAK
+            clmInvoice : "Fatura",  // BAK
+        },
+    },
+    slsRpt_01_002 : // "Ürün Grubu Raporu"
+    {
+        btnGet :"Getir",  // BAK
+        txtAmount : "Toplam Tutar",  // BAK
+        txtTotalTicket : "Toplam Evrak Sayısı",  // BAK
+        txtTicketAvg : "Ortalama Evrak Tutarı",  // BAK
+        txtTotalCost : "Toplam Maliyet",  // BAK
+        txtFamount : "Vergisiz Toplam",  // BAK
+        txtVat : "Toplam Vergi",  // BAK
+        txtRestTotal : "Vergisiz Toplam Kar",  // BAK
+        btnGetAnalysis : "Grafik Görünümü",  // BAK
+        grdGroupSalesReport: 
+        {
+            clmGrpCode : "Ürün Grubu Kodu",  // BAK
+            clmGrpName: "Ürün Grubu Adı",  // BAK
+            clmTotalCost: "Toplam Maliyet",  // BAK
+            clmFamount : "Vergisiz Tutar",  // BAK
+            clmVat : "Vergi Tutarı",  // BAK
+            clmTotal : "Toplam Tutar",  // BAK
+            clmRestTotal : "Vergisiz Toplam Kar"  // BAK
+        },
+        grpGrpDetail : 
+        {
+            clmCode : "Ürün Kodu",  // BAK
+            clmName : "Ürün Adı",  // BAK
+            clmQuantity : "Miktar",  // BAK
+            clmTotalCost :"Toplam Maliyet",  // BAK
+            clmFamount :"Vergisiz Tutar",  // BAK
+            clmVat : "Vergi Tutarı",  // BAK
+            clmTotal : "Toplam Tutar",  // BAK
+            clmRestTotal : "Vergisiz Toplam Kar"  // BAK
+        },
+        popGrpDetail : 
+        {
+            title : "Satış Detayı" // BAK
+        },
+        popAnalysis : 
+        {
+            title : "Satış Grafiği" // BAK
+        },
+    },
 }
