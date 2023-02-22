@@ -824,6 +824,19 @@ export const menu = (e) =>
                         }
                     ]
                 },
+                {
+                    id: 'salesReport',
+                    text : e.t('menuOff.salesReport'),//'Teklif',
+                    expanded: false,
+                    items: 
+                    [ 
+                        {
+                            id: 'slsRpt_01_001',
+                            text: e.t('menuOff.slsRpt_01_001'),//'Satış teklif',
+                            path: 'report/docComparisonReport'
+                        },
+                    ]
+                }
             ]
         },
         //Finans
