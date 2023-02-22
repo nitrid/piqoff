@@ -835,6 +835,11 @@ export const menu = (e) =>
                             text: e.t('menuOff.slsRpt_01_001'),//'Satış teklif',
                             path: 'report/docComparisonReport'
                         },
+                        {
+                            id: 'slsRpt_01_002',
+                            text: e.t('menuOff.slsRpt_01_002'),//'Satış teklif',
+                            path: 'report/itemGrpSalesReport'
+                        },
                     ]
                 }
             ]

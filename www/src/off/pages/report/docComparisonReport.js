@@ -6,7 +6,7 @@ import Toolbar,{Item} from 'devextreme-react/toolbar';
 import Form, { Label,EmptyItem } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 
-import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export} from '../../../core/react/devex/grid.js';
+import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export, Summary, TotalItem} from '../../../core/react/devex/grid.js';
 import NdTextBox from '../../../core/react/devex/textbox.js'
 import NdSelectBox from '../../../core/react/devex/selectbox.js';
 import NdDropDownBox from '../../../core/react/devex/dropdownbox.js';
@@ -45,7 +45,6 @@ export default class docComparisonReport extends React.PureComponent
     {
         setTimeout(async () => 
         {
-            this.txtCustomerCode.CODE = ''
         }, 1000);
     }
     _columnListBox(e)
@@ -124,9 +123,9 @@ export default class docComparisonReport extends React.PureComponent
                             "INPUT_NAME,  " +
                             "INPUT_CODE,  " +
                             "INPUT,  " +
-                            "ISNULL((SELECT SUM(TOTAL) FROM DOC_VW_01 AS ORDERS WHERE ORDERS.DOC_TYPE=60 AND ORDERS.TYPE=1 AND ORDERS.INPUT = DOC_VW_01.INPUT AND ORDERS.REBATE = 0),0) AS ORDERS, " +
-                            "ISNULL((SELECT SUM(TOTAL) FROM DOC_VW_01 AS DISPATCH WHERE DISPATCH.DOC_TYPE=40 AND DISPATCH.TYPE=1 AND DISPATCH.INPUT = DOC_VW_01.INPUT AND DISPATCH.REBATE = 0),0) AS DISPATCH, " +
-                            "ISNULL((SELECT SUM(TOTAL) FROM DOC_VW_01 AS INVOICE WHERE INVOICE.DOC_TYPE=20 AND INVOICE.TYPE=1 AND INVOICE.INPUT = DOC_VW_01.INPUT AND INVOICE.REBATE = 0),0) AS INVOICE " +
+                            "ISNULL((SELECT SUM(TOTAL) FROM DOC_VW_01 AS ORDERS WHERE ORDERS.DOC_TYPE=60 AND ORDERS.TYPE=1 AND ORDERS.INPUT = DOC_VW_01.INPUT AND ORDERS.REBATE = 0 AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE),0) AS ORDERS, " +
+                            "ISNULL((SELECT SUM(TOTAL) FROM DOC_VW_01 AS DISPATCH WHERE DISPATCH.DOC_TYPE=40 AND DISPATCH.TYPE=1 AND DISPATCH.INPUT = DOC_VW_01.INPUT AND DISPATCH.REBATE = 0 AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE),0) AS DISPATCH, " +
+                            "ISNULL((SELECT SUM(TOTAL) FROM DOC_VW_01 AS INVOICE WHERE INVOICE.DOC_TYPE=20 AND INVOICE.TYPE=1 AND INVOICE.INPUT = DOC_VW_01.INPUT AND INVOICE.REBATE = 0 AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE),0) AS INVOICE " +
                             "FROM DOC_VW_01 WHERE TYPE = 1 AND DOC_TYPE IN(60,61,20,40) AND REBATE = 0 AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE GROUP BY INPUT_NAME,INPUT_CODE,INPUT " ,
                     param : ['FIRST_DATE:date','LAST_DATE:date'],
                     value : [this.dtDate.startDate,this.dtDate.endDate]
@@ -178,7 +177,7 @@ export default class docComparisonReport extends React.PureComponent
                         <div className="col-12">
                             <Form colCount={2} id="frmKriter">
                             <Item>
-                                <NbDateRange id={"dtDate"} parent={this} startDate={moment().startOf('year')} endDate={moment().endOf('year')}/>
+                                <NbDateRange id={"dtDate"} parent={this} startDate={moment().startOf('month')} endDate={moment().endOf('month')}/>
                             </Item>
                             </Form>
                         </div>
