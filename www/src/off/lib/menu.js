@@ -730,11 +730,6 @@ export const menu = (e) =>
                                     path: 'dispatch/lists/salesDisList'
                                 },
                                 {
-                                    id: 'irs_01_006',
-                                    text: e.t('menuOff.irs_01_006'),//'Satış İrsaliye Listesi',
-                                    path: 'dispatch/lists/openSalesDisList'
-                                },
-                                {
                                     id: 'irs_01_004',
                                     text: e.t('menuOff.irs_01_004'),//'Şubeler Arası Sevk',
                                     path: 'dispatch/lists/bransSaleDisLİst'

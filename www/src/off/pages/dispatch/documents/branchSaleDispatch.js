@@ -2554,13 +2554,24 @@ export default class branchSaleDispatch extends React.PureComponent
                     height={'90%'}
                     title={this.t("pg_txtItemsCode.title")} //
                     search={true}
+                    onRowPrepared={(e) =>
+                        {
+                            if(e.rowType == 'data' && e.data.STATUS == false)
+                            {
+                                e.rowElement.style.color ="Silver"
+                            }
+                            else if(e.rowType == 'data' && e.data.STATUS == true)
+                            {
+                                e.rowElement.style.color ="Black"
+                            }
+                        }}
                     data = 
                     {{
                         source:
                         {
                             select:
                             {
-                                query : "SELECT GUID,CODE,NAME,VAT,COST_PRICE,UNIT,ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE DELETED = 0 AND ITEM_BARCODE.ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
+                                query : "SELECT GUID,CODE,NAME,VAT,COST_PRICE,UNIT,STATUS,ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE DELETED = 0 AND ITEM_BARCODE.ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
                                 param : ['VAL:string|50']
                             },
                             sql:this.core.sql

@@ -23,7 +23,7 @@ export default class QuantityList extends React.PureComponent
 
         this.state = 
         {
-            columnListValue : ['NAME','CODE','QUANTITY','BARCODE']
+            columnListValue : ['NAME','CODE','QUANTITY','UNIT_NAME','BARCODE']
         }
         
         this.core = App.instance.core;
@@ -32,6 +32,7 @@ export default class QuantityList extends React.PureComponent
             {CODE : "NAME",NAME : this.t("grdListe.clmName")},
             {CODE : "CODE",NAME : this.t("grdListe.clmCode")},                                   
             {CODE : "QUANTITY",NAME : this.t("grdListe.clmQuantity")},
+            {CODE : "UNIT_NAME",NAME : this.t("grdListe.clmUnit")},
             {CODE : "BARCODE",NAME : this.t("grdListe.clmBarcode")},    
         ]
         this.groupList = [];
@@ -69,6 +70,10 @@ export default class QuantityList extends React.PureComponent
                 if(typeof e.value.find(x => x == 'CODE') != 'undefined')
                 {
                     this.groupList.push('CODE')
+                }
+                if(typeof e.value.find(x => x == 'UNIT_NAME') != 'undefined')
+                {
+                    this.groupList.push('UNIT_NAME')
                 }
                 if(typeof e.value.find(x => x == 'QUANTITY') != 'undefined')
                 {
@@ -120,8 +125,8 @@ export default class QuantityList extends React.PureComponent
                     groupBy : this.groupList,
                     select : 
                     {
-                        query : "SELECT NAME,CODE,ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM_BARCODE.ITEM = ITEMS.GUID ORDER BY LDATE DESC),'') AS BARCODE,[dbo].[FN_DEPOT_QUANTITY](GUID,@DEPOT,GETDATE()) AS QUANTITY FROM ITEMS " +
-                                "WHERE  DELETED = 0 AND " +
+                        query : "SELECT NAME,CODE,UNIT_NAME,ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM_BARCODE.ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS BARCODE,[dbo].[FN_DEPOT_QUANTITY](GUID,@DEPOT,GETDATE()) AS QUANTITY FROM ITEMS_VW_01 " +
+                                "WHERE  " +
                                 "((NAME like @NAME + '%') OR (@NAME = ''))",
                         param : ['NAME:string|250','DEPOT:string|50'],
                         value : [this.txtUrunAdi.value,this.cmbDepot.value]
@@ -143,8 +148,8 @@ export default class QuantityList extends React.PureComponent
                     groupBy : this.groupList,
                     select : 
                     {
-                        query : "SELECT NAME,CODE,ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM_BARCODE.ITEM = ITEMS.GUID ORDER BY LDATE DESC),'') AS BARCODE,[dbo].[FN_DEPOT_QUANTITY](GUID,@DEPOT,GETDATE()) AS QUANTITY FROM ITEMS " +
-                                "WHERE [dbo].[FN_DEPOT_QUANTITY](GUID,@DEPOT,GETDATE()) <> 0 AND DELETED = 0 AND " +
+                        query : "SELECT NAME,CODE,UNIT_NAME,ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM_BARCODE.ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS BARCODE,[dbo].[FN_DEPOT_QUANTITY](GUID,@DEPOT,GETDATE()) AS QUANTITY FROM ITEMS_VW_01 " +
+                                "WHERE [dbo].[FN_DEPOT_QUANTITY](GUID,@DEPOT,GETDATE()) <> 0 AND " +
                                 "((NAME like @NAME + '%') OR (@NAME = ''))",
                         param : ['NAME:string|250','DEPOT:string|50'],
                         value : [this.txtUrunAdi.value,this.cmbDepot.value]
@@ -277,6 +282,7 @@ export default class QuantityList extends React.PureComponent
                                 <Column dataField="NAME" caption={this.t("grdListe.clmName")} visible={true}/> 
                                 <Column dataField="CODE" caption={this.t("grdListe.clmCode")} visible={true} /> 
                                 <Column dataField="QUANTITY" caption={this.t("grdListe.clmQuantity")} visible={true} defaultSortOrder="desc"/> 
+                                <Column dataField="UNIT_NAME" caption={this.t("grdListe.clmUnit")} visible={true} /> 
                                 <Column dataField="BARCODE" caption={this.t("grdListe.clmBarcode")} visible={true}/> 
 
                             </NdGrid>

@@ -2137,13 +2137,24 @@ export default class rebateDispatch extends React.PureComponent
                     height={'90%'}
                     title={this.t("pg_txtItemsCode.title")} //
                     search={true}
+                    onRowPrepared={(e) =>
+                        {
+                            if(e.rowType == 'data' && e.data.STATUS == false)
+                            {
+                                e.rowElement.style.color ="Silver"
+                            }
+                            else if(e.rowType == 'data' && e.data.STATUS == true)
+                            {
+                                e.rowElement.style.color ="Black"
+                            }
+                        }}
                     data = 
                     {{
                         source:
                         {
                             select:
                             {
-                                query : "SELECT GUID,CODE,NAME,VAT,UNIT,(SELECT [dbo].[FN_PRICE_SALE_VAT_EXT](GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000')) AS PRICE FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
+                                query : "SELECT GUID,CODE,NAME,VAT,UNIT,STATUS,(SELECT [dbo].[FN_PRICE_SALE_VAT_EXT](GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000')) AS PRICE FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
                                 param : ['VAL:string|50']
                             },
                             sql:this.core.sql

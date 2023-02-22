@@ -199,7 +199,6 @@ export const langTr =
         irs_01_002: "Satış İrsaliye Listesi",
         irs_01_003: "İade İrsaliye Listesi",
         irs_01_004: "Şubeler Arası Satış İrsaliye Listesi",
-        irs_01_006 : "Faturası Kesilmemiş İrsaliye Listesi",
         irs_02_001: "Alış İrsaliyesi",
         irs_02_002: "Satış İrsaliyesi",
         irs_02_003: "Gönderilen İade İrsaliyesi",
@@ -2502,7 +2501,8 @@ export const langTr =
             clmCode: "Kodu",
             clmName : "Adı",           
             clmQuantity : "Adet",
-            clmBarcode : "Barkodu"
+            clmBarcode : "Barkodu",
+            clmUnit : "Birim",
         },
         txtTotalQuantity : "Toplam Miktar",
         ItemNamePlaceHolder : "Ürün Adı Giriniz.."
@@ -9326,6 +9326,7 @@ export const langTr =
         dtLast : "Son Tarih",
         txtCustomerCode : "Cari",
         menu:"Satış İrsaliyesi",
+        chkOpenDispatch : "Sadece Faturası Olmayanları Göster",
         pg_txtCustomerCode : 
         {
             title : "Cari Seçimi",

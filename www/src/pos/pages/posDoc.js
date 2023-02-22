@@ -4991,7 +4991,7 @@ export default class posDoc extends React.PureComponent
                                                     UNIT_NAME: items.UNIT_NAME,
                                                     UNIT_SHORT: items.UNIT_SHORT,
                                                     VAT: items.VAT_RATE,
-                                                    VAT_TYPE: items.VAT_RATE,
+                                                    VAT_TYPE: items.VAT_TYPE,
                                                     WEIGHING: false,
                                                     POS_SALE_ORDER: items.GUID,
                                                     DISCOUNT : items.DISCOUNT
