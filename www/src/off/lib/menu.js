@@ -1058,6 +1058,11 @@ export const menu = (e) =>
                             id: 'promo_02_001',
                             text: e.t('menuOff.promo_02_001'),//'Promosyon Listesi',
                             path: 'promotion/lists/promotionList'
+                        },
+                        {
+                            id: 'promo_02_002',
+                            text: e.t('menuOff.promo_02_002'),//'Promosyon Detay Listesi',
+                            path: 'promotion/lists/promotionDetailList'
                         }
                     ]
                 },
