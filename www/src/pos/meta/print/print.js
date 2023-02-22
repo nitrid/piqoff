@@ -88,7 +88,7 @@ export function print()
             else if(data.pos[0].TYPE == 0 && data.special.type == 'Fatura')
             {
                 tmpArr.push({font:"b",style:"b",align:"ct",data:"FACTURE DE VENTE"})
-                tmpArr.push({font:"a",style:"b",align:"ct",data:"Numero De Facture : " + data.pos[0].FACT_REF})
+                tmpArr.push({font:"a",style:"b",align:"ct",data:"Numero De Facture : " + (data.pos[0].DEVICE == '9999' ? "" : data.pos[0].FACT_REF)})
                 tmpArr.push({font:"b",style:"b",align:"ct",data: " ".space(64)})
             }
             else if(data.pospay.where({TYPE:0}).length > 0 && data.pos[0].TYPE == 1)

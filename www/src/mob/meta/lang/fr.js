@@ -2,8 +2,8 @@ export const langFr =
 {
     popGrid: {btnSelection:"Choix",btnSearch:"Listes"},
     btnSave: "Enregistrez",
-    btnCancel: "Abandonner",
-    btnPrint :"Imprimer",
+    btnCancel: "Abandonnez",
+    btnPrint :"Imprimez",
     btnOk: "OK",
     btnGet: "Recherche",
     msgWarning: "Attention",
@@ -33,10 +33,10 @@ export const langFr =
         stk_01: "Définitions",
         stk_01_001: "Contrôle Prix",
         stk_01_002: "Contrôle Fournisseur",
-        stk_01_003: "Ajoute Code-barres",
+        stk_01_003: "Ajoutez Code-barres",
         stk_01_004: "Voir/Changer Famille Produit",
         stk_01_005: "M.A.J. le Prix",
-        stk_01_006: "Ajoutez Code-barre",
+        stk_01_006: "Ajoutez Code-barres",
         stk_01_007: "MAJ Famille Produit",
         stk_02: "Documents",
         stk_02_001: "Imprimer Etiquette",
@@ -62,7 +62,7 @@ export const langFr =
         logout : "Quitter",
         selectUser : "Sélection de l'utilisateur",
     },
-    stk_01_001 : // "Fiyat Gör"
+    stk_01_001 : // "Voir prix"
     {
         btnDropmenu : "Transactions",
         txtRefRefno : "Série-Séquence",
@@ -78,10 +78,10 @@ export const langFr =
         chkAutoAdd : "Ajout Automatique",
         AddItems : "Ajoutez",
         txtBarcode : "Ajoutez barre code",
-        txtBarcodePlace : "Veuillez scanner le code-barres",
+        txtBarcodePlace : "Veuillez scanner le code-barre",
         btnSave : "Enregistrez",
         btnNew : "Nouveau",
-        btnDelete : "Efface",
+        btnDelete : "Effacer",
         btnDeleteRow : "Effacer la ligne",
         btnBarcodeEntry : "Saisi de code-barres",
         validDesign : "Veuillez sélectionner le modèle",
@@ -174,7 +174,7 @@ export const langFr =
         txtDepot : "Dépôt",
 
     },
-    stk_01_002 : // "Tedarikçi Gör"
+    stk_01_002 : // "voir fournisseur"
     {
         chkGroup : "Groupe",
         chkCustomer : "Produits du fournisseur",
@@ -1235,7 +1235,7 @@ export const langFr =
         btnDocument :"Lignes d'opération",
         btnItemAdd: "AjouteR",
         txtGrandTotal : "Total général",
-        cmbPriceContract : "Fiyat Anlaşması", //BAK
+        cmbPriceContract : "Accord de prix",
         msgCustomerSelect:
         {
             title: "Attention",
@@ -1423,15 +1423,15 @@ export const langFr =
             btn02: "Abandonner",
             msg: "Voulez-vous vraiment réinitialiser la taxe ?"
         },
-        msgDetail: //BAK
+        msgDetail:
         {
-            title: "Detay",
-            btn01: "Tamam",
+            title: "Détail",
+            btn01: "D'accord",
         },
-        mnuDetail : //BAK
+        mnuDetail : 
         {
-            text: "İşlemler",
-            btn01: "Detay"
+            text: "Transactions",
+            btn01: "Détail"
         }
     },
     ord_01_002 : // "Alış Sipariş",
