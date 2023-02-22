@@ -252,10 +252,15 @@ export default class purchaseInvoice extends React.PureComponent
     }
     async _calculateTotal()
     {
+        let tmpVat = 0
+        for (let i = 0; i < this.docObj.docItems.dt().groupBy('VAT_RATE').length; i++) 
+        {
+            tmpVat = tmpVat + parseFloat(this.docObj.docItems.dt().where({'VAT_RATE':this.docObj.docItems.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("VAT",2))
+        }
         this.docObj.dt()[0].AMOUNT = this.docObj.docItems.dt().sum("AMOUNT",2)
         this.docObj.dt()[0].DISCOUNT = this.docObj.docItems.dt().sum("DISCOUNT",2)
-        this.docObj.dt()[0].VAT = this.docObj.docItems.dt().sum("VAT",2)
-        this.docObj.dt()[0].TOTAL = (parseFloat(this.docObj.docItems.dt().sum("TOTALHT",2)) + parseFloat(this.docObj.docItems.dt().sum("VAT",2))).toFixed(2)
+        this.docObj.dt()[0].VAT = parseFloat(tmpVat.toFixed(2))
+        this.docObj.dt()[0].TOTAL = (parseFloat(this.docObj.docItems.dt().sum("TOTALHT",2)) + parseFloat(this.docObj.dt()[0].VAT)).toFixed(2)
         this.docObj.dt()[0].TOTALHT = this.docObj.docItems.dt().sum("TOTALHT",2)
 
         this.docObj.docCustomer.dt()[0].AMOUNT = this.docObj.dt()[0].TOTAL
@@ -2230,30 +2235,43 @@ export default class purchaseInvoice extends React.PureComponent
                                 </Item>
                                 {/* cmbDepot */}
                                 <Item>
-                                    <Label text={this.t("cmbDepot")} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbDepot" notRefresh = {true}
-                                    dt={{data:this.docObj.dt('DOC'),field:"INPUT"}}  
-                                    displayExpr="NAME"                       
-                                    valueExpr="GUID"
-                                    value=""
-                                    searchEnabled={true}
-                                    onValueChanged={(async()=>
-                                        {
-                                            this.docObj.docCustomer.dt()[0].INPUT = this.cmbDepot.value
-                                            this.checkRow()
-                                            if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
-                                            {
-                                                this.frmDocItems.option('disabled',false)
-                                            }
-                                        }).bind(this)}
-                                    data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01 WHERE TYPE IN(0,2)"},sql:this.core.sql}}}
-                                    param={this.param.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
-                                    >
-                                        <Validator validationGroup={"frmPurcInv"  + this.tabIndex}>
-                                            <RequiredRule message={this.t("validDepot")} />
-                                        </Validator> 
-                                    </NdSelectBox>
+                                    <Form colCount={2}>
+                                        <Item>
+                                            <Label text={this.t("txtDocNo")} alignment="right" />
+                                            <NdTextBox id="txtDocNo" parent={this} simple={true}  
+                                            upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                            dt={{data:this.docObj.dt('DOC'),field:"DOC_NO"}} 
+                                            readOnly={false}
+                                            >
+                                            </NdTextBox>
+                                        </Item>
+                                        <Item>
+                                            <Label text={this.t("cmbDepot")} alignment="right" />
+                                            <NdSelectBox simple={true} parent={this} id="cmbDepot" notRefresh = {true}
+                                            dt={{data:this.docObj.dt('DOC'),field:"INPUT"}}  
+                                            displayExpr="NAME"                       
+                                            valueExpr="GUID"
+                                            value=""
+                                            searchEnabled={true}
+                                            onValueChanged={(async()=>
+                                                {
+                                                    this.docObj.docCustomer.dt()[0].INPUT = this.cmbDepot.value
+                                                    this.checkRow()
+                                                    if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
+                                                    {
+                                                        this.frmDocItems.option('disabled',false)
+                                                    }
+                                                }).bind(this)}
+                                            data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01 WHERE TYPE IN(0,2)"},sql:this.core.sql}}}
+                                            param={this.param.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
+                                            access={this.access.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
+                                            >
+                                                <Validator validationGroup={"frmPurcInv"  + this.tabIndex}>
+                                                    <RequiredRule message={this.t("validDepot")} />
+                                                </Validator> 
+                                            </NdSelectBox>
+                                        </Item>
+                                    </Form>
                                 </Item>
                                 {/* Boş */}
                                 <EmptyItem />

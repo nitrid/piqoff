@@ -238,9 +238,14 @@ export default class salesInvoice extends React.PureComponent
     }
     async _calculateTotal()
     {
+        let tmpVat = 0
+        for (let i = 0; i < this.docObj.docItems.dt().groupBy('VAT_RATE').length; i++) 
+        {
+            tmpVat = tmpVat + parseFloat(this.docObj.docItems.dt().where({'VAT_RATE':this.docObj.docItems.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("VAT",2))
+        }
         this.docObj.dt()[0].AMOUNT = this.docObj.docItems.dt().sum("AMOUNT",2)
         this.docObj.dt()[0].DISCOUNT = this.docObj.docItems.dt().sum("DISCOUNT",2)
-        this.docObj.dt()[0].VAT = parseFloat(this.docObj.docItems.dt().sum("VAT",2)) +  parseFloat((this.docObj.dt()[0].INTERFEL * 20 /100).toFixed(2))
+        this.docObj.dt()[0].VAT = parseFloat(tmpVat.toFixed(2))+  parseFloat((this.docObj.dt()[0].INTERFEL * 20 /100).toFixed(2))
         this.docObj.dt()[0].TOTALHT = parseFloat(this.docObj.docItems.dt().sum("TOTALHT",2))
         this.docObj.dt()[0].TOTAL = parseFloat(this.docObj.docItems.dt().sum("TOTALHT",2)) + parseFloat(this.docObj.docItems.dt().sum("VAT",2)) + this.docObj.dt()[0].INTERFEL
 

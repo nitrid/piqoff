@@ -204,11 +204,15 @@ export default class branchSaleDispatch extends React.PureComponent
     }
     async _calculateTotal()
     {        
-        console.log(this.docObj.docItems.dt())
+        let tmpVat = 0
+        for (let i = 0; i < this.docObj.docItems.dt().groupBy('VAT_RATE').length; i++) 
+        {
+            tmpVat = tmpVat + parseFloat(this.docObj.docItems.dt().where({'VAT_RATE':this.docObj.docItems.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("VAT",2))
+        }
         this.docObj.dt()[0].AMOUNT = this.docObj.docItems.dt().sum("AMOUNT",2)
         this.docObj.dt()[0].DISCOUNT = this.docObj.docItems.dt().sum("DISCOUNT",2)
-        this.docObj.dt()[0].VAT = this.docObj.docItems.dt().sum("VAT",2)
-        this.docObj.dt()[0].TOTAL = this.docObj.docItems.dt().sum("TOTAL",2)
+        this.docObj.dt()[0].VAT = parseFloat(tmpVat.toFixed(2))
+        this.docObj.dt()[0].TOTAL = (parseFloat(this.docObj.docItems.dt().sum("TOTALHT",2)) + parseFloat(this.docObj.dt()[0].VAT)).toFixed(2)
         this.docObj.dt()[0].TOTALHT = this.docObj.docItems.dt().sum("TOTALHT",2)
     }
     async multiItemAdd()

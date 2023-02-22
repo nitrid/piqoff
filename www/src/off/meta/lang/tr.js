@@ -3564,6 +3564,7 @@ export const langTr =
         getOffers : "Teklif Getir",
         getProforma : "Proforma Getir",
         txtTotalHt : "İndirimli Tutar",
+        txtDocNo : "Belgo No",
         cmbOrigin: "Menşei",
         pg_Docs : 
         {
@@ -4083,6 +4084,7 @@ export const langTr =
         validMail : "Lütfen Boş Geçmeyin.",
         getPreInvoice : "Ön Fatura Getir",
         txtTotalHt : "İndirimli Tutar",
+        txtDocNo : "Belgo No",
         extraCost : "Ek Maliyet",
         pg_Docs : 
         {
@@ -4594,6 +4596,7 @@ export const langTr =
         validDesign : "Lütfen Dizayn seçiniz.",
         validMail : "Lütfen Boş Geçmeyin.",
         txtTotalHt : "İndirimli Tutar",
+        txtDocNo : "Belgo No",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -5043,6 +5046,7 @@ export const langTr =
         validDesign : "Lütfen Dizayn seçiniz.",
         validMail : "Lütfen Boş Geçmeyin.",
         txtTotalHt : "İndirimli Tutar",
+        txtDocNo : "Belgo No",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -5877,6 +5881,7 @@ export const langTr =
             clmName : "Adı"
         },
         txtTotalHt : "İndirimli Tutar",
+        txtDocNo : "Belgo No",
         msgPrintforLocked:
         {
             title: "Dikkat",
@@ -5927,6 +5932,7 @@ export const langTr =
         txtExpFee : "Gecikme Cezası",
         dtExpDate : "Vade Tarihi", 
         txtTotalHt : "İndirimli Tutar",
+        txtDocNo : "Belgo No",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -6326,6 +6332,7 @@ export const langTr =
         dtExpDate : "Vade Tarihi", 
         getProforma : "Proforma Getir",
         txtTotalHt : "İndirimli Tutar",
+        txtDocNo : "Belgo No",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -6755,6 +6762,7 @@ export const langTr =
         validDesign : "Lütfen Dizayn seçiniz.",
         validMail : "Lütfen Boş Geçmeyin.",
         txtTotalHt : "İndirimli Tutar",
+        txtDocNo : "Belgo No",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -7206,6 +7214,7 @@ export const langTr =
         txtTotalQuantity : "Toplam Miktar",
         txtUnitPrice: "Birim Fiyatı",
         txtTotalHt : "İndirimli Tutar",
+        txtDocNo : "Belgo No",
         msgDiscount:
         {
             title: "Dikkat",
@@ -7544,6 +7553,7 @@ export const langTr =
         dtExpDate : "Vade Tarihi", 
         getOffers : "Teklif Getir", 
         txtTotalHt : "İndirimli Tutar",
+        txtDocNo : "Belgo No",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -7960,6 +7970,7 @@ export const langTr =
         dtExpDate : "Vade Tarihi", 
         getOffers : "Teklif Getir",
         txtTotalHt : "İndirimli Tutar",
+        txtDocNo : "Belgo No",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -8413,6 +8424,7 @@ export const langTr =
         txtExpFee : "Gecikme Cezası",
         dtExpDate : "Vade Tarihi", 
         txtTotalHt : "İndirimli Tutar",
+        txtDocNo : "Belgo No",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -8756,6 +8768,7 @@ export const langTr =
         txtExpFee : "Gecikme Cezası",
         dtExpDate : "Vade Tarihi", 
         txtTotalHt : "İndirimli Tutar",
+        txtDocNo : "Belgo No",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -9449,6 +9462,7 @@ export const langTr =
         txtTotalQuantity : "Toplam Miktar",
         txtUnitPrice: "Birim Fiyatı",
         txtTotalHt : "İndirimli Tutar",
+        txtDocNo : "Belgo No",
         cmbOrigin : "Menşei",
         pg_Docs : 
         {
@@ -9802,6 +9816,7 @@ export const langTr =
         validDesign : "Lütfen Dizayn seçiniz.",
         validMail : "Lütfen Boş Geçmeyin.",
         txtTotalHt : "İndirimli Tutar",
+        txtDocNo : "Belgo No",
         extraCost : "Ek Maliyet",
         pg_Docs : 
         {
@@ -10498,6 +10513,7 @@ export const langTr =
         validDesign : "Lütfen Dizayn seçiniz.",
         validMail : "Lütfen Boş Geçmeyin.",
         txtTotalHt : "İndirimli Tutar",
+        txtDocNo : "Belgo No",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -11168,6 +11184,7 @@ export const langTr =
         validDesign : "Lütfen Dizayn seçiniz.",
         validMail : "Lütfen Boş Geçmeyin.",
         txtTotalHt : "İndirimli Tutar",
+        txtDocNo : "Belgo No",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -11932,6 +11949,7 @@ export const langTr =
         validDesign : "Lütfen Dizayn seçiniz.",
         validMail : "Lütfen Boş Geçmeyin.",
         txtTotalHt : "İndirimli Tutar",
+        txtDocNo : "Belgo No",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
