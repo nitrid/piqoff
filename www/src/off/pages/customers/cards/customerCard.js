@@ -850,8 +850,12 @@ export default class CustomerCard extends React.PureComponent
                                                 </Item>
                                                 {/* chkTaxSucre */}
                                                 <Item>
-                                                <Label text={this.t("chkTaxSucre")} alignment="right" />
+                                                    <Label text={this.t("chkTaxSucre")} alignment="right" />
                                                     <NdCheckBox id="chkTaxSucre" parent={this} value={false}  dt={{data:this.customerObj.dt('CUSTOMERS'),field:"TAX_SUCRE"}} ></NdCheckBox>
+                                                </Item>
+                                                <Item>
+                                                    <Label text={"DEB"} alignment="right" />
+                                                    <NdCheckBox id="chkDeb" parent={this} value={false}  dt={{data:this.customerObj.dt('CUSTOMERS'),field:"DEB"}} ></NdCheckBox>
                                                 </Item>
                                                </Form>
                                             </div>

@@ -66,6 +66,7 @@ export default class purchaseInvoice extends React.PureComponent
         this.newPrice = new datatable
         this.newVat = new datatable
         this.updatePriceData = new datatable
+        this.vatRate =  new datatable
     }
     async componentDidMount()
     {
@@ -864,8 +865,8 @@ export default class purchaseInvoice extends React.PureComponent
 
             this.docObj.docItems.dt()[pIndex].VAT = parseFloat((((pPrice * pQuantity) - this.docObj.docItems.dt()[pIndex].DISCOUNT) * (this.docObj.docItems.dt()[pIndex].VAT_RATE / 100) ).toFixed(4))
             this.docObj.docItems.dt()[pIndex].AMOUNT = parseFloat((pPrice  * pQuantity).toFixed(4))
-            this.docObj.docItems.dt()[pIndex].TOTAL = parseFloat(((pPrice * pQuantity)- this.docObj.docItems.dt()[pIndex].DISCOUNT + this.docObj.docItems.dt()[pIndex].VAT).toFixed(4))
-            this.docObj.docItems.dt()[pIndex].TOTALHT = parseFloat((this.docObj.docItems.dt()[pIndex].TOTAL - this.docObj.docItems.dt()[pIndex].VAT).toFixed(4))
+            this.docObj.docItems.dt()[pIndex].TOTALHT = parseFloat(((pPrice  * pQuantity) - this.docObj.docItems.dt()[pIndex].DISCOUNT).toFixed(2))
+            this.docObj.docItems.dt()[pIndex].TOTAL = parseFloat((this.docObj.docItems.dt()[pIndex].TOTALHT + this.docObj.docItems.dt()[pIndex].VAT).toFixed(2))
             this._calculateTotal()
         }
         if(tmpData.result.recordset.length > 0)
@@ -1487,7 +1488,6 @@ export default class purchaseInvoice extends React.PureComponent
                 value : [pdata[i][tmpShema.CODE]]
             }
             let tmpData = await this.core.sql.execute(tmpQuery) 
-            console.log(tmpData)
             if(tmpData.result.recordset.length > 0)
             {               
                 let tmpDocItems = {...this.docObj.docItems.empty}
@@ -3143,8 +3143,8 @@ export default class purchaseInvoice extends React.PureComponent
 
                                             e.key.VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100)).toFixed(4));
                                             e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(4))
-                                            e.key.TOTAL = parseFloat((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) + e.key.VAT).toFixed(4))
-                                            e.key.TOTALHT = parseFloat((e.key.AMOUNT - e.key.DISCOUNT).toFixed(4))
+                                            e.key.TOTALHT = parseFloat((e.key.AMOUNT - e.key.DISCOUNT).toFixed(2))
+                                            e.key.TOTAL = parseFloat((e.key.TOTALHT + e.key.VAT).toFixed(2))
 
                                             e.key.DIFF_PRICE = e.key.PRICE - e.key.CUSTOMER_PRICE
                                             if(e.key.DISCOUNT == 0)
@@ -3344,28 +3344,18 @@ export default class purchaseInvoice extends React.PureComponent
                                                         [
                                                             {
                                                                 id:'01',
-                                                                icon:'clear',
+                                                                icon:'more',
                                                                 onClick:async ()  =>
                                                                 {
-                                                                    
-                                                                    let tmpConfObj =
+                                                                    this.vatRate.clear()
+                                                                    for (let i = 0; i < this.docObj.docItems.dt().groupBy('VAT_RATE').length; i++) 
                                                                     {
-                                                                        id:'msgVatDelete',showTitle:true,title:this.t("msgVatDelete.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                                        button:[{id:"btn01",caption:this.t("msgVatDelete.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'after'}],
-                                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgVatDelete.msg")}</div>)
+                                                                        let tmpVat = parseFloat(this.docObj.docItems.dt().where({'VAT_RATE':this.docObj.docItems.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("VAT",2))
+                                                                        let tmpData = {"RATE":this.docObj.docItems.dt().groupBy('VAT_RATE')[i].VAT_RATE,"VAT":tmpVat}
+                                                                        this.vatRate.push(tmpData)
                                                                     }
-                                                                    
-                                                                    let pResult = await dialog(tmpConfObj);
-                                                                    if(pResult == 'btn01')
-                                                                    {
-                                                                        for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
-                                                                        {
-                                                                            this.docObj.docItems.dt()[i].VAT = 0  
-                                                                            this.docObj.docItems.dt()[i].VAT_RATE = 0
-                                                                            this.docObj.docItems.dt()[i].TOTAL = parseFloat((this.docObj.docItems.dt()[i].PRICE * this.docObj.docItems.dt()[i].QUANTITY).toFixed(2)) - parseFloat(this.docObj.docItems.dt()[i].DISCOUNT.toFixed(2))
-                                                                            this._calculateTotal()
-                                                                        }
-                                                                    }
+                                                                    await this.grdVatRate.dataRefresh({source:this.vatRate})
+                                                                    this.popVatRate.show()
                                                                 }
                                                             },
                                                         ]
@@ -4408,10 +4398,82 @@ export default class purchaseInvoice extends React.PureComponent
                                     >
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
                                         <Scrolling mode="standart" />
-                                        <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
+                                        <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
                                         <Column dataField="NAME" caption={this.t("grdUnit2.clmName")} width={120}  headerFilter={{visible:true}} allowEditing={false} />
                                         <Column dataField="UNIT_FACTOR" caption={this.t("grdUnit2.clmQuantity")} dataType={'number'} width={120} headerFilter={{visible:true}}/>
                                     </NdGrid>
+                                </Item>
+                            </Form>
+                        </NdPopUp>
+                    </div>  
+                      {/* KDV PopUp */}
+                    <div>
+                        <NdPopUp parent={this} id={"popVatRate"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.lang.t("popVatRate.title")}
+                        container={"#root"} 
+                        width={'500'}
+                        height={'250'}
+                        position={{of:'#root'}}
+                        >
+                            <Form colCount={1} height={'fit-content'}>
+                                <Item >
+                                    <NdGrid parent={this} id={"grdVatRate"} 
+                                    showBorders={true} 
+                                    columnsAutoWidth={true} 
+                                    allowColumnReordering={true} 
+                                    allowColumnResizing={true} 
+                                    height={'100%'} 
+                                    width={'100%'}
+                                    dbApply={false}
+                                    onRowRemoved={async (e)=>{
+                                    
+                                    }}
+                                    >
+                                        <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
+                                        <Scrolling mode="standart" />
+                                        <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
+                                        <Column dataField="RATE" caption={this.lang.t("grdVatRate.clmRate")} width={120}  headerFilter={{visible:true}} allowEditing={false} />
+                                       <Column dataField="VAT" caption={this.lang.t("grdVatRate.clmVat")} format={{ style: "currency", currency: "EUR",precision: 3}} dataType={'number'} width={120} headerFilter={{visible:true}}/>
+                                    </NdGrid>
+                                </Item>
+                                <Item>
+                                    <div className='row'>
+                                        <div className='col-6'>
+                                            <NdButton text={this.lang.t("btnVatToZero")} type="normal" stylingMode="contained" width={'100%'} 
+                                            onClick={async ()=>
+                                            {       
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgVatDelete',showTitle:true,title:this.t("msgVatDelete.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgVatDelete.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgVatDelete.msg")}</div>)
+                                                }
+                                                
+                                                let pResult = await dialog(tmpConfObj);
+                                                if(pResult == 'btn01')
+                                                {
+                                                    for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
+                                                    {
+                                                        this.docObj.docItems.dt()[i].VAT = 0  
+                                                        this.docObj.docItems.dt()[i].VAT_RATE = 0
+                                                        this.docObj.docItems.dt()[i].TOTAL = (this.docObj.docItems.dt()[i].PRICE * this.docObj.docItems.dt()[i].QUANTITY) - this.docObj.docItems.dt()[i].DISCOUNT
+                                                        this._calculateTotal()
+                                                    }
+                                                    this.popVatRate.hide()
+                                                }
+                                            }}/>
+                                        </div>
+                                        <div className='col-6'>
+                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                            onClick={()=>
+                                            {
+                                                this.popVatRate.hide();  
+                                            }}/>
+                                        </div>
+                                    </div>
                                 </Item>
                             </Form>
                         </NdPopUp>

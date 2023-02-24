@@ -1,25 +1,25 @@
 import React from 'react';
-import App from '../../lib/app.js';
+import App from '../../../lib/app.js';
 import moment from 'moment';
 
 import Toolbar,{Item} from 'devextreme-react/toolbar';
 import Form, { Label,EmptyItem } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 
-import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export, Summary, TotalItem} from '../../../core/react/devex/grid.js';
-import NdTextBox from '../../../core/react/devex/textbox.js'
-import NdSelectBox from '../../../core/react/devex/selectbox.js';
-import NdNumberBox from '../../../core/react/devex/numberbox.js';
-import NdDropDownBox from '../../../core/react/devex/dropdownbox.js';
-import NdListBox from '../../../core/react/devex/listbox.js';
-import NdPopUp from '../../../core/react/devex/popup.js';
-import NdButton from '../../../core/react/devex/button.js';
-import NdCheckBox from '../../../core/react/devex/checkbox.js';
-import NdDatePicker from '../../../core/react/devex/datepicker.js';
-import NdPopGrid from '../../../core/react/devex/popgrid.js';
-import NbDateRange from '../../../core/react/bootstrap/daterange.js';
+import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export, Summary, TotalItem} from '../../../../core/react/devex/grid.js';
+import NdTextBox from '../../../../core/react/devex/textbox.js'
+import NdSelectBox from '../../../../core/react/devex/selectbox.js';
+import NdNumberBox from '../../../../core/react/devex/numberbox.js';
+import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
+import NdListBox from '../../../../core/react/devex/listbox.js';
+import NdPopUp from '../../../../core/react/devex/popup.js';
+import NdButton from '../../../../core/react/devex/button.js';
+import NdCheckBox from '../../../../core/react/devex/checkbox.js';
+import NdDatePicker from '../../../../core/react/devex/datepicker.js';
+import NdPopGrid from '../../../../core/react/devex/popgrid.js';
+import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
 import {  Chart, Series, CommonSeriesSettings,  Format, Legend } from 'devextreme-react/chart';
-import { dialog } from '../../../core/react/devex/dialog.js';
+import { dialog } from '../../../../core/react/devex/dialog.js';
 
 export default class itemGrpSalesReport extends React.PureComponent
 {
@@ -233,7 +233,7 @@ export default class itemGrpSalesReport extends React.PureComponent
                             >                            
                                 <Paging defaultPageSize={20} />
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
-                                <Export fileName={this.lang.t("menuOff.pos_02_009")} enabled={true} allowExportSelectedData={true} />
+                                <Export fileName={this.lang.t("menuOff.slsRpt_01_003")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="ITEM_GRP_CODE" caption={this.t("grdGroupSalesReport.clmGrpCode")} visible={true} width={100}/> 
                                 <Column dataField="ITEM_GRP_NAME" caption={this.t("grdGroupSalesReport.clmGrpName")} visible={true} width={300}/> 
                                 <Column dataField="TOTAL_COST" caption={this.t("grdGroupSalesReport.clmTotalCost")} visible={true} format={{ style: "currency", currency: "EUR",precision: 2}}  width={150} allowHeaderFiltering={false}/> 
