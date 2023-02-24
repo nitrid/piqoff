@@ -111,6 +111,16 @@ export const langTr =
         head : "Silme İşlemi Açıklaması",
         title : "Lütfen Silme Nedeninizi Giriniz"
     },
+    popVatRate:
+    {
+        title : "Vergi Oranları",
+    },
+    grdVatRate :
+    {
+        clmRate : "Vergi Oranı",
+        clmVat : "Vergi Tutarı"
+    },
+    btnVatToZero : "Vergiyi Sıfırla",
     menuOff:
     {
         stk: "Stok",                
@@ -327,7 +337,12 @@ export const langTr =
         salesinvoices_04 : "Raporlar",
         salesReport : "Raporlar",
         slsRpt_01_001 : "Evrak Kıyas Raporu",
-        slsRpt_01_002 : "Grup Bazlı Satış Raporu"
+        slsRpt_01_002 : "Grup Bazlı Satış Raporu",
+        slsRpt_01_003 : "Tarih Sıralı Satış Faturaları Raporu",
+        slsRpt_01_004 : "Satış  Raporu",
+        purchaseReport : "Raporlar",
+        slsRpt_02_001 : "Tarih Sıralı Alış Faturaları Raporu",
+        slsRpt_02_002 : "DEB Raporu",
     },
     login:
     {
@@ -14989,6 +15004,7 @@ export const langTr =
             clmOrders : "Sipariş",
             clmDispatch : "İrsaliye",
             clmInvoice : "Fatura",
+            clmCollection : "Tahsilat",
         },
     },
     slsRpt_01_002 : // "Ürün Grubu Raporu"
@@ -15030,6 +15046,73 @@ export const langTr =
         popAnalysis : 
         {
             title : "Satış Grafiği"
+        },
+    },
+    slsRpt_01_003 : // "Tarih sıralı satış raporu"
+    {
+        chkZeroBalance : "0 Bakiyeler Gösterilsin",
+        txtCustomerCode : "Cari",
+        btnCheck : "Aktif",
+        btnGet :"Getir",
+        grdListe : 
+        {
+            clmDate : "Tarih",
+            clmCode: "Kodu",
+            clmName : "Adı",           
+            clmAmount : "Tutar",
+            clmDiscount : "İndirim",
+            clmTotalHt : "Vergisiz Fiyat",
+            clmVat : "Vergi",
+            clmTotal : "Toplam",
+            clmRef : "Seri-Sıra"
+        },
+    },
+    slsRpt_01_004 : // "Tarih sıralı satış raporu"
+    {
+        chkZeroBalance : "0 Bakiyeler Gösterilsin",
+        txtCustomerCode : "Cari",
+        btnCheck : "Aktif",
+        btnGet :"Getir",
+        grdListe : 
+        {
+            clmDate : "Tarih",
+            clmTotalHt: "Vergisiz Toplam",
+            clmName : "Adı",           
+            clmTotal : "Toplam",
+        },
+    },
+    slsRpt_02_001 : // "Tarih sıralı Alış raporu"
+    {
+        chkZeroBalance : "0 Bakiyeler Gösterilsin",   
+        txtCustomerCode : "Cari",   
+        btnCheck : "Aktif",   
+        btnGet :"Getir",   
+        grdListe :    
+        {   
+            clmDate : "Tarih",   
+            clmCode: "Kodu",   
+            clmName : "Adı",              
+            clmAmount : "Tutar",   
+            clmDiscount : "İndirim",   
+            clmTotalHt : "Vergisiz Fiyat",   
+            clmVat : "Vergi",   
+            clmTotal : "Toplam",   
+            clmRef : "Seri-Sıra",
+        },
+    },
+    slsRpt_02_002 : // "DEB raporu"
+    {
+        chkZeroBalance : "0 Bakiyeler Gösterilsin",   
+        txtCustomerCode : "Cari",   
+        btnCheck : "Aktif",   
+        btnGet :"Getir",   
+        grdListe :    
+        {   
+            clmAdress : "Adres",   
+            clmCode: "Kodu",   
+            clmName : "Adı",              
+            clmTotalHt : "Vergisiz Fiyat",   
+            clmKg : "Kilogram",   
         },
     },
 }

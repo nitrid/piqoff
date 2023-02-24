@@ -67,8 +67,6 @@ export default class itemSaleReport extends React.PureComponent
             await dialog(tmpConfObj);
             return
         }
-        console.log(this.dtDate.startDate)
-        console.log(this.dtDate.endDate)
         let tmpSource =
         {
             source : 
@@ -88,7 +86,6 @@ export default class itemSaleReport extends React.PureComponent
         await this.grdItemSaleReport.dataRefresh(tmpSource)
         App.instance.setState({isExecute:false})
         let tmpTotal = this.grdItemSaleReport.data.datatable.sum("TOTAL",2)
-        console.log(tmpTotal)
         this.txtTotal.value = parseFloat(tmpTotal)
     }
     render()
