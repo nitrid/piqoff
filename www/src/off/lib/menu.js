@@ -602,6 +602,24 @@ export const menu = (e) =>
                         }
                     ]
                 },
+                {
+                    id: 'purchaseReport',
+                    text : e.t('menuOff.purchaseReport'),//'Raporlar',
+                    expanded: false,
+                    items: 
+                    [ 
+                        {
+                            id: 'slsRpt_02_001',
+                            text: e.t('menuOff.slsRpt_02_001'),//'Alış Fatura',
+                            path: 'report/purchase/purchaseInvoiceReport'
+                        },
+                        {
+                            id: 'slsRpt_02_002',
+                            text: e.t('menuOff.slsRpt_02_002'),//'DEB Raporu',
+                            path: 'report/purchase/debReport'
+                        },
+                    ]
+                }
             ]
         },
         //Satış İşlemleri
@@ -833,12 +851,22 @@ export const menu = (e) =>
                         {
                             id: 'slsRpt_01_001',
                             text: e.t('menuOff.slsRpt_01_001'),//'Evrak Kıyas Raporu',
-                            path: 'report/docComparisonReport'
+                            path: 'report/sales/docComparisonReport'
                         },
                         {
                             id: 'slsRpt_01_002',
                             text: e.t('menuOff.slsRpt_01_002'),//'Ürün Grubu Satış',
-                            path: 'report/itemGrpSalesReport'
+                            path: 'report/sales/itemGrpSalesReport'
+                        },
+                        {
+                            id: 'slsRpt_01_003',
+                            text: e.t('menuOff.slsRpt_01_003'),//'Ürün Grubu Satış',
+                            path: 'report/sales/salesInvoiceReport'
+                        },
+                        {
+                            id: 'slsRpt_01_004',
+                            text: e.t('menuOff.slsRpt_01_004'),//'Ürün Grubu Satış',
+                            path: 'report/sales/salesVatReport'
                         },
                     ]
                 }

@@ -27,6 +27,7 @@ export class customersCls
             CAPITAL : 0,
             REBATE : false,
             TAX_SUCRE : false,
+            DEB : false,
             STATUS :true,
         }
 
@@ -69,14 +70,15 @@ export class customersCls
                     "@CAPITAL = @PCAPITAL, " +
                     "@REBATE = @PREBATE, " +
                     "@TAX_SUCRE = @PTAX_SUCRE, " +
+                    "@DEB = @PDEB, " +
                     "@EXPIRY_DAY = @PEXPIRY_DAY, " +
                     "@RISK_LIMIT = @PRISK_LIMIT, " +
                     "@STATUS = @PSTATUS ",
             param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PTITLE:string|50','PCODE:string|50','PGENUS:int','PCUSTOMER_GRP:string|25','PWEB:string|100','PNOTE:string|1500',
                         'PSIRET_ID:string|25','PSIREN_NO:string|25','PRCS:string|25','PAPE_CODE:string|50','PTAX_OFFICE:string|25','PTAX_NO:string|25','PINT_VAT_NO:string|50','PINSURANCE_NO:string|50',
-                       'PTAX_TYPE:int','PCAPITAL:float','PREBATE:bit','PTAX_SUCRE:bit','PEXPIRY_DAY:float','PRISK_LIMIT:float','PSTATUS:bit'],
+                       'PTAX_TYPE:int','PCAPITAL:float','PREBATE:bit','PTAX_SUCRE:bit','PDEB:bit','PEXPIRY_DAY:float','PRISK_LIMIT:float','PSTATUS:bit'],
             dataprm : ['GUID','CUSER','TYPE','TITLE','CODE','GENUS','CUSTOMER_GRP','WEB','NOTE','SIRET_ID','SIREN_NO','RCS','APE_CODE','TAX_OFFICE','TAX_NO','INT_VAT_NO','INSURANCE_NO','TAX_TYPE','CAPITAL'
-                        ,'REBATE','TAX_SUCRE','EXPIRY_DAY','RISK_LIMIT','STATUS']
+                        ,'REBATE','TAX_SUCRE','DEB','EXPIRY_DAY','RISK_LIMIT','STATUS']
         }
         tmpDt.updateCmd = 
         {
@@ -102,14 +104,15 @@ export class customersCls
                     "@CAPITAL = @PCAPITAL, " +
                     "@REBATE = @PREBATE, " +
                     "@TAX_SUCRE = @PTAX_SUCRE, " +
+                    "@DEB = @PDEB, " +
                     "@EXPIRY_DAY = @PEXPIRY_DAY, " +
                     "@RISK_LIMIT = @PRISK_LIMIT, " +
                     "@STATUS = @PSTATUS ",
             param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PTITLE:string|50','PCODE:string|50','PGENUS:int','PCUSTOMER_GRP:string|25','PWEB:string|100','PNOTE:string|1500',
                         'PSIRET_ID:string|25','PSIREN_NO:string|25','PRCS:string|25','PAPE_CODE:string|50','PTAX_OFFICE:string|25','PTAX_NO:string|25','PINT_VAT_NO:string|50','PINSURANCE_NO:string|50',
-                       'PTAX_TYPE:int','PCAPITAL:float','PREBATE:bit','PTAX_SUCRE:bit','PEXPIRY_DAY:float','PRISK_LIMIT:float','PSTATUS:bit'],
+                       'PTAX_TYPE:int','PCAPITAL:float','PREBATE:bit','PTAX_SUCRE:bit','PDEB:bit','PEXPIRY_DAY:float','PRISK_LIMIT:float','PSTATUS:bit'],
             dataprm : ['GUID','CUSER','TYPE','TITLE','CODE','GENUS','CUSTOMER_GRP','WEB','NOTE','SIRET_ID','SIREN_NO','RCS','APE_CODE','TAX_OFFICE','TAX_NO','INT_VAT_NO','INSURANCE_NO','TAX_TYPE','CAPITAL'
-                        ,'REBATE','TAX_SUCRE','EXPIRY_DAY','RISK_LIMIT','STATUS']
+                        ,'REBATE','TAX_SUCRE','DEB','EXPIRY_DAY','RISK_LIMIT','STATUS']
         }
         tmpDt.deleteCmd = 
         {
