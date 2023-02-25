@@ -865,8 +865,8 @@ export default class purchaseInvoice extends React.PureComponent
 
             this.docObj.docItems.dt()[pIndex].VAT = parseFloat((((pPrice * pQuantity) - this.docObj.docItems.dt()[pIndex].DISCOUNT) * (this.docObj.docItems.dt()[pIndex].VAT_RATE / 100) ).toFixed(4))
             this.docObj.docItems.dt()[pIndex].AMOUNT = parseFloat((pPrice  * pQuantity).toFixed(4))
-            this.docObj.docItems.dt()[pIndex].TOTAL = parseFloat(((pPrice * pQuantity)- this.docObj.docItems.dt()[pIndex].DISCOUNT + this.docObj.docItems.dt()[pIndex].VAT).toFixed(4))
-            this.docObj.docItems.dt()[pIndex].TOTALHT = parseFloat((this.docObj.docItems.dt()[pIndex].TOTAL - this.docObj.docItems.dt()[pIndex].VAT).toFixed(4))
+            this.docObj.docItems.dt()[pIndex].TOTALHT = parseFloat(((pPrice  * pQuantity) - this.docObj.docItems.dt()[pIndex].DISCOUNT).toFixed(2))
+            this.docObj.docItems.dt()[pIndex].TOTAL = parseFloat((this.docObj.docItems.dt()[pIndex].TOTALHT + this.docObj.docItems.dt()[pIndex].VAT).toFixed(2))
             this._calculateTotal()
         }
         if(tmpData.result.recordset.length > 0)
@@ -1488,7 +1488,6 @@ export default class purchaseInvoice extends React.PureComponent
                 value : [pdata[i][tmpShema.CODE]]
             }
             let tmpData = await this.core.sql.execute(tmpQuery) 
-            console.log(tmpData)
             if(tmpData.result.recordset.length > 0)
             {               
                 let tmpDocItems = {...this.docObj.docItems.empty}
@@ -3144,8 +3143,8 @@ export default class purchaseInvoice extends React.PureComponent
 
                                             e.key.VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100)).toFixed(4));
                                             e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(4))
-                                            e.key.TOTAL = parseFloat((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) + e.key.VAT).toFixed(4))
-                                            e.key.TOTALHT = parseFloat((e.key.AMOUNT - e.key.DISCOUNT).toFixed(4))
+                                            e.key.TOTALHT = parseFloat((e.key.AMOUNT - e.key.DISCOUNT).toFixed(2))
+                                            e.key.TOTAL = parseFloat((e.key.TOTALHT + e.key.VAT).toFixed(2))
 
                                             e.key.DIFF_PRICE = e.key.PRICE - e.key.CUSTOMER_PRICE
                                             if(e.key.DISCOUNT == 0)
