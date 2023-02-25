@@ -15124,7 +15124,7 @@ export const langFr =
             clmAdress : "Adres",      // BAK
             clmCode: "Kodu",      // BAK
             clmName : "Adı",                 // BAK
-            clmTotalHt : "Vergisiz Fiyat",      // BAK
+            clmTotalHt : "Fac Total HT",  
             clmKg : "Kilogram",      // BAK
         },
     },

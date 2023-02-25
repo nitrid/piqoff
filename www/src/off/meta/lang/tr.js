@@ -15112,7 +15112,7 @@ export const langTr =
             clmAdress : "Adres",   
             clmCode: "Kodu",   
             clmName : "Adı",              
-            clmTotalHt : "Vergisiz Fiyat",   
+            clmTotalHt : "Fatura Tutarı",   
             clmKg : "Kilogram",   
         },
     },
