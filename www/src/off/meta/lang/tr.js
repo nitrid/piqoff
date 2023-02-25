@@ -111,6 +111,16 @@ export const langTr =
         head : "Silme İşlemi Açıklaması",
         title : "Lütfen Silme Nedeninizi Giriniz"
     },
+    popVatRate:
+    {
+        title : "Vergi Oranları",
+    },
+    grdVatRate :
+    {
+        clmRate : "Vergi Oranı",
+        clmVat : "Vergi Tutarı"
+    },
+    btnVatToZero : "Vergiyi Sıfırla",
     menuOff:
     {
         stk: "Stok",                
@@ -199,7 +209,6 @@ export const langTr =
         irs_01_002: "Satış İrsaliye Listesi",
         irs_01_003: "İade İrsaliye Listesi",
         irs_01_004: "Şubeler Arası Satış İrsaliye Listesi",
-        irs_01_006 : "Faturası Kesilmemiş İrsaliye Listesi",
         irs_02_001: "Alış İrsaliyesi",
         irs_02_002: "Satış İrsaliyesi",
         irs_02_003: "Gönderilen İade İrsaliyesi",
@@ -261,6 +270,7 @@ export const langTr =
         promo_01_001: "Promosyon Tanımlama",
         promo_02: "Listeler",
         promo_02_001: "Promosyon Listesi",
+        promo_02_002: "Promosyon Detay Listesi",
         promo_03: "Raporlar",
         set : "Ayarlar",
         set_01 : "Maliyet ve Ek Vergiler",
@@ -325,6 +335,14 @@ export const langTr =
         salesinvoices_02 : "Listeler",
         salesinvoices_03 : "Proforma",
         salesinvoices_04 : "Raporlar",
+        salesReport : "Raporlar",
+        slsRpt_01_001 : "Evrak Kıyas Raporu",
+        slsRpt_01_002 : "Grup Bazlı Satış Raporu",
+        slsRpt_01_003 : "Tarih Sıralı Satış Faturaları Raporu",
+        slsRpt_01_004 : "Satış  Raporu",
+        purchaseReport : "Raporlar",
+        slsRpt_02_001 : "Tarih Sıralı Alış Faturaları Raporu",
+        slsRpt_02_002 : "DEB Raporu",
     },
     login:
     {
@@ -2502,7 +2520,8 @@ export const langTr =
             clmCode: "Kodu",
             clmName : "Adı",           
             clmQuantity : "Adet",
-            clmBarcode : "Barkodu"
+            clmBarcode : "Barkodu",
+            clmUnit : "Birim",
         },
         txtTotalQuantity : "Toplam Miktar",
         ItemNamePlaceHolder : "Ürün Adı Giriniz.."
@@ -3564,6 +3583,7 @@ export const langTr =
         getOffers : "Teklif Getir",
         getProforma : "Proforma Getir",
         txtTotalHt : "İndirimli Tutar",
+        txtDocNo : "Belgo No",
         cmbOrigin: "Menşei",
         pg_Docs : 
         {
@@ -4083,6 +4103,7 @@ export const langTr =
         validMail : "Lütfen Boş Geçmeyin.",
         getPreInvoice : "Ön Fatura Getir",
         txtTotalHt : "İndirimli Tutar",
+        txtDocNo : "Belgo No",
         extraCost : "Ek Maliyet",
         pg_Docs : 
         {
@@ -4594,6 +4615,7 @@ export const langTr =
         validDesign : "Lütfen Dizayn seçiniz.",
         validMail : "Lütfen Boş Geçmeyin.",
         txtTotalHt : "İndirimli Tutar",
+        txtDocNo : "Belgo No",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -5043,6 +5065,7 @@ export const langTr =
         validDesign : "Lütfen Dizayn seçiniz.",
         validMail : "Lütfen Boş Geçmeyin.",
         txtTotalHt : "İndirimli Tutar",
+        txtDocNo : "Belgo No",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -5877,6 +5900,7 @@ export const langTr =
             clmName : "Adı"
         },
         txtTotalHt : "İndirimli Tutar",
+        txtDocNo : "Belgo No",
         msgPrintforLocked:
         {
             title: "Dikkat",
@@ -5927,6 +5951,7 @@ export const langTr =
         txtExpFee : "Gecikme Cezası",
         dtExpDate : "Vade Tarihi", 
         txtTotalHt : "İndirimli Tutar",
+        txtDocNo : "Belgo No",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -6326,6 +6351,7 @@ export const langTr =
         dtExpDate : "Vade Tarihi", 
         getProforma : "Proforma Getir",
         txtTotalHt : "İndirimli Tutar",
+        txtDocNo : "Belgo No",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -6755,6 +6781,7 @@ export const langTr =
         validDesign : "Lütfen Dizayn seçiniz.",
         validMail : "Lütfen Boş Geçmeyin.",
         txtTotalHt : "İndirimli Tutar",
+        txtDocNo : "Belgo No",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -7206,6 +7233,7 @@ export const langTr =
         txtTotalQuantity : "Toplam Miktar",
         txtUnitPrice: "Birim Fiyatı",
         txtTotalHt : "İndirimli Tutar",
+        txtDocNo : "Belgo No",
         msgDiscount:
         {
             title: "Dikkat",
@@ -7544,6 +7572,7 @@ export const langTr =
         dtExpDate : "Vade Tarihi", 
         getOffers : "Teklif Getir", 
         txtTotalHt : "İndirimli Tutar",
+        txtDocNo : "Belgo No",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -7960,6 +7989,7 @@ export const langTr =
         dtExpDate : "Vade Tarihi", 
         getOffers : "Teklif Getir",
         txtTotalHt : "İndirimli Tutar",
+        txtDocNo : "Belgo No",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -8413,6 +8443,7 @@ export const langTr =
         txtExpFee : "Gecikme Cezası",
         dtExpDate : "Vade Tarihi", 
         txtTotalHt : "İndirimli Tutar",
+        txtDocNo : "Belgo No",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -8756,6 +8787,7 @@ export const langTr =
         txtExpFee : "Gecikme Cezası",
         dtExpDate : "Vade Tarihi", 
         txtTotalHt : "İndirimli Tutar",
+        txtDocNo : "Belgo No",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -9274,6 +9306,35 @@ export const langTr =
             clmAppAmount : "Uygulama Tutarı",
         }
     },
+    promo_02_002: //  "Promosyon Detay Listesi"
+    {
+        txtCode: "Kodu",
+        txtName: "Adı",
+        dtStartDate: "Baş.Tarih",
+        dtFinishDate: "Bit.Tarih",
+        txtCodePlace: "Promosyon kodunu ya da ürün barkodunu giriniz", 
+        txtNamePlace: "Promosyon kodunu ya da ürün adını giriniz", 
+        btnGet: "Getir",
+        grdListe:
+        {
+            clmCode: "Kodu",
+            clmName: "Adı", 
+            clmStartDate: "İlk Tarih", 
+            clmFinishDate : "Son Tarih",
+            clmCondTypeName : "Koşul Tipi",
+            clmCondItemCode : "Koşul Kodu",
+            clmCondItemName : "Koşul Adı",
+            clmCondBarcode : "Koşul Barkodu",
+            clmCondQuantity : "Koşul Miktar",
+            clmCondAmount : "Koşul Tutar",
+            clmAppTypeName : "Uygulama Tipi",
+            clmAppItemCode : "Uygulama Kodu",
+            clmAppItemName : "Uygulama Adı",
+            clmAppBarcode : "Uygulama Barkodu",
+            clmAppQuantity : "Uygulama Miktarı",
+            clmAppAmount : "Uygulama Tutarı",
+        }
+    },
     irs_01_001 : // "Alış İrsaliye Listesi"
     {
         cmbCustomer :"Cari",
@@ -9313,6 +9374,7 @@ export const langTr =
         dtLast : "Son Tarih",
         txtCustomerCode : "Cari",
         menu:"Satış İrsaliyesi",
+        chkOpenDispatch : "Sadece Faturası Olmayanları Göster",
         pg_txtCustomerCode : 
         {
             title : "Cari Seçimi",
@@ -9449,6 +9511,7 @@ export const langTr =
         txtTotalQuantity : "Toplam Miktar",
         txtUnitPrice: "Birim Fiyatı",
         txtTotalHt : "İndirimli Tutar",
+        txtDocNo : "Belgo No",
         cmbOrigin : "Menşei",
         pg_Docs : 
         {
@@ -9802,6 +9865,7 @@ export const langTr =
         validDesign : "Lütfen Dizayn seçiniz.",
         validMail : "Lütfen Boş Geçmeyin.",
         txtTotalHt : "İndirimli Tutar",
+        txtDocNo : "Belgo No",
         extraCost : "Ek Maliyet",
         pg_Docs : 
         {
@@ -10498,6 +10562,7 @@ export const langTr =
         validDesign : "Lütfen Dizayn seçiniz.",
         validMail : "Lütfen Boş Geçmeyin.",
         txtTotalHt : "İndirimli Tutar",
+        txtDocNo : "Belgo No",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -11168,6 +11233,7 @@ export const langTr =
         validDesign : "Lütfen Dizayn seçiniz.",
         validMail : "Lütfen Boş Geçmeyin.",
         txtTotalHt : "İndirimli Tutar",
+        txtDocNo : "Belgo No",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -11932,6 +11998,7 @@ export const langTr =
         validDesign : "Lütfen Dizayn seçiniz.",
         validMail : "Lütfen Boş Geçmeyin.",
         txtTotalHt : "İndirimli Tutar",
+        txtDocNo : "Belgo No",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -14923,5 +14990,129 @@ export const langTr =
         btnApprove : "Kaydet",
         btnCancel : "Kapat",
         txtPopUser : "Oluşturan Kullanıcı"
-    }
+    },
+    slsRpt_01_001 : // "Ürün Grubu Raporu"
+    {
+        chkZeroBalance : "0 Bakiyeler Gösterilsin",
+        txtCustomerCode : "Cari",
+        btnCheck : "Aktif",
+        btnGet :"Getir",
+        grdListe : 
+        {
+            clmCode: "Kodu",
+            clmName : "Adı",           
+            clmOrders : "Sipariş",
+            clmDispatch : "İrsaliye",
+            clmInvoice : "Fatura",
+            clmCollection : "Tahsilat",
+        },
+    },
+    slsRpt_01_002 : // "Ürün Grubu Raporu"
+    {
+        btnGet :"Getir",
+        txtAmount : "Toplam Tutar",
+        txtTotalTicket : "Toplam Evrak Sayısı",
+        txtTicketAvg : "Ortalama Evrak Tutarı",
+        txtTotalCost : "Toplam Maliyet",
+        txtFamount : "Vergisiz Toplam",
+        txtVat : "Toplam Vergi",
+        txtRestTotal : "Vergisiz Toplam Kar",
+        btnGetAnalysis : "Grafik Görünümü",
+        grdGroupSalesReport: 
+        {
+            clmGrpCode : "Ürün Grubu Kodu",
+            clmGrpName: "Ürün Grubu Adı",
+            clmTotalCost: "Toplam Maliyet",
+            clmFamount : "Vergisiz Tutar",
+            clmVat : "Vergi Tutarı",
+            clmTotal : "Toplam Tutar",
+            clmRestTotal : "Vergisiz Toplam Kar"
+        },
+        grpGrpDetail : 
+        {
+            clmCode : "Ürün Kodu",
+            clmName : "Ürün Adı",
+            clmQuantity : "Miktar",
+            clmTotalCost :"Toplam Maliyet",
+            clmFamount :"Vergisiz Tutar",
+            clmVat : "Vergi Tutarı",
+            clmTotal : "Toplam Tutar",
+            clmRestTotal : "Vergisiz Toplam Kar"
+        },
+        popGrpDetail : 
+        {
+            title : "Satış Detayı"
+        },
+        popAnalysis : 
+        {
+            title : "Satış Grafiği"
+        },
+    },
+    slsRpt_01_003 : // "Tarih sıralı satış raporu"
+    {
+        chkZeroBalance : "0 Bakiyeler Gösterilsin",
+        txtCustomerCode : "Cari",
+        btnCheck : "Aktif",
+        btnGet :"Getir",
+        grdListe : 
+        {
+            clmDate : "Tarih",
+            clmCode: "Kodu",
+            clmName : "Adı",           
+            clmAmount : "Tutar",
+            clmDiscount : "İndirim",
+            clmTotalHt : "Vergisiz Fiyat",
+            clmVat : "Vergi",
+            clmTotal : "Toplam",
+            clmRef : "Seri-Sıra"
+        },
+    },
+    slsRpt_01_004 : // "Tarih sıralı satış raporu"
+    {
+        chkZeroBalance : "0 Bakiyeler Gösterilsin",
+        txtCustomerCode : "Cari",
+        btnCheck : "Aktif",
+        btnGet :"Getir",
+        grdListe : 
+        {
+            clmDate : "Tarih",
+            clmTotalHt: "Vergisiz Toplam",
+            clmName : "Adı",           
+            clmTotal : "Toplam",
+        },
+    },
+    slsRpt_02_001 : // "Tarih sıralı Alış raporu"
+    {
+        chkZeroBalance : "0 Bakiyeler Gösterilsin",   
+        txtCustomerCode : "Cari",   
+        btnCheck : "Aktif",   
+        btnGet :"Getir",   
+        grdListe :    
+        {   
+            clmDate : "Tarih",   
+            clmCode: "Kodu",   
+            clmName : "Adı",              
+            clmAmount : "Tutar",   
+            clmDiscount : "İndirim",   
+            clmTotalHt : "Vergisiz Fiyat",   
+            clmVat : "Vergi",   
+            clmTotal : "Toplam",   
+            clmRef : "Seri-Sıra",
+        },
+    },
+    slsRpt_02_002 : // "DEB raporu"
+    {
+        chkZeroBalance : "0 Bakiyeler Gösterilsin",   
+        txtCustomerCode : "Cari",   
+        btnCheck : "Aktif",   
+        btnGet :"Getir",   
+        grdListe :    
+        {   
+            clmAdress : "Adres",   
+            clmCode: "Kodu",   
+            clmName : "Adı",              
+            clmTotalHt : "Fatura Tutarı",   
+            clmKg : "Kilogram",   
+        },
+    },
 }

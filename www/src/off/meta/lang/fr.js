@@ -111,6 +111,16 @@ export const langFr =
         head : "Description du Processus de Suppression",   
         title : "Veuillez Saisir le motif de la Suppression"   
     },
+    popVatRate:
+    {
+        title : "Vergi Oranları", // BAK
+    },
+    grdVatRate :
+    {
+        clmRate : "Vergi Oranı", // BAK
+        clmVat : "Vergi Tutarı" // BAK
+    },
+    btnVatToZero : "Vergiyi Sıfırla", // BAK
     menuOff:
     {
         stk: "Produit",                
@@ -130,7 +140,7 @@ export const langFr =
         stk_01_009: "Désignation Groupe Sous-Produit", 
         stk_01_010: "Définir unité",
         stk_01_011: "Définir taux de TVA",
-        stk_01_012 : "Bağlı Ürün Tanımlama", // BAK
+        stk_01_012 :"Identification du produit lié", 
         stk_02_001: "Document inventaire",
         stk_02_002: "Transfert interne dépot/magasin",
         stk_02_003: "Sortie perte",
@@ -150,8 +160,8 @@ export const langFr =
         stk_04_002: "Traitement retour",
         stk_04_003: "Traitement inventaire",
         stk_04_004:"Traitement DLC",
-        stk_05_001: "Rapport Inventaire Dépôt", // BAK
-        stk_05_002: "Rapport sur la modification des prix d'achat", // BAK
+        stk_05_001: "Rapport Inventaire Dépôt", 
+        stk_05_002: "Rapport sur la modification des prix d'achat", 
         cri: "Fournisseur - Client",
         cri_01: "Saisie",
         cri_02: "Listes",
@@ -165,9 +175,9 @@ export const langFr =
         cri_02_003: "Liste Catégorie ",
         cri_03_001: "Ajouter Multi Client",
         cri_04_001 : "Rapport Relevé Fournisseur", 
-        cri_04_002 : 'Cari Bakiye Raporu', // BAK
+        cri_04_002 : 'Rapport sur le solde courant', 
         cri_04_003 : "Rapport point fidelité client",
-        cri_04_004 : "Cari Bakiyeli Ekstre Raporu", // BAK
+        cri_04_004 : "Rapport sur le bilan actuel",
         ftr: "Facture ",
         ftr_01: "Listes",
         ftr_02: "Document",
@@ -181,11 +191,11 @@ export const langFr =
         ftr_02_001: "Saisie Facture d'achat",
         ftr_02_002: "Saisie Facture de vente",
         ftr_02_003: "Saisie Facture retour",
-        ftr_02_004: "Saisie Facture différence de prix",
+        ftr_02_004: "Facture Différence Prix Achat",
         ftr_02_005: "Saisie Vente interne",
-        ftr_02_006: "Facture Différence Prix Achat", 
+        ftr_02_006: "Facture Différence Prix Vente", 
         ftr_02_007: "Facture Retour ", 
-        ftr_02_008: "Facture D'achat magasin interne", // BAK
+        ftr_02_008: "Facture d'achat interne magasin", 
         ftr_04_001: "Différence de prix Facture Proforma", 
         ftr_04_002: "Facture Proforma de Vente",   
         ftr_04_003: "Facture Proforma d'Achat",   
@@ -199,13 +209,12 @@ export const langFr =
         irs_01_002: "Liste Bon de livraison de vente",
         irs_01_003: "Liste Bon de livraison de retour",
         irs_01_004: "Liste des bordereaux de vente interne", 
-        irs_01_006 : "Faturası Kesilmemiş İrsaliye Listesi",   //BAK
         irs_02_001: " Bon de livraison d'achat",
         irs_02_002: "Saisie Bon de livraison de vente",
         irs_02_003: "Saisie Bon de Retour de livraison",
         irs_02_004: "Saisie Bon de livraison interne", 
         irs_02_005: "Bon de livraison Reprise Retour", 
-        irs_02_006: "Bon de livraison achat interne", // BAK
+        irs_02_006: "Bon de livraison d'achat interne", 
         sip: "Commande",
         sip_01: "Listes",
         sip_02: "Document",
@@ -252,7 +261,7 @@ export const langFr =
         pos_02_006 : "Rapport de Vente Fin de Journée", 
         pos_02_007 : "Rapport Pos Fond de Caisse ", 
         pos_02_008 : "Rapport de Vente Produit", 
-        pos_02_009 : "Rapport de Vente par famille de produits", // BAK
+        pos_02_009 : "Rapport de Vente par famille de produits",
         pos_03 : "Traitements", 
         pos_03_001 : "Opérations de fin de journée",
         promo: "Promotion",
@@ -260,6 +269,7 @@ export const langFr =
         promo_01_001: "Saisie promotions", 
         promo_02: "Listes",
         promo_02_001: "Liste promotion",
+        promo_02_002: "Liste Detaille promotion",
         promo_03: "Rapports",
         set : "Paramètre / Supplément",
         set_01 : "Coût et taxe annexe",
@@ -323,6 +333,14 @@ export const langFr =
         salesinvoices_02 : "Listes",
         salesinvoices_03 : "Proforma",
         salesinvoices_04 : "Rapports",
+        salesReport : "Rapports",
+        slsRpt_01_001 : "Evrak Kıyas Raporu",  // BAK
+        slsRpt_01_002 : "Grup Bazlı Satış Raporu",  // BAK
+        slsRpt_01_003 : "Tarih Sıralı Satış Faturaları Raporu", // BAK
+        slsRpt_02_004 : "Satış Raporu", // BAK
+        purchaseReport : "Rapports",
+        slsRpt_02_001 : "Tarih Sıralı Alış Faturaları Raporu", // BAK
+        slsRpt_02_002 : "DEB Raporu", // BAK
     },
     login:
     {
@@ -389,8 +407,8 @@ export const langFr =
         underUnitName : "Sous Unité",
         chkDayAnalysis : "Journalier",  
         chkMountAnalysis : "Mensuel",  
-        txtUnitFactor : "Birim Mikarı", // BAK
-        pg_txtRef:
+        txtUnitFactor : "Quantité unitaire", 
+        pg_txtRef :
         {
             title: "Sélectionner Produit",
             clmCode: "Code",
@@ -447,8 +465,8 @@ export const langFr =
             clmStartDate: "Date Début",
             clmFinishDate: "Date Fin",
             clmQuantity: "Quantité",
-            clmVatExt: "Hors Taxe",
-            clmPrice: "Prix ",
+            clmVatExt: "Prix HT",
+            clmPrice: "Prix TTC",
             clmGrossMargin: "Marge Brute",
             clmNetMargin: "Marge Nette",
         },
@@ -645,11 +663,11 @@ export const langFr =
         },
         msgUnit:
         {
-            title: "Birim Hesaplama",   // BAK
-            btn01: "Onayla",   // BAK
+            title: "Calcul unitaire",  
+            btn01: "Valider",   
         },
     },
-    stk_01_002:  //"Barkod Tanımları" 
+    stk_01_002:  //"Identification des codes-barres" 
     {
         txtBarcode: "Code barre",
         txtItem: "Référence Produit",
@@ -890,19 +908,19 @@ export const langFr =
         },
         chkActive: "Actif",
     },
-    stk_01_010 : // "Birim Tanımları"
+    stk_01_010 : // "Identification des unités"
     {
-        txtId : "I.D",  //bak
-        txtName :"Nom",  //bak
-        txtSymbol : "Symbole",  //bak
-        cmbType :"Type",  //bak
-        validCode :"Vous ne pouvez pas laisser le code sans le saisir !",  //bak
-        pg_txtCode :   //bak
-        {  //bak
-            title : "Choix de groupe de produits",  //bak
-            clmId : "I.D",  //bak
-            clmName : "Nom",  //bak
-            clmSymbol : "Symbole",  //bak
+        txtId : "I.D",  
+        txtName :"Nom",  
+        txtSymbol : "Symbole",  
+        cmbType :"Type",  
+        validCode :"Vous ne pouvez pas valider le code sans le saisir !", 
+        pg_txtCode :   
+        {  
+            title : "Choix de groupe de produits",
+            clmId : "I.D",  
+            clmName : "Nom",  
+            clmSymbol : "Symbole",  
         },
         msgSave:
         {
@@ -933,26 +951,26 @@ export const langFr =
         },
         msgCode : 
         {
-            title: "Attention",   // BAK
-            btn01: "Aller à la caisse",   // BAK
-            btn02: "OK",   // BAK
-            msg : "L'ID que vous avez entré est enregistré dans le système !"   // BAK
+            title: "Attention",   
+            btn01: "Aller à la caisse",  
+            btn02: "OK",   
+            msg : "L'I.D que vous avez saisi est enregistré dans le système !" 
         },
-        chkActive: "Actif", // BAK
+        chkActive: "Actif", 
     },
-    stk_01_011 : // "Birim Tanımları"
+    stk_01_011 : // "Identification des unités"
     {
-        txtId : "I.D",   // BAK
-        txtVat :"Valeur d'impôt",   // BAK
-        txtType : "Type",   // BAK
-        cmbType :"Type",   // BAK
-        validCode :"Vous ne pouvez pas laisser le code sans le saisir !",   // BAK
-        pg_txtCode :    // BAK
-        {   // BAK
-            title : "Choix de groupe de produits",   // BAK
-            clmId : "I.D",   // BAK
-            clmVat : "Valeur",   // BAK
-            clmType : "Type",   // BAK
+        txtId : "I.D", 
+        txtVat :"Valeur d'impôt", 
+        txtType : "Type",   
+        cmbType :"Type",   
+        validCode :"Vous ne pouvez pas valider le code sans le saisir !",  
+        pg_txtCode :    
+        {   
+            title : "Choix de groupe de produits",  
+            clmId : "I.D",   
+            clmVat : "Valeur",   
+            clmType : "Type",  
         },
         msgSave:
         {
@@ -983,68 +1001,68 @@ export const langFr =
         },
         msgCode : 
         {
-            title: "Attention", // BAK
-            btn01: "Allez à la caisse", // BAK
-            btn02: "OK", // BAK
-            msg : "L'ID que vous avez entré est enregistré dans le système !" // BAK
+            title: "Attention", 
+            btn01: "Allez à la caisse", 
+            btn02: "OK", 
+            msg : "L'ID que vous avez saisi est enregistré dans le système !" 
         },
-        chkActive: "Aktif", // BAK
+        chkActive: "Aktif", 
     },
-    stk_01_012 : // "Bağlı Ürün Tanımlama"
+    stk_01_012 : // "Identification des produits liés"
     {
-        txtCode : "Kodu", //BAK
-        txtName :"Adı", //BAK
-        txtQuantity : "Miktar", //BAK
-        msgRelatedValid: //BAK
+        txtCode : "Code", 
+        txtName :"Nom", 
+        txtQuantity : "Montant", 
+        msgRelatedValid: 
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Ürün Seçmeden Satır Eklenemez !"
+            title: "Attention",
+            btn01: "D'accord",
+            msg: "Impossible d'ajouter une ligne sans sélectionner le produit !"
         },
-        grdRelated : //BAK
+        grdRelated : 
         {
-            clmItemCode : "KODU",
-            clmItemName : "ADI",
-            clmQuantity : "MIKTAR"
+            clmItemCode : "Code",
+            clmItemName : "Nom",
+            clmQuantity : "Montant"
         },
-        popRelatedSelect : //BAK 
+        popRelatedSelect : 
         {
-            title : "Stok Seçimi",
-            clmCode : "KODU",
-            clmName : "ADI",
+            title : "Sélection du stock",
+            clmCode : "Code",
+            clmName : "Nom",
         },
-        popItemSelect : //BAK
+        popItemSelect : 
         {
-            title : "Stok Seçimi",
-            clmCode : "KODU",
-            clmName : "ADI",
+            title : "Sélection du stock",
+            clmCode : "Code",
+            clmName : "Nom",
         },
-        msgSave : //BAK
+        msgSave : 
         {
-            title : "Dikkat",
-            btn01 : "Tamam",
-            btn02 : "Vazgeç",
-            msg : "Kayıt etmek istediğinize eminmisiniz !"
+            title : "Attention",
+            btn01 : "D'accord",
+            btn02 : "Abandonnez",
+            msg : "Etes-vous sûr de vouloir valider?"
         },
-        msgSaveResult : //BAK
+        msgSaveResult :
         {
-            title : "Dikkat",
-            btn01 : "Tamam",
-            msgSuccess : "Kayıt işleminiz başarılı !",
-            msgFailed : "Kayıt işleminiz başarısız !"
+            title : "Attention",
+            btn01 : "D'accord",
+            msgSuccess : "Enregistrement réussi!",
+            msgFailed : "Echec de l'enregistrement!"
         },
-        msgSaveValid : //BAK
+        msgSaveValid : 
         {
-            title : "Dikkat",
-            btn01 : "Tamam",
-            msg : "Lütfen gerekli alanları doldurunuz !"
+            title : "Attention",
+            btn01 : "D'accord",
+            msg : "S'il vous plaît saissisez les rubriques nécessaires"
         },
-        msgDelete : //BAK
+        msgDelete :
         {
-            title : "Dikkat",
-            btn01 : "Tamam",
-            btn02 : "Vazgeç",
-            msg : "Kaydı silmek istediğinize eminmisiniz ?"
+            title : "Attention",
+            btn01 : "D'accord",
+            btn02 : "Abandonnez",
+            msg : "Etes-vous sûr de vouloir surpprimer l'enregistrement?"
         },
     },
     stk_02_001 : // Sayım Evrakı"
@@ -2500,7 +2518,8 @@ export const langFr =
             clmCode: "Code",
             clmName : "Nom",           
             clmQuantity : "Quantité",
-            clmBarcode : "Code-Barres"
+            clmBarcode : "Code-Barres",
+            clmUnit : "unitaire", 
         },
         txtTotalQuantity : "Quantité Totale",
         ItemNamePlaceHolder : "Veuillez Saisir le nom du Produit.."
@@ -2719,46 +2738,46 @@ export const langFr =
     },
     stk_05_001 : // "Depo Envanter Raporu"
     {
-        chkZeroQuantity : "Afficher quantité zéro", // BAK
-        cmbDepot : "Dépôt", // BAK
-        btnCheck : "Actif", // BAK
-        btnGet :"Rechercher", // BAK
+        chkZeroQuantity : "Afficher quantité zéro", 
+        cmbDepot : "Dépôt", 
+        btnCheck : "Actif", 
+        btnGet :"Rechercher", 
         grdListe : 
         {
-            clmCode: "Code", // BAK
-            clmName : "Nom",           // BAK
-            clmQuantity : "Quantité", // BAK
-            clmBarcode : "Code barre", // BAK
-            clmCostPrice : "Prix d'achat",    // BAK
-            clmTotalCost : "Valeur prix d'achat",    // BAK
-            clmSalePrice : "Prix de vente",    // BAK
-            clmTotalPrice : "Valeur total des ventes"    // BAK
+            clmCode: "Code", 
+            clmName : "Nom",           
+            clmQuantity : "Quantité", 
+            clmBarcode : "Code barre", 
+            clmCostPrice : "Prix d'achat",    
+            clmTotalCost : "Valeur prix d'achat",    
+            clmSalePrice : "Prix de vente",    
+            clmTotalPrice : "Montant total des ventes"  
         },
         txtTotalQuantity : "Total Quantité",
-        txtTotalCost : "Envanter Değeri",
+        txtTotalCost : "Montant de l'inventaire",
     },
     stk_05_002 : // Alış Fiyatı Raporuu"
     {
-        btnGet :"Allez", // BAK
-        dtFirst : "Date de début", // BAK
-        graphicTitle : "Graphique de changement de prix", // BAK
-        typePurc : "Achat", // BAK
-        typeSale : "Vente", // BAK
-        dlbClikMsg : "Double-cliquez sur la ligne pour voir le graphique en détail.", // BAK
+        btnGet :"Allez", 
+        dtFirst : "Date de début", 
+        graphicTitle : "Graphique de changement de prix", 
+        typePurc : "Achat", 
+        typeSale : "Vente", 
+        dlbClikMsg : "Double-cliquez sur la ligne pour visualiser le graphique en détail.", 
         cmbCustomer : "Fournisseur",
         cmbMainGrp : "Famille produit",
         grdItemPurcPriceReport: 
         {
-            clmCode : "Code de Produit",   // BAK
-            clmName: "Nom du Produit",   // BAK
-            clmCustomer: "Fournisseur",   // BAK
-            clmLdate: "Date du dernier changement",   // BAK
-            clmFamount : "Montant hors taxe",   // BAK
-            clmTotalCost : "Dernier prix d'achat",   // BAK
-            clmSale : "Prix de Vente",   // BAK
-            clmFisrtCost : "Önceki Alış Fiyatı", // BAK
-            clmMargin : "Brüt Marj", // BAK
-            clmNetMargin : "Net Marj", // BAK
+            clmCode : "Code de Produit",   
+            clmName: "Nom du Produit",   
+            clmCustomer: "Fournisseur",   
+            clmLdate: "Date du dernier changement",  
+            clmFamount : "Montant hors taxe",  
+            clmTotalCost : "Dernier prix d'achat",  
+            clmSale : "Prix de Vente",  
+            clmFisrtCost : "Dernier prix de revient", 
+            clmMargin : "Marge brute", 
+            clmNetMargin : "Marge nette", 
         },
     },
     cri_01_001: // "Cari Tanımları"
@@ -3226,19 +3245,19 @@ export const langFr =
     },
     cri_04_001 : // "Cari Extre Raporu"
     {
-        txtCustomerCode : "Cari", // BAK
-        btnGet :"Getir", // BAK
+        txtCustomerCode : "Actuel", 
+        btnGet :"Apporter", 
         grdListe : 
         {
-            clmDocDate: "Tarih",   // BAK
-            clmTypeName : "Evrak Tipi",              // BAK
-            clmRef : "Evrak Seri",   // BAK
-            clmRefNo : "Evrak Sıra",   // BAK
-            clmDebit : "Borç",   // BAK
-            clmReceive : "Alacak",   // BAK
-            clmBalance : "Bakiye",   // BAK
+            clmDocDate: "Date",  
+            clmTypeName : "Type de document",      
+            clmRef : "Série du document",   
+            clmRefNo : "Ordre du document",   
+            clmDebit : "Dette",   
+            clmReceive : "Avoir",   
+            clmBalance : "Equilibre",   
         },
-        txtTotalBalance : "Bakiye", // BAK
+        txtTotalBalance : "Equillibre", 
         pg_txtCustomerCode : 
         {
             title : "Choix Fournisseur",
@@ -3246,29 +3265,29 @@ export const langFr =
             clmTitle : "Nom Fournisseur",
             clmTypeName : "Type",
             clmGenusName : "Genre",
-            clmBalance : "Bakiye",   // BAK
+            clmBalance : "Equilibre",  
         },
         msgNotCustomer:
         {
-            title: "Dikkat",  // BAK
-            btn01: "Tamam",  // BAK
-            msg: "Lütfen Cari Seçiniz..!"  // BAK
+            title: "Attention", 
+            btn01: "D'accord", 
+            msg: "S'il vous plait choissisez actuel" 
         },
     },
-    cri_04_002 : // "Cari Bakiye Raporu"
+    cri_04_002 : // "Rapport actuel d'équilibre"
     {
-        chkZeroBalance : "0 Bakiyeler Gösterilsin",   // BAK
-        txtCustomerCode : "Cari",   // BAK
-        btnCheck : "Aktif",   // BAK
+        chkZeroBalance : "0 Afficher l'équilibre", 
+        txtCustomerCode : "Actuel",   
+        btnCheck : "Actif",   
         btnGet :"Rechercher",
         grdListe : 
         {
-            clmCode: "Kodu",  //BAK
-            clmName : "Adı",             //BAK
-            clmBalance : "Bakiye",  //BAK
-            clmUpdate : "Güncellenme Tarihi",  //BAK
+            clmCode: "Code", 
+            clmName : "Nom",           
+            clmBalance : "Equilibre", 
+            clmUpdate : "Date de mise à jour", 
         },
-        txtTotalBalance : "Toplam Tutar",
+        txtTotalBalance : "Montant total",
         pg_txtCustomerCode : 
         {
             title : "Choix Fournisseur",
@@ -3276,7 +3295,7 @@ export const langFr =
             clmTitle : "Nom Fournisseur",
             clmTypeName : "Type",
             clmGenusName : "Genre",
-            clmBalance : "Bakiye",   // BAK
+            clmBalance : "Equilibre",  
         },
     },
     cri_04_003 : // "Müşteri Puanı Raporu"
@@ -3556,12 +3575,13 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité Unitaire",  
         txtTotalQuantity : "Quantité totale",  
-        txtUnitPrice : "Prix ​​unitaire", // BAK
+        txtUnitPrice : "Prix ​​unitaire",
         txtExpFee : "Pénalités de Retard ", 
         dtExpDate : "Date d'Echéance", 
         getOffers : "Recherche Proposition", 
         getProforma : "Rechercher Proforma ", 
         txtTotalHt : "Total HT",
+        txtDocNo : "Numéro de document", 
         cmbOrigin : "Origine",
         pg_Docs : 
         {
@@ -3605,7 +3625,7 @@ export const langFr =
             clmLineNo : "Nr",
             clmItemCode: "Code",
             clmItemName: "Nom",
-            clmPrice: "Prix ",
+            clmPrice: "Prix HT",
             clmQuantity : "Quantité",
             clmDiscount : "Remise",
             clmDiscountRate : "Remise %",
@@ -3877,7 +3897,7 @@ export const langFr =
         {
             title: "Sélection de l'unité",  
             btn01: "Valider",  
-            btnFactorSave : "Stok Kartını Güncelle" // BAK
+            btnFactorSave : "Mettre à jour la carte de stock" 
         },
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
@@ -3898,8 +3918,8 @@ export const langFr =
             clmName: "Nom",     
             clmPrice: "Ancien Prix",     
             clmPrice2: "Nouveau Prix",   
-            clmSalePrice :"Prix de Vente",  // BAK
-            clmMargin : "Marge"  // BAK
+            clmSalePrice :"Prix de Vente",  
+            clmMargin : "Marge"  
         },
         pg_txtBarcode : 
         {
@@ -3991,8 +4011,8 @@ export const langFr =
         },
         popRound : 
         {
-            title : "Veuillez saisir le montant que vous souhaitez arrondir",    // BAK
-            total : "Montant",  // BAK
+            title : "Veuillez saisir le montant que vous souhaitez arrondir",  
+            total : "Montant", 
         },
         msgCompulsoryCustomer:
         {
@@ -4002,33 +4022,33 @@ export const langFr =
         },
         msgWorngRound:
         {  
-            title: "Attention",  // BAK
-            btn01: "OK",  // BAK
-            msg1: "Le montant que vous souhaitez arrondir est au maximum",  // BAK
-            msg2: " Il peut avoir une différence !"  // BAK
+            title: "Attention",  
+            btn01: "OK",  
+            msg1: "Le montant que vous souhaitez arrondir est au maximum",  
+            msg2: " Il peut avoir une différence !"  
         },
         msgDiscountEntry : 
         {
-            title : "Saisir de Remise Montant",   // BAK
-            btn01 : "Valide" // BAK
+            title : "Saisie du montant de la remise",  
+            btn01 : "Validez" 
         },
         msgGrdOrigins:
         {
-            title: "Menşei Değişimi",   // BAK
-            btn01: "Keydet",   // BAK
+            title: "Changement d'origine", 
+            btn01: "Validez",   
         },
-        txtDiscount1 : "1. Remise ",  // BAK
-        txtDiscount2 : "2. Remise ",  // BAK
-        txtDiscount3 : "3. Remise ",  // BAK
-        txtTotalDiscount :"Total de Remise ",  // BAK
+        txtDiscount1 : "1. Remise ",  
+        txtDiscount2 : "2. Remise ",
+        txtDiscount3 : "3. Remise ",  
+        txtTotalDiscount :"Total de Remise ",  
         msgDiscountPerEntry : 
         {
-            title : "Saisir de Remise %",  // BAK
-            btn01 : "Valide" // BAK
+            title : "Saisie de Remise en %",  
+            btn01 : "Validez" 
         },
-        txtDiscountPer1 : "1. Remise % ",  // BAK
-        txtDiscountPer2 : "2. Remise % ",  // BAK
-        txtDiscountPer3 : "3. Remise % ",  // BAK
+        txtDiscountPer1 : "1. Remise % ",  
+        txtDiscountPer2 : "2. Remise % ",  
+        txtDiscountPer3 : "3. Remise % ",  
     },
     ftr_02_002 : // "Satış Faturası"
     {
@@ -4069,7 +4089,7 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire ",  
         txtUnitQuantity : "Quantité Unitaire",  
         txtTotalQuantity : "Quantité totale",  
-        txtUnitPrice : "Prix unitaire", // BAK
+        txtUnitPrice : "Prix unitaire",
         txtExpFee : "Pénalités de Retard", 
         dtExpDate : "Date d'Echéance", 
         getOffers : "Recherche Proposition",  
@@ -4080,7 +4100,8 @@ export const langFr =
         validDesign : "Veuillez séléctionner le design.",  
         validMail : "Veuillez ne pas laisser le champs vide.",  
         txtTotalHt : "Total HT",
-        extraCost : "Ek Maliyet",
+        txtDocNo : "Numéro de document", 
+        extraCost : "Supplément",
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -4205,21 +4226,21 @@ export const langFr =
         },
         msgMaxPriceAlert:
         {
-            title: "Attention",    // BAK
-            btn01: "OK",    // BAK
-            msg: "€'Vous n'êtes pas autorisé à saisir un prix supérieur !"  // BAK
+            title: "Attention",    
+            btn01: "OK",   
+            msg: "€'Vous n'êtes pas autorisé à saisir un prix supérieur !"
         },
         msgMaxUnitQuantity:
         {
-            title: "Attention",   // BAK
-            btn01: "OK",   // BAK
-            msg: "'dan fazla miktar girme yetkiniz yok !"   // BAK
+            title: "Attention",  
+            btn01: "OK", 
+            msg: "'Vous n'êtes pas autorisé à saisir un prix supérieur !" 
         },
         msgRowNotUpdate:
         {
-            title: "Attention",   // BAK
-            btn01: "OK",   // BAK
-            msg: "Cette ligne étant transférée de la livraison, son montant ne peut pas être modifié."   // BAK
+            title: "Attention",  
+            btn01: "OK",  
+            msg: "Cette ligne étant transférée de la livraison, son montant ne peut pas être modifié."  
         },  
         msgVatDelete:
         {
@@ -4496,39 +4517,39 @@ export const langFr =
         },
         msgPrintforLocked:
         {
-            title: "Attention",   // BAK
-            btn01: "OK",   // BAK
-            msg: "Le document ne peut pas être imprimé sans verrouillage !"   // BAK
+            title: "Attention",  
+            btn01: "OK",  
+            msg: "Le document ne peut pas être imprimé sans être verouillé !"  
         },
         popRound : 
         {
-            title : "Veuillez saisir le montant que vous souhaitez arrondir",    // BAK
-            total : "Montant",  // BAK
+            title : "Veuillez saisir le montant que vous souhaitez arrondir",  
+            total : "Montant", 
         },
         msgWorngRound:
         {  
-            title: "Attention",  // BAK
-            btn01: "OK",  // BAK
-            msg1: "Le montant que vous voulez arrondir est au maximum ",  // BAK
-            msg2: " Il peut avoir une différence !"  // BAK
+            title: "Attention",  
+            btn01: "OK", 
+            msg1: "Le montant que vous voulez arrondir est au maximum ",  
+            msg2: " Il peut avoir une différence !" 
         },
         msgDiscountEntry : 
         {
-            title : "Saisir de Remise Montant",   // BAK
-            btn01 : "Valide" // BAK
+            title : "Saisie du montant de remise",  
+            btn01 : "Validez" 
         },
-        txtDiscount1 : "1. Remise ",  // BAK
-        txtDiscount2 : "2. Remise ",  // BAK
-        txtDiscount3 : "3. Remise ",  // BAK
-        txtTotalDiscount :"Total de Remise ",  // BAK
+        txtDiscount1 : "1. Remise ", 
+        txtDiscount2 : "2. Remise ", 
+        txtDiscount3 : "3. Remise ", 
+        txtTotalDiscount :"Total de Remise ", 
         msgDiscountPerEntry : 
         {
-            title : "Saisir de Remise %",  // BAK
-            btn01 : "Valide" // BAK
+            title : "Saisie de Remise en %", 
+            btn01 : "Validez" 
         },
-        txtDiscountPer1 : "1. Remise % ",  // BAK
-        txtDiscountPer2 : "2. Remise % ",  // BAK
-        txtDiscountPer3 : "3. Remise % ",  // BAK
+        txtDiscountPer1 : "1. Remise % ", 
+        txtDiscountPer2 : "2. Remise % ", 
+        txtDiscountPer3 : "3. Remise % ", 
         serviceAdd : "Ajouter un service",  
         pg_service : 
         {
@@ -4581,7 +4602,7 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
-        txtUnitPrice : "Prix unitaire", // BAK
+        txtUnitPrice : "Prix unitaire", 
         txtExpFee : "Pénalités de Retard", 
         dtExpDate : "Date d'Echéance", 
         getProforma : "Rechercher Proforma ", 
@@ -4591,6 +4612,7 @@ export const langFr =
         validDesign : "Veuillez choisir un design.",  
         validMail : "Veuillez ne pas laisser le champs vide.",  
         txtTotalHt : "Total HT",
+        txtDocNo : "Numéro de document", 
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -4911,40 +4933,40 @@ export const langFr =
         },
         msgMailSendResult:
         {
-            title: "Attention",   // BAK
-            btn01: "OK",   // BAK
-            msgSuccess: "Mail envoyé avec succès !",   // BAK
-            msgFailed: "Echec envoi de Mail !"   // BAK
+            title: "Attention",   
+            btn01: "OK",   
+            msgSuccess: "Mail envoyé avec succès !",   
+            msgFailed: "Echec d'envoi de mail !"  
         },
         popRound : 
         {
-            title : "Veuillez saisir le montant que vous souhaitez arrondir",    // BAK
-            total : "Montant",  // BAK
+            title : "Veuillez saisir le montant que vous souhaitez arrondir", 
+            total : "Montant", 
         },
         msgWorngRound:
         {  
-            title: "Attention",  // BAK
-            btn01: "OK",  // BAK
-            msg1: "Le montant que vous voulez arrondir est au maximum ",  // BAK
-            msg2: " Il peut avoir une différence !"  // BAK
+            title: "Attention", 
+            btn01: "OK", 
+            msg1: "Le montant que vous voulez arrondir est au maximum ", 
+            msg2: " Il peut avoir une différence !" 
         },
         msgDiscountEntry : 
         {
-            title : "Saisir de Remise Montant",   // BAK
-            btn01 : "Valide" // BAK
+            title : "Saisie du montant de la remise ",   
+            btn01 : "Validez" 
         },
-        txtDiscount1 : "1. Remise ",  // BAK
-        txtDiscount2 : "2. Remise ",  // BAK
-        txtDiscount3 : "3. Remise ",  // BAK
-        txtTotalDiscount :"Total de Remise ",  // BAK
+        txtDiscount1 : "1. Remise ",  
+        txtDiscount2 : "2. Remise ",  
+        txtDiscount3 : "3. Remise ",  
+        txtTotalDiscount :"Total de Remise ",  
         msgDiscountPerEntry : 
         {
-            title : "Saisir de Remise %",  // BAK
-            btn01 : "Valide" // BAK
+            title : "Saisie de Remise en %",  
+            btn01 : "Validez" 
         },
-        txtDiscountPer1 : "1. Remise % ",  // BAK
-        txtDiscountPer2 : "2. Remise % ",  // BAK
-        txtDiscountPer3 : "3. Remise % ",  // BAK
+        txtDiscountPer1 : "1. Remise % ",  
+        txtDiscountPer2 : "2. Remise % ",  
+        txtDiscountPer3 : "3. Remise % ", 
         serviceAdd : "Ajouter un service",  
         pg_service : 
         {
@@ -4994,9 +5016,9 @@ export const langFr =
         tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
         msgPrintforLocked:
         {
-            title: "Attention",   // BAK
-            btn01: "OK",   // BAK
-            msg: "Le document ne peut pas être imprimé sans verrouillage !"   // BAK
+            title: "Attention",   
+            btn01: "OK",   
+            msg: "Le document ne peut pas être imprimé sans être verouillé!"  
         },
     },
     ftr_02_004 : // "Fiyat Farkı Faturası"
@@ -5038,7 +5060,7 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
-        txtUnitPrice : "Prix unitaire", // BAK
+        txtUnitPrice : "Prix unitaire", 
         txtExpFee : "Pénalités de Retard", 
         dtExpDate : "Date d'Echéance", 
         btnView : "Aperçu", 
@@ -5047,6 +5069,7 @@ export const langFr =
         validDesign : "Veuillez sélectionner le design.",  
         validMail : "Veuillez ne pas laisser le champs vide.",  
         txtTotalHt : "Total HT",
+        txtDocNo : "Numéro de document", 
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -5341,40 +5364,40 @@ export const langFr =
         },
         msgMailSendResult:
         {
-            title: "Attention",   // BAK
-            btn01: "OK",   // BAK
-            msgSuccess: "Mail envoyé avec succès !",   // BAK
-            msgFailed: "Echec envoie de Mail !"   // BAK
+            title: "Attention",   
+            btn01: "OK",   
+            msgSuccess: "Mail envoyé avec succès !",   
+            msgFailed: "Echec envoie de Mail !"   
         },
         popRound : 
         {
-            title : "Veuillez saisir le montant que vous souhaitez arrondir",    // BAK
-            total : "Montant",  // BAK
+            title : "Veuillez saisir le montant que vous souhaitez arrondir",   
+            total : "Montant", 
         },
         msgWorngRound:
         {  
-            title: "Attention",  // BAK
-            btn01: "OK",  // BAK
-            msg1: "Le montant que vous voulez arrondir est au maximum",  // BAK
-            msg2: " Il peut avoir une différence !"  // BAK
+            title: "Attention",  
+            btn01: "OK",  
+            msg1: "Le montant que vous voulez arrondir est au maximum", 
+            msg2: " Il peut avoir une différence !" 
         },
         msgDiscountEntry : 
         {
-            title : "Saisir de Remise Montant",   // BAK
-            btn01 : "Valide" // BAK
+            title : "Saisie du montant de remise",   
+            btn01 : "Validez" 
         },
-        txtDiscount1 : "1. Remise ",  // BAK
-        txtDiscount2 : "2. Remise ",  // BAK
-        txtDiscount3 : "3. Remise ",  // BAK
-        txtTotalDiscount :"Total de Remise ",  // BAK
+        txtDiscount1 : "1. Remise ", 
+        txtDiscount2 : "2. Remise ", 
+        txtDiscount3 : "3. Remise ", 
+        txtTotalDiscount :"Total de Remise ",
         msgDiscountPerEntry : 
         {
-            title : "Saisir de Remise %",  // BAK
-            btn01 : "Valide" // BAK
+            title : "Saisie de Remise en %",  
+            btn01 : "Validez" 
         },
-        txtDiscountPer1 : "1. Remise % ",  // BAK
-        txtDiscountPer2 : "2. Remise % ",  // BAK
-        txtDiscountPer3 : "3. Remise % ",  // BAK
+        txtDiscountPer1 : "1. Remise % ", 
+        txtDiscountPer2 : "2. Remise % ", 
+        txtDiscountPer3 : "3. Remise % ", 
         serviceAdd : "Ajouter un service",  
         pg_service : 
         {
@@ -5424,9 +5447,9 @@ export const langFr =
         tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
         msgPrintforLocked:
         {
-            title: "Attention",   // BAK
-            btn01: "OK",   // BAK
-            msg: "Le document ne peut pas être imprimé sans verrouillage !"   // BAK
+            title: "Attention",  
+            btn01: "OK",   
+            msg: "Le document ne peut pas être imprimé sans être verouillé !" 
         },
     },
     ftr_02_005 : // "Şube Satış Faturası"
@@ -5468,7 +5491,7 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale", 
-        txtUnitPrice : "Prix unitaire", // BAK
+        txtUnitPrice : "Prix unitaire",
         txtExpFee : "Pénalités de Retard", 
         dtExpDate : "Date d'Echéance", 
         btnView : "Aperçu", 
@@ -5839,41 +5862,42 @@ export const langFr =
         },
         msgMailSendResult:
         {
-            title: "Attention",   // BAK
-            btn01: "OK",   // BAK
-            msgSuccess: "Mail envoyé avec succès !",   // BAK
-            msgFailed: "Echec d'envoi de Mail !"   // BAK
+            title: "Attention",   
+            btn01: "OK",   
+            msgSuccess: "Mail envoyé avec succès !", 
+            msgFailed: "Echec d'envoi de Mail !" 
         },
         popRound : 
         {
-            title : "Veuillez saisir le montant que vous souhaitez arrondir",    // BAK
-            total : "Montant",  // BAK
+            title : "Veuillez saisir le montant que vous souhaitez arrondir", 
+            total : "Montant",  
         },
         msgWorngRound:
         {  
-            title: "Attention",  // BAK
-            btn01: "OK",  // BAK
-            msg1: "Le montant que vous voulez arrondir est au maximum",  // BAK
-            msg2: "Il peut avoir une différence"  // BAK
+            title: "Attention",  
+            btn01: "OK",  
+            msg1: "Le montant que vous voulez arrondir est au maximum",  
+            msg2: "Il peut avoir une différence" 
         },
         msgDiscountEntry : 
         {
-            title : "Saisir de Remise Montant",   // BAK
-            btn01 : "Valide" // BAK
+            title : "Saisie du montant de remise",   
+            btn01 : "Validez" 
         },
-        txtDiscount1 : "1. Remise ",  // BAK
-        txtDiscount2 : "2. Remise ",  // BAK
-        txtDiscount3 : "3. Remise ",  // BAK
-        txtTotalDiscount :"Total de Remise ",  // BAK
+        txtDiscount1 : "1. Remise ",  
+        txtDiscount2 : "2. Remise ",  
+        txtDiscount3 : "3. Remise ",  
+        txtTotalDiscount :"Total de Remise ", 
         msgDiscountPerEntry : 
         {
-            title : "Saisir de Remise %",  // BAK
-            btn01 : "Valide" // BAK
+            title : "Saisie de Remise en %", 
+            btn01 : "Validez"
         },
-        txtDiscountPer1 : "1. Remise % ",  // BAK
-        txtDiscountPer2 : "2. Remise % ",  // BAK
-        txtDiscountPer3 : "3. Remise % ",  // BAK
+        txtDiscountPer1 : "1. Remise % ",  
+        txtDiscountPer2 : "2. Remise % ",  
+        txtDiscountPer3 : "3. Remise % ",  
         txtTotalHt : "Total HT",
+        txtDocNo : "Numéro de document", 
         serviceAdd : "Ajouter un service",  
         pg_service : 
         {
@@ -5883,9 +5907,9 @@ export const langFr =
         },
         msgPrintforLocked:
         {
-            title: "Attention",   // BAK
-            btn01: "OK",   // BAK
-            msg: "Le document ne peut pas être imprimé sans verrouillage !"   // BAK
+            title: "Attention",  
+            btn01: "OK",  
+            msg: "Le document ne peut pas être imprimé sans être vérouillé !"  
         },
     },
     ftr_02_006 : // "Fiyat Farkı Alış Faturası"
@@ -5927,10 +5951,11 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
-        txtUnitPrice : "Prix unitaire", // BAK
+        txtUnitPrice : "Prix unitaire", 
         txtExpFee : "Pénalités de Retard", 
         dtExpDate : "Date d'Echéance", 
         txtTotalHt : "Total HT",
+        txtDocNo : "Numéro de document", 
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -6212,33 +6237,33 @@ export const langFr =
         },
         popRound : 
         {
-            title : "Veuillez saisir le montant que vous souhaitez arrondir",    // BAK
-            total : "Montant",  // BAK
+            title : "Veuillez saisir le montant que vous souhaitez arrondir",  
+            total : "Montant",  
         },
         msgWorngRound:
         {  
-            title: "Attention",  // BAK
-            btn01: "OK",  // BAK
-            msg1: "Le montant que vous voulez arrondir est au maximum",  // BAK
-            msg2: "Il peut avoir une différence"  // BAK
+            title: "Attention", 
+            btn01: "OK",  
+            msg1: "Le montant que vous voulez arrondir est au maximum", 
+            msg2: "Il peut avoir une différence"  
         },
         msgDiscountEntry : 
         {
-            title : "Saisir de Remise Montant",   // BAK
-            btn01 : "Valide" // BAK
+            title : "Saisie du montant de la remise",   
+            btn01 : "Validez" 
         },
-        txtDiscount1 : "1. Remise ",  // BAK
-        txtDiscount2 : "2. Remise ",  // BAK
-        txtDiscount3 : "3. Remise ",  // BAK
-        txtTotalDiscount :"Total de Remise ",  // BAK
+        txtDiscount1 : "1. Remise ", 
+        txtDiscount2 : "2. Remise ", 
+        txtDiscount3 : "3. Remise ", 
+        txtTotalDiscount :"Total de Remise ", 
         msgDiscountPerEntry : 
         {
-            title : "Saisir de Remise %",  // BAK
-            btn01 : "Valide" // BAK
+            title : "Saisie de Remise en  %",  
+            btn01 : "Validez" 
         },
-        txtDiscountPer1 : "1. Remise % ",  // BAK
-        txtDiscountPer2 : "2. Remise % ",  // BAK
-        txtDiscountPer3 : "3. Remise % ",  // BAK
+        txtDiscountPer1 : "1. Remise % ",  
+        txtDiscountPer2 : "2. Remise % ", 
+        txtDiscountPer3 : "3. Remise % ", 
         serviceAdd : "Ajouter un service",  
         pg_service : 
         {
@@ -6325,11 +6350,12 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
-        txtUnitPrice : "Prix unitaire", // BAK
+        txtUnitPrice : "Prix unitaire", 
         txtExpFee : "Pénalités de Retard", 
         dtExpDate : "Date d'Echéance", 
         getProforma : "Rechercher Proforma ", 
         txtTotalHt : "Total HT",
+        txtDocNo : "Numéro de document", 
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -6636,33 +6662,33 @@ export const langFr =
         },
         popRound : 
         {
-            title : "Veuillez saisir le motant que vous souhaitez arrondir",    // BAK
-            total : "Montant",  // BAK
+            title : "Veuillez saisir le motant que vous souhaitez arrondir", 
+            total : "Montant",
         },
         msgWorngRound:
         {  
-            title: "Attention",  // BAK
-            btn01: "OK",  // BAK
-            msg1: "Le montant que vous voulez arrondir est au maximum",  // BAK
-            msg2: "Il peut avoir une différence"  // BAK
+            title: "Attention",  
+            btn01: "OK",  
+            msg1: "Le montant que vous voulez arrondir est au maximum",  
+            msg2: "Il peut avoir une différence"  
         },
         msgDiscountEntry : 
         {
-            title : "Saisir de Remise Montant",   // BAK
-            btn01 : "Valide" // BAK
+            title : "Saisie du montant de la remise",  
+            btn01 : "Validez" 
         },
-        txtDiscount1 : "1. Remise ",  // BAK
-        txtDiscount2 : "2. Remise ",  // BAK
-        txtDiscount3 : "3. Remise ",  // BAK
-        txtTotalDiscount :"Total de Remise ",  // BAK
+        txtDiscount1 : "1. Remise ", 
+        txtDiscount2 : "2. Remise ", 
+        txtDiscount3 : "3. Remise ", 
+        txtTotalDiscount :"Total de Remise ", 
         msgDiscountPerEntry : 
         {
-            title : "Saisir de Remise %",  // BAK
-            btn01 : "Valide" // BAK
+            title : "Saisie de Remise en %", 
+            btn01 : "Validez" 
         },
-        txtDiscountPer1 : "1. Remise % ",  // BAK
-        txtDiscountPer2 : "2. Remise % ",  // BAK
-        txtDiscountPer3 : "3. Remise % ",  // BAK
+        txtDiscountPer1 : "1. Remise % ", 
+        txtDiscountPer2 : "2. Remise % ", 
+        txtDiscountPer3 : "3. Remise % ",  
         serviceAdd : "Ajouter un service",  
         pg_service : 
         {
@@ -6725,18 +6751,18 @@ export const langFr =
         txtTotal : "Total Général",
         dtShipDate :"Date Expédition",
         getDispatch : "Recherche BL",
-        getPayment : "Entrée paiement", // BAK
+        getPayment : "Entrée du paiement",
         cash : "Total" ,
         description :"Motif",
         checkReference : "Référence",
-        btnCash : "Ajouter Paiement", // BAK
+        btnCash : "Ajouter Paiement", 
         btnCheck : "Chèque",
         btnBank : "Virement",
         cmbCashSafe : "Caisse Espèce",
         cmbCheckSafe : "Caisse Chèque",
         cmbBank : "Sélection Banque",
         txtPayInvoıceTotal : "Total Facture",
-        txtPayTotal : "Total Paiement", // BAK
+        txtPayTotal : "Total Paiement", 
         txtRemainder : "Reste",
         txtBarcode: "Code barre",
         txtBarcodePlace: "Scanner Code Barre...",
@@ -6750,7 +6776,7 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
-        txtUnitPrice : "Prix unitaire", // BAK
+        txtUnitPrice : "Prix unitaire", 
         txtExpFee : "Pénalités de Retard", 
         dtExpDate : "Date d'Echéance", 
         btnView : "Aperçu", 
@@ -6759,6 +6785,7 @@ export const langFr =
         validDesign : "Veuillez sélectionner le design.",  
         validMail : "Veuillez ne pas laisser le champs vide.",  
         txtTotalHt : "Total HT",
+        txtDocNo : "Numéro de document", 
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -7122,40 +7149,40 @@ export const langFr =
         },
         msgMailSendResult:
         {
-            title: "Attention",   // BAK
-            btn01: "OK",   // BAK
-            msgSuccess: "Mail envoyé avec succès !",   // BAK
-            msgFailed: "Echec envoie de Mail !"   // BAK
+            title: "Attention",  
+            btn01: "OK", 
+            msgSuccess: "Mail envoyé avec succès !",  
+            msgFailed: "Echec envoie de Mail !" 
         },
         popRound : 
         {
-            title : "Veuillez saisir le montant que vous souhaitez arrondir",    // BAK
-            total : "Montant",  // BAK
+            title : "Veuillez saisir le montant que vous souhaitez arrondir",  
+            total : "Montant", 
         },
         msgWorngRound:
         {  
-            title: "Attention",  // BAK
-            btn01: "OK",  // BAK
-            msg1: "Le montant que vous voulez arrondir est au maximum",  // BAK
-            msg2: "Il peut avoir une différence"  // BAK
+            title: "Attention",  
+            btn01: "OK", 
+            msg1: "Le montant que vous voulez arrondir est au maximum",
+            msg2: "Il peut avoir une différence" 
         },
         msgDiscountEntry : 
         {
-            title : "Saisir de Remise Montant",   // BAK
-            btn01 : "Valide" // BAK
+            title : "Saisie du montant de la remise", 
+            btn01 : "Validez"
         },
-        txtDiscount1 : "1. Remise ",  // BAK
-        txtDiscount2 : "2. Remise ",  // BAK
-        txtDiscount3 : "3. Remise ",  // BAK
-        txtTotalDiscount :"Total de Remise ",  // BAK
+        txtDiscount1 : "1. Remise ", 
+        txtDiscount2 : "2. Remise ", 
+        txtDiscount3 : "3. Remise ", 
+        txtTotalDiscount :"Total de Remise ", 
         msgDiscountPerEntry : 
         {
-            title : "Saisir de Remise %",  // BAK
-            btn01 : "Valide" // BAK
+            title : "Saisie de Remise en %", 
+            btn01 : "Validez"
         },
-        txtDiscountPer1 : "1. Remise % ",  // BAK
-        txtDiscountPer2 : "2. Remise % ",  // BAK
-        txtDiscountPer3 : "3. Remise % ",  // BAK
+        txtDiscountPer1 : "1. Remise % ", 
+        txtDiscountPer2 : "2. Remise % ", 
+        txtDiscountPer3 : "3. Remise % ",  
         serviceAdd : "Ajouter un service",  
         pg_service : 
         {
@@ -7201,8 +7228,9 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
-        txtUnitPrice : "Prix unitaire", // BAK
+        txtUnitPrice : "Prix unitaire",
         txtTotalHt : "Total HT",
+        txtDocNo : "Numéro de document", 
         msgDiscount:
         {
             title: "Attention",  
@@ -7536,11 +7564,12 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire ",  
         txtUnitQuantity : "Quantité Unitaire",  
         txtTotalQuantity : "Quantité totale",  
-        txtUnitPrice : "Prix unitaire", // BAK
+        txtUnitPrice : "Prix unitaire",
         txtExpFee : "Pénalités de Retard", 
         dtExpDate : "Date d'Echéance", 
         getOffers : "Teklif Getir",  
         txtTotalHt : "Total HT",
+        txtDocNo : "Numéro de document", 
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -7952,11 +7981,12 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité Unitaire",  
         txtTotalQuantity : "Quantité totale",  
-        txtUnitPrice : "Prix unitaire", // BAK
+        txtUnitPrice : "Prix unitaire", 
         txtExpFee : "Pénalités de Retard ", 
         dtExpDate : "Date d'Echéance", 
         getOffers : "Recherche Proposition", 
         txtTotalHt : "Total HT",
+        txtDocNo : "Numéro de document",
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -8286,8 +8316,8 @@ export const langFr =
             clmName: "Nom",     
             clmPrice: "Ancien Prix",     
             clmPrice2: "Nouveau Prix",    
-            clmSalePrice :"Prix de Vente",  // BAK
-            clmMargin : "Marge"  // BAK
+            clmSalePrice :"Prix de Vente", 
+            clmMargin : "Marge" 
         },
         pg_txtBarcode : 
         {
@@ -8413,10 +8443,11 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
-        txtUnitPrice : "Prix unitaire", // BAK
+        txtUnitPrice : "Prix unitaire", 
         txtExpFee : "Pénalités de Retard", 
         dtExpDate : "Date d'Echéance", 
         txtTotalHt : "Total HT",
+        txtDocNo : "Numéro de document", 
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -8757,10 +8788,11 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
-        txtUnitPrice : "Prix unitaire", // BAK
+        txtUnitPrice : "Prix unitaire", 
         txtExpFee : "Pénalités de Retard", 
         dtExpDate : "Date d'Echéance", 
         txtTotalHt : "Total HT",
+        txtDocNo : "Numéro de document", 
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -9244,14 +9276,43 @@ export const langFr =
             btn02: "Non",
             msg: "Voulez-vous vraiment tout supprimer ?",
         },
-        msgItemAlert: //BAK
+        msgItemAlert: 
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Le produit que vous essayez d'ajouter est déjà dans votre liste !",
+            msg: "Le produit que vous essayez d'ajouter est déjà présent dans votre liste !",
         },
     },
     promo_02_001: //  "Promosyon Listesi"
+    {
+        txtCode: "Code", 
+        txtName: "Nom", 
+        dtStartDate: "Date Début",
+        dtFinishDate: "Date Fin",
+        txtCodePlace: "Saisissez le code promo ou le code-barres du produit", 
+        txtNamePlace: "Entrez le code promotionnel ou le nom du produit", 
+        btnGet: "Recherche",
+        grdListe: 
+        {
+            clmCode: "Code",
+            clmName: "Nom", 
+            clmStartDate: "Date Début", 
+            clmFinishDate : "Date Fin",
+            clmCondTypeName : "Type de condition",
+            clmCondItemCode : "Code de condition",
+            clmCondItemName : "Nom de condition",
+            clmCondBarcode : "Condition de Code-Barres",
+            clmCondQuantity : "Condition de quantité",
+            clmCondAmount : "Condition Total",
+            clmAppTypeName : "Application de type",
+            clmAppItemCode : "Application de Code",
+            clmAppItemName : "Application de Nom",
+            clmAppBarcode : "Application de barre code",
+            clmAppQuantity : "Application de quantité",
+            clmAppAmount : "Application de montant",
+        }
+    },
+    promo_02_002: //  "Promosyon Detay Listesi"
     {
         txtCode: "Code", 
         txtName: "Nom", 
@@ -9319,6 +9380,7 @@ export const langFr =
         dtLast : "Date Fin",
         txtCustomerCode : "Client",
         menu:"Bon de Livraison de Vente ",
+        chkOpenDispatch : "Affichez uniquement ceux sans facture", 
         pg_txtCustomerCode : 
         {
             title : "Choix Client",
@@ -9402,37 +9464,6 @@ export const langFr =
             clmOutputName :"Dépôt",
         },
     },
-    irs_01_006 : // "Satış İrsaliye Listesi"
-    {
-        cmbCustomer :"Client",
-        btnGet :"Rechercher",
-        dtFirst : "Date Début",
-        dtLast : "Date Fin",
-        txtCustomerCode : "Client",
-        menu:"Bon de Livraison de Vente ",
-        pg_txtCustomerCode : 
-        {
-            title : "Choix Client",
-            clmCode :  "Code Client",
-            clmTitle : "Nom Client",
-            clmTypeName : "Type",
-            clmGenusName : "Genre"
-        },
-        grdSlsDisList: 
-        {
-            clmRef: "Référence",
-            clmRefNo: "Ligne",
-            clmPrice: "Prix ",
-            clmInputCode : "Sélection Document",
-            clmInputName : "Nom Client",
-            clmDate: "Date",
-            clmVat : "TVA",
-            clmAmount : "Total" ,
-            clmTotal : "Total",
-            clmOutputName :"Réserve",
-        },
-
-    },
     irs_02_001 : // "Alış İrsaliyesi"
     {
         txtRefRefno : "Réf.-Réf no:",
@@ -9453,7 +9484,7 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
-        txtUnitPrice : "Prix unitaire", // BAK
+        txtUnitPrice : "Prix unitaire", 
         cmbOrigin: "Origine",
         pg_Docs : 
         {
@@ -9687,12 +9718,12 @@ export const langFr =
         {
             title: "Sélection de l'unité",
             btn01: "Valider",
-            btnFactorSave : "Stok Kartını Güncelle" // BAK
+            btnFactorSave : "Mettre à jour la carte de stock" 
         }, 
         msgGrdOrigins:
         {
-            title: "Menşei Değişimi",   // BAK
-            btn01: "Keydet",   // BAK
+            title: "Changement d'origine",  
+            btn01: "Enregistrez", 
         },
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
@@ -9764,21 +9795,21 @@ export const langFr =
         },
         msgDiscountEntry : 
         {   
-            title : "Saisir de Remise Montant",    // BAK
-            btn01 : "Valide"   // BAK
+            title : "Saisie du montant de rmise",    
+            btn01 : "Validez"  
         },
-        txtDiscount1 : "1. Remise ",  // BAK
-        txtDiscount2 : "2. Remise ",  // BAK
-        txtDiscount3 : "3. Remise ",  // BAK
-        txtTotalDiscount :"Total de Remise ",  // BAK
+        txtDiscount1 : "1. Remise ",  
+        txtDiscount2 : "2. Remise ",  
+        txtDiscount3 : "3. Remise ", 
+        txtTotalDiscount :"Total de Remise ", 
         msgDiscountPerEntry : 
         {
-            title : "Saisir de Remise %",  // BAK
-            btn01 : "Valide" // BAK
+            title : "Saisie de Remise en %",  
+            btn01 : "Validez" 
         },
-        txtDiscountPer1 : "1. Remise % ",  // BAK
-        txtDiscountPer2 : "2. Remise % ",  // BAK
-        txtDiscountPer3 : "3. Remise % ",  // BAK
+        txtDiscountPer1 : "1. Remise % ",  
+        txtDiscountPer2 : "2. Remise % ",  
+        txtDiscountPer3 : "3. Remise % ",  
     },
     irs_02_002 : // Satış İrsaliyesi"
     {
@@ -9800,14 +9831,15 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
-        txtUnitPrice : "Prix unitaire", // BAK
+        txtUnitPrice : "Prix unitaire",
         btnView : "Aperçu", 
         btnMailsend : "Envoyer E-Mail", 
         placeMailHtmlEditor : "Veuillez saisir votre texte .", 
         validDesign : "Veuillez sélectionner le design.",  
         validMail : "Veuillez ne pas laisser le champs vide.",  
         txtTotalHt : "Total HT",
-        extraCost : "Ek Maliyet",  // BAK
+        txtDocNo : "Numéro de document", 
+        extraCost : "Supplément", 
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -10135,26 +10167,26 @@ export const langFr =
         },
         msgDiscountEntry : 
         {   
-            title : "Saisir de Remise Montant",    // BAK
-            btn01 : "Valide"   // BAK
+            title : "Saisie du montant de remise",   
+            btn01 : "Validez"  
         },
-        txtDiscount1 : "1. Remise ",  // BAK
-        txtDiscount2 : "2. Remise ",  // BAK
-        txtDiscount3 : "3. Remise ",  // BAK
-        txtTotalDiscount :"Total de Remise ",  // BAK
+        txtDiscount1 : "1. Remise ",  
+        txtDiscount2 : "2. Remise ",  
+        txtDiscount3 : "3. Remise ", 
+        txtTotalDiscount :"Total de Remise ", 
         msgDiscountPerEntry : 
         {
-            title : "Saisir de Remise %",  // BAK
-            btn01 : "Valide" // BAK
+            title : "Saisie de Remise en %", 
+            btn01 : "Validez" 
         },
-        txtDiscountPer1 : "1. Remise % ",  // BAK
-        txtDiscountPer2 : "2. Remise % ",  // BAK
-        txtDiscountPer3 : "3. Remise % ",  // BAK
+        txtDiscountPer1 : "1. Remise % ",  
+        txtDiscountPer2 : "2. Remise % ",  
+        txtDiscountPer3 : "3. Remise % ",  
         popExtraCost: 
         {
-            title : "Ek Maliyetler",  // BAK
-            interfel : "Interfel",  // BAK
-            calculateInterfel : "Interfeli Hesapla",  // BAK
+            title : "Supplément",  
+            interfel : "Interfel", 
+            calculateInterfel : "Calcul de l'interfel",  
         },
     },
     irs_02_003 : // "İade İrsaliyesi"
@@ -10177,7 +10209,7 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
-        txtUnitPrice : "Prix unitaire", // BAK
+        txtUnitPrice : "Prix unitaire",
         btnView : "Aperçu", 
         btnMailsend : "Envoyer E-Mail", 
         placeMailHtmlEditor : "Veuillez saisir votre texte .", 
@@ -10461,21 +10493,21 @@ export const langFr =
         },
         msgDiscountEntry : 
         {   
-            title : "Saisir de Remise Montant",    // BAK
-            btn01 : "Valide"   // BAK
+            title : "Saisie du montant de remise",   
+            btn01 : "Validez"   
         },
-        txtDiscount1 : "1. Remise ",  // BAK
-        txtDiscount2 : "2. Remise ",  // BAK
-        txtDiscount3 : "3. Remise ",  // BAK
-        txtTotalDiscount :"Total de Remise ",  // BAK
+        txtDiscount1 : "1. Remise ", 
+        txtDiscount2 : "2. Remise ", 
+        txtDiscount3 : "3. Remise ",  
+        txtTotalDiscount :"Total de Remise ", 
         msgDiscountPerEntry : 
         {
-            title : "Saisir de Remise %",  // BAK
-            btn01 : "Valide" // BAK
+            title : "Saisie de Remise en %",  
+            btn01 : "Validez" 
         },
-        txtDiscountPer1 : "1. Remise % ",  // BAK
-        txtDiscountPer2 : "2. Remise % ",  // BAK
-        txtDiscountPer3 : "3. Remise % ",  // BAK
+        txtDiscountPer1 : "1. Remise % ", 
+        txtDiscountPer2 : "2. Remise % ", 
+        txtDiscountPer3 : "3. Remise % ", 
     },
     irs_02_004 : // Şube Satış İrsaliyesi"
     {
@@ -10497,13 +10529,14 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
-        txtUnitPrice : "Prix unitaire", // BAK
+        txtUnitPrice : "Prix unitaire",
         btnView : "Aperçu", 
         btnMailsend : "Envoyer E-Mail", 
         placeMailHtmlEditor : "Veuillez saisir votre texte .", 
         validDesign : "Veuillez sélectionner le design.",  
         validMail : "Veuillez ne pas laisser le champs vide.",  
         txtTotalHt : "Total HT",
+        txtDocNo : "Numéro de document", 
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -10830,21 +10863,21 @@ export const langFr =
         },
         msgDiscountEntry : 
         {   
-            title : "Saisir de Remise Montant",    // BAK
-            btn01 : "Valide"   // BAK
+            title : "Saisie du montant de remise",  
+            btn01 : "Validez"  
         },
-        txtDiscount1 : "1. Remise ",  // BAK
-        txtDiscount2 : "2. Remise ",  // BAK
-        txtDiscount3 : "3. Remise ",  // BAK
-        txtTotalDiscount :"Total de Remise ",  // BAK
+        txtDiscount1 : "1. Remise ",  
+        txtDiscount2 : "2. Remise ",  
+        txtDiscount3 : "3. Remise ",  
+        txtTotalDiscount :"Total de Remise ", 
         msgDiscountPerEntry : 
         {
-            title : "Saisir de Remise %",  // BAK
-            btn01 : "Valide" // BAK
+            title : "Saisie de Remise en %", 
+            btn01 : "Validez" 
         },
-        txtDiscountPer1 : "1. Remise % ",  // BAK
-        txtDiscountPer2 : "2. Remise % ",  // BAK
-        txtDiscountPer3 : "3. Remise % ",  // BAK
+        txtDiscountPer1 : "1. Remise % ",  
+        txtDiscountPer2 : "2. Remise % ",  
+        txtDiscountPer3 : "3. Remise % ",  
     },
     irs_02_005 : // "İade Alış İrsaliyesi"
     {
@@ -10866,7 +10899,7 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
-        txtUnitPrice : "Prix unitaire", // BAK
+        txtUnitPrice : "Prix unitaire", 
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -11131,21 +11164,21 @@ export const langFr =
         },
         msgDiscountEntry : 
         {   
-            title : "Saisir de Remise Montant",    // BAK
-            btn01 : "Valide"   // BAK
+            title : "Saisie du montant de la remise",   
+            btn01 : "Validez"  
         },
-        txtDiscount1 : "1. Remise ",  // BAK
-        txtDiscount2 : "2. Remise ",  // BAK
-        txtDiscount3 : "3. Remise ",  // BAK
-        txtTotalDiscount :"Total de Remise ",  // BAK
+        txtDiscount1 : "1. Remise ",  
+        txtDiscount2 : "2. Remise ",  
+        txtDiscount3 : "3. Remise ",  
+        txtTotalDiscount :"Total de Remise ",  
         msgDiscountPerEntry : 
         {
-            title : "Saisir de Remise %",  // BAK
-            btn01 : "Valide" // BAK
+            title : "Saisie de Remise en %", 
+            btn01 : "Validez"
         },
-        txtDiscountPer1 : "1. Remise % ",  // BAK
-        txtDiscountPer2 : "2. Remise % ",  // BAK
-        txtDiscountPer3 : "3. Remise % ",  // BAK
+        txtDiscountPer1 : "1. Remise % ", 
+        txtDiscountPer2 : "2. Remise % ", 
+        txtDiscountPer3 : "3. Remise % ",  
     },
     irs_02_006 : // Şube Alış İrsaliyesi"
     {
@@ -11167,13 +11200,14 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
-        txtUnitPrice : "Prix unitaire", // BAK
+        txtUnitPrice : "Prix unitaire", 
         btnView : "Aperçu", 
         btnMailsend : "Envoyer E-Mail", 
         placeMailHtmlEditor : "Veuillez saisir votre texte .", 
         validDesign : "Veuillez sélectionner le design.",  
         validMail : "Veuillez ne pas laisser le champs vide.",  
         txtTotalHt : "Total HT",
+        txtDocNo : "Numéro de document", 
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -11500,21 +11534,21 @@ export const langFr =
         },
         msgDiscountEntry : 
         {   
-            title : "Saisir de Remise Montant",    // BAK
-            btn01 : "Valide"   // BAK
+            title : "Saisie du montant de remise", 
+            btn01 : "Validez"  
         },
-        txtDiscount1 : "1. Remise ",  // BAK
-        txtDiscount2 : "2. Remise ",  // BAK
-        txtDiscount3 : "3. Remise ",  // BAK
-        txtTotalDiscount :"Total de Remise ",  // BAK
+        txtDiscount1 : "1. Remise ", 
+        txtDiscount2 : "2. Remise ", 
+        txtDiscount3 : "3. Remise ", 
+        txtTotalDiscount :"Total de Remise ", 
         msgDiscountPerEntry : 
         {
-            title : "Saisir de Remise %",  // BAK
-            btn01 : "Valide" // BAK
+            title : "Saisie de Remise en %", 
+            btn01 : "Validez" 
         },
-        txtDiscountPer1 : "1. Remise % ",  // BAK
-        txtDiscountPer2 : "2. Remise % ",  // BAK
-        txtDiscountPer3 : "3. Remise % ",  // BAK
+        txtDiscountPer1 : "1. Remise % ", 
+        txtDiscountPer2 : "2. Remise % ", 
+        txtDiscountPer3 : "3. Remise % ", 
     },
     sip_01_001 : // "Alış Sipariş Listesi"
     {
@@ -11596,7 +11630,7 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
-        txtUnitPrice : "Prix unitaire", // BAK
+        txtUnitPrice : "Prix unitaire", 
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -11931,13 +11965,14 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
-        txtUnitPrice : "Prix unitaire", // BAK
+        txtUnitPrice : "Prix unitaire",
         btnView : "Aperçu", 
         btnMailsend : "Envoyer E-Mail", 
         placeMailHtmlEditor : "Veuillez saisir votre texte .", 
         validDesign : "Veuillez sélectionner le design.",  
         validMail : "Veuillez ne pas laisser le champs vide.",  
         txtTotalHt : "Total HT",
+        txtDocNo : "Numéro de document", 
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -12531,7 +12566,7 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
-        txtUnitPrice : "Prix unitaire", // BAK
+        txtUnitPrice : "Prix unitaire",
     },
     cnt_02_002 : // "Satış Anlaşması"
     {
@@ -12609,7 +12644,7 @@ export const langFr =
         {
             clmItemCode: "Code",
             clmItemName: "Nom",
-            clmGrpName: "Groupe", //BAK
+            clmGrpName: "Groupe",
             clmPrice: "Prix ",
             clmQuantity : "Quantité",
             clmStartDate : "Début ",
@@ -12704,7 +12739,7 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
-        txtUnitPrice : "Prix unitaire", // BAK
+        txtUnitPrice : "Prix unitaire",
     },
     fns_01_001 : // "Ödeme Listesi",
     {
@@ -12964,9 +12999,9 @@ export const langFr =
         validDocDate : "Vous devez choisir une date",
         msgInvoiceSelect:
         {
-            title: "Attention",    // BAK
-            btn01: "OK",    // BAK
-            msg: "Vous ne pouvez pas effectuer le processus sans sélectionner une facture !"    // BAK
+            title: "Attention",   
+            btn01: "OK",    
+            msg: "Vous ne pouvez pas effectuer le processus sans sélectionner une facture !"  
         },
     },
     fns_02_002 : 
@@ -13124,9 +13159,9 @@ export const langFr =
         validDocDate : "Vous devez choisir une date",
         msgInvoiceSelect:
         {
-            title: "Attention",    // BAK
-            btn01: "OK",    // BAK
-            msg: "Vous ne pouvez pas effectuer le processus sans sélectionner une facture !"    // BAK
+            title: "Attention",   
+            btn01: "OK",    
+            msg: "Vous ne pouvez pas effectuer le processus sans sélectionner une facture !"   
         },
     },
     fns_03_001 : //  "Kasa Tanıtım"
@@ -13999,50 +14034,50 @@ export const langFr =
     },
     pos_02_009 : // "Ürün Grubu Raporu"
     {
-        btnGet :"Ramenez",    // BAK
-        txtAmount : "Montant total",    // BAK
-        txtTotalTicket : "Total des ticket de caisse",    // BAK
-        txtTicketAvg : "Montant moyen des tickets de caisses",    // BAK
-        txtTotalCost : "Coût total",    // BAK
-        txtFamount : "Total hors taxes",    // BAK
-        txtVat : "Taxe total",    // BAK
-        txtRestTotal : "Bénéfice totale hors taxe",    // BAK
-        btnGetAnalysis : "Vue graphique",    // BAK
-        chkTicket : "Grub bazında fiş sayılarını hesapla", // BAK
-        grdGroupSalesReport:     // BAK
-        {    // BAK
-            clmGrpCode : "Code de groupe de produit",    // BAK
-            clmGrpName: "Nom de groupe de produit",    // BAK
-            clmTicket: "Compte de ticket de caisse",    // BAK
-            clmTotalCost: "Coût total",    // BAK
-            clmFamount : "Montant hors taxe",    // BAK
-            clmVat : "Montant de taxe",    // BAK
-            clmTotal : "Montant total",    // BAK
-            clmRestTotal : "Bénéfice total hors taxe"    // BAK
-        },    // BAK
-        grpGrpDetail :     // BAK
-        {    // BAK
-            clmCode : "Code de produit",    // BAK
-            clmName : "Nom de produit",    // BAK
-            clmQuantity : "Quantité",    // BAK
-            clmTotalCost :"Coût total",    // BAK
-            clmFamount :"Montant hors taxe",    // BAK
-            clmVat : "Montant de la taxe",    // BAK
-            clmTotal : "Montant total",    // BAK
-            clmRestTotal : "Bénéfice total hors taxe"    // BAK
-        },    // BAK
-        popGrpDetail :     // BAK
-        {    // BAK
-            title : "Detaille de vente"    // BAK
-        },    // BAK
-        popAnalysis :     // BAK
-        {    // BAK
-            title : "Graphique de vente"    // BAK
+        btnGet :"Ramenez",   
+        txtAmount : "Montant total",   
+        txtTotalTicket : "Total des tickets de caisses",   
+        txtTicketAvg : "Montant moyen des tickets de caisses", 
+        txtTotalCost : "Coût total",   
+        txtFamount : "Total hors taxes",  
+        txtVat : "Taxe total", 
+        txtRestTotal : "Bénéfice totale hors taxe",  
+        btnGetAnalysis : "Vue graphique",   
+        chkTicket : "Calcul du nombre de ticket par groupe",
+        grdGroupSalesReport:    
+        {    
+            clmGrpCode : "Code de groupe de produit",    
+            clmGrpName: "Nom de groupe de produit",    
+            clmTicket: "Compte de ticket de caisse",    
+            clmTotalCost: "Coût total",    
+            clmFamount : "Montant hors taxe",   
+            clmVat : "Montant de taxe",    
+            clmTotal : "Montant total",   
+            clmRestTotal : "Bénéfice total hors taxe"   
+        },    
+        grpGrpDetail :    
+        {
+            clmCode : "Code de produit",   
+            clmName : "Nom de produit",   
+            clmQuantity : "Quantité",   
+            clmTotalCost :"Coût total",    
+            clmFamount :"Montant hors taxe",    
+            clmVat : "Montant de la taxe",  
+            clmTotal : "Montant total",    
+            clmRestTotal : "Bénéfice total hors taxe"  
+        },    
+        popGrpDetail :     
+        {    
+            title : "Détail de la vente"    
+        },    
+        popAnalysis :     
+        {   
+            title : "Graphique de vente"   
         },
     },
     pos_03_001 : // "Gün sonu"
     {
-        TicketId :"Ticket No",
+        TicketId :"Numéro de ticket",
         title : "Opération de fin de journée",
         start :"Démarrer",
         advance : "Fond De Caisse",
@@ -14217,7 +14252,7 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
-        txtUnitPrice : "Prix unitaire", // BAK
+        txtUnitPrice : "Prix unitaire", 
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -14514,7 +14549,7 @@ export const langFr =
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
-        txtUnitPrice : "Prix unitaire", // BAK
+        txtUnitPrice : "Prix unitaire", 
         btnView : "Aperçu", 
         btnMailsend : "Envoyer E-Mail", 
         placeMailHtmlEditor : "Veuillez saisir votre texte .", 
@@ -14967,5 +15002,129 @@ export const langFr =
         btnApprove : "Enregistre",    
         btnCancel : "Fermer",    
         txtPopUser : "Utilisateur ayant saisi"    
-    }
+    },
+    slsRpt_01_001 : // "Ürün Grubu Raporu"
+    {
+        chkZeroBalance : "0 Bakiyeler Gösterilsin",  // BAK
+        txtCustomerCode : "Cari",  // BAK
+        btnCheck : "Aktif",  // BAK
+        btnGet :"Getir",  // BAK
+        grdListe : 
+        {
+            clmCode: "Kodu",  // BAK
+            clmName : "Adı",             // BAK
+            clmOrders : "Sipariş",  // BAK
+            clmDispatch : "İrsaliye",  // BAK
+            clmInvoice : "Fatura",  // BAK
+            clmCollection : "Tahsilat", // BAK
+        },
+    },
+    slsRpt_01_002 : // "Ürün Grubu Raporu"
+    {
+        btnGet :"Getir",  // BAK
+        txtAmount : "Toplam Tutar",  // BAK
+        txtTotalTicket : "Toplam Evrak Sayısı",  // BAK
+        txtTicketAvg : "Ortalama Evrak Tutarı",  // BAK
+        txtTotalCost : "Toplam Maliyet",  // BAK
+        txtFamount : "Vergisiz Toplam",  // BAK
+        txtVat : "Toplam Vergi",  // BAK
+        txtRestTotal : "Vergisiz Toplam Kar",  // BAK
+        btnGetAnalysis : "Grafik Görünümü",  // BAK
+        grdGroupSalesReport: 
+        {
+            clmGrpCode : "Ürün Grubu Kodu",  // BAK
+            clmGrpName: "Ürün Grubu Adı",  // BAK
+            clmTotalCost: "Toplam Maliyet",  // BAK
+            clmFamount : "Vergisiz Tutar",  // BAK
+            clmVat : "Vergi Tutarı",  // BAK
+            clmTotal : "Toplam Tutar",  // BAK
+            clmRestTotal : "Vergisiz Toplam Kar"  // BAK
+        },
+        grpGrpDetail : 
+        {
+            clmCode : "Ürün Kodu",  // BAK
+            clmName : "Ürün Adı",  // BAK
+            clmQuantity : "Miktar",  // BAK
+            clmTotalCost :"Toplam Maliyet",  // BAK
+            clmFamount :"Vergisiz Tutar",  // BAK
+            clmVat : "Vergi Tutarı",  // BAK
+            clmTotal : "Toplam Tutar",  // BAK
+            clmRestTotal : "Vergisiz Toplam Kar"  // BAK
+        },
+        popGrpDetail : 
+        {
+            title : "Satış Detayı" // BAK
+        },
+        popAnalysis : 
+        {
+            title : "Satış Grafiği" // BAK
+        },
+    },
+    slsRpt_01_003 : // "Tarih sıralı satış raporu"
+    {
+        chkZeroBalance : "0 Bakiyeler Gösterilsin",    // BAK
+        txtCustomerCode : "Cari",    // BAK
+        btnCheck : "Aktif",    // BAK
+        btnGet :"Getir",    // BAK
+        grdListe :     // BAK
+        {  
+            clmDate : "Tarih",    // BAK
+            clmCode: "Kodu",    // BAK
+            clmName : "Adı",               // BAK
+            clmAmount : "Tutar",    // BAK
+            clmDiscount : "İndirim",    // BAK
+            clmTotalHt : "Vergisiz Fiyat",    // BAK
+            clmVat : "Vergi",    // BAK
+            clmTotal : "Toplam",    // BAK
+            clmRef : "Seri-Sıra", // BAK
+        },
+    },
+    slsRpt_01_004 : // "Tarih sıralı satış raporu"
+    {
+        chkZeroBalance : "0 Bakiyeler Gösterilsin", // BAK
+        txtCustomerCode : "Cari", // BAK
+        btnCheck : "Aktif", // BAK
+        btnGet :"Getir", // BAK
+        grdListe :  // BAK
+        { // BAK
+            clmDate : "Tarih", // BAK
+            clmTotalHt: "Vergisiz Toplam", // BAK
+            clmName : "Adı",            // BAK
+            clmTotal : "Toplam", // BAK
+        },
+    },
+    slsRpt_02_001 : // "Tarih sıralı Alış raporu"
+    {
+        chkZeroBalance : "0 Bakiyeler Gösterilsin",    // BAK
+        txtCustomerCode : "Cari",    // BAK
+        btnCheck : "Aktif",    // BAK
+        btnGet :"Getir",    // BAK
+        grdListe :     // BAK
+        {  
+            clmDate : "Tarih",    // BAK
+            clmCode: "Kodu",    // BAK
+            clmName : "Adı",               // BAK
+            clmAmount : "Tutar",    // BAK
+            clmDiscount : "İndirim",    // BAK
+            clmTotalHt : "Vergisiz Fiyat",    // BAK
+            clmVat : "Vergi",    // BAK
+            clmTotal : "Toplam",    // BAK
+            clmRef : "Seri-Sıra", // BAK
+        },
+    },
+    slsRpt_02_002 : // "DEB raporu"
+    {
+        chkZeroBalance : "0 Bakiyeler Gösterilsin",      // BAK
+        txtCustomerCode : "Cari",      // BAK
+        btnCheck : "Aktif",      // BAK
+        btnGet :"Getir",      // BAK
+        grdListe :       // BAK
+        {    
+            clmAdress : "Adres",      // BAK
+            clmCode: "Kodu",      // BAK
+            clmName : "Adı",                 // BAK
+            clmTotalHt : "Fac Total HT",  
+            clmKg : "Kilogram",      // BAK
+        },
+    },
 }

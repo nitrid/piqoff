@@ -677,7 +677,6 @@ export default class itemCard extends React.PureComponent
                     value : [tmpData.result.recordset[0].DOC_GUID]
                 }
                 let tmpItemData = await this.core.sql.execute(tmpItemQuery)
-                console.log(tmpItemData)
                 if(tmpItemData.result.recordset.length >0)
                 {
                     let tmpServices = []

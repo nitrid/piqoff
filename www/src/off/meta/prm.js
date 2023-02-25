@@ -157,7 +157,7 @@ export const prm =
         ID :"costForInvoıces",
         VALUE : 
         {
-            value : true
+            value : false
         },
         SPECIAL : "",
         ELEMENT : "",

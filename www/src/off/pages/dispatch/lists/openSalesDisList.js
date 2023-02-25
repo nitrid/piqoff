@@ -130,10 +130,10 @@ export default class salesDisList extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT DOC_GUID AS GUID,REF,REF_NO,INPUT_CODE,OUTPUT_CODE,OUTPUT_NAME,CONVERT(NVARCHAR,MAX(DOC_DATE),104) AS DOC_DATE_CONVERT,SUM(AMOUNT) AS AMOUNT,SUM(VAT) AS VAT, SUM(TOTAL) AS TOTAL FROM DOC_ITEMS_VW_01 " +
+                    query : "SELECT DOC_GUID AS GUID,REF,REF_NO,INPUT_CODE,OUTPUT_CODE,OUTPUT_NAME,CONVERT(NVARCHAR,DOC_DATE,104) AS DOC_DATE_CONVERT,SUM(AMOUNT) AS AMOUNT,SUM(VAT) AS VAT, SUM(TOTAL) AS TOTAL FROM DOC_ITEMS_VW_01 " +
                             "WHERE ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND "+ 
                             "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))  " +
-                            " AND  TYPE = 1 AND DOC_TYPE = 40  AND REBATE = 0 AND INVOICE_DOC_GUID = '00000000-0000-0000-0000-000000000000'  GROUP BY REF,REF_NO,INPUT_CODE,OUTPUT_CODE,OUTPUT_NAME,DOC_GUID ORDER BY DOC_DATE ",
+                            " AND  TYPE = 1 AND DOC_TYPE = 40  AND REBATE = 0 AND INVOICE_DOC_GUID = '00000000-0000-0000-0000-000000000000'  GROUP BY REF,REF_NO,INPUT_CODE,OUTPUT_CODE,OUTPUT_NAME,DOC_GUID,DOC_DATE ORDER BY DOC_DATE ",
                     param : ['INPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date'],
                     value : [this.txtCustomerCode.CODE,this.dtFirst.value,this.dtLast.value]
                 },

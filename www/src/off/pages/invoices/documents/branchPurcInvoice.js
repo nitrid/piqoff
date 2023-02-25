@@ -63,6 +63,7 @@ export default class branchSaleInvoice extends React.PureComponent
         this.rightItems = [{ text: this.t("getDispatch"),},{ text: this.t("getOrders")}]
         this.multiItemData = new datatable
         this.unitDetailData = new datatable
+        this.vatRate =  new datatable
 
     }
     async componentDidMount()
@@ -228,11 +229,16 @@ export default class branchSaleInvoice extends React.PureComponent
     }
     async _calculateTotal()
     {
+        let tmpVat = 0
+        for (let i = 0; i < this.docObj.docItems.dt().groupBy('VAT_RATE').length; i++) 
+        {
+            tmpVat = tmpVat + parseFloat(this.docObj.docItems.dt().where({'VAT_RATE':this.docObj.docItems.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("VAT",2))
+        }
         this.docObj.dt()[0].AMOUNT = this.docObj.docItems.dt().sum("AMOUNT",2)
         this.docObj.dt()[0].DISCOUNT = this.docObj.docItems.dt().sum("DISCOUNT",2)
-        this.docObj.dt()[0].VAT = this.docObj.docItems.dt().sum("VAT",2)
-        this.docObj.dt()[0].TOTAL = this.docObj.docItems.dt().sum("TOTAL",2)
+        this.docObj.dt()[0].VAT = parseFloat(tmpVat.toFixed(2))
         this.docObj.dt()[0].TOTALHT = this.docObj.docItems.dt().sum("TOTALHT",2)
+        this.docObj.dt()[0].TOTAL = (parseFloat(this.docObj.docItems.dt().sum("TOTALHT",2)) + parseFloat(this.docObj.dt()[0].VAT)).toFixed(2)
 
         this.docObj.docCustomer.dt()[0].AMOUNT = this.docObj.dt()[0].TOTAL
         this.docObj.docCustomer.dt()[0].ROUND = 0
@@ -1577,7 +1583,15 @@ export default class branchSaleInvoice extends React.PureComponent
                                     </NdSelectBox>
                                 </Item>
                                 {/* Boş */}
-                                <EmptyItem />
+                                <Item>
+                                    <Label text={this.t("txtDocNo")} alignment="right" />
+                                    <NdTextBox id="txtDocNo" parent={this} simple={true}  
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                    dt={{data:this.docObj.dt('DOC'),field:"DOC_NO"}} 
+                                    readOnly={false}
+                                    >
+                                    </NdTextBox>
+                                </Item>
                                 {/* txtCustomerCode */}
                                 <Item>
                                     <Label text={this.t("txtCustomerCode")} alignment="right" />
@@ -2506,28 +2520,18 @@ export default class branchSaleInvoice extends React.PureComponent
                                                     [
                                                         {
                                                             id:'01',
-                                                            icon:'clear',
+                                                            icon:'more',
                                                             onClick:async ()  =>
                                                             {
-                                                                
-                                                                let tmpConfObj =
+                                                                this.vatRate.clear()
+                                                                for (let i = 0; i < this.docObj.docItems.dt().groupBy('VAT_RATE').length; i++) 
                                                                 {
-                                                                    id:'msgVatDelete',showTitle:true,title:this.t("msgVatDelete.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                                    button:[{id:"btn01",caption:this.t("msgVatDelete.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'after'}],
-                                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgVatDelete.msg")}</div>)
+                                                                    let tmpVat = parseFloat(this.docObj.docItems.dt().where({'VAT_RATE':this.docObj.docItems.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("VAT",2))
+                                                                    let tmpData = {"RATE":this.docObj.docItems.dt().groupBy('VAT_RATE')[i].VAT_RATE,"VAT":tmpVat}
+                                                                    this.vatRate.push(tmpData)
                                                                 }
-                                                                
-                                                                let pResult = await dialog(tmpConfObj);
-                                                                if(pResult == 'btn01')
-                                                                {
-                                                                    for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
-                                                                    {
-                                                                        this.docObj.docItems.dt()[i].VAT = 0  
-                                                                        this.docObj.docItems.dt()[i].VAT_RATE = 0
-                                                                        this.docObj.docItems.dt()[i].TOTAL = (this.docObj.docItems.dt()[i].PRICE * this.docObj.docItems.dt()[i].QUANTITY) - this.docObj.docItems.dt()[i].DISCOUNT
-                                                                        this._calculateTotal()
-                                                                    }
-                                                                }
+                                                                await this.grdVatRate.dataRefresh({source:this.vatRate})
+                                                                this.popVatRate.show()
                                                             }
                                                         },
                                                     ]
@@ -2967,13 +2971,24 @@ export default class branchSaleInvoice extends React.PureComponent
                     height={'90%'}
                     title={this.t("pg_txtItemsCode.title")} //
                     search={true}
+                     onRowPrepared={(e) =>
+                        {
+                            if(e.rowType == 'data' && e.data.STATUS == false)
+                            {
+                                e.rowElement.style.color ="Silver"
+                            }
+                            else if(e.rowType == 'data' && e.data.STATUS == true)
+                            {
+                                e.rowElement.style.color ="Black"
+                            }
+                        }}
                     data = 
                     {{
                         source:
                         {
                             select:
                             {
-                                query : "SELECT GUID,CODE,NAME,VAT,COST_PRICE,UNIT FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
+                                query : "SELECT GUID,CODE,NAME,VAT,COST_PRICE,UNIT,STATUS FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
                                 param : ['VAL:string|50']
                             },
                             sql:this.core.sql
@@ -3858,198 +3873,270 @@ export default class branchSaleInvoice extends React.PureComponent
                         <Column dataField="ZIPCODE" caption={this.t("pg_adress.clmZipcode")} width={300} defaultSortOrder="asc" />
                         <Column dataField="COUNTRY" caption={this.t("pg_adress.clmCountry")} width={200}/>
                     </NdPopGrid>
-                {/* Birim PopUp */}
-                <div>
-                    <NdDialog parent={this} id={"msgUnit"} 
-                    visible={false}
-                    showCloseButton={true}
-                    showTitle={true}
-                    title={this.t("msgUnit.title")}
-                    container={"#root"} 
-                    width={'500'}
-                    height={'400'}
-                    position={{of:'#root'}}
-                    button={[{id:"btn01",caption:this.t("msgUnit.btn01"),location:'after'}]}
-                    >
-                        <Form colCount={1} height={'fit-content'}>
-                            <Item>
-                                <NdSelectBox simple={true} parent={this} id="cmbUnit"
-                                displayExpr="NAME"                       
-                                valueExpr="GUID"
-                                value=""
-                                searchEnabled={true}
-                                onValueChanged={(async(e)=>
-                                {
-                                    this.txtUnitFactor.setState({value:this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].FACTOR});
-                                    this.txtTotalQuantity.value = Number(this.txtUnitQuantity.value * this.txtUnitFactor.value);
-                                }).bind(this)}
-                                >
-                                </NdSelectBox>
-                            </Item>
-                            <Item>
-                                <Label text={this.t("txtUnitFactor")} alignment="right" />
-                                <NdNumberBox id="txtUnitFactor" parent={this} simple={true}
-                                readOnly={true}
-                                maxLength={32}
-                                >
-                                </NdNumberBox>
-                            </Item>
-                            <Item>
-                                <Label text={this.t("txtUnitQuantity")} alignment="right" />
-                                <NdNumberBox id="txtUnitQuantity" parent={this} simple={true}
-                                maxLength={32}
-                                onValueChanged={(async(e)=>
-                                {
-                                this.txtTotalQuantity.value = Number(this.txtUnitQuantity.value * this.txtUnitFactor.value)
-                                }).bind(this)}
-                                >
-                                </NdNumberBox>
-                            </Item>
-                            <Item>
-                                <Label text={this.t("txtTotalQuantity")} alignment="right" />
-                                <NdNumberBox id="txtTotalQuantity" parent={this} simple={true}  readOnly={true}
-                                maxLength={32}
-                                >
-                                </NdNumberBox>
-                            </Item>
-                            <Item>
-                                <Label text={this.t("txtUnitPrice")} alignment="right" />
-                                <NdNumberBox id="txtUnitPrice" parent={this} simple={true} 
-                                maxLength={32}
-                                >
-                                </NdNumberBox>
-                            </Item>
-                        </Form>
-                    </NdDialog>
-                </div>  
-                {/* Delete Description Popup */} 
-                <div>
-                    <NbPopDescboard id={"popDeleteDesc"} parent={this} width={"900"} height={"450"} position={"#root"} head={this.lang.t("popDeleteDesc.head")} title={this.lang.t("popDeleteDesc.title")} 
-                    param={this.sysParam.filter({ID:'DocDelDescription',TYPE:0})}
-                    onClick={async (e)=>
-                    {
-                        let tmpExtra = {...this.extraObj.empty}
-                        tmpExtra.DOC = this.docObj.dt()[0].GUID
-                        tmpExtra.DESCRIPTION = e
-                        tmpExtra.TAG = 'DOC_DELETE'
-                        this.extraObj.addEmpty(tmpExtra);
-                        this.extraObj.save()
-                        this.docObj.dt('DOC').removeAt(0)
-                        await this.docObj.dt('DOC').delete();
-                        this.init()
-                    }}></NbPopDescboard>
-                </div>
-                {/* Mail Send PopUp */}
-                <div>
-                    <NdPopUp parent={this} id={"popMailSend"} 
-                    visible={false}
-                    showCloseButton={true}
-                    showTitle={true}
-                    title={this.t("popMailSend.title")}
-                    container={"#root"} 
-                    width={'600'}
-                    height={'600'}
-                    position={{of:'#root'}}
-                    >
-                        <Form colCount={1} height={'fit-content'}>
-                            <Item>
-                                <Label text={this.t("popMailSend.txtMailSubject")} alignment="right" />
-                                <NdTextBox id="txtMailSubject" parent={this} simple={true}
-                                maxLength={32}
-                                >
-                                     <Validator validationGroup={"frmMailsend" + this.tabIndex}>
-                                        <RequiredRule message={this.t("validMail")} />
-                                    </Validator> 
-                                </NdTextBox>
-                            </Item>
-                            <Item>
-                            <Label text={this.t("popMailSend.txtSendMail")} alignment="right" />
-                                <NdTextBox id="txtSendMail" parent={this} simple={true}
-                                maxLength={32}
-                                >
-                                    <Validator validationGroup={"frmMailsend" + this.tabIndex}>
-                                        <RequiredRule message={this.t("validMail")} />
-                                    </Validator> 
-                                </NdTextBox>
-                            </Item>
-                            <Item>
-                                <NdHtmlEditor id="htmlEditor" parent={this} height={300} placeholder={this.t("placeMailHtmlEditor")}>
-                                </NdHtmlEditor>
-                            </Item>
-                            <Item>
-                                <div className='row'>
-                                    <div className='col-6'>
-                                        <NdButton text={this.t("popMailSend.btnSend")} type="normal" stylingMode="contained" width={'100%'}  
-                                        validationGroup={"frmMailsend"  + this.tabIndex}
-                                        onClick={async (e)=>
-                                        {       
-                                            if(e.validationGroup.validate().status == "valid")
-                                            {
-                                                let tmpQuery = 
+                    {/* Birim PopUp */}
+                    <div>
+                        <NdDialog parent={this} id={"msgUnit"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.t("msgUnit.title")}
+                        container={"#root"} 
+                        width={'500'}
+                        height={'400'}
+                        position={{of:'#root'}}
+                        button={[{id:"btn01",caption:this.t("msgUnit.btn01"),location:'after'}]}
+                        >
+                            <Form colCount={1} height={'fit-content'}>
+                                <Item>
+                                    <NdSelectBox simple={true} parent={this} id="cmbUnit"
+                                    displayExpr="NAME"                       
+                                    valueExpr="GUID"
+                                    value=""
+                                    searchEnabled={true}
+                                    onValueChanged={(async(e)=>
+                                    {
+                                        this.txtUnitFactor.setState({value:this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].FACTOR});
+                                        this.txtTotalQuantity.value = Number(this.txtUnitQuantity.value * this.txtUnitFactor.value);
+                                    }).bind(this)}
+                                    >
+                                    </NdSelectBox>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("txtUnitFactor")} alignment="right" />
+                                    <NdNumberBox id="txtUnitFactor" parent={this} simple={true}
+                                    readOnly={true}
+                                    maxLength={32}
+                                    >
+                                    </NdNumberBox>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("txtUnitQuantity")} alignment="right" />
+                                    <NdNumberBox id="txtUnitQuantity" parent={this} simple={true}
+                                    maxLength={32}
+                                    onValueChanged={(async(e)=>
+                                    {
+                                    this.txtTotalQuantity.value = Number(this.txtUnitQuantity.value * this.txtUnitFactor.value)
+                                    }).bind(this)}
+                                    >
+                                    </NdNumberBox>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("txtTotalQuantity")} alignment="right" />
+                                    <NdNumberBox id="txtTotalQuantity" parent={this} simple={true}  readOnly={true}
+                                    maxLength={32}
+                                    >
+                                    </NdNumberBox>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("txtUnitPrice")} alignment="right" />
+                                    <NdNumberBox id="txtUnitPrice" parent={this} simple={true} 
+                                    maxLength={32}
+                                    >
+                                    </NdNumberBox>
+                                </Item>
+                            </Form>
+                        </NdDialog>
+                    </div>  
+                    {/* Delete Description Popup */} 
+                    <div>
+                        <NbPopDescboard id={"popDeleteDesc"} parent={this} width={"900"} height={"450"} position={"#root"} head={this.lang.t("popDeleteDesc.head")} title={this.lang.t("popDeleteDesc.title")} 
+                        param={this.sysParam.filter({ID:'DocDelDescription',TYPE:0})}
+                        onClick={async (e)=>
+                        {
+                            let tmpExtra = {...this.extraObj.empty}
+                            tmpExtra.DOC = this.docObj.dt()[0].GUID
+                            tmpExtra.DESCRIPTION = e
+                            tmpExtra.TAG = 'DOC_DELETE'
+                            this.extraObj.addEmpty(tmpExtra);
+                            this.extraObj.save()
+                            this.docObj.dt('DOC').removeAt(0)
+                            await this.docObj.dt('DOC').delete();
+                            this.init()
+                        }}></NbPopDescboard>
+                    </div>
+                    {/* Mail Send PopUp */}
+                    <div>
+                        <NdPopUp parent={this} id={"popMailSend"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.t("popMailSend.title")}
+                        container={"#root"} 
+                        width={'600'}
+                        height={'600'}
+                        position={{of:'#root'}}
+                        >
+                            <Form colCount={1} height={'fit-content'}>
+                                <Item>
+                                    <Label text={this.t("popMailSend.txtMailSubject")} alignment="right" />
+                                    <NdTextBox id="txtMailSubject" parent={this} simple={true}
+                                    maxLength={32}
+                                    >
+                                        <Validator validationGroup={"frmMailsend" + this.tabIndex}>
+                                            <RequiredRule message={this.t("validMail")} />
+                                        </Validator> 
+                                    </NdTextBox>
+                                </Item>
+                                <Item>
+                                <Label text={this.t("popMailSend.txtSendMail")} alignment="right" />
+                                    <NdTextBox id="txtSendMail" parent={this} simple={true}
+                                    maxLength={32}
+                                    >
+                                        <Validator validationGroup={"frmMailsend" + this.tabIndex}>
+                                            <RequiredRule message={this.t("validMail")} />
+                                        </Validator> 
+                                    </NdTextBox>
+                                </Item>
+                                <Item>
+                                    <NdHtmlEditor id="htmlEditor" parent={this} height={300} placeholder={this.t("placeMailHtmlEditor")}>
+                                    </NdHtmlEditor>
+                                </Item>
+                                <Item>
+                                    <div className='row'>
+                                        <div className='col-6'>
+                                            <NdButton text={this.t("popMailSend.btnSend")} type="normal" stylingMode="contained" width={'100%'}  
+                                            validationGroup={"frmMailsend"  + this.tabIndex}
+                                            onClick={async (e)=>
+                                            {       
+                                                if(e.validationGroup.validate().status == "valid")
                                                 {
-                                                    query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID) ORDER BY DOC_DATE,LINE_NO " ,
-                                                    param:  ['DOC_GUID:string|50','DESIGN:string|25'],
-                                                    value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value]
-                                                }
-                                                App.instance.setState({isExecute:true})
-                                                let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                App.instance.setState({isExecute:false})
-                                                this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
-                                                {
+                                                    let tmpQuery = 
+                                                    {
+                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID) ORDER BY DOC_DATE,LINE_NO " ,
+                                                        param:  ['DOC_GUID:string|50','DESIGN:string|25'],
+                                                        value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value]
+                                                    }
                                                     App.instance.setState({isExecute:true})
-                                                    let tmpAttach = pResult.split('|')[1]
-                                                    let tmpHtml = this.htmlEditor.value
-                                                    if(this.htmlEditor.value.length == 0)
+                                                    let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                    App.instance.setState({isExecute:false})
+                                                    this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
                                                     {
-                                                        tmpHtml = ''
-                                                    }
-                                                    if(pResult.split('|')[0] != 'ERR')
-                                                    {
-                                                    }
-                                                    let tmpMailData = {html:tmpHtml,subject:this.txtMailSubject.value,sendMail:this.txtSendMail.value,attachName:"facture.pdf",attachData:tmpAttach}
-                                                    this.core.socket.emit('mailer',tmpMailData,async(pResult1) => 
-                                                    {
-                                                        App.instance.setState({isExecute:false})
-                                                        let tmpConfObj1 =
+                                                        App.instance.setState({isExecute:true})
+                                                        let tmpAttach = pResult.split('|')[1]
+                                                        let tmpHtml = this.htmlEditor.value
+                                                        if(this.htmlEditor.value.length == 0)
                                                         {
-                                                            id:'msgMailSendResult',showTitle:true,title:this.t("msgMailSendResult.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                            button:[{id:"btn01",caption:this.t("msgMailSendResult.btn01"),location:'after'}],
+                                                            tmpHtml = ''
                                                         }
-                                                        
-                                                        if((pResult1) == 0)
-                                                        {  
-                                                            tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgMailSendResult.msgSuccess")}</div>)
-                                                            await dialog(tmpConfObj1);
-                                                            this.htmlEditor.value = '',
-                                                            this.txtMailSubject.value = '',
-                                                            this.txtSendMail.value = ''
-                                                            this.popMailSend.hide();  
+                                                        if(pResult.split('|')[0] != 'ERR')
+                                                        {
+                                                        }
+                                                        let tmpMailData = {html:tmpHtml,subject:this.txtMailSubject.value,sendMail:this.txtSendMail.value,attachName:"facture.pdf",attachData:tmpAttach}
+                                                        this.core.socket.emit('mailer',tmpMailData,async(pResult1) => 
+                                                        {
+                                                            App.instance.setState({isExecute:false})
+                                                            let tmpConfObj1 =
+                                                            {
+                                                                id:'msgMailSendResult',showTitle:true,title:this.t("msgMailSendResult.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                                button:[{id:"btn01",caption:this.t("msgMailSendResult.btn01"),location:'after'}],
+                                                            }
+                                                            
+                                                            if((pResult1) == 0)
+                                                            {  
+                                                                tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgMailSendResult.msgSuccess")}</div>)
+                                                                await dialog(tmpConfObj1);
+                                                                this.htmlEditor.value = '',
+                                                                this.txtMailSubject.value = '',
+                                                                this.txtSendMail.value = ''
+                                                                this.popMailSend.hide();  
 
-                                                        }
-                                                        else
-                                                        {
-                                                            tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgMailSendResult.msgFailed")}</div>)
-                                                            await dialog(tmpConfObj1);
-                                                            this.popMailSend.hide(); 
-                                                        }
+                                                            }
+                                                            else
+                                                            {
+                                                                tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgMailSendResult.msgFailed")}</div>)
+                                                                await dialog(tmpConfObj1);
+                                                                this.popMailSend.hide(); 
+                                                            }
+                                                        });
                                                     });
-                                                });
-                                            }
+                                                }
+                                                    
+                                            }}/>
+                                        </div>
+                                        <div className='col-6'>
+                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                            onClick={()=>
+                                            {
+                                                this.popMailSend.hide();  
+                                            }}/>
+                                        </div>
+                                    </div>
+                                </Item>
+                            </Form>
+                        </NdPopUp>
+                    </div>  
+                    {/* KDV PopUp */}
+                    <div>
+                        <NdPopUp parent={this} id={"popVatRate"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.lang.t("popVatRate.title")}
+                        container={"#root"} 
+                        width={'500'}
+                        height={'250'}
+                        position={{of:'#root'}}
+                        >
+                            <Form colCount={1} height={'fit-content'}>
+                                <Item >
+                                    <NdGrid parent={this} id={"grdVatRate"} 
+                                    showBorders={true} 
+                                    columnsAutoWidth={true} 
+                                    allowColumnReordering={true} 
+                                    allowColumnResizing={true} 
+                                    height={'100%'} 
+                                    width={'100%'}
+                                    dbApply={false}
+                                    onRowRemoved={async (e)=>{
+                                    
+                                    }}
+                                    >
+                                        <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
+                                        <Scrolling mode="standart" />
+                                        <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
+                                        <Column dataField="RATE" caption={this.lang.t("grdVatRate.clmRate")} width={120}  headerFilter={{visible:true}} allowEditing={false} />
+                                       <Column dataField="VAT" caption={this.lang.t("grdVatRate.clmVat")} format={{ style: "currency", currency: "EUR",precision: 3}} dataType={'number'} width={120} headerFilter={{visible:true}}/>
+                                    </NdGrid>
+                                </Item>
+                                <Item>
+                                    <div className='row'>
+                                        <div className='col-6'>
+                                            <NdButton text={this.lang.t("btnVatToZero")} type="normal" stylingMode="contained" width={'100%'} 
+                                            onClick={async ()=>
+                                            {       
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgVatDelete',showTitle:true,title:this.t("msgVatDelete.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgVatDelete.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgVatDelete.msg")}</div>)
+                                                }
                                                 
-                                        }}/>
+                                                let pResult = await dialog(tmpConfObj);
+                                                if(pResult == 'btn01')
+                                                {
+                                                    for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
+                                                    {
+                                                        this.docObj.docItems.dt()[i].VAT = 0  
+                                                        this.docObj.docItems.dt()[i].VAT_RATE = 0
+                                                        this.docObj.docItems.dt()[i].TOTAL = (this.docObj.docItems.dt()[i].PRICE * this.docObj.docItems.dt()[i].QUANTITY) - this.docObj.docItems.dt()[i].DISCOUNT
+                                                        this._calculateTotal()
+                                                    }
+                                                    this.popVatRate.hide()
+                                                }
+                                            }}/>
+                                        </div>
+                                        <div className='col-6'>
+                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                            onClick={()=>
+                                            {
+                                                this.popVatRate.hide();  
+                                            }}/>
+                                        </div>
                                     </div>
-                                    <div className='col-6'>
-                                        <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
-                                        onClick={()=>
-                                        {
-                                            this.popMailSend.hide();  
-                                        }}/>
-                                    </div>
-                                </div>
-                            </Item>
-                        </Form>
-                    </NdPopUp>
-                </div>  
+                                </Item>
+                            </Form>
+                        </NdPopUp>
+                    </div>  
                 </ScrollView>                
             </div>
         )

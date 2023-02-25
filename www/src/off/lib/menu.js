@@ -602,6 +602,24 @@ export const menu = (e) =>
                         }
                     ]
                 },
+                {
+                    id: 'purchaseReport',
+                    text : e.t('menuOff.purchaseReport'),//'Raporlar',
+                    expanded: false,
+                    items: 
+                    [ 
+                        {
+                            id: 'slsRpt_02_001',
+                            text: e.t('menuOff.slsRpt_02_001'),//'Alış Fatura',
+                            path: 'report/purchase/purchaseInvoiceReport'
+                        },
+                        {
+                            id: 'slsRpt_02_002',
+                            text: e.t('menuOff.slsRpt_02_002'),//'DEB Raporu',
+                            path: 'report/purchase/debReport'
+                        },
+                    ]
+                }
             ]
         },
         //Satış İşlemleri
@@ -730,11 +748,6 @@ export const menu = (e) =>
                                     path: 'dispatch/lists/salesDisList'
                                 },
                                 {
-                                    id: 'irs_01_006',
-                                    text: e.t('menuOff.irs_01_006'),//'Satış İrsaliye Listesi',
-                                    path: 'dispatch/lists/openSalesDisList'
-                                },
-                                {
                                     id: 'irs_01_004',
                                     text: e.t('menuOff.irs_01_004'),//'Şubeler Arası Sevk',
                                     path: 'dispatch/lists/bransSaleDisLİst'
@@ -829,6 +842,34 @@ export const menu = (e) =>
                         }
                     ]
                 },
+                {
+                    id: 'salesReport',
+                    text : e.t('menuOff.salesReport'),//'Raporlar',
+                    expanded: false,
+                    items: 
+                    [ 
+                        {
+                            id: 'slsRpt_01_001',
+                            text: e.t('menuOff.slsRpt_01_001'),//'Evrak Kıyas Raporu',
+                            path: 'report/sales/docComparisonReport'
+                        },
+                        {
+                            id: 'slsRpt_01_002',
+                            text: e.t('menuOff.slsRpt_01_002'),//'Ürün Grubu Satış',
+                            path: 'report/sales/itemGrpSalesReport'
+                        },
+                        {
+                            id: 'slsRpt_01_003',
+                            text: e.t('menuOff.slsRpt_01_003'),//'Ürün Grubu Satış',
+                            path: 'report/sales/salesInvoiceReport'
+                        },
+                        {
+                            id: 'slsRpt_01_004',
+                            text: e.t('menuOff.slsRpt_01_004'),//'Ürün Grubu Satış',
+                            path: 'report/sales/salesVatReport'
+                        },
+                    ]
+                }
             ]
         },
         //Finans
@@ -1058,6 +1099,11 @@ export const menu = (e) =>
                             id: 'promo_02_001',
                             text: e.t('menuOff.promo_02_001'),//'Promosyon Listesi',
                             path: 'promotion/lists/promotionList'
+                        },
+                        {
+                            id: 'promo_02_002',
+                            text: e.t('menuOff.promo_02_002'),//'Promosyon Detay Listesi',
+                            path: 'promotion/lists/promotionDetailList'
                         }
                     ]
                 },
