@@ -118,7 +118,8 @@ export const langFr =
     grdVatRate :
     {
         clmRate : "Vergi Oranı", // BAK
-        clmVat : "Vergi Tutarı" // BAK
+        clmVat : "Vergi Tutarı", // BAK
+        clmTotalHt : "Tutar", // BAK
     },
     btnVatToZero : "Vergiyi Sıfırla", // BAK
     menuOff:
