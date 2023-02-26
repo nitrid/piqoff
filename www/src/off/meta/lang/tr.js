@@ -43,6 +43,8 @@ export const langTr =
     dtLastMount : "Geçen Ay",
     dtYear : "Bu Yıl",
     dtLastYear : "Geçen Yıl",
+    txtTotalTicket : "Toplam Fiş Sayısı",
+    txtTicketAvg : "Ortalama Fiş Tutarı",
     popPassword : 
     {
         title: "Kullanıcı Şifrenizi Giriniz",
@@ -10242,6 +10244,8 @@ export const langTr =
         placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.",
         validDesign : "Lütfen Dizayn seçiniz.",
         validMail : "Lütfen Boş Geçmeyin.",
+        txtTotalHt : "İndirimli Tutar",
+        txtUnitPrice: "Birim Fiyatı",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -10290,7 +10294,7 @@ export const langTr =
             clmDescription :"Açıklama",
             clmCuser :"Kullanıcı",
             clmMulticode : "T.Kodu",
-            clmBarcode : "Barkod"
+            clmBarcode : "Barkod",
         },
         popDiscount : 
         {
@@ -10927,6 +10931,7 @@ export const langTr =
         txtUnitQuantity : "Birim Miktarı",
         txtTotalQuantity : "Toplam Miktar",
         txtUnitPrice: "Birim Fiyatı",
+        txtTotalHt : "İndirimli Toplam",
         pg_Docs : 
         {
             title : "Evrak Seçimi",

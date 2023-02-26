@@ -866,7 +866,7 @@ export const menu = (e) =>
                         {
                             id: 'slsRpt_01_004',
                             text: e.t('menuOff.slsRpt_01_004'),//'Ürün Grubu Satış',
-                            path: 'report/sales/salesVatReport'
+                            path: 'report/sales/docSalesReport'
                         },
                     ]
                 }

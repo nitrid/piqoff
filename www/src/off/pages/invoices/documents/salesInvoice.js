@@ -245,9 +245,9 @@ export default class salesInvoice extends React.PureComponent
         }
         this.docObj.dt()[0].AMOUNT = this.docObj.docItems.dt().sum("AMOUNT",2)
         this.docObj.dt()[0].DISCOUNT = this.docObj.docItems.dt().sum("DISCOUNT",2)
-        this.docObj.dt()[0].VAT = parseFloat(tmpVat.toFixed(2))+  parseFloat((this.docObj.dt()[0].INTERFEL * 20 /100).toFixed(2))
+        this.docObj.dt()[0].VAT = parseFloat(tmpVat.toFixed(2))
         this.docObj.dt()[0].TOTALHT = parseFloat(this.docObj.docItems.dt().sum("TOTALHT",2))
-        this.docObj.dt()[0].TOTAL = parseFloat(this.docObj.docItems.dt().sum("TOTALHT",2)) + parseFloat(this.docObj.docItems.dt().sum("VAT",2)) + this.docObj.dt()[0].INTERFEL
+        this.docObj.dt()[0].TOTAL = parseFloat(this.docObj.docItems.dt().sum("TOTALHT",2)) + parseFloat(this.docObj.dt()[0].VAT)
 
         this.docObj.docCustomer.dt()[0].AMOUNT = this.docObj.dt()[0].TOTAL
         this._calculateTotalMargin()
@@ -593,7 +593,7 @@ export default class salesInvoice extends React.PureComponent
             this._getPayment(this.docObj.dt()[0].GUID)
         }
     }
-    async addItem(pData,pIndex,pQuantity)
+    async addItem(pData,pIndex,pQuantity,pPrice)
     {
         App.instance.setState({isExecute:true})
         if(typeof pData.ITEM_TYPE == 'undefined')
@@ -708,20 +708,42 @@ export default class salesInvoice extends React.PureComponent
         this.docObj.docItems.dt()[pIndex].DISCOUNT = 0
         this.docObj.docItems.dt()[pIndex].DISCOUNT_RATE = 0
         this.docObj.docItems.dt()[pIndex].QUANTITY = pQuantity
-        let tmpQuery = 
+      
+        if(typeof pPrice == 'undefined')
         {
-            query :"SELECT dbo.FN_PRICE_SALE_VAT_EXT(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,NULL) AS PRICE",
-            param : ['GUID:string|50','QUANTITY:float','CUSTOMER:string|50'],
-            value : [pData.GUID,pQuantity,this.docObj.dt()[0].INPUT]
+            let tmpQuery = 
+            {
+                query :"SELECT dbo.FN_PRICE_SALE_VAT_EXT(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,NULL) AS PRICE",
+                param : ['GUID:string|50','QUANTITY:float','CUSTOMER:string|50'],
+                value : [pData.GUID,pQuantity,this.docObj.dt()[0].INPUT]
+            }
+            let tmpData = await this.core.sql.execute(tmpQuery) 
+            if(tmpData.result.recordset.length > 0)
+            {
+                this.docObj.docItems.dt()[pIndex].PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4))
+                this.docObj.docItems.dt()[pIndex].VAT = parseFloat((tmpData.result.recordset[0].PRICE * (this.docObj.docItems.dt()[pIndex].VAT_RATE / 100) * pQuantity).toFixed(4))
+                this.docObj.docItems.dt()[pIndex].AMOUNT = parseFloat((tmpData.result.recordset[0].PRICE  * pQuantity).toFixed(4))
+                this.docObj.docItems.dt()[pIndex].TOTAL = parseFloat(((tmpData.result.recordset[0].PRICE * pQuantity) + this.docObj.docItems.dt()[pIndex].VAT).toFixed(2))
+                this.docObj.docItems.dt()[pIndex].TOTALHT = parseFloat((this.docObj.docItems.dt()[pIndex].TOTAL - this.docObj.docItems.dt()[pIndex].VAT).toFixed(2))
+                this._calculateTotal()
+            }
+            else
+            {
+                this.docObj.docItems.dt()[pIndex].PRICE =0
+                this.docObj.docItems.dt()[pIndex].VAT = 0
+                this.docObj.docItems.dt()[pIndex].AMOUNT = 0
+                this.docObj.docItems.dt()[pIndex].TOTAL = 
+                this.docObj.docItems.dt()[pIndex].TOTALHT = 0
+                this._calculateTotal()
+            }
         }
-        let tmpData = await this.core.sql.execute(tmpQuery) 
-        if(tmpData.result.recordset.length > 0)
+        else
         {
-            this.docObj.docItems.dt()[pIndex].PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4))
-            this.docObj.docItems.dt()[pIndex].VAT = parseFloat((tmpData.result.recordset[0].PRICE * (pData.VAT / 100) * pQuantity).toFixed(4))
-            this.docObj.docItems.dt()[pIndex].AMOUNT = parseFloat((tmpData.result.recordset[0].PRICE * pQuantity ).toFixed(4))
-            this.docObj.docItems.dt()[pIndex].TOTAL =  parseFloat(((tmpData.result.recordset[0].PRICE * pQuantity) + this.docObj.docItems.dt()[pIndex].VAT).toFixed(4))
-            this.docObj.docItems.dt()[pIndex].TOTALHT =  parseFloat((this.docObj.docItems.dt()[pIndex].TOTAL - this.docObj.docItems.dt()[pIndex].VAT).toFixed(4))
+            this.docObj.docItems.dt()[pIndex].PRICE = parseFloat((pPrice).toFixed(4))
+            this.docObj.docItems.dt()[pIndex].VAT = parseFloat((((pPrice * pQuantity) - this.docObj.docItems.dt()[pIndex].DISCOUNT) * (this.docObj.docItems.dt()[pIndex].VAT_RATE / 100) ).toFixed(4))
+            this.docObj.docItems.dt()[pIndex].AMOUNT = parseFloat((pPrice  * pQuantity).toFixed(4))
+            this.docObj.docItems.dt()[pIndex].TOTALHT = parseFloat(((pPrice  * pQuantity) - this.docObj.docItems.dt()[pIndex].DISCOUNT).toFixed(2))
+            this.docObj.docItems.dt()[pIndex].TOTAL = parseFloat((this.docObj.docItems.dt()[pIndex].TOTALHT + this.docObj.docItems.dt()[pIndex].VAT).toFixed(2))
             this._calculateTotal()
         }
         //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
@@ -1487,7 +1509,6 @@ export default class salesInvoice extends React.PureComponent
             let tmpData = await this.core.sql.execute(tmpQuery) 
             if(tmpData.result.recordset.length > 0)
             {
-                console.log(tmpData.result.recordset[0].COUNTRY)
                 if(tmpData.result.recordset[0].COUNTRY == 'FR')
                 {
                    this.docObj.dt()[0].INTERFEL = parseFloat(((tmpInterfelHt * tmpData.result.recordset[0].FR) / 100).toFixed(2))
@@ -1496,13 +1517,30 @@ export default class salesInvoice extends React.PureComponent
                 {
                     this.docObj.dt()[0].INTERFEL =  parseFloat(((tmpInterfelHt * tmpData.result.recordset[0].NOTFR) / 100).toFixed(2))
                 }
-                this.docObj.dt()[0].AMOUNT = this.docObj.docItems.dt().sum("AMOUNT",2)
-                this.docObj.dt()[0].DISCOUNT = this.docObj.docItems.dt().sum("DISCOUNT",2)
-                this.docObj.dt()[0].VAT = parseFloat(this.docObj.docItems.dt().sum("VAT",2)) +  parseFloat((this.docObj.dt()[0].INTERFEL * 20 /100).toFixed(2))
-                this.docObj.dt()[0].TOTALHT = this.docObj.docItems.dt().sum("TOTALHT",2)
-                this.docObj.dt()[0].TOTAL = parseFloat(this.docObj.docItems.dt().sum("TOTALHT",2)) + parseFloat(this.docObj.dt()[0].VAT) + parseFloat(this.docObj.dt()[0].INTERFEL)
-        
-                this.docObj.docCustomer.dt()[0].AMOUNT = this.docObj.dt()[0].TOTAL
+                let tmpCvoQuery = 
+                {
+                    query :"SELECT *,1 AS ITEM_TYPE FROM SERVICE_ITEMS_VW_01 WHERE CODE = 'CVO'",
+                }
+                let tmpCvoData = await this.core.sql.execute(tmpCvoQuery) 
+                if(tmpData.result.recordset.length > 0)
+                {
+                      let tmpDocItems = {...this.docObj.docItems.empty}
+                    tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+                    tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+                    tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                    tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
+                    tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
+                    tmpDocItems.REF = this.docObj.dt()[0].REF
+                    tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+                    tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+                    tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+                    tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                    tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
+                    this.txtRef.readOnly = true
+                    this.txtRefno.readOnly = true
+                    this.docObj.docItems.addEmpty(tmpDocItems)
+                    this.addItem(tmpCvoData.result.recordset[0],this.docObj.docItems.dt().length -1,1,this.docObj.dt()[0].INTERFEL)
+                }
             }        
             this.extraCost.value = this.docObj.dt()[0].INTERFEL
         }

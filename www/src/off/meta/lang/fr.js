@@ -43,6 +43,8 @@ export const langFr =
     dtLastMount : "Mois Dernier",
     dtYear : "Année Courante",
     dtLastYear : "Année Dernière",
+    txtTotalTicket : "Total des tickets de caisses",   
+    txtTicketAvg : "Montant moyen des tickets de caisses", 
     popPassword : 
     {
         title: "Entrez votre mot de passe utilisateur",  
@@ -10215,7 +10217,8 @@ export const langFr =
         btnMailsend : "Envoyer E-Mail", 
         placeMailHtmlEditor : "Veuillez saisir votre texte .", 
         validDesign : "Veuillez sélectionner le design.",  
-        validMail : "Veuillez ne pas laisser le champs vide.",  
+        validMail : "Veuillez ne pas laisser le champs vide.",
+        txtTotalHt : "Total HT",
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -10901,6 +10904,7 @@ export const langFr =
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
         txtUnitPrice : "Prix unitaire", 
+        txtTotalHt : "Total HT",
         pg_Docs : 
         {
             title : "Sélection Document",

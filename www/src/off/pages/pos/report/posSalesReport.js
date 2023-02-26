@@ -9,6 +9,7 @@ import ScrollView from 'devextreme-react/scroll-view';
 import NdGrid,{Column,Editing,ColumnChooser,ColumnFixing,Paging,Pager,Scrolling} from '../../../../core/react/devex/grid.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
+import NdTextBox from '../../../../core/react/devex/textbox.js'
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
 import NdPivot,{FieldChooser,Export} from '../../../../core/react/devex/pivot.js';
 import NdButton from '../../../../core/react/devex/button.js';
@@ -61,9 +62,40 @@ export default class posSalesReport extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
+                            <Form colCount={4} parent={this} id="frmPurcoffer">
+                                <Item  >
+                                    <Label text={this.lang.t("txtTotalTicket")} alignment="right" />
+                                    <NdTextBox id="txtTotalTicket" parent={this} simple={true} readOnly={true} 
+                                    maxLength={32}
+                                   
+                                    ></NdTextBox>
+                                </Item>
+                                <Item  >
+                                    <Label text={this.lang.t("txtTicketAvg")} alignment="right" />
+                                    <NdTextBox id="txtTicketAvg" parent={this} simple={true} readOnly={true} 
+                                    maxLength={32}
+                                   
+                                    ></NdTextBox>
+                                </Item>
+                            </Form>
+                        </div>
+                    </div>
+                    <div className="row px-2 pt-2">
+                        <div className="col-12">
                             <NdButton text={this.lang.t("btnGet")} type="default" stylingMode="contained" width={'100%'}
                             onClick={async (e)=>
                             {
+                                let tmpTicketQuery = {
+                                    query :"SELECT COUNT(GUID) AS TICKET,ISNULL(AVG(TOTAL),0) AS AVGTOTAL FROM POS_VW_01 WHERE STATUS = 1 AND  DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE ",
+                                    param : ['FISRT_DATE:date','LAST_DATE:date'],
+                                    value : [this.dtDate.startDate,this.dtDate.endDate]
+                                }
+                                let tmpTicketData = await this.core.sql.execute(tmpTicketQuery) 
+                                if(tmpTicketData.result.recordset.length > 0)
+                                {
+                                    this.txtTotalTicket.value = tmpTicketData.result.recordset[0].TICKET
+                                    this.txtTicketAvg.value = tmpTicketData.result.recordset[0].AVGTOTAL.toLocaleString('fr-FR', {style: 'currency',currency: 'EUR'});
+                                }
                                 let tmpQuery = 
                                 {
                                     query : "SELECT " +
