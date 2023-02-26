@@ -356,7 +356,7 @@ export default class salesOrder extends React.PureComponent
                 {
                     let tmpRelatedItemQuery = 
                     {   
-                        query :"SELECT TOP 1 GUID,CODE,NAME,COST_PRICE,UNIT_GUID,VAT,MULTICODE,CUSTOMER_NAME,BARCODE,UNIT_GUID,UNIT_ID,UNIT_FACTOR FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE GUID = @GUID",
+                        query :"SELECT TOP 1 GUID,CODE,NAME,COST_PRICE,UNIT_GUID AS UNIT,VAT,MULTICODE,CUSTOMER_NAME,BARCODE,UNIT_GUID,UNIT_ID,UNIT_FACTOR FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE GUID = @GUID",
                         param : ['GUID:string|50'],
                         value : [tmpRelatedData.result.recordset[i].RELATED_GUID]
                     }

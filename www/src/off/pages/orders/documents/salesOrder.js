@@ -426,8 +426,16 @@ export default class salesOrder extends React.PureComponent
                                     this.cmbUnit.value = e.data.UNIT
                                     this.txtUnitFactor.value = e.data.UNIT_FACTOR
                                     this.txtTotalQuantity.value =  e.data.QUANTITY
-                                    this.txtUnitQuantity.value = e.data.QUANTITY / e.data.UNIT_FACTOR
-
+                                    if(this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].TYPE == 1)
+                                    {
+                                        this.txtUnitQuantity.value = e.data.QUANTITY * e.data.UNIT_FACTOR
+                                        this.txtUnitPrice.value = e.data.PRICE / e.data.UNIT_FACTOR
+                                    }
+                                    else
+                                    {
+                                        this.txtUnitQuantity.value = e.data.QUANTITY / e.data.UNIT_FACTOR
+                                        this.txtUnitPrice.value = e.data.PRICE * e.data.UNIT_FACTOR
+                                    }
                                 }
                                 await this.msgUnit.show().then(async () =>
                                 {
@@ -484,10 +492,10 @@ export default class salesOrder extends React.PureComponent
                         if(e == 'btn01')
                         {
                             this.docObj.docOrders.dt()[i].QUANTITY = this.docObj.docOrders.dt()[i].QUANTITY + pQuantity
-                            this.docObj.docOrders.dt()[i].VAT = parseFloat((this.docObj.docOrders.dt()[i].VAT + (this.docObj.docOrders.dt()[i].PRICE * (this.docObj.docOrders.dt()[i].VAT_RATE / 100)) * pQuantity).toFixed(9))
-                            this.docObj.docOrders.dt()[i].AMOUNT = parseFloat((this.docObj.docOrders.dt()[i].QUANTITY * this.docObj.docOrders.dt()[i].PRICE).toFixed(9))
-                            this.docObj.docOrders.dt()[i].TOTAL = parseFloat((((this.docObj.docOrders.dt()[i].QUANTITY * this.docObj.docOrders.dt()[i].PRICE) - this.docObj.docOrders.dt()[i].DISCOUNT) + this.docObj.docOrders.dt()[i].VAT).toFixed(9))
-                            this.docObj.docOrders.dt()[i].TOTALHT = parseFloat((this.docObj.docOrders.dt()[i].TOTAL - this.docObj.docOrders.dt()[i].VAT).toFixed(4))
+                            this.docObj.docOrders.dt()[i].VAT = parseFloat((this.docObj.docOrders.dt()[i].VAT + (this.docObj.docOrders.dt()[i].PRICE * (this.docObj.docOrders.dt()[i].VAT_RATE / 100)) * pQuantity).toFixed(4))
+                            this.docObj.docOrders.dt()[i].AMOUNT = parseFloat((this.docObj.docOrders.dt()[i].QUANTITY * this.docObj.docOrders.dt()[i].PRICE).toFixed(4))
+                            this.docObj.docOrders.dt()[i].TOTAL = parseFloat((((this.docObj.docOrders.dt()[i].QUANTITY * this.docObj.docOrders.dt()[i].PRICE) - this.docObj.docOrders.dt()[i].DISCOUNT) + this.docObj.docOrders.dt()[i].VAT).toFixed(2))
+                            this.docObj.docOrders.dt()[i].TOTALHT = parseFloat((this.docObj.docOrders.dt()[i].TOTAL - this.docObj.docOrders.dt()[i].VAT).toFixed(2))
                             this._calculateTotal()
                             await this.grdSlsOrder.devGrid.deleteRow(0)
                             //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
@@ -518,10 +526,10 @@ export default class salesOrder extends React.PureComponent
                 else if(this.combineNew == false)
                 {
                     this.docObj.docOrders.dt()[i].QUANTITY = this.docObj.docOrders.dt()[i].QUANTITY + pQuantity
-                    this.docObj.docOrders.dt()[i].VAT = parseFloat((this.docObj.docOrders.dt()[i].VAT + (this.docObj.docOrders.dt()[i].PRICE * (this.docObj.docOrders.dt()[i].VAT_RATE / 100)) * pQuantity).toFixed(9))
-                    this.docObj.docOrders.dt()[i].AMOUNT = parseFloat((this.docObj.docOrders.dt()[i].QUANTITY * this.docObj.docOrders.dt()[i].PRICE).toFixed(9))
-                    this.docObj.docOrders.dt()[i].TOTAL = parseFloat((((this.docObj.docOrders.dt()[i].QUANTITY * this.docObj.docOrders.dt()[i].PRICE) - this.docObj.docOrders.dt()[i].DISCOUNT) + this.docObj.docOrders.dt()[i].VAT).toFixed(9))
-                    this.docObj.docOrders.dt()[i].TOTALHT = parseFloat((this.docObj.docOrders.dt()[i].TOTAL - this.docObj.docOrders.dt()[i].VAT).toFixed(4))
+                    this.docObj.docOrders.dt()[i].VAT = parseFloat((this.docObj.docOrders.dt()[i].VAT + (this.docObj.docOrders.dt()[i].PRICE * (this.docObj.docOrders.dt()[i].VAT_RATE / 100)) * pQuantity).toFixed(4))
+                    this.docObj.docOrders.dt()[i].AMOUNT = parseFloat((this.docObj.docOrders.dt()[i].QUANTITY * this.docObj.docOrders.dt()[i].PRICE).toFixed(4))
+                    this.docObj.docOrders.dt()[i].TOTAL = parseFloat((((this.docObj.docOrders.dt()[i].QUANTITY * this.docObj.docOrders.dt()[i].PRICE) - this.docObj.docOrders.dt()[i].DISCOUNT) + this.docObj.docOrders.dt()[i].VAT).toFixed(2))
+                    this.docObj.docOrders.dt()[i].TOTALHT = parseFloat((this.docObj.docOrders.dt()[i].TOTAL - this.docObj.docOrders.dt()[i].VAT).toFixed(2))
                     
                     this._calculateTotal()
                     await this.grdSlsOrder.devGrid.deleteRow(0)
@@ -533,7 +541,6 @@ export default class salesOrder extends React.PureComponent
                 }               
             }
         }
-        console.log(this.docObj.docOrders.dt()[pIndex])
         this.docObj.docOrders.dt()[pIndex].ITEM_CODE = pData.CODE
         this.docObj.docOrders.dt()[pIndex].ITEM = pData.GUID
         this.docObj.docOrders.dt()[pIndex].ITEM_BARCODE = pData.BARCODE
@@ -556,11 +563,11 @@ export default class salesOrder extends React.PureComponent
             let tmpMargin = tmpData.result.recordset[0].PRICE - this.docObj.docOrders.dt()[pIndex].COST_PRICE
             let tmpMarginRate = ((tmpData.result.recordset[0].PRICE - this.docObj.docOrders.dt()[pIndex].COST_PRICE) - tmpData.result.recordset[0].PRICE) * 100
             this.docObj.docOrders.dt()[pIndex].MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
-            this.docObj.docOrders.dt()[pIndex].PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(9))
-            this.docObj.docOrders.dt()[pIndex].VAT = parseFloat((tmpData.result.recordset[0].PRICE * (pData.VAT / 100) * pQuantity).toFixed(9))
-            this.docObj.docOrders.dt()[pIndex].AMOUNT = parseFloat((tmpData.result.recordset[0].PRICE * pQuantity).toFixed(9))
-            this.docObj.docOrders.dt()[pIndex].TOTAL = parseFloat(((tmpData.result.recordset[0].PRICE * pQuantity)+ this.docObj.docOrders.dt()[pIndex].VAT).toFixed(9))
-            this.docObj.docOrders.dt()[pIndex].TOTALHT = parseFloat((this.docObj.docOrders.dt()[pIndex].TOTAL - this.docObj.docOrders.dt()[pIndex].VAT).toFixed(4))
+            this.docObj.docOrders.dt()[pIndex].PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4))
+            this.docObj.docOrders.dt()[pIndex].VAT = parseFloat((tmpData.result.recordset[0].PRICE * (pData.VAT / 100) * pQuantity).toFixed(4))
+            this.docObj.docOrders.dt()[pIndex].AMOUNT = parseFloat((tmpData.result.recordset[0].PRICE * pQuantity).toFixed(4))
+            this.docObj.docOrders.dt()[pIndex].TOTAL = parseFloat(((tmpData.result.recordset[0].PRICE * pQuantity)+ this.docObj.docOrders.dt()[pIndex].VAT).toFixed(2))
+            this.docObj.docOrders.dt()[pIndex].TOTALHT = parseFloat((this.docObj.docOrders.dt()[pIndex].TOTAL - this.docObj.docOrders.dt()[pIndex].VAT).toFixed(2))
             this._calculateTotal()
         }
         //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
@@ -589,7 +596,7 @@ export default class salesOrder extends React.PureComponent
                 {
                     let tmpRelatedItemQuery = 
                     {   
-                        query :"SELECT GUID,CODE,NAME,COST_PRICE,UNIT_GUID,VAT,MULTICODE,CUSTOMER_NAME,BARCODE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE GUID = @GUID",
+                        query :"SELECT GUID,CODE,NAME,COST_PRICE,UNIT_GUID AS UNIT,VAT,MULTICODE,CUSTOMER_NAME,BARCODE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE GUID = @GUID",
                         param : ['GUID:string|50'],
                         value : [tmpRelatedData.result.recordset[i].RELATED_GUID]
                     }
@@ -1596,7 +1603,7 @@ export default class salesOrder extends React.PureComponent
                                             }
                                             let tmpQuery = 
                                             {  
-                                                query :"SELECT GUID,CODE,NAME,COST_PRICE,UNIT_GUID,VAT,MULTICODE,CUSTOMER_NAME,BARCODE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE BARCODE = @CODE OR CODE = @CODE OR (MULTICODE = @CODE AND CUSTOMER_GUID = @CUSTOMER)",
+                                                query :"SELECT GUID,CODE,NAME,COST_PRICE,UNIT_GUID AS UNIT,VAT,MULTICODE,CUSTOMER_NAME,BARCODE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE BARCODE = @CODE OR CODE = @CODE OR (MULTICODE = @CODE AND CUSTOMER_GUID = @CUSTOMER)",
                                                 param : ['CODE:string|50','CUSTOMER:string|50'],
                                                 value : [this.txtBarcode.value,this.docObj.dt()[0].INPUT]
                                             }
@@ -1970,7 +1977,7 @@ export default class salesOrder extends React.PureComponent
                                             let tmpData = await this.core.sql.execute(tmpQuery) 
                                             if(tmpData.result.recordset.length > 0)
                                             {
-                                                e.key.PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(9))
+                                                e.key.PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4))
                                                 
                                                 this._calculateTotal()
                                             }
@@ -1994,17 +2001,17 @@ export default class salesOrder extends React.PureComponent
                                             return
                                         }
 
-                                        e.key.VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100)).toFixed(9));
-                                        e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(9))
-                                        e.key.TOTAL = parseFloat((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) +e.key.VAT).toFixed(9))
-                                        e.key.TOTALHT = parseFloat((e.key.AMOUNT - e.key.DISCOUNT).toFixed(4))
+                                        e.key.VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100)).toFixed(4));
+                                        e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(4))
+                                        e.key.TOTAL = parseFloat((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) +e.key.VAT).toFixed(2))
+                                        e.key.TOTALHT = parseFloat((e.key.AMOUNT - e.key.DISCOUNT).toFixed(2))
 
                                         let tmpMargin = (e.key.TOTAL - e.key.VAT) - (e.key.COST_PRICE * e.key.QUANTITY)
                                         let tmpMarginRate = (tmpMargin /(e.key.TOTAL - e.key.VAT)) * 100
                                         e.key.MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
                                         if(e.key.DISCOUNT > 0)
                                         {
-                                            e.key.DISCOUNT_RATE = parseFloat((100 - ((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) / (e.key.PRICE * e.key.QUANTITY)) * 100)).toFixed(9))
+                                            e.key.DISCOUNT_RATE = parseFloat((100 - ((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) / (e.key.PRICE * e.key.QUANTITY)) * 100)).toFixed(4))
                                         }
                                         this._calculateTotal()
                                        
@@ -2082,7 +2089,7 @@ export default class salesOrder extends React.PureComponent
                                                 {
                                                     if(this.docObj.dt()[0].DISCOUNT > 0 )
                                                     {
-                                                        this.txtDiscountPercent.value  = parseFloat((100 - (((this.docObj.dt()[0].AMOUNT - this.docObj.dt()[0].DISCOUNT) / this.docObj.dt()[0].AMOUNT) * 100)).toFixed(9))
+                                                        this.txtDiscountPercent.value  = parseFloat((100 - (((this.docObj.dt()[0].AMOUNT - this.docObj.dt()[0].DISCOUNT) / this.docObj.dt()[0].AMOUNT) * 100)).toFixed(4))
                                                         this.txtDiscountPrice.value = this.docObj.dt()[0].DISCOUNT
                                                     }
                                                     this.popDiscount.show()
@@ -2224,9 +2231,9 @@ export default class salesOrder extends React.PureComponent
                                                     this.docObj.docOrders.dt()[i].DISCOUNT =  parseFloat((((this.docObj.docOrders.dt()[i].PRICE * this.docObj.docOrders.dt()[i].QUANTITY) * this.txtDiscountPercent.value) / 100).toFixed(9))
                                                     if(this.docObj.docOrders.dt()[i].VAT > 0)
                                                     {
-                                                        this.docObj.docOrders.dt()[i].VAT = parseFloat(((this.docObj.docOrders.dt()[i].PRICE * this.docObj.docOrders.dt()[i].QUANTITY) * (this.docObj.docOrders.dt()[i].VAT_RATE / 100)).toFixed(9))
+                                                        this.docObj.docOrders.dt()[i].VAT = parseFloat(((this.docObj.docOrders.dt()[i].PRICE * this.docObj.docOrders.dt()[i].QUANTITY) * (this.docObj.docOrders.dt()[i].VAT_RATE / 100)).toFixed(4))
                                                     }
-                                                    this.docObj.docOrders.dt()[i].TOTAL = parseFloat(((this.docObj.docOrders.dt()[i].PRICE * this.docObj.docOrders.dt()[i].QUANTITY) + this.docObj.docOrders.dt()[i].VAT - this.docObj.docOrders.dt()[i].DISCOUNT).toFixed(9))
+                                                    this.docObj.docOrders.dt()[i].TOTAL = parseFloat(((this.docObj.docOrders.dt()[i].PRICE * this.docObj.docOrders.dt()[i].QUANTITY) + this.docObj.docOrders.dt()[i].VAT - this.docObj.docOrders.dt()[i].DISCOUNT).toFixed(2))
                                                     this.docObj.docOrders.dt()[i].TOTALHT  = this.docObj.docOrders.dt()[i].TOTAL - this.docObj.docOrders.dt()[i].VAT
                                                 }
                                                 this._calculateMargin()
@@ -2728,7 +2735,14 @@ export default class salesOrder extends React.PureComponent
                                     onValueChanged={(async(e)=>
                                     {
                                         this.txtUnitFactor.setState({value:this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].FACTOR});
-                                        this.txtTotalQuantity.value = Number(this.txtUnitQuantity.value * this.txtUnitFactor.value);
+                                        if(this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].TYPE == 1)
+                                        {
+                                            this.txtTotalQuantity.value = Number((this.txtUnitQuantity.value / this.txtUnitFactor.value).toFixed(3))
+                                        }
+                                        else
+                                        {
+                                            this.txtTotalQuantity.value = Number((this.txtUnitQuantity.value * this.txtUnitFactor.value).toFixed(3))
+                                        };
                                     }).bind(this)}
                                     >
                                     </NdSelectBox>
@@ -2747,14 +2761,28 @@ export default class salesOrder extends React.PureComponent
                                     maxLength={32}
                                     onValueChanged={(async(e)=>
                                     {
-                                       this.txtTotalQuantity.value = Number(this.txtUnitQuantity.value * this.txtUnitFactor.value)
+                                        if(this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].TYPE == 1)
+                                        {
+                                            this.txtTotalQuantity.value = Number((this.txtUnitQuantity.value / this.txtUnitFactor.value).toFixed(3))
+                                        }
+                                        else
+                                        {
+                                            this.txtTotalQuantity.value = Number((this.txtUnitQuantity.value * this.txtUnitFactor.value).toFixed(3))
+                                        }
                                     }).bind(this)}
                                     >
                                     </NdNumberBox>
                                 </Item>
                                 <Item>
                                     <Label text={this.t("txtTotalQuantity")} alignment="right" />
-                                    <NdNumberBox id="txtTotalQuantity" parent={this} simple={true}  readOnly={true}
+                                    <NdNumberBox id="txtTotalQuantity" parent={this} simple={true} 
+                                    maxLength={32} readOnly={true}
+                                    >
+                                    </NdNumberBox>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("txtUnitPrice")} alignment="right" />
+                                    <NdNumberBox id="txtUnitPrice" parent={this} simple={true} 
                                     maxLength={32}
                                     >
                                     </NdNumberBox>

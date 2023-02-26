@@ -704,7 +704,7 @@ export default class purchaseInvoice extends React.PureComponent
                 {
                     let tmpRelatedItemQuery = 
                     {   
-                        query :"SELECT GUID,CODE,NAME,COST_PRICE,UNIT_GUID,VAT,MULTICODE,CUSTOMER_NAME,BARCODE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE GUID = @GUID",
+                        query :"SELECT GUID,CODE,NAME,COST_PRICE,UNIT_GUID AS UNIT,VAT,MULTICODE,CUSTOMER_NAME,BARCODE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE GUID = @GUID",
                         param : ['GUID:string|50'],
                         value : [tmpRelatedData.result.recordset[i].RELATED_GUID]
                     }
