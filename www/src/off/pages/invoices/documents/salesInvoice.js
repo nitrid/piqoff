@@ -598,7 +598,17 @@ export default class salesInvoice extends React.PureComponent
         App.instance.setState({isExecute:true})
         if(typeof pData.ITEM_TYPE == 'undefined')
         {
-            pData.ITEM_TYPE = 0
+            let tmpTypeQuery = 
+            {
+                query :"SELECT TYPE FROM ITEMS WHERE GUID = @GUID ",
+                param : ['GUID:string|50'],
+                value : [pData.GUID]
+            }
+            let tmpType = await this.core.sql.execute(tmpTypeQuery) 
+            if(tmpType.result.recordset.length > 0)
+            {
+                pData.ITEM_TYPE = tmpType.result.recordset[0].TYPE
+            }
         }
         if(typeof pQuantity == 'undefined')
         {
@@ -915,6 +925,7 @@ export default class salesInvoice extends React.PureComponent
                     tmpDocItems.VAT_RATE = data[i].VAT_RATE
                     tmpDocItems.DISCOUNT_RATE = data[i].DISCOUNT_RATE
                     tmpDocItems.CONNECT_REF = data[i].CONNECT_REF
+                    tmpDocItems.ITEM_TYPE = data[i].ITEM_TYPE
     
                     await this.docObj.docItems.addEmpty(tmpDocItems,false)
                     await this.core.util.waitUntil(100)
@@ -997,6 +1008,7 @@ export default class salesInvoice extends React.PureComponent
                     tmpDocItems.DISCOUNT_RATE = data[i].DISCOUNT_RATE
                     tmpDocItems.ORDER_LINE_GUID = data[i].GUID
                     tmpDocItems.ORDER_DOC_GUID = data[i].DOC_GUID
+                    tmpDocItems.ITEM_TYPE = data[i].ITEM_TYPE
 
                     await this.docObj.docItems.addEmpty(tmpDocItems)
                     await this.core.util.waitUntil(100)
@@ -1524,7 +1536,18 @@ export default class salesInvoice extends React.PureComponent
                 let tmpCvoData = await this.core.sql.execute(tmpCvoQuery) 
                 if(tmpData.result.recordset.length > 0)
                 {
-                      let tmpDocItems = {...this.docObj.docItems.empty}
+                    if(this.docObj.docItems.dt().where({'ITEM_CODE':'CVO'}).length > 0)
+                    {
+                        this.docObj.docItems.dt().where({'ITEM_CODE':'CVO'})[0].PRICE = this.docObj.dt()[0].INTERFEL
+                        this.docObj.docItems.dt().where({'ITEM_CODE':'CVO'})[0].VAT = parseFloat((this.docObj.dt()[0].INTERFEL * (20 /100)).toFixed(4));
+                        this.docObj.docItems.dt().where({'ITEM_CODE':'CVO'})[0].AMOUNT = this.docObj.dt()[0].INTERFEL
+                        this.docObj.docItems.dt().where({'ITEM_CODE':'CVO'})[0].TOTALHT = this.docObj.dt()[0].INTERFEL
+                        this.docObj.docItems.dt().where({'ITEM_CODE':'CVO'})[0].TOTAL = parseFloat((this.docObj.dt()[0].INTERFEL -  parseFloat((this.docObj.dt()[0].INTERFEL * (20 /100)).toFixed(4))).toFixed(2))
+                        this.popExtraCost.hide()
+                        return
+                    }
+
+                    let tmpDocItems = {...this.docObj.docItems.empty}
                     tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
                     tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
                     tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
@@ -2626,6 +2649,10 @@ export default class salesInvoice extends React.PureComponent
                                             {
                                                 e.rowElement.style.color ="#feaa2b"
                                             }
+                                            if(e.rowType == 'data' && e.data.ITEM_TYPE == 2)
+                                            {
+                                                e.rowElement.style.color ="#86af49"
+                                            }
                                         }}
                                         onRowUpdating={async(e)=>
                                         {
@@ -2782,8 +2809,8 @@ export default class salesInvoice extends React.PureComponent
                                             }
                                             e.key.VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100)).toFixed(4));
                                             e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(4))
-                                            e.key.TOTAL = parseFloat((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) + e.key.VAT).toFixed(4))
-                                            e.key.TOTALHT = parseFloat((e.key.TOTAL - e.key.VAT).toFixed(4))
+                                            e.key.TOTALHT = parseFloat((e.key.AMOUNT - e.key.DISCOUNT).toFixed(2))
+                                            e.key.TOTAL = parseFloat((e.key.TOTALHT + e.key.VAT).toFixed(2))
 
                                             let tmpMargin = (e.key.TOTAL - e.key.VAT) - (e.key.COST_PRICE * e.key.QUANTITY)
                                             let tmpMarginRate = (tmpMargin /(e.key.TOTAL - e.key.VAT)) * 100
