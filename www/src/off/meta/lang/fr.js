@@ -337,13 +337,13 @@ export const langFr =
         salesinvoices_03 : "Proforma",
         salesinvoices_04 : "Rapports",
         salesReport : "Rapports",
-        slsRpt_01_001 : "Evrak Kıyas Raporu",  // BAK
-        slsRpt_01_002 : "Grup Bazlı Satış Raporu",  // BAK
-        slsRpt_01_003 : "Tarih Sıralı Satış Faturaları Raporu", // BAK
-        slsRpt_02_004 : "Satış Raporu", // BAK
+        slsRpt_01_001 : "Rapport de Comparaison de Documents",  // BAK
+        slsRpt_01_002 : "Rapport de ventes Basées Famille",  // BAK
+        slsRpt_01_003 : "Rapport des Factures de Vente", // BAK
+        slsRpt_02_004 : "Rapport de Vente", // BAK
         purchaseReport : "Rapports",
-        slsRpt_02_001 : "Tarih Sıralı Alış Faturaları Raporu", // BAK
-        slsRpt_02_002 : "DEB Raporu", // BAK
+        slsRpt_02_001 : "Rapport des Factures d'Achat", // BAK
+        slsRpt_02_002 : "Rapport DEB ", // BAK
     },
     login:
     {
@@ -15010,31 +15010,31 @@ export const langFr =
     },
     slsRpt_01_001 : // "Ürün Grubu Raporu"
     {
-        chkZeroBalance : "0 Bakiyeler Gösterilsin",  // BAK
-        txtCustomerCode : "Cari",  // BAK
-        btnCheck : "Aktif",  // BAK
-        btnGet :"Getir",  // BAK
+        chkZeroBalance : "Afficher 0 Soldes",  // BAK
+        txtCustomerCode : "Client",  // BAK
+        btnCheck : "Aktive",  // BAK
+        btnGet :"Recharche",  // BAK
         grdListe : 
         {
-            clmCode: "Kodu",  // BAK
-            clmName : "Adı",             // BAK
-            clmOrders : "Sipariş",  // BAK
-            clmDispatch : "İrsaliye",  // BAK
-            clmInvoice : "Fatura",  // BAK
-            clmCollection : "Tahsilat", // BAK
+            clmCode: "Code",  // BAK
+            clmName : "Nome",             // BAK
+            clmOrders : "Commande",  // BAK
+            clmDispatch : "Bon de Livrasion",  // BAK
+            clmInvoice : "Facture",  // BAK
+            clmCollection : "Reglement", // BAK
         },
     },
     slsRpt_01_002 : // "Ürün Grubu Raporu"
     {
-        btnGet :"Getir",  // BAK
-        txtAmount : "Toplam Tutar",  // BAK
-        txtTotalTicket : "Toplam Evrak Sayısı",  // BAK
-        txtTicketAvg : "Ortalama Evrak Tutarı",  // BAK
-        txtTotalCost : "Toplam Maliyet",  // BAK
-        txtFamount : "Vergisiz Toplam",  // BAK
-        txtVat : "Toplam Vergi",  // BAK
-        txtRestTotal : "Vergisiz Toplam Kar",  // BAK
-        btnGetAnalysis : "Grafik Görünümü",  // BAK
+        btnGet :"Recherche",  // BAK
+        txtAmount : "Total",  // BAK
+        txtTotalTicket : "Nombre Total de Documents",  // BAK
+        txtTicketAvg : "Montant Moyen des Documents",  // BAK
+        txtTotalCost : "Coût Total",  // BAK
+        txtFamount : "Total HT",  // BAK
+        txtVat : "Total TVA",  // BAK
+        txtRestTotal : "Bénéfice Total Net",  // BAK
+        btnGetAnalysis : "Vue Graphique",  // BAK
         grdGroupSalesReport: 
         {
             clmGrpCode : "Ürün Grubu Kodu",  // BAK
@@ -15073,7 +15073,7 @@ export const langFr =
         btnGet :"Getir",    // BAK
         grdListe :     // BAK
         {  
-            clmDate : "Tarih",    // BAK
+            clmDate : "Date",    // BAK
             clmCode: "Kodu",    // BAK
             clmName : "Adı",               // BAK
             clmAmount : "Tutar",    // BAK
@@ -15092,10 +15092,10 @@ export const langFr =
         btnGet :"Getir", // BAK
         grdListe :  // BAK
         { // BAK
-            clmDate : "Tarih", // BAK
-            clmTotalHt: "Vergisiz Toplam", // BAK
-            clmName : "Adı",            // BAK
-            clmTotal : "Toplam", // BAK
+            clmDate : "Date", // BAK
+            clmTotalHt: "Total HT", // BAK
+            clmName : "Nome",            // BAK
+            clmTotal : "Total", // BAK
         },
     },
     slsRpt_02_001 : // "Tarih sıralı Alış raporu"
@@ -15106,7 +15106,7 @@ export const langFr =
         btnGet :"Getir",    // BAK
         grdListe :     // BAK
         {  
-            clmDate : "Tarih",    // BAK
+            clmDate : "Date",    // BAK
             clmCode: "Kodu",    // BAK
             clmName : "Adı",               // BAK
             clmAmount : "Tutar",    // BAK
