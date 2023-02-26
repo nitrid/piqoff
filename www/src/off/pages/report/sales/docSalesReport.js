@@ -55,7 +55,7 @@ export default class docSalesReport extends React.PureComponent
                                     "ITEMS.VAT_RATE AS VAT_RATE,  " +
                                     "SUM((TOTAL-VAT)) AS AMOUNT  " +
                                     "FROM [DOC_ITEMS_VW_01] AS ITEMS  " +
-                                    "WHERE  TYPE = 1 AND ((DOC_TYPE = 20 AND ITEMS.DOC_DATE >= @START AND ITEMS.DOC_DATE <= @END) OR (ITEMS.DOC_TYPE = 40 AND ITEMS.INVOICE_DOC_GUID <> '00000000-0000-0000-0000-000000000000' AND ITEMS.INVOICE_DATE >= @START AND ITEMS.INVOICE_DATE <= @END)) AND ITEM_CODE <> 'CVO'" +
+                                    "WHERE  TYPE = 1 AND REBATE = 0 AND ((DOC_TYPE = 20 AND ITEMS.DOC_DATE >= @START AND ITEMS.DOC_DATE <= @END) OR (ITEMS.DOC_TYPE = 40 AND ITEMS.INVOICE_DOC_GUID <> '00000000-0000-0000-0000-000000000000' AND ITEMS.INVOICE_DATE >= @START AND ITEMS.INVOICE_DATE <= @END)) AND ITEM_CODE <> 'CVO'" +
                                     "GROUP BY ITEMS.INVOICE_DATE,ITEMS.TYPE,ITEMS.VAT_RATE,ITEMS.DOC_TYPE " +
                                     "UNION ALL  " +
                                     "SELECT  " +
@@ -65,7 +65,7 @@ export default class docSalesReport extends React.PureComponent
                                     "ITEMS.VAT_RATE AS VAT_RATE,  " +
                                     "SUM((VAT)) AS AMOUNT  " +
                                     "FROM [DOC_ITEMS_VW_01] AS ITEMS  " +
-                                    "WHERE TYPE = 1 AND ((DOC_TYPE = 20 AND ITEMS.DOC_DATE >= @START AND ITEMS.DOC_DATE <= @END) OR (DOC_TYPE = 40 AND INVOICE_DOC_GUID <> '00000000-0000-0000-0000-000000000000' AND ITEMS.INVOICE_DATE >= @START AND ITEMS.INVOICE_DATE <= @END)) " +
+                                    "WHERE TYPE = 1 AND REBATE = 0 AND ((DOC_TYPE = 20 AND ITEMS.DOC_DATE >= @START AND ITEMS.DOC_DATE <= @END) OR (DOC_TYPE = 40 AND INVOICE_DOC_GUID <> '00000000-0000-0000-0000-000000000000' AND ITEMS.INVOICE_DATE >= @START AND ITEMS.INVOICE_DATE <= @END)) " +
                                     "GROUP BY ITEMS.INVOICE_DATE,ITEMS.TYPE,ITEMS.VAT_RATE,ITEMS.DOC_TYPE " +
                                     "UNION ALL  " +
                                     "SELECT  " +
@@ -75,7 +75,7 @@ export default class docSalesReport extends React.PureComponent
                                     "ITEMS.VAT_RATE AS VAT_RATE,  " +
                                     "SUM((TOTALHT)) AS AMOUNT  " +
                                     "FROM [DOC_ITEMS_VW_01] AS ITEMS  " +
-                                    "WHERE TYPE = 1 AND ((DOC_TYPE = 20 AND ITEMS.DOC_DATE >= @START AND ITEMS.DOC_DATE <= @END) OR (DOC_TYPE = 40 AND INVOICE_DOC_GUID <> '00000000-0000-0000-0000-000000000000' AND ITEMS.INVOICE_DATE >= @START AND ITEMS.INVOICE_DATE <= @END)) AND ITEM_CODE = 'CVO' " +
+                                    "WHERE TYPE = 1 AND REBATE = 0 AND ((DOC_TYPE = 20 AND ITEMS.DOC_DATE >= @START AND ITEMS.DOC_DATE <= @END) OR (DOC_TYPE = 40 AND INVOICE_DOC_GUID <> '00000000-0000-0000-0000-000000000000' AND ITEMS.INVOICE_DATE >= @START AND ITEMS.INVOICE_DATE <= @END)) AND ITEM_CODE = 'CVO' " +
                                     "GROUP BY ITEMS.INVOICE_DATE,ITEMS.TYPE,ITEMS.VAT_RATE,ITEMS.DOC_TYPE " +
                                     "UNION ALL  " +
                                     "SELECT  " +
