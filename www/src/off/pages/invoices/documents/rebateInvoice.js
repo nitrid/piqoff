@@ -707,7 +707,7 @@ export default class rebateInvoice extends React.PureComponent
                 {
                     let tmpRelatedItemQuery = 
                     {   
-                        query :"SELECT GUID,CODE,NAME,COST_PRICE,UNIT_GUID,VAT,MULTICODE,CUSTOMER_NAME,BARCODE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE GUID = @GUID",
+                        query :"SELECT GUID,CODE,NAME,COST_PRICE,UNIT_GUID AS UNIT,VAT,MULTICODE,CUSTOMER_NAME,BARCODE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE GUID = @GUID",
                         param : ['GUID:string|50'],
                         value : [tmpRelatedData.result.recordset[i].RELATED_GUID]
                     }
@@ -1998,7 +1998,7 @@ export default class rebateInvoice extends React.PureComponent
                                             return
                                         }
                                         let tmpQuery = 
-                                        {   query :"SELECT GUID,CODE,NAME,COST_PRICE,UNIT_GUID,VAT,MULTICODE,CUSTOMER_NAME,BARCODE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE BARCODE = @CODE OR CODE = @CODE OR (MULTICODE = @CODE AND CUSTOMER_GUID = @CUSTOMER)",
+                                        {   query :"SELECT GUID,CODE,NAME,COST_PRICE,UNIT_GUID AS UNIT,VAT,MULTICODE,CUSTOMER_NAME,BARCODE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE BARCODE = @CODE OR CODE = @CODE OR (MULTICODE = @CODE AND CUSTOMER_GUID = @CUSTOMER)",
                                             param : ['CODE:string|50','CUSTOMER:string|50'],
                                             value : [this.txtBarcode.value,this.docObj.dt()[0].OUTPUT]
                                         }

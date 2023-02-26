@@ -572,14 +572,7 @@ export default class salesDispatch extends React.PureComponent
                                     }
                                     else
                                     {
-                                        if(this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].TYPE == 1)
-                                    {
-                                        e.data.PRICE = parseFloat((this.txtUnitPrice.value * this.txtUnitFactor.value).toFixed(4))
-                                    }
-                                    else
-                                    {
                                         e.data.PRICE = parseFloat((this.txtUnitPrice.value / this.txtUnitFactor.value).toFixed(4))
-                                    }
                                     }
                                     e.data.QUANTITY = this.txtTotalQuantity.value
                                     e.data.VAT = parseFloat(((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) * (e.data.VAT_RATE) / 100)).toFixed(4));
@@ -859,7 +852,7 @@ export default class salesDispatch extends React.PureComponent
                 {
                     let tmpRelatedItemQuery = 
                     {   
-                        query :"SELECT GUID,CODE,NAME,COST_PRICE,UNIT_GUID,VAT,MULTICODE,CUSTOMER_NAME,BARCODE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE GUID = @GUID",
+                        query :"SELECT GUID,CODE,NAME,COST_PRICE,UNIT_GUID AS UNIT,VAT,MULTICODE,CUSTOMER_NAME,BARCODE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE GUID = @GUID",
                         param : ['GUID:string|50'],
                         value : [tmpRelatedData.result.recordset[i].RELATED_GUID]
                     }
@@ -1869,7 +1862,7 @@ export default class salesDispatch extends React.PureComponent
                                         }
                                         let tmpQuery = 
                                         {   
-                                            query :"SELECT GUID,CODE,NAME,COST_PRICE,UNIT_GUID,VAT,MULTICODE,CUSTOMER_NAME,BARCODE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE BARCODE = @CODE OR CODE = @CODE OR (MULTICODE = @CODE AND CUSTOMER_GUID = @CUSTOMER)",
+                                            query :"SELECT GUID,CODE,NAME,COST_PRICE,UNIT_GUID AS UNIT,VAT,MULTICODE,CUSTOMER_NAME,BARCODE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE BARCODE = @CODE OR CODE = @CODE OR (MULTICODE = @CODE AND CUSTOMER_GUID = @CUSTOMER)",
                                             param : ['CODE:string|50','CUSTOMER:string|50'],
                                             value : [this.txtBarcode.value,this.docObj.dt()[0].INPUT]
                                         }
