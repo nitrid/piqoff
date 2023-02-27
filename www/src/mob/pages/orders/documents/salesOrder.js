@@ -310,9 +310,9 @@ export default class salesOrder extends React.PureComponent
             tmpDocItems.QUANTITY = pQuantity * this.txtFactor.value
             tmpDocItems.VAT_RATE = this.barcode.vat
             tmpDocItems.PRICE = this.txtPrice.value
-            tmpDocItems.VAT = (this.txtVat.value * pQuantity).toFixed(2)
-            tmpDocItems.AMOUNT = (this.txtPrice.value * pQuantity).toFixed(2)
-            tmpDocItems.TOTAL = parseFloat(((this.txtPrice.value * pQuantity) + (this.txtVat.value * pQuantity))).toFixed(2)
+            tmpDocItems.VAT = this.txtVat.value
+            tmpDocItems.AMOUNT = (this.txtPrice.value * (pQuantity * this.txtFactor.value)).toFixed(2)
+            tmpDocItems.TOTAL = this.txtAmount.value
             this.docObj.docOrders.addEmpty(tmpDocItems)
             this.barcodeReset()
             this._calculateTotal()
@@ -472,8 +472,8 @@ export default class salesOrder extends React.PureComponent
     }
     calculateItemPrice()
     {
-        this.txtVat.value =  parseFloat((this.txtPrice.value * (this.barcode.vat / 100) * (this.txtQuantity.value * this.txtFactor.value)).toFixed(2))
-        this.txtAmount.value = parseFloat(((this.txtPrice.value * (this.txtQuantity.value * this.txtFactor.value)) + this.txtVat.value)).toFixed(2)
+        this.txtVat.value =  parseFloat(((this.txtPrice.value * (this.barcode.vat / 100)) * (this.txtQuantity.value * this.txtFactor.value)).toFixed(2))
+        this.txtAmount.value = parseFloat((parseFloat((this.txtPrice.value * (this.txtQuantity.value * this.txtFactor.value))) + parseFloat(this.txtVat.value))).toFixed(2)
     }
     async _calculateTotal()
     {
@@ -935,15 +935,54 @@ export default class salesOrder extends React.PureComponent
                                                 }
                                                 else
                                                 {
-                                                    document.getElementById("Sound").play(); 
-                                                    let tmpConfObj = 
+                                                    await this.popItemCode.setVal(e.component._changedValue)
+                                                    this.popItemCode.show()
+                                                    this.popItemCode.onClick = async(data) =>
                                                     {
-                                                        id:'msgBarcodeNotFound',showTitle:true,title:this.t("msgBarcodeNotFound.title"),showCloseButton:true,width:'350px',height:'200px',
-                                                        button:[{id:"btn01",caption:this.t("msgBarcodeNotFound.btn01"),location:'after'}],
-                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgBarcodeNotFound.msg")}</div>)
+                                                        if(data.length == 1)
+                                                        {
+                                                            this.txtBarcode.value = data[0].CODE
+                                                            this.barcode = 
+                                                            {
+                                                                name:data[0].NAME,
+                                                                code:data[0].CODE,
+                                                                barcode:data[0].BARCODE,
+                                                                guid : data[0].GUID,
+                                                                vat : data[0].VAT,
+                                                                unit : data[0].UNIT_GUID,
+                                                                factor : data[0].UNIT_FACTOR,
+                                                                unit_id : data[0].UNIT_ID
+                                                            }
+                                                            await this.setBarcode()
+                                                        }
+                                                        else if(data.length > 1)
+                                                        {
+                                                            for (let i = 0; i < data.length; i++) 
+                                                            {
+                                                                this.txtBarcode.value = data[i].CODE
+                                                                this.barcode = 
+                                                                {
+                                                                    name:data[i].NAME,
+                                                                    code:data[i].CODE,
+                                                                    barcode:data[i].BARCODE,
+                                                                    guid : data[i].GUID,
+                                                                    vat : data[i].VAT,
+                                                                    unit : data[i].UNIT_GUID,
+                                                                    factor : data[i].UNIT_FACTOR,
+                                                                    unit_id : data[i].UNIT_ID
+                                                                }
+                                                                await this.setBarcode()
+                                                                await this.addItem()
+                                                            }
+                                                            let tmpConfObj = 
+                                                            {
+                                                                id:'msgItemsAdd',showTitle:true,title:this.t("msgItemsAdd.title"),showCloseButton:true,width:'350px',height:'200px',
+                                                                button:[{id:"btn01",caption:this.t("msgItemsAdd.btn01"),location:'after'}],
+                                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemsAdd.msg")}</div>)
+                                                            }
+                                                            await dialog(tmpConfObj);
+                                                        }
                                                     }
-                                                    await dialog(tmpConfObj);
-                                                    this.txtBarcode.value = ""
                                                 }
                                             }).bind(this)}/>
                                         </div>
