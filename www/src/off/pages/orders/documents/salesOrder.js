@@ -429,26 +429,19 @@ export default class salesOrder extends React.PureComponent
                                     if(this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].TYPE == 1)
                                     {
                                         this.txtUnitQuantity.value = e.data.QUANTITY * e.data.UNIT_FACTOR
-                                        this.txtUnitPrice.value = e.data.PRICE / e.data.UNIT_FACTOR
+                                        this.txtUnitPrice.value = e.data.PRICE 
                                     }
                                     else
                                     {
                                         this.txtUnitQuantity.value = e.data.QUANTITY / e.data.UNIT_FACTOR
-                                        this.txtUnitPrice.value = e.data.PRICE * e.data.UNIT_FACTOR
+                                        this.txtUnitPrice.value = e.data.PRICE 
                                     }
                                 }
                                 await this.msgUnit.show().then(async () =>
                                 {
                                     e.key.UNIT = this.cmbUnit.value
                                     e.key.UNIT_FACTOR = this.txtUnitFactor.value
-                                    if(this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].TYPE == 1)
-                                    {
-                                        e.data.PRICE = parseFloat((this.txtUnitPrice.value * this.txtUnitFactor.value).toFixed(4))
-                                    }
-                                    else
-                                    {
-                                        e.data.PRICE = parseFloat((this.txtUnitPrice.value / this.txtUnitFactor.value).toFixed(4))
-                                    }
+                                    e.data.PRICE = parseFloat((this.txtUnitPrice.value).toFixed(4))
                                     e.data.QUANTITY = this.txtTotalQuantity.value
                                     e.data.VAT = parseFloat(((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) * (e.data.VAT_RATE) / 100)).toFixed(4));
                                     e.data.AMOUNT = parseFloat((e.data.PRICE * e.data.QUANTITY).toFixed(4))
