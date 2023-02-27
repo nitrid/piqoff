@@ -4160,7 +4160,8 @@ export const langTr =
             clmMargin :"Marj",
             clmDescription :"Açıklama",
             clmCuser :"Kullanıcı",
-            clmVatRate : "KDV %"
+            clmVatRate : "KDV %",
+            clmOrigin : "Menşei"
         },
         grdInvoicePayment: 
         {
@@ -9912,7 +9913,8 @@ export const langTr =
             clmOrder : "Sipariş No",
             clmCuser :"Kullanıcı",
             clmBarcode : "Barkod",
-            clmVatRate : "KDV %"
+            clmVatRate : "KDV %",
+            clmOrigin : "Menşei"
         },
         popDiscount : 
         {

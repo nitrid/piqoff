@@ -4157,7 +4157,8 @@ export const langFr =
             clmMargin :"Marge",
             clmDescription : "Motif",
             clmCuser :"Utilisateur",
-            clmVatRate : "TVA %"
+            clmVatRate : "TVA %",
+            clmOrigin : "Origine",
         },
         grdInvoicePayment: 
         {
@@ -9886,6 +9887,7 @@ export const langFr =
             clmOrder : "Commande No", 
             clmVatRate : "TVA %",
             clmBarcode : "Code Barre",
+            clmOrigin : "Origine",
         },
         popDiscount : 
         {
