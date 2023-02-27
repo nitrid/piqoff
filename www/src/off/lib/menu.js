@@ -879,7 +879,6 @@ export const menu = (e) =>
             expanded: false,
             items: 
             [
-                
                 {
                     id: 'fns_02',
                     text : e.t('menuOff.fns_02'),//'Evraklar',
@@ -946,6 +945,24 @@ export const menu = (e) =>
                             id: 'fns_01_004',
                             text: e.t('menuOff.fns_01_004'),//'Tahsilat Listesi',
                             path: 'finance/lists/safeList'
+                        },
+                    ]
+                },
+                {
+                    id: 'fns_05',
+                    text : e.t('menuOff.fns_05'), //'Operasyonlar',
+                    expanded: false,
+                    items: 
+                    [
+                        {
+                            id: 'fns_05_001',
+                            text: e.t('menuOff.fns_05_001'), //'Toplu Tahsilat Girişi',
+                            path: 'finance/operations/wholeCollectionEntry'
+                        },
+                        {
+                            id: 'fns_05_002',
+                            text: e.t('menuOff.fns_05_002'), //'Toplu Ödeme Girişi',
+                            path: 'finance/operations/wholePaymentEntry'
                         },
                     ]
                 },
