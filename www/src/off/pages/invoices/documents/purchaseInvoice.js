@@ -1274,7 +1274,7 @@ export default class purchaseInvoice extends React.PureComponent
             }
             let tmpQuery = 
             {
-                query :"SELECT ROUND(BALANCE,2) AS BALANCE FROM  ACCOUNT_BALANCE WHERE ACCOUNT_GUID = @GUID ",
+                query :"SELECT [dbo].[FN_CUSTOMER_BALANCE](@GUID,GETDATE()) AS BALANCE  ",
                 param : ['GUID:string|50'],
                 value : [this.docObj.dt()[0].OUTPUT]
             }

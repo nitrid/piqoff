@@ -74,6 +74,7 @@ export default class rebateInvoice extends React.PureComponent
         this.docObj.clearAll()
         this.paymentObj.clearAll()
 
+        console.log((47.7756).toFixed(2))
         this.docObj.ds.on('onAddRow',(pTblName,pData) =>
         {
             if(pData.stat == 'new')
