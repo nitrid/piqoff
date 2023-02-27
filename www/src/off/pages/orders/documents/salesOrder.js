@@ -1513,20 +1513,7 @@ export default class salesOrder extends React.PureComponent
                                                         this.pg_txtBarcode.show()
                                                         this.pg_txtBarcode.onClick = async(data) =>
                                                         {
-                                                            let tmpdocOrders = {...this.docObj.docOrders.empty}
-                                                            tmpdocOrders.DOC_GUID = this.docObj.dt()[0].GUID
-                                                            tmpdocOrders.TYPE = this.docObj.dt()[0].TYPE
-                                                            tmpdocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                                                            tmpdocOrders.LINE_NO = this.docObj.docOrders.dt().length
-                                                            tmpdocOrders.REF = this.docObj.dt()[0].REF
-                                                            tmpdocOrders.REF_NO = this.docObj.dt()[0].REF_NO
-                                                            tmpdocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
-                                                            tmpdocOrders.INPUT = this.docObj.dt()[0].INPUT
-                                                            tmpdocOrders.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                                                            this.txtRef.readOnly = true
-                                                            this.txtRefno.readOnly = true
-                                                            this.docObj.docOrders.addEmpty(tmpdocOrders)
-                                                            await this.core.util.waitUntil(100)
+                                                          
 
                                                             if(data.length > 0)
                                                             {
@@ -1537,36 +1524,44 @@ export default class salesOrder extends React.PureComponent
             
                                                                 if(data.length == 1)
                                                                 {
+                                                                    let tmpdocOrders = {...this.docObj.docOrders.empty}
+                                                                    tmpdocOrders.DOC_GUID = this.docObj.dt()[0].GUID
+                                                                    tmpdocOrders.TYPE = this.docObj.dt()[0].TYPE
+                                                                    tmpdocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                                                    tmpdocOrders.LINE_NO = this.docObj.docOrders.dt().length
+                                                                    tmpdocOrders.REF = this.docObj.dt()[0].REF
+                                                                    tmpdocOrders.REF_NO = this.docObj.dt()[0].REF_NO
+                                                                    tmpdocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                                                    tmpdocOrders.INPUT = this.docObj.dt()[0].INPUT
+                                                                    tmpdocOrders.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                                                                    this.txtRef.readOnly = true
+                                                                    this.txtRefno.readOnly = true
+                                                                    this.docObj.docOrders.addEmpty(tmpdocOrders)
+                                                                    await this.core.util.waitUntil(100)
                                                                     await this.addItem(data[0],this.docObj.docOrders.dt().length -1)
                                                                 }
                                                                 else if(data.length > 1)
                                                                 {
                                                                     for (let i = 0; i < data.length; i++) 
                                                                     {
-                                                                        if(i == 0)
-                                                                        {
-                                                                            await this.addItem(data[i],this.docObj.docOrders.dt().length -1)
-                                                                        }
-                                                                        else
-                                                                        {
-                                                                            let tmpdocOrders = {...this.docObj.docOrders.empty}
-                                                                            tmpdocOrders.DOC_GUID = this.docObj.dt()[0].GUID
-                                                                            tmpdocOrders.TYPE = this.docObj.dt()[0].TYPE
-                                                                            tmpdocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                                                                            tmpdocOrders.LINE_NO = this.docObj.docOrders.dt().length
-                                                                            tmpdocOrders.REF = this.docObj.dt()[0].REF
-                                                                            tmpdocOrders.REF_NO = this.docObj.dt()[0].REF_NO
-                                                                            tmpdocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
-                                                                            tmpdocOrders.INPUT = this.docObj.dt()[0].INPUT
-                                                                            tmpdocOrders.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                                                                            
-                                                                            this.txtRef.readOnly = true
-                                                                            this.txtRefno.readOnly = true
-                                                                            this.docObj.docOrders.addEmpty(tmpdocOrders)
-            
-                                                                            await this.core.util.waitUntil(100)
-                                                                            await this.addItem(data[i],this.docObj.docOrders.dt().length-1)
-                                                                        }
+                                                                    
+                                                                        let tmpdocOrders = {...this.docObj.docOrders.empty}
+                                                                        tmpdocOrders.DOC_GUID = this.docObj.dt()[0].GUID
+                                                                        tmpdocOrders.TYPE = this.docObj.dt()[0].TYPE
+                                                                        tmpdocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                                                        tmpdocOrders.LINE_NO = this.docObj.docOrders.dt().length
+                                                                        tmpdocOrders.REF = this.docObj.dt()[0].REF
+                                                                        tmpdocOrders.REF_NO = this.docObj.dt()[0].REF_NO
+                                                                        tmpdocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                                                        tmpdocOrders.INPUT = this.docObj.dt()[0].INPUT
+                                                                        tmpdocOrders.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                                                                        
+                                                                        this.txtRef.readOnly = true
+                                                                        this.txtRefno.readOnly = true
+                                                                        this.docObj.docOrders.addEmpty(tmpdocOrders)
+        
+                                                                        await this.core.util.waitUntil(100)
+                                                                        await this.addItem(data[i],this.docObj.docOrders.dt().length-1)
                                                                     }
                                                                 }
                                                             }
@@ -1610,11 +1605,25 @@ export default class salesOrder extends React.PureComponent
                                             let tmpData = await this.core.sql.execute(tmpQuery) 
                                             if(tmpData.result.recordset.length > 0)
                                             {
+                                                this.txtPopQteUnitQuantity.value = 1
                                                 this.txtPopQuantity.value = 1
                                                 setTimeout(async () => 
                                                 {
                                                     this.txtPopQuantity.focus()
                                                 }, 700);
+                                                let tmpUnitQuery = 
+                                                {
+                                                    query: "SELECT GUID,ISNULL((SELECT NAME FROM UNIT WHERE UNIT.ID = ITEM_UNIT.ID),'') AS NAME,FACTOR,TYPE FROM ITEM_UNIT WHERE DELETED = 0 AND ITEM = @ITEM ORDER BY TYPE" ,
+                                                    param:  ['ITEM:string|50'],
+                                                    value:  [tmpData.result.recordset[0].GUID]
+                                                }
+                                                let tmpUnitData = await this.core.sql.execute(tmpUnitQuery) 
+                                                if(tmpUnitData.result.recordset.length > 0)
+                                                {   
+                                                    this.cmbPopQteUnit.setData(tmpUnitData.result.recordset)
+                                                    this.cmbPopQteUnit.value = tmpData.result.recordset[0].UNIT
+                                                    this.txtPopQteUnitFactor.value = 1
+                                                }
                                                 await this.msgQuantity.show().then(async (e) =>
                                                 {
                                                     let tmpdocOrders = {...this.docObj.docOrders.empty}
@@ -1631,7 +1640,7 @@ export default class salesOrder extends React.PureComponent
                                                     this.txtRefno.readOnly = true
                                                     this.docObj.docOrders.addEmpty(tmpdocOrders)
                                                 
-                                                    this.addItem(tmpData.result.recordset[0],(typeof this.docObj.docOrders.dt()[0] == 'undefined' ? 0 : this.docObj.docOrders.dt().length-1),this.txtPopQuantity.value)
+                                                    this.addItem(tmpData.result.recordset[0],(typeof this.docObj.docOrders.dt()[0] == 'undefined' ? 0 : this.docObj.docOrders.dt().length-1),this.txtPopQteUnitQuantity.value)
                                                 })
                                             }
                                             else
@@ -1640,27 +1649,49 @@ export default class salesOrder extends React.PureComponent
                                                 this.pg_txtItemsCode.show()
                                                 this.pg_txtItemsCode.onClick = async(data) =>
                                                 {
-                                                    let tmpdocOrders = {...this.docObj.docOrders.empty}
-                                                    tmpdocOrders.DOC_GUID = this.docObj.dt()[0].GUID
-                                                    tmpdocOrders.TYPE = this.docObj.dt()[0].TYPE
-                                                    tmpdocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                                                    tmpdocOrders.LINE_NO = this.docObj.docOrders.dt().length
-                                                    tmpdocOrders.REF = this.docObj.dt()[0].REF
-                                                    tmpdocOrders.REF_NO = this.docObj.dt()[0].REF_NO
-                                                    tmpdocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
-                                                    tmpdocOrders.INPUT = this.docObj.dt()[0].INPUT
-                                                    tmpdocOrders.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                                                    this.txtRef.readOnly = true
-                                                    this.txtRefno.readOnly = true
-                                                    this.docObj.docOrders.addEmpty(tmpdocOrders)
-                                                    await this.core.util.waitUntil(100)
+                                                   
                                                     if(data.length > 0)
                                                     {
                                                         this.combineControl = true
                                                         this.combineNew = false
                                                         if(data.length == 1)
                                                         {
-                                                            await this.addItem(data[0],this.docObj.docOrders.dt().length -1)
+                                                            this.txtPopQteUnitQuantity.value = 1
+                                                            this.txtPopQuantity.value = 1
+                                                            setTimeout(async () => 
+                                                            {
+                                                                this.txtPopQuantity.focus()
+                                                            }, 700);
+                                                            let tmpUnitQuery = 
+                                                            {
+                                                                query: "SELECT GUID,ISNULL((SELECT NAME FROM UNIT WHERE UNIT.ID = ITEM_UNIT.ID),'') AS NAME,FACTOR,TYPE FROM ITEM_UNIT WHERE DELETED = 0 AND ITEM = @ITEM ORDER BY TYPE" ,
+                                                                param:  ['ITEM:string|50'],
+                                                                value:  [data[0].GUID]
+                                                            }
+                                                            let tmpUnitData = await this.core.sql.execute(tmpUnitQuery) 
+                                                            if(tmpUnitData.result.recordset.length > 0)
+                                                            {   
+                                                                this.cmbPopQteUnit.setData(tmpUnitData.result.recordset)
+                                                                this.cmbPopQteUnit.value = data[0].UNIT
+                                                                this.txtPopQteUnitFactor.value = 1
+                                                            }
+                                                            await this.msgQuantity.show().then(async (e) =>
+                                                            {
+                                                                let tmpdocOrders = {...this.docObj.docOrders.empty}
+                                                                tmpdocOrders.DOC_GUID = this.docObj.dt()[0].GUID
+                                                                tmpdocOrders.TYPE = this.docObj.dt()[0].TYPE
+                                                                tmpdocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                                                tmpdocOrders.LINE_NO = this.docObj.docOrders.dt().length
+                                                                tmpdocOrders.REF = this.docObj.dt()[0].REF
+                                                                tmpdocOrders.REF_NO = this.docObj.dt()[0].REF_NO
+                                                                tmpdocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                                                tmpdocOrders.INPUT = this.docObj.dt()[0].INPUT
+                                                                tmpdocOrders.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                                                                this.txtRef.readOnly = true
+                                                                this.txtRefno.readOnly = true
+                                                                this.docObj.docOrders.addEmpty(tmpdocOrders)
+                                                                this.addItem(data[0],(typeof this.docObj.docOrders.dt()[0] == 'undefined' ? 0 : this.docObj.docOrders.dt().length-1),this.txtPopQteUnitQuantity.value)
+                                                            })
                                                         }
                                                         else if(data.length > 1)
                                                         {
@@ -2648,8 +2679,8 @@ export default class salesOrder extends React.PureComponent
                         showTitle={true} 
                         title={this.t("msgQuantity.title")} 
                         showCloseButton={false}
-                        width={"350px"}
-                        height={"250px"}
+                        width={"400px"}
+                        height={"410px"}
                         button={[{id:"btn01",caption:this.t("msgQuantity.btn01"),location:'after'}]}
                         >
                             <div className="row">
@@ -2666,9 +2697,60 @@ export default class salesOrder extends React.PureComponent
                                         {
                                             this.msgQuantity._onClick()
                                         }).bind(this)} 
+                                        onValueChanged={(async(e)=>
+                                        {
+                                            if(this.cmbPopQteUnit.data.datatable.where({'GUID':this.cmbPopQteUnit.value})[0].TYPE == 1)
+                                            {
+                                                this.txtPopQteUnitQuantity.value = Number((this.txtPopQuantity.value / this.txtPopQteUnitFactor.value).toFixed(3))
+                                            }
+                                            else
+                                            {
+                                                this.txtPopQteUnitQuantity.value = Number((this.txtPopQuantity.value * this.txtPopQteUnitFactor.value).toFixed(3))
+                                            };
+                                        }).bind(this)}
                                         >
                                     </NdNumberBox>
                                     </Item>
+                                    <Item>
+                                    <NdSelectBox simple={true} parent={this} id="cmbPopQteUnit"
+                                        displayExpr="NAME"                       
+                                        valueExpr="GUID"
+                                        value=""
+                                        searchEnabled={true}
+                                        onValueChanged={(async(e)=>
+                                        {
+                                            this.txtPopQteUnitFactor.setState({value:this.cmbPopQteUnit.data.datatable.where({'GUID':this.cmbPopQteUnit.value})[0].FACTOR});
+                                            if(this.cmbPopQteUnit.data.datatable.where({'GUID':this.cmbPopQteUnit.value})[0].TYPE == 1)
+                                            {
+                                                this.txtPopQteUnitQuantity.value = Number((this.txtPopQuantity.value / this.txtPopQteUnitFactor.value).toFixed(3))
+                                            }
+                                            else
+                                            {
+                                                this.txtPopQteUnitQuantity.value = Number((this.txtPopQuantity.value * this.txtPopQteUnitFactor.value).toFixed(3))
+                                            };
+                                        }).bind(this)}
+                                        >
+                                    </NdSelectBox>
+                                    </Item>
+                                    <Item>
+                                    <Label text={this.t("txtUnitFactor")} alignment="right" />
+                                    <NdNumberBox id="txtPopQteUnitFactor" parent={this} simple={true}
+                                    readOnly={true}
+                                    maxLength={32}
+                                    >
+                                    </NdNumberBox>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("txtTotalQuantity")} alignment="right" />
+                                    <NdNumberBox id="txtPopQteUnitQuantity" parent={this} simple={true} readOnly={true}
+                                    maxLength={32}
+                                    onValueChanged={(async(e)=>
+                                    {
+                                       
+                                    }).bind(this)}
+                                    >
+                                    </NdNumberBox>
+                                </Item>
                                 </Form>
                             </div>
                             </div>
