@@ -2040,7 +2040,7 @@ export const prm =
             }
         }
     },
-    // excelFormat
+    // compulsoryCustomer
     {
         TYPE : 1,
         ID :"compulsoryCustomer",
@@ -2681,6 +2681,58 @@ export const prm =
             TYPE : "checkbox",
             PAGE_NAME : "Şube Satış İrsaliye",
             CAPTION : "Eksiye Düşemeye İzin Verme"
+        }
+    },
+    //#endregion
+    //#region Toplu Tahsilat Giriş
+    //txtRef
+    {
+        TYPE : 2,
+        ID :"txtRef",
+        VALUE : 
+        {
+            value : ""
+        },
+        SPECIAL : "",
+        PAGE : "fns_05_001",
+        ELEMENT : "txtRef",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Toplu Tahsilat Giriş",
+            CAPTION : "Seri"
+        }
+    },
+    //excelFormat
+    {
+        TYPE : 1,
+        ID :"excelFormat",
+        VALUE : 
+        {
+            DATE:'DATE',DESC:'DESC',AMOUNT:'AMOUNT'
+        },
+        SPECIAL : "",
+        PAGE : "fns_05_001",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "popInput",
+            PAGE_NAME : "Toplu Tahsilat Giriş",
+            CAPTION : "Excel Formatı",
+            DISPLAY : "CODE",
+            FORM: 
+            {
+                width:"400",
+                height:"280",
+                item:
+                [
+                    {type:"text",caption:"DATE",field:"DATE",id:"txtPopExcelFormatDate"},
+                    {type:"text",caption:"DESC",field:"DESC",id:"txtPopExcelFormatDesc"},
+                    {type:"text",caption:"AMOUNT",field:"AMOUNT",id:"txtPopExcelFormatAmount"},
+                ]
+            }
         }
     },
     //#endregion

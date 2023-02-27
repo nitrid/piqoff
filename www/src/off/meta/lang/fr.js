@@ -252,6 +252,9 @@ export const langFr =
         fns_04 : "Rapports",
         fns_04_001 : "Rapport sur les relevés bancaires",   
         fns_04_002 : "Rapport sur le solde actuel",  
+        fns_05 : "Operasyonlar", //BAK
+        fns_05_001 : "Toplu Tahsilat Girişi", //BAK
+        fns_05_002 : "Toplu Ödeme Girişi", //BAK
         pos: "Traitement Pos",
         pos_01 : "Saisie",
         pos_01_001 : "Identifier Caisse",
