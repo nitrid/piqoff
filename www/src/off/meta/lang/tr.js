@@ -253,6 +253,9 @@ export const langTr =
         fns_04 : "Raporlar",
         fns_04_001 : "Banka Ekstre Raporu",
         fns_04_002 : "Cari Bakiye Raporu",
+        fns_05 : "Operasyonlar",
+        fns_05_001 : "Toplu Tahsilat Girişi",
+        fns_05_002 : "Toplu Ödeme Girişi",
         pos: "Pos İşlemleri",
         pos_01 : "Tanımlar",
         pos_01_001 : "Pos Cihaz Tanıtım",
@@ -4160,7 +4163,8 @@ export const langTr =
             clmMargin :"Marj",
             clmDescription :"Açıklama",
             clmCuser :"Kullanıcı",
-            clmVatRate : "KDV %"
+            clmVatRate : "KDV %",
+            clmOrigin : "Menşei"
         },
         grdInvoicePayment: 
         {
@@ -9912,7 +9916,8 @@ export const langTr =
             clmOrder : "Sipariş No",
             clmCuser :"Kullanıcı",
             clmBarcode : "Barkod",
-            clmVatRate : "KDV %"
+            clmVatRate : "KDV %",
+            clmOrigin : "Menşei"
         },
         popDiscount : 
         {
@@ -13432,6 +13437,107 @@ export const langTr =
         validRefNo : "Sıra Boş Geçilemez",
         validAccount : "Hesap Seçmelisiniz",
         validDocDate : "Tarih Seçmelisiniz",
+    },
+    fns_05_001 : //"Toplu Tahsilat Girişi"
+    {
+        txtRefRefno : "Seri-Sıra",
+        cmbCashSafe : "Kasa Seçimi",
+        cmbCheckSafe : "Çek Kasası",
+        cmbBank : "Banka Seçimi",
+        txtCustomerCode : "Cari Kodu",
+        txtCustomerName : "Cari Adı",
+        dtDocDate : "Tarih",
+        txtAmount : "Tutar",
+        cash : "Tutar",
+        description :"Açıklama",
+        checkReference : "Referans",
+        btnCash : "Tahsilat Girişi",
+        ValidCash : "0'dan büyük bir tutar giriniz",
+        excelAdd : "Excelden Kayıt",
+        popExcel : 
+        {
+            title:"Excel Dosyanızın Satır Başlıkları Doğru Olmalıdır",
+            clmDate : "Tarih",
+            clmDesc : "Açıklama",
+            clmAmount : "Tutar",
+            shemaSave : "Şema Kaydet"
+        },
+        cmbPayType : 
+        {
+            title : "Ödeme Tipi",
+            cash : "Nakit",
+            check : "Çek",
+            bankTransfer : "Hesaba Havale",
+            otoTransfer : "Otomatik Ödeme",
+            foodTicket : "Yemek Çeki",
+            bill : "Senet",
+        },
+        pg_txtCustomerCode : 
+        {
+            title : "Cari Seçimi",
+            clmCode :  "CARİ KODU",
+            clmTitle : "CARİ ADI",
+            clmTypeName : "TİPİ",
+            clmGenusName : "CİNSİ"
+        },
+        grdDocPayments: 
+        {
+            clmDate : "Tarih",
+            clmCustomerCode : "Cari Kodu",
+            clmCustomerName : "Cari Adı",
+            clmAmount : "Tutar",
+            clmInputName : "Kasa/Banka",
+            clmDescription : "Açıklama",
+        },
+        msgDocValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrak Üst Bilgileri Tamalanmadan Stok Girilemez !"
+        },
+        msgSave:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kayıt etmek istediğinize eminmisiniz !"
+        },
+        msgSaveResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Kayıt işleminiz başarılı !",
+            msgFailed: "Kayıt işleminiz başarısız !"
+        },
+        msgSaveValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen gerekli alanları doldurunuz !"
+        },
+        msgNotCustomer:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Cari Bulunmadı !!"
+        },
+        popCash : 
+        {
+            title: "Nakit Girişi",
+            btnApprove : "Ekle"
+        },
+        popCheck : 
+        {
+            title: "Çek Girişi",
+            btnApprove : "Ekle"
+        },
+        popBank : 
+        {
+            title: "Havale Girişi",
+            btnApprove : "Ekle"
+        },
+        validRef :"Seri Boş Geçilemez",
+        validCustomerCode : "Cari Kodu Boş Geçilemez",
     },
     set_01_002 : // "Interfel"
     {

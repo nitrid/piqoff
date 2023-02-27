@@ -120,7 +120,7 @@ export default class collection extends React.PureComponent
         }
         else
         {
-            this.numCash.readOnly = true
+            this.numCash.readOnly = false
         }
     }
     async getDoc(pGuid,pRef,pRefno)
