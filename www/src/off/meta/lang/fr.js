@@ -12,7 +12,7 @@ export const langFr =
     msgSqlService2: "Il n'y a pas de base de données. Souhaitez-vous créér ?", 
     msgSqlService3: "L'installation de database a réussi. Veuillez vérifier le fichier de configuration et redémarrer le serveur.", 
     btnYes : "Oui",
-    btnGet: "Validé",
+    btnGet: "Valider",
     btnNo : "Non",
     msgClose : "Etes-vous sûr(e) de vouloir quitter la page ?",
     txtLangSelect : "Choix de la langue",
@@ -115,15 +115,15 @@ export const langFr =
     },
     popVatRate:
     {
-        title : "Vergi Oranları", // BAK
+        title : "TAUX TVA", // BAK
     },
     grdVatRate :
     {
-        clmRate : "Vergi Oranı", // BAK
-        clmVat : "Vergi Tutarı", // BAK
-        clmTotalHt : "Tutar", // BAK
+        clmRate : "Taux TVA", // BAK
+        clmVat : "Montant TVA", // BAK
+        clmTotalHt : "Montant", // BAK
     },
-    btnVatToZero : "Vergiyi Sıfırla", // BAK
+    btnVatToZero : "Mettre à Zéro la TVA", // BAK
     menuOff:
     {
         stk: "Produit",                
@@ -14618,7 +14618,7 @@ export const langFr =
         {
             title: "Veuillez Saisir MDP Administrateur pour Accéder au Document ",
             Password : "Mot de passe",
-            btnApprove : "Valide"
+            btnApprove : "Valider"
         },
         msgDocValid:
         {
@@ -14630,8 +14630,8 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes-vous sur de vouloir enregistrer !"
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de vouloir enregistrer !"
         },
         msgSaveResult:
         {
@@ -14650,15 +14650,15 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
         },
         msgVatDelete:
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes-vous sur de Vouloir Mettre à Zéro la TVA !"
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de Vouloir Mettre à Zéro la TVA !"
         },
         msgDiscountPrice:
         {
@@ -14730,7 +14730,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Prix Inférieur à l'Achat ! ! Voulez Vous Continuer ?"
         },
         msgUnderPrice2:
@@ -14813,7 +14813,7 @@ export const langFr =
         {
             title: "Quantité",
             btn01: "Ajouter",
-            msg: "Ajoutez quantité"
+            msg: "Ajouter quantité"
         },
         pg_txtBarcode : 
         {
@@ -14900,15 +14900,15 @@ export const langFr =
         {
             title : "Attention",
             msg: "Les Familles de produits des produits sélectionnés changeront. Confirmez Vous ?",
-            btn01 : "Abandonne",
-            btn02 : "Valide"
+            btn01 : "Abandonner",
+            btn02 : "Valider"
         },
         msgSave:
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes-vous sur de vouloir enregistrer !"
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de vouloir enregistrer !"
         },
         msgSaveResult:
         {
@@ -14940,7 +14940,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Etes-vous sur de vouloir enregistrer !"
         },
         msgSaveResult:
@@ -14954,7 +14954,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessaire !"
+            msg: "Veuillez saisir les zones nécessaires !"
         },
         msgPrice: 
         {
@@ -14966,7 +14966,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Nom du produit trop long. Veuillez le corriger et le résaisir !"
+            msg: "Nom du produit trop long. Veuillez le corriger et le réssaisir !"
         },
     },
     pos_02_003 : // "Pos Satış Raporu"
@@ -15004,20 +15004,20 @@ export const langFr =
         txtPopDate : "Date",    
         txtPopSubject : "Sujet",    
         txtPopProcess : "Saisie effectué",    
-        btnApprove : "Enregistre",    
+        btnApprove : "Enregistrer",    
         btnCancel : "Fermer",    
         txtPopUser : "Utilisateur ayant saisi"    
     },
     slsRpt_01_001 : // "Ürün Grubu Raporu"
     {
-        chkZeroBalance : "Afficher 0 Soldes",  // BAK
+        chkZeroBalance : "Afficher Soldes 0",  // BAK
         txtCustomerCode : "Client",  // BAK
-        btnCheck : "Aktive",  // BAK
-        btnGet :"Recharche",  // BAK
+        btnCheck : "Actif",  // BAK
+        btnGet :"Rechercher",  // BAK
         grdListe : 
         {
             clmCode: "Code",  // BAK
-            clmName : "Nome",             // BAK
+            clmName : "Nom",             // BAK
             clmOrders : "Commande",  // BAK
             clmDispatch : "Bon de Livrasion",  // BAK
             clmInvoice : "Facture",  // BAK
@@ -15026,7 +15026,7 @@ export const langFr =
     },
     slsRpt_01_002 : // "Ürün Grubu Raporu"
     {
-        btnGet :"Recherche",  // BAK
+        btnGet :"Rechercher",  // BAK
         txtAmount : "Total",  // BAK
         txtTotalTicket : "Nombre Total de Documents",  // BAK
         txtTicketAvg : "Montant Moyen des Documents",  // BAK
@@ -15034,100 +15034,100 @@ export const langFr =
         txtFamount : "Total HT",  // BAK
         txtVat : "Total TVA",  // BAK
         txtRestTotal : "Bénéfice Total Net",  // BAK
-        btnGetAnalysis : "Vue Graphique",  // BAK
+        btnGetAnalysis : "Voir Graphique",  // BAK
         grdGroupSalesReport: 
         {
-            clmGrpCode : "Ürün Grubu Kodu",  // BAK
-            clmGrpName: "Ürün Grubu Adı",  // BAK
-            clmTotalCost: "Toplam Maliyet",  // BAK
-            clmFamount : "Vergisiz Tutar",  // BAK
-            clmVat : "Vergi Tutarı",  // BAK
-            clmTotal : "Toplam Tutar",  // BAK
-            clmRestTotal : "Vergisiz Toplam Kar"  // BAK
+            clmGrpCode : "Code Groupe Produit",  // BAK
+            clmGrpName: "Nom Groupe Produit",  // BAK
+            clmTotalCost: "Coût Total",  // BAK
+            clmFamount : "Total HT",  // BAK
+            clmVat : "Total TVA",  // BAK
+            clmTotal : "Montant Total",  // BAK
+            clmRestTotal : "Total Bénéfice HT"  // BAK
         },
         grpGrpDetail : 
         {
-            clmCode : "Ürün Kodu",  // BAK
-            clmName : "Ürün Adı",  // BAK
-            clmQuantity : "Miktar",  // BAK
-            clmTotalCost :"Toplam Maliyet",  // BAK
-            clmFamount :"Vergisiz Tutar",  // BAK
-            clmVat : "Vergi Tutarı",  // BAK
-            clmTotal : "Toplam Tutar",  // BAK
-            clmRestTotal : "Vergisiz Toplam Kar"  // BAK
+            clmCode : "Code Produit",  // BAK
+            clmName : "Nom Produit",  // BAK
+            clmQuantity : "Montant",  // BAK
+            clmTotalCost :"Montant Total",  // BAK
+            clmFamount :"Total HT",  // BAK
+            clmVat : "Montant TVA",  // BAK
+            clmTotal : "Montant Total",  // BAK
+            clmRestTotal : "Total Bénéfice HT"  // BAK
         },
         popGrpDetail : 
         {
-            title : "Satış Detayı" // BAK
+            title : "Rapport Vente" // BAK
         },
         popAnalysis : 
         {
-            title : "Satış Grafiği" // BAK
+            title : "Graphique Vente" // BAK
         },
     },
     slsRpt_01_003 : // "Tarih sıralı satış raporu"
     {
-        chkZeroBalance : "0 Bakiyeler Gösterilsin",    // BAK
-        txtCustomerCode : "Cari",    // BAK
-        btnCheck : "Aktif",    // BAK
-        btnGet :"Getir",    // BAK
+        chkZeroBalance : "Afficher Soldes O",    // BAK
+        txtCustomerCode : "Fournisseur ou Client",    // BAK
+        btnCheck : "Actif",    // BAK
+        btnGet :"Rechercher",    // BAK
         grdListe :     // BAK
         {  
             clmDate : "Date",    // BAK
-            clmCode: "Kodu",    // BAK
-            clmName : "Adı",               // BAK
-            clmAmount : "Tutar",    // BAK
-            clmDiscount : "İndirim",    // BAK
-            clmTotalHt : "Vergisiz Fiyat",    // BAK
-            clmVat : "Vergi",    // BAK
-            clmTotal : "Toplam",    // BAK
-            clmRef : "Seri-Sıra", // BAK
+            clmCode: "Code",    // BAK
+            clmName : "Nom",               // BAK
+            clmAmount : "Montant",    // BAK
+            clmDiscount : "Remise",    // BAK
+            clmTotalHt : "Prix HT",    // BAK
+            clmVat : "TVA",    // BAK
+            clmTotal : "TOTAL",    // BAK
+            clmRef : "Réf.-Réf no", // BAK
         },
     },
     slsRpt_01_004 : // "Tarih sıralı satış raporu"
     {
-        chkZeroBalance : "0 Bakiyeler Gösterilsin", // BAK
-        txtCustomerCode : "Cari", // BAK
-        btnCheck : "Aktif", // BAK
-        btnGet :"Getir", // BAK
+        chkZeroBalance : "Afficher Soldes 0", // BAK
+        txtCustomerCode : "Fournisseur ou Client", // BAK
+        btnCheck : "Actif", // BAK
+        btnGet :"Rechercher", // BAK
         grdListe :  // BAK
         { // BAK
             clmDate : "Date", // BAK
             clmTotalHt: "Total HT", // BAK
-            clmName : "Nome",            // BAK
+            clmName : "Nom",            // BAK
             clmTotal : "Total", // BAK
         },
     },
     slsRpt_02_001 : // "Tarih sıralı Alış raporu"
     {
-        chkZeroBalance : "0 Bakiyeler Gösterilsin",    // BAK
-        txtCustomerCode : "Cari",    // BAK
-        btnCheck : "Aktif",    // BAK
-        btnGet :"Getir",    // BAK
+        chkZeroBalance : "Afficher Soldes 0",    // BAK
+        txtCustomerCode : "Fournisseur ou Client",    // BAK
+        btnCheck : "Actif",    // BAK
+        btnGet :"Rechercher",    // BAK
         grdListe :     // BAK
         {  
             clmDate : "Date",    // BAK
-            clmCode: "Kodu",    // BAK
-            clmName : "Adı",               // BAK
-            clmAmount : "Tutar",    // BAK
-            clmDiscount : "İndirim",    // BAK
-            clmTotalHt : "Vergisiz Fiyat",    // BAK
-            clmVat : "Vergi",    // BAK
-            clmTotal : "Toplam",    // BAK
-            clmRef : "Seri-Sıra", // BAK
+            clmCode: "Code",    // BAK
+            clmName : "Nom",               // BAK
+            clmAmount : "Montant",    // BAK
+            clmDiscount : "Remise",    // BAK
+            clmTotalHt : "Prix HT",    // BAK
+            clmVat : "TVA",    // BAK
+            clmTotal : "Total",    // BAK
+            clmRef : "Réf.-Réf no", // BAK
         },
     },
     slsRpt_02_002 : // "DEB raporu"
     {
-        chkZeroBalance : "0 Bakiyeler Gösterilsin",      // BAK
-        txtCustomerCode : "Cari",      // BAK
-        btnCheck : "Aktif",      // BAK
-        btnGet :"Getir",      // BAK
+        chkZeroBalance : "Afficher Soldes 0",      // BAK
+        txtCustomerCode : "Fournisseur ou Client",      // BAK
+        btnCheck : "Actif",      // BAK
+        btnGet :"Rechercher",      // BAK
         grdListe :       // BAK
         {    
-            clmAdress : "Adres",      // BAK
-            clmCode: "Kodu",      // BAK
-            clmName : "Adı",                 // BAK
+            clmAdress : "Adresse",      // BAK
+            clmCode: "Code",      // BAK
+            clmName : "Nom",                 // BAK
             clmTotalHt : "Fac Total HT",  
             clmKg : "Kilogram",      // BAK
         },
