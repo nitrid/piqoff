@@ -2124,3 +2124,20 @@ Number.prototype.decimal = function()
 {    
     return new Intl.NumberFormat(localStorage.getItem('lang') == null ? 'en' : localStorage.getItem('lang'), { style: 'decimal',minimumIntegerDigits: 2,minimumFractionDigits: 2,maximumFractionDigits: 3}).format(this)
 }
+//* ROUND */
+Number.prototype.round = function(pDigits)
+{
+    let tmpNum = "1"
+    let tmpDigits = pDigits
+    if(typeof pDigits == 'undefined')
+    {
+        tmpDigits = 2
+    }
+
+    for (let i = 0; i < tmpDigits; i++) 
+    {
+        tmpNum = tmpNum + "0"
+    }
+    tmpNum = Number(tmpNum)
+    return Math.round((this + Number.EPSILON) * tmpNum) / tmpNum
+}
