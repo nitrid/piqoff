@@ -14,7 +14,6 @@ class mailer
         this.core = core.instance;
         this.connEvt = this.connEvt.bind(this)
         this.core.socket.on('connection',this.connEvt)
-
     }
     connEvt(pSocket)
     {
