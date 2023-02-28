@@ -310,7 +310,7 @@ export default class salesOrder extends React.PureComponent
             tmpDocItems.QUANTITY = pQuantity * this.txtFactor.value
             tmpDocItems.VAT_RATE = this.barcode.vat
             tmpDocItems.PRICE = this.txtPrice.value
-            tmpDocItems.VAT = this.txtVat.value
+            tmpDocItems.VAT = (parseFloat(this.txtVat.value).toFixed(2))
             tmpDocItems.AMOUNT = (this.txtPrice.value * (pQuantity * this.txtFactor.value)).toFixed(2)
             tmpDocItems.TOTAL = this.txtAmount.value
             this.docObj.docOrders.addEmpty(tmpDocItems)
