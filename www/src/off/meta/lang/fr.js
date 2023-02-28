@@ -4109,6 +4109,7 @@ export const langFr =
         txtTotalHt : "Total HT",
         txtDocNo : "Numéro de document", 
         extraCost : "Supplément",
+        cmbPriceContract : "Accord de prix",
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -9848,6 +9849,7 @@ export const langFr =
         txtTotalHt : "Total HT",
         txtDocNo : "Numéro de document", 
         extraCost : "Supplément", 
+        cmbPriceContract : "Accord de prix",
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -11984,6 +11986,7 @@ export const langFr =
         validMail : "Veuillez ne pas laisser le champs vide.",  
         txtTotalHt : "Total HT",
         txtDocNo : "Numéro de document", 
+        cmbPriceContract : "Accord de prix",
         pg_Docs : 
         {
             title : "Sélection Document",

@@ -546,9 +546,9 @@ export default class salesOrder extends React.PureComponent
         this.docObj.docOrders.dt()[pIndex].QUANTITY = pQuantity
         let tmpQuery = 
         {
-            query :"SELECT dbo.FN_PRICE_SALE_VAT_EXT(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,NULL) AS PRICE",
-            param : ['GUID:string|50','QUANTITY:float','CUSTOMER:string|50'],
-            value : [pData.GUID,pQuantity,this.docObj.dt()[0].INPUT]
+            query :"SELECT dbo.FN_PRICE_SALE_VAT_EXT(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,@CONTRACT_CODE) AS PRICE",
+            param : ['GUID:string|50','QUANTITY:float','CUSTOMER:string|50','CONTRACT_CODE:string|25'],
+            value : [pData.GUID,pQuantity,this.docObj.dt()[0].INPUT,this.cmbPriceContract.value]
         }
         let tmpData = await this.core.sql.execute(tmpQuery) 
         if(tmpData.result.recordset.length > 0)
@@ -1734,6 +1734,20 @@ export default class salesOrder extends React.PureComponent
                                 </Item>
                                 {/* Boş */}
                                 <EmptyItem />
+                                {/* cmbPriceContract */}
+                                <Item>
+                                    <Label text={this.t("cmbPriceContract")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbPriceContract" notRefresh={true}
+                                    displayExpr="NAME"
+                                    valueExpr="CODE"
+                                    value=""
+                                    searchEnabled={true}
+                                    data={{source:{select:{query : "SELECT CODE,NAME FROM CONTRACT_VW_01 WHERE CUSTOMER = '00000000-0000-0000-0000-000000000000' GROUP BY CODE,NAME ORDER BY CODE ASC"},sql:this.core.sql}}}
+                                    param={this.param.filter({ELEMENT:'cmbPriceContract',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'cmbPriceContract',USERS:this.user.CODE})}
+                                    >
+                                    </NdSelectBox>
+                                </Item>
                             </Form>
                         </div>
                     </div>
@@ -1987,9 +2001,9 @@ export default class salesOrder extends React.PureComponent
                                         {
                                             let tmpQuery = 
                                             {
-                                                query :"SELECT [dbo].[FN_PRICE_SALE_VAT_EXT](@ITEM_GUID,@QUANTITY,GETDATE(),@CUSTOMER_GUID,NULL) AS PRICE",
-                                                param : ['ITEM_GUID:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
-                                                value : [e.key.ITEM,this.docObj.dt()[0].INPUT,e.data.QUANTITY]
+                                                query :"SELECT [dbo].[FN_PRICE_SALE_VAT_EXT](@ITEM_GUID,@QUANTITY,GETDATE(),@CUSTOMER_GUID,@CONTRACT_CODE) AS PRICE",
+                                                param : ['ITEM_GUID:string|50','CUSTOMER_GUID:string|50','QUANTITY:float','CONTRACT_CODE:string|25'],
+                                                value : [e.key.ITEM,this.docObj.dt()[0].INPUT,e.data.QUANTITY,this.cmbPriceContract.value]
                                             }
                                             let tmpData = await this.core.sql.execute(tmpQuery) 
                                             if(tmpData.result.recordset.length > 0)
