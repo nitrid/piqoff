@@ -4112,6 +4112,7 @@ export const langTr =
         txtTotalHt : "İndirimli Tutar",
         txtDocNo : "Belgo No",
         extraCost : "Ek Maliyet",
+        cmbPriceContract : "Fiyat Anlaşması",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -9875,6 +9876,7 @@ export const langTr =
         txtTotalHt : "İndirimli Tutar",
         txtDocNo : "Belgo No",
         extraCost : "Ek Maliyet",
+        cmbPriceContract : "Fiyat Anlaşması",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -12011,6 +12013,7 @@ export const langTr =
         validMail : "Lütfen Boş Geçmeyin.",
         txtTotalHt : "İndirimli Tutar",
         txtDocNo : "Belgo No",
+        cmbPriceContract : "Fiyat Anlaşması",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
