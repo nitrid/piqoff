@@ -1690,12 +1690,6 @@ export default class salesOrder extends React.PureComponent
                                                         {
                                                             for (let i = 0; i < data.length; i++) 
                                                             {
-                                                                if(i == 0)
-                                                                {
-                                                                    await this.addItem(data[i],this.docObj.docOrders.dt().length -1)
-                                                                }
-                                                                else
-                                                                {
                                                                     let tmpdocOrders = {...this.docObj.docOrders.empty}
                                                                     tmpdocOrders.DOC_GUID = this.docObj.dt()[0].GUID
                                                                     tmpdocOrders.TYPE = this.docObj.dt()[0].TYPE
@@ -1710,8 +1704,7 @@ export default class salesOrder extends React.PureComponent
                                                                     this.txtRefno.readOnly = true
                                                                     this.docObj.docOrders.addEmpty(tmpdocOrders)
                                                                     await this.core.util.waitUntil(100)
-                                                                    await this.addItem(data[i],this.docObj.docOrders.dt().length-1)
-                                                                }
+                                                                    await this.addItem(data[i],this.docObj.docOrders.dt().length -1)
                                                             }
                                                         }
                                                     }

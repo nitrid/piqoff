@@ -150,7 +150,7 @@ export default class itemList extends React.PureComponent
                     select : 
                     {
                         query : "SELECT GUID,CDATE,CUSER,CUSER_NAME,LDATE,LUSER,LUSER_NAME,TYPE,SPECIAL,CODE,NAME,SNAME,VAT,COST_PRICE,MIN_PRICE,MAX_PRICE,STATUS,MAIN_GRP,MAIN_GRP_NAME,SUB_GRP,ORGINS,ITEMS_GRP_GUID,ORGINS_NAME,RAYON,SHELF,SECTOR, " +
-                                "SALE_JOIN_LINE,TICKET_REST,WEIGHING,MAX(BARCODE) AS BARCODE,MAX(BARCODE_GUID) AS BARCODE_GUID,UNIT_ID,UNIT_NAME,UNIT_FACTOR,MULTICODE,CUSTOMER_GUID,CUSTOMER_CODE,CUSTOMER_NAME,CUSTOMER_PRICE,PRICE_SALE, " +
+                                "SALE_JOIN_LINE,TICKET_REST,WEIGHING,MAX(BARCODE) AS BARCODE,MAX(BARCODE_GUID) AS BARCODE_GUID,UNIT_ID,UNIT_NAME,UNIT_FACTOR,MULTICODE,CUSTOMER_GUID,CUSTOMER_CODE,CUSTOMER_NAME,CUSTOMER_PRICE,PRICE_SALE,PRICE_SALE_VAT_EXT, " +
                                 "CASE WHEN PRICE_SALE <> 0 AND COST_PRICE <> 0 THEN  " +
                                 "CONVERT(nvarchar,ROUND((((PRICE_SALE / ((VAT / 100) + 1)) - COST_PRICE) / (COST_PRICE)) * 100,2)) + '% / €' + CONVERT(nvarchar,ROUND((PRICE_SALE / ((VAT / 100) + 1)) - COST_PRICE,2)) " +
                                 "ELSE '0'   " +
@@ -165,7 +165,7 @@ export default class itemList extends React.PureComponent
                                 "((MAIN_GRP = @MAIN_GRP) OR (@MAIN_GRP = '')) AND " +
                                 "((CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = '')) AND ((STATUS = @STATUS) OR (@STATUS = -1)) " +
                                 "GROUP BY GUID,CDATE,CUSER,CUSER_NAME,LDATE,LUSER,LUSER_NAME,TYPE,SPECIAL,CODE,NAME,SNAME,VAT,COST_PRICE,MIN_PRICE,MAX_PRICE,STATUS,MAIN_GRP,MAIN_GRP_NAME,SUB_GRP,ORGINS,ITEMS_GRP_GUID,ORGINS_NAME,RAYON,SHELF,SECTOR, " +
-                                "SALE_JOIN_LINE,TICKET_REST,WEIGHING,UNIT_ID,UNIT_NAME,UNIT_FACTOR,MULTICODE,CUSTOMER_GUID,CUSTOMER_CODE,CUSTOMER_NAME,CUSTOMER_PRICE,PRICE_SALE ",
+                                "SALE_JOIN_LINE,TICKET_REST,WEIGHING,UNIT_ID,UNIT_NAME,UNIT_FACTOR,MULTICODE,CUSTOMER_GUID,CUSTOMER_CODE,CUSTOMER_NAME,CUSTOMER_PRICE,PRICE_SALE,PRICE_SALE_VAT_EXT ",
                         param : ['NAME:string|250','MAIN_GRP:string|25','CUSTOMER_CODE:string|25','STATUS:int'],
                         value : [this.txtUrunAdi.value.replaceAll("*", "%"),this.cmbUrunGrup.value,this.cmbTedarikci.value,tmpStatus]
                     },
@@ -261,7 +261,7 @@ export default class itemList extends React.PureComponent
                     select : 
                     {
                         query : "SELECT GUID,CDATE,CUSER,CUSER_NAME,LDATE,LUSER,LUSER_NAME,TYPE,SPECIAL,CODE,NAME,SNAME,VAT,COST_PRICE,MIN_PRICE,MAX_PRICE,STATUS,MAIN_GRP,MAIN_GRP_NAME,SUB_GRP,ORGINS,ITEMS_GRP_GUID,ORGINS_NAME,RAYON,SHELF,SECTOR, "  +
-                                "SALE_JOIN_LINE,TICKET_REST,WEIGHING,MAX(BARCODE) AS BARCODE,MAX(BARCODE_GUID) AS BARCODE_GUID,UNIT_ID,UNIT_NAME,UNIT_FACTOR," +
+                                "SALE_JOIN_LINE,TICKET_REST,WEIGHING,MAX(BARCODE) AS BARCODE,MAX(BARCODE_GUID) AS BARCODE_GUID,UNIT_ID,UNIT_NAME,UNIT_FACTOR,PRICE_SALE_VAT_EXT," +
                                 "ISNULL((SELECT TOP 1 MULTICODE FROM ITEMS_BARCODE_MULTICODE_VW_01 AS ITEMS WHERE ITEMS.MULTICODE_LDATE = MAX(ITEMS_BARCODE_MULTICODE_VW_01.MULTICODE_LDATE) AND ITEMS.GUID = ITEMS_BARCODE_MULTICODE_VW_01.GUID),'') AS MULTICODE," +
                                 "ISNULL((SELECT TOP 1 CUSTOMER_CODE FROM ITEMS_BARCODE_MULTICODE_VW_01 AS ITEMS WHERE ITEMS.MULTICODE_LDATE = MAX(ITEMS_BARCODE_MULTICODE_VW_01.MULTICODE_LDATE) AND ITEMS.GUID = ITEMS_BARCODE_MULTICODE_VW_01.GUID),'') AS CUSTOMER_CODE," +
                                 "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEMS_BARCODE_MULTICODE_VW_01 AS ITEMS WHERE ITEMS.MULTICODE_LDATE = MAX(ITEMS_BARCODE_MULTICODE_VW_01.MULTICODE_LDATE) AND ITEMS.GUID = ITEMS_BARCODE_MULTICODE_VW_01.GUID),'') AS CUSTOMER_NAME," +
@@ -281,7 +281,7 @@ export default class itemList extends React.PureComponent
                                 "((MAIN_GRP = @MAIN_GRP) OR (@MAIN_GRP = '')) AND " +
                                 "((CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = '')) AND ((STATUS = @STATUS) OR (@STATUS = -1)) " +
                                 "GROUP BY GUID,CDATE,CUSER,CUSER_NAME,LDATE,LUSER,LUSER_NAME,TYPE,SPECIAL,CODE,NAME,SNAME,VAT,COST_PRICE,MIN_PRICE,MAX_PRICE,STATUS,MAIN_GRP,MAIN_GRP_NAME,SUB_GRP,ORGINS,ITEMS_GRP_GUID,ORGINS_NAME,RAYON,SHELF,SECTOR,  " +
-                                "SALE_JOIN_LINE,TICKET_REST,WEIGHING,UNIT_ID,UNIT_NAME,UNIT_FACTOR,PRICE_SALE ",
+                                "SALE_JOIN_LINE,TICKET_REST,WEIGHING,UNIT_ID,UNIT_NAME,UNIT_FACTOR,PRICE_SALE,PRICE_SALE_VAT_EXT",
                         param : ['NAME:string|250','MAIN_GRP:string|25','CUSTOMER_CODE:string|25','STATUS:int'],
                         value : [this.txtUrunAdi.value.replaceAll("*", "%"),this.cmbUrunGrup.value,this.cmbTedarikci.value,tmpStatus]
                     },
@@ -659,8 +659,9 @@ export default class itemList extends React.PureComponent
                                 <Column dataField="SNAME" caption={this.t("grdListe.clmSname")} visible={false}/> 
                                 <Column dataField="MAIN_GRP_NAME" caption={this.t("grdListe.clmMainGrp")} visible={true}/> 
                                 <Column dataField="VAT" caption={this.t("grdListe.clmVat")} visible={true}/> 
-                                <Column dataField="PRICE_SALE" caption={this.t("grdListe.clmPriceSale")} visible={true}/> 
-                                <Column dataField="CUSTOMER_PRICE" caption={this.t("grdListe.clmCustomerPrice")} visible={true}/> 
+                                <Column dataField="PRICE_SALE_VAT_EXT" caption={this.t("grdListe.clmPriceSaleVatExt")} format={{ style: "currency", currency: "EUR",precision: 2}} visible={true}/> 
+                                <Column dataField="PRICE_SALE" caption={this.t("grdListe.clmPriceSale")} format={{ style: "currency", currency: "EUR",precision: 2}} visible={true}/> 
+                                <Column dataField="CUSTOMER_PRICE" caption={this.t("grdListe.clmCustomerPrice")} visible={true} format={{ style: "currency", currency: "EUR",precision: 2}}/> 
                                 <Column dataField="COST_PRICE" caption={this.t("grdListe.clmCostPrice")} visible={false}/> 
                                 <Column dataField="MARGIN" caption={this.t("grdListe.clmMargin")} visible={false}/> 
                                 <Column dataField="NETMARGIN" caption={this.t("grdListe.clmNetMargin")} visible={false}/> 
