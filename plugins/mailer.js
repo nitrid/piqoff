@@ -34,7 +34,7 @@ class mailer
                 secure: true,
                 auth: {
                   user: "",
-                  pass: "" 
+                  pass: ""
                 },
                 tls : { rejectUnauthorized: false }
               });
