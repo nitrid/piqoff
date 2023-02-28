@@ -37,7 +37,7 @@ export default class wholeCollectionEntry extends React.PureComponent
         this.tabIndex = props.data.tabkey
         this.payDt = new datatable()
 
-        this._cellRoleRender = this._cellRoleRender.bind(this)
+        this._cellRoleRender = this._cellRoleRender.bind(this)        
     }
     async componentDidMount()
     {
