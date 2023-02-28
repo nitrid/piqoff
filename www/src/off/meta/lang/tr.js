@@ -12526,6 +12526,7 @@ export const langTr =
             clmCostPrice : "Maliyet",
             clmMulticode : "T.Kodu",
             clmUnit : "Birim",
+            clmUnitPrice : "Birim Fiyat"
         },
         popItems: 
         {
@@ -12693,6 +12694,7 @@ export const langTr =
             clmVatExtPrice : "KDV Hariç",
             clmCostPrice : "Maliyet",
             clmUnit : "Birim",
+            clmUnitPrice : "Birim Fiyat"
         },
         popItems: 
         {
