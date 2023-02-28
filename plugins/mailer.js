@@ -25,7 +25,6 @@ class mailer
     }
     mailSend(pData)
     {
-        console.log(pData.html)
         return new Promise(resolve =>
         {
             var transporter = nodemailer.createTransport({
@@ -34,13 +33,13 @@ class mailer
                 port: 465,
                 secure: true,
                 auth: {
-                  user: "receeep7@gmail.com",
-                  pass: "hkinpyynhwfvswyd"
+                  user: "",
+                  pass: ""
                 },
                 tls : { rejectUnauthorized: false }
               });
               var mailOptions = {
-                from: "receeep7@gmail.com",
+                from: "",
                 to: pData.sendMail,
                 subject: pData.subject,
                 html:pData.html,

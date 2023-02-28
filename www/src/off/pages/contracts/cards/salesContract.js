@@ -163,6 +163,8 @@ export default class salesContract extends React.PureComponent
         this.contractObj.addEmpty(tmpEmpty);
         this._calculateMargin()
         App.instance.setState({isExecute:false})
+        this.btnSave.setState({disabled:false});
+
     }
     async multiItemAdd()
     {
@@ -295,6 +297,16 @@ export default class salesContract extends React.PureComponent
             this.contractObj.dt()[i].MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
         }
     }
+    async checkRow()
+    {
+        for (let i = 0; i < this.contractObj.dt().length; i++) 
+        {
+            this.contractObj.dt()[i].INPUT = this.contractObj.dt()[0].INPUT
+            this.contractObj.dt()[i].OUTPUT = this.contractObj.dt()[0].OUTPUT
+            this.contractObj.dt()[i].DOC_DATE = this.contractObj.dt()[0].DOC_DATE
+            this.contractObj.dt()[i].SHIPMENT_DATE = this.contractObj.dt()[0].SHIPMENT_DATE
+        }
+    }
     _cellRoleRender(e)
     {
         if(e.column.dataField == "UNIT_NAME")
@@ -328,13 +340,22 @@ export default class salesContract extends React.PureComponent
                                     this.txtUnitFactor.value = e.data.UNIT_FACTOR
                                     this.txtTotalQuantity.value = e.data.QUANTITY
                                     this.txtUnitQuantity.value = e.data.QUANTITY / e.data.UNIT_FACTOR
-                                    this.txtUnitPrice.value = parseFloat((e.data.PRICE * e.data.UNIT_FACTOR).toFixed(3))
+                                    if(this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].TYPE == 1)
+                                    {
+                                        this.txtUnitPrice.value = parseFloat((e.data.PRICE_VAT_EXT / e.data.UNIT_FACTOR).toFixed(3))
+                                    }
+                                    else
+                                    {
+                                        this.txtUnitPrice.value = parseFloat((e.data.PRICE_VAT_EXT * e.data.UNIT_FACTOR).toFixed(3))
+                                    }
+                                   
                                 }
                                 await this.msgUnit.show().then(async () =>
                                 {
                                     e.key.UNIT = this.cmbUnit.value
                                     e.key.UNIT_NAME = this.cmbUnit.displayValue
                                     e.key.UNIT_FACTOR = this.txtUnitFactor.value
+                                    e.key.UNIT_PRICE = this.txtUnitPrice.value
                                     if(this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].TYPE == 1)
                                     {
                                         e.data.PRICE = parseFloat(((this.txtUnitPrice.value * this.txtUnitFactor.value) * ((e.data.VAT_RATE / 100) + 1)))
@@ -347,6 +368,7 @@ export default class salesContract extends React.PureComponent
                                         e.data.PRICE_VAT_EXT = parseFloat((this.txtUnitPrice.value / this.txtUnitFactor.value))
                                     }
                                     e.data.QUANTITY = this.txtTotalQuantity.value
+                                    this.btnSave.setState({disabled:false});
                                 });  
                             }
                         },
@@ -572,6 +594,7 @@ export default class salesContract extends React.PureComponent
                                     searchEnabled={true}
                                     onValueChanged={(async()=>
                                         {
+                                            this.checkRow()
                                         }).bind(this)}
                                     data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01 WHERE TYPE IN (0,2) AND STATUS = 1"},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
@@ -690,7 +713,8 @@ export default class salesContract extends React.PureComponent
                                     <NdDatePicker simple={true}  parent={this} id={"startDate"}
                                     dt={{data:this.contractObj.dt('CONTRACT'),field:"START_DATE"}}
                                     onValueChanged={(async()=>
-                                        {
+                                    {
+                                        this.checkRow()
                                     }).bind(this)}
                                     >
                                         < Validator validationGroup={"frmPurcContract"  + this.tabIndex}>
@@ -705,6 +729,7 @@ export default class salesContract extends React.PureComponent
                                     dt={{data:this.contractObj.dt('CONTRACT'),field:"FINISH_DATE"}}
                                     onValueChanged={(async()=>
                                     {
+                                        this.checkRow()
                                     }).bind(this)}
                                     >
                                         < Validator validationGroup={"frmPurcContract"  + this.tabIndex}>
@@ -796,7 +821,7 @@ export default class salesContract extends React.PureComponent
                                     allowColumnReordering={true} 
                                     allowColumnResizing={true} 
                                     filterRow={{visible:true}}
-                                    height={'400'} 
+                                    height={'700'} 
                                     width={'100%'}
                                     dbApply={false}
                                     onRowUpdated={async(e)=>
@@ -824,10 +849,11 @@ export default class salesContract extends React.PureComponent
                                         <Column dataField="ITEM_CODE" caption={this.t("grdContracts.clmItemCode")} width={150} allowEditing={false}/>
                                         <Column dataField="ITEM_NAME" caption={this.t("grdContracts.clmItemName")} width={300} allowEditing={false}/>
                                         <Column dataField="MAIN_GRP_NAME" caption={this.t("grdContracts.clmGrpName")} width={150} allowEditing={false}/>
-                                        <Column dataField="UNIT_NAME" caption={this.t("grdContracts.clmUnit")} width={100} editCellRender={this._cellRoleRender}/>
                                         <Column dataField="COST_PRICE" caption={this.t("grdContracts.clmCostPrice")} width={80} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>
-                                        <Column dataField="PRICE" caption={this.t("grdContracts.clmPrice")} dataType={'number'} width={80} format={{ style: "currency", currency: "EUR",precision: 2}}/>
-                                        <Column dataField="PRICE_VAT_EXT" caption={this.t("grdContracts.clmVatExtPrice")} width={80} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}} />
+                                        <Column dataField="PRICE_VAT_EXT" caption={this.t("grdContracts.clmVatExtPrice")} width={80} allowEditing={false} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}} />
+                                        <Column dataField="PRICE" caption={this.t("grdContracts.clmPrice")} dataType={'number'} allowEditing={false} width={80} format={{ style: "currency", currency: "EUR",precision: 2}}/>
+                                        <Column dataField="UNIT_NAME" caption={this.t("grdContracts.clmUnit")} width={100} editCellRender={this._cellRoleRender}/>
+                                        <Column dataField="UNIT_PRICE" caption={this.t("grdContracts.clmUnitPrice")} allowEditing={false} dataType={'number'} width={80} format={{ style: "currency", currency: "EUR",precision: 2}}/>
                                         <Column dataField="QUANTITY" caption={this.t("grdContracts.clmQuantity")} width={80} dataType={'number'}/>
                                         <Column dataField="MARGIN" caption={this.t("grdContracts.clmMargin")} width={80} allowEditing={false}/>
                                         <Column dataField="START_DATE" caption={this.t("grdContracts.clmStartDate")} dataType={'date'} visible={false}
@@ -1233,6 +1259,10 @@ export default class salesContract extends React.PureComponent
                                 <Label text={this.t("txtUnitPrice")} alignment="right" />
                                 <NdNumberBox id="txtUnitPrice" parent={this} simple={true} 
                                 maxLength={32}
+                                onEnterKey={(async(e)=>
+                                    {
+                                        this.msgUnit._onClick()
+                                    }).bind(this)}
                                 >
                                 </NdNumberBox>
                             </Item>

@@ -12488,17 +12488,18 @@ export const langFr =
         {
             clmItemCode: "Code",
             clmItemName: "Nom",
-            clmPrice: "Prix ",
+            clmPrice: "Prix TTC",
             clmQuantity : "Quantité",
             clmStartDate : "Début ",
             clmFinishDate : "Fin ",
             clmCreateDate: "Date d'Enregistrement",
             clmDepotName : "Réserve",
             clmMargin :"Marge", 
-            clmVatExtPrice : "Hors Taxe", 
+            clmVatExtPrice : "Prix HT", 
             clmCostPrice : "Coût", 
             clmMulticode : "FRN. Code" ,
             clmUnit : "Unité",
+            clmUnitPrice : "Unit Prix HT"
         },
         popItems: 
         {
@@ -12656,16 +12657,17 @@ export const langFr =
             clmItemCode: "Code",
             clmItemName: "Nom",
             clmGrpName: "Groupe",
-            clmPrice: "Prix ",
+            clmPrice: "Prix TTC",
             clmQuantity : "Quantité",
             clmStartDate : "Début ",
             clmFinishDate : "Fin ",
             clmCreateDate: "Date d'Enregistrement",
             clmDepotName : "Réserve",
             clmMargin :"Marge", 
-            clmVatExtPrice : "Hors Taxe", 
+            clmVatExtPrice : "Prix HT", 
             clmCostPrice : "Coût", 
             clmUnit : "Unité",
+            clmUnitPrice : "Unit Prix HT"
         },
         popItems: 
         {

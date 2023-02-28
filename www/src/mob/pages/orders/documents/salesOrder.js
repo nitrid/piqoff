@@ -181,6 +181,7 @@ export default class salesOrder extends React.PureComponent
             value : [this.barcode.guid,this.cmbPriceContract.value]
         }
         
+        console.log(this.cmbPriceContract.value)
         let tmpData = await this.core.sql.execute(tmpQuery) 
 
         if(tmpData.result.recordset.length > 0)
