@@ -38,8 +38,6 @@ export default class wholeCollectionEntry extends React.PureComponent
         this.payDt = new datatable()
 
         this._cellRoleRender = this._cellRoleRender.bind(this)
-
-        console.log(moment(44902))
     }
     async componentDidMount()
     {
@@ -118,6 +116,11 @@ export default class wholeCollectionEntry extends React.PureComponent
         {
             if(typeof pData[i][tmpShema.AMOUNT] != 'undefined' && pData[i][tmpShema.AMOUNT] > 0)
             {
+                if(typeof pData[i][tmpShema.DATE] == 'number')
+                {
+                    pData[i][tmpShema.DATE] = new Date((pData[i][tmpShema.DATE] - (25567 + 2))*86400*1000)
+                }
+                
                 let tmpData =
                 {
                     DOC_DATE : pData[i][tmpShema.DATE],
