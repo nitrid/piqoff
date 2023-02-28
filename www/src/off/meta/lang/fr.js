@@ -12413,7 +12413,7 @@ export const langFr =
     cnt_02_001 : // "Alış Anlaşması"
     {
         cmbDepot: "Réserve",
-        txtCustomerCode : "Sélection Document",
+        txtCustomerCode : "Sélection Fournisseur",
         txtCustomerName : "Nom fournisseur",
         pg_Docs : 
         {
@@ -12583,7 +12583,7 @@ export const langFr =
     {
         validDate : "Sélection Date.",
         cmbDepot: "Réserve",
-        txtCustomerCode : "Sélection Document",
+        txtCustomerCode : "Sélection Client",
         txtCustomerName : "Nom Client",
         validItemsCode : "Sélectionner Produit",
         pg_Docs :      
