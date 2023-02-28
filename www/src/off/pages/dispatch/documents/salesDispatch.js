@@ -2394,7 +2394,7 @@ export default class salesDispatch extends React.PureComponent
                                         <Column dataField="CUSER_NAME" caption={this.t("grdSlsDispatch.clmCuser")} width={90} allowEditing={false}/>
                                         <Column dataField="ITEM_CODE" caption={this.t("grdSlsDispatch.clmItemCode")} width={105} editCellRender={this._cellRoleRender}/>
                                         <Column dataField="ITEM_NAME" caption={this.t("grdSlsDispatch.clmItemName")} width={240} />
-                                        <Column dataField="ORIGIN" caption={this.t("grdSlsInv.clmOrigin")} width={60} allowEditing={true} />
+                                        <Column dataField="ORIGIN" caption={this.t("grdSlsDispatch.clmOrigin")} width={60} allowEditing={true} />
                                         <Column dataField="ITEM_BARCODE" caption={this.t("grdSlsDispatch.clmBarcode")} width={115} allowEditing={false}/>
                                         <Column dataField="QUANTITY" caption={this.t("grdSlsDispatch.clmQuantity")} width={70} editCellRender={this._cellRoleRender} dataType={'number'}/>
                                         <Column dataField="PRICE" caption={this.t("grdSlsDispatch.clmPrice")} width={70} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
