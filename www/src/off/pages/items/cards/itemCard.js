@@ -30,7 +30,7 @@ export default class itemCard extends React.PureComponent
     {
         console.log("1 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
         super(props)                
-        this.state = {underPrice : 0,isItemGrpForOrginsValid : false,isItemGrpForMinMaxAccess : false,isTaxSugar : false}
+        this.state = {underPrice : "",isItemGrpForOrginsValid : false,isItemGrpForMinMaxAccess : false,isTaxSugar : false}
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
 
@@ -506,7 +506,16 @@ export default class itemCard extends React.PureComponent
         {
             let tmpPrice = typeof this.itemsObj.itemPrice.dt().find(x => x.TYPE == 0 && x.QUANTITY == 1) != 'undefined' ? this.itemsObj.itemPrice.dt().find(x => x.TYPE == 0 && x.QUANTITY == 1).PRICE : 0;
             let tmpFactor = typeof this.itemsObj.itemUnit.dt().find(x => x.TYPE == 1) != 'undefined' ? this.itemsObj.itemUnit.dt().find(x => x.TYPE == 1).FACTOR : 0;
-            this.setState({underPrice: (tmpPrice / tmpFactor).toFixed(2)});
+            let tmpExVat = Number(tmpPrice).rateInNum(this.itemsObj.dt("ITEMS")[0].VAT,2)
+
+            if(tmpPrice > 0 && tmpFactor > 0)
+            {
+                this.setState({underPrice: (tmpExVat / tmpFactor).toFixed(2) + " € HT / " + (tmpPrice / tmpFactor).toFixed(2) + " € TTC"});
+            }
+            else
+            {
+                this.setState({underPrice: "0 € HT / 0 € TTC" });
+            }
         }
     }
     async grossMargin()
@@ -1292,7 +1301,7 @@ export default class itemCard extends React.PureComponent
                                             access={this.access.filter({ELEMENT:'cmbMainUnit',USERS:this.user.CODE})}
                                             />
                                         </div>
-                                        <div className="col-5 ps-0">
+                                        <div className="col-4 ps-0">
                                             <NdNumberBox id="txtMainUnit" parent={this} simple={true} tabIndex={this.tabIndex} style={{borderTopLeftRadius:'0px',borderBottomLeftRadius:'0px'}} 
                                             showSpinButtons={true} step={1.0} format={"###.000"}
                                             dt={{data:this.itemsObj.dt('ITEM_UNIT'),field:"FACTOR",filter:{TYPE:0}}}
@@ -1341,7 +1350,7 @@ export default class itemCard extends React.PureComponent
                                             access={this.access.filter({ELEMENT:'cmbUnderUnit',USERS:this.user.CODE})}
                                             />
                                         </div>
-                                        <div className="col-5 ps-0">
+                                        <div className="col-4 ps-0">
                                             <NdNumberBox id="txtUnderUnit" parent={this} simple={true} tabIndex={this.tabIndex} style={{borderTopLeftRadius:'0px',borderBottomLeftRadius:'0px'}} 
                                             showSpinButtons={true} step={0.1} format={"##0.000"}
                                             dt={{id:"txtUnderUnit",data:this.itemsObj.dt('ITEM_UNIT'),field:"FACTOR",filter:{TYPE:1}}}
@@ -1349,8 +1358,8 @@ export default class itemCard extends React.PureComponent
                                             access={this.access.filter({ELEMENT:'txtUnderUnit',USERS:this.user.CODE})}>
                                             </NdNumberBox>
                                         </div>
-                                        <div className="col-3 pe-0">
-                                            <div className="dx-field-label" style={{width:"100%"}}>{this.state.underPrice} €</div>
+                                        <div className="col-4 pe-0">
+                                            <div className="dx-field-label" style={{width:"100%"}}>{this.state.underPrice}</div>
                                         </div>
                                     </div>                                     
                                 </Item>   
