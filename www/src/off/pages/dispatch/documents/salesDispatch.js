@@ -1905,11 +1905,25 @@ export default class salesDispatch extends React.PureComponent
                                         let tmpData = await this.core.sql.execute(tmpQuery) 
                                         if(tmpData.result.recordset.length > 0)
                                         {
+                                            this.txtPopQteUnitQuantity.value = 1
                                             this.txtPopQuantity.value = 1
                                             setTimeout(async () => 
                                             {
-                                               this.txtPopQuantity.focus()
+                                                this.txtPopQuantity.focus()
                                             }, 700);
+                                            let tmpUnitQuery = 
+                                            {
+                                                query: "SELECT GUID,ISNULL((SELECT NAME FROM UNIT WHERE UNIT.ID = ITEM_UNIT.ID),'') AS NAME,FACTOR,TYPE FROM ITEM_UNIT WHERE DELETED = 0 AND ITEM = @ITEM ORDER BY TYPE" ,
+                                                param:  ['ITEM:string|50'],
+                                                value:  [tmpData.result.recordset[0].GUID]
+                                            }
+                                            let tmpUnitData = await this.core.sql.execute(tmpUnitQuery) 
+                                            if(tmpUnitData.result.recordset.length > 0)
+                                            {   
+                                                this.cmbPopQteUnit.setData(tmpUnitData.result.recordset)
+                                                this.cmbPopQteUnit.value = tmpData.result.recordset[0].UNIT
+                                                this.txtPopQteUnitFactor.value = 1
+                                            }
                                             await this.msgQuantity.show().then(async (e) =>
                                             {
                                                 let tmpDocItems = {...this.docObj.docItems.empty}
@@ -1929,7 +1943,7 @@ export default class salesDispatch extends React.PureComponent
                                                 this.docObj.docItems.addEmpty(tmpDocItems)
                                                 await this.core.util.waitUntil(100)
                                             });
-                                            this.addItem(tmpData.result.recordset[0],(typeof this.docObj.docItems.dt()[0] == 'undefined' ? 0 : this.docObj.docItems.dt().length-1),this.txtPopQuantity.value)
+                                            this.addItem(tmpData.result.recordset[0],(typeof this.docObj.docItems.dt()[0] == 'undefined' ? 0 : this.docObj.docItems.dt().length-1),this.txtPopQteUnitQuantity.value)
                                             this.txtBarcode.focus()
                                         }
                                         else
@@ -1938,60 +1952,75 @@ export default class salesDispatch extends React.PureComponent
                                             this.pg_txtItemsCode.show()
                                             this.pg_txtItemsCode.onClick = async(data) =>
                                             {
-                                                let tmpDocItems = {...this.docObj.docItems.empty}
-                                                tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
-                                                tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
-                                                tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                                                tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
-                                                tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
-                                                tmpDocItems.REF = this.docObj.dt()[0].REF
-                                                tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
-                                                tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
-                                                tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
-                                                tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                                                tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
-                                                this.txtRef.readOnly = true
-                                                this.txtRefno.readOnly = true
-                                                this.docObj.docItems.addEmpty(tmpDocItems)
-                                                await this.core.util.waitUntil(100)
-                                                this.customerControl = true
-                                                this.customerClear = false
                                                 this.combineControl = true
                                                 this.combineNew = false
+
                                                 if(data.length > 0)
                                                 {
                                                     if(data.length == 1)
                                                     {
-                                                        await this.addItem(data[0],this.docObj.docItems.dt().length -1)
+                                                        this.txtPopQteUnitQuantity.value = 1
+                                                        this.txtPopQuantity.value = 1
+                                                        setTimeout(async () => 
+                                                        {
+                                                            this.txtPopQuantity.focus()
+                                                        }, 700);
+                                                        let tmpUnitQuery = 
+                                                        {
+                                                            query: "SELECT GUID,ISNULL((SELECT NAME FROM UNIT WHERE UNIT.ID = ITEM_UNIT.ID),'') AS NAME,FACTOR,TYPE FROM ITEM_UNIT WHERE DELETED = 0 AND ITEM = @ITEM ORDER BY TYPE" ,
+                                                            param:  ['ITEM:string|50'],
+                                                            value:  [data[0].GUID]
+                                                        }
+                                                        let tmpUnitData = await this.core.sql.execute(tmpUnitQuery) 
+                                                        if(tmpUnitData.result.recordset.length > 0)
+                                                        {   
+                                                            this.cmbPopQteUnit.setData(tmpUnitData.result.recordset)
+                                                            this.cmbPopQteUnit.value = data[0].UNIT
+                                                            this.txtPopQteUnitFactor.value = 1
+                                                        }
+                                                        await this.msgQuantity.show().then(async (e) =>
+                                                        {
+                                                            let tmpDocItems = {...this.docObj.docItems.empty}
+                                                            tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+                                                            tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+                                                            tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                                            tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
+                                                            tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
+                                                            tmpDocItems.REF = this.docObj.dt()[0].REF
+                                                            tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+                                                            tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                                            tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+                                                            tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                                                            tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
+                                                            this.txtRef.readOnly = true
+                                                            this.txtRefno.readOnly = true
+                                                            this.docObj.docItems.addEmpty(tmpDocItems)
+                                                            await this.core.util.waitUntil(100)
+                                                            await this.addItem(data[0],this.docObj.docItems.dt().length -1,this.txtPopQteUnitQuantity.value)
+                                                        });
                                                     }
                                                     else if(data.length > 1)
                                                     {
                                                         for (let i = 0; i < data.length; i++) 
                                                         {
-                                                            if(i == 0)
-                                                            {
-                                                                await this.addItem(data[i],this.docObj.docItems.dt().length -1)
-                                                            }
-                                                            else
-                                                            {
-                                                                let tmpDocItems = {...this.docObj.docItems.empty}
-                                                                tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
-                                                                tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
-                                                                tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                                                                tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
-                                                                tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
-                                                                tmpDocItems.REF = this.docObj.dt()[0].REF
-                                                                tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
-                                                                tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
-                                                                tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
-                                                                tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                                                                tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
-                                                                this.txtRef.readOnly = true
-                                                                this.txtRefno.readOnly = true
-                                                                this.docObj.docItems.addEmpty(tmpDocItems)
-                                                                await this.core.util.waitUntil(100)
-                                                                await this.addItem(data[i],this.docObj.docItems.dt().length-1)
-                                                            }
+                                                        
+                                                            let tmpDocItems = {...this.docObj.docItems.empty}
+                                                            tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+                                                            tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+                                                            tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                                            tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
+                                                            tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
+                                                            tmpDocItems.REF = this.docObj.dt()[0].REF
+                                                            tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+                                                            tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                                            tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+                                                            tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                                                            tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
+                                                            this.txtRef.readOnly = true
+                                                            this.txtRefno.readOnly = true
+                                                            this.docObj.docItems.addEmpty(tmpDocItems)
+                                                            await this.core.util.waitUntil(100)
+                                                            await this.addItem(data[i],this.docObj.docItems.dt().length-1)
                                                         }
                                                     }
                                                 }
@@ -3169,14 +3198,14 @@ export default class salesDispatch extends React.PureComponent
                         <Column dataField="NAME" caption={this.t("pg_txtBarcode.clmName")} width={300} defaultSortOrder="asc" />
                         <Column dataField="MULTICODE" caption={this.t("pg_txtBarcode.clmMulticode")} width={200}/>
                     </NdPopGrid>
-                     {/* Miktar Dialog  */}
+                    {/* Miktar Dialog  */}
                     <NdDialog id={"msgQuantity"} container={"#root"} parent={this}
                         position={{of:'#root'}} 
                         showTitle={true} 
                         title={this.t("msgQuantity.title")} 
                         showCloseButton={false}
-                        width={"350px"}
-                        height={"250px"}
+                        width={"400px"}
+                        height={"410px"}
                         button={[{id:"btn01",caption:this.t("msgQuantity.btn01"),location:'after'}]}
                         >
                             <div className="row">
@@ -3185,16 +3214,68 @@ export default class salesDispatch extends React.PureComponent
                                 </div>
                                 <div className="col-12 py-2">
                                 <Form>
+                                    {/* checkCustomer */}
                                     <Item>
                                         <Label text={this.t("txtQuantity")} alignment="right" />
-                                        <NdNumberBox id="txtPopQuantity" parent={this} simple={true}  
-                                        onEnterKey={(async(e)=>
+                                        <NdNumberBox id="txtPopQuantity" parent={this} simple={true} 
+                                         onEnterKey={(async(e)=>
                                         {
                                             this.msgQuantity._onClick()
+                                        }).bind(this)} 
+                                        onValueChanged={(async(e)=>
+                                        {
+                                            if(this.cmbPopQteUnit.data.datatable.where({'GUID':this.cmbPopQteUnit.value})[0].TYPE == 1)
+                                            {
+                                                this.txtPopQteUnitQuantity.value = Number((this.txtPopQuantity.value / this.txtPopQteUnitFactor.value).toFixed(3))
+                                            }
+                                            else
+                                            {
+                                                this.txtPopQteUnitQuantity.value = Number((this.txtPopQuantity.value * this.txtPopQteUnitFactor.value).toFixed(3))
+                                            };
                                         }).bind(this)}
                                         >
                                     </NdNumberBox>
                                     </Item>
+                                    <Item>
+                                    <NdSelectBox simple={true} parent={this} id="cmbPopQteUnit"
+                                        displayExpr="NAME"                       
+                                        valueExpr="GUID"
+                                        value=""
+                                        searchEnabled={true}
+                                        onValueChanged={(async(e)=>
+                                        {
+                                            this.txtPopQteUnitFactor.setState({value:this.cmbPopQteUnit.data.datatable.where({'GUID':this.cmbPopQteUnit.value})[0].FACTOR});
+                                            if(this.cmbPopQteUnit.data.datatable.where({'GUID':this.cmbPopQteUnit.value})[0].TYPE == 1)
+                                            {
+                                                this.txtPopQteUnitQuantity.value = Number((this.txtPopQuantity.value / this.txtPopQteUnitFactor.value).toFixed(3))
+                                            }
+                                            else
+                                            {
+                                                this.txtPopQteUnitQuantity.value = Number((this.txtPopQuantity.value * this.txtPopQteUnitFactor.value).toFixed(3))
+                                            };
+                                        }).bind(this)}
+                                        >
+                                    </NdSelectBox>
+                                    </Item>
+                                    <Item>
+                                    <Label text={this.t("txtUnitFactor")} alignment="right" />
+                                    <NdNumberBox id="txtPopQteUnitFactor" parent={this} simple={true}
+                                    readOnly={true}
+                                    maxLength={32}
+                                    >
+                                    </NdNumberBox>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("txtTotalQuantity")} alignment="right" />
+                                    <NdNumberBox id="txtPopQteUnitQuantity" parent={this} simple={true} readOnly={true}
+                                    maxLength={32}
+                                    onValueChanged={(async(e)=>
+                                    {
+                                       
+                                    }).bind(this)}
+                                    >
+                                    </NdNumberBox>
+                                </Item>
                                 </Form>
                             </div>
                             </div>
@@ -3202,7 +3283,7 @@ export default class salesDispatch extends React.PureComponent
                             
                             </div>
                         
-                    </NdDialog>   
+                    </NdDialog>  
                     {/* Sipariş Grid */}
                     <NdPopGrid id={"pg_ordersGrid"} parent={this} container={"#root"}
                     visible={false}

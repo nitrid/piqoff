@@ -2433,7 +2433,7 @@ export const langFr =
             clmUnit : "Unité",
             clmBarcode : "Code barre",
             clmCostPrice : "Prix de Revient",
-            clmPriceSale : "Prix Vente",
+            clmPriceSale : "Prix TTC",
             clmVat : "Taxe",
             clmMinPrice : "Prix Min",
             clmMaxPrice : "Prix Max",
@@ -2441,7 +2441,8 @@ export const langFr =
             clmNetMargin : "Marge Nette",
             clmMargin : "Marge Brute",
             clmCustomerPrice : "Prix Fournisseur",
-            clmOrgin : "Origine" 
+            clmOrgin : "Origine" ,
+            clmPriceSaleVatExt : "Prix HT"
         },
     },
     stk_03_002 :   //"Fiyat Listesi"

@@ -2224,119 +2224,153 @@ export default class salesInvoice extends React.PureComponent
                                         ]
                                     }
                                     onEnterKey={(async(e)=>
-                                    {
-                                        if(this.cmbDepot.value == '')
                                         {
-                                            let tmpConfObj =
+                                            if(this.cmbDepot.value == '')
                                             {
-                                                id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
-                                            }
-                                            
-                                            await dialog(tmpConfObj);
-                                            this.txtBarcode.setState({value:""})
-                                            return
-                                        }
-                                        let tmpQuery = 
-                                        {   
-                                            query :"SELECT GUID,CODE,NAME,COST_PRICE,UNIT_GUID AS UNIT,VAT,MULTICODE,CUSTOMER_NAME,BARCODE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE BARCODE = @CODE OR CODE = @CODE OR (MULTICODE = @CODE AND CUSTOMER_GUID = @CUSTOMER)",
-                                            param : ['CODE:string|50','CUSTOMER:string|50'],
-                                            value : [this.txtBarcode.value,this.docObj.dt()[0].INPUT]
-                                        }
-                                        let tmpData = await this.core.sql.execute(tmpQuery) 
-                                        if(tmpData.result.recordset.length > 0)
-                                        {
-                                            this.txtPopQuantity.value = 1
-                                            setTimeout(async () => 
-                                            {
-                                               this.txtPopQuantity.focus()
-                                            }, 700);
-                                            await this.msgQuantity.show().then(async (e) =>
-                                            {
-                                                let tmpDocItems = {...this.docObj.docItems.empty}
-                                                tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
-                                                tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
-                                                tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                                                tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
-                                                tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
-                                                tmpDocItems.REF = this.docObj.dt()[0].REF
-                                                tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
-                                                tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
-                                                tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
-                                                tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                                                tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
-                                                this.txtRef.readOnly = true
-                                                this.txtRefno.readOnly = true
-                                                this.docObj.docItems.addEmpty(tmpDocItems)
-                                                await this.core.util.waitUntil(100)
-                                            });
-                                            
-                                            this.addItem(tmpData.result.recordset[0],(typeof this.docObj.docItems.dt()[0] == 'undefined' ? 0 : this.docObj.docItems.dt().length-1),this.txtPopQuantity.value)
-                                            
-                                        }
-                                        else
-                                        {
-                                            await this.pg_txtItemsCode.setVal(this.txtBarcode.value)
-                                            this.pg_txtItemsCode.show()
-                                            this.pg_txtItemsCode.onClick = async(data) =>
-                                            {
-                                                let tmpDocItems = {...this.docObj.docItems.empty}
-                                                tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
-                                                tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
-                                                tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                                                tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
-                                                tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
-                                                tmpDocItems.REF = this.docObj.dt()[0].REF
-                                                tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
-                                                tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
-                                                tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
-                                                tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                                                tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
-                                                this.txtRef.readOnly = true
-                                                this.txtRefno.readOnly = true
-                                                this.docObj.docItems.addEmpty(tmpDocItems)
-                                                await this.core.util.waitUntil(100)
-                                                this.combineControl = true
-                                                this.combineNew = false
-                                                if(data.length == 1)
+                                                let tmpConfObj =
                                                 {
-                                                    await this.addItem(data[0],this.docObj.docItems.dt().length-1)
+                                                    id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
                                                 }
-                                                else if(data.length > 1)
+                                                
+                                                await dialog(tmpConfObj);
+                                                this.txtBarcode.setState({value:""})
+                                                return
+                                            }
+                                            let tmpQuery = 
+                                            {   
+                                                query :"SELECT GUID,CODE,NAME,COST_PRICE,UNIT_GUID AS UNIT,VAT,MULTICODE,CUSTOMER_NAME,BARCODE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE BARCODE = @CODE OR CODE = @CODE OR (MULTICODE = @CODE AND CUSTOMER_GUID = @CUSTOMER)",
+                                                param : ['CODE:string|50','CUSTOMER:string|50'],
+                                                value : [this.txtBarcode.value,this.docObj.dt()[0].INPUT]
+                                            }
+                                            let tmpData = await this.core.sql.execute(tmpQuery) 
+                                            if(tmpData.result.recordset.length > 0)
+                                            {
+                                                this.txtPopQteUnitQuantity.value = 1
+                                                this.txtPopQuantity.value = 1
+                                                setTimeout(async () => 
                                                 {
-                                                    for (let i = 0; i < data.length; i++) 
+                                                    this.txtPopQuantity.focus()
+                                                }, 700);
+                                                let tmpUnitQuery = 
+                                                {
+                                                    query: "SELECT GUID,ISNULL((SELECT NAME FROM UNIT WHERE UNIT.ID = ITEM_UNIT.ID),'') AS NAME,FACTOR,TYPE FROM ITEM_UNIT WHERE DELETED = 0 AND ITEM = @ITEM ORDER BY TYPE" ,
+                                                    param:  ['ITEM:string|50'],
+                                                    value:  [tmpData.result.recordset[0].GUID]
+                                                }
+                                                let tmpUnitData = await this.core.sql.execute(tmpUnitQuery) 
+                                                if(tmpUnitData.result.recordset.length > 0)
+                                                {   
+                                                    this.cmbPopQteUnit.setData(tmpUnitData.result.recordset)
+                                                    this.cmbPopQteUnit.value = tmpData.result.recordset[0].UNIT
+                                                    this.txtPopQteUnitFactor.value = 1
+                                                }
+                                                await this.msgQuantity.show().then(async (e) =>
+                                                {
+                                                    let tmpDocItems = {...this.docObj.docItems.empty}
+                                                    tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+                                                    tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+                                                    tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                                    tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
+                                                    tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
+                                                    tmpDocItems.REF = this.docObj.dt()[0].REF
+                                                    tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+                                                    tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                                    tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+                                                    tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                                                    tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
+                                                    this.txtRef.readOnly = true
+                                                    this.txtRefno.readOnly = true
+                                                    this.docObj.docItems.addEmpty(tmpDocItems)
+                                                    await this.core.util.waitUntil(100)
+                                                });
+                                                this.addItem(tmpData.result.recordset[0],(typeof this.docObj.docItems.dt()[0] == 'undefined' ? 0 : this.docObj.docItems.dt().length-1),this.txtPopQteUnitQuantity.value)
+                                                this.txtBarcode.focus()
+                                            }
+                                            else
+                                            {
+                                                await this.pg_txtItemsCode.setVal(this.txtBarcode.value)
+                                                this.pg_txtItemsCode.show()
+                                                this.pg_txtItemsCode.onClick = async(data) =>
+                                                {
+                                                    this.combineControl = true
+                                                    this.combineNew = false
+    
+                                                    if(data.length > 0)
                                                     {
-                                                        if(i == 0)
+                                                        if(data.length == 1)
                                                         {
-                                                            await this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                                            this.txtPopQteUnitQuantity.value = 1
+                                                            this.txtPopQuantity.value = 1
+                                                            setTimeout(async () => 
+                                                            {
+                                                                this.txtPopQuantity.focus()
+                                                            }, 700);
+                                                            let tmpUnitQuery = 
+                                                            {
+                                                                query: "SELECT GUID,ISNULL((SELECT NAME FROM UNIT WHERE UNIT.ID = ITEM_UNIT.ID),'') AS NAME,FACTOR,TYPE FROM ITEM_UNIT WHERE DELETED = 0 AND ITEM = @ITEM ORDER BY TYPE" ,
+                                                                param:  ['ITEM:string|50'],
+                                                                value:  [data[0].GUID]
+                                                            }
+                                                            let tmpUnitData = await this.core.sql.execute(tmpUnitQuery) 
+                                                            if(tmpUnitData.result.recordset.length > 0)
+                                                            {   
+                                                                this.cmbPopQteUnit.setData(tmpUnitData.result.recordset)
+                                                                this.cmbPopQteUnit.value = data[0].UNIT
+                                                                this.txtPopQteUnitFactor.value = 1
+                                                            }
+                                                            await this.msgQuantity.show().then(async (e) =>
+                                                            {
+                                                                let tmpDocItems = {...this.docObj.docItems.empty}
+                                                                tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+                                                                tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+                                                                tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                                                tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
+                                                                tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
+                                                                tmpDocItems.REF = this.docObj.dt()[0].REF
+                                                                tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+                                                                tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                                                tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+                                                                tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                                                                tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
+                                                                this.txtRef.readOnly = true
+                                                                this.txtRefno.readOnly = true
+                                                                this.docObj.docItems.addEmpty(tmpDocItems)
+                                                                await this.core.util.waitUntil(100)
+                                                                await this.addItem(data[0],this.docObj.docItems.dt().length -1,this.txtPopQteUnitQuantity.value)
+                                                            });
                                                         }
-                                                        else
+                                                        else if(data.length > 1)
                                                         {
-                                                            let tmpDocItems = {...this.docObj.docItems.empty}
-                                                            tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
-                                                            tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
-                                                            tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                                                            tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
-                                                            tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
-                                                            tmpDocItems.REF = this.docObj.dt()[0].REF
-                                                            tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
-                                                            tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
-                                                            tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
-                                                            tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                                                            tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
-                                                            this.txtRef.readOnly = true
-                                                            this.txtRefno.readOnly = true
-                                                            this.docObj.docItems.addEmpty(tmpDocItems)
-                                                            await this.core.util.waitUntil(100)
-                                                            await this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                                            for (let i = 0; i < data.length; i++) 
+                                                            {
+                                                            
+                                                                let tmpDocItems = {...this.docObj.docItems.empty}
+                                                                tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+                                                                tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+                                                                tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                                                tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
+                                                                tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
+                                                                tmpDocItems.REF = this.docObj.dt()[0].REF
+                                                                tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+                                                                tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                                                tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+                                                                tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                                                                tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
+                                                                this.txtRef.readOnly = true
+                                                                this.txtRefno.readOnly = true
+                                                                this.docObj.docItems.addEmpty(tmpDocItems)
+                                                                await this.core.util.waitUntil(100)
+                                                                await this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                                            }
                                                         }
                                                     }
                                                 }
                                             }
-                                        }
-                                        this.txtBarcode.value = ''
-                                    }).bind(this)}
+                                            this.txtBarcode.value = ''
+                                            
+                                        }).bind(this)}
                                     param={this.param.filter({ELEMENT:'txtBarcode',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtBarcode',USERS:this.user.CODE})}
                                     >
@@ -4092,34 +4126,90 @@ export default class salesInvoice extends React.PureComponent
                     </NdPopGrid>
                     {/* Miktar Dialog  */}
                     <NdDialog id={"msgQuantity"} container={"#root"} parent={this}
-                    position={{of:'#root'}} 
-                    showTitle={true} 
-                    title={this.t("msgQuantity.title")} 
-                    showCloseButton={false}
-                    width={"350px"}
-                    height={"250px"}
-                    button={[{id:"btn01",caption:this.t("msgQuantity.btn01"),location:'after'}]}
-                    >
-                        <div className="row">
-                            <div className="col-12 py-2">
-                                <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgQuantity.msg")}</div>
-                            </div>
-                            <div className="col-12 py-2">
+                        position={{of:'#root'}} 
+                        showTitle={true} 
+                        title={this.t("msgQuantity.title")} 
+                        showCloseButton={false}
+                        width={"400px"}
+                        height={"410px"}
+                        button={[{id:"btn01",caption:this.t("msgQuantity.btn01"),location:'after'}]}
+                        >
+                            <div className="row">
+                                <div className="col-12 py-2">
+                                    <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgQuantity.msg")}</div>
+                                </div>
+                                <div className="col-12 py-2">
                                 <Form>
+                                    {/* checkCustomer */}
                                     <Item>
                                         <Label text={this.t("txtQuantity")} alignment="right" />
-                                        <NdNumberBox id="txtPopQuantity" value={1} parent={this} simple={true}  
-                                        onEnterKey={(async(e)=>
+                                        <NdNumberBox id="txtPopQuantity" parent={this} simple={true} 
+                                         onEnterKey={(async(e)=>
                                         {
                                             this.msgQuantity._onClick()
-                                        }).bind(this)}/>
+                                        }).bind(this)} 
+                                        onValueChanged={(async(e)=>
+                                        {
+                                            if(this.cmbPopQteUnit.data.datatable.where({'GUID':this.cmbPopQteUnit.value})[0].TYPE == 1)
+                                            {
+                                                this.txtPopQteUnitQuantity.value = Number((this.txtPopQuantity.value / this.txtPopQteUnitFactor.value).toFixed(3))
+                                            }
+                                            else
+                                            {
+                                                this.txtPopQteUnitQuantity.value = Number((this.txtPopQuantity.value * this.txtPopQteUnitFactor.value).toFixed(3))
+                                            };
+                                        }).bind(this)}
+                                        >
+                                    </NdNumberBox>
                                     </Item>
+                                    <Item>
+                                    <NdSelectBox simple={true} parent={this} id="cmbPopQteUnit"
+                                        displayExpr="NAME"                       
+                                        valueExpr="GUID"
+                                        value=""
+                                        searchEnabled={true}
+                                        onValueChanged={(async(e)=>
+                                        {
+                                            this.txtPopQteUnitFactor.setState({value:this.cmbPopQteUnit.data.datatable.where({'GUID':this.cmbPopQteUnit.value})[0].FACTOR});
+                                            if(this.cmbPopQteUnit.data.datatable.where({'GUID':this.cmbPopQteUnit.value})[0].TYPE == 1)
+                                            {
+                                                this.txtPopQteUnitQuantity.value = Number((this.txtPopQuantity.value / this.txtPopQteUnitFactor.value).toFixed(3))
+                                            }
+                                            else
+                                            {
+                                                this.txtPopQteUnitQuantity.value = Number((this.txtPopQuantity.value * this.txtPopQteUnitFactor.value).toFixed(3))
+                                            };
+                                        }).bind(this)}
+                                        >
+                                    </NdSelectBox>
+                                    </Item>
+                                    <Item>
+                                    <Label text={this.t("txtUnitFactor")} alignment="right" />
+                                    <NdNumberBox id="txtPopQteUnitFactor" parent={this} simple={true}
+                                    readOnly={true}
+                                    maxLength={32}
+                                    >
+                                    </NdNumberBox>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("txtTotalQuantity")} alignment="right" />
+                                    <NdNumberBox id="txtPopQteUnitQuantity" parent={this} simple={true} readOnly={true}
+                                    maxLength={32}
+                                    onValueChanged={(async(e)=>
+                                    {
+                                       
+                                    }).bind(this)}
+                                    >
+                                    </NdNumberBox>
+                                </Item>
                                 </Form>
                             </div>
-                        </div>
-                        <div className='row'>
-                        </div>
-                    </NdDialog>   
+                            </div>
+                            <div className='row'>
+                            
+                            </div>
+                        
+                    </NdDialog>  
                     {/* Evrak Silme Açıklaması Dialog  */}
                     <NdDialog id={"msgDelDesc"} container={"#root"} parent={this}
                     position={{of:'#root'}} 

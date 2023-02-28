@@ -2443,7 +2443,8 @@ export const langTr =
             clmNetMargin : "Net Marj",
             clmMargin : "Brüt Marj",
             clmCustomerPrice : "T.Fiyatı",
-            clmOrgin : "Menşei"
+            clmOrgin : "Menşei",
+            clmPriceSaleVatExt : "Vergisiz Fiyat"
         },
     },
     stk_03_002 :   //"Fiyat Listesi" 
