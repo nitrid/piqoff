@@ -16,7 +16,7 @@ import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
-import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export,ColumnChooser,StateStoring} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export} from '../../../../core/react/devex/grid.js';
 import NbPopDescboard from "../../../tools/popdescboard.js";
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
@@ -1844,134 +1844,132 @@ export default class rebateDispatch extends React.PureComponent
                                     }}/>
                                 </Item>
                                 <Item>
-                                    <React.Fragment>
-                                        <NdGrid parent={this} id={"grdRebtDispatch"} 
-                                        showBorders={true} 
-                                        columnsAutoWidth={true} 
-                                        allowColumnReordering={true} 
-                                        allowColumnResizing={true} 
-                                        filterRow={{visible:true}}
-                                        height={'450'} 
-                                        width={'100%'}
-                                        dbApply={false}
-                                        onRowPrepared={(e) =>
+                                 <React.Fragment>
+                                    <NdGrid parent={this} id={"grdRebtDispatch"} 
+                                    showBorders={true} 
+                                    columnsAutoWidth={true} 
+                                    allowColumnReordering={true} 
+                                    allowColumnResizing={true} 
+                                    filterRow={{visible:true}}
+                                    height={'450'} 
+                                    width={'100%'}
+                                    dbApply={false}
+                                    onRowPrepared={(e) =>
+                                    {
+                                        if(e.rowType == 'data' && e.data.INVOICE_LINE_GUID  != '00000000-0000-0000-0000-000000000000')
                                         {
-                                            if(e.rowType == 'data' && e.data.INVOICE_LINE_GUID  != '00000000-0000-0000-0000-000000000000')
-                                            {
-                                                e.rowElement.style.color ="Silver"
-                                            }
-                                        }}
-                                        onRowUpdating={async (e)=>
+                                            e.rowElement.style.color ="Silver"
+                                        }
+                                    }}
+                                    onRowUpdating={async (e)=>
+                                    {
+                                        if(e.key.INVOICE_LINE_GUID != '00000000-0000-0000-0000-000000000000')
                                         {
-                                            if(e.key.INVOICE_LINE_GUID != '00000000-0000-0000-0000-000000000000')
+                                            e.cancel = true
+                                            let tmpConfObj =
                                             {
-                                                e.cancel = true
-                                                let tmpConfObj =
-                                                {
-                                                    id:'msgRowNotUpdate',showTitle:true,title:this.t("msgRowNotUpdate.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:this.t("msgRowNotUpdate.btn01"),location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgRowNotUpdate.msg")}</div>)
-                                                }
-                                            
-                                                dialog(tmpConfObj);
-                                                e.component.cancelEditData()
+                                                id:'msgRowNotUpdate',showTitle:true,title:this.t("msgRowNotUpdate.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgRowNotUpdate.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgRowNotUpdate.msg")}</div>)
                                             }
-                                            if(typeof e.newData.QUANTITY != 'undefined')
-                                            {
-                                                //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
-                                                await this.itemRelatedUpdate(e.key.ITEM,e.newData.QUANTITY)
-                                                //*****************************************/
-                                            }
-                                        }}
-                                        onRowRemoving={async (e)=>
-                                        {
-                                            if(e.key.INVOICE_LINE_GUID != '00000000-0000-0000-0000-000000000000')
-                                            {
-                                                e.cancel = true
-                                                let tmpConfObj =
-                                                {
-                                                    id:'msgRowNotDelete',showTitle:true,title:this.t("msgRowNotDelete.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:this.t("msgRowNotDelete.btn01"),location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgRowNotDelete.msg")}</div>)
-                                                }
-                                            
-                                                dialog(tmpConfObj);
-                                                e.component.cancelEditData()
-                                            }
-                                        }}
-                                        onRowUpdated={async(e)=>{
-
-                                            if(typeof e.data.DISCOUNT_RATE != 'undefined')
-                                            {
-                                                e.key.DISCOUNT = parseFloat((((e.key.AMOUNT * e.data.DISCOUNT_RATE) / 100)).toFixed(2))
-                                            }
-                                            if(typeof e.data.DISCOUNT_RATE != 'undefined')
-                                            {
-                                                console.log(Number(e.key.PRICE * e.key.QUANTITY).rateInc(e.data.DISCOUNT_RATE,4))
-                                                e.key.DISCOUNT = Number(e.key.PRICE * e.key.QUANTITY).rateInc(e.data.DISCOUNT_RATE,4)
-                                                e.key.DISCOUNT_1 = Number(e.key.PRICE * e.key.QUANTITY).rateInc( e.data.DISCOUNT_RATE,4)
-                                                e.key.DISCOUNT_2 = 0
-                                                e.key.DISCOUNT_3 = 0
-                                            }
-                                            if(typeof e.data.DISCOUNT != 'undefined')
-                                            {
-                                                e.key.DISCOUNT_1 = e.data.DISCOUNT
-                                                e.key.DISCOUNT_2 = 0
-                                                e.key.DISCOUNT_3 = 0
-                                                e.key.DISCOUNT_RATE = Number(e.key.PRICE * e.key.QUANTITY).rate2Num(e.data.DISCOUNT)
-                                            }
-
-                                            e.key.VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100)).toFixed(4));
-                                            e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(4))
-                                            e.key.TOTAL = parseFloat((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) + e.key.VAT).toFixed(4))
-                                            e.key.TOTALHT = parseFloat((e.key.TOTAL - e.key.VAT).toFixed(4))
-
-                                            if(e.key.DISCOUNT == 0)
-                                            {
-                                                e.key.DISCOUNT_RATE = 0
-                                                e.key.DISCOUNT_1 = 0
-                                                e.key.DISCOUNT_2 = 0
-                                                e.key.DISCOUNT_3 = 0
-                                            }
-                                            this._calculateTotal()
                                         
-                                        }}
-                                        onRowRemoved={async (e)=>{
-                                            this._calculateTotal()
-                                        }}
-                                        >
-                                            <StateStoring enabled={true} type="localStorage" storageKey={this.props.data.id + "_grdRebtDispatch"} />
-                                            <ColumnChooser enabled={true} />
-                                            <Paging defaultPageSize={10} />
-                                            <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
-                                            <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
-                                            <Scrolling mode="standart" />
-                                            <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
-                                            <Export fileName={this.lang.t("menu.irs_02_003")} enabled={true} allowExportSelectedData={true} />
-                                            <Column dataField="LINE_NO" caption={this.t("LINE_NO")} visible={false} width={50} dataType={'number'} defaultSortOrder="desc"/>
-                                            <Column dataField="CDATE_FORMAT" caption={this.t("grdRebtDispatch.clmCreateDate")} width={100} allowEditing={false}/>
-                                            <Column dataField="CUSER_NAME" caption={this.t("grdRebtDispatch.clmCuser")} width={100} allowEditing={false}/>
-                                            <Column dataField="ITEM_CODE" caption={this.t("grdRebtDispatch.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
-                                            <Column dataField="MULTICODE" caption={this.t("grdRebtDispatch.clmMulticode")} width={110} allowEditing={false}/>
-                                            <Column dataField="ITEM_NAME" caption={this.t("grdRebtDispatch.clmItemName")} width={280} />
-                                            <Column dataField="ITEM_BARCODE" caption={this.t("grdRebtDispatch.clmBarcode")} width={130} allowEditing={false}/>
-                                            <Column dataField="QUANTITY" caption={this.t("grdRebtDispatch.clmQuantity")} width={70} editCellRender={this._cellRoleRender} dataType={'number'}/>
-                                            <Column dataField="PRICE" caption={this.t("grdRebtDispatch.clmPrice")} width={75} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
-                                            <Column dataField="AMOUNT" caption={this.t("grdRebtDispatch.clmAmount")} width={100} allowEditing={false} format={{ style: "currency", currency: "EUR",precision: 3}}/>
-                                            <Column dataField="VAT" caption={this.t("grdRebtDispatch.clmVat")} width={75} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
-                                            <Column dataField="TOTALHT" caption={this.t("grdRebtDispatch.clmTotalHt")} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false} width={90} allowHeaderFiltering={false}/>
-                                            <Column dataField="TOTAL" caption={this.t("grdRebtDispatch.clmTotal")} width={110} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
-                                            <Column dataField="DESCRIPTION" caption={this.t("grdRebtDispatch.clmDescription")} width={160}  headerFilter={{visible:true}}/>
-                                        </NdGrid>
-                                        <ContextMenu
-                                        dataSource={this.rightItems}
-                                        width={200}
-                                        target="#grdRebtDispatch"
-                                        onItemClick={(async(e)=>
+                                            dialog(tmpConfObj);
+                                            e.component.cancelEditData()
+                                        }
+                                        if(typeof e.newData.QUANTITY != 'undefined')
                                         {
-                                            this._getRebate()
-                                        }).bind(this)} />
-                                    </React.Fragment> 
+                                            //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
+                                            await this.itemRelatedUpdate(e.key.ITEM,e.newData.QUANTITY)
+                                            //*****************************************/
+                                        }
+                                    }}
+                                    onRowRemoving={async (e)=>
+                                    {
+                                        if(e.key.INVOICE_LINE_GUID != '00000000-0000-0000-0000-000000000000')
+                                        {
+                                            e.cancel = true
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgRowNotDelete',showTitle:true,title:this.t("msgRowNotDelete.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgRowNotDelete.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgRowNotDelete.msg")}</div>)
+                                            }
+                                        
+                                            dialog(tmpConfObj);
+                                            e.component.cancelEditData()
+                                        }
+                                    }}
+                                    onRowUpdated={async(e)=>{
+
+                                        if(typeof e.data.DISCOUNT_RATE != 'undefined')
+                                        {
+                                            e.key.DISCOUNT = parseFloat((((e.key.AMOUNT * e.data.DISCOUNT_RATE) / 100)).toFixed(2))
+                                        }
+                                        if(typeof e.data.DISCOUNT_RATE != 'undefined')
+                                        {
+                                            console.log(Number(e.key.PRICE * e.key.QUANTITY).rateInc(e.data.DISCOUNT_RATE,4))
+                                            e.key.DISCOUNT = Number(e.key.PRICE * e.key.QUANTITY).rateInc(e.data.DISCOUNT_RATE,4)
+                                            e.key.DISCOUNT_1 = Number(e.key.PRICE * e.key.QUANTITY).rateInc( e.data.DISCOUNT_RATE,4)
+                                            e.key.DISCOUNT_2 = 0
+                                            e.key.DISCOUNT_3 = 0
+                                        }
+                                        if(typeof e.data.DISCOUNT != 'undefined')
+                                        {
+                                            e.key.DISCOUNT_1 = e.data.DISCOUNT
+                                            e.key.DISCOUNT_2 = 0
+                                            e.key.DISCOUNT_3 = 0
+                                            e.key.DISCOUNT_RATE = Number(e.key.PRICE * e.key.QUANTITY).rate2Num(e.data.DISCOUNT)
+                                        }
+
+                                        e.key.VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100)).toFixed(4));
+                                        e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(4))
+                                        e.key.TOTAL = parseFloat((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) + e.key.VAT).toFixed(4))
+                                        e.key.TOTALHT = parseFloat((e.key.TOTAL - e.key.VAT).toFixed(4))
+
+                                        if(e.key.DISCOUNT == 0)
+                                        {
+                                            e.key.DISCOUNT_RATE = 0
+                                            e.key.DISCOUNT_1 = 0
+                                            e.key.DISCOUNT_2 = 0
+                                            e.key.DISCOUNT_3 = 0
+                                        }
+                                        this._calculateTotal()
+                                       
+                                    }}
+                                    onRowRemoved={async (e)=>{
+                                        this._calculateTotal()
+                                    }}
+                                    >
+                                        <Paging defaultPageSize={10} />
+                                        <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
+                                        <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
+                                        <Scrolling mode="standart" />
+                                        <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
+                                        <Export fileName={this.lang.t("menu.irs_02_003")} enabled={true} allowExportSelectedData={true} />
+                                        <Column dataField="LINE_NO" caption={this.t("LINE_NO")} visible={false} width={50} dataType={'number'} defaultSortOrder="desc"/>
+                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdRebtDispatch.clmCreateDate")} width={100} allowEditing={false}/>
+                                        <Column dataField="CUSER_NAME" caption={this.t("grdRebtDispatch.clmCuser")} width={100} allowEditing={false}/>
+                                        <Column dataField="ITEM_CODE" caption={this.t("grdRebtDispatch.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
+                                        <Column dataField="MULTICODE" caption={this.t("grdRebtDispatch.clmMulticode")} width={110} allowEditing={false}/>
+                                        <Column dataField="ITEM_NAME" caption={this.t("grdRebtDispatch.clmItemName")} width={280} />
+                                        <Column dataField="ITEM_BARCODE" caption={this.t("grdRebtDispatch.clmBarcode")} width={130} allowEditing={false}/>
+                                        <Column dataField="QUANTITY" caption={this.t("grdRebtDispatch.clmQuantity")} width={70} editCellRender={this._cellRoleRender} dataType={'number'}/>
+                                        <Column dataField="PRICE" caption={this.t("grdRebtDispatch.clmPrice")} width={75} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
+                                        <Column dataField="AMOUNT" caption={this.t("grdRebtDispatch.clmAmount")} width={100} allowEditing={false} format={{ style: "currency", currency: "EUR",precision: 3}}/>
+                                        <Column dataField="VAT" caption={this.t("grdRebtDispatch.clmVat")} width={75} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
+                                        <Column dataField="TOTALHT" caption={this.t("grdRebtDispatch.clmTotalHt")} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false} width={90} allowHeaderFiltering={false}/>
+                                        <Column dataField="TOTAL" caption={this.t("grdRebtDispatch.clmTotal")} width={110} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
+                                        <Column dataField="DESCRIPTION" caption={this.t("grdRebtDispatch.clmDescription")} width={160}  headerFilter={{visible:true}}/>
+                                    </NdGrid>
+                                    <ContextMenu
+                                    dataSource={this.rightItems}
+                                    width={200}
+                                    target="#grdRebtDispatch"
+                                    onItemClick={(async(e)=>
+                                    {
+                                        this._getRebate()
+                                    }).bind(this)} />
+                                </React.Fragment> 
                                 </Item>
                             </Form>
                         </div>
