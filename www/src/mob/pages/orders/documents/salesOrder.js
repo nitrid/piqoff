@@ -186,7 +186,7 @@ export default class salesOrder extends React.PureComponent
 
         if(tmpData.result.recordset.length > 0)
         {
-            this.txtPrice.value = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(2))
+            this.txtPrice.value = Number((tmpData.result.recordset[0].PRICE)).round(2)
             this.calculateItemPrice()
             // this.txtVat.value = parseFloat((tmpData.result.recordset[0].PRICE * (this.barcode.vat / 100)).toFixed(2))
             // this.txtAmount.value = parseFloat((Number(this.txtPrice.value) + Number(this.txtVat.value)).toFixed(2))
@@ -311,8 +311,8 @@ export default class salesOrder extends React.PureComponent
             tmpDocItems.QUANTITY = pQuantity * this.txtFactor.value
             tmpDocItems.VAT_RATE = this.barcode.vat
             tmpDocItems.PRICE = this.txtPrice.value
-            tmpDocItems.VAT = (parseFloat(this.txtVat.value).toFixed(2))
-            tmpDocItems.AMOUNT = (this.txtPrice.value * (pQuantity * this.txtFactor.value)).toFixed(2)
+            tmpDocItems.VAT = (Number(this.txtVat.value).round(2))
+            tmpDocItems.AMOUNT = Number(this.txtPrice.value * (pQuantity * this.txtFactor.value)).round(2)
             tmpDocItems.TOTAL = this.txtAmount.value
             this.docObj.docOrders.addEmpty(tmpDocItems)
             this.barcodeReset()
@@ -387,9 +387,9 @@ export default class salesOrder extends React.PureComponent
                             if(this.docObj.docOrders.dt()[x].ITEM_CODE == tmpRelatedItemData.result.recordset[0].CODE)
                             {
                                 this.docObj.docOrders.dt()[x].QUANTITY = this.docObj.docOrders.dt()[x].QUANTITY + (tmpRelatedQt * tmpRelatedItemData.result.recordset[0].UNIT_FACTOR)
-                                this.docObj.docOrders.dt()[x].VAT = parseFloat((this.docObj.docOrders.dt()[x].VAT + (this.docObj.docOrders.dt()[x].PRICE * (this.docObj.docOrders.dt()[x].VAT_RATE / 100)) * tmpRelatedQt)).toFixed(3)
-                                this.docObj.docOrders.dt()[x].AMOUNT = parseFloat((this.docObj.docOrders.dt()[x].QUANTITY * this.docObj.docOrders.dt()[x].PRICE)).toFixed(3)
-                                this.docObj.docOrders.dt()[x].TOTAL = parseFloat((((this.docObj.docOrders.dt()[x].QUANTITY * this.docObj.docOrders.dt()[x].PRICE) - this.docObj.docOrders.dt()[x].DISCOUNT) + this.docObj.docOrders.dt()[x].VAT)).toFixed(3)
+                                this.docObj.docOrders.dt()[x].VAT = Number((this.docObj.docOrders.dt()[x].VAT + (this.docObj.docOrders.dt()[x].PRICE * (this.docObj.docOrders.dt()[x].VAT_RATE / 100)) * tmpRelatedQt)).round(2)
+                                this.docObj.docOrders.dt()[x].AMOUNT = Number((this.docObj.docOrders.dt()[x].QUANTITY * this.docObj.docOrders.dt()[x].PRICE)).round(2)
+                                this.docObj.docOrders.dt()[x].TOTAL = Number((((this.docObj.docOrders.dt()[x].QUANTITY * this.docObj.docOrders.dt()[x].PRICE) - this.docObj.docOrders.dt()[x].DISCOUNT) + this.docObj.docOrders.dt()[x].VAT)).round(2)
                                 this._calculateTotal()
                                 tmpMerge = true                                
                             }
@@ -417,9 +417,9 @@ export default class salesOrder extends React.PureComponent
                             tmpDocItems.QUANTITY = tmpRelatedQt * tmpRelatedItemData.result.recordset[0].UNIT_FACTOR
                             tmpDocItems.VAT_RATE = tmpRelatedItemData.result.recordset[0].VAT
                             tmpDocItems.PRICE = tmpPrice
-                            tmpDocItems.VAT = parseFloat((tmpPrice * (tmpRelatedItemData.result.recordset[0].VAT / 100)) * tmpDocItems.QUANTITY).toFixed(2)
-                            tmpDocItems.AMOUNT = (tmpPrice * tmpDocItems.QUANTITY).toFixed(2)
-                            tmpDocItems.TOTAL = parseFloat(((tmpPrice * tmpDocItems.QUANTITY) + (tmpDocItems.VAT * tmpDocItems.QUANTITY))).toFixed(2)
+                            tmpDocItems.VAT = Number((tmpPrice * (tmpRelatedItemData.result.recordset[0].VAT / 100)) * tmpDocItems.QUANTITY).round(2)
+                            tmpDocItems.AMOUNT = Number(tmpPrice * tmpDocItems.QUANTITY).round(2)
+                            tmpDocItems.TOTAL = Number(((tmpPrice * tmpDocItems.QUANTITY) + (tmpDocItems.VAT * tmpDocItems.QUANTITY))).round(2)
                             this.docObj.docOrders.addEmpty(tmpDocItems)
                             this._calculateTotal()
                         }
@@ -473,8 +473,8 @@ export default class salesOrder extends React.PureComponent
     }
     calculateItemPrice()
     {
-        this.txtVat.value =  parseFloat(((this.txtPrice.value * (this.barcode.vat / 100)) * (this.txtQuantity.value * this.txtFactor.value)).toFixed(2))
-        this.txtAmount.value = parseFloat((parseFloat((this.txtPrice.value * (this.txtQuantity.value * this.txtFactor.value))) + parseFloat(this.txtVat.value))).toFixed(2)
+        this.txtVat.value =  Number(((this.txtPrice.value * (this.barcode.vat / 100)) * (this.txtQuantity.value * this.txtFactor.value))).round(2)
+        this.txtAmount.value = Number((parseFloat((this.txtPrice.value * (this.txtQuantity.value * this.txtFactor.value))) + parseFloat(this.txtVat.value))).round(2)
     }
     async _calculateTotal()
     {
@@ -1154,7 +1154,7 @@ export default class salesOrder extends React.PureComponent
 
                                             if(typeof e.data.DISCOUNT_RATE != 'undefined')
                                             {
-                                                e.key.DISCOUNT = parseFloat((((e.key.AMOUNT * e.data.DISCOUNT_RATE) / 100)).toFixed(2))
+                                                e.key.DISCOUNT = parseFloat((((e.key.AMOUNT * e.data.DISCOUNT_RATE) / 100)).toFixed(4))
                                             }
 
                                             if(e.key.COST_PRICE > e.key.PRICE )
@@ -1206,17 +1206,17 @@ export default class salesOrder extends React.PureComponent
                                             }
                                             if(e.key.VAT > 0)
                                             {
-                                                e.key.VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100)).toFixed(2));
+                                                e.key.VAT = Number(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100))).round(2);
                                             }
-                                            e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(2))
-                                            e.key.TOTAL = parseFloat((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) +e.key.VAT).toFixed(2))
+                                            e.key.AMOUNT = Number((e.key.PRICE * e.key.QUANTITY)).round(2)
+                                            e.key.TOTAL = Number((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) +e.key.VAT)).round(2)
 
                                             let tmpMargin = (e.key.TOTAL - e.key.VAT) - (e.key.COST_PRICE * e.key.QUANTITY)
                                             let tmpMarginRate = (tmpMargin) * 100
                                             e.key.MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
                                             if(e.key.DISCOUNT > 0)
                                             {
-                                                e.key.DISCOUNT_RATE = parseFloat((100 - ((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) / (e.key.PRICE * e.key.QUANTITY)) * 100)).toFixed(2))
+                                                e.key.DISCOUNT_RATE = Number((100 - ((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) / (e.key.PRICE * e.key.QUANTITY)) * 100)).toFixed(4))
                                             }
                                             console.log(e.key.MARGIN)
                                             this._calculateTotal()
