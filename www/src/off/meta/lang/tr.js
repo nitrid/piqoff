@@ -674,6 +674,12 @@ export const langTr =
             title: "Birim Hesaplama",
             btn01: "Onayla",
         },
+        msgUnitRowNotDelete :
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Ana birim yada Alt birim i silemezsiniz !"
+        },
     },
     stk_01_002:  //"Barkod Tanımları"
     {
