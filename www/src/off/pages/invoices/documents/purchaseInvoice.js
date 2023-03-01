@@ -673,7 +673,17 @@ export default class purchaseInvoice extends React.PureComponent
         App.instance.setState({isExecute:true})
         if(typeof pData.ITEM_TYPE == 'undefined')
         {
-            pData.ITEM_TYPE = 0
+            let tmpTypeQuery = 
+            {
+                query :"SELECT TYPE FROM ITEMS WHERE GUID = @GUID ",
+                param : ['GUID:string|50'],
+                value : [pData.GUID]
+            }
+            let tmpType = await this.core.sql.execute(tmpTypeQuery) 
+            if(tmpType.result.recordset.length > 0)
+            {
+                pData.ITEM_TYPE = tmpType.result.recordset[0].TYPE
+            }
         }
         if(typeof pQuantity == 'undefined')
         {
