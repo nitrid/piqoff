@@ -1635,6 +1635,7 @@ export default class salesOrder extends React.PureComponent
                                                     this.docObj.docOrders.addEmpty(tmpdocOrders)
                                                 
                                                     this.addItem(tmpData.result.recordset[0],(typeof this.docObj.docOrders.dt()[0] == 'undefined' ? 0 : this.docObj.docOrders.dt().length-1),this.txtPopQteUnitQuantity.value)
+                                                    this.txtBarcode.focus()
                                                 })
                                             }
                                             else
@@ -1685,6 +1686,7 @@ export default class salesOrder extends React.PureComponent
                                                                 this.txtRefno.readOnly = true
                                                                 this.docObj.docOrders.addEmpty(tmpdocOrders)
                                                                 this.addItem(data[0],(typeof this.docObj.docOrders.dt()[0] == 'undefined' ? 0 : this.docObj.docOrders.dt().length-1),this.txtPopQteUnitQuantity.value)
+                                                                this.txtBarcode.focus()
                                                             })
                                                         }
                                                         else if(data.length > 1)

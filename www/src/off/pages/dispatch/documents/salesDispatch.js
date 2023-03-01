@@ -1997,6 +1997,7 @@ export default class salesDispatch extends React.PureComponent
                                                             this.docObj.docItems.addEmpty(tmpDocItems)
                                                             await this.core.util.waitUntil(100)
                                                             await this.addItem(data[0],this.docObj.docItems.dt().length -1,this.txtPopQteUnitQuantity.value)
+                                                            this.txtBarcode.focus()
                                                         });
                                                     }
                                                     else if(data.length > 1)
