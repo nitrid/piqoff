@@ -151,6 +151,24 @@ export const prm =
             CAPTION : "Daha Düşük Fiyatlı Tedarikçi Uyarısı"
         }
     },
+     //Otomatik Interfel
+     {
+        TYPE : 0,
+        ID :"autoInterfel",
+        VALUE : 
+        {
+            value : true
+        },
+        SPECIAL : "",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Sistem",
+            CAPTION : "Otomatik Interfel Hesaplaması"
+        }
+    },
     //Faturadaki Hizmetten maliyet ekle
     {
         TYPE : 0,

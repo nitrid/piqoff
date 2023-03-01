@@ -821,6 +821,7 @@ export default class salesContract extends React.PureComponent
                                     allowColumnReordering={true} 
                                     allowColumnResizing={true} 
                                     filterRow={{visible:true}}
+                                    headerFilter={{visible:true}}
                                     height={'700'} 
                                     width={'100%'}
                                     dbApply={false}

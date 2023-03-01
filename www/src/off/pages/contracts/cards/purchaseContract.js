@@ -742,6 +742,7 @@ export default class purchaseContract extends React.PureComponent
                                     allowColumnReordering={true} 
                                     allowColumnResizing={true} 
                                     filterRow={{visible:true}}
+                                    headerFilter={{visible:true}}
                                     height={'650'} 
                                     width={'100%'}
                                     dbApply={false}

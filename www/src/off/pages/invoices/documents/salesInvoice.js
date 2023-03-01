@@ -887,7 +887,7 @@ export default class salesInvoice extends React.PureComponent
         {
             let tmpQuery = 
             {
-                query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ITEMS_VW_01 WHERE INPUT = @INPUT AND INVOICE_DOC_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 1 AND REBATE = 0 AND DOC_TYPE IN(40)",
+                query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ITEMS_VW_01 WHERE INPUT = @INPUT AND INVOICE_DOC_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 1 AND ITEM_CODE <> 'CVO' AND REBATE = 0 AND DOC_TYPE IN(40)",
                 param : ['INPUT:string|50'],
                 value : [this.docObj.dt()[0].INPUT]
             }
@@ -1503,84 +1503,89 @@ export default class salesInvoice extends React.PureComponent
     }
     async _calculateInterfel()
     {
-        let tmpInterfelHt = 0
-        for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
+        return new Promise(async resolve => 
         {
-            let tmpQuery = 
+            let tmpInterfelHt = 0
+            for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
             {
-                query :"SELECT INTERFEL FROM ITEMS_SHOP WHERE ITEM = @ITEM ",
-                param : ['ITEM:string|50'],
-                value : [this.docObj.docItems.dt()[i].ITEM]
-            }
-            let tmpData = await this.core.sql.execute(tmpQuery) 
-            if(tmpData.result.recordset.length > 0)
-            {
-                console.log(tmpData.result.recordset[0])
-                if(tmpData.result.recordset[0].INTERFEL == true)
+                let tmpQuery = 
                 {
-                    tmpInterfelHt += this.docObj.docItems.dt()[i].TOTALHT
+                    query :"SELECT INTERFEL FROM ITEMS_SHOP WHERE ITEM = @ITEM ",
+                    param : ['ITEM:string|50'],
+                    value : [this.docObj.docItems.dt()[i].ITEM]
                 }
-            }            
-        }
-        if(tmpInterfelHt != 0)
-        {
-            let tmpQuery = 
-            {
-                query :"SELECT FR,NOTFR,ISNULL((SELECT TOP 1 COUNTRY FROM CUSTOMER_ADRESS WHERE CUSTOMER = @CUSTOMER AND ADRESS_NO = 0 AND DELETED = 0),'') AS COUNTRY " +
-                "FROM INTERFEL_TABLE_VW_01 ",
-                param : ['CUSTOMER:string|50'],
-                value : [this.docObj.dt()[0].INPUT]
-            }
-            let tmpData = await this.core.sql.execute(tmpQuery) 
-            if(tmpData.result.recordset.length > 0)
-            {
-                if(tmpData.result.recordset[0].COUNTRY == 'FR')
-                {
-                   this.docObj.dt()[0].INTERFEL = parseFloat(((tmpInterfelHt * tmpData.result.recordset[0].FR) / 100).toFixed(2))
-                }
-                else
-                {
-                    this.docObj.dt()[0].INTERFEL =  parseFloat(((tmpInterfelHt * tmpData.result.recordset[0].NOTFR) / 100).toFixed(2))
-                }
-                let tmpCvoQuery = 
-                {
-                    query :"SELECT *,1 AS ITEM_TYPE FROM SERVICE_ITEMS_VW_01 WHERE CODE = 'CVO'",
-                }
-                let tmpCvoData = await this.core.sql.execute(tmpCvoQuery) 
+                let tmpData = await this.core.sql.execute(tmpQuery) 
                 if(tmpData.result.recordset.length > 0)
                 {
-                    if(this.docObj.docItems.dt().where({'ITEM_CODE':'CVO'}).length > 0)
+                    console.log(tmpData.result.recordset[0])
+                    if(tmpData.result.recordset[0].INTERFEL == true)
                     {
-                        this.docObj.docItems.dt().where({'ITEM_CODE':'CVO'})[0].PRICE = this.docObj.dt()[0].INTERFEL
-                        this.docObj.docItems.dt().where({'ITEM_CODE':'CVO'})[0].VAT = parseFloat((this.docObj.dt()[0].INTERFEL * (20 /100)).toFixed(4));
-                        this.docObj.docItems.dt().where({'ITEM_CODE':'CVO'})[0].AMOUNT = this.docObj.dt()[0].INTERFEL
-                        this.docObj.docItems.dt().where({'ITEM_CODE':'CVO'})[0].TOTALHT = this.docObj.dt()[0].INTERFEL
-                        this.docObj.docItems.dt().where({'ITEM_CODE':'CVO'})[0].TOTAL = parseFloat((this.docObj.docItems.dt().where({'ITEM_CODE':'CVO'})[0].TOTALHT +  parseFloat(this.docObj.docItems.dt().where({'ITEM_CODE':'CVO'})[0].VAT)).toFixed(2))
-                        this.popExtraCost.hide()
-                        this.extraCost.value = this.docObj.dt()[0].INTERFEL
-                        return
+                        tmpInterfelHt += this.docObj.docItems.dt()[i].TOTALHT
                     }
-
-                    let tmpDocItems = {...this.docObj.docItems.empty}
-                    tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
-                    tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
-                    tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                    tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
-                    tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
-                    tmpDocItems.REF = this.docObj.dt()[0].REF
-                    tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
-                    tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
-                    tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
-                    tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                    tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
-                    this.txtRef.readOnly = true
-                    this.txtRefno.readOnly = true
-                    this.docObj.docItems.addEmpty(tmpDocItems)
-                    this.addItem(tmpCvoData.result.recordset[0],this.docObj.docItems.dt().length -1,1,this.docObj.dt()[0].INTERFEL)
+                }            
+            }
+            if(tmpInterfelHt != 0)
+            {
+                let tmpQuery = 
+                {
+                    query :"SELECT FR,NOTFR,ISNULL((SELECT TOP 1 COUNTRY FROM CUSTOMER_ADRESS WHERE CUSTOMER = @CUSTOMER AND ADRESS_NO = 0 AND DELETED = 0),'') AS COUNTRY " +
+                    "FROM INTERFEL_TABLE_VW_01 ",
+                    param : ['CUSTOMER:string|50'],
+                    value : [this.docObj.dt()[0].INPUT]
                 }
-            }        
-            this.extraCost.value = this.docObj.dt()[0].INTERFEL
-        }
+                let tmpData = await this.core.sql.execute(tmpQuery) 
+                if(tmpData.result.recordset.length > 0)
+                {
+                    if(tmpData.result.recordset[0].COUNTRY == 'FR')
+                    {
+                    this.docObj.dt()[0].INTERFEL = parseFloat(((tmpInterfelHt * tmpData.result.recordset[0].FR) / 100).toFixed(2))
+                    }
+                    else
+                    {
+                        this.docObj.dt()[0].INTERFEL =  parseFloat(((tmpInterfelHt * tmpData.result.recordset[0].NOTFR) / 100).toFixed(2))
+                    }
+                    let tmpCvoQuery = 
+                    {
+                        query :"SELECT *,1 AS ITEM_TYPE FROM SERVICE_ITEMS_VW_01 WHERE CODE = 'CVO'",
+                    }
+                    let tmpCvoData = await this.core.sql.execute(tmpCvoQuery) 
+                    if(tmpData.result.recordset.length > 0)
+                    {
+                        if(this.docObj.docItems.dt().where({'ITEM_CODE':'CVO'}).length > 0)
+                        {
+                            this.docObj.docItems.dt().where({'ITEM_CODE':'CVO'})[0].PRICE = this.docObj.dt()[0].INTERFEL
+                            this.docObj.docItems.dt().where({'ITEM_CODE':'CVO'})[0].VAT = parseFloat((this.docObj.dt()[0].INTERFEL * (20 /100)).toFixed(4));
+                            this.docObj.docItems.dt().where({'ITEM_CODE':'CVO'})[0].AMOUNT = this.docObj.dt()[0].INTERFEL
+                            this.docObj.docItems.dt().where({'ITEM_CODE':'CVO'})[0].TOTALHT = this.docObj.dt()[0].INTERFEL
+                            this.docObj.docItems.dt().where({'ITEM_CODE':'CVO'})[0].TOTAL = parseFloat((this.docObj.docItems.dt().where({'ITEM_CODE':'CVO'})[0].TOTALHT +  parseFloat(this.docObj.docItems.dt().where({'ITEM_CODE':'CVO'})[0].VAT)).toFixed(2))
+                            this.popExtraCost.hide()
+                            this.extraCost.value = this.docObj.dt()[0].INTERFEL
+                            return
+                        }
+
+                        let tmpDocItems = {...this.docObj.docItems.empty}
+                        tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+                        tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+                        tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                        tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
+                        tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
+                        tmpDocItems.REF = this.docObj.dt()[0].REF
+                        tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+                        tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+                        tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+                        tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                        tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
+                        this.txtRef.readOnly = true
+                        this.txtRefno.readOnly = true
+                        this.docObj.docItems.addEmpty(tmpDocItems)
+                        await this.addItem(tmpCvoData.result.recordset[0],this.docObj.docItems.dt().length -1,1,this.docObj.dt()[0].INTERFEL)
+                        this.popExtraCost.hide()
+                    }
+                }        
+                this.extraCost.value = this.docObj.dt()[0].INTERFEL
+            }
+            resolve()
+        })
     }
     render()
     {
@@ -1657,7 +1662,11 @@ export default class salesInvoice extends React.PureComponent
                                                 {
                                                     await this.grdSlsInv.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
                                                 }
-                                                
+                                                let tmpData = this.sysParam.filter({ID:'autoInterfel',USERS:this.user.CODE}).getValue()
+                                                if(typeof tmpData != 'undefined' && tmpData.value ==  true)
+                                                {
+                                                   await this._calculateInterfel()
+                                                }
                                                 //***** FACTURE İMZALAMA *****/
                                                 let tmpSignedData = await this.nf525.signatureDoc(this.docObj.dt()[0],this.docObj.docItems.dt())                
                                                 this.docObj.dt()[0].SIGNATURE = tmpSignedData.SIGNATURE
