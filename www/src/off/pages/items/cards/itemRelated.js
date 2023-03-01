@@ -233,6 +233,21 @@ export default class itemRelated extends React.PureComponent
                                             }
                                         }
                                     ]}
+                                    onEnterKey={(async()=>
+                                        {
+                                            await this.popItemSelect.setVal(this.txtCode.value)
+                                            this.popItemSelect.show()
+                                            this.popItemSelect.onClick = async(data) =>
+                                            {
+                                                if(data.length > 0)
+                                                {
+                                                    await this.itemRelatedObj.load({ITEM_GUID:data[0].GUID});
+                                                    this.txtCode.GUID = data[0].GUID
+                                                    this.txtCode.value = data[0].CODE
+                                                    this.txtName.value = data[0].NAME
+                                                }
+                                            }
+                                        }).bind(this)}
                                     param={this.param.filter({ELEMENT:'txtCode',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtCode',USERS:this.user.CODE})}
                                     >
