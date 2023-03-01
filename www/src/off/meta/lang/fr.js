@@ -674,9 +674,9 @@ export const langFr =
         },
         msgUnitRowNotDelete :
         {
-            title: "Dikkat", //BAK
-            btn01: "Tamam", //BAK
-            msg: "Ana birim yada Alt birim i silemezsiniz !" //BAK
+            title: "Attention", //BAK
+            btn01: "OK", //BAK
+            msg: "Vous pouvez pas supprimé unité principale et sous-unité !" //BAK
         },
     },
     stk_01_002:  //"Identification des codes-barres" 
