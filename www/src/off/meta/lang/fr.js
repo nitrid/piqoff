@@ -672,6 +672,12 @@ export const langFr =
             title: "Calcul unitaire",  
             btn01: "Valider",   
         },
+        msgUnitRowNotDelete :
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ana birim yada Alt birim i silemezsiniz !" //BAK
+        },
     },
     stk_01_002:  //"Identification des codes-barres" 
     {

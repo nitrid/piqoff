@@ -1689,6 +1689,22 @@ export default class itemCard extends React.PureComponent
                                             height={'100%'} 
                                             width={'100%'}
                                             dbApply={false}
+                                            onRowRemoving={async (e)=>
+                                            {
+                                                if(e.key.TYPE != 2)
+                                                {
+                                                    e.cancel = true
+                                                    let tmpConfObj =
+                                                    {
+                                                        id:'msgUnitRowNotDelete',showTitle:true,title:this.t("msgUnitRowNotDelete.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                        button:[{id:"btn01",caption:this.t("msgUnitRowNotDelete.btn01"),location:'after'}],
+                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgUnitRowNotDelete.msg")}</div>)
+                                                    }
+                                                
+                                                    dialog(tmpConfObj);
+                                                    e.component.cancelEditData()
+                                                }
+                                            }}
                                             >
                                                 <Paging defaultPageSize={5} />
                                                 <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
