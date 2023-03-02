@@ -214,7 +214,6 @@ export class docCls
     {
         return new Promise(async resolve => 
         {
-            console.log(this.ds)
             this.ds.delete()
             resolve(await this.ds.update()); 
         });

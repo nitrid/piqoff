@@ -1131,7 +1131,7 @@ export default class salesDispatch extends React.PureComponent
                 {
                     if(tmpData.result.recordset[0].COUNTRY == 'FR')
                     {
-                    this.docObj.dt()[0].INTERFEL = parseFloat(((tmpInterfelHt * tmpData.result.recordset[0].FR) / 100).toFixed(2))
+                        this.docObj.dt()[0].INTERFEL = parseFloat(((tmpInterfelHt * tmpData.result.recordset[0].FR) / 100).toFixed(2))
                     }
                     else
                     {
@@ -1259,6 +1259,7 @@ export default class salesDispatch extends React.PureComponent
                                                 {
                                                    await this._calculateInterfel()
                                                 }
+                                                
                                                 if((await this.docObj.save()) == 0)
                                                 {                                                    
                                                     tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
@@ -2427,7 +2428,7 @@ export default class salesDispatch extends React.PureComponent
                                         this._calculateTotal()
                                     }}
                                     onRowRemoved={async (e)=>{
-                                        this._calculateTotal()
+                                        //this._calculateTotal()
                                     }}
                                     >
                                         <Paging defaultPageSize={10} />

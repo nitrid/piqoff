@@ -836,7 +836,7 @@ export class datatable
     }
     //#endregion
     push(pItem,pIsNew)
-    {            
+    {   
         if(!isProxy(pItem))
         {
             pItem = new Proxy(pItem, 
@@ -909,7 +909,7 @@ export class datatable
         {
             tmpIndex = arguments[0]
         }
-
+        
         if(tmpIndex > -1)
         {
             this._deleteList.push(this[tmpIndex]); 
@@ -918,7 +918,7 @@ export class datatable
         }
     }
     removeAll()
-    {               
+    {
         this.forEach(x =>
         {
             this._deleteList.push(x);
@@ -927,7 +927,7 @@ export class datatable
         this.emit('onDeleteAll')
     }
     clear()
-    {
+    {        
         this.splice(0,this.length);
         this._deleteList.splice(0,this._deleteList.length);
         this.emit('onClear')
@@ -1181,6 +1181,7 @@ export class datatable
         return new Promise(async resolve => 
         {
             let tmpQueryList = [];
+
             for (let i = 0; i < this._deleteList.length; i++) 
             {
                 if(typeof this.deleteCmd != 'undefined')
@@ -1369,7 +1370,8 @@ export class datatable
         
         //let tmpDt = new datatable();
         let tmpDt = Object.assign(Object.create(Object.getPrototypeOf(this)), this)
-        tmpDt.clear()
+        tmpDt.splice(0,tmpDt.length);
+        //tmpDt.clear()
         tmpDt.import(tmpGrpData)
         return tmpDt
     }
