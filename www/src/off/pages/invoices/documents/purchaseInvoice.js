@@ -671,6 +671,18 @@ export default class purchaseInvoice extends React.PureComponent
     async addItem(pData,pIndex,pQuantity,pPrice,pDiscount,pDiscountPer,pVat)
     {
         App.instance.setState({isExecute:true})
+        let tmpGrpQuery = 
+        {
+            query :"SELECT ORGINS,ISNULL((SELECT top 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID AND ITEM_UNIT_VW_01.TYPE = 1),1) AS SUB_FACTOR FROM ITEMS_VW_01 WHERE GUID = @GUID ",
+            param : ['GUID:string|50'],
+            value : [pData.GUID]
+        }
+        let tmpGrpData = await this.core.sql.execute(tmpGrpQuery) 
+        if(tmpGrpData.result.recordset.length > 0)
+        {
+            this.docObj.docItems.dt()[pIndex].ORIGIN = tmpGrpData.result.recordset[0].ORGINS
+            this.docObj.docItems.dt()[pIndex].SUB_FACTOR = tmpGrpData.result.recordset[0].SUB_FACTOR
+        }
         if(typeof pData.ITEM_TYPE == 'undefined')
         {
             let tmpTypeQuery = 
@@ -795,6 +807,7 @@ export default class purchaseInvoice extends React.PureComponent
                     else if(this.combineNew == false)
                     {
                         this.docObj.docItems.dt()[i].QUANTITY = this.docObj.docItems.dt()[i].QUANTITY + pQuantity
+                        this.docObj.docItems.dt()[i].SUB_QUANTITY = this.docObj.docItems.dt()[i].SUB_QUANTITY * this.docObj.docItems.dt()[i].SUB_FACTOR
                         this.docObj.docItems.dt()[i].VAT = parseFloat((this.docObj.docItems.dt()[i].VAT + (this.docObj.docItems.dt()[i].PRICE * (this.docObj.docItems.dt()[i].VAT_RATE / 100) * pQuantity)).toFixed(4))
                         this.docObj.docItems.dt()[i].AMOUNT = parseFloat((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE).toFixed(4))
                         this.docObj.docItems.dt()[i].TOTAL = parseFloat((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT).toFixed(4))
@@ -827,6 +840,7 @@ export default class purchaseInvoice extends React.PureComponent
         this.docObj.docItems.dt()[pIndex].ITEM_NAME = pData.NAME
 
         this.docObj.docItems.dt()[pIndex].QUANTITY = pQuantity
+        this.docObj.docItems.dt()[pIndex].SUB_QUANTITY = pQuantity * this.docObj.docItems.dt()[pIndex].SUB_FACTOR
 
         let tmpQuery = 
         {
@@ -841,10 +855,11 @@ export default class purchaseInvoice extends React.PureComponent
             if(tmpData.result.recordset.length > 0)
             {
                 this.docObj.docItems.dt()[pIndex].PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4))
-                this.docObj.docItems.dt()[pIndex].VAT = parseFloat((tmpData.result.recordset[0].PRICE * (this.docObj.docItems.dt()[pIndex].VAT_RATE / 100) * pQuantity).toFixed(4))
-                this.docObj.docItems.dt()[pIndex].AMOUNT = parseFloat((tmpData.result.recordset[0].PRICE  * pQuantity).toFixed(4))
-                this.docObj.docItems.dt()[pIndex].TOTAL = parseFloat(((tmpData.result.recordset[0].PRICE * pQuantity) + this.docObj.docItems.dt()[pIndex].VAT).toFixed(4))
-                this.docObj.docItems.dt()[pIndex].TOTALHT = parseFloat((this.docObj.docItems.dt()[pIndex].TOTAL - this.docObj.docItems.dt()[pIndex].VAT).toFixed(4))
+                this.docObj.docItems.dt()[pIndex].VAT = Number((tmpData.result.recordset[0].PRICE * (this.docObj.docItems.dt()[pIndex].VAT_RATE / 100) * pQuantity))
+                this.docObj.docItems.dt()[pIndex].AMOUNT = Number(tmpData.result.recordset[0].PRICE  * pQuantity).round(2)
+                this.docObj.docItems.dt()[pIndex].TOTAL = Number(((tmpData.result.recordset[0].PRICE * pQuantity) + this.docObj.docItems.dt()[pIndex].VAT)).round(2)
+                this.docObj.docItems.dt()[pIndex].TOTALHT = Number((this.docObj.docItems.dt()[pIndex].TOTAL - this.docObj.docItems.dt()[pIndex].VAT)).round(2)
+                this.docObj.docItems.dt()[pIndex].SUB_PRICE = Number(parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4)) / this.docObj.docItems.dt()[pIndex].SUB_FACTOR).round(2)
                 this._calculateTotal()
             }
             else
@@ -883,17 +898,6 @@ export default class purchaseInvoice extends React.PureComponent
         {
             this.docObj.docItems.dt()[pIndex].CUSTOMER_PRICE = tmpData.result.recordset[0].PRICE
             this.docObj.docItems.dt()[pIndex].DIFF_PRICE = this.docObj.docItems.dt()[pIndex].PRICE - this.docObj.docItems.dt()[pIndex].CUSTOMER_PRICE
-        }
-        let tmpGrpQuery = 
-        {
-            query :"SELECT ORGINS FROM ITEMS_VW_01 WHERE GUID = @GUID ",
-            param : ['GUID:string|50'],
-            value : [pData.GUID]
-        }
-        let tmpGrpData = await this.core.sql.execute(tmpGrpQuery) 
-        if(tmpGrpData.result.recordset.length > 0)
-        {
-            this.docObj.docItems.dt()[pIndex].ORIGIN = tmpGrpData.result.recordset[0].ORGINS
         }
         //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
         await this.itemRelated(pData.GUID,pQuantity)
@@ -3098,6 +3102,7 @@ export default class purchaseInvoice extends React.PureComponent
                                         {
                                             if(typeof e.data.QUANTITY != 'undefined')
                                             {
+                                                e.key.SUB_QUANTITY =  e.data.QUANTITY * e.key.SUB_FACTOR
                                                 let tmpQuery = 
                                                 {
                                                     query :"SELECT [dbo].[FN_CUSTOMER_PRICE](@ITEM_GUID,@CUSTOMER_GUID,@QUANTITY,GETDATE()) AS PRICE",
@@ -3108,9 +3113,22 @@ export default class purchaseInvoice extends React.PureComponent
                                                 if(tmpData.result.recordset.length > 0)
                                                 {
                                                     e.key.PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(3))
+                                                    e.key.SUB_PRICE = Number(((tmpData.result.recordset[0].PRICE).toFixed(3)) / e.key.SUB_FACTOR).round(2)
                                                     
                                                     this._calculateTotal()
                                                 }
+                                            }
+                                            if(typeof e.data.SUB_QUANTITY != 'undefined')
+                                            {
+                                                e.key.QUANTITY = e.data.SUB_QUANTITY / e.key.SUB_FACTOR
+                                            }
+                                            if(typeof e.data.PRICE != 'undefined')
+                                            {
+                                                e.key.SUB_PRICE = e.data.PRICE / e.key.SUB_FACTOR
+                                            }
+                                            if(typeof e.data.SUB_PRICE != 'undefined')
+                                            {
+                                                e.key.PRICE = e.data.SUB_PRICE * e.key.SUB_FACTOR
                                             }
                                             if(typeof e.data.DISCOUNT_RATE != 'undefined')
                                             {
@@ -3151,8 +3169,8 @@ export default class purchaseInvoice extends React.PureComponent
                                             }
                                            
 
-                                            e.key.VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100)).toFixed(4));
-                                            e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(4))
+                                            e.key.VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100)).toFixed(2));
+                                            e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(2))
                                             e.key.TOTALHT = parseFloat((e.key.AMOUNT - e.key.DISCOUNT).toFixed(2))
                                             e.key.TOTAL = parseFloat((e.key.TOTALHT + e.key.VAT).toFixed(2))
 
@@ -3185,7 +3203,9 @@ export default class purchaseInvoice extends React.PureComponent
                                             <Column dataField="ITEM_NAME" caption={this.t("grdPurcInv.clmItemName")} width={200} allowHeaderFiltering={false}/>
                                             <Column dataField="ORIGIN" caption={this.t("grdPurcInv.clmOrigin")} width={60} allowEditing={true}  allowHeaderFiltering={false} editCellRender={this._cellRoleRender} />
                                             <Column dataField="QUANTITY" caption={this.t("grdPurcInv.clmQuantity")} dataType={'number'} width={70} editCellRender={this._cellRoleRender} allowHeaderFiltering={false}/>
+                                            <Column dataField="SUB_QUANTITY" caption={this.t("grdPurcInv.clmSubQuantity")} dataType={'number'} width={70} allowHeaderFiltering={false}/>
                                             <Column dataField="PRICE" caption={this.t("grdPurcInv.clmPrice")} dataType={'number'} format={'€#,##0.000'} width={70} allowHeaderFiltering={false}/>
+                                            <Column dataField="SUB_PRICE" caption={this.t("grdPurcInv.clmSubPrice")} dataType={'number'} format={'€#,##0.000'} width={70} allowHeaderFiltering={false}/>
                                             <Column dataField="CUSTOMER_PRICE" caption={this.t("grdPurcInv.clmCustomerPrice")} dataType={'number'} format={'€#,##0.000'} width={70} allowHeaderFiltering={false} allowEditing={false}/>
                                             <Column dataField="DIFF_PRICE" caption={this.t("grdPurcInv.clmDiffPrice")} dataType={'number'} format={'€#,##0.000'} width={70} allowHeaderFiltering={false} allowEditing={false}/>
                                             <Column dataField="AMOUNT" caption={this.t("grdPurcInv.clmAmount")} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false} width={80} allowHeaderFiltering={false}/>

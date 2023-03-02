@@ -3656,7 +3656,9 @@ export const langTr =
             clmDescription :"Açıklama",
             clmCuser :"Kullanıcı",
             clmMulticode : "T.Kodu",
-            clmOrigin : "Menşei"
+            clmOrigin : "Menşei",
+            clmSubQuantity : "Alt Birim",
+            clmSubPrice : "Alt Birim Fiyatı"
         },
         grdInvoicePayment: 
         {
@@ -4172,7 +4174,9 @@ export const langTr =
             clmDescription :"Açıklama",
             clmCuser :"Kullanıcı",
             clmVatRate : "KDV %",
-            clmOrigin : "Menşei"
+            clmOrigin : "Menşei",
+            clmSubQuantity : "Alt Birim",
+            clmSubPrice : "Alt Birim Fiyatı"
         },
         grdInvoicePayment: 
         {
@@ -9572,7 +9576,9 @@ export const langTr =
             clmCuser :"Kullanıcı",
             clmMulticode : "T.Kodu",
             clmVatRate : "KDV %",
-            clmOrigin : "Menşei"
+            clmOrigin : "Menşei",
+            clmSubQuantity : "Alt Birim",
+            clmSubPrice : "Alt Birim Fiyatı"
         },
         popDiscount : 
         {
@@ -9926,7 +9932,9 @@ export const langTr =
             clmCuser :"Kullanıcı",
             clmBarcode : "Barkod",
             clmVatRate : "KDV %",
-            clmOrigin : "Menşei"
+            clmOrigin : "Menşei",
+            clmSubQuantity : "Alt Birim",
+            clmSubPrice : "Alt Birim Fiyatı"
         },
         popDiscount : 
         {

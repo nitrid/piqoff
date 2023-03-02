@@ -257,7 +257,7 @@ export class docItemsCls
             SUB_QUANTITY : 1,
             PRICE : 0,
             SUB_PRICE : 0,
-            SUB_UNIT : 1,
+            SUB_FACTOR : 1,
             CUSTOMER_PRICE : 0,
             DIFF_PRICE : 0,
             DISCOUNT : 0,
