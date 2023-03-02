@@ -3655,6 +3655,8 @@ export const langFr =
             clmCuser :"Utilisateur",
             clmMulticode : "FRN.Code",
             clmOrigin : "Origine",
+            clmSubQuantity : "Alt Birim",   // BAK
+            clmSubPrice : "Alt Birim Fiyatı"   // BAK
         },
         grdInvoicePayment: 
         {
@@ -4170,6 +4172,8 @@ export const langFr =
             clmCuser :"Utilisateur",
             clmVatRate : "TVA %",
             clmOrigin : "Origine",
+            clmSubQuantity : "Alt Birim",   // BAK
+            clmSubPrice : "Alt Birim Fiyatı"   // BAK
         },
         grdInvoicePayment: 
         {
@@ -9545,7 +9549,9 @@ export const langFr =
             clmOrder : "Commande No", 
             clmVatRate : "TVA %", 
             clmMulticode : "FRN.Code", 
-            clmOrigin : "Origine"
+            clmOrigin : "Origine",
+            clmSubQuantity : "Alt Birim",  // BAK
+            clmSubPrice : "Alt Birim Fiyatı"  // BAK
         },
         popDiscount : 
         {
@@ -9900,6 +9906,8 @@ export const langFr =
             clmVatRate : "TVA %",
             clmBarcode : "Code Barre",
             clmOrigin : "Origine",
+            clmSubQuantity : "Alt Birim",  // BAK
+            clmSubPrice : "Alt Birim Fiyatı"  // BAK
         },
         popDiscount : 
         {
