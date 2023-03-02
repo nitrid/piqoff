@@ -1565,6 +1565,7 @@ export default class salesInvoice extends React.PureComponent
                             this.docObj.docItems.dt().where({'ITEM_CODE':'CVO'})[0].TOTAL = parseFloat((this.docObj.docItems.dt().where({'ITEM_CODE':'CVO'})[0].TOTALHT +  parseFloat(this.docObj.docItems.dt().where({'ITEM_CODE':'CVO'})[0].VAT)).toFixed(2))
                             this.popExtraCost.hide()
                             this.extraCost.value = this.docObj.dt()[0].INTERFEL
+                            resolve()
                             return
                         }
 
@@ -1670,7 +1671,18 @@ export default class salesInvoice extends React.PureComponent
                                                 let tmpData = this.sysParam.filter({ID:'autoInterfel',USERS:this.user.CODE}).getValue()
                                                 if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                 {
-                                                   await this._calculateInterfel()
+                                                    let tmpConfObj =
+                                                    {
+                                                        id:'msgInterfel',showTitle:true,title:this.t("msgInterfel.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                        button:[{id:"btn01",caption:this.t("msgInterfel.btn01"),location:'before'},{id:"btn02",caption:this.t("msgInterfel.btn02"),location:'after'}],
+                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgInterfel.msg")}</div>)
+                                                    }
+                                                    
+                                                    let pResult = await dialog(tmpConfObj);
+                                                    if(pResult == 'btn01')
+                                                    {
+                                                        await this._calculateInterfel()
+                                                    }
                                                 }
                                                 //***** FACTURE İMZALAMA *****/
                                                 let tmpSignedData = await this.nf525.signatureDoc(this.docObj.dt()[0],this.docObj.docItems.dt())                

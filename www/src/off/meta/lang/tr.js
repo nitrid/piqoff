@@ -4220,6 +4220,13 @@ export const langTr =
             btn01: "Tamam",
             msg: "Kalan Tutardan Fazla Tahsilat Girilemez !"
         },
+        msgInterfel:
+        {
+            title: "Dikkat",
+            btn01: "Evet",
+            btn02: "Hayır",
+            msg: "Interfel uygulansın mı?"
+        },
         msgSave:
         {
             title: "Dikkat",
@@ -9960,6 +9967,13 @@ export const langTr =
             title: "Dikkat",
             btn01: "Tamam",
             msg: "Evrak Üst Bilgileri Tamalanmadan Stok Girilemez !"
+        },
+        msgInterfel:
+        {
+            title: "Dikkat",
+            btn01: "Evet",
+            btn02: "Hayır",
+            msg: "Interfel uygulansın mı?"
         },
         msgSave:
         {
