@@ -4176,7 +4176,8 @@ export const langTr =
             clmVatRate : "KDV %",
             clmOrigin : "Menşei",
             clmSubQuantity : "Alt Birim",
-            clmSubPrice : "Alt Birim Fiyatı"
+            clmSubPrice : "Alt Birim Fiyatı",
+            clmSubFactor : "Katsayı",
         },
         grdInvoicePayment: 
         {
@@ -9934,7 +9935,8 @@ export const langTr =
             clmVatRate : "KDV %",
             clmOrigin : "Menşei",
             clmSubQuantity : "Alt Birim",
-            clmSubPrice : "Alt Birim Fiyatı"
+            clmSubPrice : "Alt Birim Fiyatı",
+            clmSubFactor : "Katsayı",
         },
         popDiscount : 
         {

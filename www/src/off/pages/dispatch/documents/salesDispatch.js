@@ -125,7 +125,7 @@ export default class salesDispatch extends React.PureComponent
         this.docObj.addEmpty(tmpDoc);
 
         this.txtRef.readOnly = false
-        this.txtRefno.readOnly = false
+        this.txtRefno.readOnly = true
         this.docLocked = false
         this.extraCost.value = 0
         
@@ -1153,6 +1153,7 @@ export default class salesDispatch extends React.PureComponent
                             this.docObj.docItems.dt().where({'ITEM_CODE':'CVO'})[0].TOTAL = parseFloat((this.docObj.dt()[0].INTERFEL -  parseFloat((this.docObj.dt()[0].INTERFEL * (20 /100)).toFixed(4))).toFixed(2))
                             this.popExtraCost.hide()
                             this.extraCost.value = this.docObj.dt()[0].INTERFEL
+                            resolve()
                             return
                         }
                         let tmpDocItems = {...this.docObj.docItems.empty}
@@ -1451,7 +1452,7 @@ export default class salesDispatch extends React.PureComponent
                                                 {
                                                     let tmpQuery = 
                                                     {
-                                                        query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 40 AND REF = @REF ",
+                                                        query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 40 --AND REF = @REF ",
                                                         param : ['REF:string|25'],
                                                         value : [this.txtRef.value]
                                                     }
@@ -2443,6 +2444,7 @@ export default class salesDispatch extends React.PureComponent
                                         <Column dataField="ORIGIN" caption={this.t("grdSlsDispatch.clmOrigin")} width={60} allowEditing={true} />
                                         <Column dataField="ITEM_BARCODE" caption={this.t("grdSlsDispatch.clmBarcode")} width={115} allowEditing={false}/>
                                         <Column dataField="QUANTITY" caption={this.t("grdSlsDispatch.clmQuantity")} width={70} editCellRender={this._cellRoleRender} dataType={'number'}/>
+                                        <Column dataField="SUB_FACTOR" caption={this.t("grdSlsDispatch.clmSubFactor")} width={60} allowEditing={false}/>
                                         <Column dataField="SUB_QUANTITY" caption={this.t("grdSlsDispatch.clmSubQuantity")} dataType={'number'} width={70} allowHeaderFiltering={false}/>
                                         <Column dataField="PRICE" caption={this.t("grdSlsDispatch.clmPrice")} width={70} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
                                         <Column dataField="SUB_PRICE" caption={this.t("grdSlsDispatch.clmSubPrice")} dataType={'number'} format={'€#,##0.000'} width={70} allowHeaderFiltering={false}/>

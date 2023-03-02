@@ -4173,7 +4173,8 @@ export const langFr =
             clmVatRate : "TVA %",
             clmOrigin : "Origine",
             clmSubQuantity : "Alt Birim",   // BAK
-            clmSubPrice : "Alt Birim Fiyatı"   // BAK
+            clmSubPrice : "Alt Birim Fiyatı",   // BAK
+            clmSubFactor : "Katsayı", // BAK
         },
         grdInvoicePayment: 
         {
@@ -9907,7 +9908,8 @@ export const langFr =
             clmBarcode : "Code Barre",
             clmOrigin : "Origine",
             clmSubQuantity : "Alt Birim",  // BAK
-            clmSubPrice : "Alt Birim Fiyatı"  // BAK
+            clmSubPrice : "Alt Birim Fiyatı",  // BAK
+            clmSubFactor : "Katsayı", // BAK
         },
         popDiscount : 
         {
