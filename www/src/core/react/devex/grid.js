@@ -1,10 +1,10 @@
 import React from 'react';
-import DataGrid,{Column,ColumnChooser,ColumnFixing,Pager,Paging,Scrolling,Selection,Editing,FilterRow,SearchPanel,HeaderFilter,Popup,KeyboardNavigation,Form,Lookup,Export,Button,GroupPanel,Summary,TotalItem} from 'devextreme-react/data-grid';
+import DataGrid,{Column,ColumnChooser,ColumnFixing,Pager,Paging,Scrolling,Selection,Editing,FilterRow,SearchPanel,HeaderFilter,Popup,KeyboardNavigation,Form,Lookup,Export,Button,GroupPanel,Summary,TotalItem,StateStoring} from 'devextreme-react/data-grid';
 import Toolbar,{Item} from 'devextreme-react/toolbar';
 import { exportDataGrid } from 'devextreme/excel_exporter';
 import Base from './base.js';
 
-export {Column,ColumnChooser,ColumnFixing,Pager,Paging,Scrolling,Selection,Editing,FilterRow,SearchPanel,HeaderFilter,Popup,Toolbar,Item,KeyboardNavigation,Form,Lookup,Export,Button,GroupPanel,Summary,TotalItem}
+export {Column,ColumnChooser,ColumnFixing,Pager,Paging,Scrolling,Selection,Editing,FilterRow,SearchPanel,HeaderFilter,Popup,Toolbar,Item,KeyboardNavigation,Form,Lookup,Export,Button,GroupPanel,Summary,TotalItem,StateStoring}
 export default class NdGrid extends Base
 {
     constructor(props)
@@ -48,6 +48,7 @@ export default class NdGrid extends Base
     //#region Private
     _onInitialized(e) 
     {
+        console.log(1111)
         this.devGrid = e.component;
     }    
     _onSelectionChanged(e) 
