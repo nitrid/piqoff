@@ -343,7 +343,7 @@ export const langFr =
         slsRpt_01_001 : "Rapport de Comparaison de Documents",  // BAK
         slsRpt_01_002 : "Rapport de ventes Basées Famille",  // BAK
         slsRpt_01_003 : "Rapport des Factures de Vente", // BAK
-        slsRpt_02_004 : "Rapport de Vente", // BAK
+        slsRpt_01_004 : "Rapport de Vente", // BAK
         purchaseReport : "Rapports",
         slsRpt_02_001 : "Rapport des Factures d'Achat", // BAK
         slsRpt_02_002 : "Rapport DEB ", // BAK
@@ -4216,6 +4216,13 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             msg: "Le montant saisie ne peut être supérieur au solde !"
+        },
+        msgInterfel:
+        {
+            title: "Attention",
+            btn01: "Evet",
+            btn02: "Hayır",
+            msg: "Interfel uygulansın mı?"
         },
         msgSave:
         {
@@ -9933,6 +9940,13 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             msg: "Veuillez saisir les en-tête avant l'achèvement !"
+        },
+        msgInterfel:
+        {
+            title: "Dikkat",
+            btn01: "Evet",
+            btn02: "Hayır",
+            msg: "Interfel uygulansın mı?"
         },
         msgSave:
         {
