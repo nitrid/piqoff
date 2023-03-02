@@ -1636,7 +1636,6 @@ export default class rebateInvoice extends React.PureComponent
                                                 }
                                             }
                                         ]
-                                        
                                     }
                                     >
                                         <Column dataField="REF" caption={this.t("pg_Docs.clmRef")} width={150}/>
@@ -1644,7 +1643,6 @@ export default class rebateInvoice extends React.PureComponent
                                         <Column dataField="DOC_DATE_CONVERT" caption={this.t("pg_Docs.clmDate")} width={300} />
                                         <Column dataField="INPUT_NAME" caption={this.t("pg_Docs.clmInputName")} width={300} />
                                         <Column dataField="INPUT_CODE" caption={this.t("pg_Docs.clmInputCode")} width={300} />
-                                        
                                     </NdPopGrid>
                                 </Item>
                                 {/* cmbDepot */}
