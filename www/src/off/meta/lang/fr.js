@@ -252,9 +252,9 @@ export const langFr =
         fns_04 : "Rapports",
         fns_04_001 : "Rapport sur les relevés bancaires",   
         fns_04_002 : "Rapport sur le solde actuel",  
-        fns_05 : "Operasyonlar", //BAK
-        fns_05_001 : "Toplu Tahsilat Girişi", //BAK
-        fns_05_002 : "Toplu Ödeme Girişi", //BAK
+        fns_05 : "Opérations", //BAK
+        fns_05_001 : "Saisie Multi Encaissement", //BAK
+        fns_05_002 : "Saisie Multi Paiement", //BAK
         pos: "Traitement Pos",
         pos_01 : "Saisie",
         pos_01_001 : "Identifier Caisse",
@@ -3655,9 +3655,9 @@ export const langFr =
             clmCuser :"Utilisateur",
             clmMulticode : "FRN.Code",
             clmOrigin : "Origine",
-            clmSubQuantity : "Alt Birim",   // BAK
-            clmSubPrice : "Alt Birim Fiyatı" ,  // BAK
-            clmSubFactor : "Katsayı"
+            clmSubQuantity : "Qtt. Unitaire",   // BAK
+            clmSubPrice : "Prix Unitaire",   // BAK
+            clmSubFactor : "Coefficient"
         },
         grdInvoicePayment: 
         {
@@ -4173,9 +4173,9 @@ export const langFr =
             clmCuser :"Utilisateur",
             clmVatRate : "TVA %",
             clmOrigin : "Origine",
-            clmSubQuantity : "Alt Birim",   // BAK
-            clmSubPrice : "Alt Birim Fiyatı",   // BAK
-            clmSubFactor : "Katsayı", // BAK
+            clmSubQuantity : "Qtt. Unitaire",   // BAK
+            clmSubPrice : "Prix Unitaire",   // BAK
+            clmSubFactor : "Coefficient", // BAK
         },
         grdInvoicePayment: 
         {
@@ -4221,9 +4221,9 @@ export const langFr =
         msgInterfel:
         {
             title: "Attention",
-            btn01: "Evet",
-            btn02: "Hayır",
-            msg: "Interfel uygulansın mı?"
+            btn01: "Oui",
+            btn02: "Non",
+            msg: "Voulez-vous l'application Interfel?"
         },
         msgSave:
         {
@@ -4587,9 +4587,9 @@ export const langFr =
         },
         popExtraCost: 
         {
-            title : "Ek Maliyetler",
-            interfel : "Interfel",
-            calculateInterfel : "Interfeli Hesapla",
+            title : "Supplément",  
+            interfel : "Interfel", 
+            calculateInterfel : "Calcul de l'interfel",
         }
     },
     ftr_02_003 : // "İade Faturası"
@@ -4695,7 +4695,10 @@ export const langFr =
             clmCuser :"Utilisateur",
             clmMulticode : "FRN.Code",    
             clmBarcode : "Code-barres",    
-            clmVatRate :"TVA %"     
+            clmVatRate :"TVA %",
+            clmSubQuantity : "Qtt. Unitaire",
+            clmSubPrice : "Prix Unitaire",
+            clmSubFactor : "Coefficient",   
         },
         grdInvoicePayment: 
         {
@@ -6438,7 +6441,10 @@ export const langFr =
             clmCuser :"Utilisateur",
             clmMulticode : "FRN.Code",    
             clmBarcode : "Code-barres",    
-            clmVatRate :"TVA %"     
+            clmVatRate :"TVA %",
+            clmSubQuantity : "Qtt. Unitaire",
+            clmSubPrice : "Prix Unitaire",
+            clmSubFactor : "Coefficient",
         },
         grdInvoicePayment: 
         {
@@ -9559,9 +9565,9 @@ export const langFr =
             clmVatRate : "TVA %", 
             clmMulticode : "FRN.Code", 
             clmOrigin : "Origine",
-            clmSubQuantity : "Alt Birim",  // BAK
-            clmSubPrice : "Alt Birim Fiyatı",  // BAK
-            clmSubFactor : "Katsayı"
+            clmSubQuantity : "Qtt. Unitaire",  // BAK
+            clmSubPrice : "Prix Unitaire",  // BAK
+            clmSubFactor : "Coefficient"
         },
         popDiscount : 
         {
@@ -9917,9 +9923,9 @@ export const langFr =
             clmVatRate : "TVA %",
             clmBarcode : "Code Barre",
             clmOrigin : "Origine",
-            clmSubQuantity : "Alt Birim",  // BAK
-            clmSubPrice : "Alt Birim Fiyatı",  // BAK
-            clmSubFactor : "Katsayı", // BAK
+            clmSubQuantity : "Qtt. Unitaire",  // BAK
+            clmSubPrice : "Prix Unitaire",  // BAK
+            clmSubFactor : "Coefficient", // BAK
         },
         popDiscount : 
         {
@@ -9946,10 +9952,10 @@ export const langFr =
         },
         msgInterfel:
         {
-            title: "Dikkat",
-            btn01: "Evet",
-            btn02: "Hayır",
-            msg: "Interfel uygulansın mı?"
+            title: "Attention",
+            btn01: "Oui",
+            btn02: "Non",
+            msg: "Voulez-vous l'application Interfel?"
         },
         msgSave:
         {
@@ -10308,7 +10314,10 @@ export const langFr =
             clmDescription :"Motif",
             clmCuser :"Utilisateur",
             clmMulticode : "Référence Fournisseur",
-            clmBarcode : "Code-Barres"
+            clmBarcode : "Code-Barres",
+            clmSubQuantity : "Qtt. Unitaire",
+            clmSubPrice : "Prix Unitaire",
+            clmSubFactor : "Coefficient",
         },
         popDiscount : 
         {
@@ -10994,7 +11003,10 @@ export const langFr =
             clmDescription :"Motif",
             clmCuser :"Utilisateur",
             clmMulticode : "Référence Fournisseur",
-            clmBarcode : "Code Barre"
+            clmBarcode : "Code Barre",
+            clmSubQuantity : "Qtt. Unitaire",
+            clmSubPrice : "Prix Unitaire",
+            clmSubFactor : "Coefficient",
         },
         popDiscount : 
         {
@@ -11730,9 +11742,9 @@ export const langFr =
             clmCuser :"Utilisateur",
             clmOffer : "Proposition No", 
             clmVatRate : "TVA %",
-            clmSubQuantity : "Alt Birim",
-            clmSubPrice : "Alt Birim Fiyatı",
-            clmSubFactor : "Katsayı",
+            clmSubQuantity : "Qtt. Unitaire",
+            clmSubPrice : "Prix Unitaire",
+            clmSubFactor : "Coefficient",
         },
         popDiscount : 
         {
@@ -12031,6 +12043,7 @@ export const langFr =
             clmRefNo : "Numéro",
             clmInputName : "Nom Client",
             clmInputCode  : "Code Client",
+            clmAddress : "Adresse"
         },
         pg_txtCustomerCode : 
         {
@@ -12051,7 +12064,7 @@ export const langFr =
         {
             clmItemCode: "Code",
             clmItemName: "Nom",
-            clmPrice: "Prix ",
+            clmPrice: "Prix HT",
             clmQuantity : "Quantité",
             clmDiscount : "Remise",
             clmDiscountRate : "Remise %",
@@ -12066,9 +12079,9 @@ export const langFr =
             clmOffer : "N° de l'offre", 
             clmBarcode : "Code Barre",
             clmVatRate : "TVA %",
-            clmSubQuantity : "Alt Birim",
-            clmSubPrice : "Alt Birim Fiyatı",
-            clmSubFactor : "Katsayı",
+            clmSubQuantity : "Qtt. Unitaire",
+            clmSubPrice : "Prix Unitaire",
+            clmSubFactor : "Coefficient",
         },
         popDiscount : 
         {
@@ -12541,7 +12554,8 @@ export const langFr =
             clmCostPrice : "Coût", 
             clmMulticode : "FRN. Code" ,
             clmUnit : "Unité",
-            clmUnitPrice : "Unit Prix HT"
+            clmUnitPrice : "Unit Prix HT",
+            clmOrgins : "Origine",
         },
         popItems: 
         {
@@ -12709,7 +12723,8 @@ export const langFr =
             clmVatExtPrice : "Prix HT", 
             clmCostPrice : "Coût", 
             clmUnit : "Unité",
-            clmUnitPrice : "Unit Prix HT"
+            clmUnitPrice : "Unit Prix HT",
+            clmOrgins : "Origine",
         },
         popItems: 
         {

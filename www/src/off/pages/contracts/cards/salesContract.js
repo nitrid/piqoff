@@ -139,7 +139,7 @@ export default class salesContract extends React.PureComponent
         }   
         let tmpCheckQuery = 
         {
-            query :"SELECT COST_PRICE,VAT,PRICE_SALE AS PRICE,UNIT_GUID,UNIT_NAME,UNIT_FACTOR,MAIN_GRP_NAME FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE ITEMS_BARCODE_MULTICODE_VW_01.GUID = @GUID",
+            query :"SELECT COST_PRICE,VAT,PRICE_SALE AS PRICE,UNIT_GUID,UNIT_NAME,UNIT_FACTOR,MAIN_GRP_NAME,ORGINS_NAME FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE ITEMS_BARCODE_MULTICODE_VW_01.GUID = @GUID",
             param : ['GUID:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
             value : [pData.GUID,this.txtCustomerCode.GUID,1]
         }
@@ -154,6 +154,7 @@ export default class salesContract extends React.PureComponent
             tmpEmpty.UNIT_NAME = tmpCheckData.result.recordset[0].UNIT_NAME
             tmpEmpty.UNIT_FACTOR = tmpCheckData.result.recordset[0].UNIT_FACTOR
             tmpEmpty.MAIN_GRP_NAME = tmpCheckData.result.recordset[0].MAIN_GRP_NAME
+            tmpEmpty.ORGINS_NAME = tmpCheckData.result.recordset[0].ORGINS_NAME
         }
         else
         {
@@ -849,6 +850,7 @@ export default class salesContract extends React.PureComponent
                                         <Column dataField="CDATE_FORMAT" caption={this.t("grdContracts.clmCreateDate")} allowEditing={false} width={80}/>
                                         <Column dataField="ITEM_CODE" caption={this.t("grdContracts.clmItemCode")} width={150} allowEditing={false}/>
                                         <Column dataField="ITEM_NAME" caption={this.t("grdContracts.clmItemName")} width={300} allowEditing={false}/>
+                                        <Column dataField="ORGINS_NAME" caption={this.t("grdContracts.clmOrgins")} width={110} allowEditing={false}/>
                                         <Column dataField="MAIN_GRP_NAME" caption={this.t("grdContracts.clmGrpName")} width={150} allowEditing={false}/>
                                         <Column dataField="COST_PRICE" caption={this.t("grdContracts.clmCostPrice")} width={80} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>
                                         <Column dataField="PRICE_VAT_EXT" caption={this.t("grdContracts.clmVatExtPrice")} width={80} allowEditing={false} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}} />

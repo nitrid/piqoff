@@ -559,11 +559,24 @@ export default class rebateDispatch extends React.PureComponent
     async addItem(pData,pIndex,pQuantity)
     {
         App.instance.setState({isExecute:true})
+        let tmpGrpQuery = 
+        {
+            query :"SELECT ORGINS,ISNULL((SELECT top 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID AND ITEM_UNIT_VW_01.TYPE = 1),1) AS SUB_FACTOR, " +
+             "ISNULL((SELECT top 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID AND ITEM_UNIT_VW_01.TYPE = 1),'') AS SUB_SYMBOL FROM ITEMS_VW_01 WHERE GUID = @GUID ",
+            param : ['GUID:string|50'],
+            value : [pData.GUID]
+        }
+        let tmpGrpData = await this.core.sql.execute(tmpGrpQuery) 
+        if(tmpGrpData.result.recordset.length > 0)
+        {
+            this.docObj.docItems.dt()[pIndex].ORIGIN = tmpGrpData.result.recordset[0].ORGINS
+            this.docObj.docItems.dt()[pIndex].SUB_FACTOR = tmpGrpData.result.recordset[0].SUB_FACTOR
+            this.docObj.docItems.dt()[pIndex].SUB_SYMBOL = tmpGrpData.result.recordset[0].SUB_SYMBOL
+        }
         if(typeof pQuantity == 'undefined')
         {
             pQuantity = 1
         }
-
         for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
         {
             if(this.docObj.docItems.dt()[i].ITEM_CODE == pData.CODE)
@@ -577,6 +590,7 @@ export default class rebateDispatch extends React.PureComponent
                         if(e == 'btn01')
                         {
                             this.docObj.docItems.dt()[i].QUANTITY = this.docObj.docItems.dt()[i].QUANTITY + pQuantity
+                            this.docObj.docItems.dt()[i].SUB_QUANTITY = this.docObj.docItems.dt()[i].SUB_QUANTITY * this.docObj.docItems.dt()[i].SUB_FACTOR
                             this.docObj.docItems.dt()[i].VAT = parseFloat((this.docObj.docItems.dt()[i].VAT + (this.docObj.docItems.dt()[i].PRICE * (this.docObj.docItems.dt()[i].VAT_RATE / 100) * pQuantity)).toFixed(3))
                             this.docObj.docItems.dt()[i].AMOUNT = parseFloat((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE).toFixed(3))
                             this.docObj.docItems.dt()[i].TOTAL = parseFloat((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT).toFixed(3))
@@ -611,6 +625,7 @@ export default class rebateDispatch extends React.PureComponent
                 {
                 
                     this.docObj.docItems.dt()[i].QUANTITY = this.docObj.docItems.dt()[i].QUANTITY + pQuantity
+                    this.docObj.docItems.dt()[i].SUB_QUANTITY = this.docObj.docItems.dt()[i].SUB_QUANTITY * this.docObj.docItems.dt()[i].SUB_FACTOR
                     this.docObj.docItems.dt()[i].VAT = parseFloat((this.docObj.docItems.dt()[i].VAT + (this.docObj.docItems.dt()[i].PRICE * (this.docObj.docItems.dt()[i].VAT_RATE / 100) * pQuantity)).toFixed(3))
                     this.docObj.docItems.dt()[i].AMOUNT = parseFloat((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE).toFixed(3))
                     this.docObj.docItems.dt()[i].TOTAL = parseFloat((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT).toFixed(3))
@@ -633,6 +648,7 @@ export default class rebateDispatch extends React.PureComponent
         this.docObj.docItems.dt()[pIndex].DISCOUNT = 0
         this.docObj.docItems.dt()[pIndex].DISCOUNT_RATE = 0
         this.docObj.docItems.dt()[pIndex].QUANTITY = pQuantity
+        this.docObj.docItems.dt()[pIndex].SUB_QUANTITY = pQuantity * this.docObj.docItems.dt()[pIndex].SUB_FACTOR
         let tmpQuery = 
         {
             query :"SELECT dbo.FN_PRICE_SALE_VAT_EXT(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,NULL) AS PRICE",
@@ -647,7 +663,7 @@ export default class rebateDispatch extends React.PureComponent
             this.docObj.docItems.dt()[pIndex].AMOUNT = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(3))
             this.docObj.docItems.dt()[pIndex].TOTAL = parseFloat((tmpData.result.recordset[0].PRICE + this.docObj.docItems.dt()[pIndex].VAT).toFixed(3))
             this.docObj.docItems.dt()[pIndex].TOTALHT = parseFloat((this.docObj.docItems.dt()[pIndex].TOTAL - this.docObj.docItems.dt()[pIndex].VAT).toFixed(4))
-            
+            this.docObj.docItems.dt()[pIndex].SUB_PRICE = Number(parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4)) / this.docObj.docItems.dt()[pIndex].SUB_FACTOR).round(2)
             this._calculateTotal()
         }
         //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
@@ -1920,7 +1936,22 @@ export default class rebateDispatch extends React.PureComponent
                                             e.key.DISCOUNT_3 = 0
                                             e.key.DISCOUNT_RATE = Number(e.key.PRICE * e.key.QUANTITY).rate2Num(e.data.DISCOUNT)
                                         }
-
+                                        if(typeof e.data.QUANTITY != 'undefined')
+                                        {
+                                            e.key.SUB_QUANTITY =  e.data.QUANTITY * e.key.SUB_FACTOR
+                                        }
+                                        if(typeof e.data.SUB_QUANTITY != 'undefined')
+                                        {
+                                            e.key.QUANTITY = e.data.SUB_QUANTITY / e.key.SUB_FACTOR
+                                        }
+                                        if(typeof e.data.PRICE != 'undefined')
+                                        {
+                                            e.key.SUB_PRICE = e.data.PRICE / e.key.SUB_FACTOR
+                                        }
+                                        if(typeof e.data.SUB_PRICE != 'undefined')
+                                        {
+                                            e.key.PRICE = e.data.SUB_PRICE * e.key.SUB_FACTOR
+                                        }
                                         e.key.VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100)).toFixed(4));
                                         e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(4))
                                         e.key.TOTAL = parseFloat((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) + e.key.VAT).toFixed(4))
@@ -1947,19 +1978,22 @@ export default class rebateDispatch extends React.PureComponent
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                         <Export fileName={this.lang.t("menu.irs_02_003")} enabled={true} allowExportSelectedData={true} />
                                         <Column dataField="LINE_NO" caption={this.t("LINE_NO")} visible={false} width={50} dataType={'number'} defaultSortOrder="desc"/>
-                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdRebtDispatch.clmCreateDate")} width={100} allowEditing={false}/>
-                                        <Column dataField="CUSER_NAME" caption={this.t("grdRebtDispatch.clmCuser")} width={100} allowEditing={false}/>
-                                        <Column dataField="ITEM_CODE" caption={this.t("grdRebtDispatch.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
-                                        <Column dataField="MULTICODE" caption={this.t("grdRebtDispatch.clmMulticode")} width={110} allowEditing={false}/>
-                                        <Column dataField="ITEM_NAME" caption={this.t("grdRebtDispatch.clmItemName")} width={280} />
-                                        <Column dataField="ITEM_BARCODE" caption={this.t("grdRebtDispatch.clmBarcode")} width={130} allowEditing={false}/>
-                                        <Column dataField="QUANTITY" caption={this.t("grdRebtDispatch.clmQuantity")} width={70} editCellRender={this._cellRoleRender} dataType={'number'}/>
-                                        <Column dataField="PRICE" caption={this.t("grdRebtDispatch.clmPrice")} width={75} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
-                                        <Column dataField="AMOUNT" caption={this.t("grdRebtDispatch.clmAmount")} width={100} allowEditing={false} format={{ style: "currency", currency: "EUR",precision: 3}}/>
-                                        <Column dataField="VAT" caption={this.t("grdRebtDispatch.clmVat")} width={75} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
+                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdRebtDispatch.clmCreateDate")} width={75} allowEditing={false}/>
+                                        <Column dataField="CUSER_NAME" caption={this.t("grdRebtDispatch.clmCuser")} width={70} allowEditing={false}/>
+                                        <Column dataField="ITEM_CODE" caption={this.t("grdRebtDispatch.clmItemCode")} width={75} editCellRender={this._cellRoleRender}/>
+                                        <Column dataField="MULTICODE" caption={this.t("grdRebtDispatch.clmMulticode")} width={100} allowEditing={false}/>
+                                        <Column dataField="ITEM_NAME" caption={this.t("grdRebtDispatch.clmItemName")} width={240} />
+                                        <Column dataField="ITEM_BARCODE" caption={this.t("grdRebtDispatch.clmBarcode")} width={100} allowEditing={false}/>
+                                        <Column dataField="QUANTITY" caption={this.t("grdRebtDispatch.clmQuantity")} width={70} dataType={'number'} cellRender={(e)=>{return e.value + " / " + e.data.UNIT_SHORT}}/>
+                                        <Column dataField="SUB_FACTOR" caption={this.t("grdRebtDispatch.clmSubFactor")} width={70} allowEditing={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
+                                        <Column dataField="SUB_QUANTITY" caption={this.t("grdRebtDispatch.clmSubQuantity")} dataType={'number'} width={70} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
+                                        <Column dataField="PRICE" caption={this.t("grdRebtDispatch.clmPrice")} width={70} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
+                                        <Column dataField="SUB_PRICE" caption={this.t("grdRebtDispatch.clmSubPrice")} dataType={'number'} format={'€#,##0.000'} width={70} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + "€/ " + e.data.SUB_SYMBOL}}/>
+                                        <Column dataField="AMOUNT" caption={this.t("grdRebtDispatch.clmAmount")} width={80} allowEditing={false} format={{ style: "currency", currency: "EUR",precision: 3}}/>
+                                        <Column dataField="VAT" caption={this.t("grdRebtDispatch.clmVat")} width={70} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
                                         <Column dataField="TOTALHT" caption={this.t("grdRebtDispatch.clmTotalHt")} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false} width={90} allowHeaderFiltering={false}/>
-                                        <Column dataField="TOTAL" caption={this.t("grdRebtDispatch.clmTotal")} width={110} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
-                                        <Column dataField="DESCRIPTION" caption={this.t("grdRebtDispatch.clmDescription")} width={160}  headerFilter={{visible:true}}/>
+                                        <Column dataField="TOTAL" caption={this.t("grdRebtDispatch.clmTotal")} width={100} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
+                                        <Column dataField="DESCRIPTION" caption={this.t("grdRebtDispatch.clmDescription")} width={100}  headerFilter={{visible:true}}/>
                                     </NdGrid>
                                     <ContextMenu
                                     dataSource={this.rightItems}

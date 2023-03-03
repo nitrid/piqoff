@@ -2454,19 +2454,19 @@ export default class salesDispatch extends React.PureComponent
                                         <Column dataField="LINE_NO" caption={this.t("LINE_NO")} visible={false} width={50} dataType={'number'} defaultSortOrder="desc"/>
                                         <Column dataField="CDATE_FORMAT" caption={this.t("grdSlsDispatch.clmCreateDate")} width={70} allowEditing={false}/>
                                         <Column dataField="CUSER_NAME" caption={this.t("grdSlsDispatch.clmCuser")} width={75} allowEditing={false}/>
-                                        <Column dataField="ITEM_CODE" caption={this.t("grdSlsDispatch.clmItemCode")} width={90} editCellRender={this._cellRoleRender}/>
+                                        <Column dataField="ITEM_CODE" caption={this.t("grdSlsDispatch.clmItemCode")} width={75} editCellRender={this._cellRoleRender}/>
                                         <Column dataField="ITEM_NAME" caption={this.t("grdSlsDispatch.clmItemName")} width={240} />
                                         <Column dataField="ORIGIN" caption={this.t("grdSlsDispatch.clmOrigin")} width={60} allowEditing={true} />
                                         <Column dataField="ITEM_BARCODE" caption={this.t("grdSlsDispatch.clmBarcode")} width={100} allowEditing={false}/>
-                                        <Column dataField="QUANTITY" caption={this.t("grdSlsDispatch.clmQuantity")} width={65} dataType={'number'} cellRender={(e)=>{return e.value + " / " + e.data.UNIT_SHORT}}/>
-                                        <Column dataField="SUB_FACTOR" caption={this.t("grdSlsDispatch.clmSubFactor")} width={65} allowEditing={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
-                                        <Column dataField="SUB_QUANTITY" caption={this.t("grdSlsDispatch.clmSubQuantity")} dataType={'number'} width={65} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
-                                        <Column dataField="PRICE" caption={this.t("grdSlsDispatch.clmPrice")} width={65} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
-                                        <Column dataField="SUB_PRICE" caption={this.t("grdSlsDispatch.clmSubPrice")} dataType={'number'} format={'€#,##0.000'} width={65} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + "€/ " + e.data.SUB_SYMBOL}}/>
+                                        <Column dataField="QUANTITY" caption={this.t("grdSlsDispatch.clmQuantity")} width={70} dataType={'number'} cellRender={(e)=>{return e.value + " / " + e.data.UNIT_SHORT}}/>
+                                        <Column dataField="SUB_FACTOR" caption={this.t("grdSlsDispatch.clmSubFactor")} width={70} allowEditing={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
+                                        <Column dataField="SUB_QUANTITY" caption={this.t("grdSlsDispatch.clmSubQuantity")} dataType={'number'} width={70} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
+                                        <Column dataField="PRICE" caption={this.t("grdSlsDispatch.clmPrice")} width={70} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
+                                        <Column dataField="SUB_PRICE" caption={this.t("grdSlsDispatch.clmSubPrice")} dataType={'number'} format={'€#,##0.000'} width={70} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + "€/ " + e.data.SUB_SYMBOL}}/>
                                         <Column dataField="AMOUNT" caption={this.t("grdSlsDispatch.clmAmount")} width={80} allowEditing={false} format={{ style: "currency", currency: "EUR",precision: 3}}/>
                                         <Column dataField="DISCOUNT" caption={this.t("grdSlsDispatch.clmDiscount")} width={60} dataType={'number'} editCellRender={this._cellRoleRender} format={{ style: "currency", currency: "EUR",precision: 3}}/>
                                         <Column dataField="DISCOUNT_RATE" caption={this.t("grdSlsDispatch.clmDiscountRate")} width={60} dataType={'number'} editCellRender={this._cellRoleRender}/>
-                                        <Column dataField="MARGIN" caption={this.t("grdSlsDispatch.clmMargin")} width={70} allowEditing={false}/>
+                                        <Column dataField="MARGIN" caption={this.t("grdSlsDispatch.clmMargin")} width={60} allowEditing={false}/>
                                         <Column dataField="VAT" caption={this.t("grdSlsDispatch.clmVat")} width={70} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
                                         <Column dataField="VAT_RATE" caption={this.t("grdSlsDispatch.clmVatRate")} width={50} allowEditing={false}/>
                                         <Column dataField="TOTALHT" caption={this.t("grdSlsDispatch.clmTotalHt")} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false} width={80} allowHeaderFiltering={false}/>

@@ -2960,25 +2960,25 @@ export default class salesInvoice extends React.PureComponent
                                             <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                             <Export fileName={this.lang.t("menu.ftr_02_002")} enabled={true} allowExportSelectedData={true} />
                                             <Column dataField="LINE_NO" caption={this.t("LINE_NO")} visible={false} width={50} dataType={'number'} defaultSortOrder="desc"/>
-                                            <Column dataField="CDATE_FORMAT" caption={this.t("grdSlsInv.clmCreateDate")} width={80} allowEditing={false}/>
-                                            <Column dataField="CUSER_NAME" caption={this.t("grdSlsInv.clmCuser")} width={90} allowEditing={false}/>
-                                            <Column dataField="ITEM_CODE" caption={this.t("grdSlsInv.clmItemCode")} width={100} editCellRender={this._cellRoleRender}/>
-                                            <Column dataField="ITEM_NAME" caption={this.t("grdSlsInv.clmItemName")} width={290}/>
+                                            <Column dataField="CDATE_FORMAT" caption={this.t("grdSlsInv.clmCreateDate")} width={70} allowEditing={false}/>
+                                            <Column dataField="CUSER_NAME" caption={this.t("grdSlsInv.clmCuser")} width={75} allowEditing={false}/>
+                                            <Column dataField="ITEM_CODE" caption={this.t("grdSlsInv.clmItemCode")} width={75} editCellRender={this._cellRoleRender}/>
+                                            <Column dataField="ITEM_NAME" caption={this.t("grdSlsInv.clmItemName")} width={240}/>
                                             <Column dataField="ORIGIN" caption={this.t("grdSlsInv.clmOrigin")} width={60} allowEditing={true} editCellRender={this._cellRoleRender} />
-                                            <Column dataField="QUANTITY" caption={this.t("grdSlsInv.clmQuantity")} width={65} dataType={'number'} cellRender={(e)=>{return e.value + " / " + e.data.UNIT_SHORT}}/>
-                                            <Column dataField="SUB_FACTOR" caption={this.t("grdSlsInv.clmSubFactor")} width={65} allowEditing={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
-                                            <Column dataField="SUB_QUANTITY" caption={this.t("grdSlsInv.clmSubQuantity")} dataType={'number'} width={65} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
-                                            <Column dataField="PRICE" caption={this.t("grdSlsInv.clmPrice")} width={65} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
-                                            <Column dataField="SUB_PRICE" caption={this.t("grdSlsInv.clmSubPrice")} dataType={'number'} format={'€#,##0.000'} width={65} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + "€/ " + e.data.SUB_SYMBOL}}/>
-                                            <Column dataField="AMOUNT" caption={this.t("grdSlsInv.clmAmount")} width={90} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
+                                            <Column dataField="QUANTITY" caption={this.t("grdSlsInv.clmQuantity")} width={70} dataType={'number'} cellRender={(e)=>{return e.value + " / " + e.data.UNIT_SHORT}}/>
+                                            <Column dataField="SUB_FACTOR" caption={this.t("grdSlsInv.clmSubFactor")} width={70} allowEditing={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
+                                            <Column dataField="SUB_QUANTITY" caption={this.t("grdSlsInv.clmSubQuantity")} dataType={'number'} width={70} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
+                                            <Column dataField="PRICE" caption={this.t("grdSlsInv.clmPrice")} width={70} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
+                                            <Column dataField="SUB_PRICE" caption={this.t("grdSlsInv.clmSubPrice")} dataType={'number'} format={'€#,##0.000'} width={70} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + "€/ " + e.data.SUB_SYMBOL}}/>
+                                            <Column dataField="AMOUNT" caption={this.t("grdSlsInv.clmAmount")} width={80} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
                                             <Column dataField="DISCOUNT" caption={this.t("grdSlsInv.clmDiscount")} dataType={'number'} width={60} editCellRender={this._cellRoleRender} format={{ style: "currency", currency: "EUR",precision: 3}}/>
                                             <Column dataField="DISCOUNT_RATE" caption={this.t("grdSlsInv.clmDiscountRate")} width={60} dataType={'number'} editCellRender={this._cellRoleRender}/>
                                             <Column dataField="MARGIN" caption={this.t("grdSlsInv.clmMargin")} width={80} allowEditing={false}/>
-                                            <Column dataField="VAT" caption={this.t("grdSlsInv.clmVat")} width={75} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
+                                            <Column dataField="VAT" caption={this.t("grdSlsInv.clmVat")} width={70} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
                                             <Column dataField="VAT_RATE" caption={this.t("grdSlsInv.clmVatRate")} width={50} allowEditing={false}/>
                                             <Column dataField="TOTALHT" caption={this.t("grdSlsInv.clmTotalHt")} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false} width={90} allowHeaderFiltering={false}/>
-                                            <Column dataField="TOTAL" caption={this.t("grdSlsInv.clmTotal")} width={110} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
-                                            <Column dataField="CONNECT_REF" caption={this.t("grdSlsInv.clmDispatch")} width={110} allowEditing={false}/>
+                                            <Column dataField="TOTAL" caption={this.t("grdSlsInv.clmTotal")} width={100} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
+                                            <Column dataField="CONNECT_REF" caption={this.t("grdSlsInv.clmDispatch")} width={100} allowEditing={false}/>
                                             <Column dataField="DESCRIPTION" caption={this.t("grdSlsInv.clmDescription")} width={100} />
                                         </NdGrid>
                                         <ContextMenu

@@ -4698,7 +4698,10 @@ export const langTr =
             clmCuser :"Kullanıcı",
             clmMulticode : "T.Kodu",
             clmBarcode : "Barkod",
-            clmVatRate :"KDV %"
+            clmVatRate :"KDV %",
+            clmSubQuantity : "Alt Birim",
+            clmSubPrice : "Alt Birim Fiyatı",
+            clmSubFactor : "Katsayı",
         },
         grdInvoicePayment: 
         {
@@ -10340,6 +10343,9 @@ export const langTr =
             clmCuser :"Kullanıcı",
             clmMulticode : "T.Kodu",
             clmBarcode : "Barkod",
+            clmSubQuantity : "Alt Birim",
+            clmSubPrice : "Alt Birim Fiyatı",
+            clmSubFactor : "Katsayı",
         },
         popDiscount : 
         {
@@ -11025,7 +11031,10 @@ export const langTr =
             clmDescription :"Açıklama",
             clmCuser :"Kullanıcı",
             clmMulticode : "T.Kodu",
-            clmBarcode : "Barkod"
+            clmBarcode : "Barkod",
+            clmSubQuantity : "Alt Birim",
+            clmSubPrice : "Alt Birim Fiyatı",
+            clmSubFactor : "Katsayı",
         },
         popDiscount : 
         {
@@ -12062,6 +12071,7 @@ export const langTr =
             clmRefNo : "SIRA",
             clmInputName : "CARİ ADI",
             clmInputCode  : "CARİ KODU",
+            clmAddress : "ADRES"
         },
         pg_txtCustomerCode : 
         {
@@ -12572,7 +12582,8 @@ export const langTr =
             clmCostPrice : "Maliyet",
             clmMulticode : "T.Kodu",
             clmUnit : "Birim",
-            clmUnitPrice : "Birim Fiyat"
+            clmUnitPrice : "Birim Fiyat",
+            clmOrgins : "Menşei",
         },
         popItems: 
         {
@@ -12740,7 +12751,8 @@ export const langTr =
             clmVatExtPrice : "KDV Hariç",
             clmCostPrice : "Maliyet",
             clmUnit : "Birim",
-            clmUnitPrice : "Birim Fiyat"
+            clmUnitPrice : "Birim Fiyat",
+            clmOrgins : "Menşei",
         },
         popItems: 
         {
