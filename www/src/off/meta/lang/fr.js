@@ -3315,14 +3315,14 @@ export const langFr =
     {
         cmbCustomer :"Fournisseur",
         btnGet :"Rechercher",
-        txtCustomerCode : "Sélection Document",
-        txtCustomerName : "Nom fournisseur",
+        txtCustomerCode : "Sélection Client",
+        txtCustomerName : "Nom Client",
         txtAmount : "Total Points", 
         pg_txtCustomerCode : 
         {
-            title : "Choix Fournisseur",
+            title : "Choix Client",
             clmCode :  "Code Client",
-            clmTitle : "Nom Fournisseur",
+            clmTitle : "Nom Client",
             clmTypeName : "Type",
             clmGenusName : "Genre"
         },
@@ -3401,7 +3401,7 @@ export const langFr =
         pg_txtCustomerCode : 
         {
             title : "Choix Fournisseur",
-            clmCode :  "Code Client",
+            clmCode :  "Code fournisseur",
             clmTitle : "Nom Fournisseur",
             clmTypeName : "Type",
             clmGenusName : "Genre"
@@ -3414,7 +3414,7 @@ export const langFr =
             clmRef: "Référence",
             clmRefNo: "Ligne",
             clmPrice: "Prix ",
-            clmOutputCode : "Sélection Document",
+            clmOutputCode : "Sélection fournisseur",
             clmOutputName : "Nom fournisseur",
             clmDate: "Date",
             clmVat : "TVA",
@@ -3444,7 +3444,7 @@ export const langFr =
             clmRef: "Référence",
             clmRefNo: "Ligne",
             clmPrice: "Prix ",
-            clmInputCode : "Sélection Document",
+            clmInputCode : "Sélection Client",
             clmInputName : "Nom Client",
             clmDate: "Date",
             clmVat : "TVA",
@@ -3461,7 +3461,7 @@ export const langFr =
         pg_txtCustomerCode : 
         {
             title : "Choix Fournisseur",
-            clmCode :  "Code Client",
+            clmCode :  "Code Fournisseur",
             clmTitle : "Nom Fournisseur",
             clmTypeName : "Type",
             clmGenusName : "Genre"
@@ -3474,7 +3474,7 @@ export const langFr =
             clmRef: "Référence",
             clmRefNo: "Ligne",
             clmPrice: "Prix ",
-            clmInputCode : "Sélection Document",
+            clmInputCode : "Sélection Fournisseur",
             clmInputName : "Nom fournisseur",
             clmDate: "Date",
             clmVat : "TVA",
@@ -3490,7 +3490,7 @@ export const langFr =
         pg_txtCustomerCode : 
         {
             title : "Choix Fournisseur",
-            clmCode :  "Code Client",
+            clmCode :  "Code Fournisseur",
             clmTitle : "Nom Fournisseur",
             clmTypeName : "Type",
             clmGenusName : "Genre"
@@ -3503,7 +3503,7 @@ export const langFr =
             clmRef: "Référence",
             clmRefNo: "Ligne",
             clmPrice: "Prix ",
-            clmInputCode : "Sélection Document",
+            clmInputCode : "Sélection Fournisseur",
             clmInputName : "Nom fournisseur",
             clmDate: "Date",
             clmVat : "TVA",
@@ -3546,7 +3546,7 @@ export const langFr =
     {
         txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
-        txtCustomerCode : "Sélection Document",
+        txtCustomerCode : "Sélection fournisseur",
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
         txtAmount : "Total" ,
@@ -3603,13 +3603,13 @@ export const langFr =
             clmRef : "Référence",
             clmRefNo : "Numéro",
             clmOutputName : "Nom Fournisseur",
-            clmOutputCode  : "Code Client",
+            clmOutputCode  : "Code fournisseur",
             clmTotal : "Total TTC"
         },
         pg_txtCustomerCode : 
         {
             title : "Choix Fournisseur",
-            clmCode :  "Code Client",
+            clmCode :  "Code fournisseur",
             clmTitle : "Nom Fournisseur",
             clmTypeName : "Type",
             clmGenusName : "Genre"
