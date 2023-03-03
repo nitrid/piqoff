@@ -443,7 +443,7 @@ export default class salesOrder extends React.PureComponent
                                     e.key.UNIT_FACTOR = this.txtUnitFactor.value
                                     e.data.PRICE = parseFloat((this.txtUnitPrice.value).toFixed(4))
                                     e.data.QUANTITY = this.txtTotalQuantity.value
-                                    e.data.VAT = Number(((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) * (e.data.VAT_RATE) / 100))).round(2)
+                                    e.data.VAT = Number(((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) * (e.data.VAT_RATE) / 100))).round(4)
                                     e.data.AMOUNT = Number((e.data.PRICE * e.data.QUANTITY)).round(2)
                                     e.data.TOTALHT = Number(((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT)).round(2)
                                     e.data.TOTAL = Number((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) +e.data.VAT)).round(2)
@@ -536,7 +536,7 @@ export default class salesOrder extends React.PureComponent
                 {
                     this.docObj.docOrders.dt()[i].QUANTITY = this.docObj.docOrders.dt()[i].QUANTITY + pQuantity
                     this.docObj.docOrders.dt()[i].SUB_QUANTITY = this.docObj.docOrders.dt()[i].SUB_QUANTITY + this.docObj.docOrders.dt()[i].SUB_FACTOR
-                    this.docObj.docOrders.dt()[i].VAT = parseFloat((this.docObj.docOrders.dt()[i].VAT + (this.docObj.docOrders.dt()[i].PRICE * (this.docObj.docOrders.dt()[i].VAT_RATE / 100)) * pQuantity).toFixed(2))
+                    this.docObj.docOrders.dt()[i].VAT = parseFloat((this.docObj.docOrders.dt()[i].VAT + (this.docObj.docOrders.dt()[i].PRICE * (this.docObj.docOrders.dt()[i].VAT_RATE / 100)) * pQuantity).toFixed(4))
                     this.docObj.docOrders.dt()[i].AMOUNT = parseFloat((this.docObj.docOrders.dt()[i].QUANTITY * this.docObj.docOrders.dt()[i].PRICE).toFixed(2))
                     this.docObj.docOrders.dt()[i].TOTAL = parseFloat((((this.docObj.docOrders.dt()[i].QUANTITY * this.docObj.docOrders.dt()[i].PRICE) - this.docObj.docOrders.dt()[i].DISCOUNT) + this.docObj.docOrders.dt()[i].VAT).toFixed(2))
                     this.docObj.docOrders.dt()[i].TOTALHT = parseFloat((this.docObj.docOrders.dt()[i].TOTAL - this.docObj.docOrders.dt()[i].VAT).toFixed(2))
@@ -575,7 +575,7 @@ export default class salesOrder extends React.PureComponent
             let tmpMarginRate = ((tmpData.result.recordset[0].PRICE - this.docObj.docOrders.dt()[pIndex].COST_PRICE) - tmpData.result.recordset[0].PRICE) * 100
             this.docObj.docOrders.dt()[pIndex].MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
             this.docObj.docOrders.dt()[pIndex].PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4))
-            this.docObj.docOrders.dt()[pIndex].VAT = parseFloat((tmpData.result.recordset[0].PRICE * (pData.VAT / 100) * pQuantity).toFixed(2))
+            this.docObj.docOrders.dt()[pIndex].VAT = parseFloat((tmpData.result.recordset[0].PRICE * (pData.VAT / 100) * pQuantity).toFixed(4))
             this.docObj.docOrders.dt()[pIndex].AMOUNT = parseFloat((tmpData.result.recordset[0].PRICE * pQuantity).toFixed(2))
             this.docObj.docOrders.dt()[pIndex].TOTAL = parseFloat(((tmpData.result.recordset[0].PRICE * pQuantity)+ this.docObj.docOrders.dt()[pIndex].VAT).toFixed(2))
             this.docObj.docOrders.dt()[pIndex].TOTALHT = parseFloat((this.docObj.docOrders.dt()[pIndex].TOTAL - this.docObj.docOrders.dt()[pIndex].VAT).toFixed(2))
@@ -2066,7 +2066,7 @@ export default class salesOrder extends React.PureComponent
                                             return
                                         }
 
-                                        e.key.VAT =  Number(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100))).round(2)
+                                        e.key.VAT =  Number(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100))).round(4)
                                         e.key.AMOUNT = Number((e.key.PRICE * e.key.QUANTITY)).round(2)
                                         e.key.TOTALHT =  Number((e.key.AMOUNT - e.key.DISCOUNT)).round(2)
                                         e.key.TOTAL =  Number((e.key.TOTALHT + e.key.VAT)).round(2)
