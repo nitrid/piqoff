@@ -2354,6 +2354,7 @@ export class itemRelatedCls
     {
         return new Promise(async resolve => 
         {
+            this.ds.delete()
             resolve(await this.ds.update()); 
         });
     }

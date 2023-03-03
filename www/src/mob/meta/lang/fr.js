@@ -1236,6 +1236,7 @@ export const langFr =
         btnItemAdd: "AjouteR",
         txtGrandTotal : "Total général",
         cmbPriceContract : "Accord de prix",
+        btnMailsend : "Envoyer E-Mail", 
         msgCustomerSelect:
         {
             title: "Attention",
@@ -1431,8 +1432,29 @@ export const langFr =
         mnuDetail : 
         {
             text: "Transactions",
-            btn01: "Détail"
-        }
+            btn01: "Détail",
+            btn02: "Mail Gönder" //BAK
+        },
+        popDesign : 
+        {
+            title: "Choix du Désign",
+            design : "Design" ,
+            lang : "Langue Document" 
+        },
+        popMailSend : 
+        {
+            title :"Envoyer Mail ",   
+            txtMailSubject : "Objet E-Mail ",   
+            txtSendMail : "Adresse E-Mail ",   
+            btnSend : "Envoyer"   
+        },
+        msgMailSendResult:
+        {
+            title: "Attention",   
+            btn01: "OK",   
+            msgSuccess: "Mail envoyé avec succès  !",   
+            msgFailed: "Echec envoie Mail  !"   
+        },
     },
     ord_01_002 : // "Alış Sipariş",
     {

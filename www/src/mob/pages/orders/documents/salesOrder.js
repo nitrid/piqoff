@@ -505,6 +505,25 @@ export default class salesOrder extends React.PureComponent
                         <Item name={"Main"}>
                             <div className="row px-1 py-1">
                                 <Form colCount={1}>
+                                    {/* Button Group */}
+                                    <Item>
+                                        <div className='row'>
+                                            <div className="col-4 px-1 pt-1 offset-8">
+                                                <DropDownButton
+                                                text={this.t("mnuDetail.text")}
+                                                style={{width:'100%',backgroundColor:"#337ab7",borderRadius: "5px"}}
+                                                dropDownOptions={{width:'100%'}}
+                                                displayExpr="text"
+                                                keyExpr="id"
+                                                items={[{id:'btn01',text:this.t("mnuDetail.btn02")}]}
+                                                onItemClick={async (e)=>
+                                                {
+                                                    this.popDesign.show()
+                                                }}
+                                                />
+                                            </div>
+                                        </div>
+                                    </Item>
                                     {/* txtRef-Refno */}
                                     <Item>
                                         <Label text={this.t("txtRefRefno")} alignment="right" />
@@ -816,27 +835,27 @@ export default class salesOrder extends React.PureComponent
                                                 <NdButton icon="detailslayout" type="default" width="100%" onClick={()=>this.page.pageSelect("Document")}></NdButton>
                                             </div>
                                             <div className="col-4 px-1 pt-1">
-                                            <DropDownButton
-                                            text={this.t("mnuDetail.text")}
-                                            style={{width:'100%',backgroundColor:"#337ab7",borderRadius: "5px"}}
-                                            dropDownOptions={{width:'100%'}}
-                                            displayExpr="text"
-                                            keyExpr="id"
-                                            items={[{id:'btn01',text:this.t("mnuDetail.btn01")}]}
-                                            onItemClick={async (e)=>
-                                            {
-                                                if(e.itemData.id == 'btn01')
+                                                <DropDownButton
+                                                text={this.t("mnuDetail.text")}
+                                                style={{width:'100%',backgroundColor:"#337ab7",borderRadius: "5px"}}
+                                                dropDownOptions={{width:'100%'}}
+                                                displayExpr="text"
+                                                keyExpr="id"
+                                                items={[{id:'btn01',text:this.t("mnuDetail.btn01")}]}
+                                                onItemClick={async (e)=>
                                                 {
-                                                    let tmpConfObj = 
+                                                    if(e.itemData.id == 'btn01')
                                                     {
-                                                        id:'msgDetail',showTitle:true,title:this.t("msgDetail.title"),showCloseButton:true,width:'350px',height:'200px',
-                                                        button:[{id:"btn01",caption:this.t("msgDetail.btn01"),location:'after'}],
-                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}></div>)
+                                                        let tmpConfObj = 
+                                                        {
+                                                            id:'msgDetail',showTitle:true,title:this.t("msgDetail.title"),showCloseButton:true,width:'350px',height:'200px',
+                                                            button:[{id:"btn01",caption:this.t("msgDetail.btn01"),location:'after'}],
+                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}></div>)
+                                                        }
+                                                        await dialog(tmpConfObj);
                                                     }
-                                                    await dialog(tmpConfObj);
-                                                }
-                                            }}
-                                            />                                                
+                                                }}
+                                                />
                                             </div>
                                         </div>
                                     </Item>
@@ -1509,6 +1528,192 @@ export default class salesOrder extends React.PureComponent
                             </div>
                         
                     </NdDialog>
+                    {/* Mail Send PopUp */}
+                    <div>
+                        <NdPopUp parent={this} id={"popMailSend"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.t("popMailSend.title")}
+                        container={"#root"} 
+                        width={'90%'}
+                        height={'180'}
+                        position={{of:'#root'}}
+                        >
+                            <Form colCount={1} height={'fit-content'}>
+                                <Item>
+                                    <Label text={this.t("popMailSend.txtMailSubject")} alignment="right" />
+                                    <NdTextBox id="txtMailSubject" parent={this} simple={true}
+                                    maxLength={32}
+                                    >
+                                        <Validator validationGroup={"frmMailsend" + this.tabIndex}>
+                                            <RequiredRule message={this.t("validMail")} />
+                                        </Validator> 
+                                    </NdTextBox>
+                                </Item>
+                                <Item>
+                                <Label text={this.t("popMailSend.txtSendMail")} alignment="right" />
+                                    <NdTextBox id="txtSendMail" parent={this} simple={true}
+                                    maxLength={32}
+                                    >
+                                        <Validator validationGroup={"frmMailsend" + this.tabIndex}>
+                                            <RequiredRule message={this.t("validMail")} />
+                                        </Validator> 
+                                    </NdTextBox>
+                                </Item>
+                                <Item>
+                                    <div className='row'>
+                                        <div className='col-6'>
+                                            <NdButton text={this.t("popMailSend.btnSend")} type="normal" stylingMode="contained" width={'100%'}  
+                                            validationGroup={"frmMailsend"  + this.tabIndex}
+                                            onClick={async (e)=>
+                                            {       
+                                                if(e.validationGroup.validate().status == "valid")
+                                                {
+                                                    let tmpQuery = 
+                                                    {
+                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ORDERS_FOR_PRINT](@DOC_GUID) ORDER BY LINE_NO " ,
+                                                        param:  ['DOC_GUID:string|50','DESIGN:string|25'],
+                                                        value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value]
+                                                    }
+
+                                                    App.instance.setState({isExecute:true})
+                                                    let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                    App.instance.setState({isExecute:false})
+
+                                                    this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
+                                                    {
+                                                        App.instance.setState({isExecute:true})
+                                                        let tmpAttach = pResult.split('|')[1]
+                                                        let tmpHtml = ''
+                                                        
+                                                        let tmpMailData = {html:tmpHtml,subject:this.txtMailSubject.value,sendMail:this.txtSendMail.value,attachName:"commande.pdf",attachData:tmpAttach}
+                                                        this.core.socket.emit('mailer',tmpMailData,async(pResult1) => 
+                                                        {
+                                                            App.instance.setState({isExecute:false})
+                                                            let tmpConfObj1 =
+                                                            {
+                                                                id:'msgMailSendResult',showTitle:true,title:this.t("msgMailSendResult.title"),showCloseButton:true,width:'90%',height:'200px',
+                                                                button:[{id:"btn01",caption:this.t("msgMailSendResult.btn01"),location:'after'}],
+                                                            }
+                                                            
+                                                            if((pResult1) == 0)
+                                                            {  
+                                                                tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgMailSendResult.msgSuccess")}</div>)
+                                                                await dialog(tmpConfObj1);
+                                                                this.txtMailSubject.value = '',
+                                                                this.txtSendMail.value = ''
+                                                                this.popMailSend.hide();  
+                                                            }
+                                                            else
+                                                            {
+                                                                tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgMailSendResult.msgFailed")}</div>)
+                                                                await dialog(tmpConfObj1);
+                                                                this.popMailSend.hide(); 
+                                                            }
+                                                        });
+                                                    });
+                                                }
+                                                    
+                                            }}/>
+                                        </div>
+                                        <div className='col-6'>
+                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                            onClick={()=>
+                                            {
+                                                this.popMailSend.hide();  
+                                            }}/>
+                                        </div>
+                                    </div>
+                                </Item>
+                            </Form>
+                        </NdPopUp>
+                    </div>
+                    {/* Dizayn Seçim PopUp */}
+                    <div>
+                        <NdPopUp parent={this} id={"popDesign"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.t("popDesign.title")}
+                        container={"#root"} 
+                        width={'90%'}
+                        height={'180'}
+                        position={{of:'#root'}}
+                        >
+                            <Form colCount={1} height={'fit-content'}>
+                                <Item>
+                                    <Label text={this.t("popDesign.design")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbDesignList" notRefresh = {true}
+                                    displayExpr="DESIGN_NAME"                       
+                                    valueExpr="TAG"
+                                    value=""
+                                    searchEnabled={true}
+                                    onValueChanged={(async()=>
+                                    {
+                                    }).bind(this)}
+                                    data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '11'"},sql:this.core.sql}}}
+                                    param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
+                                    >
+                                        <Validator validationGroup={"frmSlsOrderMail" + this.tabIndex}>
+                                            <RequiredRule message={this.t("validDesign")} />
+                                        </Validator> 
+                                    </NdSelectBox>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("popDesign.lang")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbDesignLang" notRefresh = {true}
+                                        displayExpr="VALUE"                       
+                                        valueExpr="ID"
+                                        value=""
+                                        searchEnabled={true}
+                                        onValueChanged={(async()=>
+                                            {
+                                            }).bind(this)}
+                                        data={{source:[{ID:"FR",VALUE:"FR"},{ID:"TR",VALUE:"TR"}]}}
+                                        >
+                                    </NdSelectBox>
+                                </Item>
+                                <Item>
+                                    <div className='row'>
+                                        <div className='col-6'>
+                                            <NdButton text={this.t("btnMailsend")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmSlsOrderMail" + this.tabIndex}
+                                            onClick={async (e)=>
+                                            {    
+                                                if(e.validationGroup.validate().status == "valid")
+                                                {
+                                                    let tmpQuery = 
+                                                    {
+                                                        query : "SELECT EMAIL FROM CUSTOMER_VW_02 WHERE GUID = @GUID",
+                                                        param : ['GUID:string|50'],
+                                                        value : [this.docObj.dt()[0].INPUT]
+                                                    }
+                                                    let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                    if(tmpData.result.recordset.length > 0)
+                                                    {
+                                                        this.txtSendMail.value = tmpData.result.recordset[0].EMAIL
+                                                        this.popMailSend.show()
+                                                    }
+                                                    else
+                                                    {
+                                                        this.popMailSend.show()
+                                                    }
+                                                }
+                                            }}/>
+                                        </div>
+                                        <div className='col-6'>
+                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                            onClick={()=>
+                                            {
+                                                this.popDesign.hide();  
+                                            }}/>
+                                        </div>
+                                    </div>
+                                </Item>
+                            </Form>
+                        </NdPopUp>
+                    </div> 
                 </div>
             </div>
         </ScrollView>
