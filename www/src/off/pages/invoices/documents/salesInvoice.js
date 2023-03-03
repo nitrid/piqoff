@@ -250,7 +250,7 @@ export default class salesInvoice extends React.PureComponent
         this.docObj.dt()[0].TOTAL = parseFloat((parseFloat(this.docObj.docItems.dt().sum("TOTALHT",2)) + parseFloat(this.docObj.dt()[0].VAT)).toFixed(2))
 
         this.docObj.docCustomer.dt()[0].AMOUNT = this.docObj.dt()[0].TOTAL
-        this.docObj.dt()[0].INTERFEL = this.docObj.docItems.dt().where({'ITEM_CODE':'CVO'}).sum("TOTALHT",2)
+        this.docObj.dt()[0].INTERFEL = this.docObj.docItems.dt().where({'ITEM_CODE':'INTERFEL'}).sum("TOTALHT",2)
         this.extraCost.value = this.docObj.dt()[0].INTERFEL
         this._calculateTotalMargin()
         this._calculateMargin()
@@ -894,7 +894,7 @@ export default class salesInvoice extends React.PureComponent
         {
             let tmpQuery = 
             {
-                query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ITEMS_VW_01 WHERE INPUT = @INPUT AND INVOICE_DOC_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 1 AND ITEM_CODE <> 'CVO' AND REBATE = 0 AND DOC_TYPE IN(40)",
+                query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ITEMS_VW_01 WHERE INPUT = @INPUT AND INVOICE_DOC_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 1 AND ITEM_CODE <> 'INTERFEL' AND REBATE = 0 AND DOC_TYPE IN(40)",
                 param : ['INPUT:string|50'],
                 value : [this.docObj.dt()[0].INPUT]
             }
@@ -1558,18 +1558,18 @@ export default class salesInvoice extends React.PureComponent
                     }
                     let tmpCvoQuery = 
                     {
-                        query :"SELECT *,1 AS ITEM_TYPE FROM SERVICE_ITEMS_VW_01 WHERE CODE = 'CVO'",
+                        query :"SELECT *,1 AS ITEM_TYPE FROM SERVICE_ITEMS_VW_01 WHERE CODE = 'INTERFEL'",
                     }
                     let tmpCvoData = await this.core.sql.execute(tmpCvoQuery) 
                     if(tmpData.result.recordset.length > 0)
                     {
-                        if(this.docObj.docItems.dt().where({'ITEM_CODE':'CVO'}).length > 0)
+                        if(this.docObj.docItems.dt().where({'ITEM_CODE':'INTERFEL'}).length > 0)
                         {
-                            this.docObj.docItems.dt().where({'ITEM_CODE':'CVO'})[0].PRICE = this.docObj.dt()[0].INTERFEL
-                            this.docObj.docItems.dt().where({'ITEM_CODE':'CVO'})[0].VAT = parseFloat((this.docObj.dt()[0].INTERFEL * (20 /100)).toFixed(4));
-                            this.docObj.docItems.dt().where({'ITEM_CODE':'CVO'})[0].AMOUNT = this.docObj.dt()[0].INTERFEL
-                            this.docObj.docItems.dt().where({'ITEM_CODE':'CVO'})[0].TOTALHT = this.docObj.dt()[0].INTERFEL
-                            this.docObj.docItems.dt().where({'ITEM_CODE':'CVO'})[0].TOTAL = parseFloat((this.docObj.docItems.dt().where({'ITEM_CODE':'CVO'})[0].TOTALHT +  parseFloat(this.docObj.docItems.dt().where({'ITEM_CODE':'CVO'})[0].VAT)).toFixed(2))
+                            this.docObj.docItems.dt().where({'ITEM_CODE':'INTERFEL'})[0].PRICE = this.docObj.dt()[0].INTERFEL
+                            this.docObj.docItems.dt().where({'ITEM_CODE':'INTERFEL'})[0].VAT = parseFloat((this.docObj.dt()[0].INTERFEL * (20 /100)).toFixed(4));
+                            this.docObj.docItems.dt().where({'ITEM_CODE':'INTERFEL'})[0].AMOUNT = this.docObj.dt()[0].INTERFEL
+                            this.docObj.docItems.dt().where({'ITEM_CODE':'INTERFEL'})[0].TOTALHT = this.docObj.dt()[0].INTERFEL
+                            this.docObj.docItems.dt().where({'ITEM_CODE':'INTERFEL'})[0].TOTAL = parseFloat((this.docObj.docItems.dt().where({'ITEM_CODE':'INTERFEL'})[0].TOTALHT +  parseFloat(this.docObj.docItems.dt().where({'ITEM_CODE':'INTERFEL'})[0].VAT)).toFixed(2))
                             this.popExtraCost.hide()
                             this.extraCost.value = this.docObj.dt()[0].INTERFEL
                             resolve()
