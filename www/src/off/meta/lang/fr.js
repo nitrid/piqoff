@@ -3656,7 +3656,8 @@ export const langFr =
             clmMulticode : "FRN.Code",
             clmOrigin : "Origine",
             clmSubQuantity : "Alt Birim",   // BAK
-            clmSubPrice : "Alt Birim Fiyatı"   // BAK
+            clmSubPrice : "Alt Birim Fiyatı" ,  // BAK
+            clmSubFactor : "Katsayı"
         },
         grdInvoicePayment: 
         {
@@ -4310,7 +4311,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrer les Modifications !"
+            msg: "La modification ou la suppression est impossible car votre document a été signé et archivé.!"
         },
         msgPayNotDeleted:
         {
@@ -9559,7 +9560,8 @@ export const langFr =
             clmMulticode : "FRN.Code", 
             clmOrigin : "Origine",
             clmSubQuantity : "Alt Birim",  // BAK
-            clmSubPrice : "Alt Birim Fiyatı"  // BAK
+            clmSubPrice : "Alt Birim Fiyatı",  // BAK
+            clmSubFactor : "Katsayı"
         },
         popDiscount : 
         {
@@ -9878,6 +9880,7 @@ export const langFr =
             clmRefNo : "Numéro",
             clmInputName : "Nom Fournisseur",
             clmInputCode  : "Code Client",
+            clmAddress : "Adresse"
         },
         pg_txtCustomerCode : 
         {
@@ -11726,7 +11729,10 @@ export const langFr =
             clmDescription :"Motif",
             clmCuser :"Utilisateur",
             clmOffer : "Proposition No", 
-            clmVatRate : "TVA %"
+            clmVatRate : "TVA %",
+            clmSubQuantity : "Alt Birim",
+            clmSubPrice : "Alt Birim Fiyatı",
+            clmSubFactor : "Katsayı",
         },
         popDiscount : 
         {
@@ -12060,6 +12066,9 @@ export const langFr =
             clmOffer : "N° de l'offre", 
             clmBarcode : "Code Barre",
             clmVatRate : "TVA %",
+            clmSubQuantity : "Alt Birim",
+            clmSubPrice : "Alt Birim Fiyatı",
+            clmSubFactor : "Katsayı",
         },
         popDiscount : 
         {

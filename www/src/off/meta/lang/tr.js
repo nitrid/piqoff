@@ -3658,7 +3658,8 @@ export const langTr =
             clmMulticode : "T.Kodu",
             clmOrigin : "Menşei",
             clmSubQuantity : "Alt Birim",
-            clmSubPrice : "Alt Birim Fiyatı"
+            clmSubPrice : "Alt Birim Fiyatı",
+            clmSubFactor : "Katsayı",
         },
         grdInvoicePayment: 
         {
@@ -6433,7 +6434,10 @@ export const langTr =
             clmCuser :"Kullanıcı",
             clmMulticode : "T.Kodu",
             clmBarcode : "Barkod",
-            clmVatRate :"KDV %"
+            clmVatRate :"KDV %",
+            clmSubQuantity : "Alt Birim",
+            clmSubPrice : "Alt Birim Fiyatı",
+            clmSubFactor : "Katsayı",
         },
         grdInvoicePayment: 
         {
@@ -9586,7 +9590,9 @@ export const langTr =
             clmVatRate : "KDV %",
             clmOrigin : "Menşei",
             clmSubQuantity : "Alt Birim",
-            clmSubPrice : "Alt Birim Fiyatı"
+            clmSubPrice : "Alt Birim Fiyatı",
+            clmSubFactor : "Katsayı",
+
         },
         popDiscount : 
         {
@@ -9905,6 +9911,7 @@ export const langTr =
             clmRefNo : "SIRA",
             clmInputName : "CARİ ADI",
             clmInputCode  : "CARİ KODU",
+            clmAddress : "ADRES"
         },
         pg_txtCustomerCode : 
         {
@@ -11753,7 +11760,10 @@ export const langTr =
             clmDescription :"Açıklama",
             clmCuser :"Kullanıcı",
             clmOffer : "Teklif No",
-            clmVatRate : "KDV %"
+            clmVatRate : "KDV %",
+            clmSubQuantity : "Alt Birim",
+            clmSubPrice : "Alt Birim Fiyatı",
+            clmSubFactor : "Katsayı",
         },
         popDiscount : 
         {
@@ -12087,6 +12097,9 @@ export const langTr =
             clmOffer : "Teklif No",
             clmBarcode : "Barkodu",
             clmVatRate : "KDV %",
+            clmSubQuantity : "Alt Birim",
+            clmSubPrice : "Alt Birim Fiyatı",
+            clmSubFactor : "Katsayı",
         },
         popDiscount : 
         {

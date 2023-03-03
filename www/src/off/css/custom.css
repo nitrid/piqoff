@@ -18,7 +18,7 @@
 }
 .dx-datagrid .dx-row > td {
     padding: 4px;
-    font-size: smaller;
+    font-size: 11px;
     -webkit-text-stroke: thin;
   }
   .dx-pivotgrid table {
