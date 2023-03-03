@@ -1050,7 +1050,13 @@ export default class salesDispatch extends React.PureComponent
                     tmpDocItems.DISCOUNT_RATE = data[i].DISCOUNT_RATE
                     tmpDocItems.ORDER_LINE_GUID = data[i].GUID
                     tmpDocItems.ORDER_DOC_GUID = data[i].DOC_GUID
+                    tmpDocItems.SUB_FACTOR = data[i].SUB_FACTOR
+                    tmpDocItems.SUB_PRICE = data[i].SUB_PRICE
+                    tmpDocItems.SUB_QUANTITY = data[i].SUB_QUANTITY
+                    tmpDocItems.SUB_SYMBOL = data[i].SUB_SYMBOL
                     tmpDocItems.ITEM_TYPE = data[i].ITEM_TYPE
+                    tmpDocItems.UNIT_SHORT = data[i].UNIT_SHORT
+
 
                     await this.docObj.docItems.addEmpty(tmpDocItems)
                     await this.core.util.waitUntil(100)
