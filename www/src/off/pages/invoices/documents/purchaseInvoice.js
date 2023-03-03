@@ -1094,6 +1094,11 @@ export default class purchaseInvoice extends React.PureComponent
                     tmpDocItems.VAT_RATE = data[i].VAT_RATE
                     tmpDocItems.DEPOT_QUANTITY = data[i].DEPOT_QUANTITY
                     tmpDocItems.CUSTOMER_PRICE = data[i].CUSTOMER_PRICE
+                    tmpDocItems.SUB_FACTOR = data[i].SUB_FACTOR
+                    tmpDocItems.SUB_PRICE = data[i].SUB_PRICE
+                    tmpDocItems.SUB_QUANTITY = data[i].SUB_QUANTITY
+                    tmpDocItems.SUB_SYMBOL = data[i].SUB_SYMBOL
+                    tmpDocItems.UNIT_SHORT = data[i].UNIT_SHORT
 
                     await this.docObj.docItems.addEmpty(tmpDocItems,false)
                     await this.core.util.waitUntil(100)

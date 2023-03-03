@@ -1237,7 +1237,8 @@ export const langTr =
         btnDocument : "İşlem Satırları",
         btnItemAdd: "Ekle",
         txtGrandTotal : "Genel Toplam",
-        cmbPriceContract : "Fiyat Anlaşması",        
+        cmbPriceContract : "Fiyat Anlaşması",
+        btnMailsend : "Mail Gönder",
         msgCustomerSelect:
         {
             title: "Dikkat",
@@ -1433,8 +1434,29 @@ export const langTr =
         mnuDetail :
         {
             text: "İşlemler",
-            btn01: "Detay"
-        }
+            btn01: "Detay",
+            btn02: "Mail Gönder"
+        },
+        popDesign : 
+        {
+            title: "Dizayn seçimi",
+            design : "Dizayn",
+            lang : "Evrak Dili"
+        },
+        popMailSend : 
+        {
+            title :"E-Mail Gönder",
+            txtMailSubject : "E-Mail Başlığı",
+            txtSendMail : "E-Mail Adresi",
+            btnSend : "Gönder"
+        },
+        msgMailSendResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Mail gönderimi başarılı !",
+            msgFailed: "Mail gönderimi başarısız !"
+        },
     },
     ord_01_002 : // "Alış Sipariş",
     {
