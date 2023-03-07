@@ -415,8 +415,8 @@ export default class purchaseOrder extends React.PureComponent
                                     e.data.QUANTITY = this.txtTotalQuantity.value
                                     e.data.VAT = parseFloat(((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) * (e.data.VAT_RATE) / 100)).toFixed(4));
                                     e.data.AMOUNT = parseFloat((e.data.PRICE * e.data.QUANTITY).toFixed(4))
-                                    e.data.TOTALHT = parseFloat(((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT).toFixed(4))
-                                    e.data.TOTAL = parseFloat((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) +e.data.VAT).toFixed(4))
+                                    e.data.TOTALHT = (((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT)).round(2)
+                                    e.data.TOTAL = ((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) +e.data.VAT)).round(2)
                                     e.data.DISCOUNT_RATE = Number(e.data.AMOUNT).rate2Num(e.data.DISCOUNT,4)
                                     //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
                                     await this.itemRelatedUpdate(e.data.ITEM,this.txtTotalQuantity.value)
@@ -520,8 +520,8 @@ export default class purchaseOrder extends React.PureComponent
                             this.docObj.docOrders.dt()[i].SUB_QUANTITY = this.docObj.docOrders.dt()[i].SUB_QUANTITY + this.docObj.docOrders.dt()[i].SUB_FACTOR
                             this.docObj.docOrders.dt()[i].VAT = parseFloat((this.docObj.docOrders.dt()[i].VAT + (this.docObj.docOrders.dt()[i].PRICE * (this.docObj.docOrders.dt()[i].VAT_RATE / 100)) * pQuantity).toFixed(4))
                             this.docObj.docOrders.dt()[i].AMOUNT = parseFloat((this.docObj.docOrders.dt()[i].QUANTITY * this.docObj.docOrders.dt()[i].PRICE).toFixed(4))
-                            this.docObj.docOrders.dt()[i].TOTAL = parseFloat((((this.docObj.docOrders.dt()[i].QUANTITY * this.docObj.docOrders.dt()[i].PRICE) - this.docObj.docOrders.dt()[i].DISCOUNT) + this.docObj.docOrders.dt()[i].VAT).toFixed(4))
-                            this._calculateTotal()
+                            this.docObj.docOrders.dt()[i].TOTAL = Number((((this.docObj.docOrders.dt()[i].QUANTITY * this.docObj.docOrders.dt()[i].PRICE) - this.docObj.docOrders.dt()[i].DISCOUNT) + this.docObj.docOrders.dt()[i].VAT)).round(2)
+                            this.docObj.docOrders.dt()[i].TOTALHT = Number((this.docObj.docOrders.dt()[i].TOTAL - this.docObj.docOrders.dt()[i].VAT)).round(2)
                             await this.grdPurcOrders.devGrid.deleteRow(0)
                             //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
                             await this.itemRelated(pData.GUID,this.docObj.docOrders.dt()[i].QUANTITY)
@@ -555,7 +555,8 @@ export default class purchaseOrder extends React.PureComponent
                     this.docObj.docOrders.dt()[i].SUB_QUANTITY = this.docObj.docOrders.dt()[i].SUB_QUANTITY + this.docObj.docOrders.dt()[i].SUB_FACTOR
                     this.docObj.docOrders.dt()[i].VAT = parseFloat((this.docObj.docOrders.dt()[i].VAT + (this.docObj.docOrders.dt()[i].PRICE * (this.docObj.docOrders.dt()[i].VAT_RATE / 100)) * pQuantity).toFixed(4))
                     this.docObj.docOrders.dt()[i].AMOUNT = parseFloat((this.docObj.docOrders.dt()[i].QUANTITY * this.docObj.docOrders.dt()[i].PRICE).toFixed(4))
-                    this.docObj.docOrders.dt()[i].TOTAL = parseFloat((((this.docObj.docOrders.dt()[i].QUANTITY * this.docObj.docOrders.dt()[i].PRICE) - this.docObj.docOrders.dt()[i].DISCOUNT) + this.docObj.docOrders.dt()[i].VAT).toFixed(4))
+                    this.docObj.docOrders.dt()[i].TOTAL = Number((((this.docObj.docOrders.dt()[i].QUANTITY * this.docObj.docOrders.dt()[i].PRICE) - this.docObj.docOrders.dt()[i].DISCOUNT) + this.docObj.docOrders.dt()[i].VAT)).round(2)
+                    this.docObj.docOrders.dt()[i].TOTALHT = Number((this.docObj.docOrders.dt()[i].TOTAL - this.docObj.docOrders.dt()[i].VAT)).round(2)
                     this._calculateTotal()                    
                     await this.grdPurcOrders.devGrid.deleteRow(0)
                     //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
@@ -591,8 +592,9 @@ export default class purchaseOrder extends React.PureComponent
         {
             this.docObj.docOrders.dt()[pIndex].PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4))
             this.docObj.docOrders.dt()[pIndex].VAT = parseFloat((tmpData.result.recordset[0].PRICE * (pData.VAT / 100) * pQuantity).toFixed(4))
-            this.docObj.docOrders.dt()[pIndex].AMOUNT = parseFloat((tmpData.result.recordset[0].PRICE * pQuantity).toFixed(2) )
-            this.docObj.docOrders.dt()[pIndex].TOTAL = parseFloat(((tmpData.result.recordset[0].PRICE * pQuantity)+ this.docObj.docOrders.dt()[pIndex].VAT).toFixed(2))
+            this.docObj.docOrders.dt()[pIndex].AMOUNT = parseFloat((tmpData.result.recordset[0].PRICE * pQuantity).toFixed(4))
+            this.docObj.docOrders.dt()[pIndex].TOTAL = Number(((tmpData.result.recordset[0].PRICE * pQuantity)+ this.docObj.docOrders.dt()[pIndex].VAT)).round(2)
+            this.docObj.docOrders.dt()[pIndex].TOTALHT = Number((this.docObj.docOrders.dt()[pIndex].TOTAL - this.docObj.docOrders.dt()[pIndex].VAT)).round(2)
             this.docObj.docOrders.dt()[pIndex].SUB_PRICE = Number(parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4)) / this.docObj.docOrders.dt()[pIndex].SUB_FACTOR).round(2)
 
             this._calculateTotal()
@@ -685,7 +687,7 @@ export default class purchaseOrder extends React.PureComponent
                         let tmpRelatedQt = Math.floor(pQuantity / tmpRelatedData.result.recordset[i].ITEM_QUANTITY) * tmpRelatedData.result.recordset[i].RELATED_QUANTITY
                         
                         if(tmpRelatedQt > 0)
-                        {
+                        { 
                             this.docObj.docOrders.dt()[x].QUANTITY = tmpRelatedQt
                             this.docObj.docOrders.dt()[x].VAT = parseFloat((this.docObj.docOrders.dt()[x].VAT + (this.docObj.docOrders.dt()[x].PRICE * (this.docObj.docOrders.dt()[x].VAT_RATE / 100) * pQuantity)).toFixed(4))
                             this.docObj.docOrders.dt()[x].AMOUNT = parseFloat((this.docObj.docOrders.dt()[x].QUANTITY * this.docObj.docOrders.dt()[x].PRICE).toFixed(4))
@@ -2105,11 +2107,11 @@ export default class purchaseOrder extends React.PureComponent
                                             e.key.DISCOUNT = 0 
                                             return
                                         }
+                                        e.key.VAT =  Number(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100))).round(4)
+                                        e.key.AMOUNT = Number((e.key.PRICE * e.key.QUANTITY)).round(4)
+                                        e.key.TOTALHT =  Number((e.key.AMOUNT - e.key.DISCOUNT)).round(2)
+                                        e.key.TOTAL =  Number((e.key.TOTALHT + e.key.VAT)).round(2)
 
-                                        e.key.VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100)).toFixed(4));
-                                        e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(2))
-                                        e.key.TOTAL = parseFloat((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) +e.key.VAT).toFixed(2))
-                                        
                                         if(e.key.DISCOUNT > 0)
                                         {
                                             e.key.DISCOUNT_RATE = parseFloat(100 - ((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) / (e.key.PRICE * e.key.QUANTITY)) * 100).toFixed(4))

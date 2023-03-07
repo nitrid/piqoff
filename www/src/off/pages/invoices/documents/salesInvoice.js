@@ -676,9 +676,9 @@ export default class salesInvoice extends React.PureComponent
                             this.docObj.docItems.dt()[i].QUANTITY = this.docObj.docItems.dt()[i].QUANTITY + pQuantity
                             this.docObj.docItems.dt()[i].SUB_QUANTITY = this.docObj.docItems.dt()[i].SUB_QUANTITY * this.docObj.docItems.dt()[i].SUB_FACTOR
                             this.docObj.docItems.dt()[i].VAT = parseFloat((this.docObj.docItems.dt()[i].VAT + (this.docObj.docItems.dt()[i].PRICE * (this.docObj.docItems.dt()[i].VAT_RATE / 100) * pQuantity)).toFixed(4))
-                            this.docObj.docItems.dt()[i].AMOUNT = parseFloat((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE).toFixed(2))
-                            this.docObj.docItems.dt()[i].TOTAL = parseFloat((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT).toFixed(2))
-                            this.docObj.docItems.dt()[i].TOTALHT =  parseFloat((this.docObj.docItems.dt()[i].TOTAL - this.docObj.docItems.dt()[i].VAT).toFixed(2))
+                            this.docObj.docItems.dt()[i].AMOUNT = parseFloat((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE).toFixed(4))
+                            this.docObj.docItems.dt()[i].TOTAL = Number((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT)).round(2)
+                            this.docObj.docItems.dt()[i].TOTALHT =  Number((this.docObj.docItems.dt()[i].TOTAL - this.docObj.docItems.dt()[i].VAT)).round(2)
                             this._calculateTotal()
                             await this.grdSlsInv.devGrid.deleteRow(0)
                             //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
@@ -712,7 +712,7 @@ export default class salesInvoice extends React.PureComponent
                     this.docObj.docItems.dt()[i].QUANTITY = this.docObj.docItems.dt()[i].QUANTITY + pQuantity
                     this.docObj.docItems.dt()[i].SUB_QUANTITY = this.docObj.docItems.dt()[i].SUB_QUANTITY * this.docObj.docItems.dt()[i].SUB_FACTOR
                     this.docObj.docItems.dt()[i].VAT = Number((this.docObj.docItems.dt()[i].VAT + (this.docObj.docItems.dt()[i].PRICE * (this.docObj.docItems.dt()[i].VAT_RATE / 100) * pQuantity))).round(4)
-                    this.docObj.docItems.dt()[i].AMOUNT = Number((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE)).round(2)
+                    this.docObj.docItems.dt()[i].AMOUNT = Number((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE)).round(4)
                     this.docObj.docItems.dt()[i].TOTAL = Number((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT)).round(2)
                     this.docObj.docItems.dt()[i].TOTALHT =  Number((this.docObj.docItems.dt()[i].TOTAL - this.docObj.docItems.dt()[i].VAT)).round(2)
                     this._calculateTotal()
@@ -751,9 +751,9 @@ export default class salesInvoice extends React.PureComponent
             {
                 this.docObj.docItems.dt()[pIndex].PRICE = parseFloat((tmpData.result.recordset[0].PRICE))
                 this.docObj.docItems.dt()[pIndex].VAT = parseFloat((tmpData.result.recordset[0].PRICE * (this.docObj.docItems.dt()[pIndex].VAT_RATE / 100) * pQuantity).toFixed(4))
-                this.docObj.docItems.dt()[pIndex].AMOUNT = parseFloat((tmpData.result.recordset[0].PRICE  * pQuantity).toFixed(2))
-                this.docObj.docItems.dt()[pIndex].TOTAL = parseFloat(((tmpData.result.recordset[0].PRICE * pQuantity) + this.docObj.docItems.dt()[pIndex].VAT).toFixed(2))
-                this.docObj.docItems.dt()[pIndex].TOTALHT = parseFloat((this.docObj.docItems.dt()[pIndex].TOTAL - this.docObj.docItems.dt()[pIndex].VAT).toFixed(2))
+                this.docObj.docItems.dt()[pIndex].AMOUNT = parseFloat((tmpData.result.recordset[0].PRICE  * pQuantity).toFixed(4))
+                this.docObj.docItems.dt()[pIndex].TOTAL = Number(((tmpData.result.recordset[0].PRICE * pQuantity) + this.docObj.docItems.dt()[pIndex].VAT)).round(2)
+                this.docObj.docItems.dt()[pIndex].TOTALHT = Number((this.docObj.docItems.dt()[pIndex].TOTAL - this.docObj.docItems.dt()[pIndex].VAT)).round(2)
                 this.docObj.docItems.dt()[pIndex].SUB_PRICE = Number(parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4)) / this.docObj.docItems.dt()[pIndex].SUB_FACTOR).round(2)
                 this._calculateTotal()
             }
@@ -771,9 +771,9 @@ export default class salesInvoice extends React.PureComponent
         {
             this.docObj.docItems.dt()[pIndex].PRICE = parseFloat((pPrice).toFixed(4))
             this.docObj.docItems.dt()[pIndex].VAT = parseFloat((((pPrice * pQuantity) - this.docObj.docItems.dt()[pIndex].DISCOUNT) * (this.docObj.docItems.dt()[pIndex].VAT_RATE / 100) ).toFixed(4))
-            this.docObj.docItems.dt()[pIndex].AMOUNT = parseFloat((pPrice  * pQuantity).toFixed(2))
-            this.docObj.docItems.dt()[pIndex].TOTALHT = parseFloat(((pPrice  * pQuantity) - this.docObj.docItems.dt()[pIndex].DISCOUNT).toFixed(2))
-            this.docObj.docItems.dt()[pIndex].TOTAL = parseFloat((this.docObj.docItems.dt()[pIndex].TOTALHT + this.docObj.docItems.dt()[pIndex].VAT).toFixed(2))
+            this.docObj.docItems.dt()[pIndex].AMOUNT = parseFloat((pPrice  * pQuantity).toFixed(4))
+            this.docObj.docItems.dt()[pIndex].TOTALHT = Number(((pPrice  * pQuantity) - this.docObj.docItems.dt()[pIndex].DISCOUNT)).round(2)
+            this.docObj.docItems.dt()[pIndex].TOTAL = Number((this.docObj.docItems.dt()[pIndex].TOTALHT + this.docObj.docItems.dt()[pIndex].VAT)).round(2)
             this._calculateTotal()
         }
         //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
@@ -862,8 +862,8 @@ export default class salesInvoice extends React.PureComponent
                             this.docObj.docItems.dt()[x].QUANTITY = tmpRelatedQt
                             this.docObj.docItems.dt()[x].VAT = parseFloat((this.docObj.docItems.dt()[x].VAT + (this.docObj.docItems.dt()[x].PRICE * (this.docObj.docItems.dt()[x].VAT_RATE / 100) * pQuantity)).toFixed(4))
                             this.docObj.docItems.dt()[x].AMOUNT = parseFloat((this.docObj.docItems.dt()[x].QUANTITY * this.docObj.docItems.dt()[x].PRICE).toFixed(4))
-                            this.docObj.docItems.dt()[x].TOTAL = parseFloat((((this.docObj.docItems.dt()[x].QUANTITY * this.docObj.docItems.dt()[x].PRICE) - this.docObj.docItems.dt()[x].DISCOUNT) + this.docObj.docItems.dt()[x].VAT).toFixed(4))
-                            this.docObj.docItems.dt()[x].TOTALHT =  parseFloat((this.docObj.docItems.dt()[x].TOTAL - this.docObj.docItems.dt()[x].VAT).toFixed(4))
+                            this.docObj.docItems.dt()[x].TOTAL = Number((((this.docObj.docItems.dt()[x].QUANTITY * this.docObj.docItems.dt()[x].PRICE) - this.docObj.docItems.dt()[x].DISCOUNT) + this.docObj.docItems.dt()[x].VAT)).round(2)
+                            this.docObj.docItems.dt()[x].TOTALHT =  Number((this.docObj.docItems.dt()[x].TOTAL - this.docObj.docItems.dt()[x].VAT)).round(2)
                         }
                         tmpExist = true
                     }
@@ -1550,11 +1550,11 @@ export default class salesInvoice extends React.PureComponent
                 {
                     if(tmpData.result.recordset[0].COUNTRY == 'FR')
                     {
-                    this.docObj.dt()[0].INTERFEL = parseFloat(((tmpInterfelHt * tmpData.result.recordset[0].FR) / 100).toFixed(2))
+                    this.docObj.dt()[0].INTERFEL = Number(((tmpInterfelHt * tmpData.result.recordset[0].FR) / 100)).round(2)
                     }
                     else
                     {
-                        this.docObj.dt()[0].INTERFEL =  parseFloat(((tmpInterfelHt * tmpData.result.recordset[0].NOTFR) / 100).toFixed(2))
+                        this.docObj.dt()[0].INTERFEL =  Number(((tmpInterfelHt * tmpData.result.recordset[0].NOTFR) / 100)).round(2)
                     }
                     let tmpCvoQuery = 
                     {
@@ -2932,7 +2932,7 @@ export default class salesInvoice extends React.PureComponent
                                                 return
                                             }
                                             e.key.VAT = Number(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100))).round(4)
-                                            e.key.AMOUNT = Number((e.key.PRICE * e.key.QUANTITY)).round(2)
+                                            e.key.AMOUNT = Number((e.key.PRICE * e.key.QUANTITY)).round(4)
                                             e.key.TOTALHT = Number((e.key.AMOUNT - e.key.DISCOUNT)).round(2)
                                             e.key.TOTAL = Number((e.key.TOTALHT + e.key.VAT)).round(2)
 
@@ -3376,12 +3376,12 @@ export default class salesInvoice extends React.PureComponent
                                                     tmpDocData.DISCOUNT_3 =  Number(((tmpDocData.PRICE * tmpDocData.QUANTITY)-(tmpDocData.DISCOUNT_1+tmpDocData.DISCOUNT_2))).rateInc(this.txtDiscountPercent3.value,4)
                                                     
                                                     tmpDocData.DISCOUNT = parseFloat((tmpDocData.DISCOUNT_1 + tmpDocData.DISCOUNT_2 + tmpDocData.DISCOUNT_3).toFixed(4))
-                                                    tmpDocData.TOTALHT = parseFloat((Number((tmpDocData.PRICE * tmpDocData.QUANTITY)) - (Number(tmpDocData.DISCOUNT_1) + Number(tmpDocData.DISCOUNT_2) + Number(tmpDocData.DISCOUNT_3))).toFixed(4))
+                                                    tmpDocData.TOTALHT = Number((Number((tmpDocData.PRICE * tmpDocData.QUANTITY)) - (Number(tmpDocData.DISCOUNT_1) + Number(tmpDocData.DISCOUNT_2) + Number(tmpDocData.DISCOUNT_3)))).round(2)
                                                     if(tmpDocData.VAT > 0)
                                                     {
                                                         tmpDocData.VAT = parseFloat(((tmpDocData.TOTALHT) * (tmpDocData.VAT_RATE / 100)).toFixed(4))
                                                     }
-                                                    tmpDocData.TOTAL = parseFloat((tmpDocData.TOTALHT + tmpDocData.VAT).toFixed(4))
+                                                    tmpDocData.TOTAL = Number((tmpDocData.TOTALHT + tmpDocData.VAT)).round(2)
                                                     tmpDocData.DISCOUNT_RATE = Number((tmpDocData.PRICE * tmpDocData.QUANTITY)).rate2Num((tmpDocData.DISCOUNT_1 + tmpDocData.DISCOUNT_2 + tmpDocData.DISCOUNT_3),2)
                                                 }
                                                 this._calculateTotal()
