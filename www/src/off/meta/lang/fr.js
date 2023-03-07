@@ -236,6 +236,8 @@ export const langFr =
         cnt_02_001 : "Saisie Accord d'achat",
         cnt_02_002 : "Saisie Accord de vente",
         cnt_03 : "Rapports",
+        cnt_04 : "Opérations",
+        cnt_04_001 : "Çoklu Satış Anlaşması", //BAK
         fns : "Finance",
         fns_01 : "Listes",
         fns_01_001: "Liste paiement",

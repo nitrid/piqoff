@@ -358,6 +358,19 @@ export const menu = (e) =>
                     ]
                 },
                 {
+                    id: 'cnt_04',
+                    text : e.t('menuOff.cnt_04'),//'Operasyonlar',
+                    expanded: false,
+                    items: 
+                    [
+                        {
+                            id: 'cnt_04_001',
+                            text: e.t('menuOff.cnt_04_001'),//Çoklu Satış Anlaşması',
+                            path: 'contracts/lists/purchaseContList'
+                        }
+                    ]
+                },
+                {
                     id: 'cnt_03',
                     text : e.t('menuOff.cnt_03'),//'Raporlar',
                     expanded: false,

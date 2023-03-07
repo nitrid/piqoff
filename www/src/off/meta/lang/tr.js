@@ -237,6 +237,8 @@ export const langTr =
         cnt_02_002 : "Satış Anlaşması",
         cnt_02_003 : "Satış Fiyat Listesi Tanımlama",
         cnt_03 : "Raporlar",
+        cnt_04 : "Operasyonlar",
+        cnt_04_001 : "Çoklu Satış Anlaşması",
         fns : "Finans",
         fns_01 : "Listeler",
         fns_01_001: "Ödeme Listesi",
