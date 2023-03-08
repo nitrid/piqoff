@@ -1600,9 +1600,6 @@ export default class purchaseInvoice extends React.PureComponent
     } 
     async saveDoc()
     {
-        console.log(this.docObj.docItems.dt()[0])
-        console.log(this.docObj.docCustomer.dt()[0])
-        console.log(this.docObj.dt()[0].DOC_DATE)
         let tmpConfObj =
         {
             id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',

@@ -53,6 +53,8 @@ export default class purchaseDispatch extends React.PureComponent
 
         
         this.multiItemData = new datatable
+        this.newPrice = new datatable
+        this.updatePriceData = new datatable
         this.vatRate =  new datatable
         this.rightItems = [{ text: this.t("getOrders")}]
 
@@ -70,6 +72,7 @@ export default class purchaseDispatch extends React.PureComponent
     {
         this.docObj.clearAll()
         this.extraObj.clearAll()
+        this.newPrice.clear()
 
         this.docObj.ds.on('onAddRow',(pTblName,pData) =>
         {
@@ -133,6 +136,7 @@ export default class purchaseDispatch extends React.PureComponent
         this.frmDocItems.option('disabled',true)
         await this.grdPurcDispatch.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
         await this.grdMultiItem.dataRefresh({source:this.multiItemData});
+        await this.grdNewPrice.dataRefresh({source:this.newPrice})
     }
     async getDoc(pGuid,pRef,pRefno)
     {
@@ -747,6 +751,7 @@ export default class purchaseDispatch extends React.PureComponent
         let tmpData = await this.core.sql.execute(tmpQuery) 
         if(tmpData.result.recordset.length > 0)
         {
+            this.docObj.docItems.dt()[pIndex].CUSTOMER_PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(2))
             this.docObj.docItems.dt()[pIndex].PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(2))
             this.docObj.docItems.dt()[pIndex].VAT = parseFloat((tmpData.result.recordset[0].PRICE * (pData.VAT / 100) * pQuantity).toFixed(2))
             this.docObj.docItems.dt()[pIndex].AMOUNT = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(2) * pQuantity)
@@ -1019,6 +1024,133 @@ export default class purchaseDispatch extends React.PureComponent
             this.popMultiItem.hide()
         }
     }
+    async saveDoc()
+    {
+        let tmpConfObj =
+        {
+            id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+            button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'after'}],
+            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSave.msg")}</div>)
+        }
+        
+        let pResult = await dialog(tmpConfObj);
+        if(pResult == 'btn01')
+        {
+            let tmpData = this.sysParam.filter({ID:'purcInvoıcePriceSave',USERS:this.user.CODE}).getValue()
+            if(typeof tmpData != 'undefined' && tmpData.value ==  true)
+            {
+                App.instance.setState({isExecute:true})
+                this.newPrice.clear()
+                for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
+                {
+
+                    if(this.docObj.docItems.dt()[i].ITEM_TYPE == 0)
+                    {
+                        if(this.docObj.docItems.dt()[i].CUSTOMER_PRICE != this.docObj.docItems.dt()[i].PRICE && this.docObj.docItems.dt()[i].CUSTOMER_PRICE != 0)
+                        {
+                            let tmpQuery = 
+                            {
+                                query : "SELECT TOP 1 PRICE_SALE_GUID AS PRICE_GUID,PRICE_SALE AS SALE_PRICE,CUSTOMER_PRICE_GUID AS CUSTOMER_PRICE_GUID FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE  GUID = @ITEM AND CUSTOMER_GUID = @CUSTOMER",
+                                param : ['ITEM:string|50','CUSTOMER:string|50'],
+                                value : [this.docObj.docItems.dt()[i].ITEM,this.docObj.docItems.dt()[i].OUTPUT]
+                            }
+                            let tmpData = await this.core.sql.execute(tmpQuery)
+                            if(tmpData.result.recordset.length > 0)
+                            {
+                                console.log(tmpData.result.recordset)
+                                let tmpItemData = [{...this.docObj.docItems.dt()[i]}]
+                                tmpItemData[0].SALE_PRICE_GUID = tmpData.result.recordset[0].PRICE_GUID
+                                tmpItemData[0].SALE_PRICE = tmpData.result.recordset[0].SALE_PRICE
+                                tmpItemData[0].PRICE_MARGIN = (parseFloat(tmpData.result.recordset[0].SALE_PRICE- tmpItemData[0].PRICE).toFixed(2) + '€ / %' + parseFloat(((tmpData.result.recordset[0].SALE_PRICE- tmpItemData[0].PRICE)/tmpData.result.recordset[0].SALE_PRICE) * 100).toFixed(2))
+                                tmpItemData[0].CUSTOMER_PRICE_GUID = tmpData.result.recordset[0].CUSTOMER_PRICE_GUID
+                                this.newPrice.push(tmpItemData[0])
+                            } 
+                        }
+                    }
+                }
+                if(this.newPrice.length > 0)
+                {
+                    await this.msgNewPrice.show().then(async (e) =>
+                    {
+            
+                        if(e == 'btn01')
+                        {
+                            
+                        }
+                        if(e == 'btn02')
+                        {
+                            this.updatePriceData.insertCmd = 
+                            {
+                                query : "EXEC [dbo].[PRD_INVOICE_PRICE_UPDATE] " + 
+                                "@PRICE_GUID = @PPRICE_GUID, " +
+                                "@NEW_CUSER = @PNEW_CUSER, " + 
+                                "@NEW_PRICE = @PNEW_PRICE, " +
+                                "@UPDATE_ITEM = @PUPDATE_ITEM, " +
+                                "@CUSTOMER_PRICE_GUID = @PCUSTOMER_PRICE_GUID, " +
+                                "@COST_PRICE = @PCOST_PRICE ", 
+                                param : ['PPRICE_GUID:string|50','PNEW_CUSER:string|25','PNEW_PRICE:float','PUPDATE_ITEM:string|50','PCUSTOMER_PRICE_GUID:string|50','PCOST_PRICE:float'],
+                                dataprm : ['SALE_PRICE_GUID','CUSER','SALE_PRICE','ITEM','CUSTOMER_PRICE_GUID','PRICE']
+                            } 
+                            this.updatePriceData.updateCmd = 
+                            {
+                                query : "EXEC [dbo].[PRD_INVOICE_PRICE_UPDATE] " + 
+                                "@PRICE_GUID = @PPRICE_GUID, " +
+                                "@NEW_CUSER = @PNEW_CUSER, " + 
+                                "@NEW_PRICE = @PNEW_PRICE, " +
+                                "@UPDATE_ITEM = @PUPDATE_ITEM, " +
+                                "@CUSTOMER_PRICE_GUID = @PCUSTOMER_PRICE_GUID, " +
+                                "@COST_PRICE = @PCOST_PRICE ", 
+                                param : ['PPRICE_GUID:string|50','PNEW_CUSER:string|25','PNEW_PRICE:float','PUPDATE_ITEM:string|50','PCUSTOMER_PRICE_GUID:string|50','PCOST_PRICE:float'],
+                                dataprm : ['SALE_PRICE_GUID','CUSER','SALE_PRICE','ITEM','CUSTOMER_PRICE_GUID','PRICE']
+                            } 
+                            App.instance.setState({isExecute:true})
+                            for (let i = 0; i < this.grdNewPrice.getSelectedData().length; i++) 
+                            {
+                                this.updatePriceData.push(this.grdNewPrice.getSelectedData()[i])
+                                // let tmpMulticodeObj = new itemMultiCodeCls()
+                                // await tmpMulticodeObj.load({ITEM_CODE:this.grdNewPrice.getSelectedData()[i].ITEM_CODE,CUSTOMER_CODE:this.grdNewPrice.getSelectedData()[i].CUSTOMER_CODE});
+                                // tmpMulticodeObj.dt()[0].CUSTOMER_PRICE = this.grdNewPrice.getSelectedData()[i].PRICE
+                                // tmpMulticodeObj.save()
+                                // let tmpQuery = 
+                                // {
+                                //     query : "EXEC [dbo].[PRD_ITEM_PRICE_UPDATE] " +
+                                //             "@GUID = @PGUID, " +
+                                //             "@CUSER = @PCUSER, " +
+                                //             "@PRICE = @PPRICE" ,
+                                //     param : ['PGUID:string|50','PCUSER:string|25','PPRICE:float'],
+                                //     value : [this.grdNewPrice.getSelectedData()[i].SALE_PRICE_GUID,this.user.CODE,this.grdNewPrice.getSelectedData()[i].SALE_PRICE]
+                                // }
+                                // await this.core.sql.execute(tmpQuery)
+                            }
+                            await this.updatePriceData.update()
+                            App.instance.setState({isExecute:false})
+                            this.updatePriceData.clear()
+                        }
+                    })
+                }    
+                App.instance.setState({isExecute:false})
+            }
+            
+            let tmpConfObj1 =
+            {
+                id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
+            }
+            
+            if((await this.docObj.save()) == 0)
+            {                                                    
+                tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
+                await dialog(tmpConfObj1);
+                this.btnSave.setState({disabled:true});
+                this.btnNew.setState({disabled:false});
+            }
+            else
+            {
+                tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
+                await dialog(tmpConfObj1);
+            }
+        }
+    }
     async checkRow()
     {
         for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
@@ -1213,24 +1345,7 @@ export default class purchaseDispatch extends React.PureComponent
                                             let pResult = await dialog(tmpConfObj);
                                             if(pResult == 'btn01')
                                             {
-                                                let tmpConfObj1 =
-                                                {
-                                                    id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
-                                                }
-                                                
-                                                if((await this.docObj.save()) == 0)
-                                                {                                                    
-                                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
-                                                    await dialog(tmpConfObj1);
-                                                    this.btnSave.setState({disabled:true});
-                                                    this.btnNew.setState({disabled:false});
-                                                }
-                                                else
-                                                {
-                                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
-                                                    await dialog(tmpConfObj1);
-                                                }
+                                                this.saveDoc()
                                             }
                                         }                              
                                         else
@@ -2128,6 +2243,26 @@ export default class purchaseDispatch extends React.PureComponent
                                     width={'100%'}
                                     dbApply={false}
                                     filterRow={{visible:true}}
+                                    onCellPrepared={(e) =>
+                                        {
+                                            if(e.rowType === "data" && e.column.dataField === "DIFF_PRICE" && e.data.ITEM_TYPE == 0)
+                                            {
+                                                if(e.data.PRICE > e.data.CUSTOMER_PRICE)
+                                                {
+                                                    e.cellElement.style.color ="red"
+                                                    e.cellElement.style.fontWeight ="bold"
+                                                }
+                                                else if(e.data.PRICE < e.data.CUSTOMER_PRICE)
+                                                {
+                                                    e.cellElement.style.color ="green"
+                                                    e.cellElement.style.fontWeight ="bold"
+                                                }
+                                                else
+                                                {
+                                                    e.cellElement.style.color ="blue"
+                                                }
+                                            }
+                                        }}
                                     onRowPrepared={(e) =>
                                     {
                                         if(e.rowType == 'data' && e.data.INVOICE_LINE_GUID  != '00000000-0000-0000-0000-000000000000')
@@ -2240,6 +2375,7 @@ export default class purchaseDispatch extends React.PureComponent
                                         e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(4))
                                         e.key.TOTAL = Number((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) + e.key.VAT)).round(2)
                                         e.key.TOTALHT = Number((e.key.TOTAL - e.key.VAT)).round(2)
+                                        e.key.DIFF_PRICE = e.key.PRICE - e.key.CUSTOMER_PRICE
                                        
                                         if(e.key.DISCOUNT == 0)
                                         {
@@ -2272,6 +2408,8 @@ export default class purchaseDispatch extends React.PureComponent
                                         <Column dataField="SUB_QUANTITY" caption={this.t("grdPurcDispatch.clmSubQuantity")} dataType={'number'} width={65} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
                                         <Column dataField="PRICE" caption={this.t("grdPurcDispatch.clmPrice")} width={65} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
                                         <Column dataField="SUB_PRICE" caption={this.t("grdPurcDispatch.clmSubPrice")} dataType={'number'} format={'€#,##0.000'} width={65} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + "€/ " + e.data.SUB_SYMBOL}}/>
+                                        <Column dataField="CUSTOMER_PRICE" caption={this.t("grdPurcDispatch.clmCustomerPrice")} dataType={'number'} format={'€#,##0.000'} width={70} allowHeaderFiltering={false} allowEditing={false}/>
+                                        <Column dataField="DIFF_PRICE" caption={this.t("grdPurcDispatch.clmDiffPrice")} dataType={'number'} format={'€#,##0.000'} width={70} allowHeaderFiltering={false} allowEditing={false}/>
                                         <Column dataField="AMOUNT" caption={this.t("grdPurcDispatch.clmAmount")} width={90} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>
                                         <Column dataField="DISCOUNT" caption={this.t("grdPurcDispatch.clmDiscount")} width={60} editCellRender={this._cellRoleRender} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}}/>
                                         <Column dataField="DISCOUNT_RATE" caption={this.t("grdPurcDispatch.clmDiscountRate")} width={60} dataType={'number'} editCellRender={this._cellRoleRender}/>
@@ -2953,6 +3091,63 @@ export default class purchaseDispatch extends React.PureComponent
                         
                             </div>
                         
+                    </NdDialog>  
+                    {/* Yeni Fiyat Dialog  */}
+                    <NdDialog id={"msgNewPrice"} container={"#root"} parent={this}
+                    position={{of:'#root'}} 
+                    showTitle={true} 
+                    title={this.t("msgNewPrice.title")} 
+                    showCloseButton={false}
+                    width={"1000px"}
+                    height={"800PX"}
+                    button={[{id:"btn01",caption:this.t("msgNewPrice.btn01"),location:'before'},{id:"btn02",caption:this.t("msgNewPrice.btn02"),location:'after'}]}
+                    >
+                        <div className="row">
+                            <div className="col-12 py-2">
+                                <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNewPrice.msg")}</div>
+                            </div>
+                            <div className="col-12 py-2">
+                                <Form>
+                                    {/* grdNewPrice */}
+                                    <Item>
+                                    <NdGrid parent={this} id={"grdNewPrice"} 
+                                    showBorders={true} 
+                                    columnsAutoWidth={true} 
+                                    allowColumnReordering={true} 
+                                    allowColumnResizing={true} 
+                                    headerFilter={{visible:true}}
+                                    filterRow = {{visible:true}}
+                                    height={600} 
+                                    width={'100%'}
+                                    dbApply={false}
+                                    selection={{mode:"multiple"}}
+                                    onRowRemoved={async (e)=>{
+                                    }}
+                                    onRowUpdated={async(e)=>{
+
+                                        let tmpMargin = e.key.SALE_PRICE - e.key.PRICE
+                                        let tmpMarginRate = (tmpMargin /(e.key.SALE_PRICE)) * 100
+                                        e.key.PRICE_MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
+                                        
+                                    }}
+                                    >
+                                        <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
+                                        <Scrolling mode="standart" />
+                                        <Editing mode="cell" allowUpdating={true} allowDeleting={false} />
+                                        <Column dataField="ITEM_CODE" caption={this.t("grdNewPrice.clmCode")} width={100} allowEditing={false}/>
+                                        <Column dataField="ITEM_NAME" caption={this.t("grdNewPrice.clmName")} width={180}  allowEditing={false}/>
+                                        <Column dataField="CUSTOMER_PRICE" caption={this.t("grdNewPrice.clmPrice")} width={130}   allowEditing={false}/>
+                                        <Column dataField="PRICE" caption={this.t("grdNewPrice.clmPrice2")} dataType={'number'} width={70}  allowEditing={false}/>
+                                        <Column dataField="SALE_PRICE" caption={this.t("grdNewPrice.clmSalePrice")} dataType={'number'} width={80}  format={{ style: "currency", currency: "EUR",precision: 2}}/>
+                                        <Column dataField="PRICE_MARGIN" caption={this.t("grdNewPrice.clmMargin")}width={100}  allowEditing={false}/>
+                                    </NdGrid>
+                                    </Item>
+                                </Form>
+                            </div>
+                        </div>
+                        <div className='row'>
+                    
+                        </div>
                     </NdDialog>  
                      {/* BARKOD POPUP */}
                     <NdPopGrid id={"pg_txtBarcode"} parent={this} container={"#root"}

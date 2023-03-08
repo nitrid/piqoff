@@ -1188,7 +1188,7 @@ export default class salesOrder extends React.PureComponent
                                             param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             >
-                                            <Validator validationGroup={"frmslsDoc" + this.tabIndex}>
+                                                <Validator validationGroup={"frmslsDoc" + this.tabIndex}>
                                                     <RequiredRule message={this.t("validRef")} />
                                                 </Validator>  
                                             </NdTextBox>

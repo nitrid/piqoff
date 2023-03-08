@@ -348,6 +348,8 @@ export const langTr =
         slsRpt_01_002 : "Grup Bazlı Satış Raporu",
         slsRpt_01_003 : "Tarih Sıralı Satış Faturaları Raporu",
         slsRpt_01_004 : "Satış  Raporu",
+        slsRpt_01_005 : "Ürün Satış ve İade Raporu",
+        slsRpt_01_006 : "Cari Bazlı Satış ve İade Raporu",
         purchaseReport : "Raporlar",
         slsRpt_02_001 : "Tarih Sıralı Alış Faturaları Raporu",
         slsRpt_02_002 : "DEB Raporu",
@@ -9597,7 +9599,8 @@ export const langTr =
             clmSubQuantity : "Alt Birim",
             clmSubPrice : "Alt Birim Fiyatı",
             clmSubFactor : "Katsayı",
-
+            clmDiffPrice : "Fark",
+            clmCustomerPrice : "T.Fiyat",
         },
         popDiscount : 
         {
@@ -9877,6 +9880,22 @@ export const langTr =
         txtDiscountPer1 : "1. İndirim Oranı",
         txtDiscountPer2 : "2. İndirim Oranı",
         txtDiscountPer3 : "3. İndirim Oranı",
+        msgNewPrice : 
+        {
+            title: "Dikkat",
+            btn01: "Hiç Birini Güncelleme",
+            btn02: "Seçilen Fiyatları Güncelle",
+            msg: "Lütfen Tedarikçi Fiyatını Güncellemek İstediğiniz Ürünleri Seçiniz.. "
+        },
+        grdNewPrice: 
+        {
+            clmCode: "Kodu",
+            clmName: "Adı",
+            clmPrice: "Eski Fiyat",
+            clmPrice2: "Yeni Fiyat",
+            clmSalePrice :"Satış Fiyatı", 
+            clmMargin : "Marj"
+        },
     },
     irs_02_002 : // Satış İrsaliyesi"
     {
@@ -12963,7 +12982,7 @@ export const langTr =
         btnAddPay : "Ödeme Girişi",
         invoiceSelect : "Fatura Seçimi",
         btnCash : "Ödeme Girişi",
-        ValidCash : "0'dan büyük bir tutar giriniz", // BAK
+        ValidCash : "0'dan büyük bir tutar giriniz",
         cmbPayType : {
             title : "Ödeme Tipi",
             cash : "Nakit",
@@ -15255,6 +15274,50 @@ export const langTr =
             clmName : "Adı",           
             clmTotal : "Toplam",
         },
+    },
+    slsRpt_01_005 : // "Tarih sıralı satış raporu"
+    {
+        chkZeroBalance : "0 Bakiyeler Gösterilsin",
+        txtItemCode : "Ürün Seçimi",
+        btnGet :"Getir",
+        grdListe : 
+        {
+            clmCode : "Müşteri Kodu",
+            clmName: "Müşteri Adı",
+            clmDispatch : "İrsaliye Miktarı",           
+            clmInvoice : "Fatura Miktarı",
+            clmRebate : "İade Miktarı"
+        },
+        pg_txtItemCode : 
+        {
+            title : "STOK Seçimi",
+            clmCode :  "STOK KODU",
+            clmName : "STOK ADI",
+        },
+        validCode : "Lütfen Stok Seçin"
+    },
+    slsRpt_01_006 : // "Cari Bazlı satış ve iade raporu"
+    {
+        chkZeroBalance : "0 Bakiyeler Gösterilsin", 
+        txtCustomerCode : "Müşteri Seçimi", 
+        btnGet :"Getir", 
+        grdListe : 
+        {
+            clmCode : "Stok Kodu",  
+            clmName: "Stok Adı",  
+            clmDispatch : "İrsaliye Miktarı",             
+            clmInvoice : "Fatura Miktarı",  
+            clmRebate : "İade Miktarı"  
+        },
+        pg_txtCustomerCode : 
+        {
+            title : "Cari Seçimi",
+            clmCode :  "CARİ KODU",
+            clmTitle : "CARİ ADI",
+            clmTypeName : "TİPİ",
+            clmGenusName : "CİNSİ"
+        },
+        validCode : "Lütfen Müşteri Seçin" 
     },
     slsRpt_02_001 : // "Tarih sıralı Alış raporu"
     {

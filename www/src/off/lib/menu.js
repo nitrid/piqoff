@@ -881,6 +881,16 @@ export const menu = (e) =>
                             text: e.t('menuOff.slsRpt_01_004'),//'Ürün Grubu Satış',
                             path: 'report/sales/docSalesReport'
                         },
+                        {
+                            id: 'slsRpt_01_005',
+                            text: e.t('menuOff.slsRpt_01_005'),//'Ürün Satış iade raporu',
+                            path: 'report/sales/itemSaleRebateReport'
+                        },
+                        {
+                            id: 'slsRpt_01_006',
+                            text: e.t('menuOff.slsRpt_01_006'),//'Cari Bazlı Satış iade raporu',
+                            path: 'report/sales/customerSaleRebateReport'
+                        },
                     ]
                 }
             ]

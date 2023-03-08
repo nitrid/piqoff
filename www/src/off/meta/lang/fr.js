@@ -346,6 +346,8 @@ export const langFr =
         slsRpt_01_002 : "Rapport de ventes Basées Famille",  // BAK
         slsRpt_01_003 : "Rapport des Factures de Vente", // BAK
         slsRpt_01_004 : "Rapport de Vente", // BAK
+        slsRpt_01_005 : "Ürün Satış ve İade Raporu", // BAK
+        slsRpt_01_006 : "Cari Bazlı Satış ve İade Raporu", // BAK
         purchaseReport : "Rapports",
         slsRpt_02_001 : "Rapport des Factures d'Achat", // BAK
         slsRpt_02_002 : "Rapport DEB ", // BAK
@@ -9569,7 +9571,9 @@ export const langFr =
             clmOrigin : "Origine",
             clmSubQuantity : "Qtt. Unitaire",  // BAK
             clmSubPrice : "Prix Unitaire",  // BAK
-            clmSubFactor : "Coefficient"
+            clmSubFactor : "Coefficient",
+            clmDiffPrice : "Différence",
+            clmCustomerPrice : "Prix F.",
         },
         popDiscount : 
         {
@@ -9849,6 +9853,22 @@ export const langFr =
         txtDiscountPer1 : "1. Remise % ",  
         txtDiscountPer2 : "2. Remise % ",  
         txtDiscountPer3 : "3. Remise % ",  
+        msgNewPrice :      
+        {     
+            title: "Attention",     
+            btn01: "Ne pas mettre à jour",     
+            btn02: "Mettre prix sélectionné à jour ",     
+            msg: "Veuillez sélectionner et mettre à jour les prix du fournisseur... "     
+        },     
+        grdNewPrice:      
+        {     
+            clmCode: "Code",     
+            clmName: "Nom",     
+            clmPrice: "Ancien Prix",     
+            clmPrice2: "Nouveau Prix",    
+            clmSalePrice :"Prix de Vente", 
+            clmMargin : "Marge" 
+        },
     },
     irs_02_002 : // Satış İrsaliyesi"
     {
@@ -15165,6 +15185,50 @@ export const langFr =
             clmTotal : "Total", // BAK
         },
     },
+    slsRpt_01_005 : // "Ürün Satış ve İade raporu"
+    {
+        chkZeroBalance : "0 Bakiyeler Gösterilsin",  // BAK
+        txtItemCode : "Ürün Seçimi",  // BAK
+        btnGet :"Getir",  // BAK
+        grdListe : 
+        {
+            clmCode : "Müşteri Kodu",   // BAK
+            clmName: "Müşteri Adı",   // BAK
+            clmDispatch : "İrsaliye Miktarı",              // BAK
+            clmInvoice : "Fatura Miktarı",   // BAK
+            clmRebate : "İade Miktarı"   // BAK
+        },
+        pg_txtItemCode : 
+        {
+            title : "STOK Seçimi", // BAK
+            clmCode :  "STOK KODU", // BAK
+            clmName : "STOK ADI", // BAK
+        },
+        validCode : "Lütfen Stok Seçin"  // BAK
+    },
+    slsRpt_01_006 : // "Cari Bazlı satış ve iade raporu"
+    {
+        chkZeroBalance : "0 Bakiyeler Gösterilsin",  // BAK
+        txtCustomerCode : "Müşteri Seçimi",  // BAK
+        btnGet :"Getir",  // BAK
+        grdListe : 
+        {
+            clmCode : "Stok Kodu",   // BAK
+            clmName: "Stok Adı",   // BAK
+            clmDispatch : "İrsaliye Miktarı",              // BAK
+            clmInvoice : "Fatura Miktarı",   // BAK
+            clmRebate : "İade Miktarı"   // BAK
+        },
+        pg_txtCustomerCode : 
+        {
+            title : "Cari Seçimi",  // BAK
+            clmCode :  "CARİ KODU",  // BAK
+            clmTitle : "CARİ ADI",  // BAK
+            clmTypeName : "TİPİ",  // BAK
+            clmGenusName : "CİNSİ"  // BAK
+        },
+        validCode : "Lütfen Müşteri Seçin" // BAK
+    },
     slsRpt_02_001 : // "Tarih sıralı Alış raporu"
     {
         chkZeroBalance : "Afficher Soldes 0",    // BAK
@@ -15173,9 +15237,9 @@ export const langFr =
         btnGet :"Rechercher",    // BAK
         grdListe :     // BAK
         {  
-            clmDate : "Date",    // BAK
-            clmCode: "Code",    // BAK
-            clmName : "Nom",               // BAK
+            clmDate : "Date",  // BAK
+            clmCode: "Code",  // BAK
+            clmName : "Nom",  // BAK
             clmAmount : "Montant",    // BAK
             clmDiscount : "Remise",    // BAK
             clmTotalHt : "Prix HT",    // BAK
