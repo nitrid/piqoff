@@ -16,6 +16,7 @@ export class contractCls
             LDATE : moment(new Date()).format("YYYY-MM-DD"),
             LUSER : this.core.auth.data.CODE,
             LUSER_NAME : '',
+            DOC_DATE : moment(new Date()).format("YYYY-MM-DD"),
             CODE : '',
             NAME : '',
             TYPE : 0,
@@ -59,6 +60,7 @@ export class contractCls
             query : "EXEC [dbo].[PRD_CONTRACT_INSERT] " + 
                     "@GUID = @PGUID, " +
                     "@CUSER = @PCUSER, " + 
+                    "@DOC_DATE = @PDOC_DATE, " + 
                     "@CODE = @PCODE, " + 
                     "@NAME = @PNAME, " + 
                     "@TYPE = @PTYPE, " + 
@@ -70,15 +72,16 @@ export class contractCls
                     "@QUANTITY = @PQUANTITY, " +
                     "@PRICE = @PPRICE, " +
                     "@UNIT = @PUNIT ",
-            param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|25','PNAME:string|250','PTYPE:int','PSTART_DATE:date','PFINISH_DATE:date',
+            param : ['PGUID:string|50','PCUSER:string|25','PDOC_DATE:date','PCODE:string|25','PNAME:string|250','PTYPE:int','PSTART_DATE:date','PFINISH_DATE:date',
                      'PCUSTOMER:string|50','PDEPOT:string|50','PITEM:string|50','PQUANTITY:float','PPRICE:float','PUNIT:string|50'],
-            dataprm : ['GUID','CUSER','CODE','NAME','TYPE','START_DATE','FINISH_DATE','CUSTOMER','DEPOT','ITEM','QUANTITY','PRICE','UNIT']
+            dataprm : ['GUID','CUSER','DOC_DATE','CODE','NAME','TYPE','START_DATE','FINISH_DATE','CUSTOMER','DEPOT','ITEM','QUANTITY','PRICE','UNIT']
         } 
         tmpDt.updateCmd = 
         {
             query : "EXEC [dbo].[PRD_CONTRACT_UPDATE] " + 
                     "@GUID = @PGUID, " +
                     "@CUSER = @PCUSER, " +
+                    "@DOC_DATE = @PDOC_DATE, " +
                     "@CODE = @PCODE, " + 
                     "@NAME = @PNAME, " +  
                     "@TYPE = @PTYPE, " + 
@@ -90,9 +93,9 @@ export class contractCls
                     "@QUANTITY = @PQUANTITY, " +
                     "@PRICE = @PPRICE, " +
                     "@UNIT = @PUNIT ",
-            param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|25','PNAME:string|250','PTYPE:int','PSTART_DATE:date','PFINISH_DATE:date',
+            param : ['PGUID:string|50','PCUSER:string|25','PDOC_DATE:date','PCODE:string|25','PNAME:string|250','PTYPE:int','PSTART_DATE:date','PFINISH_DATE:date',
                      'PCUSTOMER:string|50','PDEPOT:string|50','PITEM:string|50','PQUANTITY:float','PPRICE:float','PUNIT:string|50'],
-            dataprm : ['GUID','CUSER','CODE','NAME','TYPE','START_DATE','FINISH_DATE','CUSTOMER','DEPOT','ITEM','QUANTITY','PRICE','UNIT']
+            dataprm : ['GUID','CUSER','DOC_DATE','CODE','NAME','TYPE','START_DATE','FINISH_DATE','CUSTOMER','DEPOT','ITEM','QUANTITY','PRICE','UNIT']
         } 
         tmpDt.deleteCmd = 
         {

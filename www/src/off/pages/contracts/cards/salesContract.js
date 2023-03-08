@@ -88,6 +88,7 @@ export default class salesContract extends React.PureComponent
         this.txtCode.readOnly = false
         this.txtName.readOnly = false
 
+        this.docDate.value = moment(new Date()).format("YYYY-MM-DD")
         this.startDate.value = moment(new Date(0)).format("YYYY-MM-DD")
         this.finishDate.value = moment(new Date(0)).format("YYYY-MM-DD")
         await this.grdContracts.dataRefresh({source:this.contractObj.dt('CONTRACT')});
@@ -706,8 +707,11 @@ export default class salesContract extends React.PureComponent
                                     >
                                     </NdTextBox>
                                 </Item> 
-                                {/* Boş */}
-                                <EmptyItem />
+                                {/* docDate */}
+                                <Item>
+                                    <Label text={this.t("docDate")} alignment="right" />
+                                    <NdDatePicker simple={true}  parent={this} id={"docDate"} dt={{data:this.contractObj.dt('CONTRACT'),field:"DOC_DATE"}} />
+                                </Item>
                                 {/* startDate */}
                                 <Item>
                                     <Label text={this.t("startDate")} alignment="right" />
@@ -815,7 +819,7 @@ export default class salesContract extends React.PureComponent
                                         }
                                     }}/>
                                 </Item>
-                                 <Item>
+                                <Item>
                                     <NdGrid parent={this} id={"grdContracts"} 
                                     showBorders={true} 
                                     columnsAutoWidth={true} 
@@ -846,7 +850,7 @@ export default class salesContract extends React.PureComponent
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
                                         <Paging defaultPageSize={10} />
                                         <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
-                                        <Export fileName={this.lang.t("menu.cnt_02_001")} enabled={true} allowExportSelectedData={true} />
+                                        <Export fileName={this.lang.t("menu.cnt_04_001")} enabled={true} allowExportSelectedData={true} />
                                         <Column dataField="CDATE_FORMAT" caption={this.t("grdContracts.clmCreateDate")} allowEditing={false} width={80}/>
                                         <Column dataField="ITEM_CODE" caption={this.t("grdContracts.clmItemCode")} width={150} allowEditing={false}/>
                                         <Column dataField="ITEM_NAME" caption={this.t("grdContracts.clmItemName")} width={300} allowEditing={false}/>
@@ -1271,7 +1275,7 @@ export default class salesContract extends React.PureComponent
                             </Item>
                         </Form>
                     </NdDialog>
-                </div>  
+                </div>
             </div>
         )
     }

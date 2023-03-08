@@ -366,7 +366,7 @@ export const menu = (e) =>
                         {
                             id: 'cnt_04_001',
                             text: e.t('menuOff.cnt_04_001'),//Çoklu Satış Anlaşması',
-                            path: 'contracts/lists/purchaseContList'
+                            path: 'contracts/operations/multipleSaleContract'
                         }
                     ]
                 },

@@ -12594,6 +12594,7 @@ export const langFr =
         txtName : "Nom",
         startDate :"Date Début",    
         finishDate : "Date Fin",    
+        docDate : "Tarih", //BAK
         msgMissItemCode:    
         {    
             title: "Attention",    
@@ -12769,6 +12770,7 @@ export const langFr =
         txtName : "Nom",
         startDate :"Date Début",   
         finishDate : "Date Fin",   
+        docDate : "Tarih", //BAK
         msgMissItemCode:   
         {   
             title: "Attention",   
@@ -12832,6 +12834,60 @@ export const langFr =
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
         txtUnitPrice : "Prix unitaire",
+    },
+    cnt_04_001 : // "Çoklu Satış Anlaşması"
+    {
+        txtCode : "Code",
+        btnGet : "Getir", //BAK
+        docDate : "Tarih", //BAK
+        pg_Docs :      
+        {     
+            title : "Sélection Documents",     
+            clmDate : "Date",
+            clmCode : "Code",     
+            clmName : "Nom",     
+            clmOutputName : "Nom Client",     
+            clmOutputCode  : "Code Client",     
+        },
+        grdContracts: 
+        {
+            clmItemCode: "Code",
+            clmItemName: "Nom",
+            clmOrgins : "Origine",
+            clmGrpName: "Groupe",
+            clmPrice1: "Prix 1",
+            clmUnderPrice1 : "Alt B.Fiyat 1", //BAK
+            clmPrice1: "Prix 2",
+            clmUnderPrice2 : "Alt B.Fiyat 2", //BAK
+            clmUnit : "Unité",
+            clmUnitPrice : "Unit Prix HT", 
+            clmQuantity : "Quantité",
+        },
+        msgUnit:
+        {
+            title: "Sélection de l'unité",
+            btn01: "Valider",
+            txtUnitFactor : "Coefficient unitaire",  
+            txtUnitQuantity : "Quantité unitaire",  
+            txtTotalQuantity : "Quantité totale",  
+            txtUnitPrice : "Prix unitaire",
+        },
+        pg_txtPopItemsCode : 
+        {
+            title : "Sélectionner Produit",
+            clmCode :  "Référence Produit",
+            clmName : "Nom Produit",
+            clmGrpName : "Groupe",
+            clmCostPrice :  "Prix D'Achat",
+            clmSalesPrice : "Prix De Vente"
+        },
+        msgSaveResult:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msgSuccess: "Enregistré avec succès !",
+            msgFailed: "Enregistrement échoué !"
+        },
     },
     fns_01_001 : // "Ödeme Listesi",
     {
