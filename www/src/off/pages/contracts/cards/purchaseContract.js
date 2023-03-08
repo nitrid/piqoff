@@ -83,7 +83,8 @@ export default class purchaseContract extends React.PureComponent
         this.txtCustomerName.value = ''
         this.txtCode.value = ''
         this.txtName.value = ''
-
+        
+        this.docDate.value = moment(new Date()).format("YYYY-MM-DD")
         this.startDate.value = moment(new Date(0)).format("YYYY-MM-DD")
         this.finishDate.value = moment(new Date(0)).format("YYYY-MM-DD")
         await this.grdContracts.dataRefresh({source:this.contractObj.dt('CONTRACT')});
@@ -608,8 +609,11 @@ export default class purchaseContract extends React.PureComponent
                                     >
                                     </NdTextBox>
                                 </Item> 
-                                {/* Boş */}
-                                <EmptyItem />
+                                {/* docDate */}
+                                <Item>
+                                    <Label text={this.t("docDate")} alignment="right" />
+                                    <NdDatePicker simple={true}  parent={this} id={"docDate"} dt={{data:this.contractObj.dt('CONTRACT'),field:"DOC_DATE"}} />
+                                </Item>
                                 {/* startDate */}
                                 <Item>
                                     <Label text={this.t("startDate")} alignment="right" />
