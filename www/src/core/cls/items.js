@@ -267,11 +267,17 @@ export class itemsCls
             
             if(this.ds.get('ITEMS').length > 0)
             {
+                console.log("1 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
                 await this.itemUnit.load({ITEM_GUID:this.ds.get('ITEMS')[0].GUID})
+                console.log("2 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
                 await this.itemPrice.load({ITEM_GUID:this.ds.get('ITEMS')[0].GUID,TYPE:0})
+                console.log("3 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
                 await this.itemBarcode.load({ITEM_GUID:this.ds.get('ITEMS')[0].GUID})
+                console.log("4 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
                 await this.itemMultiCode.load({ITEM_GUID:this.ds.get('ITEMS')[0].GUID})
+                console.log("5 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
                 await this.itemImage.load({ITEM_GUID:this.ds.get('ITEMS')[0].GUID})
+                console.log("6 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
                 await this.itemPriceLog.load({ITEM_GUID:this.ds.get('ITEMS')[0].GUID})
             }
             resolve(this.ds.get('ITEMS'));    
@@ -645,10 +651,9 @@ export class itemBarcodeCls
         tmpDt.selectCmd = 
         {
             query : "SELECT * FROM [dbo].[ITEM_BARCODE_VW_01] " + 
-                    "WHERE ((BARCODE = @BARCODE) OR (@BARCODE = '')) AND" + 
+                    "WHERE {0}" + 
                     "((TYPE = @TYPE) OR (@TYPE = -1)) AND " + 
-                    "((ITEM_GUID = @ITEM_GUID) OR (@ITEM_GUID = '00000000-0000-0000-0000-000000000000')) AND " + 
-                    "((ITEM_CODE = @ITEM_CODE) OR (@ITEM_CODE = '')) ",
+                    "((ITEM_GUID = @ITEM_GUID) OR (@ITEM_GUID = '00000000-0000-0000-0000-000000000000')) ",
             param : ['BARCODE:string|50','TYPE:int','ITEM_GUID:string|50','ITEM_CODE:string|25']
         }
         tmpDt.insertCmd = 
@@ -734,6 +739,14 @@ export class itemBarcodeCls
                 ITEM_CODE : '',
             }
            
+            this.ds.get('ITEM_BARCODE').selectCmd =
+            {
+                query : "SELECT * FROM [dbo].[ITEM_BARCODE_VW_01] " + 
+                    "WHERE {0}" + 
+                    "((TYPE = @TYPE) OR (@TYPE = -1)) AND " + 
+                    "((ITEM_GUID = @ITEM_GUID) OR (@ITEM_GUID = '00000000-0000-0000-0000-000000000000')) ",
+                param : ['BARCODE:string|50','TYPE:int','ITEM_GUID:string|50','ITEM_CODE:string|25']
+            }
             if(arguments.length > 0)
             {
                 tmpPrm.BARCODE = typeof arguments[0].BARCODE == 'undefined' ? '' : arguments[0].BARCODE;
@@ -742,6 +755,18 @@ export class itemBarcodeCls
                 tmpPrm.ITEM_CODE = typeof arguments[0].ITEM_CODE == 'undefined' ? '' : arguments[0].ITEM_CODE;                                
             }
             
+            if(tmpPrm.BARCODE != '')
+            {
+                this.ds.get('ITEM_BARCODE').selectCmd.query = this.ds.get('ITEM_BARCODE').selectCmd.query.replaceAll("{0}", "BARCODE = @BARCODE")
+            }
+            else if(tmpPrm.ITEM_CODE != '')
+            {
+                this.ds.get('ITEM_BARCODE').selectCmd.query = this.ds.get('ITEM_BARCODE').selectCmd.query.replaceAll("{0}", "ITEM_CODE = @ITEM_CODE")
+            }
+            else
+            {
+                this.ds.get('ITEM_BARCODE').selectCmd.query = this.ds.get('ITEM_BARCODE').selectCmd.query.replaceAll("{0}", " ")
+            }
             this.ds.get('ITEM_BARCODE').selectCmd.value = Object.values(tmpPrm)
             await this.ds.get('ITEM_BARCODE').refresh();
             resolve(this.ds.get('ITEM_BARCODE'));    
