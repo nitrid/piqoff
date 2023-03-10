@@ -49,7 +49,7 @@ export default class purchaseContract extends React.PureComponent
         {
             if(pData.stat == 'new')
             {
-                
+                this.btnBack.setState({disabled:false});
                 this.btnNew.setState({disabled:false});
                 this.btnSave.setState({disabled:false});
                 this.btnDelete.setState({disabled:false});
@@ -59,6 +59,7 @@ export default class purchaseContract extends React.PureComponent
         {            
             if(pData.rowData.stat == 'edit')
             {
+                this.btnBack.setState({disabled:false});
                 this.btnNew.setState({disabled:false});
                 this.btnSave.setState({disabled:false});
                 this.btnDelete.setState({disabled:false});
@@ -67,13 +68,15 @@ export default class purchaseContract extends React.PureComponent
             }                 
         })
         this.contractObj.ds.on('onRefresh',(pTblName) =>
-        {            
+        {
+            this.btnBack.setState({disabled:true});
             this.btnNew.setState({disabled:false});
             this.btnSave.setState({disabled:true});
             this.btnDelete.setState({disabled:false});
         })
         this.contractObj.ds.on('onDelete',(pTblName) =>
-        {            
+        {
+            this.btnBack.setState({disabled:false});
             this.btnNew.setState({disabled:false});
             this.btnSave.setState({disabled:false});
             this.btnDelete.setState({disabled:false});
@@ -295,6 +298,15 @@ export default class purchaseContract extends React.PureComponent
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <Toolbar>
+                                <Item location="after" locateInMenu="auto">
+                                    <NdButton id="btnBack" parent={this} icon="revert" type="default"
+                                    onClick={async()=>
+                                    {
+                                        await this.contractObj.load({CODE:this.txtCode.value,TYPE:0});
+                                        this.txtCustomerCode.GUID = this.contractObj.dt()[0].CUSTOMER
+                                        this._getItems()
+                                    }}/>
+                                </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnNew" parent={this} icon="file" type="default"
                                     onClick={()=>
