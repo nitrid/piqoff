@@ -98,18 +98,22 @@ export default class salesContract extends React.PureComponent
                 value : [this.txtCode.value.split(',')[i]]
             } 
             await tmpContDt.refresh()
-
+            
             for (let x = 0; x < tmpContDt.length; x++) 
             {
                 this.docDate.value = moment(tmpContDt[0].DOC_DATE).format("YYYY-MM-DD")
 
                 if(this.grdData.where({ITEM_CODE : tmpContDt[x].ITEM_CODE}).length == 0)
                 {
+                    tmpContDt[x]["P" + i] = Number(tmpContDt[x].PRICE_VAT_EXT).round(2)
+                    tmpContDt[x]["PA" + i] = Number(tmpContDt[x].PRICE_VAT_EXT / tmpContDt[x].UNDER_UNIT_FACTOR).round(2)
                     this.grdData.push(tmpContDt[x],false)
                 }
-                
-                this.grdData[x]["P" + i] = Number(tmpContDt[x].PRICE_VAT_EXT).round(2)
-                this.grdData[x]["PA" + i] = Number(tmpContDt[x].PRICE_VAT_EXT / tmpContDt[x].UNDER_UNIT_FACTOR).round(2)
+                else
+                {
+                    this.grdData.where({ITEM_CODE : tmpContDt[x].ITEM_CODE})[0]["P" + i] = Number(tmpContDt[x].PRICE_VAT_EXT).round(2)
+                    this.grdData.where({ITEM_CODE : tmpContDt[x].ITEM_CODE})[0]["PA" + i] = Number(tmpContDt[x].PRICE_VAT_EXT / tmpContDt[x].UNDER_UNIT_FACTOR).round(2)
+                }
             }
         }
         
@@ -170,6 +174,7 @@ export default class salesContract extends React.PureComponent
     async save()
     {
         App.instance.setState({isExecute:true})
+        this.grdContracts.devGrid.saveEditData()
         for (let i = 0; i < this.txtCode.value.split(',').length; i++)
         {
             for (let x = 0; x < this.grdData.length; x++) 
@@ -214,8 +219,8 @@ export default class salesContract extends React.PureComponent
 
         let tmpConfObj1 =
         {
-            id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
-            button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
+            id:'msgSaveResult',showTitle:true,title:this.t("msgSaveResult.title"),showCloseButton:true,width:'500px',height:'200px',
+            button:[{id:"btn01",caption:this.t("msgSaveResult.btn01"),location:'after'}],
             content : (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
         }
         await dialog(tmpConfObj1);        
