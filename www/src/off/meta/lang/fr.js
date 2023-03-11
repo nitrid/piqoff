@@ -12857,7 +12857,7 @@ export const langFr =
             clmGrpName: "Groupe",
             clmPrice1: "Prix 1",
             clmUnderPrice1 : "Alt B.Fiyat 1", //BAK
-            clmPrice1: "Prix 2",
+            clmPrice2: "Prix 2",
             clmUnderPrice2 : "Alt B.Fiyat 2", //BAK
             clmUnit : "Unité",
             clmUnitPrice : "Unit Prix HT", 
