@@ -21,7 +21,7 @@ import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
-import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export,ColumnChooser,StateStoring} from '../../../../core/react/devex/grid.js';
 import NbPopDescboard from "../../../tools/popdescboard.js";
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
@@ -148,8 +148,7 @@ export default class purchaseInvoice extends React.PureComponent
         this.txtRefno.readOnly = false
         this.docLocked = false
         
-        this.frmDocItems.option('disabled',true)
-        await this.grdPurcInv.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
+        this.frmDocItems.option('disabled',true)        
         await this.grdInvoicePayment.dataRefresh({source:this.paymentObj.docCustomer.dt()});
         await this.grdMultiItem.dataRefresh({source:this.multiItemData});
         await this.grdUnit2.dataRefresh({source:this.unitDetailData})
@@ -3190,7 +3189,13 @@ export default class purchaseInvoice extends React.PureComponent
                                         {
                                             this._calculateTotal()
                                         }}
+                                        onReady={async()=>
+                                        {
+                                            await this.grdPurcInv.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
+                                        }}
                                         >
+                                            <StateStoring enabled={true} type="localStorage" storageKey={this.props.data.id + "_grdPurcInv"}/>
+                                            <ColumnChooser enabled={true} />
                                             <Paging defaultPageSize={10} />
                                             <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
                                             <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
