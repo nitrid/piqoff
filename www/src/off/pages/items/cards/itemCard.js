@@ -1048,11 +1048,29 @@ export default class itemCard extends React.PureComponent
                                         let tmpData = await this.core.sql.execute(tmpQuery) 
                                         if(tmpData.result.recordset.length > 0)
                                         {
+                                            this.cmbAnlysType.value = 0
                                             this.setState({dataSource:tmpData.result.recordset})
                                         }
                                         else
                                         {
-                                            this.setState({dataRefresh:{0:{QUANTITY:0,DOC_DATE:''}}})
+                                            this.cmbAnlysType.value = 1
+                                            let tmpFacQuery = 
+                                            {
+                                                query :"SELECT SUM(QUANTITY) AS QUANTITY,CONVERT(NVARCHAR,DOC_DATE,104) AS DOC_DATE FROM DOC_ITEMS_VW_01 " +
+                                                        "WHERE ITEM_CODE = @CODE AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE AND TYPE = 1 AND ((DOC_TYPE = 20) OR (DOC_TYPE = 40 AND INVOICE_DOC_GUID != '00000000-0000-0000-0000-000000000000'))  " +
+                                                        "GROUP BY DOC_DATE,ITEM_CODE ",
+                                                param : ['CODE:string|50','FIRST_DATE:date','LAST_DATE:date'],
+                                                value : [this.txtRef.value,this.dtDate.startDate,this.dtDate.endDate]
+                                            }
+                                            let tmpFacData = await this.core.sql.execute(tmpFacQuery) 
+                                            if(tmpFacData.result.recordset.length > 0)
+                                            {
+                                                this.setState({dataSource:tmpFacData.result.recordset})
+                                            }
+                                            else
+                                            {
+                                                this.setState({dataRefresh:{0:{QUANTITY:0,DOC_DATE:''}}})
+                                            }
                                         }
                                         App.instance.setState({isExecute:false})
                                         this.popAnalysis.show()
@@ -2585,51 +2603,116 @@ export default class itemCard extends React.PureComponent
                                     onClick={async()=>
                                     {
                                         App.instance.setState({isExecute:true})
-                                        if(this.chkDayAnalysis.value == true)
+                                        if(this.cmbAnlysType.value == 0)
                                         {
-                                            let tmpQuery = 
+                                            if(this.chkDayAnalysis.value == true)
                                             {
-                                                query :"SELECT SUM(QUANTITY) AS QUANTITY,CONVERT(NVARCHAR,DOC_DATE,104) AS DOC_DATE FROM POS_SALE_VW_01 " +
-                                                        "WHERE ITEM_CODE = @CODE AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE AND DEVICE <> '9999' " +
-                                                        "GROUP BY DOC_DATE,ITEM_CODE ",
-                                                param : ['CODE:string|50','FIRST_DATE:date','LAST_DATE:date'],
-                                                value : [this.txtRef.value,this.dtDate.startDate,this.dtDate.endDate]
+                                                let tmpQuery = 
+                                                {
+                                                    query :"SELECT SUM(QUANTITY) AS QUANTITY,CONVERT(NVARCHAR,DOC_DATE,104) AS DOC_DATE FROM POS_SALE_VW_01 " +
+                                                            "WHERE ITEM_CODE = @CODE AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE AND DEVICE <> '9999' " +
+                                                            "GROUP BY DOC_DATE,ITEM_CODE ",
+                                                    param : ['CODE:string|50','FIRST_DATE:date','LAST_DATE:date'],
+                                                    value : [this.txtRef.value,this.dtDate.startDate,this.dtDate.endDate]
+                                                }
+                                                let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                if(tmpData.result.recordset.length > 0)
+                                                {
+                                                    console.log(tmpData.result.recordset)
+                                                    this.setState({dataSource:tmpData.result.recordset})
+                                                }
+                                                else
+                                                {
+                                                    this.setState({dataRefresh:{}})
+                                                }
                                             }
-                                            let tmpData = await this.core.sql.execute(tmpQuery) 
-                                            if(tmpData.result.recordset.length > 0)
+                                            else if(this.chkMountAnalysis.value == true)
                                             {
-                                                this.setState({dataSource:tmpData.result.recordset})
-                                            }
-                                            else
-                                            {
-                                                this.setState({dataRefresh:{0:{QUANTITY:0,DOC_DATE:''}}})
+                                                let tmpQuery = 
+                                                {
+                                                    query :"SELECT SUM(QUANTITY) AS QUANTITY,MONTH(DOC_DATE) AS DOC_DATE FROM POS_SALE_VW_01 " +
+                                                            "WHERE ITEM_CODE = @CODE AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE AND DEVICE <> '9999' " +
+                                                            "GROUP BY MONTH(DOC_DATE),ITEM_CODE ",
+                                                    param : ['CODE:string|50','FIRST_DATE:date','LAST_DATE:date'],
+                                                    value : [this.txtRef.value,this.dtDate.startDate,this.dtDate.endDate]
+                                                }
+                                                let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                if(tmpData.result.recordset.length > 0)
+                                                {
+                                                    this.setState({dataSource:tmpData.result.recordset})
+                                                }
+                                                else
+                                                {
+                                                    this.setState({dataRefresh:{0:{QUANTITY:0,DOC_DATE:''}}})
+                                                }
                                             }
                                         }
-                                        else if(this.chkMountAnalysis.value == true)
+                                        else if(this.cmbAnlysType.value == 1)
                                         {
-                                            let tmpQuery = 
+                                            if(this.chkDayAnalysis.value == true)
                                             {
-                                                query :"SELECT SUM(QUANTITY) AS QUANTITY,MONTH(DOC_DATE) AS DOC_DATE FROM POS_SALE_VW_01 " +
-                                                        "WHERE ITEM_CODE = @CODE AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE AND DEVICE <> '9999' " +
-                                                        "GROUP BY MONTH(DOC_DATE),ITEM_CODE ",
-                                                param : ['CODE:string|50','FIRST_DATE:date','LAST_DATE:date'],
-                                                value : [this.txtRef.value,this.dtDate.startDate,this.dtDate.endDate]
+                                                let tmpFacQuery = 
+                                                {
+                                                    query :"SELECT SUM(QUANTITY) AS QUANTITY,CONVERT(NVARCHAR,DOC_DATE,104) AS DOC_DATE FROM DOC_ITEMS_VW_01 " +
+                                                            "WHERE ITEM_CODE = @CODE AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE AND TYPE = 1 AND ((DOC_TYPE = 20) OR (DOC_TYPE = 40 AND INVOICE_DOC_GUID != '00000000-0000-0000-0000-000000000000'))  " +
+                                                            "GROUP BY DOC_DATE,ITEM_CODE ",
+                                                    param : ['CODE:string|50','FIRST_DATE:date','LAST_DATE:date'],
+                                                    value : [this.txtRef.value,this.dtDate.startDate,this.dtDate.endDate]
+                                                }
+                                                let tmpFacData = await this.core.sql.execute(tmpFacQuery) 
+                                                if(tmpFacData.result.recordset.length > 0)
+                                                {
+                                                    console.log('asddsa3')
+                                                    this.setState({dataSource:tmpFacData.result.recordset})
+                                                }
+                                                else
+                                                {
+                                                    console.log('asddsa4')
+                                                    this.setState({dataRefresh:{0:{QUANTITY:0,DOC_DATE:''}}})
+                                                }
                                             }
-                                            let tmpData = await this.core.sql.execute(tmpQuery) 
-                                            if(tmpData.result.recordset.length > 0)
+                                            else if(this.chkMountAnalysis.value == true)
                                             {
-                                                this.setState({dataSource:tmpData.result.recordset})
-                                            }
-                                            else
-                                            {
-                                                this.setState({dataRefresh:{0:{QUANTITY:0,DOC_DATE:''}}})
+                                                let tmpQuery = 
+                                                {
+                                                    query :"SELECT SUM(QUANTITY) AS QUANTITY,MONTH(DOC_DATE) AS DOC_DATE FROM DOC_ITEMS_VW_01 " +
+                                                            "WHERE ITEM_CODE = @CODE AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE  AND TYPE = 1 AND ((DOC_TYPE = 20) OR (DOC_TYPE = 40 AND INVOICE_DOC_GUID != '00000000-0000-0000-0000-000000000000')) " +
+                                                            "GROUP BY MONTH(DOC_DATE),ITEM_CODE ",
+                                                    param : ['CODE:string|50','FIRST_DATE:date','LAST_DATE:date'],
+                                                    value : [this.txtRef.value,this.dtDate.startDate,this.dtDate.endDate]
+                                                }
+                                                let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                if(tmpData.result.recordset.length > 0)
+                                                {
+                                                    this.setState({dataSource:tmpData.result.recordset})
+                                                }
+                                                else
+                                                {
+                                                    this.setState({dataRefresh:{0:{QUANTITY:0,DOC_DATE:''}}})
+                                                }
                                             }
                                         }
+                                            
                                         App.instance.setState({isExecute:false})
 
                                        
                                     }}/>
                                 </Item>
+                                 {/* cmbAnlysType */}
+                                 <Item>
+                                    <Label text={this.t("cmbAnlysType")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbAnlysType" height='fit-content'
+                                    displayExpr="VALUE"                       
+                                    valueExpr="ID"
+                                    data={{source:[{ID:0,VALUE:this.t("cmbAnlysTypeData.pos")},{ID:1,VALUE:this.t("cmbAnlysTypeData.invoice")}]}}
+                                    onValueChanged={(async(e)=>
+                                    {
+                                        
+                                    }).bind(this)}
+                                    param={this.param.filter({ELEMENT:'cmbAnlysType',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'cmbAnlysType',USERS:this.user.CODE})}
+                                    />
+                                </Item>       
                                 <Item>
                                     <Label text={this.t("chkDayAnalysis")} alignment="right" />
                                     <NdCheckBox id="chkDayAnalysis" parent={this} defaultValue={true} value={true}
@@ -2652,7 +2735,6 @@ export default class itemCard extends React.PureComponent
                                         }
                                     }}/>
                                 </Item>
-                                <EmptyItem/>
                                 <Item colSpan={3}>
                                     <Chart id="chart" dataSource={this.state.dataSource}>
                                     <CommonSeriesSettings

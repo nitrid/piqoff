@@ -891,6 +891,11 @@ export const menu = (e) =>
                             text: e.t('menuOff.slsRpt_01_006'),//'Cari Bazlı Satış iade raporu',
                             path: 'report/sales/customerSaleRebateReport'
                         },
+                        {
+                            id: 'slsRpt_01_007',
+                            text: e.t('menuOff.slsRpt_01_007'),//'İade Fatura raporu',
+                            path: 'report/sales/rebateInvoiceReport'
+                        },
                     ]
                 }
             ]

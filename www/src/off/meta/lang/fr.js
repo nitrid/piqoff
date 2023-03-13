@@ -418,6 +418,12 @@ export const langFr =
         chkDayAnalysis : "Journalier",  
         chkMountAnalysis : "Mensuel",  
         txtUnitFactor : "Quantité unitaire", 
+        cmbAnlysType : "Tip", // BAK
+        cmbAnlysTypeData : 
+        {
+            pos: "Pos", // BAK
+            invoice : "Fatura" // BAK
+        },
         pg_txtRef :
         {
             title: "Sélectionner Produit",

@@ -477,12 +477,12 @@ export default class CustomerCard extends React.PureComponent
                                     valueExpr="ID"
                                     data={{source:[{ID:0,VALUE:this.t("cmbTypeData.individual")},{ID:1,VALUE:this.t("cmbTypeData.company")}]}}
                                     onValueChanged={(async(e)=>
-                                            {
-                                                if(typeof e != 'undefined')
-                                                {
-                                                    this.typeChange(e.value)
-                                                }
-                                        }).bind(this)}
+                                    {
+                                        if(typeof e != 'undefined')
+                                        {
+                                            this.typeChange(e.value)
+                                        }
+                                    }).bind(this)}
                                     param={this.param.filter({ELEMENT:'cmbType',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbType',USERS:this.user.CODE})}
                                     />

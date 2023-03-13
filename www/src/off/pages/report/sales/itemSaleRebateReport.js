@@ -119,7 +119,6 @@ export default class itemSaleRebateReport extends React.PureComponent
                 select : 
                 {
                     query : "SELECT ITEM, " +
-                    "ITEM_NAME, " +
                     "ITEM_CODE, " +
                     "INPUT, " +
                     "INPUT_NAME, " +
@@ -129,7 +128,7 @@ export default class itemSaleRebateReport extends React.PureComponent
                     "ISNULL((SELECT SUM(QUANTITY) FROM DOC_ITEMS WHERE DOC_ITEMS.INPUT = DOC_ITEMS_VW_01.INPUT AND DELETED = 0 AND TYPE = 0 AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE AND DOC_TYPE IN(40,20) AND REBATE = 1 AND DOC_ITEMS.ITEM = DOC_ITEMS_VW_01.ITEM),0) AS REBATE " +
                     "FROM DOC_ITEMS_VW_01 " +
                     "WHERE TYPE = 1 AND DOC_TYPE IN(40,20) AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE AND ITEM_CODE = @ITEM_CODE " +
-                    "GROUP BY ITEM,INPUT,INPUT_NAME,ITEM_NAME,ITEM_CODE,INPUT_CODE ",
+                    "GROUP BY ITEM,INPUT,INPUT_NAME,ITEM_CODE,INPUT_CODE ",
                     param : ['FIRST_DATE:date','LAST_DATE:date','ITEM_CODE:string|50'],
                     value : [this.dtDate.startDate,this.dtDate.endDate,this.txtItemCode.CODE]
                 },

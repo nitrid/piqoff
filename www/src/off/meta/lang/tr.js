@@ -350,6 +350,7 @@ export const langTr =
         slsRpt_01_004 : "Satış  Raporu",
         slsRpt_01_005 : "Ürün Satış ve İade Raporu",
         slsRpt_01_006 : "Cari Bazlı Satış ve İade Raporu",
+        slsRpt_01_007 : "İade Faturaları Raporu",
         purchaseReport : "Raporlar",
         slsRpt_02_001 : "Tarih Sıralı Alış Faturaları Raporu",
         slsRpt_02_002 : "DEB Raporu",
@@ -420,6 +421,12 @@ export const langTr =
         chkDayAnalysis : "Günlük",
         chkMountAnalysis : "Aylık",
         txtUnitFactor : "Birim Mikarı",
+        cmbAnlysType : "Tip",
+        cmbAnlysTypeData : 
+        {
+            pos: "Pos",
+            invoice : "Fatura"
+        },
         pg_txtRef:
         {
             title: "Stok Seçimi",
@@ -15374,6 +15381,31 @@ export const langTr =
             clmGenusName : "CİNSİ"
         },
         validCode : "Lütfen Müşteri Seçin" 
+    },
+    slsRpt_01_007 : // "İade Fatura raporu"
+    {
+        chkZeroBalance : "0 Bakiyeler Gösterilsin",
+        txtItemCode : "Ürün Seçimi",
+        btnGet :"Getir",
+        grdListe : 
+        {
+            clmDate : "Tarih",
+            clmCode: "Kodu",
+            clmName : "Adı",           
+            clmAmount : "Tutar",
+            clmDiscount : "İndirim",
+            clmTotalHt : "Vergisiz Fiyat",
+            clmVat : "Vergi",
+            clmTotal : "Toplam",
+            clmRef : "Seri-Sıra"
+        },
+        pg_txtItemCode : 
+        {
+            title : "STOK Seçimi",
+            clmCode :  "STOK KODU",
+            clmName : "STOK ADI",
+        },
+        validCode : "Lütfen Stok Seçin"
     },
     slsRpt_02_001 : // "Tarih sıralı Alış raporu"
     {
