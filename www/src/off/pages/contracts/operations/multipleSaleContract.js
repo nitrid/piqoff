@@ -95,21 +95,25 @@ export default class salesContract extends React.PureComponent
                         "FROM CONTRACT_VW_01 WHERE CODE = @CODE AND TYPE = 1" +
                         "ORDER BY ITEM_CODE ASC" ,
                 param : ['CODE:string|50'],
-                value : [this.txtCode.value.split(',')[i]]
+                value : [this.txtCode.code.split(',')[i]]
             } 
             await tmpContDt.refresh()
-
+            
             for (let x = 0; x < tmpContDt.length; x++) 
             {
                 this.docDate.value = moment(tmpContDt[0].DOC_DATE).format("YYYY-MM-DD")
 
                 if(this.grdData.where({ITEM_CODE : tmpContDt[x].ITEM_CODE}).length == 0)
                 {
+                    tmpContDt[x]["P" + i] = Number(tmpContDt[x].PRICE_VAT_EXT).round(2)
+                    tmpContDt[x]["PA" + i] = Number(tmpContDt[x].PRICE_VAT_EXT / tmpContDt[x].UNDER_UNIT_FACTOR).round(2)
                     this.grdData.push(tmpContDt[x],false)
                 }
-                
-                this.grdData[x]["P" + i] = Number(tmpContDt[x].PRICE_VAT_EXT).round(2)
-                this.grdData[x]["PA" + i] = Number(tmpContDt[x].PRICE_VAT_EXT / tmpContDt[x].UNDER_UNIT_FACTOR).round(2)
+                else
+                {
+                    this.grdData.where({ITEM_CODE : tmpContDt[x].ITEM_CODE})[0]["P" + i] = Number(tmpContDt[x].PRICE_VAT_EXT).round(2)
+                    this.grdData.where({ITEM_CODE : tmpContDt[x].ITEM_CODE})[0]["PA" + i] = Number(tmpContDt[x].PRICE_VAT_EXT / tmpContDt[x].UNDER_UNIT_FACTOR).round(2)
+                }
             }
         }
         
@@ -158,7 +162,7 @@ export default class salesContract extends React.PureComponent
 
             for (let i = 0; i < this.txtCode.value.split(',').length; i++)
             {
-                tmpEmpty.NAME = this.txtCode.name.split(',')[i]
+                tmpEmpty.NAME = this.txtCode.value.split(',')[i]
                 tmpEmpty["P" + i] = Number(tmpCheckData.result.recordset[0].PRICE).round(2)
                 tmpEmpty["PA" + i] = Number(tmpCheckData.result.recordset[0].PRICE / tmpCheckData.result.recordset[0].UNDER_UNIT_FACTOR).round(2)
             } 
@@ -170,6 +174,7 @@ export default class salesContract extends React.PureComponent
     async save()
     {
         App.instance.setState({isExecute:true})
+        this.grdContracts.devGrid.saveEditData()
         for (let i = 0; i < this.txtCode.value.split(',').length; i++)
         {
             for (let x = 0; x < this.grdData.length; x++) 
@@ -202,7 +207,7 @@ export default class salesContract extends React.PureComponent
                             "END",
                     param : ['PCUSER:string|25','PDOC_DATE:date','PCODE:string|25','PNAME:string|250','PTYPE:int','PSTART_DATE:date','PFINISH_DATE:date',
                             'PCUSTOMER:string|50','PDEPOT:string|50','PITEM:string|50','PQUANTITY:float','PPRICE:float','PUNIT:string|50'],
-                    value : [this.core.auth.data.CODE,this.docDate.value,this.txtCode.value.split(',')[i],this.txtCode.name.split(',')[i],1,
+                    value : [this.core.auth.data.CODE,this.docDate.value,this.txtCode.code.split(',')[i],this.txtCode.value.split(',')[i],1,
                             this.grdData[x].START_DATE,this.grdData[x].FINISH_DATE,this.grdData[x].CUSTOMER,this.grdData[x].DEPOT,this.grdData[x].ITEM,
                             this.grdData[x].QUANTITY,tmpPrice,this.grdData[x].UNIT]
                 }
@@ -214,8 +219,8 @@ export default class salesContract extends React.PureComponent
 
         let tmpConfObj1 =
         {
-            id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
-            button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
+            id:'msgSaveResult',showTitle:true,title:this.t("msgSaveResult.title"),showCloseButton:true,width:'500px',height:'200px',
+            button:[{id:"btn01",caption:this.t("msgSaveResult.btn01"),location:'after'}],
             content : (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
         }
         await dialog(tmpConfObj1);        
@@ -356,12 +361,12 @@ export default class salesContract extends React.PureComponent
                                                     this.pg_Docs.onClick = async(data) =>
                                                     {
                                                         this.txtCode.value = ""
-                                                        this.txtCode.name = ""
+                                                        this.txtCode.code = ""
 
                                                         for (let i = 0; i < data.length; i++) 
                                                         {
-                                                            this.txtCode.value = (i == (data.length - 1)) ?  this.txtCode.value + data[i].CODE : this.txtCode.value + data[i].CODE + ","
-                                                            this.txtCode.name = (i == (data.length - 1)) ?  this.txtCode.name + data[i].NAME : this.txtCode.name + data[i].NAME + ","
+                                                            this.txtCode.value = (i == (data.length - 1)) ?  this.txtCode.value + data[i].NAME : this.txtCode.value + data[i].NAME + ","
+                                                            this.txtCode.code = (i == (data.length - 1)) ?  this.txtCode.code + data[i].CODE : this.txtCode.code + data[i].CODE + ","
                                                         }
                                                     }
                                                 }
@@ -469,7 +474,7 @@ export default class salesContract extends React.PureComponent
                                                         "EXEC [dbo].[PRD_CONTRACT_DELETE] @CUSER = @PCUSER, @UPDATE = 1, @GUID = @TMPGUID " +
                                                         "END" ,
                                                 param : ['PCUSER:string|25','PCODE:string|25','PITEM:string|50'],
-                                                value : [this.core.auth.data.CODE,this.txtCode.value.split(',')[i],e.data.ITEM]
+                                                value : [this.core.auth.data.CODE,this.txtCode.code.split(',')[i],e.data.ITEM]
                                             }
     
                                             await this.core.sql.execute(tmpDelQuery)

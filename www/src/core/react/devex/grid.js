@@ -12,7 +12,8 @@ export default class NdGrid extends Base
         super(props);
         
         this.devGrid = null;
-        
+        this.isReady = false;
+
         this.state.columns = typeof props.columns == 'undefined' ? undefined : props.columns
         this.state.filterRow = typeof props.filterRow == 'undefined' ? {} : props.filterRow
         this.state.headerFilter = typeof props.headerFilter == 'undefined' ? {} : props.headerFilter
@@ -44,12 +45,17 @@ export default class NdGrid extends Base
         this._onEditorPreparing = this._onEditorPreparing.bind(this);
         this._onRowPrepared = this._onRowPrepared.bind(this);
         this._onKeyDown = this._onKeyDown.bind(this); 
+        this._onReady = this._onReady.bind(this);
     }
     //#region Private
     _onInitialized(e) 
     {
-        console.log(1111)
         this.devGrid = e.component;
+        if(typeof this.props.onInitialized != 'undefined')
+        {
+            this.props.onInitialized(e);
+        }
+        this.isReady = false;
     }    
     _onSelectionChanged(e) 
     {
@@ -105,6 +111,12 @@ export default class NdGrid extends Base
         if(typeof this.props.onContentReady != 'undefined')
         {
             this.props.onContentReady(e);
+        }
+        //GRID KOLONLARI VE DİĞER TÜM İÇERİKLERİ YÜKLENDİĞiNİN BİLGİSİ EVENT OLARAK SAYFAYA BİLDİRİLİYOR.
+        if(!this.isReady)
+        {
+            this.isReady = true;
+            this._onReady();
         }
     }
     _onRowRemoving(e)
@@ -211,6 +223,13 @@ export default class NdGrid extends Base
         {
             this.props.onRowPrepared(e);
         }  
+    }
+    _onReady()
+    {
+        if(typeof this.props.onReady != 'undefined')
+        {
+            this.props.onReady();
+        }
     }
     //#endregion
     componentDidUpdate()
@@ -320,7 +339,7 @@ export default class NdGrid extends Base
                 selection={this.state.selection}
                 onEditorPrepared={this._onEditorPrepared}
                 onEditorPreparing={this._onEditorPreparing}
-                onRowPrepared = {this._onRowPrepared}   
+                onRowPrepared = {this._onRowPrepared}
                 sorting = {typeof this.props.sorting == 'undefined' ?{ mode: 'single' }: this.props.sorting}
                 >
                     {this.props.children}

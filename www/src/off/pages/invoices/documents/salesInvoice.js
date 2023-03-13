@@ -141,7 +141,7 @@ export default class salesInvoice extends React.PureComponent
         this.docLocked = false
         
         this.frmSalesInv.option('disabled',true)
-        await this.grdSlsInv.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
+                
         await this.grdInvoicePayment.dataRefresh({source:this.paymentObj.docCustomer.dt()});
         await this.grdMultiItem.dataRefresh({source:this.multiItemData});
         await this.grdUnit2.dataRefresh({source:this.unitDetailData})
@@ -608,9 +608,9 @@ export default class salesInvoice extends React.PureComponent
         let tmpGrpData = await this.core.sql.execute(tmpGrpQuery) 
         if(tmpGrpData.result.recordset.length > 0)
         {
-            this.docObj.docOrders.dt()[pIndex].ORIGIN = tmpGrpData.result.recordset[0].ORGINS
-            this.docObj.docOrders.dt()[pIndex].SUB_FACTOR = tmpGrpData.result.recordset[0].SUB_FACTOR
-            this.docObj.docOrders.dt()[pIndex].SUB_SYMBOL = tmpGrpData.result.recordset[0].SUB_SYMBOL
+            this.docObj.docItems.dt()[pIndex].ORIGIN = tmpGrpData.result.recordset[0].ORGINS
+            this.docObj.docItems.dt()[pIndex].SUB_FACTOR = tmpGrpData.result.recordset[0].SUB_FACTOR
+            this.docObj.docItems.dt()[pIndex].SUB_SYMBOL = tmpGrpData.result.recordset[0].SUB_SYMBOL
         }
         if(typeof pData.ITEM_TYPE == 'undefined')
         {
@@ -2951,13 +2951,13 @@ export default class salesInvoice extends React.PureComponent
                                         onRowRemoved={async (e)=>{
                                             this._calculateTotal()
                                         }}
-                                        onInitialized={()=>
+                                        onReady={async()=>
                                         {
-                                            console.log(1111)
+                                            await this.grdSlsInv.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
                                         }}
                                         >
-                                            {/* <StateStoring enabled={true} type="localStorage" storageKey={this.props.data.id + "_grdSlsInv"}/>
-                                            <ColumnChooser enabled={true} /> */}
+                                            <StateStoring enabled={true} type="localStorage" storageKey={this.props.data.id + "_grdSlsInv"}/>
+                                            <ColumnChooser enabled={true} />
                                             <Paging defaultPageSize={10} />
                                             <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
                                             <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />

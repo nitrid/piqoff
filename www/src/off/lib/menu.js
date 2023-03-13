@@ -631,6 +631,11 @@ export const menu = (e) =>
                             text: e.t('menuOff.slsRpt_02_002'),//'DEB Raporu',
                             path: 'report/purchase/debReport'
                         },
+                        {
+                            id: 'slsRpt_02_003',
+                            text: e.t('menuOff.slsRpt_02_003'),//'DEB Raporu',
+                            path: 'report/purchase/taxSucreReport'
+                        },
                     ]
                 }
             ]
