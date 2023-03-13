@@ -353,6 +353,7 @@ export const langTr =
         purchaseReport : "Raporlar",
         slsRpt_02_001 : "Tarih Sıralı Alış Faturaları Raporu",
         slsRpt_02_002 : "DEB Raporu",
+        slsRpt_02_003 : "Şeker Vergisi Raporu",
     },
     login:
     {
@@ -15407,6 +15408,20 @@ export const langTr =
             clmName : "Adı",              
             clmTotalHt : "Fatura Tutarı",   
             clmKg : "Kilogram",   
+        },
+    },
+    slsRpt_02_003 : // "DEB raporu"
+    {
+        chkZeroBalance : "0 Bakiyeler Gösterilsin",   
+        txtCustomerCode : "Cari",   
+        btnCheck : "Aktif",   
+        btnGet :"Getir",   
+        grdListe :    
+        {   
+            clmQuantity : "Miktar",   
+            clmCode: "Kodu",   
+            clmName : "Adı",              
+            clmAmount : "Vergi Tutarı",   
         },
     },
 }

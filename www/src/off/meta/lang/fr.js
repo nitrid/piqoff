@@ -351,6 +351,7 @@ export const langFr =
         purchaseReport : "Rapports",
         slsRpt_02_001 : "Rapport des Factures d'Achat", // BAK
         slsRpt_02_002 : "Rapport DEB ", // BAK
+        slsRpt_02_003 : "Şeker Vergisi Raporu", // BAK
     },
     login:
     {
@@ -15317,6 +15318,20 @@ export const langFr =
             clmName : "Nom",                 // BAK
             clmTotalHt : "Fac Total HT",  
             clmKg : "Kilogram",      // BAK
+        },
+    },
+    slsRpt_02_003 : // "DEB raporu"
+    {
+        chkZeroBalance : "0 Bakiyeler Gösterilsin",    // BAK
+        txtCustomerCode : "Cari",    // BAK
+        btnCheck : "Aktif",    // BAK
+        btnGet :"Getir",    // BAK
+        grdListe :    
+        {   
+            clmQuantity : "Miktar",    // BAK
+            clmCode: "Kodu",    // BAK
+            clmName : "Adı",               // BAK
+            clmAmount : "Vergi Tutarı",    // BAK
         },
     },
 }
