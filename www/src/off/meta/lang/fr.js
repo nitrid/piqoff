@@ -237,7 +237,7 @@ export const langFr =
         cnt_02_002 : "Saisie Accord de vente",
         cnt_03 : "Rapports",
         cnt_04 : "Opérations",
-        cnt_04_001 : "Çoklu Satış Anlaşması", //BAK
+        cnt_04_001 : "Contrat de vente multiple",
         fns : "Finance",
         fns_01 : "Listes",
         fns_01_001: "Liste paiement",
@@ -12839,8 +12839,8 @@ export const langFr =
     cnt_04_001 : // "Çoklu Satış Anlaşması"
     {
         txtCode : "Code",
-        btnGet : "Getir", //BAK
-        docDate : "Tarih", //BAK
+        btnGet : "Rechercher",
+        docDate : "Date",
         pg_Docs :      
         {     
             title : "Sélection Documents",     
@@ -12857,9 +12857,9 @@ export const langFr =
             clmOrgins : "Origine",
             clmGrpName: "Groupe",
             clmPrice1: "Prix 1",
-            clmUnderPrice1 : "Alt B.Fiyat 1", //BAK
+            clmUnderPrice1 : "Sous U.Prix 1",
             clmPrice2: "Prix 2",
-            clmUnderPrice2 : "Alt B.Fiyat 2", //BAK
+            clmUnderPrice2 : "Sous U.Fiyat 2",
             clmUnit : "Unité",
             clmUnitPrice : "Unit Prix HT", 
             clmQuantity : "Quantité",

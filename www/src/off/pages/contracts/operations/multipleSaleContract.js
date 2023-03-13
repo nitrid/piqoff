@@ -95,7 +95,7 @@ export default class salesContract extends React.PureComponent
                         "FROM CONTRACT_VW_01 WHERE CODE = @CODE AND TYPE = 1" +
                         "ORDER BY ITEM_CODE ASC" ,
                 param : ['CODE:string|50'],
-                value : [this.txtCode.value.split(',')[i]]
+                value : [this.txtCode.code.split(',')[i]]
             } 
             await tmpContDt.refresh()
             
@@ -162,7 +162,7 @@ export default class salesContract extends React.PureComponent
 
             for (let i = 0; i < this.txtCode.value.split(',').length; i++)
             {
-                tmpEmpty.NAME = this.txtCode.name.split(',')[i]
+                tmpEmpty.NAME = this.txtCode.value.split(',')[i]
                 tmpEmpty["P" + i] = Number(tmpCheckData.result.recordset[0].PRICE).round(2)
                 tmpEmpty["PA" + i] = Number(tmpCheckData.result.recordset[0].PRICE / tmpCheckData.result.recordset[0].UNDER_UNIT_FACTOR).round(2)
             } 
@@ -207,7 +207,7 @@ export default class salesContract extends React.PureComponent
                             "END",
                     param : ['PCUSER:string|25','PDOC_DATE:date','PCODE:string|25','PNAME:string|250','PTYPE:int','PSTART_DATE:date','PFINISH_DATE:date',
                             'PCUSTOMER:string|50','PDEPOT:string|50','PITEM:string|50','PQUANTITY:float','PPRICE:float','PUNIT:string|50'],
-                    value : [this.core.auth.data.CODE,this.docDate.value,this.txtCode.value.split(',')[i],this.txtCode.name.split(',')[i],1,
+                    value : [this.core.auth.data.CODE,this.docDate.value,this.txtCode.code.split(',')[i],this.txtCode.value.split(',')[i],1,
                             this.grdData[x].START_DATE,this.grdData[x].FINISH_DATE,this.grdData[x].CUSTOMER,this.grdData[x].DEPOT,this.grdData[x].ITEM,
                             this.grdData[x].QUANTITY,tmpPrice,this.grdData[x].UNIT]
                 }
@@ -361,12 +361,12 @@ export default class salesContract extends React.PureComponent
                                                     this.pg_Docs.onClick = async(data) =>
                                                     {
                                                         this.txtCode.value = ""
-                                                        this.txtCode.name = ""
+                                                        this.txtCode.code = ""
 
                                                         for (let i = 0; i < data.length; i++) 
                                                         {
-                                                            this.txtCode.value = (i == (data.length - 1)) ?  this.txtCode.value + data[i].CODE : this.txtCode.value + data[i].CODE + ","
-                                                            this.txtCode.name = (i == (data.length - 1)) ?  this.txtCode.name + data[i].NAME : this.txtCode.name + data[i].NAME + ","
+                                                            this.txtCode.value = (i == (data.length - 1)) ?  this.txtCode.value + data[i].NAME : this.txtCode.value + data[i].NAME + ","
+                                                            this.txtCode.code = (i == (data.length - 1)) ?  this.txtCode.code + data[i].CODE : this.txtCode.code + data[i].CODE + ","
                                                         }
                                                     }
                                                 }
@@ -474,7 +474,7 @@ export default class salesContract extends React.PureComponent
                                                         "EXEC [dbo].[PRD_CONTRACT_DELETE] @CUSER = @PCUSER, @UPDATE = 1, @GUID = @TMPGUID " +
                                                         "END" ,
                                                 param : ['PCUSER:string|25','PCODE:string|25','PITEM:string|50'],
-                                                value : [this.core.auth.data.CODE,this.txtCode.value.split(',')[i],e.data.ITEM]
+                                                value : [this.core.auth.data.CODE,this.txtCode.code.split(',')[i],e.data.ITEM]
                                             }
     
                                             await this.core.sql.execute(tmpDelQuery)
