@@ -13,7 +13,7 @@ import NdNumberBox from '../../../../core/react/devex/numberbox.js';
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
-import NdGrid,{Column,Editing,Paging,Scrolling,KeyboardNavigation,Pager,Export, ColumnChooser} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Editing,Paging,Scrolling,KeyboardNavigation,Pager,Export,ColumnChooser,StateStoring} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdTagBox from '../../../../core/react/devex/tagbox.js';
@@ -480,7 +480,13 @@ export default class salesContract extends React.PureComponent
                                             await this.core.sql.execute(tmpDelQuery)
                                         }
                                     }}
+                                    onReady={async()=>
+                                    {
+                                        await this.grdContracts.dataRefresh({source:this.grdData});
+                                    }}
                                     >
+                                        <StateStoring enabled={true} type="localStorage" storageKey={this.props.data.id + "grdContracts"}/>
+                                        <ColumnChooser enabled={true} />
                                         <ColumnChooser enabled={true} />
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
                                         <Editing mode="batch" allowUpdating={true} allowDeleting={true} />
