@@ -186,7 +186,7 @@ export default class salesContract extends React.PureComponent
                             "SELECT @TMPGUID = ISNULL(GUID,'00000000-0000-0000-0000-000000000000') FROM [dbo].[CONTRACT_VW_01] WHERE CODE = @PCODE AND ITEM = @PITEM AND TYPE = 1 " +
                             "IF @TMPGUID <> '00000000-0000-0000-0000-000000000000' " +
                             "BEGIN " +
-                            "EXEC [dbo].[PRD_CONTRACT_UPDATE] @GUID = @TMPGUID, @DOC_DATE = @PDOC_DATE, @PRICE = @PPRICE " +
+                            "EXEC [dbo].[PRD_CONTRACT_UPDATE] @GUID = @TMPGUID, @DOC_DATE = @PDOC_DATE, @PRICE = @PPRICE, @UNIT = @PUNIT, @QUANTITY = @PQUANTITY " +
                             "END " +
                             "ELSE " +
                             "BEGIN " +
@@ -279,7 +279,7 @@ export default class salesContract extends React.PureComponent
                                     e.data.PRICE = parseFloat(((this.txtUnitPrice.value / this.txtUnitFactor.value) * ((e.data.VAT_RATE / 100) + 1)))
                                     e.data.PRICE_VAT_EXT = parseFloat((this.txtUnitPrice.value / this.txtUnitFactor.value))
                                 }
-                                e.data.QUANTITY = this.txtTotalQuantity.value
+                                e.data.QUANTITY = 1; //this.txtTotalQuantity.value
                                 this.btnSave.setState({disabled:false});
                             });  
                         }
@@ -454,7 +454,7 @@ export default class salesContract extends React.PureComponent
                                         {
                                             e.key.PA1 = Number(e.data.P1 / e.key.UNDER_UNIT_FACTOR).round(2)
                                         }
-                                        if(typeof e.data.PA0 != 'undefined')
+                                        if(typeof e.data.PA1 != 'undefined')
                                         {
                                             e.key.P1 = Number(e.data.PA1 * e.key.UNDER_UNIT_FACTOR).round(2)
                                         }

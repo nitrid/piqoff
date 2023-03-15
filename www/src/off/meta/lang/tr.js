@@ -12527,6 +12527,7 @@ export const langTr =
         cmbDepot: "Depo",
         txtCustomerCode : "Cari Kodu",
         txtCustomerName : "Cari Adı",
+        btnMailsend : "Mail Gönder",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -12693,6 +12694,20 @@ export const langTr =
         txtUnitQuantity : "Birim Miktarı",
         txtTotalQuantity : "Toplam Miktar",
         txtUnitPrice: "Birim Fiyatı",
+        popMailSend : 
+        {
+            title :"E-Mail Gönder",
+            txtMailSubject : "E-Mail Başlığı",
+            txtSendMail : "E-Mail Adresi",
+            btnSend : "Gönder"
+        },
+        msgMailSendResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Mail gönderimi başarılı !",
+            msgFailed: "Mail gönderimi başarısız !"
+        },
     },
     cnt_02_002 : // "Satış Anlaşması"
     {
@@ -12701,6 +12716,7 @@ export const langTr =
         txtCustomerCode : "Cari Kodu",
         txtCustomerName : "Cari Adı",
         validItemsCode : "Stok Seçimi",
+        btnMailsend : "Mail Gönder",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -12869,6 +12885,20 @@ export const langTr =
         txtUnitQuantity : "Birim Miktarı",
         txtTotalQuantity : "Toplam Miktar",
         txtUnitPrice: "Birim Fiyatı",
+        popMailSend : 
+        {
+            title :"E-Mail Gönder",
+            txtMailSubject : "E-Mail Başlığı",
+            txtSendMail : "E-Mail Adresi",
+            btnSend : "Gönder"
+        },
+        msgMailSendResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Mail gönderimi başarılı !",
+            msgFailed: "Mail gönderimi başarısız !"
+        },
     },
     cnt_04_001 : // "Çoklu Satış Anlaşması"
     {
