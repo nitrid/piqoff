@@ -1451,12 +1451,10 @@ export class datatable
                 return {[arguments[0]] : Number(a[arguments[0]]).round(5) + Number(b[arguments[0]]).round(5)}
             },{[arguments[0]]:0})[arguments[0]]
 
-            console.log(tmpVal)
             if(arguments.length == 2)
             {
                 tmpVal = Number(tmpVal).round(arguments[1]);
             }
-            console.log(tmpVal)
         }
 
         return tmpVal;
