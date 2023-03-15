@@ -12499,6 +12499,7 @@ export const langFr =
         cmbDepot: "Réserve",
         txtCustomerCode : "Sélection Fournisseur",
         txtCustomerName : "Nom fournisseur",
+        btnMailsend : "Envoyer E-Mail",
         pg_Docs : 
         {
             title : "Sélection Documents",
@@ -12665,6 +12666,20 @@ export const langFr =
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
         txtUnitPrice : "Prix unitaire",
+        popMailSend : 
+        {
+            title :"Envoyer Mail ",   
+            txtMailSubject : "Objet E-Mail ",   
+            txtSendMail : "Adresse E-Mail ",   
+            btnSend : "Envoyer"   
+        },
+        msgMailSendResult:
+        {
+            title: "Attention",   
+            btn01: "OK",   
+            msgSuccess: "Mail envoyé avec succès  !",   
+            msgFailed: "Echec envoie Mail  !"   
+        },
     },
     cnt_02_002 : // "Satış Anlaşması"
     {
@@ -12673,6 +12688,7 @@ export const langFr =
         txtCustomerCode : "Sélection Client",
         txtCustomerName : "Nom Client",
         validItemsCode : "Sélectionner Produit",
+        btnMailsend : "Envoyer E-Mail",
         pg_Docs :      
         {     
             title : "Sélection Documents",     
@@ -12841,6 +12857,20 @@ export const langFr =
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
         txtUnitPrice : "Prix unitaire",
+        popMailSend : 
+        {
+            title :"Envoyer Mail ",   
+            txtMailSubject : "Objet E-Mail ",   
+            txtSendMail : "Adresse E-Mail ",   
+            btnSend : "Envoyer"   
+        },
+        msgMailSendResult:
+        {
+            title: "Attention",   
+            btn01: "OK",   
+            msgSuccess: "Mail envoyé avec succès  !",   
+            msgFailed: "Echec envoie Mail  !"   
+        },
     },
     cnt_04_001 : // "Çoklu Satış Anlaşması"
     {
