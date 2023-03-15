@@ -935,6 +935,25 @@ export const prm =
             CAPTION : "Ticket Rest."
         }
     },
+    //chkInterfel
+    {
+        TYPE : 2,
+        ID :"chkInterfel",
+        VALUE : 
+        {
+            value : false
+        },
+        SPECIAL : "",
+        PAGE : "stk_01_001",
+        ELEMENT : "chkInterfel",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Stok Tanımları",
+            CAPTION : "İnterfel."
+        }
+    },
     //txtCostPrice
     {
         TYPE : 2,

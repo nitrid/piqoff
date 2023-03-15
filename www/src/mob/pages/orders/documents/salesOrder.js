@@ -43,7 +43,8 @@ export default class salesOrder extends React.PureComponent
             guid : "00000000-0000-0000-0000-000000000000",
             unit : "00000000-0000-0000-0000-000000000000",
             factor : 0,
-            unit_id : ""
+            unit_id : "",
+            subFactor: 0
         }
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
@@ -127,7 +128,7 @@ export default class salesOrder extends React.PureComponent
                     this.txtBarcode.value = result.text;
                     let tmpQuery = 
                     {
-                        query : "SELECT GUID,CODE,NAME,BARCODE,VAT,UNIT_GUID,UNIT_ID,UNIT_FACTOR FROM ITEMS_BARCODE_MULTICODE_VW_01  WHERE BARCODE = @BARCODE OR CODE = @BARCODE ",
+                        query : "SELECT GUID,CODE,NAME,BARCODE,VAT,UNIT_GUID,UNIT_ID,UNIT_FACTOR,ISNULL((SELECT top 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_BARCODE_MULTICODE_VW_01.GUID AND ITEM_UNIT_VW_01.TYPE = 1),1) AS SUB_FACTOR FROM ITEMS_BARCODE_MULTICODE_VW_01  WHERE BARCODE = @BARCODE OR CODE = @BARCODE ",
                         param : ['BARCODE:string|50'],
                         value : [result.text]
                     }
@@ -141,6 +142,7 @@ export default class salesOrder extends React.PureComponent
                         this.barcode.vat = tmpData.result.recordset[0].VAT 
                         this.barcode.unit = tmpData.result.recordset[0].UNIT_GUID
                         this.barcode.factor = tmpData.result.recordset[0].UNIT_FACTOR
+                        this.barcode.subFactor = tmpData.result.recordset[0].SUB_FACTOR
                         this.barcode.unit_id = tmpData.result.recordset[0].UNIT_ID
                         this.setBarcode()
                     }
@@ -187,6 +189,7 @@ export default class salesOrder extends React.PureComponent
         if(tmpData.result.recordset.length > 0)
         {
             this.txtPrice.value = Number((tmpData.result.recordset[0].PRICE)).round(2)
+            this.txtUnderPrice.value = Number((tmpData.result.recordset[0].PRICE / this.barcode.subFactor)).round(2)
             this.calculateItemPrice()
             // this.txtVat.value = parseFloat((tmpData.result.recordset[0].PRICE * (this.barcode.vat / 100)).toFixed(2))
             // this.txtAmount.value = parseFloat((Number(this.txtPrice.value) + Number(this.txtVat.value)).toFixed(2))
@@ -357,7 +360,7 @@ export default class salesOrder extends React.PureComponent
                 {
                     let tmpRelatedItemQuery = 
                     {   
-                        query :"SELECT TOP 1 GUID,CODE,NAME,COST_PRICE,UNIT_GUID AS UNIT,VAT,MULTICODE,CUSTOMER_NAME,BARCODE,UNIT_GUID,UNIT_ID,UNIT_FACTOR FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE GUID = @GUID",
+                        query :"SELECT TOP 1 GUID,CODE,NAME,COST_PRICE,UNIT_GUID AS UNIT,VAT,MULTICODE,CUSTOMER_NAME,BARCODE,UNIT_GUID,UNIT_ID,UNIT_FACTOR,ISNULL((SELECT top 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_BARCODE_MULTICODE_VW_01.GUID AND ITEM_UNIT_VW_01.TYPE = 1),1) AS SUB_FACTOR  FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE GUID = @GUID",
                         param : ['GUID:string|50'],
                         value : [tmpRelatedData.result.recordset[i].RELATED_GUID]
                     }
@@ -474,6 +477,7 @@ export default class salesOrder extends React.PureComponent
     calculateItemPrice()
     {
         this.txtVat.value =  Number(((this.txtPrice.value * (this.barcode.vat / 100)) * (this.txtQuantity.value * this.txtFactor.value))).round(2)
+        this.txtAmountHT.value = Number((this.txtQuantity.value * this.txtFactor.value) * this.txtPrice.value).round(2)
         this.txtAmount.value = Number((parseFloat((this.txtPrice.value * (this.txtQuantity.value * this.txtFactor.value))) + parseFloat(this.txtVat.value))).round(2)
     }
     async _calculateTotal()
@@ -872,6 +876,7 @@ export default class salesOrder extends React.PureComponent
                                                         this.popItemCode.show()
                                                         this.popItemCode.onClick = async(data) =>
                                                         {
+                                                            console.log(this.barcode.subFactor)
                                                             if(data.length == 1)
                                                             {
                                                                 this.txtBarcode.value = data[0].CODE
@@ -884,6 +889,7 @@ export default class salesOrder extends React.PureComponent
                                                                     vat : data[0].VAT,
                                                                     unit : data[0].UNIT_GUID,
                                                                     factor : data[0].UNIT_FACTOR,
+                                                                    subFactor : data[0].SUB_FACTOR,
                                                                     unit_id : data[0].UNIT_ID
                                                                 }
                                                                 await this.setBarcode()
@@ -902,6 +908,7 @@ export default class salesOrder extends React.PureComponent
                                                                         vat : data[i].VAT,
                                                                         unit : data[i].UNIT_GUID,
                                                                         factor : data[i].UNIT_FACTOR,
+                                                                        subFactor : data[0].SUB_FACTOR,
                                                                         unit_id : data[i].UNIT_ID
                                                                     }
                                                                     await this.setBarcode()
@@ -935,7 +942,7 @@ export default class salesOrder extends React.PureComponent
                                                 }
                                                 let tmpQuery = 
                                                 {
-                                                    query : "SELECT GUID,CODE,NAME,BARCODE,VAT,UNIT_GUID,UNIT_ID,UNIT_FACTOR FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE BARCODE = @BARCODE OR CODE = @BARCODE ",
+                                                    query : "SELECT GUID,CODE,NAME,BARCODE,VAT,UNIT_GUID,UNIT_ID,UNIT_FACTOR,ISNULL((SELECT top 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_BARCODE_MULTICODE_VW_01.GUID AND ITEM_UNIT_VW_01.TYPE = 1),1) AS SUB_FACTOR  FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE BARCODE = @BARCODE OR CODE = @BARCODE ",
                                                     param : ['BARCODE:string|50'],
                                                     value : [e.component._changedValue]
                                                 }
@@ -949,6 +956,7 @@ export default class salesOrder extends React.PureComponent
                                                     this.barcode.vat = tmpData.result.recordset[0].VAT 
                                                     this.barcode.unit = tmpData.result.recordset[0].UNIT_GUID
                                                     this.barcode.factor = tmpData.result.recordset[0].UNIT_FACTOR
+                                                    this.barcode.subFactor = tmpData.result.recordset[0].SUB_FACTOR
                                                     this.barcode.unit_id = tmpData.result.recordset[0].UNIT_ID
                                                     this.setBarcode()
                                                     
@@ -959,6 +967,7 @@ export default class salesOrder extends React.PureComponent
                                                     this.popItemCode.show()
                                                     this.popItemCode.onClick = async(data) =>
                                                     {
+                                                        console.log(this.barcode.subFactor)
                                                         if(data.length == 1)
                                                         {
                                                             this.txtBarcode.value = data[0].CODE
@@ -971,6 +980,7 @@ export default class salesOrder extends React.PureComponent
                                                                 vat : data[0].VAT,
                                                                 unit : data[0].UNIT_GUID,
                                                                 factor : data[0].UNIT_FACTOR,
+                                                                subFactor : data[0].SUB_FACTOR,
                                                                 unit_id : data[0].UNIT_ID
                                                             }
                                                             await this.setBarcode()
@@ -989,6 +999,7 @@ export default class salesOrder extends React.PureComponent
                                                                     vat : data[i].VAT,
                                                                     unit : data[i].UNIT_GUID,
                                                                     factor : data[i].UNIT_FACTOR,
+                                                                    subFactor : data[0].SUB_FACTOR,
                                                                     unit_id : data[i].UNIT_ID
                                                                 }
                                                                 await this.setBarcode()
@@ -1021,7 +1032,7 @@ export default class salesOrder extends React.PureComponent
                                     </Item>
                                     {/* txtQuantity */}
                                     <Item>
-                                        <Label text={this.t("txtQuantity")}/>
+                                        <Label text={this.t("txtQuantity")} alignment="right"/>
                                         <div className='row'>
                                             <div className='col-4'>
                                                 <NdNumberBox id="txtFactor" parent={this} simple={true} readOnly={true} 
@@ -1064,16 +1075,31 @@ export default class salesOrder extends React.PureComponent
                                     </Item>
                                     {/* txtPrice */}
                                     <Item>
-                                        <Label text={this.t("txtPrice")} alignment="right" />
-                                        <NdNumberBox id="txtPrice" parent={this} simple={true}
-                                        param={this.param.filter({ELEMENT:'txtPrice',USERS:this.user.CODE})}
-                                        access={this.access.filter({ELEMENT:'txtPrice',USERS:this.user.CODE})}
-                                        onValueChanged={(async(e)=>
-                                        {
-                                            this.calculateItemPrice()
-                                        }).bind(this)}
-                                        >
-                                        </NdNumberBox>
+                                    <Label text={this.t("txtPrice")} alignment="right" />
+                                        <div className='row'>
+                                            <div className='col-6'>
+                                                <NdNumberBox id="txtPrice" parent={this} simple={true}
+                                                param={this.param.filter({ELEMENT:'txtPrice',USERS:this.user.CODE})}
+                                                access={this.access.filter({ELEMENT:'txtPrice',USERS:this.user.CODE})}
+                                                onValueChanged={(async(e)=>
+                                                {
+                                                    this.txtUnderPrice.value = this.txtPrice.value / this.barcode.subFactor
+                                                    this.calculateItemPrice()
+                                                }).bind(this)}
+                                                ></NdNumberBox>
+                                            </div>
+                                            <div className='col-6'>
+                                                <NdNumberBox id="txtUnderPrice" parent={this} simple={true}
+                                                param={this.param.filter({ELEMENT:'txtUnderPrice',USERS:this.user.CODE})}
+                                                access={this.access.filter({ELEMENT:'txtUnderPrice',USERS:this.user.CODE})}
+                                                onValueChanged={(async(e)=>
+                                                {
+                                                    this.txtPrice.value = this.txtUnderPrice.value * this.barcode.subFactor
+                                                    this.calculateItemPrice()
+                                                }).bind(this)}
+                                                ></NdNumberBox>
+                                            </div>
+                                        </div>
                                     </Item>
                                     {/* txtVat */}
                                     <Item>
@@ -1088,13 +1114,26 @@ export default class salesOrder extends React.PureComponent
                                     {/* txtAmount */}
                                     <Item>
                                         <Label text={this.t("txtAmount")} alignment="right" />
-                                        <NdTextBox id="txtAmount" parent={this} simple={true}  
-                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                        readOnly={true}
-                                        param={this.param.filter({ELEMENT:'txtAmount',USERS:this.user.CODE})}
-                                        access={this.access.filter({ELEMENT:'txtAmount',USERS:this.user.CODE})}
-                                        >
-                                        </NdTextBox>
+                                        <div className='row'>
+                                            <div className='col-6'>
+                                                <NdTextBox id="txtAmountHT" parent={this} simple={true}  
+                                                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                                readOnly={true}
+                                                param={this.param.filter({ELEMENT:'txtAmountHT',USERS:this.user.CODE})}
+                                                access={this.access.filter({ELEMENT:'txtAmountHT',USERS:this.user.CODE})}
+                                                >
+                                                </NdTextBox>
+                                            </div>
+                                            <div className='col-6'>
+                                                <NdTextBox id="txtAmount" parent={this} simple={true}  
+                                                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                                readOnly={true}
+                                                param={this.param.filter({ELEMENT:'txtAmount',USERS:this.user.CODE})}
+                                                access={this.access.filter({ELEMENT:'txtAmount',USERS:this.user.CODE})}
+                                                >
+                                                </NdTextBox>
+                                            </div>
+                                        </div>
                                     </Item>
                                     <Item>
                                         <div className="row">
@@ -1372,10 +1411,10 @@ export default class salesOrder extends React.PureComponent
                             select:
                             {
                                 query : "SELECT  *,  " +
-                                        "CASE WHEN UNDER_UNIT_VALUE =0  " +
+                                        "CASE WHEN SUB_FACTOR =0  " +
                                         "THEN 0 " +
                                         "ELSE " +
-                                        "ROUND((PRICE * UNDER_UNIT_VALUE),2) " +
+                                        "ROUND((PRICE * SUB_FACTOR),2) " +
                                         "END AS UNDER_UNIT_PRICE " +
                                         "FROM  (  SELECT GUID,   " +
                                         "CODE,   " +
@@ -1388,7 +1427,7 @@ export default class salesOrder extends React.PureComponent
                                         "ISNULL((SELECT TOP 1 GUID FROM ITEM_UNIT WHERE TYPE = 0 AND ITEM_UNIT.ITEM = ITEMS_VW_01.GUID),'00000000-0000-0000-0000-000000000000') AS UNIT_GUID, " +
                                         "ISNULL((SELECT TOP 1 ID FROM ITEM_UNIT WHERE TYPE = 0 AND ITEM_UNIT.ITEM = ITEMS_VW_01.GUID),0) AS UNIT_ID, " +
                                         "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 0 AND ITEM_UNIT.ITEM = ITEMS_VW_01.GUID),0) AS UNIT_FACTOR, " +
-                                        "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 1 AND ITEM_UNIT.ITEM = ITEMS_VW_01.GUID),0) AS UNDER_UNIT_VALUE " +
+                                        "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.TYPE = 1 AND ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID),0) AS SUB_FACTOR " +
                                         "FROM ITEMS_VW_01) AS TMP " +
                                         "WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL) " ,
                                 param : ['VAL:string|50']

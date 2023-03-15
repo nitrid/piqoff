@@ -1501,7 +1501,8 @@ export default class itemCard extends React.PureComponent
                                  <Item>
                                     <Label text={this.t("chkInterfel")} alignment="right" />
                                     <NdCheckBox id="chkInterfel" parent={this} defaultValue={false} dt={{data:this.itemsObj.dt('ITEMS'),field:"INTERFEL"}}
-                                    />
+                                     param={this.param.filter({ELEMENT:'chkInterfel',USERS:this.user.CODE})}
+                                     access={this.access.filter({ELEMENT:'chkInterfel',USERS:this.user.CODE})}/>
                                 </Item>
                             </Form>
                         </div>
