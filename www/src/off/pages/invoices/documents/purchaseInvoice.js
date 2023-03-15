@@ -3050,6 +3050,7 @@ export default class purchaseInvoice extends React.PureComponent
                                         height={'400'} 
                                         width={'100%'}
                                         dbApply={false}
+                                        sorting={false}
                                         filterRow={{visible:true}}
                                         onRowPrepared={(e) =>
                                         {

@@ -9531,6 +9531,7 @@ export const langFr =
         txtTotalQuantity : "Quantité totale",  
         txtUnitPrice : "Prix unitaire", 
         cmbOrigin: "Origine",
+        txtTotalHt : "Total HT",
         pg_Docs : 
         {
             title : "Sélection Document",

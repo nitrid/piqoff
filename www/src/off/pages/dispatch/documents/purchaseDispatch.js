@@ -16,7 +16,7 @@ import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
-import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export,ColumnChooser,StateStoring} from '../../../../core/react/devex/grid.js';
 import NbPopDescboard from "../../../tools/popdescboard.js";
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
@@ -134,7 +134,6 @@ export default class purchaseDispatch extends React.PureComponent
         this.docLocked = false
         
         this.frmDocItems.option('disabled',true)
-        await this.grdPurcDispatch.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
         await this.grdMultiItem.dataRefresh({source:this.multiItemData});
         await this.grdNewPrice.dataRefresh({source:this.newPrice})
     }
@@ -2242,6 +2241,7 @@ export default class purchaseDispatch extends React.PureComponent
                                     height={'450'} 
                                     width={'100%'}
                                     dbApply={false}
+                                    sorting={false}
                                     filterRow={{visible:true}}
                                     onCellPrepared={(e) =>
                                         {
@@ -2389,20 +2389,26 @@ export default class purchaseDispatch extends React.PureComponent
                                     onRowRemoved={async (e)=>{
                                         this._calculateTotal()
                                     }}
+                                    onReady={async()=>
+                                    {
+                                        await this.grdPurcDispatch.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
+                                    }}
                                     >
+                                        <StateStoring enabled={true} type="localStorage" storageKey={this.props.data.id + "_grdPurcDispatch"}/>
+                                        <ColumnChooser enabled={true} />
                                         <Paging defaultPageSize={10} />
                                         <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
                                         <Scrolling mode="standart" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                         <Export fileName={this.lang.t("menu.irs_02_001")} enabled={true} allowExportSelectedData={true} />
-                                        <Column dataField="LINE_NO" caption={this.t("LINE_NO")} visible={false} width={50} dataType={'number'} defaultSortOrder="desc"/>
+                                        <Column dataField="LINE_NO" caption={this.t("LINE_NO")} visible={false} width={50} dataType={'number'} allowEditing={false} defaultSortOrder="desc"/>
                                         <Column dataField="CDATE_FORMAT" caption={this.t("grdPurcDispatch.clmCreateDate")} width={80} allowEditing={false}/>
                                         <Column dataField="CUSER_NAME" caption={this.t("grdPurcDispatch.clmCuser")} width={90} allowEditing={false}/>
                                         <Column dataField="ITEM_CODE" caption={this.t("grdPurcDispatch.clmItemCode")} width={105} editCellRender={this._cellRoleRender}/>
                                         <Column dataField="MULTICODE" caption={this.t("grdPurcDispatch.clmMulticode")} width={105} allowEditing={false}/>
                                         <Column dataField="ITEM_NAME" caption={this.t("grdPurcDispatch.clmItemName")} width={330} />
-                                        <Column dataField="ORIGIN" caption={this.t("grdPurcDispatch.clmOrigin")} width={60} allowEditing={true} />
+                                        <Column dataField="ORIGIN" caption={this.t("grdPurcDispatch.clmOrigin")} width={60} allowEditing={true} editCellRender={this._cellRoleRender}/>
                                         <Column dataField="QUANTITY" caption={this.t("grdPurcDispatch.clmQuantity")} width={65} dataType={'number'} cellRender={(e)=>{return e.value + " / " + e.data.UNIT_SHORT}}/>
                                         <Column dataField="SUB_FACTOR" caption={this.t("grdPurcDispatch.clmSubFactor")} width={65} allowEditing={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
                                         <Column dataField="SUB_QUANTITY" caption={this.t("grdPurcDispatch.clmSubQuantity")} dataType={'number'} width={65} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>

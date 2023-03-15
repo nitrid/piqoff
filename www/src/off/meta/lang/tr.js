@@ -4065,7 +4065,7 @@ export const langTr =
         msgGrdOrigins:
         {
             title: "Menşei Değişimi",  
-            btn01: "Keydet",  
+            btn01: "Kaydet",  
         },
         txtDiscount1 : "1. İndirim Tutarı",
         txtDiscount2 : "2. İndirim Tutarı",
@@ -9801,7 +9801,7 @@ export const langTr =
         msgGrdOrigins:
         {
             title: "Menşei Değişimi",
-            btn01: "Keydet",
+            btn01: "Kaydet",
         },
         validRef :"Seri Boş Geçilemez",
         validRefNo : "Sıra Boş Geçilemez",

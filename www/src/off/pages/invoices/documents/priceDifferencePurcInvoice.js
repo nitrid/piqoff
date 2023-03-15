@@ -17,7 +17,7 @@ import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
-import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export,ColumnChooser,StateStoring} from '../../../../core/react/devex/grid.js';
 import NbPopDescboard from "../../../tools/popdescboard.js";
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
@@ -2229,6 +2229,7 @@ export default class priceDifferenceInvoice extends React.PureComponent
                                         height={'400'} 
                                         width={'100%'}
                                         dbApply={false}
+                                        sorting={false}
                                         onRowPrepared={(e) =>
                                             {
                                                 if(e.rowType == 'data' && e.data.ITEM_TYPE == 1)
@@ -2294,14 +2295,20 @@ export default class priceDifferenceInvoice extends React.PureComponent
                                         onRowRemoved={async (e)=>{
                                             this._calculateTotal()
                                         }}
+                                        onReady={async()=>
+                                        {
+                                            await this.grdDiffInv.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
+                                        }}
                                         >
+                                            <StateStoring enabled={true} type="localStorage" storageKey={this.props.data.id + "_grdDiffInv"}/>
+                                            <ColumnChooser enabled={true} />
                                             <Paging defaultPageSize={10} />
                                             <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
                                             <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
                                             <Scrolling mode="standart" />
                                             <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                             <Export fileName={this.lang.t("menu.ftr_02_004")} enabled={true} allowExportSelectedData={true} />
-                                            <Column dataField="LINE_NO" caption={this.t("LINE_NO")} visible={false} width={50} dataType={'number'} defaultSortOrder="desc"/>
+                                            <Column dataField="LINE_NO" caption={this.t("LINE_NO")} visible={false} width={50} dataType={'number'} allowEditing={false} defaultSortOrder="desc"/>
                                             <Column dataField="CDATE_FORMAT" caption={this.t("grdDiffInv.clmCreateDate")} width={80} allowEditing={false}/>
                                             <Column dataField="CUSER_NAME" caption={this.t("grdDiffInv.clmCuser")} width={90} allowEditing={false}/>
                                             <Column dataField="ITEM_CODE" caption={this.t("grdDiffInv.clmItemCode")} width={90} editCellRender={this._cellRoleRender}/>

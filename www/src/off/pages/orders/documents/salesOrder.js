@@ -16,7 +16,7 @@ import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
-import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export,ColumnChooser,StateStoring} from '../../../../core/react/devex/grid.js';
 import NbPopDescboard from "../../../tools/popdescboard.js";
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
@@ -122,7 +122,6 @@ export default class salesOrder extends React.PureComponent
         this.docLocked = false
         
         this.frmdocOrders.option('disabled',true)
-        await this.grdSlsOrder.dataRefresh({source:this.docObj.docOrders.dt('DOC_ORDERS')});
         await this.grdMultiItem.dataRefresh({source:this.multiItemData});
     }
     async getDoc(pGuid,pRef,pRefno)
@@ -1941,6 +1940,7 @@ export default class salesOrder extends React.PureComponent
                                     height={'500'} 
                                     width={'100%'}
                                     dbApply={false}
+                                    sorting={false}
                                     onRowPrepared={(e) =>
                                     {
                                         if(e.rowType == 'data' && e.data.SHIPMENT_LINE_GUID  != '00000000-0000-0000-0000-000000000000')
@@ -2084,7 +2084,13 @@ export default class salesOrder extends React.PureComponent
                                     onRowRemoved={async (e)=>{
                                         this._calculateTotal()
                                     }}
+                                    onReady={async()=>
+                                    {
+                                        await this.grdSlsOrder.dataRefresh({source:this.docObj.docOrders.dt('DOC_ORDERS')});
+                                    }}
                                     >
+                                        <StateStoring enabled={true} type="localStorage" storageKey={this.props.data.id + "_grdSlsOrder"}/>
+                                        <ColumnChooser enabled={true} />
                                         <Paging defaultPageSize={10} />
                                         <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
