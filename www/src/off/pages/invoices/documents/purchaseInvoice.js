@@ -253,6 +253,7 @@ export default class purchaseInvoice extends React.PureComponent
     async _calculateTotal()
     {
         let tmpVat = 0
+        console.log(this.docObj.docItems.dt())
         for (let i = 0; i < this.docObj.docItems.dt().groupBy('VAT_RATE').length; i++) 
         {
             tmpVat = tmpVat + parseFloat(this.docObj.docItems.dt().where({'VAT_RATE':this.docObj.docItems.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("VAT",2))
@@ -3133,7 +3134,6 @@ export default class purchaseInvoice extends React.PureComponent
                                             }
                                             if(typeof e.data.DISCOUNT_RATE != 'undefined')
                                             {
-                                                console.log(Number(e.key.PRICE * e.key.QUANTITY).rateInc(e.data.DISCOUNT_RATE,4))
                                                 e.key.DISCOUNT = Number(e.key.PRICE * e.key.QUANTITY).rateInc(e.data.DISCOUNT_RATE,4)
                                                 e.key.DISCOUNT_1 = Number(e.key.PRICE * e.key.QUANTITY).rateInc( e.data.DISCOUNT_RATE,4)
                                                 e.key.DISCOUNT_2 = 0
@@ -3170,8 +3170,8 @@ export default class purchaseInvoice extends React.PureComponent
                                             }
                                            
 
-                                            e.key.VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100)).toFixed(4));
-                                            e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(4))
+                                            e.key.VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100))).round(4);
+                                            e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY)).round(4)
                                             e.key.TOTALHT = Number((e.key.AMOUNT - e.key.DISCOUNT)).round(2)
                                             e.key.TOTAL = Number((e.key.TOTALHT + e.key.VAT)).round(2)
 
