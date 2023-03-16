@@ -270,6 +270,7 @@ export const langFr =
         pos_02_007 : "Rapport Pos Fond de Caisse ", 
         pos_02_008 : "Rapport de Vente Produit", 
         pos_02_009 : "Rapport de Vente par famille de produits",
+        pos_02_010 : "Ürün Detaylı Satış Raporu", // BAK
         pos_03 : "Traitements", 
         pos_03_001 : "Opérations de fin de journée",
         promo: "Promotion",
@@ -14259,6 +14260,19 @@ export const langFr =
         popAnalysis :     
         {   
             title : "Graphique de vente"   
+        },
+    },
+    pos_02_010 : // "Ürün Detaylı Satış Raporu"
+    {
+        btnGet :"Getir", // BAK
+        grdListe : 
+        {
+            clmCode: "Kodu",  // BAK
+            clmName : "Adı",             // BAK
+            clmQuantity : "Miktar",  // BAK
+            clmAmount : "Tutar",  // BAK
+            clmVat : "Vergi",  // BAK
+            clmTotal : "Toplam",  // BAK
         },
     },
     pos_03_001 : // "Gün sonu"

@@ -271,6 +271,7 @@ export const langTr =
         pos_02_007 : "Pos Avans Raporu",
         pos_02_008 : "Ürün Satış Raporu",
         pos_02_009 : "Grup Bazlı Satış Raporu",
+        pos_02_010 : "Ürün Detaylı Satış Raporu",
         pos_03 :"Operasyonlar",
         pos_03_001 : "Gün Sonu",
         promo: "Promosyon",
@@ -14349,6 +14350,19 @@ export const langTr =
         popAnalysis : 
         {
             title : "Satış Grafiği"
+        },
+    },
+    pos_02_010 : // "Ürün Detaylı Satış Raporu"
+    {
+        btnGet :"Getir",
+        grdListe : 
+        {
+            clmCode: "Kodu",
+            clmName : "Adı",           
+            clmQuantity : "Miktar",
+            clmAmount : "Tutar",
+            clmVat : "Vergi",
+            clmTotal : "Toplam",
         },
     },
     pos_03_001 : // "Gün Sonu",
