@@ -636,6 +636,11 @@ export const menu = (e) =>
                             text: e.t('menuOff.slsRpt_02_003'),//'DEB Raporu',
                             path: 'report/purchase/taxSucreReport'
                         },
+                        {
+                            id: 'slsRpt_02_004',
+                            text: e.t('menuOff.slsRpt_02_004'),//'Ürün Detaylı Alış Raporu',
+                            path: 'report/purchase/itemInvoicePurchaseReport'
+                        },
                     ]
                 }
             ]
@@ -900,6 +905,11 @@ export const menu = (e) =>
                             id: 'slsRpt_01_007',
                             text: e.t('menuOff.slsRpt_01_007'),//'İade Fatura raporu',
                             path: 'report/sales/rebateInvoiceReport'
+                        },
+                        {
+                            id: 'slsRpt_01_008',
+                            text: e.t('menuOff.slsRpt_01_008'),//'İade Fatura raporu',
+                            path: 'report/sales/itemInvoiceSalesReport'
                         },
                     ]
                 }

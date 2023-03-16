@@ -352,10 +352,12 @@ export const langTr =
         slsRpt_01_005 : "Ürün Satış ve İade Raporu",
         slsRpt_01_006 : "Cari Bazlı Satış ve İade Raporu",
         slsRpt_01_007 : "İade Faturaları Raporu",
+        slsRpt_01_008 : "Ürün Detaylı Satış Raporu",
         purchaseReport : "Raporlar",
         slsRpt_02_001 : "Tarih Sıralı Alış Faturaları Raporu",
         slsRpt_02_002 : "DEB Raporu",
         slsRpt_02_003 : "Şeker Vergisi Raporu",
+        slsRpt_02_004 : "Ürün Detaylı Alış Raporu",
     },
     login:
     {
@@ -15452,6 +15454,19 @@ export const langTr =
         },
         validCode : "Lütfen Stok Seçin"
     },
+    slsRpt_01_008 : // "Ürün Detaylı Satış Raporu"
+    {
+        btnGet :"Getir",
+        grdListe :
+        {
+            clmCode: "Kodu",
+            clmName : "Adı",           
+            clmQuantity : "Miktar",
+            clmAmount : "Tutar",
+            clmVat : "Vergi",
+            clmTotal : "Toplam",
+        },
+    },
     slsRpt_02_001 : // "Tarih sıralı Alış raporu"
     {
         chkZeroBalance : "0 Bakiyeler Gösterilsin",   
@@ -15500,4 +15515,18 @@ export const langTr =
             clmAmount : "Vergi Tutarı",   
         },
     },
+    slsRpt_02_004 : // "Ürün Detaylı Satış Raporu"
+    {
+        btnGet :"Getir",
+        grdListe :
+        {
+            clmCode: "Kodu",
+            clmName : "Adı",           
+            clmQuantity : "Miktar",
+            clmAmount : "Tutar",
+            clmVat : "Vergi",
+            clmTotal : "Toplam",
+        },
+    },
+    
 }

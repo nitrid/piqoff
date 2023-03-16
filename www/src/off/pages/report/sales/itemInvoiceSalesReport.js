@@ -17,7 +17,7 @@ import NdButton from '../../../../core/react/devex/button.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 
-export default class itemSalesReport extends React.PureComponent
+export default class itemInvoiceSalesReport extends React.PureComponent
 {
     constructor(props)
     {
@@ -124,8 +124,8 @@ export default class itemSalesReport extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT ITEM_CODE,ITEM_NAME,SUM(QUANTITY) AS QUANTITY,ROUND(SUM(FAMOUNT),2) AS AMOUNT,ROUND(SUM(VAT),2) AS VAT,ROUND(SUM(TOTAL),2) AS TOTAL " +
-                            " FROM POS_SALE_VW_01 WHERE DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE GROUP BY  ITEM_CODE,ITEM_NAME",
+                    query : "SELECT ITEM_CODE,MAX(ITEM_NAME) AS ITEM_NAME,SUM(QUANTITY) AS QUANTITY,ROUND(SUM(TOTALHT),2) AS AMOUNT,ROUND(SUM(VAT),2) AS VAT,ROUND(SUM(TOTAL),2) AS TOTAL " +
+                            " FROM DOC_ITEMS_VW_01 WHERE DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE AND REBATE = 0 AND TYPE = 1 AND (DOC_TYPE =20 OR (DOC_TYPE = 40 AND INVOICE_DOC_GUID <> '00000000-0000-0000-0000-000000000000'))  GROUP BY  ITEM_CODE",
                     param : ['FIRST_DATE:date','LAST_DATE:date'],
                     value : [this.dtDate.startDate,this.dtDate.endDate]
                 },

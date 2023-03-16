@@ -349,10 +349,13 @@ export const langFr =
         slsRpt_01_004 : "Rapport de Vente", // BAK
         slsRpt_01_005 : "Ürün Satış ve İade Raporu", // BAK
         slsRpt_01_006 : "Cari Bazlı Satış ve İade Raporu", // BAK
+        slsRpt_01_007 : "İade Faturaları Raporu",   // BAK
+        slsRpt_01_008 : "Ürün Detaylı Satış Raporu",   // BAK
         purchaseReport : "Rapports",
         slsRpt_02_001 : "Rapport des Factures d'Achat", // BAK
         slsRpt_02_002 : "Rapport DEB ", // BAK
         slsRpt_02_003 : "Şeker Vergisi Raporu", // BAK
+        slsRpt_02_004 : ""
     },
     login:
     {
@@ -15337,6 +15340,44 @@ export const langFr =
         },
         validCode : "Lütfen Müşteri Seçin" // BAK
     },
+    slsRpt_01_007 : // "İade Fatura raporu"
+    {
+        chkZeroBalance : "0 Bakiyeler Gösterilsin", // BAK
+        txtItemCode : "Ürün Seçimi", // BAK
+        btnGet :"Getir", // BAK
+        grdListe : 
+        {
+            clmDate : "Tarih",   // BAK
+            clmCode: "Kodu",   // BAK
+            clmName : "Adı",              // BAK
+            clmAmount : "Tutar",   // BAK
+            clmDiscount : "İndirim",   // BAK
+            clmTotalHt : "Vergisiz Fiyat",   // BAK
+            clmVat : "Vergi",   // BAK
+            clmTotal : "Toplam",   // BAK
+            clmRef : "Seri-Sıra"   // BAK
+        },
+        pg_txtItemCode : 
+        {
+            title : "STOK Seçimi",  // BAK
+            clmCode :  "STOK KODU",  // BAK
+            clmName : "STOK ADI",  // BAK
+        },
+        validCode : "Lütfen Stok Seçin" // BAK
+    },
+    slsRpt_01_008 : // "Ürün Detaylı Satış Raporu"
+    {
+        btnGet :"Getir", // BAK
+        grdListe :
+        {
+            clmCode: "Kodu",  // BAK
+            clmName : "Adı",             // BAK
+            clmQuantity : "Miktar",  // BAK
+            clmAmount : "Tutar",  // BAK
+            clmVat : "Vergi",  // BAK
+            clmTotal : "Toplam",  // BAK
+        },
+    },
     slsRpt_02_001 : // "Tarih sıralı Alış raporu"
     {
         chkZeroBalance : "Afficher Soldes 0",    // BAK
@@ -15383,6 +15424,19 @@ export const langFr =
             clmCode: "Kodu",    // BAK
             clmName : "Adı",               // BAK
             clmAmount : "Vergi Tutarı",    // BAK
+        },
+    },
+    slsRpt_02_004 : // "Ürün Detaylı Alış Raporu"
+    {
+        btnGet :"Getir", // BAK
+        grdListe :
+        {
+            clmCode: "Kodu",  // BAK
+            clmName : "Adı",             // BAK
+            clmQuantity : "Miktar",  // BAK
+            clmAmount : "Tutar",  // BAK
+            clmVat : "Vergi",  // BAK
+            clmTotal : "Toplam",  // BAK
         },
     },
 }
