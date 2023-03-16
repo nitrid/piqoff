@@ -239,6 +239,8 @@ export default class salesOrder extends React.PureComponent
         }
         this.txtBarcode.value = ""
         this.txtAmount.value = 0
+        this.txtAmountHT.value = 0
+        this.txtUnderPrice.value = 0
         this.txtVat.value = 0
         this.txtFactor.value = 0
         this.txtQuantity.value = 0
