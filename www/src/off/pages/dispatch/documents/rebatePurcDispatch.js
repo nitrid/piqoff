@@ -125,7 +125,6 @@ export default class rebateDispatch extends React.PureComponent
         this.docLocked = false
         
         this.frmDocItems.option('disabled',true)
-        await this.grdRebtDispatch.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
         if(this.sysParam.filter({ID:'randomRefNo',USERS:this.user.CODE}).getValue().value == true)
         {
             this.txtRefno.value = Math.floor(Date.now() / 1000)

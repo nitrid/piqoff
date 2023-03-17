@@ -123,7 +123,6 @@ export default class branchSaleDispatch extends React.PureComponent
         this.docLocked = false
         
         this.frmDocItems.option('disabled',true)
-        await this.grdSlsDispatch.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
         await this.grdMultiItem.dataRefresh({source:this.multiItemData});
         if(this.sysParam.filter({ID:'randomRefNo',USERS:this.user.CODE}).getValue().value == true)
         {
