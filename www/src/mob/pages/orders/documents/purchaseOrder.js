@@ -345,6 +345,7 @@ export default class salesOrder extends React.Component
         this.docObj.dt()[0].DISCOUNT = this.docObj.docOrders.dt().sum("DISCOUNT",2)
         this.docObj.dt()[0].VAT = this.docObj.docOrders.dt().sum("VAT",2)
         this.docObj.dt()[0].TOTAL = this.docObj.docOrders.dt().sum("TOTAL",2)
+        await this.docObj.save()
     }
     async _onItemRendered(e)
     {
@@ -996,7 +997,6 @@ export default class salesOrder extends React.Component
                                     }
                                     console.log(e.key.MARGIN)
                                     this._calculateTotal()
-                                    await this.docObj.save()
                                     
                                 }}
                                 onContentReady={async(e)=>{
@@ -1004,7 +1004,6 @@ export default class salesOrder extends React.Component
                                 }}
                                 onRowRemoved={async (e)=>{
                                     this._calculateTotal()
-                                    await this.docObj.save()
                                 }}
                                 >
                                     <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />

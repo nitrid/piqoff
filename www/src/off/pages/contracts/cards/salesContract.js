@@ -723,7 +723,12 @@ export default class salesContract extends React.PureComponent
                                 {/* docDate */}
                                 <Item>
                                     <Label text={this.t("docDate")} alignment="right" />
-                                    <NdDatePicker simple={true}  parent={this} id={"docDate"} dt={{data:this.contractObj.dt('CONTRACT'),field:"DOC_DATE"}} />
+                                    <NdDatePicker simple={true}  parent={this} id={"docDate"} dt={{data:this.contractObj.dt('CONTRACT'),field:"DOC_DATE"}} 
+                                     onValueChanged={(async()=>
+                                        {
+                                            this.checkRow()
+                                        }).bind(this)}
+                                    />
                                 </Item>
                                 {/* startDate */}
                                 <Item>
