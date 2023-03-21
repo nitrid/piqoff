@@ -61,7 +61,8 @@ export default class salesOrder extends React.PureComponent
         this._onItemRendered = this._onItemRendered.bind(this)
     }
     async init()
-    {        
+    {
+        await this.core.util.waitUntil(0)
         this.docObj.clearAll()
 
         let tmpDoc = {...this.docObj.empty}
@@ -72,6 +73,7 @@ export default class salesOrder extends React.PureComponent
         this.txtCustomerCode.readOnly = false;
         this.txtRef.readOnly = false
         this.txtRefno.readOnly = false
+        this.txtRef.readOnly = true
     }
     async dropmenuClick(e)
     {
@@ -249,24 +251,41 @@ export default class salesOrder extends React.PureComponent
         this.itemName.value = this.barcode.name
     }
     async addItem(pQuantity)
-    {        
-        let validationResult = validationEngine.validateGroup('frmBarcode');
-        if(validationResult.status == "valid")
+    {
+        if(this.txtBarcode.value == "")
         {
-            if(this.txtBarcode.value == "")
+            let tmpConfObj = 
             {
+                id:'msgBarcodeCheck',showTitle:true,title:this.t("msgBarcodeCheck.title"),showCloseButton:true,width:'350px',height:'200px',
+                button:[{id:"btn01",caption:this.t("msgBarcodeCheck.btn01"),location:'after'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgBarcodeCheck.msg")}</div>)
+            }
+            await dialog(tmpConfObj);
+            return
+        }
+        for (let i = 0; i < this.docObj.docOrders.dt().length; i++) 
+        {
+            if(this.docObj.docOrders.dt()[i].ITEM_CODE == this.barcode.code)
+            {
+                document.getElementById("Sound2").play(); 
                 let tmpConfObj = 
                 {
-                    id:'msgBarcodeCheck',showTitle:true,title:this.t("msgBarcodeCheck.title"),showCloseButton:true,width:'350px',height:'200px',
-                    button:[{id:"btn01",caption:this.t("msgBarcodeCheck.btn01"),location:'after'}],
-                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgBarcodeCheck.msg")}</div>)
+                    id:'msgCombineItem',showTitle:true,title:this.t("msgCombineItem.title"),showCloseButton:true,width:'350px',height:'200px',
+                    button:[{id:"btn01",caption:this.t("msgCombineItem.btn01"),location:'before'},{id:"btn02",caption:this.t("msgCombineItem.btn02"),location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCombineItem.msg")}</div>)
                 }
-                await dialog(tmpConfObj);
-                return
-            }
-            for (let i = 0; i < this.docObj.docOrders.dt().length; i++) 
-            {
-                if(this.docObj.docOrders.dt()[i].ITEM_CODE == this.barcode.code)
+                let pResult = await dialog(tmpConfObj);
+                if(pResult == 'btn01')
+                {                   
+                    this.docObj.docOrders.dt()[i].QUANTITY = this.docObj.docOrders.dt()[i].QUANTITY + pQuantity
+                    this.docObj.docOrders.dt()[i].VAT = parseFloat((this.docObj.docOrders.dt()[i].VAT + (this.docObj.docOrders.dt()[i].PRICE * (this.docObj.docOrders.dt()[i].VAT_RATE / 100)) * pQuantity)).toFixed(3)
+                    this.docObj.docOrders.dt()[i].AMOUNT = parseFloat((this.docObj.docOrders.dt()[i].QUANTITY * this.docObj.docOrders.dt()[i].PRICE)).toFixed(3)
+                    this.docObj.docOrders.dt()[i].TOTAL = parseFloat((((this.docObj.docOrders.dt()[i].QUANTITY * this.docObj.docOrders.dt()[i].PRICE) - this.docObj.docOrders.dt()[i].DISCOUNT) + this.docObj.docOrders.dt()[i].VAT)).toFixed(3)
+                    this._calculateTotal()
+                    this.barcodeReset()
+                    return
+                }
+                else
                 {
                     document.getElementById("Sound2").play(); 
                     let tmpConfObj = 
@@ -295,50 +314,35 @@ export default class salesOrder extends React.PureComponent
                     }
                     
                 }
+                
             }
-            let tmpDocItems = {...this.docObj.docOrders.empty}
-            tmpDocItems.REF = this.docObj.dt()[0].REF
-            tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
-            tmpDocItems.ITEM_NAME = this.barcode.name
-            tmpDocItems.ITEM_CODE = this.barcode.code
-            tmpDocItems.ITEM = this.barcode.guid
-            tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
-            tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
-            tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-            tmpDocItems.LINE_NO = this.docObj.docOrders.dt().length
-            tmpDocItems.REF = this.docObj.dt()[0].REF
-            tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
-            tmpDocItems.UNIT = this.barcode.unit
-            tmpDocItems.UNIT_FACTOR = this.barcode.factor
-            tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
-            tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
-            tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-            tmpDocItems.QUANTITY = pQuantity * this.txtFactor.value
-            tmpDocItems.VAT_RATE = this.barcode.vat
-            tmpDocItems.PRICE = this.txtPrice.value
-            tmpDocItems.VAT = (Number(this.txtVat.value).round(2))
-            tmpDocItems.AMOUNT = Number(this.txtPrice.value * (pQuantity * this.txtFactor.value)).round(2)
-            tmpDocItems.TOTAL = this.txtAmount.value
-            this.docObj.docOrders.addEmpty(tmpDocItems)
-            this.barcodeReset()
-            this._calculateTotal()
-            //BAĞLI ÜRÜN İÇİN YAPILDI ******************
-            await this.itemRelated(tmpDocItems.ITEM,pQuantity)
-            //*****************************************/
-            await this.docObj.save()
-            this.txtPopQuantity.value = 1
         }
-        else
-        {
-            let tmpConfObj =
-            {
-                id:'msgSaveValid',showTitle:true,title:this.t("msgSaveValid.title"),showCloseButton:true,width:'500px',height:'200px',
-                button:[{id:"btn01",caption:this.t("msgSaveValid.btn01"),location:'after'}],
-                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveValid.msg")}</div>)
-            }
-            
-            await dialog(tmpConfObj);
-        }
+        let tmpDocItems = {...this.docObj.docOrders.empty}
+        tmpDocItems.REF = this.docObj.dt()[0].REF
+        tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+        tmpDocItems.ITEM_NAME = this.barcode.name
+        tmpDocItems.ITEM_CODE = this.barcode.code
+        tmpDocItems.ITEM = this.barcode.guid
+        tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+        tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+        tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+        tmpDocItems.LINE_NO = this.docObj.docOrders.dt().length
+        tmpDocItems.REF = this.docObj.dt()[0].REF
+        tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+        tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+        tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+        tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+        tmpDocItems.QUANTITY = pQuantity
+        tmpDocItems.VAT_RATE = this.barcode.vat
+        tmpDocItems.PRICE = this.txtPrice.value
+        tmpDocItems.VAT = (this.txtVat.value * pQuantity).toFixed(2)
+        tmpDocItems.AMOUNT = (this.txtPrice.value * pQuantity).toFixed(2)
+        tmpDocItems.TOTAL = parseFloat(((this.txtPrice.value * pQuantity) + (this.txtVat.value * pQuantity))).toFixed(2)
+        this.docObj.docOrders.addEmpty(tmpDocItems)
+        this.barcodeReset()
+        this._calculateTotal()
+        await this.docObj.save()
+        this.txtPopQuantity.value = 1
     }
     itemRelated(pGuid,pQuantity)
     {
@@ -491,13 +495,20 @@ export default class salesOrder extends React.PureComponent
     }
     async _onItemRendered(e)
     {
-        await this.core.util.waitUntil(1000)
+        await this.core.util.waitUntil(500)
+        
         if(e.itemData.name == "Main")
-        {   
+        {
             this.init()
+            console.log(this.docObj)
+        }
+        else if(e.itemData.name == "Barcode")
+        {
+            
         }
         else if(e.itemData.name == "Document")
         {
+            console.log(111)
             await this.grdSlsOrder.dataRefresh({source:this.docObj.docOrders.dt('DOC_ORDERS')});
         }
     }
@@ -537,7 +548,7 @@ export default class salesOrder extends React.PureComponent
                                             <div className="col-4 pe-0">
                                                 <NdTextBox id="txtRef" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF"}}
                                                 upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                                readOnly={false}
+                                                readOnly={true}
                                                 maxLength={32}
                                                 onChange={(async()=>
                                                 {
@@ -550,11 +561,13 @@ export default class salesOrder extends React.PureComponent
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
                                                     if(tmpData.result.recordset.length > 0)
                                                     {
-                                                        this.txtRefno.value = tmpData.result.recordset[0].REF_NO
+                                                        this.txtRefno.value=tmpData.result.recordset[0].REF_NO
                                                     }
                                                 }).bind(this)}
+                                                param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
+                                                access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                                 >
-                                                    <Validator validationGroup={"frmLabelQeueu"}>
+                                                <Validator validationGroup={"frmLabelQeueu"}>
                                                         <RequiredRule message={this.t("validRef")} />
                                                     </Validator>  
                                                 </NdTextBox>
@@ -607,6 +620,8 @@ export default class salesOrder extends React.PureComponent
                                                         this.txtRefno.value = "";
                                                     }
                                                 }).bind(this)}
+                                                param={this.param.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
+                                                access={this.access.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                                 >
                                                 <Validator validationGroup={"frmLabelQeueu"}>
                                                         <RequiredRule message={this.t("validRefNo")} />
@@ -635,12 +650,16 @@ export default class salesOrder extends React.PureComponent
                                     {/* Depot */}
                                     <Item>
                                         <Label text={this.t("txtDepot")} alignment="right" />
-                                        <NdSelectBox simple={true} parent={this} id="cmbDepot" notRefresh={true}
+                                        <NdSelectBox simple={true} parent={this} id="cmbDepot" notRefresh = {true}
                                         dt={{data:this.docObj.dt('DOC'),field:"OUTPUT"}}  
                                         displayExpr="NAME"
                                         valueExpr="GUID"
                                         value=""
                                         searchEnabled={true}
+                                        onValueChanged={(async(e)=>
+                                            {
+                                                
+                                            }).bind(this)}
                                         data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01"},sql:this.core.sql}}}
                                         param={this.param.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                         access={this.access.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
@@ -656,25 +675,26 @@ export default class salesOrder extends React.PureComponent
                                                 upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                                 dt={{data:this.docObj.dt('DOC'),field:"INPUT_CODE"}}
                                                 onEnterKey={(async()=>
-                                                {
-                                                    await this.pg_CustomerSelect.setVal(this.txtCustomerCode.value)
-                                                    this.pg_CustomerSelect.show()
-                                                    this.pg_CustomerSelect.onClick = (data) =>
                                                     {
-                                                        if(data.length > 0)
+                                                        await this.pg_CustomerSelect.setVal(this.txtCustomerCode.value)
+                                                        this.pg_CustomerSelect.show()
+                                                        this.pg_CustomerSelect.onClick = (data) =>
                                                         {
-                                                            this.docObj.dt()[0].INPUT = data[0].GUID
-                                                            this.docObj.dt()[0].INPUT_CODE = data[0].CODE
-                                                            this.docObj.dt()[0].INPUT_NAME = data[0].TITLE
-                                                            let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
-                                                            if(typeof tmpData != 'undefined' && tmpData.value ==  true)
+                                                            if(data.length > 0)
                                                             {
-                                                                this.txtRef.value = data[0].CODE;
-                                                                this.txtRef.props.onChange()
+                                                                this.docObj.dt()[0].INPUT = data[0].GUID
+                                                                this.docObj.dt()[0].INPUT_CODE = data[0].CODE
+                                                                this.docObj.dt()[0].INPUT_NAME = data[0].TITLE
+                                                                console.log(this.docObj.dt()[0].INPUT_NAME)
+                                                                let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
+                                                                if(typeof tmpData != 'undefined' && tmpData.value ==  true)
+                                                                {
+                                                                    this.txtRef.value=data[0].CODE;
+                                                                    this.txtRef.props.onChange()
+                                                                }
                                                             }
                                                         }
-                                                    }
-                                                }).bind(this)}
+                                                    }).bind(this)}
                                                 button=
                                                 {
                                                     [
@@ -683,19 +703,21 @@ export default class salesOrder extends React.PureComponent
                                                             icon:'more',
                                                             onClick:async()=>
                                                             {
+                                                                console.log(111111)
                                                                 this.pg_CustomerSelect.show()
                                                                 this.pg_CustomerSelect.onClick = (data) =>
                                                                 {
                                                                     if(data.length > 0)
                                                                     {
+                                                                        console.log(this.docObj.dt())
                                                                         this.docObj.dt()[0].INPUT = data[0].GUID
                                                                         this.docObj.dt()[0].INPUT_CODE = data[0].CODE
                                                                         this.docObj.dt()[0].INPUT_NAME = data[0].TITLE
                                                                         let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
-                                                                        
+                                                                        console.log(this.txtCustomerCode)
                                                                         if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                                         {
-                                                                            this.txtRef.value = data[0].CODE;
+                                                                            this.txtRef.value=data[0].CODE;
                                                                             this.txtRef.props.onChange()
                                                                         }
                                                                     }
@@ -1140,7 +1162,7 @@ export default class salesOrder extends React.PureComponent
                                     <Item>
                                         <div className="row">
                                             <div className="col-12 px-2 pt-2">
-                                                <NdButton text={this.t("btnItemAdd")} type="default" width="100%" onClick={(e)=>this.addItem(this.txtQuantity.value)}></NdButton>
+                                                <NdButton text={this.t("btnItemAdd")} type="default" width="100%" onClick={()=>this.addItem(this.txtQuantity.value)}></NdButton>
                                             </div>
                                         </div>
                                     </Item>
@@ -1757,6 +1779,7 @@ export default class salesOrder extends React.PureComponent
                     </div> 
                 </div>
             </div>
+
         </ScrollView>
         )
     }
