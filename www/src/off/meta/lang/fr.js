@@ -5596,7 +5596,10 @@ export const langFr =
             clmMargin :"Marge",
             clmDescription : "Motif",
             clmCuser :"Utilisateur",
-            clmVatRate : "TVA %"
+            clmVatRate : "TVA %",
+            clmSubQuantity : "Qtt. Unitaire",   // BAK
+            clmSubPrice : "Prix Unitaire",   // BAK
+            clmSubFactor : "Coefficient", // BAK
         },
         grdInvoicePayment: 
         {
@@ -6886,7 +6889,10 @@ export const langFr =
             clmMargin :"Marge",
             clmDescription : "Motif",
             clmCuser :"Utilisateur",
-            clmVatRate : "TVA %"
+            clmVatRate : "TVA %",
+            clmSubQuantity : "Qtt. Unitaire",   // BAK
+            clmSubPrice : "Prix Unitaire",   // BAK
+            clmSubFactor : "Coefficient", // BAK
         },
         grdInvoicePayment: 
         {
@@ -7670,7 +7676,10 @@ export const langFr =
             clmMargin :"Marge",
             clmDescription : "Motif",
             clmCuser :"Utilisateur",
-            clmVatRate : "TVA %"
+            clmVatRate : "TVA %",
+            clmSubQuantity : "Qtt. Unitaire",   // BAK
+            clmSubPrice : "Prix Unitaire",   // BAK
+            clmSubFactor : "Coefficient", // BAK
         },
         grdInvoicePayment: 
         {
@@ -8893,7 +8902,10 @@ export const langFr =
             clmMargin :"Marge",
             clmDescription : "Motif",
             clmCuser :"Utilisateur",
-            clmVatRate : "TVA %"
+            clmVatRate : "TVA %",
+            clmSubQuantity : "Qtt. Unitaire",   // BAK
+            clmSubPrice : "Prix Unitaire",   // BAK
+            clmSubFactor : "Coefficient", // BAK
         },
         grdInvoicePayment: 
         {
@@ -10667,6 +10679,9 @@ export const langFr =
             clmOrder : "Commande No", 
             clmVatRate : "TVA %",
             clmBarcode : "Code Barre",
+            clmSubQuantity : "Qtt. Unitaire",  // BAK
+            clmSubPrice : "Prix Unitaire",  // BAK
+            clmSubFactor : "Coefficient", // BAK
         },
         popDiscount : 
         {
@@ -11342,6 +11357,9 @@ export const langFr =
             clmOrder : "Commande No", 
             clmVatRate : "TVA %",
             clmBarcode : "Code Barre",
+            clmSubQuantity : "Qtt. Unitaire",  // BAK
+            clmSubPrice : "Prix Unitaire",  // BAK
+            clmSubFactor : "Coefficient", // BAK
         },
         popDiscount : 
         {

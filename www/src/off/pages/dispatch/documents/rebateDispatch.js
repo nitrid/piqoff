@@ -567,6 +567,22 @@ export default class rebateDispatch extends React.PureComponent
             pQuantity = 1
         }
 
+        let tmpGrpQuery = 
+        {
+            query :"SELECT ORGINS,UNIT_SHORT,ISNULL((SELECT top 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID AND ITEM_UNIT_VW_01.TYPE = 1),1) AS SUB_FACTOR, " +
+             "ISNULL((SELECT top 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID AND ITEM_UNIT_VW_01.TYPE = 1),'') AS SUB_SYMBOL FROM ITEMS_VW_01 WHERE GUID = @GUID ",
+            param : ['GUID:string|50'],
+            value : [pData.GUID]
+        }
+        let tmpGrpData = await this.core.sql.execute(tmpGrpQuery) 
+        if(tmpGrpData.result.recordset.length > 0)
+        {
+            this.docObj.docItems.dt()[pIndex].ORIGIN = tmpGrpData.result.recordset[0].ORGINS
+            this.docObj.docItems.dt()[pIndex].SUB_FACTOR = tmpGrpData.result.recordset[0].SUB_FACTOR
+            this.docObj.docItems.dt()[pIndex].SUB_SYMBOL = tmpGrpData.result.recordset[0].SUB_SYMBOL
+            this.docObj.docItems.dt()[pIndex].UNIT_SHORT = tmpGrpData.result.recordset[0].UNIT_SHORT
+        }
+
         if(this.customerControl == true)
         {
             let tmpCheckQuery = 
@@ -623,6 +639,7 @@ export default class rebateDispatch extends React.PureComponent
                         if(e == 'btn01')
                         {
                             this.docObj.docItems.dt()[i].QUANTITY = this.docObj.docItems.dt()[i].QUANTITY + pQuantity
+                            this.docObj.docItems.dt()[i].SUB_QUANTITY = this.docObj.docItems.dt()[i].SUB_QUANTITY * this.docObj.docItems.dt()[i].SUB_FACTOR
                             this.docObj.docItems.dt()[i].VAT = parseFloat((this.docObj.docItems.dt()[i].VAT + (this.docObj.docItems.dt()[i].PRICE * (this.docObj.docItems.dt()[i].VAT_RATE / 100) * pQuantity)).toFixed(4))
                             this.docObj.docItems.dt()[i].AMOUNT = parseFloat((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE).toFixed(4))
                             this.docObj.docItems.dt()[i].TOTAL = parseFloat((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT).toFixed(4))
@@ -657,6 +674,7 @@ export default class rebateDispatch extends React.PureComponent
                 {
                 
                     this.docObj.docItems.dt()[i].QUANTITY = this.docObj.docItems.dt()[i].QUANTITY + pQuantity
+                    this.docObj.docItems.dt()[i].SUB_QUANTITY = this.docObj.docItems.dt()[i].SUB_QUANTITY * this.docObj.docItems.dt()[i].SUB_FACTOR
                     this.docObj.docItems.dt()[i].VAT = parseFloat((this.docObj.docItems.dt()[i].VAT + (this.docObj.docItems.dt()[i].PRICE * (this.docObj.docItems.dt()[i].VAT_RATE / 100) * pQuantity)).toFixed(4))
                     this.docObj.docItems.dt()[i].AMOUNT = parseFloat((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE).toFixed(4))
                     this.docObj.docItems.dt()[i].TOTAL = parseFloat((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT).toFixed(4))
@@ -679,6 +697,7 @@ export default class rebateDispatch extends React.PureComponent
         this.docObj.docItems.dt()[pIndex].DISCOUNT = 0
         this.docObj.docItems.dt()[pIndex].DISCOUNT_RATE = 0
         this.docObj.docItems.dt()[pIndex].QUANTITY = pQuantity
+        this.docObj.docItems.dt()[pIndex].SUB_QUANTITY = pQuantity * this.docObj.docItems.dt()[pIndex].SUB_FACTOR
         let tmpQuery = 
         {
             query :"SELECT (SELECT [dbo].[FN_CUSTOMER_PRICE](ITEM_GUID,CUSTOMER_GUID,@QUANTITY,GETDATE())) AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID ORDER BY LDATE DESC",
@@ -696,6 +715,7 @@ export default class rebateDispatch extends React.PureComponent
             this.docObj.docItems.dt()[pIndex].AMOUNT = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4))
             this.docObj.docItems.dt()[pIndex].TOTAL = parseFloat((tmpData.result.recordset[0].PRICE + this.docObj.docItems.dt()[pIndex].VAT).toFixed(4))
             this.docObj.docItems.dt()[pIndex].TOTALHT = parseFloat((this.docObj.docItems.dt()[pIndex].TOTAL - this.docObj.docItems.dt()[pIndex].VAT).toFixed(4))
+            this.docObj.docItems.dt()[pIndex].SUB_PRICE = Number(parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4)) / this.docObj.docItems.dt()[pIndex].SUB_FACTOR).round(2)
 
             this._calculateTotal()
         }
@@ -1953,6 +1973,7 @@ export default class rebateDispatch extends React.PureComponent
 
                                         if(typeof e.data.QUANTITY != 'undefined')
                                         {
+                                            e.key.SUB_QUANTITY =  e.data.QUANTITY * e.key.SUB_FACTOR
                                             let tmpQuery = 
                                             {
                                                 query :"SELECT [dbo].[FN_CUSTOMER_PRICE](@ITEM_GUID,@CUSTOMER_GUID,@QUANTITY,GETDATE()) AS PRICE",
@@ -1963,13 +1984,23 @@ export default class rebateDispatch extends React.PureComponent
                                             if(tmpData.result.recordset.length > 0)
                                             {
                                                 e.key.PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4))
+                                                e.key.SUB_PRICE = Number(((tmpData.result.recordset[0].PRICE).toFixed(3)) / e.key.SUB_FACTOR).round(2)
                                                 
                                                 this._calculateTotal()
                                             }
                                         }
-                                        if(typeof e.data.DISCOUNT_RATE != 'undefined')
+                                      
+                                        if(typeof e.data.SUB_QUANTITY != 'undefined')
                                         {
-                                            e.key.DISCOUNT = parseFloat((((e.key.AMOUNT * e.data.DISCOUNT_RATE) / 100)).toFixed(2))
+                                            e.key.QUANTITY = e.data.SUB_QUANTITY / e.key.SUB_FACTOR
+                                        }
+                                        if(typeof e.data.PRICE != 'undefined')
+                                        {
+                                            e.key.SUB_PRICE = e.data.PRICE / e.key.SUB_FACTOR
+                                        }
+                                        if(typeof e.data.SUB_PRICE != 'undefined')
+                                        {
+                                            e.key.PRICE = e.data.SUB_PRICE * e.key.SUB_FACTOR
                                         }
                                         if(typeof e.data.DISCOUNT_RATE != 'undefined')
                                         {
@@ -2025,8 +2056,11 @@ export default class rebateDispatch extends React.PureComponent
                                         <Column dataField="MULTICODE" caption={this.t("grdRebtDispatch.clmMulticode")} width={110} allowEditing={false}/>
                                         <Column dataField="ITEM_NAME" caption={this.t("grdRebtDispatch.clmItemName")} width={280} />
                                         <Column dataField="ITEM_BARCODE" caption={this.t("grdRebtDispatch.clmBarcode")} width={130} allowEditing={false}/>
-                                        <Column dataField="QUANTITY" caption={this.t("grdRebtDispatch.clmQuantity")} width={70} editCellRender={this._cellRoleRender} dataType={'number'}/>
-                                        <Column dataField="PRICE" caption={this.t("grdRebtDispatch.clmPrice")} width={75} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
+                                        <Column dataField="QUANTITY" caption={this.t("grdRebtDispatch.clmQuantity")} width={70} dataType={'number'} cellRender={(e)=>{return e.value + " / " + e.data.UNIT_SHORT}}/>
+                                        <Column dataField="SUB_FACTOR" caption={this.t("grdRebtDispatch.clmSubFactor")} width={70} allowEditing={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
+                                        <Column dataField="SUB_QUANTITY" caption={this.t("grdRebtDispatch.clmSubQuantity")} dataType={'number'} width={70} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
+                                        <Column dataField="PRICE" caption={this.t("grdRebtDispatch.clmPrice")} width={70} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
+                                        <Column dataField="SUB_PRICE" caption={this.t("grdRebtDispatch.clmSubPrice")} dataType={'number'} format={'€#,##0.000'} width={70} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + "€/ " + e.data.SUB_SYMBOL}}/>
                                         <Column dataField="AMOUNT" caption={this.t("grdRebtDispatch.clmAmount")} width={100} allowEditing={false} format={{ style: "currency", currency: "EUR",precision: 3}}/>
                                         <Column dataField="VAT" caption={this.t("grdRebtDispatch.clmVat")} width={75} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
                                         <Column dataField="TOTALHT" caption={this.t("grdRebtDispatch.clmTotalHt")} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false} width={90} allowHeaderFiltering={false}/>
