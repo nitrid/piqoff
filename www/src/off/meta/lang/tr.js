@@ -5585,7 +5585,10 @@ export const langTr =
             clmMargin :"Marj",
             clmDescription :"Açıklama",
             clmCuser :"Kullanıcı",
-            clmVatRate : "KDV %"
+            clmVatRate : "KDV %",
+            clmSubQuantity : "Alt Birim",
+            clmSubPrice : "Alt Birim Fiyatı",
+            clmSubFactor : "Katsayı",
         },
         grdInvoicePayment: 
         {
@@ -6882,7 +6885,10 @@ export const langTr =
             clmMargin :"Marj",
             clmDescription :"Açıklama",
             clmCuser :"Kullanıcı",
-            clmVatRate : "KDV %"
+            clmVatRate : "KDV %",
+            clmSubQuantity : "Alt Birim",
+            clmSubPrice : "Alt Birim Fiyatı",
+            clmSubFactor : "Katsayı",
         },
         grdInvoicePayment: 
         {
@@ -7673,7 +7679,10 @@ export const langTr =
             clmMargin :"Marj",
             clmDescription :"Açıklama",
             clmCuser :"Kullanıcı",
-            clmVatRate : "KDV %"
+            clmVatRate : "KDV %",
+            clmSubQuantity : "Alt Birim",
+            clmSubPrice : "Alt Birim Fiyatı",
+            clmSubFactor : "Katsayı",
         },
         grdInvoicePayment: 
         {
@@ -8888,7 +8897,10 @@ export const langTr =
             clmMargin :"Marj",
             clmDescription :"Açıklama",
             clmCuser :"Kullanıcı",
-            clmVatRate : "KDV %"
+            clmVatRate : "KDV %",
+            clmSubQuantity : "Alt Birim",
+            clmSubPrice : "Alt Birim Fiyatı",
+            clmSubFactor : "Katsayı",
         },
         grdInvoicePayment: 
         {
@@ -10692,7 +10704,11 @@ export const langTr =
             clmOrder : "Sipariş No",
             clmCuser :"Kullanıcı",
             clmBarcode : "Barkod",
-            clmVatRate : "KDV %"
+            clmVatRate : "KDV %",
+            clmOrigin : "Menşei",
+            clmSubQuantity : "Alt Birim",
+            clmSubPrice : "Alt Birim Fiyatı",
+            clmSubFactor : "Katsayı",
         },
         popDiscount : 
         {
@@ -11367,7 +11383,11 @@ export const langTr =
             clmOrder : "Sipariş No",
             clmCuser :"Kullanıcı",
             clmBarcode : "Barkod",
-            clmVatRate : "KDV %"
+            clmVatRate : "KDV %",
+            clmOrigin : "Menşei",
+            clmSubQuantity : "Alt Birim",
+            clmSubPrice : "Alt Birim Fiyatı",
+            clmSubFactor : "Katsayı",
         },
         popDiscount : 
         {
