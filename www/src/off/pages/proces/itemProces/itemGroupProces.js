@@ -71,7 +71,7 @@ export default class itemList extends React.PureComponent
         {
             let tmpQuery = 
             {
-                query :"UPDATE ITEMS_GRP SET MAIN = @MAIN WHERE ITEM = @ITEM ",
+                query :"UPDATE ITEMS_GRP SET MAIN_GUID = @MAIN WHERE ITEM = @ITEM ",
                 param : ['MAIN:string|25','ITEM:string|50'],
                 value : [this.cmbItemGrp.value,this.grdListe.getSelectedData()[i].GUID]
             }
@@ -296,13 +296,12 @@ export default class itemList extends React.PureComponent
                                 
                                 <NdSelectBox id="cmbItemGrp" simple={true} parent={this} text={this.t("chkMasterBarcode")}
                                 displayExpr="NAME"                       
-                                valueExpr="CODE"
-                                value=""
+                                valueExpr="GUID"
                                 searchEnabled={true} 
                                 showClearButton={true}
                                 pageSize ={50}
                                 notRefresh={true}
-                                data={{source:{select:{query : "SELECT CODE,NAME FROM ITEM_GROUP ORDER BY NAME ASC"},sql:this.core.sql}}}
+                                data={{source:{select:{query : "SELECT GUID,CODE,NAME FROM ITEM_GROUP ORDER BY NAME ASC"},sql:this.core.sql}}}
                                 onValueChanged={(e)=>
                                 {
                                   

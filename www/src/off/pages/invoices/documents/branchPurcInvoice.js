@@ -634,7 +634,7 @@ export default class branchSaleInvoice extends React.PureComponent
                             this.docObj.docItems.dt()[i].VAT = parseFloat((this.docObj.docItems.dt()[i].VAT + (this.docObj.docItems.dt()[i].PRICE * (this.docObj.docItems.dt()[i].VAT_RATE / 100) * pQuantity)).toFixed(4))
                             this.docObj.docItems.dt()[i].AMOUNT = parseFloat((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE).toFixed(4))
                             this.docObj.docItems.dt()[i].TOTAL = Number((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT)).round(2)
-                            this.docObj.docItems.dt()[i].TOTALHT = Number(this.docObj.docItems.dt()[i].TOTAL -this.docObj.docItems.dt()[i].VAT).round(2)
+                            this.docObj.docItems.dt()[i].TOTALHT = Number(this.docObj.docItems.dt()[i].AMOUNT -this.docObj.docItems.dt()[i].DISCOUNT).round(2)
                             
                             this._calculateTotal()
                             await this.grdSlsInv.devGrid.deleteRow(0)
@@ -671,7 +671,7 @@ export default class branchSaleInvoice extends React.PureComponent
                     this.docObj.docItems.dt()[i].VAT = parseFloat((this.docObj.docItems.dt()[i].VAT + (this.docObj.docItems.dt()[i].PRICE * (this.docObj.docItems.dt()[i].VAT_RATE / 100) * pQuantity)).toFixed(4))
                     this.docObj.docItems.dt()[i].AMOUNT = parseFloat((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE).toFixed(4))
                     this.docObj.docItems.dt()[i].TOTAL = Number((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT)).round(2)
-                    this.docObj.docItems.dt()[i].TOTALHT = Number(this.docObj.docItems.dt()[i].TOTAL -this.docObj.docItems.dt()[i].VAT).round(2)
+                    this.docObj.docItems.dt()[i].TOTALHT = Number(this.docObj.docItems.dt()[i].AMOUNT -this.docObj.docItems.dt()[i].DISCOUNT).round(2)
                     this._calculateTotal()
                     await this.grdSlsInv.devGrid.deleteRow(0)
                     //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
@@ -706,7 +706,7 @@ export default class branchSaleInvoice extends React.PureComponent
             this.docObj.docItems.dt()[pIndex].VAT = parseFloat((tmpData.result.recordset[0].PRICE * (this.docObj.docItems.dt()[pIndex].VAT_RATE / 100) * pQuantity).toFixed(4))
             this.docObj.docItems.dt()[pIndex].AMOUNT = parseFloat((tmpData.result.recordset[0].PRICE  * pQuantity).toFixed(4))
             this.docObj.docItems.dt()[pIndex].TOTAL = Number(((tmpData.result.recordset[0].PRICE * pQuantity) + this.docObj.docItems.dt()[pIndex].VAT)).round(2)
-            this.docObj.docItems.dt()[pIndex].TOTALHT = Number((this.docObj.docItems.dt()[pIndex].TOTAL - this.docObj.docItems.dt()[pIndex].VAT)).round(2)
+            this.docObj.docItems.dt()[pIndex].TOTALHT = Number((this.docObj.docItems.dt()[pIndex].AMOUNT - this.docObj.docItems.dt()[pIndex].DISCOUNT)).round(2)
             this.docObj.docItems.dt()[pIndex].SUB_PRICE = Number(parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4)) / this.docObj.docItems.dt()[pIndex].SUB_FACTOR).round(2)
             this._calculateTotal()
         }
@@ -2426,7 +2426,7 @@ export default class branchSaleInvoice extends React.PureComponent
                                         e.key.VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100)).toFixed(4));
                                         e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(4))
                                         e.key.TOTAL = Number((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) + e.key.VAT)).round(2)
-                                        e.key.TOTALHT = Number((e.key.TOTAL - e.key.VAT)).round(2)
+                                        e.key.TOTALHT = Number((e.key.AMOUNT - e.key.DISCOUNT)).round(2)
                                        
                                         let tmpMargin = (e.key.TOTAL - e.key.VAT) - (e.key.COST_PRICE * e.key.QUANTITY)
                                         let tmpMarginRate = ((tmpMargin) * 100) / e.key.QUANTITY
@@ -2461,7 +2461,6 @@ export default class branchSaleInvoice extends React.PureComponent
                                         <Column dataField="CUSER_NAME" caption={this.t("grdSlsInv.clmCuser")} width={90} allowEditing={false}/>
                                         <Column dataField="ITEM_CODE" caption={this.t("grdSlsInv.clmItemCode")} width={100} editCellRender={this._cellRoleRender}/>
                                         <Column dataField="ITEM_NAME" caption={this.t("grdSlsInv.clmItemName")} width={330}/>
-                                        <Column dataField="QUANTITY" caption={this.t("grdSlsInv.clmQuantity")} dataType={'number'} width={70} editCellRender={this._cellRoleRender}/>
                                         <Column dataField="QUANTITY" caption={this.t("grdSlsInv.clmQuantity")} width={70} dataType={'number'} cellRender={(e)=>{return e.value + " / " + e.data.UNIT_SHORT}}/>
                                         <Column dataField="SUB_FACTOR" caption={this.t("grdSlsInv.clmSubFactor")} width={70} allowEditing={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
                                         <Column dataField="SUB_QUANTITY" caption={this.t("grdSlsInv.clmSubQuantity")} dataType={'number'} width={70} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>

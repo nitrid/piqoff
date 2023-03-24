@@ -6,8 +6,8 @@ import Toolbar,{Item} from 'devextreme-react/toolbar';
 import Form, { Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 
-import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export} from '../../../../core/react/devex/grid.js';
-import NdTextBox from '../../../../core/react/devex/textbox.js'
+import NdGrid,{Column,Button, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export} from '../../../../core/react/devex/grid.js';
+import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
 import NdListBox from '../../../../core/react/devex/listbox.js';
@@ -15,6 +15,7 @@ import NdButton from '../../../../core/react/devex/button.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
+import NdPopUp from '../../../../core/react/devex/popup.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 
 export default class salesOrdList extends React.PureComponent
@@ -27,6 +28,7 @@ export default class salesOrdList extends React.PureComponent
         {
             columnListValue : ['REF','REF_NO','INPUT_NAME','DOC_DATE_CONVERT','TOTAL']
         }
+        this.printGuid = ''
         
         this.core = App.instance.core;
         this.columnListData = 
@@ -44,6 +46,7 @@ export default class salesOrdList extends React.PureComponent
         this.groupList = [];
         this._btnGetClick = this._btnGetClick.bind(this)
         this._columnListBox = this._columnListBox.bind(this)
+        this._btnGrdPrint = this._btnGrdPrint.bind(this)
     }
     componentDidMount()
     {
@@ -144,6 +147,12 @@ export default class salesOrdList extends React.PureComponent
         await this.grdSlsOrdList.dataRefresh(tmpSource)
         App.instance.setState({isExecute:false})
 
+    }
+    async _btnGrdPrint(e)
+    {
+        this.printGuid = e.row.data.GUID
+        this.popDesign.show() 
+        console.log(e.row.data.GUID)
     }
     render()
     {
@@ -357,10 +366,148 @@ export default class salesOrdList extends React.PureComponent
                                 <Column dataField="AMOUNT" caption={this.t("grdSlsOrdList.clmAmount")} visible={false} format={{ style: "currency", currency: "EUR",precision: 2}}/> 
                                 <Column dataField="VAT" caption={this.t("grdSlsOrdList.clmVat")} visible={false} format={{ style: "currency", currency: "EUR",precision: 2}}/> 
                                 <Column dataField="TOTAL" caption={this.t("grdSlsOrdList.clmTotal")} visible={true} format={{ style: "currency", currency: "EUR",precision: 2}}/>              
+                                <Column type="buttons" width={70}>
+                                    <Button hint="Clone" icon="print" onClick={this._btnGrdPrint} />
+                                </Column>
                             </NdGrid>
                         </div>
                     </div>
                 </ScrollView>
+                    {/* Dizayn Seçim PopUp */}
+                    <div>
+                        <NdPopUp parent={this} id={"popDesign"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.t("popDesign.title")}
+                        container={"#root"} 
+                        width={'500'}
+                        height={'280'}
+                        position={{of:'#root'}}
+                        >
+                            <Form colCount={1} height={'fit-content'}>
+                                <Item>
+                                    <Label text={this.t("popDesign.design")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbDesignList" notRefresh = {true}
+                                    displayExpr="DESIGN_NAME"                       
+                                    valueExpr="TAG"
+                                    value=""
+                                    searchEnabled={true}
+                                    onValueChanged={(async()=>
+                                        {
+                                        }).bind(this)}
+                                    data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '11'"},sql:this.core.sql}}}
+                                    param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
+                                    >
+                                        <Validator validationGroup={"frmSlsOrderMail" + this.tabIndex}>
+                                            <RequiredRule message={this.t("validDesign")} />
+                                        </Validator> 
+                                    </NdSelectBox>
+                                </Item>
+                                <Item>
+                                <Label text={this.t("popDesign.lang")} alignment="right" />
+                                <NdSelectBox simple={true} parent={this} id="cmbDesignLang" notRefresh = {true}
+                                    displayExpr="VALUE"                       
+                                    valueExpr="ID"
+                                    value=""
+                                    searchEnabled={true}
+                                    onValueChanged={(async()=>
+                                        {
+                                        }).bind(this)}
+                                    data={{source:[{ID:"FR",VALUE:"FR"},{ID:"TR",VALUE:"TR"}]}}
+                                    >
+                                    </NdSelectBox>
+                                </Item>
+                                <Item>
+                                    <div className='row'>
+                                        <div className='col-6'>
+                                            <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"frmSlsOrderMail" + this.tabIndex}
+                                            onClick={async (e)=>
+                                            {       
+                                                if(e.validationGroup.validate().status == "valid")
+                                                {
+                                                    let tmpQuery = 
+                                                    {
+                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ORDERS_FOR_PRINT](@DOC_GUID) ORDER BY LINE_NO " ,
+                                                        param:  ['DOC_GUID:string|50','DESIGN:string|25'],
+                                                        value:  [this.printGuid,this.cmbDesignList.value]
+                                                    }
+                                                    let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                    console.log(JSON.stringify(tmpData.result.recordset)) // BAK
+                                                    this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
+                                                    {
+                                                        var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");                                                         
+
+                                                        mywindow.onload = function() 
+                                                        {
+                                                            mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
+                                                        } 
+                                                        // if(pResult.split('|')[0] != 'ERR')
+                                                        // {
+                                                        //     let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
+                                                        //     mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
+                                                        // }
+                                                    });
+                                                    this.popDesign.hide();  
+                                                }
+                                            }}/>
+                                        </div>
+                                        <div className='col-6'>
+                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                            onClick={()=>
+                                            {
+                                                this.popDesign.hide();  
+                                            }}/>
+                                        </div>
+                                    </div>
+                                    <div className='row py-2'>
+                                        <div className='col-6'>
+                                            <NdButton text={this.t("btnView")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmSlsOrderMail" + this.tabIndex}
+                                            onClick={async (e)=>
+                                            {       
+                                                if(e.validationGroup.validate().status == "valid")
+                                                {
+                                                    let tmpQuery = 
+                                                    {
+                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ORDERS_FOR_PRINT](@DOC_GUID) ORDER BY LINE_NO " ,
+                                                        param:  ['DOC_GUID:string|50','DESIGN:string|25'],
+                                                        value:  [this.printGuid,this.cmbDesignList.value]
+                                                    }
+                                                    App.instance.setState({isExecute:true})
+                                                    let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                    App.instance.setState({isExecute:false})
+                                                    this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
+                                                    {
+                                                        if(pResult.split('|')[0] != 'ERR')
+                                                        {
+                                                            var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
+                                                            mywindow.onload = function() 
+                                                            { 
+                                                                mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
+                                                            } 
+                                                            // let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
+                                                            // mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
+                                                        }
+                                                    });
+                                                }
+                                            }}/>
+                                        </div>
+                                        <div className='col-6'>
+                                            <NdButton text={this.t("btnMailsend")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmSlsOrderMail" + this.tabIndex}
+                                            onClick={async (e)=>
+                                            {    
+                                                if(e.validationGroup.validate().status == "valid")
+                                                {
+                                                    this.popMailSend.show()
+                                                }
+                                            }}/>
+                                        </div>
+                                    </div>
+                                </Item>
+                            </Form>
+                        </NdPopUp>
+                    </div>  
             </div>
         )
     }

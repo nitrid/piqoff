@@ -679,7 +679,7 @@ export default class salesInvoice extends React.PureComponent
                             this.docObj.docItems.dt()[i].VAT = parseFloat((this.docObj.docItems.dt()[i].VAT + (this.docObj.docItems.dt()[i].PRICE * (this.docObj.docItems.dt()[i].VAT_RATE / 100) * pQuantity)).toFixed(4))
                             this.docObj.docItems.dt()[i].AMOUNT = parseFloat((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE).toFixed(4))
                             this.docObj.docItems.dt()[i].TOTAL = Number((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT)).round(2)
-                            this.docObj.docItems.dt()[i].TOTALHT =  Number((this.docObj.docItems.dt()[i].TOTAL - this.docObj.docItems.dt()[i].VAT)).round(2)
+                            this.docObj.docItems.dt()[i].TOTALHT =  Number((this.docObj.docItems.dt()[i].AMOUNT - this.docObj.docItems.dt()[i].DISCOUNT)).round(2)
                             this._calculateTotal()
                             await this.grdSlsInv.devGrid.deleteRow(0)
                             //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
@@ -715,7 +715,7 @@ export default class salesInvoice extends React.PureComponent
                     this.docObj.docItems.dt()[i].VAT = Number((this.docObj.docItems.dt()[i].VAT + (this.docObj.docItems.dt()[i].PRICE * (this.docObj.docItems.dt()[i].VAT_RATE / 100) * pQuantity))).round(4)
                     this.docObj.docItems.dt()[i].AMOUNT = Number((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE)).round(4)
                     this.docObj.docItems.dt()[i].TOTAL = Number((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT)).round(2)
-                    this.docObj.docItems.dt()[i].TOTALHT =  Number((this.docObj.docItems.dt()[i].TOTAL - this.docObj.docItems.dt()[i].VAT)).round(2)
+                    this.docObj.docItems.dt()[i].TOTALHT =  Number((this.docObj.docItems.dt()[i].AMOUNT - this.docObj.docItems.dt()[i].DISCOUNT)).round(2)
                     this._calculateTotal()
                     await this.grdSlsInv.devGrid.deleteRow(0)
                     //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
@@ -754,7 +754,7 @@ export default class salesInvoice extends React.PureComponent
                 this.docObj.docItems.dt()[pIndex].VAT = parseFloat((tmpData.result.recordset[0].PRICE * (this.docObj.docItems.dt()[pIndex].VAT_RATE / 100) * pQuantity).toFixed(4))
                 this.docObj.docItems.dt()[pIndex].AMOUNT = parseFloat((tmpData.result.recordset[0].PRICE  * pQuantity).toFixed(4))
                 this.docObj.docItems.dt()[pIndex].TOTAL = Number(((tmpData.result.recordset[0].PRICE * pQuantity) + this.docObj.docItems.dt()[pIndex].VAT)).round(2)
-                this.docObj.docItems.dt()[pIndex].TOTALHT = Number((this.docObj.docItems.dt()[pIndex].TOTAL - this.docObj.docItems.dt()[pIndex].VAT)).round(2)
+                this.docObj.docItems.dt()[pIndex].TOTALHT = Number((this.docObj.docItems.dt()[pIndex].AMOUNT - this.docObj.docItems.dt()[pIndex].DISCOUNT)).round(2)
                 this.docObj.docItems.dt()[pIndex].SUB_PRICE = Number(parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4)) / this.docObj.docItems.dt()[pIndex].SUB_FACTOR).round(2)
                 this._calculateTotal()
             }
@@ -864,7 +864,7 @@ export default class salesInvoice extends React.PureComponent
                             this.docObj.docItems.dt()[x].VAT = parseFloat((this.docObj.docItems.dt()[x].VAT + (this.docObj.docItems.dt()[x].PRICE * (this.docObj.docItems.dt()[x].VAT_RATE / 100) * pQuantity)).toFixed(4))
                             this.docObj.docItems.dt()[x].AMOUNT = parseFloat((this.docObj.docItems.dt()[x].QUANTITY * this.docObj.docItems.dt()[x].PRICE).toFixed(4))
                             this.docObj.docItems.dt()[x].TOTAL = Number((((this.docObj.docItems.dt()[x].QUANTITY * this.docObj.docItems.dt()[x].PRICE) - this.docObj.docItems.dt()[x].DISCOUNT) + this.docObj.docItems.dt()[x].VAT)).round(2)
-                            this.docObj.docItems.dt()[x].TOTALHT =  Number((this.docObj.docItems.dt()[x].TOTAL - this.docObj.docItems.dt()[x].VAT)).round(2)
+                            this.docObj.docItems.dt()[x].TOTALHT =  Number((this.docObj.docItems.dt()[x].AMOUNT - this.docObj.docItems.dt()[x].DISCOUNT)).round(2)
                         }
                         tmpExist = true
                     }
@@ -4834,7 +4834,7 @@ export default class salesInvoice extends React.PureComponent
                                                     {
                                                         this.docObj.docItems.dt()[i].VAT = 0  
                                                         this.docObj.docItems.dt()[i].VAT_RATE = 0
-                                                        this.docObj.docItems.dt()[i].TOTAL = (this.docObj.docItems.dt()[i].PRICE * this.docObj.docItems.dt()[i].QUANTITY) - this.docObj.docItems.dt()[i].DISCOUNT
+                                                        this.docObj.docItems.dt()[i].TOTAL = Number((this.docObj.docItems.dt()[i].PRICE * this.docObj.docItems.dt()[i].QUANTITY) - this.docObj.docItems.dt()[i].DISCOUNT).round(2)
                                                         this._calculateTotal()
                                                     }
                                                     this.popVatRate.hide()

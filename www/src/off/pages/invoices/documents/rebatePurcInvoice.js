@@ -667,7 +667,7 @@ export default class rebateInvoice extends React.PureComponent
                     this.docObj.docItems.dt()[i].VAT = parseFloat((this.docObj.docItems.dt()[i].VAT + (this.docObj.docItems.dt()[i].PRICE * (this.docObj.docItems.dt()[i].VAT_RATE / 100)* pQuantity)).toFixed(3))
                     this.docObj.docItems.dt()[i].AMOUNT = parseFloat((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE).toFixed(3))
                     this.docObj.docItems.dt()[i].TOTAL = Number((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT)).round(2)
-                    this.docObj.docItems.dt()[i].TOTALHT = Number((this.docObj.docItems.dt()[i].TOTAL - this.docObj.docItems.dt()[i].VAT)).round(2)
+                    this.docObj.docItems.dt()[i].TOTALHT = Number((this.docObj.docItems.dt()[i].AMOUNT - this.docObj.docItems.dt()[i].DISCOUNT)).round(2)
                     this._calculateTotal()
                     await this.grdRebtInv.devGrid.deleteRow(0)
                     //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
@@ -701,7 +701,7 @@ export default class rebateInvoice extends React.PureComponent
             this.docObj.docItems.dt()[pIndex].VAT = Number((tmpData.result.recordset[0].PRICE * (this.docObj.docItems.dt()[pIndex].VAT_RATE / 100) * pQuantity)).round(4)
             this.docObj.docItems.dt()[pIndex].AMOUNT = Number((tmpData.result.recordset[0].PRICE  * pQuantity)).round(4)
             this.docObj.docItems.dt()[pIndex].TOTAL = Number(((tmpData.result.recordset[0].PRICE * pQuantity) + this.docObj.docItems.dt()[pIndex].VAT)).round(2)
-            this.docObj.docItems.dt()[pIndex].TOTALHT = Number((this.docObj.docItems.dt()[pIndex].TOTAL - this.docObj.docItems.dt()[pIndex].VAT)).round(2)
+            this.docObj.docItems.dt()[pIndex].TOTALHT = Number((this.docObj.docItems.dt()[pIndex].AMOUNT - this.docObj.docItems.dt()[pIndex].DISCOUNT)).round(2)
             this.docObj.docItems.dt()[pIndex].SUB_PRICE = Number(parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4)) / this.docObj.docItems.dt()[pIndex].SUB_FACTOR).round(2)
             this._calculateTotal()
         }
@@ -792,7 +792,7 @@ export default class rebateInvoice extends React.PureComponent
                             this.docObj.docItems.dt()[x].VAT = parseFloat((this.docObj.docItems.dt()[x].VAT + (this.docObj.docItems.dt()[x].PRICE * (this.docObj.docItems.dt()[x].VAT_RATE / 100) * pQuantity)).toFixed(4))
                             this.docObj.docItems.dt()[x].AMOUNT = parseFloat((this.docObj.docItems.dt()[x].QUANTITY * this.docObj.docItems.dt()[x].PRICE).toFixed(4))
                             this.docObj.docItems.dt()[x].TOTAL = parseFloat((((this.docObj.docItems.dt()[x].QUANTITY * this.docObj.docItems.dt()[x].PRICE) - this.docObj.docItems.dt()[x].DISCOUNT) + this.docObj.docItems.dt()[x].VAT).toFixed(4))
-                            this.docObj.docItems.dt()[x].TOTALHT =  parseFloat((this.docObj.docItems.dt()[x].TOTAL - this.docObj.docItems.dt()[x].VAT).toFixed(4))
+                            this.docObj.docItems.dt()[x].TOTALHT =  parseFloat((this.docObj.docItems.dt()[x].AMOUNT - this.docObj.docItems.dt()[x].DISCOUNT).toFixed(4))
                         }
                         tmpExist = true
                     }
@@ -2467,7 +2467,7 @@ export default class rebateInvoice extends React.PureComponent
                                         e.key.VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100)).toFixed(4));
                                         e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(4))
                                         e.key.TOTAL = parseFloat((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) + e.key.VAT).toFixed(4))
-                                        e.key.TOTALHT = parseFloat((e.key.TOTAL - e.key.VAT).toFixed(4))
+                                        e.key.TOTALHT = parseFloat((e.key.AMOUNT - e.key.DISCOUNT).toFixed(4))
                                        
                                         let tmpMargin = (e.key.TOTAL - e.key.VAT) - (e.key.COST_PRICE * e.key.QUANTITY)
                                         let tmpMarginRate = (tmpMargin /(e.key.TOTAL - e.key.VAT)) * 100

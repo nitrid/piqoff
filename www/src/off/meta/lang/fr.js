@@ -8559,7 +8559,10 @@ export const langFr =
             clmCuser :"Utilisateur",
             clmMulticode : "FRN.Code",    
             clmBarcode : "Code-barres",    
-            clmVatRate :"TVA %"     
+            clmVatRate :"TVA %",
+            clmSubQuantity : "Qtt. Unitaire",
+            clmSubPrice : "Prix Unitaire",
+            clmSubFactor : "Coefficient",
         },
         grdInvoicePayment: 
         {
@@ -11719,6 +11722,14 @@ export const langFr =
             clmTotal : "Total",
             clmOutputName :"Réserve",
         },
+        popDesign : 
+        {
+            title: "Choix du Design",
+            design : "Design" ,
+            lang : "Langue Document" 
+        },
+        btnView : "Aperçu", 
+        btnMailsend : "Envoyer E-Mail", 
     },
     sip_02_001 : // "Alış Sipariş"
     {

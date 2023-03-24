@@ -616,7 +616,7 @@ export default class priceDifferenceInvoice extends React.PureComponent
                             this.docObj.docItems.dt()[i].VAT = parseFloat((this.docObj.docItems.dt()[i].VAT + (this.docObj.docItems.dt()[i].PRICE * (this.docObj.docItems.dt()[i].VAT_RATE / 100)* pQuantity )).toFixed(4))
                             this.docObj.docItems.dt()[i].AMOUNT = parseFloat((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE).toFixed(4))
                             this.docObj.docItems.dt()[i].TOTAL = Number((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT)).round(2)
-                            this.docObj.docItems.dt()[i].TOTALHT = Number((this.docObj.docItems.dt()[i].TOTAL-this.docObj.docItems.dt()[i].VAT)).round(2)
+                            this.docObj.docItems.dt()[i].TOTALHT = Number((this.docObj.docItems.dt()[i].AMOUNT-this.docObj.docItems.dt()[i].DISCOUNT)).round(2)
                             this._calculateTotal()
                             await this.grdDiffInv.devGrid.deleteRow(0)
                             //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
@@ -650,7 +650,7 @@ export default class priceDifferenceInvoice extends React.PureComponent
                     this.docObj.docItems.dt()[i].VAT = parseFloat((this.docObj.docItems.dt()[i].VAT + (this.docObj.docItems.dt()[i].PRICE * (this.docObj.docItems.dt()[i].VAT_RATE / 100)* pQuantity )).toFixed(4))
                     this.docObj.docItems.dt()[i].AMOUNT = parseFloat((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE).toFixed(4))
                     this.docObj.docItems.dt()[i].TOTAL = Number((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT)).round(2)
-                    this.docObj.docItems.dt()[i].TOTALHT = Number((this.docObj.docItems.dt()[i].TOTAL-this.docObj.docItems.dt()[i].VAT)).round(2)
+                    this.docObj.docItems.dt()[i].TOTALHT = Number((this.docObj.docItems.dt()[i].AMOUNT-this.docObj.docItems.dt()[i].DISCOUNT)).round(2)
                     this._calculateTotal()
                     await this.grdDiffInv.devGrid.deleteRow(0)
                     //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
@@ -683,7 +683,7 @@ export default class priceDifferenceInvoice extends React.PureComponent
             this.docObj.docItems.dt()[pIndex].VAT = parseFloat((tmpData.result.recordset[0].PRICE * (this.docObj.docItems.dt()[pIndex].VAT_RATE / 100) * pQuantity).toFixed(4))
             this.docObj.docItems.dt()[pIndex].AMOUNT = parseFloat((tmpData.result.recordset[0].PRICE  * pQuantity).toFixed(4))
             this.docObj.docItems.dt()[pIndex].TOTAL = Number(((tmpData.result.recordset[0].PRICE * pQuantity) + this.docObj.docItems.dt()[pIndex].VAT)).round(2)
-            this.docObj.docItems.dt()[pIndex].TOTALHT = Number((this.docObj.docItems.dt()[pIndex].TOTAL - this.docObj.docItems.dt()[pIndex].VAT)).round(2)
+            this.docObj.docItems.dt()[pIndex].TOTALHT = Number((this.docObj.docItems.dt()[pIndex].AMOUNT - this.docObj.docItems.dt()[pIndex].DISCOUNT)).round(2)
             this._calculateTotal()
         }
         //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
@@ -2390,7 +2390,7 @@ export default class priceDifferenceInvoice extends React.PureComponent
                                             e.key.VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100)).toFixed(4));
                                             e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(4))
                                             e.key.TOTAL = Number((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) + e.key.VAT)).round(2)
-                                            e.key.TOTALHT = Number((e.key.TOTAL - e.key.VAT)).round(2)
+                                            e.key.TOTALHT = Number((e.key.AMOUNT - e.key.DISCOUNT)).round(2)
 
                                         
                                             let tmpMargin = (e.key.TOTAL - e.key.VAT) - (e.key.COST_PRICE * e.key.QUANTITY)

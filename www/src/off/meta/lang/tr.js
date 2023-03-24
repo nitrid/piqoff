@@ -8555,7 +8555,10 @@ export const langTr =
             clmCuser :"Kullanıcı",
             clmMulticode : "T.Kodu",
             clmBarcode : "Barkod",
-            clmVatRate :"KDV %"
+            clmVatRate :"KDV %",
+            clmSubQuantity : "Alt Birim",
+            clmSubPrice : "Alt Birim Fiyatı",
+            clmSubFactor : "Katsayı",
         },
         grdInvoicePayment: 
         {
@@ -11747,6 +11750,14 @@ export const langTr =
             clmTotal : "Toplam",
             clmOutputName :"Depo",
         },
+        popDesign : 
+        {
+            title: "Dizayn seçimi",
+            design : "Dizayn",
+            lang : "Evrak Dili"
+        },
+        btnView : "Görüntüle",
+        btnMailsend : "Mail Gönder",
     },
     sip_02_001 : // "Alış Sipariş"
     {

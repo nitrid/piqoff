@@ -746,7 +746,7 @@ export default class branchSaleDispatch extends React.PureComponent
                             this.docObj.docItems.dt()[i].VAT = parseFloat((this.docObj.docItems.dt()[i].VAT + (this.docObj.docItems.dt()[i].PRICE * (this.docObj.docItems.dt()[i].VAT_RATE / 100) * pQuantity)).toFixed(4))
                             this.docObj.docItems.dt()[i].AMOUNT = parseFloat((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE).toFixed(4))
                             this.docObj.docItems.dt()[i].TOTAL = parseFloat((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT).toFixed(4))
-                            this.docObj.docItems.dt()[i].TOTALHT =  parseFloat((this.docObj.docItems.dt()[i].TOTAL - this.docObj.docItems.dt()[i].VAT).toFixed(4))
+                            this.docObj.docItems.dt()[i].TOTALHT =  parseFloat((this.docObj.docItems.dt()[i].AMOUNT - this.docObj.docItems.dt()[i].DISCOUNT).toFixed(4))
                             this._calculateTotal()
                             await this.grdSlsDispatch.devGrid.deleteRow(0)
                             //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
@@ -782,7 +782,7 @@ export default class branchSaleDispatch extends React.PureComponent
                     this.docObj.docItems.dt()[i].VAT = parseFloat((this.docObj.docItems.dt()[i].VAT + (this.docObj.docItems.dt()[i].PRICE * (this.docObj.docItems.dt()[i].VAT_RATE / 100) * pQuantity)).toFixed(4))
                     this.docObj.docItems.dt()[i].AMOUNT = parseFloat((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE).toFixed(4))
                     this.docObj.docItems.dt()[i].TOTAL = parseFloat((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT).toFixed(4))
-                    this.docObj.docItems.dt()[i].TOTALHT =  parseFloat((this.docObj.docItems.dt()[i].TOTAL - this.docObj.docItems.dt()[i].VAT).toFixed(4))
+                    this.docObj.docItems.dt()[i].TOTALHT =  parseFloat((this.docObj.docItems.dt()[i].AMOUNT - this.docObj.docItems.dt()[i].DISCOUNT).toFixed(4))
                     this._calculateTotal()
                     await this.grdSlsDispatch.devGrid.deleteRow(0)
                     //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
@@ -820,7 +820,7 @@ export default class branchSaleDispatch extends React.PureComponent
             this.docObj.docItems.dt()[pIndex].VAT = parseFloat((tmpData.result.recordset[0].PRICE * (pData.VAT / 100) * pQuantity).toFixed(3))
             this.docObj.docItems.dt()[pIndex].AMOUNT = parseFloat((tmpData.result.recordset[0].PRICE * pQuantity ).toFixed(3))
             this.docObj.docItems.dt()[pIndex].TOTAL =  parseFloat(((tmpData.result.recordset[0].PRICE * pQuantity) + this.docObj.docItems.dt()[pIndex].VAT).toFixed(2))
-            this.docObj.docItems.dt()[pIndex].TOTALHT =  parseFloat((this.docObj.docItems.dt()[pIndex].TOTAL - this.docObj.docItems.dt()[pIndex].VAT).toFixed(4))
+            this.docObj.docItems.dt()[pIndex].TOTALHT =  parseFloat((this.docObj.docItems.dt()[pIndex].AMOUNT - this.docObj.docItems.dt()[pIndex].DISCOUNT).toFixed(2))
             this.docObj.docItems.dt()[pIndex].SUB_PRICE = Number(parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4)) / this.docObj.docItems.dt()[pIndex].SUB_FACTOR).round(2)
             this._calculateTotal()
         }
@@ -2131,7 +2131,7 @@ export default class branchSaleDispatch extends React.PureComponent
                                         e.key.VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100)).toFixed(4));
                                         e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(4))
                                         e.key.TOTAL = parseFloat((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) + e.key.VAT).toFixed(4))
-                                        e.key.TOTALHT = parseFloat((e.key.TOTAL - e.key.VAT).toFixed(4))
+                                        e.key.TOTALHT = parseFloat((e.key.AMOUNT - e.key.DISCOUNT).toFixed(4))
 
                                         if(e.key.DISCOUNT == 0)
                                         {

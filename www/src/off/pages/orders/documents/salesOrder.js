@@ -504,7 +504,7 @@ export default class salesOrder extends React.PureComponent
                             this.docObj.docOrders.dt()[i].VAT = Number((this.docObj.docOrders.dt()[i].VAT + (this.docObj.docOrders.dt()[i].PRICE * (this.docObj.docOrders.dt()[i].VAT_RATE / 100)) * pQuantity)).round(4)
                             this.docObj.docOrders.dt()[i].AMOUNT = Number((this.docObj.docOrders.dt()[i].QUANTITY * this.docObj.docOrders.dt()[i].PRICE)).round(2)
                             this.docObj.docOrders.dt()[i].TOTAL = Number((((this.docObj.docOrders.dt()[i].QUANTITY * this.docObj.docOrders.dt()[i].PRICE) - this.docObj.docOrders.dt()[i].DISCOUNT) + this.docObj.docOrders.dt()[i].VAT)).round(2)
-                            this.docObj.docOrders.dt()[i].TOTALHT = Number((this.docObj.docOrders.dt()[i].TOTAL - this.docObj.docOrders.dt()[i].VAT)).round(2)
+                            this.docObj.docOrders.dt()[i].TOTALHT = Number((this.docObj.docOrders.dt()[i].AMOUNT - this.docObj.docOrders.dt()[i].DISCOUNT)).round(2)
                             this._calculateTotal()
                             await this.grdSlsOrder.devGrid.deleteRow(0)
                             //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
@@ -539,7 +539,7 @@ export default class salesOrder extends React.PureComponent
                     this.docObj.docOrders.dt()[i].VAT = parseFloat((this.docObj.docOrders.dt()[i].VAT + (this.docObj.docOrders.dt()[i].PRICE * (this.docObj.docOrders.dt()[i].VAT_RATE / 100)) * pQuantity).toFixed(4))
                     this.docObj.docOrders.dt()[i].AMOUNT = parseFloat((this.docObj.docOrders.dt()[i].QUANTITY * this.docObj.docOrders.dt()[i].PRICE).toFixed(4))
                     this.docObj.docOrders.dt()[i].TOTAL = Number((((this.docObj.docOrders.dt()[i].QUANTITY * this.docObj.docOrders.dt()[i].PRICE) - this.docObj.docOrders.dt()[i].DISCOUNT) + this.docObj.docOrders.dt()[i].VAT)).round(2)
-                    this.docObj.docOrders.dt()[i].TOTALHT = Number((this.docObj.docOrders.dt()[i].TOTAL - this.docObj.docOrders.dt()[i].VAT)).round(2)
+                    this.docObj.docOrders.dt()[i].TOTALHT = Number((this.docObj.docOrders.dt()[i].AMOUNT - this.docObj.docOrders.dt()[i].DISCOUNT)).round(2)
                     
                     this._calculateTotal()
                     await this.grdSlsOrder.devGrid.deleteRow(0)
@@ -578,7 +578,7 @@ export default class salesOrder extends React.PureComponent
             this.docObj.docOrders.dt()[pIndex].VAT = parseFloat((tmpData.result.recordset[0].PRICE * (pData.VAT / 100) * pQuantity).toFixed(4))
             this.docObj.docOrders.dt()[pIndex].AMOUNT = parseFloat((tmpData.result.recordset[0].PRICE * pQuantity).toFixed(4))
             this.docObj.docOrders.dt()[pIndex].TOTAL = Number(((tmpData.result.recordset[0].PRICE * pQuantity)+ this.docObj.docOrders.dt()[pIndex].VAT)).round(2)
-            this.docObj.docOrders.dt()[pIndex].TOTALHT = Number((this.docObj.docOrders.dt()[pIndex].TOTAL - this.docObj.docOrders.dt()[pIndex].VAT)).round(2)
+            this.docObj.docOrders.dt()[pIndex].TOTALHT = Number((this.docObj.docOrders.dt()[pIndex].AMOUNT - this.docObj.docOrders.dt()[pIndex].DISCOUNT)).round(2)
             this.docObj.docOrders.dt()[pIndex].SUB_PRICE = Number(parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4)) / this.docObj.docOrders.dt()[pIndex].SUB_FACTOR).round(2)
             this._calculateTotal()
         }
@@ -667,7 +667,7 @@ export default class salesOrder extends React.PureComponent
                             this.docObj.docOrders.dt()[x].VAT = parseFloat((this.docObj.docOrders.dt()[x].VAT + (this.docObj.docOrders.dt()[x].PRICE * (this.docObj.docOrders.dt()[x].VAT_RATE / 100) * pQuantity)).toFixed(4))
                             this.docObj.docOrders.dt()[x].AMOUNT = parseFloat((this.docObj.docOrders.dt()[x].QUANTITY * this.docObj.docOrders.dt()[x].PRICE).toFixed(4))
                             this.docObj.docOrders.dt()[x].TOTAL = parseFloat((((this.docObj.docOrders.dt()[x].QUANTITY * this.docObj.docOrders.dt()[x].PRICE) - this.docObj.docOrders.dt()[x].DISCOUNT) + this.docObj.docOrders.dt()[x].VAT).toFixed(4))
-                            this.docObj.docOrders.dt()[x].TOTALHT =  parseFloat((this.docObj.docOrders.dt()[x].TOTAL - this.docObj.docOrders.dt()[x].VAT).toFixed(4))
+                            this.docObj.docOrders.dt()[x].TOTALHT =  parseFloat((this.docObj.docOrders.dt()[x].AMOUNT - this.docObj.docOrders.dt()[x].DISCOUNT).toFixed(4))
                         }
                         tmpExist = true
                     }
