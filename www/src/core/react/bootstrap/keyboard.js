@@ -8,11 +8,8 @@ export default class NbKeyboard extends NbBase
     constructor(props)
     {
         super(props);
-        this.state =
-        {
-            layoutName: "default",
-            inputName: this.props.inputName,
-        }
+        this.state.layoutName = typeof this.props.layoutName == 'undefined' ?  "default" : this.props.layoutName
+        this.state.inputName = this.props.inputName
     }
     get inputName()
     {
@@ -61,7 +58,7 @@ export default class NbKeyboard extends NbBase
                     {
                         this.setState(
                         {
-                            layoutName: this.state.layoutName === "default" ? "numbers" : "default"
+                            layoutName: this.state.layoutName === "numbers" ? this.props.layoutName : "numbers"
                         });
                     }
                 }}
@@ -81,6 +78,14 @@ export default class NbKeyboard extends NbBase
                     "A S D F G H J K L Ş - ,",
                     "Z X C V B N M Ö Ç * / %",
                     "{numbers} {space} {backspace} @"
+                    ],
+                    mail: 
+                    [
+                    "q w e r t y u i o p ü .",
+                    "a s d f g h j k l ş - ,",
+                    "z x c v b n m ö ç * / %",
+                    "{numbers} {space} {backspace} @",
+                    "hotmail gmail outlook .com"
                     ],
                     numbers: ["1 2 3", "4 5 6", "7 8 9", "{abc} 0 {backspace}"]
                 }}

@@ -1589,11 +1589,12 @@ export default class posDoc extends React.PureComponent
                         let tmpConfObj =
                         {
                             id:'msgPrintAlert',showTitle:true,title:this.lang.t("msgPrintAlert.title"),showCloseButton:true,width:'500px',height:'250px',
-                            button:[{id:"btn01",caption:this.lang.t("msgPrintAlert.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgPrintAlert.btn02"),location:'after'}],
+                            button:[{id:"btn01",caption:this.lang.t("msgPrintAlert.btn01"),location:'before'},{id:"btn03",caption:this.lang.t("msgPrintAlert.btn03"),location:'before'},{id:"btn02",caption:this.lang.t("msgPrintAlert.btn02"),location:'after'}],
                             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgPrintAlert.msg")}</div>)
                         }
                         
-                        if((await dialog(tmpConfObj)) == 'btn01')
+                        let pResult = await dialog(tmpConfObj);
+                        if(pResult == 'btn01')
                         {
                             //POS_EXTRA TABLOSUNA YAZDIRMA BİLDİRİMİ GÖNDERİLİYOR                    
                             let tmpInsertQuery = 
@@ -1631,6 +1632,32 @@ export default class posDoc extends React.PureComponent
                             await this.core.sql.execute(tmpInsertQuery)
                             //***************************************************/
                             await this.print(tmpData)
+                        }
+                        else if(pResult == 'btn03')
+                        {
+                            if(this.posObj.dt()[0].CUSTOMER_GUID != '00000000-0000-0000-0000-000000000000')
+                            { 
+                                let tmpQuery = 
+                                {
+                                    query :"SELECT EMAIL FROM CUSTOMER_VW_02 WHERE GUID = @GUID",
+                                    param:  ['GUID:string|50'],
+                                    value:  [this.posObj.dt()[0].CUSTOMER_GUID]
+                                }
+                                let tmpData = await this.core.sql.execute(tmpQuery) 
+                                if(tmpData.result.recordset.length > 0)
+                                {
+                                    this.txtMail.value = tmpData.result.recordset[0].EMAIL
+                                    await this.mailPopup.show().then(async (e) =>
+                                    {
+                                    });
+                                }
+                            }
+                            else
+                            {
+                                await this.mailPopup.show().then(async (e) =>
+                                {
+                                });
+                            }
                         }
                     }
                     else
@@ -7573,6 +7600,77 @@ export default class posDoc extends React.PureComponent
                             </Item>
                         </Form>
                     </NdPopUp>
+                </div>
+                {/* Mail PopUp */}
+                <div>
+                    <NdDialog parent={this} id={"mailPopup"} 
+                    visible={false}                        
+                    showTitle={true}
+                    title={this.lang.t("mailPopup.title")}
+                    container={"#root"} 
+                    width={"800"}
+                    height={"600"}
+                    position={{of:"#root"}}
+                    >
+                        {/* txtMail */}
+                        <div className="row pt-1">
+                            <div className="col-12">
+                                <NdTextBox id="txtMail" parent={this} simple={true} elementAttr={{style:"font-size:15pt;font-weight:bold;border:3px solid #428bca;"}}>     
+                                </NdTextBox> 
+                            </div>
+                        </div> 
+                        <div className="row py-1">
+                            <div className="col-12">
+                                <NbKeyboard id={"keybordMail"} layoutName={"mail"} parent={this} inputName={"txtMail"}/>
+                            </div>
+                        </div>     
+                        <div className="row py-1">
+                            <div className="col-6">
+                                <div className="col-12 px-1">
+                                    <NbButton id={"btnMailSend"} parent={this} className="form-group btn btn-success btn-block my-1" style={{height:"70px",width:"100%"}}
+                                    onClick={async()=>
+                                    {
+                                            let tmpQuery = 
+                                            {
+                                                query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM POS_SALE_VW_01 WHERE POS_GUID = @POS_GUID" ,
+                                                param:  ['POS_GUID:string|50','DESIGN:string|25'],
+                                                value:  [this.posObj.dt()[0].GUID,'POS']
+                                            }
+                                            App.instance.setState({isExecute:true})
+                                            let tmpData = await this.core.sql.execute(tmpQuery) 
+                                            App.instance.setState({isExecute:false})
+                                            this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
+                                            {
+                                                let tmpAttach = pResult.split('|')[1]
+                                                let tmpHtml = ''
+                                                if(pResult.split('|')[0] != 'ERR')
+                                                {
+                                                }
+                                                let tmpMailData = {html:tmpHtml,subject:"POS",sendMail:this.txtMail.value,attachName:"ticket de vente.pdf",attachData:tmpAttach}
+                                                this.mailPopup._onClick()
+                                                this.core.socket.emit('mailer',tmpMailData,async(pResult1) => 
+                                                {
+                                                });
+                                            });
+                                    }}>
+                                        <i className="text-white fa-solid fa-check" style={{fontSize: "24px"}} />
+                                    </NbButton>
+                                </div>   
+                            </div>
+                            <div className="col-6">
+                                <div className="col-12 px-1">
+                                    <NbButton id={"btnMailReject"} parent={this} className="form-group btn btn-danger btn-block my-1" style={{height:"70px",width:"100%"}}
+                                    onClick={async()=>
+                                    {
+                                        this.mailPopup._onClick()
+                                    }}>
+                                        <i className="text-white fa-solid fa-close" style={{fontSize: "24px"}} />
+                                    </NbButton>
+                                </div>   
+                            </div>
+                        </div>     
+                      
+                    </NdDialog>
                 </div>
             </div>
         )
