@@ -33,13 +33,13 @@ class mailer
                 //secure: true,
                 auth: 
                 {
-                  user: "akemalkaraca@outlook.com",
-                  pass: "akefere8"
+                  user: "",
+                  pass: ""
                 },
                 //tls : { rejectUnauthorized: false }
               });
               var mailOptions = {
-                from: "akemalkaraca@outlook.com",
+                from: "",
                 to: pData.sendMail,
                 subject: pData.subject,
                 html:pData.html,
