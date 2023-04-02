@@ -14325,7 +14325,10 @@ export const langTr =
             clmLastDate: "Son Tarih",
             clmQuantity: "Miktar",
             clmPrice : "Fiyat",
-            clmTotal : "Toplam"
+            clmTotal : "Toplam",
+            clmAmount : "Tutar",
+            clmDiscount : "İndirim",
+            clmLoyalty : "Sadakat İnd"
         },
         pg_txtRef:
         {

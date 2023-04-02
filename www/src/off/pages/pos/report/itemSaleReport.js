@@ -74,7 +74,7 @@ export default class itemSaleReport extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT MIN(DOC_DATE) AS FIRST_DATE, MAX(DOC_DATE) AS LAST_DATE, SUM(QUANTITY) AS QUANTITY,PRICE,SUM(QUANTITY)* PRICE AS TOTAL,ITEM_NAME " +
+                    query : "SELECT MIN(DOC_DATE) AS FIRST_DATE, MAX(DOC_DATE) AS LAST_DATE, SUM(QUANTITY) AS QUANTITY, PRICE AS PRICE,(PRICE * SUM(QUANTITY)) AS AMOUNT,SUM(DISCOUNT) AS DISCOUNT,SUM(LOYALTY) AS LOYALTY,SUM(TOTAL) AS TOTAL,ITEM_NAME " +
                     "FROM POS_SALE_VW_01 WHERE (DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE) AND ((ITEM_GUID = @ITEM) OR (@ITEM = '00000000-0000-0000-0000-000000000000')) GROUP BY PRICE,ITEM_GUID,ITEM_NAME ORDER BY ITEM_NAME,MIN(DOC_DATE) " ,
                     param : ['FIRST_DATE:date','LAST_DATE:date','ITEM:string|50'],
                     value : [this.dtDate.startDate,this.dtDate.endDate,this.txtRef.GUID]
@@ -281,6 +281,9 @@ export default class itemSaleReport extends React.PureComponent
                                 }}/>
                                 <Column dataField="QUANTITY" caption={this.t("grdItemSaleReport.clmQuantity")} visible={true} width={150}/> 
                                 <Column dataField="PRICE" caption={this.t("grdItemSaleReport.clmPrice")} visible={true}  dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}  width={150}/> 
+                                <Column dataField="AMOUNT" caption={this.t("grdItemSaleReport.clmAmount")} visible={true}  dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}  width={150}/> 
+                                <Column dataField="DISCOUNT" caption={this.t("grdItemSaleReport.clmDiscount")} visible={true}  dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}  width={150}/> 
+                                <Column dataField="LOYALTY" caption={this.t("grdItemSaleReport.clmLoyalty")} visible={true}  dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}  width={150}/> 
                                 <Column dataField="TOTAL" caption={this.t("grdItemSaleReport.clmTotal")} visible={true}  dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}  width={200}/> 
                             </NdGrid>
                         </div>

@@ -2017,9 +2017,27 @@ export class posDeviceCls
                 }
             }           
 
+            let tmpText = "Bonjour Cher Client, \n" + 
+            " \n "+
+           "Merci pour votre achat dans notre magasin. \n" +
+           "Ci-joint votre ticket de caisse. \n" +
+           "Ceci est un e-mail automatique,veuillez ne pas y répondre! \n"+
+           "Pour toute information, vous pouvez nous joindre sur les coordonnées indiquées sur votre ticket de caisse. \n"+
+           " \n"+
+           " \n"+
+           " \n"+
+           " \n"+
+           "Cordialment \n"+
+           "P&P Supermarche & Boucherie \n" + 
+           " \n"+
+           " \n"+ 
+           "Ce message est confidentiel. Toute publication, utilisation ou diffusion,même partielle, doit être autorisée préalablement. Si vous n'êtes pas destinataire de ce message, merci d'en avertir immédiatement l'expéditeur et de procéder à sa destruction. \n" +
+           " \n"+
+           " \n"+
+           "This message is confidential. Any unauthorised disclosure, use or dissemination, either whole or partial, is prohibited. If you are not the intended recipient of the message, please notify the sender immediatly and delete the message. Thank you. "
             let tmpHtml = ''
             let tmpAttach = btoa(docPdf.output())
-            let tmpMailData = {html:tmpHtml,subject:"Ticket De Vente",sendMail:pMail,attachName:"ticket de vente.pdf",attachData:tmpAttach}
+            let tmpMailData = {html:tmpHtml,subject:"Votre Ticket De Caisse",sendMail:pMail,attachName:"ticket de vente.pdf",attachData:tmpAttach,text:tmpText}
             this.core.socket.emit('mailer',tmpMailData,async(pResult1) => 
             {
                 

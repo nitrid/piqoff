@@ -14234,7 +14234,10 @@ export const langFr =
             clmLastDate: "Date Fin",   
             clmQuantity: "Quantité",   
             clmPrice : "Prix",   
-            clmTotal : "Total"   
+            clmTotal : "Total TTC",
+            clmAmount : "Total",
+            clmDiscount : "Tot.Remise",
+            clmLoyalty : "Tot.Fidelite" 
         },
         pg_txtRef:
         {
