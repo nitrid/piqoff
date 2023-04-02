@@ -7,6 +7,7 @@
 - Mobil uygulama yapilacak
 - Müşteri ile iletişim ve hata bildirim paneli online yapılacak.
 - Satış raporları geliştirilecek.
+- Pos satış fişlerinin mail gönderimi yapılacak
 ## Q3
 - E-fatura süreci başlatılacak.
 ## Q4
