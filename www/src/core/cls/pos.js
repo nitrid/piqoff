@@ -1,5 +1,7 @@
 import { core,dataset,datatable } from "../core.js";
 import moment from 'moment';
+import { jsPDF } from "jspdf";
+import "jspdf-barcode";
 
 export class posCls
 {
@@ -1909,6 +1911,121 @@ export class posDeviceCls
                 tmpBarcode = "";            
             }
         })
+    }
+    pdfPrint(pData,pMail)
+    {
+        console.log(pData)
+        return new Promise(async resolve => 
+        {
+            let tmpArr = [];
+            for (let i = 0; i < pData.length; i++) 
+            {
+                let tmpObj = pData[i]
+                if(typeof pData[i] == 'function')
+                {
+                    tmpObj = pData[i]()
+                }
+                if(Array.isArray(tmpObj))
+                {
+                    tmpArr.push(...tmpObj)
+                }
+                else if(typeof tmpObj == 'object')
+                {
+                    tmpArr.push(tmpObj)
+                }
+            }
+            
+            let tmpY = 5
+            let docPdf = new jsPDF('p','mm',[103,tmpArr.length*10])
+            for (let i = 0; i < tmpArr.length; i++) 
+            {
+                if(typeof tmpArr[i].barcode != 'undefined')
+                {
+                    docPdf.barcode(tmpArr[i].barcode, 
+                    {
+                        fontSize: 25,
+                        textColor: "#000000",
+                        x: 26,
+                        y: tmpY+2,
+                        options: {align:"center"}
+                    })
+                    tmpY += 7
+                }
+                else if(typeof tmpArr[i].logo != 'undefined')
+                {
+                    let img = new Image()
+                    img.src = tmpArr[i].logo
+                    docPdf.addImage(img, 'png', 15, tmpY, undefined, undefined)
+                    tmpY += 20
+                }
+                else
+                {
+                    let  tmpAlign  ='' 
+                    let tmpX = 0
+                    if(tmpArr[i].align == 'ct')
+                    {
+                        tmpAlign = 'center'
+                        tmpX = 51
+                    }
+                    else if(tmpArr[i].align == 'lt')
+                    {
+                        tmpAlign = 'left'
+                        tmpX = 3
+                    }
+                    else  if(tmpArr[i].align == 'rt')
+                    {
+                        tmpAlign = 'right'
+                        tmpX = 103
+                    }
+
+                    let tmpStyle = 'normal'
+                    if(tmpArr[i].style == 'bu')
+                    {
+                        docPdf.line(tmpX,tmpY,tmpX + 103,tmpY)
+                    }
+                    else if(tmpArr[i].style == 'b')
+                    {
+                        tmpStyle = 'bold'
+                    }
+
+                    let tmpFontSize = 12
+                    if(tmpArr[i].font == 'a')
+                    {
+                        tmpFontSize = 16
+                    }
+                    else if(tmpArr[i].font == 'b')
+                    {
+                        tmpFontSize = 12
+                    }
+
+                    if(typeof tmpArr[i].size != 'undefined' && Array.isArray(tmpArr[i].size))
+                    {
+                        if(tmpArr[i].size[0] == 1 && tmpArr[i].size[1] == 1)
+                        {
+                            tmpFontSize = 20
+                        }
+                        else if(tmpArr[i].size[0] == 1 && tmpArr[i].size[1] == 0)
+                        {
+                            tmpFontSize = 16
+                        }
+                    }
+                    docPdf.setFont('helvetica',tmpStyle)
+                    docPdf.setFontSize(tmpFontSize)
+                    docPdf.text(tmpArr[i].data,tmpX,tmpY,null,null,tmpAlign)//.setFontSize(tmpFontSize).setFont(undefined,tmpStyle);
+
+                    tmpY += 8
+                }
+            }           
+
+            let tmpHtml = ''
+            let tmpAttach = btoa(docPdf.output())
+            let tmpMailData = {html:tmpHtml,subject:"Ticket De Vente",sendMail:pMail,attachName:"ticket de vente.pdf",attachData:tmpAttach}
+            this.core.socket.emit('mailer',tmpMailData,async(pResult1) => 
+            {
+                
+            });
+            resolve()
+        });
     }
 }
 export class posPromoCls

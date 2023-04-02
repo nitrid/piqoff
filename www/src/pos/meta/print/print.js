@@ -442,7 +442,7 @@ export function print()
                     font:"b",
                     style:"b",
                     align:"lt",
-                    data:"(*) TOTAL ART ELIGIBLE".space(56) + " " + 
+                    data:"(*) TOTAL ART ELIGIBLE".space(52) + " " + 
                     data.possale.where({TICKET_REST:true}).sum('TOTAL',2).space(7,"s") 
                 }
             }

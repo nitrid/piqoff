@@ -1631,7 +1631,7 @@ export default class posDoc extends React.PureComponent
                             }
                             await this.core.sql.execute(tmpInsertQuery)
                             //***************************************************/
-                            await this.print(tmpData)
+                            await this.print(tmpData,0)
                         }
                         else if(pResult == 'btn03')
                         {
@@ -1643,21 +1643,17 @@ export default class posDoc extends React.PureComponent
                                     param:  ['GUID:string|50'],
                                     value:  [this.posObj.dt()[0].CUSTOMER_GUID]
                                 }
-                                let tmpData = await this.core.sql.execute(tmpQuery) 
-                                if(tmpData.result.recordset.length > 0)
+                                let tmpMailData = await this.core.sql.execute(tmpQuery) 
+                                if(tmpMailData.result.recordset.length > 0)
                                 {
-                                    this.txtMail.value = tmpData.result.recordset[0].EMAIL
-                                    await this.mailPopup.show().then(async (e) =>
-                                    {
-                                    });
+                                    this.txtMail.value = tmpMailData.result.recordset[0].EMAIL
                                 }
                             }
-                            else
+
+                            this.mailPopup.tmpData = tmpData;
+                            await this.mailPopup.show().then(async (e) =>
                             {
-                                await this.mailPopup.show().then(async (e) =>
-                                {
-                                });
-                            }
+                            });
                         }
                     }
                     else
@@ -1697,7 +1693,7 @@ export default class posDoc extends React.PureComponent
                         }
                         await this.core.sql.execute(tmpInsertQuery)
                         //***************************************************/
-                        await this.print(tmpData)
+                        await this.print(tmpData,0)
                     }
                     //***************************************************/
                     //TICKET REST. ALDIĞINDA KASA AÇMA İŞLEMİ 
@@ -2414,7 +2410,7 @@ export default class posDoc extends React.PureComponent
             resolve(true)
         });        
     }
-    print(pData)
+    print(pData,pType)
     {
         return new Promise(async resolve => 
         {
@@ -2423,26 +2419,34 @@ export default class posDoc extends React.PureComponent
             {
                 let tmpPrint = e.print(pData)
 
-                let tmpArr = [];
-                for (let i = 0; i < tmpPrint.length; i++) 
-                {
-                    let tmpObj = tmpPrint[i]
-                    if(typeof tmpPrint[i] == 'function')
-                    {
-                        tmpObj = tmpPrint[i]()
-                    }
-                    if(Array.isArray(tmpObj))
-                    {
-                        tmpArr.push(...tmpObj)
-                    }
-                    else if(typeof tmpObj == 'object')
-                    {
-                        tmpArr.push(tmpObj)
-                    }
-                }
-                console.log(JSON.stringify(tmpArr))
+                // let tmpArr = [];
+                // for (let i = 0; i < tmpPrint.length; i++) 
+                // {
+                //     let tmpObj = tmpPrint[i]
+                //     if(typeof tmpPrint[i] == 'function')
+                //     {
+                //         tmpObj = tmpPrint[i]()
+                //     }
+                //     if(Array.isArray(tmpObj))
+                //     {
+                //         tmpArr.push(...tmpObj)
+                //     }
+                //     else if(typeof tmpObj == 'object')
+                //     {
+                //         tmpArr.push(tmpObj)
+                //     }
+                // }
+                // console.log(JSON.stringify(tmpArr))
                 
-                await this.posDevice.escPrinter(tmpPrint)
+                if(pType == 0)
+                {
+                    await this.posDevice.escPrinter(tmpPrint)
+                }
+                else if(pType == 1)
+                {
+                    this.mailPopup._onClick()
+                    await this.posDevice.pdfPrint(tmpPrint,this.txtMail.value)
+                }
                 resolve()
             })
         });
@@ -5587,7 +5591,7 @@ export default class posDoc extends React.PureComponent
                                                                     customerGrowPoint : tmpLastPos[0].CUSTOMER_POINT - Math.floor(tmpLastPos[0].TOTAL)
                                                                 }
                                                             }
-                                                            await this.print(tmpData)
+                                                            await this.print(tmpData,0)
                                                         }                                                        
                                                     }
                                                     else
@@ -5704,7 +5708,7 @@ export default class posDoc extends React.PureComponent
                                                         customerGrowPoint : tmpLastPos[0].CUSTOMER_POINT - Math.floor(tmpLastPos[0].TOTAL)
                                                     }
                                                 }
-                                                await this.print(tmpData)
+                                                await this.print(tmpData,0)
                                             }
                                             
                                         }}>
@@ -5782,7 +5786,7 @@ export default class posDoc extends React.PureComponent
                                                         }
 
                                                         this.sendJet({CODE:"155",NAME:"Duplicata ticket imprimé."}) //// Duplicate fiş yazdırıldı.
-                                                        await this.print(tmpData)
+                                                        await this.print(tmpData,0)
                                                     } 
                                                 }
                                                 else
@@ -7630,28 +7634,7 @@ export default class posDoc extends React.PureComponent
                                     <NbButton id={"btnMailSend"} parent={this} className="form-group btn btn-success btn-block my-1" style={{height:"70px",width:"100%"}}
                                     onClick={async()=>
                                     {
-                                            let tmpQuery = 
-                                            {
-                                                query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM POS_SALE_VW_01 WHERE POS_GUID = @POS_GUID" ,
-                                                param:  ['POS_GUID:string|50','DESIGN:string|25'],
-                                                value:  [this.posObj.dt()[0].GUID,'POS']
-                                            }
-                                            App.instance.setState({isExecute:true})
-                                            let tmpData = await this.core.sql.execute(tmpQuery) 
-                                            App.instance.setState({isExecute:false})
-                                            this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
-                                            {
-                                                let tmpAttach = pResult.split('|')[1]
-                                                let tmpHtml = ''
-                                                if(pResult.split('|')[0] != 'ERR')
-                                                {
-                                                }
-                                                let tmpMailData = {html:tmpHtml,subject:"POS",sendMail:this.txtMail.value,attachName:"ticket de vente.pdf",attachData:tmpAttach}
-                                                this.mailPopup._onClick()
-                                                this.core.socket.emit('mailer',tmpMailData,async(pResult1) => 
-                                                {
-                                                });
-                                            });
+                                        await this.print(this.mailPopup.tmpData,1)
                                     }}>
                                         <i className="text-white fa-solid fa-check" style={{fontSize: "24px"}} />
                                     </NbButton>

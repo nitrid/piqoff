@@ -33,13 +33,13 @@ class mailer
                 //secure: true,
                 auth: 
                 {
-                  user: "",
-                  pass: ""
+                  user: "akemalkaraca@outlook.com",
+                  pass: "akefere8"
                 },
                 //tls : { rejectUnauthorized: false }
               });
               var mailOptions = {
-                from: "",
+                from: "akemalkaraca@outlook.com",
                 to: pData.sendMail,
                 subject: pData.subject,
                 html:pData.html,
@@ -54,6 +54,7 @@ class mailer
               };
               transporter.sendMail(mailOptions, function(error, info){
                 if (error) {
+                    console.log(error)
                     resolve(error);
                 } else {
                     resolve(0);

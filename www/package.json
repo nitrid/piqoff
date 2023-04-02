@@ -40,6 +40,8 @@
     "i18next": "21.6.16",
     "is-proxy": "1.0.6",
     "jquery": "3.6.0",
+    "jspdf": "^2.5.1",
+    "jspdf-barcode": "0.0.12",
     "jsrsasign": "10.6.1",
     "jsrsasign-util": "1.0.5",
     "jsstore": "4.4.3",
