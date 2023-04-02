@@ -596,7 +596,12 @@ export const langTr =
         title : "Uyarı",
         msg : "Fişi yazdırmak istermisiniz ?",
         btn01 : "Tamam",
-        btn02 : "İptal"
+        btn02 : "İptal",
+        btn03 : "Mail Gönder"
+    },
+    mailPopup : 
+    {
+        title : "Mail Gönderimi",
     },
     msgRePrint: 
     {

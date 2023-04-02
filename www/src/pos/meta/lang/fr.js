@@ -596,7 +596,12 @@ export const langFr =
         title : "Avertissement",
         msg : "Souhaitez-vous imprimer le ticket ?",
         btn01 : "OK",
-        btn02 : "Annuler"
+        btn02 : "Annuler",
+        btn03 : "Mail Gönder" // BAK
+    },
+    mailPopup : 
+    {
+        title : "Mail Gönderimi",
     },
     msgRePrint: 
     {

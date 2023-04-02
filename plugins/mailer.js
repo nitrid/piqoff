@@ -27,18 +27,19 @@ class mailer
         return new Promise(resolve =>
         {
             var transporter = nodemailer.createTransport({
-                service: 'gmail',
-                host: 'smtp.gmail.com',
+                service: 'hotmail',
+                //host: 'smtp.gmail.com',
                 port: 465,
-                secure: true,
-                auth: {
-                  user: "",
-                  pass: ""
+                //secure: true,
+                auth: 
+                {
+                  user: "akemalkaraca@outlook.com",
+                  pass: "akefere8"
                 },
-                tls : { rejectUnauthorized: false }
+                //tls : { rejectUnauthorized: false }
               });
               var mailOptions = {
-                from: "",
+                from: "akemalkaraca@outlook.com",
                 to: pData.sendMail,
                 subject: pData.subject,
                 html:pData.html,
@@ -53,6 +54,7 @@ class mailer
               };
               transporter.sendMail(mailOptions, function(error, info){
                 if (error) {
+                    console.log(error)
                     resolve(error);
                 } else {
                     resolve(0);
