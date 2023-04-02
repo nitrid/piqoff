@@ -2484,6 +2484,7 @@ export default class branchSaleDispatch extends React.PureComponent
 
                                                     tmpDocData.DISCOUNT_3 =  Number(((tmpDocData.PRICE * tmpDocData.QUANTITY)-(tmpDocData.DISCOUNT_1+tmpDocData.DISCOUNT_2))).rateInc(this.txtDiscountPercent3.value,4)
                                                     
+                                                    tmpDocData.AMOUNT = Number((tmpDocData.PRICE * tmpDocData.QUANTITY)).round(4)
                                                     tmpDocData.DISCOUNT = parseFloat((tmpDocData.DISCOUNT_1 + tmpDocData.DISCOUNT_2 + tmpDocData.DISCOUNT_3).toFixed(4))
                                                     tmpDocData.TOTALHT = parseFloat((Number((tmpDocData.PRICE * tmpDocData.QUANTITY)) - (Number(tmpDocData.DISCOUNT_1) + Number(tmpDocData.DISCOUNT_2) + Number(tmpDocData.DISCOUNT_3))).toFixed(4))
                                                     if(tmpDocData.VAT > 0)
