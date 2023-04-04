@@ -1769,7 +1769,16 @@ export default class purchaseInvoice extends React.PureComponent
             this.docObj.docItems.dt()[i].OUTPUT = this.docObj.dt()[0].OUTPUT
             this.docObj.docItems.dt()[i].DOC_DATE = this.docObj.dt()[0].DOC_DATE
             this.docObj.docItems.dt()[i].SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
+            this.docObj.docItems.dt()[i].REF = this.docObj.dt()[0].REF
+            this.docObj.docItems.dt()[i].REF_NO = this.docObj.dt()[0].REF_NO
         }
+
+        this.docObj.docCustomer.dt()[i].INPUT = this.docObj.dt()[0].INPUT
+        this.docObj.docCustomer.dt()[i].OUTPUT = this.docObj.dt()[0].OUTPUT
+        this.docObj.docCustomer.dt()[i].DOC_DATE = this.docObj.dt()[0].DOC_DATE
+        this.docObj.docCustomer.dt()[i].SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
+        this.docObj.docCustomer.dt()[i].REF = this.docObj.dt()[0].REF
+        this.docObj.docCustomer.dt()[i].REF_NO = this.docObj.dt()[0].REF_NO
     }
     async getDocs(pType)
     {
@@ -2155,8 +2164,9 @@ export default class purchaseInvoice extends React.PureComponent
                                             </NdTextBox>
                                         </div>
                                         <div className="col-5 ps-0">
-                                            <NdTextBox id="txtRefno" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF_NO"}}
+                                            <NdTextBox id="txtRefno" mode="number" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF_NO"}}
                                             readOnly={true}
+                                            maxLength={10}
                                             button=
                                             {
                                                 [
@@ -2174,6 +2184,7 @@ export default class purchaseInvoice extends React.PureComponent
                                                         onClick:()=>
                                                         {
                                                             this.txtRefno.value = Math.floor(Date.now() / 1000)
+                                                            this.checkRow()
                                                         }
                                                     }
                                                 ]
@@ -2203,6 +2214,7 @@ export default class purchaseInvoice extends React.PureComponent
                                                     }
                                                 }
                                                 this.docObj.docCustomer.dt()[0].REF_NO = this.txtRefno.value
+                                                this.checkRow()
                                                 let tmpResult = await this.checkDoc('00000000-0000-0000-0000-000000000000',this.txtRef.value,this.txtRefno.value)
                                                 if(tmpResult == 3)
                                                 {

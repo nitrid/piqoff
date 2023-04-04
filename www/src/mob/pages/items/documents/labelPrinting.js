@@ -386,7 +386,7 @@ export default class labelPrinting extends React.Component
                                             </NdTextBox>
                                         </div>
                                         <div className="col-8 ps-0">
-                                            <NdTextBox id="txtRefno" parent={this} simple={true} dt={{data:this.mainLblObj.dt('MAIN_LABEL_QUEUE'),field:"REF_NO"}}
+                                            <NdTextBox id="txtRefno" mode="number" parent={this} simple={true} dt={{data:this.mainLblObj.dt('MAIN_LABEL_QUEUE'),field:"REF_NO"}}
                                             upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                             readOnly={true}
                                             button=

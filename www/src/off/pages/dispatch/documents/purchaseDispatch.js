@@ -1159,6 +1159,8 @@ export default class purchaseDispatch extends React.PureComponent
             this.docObj.docItems.dt()[i].OUTPUT = this.docObj.dt()[0].OUTPUT
             this.docObj.docItems.dt()[i].DOC_DATE = this.docObj.dt()[0].DOC_DATE
             this.docObj.docItems.dt()[i].SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
+            this.docObj.docItems.dt()[i].REF = this.docObj.dt()[0].REF
+            this.docObj.docItems.dt()[i].REF_NO = this.docObj.dt()[0].REF_NO
         }
     }
     async _getOrders()
@@ -1534,7 +1536,7 @@ export default class purchaseDispatch extends React.PureComponent
                                             </NdTextBox>
                                         </div>
                                         <div className="col-5 ps-0">
-                                            <NdTextBox id="txtRefno" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF_NO"}}
+                                            <NdTextBox id="txtRefno" mode="number" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF_NO"}}
                                             readOnly={true}
                                             button=
                                             {
@@ -1553,6 +1555,7 @@ export default class purchaseDispatch extends React.PureComponent
                                                         onClick:()=>
                                                         {
                                                             this.txtRefno.value = Math.floor(Date.now() / 1000)
+                                                            this.checkRow()
                                                         }
                                                     }
                                                 ]

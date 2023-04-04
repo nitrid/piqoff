@@ -1373,7 +1373,16 @@ export default class salesInvoice extends React.PureComponent
             this.docObj.docItems.dt()[i].OUTPUT = this.docObj.dt()[0].OUTPUT
             this.docObj.docItems.dt()[i].DOC_DATE = this.docObj.dt()[0].DOC_DATE
             this.docObj.docItems.dt()[i].SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
+            this.docObj.docItems.dt()[i].REF = this.docObj.dt()[0].REF
+            this.docObj.docItems.dt()[i].REF_NO = this.docObj.dt()[0].REF_NO
         }
+
+        this.docObj.docCustomer.dt()[i].INPUT = this.docObj.dt()[0].INPUT
+        this.docObj.docCustomer.dt()[i].OUTPUT = this.docObj.dt()[0].OUTPUT
+        this.docObj.docCustomer.dt()[i].DOC_DATE = this.docObj.dt()[0].DOC_DATE
+        this.docObj.docCustomer.dt()[i].SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
+        this.docObj.docCustomer.dt()[i].REF = this.docObj.dt()[0].REF
+        this.docObj.docCustomer.dt()[i].REF_NO = this.docObj.dt()[0].REF_NO
     }
     async _getBarcodes()
     {
@@ -1826,7 +1835,7 @@ export default class salesInvoice extends React.PureComponent
                                             </NdTextBox>
                                         </div>
                                         <div className="col-5 ps-0">
-                                            <NdTextBox id="txtRefno" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF_NO"}}
+                                            <NdTextBox id="txtRefno" mode="number" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF_NO"}}
                                             upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                             readOnly={true}
                                             button=
