@@ -56,6 +56,7 @@ export default class posDoc extends React.PureComponent
         this.acsObj = new access(acs);   
         this.nf525 = new nf525Cls();
         this.isFirstOpen = false
+        this.isWeigh = false
         // NUMBER İÇİN PARAMETREDEN PARA SEMBOLÜ ATANIYOR.
         Number.money = this.prmObj.filter({ID:'MoneySymbol',TYPE:0}).getValue()
         
@@ -640,7 +641,8 @@ export default class posDoc extends React.PureComponent
         });
     }
     async getItem(pCode)
-    {           
+    {
+        this.isWeigh = false;           
         this.txtBarcode.value = ""; 
         let tmpQuantity = 1
         let tmpPrice = 0                
@@ -845,6 +847,7 @@ export default class posDoc extends React.PureComponent
             //EĞER ÜRÜN TERAZİLİ İSE
             if(tmpItemsDt[0].WEIGHING)
             {
+                this.isWeigh = true
                 this.loading.current.instance.hide()
                 if(tmpPrice > 0)
                 {
@@ -1186,13 +1189,27 @@ export default class posDoc extends React.PureComponent
                 
                 if(tmpPosSale.length > 0)
                 {
-                    this.posDevice.lcdPrint
-                    ({
-                        blink : 0,
-                        text :  tmpPosSale[tmpPosSale.length - 1].ITEM_NAME.toString().space(11) + " " + 
-                                (parseFloat(Number(tmpPosSale[tmpPosSale.length - 1].PRICE) - (Number(tmpPosSale[tmpPosSale.length - 1].DISCOUNT) / Number(tmpPosSale[tmpPosSale.length - 1].QUANTITY))).toFixed(2) + "EUR").space(8,"s") +
-                                "TOTAL : " + (parseFloat(tmpPayRest).toFixed(2) + "EUR").space(12,"s")
-                    })
+                    if(this.isWeigh)
+                    {
+                        this.posDevice.lcdPrint
+                        ({
+                            blink : 0,
+                            text :  tmpPosSale[tmpPosSale.length - 1].ITEM_NAME.toString().space(19) + " " + 
+                                    parseFloat(Number(tmpPosSale[tmpPosSale.length - 1].QUANTITY)).toFixed(3).space(6) + "X" +
+                                    (parseFloat(Number(tmpPosSale[tmpPosSale.length - 1].PRICE) - (Number(tmpPosSale[tmpPosSale.length - 1].DISCOUNT) / Number(tmpPosSale[tmpPosSale.length - 1].QUANTITY))).toFixed(2)).space(5) + " = " +
+                                    parseFloat(Number(tmpPosSale[tmpPosSale.length - 1].TOTAL)).toFixed(2).space(5)
+                        })
+                    }
+                    else
+                    {
+                        this.posDevice.lcdPrint
+                        ({
+                            blink : 0,
+                            text :  tmpPosSale[tmpPosSale.length - 1].ITEM_NAME.toString().space(11) + " " + 
+                                    (parseFloat(Number(tmpPosSale[tmpPosSale.length - 1].PRICE) - (Number(tmpPosSale[tmpPosSale.length - 1].DISCOUNT) / Number(tmpPosSale[tmpPosSale.length - 1].QUANTITY))).toFixed(2) + "EUR").space(8,"s") +
+                                    "TOTAL : " + (parseFloat(tmpPayRest).toFixed(2) + "EUR").space(12,"s")
+                        })
+                    }
                 }
             }            
             //console.log("100 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS")) 
