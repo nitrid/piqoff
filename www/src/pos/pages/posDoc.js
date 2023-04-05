@@ -3177,8 +3177,8 @@ export default class posDoc extends React.PureComponent
                                         cellElement.innerText = this.posObj.posSale.dt().length - cellInfo.rowIndex
                                     }}
                                     alignment={"center"}/>                                    
-                                    <Column dataField="ITEM_SNAME" caption={this.lang.t("grdList.ITEM_NAME")} width={260}/>
-                                    <Column dataField="QUANTITY" caption={this.lang.t("grdList.QUANTITY")} width={60} cellRender={(e)=>{return e.value + e.data.UNIT_SHORT}}/>
+                                    <Column dataField="ITEM_SNAME" caption={this.lang.t("grdList.ITEM_NAME")} width={250}/>
+                                    <Column dataField="QUANTITY" caption={this.lang.t("grdList.QUANTITY")} width={70} cellRender={(e)=>{return e.value + e.data.UNIT_SHORT}}/>
                                     <Column dataField="PRICE" caption={this.lang.t("grdList.PRICE")} width={70} format={"#,##0.00" + Number.money.sign}/>
                                     <Column dataField="AMOUNT" alignment={"right"} caption={this.lang.t("grdList.AMOUNT")} width={60} format={"#,##0.00" + Number.money.sign}/>                                                
                                 </NdGrid>
