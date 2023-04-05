@@ -3693,11 +3693,11 @@ export default class posDoc extends React.PureComponent
                     {/* Right Column */}
                     <div className="col-6">
                         <div className="row" style={{backgroundColor:this.state.isFormation ? 'coral' : 'white',marginLeft:'1px',marginRight:'0.5px',borderRadius:'5px'}}>
-                            <div className="col-6">
+                            <div className="col-8">
                                 <a className="link-primary" onClick={()=>{this.popAbout.show()}} style={{textDecoration:'none'}}>{this.core.appInfo.name + " " + this.lang.t("about")}</a>
                                 <a className="link-primary" onClick={()=>{this.popBalanceAbout.show()}} style={{textDecoration:'none'}}>{"Balance " + this.lang.t("about")}</a>
                             </div>
-                            <div className="col-6 text-end">
+                            <div className="col-4 text-end">
                                 <NbLabel id="formation" parent={this} value={''}/>
                             </div>
                         </div>
