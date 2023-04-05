@@ -4,6 +4,12 @@
   "certificate": "(NF525) B_0527-1",
   "description": "",
   "main": "index.js",
+  "scale" : 
+  {
+    "version" : "1.0.1",
+    "certificate" : "LNE-000000",
+    "sha" : "XXXXXXXXX"
+  },
   "scripts": {
     "start": "webpack-dev-server --mode development",
     "build": "webpack --mode production"

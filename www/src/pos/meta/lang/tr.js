@@ -30,6 +30,10 @@ export const langTr =
     abtNrCertificate : "Sertifika No : B_0527-1",
     abtLicence : "Lisans : XXXXXXXXXXXXXXXXX",
     abtVersion : "Versiyon : ",
+    blnAbtCompany : "Şirket : Piqsoft SAS",
+    blnAbtType : "Tip : Piqsoft - Pos",
+    blnAbtSw : "S/W : Scale.js",
+    blnAbtCertificate : "Sertifika No : ",
     msgCustomerNotFound : 
     {
         title : "Dikkat",

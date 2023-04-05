@@ -3695,6 +3695,7 @@ export default class posDoc extends React.PureComponent
                         <div className="row" style={{backgroundColor:this.state.isFormation ? 'coral' : 'white',marginLeft:'1px',marginRight:'0.5px',borderRadius:'5px'}}>
                             <div className="col-6">
                                 <a className="link-primary" onClick={()=>{this.popAbout.show()}} style={{textDecoration:'none'}}>{this.core.appInfo.name + " " + this.lang.t("about")}</a>
+                                <a className="link-primary" onClick={()=>{this.popBalanceAbout.show()}} style={{textDecoration:'none'}}>{"Balance " + this.lang.t("about")}</a>
                             </div>
                             <div className="col-6 text-end">
                                 <NbLabel id="formation" parent={this} value={''}/>
@@ -7617,6 +7618,34 @@ export default class posDoc extends React.PureComponent
                             </Item>
                             <Item>
                                 <NbLabel id="abtVersion" parent={this} value={this.lang.t("abtVersion") + this.core.appInfo.version}/>
+                            </Item>
+                        </Form>
+                    </NdPopUp>
+                </div>
+                {/* Balance About PopUp */}
+                <div>
+                    <NdPopUp parent={this} id={"popBalanceAbout"} 
+                    visible={false}
+                    showCloseButton={true}
+                    showTitle={true}
+                    container={"#root"} 
+                    width={'300'}
+                    height={'250'}
+                    title={this.lang.t("about")}
+                    position={{my:'bottom',of:'#root'}}
+                    >
+                        <Form colCount={1} height={'fit-content'}>
+                            <Item>
+                                <NbLabel id="blnAbtCompany" parent={this} value={this.lang.t("blnAbtCompany")} textSize={"28px"}/>
+                            </Item>
+                            <Item>
+                                <NbLabel id="blnAbtType" parent={this} value={this.lang.t("blnAbtType")}/>
+                            </Item>
+                            <Item>
+                                <NbLabel id="blnAbtSw" parent={this} value={this.lang.t("blnAbtSw") + " V." + this.core.appInfo.scale.version}/>
+                            </Item>
+                            <Item>
+                                <NbLabel id="blnAbtCertificate" parent={this} value={this.lang.t("blnAbtCertificate") + this.core.appInfo.scale.certificate}/>
                             </Item>
                         </Form>
                     </NdPopUp>
