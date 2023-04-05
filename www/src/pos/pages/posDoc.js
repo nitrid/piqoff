@@ -32,6 +32,7 @@ import IdleTimer from 'react-idle-timer'
 import NdButton from "../../core/react/devex/button.js";
 
 import { posCls,posSaleCls,posPaymentCls,posPluCls,posDeviceCls,posPromoCls, posExtraCls } from "../../core/cls/pos.js";
+import { posScaleCls } from "../../core/cls/scale.js";
 import { docCls} from "../../core/cls/doc.js"
 import transferCls from "../lib/transfer.js";
 import { promoCls } from "../../core/cls/promotion.js";
@@ -337,7 +338,8 @@ export default class posDoc extends React.PureComponent
         
         if(this.posObj.dt()[this.posObj.dt().length - 1].DEVICE != '9999')
         {
-            await this.posDevice.load({CODE:this.posObj.dt()[this.posObj.dt().length - 1].DEVICE})        
+            await this.posDevice.load({CODE:this.posObj.dt()[this.posObj.dt().length - 1].DEVICE})
+            this.posScale = new posSaleCls(this.posDevice.dt()[0].SCALE_PORT)
         }
         this.posDevice.scanner();       
          
@@ -1046,7 +1048,7 @@ export default class posDoc extends React.PureComponent
                     resolve()
                 }
             })
-            let tmpWeigh = await this.posDevice.mettlerScaleSend(pPrice)
+            let tmpWeigh = await this.posScale.mettlerScaleSend(pPrice)
             if(typeof tmpWeigh != 'undefined' && tmpWeigh != null)
             {
                 this.msgWeighing.hide()
