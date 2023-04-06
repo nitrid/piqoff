@@ -221,7 +221,7 @@ export function print()
                     {
                         tmpQt = parseFloat(parseFloat(tmpSaleItem.QUANTITY / tmpSaleItem.UNIT_FACTOR).toFixed(3));
                     }
-                    console.log(tmpSaleItem.UNIT_FACTOR)
+                    
                     if(tmpSaleItem.UNIT_FACTOR > 1)
                     {
                         tmpFactStr = "X" + tmpSaleItem.UNIT_FACTOR.toString().substring(0,2)
