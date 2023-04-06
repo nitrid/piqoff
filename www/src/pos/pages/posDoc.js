@@ -7632,7 +7632,7 @@ export default class posDoc extends React.PureComponent
                     showCloseButton={true}
                     showTitle={true}
                     container={"#root"} 
-                    width={'400'}
+                    width={'600'}
                     height={'250'}
                     title={"Balance " + this.lang.t("about")}
                     position={{my:'bottom',of:'#root'}}
