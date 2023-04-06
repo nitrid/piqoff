@@ -63,6 +63,7 @@ export default class posDoc extends React.PureComponent
         
         this.posObj = new posCls()
         this.posDevice = new posDeviceCls();
+        this.posScale = new posScaleCls();
         this.parkDt = new datatable();        
         this.cheqDt = new datatable();
         this.lastPosDt = new datatable();
