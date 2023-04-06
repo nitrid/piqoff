@@ -340,8 +340,7 @@ export default class posDoc extends React.PureComponent
         if(this.posObj.dt()[this.posObj.dt().length - 1].DEVICE != '9999')
         {
             await this.posDevice.load({CODE:this.posObj.dt()[this.posObj.dt().length - 1].DEVICE})
-            this.posScale = new posSaleCls(this.posDevice.dt()[0].SCALE_PORT)
-            console.log(this.posScale)
+            this.posScale = new posScaleCls(this.posDevice.dt()[0].SCALE_PORT)
         }
         this.posDevice.scanner();       
          
