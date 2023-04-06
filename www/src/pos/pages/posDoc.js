@@ -7634,7 +7634,7 @@ export default class posDoc extends React.PureComponent
                     container={"#root"} 
                     width={'400'}
                     height={'250'}
-                    title={this.lang.t("about")}
+                    title={"Balance " + this.lang.t("about")}
                     position={{my:'bottom',of:'#root'}}
                     >
                         <Form colCount={1} height={'fit-content'}>
