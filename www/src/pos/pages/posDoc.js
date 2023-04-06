@@ -794,6 +794,8 @@ export default class posDoc extends React.PureComponent
         let tmpItemsDt = await this.getItemDb(pCode)
         if(tmpItemsDt.length > 0)
         {     
+            //TERAZİ DEN VERİ GELMEZ İSE KULLANICI ELLE MİKTAR GİRDİĞİNİ TUTAN ALAN
+            tmpItemsDt[0].SCALE_MANUEL = false;
             //******************************************************** */
             //UNIQ BARKODU
             if(tmpItemsDt[0].UNIQ_CODE == tmpItemsDt[0].INPUT)
@@ -860,7 +862,8 @@ export default class posDoc extends React.PureComponent
                     {
                         if(typeof tmpWResult.Result == 'undefined')
                         {
-                            tmpQuantity = tmpWResult
+                            tmpItemsDt[0].SCALE_MANUEL = true;
+                            tmpQuantity = tmpWResult;
                         }
                         else
                         {
@@ -1364,6 +1367,7 @@ export default class posDoc extends React.PureComponent
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_VAT = 0
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].GRAND_TOTAL = 0
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].ORDER_GUID = typeof pItemData.POS_SALE_ORDER == 'undefined' ? '00000000-0000-0000-0000-000000000000' : pItemData.POS_SALE_ORDER
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].SCALE_MANUEL = pItemData.SCALE_MANUEL
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].DELETED = false
         
         this.promoApply()
@@ -1419,7 +1423,8 @@ export default class posDoc extends React.PureComponent
         pRowData.DISCOUNT = tmpCalc.DISCOUNT
         pRowData.VAT = tmpCalc.VAT
         pRowData.TOTAL = tmpCalc.TOTAL
-        
+        pRowData.SCALE_MANUEL = pItemData.SCALE_MANUEL
+
         this.promoApply()
 
         await this.calcGrandTotal();
@@ -3181,7 +3186,7 @@ export default class posDoc extends React.PureComponent
                                     }}
                                     alignment={"center"} cssClass={"cell-fontsize"}/>                                    
                                     <Column dataField="ITEM_SNAME" caption={this.lang.t("grdList.ITEM_NAME")} width={250} cssClass={"cell-fontsize"}/>
-                                    <Column dataField="QUANTITY" caption={this.lang.t("grdList.QUANTITY")} width={80} cellRender={(e)=>{return e.value + e.data.UNIT_SHORT}} cssClass={"cell-fontsize"}/>
+                                    <Column dataField="QUANTITY" caption={this.lang.t("grdList.QUANTITY")} width={80} cellRender={(e)=>{return (e.data.SCALE_MANUEL == true ? "M" : "") + e.value + e.data.UNIT_SHORT}} cssClass={"cell-fontsize"}/>
                                     <Column dataField="PRICE" caption={this.lang.t("grdList.PRICE")} width={60} format={"#,##0.00" + Number.money.sign} cssClass={"cell-fontsize"}/>
                                     <Column dataField="AMOUNT" alignment={"right"} caption={this.lang.t("grdList.AMOUNT")} width={60} format={"#,##0.00" + Number.money.sign} cssClass={"cell-fontsize"}/>                                                
                                 </NdGrid>

@@ -330,7 +330,8 @@ export class posSaleCls
             STATUS : 0,
             NO : 0,
             DELETED : false,
-            ORDER_GUID : '00000000-0000-0000-0000-000000000000'
+            ORDER_GUID : '00000000-0000-0000-0000-000000000000',
+            SCALE_MANUEL : false
         }
         this._initDs();
     }
@@ -371,11 +372,13 @@ export class posSaleCls
                     "@TOTAL = @PTOTAL, " + 
                     "@SUBTOTAL = @PSUBTOTAL, " + 
                     "@PROMO_TYPE = @PPROMO_TYPE, " +
-                    "@ORDER_GUID = @PORDER_GUID ",  
+                    "@ORDER_GUID = @PORDER_GUID, " + 
+                    "@SCALE_MANUEL = @PSCALE_MANUEL ",  
             param : ['PGUID:string|50','PCUSER:string|25','PCDATE:datetime','PLDATE:datetime','PPOS:string|50','PLINE_NO:int','PITEM:string|50','PINPUT:string|25','PBARCODE:string|50','PUNIT:string|50',
-                    'PQUANTITY:float','PPRICE:float','PFAMOUNT:float','PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float','PSUBTOTAL:int','PPROMO_TYPE:int','PORDER_GUID:string|50'],
+                    'PQUANTITY:float','PPRICE:float','PFAMOUNT:float','PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float','PSUBTOTAL:int','PPROMO_TYPE:int','PORDER_GUID:string|50',
+                    'PSCALE_MANUEL:bit'],
             dataprm : ['GUID','CUSER','LDATE','LDATE','POS_GUID','LINE_NO','ITEM_GUID','INPUT','BARCODE_GUID','UNIT_GUID','QUANTITY','PRICE','FAMOUNT','AMOUNT','DISCOUNT','LOYALTY','VAT',
-                    'TOTAL','SUBTOTAL','PROMO_TYPE','ORDER_GUID'],
+                    'TOTAL','SUBTOTAL','PROMO_TYPE','ORDER_GUID','SCALE_MANUEL'],
             local : 
             {
                 type : "insert",
@@ -413,11 +416,13 @@ export class posSaleCls
                     "@TOTAL = @PTOTAL, " + 
                     "@SUBTOTAL = @PSUBTOTAL, " + 
                     "@PROMO_TYPE = @PPROMO_TYPE, " +
-                    "@ORDER_GUID = @PORDER_GUID ", 
+                    "@ORDER_GUID = @PORDER_GUID, " +
+                    "@SCALE_MANUEL = @PSCALE_MANUEL " ,  
             param : ['PGUID:string|50','PCUSER:string|25','PLDATE:datetime','PPOS:string|50','PLINE_NO:int','PITEM:string|50','PINPUT:string|25','PBARCODE:string|50','PUNIT:string|50',
-                     'PQUANTITY:float','PPRICE:float','PFAMOUNT:float','PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float','PSUBTOTAL:int','PPROMO_TYPE:int','PORDER_GUID:string|50'],
+                     'PQUANTITY:float','PPRICE:float','PFAMOUNT:float','PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float','PSUBTOTAL:int','PPROMO_TYPE:int','PORDER_GUID:string|50',
+                     'PSCALE_MANUEL:bit'],
             dataprm : ['GUID','CUSER','LDATE','POS_GUID','LINE_NO','ITEM_GUID','INPUT','BARCODE_GUID','UNIT_GUID','QUANTITY','PRICE','FAMOUNT','AMOUNT','DISCOUNT','LOYALTY',
-                    'VAT','TOTAL','SUBTOTAL','PROMO_TYPE','ORDER_GUID'],
+                    'VAT','TOTAL','SUBTOTAL','PROMO_TYPE','ORDER_GUID','SCALE_MANUEL'],
             local : 
             {
                 type : "update",
