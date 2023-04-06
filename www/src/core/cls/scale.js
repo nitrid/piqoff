@@ -12,7 +12,6 @@ export class posScaleCls
             this.serialport = global.require('serialport');
         }
         this.port = typeof pPort == 'undefined' ? '' : pPort
-        this.core = core.instance;
     }
     mettlerScaleSend(pPrice)
     {
