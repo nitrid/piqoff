@@ -1,4 +1,4 @@
-import { core,dataset,datatable } from "../core.js";
+import { core } from "../core.js";
 export class posScaleCls
 {
     constructor(pPort)

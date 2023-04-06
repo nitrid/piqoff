@@ -8,7 +8,7 @@
   {
     "version" : "1.0.1",
     "certificate" : "LNE-000000",
-    "sha" : "XXXXXXXXX"
+    "sha" : "5d733495732cf990723d6253fe0642dfe5a1f40f0dbe743f53485601fee3fdba"
   },
   "scripts": {
     "start": "webpack-dev-server --mode development",
