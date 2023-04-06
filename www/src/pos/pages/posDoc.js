@@ -341,6 +341,7 @@ export default class posDoc extends React.PureComponent
         {
             await this.posDevice.load({CODE:this.posObj.dt()[this.posObj.dt().length - 1].DEVICE})
             this.posScale = new posSaleCls(this.posDevice.dt()[0].SCALE_PORT)
+            console.log(this.posScale)
         }
         this.posDevice.scanner();       
          
