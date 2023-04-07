@@ -1236,7 +1236,7 @@ export default class posDoc extends React.PureComponent
                         this.posDevice.lcdPrint
                         ({
                             blink : 0,
-                            text :  tmpPosSale[tmpPosSale.length - 1].ITEM_NAME.toString().space(9) + Number(pData.rowData.QUANTITY).toString() + "X" +
+                            text :  tmpPosSale[tmpPosSale.length - 1].ITEM_NAME.toString().space(9) + Number(tmpPosSale[tmpPosSale.length - 1].QUANTITY).toString() + "X" +
                                     (parseFloat(Number(tmpPosSale[tmpPosSale.length - 1].PRICE) - (Number(tmpPosSale[tmpPosSale.length - 1].DISCOUNT) / Number(tmpPosSale[tmpPosSale.length - 1].QUANTITY))).toFixed(2) + "EUR").space(8,"s") +
                                     "TOTAL : " + (parseFloat(tmpPayRest).toFixed(2) + "EUR").space(12,"s")
                         })
