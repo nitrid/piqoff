@@ -478,6 +478,35 @@ export default class posDoc extends React.PureComponent
         
         await this.calcGrandTotal(false) 
         
+        this.posObj.ds.on('onEdit',(pTblName,pData) =>
+        {
+            if(pTblName == "POS_SALE")
+            {
+                let tmpPayRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).toFixed(2))
+                
+                if(pData.rowData.WEIGHING)
+                {
+                    this.posDevice.lcdPrint
+                    ({
+                        blink : 0,
+                        text :  parseFloat(Number(pData.rowData.QUANTITY)).toFixed(3).space(6) + "kg X " +
+                                (parseFloat(Number(pData.rowData.PRICE) - (Number(pData.rowData.DISCOUNT) / Number(pData.rowData.QUANTITY))).toFixed(2) + "EUR").space(9,"s") +
+                                tmpPosSale[tmpPosSale.length - 1].ITEM_NAME.toString().space(11) + "=" +  (parseFloat(Number(pData.rowData.TOTAL)).toFixed(2) + "EUR").space(8,"s")
+                    })
+                }
+                else
+                {
+                    this.posDevice.lcdPrint
+                    ({
+                        blink : 0,
+                        text :  pData.rowData.ITEM_NAME.toString().space(11) + " " + 
+                                (parseFloat(Number(pData.rowData.PRICE) - (Number(pData.rowData.DISCOUNT) / Number(pData.rowData.QUANTITY))).toFixed(2) + "EUR").space(8,"s") +
+                                "TOTAL : " + (parseFloat(tmpPayRest).toFixed(2) + "EUR").space(12,"s")
+                    })
+                }
+            }
+        })
+
         this.core.util.logPath = "\\www\\log\\pos_" + this.posObj.dt()[this.posObj.dt().length - 1].DEVICE + ".txt"        
 
         if(this.posObj.dt()[this.posObj.dt().length - 1].DEVICE == '')
@@ -498,7 +527,7 @@ export default class posDoc extends React.PureComponent
                 await this.getDoc(this.parkDt[i].GUID)                 
                 return
             }
-        }
+        }        
     }
     async deviceEntry()
     {
