@@ -57,7 +57,6 @@ export default class posDoc extends React.PureComponent
         this.acsObj = new access(acs);   
         this.nf525 = new nf525Cls();
         this.isFirstOpen = false
-        this.isWeigh = false
         // NUMBER İÇİN PARAMETREDEN PARA SEMBOLÜ ATANIYOR.
         Number.money = this.prmObj.filter({ID:'MoneySymbol',TYPE:0}).getValue()
         
@@ -483,7 +482,7 @@ export default class posDoc extends React.PureComponent
             if(pTblName == "POS_SALE")
             {
                 let tmpPayRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).toFixed(2))
-                
+
                 if(pData.rowData.WEIGHING)
                 {
                     this.posDevice.lcdPrint
@@ -674,7 +673,6 @@ export default class posDoc extends React.PureComponent
     }
     async getItem(pCode)
     {
-        this.isWeigh = false;           
         this.txtBarcode.value = ""; 
         let tmpQuantity = 1
         let tmpPrice = 0                
@@ -881,7 +879,6 @@ export default class posDoc extends React.PureComponent
             //EĞER ÜRÜN TERAZİLİ İSE
             if(tmpItemsDt[0].WEIGHING)
             {
-                this.isWeigh = true
                 this.loading.current.instance.hide()
                 if(tmpPrice > 0)
                 {
@@ -1224,7 +1221,7 @@ export default class posDoc extends React.PureComponent
                 
                 if(tmpPosSale.length > 0)
                 {
-                    if(this.isWeigh)
+                    if(tmpPosSale[tmpPosSale.length - 1].WEIGHING)
                     {
                         this.posDevice.lcdPrint
                         ({
