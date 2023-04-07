@@ -1342,6 +1342,7 @@ export default class posDoc extends React.PureComponent
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].MAX_PRICE = pItemData.MAX_PRICE
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].COST_PRICE = pItemData.COST_PRICE
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].TICKET_REST = pItemData.TICKET_REST
+        this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].WEIGHING = pItemData.WEIGHING
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].INPUT = pItemData.INPUT
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].BARCODE_GUID = pItemData.BARCODE_GUID
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].BARCODE = pItemData.BARCODE
@@ -3163,7 +3164,7 @@ export default class posDoc extends React.PureComponent
                                                     await dialog(tmpConfObj);
                                                     return
                                                 }
-                                                let tmpData = {QUANTITY:Number(tmpResult) * Number(e.data.UNIT_FACTOR),PRICE:e.data.PRICE}
+                                                let tmpData = {QUANTITY:Number(tmpResult) * Number(e.data.UNIT_FACTOR),PRICE:e.data.PRICE,SCALE_MANUEL:e.data.WEIGHING}
                                                 this.saleRowUpdate(e.data,tmpData)
                                             }
                                         }
@@ -5038,6 +5039,7 @@ export default class posDoc extends React.PureComponent
                                                     SPECIAL: "",
                                                     STATUS: true,
                                                     TICKET_REST: true,
+                                                    WEIGHING : false,
                                                     UNIQ_CODE: "",
                                                     UNIQ_PRICE: 0,
                                                     UNIQ_QUANTITY: 0,

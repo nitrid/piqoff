@@ -300,6 +300,7 @@ export class posSaleCls
             ITEM_NAME : '',
             ITEM_SNAME : '',
             TICKET_REST : false,
+            WEIGHING : false,
             COST_PRICE : 0,
             MIN_PRICE : 0,
             MAX_PRICE : 0,
