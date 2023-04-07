@@ -7174,8 +7174,8 @@ export default class posDoc extends React.PureComponent
                                         cellElement.innerText = this.posObj.posSale.dt().length - cellInfo.rowIndex
                                     }}
                                     alignment={"center"}/>                                    
-                                    <Column dataField="ITEM_SNAME" caption={this.lang.t("grdList.ITEM_NAME")} width={290}/>
-                                    <Column dataField="QUANTITY" caption={this.lang.t("grdList.QUANTITY")} cellRender={(e)=>{return (e.data.SCALE_MANUEL == true ? "M-" : "") + e.value + e.data.UNIT_SHORT}} width={50}/>
+                                    <Column dataField="ITEM_SNAME" caption={this.lang.t("grdList.ITEM_NAME")} width={390}/>
+                                    <Column dataField="QUANTITY" caption={this.lang.t("grdList.QUANTITY")} cellRender={(e)=>{return (e.data.SCALE_MANUEL == true ? "M-" : "") + e.value + e.data.UNIT_SHORT}} width={80}/>
                                     <Column dataField="DISCPRICE" caption={this.lang.t("grdList.DISCOUNT")} width={100} format={"#,##0.00" + Number.money.sign}/>
                                     <Column dataField="PRICE" caption={this.lang.t("grdList.PRICE")} width={70} format={"#,##0.00" + Number.money.sign}/>
                                     <Column dataField="TOTAL" alignment={"right"} caption={this.lang.t("grdList.AMOUNT")} width={60} format={"#,##0.00" + Number.money.sign}/>                                                
