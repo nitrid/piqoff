@@ -22,7 +22,7 @@ import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NbButton from "../../../../core/react/bootstrap/button.js";
 import { dialog } from '../../../../core/react/devex/dialog.js';
 import { dataset,datatable,param,access } from "../../../../core/core.js";
-import { posExtraCls} from "../../../../core/cls/pos.js";
+import { posExtraCls,posDeviceCls} from "../../../../core/cls/pos.js";
 
 export default class salesOrdList extends React.PureComponent
 {
@@ -33,9 +33,14 @@ export default class salesOrdList extends React.PureComponent
         this.core = App.instance.core;
         this.groupList = [];
         this._btnGetClick = this._btnGetClick.bind(this)
+        this._sendMail = this._sendMail.bind(this)
         this.btnGetDetail = this.btnGetDetail.bind(this)
+        this.posDevice = new posDeviceCls();
+        this.lastPosDt = new datatable();
         this.lastPosSaleDt = new datatable();
         this.lastPosPayDt = new datatable();
+        this.lastPosPromoDt = new datatable();  
+        this.firm = new datatable();
         this.state={ticketId :""}
         
         Number.money = this.sysParam.filter({ID:'MoneySymbol',TYPE:0}).getValue()
@@ -206,6 +211,138 @@ export default class salesOrdList extends React.PureComponent
         await this.grdLastTotalPay.dataRefresh({source:this.lastPosPayDt});
 
         this.popDetail.show()
+    }
+    async _sendMail()
+    {
+        console.log(this.grdSaleTicketReport.getSelectedData())
+
+        let tmpLastPos = new datatable(); 
+        tmpLastPos.selectCmd = 
+        {
+            query:  "SELECT * FROM POS_VW_01 WHERE GUID = @GUID ",
+            param:  ["GUID:string|50"],
+            value:  [this.grdSaleTicketReport.getSelectedData()[0].POS_GUID]
+        }
+        
+        await tmpLastPos.refresh()
+
+        console.log(tmpLastPos)
+        this.lastPosSaleDt.selectCmd = 
+        {
+            query:  "SELECT * FROM POS_SALE_VW_01 WHERE POS_GUID = @GUID ORDER BY LDATE DESC",
+            param:  ["GUID:string|50"],
+            value:  [this.grdSaleTicketReport.getSelectedData()[0].POS_GUID]
+        }
+        
+        await this.lastPosSaleDt.refresh()
+
+        this.lastPosPromoDt.selectCmd = 
+        {
+            query : "SELECT * FROM [dbo].[POS_PROMO_VW_01] WHERE POS_GUID = @POS_GUID",
+            param : ['POS_GUID:string|50'],
+            value:  [this.grdSaleTicketReport.getSelectedData()[0].POS_GUID]
+        } 
+        
+        await this.lastPosPromoDt.refresh()
+
+        this.lastPosPayDt.selectCmd = 
+        {
+            query:  "SELECT * FROM POS_PAYMENT_VW_01 WHERE POS_GUID = @GUID ORDER BY LDATE DESC",
+            param:  ["GUID:string|50"],
+            value:  [this.grdSaleTicketReport.getSelectedData()[0].POS_GUID]
+        }
+        this.lastPosPayDt.insertCmd = 
+        {
+            query : "EXEC [dbo].[PRD_POS_PAYMENT_INSERT] " + 
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " + 
+                    "@POS = @PPOS, " +
+                    "@TYPE = @PTYPE, " +
+                    "@LINE_NO = @PLINE_NO, " +
+                    "@AMOUNT = @PAMOUNT, " + 
+                    "@CHANGE = @PCHANGE ", 
+            param : ['PGUID:string|50','PCUSER:string|25','PPOS:string|50','PTYPE:int','PLINE_NO:int','PAMOUNT:float','PCHANGE:float'],
+            dataprm : ['GUID','CUSER','POS_GUID','PAY_TYPE','LINE_NO','AMOUNT','CHANGE']
+        } 
+        this.lastPosPayDt.updateCmd = 
+        {
+            query : "EXEC [dbo].[PRD_POS_PAYMENT_UPDATE] " + 
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " + 
+                    "@POS = @PPOS, " +
+                    "@TYPE = @PTYPE, " +
+                    "@LINE_NO = @PLINE_NO, " +
+                    "@AMOUNT = @PAMOUNT, " + 
+                    "@CHANGE = @PCHANGE ", 
+            param : ['PGUID:string|50','PCUSER:string|25','PPOS:string|50','PTYPE:int','PLINE_NO:int','PAMOUNT:float','PCHANGE:float'],
+            dataprm : ['GUID','CUSER','POS_GUID','PAY_TYPE','LINE_NO','AMOUNT','CHANGE']
+        } 
+        this.lastPosPayDt.deleteCmd = 
+        {
+            query : "EXEC [dbo].[PRD_POS_PAYMENT_DELETE] " + 
+                    "@CUSER = @PCUSER, " + 
+                    "@UPDATE = 1, " +
+                    "@GUID = @PGUID, " + 
+                    "@POS_GUID = @PPOS_GUID ", 
+            param : ['PCUSER:string|25','PGUID:string|50','PPOS_GUID:string|50'],
+            dataprm : ['CUSER','GUID','POS_GUID']
+        }
+        await this.lastPosPayDt.refresh()
+        let tmpData = 
+        {
+            pos : tmpLastPos,
+            possale : this.lastPosSaleDt,
+            pospay : this.lastPosPayDt,
+            pospromo : this.lastPosPromoDt,
+            firm : this.firm,
+            special : 
+            {
+                type : tmpLastPos[0].FACT_REF == 0 ? 'Fis' : 'Fatura',
+                ticketCount : 0,
+                reprint : 1,
+                repas : 0,
+                factCertificate : '',
+                dupCertificate : '',
+                customerUsePoint : Math.floor(tmpLastPos[0].LOYALTY * 100),
+                customerPoint : (tmpLastPos[0].CUSTOMER_POINT + Math.floor(tmpLastPos[0].LOYALTY * 100)) - Math.floor(tmpLastPos[0].TOTAL),
+                customerGrowPoint : tmpLastPos[0].CUSTOMER_POINT - Math.floor(tmpLastPos[0].TOTAL)
+            }
+        }
+        await this.print(tmpData)
+    }
+    print(pData)
+    {
+        return new Promise(async resolve => 
+        {
+            let prmPrint = "print.js"
+            import("../../../../pos/meta/print/" + prmPrint).then(async(e)=>
+            {
+                let tmpPrint = e.print(pData)
+
+                // let tmpArr = [];
+                // for (let i = 0; i < tmpPrint.length; i++) 
+                // {
+                //     let tmpObj = tmpPrint[i]
+                //     if(typeof tmpPrint[i] == 'function')
+                //     {
+                //         tmpObj = tmpPrint[i]()
+                //     }
+                //     if(Array.isArray(tmpObj))
+                //     {
+                //         tmpArr.push(...tmpObj)
+                //     }
+                //     else if(typeof tmpObj == 'object')
+                //     {
+                //         tmpArr.push(tmpObj)
+                //     }
+                // }
+                // console.log(JSON.stringify(tmpArr))
+
+               
+                await this.posDevice.pdfPrint(tmpPrint,'receeep7@gmail.com')
+                resolve()
+            })
+        });
     }
     render()
     {
@@ -561,6 +698,19 @@ export default class salesOrdList extends React.PureComponent
                                 <Column dataField="POS_ID" caption={this.t("grdSaleTicketReport.clmTicketID")} visible={true} /> 
 
                             </NdGrid>
+                        </div>
+                    </div>
+                    <div className="row px-2 pt-2">
+                        <div className="col-3">
+                        </div>
+                        <div className="col-3">
+                            
+                        </div>
+                        <div className="col-3">
+                            
+                        </div>
+                        <div className="col-3">
+                            <NdButton text={this.t("btnMailSend")} type="primary" width="100%" onClick={this._sendMail}></NdButton>
                         </div>
                     </div>
                     <NdPopUp parent={this} id={"popDetail"} 

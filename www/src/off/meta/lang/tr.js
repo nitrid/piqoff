@@ -272,6 +272,7 @@ export const langTr =
         pos_02_008 : "Ürün Satış Raporu",
         pos_02_009 : "Grup Bazlı Satış Raporu",
         pos_02_010 : "Ürün Detaylı Satış Raporu",
+        pos_02_011 : "Ürün Karşılaştırma Raporu",
         pos_03 :"Operasyonlar",
         pos_03_001 : "Gün Sonu",
         promo: "Promosyon",
@@ -14399,6 +14400,30 @@ export const langTr =
             clmAmount : "Tutar",
             clmVat : "Vergi",
             clmTotal : "Toplam",
+        },
+    },
+    pos_02_011 : // "Ürün Detaylı Satış Raporu"
+    {
+        btnGet :"Getir",
+        dtDate : "Tarih",
+        txtRef : "Ürün",
+        grdListe : 
+        {
+            clmCode : "Ürün Kodu",
+            clmName: "Ürün Adı",
+            clmTotalCost: "Toplam Maliyet",
+            clmFamount : "Vergisiz Tutar",
+            clmVat : "Vergi Tutarı",
+            clmTotal : "Toplam Tutar",
+            clmRestTotal : "Vergisiz Toplam Kar",
+            clmMargin : "Marj",
+        },
+        pg_txtRef:
+        {
+            title: "Ürün Seçim",
+            clmCode: "KODU",
+            clmName: "ADI", 
+            clmStatus : "DURUM"
         },
     },
     pos_03_001 : // "Gün Sonu",

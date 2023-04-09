@@ -271,6 +271,7 @@ export const langFr =
         pos_02_008 : "Rapport de Vente Produit", 
         pos_02_009 : "Rapport de Vente par famille de produits",
         pos_02_010 : "Ürün Detaylı Satış Raporu", // BAK
+        pos_02_011 : "Ürün Karşılaştırma Raporu", // BAK
         pos_03 : "Traitements", 
         pos_03_001 : "Opérations de fin de journée",
         promo: "Promotion",
@@ -14308,6 +14309,30 @@ export const langFr =
             clmAmount : "Tutar",  // BAK
             clmVat : "Vergi",  // BAK
             clmTotal : "Toplam",  // BAK
+        },
+    },
+    pos_02_011 : // "Ürün Kıyas Raporu"
+    {
+        btnGet :"Getir",  // BAK
+        dtDate : "Tarih",  // BAK
+        txtRef : "Ürün",  // BAK
+        grdListe : 
+        { 
+            clmCode : "Ürün Kodu", // BAK
+            clmName: "Ürün Adı", // BAK
+            clmTotalCost: "Toplam Maliyet", // BAK
+            clmFamount : "Vergisiz Tutar", // BAK
+            clmVat : "Vergi Tutarı", // BAK
+            clmTotal : "Toplam Tutar", // BAK
+            clmRestTotal : "Vergisiz Toplam Kar", // BAK
+            clmMargin : "Marj", // BAK
+        },
+        pg_txtRef:
+        {
+            title: "Ürün Seçim",  // BAK
+            clmCode: "KODU",  // BAK
+            clmName: "ADI",   // BAK
+            clmStatus : "DURUM"  // BAK
         },
     },
     pos_03_001 : // "Gün sonu"
