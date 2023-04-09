@@ -20,7 +20,7 @@ import NbRadioButton from "../../../../core/react/bootstrap/radiogroup.js";
 import NbLabel from "../../../../core/react/bootstrap/label.js";
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NbButton from "../../../../core/react/bootstrap/button.js";
-import { dialog } from '../../../../core/react/devex/dialog.js';
+import NdDialog, { dialog } from '../../../../core/react/devex/dialog.js';
 import { dataset,datatable,param,access } from "../../../../core/core.js";
 import { posExtraCls,posDeviceCls} from "../../../../core/cls/pos.js";
 
@@ -214,101 +214,106 @@ export default class salesOrdList extends React.PureComponent
     }
     async _sendMail()
     {
-        console.log(this.grdSaleTicketReport.getSelectedData())
-
-        let tmpLastPos = new datatable(); 
-        tmpLastPos.selectCmd = 
+        for (let i = 0; i < this.grdSaleTicketReport.getSelectedData().length; i++) 
         {
-            query:  "SELECT * FROM POS_VW_01 WHERE GUID = @GUID ",
-            param:  ["GUID:string|50"],
-            value:  [this.grdSaleTicketReport.getSelectedData()[0].POS_GUID]
-        }
-        
-        await tmpLastPos.refresh()
-
-        console.log(tmpLastPos)
-        this.lastPosSaleDt.selectCmd = 
-        {
-            query:  "SELECT * FROM POS_SALE_VW_01 WHERE POS_GUID = @GUID ORDER BY LDATE DESC",
-            param:  ["GUID:string|50"],
-            value:  [this.grdSaleTicketReport.getSelectedData()[0].POS_GUID]
-        }
-        
-        await this.lastPosSaleDt.refresh()
-
-        this.lastPosPromoDt.selectCmd = 
-        {
-            query : "SELECT * FROM [dbo].[POS_PROMO_VW_01] WHERE POS_GUID = @POS_GUID",
-            param : ['POS_GUID:string|50'],
-            value:  [this.grdSaleTicketReport.getSelectedData()[0].POS_GUID]
-        } 
-        
-        await this.lastPosPromoDt.refresh()
-
-        this.lastPosPayDt.selectCmd = 
-        {
-            query:  "SELECT * FROM POS_PAYMENT_VW_01 WHERE POS_GUID = @GUID ORDER BY LDATE DESC",
-            param:  ["GUID:string|50"],
-            value:  [this.grdSaleTicketReport.getSelectedData()[0].POS_GUID]
-        }
-        this.lastPosPayDt.insertCmd = 
-        {
-            query : "EXEC [dbo].[PRD_POS_PAYMENT_INSERT] " + 
-                    "@GUID = @PGUID, " +
-                    "@CUSER = @PCUSER, " + 
-                    "@POS = @PPOS, " +
-                    "@TYPE = @PTYPE, " +
-                    "@LINE_NO = @PLINE_NO, " +
-                    "@AMOUNT = @PAMOUNT, " + 
-                    "@CHANGE = @PCHANGE ", 
-            param : ['PGUID:string|50','PCUSER:string|25','PPOS:string|50','PTYPE:int','PLINE_NO:int','PAMOUNT:float','PCHANGE:float'],
-            dataprm : ['GUID','CUSER','POS_GUID','PAY_TYPE','LINE_NO','AMOUNT','CHANGE']
-        } 
-        this.lastPosPayDt.updateCmd = 
-        {
-            query : "EXEC [dbo].[PRD_POS_PAYMENT_UPDATE] " + 
-                    "@GUID = @PGUID, " +
-                    "@CUSER = @PCUSER, " + 
-                    "@POS = @PPOS, " +
-                    "@TYPE = @PTYPE, " +
-                    "@LINE_NO = @PLINE_NO, " +
-                    "@AMOUNT = @PAMOUNT, " + 
-                    "@CHANGE = @PCHANGE ", 
-            param : ['PGUID:string|50','PCUSER:string|25','PPOS:string|50','PTYPE:int','PLINE_NO:int','PAMOUNT:float','PCHANGE:float'],
-            dataprm : ['GUID','CUSER','POS_GUID','PAY_TYPE','LINE_NO','AMOUNT','CHANGE']
-        } 
-        this.lastPosPayDt.deleteCmd = 
-        {
-            query : "EXEC [dbo].[PRD_POS_PAYMENT_DELETE] " + 
-                    "@CUSER = @PCUSER, " + 
-                    "@UPDATE = 1, " +
-                    "@GUID = @PGUID, " + 
-                    "@POS_GUID = @PPOS_GUID ", 
-            param : ['PCUSER:string|25','PGUID:string|50','PPOS_GUID:string|50'],
-            dataprm : ['CUSER','GUID','POS_GUID']
-        }
-        await this.lastPosPayDt.refresh()
-        let tmpData = 
-        {
-            pos : tmpLastPos,
-            possale : this.lastPosSaleDt,
-            pospay : this.lastPosPayDt,
-            pospromo : this.lastPosPromoDt,
-            firm : this.firm,
-            special : 
+            App.instance.setState({isExecute:true})
+            let tmpLastPos = new datatable(); 
+            tmpLastPos.selectCmd = 
             {
-                type : tmpLastPos[0].FACT_REF == 0 ? 'Fis' : 'Fatura',
-                ticketCount : 0,
-                reprint : 1,
-                repas : 0,
-                factCertificate : '',
-                dupCertificate : '',
-                customerUsePoint : Math.floor(tmpLastPos[0].LOYALTY * 100),
-                customerPoint : (tmpLastPos[0].CUSTOMER_POINT + Math.floor(tmpLastPos[0].LOYALTY * 100)) - Math.floor(tmpLastPos[0].TOTAL),
-                customerGrowPoint : tmpLastPos[0].CUSTOMER_POINT - Math.floor(tmpLastPos[0].TOTAL)
+                query:  "SELECT * FROM POS_VW_01 WHERE GUID = @GUID ",
+                param:  ["GUID:string|50"],
+                value:  [this.grdSaleTicketReport.getSelectedData()[i].POS_GUID]
             }
+            
+            await tmpLastPos.refresh()
+    
+            console.log(tmpLastPos)
+            this.lastPosSaleDt.selectCmd = 
+            {
+                query:  "SELECT * FROM POS_SALE_VW_01 WHERE POS_GUID = @GUID ORDER BY LDATE DESC",
+                param:  ["GUID:string|50"],
+                value:  [this.grdSaleTicketReport.getSelectedData()[i].POS_GUID]
+            }
+            
+            await this.lastPosSaleDt.refresh()
+    
+            this.lastPosPromoDt.selectCmd = 
+            {
+                query : "SELECT * FROM [dbo].[POS_PROMO_VW_01] WHERE POS_GUID = @POS_GUID",
+                param : ['POS_GUID:string|50'],
+                value:  [this.grdSaleTicketReport.getSelectedData()[i].POS_GUID]
+            } 
+            
+            await this.lastPosPromoDt.refresh()
+    
+            this.lastPosPayDt.selectCmd = 
+            {
+                query:  "SELECT * FROM POS_PAYMENT_VW_01 WHERE POS_GUID = @GUID ORDER BY LDATE DESC",
+                param:  ["GUID:string|50"],
+                value:  [this.grdSaleTicketReport.getSelectedData()[i].POS_GUID]
+            }
+            this.lastPosPayDt.insertCmd = 
+            {
+                query : "EXEC [dbo].[PRD_POS_PAYMENT_INSERT] " + 
+                        "@GUID = @PGUID, " +
+                        "@CUSER = @PCUSER, " + 
+                        "@POS = @PPOS, " +
+                        "@TYPE = @PTYPE, " +
+                        "@LINE_NO = @PLINE_NO, " +
+                        "@AMOUNT = @PAMOUNT, " + 
+                        "@CHANGE = @PCHANGE ", 
+                param : ['PGUID:string|50','PCUSER:string|25','PPOS:string|50','PTYPE:int','PLINE_NO:int','PAMOUNT:float','PCHANGE:float'],
+                dataprm : ['GUID','CUSER','POS_GUID','PAY_TYPE','LINE_NO','AMOUNT','CHANGE']
+            } 
+            this.lastPosPayDt.updateCmd = 
+            {
+                query : "EXEC [dbo].[PRD_POS_PAYMENT_UPDATE] " + 
+                        "@GUID = @PGUID, " +
+                        "@CUSER = @PCUSER, " + 
+                        "@POS = @PPOS, " +
+                        "@TYPE = @PTYPE, " +
+                        "@LINE_NO = @PLINE_NO, " +
+                        "@AMOUNT = @PAMOUNT, " + 
+                        "@CHANGE = @PCHANGE ", 
+                param : ['PGUID:string|50','PCUSER:string|25','PPOS:string|50','PTYPE:int','PLINE_NO:int','PAMOUNT:float','PCHANGE:float'],
+                dataprm : ['GUID','CUSER','POS_GUID','PAY_TYPE','LINE_NO','AMOUNT','CHANGE']
+            } 
+            this.lastPosPayDt.deleteCmd = 
+            {
+                query : "EXEC [dbo].[PRD_POS_PAYMENT_DELETE] " + 
+                        "@CUSER = @PCUSER, " + 
+                        "@UPDATE = 1, " +
+                        "@GUID = @PGUID, " + 
+                        "@POS_GUID = @PPOS_GUID ", 
+                param : ['PCUSER:string|25','PGUID:string|50','PPOS_GUID:string|50'],
+                dataprm : ['CUSER','GUID','POS_GUID']
+            }
+            await this.lastPosPayDt.refresh()
+            let tmpData = 
+            {
+                pos : tmpLastPos,
+                possale : this.lastPosSaleDt,
+                pospay : this.lastPosPayDt,
+                pospromo : this.lastPosPromoDt,
+                firm : this.firm,
+                special : 
+                {
+                    type : tmpLastPos[0].FACT_REF == 0 ? 'Fis' : 'Fatura',
+                    ticketCount : 0,
+                    reprint : 1,
+                    repas : 0,
+                    factCertificate : '',
+                    dupCertificate : '',
+                    customerUsePoint : Math.floor(tmpLastPos[0].LOYALTY * 100),
+                    customerPoint : (tmpLastPos[0].CUSTOMER_POINT + Math.floor(tmpLastPos[0].LOYALTY * 100)) - Math.floor(tmpLastPos[0].TOTAL),
+                    customerGrowPoint : tmpLastPos[0].CUSTOMER_POINT - Math.floor(tmpLastPos[0].TOTAL)
+                }
+            }
+            await this.print(tmpData)
+            App.instance.setState({isExecute:false})
         }
-        await this.print(tmpData)
+     
+        this.mailPopup._onClick()
     }
     print(pData)
     {
@@ -339,7 +344,7 @@ export default class salesOrdList extends React.PureComponent
                 // console.log(JSON.stringify(tmpArr))
 
                
-                await this.posDevice.pdfPrint(tmpPrint,'receeep7@gmail.com')
+                await this.posDevice.pdfPrint(tmpPrint,this.txtMail.value)
                 resolve()
             })
         });
@@ -710,7 +715,12 @@ export default class salesOrdList extends React.PureComponent
                             
                         </div>
                         <div className="col-3">
-                            <NdButton text={this.t("btnMailSend")} type="primary" width="100%" onClick={this._sendMail}></NdButton>
+                            <NdButton text={this.t("btnMailSend")} type="default" width="100%"  onClick={async ()=>
+                            {
+                                await this.mailPopup.show().then(async (e) =>
+                                {
+                                });
+                            }}></NdButton>
                         </div>
                     </div>
                     <NdPopUp parent={this} id={"popDetail"} 
@@ -1220,6 +1230,50 @@ export default class salesOrdList extends React.PureComponent
                                 </Item>
                             </Form>
                         </NdPopUp>
+                    </div>
+                    {/* Mail PopUp */}
+                    <div>
+                        <NdDialog parent={this} id={"mailPopup"} 
+                        visible={false}                        
+                        showTitle={true}
+                        title={this.t("mailPopup.title")}
+                        container={"#root"} 
+                        width={"600"}
+                        height={"300"}
+                        position={{of:"#root"}}
+                        >
+                            {/* txtMail */}
+                            <div className="row pt-1">
+                                <div className="col-12">
+                                    <NdTextBox id="txtMail" parent={this} simple={true} elementAttr={{style:"font-size:15pt;font-weight:bold;border:3px solid #428bca;"}}>     
+                                    </NdTextBox> 
+                                </div>
+                            </div> 
+                            <div className="row py-1">
+                                <div className="col-6">
+                                    <div className="col-12 px-1">
+                                        <NbButton id={"btnMailSend"} parent={this} className="form-group btn btn-success btn-block my-1" style={{height:"70px",width:"100%"}}
+                                        onClick={async()=>
+                                        {
+                                            this._sendMail()
+                                        }}>
+                                            <i className="text-white fa-solid fa-check" style={{fontSize: "24px"}} />
+                                        </NbButton>
+                                    </div>   
+                                </div>
+                                <div className="col-6">
+                                    <div className="col-12 px-1">
+                                        <NbButton id={"btnMailReject"} parent={this} className="form-group btn btn-danger btn-block my-1" style={{height:"70px",width:"100%"}}
+                                        onClick={async()=>
+                                        {
+                                            this.mailPopup._onClick()
+                                        }}>
+                                            <i className="text-white fa-solid fa-close" style={{fontSize: "24px"}} />
+                                        </NbButton>
+                                    </div>   
+                                </div>
+                            </div>     
+                        </NdDialog>
                     </div>
                 </ScrollView>
             </div>

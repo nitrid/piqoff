@@ -13980,6 +13980,11 @@ export const langFr =
             design : "Design" ,
             lang : "Langue Document" 
         },
+        btnMailSend : "Mail Gönder",  // BAK
+        mailPopup : 
+        {
+            title : "Mail Adresi Girişi"  // BAK
+        }
     },
     pos_02_002 : // "Müşteri Puanı Raporu"
     {

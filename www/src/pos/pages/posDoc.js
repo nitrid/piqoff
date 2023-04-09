@@ -5585,7 +5585,7 @@ export default class posDoc extends React.PureComponent
                             <div className="offset-10 col-2">
                                 <div className="row px-2">
                                     {/* btnPopLastSaleTRest */}
-                                    <div className="col-4 p-1">
+                                    <div className="col-3 p-1">
                                         <NbButton id={"btnPopLastSaleTRest"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"50px",width:"100%"}}
                                         onClick={async ()=>
                                         {
@@ -5663,8 +5663,55 @@ export default class posDoc extends React.PureComponent
                                             <i className="text-white fa-solid fa-utensils" style={{fontSize: "16px"}} />
                                         </NbButton>
                                     </div>
+                                      {/* btnLastSaleSendMail */}
+                                      <div className="col-3 p-1">
+                                        <NbButton id={"btnLastSaleSendMail"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"50px",width:"100%"}}
+                                        onClick={async()=>
+                                        {
+                                            let tmpLastPos = new datatable();
+                                            tmpLastPos.import(this.grdLastPos.devGrid.getSelectedRowKeys())
+                                            
+                                            if(tmpLastPos.length > 0)
+                                            {
+                                                let tmpDupSignature = await this.nf525.signaturePosFactDuplicate(tmpLastPos[0])
+                                                let tmpDupSign = ''
+
+                                                if(tmpDupSignature != '')
+                                                {
+                                                    tmpDupSign = tmpDupSignature.SIGNATURE.substring(2,3) + tmpDupSignature.SIGNATURE.substring(6,7) + tmpDupSignature.SIGNATURE.substring(12,13) + tmpDupSignature.SIGNATURE.substring(18,19)
+                                                }
+                                                let tmpData = 
+                                                {
+                                                    pos : tmpLastPos,
+                                                    possale : this.lastPosSaleDt,
+                                                    pospay : this.lastPosPayDt,
+                                                    pospromo : this.lastPosPromoDt,
+                                                    firm : this.firm,
+                                                    special : 
+                                                    {
+                                                        type : tmpLastPos[0].FACT_REF == 0 ? 'Fis' : 'Fatura',
+                                                        ticketCount : 0,
+                                                        reprint :  1,
+                                                        repas : 0,
+                                                        factCertificate : '',
+                                                        dupCertificate : this.core.appInfo.name + " version : " + this.core.appInfo.version + " - " + this.core.appInfo.certificate + " - " + tmpDupSign,
+                                                        customerUsePoint : Math.floor(tmpLastPos[0].LOYALTY * 100),
+                                                        customerPoint : (tmpLastPos[0].CUSTOMER_POINT + Math.floor(tmpLastPos[0].LOYALTY * 100)) - Math.floor(tmpLastPos[0].TOTAL),
+                                                        customerGrowPoint : tmpLastPos[0].CUSTOMER_POINT - Math.floor(tmpLastPos[0].TOTAL)
+                                                    }
+                                                }
+
+                                                this.mailPopup.tmpData = tmpData;
+                                                await this.mailPopup.show().then(async (e) =>
+                                                {
+                                                });
+                                            }
+                                        }}>
+                                            <i className="text-white fa-solid fa-paper-plane" style={{fontSize: "16px"}} />
+                                        </NbButton>
+                                    </div>
                                     {/* btnPopLastSaleFile */}
-                                    <div className="col-4 p-1">
+                                    <div className="col-3 p-1">
                                         <NbButton id={"btnPopLastSaleFile"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"50px",width:"100%"}}
                                         onClick={async()=>
                                         {
@@ -5769,7 +5816,7 @@ export default class posDoc extends React.PureComponent
                                         </NbButton>
                                     </div>
                                     {/* btnPopLastSalePrint */}
-                                    <div className="col-4 p-1">
+                                    <div className="col-3 p-1">
                                         <NbButton id={"btnPopLastSalePrint"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"50px",width:"100%"}}
                                         onClick={async()=>
                                         {

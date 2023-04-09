@@ -1921,7 +1921,7 @@ export class posDeviceCls
             let tmpMailData = {html:tmpHtml,subject:"Votre Ticket De Caisse",sendMail:pMail,attachName:"ticket de vente.pdf",attachData:tmpAttach,text:tmpText}
             this.core.socket.emit('mailer',tmpMailData,async(pResult1) => 
             {
-                
+                console.log(pResult1)
             });
             resolve()
         });

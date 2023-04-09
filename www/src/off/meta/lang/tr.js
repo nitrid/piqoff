@@ -14071,6 +14071,11 @@ export const langTr =
             design : "Dizayn",
             lang : "Evrak Dili"
         },
+        btnMailSend : "Mail Gönder", 
+        mailPopup : 
+        {
+            title : "Mail Adresi Girişi"
+        }
     },
     pos_02_002 : // "Müşteri Puanı Raporu"
     {
