@@ -749,4 +749,10 @@ export const langTr =
         payCardPort : "Pay card port",
         printDesing : "Yazdırma dizaynı"
     },
+    msgConnectOut: 
+    {
+        title : "Dikkat",
+        msg : "Sunucu ile bağlantınız koptu.. ",
+        btn01 : "Tamam"
+    },
 }

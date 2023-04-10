@@ -165,6 +165,7 @@ export const langTr =
         stk_04_004 :"SKT Operasyonu",
         stk_05_001 : "Depo Envanter Raporu",
         stk_05_002 : "Değişen Alış Fiyatları Raporu",
+        stk_05_003 : "Sayım Envanter Raporu",
         cri: "Cari",
         cri_01: "Tanımlar",
         cri_02: "Listeler",
@@ -2810,6 +2811,27 @@ export const langTr =
             clmMargin : "Brüt Marj",
             clmNetMargin : "Net Marj",
         },
+    },
+    stk_05_001 : // "Sayım Envanter Raporu"
+    {
+        chkZeroQuantity : "0 Miktarlar Gösterilsin",
+        cmbDepot : "Depo",
+        btnCheck : "Aktif",
+        btnGet :"Getir",
+        grdListe : 
+        {
+            clmCode: "Kodu",
+            clmName : "Adı",           
+            clmQuantity : "Adet",
+            clmBarcode : "Barkodu",
+            clmCostPrice : "Maliyet Fiyatı", 
+            clmTotalCost : "Envanter Değeri", 
+            clmSalePrice : "Satış Fiyatı", 
+            clmTotalPrice : "Toplam Satış Değeri" 
+        },
+        txtTotalQuantity : "Toplam Miktar",
+        txtTotalCost : "Envanter Değeri",
+        cmbDepot : "Depo"
     },
     cri_01_001: // "Cari Tanımları"
     {

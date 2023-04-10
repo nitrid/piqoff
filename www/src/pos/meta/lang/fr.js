@@ -749,4 +749,10 @@ export const langFr =
         payCardPort : "TPE port",
         printDesing : "Design d’imprimante"
     },
+    msgConnectOut: 
+    {
+        title : "Dikkat",   // BAK
+        msg : "Sunucu ile bağlantınız koptu.. ",   // BAK
+        btn01 : "Tamam"   // BAK
+    },
 }

@@ -211,6 +211,11 @@ export const menu = (e) =>
                             text : e.t('menuOff.stk_05_002'),//'',
                             path: 'items/report/itemPurcPriceReport'
                         },
+                        {
+                            id: 'stk_05_003',
+                            text : e.t('menuOff.stk_05_003'),//'',
+                            path: 'items/report/countInventoryReport'
+                        },
                     ]
                 }
             ]

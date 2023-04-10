@@ -358,6 +358,15 @@ export default class salesOrdList extends React.PureComponent
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
+                                    <NdButton id="btnMailSend" parent={this} icon="message" type="default"
+                                    onClick={async ()=>
+                                    {
+                                        await this.mailPopup.show().then(async (e) =>
+                                        {
+                                        });
+                                    }}/>
+                                </Item>
+                                <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnPrint" parent={this} icon="print" type="default"
                                     onClick={()=>
                                     {
@@ -703,24 +712,6 @@ export default class salesOrdList extends React.PureComponent
                                 <Column dataField="POS_ID" caption={this.t("grdSaleTicketReport.clmTicketID")} visible={true} /> 
 
                             </NdGrid>
-                        </div>
-                    </div>
-                    <div className="row px-2 pt-2">
-                        <div className="col-3">
-                        </div>
-                        <div className="col-3">
-                            
-                        </div>
-                        <div className="col-3">
-                            
-                        </div>
-                        <div className="col-3">
-                            <NdButton text={this.t("btnMailSend")} type="default" width="100%"  onClick={async ()=>
-                            {
-                                await this.mailPopup.show().then(async (e) =>
-                                {
-                                });
-                            }}></NdButton>
                         </div>
                     </div>
                     <NdPopUp parent={this} id={"popDetail"} 

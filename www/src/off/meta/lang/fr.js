@@ -165,6 +165,7 @@ export const langFr =
         stk_04_004:"Traitement DLC",
         stk_05_001: "Rapport Inventaire Dépôt", 
         stk_05_002: "Rapport sur la modification des prix d'achat", 
+        stk_05_003: "Sayım Envanter Raporu", //BAK 
         cri: "Fournisseur - Client",
         cri_01: "Saisie",
         cri_02: "Listes",
@@ -2808,6 +2809,27 @@ export const langFr =
             clmMargin : "Marge brute", 
             clmNetMargin : "Marge nette", 
         },
+    },
+    stk_05_003 : // "Depo Envanter Raporu"
+    {
+        chkZeroQuantity : "Afficher quantité zéro", 
+        cmbDepot : "Dépôt", 
+        btnCheck : "Actif", 
+        btnGet :"Rechercher", 
+        grdListe : 
+        {
+            clmCode: "Code", 
+            clmName : "Nom",           
+            clmQuantity : "Quantité", 
+            clmBarcode : "Code barre", 
+            clmCostPrice : "Prix d'achat",    
+            clmTotalCost : "Valeur prix d'achat",    
+            clmSalePrice : "Prix de vente",    
+            clmTotalPrice : "Montant total des ventes"  
+        },
+        txtTotalQuantity : "Total Quantité",
+        txtTotalCost : "Montant de l'inventaire",
+        cmbDepot : "Réserve"
     },
     cri_01_001: // "Cari Tanımları"
     {
