@@ -5966,7 +5966,7 @@ export default class posDoc extends React.PureComponent
                                     {
                                         this.lastPosDt.selectCmd = 
                                         {
-                                            query:  "SELECT *, " +
+                                            query:  "SELECT *,CONVERT(NVARCHAR,LDATE,104) + '-' + CONVERT(NVARCHAR,LDATE,108) AS CONVERT_DATE, " +
                                                     "SUBSTRING(CONVERT(NVARCHAR(50),GUID),20,36) AS REF_NO " + 
                                                     "FROM POS_" + (this.state.isFormation ? 'FRM_' : '') + "VW_01 WHERE DOC_DATE >= @START_DATE AND DOC_DATE <= @FINISH_DATE AND " +
                                                     "((ISNULL((SELECT TOP 1 1 FROM POS_PAYMENT AS PAY WHERE PAY.POS = POS_" + (this.state.isFormation ? 'FRM_' : '') + "VW_01.GUID AND TYPE = @TYPE AND DELETED = 0),0) = 1) OR (@TYPE = -1)) AND " + 
@@ -5979,7 +5979,7 @@ export default class posDoc extends React.PureComponent
                                     {
                                         this.lastPosDt.selectCmd = 
                                         {
-                                            query:  "SELECT *, " +
+                                            query:  "SELECT *,CONVERT(NVARCHAR,LDATE,104) + '-' + CONVERT(NVARCHAR,LDATE,108) AS CONVERT_DATE, " +
                                                     "SUBSTRING(CONVERT(NVARCHAR(50),GUID),20,36) AS REF_NO " + 
                                                     "FROM POS_" + (this.state.isFormation ? 'FRM_' : '') + "VW_01 WHERE SUBSTRING(CONVERT(NVARCHAR(50),GUID),20,36) = @REF AND STATUS = 1",
                                             param:  ["REF:string|25"],
@@ -6095,7 +6095,7 @@ export default class posDoc extends React.PureComponent
                                     }
                                 }}
                                 >
-                                    <Column dataField="LDATE" caption={this.lang.t("grdLastPos.LDATE")} width={150} alignment={"center"} dataType="datetime" />
+                                    <Column dataField="CONVERT_DATE" caption={this.lang.t("grdLastPos.LDATE")} width={150} alignment={"center"}  />
                                     <Column dataField="DEVICE" caption={this.lang.t("grdLastPos.DEVICE")} width={60}/>
                                     <Column dataField="REF_NO" caption={this.lang.t("grdLastPos.REF")} width={150}/>
                                     <Column dataField="CUSTOMER_NAME" caption={this.lang.t("grdLastPos.CUSTOMER_NAME")} width={200}/> 

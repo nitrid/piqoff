@@ -223,7 +223,7 @@ export default class labelPrinting extends React.PureComponent
                 {
                     this.addAutoItem(tmpData.result.recordset[i])
                 }
-                await this.grdLabelQueue.devGrid.deleteRow(0)
+                await this.grdLabelQueue.devGrid.deleteRow(this.lblObj.dt().length - 1)
                 this.popWizard.hide()
                 
             }
@@ -274,7 +274,7 @@ export default class labelPrinting extends React.PureComponent
                 {
                     this.addAutoItem(tmpData.result.recordset[i])
                 }
-                await this.grdLabelQueue.devGrid.deleteRow(0)
+                await this.grdLabelQueue.devGrid.deleteRow(this.lblObj.dt().length - 1)
                 this.popWizard.hide()
                 
             }
@@ -328,7 +328,7 @@ export default class labelPrinting extends React.PureComponent
                 {
                     this.addAutoItem(tmpData.result.recordset[i])
                 }
-                await this.grdLabelQueue.devGrid.deleteRow(0)
+                await this.grdLabelQueue.devGrid.deleteRow(this.lblObj.dt().length - 1)
                 this.popWizard.hide()
                 
             }
@@ -379,7 +379,7 @@ export default class labelPrinting extends React.PureComponent
                 {
                     this.addAutoItem(tmpData.result.recordset[i])
                 }
-                await this.grdLabelQueue.devGrid.deleteRow(0)
+                await this.grdLabelQueue.devGrid.deleteRow(this.lblObj.dt().length - 1)
                 this.popWizard.hide()
                 
             }
@@ -430,7 +430,7 @@ export default class labelPrinting extends React.PureComponent
                 {
                     this.addAutoItem(tmpData.result.recordset[i])
                 }
-                await this.grdLabelQueue.devGrid.deleteRow(0)
+                await this.grdLabelQueue.devGrid.deleteRow(this.lblObj.dt().length - 1)
                 this.popWizard.hide()
                 
             }
@@ -479,7 +479,7 @@ export default class labelPrinting extends React.PureComponent
                 {
                     this.addAutoItem(tmpData.result.recordset[i])
                 }
-                await this.grdLabelQueue.devGrid.deleteRow(0)
+                await this.grdLabelQueue.devGrid.deleteRow(this.lblObj.dt().length - 1)
                 this.popWizard.hide()
                 
             }
@@ -645,7 +645,7 @@ export default class labelPrinting extends React.PureComponent
                 let pResult = await dialog(tmpConfObj);
                 if(pResult == 'btn01')
                 {
-                    await this.grdLabelQueue.devGrid.deleteRow(0)
+                    await this.grdLabelQueue.devGrid.deleteRow(this.lblObj.dt().length - 1)
                     return
                 }
                 else
