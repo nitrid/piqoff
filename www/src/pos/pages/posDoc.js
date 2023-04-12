@@ -489,34 +489,37 @@ export default class posDoc extends React.PureComponent
         
         await this.calcGrandTotal(false) 
         
-        // this.posObj.ds.on('onEdit',(pTblName,pData) =>
-        // {
-        //     if(pTblName == "POS_SALE")
-        //     {
-        //         let tmpPayRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).toFixed(2))
-        //         console.log(this.posObj.dt()[0].TOTAL)
-        //         if(pData.rowData.WEIGHING)
-        //         {
-        //             this.posDevice.lcdPrint
-        //             ({
-        //                 blink : 0,
-        //                 text :  parseFloat(Number(pData.rowData.QUANTITY)).toFixed(3).space(5) + "kg X " +
-        //                         (parseFloat(Number(pData.rowData.PRICE) - (Number(pData.rowData.DISCOUNT) / Number(pData.rowData.QUANTITY))).toFixed(2) + "EU/kg").space(10,"s") +
-        //                         pData.rowData.ITEM_NAME.toString().space(11) + "=" +  (parseFloat(Number(pData.rowData.TOTAL)).toFixed(2) + "EUR").space(8,"s")
-        //             })
-        //         }
-        //         else
-        //         {
-        //             this.posDevice.lcdPrint
-        //             ({
-        //                 blink : 0,
-        //                 text :  pData.rowData.ITEM_NAME.toString().space(9) + Number(pData.rowData.QUANTITY).toString() + "X" +
-        //                         (parseFloat(Number(pData.rowData.PRICE) - (Number(pData.rowData.DISCOUNT) / Number(pData.rowData.QUANTITY))).toFixed(2) + "EUR").space(8,"s") +
-        //                         "TOTAL : " + (parseFloat(tmpPayRest).toFixed(2) + "EUR").space(12,"s")
-        //             })
-        //         }
-        //     }
-        // })
+        this.posObj.ds.on('onEdit',(pTblName,pData) =>
+        {
+            if(pTblName == "POS_SALE")
+            {
+                setTimeout(() => 
+                {
+                    let tmpPayRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).toFixed(2))
+                
+                    if(pData.rowData.WEIGHING)
+                    {
+                        this.posDevice.lcdPrint
+                        ({
+                            blink : 0,
+                            text :  parseFloat(Number(pData.rowData.QUANTITY)).toFixed(3).space(5) + "kg X " +
+                                    (parseFloat(Number(pData.rowData.PRICE) - (Number(pData.rowData.DISCOUNT) / Number(pData.rowData.QUANTITY))).toFixed(2) + "EU/kg").space(10,"s") +
+                                    pData.rowData.ITEM_NAME.toString().space(11) + "=" +  (parseFloat(Number(pData.rowData.TOTAL)).toFixed(2) + "EUR").space(8,"s")
+                        })
+                    }
+                    else
+                    {
+                        this.posDevice.lcdPrint
+                        ({
+                            blink : 0,
+                            text :  pData.rowData.ITEM_NAME.toString().space(9) + Number(pData.rowData.QUANTITY).toString() + "X" +
+                                    (parseFloat(Number(pData.rowData.PRICE) - (Number(pData.rowData.DISCOUNT) / Number(pData.rowData.QUANTITY))).toFixed(2) + "EUR").space(8,"s") +
+                                    "TOTAL : " + (parseFloat(tmpPayRest).toFixed(2) + "EUR").space(12,"s")
+                        })
+                    }
+                }, 200);                
+            }
+        })
 
         this.core.util.logPath = "\\www\\log\\pos_" + this.posObj.dt()[this.posObj.dt().length - 1].DEVICE + ".txt"        
 
@@ -1231,32 +1234,29 @@ export default class posDoc extends React.PureComponent
                 this.txtTicRest.value = this.cheqDt.length + '/' + parseFloat(this.cheqTotalAmount.value).toFixed(2) + ' ' + Number.money.sign
                 this.cheqLastAmount.value = this.cheqDt.length > 0 ? this.cheqDt[0].AMOUNT : 0
                 
-                setTimeout(() => 
+                if(tmpPosSale.length > 0)
                 {
-                    if(tmpPosSale.length > 0)
+                    if(tmpPosSale[tmpPosSale.length - 1].WEIGHING)
                     {
-                        if(tmpPosSale[tmpPosSale.length - 1].WEIGHING)
-                        {
-                            this.posDevice.lcdPrint
-                            ({
-                                blink : 0,
-                                text :  parseFloat(Number(tmpPosSale[tmpPosSale.length - 1].QUANTITY)).toFixed(3).space(5) + "kg X " +
-                                        (parseFloat(Number(tmpPosSale[tmpPosSale.length - 1].PRICE) - (Number(tmpPosSale[tmpPosSale.length - 1].DISCOUNT) / Number(tmpPosSale[tmpPosSale.length - 1].QUANTITY))).toFixed(2) + "EU/kg").space(10,"s") +
-                                        tmpPosSale[tmpPosSale.length - 1].ITEM_NAME.toString().space(11) + "=" +  (parseFloat(Number(tmpPosSale[tmpPosSale.length - 1].TOTAL)).toFixed(2) + "EUR").space(8,"s")
-                            })
-                        }
-                        else
-                        {
-                            this.posDevice.lcdPrint
-                            ({
-                                blink : 0,
-                                text :  tmpPosSale[tmpPosSale.length - 1].ITEM_NAME.toString().space(9) + Number(tmpPosSale[tmpPosSale.length - 1].QUANTITY).toString() + "X" +
-                                        (parseFloat(Number(tmpPosSale[tmpPosSale.length - 1].PRICE) - (Number(tmpPosSale[tmpPosSale.length - 1].DISCOUNT) / Number(tmpPosSale[tmpPosSale.length - 1].QUANTITY))).toFixed(2) + "EUR").space(8,"s") +
-                                        "TOTAL : " + (parseFloat(tmpPayRest).toFixed(2) + "EUR").space(12,"s")
-                            })
-                        }
+                        this.posDevice.lcdPrint
+                        ({
+                            blink : 0,
+                            text :  parseFloat(Number(tmpPosSale[tmpPosSale.length - 1].QUANTITY)).toFixed(3).space(5) + "kg X " +
+                                    (parseFloat(Number(tmpPosSale[tmpPosSale.length - 1].PRICE) - (Number(tmpPosSale[tmpPosSale.length - 1].DISCOUNT) / Number(tmpPosSale[tmpPosSale.length - 1].QUANTITY))).toFixed(2) + "EU/kg").space(10,"s") +
+                                    tmpPosSale[tmpPosSale.length - 1].ITEM_NAME.toString().space(11) + "=" +  (parseFloat(Number(tmpPosSale[tmpPosSale.length - 1].TOTAL)).toFixed(2) + "EUR").space(8,"s")
+                        })
                     }
-                }, 200);                
+                    else
+                    {
+                        this.posDevice.lcdPrint
+                        ({
+                            blink : 0,
+                            text :  tmpPosSale[tmpPosSale.length - 1].ITEM_NAME.toString().space(9) + Number(tmpPosSale[tmpPosSale.length - 1].QUANTITY).toString() + "X" +
+                                    (parseFloat(Number(tmpPosSale[tmpPosSale.length - 1].PRICE) - (Number(tmpPosSale[tmpPosSale.length - 1].DISCOUNT) / Number(tmpPosSale[tmpPosSale.length - 1].QUANTITY))).toFixed(2) + "EUR").space(8,"s") +
+                                    "TOTAL : " + (parseFloat(tmpPayRest).toFixed(2) + "EUR").space(12,"s")
+                        })
+                    }
+                }
             }            
             //console.log("100 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS")) 
             //HER EKLEME İŞLEMİNDEN SONRA İLK SATIR SEÇİLİYOR.
