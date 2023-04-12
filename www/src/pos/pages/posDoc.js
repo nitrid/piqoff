@@ -2373,18 +2373,18 @@ export default class posDoc extends React.PureComponent
             
             if(tmpDt.length > 0)
             {
-                if(tmpDt[0].REBATE_TICKET != '')
-                {
-                    let tmpConfObj =
-                    {
-                        id:'msgDoubleRebate',showTitle:true,title:this.lang.t("msgDoubleRebate.title"),showCloseButton:true,width:'500px',height:'200px',
-                        button:[{id:"btn01",caption:this.lang.t("msgDoubleRebate.btn01"),location:'after'}],
-                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgDoubleRebate.msg")}</div>)
-                    }
-                    await dialog(tmpConfObj);
-                    this.msgItemReturnTicket.hide()
-                    return
-                }
+                // if(tmpDt[0].REBATE_TICKET != '')
+                // {
+                //     let tmpConfObj =
+                //     {
+                //         id:'msgDoubleRebate',showTitle:true,title:this.lang.t("msgDoubleRebate.title"),showCloseButton:true,width:'500px',height:'200px',
+                //         button:[{id:"btn01",caption:this.lang.t("msgDoubleRebate.btn01"),location:'after'}],
+                //         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgDoubleRebate.msg")}</div>)
+                //     }
+                //     await dialog(tmpConfObj);
+                //     this.msgItemReturnTicket.hide()
+                //     return
+                // }
 
                 for (let i = 0; i < this.posObj.posSale.dt().length; i++) 
                 {
