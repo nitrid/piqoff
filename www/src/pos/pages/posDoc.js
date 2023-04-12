@@ -494,7 +494,7 @@ export default class posDoc extends React.PureComponent
             if(pTblName == "POS_SALE")
             {
                 let tmpPayRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).toFixed(2))
-
+                console.log(this.posObj.dt()[0].TOTAL)
                 if(pData.rowData.WEIGHING)
                 {
                     this.posDevice.lcdPrint
@@ -1239,7 +1239,7 @@ export default class posDoc extends React.PureComponent
                         ({
                             blink : 0,
                             text :  parseFloat(Number(tmpPosSale[tmpPosSale.length - 1].QUANTITY)).toFixed(3).space(5) + "kg X " +
-                                    (parseFloat(Number(tmpPosSale[tmpPosSale.length - 1].PRICE) - (Number(tmpPosSale[tmpPosSale.length - 1].DISCOUNT) / Number(tmpPosSale[tmpPosSale.length - 1].QUANTITY))).toFixed(2) + "E/kg").space(10,"s") +
+                                    (parseFloat(Number(tmpPosSale[tmpPosSale.length - 1].PRICE) - (Number(tmpPosSale[tmpPosSale.length - 1].DISCOUNT) / Number(tmpPosSale[tmpPosSale.length - 1].QUANTITY))).toFixed(2) + "EU/kg").space(10,"s") +
                                     tmpPosSale[tmpPosSale.length - 1].ITEM_NAME.toString().space(11) + "=" +  (parseFloat(Number(tmpPosSale[tmpPosSale.length - 1].TOTAL)).toFixed(2) + "EUR").space(8,"s")
                         })
                     }
