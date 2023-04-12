@@ -751,11 +751,11 @@ export class itemBarcodeCls
             
             if(tmpPrm.BARCODE != '')
             {
-                this.ds.get('ITEM_BARCODE').selectCmd.query = this.ds.get('ITEM_BARCODE').selectCmd.query.replaceAll("{0}", "BARCODE = @BARCODE")
+                this.ds.get('ITEM_BARCODE').selectCmd.query = this.ds.get('ITEM_BARCODE').selectCmd.query.replaceAll("{0}", "BARCODE = @BARCODE AND ")
             }
             else if(tmpPrm.ITEM_CODE != '')
             {
-                this.ds.get('ITEM_BARCODE').selectCmd.query = this.ds.get('ITEM_BARCODE').selectCmd.query.replaceAll("{0}", "ITEM_CODE = @ITEM_CODE")
+                this.ds.get('ITEM_BARCODE').selectCmd.query = this.ds.get('ITEM_BARCODE').selectCmd.query.replaceAll("{0}", "ITEM_CODE = @ITEM_CODE AND")
             }
             else
             {

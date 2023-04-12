@@ -4627,8 +4627,9 @@ export default class purchaseInvoice extends React.PureComponent
                                     }}
                                     onRowUpdated={async(e)=>{
 
-                                        let tmpMargin = e.key.SALE_PRICE - e.key.PRICE
-                                        let tmpMarginRate = (tmpMargin /(e.key.SALE_PRICE)) * 100
+                                        let tmpExVat = e.key.SALE_PRICE / ((e.key.VAT_RATE / 100) + 1)
+                                        let tmpMargin = tmpExVat -  e.key.PRICE;
+                                        let tmpMarginRate = ((tmpMargin /  e.key.PRICE)) * 100
                                         e.key.PRICE_MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
                                         
                                     }}
