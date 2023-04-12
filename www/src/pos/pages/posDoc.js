@@ -491,7 +491,7 @@ export default class posDoc extends React.PureComponent
         
         this.posObj.ds.on('onEdit',(pTblName,pData) =>
         {
-            if(pTblName == "POS_SALE")
+            if(pTblName == "POS_SALE" && typeof pData.data != 'undefined' && (typeof pData.data.QUANTITY != 'undefined' || typeof pData.data.PRICE != 'undefined'))
             {
                 setTimeout(() => 
                 {
@@ -518,7 +518,7 @@ export default class posDoc extends React.PureComponent
                                     "TOTAL : " + (parseFloat(tmpPayRest).toFixed(2) + "EUR").space(12,"s")
                         })
                     }
-                }, 200);                
+                }, 500);                
             }
         })
 
