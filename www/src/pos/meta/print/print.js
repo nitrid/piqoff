@@ -109,11 +109,11 @@ export function print()
             let tmpTitle = {}
             if(data.special.type != 'Fatura')
             {
-                tmpTitle = {font:"b",style:"bu",align:"lt",data:"T " + "Libelle".space(38) + " " + "Qte".space(6) + " " + "Prix/u".space(7) + " " + "Prix EUR".space(8)}
+                tmpTitle = {font:"b",style:"bu",align:"lt",data:"T " + "Libelle".space(37) + " " + "Qte".space(3) + " " + "Prix/(u-kg)".space(11) + " " + "Prix EUR".space(8)}
             }
             else if(data.special.type == 'Fatura')
             {
-                tmpTitle = {font:"b",style:"bu",align:"lt",data:"T " + "Libelle".space(38) + " " + "Qte".space(6) + " " + "P.HT/u".space(7) + " " + "T.HT EUR".space(8)}
+                tmpTitle = {font:"b",style:"bu",align:"lt",data:"T " + "Libelle".space(37) + " " + "Qte".space(3) + " " + "P.HT/(u-kg)".space(11) + " " + "T.HT EUR".space(8)}
             }
             return tmpTitle
         },

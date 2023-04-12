@@ -495,7 +495,6 @@ export default class posDoc extends React.PureComponent
             {
                 setTimeout(() => 
                 {
-                    console.log(pData)
                     let tmpPayRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).toFixed(2))
                 
                     if(pData.rowData.WEIGHING)
