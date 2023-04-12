@@ -513,8 +513,8 @@ export default class posDoc extends React.PureComponent
                         this.posDevice.lcdPrint
                         ({
                             blink : 0,
-                            text :  pData.rowData.ITEM_NAME.toString().space(9) + Number(pData.rowData.QUANTITY).toString() + "X" +
-                                    (parseFloat(Number(pData.rowData.PRICE) - (Number(pData.rowData.DISCOUNT) / Number(pData.rowData.QUANTITY))).toFixed(2) + "EUR").space(8,"s") +
+                            text :  pData.rowData.ITEM_NAME.toString().space(7) + " " + Number(pData.rowData.QUANTITY).toString().space(3,"s") + "X" +
+                                    (parseFloat(Number(pData.rowData.PRICE) - (Number(pData.rowData.DISCOUNT) / Number(pData.rowData.QUANTITY))).toFixed(2) + "EU").space(8,"s") +
                                     "TOTAL : " + (parseFloat(tmpPayRest).toFixed(2) + "EUR").space(12,"s")
                         })
                     }
@@ -1252,8 +1252,8 @@ export default class posDoc extends React.PureComponent
                         this.posDevice.lcdPrint
                         ({
                             blink : 0,
-                            text :  tmpPosSale[tmpPosSale.length - 1].ITEM_NAME.toString().space(9) + Number(tmpPosSale[tmpPosSale.length - 1].QUANTITY).toString() + "X" +
-                                    (parseFloat(Number(tmpPosSale[tmpPosSale.length - 1].PRICE) - (Number(tmpPosSale[tmpPosSale.length - 1].DISCOUNT) / Number(tmpPosSale[tmpPosSale.length - 1].QUANTITY))).toFixed(2) + "EUR").space(8,"s") +
+                            text :  tmpPosSale[tmpPosSale.length - 1].ITEM_NAME.toString().space(7) + " " + Number(tmpPosSale[tmpPosSale.length - 1].QUANTITY).toString().space(3,"s") + "X" +
+                                    (parseFloat(Number(tmpPosSale[tmpPosSale.length - 1].PRICE) - (Number(tmpPosSale[tmpPosSale.length - 1].DISCOUNT) / Number(tmpPosSale[tmpPosSale.length - 1].QUANTITY))).toFixed(2) + "EU").space(8,"s") +
                                     "TOTAL : " + (parseFloat(tmpPayRest).toFixed(2) + "EUR").space(12,"s")
                         })
                     }
