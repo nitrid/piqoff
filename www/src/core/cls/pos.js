@@ -1872,22 +1872,22 @@ export class posDeviceCls
                     let tmpFontSize = 12
                     if(tmpArr[i].font == 'a')
                     {
-                        tmpFontSize = 16
+                        tmpFontSize = 12
                     }
                     else if(tmpArr[i].font == 'b')
                     {
-                        tmpFontSize = 12
+                        tmpFontSize = 9
                     }
 
                     if(typeof tmpArr[i].size != 'undefined' && Array.isArray(tmpArr[i].size))
                     {
                         if(tmpArr[i].size[0] == 1 && tmpArr[i].size[1] == 1)
                         {
-                            tmpFontSize = 20
+                            tmpFontSize = 15
                         }
                         else if(tmpArr[i].size[0] == 1 && tmpArr[i].size[1] == 0)
                         {
-                            tmpFontSize = 16
+                            tmpFontSize = 12
                         }
                     }
                     docPdf.setFont('helvetica',tmpStyle)

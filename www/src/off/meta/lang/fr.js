@@ -14006,7 +14006,20 @@ export const langFr =
         mailPopup : 
         {
             title : "Mail Adresi Girişi"  // BAK
-        }
+        },
+        msgFacture:
+        {
+            title: "Dikkat",   // BAK
+            btn01: "Tamam",   // BAK
+            btn02: "İptal",   // BAK
+            msg: "Seçtiğiniz Fişler Faturaya Çevirilecektir! Onaylıyormusunuz ?"   // BAK
+        },
+        msgFactureCustomer:
+        {  
+            title: "Dikkat",  // BAK
+            btn01: "Tamam",  // BAK
+            msg: "Müşteri tanımlayanmamış fiş faturaya çevrilemez !"  // BAK
+        },
     },
     pos_02_002 : // "Müşteri Puanı Raporu"
     {

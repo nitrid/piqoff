@@ -2481,6 +2481,10 @@ export default class posDoc extends React.PureComponent
         return new Promise(async resolve => 
         {
             let prmPrint = this.posDevice.dt().length > 0 ? this.posDevice.dt()[0].PRINT_DESING : ""
+            if(pType == 1)
+            {
+                prmPrint = 'printPdf.js'
+            }
             import("../meta/print/" + prmPrint).then(async(e)=>
             {
                 let tmpPrint = e.print(pData)
