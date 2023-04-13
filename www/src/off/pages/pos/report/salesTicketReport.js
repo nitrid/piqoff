@@ -437,7 +437,7 @@ export default class salesOrdList extends React.PureComponent
                         <div className="col-12">
                             <Toolbar>
                             <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnMailSend" parent={this} icon="message" type="default"
+                                    <NdButton id="btnMailSend" parent={this} icon="file" type="default"
                                     onClick={async ()=>
                                     {
                                         this._factureInsert()
