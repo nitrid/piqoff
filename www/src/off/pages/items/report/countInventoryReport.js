@@ -6,7 +6,7 @@ import Toolbar,{Item} from 'devextreme-react/toolbar';
 import Form, { Label,EmptyItem } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 
-import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export, Summary, TotalItem} from '../../../../core/react/devex/grid.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js'
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
@@ -140,7 +140,7 @@ export default class countInventoryReport extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT ITEM_NAME AS NAME,ITEM_CODE  AS CODE, SUM(QUANTITY) AS QUANTITY, MAX(BARCODE) AS BARCODE,MAX(COST_PRICE) AS COST_PRICE,SUM(TOTAL_COST) AS TOTAL_COST,MAX(PRICE_SALE) AS SALE_PRICE, (MAX(PRICE_SALE) * SUM(QUANTITY)) AS TOTAL_PRICE FROM [ITEM_COUNT_VW_01] " +
+                    query : "SELECT ITEM_NAME AS NAME,ITEM_CODE  AS CODE, ROUND(SUM(QUANTITY),2) AS QUANTITY, MAX(BARCODE) AS BARCODE,MAX(COST_PRICE) AS COST_PRICE,ROUND(SUM(TOTAL_COST),2) AS TOTAL_COST,MAX(PRICE_SALE) AS SALE_PRICE, ROUND((MAX(PRICE_SALE) * SUM(QUANTITY)),2) AS TOTAL_PRICE FROM [ITEM_COUNT_VW_01] " +
                     "WHERE DOC_DATE >= @START AND DOC_DATE <= @END AND DEPOT = @DEPOT GROUP BY ITEM_NAME,ITEM_CODE ORDER BY ITEM_NAME",
                     param : ['START:date','END:date','DEPOT:string|50'],
                     value : [this.dtDate.startDate,this.dtDate.endDate,this.cmbDepot.value]
@@ -254,10 +254,23 @@ export default class countInventoryReport extends React.PureComponent
                                 <Column dataField="CODE" caption={this.t("grdListe.clmCode")} visible={true} /> 
                                 <Column dataField="QUANTITY" caption={this.t("grdListe.clmQuantity")} visible={true} defaultSortOrder="desc"/> 
                                 <Column dataField="BARCODE" caption={this.t("grdListe.clmBarcode")} visible={true}/> 
-                                <Column dataField="COST_PRICE" caption={this.t("grdListe.clmCostPrice")} visible={true}/> 
-                                <Column dataField="TOTAL_COST" caption={this.t("grdListe.clmTotalCost")} visible={true}/> 
-                                <Column dataField="SALE_PRICE" caption={this.t("grdListe.clmSalePrice")} visible={true}/> 
-                                <Column dataField="TOTAL_PRICE" caption={this.t("grdListe.clmTotalPrice")} visible={true}/> 
+                                <Column dataField="COST_PRICE" caption={this.t("grdListe.clmCostPrice")} format={{ style: "currency", currency: "EUR",precision: 3}} visible={true}/> 
+                                <Column dataField="TOTAL_COST" caption={this.t("grdListe.clmTotalCost")} format={{ style: "currency", currency: "EUR",precision: 2}} visible={true}/> 
+                                <Column dataField="SALE_PRICE" caption={this.t("grdListe.clmSalePrice")} format={{ style: "currency", currency: "EUR",precision: 2}} visible={true}/> 
+                                <Column dataField="TOTAL_PRICE" caption={this.t("grdListe.clmTotalPrice")} format={{ style: "currency", currency: "EUR",precision: 2}} visible={true}/> 
+                                <Summary>
+                                    <TotalItem
+                                    column="QUANTITY"
+                                    summaryType="sum"/>
+                                    <TotalItem
+                                    column="TOTAL_COST"
+                                    summaryType="sum"
+                                    valueFormat={{ style: "currency", currency: "EUR",precision: 2}} />
+                                    <TotalItem
+                                    column="TOTAL_PRICE"
+                                    summaryType="sum"
+                                    valueFormat={{ style: "currency", currency: "EUR",precision: 2}} />
+                                </Summary>
                             </NdGrid>
                         </div>
                     </div>
