@@ -685,6 +685,7 @@ export default class posDoc extends React.PureComponent
     }
     async getItem(pCode)
     {
+        console.log(pCode)
         this.txtBarcode.value = ""; 
         let tmpQuantity = 1
         let tmpPrice = 0                
