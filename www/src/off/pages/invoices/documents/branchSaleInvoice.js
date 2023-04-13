@@ -3514,15 +3514,6 @@ export default class branchSaleInvoice extends React.PureComponent
                                                         App.instance.setState({isExecute:false})
                                                         if(pResult.split('|')[0] != 'ERR')
                                                         {
-                                                            let tmpLastSignature = await this.nf525.signatureDocDuplicate(this.docObj.dt()[0])
-                                                            let tmpExtra = {...this.extraObj.empty}
-                                                            tmpExtra.DOC = this.docObj.dt()[0].GUID
-                                                            tmpExtra.DESCRIPTION = ''
-                                                            tmpExtra.TAG = 'PRINT'
-                                                            tmpExtra.SIGNATURE = tmpLastSignature.SIGNATURE
-                                                            tmpExtra.SIGNATURE_SUM = tmpLastSignature.SIGNATURE_SUM
-                                                            this.extraObj.addEmpty(tmpExtra);
-                                                            this.extraObj.save()
                                                             var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
                                                             mywindow.onload = function() 
                                                             {
