@@ -14097,7 +14097,20 @@ export const langTr =
         mailPopup : 
         {
             title : "Mail Adresi Girişi"
-        }
+        },
+        msgFacture:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "İptal",
+            msg: "Seçtiğiniz Fişler Faturaya Çevirilecektir! Onaylıyormusunuz ?"
+        },
+        msgFactureCustomer:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Müşteri tanımlayanmamış fiş faturaya çevrilemez !"
+        },
     },
     pos_02_002 : // "Müşteri Puanı Raporu"
     {

@@ -109,11 +109,11 @@ export function print()
             let tmpTitle = {}
             if(data.special.type != 'Fatura')
             {
-                tmpTitle = {font:"b",style:"bu",align:"lt",data:"T " + "Libelle".space(68) + " " + "Qte".space(6) + " " + "Prix/u".space(7) + " " + "Prix EUR".space(8)}
+                tmpTitle = {font:"b",style:"bu",align:"lt",data:"T " + "Libelle".space(65) + " " + "Qte".space(8) + " " + "Prix(u/kg)".space(11) + " " + "Prix EUR".space(8)}
             }
             else if(data.special.type == 'Fatura')
             {
-                tmpTitle = {font:"b",style:"bu",align:"lt",data:"T " + "Libelle".space(68) + " " + "Qte".space(6) + " " + "P.HT/u".space(7) + " " + "T.HT EUR".space(8)}
+                tmpTitle = {font:"b",style:"bu",align:"lt",data:"T " + "Libelle".space(65) + " " + "Qte".space(8) + " " + "P.HT(u/kg)".space(11) + " " + "T.HT EUR".space(8)}
             }
             return tmpTitle
         },
@@ -172,13 +172,13 @@ export function print()
                                 {
                                     font: "b",
                                     style: tmpProSale[0].GUID == "00000000-0000-0000-0000-000000000000" ? "b" : undefined, //SUBTOTAL
-                                    align: tmpProSale[0].GUID == "00000000-0000-0000-0000-000000000000" ? "lt" : "lt", //SUBTOTAL
+                                    align: tmpProSale[0].GUID == "00000000-0000-0000-0000-000000000000" ? "rt" : "rt", //SUBTOTAL
                                     data: tmpProSale[0].VAT_TYPE + " " +
-                                        (tmpProSale[0].GUID == "00000000-0000-0000-0000-000000000000" ? (tmpProSale[0].ITEM_SNAME + tmpFactStr).space(34,'s') + tmpFactStr : (tmpProSale[0].TICKET_REST ? "*" + tmpProSale[0].ITEM_SNAME + tmpFactStr : tmpProSale[0].ITEM_SNAME + tmpFactStr).toString().space(36)) + " " +                                    
-                                        (tmpProSale[0].GUID == "00000000-0000-0000-0000-000000000000" ? "" : tmpQt + " " + tmpProSale[0].UNIT_SHORT).space(8,'e') + " " + //SUBTOTAL                                    
+                                        (tmpProSale[0].GUID == "00000000-0000-0000-0000-000000000000" ? (tmpProSale[0].ITEM_SNAME + tmpFactStr).space(32,'s') + tmpFactStr : (tmpProSale[0].TICKET_REST ? "*" + tmpProSale[0].ITEM_SNAME + tmpFactStr : tmpProSale[0].ITEM_SNAME + tmpFactStr).toString().space(31)) + " " +                                    
+                                        (tmpProSale[0].GUID == "00000000-0000-0000-0000-000000000000" ? "" : (tmpProSale[0].SCALE_MANUEL == true ? "(M)" : "") + "" + tmpQt + " " + tmpProSale[0].UNIT_SHORT).space(13,'e') + " " + //SUBTOTAL                                    
                                         (tmpProSale[0].GUID == "00000000-0000-0000-0000-000000000000" ? "" : parseFloat(tmpProSale[0].FAMOUNT / tmpQt).toFixed(2)).space(7,"e") + " " + //SUBTOTAL
                                        // (tmpProSale[0].GUID == "00000000-0000-0000-0000-000000000000" ? "" : (parseFloat(Number(tmpProSale[0].DISCOUNT) * -1).toFixed(2)).space(7,"s")) + " " + //SUBTOTAL
-                                        (parseFloat(tmpProSale[0].FAMOUNT).toFixed(2)).space(7,"e")
+                                        (parseFloat(tmpProSale[0].FAMOUNT).toFixed(2)).space(7,"s")
                                 })
                             }
                             else
@@ -187,13 +187,13 @@ export function print()
                                 {
                                     font: "b",
                                     style: tmpProSale[0].GUID == "00000000-0000-0000-0000-000000000000" ? "b" : undefined, //SUBTOTAL
-                                    align: tmpProSale[0].GUID == "00000000-0000-0000-0000-000000000000" ? "lt" : "lt", //SUBTOTAL
+                                    align: tmpProSale[0].GUID == "00000000-0000-0000-0000-000000000000" ? "rt" : "rt", //SUBTOTAL
                                     data: tmpProSale[0].VAT_TYPE + " " +
-                                        (tmpProSale[0].GUID == "00000000-0000-0000-0000-000000000000" ? tmpProSale[0].ITEM_SNAME.space(37,'s') : (tmpProSale[0].TICKET_REST ? "*" + tmpProSale[0].ITEM_SNAME : tmpProSale[0].ITEM_SNAME).toString().space(36)) + " " +                                    
-                                        (tmpProSale[0].GUID == "00000000-0000-0000-0000-000000000000" ? "" : tmpQt + " " + tmpProSale[0].UNIT_SHORT).space(8,'e') + " " + //SUBTOTAL                                    
+                                        (tmpProSale[0].GUID == "00000000-0000-0000-0000-000000000000" ? tmpProSale[0].ITEM_SNAME.space(32,'s') : (tmpProSale[0].TICKET_REST ? "*" + tmpProSale[0].ITEM_SNAME : tmpProSale[0].ITEM_SNAME).toString().space(31)) + " " +                                    
+                                        (tmpProSale[0].GUID == "00000000-0000-0000-0000-000000000000" ? "" : (tmpProSale[0].SCALE_MANUEL == true ? "(M)" : "") + "" + tmpQt + " " + tmpProSale[0].UNIT_SHORT).space(13,'e') + " " + //SUBTOTAL                                    
                                         (tmpProSale[0].GUID == "00000000-0000-0000-0000-000000000000" ? "" : parseFloat(tmpProSale[0].PRICE * tmpProSale[0].UNIT_FACTOR).toFixed(2)).space(7,"e") + " " + //SUBTOTAL
                                        // (tmpProSale[0].GUID == "00000000-0000-0000-0000-000000000000" ? "" : (parseFloat(Number(tmpProSale[0].DISCOUNT) * -1).toFixed(2)).space(7,"s")) + " " + //SUBTOTAL
-                                        (parseFloat(tmpProSale[0].AMOUNT).toFixed(2)).space(7,"e")
+                                        (parseFloat(tmpProSale[0].AMOUNT).toFixed(2)).space(7,"s")
                                 })
                             }
                         }
@@ -229,18 +229,17 @@ export function print()
 
                     if(data.special.type == 'Fatura')
                     {
-                        console.log(tmpSaleItem.ITEM_SNAME.length)
                         tmpArr.push( 
                         {
                             font: "b",
                             style: tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? "b" : undefined, //SUBTOTAL
                             align: tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? "rt" : "rt", //SUBTOTAL
                             data: tmpSaleItem.VAT_TYPE + " " +
-                                (tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? (tmpSaleItem.ITEM_SNAME + tmpFactStr).space(37,'s') : (tmpSaleItem.TICKET_REST ? "*" + tmpSaleItem.ITEM_SNAME +tmpSaleItem.ITEM_SNAME.length + tmpFactStr : tmpSaleItem.ITEM_SNAME + tmpFactStr).toString().space(75 - tmpSaleItem.ITEM_SNAME.length)) + " " +                            
-                                (tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? "" : (tmpSaleItem.SCALE_MANUEL == true ? "M-" : "") + "" + tmpQt + " " + tmpSaleItem.UNIT_SHORT).space(8,'e') + " " + //SUBTOTAL                            
+                                (tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? (tmpSaleItem.ITEM_SNAME + tmpFactStr).space(32,'s') : (tmpSaleItem.TICKET_REST ? "*" + tmpSaleItem.ITEM_SNAME + tmpFactStr : tmpSaleItem.ITEM_SNAME + tmpFactStr).toString().space(31)) + " " +                            
+                                (tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? "" : (tmpSaleItem.SCALE_MANUEL == true ? "(M)" : "") + "" + tmpQt + " " + tmpSaleItem.UNIT_SHORT).space(13,'e') + " " + //SUBTOTAL                            
                                 (tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? "" : parseFloat(tmpSaleItem.FAMOUNT / tmpQt).toFixed(2)).space(7,"e") + " " + //SUBTOTAL
                                // (tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? "" : (parseFloat(Number(tmpSaleItem.DISCOUNT) * -1).toFixed(2)).space(7,"s")) + " " + //SUBTOTAL
-                                (parseFloat(tmpSaleItem.FAMOUNT).toFixed(2)).space(7,"e")
+                                (parseFloat(tmpSaleItem.FAMOUNT).toFixed(2)).space(7,"s")
                         }) 
                     }
                     else
@@ -251,11 +250,11 @@ export function print()
                             style: tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? "b" : undefined, //SUBTOTAL
                             align: tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? "rt" : "rt", //SUBTOTAL
                             data: tmpSaleItem.VAT_TYPE + " " +
-                                (tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? (tmpSaleItem.ITEM_SNAME + tmpFactStr).space(37,'s') + tmpFactStr : (tmpSaleItem.TICKET_REST ? "*" + tmpSaleItem.ITEM_SNAME + tmpFactStr : tmpSaleItem.ITEM_SNAME + tmpFactStr).toString().space(76 - tmpSaleItem.ITEM_SNAME.length)) + " " +                            
-                                (tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? "" : (tmpSaleItem.SCALE_MANUEL == true ? "M-" : "") + "" + tmpQt + " " + tmpSaleItem.UNIT_SHORT).space(8,'e') + " " + //SUBTOTAL                            
+                                (tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? (tmpSaleItem.ITEM_SNAME + tmpFactStr).space(32,'s') + tmpFactStr : (tmpSaleItem.TICKET_REST ? "*" + tmpSaleItem.ITEM_SNAME + tmpFactStr : tmpSaleItem.ITEM_SNAME + tmpFactStr).toString().space(31)) + " " +                            
+                                (tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? "" : (tmpSaleItem.SCALE_MANUEL == true ? "(M)" : "") + "" + tmpQt + " " + tmpSaleItem.UNIT_SHORT).space(13,'e') + " " + //SUBTOTAL                            
                                 (tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? "" : parseFloat(tmpSaleItem.PRICE * tmpSaleItem.UNIT_FACTOR).toFixed(2)).space(7,"e") + " " + //SUBTOTAL
                                 //(tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? "" : (parseFloat(Number(tmpSaleItem.DISCOUNT) * -1).toFixed(2)).space(7,"s")) + " " + //SUBTOTAL
-                                (parseFloat(tmpSaleItem.AMOUNT).toFixed(2)).space(7,"e")
+                                (parseFloat(tmpSaleItem.AMOUNT).toFixed(2)).space(7,"s")
                         }) 
                     }
                 }) 
@@ -271,15 +270,15 @@ export function print()
 
             if(data.special.customerUsePoint > 0)
             {
-                tmpArr.push({font:"a",align:"lt",data:"Sous-Total TTC".space(33) + (tmpOperator + decimal(data.possale.sum("AMOUNT",2)) + "EUR").space(15,"s")});
-                tmpArr.push({font:"a",align:"lt",data:"Remise Fidelite ".space(33) + ((parseFloat(parseFloat(data.special.customerUsePoint) / 100) * -1).toFixed(2).toString() + ' EUR').space(15,"s")});
+                tmpArr.push({font:"a",align:"lt",data:"Sous-Total TTC".space(65) + (tmpOperator + decimal(data.possale.sum("AMOUNT",2)) + "EUR").space(15,"s")});
+                tmpArr.push({font:"a",align:"lt",data:"Remise Fidelite ".space(68) + ((parseFloat(parseFloat(data.special.customerUsePoint) / 100) * -1).toFixed(2).toString() + ' EUR').space(15,"s")});
             }
 
             if(data.possale.sum("DISCOUNT",2) > 0)
             {
                 if(data.special.customerUsePoint == 0)
                 {
-                    tmpArr.push({font:"a",align:"lt",data:"Sous-Total TTC".space(33) + (tmpOperator + decimal(data.possale.sum("AMOUNT",2)) + "EUR").space(15,"s")});
+                    tmpArr.push({font:"a",align:"lt",data:"Sous-Total TTC".space(65) + (tmpOperator + decimal(data.possale.sum("AMOUNT",2)) + "EUR").space(15,"s")});
                 }
                 tmpArr.push({font:"a",align:"lt",data:("Remise " + Number(data.possale.sum("AMOUNT",2)).rate2Num(data.possale.sum("DISCOUNT",2),2) + "%").space(33) + (decimal(data.possale.sum("DISCOUNT",2) * -1) + "EUR").space(15,"s")});
             }
@@ -294,7 +293,7 @@ export function print()
                 size : [1,1],
                 style: "b",
                 align: "lt",
-                data: "Total TTC".space(17) + 
+                data: "Total TTC".space(35) + 
                 (tmpOperator + decimal(parseFloat(data.possale.sum("TOTAL")).toFixed(2)) + "EUR").space(15,"s")
             }
         },
@@ -328,7 +327,7 @@ export function print()
                 {
                     font: "a",
                     align: "lt",
-                    data: tmpType.space(33) + 
+                    data: tmpType.space(50) + 
                     (tmpOperator + decimal(data.pospay.where({PAY_TYPE:data.pospay[i].PAY_TYPE}).sum("AMOUNT",2)) + "EUR").space(15,"s")
                 })
             }
@@ -344,14 +343,14 @@ export function print()
                 {
                     font: "a",
                     align: "lt",
-                    data: "Recu".space(33) +
+                    data: "Recu".space(53) +
                         (decimal(parseFloat(data.pospay.sum("AMOUNT",2)).toFixed(2)) + "EUR").space(15,"s")
                 });
                 tmpArr.push(
                 {
                     font: "a",
                     align: "lt",
-                    data: "Rendu".space(33) + (decimal(data.pospay.sum("CHANGE",2)) + "EUR").space(15,"s")
+                    data: "Rendu".space(53) + (decimal(data.pospay.sum("CHANGE",2)) + "EUR").space(15,"s")
                 });
             }
             else if(data.pospay.where({PAY_TYPE:3}).length > 0)
@@ -360,13 +359,13 @@ export function print()
                 {
                     font: "a",
                     align: "lt",
-                    data: "Surplus Tic. Rest.".space(33) + (decimal(data.pospay.sum("TICKET_PLUS",2)) + "EUR").space(15,"s")
+                    data: "Surplus Tic. Rest.".space(53) + (decimal(data.pospay.sum("TICKET_PLUS",2)) + "EUR").space(15,"s")
                 });
                 tmpArr.push(
                 {
                     font: "a",
                     align: "lt",
-                    data: "Rendu".space(33) + ("0,00" + "EUR").space(15,"s")
+                    data: "Rendu".space(53) + ("0,00" + "EUR").space(15,"s")
                 });
             }
             else if(data.pospay.where({PAY_TYPE:4}).length > 0)
@@ -375,14 +374,14 @@ export function print()
                 {
                     font: "a",
                     align: "lt",
-                    data: "Recu".space(33) +
+                    data: "Recu".space(53) +
                         (decimal(parseFloat(data.pospay.where({PAY_TYPE:4}).sum("AMOUNT",2) + data.pospay.sum("CHANGE",2)).toFixed(2)) + "EUR").space(15,"s")
                 });
                 tmpArr.push(
                 {
                     font: "a",
                     align: "lt",
-                    data: "Rendu".space(33) + (decimal(data.pospay.sum("CHANGE",2)) + "EUR").space(15,"s")
+                    data: "Rendu".space(53) + (decimal(data.pospay.sum("CHANGE",2)) + "EUR").space(15,"s")
                 });
             }
             return tmpArr.length > 0 ? tmpArr : undefined
