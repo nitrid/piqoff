@@ -23,6 +23,8 @@ import NbButton from "../../../../core/react/bootstrap/button.js";
 import NdDialog, { dialog } from '../../../../core/react/devex/dialog.js';
 import { dataset,datatable,param,access } from "../../../../core/core.js";
 import { posExtraCls,posDeviceCls} from "../../../../core/cls/pos.js";
+import { nf525Cls } from "../../../../core/cls/nf525.js";
+
 
 export default class salesOrdList extends React.PureComponent
 {
@@ -35,12 +37,14 @@ export default class salesOrdList extends React.PureComponent
         this._btnGetClick = this._btnGetClick.bind(this)
         this._sendMail = this._sendMail.bind(this)
         this.btnGetDetail = this.btnGetDetail.bind(this)
+        this._factureInsert = this._factureInsert.bind(this)
         this.posDevice = new posDeviceCls();
         this.lastPosDt = new datatable();
         this.lastPosSaleDt = new datatable();
         this.lastPosPayDt = new datatable();
         this.lastPosPromoDt = new datatable();  
         this.firm = new datatable();
+        this.nf525 = new nf525Cls();
         this.state={ticketId :""}
         
         Number.money = this.sysParam.filter({ID:'MoneySymbol',TYPE:0}).getValue()
@@ -315,11 +319,86 @@ export default class salesOrdList extends React.PureComponent
      
         this.mailPopup._onClick()
     }
+    async _factureInsert()
+    {
+        let tmpConfObj =
+        {
+            id:'msgFacture',showTitle:true,title:this.t("msgFacture.title"),showCloseButton:true,width:'500px',height:'200px',
+            button:[{id:"btn01",caption:this.t("msgFacture.btn01"),location:'before'},{id:"btn02",caption:this.t("msgFacture.btn02"),location:'after'}],
+            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgFacture.msg")}</div>)
+        }
+        
+        let pResult = await dialog(tmpConfObj);
+        if(pResult == 'btn02')
+        {
+            return
+        }
+        for (let i = 0; i < this.grdSaleTicketReport.getSelectedData().length; i++) 
+        {
+            App.instance.setState({isExecute:true})
+            let tmpLastPos = new datatable(); 
+            tmpLastPos.selectCmd = 
+            {
+                query:  "SELECT * FROM POS_VW_01 WHERE GUID = @GUID ",
+                param:  ["GUID:string|50"],
+                value:  [this.grdSaleTicketReport.getSelectedData()[i].POS_GUID]
+            }
+            
+            await tmpLastPos.refresh()
+
+            if(tmpLastPos[0].CUSTOMER_GUID == '00000000-0000-0000-0000-000000000000')
+            {
+                App.instance.setState({isExecute:false})
+                let tmpConfObj =
+                {
+                    id:'msgFactureCustomer',showTitle:true,title:this.t("msgFactureCustomer.title"),showCloseButton:true,width:'500px',height:'200px',
+                    button:[{id:"btn01",caption:this.t("msgFactureCustomer.btn01"),location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgFactureCustomer.msg")}</div>)
+                }
+                let pResult = await dialog(tmpConfObj);
+                if(pResult == 'btn01')
+                {
+                    return
+                }
+            }
+            this.lastPosSaleDt.selectCmd = 
+            {
+                query:  "SELECT * FROM POS_SALE_VW_01 WHERE POS_GUID = @GUID ORDER BY LDATE DESC",
+                param:  ["GUID:string|50"],
+                value:  [this.grdSaleTicketReport.getSelectedData()[i].POS_GUID]
+            }
+            
+            await this.lastPosSaleDt.refresh()
+    
+            if(tmpLastPos[0].FACT_REF == 0)
+            {
+                //***** FACTURE İMZALAMA *****/
+                let tmpSignedData = await this.nf525.signatureSaleFact(tmpLastPos[0],this.lastPosSaleDt)  
+                let tmpFactRef = tmpSignedData.REF
+    
+                let tmpInsertQuery = 
+                {
+                    query : "EXEC [dbo].[PRD_POS_FACTURE_INSERT] " + 
+                            "@CUSER = @PCUSER, " + 
+                            "@POS = @PPOS, " +
+                            "@REF = @PREF, " +
+                            "@SIGNATURE = @PSIGNATURE, " +
+                            "@SIGNATURE_SUM = @PSIGNATURE_SUM, " +
+                            "@APP_VERSION = @PAPP_VERSION ", 
+                    param : ['PCUSER:string|25','PPOS:string|50','PREF:int','PSIGNATURE:string|max','PSIGNATURE_SUM:string|max','PAPP_VERSION:string|25'],
+                    value : [tmpLastPos[0].CUSER,tmpLastPos[0].GUID,tmpFactRef,tmpSignedData.SIGNATURE,tmpSignedData.SIGNATURE_SUM,this.core.appInfo.version],
+                }
+        
+                await this.core.sql.execute(tmpInsertQuery)                                
+            }
+            App.instance.setState({isExecute:false})
+        }
+    }
     print(pData)
     {
         return new Promise(async resolve => 
         {
-            let prmPrint = "print.js"
+            let prmPrint = 'printPdf.js'
             import("../../../../pos/meta/print/" + prmPrint).then(async(e)=>
             {
                 let tmpPrint = e.print(pData)
@@ -357,6 +436,13 @@ export default class salesOrdList extends React.PureComponent
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <Toolbar>
+                            <Item location="after" locateInMenu="auto">
+                                    <NdButton id="btnMailSend" parent={this} icon="message" type="default"
+                                    onClick={async ()=>
+                                    {
+                                        this._factureInsert()
+                                    }}/>
+                                </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnMailSend" parent={this} icon="message" type="default"
                                     onClick={async ()=>
