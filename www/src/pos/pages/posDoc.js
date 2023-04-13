@@ -491,30 +491,33 @@ export default class posDoc extends React.PureComponent
         
         this.posObj.ds.on('onEdit',(pTblName,pData) =>
         {
-            if(pTblName == "POS_SALE")
+            if(pTblName == "POS_SALE" && typeof pData.data != 'undefined' && (typeof pData.data.QUANTITY != 'undefined' || typeof pData.data.PRICE != 'undefined'))
             {
-                let tmpPayRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).toFixed(2))
-
-                if(pData.rowData.WEIGHING)
+                setTimeout(() => 
                 {
-                    this.posDevice.lcdPrint
-                    ({
-                        blink : 0,
-                        text :  parseFloat(Number(pData.rowData.QUANTITY)).toFixed(3).space(6) + "kg X " +
-                                (parseFloat(Number(pData.rowData.PRICE) - (Number(pData.rowData.DISCOUNT) / Number(pData.rowData.QUANTITY))).toFixed(2) + "EUR").space(9,"s") +
-                                pData.rowData.ITEM_NAME.toString().space(11) + "=" +  (parseFloat(Number(pData.rowData.TOTAL)).toFixed(2) + "EUR").space(8,"s")
-                    })
-                }
-                else
-                {
-                    this.posDevice.lcdPrint
-                    ({
-                        blink : 0,
-                        text :  pData.rowData.ITEM_NAME.toString().space(9) + Number(pData.rowData.QUANTITY).toString() + "X" +
-                                (parseFloat(Number(pData.rowData.PRICE) - (Number(pData.rowData.DISCOUNT) / Number(pData.rowData.QUANTITY))).toFixed(2) + "EUR").space(8,"s") +
-                                "TOTAL : " + (parseFloat(tmpPayRest).toFixed(2) + "EUR").space(12,"s")
-                    })
-                }
+                    let tmpPayRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).toFixed(2))
+                
+                    if(pData.rowData.WEIGHING)
+                    {
+                        this.posDevice.lcdPrint
+                        ({
+                            blink : 0,
+                            text :  parseFloat(Number(pData.rowData.QUANTITY)).toFixed(3).space(5) + "kg X " +
+                                    (parseFloat(Number(pData.rowData.PRICE) - (Number(pData.rowData.DISCOUNT) / Number(pData.rowData.QUANTITY))).toFixed(2) + "EU/kg").space(10,"s") +
+                                    pData.rowData.ITEM_NAME.toString().space(11) + "=" +  (parseFloat(Number(pData.rowData.TOTAL)).toFixed(2) + "EUR").space(8,"s")
+                        })
+                    }
+                    else
+                    {
+                        this.posDevice.lcdPrint
+                        ({
+                            blink : 0,
+                            text :  pData.rowData.ITEM_NAME.toString().space(7) + " " + Number(pData.rowData.QUANTITY).toString().space(3,"s") + "X" +
+                                    (parseFloat(Number(pData.rowData.PRICE) - (Number(pData.rowData.DISCOUNT) / Number(pData.rowData.QUANTITY))).toFixed(2) + "EU").space(8,"s") +
+                                    "TOTAL : " + (parseFloat(tmpPayRest).toFixed(2) + "EUR").space(12,"s")
+                        })
+                    }
+                }, 500);                
             }
         })
 
@@ -1238,8 +1241,8 @@ export default class posDoc extends React.PureComponent
                         this.posDevice.lcdPrint
                         ({
                             blink : 0,
-                            text :  parseFloat(Number(tmpPosSale[tmpPosSale.length - 1].QUANTITY)).toFixed(3).space(6) + "kg X " +
-                                    (parseFloat(Number(tmpPosSale[tmpPosSale.length - 1].PRICE) - (Number(tmpPosSale[tmpPosSale.length - 1].DISCOUNT) / Number(tmpPosSale[tmpPosSale.length - 1].QUANTITY))).toFixed(2) + "EUR").space(9,"s") +
+                            text :  parseFloat(Number(tmpPosSale[tmpPosSale.length - 1].QUANTITY)).toFixed(3).space(5) + "kg X " +
+                                    (parseFloat(Number(tmpPosSale[tmpPosSale.length - 1].PRICE) - (Number(tmpPosSale[tmpPosSale.length - 1].DISCOUNT) / Number(tmpPosSale[tmpPosSale.length - 1].QUANTITY))).toFixed(2) + "EU/kg").space(10,"s") +
                                     tmpPosSale[tmpPosSale.length - 1].ITEM_NAME.toString().space(11) + "=" +  (parseFloat(Number(tmpPosSale[tmpPosSale.length - 1].TOTAL)).toFixed(2) + "EUR").space(8,"s")
                         })
                     }
@@ -1248,8 +1251,8 @@ export default class posDoc extends React.PureComponent
                         this.posDevice.lcdPrint
                         ({
                             blink : 0,
-                            text :  tmpPosSale[tmpPosSale.length - 1].ITEM_NAME.toString().space(9) + Number(tmpPosSale[tmpPosSale.length - 1].QUANTITY).toString() + "X" +
-                                    (parseFloat(Number(tmpPosSale[tmpPosSale.length - 1].PRICE) - (Number(tmpPosSale[tmpPosSale.length - 1].DISCOUNT) / Number(tmpPosSale[tmpPosSale.length - 1].QUANTITY))).toFixed(2) + "EUR").space(8,"s") +
+                            text :  tmpPosSale[tmpPosSale.length - 1].ITEM_NAME.toString().space(7) + " " + Number(tmpPosSale[tmpPosSale.length - 1].QUANTITY).toString().space(3,"s") + "X" +
+                                    (parseFloat(Number(tmpPosSale[tmpPosSale.length - 1].PRICE) - (Number(tmpPosSale[tmpPosSale.length - 1].DISCOUNT) / Number(tmpPosSale[tmpPosSale.length - 1].QUANTITY))).toFixed(2) + "EU").space(8,"s") +
                                     "TOTAL : " + (parseFloat(tmpPayRest).toFixed(2) + "EUR").space(12,"s")
                         })
                     }
@@ -2370,18 +2373,18 @@ export default class posDoc extends React.PureComponent
             
             if(tmpDt.length > 0)
             {
-                if(tmpDt[0].REBATE_TICKET != '')
-                {
-                    let tmpConfObj =
-                    {
-                        id:'msgDoubleRebate',showTitle:true,title:this.lang.t("msgDoubleRebate.title"),showCloseButton:true,width:'500px',height:'200px',
-                        button:[{id:"btn01",caption:this.lang.t("msgDoubleRebate.btn01"),location:'after'}],
-                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgDoubleRebate.msg")}</div>)
-                    }
-                    await dialog(tmpConfObj);
-                    this.msgItemReturnTicket.hide()
-                    return
-                }
+                // if(tmpDt[0].REBATE_TICKET != '')
+                // {
+                //     let tmpConfObj =
+                //     {
+                //         id:'msgDoubleRebate',showTitle:true,title:this.lang.t("msgDoubleRebate.title"),showCloseButton:true,width:'500px',height:'200px',
+                //         button:[{id:"btn01",caption:this.lang.t("msgDoubleRebate.btn01"),location:'after'}],
+                //         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgDoubleRebate.msg")}</div>)
+                //     }
+                //     await dialog(tmpConfObj);
+                //     this.msgItemReturnTicket.hide()
+                //     return
+                // }
 
                 for (let i = 0; i < this.posObj.posSale.dt().length; i++) 
                 {

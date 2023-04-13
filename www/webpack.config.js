@@ -13,6 +13,7 @@ module.exports =
         off: './src/off/index.js',
         pos: './src/pos/index.js',
         mob: './src/mob/index.js',
+        tab: './src/tab/index.js'
     },    
     mode: "development",
     module: 
@@ -73,6 +74,9 @@ module.exports =
             },
             {
                 directory: path.join(__dirname, "public/mob")
+            },
+            {
+                directory: path.join(__dirname, "public/tab")
             }
         ],
         port: 3000,
@@ -133,6 +137,12 @@ module.exports =
             filename: 'mob/index.html',
             chunks: ['mob']
         }),
+        new htmlWebPackPlugin(
+        {
+            template: './src/tab/index.html',
+            filename: 'tab/index.html',
+            chunks: ['tab']
+        }),
         new zipPlugin(
         {
             path: './',
@@ -149,6 +159,6 @@ module.exports =
                     './public'
                 ]
             }
-        })
+        }),
     ]
 };
