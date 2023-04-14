@@ -31,9 +31,9 @@ export const langFr =
     abtLicence : "Licence : XXXXXXXXXXXXXXXXX",
     abtVersion : "Version : ",
     blnAbtCompany : "Société : Piqsoft SAS",
-    blnAbtType : "Type : Piqsoft - Pos",
+    blnAbtType : "Logiciel : Piqsoft - Pos",
     blnAbtSw : "S/W : Scale.js",
-    blnAbtCertificate : "Certificate No : ",
+    blnAbtCertificate : "Numéro de certificat : ",
     msgCustomerNotFound : 
     {
         title : "Attention",
