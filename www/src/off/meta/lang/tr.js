@@ -15631,10 +15631,16 @@ export const langTr =
         btnGet :"Getir",   
         grdListe :    
         {   
+            clmRef: "Fatura Seri",
+            clmRefNo : "Fatura Sıra",
+            clmDocDate : "Fatura Tarihi",
+            clmOutputCode : "Teadrikçi Kodu",
+            clmOutputName : "Tedarikçi Adı",
             clmQuantity : "Miktar",   
             clmCode: "Kodu",   
             clmName : "Adı",              
             clmAmount : "Vergi Tutarı",   
+            clmLitre : "Birim Litre"
         },
     },
     slsRpt_02_004 : // "Ürün Detaylı Satış Raporu"

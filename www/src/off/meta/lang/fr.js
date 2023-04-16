@@ -15540,10 +15540,16 @@ export const langFr =
         btnGet :"Getir",    // BAK
         grdListe :    
         {   
-            clmQuantity : "Miktar",    // BAK
-            clmCode: "Kodu",    // BAK
-            clmName : "Adı",               // BAK
-            clmAmount : "Vergi Tutarı",    // BAK
+            clmRef: "Fatura Seri",   // BAK
+            clmRefNo : "Fatura Sıra",   // BAK
+            clmDocDate : "Fatura Tarihi",   // BAK
+            clmOutputCode : "Teadrikçi Kodu",   // BAK
+            clmOutputName : "Tedarikçi Adı",   // BAK
+            clmQuantity : "Miktar",      // BAK
+            clmCode: "Kodu",      // BAK
+            clmName : "Adı",                 // BAK
+            clmAmount : "Vergi Tutarı",      // BAK
+            clmLitre : "Birim Litre"   // BAK
         },
     },
     slsRpt_02_004 : // "Ürün Detaylı Alış Raporu"
