@@ -147,6 +147,9 @@ export default class purchaseInvoice extends React.PureComponent
         this.txtRef.readOnly = false
         this.txtRefno.readOnly = false
         this.docLocked = false
+        this.chkDocDiscount = false
+        this.chkFirstDiscount = false
+        this.tagItemCode.dev.reset()
         
         this.frmDocItems.option('disabled',true)        
         await this.grdInvoicePayment.dataRefresh({source:this.paymentObj.docCustomer.dt()});
@@ -261,7 +264,14 @@ export default class purchaseInvoice extends React.PureComponent
         this.docObj.dt()[0].AMOUNT = this.docObj.docItems.dt().sum("AMOUNT",2)
         this.docObj.dt()[0].DISCOUNT = this.docObj.docItems.dt().sum("DISCOUNT",2)
         this.docObj.dt()[0].VAT = Number(tmpVat).round(2)
-        this.docObj.dt()[0].TOTALHT =this.docObj.docItems.dt().sum("TOTALHT",2)
+        if(this.chkDocDiscount.value == true)
+        {
+            this.docObj.dt()[0].TOTALHT = parseFloat(this.docObj.docItems.dt().sum("AMOUNT",2)) - parseFloat(this.docObj.docItems.dt().sum("DISCOUNT",2))
+        }
+        else
+        {
+            this.docObj.dt()[0].TOTALHT =this.docObj.docItems.dt().sum("TOTALHT",2)
+        }
         this.docObj.dt()[0].TOTAL = Number(parseFloat(this.docObj.dt()[0].TOTALHT) + parseFloat(this.docObj.dt()[0].VAT)).round(2)
 
         this.docObj.docCustomer.dt()[0].AMOUNT = this.docObj.dt()[0].TOTAL
@@ -1773,12 +1783,12 @@ export default class purchaseInvoice extends React.PureComponent
             this.docObj.docItems.dt()[i].REF_NO = this.docObj.dt()[0].REF_NO
         }
 
-        this.docObj.docCustomer.dt()[i].INPUT = this.docObj.dt()[0].INPUT
-        this.docObj.docCustomer.dt()[i].OUTPUT = this.docObj.dt()[0].OUTPUT
-        this.docObj.docCustomer.dt()[i].DOC_DATE = this.docObj.dt()[0].DOC_DATE
-        this.docObj.docCustomer.dt()[i].SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
-        this.docObj.docCustomer.dt()[i].REF = this.docObj.dt()[0].REF
-        this.docObj.docCustomer.dt()[i].REF_NO = this.docObj.dt()[0].REF_NO
+        this.docObj.docCustomer.dt()[0].INPUT = this.docObj.dt()[0].INPUT
+        this.docObj.docCustomer.dt()[0].OUTPUT = this.docObj.dt()[0].OUTPUT
+        this.docObj.docCustomer.dt()[0].DOC_DATE = this.docObj.dt()[0].DOC_DATE
+        this.docObj.docCustomer.dt()[0].SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
+        this.docObj.docCustomer.dt()[0].REF = this.docObj.dt()[0].REF
+        this.docObj.docCustomer.dt()[0].REF_NO = this.docObj.dt()[0].REF_NO
     }
     async getDocs(pType)
     {
@@ -3685,7 +3695,7 @@ export default class purchaseInvoice extends React.PureComponent
                                                     tmpDocData.AMOUNT = parseFloat(((tmpDocData.PRICE * tmpDocData.QUANTITY))).round(2)
                                                     if(this.chkDocDiscount.value == true)
                                                     {
-                                                        tmpDocData.TOTALHT = parseFloat((Number((tmpDocData.PRICE * tmpDocData.QUANTITY)) - parseFloat(Number(tmpDocData.DISCOUNT_1) + Number(tmpDocData.DISCOUNT_2) + Number(tmpDocData.DISCOUNT_3)).round(6))).round(4)
+                                                        tmpDocData.TOTALHT = parseFloat((Number((tmpDocData.PRICE * tmpDocData.QUANTITY)) - parseFloat(Number(tmpDocData.DISCOUNT_1) + Number(tmpDocData.DISCOUNT_2) + Number(tmpDocData.DISCOUNT_3)).round(6))).round(6)
                                                     }
                                                     else
                                                     {

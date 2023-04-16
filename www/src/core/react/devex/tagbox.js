@@ -20,6 +20,7 @@ export default class NdTagBox extends Base
     //#region Private
     _onInitialized(e) 
     {
+        console.log(e)
         this.dev = e.component;
     }  
     _TagBoxView()
@@ -29,6 +30,7 @@ export default class NdTagBox extends Base
             items={[]}
             acceptCustomValue={true} onValueChanged={this._onValueChanged} 
             placeholder={this.state.placeholder}
+            onInitialized={this._onInitialized}
             openOnFieldClick={false}
             showClearButton ={true}
             maxFilterQueryLength={10000}
