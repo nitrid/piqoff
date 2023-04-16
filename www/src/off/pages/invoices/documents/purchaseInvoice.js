@@ -3649,6 +3649,13 @@ export default class purchaseInvoice extends React.PureComponent
                                     ></NdNumberBox>
                                 </Item>
                                 <Item>
+                                    <Label text={this.t("popDiscount.chkFirstDiscount")} alignment="right" />
+                                    <NdCheckBox id="chkFirstDiscount" parent={this} simple={true}  
+                                    value ={false}
+                                    >
+                                    </NdCheckBox>
+                                </Item>
+                                <Item>
                                     <Label text={this.t("popDiscount.chkDocDiscount")} alignment="right" />
                                     <NdCheckBox id="chkDocDiscount" parent={this} simple={true}  
                                     value ={false}
@@ -3666,7 +3673,7 @@ export default class purchaseInvoice extends React.PureComponent
                                                 {
                                                     let tmpDocData = this.docObj.docItems.dt()[i]
 
-                                                    if(this.chkDocDiscount.value == false)
+                                                    if(this.chkFirstDiscount.value == false)
                                                     {
                                                         tmpDocData.DISCOUNT_1 = Number(tmpDocData.PRICE * tmpDocData.QUANTITY).rateInc(this.txtDiscountPercent1.value,8)
                                                     }
@@ -3676,7 +3683,14 @@ export default class purchaseInvoice extends React.PureComponent
                                                     
                                                     tmpDocData.DISCOUNT = parseFloat((tmpDocData.DISCOUNT_1 + tmpDocData.DISCOUNT_2 + tmpDocData.DISCOUNT_3).toFixed(8))
                                                     tmpDocData.AMOUNT = parseFloat(((tmpDocData.PRICE * tmpDocData.QUANTITY))).round(2)
-                                                    tmpDocData.TOTALHT = parseFloat((Number((tmpDocData.PRICE * tmpDocData.QUANTITY)) - parseFloat(Number(tmpDocData.DISCOUNT_1) + Number(tmpDocData.DISCOUNT_2) + Number(tmpDocData.DISCOUNT_3)).round(6))).round(2)
+                                                    if(this.chkDocDiscount.value == true)
+                                                    {
+                                                        tmpDocData.TOTALHT = parseFloat((Number((tmpDocData.PRICE * tmpDocData.QUANTITY)) - parseFloat(Number(tmpDocData.DISCOUNT_1) + Number(tmpDocData.DISCOUNT_2) + Number(tmpDocData.DISCOUNT_3)).round(6))).round(4)
+                                                    }
+                                                    else
+                                                    {
+                                                        tmpDocData.TOTALHT = parseFloat((Number((tmpDocData.PRICE * tmpDocData.QUANTITY)) - parseFloat(Number(tmpDocData.DISCOUNT_1) + Number(tmpDocData.DISCOUNT_2) + Number(tmpDocData.DISCOUNT_3)).round(6))).round(2)
+                                                    }
                                                     if(tmpDocData.VAT > 0)
                                                     {
                                                         tmpDocData.VAT = parseFloat(((tmpDocData.TOTALHT) * (tmpDocData.VAT_RATE / 100)).toFixed(4))

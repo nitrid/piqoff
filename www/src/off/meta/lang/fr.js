@@ -3712,7 +3712,8 @@ export const langFr =
         popDiscount : 
         {
             title: "Télécharger Document",
-            chkDocDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkDocDiscount : "Evrak İndirimi Olarak Uygula", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -4230,7 +4231,8 @@ export const langFr =
         popDiscount : 
         {
             title: "Télécharger Document",
-            chkDocDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkDocDiscount : "Evrak İndirimi Olarak Uygula", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -4753,7 +4755,8 @@ export const langFr =
         popDiscount : 
         {
             title: "Télécharger Document",
-            chkDocDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkDocDiscount : "Evrak İndirimi Olarak Uygula", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -5206,7 +5209,8 @@ export const langFr =
         popDiscount : 
         {
             title: "Télécharger Document",
-            chkDocDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkDocDiscount : "Evrak İndirimi Olarak Uygula", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -5639,8 +5643,9 @@ export const langFr =
         popDiscount : 
         {
             title: "Télécharger Document",
-            chkDocDiscount : "1. remises n'est pas indiqué sur les lignes",
-            Percent1 : "1. Remise % ",
+            chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkDocDiscount : "Evrak İndirimi Olarak Uygula", // BAK
+            Percent1 : "1. Remise % ", 
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
             Price2 : "2. Remise",
@@ -6096,7 +6101,8 @@ export const langFr =
         popDiscount : 
         {
             title: "Télécharger Document",
-            chkDocDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkDocDiscount : "Evrak İndirimi Olarak Uygula", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -6502,7 +6508,8 @@ export const langFr =
         popDiscount : 
         {
             title: "Télécharger Document",
-            chkDocDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkDocDiscount : "Evrak İndirimi Olarak Uygula", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -6932,7 +6939,8 @@ export const langFr =
         popDiscount : 
         {
             title: "Télécharger Document",
-            chkDocDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkDocDiscount : "Evrak İndirimi Olarak Uygula", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -7382,7 +7390,8 @@ export const langFr =
         popDiscount : 
         {
             title: "Télécharger Document",
-            chkDocDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkDocDiscount : "Evrak İndirimi Olarak Uygula", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -7719,7 +7728,8 @@ export const langFr =
         popDiscount : 
         {
             title: "Télécharger Document",
-            chkDocDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkDocDiscount : "Evrak İndirimi Olarak Uygula", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -8138,7 +8148,8 @@ export const langFr =
         popDiscount : 
         {
             title: "Télécharger Document",
-            chkDocDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkDocDiscount : "Evrak İndirimi Olarak Uygula", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -8602,7 +8613,8 @@ export const langFr =
         popDiscount : 
         {
             title: "Télécharger Document",
-            chkDocDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkDocDiscount : "Evrak İndirimi Olarak Uygula", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -8948,7 +8960,8 @@ export const langFr =
         popDiscount : 
         {
             title: "Télécharger Document",
-            chkDocDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkDocDiscount : "Evrak İndirimi Olarak Uygula", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -9628,7 +9641,8 @@ export const langFr =
         popDiscount : 
         {
             title: "Télécharger Document",
-            chkDocDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkDocDiscount : "Evrak İndirimi Olarak Uygula", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -10002,7 +10016,8 @@ export const langFr =
         popDiscount : 
         {
             title: "Télécharger Document",
-            chkDocDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkDocDiscount : "Evrak İndirimi Olarak Uygula", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -10394,7 +10409,8 @@ export const langFr =
         popDiscount : 
         {
             title: "Télécharger Document",
-            chkDocDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkDocDiscount : "Evrak İndirimi Olarak Uygula", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -10712,7 +10728,8 @@ export const langFr =
         popDiscount : 
         {
             title: "Télécharger Document",
-            chkDocDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkDocDiscount : "Evrak İndirimi Olarak Uygula", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -11086,7 +11103,8 @@ export const langFr =
         popDiscount : 
         {
             title: "Télécharger Document",
-            chkDocDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkDocDiscount : "Evrak İndirimi Olarak Uygula", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -11390,7 +11408,8 @@ export const langFr =
         popDiscount : 
         {
             title: "Télécharger Document",
-            chkDocDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkDocDiscount : "Evrak İndirimi Olarak Uygula", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -11835,7 +11854,8 @@ export const langFr =
         popDiscount : 
         {
             title: "Télécharger Document",
-            chkDocDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkDocDiscount : "Evrak İndirimi Olarak Uygula", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -12172,7 +12192,8 @@ export const langFr =
         popDiscount : 
         {
             title: "Télécharger Document",
-            chkDocDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkDocDiscount : "Evrak İndirimi Olarak Uygula", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -14601,7 +14622,8 @@ export const langFr =
         popDiscount : 
         {
             title: "Télécharger Document",
-            chkDocDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkDocDiscount : "Evrak İndirimi Olarak Uygula", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -14901,7 +14923,8 @@ export const langFr =
         popDiscount : 
         {
             title: "Télécharger Document",
-            chkDocDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkDocDiscount : "Evrak İndirimi Olarak Uygula", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",

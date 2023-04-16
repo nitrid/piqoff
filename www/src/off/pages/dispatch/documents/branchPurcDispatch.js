@@ -2381,8 +2381,8 @@ export default class branchSaleDispatch extends React.PureComponent
                                 ></NdNumberBox>
                                 </Item>
                                 <Item>
-                                        <Label text={this.t("popDiscount.chkDocDiscount")} alignment="right" />
-                                        <NdCheckBox id="chkDocDiscount" parent={this} simple={true}  
+                                        <Label text={this.t("popDiscount.chkFirstDiscount")} alignment="right" />
+                                        <NdCheckBox id="chkFirstDiscount" parent={this} simple={true}  
                                         value ={false}
                                         >
                                         </NdCheckBox>
@@ -2398,7 +2398,7 @@ export default class branchSaleDispatch extends React.PureComponent
                                                 {
                                                     let tmpDocData = this.docObj.docItems.dt()[i]
 
-                                                    if(this.chkDocDiscount.value == false)
+                                                    if(this.chkFirstDiscount.value == false)
                                                     {
                                                         tmpDocData.DISCOUNT_1 = Number(tmpDocData.PRICE * tmpDocData.QUANTITY).rateInc(this.txtDiscountPercent1.value,4)
                                                     }

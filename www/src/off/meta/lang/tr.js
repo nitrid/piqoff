@@ -3714,7 +3714,8 @@ export const langTr =
         popDiscount : 
         {
             title: "Evrak İndirimi",
-            chkDocDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            chkFirstDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            chkDocDiscount : "Evrak İndirimi Olarak Uygula",
             Percent1 : "1. İnd. Yüzde",
             Price1 : "1. İnd. Tutar",
             Percent2 : "2. İnd. Yüzde",
@@ -4233,7 +4234,8 @@ export const langTr =
         popDiscount : 
         {
             title: "Evrak İndirimi",
-            chkDocDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            chkFirstDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            chkDocDiscount : "Evrak İndirimi Olarak Uygula",
             Percent1 : "1. İnd. Yüzde",
             Price1 : "1. İnd. Tutar",
             Percent2 : "2. İnd. Yüzde",
@@ -4756,7 +4758,8 @@ export const langTr =
         popDiscount : 
         {
             title: "Evrak İndirimi",
-            chkDocDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            chkFirstDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            chkDocDiscount : "Evrak İndirimi Olarak Uygula",
             Percent1 : "1. İnd. Yüzde",
             Price1 : "1. İnd. Tutar",
             Percent2 : "2. İnd. Yüzde",
@@ -5202,7 +5205,8 @@ export const langTr =
         popDiscount : 
         {
             title: "Evrak İndirimi",
-            chkDocDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            chkFirstDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            chkDocDiscount : "Evrak İndirimi Olarak Uygula",
             Percent1 : "1. İnd. Yüzde",
             Price1 : "1. İnd. Tutar",
             Percent2 : "2. İnd. Yüzde",
@@ -5628,7 +5632,8 @@ export const langTr =
         popDiscount : 
         {
             title: "Evrak İndirimi",
-            chkDocDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            chkFirstDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            chkDocDiscount : "Evrak İndirimi Olarak Uygula",
             Percent1 : "1. İnd. Yüzde",
             Price1 : "1. İnd. Tutar",
             Percent2 : "2. İnd. Yüzde",
@@ -6092,7 +6097,8 @@ export const langTr =
         popDiscount : 
         {
             title: "Evrak İndirimi",
-            chkDocDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            chkFirstDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            chkDocDiscount : "Evrak İndirimi Olarak Uygula",
             Percent1 : "1. İnd. Yüzde",
             Price1 : "1. İnd. Tutar",
             Percent2 : "2. İnd. Yüzde",
@@ -6498,7 +6504,8 @@ export const langTr =
         popDiscount : 
         {
             title: "Evrak İndirimi",
-            chkDocDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            chkFirstDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            chkDocDiscount : "Evrak İndirimi Olarak Uygula",
             Percent1 : "1. İnd. Yüzde",
             Price1 : "1. İnd. Tutar",
             Percent2 : "2. İnd. Yüzde",
@@ -6928,7 +6935,8 @@ export const langTr =
         popDiscount : 
         {
             title: "Evrak İndirimi",
-            chkDocDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            chkFirstDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            chkDocDiscount : "Evrak İndirimi Olarak Uygula",
             Percent1 : "1. İnd. Yüzde",
             Price1 : "1. İnd. Tutar",
             Percent2 : "2. İnd. Yüzde",
@@ -7385,7 +7393,8 @@ export const langTr =
         popDiscount : 
         {
             title: "Evrak İndirimi",
-            chkDocDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            chkFirstDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            chkDocDiscount : "Evrak İndirimi Olarak Uygula",
             Percent1 : "1. İnd. Yüzde",
             Price1 : "1. İnd. Tutar",
             Percent2 : "2. İnd. Yüzde",
@@ -7722,7 +7731,8 @@ export const langTr =
         popDiscount : 
         {
             title: "Evrak İndirimi",
-            chkDocDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            chkFirstDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            chkDocDiscount : "Evrak İndirimi Olarak Uygula",
             Percent1 : "1. İnd. Yüzde",
             Price1 : "1. İnd. Tutar",
             Percent2 : "2. İnd. Yüzde",
@@ -8141,7 +8151,8 @@ export const langTr =
         popDiscount : 
         {
             title: "Evrak İndirimi",
-            chkDocDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            chkFirstDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            chkDocDiscount : "Evrak İndirimi Olarak Uygula",
             Percent1 : "1. İnd. Yüzde",
             Price1 : "1. İnd. Tutar",
             Percent2 : "2. İnd. Yüzde",
@@ -8598,7 +8609,8 @@ export const langTr =
         popDiscount : 
         {
             title: "Evrak İndirimi",
-            chkDocDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            chkFirstDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            chkDocDiscount : "Evrak İndirimi Olarak Uygula",
             Percent1 : "1. İnd. Yüzde",
             Price1 : "1. İnd. Tutar",
             Percent2 : "2. İnd. Yüzde",
@@ -8943,7 +8955,8 @@ export const langTr =
         popDiscount : 
         {
             title: "Evrak İndirimi",
-            chkDocDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            chkFirstDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            chkDocDiscount : "Evrak İndirimi Olarak Uygula",
             Percent1 : "1. İnd. Yüzde",
             Price1 : "1. İnd. Tutar",
             Percent2 : "2. İnd. Yüzde",
@@ -9654,7 +9667,8 @@ export const langTr =
         popDiscount : 
         {
             title: "Evrak İndirimi",
-            chkDocDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            chkFirstDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            chkDocDiscount : "Evrak İndirimi Olarak Uygula",
             Percent1 : "1. İnd. Yüzde",
             Price1 : "1. İnd. Tutar",
             Percent2 : "2. İnd. Yüzde",
@@ -10028,7 +10042,8 @@ export const langTr =
         popDiscount : 
         {
             title: "Evrak İndirimi",
-            chkDocDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            chkFirstDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            chkDocDiscount : "Evrak İndirimi Olarak Uygula",
             Percent1 : "1. İnd. Yüzde",
             Price1 : "1. İnd. Tutar",
             Percent2 : "2. İnd. Yüzde",
@@ -10420,7 +10435,8 @@ export const langTr =
         popDiscount : 
         {
             title: "Evrak İndirimi",
-            chkDocDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            chkFirstDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            chkDocDiscount : "Evrak İndirimi Olarak Uygula",
             Percent1 : "1. İnd. Yüzde",
             Price1 : "1. İnd. Tutar",
             Percent2 : "2. İnd. Yüzde",
@@ -10739,7 +10755,8 @@ export const langTr =
         popDiscount : 
         {
             title: "Evrak İndirimi",
-            chkDocDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            chkFirstDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            chkDocDiscount : "Evrak İndirimi Olarak Uygula",
             Percent1 : "1. İnd. Yüzde",
             Price1 : "1. İnd. Tutar",
             Percent2 : "2. İnd. Yüzde",
@@ -11113,7 +11130,8 @@ export const langTr =
         popDiscount : 
         {
             title: "Evrak İndirimi",
-            chkDocDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            chkFirstDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            chkDocDiscount : "Evrak İndirimi Olarak Uygula",
             Percent1 : "1. İnd. Yüzde",
             Price1 : "1. İnd. Tutar",
             Percent2 : "2. İnd. Yüzde",
@@ -11418,7 +11436,8 @@ export const langTr =
         popDiscount : 
         {
             title: "Evrak İndirimi",
-            chkDocDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            chkFirstDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            chkDocDiscount : "Evrak İndirimi Olarak Uygula",
             Percent1 : "1. İnd. Yüzde",
             Price1 : "1. İnd. Tutar",
             Percent2 : "2. İnd. Yüzde",
@@ -11863,7 +11882,8 @@ export const langTr =
         popDiscount : 
         {
             title: "Evrak İndirimi",
-            chkDocDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            chkFirstDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            chkDocDiscount : "Evrak İndirimi Olarak Uygula",
             Percent1 : "1. İnd. Yüzde",
             Price1 : "1. İnd. Tutar",
             Percent2 : "2. İnd. Yüzde",
@@ -12200,7 +12220,8 @@ export const langTr =
         popDiscount : 
         {
             title: "Evrak İndirimi",
-            chkDocDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            chkFirstDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            chkDocDiscount : "Evrak İndirimi Olarak Uygula",
             Percent1 : "1. İnd. Yüzde",
             Price1 : "1. İnd. Tutar",
             Percent2 : "2. İnd. Yüzde",
@@ -14692,7 +14713,8 @@ export const langTr =
         popDiscount : 
         {
             title: "Evrak İndirimi",
-            chkDocDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            chkFirstDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            chkDocDiscount : "Evrak İndirimi Olarak Uygula",
             Percent1 : "1. İnd. Yüzde",
             Price1 : "1. İnd. Tutar",
             Percent2 : "2. İnd. Yüzde",
@@ -14992,7 +15014,8 @@ export const langTr =
         popDiscount : 
         {
             title: "Evrak İndirimi",
-            chkDocDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            chkFirstDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            chkDocDiscount : "Evrak İndirimi Olarak Uygula",
             Percent1 : "1. İnd. Yüzde",
             Price1 : "1. İnd. Tutar",
             Percent2 : "2. İnd. Yüzde",
