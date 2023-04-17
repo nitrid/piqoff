@@ -49,6 +49,7 @@ export default class salesOrder extends React.PureComponent
         this.tabIndex = props.data.tabkeyc
        
         this.multiItemData = new datatable
+        this.vatRate =  new datatable
 
     }
     async componentDidMount()
@@ -198,10 +199,23 @@ export default class salesOrder extends React.PureComponent
     }
     async _calculateTotal()
     {
+        let tmpVat = 0
+        for (let i = 0; i < this.docObj.docOffers.dt().groupBy('VAT_RATE').length; i++) 
+        {
+            tmpVat = tmpVat + parseFloat(this.docObj.docOffers.dt().where({'VAT_RATE':this.docObj.docOffers.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("VAT",2))
+        }
         this.docObj.dt()[0].AMOUNT = this.docObj.docOffers.dt().sum("AMOUNT",2)
         this.docObj.dt()[0].DISCOUNT = this.docObj.docOffers.dt().sum("DISCOUNT",2)
-        this.docObj.dt()[0].VAT = this.docObj.docOffers.dt().sum("VAT",2)
-        this.docObj.dt()[0].TOTAL = this.docObj.docOffers.dt().sum("TOTAL",2)
+        this.docObj.dt()[0].VAT = Number(tmpVat).round(2)
+        if(this.chkDocDiscount.value == true)
+        {
+            this.docObj.dt()[0].TOTALHT = parseFloat(parseFloat(this.docObj.docItems.dt().sum("AMOUNT",2)) - parseFloat(this.docObj.docItems.dt().sum("DISCOUNT",2))).round(2)
+        }
+        else
+        {
+            this.docObj.dt()[0].TOTALHT =this.docObj.docOffers.dt().sum("TOTALHT",2)
+        }
+        this.docObj.dt()[0].TOTAL = Number(parseFloat(this.docObj.dt()[0].TOTALHT) + parseFloat(this.docObj.dt()[0].VAT)).round(2)
         this._calculateTotalMargin()
     }
     async _calculateTotalMargin()
@@ -253,28 +267,21 @@ export default class salesOrder extends React.PureComponent
                                     {
                                         for (let i = 0; i < data.length; i++) 
                                         {
-                                            if(i == 0)
-                                            {
-                                                await this.addItem(data[i],e.rowIndex)
-                                            }
-                                            else
-                                            {
-                                                let tmpdocOffers = {...this.docObj.docOffers.empty}
-                                                tmpdocOffers.DOC_GUID = this.docObj.dt()[0].GUID
-                                                tmpdocOffers.TYPE = this.docObj.dt()[0].TYPE
-                                                tmpdocOffers.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                                                tmpdocOffers.LINE_NO = this.docObj.docOffers.dt().length
-                                                tmpdocOffers.REF = this.docObj.dt()[0].REF
-                                                tmpdocOffers.REF_NO = this.docObj.dt()[0].REF_NO
-                                                tmpdocOffers.OUTPUT = this.docObj.dt()[0].OUTPUT
-                                                tmpdocOffers.INPUT = this.docObj.dt()[0].INPUT
-                                                tmpdocOffers.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                                                this.txtRef.readOnly = true
-                                                this.txtRefno.readOnly = true
-                                                this.docObj.docOffers.addEmpty(tmpdocOffers)
-                                                await this.core.util.waitUntil(100)
-                                                await this.addItem(data[i],this.docObj.docOffers.dt().length-1)
-                                            }
+                                            let tmpdocOffers = {...this.docObj.docOffers.empty}
+                                            tmpdocOffers.DOC_GUID = this.docObj.dt()[0].GUID
+                                            tmpdocOffers.TYPE = this.docObj.dt()[0].TYPE
+                                            tmpdocOffers.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                            tmpdocOffers.LINE_NO = this.docObj.docOffers.dt().length
+                                            tmpdocOffers.REF = this.docObj.dt()[0].REF
+                                            tmpdocOffers.REF_NO = this.docObj.dt()[0].REF_NO
+                                            tmpdocOffers.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                            tmpdocOffers.INPUT = this.docObj.dt()[0].INPUT
+                                            tmpdocOffers.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                                            this.txtRef.readOnly = true
+                                            this.txtRefno.readOnly = true
+                                            this.docObj.docOffers.addEmpty(tmpdocOffers)
+                                            await this.core.util.waitUntil(100)
+                                            await this.addItem(data[i],this.docObj.docOffers.dt().length-1)
                                         }
                                     }
                                 }
@@ -338,28 +345,22 @@ export default class salesOrder extends React.PureComponent
                                         {
                                             for (let i = 0; i < data.length; i++) 
                                             {
-                                                if(i == 0)
-                                                {
-                                                    await this.addItem(data[i],e.rowIndex)
-                                                }
-                                                else
-                                                {
-                                                    let tmpdocOffers = {...this.docObj.docOffers.empty}
-                                                    tmpdocOffers.DOC_GUID = this.docObj.dt()[0].GUID
-                                                    tmpdocOffers.TYPE = this.docObj.dt()[0].TYPE
-                                                    tmpdocOffers.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                                                    tmpdocOffers.LINE_NO = this.docObj.docOffers.dt().length
-                                                    tmpdocOffers.REF = this.docObj.dt()[0].REF
-                                                    tmpdocOffers.REF_NO = this.docObj.dt()[0].REF_NO
-                                                    tmpdocOffers.OUTPUT = this.docObj.dt()[0].OUTPUT
-                                                    tmpdocOffers.INPUT = this.docObj.dt()[0].INPUT
-                                                    tmpdocOffers.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                                                    this.txtRef.readOnly = true
-                                                    this.txtRefno.readOnly = true
-                                                    this.docObj.docOffers.addEmpty(tmpdocOffers)
-                                                    await this.core.util.waitUntil(100)
-                                                    await this.addItem(data[i],this.docObj.docOffers.dt().length-1)
-                                                }
+                                               
+                                                let tmpdocOffers = {...this.docObj.docOffers.empty}
+                                                tmpdocOffers.DOC_GUID = this.docObj.dt()[0].GUID
+                                                tmpdocOffers.TYPE = this.docObj.dt()[0].TYPE
+                                                tmpdocOffers.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                                tmpdocOffers.LINE_NO = this.docObj.docOffers.dt().length
+                                                tmpdocOffers.REF = this.docObj.dt()[0].REF
+                                                tmpdocOffers.REF_NO = this.docObj.dt()[0].REF_NO
+                                                tmpdocOffers.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                                tmpdocOffers.INPUT = this.docObj.dt()[0].INPUT
+                                                tmpdocOffers.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                                                this.txtRef.readOnly = true
+                                                this.txtRefno.readOnly = true
+                                                this.docObj.docOffers.addEmpty(tmpdocOffers)
+                                                await this.core.util.waitUntil(100)
+                                                await this.addItem(data[i],this.docObj.docOffers.dt().length-1)
                                             }
                                         }
                                     }
@@ -408,10 +409,15 @@ export default class salesOrder extends React.PureComponent
                                 }
                                 await this.msgUnit.show().then(async () =>
                                 {
-                                    e.data.UNIT = this.cmbUnit.value
-                                    e.data.QUANTITY = this.txtTotalQuantity.value
-                                    e.data.UNIT_FACTOR = this.txtUnitFactor.value
+                                    e.key.UNIT = this.cmbUnit.value
+                                    e.key.UNIT_FACTOR = this.txtUnitFactor.value
                                     if(this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].TYPE == 1)
+                                    {
+                                        e.data.PRICE = parseFloat((this.txtUnitPrice.value * this.txtUnitFactor.value).toFixed(4))
+                                    }
+                                    else
+                                    {
+                                        if(this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].TYPE == 1)
                                     {
                                         e.data.PRICE = parseFloat((this.txtUnitPrice.value * this.txtUnitFactor.value).toFixed(4))
                                     }
@@ -419,12 +425,103 @@ export default class salesOrder extends React.PureComponent
                                     {
                                         e.data.PRICE = parseFloat((this.txtUnitPrice.value / this.txtUnitFactor.value).toFixed(4))
                                     }
+                                    }
+                                    e.data.DIFF_PRICE = parseFloat((e.data.PRICE - e.data.CUSTOMER_PRICE).toFixed(3))
                                     e.data.QUANTITY = this.txtTotalQuantity.value
                                     e.data.VAT = parseFloat(((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) * (e.data.VAT_RATE) / 100)).toFixed(4));
-                                    e.data.AMOUNT = parseFloat((e.data.PRICE * e.data.QUANTITY).toFixed(4))
-                                    e.data.TOTALHT = parseFloat(((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT).toFixed(4))
-                                    e.data.TOTAL = parseFloat((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) +e.data.VAT).toFixed(4))
+                                    e.data.AMOUNT = parseFloat((e.data.PRICE * e.data.QUANTITY)).round(2)
+                                    e.data.TOTALHT = Number(((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT)).round(2)
+                                    e.data.TOTAL = Number((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) +e.data.VAT)).round(2)
                                     e.data.DISCOUNT_RATE = Number(e.data.AMOUNT).rate2Num(e.data.DISCOUNT,4)
+                                    //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
+                                    await this.itemRelatedUpdate(e.data.ITEM,this.txtTotalQuantity.value)
+                                    //*****************************************/
+                                    this._calculateTotal()
+                                });  
+                            }
+                        },
+                    ]
+                }
+                >  
+                </NdTextBox>
+            )
+        }
+        if(e.column.dataField == "DISCOUNT")
+        {
+            return (
+                <NdTextBox id={"txtGrdDiscount"+e.rowIndex} parent={this} simple={true} 
+                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                value={e.value}
+                onChange={(r)=>
+                {
+                    this.grdSlsOffer.devGrid.cellValue(e.rowIndex,"DISCOUNT",r.component._changedValue)
+                }}
+                button=
+                {
+                    [
+                        {
+                            id:'01',
+                            icon:'more',
+                            onClick:async ()  =>
+                            {
+                                this.txtDiscount1.value = e.data.DISCOUNT_1
+                                this.txtDiscount2.value = e.data.DISCOUNT_2
+                                this.txtDiscount3.value = e.data.DISCOUNT_3
+                                this.txtTotalDiscount.value = (parseFloat(e.data.DISCOUNT_1) + parseFloat(e.data.DISCOUNT_2) + parseFloat(e.data.DISCOUNT_3))
+                                await this.msgDiscountEntry.show().then(async () =>
+                                {
+                                    e.data.DISCOUNT_1 = this.txtDiscount1.value
+                                    e.data.DISCOUNT_2 = this.txtDiscount2.value
+                                    e.data.DISCOUNT_3 = this.txtDiscount3.value
+                                    e.data.DISCOUNT = (parseFloat(this.txtDiscount1.value) + parseFloat(this.txtDiscount2.value) + parseFloat(this.txtDiscount3.value))
+                                    e.data.VAT = parseFloat(((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) * (e.data.VAT_RATE) / 100)).toFixed(4));
+                                    e.data.AMOUNT = parseFloat((e.data.PRICE * e.data.QUANTITY)).round(2)
+                                    e.data.TOTALHT = Number(((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT)).round(2)
+                                    e.data.TOTAL = Number((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) +e.data.VAT)).round(2)
+                                    e.data.DISCOUNT_RATE = Number(e.data.AMOUNT).rate2Num(e.data.DISCOUNT,4)
+                                    this._calculateTotal()
+                                });  
+                            }
+                        },
+                    ]
+                }
+                >  
+                </NdTextBox>
+            )
+        }
+        if(e.column.dataField == "DISCOUNT_RATE")
+        {
+            return (
+                <NdTextBox id={"txtGrdDiscountRate"+e.rowIndex} parent={this} simple={true} 
+                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                value={e.value}
+                onChange={(r)=>
+                {
+                    this.grdSlsOffer.devGrid.cellValue(e.rowIndex,"DISCOUNT_RATE",r.component._changedValue)
+                }}
+                button=
+                {
+                    [
+                        {
+                            id:'01',
+                            icon:'more',
+                            onClick:async ()  =>
+                            {
+                                this.txtDiscountPer1.value = Number(e.data.QUANTITY*e.data.PRICE).rate2Num(e.data.DISCOUNT_1,4)
+                                this.txtDiscountPer2.value = Number((e.data.QUANTITY*e.data.PRICE)-e.data.DISCOUNT_1).rate2Num(e.data.DISCOUNT_2,4)
+                                this.txtDiscountPer3.value = Number((e.data.QUANTITY*e.data.PRICE)-((e.data.DISCOUNT_1+e.data.DISCOUNT_2))).rate2Num(e.data.DISCOUNT_3,4)
+                                await this.msgDiscountPerEntry.show().then(async () =>
+                                {
+                                    e.data.DISCOUNT_1 = Number(e.data.AMOUNT).rateInc(this.txtDiscountPer1.value,4) 
+                                    e.data.DISCOUNT_2 = Number(e.data.AMOUNT-e.data.DISCOUNT_1).rateInc(this.txtDiscountPer2.value,4) 
+                                    e.data.DISCOUNT_3 = Number(e.data.AMOUNT-e.data.DISCOUNT_1-e.data.DISCOUNT_2).rateInc(this.txtDiscountPer3.value,4) 
+                                    e.data.DISCOUNT = (e.data.DISCOUNT_1 + e.data.DISCOUNT_2 + e.data.DISCOUNT_3)
+                                    e.data.VAT = parseFloat(((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) * (e.data.VAT_RATE) / 100)).toFixed(4));
+                                    e.data.AMOUNT = parseFloat((e.data.PRICE * e.data.QUANTITY)).round(2)
+                                    e.data.TOTALHT = Number(((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT)).round(2)
+                                    e.data.TOTAL = Number((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) +e.data.VAT)).round(2)
+                                    e.data.DISCOUNT_RATE = Number(e.data.AMOUNT).rate2Num(e.data.DISCOUNT,4)
+                                    this._calculateTotal()
                                 });  
                             }
                         },
@@ -459,8 +556,12 @@ export default class salesOrder extends React.PureComponent
                             this.docObj.docOffers.dt()[i].VAT = parseFloat((this.docObj.docOffers.dt()[i].VAT + (this.docObj.docOffers.dt()[i].PRICE * (this.docObj.docOffers.dt()[i].VAT_RATE / 100)) * pQuantity).toFixed(9))
                             this.docObj.docOffers.dt()[i].AMOUNT = parseFloat((this.docObj.docOffers.dt()[i].QUANTITY * this.docObj.docOffers.dt()[i].PRICE).toFixed(9))
                             this.docObj.docOffers.dt()[i].TOTAL = parseFloat((((this.docObj.docOffers.dt()[i].QUANTITY * this.docObj.docOffers.dt()[i].PRICE) - this.docObj.docOffers.dt()[i].DISCOUNT) + this.docObj.docOffers.dt()[i].VAT).toFixed(9))
+                            this.docObj.docOffers.dt()[i].TOTALHT = Number((this.docObj.docOffers.dt()[i].AMOUNT - this.docObj.docOffers.dt()[i].DISCOUNT)).round(2)
                             this._calculateTotal()
                             await this.grdSlsOffer.devGrid.deleteRow(0)
+                            //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
+                            await this.itemRelated(pData.GUID,this.docObj.docOffers.dt()[i].QUANTITY)
+                            //*****************************************/
                             if(this.checkCombine.value == true)
                             {
                                 this.combineControl = false
@@ -489,7 +590,11 @@ export default class salesOrder extends React.PureComponent
                     this.docObj.docOffers.dt()[i].VAT = parseFloat((this.docObj.docOffers.dt()[i].VAT + (this.docObj.docOffers.dt()[i].PRICE * (this.docObj.docOffers.dt()[i].VAT_RATE / 100)) * pQuantity).toFixed(9))
                     this.docObj.docOffers.dt()[i].AMOUNT = parseFloat((this.docObj.docOffers.dt()[i].QUANTITY * this.docObj.docOffers.dt()[i].PRICE).toFixed(9))
                     this.docObj.docOffers.dt()[i].TOTAL = parseFloat((((this.docObj.docOffers.dt()[i].QUANTITY * this.docObj.docOffers.dt()[i].PRICE) - this.docObj.docOffers.dt()[i].DISCOUNT) + this.docObj.docOffers.dt()[i].VAT).toFixed(9))
+                    this.docObj.docOffers.dt()[i].TOTALHT = Number((this.docObj.docOffers.dt()[i].AMOUNT - this.docObj.docOffers.dt()[i].DISCOUNT)).round(2)
                     this._calculateTotal()
+                    //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
+                    await this.itemRelated(pData.GUID,this.docObj.docOffers.dt()[i].QUANTITY)
+                    //*****************************************/
                     await this.grdSlsOffer.devGrid.deleteRow(0)
                     return
                 }
@@ -518,13 +623,110 @@ export default class salesOrder extends React.PureComponent
             let tmpMargin = tmpData.result.recordset[0].PRICE - this.docObj.docOffers.dt()[pIndex].COST_PRICE
             let tmpMarginRate = ((tmpData.result.recordset[0].PRICE - this.docObj.docOffers.dt()[pIndex].COST_PRICE) - tmpData.result.recordset[0].PRICE) * 100
             this.docObj.docOffers.dt()[pIndex].MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
-            this.docObj.docOffers.dt()[pIndex].PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(9))
-            this.docObj.docOffers.dt()[pIndex].VAT = parseFloat((tmpData.result.recordset[0].PRICE * (pData.VAT / 100) * pQuantity).toFixed(9))
-            this.docObj.docOffers.dt()[pIndex].AMOUNT = parseFloat((tmpData.result.recordset[0].PRICE * pQuantity).toFixed(9))
-            this.docObj.docOffers.dt()[pIndex].TOTAL = parseFloat(((tmpData.result.recordset[0].PRICE * pQuantity)+ this.docObj.docOffers.dt()[pIndex].VAT).toFixed(9))
+            this.docObj.docOffers.dt()[pIndex].PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4))
+            this.docObj.docOffers.dt()[pIndex].VAT = Number((tmpData.result.recordset[0].PRICE * (this.docObj.docOffers.dt()[pIndex].VAT_RATE / 100) * pQuantity)).round(4)
+            this.docObj.docOffers.dt()[pIndex].AMOUNT = Number(tmpData.result.recordset[0].PRICE  * pQuantity).round(2)
+            this.docObj.docOffers.dt()[pIndex].TOTAL = Number(((tmpData.result.recordset[0].PRICE * pQuantity) + this.docObj.docOffers.dt()[pIndex].VAT)).round(2)
+            this.docObj.docOffers.dt()[pIndex].TOTALHT = Number((this.docObj.docOffers.dt()[pIndex].AMOUNT - this.docObj.docOffers.dt()[pIndex].DISCOUNT)).round(2)
             this._calculateTotal()
         }
         App.instance.setState({isExecute:false})
+        //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
+        await this.itemRelated(pData.GUID,this.docObj.docOffers.dt()[pIndex].QUANTITY)
+        //*****************************************/
+    }
+    itemRelated(pGuid,pQuantity)
+    {
+        return new Promise(async resolve =>
+        {
+            let tmpRelatedQuery = 
+            {
+                query :"SELECT ITEM_GUID,ITEM_CODE,ITEM_NAME,ITEM_QUANTITY,RELATED_GUID,RELATED_CODE,RELATED_NAME,RELATED_QUANTITY FROM ITEM_RELATED_VW_01 WHERE ITEM_GUID = @ITEM_GUID",
+                param : ['ITEM_GUID:string|50'],
+                value : [pGuid]
+            }
+    
+            let tmpRelatedData = await this.core.sql.execute(tmpRelatedQuery)            
+            
+            for (let i = 0; i < tmpRelatedData.result.recordset.length; i++) 
+            {
+                let tmpRelatedQt = Math.floor(pQuantity / tmpRelatedData.result.recordset[i].ITEM_QUANTITY) * tmpRelatedData.result.recordset[i].RELATED_QUANTITY
+                
+                if(tmpRelatedQt > 0)
+                {
+                    let tmpRelatedItemQuery = 
+                    {   
+                        query :"SELECT GUID,CODE,NAME,COST_PRICE,UNIT_GUID AS UNIT,VAT,MULTICODE,CUSTOMER_NAME,BARCODE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE GUID = @GUID",
+                        param : ['GUID:string|50'],
+                        value : [tmpRelatedData.result.recordset[i].RELATED_GUID]
+                    }
+    
+                    let tmpRelatedItemData = await this.core.sql.execute(tmpRelatedItemQuery)
+                    
+                    if(tmpRelatedItemData.result.recordset.length > 0)
+                    {
+                        let tmpDocItems = {...this.docObj.docOffers.empty}
+                        tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+                        tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+                        tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                        tmpDocItems.LINE_NO = this.docObj.docOffers.dt().length
+                        tmpDocItems.REF = this.docObj.dt()[0].REF
+                        tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+                        tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+                        tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+                        tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                        this.txtRef.readOnly = true
+                        this.txtRefno.readOnly = true
+                        this.docObj.docOffers.addEmpty(tmpDocItems)
+                        await this.core.util.waitUntil(100)
+                        await this.addItem(tmpRelatedItemData.result.recordset[0],this.docObj.docOffers.dt().length-1,tmpRelatedQt)
+                    }
+                }
+            }
+            resolve()
+        })
+    }
+    itemRelatedUpdate(pGuid,pQuantity)
+    {
+        return new Promise(async resolve =>
+        {
+            await this.core.util.waitUntil()
+            let tmpRelatedQuery = 
+            {
+                query :"SELECT ITEM_GUID,ITEM_CODE,ITEM_NAME,ITEM_QUANTITY,RELATED_GUID,RELATED_CODE,RELATED_NAME,RELATED_QUANTITY FROM ITEM_RELATED_VW_01 WHERE ITEM_GUID = @ITEM_GUID",
+                param : ['ITEM_GUID:string|50'],
+                value : [pGuid]
+            }
+            
+            let tmpRelatedData = await this.core.sql.execute(tmpRelatedQuery)                        
+            
+            for (let i = 0; i < tmpRelatedData.result.recordset.length; i++) 
+            {
+                let tmpExist = false
+                for (let x = 0; x < this.docObj.docOffers.dt().length; x++) 
+                {
+                    if(this.docObj.docOffers.dt()[x].ITEM_CODE == tmpRelatedData.result.recordset[i].RELATED_CODE)
+                    {                
+                        let tmpRelatedQt = Math.floor(pQuantity / tmpRelatedData.result.recordset[i].ITEM_QUANTITY) * tmpRelatedData.result.recordset[i].RELATED_QUANTITY
+                        
+                        if(tmpRelatedQt > 0)
+                        {
+                            this.docObj.docOffers.dt()[x].QUANTITY = tmpRelatedQt
+                            this.docObj.docOffers.dt()[x].VAT = parseFloat((this.docObj.docOffers.dt()[x].VAT + (this.docObj.docOffers.dt()[x].PRICE * (this.docObj.docOffers.dt()[x].VAT_RATE / 100) * pQuantity)).toFixed(4))
+                            this.docObj.docOffers.dt()[x].AMOUNT = parseFloat((this.docObj.docOffers.dt()[x].QUANTITY * this.docObj.docOffers.dt()[x].PRICE)).round(2)
+                            this.docObj.docOffers.dt()[x].TOTAL = parseFloat((((this.docObj.docOffers.dt()[x].QUANTITY * this.docObj.docOffers.dt()[x].PRICE) - this.docObj.docOffers.dt()[x].DISCOUNT) + this.docObj.docOffers.dt()[x].VAT)).round(2)
+                            this.docObj.docOffers.dt()[x].TOTALHT =  parseFloat((this.docObj.docOffers.dt()[x].AMOUNT - this.docObj.docOffers.dt()[x].DISCOUNT)).round(2)
+                        }
+                        tmpExist = true
+                    }
+                }
+                if(!tmpExist)
+                {
+                    await this.itemRelated(pGuid,pQuantity)
+                }
+            }
+            resolve()
+        })
     }
     async multiItemAdd()
     {
@@ -1417,28 +1619,22 @@ export default class salesOrder extends React.PureComponent
                                                     {
                                                         for (let i = 0; i < data.length; i++) 
                                                         {
-                                                            if(i == 0)
-                                                            {
-                                                                await this.addItem(data[i],this.docObj.docOffers.dt().length -1)
-                                                            }
-                                                            else
-                                                            {
-                                                                let tmpdocOffers = {...this.docObj.docOffers.empty}
-                                                                tmpdocOffers.DOC_GUID = this.docObj.dt()[0].GUID
-                                                                tmpdocOffers.TYPE = this.docObj.dt()[0].TYPE
-                                                                tmpdocOffers.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                                                                tmpdocOffers.LINE_NO = this.docObj.docOffers.dt().length
-                                                                tmpdocOffers.REF = this.docObj.dt()[0].REF
-                                                                tmpdocOffers.REF_NO = this.docObj.dt()[0].REF_NO
-                                                                tmpdocOffers.OUTPUT = this.docObj.dt()[0].OUTPUT
-                                                                tmpdocOffers.INPUT = this.docObj.dt()[0].INPUT
-                                                                tmpdocOffers.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                                                                this.txtRef.readOnly = true
-                                                                this.txtRefno.readOnly = true
-                                                                this.docObj.docOffers.addEmpty(tmpdocOffers)
-                                                                await this.core.util.waitUntil(100)
-                                                                await this.addItem(data[i],this.docObj.docOffers.dt().length-1)
-                                                            }
+                                                           
+                                                            let tmpdocOffers = {...this.docObj.docOffers.empty}
+                                                            tmpdocOffers.DOC_GUID = this.docObj.dt()[0].GUID
+                                                            tmpdocOffers.TYPE = this.docObj.dt()[0].TYPE
+                                                            tmpdocOffers.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                                            tmpdocOffers.LINE_NO = this.docObj.docOffers.dt().length
+                                                            tmpdocOffers.REF = this.docObj.dt()[0].REF
+                                                            tmpdocOffers.REF_NO = this.docObj.dt()[0].REF_NO
+                                                            tmpdocOffers.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                                            tmpdocOffers.INPUT = this.docObj.dt()[0].INPUT
+                                                            tmpdocOffers.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                                                            this.txtRef.readOnly = true
+                                                            this.txtRefno.readOnly = true
+                                                            this.docObj.docOffers.addEmpty(tmpdocOffers)
+                                                            await this.core.util.waitUntil(100)
+                                                            await this.addItem(data[i],this.docObj.docOffers.dt().length-1)
                                                         }
                                                     }
                                                 }
@@ -1504,28 +1700,22 @@ export default class salesOrder extends React.PureComponent
                                                             {
                                                                 for (let i = 0; i < data.length; i++) 
                                                                 {
-                                                                    if(i == 0)
-                                                                    {
-                                                                        await this.addItem(data[i],this.docObj.docOffers.dt().length -1)
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        let tmpdocOffers = {...this.docObj.docOffers.empty}
-                                                                        tmpdocOffers.DOC_GUID = this.docObj.dt()[0].GUID
-                                                                        tmpdocOffers.TYPE = this.docObj.dt()[0].TYPE
-                                                                        tmpdocOffers.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                                                                        tmpdocOffers.LINE_NO = this.docObj.docOffers.dt().length
-                                                                        tmpdocOffers.REF = this.docObj.dt()[0].REF
-                                                                        tmpdocOffers.REF_NO = this.docObj.dt()[0].REF_NO
-                                                                        tmpdocOffers.OUTPUT = this.docObj.dt()[0].OUTPUT
-                                                                        tmpdocOffers.INPUT = this.docObj.dt()[0].INPUT
-                                                                        tmpdocOffers.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                                                                        this.txtRef.readOnly = true
-                                                                        this.txtRefno.readOnly = true
-                                                                        this.docObj.docOffers.addEmpty(tmpdocOffers)
-                                                                        await this.core.util.waitUntil(100)
-                                                                        await this.addItem(data[i],this.docObj.docOffers.dt().length-1)
-                                                                    }
+                                                                  
+                                                                    let tmpdocOffers = {...this.docObj.docOffers.empty}
+                                                                    tmpdocOffers.DOC_GUID = this.docObj.dt()[0].GUID
+                                                                    tmpdocOffers.TYPE = this.docObj.dt()[0].TYPE
+                                                                    tmpdocOffers.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                                                    tmpdocOffers.LINE_NO = this.docObj.docOffers.dt().length
+                                                                    tmpdocOffers.REF = this.docObj.dt()[0].REF
+                                                                    tmpdocOffers.REF_NO = this.docObj.dt()[0].REF_NO
+                                                                    tmpdocOffers.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                                                    tmpdocOffers.INPUT = this.docObj.dt()[0].INPUT
+                                                                    tmpdocOffers.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                                                                    this.txtRef.readOnly = true
+                                                                    this.txtRefno.readOnly = true
+                                                                    this.docObj.docOffers.addEmpty(tmpdocOffers)
+                                                                    await this.core.util.waitUntil(100)
+                                                                    await this.addItem(data[i],this.docObj.docOffers.dt().length-1)
                                                                 }
                                                             }
                                                         }
@@ -1564,28 +1754,22 @@ export default class salesOrder extends React.PureComponent
                                                     {
                                                         for (let i = 0; i < data.length; i++) 
                                                         {
-                                                            if(i == 0)
-                                                            {
-                                                                await this.addItem(data[i],this.docObj.docOffers.dt().length -1)
-                                                            }
-                                                            else
-                                                            {
-                                                                let tmpdocOffers = {...this.docObj.docOffers.empty}
-                                                                tmpdocOffers.DOC_GUID = this.docObj.dt()[0].GUID
-                                                                tmpdocOffers.TYPE = this.docObj.dt()[0].TYPE
-                                                                tmpdocOffers.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                                                                tmpdocOffers.LINE_NO = this.docObj.docOffers.dt().length
-                                                                tmpdocOffers.REF = this.docObj.dt()[0].REF
-                                                                tmpdocOffers.REF_NO = this.docObj.dt()[0].REF_NO
-                                                                tmpdocOffers.OUTPUT = this.docObj.dt()[0].OUTPUT
-                                                                tmpdocOffers.INPUT = this.docObj.dt()[0].INPUT
-                                                                tmpdocOffers.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                                                                this.txtRef.readOnly = true
-                                                                this.txtRefno.readOnly = true
-                                                                this.docObj.docOffers.addEmpty(tmpdocOffers)
-                                                                await this.core.util.waitUntil(100)
-                                                                await this.addItem(data[i],this.docObj.docOffers.dt().length-1)
-                                                            }
+                                                        
+                                                            let tmpdocOffers = {...this.docObj.docOffers.empty}
+                                                            tmpdocOffers.DOC_GUID = this.docObj.dt()[0].GUID
+                                                            tmpdocOffers.TYPE = this.docObj.dt()[0].TYPE
+                                                            tmpdocOffers.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                                            tmpdocOffers.LINE_NO = this.docObj.docOffers.dt().length
+                                                            tmpdocOffers.REF = this.docObj.dt()[0].REF
+                                                            tmpdocOffers.REF_NO = this.docObj.dt()[0].REF_NO
+                                                            tmpdocOffers.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                                            tmpdocOffers.INPUT = this.docObj.dt()[0].INPUT
+                                                            tmpdocOffers.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                                                            this.txtRef.readOnly = true
+                                                            this.txtRefno.readOnly = true
+                                                            this.docObj.docOffers.addEmpty(tmpdocOffers)
+                                                            await this.core.util.waitUntil(100)
+                                                            await this.addItem(data[i],this.docObj.docOffers.dt().length-1)
                                                         }
                                                     }
                                                 }
@@ -1611,9 +1795,9 @@ export default class salesOrder extends React.PureComponent
                                         {
                                             this.multiItemData.clear
                                             this.popMultiItem.show()
-                                            if( typeof this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1] != 'undefined' && this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
+                                            if( typeof this.docObj.docOffers.dt()[this.docObj.docOffers.dt().length - 1] != 'undefined' && this.docObj.docOffers.dt()[this.docObj.docOffers.dt().length - 1].ITEM_CODE == '')
                                             {
-                                                await this.grdSlsOffer.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
+                                                await this.grdSlsOffer.devGrid.deleteRow(this.docObj.docOffers.dt().length - 1)
                                             }
                                         }
                                         else
@@ -1660,6 +1844,7 @@ export default class salesOrder extends React.PureComponent
                                         
                                             dialog(tmpConfObj);
                                             e.component.cancelEditData()
+                                            
                                         }
                                         if(typeof e.newData.PRICE != 'undefined' && e.key.COST_PRICE > e.newData.PRICE)
                                         {
@@ -1691,6 +1876,12 @@ export default class salesOrder extends React.PureComponent
                                                 dialog(tmpConfObj);
                                                 e.component.cancelEditData()
                                             }
+                                        }
+                                        if(typeof e.newData.QUANTITY != 'undefined')
+                                        {
+                                            //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
+                                            await this.itemRelatedUpdate(e.key.ITEM,e.newData.QUANTITY)
+                                            //*****************************************/
                                         }
                                     }}
                                     onRowRemoving={async (e)=>
@@ -1730,37 +1921,55 @@ export default class salesOrder extends React.PureComponent
                                             }
                                         }
                                         if(typeof e.data.DISCOUNT_RATE != 'undefined')
-                                        {
-                                            e.key.DISCOUNT = parseFloat((((e.key.AMOUNT * e.data.DISCOUNT_RATE) / 100)).toFixed(2))
-                                        }
-
-                                       
-                                        if(e.key.DISCOUNT > (e.key.PRICE * e.key.QUANTITY))
-                                        {
-                                            let tmpConfObj =
                                             {
-                                                id:'msgDiscount',showTitle:true,title:"Uyarı",showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgDiscount.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscount.msg")}</div>)
+                                                e.key.DISCOUNT = Number(e.key.PRICE * e.key.QUANTITY).rateInc(e.data.DISCOUNT_RATE,4)
+                                                e.key.DISCOUNT_1 = Number(e.key.PRICE * e.key.QUANTITY).rateInc( e.data.DISCOUNT_RATE,4)
+                                                e.key.DISCOUNT_2 = 0
+                                                e.key.DISCOUNT_3 = 0
                                             }
-                                        
-                                            dialog(tmpConfObj);
-                                            e.key.DISCOUNT = 0 
-                                            return
-                                        }
+                                            if(typeof e.data.DISCOUNT != 'undefined')
+                                            {
+                                                e.key.DISCOUNT_1 = e.data.DISCOUNT
+                                                e.key.DISCOUNT_2 = 0
+                                                e.key.DISCOUNT_3 = 0
+                                                e.key.DISCOUNT_RATE = Number(e.key.PRICE * e.key.QUANTITY).rate2Num(e.data.DISCOUNT)
+                                            }
+                                            
+                                           
+                                            if(e.key.DISCOUNT > (e.key.PRICE * e.key.QUANTITY))
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgDiscount',showTitle:true,title:this.t("msgDiscount.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgDiscount.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscount.msg")}</div>)
+                                                }
+                                            
+                                                dialog(tmpConfObj);
+                                                e.key.DISCOUNT = 0 
+                                                e.key.DISCOUNT_1 = 0
+                                                e.key.DISCOUNT_2 = 0
+                                                e.key.DISCOUNT_3 = 0
+                                                e.key.DISCOUNT_RATE = 0
+                                                return
+                                            }
 
                                         e.key.VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100)).toFixed(9));
-                                        e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(9))
+                                        e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY)).round(2)
                                         e.key.TOTAL = parseFloat((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) +e.key.VAT).toFixed(9))
+                                        e.key.TOTALHT =  Number(((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT)).round(2)
+                                        e.key.TOTAL =  Number((e.key.TOTALHT + e.key.VAT)).round(2)
 
                                         let tmpMargin = (e.key.TOTAL - e.key.VAT) - (e.key.COST_PRICE * e.key.QUANTITY)
                                         let tmpMarginRate = (tmpMargin /(e.key.TOTAL - e.key.VAT)) * 100
                                         e.key.MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
-                                        if(e.key.DISCOUNT > 0)
+                                        if(e.key.DISCOUNT == 0)
                                         {
-                                            e.key.DISCOUNT_RATE = parseFloat((100 - ((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) / (e.key.PRICE * e.key.QUANTITY)) * 100)).toFixed(9))
+                                            e.key.DISCOUNT_RATE = 0
+                                            e.key.DISCOUNT_1 = 0
+                                            e.key.DISCOUNT_2 = 0
+                                            e.key.DISCOUNT_3 = 0
                                         }
-                                        console.log(e.key.MARGIN)
                                         this._calculateTotal()
                                        
                                     }}
@@ -1783,11 +1992,12 @@ export default class salesOrder extends React.PureComponent
                                         <Column dataField="QUANTITY" caption={this.t("grdSlsOffer.clmQuantity")}  width={70} editCellRender={this._cellRoleRender} dataType={'number'}/>
                                         <Column dataField="PRICE" caption={this.t("grdSlsOffer.clmPrice")}  width={70} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
                                         <Column dataField="AMOUNT" caption={this.t("grdSlsOffer.clmAmount")}  width={90} allowEditing={false} format={{ style: "currency", currency: "EUR",precision: 3}}/>
-                                        <Column dataField="DISCOUNT" caption={this.t("grdSlsOffer.clmDiscount")}  width={60} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
-                                        <Column dataField="DISCOUNT_RATE" caption={this.t("grdSlsOffer.clmDiscountRate")} width={60} dataType={'number'} />
+                                        <Column dataField="DISCOUNT" caption={this.t("grdSlsOffer.clmDiscount")}  width={60} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}} editCellRender={this._cellRoleRender}/>
+                                        <Column dataField="DISCOUNT_RATE" caption={this.t("grdSlsOffer.clmDiscountRate")}  dataType={'number'}  format={'##0.00'} width={60} editCellRender={this._cellRoleRender}/>
                                         <Column dataField="MARGIN" caption={this.t("grdSlsOffer.clmMargin")} width={80} allowEditing={false}/>
                                         <Column dataField="VAT" caption={this.t("grdSlsOffer.clmVat")} width={75} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
                                         <Column dataField="VAT_RATE" caption={this.t("grdSlsOffer.clmVatRate")} width={50} allowEditing={false}/>
+                                        <Column dataField="TOTALHT" caption={this.t("grdSlsOffer.clmTotalHt")} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false} width={90} allowHeaderFiltering={false}/>
                                         <Column dataField="TOTAL" caption={this.t("grdSlsOffer.clmTotal")} width={110} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
                                         <Column dataField="DESCRIPTION" caption={this.t("grdSlsOffer.clmDescription")} width={100}  headerFilter={{visible:true}}/>
                                     </NdGrid>
@@ -1797,46 +2007,69 @@ export default class salesOrder extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={4} parent={this} id="frmslsDoc">
+                            <Form colCount={4} parent={this} id={"frmPurcInv"  + this.tabIndex}>
                                 {/* Ara Toplam */}
                                 <EmptyItem colSpan={3}/>
                                 <Item>
-                                <Label text={this.t("txtAmount")} alignment="right" />
-                                    <NdTextBox id="txtAmount" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"AMOUNT"}}
-                                    maxLength={32}
-                                   
-                                    ></NdTextBox>
+                                    <Form colCount={5}>
+                                        <Item colSpan={3}>
+                                            <Label text={this.t("txtAmount")} alignment="right" />
+                                            <NdTextBox id="txtAmount" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"AMOUNT"}}
+                                            maxLength={32}
+                                        
+                                            ></NdTextBox>
+                                        </Item>
+                                        <Item colSpan={2}>
+                                            <Label text={this.t("txtDiscount")} alignment="right" />
+                                            <NdTextBox id="txtDiscount" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"DISCOUNT"}}
+                                            maxLength={32}
+                                            button=
+                                            {
+                                                [
+                                                    {
+                                                        id:'01',
+                                                        icon:'more',
+                                                        onClick:()  =>
+                                                        {
+                                                            if(this.docObj.dt()[0].DISCOUNT > 0 )
+                                                            {
+                                                                this.txtDiscountPercent1.value  = Number(this.docObj.dt()[0].AMOUNT).rate2Num(this.docObj.docOffers.dt().sum("DISCOUNT_1",3),3)
+                                                                this.txtDiscountPrice1.value = this.docObj.docOffers.dt().sum("DISCOUNT_1",2)
+                                                                this.txtDiscountPercent2.value  = Number(this.docObj.dt()[0].AMOUNT-parseFloat(this.docObj.docOffers.dt().sum("DISCOUNT_1",3))).rate2Num(this.docObj.docOffers.dt().sum("DISCOUNT_2",3),3)
+                                                                this.txtDiscountPrice2.value = this.docObj.docOffers.dt().sum("DISCOUNT_2",2)
+                                                                this.txtDiscountPercent3.value  = Number(this.docObj.dt()[0].AMOUNT-(parseFloat(this.docObj.docOffers.dt().sum("DISCOUNT_1",3))+parseFloat(this.docObj.docOffers.dt().sum("DISCOUNT_2",3)))).rate2Num(this.docObj.docOffers.dt().sum("DISCOUNT_3",3),3)
+                                                                this.txtDiscountPrice3.value = this.docObj.docOffers.dt().sum("DISCOUNT_3",2)
+                                                            }
+                                                            else
+                                                            {
+                                                                this.txtDiscountPercent1.value  = 0
+                                                                this.txtDiscountPrice1.value = 0
+                                                                this.txtDiscountPercent2.value  = 0
+                                                                this.txtDiscountPrice2.value = 0
+                                                                this.txtDiscountPercent3.value  = 0
+                                                                this.txtDiscountPrice3.value = 0
+                                                            }
+                                                            this.popDiscount.show()
+                                                        }
+                                                    },
+                                                ]
+                                            }
+                                            ></NdTextBox>
+                                        </Item>
+                                    </Form> 
                                 </Item>
                                 {/* İndirim */}
                                 <EmptyItem colSpan={3}/>
                                 <Item>
-                                <Label text={this.t("txtDiscount")} alignment="right" />
-                                    <NdTextBox id="txtDiscount" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"DISCOUNT"}}
+                                    <Label text={this.t("txtTotalHt")} alignment="right" />
+                                    <NdTextBox id="txtTotalHt" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"TOTALHT"}}
                                     maxLength={32}
-                                    button=
-                                    {
-                                        [
-                                            {
-                                                id:'01',
-                                                icon:'more',
-                                                onClick:()  =>
-                                                {
-                                                    if(this.docObj.dt()[0].DISCOUNT > 0 )
-                                                    {
-                                                        this.txtDiscountPercent.value  = parseFloat((100 - (((this.docObj.dt()[0].AMOUNT - this.docObj.dt()[0].DISCOUNT) / this.docObj.dt()[0].AMOUNT) * 100)).toFixed(9))
-                                                        this.txtDiscountPrice.value = this.docObj.dt()[0].DISCOUNT
-                                                    }
-                                                    this.popDiscount.show()
-                                                }
-                                            },
-                                        ]
-                                    }
                                     ></NdTextBox>
                                 </Item>
                                 {/* KDV */}
                                 <EmptyItem colSpan={3}/>
                                 <Item>
-                                <Label text={this.t("txtVat")} alignment="right" />
+                                    <Label text={this.t("txtVat")} alignment="right" />
                                     <NdTextBox id="txtVat" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"VAT"}}
                                     maxLength={32}
                                     button=
@@ -1844,28 +2077,19 @@ export default class salesOrder extends React.PureComponent
                                         [
                                             {
                                                 id:'01',
-                                                icon:'clear',
+                                                icon:'more',
                                                 onClick:async ()  =>
                                                 {
-                                                    
-                                                    let tmpConfObj =
+                                                    this.vatRate.clear()
+                                                    for (let i = 0; i < this.docObj.docOffers.dt().groupBy('VAT_RATE').length; i++) 
                                                     {
-                                                        id:'msgVatDelete',showTitle:true,title:this.t("msgVatDelete.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                        button:[{id:"btn01",caption:this.t("msgVatDelete.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'after'}],
-                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgVatDelete.msg")}</div>)
+                                                        let tmpTotalHt  =  parseFloat(this.docObj.docOffers.dt().where({'VAT_RATE':this.docObj.docOffers.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("TOTALHT",2))
+                                                        let tmpVat = parseFloat(this.docObj.docOffers.dt().where({'VAT_RATE':this.docObj.docOffers.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("VAT",2))
+                                                        let tmpData = {"RATE":this.docObj.docOffers.dt().groupBy('VAT_RATE')[i].VAT_RATE,"VAT":tmpVat,"TOTALHT":tmpTotalHt}
+                                                        this.vatRate.push(tmpData)
                                                     }
-                                                    
-                                                    let pResult = await dialog(tmpConfObj);
-                                                    if(pResult == 'btn01')
-                                                    {
-                                                        for (let i = 0; i < this.docObj.docOffers.dt().length; i++) 
-                                                        {
-                                                            this.docObj.docOffers.dt()[i].VAT = 0  
-                                                            this.docObj.docOffers.dt()[i].VAT_RATE = 0
-                                                            this.docObj.docOffers.dt()[i].TOTAL = (this.docObj.docOffers.dt()[i].PRICE * this.docObj.docOffers.dt()[i].QUANTITY) - this.docObj.docOffers.dt()[i].DISCOUNT
-                                                            this._calculateTotal()
-                                                        }
-                                                    }
+                                                    await this.grdVatRate.dataRefresh({source:this.vatRate})
+                                                    this.popVatRate.show()
                                                 }
                                             },
                                         ]
@@ -1875,11 +2099,9 @@ export default class salesOrder extends React.PureComponent
                                 {/* KDV */}
                                 <EmptyItem colSpan={3}/>
                                 <Item>
-                                <Label text={this.t("txtTotal")} alignment="right" />
+                                    <Label text={this.t("txtTotal")} alignment="right" />
                                     <NdTextBox id="txtTotal" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"TOTAL"}}
                                     maxLength={32}
-                                    //param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
-                                    //access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                     ></NdTextBox>
                                 </Item>
                             </Form>
@@ -2574,6 +2796,409 @@ export default class salesOrder extends React.PureComponent
                                             onClick={()=>
                                             {
                                                 this.popMailSend.hide();  
+                                            }}/>
+                                        </div>
+                                    </div>
+                                </Item>
+                            </Form>
+                        </NdPopUp>
+                    </div> 
+                    {/* Satır İndirim PopUp */}
+                    <div>
+                        <NdDialog parent={this} id={"msgDiscountEntry"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.t("msgDiscountEntry.title")}
+                        container={"#root"} 
+                        width={'500'}
+                        height={'400'}
+                        position={{of:'#root'}}
+                        button={[{id:"btn01",caption:this.t("msgDiscountEntry.btn01"),location:'after'}]}
+                        >
+                            <Form colCount={1} height={'fit-content'}>
+                                <Item>
+                                    <Label text={this.t("txtDiscount1")} alignment="right" />
+                                    <NdNumberBox id="txtDiscount1" parent={this} simple={true}
+                                    maxLength={32}
+                                    onValueChanged={(async(e)=>
+                                    {
+                                        this.txtTotalDiscount.value = this.txtDiscount1.value + this.txtDiscount2.value + this.txtDiscount3.value
+                                    }).bind(this)}
+                                    >
+                                    </NdNumberBox>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("txtDiscount2")} alignment="right" />
+                                    <NdNumberBox id="txtDiscount2" parent={this} simple={true}
+                                    maxLength={32}
+                                    onValueChanged={(async(e)=>
+                                    {
+                                        this.txtTotalDiscount.value = this.txtDiscount1.value + this.txtDiscount2.value + this.txtDiscount3.value
+                                    }).bind(this)}
+                                    >
+                                    </NdNumberBox>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("txtDiscount3")} alignment="right" />
+                                    <NdNumberBox id="txtDiscount3" parent={this} simple={true}
+                                    maxLength={32}
+                                    onValueChanged={(async(e)=>
+                                    {
+                                        this.txtTotalDiscount.value = this.txtDiscount1.value + this.txtDiscount2.value + this.txtDiscount3.value
+                                    }).bind(this)}
+                                    >
+                                    </NdNumberBox>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("txtTotalDiscount")} alignment="right" />
+                                    <NdNumberBox id="txtTotalDiscount" parent={this} simple={true}  readOnly={true}
+                                    maxLength={32}
+                                    >
+                                    </NdNumberBox>
+                                </Item>
+                            </Form>
+                        </NdDialog>
+                    </div> 
+                    {/* Satır İndirim Yüzde PopUp */}
+                    <div>
+                        <NdDialog parent={this} id={"msgDiscountPerEntry"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.t("msgDiscountPerEntry.title")}
+                        container={"#root"} 
+                        width={'500'}
+                        height={'400'}
+                        position={{of:'#root'}}
+                        button={[{id:"btn01",caption:this.t("msgDiscountPerEntry.btn01"),location:'after'}]}
+                        >
+                            <Form colCount={1} height={'fit-content'}>
+                                <Item>
+                                    <Label text={this.t("txtDiscountPer1")} alignment="right" />
+                                    <NdNumberBox id="txtDiscountPer1" parent={this} simple={true}
+                                    maxLength={32}
+                                    onValueChanged={(async(e)=>
+                                    {
+                                        
+                                    }).bind(this)}
+                                    >
+                                    </NdNumberBox>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("txtDiscountPer2")} alignment="right" />
+                                    <NdNumberBox id="txtDiscountPer2" parent={this} simple={true}
+                                    maxLength={32}
+                                    onValueChanged={(async(e)=>
+                                    {
+                                    }).bind(this)}
+                                    >
+                                    </NdNumberBox>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("txtDiscountPer3")} alignment="right" />
+                                    <NdNumberBox id="txtDiscountPer3" parent={this} simple={true}
+                                    maxLength={32}
+                                    onValueChanged={(async(e)=>
+                                    {
+                                    }).bind(this)}
+                                    >
+                                    </NdNumberBox>
+                                </Item>
+                            </Form>
+                        </NdDialog>
+                    </div>  
+                    {/* İndirim PopUp */}
+                    <div>
+                        <NdPopUp parent={this} id={"popDiscount"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.t("popDiscount.title")}
+                        container={"#root"} 
+                        width={'500'}
+                        height={'500'}
+                        position={{of:'#root'}}
+                        >
+                            <Form colCount={1} height={'fit-content'}>
+                                <Item>
+                                    <Label text={this.t("popDiscount.Percent1")} alignment="right" />
+                                    <NdNumberBox id="txtDiscountPercent1" parent={this} simple={true}
+                                            maxLength={32}
+                                            onValueChanged={(async()=>
+                                                {
+                                                    if( this.txtDiscountPercent1.value > 100)
+                                                    {
+                                                        let tmpConfObj =
+                                                        {
+                                                            id:'msgDiscountPercent',showTitle:true,title:this.t("msgDiscountPercent.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                            button:[{id:"btn01",caption:this.t("msgDiscountPercent.btn01"),location:'after'}],
+                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPercent.msg")}</div>)
+                                                        }
+                                            
+                                                        await dialog(tmpConfObj);
+                                                        this.txtDiscountPercent1.value = 0;
+                                                        this.txtDiscountPrice1.value = 0;
+                                                        return
+                                                    }
+
+                                                    this.txtDiscountPrice1.value =  Number(this.docObj.dt()[0].AMOUNT).rateInc(this.txtDiscountPercent1.value,2)
+                                            }).bind(this)}
+                                    ></NdNumberBox>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("popDiscount.Price1")} alignment="right" />
+                                    <NdNumberBox id="txtDiscountPrice1" parent={this} simple={true}
+                                        maxLength={32}
+                                        onValueChanged={(async()=>
+                                            {
+                                                if( this.txtDiscountPrice1.value > this.docObj.dt()[0].AMOUNT)
+                                                {
+                                                    let tmpConfObj =
+                                                    {
+                                                        id:'msgDiscountPrice',showTitle:true,title:this.t("msgDiscountPrice.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                        button:[{id:"btn01",caption:this.t("msgDiscountPrice.btn01"),location:'after'}],
+                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPrice.msg")}</div>)
+                                                    }
+                                        
+                                                    await dialog(tmpConfObj);
+                                                    this.txtDiscountPercent1.value = 0;
+                                                    this.txtDiscountPrice1.value = 0;
+                                                    return
+                                                }
+                                                
+                                                this.txtDiscountPercent1.value = Number(this.docObj.dt()[0].AMOUNT).rate2Num(this.txtDiscountPrice1.value)
+                                        }).bind(this)}
+                                    ></NdNumberBox>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("popDiscount.Percent2")} alignment="right" />
+                                    <NdNumberBox id="txtDiscountPercent2" parent={this} simple={true}
+                                            maxLength={32}
+                                            onValueChanged={(async()=>
+                                                {
+                                                    if( this.txtDiscountPercent1.value > 100)
+                                                    {
+                                                        let tmpConfObj =
+                                                        {
+                                                            id:'msgDiscountPercent',showTitle:true,title:this.t("msgDiscountPercent.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                            button:[{id:"btn01",caption:this.t("msgDiscountPercent.btn01"),location:'after'}],
+                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPercent.msg")}</div>)
+                                                        }
+                                            
+                                                        await dialog(tmpConfObj);
+                                                        this.txtDiscountPercent2.value = 0;
+                                                        this.txtDiscountPrice2.value = 0;
+                                                        return
+                                                    }
+                                                    this.txtDiscountPrice2.value =  Number(this.docObj.dt()[0].AMOUNT - Number(this.txtDiscountPrice1.value)).rateInc(this.txtDiscountPercent2.value,2)
+                                            }).bind(this)}
+                                    ></NdNumberBox>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("popDiscount.Price2")} alignment="right" />
+                                    <NdNumberBox id="txtDiscountPrice2" parent={this} simple={true}
+                                        maxLength={32}
+                                        onValueChanged={(async()=>
+                                            {
+                                                if( this.txtDiscountPrice2.value > this.docObj.dt()[0].AMOUNT)
+                                                {
+                                                    let tmpConfObj =
+                                                    {
+                                                        id:'msgDiscountPrice',showTitle:true,title:this.t("msgDiscountPrice.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                        button:[{id:"btn01",caption:this.t("msgDiscountPrice.btn01"),location:'after'}],
+                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPrice.msg")}</div>)
+                                                    }
+                                        
+                                                    await dialog(tmpConfObj);
+                                                    this.txtDiscountPercent2.value = 0;
+                                                    this.txtDiscountPrice2.value = 0;
+                                                    return
+                                                }
+                                                this.txtDiscountPercent2.value = Number(this.docObj.dt()[0].AMOUNT - Number(this.txtDiscountPrice1.value)).rate2Num(this.txtDiscountPrice2.value)
+                                        }).bind(this)}
+                                    ></NdNumberBox>
+                                </Item>
+                                 <Item>
+                                    <Label text={this.t("popDiscount.Percent3")} alignment="right" />
+                                    <NdNumberBox id="txtDiscountPercent3" parent={this} simple={true}
+                                            maxLength={32}
+                                            onValueChanged={(async()=>
+                                                {
+                                                    if( this.txtDiscountPercent1.value > 100)
+                                                    {
+                                                        let tmpConfObj =
+                                                        {
+                                                            id:'msgDiscountPercent',showTitle:true,title:this.t("msgDiscountPercent.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                            button:[{id:"btn01",caption:this.t("msgDiscountPercent.btn01"),location:'after'}],
+                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPercent.msg")}</div>)
+                                                        }
+                                            
+                                                        await dialog(tmpConfObj);
+                                                        this.txtDiscountPercent3.value = 0;
+                                                        this.txtDiscountPrice3.value = 0;
+                                                        return
+                                                    }
+                                                    this.txtDiscountPrice3.value = Number(this.docObj.dt()[0].AMOUNT - (Number(this.txtDiscountPrice1.value) + Number(this.txtDiscountPrice2.value))).rateInc(this.txtDiscountPercent3.value,2)
+                                            }).bind(this)}
+                                    ></NdNumberBox>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("popDiscount.Price3")} alignment="right" />
+                                    <NdNumberBox id="txtDiscountPrice3" parent={this} simple={true}
+                                        maxLength={32}
+                                        onValueChanged={(async()=>
+                                            {
+                                                if( this.txtDiscountPrice3.value > this.docObj.dt()[0].AMOUNT)
+                                                {
+                                                    let tmpConfObj =
+                                                    {
+                                                        id:'msgDiscountPrice',showTitle:true,title:this.t("msgDiscountPrice.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                        button:[{id:"btn01",caption:this.t("msgDiscountPrice.btn01"),location:'after'}],
+                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPrice.msg")}</div>)
+                                                    }
+                                        
+                                                    await dialog(tmpConfObj);
+                                                    this.txtDiscountPercent3.value = 0;
+                                                    this.txtDiscountPrice3.value = 0;
+                                                    return
+                                                }
+                                                this.txtDiscountPercent3.value = Number(this.docObj.dt()[0].AMOUNT - (Number(this.txtDiscountPrice1.value) + Number(this.txtDiscountPrice2.value))).rate2Num(this.txtDiscountPrice3.value)
+                                        }).bind(this)}
+                                    ></NdNumberBox>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("popDiscount.chkFirstDiscount")} alignment="right" />
+                                    <NdCheckBox id="chkFirstDiscount" parent={this} simple={true}  
+                                    value ={false}
+                                    >
+                                    </NdCheckBox>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("popDiscount.chkDocDiscount")} alignment="right" />
+                                    <NdCheckBox id="chkDocDiscount" parent={this} simple={true}  
+                                    value ={false}
+                                    >
+                                    </NdCheckBox>
+                                </Item>
+                                <Item>
+                                    <div className='row'>
+                                        <div className='col-6'>
+                                            <NdButton text={this.lang.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} 
+                                            onClick={async ()=>
+                                            {           
+                                                
+                                                for (let i = 0; i < this.docObj.docOffers.dt().length; i++) 
+                                                {
+                                                    let tmpDocData = this.docObj.docOffers.dt()[i]
+
+                                                    if(this.chkFirstDiscount.value == false)
+                                                    {
+                                                        tmpDocData.DISCOUNT_1 = Number(tmpDocData.PRICE * tmpDocData.QUANTITY).rateInc(this.txtDiscountPercent1.value,8)
+                                                    }
+                                                    tmpDocData.DISCOUNT_2 = Number(((tmpDocData.PRICE * tmpDocData.QUANTITY) - tmpDocData.DISCOUNT_1)).rateInc(this.txtDiscountPercent2.value,8)
+
+                                                    tmpDocData.DISCOUNT_3 =  Number(((tmpDocData.PRICE * tmpDocData.QUANTITY)-(tmpDocData.DISCOUNT_1+tmpDocData.DISCOUNT_2))).rateInc(this.txtDiscountPercent3.value,8)
+                                                    
+                                                    tmpDocData.DISCOUNT = parseFloat((tmpDocData.DISCOUNT_1 + tmpDocData.DISCOUNT_2 + tmpDocData.DISCOUNT_3).toFixed(8))
+                                                    tmpDocData.AMOUNT = parseFloat(((tmpDocData.PRICE * tmpDocData.QUANTITY))).round(2)
+                                                    if(this.chkDocDiscount.value == true)
+                                                    {
+                                                        tmpDocData.TOTALHT = parseFloat((Number((tmpDocData.PRICE * tmpDocData.QUANTITY)) - parseFloat(Number(tmpDocData.DISCOUNT_1) + Number(tmpDocData.DISCOUNT_2) + Number(tmpDocData.DISCOUNT_3)).round(6))).round(6)
+                                                    }
+                                                    else
+                                                    {
+                                                        tmpDocData.TOTALHT = parseFloat((Number((tmpDocData.PRICE * tmpDocData.QUANTITY)) - parseFloat(Number(tmpDocData.DISCOUNT_1) + Number(tmpDocData.DISCOUNT_2) + Number(tmpDocData.DISCOUNT_3)).round(6))).round(2)
+                                                    }
+                                                    if(tmpDocData.VAT > 0)
+                                                    {
+                                                        tmpDocData.VAT = parseFloat(((tmpDocData.TOTALHT) * (tmpDocData.VAT_RATE / 100)).toFixed(4))
+                                                    }
+                                                    tmpDocData.TOTAL = parseFloat((tmpDocData.TOTALHT + tmpDocData.VAT)).round(2)
+                                                    tmpDocData.DISCOUNT_RATE = Number((tmpDocData.PRICE * tmpDocData.QUANTITY)).rate2Num((tmpDocData.DISCOUNT_1 + tmpDocData.DISCOUNT_2 + tmpDocData.DISCOUNT_3),2)
+                                                }
+                                                this._calculateTotal()
+                                                this.popDiscount.hide(); 
+                                            }}/>
+                                        </div>
+                                        <div className='col-6'>
+                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                            onClick={()=>
+                                            {
+                                                this.popDiscount.hide();  
+                                            }}/>
+                                        </div>
+                                    </div>
+                                </Item>
+                            </Form>
+                        </NdPopUp>
+                    </div>  
+                    {/* KDV PopUp */}
+                    <div>
+                        <NdPopUp parent={this} id={"popVatRate"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.lang.t("popVatRate.title")}
+                        container={"#root"} 
+                        width={'500'}
+                        height={'250'}
+                        position={{of:'#root'}}
+                        >
+                            <Form colCount={1} height={'fit-content'}>
+                                <Item >
+                                    <NdGrid parent={this} id={"grdVatRate"} 
+                                    showBorders={true} 
+                                    columnsAutoWidth={true} 
+                                    allowColumnReordering={true} 
+                                    allowColumnResizing={true} 
+                                    height={'100%'} 
+                                    width={'100%'}
+                                    dbApply={false}
+                                    onRowRemoved={async (e)=>{
+                                    
+                                    }}
+                                    >
+                                        <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
+                                        <Scrolling mode="standart" />
+                                        <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
+                                        <Column dataField="RATE" caption={this.lang.t("grdVatRate.clmRate")} width={120}  headerFilter={{visible:true}} allowEditing={false} />
+                                        <Column dataField="VAT" caption={this.lang.t("grdVatRate.clmVat")} format={{ style: "currency", currency: "EUR",precision: 3}} dataType={'number'} width={120} headerFilter={{visible:true}}/>
+                                        <Column dataField="TOTALHT" caption={this.lang.t("grdVatRate.clmTotalHt")} format={{ style: "currency", currency: "EUR",precision: 3}} dataType={'number'} width={120} headerFilter={{visible:true}}/>
+                                    </NdGrid>
+                                </Item>
+                                <Item>
+                                    <div className='row'>
+                                        <div className='col-6'>
+                                            <NdButton text={this.lang.t("btnVatToZero")} type="normal" stylingMode="contained" width={'100%'} 
+                                            onClick={async ()=>
+                                            {       
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgVatDelete',showTitle:true,title:this.t("msgVatDelete.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgVatDelete.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgVatDelete.msg")}</div>)
+                                                }
+                                                
+                                                let pResult = await dialog(tmpConfObj);
+                                                if(pResult == 'btn01')
+                                                {
+                                                    for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
+                                                    {
+                                                        this.docObj.docItems.dt()[i].VAT = 0  
+                                                        this.docObj.docItems.dt()[i].VAT_RATE = 0
+                                                        this.docObj.docItems.dt()[i].TOTAL = (this.docObj.docItems.dt()[i].PRICE * this.docObj.docItems.dt()[i].QUANTITY) - this.docObj.docItems.dt()[i].DISCOUNT
+                                                        this._calculateTotal()
+                                                    }
+                                                    this.popVatRate.hide()
+                                                }
+                                            }}/>
+                                        </div>
+                                        <div className='col-6'>
+                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                            onClick={()=>
+                                            {
+                                                this.popVatRate.hide();  
                                             }}/>
                                         </div>
                                     </div>

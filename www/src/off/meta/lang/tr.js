@@ -12139,6 +12139,19 @@ export const langTr =
             btn01: "Evrağa Git",
             msg: "Evrak Bulundu"
         },
+        txtDiscount1 : "1. İndirim Tutarı",
+        txtDiscount2 : "2. İndirim Tutarı",
+        txtDiscount3 : "3. İndirim Tutarı",
+        txtTotalDiscount :"Toplam İndirim Tutarı",
+        msgDiscountPerEntry : 
+        {
+            title : "Oransal İndirim Girişi",
+            btn01 : "Onayla"
+        },
+        txtDiscountPer1 : "1. İndirim Oranı",
+        txtDiscountPer2 : "2. İndirim Oranı",
+        txtDiscountPer3 : "3. İndirim Oranı",
+        txtTotalHt : "İndirimli Tutar",
     },
     sip_02_002 : // "Satış Sipariş"
     {
@@ -12493,6 +12506,18 @@ export const langTr =
             msgSuccess: "Mail gönderimi başarılı !",
             msgFailed: "Mail gönderimi başarısız !"
         },
+        txtDiscount1 : "1. İndirim Tutarı",
+        txtDiscount2 : "2. İndirim Tutarı",
+        txtDiscount3 : "3. İndirim Tutarı",
+        txtTotalDiscount :"Toplam İndirim Tutarı",
+        msgDiscountPerEntry : 
+        {
+            title : "Oransal İndirim Girişi",
+            btn01 : "Onayla"
+        },
+        txtDiscountPer1 : "1. İndirim Oranı",
+        txtDiscountPer2 : "2. İndirim Oranı",
+        txtDiscountPer3 : "3. İndirim Oranı",
     },
     sip_04_001 : // "Sipariş Ayrıştırma" 
     {
@@ -14942,6 +14967,19 @@ export const langTr =
             btn01: "Evrağa Git",
             msg: "Evrak Bulundu"
         },
+        txtDiscount1 : "1. İndirim Tutarı",
+        txtDiscount2 : "2. İndirim Tutarı",
+        txtDiscount3 : "3. İndirim Tutarı",
+        txtTotalDiscount :"Toplam İndirim Tutarı",
+        msgDiscountPerEntry : 
+        {
+            title : "Oransal İndirim Girişi",
+            btn01 : "Onayla"
+        },
+        txtDiscountPer1 : "1. İndirim Oranı",
+        txtDiscountPer2 : "2. İndirim Oranı",
+        txtDiscountPer3 : "3. İndirim Oranı",
+        txtTotalHt: "İndirimsiz Toplam",
     },
     tkf_02_002 : // "Satış Teklifi",
     {
@@ -15270,6 +15308,19 @@ export const langTr =
             msgSuccess: "Mail gönderimi başarılı !",
             msgFailed: "Mail gönderimi başarısız !"
         },
+        txtDiscount1 : "1. İndirim Tutarı",
+        txtDiscount2 : "2. İndirim Tutarı",
+        txtDiscount3 : "3. İndirim Tutarı",
+        txtTotalDiscount :"Toplam İndirim Tutarı",
+        msgDiscountPerEntry : 
+        {
+            title : "Oransal İndirim Girişi",
+            btn01 : "Onayla"
+        },
+        txtDiscountPer1 : "1. İndirim Oranı",
+        txtDiscountPer2 : "2. İndirim Oranı",
+        txtDiscountPer3 : "3. İndirim Oranı",
+        txtTotalHt: "İndirimsiz Toplam",
     },
     proces_01_001 : // "Ürün Grubu Güncelleme"
     {

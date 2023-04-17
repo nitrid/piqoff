@@ -12111,6 +12111,18 @@ export const langFr =
             btn01:"Aller au document",
             msg: "Document trouvé !"
         },
+        txtDiscount1 : "1. Remise ",  
+        txtDiscount2 : "2. Remise ",
+        txtDiscount3 : "3. Remise ",  
+        txtTotalDiscount :"Total de Remise ",  
+        msgDiscountPerEntry : 
+        {
+            title : "Saisie de Remise en %",  
+            btn01 : "Validez" 
+        },
+        txtDiscountPer1 : "1. Remise % ",  
+        txtDiscountPer2 : "2. Remise % ",  
+        txtDiscountPer3 : "3. Remise % ", 
     },
     sip_02_002 : // "Satış Sipariş"
     {
@@ -12465,6 +12477,19 @@ export const langFr =
             msgSuccess: "Mail envoyé avec succès  !",   
             msgFailed: "Echec envoie Mail  !"   
         },
+        txtDiscount1 : "1. Remise ",  
+        txtDiscount2 : "2. Remise ",
+        txtDiscount3 : "3. Remise ",  
+        txtTotalDiscount :"Total de Remise ",  
+        msgDiscountPerEntry : 
+        {
+            title : "Saisie de Remise en %",  
+            btn01 : "Validez" 
+        },
+        txtDiscountPer1 : "1. Remise % ",  
+        txtDiscountPer2 : "2. Remise % ",  
+        txtDiscountPer3 : "3. Remise % ", 
+        txtTotalHt : "Total HT"
     },
     sip_04_001 : // "Sipariş Ayrıştırma"
     {
@@ -14851,6 +14876,19 @@ export const langFr =
             btn01:"Aller au document",
             msg: "Document trouvé !"
         },
+        txtDiscount1 : "1. Remise ",  
+        txtDiscount2 : "2. Remise ",
+        txtDiscount3 : "3. Remise ",  
+        txtTotalDiscount :"Total de Remise ",  
+        msgDiscountPerEntry : 
+        {
+            title : "Saisie de Remise en %",  
+            btn01 : "Validez" 
+        },
+        txtDiscountPer1 : "1. Remise % ",  
+        txtDiscountPer2 : "2. Remise % ",  
+        txtDiscountPer3 : "3. Remise % ", 
+        txtTotalHt : "Total HT"
     },
     tkf_02_002 : // "Satış Teklifi",
     {
@@ -15177,8 +15215,21 @@ export const langFr =
             title: "Attention",   
             btn01: "OK",   
             msgSuccess: "E-Mail envoyé avec succès  !",   
-            msgFailed: "Echec envoie E-Mail  !"   
+            msgFailed: "Echec envoie E-Mail  !" ,
         },
+        txtDiscount1 : "1. Remise ",  
+        txtDiscount2 : "2. Remise ",
+        txtDiscount3 : "3. Remise ",  
+        txtTotalDiscount :"Total de Remise ",  
+        msgDiscountPerEntry : 
+        {
+            title : "Saisie de Remise en %",  
+            btn01 : "Validez" 
+        },
+        txtDiscountPer1 : "1. Remise % ",  
+        txtDiscountPer2 : "2. Remise % ",  
+        txtDiscountPer3 : "3. Remise % ", 
+        txtTotalHt : "Total HT"
     },
     proces_01_001 : // "Ürün Grubu Güncelleme" 
     {
