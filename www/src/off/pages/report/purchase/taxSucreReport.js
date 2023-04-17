@@ -144,16 +144,16 @@ export default class taxSucreReport extends React.PureComponent
                     "MAX(ITEM_NAME) AS ITEM_NAME, " +
                     "OUTPUT_CODE AS OUTPUT_CODE, " +
                     "OUTPUT_NAME AS OUTPUT_NAME, " +
-                    "(SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM = DOC_ITEMS.ITEM AND ITEM_UNIT_VW_01.ID = '005') AS UNIT_LITRE, " +
+                    "(SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ITEMS.ITEM AND ITEM_UNIT_VW_01.ID = '005') AS UNIT_LITRE, " +
                     "((SELECT TOP 1 FACTOR / 100 FROM ITEM_UNIT WHERE ITEM_UNIT.ITEM = DOC_ITEMS.ITEM AND TYPE = 1)*(SELECT TOP 1 PRICE FROM TAX_SUGAR_TABLE_VW_01 WHERE MIN_VALUE <= (SELECT TOP 1 SUGAR_RATE FROM ITEMS WHERE ITEMS.GUID = DOC_ITEMS.ITEM ) AND MAX_VALUE >=  (SELECT TOP 1 SUGAR_RATE FROM ITEMS WHERE ITEMS.GUID = DOC_ITEMS.ITEM ))) * SUM(QUANTITY) AS AMOUNT, " +
                     "ROUND(SUM(QUANTITY),3) AS QUANTITY, " +
-                    "ITEM FROM DOC_ITEMS  " +
-                    "WHERE TYPE = 0 AND DOC_TYPE IN(20,40) AND  REBATE = 0 AND DELETED = 0 AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE AND " +
+                    "ITEM FROM  DOC_ITEMS_VW_01 AS DOC_ITEMS  " +
+                    "WHERE TYPE = 0 AND DOC_TYPE IN(20,40) AND  REBATE = 0  AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE AND " +
                     "((SELECT TOP 1 FACTOR / 100 FROM ITEM_UNIT WHERE ITEM_UNIT.ITEM = DOC_ITEMS.ITEM AND TYPE = 1)*(SELECT TOP 1 PRICE FROM TAX_SUGAR_TABLE_VW_01 WHERE MIN_VALUE <= (SELECT TOP 1 SUGAR_RATE FROM ITEMS WHERE ITEMS.GUID = DOC_ITEMS.ITEM ) AND MAX_VALUE >=  (SELECT TOP 1 SUGAR_RATE FROM ITEMS WHERE ITEMS.GUID = DOC_ITEMS.ITEM )))  IS NOT NULL AND " +
                     "(SELECT TOP 1 MAIN_GUID FROM ITEMS_GRP WHERE ITEMS_GRP.ITEM = DOC_ITEMS.ITEM)   " +
-                    "IN("+tmpQueryValue+") AND ((SELECT TOP 1 FACTOR / 100 FROM ITEM_UNIT WHERE ITEM_UNIT.ITEM = DOC_ITEMS.ITEM AND TYPE = 1)*(SELECT TOP 1 PRICE FROM TAX_SUGAR_TABLE_VW_01 WHERE MIN_VALUE <= (SELECT TOP 1 SUGAR_RATE FROM ITEMS WHERE ITEMS.GUID = DOC_ITEMS.ITEM ) AND MAX_VALUE >=  (SELECT TOP 1 SUGAR_RATE FROM ITEMS WHERE ITEMS.GUID = DOC_ITEMS.ITEM ))) * SUM(QUANTITY) <> 0 AND  " +
+                    "IN("+tmpQueryValue+")  AND  " +
                     "(SELECT TOP 1 TAX_SUCRE FROM CUSTOMERS WHERE CUSTOMERS.GUID = DOC_ITEMS.OUTPUT ) = 1  " +
-                    "GROUP BY ITEM ",
+                    "GROUP BY ITEM,REF,REF_NO,DOC_DATE,OUTPUT_CODE,OUTPUT_NAME HAVING ((SELECT TOP 1 FACTOR / 100 FROM ITEM_UNIT WHERE ITEM_UNIT.ITEM = DOC_ITEMS.ITEM AND TYPE = 1)*(SELECT TOP 1 PRICE FROM TAX_SUGAR_TABLE_VW_01 WHERE MIN_VALUE <= (SELECT TOP 1 SUGAR_RATE FROM ITEMS WHERE ITEMS.GUID = DOC_ITEMS.ITEM ) AND MAX_VALUE >=  (SELECT TOP 1 SUGAR_RATE FROM ITEMS WHERE ITEMS.GUID = DOC_ITEMS.ITEM ))) * SUM(QUANTITY) <> 0",
                     param : ['FIRST_DATE:date','LAST_DATE:date','GROUPS:string|250'],
                     value : [this.dtDate.startDate,this.dtDate.endDate,tmpQueryValue]
                 },
@@ -248,7 +248,7 @@ export default class taxSucreReport extends React.PureComponent
                                 <Export fileName={this.lang.t("menuOff.slsRpt_01_001")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="REF" caption={this.t("grdListe.clmRef")} visible={true} /> 
                                 <Column dataField="REF_NO" caption={this.t("grdListe.clmRefNo")} visible={true} /> 
-                                <Column dataField="DOC_DATE" caption={this.t("grdListe.clmDocDate")} visible={true} /> 
+                                <Column dataField="DOC_DATE" caption={this.t("grdListe.clmDocDate")} dataType="datetime" format={"dd/MM/yyyy"} visible={true} /> 
                                 <Column dataField="OUTPUT_CODE" caption={this.t("grdListe.clmOutputCode")} visible={true} /> 
                                 <Column dataField="OUTPUT_NAME" caption={this.t("grdListe.clmOutputName")} visible={true}/> 
                                 <Column dataField="ITEM_CODE" caption={this.t("grdListe.clmCode")} visible={true} /> 

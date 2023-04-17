@@ -147,8 +147,8 @@ export default class purchaseInvoice extends React.PureComponent
         this.txtRef.readOnly = false
         this.txtRefno.readOnly = false
         this.docLocked = false
-        this.chkDocDiscount = false
-        this.chkFirstDiscount = false
+        this.chkDocDiscount.value = false
+        this.chkFirstDiscount.value = false
         this.tagItemCode.dev.reset()
         
         this.frmDocItems.option('disabled',true)        
@@ -266,11 +266,11 @@ export default class purchaseInvoice extends React.PureComponent
         this.docObj.dt()[0].VAT = Number(tmpVat).round(2)
         if(this.chkDocDiscount.value == true)
         {
-            this.docObj.dt()[0].TOTALHT = parseFloat(this.docObj.docItems.dt().sum("AMOUNT",2)) - parseFloat(this.docObj.docItems.dt().sum("DISCOUNT",2))
+            this.docObj.dt()[0].TOTALHT = parseFloat(parseFloat(this.docObj.docItems.dt().sum("AMOUNT",2)) - parseFloat(this.docObj.docItems.dt().sum("DISCOUNT",2))).round(2)
         }
         else
         {
-            this.docObj.dt()[0].TOTALHT =this.docObj.docItems.dt().sum("TOTALHT",2)
+            this.docObj.dt()[0].TOTALHT = this.docObj.docItems.dt().sum("TOTALHT",2)
         }
         this.docObj.dt()[0].TOTAL = Number(parseFloat(this.docObj.dt()[0].TOTALHT) + parseFloat(this.docObj.dt()[0].VAT)).round(2)
 
@@ -3701,6 +3701,7 @@ export default class purchaseInvoice extends React.PureComponent
                                                     {
                                                         tmpDocData.TOTALHT = parseFloat((Number((tmpDocData.PRICE * tmpDocData.QUANTITY)) - parseFloat(Number(tmpDocData.DISCOUNT_1) + Number(tmpDocData.DISCOUNT_2) + Number(tmpDocData.DISCOUNT_3)).round(6))).round(2)
                                                     }
+                                                    
                                                     if(tmpDocData.VAT > 0)
                                                     {
                                                         tmpDocData.VAT = parseFloat(((tmpDocData.TOTALHT) * (tmpDocData.VAT_RATE / 100)).toFixed(4))
