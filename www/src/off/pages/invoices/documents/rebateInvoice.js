@@ -237,8 +237,15 @@ export default class rebateInvoice extends React.PureComponent
         this.docObj.dt()[0].AMOUNT = this.docObj.docItems.dt().sum("AMOUNT",2)
         this.docObj.dt()[0].DISCOUNT = this.docObj.docItems.dt().sum("DISCOUNT",2)
         this.docObj.dt()[0].VAT = Number(tmpVat).round(2)
-        this.docObj.dt()[0].TOTAL = Number(parseFloat(this.docObj.docItems.dt().sum("TOTALHT",2)) + parseFloat(this.docObj.dt()[0].VAT)).round(2)
-        this.docObj.dt()[0].TOTALHT = this.docObj.docItems.dt().sum("TOTALHT",2)
+        if(this.chkDocDiscount.value == true)
+        {
+            this.docObj.dt()[0].TOTALHT = parseFloat(parseFloat(this.docObj.docItems.dt().sum("AMOUNT",2)) - parseFloat(this.docObj.docItems.dt().sum("DISCOUNT",2))).round(2)
+        }
+        else
+        {
+            this.docObj.dt()[0].TOTALHT = this.docObj.docItems.dt().sum("TOTALHT",2)
+        }
+        this.docObj.dt()[0].TOTAL = Number(parseFloat(this.docObj.dt()[0].TOTALHT) + parseFloat(this.docObj.dt()[0].VAT)).round(2)
 
 
         this.docObj.docCustomer.dt()[0].AMOUNT = this.docObj.dt()[0].TOTAL
@@ -2924,6 +2931,13 @@ export default class rebateInvoice extends React.PureComponent
                                     </NdCheckBox>
                                 </Item>
                                 <Item>
+                                    <Label text={this.t("popDiscount.chkDocDiscount")} alignment="right" />
+                                    <NdCheckBox id="chkDocDiscount" parent={this} simple={true}  
+                                    value ={false}
+                                    >
+                                    </NdCheckBox>
+                                </Item>
+                                <Item>
                                     <div className='row'>
                                         <div className='col-6'>
                                             <NdButton text={this.lang.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} 
@@ -2943,7 +2957,14 @@ export default class rebateInvoice extends React.PureComponent
                                                     tmpDocData.DISCOUNT_3 =  Number(((tmpDocData.PRICE * tmpDocData.QUANTITY)-(tmpDocData.DISCOUNT_1+tmpDocData.DISCOUNT_2))).rateInc(this.txtDiscountPercent3.value,4)
                                                     
                                                     tmpDocData.DISCOUNT = parseFloat((tmpDocData.DISCOUNT_1 + tmpDocData.DISCOUNT_2 + tmpDocData.DISCOUNT_3).toFixed(4))
-                                                    tmpDocData.TOTALHT = Number((Number((tmpDocData.PRICE * tmpDocData.QUANTITY)) - (Number(tmpDocData.DISCOUNT_1) + Number(tmpDocData.DISCOUNT_2) + Number(tmpDocData.DISCOUNT_3)))).round(2)
+                                                    if(this.chkDocDiscount.value == true)
+                                                    {
+                                                        tmpDocData.TOTALHT = parseFloat((Number((tmpDocData.PRICE * tmpDocData.QUANTITY)) - parseFloat(Number(tmpDocData.DISCOUNT_1) + Number(tmpDocData.DISCOUNT_2) + Number(tmpDocData.DISCOUNT_3)).round(6))).round(6)
+                                                    }
+                                                    else
+                                                    {
+                                                        tmpDocData.TOTALHT = parseFloat((Number((tmpDocData.PRICE * tmpDocData.QUANTITY)) - parseFloat(Number(tmpDocData.DISCOUNT_1) + Number(tmpDocData.DISCOUNT_2) + Number(tmpDocData.DISCOUNT_3)).round(6))).round(2)
+                                                    }
                                                     if(tmpDocData.VAT > 0)
                                                     {
                                                         tmpDocData.VAT = parseFloat(((tmpDocData.TOTALHT) * (tmpDocData.VAT_RATE / 100)).toFixed(4))

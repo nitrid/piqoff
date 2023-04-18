@@ -2252,6 +2252,7 @@ export default class purchaseOrder extends React.PureComponent
                                         <Column dataField="VAT" caption={this.t("grdPurcOrders.clmVat")} width={75} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>
                                         <Column dataField="VAT_RATE" caption={this.t("grdPurcOrders.clmVatRate")} width={50} allowEditing={false}/>
                                         <Column dataField="TOTAL" caption={this.t("grdPurcOrders.clmTotal")} width={110} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>
+                                        <Column dataField="TOTALHT" caption={this.t("grdPurcOrders.clmTotalHt")} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false} width={90} allowHeaderFiltering={false}/>
                                         <Column dataField="OFFER_REF" caption={this.t("grdPurcOrders.clmOffer")} width={110}  headerFilter={{visible:true}} allowEditing={false}/>
                                         <Column dataField="DESCRIPTION" caption={this.t("grdPurcOrders.clmDescription")} width={100}  headerFilter={{visible:true}}/>
                                     </NdGrid>
