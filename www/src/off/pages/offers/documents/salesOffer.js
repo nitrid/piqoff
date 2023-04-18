@@ -209,7 +209,8 @@ export default class salesOrder extends React.PureComponent
         this.docObj.dt()[0].VAT = Number(tmpVat).round(2)
         if(this.chkDocDiscount.value == true)
         {
-            this.docObj.dt()[0].TOTALHT = parseFloat(parseFloat(this.docObj.docItems.dt().sum("AMOUNT",2)) - parseFloat(this.docObj.docItems.dt().sum("DISCOUNT",2))).round(2)
+            console.log(this.docObj.docItems.dt().sum("AMOUNT",2))
+            this.docObj.dt()[0].TOTALHT = parseFloat(parseFloat(this.docObj.docOffers.dt().sum("AMOUNT",2)) - parseFloat(this.docObj.docOffers.dt().sum("DISCOUNT",2))).round(2)
         }
         else
         {
