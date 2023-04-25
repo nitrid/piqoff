@@ -3197,8 +3197,8 @@ export default class purchaseInvoice extends React.PureComponent
                                            
 
                                             e.key.VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100))).round(4);
-                                            e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY)).round(2)
-                                            e.key.TOTALHT = Number(((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT)).round(2)
+                                            e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3)).round(2)
+                                            e.key.TOTALHT = Number((parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3)) - e.key.DISCOUNT)).round(2)
                                             e.key.TOTAL = Number((e.key.TOTALHT + e.key.VAT)).round(2)
 
                                             e.key.DIFF_PRICE = e.key.PRICE - e.key.CUSTOMER_PRICE
