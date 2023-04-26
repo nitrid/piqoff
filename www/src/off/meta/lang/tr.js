@@ -3969,14 +3969,39 @@ export const langTr =
             btn02: "Seçilen Fiyatları Güncelle",
             msg: "Lütfen Tedarikçi Fiyatını Güncellemek İstediğiniz Ürünleri Seçiniz.. "
         },
+        msgNewPriceDate : 
+        {
+            title: "Dikkat",
+            btn01: "Hiç Birini Güncelleme",
+            btn02: "Seçilen Fiyatları Güncelle",
+            msg: "Lütfen Tarihlerini Güncellemek İsteidiğiniz Ürünleri Seçiniz.. "
+        },
         grdNewPrice: 
         {
             clmCode: "Kodu",
             clmName: "Adı",
-            clmPrice: "Eski Fiyat",
+            clmPrice: "Eski T. Fiyat",
             clmPrice2: "Yeni Fiyat",
             clmSalePrice :"Satış Fiyatı", 
-            clmMargin : "Marj"
+            clmMargin : "Marj",
+            clmCostPrice : "Maliyet Fiyatı"
+        },
+        grdNewPriceDate: 
+        {
+            clmCode: "Kodu",
+            clmName: "Adı",
+            clmPrice: "Eski T. Fiyat",
+            clmPrice2: "Yeni Fiyat",
+            clmSalePrice :"Satış Fiyatı", 
+            clmMargin : "Marj",
+            clmCostPrice : "Maliyet Fiyatı"
+        },
+        msgPriceDateUpdate :
+        {
+            msg : "Değişmeyen Fiyatların Tarihlerini Güncellemek İstiyormusunuz? ",
+            btn01 : "Evet",
+            btn02 : "Hayır",
+            title : "Dikkat"
         },
         msgNewVat : 
         {
@@ -8405,14 +8430,39 @@ export const langTr =
             btn02: "Seçilen Fiyatları Güncelle",
             msg: "Lütfen Tedarikçi Fiyatını Güncellemek İstediğiniz Ürünleri Seçiniz.. "
         },
+        msgNewPriceDate : 
+        {
+            title: "Dikkat",
+            btn01: "Hiç Birini Güncelleme",
+            btn02: "Seçilen Fiyatları Güncelle",
+            msg: "Lütfen Tarihlerini Güncellemek İsteidiğiniz Ürünleri Seçiniz.. "
+        },
         grdNewPrice: 
         {
             clmCode: "Kodu",
             clmName: "Adı",
-            clmPrice: "Eski Fiyat",
+            clmPrice: "Eski T. Fiyat",
             clmPrice2: "Yeni Fiyat",
             clmSalePrice :"Satış Fiyatı", 
-            clmMargin : "Marj"
+            clmMargin : "Marj",
+            clmCostPrice : "Maliyet Fiyatı"
+        },
+        grdNewPriceDate: 
+        {
+            clmCode: "Kodu",
+            clmName: "Adı",
+            clmPrice: "Eski T. Fiyat",
+            clmPrice2: "Yeni Fiyat",
+            clmSalePrice :"Satış Fiyatı", 
+            clmMargin : "Marj",
+            clmCostPrice : "Maliyet Fiyatı"
+        },
+        msgPriceDateUpdate :
+        {
+            msg : "Değişmeyen Fiyatların Tarihlerini Güncellemek İstiyormusunuz? ",
+            btn01 : "Evet",
+            btn02 : "Hayır",
+            title : "Dikkat"
         },
         msgNewVat : 
         {
@@ -9950,15 +10000,40 @@ export const langTr =
             btn02: "Seçilen Fiyatları Güncelle",
             msg: "Lütfen Tedarikçi Fiyatını Güncellemek İstediğiniz Ürünleri Seçiniz.. "
         },
+        msgNewPriceDate : 
+        {
+            title: "Dikkat",
+            btn01: "Hiç Birini Güncelleme",
+            btn02: "Seçilen Fiyatları Güncelle",
+            msg: "Lütfen Tarihlerini Güncellemek İsteidiğiniz Ürünleri Seçiniz.. "
+        },
         grdNewPrice: 
         {
             clmCode: "Kodu",
             clmName: "Adı",
-            clmPrice: "Eski Fiyat",
+            clmPrice: "Eski T. Fiyat",
             clmPrice2: "Yeni Fiyat",
             clmSalePrice :"Satış Fiyatı", 
-            clmMargin : "Marj"
+            clmMargin : "Marj",
+            clmCostPrice : "Maliyet Fiyatı"
         },
+        grdNewPriceDate: 
+        {
+            clmCode: "Kodu",
+            clmName: "Adı",
+            clmPrice: "Eski T. Fiyat",
+            clmPrice2: "Yeni Fiyat",
+            clmSalePrice :"Satış Fiyatı", 
+            clmMargin : "Marj",
+            clmCostPrice : "Maliyet Fiyatı"
+        },
+        msgPriceDateUpdate :
+        {
+            msg : "Değişmeyen Fiyatların Tarihlerini Güncellemek İstiyormusunuz? ",
+            btn01 : "Evet",
+            btn02 : "Hayır",
+            title : "Dikkat"
+        }
     },
     irs_02_002 : // Satış İrsaliyesi"
     {

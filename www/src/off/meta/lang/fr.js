@@ -5,7 +5,7 @@ export const langFr =
     loading : "Connexion En Cours",
     btnSave: "Enregistre",
     btnCancel: "Supprimer",
-    btnPrint :"Imprime",
+    btnPrint :"Imprimer",
     btnOk: "OK",
     msgWarning: "Attention",
     msgSqlService1: "Impossible de se connecter au serveur database", 
@@ -130,7 +130,7 @@ export const langFr =
         stk_01: "Définition",
         stk_02: "Documents",
         stk_03: "Listes",
-        stk_04: "Traitements",
+        stk_04: "Les opérations",
         stk_05: "Rapports",
         stk_01_001: "Saisie nouveau Produit",
         stk_01_002: "Ajouter code barre",
@@ -169,7 +169,7 @@ export const langFr =
         cri: "Fournisseur - Client",
         cri_01: "Saisie",
         cri_02: "Listes",
-        cri_03: "Traitements",
+        cri_03: "Les opérations",
         cri_04: "Rapports",
         cri_01_001: "Fournisseur-Client saisie",
         cri_01_002: "Adresse saisie",
@@ -273,7 +273,7 @@ export const langFr =
         pos_02_009 : "Rapport de Vente par famille de produits",
         pos_02_010 : "Rapport de vente détaillé du produit", 
         pos_02_011 : "Rapport de comparaison de produit",
-        pos_03 : "Traitements", 
+        pos_03 : "Les opérations", 
         pos_03_001 : "Opérations de fin de journée",
         promo: "Promotion",
         promo_01: "Saisie",
@@ -315,7 +315,7 @@ export const langFr =
         purcorder : "Commande",
         purcorder_01 : "Document",
         purcorder_02 : "Listes",
-        purcorder_03 : "Operasyonlar",
+        purcorder_03 : "Les opérations",
         purcorder_04 : "Rapports",
         purcDispatch : "Bon de livraison",
         purcDispatch_01 : "Document",
@@ -1292,7 +1292,7 @@ export const langFr =
         {
             title: "Veuillez Saisir MDP Administrateur pour Accès Document ",
             Password : "Mot de passe",
-            btnApprove : "Valide"
+            btnApprove : "Valider"
         },
         msgDocValid:
         {
@@ -1454,7 +1454,7 @@ export const langFr =
         {
             title: "Veuillez Saisir MDP Administrateur pour Accès au Document ",
             Password : "Mot de passe",
-            btnApprove : "Valide"
+            btnApprove : "Valider"
         },
         msgGetLocked:
         {
@@ -1806,7 +1806,7 @@ export const langFr =
         {
             title: "Veuillez Saisir MDP Administrateur pour Accès au Document ",
             Password : "Mot de passe",
-            btnApprove : "Valide"
+            btnApprove : "Valider"
         },
         msgDocValid:
         {
@@ -2089,7 +2089,7 @@ export const langFr =
         {
             title: "Veuillez Saisir MDP Administrateur pour Accès au Document ",
             Password : "Mot de passe",
-            btnApprove : "Valide"
+            btnApprove : "Valider"
         },
         msgGetLocked:
         {
@@ -2284,7 +2284,7 @@ export const langFr =
         {
             title: "Veuillez Saisir MDP Administrateur pour Accès au Document ",
             Password : "Mot de passe",
-            btnApprove : "Valide"
+            btnApprove : "Valider"
         },
         msgGetLocked:
         {
@@ -2593,7 +2593,7 @@ export const langFr =
         msgSave:
         {
             title: "Attention",
-            btn01: "Valide",
+            btn01: "Valider",
             btn02: "Abandonne",
             msg: "Etes-vous sûr(e) de Vouloir Enregistrer !"
         },
@@ -2605,7 +2605,7 @@ export const langFr =
             msgFailed: "Enregistrement échoué !"
         },
     },
-    stk_04_002 : // "İade Operasyonları"
+    stk_04_002 : // "İade Les opérationsı"
     {
         txtCustomerCode : "Fournisseur",
         validDepot : "Sélectionner Dépot",
@@ -2633,7 +2633,7 @@ export const langFr =
         msgSave:
         {
             title: "Attention",
-            btn01: "Valide",
+            btn01: "Valider",
             btn02: "Abandonne",
             msg: "Etes-vous sûr(e) de Vouloir Faire Retour des Lignes Sélectionnées !"
         },
@@ -2665,7 +2665,7 @@ export const langFr =
         btnAddCount : "Fusionner Inventaire",
         dtFirstDate :"Date Début",
         dtLastDate : "Date Fin",
-        btnSuccess : "Valide",
+        btnSuccess : "Valider",
         validDepot : "Sélectionner Dépot",
         popCount : 
         {
@@ -2735,7 +2735,7 @@ export const langFr =
             title : "Saisie Prix Montant",   
             txtQuantity : "Montant",   
             txtPrice : "Prix",   
-            btnSave : "Enregistre et Imprime"   
+            btnSave : "Enregistre et Imprimer"   
         },  
         pg_txtRef:  
         {  
@@ -3725,7 +3725,7 @@ export const langFr =
         {
             title: "Veuillez Saisir MDP Administrateur pour Accès au Document ",
             Password : "Mot de passe",
-            btnApprove : "Valide"
+            btnApprove : "Valider"
         },
         msgDocValid:
         {
@@ -3967,6 +3967,13 @@ export const langFr =
             btn02: "Mettre prix sélectionné à jour ",     
             msg: "Veuillez sélectionner et mettre à jour les prix du fournisseur... "     
         },     
+        msgNewPriceDate : 
+        {
+            title: "Dikkat",  // BAK
+            btn01: "Hiç Birini Güncelleme",  // BAK
+            btn02: "Seçilen Fiyatları Güncelle",  // BAK
+            msg: "Lütfen Tarihlerini Güncellemek İsteidiğiniz Ürünleri Seçiniz.. "  // BAK
+        },
         grdNewPrice:      
         {     
             clmCode: "Code",     
@@ -3974,7 +3981,25 @@ export const langFr =
             clmPrice: "Ancien Prix",     
             clmPrice2: "Nouveau Prix",   
             clmSalePrice :"Prix de Vente",  
-            clmMargin : "Marge"  
+            clmMargin : "Marge" ,
+            clmCostPrice : "Coût", 
+        },
+        grdNewPriceDate:      
+        {     
+            clmCode: "Code",     
+            clmName: "Nom",     
+            clmPrice: "Ancien Prix",     
+            clmPrice2: "Nouveau Prix",   
+            clmSalePrice :"Prix de Vente",  
+            clmMargin : "Marge" ,
+            clmCostPrice : "Coût", 
+        },
+        msgPriceDateUpdate :
+        {
+            msg : "Değişmeyen Fiyatların Tarihlerini Güncellemek İstiyormusunuz? ",  // BAK
+            btn01 : "Evet",  // BAK
+            btn02 : "Hayır",  // BAK
+            title : "Dikkat"  // BAK
         },
         pg_txtBarcode : 
         {
@@ -4244,7 +4269,7 @@ export const langFr =
         {
             title: "Veuillez Saisir MDP Administrateur pour Accès au Document ",
             Password : "Mot de passe",
-            btnApprove : "Valide"
+            btnApprove : "Valider"
         },
         msgDocValid:
         {
@@ -4768,7 +4793,7 @@ export const langFr =
         {
             title: "Veuillez Saisir MDP Administrateur pour Acces au Document ",
             Password : "Mot de passe",
-            btnApprove : "Valide"
+            btnApprove : "Valider"
         },
         msgDocValid:
         {
@@ -5222,7 +5247,7 @@ export const langFr =
         {
             title: "Veuillez Saisir MDP Administrateur pour Accès au Document ",
             Password : "Mot de passe",
-            btnApprove : "Valide"
+            btnApprove : "Valider"
         },
         msgDocValid:
         {
@@ -5656,7 +5681,7 @@ export const langFr =
         {
             title: "Veuillez Saisir MDP Administrateur pour Acces au Document ",
             Password : "Mot de passe",
-            btnApprove : "Valide"
+            btnApprove : "Valider"
         },
         msgDocValid:
         {
@@ -6114,7 +6139,7 @@ export const langFr =
         {
             title: "Veuillez Saisir MDP Administrateur pour Accès au Document ",
             Password : "Mot de passe",
-            btnApprove : "Valide"
+            btnApprove : "Valider"
         },
         msgDocValid:
         {
@@ -6521,7 +6546,7 @@ export const langFr =
         {
             title: "Veuillez Saisir MDP Administrateur pour Accès au Document ",
             Password : "Mot de passe",
-            btnApprove : "Valide"
+            btnApprove : "Valider"
         },
         msgDocValid:
         {
@@ -6952,7 +6977,7 @@ export const langFr =
         {
             title: "Veuillez Saisir MDP Administrateur pour Acces au Document ",
             Password : "Mot de passe",
-            btnApprove : "Valide"
+            btnApprove : "Valider"
         },
         msgDocValid:
         {
@@ -7403,7 +7428,7 @@ export const langFr =
         {
             title: "Veuillez Saisir MDP Responsable pour Dévérouiller",
             Password : "MDP",
-            btnApprove : "Valide"
+            btnApprove : "Valider"
         },
         msgDocValid:
         {
@@ -7741,7 +7766,7 @@ export const langFr =
         {
             title: "Veuillez Saisir MDP Administrateur pour Acces au Document ",
             Password : "Mot de passe",
-            btnApprove : "Valide"
+            btnApprove : "Valider"
         },
         msgDocValid:
         {
@@ -8161,7 +8186,7 @@ export const langFr =
         {
             title: "Veuillez Saisir MDP Administrateur pour Accès au Document ",
             Password : "Mot de passe",
-            btnApprove : "Valide"
+            btnApprove : "Valider"
         },
         msgDocValid:
         {
@@ -8402,14 +8427,39 @@ export const langFr =
             btn02: "Mettre prix sélectionné à jour ",     
             msg: "Veuillez sélectionner et mettre à jour les prix du fournisseur... "     
         },     
+        msgNewPriceDate : 
+        {
+            title: "Dikkat",  // BAK
+            btn01: "Hiç Birini Güncelleme",  // BAK
+            btn02: "Seçilen Fiyatları Güncelle",  // BAK
+            msg: "Lütfen Tarihlerini Güncellemek İsteidiğiniz Ürünleri Seçiniz.. "  // BAK
+        },
         grdNewPrice:      
         {     
             clmCode: "Code",     
             clmName: "Nom",     
             clmPrice: "Ancien Prix",     
-            clmPrice2: "Nouveau Prix",    
-            clmSalePrice :"Prix de Vente", 
-            clmMargin : "Marge" 
+            clmPrice2: "Nouveau Prix",   
+            clmSalePrice :"Prix de Vente",  
+            clmMargin : "Marge" ,
+            clmCostPrice : "Coût", 
+        },
+        grdNewPriceDate:      
+        {     
+            clmCode: "Code",     
+            clmName: "Nom",     
+            clmPrice: "Ancien Prix",     
+            clmPrice2: "Nouveau Prix",   
+            clmSalePrice :"Prix de Vente",  
+            clmMargin : "Marge" ,
+            clmCostPrice : "Coût", 
+        },
+        msgPriceDateUpdate :
+        {
+            msg : "Değişmeyen Fiyatların Tarihlerini Güncellemek İstiyormusunuz? ",  // BAK
+            btn01 : "Evet",  // BAK
+            btn02 : "Hayır",  // BAK
+            title : "Dikkat"  // BAK
         },
         pg_txtBarcode : 
         {
@@ -8626,7 +8676,7 @@ export const langFr =
         {
             title: "Veuillez Saisir MDP Administrateur pour Accès au Document ",
             Password : "Mot de passe",
-            btnApprove : "Valide"
+            btnApprove : "Valider"
         },
         msgDocValid:
         {
@@ -8973,7 +9023,7 @@ export const langFr =
         {
             title: "Veuillez Saisir MDP Administrateur pour Accès au Document ",
             Password : "Mot de passe",
-            btnApprove : "Valide"
+            btnApprove : "Valider"
         },
         msgDocValid:
         {
@@ -9654,7 +9704,7 @@ export const langFr =
         {
             title: "Veuillez Saisir MDP Administrateur pour Accès au Document ",
             Password : "Mot de passe",
-            btnApprove : "Valide"
+            btnApprove : "Valider"
         },
         msgDocValid:
         {
@@ -9924,14 +9974,39 @@ export const langFr =
             btn02: "Mettre prix sélectionné à jour ",     
             msg: "Veuillez sélectionner et mettre à jour les prix du fournisseur... "     
         },     
+        msgNewPriceDate : 
+        {
+            title: "Dikkat",   // BAK
+            btn01: "Hiç Birini Güncelleme",   // BAK
+            btn02: "Seçilen Fiyatları Güncelle",   // BAK
+            msg: "Lütfen Tarihlerini Güncellemek İsteidiğiniz Ürünleri Seçiniz.. "   // BAK
+        },
         grdNewPrice:      
         {     
             clmCode: "Code",     
             clmName: "Nom",     
             clmPrice: "Ancien Prix",     
-            clmPrice2: "Nouveau Prix",    
-            clmSalePrice :"Prix de Vente", 
-            clmMargin : "Marge" 
+            clmPrice2: "Nouveau Prix",   
+            clmSalePrice :"Prix de Vente",  
+            clmMargin : "Marge" ,
+            clmCostPrice : "Coût", 
+        },
+        grdNewPriceDate:      
+        {     
+            clmCode: "Code",     
+            clmName: "Nom",     
+            clmPrice: "Ancien Prix",     
+            clmPrice2: "Nouveau Prix",   
+            clmSalePrice :"Prix de Vente",  
+            clmMargin : "Marge" ,
+            clmCostPrice : "Coût", 
+        },
+        msgPriceDateUpdate :
+        {
+            msg : "Değişmeyen Fiyatların Tarihlerini Güncellemek İstiyormusunuz? ",  // BAK
+            btn01 : "Evet",  // BAK
+            btn02 : "Hayır",  // BAK
+            title : "Dikkat"  // BAK
         },
     },
     irs_02_002 : // Satış İrsaliyesi"
@@ -10029,7 +10104,7 @@ export const langFr =
         {
             title: "Veuillez Saisir MDP Administrateur pour Acces au Document ",
             Password : "Mot de passe",
-            btnApprove : "Valide"
+            btnApprove : "Valider"
         },
         msgDocValid:
         {
@@ -10422,7 +10497,7 @@ export const langFr =
         {
             title: "Veuillez Saisir MDP Administrateur pour Accès au Document ",
             Password : "Mot de passe",
-            btnApprove : "Valide"
+            btnApprove : "Valider"
         },
         msgDocValid:
         {
@@ -10741,7 +10816,7 @@ export const langFr =
         {
             title: "Veuillez Saisir MDP Administrateur pour Accès au Document ",
             Password : "Mot de passe",
-            btnApprove : "Valide"
+            btnApprove : "Valider"
         },
         msgDocValid:
         {
@@ -11116,7 +11191,7 @@ export const langFr =
         {
             title: "Veuillez Saisir MDP Administrateur pour Accès au Document ",
             Password : "Mot de passe",
-            btnApprove : "Valide"
+            btnApprove : "Valider"
         },
         msgDocValid:
         {
@@ -11421,7 +11496,7 @@ export const langFr =
         {
             title: "Veuillez Saisir MDP Administrateur pour Accès au Document ",
             Password : "Mot de passe",
-            btnApprove : "Valide"
+            btnApprove : "Valider"
         },
         msgDocValid:
         {
@@ -11867,7 +11942,7 @@ export const langFr =
         {
             title: "Veuillez Saisir MDP Administrateur pour Accès au Document ",
             Password : "Mot de passe",
-            btnApprove : "Valide"
+            btnApprove : "Valider"
         },
         popDesign : 
         {
@@ -12217,7 +12292,7 @@ export const langFr =
         {
             title: "Veuillez Saisir MDP Administrateur pour Accès au Document ",
             Password : "Mot de passe",
-            btnApprove : "Valide"
+            btnApprove : "Valider"
         },
         msgDocValid:
         {
@@ -14467,7 +14542,7 @@ export const langFr =
             msg :"Veuillez entrer le montant du fond de caisse …"   
         },
         txtPopAdvance :"Total",
-        btnPopAdd : "Valide",
+        btnPopAdd : "Valider",
         grdAdvance : 
         {
             clmUser : 'Utilisateur',
@@ -14660,7 +14735,7 @@ export const langFr =
         {
             title: "Veuillez Saisir MDP Administrateur pour Acces au Document ",
             Password : "Mot de passe",
-            btnApprove : "Valide"
+            btnApprove : "Valider"
         },
         popDesign : 
         {
