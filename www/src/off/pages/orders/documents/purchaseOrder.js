@@ -215,7 +215,7 @@ export default class purchaseOrder extends React.PureComponent
         this.docObj.dt()[0].VAT = Number(tmpVat).round(2)
         if(this.chkDocDiscount.value == true)
         {
-            this.docObj.dt()[0].TOTALHT = parseFloat(parseFloat(this.docObj.docItems.dt().sum("AMOUNT",2)) - parseFloat(this.docObj.docItems.dt().sum("DISCOUNT",2))).round(2)
+            this.docObj.dt()[0].TOTALHT = parseFloat(parseFloat(this.docObj.docOrders.dt().sum("AMOUNT",2)) - parseFloat(this.docObj.docOrders.dt().sum("DISCOUNT",2))).round(2)
         }
         else
         {
@@ -2754,11 +2754,11 @@ export default class purchaseOrder extends React.PureComponent
                                                 let pResult = await dialog(tmpConfObj);
                                                 if(pResult == 'btn01')
                                                 {
-                                                    for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
+                                                    for (let i = 0; i < this.docObj.docOrders.dt().length; i++) 
                                                     {
-                                                        this.docObj.docItems.dt()[i].VAT = 0  
-                                                        this.docObj.docItems.dt()[i].VAT_RATE = 0
-                                                        this.docObj.docItems.dt()[i].TOTAL = (this.docObj.docItems.dt()[i].PRICE * this.docObj.docItems.dt()[i].QUANTITY) - this.docObj.docItems.dt()[i].DISCOUNT
+                                                        this.docObj.docOrders.dt()[i].VAT = 0  
+                                                        this.docObj.docOrders.dt()[i].VAT_RATE = 0
+                                                        this.docObj.docOrders.dt()[i].TOTAL = (this.docObj.docOrders.dt()[i].PRICE * this.docObj.docOrders.dt()[i].QUANTITY) - this.docObj.docOrders.dt()[i].DISCOUNT
                                                         this._calculateTotal()
                                                     }
                                                     this.popVatRate.hide()

@@ -1042,6 +1042,11 @@ export default class salesInvoice extends React.PureComponent
                     tmpDocItems.ORDER_LINE_GUID = data[i].GUID
                     tmpDocItems.ORDER_DOC_GUID = data[i].DOC_GUID
                     tmpDocItems.ITEM_TYPE = data[i].ITEM_TYPE
+                    tmpDocItems.DISCOUNT = data[i].DISCOUNT
+                    tmpDocItems.DISCOUNT_1 = data[i].DISCOUNT_1
+                    tmpDocItems.DISCOUNT_2 = data[i].DISCOUNT_2
+                    tmpDocItems.DISCOUNT_3 = data[i].DISCOUNT_3
+                    tmpDocItems.TOTALHT = data[i].TOTALHT
 
                     await this.docObj.docItems.addEmpty(tmpDocItems)
                     await this.core.util.waitUntil(100)
@@ -1120,6 +1125,11 @@ export default class salesInvoice extends React.PureComponent
                     tmpDocItems.DISCOUNT_RATE = data[i].DISCOUNT_RATE
                     tmpDocItems.OFFER_LINE_GUID = data[i].GUID
                     tmpDocItems.OFFER_DOC_GUID = data[i].DOC_GUID
+                    tmpDocItems.DISCOUNT = data[i].DISCOUNT
+                    tmpDocItems.DISCOUNT_1 = data[i].DISCOUNT_1
+                    tmpDocItems.DISCOUNT_2 = data[i].DISCOUNT_2
+                    tmpDocItems.DISCOUNT_3 = data[i].DISCOUNT_3
+                    tmpDocItems.TOTALHT = data[i].TOTALHT
 
                     await this.docObj.docItems.addEmpty(tmpDocItems)
                     await this.core.util.waitUntil(100)
@@ -4026,7 +4036,7 @@ export default class salesInvoice extends React.PureComponent
                                                     }
                                                     let tmpData2 = await this.core.sql.execute(tmpQuery2) 
                                                     let tmpObj = {data1:tmpData.result.recordset,data2:tmpData2.result.recordset}
-                                                    console.log(JSON.stringify(tmpObj))
+                                                    console.log(JSON.stringify(tmpData.result.recordset)) // BAK
                                                     this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",async(pResult) => 
                                                     {
                                                         if(pResult.split('|')[0] != 'ERR')

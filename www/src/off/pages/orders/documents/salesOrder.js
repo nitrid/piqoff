@@ -213,11 +213,11 @@ export default class salesOrder extends React.PureComponent
         this.docObj.dt()[0].VAT = Number(tmpVat).round(2)
         if(this.chkDocDiscount.value == true)
         {
-            this.docObj.dt()[0].TOTALHT = parseFloat(parseFloat(this.docObj.docItems.dt().sum("AMOUNT",2)) - parseFloat(this.docObj.docItems.dt().sum("DISCOUNT",2))).round(2)
+            this.docObj.dt()[0].TOTALHT = parseFloat(parseFloat(this.docObj.docOrders.dt().sum("AMOUNT",2)) - parseFloat(this.docObj.docOrders.dt().sum("DISCOUNT",2))).round(2)
         }
         else
         {
-            this.docObj.dt()[0].TOTALHT =this.docObj.docOrders.dt().sum("TOTALHT",2)
+            this.docObj.dt()[0].TOTALHT = this.docObj.docOrders.dt().sum("TOTALHT",2)
         }
         this.docObj.dt()[0].TOTAL = Number(parseFloat(this.docObj.dt()[0].TOTALHT) + parseFloat(this.docObj.dt()[0].VAT)).round(2)
         this._calculateTotalMargin()
@@ -966,8 +966,13 @@ export default class salesOrder extends React.PureComponent
                     tmpDocItems.DESCRIPTION = data[i].DESCRIPTION
                     tmpDocItems.VAT_RATE = data[i].VAT_RATE
                     tmpDocItems.DISCOUNT_RATE = data[i].DISCOUNT_RATE
+                    tmpDocItems.DISCOUNT_1 = data[i].DISCOUNT_1
+                    tmpDocItems.DISCOUNT_2 = data[i].DISCOUNT_2
+                    tmpDocItems.DISCOUNT_3 = data[i].DISCOUNT_3
+                    tmpDocItems.DISCOUNT = data[i].DISCOUNT
                     tmpDocItems.MULTICODE = data[i].MULTICODE
                     tmpDocItems.ITEM_BARCODE = data[i].ITEM_BARCODE
+                    tmpDocItems.TOTALHT = data[i].TOTALHT
                     tmpDocItems.OFFER_LINE_GUID = data[i].GUID
                     tmpDocItems.OFFER_DOC_GUID = data[i].DOC_GUID
                     tmpDocItems.OFFER_REF = data[i].REF + '-' + data[i].REF_NO
@@ -2011,9 +2016,9 @@ export default class salesOrder extends React.PureComponent
                                         {
                                             this.multiItemData.clear
                                             this.popMultiItem.show()
-                                            if( typeof this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1] != 'undefined' && this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
+                                            if( typeof this.docObj.docOrders.dt()[this.docObj.docOrders.dt().length - 1] != 'undefined' && this.docObj.docOrders.dt()[this.docObj.docOrders.dt().length - 1].ITEM_CODE == '')
                                             {
-                                                await this.grdPurcInv.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
+                                                await this.grdPurcInv.devGrid.deleteRow(this.docObj.docOrders.dt().length - 1)
                                             }
                                         }
                                         else
@@ -2716,11 +2721,11 @@ export default class salesOrder extends React.PureComponent
                                                 let pResult = await dialog(tmpConfObj);
                                                 if(pResult == 'btn01')
                                                 {
-                                                    for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
+                                                    for (let i = 0; i < this.docObj.docOrders.dt().length; i++) 
                                                     {
-                                                        this.docObj.docItems.dt()[i].VAT = 0  
-                                                        this.docObj.docItems.dt()[i].VAT_RATE = 0
-                                                        this.docObj.docItems.dt()[i].TOTAL = (this.docObj.docItems.dt()[i].PRICE * this.docObj.docItems.dt()[i].QUANTITY) - this.docObj.docItems.dt()[i].DISCOUNT
+                                                        this.docObj.docOrders.dt()[i].VAT = 0  
+                                                        this.docObj.docOrders.dt()[i].VAT_RATE = 0
+                                                        this.docObj.docOrders.dt()[i].TOTAL = (this.docObj.docOrders.dt()[i].PRICE * this.docObj.docOrders.dt()[i].QUANTITY) - this.docObj.docOrders.dt()[i].DISCOUNT
                                                         this._calculateTotal()
                                                     }
                                                     this.popVatRate.hide()

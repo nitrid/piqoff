@@ -3183,11 +3183,11 @@ export default class salesOrder extends React.PureComponent
                                                 let pResult = await dialog(tmpConfObj);
                                                 if(pResult == 'btn01')
                                                 {
-                                                    for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
+                                                    for (let i = 0; i < this.docObj.docOffers.dt().length; i++) 
                                                     {
-                                                        this.docObj.docItems.dt()[i].VAT = 0  
-                                                        this.docObj.docItems.dt()[i].VAT_RATE = 0
-                                                        this.docObj.docItems.dt()[i].TOTAL = (this.docObj.docItems.dt()[i].PRICE * this.docObj.docItems.dt()[i].QUANTITY) - this.docObj.docItems.dt()[i].DISCOUNT
+                                                        this.docObj.docOffers.dt()[i].VAT = 0  
+                                                        this.docObj.docOffers.dt()[i].VAT_RATE = 0
+                                                        this.docObj.docOffers.dt()[i].TOTAL = (this.docObj.docOffers.dt()[i].PRICE * this.docObj.docOffers.dt()[i].QUANTITY) - this.docObj.docOffers.dt()[i].DISCOUNT
                                                         this._calculateTotal()
                                                     }
                                                     this.popVatRate.hide()
