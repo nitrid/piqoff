@@ -64,6 +64,7 @@ export default class purchaseInvoice extends React.PureComponent
         this.multiItemData = new datatable
         this.unitDetailData = new datatable
         this.newPrice = new datatable
+        this.newPriceDate = new datatable
         this.newVat = new datatable
         this.updatePriceData = new datatable
         this.vatRate =  new datatable
@@ -82,6 +83,7 @@ export default class purchaseInvoice extends React.PureComponent
         this.docObj.clearAll()
         this.paymentObj.clearAll()
         this.newPrice.clear()
+        this.newPriceDate.clear()
         this.newVat.clear()
 
 
@@ -156,6 +158,7 @@ export default class purchaseInvoice extends React.PureComponent
         await this.grdMultiItem.dataRefresh({source:this.multiItemData});
         await this.grdUnit2.dataRefresh({source:this.unitDetailData})
         await this.grdNewPrice.dataRefresh({source:this.newPrice})
+        await this.grdNewPriceDate.dataRefresh({source:this.newPriceDate})
         await this.grdNewVat.dataRefresh({source:this.newVat})
         this.txtDiffrentPositive.value = 0
         this.txtDiffrentNegative.value = 0
@@ -680,6 +683,7 @@ export default class purchaseInvoice extends React.PureComponent
     }
     async addItem(pData,pIndex,pQuantity,pPrice,pDiscount,pDiscountPer,pVat)
     {
+        console.log(pData)
         App.instance.setState({isExecute:true})
         let tmpGrpQuery = 
         {
@@ -840,6 +844,7 @@ export default class purchaseInvoice extends React.PureComponent
         this.docObj.docItems.dt()[pIndex].ITEM = pData.GUID
         this.docObj.docItems.dt()[pIndex].ITEM_TYPE = pData.ITEM_TYPE
         this.docObj.docItems.dt()[pIndex].UNIT = pData.UNIT
+        this.docObj.docItems.dt()[pIndex].COST_PRICE = pData.COST_PRICE
         if(typeof pVat == 'undefined')
         {
             this.docObj.docItems.dt()[pIndex].VAT_RATE = pData.VAT
@@ -1021,7 +1026,7 @@ export default class purchaseInvoice extends React.PureComponent
                 select:
                 {
                     query : "SELECT GUID,CODE,NAME,VAT,ITEMS_VW_01.UNIT,0 AS ITEM_TYPE," + 
-                    "ISNULL((SELECT TOP 1 CUSTOMER_PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].OUTPUT+"'),COST_PRICE) AS PURC_PRICE,"+
+                    "ISNULL((SELECT TOP 1 CUSTOMER_PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].OUTPUT+"'),COST_PRICE) AS PURC_PRICE,COST_PRICE,"+
                     "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].OUTPUT+"'),'') AS MULTICODE,STATUS"+
                     " FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL) " ,
                     param : ['VAL:string|50']
@@ -1433,7 +1438,7 @@ export default class purchaseInvoice extends React.PureComponent
             {
                 let tmpQuery = 
                 {
-                    query :"SELECT GUID,CODE,NAME,VAT,ITEMS_VW_01.UNIT,1 AS QUANTITY,0 AS ITEM_TYPE," + 
+                    query :"SELECT GUID,CODE,NAME,VAT,ITEMS_VW_01.UNIT,1 AS QUANTITY,0 AS ITEM_TYPE,COST_PRICE," + 
                     "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].OUTPUT+"'),'') AS MULTICODE"+
                     " FROM ITEMS_VW_01 WHERE ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].OUTPUT+"'),'') = @VALUE " ,
                     param : ['VALUE:string|50'],
@@ -1513,7 +1518,7 @@ export default class purchaseInvoice extends React.PureComponent
         {
             let tmpQuery = 
             { 
-                query :"SELECT GUID,CODE,NAME,VAT,UNIT,1 AS QUANTITY,0 AS ITEM_TYPE," + 
+                query :"SELECT GUID,CODE,NAME,VAT,UNIT,1 AS QUANTITY,0 AS ITEM_TYPE,COST_PRICE" + 
                 "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].OUTPUT+"'),'') AS MULTICODE"+
                 " FROM ITEMS_VW_01 WHERE ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].OUTPUT+"'),'') = @VALUE AND STATUS = 1 " ,
                 param : ['VALUE:string|50'],
@@ -1631,15 +1636,14 @@ export default class purchaseInvoice extends React.PureComponent
                 this.newVat.clear()
                 for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
                 {
-
                     if(this.docObj.docItems.dt()[i].ITEM_TYPE == 0)
                     {
-                        console.log(this.docObj.docItems.dt()[i])
                         if(typeof this.docObj.docItems.dt()[i].OLD_VAT != 'undefined' && this.docObj.docItems.dt()[i].VAT_RATE != this.docObj.docItems.dt()[i].OLD_VAT && this.docObj.docItems.dt()[i].VAT_RATE != 0)
                         {
                             this.newVat.push({...this.docObj.docItems.dt()[i]})
                         }
-                        if(this.docObj.docItems.dt()[i].CUSTOMER_PRICE != this.docObj.docItems.dt()[i].PRICE && this.docObj.docItems.dt()[i].CUSTOMER_PRICE != 0)
+                        console.log(this.docObj.docItems.dt()[i].COST_PRICE)
+                        if(this.docObj.docItems.dt()[i].COST_PRICE != this.docObj.docItems.dt()[i].PRICE && this.docObj.docItems.dt()[i].COST_PRICE != 0)
                         {
                             let tmpQuery = 
                             {
@@ -1650,12 +1654,15 @@ export default class purchaseInvoice extends React.PureComponent
                             let tmpData = await this.core.sql.execute(tmpQuery)
                             if(tmpData.result.recordset.length > 0)
                             {
-                                console.log(tmpData.result.recordset)
                                 let tmpItemData = [{...this.docObj.docItems.dt()[i]}]
                                 tmpItemData[0].SALE_PRICE_GUID = tmpData.result.recordset[0].PRICE_GUID
                                 tmpItemData[0].SALE_PRICE = tmpData.result.recordset[0].SALE_PRICE
-                                tmpItemData[0].PRICE_MARGIN = (parseFloat((tmpData.result.recordset[0].SALE_PRICE / ((tmpData.result.recordset[0].VAT_RATE / 100) + 1))  - tmpItemData[0].PRICE).toFixed(2) + '€ / %' + parseFloat((parseFloat((tmpData.result.recordset[0].SALE_PRICE / ((tmpData.result.recordset[0].VAT_RATE / 100) + 1))  - tmpItemData[0].PRICE)/tmpItemData[0].PRICE) * 100).toFixed(2))
+                                let tmpExVat = tmpData.result.recordset[0].SALE_PRICE / ((tmpItemData[0].VAT_RATE / 100) + 1)
+                                let tmpMargin = tmpExVat - tmpItemData[0].PRICE;
+                                let tmpMarginRate = ((tmpMargin / tmpItemData[0].PRICE)) * 100
+                                tmpItemData[0].PRICE_MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
                                 tmpItemData[0].CUSTOMER_PRICE_GUID = tmpData.result.recordset[0].CUSTOMER_PRICE_GUID
+                                console.log(tmpItemData[0])
                                 this.newPrice.push(tmpItemData[0])
                             } 
                         }
@@ -1700,20 +1707,6 @@ export default class purchaseInvoice extends React.PureComponent
                             for (let i = 0; i < this.grdNewPrice.getSelectedData().length; i++) 
                             {
                                 this.updatePriceData.push(this.grdNewPrice.getSelectedData()[i])
-                                // let tmpMulticodeObj = new itemMultiCodeCls()
-                                // await tmpMulticodeObj.load({ITEM_CODE:this.grdNewPrice.getSelectedData()[i].ITEM_CODE,CUSTOMER_CODE:this.grdNewPrice.getSelectedData()[i].CUSTOMER_CODE});
-                                // tmpMulticodeObj.dt()[0].CUSTOMER_PRICE = this.grdNewPrice.getSelectedData()[i].PRICE
-                                // tmpMulticodeObj.save()
-                                // let tmpQuery = 
-                                // {
-                                //     query : "EXEC [dbo].[PRD_ITEM_PRICE_UPDATE] " +
-                                //             "@GUID = @PGUID, " +
-                                //             "@CUSER = @PCUSER, " +
-                                //             "@PRICE = @PPRICE" ,
-                                //     param : ['PGUID:string|50','PCUSER:string|25','PPRICE:float'],
-                                //     value : [this.grdNewPrice.getSelectedData()[i].SALE_PRICE_GUID,this.user.CODE,this.grdNewPrice.getSelectedData()[i].SALE_PRICE]
-                                // }
-                                // await this.core.sql.execute(tmpQuery)
                             }
                             await this.updatePriceData.update()
                             App.instance.setState({isExecute:false})
@@ -1750,6 +1743,92 @@ export default class purchaseInvoice extends React.PureComponent
                 App.instance.setState({isExecute:false})
             }
             
+            let tmpConfObj =
+            {
+                id:'msgPriceDateUpdate',showTitle:true,title:this.t("msgPriceDateUpdate.title"),showCloseButton:true,width:'500px',height:'200px',
+                button:[{id:"btn01",caption:this.t("msgPriceDateUpdate.btn01"),location:'before'},{id:"btn02",caption:this.t("msgPriceDateUpdate.btn02"),location:'after'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgPriceDateUpdate.msg")}</div>)
+            }
+            
+            let pResult = await dialog(tmpConfObj);
+            if(pResult == 'btn01')
+            {
+                let tmpData = this.sysParam.filter({ID:'purcInvoıcePriceSave',USERS:this.user.CODE}).getValue()
+                if(typeof tmpData != 'undefined' && tmpData.value ==  true)
+                {
+                    App.instance.setState({isExecute:true})
+                    this.newPriceDate.clear()
+                    for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
+                    {
+                        if(this.docObj.docItems.dt()[i].ITEM_TYPE == 0)
+                        {
+                            if(this.docObj.docItems.dt()[i].COST_PRICE == this.docObj.docItems.dt()[i].PRICE && this.docObj.docItems.dt()[i].COST_PRICE != 0)
+                            {
+                                let tmpQuery = 
+                                {
+                                    query : "SELECT TOP 1 PRICE_SALE_GUID AS PRICE_GUID,PRICE_SALE AS SALE_PRICE,CUSTOMER_PRICE_GUID AS CUSTOMER_PRICE_GUID,VAT AS VAT_RATE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE  GUID = @ITEM AND CUSTOMER_GUID = @CUSTOMER",
+                                    param : ['ITEM:string|50','CUSTOMER:string|50'],
+                                    value : [this.docObj.docItems.dt()[i].ITEM,this.docObj.docItems.dt()[i].OUTPUT]
+                                }
+                                let tmpData = await this.core.sql.execute(tmpQuery)
+                                if(tmpData.result.recordset.length > 0)
+                                {
+                                    console.log(tmpData.result.recordset)
+                                    let tmpItemData = [{...this.docObj.docItems.dt()[i]}]
+                                    tmpItemData[0].SALE_PRICE_GUID = tmpData.result.recordset[0].PRICE_GUID
+                                    tmpItemData[0].SALE_PRICE = tmpData.result.recordset[0].SALE_PRICE
+                                    let tmpExVat = tmpData.result.recordset[0].SALE_PRICE / ((tmpItemData[0].VAT_RATE / 100) + 1)
+                                    let tmpMargin = tmpExVat - tmpItemData[0].PRICE;
+                                    let tmpMarginRate = ((tmpMargin / tmpItemData[0].PRICE)) * 100
+                                    tmpItemData[0].PRICE_MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
+                                    tmpItemData[0].CUSTOMER_PRICE_GUID = tmpData.result.recordset[0].CUSTOMER_PRICE_GUID
+                                    console.log(tmpItemData[0])
+                                    this.newPriceDate.push(tmpItemData[0])
+                                } 
+                            }
+                        }
+                    }
+                    if(this.newPriceDate.length > 0)
+                    {
+                        await this.msgNewPriceDate.show().then(async (e) =>
+                        {
+                
+                            if(e == 'btn01')
+                            {
+                                
+                            }
+                            if(e == 'btn02')
+                            {
+                                this.updatePriceData.insertCmd = 
+                                {
+                                    query : "EXEC [dbo].[PRD_ITEM_PRICE_UPDATE] " + 
+                                    "@GUID =  @PCUSTOMER_PRICE_GUID," +
+                                    "@CUSER = @PNEW_CUSER ", 
+                                    param : ['PNEW_CUSER:string|25','PCUSTOMER_PRICE_GUID:string|50'],
+                                    dataprm : ['CUSER','CUSTOMER_PRICE_GUID']
+                                } 
+                                this.updatePriceData.updateCmd = 
+                                {
+                                    query : "EXEC [dbo].[PRD_ITEM_PRICE_UPDATE] " + 
+                                    "@GUID =  @PCUSTOMER_PRICE_GUID," +
+                                    "@CUSER = @PNEW_CUSER ", 
+                                    param : ['PNEW_CUSER:string|25','PCUSTOMER_PRICE_GUID:string|50'],
+                                    dataprm : ['CUSER','CUSTOMER_PRICE_GUID']
+                                } 
+                                App.instance.setState({isExecute:true})
+                                for (let i = 0; i < this.grdNewPriceDate.getSelectedData().length; i++) 
+                                {
+                                    this.updatePriceData.push(this.grdNewPriceDate.getSelectedData()[i])
+                                }
+                                await this.updatePriceData.update()
+                                App.instance.setState({isExecute:false})
+                                this.updatePriceData.clear()
+                            }
+                        })
+                    }    
+                    App.instance.setState({isExecute:false})
+                }
+            }
             let tmpConfObj1 =
             {
                 id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
@@ -3197,8 +3276,8 @@ export default class purchaseInvoice extends React.PureComponent
                                            
 
                                             e.key.VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100))).round(4);
-                                            e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY)).round(2)
-                                            e.key.TOTALHT = Number(((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT)).round(2)
+                                            e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3)).round(2)
+                                            e.key.TOTALHT = Number((parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3)) - e.key.DISCOUNT)).round(2)
                                             e.key.TOTAL = Number((e.key.TOTALHT + e.key.VAT)).round(2)
 
                                             e.key.DIFF_PRICE = e.key.PRICE - e.key.CUSTOMER_PRICE
@@ -4651,12 +4730,10 @@ export default class purchaseInvoice extends React.PureComponent
                                     onRowRemoved={async (e)=>{
                                     }}
                                     onRowUpdated={async(e)=>{
-
                                         let tmpExVat = e.key.SALE_PRICE / ((e.key.VAT_RATE / 100) + 1)
                                         let tmpMargin = tmpExVat -  e.key.PRICE;
                                         let tmpMarginRate = ((tmpMargin /  e.key.PRICE)) * 100
                                         e.key.PRICE_MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
-                                        
                                     }}
                                     >
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
@@ -4664,10 +4741,65 @@ export default class purchaseInvoice extends React.PureComponent
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={false} />
                                         <Column dataField="ITEM_CODE" caption={this.t("grdNewPrice.clmCode")} width={100} allowEditing={false}/>
                                         <Column dataField="ITEM_NAME" caption={this.t("grdNewPrice.clmName")} width={180}  allowEditing={false}/>
+                                        <Column dataField="COST_PRICE" caption={this.t("grdNewPrice.clmCostPrice")} width={130}   allowEditing={false}/>
                                         <Column dataField="CUSTOMER_PRICE" caption={this.t("grdNewPrice.clmPrice")} width={130}   allowEditing={false}/>
                                         <Column dataField="PRICE" caption={this.t("grdNewPrice.clmPrice2")} dataType={'number'} width={70}  allowEditing={false}/>
                                         <Column dataField="SALE_PRICE" caption={this.t("grdNewPrice.clmSalePrice")} dataType={'number'} width={80}  format={{ style: "currency", currency: "EUR",precision: 2}}/>
                                         <Column dataField="PRICE_MARGIN" caption={this.t("grdNewPrice.clmMargin")}width={100}  allowEditing={false}/>
+                                    </NdGrid>
+                                    </Item>
+                                </Form>
+                            </div>
+                        </div>
+                        <div className='row'>
+                    
+                        </div>
+                    </NdDialog>  
+                      {/* Yeni Fiyat Dialog  */}
+                      <NdDialog id={"msgNewPriceDate"} container={"#root"} parent={this}
+                    position={{of:'#root'}} 
+                    showTitle={true} 
+                    title={this.t("msgNewPriceDate.title")} 
+                    showCloseButton={false}
+                    width={"1000px"}
+                    height={"800PX"}
+                    button={[{id:"btn01",caption:this.t("msgNewPriceDate.btn01"),location:'before'},{id:"btn02",caption:this.t("msgNewPriceDate.btn02"),location:'after'}]}
+                    >
+                        <div className="row">
+                            <div className="col-12 py-2">
+                                <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNewPriceDate.msg")}</div>
+                            </div>
+                            <div className="col-12 py-2">
+                                <Form>
+                                    {/* grdNewPriceDate */}
+                                    <Item>
+                                    <NdGrid parent={this} id={"grdNewPriceDate"} 
+                                    showBorders={true} 
+                                    columnsAutoWidth={true} 
+                                    allowColumnReordering={true} 
+                                    allowColumnResizing={true} 
+                                    headerFilter={{visible:true}}
+                                    filterRow = {{visible:true}}
+                                    height={600} 
+                                    width={'100%'}
+                                    dbApply={false}
+                                    selection={{mode:"multiple"}}
+                                    onRowRemoved={async (e)=>{
+                                    }}
+                                    onRowUpdated={async(e)=>{
+                                        let tmpExVat = e.key.SALE_PRICE / ((e.key.VAT_RATE / 100) + 1)
+                                        let tmpMargin = tmpExVat -  e.key.PRICE;
+                                        let tmpMarginRate = ((tmpMargin /  e.key.PRICE)) * 100
+                                        e.key.PRICE_MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
+                                    }}
+                                    >
+                                        <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
+                                        <Scrolling mode="standart" />
+                                        <Editing mode="cell" allowUpdating={true} allowDeleting={false} />
+                                        <Column dataField="ITEM_CODE" caption={this.t("grdNewPriceDate.clmCode")} width={100} allowEditing={false}/>
+                                        <Column dataField="ITEM_NAME" caption={this.t("grdNewPriceDate.clmName")} width={180}  allowEditing={false}/>
+                                        <Column dataField="COST_PRICE" caption={this.t("grdNewPriceDate.clmCostPrice")} width={130}   allowEditing={false}/>
+                                        <Column dataField="CUSTOMER_PRICE" caption={this.t("grdNewPriceDate.clmPrice")} width={130}   allowEditing={false}/>
                                     </NdGrid>
                                     </Item>
                                 </Form>

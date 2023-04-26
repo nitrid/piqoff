@@ -1433,7 +1433,7 @@ export const langFr =
         {
             text: "Transactions",
             btn01: "Détail",
-            btn02: "Mail Gönder" //BAK
+            btn02: "Envoyer E-mail"
         },
         popDesign : 
         {
@@ -1443,7 +1443,7 @@ export const langFr =
         },
         popMailSend : 
         {
-            title :"Envoyer Mail ",   
+            title :"Envoyer E-Mail ",   
             txtMailSubject : "Objet E-Mail ",   
             txtSendMail : "Adresse E-Mail ",   
             btnSend : "Envoyer"   

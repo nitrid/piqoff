@@ -5,7 +5,7 @@ export const langFr =
     loading : "Connexion En Cours",
     btnSave: "Enregistre",
     btnCancel: "Supprimer",
-    btnPrint :"Imprime",
+    btnPrint :"Imprimer",
     btnOk: "OK",
     msgWarning: "Attention",
     msgSqlService1: "Impossible de se connecter au serveur database", 
@@ -115,22 +115,22 @@ export const langFr =
     },
     popVatRate:
     {
-        title : "TAUX TVA", // BAK
+        title : "Taux TVA", 
     },
     grdVatRate :
     {
-        clmRate : "Taux TVA", // BAK
-        clmVat : "Montant TVA", // BAK
-        clmTotalHt : "Montant", // BAK
+        clmRate : "Taux TVA", 
+        clmVat : "Montant TVA", 
+        clmTotalHt : "Montant total", 
     },
-    btnVatToZero : "Mettre à Zéro la TVA", // BAK
+    btnVatToZero : "Mettre à Zéro la TVA",
     menuOff:
     {
         stk: "Produit",                
         stk_01: "Définition",
         stk_02: "Documents",
         stk_03: "Listes",
-        stk_04: "Traitements",
+        stk_04: "Les opérations",
         stk_05: "Rapports",
         stk_01_001: "Saisie nouveau Produit",
         stk_01_002: "Ajouter code barre",
@@ -165,11 +165,11 @@ export const langFr =
         stk_04_004:"Traitement DLC",
         stk_05_001: "Rapport Inventaire Dépôt", 
         stk_05_002: "Rapport sur la modification des prix d'achat", 
-        stk_05_003: "Sayım Envanter Raporu", //BAK 
+        stk_05_003: "Rapport inventaire", 
         cri: "Fournisseur - Client",
         cri_01: "Saisie",
         cri_02: "Listes",
-        cri_03: "Traitements",
+        cri_03: "Les opérations",
         cri_04: "Rapports",
         cri_01_001: "Fournisseur-Client saisie",
         cri_01_002: "Adresse saisie",
@@ -255,9 +255,9 @@ export const langFr =
         fns_04 : "Rapports",
         fns_04_001 : "Rapport sur les relevés bancaires",   
         fns_04_002 : "Rapport sur le solde actuel",  
-        fns_05 : "Opérations", //BAK
-        fns_05_001 : "Saisie Multi Encaissement", //BAK
-        fns_05_002 : "Saisie Multi Paiement", //BAK
+        fns_05 : "Opérations", 
+        fns_05_001 : "Saisie Multi Encaissement", 
+        fns_05_002 : "Saisie Multi Paiement", 
         pos: "Traitement Pos",
         pos_01 : "Saisie",
         pos_01_001 : "Identifier Caisse",
@@ -271,9 +271,9 @@ export const langFr =
         pos_02_007 : "Rapport Pos Fond de Caisse ", 
         pos_02_008 : "Rapport de Vente Produit", 
         pos_02_009 : "Rapport de Vente par famille de produits",
-        pos_02_010 : "Ürün Detaylı Satış Raporu", // BAK
-        pos_02_011 : "Ürün Karşılaştırma Raporu", // BAK
-        pos_03 : "Traitements", 
+        pos_02_010 : "Rapport de vente détaillé du produit", 
+        pos_02_011 : "Rapport de comparaison de produit",
+        pos_03 : "Les opérations", 
         pos_03_001 : "Opérations de fin de journée",
         promo: "Promotion",
         promo_01: "Saisie",
@@ -315,7 +315,7 @@ export const langFr =
         purcorder : "Commande",
         purcorder_01 : "Document",
         purcorder_02 : "Listes",
-        purcorder_03 : "Operasyonlar",
+        purcorder_03 : "Les opérations",
         purcorder_04 : "Rapports",
         purcDispatch : "Bon de livraison",
         purcDispatch_01 : "Document",
@@ -345,18 +345,18 @@ export const langFr =
         salesinvoices_03 : "Proforma",
         salesinvoices_04 : "Rapports",
         salesReport : "Rapports",
-        slsRpt_01_001 : "Rapport de Comparaison de Documents",  // BAK
-        slsRpt_01_002 : "Rapport de ventes Basées Famille",  // BAK
-        slsRpt_01_003 : "Rapport des Factures de Vente", // BAK
-        slsRpt_01_004 : "Rapport de Vente", // BAK
-        slsRpt_01_005 : "Ürün Satış ve İade Raporu", // BAK
-        slsRpt_01_006 : "Cari Bazlı Satış ve İade Raporu", // BAK
-        slsRpt_01_007 : "İade Faturaları Raporu",   // BAK
-        slsRpt_01_008 : "Ürün Detaylı Satış Raporu",   // BAK
+        slsRpt_01_001 : "Rapport de Comparaison de Documents", 
+        slsRpt_01_002 : "Rapport de ventes basés sur les familles", 
+        slsRpt_01_003 : "Rapport des Factures de Vente", 
+        slsRpt_01_004 : "Rapport de Vente", 
+        slsRpt_01_005 : "Rapport de vente et de retour ", 
+        slsRpt_01_006 : "Rapport actuel sur les ventes et les retours",
+        slsRpt_01_007 : "Rapport des factures de retours",   
+        slsRpt_01_008 : "Rapport de vente du produit détaillé",   
         purchaseReport : "Rapports",
-        slsRpt_02_001 : "Rapport des Factures d'Achat", // BAK
-        slsRpt_02_002 : "Rapport DEB ", // BAK
-        slsRpt_02_003 : "Şeker Vergisi Raporu", // BAK
+        slsRpt_02_001 : "Rapport des Factures d'Achat", 
+        slsRpt_02_002 : "Rapport DEB ", 
+        slsRpt_02_003 : "Rapport du taux de sucre", 
         slsRpt_02_004 : ""
     },
     login:
@@ -425,11 +425,11 @@ export const langFr =
         chkDayAnalysis : "Journalier",  
         chkMountAnalysis : "Mensuel",  
         txtUnitFactor : "Quantité unitaire", 
-        cmbAnlysType : "Tip", // BAK
+        cmbAnlysType : "Type", 
         cmbAnlysTypeData : 
         {
-            pos: "Pos", // BAK
-            invoice : "Fatura" // BAK
+            pos: "Pos", 
+            invoice : "Facture"
         },
         pg_txtRef :
         {
@@ -691,9 +691,9 @@ export const langFr =
         },
         msgUnitRowNotDelete :
         {
-            title: "Attention", //BAK
-            btn01: "OK", //BAK
-            msg: "Vous pouvez pas supprimé unité principale et sous-unité !" //BAK
+            title: "Attention",
+            btn01: "OK",
+            msg: "Vous ne pouvez pas supprimé l'unité principale et la sous-unité !" 
         },
     },
     stk_01_002:  //"Identification des codes-barres" 
@@ -1292,7 +1292,7 @@ export const langFr =
         {
             title: "Veuillez Saisir MDP Administrateur pour Accès Document ",
             Password : "Mot de passe",
-            btnApprove : "Valide"
+            btnApprove : "Valider"
         },
         msgDocValid:
         {
@@ -1454,7 +1454,7 @@ export const langFr =
         {
             title: "Veuillez Saisir MDP Administrateur pour Accès au Document ",
             Password : "Mot de passe",
-            btnApprove : "Valide"
+            btnApprove : "Valider"
         },
         msgGetLocked:
         {
@@ -1806,7 +1806,7 @@ export const langFr =
         {
             title: "Veuillez Saisir MDP Administrateur pour Accès au Document ",
             Password : "Mot de passe",
-            btnApprove : "Valide"
+            btnApprove : "Valider"
         },
         msgDocValid:
         {
@@ -2089,7 +2089,7 @@ export const langFr =
         {
             title: "Veuillez Saisir MDP Administrateur pour Accès au Document ",
             Password : "Mot de passe",
-            btnApprove : "Valide"
+            btnApprove : "Valider"
         },
         msgGetLocked:
         {
@@ -2284,7 +2284,7 @@ export const langFr =
         {
             title: "Veuillez Saisir MDP Administrateur pour Accès au Document ",
             Password : "Mot de passe",
-            btnApprove : "Valide"
+            btnApprove : "Valider"
         },
         msgGetLocked:
         {
@@ -2593,7 +2593,7 @@ export const langFr =
         msgSave:
         {
             title: "Attention",
-            btn01: "Valide",
+            btn01: "Valider",
             btn02: "Abandonne",
             msg: "Etes-vous sûr(e) de Vouloir Enregistrer !"
         },
@@ -2605,7 +2605,7 @@ export const langFr =
             msgFailed: "Enregistrement échoué !"
         },
     },
-    stk_04_002 : // "İade Operasyonları"
+    stk_04_002 : // "İade Les opérationsı"
     {
         txtCustomerCode : "Fournisseur",
         validDepot : "Sélectionner Dépot",
@@ -2633,7 +2633,7 @@ export const langFr =
         msgSave:
         {
             title: "Attention",
-            btn01: "Valide",
+            btn01: "Valider",
             btn02: "Abandonne",
             msg: "Etes-vous sûr(e) de Vouloir Faire Retour des Lignes Sélectionnées !"
         },
@@ -2665,7 +2665,7 @@ export const langFr =
         btnAddCount : "Fusionner Inventaire",
         dtFirstDate :"Date Début",
         dtLastDate : "Date Fin",
-        btnSuccess : "Valide",
+        btnSuccess : "Valider",
         validDepot : "Sélectionner Dépot",
         popCount : 
         {
@@ -2735,7 +2735,7 @@ export const langFr =
             title : "Saisie Prix Montant",   
             txtQuantity : "Montant",   
             txtPrice : "Prix",   
-            btnSave : "Enregistre et Imprime"   
+            btnSave : "Enregistre et Imprimer"   
         },  
         pg_txtRef:  
         {  
@@ -3693,8 +3693,8 @@ export const langFr =
             clmCuser :"Utilisateur",
             clmMulticode : "FRN.Code",
             clmOrigin : "Origine",
-            clmSubQuantity : "Qtt. Unitaire",   // BAK
-            clmSubPrice : "Prix Unitaire",   // BAK
+            clmSubQuantity : "Quantité unitaire",  
+            clmSubPrice : "Prix unitaire",  
             clmSubFactor : "Coefficient"
         },
         grdInvoicePayment: 
@@ -3713,7 +3713,7 @@ export const langFr =
         {
             title: "Télécharger Document",
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
-            chkDocDiscount : "Evrak İndirimi Olarak Uygula", // BAK
+            chkDocDiscount : "Appliquer la remise sur le total général", 
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -3725,7 +3725,7 @@ export const langFr =
         {
             title: "Veuillez Saisir MDP Administrateur pour Accès au Document ",
             Password : "Mot de passe",
-            btnApprove : "Valide"
+            btnApprove : "Valider"
         },
         msgDocValid:
         {
@@ -3967,6 +3967,13 @@ export const langFr =
             btn02: "Mettre prix sélectionné à jour ",     
             msg: "Veuillez sélectionner et mettre à jour les prix du fournisseur... "     
         },     
+        msgNewPriceDate : 
+        {
+            title: "Dikkat",  // BAK
+            btn01: "Hiç Birini Güncelleme",  // BAK
+            btn02: "Seçilen Fiyatları Güncelle",  // BAK
+            msg: "Lütfen Tarihlerini Güncellemek İsteidiğiniz Ürünleri Seçiniz.. "  // BAK
+        },
         grdNewPrice:      
         {     
             clmCode: "Code",     
@@ -3974,7 +3981,25 @@ export const langFr =
             clmPrice: "Ancien Prix",     
             clmPrice2: "Nouveau Prix",   
             clmSalePrice :"Prix de Vente",  
-            clmMargin : "Marge"  
+            clmMargin : "Marge" ,
+            clmCostPrice : "Coût", 
+        },
+        grdNewPriceDate:      
+        {     
+            clmCode: "Code",     
+            clmName: "Nom",     
+            clmPrice: "Ancien Prix",     
+            clmPrice2: "Nouveau Prix",   
+            clmSalePrice :"Prix de Vente",  
+            clmMargin : "Marge" ,
+            clmCostPrice : "Coût", 
+        },
+        msgPriceDateUpdate :
+        {
+            msg : "Değişmeyen Fiyatların Tarihlerini Güncellemek İstiyormusunuz? ",  // BAK
+            btn01 : "Evet",  // BAK
+            btn02 : "Hayır",  // BAK
+            title : "Dikkat"  // BAK
         },
         pg_txtBarcode : 
         {
@@ -4212,9 +4237,9 @@ export const langFr =
             clmCuser :"Utilisateur",
             clmVatRate : "TVA %",
             clmOrigin : "Origine",
-            clmSubQuantity : "Qtt. Unitaire",   // BAK
-            clmSubPrice : "Prix Unitaire",   // BAK
-            clmSubFactor : "Coefficient", // BAK
+            clmSubQuantity : "Quantité unitaire",  
+            clmSubPrice : "Prix unitaire", 
+            clmSubFactor : "Coefficient", 
         },
         grdInvoicePayment: 
         {
@@ -4232,7 +4257,7 @@ export const langFr =
         {
             title: "Télécharger Document",
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
-            chkDocDiscount : "Evrak İndirimi Olarak Uygula", // BAK
+            chkDocDiscount : "Appliquer la remise sur le total général",
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -4244,7 +4269,7 @@ export const langFr =
         {
             title: "Veuillez Saisir MDP Administrateur pour Accès au Document ",
             Password : "Mot de passe",
-            btnApprove : "Valide"
+            btnApprove : "Valider"
         },
         msgDocValid:
         {
@@ -4756,7 +4781,7 @@ export const langFr =
         {
             title: "Télécharger Document",
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
-            chkDocDiscount : "Evrak İndirimi Olarak Uygula", // BAK
+            chkDocDiscount : "Appliquer la remise sur le total général",
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -4768,7 +4793,7 @@ export const langFr =
         {
             title: "Veuillez Saisir MDP Administrateur pour Acces au Document ",
             Password : "Mot de passe",
-            btnApprove : "Valide"
+            btnApprove : "Valider"
         },
         msgDocValid:
         {
@@ -5210,7 +5235,7 @@ export const langFr =
         {
             title: "Télécharger Document",
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
-            chkDocDiscount : "Evrak İndirimi Olarak Uygula", // BAK
+            chkDocDiscount : "Appliquer la remise sur le total général",
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -5222,7 +5247,7 @@ export const langFr =
         {
             title: "Veuillez Saisir MDP Administrateur pour Accès au Document ",
             Password : "Mot de passe",
-            btnApprove : "Valide"
+            btnApprove : "Valider"
         },
         msgDocValid:
         {
@@ -5624,9 +5649,9 @@ export const langFr =
             clmDescription : "Motif",
             clmCuser :"Utilisateur",
             clmVatRate : "TVA %",
-            clmSubQuantity : "Qtt. Unitaire",   // BAK
-            clmSubPrice : "Prix Unitaire",   // BAK
-            clmSubFactor : "Coefficient", // BAK
+            clmSubQuantity : "Quantité unitaire",   
+            clmSubPrice : "Prix unitaire",  
+            clmSubFactor : "Coefficient", 
         },
         grdInvoicePayment: 
         {
@@ -5644,7 +5669,7 @@ export const langFr =
         {
             title: "Télécharger Document",
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
-            chkDocDiscount : "Evrak İndirimi Olarak Uygula", // BAK
+            chkDocDiscount : "Appliquer la remise sur le total général", 
             Percent1 : "1. Remise % ", 
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -5656,7 +5681,7 @@ export const langFr =
         {
             title: "Veuillez Saisir MDP Administrateur pour Acces au Document ",
             Password : "Mot de passe",
-            btnApprove : "Valide"
+            btnApprove : "Valider"
         },
         msgDocValid:
         {
@@ -6102,7 +6127,7 @@ export const langFr =
         {
             title: "Télécharger Document",
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
-            chkDocDiscount : "Evrak İndirimi Olarak Uygula", // BAK
+            chkDocDiscount : "Appliquer la remise sur le total général",
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -6114,7 +6139,7 @@ export const langFr =
         {
             title: "Veuillez Saisir MDP Administrateur pour Accès au Document ",
             Password : "Mot de passe",
-            btnApprove : "Valide"
+            btnApprove : "Valider"
         },
         msgDocValid:
         {
@@ -6509,7 +6534,7 @@ export const langFr =
         {
             title: "Télécharger Document",
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
-            chkDocDiscount : "Evrak İndirimi Olarak Uygula", // BAK
+            chkDocDiscount : "Appliquer la remise sur le total général",
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -6521,7 +6546,7 @@ export const langFr =
         {
             title: "Veuillez Saisir MDP Administrateur pour Accès au Document ",
             Password : "Mot de passe",
-            btnApprove : "Valide"
+            btnApprove : "Valider"
         },
         msgDocValid:
         {
@@ -6920,9 +6945,9 @@ export const langFr =
             clmDescription : "Motif",
             clmCuser :"Utilisateur",
             clmVatRate : "TVA %",
-            clmSubQuantity : "Qtt. Unitaire",   // BAK
-            clmSubPrice : "Prix Unitaire",   // BAK
-            clmSubFactor : "Coefficient", // BAK
+            clmSubQuantity : "Quantité unitaire",   
+            clmSubPrice : "Prix unitaire",  
+            clmSubFactor : "Coefficient", 
         },
         grdInvoicePayment: 
         {
@@ -6940,7 +6965,7 @@ export const langFr =
         {
             title: "Télécharger Document",
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
-            chkDocDiscount : "Evrak İndirimi Olarak Uygula", // BAK
+            chkDocDiscount : "Appliquer la remise sur le total général",
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -6952,7 +6977,7 @@ export const langFr =
         {
             title: "Veuillez Saisir MDP Administrateur pour Acces au Document ",
             Password : "Mot de passe",
-            btnApprove : "Valide"
+            btnApprove : "Valider"
         },
         msgDocValid:
         {
@@ -7391,7 +7416,7 @@ export const langFr =
         {
             title: "Télécharger Document",
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
-            chkDocDiscount : "Evrak İndirimi Olarak Uygula", // BAK
+            chkDocDiscount : "Appliquer la remise sur le total général",
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -7403,7 +7428,7 @@ export const langFr =
         {
             title: "Veuillez Saisir MDP Responsable pour Dévérouiller",
             Password : "MDP",
-            btnApprove : "Valide"
+            btnApprove : "Valider"
         },
         msgDocValid:
         {
@@ -7709,9 +7734,9 @@ export const langFr =
             clmDescription : "Motif",
             clmCuser :"Utilisateur",
             clmVatRate : "TVA %",
-            clmSubQuantity : "Qtt. Unitaire",   // BAK
-            clmSubPrice : "Prix Unitaire",   // BAK
-            clmSubFactor : "Coefficient", // BAK
+            clmSubQuantity : "Quantité unitaire", 
+            clmSubPrice : "Prix unitaire", 
+            clmSubFactor : "Coefficient",
         },
         grdInvoicePayment: 
         {
@@ -7729,7 +7754,7 @@ export const langFr =
         {
             title: "Télécharger Document",
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
-            chkDocDiscount : "Evrak İndirimi Olarak Uygula", // BAK
+            chkDocDiscount : "Appliquer la remise sur le total général", 
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -7741,7 +7766,7 @@ export const langFr =
         {
             title: "Veuillez Saisir MDP Administrateur pour Acces au Document ",
             Password : "Mot de passe",
-            btnApprove : "Valide"
+            btnApprove : "Valider"
         },
         msgDocValid:
         {
@@ -8149,7 +8174,7 @@ export const langFr =
         {
             title: "Télécharger Document",
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
-            chkDocDiscount : "Evrak İndirimi Olarak Uygula", // BAK
+            chkDocDiscount : "Appliquer la remise sur le total général", 
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -8161,7 +8186,7 @@ export const langFr =
         {
             title: "Veuillez Saisir MDP Administrateur pour Accès au Document ",
             Password : "Mot de passe",
-            btnApprove : "Valide"
+            btnApprove : "Valider"
         },
         msgDocValid:
         {
@@ -8402,14 +8427,39 @@ export const langFr =
             btn02: "Mettre prix sélectionné à jour ",     
             msg: "Veuillez sélectionner et mettre à jour les prix du fournisseur... "     
         },     
+        msgNewPriceDate : 
+        {
+            title: "Dikkat",  // BAK
+            btn01: "Hiç Birini Güncelleme",  // BAK
+            btn02: "Seçilen Fiyatları Güncelle",  // BAK
+            msg: "Lütfen Tarihlerini Güncellemek İsteidiğiniz Ürünleri Seçiniz.. "  // BAK
+        },
         grdNewPrice:      
         {     
             clmCode: "Code",     
             clmName: "Nom",     
             clmPrice: "Ancien Prix",     
-            clmPrice2: "Nouveau Prix",    
-            clmSalePrice :"Prix de Vente", 
-            clmMargin : "Marge" 
+            clmPrice2: "Nouveau Prix",   
+            clmSalePrice :"Prix de Vente",  
+            clmMargin : "Marge" ,
+            clmCostPrice : "Coût", 
+        },
+        grdNewPriceDate:      
+        {     
+            clmCode: "Code",     
+            clmName: "Nom",     
+            clmPrice: "Ancien Prix",     
+            clmPrice2: "Nouveau Prix",   
+            clmSalePrice :"Prix de Vente",  
+            clmMargin : "Marge" ,
+            clmCostPrice : "Coût", 
+        },
+        msgPriceDateUpdate :
+        {
+            msg : "Değişmeyen Fiyatların Tarihlerini Güncellemek İstiyormusunuz? ",  // BAK
+            btn01 : "Evet",  // BAK
+            btn02 : "Hayır",  // BAK
+            title : "Dikkat"  // BAK
         },
         pg_txtBarcode : 
         {
@@ -8614,7 +8664,7 @@ export const langFr =
         {
             title: "Télécharger Document",
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
-            chkDocDiscount : "Evrak İndirimi Olarak Uygula", // BAK
+            chkDocDiscount : "Appliquer la remise sur le total général", 
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -8626,7 +8676,7 @@ export const langFr =
         {
             title: "Veuillez Saisir MDP Administrateur pour Accès au Document ",
             Password : "Mot de passe",
-            btnApprove : "Valide"
+            btnApprove : "Valider"
         },
         msgDocValid:
         {
@@ -8941,9 +8991,9 @@ export const langFr =
             clmDescription : "Motif",
             clmCuser :"Utilisateur",
             clmVatRate : "TVA %",
-            clmSubQuantity : "Qtt. Unitaire",   // BAK
-            clmSubPrice : "Prix Unitaire",   // BAK
-            clmSubFactor : "Coefficient", // BAK
+            clmSubQuantity : "Quantité unitaire", 
+            clmSubPrice : "Prix unitaire", 
+            clmSubFactor : "Coefficient", 
         },
         grdInvoicePayment: 
         {
@@ -8961,7 +9011,7 @@ export const langFr =
         {
             title: "Télécharger Document",
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
-            chkDocDiscount : "Evrak İndirimi Olarak Uygula", // BAK
+            chkDocDiscount : "Appliquer la remise sur le total général", 
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -8973,7 +9023,7 @@ export const langFr =
         {
             title: "Veuillez Saisir MDP Administrateur pour Accès au Document ",
             Password : "Mot de passe",
-            btnApprove : "Valide"
+            btnApprove : "Valider"
         },
         msgDocValid:
         {
@@ -9632,8 +9682,8 @@ export const langFr =
             clmVatRate : "TVA %", 
             clmMulticode : "FRN.Code", 
             clmOrigin : "Origine",
-            clmSubQuantity : "Qtt. Unitaire",  // BAK
-            clmSubPrice : "Prix Unitaire",  // BAK
+            clmSubQuantity : "Quantité unitaire", 
+            clmSubPrice : "Prix unitaire", 
             clmSubFactor : "Coefficient",
             clmDiffPrice : "Différence",
             clmCustomerPrice : "Prix F.",
@@ -9642,7 +9692,7 @@ export const langFr =
         {
             title: "Télécharger Document",
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
-            chkDocDiscount : "Evrak İndirimi Olarak Uygula", // BAK
+            chkDocDiscount : "Appliquer la remise sur le total général", 
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -9654,7 +9704,7 @@ export const langFr =
         {
             title: "Veuillez Saisir MDP Administrateur pour Accès au Document ",
             Password : "Mot de passe",
-            btnApprove : "Valide"
+            btnApprove : "Valider"
         },
         msgDocValid:
         {
@@ -9924,14 +9974,39 @@ export const langFr =
             btn02: "Mettre prix sélectionné à jour ",     
             msg: "Veuillez sélectionner et mettre à jour les prix du fournisseur... "     
         },     
+        msgNewPriceDate : 
+        {
+            title: "Dikkat",   // BAK
+            btn01: "Hiç Birini Güncelleme",   // BAK
+            btn02: "Seçilen Fiyatları Güncelle",   // BAK
+            msg: "Lütfen Tarihlerini Güncellemek İsteidiğiniz Ürünleri Seçiniz.. "   // BAK
+        },
         grdNewPrice:      
         {     
             clmCode: "Code",     
             clmName: "Nom",     
             clmPrice: "Ancien Prix",     
-            clmPrice2: "Nouveau Prix",    
-            clmSalePrice :"Prix de Vente", 
-            clmMargin : "Marge" 
+            clmPrice2: "Nouveau Prix",   
+            clmSalePrice :"Prix de Vente",  
+            clmMargin : "Marge" ,
+            clmCostPrice : "Coût", 
+        },
+        grdNewPriceDate:      
+        {     
+            clmCode: "Code",     
+            clmName: "Nom",     
+            clmPrice: "Ancien Prix",     
+            clmPrice2: "Nouveau Prix",   
+            clmSalePrice :"Prix de Vente",  
+            clmMargin : "Marge" ,
+            clmCostPrice : "Coût", 
+        },
+        msgPriceDateUpdate :
+        {
+            msg : "Değişmeyen Fiyatların Tarihlerini Güncellemek İstiyormusunuz? ",  // BAK
+            btn01 : "Evet",  // BAK
+            btn02 : "Hayır",  // BAK
+            title : "Dikkat"  // BAK
         },
     },
     irs_02_002 : // Satış İrsaliyesi"
@@ -10009,15 +10084,15 @@ export const langFr =
             clmVatRate : "TVA %",
             clmBarcode : "Code Barre",
             clmOrigin : "Origine",
-            clmSubQuantity : "Qtt. Unitaire",  // BAK
-            clmSubPrice : "Prix Unitaire",  // BAK
-            clmSubFactor : "Coefficient", // BAK
+            clmSubQuantity : "Quantité unitaire",
+            clmSubPrice : "Prix unitaire", 
+            clmSubFactor : "Coefficient", 
         },
         popDiscount : 
         {
             title: "Télécharger Document",
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
-            chkDocDiscount : "Evrak İndirimi Olarak Uygula", // BAK
+            chkDocDiscount : "Appliquer la remise sur le total général",
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -10029,7 +10104,7 @@ export const langFr =
         {
             title: "Veuillez Saisir MDP Administrateur pour Acces au Document ",
             Password : "Mot de passe",
-            btnApprove : "Valide"
+            btnApprove : "Valider"
         },
         msgDocValid:
         {
@@ -10410,7 +10485,7 @@ export const langFr =
         {
             title: "Télécharger Document",
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
-            chkDocDiscount : "Evrak İndirimi Olarak Uygula", // BAK
+            chkDocDiscount : "Appliquer la remise sur le total général",
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -10422,7 +10497,7 @@ export const langFr =
         {
             title: "Veuillez Saisir MDP Administrateur pour Accès au Document ",
             Password : "Mot de passe",
-            btnApprove : "Valide"
+            btnApprove : "Valider"
         },
         msgDocValid:
         {
@@ -10721,15 +10796,15 @@ export const langFr =
             clmOrder : "Commande No", 
             clmVatRate : "TVA %",
             clmBarcode : "Code Barre",
-            clmSubQuantity : "Qtt. Unitaire",  // BAK
-            clmSubPrice : "Prix Unitaire",  // BAK
-            clmSubFactor : "Coefficient", // BAK
+            clmSubQuantity : "Quantité unitaire",
+            clmSubPrice : "Prix unitaire",  
+            clmSubFactor : "Coefficient",
         },
         popDiscount : 
         {
             title: "Télécharger Document",
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
-            chkDocDiscount : "Evrak İndirimi Olarak Uygula", // BAK
+            chkDocDiscount : "Appliquer la remise sur le total général", 
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -10741,7 +10816,7 @@ export const langFr =
         {
             title: "Veuillez Saisir MDP Administrateur pour Accès au Document ",
             Password : "Mot de passe",
-            btnApprove : "Valide"
+            btnApprove : "Valider"
         },
         msgDocValid:
         {
@@ -11104,7 +11179,7 @@ export const langFr =
         {
             title: "Télécharger Document",
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
-            chkDocDiscount : "Evrak İndirimi Olarak Uygula", // BAK
+            chkDocDiscount : "Appliquer la remise sur le total général", 
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -11116,7 +11191,7 @@ export const langFr =
         {
             title: "Veuillez Saisir MDP Administrateur pour Accès au Document ",
             Password : "Mot de passe",
-            btnApprove : "Valide"
+            btnApprove : "Valider"
         },
         msgDocValid:
         {
@@ -11401,15 +11476,15 @@ export const langFr =
             clmOrder : "Commande No", 
             clmVatRate : "TVA %",
             clmBarcode : "Code Barre",
-            clmSubQuantity : "Qtt. Unitaire",  // BAK
-            clmSubPrice : "Prix Unitaire",  // BAK
-            clmSubFactor : "Coefficient", // BAK
+            clmSubQuantity : "Quantité unitaire", 
+            clmSubPrice : "Prix unitaire", 
+            clmSubFactor : "Coefficient", 
         },
         popDiscount : 
         {
             title: "Télécharger Document",
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
-            chkDocDiscount : "Evrak İndirimi Olarak Uygula", // BAK
+            chkDocDiscount : "Appliquer la remise sur le total général",
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -11421,7 +11496,7 @@ export const langFr =
         {
             title: "Veuillez Saisir MDP Administrateur pour Accès au Document ",
             Password : "Mot de passe",
-            btnApprove : "Valide"
+            btnApprove : "Valider"
         },
         msgDocValid:
         {
@@ -11855,7 +11930,7 @@ export const langFr =
         {
             title: "Télécharger Document",
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
-            chkDocDiscount : "Evrak İndirimi Olarak Uygula", // BAK
+            chkDocDiscount : "Appliquer la remise sur le total général",
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -11867,7 +11942,7 @@ export const langFr =
         {
             title: "Veuillez Saisir MDP Administrateur pour Accès au Document ",
             Password : "Mot de passe",
-            btnApprove : "Valide"
+            btnApprove : "Valider"
         },
         popDesign : 
         {
@@ -12205,7 +12280,7 @@ export const langFr =
         {
             title: "Télécharger Document",
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
-            chkDocDiscount : "Evrak İndirimi Olarak Uygula", // BAK
+            chkDocDiscount : "Appliquer la remise sur le total général",
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -12217,7 +12292,7 @@ export const langFr =
         {
             title: "Veuillez Saisir MDP Administrateur pour Accès au Document ",
             Password : "Mot de passe",
-            btnApprove : "Valide"
+            btnApprove : "Valider"
         },
         msgDocValid:
         {
@@ -12705,7 +12780,7 @@ export const langFr =
         txtName : "Nom",
         startDate :"Date Début",    
         finishDate : "Date Fin",    
-        docDate : "Tarih", //BAK
+        docDate : "Date", 
         msgMissItemCode:    
         {    
             title: "Attention",    
@@ -12896,7 +12971,7 @@ export const langFr =
         txtName : "Nom",
         startDate :"Date Début",   
         finishDate : "Date Fin",   
-        docDate : "Tarih", //BAK
+        docDate : "Date", 
         msgMissItemCode:   
         {   
             title: "Attention",   
@@ -14048,23 +14123,23 @@ export const langFr =
             design : "Design" ,
             lang : "Langue Document" 
         },
-        btnMailSend : "Mail Gönder",  // BAK
+        btnMailSend : "Envoyer E-mail",  
         mailPopup : 
         {
-            title : "Mail Adresi Girişi"  // BAK
+            title : "Saisie d'adresse E-mail"  
         },
         msgFacture:
         {
-            title: "Dikkat",   // BAK
-            btn01: "Tamam",   // BAK
-            btn02: "İptal",   // BAK
-            msg: "Seçtiğiniz Fişler Faturaya Çevirilecektir! Onaylıyormusunuz ?"   // BAK
+            title: "Attention",   
+            btn01: "OK",   
+            btn02: "Annuler",  
+            msg: "Les tickets choisis vont être convertis en facture, êtes-vous sûr ?" 
         },
         msgFactureCustomer:
         {  
-            title: "Dikkat",  // BAK
-            btn01: "Tamam",  // BAK
-            msg: "Müşteri tanımlayanmamış fiş faturaya çevrilemez !"  // BAK
+            title: "Attention",  
+            btn01: "Ok", 
+            msg: "Une facture ne peut pas être établie si vous ne choissisez pas de client pour le ticket" 
         },
     },
     pos_02_002 : // "Müşteri Puanı Raporu"
@@ -14386,39 +14461,39 @@ export const langFr =
     },
     pos_02_010 : // "Ürün Detaylı Satış Raporu"
     {
-        btnGet :"Getir", // BAK
+        btnGet :"Apporter", 
         grdListe : 
         {
-            clmCode: "Kodu",  // BAK
-            clmName : "Adı",             // BAK
-            clmQuantity : "Miktar",  // BAK
-            clmAmount : "Tutar",  // BAK
-            clmVat : "Vergi",  // BAK
-            clmTotal : "Toplam",  // BAK
+            clmCode: "Code", 
+            clmName : "Nom",             
+            clmQuantity : "Quantité",  
+            clmAmount : "Total", 
+            clmVat : "Taxe",  
+            clmTotal : "Montant total",  
         },
     },
     pos_02_011 : // "Ürün Kıyas Raporu"
     {
-        btnGet :"Getir",  // BAK
-        dtDate : "Tarih",  // BAK
-        txtRef : "Ürün",  // BAK
+        btnGet :"Apporter", 
+        dtDate : "Date",  
+        txtRef : "Produit", 
         grdListe : 
         { 
-            clmCode : "Ürün Kodu", // BAK
-            clmName: "Ürün Adı", // BAK
-            clmTotalCost: "Toplam Maliyet", // BAK
-            clmFamount : "Vergisiz Tutar", // BAK
-            clmVat : "Vergi Tutarı", // BAK
-            clmTotal : "Toplam Tutar", // BAK
-            clmRestTotal : "Vergisiz Toplam Kar", // BAK
-            clmMargin : "Marj", // BAK
+            clmCode : "Code produit", 
+            clmName: "Nom du produit", 
+            clmTotalCost: "Coût total", 
+            clmFamount : "Montant hors taxe", 
+            clmVat : "Montant avec taxe", 
+            clmTotal : "Montant total",
+            clmRestTotal : "Bénéfice total sans taxe", 
+            clmMargin : "Marge", 
         },
         pg_txtRef:
         {
-            title: "Ürün Seçim",  // BAK
-            clmCode: "KODU",  // BAK
-            clmName: "ADI",   // BAK
-            clmStatus : "DURUM"  // BAK
+            title: "Choix de produit", 
+            clmCode: "Code", 
+            clmName: "Nom",  
+            clmStatus : "Etat"  
         },
     },
     pos_03_001 : // "Gün sonu"
@@ -14467,7 +14542,7 @@ export const langFr =
             msg :"Veuillez entrer le montant du fond de caisse …"   
         },
         txtPopAdvance :"Total",
-        btnPopAdd : "Valide",
+        btnPopAdd : "Valider",
         grdAdvance : 
         {
             clmUser : 'Utilisateur',
@@ -14648,7 +14723,7 @@ export const langFr =
         {
             title: "Télécharger Document",
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
-            chkDocDiscount : "Evrak İndirimi Olarak Uygula", // BAK
+            chkDocDiscount : "Appliquer la remise sur le total général",
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -14660,7 +14735,7 @@ export const langFr =
         {
             title: "Veuillez Saisir MDP Administrateur pour Acces au Document ",
             Password : "Mot de passe",
-            btnApprove : "Valide"
+            btnApprove : "Valider"
         },
         popDesign : 
         {
@@ -14962,7 +15037,7 @@ export const langFr =
         {
             title: "Télécharger Document",
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
-            chkDocDiscount : "Evrak İndirimi Olarak Uygula", // BAK
+            chkDocDiscount : "Appliquer la remise sur le total général", 
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -15379,241 +15454,241 @@ export const langFr =
     },
     slsRpt_01_001 : // "Ürün Grubu Raporu"
     {
-        chkZeroBalance : "Afficher Soldes 0",  // BAK
-        txtCustomerCode : "Client",  // BAK
-        btnCheck : "Actif",  // BAK
-        btnGet :"Rechercher",  // BAK
+        chkZeroBalance : "Afficher Soldes 0", 
+        txtCustomerCode : "Client",  
+        btnCheck : "Actif", 
+        btnGet :"Rechercher",  
         grdListe : 
         {
-            clmCode: "Code",  // BAK
-            clmName : "Nom",             // BAK
-            clmOrders : "Commande",  // BAK
-            clmDispatch : "Bon de Livrasion",  // BAK
-            clmInvoice : "Facture",  // BAK
-            clmCollection : "Reglement", // BAK
+            clmCode: "Code", 
+            clmName : "Nom",            
+            clmOrders : "Commande", 
+            clmDispatch : "Bon de Livrasion",  
+            clmInvoice : "Facture",  
+            clmCollection : "Réglement", 
         },
     },
     slsRpt_01_002 : // "Ürün Grubu Raporu"
     {
-        btnGet :"Rechercher",  // BAK
-        txtAmount : "Total",  // BAK
-        txtTotalTicket : "Nombre Total de Documents",  // BAK
-        txtTicketAvg : "Montant Moyen des Documents",  // BAK
-        txtTotalCost : "Coût Total",  // BAK
-        txtFamount : "Total HT",  // BAK
-        txtVat : "Total TVA",  // BAK
-        txtRestTotal : "Bénéfice Total Net",  // BAK
-        btnGetAnalysis : "Voir Graphique",  // BAK
+        btnGet :"Rechercher",  
+        txtAmount : "Total", 
+        txtTotalTicket : "Nombre Total de Documents", 
+        txtTicketAvg : "Montant Moyen des Documents", 
+        txtTotalCost : "Coût Total", 
+        txtFamount : "Total HT",  
+        txtVat : "Total TVA",  
+        txtRestTotal : "Bénéfice Total Net",  
+        btnGetAnalysis : "Voir Graphique",
         grdGroupSalesReport: 
         {
-            clmGrpCode : "Code Groupe Produit",  // BAK
-            clmGrpName: "Nom Groupe Produit",  // BAK
-            clmTotalCost: "Coût Total",  // BAK
-            clmFamount : "Total HT",  // BAK
-            clmVat : "Total TVA",  // BAK
-            clmTotal : "Montant Total",  // BAK
-            clmRestTotal : "Total Bénéfice HT"  // BAK
+            clmGrpCode : "Code Groupe Produit",  
+            clmGrpName: "Nom Groupe Produit",  
+            clmTotalCost: "Coût Total", 
+            clmFamount : "Total HT",  
+            clmVat : "Total TVA",  
+            clmTotal : "Montant Total",  
+            clmRestTotal : "Total Bénéfice HT"  
         },
         grpGrpDetail : 
         {
-            clmCode : "Code Produit",  // BAK
-            clmName : "Nom Produit",  // BAK
-            clmQuantity : "Montant",  // BAK
-            clmTotalCost :"Montant Total",  // BAK
-            clmFamount :"Total HT",  // BAK
-            clmVat : "Montant TVA",  // BAK
-            clmTotal : "Montant Total",  // BAK
-            clmRestTotal : "Total Bénéfice HT"  // BAK
+            clmCode : "Code Produit", 
+            clmName : "Nom Produit",  
+            clmQuantity : "Montant",  
+            clmTotalCost :"Montant Total", 
+            clmFamount :"Total HT",  
+            clmVat : "Montant TVA", 
+            clmTotal : "Montant Total",  
+            clmRestTotal : "Total Bénéfice HT" 
         },
         popGrpDetail : 
         {
-            title : "Rapport Vente" // BAK
+            title : "Rapport Vente"
         },
         popAnalysis : 
         {
-            title : "Graphique Vente" // BAK
+            title : "Graphique Vente"
         },
     },
     slsRpt_01_003 : // "Tarih sıralı satış raporu"
     {
-        chkZeroBalance : "Afficher Soldes O",    // BAK
-        txtCustomerCode : "Fournisseur ou Client",    // BAK
-        btnCheck : "Actif",    // BAK
-        btnGet :"Rechercher",    // BAK
-        grdListe :     // BAK
+        chkZeroBalance : "Afficher Soldes O",    
+        txtCustomerCode : "Fournisseur ou Client", 
+        btnCheck : "Actif",  
+        btnGet :"Rechercher", 
+        grdListe :    
         {  
-            clmDate : "Date",    // BAK
-            clmCode: "Code",    // BAK
-            clmName : "Nom",               // BAK
-            clmAmount : "Montant",    // BAK
-            clmDiscount : "Remise",    // BAK
-            clmTotalHt : "Prix HT",    // BAK
-            clmVat : "TVA",    // BAK
-            clmTotal : "TOTAL",    // BAK
-            clmRef : "Réf.-Réf no", // BAK
+            clmDate : "Date",    
+            clmCode: "Code",   
+            clmName : "Nom",              
+            clmAmount : "Montant",    
+            clmDiscount : "Remise",    
+            clmTotalHt : "Prix HT",    
+            clmVat : "TVA",    
+            clmTotal : "TOTAL",   
+            clmRef : "Réf.-Réf no", 
         },
     },
     slsRpt_01_004 : // "Tarih sıralı satış raporu"
     {
-        chkZeroBalance : "Afficher Soldes 0", // BAK
-        txtCustomerCode : "Fournisseur ou Client", // BAK
-        btnCheck : "Actif", // BAK
-        btnGet :"Rechercher", // BAK
-        grdListe :  // BAK
-        { // BAK
-            clmDate : "Date", // BAK
-            clmTotalHt: "Total HT", // BAK
-            clmName : "Nom",            // BAK
-            clmTotal : "Total", // BAK
+        chkZeroBalance : "Afficher Soldes 0",
+        txtCustomerCode : "Fournisseur ou Client", 
+        btnCheck : "Actif", 
+        btnGet :"Rechercher", 
+        grdListe :  
+        { 
+            clmDate : "Date", 
+            clmTotalHt: "Total HT",
+            clmName : "Nom",          
+            clmTotal : "Total",
         },
     },
     slsRpt_01_005 : // "Ürün Satış ve İade raporu"
     {
-        chkZeroBalance : "0 Bakiyeler Gösterilsin",  // BAK
-        txtItemCode : "Ürün Seçimi",  // BAK
-        btnGet :"Getir",  // BAK
+        chkZeroBalance : "Afficher soldes 0",  
+        txtItemCode : "Choix de produit", 
+        btnGet :"Apporter",  
         grdListe : 
         {
-            clmCode : "Müşteri Kodu",   // BAK
-            clmName: "Müşteri Adı",   // BAK
-            clmDispatch : "İrsaliye Miktarı",              // BAK
-            clmInvoice : "Fatura Miktarı",   // BAK
-            clmRebate : "İade Miktarı"   // BAK
+            clmCode : "Code client",  
+            clmName: "Nom du client",   
+            clmDispatch : "Montant du ticket",            
+            clmInvoice : "Montant de la facture", 
+            clmRebate : "Montant du retour" 
         },
         pg_txtItemCode : 
         {
-            title : "STOK Seçimi", // BAK
-            clmCode :  "STOK KODU", // BAK
-            clmName : "STOK ADI", // BAK
+            title : "Choix du stock", 
+            clmCode :  "Code stock", 
+            clmName : "Nom stock",
         },
-        validCode : "Lütfen Stok Seçin"  // BAK
+        validCode : "S'il vous plaît , choissisez un stock" 
     },
     slsRpt_01_006 : // "Cari Bazlı satış ve iade raporu"
     {
-        chkZeroBalance : "0 Bakiyeler Gösterilsin",  // BAK
-        txtCustomerCode : "Müşteri Seçimi",  // BAK
-        btnGet :"Getir",  // BAK
+        chkZeroBalance : "Afficher soldes 0",  
+        txtCustomerCode : "Choix de client",  
+        btnGet :"Apporter", 
         grdListe : 
         {
-            clmCode : "Stok Kodu",   // BAK
-            clmName: "Stok Adı",   // BAK
-            clmDispatch : "İrsaliye Miktarı",              // BAK
-            clmInvoice : "Fatura Miktarı",   // BAK
-            clmRebate : "İade Miktarı"   // BAK
+            clmCode : "Code stock",  
+            clmName: "Nom stock", 
+            clmDispatch : "Montant du ticket",             
+            clmInvoice : "Montant de la facture",  
+            clmRebate : "Montant du retour"   
         },
         pg_txtCustomerCode : 
         {
-            title : "Cari Seçimi",  // BAK
-            clmCode :  "CARİ KODU",  // BAK
-            clmTitle : "CARİ ADI",  // BAK
-            clmTypeName : "TİPİ",  // BAK
-            clmGenusName : "CİNSİ"  // BAK
+            title : "Choix actuel",  
+            clmCode :  "Code actuel",  
+            clmTitle : "Nom actuel",  
+            clmTypeName : "Type",  
+            clmGenusName : "Race" 
         },
-        validCode : "Lütfen Müşteri Seçin" // BAK
+        validCode : "S'il vous plaît, choisissez un client!"
     },
     slsRpt_01_007 : // "İade Fatura raporu"
     {
-        chkZeroBalance : "0 Bakiyeler Gösterilsin", // BAK
-        txtItemCode : "Ürün Seçimi", // BAK
-        btnGet :"Getir", // BAK
+        chkZeroBalance : "Afficher soldes 0",
+        txtItemCode : "Choix du produit", 
+        btnGet :"Apporter", 
         grdListe : 
         {
-            clmDate : "Tarih",   // BAK
-            clmCode: "Kodu",   // BAK
-            clmName : "Adı",              // BAK
-            clmAmount : "Tutar",   // BAK
-            clmDiscount : "İndirim",   // BAK
-            clmTotalHt : "Vergisiz Fiyat",   // BAK
-            clmVat : "Vergi",   // BAK
-            clmTotal : "Toplam",   // BAK
-            clmRef : "Seri-Sıra"   // BAK
+            clmDate : "Date",   
+            clmCode: "Code",   
+            clmName : "Nom",            
+            clmAmount : "Montant",   
+            clmDiscount : "Remise",  
+            clmTotalHt : "Montant hors taxe",  
+            clmVat : "Taxe",   
+            clmTotal : "Montant total",  
+            clmRef : "Série-ligne" 
         },
         pg_txtItemCode : 
         {
-            title : "STOK Seçimi",  // BAK
-            clmCode :  "STOK KODU",  // BAK
-            clmName : "STOK ADI",  // BAK
+            title : "Choix du stock", 
+            clmCode :  "Code stock",  
+            clmName : "Nom stock",  
         },
-        validCode : "Lütfen Stok Seçin" // BAK
+        validCode : "S'il vous plaît, choisissez un client!" 
     },
     slsRpt_01_008 : // "Ürün Detaylı Satış Raporu"
     {
-        btnGet :"Getir", // BAK
+        btnGet :"Apporter", 
         grdListe :
         {
-            clmCode: "Kodu",  // BAK
-            clmName : "Adı",             // BAK
-            clmQuantity : "Miktar",  // BAK
-            clmAmount : "Tutar",  // BAK
-            clmVat : "Vergi",  // BAK
-            clmTotal : "Toplam",  // BAK
+            clmCode: "Code",  
+            clmName : "Nom",             
+            clmQuantity : "Quantité", 
+            clmAmount : "Montant",  
+            clmVat : "Taxe",  
+            clmTotal : "Montant total",  
         },
     },
     slsRpt_02_001 : // "Tarih sıralı Alış raporu"
     {
-        chkZeroBalance : "Afficher Soldes 0",    // BAK
-        txtCustomerCode : "Fournisseur ou Client",    // BAK
-        btnCheck : "Actif",    // BAK
-        btnGet :"Rechercher",    // BAK
-        grdListe :     // BAK
+        chkZeroBalance : "Afficher Soldes 0",    
+        txtCustomerCode : "Fournisseur ou Client",   
+        btnCheck : "Actif",    
+        btnGet :"Rechercher",   
+        grdListe :    
         {  
-            clmDate : "Date",  // BAK
-            clmCode: "Code",  // BAK
-            clmName : "Nom",  // BAK
-            clmAmount : "Montant",    // BAK
-            clmDiscount : "Remise",    // BAK
-            clmTotalHt : "Prix HT",    // BAK
-            clmVat : "TVA",    // BAK
-            clmTotal : "Total",    // BAK
-            clmRef : "Réf.-Réf no", // BAK
+            clmDate : "Date",  
+            clmCode: "Code",  
+            clmName : "Nom",  
+            clmAmount : "Montant",    
+            clmDiscount : "Remise",   
+            clmTotalHt : "Prix HT",   
+            clmVat : "TVA",    
+            clmTotal : "Total",    
+            clmRef : "Réf.-Réf no", 
         },
     },
     slsRpt_02_002 : // "DEB raporu"
     {
-        chkZeroBalance : "Afficher Soldes 0",      // BAK
-        txtCustomerCode : "Fournisseur ou Client",      // BAK
-        btnCheck : "Actif",      // BAK
-        btnGet :"Rechercher",      // BAK
-        grdListe :       // BAK
+        chkZeroBalance : "Afficher Soldes 0",      
+        txtCustomerCode : "Fournisseur ou Client",     
+        btnCheck : "Actif",      
+        btnGet :"Rechercher",     
+        grdListe :       
         {    
-            clmAdress : "Adresse",      // BAK
-            clmCode: "Code",      // BAK
-            clmName : "Nom",                 // BAK
-            clmTotalHt : "Fac Total HT",  
-            clmKg : "Kilogram",      // BAK
+            clmAdress : "Adresse",     
+            clmCode: "Code",      
+            clmName : "Nom",                
+            clmTotalHt : "Total HT",  
+            clmKg : "kilogramme",      
         },
     },
     slsRpt_02_003 : // "DEB raporu"
     {
-        chkZeroBalance : "0 Bakiyeler Gösterilsin",    // BAK
-        txtCustomerCode : "Cari",    // BAK
-        btnCheck : "Aktif",    // BAK
-        btnGet :"Getir",    // BAK
+        chkZeroBalance : "Afficher soldes 0", 
+        txtCustomerCode : "Actuel",   
+        btnCheck : "Actif",    
+        btnGet :"Apporter",  
         grdListe :    
         {   
-            clmRef: "Fatura Seri",   // BAK
-            clmRefNo : "Fatura Sıra",   // BAK
-            clmDocDate : "Fatura Tarihi",   // BAK
-            clmOutputCode : "Teadrikçi Kodu",   // BAK
-            clmOutputName : "Tedarikçi Adı",   // BAK
-            clmQuantity : "Miktar",      // BAK
-            clmCode: "Kodu",      // BAK
-            clmName : "Adı",                 // BAK
-            clmAmount : "Vergi Tutarı",      // BAK
-            clmLitre : "Birim Litre"   // BAK
+            clmRef: "Colonne facture",   
+            clmRefNo : "Ligne facture",  
+            clmDocDate : "Date de facture",   
+            clmOutputCode : "Code fournisseur",   
+            clmOutputName : "Nom fournisseur", 
+            clmQuantity : "Quantité",    
+            clmCode: "Code",     
+            clmName : "Nom",               
+            clmAmount : "Montant de la taxe",     
+            clmLitre : "Unité litre" 
         },
     },
     slsRpt_02_004 : // "Ürün Detaylı Alış Raporu"
     {
-        btnGet :"Getir", // BAK
+        btnGet :"Apporter", 
         grdListe :
         {
-            clmCode: "Kodu",  // BAK
-            clmName : "Adı",             // BAK
-            clmQuantity : "Miktar",  // BAK
-            clmAmount : "Tutar",  // BAK
-            clmVat : "Vergi",  // BAK
-            clmTotal : "Toplam",  // BAK
+            clmCode: "Code", 
+            clmName : "Nom",             
+            clmQuantity : "Quantité",  
+            clmAmount : "Montant",  
+            clmVat : "Taxe",  
+            clmTotal : "Montant total", 
         },
     },
 }
