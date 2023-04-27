@@ -1661,8 +1661,11 @@ export default class purchaseInvoice extends React.PureComponent
                                 let tmpMargin = tmpExVat - tmpItemData[0].PRICE;
                                 let tmpMarginRate = ((tmpMargin / tmpItemData[0].PRICE)) * 100
                                 tmpItemData[0].PRICE_MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
+                                let tmpNetExVat = tmpData.result.recordset[0].SALE_PRICE / ((tmpItemData[0].VAT_RATE / 100) + 1)
+                                let tmpNetMargin = (tmpNetExVat - tmpItemData[0].PRICE) / 1.15;
+                                let tmpNetMarginRate = (((tmpNetMargin / tmpItemData[0].PRICE))) * 100
+                                tmpItemData[0].NET_MARGIN = tmpNetMargin.toFixed(2) + "€ / %" +  tmpNetMarginRate.toFixed(2); 
                                 tmpItemData[0].CUSTOMER_PRICE_GUID = tmpData.result.recordset[0].CUSTOMER_PRICE_GUID
-                                console.log(tmpItemData[0])
                                 this.newPrice.push(tmpItemData[0])
                             } 
                         }
@@ -4734,6 +4737,10 @@ export default class purchaseInvoice extends React.PureComponent
                                         let tmpMargin = tmpExVat -  e.key.PRICE;
                                         let tmpMarginRate = ((tmpMargin /  e.key.PRICE)) * 100
                                         e.key.PRICE_MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
+                                        let tmpNetExVat = e.key.SALE_PRICE / ((e.key.VAT_RATE / 100) + 1)
+                                        let tmpNetMargin = (tmpNetExVat - e.key.PRICE) / 1.15;
+                                        let tmpNetMarginRate = (((tmpNetMargin / e.key.PRICE) )) * 100
+                                        e.key.NET_MARGIN = tmpNetMargin.toFixed(2) + "€ / %" +  tmpNetMarginRate.toFixed(2); 
                                     }}
                                     >
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
@@ -4746,6 +4753,7 @@ export default class purchaseInvoice extends React.PureComponent
                                         <Column dataField="PRICE" caption={this.t("grdNewPrice.clmPrice2")} dataType={'number'} width={70}  allowEditing={false}/>
                                         <Column dataField="SALE_PRICE" caption={this.t("grdNewPrice.clmSalePrice")} dataType={'number'} width={80}  format={{ style: "currency", currency: "EUR",precision: 2}}/>
                                         <Column dataField="PRICE_MARGIN" caption={this.t("grdNewPrice.clmMargin")}width={100}  allowEditing={false}/>
+                                        <Column dataField="NET_MARGIN" caption={this.t("grdNewPrice.clmNetMargin")}width={100}  allowEditing={false}/>
                                     </NdGrid>
                                     </Item>
                                 </Form>
@@ -4791,6 +4799,10 @@ export default class purchaseInvoice extends React.PureComponent
                                         let tmpMargin = tmpExVat -  e.key.PRICE;
                                         let tmpMarginRate = ((tmpMargin /  e.key.PRICE)) * 100
                                         e.key.PRICE_MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
+                                        let tmpNetExVat = e.key.SALE_PRICE / ((e.key.VAT_RATE / 100) + 1)
+                                        let tmpNetMargin = (tmpNetExVat - e.key.PRICE) / 1.15;
+                                        let tmpNetMarginRate = (((tmpNetMargin / e.key.PRICE) )) * 100
+                                        e.key.NET_MARGIN = tmpNetMargin.toFixed(2) + "€ / %" +  tmpNetMarginRate.toFixed(2); 
                                     }}
                                     >
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
@@ -4800,6 +4812,9 @@ export default class purchaseInvoice extends React.PureComponent
                                         <Column dataField="ITEM_NAME" caption={this.t("grdNewPriceDate.clmName")} width={180}  allowEditing={false}/>
                                         <Column dataField="COST_PRICE" caption={this.t("grdNewPriceDate.clmCostPrice")} width={130}   allowEditing={false}/>
                                         <Column dataField="CUSTOMER_PRICE" caption={this.t("grdNewPriceDate.clmPrice")} width={130}   allowEditing={false}/>
+                                        <Column dataField="SALE_PRICE" caption={this.t("grdNewPriceDate.clmSalePrice")} width={130}   allowEditing={false}/>
+                                        <Column dataField="PRICE_MARGIN" caption={this.t("grdNewPriceDate.clmMargin")} width={130}   allowEditing={false}/>
+                                        <Column dataField="NET_MARGIN" caption={this.t("grdNewPriceDate.clmNetMargin")}width={100}  allowEditing={false}/>
                                     </NdGrid>
                                     </Item>
                                 </Form>

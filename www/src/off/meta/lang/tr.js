@@ -3983,8 +3983,9 @@ export const langTr =
             clmPrice: "Eski T. Fiyat",
             clmPrice2: "Yeni Fiyat",
             clmSalePrice :"Satış Fiyatı", 
-            clmMargin : "Marj",
-            clmCostPrice : "Maliyet Fiyatı"
+            clmMargin : "Brüt Marj",
+            clmCostPrice : "Maliyet Fiyatı",
+            clmNetMargin : "Net Marj"
         },
         grdNewPriceDate: 
         {
@@ -3993,8 +3994,9 @@ export const langTr =
             clmPrice: "Eski T. Fiyat",
             clmPrice2: "Yeni Fiyat",
             clmSalePrice :"Satış Fiyatı", 
-            clmMargin : "Marj",
-            clmCostPrice : "Maliyet Fiyatı"
+            clmMargin : "Brüt Marj",
+            clmCostPrice : "Maliyet Fiyatı",
+            clmNetMargin : "Net Marj"
         },
         msgPriceDateUpdate :
         {
@@ -8444,8 +8446,9 @@ export const langTr =
             clmPrice: "Eski T. Fiyat",
             clmPrice2: "Yeni Fiyat",
             clmSalePrice :"Satış Fiyatı", 
-            clmMargin : "Marj",
-            clmCostPrice : "Maliyet Fiyatı"
+            clmMargin : "Brüt Marj",
+            clmCostPrice : "Maliyet Fiyatı",
+            clmNetMargin : "Net Marj"
         },
         grdNewPriceDate: 
         {
@@ -8454,8 +8457,9 @@ export const langTr =
             clmPrice: "Eski T. Fiyat",
             clmPrice2: "Yeni Fiyat",
             clmSalePrice :"Satış Fiyatı", 
-            clmMargin : "Marj",
-            clmCostPrice : "Maliyet Fiyatı"
+            clmMargin : "Brüt Marj",
+            clmCostPrice : "Maliyet Fiyatı",
+            clmNetMargin : "Net Marj"
         },
         msgPriceDateUpdate :
         {
@@ -10014,8 +10018,9 @@ export const langTr =
             clmPrice: "Eski T. Fiyat",
             clmPrice2: "Yeni Fiyat",
             clmSalePrice :"Satış Fiyatı", 
-            clmMargin : "Marj",
-            clmCostPrice : "Maliyet Fiyatı"
+            clmMargin : "Brüt Marj",
+            clmCostPrice : "Maliyet Fiyatı",
+            clmNetMargin : "Net Marj"
         },
         grdNewPriceDate: 
         {
@@ -10024,8 +10029,9 @@ export const langTr =
             clmPrice: "Eski T. Fiyat",
             clmPrice2: "Yeni Fiyat",
             clmSalePrice :"Satış Fiyatı", 
-            clmMargin : "Marj",
-            clmCostPrice : "Maliyet Fiyatı"
+            clmMargin : "Brüt Marj",
+            clmCostPrice : "Maliyet Fiyatı",
+            clmNetMargin : "Net Marj"
         },
         msgPriceDateUpdate :
         {

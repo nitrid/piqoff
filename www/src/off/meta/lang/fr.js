@@ -3969,10 +3969,10 @@ export const langFr =
         },     
         msgNewPriceDate : 
         {
-            title: "Dikkat",  // BAK
-            btn01: "Hiç Birini Güncelleme",  // BAK
-            btn02: "Seçilen Fiyatları Güncelle",  // BAK
-            msg: "Lütfen Tarihlerini Güncellemek İsteidiğiniz Ürünleri Seçiniz.. "  // BAK
+            title: "Attention", 
+            btn01: "Ne pas mettre a jour", 
+            btn02: "Mettre à jour les produits sélectionnés", 
+            msg: "Veuillez choisir les produits où vous souhaitez mettre à jour la date. " 
         },
         grdNewPrice:      
         {     
@@ -3981,8 +3981,9 @@ export const langFr =
             clmPrice: "Ancien Prix",     
             clmPrice2: "Nouveau Prix",   
             clmSalePrice :"Prix de Vente",  
-            clmMargin : "Marge" ,
+            clmMargin : "Marge Nette",
             clmCostPrice : "Coût", 
+            clmNetMargin : "Marge Nette",
         },
         grdNewPriceDate:      
         {     
@@ -3991,15 +3992,16 @@ export const langFr =
             clmPrice: "Ancien Prix",     
             clmPrice2: "Nouveau Prix",   
             clmSalePrice :"Prix de Vente",  
-            clmMargin : "Marge" ,
+            clmMargin : "Marge Nette",
             clmCostPrice : "Coût", 
+            clmNetMargin : "Marge Nette",
         },
         msgPriceDateUpdate :
         {
-            msg : "Değişmeyen Fiyatların Tarihlerini Güncellemek İstiyormusunuz? ",  // BAK
-            btn01 : "Evet",  // BAK
-            btn02 : "Hayır",  // BAK
-            title : "Dikkat"  // BAK
+            msg : "Souhaitez-vous mettre à jour la date des produits où le prix d’achat reste inchangé ? ", 
+            btn01 : "Oui", 
+            btn02 : "Non", 
+            title : "Attention" 
         },
         pg_txtBarcode : 
         {
@@ -8429,10 +8431,10 @@ export const langFr =
         },     
         msgNewPriceDate : 
         {
-            title: "Dikkat",  // BAK
-            btn01: "Hiç Birini Güncelleme",  // BAK
-            btn02: "Seçilen Fiyatları Güncelle",  // BAK
-            msg: "Lütfen Tarihlerini Güncellemek İsteidiğiniz Ürünleri Seçiniz.. "  // BAK
+            title: "Attention", 
+            btn01: "Ne pas mettre a jour", 
+            btn02: "Mettre à jour les produits sélectionnés", 
+            msg: "Veuillez choisir les produits où vous souhaitez mettre à jour la date. " 
         },
         grdNewPrice:      
         {     
@@ -8441,8 +8443,9 @@ export const langFr =
             clmPrice: "Ancien Prix",     
             clmPrice2: "Nouveau Prix",   
             clmSalePrice :"Prix de Vente",  
-            clmMargin : "Marge" ,
+            clmMargin : "Marge Nette",
             clmCostPrice : "Coût", 
+            clmNetMargin : "Marge Nette",
         },
         grdNewPriceDate:      
         {     
@@ -8451,15 +8454,16 @@ export const langFr =
             clmPrice: "Ancien Prix",     
             clmPrice2: "Nouveau Prix",   
             clmSalePrice :"Prix de Vente",  
-            clmMargin : "Marge" ,
+            clmMargin : "Marge Nette",
             clmCostPrice : "Coût", 
+            clmNetMargin : "Marge Nette",
         },
         msgPriceDateUpdate :
         {
-            msg : "Değişmeyen Fiyatların Tarihlerini Güncellemek İstiyormusunuz? ",  // BAK
-            btn01 : "Evet",  // BAK
-            btn02 : "Hayır",  // BAK
-            title : "Dikkat"  // BAK
+            msg : "Souhaitez-vous mettre à jour la date des produits où le prix d’achat reste inchangé ? ", 
+            btn01 : "Oui", 
+            btn02 : "Non", 
+            title : "Attention" 
         },
         pg_txtBarcode : 
         {
@@ -9976,10 +9980,10 @@ export const langFr =
         },     
         msgNewPriceDate : 
         {
-            title: "Dikkat",   // BAK
-            btn01: "Hiç Birini Güncelleme",   // BAK
-            btn02: "Seçilen Fiyatları Güncelle",   // BAK
-            msg: "Lütfen Tarihlerini Güncellemek İsteidiğiniz Ürünleri Seçiniz.. "   // BAK
+            title: "Attention",  
+            btn01: "Ne pas mettre a jour",  
+            btn02: "Mettre à jour les produits sélectionnés",  
+            msg: "Veuillez choisir les produits où vous souhaitez mettre à jour la date. "  
         },
         grdNewPrice:      
         {     
@@ -9988,8 +9992,9 @@ export const langFr =
             clmPrice: "Ancien Prix",     
             clmPrice2: "Nouveau Prix",   
             clmSalePrice :"Prix de Vente",  
-            clmMargin : "Marge" ,
+            clmMargin : "Marge Nette",
             clmCostPrice : "Coût", 
+            clmNetMargin : "Marge Nette",
         },
         grdNewPriceDate:      
         {     
@@ -9998,15 +10003,16 @@ export const langFr =
             clmPrice: "Ancien Prix",     
             clmPrice2: "Nouveau Prix",   
             clmSalePrice :"Prix de Vente",  
-            clmMargin : "Marge" ,
+            clmMargin : "Marge Nette",
             clmCostPrice : "Coût", 
+            clmNetMargin : "Marge Nette",
         },
         msgPriceDateUpdate :
         {
-            msg : "Değişmeyen Fiyatların Tarihlerini Güncellemek İstiyormusunuz? ",  // BAK
-            btn01 : "Evet",  // BAK
-            btn02 : "Hayır",  // BAK
-            title : "Dikkat"  // BAK
+            msg : "Souhaitez-vous mettre à jour la date des produits où le prix d’achat reste inchangé ? ", 
+            btn01 : "Oui", 
+            btn02 : "Non", 
+            title : "Attention" 
         },
     },
     irs_02_002 : // Satış İrsaliyesi"
