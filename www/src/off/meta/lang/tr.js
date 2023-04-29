@@ -3590,7 +3590,9 @@ export const langTr =
         txtCustomerName : "Cari Adı",
         dtDocDate : "Tarih",
         txtAmount : "İndrimsiz Tutar",
-        txtDiscount : "İndirim",
+        txtDiscount : "Satır İndirimi",
+        txtDocDiscount : "Evrak İndirimi",
+        txtSubTotal : "Ara Toplam",
         txtMargin : "Marj",
         txtVat : "Kdv",
         txtTotal : "Genel Toplam",
@@ -3713,9 +3715,19 @@ export const langTr =
         },
         popDiscount : 
         {
-            title: "Evrak İndirimi",
+            title: "Satır İndirimi",
             chkFirstDiscount : "Satırdaki 1. İndirimleri Güncelleme",
             chkDocDiscount : "Evrak İndirimi Olarak Uygula",
+            Percent1 : "1. İnd. Yüzde",
+            Price1 : "1. İnd. Tutar",
+            Percent2 : "2. İnd. Yüzde",
+            Price2 : "2. İnd. Tutar",
+            Percent3 : "3. İnd. Yüzde",
+            Price3 : "3. İnd. Tutar"
+        },
+        popDocDiscount : 
+        {
+            title: "Evrak İndirimi",
             Percent1 : "1. İnd. Yüzde",
             Price1 : "1. İnd. Tutar",
             Percent2 : "2. İnd. Yüzde",
@@ -4142,7 +4154,9 @@ export const langTr =
         txtCustomerName : "Cari Adı",
         dtDocDate : "Tarih",
         txtAmount : "Tutar",
-        txtDiscount : "İndirim",
+        txtDiscount : "Satır İndirimi",
+        txtDocDiscount : "Evrak İndirimi",
+        txtSubTotal : "Ara Toplam",
         txtMargin : "Marj",
         txtVat : "Kdv",
         txtTotal : "Genel Toplam",
@@ -4260,9 +4274,19 @@ export const langTr =
         },
         popDiscount : 
         {
-            title: "Evrak İndirimi",
+            title: "Satır İndirimi",
             chkFirstDiscount : "Satırdaki 1. İndirimleri Güncelleme",
             chkDocDiscount : "Evrak İndirimi Olarak Uygula",
+            Percent1 : "1. İnd. Yüzde",
+            Price1 : "1. İnd. Tutar",
+            Percent2 : "2. İnd. Yüzde",
+            Price2 : "2. İnd. Tutar",
+            Percent3 : "3. İnd. Yüzde",
+            Price3 : "3. İnd. Tutar"
+        },
+        popDocDiscount : 
+        {
+            title: "Evrak İndirimi",
             Percent1 : "1. İnd. Yüzde",
             Price1 : "1. İnd. Tutar",
             Percent2 : "2. İnd. Yüzde",
@@ -4670,7 +4694,9 @@ export const langTr =
         txtCustomerName : "Cari Adı",
         dtDocDate : "Tarih",
         txtAmount : "Tutar",
-        txtDiscount : "İndirim",
+        txtDiscount : "Satır İndirimi",
+        txtDocDiscount : "Evrak İndirimi",
+        txtSubTotal : "Ara Toplam",
         txtMargin : "Marj",
         txtVat : "Kdv",
         txtTotal : "Genel Toplam",
@@ -4784,9 +4810,19 @@ export const langTr =
         },
         popDiscount : 
         {
-            title: "Evrak İndirimi",
+            title: "Satır İndirimi",
             chkFirstDiscount : "Satırdaki 1. İndirimleri Güncelleme",
             chkDocDiscount : "Evrak İndirimi Olarak Uygula",
+            Percent1 : "1. İnd. Yüzde",
+            Price1 : "1. İnd. Tutar",
+            Percent2 : "2. İnd. Yüzde",
+            Price2 : "2. İnd. Tutar",
+            Percent3 : "3. İnd. Yüzde",
+            Price3 : "3. İnd. Tutar"
+        },
+        popDocDiscount : 
+        {
+            title: "Evrak İndirimi",
             Percent1 : "1. İnd. Yüzde",
             Price1 : "1. İnd. Tutar",
             Percent2 : "2. İnd. Yüzde",
@@ -5124,7 +5160,9 @@ export const langTr =
         txtCustomerName : "Cari Adı",
         dtDocDate : "Tarih",
         txtAmount : "Tutar",
-        txtDiscount : "İndirim",
+        txtDiscount : "Satır İndirimi",
+        txtDocDiscount : "Evrak İndirimi",
+        txtSubTotal : "Ara Toplam",
         txtMargin : "Marj",
         txtVat : "Kdv",
         txtTotal : "Genel Toplam",
@@ -5231,9 +5269,19 @@ export const langTr =
         },
         popDiscount : 
         {
-            title: "Evrak İndirimi",
+            title: "Satır İndirimi",
             chkFirstDiscount : "Satırdaki 1. İndirimleri Güncelleme",
             chkDocDiscount : "Evrak İndirimi Olarak Uygula",
+            Percent1 : "1. İnd. Yüzde",
+            Price1 : "1. İnd. Tutar",
+            Percent2 : "2. İnd. Yüzde",
+            Price2 : "2. İnd. Tutar",
+            Percent3 : "3. İnd. Yüzde",
+            Price3 : "3. İnd. Tutar"
+        },
+        popDocDiscount : 
+        {
+            title: "Evrak İndirimi",
             Percent1 : "1. İnd. Yüzde",
             Price1 : "1. İnd. Tutar",
             Percent2 : "2. İnd. Yüzde",
@@ -5549,7 +5597,9 @@ export const langTr =
         txtCustomerName : "Cari Adı",
         dtDocDate : "Tarih",
         txtAmount : "Tutar",
-        txtDiscount : "İndirim",
+        txtDiscount : "Satır İndirimi",
+        txtDocDiscount : "Evrak İndirimi",
+        txtSubTotal : "Ara Toplam",
         txtMargin : "Marj",
         txtVat : "Kdv",
         txtTotal : "Genel Toplam",
@@ -5658,9 +5708,19 @@ export const langTr =
         },
         popDiscount : 
         {
-            title: "Evrak İndirimi",
+            title: "Satır İndirimi",
             chkFirstDiscount : "Satırdaki 1. İndirimleri Güncelleme",
             chkDocDiscount : "Evrak İndirimi Olarak Uygula",
+            Percent1 : "1. İnd. Yüzde",
+            Price1 : "1. İnd. Tutar",
+            Percent2 : "2. İnd. Yüzde",
+            Price2 : "2. İnd. Tutar",
+            Percent3 : "3. İnd. Yüzde",
+            Price3 : "3. İnd. Tutar"
+        },
+        popDocDiscount : 
+        {
+            title: "Evrak İndirimi",
             Percent1 : "1. İnd. Yüzde",
             Price1 : "1. İnd. Tutar",
             Percent2 : "2. İnd. Yüzde",
@@ -6020,7 +6080,9 @@ export const langTr =
         txtCustomerName : "Cari Adı",
         dtDocDate : "Tarih",
         txtAmount : "Tutar",
-        txtDiscount : "İndirim",
+        txtDiscount : "Satır İndirimi",
+        txtDocDiscount : "Evrak İndirimi",
+        txtSubTotal : "Ara Toplam",
         txtMargin : "Marj",
         txtVat : "Kdv",
         txtTotal : "Genel Toplam",
@@ -6123,9 +6185,19 @@ export const langTr =
         },
         popDiscount : 
         {
-            title: "Evrak İndirimi",
+            title: "Satır İndirimi",
             chkFirstDiscount : "Satırdaki 1. İndirimleri Güncelleme",
             chkDocDiscount : "Evrak İndirimi Olarak Uygula",
+            Percent1 : "1. İnd. Yüzde",
+            Price1 : "1. İnd. Tutar",
+            Percent2 : "2. İnd. Yüzde",
+            Price2 : "2. İnd. Tutar",
+            Percent3 : "3. İnd. Yüzde",
+            Price3 : "3. İnd. Tutar"
+        },
+        popDocDiscount : 
+        {
+            title: "Evrak İndirimi",
             Percent1 : "1. İnd. Yüzde",
             Price1 : "1. İnd. Tutar",
             Percent2 : "2. İnd. Yüzde",
@@ -6421,7 +6493,9 @@ export const langTr =
         txtCustomerName : "Cari Adı",
         dtDocDate : "Tarih",
         txtAmount : "Tutar",
-        txtDiscount : "İndirim",
+        txtDiscount : "Satır İndirimi",
+        txtDocDiscount : "Evrak İndirimi",
+        txtSubTotal : "Ara Toplam",
         txtMargin : "Marj",
         txtVat : "Kdv",
         txtTotal : "Genel Toplam",
@@ -6530,9 +6604,19 @@ export const langTr =
         },
         popDiscount : 
         {
-            title: "Evrak İndirimi",
+            title: "Satır İndirimi",
             chkFirstDiscount : "Satırdaki 1. İndirimleri Güncelleme",
             chkDocDiscount : "Evrak İndirimi Olarak Uygula",
+            Percent1 : "1. İnd. Yüzde",
+            Price1 : "1. İnd. Tutar",
+            Percent2 : "2. İnd. Yüzde",
+            Price2 : "2. İnd. Tutar",
+            Percent3 : "3. İnd. Yüzde",
+            Price3 : "3. İnd. Tutar"
+        },
+        popDocDiscount : 
+        {
+            title: "Evrak İndirimi",
             Percent1 : "1. İnd. Yüzde",
             Price1 : "1. İnd. Tutar",
             Percent2 : "2. İnd. Yüzde",
@@ -6850,7 +6934,9 @@ export const langTr =
         txtCustomerName : "Cari Adı",
         dtDocDate : "Tarih",
         txtAmount : "Tutar",
-        txtDiscount : "İndirim",
+        txtDiscount : "Satır İndirimi",
+        txtDocDiscount : "Evrak İndirimi",
+        txtSubTotal : "Ara Toplam",
         txtMargin : "Marj",
         txtVat : "Kdv",
         txtTotal : "Genel Toplam",
@@ -6961,9 +7047,19 @@ export const langTr =
         },
         popDiscount : 
         {
-            title: "Evrak İndirimi",
+            title: "Satır İndirimi",
             chkFirstDiscount : "Satırdaki 1. İndirimleri Güncelleme",
             chkDocDiscount : "Evrak İndirimi Olarak Uygula",
+            Percent1 : "1. İnd. Yüzde",
+            Price1 : "1. İnd. Tutar",
+            Percent2 : "2. İnd. Yüzde",
+            Price2 : "2. İnd. Tutar",
+            Percent3 : "3. İnd. Yüzde",
+            Price3 : "3. İnd. Tutar"
+        },
+        popDocDiscount : 
+        {
+            title: "Evrak İndirimi",
             Percent1 : "1. İnd. Yüzde",
             Price1 : "1. İnd. Tutar",
             Percent2 : "2. İnd. Yüzde",
@@ -7315,7 +7411,9 @@ export const langTr =
         txtCustomerName : "Cari Adı",
         dtDocDate : "Tarih",
         txtAmount : "Tutar",
-        txtDiscount : "İndirim",
+        txtDiscount : "Satır İndirimi",
+        txtDocDiscount : "Evrak İndirimi",
+        txtSubTotal : "Ara Toplam",
         txtMargin : "Marj",
         txtVat : "Kdv",
         txtTotal : "Genel Toplam",
@@ -7419,9 +7517,19 @@ export const langTr =
         },
         popDiscount : 
         {
-            title: "Evrak İndirimi",
+            title: "Satır İndirimi",
             chkFirstDiscount : "Satırdaki 1. İndirimleri Güncelleme",
             chkDocDiscount : "Evrak İndirimi Olarak Uygula",
+            Percent1 : "1. İnd. Yüzde",
+            Price1 : "1. İnd. Tutar",
+            Percent2 : "2. İnd. Yüzde",
+            Price2 : "2. İnd. Tutar",
+            Percent3 : "3. İnd. Yüzde",
+            Price3 : "3. İnd. Tutar"
+        },
+        popDocDiscount : 
+        {
+            title: "Evrak İndirimi",
             Percent1 : "1. İnd. Yüzde",
             Price1 : "1. İnd. Tutar",
             Percent2 : "2. İnd. Yüzde",
@@ -7650,7 +7758,9 @@ export const langTr =
         txtCustomerName : "Cari Adı",
         dtDocDate : "Tarih",
         txtAmount : "Tutar",
-        txtDiscount : "İndirim",
+        txtDiscount : "Satır İndirimi",
+        txtDocDiscount : "Evrak İndirimi",
+        txtSubTotal : "Ara Toplam",
         txtMargin : "Marj",
         txtVat : "Kdv",
         txtTotal : "Genel Toplam",
@@ -7757,9 +7867,19 @@ export const langTr =
         },
         popDiscount : 
         {
-            title: "Evrak İndirimi",
+            title: "Satır İndirimi",
             chkFirstDiscount : "Satırdaki 1. İndirimleri Güncelleme",
             chkDocDiscount : "Evrak İndirimi Olarak Uygula",
+            Percent1 : "1. İnd. Yüzde",
+            Price1 : "1. İnd. Tutar",
+            Percent2 : "2. İnd. Yüzde",
+            Price2 : "2. İnd. Tutar",
+            Percent3 : "3. İnd. Yüzde",
+            Price3 : "3. İnd. Tutar"
+        },
+        popDocDiscount : 
+        {
+            title: "Evrak İndirimi",
             Percent1 : "1. İnd. Yüzde",
             Price1 : "1. İnd. Tutar",
             Percent2 : "2. İnd. Yüzde",
@@ -8064,7 +8184,9 @@ export const langTr =
         txtCustomerName : "Cari Adı",
         dtDocDate : "Tarih",
         txtAmount : "Tutar",
-        txtDiscount : "İndirim",
+        txtDiscount : "Satır İndirimi",
+        txtDocDiscount : "Evrak İndirimi",
+        txtSubTotal : "Ara Toplam",
         txtMargin : "Marj",
         txtVat : "Kdv",
         txtTotal : "Genel Toplam",
@@ -8177,9 +8299,19 @@ export const langTr =
         },
         popDiscount : 
         {
-            title: "Evrak İndirimi",
+            title: "Satır İndirimi",
             chkFirstDiscount : "Satırdaki 1. İndirimleri Güncelleme",
             chkDocDiscount : "Evrak İndirimi Olarak Uygula",
+            Percent1 : "1. İnd. Yüzde",
+            Price1 : "1. İnd. Tutar",
+            Percent2 : "2. İnd. Yüzde",
+            Price2 : "2. İnd. Tutar",
+            Percent3 : "3. İnd. Yüzde",
+            Price3 : "3. İnd. Tutar"
+        },
+        popDocDiscount : 
+        {
+            title: "Evrak İndirimi",
             Percent1 : "1. İnd. Yüzde",
             Price1 : "1. İnd. Tutar",
             Percent2 : "2. İnd. Yüzde",
@@ -8555,7 +8687,9 @@ export const langTr =
         txtCustomerName : "Cari Adı",
         dtDocDate : "Tarih",
         txtAmount : "Tutar",
-        txtDiscount : "İndirim",
+        txtDiscount : "Satır İndirimi",
+        txtDocDiscount : "Evrak İndirimi",
+        txtSubTotal : "Ara Toplam",
         txtMargin : "Marj",
         txtVat : "Kdv",
         txtTotal : "Genel Toplam",
@@ -8662,9 +8796,19 @@ export const langTr =
         },
         popDiscount : 
         {
-            title: "Evrak İndirimi",
+            title: "Satır İndirimi",
             chkFirstDiscount : "Satırdaki 1. İndirimleri Güncelleme",
             chkDocDiscount : "Evrak İndirimi Olarak Uygula",
+            Percent1 : "1. İnd. Yüzde",
+            Price1 : "1. İnd. Tutar",
+            Percent2 : "2. İnd. Yüzde",
+            Price2 : "2. İnd. Tutar",
+            Percent3 : "3. İnd. Yüzde",
+            Price3 : "3. İnd. Tutar"
+        },
+        popDocDiscount : 
+        {
+            title: "Evrak İndirimi",
             Percent1 : "1. İnd. Yüzde",
             Price1 : "1. İnd. Tutar",
             Percent2 : "2. İnd. Yüzde",
@@ -8902,7 +9046,9 @@ export const langTr =
         txtCustomerName : "Cari Adı",
         dtDocDate : "Tarih",
         txtAmount : "Tutar",
-        txtDiscount : "İndirim",
+        txtDiscount : "Satır İndirimi",
+        txtDocDiscount : "Evrak İndirimi",
+        txtSubTotal : "Ara Toplam",
         txtMargin : "Marj",
         txtVat : "Kdv",
         txtTotal : "Genel Toplam",
@@ -9008,9 +9154,19 @@ export const langTr =
         },
         popDiscount : 
         {
-            title: "Evrak İndirimi",
+            title: "Satır İndirimi",
             chkFirstDiscount : "Satırdaki 1. İndirimleri Güncelleme",
             chkDocDiscount : "Evrak İndirimi Olarak Uygula",
+            Percent1 : "1. İnd. Yüzde",
+            Price1 : "1. İnd. Tutar",
+            Percent2 : "2. İnd. Yüzde",
+            Price2 : "2. İnd. Tutar",
+            Percent3 : "3. İnd. Yüzde",
+            Price3 : "3. İnd. Tutar"
+        },
+        popDocDiscount : 
+        {
+            title: "Evrak İndirimi",
             Percent1 : "1. İnd. Yüzde",
             Price1 : "1. İnd. Tutar",
             Percent2 : "2. İnd. Yüzde",
@@ -9651,7 +9807,9 @@ export const langTr =
         txtCustomerName : "Cari Adı",
         dtDocDate : "Tarih",
         txtAmount : "Tutar",
-        txtDiscount : "İndirim",
+        txtDiscount : "Satır İndirimi",
+        txtDocDiscount : "Evrak İndirimi",
+        txtSubTotal : "Ara Toplam",
         txtMargin : "Marj",
         txtVat : "Kdv",
         txtTotal : "Genel Toplam",
@@ -9720,9 +9878,19 @@ export const langTr =
         },
         popDiscount : 
         {
-            title: "Evrak İndirimi",
+            title: "Satır İndirimi",
             chkFirstDiscount : "Satırdaki 1. İndirimleri Güncelleme",
             chkDocDiscount : "Evrak İndirimi Olarak Uygula",
+            Percent1 : "1. İnd. Yüzde",
+            Price1 : "1. İnd. Tutar",
+            Percent2 : "2. İnd. Yüzde",
+            Price2 : "2. İnd. Tutar",
+            Percent3 : "3. İnd. Yüzde",
+            Price3 : "3. İnd. Tutar"
+        },
+        popDocDiscount : 
+        {
+            title: "Evrak İndirimi",
             Percent1 : "1. İnd. Yüzde",
             Price1 : "1. İnd. Tutar",
             Percent2 : "2. İnd. Yüzde",
@@ -10049,7 +10217,9 @@ export const langTr =
         txtCustomerName : "Cari Adı",
         dtDocDate : "Tarih",
         txtAmount : "Tutar",
-        txtDiscount : "İndirim",
+        txtDiscount : "Satır İndirimi",
+        txtDocDiscount : "Evrak İndirimi",
+        txtSubTotal : "Ara Toplam",
         txtMargin : "Marj",
         txtVat : "Kdv",
         txtTotal : "Genel Toplam",
@@ -10122,9 +10292,19 @@ export const langTr =
         },
         popDiscount : 
         {
-            title: "Evrak İndirimi",
+            title: "Satır İndirimi",
             chkFirstDiscount : "Satırdaki 1. İndirimleri Güncelleme",
             chkDocDiscount : "Evrak İndirimi Olarak Uygula",
+            Percent1 : "1. İnd. Yüzde",
+            Price1 : "1. İnd. Tutar",
+            Percent2 : "2. İnd. Yüzde",
+            Price2 : "2. İnd. Tutar",
+            Percent3 : "3. İnd. Yüzde",
+            Price3 : "3. İnd. Tutar"
+        },
+        popDocDiscount : 
+        {
+            title: "Evrak İndirimi",
             Percent1 : "1. İnd. Yüzde",
             Price1 : "1. İnd. Tutar",
             Percent2 : "2. İnd. Yüzde",
@@ -10442,7 +10622,9 @@ export const langTr =
         txtCustomerName : "Cari Adı",
         dtDocDate : "Tarih",
         txtAmount : "Tutar",
-        txtDiscount : "İndirim",
+        txtDiscount : "Satır İndirimi",
+        txtDocDiscount : "Evrak İndirimi",
+        txtSubTotal : "Ara Toplam",
         txtMargin : "Marj",
         txtVat : "Kdv",
         txtTotal : "Genel Toplam",
@@ -10515,9 +10697,19 @@ export const langTr =
         },
         popDiscount : 
         {
-            title: "Evrak İndirimi",
+            title: "Satır İndirimi",
             chkFirstDiscount : "Satırdaki 1. İndirimleri Güncelleme",
             chkDocDiscount : "Evrak İndirimi Olarak Uygula",
+            Percent1 : "1. İnd. Yüzde",
+            Price1 : "1. İnd. Tutar",
+            Percent2 : "2. İnd. Yüzde",
+            Price2 : "2. İnd. Tutar",
+            Percent3 : "3. İnd. Yüzde",
+            Price3 : "3. İnd. Tutar"
+        },
+        popDocDiscount : 
+        {
+            title: "Evrak İndirimi",
             Percent1 : "1. İnd. Yüzde",
             Price1 : "1. İnd. Tutar",
             Percent2 : "2. İnd. Yüzde",
@@ -10766,7 +10958,9 @@ export const langTr =
         txtCustomerName : "Cari Adı",
         dtDocDate : "Tarih",
         txtAmount : "Tutar",
-        txtDiscount : "İndirim",
+        txtDiscount : "Satır İndirimi",
+        txtDocDiscount : "Evrak İndirimi",
+        txtSubTotal : "Ara Toplam",
         txtMargin : "Marj",
         txtVat : "Kdv",
         txtTotal : "Genel Toplam",
@@ -10835,9 +11029,19 @@ export const langTr =
         },
         popDiscount : 
         {
-            title: "Evrak İndirimi",
+            title: "Satır İndirimi",
             chkFirstDiscount : "Satırdaki 1. İndirimleri Güncelleme",
             chkDocDiscount : "Evrak İndirimi Olarak Uygula",
+            Percent1 : "1. İnd. Yüzde",
+            Price1 : "1. İnd. Tutar",
+            Percent2 : "2. İnd. Yüzde",
+            Price2 : "2. İnd. Tutar",
+            Percent3 : "3. İnd. Yüzde",
+            Price3 : "3. İnd. Tutar"
+        },
+        popDocDiscount : 
+        {
+            title: "Evrak İndirimi",
             Percent1 : "1. İnd. Yüzde",
             Price1 : "1. İnd. Tutar",
             Percent2 : "2. İnd. Yüzde",
@@ -11142,7 +11346,9 @@ export const langTr =
         txtCustomerName : "Cari Adı",
         dtDocDate : "Tarih",
         txtAmount : "Tutar",
-        txtDiscount : "İndirim",
+        txtDiscount : "Satır İndirimi",
+        txtDocDiscount : "Evrak İndirimi",
+        txtSubTotal : "Ara Toplam",
         txtMargin : "Marj",
         txtVat : "Kdv",
         txtTotal : "Genel Toplam",
@@ -11210,9 +11416,19 @@ export const langTr =
         },
         popDiscount : 
         {
-            title: "Evrak İndirimi",
+            title: "Satır İndirimi",
             chkFirstDiscount : "Satırdaki 1. İndirimleri Güncelleme",
             chkDocDiscount : "Evrak İndirimi Olarak Uygula",
+            Percent1 : "1. İnd. Yüzde",
+            Price1 : "1. İnd. Tutar",
+            Percent2 : "2. İnd. Yüzde",
+            Price2 : "2. İnd. Tutar",
+            Percent3 : "3. İnd. Yüzde",
+            Price3 : "3. İnd. Tutar"
+        },
+        popDocDiscount : 
+        {
+            title: "Evrak İndirimi",
             Percent1 : "1. İnd. Yüzde",
             Price1 : "1. İnd. Tutar",
             Percent2 : "2. İnd. Yüzde",
@@ -11447,7 +11663,9 @@ export const langTr =
         txtCustomerName : "Cari Adı",
         dtDocDate : "Tarih",
         txtAmount : "Tutar",
-        txtDiscount : "İndirim",
+        txtDiscount : "Satır İndirimi",
+        txtDocDiscount : "Evrak İndirimi",
+        txtSubTotal : "Ara Toplam",
         txtMargin : "Marj",
         txtVat : "Kdv",
         txtTotal : "Genel Toplam",
@@ -11516,9 +11734,19 @@ export const langTr =
         },
         popDiscount : 
         {
-            title: "Evrak İndirimi",
+            title: "Satır İndirimi",
             chkFirstDiscount : "Satırdaki 1. İndirimleri Güncelleme",
             chkDocDiscount : "Evrak İndirimi Olarak Uygula",
+            Percent1 : "1. İnd. Yüzde",
+            Price1 : "1. İnd. Tutar",
+            Percent2 : "2. İnd. Yüzde",
+            Price2 : "2. İnd. Tutar",
+            Percent3 : "3. İnd. Yüzde",
+            Price3 : "3. İnd. Tutar"
+        },
+        popDocDiscount : 
+        {
+            title: "Evrak İndirimi",
             Percent1 : "1. İnd. Yüzde",
             Price1 : "1. İnd. Tutar",
             Percent2 : "2. İnd. Yüzde",
@@ -11890,7 +12118,9 @@ export const langTr =
         txtCustomerName : "Cari Adı",
         dtDocDate : "Tarih",
         txtAmount : "Tutar",
-        txtDiscount : "İndirim",
+        txtDiscount : "Satır İndirimi",
+        txtDocDiscount : "Evrak İndirimi",
+        txtSubTotal : "Ara Toplam",
         txtMargin : "Marj",
         txtVat : "Kdv",
         txtTotal : "Genel Toplam",
@@ -11962,9 +12192,19 @@ export const langTr =
         },
         popDiscount : 
         {
-            title: "Evrak İndirimi",
+            title: "Satır İndirimi",
             chkFirstDiscount : "Satırdaki 1. İndirimleri Güncelleme",
             chkDocDiscount : "Evrak İndirimi Olarak Uygula",
+            Percent1 : "1. İnd. Yüzde",
+            Price1 : "1. İnd. Tutar",
+            Percent2 : "2. İnd. Yüzde",
+            Price2 : "2. İnd. Tutar",
+            Percent3 : "3. İnd. Yüzde",
+            Price3 : "3. İnd. Tutar"
+        },
+        popDocDiscount : 
+        {
+            title: "Evrak İndirimi",
             Percent1 : "1. İnd. Yüzde",
             Price1 : "1. İnd. Tutar",
             Percent2 : "2. İnd. Yüzde",
@@ -12242,7 +12482,9 @@ export const langTr =
         txtCustomerName : "Cari Adı",
         dtDocDate : "Tarih",
         txtAmount : "Tutar",
-        txtDiscount : "İndirim",
+        txtDiscount : "Satır İndirimi",
+        txtDocDiscount : "Evrak İndirimi",
+        txtSubTotal : "Ara Toplam",
         txtMargin : "Marj",
         txtVat : "Kdv",
         txtTotal : "Genel Toplam",
@@ -12313,9 +12555,19 @@ export const langTr =
         },
         popDiscount : 
         {
-            title: "Evrak İndirimi",
+            title: "Satır İndirimi",
             chkFirstDiscount : "Satırdaki 1. İndirimleri Güncelleme",
             chkDocDiscount : "Evrak İndirimi Olarak Uygula",
+            Percent1 : "1. İnd. Yüzde",
+            Price1 : "1. İnd. Tutar",
+            Percent2 : "2. İnd. Yüzde",
+            Price2 : "2. İnd. Tutar",
+            Percent3 : "3. İnd. Yüzde",
+            Price3 : "3. İnd. Tutar"
+        },
+        popDocDiscount : 
+        {
+            title: "Evrak İndirimi",
             Percent1 : "1. İnd. Yüzde",
             Price1 : "1. İnd. Tutar",
             Percent2 : "2. İnd. Yüzde",
@@ -13248,7 +13500,9 @@ export const langTr =
         txtCustomerName : "Cari Adı",
         dtDocDate : "Tarih",
         txtAmount : "Tutar",
-        txtDiscount : "İndirim",
+        txtDiscount : "Satır İndirimi",
+        txtDocDiscount : "Evrak İndirimi",
+        txtSubTotal : "Ara Toplam",
         txtMargin : "Marj",
         txtVat : "Kdv",
         txtTotal : "Genel Toplam",
@@ -14759,7 +15013,9 @@ export const langTr =
         txtCustomerName : "Cari Adı",
         dtDocDate : "Tarih",
         txtAmount : "Tutar",
-        txtDiscount : "İndirim",
+        txtDiscount : "Satır İndirimi",
+        txtDocDiscount : "Evrak İndirimi",
+        txtSubTotal : "Ara Toplam",
         txtMargin : "Marj",
         txtVat : "Kdv",
         txtTotal : "Genel Toplam",
@@ -14818,9 +15074,19 @@ export const langTr =
         },
         popDiscount : 
         {
-            title: "Evrak İndirimi",
+            title: "Satır İndirimi",
             chkFirstDiscount : "Satırdaki 1. İndirimleri Güncelleme",
             chkDocDiscount : "Evrak İndirimi Olarak Uygula",
+            Percent1 : "1. İnd. Yüzde",
+            Price1 : "1. İnd. Tutar",
+            Percent2 : "2. İnd. Yüzde",
+            Price2 : "2. İnd. Tutar",
+            Percent3 : "3. İnd. Yüzde",
+            Price3 : "3. İnd. Tutar"
+        },
+        popDocDiscount : 
+        {
+            title: "Evrak İndirimi",
             Percent1 : "1. İnd. Yüzde",
             Price1 : "1. İnd. Tutar",
             Percent2 : "2. İnd. Yüzde",
@@ -15060,7 +15326,7 @@ export const langTr =
         txtDiscountPer1 : "1. İndirim Oranı",
         txtDiscountPer2 : "2. İndirim Oranı",
         txtDiscountPer3 : "3. İndirim Oranı",
-        txtTotalHt: "İndirimsiz Toplam",
+        txtTotalHt: "İndirimli Toplam",
     },
     tkf_02_002 : // "Satış Teklifi",
     {
@@ -15070,7 +15336,9 @@ export const langTr =
         txtCustomerName : "Cari Adı",
         dtDocDate : "Tarih",
         txtAmount : "Tutar",
-        txtDiscount : "İndirim",
+        txtDiscount : "Satır İndirimi",
+        txtDocDiscount : "Evrak İndirimi",
+        txtSubTotal : "Ara Toplam",
         txtMargin : "Marj",
         txtVat : "Kdv",
         txtTotal : "Genel Toplam",
@@ -15132,9 +15400,19 @@ export const langTr =
         },
         popDiscount : 
         {
-            title: "Evrak İndirimi",
+            title: "Satır İndirimi",
             chkFirstDiscount : "Satırdaki 1. İndirimleri Güncelleme",
             chkDocDiscount : "Evrak İndirimi Olarak Uygula",
+            Percent1 : "1. İnd. Yüzde",
+            Price1 : "1. İnd. Tutar",
+            Percent2 : "2. İnd. Yüzde",
+            Price2 : "2. İnd. Tutar",
+            Percent3 : "3. İnd. Yüzde",
+            Price3 : "3. İnd. Tutar"
+        },
+        popDocDiscount : 
+        {
+            title: "Evrak İndirimi",
             Percent1 : "1. İnd. Yüzde",
             Price1 : "1. İnd. Tutar",
             Percent2 : "2. İnd. Yüzde",

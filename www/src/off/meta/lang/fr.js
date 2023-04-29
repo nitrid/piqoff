@@ -3588,7 +3588,9 @@ export const langFr =
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
         txtAmount : "Total" ,
-        txtDiscount : "Remise",
+        txtDiscount : "Satır İndirimi",    // BAK
+        txtDocDiscount : "Evrak İndirimi",    // BAK
+        txtSubTotal : "Ara Toplam",    // BAK
         txtMargin : "Marge",
         txtVat : "TVA",
         txtTotal : "Total Général",
@@ -3711,9 +3713,19 @@ export const langFr =
         },
         popDiscount : 
         {
-            title: "Télécharger Document",
+           title: "Satır İndirimi", // BAK
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
             chkDocDiscount : "Appliquer la remise sur le total général", 
+            Percent1 : "1. Remise % ",
+            Price1 : "1. Remise",
+            Percent2 : "2. Remise %",
+            Price2 : "2. Remise",
+            Percent3 : "3. Remise %",
+            Price3 : "3. Remise"
+        },
+        popDocDiscount : 
+        {
+           title: "Evrak İndirimi", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -4140,7 +4152,9 @@ export const langFr =
         txtCustomerName : "Nom Client",
         dtDocDate : "Date",
         txtAmount : "Total" ,
-        txtDiscount : "Remise",
+        txtDiscount : "Satır İndirimi",    // BAK
+        txtDocDiscount : "Evrak İndirimi",    // BAK
+        txtSubTotal : "Ara Toplam",    // BAK
         txtMargin : "Marge",
         txtVat : "TVA",
         txtTotal : "Total Général",
@@ -4257,9 +4271,19 @@ export const langFr =
         },
         popDiscount : 
         {
-            title: "Télécharger Document",
+           title: "Satır İndirimi", // BAK
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
             chkDocDiscount : "Appliquer la remise sur le total général",
+            Percent1 : "1. Remise % ",
+            Price1 : "1. Remise",
+            Percent2 : "2. Remise %",
+            Price2 : "2. Remise",
+            Percent3 : "3. Remise %",
+            Price3 : "3. Remise"
+        },
+        popDocDiscount : 
+        {
+           title: "Evrak İndirimi", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -4667,7 +4691,9 @@ export const langFr =
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
         txtAmount : "Total" ,
-        txtDiscount : "Remise",
+        txtDiscount : "Satır İndirimi",    // BAK
+        txtDocDiscount : "Evrak İndirimi",    // BAK
+        txtSubTotal : "Ara Toplam",    // BAK
         txtMargin : "Marge",
         txtVat : "TVA",
         txtTotal : "Total Général",
@@ -4781,9 +4807,19 @@ export const langFr =
         },
         popDiscount : 
         {
-            title: "Télécharger Document",
+           title: "Satır İndirimi", // BAK
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
             chkDocDiscount : "Appliquer la remise sur le total général",
+            Percent1 : "1. Remise % ",
+            Price1 : "1. Remise",
+            Percent2 : "2. Remise %",
+            Price2 : "2. Remise",
+            Percent3 : "3. Remise %",
+            Price3 : "3. Remise"
+        },
+        popDocDiscount : 
+        {
+           title: "Evrak İndirimi", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -5128,7 +5164,9 @@ export const langFr =
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
         txtAmount : "Total" ,
-        txtDiscount : "Remise",
+        txtDiscount : "Satır İndirimi",    // BAK
+        txtDocDiscount : "Evrak İndirimi",    // BAK
+        txtSubTotal : "Ara Toplam",    // BAK
         txtMargin : "Marge",
         txtVat : "TVA",
         txtTotal : "Total Général",
@@ -5235,9 +5273,19 @@ export const langFr =
         },
         popDiscount : 
         {
-            title: "Télécharger Document",
+           title: "Satır İndirimi", // BAK
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
             chkDocDiscount : "Appliquer la remise sur le total général",
+            Percent1 : "1. Remise % ",
+            Price1 : "1. Remise",
+            Percent2 : "2. Remise %",
+            Price2 : "2. Remise",
+            Percent3 : "3. Remise %",
+            Price3 : "3. Remise"
+        },
+        popDocDiscount : 
+        {
+           title: "Evrak İndirimi", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -5560,7 +5608,9 @@ export const langFr =
         txtCustomerName : "Nom Client",
         dtDocDate : "Date",
         txtAmount : "Total" ,
-        txtDiscount : "Remise",
+        txtDiscount : "Satır İndirimi",    // BAK
+        txtDocDiscount : "Evrak İndirimi",    // BAK
+        txtSubTotal : "Ara Toplam",    // BAK
         txtMargin : "Marge",
         txtVat : "TVA",
         txtTotal : "Total Général",
@@ -5669,10 +5719,20 @@ export const langFr =
         },
         popDiscount : 
         {
-            title: "Télécharger Document",
+           title: "Satır İndirimi", // BAK
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
             chkDocDiscount : "Appliquer la remise sur le total général", 
             Percent1 : "1. Remise % ", 
+            Price1 : "1. Remise",
+            Percent2 : "2. Remise %",
+            Price2 : "2. Remise",
+            Percent3 : "3. Remise %",
+            Price3 : "3. Remise"
+        },
+        popDocDiscount : 
+        {
+           title: "Evrak İndirimi", // BAK
+            Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
             Price2 : "2. Remise",
@@ -6024,7 +6084,9 @@ export const langFr =
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
         txtAmount : "Total" ,
-        txtDiscount : "Remise",
+        txtDiscount : "Satır İndirimi",    // BAK
+        txtDocDiscount : "Evrak İndirimi",    // BAK
+        txtSubTotal : "Ara Toplam",    // BAK
         txtMargin : "Marge",
         txtVat : "TVA",
         txtTotal : "Total Général",
@@ -6127,9 +6189,19 @@ export const langFr =
         },
         popDiscount : 
         {
-            title: "Télécharger Document",
+           title: "Satır İndirimi", // BAK
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
             chkDocDiscount : "Appliquer la remise sur le total général",
+            Percent1 : "1. Remise % ",
+            Price1 : "1. Remise",
+            Percent2 : "2. Remise %",
+            Price2 : "2. Remise",
+            Percent3 : "3. Remise %",
+            Price3 : "3. Remise"
+        },
+        popDocDiscount : 
+        {
+           title: "Evrak İndirimi", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -6425,7 +6497,9 @@ export const langFr =
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
         txtAmount : "Total" ,
-        txtDiscount : "Remise",
+        txtDiscount : "Satır İndirimi",    // BAK
+        txtDocDiscount : "Evrak İndirimi",    // BAK
+        txtSubTotal : "Ara Toplam",    // BAK
         txtMargin : "Marge",
         txtVat : "TVA",
         txtTotal : "Total Général",
@@ -6534,9 +6608,19 @@ export const langFr =
         },
         popDiscount : 
         {
-            title: "Télécharger Document",
+           title: "Satır İndirimi", // BAK
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
             chkDocDiscount : "Appliquer la remise sur le total général",
+            Percent1 : "1. Remise % ",
+            Price1 : "1. Remise",
+            Percent2 : "2. Remise %",
+            Price2 : "2. Remise",
+            Percent3 : "3. Remise %",
+            Price3 : "3. Remise"
+        },
+        popDocDiscount : 
+        {
+           title: "Evrak İndirimi", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -6854,7 +6938,9 @@ export const langFr =
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
         txtAmount : "Total" ,
-        txtDiscount : "Remise",
+        txtDiscount : "Satır İndirimi",    // BAK
+        txtDocDiscount : "Evrak İndirimi",    // BAK
+        txtSubTotal : "Ara Toplam",    // BAK
         txtMargin : "Marge",
         txtVat : "TVA",
         txtTotal : "Total Général",
@@ -6965,9 +7051,19 @@ export const langFr =
         },
         popDiscount : 
         {
-            title: "Télécharger Document",
+           title: "Satır İndirimi", // BAK
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
             chkDocDiscount : "Appliquer la remise sur le total général",
+            Percent1 : "1. Remise % ",
+            Price1 : "1. Remise",
+            Percent2 : "2. Remise %",
+            Price2 : "2. Remise",
+            Percent3 : "3. Remise %",
+            Price3 : "3. Remise"
+        },
+        popDocDiscount : 
+        {
+           title: "Evrak İndirimi", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -7312,7 +7408,9 @@ export const langFr =
         txtCustomerName : "Nom Fournisseur",
         dtDocDate : "Date",
         txtAmount : "Total",
-        txtDiscount : "Remise",
+        txtDiscount : "Satır İndirimi",    // BAK
+        txtDocDiscount : "Evrak İndirimi",    // BAK
+        txtSubTotal : "Ara Toplam",    // BAK
         txtMargin : "Marge",
         txtVat : "TVA",
         txtTotal : "Total Général",
@@ -7416,9 +7514,19 @@ export const langFr =
         },
         popDiscount : 
         {
-            title: "Télécharger Document",
+           title: "Satır İndirimi", // BAK
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
             chkDocDiscount : "Appliquer la remise sur le total général",
+            Percent1 : "1. Remise % ",
+            Price1 : "1. Remise",
+            Percent2 : "2. Remise %",
+            Price2 : "2. Remise",
+            Percent3 : "3. Remise %",
+            Price3 : "3. Remise"
+        },
+        popDocDiscount : 
+        {
+           title: "Evrak İndirimi", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -7647,7 +7755,9 @@ export const langFr =
         txtCustomerName : "Nom Client",
         dtDocDate : "Date",
         txtAmount : "Total" ,
-        txtDiscount : "Remise",
+        txtDiscount : "Satır İndirimi",    // BAK
+        txtDocDiscount : "Evrak İndirimi",    // BAK
+        txtSubTotal : "Ara Toplam",    // BAK
         txtMargin : "Marge",
         txtVat : "TVA",
         txtTotal : "Total Général",
@@ -7754,9 +7864,19 @@ export const langFr =
         },
         popDiscount : 
         {
-            title: "Télécharger Document",
+           title: "Satır İndirimi", // BAK
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
             chkDocDiscount : "Appliquer la remise sur le total général", 
+            Percent1 : "1. Remise % ",
+            Price1 : "1. Remise",
+            Percent2 : "2. Remise %",
+            Price2 : "2. Remise",
+            Percent3 : "3. Remise %",
+            Price3 : "3. Remise"
+        },
+        popDocDiscount : 
+        {
+           title: "Evrak İndirimi", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -8061,7 +8181,9 @@ export const langFr =
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
         txtAmount : "Total" ,
-        txtDiscount : "Remise",
+        txtDiscount : "Satır İndirimi",    // BAK
+        txtDocDiscount : "Evrak İndirimi",    // BAK
+        txtSubTotal : "Ara Toplam",    // BAK
         txtMargin : "Marge",
         txtVat : "TVA",
         txtTotal : "Total Général",
@@ -8174,9 +8296,19 @@ export const langFr =
         },
         popDiscount : 
         {
-            title: "Télécharger Document",
+           title: "Satır İndirimi", // BAK
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
             chkDocDiscount : "Appliquer la remise sur le total général", 
+            Percent1 : "1. Remise % ",
+            Price1 : "1. Remise",
+            Percent2 : "2. Remise %",
+            Price2 : "2. Remise",
+            Percent3 : "3. Remise %",
+            Price3 : "3. Remise"
+        },
+        popDocDiscount : 
+        {
+           title: "Evrak İndirimi", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -8559,7 +8691,9 @@ export const langFr =
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
         txtAmount : "Total" ,
-        txtDiscount : "Remise",
+        txtDiscount : "Satır İndirimi",    // BAK
+        txtDocDiscount : "Evrak İndirimi",    // BAK
+        txtSubTotal : "Ara Toplam",    // BAK
         txtMargin : "Marge",
         txtVat : "TVA",
         txtTotal : "Total Général",
@@ -8666,9 +8800,19 @@ export const langFr =
         },
         popDiscount : 
         {
-            title: "Télécharger Document",
+           title: "Satır İndirimi", // BAK
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
             chkDocDiscount : "Appliquer la remise sur le total général", 
+            Percent1 : "1. Remise % ",
+            Price1 : "1. Remise",
+            Percent2 : "2. Remise %",
+            Price2 : "2. Remise",
+            Percent3 : "3. Remise %",
+            Price3 : "3. Remise"
+        },
+        popDocDiscount : 
+        {
+           title: "Evrak İndirimi", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -8907,7 +9051,9 @@ export const langFr =
         txtCustomerName : "Nom Client",
         dtDocDate : "Date",
         txtAmount : "Total" ,
-        txtDiscount : "Remise",
+        txtDiscount : "Satır İndirimi",    // BAK
+        txtDocDiscount : "Evrak İndirimi",    // BAK
+        txtSubTotal : "Ara Toplam",    // BAK
         txtMargin : "Marge",
         txtVat : "TVA",
         txtTotal : "Total Général",
@@ -9013,9 +9159,19 @@ export const langFr =
         },
         popDiscount : 
         {
-            title: "Télécharger Document",
+           title: "Satır İndirimi", // BAK
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
             chkDocDiscount : "Appliquer la remise sur le total général", 
+            Percent1 : "1. Remise % ",
+            Price1 : "1. Remise",
+            Percent2 : "2. Remise %",
+            Price2 : "2. Remise",
+            Percent3 : "3. Remise %",
+            Price3 : "3. Remise"
+        },
+        popDocDiscount : 
+        {
+           title: "Evrak İndirimi", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -9626,7 +9782,9 @@ export const langFr =
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
         txtAmount : "Total" ,
-        txtDiscount : "Remise",
+        txtDiscount : "Satır İndirimi",    // BAK
+        txtDocDiscount : "Evrak İndirimi",    // BAK
+        txtSubTotal : "Ara Toplam",    // BAK
         txtMargin : "Marge",
         txtVat : "TVA",
         txtTotal : "Total Général",
@@ -9694,9 +9852,19 @@ export const langFr =
         },
         popDiscount : 
         {
-            title: "Télécharger Document",
+           title: "Satır İndirimi", // BAK
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
             chkDocDiscount : "Appliquer la remise sur le total général", 
+            Percent1 : "1. Remise % ",
+            Price1 : "1. Remise",
+            Percent2 : "2. Remise %",
+            Price2 : "2. Remise",
+            Percent3 : "3. Remise %",
+            Price3 : "3. Remise"
+        },
+        popDocDiscount : 
+        {
+           title: "Evrak İndirimi", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -10023,7 +10191,9 @@ export const langFr =
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
         txtAmount : "Total" ,
-        txtDiscount : "Remise",
+        txtDiscount : "Satır İndirimi",    // BAK
+        txtDocDiscount : "Evrak İndirimi",    // BAK
+        txtSubTotal : "Ara Toplam",    // BAK
         txtMargin : "Marge",
         txtVat : "TVA",
         txtTotal : "Total Général",
@@ -10096,9 +10266,19 @@ export const langFr =
         },
         popDiscount : 
         {
-            title: "Télécharger Document",
+           title: "Satır İndirimi", // BAK
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
             chkDocDiscount : "Appliquer la remise sur le total général",
+            Percent1 : "1. Remise % ",
+            Price1 : "1. Remise",
+            Percent2 : "2. Remise %",
+            Price2 : "2. Remise",
+            Percent3 : "3. Remise %",
+            Price3 : "3. Remise"
+        },
+        popDocDiscount : 
+        {
+           title: "Evrak İndirimi", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -10416,7 +10596,9 @@ export const langFr =
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
         txtAmount : "Total" ,
-        txtDiscount : "Remise",
+        txtDiscount : "Satır İndirimi",    // BAK
+        txtDocDiscount : "Evrak İndirimi",    // BAK
+        txtSubTotal : "Ara Toplam",    // BAK
         txtMargin : "Marge",
         txtVat : "TVA",
         txtTotal : "Total Général",
@@ -10489,9 +10671,19 @@ export const langFr =
         },
         popDiscount : 
         {
-            title: "Télécharger Document",
+           title: "Satır İndirimi", // BAK
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
             chkDocDiscount : "Appliquer la remise sur le total général",
+            Percent1 : "1. Remise % ",
+            Price1 : "1. Remise",
+            Percent2 : "2. Remise %",
+            Price2 : "2. Remise",
+            Percent3 : "3. Remise %",
+            Price3 : "3. Remise"
+        },
+        popDocDiscount : 
+        {
+           title: "Evrak İndirimi", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -10740,7 +10932,9 @@ export const langFr =
         txtCustomerName : "Nom Magasin",
         dtDocDate : "Date",
         txtAmount : "Total" ,
-        txtDiscount : "Remise",
+        txtDiscount : "Satır İndirimi",    // BAK
+        txtDocDiscount : "Evrak İndirimi",    // BAK
+        txtSubTotal : "Ara Toplam",    // BAK
         txtMargin : "Marge",
         txtVat : "TVA",
         txtTotal : "Total Général",
@@ -10808,9 +11002,19 @@ export const langFr =
         },
         popDiscount : 
         {
-            title: "Télécharger Document",
+           title: "Satır İndirimi", // BAK
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
             chkDocDiscount : "Appliquer la remise sur le total général", 
+            Percent1 : "1. Remise % ",
+            Price1 : "1. Remise",
+            Percent2 : "2. Remise %",
+            Price2 : "2. Remise",
+            Percent3 : "3. Remise %",
+            Price3 : "3. Remise"
+        },
+        popDocDiscount : 
+        {
+           title: "Evrak İndirimi", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -11115,7 +11319,9 @@ export const langFr =
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
         txtAmount : "Total" ,
-        txtDiscount : "Remise",
+        txtDiscount : "Satır İndirimi",    // BAK
+        txtDocDiscount : "Evrak İndirimi",    // BAK
+        txtSubTotal : "Ara Toplam",    // BAK
         txtMargin : "Marge",
         txtVat : "TVA",
         txtTotal : "Total Général",
@@ -11183,9 +11389,19 @@ export const langFr =
         },
         popDiscount : 
         {
-            title: "Télécharger Document",
+           title: "Satır İndirimi", // BAK
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
             chkDocDiscount : "Appliquer la remise sur le total général", 
+            Percent1 : "1. Remise % ",
+            Price1 : "1. Remise",
+            Percent2 : "2. Remise %",
+            Price2 : "2. Remise",
+            Percent3 : "3. Remise %",
+            Price3 : "3. Remise"
+        },
+        popDocDiscount : 
+        {
+           title: "Evrak İndirimi", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -11420,7 +11636,9 @@ export const langFr =
         txtCustomerName : "Nom Magasin",
         dtDocDate : "Date",
         txtAmount : "Total" ,
-        txtDiscount : "Remise",
+        txtDiscount : "Satır İndirimi",    // BAK
+        txtDocDiscount : "Evrak İndirimi",    // BAK
+        txtSubTotal : "Ara Toplam",    // BAK
         txtMargin : "Marge",
         txtVat : "TVA",
         txtTotal : "Total Général",
@@ -11488,9 +11706,19 @@ export const langFr =
         },
         popDiscount : 
         {
-            title: "Télécharger Document",
+           title: "Satır İndirimi", // BAK
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
             chkDocDiscount : "Appliquer la remise sur le total général",
+            Percent1 : "1. Remise % ",
+            Price1 : "1. Remise",
+            Percent2 : "2. Remise %",
+            Price2 : "2. Remise",
+            Percent3 : "3. Remise %",
+            Price3 : "3. Remise"
+        },
+        popDocDiscount : 
+        {
+           title: "Evrak İndirimi", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -11862,7 +12090,9 @@ export const langFr =
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
         txtAmount : "Total" ,
-        txtDiscount : "Remise",
+        txtDiscount : "Satır İndirimi",    // BAK
+        txtDocDiscount : "Evrak İndirimi",    // BAK
+        txtSubTotal : "Ara Toplam",    // BAK
         txtMargin : "Marge",
         txtVat : "TVA",
         txtTotal : "Total Général",
@@ -11934,9 +12164,19 @@ export const langFr =
         },
         popDiscount : 
         {
-            title: "Télécharger Document",
+           title: "Satır İndirimi", // BAK
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
             chkDocDiscount : "Appliquer la remise sur le total général",
+            Percent1 : "1. Remise % ",
+            Price1 : "1. Remise",
+            Percent2 : "2. Remise %",
+            Price2 : "2. Remise",
+            Percent3 : "3. Remise %",
+            Price3 : "3. Remise"
+        },
+        popDocDiscount : 
+        {
+           title: "Evrak İndirimi", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -12213,7 +12453,9 @@ export const langFr =
         txtCustomerName : "Nom Client",
         dtDocDate : "Date",
         txtAmount : "Total" ,
-        txtDiscount : "Remise",
+        txtDiscount : "Satır İndirimi",    // BAK
+        txtDocDiscount : "Evrak İndirimi",    // BAK
+        txtSubTotal : "Ara Toplam",    // BAK
         txtMargin : "Marge",
         txtVat : "TVA",
         txtTotal : "Total Général",
@@ -12284,9 +12526,19 @@ export const langFr =
         },
         popDiscount : 
         {
-            title: "Télécharger Document",
+           title: "Satır İndirimi", // BAK
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
             chkDocDiscount : "Appliquer la remise sur le total général",
+            Percent1 : "1. Remise % ",
+            Price1 : "1. Remise",
+            Percent2 : "2. Remise %",
+            Price2 : "2. Remise",
+            Percent3 : "3. Remise %",
+            Price3 : "3. Remise"
+        },
+        popDocDiscount : 
+        {
+           title: "Evrak İndirimi", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -14668,7 +14920,9 @@ export const langFr =
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
         txtAmount : "Total" ,
-        txtDiscount : "Remise",
+        txtDiscount : "Satır İndirimi",    // BAK
+        txtDocDiscount : "Evrak İndirimi",    // BAK
+        txtSubTotal : "Ara Toplam",    // BAK
         txtMargin : "Marge",
         txtVat : "TVA",
         txtTotal : "Total Général",
@@ -14727,9 +14981,19 @@ export const langFr =
         },
         popDiscount : 
         {
-            title: "Télécharger Document",
+           title: "Satır İndirimi", // BAK
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
             chkDocDiscount : "Appliquer la remise sur le total général",
+            Percent1 : "1. Remise % ",
+            Price1 : "1. Remise",
+            Percent2 : "2. Remise %",
+            Price2 : "2. Remise",
+            Percent3 : "3. Remise %",
+            Price3 : "3. Remise"
+        },
+        popDocDiscount : 
+        {
+           title: "Evrak İndirimi", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -14979,7 +15243,9 @@ export const langFr =
         txtCustomerName : "Nom Client",
         dtDocDate : "Date",
         txtAmount : "Total" ,
-        txtDiscount : "Remise",
+        txtDiscount : "Satır İndirimi",    // BAK
+        txtDocDiscount : "Evrak İndirimi",    // BAK
+        txtSubTotal : "Ara Toplam",    // BAK
         txtMargin : "Marge",
         txtVat : "TVA",
         txtTotal : "Total Général",
@@ -15041,9 +15307,19 @@ export const langFr =
         },
         popDiscount : 
         {
-            title: "Télécharger Document",
+           title: "Satır İndirimi", // BAK
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
             chkDocDiscount : "Appliquer la remise sur le total général", 
+            Percent1 : "1. Remise % ",
+            Price1 : "1. Remise",
+            Percent2 : "2. Remise %",
+            Price2 : "2. Remise",
+            Percent3 : "3. Remise %",
+            Price3 : "3. Remise"
+        },
+        popDocDiscount : 
+        {
+           title: "Evrak İndirimi", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
