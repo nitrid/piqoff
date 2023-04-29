@@ -2366,7 +2366,22 @@ export default class posDoc extends React.PureComponent
             let tmpDt = new datatable();
             tmpDt.selectCmd = 
             {
-                query : "SELECT *,ISNULL((SELECT TOP 1 TICKET FROM POS_VW_01 WHERE TICKET = @GUID),'') AS REBATE_TICKET FROM POS_SALE_VW_01 WHERE SUBSTRING(CONVERT(NVARCHAR(50),POS_GUID),20,17) = @GUID",
+                //query : "SELECT *,ISNULL((SELECT TOP 1 TICKET FROM POS_VW_01 WHERE TICKET = @GUID),'') AS REBATE_TICKET FROM POS_SALE_VW_01 WHERE SUBSTRING(CONVERT(NVARCHAR(50),POS_GUID),20,17) = @GUID",
+                query : `SELECT 
+                        ITEM_CODE AS ITEM_CODE,
+                        SUM(QUANTITY) AS QUANTITY 
+                        FROM 
+                        (SELECT 
+                        ITEM_CODE,
+                        QUANTITY 
+                        FROM POS_SALE_VW_01 WHERE SUBSTRING(CONVERT(NVARCHAR(50),POS_GUID),20,17) = @GUID  
+                        UNION ALL 
+                        SELECT 
+                        ITEM_CODE,
+                        QUANTITY * -1 
+                        FROM POS_SALE_VW_01 WHERE POS_GUID IN (SELECT GUID FROM POS_VW_01 WHERE TICKET = @GUID)
+                        ) AS TMP 
+                        GROUP BY ITEM_CODE`,
                 param : ['GUID:string|50'], 
                 value : [pTicket] 
             }

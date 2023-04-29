@@ -1447,9 +1447,12 @@ export class posDeviceCls
         
         let generate_lrc = function(real_msg_with_etx)
         {
-            let lrc = 0, text = real_msg_with_etx.split('');
+            let lrc = 0 
+            let text = real_msg_with_etx.split('');
+            
             for (let i in text)
             {
+                this.core.util.writeLog(typeof text[i].charCodeAt)
                 if(typeof text[i].charCodeAt != 'undefined')
                 {
                     lrc ^= text[i].charCodeAt(0);
@@ -1457,6 +1460,7 @@ export class posDeviceCls
             }
 
             console.log('lrc => ', lrc);
+            this.core.util.writeLog('lrc => ', lrc)
             return lrc;
         }
         let checkSum = (pCode,pData) =>
