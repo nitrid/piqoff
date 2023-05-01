@@ -1447,12 +1447,9 @@ export class posDeviceCls
         
         let generate_lrc = function(real_msg_with_etx)
         {
-            let lrc = 0 
-            let text = real_msg_with_etx.split('');
-            
+            let lrc = 0, text = real_msg_with_etx.split('');
             for (let i in text)
             {
-                this.core.util.writeLog(typeof text[i].charCodeAt)
                 if(typeof text[i].charCodeAt != 'undefined')
                 {
                     lrc ^= text[i].charCodeAt(0);
@@ -1460,7 +1457,6 @@ export class posDeviceCls
             }
 
             console.log('lrc => ', lrc);
-            this.core.util.writeLog('lrc => ', lrc)
             return lrc;
         }
         let checkSum = (pCode,pData) =>
@@ -1799,7 +1795,6 @@ export class posDeviceCls
     }
     pdfPrint(pData,pMail)
     {
-        console.log(pData)
         return new Promise(async resolve => 
         {
             let tmpArr = [];
@@ -1821,7 +1816,7 @@ export class posDeviceCls
             }
             
             let tmpY = 5
-            let docPdf = new jsPDF('p','mm',[103,tmpArr.length*10])
+            let docPdf = new jsPDF('p','mm',[103,tmpArr.length * 10])
             for (let i = 0; i < tmpArr.length; i++) 
             {
                 if(typeof tmpArr[i].barcode != 'undefined')
@@ -1845,12 +1840,14 @@ export class posDeviceCls
                 }
                 else
                 {
-                    let  tmpAlign  ='' 
+                    let  tmpAlign = '' 
                     let tmpX = 0
+                    let tmpCharSpace = 0
+
                     if(tmpArr[i].align == 'ct')
                     {
                         tmpAlign = 'center'
-                        tmpX = 51
+                        tmpX = docPdf.internal.pageSize.getWidth() / 2
                     }
                     else if(tmpArr[i].align == 'lt')
                     {
@@ -1860,7 +1857,7 @@ export class posDeviceCls
                     else  if(tmpArr[i].align == 'rt')
                     {
                         tmpAlign = 'right'
-                        tmpX = 103
+                        tmpX = docPdf.internal.pageSize.getWidth() - 3
                     }
 
                     let tmpStyle = 'normal'
@@ -1881,22 +1878,68 @@ export class posDeviceCls
                     else if(tmpArr[i].font == 'b')
                     {
                         tmpFontSize = 9
-                    }
+                    }                    
 
                     if(typeof tmpArr[i].size != 'undefined' && Array.isArray(tmpArr[i].size))
                     {
                         if(tmpArr[i].size[0] == 1 && tmpArr[i].size[1] == 1)
                         {
-                            tmpFontSize = 15
+                            tmpFontSize = 20
                         }
                         else if(tmpArr[i].size[0] == 1 && tmpArr[i].size[1] == 0)
                         {
                             tmpFontSize = 12
                         }
                     }
+
+                    if(typeof tmpArr[i].pdf != 'undefined')
+                    {
+                        if(typeof tmpArr[i].pdf.fontSize != 'undefined')
+                        {
+                            tmpFontSize = tmpArr[i].pdf.fontSize
+                        }
+                        if(typeof tmpArr[i].pdf.charSpace != 'undefined')
+                        {
+                            tmpCharSpace = tmpArr[i].pdf.charSpace
+                        }                        
+                    }
+
                     docPdf.setFont('helvetica',tmpStyle)
                     docPdf.setFontSize(tmpFontSize)
-                    docPdf.text(tmpArr[i].data,tmpX,tmpY,null,null,tmpAlign)//.setFontSize(tmpFontSize).setFont(undefined,tmpStyle);
+
+                    if(typeof tmpArr[i].pdf != 'undefined' && typeof tmpArr[i].pdf.grid != 'undefined')
+                    {
+                        for (let x = 0; x < tmpArr[i].pdf.grid.length; x++) 
+                        {
+                            let tmpGrid = tmpArr[i].pdf.grid[x]
+                            let tmpGrdData = tmpArr[i].data.toString().substring(tmpGrid.charS,tmpGrid.charE)
+                            
+                            if(typeof tmpGrid.align != 'undefined')
+                            {
+                                tmpAlign = tmpGrid.align
+                            }
+                            else
+                            {
+                                if(tmpArr[i].align == 'ct')
+                                {
+                                    tmpAlign = 'center'
+                                }
+                                else if(tmpArr[i].align == 'lt')
+                                {
+                                    tmpAlign = 'left'
+                                }
+                                else if(tmpArr[i].align == 'rt')
+                                {
+                                    tmpAlign = 'right'
+                                }
+                            }
+                            docPdf.text(tmpGrdData,tmpGrid.x,tmpY,{align: tmpAlign,charSpace:tmpCharSpace})
+                        }
+                    }
+                    else
+                    {
+                        docPdf.text(tmpArr[i].data,tmpX,tmpY,{align: tmpAlign,charSpace:tmpCharSpace})
+                    }
 
                     tmpY += 8
                 }
@@ -1927,6 +1970,8 @@ export class posDeviceCls
             {
                 console.log(pResult1)
             });
+
+            //docPdf.save('test.pdf')
             resolve()
         });
     }
