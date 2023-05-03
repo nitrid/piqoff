@@ -3949,7 +3949,8 @@ export const langFr =
             title: "Contenu Document",
             count:  "Quantité Ligne",
             quantity: "Quantité Totale",
-            quantity2: "Total 2eme Unit "
+            quantity2: "Total 2eme Unit ",
+            margin: "Marge"
         },
         grdUnit2 : 
         {
@@ -4562,7 +4563,8 @@ export const langFr =
             title: "Contenu Document",
             count:  "Quantité Ligne",
             quantity: "Quantité Totale",
-            quantity2: "Total 2eme Unit "
+            quantity2: "Total 2eme Unit ",
+            margin: "Marge"
         },
         popUnit2 : 
         {
@@ -5017,7 +5019,8 @@ export const langFr =
             title: "Contenu Document",
             count:  "Quantité Ligne",
             quantity: "Quantité Totale",
-            quantity2: "Total 2eme Unit "
+            quantity2: "Total 2eme Unit ",
+            margin: "Marge"
         },
         popUnit2 : 
         {
@@ -5985,7 +5988,8 @@ export const langFr =
             title: "Contenu Document",
             count:  "Quantité Ligne",
             quantity: "Quantité Totale",
-            quantity2: "Total 2eme Unit "
+            quantity2: "Total 2eme Unit ",
+            margin: "Marge"
         },
         popUnit2 : 
         {
@@ -6818,7 +6822,8 @@ export const langFr =
             title: "Contenu Document",
             count:  "Quantité Ligne",
             quantity: "Quantité Totale",
-            quantity2: "Total 2eme Unit "
+            quantity2: "Total 2eme Unit ",
+            margin: "Marge"
         },
         popUnit2 : 
         {
@@ -7317,7 +7322,8 @@ export const langFr =
             title: "Contenu Document",
             count:  "Quantité Ligne",
             quantity: "Quantité Totale",
-            quantity2: "Total 2eme Unit "
+            quantity2: "Total 2eme Unit ",
+            margin: "Marge"
         },
         popUnit2 : 
         {
@@ -8130,7 +8136,8 @@ export const langFr =
             title: "Contenu Document",
             count:  "Quantité Ligne",
             quantity: "Quantité Totale",
-            quantity2: "Total 2eme Unit "
+            quantity2: "Total 2eme Unit ",
+            margin: "Marge"
         },
         popUnit2 : 
         {
@@ -8532,7 +8539,8 @@ export const langFr =
             title: "Contenu Document",
             count:  "Quantité Ligne",
             quantity: "Quantité Totale",
-            quantity2: "Total 2eme Unit "
+            quantity2: "Total 2eme Unit ",
+            margin: "Marge"
         },
         grdUnit2 : 
         {
@@ -9010,7 +9018,8 @@ export const langFr =
             title: "Contenu Document",
             count:  "Quantité Ligne",
             quantity: "Quantité Totale",
-            quantity2: "Total 2eme Unit "
+            quantity2: "Total 2eme Unit ",
+            margin: "Marge"
         },
         popUnit2 : 
         {
@@ -9425,7 +9434,8 @@ export const langFr =
             title: "Contenu Document",
             count:  "Quantité Ligne",
             quantity: "Quantité Totale",
-            quantity2: "Total 2eme Unit "
+            quantity2: "Total 2eme Unit ",
+            margin: "Marge"
         },
         popUnit2 : 
         {
@@ -10585,6 +10595,14 @@ export const langFr =
             title : "Supplément",  
             interfel : "Interfel", 
             calculateInterfel : "Calcul de l'interfel",  
+        },
+        popDetail:
+        {
+            title: "Contenu Document",
+            count:  "Quantité Ligne",
+            quantity: "Quantité Totale",
+            quantity2: "Total 2eme Unit ",
+            margin: "Marge"
         },
     },
     irs_02_003 : // "İade İrsaliyesi"
@@ -12822,7 +12840,15 @@ export const langFr =
         txtDiscountPer1 : "1. Remise % ",  
         txtDiscountPer2 : "2. Remise % ",  
         txtDiscountPer3 : "3. Remise % ", 
-        txtTotalHt : "Total HT"
+        txtTotalHt : "Total HT",
+        popDetail:
+        {
+            title: "Contenu Document",
+            count:  "Quantité Ligne",
+            quantity: "Quantité Totale",
+            quantity2: "Total 2eme Unit ",
+            margin: "Marge"
+        },
     },
     sip_04_001 : // "Sipariş Ayrıştırma"
     {
@@ -15586,7 +15612,15 @@ export const langFr =
         txtDiscountPer1 : "1. Remise % ",  
         txtDiscountPer2 : "2. Remise % ",  
         txtDiscountPer3 : "3. Remise % ", 
-        txtTotalHt : "Total HT"
+        txtTotalHt : "Total HT",
+        popDetail:
+        {
+            title: "Contenu Document",
+            count:  "Quantité Ligne",
+            quantity: "Quantité Totale",
+            quantity2: "Total 2eme Unit ",
+            margin: "Marge"
+        },
     },
     proces_01_001 : // "Ürün Grubu Güncelleme" 
     {

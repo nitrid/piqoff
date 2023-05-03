@@ -1794,6 +1794,10 @@ export default class salesInvoice extends React.PureComponent
                                             }
                                         }
                                         this.numDetailQuantity2.value = tmpQuantity2.toFixed(3)
+                                        let tmpExVat = Number(this.docObj.docItems.dt().sum("PRICE",2))
+                                        let tmpMargin = Number(tmpExVat) - Number(this.docObj.docItems.dt().sum("COST_PRICE",2)) 
+                                        let tmpMarginRate = ((tmpMargin / Number(this.docObj.docItems.dt().sum("COST_PRICE",2)))) * 100
+                                        this.txtDetailMargin.value = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2);                 
                                         this.popDetail.show()
                                     }}/>
                                 </Item>
@@ -4668,7 +4672,7 @@ export default class salesInvoice extends React.PureComponent
                         title={this.t("popDetail.title")}
                         container={"#root"} 
                         width={'500'}
-                        height={'250'}
+                        height={'300'}
                         position={{of:'#root'}}
                         >
                             <Form colCount={1} height={'fit-content'}>
@@ -4719,6 +4723,11 @@ export default class salesInvoice extends React.PureComponent
                                             }
                                         },
                                     ]}/>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("popDetail.margin")} alignment="right" />
+                                    <NdTextBox id="txtDetailMargin" parent={this} simple={true} readOnly={true}
+                                    maxLength={32}/>
                                 </Item>
                             </Form>
                         </NdPopUp>

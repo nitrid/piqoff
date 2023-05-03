@@ -3951,7 +3951,8 @@ export const langTr =
             title: "Evrak İçeriği",
             count: "Toplam Satır",
             quantity: "Toplam Miktar",
-            quantity2: "2. Birim Toplamı "
+            quantity2: "2. Birim Toplamı ",
+            margin : "Marj"
         },
         grdUnit2 : 
         {
@@ -4565,7 +4566,8 @@ export const langTr =
             title: "Evrak İçeriği",
             count: "Toplam Satır",
             quantity: "Toplam Miktar",
-            quantity2: "2. Birim Toplamı "
+            quantity2: "2. Birim Toplamı ",
+            margin : "Marj"
         },
         popUnit2 : 
         {
@@ -5020,7 +5022,8 @@ export const langTr =
             title: "Evrak İçeriği",
             count: "Toplam Satır",
             quantity: "Toplam Miktar",
-            quantity2: "2. Birim Toplamı "
+            quantity2: "2. Birim Toplamı ",
+            margin : "Marj"
         },
         popUnit2 : 
         {
@@ -5974,7 +5977,8 @@ export const langTr =
             title: "Evrak İçeriği",
             count: "Toplam Satır",
             quantity: "Toplam Miktar",
-            quantity2: "2. Birim Toplamı "
+            quantity2: "2. Birim Toplamı ",
+            margin : "Marj"
         },
         popUnit2 : 
         {
@@ -6814,7 +6818,8 @@ export const langTr =
             title: "Evrak İçeriği",
             count: "Toplam Satır",
             quantity: "Toplam Miktar",
-            quantity2: "2. Birim Toplamı "
+            quantity2: "2. Birim Toplamı ",
+            margin : "Marj"
         },
         popUnit2 : 
         {
@@ -7313,7 +7318,8 @@ export const langTr =
             title: "Evrak İçeriği",
             count: "Toplam Satır",
             quantity: "Toplam Miktar",
-            quantity2: "2. Birim Toplamı "
+            quantity2: "2. Birim Toplamı ",
+            margin : "Marj"
         },
         popUnit2 : 
         {
@@ -8133,7 +8139,8 @@ export const langTr =
             title: "Evrak İçeriği",
             count: "Toplam Satır",
             quantity: "Toplam Miktar",
-            quantity2: "2. Birim Toplamı "
+            quantity2: "2. Birim Toplamı ",
+            margin : "Marj"
         },
         popUnit2 : 
         {
@@ -8535,7 +8542,8 @@ export const langTr =
             title: "Evrak İçeriği",
             count: "Toplam Satır",
             quantity: "Toplam Miktar",
-            quantity2: "2. Birim Toplamı "
+            quantity2: "2. Birim Toplamı ",
+            margin : "Marj"
         },
         grdUnit2 : 
         {
@@ -9006,7 +9014,8 @@ export const langTr =
             title: "Evrak İçeriği",
             count: "Toplam Satır",
             quantity: "Toplam Miktar",
-            quantity2: "2. Birim Toplamı "
+            quantity2: "2. Birim Toplamı ",
+            margin : "Marj"
         },
         popUnit2 : 
         {
@@ -9420,7 +9429,8 @@ export const langTr =
             title: "Evrak İçeriği",
             count: "Toplam Satır",
             quantity: "Toplam Miktar",
-            quantity2: "2. Birim Toplamı "
+            quantity2: "2. Birim Toplamı ",
+            margin : "Marj"
         },
         popUnit2 : 
         {
@@ -10612,6 +10622,14 @@ export const langTr =
         txtDiscountPer1 : "1. İndirim Oranı",
         txtDiscountPer2 : "2. İndirim Oranı",
         txtDiscountPer3 : "3. İndirim Oranı",
+        popDetail:
+        {
+            title: "Evrak İçeriği",
+            count: "Toplam Satır",
+            quantity: "Toplam Miktar",
+            quantity2: "2. Birim Toplamı ",
+            margin : "Marj"
+        },
     },
     irs_02_003 : // "İade İrsaliyesi"
     {
@@ -12851,6 +12869,14 @@ export const langTr =
         txtDiscountPer1 : "1. İndirim Oranı",
         txtDiscountPer2 : "2. İndirim Oranı",
         txtDiscountPer3 : "3. İndirim Oranı",
+        popDetail:
+        {
+            title: "Evrak İçeriği",
+            count: "Toplam Satır",
+            quantity: "Toplam Miktar",
+            quantity2: "2. Birim Toplamı ",
+            margin : "Marj"
+        },
     },
     sip_04_001 : // "Sipariş Ayrıştırma" 
     {
@@ -15602,7 +15628,8 @@ export const langTr =
             title: "Evrak İçeriği",
             count: "Toplam Satır",
             quantity: "Toplam Miktar",
-            quantity2: "2. Birim Toplamı "
+            quantity2: "2. Birim Toplamı ",
+            margin : "Marj"
         },
         msgUnit:
         {
@@ -15680,6 +15707,14 @@ export const langTr =
         txtDiscountPer2 : "2. İndirim Oranı",
         txtDiscountPer3 : "3. İndirim Oranı",
         txtTotalHt: "İndirimsiz Toplam",
+        popDetail:
+        {
+            title: "Evrak İçeriği",
+            count: "Toplam Satır",
+            quantity: "Toplam Miktar",
+            quantity2: "2. Birim Toplamı ",
+            margin : "Marj"
+        },
     },
     proces_01_001 : // "Ürün Grubu Güncelleme"
     {
