@@ -740,7 +740,7 @@ export default class posDoc extends React.PureComponent
                     showCloseButton:true,
                     width:'500px',
                     height:'200px',
-                    button:[{id:"btn01",caption:"Tamam",location:'before'}],
+                    button:[{id:"btn01",caption:this.lang.t("msgCustomerNotFound.btn01"),location:'before'}],
                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgCustomerNotFound.msg")}</div>)
                 }
                 
@@ -763,7 +763,7 @@ export default class posDoc extends React.PureComponent
                     showCloseButton:true,
                     width:'500px',
                     height:'200px',
-                    button:[{id:"btn01",caption:"Tamam",location:'after'}],
+                    button:[{id:"btn01",caption:this.lang.t("msgZeroValidation.btn01"),location:'after'}],
                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgZeroValidation.msg")}</div>)
                 }
                 await dialog(tmpConfObj);
@@ -830,7 +830,7 @@ export default class posDoc extends React.PureComponent
                         showCloseButton:true,
                         width:'500px',
                         height:'250px',
-                        button:[{id:"btn01",caption:"Tamam",location:'after'}],
+                        button:[{id:"btn01",caption:this.lang.t("btnOk"),location:'after'}],
                         content:(<div><h3 className="text-primary text-center">{tmpItemsDt[0].NAME}</h3><h3 className="text-danger text-center">{tmpPrice + " EUR"}</h3></div>)
                     }
                     await dialog(tmpConfObj);
@@ -1024,7 +1024,7 @@ export default class posDoc extends React.PureComponent
                                 showCloseButton:true,
                                 width:'500px',
                                 height:'200px',
-                                button:[{id:"btn01",caption:"Tamam",location:'after'}],
+                                button:[{id:"btn01",caption:this.lang.t("msgZeroValidation.btn01"),location:'after'}],
                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgZeroValidation.msg")}</div>)
                             }
                             await dialog(tmpConfObj);
@@ -2821,7 +2821,7 @@ export default class posDoc extends React.PureComponent
                 showIndicator={true}
                 shading={true}
                 showPane={true}
-                message={"Lütfen bekleyiniz..."}
+                message={this.lang.t("pleaseWait")}
                 ref={this.loadingPay}
                 />               
                 <div className="top-bar row">
