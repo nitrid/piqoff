@@ -34,6 +34,7 @@ export const langTr =
     blnAbtType : "Tip : Piqsoft - Pos",
     blnAbtSw : "S/W : Scale.js",
     blnAbtCertificate : "Sertifika No : ",
+    pleaseWait : "Lütfen Bekleyin...",
     msgCustomerNotFound : 
     {
         title : "Dikkat",

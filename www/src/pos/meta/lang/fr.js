@@ -34,6 +34,7 @@ export const langFr =
     blnAbtType : "Logiciel : Piqsoft - Pos",
     blnAbtSw : "S/W : Scale.js",
     blnAbtCertificate : "Numéro de certificat : ",
+    pleaseWait : "Veuillez patienter...",
     msgCustomerNotFound : 
     {
         title : "Attention",
