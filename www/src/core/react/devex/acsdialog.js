@@ -68,8 +68,8 @@ export default class NdAcsDialog extends NdBase
                         local : 
                         {
                             type : "select",
-                            from : "USERS",
-                            where : {PWD:tmpPass,ROLE:'Administrator',STATUS:true}
+                            query : "SELECT * FROM USERS WHERE PWD = ? AND ROLE = 'Administrator' AND STATUS = 1",
+                            values : [tmpPass]
                         }
                     }
                 }
@@ -83,8 +83,8 @@ export default class NdAcsDialog extends NdBase
                         local : 
                         {
                             type : "select",
-                            from : "USERS",
-                            where : {CODE:tmpCode,PWD:tmpPass,STATUS:true}
+                            query : "SELECT * FROM USERS WHERE CODE = ? AND PWD = ? AND STATUS = 1",
+                            values : [tmpCode,tmpPass]
                         }
                     }
                 }

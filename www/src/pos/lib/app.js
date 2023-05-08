@@ -166,7 +166,7 @@ export default class App extends React.Component
                 this.core.auth.logout()
                 window.location.reload()
             }
-        })        
+        })     
     }
     async login()
     {

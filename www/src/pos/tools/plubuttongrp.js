@@ -53,15 +53,16 @@ export default class NbPluButtonGrp extends NbBase
         
         this.pluImageDt.selectCmd = 
         {
-            query : "SELECT *,ISNULL((SELECT TOP 1 1 FROM PROMO_COND_APP_VW_01 WHERE COND_ITEM_GUID = ITEM_GUID AND START_DATE <= CONVERT(NVARCHAR(10),GETDATE(),112) AND FINISH_DATE >= CONVERT(NVARCHAR(10),GETDATE(),112)),0) AS PROMO FROM PLU_IMAGE_VW_01 WHERE MAIN_GUID IN (SELECT CASE WHEN value = '' THEN '00000000-0000-0000-0000-000000000000' ELSE value END FROM STRING_SPLIT(@MAIN_GUID,',')) ORDER BY ITEM_NAME ASC",
+            query : `SELECT *,ISNULL((SELECT TOP 1 1 FROM PROMO_COND_APP_VW_01 WHERE COND_ITEM_GUID = ITEM_GUID AND START_DATE <= CONVERT(NVARCHAR(10),GETDATE(),112) AND 
+                    FINISH_DATE >= CONVERT(NVARCHAR(10),GETDATE(),112)),0) AS PROMO FROM PLU_IMAGE_VW_01 WHERE MAIN_GUID IN (SELECT CASE WHEN value = '' THEN '00000000-0000-0000-0000-000000000000' ELSE value END 
+                    FROM STRING_SPLIT(@MAIN_GUID,',')) ORDER BY ITEM_NAME ASC`,
             param : ['MAIN_GUID:string|250'],
             value : [tmpArr.toString()],
             local : 
             {
                 type : "select",
-                from : "PLU_IMAGE_VW_01",
-                where : {MAIN_GUID:{in:tmpArr}},
-                order: {by: "ITEM_NAME",type: "asc"}
+                query : `SELECT * FROM PLU_IMAGE_VW_01 WHERE MAIN_GUID IN (${tmpArr.map(() => '?').join(',')}) ORDER BY ITEM_NAME ASC`,
+                values : tmpArr,
             }
         }        
         await this.pluImageDt.refresh()

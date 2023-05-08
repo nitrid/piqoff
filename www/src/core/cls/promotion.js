@@ -40,14 +40,17 @@ export class promoCls
         let tmpDt = new datatable('PROMO');            
         tmpDt.selectCmd = 
         {
-            query : "SELECT * FROM [dbo].[PROMO_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND " + 
-                    "((CUSTOMER_GUID = @CUSTOMER_GUID) OR (CUSTOMER_GUID = '00000000-0000-0000-0000-000000000000')) AND ((DEPOT_GUID = @DEPOT_GUID) OR (@DEPOT_GUID = '00000000-0000-0000-0000-000000000000')) AND " + 
-                    "((START_DATE <= @START_DATE) OR (@START_DATE = '19700101')) AND ((FINISH_DATE >= @FINISH_DATE) OR (@FINISH_DATE = '19700101')) AND STATUS = 1 ORDER BY TYPE ASC",
+            query : `SELECT * FROM [dbo].[PROMO_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND 
+                    ((CUSTOMER_GUID = @CUSTOMER_GUID) OR (CUSTOMER_GUID = '00000000-0000-0000-0000-000000000000')) AND ((DEPOT_GUID = @DEPOT_GUID) OR (@DEPOT_GUID = '00000000-0000-0000-0000-000000000000')) AND 
+                    ((START_DATE <= @START_DATE) OR (@START_DATE = '19700101')) AND ((FINISH_DATE >= @FINISH_DATE) OR (@FINISH_DATE = '19700101')) AND STATUS = 1 ORDER BY TYPE ASC`,
             param : ['GUID:string|50','CODE:string|25','START_DATE:date','FINISH_DATE:date','CUSTOMER_GUID:string|50','DEPOT_GUID:string|50'],
             local : 
             {
                 type : "select",
-                from : "PROMO_VW_01",
+                query : `SELECT * FROM PROMO_VW_01 WHERE ((GUID = ?) OR (? = '00000000-0000-0000-0000-000000000000')) AND  
+                        ((CUSTOMER_GUID = ?) OR (CUSTOMER_GUID = '00000000-0000-0000-0000-000000000000')) AND ((DEPOT_GUID = ?) OR (? = '00000000-0000-0000-0000-000000000000')) AND  
+                        ((START_DATE <= ?) OR (? = '19700101')) AND ((FINISH_DATE >= ?) OR (? = '19700101')) AND STATUS = 1 ORDER BY TYPE ASC`,
+                values : []
             }
         } 
         tmpDt.insertCmd = 
@@ -157,36 +160,22 @@ export class promoCls
                     tmpPrm.FINISH_DATE = typeof arguments[0].FINISH_DATE == 'undefined' ? '19700101' : arguments[0].FINISH_DATE;
                     tmpPrm.CUSTOMER_GUID = typeof arguments[0].CUSTOMER_GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].CUSTOMER_GUID;
                     tmpPrm.DEPOT_GUID = typeof arguments[0].DEPOT_GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].DEPOT_GUID;
+
+                    this.ds.get('PROMO').selectCmd.local.values = [tmpPrm.GUID,tmpPrm.GUID,tmpPrm.CUSTOMER_GUID,tmpPrm.DEPOT_GUID,tmpPrm.DEPOT_GUID,tmpPrm.START_DATE,tmpPrm.START_DATE,tmpPrm.FINISH_DATE,tmpPrm.FINISH_DATE]
                 }
                 else
                 {
                     tmpPrm = {CODE:arguments[0].CODE}
                     this.ds.get('PROMO').selectCmd.query = "SELECT * FROM [dbo].[PROMO_VW_01] WHERE ((CODE = @CODE) OR (@CODE = '')) AND STATUS = 1 ORDER BY TYPE ASC"
                     this.ds.get('PROMO').selectCmd.param = ['CODE:string|25']
+
+                    this.ds.get('PROMO').selectCmd.local.query = "SELECT * FROM PROMO_VW_01 WHERE ((CODE = ?) OR (? = '')) AND STATUS = 1 ORDER BY TYPE ASC"
+                    this.ds.get('PROMO').selectCmd.local.values = [tmpPrm.CODE,tmpPrm.CODE]
                 }
             }
             
             this.ds.get('PROMO').selectCmd.value = Object.values(tmpPrm)
 
-            this.ds.get('PROMO').selectCmd.local =
-            {
-                type : "select",
-                from : "PROMO_VW_01",
-                where : 
-                {
-                    START_DATE : {'<=' : arguments[0].START_DATE + "|date"},
-                    FINISH_DATE : {'>=' : arguments[0].FINISH_DATE + "|date"},                    
-                }
-            }
-
-            if(tmpPrm.DEPOT_GUID != '00000000-0000-0000-0000-000000000000')
-            {
-                this.ds.get('PROMO').selectCmd.local.where.DEPOT_GUID = arguments[0].DEPOT_GUID
-            }
-            if(tmpPrm.CUSTOMER_GUID != '00000000-0000-0000-0000-000000000000')
-            {
-                this.ds.get('PROMO').selectCmd.local.where.CUSTOMER_GUID = arguments[0].CUSTOMER_GUID
-            }
             await this.ds.get('PROMO').refresh();
             
             let tmpGuids = ''
@@ -240,7 +229,7 @@ export class promoCondCls
         {
             query : "SELECT *,'COND' AS SECTOR FROM [dbo].[PROMO_CONDITION_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND " + 
                     "((PROMO IN (SELECT value FROM STRING_SPLIT(@PROMO,','))) OR (@PROMO = '')) ORDER BY WITHAL ASC",
-            param : ['GUID:string|50','PROMO:string|max']
+            param : ['GUID:string|50','PROMO:string|max'],
         } 
         tmpDt.insertCmd = 
         {
