@@ -660,6 +660,10 @@ export const langFr =
         {
             title : "Statistique de Vente" 
         },
+        popDescription :
+        {
+            title : "Ürün Açıklaması" // BAK
+        },
         grdAnalysis:  
         {
             clmToday: "Aujour'hui",
@@ -2445,6 +2449,9 @@ export const langFr =
         multicodePlaceHolder : "Veuillez Entrer les Codes Fournisseur Recherchés" ,
         barkodPlaceHolder :"Veuillez Entrer Le ou Les Codes Produits ou Codes Barres",
         ItemNamePlaceHolder :"Veuillez Entrer le Nom Complet ou une Syllabe",
+        txtTotalCount : "Toplam Kayıt",  // BAK
+        txtTotalActive : "Aktif Kayıt Sayısı",  // BAK
+        txtTotalPassive : "Pasif Kayıt Sayısı",  // BAK
         grdListe : 
         {
             clmCode: "Référence Produit",

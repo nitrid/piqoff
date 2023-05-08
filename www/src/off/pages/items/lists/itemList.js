@@ -248,6 +248,9 @@ export default class itemList extends React.PureComponent
                     }
                 }
                 this.grdListe.dataRefresh(this.grdListe.data.datatable)
+                this.txtTotalCount.value = this.grdListe.data.datatable.length
+                this.txtTotalActive.value = this.grdListe.data.datatable.where({'STATUS':true}).length
+                this.txtTotalPassive.value = this.grdListe.data.datatable.where({'STATUS':false}).length
             }
            
         }
@@ -364,6 +367,9 @@ export default class itemList extends React.PureComponent
                     }
                 }
                 this.grdListe.dataRefresh(this.grdListe.data.datatable)
+                this.txtTotalCount.value = this.grdListe.data.datatable.length
+                this.txtTotalActive.value = this.grdListe.data.datatable.where({'STATUS':true}).length
+                this.txtTotalPassive.value = this.grdListe.data.datatable.where({'STATUS':false}).length
             }
         }
         else
@@ -470,6 +476,9 @@ export default class itemList extends React.PureComponent
                     }
                 }
                 this.grdListe.dataRefresh(this.grdListe.data.datatable)
+                this.txtTotalCount.value = this.grdListe.data.datatable.length
+                this.txtTotalActive.value = this.grdListe.data.datatable.where({'STATUS':true}).length
+                this.txtTotalPassive.value = this.grdListe.data.datatable.where({'STATUS':false}).length
             }
         }
     }
@@ -594,6 +603,24 @@ export default class itemList extends React.PureComponent
                         </div>
                         <div className="col-3">
                             <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnGetirClick}></NdButton>
+                        </div>
+                    </div>
+                    <div className="row px-2 pt-2">
+                        <div className="col-12">
+                            <Form colCount={3} id="frmKriter">
+                                <Item>
+                                    <Label text={this.t("txtTotalCount")} alignment="right" />
+                                    <NdTextBox id="txtTotalCount" parent={this} simple={true} readOnly={true}/>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("txtTotalActive")} alignment="right" />
+                                    <NdTextBox id="txtTotalActive" parent={this} simple={true} readOnly={true}/>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("txtTotalPassive")} alignment="right" />
+                                    <NdTextBox id="txtTotalPassive" parent={this} simple={true} readOnly={true}/>
+                                </Item>
+                            </Form>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">

@@ -662,6 +662,10 @@ export const langTr =
         {
             title : "Satış İstatistiği"
         },
+        popDescription :
+        {
+            title : "Ürün Açıklaması"
+        },
         grdAnalysis: 
         {
             clmToday: "Bugün",
@@ -2447,6 +2451,9 @@ export const langTr =
         multicodePlaceHolder : "Aratmak İstediğiniz Tedarikçi Kodlarını Giriniz",
         barkodPlaceHolder :"Aratmak İstediğiniz Bir yada Birden Fazla Ürün Kodu yada Barkod Giriniz",
         ItemNamePlaceHolder :"Ürün Adının Tamamını yada İçinde Geçen Bir Hece Giriniz",
+        txtTotalCount : "Toplam Kayıt",
+        txtTotalActive : "Aktif Kayıt Sayısı",
+        txtTotalPassive : "Pasif Kayıt Sayısı",
         grdListe : 
         {
             clmCode: "Ürün Kodu",

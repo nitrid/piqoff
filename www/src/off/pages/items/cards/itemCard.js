@@ -22,6 +22,7 @@ import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
 import NdImageUpload from '../../../../core/react/devex/imageupload.js';
 import NdDialog, { dialog } from '../../../../core/react/devex/dialog.js';
+import NdTextArea from '../../../../core/react/devex/textarea.js';
 import { datatable } from '../../../../core/core.js';
 
 export default class itemCard extends React.PureComponent
@@ -1410,11 +1411,20 @@ export default class itemCard extends React.PureComponent
                                     {
                                         if(e.value.length <= 32)
                                             this.txtShortName.value = e.value.toUpperCase()
-                                    }}>
-                                        <Validator validationGroup={"frmItems" + this.tabIndex}>
-                                            <RequiredRule message={this.t("validName")}   
-                                             />
-                                        </Validator> 
+                                    }}
+                                    button={[
+                                    {
+                                        id:'001',
+                                        icon:'more',
+                                        onClick:()=>
+                                        {
+                                            this.popDescription.show()
+                                        }
+                                    }]}>
+                                    <Validator validationGroup={"frmItems" + this.tabIndex}>
+                                        <RequiredRule message={this.t("validName")}   
+                                            />
+                                    </Validator> 
                                     </NdTextBox>
                                 </Item>
                                 {/* txtShortName */}
@@ -2806,7 +2816,48 @@ export default class itemCard extends React.PureComponent
                                 </Item>
                             </Form>
                         </NdDialog>
-                    </div>                              
+                    </div>     
+                      {/* Açıklama POPUP */}
+                      <div>
+                        <NdPopUp parent={this} id={"popDescription"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.t("popDescription.title")}
+                        container={"#root"} 
+                        width={'800'}
+                        height={'500'}
+                        position={{of:'#root'}}
+                        >
+                            <Form colCount={1} height={'fit-content'}>
+                                <Item>
+                                    <NdTextArea simple={true} parent={this} id="txtDescription" height='300px'  dt={{data:this.itemsObj.dt('ITEMS'),field:"DESCRIPTION"}}
+                                    param={this.param.filter({ELEMENT:'txtDescription',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'txtDescription',USERS:this.user.CODE})}
+                                    />
+                                </Item>   
+                                <Item>
+                                    <div className='row'>
+                                        <div className='col-6'>
+                                            <NdButton text={this.lang.t("btnSave")} type="normal" stylingMode="contained" width={'100%'}
+                                            onClick={async (e)=>
+                                            {       
+                                               this.itemsObj.dt()[0].DESCRIPTION = this.txtDescription.value
+                                               this.popDescription.hide()
+                                            }}/>
+                                        </div>
+                                        <div className='col-6'>
+                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                            onClick={()=>
+                                            {
+                                                this.popDescription.hide()
+                                            }}/>
+                                        </div>
+                                    </div>
+                                </Item>    
+                            </Form>
+                        </NdPopUp>
+                    </div>                            
                 </ScrollView>
             </React.Fragment>
         )
