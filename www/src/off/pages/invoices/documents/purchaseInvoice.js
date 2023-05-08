@@ -1531,7 +1531,7 @@ export default class purchaseInvoice extends React.PureComponent
         {
             let tmpQuery = 
             { 
-                query :"SELECT GUID,CODE,NAME,VAT,UNIT,1 AS QUANTITY,0 AS ITEM_TYPE,COST_PRICE" + 
+                query :"SELECT GUID,CODE,NAME,VAT,UNIT,1 AS QUANTITY,0 AS ITEM_TYPE,COST_PRICE," + 
                 "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].OUTPUT+"'),'') AS MULTICODE"+
                 " FROM ITEMS_VW_01 WHERE ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].OUTPUT+"'),'') = @VALUE AND STATUS = 1 " ,
                 param : ['VALUE:string|50'],

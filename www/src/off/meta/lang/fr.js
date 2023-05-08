@@ -590,7 +590,7 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Etes-vous sûr(e) de vouloir enregistrer !"
+            msg: "Etes-vous sûr(e) de vouloir Enregistrer!"
         },
         msgSaveResult:
         {
@@ -603,7 +603,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessaires !"
+            msg: "Veuillez saisir les zones nécessairess !"
         },
         msgDelete:
         {
@@ -622,7 +622,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessaires !"
+            msg: "Veuillez saisir les zones nécessairess !"
         },
         tabTitleSalesPriceHistory : "Historique Prix de Vente",
         grdSalesPrice : 
@@ -740,7 +740,7 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Etes-vous sûr(e) de vouloir enregistrer !"
+            msg: "Etes-vous sûr(e) de vouloir Enregistrer!"
         },
         msgSaveResult:
         {
@@ -753,13 +753,13 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessaires !" ,
+            msg: "Veuillez saisir les zones nécessairess !" ,
         },
         msgDelete:
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?" ,
         },
         validCode :"Veuillez Sélectionner le Produit",
@@ -789,7 +789,7 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Etes-vous sûr(e) de vouloir enregistrer !" ,
+            msg: "Etes-vous sûr(e) de vouloir Enregistrer!" ,
         },
         msgSaveResult:
         {
@@ -802,7 +802,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessaires !" ,
+            msg: "Veuillez saisir les zones nécessairess !" ,
         },
         msgDelete:
         {
@@ -844,7 +844,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Êtes-vous sûr(e) de vouloir enregistrer? "
         },
         msgSaveResult:
@@ -906,7 +906,7 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Etes vous sûr(e) de vouloir enregistrer !"
+            msg: "Etes vous sûr(e) de vouloir Enregistrer!"
         },
         msgSaveResult:
         {
@@ -956,7 +956,7 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Etes vous sûr(e) de vouloir enregistrer !"
+            msg: "Etes vous sûr(e) de vouloir Enregistrer!"
         },
         msgSaveResult:
         {
@@ -1006,7 +1006,7 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Etes vous sûr(e) de vouloir enregistrer !"
+            msg: "Etes vous sûr(e) de vouloir Enregistrer!"
         },
         msgSaveResult:
         {
@@ -1070,7 +1070,7 @@ export const langFr =
         {
             title : "Attention",
             btn01 : "D'accord",
-            btn02 : "Abandonnez",
+            btn02 : "Abandonnerz",
             msg : "Etes-vous sûr de vouloir valider?"
         },
         msgSaveResult :
@@ -1090,7 +1090,7 @@ export const langFr =
         {
             title : "Attention",
             btn01 : "D'accord",
-            btn02 : "Abandonnez",
+            btn02 : "Abandonnerz",
             msg : "Etes-vous sûr de vouloir surpprimer l'enregistrement?"
         },
     },
@@ -1150,7 +1150,7 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Etes-vous sûr(e) de vouloir enregistrer !" ,
+            msg: "Etes-vous sûr(e) de vouloir Enregistrer!" ,
         },
         msgQuantity:
         {
@@ -1170,13 +1170,13 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessaires !",
+            msg: "Veuillez saisir les zones nécessairess !",
         },
         msgDelete:
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?",
         },
         msgBigQuantity:
@@ -1184,7 +1184,7 @@ export const langFr =
             title: "Attention",
             btn01: "Continue",
             btn02: "Abandonner",
-            msg: "Chiffre Saisi Supérieur à 1000 Voulez Voulez vous Continuer ?",
+            msg: "Chiffre Saisi Supérieur à 1000 Voulez Voulez-vous Continuer ?",
         },
         msgLocked:
         {
@@ -1208,13 +1208,13 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrer les Modifications !"
+            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrerles Modifications !"
         },
         msgDoclocked:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez Enregistrer Sans Dévérouiller !"
+            msg: "Vous ne Pouvez EnregistrerSans Dévérouiller !"
         },
         msgItemNotFound:
         {
@@ -1228,7 +1228,7 @@ export const langFr =
             btn01: "Regroupe",
             btn02: "Modifier",
             btn03: "Abandonner",
-            msg: "Produit Existant dans Document ! Voulez vous Combiner ?"
+            msg: "Produit Existant dans Document ! Voulez-vous Combiner ?"
         },
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
@@ -1317,7 +1317,7 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Etes-vous sur de vouloir enregistrer !"
+            msg: "Etes-vous sûr(e) de vouloir Enregistrer!"
         },
         msgSaveResult:
         {
@@ -1330,7 +1330,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessaires !"
+            msg: "Veuillez saisir les zones nécessairess !"
         },
         msgDelete:
         {
@@ -1361,13 +1361,13 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrer les Modifications !"
+            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrerles Modifications !"
         },
         msgDoclocked:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez Enregistrer Sans Dévérouiller !"
+            msg: "Vous ne Pouvez EnregistrerSans Dévérouiller !"
         },
         msgItemNotFound:
         {
@@ -1380,7 +1380,7 @@ export const langFr =
             title: "Attention",
             btn01: "Regroupe",
             btn02: "Nouvel Ajout",
-            msg: "Produit Existant dans Document ! Voulez vous Combiner ?"
+            msg: "Produit Existant dans Document ! Voulez-vous Combiner ?"
         },
         popDesign : 
         {
@@ -1400,7 +1400,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "Ajouter",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Veuillez Saisir la Quantité !" ,
         },
         txtQuantity :"Quantité",
@@ -1460,13 +1460,13 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrer les Modifications !"
+            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrerles Modifications !"
         },
         msgDocLocked:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez Enregistrer Sans Dévérouiller !"
+            msg: "Vous ne Pouvez EnregistrerSans Dévérouiller !"
         },
         msgDocValid:
         {
@@ -1485,7 +1485,7 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Etes-vous sur de vouloir enregistrer !"
+            msg: "Etes-vous sûr(e) de vouloir Enregistrer!"
         },
         msgSaveResult:
         {
@@ -1498,7 +1498,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessaires !"
+            msg: "Veuillez saisir les zones nécessairess !"
         },
         msgDelete:
         {
@@ -1529,13 +1529,13 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrer les Modifications !"
+            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrerles Modifications !"
         },
         msgDoclocked:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez Enregistrer Sans Dévérouiller !"
+            msg: "Vous ne Pouvez EnregistrerSans Dévérouiller !"
         },
         msgItemNotFound:
         {
@@ -1548,7 +1548,7 @@ export const langFr =
             title: "Attention",
             btn01: "Regroupe",
             btn02: "Nouvel Ajout",
-            msg: "Produit Existant dans Document ! Voulez vous Combiner ?"
+            msg: "Produit Existant dans Document ! Voulez-vous Combiner ?"
         },
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
@@ -1564,7 +1564,7 @@ export const langFr =
         {
             title : "Ajoute Saisie Rapide" ,
             description : "Nouvelle Saisie" ,
-            btnApprove : "Enregistre "        
+            btnApprove : "enregistrer"        
         },
         popDesign : 
         {
@@ -1596,7 +1596,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "Ajouter",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Veuillez Saisir la Quantité !" ,
         },
         txtQuantity :"Quantité",
@@ -1666,21 +1666,21 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Modification Effectué Dans Document ! Veuillez Enregistrer ou Annuler Les Modifications" 
+            msg: "Modification Effectué Dans Document ! Veuillez Enregistrerou Annuler Les Modifications" 
         },
         msgAddItems:
         {
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Ajout De Produit Selon Vos Critères.Validez-vous ?"
+            msg: "Ajout De Produit Selon Vos Critères.Valider-vous ?"
         },
         msgSave:
         {
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Etes-vous sûr(e) de vouloir enregistrer !"
+            msg: "Etes-vous sûr(e) de vouloir Enregistrer!"
         },
         msgSaveResult:
         {
@@ -1693,7 +1693,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessaires!"
+            msg: "Veuillez saisir les zones nécessairess!"
         },
         msgDelete:
         {
@@ -1724,13 +1724,13 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrer les Modifications !"
+            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrerles Modifications !"
         },
         msgDoclocked:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez Enregistrer Sans Dévérouiller !"
+            msg: "Vous ne Pouvez EnregistrerSans Dévérouiller !"
         },
         msgItemNotFound:
         {
@@ -1741,7 +1741,7 @@ export const langFr =
         msgCombineItem:
         {
             title: "Attention",
-            btn01: "Abandonne",
+            btn01: "Abandonner",
             btn02: "Nouvel Ajout",
             msg: "Produit Sélectionné Déjà Existant Dans Document !Voulez -vous Ajouter une Ligne ? "
         },
@@ -1818,8 +1818,8 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes-vous sur de vouloir enregistrer !"
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de vouloir Enregistrer!"
         },
         msgSaveResult:
         {
@@ -1838,7 +1838,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
         },
         msgLocked:
@@ -1863,13 +1863,13 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrer les Modifications !"
+            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrerles Modifications !"
         },
         msgDoclocked:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez Enregistrer Sans Dévérouiller !"
+            msg: "Vous ne Pouvez EnregistrerSans Dévérouiller !"
         },
         msgItemNotFound:
         {
@@ -1882,7 +1882,7 @@ export const langFr =
             title: "Attention",
             btn01: "Regroupe",
             btn02: "Nouvel Ajout",
-            msg: "Produit Existant dans Document ! Voulez vous Combiner ?"
+            msg: "Produit Existant dans Document ! Voulez-vous Combiner ?"
         },
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
@@ -1919,7 +1919,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "Ajouter",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Veuillez Saisir la Quantité !" ,
         },
         txtQuantity :"Quantité",
@@ -1951,7 +1951,7 @@ export const langFr =
         },
         popItems: 
         {
-            title: "Ajoutez stock",
+            title: "Ajouter stock",
             txtPopItemsCode : "Code",
             txtPopItemsName: "Nom Produit",
             txtPopItemsQuantity : "Quantité",
@@ -1976,20 +1976,20 @@ export const langFr =
         {
             title: "Attention",
             btn01: "Ok",
-            msg: "Documentation modifiée ! Veuillez enregistrer ou annuler les modifications"
+            msg: "Documentation modifiée ! Veuillez Enregistrerou annuler les modifications"
         },
         msgAddItems:
         {
             title: "Attention",
             btn01: "Ok",
-            btn02: "Abandonnez",
+            btn02: "Abandonnerz",
             msg: "Les produits correspondant aux critères que vous avez sélectionnés seront ajoutés. Êtes-vous d'accord ?"
         },
         msgSave:
         {
             title: "Attention",
             btn01: "Ok",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Êtes-vous sûr de vouloir enregistrer? "
         },
         msgSaveResult:
@@ -2009,7 +2009,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "Ok",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Voulez-vous vraiment supprimer l'enregistrement ?"
         },
         msgItemNotFound:
@@ -2021,7 +2021,7 @@ export const langFr =
         msgCombineItem:
         {
             title: "Attention",
-            btn01: "Abandonne",
+            btn01: "Abandonner",
             btn02: "Ajouter nouveau",
             msg: "Le produit que vous souhaitez ajouter est dans le document ! Ajouter une nouvelle ligne ?"
         },
@@ -2095,13 +2095,13 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrer les Modifications !"
+            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrerles Modifications !"
         },
         msgDocLocked:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez Enregistrer Sans Dévérouiller !"
+            msg: "Vous ne Pouvez EnregistrerSans Dévérouiller !"
         },
         msgDocValid:
         {
@@ -2119,8 +2119,8 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes-vous sur de vouloir enregistrer !"
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de vouloir Enregistrer!"
         },
         msgSaveResult:
         {
@@ -2133,13 +2133,13 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessaires !"
+            msg: "Veuillez saisir les zones nécessairess !"
         },
         msgDelete:
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
         },
         msgLocked:
@@ -2164,13 +2164,13 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrer les Modifications !"
+            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrerles Modifications !"
         },
         msgDoclocked:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez Enregistrer Sans Dévérouiller !"
+            msg: "Vous ne Pouvez EnregistrerSans Dévérouiller !"
         },
         msgItemNotFound:
         {
@@ -2183,7 +2183,7 @@ export const langFr =
             title: "Attention",
             btn01: "Regroupe",
             btn02: "Nouvel Ajout",
-            msg: "Produit Existant dans Document ! Voulez vous Combiner ?"
+            msg: "Produit Existant dans Document ! Voulez-vous Combiner ?"
         },
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
@@ -2199,7 +2199,7 @@ export const langFr =
         {
             title : "Ajoute Saisie Rapide" ,
             description : "Nouvelle Saisie" ,
-            btnApprove : "Enregistre "        
+            btnApprove : "enregistrer"        
         },
         popDesign : 
         {
@@ -2231,7 +2231,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "Ajouter",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Veuillez Saisir la Quantité !" ,
         },
         txtQuantity :"Quantité",
@@ -2290,13 +2290,13 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrer les Modifications !"
+            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrerles Modifications !"
         },
         msgDocLocked:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez Enregistrer Sans Dévérouiller !"
+            msg: "Vous ne Pouvez EnregistrerSans Dévérouiller !"
         },
         msgDocValid:
         {
@@ -2314,8 +2314,8 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes-vous sur de vouloir enregistrer !"
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de vouloir Enregistrer!"
         },
         msgSaveResult:
         {
@@ -2328,13 +2328,13 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessaires !"
+            msg: "Veuillez saisir les zones nécessairess !"
         },
         msgDelete:
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
         },
         msgLocked:
@@ -2359,13 +2359,13 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrer les Modifications !"
+            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrerles Modifications !"
         },
         msgDoclocked:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez Enregistrer Sans Dévérouiller !"
+            msg: "Vous ne Pouvez EnregistrerSans Dévérouiller !"
         },
         msgItemNotFound:
         {
@@ -2378,7 +2378,7 @@ export const langFr =
             title: "Attention",
             btn01: "Regroupe",
             btn02: "Nouvel Ajout",
-            msg: "Produit Existant dans Document ! Voulez vous Combiner ?"
+            msg: "Produit Existant dans Document ! Voulez-vous Combiner ?"
         },
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
@@ -2394,7 +2394,7 @@ export const langFr =
         {
             title : "Ajoute Saisie Rapide" ,
             description : "Nouvelle Saisie" ,
-            btnApprove : "Enregistre "        
+            btnApprove : "enregistrer"        
         },
         popDesign : 
         {
@@ -2426,7 +2426,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "Ajouter",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Veuillez Saisir la Quantité !" ,
         },
         txtQuantity :"Quantité",
@@ -2594,8 +2594,8 @@ export const langFr =
         {
             title: "Attention",
             btn01: "Valider",
-            btn02: "Abandonne",
-            msg: "Etes-vous sûr(e) de Vouloir Enregistrer !"
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de Vouloir Enregistrer!"
         },
         msgSaveResult:
         {
@@ -2634,7 +2634,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "Valider",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Etes-vous sûr(e) de Vouloir Faire Retour des Lignes Sélectionnées !"
         },
         msgSaveResult:
@@ -2688,8 +2688,8 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes-vous sur de vouloir enregistrer !"
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de vouloir Enregistrer!"
         },
         msgSaveResult:
         {
@@ -2735,7 +2735,7 @@ export const langFr =
             title : "Saisie Prix Montant",   
             txtQuantity : "Montant",   
             txtPrice : "Prix",   
-            btnSave : "Enregistre et Imprimer"   
+            btnSave : "enregistreret Imprimer"   
         },  
         pg_txtRef:  
         {  
@@ -2756,7 +2756,7 @@ export const langFr =
         {
             title: "Attention",  
             btn01: "OK",  
-            btn02: "Abandonne",  
+            btn02: "Abandonner",  
             msg: "Etiquette déjà Imprimé pour le Produit Sélectionné !Etes-vous sûr(e) de Vouloir Imprimer à Nouveau?" 
         },
         msgLabelCount:
@@ -2932,7 +2932,7 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Etês-vous sûr(e) de vouloir enregistrer !"
+            msg: "Etês-vous sûr(e) de vouloir Enregistrer!"
         },
         msgSaveResult:
         {
@@ -2945,7 +2945,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessaires !"
+            msg: "Veuillez saisir les zones nécessairess !"
         },
         msgLegalNotValid:
         {
@@ -3038,7 +3038,7 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Etes-vous sûr(e) de vouloir enregistrer !"
+            msg: "Etes-vous sûr(e) de vouloir Enregistrer!"
         },
         msgSaveResult:
         {
@@ -3051,7 +3051,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessaires !"
+            msg: "Veuillez saisir les zones nécessairess !"
         },
         msgDelete:
         {
@@ -3225,8 +3225,8 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes-vous sur de vouloir enregistrer !"
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de vouloir Enregistrer!"
         },
         msgSaveResult:
         {
@@ -3239,7 +3239,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessaires !"
+            msg: "Veuillez saisir les zones nécessairess !"
         },
         msgLegalNotValid:
         {
@@ -3257,7 +3257,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
         },
         cmbTypeData : 
@@ -3408,7 +3408,7 @@ export const langFr =
         },
         trDeatil: "T.R Détail", 
         lineDelete :"Ligne annulé", 
-        cancel : "Abandonne", 
+        cancel : "Abandonner", 
         btnAddpoint : "Entrée et Sortie Point",     
         popPointEntry :     
         {    
@@ -3588,9 +3588,9 @@ export const langFr =
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
         txtAmount : "Total" ,
-        txtDiscount : "Satır İndirimi",    // BAK
-        txtDocDiscount : "Evrak İndirimi",    // BAK
-        txtSubTotal : "Ara Toplam",    // BAK
+        txtDiscount : "Remise sur les lignes",    // BAK
+        txtDocDiscount : "Remise total général",    // BAK
+        txtSubTotal : "Sous-total",    // BAK
         txtMargin : "Marge",
         txtVat : "TVA",
         txtTotal : "Total Général",
@@ -3615,7 +3615,7 @@ export const langFr =
         getOrders : "Rechercher la commande", 
         popExcel : {title:"Les en-têtes de ligne de votre fichier Excel doivent être corrects"}, 
         excelAdd : "Inscription à partir d'Excel",
-        shemaSave : "Enregistrer le Format", 
+        shemaSave : "Enregistrerle Format", 
         tabTitleSubtotal : "Total de la facture", 
         tabTitlePayments : "Informations de paiement", 
         txtDiffrentTotal : "Différence totale", 
@@ -3713,9 +3713,9 @@ export const langFr =
         },
         popDiscount : 
         {
-           title: "Satır İndirimi", // BAK
+           title: "Remise sur les lignes", // BAK
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
-            chkDocDiscount : "Appliquer la remise sur le total général", 
+            chkDocDiscount : "Remise total général", 
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -3725,7 +3725,7 @@ export const langFr =
         },
         popDocDiscount : 
         {
-           title: "Evrak İndirimi", // BAK
+           title: "Remise total général", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -3755,8 +3755,8 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes-vous sûr(e) de vouloir enregistrer !"
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de vouloir Enregistrer!"
         },
         msgSaveResult:
         {
@@ -3775,14 +3775,14 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
         },
         msgVatDelete:
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Etes-vous sûr(e) de Vouloir Mettre à Zéro la TVA !"
         },
         msgDiscountPrice:
@@ -3819,7 +3819,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrer les Modifications !"
+            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrerles Modifications !"
         },
         msgPayNotDeleted:
         {
@@ -3831,7 +3831,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez Enregistrer Sans Dévérouiller !"
+            msg: "Vous ne Pouvez EnregistrerSans Dévérouiller !"
         },
         msgDiscount:
         {
@@ -3849,7 +3849,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "Continue",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Le Produit Sélectionné n'a pas de Fournisseur Enregistré ! Voulez-vous Continuer "
         },
         msgNotCustomer:
@@ -3862,7 +3862,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Prix Inférieur à l'Achat ! !"
         },
         msgUnderPrice2:
@@ -3876,7 +3876,7 @@ export const langFr =
             title: "Attention",
             btn01: "Regroupe",
             btn02: "Nouvel Ajout",
-            msg: "Produit Existant dans Document ! Voulez vous Combiner ?"
+            msg: "Produit Existant dans Document ! Voulez-vous Combiner ?"
         },
         msgCustomerSelect:
         {
@@ -4028,7 +4028,7 @@ export const langFr =
         {
             title: "Quantité",
             btn01: "Ajouter",
-            msg: "Ajoutez quantité"
+            msg: "Ajouter quantité"
         },
         msgNewVat : 
         {
@@ -4125,12 +4125,12 @@ export const langFr =
         msgDiscountEntry : 
         {
             title : "Saisie du montant de la remise",  
-            btn01 : "Validez" 
+            btn01 : "Valider" 
         },
         msgGrdOrigins:
         {
             title: "Changement d'origine", 
-            btn01: "Validez",   
+            btn01: "Valider",   
         },
         txtDiscount1 : "1. Remise ",  
         txtDiscount2 : "2. Remise ",
@@ -4139,7 +4139,7 @@ export const langFr =
         msgDiscountPerEntry : 
         {
             title : "Saisie de Remise en %",  
-            btn01 : "Validez" 
+            btn01 : "Valider" 
         },
         txtDiscountPer1 : "1. Remise % ",  
         txtDiscountPer2 : "2. Remise % ",  
@@ -4153,9 +4153,9 @@ export const langFr =
         txtCustomerName : "Nom Client",
         dtDocDate : "Date",
         txtAmount : "Total" ,
-        txtDiscount : "Satır İndirimi",    // BAK
-        txtDocDiscount : "Evrak İndirimi",    // BAK
-        txtSubTotal : "Ara Toplam",    // BAK
+        txtDiscount : "Remise sur les lignes",    // BAK
+        txtDocDiscount : "Remise total général",    // BAK
+        txtSubTotal : "Sous-total",    // BAK
         txtMargin : "Marge",
         txtVat : "TVA",
         txtTotal : "Total Général",
@@ -4272,9 +4272,9 @@ export const langFr =
         },
         popDiscount : 
         {
-           title: "Satır İndirimi", // BAK
+           title: "Remise sur les lignes", // BAK
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
-            chkDocDiscount : "Appliquer la remise sur le total général",
+            chkDocDiscount : "Remise total général",
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -4284,7 +4284,7 @@ export const langFr =
         },
         popDocDiscount : 
         {
-           title: "Evrak İndirimi", // BAK
+           title: "Remise total général", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -4321,8 +4321,8 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes-vous sur de vouloir enregistrer !"
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de vouloir Enregistrer!"
         },
         msgSaveResult:
         {
@@ -4335,13 +4335,13 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessaire !"
+            msg: "Veuillez saisir les zones nécessaires !"
         },
         msgDelete:
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
         },
         msgMaxPriceAlert:
@@ -4366,8 +4366,8 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes-vous sur de Vouloir Mettre à Zéro la TVA !"
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de Vouloir Mettre à Zéro la TVA !"
         },
         msgDiscountPrice:
         {
@@ -4415,7 +4415,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez Enregistrer Sans Dévérouiller !"
+            msg: "Vous ne Pouvez EnregistrerSans Dévérouiller !"
         },
         msgDiscount:
         {
@@ -4440,7 +4440,7 @@ export const langFr =
             title: "Attention",
             btn01: "Regroupe",
             btn02: "Nouvel Ajout",
-            msg: "Produit Existant dans Document ! Voulez vous Regrouper ?"
+            msg: "Produit Existant dans Document ! Voulez-vous Regrouper ?"
         },
         msgCustomerSelect:
         {
@@ -4537,7 +4537,7 @@ export const langFr =
         {
             title: "Quantité",
             btn01: "Ajouter",
-            msg: "Ajoutez quantité"
+            msg: "Ajouter quantité"
         },
         pg_ordersGrid : 
         {
@@ -4613,7 +4613,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Prix Inférieur à l'Achat ! !"
         },
         msgUnderPrice2:
@@ -4657,7 +4657,7 @@ export const langFr =
         msgDiscountEntry : 
         {
             title : "Saisie du montant de remise",  
-            btn01 : "Validez" 
+            btn01 : "Valider" 
         },
         txtDiscount1 : "1. Remise ", 
         txtDiscount2 : "2. Remise ", 
@@ -4666,7 +4666,7 @@ export const langFr =
         msgDiscountPerEntry : 
         {
             title : "Saisie de Remise en %", 
-            btn01 : "Validez" 
+            btn01 : "Valider" 
         },
         txtDiscountPer1 : "1. Remise % ", 
         txtDiscountPer2 : "2. Remise % ", 
@@ -4693,9 +4693,9 @@ export const langFr =
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
         txtAmount : "Total" ,
-        txtDiscount : "Satır İndirimi",    // BAK
-        txtDocDiscount : "Evrak İndirimi",    // BAK
-        txtSubTotal : "Ara Toplam",    // BAK
+        txtDiscount : "Remise sur les lignes",    // BAK
+        txtDocDiscount : "Remise total général",    // BAK
+        txtSubTotal : "Sous-total",    // BAK
         txtMargin : "Marge",
         txtVat : "TVA",
         txtTotal : "Total Général",
@@ -4809,9 +4809,9 @@ export const langFr =
         },
         popDiscount : 
         {
-           title: "Satır İndirimi", // BAK
+           title: "Remise sur les lignes", // BAK
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
-            chkDocDiscount : "Appliquer la remise sur le total général",
+            chkDocDiscount : "Remise total général",
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -4821,7 +4821,7 @@ export const langFr =
         },
         popDocDiscount : 
         {
-           title: "Evrak İndirimi", // BAK
+           title: "Remise total général", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -4851,8 +4851,8 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes-vous sur de vouloir enregistrer !"
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de vouloir Enregistrer!"
         },
         msgSaveResult:
         {
@@ -4865,21 +4865,21 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessaire !"
+            msg: "Veuillez saisir les zones nécessaires !"
         },
         msgDelete:
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
         },
         msgVatDelete:
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes-vous sur de Vouloir Mettre à Zéro la TVA !"
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de Vouloir Mettre à Zéro la TVA !"
         },
         msgDiscountPrice:
         {
@@ -4915,7 +4915,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrer les Modifications !"
+            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrerles Modifications !"
         },
         msgPayNotDeleted:
         {
@@ -4927,7 +4927,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez Enregistrer Sans Dévérouiller !"
+            msg: "Vous ne Pouvez EnregistrerSans Dévérouiller !"
         },
         msgDiscount:
         {
@@ -4952,7 +4952,7 @@ export const langFr =
             title: "Attention",
             btn01: "Regroupe",
             btn02: "Nouvel Ajout",
-            msg: "Produit Existant dans Document ! Voulez vous Combiner ?"
+            msg: "Produit Existant dans Document ! Voulez-vous Combiner ?"
         },
         msgCustomerSelect:
         {
@@ -5003,7 +5003,7 @@ export const langFr =
         {
             title: "Quantité",
             btn01: "Ajouter",
-            msg: "Ajoutez quantité"
+            msg: "Ajouter quantité"
         },
         cmbPayType : {
             title : "Mode de paiement",   
@@ -5091,7 +5091,7 @@ export const langFr =
         msgDiscountEntry : 
         {
             title : "Saisie du montant de la remise ",   
-            btn01 : "Validez" 
+            btn01 : "Valider" 
         },
         txtDiscount1 : "1. Remise ",  
         txtDiscount2 : "2. Remise ",  
@@ -5100,7 +5100,7 @@ export const langFr =
         msgDiscountPerEntry : 
         {
             title : "Saisie de Remise en %",  
-            btn01 : "Validez" 
+            btn01 : "Valider" 
         },
         txtDiscountPer1 : "1. Remise % ",  
         txtDiscountPer2 : "2. Remise % ",  
@@ -5167,9 +5167,9 @@ export const langFr =
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
         txtAmount : "Total" ,
-        txtDiscount : "Satır İndirimi",    // BAK
-        txtDocDiscount : "Evrak İndirimi",    // BAK
-        txtSubTotal : "Ara Toplam",    // BAK
+        txtDiscount : "Remise sur les lignes",    // BAK
+        txtDocDiscount : "Remise total général",    // BAK
+        txtSubTotal : "Sous-total",    // BAK
         txtMargin : "Marge",
         txtVat : "TVA",
         txtTotal : "Total Général",
@@ -5276,9 +5276,9 @@ export const langFr =
         },
         popDiscount : 
         {
-           title: "Satır İndirimi", // BAK
+           title: "Remise sur les lignes", // BAK
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
-            chkDocDiscount : "Appliquer la remise sur le total général",
+            chkDocDiscount : "Remise total général",
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -5288,7 +5288,7 @@ export const langFr =
         },
         popDocDiscount : 
         {
-           title: "Evrak İndirimi", // BAK
+           title: "Remise total général", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -5312,8 +5312,8 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes-vous sur de vouloir enregistrer !"
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de vouloir Enregistrer!"
         },
         msgSaveResult:
         {
@@ -5332,15 +5332,15 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
         },
         msgVatDelete:
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes-vous sur de Vouloir Mettre à Zéro la TVA !"
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de Vouloir Mettre à Zéro la TVA !"
         },
         msgMoreAmount:
         {
@@ -5382,7 +5382,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrer les Modifications !"
+            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrerles Modifications !"
         },
         msgPayNotDeleted:
         {
@@ -5394,7 +5394,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez Enregistrer Sans Dévérouiller !"
+            msg: "Vous ne Pouvez EnregistrerSans Dévérouiller !"
         },
         msgDiscount:
         {
@@ -5419,7 +5419,7 @@ export const langFr =
             title: "Attention",
             btn01: "Regroupe",
             btn02: "Nouvel Ajout",
-            msg: "Produit Existant dans Document ! Voulez vous Combiner ?"
+            msg: "Produit Existant dans Document ! Voulez-vous Combiner ?"
         },
         popCash : 
         {
@@ -5464,7 +5464,7 @@ export const langFr =
         {
             title: "Quantité",
             btn01: "Ajouter",
-            msg: "Ajoutez quantité"
+            msg: "Ajouter quantité"
         },
         cmbPayType : {
             title : "Mode de paiement",   
@@ -5535,7 +5535,7 @@ export const langFr =
         msgDiscountEntry : 
         {
             title : "Saisie du montant de remise",   
-            btn01 : "Validez" 
+            btn01 : "Valider" 
         },
         txtDiscount1 : "1. Remise ", 
         txtDiscount2 : "2. Remise ", 
@@ -5544,7 +5544,7 @@ export const langFr =
         msgDiscountPerEntry : 
         {
             title : "Saisie de Remise en %",  
-            btn01 : "Validez" 
+            btn01 : "Valider" 
         },
         txtDiscountPer1 : "1. Remise % ", 
         txtDiscountPer2 : "2. Remise % ", 
@@ -5611,9 +5611,9 @@ export const langFr =
         txtCustomerName : "Nom Client",
         dtDocDate : "Date",
         txtAmount : "Total" ,
-        txtDiscount : "Satır İndirimi",    // BAK
-        txtDocDiscount : "Evrak İndirimi",    // BAK
-        txtSubTotal : "Ara Toplam",    // BAK
+        txtDiscount : "Remise sur les lignes",    // BAK
+        txtDocDiscount : "Remise total général",    // BAK
+        txtSubTotal : "Sous-total",    // BAK
         txtMargin : "Marge",
         txtVat : "TVA",
         txtTotal : "Total Général",
@@ -5722,9 +5722,9 @@ export const langFr =
         },
         popDiscount : 
         {
-           title: "Satır İndirimi", // BAK
+           title: "Remise sur les lignes", // BAK
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
-            chkDocDiscount : "Appliquer la remise sur le total général", 
+            chkDocDiscount : "Remise total général", 
             Percent1 : "1. Remise % ", 
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -5734,7 +5734,7 @@ export const langFr =
         },
         popDocDiscount : 
         {
-           title: "Evrak İndirimi", // BAK
+           title: "Remise total général", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -5764,8 +5764,8 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes-vous sur de vouloir enregistrer !"
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de vouloir Enregistrer!"
         },
         msgSaveResult:
         {
@@ -5778,21 +5778,21 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessaire !"
+            msg: "Veuillez saisir les zones nécessaires !"
         },
         msgDelete:
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
         },
         msgVatDelete:
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes-vous sur de Vouloir Mettre à Zéro la TVA !"
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de Vouloir Mettre à Zéro la TVA !"
         },
         msgDiscountPrice:
         {
@@ -5828,7 +5828,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrer les Modifications !"
+            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrerles Modifications !"
         },
         msgPayNotDeleted:
         {
@@ -5840,7 +5840,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez Enregistrer Sans Dévérouiller !"
+            msg: "Vous ne Pouvez EnregistrerSans Dévérouiller !"
         },
         msgDiscount:
         {
@@ -5865,7 +5865,7 @@ export const langFr =
             title: "Attention",
             btn01: "Regroupe",
             btn02: "Nouvel Ajout",
-            msg: "Produit Existant dans Document ! Voulez vous Regrouper ?"
+            msg: "Produit Existant dans Document ! Voulez-vous Regrouper ?"
         },
         msgCustomerSelect:
         {
@@ -5962,7 +5962,7 @@ export const langFr =
         {
             title: "Quantité",
             btn01: "Ajouter",
-            msg: "Ajoutez quantité"
+            msg: "Ajouter quantité"
         },
         pg_ordersGrid : 
         {
@@ -6050,7 +6050,7 @@ export const langFr =
         msgDiscountEntry : 
         {
             title : "Saisie du montant de remise",   
-            btn01 : "Validez" 
+            btn01 : "Valider" 
         },
         txtDiscount1 : "1. Remise ",  
         txtDiscount2 : "2. Remise ",  
@@ -6059,7 +6059,7 @@ export const langFr =
         msgDiscountPerEntry : 
         {
             title : "Saisie de Remise en %", 
-            btn01 : "Validez"
+            btn01 : "Valider"
         },
         txtDiscountPer1 : "1. Remise % ",  
         txtDiscountPer2 : "2. Remise % ",  
@@ -6088,9 +6088,9 @@ export const langFr =
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
         txtAmount : "Total" ,
-        txtDiscount : "Satır İndirimi",    // BAK
-        txtDocDiscount : "Evrak İndirimi",    // BAK
-        txtSubTotal : "Ara Toplam",    // BAK
+        txtDiscount : "Remise sur les lignes",    // BAK
+        txtDocDiscount : "Remise total général",    // BAK
+        txtSubTotal : "Sous-total",    // BAK
         txtMargin : "Marge",
         txtVat : "TVA",
         txtTotal : "Total Général",
@@ -6193,9 +6193,9 @@ export const langFr =
         },
         popDiscount : 
         {
-           title: "Satır İndirimi", // BAK
+           title: "Remise sur les lignes", // BAK
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
-            chkDocDiscount : "Appliquer la remise sur le total général",
+            chkDocDiscount : "Remise total général",
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -6205,7 +6205,7 @@ export const langFr =
         },
         popDocDiscount : 
         {
-           title: "Evrak İndirimi", // BAK
+           title: "Remise total général", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -6229,8 +6229,8 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes-vous sur de vouloir enregistrer !"
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de vouloir Enregistrer!"
         },
         msgSaveResult:
         {
@@ -6249,15 +6249,15 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
         },
         msgVatDelete:
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes-vous sur de Vouloir Mettre à Zéro la TVA !"
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de Vouloir Mettre à Zéro la TVA !"
         },
         msgMoreAmount:
         {
@@ -6299,7 +6299,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrer les Modifications !"
+            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrerles Modifications !"
         },
         msgPayNotDeleted:
         {
@@ -6311,7 +6311,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez Enregistrer Sans Dévérouiller !"
+            msg: "Vous ne Pouvez EnregistrerSans Dévérouiller !"
         },
         msgDiscount:
         {
@@ -6336,7 +6336,7 @@ export const langFr =
             title: "Attention",
             btn01: "Regroupe",
             btn02: "Nouvel Ajout",
-            msg: "Produit Existant dans Document ! Voulez vous Combiner ?"
+            msg: "Produit Existant dans Document ! Voulez-vous Combiner ?"
         },
         popCash : 
         {
@@ -6381,7 +6381,7 @@ export const langFr =
         {
             title: "Quantité",
             btn01: "Ajouter",
-            msg: "Ajoutez quantité"
+            msg: "Ajouter quantité"
         },
         cmbPayType : {
             title : "Mode de paiement",   
@@ -6431,7 +6431,7 @@ export const langFr =
         msgDiscountEntry : 
         {
             title : "Saisie du montant de la remise",   
-            btn01 : "Validez" 
+            btn01 : "Valider" 
         },
         txtDiscount1 : "1. Remise ", 
         txtDiscount2 : "2. Remise ", 
@@ -6440,7 +6440,7 @@ export const langFr =
         msgDiscountPerEntry : 
         {
             title : "Saisie de Remise en  %",  
-            btn01 : "Validez" 
+            btn01 : "Valider" 
         },
         txtDiscountPer1 : "1. Remise % ",  
         txtDiscountPer2 : "2. Remise % ", 
@@ -6501,9 +6501,9 @@ export const langFr =
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
         txtAmount : "Total" ,
-        txtDiscount : "Satır İndirimi",    // BAK
-        txtDocDiscount : "Evrak İndirimi",    // BAK
-        txtSubTotal : "Ara Toplam",    // BAK
+        txtDiscount : "Remise sur les lignes",    // BAK
+        txtDocDiscount : "Remise total général",    // BAK
+        txtSubTotal : "Sous-total",    // BAK
         txtMargin : "Marge",
         txtVat : "TVA",
         txtTotal : "Total Général",
@@ -6612,9 +6612,9 @@ export const langFr =
         },
         popDiscount : 
         {
-           title: "Satır İndirimi", // BAK
+           title: "Remise sur les lignes", // BAK
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
-            chkDocDiscount : "Appliquer la remise sur le total général",
+            chkDocDiscount : "Remise total général",
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -6624,7 +6624,7 @@ export const langFr =
         },
         popDocDiscount : 
         {
-           title: "Evrak İndirimi", // BAK
+           title: "Remise total général", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -6654,8 +6654,8 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes-vous sur de vouloir enregistrer !"
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de vouloir Enregistrer!"
         },
         msgSaveResult:
         {
@@ -6668,21 +6668,21 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessaire !"
+            msg: "Veuillez saisir les zones nécessaires !"
         },
         msgDelete:
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
         },
         msgVatDelete:
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes-vous sur de Vouloir Mettre à Zéro la TVA !"
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de Vouloir Mettre à Zéro la TVA !"
         },
         msgDiscountPrice:
         {
@@ -6718,7 +6718,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrer les Modifications !"
+            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrerles Modifications !"
         },
         msgPayNotDeleted:
         {
@@ -6730,7 +6730,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez Enregistrer Sans Dévérouiller !"
+            msg: "Vous ne Pouvez EnregistrerSans Dévérouiller !"
         },
         msgDiscount:
         {
@@ -6755,7 +6755,7 @@ export const langFr =
             title: "Attention",
             btn01: "Regroupe",
             btn02: "Nouvel Ajout",
-            msg: "Produit Existant dans Document ! Voulez vous Combiner ?"
+            msg: "Produit Existant dans Document ! Voulez-vous Combiner ?"
         },
         msgCustomerSelect:
         {
@@ -6806,7 +6806,7 @@ export const langFr =
         {
             title: "Quantité",
             btn01: "Ajouter",
-            msg: "Ajoutez quantité"
+            msg: "Ajouter quantité"
         },
         cmbPayType : {
             title : "Mode de paiement",   
@@ -6873,7 +6873,7 @@ export const langFr =
         msgDiscountEntry : 
         {
             title : "Saisie du montant de la remise",  
-            btn01 : "Validez" 
+            btn01 : "Valider" 
         },
         txtDiscount1 : "1. Remise ", 
         txtDiscount2 : "2. Remise ", 
@@ -6882,7 +6882,7 @@ export const langFr =
         msgDiscountPerEntry : 
         {
             title : "Saisie de Remise en %", 
-            btn01 : "Validez" 
+            btn01 : "Valider" 
         },
         txtDiscountPer1 : "1. Remise % ", 
         txtDiscountPer2 : "2. Remise % ", 
@@ -6943,9 +6943,9 @@ export const langFr =
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
         txtAmount : "Total" ,
-        txtDiscount : "Satır İndirimi",    // BAK
-        txtDocDiscount : "Evrak İndirimi",    // BAK
-        txtSubTotal : "Ara Toplam",    // BAK
+        txtDiscount : "Remise sur les lignes",    // BAK
+        txtDocDiscount : "Remise total général",    // BAK
+        txtSubTotal : "Sous-total",    // BAK
         txtMargin : "Marge",
         txtVat : "TVA",
         txtTotal : "Total Général",
@@ -7056,9 +7056,9 @@ export const langFr =
         },
         popDiscount : 
         {
-           title: "Satır İndirimi", // BAK
+           title: "Remise sur les lignes", // BAK
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
-            chkDocDiscount : "Appliquer la remise sur le total général",
+            chkDocDiscount : "Remise total général",
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -7068,7 +7068,7 @@ export const langFr =
         },
         popDocDiscount : 
         {
-           title: "Evrak İndirimi", // BAK
+           title: "Remise total général", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -7098,8 +7098,8 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes-vous sur de vouloir enregistrer !"
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de vouloir Enregistrer!"
         },
         msgSaveResult:
         {
@@ -7112,21 +7112,21 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessaire !"
+            msg: "Veuillez saisir les zones nécessaires !"
         },
         msgDelete:
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
         },
         msgVatDelete:
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes-vous sur de Vouloir Mettre à Zéro la TVA !"
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de Vouloir Mettre à Zéro la TVA !"
         },
         msgDiscountPrice:
         {
@@ -7162,7 +7162,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrer les Modifications !"
+            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrerles Modifications !"
         },
         msgPayNotDeleted:
         {
@@ -7174,7 +7174,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez Enregistrer Sans Dévérouiller !"
+            msg: "Vous ne Pouvez EnregistrerSans Dévérouiller !"
         },
         msgDiscount:
         {
@@ -7199,7 +7199,7 @@ export const langFr =
             title: "Attention",
             btn01: "Regroupe",
             btn02: "Nouvel Ajout",
-            msg: "Produit Existant dans Document ! Voulez vous Regrouper ?"
+            msg: "Produit Existant dans Document ! Voulez-vous Regrouper ?"
         },
         msgCustomerSelect:
         {
@@ -7296,7 +7296,7 @@ export const langFr =
         {
             title: "Quantité",
             btn01: "Ajouter",
-            msg: "Ajoutez quantité"
+            msg: "Ajouter quantité"
         },
         pg_ordersGrid : 
         {
@@ -7384,7 +7384,7 @@ export const langFr =
         msgDiscountEntry : 
         {
             title : "Saisie du montant de la remise", 
-            btn01 : "Validez"
+            btn01 : "Valider"
         },
         txtDiscount1 : "1. Remise ", 
         txtDiscount2 : "2. Remise ", 
@@ -7393,7 +7393,7 @@ export const langFr =
         msgDiscountPerEntry : 
         {
             title : "Saisie de Remise en %", 
-            btn01 : "Validez"
+            btn01 : "Valider"
         },
         txtDiscountPer1 : "1. Remise % ", 
         txtDiscountPer2 : "2. Remise % ", 
@@ -7414,9 +7414,9 @@ export const langFr =
         txtCustomerName : "Nom Fournisseur",
         dtDocDate : "Date",
         txtAmount : "Total",
-        txtDiscount : "Satır İndirimi",    // BAK
-        txtDocDiscount : "Evrak İndirimi",    // BAK
-        txtSubTotal : "Ara Toplam",    // BAK
+        txtDiscount : "Remise sur les lignes",    // BAK
+        txtDocDiscount : "Remise total général",    // BAK
+        txtSubTotal : "Sous-total",    // BAK
         txtMargin : "Marge",
         txtVat : "TVA",
         txtTotal : "Total Général",
@@ -7520,9 +7520,9 @@ export const langFr =
         },
         popDiscount : 
         {
-           title: "Satır İndirimi", // BAK
+           title: "Remise sur les lignes", // BAK
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
-            chkDocDiscount : "Appliquer la remise sur le total général",
+            chkDocDiscount : "Remise total général",
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -7532,7 +7532,7 @@ export const langFr =
         },
         popDocDiscount : 
         {
-           title: "Evrak İndirimi", // BAK
+           title: "Remise total général", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -7556,8 +7556,8 @@ export const langFr =
         {
             title: "Attention",
             btn01: "Ok",
-            btn02: "Abandonne",
-            msg: "Etes-vous Sûr(e) de Vouloir Enregistrer !"
+            btn02: "Abandonner",
+            msg: "Etes-vous Sûr(e) de Vouloir Enregistrer!"
         },
         msgSaveResult:
         {
@@ -7576,14 +7576,14 @@ export const langFr =
         {
             title: "Attention",
             btn01: "Ok",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Etes-vous sû(e) de Vouloir Supprimer l'Enregistrement ?"
         },
         msgVatDelete:
         {
             title: "Attention",
             btn01: "Ok",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Etes-vous sûr(e) de Vouloir Metrre la TVA à Zéro !"
         },
         msgMoreAmount:
@@ -7626,7 +7626,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "Ok",
-            msg: "Document Vérouillé!  \n Pour Enregistrer les Modifications Vous Devez Saisir MDP Responsable pour Dévérouiller !"
+            msg: "Document Vérouillé!  \n Pour Enregistrerles Modifications Vous Devez Saisir MDP Responsable pour Dévérouiller !"
         },
         msgDocLocked:
         {
@@ -7761,9 +7761,9 @@ export const langFr =
         txtCustomerName : "Nom Client",
         dtDocDate : "Date",
         txtAmount : "Total" ,
-        txtDiscount : "Satır İndirimi",    // BAK
-        txtDocDiscount : "Evrak İndirimi",    // BAK
-        txtSubTotal : "Ara Toplam",    // BAK
+        txtDiscount : "Remise sur les lignes",    // BAK
+        txtDocDiscount : "Remise total général",    // BAK
+        txtSubTotal : "Sous-total",    // BAK
         txtMargin : "Marge",
         txtVat : "TVA",
         txtTotal : "Total Général",
@@ -7870,9 +7870,9 @@ export const langFr =
         },
         popDiscount : 
         {
-           title: "Satır İndirimi", // BAK
+           title: "Remise sur les lignes", // BAK
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
-            chkDocDiscount : "Appliquer la remise sur le total général", 
+            chkDocDiscount : "Remise total général", 
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -7882,7 +7882,7 @@ export const langFr =
         },
         popDocDiscount : 
         {
-           title: "Evrak İndirimi", // BAK
+           title: "Remise total général", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -7912,8 +7912,8 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes-vous sur de vouloir enregistrer !"
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de vouloir Enregistrer!"
         },
         msgSaveResult:
         {
@@ -7926,21 +7926,21 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessaire !"
+            msg: "Veuillez saisir les zones nécessaires !"
         },
         msgDelete:
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
         },
         msgVatDelete:
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes-vous sur de Vouloir Mettre à Zéro la TVA !"
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de Vouloir Mettre à Zéro la TVA !"
         },
         msgDiscountPrice:
         {
@@ -7976,7 +7976,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrer les Modifications !"
+            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrerles Modifications !"
         },
         msgPayNotDeleted:
         {
@@ -7988,7 +7988,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez Enregistrer Sans Dévérouiller !"
+            msg: "Vous ne Pouvez EnregistrerSans Dévérouiller !"
         },
         msgDiscount:
         {
@@ -8013,7 +8013,7 @@ export const langFr =
             title: "Attention",
             btn01: "Regroupe",
             btn02: "Nouvel Ajout",
-            msg: "Produit Existant dans Document ! Voulez vous Regrouper ?"
+            msg: "Produit Existant dans Document ! Voulez-vous Regrouper ?"
         },
         msgCustomerSelect:
         {
@@ -8110,7 +8110,7 @@ export const langFr =
         {
             title: "Quantité",
             btn01: "Ajouter",
-            msg: "Ajoutez quantité"
+            msg: "Ajouter quantité"
         },
         pg_ordersGrid : 
         {
@@ -8188,9 +8188,9 @@ export const langFr =
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
         txtAmount : "Total" ,
-        txtDiscount : "Satır İndirimi",    // BAK
-        txtDocDiscount : "Evrak İndirimi",    // BAK
-        txtSubTotal : "Ara Toplam",    // BAK
+        txtDiscount : "Remise sur les lignes",    // BAK
+        txtDocDiscount : "Remise total général",    // BAK
+        txtSubTotal : "Sous-total",    // BAK
         txtMargin : "Marge",
         txtVat : "TVA",
         txtTotal : "Total Général",
@@ -8215,7 +8215,7 @@ export const langFr =
         getOrders : "Rechercher la commande", 
         popExcel : {title:"Les en-têtes de ligne de votre fichier Excel doivent être corrects"}, 
         excelAdd : "Inscription à partir d'Excel",
-        shemaSave : "Enregistrer le Format", 
+        shemaSave : "Enregistrerle Format", 
         tabTitleSubtotal : "Total de la facture", 
         tabTitlePayments : "Informations de paiement", 
         txtDiffrentTotal : "Différence totale", 
@@ -8303,9 +8303,9 @@ export const langFr =
         },
         popDiscount : 
         {
-           title: "Satır İndirimi", // BAK
+           title: "Remise sur les lignes", // BAK
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
-            chkDocDiscount : "Appliquer la remise sur le total général", 
+            chkDocDiscount : "Remise total général", 
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -8315,7 +8315,7 @@ export const langFr =
         },
         popDocDiscount : 
         {
-           title: "Evrak İndirimi", // BAK
+           title: "Remise total général", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -8345,8 +8345,8 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes-vous sûr(e) de vouloir enregistrer !"
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de vouloir Enregistrer!"
         },
         msgSaveResult:
         {
@@ -8365,14 +8365,14 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
         },
         msgVatDelete:
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Etes-vous sûr(e) de Vouloir Mettre à Zéro la TVA !"
         },
         msgDiscountPrice:
@@ -8409,7 +8409,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrer les Modifications !"
+            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrerles Modifications !"
         },
         msgPayNotDeleted:
         {
@@ -8421,7 +8421,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez Enregistrer Sans Dévérouiller !"
+            msg: "Vous ne Pouvez EnregistrerSans Dévérouiller !"
         },
         msgDiscount:
         {
@@ -8439,7 +8439,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "Continue",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Le Produit Sélectionné n'a pas de Fournisseur Enregistré ! Voulez-vous Continuer "
         },
         msgNotCustomer:
@@ -8452,7 +8452,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Prix Inférieur à l'Achat ! !"
         },
         msgUnderPrice2:
@@ -8466,7 +8466,7 @@ export const langFr =
             title: "Attention",
             btn01: "Regroupe",
             btn02: "Nouvel Ajout",
-            msg: "Produit Existant dans Document ! Voulez vous Combiner ?"
+            msg: "Produit Existant dans Document ! Voulez-vous Combiner ?"
         },
         msgCustomerSelect:
         {
@@ -8617,7 +8617,7 @@ export const langFr =
         {
             title: "Quantité",
             btn01: "Ajouter",
-            msg: "Ajoutez quantité"
+            msg: "Ajouter quantité"
         },
         msgNewVat : 
         {
@@ -8699,9 +8699,9 @@ export const langFr =
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
         txtAmount : "Total" ,
-        txtDiscount : "Satır İndirimi",    // BAK
-        txtDocDiscount : "Evrak İndirimi",    // BAK
-        txtSubTotal : "Ara Toplam",    // BAK
+        txtDiscount : "Remise sur les lignes",    // BAK
+        txtDocDiscount : "Remise total général",    // BAK
+        txtSubTotal : "Sous-total",    // BAK
         txtMargin : "Marge",
         txtVat : "TVA",
         txtTotal : "Total Général",
@@ -8808,9 +8808,9 @@ export const langFr =
         },
         popDiscount : 
         {
-           title: "Satır İndirimi", // BAK
+           title: "Remise sur les lignes", // BAK
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
-            chkDocDiscount : "Appliquer la remise sur le total général", 
+            chkDocDiscount : "Remise total général", 
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -8820,7 +8820,7 @@ export const langFr =
         },
         popDocDiscount : 
         {
-           title: "Evrak İndirimi", // BAK
+           title: "Remise total général", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -8850,8 +8850,8 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes-vous sur de vouloir enregistrer !"
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de vouloir Enregistrer!"
         },
         msgSaveResult:
         {
@@ -8864,21 +8864,21 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessaire !"
+            msg: "Veuillez saisir les zones nécessaires !"
         },
         msgDelete:
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
         },
         msgVatDelete:
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes-vous sur de Vouloir Mettre à Zéro la TVA !"
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de Vouloir Mettre à Zéro la TVA !"
         },
         msgDiscountPrice:
         {
@@ -8914,7 +8914,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrer les Modifications !"
+            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrerles Modifications !"
         },
         msgPayNotDeleted:
         {
@@ -8926,7 +8926,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez Enregistrer Sans Dévérouiller !"
+            msg: "Vous ne Pouvez EnregistrerSans Dévérouiller !"
         },
         msgDiscount:
         {
@@ -8951,7 +8951,7 @@ export const langFr =
             title: "Attention",
             btn01: "Regroupe",
             btn02: "Nouvel Ajout",
-            msg: "Produit Existant dans Document ! Voulez vous Combiner ?"
+            msg: "Produit Existant dans Document ! Voulez-vous Combiner ?"
         },
         msgCustomerSelect:
         {
@@ -9002,7 +9002,7 @@ export const langFr =
         {
             title: "Quantité",
             btn01: "Ajouter",
-            msg: "Ajoutez quantité"
+            msg: "Ajouter quantité"
         },
         cmbPayType : {
             title : "Mode de paiement",   
@@ -9060,9 +9060,9 @@ export const langFr =
         txtCustomerName : "Nom Client",
         dtDocDate : "Date",
         txtAmount : "Total" ,
-        txtDiscount : "Satır İndirimi",    // BAK
-        txtDocDiscount : "Evrak İndirimi",    // BAK
-        txtSubTotal : "Ara Toplam",    // BAK
+        txtDiscount : "Remise sur les lignes",    // BAK
+        txtDocDiscount : "Remise total général",    // BAK
+        txtSubTotal : "Sous-total",    // BAK
         txtMargin : "Marge",
         txtVat : "TVA",
         txtTotal : "Total Général",
@@ -9168,9 +9168,9 @@ export const langFr =
         },
         popDiscount : 
         {
-           title: "Satır İndirimi", // BAK
+           title: "Remise sur les lignes", // BAK
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
-            chkDocDiscount : "Appliquer la remise sur le total général", 
+            chkDocDiscount : "Remise total général", 
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -9180,7 +9180,7 @@ export const langFr =
         },
         popDocDiscount : 
         {
-           title: "Evrak İndirimi", // BAK
+           title: "Remise total général", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -9210,8 +9210,8 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes-vous sur de vouloir enregistrer !"
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de vouloir Enregistrer!"
         },
         msgSaveResult:
         {
@@ -9224,21 +9224,21 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessaire !"
+            msg: "Veuillez saisir les zones nécessaires !"
         },
         msgDelete:
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
         },
         msgVatDelete:
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes-vous sur de Vouloir Mettre à Zéro la TVA !"
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de Vouloir Mettre à Zéro la TVA !"
         },
         msgDiscountPrice:
         {
@@ -9274,7 +9274,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrer les Modifications !"
+            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrerles Modifications !"
         },
         msgPayNotDeleted:
         {
@@ -9286,7 +9286,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez Enregistrer Sans Dévérouiller !"
+            msg: "Vous ne Pouvez EnregistrerSans Dévérouiller !"
         },
         msgDiscount:
         {
@@ -9311,7 +9311,7 @@ export const langFr =
             title: "Attention",
             btn01: "Regroupe",
             btn02: "Nouvel Ajout",
-            msg: "Produit Existant dans Document ! Voulez vous Regrouper ?"
+            msg: "Produit Existant dans Document ! Voulez-vous Regrouper ?"
         },
         msgCustomerSelect:
         {
@@ -9408,7 +9408,7 @@ export const langFr =
         {
             title: "Quantité",
             btn01: "Ajouter",
-            msg: "Ajoutez quantité"
+            msg: "Ajouter quantité"
         },
         pg_ordersGrid : 
         {
@@ -9514,8 +9514,8 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes-vous sûr(e) de vouloir enregistrer !"
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de vouloir Enregistrer!"
         },
         msgSaveResult:
         {
@@ -9528,13 +9528,13 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessaire !"
+            msg: "Veuillez saisir les zones nécessaires !"
         },
         msgDelete:
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
         },
         pop_PrmItemList: 
@@ -9792,9 +9792,9 @@ export const langFr =
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
         txtAmount : "Total" ,
-        txtDiscount : "Satır İndirimi",    // BAK
-        txtDocDiscount : "Evrak İndirimi",    // BAK
-        txtSubTotal : "Ara Toplam",    // BAK
+        txtDiscount : "Remise sur les lignes",    // BAK
+        txtDocDiscount : "Remise total général",    // BAK
+        txtSubTotal : "Sous-total",    // BAK
         txtMargin : "Marge",
         txtVat : "TVA",
         txtTotal : "Total Général",
@@ -9862,9 +9862,9 @@ export const langFr =
         },
         popDiscount : 
         {
-           title: "Satır İndirimi", // BAK
+           title: "Remise sur les lignes", // BAK
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
-            chkDocDiscount : "Appliquer la remise sur le total général", 
+            chkDocDiscount : "Remise total général", 
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -9874,7 +9874,7 @@ export const langFr =
         },
         popDocDiscount : 
         {
-           title: "Evrak İndirimi", // BAK
+           title: "Remise total général", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -9898,8 +9898,8 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes-vous sur de vouloir enregistrer !"
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de vouloir Enregistrer!"
         },
         msgSaveResult:
         {
@@ -9912,21 +9912,21 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessaire !"
+            msg: "Veuillez saisir les zones nécessaires !"
         },
         msgDelete:
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
         },
         msgVatDelete:
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes-vous sur de Vouloir Mettre à Zéro la TVA !"
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de Vouloir Mettre à Zéro la TVA !"
         },
         msgDiscountPrice:
         {
@@ -9968,13 +9968,13 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrer les Modifications !"
+            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrerles Modifications !"
         },
         msgDoclocked:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez Enregistrer Sans Dévérouiller !"
+            msg: "Vous ne Pouvez EnregistrerSans Dévérouiller !"
         },
         msgDiscount:
         {
@@ -9992,7 +9992,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "Continue",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Le Produit Sélectionné n'a pas de Fournisseur Enregistré ! Voulez-vous Continuer "
         },
         msgNotCustomer:
@@ -10006,7 +10006,7 @@ export const langFr =
             title: "Attention",
             btn01: "Regroupe",
             btn02: "Nouvel Ajout",
-            msg: "Produit Existant dans Document ! Voulez vous Combiner ?"
+            msg: "Produit Existant dans Document ! Voulez-vous Combiner ?"
         },
         popDesign : 
         {
@@ -10082,7 +10082,7 @@ export const langFr =
         {
             title: "Quantité",
             btn01: "Ajouter",
-            msg: "Ajoutez quantité"
+            msg: "Ajouter quantité"
         },
         pg_ordersGrid : 
         {
@@ -10135,7 +10135,7 @@ export const langFr =
         msgDiscountEntry : 
         {   
             title : "Saisie du montant de rmise",    
-            btn01 : "Validez"  
+            btn01 : "Valider"  
         },
         txtDiscount1 : "1. Remise ",  
         txtDiscount2 : "2. Remise ",  
@@ -10144,7 +10144,7 @@ export const langFr =
         msgDiscountPerEntry : 
         {
             title : "Saisie de Remise en %",  
-            btn01 : "Validez" 
+            btn01 : "Valider" 
         },
         txtDiscountPer1 : "1. Remise % ",  
         txtDiscountPer2 : "2. Remise % ",  
@@ -10201,9 +10201,9 @@ export const langFr =
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
         txtAmount : "Total" ,
-        txtDiscount : "Satır İndirimi",    // BAK
-        txtDocDiscount : "Evrak İndirimi",    // BAK
-        txtSubTotal : "Ara Toplam",    // BAK
+        txtDiscount : "Remise sur les lignes",    // BAK
+        txtDocDiscount : "Remise total général",    // BAK
+        txtSubTotal : "Sous-total",    // BAK
         txtMargin : "Marge",
         txtVat : "TVA",
         txtTotal : "Total Général",
@@ -10276,9 +10276,9 @@ export const langFr =
         },
         popDiscount : 
         {
-           title: "Satır İndirimi", // BAK
+           title: "Remise sur les lignes", // BAK
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
-            chkDocDiscount : "Appliquer la remise sur le total général",
+            chkDocDiscount : "Remise total général",
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -10288,7 +10288,7 @@ export const langFr =
         },
         popDocDiscount : 
         {
-           title: "Evrak İndirimi", // BAK
+           title: "Remise total général", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -10319,8 +10319,8 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes-vous sur de vouloir enregistrer !"
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de vouloir Enregistrer!"
         },
         msgSaveResult:
         {
@@ -10333,20 +10333,20 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessaire !"
+            msg: "Veuillez saisir les zones nécessaires !"
         },
         msgDelete:
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
         },
         msgVatDelete:
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Etes-vous sûr(e) de Vouloir Mettre à Zéro la TVA !"
         },
         msgDiscountPrice:
@@ -10389,13 +10389,13 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrer les Modifications !"
+            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrerles Modifications !"
         },
         msgDoclocked:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez Enregistrer Sans Dévérouiller !"
+            msg: "Vous ne Pouvez EnregistrerSans Dévérouiller !"
         },
         msgDiscount:
         {
@@ -10419,7 +10419,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Prix Inférieur à l'Achat ! !"
         },
         msgUnderPrice2:
@@ -10433,7 +10433,7 @@ export const langFr =
             title: "Attention",
             btn01: "Regroupe",
             btn02: "Nouvel Ajout",
-            msg: "Produit Existant dans Document ! Voulez vous Combiner ?"
+            msg: "Produit Existant dans Document ! Voulez-vous Combiner ?"
         },
         popDesign : 
         {
@@ -10501,7 +10501,7 @@ export const langFr =
         {
             title: "Quantité",
             btn01: "Ajouter",
-            msg: "Ajoutez quantité"
+            msg: "Ajouter quantité"
         },
         pg_txtBarcode : 
         {
@@ -10576,7 +10576,7 @@ export const langFr =
         msgDiscountEntry : 
         {   
             title : "Saisie du montant de remise",   
-            btn01 : "Validez"  
+            btn01 : "Valider"  
         },
         txtDiscount1 : "1. Remise ",  
         txtDiscount2 : "2. Remise ",  
@@ -10585,7 +10585,7 @@ export const langFr =
         msgDiscountPerEntry : 
         {
             title : "Saisie de Remise en %", 
-            btn01 : "Validez" 
+            btn01 : "Valider" 
         },
         txtDiscountPer1 : "1. Remise % ",  
         txtDiscountPer2 : "2. Remise % ",  
@@ -10614,9 +10614,9 @@ export const langFr =
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
         txtAmount : "Total" ,
-        txtDiscount : "Satır İndirimi",    // BAK
-        txtDocDiscount : "Evrak İndirimi",    // BAK
-        txtSubTotal : "Ara Toplam",    // BAK
+        txtDiscount : "Remise sur les lignes",    // BAK
+        txtDocDiscount : "Remise total général",    // BAK
+        txtSubTotal : "Sous-total",    // BAK
         txtMargin : "Marge",
         txtVat : "TVA",
         txtTotal : "Total Général",
@@ -10689,9 +10689,9 @@ export const langFr =
         },
         popDiscount : 
         {
-           title: "Satır İndirimi", // BAK
+           title: "Remise sur les lignes", // BAK
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
-            chkDocDiscount : "Appliquer la remise sur le total général",
+            chkDocDiscount : "Remise total général",
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -10701,7 +10701,7 @@ export const langFr =
         },
         popDocDiscount : 
         {
-           title: "Evrak İndirimi", // BAK
+           title: "Remise total général", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -10725,8 +10725,8 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes-vous sur de vouloir enregistrer !"
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de vouloir Enregistrer!"
         },
         msgSaveResult:
         {
@@ -10739,20 +10739,20 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessaire !"
+            msg: "Veuillez saisir les zones nécessaires !"
         },
         msgDelete:
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
         },
         msgVatDelete:
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Etes-vous sûr(e) de Vouloir Mettre à Zéro la TVA !"
         },
         msgDiscountPrice:
@@ -10795,13 +10795,13 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrer les Modifications !"
+            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrerles Modifications !"
         },
         msgDoclocked:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez Enregistrer Sans Dévérouiller !"
+            msg: "Vous ne Pouvez EnregistrerSans Dévérouiller !"
         },
         msgDiscount:
         {
@@ -10825,7 +10825,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Prix Inférieur à l'Achat ! !"
         },
         msgUnderPrice2:
@@ -10839,7 +10839,7 @@ export const langFr =
             title: "Attention",
             btn01: "Regroupe",
             btn02: "Nouvel Ajout",
-            msg: "Produit Existant dans Document ! Voulez vous Combiner ?"
+            msg: "Produit Existant dans Document ! Voulez-vous Combiner ?"
         },
         popDesign : 
         {
@@ -10861,7 +10861,7 @@ export const langFr =
         {
             title: "Quantité",
             btn01: "Ajouter",
-            msg: "Ajoutez quantité"
+            msg: "Ajouter quantité"
         },
         pg_txtBarcode : 
         {
@@ -10901,7 +10901,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "Continue",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Le Produit Sélectionné n'a pas de Fournisseur Enregistré ! Voulez-vous Continuer "
         },
         msgCode : 
@@ -10927,7 +10927,7 @@ export const langFr =
         msgDiscountEntry : 
         {   
             title : "Saisie du montant de remise",   
-            btn01 : "Validez"   
+            btn01 : "Valider"   
         },
         txtDiscount1 : "1. Remise ", 
         txtDiscount2 : "2. Remise ", 
@@ -10936,7 +10936,7 @@ export const langFr =
         msgDiscountPerEntry : 
         {
             title : "Saisie de Remise en %",  
-            btn01 : "Validez" 
+            btn01 : "Valider" 
         },
         txtDiscountPer1 : "1. Remise % ", 
         txtDiscountPer2 : "2. Remise % ", 
@@ -10950,9 +10950,9 @@ export const langFr =
         txtCustomerName : "Nom Magasin",
         dtDocDate : "Date",
         txtAmount : "Total" ,
-        txtDiscount : "Satır İndirimi",    // BAK
-        txtDocDiscount : "Evrak İndirimi",    // BAK
-        txtSubTotal : "Ara Toplam",    // BAK
+        txtDiscount : "Remise sur les lignes",    // BAK
+        txtDocDiscount : "Remise total général",    // BAK
+        txtSubTotal : "Sous-total",    // BAK
         txtMargin : "Marge",
         txtVat : "TVA",
         txtTotal : "Total Général",
@@ -11020,9 +11020,9 @@ export const langFr =
         },
         popDiscount : 
         {
-           title: "Satır İndirimi", // BAK
+           title: "Remise sur les lignes", // BAK
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
-            chkDocDiscount : "Appliquer la remise sur le total général", 
+            chkDocDiscount : "Remise total général", 
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -11032,7 +11032,7 @@ export const langFr =
         },
         popDocDiscount : 
         {
-           title: "Evrak İndirimi", // BAK
+           title: "Remise total général", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -11056,8 +11056,8 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes-vous sur de vouloir enregistrer !"
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de vouloir Enregistrer!"
         },
         msgSaveResult:
         {
@@ -11070,21 +11070,21 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessaire !"
+            msg: "Veuillez saisir les zones nécessaires !"
         },
         msgDelete:
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
         },
         msgVatDelete:
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes-vous sur de Vouloir Mettre à Zéro la TVA !"
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de Vouloir Mettre à Zéro la TVA !"
         },
         msgDiscountPrice:
         {
@@ -11126,13 +11126,13 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrer les Modifications !"
+            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrerles Modifications !"
         },
         msgDoclocked:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez Enregistrer Sans Dévérouiller !"
+            msg: "Vous ne Pouvez EnregistrerSans Dévérouiller !"
         },
         msgDiscount:
         {
@@ -11156,7 +11156,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Prix Inférieur à l'Achat ! !"
         },
         msgUnderPrice2:
@@ -11170,7 +11170,7 @@ export const langFr =
             title: "Attention",
             btn01: "Regroupe",
             btn02: "Nouvel Ajout",
-            msg: "Produit Existant dans Document ! Voulez vous Combiner ?"
+            msg: "Produit Existant dans Document ! Voulez-vous Combiner ?"
         },
         popDesign : 
         {
@@ -11238,7 +11238,7 @@ export const langFr =
         {
             title: "Quantité",
             btn01: "Ajouter",
-            msg: "Ajoutez quantité"
+            msg: "Ajouter quantité"
         },
         pg_txtBarcode : 
         {
@@ -11313,7 +11313,7 @@ export const langFr =
         msgDiscountEntry : 
         {   
             title : "Saisie du montant de remise",  
-            btn01 : "Validez"  
+            btn01 : "Valider"  
         },
         txtDiscount1 : "1. Remise ",  
         txtDiscount2 : "2. Remise ",  
@@ -11322,7 +11322,7 @@ export const langFr =
         msgDiscountPerEntry : 
         {
             title : "Saisie de Remise en %", 
-            btn01 : "Validez" 
+            btn01 : "Valider" 
         },
         txtDiscountPer1 : "1. Remise % ",  
         txtDiscountPer2 : "2. Remise % ",  
@@ -11337,9 +11337,9 @@ export const langFr =
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
         txtAmount : "Total" ,
-        txtDiscount : "Satır İndirimi",    // BAK
-        txtDocDiscount : "Evrak İndirimi",    // BAK
-        txtSubTotal : "Ara Toplam",    // BAK
+        txtDiscount : "Remise sur les lignes",    // BAK
+        txtDocDiscount : "Remise total général",    // BAK
+        txtSubTotal : "Sous-total",    // BAK
         txtMargin : "Marge",
         txtVat : "TVA",
         txtTotal : "Total Général",
@@ -11407,9 +11407,9 @@ export const langFr =
         },
         popDiscount : 
         {
-           title: "Satır İndirimi", // BAK
+           title: "Remise sur les lignes", // BAK
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
-            chkDocDiscount : "Appliquer la remise sur le total général", 
+            chkDocDiscount : "Remise total général", 
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -11419,7 +11419,7 @@ export const langFr =
         },
         popDocDiscount : 
         {
-           title: "Evrak İndirimi", // BAK
+           title: "Remise total général", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -11443,8 +11443,8 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes-vous sur de vouloir enregistrer !"
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de vouloir Enregistrer!"
         },
         msgSaveResult:
         {
@@ -11457,20 +11457,20 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessaire !"
+            msg: "Veuillez saisir les zones nécessaires !"
         },
         msgDelete:
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
         },
         msgVatDelete:
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Etes-vous sûr(e) de Vouloir Mettre à Zéro la TVA !"
         },
         msgDiscountPrice:
@@ -11513,13 +11513,13 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrer les Modifications !"
+            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrerles Modifications !"
         },
         msgDoclocked:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez Enregistrer Sans Dévérouiller !"
+            msg: "Vous ne Pouvez EnregistrerSans Dévérouiller !"
         },
         msgDiscount:
         {
@@ -11543,7 +11543,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Prix Inférieur à l'Achat ! !"
         },
         msgUnderPrice2:
@@ -11557,7 +11557,7 @@ export const langFr =
             title: "Attention",
             btn01: "Regroupe",
             btn02: "Nouvel Ajout",
-            msg: "Produit Existant dans Document ! Voulez vous Combiner ?"
+            msg: "Produit Existant dans Document ! Voulez-vous Combiner ?"
         },
         popDesign : 
         {
@@ -11579,7 +11579,7 @@ export const langFr =
         {
             title: "Quantité",
             btn01: "Ajouter",
-            msg: "Ajoutez quantité"
+            msg: "Ajouter quantité"
         },
         pg_txtBarcode : 
         {
@@ -11619,7 +11619,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "Continue",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Le Produit Sélectionné n'a pas de Fournisseur Enregistré ! Voulez-vous Continuer "
         },
         msgCode : 
@@ -11631,7 +11631,7 @@ export const langFr =
         msgDiscountEntry : 
         {   
             title : "Saisie du montant de la remise",   
-            btn01 : "Validez"  
+            btn01 : "Valider"  
         },
         txtDiscount1 : "1. Remise ",  
         txtDiscount2 : "2. Remise ",  
@@ -11640,7 +11640,7 @@ export const langFr =
         msgDiscountPerEntry : 
         {
             title : "Saisie de Remise en %", 
-            btn01 : "Validez"
+            btn01 : "Valider"
         },
         txtDiscountPer1 : "1. Remise % ", 
         txtDiscountPer2 : "2. Remise % ", 
@@ -11654,9 +11654,9 @@ export const langFr =
         txtCustomerName : "Nom Magasin",
         dtDocDate : "Date",
         txtAmount : "Total" ,
-        txtDiscount : "Satır İndirimi",    // BAK
-        txtDocDiscount : "Evrak İndirimi",    // BAK
-        txtSubTotal : "Ara Toplam",    // BAK
+        txtDiscount : "Remise sur les lignes",    // BAK
+        txtDocDiscount : "Remise total général",    // BAK
+        txtSubTotal : "Sous-total",    // BAK
         txtMargin : "Marge",
         txtVat : "TVA",
         txtTotal : "Total Général",
@@ -11724,9 +11724,9 @@ export const langFr =
         },
         popDiscount : 
         {
-           title: "Satır İndirimi", // BAK
+           title: "Remise sur les lignes", // BAK
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
-            chkDocDiscount : "Appliquer la remise sur le total général",
+            chkDocDiscount : "Remise total général",
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -11736,7 +11736,7 @@ export const langFr =
         },
         popDocDiscount : 
         {
-           title: "Evrak İndirimi", // BAK
+           title: "Remise total général", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -11760,8 +11760,8 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes-vous sur de vouloir enregistrer !"
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de vouloir Enregistrer!"
         },
         msgSaveResult:
         {
@@ -11774,21 +11774,21 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessaire !"
+            msg: "Veuillez saisir les zones nécessaires !"
         },
         msgDelete:
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
         },
         msgVatDelete:
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes-vous sur de Vouloir Mettre à Zéro la TVA !"
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de Vouloir Mettre à Zéro la TVA !"
         },
         msgDiscountPrice:
         {
@@ -11830,13 +11830,13 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrer les Modifications !"
+            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrerles Modifications !"
         },
         msgDoclocked:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez Enregistrer Sans Dévérouiller !"
+            msg: "Vous ne Pouvez EnregistrerSans Dévérouiller !"
         },
         msgDiscount:
         {
@@ -11860,7 +11860,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Prix Inférieur à l'Achat ! !"
         },
         msgUnderPrice2:
@@ -11874,7 +11874,7 @@ export const langFr =
             title: "Attention",
             btn01: "Regroupe",
             btn02: "Nouvel Ajout",
-            msg: "Produit Existant dans Document ! Voulez vous Combiner ?"
+            msg: "Produit Existant dans Document ! Voulez-vous Combiner ?"
         },
         popDesign : 
         {
@@ -11942,7 +11942,7 @@ export const langFr =
         {
             title: "Quantité",
             btn01: "Ajouter",
-            msg: "Ajoutez quantité"
+            msg: "Ajouter quantité"
         },
         pg_txtBarcode : 
         {
@@ -12017,7 +12017,7 @@ export const langFr =
         msgDiscountEntry : 
         {   
             title : "Saisie du montant de remise", 
-            btn01 : "Validez"  
+            btn01 : "Valider"  
         },
         txtDiscount1 : "1. Remise ", 
         txtDiscount2 : "2. Remise ", 
@@ -12026,7 +12026,7 @@ export const langFr =
         msgDiscountPerEntry : 
         {
             title : "Saisie de Remise en %", 
-            btn01 : "Validez" 
+            btn01 : "Valider" 
         },
         txtDiscountPer1 : "1. Remise % ", 
         txtDiscountPer2 : "2. Remise % ", 
@@ -12108,9 +12108,9 @@ export const langFr =
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
         txtAmount : "Total" ,
-        txtDiscount : "Satır İndirimi",    // BAK
-        txtDocDiscount : "Evrak İndirimi",    // BAK
-        txtSubTotal : "Ara Toplam",    // BAK
+        txtDiscount : "Remise sur les lignes",    // BAK
+        txtDocDiscount : "Remise total général",    // BAK
+        txtSubTotal : "Sous-total",    // BAK
         txtMargin : "Marge",
         txtVat : "TVA",
         txtTotal : "Total Général",
@@ -12182,9 +12182,9 @@ export const langFr =
         },
         popDiscount : 
         {
-           title: "Satır İndirimi", // BAK
+           title: "Remise sur les lignes", // BAK
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
-            chkDocDiscount : "Appliquer la remise sur le total général",
+            chkDocDiscount : "Remise total général",
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -12194,7 +12194,7 @@ export const langFr =
         },
         popDocDiscount : 
         {
-           title: "Evrak İndirimi", // BAK
+           title: "Remise total général", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -12224,8 +12224,8 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes-vous sur de vouloir enregistrer !"
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de vouloir Enregistrer!"
         },
         msgSaveResult:
         {
@@ -12238,21 +12238,21 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessaire !"
+            msg: "Veuillez saisir les zones nécessaires !"
         },
         msgDelete:
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
         },
         msgVatDelete:
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes-vous sur de Vouloir Mettre à Zéro la TVA !"
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de Vouloir Mettre à Zéro la TVA !"
         },
         msgDiscountPrice:
         {
@@ -12294,13 +12294,13 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrer les Modifications !"
+            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrerles Modifications !"
         },
         msgDoclocked:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez Enregistrer Sans Dévérouiller !"
+            msg: "Vous ne Pouvez EnregistrerSans Dévérouiller !"
         },
         msgDiscount:
         {
@@ -12318,7 +12318,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "Continue",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Le Produit Sélectionné n'a pas de Fournisseur Enregistré ! Voulez-vous Continuer "
         },
         msgNotCustomer:
@@ -12332,7 +12332,7 @@ export const langFr =
             title: "Attention",
             btn01: "Regroupe",
             btn02: "Nouvel Ajout",
-            msg: "Produit Existant dans Document ! Voulez vous Combiner ?"
+            msg: "Produit Existant dans Document ! Voulez-vous Combiner ?"
         },
         msgMissItemCode:
         {
@@ -12400,7 +12400,7 @@ export const langFr =
         {
             title: "Quantité",
             btn01: "Ajouter",
-            msg: "Ajoutez quantité"
+            msg: "Ajouter quantité"
         },
         pg_offersGrid : 
         {
@@ -12457,7 +12457,7 @@ export const langFr =
         msgDiscountPerEntry : 
         {
             title : "Saisie de Remise en %",  
-            btn01 : "Validez" 
+            btn01 : "Valider" 
         },
         txtDiscountPer1 : "1. Remise % ",  
         txtDiscountPer2 : "2. Remise % ",  
@@ -12471,9 +12471,9 @@ export const langFr =
         txtCustomerName : "Nom Client",
         dtDocDate : "Date",
         txtAmount : "Total" ,
-        txtDiscount : "Satır İndirimi",    // BAK
-        txtDocDiscount : "Evrak İndirimi",    // BAK
-        txtSubTotal : "Ara Toplam",    // BAK
+        txtDiscount : "Remise sur les lignes",    // BAK
+        txtDocDiscount : "Remise total général",    // BAK
+        txtSubTotal : "Sous-total",    // BAK
         txtMargin : "Marge",
         txtVat : "TVA",
         txtTotal : "Total Général",
@@ -12544,9 +12544,9 @@ export const langFr =
         },
         popDiscount : 
         {
-           title: "Satır İndirimi", // BAK
+           title: "Remise sur les lignes", // BAK
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
-            chkDocDiscount : "Appliquer la remise sur le total général",
+            chkDocDiscount : "Remise total général",
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -12556,7 +12556,7 @@ export const langFr =
         },
         popDocDiscount : 
         {
-           title: "Evrak İndirimi", // BAK
+           title: "Remise total général", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -12580,8 +12580,8 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes-vous sur de vouloir enregistrer !"
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de vouloir Enregistrer!"
         },
         msgSaveResult:
         {
@@ -12594,21 +12594,21 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessaire !"
+            msg: "Veuillez saisir les zones nécessaires !"
         },
         msgDelete:
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
         },
         msgVatDelete:
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes-vous sur de Vouloir Mettre à Zéro la TVA !"
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de Vouloir Mettre à Zéro la TVA !"
         },
         msgDiscountPrice:
         {
@@ -12650,13 +12650,13 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrer les Modifications !"
+            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrerles Modifications !"
         },
         msgDoclocked:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez Enregistrer Sans Dévérouiller !"
+            msg: "Vous ne Pouvez EnregistrerSans Dévérouiller !"
         },
         msgDiscount:
         {
@@ -12680,7 +12680,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Prix Inférieur à l'Achat ! !"
         },
         msgUnderPrice2:
@@ -12694,7 +12694,7 @@ export const langFr =
             title: "Attention",
             btn01: "Regroupe",
             btn02: "Nouvel Ajout",
-            msg: "Produit Existant dans Document ! Voulez vous Combiner ?"
+            msg: "Produit Existant dans Document ! Voulez-vous Combiner ?"
         },
         popDesign : 
         {
@@ -12756,7 +12756,7 @@ export const langFr =
         {
             title: "Quantité",
             btn01: "Ajouter",
-            msg: "Ajoutez quantité"
+            msg: "Ajouter quantité"
         },
         pg_txtBarcode : 
         {
@@ -12835,7 +12835,7 @@ export const langFr =
         msgDiscountPerEntry : 
         {
             title : "Saisie de Remise en %",  
-            btn01 : "Validez" 
+            btn01 : "Valider" 
         },
         txtDiscountPer1 : "1. Remise % ",  
         txtDiscountPer2 : "2. Remise % ",  
@@ -12996,8 +12996,8 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes-vous sur de vouloir enregistrer !"
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de vouloir Enregistrer!"
         },
         msgSaveResult:
         {
@@ -13010,7 +13010,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessaire !"
+            msg: "Veuillez saisir les zones nécessaires !"
         },
         msgNotCustomerCount:
         {
@@ -13022,7 +13022,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
         },
         msgNotCustomer:
@@ -13082,7 +13082,7 @@ export const langFr =
             title: "Ajouté plusieurs produits",    
             btnApprove: "Chercher Produits",    
             btnClear : "Vider",    
-            btnSave : "Ajoutez les lignes",    
+            btnSave : "Ajouter les lignes",    
         },    
         cmbMultiItemType :     
         {    
@@ -13187,8 +13187,8 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes-vous sur de vouloir enregistrer !"
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de vouloir Enregistrer!"
         },
         msgSaveResult:
         {
@@ -13201,13 +13201,13 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessaire !"
+            msg: "Veuillez saisir les zones nécessaires !"
         },
         msgDelete:
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
         },
         msgNotCustomer:
@@ -13273,7 +13273,7 @@ export const langFr =
             title: "Ajouté plusieurs produits",   
             btnApprove: "Chercher Produits",   
             btnClear : "Vider",   
-            btnSave : "Ajoutez les lignes",   
+            btnSave : "Ajouter les lignes",   
         },   
         cmbMultiItemType :    
         {   
@@ -13565,7 +13565,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Êtes-vous sûr de vouloir enregistrer? "
         },
         msgSaveResult:
@@ -13610,7 +13610,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Document verrouillé ! \n Pour enregistrer les modifications, vous devez déverrouiller avec le mot de passe administrateur !"
+            msg: "Document verrouillé ! \n Pour Enregistrerles modifications, vous devez déverrouiller avec le mot de passe administrateur !"
         },
         msgDocLocked:
         {
@@ -13725,7 +13725,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Êtes-vous sûr de vouloir enregistrer? "
         },
         msgSaveResult:
@@ -13745,7 +13745,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Voulez-vous vraiment supprimer l'enregistrement ?"
         },
         msgLocked:
@@ -13770,7 +13770,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Document verrouillé ! \n Pour enregistrer les modifications, vous devez déverrouiller avec le mot de passe administrateur !"
+            msg: "Document verrouillé ! \n Pour Enregistrerles modifications, vous devez déverrouiller avec le mot de passe administrateur !"
         },
         msgDocLocked:
         {
@@ -13834,8 +13834,8 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes-vous sur de vouloir enregistrer !"
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de vouloir Enregistrer!"
         },
         msgSaveResult:
         {
@@ -13848,13 +13848,13 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessaire !"
+            msg: "Veuillez saisir les zones nécessaires !"
         },
         msgDelete:
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
         },
         msgCode : 
@@ -13889,8 +13889,8 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes-vous sur de vouloir enregistrer !"
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de vouloir Enregistrer!"
         },
         msgSaveResult:
         {
@@ -13903,13 +13903,13 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessaire !"
+            msg: "Veuillez saisir les zones nécessaires !"
         },
         msgDelete:
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
         },
         msgCode : 
@@ -13963,8 +13963,8 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes-vous sur de vouloir enregistrer !"
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de vouloir Enregistrer!"
         },
         msgSaveResult:
         {
@@ -13977,13 +13977,13 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessaire !"
+            msg: "Veuillez saisir les zones nécessaires !"
         },
         msgDelete:
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
         },
         msgLocked:
@@ -14008,13 +14008,13 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrer les Modifications !"
+            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrerles Modifications !"
         },
         msgDoclocked:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez Enregistrer Sans Dévérouiller !"
+            msg: "Vous ne Pouvez EnregistrerSans Dévérouiller !"
         },
         msgDblAccount:
         {
@@ -14085,8 +14085,8 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes-vous sur de vouloir enregistrer !"
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de vouloir Enregistrer!"
         },
         msgSaveResult:
         {
@@ -14099,7 +14099,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessaire !"
+            msg: "Veuillez saisir les zones nécessaires !"
         },
         validValue :"Ne peut être Vide",
         zeroValid : "Ne peut pas être 0",
@@ -14137,7 +14137,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Êtes-vous sûr de vouloir enregistrer? "
         },
         msgSaveResult:
@@ -14157,7 +14157,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Voulez-vous vraiment supprimer l'enregistrement ?"
         },
         validation:
@@ -14174,8 +14174,8 @@ export const langFr =
         {
             title: "Attention",   
             btn01: "OK",   
-            btn02: "Abandonne",   
-            msg: "Etes vous sur de vouloir générer le document sélectionné ?"   
+            btn02: "Abandonner",   
+            msg: "Etes vous sûr(e) de vouloir générer le document sélectionné ?"   
         },
         grdDeleteList : 
         {
@@ -14220,7 +14220,7 @@ export const langFr =
             title: "Attention",   
             btn01: "OK",   
             btn02: "Abandonner",   
-            msg: "Etes vous sur de vouloir saisir à nouveau le document sélectionné ?"   
+            msg: "Etes vous sûr(e) de vouloir saisir à nouveau le document sélectionné ?"   
         },
         grdDeleteList : 
         {
@@ -14272,8 +14272,8 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes-vous sur de vouloir enregistrer !"
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de vouloir Enregistrer!"
         },
         msgSaveResult:
         {
@@ -14286,13 +14286,13 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessaire !"
+            msg: "Veuillez saisir les zones nécessaires !"
         },
         msgDelete:
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
         },
         msgCode : 
@@ -14387,7 +14387,7 @@ export const langFr =
         },      
         trDeatil: "T.R Detail",      
         lineDelete :"ligne annulé",      
-        cancel : "Abandonne",      
+        cancel : "Abandonner",      
         popOpenTike :
         {
             title : "Ticket En Attente" 
@@ -14485,7 +14485,7 @@ export const langFr =
         },
         trDeatil: "T.R Detaille", 
         lineDelete :"Ligne annulé", 
-        cancel : "Abandonne", 
+        cancel : "Abandonner", 
         btnAddpoint : "Entrée et Sortie Points",     
         popPointEntry :     
         {    
@@ -14596,7 +14596,7 @@ export const langFr =
         },
         trDeatil: "T.R Detail",
         lineDelete :"Annulation de ligne",
-        cancel : "Abandonne",
+        cancel : "Abandonner",
         popOpenTike :
         {
             title : "Ticket En Attente"
@@ -14692,7 +14692,7 @@ export const langFr =
             clmName: "NOM",    
             clmStatus : "Statut" 
         },
-        cancel : "Abandonne", 
+        cancel : "Abandonner", 
         msgItemSelect:
         {
             title: "Attention",   
@@ -14791,7 +14791,7 @@ export const langFr =
         check : "Chèque",
         ticketRest : "T. Restaurant",
         previous: "Précédent",
-        finish : "Terminez",
+        finish : "Terminer",
         next : "Suivant",
         dtDocDate :"Date",
         cmbSafe : " Caisse No",
@@ -14868,7 +14868,7 @@ export const langFr =
             title: "Attention", 
             btn01: "Annulé", 
             btn02: "Continuer", 
-            msg: "Le montant que vous avez saisi est 0€ ! Etes-vous sur de vouloir continuer?" 
+            msg: "Le montant que vous avez saisi est 0€ ! Etes-vous sûr(e) de vouloir continuer?" 
         },
         msgBigAmount:
         {
@@ -14946,9 +14946,9 @@ export const langFr =
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
         txtAmount : "Total" ,
-        txtDiscount : "Satır İndirimi",    // BAK
-        txtDocDiscount : "Evrak İndirimi",    // BAK
-        txtSubTotal : "Ara Toplam",    // BAK
+        txtDiscount : "Remise sur les lignes",    // BAK
+        txtDocDiscount : "Remise total général",    // BAK
+        txtSubTotal : "Sous-total",    // BAK
         txtMargin : "Marge",
         txtVat : "TVA",
         txtTotal : "Total Général",
@@ -15007,9 +15007,9 @@ export const langFr =
         },
         popDiscount : 
         {
-           title: "Satır İndirimi", // BAK
+           title: "Remise sur les lignes", // BAK
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
-            chkDocDiscount : "Appliquer la remise sur le total général",
+            chkDocDiscount : "Remise total général",
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -15019,7 +15019,7 @@ export const langFr =
         },
         popDocDiscount : 
         {
-           title: "Evrak İndirimi", // BAK
+           title: "Remise total général", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -15049,8 +15049,8 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes-vous sur de vouloir enregistrer !"
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de vouloir Enregistrer!"
         },
         msgSaveResult:
         {
@@ -15063,21 +15063,21 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessaire !"
+            msg: "Veuillez saisir les zones nécessaires !"
         },
         msgDelete:
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
         },
         msgVatDelete:
         {
             title: "Attention",
             btn01: "OK",
-            btn02: "Abandonne",
-            msg: "Etes-vous sur de Vouloir Mettre à Zéro la TVA !"
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de Vouloir Mettre à Zéro la TVA !"
         },
         msgDiscountPrice:
         {
@@ -15119,13 +15119,13 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrer les Modifications !"
+            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrerles Modifications !"
         },
         msgDoclocked:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez Enregistrer Sans Dévérouiller !"
+            msg: "Vous ne Pouvez EnregistrerSans Dévérouiller !"
         },
         msgDiscount:
         {
@@ -15143,7 +15143,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "Continue",
-            btn02: "Abandonne",
+            btn02: "Abandonner",
             msg: "Le Produit Sélectionné n'a pas de Fournisseur Enregistré ! Voulez-vous Continuer ? "
         },
         msgNotCustomer:
@@ -15157,7 +15157,7 @@ export const langFr =
             title: "Attention",
             btn01: "Regroupe",
             btn02: "Nouvel Ajout",
-            msg: "Produit Existant dans Document ! Voulez vous Combiner ?"
+            msg: "Produit Existant dans Document ! Voulez-vous Combiner ?"
         },
         msgMissItemCode:
         {
@@ -15173,7 +15173,7 @@ export const langFr =
         },
         popMultiItem:
         {
-            title: "Ajout Groupé de Produit",
+            title: "Ajout Groupe de Produit",
             btnApprove: "Chercher Produits",
             btnClear : "Vider",
             btnSave : "Ajouter Lignes",
@@ -15213,7 +15213,7 @@ export const langFr =
         {
             title: "Quantité",
             btn01: "Ajouter",
-            msg: "Ajoutez quantité"
+            msg: "Ajouter quantité"
         },
         pg_txtBarcode : 
         {
@@ -15254,7 +15254,7 @@ export const langFr =
         msgDiscountPerEntry : 
         {
             title : "Saisie de Remise en %",  
-            btn01 : "Validez" 
+            btn01 : "Valider" 
         },
         txtDiscountPer1 : "1. Remise % ",  
         txtDiscountPer2 : "2. Remise % ",  
@@ -15269,9 +15269,9 @@ export const langFr =
         txtCustomerName : "Nom Client",
         dtDocDate : "Date",
         txtAmount : "Total" ,
-        txtDiscount : "Satır İndirimi",    // BAK
-        txtDocDiscount : "Evrak İndirimi",    // BAK
-        txtSubTotal : "Ara Toplam",    // BAK
+        txtDiscount : "Remise sur les lignes",    // BAK
+        txtDocDiscount : "Remise total général",    // BAK
+        txtSubTotal : "Sous-total",    // BAK
         txtMargin : "Marge",
         txtVat : "TVA",
         txtTotal : "Total Général",
@@ -15333,9 +15333,9 @@ export const langFr =
         },
         popDiscount : 
         {
-           title: "Satır İndirimi", // BAK
+           title: "Remise sur les lignes", // BAK
             chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
-            chkDocDiscount : "Appliquer la remise sur le total général", 
+            chkDocDiscount : "Remise total général", 
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -15345,7 +15345,7 @@ export const langFr =
         },
         popDocDiscount : 
         {
-           title: "Evrak İndirimi", // BAK
+           title: "Remise total général", // BAK
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -15370,7 +15370,7 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Etes-vous sûr(e) de vouloir enregistrer !"
+            msg: "Etes-vous sûr(e) de vouloir Enregistrer!"
         },
         msgSaveResult:
         {
@@ -15383,7 +15383,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessaire !"
+            msg: "Veuillez saisir les zones nécessaires !"
         },
         msgDelete:
         {
@@ -15445,7 +15445,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez Enregistrer Sans Dévérouiller !"
+            msg: "Vous ne Pouvez EnregistrerSans Dévérouiller !"
         },
         msgDiscount:
         {
@@ -15470,7 +15470,7 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Prix Inférieur à l'Achat ! ! Voulez Vous Continuer ?"
+            msg: "Prix Inférieur à l'Achat ! ! Voulez-vous Continuer ?"
         },
         msgUnderPrice2:
         {
@@ -15483,7 +15483,7 @@ export const langFr =
             title: "Attention",
             btn01: "Regroupe",
             btn02: "Nouvel Ajout",
-            msg: "Produit Existant dans Document ! Voulez vous Combiner ?"
+            msg: "Produit Existant dans Document ! Voulez-vous Combiner ?"
         },
         popDesign : 
         {
@@ -15607,7 +15607,7 @@ export const langFr =
         msgDiscountPerEntry : 
         {
             title : "Saisie de Remise en %",  
-            btn01 : "Validez" 
+            btn01 : "Valider" 
         },
         txtDiscountPer1 : "1. Remise % ",  
         txtDiscountPer2 : "2. Remise % ",  
@@ -15668,7 +15668,7 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Etes-vous sûr(e) de vouloir enregistrer !"
+            msg: "Etes-vous sûr(e) de vouloir Enregistrer!"
         },
         msgSaveResult:
         {
@@ -15701,7 +15701,7 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Etes-vous sur de vouloir enregistrer !"
+            msg: "Etes-vous sûr(e) de vouloir Enregistrer!"
         },
         msgSaveResult:
         {
@@ -15714,7 +15714,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessaires !"
+            msg: "Veuillez saisir les zones nécessairess !"
         },
         msgPrice: 
         {
