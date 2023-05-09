@@ -54,8 +54,8 @@ export function print()
             }   
             return tmpArr.length > 0 ? tmpArr : undefined
         },
-        ()=>{return {font:"b",align:"lt",data:moment(new Date(data.pos[0].LDATE).toISOString()).utcOffset(0,false).locale('fr').format('dddd DD.MM.YYYY HH:mm:ss')}},
-        ()=>{return {font:"b",align:"lt",data:("Caissier: " + data.pos[0].CUSER).space(34,'e') + ("Caisse: " + data.pos[0].DEVICE).space(30,'s')}},
+        ()=>{return {font:"b",align:"lt",pdf:{fontSize:12},data:moment(new Date(data.pos[0].LDATE).toISOString()).utcOffset(0,false).locale('fr').format('dddd DD.MM.YYYY HH:mm:ss')}},
+        ()=>{return {font:"b",align:"lt",pdf:{fontSize:12},data:("Caissier: " + data.pos[0].CUSER).space(34,'e') + ("Caisse: " + data.pos[0].DEVICE).space(30,'s')}},
         //FIS NO BARKODU
         ()=>{return {align:"ct",barcode:data.pos[0].GUID.substring(19,36),options:{width: 1,height:40,position:'OFF'}}},
         ()=>{return {font:"a",style:"b",align:"ct",data:"****** Numero de Ticket De Caisse ******"}},
@@ -109,11 +109,15 @@ export function print()
             let tmpTitle = {}
             if(data.special.type != 'Fatura')
             {
-                tmpTitle = {font:"b",style:"bu",align:"lt",data:"T " + "Libelle".space(32) + " " + "Qte".space(8) + " " + "Prix(u/kg)".space(11) + " " + "Prix EUR".space(8)}
+                tmpTitle = {font:"b",style:"bu",align:"lt",
+                pdf:{fontSize:8,grid:[{x:3,charS:0,charE:2,align:'left'},{x:6,charS:2,charE:33,align:'left'},{x:70,charS:34,charE:47},{x:80,charS:48,charE:55},{x:90,charS:56,charE:63}]},
+                data:"T " + "Libelle".space(32) + " " + "Qte".space(8) + " " + "Prix(u/kg)".space(11) + " " + "Prix EUR".space(8)}
             }
             else if(data.special.type == 'Fatura')
             {
-                tmpTitle = {font:"b",style:"bu",align:"lt",data:"T " + "Libelle".space(32) + " " + "Qte".space(8) + " " + "P.HT(u/kg)".space(11) + " " + "T.HT EUR".space(8)}
+                tmpTitle = {font:"b",style:"bu",align:"lt",
+                pdf:{fontSize:8,grid:[{x:3,charS:0,charE:2,align:'left'},{x:6,charS:2,charE:33,align:'left'},{x:70,charS:34,charE:47},{x:80,charS:48,charE:55},{x:90,charS:56,charE:63}]},
+                data:"T " + "Libelle".space(32) + " " + "Qte".space(8) + " " + "P.HT(u/kg)".space(11) + " " + "T.HT EUR".space(8)}
             }
             return tmpTitle
         },
@@ -173,6 +177,7 @@ export function print()
                                     font: "b",
                                     style: tmpProSale[0].GUID == "00000000-0000-0000-0000-000000000000" ? "b" : undefined, //SUBTOTAL
                                     align: tmpProSale[0].GUID == "00000000-0000-0000-0000-000000000000" ? "rt" : "rt", //SUBTOTAL
+                                    pdf: {fontSize:8,grid:[{x:3,charS:0,charE:2,align:'left'},{x:6,charS:2,charE:33,align:'left'},{x:80,charS:34,charE:47},{x:90,charS:48,charE:55},{x:100,charS:56,charE:63}]},
                                     data: tmpProSale[0].VAT_TYPE + " " +
                                         (tmpProSale[0].GUID == "00000000-0000-0000-0000-000000000000" ? (tmpProSale[0].ITEM_SNAME + tmpFactStr).space(32,'s') + tmpFactStr : (tmpProSale[0].TICKET_REST ? "*" + tmpProSale[0].ITEM_SNAME + tmpFactStr : tmpProSale[0].ITEM_SNAME + tmpFactStr).toString().space(31)) + " " +                                    
                                         (tmpProSale[0].GUID == "00000000-0000-0000-0000-000000000000" ? "" : (tmpProSale[0].SCALE_MANUEL == true ? "(M)" : "") + "" + tmpQt + " " + tmpProSale[0].UNIT_SHORT).space(13,'e') + " " + //SUBTOTAL                                    
@@ -188,6 +193,7 @@ export function print()
                                     font: "b",
                                     style: tmpProSale[0].GUID == "00000000-0000-0000-0000-000000000000" ? "b" : undefined, //SUBTOTAL
                                     align: tmpProSale[0].GUID == "00000000-0000-0000-0000-000000000000" ? "rt" : "rt", //SUBTOTAL
+                                    pdf: {fontSize:8,grid:[{x:3,charS:0,charE:2,align:'left'},{x:6,charS:2,charE:33,align:'left'},{x:80,charS:34,charE:47},{x:90,charS:48,charE:55},{x:100,charS:56,charE:63}]},
                                     data: tmpProSale[0].VAT_TYPE + " " +
                                         (tmpProSale[0].GUID == "00000000-0000-0000-0000-000000000000" ? tmpProSale[0].ITEM_SNAME.space(32,'s') : (tmpProSale[0].TICKET_REST ? "*" + tmpProSale[0].ITEM_SNAME : tmpProSale[0].ITEM_SNAME).toString().space(31)) + " " +                                    
                                         (tmpProSale[0].GUID == "00000000-0000-0000-0000-000000000000" ? "" : (tmpProSale[0].SCALE_MANUEL == true ? "(M)" : "") + "" + tmpQt + " " + tmpProSale[0].UNIT_SHORT).space(13,'e') + " " + //SUBTOTAL                                    
@@ -234,6 +240,7 @@ export function print()
                             font: "b",
                             style: tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? "b" : undefined, //SUBTOTAL
                             align: tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? "rt" : "rt", //SUBTOTAL
+                            pdf: {fontSize:8,grid:[{x:3,charS:0,charE:2,align:'left'},{x:6,charS:2,charE:33,align:'left'},{x:80,charS:34,charE:47},{x:90,charS:48,charE:55},{x:100,charS:56,charE:63}]},
                             data: tmpSaleItem.VAT_TYPE + " " +
                                 (tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? (tmpSaleItem.ITEM_SNAME + tmpFactStr).space(32,'s') : (tmpSaleItem.TICKET_REST ? "*" + tmpSaleItem.ITEM_SNAME + tmpFactStr : tmpSaleItem.ITEM_SNAME + tmpFactStr).toString().space(31)) + " " +                            
                                 (tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? "" : (tmpSaleItem.SCALE_MANUEL == true ? "(M)" : "") + "" + tmpQt + " " + tmpSaleItem.UNIT_SHORT).space(13,'e') + " " + //SUBTOTAL                            
@@ -249,6 +256,7 @@ export function print()
                             font: "b",
                             style: tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? "b" : undefined, //SUBTOTAL
                             align: tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? "rt" : "rt", //SUBTOTAL
+                            pdf: {fontSize:8,grid:[{x:3,charS:0,charE:2,align:'left'},{x:6,charS:2,charE:33,align:'left'},{x:80,charS:34,charE:47},{x:90,charS:48,charE:55},{x:100,charS:56,charE:63}]},
                             data: tmpSaleItem.VAT_TYPE + " " +
                                 (tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? (tmpSaleItem.ITEM_SNAME + tmpFactStr).space(32,'s') + tmpFactStr : (tmpSaleItem.TICKET_REST ? "*" + tmpSaleItem.ITEM_SNAME + tmpFactStr : tmpSaleItem.ITEM_SNAME + tmpFactStr).toString().space(31)) + " " +                            
                                 (tmpSaleItem.GUID == "00000000-0000-0000-0000-000000000000" ? "" : (tmpSaleItem.SCALE_MANUEL == true ? "(M)" : "") + "" + tmpQt + " " + tmpSaleItem.UNIT_SHORT).space(13,'e') + " " + //SUBTOTAL                            
@@ -327,6 +335,7 @@ export function print()
                 {
                     font: "a",
                     align: "lt",
+                    pdf: {fontSize:15},
                     data: tmpType.space(33) + 
                     (tmpOperator + decimal(data.pospay.where({PAY_TYPE:data.pospay[i].PAY_TYPE}).sum("AMOUNT",2)) + "EUR").space(15,"s")
                 })
@@ -343,6 +352,7 @@ export function print()
                 {
                     font: "a",
                     align: "lt",
+                    pdf: {fontSize:15},
                     data: "Recu".space(33) +
                         (decimal(parseFloat(data.pospay.sum("AMOUNT",2)).toFixed(2)) + "EUR").space(15,"s")
                 });
@@ -350,6 +360,7 @@ export function print()
                 {
                     font: "a",
                     align: "lt",
+                    pdf: {fontSize:15},
                     data: "Rendu".space(33) + (decimal(data.pospay.sum("CHANGE",2)) + "EUR").space(15,"s")
                 });
             }
@@ -359,12 +370,14 @@ export function print()
                 {
                     font: "a",
                     align: "lt",
+                    pdf: {fontSize:15},
                     data: "Surplus Tic. Rest.".space(33) + (decimal(data.pospay.sum("TICKET_PLUS",2)) + "EUR").space(15,"s")
                 });
                 tmpArr.push(
                 {
                     font: "a",
                     align: "lt",
+                    pdf: {fontSize:15},
                     data: "Rendu".space(33) + ("0,00" + "EUR").space(15,"s")
                 });
             }
@@ -374,6 +387,7 @@ export function print()
                 {
                     font: "a",
                     align: "lt",
+                    pdf: {fontSize:15},
                     data: "Recu".space(33) +
                         (decimal(parseFloat(data.pospay.where({PAY_TYPE:4}).sum("AMOUNT",2) + data.pospay.sum("CHANGE",2)).toFixed(2)) + "EUR").space(15,"s")
                 });
@@ -381,6 +395,7 @@ export function print()
                 {
                     font: "a",
                     align: "lt",
+                    pdf: {fontSize:15},
                     data: "Rendu".space(33) + (decimal(data.pospay.sum("CHANGE",2)) + "EUR").space(15,"s")
                 });
             }

@@ -130,33 +130,33 @@ export default class posDoc extends React.PureComponent
 
         this.core.socket.on('connect',async () => 
         {               
-            // if(!this.state.isConnected)
-            // {
-            //     this.sendJet({CODE:"120",NAME:"Le système est online"}) ///Kasa offline dan online a döndü.
+            if(!this.state.isConnected)
+            {
+                this.sendJet({CODE:"120",NAME:"Le système est online"}) ///Kasa offline dan online a döndü.
 
-            //     let tmpConfObj =
-            //     {
-            //         id:'msgOnlineAlert',showTitle:true,title:this.lang.t("msgOnlineAlert.title"),showCloseButton:true,width:'650px',height:'220px',
-            //         button:[{id:"btn01",caption:this.lang.t("msgOnlineAlert.btn01"),location:'after'}],
-            //         content:(
-            //             <div>
-            //                 <div className="row">
-            //                     <div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgOnlineAlert.msg1")}</div>
-            //                 </div>
-            //                 <div className="row">
-            //                     <div style={{textAlign:"center",fontSize:"20px",fontWeight:"bold",color:"red"}}>{this.lang.t("msgOnlineAlert.msg2")}</div>
-            //                 </div>
-            //             </div>
-            //         )
-            //     }
-            //     await dialog(tmpConfObj);
+                let tmpConfObj =
+                {
+                    id:'msgOnlineAlert',showTitle:true,title:this.lang.t("msgOnlineAlert.title"),showCloseButton:true,width:'650px',height:'220px',
+                    button:[{id:"btn01",caption:this.lang.t("msgOnlineAlert.btn01"),location:'after'}],
+                    content:(
+                        <div>
+                            <div className="row">
+                                <div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgOnlineAlert.msg1")}</div>
+                            </div>
+                            <div className="row">
+                                <div style={{textAlign:"center",fontSize:"20px",fontWeight:"bold",color:"red"}}>{this.lang.t("msgOnlineAlert.msg2")}</div>
+                            </div>
+                        </div>
+                    )
+                }
+                await dialog(tmpConfObj);
 
-            //     await this.transferLocal();
+                await this.transferLocal();
 
-            //     this.sendJet({CODE:"123",NAME:"Les saisies ont été enregistrés dans la base suite à online."}) ////Eldeki kayıtlar online a gönderildi.
+                this.sendJet({CODE:"123",NAME:"Les saisies ont été enregistrés dans la base suite à online."}) ////Eldeki kayıtlar online a gönderildi.
                 
-            //     window.location.reload()
-            // }
+                window.location.reload()
+            }
             this.setState({isConnected:true})            
         })
         this.core.socket.on('connect_error',async(error) => 
@@ -168,16 +168,16 @@ export default class posDoc extends React.PureComponent
         {
 
             this.setState({isConnected:false})
-            let tmpConfObj12 =
-            {
-                id:'msgConnectOut',showTitle:true,title:this.lang.t("msgConnectOut.title"),showCloseButton:true,width:'450px',height:'250px',
-                button:[{id:"btn01",caption:this.lang.t("msgConnectOut.btn01"),location:'before'}],
-                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgConnectOut.msg")}</div>)
-            }
-            await dialog(tmpConfObj12)
-            this.core.auth.logout()
-            window.location.reload()
-            return
+            // let tmpConfObj12 =
+            // {
+            //     id:'msgConnectOut',showTitle:true,title:this.lang.t("msgConnectOut.title"),showCloseButton:true,width:'450px',height:'250px',
+            //     button:[{id:"btn01",caption:this.lang.t("msgConnectOut.btn01"),location:'before'}],
+            //     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgConnectOut.msg")}</div>)
+            // }
+            // await dialog(tmpConfObj12)
+            // this.core.auth.logout()
+            // window.location.reload()
+            
             let tmpConfObj =
             {
                 id:'msgOfflineAlert',showTitle:true,title:this.lang.t("msgOfflineAlert.title"),showCloseButton:true,width:'650px',height:'220px',
@@ -198,8 +198,8 @@ export default class posDoc extends React.PureComponent
             //OFFLINE MODA DÖNDÜĞÜNDE EĞER EKRANDA KAYITLAR VARSA LOCAL DB YE GÖNDERİLİYOR
             for (let i = 0; i < this.posObj.dt("POS").length; i++) 
             {
-                let tmpCtrl = await this.core.local.select({from:"POS_VW_01",where:{GUID:this.posObj.dt("POS")[i].GUID}})
-                if(tmpCtrl.result.length > 0)
+                let tmpCtrl = await this.core.local.select({query:"SELECT * FROM POS_VW_01 WHERE GUID = ?;",values:[this.posObj.dt("POS")[i].GUID]})
+                if(tmpCtrl.result.recordset.length > 0)
                 {
                     Object.setPrototypeOf(this.posObj.dt("POS")[i],{stat:'edit'})
                 }
@@ -212,9 +212,9 @@ export default class posDoc extends React.PureComponent
             {
                 if(this.posObj.dt("POS_SALE")[i].GUID != '00000000-0000-0000-0000-000000000000')
                 {
-                    let tmpCtrl = await this.core.local.select({from:"POS_SALE_VW_01",where:{GUID:this.posObj.dt("POS_SALE")[i].GUID}})
+                    let tmpCtrl = await this.core.local.select({query:"SELECT * FROM POS_SALE_VW_01 WHERE GUID = ?;",values:[this.posObj.dt("POS_SALE")[i].GUID]})
                 
-                    if(tmpCtrl.result.length > 0)
+                    if(tmpCtrl.result.recordset.length > 0)
                     {
                         Object.setPrototypeOf(this.posObj.dt("POS_SALE")[i],{stat:'edit'})
                     }
@@ -230,8 +230,8 @@ export default class posDoc extends React.PureComponent
             }
             for (let i = 0; i < this.posObj.dt("POS_PAYMENT").length; i++) 
             {
-                let tmpCtrl = await this.core.local.select({from:"POS_PAYMENT_VW_01",where:{GUID:this.posObj.dt("POS_PAYMENT")[i].GUID}})
-                if(tmpCtrl.result.length > 0)
+                let tmpCtrl = await this.core.local.select({query:"SELECT * FROM POS_PAYMENT_VW_01 WHERE GUID = ?;",values:[this.posObj.dt("POS_PAYMENT")[i].GUID]})
+                if(tmpCtrl.result.recordset.length > 0)
                 {
                     Object.setPrototypeOf(this.posObj.dt("POS_PAYMENT")[i],{stat:'edit'})
                 }
@@ -242,8 +242,8 @@ export default class posDoc extends React.PureComponent
             }
             for (let i = 0; i < this.posObj.dt("POS_EXTRA").length; i++) 
             {
-                let tmpCtrl = await this.core.local.select({from:"POS_EXTRA_VW_01",where:{GUID:this.posObj.dt("POS_EXTRA")[i].GUID}})
-                if(tmpCtrl.result.length > 0)
+                let tmpCtrl = await this.core.local.select({query:"SELECT * FROM POS_EXTRA_VW_01 WHERE GUID = ?;",values:[this.posObj.dt("POS_EXTRA")[i].GUID]})
+                if(tmpCtrl.result.recordset.length > 0)
                 {
                     Object.setPrototypeOf(this.posObj.dt("POS_EXTRA")[i],{stat:'edit'})
                 }
@@ -256,17 +256,20 @@ export default class posDoc extends React.PureComponent
             //CHEQPAY AKTARIMI İÇİN ÖZEL YAPILDI.
             for (let i = 0; i < this.cheqDt.length; i++) 
             {
-                let tmpCtrl = await this.core.local.select({from:"CHEQPAY_VW_01",where:{GUID:this.cheqDt[i].GUID}})
-                
+                let tmpCtrl = await this.core.local.select({query:`SELECT * FROM CHEQPAY_VW_01 WHERE GUID = '${this.cheqDt[i].GUID}'`})
+                console.log(this.cheqDt)
                 this.cheqDt.insertCmd = 
                 {
                     local : 
                     {
                         type : "insert",
-                        into : "CHEQPAY_VW_01",
+                        query : `INSERT INTO CHEQPAY_VW_01 (GUID, CDATE, CUSER, CUSER_NAME, LDATE, LUSER, LUSER_NAME, TYPE, DOC, CODE, AMOUNT, STATUS, REFERENCE, RANDOM1, 
+                                PRICE, TICKET_TYPE, TICKET_NAME, RANDOM2, YEAR, EXDAY, TRANSFER)
+                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
                         values : [{GUID : {map:'GUID'},CDATE : {map:'CDATE',type:'date_time'},CUSER : {map:'CUSER'},CUSER_NAME : {map:'CUSER_NAME'},LDATE : {map:'LDATE',type:'date_time'},LUSER : {map:'LUSER'},
-                        LUSER_NAME : {map:'LUSER_NAME'},TYPE : {map:'TYPE'},DOC : {map:'DOC'},CODE : {map:'CODE'},AMOUNT : {map:'AMOUNT'},STATUS : {map:'STATUS'},REFERENCE : {map:'REFERENCE'},RANDOM1 : {map:'RANDOM1'},
-                        PRICE : {map:'PRICE'},TICKET_TYPE : {map:'TICKET_TYPE'},TICKET_NAME : {map:'TICKET_NAME'},RANDOM2 : {map:'RANDOM2'},YEAR : {map:'YEAR'},EXDAY : {map:'EXDAY'},TRANSFER : 1}]
+                                LUSER_NAME : {map:'LUSER_NAME'},TYPE : {map:'TYPE'},DOC : {map:'DOC'},CODE : {map:'CODE'},AMOUNT : {map:'AMOUNT'},STATUS : {map:'STATUS'},REFERENCE : {map:'REFERENCE'},
+                                RANDOM1 : {map:'RANDOM1'},PRICE : {map:'PRICE'},TICKET_TYPE : {map:'TICKET_TYPE'},TICKET_NAME : {map:'TICKET_NAME'},RANDOM2 : {map:'RANDOM2'},YEAR : {map:'YEAR'},
+                                EXDAY : {map:'EXDAY'},TRANSFER : 1}]
                     }
                 }
                 this.cheqDt.updateCmd = 
@@ -274,11 +277,12 @@ export default class posDoc extends React.PureComponent
                     local : 
                     {
                         type : "update",
-                        in : "CHEQPAY_VW_01",
-                        set : {CDATE : {map:'CDATE',type:'date_time'},CUSER : {map:'CUSER'},CUSER_NAME : {map:'CUSER_NAME'},LDATE : {map:'LDATE',type:'date_time'},LUSER : {map:'LUSER'},
-                        LUSER_NAME : {map:'LUSER_NAME'},TYPE : {map:'TYPE'},DOC : {map:'DOC'},CODE : {map:'CODE'},AMOUNT : {map:'AMOUNT'},STATUS : {map:'STATUS'},REFERENCE : {map:'REFERENCE'},RANDOM1 : {map:'RANDOM1'},
-                        PRICE : {map:'PRICE'},TICKET_TYPE : {map:'TICKET_TYPE'},TICKET_NAME : {map:'TICKET_NAME'},RANDOM2 : {map:'RANDOM2'},YEAR : {map:'YEAR'},EXDAY : {map:'EXDAY'},TRANSFER : 1},
-                        where : {GUID : {map:'GUID'}}
+                        query : `UPDATE CHEQPAY_VW_01 SET CDATE=?, CUSER=?, CUSER_NAME=?, LDATE=?, LUSER=?, LUSER_NAME=?, TYPE=?, DOC=?, CODE=?, AMOUNT=?, STATUS=?, REFERENCE=?, 
+                                RANDOM1=?, PRICE=?, TICKET_TYPE=?, TICKET_NAME=?, RANDOM2=?, YEAR=?, EXDAY=?, TRANSFER=? WHERE GUID=?;`,
+                        values : [{CDATE : {map:'CDATE',type:'date_time'},CUSER : {map:'CUSER'},CUSER_NAME : {map:'CUSER_NAME'},LDATE : {map:'LDATE',type:'date_time'},LUSER : {map:'LUSER'},
+                                 LUSER_NAME : {map:'LUSER_NAME'},TYPE : {map:'TYPE'},DOC : {map:'DOC'},CODE : {map:'CODE'},AMOUNT : {map:'AMOUNT'},STATUS : {map:'STATUS'},
+                                 REFERENCE : {map:'REFERENCE'},RANDOM1 : {map:'RANDOM1'},PRICE : {map:'PRICE'},TICKET_TYPE : {map:'TICKET_TYPE'},TICKET_NAME : {map:'TICKET_NAME'},
+                                 RANDOM2 : {map:'RANDOM2'},YEAR : {map:'YEAR'},EXDAY : {map:'EXDAY'},TRANSFER : 1,GUID : {map:'GUID'}}],
                     }
                 }
 
@@ -286,13 +290,13 @@ export default class posDoc extends React.PureComponent
                 {
                     let tmpQuery = 
                     {
-                        type : "update",
-                        in : "CHEQPAY_VW_01",
-                        set : {GUID : this.cheqDt[i].GUID,CDATE : new Date(this.cheqDt[i].CDATE),CUSER : this.cheqDt[i].CUSER,CUSER_NAME : this.cheqDt[i].CUSER_NAME,LDATE : new Date(this.cheqDt[i].LDATE),LUSER : this.cheqDt[i].LUSER,
-                        LUSER_NAME : this.cheqDt[i].LUSER_NAME,TYPE : this.cheqDt[i].TYPE,DOC : this.cheqDt[i].DOC,CODE : this.cheqDt[i].CODE,AMOUNT : this.cheqDt[i].AMOUNT,STATUS : this.cheqDt[i].STATUS,
-                        REFERENCE : this.cheqDt[i].REFERENCE,RANDOM1 : this.cheqDt[i].RANDOM1,PRICE : this.cheqDt[i].PRICE,TICKET_TYPE : this.cheqDt[i].TICKET_TYPE,TICKET_NAME : this.cheqDt[i].TICKET_NAME,
-                        RANDOM2 : this.cheqDt[i].RANDOM2,YEAR : this.cheqDt[i].YEAR,EXDAY : this.cheqDt[i].EXDAY,TRANSFER : 0},
-                        where : {GUID : this.cheqDt[i].GUID}
+                        type :  "update",
+                        query : `UPDATE CHEQPAY_VW_01 SET GUID=?, CDATE=?, CUSER=?, CUSER_NAME=?, LDATE=?, LUSER=?, LUSER_NAME=?, TYPE=?, DOC=?, CODE=?, AMOUNT=?, STATUS=?, REFERENCE=?, RANDOM1=?, 
+                                PRICE=?, TICKET_TYPE=?, TICKET_NAME=?, RANDOM2=?, YEAR=?, EXDAY=?, TRANSFER=? WHERE GUID=?;`,
+                        values : [this.cheqDt[i].GUID,moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),this.cheqDt[i].CUSER,this.cheqDt[i].CUSER_NAME,moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),this.cheqDt[i].LUSER,
+                                 this.cheqDt[i].LUSER_NAME,this.cheqDt[i].TYPE,this.cheqDt[i].DOC,this.cheqDt[i].CODE,this.cheqDt[i].AMOUNT,this.cheqDt[i].STATUS,
+                                 this.cheqDt[i].REFERENCE,this.cheqDt[i].RANDOM1,this.cheqDt[i].PRICE,this.cheqDt[i].TICKET_TYPE,this.cheqDt[i].TICKET_NAME,
+                                 this.cheqDt[i].RANDOM2,this.cheqDt[i].YEAR,this.cheqDt[i].EXDAY,0,this.cheqDt[i].GUID]
                     }
                     await this.core.local.update(tmpQuery)
                 }
@@ -301,11 +305,12 @@ export default class posDoc extends React.PureComponent
                     let tmpQuery = 
                     {
                         type : "insert",
-                        into : "CHEQPAY_VW_01",
-                        values : [{GUID : this.cheqDt[i].GUID,CDATE : new Date(this.cheqDt[i].CDATE),CUSER : this.cheqDt[i].CUSER,CUSER_NAME : this.cheqDt[i].CUSER_NAME,LDATE : new Date(this.cheqDt[i].LDATE),LUSER : this.cheqDt[i].LUSER,
-                        LUSER_NAME : this.cheqDt[i].LUSER_NAME,TYPE : this.cheqDt[i].TYPE,DOC : this.cheqDt[i].DOC,CODE : this.cheqDt[i].CODE,AMOUNT : this.cheqDt[i].AMOUNT,STATUS : this.cheqDt[i].STATUS,
-                        REFERENCE : this.cheqDt[i].REFERENCE,RANDOM1 : this.cheqDt[i].RANDOM1,PRICE : this.cheqDt[i].PRICE,TICKET_TYPE : this.cheqDt[i].TICKET_TYPE,TICKET_NAME : this.cheqDt[i].TICKET_NAME,
-                        RANDOM2 : this.cheqDt[i].RANDOM2,YEAR : this.cheqDt[i].YEAR,EXDAY : this.cheqDt[i].EXDAY,TRANSFER : 0}]                        
+                        query : `INSERT INTO CHEQPAY_VW_01 (GUID, CDATE, CUSER, CUSER_NAME, LDATE, LUSER, LUSER_NAME, TYPE, DOC, CODE, AMOUNT, STATUS, REFERENCE, RANDOM1, PRICE, TICKET_TYPE, 
+                                TICKET_NAME, RANDOM2, YEAR, EXDAY, TRANSFER) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
+                        values : [this.cheqDt[i].GUID,moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),this.cheqDt[i].CUSER,this.cheqDt[i].CUSER_NAME,moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),this.cheqDt[i].LUSER,
+                                this.cheqDt[i].LUSER_NAME,this.cheqDt[i].TYPE,this.cheqDt[i].DOC,this.cheqDt[i].CODE,this.cheqDt[i].AMOUNT,this.cheqDt[i].STATUS,
+                                this.cheqDt[i].REFERENCE,this.cheqDt[i].RANDOM1,this.cheqDt[i].PRICE,this.cheqDt[i].TICKET_TYPE,this.cheqDt[i].TICKET_NAME,
+                                this.cheqDt[i].RANDOM2,this.cheqDt[i].YEAR,this.cheqDt[i].EXDAY,0]                        
                     }
                     await this.core.local.insert(tmpQuery)
                 }
@@ -316,7 +321,7 @@ export default class posDoc extends React.PureComponent
         })
 
         this.sendJet({CODE:"80",NAME:"Démarrage terminal lancé."}) ////Kasa işleme başladı.
-        this.sendJet({CODE:"120",NAME:"Le système est offline."}) ///Kasa offline dan online a döndü.
+        this.sendJet({CODE:"120",NAME:"Le système est offline."}) ///Kasa offline dan online a döndü.        
     }
     async init()
     {
@@ -391,20 +396,23 @@ export default class posDoc extends React.PureComponent
             this.interval = null;
             
             // TEST İÇİN OFLİNE VE TRASFER KAPATILDI
-            //this.transferStart();
-            //this.transferLocal();
+            this.transferStart();
+            if(!this.core.offline)
+            {
+                this.transferLocal();
+            }
             //DATA TRANSFER İÇİN EVENT.
-            // this.transfer.on('onState',(pParam)=>
-            // {
-            //     if(pParam.tag == 'progress')
-            //     {
-            //         this.transProgress.value = pParam.index + " / " + pParam.count
-            //     }
-            //     else
-            //     {
-            //         this.msgTransfer2.value = pParam.text + " " + this.lang.t("popTransfer.msg3")
-            //     }
-            // })
+            this.transfer.on('onState',(pParam)=>
+            {
+                if(pParam.tag == 'progress')
+                {
+                    this.transProgress.value = pParam.index + " / " + pParam.count
+                }
+                else
+                {
+                    this.msgTransfer2.value = pParam.text + " " + this.lang.t("popTransfer.msg3")
+                }
+            })
             //****************************** */
         }
 
@@ -419,7 +427,8 @@ export default class posDoc extends React.PureComponent
             local : 
             {
                 type : "select",
-                from : "COMPANY_VW_01"
+                query : "SELECT * FROM COMPANY_VW_01 LIMIT 1;",
+                values : []
             }
         }
         await this.firm.refresh();
@@ -437,8 +446,8 @@ export default class posDoc extends React.PureComponent
             local : 
             {
                 type : "select",
-                from : "CHEQPAY_VW_01",
-                where : {DOC:this.posObj.dt()[0].GUID}
+                query : "SELECT * FROM CHEQPAY_VW_01 WHERE DOC = ?;",
+                values : [this.posObj.dt()[0].GUID]
             }
         }
         this.cheqDt.deleteCmd = 
@@ -449,12 +458,8 @@ export default class posDoc extends React.PureComponent
             local : 
             {
                 type : "delete",
-                from : "CHEQPAY_VW_01",
-                where : 
-                {
-                    GUID : {map:'GUID'},
-                    DOC : {map:'DOC'}
-                }
+                query : "DELETE FROM CHEQPAY_VW_01 WHERE GUID = ? AND DOC = ?;",
+                values : [{GUID : {map:'GUID'},DOC : {map:'DOC'}}]
             }
         }
 
@@ -470,9 +475,8 @@ export default class posDoc extends React.PureComponent
             local : 
             {
                 type : "select",
-                from : "POS_VW_01",
-                where : {STATUS:0,LUSER:this.core.auth.data.CODE,DELETED:false},
-                order: {by: "LDATE",type: "desc"}
+                query : "SELECT * FROM POS_VW_01 WHERE STATUS = ? AND LUSER = ? AND DELETED = ? ORDER BY LDATE DESC;",
+                values : [0,this.core.auth.data.CODE,0]
             }
         }
         
@@ -532,12 +536,11 @@ export default class posDoc extends React.PureComponent
         //************************************************** */        
         for (let i = 0; i < this.parkDt.length; i++) 
         {            
-            if(typeof this.parkDt[i].DESCRIPTION == 'undefined' || this.parkDt[i].DESCRIPTION == '')
-            {                
+            if(typeof this.parkDt[i].DESCRIPTION == 'undefined' || this.parkDt[i].DESCRIPTION == null || this.parkDt[i].DESCRIPTION == '')
+            {         
                 this.cheqDt.selectCmd.value = [this.parkDt[i].GUID] 
-                this.cheqDt.selectCmd.local.where.DOC = this.parkDt[i].GUID
+                this.cheqDt.selectCmd.local.values = [this.parkDt[i].GUID]
                 await this.cheqDt.refresh();  
-
                 await this.getDoc(this.parkDt[i].GUID)                 
                 return
             }
@@ -597,26 +600,8 @@ export default class posDoc extends React.PureComponent
                 local : 
                 {
                     type : "select",
-                    from : "ITEMS_POS_VW_01",
-                    where : 
-                    {
-                        CODE : pCode,
-                        or :
-                        {
-                            BARCODE : pCode
-                        },
-                        STATUS : true
-                    },
-                    case: 
-                    {
-                        INPUT: 
-                        [
-                            {
-                                '=': '',
-                                then: pCode
-                            }
-                        ]
-                    }
+                    query : "SELECT *, ? AS INPUT FROM ITEMS_POS_VW_01 WHERE CODE = ? OR BARCODE = ? AND STATUS = 1 LIMIT 1;",
+                    values : [pCode,pCode,pCode]
                 }
             }
             await tmpDt.refresh();            
@@ -631,26 +616,11 @@ export default class posDoc extends React.PureComponent
                     local : 
                     {
                         type : "select",
-                        from : "ITEMS_POS_VW_01",
-                        where : 
-                        {
-                            UNIQ_CODE : pCode,
-                            STATUS : true
-                        },
-                        case: 
-                        {
-                            INPUT: 
-                            [
-                                {
-                                    '=': '',
-                                    then: pCode
-                                }
-                            ]
-                        }
+                        query : "SELECT *, ? AS INPUT FROM ITEMS_POS_VW_01 WHERE UNIQ_CODE = ? AND STATUS = 1 LIMIT 1;",
+                        values : [pCode,pCode]
                     }
                 }
                 await tmpDt.refresh();
-                console.log(tmpDt)
                 //BURASI 7 HANELI UNIQLER BİTTİĞİNDE KALDIRILACAK //BAK
                 if(tmpDt.length == 0 && pCode.length > 6)
                 {
@@ -662,22 +632,8 @@ export default class posDoc extends React.PureComponent
                         local : 
                         {
                             type : "select",
-                            from : "ITEMS_POS_VW_01",
-                            where : 
-                            {
-                                UNIQ_CODE : pCode.substring(pCode.lastIndexOf('F') + 1,pCode.length - 1),
-                                STATUS : true
-                            },
-                            case: 
-                            {
-                                INPUT: 
-                                [
-                                    {
-                                        '=': '',
-                                        then: pCode.substring(pCode.lastIndexOf('F') + 1,pCode.length - 1)
-                                    }
-                                ]
-                            }
+                            query : "SELECT *, ? AS INPUT FROM ITEMS_POS_VW_01 WHERE UNIQ_CODE = ? AND STATUS = 1 LIMIT 1;",
+                            values : [pCode.substring(pCode.lastIndexOf('F') + 1,pCode.length - 1),pCode.substring(pCode.lastIndexOf('F') + 1,pCode.length - 1)]
                         }
                     }
                     await tmpDt.refresh();
@@ -688,7 +644,6 @@ export default class posDoc extends React.PureComponent
     }
     async getItem(pCode)
     {
-        console.log(pCode)
         this.txtBarcode.value = ""; 
         let tmpQuantity = 1
         let tmpPrice = 0                
@@ -724,11 +679,8 @@ export default class posDoc extends React.PureComponent
                 local : 
                 {
                     type : "select",
-                    from : "CUSTOMER_VW_02",
-                    where : 
-                    {
-                        CODE : { like : pCode + '%'},
-                    },
+                    query : "SELECT * FROM CUSTOMER_VW_02 WHERE CODE LIKE SUBSTR(?, 0, 15) || '%' LIMIT 1;",
+                    values : [pCode]
                 }
             }
             tmpCustomerDt.selectCmd.value = [pCode]
@@ -788,7 +740,7 @@ export default class posDoc extends React.PureComponent
                     showCloseButton:true,
                     width:'500px',
                     height:'200px',
-                    button:[{id:"btn01",caption:"Tamam",location:'before'}],
+                    button:[{id:"btn01",caption:this.lang.t("msgCustomerNotFound.btn01"),location:'before'}],
                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgCustomerNotFound.msg")}</div>)
                 }
                 
@@ -811,7 +763,7 @@ export default class posDoc extends React.PureComponent
                     showCloseButton:true,
                     width:'500px',
                     height:'200px',
-                    button:[{id:"btn01",caption:"Tamam",location:'after'}],
+                    button:[{id:"btn01",caption:this.lang.t("msgZeroValidation.btn01"),location:'after'}],
                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgZeroValidation.msg")}</div>)
                 }
                 await dialog(tmpConfObj);
@@ -856,11 +808,8 @@ export default class posDoc extends React.PureComponent
                 local : 
                 {
                     type : "select",
-                    from : "ITEMS_POS_VW_01",
-                    where : 
-                    {
-                        GUID : tmpItemsDt[0].GUID
-                    },
+                    query : "SELECT * FROM ITEMS_POS_VW_01 WHERE GUID = ? LIMIT 1;",
+                    values : [tmpItemsDt[0].GUID]
                 }
             }
             
@@ -881,7 +830,7 @@ export default class posDoc extends React.PureComponent
                         showCloseButton:true,
                         width:'500px',
                         height:'250px',
-                        button:[{id:"btn01",caption:"Tamam",location:'after'}],
+                        button:[{id:"btn01",caption:this.lang.t("btnOk"),location:'after'}],
                         content:(<div><h3 className="text-primary text-center">{tmpItemsDt[0].NAME}</h3><h3 className="text-danger text-center">{tmpPrice + " EUR"}</h3></div>)
                     }
                     await dialog(tmpConfObj);
@@ -1075,7 +1024,7 @@ export default class posDoc extends React.PureComponent
                                 showCloseButton:true,
                                 width:'500px',
                                 height:'200px',
-                                button:[{id:"btn01",caption:"Tamam",location:'after'}],
+                                button:[{id:"btn01",caption:this.lang.t("msgZeroValidation.btn01"),location:'after'}],
                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgZeroValidation.msg")}</div>)
                             }
                             await dialog(tmpConfObj);
@@ -1271,7 +1220,6 @@ export default class posDoc extends React.PureComponent
             {                
                 let tmpClose = await this.saleClosed(true,tmpPayRest,tmpPayChange)
                 let tmpSaveResult = await this.posObj.save()
-
                 if(tmpSaveResult == 0)
                 {
                     if(tmpClose)
@@ -1296,7 +1244,6 @@ export default class posDoc extends React.PureComponent
                 }
             }    
             resolve()            
-            
         });
     }    
     calcSaleTotal(pPrice,pQuantity,pDiscount,pLoyalty,pVatRate)
@@ -1430,11 +1377,8 @@ export default class posDoc extends React.PureComponent
                 local : 
                 {
                     type : "select",
-                    from : "ITEMS_POS_VW_01",
-                    where : 
-                    {
-                        GUID : pRowData.ITEM_GUID
-                    },
+                    query : "SELECT * FROM ITEMS_POS_VW_01 WHERE GUID = ? LIMIT 1;",
+                    values : [pRowData.ITEM_GUID]
                 }
             }     
             tmpPriceDt.selectCmd.value = [pRowData.ITEM_GUID,pItemData.QUANTITY,pRowData.CUSTOMER_GUID]
@@ -1492,13 +1436,11 @@ export default class posDoc extends React.PureComponent
                 this.posObj.dt()[0].REF = tmpSignedData.REF
                 this.posObj.dt()[0].SIGNATURE = tmpSignedData.SIGNATURE
                 this.posObj.dt()[0].SIGNATURE_SUM = tmpSignedData.SIGNATURE_SUM
-
                 let tmpSigned = "-"
                 if(this.posObj.dt()[0].SIGNATURE != '')
                 {
                     tmpSigned = this.posObj.dt()[0].SIGNATURE.substring(2,3) + this.posObj.dt()[0].SIGNATURE.substring(6,7) + this.posObj.dt()[0].SIGNATURE.substring(12,13) + this.posObj.dt()[0].SIGNATURE.substring(18,19)
                 }
-
                 this.posObj.dt()[this.posObj.dt().length - 1].CERTIFICATE = this.core.appInfo.name + " version : " + this.core.appInfo.version + " - " + this.core.appInfo.certificate + " - " + tmpSigned;
                 //************************* */
 
@@ -1541,7 +1483,6 @@ export default class posDoc extends React.PureComponent
                 this.popCashPay.hide();
                 this.popCardPay.hide();
                 this.popCheqpay.hide();                
-                
                 //PROMOSYONDA HEDİYE ÇEKİ VARSA UYGULANIYOR
                 if(this.posPromoObj.dt().where({APP_TYPE:2}).length > 0)
                 {
@@ -1659,7 +1600,6 @@ export default class posDoc extends React.PureComponent
                             button:[{id:"btn01",caption:this.lang.t("msgPrintAlert.btn01"),location:'before'},{id:"btn03",caption:this.lang.t("msgPrintAlert.btn03"),location:'before'},{id:"btn02",caption:this.lang.t("msgPrintAlert.btn02"),location:'after'}],
                             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgPrintAlert.msg")}</div>)
                         }
-                        
                         let pResult = await dialog(tmpConfObj);
                         if(pResult == 'btn01')
                         {
@@ -1680,20 +1620,8 @@ export default class posDoc extends React.PureComponent
                                 local : 
                                 {
                                     type : "insert",
-                                    into : "POS_EXTRA_VW_01",
-                                    values : 
-                                    [
-                                        {
-                                            GUID : datatable.uuidv4(),
-                                            CUSER : this.posObj.dt()[0].CUSER,
-                                            TAG : "REPRINT",
-                                            POS_GUID : this.posObj.dt()[0].GUID,
-                                            LINE_GUID : "00000000-0000-0000-0000-000000000000",
-                                            DATA : "",
-                                            APP_VERSION : this.core.appInfo.version,
-                                            DESCRIPTION : ""
-                                        }
-                                    ]
+                                    query : `INSERT INTO POS_EXTRA_VW_01 (GUID, CUSER, TAG, POS_GUID, LINE_GUID, DATA, APP_VERSION, DESCRIPTION) VALUES (?, ?, ?, ?, ?, ?, ?, ?);`,
+                                    values : [datatable.uuidv4(),this.posObj.dt()[0].CUSER,"REPRINT",this.posObj.dt()[0].GUID,"00000000-0000-0000-0000-000000000000","",this.core.appInfo.version,""]
                                 }
                             }
                             await this.core.sql.execute(tmpInsertQuery)
@@ -1725,6 +1653,7 @@ export default class posDoc extends React.PureComponent
                     }
                     else
                     {
+                        console.log(11)
                         //POS_EXTRA TABLOSUNA YAZDIRMA BİLDİRİMİ GÖNDERİLİYOR                    
                         let tmpInsertQuery = 
                         {
@@ -1742,25 +1671,16 @@ export default class posDoc extends React.PureComponent
                             local : 
                             {
                                 type : "insert",
-                                into : "POS_EXTRA_VW_01",
-                                values : 
-                                [
-                                    {
-                                        GUID : datatable.uuidv4(),
-                                        CUSER : this.posObj.dt()[0].CUSER,
-                                        TAG : "REPRINT",
-                                        POS_GUID : this.posObj.dt()[0].GUID,
-                                        LINE_GUID : "00000000-0000-0000-0000-000000000000",
-                                        DATA : "",
-                                        APP_VERSION : this.core.appInfo.version,
-                                        DESCRIPTION : ""
-                                    }
-                                ]
+                                query : `INSERT INTO POS_EXTRA_VW_01 (GUID, CUSER, TAG, POS_GUID, LINE_GUID, DATA, APP_VERSION, DESCRIPTION) VALUES (?, ?, ?, ?, ?, ?, ?, ?);`,
+                                values : [datatable.uuidv4(),this.posObj.dt()[0].CUSER,"REPRINT",this.posObj.dt()[0].GUID,"00000000-0000-0000-0000-000000000000","",this.core.appInfo.version,""]
                             }
                         }
+                        console.log(12)
                         await this.core.sql.execute(tmpInsertQuery)
                         //***************************************************/
+                        console.log(13)
                         await this.print(tmpData,0)
+                        console.log(14)
                     }
                     //***************************************************/
                     //TICKET REST. ALDIĞINDA KASA AÇMA İŞLEMİ 
@@ -1769,11 +1689,13 @@ export default class posDoc extends React.PureComponent
                         await this.posDevice.caseOpen();
                     }
                 }
-                
                 //POS_SALE DEKİ TÜM KAYITLARI TEKRAR SQL E DURUMU NEW OLARAK GÖNDERİYORUZ. PRD_POS_SALE_INSERT PROSEDÜRÜNÜN İÇERİSİNE UPDATE İŞLEMİNİ DE YERLEŞTİRDİK.
-                for (let i = 0; i < this.posObj.posSale.dt().length; i++) 
+                if (!this.core.offline)
                 {
-                    Object.setPrototypeOf(this.posObj.posSale.dt()[i],{stat:'new'})
+                    for (let i = 0; i < this.posObj.posSale.dt().length; i++) 
+                    {
+                        Object.setPrototypeOf(this.posObj.posSale.dt()[i],{stat:'new'})
+                    }
                 }
                 resolve(true)
             }
@@ -2040,7 +1962,6 @@ export default class posDoc extends React.PureComponent
             if(this.core.offline)
             {
                 this.posObj.dt()[0].DESCRIPTION = pDesc
-                console.log(11)
                 this.calcGrandTotal()
             }
             
@@ -2079,7 +2000,6 @@ export default class posDoc extends React.PureComponent
             await this.posObj.posSale.dt().delete()
             this.promoApply()
             await this.calcGrandTotal()
-            console.log(this.posObj.posSale.dt())
         }
         else
         {
@@ -2114,12 +2034,8 @@ export default class posDoc extends React.PureComponent
                 local : 
                 {
                     type : "select",
-                    from : "CHEQPAY_VW_01",
-                    where : 
-                    {
-                        CODE : pCode,
-                        TYPE : 1
-                    },
+                    query : "SELECT * FROM CHEQPAY_VW_01 WHERE CODE = ? AND TYPE = 1;",
+                    values: [pCode]
                 }
             }     
 
@@ -2212,12 +2128,8 @@ export default class posDoc extends React.PureComponent
                 local : 
                 {
                     type : "select",
-                    from : "CHEQPAY_VW_01",
-                    where : 
-                    {
-                        REFERENCE : pCode.substring(0,9),
-                        TYPE : 0
-                    },
+                    query : "SELECT * FROM CHEQPAY_VW_01 WHERE REFERENCE = ? AND TYPE = 0;",
+                    value : [pCode.substring(0,9)]
                 }
             }                                            
         }
@@ -2325,8 +2237,8 @@ export default class posDoc extends React.PureComponent
                 local : 
                 {
                     type : "insert",
-                    into : "CHEQPAY_VW_01",
-                    values : [{GUID : datatable.uuidv4(),CUSER : this.core.auth.data.CODE,TYPE : pType,DOC : this.posObj.dt()[0].GUID,CODE : pCode,AMOUNT : pAmount,STATUS : pStatus,TRANSFER : 1}]
+                    query : `INSERT INTO CHEQPAY_VW_01 (GUID, CUSER, TYPE, DOC, CODE, AMOUNT, STATUS, TRANSFER) VALUES (?, ?, ?, ?, ?, ?, ?, 1);`,
+                    values : [datatable.uuidv4(),this.core.auth.data.CODE,pType,this.posObj.dt()[0].GUID,pCode,pAmount,pStatus]
                 }
             }
             await this.core.sql.execute(tmpQuery)
@@ -2351,8 +2263,8 @@ export default class posDoc extends React.PureComponent
                 local : 
                 {
                     type : "insert",
-                    into : "CUSTOMER_POINT_VW_01",
-                    values : [{GUID : datatable.uuidv4(),CUSER : this.core.auth.data.CODE,TYPE : pType,CUSTOMER : this.posObj.dt()[0].CUSTOMER_GUID,DOC : this.posObj.dt()[0].GUID,POINT : pPoint,DESCRIPTION : ''}]
+                    query : `INSERT INTO CUSTOMER_POINT_VW_01 (GUID, CUSER, TYPE, CUSTOMER, DOC, POINT, DESCRIPTION) VALUES (?, ?, ?, ?, ?, ?, '');`,
+                    values : [datatable.uuidv4(),this.core.auth.data.CODE,pType,this.posObj.dt()[0].CUSTOMER_GUID,this.posObj.dt()[0].GUID,pPoint]
                 }
             }
             await this.core.sql.execute(tmpQuery)
@@ -2497,10 +2409,7 @@ export default class posDoc extends React.PureComponent
         return new Promise(async resolve => 
         {
             let prmPrint = this.posDevice.dt().length > 0 ? this.posDevice.dt()[0].PRINT_DESING : ""
-            if(pType == 1)
-            {
-                prmPrint = 'printPdf.js'
-            }
+
             import("../meta/print/" + prmPrint).then(async(e)=>
             {
                 let tmpPrint = e.print(pData)
@@ -2537,47 +2446,46 @@ export default class posDoc extends React.PureComponent
             })
         });
     }
-    // async transferStart(pTime,pClear)
-    // {
-    //     let tmpCounter = 0
-    //     let tmpPrmTime = typeof pTime != 'undefined' ? pTime : this.prmObj.filter({ID:'TransferTime',TYPE:0}).getValue()
-    //     this.interval = setInterval(async ()=>
-    //     {
-    //         this.msgTransfer1.value = this.lang.t("popTransfer.msg1") + (tmpPrmTime - tmpCounter).toString() + " Sn."
-    //         this.msgTransfer2.value = ""
+    async transferStart(pTime,pClear)
+    {
+        let tmpCounter = 0
+        let tmpPrmTime = typeof pTime != 'undefined' ? pTime : this.prmObj.filter({ID:'TransferTime',TYPE:0}).getValue()
+        this.interval = setInterval(async ()=>
+        {
+            this.msgTransfer1.value = this.lang.t("popTransfer.msg1") + (tmpPrmTime - tmpCounter).toString() + " Sn."
+            this.msgTransfer2.value = ""
 
-    //         tmpCounter += 1
-    //         if(tmpCounter == tmpPrmTime)
-    //         {
-    //             this.setState({msgTransfer1:this.lang.t("popTransfer.msg2")})
-    //             this.transferStop()
-    //             await this.transfer.transferSql(pClear)
-    //             await this.transfer.transferLocal()
-    //             this.transferStart()                
-    //         }
-    //     },1000)
-    // }
-    // transferStop()
-    // {
-    //     clearInterval(this.interval)
-    // }
-    // async transferLocal()
-    // {
-    //     return new Promise(async resolve => 
-    //     {
-    //         let tmpResult = await this.transfer.transferLocal()
-    //         if(tmpResult)
-    //         {
-    //             await this.transfer.clearTbl("POS_VW_01")
-    //             await this.transfer.clearTbl("POS_SALE_VW_01")
-    //             await this.transfer.clearTbl("POS_PAYMENT_VW_01")
-    //             await this.transfer.clearTbl("POS_EXTRA_VW_01")
-    //             await this.core.local.remove({from:"CHEQPAY_VW_01",where:{TRANSFER:1}})
-    //         }
-
-    //         resolve()
-    //     });
-    // }
+            tmpCounter += 1
+            if(tmpCounter == tmpPrmTime)
+            {
+                this.setState({msgTransfer1:this.lang.t("popTransfer.msg2")})
+                this.transferStop()
+                await this.transfer.transferSql(pClear)
+                await this.transfer.transferLocal()
+                this.transferStart()                
+            }
+        },1000)
+    }
+    transferStop()
+    {
+        clearInterval(this.interval)
+    }
+    async transferLocal()
+    {
+        return new Promise(async resolve => 
+        {
+            let tmpResult = await this.transfer.transferLocal()
+            if(tmpResult)
+            {
+                await this.transfer.clearTbl("POS_VW_01")
+                await this.transfer.clearTbl("POS_SALE_VW_01")
+                await this.transfer.clearTbl("POS_PAYMENT_VW_01")
+                await this.transfer.clearTbl("POS_EXTRA_VW_01")
+                await this.core.local.remove({query:"DELETE FROM CHEQPAY_VW_01 WHERE TRANSFER = 1"})
+            }
+            resolve()
+        });
+    }
     getPromoDb(pFirstDate,pLastDate)
     {
         return new Promise(async resolve => 
@@ -2821,10 +2729,10 @@ export default class posDoc extends React.PureComponent
             let tmpQuery = 
             {
                 type : "insert",
-                into : "NF525_JET",
-                values : [{CUSER : this.core.auth.data.CODE,CDATE:moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),CODE : typeof pData.CODE != 'undefined' ? pData.CODE : '',
-                NAME:typeof pData.NAME != 'undefined' ? pData.NAME : '',DESCRIPTION:typeof pData.DESCRIPTION != 'undefined' ? pData.DESCRIPTION : '',
-                APP_VERSION:this.core.appInfo.version}]                        
+                query : `INSERT INTO NF525_JET (CUSER, CDATE, CODE, NAME, DESCRIPTION, APP_VERSION)
+                        VALUES (?, ?, ?, ?, ?, ?);`,
+                values : [this.core.auth.data.CODE,moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),typeof pData.CODE != 'undefined' ? pData.CODE : '',
+                          typeof pData.NAME != 'undefined' ? pData.NAME : '',typeof pData.DESCRIPTION != 'undefined' ? pData.DESCRIPTION : '',this.core.appInfo.version]                        
             }
             await this.core.local.insert(tmpQuery)
         }
@@ -2913,7 +2821,7 @@ export default class posDoc extends React.PureComponent
                 showIndicator={true}
                 shading={true}
                 showPane={true}
-                message={"Lütfen bekleyiniz..."}
+                message={this.lang.t("pleaseWait")}
                 ref={this.loadingPay}
                 />               
                 <div className="top-bar row">
@@ -3136,11 +3044,8 @@ export default class posDoc extends React.PureComponent
                                                     local : 
                                                     {
                                                         type : "select",
-                                                        from : "ITEMS_BARCODE_MULTICODE_VW_01",
-                                                        where : 
-                                                        {
-                                                            BARCODE : {like : '%' + this.txtBarcode.value},
-                                                        },
+                                                        query : "SELECT BARCODE, NAME, PRICE_SALE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE BARCODE LIKE '%' || ? AND STATUS = 1;",
+                                                        values : [this.txtBarcode.value]                                                        
                                                     }
                                                 }
                                                 tmpDt.selectCmd.value = [this.txtBarcode.value]
@@ -4094,7 +3999,6 @@ export default class posDoc extends React.PureComponent
                                                 tmpData[i].SUBTOTAL = tmpMaxSub
                                             }
                                             this.calcGrandTotal()
-                                            console.log(this.posObj.posSale.dt())
                                         }}>
                                             <i className="text-white fa-solid fa-square-root-variable" style={{fontSize: "24px"}} />
                                         </NbButton>
@@ -4174,7 +4078,7 @@ export default class posDoc extends React.PureComponent
                                     {/* Offline */}
                                     <div className="col px-1">
                                         <NbButton id={"btnOffline"} parent={this} className={this.state.isConnected == false ? "form-group btn btn-danger btn-block my-1" : "form-group btn btn-success btn-block my-1"} style={{height:"70px",width:"100%",fontSize:"10pt"}}
-                                        onClick={()=>
+                                        onClick={async ()=>
                                         {
                                             this.popTransfer.show()
                                         }}>
@@ -4476,10 +4380,8 @@ export default class posDoc extends React.PureComponent
                                                             local : 
                                                             {
                                                                 type : "select",
-                                                                from : "CHEQPAY_VW_01",
-                                                                where : {DOC : this.posObj.dt()[0].GUID},
-                                                                aggregate:{count: "AMOUNT"},
-                                                                groupBy: "AMOUNT",
+                                                                query : "SELECT AMOUNT, COUNT(AMOUNT) AS COUNT FROM CHEQPAY_VW_01 WHERE DOC = ? GROUP BY AMOUNT;",
+                                                                values : [this.posObj.dt()[0].GUID]
                                                             }
                                                         }
                                                         tmpDt.selectCmd.value = [this.posObj.dt()[0].GUID]
@@ -4742,15 +4644,8 @@ export default class posDoc extends React.PureComponent
                             local : 
                             {
                                 type : "select",
-                                from : "CUSTOMER_VW_02",
-                                where : 
-                                {
-                                    CODE : { like : '{0}'},
-                                    or: 
-                                    {
-                                        TITLE: { like : '{0}'}
-                                    }
-                                },
+                                query : "SELECT * FROM CUSTOMER_VW_02 WHERE UPPER(CODE) LIKE UPPER(?) OR UPPER(TITLE) LIKE UPPER(?);",
+                                values : [{VAL : {map:'VAL'},VAL1 : {map:'VAL'}}]
                             }
                         },
                         sql:this.core.sql
@@ -4817,15 +4712,8 @@ export default class posDoc extends React.PureComponent
                             local : 
                             {
                                 type : "select",
-                                from : "ITEMS_VW_01",
-                                where : 
-                                {
-                                    CODE : { like : "{0}"},
-                                    or: 
-                                    {
-                                        NAME: { like : "{0}"}
-                                    }
-                                },
+                                query : "SELECT * FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(?) OR UPPER(NAME) LIKE UPPER(?) AND STATUS = 1;",
+                                values : [{VAL : {map:'VAL'},VAL1 : {map:'VAL'}}]
                             }
                         },
                         sql:this.core.sql
@@ -4885,7 +4773,6 @@ export default class posDoc extends React.PureComponent
                                 }}
                                 onSelectionChanged={(e)=>
                                 {
-                                    console.log(e.currentSelectedRowKeys[0])
                                     if(typeof e.currentSelectedRowKeys[0] != 'undefined')
                                     {
                                         this.getItem(this.txtBarcode.value + e.currentSelectedRowKeys[0].BARCODE)
@@ -5966,7 +5853,7 @@ export default class posDoc extends React.PureComponent
                             {/* cmbPopLastSaleUser */} 
                             <div className="col-2">
                                 <NdSelectBox simple={true} parent={this} id="cmbPopLastSaleUser" displayExpr={'NAME'} valueExpr={'CODE'}
-                                data={{source:{select:{query : "SELECT '' AS CODE,'ALL' AS NAME UNION ALL SELECT CODE,NAME FROM USERS"},sql:this.core.sql}}}/>
+                                data={{source:{select:{query : "SELECT '' AS CODE,'ALL' AS NAME UNION ALL SELECT CODE,NAME FROM USERS",local:{type : "select",query:"SELECT '' AS CODE,'ALL' AS NAME UNION ALL SELECT CODE,NAME FROM USERS;"}},sql:this.core.sql}}}/>
                             </div>
                             {/* txtPopLastRef */} 
                             <div className="col-2">
@@ -6344,10 +6231,8 @@ export default class posDoc extends React.PureComponent
                                                             local : 
                                                             {
                                                                 type : "select",
-                                                                from : "CHEQPAY_VW_01",
-                                                                where : {DOC : this.lastPosPayDt[0].POS_GUID},
-                                                                aggregate:{count: "AMOUNT"},
-                                                                groupBy: "AMOUNT",
+                                                                query : "SELECT AMOUNT, COUNT(AMOUNT) AS COUNT FROM CHEQPAY_VW_01 WHERE DOC = ? GROUP BY AMOUNT",
+                                                                values : [this.lastPosPayDt[0].POS_GUID]
                                                             }
                                                         }
                                                         tmpDt.selectCmd.value = [this.lastPosPayDt[0].POS_GUID]

@@ -1,6 +1,4 @@
 import { isProxy } from 'is-proxy';
-import {Connection} from 'jsstore';
-import { jsworker } from './jsworker.js';
 import moment from 'moment';
 
 export class core
@@ -29,9 +27,9 @@ export class core
         this.offline = false;
         this.listeners = Object();        
         this.sql = new sql();
+        this.util = new util();
         this.local = new local();
-        this.auth = new auth();
-        this.util = new util();                
+        this.auth = new auth();                        
 
         this.ioEvents();
     }    
@@ -101,6 +99,26 @@ export class sql
             });
         });        
     }
+    buffer()
+    {
+        return new Promise(async resolve => 
+        {
+            if(typeof arguments[0] == 'undefined')
+            {
+                resolve({result : {state:false,err: 'Buffer param undefined'}})
+                return
+            }
+
+            core.instance.socket.emit('sql_buffer',arguments[0],(data) =>
+            {
+                resolve(data)
+            });
+        });
+    }
+    bufferRemove()
+    {
+        core.instance.socket.emit('sql_buffer_remove',arguments[0])
+    }
     execute()
     {    
         return new Promise(async resolve => 
@@ -133,7 +151,7 @@ export class sql
                         if(typeof TmpQuery.value[i] == 'undefined')
                         {
                             core.instance.emit('onExecuted');
-                            resolve({result : {err: "Parametre değerlerinde problem oluştu ! "}})
+                            resolve({result : {state:false,err: "There was a problem with the parameter values!"}})
                         }
                     }
                 }
@@ -142,13 +160,14 @@ export class sql
                     core.instance.emit('onExecuted');
                     if(typeof data.auth_err == 'undefined')
                     {
+                        data.state = typeof data.result.err == 'undefined' ? true : false;
                         resolve(data); 
                     }
                     else
                     {
                         //BURADA HATA SAYFASINA YÖNLENDİRME ÇALIŞACAK. /edit r.k İNŞALLAH :)
                         console.log(data.auth_err);
-                        resolve([]);
+                        resolve({result : {state:false,err: data.auth_err}});
                     }
                 });
             }
@@ -159,134 +178,147 @@ export class local
 {
     constructor()
     {
-        const getWorkerPath = () => 
+        this.db = null;  
+        this.sqllite = null
+        if(core.instance.util.isElectron())
         {
-            if (process.env.NODE_ENV === 'development') 
-            {
-                return require("file-loader?name=scripts/[name].[hash].js!jsstore/dist/jsstore.worker.js");
-            }
-            else 
-            {
-                return require("file-loader?name=scripts/[name].[hash].js!jsstore/dist/jsstore.worker.min.js");
-            }
-        };
-        if(typeof Connection != 'undefined')
-        {
-            this.conn = new Connection(new Worker(getWorkerPath().default));
-        }
+            this.sqllite = global.require('sqlite3').verbose()            
+        }      
     }
     async init(pDb)
     {
         return new Promise(async resolve => 
-        {
-            if(typeof this.conn != 'undefined')
+        {                        
+            if(this.sqllite == null)
             {
-                let tmpResult = await this.conn.initDb(pDb)
-                
-                if(tmpResult)
-                {
-                    console.log('Database created and connection is opened')
-                    resolve(true)
-                }
-                else
-                {
-                    console.log('Connection is opened')
-                    resolve(true)
-                }
+                resolve(false);
+                return
             }
-            else
+
+            this.db = new this.sqllite.Database('./resources/' + pDb.name + '.db', async(err) => 
             {
-                console.log('jsstore is undefined')
-            }
-            resolve(false)
+                if (err) 
+                {
+                    console.error(err.message);
+                    resolve(false)
+                    return
+                }
+
+                console.log('Connected to the database.');
+
+                this.db.serialize(() => 
+                {
+                    for (let i = 0; i < pDb.tables.length; i++) 
+                    {
+                        this.db.run(pDb.tables[i].query)
+                    }
+                    resolve(true)
+                })                                
+            })                        
         });
     }
     async insert(pQuery)
     {
         return new Promise(async resolve => 
         {
-            if(typeof this.conn != 'undefined')
+            if(this.sqllite == null)
             {
-                //BURAYA ONLINE SORGUSU İLE QUERY GÖNDERİLEBİLİR ONUN İÇİN LOCAL KONTROL VAR. (pQuery.local != 'undefined' ? pQuery.local : pQuery)
-                let tmpResult = await this.conn.insert(typeof pQuery.local != 'undefined' ? pQuery.local : pQuery)
-                if(tmpResult > 0)
-                {
-                    resolve({result:{state:true}})
-                }
-                else
-                {
-                    console.log(tmpResult)
-                }
+                resolve({result:{state:false,err:'No Sqlite'}});
+                return
             }
-            else
+            //BURAYA ONLINE SORGUSU İLE QUERY GÖNDERİLEBİLİR ONUN İÇİN LOCAL KONTROL VAR. (pQuery.local != 'undefined' ? pQuery.local : pQuery)
+            let tmpQuery = typeof pQuery.local != 'undefined' ? pQuery.local : pQuery
+            this.db.run(tmpQuery.query, typeof tmpQuery.values == 'undefined' ? [] : tmpQuery.values, (err) => 
             {
-                console.log('jsstore is undefined')
-            }
-            resolve({result:{state:false}})
+                if (err) 
+                {
+                    console.log(err.message + ' ' + tmpQuery.query)
+                    resolve({result:{state:false,err:err.message + ' ' + tmpQuery.query}});
+                }
+                resolve({result:{state:true}})
+            });
         });
     }
     async select(pQuery)
     {
         return new Promise(async resolve => 
         {
-            if(typeof this.conn != 'undefined')
+            if(this.sqllite == null)
             {
-                //BURAYA ONLINE SORGUSU İLE QUERY GÖNDERİLEBİLİR ONUN İÇİN LOCAL KONTROL VAR. (pQuery.local != 'undefined' ? pQuery.local : pQuery)
-                let tmpResult = await this.conn.select(typeof pQuery.local != 'undefined' ? pQuery.local : pQuery); 
-                if(tmpResult.length > 0)
+                resolve({result:{state:false,err:'No Sqlite'}});
+                return
+            }
+
+            //BURAYA ONLINE SORGUSU İLE QUERY GÖNDERİLEBİLİR ONUN İÇİN LOCAL KONTROL VAR. (pQuery.local != 'undefined' ? pQuery.local : pQuery)
+            let tmpQuery = typeof pQuery.local != 'undefined' ? pQuery.local : pQuery
+            if(typeof tmpQuery.query == 'undefined')
+            {
+                resolve({result:{state:false,err:'Query is undefined'}});
+                return
+            }
+            this.db.all(tmpQuery.query, typeof tmpQuery.values == 'undefined' ? [] : tmpQuery.values, (err, rows) => 
+            {
+                if (err) 
                 {
-                    resolve({result:tmpResult})
+                    console.log(err.message + ' ' + tmpQuery.query)
+                    resolve({result:{state:false,err:err.message}});
                 }
-            }
-            else
-            {
-                console.log('jsstore is undefined')
-            }
-            resolve({result:[]})
+                resolve({result:{state:true,recordset:rows}})
+            });
         });
     }
     async update(pQuery)
     {
         return new Promise(async resolve => 
         {
-            if(typeof this.conn != 'undefined')
+            if(this.sqllite == null)
             {
-                //BURAYA ONLINE SORGUSU İLE QUERY GÖNDERİLEBİLİR ONUN İÇİN LOCAL KONTROL VAR. (pQuery.local != 'undefined' ? pQuery.local : pQuery)
-                let tmpResult = await this.conn.update(typeof pQuery.local != 'undefined' ? pQuery.local : pQuery)
-                if(tmpResult > 0)
-                {
-                    resolve({result:{state:true}})
-                }
-                else
-                {
-                    console.log(tmpResult)
-                }
+                resolve({result:{state:false,err:'No Sqlite'}});
+                return
             }
-            else
+            //BURAYA ONLINE SORGUSU İLE QUERY GÖNDERİLEBİLİR ONUN İÇİN LOCAL KONTROL VAR. (pQuery.local != 'undefined' ? pQuery.local : pQuery)
+            let tmpQuery = typeof pQuery.local != 'undefined' ? pQuery.local : pQuery
+            if(typeof tmpQuery.query == 'undefined')
             {
-                console.log('jsstore is undefined')
+                resolve({result:{state:false,err:'Query is undefined'}});
+                return
             }
-            resolve({result:{state:false}});
+            this.db.run(tmpQuery.query, typeof tmpQuery.values == 'undefined' ? [] : tmpQuery.values, (err) => 
+            {
+                if (err) 
+                {
+                    console.log(err.message + ' ' + tmpQuery.query)
+                    resolve({result:{state:false,err:err.message}});
+                }
+                resolve({result:{state:true}})
+            });
         });
     }
     async remove(pQuery)
     {
         return new Promise(async resolve => 
         {
-            if(typeof this.conn != 'undefined')
+            if(this.sqllite == null)
             {
-                //BURAYA ONLINE SORGUSU İLE QUERY GÖNDERİLEBİLİR ONUN İÇİN LOCAL KONTROL VAR. (pQuery.local != 'undefined' ? pQuery.local : pQuery)
-                let tmpResult = await this.conn.remove(typeof pQuery.local != 'undefined' ? pQuery.local : pQuery)
-                if(tmpResult > 0)
+                resolve({result:{state:false,err:'No Sqlite'}});
+                return
+            }
+            //BURAYA ONLINE SORGUSU İLE QUERY GÖNDERİLEBİLİR ONUN İÇİN LOCAL KONTROL VAR. (pQuery.local != 'undefined' ? pQuery.local : pQuery)
+            let tmpQuery = typeof pQuery.local != 'undefined' ? pQuery.local : pQuery
+            if(typeof tmpQuery.query == 'undefined')
+            {
+                resolve({result:{state:false,err:'Query is undefined'}});
+                return
+            }
+            this.db.run(tmpQuery.query, typeof tmpQuery.values == 'undefined' ? [] : tmpQuery.values, (err) => 
+            {
+                if (err) 
                 {
-                    resolve({result:{state:true}})
+                    console.log(err.message + ' ' + tmpQuery.query)
+                    resolve({result:{state:false,err:err.message}});
                 }
-            }
-            else
-            {
-                console.log('jsstore is undefined')
-            }
-            resolve({result:{state:false}});
+                resolve({result:{state:true}})
+            });
         });
     }
     async execute(pQuery)
@@ -294,6 +326,18 @@ export class local
         //DÜZENLEME - ALI KEMAL KARACA 23.08.2022
         return new Promise(async resolve => 
         {
+            if(this.sqllite == null)
+            {
+                resolve({result:{state:false,err:'No Sqlite'}});
+                return
+            }
+            
+            if(typeof pQuery == 'undefined')
+            {
+                resolve({result:{state:false,err:'No Query'}});
+                return
+            }
+
             if(Array.isArray(pQuery))
             {
                 let tmpQuery = pQuery
@@ -302,49 +346,51 @@ export class local
                     if(typeof tmpQuery[i].local != 'undefined')
                     {
                         let tmpLocs = Array.isArray(tmpQuery[i].local) ? tmpQuery[i].local : [tmpQuery[i].local]
-                        tmpLocs.forEach(async pItem => 
+                        
+                        for (let x = 0; x < tmpLocs.length; x++) 
                         {
-                            if(pItem.type == 'insert')
-                            {                                        
-                                await this.insert(pItem);
-                            } 
-                            else if(pItem.type == 'update')
-                            {          
-                                await this.update(pItem);
-                            } 
-                            else if(pItem.type == 'delete')
-                            {                                               
-                                await this.remove(pItem);
-                            }      
-                        });
+                            if(tmpLocs[x].type == 'insert')
+                            {
+                                await this.insert(tmpLocs[x])
+                            }
+                            else if(tmpLocs[x].type == 'update')
+                            {
+                                await this.update(tmpLocs[x])
+                            }
+                            if(tmpLocs[x].type == 'delete')
+                            {
+                                await this.remove(tmpLocs[x])
+                            }
+                        }
                     }
                 }
                 resolve({result:{state:true}})
             }
             else
             {
-                if(typeof pQuery.local != 'undefined')
+                let tmpQuery = typeof pQuery.local != 'undefined' ? pQuery.local : pQuery
+                if(typeof tmpQuery.type == 'undefined')
                 {
-                    if(pQuery.local.type == 'select')
-                    {
-                        let tmpData = await this.select(pQuery.local)
-                        let tmpResult = {result:{recordset:tmpData.result}}
-                        resolve(tmpResult)
-                    }
-                    else if(pQuery.local.type == 'insert')
-                    {
-                        resolve(await this.insert(pQuery.local))
-                    } 
-                    else if(pQuery.local.type == 'update')
-                    {
-                        resolve(await this.update(pQuery.local))
-                    } 
-                    else if(pQuery.local.type == 'delete')
-                    {
-                        resolve(await this.remove(pQuery.local))
-                    }                       
+                    resolve({result:{state:false,err:'Type is undefined in query'}});
+                    return
                 }
-                resolve({result:{}});
+
+                if(tmpQuery.type == 'select')
+                {
+                    resolve(await this.select(tmpQuery))
+                }
+                else if(tmpQuery.type == 'insert')
+                {
+                    resolve(await this.insert(tmpQuery))
+                }
+                else if(tmpQuery.type == 'update')
+                {
+                    resolve(await this.update(tmpQuery))
+                }
+                else if(tmpQuery.type == 'delete')
+                {
+                    resolve(await this.remove(tmpQuery))
+                }
             }
         });        
     }
@@ -352,25 +398,25 @@ export class local
     {
         return new Promise(async resolve => 
         {
-            await this.conn.clear(pTblName);
+            this.remove({query:"DELETE FROM " + pTblName})
             resolve()
         });
     }
-    dropDb()
-    {
-        return new Promise(async resolve => 
-        {
-            this.conn.dropDb().then(async function() 
-            {
-                console.log('Db deleted successfully');
-                resolve(true)                
-            }).catch(function(error) 
-            {                
-                console.log(error);
-                resolve(false)
-            });    
-        });
-    }
+    // dropDb()
+    // {
+    //     return new Promise(async resolve => 
+    //     {
+    //         this.conn.dropDb().then(async function() 
+    //         {
+    //             console.log('Db deleted successfully');
+    //             resolve(true)                
+    //         }).catch(function(error) 
+    //         {                
+    //             console.log(error);
+    //             resolve(false)
+    //         });    
+    //     });
+    // }
 }
 export class auth 
 {
@@ -383,27 +429,44 @@ export class auth
         return new Promise(async resolve => 
         {
             let tmpData = []
-            let tmpLocWhere = {}
+            let tmpCode = ''
+            let tmpPwd = ''
+            let tmpSha = ''
+
             if(arguments.length == 2)
             {
                 tmpData.push(arguments[0],arguments[1])
-                tmpLocWhere = {SHA:arguments[0]}
+                tmpSha = arguments[0]
             }
             else if(arguments.length == 3)
             {
                 tmpData.push(arguments[0],arguments[1],arguments[2])
-                tmpLocWhere = {CODE:arguments[0],PWD:btoa(arguments[1])}
+                tmpCode = arguments[0]
+                tmpPwd = btoa(arguments[1])
             }
             //LOCAL DB İÇİN YAPILDI
             if(core.instance.offline)
             {
-                let tmpData = await core.instance.local.select({from:"USERS",where:tmpLocWhere})
+                let tmpQuery = {query : '', values:[]}
 
-                if(tmpData.result.length > 0)
+                if (tmpSha != '')
                 {
-                    this.data = tmpData.result[0]
+                    tmpQuery.query = 'SELECT * FROM USERS WHERE SHA = ?'
+                    tmpQuery.values = [tmpSha]
+                } 
+                else if (tmpCode != '' && tmpPwd != '')
+                {
+                    tmpQuery.query = 'SELECT * FROM USERS WHERE CODE = ? AND PWD = ?'
+                    tmpQuery.values = [tmpCode,tmpPwd]
+                } 
+
+                let tmpData = await core.instance.local.select(tmpQuery)
+
+                if(tmpData.result.recordset.length > 0)
+                {
+                    this.data = tmpData.result.recordset[0]
                     if(typeof window != 'undefined')
-                        window.sessionStorage.setItem('auth',tmpData.result[0].SHA)
+                        window.sessionStorage.setItem('auth',tmpData.result.recordset[0].SHA)
 
                     resolve(true)
                     return
@@ -447,10 +510,10 @@ export class auth
             //LOCAL DB İÇİN YAPILDI
             if(core.instance.offline)
             {
-                let tmpData = await core.instance.local.select({from:"USERS"})
-                if(tmpData.result.length > 0)
+                let tmpData = await core.instance.local.select({query:"SELECT * FROM USERS"})
+                if(tmpData.result.recordset.length > 0)
                 {                   
-                    resolve(tmpData.result)
+                    resolve(tmpData.result.recordset)
                     return
                 }
                 else 
@@ -700,7 +763,7 @@ export class dataset
                     tmpQuerys.push(e)    
                 });
             }
-            
+
             let tmpResult = await this.sql.execute(tmpQuerys)
             
             if(typeof tmpResult.result.err == 'undefined')
@@ -712,16 +775,6 @@ export class dataset
                         Object.setPrototypeOf(x.rowData,{stat:''})
                     }
                 })        
-
-                // for (let i = 0; i < this.length; i++) 
-                // {
-                //     let tmp = this.get(i);
-                //     tmp.forEach(e => 
-                //     {      
-                //         Object.setPrototypeOf(e,{stat:''})   
-                //     });
-                // }
-
                 resolve(0)
             }
             else
@@ -729,12 +782,6 @@ export class dataset
                 console.log(tmpResult.result.err)
                 tmpQuerys.forEach(x =>
                 {
-                    // KAYIT İŞLEMİNDE HATA VERDİĞİNDE UYARI MESAJINI YAPARKEN DEĞİŞTİRİLDİ.
-                    //İLK HATA MESAJINI VERİYORDU İKİNCİ MESAJI VERMİYORDU ÇÜNKÜ TÜM SATIRLARIN STAT I BOŞALTILIYOR. 31.10.2022 
-                    // if(x.rowData.stat == 'editing' || x.rowData.stat == 'newing')
-                    // {
-                    //     Object.setPrototypeOf(x.rowData,{stat:''})
-                    // }
                     if(x.rowData.stat == 'newing')
                     {
                         Object.setPrototypeOf(x.rowData,{stat:'new'})
@@ -940,33 +987,29 @@ export class datatable
             {
                 let tmpQuery = JSON.parse(JSON.stringify(this.selectCmd))
                 //LOCAL DB İÇİN YAPILDI. WHERE ŞARTINDA {index} ŞEKLİNDE DEĞER ATAMASI... ALI KEMAL KARACA - 22.08.2022 
-                if(typeof tmpQuery.local != 'undefined' && typeof tmpQuery.local.where != 'undefined' && typeof tmpQuery.param != 'undefined')
+                if(typeof tmpQuery.local != 'undefined' && typeof tmpQuery.local.values != 'undefined' && typeof tmpQuery.param != 'undefined')
                 {
-                    let tmpFindObj = (pVals,pIndex,pVal) =>
+                    if(tmpQuery.local.values.length > 0 && typeof tmpQuery.local.values[0] == 'object')
                     {
-                        for (let i = 0; i < Object.values(pVals).length; i++) 
+                        let tmpValArr = []
+
+                        Object.values(tmpQuery.local.values[0]).map(tmpItem => 
                         {
-                            let tmpItem = Object.values(pVals)[i]
-                            if(typeof tmpItem == 'object')
-                            {
-                                tmpFindObj(tmpItem,pIndex,pVal)
-                            }
-                            else if(typeof tmpItem == 'string' && tmpItem.indexOf('{' + pIndex + '}') > -1)
-                            {                                
-                                pVals[Object.keys(pVals)[i]] = pVal
-                            }
-                            else if(typeof tmpItem == 'string' && tmpItem.toString().split('|').length > 0 && tmpItem.toString().split('|')[1] == 'date') //TARIH DENETİMİ
-                            {
-                                pVals[Object.keys(pVals)[i]] = new Date(tmpItem.split('|')[0])
-                            }
-                        }
-                    }
-                                        
-                    for (let i = 0; i < tmpQuery.param.length; i++) 
-                    {
-                        tmpFindObj(tmpQuery.local.where,i,tmpQuery.value[i])
-                    }
-                }                
+                            Object.values(tmpItem).map(tmpItem1 =>
+                            {               
+                                for (let i = 0; i < tmpQuery.param.length; i++) 
+                                {
+                                    if(tmpQuery.param[i].split(':').length > 0 && tmpQuery.param[i].split(':')[0] == tmpItem1)
+                                    {
+                                        tmpValArr.push(tmpQuery.value[i])
+                                    }
+                                }                 
+                            })
+                        })
+                        tmpQuery.local.values = tmpValArr
+                    }                                                                                
+                }
+
                 let TmpData = await this.sql.execute(tmpQuery)
                 
                 if(typeof TmpData.result.err == 'undefined') 
@@ -983,6 +1026,7 @@ export class datatable
                 }
                 else
                 {
+                    console.log(tmpQuery.local)
                     console.log(TmpData.result.err)
                 }                
             }
@@ -1010,28 +1054,23 @@ export class datatable
                     tmpQuery = JSON.parse(JSON.stringify(this.insertCmd))
                     Object.setPrototypeOf(this[i],{stat:'newing'})                    
                     //LOCALDB İÇİN YAPILDI. ALI KEMAL KARACA 28.02.2022
-                    if(core.instance.offline && typeof tmpQuery.local != 'undefined' && typeof tmpQuery.local.values != 'undefined' && tmpQuery.local.values.length > 0)
+                    if(core.instance.offline && typeof tmpQuery.local != 'undefined' && typeof tmpQuery.dataprm != 'undefined' && typeof tmpQuery.local.values != 'undefined' && tmpQuery.local.values.length > 0)
                     {                        
-                        for (let x = 0; x < Object.keys(tmpQuery.local.values[0]).length; x++) 
+                        if(typeof tmpQuery.local.values[0] == 'object')
                         {
-                            let tmpKey = Object.keys(tmpQuery.local.values[0])[x]
-                            let tmpMap = Object.values(tmpQuery.local.values[0])[x]
-                            
-                            if(typeof tmpMap.map != 'undefined')
+                            let tmpValArr = []
+                            Object.values(tmpQuery.local.values[0]).map(tmpMap => 
                             {
-                                if(typeof tmpMap.type != 'undefined' && tmpMap.type == 'date_time')
+                                if(typeof tmpMap.map != 'undefined')
                                 {
-                                    tmpQuery.local.values[0][tmpKey] = new Date(this[i][tmpMap.map])
+                                    tmpValArr.push(this[i][tmpMap.map])
                                 }
                                 else
                                 {
-                                    tmpQuery.local.values[0][tmpKey] = this[i][tmpMap.map]  
+                                    tmpValArr.push(tmpMap)
                                 }
-                            }
-                            else
-                            {
-                                tmpQuery.local.values[0][tmpKey] = tmpMap
-                            }
+                            })
+                            tmpQuery.local.values = tmpValArr
                         }
                     }
                 }
@@ -1040,57 +1079,21 @@ export class datatable
                     tmpQuery = JSON.parse(JSON.stringify(this.updateCmd))
                     Object.setPrototypeOf(this[i],{stat:'editing'})
                     //LOCALDB İÇİN YAPILDI. ALI KEMAL KARACA 28.02.2022
-                    if(core.instance.offline && typeof tmpQuery.local != 'undefined' && typeof tmpQuery.local.set != 'undefined')
+                    if(core.instance.offline && typeof tmpQuery.local != 'undefined' && typeof tmpQuery.local.values != 'undefined')
                     {
-                        //SET
-                        for (let x = 0; x < Object.keys(tmpQuery.local.set).length; x++) 
-                        {                            
-                            let tmpKey = Object.keys(tmpQuery.local.set)[x]
-                            let tmpMap = Object.values(tmpQuery.local.set)[x]
-                            
-                            if(typeof tmpMap.map != 'undefined')
-                            {
-                                if(typeof tmpMap.type != 'undefined' && tmpMap.type == 'date_time')
-                                {
-                                    tmpQuery.local.set[tmpKey] = new Date(this[i][tmpMap.map])
-                                }
-                                else
-                                {
-                                    tmpQuery.local.set[tmpKey] = this[i][tmpMap.map]
-                                }                                
-                            }
-                            else
-                            {
-                                tmpQuery.local.set[tmpKey] = tmpMap
-                            }
-                        }
-                        
-                    }
-                    //LOCALDB İÇİN YAPILDI. ALI KEMAL KARACA 28.02.2022
-                    if(core.instance.offline && typeof tmpQuery.local != 'undefined' && typeof tmpQuery.local.where != 'undefined')
-                    {
-                        //WHERE
-                        for (let x = 0; x < Object.keys(tmpQuery.local.where).length; x++) 
+                        let tmpValArr = []
+                        Object.values(tmpQuery.local.values[0]).map(tmpMap => 
                         {
-                            let tmpKey = Object.keys(tmpQuery.local.where)[x]
-                            let tmpMap = Object.values(tmpQuery.local.where)[x]
-
                             if(typeof tmpMap.map != 'undefined')
                             {
-                                if(typeof tmpMap.type != 'undefined' && tmpMap.type == 'date_time')
-                                {
-                                    tmpQuery.local.where[tmpKey] = new Date(this[i][tmpMap.map])
-                                }
-                                else
-                                {
-                                    tmpQuery.local.where[tmpKey] = this[i][tmpMap.map]
-                                }        
+                                tmpValArr.push(this[i][tmpMap.map])
                             }
                             else
                             {
-                                tmpQuery.local.where[tmpKey] = tmpMap
+                                tmpValArr.push(tmpMap)
                             }
-                        }
+                        })
+                        tmpQuery.local.values = tmpValArr
                     }
                 }
             
@@ -1132,7 +1135,7 @@ export class datatable
         return new Promise(async resolve => 
         {
             let tmpQuerys = undefined;
-            
+
             if(typeof arguments[0] == 'undefined' || arguments[0] == '')
             {
                 tmpQuerys = this.toCommands();
@@ -1140,8 +1143,8 @@ export class datatable
             else
             {
                 tmpQuerys = this.toCommands(arguments[0]);
-            }                        
-
+            }            
+            
             let tmpResult = await this.sql.execute(tmpQuerys)
             if(typeof tmpResult.result.err == 'undefined')
             {     
@@ -1152,10 +1155,6 @@ export class datatable
                         Object.setPrototypeOf(x.rowData,{stat:''})
                     }
                 })
-                // for (let i = 0; i < this.length; i++) 
-                // {
-                //     Object.setPrototypeOf(this[i],{stat:''})
-                // }
                 resolve(0)
             }
             else
@@ -1197,59 +1196,40 @@ export class datatable
                         {
                             if(pItem.type == 'update')
                             {
-                                if(typeof pItem.set != 'undefined')
+                                if(typeof pItem.values != 'undefined')
                                 {
-                                    //SET
-                                    for (let x = 0; x < Object.keys(pItem.set).length; x++) 
-                                    {                                        
-                                        let tmpKey = Object.keys(pItem.set)[x]
-                                        let tmpMap = Object.values(pItem.set)[x]
-                                        if(typeof tmpMap.map != 'undefined')
-                                        {
-                                            pItem.set[tmpKey] = this._deleteList[i][tmpMap.map]
-                                        }
-                                        else
-                                        {
-                                            pItem.set[tmpKey] = tmpMap
-                                        }
-                                    }                            
-                                }
-                                if(typeof pItem.where != 'undefined')
-                                {
-                                    //WHERE
-                                    for (let x = 0; x < Object.keys(pItem.where).length; x++) 
+                                    let tmpValArr = []
+                                    Object.values(pItem.values[0]).map(tmpMap => 
                                     {
-                                        let tmpKey = Object.keys(pItem.where)[x]
-                                        let tmpMap = Object.values(pItem.where)[x]
                                         if(typeof tmpMap.map != 'undefined')
                                         {
-                                            pItem.where[tmpKey] = this._deleteList[i][tmpMap.map]
+                                            tmpValArr.push(this._deleteList[i][tmpMap.map])
                                         }
                                         else
                                         {
-                                            pItem.where[tmpKey] = tmpMap
+                                            tmpValArr.push(tmpMap)
                                         }
-                                    }
+                                    })
+                                    pItem.values = tmpValArr
                                 }
                             }
                             if(pItem.type == 'delete')
                             {
-                                if(typeof pItem.where != 'undefined')
+                                if(typeof pItem.values != 'undefined')
                                 {
-                                    //WHERE
-                                    for (let x = 0; x < Object.keys(pItem.where).length; x++) 
+                                    let tmpValArr = []
+                                    Object.values(pItem.values[0]).map(tmpMap => 
                                     {
-                                        let tmpKey = Object.keys(pItem.where)[x]
-                                        let tmpMap = Object.values(pItem.where)[x]
                                         if(typeof tmpMap.map != 'undefined')
                                         {
-                                            pItem.where[tmpKey] = this._deleteList[i][tmpMap.map]
+                                            tmpValArr.push(this._deleteList[i][tmpMap.map])
                                         }
                                         else
                                         {
-                                            pItem.where[tmpKey] = tmpMap
-                                        }                                        
-                                    }
+                                            tmpValArr.push(tmpMap)
+                                        }
+                                    })
+                                    pItem.values = tmpValArr
                                 }
                             }
                         });
@@ -1295,13 +1275,8 @@ export class datatable
         });
     }
     toArray()
-    {
-        let tmpArr = [];
-        for (let i = 0; i < this.length; i++) 
-        {
-            tmpArr.push(this[i])                                    
-        }
-        return tmpArr;
+    {        
+        return this.slice();
     }
     toColumnArr(pColumn)
     {
@@ -1380,18 +1355,19 @@ export class datatable
         if(arguments.length > 0)
         {
             let tmpData = this.toArray();
-            
+
             if(Object.keys(arguments[0]).length > 0)
             {
                 let tmpOp = '='
                 let tmpKey = Object.keys(arguments[0])[0]
                 let tmpValue = Object.values(arguments[0])[0]
+
                 if(typeof tmpValue === 'object')
                 {
                     tmpOp = Object.keys(tmpValue)[0]
                     tmpValue = Object.values(tmpValue)[0]
                 }
-                
+
                 if(tmpOp == '=')
                 {
                     tmpData = tmpData.filter(x => x[tmpKey] === tmpValue)
@@ -1434,10 +1410,20 @@ export class datatable
                 }
             }
             
-            let tmpDt = Object.assign(Object.create(Object.getPrototypeOf(this)), this)
-            tmpDt.splice(0,tmpDt.length);
-            tmpDt.import(tmpData)
-            
+            let tmpDt = new datatable();
+            tmpDt.import(tmpData);
+
+            tmpDt.selectCmd = this.selectCmd;
+            tmpDt.insertCmd = this.insertCmd;
+            tmpDt.updateCmd = this.updateCmd;
+            tmpDt.deleteCmd = this.deleteCmd;
+            tmpDt._deleteList = [...this._deleteList];
+            tmpDt._groupList = [...this._groupList];
+            tmpDt.noColumnEdit = [...this.noColumnEdit];
+            tmpDt.listeners = Object.assign({}, this.listeners);
+            tmpDt.sql = this.sql;
+            tmpDt.name = this.name
+           
             return tmpDt;
         }
     }
@@ -1536,7 +1522,21 @@ export class param extends datatable
                                 typeof arguments[0].APP == 'undefined' ? '' : arguments[0].APP,
                                 typeof arguments[0].USERS == 'undefined' ? '' : arguments[0].USERS,
                                 typeof arguments[0].ID == 'undefined' ? '' : arguments[0].ID,
-                            ]
+                            ],
+                    local : 
+                    {
+                        type : "select",
+                        query : "SELECT * FROM PARAM WHERE ((APP = ?) OR (? = '')) AND ((USERS = ?) OR (? = '')) AND ((ID = ?) OR (? = ''));",
+                        values : 
+                        [
+                            typeof arguments[0].APP == 'undefined' ? '' : arguments[0].APP,
+                            typeof arguments[0].APP == 'undefined' ? '' : arguments[0].APP,
+                            typeof arguments[0].USERS == 'undefined' ? '' : arguments[0].USERS,
+                            typeof arguments[0].USERS == 'undefined' ? '' : arguments[0].USERS,
+                            typeof arguments[0].ID == 'undefined' ? '' : arguments[0].ID,
+                            typeof arguments[0].ID == 'undefined' ? '' : arguments[0].ID,
+                        ],        
+                    } 
                 } 
                 await this.refresh();
             }
@@ -1717,9 +1717,17 @@ export class access extends datatable
                 {
                     query : "SELECT * FROM ACCESS WHERE ((APP = @APP) OR (@APP = ''))" ,
                     param : ['APP:string|50'],
-                    value : [
-                                typeof arguments[0].APP == 'undefined' ? '' : arguments[0].APP,
-                            ]
+                    value : [typeof arguments[0].APP == 'undefined' ? '' : arguments[0].APP],
+                    local : 
+                    {
+                        type : "select",
+                        query : "SELECT * FROM ACCESS WHERE ((APP = ?) OR (? = ''));",
+                        values : 
+                        [
+                            typeof arguments[0].APP == 'undefined' ? '' : arguments[0].APP,
+                            typeof arguments[0].APP == 'undefined' ? '' : arguments[0].APP,
+                        ],        
+                    } 
                 } 
                 await this.refresh();
             }

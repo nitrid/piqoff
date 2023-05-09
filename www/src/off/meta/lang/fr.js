@@ -3299,7 +3299,7 @@ export const langFr =
             txtTotal : "Nombre total",    
             chkDigit : "EAN Code"    
         },  
-        btnGet : "Enregistrez"    
+        btnGet : "Enregistrer"    
     },
     cri_04_001 : // "Cari Extre Raporu"
     {
@@ -3721,7 +3721,7 @@ export const langFr =
         popDiscount : 
         {
            title: "Remise sur les lignes", // BAK
-            chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkFirstDiscount : "Ne pas mettre à jour les remises présentes sur la 1ère ligne",
             chkDocDiscount : "Remise total général", 
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
@@ -4280,7 +4280,7 @@ export const langFr =
         popDiscount : 
         {
            title: "Remise sur les lignes", // BAK
-            chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkFirstDiscount : "Ne pas mettre à jour les remises présentes sur la 1ère ligne",
             chkDocDiscount : "Remise total général",
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
@@ -4817,7 +4817,7 @@ export const langFr =
         popDiscount : 
         {
            title: "Remise sur les lignes", // BAK
-            chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkFirstDiscount : "Ne pas mettre à jour les remises présentes sur la 1ère ligne",
             chkDocDiscount : "Remise total général",
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
@@ -5284,7 +5284,7 @@ export const langFr =
         popDiscount : 
         {
            title: "Remise sur les lignes", // BAK
-            chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkFirstDiscount : "Ne pas mettre à jour les remises présentes sur la 1ère ligne",
             chkDocDiscount : "Remise total général",
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
@@ -5730,7 +5730,7 @@ export const langFr =
         popDiscount : 
         {
            title: "Remise sur les lignes", // BAK
-            chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkFirstDiscount : "Ne pas mettre à jour les remises présentes sur la 1ère ligne",
             chkDocDiscount : "Remise total général", 
             Percent1 : "1. Remise % ", 
             Price1 : "1. Remise",
@@ -6201,7 +6201,7 @@ export const langFr =
         popDiscount : 
         {
            title: "Remise sur les lignes", // BAK
-            chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkFirstDiscount : "Ne pas mettre à jour les remises présentes sur la 1ère ligne",
             chkDocDiscount : "Remise total général",
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
@@ -6620,7 +6620,7 @@ export const langFr =
         popDiscount : 
         {
            title: "Remise sur les lignes", // BAK
-            chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkFirstDiscount : "Ne pas mettre à jour les remises présentes sur la 1ère ligne",
             chkDocDiscount : "Remise total général",
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
@@ -7064,7 +7064,7 @@ export const langFr =
         popDiscount : 
         {
            title: "Remise sur les lignes", // BAK
-            chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkFirstDiscount : "Ne pas mettre à jour les remises présentes sur la 1ère ligne",
             chkDocDiscount : "Remise total général",
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
@@ -7528,7 +7528,7 @@ export const langFr =
         popDiscount : 
         {
            title: "Remise sur les lignes", // BAK
-            chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkFirstDiscount : "Ne pas mettre à jour les remises présentes sur la 1ère ligne",
             chkDocDiscount : "Remise total général",
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
@@ -7878,7 +7878,7 @@ export const langFr =
         popDiscount : 
         {
            title: "Remise sur les lignes", // BAK
-            chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkFirstDiscount : "Ne pas mettre à jour les remises présentes sur la 1ère ligne",
             chkDocDiscount : "Remise total général", 
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
@@ -8311,7 +8311,7 @@ export const langFr =
         popDiscount : 
         {
            title: "Remise sur les lignes", // BAK
-            chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkFirstDiscount : "Ne pas mettre à jour les remises présentes sur la 1ère ligne",
             chkDocDiscount : "Remise total général", 
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
@@ -8816,7 +8816,7 @@ export const langFr =
         popDiscount : 
         {
            title: "Remise sur les lignes", // BAK
-            chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkFirstDiscount : "Ne pas mettre à jour les remises présentes sur la 1ère ligne",
             chkDocDiscount : "Remise total général", 
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
@@ -9176,7 +9176,7 @@ export const langFr =
         popDiscount : 
         {
            title: "Remise sur les lignes", // BAK
-            chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkFirstDiscount : "Ne pas mettre à jour les remises présentes sur la 1ère ligne",
             chkDocDiscount : "Remise total général", 
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
@@ -9870,7 +9870,7 @@ export const langFr =
         popDiscount : 
         {
            title: "Remise sur les lignes", // BAK
-            chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkFirstDiscount : "Ne pas mettre à jour les remises présentes sur la 1ère ligne",
             chkDocDiscount : "Remise total général", 
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
@@ -10069,7 +10069,7 @@ export const langFr =
         msgGrdOrigins:
         {
             title: "Changement d'origine",  
-            btn01: "Enregistrez", 
+            btn01: "Enregistrer", 
         },
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
@@ -10284,7 +10284,7 @@ export const langFr =
         popDiscount : 
         {
            title: "Remise sur les lignes", // BAK
-            chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkFirstDiscount : "Ne pas mettre à jour les remises présentes sur la 1ère ligne",
             chkDocDiscount : "Remise total général",
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
@@ -10697,7 +10697,7 @@ export const langFr =
         popDiscount : 
         {
            title: "Remise sur les lignes", // BAK
-            chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkFirstDiscount : "Ne pas mettre à jour les remises présentes sur la 1ère ligne",
             chkDocDiscount : "Remise total général",
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
@@ -11028,7 +11028,7 @@ export const langFr =
         popDiscount : 
         {
            title: "Remise sur les lignes", // BAK
-            chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkFirstDiscount : "Ne pas mettre à jour les remises présentes sur la 1ère ligne",
             chkDocDiscount : "Remise total général", 
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
@@ -11415,7 +11415,7 @@ export const langFr =
         popDiscount : 
         {
            title: "Remise sur les lignes", // BAK
-            chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkFirstDiscount : "Ne pas mettre à jour les remises présentes sur la 1ère ligne",
             chkDocDiscount : "Remise total général", 
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
@@ -11732,7 +11732,7 @@ export const langFr =
         popDiscount : 
         {
            title: "Remise sur les lignes", // BAK
-            chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkFirstDiscount : "Ne pas mettre à jour les remises présentes sur la 1ère ligne",
             chkDocDiscount : "Remise total général",
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
@@ -12190,7 +12190,7 @@ export const langFr =
         popDiscount : 
         {
            title: "Remise sur les lignes", // BAK
-            chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkFirstDiscount : "Ne pas mettre à jour les remises présentes sur la 1ère ligne",
             chkDocDiscount : "Remise total général",
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
@@ -12552,7 +12552,7 @@ export const langFr =
         popDiscount : 
         {
            title: "Remise sur les lignes", // BAK
-            chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkFirstDiscount : "Ne pas mettre à jour les remises présentes sur la 1ère ligne",
             chkDocDiscount : "Remise total général",
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
@@ -15015,7 +15015,7 @@ export const langFr =
         popDiscount : 
         {
            title: "Remise sur les lignes", // BAK
-            chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkFirstDiscount : "Ne pas mettre à jour les remises présentes sur la 1ère ligne",
             chkDocDiscount : "Remise total général",
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
@@ -15341,7 +15341,7 @@ export const langFr =
         popDiscount : 
         {
            title: "Remise sur les lignes", // BAK
-            chkFirstDiscount : "1. remises n'est pas indiqué sur les lignes",
+            chkFirstDiscount : "Ne pas mettre à jour les remises présentes sur la 1ère ligne",
             chkDocDiscount : "Remise total général", 
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
