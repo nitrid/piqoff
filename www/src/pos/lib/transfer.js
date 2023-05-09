@@ -95,7 +95,8 @@ export default class transferCls
             {
                 name :  "ITEMS_POS_VW_01",
                 query : `CREATE TABLE IF NOT EXISTS ITEMS_POS_VW_01 (
-                        GUID TEXT PRIMARY KEY,
+                        DBGUID TEXT PRIMARY KEY,
+                        GUID TEXT,
                         SPECIAL TEXT,
                         CODE TEXT,
                         NAME TEXT,
@@ -126,7 +127,8 @@ export default class transferCls
             {
                 name : "ITEMS_BARCODE_MULTICODE_VW_01",
                 query : `CREATE TABLE IF NOT EXISTS ITEMS_BARCODE_MULTICODE_VW_01 (
-                        GUID TEXT PRIMARY KEY,
+                        DBGUID TEXT PRIMARY KEY,
+                        GUID TEXT,
                         CDATE DATETIME,
                         CUSER TEXT,
                         CUSER_NAME TEXT,
@@ -271,7 +273,8 @@ export default class transferCls
                         CDATE DATETIME,
                         CUSER TEXT,
                         CUSER_NAME TEXT,
-                        LUSER DATETIME,
+                        LDATE DATETIME,
+                        LUSER TEXT,
                         LUSER_NAME TEXT,
                         TYPE INTEGER,
                         CODE TEXT,
@@ -643,16 +646,18 @@ export default class transferCls
                 from : 
                 {
                     type : "select",
-                    query : `SELECT *,dbo.FN_PRICE_SALE(GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000') AS PRICE FROM ITEMS_POS_VW_01 {0}`,
+                    query : `SELECT *,dbo.FN_PRICE_SALE(GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000') AS PRICE, 
+                            CONVERT(NVARCHAR(50),GUID) + '-' + CONVERT(NVARCHAR(50),BARCODE_GUID) AS DBGUID 
+                            FROM ITEMS_POS_VW_01 {0}`,
                     where : `WHERE LDATE >= GETDATE() - 10`
                 },
                 to : 
                 {
                     type : "insert",
-                    query : `INSERT OR REPLACE INTO ITEMS_POS_VW_01 (GUID, SPECIAL, CODE, NAME, SNAME, VAT, VAT_TYPE, COST_PRICE, MIN_PRICE, MAX_PRICE, 
+                    query : `INSERT OR REPLACE INTO ITEMS_POS_VW_01 (DBGUID, GUID, SPECIAL, CODE, NAME, SNAME, VAT, VAT_TYPE, COST_PRICE, MIN_PRICE, MAX_PRICE, 
                             SALE_JOIN_LINE, TICKET_REST, WEIGHING, BARCODE, BARCODE_GUID, UNIT_GUID, UNIT_ID, UNIT_NAME, UNIT_SHORT, UNIT_FACTOR, UNIQ_CODE, 
-                            UNIQ_QUANTITY, UNIQ_PRICE, STATUS, PRICE, INPUT) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
-                    values : [{GUID : {map:'GUID'},SPECIAL : {map:'SPECIAL'},CODE : {map:'CODE'},NAME : {map:'NAME'},SNAME : {map:'SNAME'},VAT : {map:'VAT'},VAT_TYPE : {map:'VAT_TYPE'},COST_PRICE : {map:'COST_PRICE'},
+                            UNIQ_QUANTITY, UNIQ_PRICE, STATUS, PRICE, INPUT) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+                    values : [{DBGUID : {map:'DBGUID'},GUID : {map:'GUID'},SPECIAL : {map:'SPECIAL'},CODE : {map:'CODE'},NAME : {map:'NAME'},SNAME : {map:'SNAME'},VAT : {map:'VAT'},VAT_TYPE : {map:'VAT_TYPE'},COST_PRICE : {map:'COST_PRICE'},
                     MIN_PRICE : {map:'MIN_PRICE'},MAX_PRICE : {map:'MAX_PRICE'},SALE_JOIN_LINE : {map:'SALE_JOIN_LINE'},TICKET_REST : {map:'TICKET_REST'},WEIGHING : {map:'WEIGHING'},BARCODE : {map:'BARCODE'},
                     BARCODE_GUID : {map:'BARCODE_GUID'},UNIT_GUID : {map:'UNIT_GUID'},UNIT_ID : {map:'UNIT_ID'},UNIT_NAME : {map:'UNIT_NAME'},UNIT_SHORT : {map:'UNIT_SHORT'},UNIT_FACTOR : {map:'UNIT_FACTOR'},
                     UNIQ_CODE : {map:'UNIQ_CODE'},UNIQ_QUANTITY : {map:'UNIQ_QUANTITY'},UNIQ_PRICE : {map:'UNIQ_PRICE'},STATUS : {map:'STATUS'},PRICE : {map:'PRICE'},INPUT : ''}]
@@ -664,18 +669,18 @@ export default class transferCls
                 from : 
                 {
                     type : "select",
-                    query : `SELECT * FROM ITEMS_BARCODE_MULTICODE_VW_01 {0}`,
+                    query : `SELECT *, CONVERT(NVARCHAR(50),GUID) + '-' + CONVERT(NVARCHAR(50),BARCODE_GUID) + '-' + CONVERT(NVARCHAR(50),CUSTOMER_GUID) + '-' + MULTICODE AS DBGUID FROM ITEMS_BARCODE_MULTICODE_VW_01 {0}`,
                     where : `WHERE LDATE >= GETDATE() - 10`
                 },
                 to : 
                 {
                     type : "insert",
                     query : `INSERT OR REPLACE INTO ITEMS_BARCODE_MULTICODE_VW_01 (
-                            GUID, CDATE, CUSER, CUSER_NAME, LDATE, LUSER, LUSER_NAME, TYPE, SPECIAL, CODE, NAME, SNAME, VAT, COST_PRICE, MIN_PRICE, MAX_PRICE, STATUS, MAIN_GRP,
+                            DBGUID, GUID, CDATE, CUSER, CUSER_NAME, LDATE, LUSER, LUSER_NAME, TYPE, SPECIAL, CODE, NAME, SNAME, VAT, COST_PRICE, MIN_PRICE, MAX_PRICE, STATUS, MAIN_GRP,
                             MAIN_GRP_NAME, SUB_GRP, ORGINS, ITEMS_GRP_GUID, ORGINS_NAME, RAYON, SHELF, SECTOR, SALE_JOIN_LINE, TICKET_REST, WEIGHING, BARCODE, BARCODE_GUID, UNIT_ID,
                             UNIT_NAME, UNIT_FACTOR, MULTICODE, CUSTOMER_GUID, CUSTOMER_CODE, CUSTOMER_NAME, CUSTOMER_PRICE, CUSTOMER_PRICE_GUID, PRICE_SALE, PRICE_SALE_GUID) 
-                            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
-                    values : [{GUID : {map:'GUID'},CDATE : {map:'CDATE',type:'date_time'},CUSER : {map:'CUSER'},CUSER_NAME : {map:'CUSER_NAME'},LDATE : {map:'LDATE',type:'date_time'},LUSER : {map:'LUSER'},
+                            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+                    values : [{DBGUID : {map:'DBGUID'},GUID : {map:'GUID'},CDATE : {map:'CDATE',type:'date_time'},CUSER : {map:'CUSER'},CUSER_NAME : {map:'CUSER_NAME'},LDATE : {map:'LDATE',type:'date_time'},LUSER : {map:'LUSER'},
                     LUSER_NAME : {map:'LUSER_NAME'},TYPE : {map:'TYPE'},SPECIAL : {map:'SPECIAL'},CODE : {map:'CODE'},NAME : {map:'NAME'},SNAME : {map:'SNAME'},VAT : {map:'VAT'},COST_PRICE : {map:'COST_PRICE'},
                     MIN_PRICE : {map:'MIN_PRICE'},MAX_PRICE : {map:'MAX_PRICE'},STATUS : {map:'STATUS'},MAIN_GRP : {map:'MAIN_GRP'},MAIN_GRP_NAME : {map:'MAIN_GRP_NAME'},SUB_GRP : {map:'SUB_GRP'},
                     ORGINS : {map:'ORGINS'},ITEMS_GRP_GUID : {map:'ITEMS_GRP_GUID'},ORGINS_NAME : {map:'ORGINS_NAME'},RAYON : {map:'RAYON'},SHELF : {map:'SHELF'},SECTOR : {map:'SECTOR'},
@@ -697,7 +702,7 @@ export default class transferCls
                 {
                     type : "insert",
                     query : `INSERT OR REPLACE INTO CHEQPAY_VW_01 (GUID, CDATE, CUSER, CUSER_NAME, LDATE, LUSER, LUSER_NAME, TYPE, DOC, CODE, AMOUNT, STATUS, REFERENCE, RANDOM1, PRICE, 
-                            TICKET_TYPE, TICKET_NAME, RANDOM2, YEAR, EXDAY, TRANSFER) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                            TICKET_TYPE, TICKET_NAME, RANDOM2, YEAR, EXDAY, TRANSFER) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
                     values : [{GUID : {map:'GUID'},CDATE : {map:'CDATE',type:'date_time'},CUSER : {map:'CUSER'},CUSER_NAME : {map:'CUSER_NAME'},LDATE : {map:'LDATE',type:'date_time'},LUSER : {map:'LUSER'},
                     LUSER_NAME : {map:'LUSER_NAME'},TYPE : {map:'TYPE'},DOC : {map:'DOC'},CODE : {map:'CODE'},AMOUNT : {map:'AMOUNT'},STATUS : {map:'STATUS'},REFERENCE : {map:'REFERENCE'},RANDOM1 : {map:'RANDOM1'},
                     PRICE : {map:'PRICE'},TICKET_TYPE : {map:'TICKET_TYPE'},TICKET_NAME : {map:'TICKET_NAME'},RANDOM2 : {map:'RANDOM2'},YEAR : {map:'YEAR'},EXDAY : {map:'EXDAY'},TRANSFER : 0}]
@@ -790,7 +795,7 @@ export default class transferCls
                     type : "insert",
                     query : `INSERT OR REPLACE INTO PROMO_VW_01 (GUID, CDATE, CUSER, CUSER_NAME, LDATE, LUSER, LUSER_NAME, TYPE, CODE, NAME, START_DATE, FINISH_DATE, CUSTOMER_GUID, CUSTOMER_CODE, 
                             CUSTOMER_NAME, DEPOT_GUID, DEPOT_CODE, DEPOT_NAME, STATUS)
-                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
                     values : [{GUID : {map:'GUID'},CDATE : {map:'CDATE',type:'date_time'},CUSER : {map:'CUSER'},CUSER_NAME : {map:'CUSER_NAME'},LDATE : {map:'LDATE',type:'date_time'},LUSER : {map:'LUSER'},
                     LUSER_NAME : {map:'LUSER_NAME'},TYPE : {map:'TYPE'},CODE : {map:'CODE'},NAME : {map:'NAME'},START_DATE : {map:'START_DATE',type:'date_time'},FINISH_DATE : {map:'FINISH_DATE',type:'date_time'},
                     CUSTOMER_GUID : {map:'CUSTOMER_GUID'},CUSTOMER_CODE : {map:'CUSTOMER_CODE'},CUSTOMER_NAME : {map:'CUSTOMER_NAME'},DEPOT_GUID : {map:'DEPOT_GUID'},DEPOT_CODE : {map:'DEPOT_CODE'},
@@ -1234,9 +1239,9 @@ export default class transferCls
                 {   
                     tmpStartPage = tmpPageLimit * m
                     tmpEndPage = tmpStartPage + tmpPageLimit
-                    let tmpData = await this.core.sql.buffer({start : tmpStartPage,end : tmpEndPage,bufferId : tmpBuf.result.bufferId})
-                    
+                    let tmpData = await this.core.sql.buffer({start : tmpStartPage,end : tmpEndPage,bufferId : tmpBuf.result.bufferId})                    
                     let tmpInserts = {querys:[],values:[]}
+                    
                     if(typeof tmpData.result.err == 'undefined')
                     {                                
                         tmpData = tmpData.result.recordset 
@@ -1288,7 +1293,6 @@ export default class transferCls
                             })
                         }
                     }
-
                     tmpInserts = null;
                     tmpData = null;
                     this.emit('onState',{tag:'progress',count:tmpCount,index:tmpEndPage})                
