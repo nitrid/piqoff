@@ -227,9 +227,16 @@ export class promoCondCls
         let tmpDt = new datatable('PROMO_CONDITION');            
         tmpDt.selectCmd = 
         {
-            query : "SELECT *,'COND' AS SECTOR FROM [dbo].[PROMO_CONDITION_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND " + 
-                    "((PROMO IN (SELECT value FROM STRING_SPLIT(@PROMO,','))) OR (@PROMO = '')) ORDER BY WITHAL ASC",
+            query : `SELECT *,'COND' AS SECTOR FROM [dbo].[PROMO_CONDITION_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND 
+                    ((PROMO IN (SELECT value FROM STRING_SPLIT(@PROMO,','))) OR (@PROMO = '')) ORDER BY WITHAL ASC`,
             param : ['GUID:string|50','PROMO:string|max'],
+            local : 
+            {
+                type : "select",
+                query : `SELECT *,'COND' AS SECTOR FROM PROMO_CONDITION_VW_01 WHERE ((GUID = ?) OR (? = '00000000-0000-0000-0000-000000000000')) AND   
+                        ((',' || ? || ',' GLOB ',*' || PROMO || ',*') OR (? = '')) ORDER BY WITHAL ASC`,
+                values : []
+            }
         } 
         tmpDt.insertCmd = 
         {
@@ -325,23 +332,10 @@ export class promoCondCls
             {
                 tmpPrm.GUID = typeof arguments[0].GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].GUID;
                 tmpPrm.PROMO = typeof arguments[0].PROMO == 'undefined' ? '' : arguments[0].PROMO;
+
+                this.ds.get('PROMO_CONDITION').selectCmd.local.values = [tmpPrm.GUID,tmpPrm.GUID,tmpPrm.PROMO,tmpPrm.PROMO]
             }
             this.ds.get('PROMO_CONDITION').selectCmd.value = Object.values(tmpPrm)
-
-            this.ds.get('PROMO_CONDITION').selectCmd.local =
-            {
-                type : "select",
-                from : "PROMO_CONDITION_VW_01",
-                where : {}
-            }
-            if(tmpPrm.GUID != '00000000-0000-0000-0000-000000000000')
-            {
-                this.ds.get('PROMO_CONDITION').selectCmd.local.where.GUID = arguments[0].GUID
-            }
-            if(tmpPrm.PROMO != '00000000-0000-0000-0000-000000000000')
-            {
-                this.ds.get('PROMO_CONDITION').selectCmd.local.where.PROMO = { in : arguments[0].PROMO.split(',')}
-            }
 
             await this.ds.get('PROMO_CONDITION').refresh();
             resolve(this.ds.get('PROMO_CONDITION'));    
@@ -385,9 +379,16 @@ export class promoAppCls
         let tmpDt = new datatable('PROMO_APPLICATION');            
         tmpDt.selectCmd = 
         {
-            query : "SELECT *,'APP' AS SECTOR FROM [dbo].[PROMO_APPLICATION_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND " + 
-                    "((PROMO IN (SELECT value FROM STRING_SPLIT(@PROMO,','))) OR (@PROMO = '')) ORDER BY WITHAL ASC",
-            param : ['GUID:string|50','PROMO:string|max']
+            query : `SELECT *,'APP' AS SECTOR FROM [dbo].[PROMO_APPLICATION_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND 
+                    ((PROMO IN (SELECT value FROM STRING_SPLIT(@PROMO,','))) OR (@PROMO = '')) ORDER BY WITHAL ASC`,
+            param : ['GUID:string|50','PROMO:string|max'],
+            local : 
+            {
+                type : "select",
+                query : `SELECT *,'APP' AS SECTOR FROM PROMO_APPLICATION_VW_01 WHERE ((GUID = ?) OR (? = '00000000-0000-0000-0000-000000000000')) AND   
+                        ((',' || ? || ',' GLOB ',*' || PROMO || ',*') OR (? = '')) ORDER BY WITHAL ASC`,
+                values : []
+            }
         } 
         tmpDt.insertCmd = 
         {
@@ -481,24 +482,11 @@ export class promoAppCls
             {
                 tmpPrm.GUID = typeof arguments[0].GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].GUID;
                 tmpPrm.PROMO = typeof arguments[0].PROMO == 'undefined' ? '' : arguments[0].PROMO;
+
+                this.ds.get('PROMO_APPLICATION').selectCmd.local.values = [tmpPrm.GUID,tmpPrm.GUID,tmpPrm.PROMO,tmpPrm.PROMO]
             }
 
             this.ds.get('PROMO_APPLICATION').selectCmd.value = Object.values(tmpPrm)
-
-            this.ds.get('PROMO_APPLICATION').selectCmd.local =
-            {
-                type : "select",
-                from : "PROMO_APPLICATION_VW_01",
-                where : {}
-            }
-            if(tmpPrm.GUID != '00000000-0000-0000-0000-000000000000')
-            {
-                this.ds.get('PROMO_APPLICATION').selectCmd.local.where.GUID = arguments[0].GUID
-            }
-            if(tmpPrm.PROMO != '00000000-0000-0000-0000-000000000000')
-            {
-                this.ds.get('PROMO_APPLICATION').selectCmd.local.where.PROMO = { in : arguments[0].PROMO.split(',')}
-            }
 
             await this.ds.get('PROMO_APPLICATION').refresh();
             
