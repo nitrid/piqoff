@@ -3,7 +3,7 @@ export const langFr =
     popGrid: {btnSelection:"Choix",btnSearch:"Listes"},
     serverConnection : "Établissement de la connexion avec le serveur",
     loading : "Connexion En Cours",
-    btnSave: "Enregistre",
+    btnSave: "Enregistrer",
     btnCancel: "Supprimer",
     btnPrint :"Imprimer",
     btnOk: "OK",
@@ -213,7 +213,7 @@ export const langFr =
         irs_01_002: "Liste Bon de livraison de vente",
         irs_01_003: "Liste Bon de livraison de retour",
         irs_01_004: "Liste des bordereaux de vente interne", 
-        irs_02_001: " Bon de livraison d'achat",
+        irs_02_001: "Saisie Bon de livraison d'achat",
         irs_02_002: "Saisie Bon de livraison de vente",
         irs_02_003: "Saisie Bon de Retour de livraison",
         irs_02_004: "Saisie Bon de livraison interne", 
@@ -2444,14 +2444,14 @@ export const langFr =
         btnCheck : "Actif",
         btnGet :"Rechercher",
         chkMasterBarcode : "Regrouper code-barres ",
-        chkLastCustomer : "Recherche dernier fournisseur", 
+        chkLastCustomer : "Rechercher dernier fournisseur", 
         txtMulticode : "Référence Fournisseur",
         multicodePlaceHolder : "Veuillez Entrer les Codes Fournisseur Recherchés" ,
         barkodPlaceHolder :"Veuillez Entrer Le ou Les Codes Produits ou Codes Barres",
         ItemNamePlaceHolder :"Veuillez Entrer le Nom Complet ou une Syllabe",
-        txtTotalCount : "Toplam Kayıt",  // BAK
-        txtTotalActive : "Aktif Kayıt Sayısı",  // BAK
-        txtTotalPassive : "Pasif Kayıt Sayısı",  // BAK
+        txtTotalCount : "Nombre Total d'Enregistrement",  // BAK
+        txtTotalActive : "Enregistrement Actif",  // BAK
+        txtTotalPassive : "Enregistrement Pasif",  // BAK
         grdListe : 
         {
             clmCode: "Référence Produit",
@@ -9486,7 +9486,7 @@ export const langFr =
         txtCustomerName: "Nom fournisseur",
         cmbPrmType: "Type de Promotion",
         txtPrmItem:  "Produit",
-        btnPrmItem: "Choix", 
+        btnPrmItem: "Rechercher", 
         txtPrmItemGrp: "Groupe" ,
         txtPrmQuantity: "Quantité",
         txtPrmAmount: "Total" ,
@@ -9555,7 +9555,7 @@ export const langFr =
             title: "Promotion",
             txtDiscRate : "Pourcentage",
             txtDiscAmount : "Total",
-            btnSave: "Enregistre"
+            btnSave: "Enregistrer"
         },
         msgDiscRate: 
         {
