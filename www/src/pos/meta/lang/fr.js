@@ -163,7 +163,7 @@ export const langFr =
         msg : "Le prix ne peut être inferieur au prix de revient !",
         btn01 : "OK",
     },
-    totalLine : "Qte Ligne : ",
+    totalLine : "Nbr Ligne : ",
     totalQuantity : "Qte Art.:",
     loyaltyDiscount : "Remise fidélité :",
     ticketRect : "Ticket Rest. : ",
