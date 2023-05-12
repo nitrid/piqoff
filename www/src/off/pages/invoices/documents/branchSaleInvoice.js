@@ -3368,8 +3368,8 @@ export default class branchSaleInvoice extends React.PureComponent
                         <Column dataField="ITEM_CODE" caption={this.t("pg_dispatchGrid.clmCode")} width={200}/>
                         <Column dataField="ITEM_NAME" caption={this.t("pg_dispatchGrid.clmName")} width={300} />
                         <Column dataField="QUANTITY" caption={this.t("pg_dispatchGrid.clmQuantity")} width={300} />
-                        <Column dataField="PRICE" caption={this.t("pg_dispatchGrid.clmPrice")} width={300} />
-                        <Column dataField="TOTAL" caption={this.t("pg_dispatchGrid.clmTotal")} width={300} />
+                        <Column dataField="PRICE" caption={this.t("pg_dispatchGrid.clmPrice")} width={300} format={{ style: "currency", currency: "EUR",precision: 3}}/>
+                        <Column dataField="TOTAL" caption={this.t("pg_dispatchGrid.clmTotal")} width={300} format={{ style: "currency", currency: "EUR",precision: 3}}/>
                     </NdPopGrid>
                     {/* Stok Grid */}
                     <NdPopGrid id={"pg_txtItemsCode"} parent={this} container={"#root"}

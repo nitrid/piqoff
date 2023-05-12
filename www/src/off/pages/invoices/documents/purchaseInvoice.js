@@ -4200,8 +4200,8 @@ export default class purchaseInvoice extends React.PureComponent
                         <Column dataField="ITEM_CODE" caption={this.t("pg_dispatchGrid.clmCode")} width={200}/>
                         <Column dataField="ITEM_NAME" caption={this.t("pg_dispatchGrid.clmName")} width={450} />
                         <Column dataField="QUANTITY" caption={this.t("pg_dispatchGrid.clmQuantity")} width={200} />
-                        <Column dataField="PRICE" caption={this.t("pg_dispatchGrid.clmPrice")} width={200} />
-                        <Column dataField="TOTAL" caption={this.t("pg_dispatchGrid.clmTotal")} width={200} />
+                        <Column dataField="PRICE" caption={this.t("pg_dispatchGrid.clmPrice")} width={200} format={{ style: "currency", currency: "EUR",precision: 3}}/>
+                        <Column dataField="TOTAL" caption={this.t("pg_dispatchGrid.clmTotal")} width={200} format={{ style: "currency", currency: "EUR",precision: 3}}/>
                     </NdPopGrid>
                     {/* Stok Grid */}
                     <NdPopGrid id={"pg_txtItemsCode"} parent={this} container={"#root"}
@@ -5572,8 +5572,8 @@ export default class purchaseInvoice extends React.PureComponent
                         <Column dataField="ITEM_CODE" caption={this.t("pg_proformaGrid.clmCode")} width={200}/>
                         <Column dataField="ITEM_NAME" caption={this.t("pg_proformaGrid.clmName")} width={450} />
                         <Column dataField="QUANTITY" caption={this.t("pg_proformaGrid.clmQuantity")} width={200} />
-                        <Column dataField="PRICE" caption={this.t("pg_proformaGrid.clmPrice")} width={200} />
-                        <Column dataField="TOTAL" caption={this.t("pg_proformaGrid.clmTotal")} width={200} />
+                        <Column dataField="PRICE" caption={this.t("pg_proformaGrid.clmPrice")} width={200} format={{ style: "currency", currency: "EUR",precision: 3}}/>
+                        <Column dataField="TOTAL" caption={this.t("pg_proformaGrid.clmTotal")} width={200} format={{ style: "currency", currency: "EUR",precision: 3}}/>
                     </NdPopGrid>
                     {/* Origins PopUp */}
                     <div>
