@@ -16,21 +16,21 @@ import frMessages from '../meta/lang/devexpress/fr.js';
 import trMessages from '../meta/lang/devexpress/tr.js';
 import { locale, loadMessages, formatMessage } from 'devextreme/localization';
 import i18n from './i18n.js'
-import Drawer from 'devextreme-react/drawer';
-import Toolbar from 'devextreme-react/toolbar';
-import TextBox from 'devextreme-react/text-box';
-import Button from 'devextreme-react/button';
-import SelectBox from 'devextreme-react/select-box';
-import { LoadPanel } from 'devextreme-react/load-panel';
-
-import HTMLReactParser from 'html-react-parser';
-
-import Navigation from './navigation.js'
 import Login from './login.js'
 import NdDialog,{dialog} from '../../core/react/devex/dialog';
-import Page from './page';
-
+import ScrollView from 'devextreme-react/scroll-view';
+import NbButton from '../../core/react/bootstrap/button';
 import * as appInfo from '../../../package.json'
+
+import Chart, {
+    ArgumentAxis,
+    Series,
+    CommonSeriesSettings,
+    Label,
+    Legend,
+    Border,
+    Export,
+  } from 'devextreme-react/chart';
 
 export default class App extends React.PureComponent
 {
@@ -48,6 +48,8 @@ export default class App extends React.PureComponent
         this.lang = i18n;  
         moment.locale(localStorage.getItem('lang') == null ? 'tr' : localStorage.getItem('lang'));
         
+        console.log(new Date())
+        console.log(moment(new Date(),'DD.MM.YYYY hh:mm:ss').utcOffset(0).toDate())
         this.style =
         {
             splash_body : 
@@ -147,9 +149,8 @@ export default class App extends React.PureComponent
             this.device = true
         }
 
-        this.core = new core(io(this.device ? 'http://'+localStorage.host : window.origin,{timeout:100000,transports : ['websocket']}));
+        this.core = new core(io(this.device ? 'http://' + localStorage.host : window.origin,{timeout:100000,transports : ['websocket']}));
         this.textValueChanged = this.textValueChanged.bind(this)
-        this.onDbClick = this.onDbClick.bind(this)
         this.core.appInfo = appInfo
         
         if(!App.instance)
@@ -159,7 +160,7 @@ export default class App extends React.PureComponent
 
         this.core.socket.on('connect',async () => 
         {
-            if((await this.core.sql.try()).status == 1)
+            if((await this.core.sql.try()).status > 0)
             {
                 let tmpSplash = 
                 {
@@ -167,17 +168,6 @@ export default class App extends React.PureComponent
                     headers : 'Warning',
                     title: 'Sql sunucuya bağlanılamıyor.',
                 }
-                App.instance.setState({logined:false,connected:false,splash:tmpSplash});
-            }
-            else if((await this.core.sql.try()).status == 2)
-            {
-                let tmpSplash = 
-                {
-                    type : 1,
-                    headers : 'Veritabanı yok. Oluşturmak istermisiniz.',
-                    title: '',
-                }
-
                 App.instance.setState({logined:false,connected:false,splash:tmpSplash});
             }
             else
@@ -191,10 +181,9 @@ export default class App extends React.PureComponent
                 App.instance.setState({splash:tmpSplash});
             }
             //SUNUCUYA BAĞLANDIKDAN SONRA AUTH ILE LOGIN DENETLENIYOR
-            if((await this.core.auth.login(window.sessionStorage.getItem('auth'),'MOB')))
+            if((await this.core.auth.login(window.sessionStorage.getItem('auth'),'TAB')))
             {
                 App.instance.setState({logined:true,connected:true});
-               
             }
             else
             {
@@ -227,48 +216,12 @@ export default class App extends React.PureComponent
             }
         })
     }
-    menuClick(data)
-    {
-        if(typeof data.path != 'undefined')
-        {
-            this.setState({opened: !this.state.opened,page:data})
-        }
-    }
     textValueChanged(e) 
     {      
         if(e.element.id == 'VtAdi')
         {
             this.setState({vtadi: e.value});
         } 
-    }
-    async onDbClick(e)
-    {
-        if(this.state.vtadi == '')
-        {
-            return;
-        }
-
-        let tmpResult = await this.core.sql.createDb(this.state.vtadi)
-        if(tmpResult.msg == "")
-        {
-            let tmpSplash = 
-            {
-                type : 1,
-                headers : 'Veritabanı yok. Oluşturmak istermisiniz.',
-                title: 'Vt kurulumu başarılı.Lütfen config dosyasını kontrol edip sunucuyu restart ediniz.',
-            }
-            App.instance.setState({logined:false,connected:false,splash:tmpSplash});
-        }
-        else
-        {
-            let tmpSplash = 
-            {
-                type : 1,
-                headers : 'Veritabanı yok. Oluşturmak istermisiniz.',
-                title: tmpResult.msg,
-            }
-            App.instance.setState({logined:false,connected:false,splash:tmpSplash});
-        }
     }
     render() 
     {
@@ -295,59 +248,217 @@ export default class App extends React.PureComponent
                     </div>
                 )                
             }
-            else
-            {
-                //VERITABANI OLUŞTURMAK İÇİN AÇILAN EKRAN.
-                return(
-                    <div style={this.style.splash_body}>
-                        <div className="card" style={this.style.splash_box}>
-                            <div className="card-header" style={{height:'40px'}}>{splash.headers}</div>
-                            <div className="card-body">
-                                <div className="row">
-                                    <div className="col-12 pb-2">
-                                        <h6 className="text-center">{splash.title}</h6>
-                                    </div>
-                                </div>
-                                <div className="dx-field">
-                                    <div className="dx-field-label">Veritabanı Adı</div>
-                                    <div className="dx-field-value">
-                                        <TextBox id="VtAdi" showClearButton={true} height='fit-content' valueChangeEvent="keyup" onValueChanged={this.textValueChanged} />
-                                    </div>
-                                </div>
-                                <div className="dx-field">
-                                    <Button
-                                        width={'100%'}
-                                        height='fit-content'
-                                        text="Oluştur"
-                                        type="default"
-                                        stylingMode="contained"
-                                        onClick={this.onDbClick}
-                                    />
-                                </div>
-                            </div>                        
-                        </div>
-                    </div>
-                )                
-            }
         }
+
         if(!logined)
         {
             return <Login />
         }
         
         return (
-            <div>
-                <LoadPanel shadingColor="rgba(0,0,0,0.4)" position={{ of: '#root' }} visible={this.state.isExecute} showIndicator={true} shading={true} showPane={true}/>
-                <div className="top-bar">
-                    <Toolbar className="main-toolbar" height={45} items={this.toolbarItems}/>
+            <div style={{backgroundColor:"#ecf0f1"}}>
+                <div className="top-bar row shadow" style={{backgroundColor: "#0d6efd",height:"65px"}}>
+                    <div className="col-4" style={{paddingLeft:"25px",paddingTop:"10px"}}>
+                        <img src="./css/img/logo.png" width="45px" height="45px"/>
+                    </div>
+                    <div className="col-4" style={{paddingTop:"10px"}} align="center">
+                        <NbButton className="form-group btn btn-primary btn-block" style={{height:"45px",width:"20%"}}
+                        onClick={()=>
+                        {
+                        }}>
+                            <i className="fa-solid fa-bars fa-2x"></i>
+                        </NbButton>
+                    </div>
+                    <div className="col-4" style={{paddingRight:"25px",paddingTop:"10px"}} align="right">
+                        <NbButton className="form-group btn btn-primary btn-block" style={{height:"45px",width:"20%"}}
+                        onClick={()=>
+                        {
+                        }}>
+                            <i class="fa-solid fa-user fa-2x"></i>
+                        </NbButton>
+                    </div>
                 </div>
-                <div>
-                    <Drawer className="main-drawer"  opened={opened} openedStateMode={'shrink'} position={'left'} revealMode={'slide'} component={Navigation} >
-                        <div>
-                            <Page data={this.state.page}/>
+                <ScrollView>
+                    <div className='row'>
+                        <div className='col-12' style={{paddingLeft:"15px",paddingRight:"15px",paddingTop:"70px"}}>
+                            <Chart
+        title="Australian Medal Count"
+        dataSource={[{
+            year: 1896,
+            gold: 2,
+            silver: 0,
+            bronze: 0,
+          }, {
+            year: 1900,
+            gold: 2,
+            silver: 0,
+            bronze: 3,
+          }, {
+            year: 1904,
+            gold: 0,
+            silver: 0,
+            bronze: 0,
+          }, {
+            year: 1908,
+            gold: 1,
+            silver: 2,
+            bronze: 2,
+          }, {
+            year: 1912,
+            gold: 2,
+            silver: 2,
+            bronze: 3,
+          }, {
+            year: 1916,
+            gold: 0,
+            silver: 0,
+            bronze: 0,
+          }, {
+            year: 1920,
+            gold: 0,
+            silver: 2,
+            bronze: 1,
+          }, {
+            year: 1924,
+            gold: 3,
+            silver: 1,
+            bronze: 2,
+          }, {
+            year: 1928,
+            gold: 1,
+            silver: 2,
+            bronze: 1,
+          }, {
+            year: 1932,
+            gold: 3,
+            silver: 1,
+            bronze: 1,
+          }, {
+            year: 1936,
+            gold: 0,
+            silver: 0,
+            bronze: 1,
+          }, {
+            year: 1940,
+            gold: 0,
+            silver: 0,
+            bronze: 0,
+          }, {
+            year: 1944,
+            gold: 0,
+            silver: 0,
+            bronze: 0,
+          }, {
+            year: 1948,
+            gold: 2,
+            silver: 6,
+            bronze: 5,
+          }, {
+            year: 1952,
+            gold: 6,
+            silver: 2,
+            bronze: 3,
+          }, {
+            year: 1956,
+            gold: 13,
+            silver: 8,
+            bronze: 14,
+          }, {
+            year: 1960,
+            gold: 8,
+            silver: 8,
+            bronze: 6,
+          }, {
+            year: 1964,
+            gold: 6,
+            silver: 2,
+            bronze: 10,
+          }, {
+            year: 1968,
+            gold: 5,
+            silver: 7,
+            bronze: 5,
+          }, {
+            year: 1972,
+            gold: 8,
+            silver: 7,
+            bronze: 2,
+          }, {
+            year: 1976,
+            gold: 0,
+            silver: 1,
+            bronze: 4,
+          }, {
+            year: 1980,
+            gold: 2,
+            silver: 2,
+            bronze: 5,
+          }, {
+            year: 1984,
+            gold: 4,
+            silver: 8,
+            bronze: 12,
+          }, {
+            year: 1988,
+            gold: 3,
+            silver: 6,
+            bronze: 5,
+          }, {
+            year: 1992,
+            gold: 7,
+            silver: 9,
+            bronze: 11,
+          }, {
+            year: 1996,
+            gold: 9,
+            silver: 9,
+            bronze: 23,
+          }, {
+            year: 2000,
+            gold: 16,
+            silver: 25,
+            bronze: 17,
+          }, {
+            year: 2004,
+            gold: 17,
+            silver: 16,
+            bronze: 16,
+          }, {
+            year: 2008,
+            gold: 14,
+            silver: 15,
+            bronze: 17,
+          }, {
+            year: 2012,
+            gold: 8,
+            silver: 15,
+            bronze: 12,
+          }, {
+            year: 2016,
+            gold: 8,
+            silver: 11,
+            bronze: 10,
+          }]}
+        id="chart">
+        <Series valueField="bronze" name="Bronze Medals" color="#cd7f32" />
+        <Series valueField="silver" name="Silver Medals" color="#c0c0c0" />
+        <Series valueField="gold" name="Gold Medals" color="#ffd700" />
+        <CommonSeriesSettings
+          argumentField="year"
+          type="steparea">
+          <Border visible={false} />
+        </CommonSeriesSettings>
+        <ArgumentAxis valueMarginsEnabled={false}>
+          <Label format="decimal" />
+        </ArgumentAxis>
+        <Export enabled={true} />
+        <Legend
+          verticalAlignment="bottom"
+          horizontalAlignment="center" />
+      </Chart>
                         </div>
-                    </Drawer>
-                </div>
+                    </div>
+                </ScrollView>
             </div>
         );
     }
