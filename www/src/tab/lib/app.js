@@ -9,7 +9,8 @@ import "@fortawesome/fontawesome-free/js/all.js";
 import "@fortawesome/fontawesome-free/css/all.css";
 
 import React from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import LoadIndicator from 'devextreme-react/load-indicator';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import {core} from '../../core/core.js'
 import enMessages from '../meta/lang/devexpress/en.js';
 import frMessages from '../meta/lang/devexpress/fr.js';
@@ -18,19 +19,9 @@ import { locale, loadMessages, formatMessage } from 'devextreme/localization';
 import i18n from './i18n.js'
 import Login from './login.js'
 import NdDialog,{dialog} from '../../core/react/devex/dialog';
-import ScrollView from 'devextreme-react/scroll-view';
 import NbButton from '../../core/react/bootstrap/button';
+import NbPopUp from '../../core/react/bootstrap/popup';
 import * as appInfo from '../../../package.json'
-
-import Chart, {
-    ArgumentAxis,
-    Series,
-    CommonSeriesSettings,
-    Label,
-    Legend,
-    Border,
-    Export,
-  } from 'devextreme-react/chart';
 
 export default class App extends React.PureComponent
 {
@@ -48,8 +39,6 @@ export default class App extends React.PureComponent
         this.lang = i18n;  
         moment.locale(localStorage.getItem('lang') == null ? 'tr' : localStorage.getItem('lang'));
         
-        console.log(new Date())
-        console.log(moment(new Date(),'DD.MM.YYYY hh:mm:ss').utcOffset(0).toDate())
         this.style =
         {
             splash_body : 
@@ -68,7 +57,6 @@ export default class App extends React.PureComponent
         }
         this.state = 
         {
-            opened : true,
             logined : false,
             connected : false,
             splash : 
@@ -77,63 +65,8 @@ export default class App extends React.PureComponent
                 headers : 'Warning',
                 title : 'Sunucu ile bağlantı kuruluyor.',
             },
-            vtadi : '',
-            isExecute:false,
-            page:{id: 'main_01_001',text: 'main',path: 'main'}
+            page:'dashboard.js'
         }
-        this.toolbarItems = 
-        [
-            {
-                widget : 'dxButton',
-                location : 'before',
-                options : 
-                {
-                    icon : 'menu',
-                    onClick : () => this.setState({opened: !this.state.opened})
-                }
-            },
-            {
-                widget : 'dxSelectBox',
-                location : 'after',
-                options : 
-                {
-                    width: 80,
-                    items: [{id:"en",text:"EN"},{id:"fr",text:"FR"},{id:"tr",text:"TR"}],
-                    valueExpr: 'id',
-                    displayExpr: 'text',
-                    value: localStorage.getItem('lang') == null ? 'tr' : localStorage.getItem('lang'),
-                    onValueChanged: (args) => 
-                    {
-                        localStorage.setItem('lang',args.value)
-                        i18n.changeLanguage(args.value)
-                        locale(args.value)
-                        window.location.reload()
-                    }
-                }
-            },
-            {
-                widget : 'dxButton',
-                location : 'after',
-                options : 
-                {
-                    icon : 'refresh',
-                    onClick : () => window.location.reload()
-                }
-            },
-            {
-                widget : 'dxButton',
-                location : 'after',
-                options : 
-                {
-                    icon : 'fa-solid fa-arrow-right-to-bracket',
-                    onClick : () => 
-                    {                                                        
-                        this.core.auth.logout()
-                        window.location.reload()
-                    }
-                }
-            }
-        ];
 
         if(window.origin.substring(0,4) == 'http')
         {
@@ -150,7 +83,6 @@ export default class App extends React.PureComponent
         }
 
         this.core = new core(io(this.device ? 'http://' + localStorage.host : window.origin,{timeout:100000,transports : ['websocket']}));
-        this.textValueChanged = this.textValueChanged.bind(this)
         this.core.appInfo = appInfo
         
         if(!App.instance)
@@ -216,16 +148,9 @@ export default class App extends React.PureComponent
             }
         })
     }
-    textValueChanged(e) 
-    {      
-        if(e.element.id == 'VtAdi')
-        {
-            this.setState({vtadi: e.value});
-        } 
-    }
     render() 
     {
-        const { opened,logined,connected,splash } = this.state;
+        const { logined,connected,splash } = this.state;
 
         if(!connected)
         {
@@ -254,9 +179,11 @@ export default class App extends React.PureComponent
         {
             return <Login />
         }
-        
+
+        const Page = React.lazy(() => import('../pages/' + this.state.page));
+
         return (
-            <div style={{backgroundColor:"#ecf0f1"}}>
+            <div style={{height:'100%'}}>
                 <div className="top-bar row shadow" style={{backgroundColor: "#0d6efd",height:"65px"}}>
                     <div className="col-4" style={{paddingLeft:"25px",paddingTop:"10px"}}>
                         <img src="./css/img/logo.png" width="45px" height="45px"/>
@@ -265,6 +192,14 @@ export default class App extends React.PureComponent
                         <NbButton className="form-group btn btn-primary btn-block" style={{height:"45px",width:"20%"}}
                         onClick={()=>
                         {
+                            if(!this.popMenu.state.show)
+                            {
+                                this.popMenu.show()
+                            }
+                            else
+                            {
+                                this.popMenu.hide()
+                            }
                         }}>
                             <i className="fa-solid fa-bars fa-2x"></i>
                         </NbButton>
@@ -273,192 +208,105 @@ export default class App extends React.PureComponent
                         <NbButton className="form-group btn btn-primary btn-block" style={{height:"45px",width:"20%"}}
                         onClick={()=>
                         {
+                            
                         }}>
-                            <i class="fa-solid fa-user fa-2x"></i>
+                            <i className="fa-solid fa-user fa-2x"></i>
                         </NbButton>
                     </div>
                 </div>
-                <ScrollView>
-                    <div className='row'>
-                        <div className='col-12' style={{paddingLeft:"15px",paddingRight:"15px",paddingTop:"70px"}}>
-                            <Chart
-        title="Australian Medal Count"
-        dataSource={[{
-            year: 1896,
-            gold: 2,
-            silver: 0,
-            bronze: 0,
-          }, {
-            year: 1900,
-            gold: 2,
-            silver: 0,
-            bronze: 3,
-          }, {
-            year: 1904,
-            gold: 0,
-            silver: 0,
-            bronze: 0,
-          }, {
-            year: 1908,
-            gold: 1,
-            silver: 2,
-            bronze: 2,
-          }, {
-            year: 1912,
-            gold: 2,
-            silver: 2,
-            bronze: 3,
-          }, {
-            year: 1916,
-            gold: 0,
-            silver: 0,
-            bronze: 0,
-          }, {
-            year: 1920,
-            gold: 0,
-            silver: 2,
-            bronze: 1,
-          }, {
-            year: 1924,
-            gold: 3,
-            silver: 1,
-            bronze: 2,
-          }, {
-            year: 1928,
-            gold: 1,
-            silver: 2,
-            bronze: 1,
-          }, {
-            year: 1932,
-            gold: 3,
-            silver: 1,
-            bronze: 1,
-          }, {
-            year: 1936,
-            gold: 0,
-            silver: 0,
-            bronze: 1,
-          }, {
-            year: 1940,
-            gold: 0,
-            silver: 0,
-            bronze: 0,
-          }, {
-            year: 1944,
-            gold: 0,
-            silver: 0,
-            bronze: 0,
-          }, {
-            year: 1948,
-            gold: 2,
-            silver: 6,
-            bronze: 5,
-          }, {
-            year: 1952,
-            gold: 6,
-            silver: 2,
-            bronze: 3,
-          }, {
-            year: 1956,
-            gold: 13,
-            silver: 8,
-            bronze: 14,
-          }, {
-            year: 1960,
-            gold: 8,
-            silver: 8,
-            bronze: 6,
-          }, {
-            year: 1964,
-            gold: 6,
-            silver: 2,
-            bronze: 10,
-          }, {
-            year: 1968,
-            gold: 5,
-            silver: 7,
-            bronze: 5,
-          }, {
-            year: 1972,
-            gold: 8,
-            silver: 7,
-            bronze: 2,
-          }, {
-            year: 1976,
-            gold: 0,
-            silver: 1,
-            bronze: 4,
-          }, {
-            year: 1980,
-            gold: 2,
-            silver: 2,
-            bronze: 5,
-          }, {
-            year: 1984,
-            gold: 4,
-            silver: 8,
-            bronze: 12,
-          }, {
-            year: 1988,
-            gold: 3,
-            silver: 6,
-            bronze: 5,
-          }, {
-            year: 1992,
-            gold: 7,
-            silver: 9,
-            bronze: 11,
-          }, {
-            year: 1996,
-            gold: 9,
-            silver: 9,
-            bronze: 23,
-          }, {
-            year: 2000,
-            gold: 16,
-            silver: 25,
-            bronze: 17,
-          }, {
-            year: 2004,
-            gold: 17,
-            silver: 16,
-            bronze: 16,
-          }, {
-            year: 2008,
-            gold: 14,
-            silver: 15,
-            bronze: 17,
-          }, {
-            year: 2012,
-            gold: 8,
-            silver: 15,
-            bronze: 12,
-          }, {
-            year: 2016,
-            gold: 8,
-            silver: 11,
-            bronze: 10,
-          }]}
-        id="chart">
-        <Series valueField="bronze" name="Bronze Medals" color="#cd7f32" />
-        <Series valueField="silver" name="Silver Medals" color="#c0c0c0" />
-        <Series valueField="gold" name="Gold Medals" color="#ffd700" />
-        <CommonSeriesSettings
-          argumentField="year"
-          type="steparea">
-          <Border visible={false} />
-        </CommonSeriesSettings>
-        <ArgumentAxis valueMarginsEnabled={false}>
-          <Label format="decimal" />
-        </ArgumentAxis>
-        <Export enabled={true} />
-        <Legend
-          verticalAlignment="bottom"
-          horizontalAlignment="center" />
-      </Chart>
+                <React.Suspense fallback={<div style={{position: 'relative',margin:'auto',top: '40%',left:'50%'}}><LoadIndicator height={40} width={40} /></div>}>
+                    <Page/>
+                </React.Suspense>
+                <div>
+                    <NbPopUp id={"popMenu"} parent={this} title={""} fullscreen={true}>
+                        <div>
+                            {/* 1 */}
+                            <div className='row' style={{paddingTop:"30px"}}>
+                                {/* DASHBOARD */}
+                                <div className='col-12'>
+                                    <NbButton className="form-group btn btn-block" style={{height:"100%",width:"100%",backgroundColor:'#0d6efd'}}
+                                    onClick={()=>
+                                    {
+                                        this.popMenu.hide()
+                                        this.setState({page:'dashboard.js'})
+                                    }}>
+                                        <div className='row py-2'>
+                                            <div className='col-12'>
+                                                <i className="fa-solid fa-chart-pie fa-4x" style={{color:'#ecf0f1'}}></i>
+                                            </div>
+                                        </div>
+                                        <div className='row'>
+                                            <div className='col-12'>
+                                                <h3 style={{color:'#ecf0f1'}}>DASHBOARD</h3>
+                                            </div>
+                                        </div>
+                                    </NbButton>
+                                </div>
+                            </div>
+                            {/* 2 */}
+                            <div className='row' style={{paddingTop:"30px"}}>
+                                {/* SATIŞ */}
+                                <div className='col-4'>
+                                    <NbButton className="form-group btn btn-block" style={{height:"100%",width:"100%",backgroundColor:'#0d6efd'}}
+                                    onClick={()=>
+                                    {
+                                        this.popMenu.hide()
+                                        this.setState({page:'sale.js'})
+                                    }}>
+                                        <div className='row py-2'>
+                                            <div className='col-12'>
+                                                <i className="fa-solid fa-scale-balanced fa-4x" style={{color:'#ecf0f1'}}></i>
+                                            </div>
+                                        </div>
+                                        <div className='row'>
+                                            <div className='col-12'>
+                                                <h3 style={{color:'#ecf0f1'}}>SATIŞ</h3>
+                                            </div>
+                                        </div>                                        
+                                    </NbButton>
+                                </div>
+                                {/* MÜŞTERİ EKSTRESİ */}
+                                <div className='col-4'>
+                                    <NbButton className="form-group btn btn-block" style={{height:"100%",width:"100%",backgroundColor:'#0d6efd'}}
+                                    onClick={()=>
+                                    {
+                                        this.setState({page:{id: 'main_01_001',fileName: 'last.js',path: '/tab'}})
+                                    }}>
+                                        <div className='row py-2'>
+                                            <div className='col-12'>
+                                                <i className="fa-solid fa-receipt fa-4x" style={{color:'#ecf0f1'}}></i>
+                                            </div>
+                                        </div>
+                                        <div className='row'>
+                                            <div className='col-12'>
+                                                <h3 style={{color:'#ecf0f1'}}>MÜŞTERİ EKSTRESİ</h3>
+                                            </div>
+                                        </div>                                        
+                                    </NbButton>
+                                </div>
+                                {/* ÜRÜN  */}
+                                <div className='col-4'>
+                                    <NbButton className="form-group btn btn-block" style={{height:"100%",width:"100%",backgroundColor:'#0d6efd'}}
+                                    onClick={()=>
+                                    {
+                                        this.setState({page:{id: 'main_01_001',fileName: 'last.js',path: '/tab'}})
+                                    }}>
+                                        <div className='row py-2'>
+                                            <div className='col-12'>
+                                                <i className="fa-solid fa-circle-info fa-4x" style={{color:'#ecf0f1'}}></i>
+                                            </div>
+                                        </div>
+                                        <div className='row'>
+                                            <div className='col-12'>
+                                                <h3 style={{color:'#ecf0f1'}}>ÜRÜN DETAYI</h3>
+                                            </div>
+                                        </div>                                        
+                                    </NbButton>
+                                </div>
+                            </div>                            
                         </div>
-                    </div>
-                </ScrollView>
+                    </NbPopUp>
+                </div>
             </div>
         );
     }
