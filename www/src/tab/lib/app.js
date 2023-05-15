@@ -97,8 +97,8 @@ export default class App extends React.PureComponent
                 let tmpSplash = 
                 {
                     type : 0,
-                    headers : 'Warning',
-                    title: 'Sql sunucuya bağlanılamıyor.',
+                    headers : this.lang.t('msgWarning'),
+                    title: this.lang.t('msgSqlService1'),
                 }
                 App.instance.setState({logined:false,connected:false,splash:tmpSplash});
             }
@@ -107,8 +107,8 @@ export default class App extends React.PureComponent
                 let tmpSplash = 
                 {
                     type : 0,
-                    headers : 'Warning',
-                    title : 'Sunucu ile bağlantı kuruluyor.',
+                    headers : this.lang.t('msgWarning'),
+                    title : this.lang.t('serverConnection'),
                 }
                 App.instance.setState({splash:tmpSplash});
             }
@@ -237,7 +237,7 @@ export default class App extends React.PureComponent
                                         </div>
                                         <div className='row'>
                                             <div className='col-12'>
-                                                <h3 style={{color:'#ecf0f1'}}>DASHBOARD</h3>
+                                                <h3 style={{color:'#ecf0f1'}}>{this.lang.t('menu.dashboard')}</h3>
                                             </div>
                                         </div>
                                     </NbButton>
@@ -260,7 +260,7 @@ export default class App extends React.PureComponent
                                         </div>
                                         <div className='row'>
                                             <div className='col-12'>
-                                                <h3 style={{color:'#ecf0f1'}}>SATIŞ</h3>
+                                                <h3 style={{color:'#ecf0f1'}}>{this.lang.t('menu.sale')}</h3>
                                             </div>
                                         </div>                                        
                                     </NbButton>
@@ -279,7 +279,7 @@ export default class App extends React.PureComponent
                                         </div>
                                         <div className='row'>
                                             <div className='col-12'>
-                                                <h3 style={{color:'#ecf0f1'}}>MÜŞTERİ EKSTRESİ</h3>
+                                                <h3 style={{color:'#ecf0f1'}}>{this.lang.t('menu.customerAccount')}</h3>
                                             </div>
                                         </div>                                        
                                     </NbButton>
@@ -298,7 +298,7 @@ export default class App extends React.PureComponent
                                         </div>
                                         <div className='row'>
                                             <div className='col-12'>
-                                                <h3 style={{color:'#ecf0f1'}}>ÜRÜN DETAYI</h3>
+                                                <h3 style={{color:'#ecf0f1'}}>{this.lang.t('menu.itemDetail')}</h3>
                                             </div>
                                         </div>                                        
                                     </NbButton>
