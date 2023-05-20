@@ -16,6 +16,10 @@ export default class NdImageUpload extends Base
             textVisible: true,
         };
 
+        this.imageHeight = typeof this.props.imageHeight == 'undefined' ? '' : this.props.imageHeight;
+        this.imageWidth = typeof this.props.imageWidth == 'undefined' ? '' : this.props.imageWidth;
+        this.imageScale = typeof this.props.imageScale == 'undefined' ? false : this.props.imageScale;
+
         this.allowedFileExtensions = ['.jpg', '.jpeg', '.gif', '.png'];
 
         this._onDropZoneEnter = this._onDropZoneEnter.bind(this);
@@ -39,7 +43,6 @@ export default class NdImageUpload extends Base
     }
     _onValueChanged(e)
     {
-        console.log(11)
         const file = e.value[0];
         const fileReader = new FileReader();
 
@@ -52,8 +55,12 @@ export default class NdImageUpload extends Base
             {
                 var canvas = document.createElement('canvas');
                 var ctx = canvas.getContext('2d');
-                canvas.width = 120;
-                canvas.height = canvas.width * (img.height / img.width);
+
+                //PROPS WIDTH VE HEIGHT İÇİN DEĞER VARSA KAYIT EDİLECEK İMAJIN BOYUTU BUNA GÖRE AYARLANIYOR.
+                canvas.width = this.imageWidth == '' ? (this.imageHeight != '' && this.imageScale ? this.imageHeight * (img.height / img.width) : img.width) : this.imageWidth;
+                canvas.height = this.imageHeight == '' ? (this.imageWidth != '' && this.imageScale ? this.imageWidth * (img.height / img.width) : img.height) : this.imageHeight;
+                // canvas.width = 120  
+                // canvas.height = canvas.width * (img.height / img.width);
                 ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
                 var data = canvas.toDataURL('image/png');
                 
@@ -107,14 +114,28 @@ export default class NdImageUpload extends Base
         }
         this.setState({textVisible: false,isDropZoneActive: false,imageSource: e});
     }
+    getResolution()
+    {
+        return new Promise((resolve) => 
+        {
+            var img = new Image();
+        
+            img.onload = function() 
+            {
+                resolve({width:this.width,height:this.height})
+            };
+            img.src = this.state.imageSource;  
+        })
+         
+    }
     render()
     {
         const {isDropZoneActive,imageSource,textVisible} = this.state;
 
         return (
-            <div className="widget-container flex-box">
+            <div className="widget-container flex-box" style={{width:this.props.width,height:this.props.height}}>
                 <div id="dropzone-external" className={`flex-box ${isDropZoneActive ? 'dx-theme-accent-as-border-color dropzone-active' : 'dx-theme-border-color'}`}>
-                    {imageSource && <img style={{width:"100%",height:"100%"}} id="dropzone-image" src={imageSource} alt="" />}
+                    {imageSource && <img id={this.props.id + "img"} style={{width:"100%",height:"100%"}} src={imageSource} alt="" />}
                     {textVisible && <div id="dropzone-text" className="flex-box">
                         <span>Drag & Drop the desired file</span>
                         <span>…or click to browse for a file instead.</span>
@@ -122,7 +143,7 @@ export default class NdImageUpload extends Base
                 </div>
                 <FileUploader
                 id="file-uploader"
-                dialogTrigger="#btnNewImg"
+                dialogTrigger={this.props.buttonTrigger}
                 dropZone="#dropzone-external"
                 multiple={false}
                 uploadMode="useButtons"
