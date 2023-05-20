@@ -34,7 +34,9 @@ export const langTr =
             txtDocDiscount: "Evrak İndirim",
             txtTotalHt : "Ara Toplam",
             txtVat : "Vergi",
-            txtTotal : "Genel Toplam"
+            txtTotal : "Genel Toplam",
+            cmbDepot : "Depo",
+            dtDocDate : "Tarih"
         },
         popCustomer:
         {
@@ -43,6 +45,40 @@ export const langTr =
             btn02 : "Seç",
             clmCode : "KODU",
             clmName : "ADI"
-        }
+        },
+        grdSale: 
+        {
+            clmItemName: "Adı",
+            clmPrice: "Fiyat",
+            clmQuantity : "Adet",
+            clmDiscount : "İndirim",
+            clmDiscountRate : "İndirim %",
+            clmVat : "KDV",
+            clmAmount : "Tutar",
+            clmTotal : "G.Toplam",
+            clmTotalHt : "Ver.Haric Top.",
+        },
+        msgSave:
+        {
+            title: "Dikkat",
+            btn01: "Sipariş",
+            btn02: "Fatura",
+            btn03: "Vazgeç",
+            msg: "Lütfen kaydetmek istediğiniz evrak tipini seçiniz!"
+        },
+        msgSaveResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Kayıt işleminiz başarılı !",
+            msgFailed: "Kayıt işleminiz başarısız !"
+        },
+        msgDelete:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        },
     }
 }

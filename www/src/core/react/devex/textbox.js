@@ -39,6 +39,10 @@ export default class NdTextBox extends Base
     _onInitialized(e) 
     {
         this.dev = e.component;    
+        if(typeof this.props.dt != 'undefined' && typeof this.props.dt.data != 'undefined' && typeof this.props.dt.field != 'undefined')
+        {
+            this.onRefresh()
+        }
     }
     _onValueChanged(e) 
     {       

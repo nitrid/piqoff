@@ -15,6 +15,25 @@ export default class NbItemCard extends NbBase
             name : typeof this.props.name == 'undefined' ? '' : this.props.name,
             price : typeof this.props.price == 'undefined' ? 0 : this.props.price,
         }
+
+        this.data = this.props.data
+        this.value = 0
+        this._onValueChange = this._onValueChange.bind(this);
+    }
+    _onValueChange(e)
+    {
+        if(typeof this.props.onValueChange != 'undefined')
+        {
+            this.props.onValueChange(e);
+        }
+    }
+    setDocItem()
+    {
+        let tmpDt = typeof this.props.dt == 'undefined' ? [] : this.props.dt.where({'ITEM':this.props.data.GUID})
+        if(tmpDt.length > 0)
+        {
+            this["txtQuantity" + this.props.id].value = tmpDt[0].QUANTITY
+        }
     }
     render()
     {
@@ -27,12 +46,12 @@ export default class NbItemCard extends NbBase
                             <h5 className="card-title" style={{marginBottom:'0px',paddingTop:'5px'}}>{this.state.price}€</h5>
                         </div>
                         <div className='col-6'>
-                            <NdSelectBox simple={true} parent={this} id="cmbGroup" height='fit-content' style={{width:'100px'}}
+                            <NdSelectBox simple={true} parent={this} id="cmbGroup" height='fit-content' 
                             displayExpr="NAME"                       
-                            valueExpr="CODE"
-                            value= ""
+                            valueExpr="GUID"
+                            value= {this.props.data.UNIT}
                             searchEnabled={true}
-                            data={{source:[{CODE:'001',NAME:'XXX'}]}}
+                            data={{source:[{GUID:this.props.data.UNIT,NAME:this.props.data.UNIT_NAME}]}}
                             />
                         </div>
                     </div>
@@ -43,8 +62,13 @@ export default class NbItemCard extends NbBase
                     </div>
                     <div className='row'>
                         <div className='col-12'>
-                            <NdTextBox id={"txtQuantity"} parent={this} simple={true} inputAttr={{ class: 'dx-texteditor-input txtbox-center' }}
+                            <NdTextBox id={"txtQuantity" + this.props.id} parent={this} simple={true} inputAttr={{ class: 'dx-texteditor-input txtbox-center' }}
                             value={0}
+                            onChange={(async(e)=>
+                            {
+                                this.props.data.QUANTITY = this["txtQuantity" + this.props.id].value
+                                this._onValueChange(this.props.data)
+                            }).bind(this)}
                             button={
                             [
                                 {
@@ -53,6 +77,12 @@ export default class NbItemCard extends NbBase
                                     location:'before',
                                     onClick:async()=>
                                     {
+                                        if(this["txtQuantity" + this.props.id].value > 0)
+                                        {
+                                            this["txtQuantity" + this.props.id].value = Number(this["txtQuantity" + this.props.id].value) - 1 
+                                            this.props.data.QUANTITY = this["txtQuantity" + this.props.id].value
+                                            this._onValueChange(this.props.data)
+                                        }
                                         
                                     }
                                 },
@@ -62,11 +92,12 @@ export default class NbItemCard extends NbBase
                                     location:'after',
                                     onClick:async()=>
                                     {
-                                        
+                                        this["txtQuantity" + this.props.id].value = Number(this["txtQuantity" + this.props.id].value) + 1 
+                                        this.props.data.QUANTITY = this["txtQuantity" + this.props.id].value
+                                        this._onValueChange(this.props.data)
                                     }
                                 }                                                    
                             ]}>
-                                
                             </NdTextBox>
                         </div>                                            
                     </div>
