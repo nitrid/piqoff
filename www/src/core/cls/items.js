@@ -948,7 +948,10 @@ export class itemImageCls
             ITEM_GUID : '00000000-0000-0000-0000-000000000000',            
             ITEM_CODE : '',            
             ITEM_NAME : '',
-            IMAGE : ''
+            IMAGE : '',
+            SORT : 0,
+            WIDTH : 0,
+            HEIGHT : 0
         }
         
         this._initDs();
@@ -971,9 +974,12 @@ export class itemImageCls
                     "@GUID = @PGUID, " +
                     "@CUSER = @PCUSER, " + 
                     "@ITEM = @PITEM, " + 
-                    "@IMAGE = @PIMAGE ", 
-            param : ['PGUID:string|50','PCUSER:string|25','PITEM:string|50','PIMAGE:string|max'],
-            dataprm : ['GUID','CUSER','ITEM_GUID','IMAGE']
+                    "@IMAGE = @PIMAGE, " + 
+                    "@SORT = @PSORT, " +
+                    "@WIDTH = @PWIDTH, " +
+                    "@HEIGHT = @PHEIGHT ",  
+            param : ['PGUID:string|50','PCUSER:string|25','PITEM:string|50','PIMAGE:string|max','PSORT:int','PWIDTH:int','PHEIGHT:int'],
+            dataprm : ['GUID','CUSER','ITEM_GUID','IMAGE','SORT','WIDTH','HEIGHT']
         } 
         tmpDt.updateCmd = 
         {
@@ -981,9 +987,12 @@ export class itemImageCls
                     "@GUID = @PGUID, " +
                     "@CUSER = @PCUSER, " + 
                     "@ITEM = @PITEM, " + 
-                    "@IMAGE = @PIMAGE ", 
-            param : ['PGUID:string|50','PCUSER:string|25','PITEM:string|50','PIMAGE:string|max'],
-            dataprm : ['GUID','CUSER','ITEM_GUID','IMAGE']
+                    "@IMAGE = @PIMAGE, " + 
+                    "@SORT = @PSORT, " +
+                    "@WIDTH = @PWIDTH, " +
+                    "@HEIGHT = @PHEIGHT ",  
+            param : ['PGUID:string|50','PCUSER:string|25','PITEM:string|50','PIMAGE:string|max','PSORT:int','PWIDTH:int','PHEIGHT:int'],
+            dataprm : ['GUID','CUSER','ITEM_GUID','IMAGE','SORT','WIDTH','HEIGHT']
         }
         tmpDt.deleteCmd = 
         {

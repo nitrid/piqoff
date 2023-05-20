@@ -1442,25 +1442,27 @@ export default class itemCard extends React.PureComponent
                         <div className="col-3">
                             <div className='row'>
                                 <div className='col-12'>                                
-                                    <NdImageUpload id="imgFile" parent={this} dt={{data:this.itemsObj.dt('ITEM_IMAGE'),field:"IMAGE"}}
-                                    onValueChanged={(e)=>
+                                    <NdImageUpload id="imgFile" parent={this} dt={{data:this.itemsObj.dt('ITEM_IMAGE'),field:"IMAGE"}} imageWidth={"120"} imageScale={true} buttonTrigger={"#btnNewImg"}
+                                    onValueChanged={async (e)=>
                                     {
                                         if(this.itemsObj.dt('ITEM_IMAGE').length == 0)
                                         {
                                             this.itemsObj.itemImage.addEmpty();                             
                                         }
-
+                                        let tmpResolution = await this.imgFile.getResolution()
                                         this.itemsObj.dt('ITEM_IMAGE')[0].CUSER = this.core.auth.data.CODE,  
                                         this.itemsObj.dt('ITEM_IMAGE')[0].ITEM_GUID = this.itemsObj.dt()[0].GUID 
                                         this.itemsObj.dt('ITEM_IMAGE')[0].IMAGE = e
+                                        this.itemsObj.dt('ITEM_IMAGE')[0].SORT = 0
+                                        this.itemsObj.dt('ITEM_IMAGE')[0].WIDTH = tmpResolution.width
+                                        this.itemsObj.dt('ITEM_IMAGE')[0].HEIGHT = tmpResolution.height
                                     }
                                     }/>
                                 </div>
                             </div>
                             <div className='row pt-2'>
                             <div className='col-6'>
-                                    <NdButton id="btnNewImg" parent={this} icon="add" type="default" width='100%'
-                                    />
+                                    <NdButton id="btnNewImg" parent={this} icon="add" type="default" width='100%'/>
                                 </div>
                                 <div className='col-6'>
                                     <NdButton id="btnImgDel" parent={this} icon="trash" type="default" width='100%'
@@ -2817,8 +2819,8 @@ export default class itemCard extends React.PureComponent
                             </Form>
                         </NdDialog>
                     </div>     
-                      {/* Açıklama POPUP */}
-                      <div>
+                    {/* Açıklama POPUP */}
+                    <div>
                         <NdPopUp parent={this} id={"popDescription"} 
                         visible={false}
                         showCloseButton={true}
