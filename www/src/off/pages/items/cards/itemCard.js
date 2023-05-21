@@ -2761,7 +2761,7 @@ export default class itemCard extends React.PureComponent
                                         <Series
                                         valueField="QUANTITY"
                                         argumentField="DOC_DATE"
-                                        name="Şatış"
+                                        name="Vente"
                                         type="bar"
                                         color="#008000" />
                                     </Chart>

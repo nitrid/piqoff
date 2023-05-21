@@ -1537,7 +1537,9 @@ export default class purchaseInvoice extends React.PureComponent
                 param : ['VALUE:string|50'],
                 value : [pdata[i][tmpShema.CODE]]
             }
+            console.log(pdata[i][tmpShema.CODE])
             let tmpData = await this.core.sql.execute(tmpQuery) 
+            console.log(tmpData.result.recordset)
             if(tmpData.result.recordset.length > 0)
             {               
                 let tmpDocItems = {...this.docObj.docItems.empty}

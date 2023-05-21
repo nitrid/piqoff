@@ -414,7 +414,7 @@ export default class itemGrpSalesReport extends React.PureComponent
                                             <Series
                                             valueField="TOTAL"
                                             argumentField="ITEM_GRP_CODE"
-                                            name="Şatış"
+                                            name="Vente"
                                             type="bar"
                                             color="#008000" />
                                     </Chart>

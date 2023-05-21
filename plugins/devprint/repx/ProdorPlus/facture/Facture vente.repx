@@ -413,10 +413,10 @@
         <Item5 Ref="214" ControlType="XRLabel" Name="label50" Multiline="true" Text="          EXTRAIT DE NOS CONDITIONS GENERALES DE VENTE : - Escompte pour paiement anticipé : Néant - Pénalité pour paiement tardif : 3 x taux de l'intérêt légal. &#xD;&#xA;Indémnité forfaitaire pour frais de recouvrement : 40€. En cas de contestation quelconque, le tribunal de commerce dont dépend le siège de la société est le seul compétent." TextAlignment="TopJustify" SizeF="786.874939,28.125" LocationFloat="0.5800673, 0" Font="Arial, 7.2pt" Padding="2,2,0,0,100" Borders="All">
           <StylePriority Ref="215" UseFont="false" UseBorders="false" UseTextAlignment="false" />
         </Item5>
-        <Item6 Ref="216" ControlType="XRLabel" Name="label51" Multiline="true" Text="Factures No Soldées" TextAlignment="TopLeft" SizeF="270.9583,11.958313" LocationFloat="2.33005953, 109.277336" Font="Arial, 8pt" ForeColor="Black" Padding="2,2,0,0,100">
+        <Item6 Ref="216" ControlType="XRLabel" Name="label51" Multiline="true" Text="Factures Non Soldées" TextAlignment="TopLeft" SizeF="270.9583,11.958313" LocationFloat="2.33005953, 109.277336" Font="Arial, 8pt" ForeColor="Black" Padding="2,2,0,0,100">
           <StylePriority Ref="217" UseFont="false" UseForeColor="false" UseTextAlignment="false" />
         </Item6>
-        <Item7 Ref="218" ControlType="XRLabel" Name="label52" Multiline="true" Text="Total de Poids de Facturés :" TextAlignment="TopRight" SizeF="180.669983,23.00003" LocationFloat="1.66331923, 219.17514" Font="Arial, 10pt" Padding="2,2,0,0,100">
+        <Item7 Ref="218" ControlType="XRLabel" Name="label52" Multiline="true" Text="Total de Poids Facturés :" TextAlignment="TopRight" SizeF="180.669983,23.00003" LocationFloat="1.66331923, 219.17514" Font="Arial, 10pt" Padding="2,2,0,0,100">
           <StylePriority Ref="219" UseFont="false" UseTextAlignment="false" />
         </Item7>
         <Item8 Ref="220" ControlType="XRLabel" Name="label53" TextFormatString="{0:0.00KG}" Multiline="true" CanGrow="false" TextAlignment="TopRight" SizeF="142.485641,23" LocationFloat="184.323044, 219.17514" Font="Arial, 10pt" Padding="2,2,0,0,100">
