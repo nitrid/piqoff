@@ -4,7 +4,6 @@ import ScrollView from 'devextreme-react/scroll-view';
 import NbButton from '../../core/react/bootstrap/button';
 import NdTextBox,{ Button,Validator, NumericRule, RequiredRule, CompareRule } from '../../core/react/devex/textbox'
 import NdSelectBox from '../../core/react/devex/selectbox'
-import NbItemCard from '../tools/itemCard';
 import NbPopUp from '../../core/react/bootstrap/popup';
 import Form, { Label,Item, EmptyItem } from 'devextreme-react/form';
 import Toolbar from 'devextreme-react/toolbar';
@@ -12,21 +11,16 @@ import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export,C
 import NdDatePicker from '../../core/react/devex/datepicker.js';
 import NdPopGrid from '../../core/react/devex/popgrid.js';
 import NdDialog, { dialog } from '../../core/react/devex/dialog.js';
-
+import NbItemView from '../tools/itemView.js';
 
 import { docCls,docOrdersCls, docCustomerCls,docExtraCls }from '../../core/cls/doc.js';
 import { datatable } from '../../core/core.js';
-
 
 export default class Sale extends React.PureComponent
 {
     constructor(props)
     {
         super(props)
-        this.state = 
-        {
-            items : []
-        }
         this.core = App.instance.core;
         this.t = App.instance.lang.getFixedT(null,null,"sale")
         this.lang = App.instance.lang;
@@ -56,7 +50,6 @@ export default class Sale extends React.PureComponent
     }
     async getItems()
     {
-        this.setState({items:[]})
         let tmpQuery = 
         {
             query :"SELECT TOP 25  GUID,CODE,NAME,VAT," +
@@ -72,9 +65,10 @@ export default class Sale extends React.PureComponent
         let tmpData = await this.core.sql.execute(tmpQuery) 
         if(tmpData.result.recordset.length > 0)
         {
-            this.setState({items:tmpData.result.recordset})
+            console.log(111)
+            this.itemView.items = tmpData.result.recordset
         }
-        this.setAllItemCard()
+        this.itemView.setItemAll()
     }
     async _customerSearch()
     {
@@ -121,6 +115,7 @@ export default class Sale extends React.PureComponent
     }
     onValueChange(e)
     {
+        console.log(e)
         let tmpLine = this.docLines.where({'ITEM':e.GUID})
         if(tmpLine.length > 0)
         {
@@ -169,14 +164,7 @@ export default class Sale extends React.PureComponent
             this.docLines[i].OUTPUT = this.docObj.dt()[0].OUTPUT
             this.docLines[i].DOC_DATE = this.docObj.dt()[0].DOC_DATE
         }
-    }
-    async setAllItemCard()
-    {
-        let itemsElement = Object.keys(this).filter(key => key.startsWith("itemCard")).map((key) =>
-        {
-            this[key].setDocItem()
-        });
-    }
+    }    
     async orderSave()
     {
         let tmpQuery = 
@@ -364,18 +352,11 @@ export default class Sale extends React.PureComponent
                 </div>
                 <div style={{paddingLeft:"15px",paddingRight:"15px",paddingTop:"65px"}}>
                     <ScrollView showScrollbar={'never'} useNative={false}>
-                        <div className='row pt-3' style={{paddingBottom:"200px"}}>
-                            {   this.state.items.map((function(object, i){
-                                return (
-                                            <div className='col-lg-3 col-md-4 pb-2' key={'div'+i}>
-                                                <NbItemCard id={'itemCard'+i} parent={this} key={'itemCard'+i} price={object.PRICE} name={object.NAME}
-                                                image={object.IMAGES} data={object} dt={this.docLines}
-                                                onValueChange={this.onValueChange}
-                                                /> 
-                                            </div>
-                                        )
-                            }).bind(this))}
-                       </div>
+                        <div className='row'>
+                            <div className='col-12'>
+                                <NbItemView id="itemView" parent={this} dt={this.docLines} onValueChange={this.onValueChange}/>
+                            </div>
+                        </div>
                         {/* CART */}
                         <div>
                             <NbPopUp id={"popCart"} parent={this} title={""} fullscreen={true}>
@@ -447,7 +428,7 @@ export default class Sale extends React.PureComponent
                                                     onClick={()=>
                                                     {
                                                         this.popCart.hide();
-                                                        this.setAllItemCard()
+                                                        this.itemView.setItemAll()
                                                     }}>
                                                         <i className="fa-solid fa-xmark fa-1x"></i>
                                                     </NbButton>
