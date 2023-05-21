@@ -30,7 +30,6 @@ export default class Sale extends React.PureComponent
         this._customerSearch = this._customerSearch.bind(this)
         this.onValueChange = this.onValueChange.bind(this)
         this.getItems = this.getItems.bind(this)
-
     }
     async componentDidMount()
     {
@@ -115,7 +114,6 @@ export default class Sale extends React.PureComponent
     }
     onValueChange(e)
     {
-        console.log(e)
         let tmpLine = this.docLines.where({'ITEM':e.GUID})
         if(tmpLine.length > 0)
         {
@@ -137,7 +135,7 @@ export default class Sale extends React.PureComponent
         {
             this.addItem(e)
         }
-    }
+    }    
     async _calculateTotal()
     {
         let tmpVat = 0
@@ -354,7 +352,7 @@ export default class Sale extends React.PureComponent
                     <ScrollView showScrollbar={'never'} useNative={false}>
                         <div className='row'>
                             <div className='col-12'>
-                                <NbItemView id="itemView" parent={this} dt={this.docLines} onValueChange={this.onValueChange}/>
+                                <NbItemView id="itemView" parent={this} dt={this.docLines} onValueChange={this.onValueChange} onClick={this.onClick}/>
                             </div>
                         </div>
                         {/* CART */}
@@ -738,7 +736,7 @@ export default class Sale extends React.PureComponent
                                     </div>
                                 </div>
                             </NbPopUp>
-                        </div>
+                        </div>                        
                     </ScrollView>
                 </div>
             </div>

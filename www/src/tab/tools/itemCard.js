@@ -1,7 +1,6 @@
 import React from "react";
 import NbBase from "../../core/react/bootstrap/base.js";
 import NdTextBox,{ Button } from '../../core/react/devex/textbox'
-import NdPopUp from "../../core/react/devex/popup.js";
 import NdSelectBox from '../../core/react/devex/selectbox'
 
 export default class NbItemCard extends NbBase
@@ -19,12 +18,20 @@ export default class NbItemCard extends NbBase
         this.data = this.props.data
         this.value = 0
         this._onValueChange = this._onValueChange.bind(this);
+        this._onClick = this._onClick.bind(this);
     }
     _onValueChange(e)
     {
         if(typeof this.props.onValueChange != 'undefined')
         {
             this.props.onValueChange(e);
+        }
+    }
+    _onClick()
+    {
+        if(typeof this.props.onClick != 'undefined')
+        {
+            this.props.onClick();
         }
     }
     setDocItem()
@@ -39,7 +46,11 @@ export default class NbItemCard extends NbBase
     {
         return(
             <div className="card shadow-sm">
-                <img src={this.state.image} className="card-img-top" height={'280px'}/>
+                <img src={this.state.image} className="card-img-top" height={'280px'} 
+                onClick={()=>
+                {
+                    this._onClick()
+                }}/>
                 <div className="card-body">
                     <div className='row pb-2'>
                         <div className='col-6'>
