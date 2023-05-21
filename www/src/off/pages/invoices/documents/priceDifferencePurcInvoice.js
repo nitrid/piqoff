@@ -3127,7 +3127,7 @@ export default class priceDifferenceInvoice extends React.PureComponent
                     title={this.t("pg_contractGrid.title")} //
                     >
                         <Column dataField="REFERANS" caption={this.t("pg_contractGrid.clmReferans")} width={200} defaultSortOrder="asc"/>
-                        <Column dataField="TOTAL" caption={this.t("pg_contractGrid.clmTotal")} width={300} />
+                        <Column dataField="TOTAL" caption={this.t("pg_contractGrid.clmTotal")} width={300} format={{ style: "currency", currency: "EUR",precision: 3}}/>
                         <Column dataField="DOC_DATE_CONVERT" caption={this.t("pg_contractGrid.clmDocDate")} width={300} />
                     </NdPopGrid>
                     {/* Stok Grid */}
@@ -3749,8 +3749,8 @@ export default class priceDifferenceInvoice extends React.PureComponent
                         <Column dataField="ITEM_CODE" caption={this.t("pg_proformaGrid.clmCode")} width={200}/>
                         <Column dataField="ITEM_NAME" caption={this.t("pg_proformaGrid.clmName")} width={450} />
                         <Column dataField="QUANTITY" caption={this.t("pg_proformaGrid.clmQuantity")} width={200} />
-                        <Column dataField="PRICE" caption={this.t("pg_proformaGrid.clmPrice")} width={200} />
-                        <Column dataField="TOTAL" caption={this.t("pg_proformaGrid.clmTotal")} width={200} />
+                        <Column dataField="PRICE" caption={this.t("pg_proformaGrid.clmPrice")} width={200} format={{ style: "currency", currency: "EUR",precision: 3}}/>
+                        <Column dataField="TOTAL" caption={this.t("pg_proformaGrid.clmTotal")} width={200} format={{ style: "currency", currency: "EUR",precision: 3}}/>
                     </NdPopGrid>
                     {/* Adres Seçim POPUP */}
                     <NdPopGrid id={"pg_adress"} showCloseButton={false} parent={this} container={"#root"}
