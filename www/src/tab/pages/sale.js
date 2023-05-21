@@ -194,27 +194,27 @@ export default class Sale extends React.PureComponent
         this.docObj.dt()[0].DOC_TYPE = 60
         for (let i = 0; i < this.docLines.length; i++) 
         {
-            let tmpdocOrders = {...this.docObj.docOrders.empty}
-                tmpdocOrders.DOC_GUID = this.docLines[i].DOC_GUID
-                tmpdocOrders.TYPE = this.docObj.dt()[0].TYPE
-                tmpdocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                tmpdocOrders.LINE_NO = this.docLines[i].LINE_NO
-                tmpdocOrders.REF = this.docObj.dt()[0].REF
-                tmpdocOrders.REF_NO = this.docObj.dt()[0].REF_NO
-                tmpdocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
-                tmpdocOrders.INPUT = this.docObj.dt()[0].INPUT
-                tmpdocOrders.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                tmpdocOrders.ITEM_CODE = this.docLines[i].ITEM_CODE
-                tmpdocOrders.ITEM = this.docLines[i].ITEM
-                tmpdocOrders.ITEM_NAME = this.docLines[i].ITEM_NAME
-                tmpdocOrders.VAT_RATE = this.docLines[i].VAT_RATE
-                tmpdocOrders.QUANTITY = this.docLines[i].QUANTITY
-                tmpdocOrders.PRICE = this.docLines[i].PRICE
-                tmpdocOrders.AMOUNT = this.docLines[i].AMOUNT
-                tmpdocOrders.TOTALHT = this.docLines[i].TOTALHT
-                tmpdocOrders.VAT = this.docLines[i].VAT
-                tmpdocOrders.TOTAL = this.docLines[i].TOTAL
-                this.docObj.docOrders.addEmpty(tmpdocOrders)
+            let tmpDocOrders = {...this.docObj.docOrders.empty}
+            tmpDocOrders.DOC_GUID = this.docLines[i].DOC_GUID
+            tmpDocOrders.TYPE = this.docObj.dt()[0].TYPE
+            tmpDocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+            tmpDocOrders.LINE_NO = this.docLines[i].LINE_NO
+            tmpDocOrders.REF = this.docObj.dt()[0].REF
+            tmpDocOrders.REF_NO = this.docObj.dt()[0].REF_NO
+            tmpDocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
+            tmpDocOrders.INPUT = this.docObj.dt()[0].INPUT
+            tmpDocOrders.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+            tmpDocOrders.ITEM_CODE = this.docLines[i].ITEM_CODE
+            tmpDocOrders.ITEM = this.docLines[i].ITEM
+            tmpDocOrders.ITEM_NAME = this.docLines[i].ITEM_NAME
+            tmpDocOrders.VAT_RATE = this.docLines[i].VAT_RATE
+            tmpDocOrders.QUANTITY = this.docLines[i].QUANTITY
+            tmpDocOrders.PRICE = this.docLines[i].PRICE
+            tmpDocOrders.AMOUNT = this.docLines[i].AMOUNT
+            tmpDocOrders.TOTALHT = this.docLines[i].TOTALHT
+            tmpDocOrders.VAT = this.docLines[i].VAT
+            tmpDocOrders.TOTAL = this.docLines[i].TOTAL
+            this.docObj.docOrders.addEmpty(tmpDocOrders)
         }
 
         let tmpConfObj1 =
@@ -264,26 +264,26 @@ export default class Sale extends React.PureComponent
         for (let i = 0; i < this.docLines.length; i++) 
         {
             let tmpDocItems = {...this.docObj.docItems.empty}
-                tmpDocItems.DOC_GUID = this.docLines[i].DOC_GUID
-                tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
-                tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                tmpDocItems.LINE_NO = this.docLines[i].LINE_NO
-                tmpDocItems.REF = this.docObj.dt()[0].REF
-                tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
-                tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
-                tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
-                tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                tmpDocItems.ITEM_CODE = this.docLines[i].ITEM_CODE
-                tmpDocItems.ITEM = this.docLines[i].ITEM
-                tmpDocItems.ITEM_NAME = this.docLines[i].ITEM_NAME
-                tmpDocItems.VAT_RATE = this.docLines[i].VAT_RATE
-                tmpDocItems.QUANTITY = this.docLines[i].QUANTITY
-                tmpDocItems.PRICE = this.docLines[i].PRICE
-                tmpDocItems.AMOUNT = this.docLines[i].AMOUNT
-                tmpDocItems.TOTALHT = this.docLines[i].TOTALHT
-                tmpDocItems.VAT = this.docLines[i].VAT
-                tmpDocItems.TOTAL = this.docLines[i].TOTAL
-                this.docObj.docOrders.addEmpty(tmpDocItems)
+            tmpDocItems.DOC_GUID = this.docLines[i].DOC_GUID
+            tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+            tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+            tmpDocItems.LINE_NO = this.docLines[i].LINE_NO
+            tmpDocItems.REF = this.docObj.dt()[0].REF
+            tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+            tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+            tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+            tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+            tmpDocItems.ITEM_CODE = this.docLines[i].ITEM_CODE
+            tmpDocItems.ITEM = this.docLines[i].ITEM
+            tmpDocItems.ITEM_NAME = this.docLines[i].ITEM_NAME
+            tmpDocItems.VAT_RATE = this.docLines[i].VAT_RATE
+            tmpDocItems.QUANTITY = this.docLines[i].QUANTITY
+            tmpDocItems.PRICE = this.docLines[i].PRICE
+            tmpDocItems.AMOUNT = this.docLines[i].AMOUNT
+            tmpDocItems.TOTALHT = this.docLines[i].TOTALHT
+            tmpDocItems.VAT = this.docLines[i].VAT
+            tmpDocItems.TOTAL = this.docLines[i].TOTAL
+            this.docObj.docOrders.addEmpty(tmpDocItems)
         }
 
         let tmpConfObj1 =
