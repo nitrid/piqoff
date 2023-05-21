@@ -135,7 +135,7 @@ export default class Sale extends React.PureComponent
         {
             this.addItem(e)
         }
-    }    
+    }        
     async _calculateTotal()
     {
         let tmpVat = 0
@@ -352,7 +352,7 @@ export default class Sale extends React.PureComponent
                     <ScrollView showScrollbar={'never'} useNative={false}>
                         <div className='row'>
                             <div className='col-12'>
-                                <NbItemView id="itemView" parent={this} dt={this.docLines} onValueChange={this.onValueChange} onClick={this.onClick}/>
+                                <NbItemView id="itemView" parent={this} dt={this.docLines} onValueChange={this.onValueChange}/>
                             </div>
                         </div>
                         {/* CART */}
@@ -736,7 +736,7 @@ export default class Sale extends React.PureComponent
                                     </div>
                                 </div>
                             </NbPopUp>
-                        </div>                        
+                        </div>                                               
                     </ScrollView>
                 </div>
             </div>
