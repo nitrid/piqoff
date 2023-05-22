@@ -46,7 +46,7 @@ export default class NbItemCard extends NbBase
     {
         return(
             <div className="card shadow-sm">
-                <img src={this.state.image} className="card-img-top" height={'280px'} 
+                <img src={this.state.image} className="card-img-top" height={'220px'} 
                 onClick={()=>
                 {
                     this._onClick()

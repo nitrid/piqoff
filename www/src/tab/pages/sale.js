@@ -55,7 +55,8 @@ export default class Sale extends React.PureComponent
             "WHERE STATUS = 1 AND IMAGE <> '' AND " +
             " UPPER(NAME) LIKE UPPER(@VAL + '%') AND ((MAIN_GRP = @MAIN_GRP) OR (@MAIN_GRP = ''))",
             param : ['VAL:string|50','MAIN_GRP:string|50'],
-            value : [this.txtSearch.value,this.cmbGroup.value]
+            value : [this.txtSearch.value,this.cmbGroup.value],
+            buffer : true
         }
         let tmpData = await this.core.sql.execute(tmpQuery) 
         if(tmpData.result.recordset.length > 0)
