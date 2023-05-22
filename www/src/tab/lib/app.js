@@ -183,7 +183,7 @@ export default class App extends React.PureComponent
         const Page = React.lazy(() => import('../pages/' + this.state.page));
 
         return (
-            <div style={{height:'100%'}}>
+            <div style={{height:'90%'}}>
                 <div className="top-bar row shadow" style={{backgroundColor: "#0d6efd",height:"65px"}}>
                     <div className="col-4" style={{paddingLeft:"25px",paddingTop:"10px"}}>
                         <img src="./css/img/logo.png" width="45px" height="45px"/>

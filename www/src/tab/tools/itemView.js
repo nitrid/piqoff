@@ -47,7 +47,6 @@ export default class NbItemView extends NbBase
             this.props.onClick();
         }
         this.itemPopUp.open()
-        console.log(1111)
     }
     render()
     {
@@ -62,11 +61,11 @@ export default class NbItemView extends NbBase
                                 image={object.IMAGE} data={object} dt={this.props.dt} onValueChange={this._onValueChange} onClick={this._onClick}/>
                             </div>)
                     }).bind(this))}                
-                </div>
+                </div>    
                 {/* CARD POPUP */}
                 <div>
                     <NbItemPopUp id={"itemPopUp"} parent={this}/>
-                </div>
+                </div>             
             </div>
         )
     }
