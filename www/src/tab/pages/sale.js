@@ -51,12 +51,8 @@ export default class Sale extends React.PureComponent
     {
         let tmpQuery = 
         {
-            query :"SELECT TOP 25  GUID,CODE,NAME,VAT," +
-            "ISNULL((SELECT [dbo].[FN_PRICE_SALE_VAT_EXT](GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000',NULL)),0) AS PRICE," + 
-            "(SELECT IMAGE FROM ITEM_IMAGE_VW_01 WHERE ITEM_IMAGE_VW_01.ITEM_GUID = ITEMS_VW_01.GUID) AS IMAGES, " +
-            "(SELECT TOP 1 GUID FROM ITEM_UNIT_VW_01 WHERE TYPE = 0 AND ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID) AS UNIT, " +
-            "(SELECT TOP 1 NAME FROM ITEM_UNIT_VW_01 WHERE TYPE = 0 AND ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID) AS UNIT_NAME " + 
-            " FROM ITEMS_VW_01 WHERE (SELECT IMAGE FROM ITEM_IMAGE_VW_01 WHERE ITEM_IMAGE_VW_01.ITEM_GUID = ITEMS_VW_01.GUID) <> '' AND STATUS = 1 AND " +
+            query :"SELECT TOP 25  GUID,CODE,NAME,VAT,PRICE,IMAGE,UNIT,UNIT_NAME FROM ITEMS_VW_02 " +
+            "WHERE STATUS = 1 AND IMAGE <> '' AND " +
             " UPPER(NAME) LIKE UPPER(@VAL + '%') AND ((MAIN_GRP = @MAIN_GRP) OR (@MAIN_GRP = ''))",
             param : ['VAL:string|50','MAIN_GRP:string|50'],
             value : [this.txtSearch.value,this.cmbGroup.value]
@@ -64,8 +60,11 @@ export default class Sale extends React.PureComponent
         let tmpData = await this.core.sql.execute(tmpQuery) 
         if(tmpData.result.recordset.length > 0)
         {
-            console.log(111)
             this.itemView.items = tmpData.result.recordset
+        }
+        else
+        {
+            this.itemView.items =  []
         }
         this.itemView.setItemAll()
     }
