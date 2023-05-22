@@ -7,6 +7,7 @@ import NdSelectBox from '../../core/react/devex/selectbox'
 import NbPopUp from '../../core/react/bootstrap/popup';
 import Form, { Label,Item, EmptyItem } from 'devextreme-react/form';
 import Toolbar from 'devextreme-react/toolbar';
+import { LoadPanel } from 'devextreme-react/load-panel';
 import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export,ColumnChooser,StateStoring} from '../../core/react/devex/grid.js';
 import NdDatePicker from '../../core/react/devex/datepicker.js';
 import NdPopGrid from '../../core/react/devex/popgrid.js';
@@ -26,6 +27,14 @@ export default class Sale extends React.PureComponent
         this.lang = App.instance.lang;
         this.docObj = new docCls();
         this.docLines = new datatable()
+        this.tmpPageLimit = 21
+        this.tmpStartPage = 0
+        this.tmpEndPage = 0
+        this.bufferId = ''
+        this.state = 
+        {
+            isExecute : false
+        }
 
         this._customerSearch = this._customerSearch.bind(this)
         this.onValueChange = this.onValueChange.bind(this)
@@ -49,25 +58,48 @@ export default class Sale extends React.PureComponent
     }
     async getItems()
     {
+        this.setState({isExecute:true})
+        this.tmpPageLimit = 21
+        this.tmpStartPage = 0
+        this.tmpEndPage = 0
+        this.bufferId = ''
+        this.itemView.items = []
         let tmpQuery = 
         {
-            query :"SELECT TOP 25  GUID,CODE,NAME,VAT,PRICE,IMAGE,UNIT,UNIT_NAME FROM ITEMS_VW_02 " +
+            query :"SELECT  GUID,CODE,NAME,VAT,PRICE,IMAGE,UNIT,UNIT_NAME FROM ITEMS_VW_02 " +
             "WHERE STATUS = 1 AND IMAGE <> '' AND " +
             " UPPER(NAME) LIKE UPPER(@VAL + '%') AND ((MAIN_GRP = @MAIN_GRP) OR (@MAIN_GRP = ''))",
             param : ['VAL:string|50','MAIN_GRP:string|50'],
             value : [this.txtSearch.value,this.cmbGroup.value],
             buffer : true
         }
-        let tmpData = await this.core.sql.execute(tmpQuery) 
-        if(tmpData.result.recordset.length > 0)
+        let tmpBuf = await this.core.sql.execute(tmpQuery) 
+        if(typeof tmpBuf.result.err == 'undefined')
         {
-            this.itemView.items = tmpData.result.recordset
+            this.bufferId = tmpBuf.result.bufferId
+            this.tmpEndPage = this.tmpStartPage + this.tmpPageLimit
+            let tmpItems = await this.core.sql.buffer({start : this.tmpStartPage,end : this.tmpEndPage,bufferId : this.bufferId})  
+            for (let i = 0; i < tmpItems.result.recordset.length; i++) 
+            {
+                this.itemView.items.push(tmpItems.result.recordset[i])
+            }
+            this.itemView.items = this.itemView.items
+            this.tmpStartPage = this.tmpStartPage + this.tmpPageLimit
         }
-        else
+        this.setState({isExecute:false})
+    }
+    async loadMore()
+    {
+        this.setState({isExecute:true})
+        this.tmpEndPage = this.tmpStartPage + this.tmpPageLimit
+        let tmpItems = await this.core.sql.buffer({start : this.tmpStartPage,end : this.tmpEndPage,bufferId : this.bufferId})  
+        for (let i = 0; i < tmpItems.result.recordset.length; i++) 
         {
-            this.itemView.items =  []
+            this.itemView.items.push(tmpItems.result.recordset[i])
         }
-        this.itemView.setItemAll()
+        this.itemView.items = this.itemView.items
+        this.tmpStartPage = this.tmpStartPage + this.tmpPageLimit
+        this.setState({isExecute:false})
     }
     async _customerSearch()
     {
@@ -292,6 +324,14 @@ export default class Sale extends React.PureComponent
     {
         return(
             <div>
+                <LoadPanel
+                shadingColor="rgba(0,0,0,0)"
+                position={{ of: '#root' }}
+                visible={this.state.isExecute}
+                showIndicator={true}
+                shading={true}
+                showPane={true}
+                />
                 <div style={{height:'50px',backgroundColor:'#f5f6fa',top:'65px',position:'sticky',borderBottom:'1px solid #7f8fa6'}}>
                     <div className="row">
                         <div className="col-1" align="left" style={{paddingLeft:'20px',paddingTop:'10px'}}>
@@ -307,8 +347,6 @@ export default class Sale extends React.PureComponent
                             <NbButton className="form-group btn btn-block btn-outline-secondary" style={{height:"100%",width:"100%"}}
                             onClick={()=>
                             {
-                                this.popMenu.hide()
-                                this.setState({page:'dashboard.js'})
                             }}>
                                 <i className="fa-solid fa-filter"></i>
                             </NbButton>
@@ -353,6 +391,17 @@ export default class Sale extends React.PureComponent
                         <div className='row'>
                             <div className='col-12'>
                                 <NbItemView id="itemView" parent={this} dt={this.docLines} onValueChange={this.onValueChange}/>
+                            </div>
+                        </div>
+                        <div className='row'>                            
+                            <div className='col-5 offset-5' style={{paddingBottom:"100px"}}>
+                                <NbButton className="form-group btn btn-primary btn-block"
+                                onClick={()=>
+                                {
+                                    this.loadMore()
+                                }}>
+                                    <i className="">{this.t("loadMore")}</i>
+                                </NbButton>
                             </div>
                         </div>
                         {/* CART */}

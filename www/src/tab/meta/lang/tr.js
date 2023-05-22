@@ -26,6 +26,7 @@ export const langTr =
     },
     sale:  // "Satış"
     {
+        loadMore : "Daha Fazla Göster",
         popCart:
         {
             txtCustomer: "Müşteri",

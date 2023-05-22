@@ -52,7 +52,7 @@ export default class NbItemView extends NbBase
     {
         return(
             <div>
-                <div className='row pt-3' style={{paddingBottom:"200px"}}>
+                <div className='row pt-3' style={{paddingBottom:"20px"}}>
                     {this.state.items.map((function(object, i)
                     {
                         return (
