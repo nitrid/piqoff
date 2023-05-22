@@ -281,7 +281,7 @@ export default class itemImage extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <h3>Küçük Resim</h3>
+                            <h3>Küçük Resim - 120X90</h3>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">  
@@ -313,7 +313,7 @@ export default class itemImage extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <h3>Büyük Resim</h3>
+                            <h3>Büyük Resim - 620X465</h3>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">  
