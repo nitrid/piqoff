@@ -664,7 +664,7 @@ export default class CustomerCard extends React.PureComponent
                                     <Label text={this.t("txtEmail")} alignment="right" />
                                         <NdTextBox id="txtEmail" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"EMAIL",filter:{TYPE:0}}}
                                         upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                        maxLength={32}
+                                        maxLength={100}
                                          access={this.access.filter({ELEMENT:'txtEmail',USERS:this.user.CODE})}
                                         />
                                 </Item>

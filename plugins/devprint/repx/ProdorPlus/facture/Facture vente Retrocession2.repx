@@ -362,19 +362,19 @@
                   </ExpressionBindings>
                   <StylePriority Ref="190" UseTextAlignment="false" />
                 </Item7>
-                <Item8 Ref="191" ControlType="XRTableCell" Name="tableCell16" Weight="0.10518690913970562" TextFormatString="{0:0.00€}" Text="€" TextAlignment="MiddleRight" StyleName="DetailData1" Font="Arial, 7.5pt">
+                <Item8 Ref="191" ControlType="XRTableCell" Name="tableCell16" Weight="0.10518690913970562" TextFormatString="{0:0.00}€" Text="€" TextAlignment="MiddleRight" StyleName="DetailData1" Font="Arial, 7.5pt">
                   <ExpressionBindings>
                     <Item1 Ref="192" EventName="BeforePrint" PropertyName="Text" Expression="[PRICE]" />
                   </ExpressionBindings>
                   <StylePriority Ref="193" UseFont="false" UseTextAlignment="false" />
                 </Item8>
-                <Item9 Ref="194" ControlType="XRTableCell" Name="tableCell36" Weight="0.10045916795426155" TextFormatString="{0:0.00€}" Multiline="true" TextAlignment="MiddleRight" StyleName="DetailData1" Font="Arial, 7.5pt">
+                <Item9 Ref="194" ControlType="XRTableCell" Name="tableCell36" Weight="0.10045916795426155" TextFormatString="{0:0.00}€" Multiline="true" TextAlignment="MiddleRight" StyleName="DetailData1" Font="Arial, 7.5pt">
                   <ExpressionBindings>
                     <Item1 Ref="195" EventName="BeforePrint" PropertyName="Text" Expression="[COLIS_FACTOR]*[PRICE]" />
                   </ExpressionBindings>
                   <StylePriority Ref="196" UseFont="false" UseTextAlignment="false" />
                 </Item9>
-                <Item10 Ref="197" ControlType="XRTableCell" Name="tableCell17" Weight="0.089708114058721908" TextFormatString="{0:0.00€}" TextAlignment="MiddleRight" StyleName="DetailData1" Font="Arial, 7.5pt">
+                <Item10 Ref="197" ControlType="XRTableCell" Name="tableCell17" Weight="0.089708114058721908" TextFormatString="{0:0.00}€" TextAlignment="MiddleRight" StyleName="DetailData1" Font="Arial, 7.5pt">
                   <ExpressionBindings>
                     <Item1 Ref="198" EventName="BeforePrint" PropertyName="Text" Expression="[VAT]" />
                   </ExpressionBindings>
@@ -386,15 +386,15 @@
                   </ExpressionBindings>
                   <StylePriority Ref="202" UseFont="false" UseTextAlignment="false" />
                 </Item11>
-                <Item12 Ref="203" ControlType="XRTableCell" Name="tableCell40" Weight="0.091762299348564863" TextFormatString="{0:0.0%}" Multiline="true" TextAlignment="MiddleRight" StyleName="DetailData1" Font="Arial, 7.5pt">
+                <Item12 Ref="203" ControlType="XRTableCell" Name="tableCell40" Weight="0.091762299348564863" TextFormatString="{0:0.0}%" Multiline="true" TextAlignment="MiddleRight" StyleName="DetailData1" Font="Arial, 7.5pt">
                   <ExpressionBindings>
                     <Item1 Ref="204" EventName="BeforePrint" PropertyName="Text" Expression="[DISCOUNT_RATE]" />
                   </ExpressionBindings>
                   <StylePriority Ref="205" UseFont="false" UseTextAlignment="false" />
                 </Item12>
-                <Item13 Ref="206" ControlType="XRTableCell" Name="tableCell18" Weight="0.13910370090564556" TextFormatString="{0:0.00€}" TextAlignment="MiddleRight" StyleName="DetailData1" Font="Arial, 8pt">
+                <Item13 Ref="206" ControlType="XRTableCell" Name="tableCell18" Weight="0.13910370090564556" TextFormatString="{0:0.00}€" TextAlignment="MiddleRight" StyleName="DetailData1" Font="Arial, 8pt">
                   <ExpressionBindings>
-                    <Item1 Ref="207" EventName="BeforePrint" PropertyName="Text" Expression="[TOTAL]-[VAT]" />
+                    <Item1 Ref="207" EventName="BeforePrint" PropertyName="Text" Expression="[AMOUNT]- [DISCOUNT]" />
                   </ExpressionBindings>
                   <StylePriority Ref="208" UseFont="false" UseTextAlignment="false" />
                 </Item13>
@@ -405,184 +405,170 @@
       </Controls>
       <StylePriority Ref="209" UseBorders="false" />
     </Item5>
-    <Item6 Ref="210" ControlType="ReportFooterBand" Name="ReportFooter" PrintAtBottom="true" HeightF="236.04" KeepTogether="true">
+    <Item6 Ref="210" ControlType="ReportFooterBand" Name="ReportFooter" PrintAtBottom="true" HeightF="166.580673" KeepTogether="true">
       <Controls>
-        <Item1 Ref="211" ControlType="XRTable" Name="table4" TextAlignment="TopCenter" SizeF="786,23.124155" LocationFloat="0.999982834, 28.125" Padding="2,2,0,0,96" Borders="All">
+        <Item1 Ref="211" ControlType="XRTable" Name="table6" TextAlignment="TopRight" SizeF="785.3366,43.9865074" LocationFloat="1.66331923, 51.2491531" Padding="2,2,0,0,96" Borders="All">
           <Rows>
-            <Item1 Ref="212" ControlType="XRTableRow" Name="tableRow5" Weight="1">
+            <Item1 Ref="212" ControlType="XRTableRow" Name="tableRow6" Weight="1">
               <Cells>
-                <Item1 Ref="213" ControlType="XRTableCell" Name="tableCell26" Weight="0.97059055151477658" CanGrow="false" Multiline="true" Text="Taux TVA" />
-                <Item2 Ref="214" ControlType="XRTableCell" Name="tableCell27" Weight="1.0394548180649059" Multiline="true" Text="Total HT" />
-                <Item3 Ref="215" ControlType="XRTableCell" Name="tableCell28" Weight="0.97611410448848956" Multiline="true" Text="Total Taxes" />
-                <Item4 Ref="216" ControlType="XRTableCell" Name="tableCell29" Weight="0.98332035801437756" Multiline="true" Text="Devise" />
-                <Item5 Ref="217" ControlType="XRTableCell" Name="tableCell30" Weight="1.0030819680846939" Multiline="true" Text="Total HT" />
-                <Item6 Ref="218" ControlType="XRTableCell" Name="tableCell37" Weight="1.3423753404058203" Multiline="true" Text="Total Taxes" />
-                <Item7 Ref="219" ControlType="XRTableCell" Name="tableCell38" Weight="1.4560512078821668" Multiline="true" Text="Remise" />
-                <Item8 Ref="220" ControlType="XRTableCell" Name="tableCell41" Weight="1.7421878857802438" Multiline="true" Text="Net à Payer" />
-              </Cells>
-            </Item1>
-          </Rows>
-          <StylePriority Ref="221" UseBorders="false" UseTextAlignment="false" />
-        </Item1>
-        <Item2 Ref="222" ControlType="XRLabel" Name="label30" Multiline="true" Text="          EXTRAIT DE NOS CONDITIONS GENERALES DE VENTE : - Escompte pour paiement anticipé : Néant - Pénalité pour paiement tardif : 3 x taux de l'intérêt légal. &#xD;&#xA;Indémnité forfaitaire pour frais de recouvrement : 40€. En cas de contestation quelconque, le tribunal de commerce dont dépend le siège de la société est le seul compétent." TextAlignment="TopJustify" SizeF="786.874939,28.125" LocationFloat="0.5800673, 0" Font="Arial, 7.2pt" Padding="2,2,0,0,100" Borders="All">
-          <StylePriority Ref="223" UseFont="false" UseBorders="false" UseTextAlignment="false" />
-        </Item2>
-        <Item3 Ref="224" ControlType="XRLabel" Name="label11" Multiline="true" Text="Factures No Soldées" TextAlignment="TopLeft" SizeF="270.9583,11.958313" LocationFloat="2.33005953, 98.23566" Font="Arial, 8pt" ForeColor="Black" Padding="2,2,0,0,100">
-          <StylePriority Ref="225" UseFont="false" UseForeColor="false" UseTextAlignment="false" />
-        </Item3>
-        <Item4 Ref="226" ControlType="XRLabel" Name="label12" Multiline="true" Text="Total de Pois de Facturés :" TextAlignment="TopRight" SizeF="180.669983,23.00003" LocationFloat="1.66331923, 208.133453" Font="Arial, 10pt" Padding="2,2,0,0,100">
-          <StylePriority Ref="227" UseFont="false" UseTextAlignment="false" />
-        </Item4>
-        <Item5 Ref="228" ControlType="XRLabel" Name="label13" TextFormatString="{0:0.00KG}" Multiline="true" CanGrow="false" TextAlignment="TopRight" SizeF="142.485641,23" LocationFloat="184.323044, 208.133453" Font="Arial, 10pt" Padding="2,2,0,0,100">
-          <ExpressionBindings>
-            <Item1 Ref="229" EventName="BeforePrint" PropertyName="Text" Expression="SUM([KILOGRAMME_FACTOR]*[QUANTITY])" />
-          </ExpressionBindings>
-          <StylePriority Ref="230" UseFont="false" UseTextAlignment="false" />
-        </Item5>
-        <Item6 Ref="231" ControlType="XRLabel" Name="label14" TextFormatString="{0:0.00€}" Multiline="true" CanGrow="false" TextAlignment="TopRight" SizeF="194.750061,23" LocationFloat="590.249939, 208.110657" Font="Arial, 10pt" Padding="2,2,0,0,100">
-          <ExpressionBindings>
-            <Item1 Ref="232" EventName="BeforePrint" PropertyName="Text" Expression="SUM([TOTAL])" />
-          </ExpressionBindings>
-          <StylePriority Ref="233" UseFont="false" UseTextAlignment="false" />
-        </Item6>
-        <Item7 Ref="234" ControlType="XRLabel" Name="label15" Multiline="true" Text="Total des facturés Non Soldées :" TextAlignment="TopRight" SizeF="262.441254,23.00003" LocationFloat="327.8087, 208.110657" Font="Arial, 10pt" Padding="2,2,0,0,100">
-          <StylePriority Ref="235" UseFont="false" UseTextAlignment="false" />
-        </Item7>
-        <Item8 Ref="236" ControlType="XRTable" Name="table3" SizeF="786.999939,73.95833" LocationFloat="7.62939453E-06, 134.152328" Padding="2,2,0,0,96" Borders="All">
-          <Rows>
-            <Item1 Ref="237" ControlType="XRTableRow" Name="tableRow3" Weight="1">
-              <Cells>
-                <Item1 Ref="238" ControlType="XRTableCell" Name="tableCell19" Weight="1.0038232017391746" Multiline="true" />
-                <Item2 Ref="239" ControlType="XRTableCell" Name="tableCell20" Weight="1.0013995044368773" Multiline="true" />
-                <Item3 Ref="240" ControlType="XRTableCell" Name="tableCell21" Weight="1.0035691563520517" Multiline="true" />
-                <Item4 Ref="241" ControlType="XRTableCell" Name="tableCell22" Weight="1.0031022918772778" Multiline="true" />
-              </Cells>
-            </Item1>
-          </Rows>
-          <StylePriority Ref="242" UseBorders="false" />
-        </Item8>
-        <Item9 Ref="243" ControlType="XRTable" Name="table5" SizeF="787,23.9583359" LocationFloat="0, 110.194" Padding="2,2,0,0,96" Borders="All">
-          <Rows>
-            <Item1 Ref="244" ControlType="XRTableRow" Name="tableRow4" Weight="1">
-              <Cells>
-                <Item1 Ref="245" ControlType="XRTableCell" Name="tableCell23" Weight="1" Multiline="true" Text="Date" />
-                <Item2 Ref="246" ControlType="XRTableCell" Name="tableCell24" Weight="1" Multiline="true" Text="Facture n°" />
-                <Item3 Ref="247" ControlType="XRTableCell" Name="tableCell42" Weight="1" Multiline="true" Text="Total" />
-                <Item4 Ref="248" ControlType="XRTableCell" Name="tableCell25" Weight="1" Multiline="true" Text="Reste à Payer" />
-              </Cells>
-            </Item1>
-          </Rows>
-          <StylePriority Ref="249" UseBorders="false" />
-        </Item9>
-        <Item10 Ref="250" ControlType="XRTable" Name="table6" TextAlignment="TopRight" SizeF="785.3366,43.9865074" LocationFloat="1.66331923, 51.2491531" Padding="2,2,0,0,96" Borders="All">
-          <Rows>
-            <Item1 Ref="251" ControlType="XRTableRow" Name="tableRow6" Weight="1">
-              <Cells>
-                <Item1 Ref="252" ControlType="XRTableCell" Name="tableCell43" Weight="0.933205397300761" Multiline="true" />
-                <Item2 Ref="253" ControlType="XRTableCell" Name="tableCell44" Weight="1.0215917988632564" Multiline="true" TextAlignment="TopLeft">
-                  <StylePriority Ref="254" UseTextAlignment="false" />
+                <Item1 Ref="213" ControlType="XRTableCell" Name="tableCell43" Weight="0.933205397300761" Multiline="true" />
+                <Item2 Ref="214" ControlType="XRTableCell" Name="tableCell44" Weight="1.0215917988632564" Multiline="true" TextAlignment="TopLeft">
+                  <StylePriority Ref="215" UseTextAlignment="false" />
                 </Item2>
-                <Item3 Ref="255" ControlType="XRTableCell" Name="tableCell45" Weight="0.93657367082395271" Multiline="true" />
-                <Item4 Ref="256" ControlType="XRTableCell" Name="tableCell46" Weight="0.95642408697641368" Multiline="true" TextAlignment="TopCenter">
+                <Item3 Ref="216" ControlType="XRTableCell" Name="tableCell45" Weight="0.93657367082395271" Multiline="true" />
+                <Item4 Ref="217" ControlType="XRTableCell" Name="tableCell46" Weight="0.95642408697641368" Multiline="true" TextAlignment="TopCenter">
                   <Controls>
-                    <Item1 Ref="257" ControlType="XRLabel" Name="label23" Multiline="true" CanGrow="false" Text="EURO" TextAlignment="TopCenter" SizeF="80.54779,18.9999237" LocationFloat="0, 1.99998093" Font="Arial, 8pt" Padding="2,2,0,0,100" Borders="None">
-                      <StylePriority Ref="258" UseFont="false" UseBorders="false" UseTextAlignment="false" />
+                    <Item1 Ref="218" ControlType="XRLabel" Name="label11" Multiline="true" CanGrow="false" Text="EURO" TextAlignment="TopCenter" SizeF="80.54779,18.9999237" LocationFloat="0, 1.99998093" Font="Arial, 8pt" Padding="2,2,0,0,100" Borders="None">
+                      <StylePriority Ref="219" UseFont="false" UseBorders="false" UseTextAlignment="false" />
                     </Item1>
                   </Controls>
-                  <StylePriority Ref="259" UseTextAlignment="false" />
+                  <StylePriority Ref="220" UseTextAlignment="false" />
                 </Item4>
-                <Item5 Ref="260" ControlType="XRTableCell" Name="tableCell47" Weight="0.97430336546145924" Multiline="true" Text="tableCell24">
+                <Item5 Ref="221" ControlType="XRTableCell" Name="tableCell47" Weight="0.97430336546145924" Multiline="true" Text="tableCell24">
                   <Controls>
-                    <Item1 Ref="261" ControlType="XRLabel" Name="label25" TextFormatString="{0:0.00€}" Multiline="true" Text="€" TextAlignment="TopCenter" SizeF="78.8176,17.3749924" LocationFloat="0, 1.99998093" Font="Arial, 8pt" Padding="2,2,0,0,100" Borders="None">
+                    <Item1 Ref="222" ControlType="XRLabel" Name="label12" TextFormatString="{0:0.00€}" Multiline="true" Text="€" TextAlignment="TopCenter" SizeF="78.8176,17.3749924" LocationFloat="0, 1.99998093" Font="Arial, 8pt" Padding="2,2,0,0,100" Borders="None">
                       <ExpressionBindings>
-                        <Item1 Ref="262" EventName="BeforePrint" PropertyName="Text" Expression="SUM([AMOUNT])" />
+                        <Item1 Ref="223" EventName="BeforePrint" PropertyName="Text" Expression="[DOC_TOTALHT]" />
                       </ExpressionBindings>
-                      <StylePriority Ref="263" UseFont="false" UseBorders="false" UseTextAlignment="false" />
+                      <StylePriority Ref="224" UseFont="false" UseBorders="false" UseTextAlignment="false" />
                     </Item1>
                   </Controls>
                 </Item5>
-                <Item6 Ref="264" ControlType="XRTableCell" Name="tableCell48" Weight="1.3038610272553135" Multiline="true" Text="tableCell22">
+                <Item6 Ref="225" ControlType="XRTableCell" Name="tableCell48" Weight="1.3038610272553135" Multiline="true" Text="tableCell22">
                   <Controls>
-                    <Item1 Ref="265" ControlType="XRLabel" Name="label26" TextFormatString="{0:0.00€}" Multiline="true" Text="€" TextAlignment="TopCenter" SizeF="109.069794,18.9999237" LocationFloat="9.15527344E-05, 1.99998093" Font="Arial, 8pt" Padding="2,2,0,0,100" Borders="None">
+                    <Item1 Ref="226" ControlType="XRLabel" Name="label13" TextFormatString="{0:0.00€}" Multiline="true" Text="€" TextAlignment="TopCenter" SizeF="109.069794,18.9999237" LocationFloat="9.15527344E-05, 1.99998093" Font="Arial, 8pt" Padding="2,2,0,0,100" Borders="None">
                       <ExpressionBindings>
-                        <Item1 Ref="266" EventName="BeforePrint" PropertyName="Text" Expression="SUM([VAT])" />
+                        <Item1 Ref="227" EventName="BeforePrint" PropertyName="Text" Expression="SUM([VAT])" />
                       </ExpressionBindings>
-                      <StylePriority Ref="267" UseFont="false" UseBorders="false" UseTextAlignment="false" />
+                      <StylePriority Ref="228" UseFont="false" UseBorders="false" UseTextAlignment="false" />
                     </Item1>
                   </Controls>
                 </Item6>
-                <Item7 Ref="268" ControlType="XRTableCell" Name="tableCell49" Weight="1.4229184818444516" Multiline="true">
+                <Item7 Ref="229" ControlType="XRTableCell" Name="tableCell49" Weight="1.4229184818444516" Multiline="true">
                   <Controls>
-                    <Item1 Ref="269" ControlType="XRLabel" Name="label27" TextFormatString="{0:0.00€}" Multiline="true" Text="€" TextAlignment="TopCenter" SizeF="118.177368,18.9999237" LocationFloat="6.10351563E-05, 1.99998093" Font="Arial, 8pt" Padding="2,2,0,0,100" Borders="None">
+                    <Item1 Ref="230" ControlType="XRLabel" Name="label14" TextFormatString="{0:0.00€}" Multiline="true" Text="€" TextAlignment="TopCenter" SizeF="118.177368,18.9999237" LocationFloat="6.10351563E-05, 1.99998093" Font="Arial, 8pt" Padding="2,2,0,0,100" Borders="None">
                       <ExpressionBindings>
-                        <Item1 Ref="270" EventName="BeforePrint" PropertyName="Text" Expression="SUM([DISCOUNT])" />
+                        <Item1 Ref="231" EventName="BeforePrint" PropertyName="Text" Expression="[DOC_AMOUNT]-[DOC_TOTALHT]" />
                       </ExpressionBindings>
-                      <StylePriority Ref="271" UseFont="false" UseBorders="false" UseTextAlignment="false" />
+                      <StylePriority Ref="232" UseFont="false" UseBorders="false" UseTextAlignment="false" />
                     </Item1>
                   </Controls>
                 </Item7>
-                <Item8 Ref="272" ControlType="XRTableCell" Name="tableCell50" Weight="1.6835608469302048" Multiline="true" Text="tableCell19" TextAlignment="TopRight">
+                <Item8 Ref="233" ControlType="XRTableCell" Name="tableCell50" Weight="1.6835608469302048" Multiline="true" Text="tableCell19" TextAlignment="TopRight">
                   <Controls>
-                    <Item1 Ref="273" ControlType="XRLabel" Name="label36" TextFormatString="{0:0.00€}" Multiline="true" TextAlignment="TopCenter" SizeF="144.2793,18.9999237" LocationFloat="0, 1.99998093" Font="Arial, 8pt" Padding="2,2,0,0,100" Borders="None">
+                    <Item1 Ref="234" ControlType="XRLabel" Name="label15" TextFormatString="{0:0.00€}" Multiline="true" TextAlignment="TopCenter" SizeF="144.2793,18.9999237" LocationFloat="0, 1.99998093" Font="Arial, 8pt" Padding="2,2,0,0,100" Borders="None">
                       <ExpressionBindings>
-                        <Item1 Ref="274" EventName="BeforePrint" PropertyName="Text" Expression="SUM([TOTAL])" />
+                        <Item1 Ref="235" EventName="BeforePrint" PropertyName="Text" Expression="[DOC_TOTAL]" />
                       </ExpressionBindings>
-                      <StylePriority Ref="275" UseFont="false" UseBorders="false" UseTextAlignment="false" />
+                      <StylePriority Ref="236" UseFont="false" UseBorders="false" UseTextAlignment="false" />
                     </Item1>
                   </Controls>
-                  <StylePriority Ref="276" UseTextAlignment="false" />
+                  <StylePriority Ref="237" UseTextAlignment="false" />
                 </Item8>
               </Cells>
             </Item1>
           </Rows>
-          <StylePriority Ref="277" UseBorders="false" UseTextAlignment="false" />
-        </Item10>
-        <Item11 Ref="278" ControlType="XRCrossTab" Name="crossTab1" GeneralStyleName="crossTabGeneralStyle1" DataAreaStyleName="crossTabDataStyle1" HeaderAreaStyleName="crossTabHeaderStyle1" TotalAreaStyleName="crossTabTotalStyle1" SizeF="247.037064,26.7920837" LocationFloat="0.5800673, 52.2491379">
-          <LayoutOptions Ref="279" />
-          <PrintOptions Ref="280" />
+          <StylePriority Ref="238" UseBorders="false" UseTextAlignment="false" />
+        </Item1>
+        <Item2 Ref="239" ControlType="XRCrossTab" Name="crossTab1" GeneralStyleName="crossTabGeneralStyle1" DataAreaStyleName="crossTabDataStyle1" HeaderAreaStyleName="crossTabHeaderStyle1" TotalAreaStyleName="crossTabTotalStyle1" SizeF="247.037064,27.839283" LocationFloat="0.5800673, 52.2491379">
+          <LayoutOptions Ref="240" />
+          <PrintOptions Ref="241" />
           <RowFields>
-            <Item1 Ref="281" FieldName="VAT_RATE" />
+            <Item1 Ref="242" FieldName="VAT_RATE" />
           </RowFields>
           <DataFields>
-            <Item1 Ref="282" FieldName="AMOUNT" />
-            <Item2 Ref="283" FieldName="VAT" />
+            <Item1 Ref="243" FieldName="TOTALHT" />
+            <Item2 Ref="244" FieldName="VAT" />
           </DataFields>
           <ColumnDefinitions>
-            <Item1 Ref="284" Width="80.2404556" />
-            <Item2 Ref="285" Width="86.37086" />
-            <Item3 Ref="286" Width="80.42575" />
+            <Item1 Ref="245" Width="80.2404556" />
+            <Item2 Ref="246" Width="86.37086" />
+            <Item3 Ref="247" Width="80.42575" />
           </ColumnDefinitions>
           <RowDefinitions>
-            <Item1 Ref="287" Height="2.578156" Visible="false" />
-            <Item2 Ref="288" Height="1.53095794" />
-            <Item3 Ref="289" Height="20.6970711" />
-            <Item4 Ref="290" Height="1.985899" Visible="false" />
+            <Item1 Ref="248" Height="2.578156" Visible="false" />
+            <Item2 Ref="249" Height="2.578156" />
+            <Item3 Ref="250" Height="20.6970711" />
+            <Item4 Ref="251" Height="1.985899" Visible="false" />
           </RowDefinitions>
           <Cells>
-            <Item1 Ref="291" ControlType="XRCrossTabCell" Name="crossTabHeaderCell1" ColumnIndex="0" RowIndex="0" RowSpan="2" Text="VAT_RATE" />
-            <Item2 Ref="292" ControlType="XRCrossTabCell" Name="crossTabDataCell1" TextFormatString="{0:0.00€}" ColumnIndex="1" RowIndex="2" TextAlignment="MiddleCenter" Font="Arial, 8pt" BackColor="Transparent" BorderColor="Black" />
-            <Item3 Ref="293" ControlType="XRCrossTabCell" Name="crossTabHeaderCell2" ColumnIndex="1" RowIndex="0" ColumnSpan="2" />
-            <Item4 Ref="294" ControlType="XRCrossTabCell" Name="crossTabHeaderCell3" ColumnIndex="0" RowIndex="2" TextAlignment="MiddleCenter" Font="Arial, 8pt" BackColor="Transparent" BorderColor="Black" />
-            <Item5 Ref="295" ControlType="XRCrossTabCell" Name="crossTabHeaderCell4" ColumnIndex="0" RowIndex="3" Text="Grand Total" />
-            <Item6 Ref="296" ControlType="XRCrossTabCell" Name="crossTabTotalCell1" ColumnIndex="1" RowIndex="3" />
-            <Item7 Ref="297" ControlType="XRCrossTabCell" Name="crossTabHeaderCell5" ColumnIndex="1" RowIndex="1" Text="AMOUNT" />
-            <Item8 Ref="298" ControlType="XRCrossTabCell" Name="crossTabHeaderCell6" ColumnIndex="2" RowIndex="1" Text="VAT" />
-            <Item9 Ref="299" ControlType="XRCrossTabCell" Name="crossTabDataCell2" TextFormatString="{0:0.00€}" ColumnIndex="2" RowIndex="2" Font="Arial, 8pt" BackColor="Transparent" BorderColor="Black" />
-            <Item10 Ref="300" ControlType="XRCrossTabCell" Name="crossTabTotalCell2" ColumnIndex="2" RowIndex="3" />
+            <Item1 Ref="252" ControlType="XRCrossTabCell" Name="crossTabHeaderCell1" ColumnIndex="0" RowIndex="0" RowSpan="2" Text="VAT_RATE" />
+            <Item2 Ref="253" ControlType="XRCrossTabCell" Name="crossTabDataCell1" TextFormatString="{0:0.00€}" ColumnIndex="1" RowIndex="2" TextAlignment="MiddleCenter" Font="Arial, 8pt" BackColor="Transparent" BorderColor="Black" />
+            <Item3 Ref="254" ControlType="XRCrossTabCell" Name="crossTabHeaderCell2" ColumnIndex="1" RowIndex="0" ColumnSpan="2" />
+            <Item4 Ref="255" ControlType="XRCrossTabCell" Name="crossTabHeaderCell3" ColumnIndex="0" RowIndex="2" TextAlignment="MiddleCenter" Font="Arial, 8pt" BackColor="Transparent" BorderColor="Black" />
+            <Item5 Ref="256" ControlType="XRCrossTabCell" Name="crossTabHeaderCell4" ColumnIndex="0" RowIndex="3" Text="Grand Total" />
+            <Item6 Ref="257" ControlType="XRCrossTabCell" Name="crossTabTotalCell1" ColumnIndex="1" RowIndex="3" />
+            <Item7 Ref="258" ControlType="XRCrossTabCell" Name="crossTabHeaderCell5" ColumnIndex="1" RowIndex="1" Text="AMOUNT" />
+            <Item8 Ref="259" ControlType="XRCrossTabCell" Name="crossTabHeaderCell6" ColumnIndex="2" RowIndex="1" Text="VAT" />
+            <Item9 Ref="260" ControlType="XRCrossTabCell" Name="crossTabDataCell2" TextFormatString="{0:0.00€}" ColumnIndex="2" RowIndex="2" Font="Arial, 8pt" BackColor="Transparent" BorderColor="Black" />
+            <Item10 Ref="261" ControlType="XRCrossTabCell" Name="crossTabTotalCell2" ColumnIndex="2" RowIndex="3" />
           </Cells>
+        </Item2>
+        <Item3 Ref="262" ControlType="XRLabel" Name="label23" Multiline="true" Text="Total des facturés Non Soldées :" TextAlignment="TopRight" SizeF="262.441254,23.00003" LocationFloat="327.8087, 95.23566" Font="Arial, 10pt" Padding="2,2,0,0,100">
+          <StylePriority Ref="263" UseFont="false" UseTextAlignment="false" />
+        </Item3>
+        <Item4 Ref="264" ControlType="XRLabel" Name="label25" TextFormatString="{0:0.00€}" Multiline="true" CanGrow="false" TextAlignment="TopRight" SizeF="194.750061,23" LocationFloat="590.249939, 95.23566" Font="Arial, 10pt" Padding="2,2,0,0,100">
+          <ExpressionBindings>
+            <Item1 Ref="265" EventName="BeforePrint" PropertyName="Text" Expression="[DOC_TOTAL]" />
+          </ExpressionBindings>
+          <StylePriority Ref="266" UseFont="false" UseTextAlignment="false" />
+        </Item4>
+        <Item5 Ref="267" ControlType="XRLabel" Name="label26" TextFormatString="{0:0.00KG}" Multiline="true" CanGrow="false" TextAlignment="TopLeft" SizeF="142.485641,23" LocationFloat="184.323044, 95.25845" Font="Arial, 10pt" Padding="2,2,0,0,100">
+          <ExpressionBindings>
+            <Item1 Ref="268" EventName="BeforePrint" PropertyName="Text" Expression="SUM([KILOGRAMME_FACTOR]*[QUANTITY])" />
+          </ExpressionBindings>
+          <StylePriority Ref="269" UseFont="false" UseTextAlignment="false" />
+        </Item5>
+        <Item6 Ref="270" ControlType="XRLabel" Name="label27" Multiline="true" Text="Total de Poids de Facturés :" TextAlignment="TopRight" SizeF="180.669983,23.00003" LocationFloat="1.66331923, 95.25845" Font="Arial, 10pt" Padding="2,2,0,0,100">
+          <StylePriority Ref="271" UseFont="false" UseTextAlignment="false" />
+        </Item6>
+        <Item7 Ref="272" ControlType="XRLabel" Name="label30" Multiline="true" Text="          EXTRAIT DE NOS CONDITIONS GENERALES DE VENTE : - Escompte pour paiement anticipé : Néant - Pénalité pour paiement tardif : 3 x taux de l'intérêt légal. &#xD;&#xA;Indémnité forfaitaire pour frais de recouvrement : 40€. En cas de contestation quelconque, le tribunal de commerce dont dépend le siège de la société est le seul compétent." TextAlignment="TopJustify" SizeF="786.874939,28.125" LocationFloat="0.5800673, 0" Font="Arial, 7.2pt" Padding="2,2,0,0,100" Borders="All">
+          <StylePriority Ref="273" UseFont="false" UseBorders="false" UseTextAlignment="false" />
+        </Item7>
+        <Item8 Ref="274" ControlType="XRTable" Name="table4" TextAlignment="TopCenter" SizeF="786,23.124155" LocationFloat="0.999982834, 28.125" Padding="2,2,0,0,96" Borders="All">
+          <Rows>
+            <Item1 Ref="275" ControlType="XRTableRow" Name="tableRow5" Weight="1">
+              <Cells>
+                <Item1 Ref="276" ControlType="XRTableCell" Name="tableCell26" Weight="0.97059055151477658" CanGrow="false" Multiline="true" Text="Taux TVA" />
+                <Item2 Ref="277" ControlType="XRTableCell" Name="tableCell27" Weight="1.0394548180649059" Multiline="true" Text="Total HT" />
+                <Item3 Ref="278" ControlType="XRTableCell" Name="tableCell28" Weight="0.97611410448848956" Multiline="true" Text="Total Taxes" />
+                <Item4 Ref="279" ControlType="XRTableCell" Name="tableCell29" Weight="0.98332035801437756" Multiline="true" Text="Devise" />
+                <Item5 Ref="280" ControlType="XRTableCell" Name="tableCell30" Weight="1.0030819680846939" Multiline="true" Text="Total HT" />
+                <Item6 Ref="281" ControlType="XRTableCell" Name="tableCell37" Weight="1.3423753404058203" Multiline="true" Text="Total Taxes" />
+                <Item7 Ref="282" ControlType="XRTableCell" Name="tableCell38" Weight="1.4560512078821668" Multiline="true" Text="Remise" />
+                <Item8 Ref="283" ControlType="XRTableCell" Name="tableCell41" Weight="1.7421878857802438" Multiline="true" Text="Net à Payer" />
+              </Cells>
+            </Item1>
+          </Rows>
+          <StylePriority Ref="284" UseBorders="false" UseTextAlignment="false" />
+        </Item8>
+        <Item9 Ref="285" ControlType="XRLabel" Name="label66" Multiline="true" TextAlignment="TopCenter" SizeF="782.6699,15.3731384" LocationFloat="1.33006477, 118.258484" Font="Arial, 10pt, style=Bold" Padding="2,2,0,0,100">
+          <ExpressionBindings>
+            <Item1 Ref="286" EventName="BeforePrint" PropertyName="Text" Expression="[SIGNATURE]" />
+          </ExpressionBindings>
+          <StylePriority Ref="287" UseFont="false" UseTextAlignment="false" />
+        </Item9>
+        <Item10 Ref="288" ControlType="XRLabel" Name="label59" Multiline="true" Text="Titulaire du compte: HUDO DISTRIBUTION SARL -  IBAN: FR76 1027 8056 0000 0212 6670 165  -  BIC:CMCIFR2A" TextAlignment="TopCenter" SizeF="782.6699,15.3731384" LocationFloat="3.621704, 149.004791" Font="Times New Roman, 10pt, style=Bold" Padding="2,2,0,0,100">
+          <StylePriority Ref="289" UseFont="false" UseTextAlignment="false" />
+        </Item10>
+        <Item11 Ref="290" ControlType="XRLabel" Name="label67" Multiline="true" TextAlignment="TopCenter" SizeF="782.6699,15.3731384" LocationFloat="1.3717041, 133.631622" Font="Arial, 10pt, style=Bold" Padding="2,2,0,0,100">
+          <ExpressionBindings>
+            <Item1 Ref="291" EventName="BeforePrint" PropertyName="Text" Expression="[PRINT_SIGNATURE]" />
+          </ExpressionBindings>
+          <StylePriority Ref="292" UseFont="false" UseTextAlignment="false" />
         </Item11>
       </Controls>
     </Item6>
   </Bands>
   <StyleSheet>
-    <Item1 Ref="301" Name="Title" BorderStyle="Inset" Font="Arial, 14.25pt" ForeColor="255,75,75,75" BackColor="Transparent" BorderColor="Black" Sides="None" StringFormat="Near;Near;0;None;Character;Default" BorderWidthSerializable="1" />
-    <Item2 Ref="302" Name="DetailCaption1" BorderStyle="Inset" Padding="6,6,0,0,100" Font="Arial, 8.25pt, style=Bold" ForeColor="White" BackColor="255,75,75,75" BorderColor="White" Sides="None" StringFormat="Near;Center;0;None;Character;Default" TextAlignment="MiddleLeft" BorderWidthSerializable="2" />
-    <Item3 Ref="303" Name="DetailData1" BorderStyle="Inset" Padding="6,6,0,0,100" Font="Arial, 8.25pt" ForeColor="Black" BorderColor="Transparent" Sides="Left" StringFormat="Near;Center;0;None;Character;Default" TextAlignment="MiddleLeft" BorderWidthSerializable="2" />
-    <Item4 Ref="304" Name="DetailData3_Odd" BorderStyle="Inset" Padding="6,6,0,0,100" Font="Arial, 8.25pt" ForeColor="Black" BackColor="255,231,231,231" BorderColor="Transparent" Sides="None" StringFormat="Near;Center;0;None;Character;Default" TextAlignment="MiddleLeft" BorderWidthSerializable="1" />
-    <Item5 Ref="305" Name="PageInfo" BorderStyle="Inset" Padding="2,2,0,0,100" Font="Arial, 8.25pt, style=Bold" ForeColor="255,75,75,75" StringFormat="Near;Near;0;None;Character;Default" />
-    <Item6 Ref="306" Name="crossTabGeneralStyle1" BorderStyle="Inset" Padding="2,2,0,0,100" Font="Arial, 9.75pt" ForeColor="Black" BackColor="White" BorderColor="255,160,160,160" Sides="All" StringFormat="Near;Near;0;None;Character;Default" />
-    <Item7 Ref="307" Name="crossTabHeaderStyle1" BorderStyle="Inset" BackColor="255,240,240,240" StringFormat="Near;Center;0;None;Character;Default" TextAlignment="MiddleLeft" />
-    <Item8 Ref="308" Name="crossTabDataStyle1" BorderStyle="Inset" StringFormat="Far;Center;0;None;Character;Default" TextAlignment="MiddleRight" />
-    <Item9 Ref="309" Name="crossTabTotalStyle1" BorderStyle="Inset" StringFormat="Far;Center;0;None;Character;Default" TextAlignment="MiddleRight" />
+    <Item1 Ref="293" Name="Title" BorderStyle="Inset" Font="Arial, 14.25pt" ForeColor="255,75,75,75" BackColor="Transparent" BorderColor="Black" Sides="None" StringFormat="Near;Near;0;None;Character;Default" BorderWidthSerializable="1" />
+    <Item2 Ref="294" Name="DetailCaption1" BorderStyle="Inset" Padding="6,6,0,0,100" Font="Arial, 8.25pt, style=Bold" ForeColor="White" BackColor="255,75,75,75" BorderColor="White" Sides="None" StringFormat="Near;Center;0;None;Character;Default" TextAlignment="MiddleLeft" BorderWidthSerializable="2" />
+    <Item3 Ref="295" Name="DetailData1" BorderStyle="Inset" Padding="6,6,0,0,100" Font="Arial, 8.25pt" ForeColor="Black" BorderColor="Transparent" Sides="Left" StringFormat="Near;Center;0;None;Character;Default" TextAlignment="MiddleLeft" BorderWidthSerializable="2" />
+    <Item4 Ref="296" Name="DetailData3_Odd" BorderStyle="Inset" Padding="6,6,0,0,100" Font="Arial, 8.25pt" ForeColor="Black" BackColor="255,231,231,231" BorderColor="Transparent" Sides="None" StringFormat="Near;Center;0;None;Character;Default" TextAlignment="MiddleLeft" BorderWidthSerializable="1" />
+    <Item5 Ref="297" Name="PageInfo" BorderStyle="Inset" Padding="2,2,0,0,100" Font="Arial, 8.25pt, style=Bold" ForeColor="255,75,75,75" StringFormat="Near;Near;0;None;Character;Default" />
+    <Item6 Ref="298" Name="crossTabGeneralStyle1" BorderStyle="Inset" Padding="2,2,0,0,100" Font="Arial, 9.75pt" ForeColor="Black" BackColor="White" BorderColor="255,160,160,160" Sides="All" StringFormat="Near;Near;0;None;Character;Default" />
+    <Item7 Ref="299" Name="crossTabHeaderStyle1" BorderStyle="Inset" BackColor="255,240,240,240" StringFormat="Near;Center;0;None;Character;Default" TextAlignment="MiddleLeft" />
+    <Item8 Ref="300" Name="crossTabDataStyle1" BorderStyle="Inset" StringFormat="Far;Center;0;None;Character;Default" TextAlignment="MiddleRight" />
+    <Item9 Ref="301" Name="crossTabTotalStyle1" BorderStyle="Inset" StringFormat="Far;Center;0;None;Character;Default" TextAlignment="MiddleRight" />
   </StyleSheet>
 </XtraReportsLayoutSerializer>
