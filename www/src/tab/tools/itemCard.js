@@ -41,6 +41,10 @@ export default class NbItemCard extends NbBase
         {
             this["txtQuantity" + this.props.id].value = tmpDt[0].QUANTITY
         }
+        else
+        {
+            this["txtQuantity" + this.props.id].value = 0
+        }
     }
     render()
     {
