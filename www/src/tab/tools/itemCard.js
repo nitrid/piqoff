@@ -31,7 +31,7 @@ export default class NbItemCard extends NbBase
     {
         if(typeof this.props.onClick != 'undefined')
         {
-            this.props.onClick();
+            this.props.onClick(this.props);
         }
     }
     setDocItem()

@@ -148,6 +148,7 @@ export default class Sale extends React.PureComponent
     }
     onValueChange(e)
     {
+        console.log(e)
         let tmpLine = this.docLines.where({'ITEM':e.GUID})
         if(tmpLine.length > 0)
         {
