@@ -1,4 +1,5 @@
 import React from "react";
+import App from "../lib/app.js";
 import NbBase from "../../core/react/bootstrap/base.js";
 import NbPopUp from '../../core/react/bootstrap/popup';
 import NbButton from '../../core/react/bootstrap/button';
@@ -12,7 +13,7 @@ export default class NbItemPopUp extends NbBase
     constructor(props)
     {
         super(props)
-
+        this.core = App.instance.core;
         this.state =
         {
             images : [],
@@ -21,10 +22,44 @@ export default class NbItemPopUp extends NbBase
             minImgStyle3 : {padding:"2px"},
             minImgStyle4 : {padding:"2px"}
         }
+        this.data = []
     }
-    open(pData)
+    async open(pData)
     {        
-        this.popCard.show();
+        this.data = pData.data
+        
+        let tmpQuery = 
+        {
+            query :"SELECT IMAGE AS IMAGE1,  " +
+                    "(SELECT IMAGE FROM ITEM_IMAGE AS IMG1 WHERE IMG1.ITEM = ITEM_IMAGE.ITEM AND SORT = 1) AS IMAGE2,  " +
+                    "(SELECT IMAGE FROM ITEM_IMAGE AS IMG1 WHERE IMG1.ITEM = ITEM_IMAGE.ITEM AND SORT = 2) AS IMAGE3,  " +
+                    "(SELECT IMAGE FROM ITEM_IMAGE AS IMG1 WHERE IMG1.ITEM = ITEM_IMAGE.ITEM AND SORT = 3) AS IMAGE4,  " +
+                    "(SELECT IMAGE FROM ITEM_IMAGE AS IMG1 WHERE IMG1.ITEM = ITEM_IMAGE.ITEM AND SORT = 4) AS IMAGE5  " +
+                    "FROM ITEM_IMAGE WHERE ITEM = @ITEM AND SORT = 0 ",
+            param : ['ITEM:string|50'],
+            value : [this.data.GUID],
+        }
+        let tmpData = await this.core.sql.execute(tmpQuery)
+        if(tmpData.result.recordset.length > 0)
+        {
+            this.data.IMAGE1 = tmpData.result.recordset[0].IMAGE1
+            this.data.IMAGE2 = tmpData.result.recordset[0].IMAGE2
+            this.data.IMAGE3 = tmpData.result.recordset[0].IMAGE3
+            this.data.IMAGE4 = tmpData.result.recordset[0].IMAGE4
+            if(typeof this.data.QUANTITY == 'undefined')
+            {
+                this.data.QUANTITY = 0
+            }
+            this.setState({images:[]})
+            this.popCard.show();
+        }
+    }
+    _onValueChange(e)
+    {
+        if(typeof this.props.onValueChange != 'undefined')
+        {
+            this.props.onValueChange(e);
+        }
     }
     render()
     {
@@ -66,53 +101,53 @@ export default class NbItemPopUp extends NbBase
                                         }
                                     }}>
                                         <Carousel.Item>
-                                            <img className="d-block w-100 h-100" src="https://149370792.v2.pressablecdn.com/wp-content/uploads/2012/11/img_0517-620x465.jpg"/>
+                                            <img className="d-block w-100 h-100" src={this.data.IMAGE1}/>
                                         </Carousel.Item>
                                         <Carousel.Item>
-                                            <img className="d-block w-100 h-100" src="https://www.perrysplate.com/wp-content/uploads/2021/11/Thai-Peanut-Turkey-Meatball-Curry_-9-620x465.jpg"/>
+                                            <img className="d-block w-100 h-100" src={this.data.IMAGE2}/>
                                         </Carousel.Item>
                                         <Carousel.Item>
-                                            <img className="d-block w-100 h-100" src="https://eating-made-easy.com/wp-content/uploads/2016/03/Easter-Collage-620x465.jpg"/>
+                                            <img className="d-block w-100 h-100" src={this.data.IMAGE3}/>
                                         </Carousel.Item>
                                         <Carousel.Item>
-                                            <img className="d-block w-100 h-100" src="https://www.spachethespatula.com/wp-content/uploads/2014/04/featured_Fotor_Collage-620x465.jpg"/>
+                                            <img className="d-block w-100 h-100" src={this.data.IMAGE4}/>
                                         </Carousel.Item>
                                     </Carousel>
                                 </div>
                             </div>
                             <div className='row pt-3'>
                                 <div className='col-3' style={{height:'90px'}}>
-                                    <img className="d-block w-100 h-100" style={this.state.minImgStyle1} src="https://149370792.v2.pressablecdn.com/wp-content/uploads/2012/11/img_0517-620x465.jpg"/>
+                                    <img className="d-block w-100 h-100" style={this.state.minImgStyle1} src={this.data.IMAGE1}/>
                                 </div>
                                 <div className='col-3' style={{height:'90px'}}>
-                                    <img className="d-block w-100 h-100" style={this.state.minImgStyle2} src="https://www.perrysplate.com/wp-content/uploads/2021/11/Thai-Peanut-Turkey-Meatball-Curry_-9-620x465.jpg"/>
+                                    <img className="d-block w-100 h-100" style={this.state.minImgStyle2} src={this.data.IMAGE2}/>
                                 </div>
                                 <div className='col-3' style={{height:'90px'}}>
-                                    <img className="d-block w-100 h-100" style={this.state.minImgStyle3} src="https://eating-made-easy.com/wp-content/uploads/2016/03/Easter-Collage-620x465.jpg"/>
+                                    <img className="d-block w-100 h-100" style={this.state.minImgStyle3} src={this.data.IMAGE3}/>
                                 </div>
                                 <div className='col-3' style={{height:'90px'}}>
-                                    <img className="d-block w-100 h-100" style={this.state.minImgStyle4} src="https://www.spachethespatula.com/wp-content/uploads/2014/04/featured_Fotor_Collage-620x465.jpg"/>
+                                    <img className="d-block w-100 h-100" style={this.state.minImgStyle4} src={this.data.IMAGE4}/>
                                 </div>
                             </div>
                         </div>
                         <div className='row pt-2'>
                             <div className='col-12'>
-                                <h5 className="text-danger">HYGIENE ENTRETIEN NETTOYAGE</h5>
+                                <h5 className="text-danger">{this.data.NAME}</h5>
                             </div>                            
                         </div>
                         <div className='row pt-2'>
                             <div className='col-12'>
-                                <h5 className="overflow-hidden">LAVETTE MICROFIBRE MULTI-USAGES 30X30CM LOT DE 2 - 1GREGE + 1 BLEU NEPTUNE</h5>
+                                <h5 className="overflow-hidden"></h5>
                             </div>                            
                         </div>
                         <div className='row pt-2'>
                             <div className='col-12'>
-                                <div className="overflow-hidden" style={{height:'75px'}}>Juice is a drink made from the extraction or pressing of the natural liquid contained in fruit and vegetables. It can also refer to liquids that are flavored with concentrate or other biological food sources, such as meat or seafood, such as clam juice..</div>
+                                <div className="overflow-hidden" style={{height:'75px'}}></div>
                             </div>
                         </div>
                         <div className='row pt-2'>
                             <div className='col-6'>
-                                <NdTextBox id={"txtPrice"} parent={this} simple={true} inputAttr={{ class: 'dx-texteditor-input txtbox-center' }} value={1.65}/>
+                                <NdTextBox id={"txtPrice"} parent={this} simple={true} inputAttr={{ class: 'dx-texteditor-input txtbox-center' }} value={this.data.PRICE}/>
                             </div>
                             <div className='col-6'>
                                 <NdSelectBox simple={true} parent={this} id="cmbGroup" height='fit-content' 
@@ -127,11 +162,11 @@ export default class NbItemPopUp extends NbBase
                         <div className='row pt-2'>
                             <div className='col-12'>
                                 <NdTextBox id={"txtQuantity"} parent={this} simple={true} inputAttr={{ class: 'dx-texteditor-input txtbox-center' }}
-                                value={0}
+                                value={this.data.QUANTITY}
                                 onChange={(async(e)=>
                                 {
-                                    this.props.data.QUANTITY = this.txtQuantity.value
-                                    this._onValueChange(this.props.data)
+                                    this.data.QUANTITY = this.txtQuantity.value
+                                    this._onValueChange(this.data)
                                 }).bind(this)}
                                 button={
                                 [
@@ -144,8 +179,8 @@ export default class NbItemPopUp extends NbBase
                                             if(this["txtQuantity" + this.props.id].value > 0)
                                             {
                                                 this.txtQuantity.value = Number(this.txtQuantity.value) - 1 
-                                                this.props.data.QUANTITY = this.txtQuantity.value
-                                                this._onValueChange(this.props.data)
+                                                this.data.QUANTITY = this.txtQuantity.value
+                                                this._onValueChange(this.data)
                                             }
                                             
                                         }
@@ -157,8 +192,8 @@ export default class NbItemPopUp extends NbBase
                                         onClick:async()=>
                                         {
                                             this.txtQuantity.value = Number(this.txtQuantity.value) + 1 
-                                            this.props.data.QUANTITY = this.txtQuantity.value
-                                            this._onValueChange(this.props.data)
+                                            this.data.QUANTITY = this.txtQuantity.value
+                                            this._onValueChange(this.data)
                                         }
                                     }                                                    
                                 ]}>

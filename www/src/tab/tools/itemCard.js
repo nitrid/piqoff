@@ -31,7 +31,7 @@ export default class NbItemCard extends NbBase
     {
         if(typeof this.props.onClick != 'undefined')
         {
-            this.props.onClick();
+            this.props.onClick(this.props);
         }
     }
     setDocItem()
@@ -40,6 +40,10 @@ export default class NbItemCard extends NbBase
         if(tmpDt.length > 0)
         {
             this["txtQuantity" + this.props.id].value = tmpDt[0].QUANTITY
+        }
+        else
+        {
+            this["txtQuantity" + this.props.id].value = 0
         }
     }
     render()

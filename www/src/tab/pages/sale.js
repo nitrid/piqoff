@@ -86,6 +86,7 @@ export default class Sale extends React.PureComponent
             this.itemView.items = this.itemView.items
             this.tmpStartPage = this.tmpStartPage + this.tmpPageLimit
         }
+        this.itemView.setItemAll()
         this.setState({isExecute:false})
     }
     async loadMore()
@@ -99,6 +100,7 @@ export default class Sale extends React.PureComponent
         }
         this.itemView.items = this.itemView.items
         this.tmpStartPage = this.tmpStartPage + this.tmpPageLimit
+        this.itemView.setItemAll()
         this.setState({isExecute:false})
     }
     async _customerSearch()
@@ -146,6 +148,7 @@ export default class Sale extends React.PureComponent
     }
     onValueChange(e)
     {
+        console.log(e)
         let tmpLine = this.docLines.where({'ITEM':e.GUID})
         if(tmpLine.length > 0)
         {
