@@ -22,6 +22,7 @@ import NdDialog,{dialog} from '../../core/react/devex/dialog';
 import NbButton from '../../core/react/bootstrap/button';
 import NbPopUp from '../../core/react/bootstrap/popup';
 import * as appInfo from '../../../package.json'
+import transferCls from './transfer';
 
 export default class App extends React.PureComponent
 {
@@ -37,8 +38,8 @@ export default class App extends React.PureComponent
         locale(localStorage.getItem('lang') == null ? 'tr' : localStorage.getItem('lang'));
         i18n.changeLanguage(localStorage.getItem('lang') == null ? 'tr' : localStorage.getItem('lang'))
         this.lang = i18n;  
-        moment.locale(localStorage.getItem('lang') == null ? 'tr' : localStorage.getItem('lang'));
-        
+        moment.locale(localStorage.getItem('lang') == null ? 'tr' : localStorage.getItem('lang'));        
+
         this.style =
         {
             splash_body : 
@@ -71,6 +72,7 @@ export default class App extends React.PureComponent
         if(window.origin.substring(0,4) == 'http')
         {
             this.device = false
+            this.init();
         }
         else
         {
@@ -80,18 +82,25 @@ export default class App extends React.PureComponent
             js.src = "../../cordova.js";
             body.appendChild(js);
             this.device = true
-        }
-
+            document.addEventListener('deviceready', ()=>
+            {
+                this.init();
+            }, false);
+        }        
+    }
+    init()
+    {
         this.core = new core(io(this.device ? 'http://' + localStorage.host : window.origin,{timeout:100000,transports : ['websocket']}));
         this.core.appInfo = appInfo
-        
+        this.transfer = new transferCls()
+
         if(!App.instance)
         {
             App.instance = this;
         }
 
         this.core.socket.on('connect',async () => 
-        {
+        {            
             if((await this.core.sql.try()).status > 0)
             {
                 let tmpSplash = 

@@ -55,7 +55,7 @@ export default class Login extends React.PureComponent
     async componentDidMount()
     {
         await this.core.util.waitUntil(0)
-        this.Kullanici.focus()
+        this.Kullanici.focus()        
     }
     textValueChanged(e) 
     {      

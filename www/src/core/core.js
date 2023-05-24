@@ -180,10 +180,18 @@ export class local
     {
         this.db = null;  
         this.sqllite = null
+        this.platform = ''
+
         if(core.instance.util.isElectron())
         {
-            this.sqllite = global.require('sqlite3').verbose()            
-        }      
+            this.sqllite = global.require('sqlite3').verbose()
+            this.platform = 'electron'
+        }
+        else if(typeof window.sqlitePlugin != 'undefined')
+        {
+            this.sqllite = window.sqlitePlugin
+            this.platform = 'cordova'
+        }
     }
     async init(pDb)
     {
@@ -195,26 +203,49 @@ export class local
                 return
             }
 
-            this.db = new this.sqllite.Database('./resources/' + pDb.name + '.db', async(err) => 
+            if(this.platform == 'electron')
             {
-                if (err) 
+                this.db = new this.sqllite.Database('./resources/' + pDb.name + '.db', async(err) => 
                 {
-                    console.error(err.message);
+                    if (err) 
+                    {
+                        console.error(err.message);
+                        resolve(false)
+                        return
+                    }
+    
+                    console.log('Connected to the database.');
+    
+                    this.db.serialize(() => 
+                    {
+                        for (let i = 0; i < pDb.tables.length; i++) 
+                        {
+                            this.db.run(pDb.tables[i].query)
+                        }
+                        resolve(true)
+                    })
+                })
+            }
+            else if(this.platform == 'cordova')
+            {
+                this.db = this.sqllite.openDatabase({ name: pDb.name + '.db', location: 'default' });
+
+                this.db.transaction((tx) =>
+                {
+                    for (var i = 0; i < pDb.tables.length; i++) 
+                    {
+                        tx.executeSql(pDb.tables[i].query);
+                    }
+                },(err)=>
+                {
+                    console.error(err);
                     resolve(false)
                     return
-                }
-
-                console.log('Connected to the database.');
-
-                this.db.serialize(() => 
+                },()=>
                 {
-                    for (let i = 0; i < pDb.tables.length; i++) 
-                    {
-                        this.db.run(pDb.tables[i].query)
-                    }
                     resolve(true)
-                })                                
-            })                        
+                });
+            }
         });
     }
     async insert(pQuery)
@@ -226,17 +257,36 @@ export class local
                 resolve({result:{state:false,err:'No Sqlite'}});
                 return
             }
+            
             //BURAYA ONLINE SORGUSU İLE QUERY GÖNDERİLEBİLİR ONUN İÇİN LOCAL KONTROL VAR. (pQuery.local != 'undefined' ? pQuery.local : pQuery)
             let tmpQuery = typeof pQuery.local != 'undefined' ? pQuery.local : pQuery
-            this.db.run(tmpQuery.query, typeof tmpQuery.values == 'undefined' ? [] : tmpQuery.values, (err) => 
+            
+            if(this.platform == 'electron')
             {
-                if (err) 
+                this.db.run(tmpQuery.query, typeof tmpQuery.values == 'undefined' ? [] : tmpQuery.values, (err) => 
                 {
-                    console.log(err.message + ' ' + tmpQuery.query)
-                    resolve({result:{state:false,err:err.message + ' ' + tmpQuery.query}});
-                }
-                resolve({result:{state:true}})
-            });
+                    if (err) 
+                    {
+                        console.log(err.message + ' ' + tmpQuery.query)
+                        resolve({result:{state:false,err:err.message + ' ' + tmpQuery.query}});
+                    }
+                    resolve({result:{state:true}})
+                });
+            }
+            else if(this.platform == 'cordova')
+            {
+                this.db.transaction((tx) =>
+                {
+                    tx.executeSql(tmpQuery.query, typeof tmpQuery.values == 'undefined' ? [] : tmpQuery.values, (tx, result) =>
+                    {
+                        resolve({ result: { state: true } });
+                    }, (tx, err) =>
+                    {
+                        console.log(err + ' ' + tmpQuery.query)
+                        resolve({result:{state:false,err:err + ' ' + tmpQuery.query}});
+                    });
+                });
+            }
         });
     }
     async select(pQuery)
@@ -256,15 +306,34 @@ export class local
                 resolve({result:{state:false,err:'Query is undefined'}});
                 return
             }
-            this.db.all(tmpQuery.query, typeof tmpQuery.values == 'undefined' ? [] : tmpQuery.values, (err, rows) => 
+
+            if(this.platform == 'electron')
             {
-                if (err) 
+                this.db.all(tmpQuery.query, typeof tmpQuery.values == 'undefined' ? [] : tmpQuery.values, (err, rows) => 
                 {
-                    console.log(err.message + ' ' + tmpQuery.query)
-                    resolve({result:{state:false,err:err.message}});
-                }
-                resolve({result:{state:true,recordset:rows}})
-            });
+                    if (err) 
+                    {
+                        console.log(err.message + ' ' + tmpQuery.query)
+                        resolve({result:{state:false,err:err.message}});
+                    }
+                    resolve({result:{state:true,recordset:rows}})
+                });
+            }
+            else if(this.platform == 'cordova')
+            {
+                this.db.transaction((tx) =>
+                {
+                    tx.executeSql(tmpQuery.query, typeof tmpQuery.values == 'undefined' ? [] : tmpQuery.values, (tx, result) =>
+                    {
+                        console.log(result)
+                        resolve({result:{state:true,recordset:result}})
+                    }, (tx, err) =>
+                    {
+                        console.log(err + ' ' + tmpQuery.query)
+                        resolve({result:{state:false,err:err + ' ' + tmpQuery.query}});
+                    });
+                });
+            }
         });
     }
     async update(pQuery)
@@ -283,15 +352,33 @@ export class local
                 resolve({result:{state:false,err:'Query is undefined'}});
                 return
             }
-            this.db.run(tmpQuery.query, typeof tmpQuery.values == 'undefined' ? [] : tmpQuery.values, (err) => 
+
+            if(this.platform == 'electron')
             {
-                if (err) 
+                this.db.run(tmpQuery.query, typeof tmpQuery.values == 'undefined' ? [] : tmpQuery.values, (err) => 
                 {
-                    console.log(err.message + ' ' + tmpQuery.query)
-                    resolve({result:{state:false,err:err.message}});
-                }
-                resolve({result:{state:true}})
-            });
+                    if (err) 
+                    {
+                        console.log(err.message + ' ' + tmpQuery.query)
+                        resolve({result:{state:false,err:err.message}});
+                    }
+                    resolve({result:{state:true}})
+                });
+            }
+            else if(this.platform == 'cordova')
+            {
+                this.db.transaction((tx) =>
+                {
+                    tx.executeSql(tmpQuery.query, typeof tmpQuery.values == 'undefined' ? [] : tmpQuery.values, (tx, result) =>
+                    {
+                        resolve({ result: { state: true } });
+                    }, (tx, err) =>
+                    {
+                        console.log(err + ' ' + tmpQuery.query)
+                        resolve({result:{state:false,err:err + ' ' + tmpQuery.query}});
+                    });
+                });
+            }
         });
     }
     async remove(pQuery)
@@ -310,15 +397,33 @@ export class local
                 resolve({result:{state:false,err:'Query is undefined'}});
                 return
             }
-            this.db.run(tmpQuery.query, typeof tmpQuery.values == 'undefined' ? [] : tmpQuery.values, (err) => 
+            
+            if(this.platform == 'electron')
             {
-                if (err) 
+                this.db.run(tmpQuery.query, typeof tmpQuery.values == 'undefined' ? [] : tmpQuery.values, (err) => 
                 {
-                    console.log(err.message + ' ' + tmpQuery.query)
-                    resolve({result:{state:false,err:err.message}});
-                }
-                resolve({result:{state:true}})
-            });
+                    if (err) 
+                    {
+                        console.log(err.message + ' ' + tmpQuery.query)
+                        resolve({result:{state:false,err:err.message}});
+                    }
+                    resolve({result:{state:true}})
+                });
+            }
+            else if(this.platform == 'cordova')
+            {
+                this.db.transaction((tx) =>
+                {
+                    tx.executeSql(tmpQuery.query, typeof tmpQuery.values == 'undefined' ? [] : tmpQuery.values, (tx, result) =>
+                    {
+                        resolve({ result: { state: true } });
+                    }, (tx, err) =>
+                    {
+                        console.log(err + ' ' + tmpQuery.query)
+                        resolve({result:{state:false,err:err + ' ' + tmpQuery.query}});
+                    });
+                });
+            }
         });
     }
     async execute(pQuery)
