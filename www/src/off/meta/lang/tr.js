@@ -16,6 +16,7 @@ export const langTr =
     btnNo : "Hayır",
     msgClose : "Sayfayı Kapatmak İstediğinize Eminmisiniz ?",
     txtLangSelect : "Dil Seçimi",
+    txtDbSelect : "Database Seçimi",
     userListTitle : "Kullanıcı Listesi",
     txtUser : "Kullanıcı",
     txtPass : "Şifre",
@@ -45,6 +46,11 @@ export const langTr =
     dtLastYear : "Geçen Yıl",
     txtTotalTicket : "Toplam Fiş Sayısı",
     txtTicketAvg : "Ortalama Fiş Tutarı",
+    popDbList :
+    {
+        title : "Database Seçimi",
+        clmCode : "KODU"
+    },
     popPassword : 
     {
         title: "Kullanıcı Şifrenizi Giriniz",

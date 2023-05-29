@@ -33,7 +33,7 @@ export default class Login extends React.PureComponent
                 margin:'auto',
                 top: '40%',
                 width: '500px',
-                height: '500px',
+                height: '540px',
             },
 
         }  
@@ -59,6 +59,11 @@ export default class Login extends React.PureComponent
     {
         await this.core.util.waitUntil(0)
         this.Kullanici.focus()
+        if(typeof this.core.appInfo.databases != 'undefined' && this.core.appInfo.databases.length > 0)
+        {
+            this.txtDbSelect.value = this.core.appInfo.databases[0].CODE
+            this.core.sql.selectedDb = this.txtDbSelect.value
+        }
     }
     textValueChanged(e) 
     {      
@@ -87,6 +92,12 @@ export default class Login extends React.PureComponent
             }
             else
             {
+                //ÇOKLU DATABASE SEÇİMİ İÇİN YAPILDI
+                if(typeof this.core.appInfo.databases != 'undefined' && this.core.appInfo.databases.length > 0)
+                {
+                    window.sessionStorage.setItem('selectedDb',this.txtDbSelect.value)
+                }
+
                 App.instance.setState({logined:true});
                 this.setUser()
             }
@@ -97,7 +108,7 @@ export default class Login extends React.PureComponent
         }
     }
     async getUserList()
-    {
+    {        
         let tmpData = await this.core.auth.getUserList()
         await this.pg_users.setData(tmpData)
         this.pg_users.show()
@@ -168,7 +179,8 @@ export default class Login extends React.PureComponent
                 {
                     icon : 'fa-solid fa-arrow-right-to-bracket',
                     onClick : () => 
-                    {                                                        
+                    { 
+                        window.sessionStorage.removeItem('selectedDb')                                                        
                         this.core.auth.logout()
                         window.location.reload()
                     }
@@ -220,6 +232,62 @@ export default class Login extends React.PureComponent
             await dialog(tmpConfObj);
         }
     }
+    dbSelectedView()
+    {
+        if(typeof this.core.appInfo.databases != 'undefined' && this.core.appInfo.databases.length > 0)
+        {
+            return(
+                <div className="dx-field">
+                    <div className="dx-field-label">{this.lang.t("txtDbSelect")}</div>
+                    <div className="dx-field-value">
+                        <NdTextBox id="txtDbSelect" parent={this} simple={true} tabIndex={this.tabIndex} readOnly={true}
+                        button=
+                        {
+                            [
+                                {
+                                    id:'01',
+                                    icon:'more',
+                                    onClick:async()=>
+                                    {
+                                        await this.popDbList.setData(this.core.appInfo.databases)
+                                        this.popDbList.show()
+                                        this.popDbList.onClick = (data) =>
+                                        {
+                                            if(data.length > 0)
+                                            {
+                                                this.txtDbSelect.value = data[0].CODE
+                                                this.core.sql.selectedDb = this.txtDbSelect.value
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                        />
+                        {/* DATABASE SEÇİM POPUP */}
+                        <NdPopGrid id={"popDbList"} parent={this} container={"#root"} 
+                        visible={false}
+                        position={{of:'#root'}} 
+                        showTitle={true} 
+                        showBorders={true}
+                        width={'40%'}
+                        height={'50%'}
+                        headerFilter={{visible:false}}
+                        filterRow={{visible:false}}
+                        title={this.lang.t("popDbList.title")} 
+                        selection={{mode:"single"}}
+                        >
+                            <Column dataField="CODE" caption={this.lang.t("popDbList.clmCode")} width={'100%'} />
+                        </NdPopGrid>    
+                    </div>
+                </div>
+            )
+        }
+        else
+        {
+            return
+        }
+    }
     render()
     {
         return (
@@ -243,21 +311,22 @@ export default class Login extends React.PureComponent
                         <div className="dx-field">
                             <div className="dx-field-label">{this.lang.t("txtLangSelect")}</div>
                             <div className="dx-field-value">
-                            <NdSelectBox simple={true} parent={this} id="cmbType" height='fit-content'
-                                    displayExpr="text"                       
-                                    valueExpr="id"
-                                    value= {localStorage.getItem('lang') == null ? 'tr' : localStorage.getItem('lang')}
-                                    data={{source:[{id:"en",text:"EN"},{id:"fr",text:"FR"},{id:"tr",text:"TR"}]}}
-                                    onValueChanged={(async(args)=>
-                                            {
-                                                localStorage.setItem('lang',args.value)
-                                                i18n.changeLanguage(args.value)
-                                                locale(args.value)
-                                                window.location.reload()
-                                        }).bind(this)}
-                                    />
+                                <NdSelectBox simple={true} parent={this} id="cmbType" height='fit-content'
+                                displayExpr="text"                       
+                                valueExpr="id"
+                                value= {localStorage.getItem('lang') == null ? 'tr' : localStorage.getItem('lang')}
+                                data={{source:[{id:"en",text:"EN"},{id:"fr",text:"FR"},{id:"tr",text:"TR"}]}}
+                                onValueChanged={(async(args)=>
+                                {
+                                    localStorage.setItem('lang',args.value)
+                                    i18n.changeLanguage(args.value)
+                                    locale(args.value)
+                                    window.location.reload()
+                                }).bind(this)}
+                                />
                             </div>
                         </div>
+                        {this.dbSelectedView()}
                         <div className="dx-field">
                             <div className="dx-field-label">{this.lang.t("txtUser")}</div>
                             <div className="dx-field-value">
