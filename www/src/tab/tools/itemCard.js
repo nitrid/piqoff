@@ -1,4 +1,5 @@
 import React from "react";
+import App from "../lib/app.js";
 import NbBase from "../../core/react/bootstrap/base.js";
 import NdTextBox,{ Button } from '../../core/react/devex/textbox'
 import NdSelectBox from '../../core/react/devex/selectbox'
@@ -8,6 +9,7 @@ export default class NbItemCard extends NbBase
     constructor(props)
     {
         super(props)
+        this.core = App.instance.core;
         this.state = 
         {
             image : typeof this.props.image == 'undefined' ? '../css/img/noimage.jpg' : this.props.image,
@@ -22,6 +24,7 @@ export default class NbItemCard extends NbBase
     }
     _onValueChange(e)
     {
+        console.log(e)
         if(typeof this.props.onValueChange != 'undefined')
         {
             this.props.onValueChange(e);
@@ -39,7 +42,8 @@ export default class NbItemCard extends NbBase
         let tmpDt = typeof this.props.dt == 'undefined' ? [] : this.props.dt.where({'ITEM':this.props.data.GUID})
         if(tmpDt.length > 0)
         {
-            this["txtQuantity" + this.props.id].value = tmpDt[0].QUANTITY
+            this["txtQuantity" + this.props.id].value = tmpDt[0].QUANTITY / tmpDt[0].UNIT_FACTOR
+            this.cmbUnit.value = tmpDt[0].UNIT
         }
         else
         {
@@ -61,12 +65,26 @@ export default class NbItemCard extends NbBase
                             <h5 className="card-title" style={{marginBottom:'0px',paddingTop:'5px'}}>{this.state.price}€</h5>
                         </div>
                         <div className='col-6'>
-                            <NdSelectBox simple={true} parent={this} id="cmbGroup" height='fit-content' 
+                            <NdSelectBox simple={true} parent={this} id="cmbUnit" height='fit-content' 
                             displayExpr="NAME"                       
                             valueExpr="GUID"
                             value= {this.props.data.UNIT}
                             searchEnabled={true}
-                            data={{source:[{GUID:this.props.data.UNIT,NAME:this.props.data.UNIT_NAME}]}}
+                            data={{source:{select:{query : "SELECT GUID,NAME,FACTOR,TYPE FROM ITEM_UNIT_VW_01 WHERE ITEM_GUID ='"+ this.props.data.GUID +"'"},sql:this.core.sql}}}
+                            onValueChanged={(async(e)=>
+                            {
+                                if(e.value != '00000000-0000-0000-0000-000000000000' && e.value != '')
+                                {
+                                    this.props.data.UNIT_FACTOR = this.cmbUnit.data.datatable.where({'GUID':e.value})[0].FACTOR
+                                    this.props.data.UNIT = e.value
+                                    let tmpDt = typeof this.props.dt == 'undefined' ? [] : this.props.dt.where({'ITEM':this.props.data.GUID})
+                                    if(tmpDt.length > 0)
+                                    {
+                                        tmpDt[0].UNIT_FACTOR = this.data.UNIT_FACTOR
+                                    }
+                                    this._onValueChange(this.props.data)
+                                }
+                            }).bind(this)}
                             />
                         </div>
                     </div>

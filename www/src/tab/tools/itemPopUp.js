@@ -23,7 +23,6 @@ export default class NbItemPopUp extends NbBase
             minImgStyle4 : {padding:"2px"}
         }
         this.data = []
-        this.unitFactor = 1
     }
     async open(pData)
     {        
@@ -70,8 +69,7 @@ export default class NbItemPopUp extends NbBase
         await this.cmbUnit.dataRefresh(tmpSource)
         if(this.cmbUnit.data.datatable.length > 0)
         {
-            this.unitFactor = this.cmbUnit.data.datatable.where({'TYPE':0})[0].FACTOR;
-            this.cmbUnit.value = this.cmbUnit.data.datatable.where({'TYPE':0})[0].GUID;
+            this.cmbUnit.value = this.data.UNIT;
         }
     }
     _onValueChange(e)
@@ -178,7 +176,9 @@ export default class NbItemPopUp extends NbBase
                                     {
                                         if(e.value != '00000000-0000-0000-0000-000000000000' && e.value != '')
                                         {
-                                            this.unitFactor = this.cmbUnit.data.datatable.where({'GUID':e.value})[0].FACTOR
+                                            this.data.UNIT_FACTOR = this.cmbUnit.data.datatable.where({'GUID':e.value})[0].FACTOR
+                                            this.data.UNIT = e.value
+                                            this._onValueChange(this.data)
                                         }
                                     }).bind(this)}
                                 />
