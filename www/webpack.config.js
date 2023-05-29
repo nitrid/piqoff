@@ -110,7 +110,10 @@ module.exports =
                 { from: "./src/mob/sound/", to: "./mob/sound/" },
                 { from: "./src/mob/css/bootstrap.min.css", to: "./mob/css/bootstrap.min.css" },
                 { from: "./src/mob/lib/bootstrap.bundle.min.js", to: "./mob/lib/bootstrap.bundle.min.js" },
-                { from: "./src/mob/lib/socket.io.js", to: "./mob/lib/socket.io.js" },
+                { from: "./src/mob/lib/socket.io.js", to: "./mob/lib/socket.io.js" },                
+                { from: "./src/tab/css/", to: "./tab/css/" },
+                { from: "./src/tab/appUpdate.html", to: "./tab/appUpdate.html" },
+                { from: "./src/tab/lib/bootstrap.bundle.min.js", to: "./tab/lib/bootstrap.bundle.min.js" },
             ]
         }),
         new htmlWebPackPlugin(

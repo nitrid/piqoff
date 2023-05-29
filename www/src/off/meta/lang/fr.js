@@ -16,6 +16,7 @@ export const langFr =
     btnNo : "Non",
     msgClose : "Etes-vous sûr(e) de vouloir quitter la page ?",
     txtLangSelect : "Choix de la langue",
+    txtDbSelect : "Choix de la database",
     userListTitle : "Liste d'utilisateur", 
     txtUser : "Utilisateur",
     txtPass : "Mot de passe",
@@ -45,6 +46,11 @@ export const langFr =
     dtLastYear : "Année Dernière",
     txtTotalTicket : "Total des tickets de caisses",   
     txtTicketAvg : "Montant moyen des tickets de caisses", 
+    popDbList : 
+    {
+        title : "Database Seçimi", //BAK
+        clmCode : "KODU" //BAK
+    },
     popPassword : 
     {
         title: "Entrez votre mot de passe utilisateur",  

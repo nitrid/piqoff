@@ -66,7 +66,7 @@ export default class Sale extends React.PureComponent
         this.itemView.items = []
         let tmpQuery = 
         {
-            query :"SELECT  GUID,CODE,NAME,VAT,PRICE,IMAGE,UNIT,UNIT_NAME FROM ITEMS_VW_02 " +
+            query :"SELECT  GUID,CODE,NAME,VAT,PRICE,IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR FROM ITEMS_VW_02 " +
             "WHERE STATUS = 1 AND IMAGE <> '' AND " +
             " UPPER(NAME) LIKE UPPER(@VAL + '%') AND ((MAIN_GRP = @MAIN_GRP) OR (@MAIN_GRP = ''))",
             param : ['VAL:string|50','MAIN_GRP:string|50'],
@@ -137,7 +137,9 @@ export default class Sale extends React.PureComponent
         tmpdocOrders.ITEM = e.GUID
         tmpdocOrders.ITEM_NAME = e.NAME
         tmpdocOrders.VAT_RATE = e.VAT
-        tmpdocOrders.QUANTITY = e.QUANTITY
+        tmpdocOrders.QUANTITY = e.QUANTITY * e.UNIT_FACTOR
+        tmpdocOrders.UNIT = e.UNIT
+        tmpdocOrders.UNIT_FACTOR = e.UNIT_FACTOR
         tmpdocOrders.PRICE = e.PRICE
         tmpdocOrders.AMOUNT = parseFloat(((tmpdocOrders.PRICE * tmpdocOrders.QUANTITY))).round(2)
         tmpdocOrders.TOTALHT = parseFloat(((tmpdocOrders.PRICE * tmpdocOrders.QUANTITY))).round(2)
@@ -148,17 +150,19 @@ export default class Sale extends React.PureComponent
     }
     onValueChange(e)
     {
-        console.log(e)
+
         let tmpLine = this.docLines.where({'ITEM':e.GUID})
         if(tmpLine.length > 0)
         {
             if(e.QUANTITY > 0)
             {
-                tmpLine[0].QUANTITY = e.QUANTITY
-                tmpLine[0].AMOUNT = parseFloat(((tmpLine[0].PRICE * e.QUANTITY))).round(2)
-                tmpLine[0].TOTALHT = parseFloat(((tmpLine[0].PRICE * e.QUANTITY))).round(2)
+                tmpLine[0].QUANTITY = e.QUANTITY * e.UNIT_FACTOR
+                tmpLine[0].AMOUNT = parseFloat(((tmpLine[0].PRICE * (e.QUANTITY * e.UNIT_FACTOR)))).round(2)
+                tmpLine[0].TOTALHT = parseFloat(((tmpLine[0].PRICE * (e.QUANTITY * e.UNIT_FACTOR)))).round(2)
                 tmpLine[0].VAT = parseFloat(((tmpLine[0].TOTALHT ) * (e.VAT / 100)).toFixed(4))
                 tmpLine[0].TOTAL = parseFloat(((tmpLine[0].TOTALHT) + tmpLine[0].VAT)).round(2)
+                tmpLine[0].UNIT_FACTOR = e.UNIT_FACTOR
+                tmpLine[0].UNIT = e.UNIT
             }
             else
             {

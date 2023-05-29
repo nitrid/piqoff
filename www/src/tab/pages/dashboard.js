@@ -22,7 +22,7 @@ export default class Dashboard extends React.PureComponent
                         <div className='col-6'>
                             <div className="card" style={{height:'150px'}}>
                                 <div className="card-body">
-                                    <h5 className="card-title">Son Satış Detayı</h5>
+                                    <h5 className="card-title">Dernier détail de vente</h5>
                                     <h6 className="card-subtitle mb-2 text-muted">Hudo Distiribution</h6>
                                     <p className="fs-1 fw-bold text-primary">1.255,60€</p>
                                 </div>
@@ -31,7 +31,7 @@ export default class Dashboard extends React.PureComponent
                         <div className='col-6'>
                             <div className="card" style={{height:'150px'}}>
                                 <div className="card-body">
-                                    <h5 className="card-title">Günlük Satış Tutar</h5>
+                                    <h5 className="card-title">Montant des ventes</h5>
                                     <p className="fw-bold text-danger" style={{fontSize:'60px'}}>4.218,27€</p>
                                 </div>
                             </div>
@@ -41,11 +41,11 @@ export default class Dashboard extends React.PureComponent
                         <div className='col-12'>
                             <div className="card" style={{height:'520px'}}>
                                 <div className="card-body">
-                                    <h5 className="card-title">Aylık Satış Detayı</h5>
+                                    <h5 className="card-title">Détails des ventes mensuelles</h5>
                                     <p className="fs-3 fw-bold text-primary">12.825,15€</p>
                                     <div className="row">
                                         <div className="col-12">
-                                        <Chart id="chart" title="Aylık Satış Raporu" 
+                                        <Chart id="chart" title="Détails des ventes mensuelles" 
                                         dataSource={
                                         [{
                                             state: 'Illinois',

@@ -77,7 +77,8 @@ export class sql
 {
     constructor()
     {
-        this.query = "";        
+        this.query = "";
+        this.selectedDb = "";
     }
     try()
     {
@@ -155,6 +156,12 @@ export class sql
                         }
                     }
                 }
+                //SQL SINIFINDAKI DATABASE DEĞİŞKENİ BOŞTAN FARKLI İSE GÖNDERİLEN SORGUNUN DATABASE ADI BU DEĞİŞKENDEN VERİLİYOR.BU ŞEKİLDE UYGULAMA İÇİNDE BİRDEN FAZLA DB İLE ÇALIŞMAK MÜMKÜN.
+                if(this.selectedDb != '')
+                {
+                    TmpQuery.db = this.selectedDb
+                }
+
                 core.instance.socket.emit('sql',TmpQuery,(data) =>
                 {
                     core.instance.emit('onExecuted');
@@ -587,14 +594,18 @@ export class auth
                 }
             }
             /************************************************************************************ */
+            //BİRDEN FAZLA DB İÇİN YAPILDI
+            tmpData.push(core.instance.sql.selectedDb != '' ? core.instance.sql.selectedDb : '')
+
             core.instance.socket.emit('login',tmpData,async (data) =>
             {
                 if(data.length > 0)
                 {
                     this.data = data[0]
                     if(typeof window != 'undefined')
+                    {
                         window.sessionStorage.setItem('auth',data[0].SHA)
-
+                    }
                     resolve(true)
                 }
                 else 
@@ -628,7 +639,14 @@ export class auth
                 }
             }
             /************************************************************************************ */
-            core.instance.socket.emit('getUserList',async (data) =>
+            //BİRDEN FAZLA DB İÇİN YAPILDI
+            let tmpParam = ""
+            if(core.instance.sql.selectedDb != '')
+            {
+                tmpParam = core.instance.sql.selectedDb
+            }
+
+            core.instance.socket.emit('getUserList',tmpParam,async (data) =>
             {
                 if(data.length > 0)
                 {

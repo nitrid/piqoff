@@ -53,6 +53,24 @@ export default class NbItemPopUp extends NbBase
             this.setState({images:[]})
             this.popCard.show();
         }
+        let tmpSource =
+        {
+            source : 
+            {
+                select : 
+                {
+                    query : "SELECT GUID,NAME,FACTOR,TYPE FROM ITEM_UNIT_VW_01 WHERE ITEM_GUID =@ITEM_GUID",
+                    param : ['ITEM_GUID:string|50'],
+                    value : [this.data.GUID]
+                },
+                sql : this.core.sql
+            }
+        }
+        await this.cmbUnit.dataRefresh(tmpSource)
+        if(this.cmbUnit.data.datatable.length > 0)
+        {
+            this.cmbUnit.value = this.data.UNIT;
+        }
     }
     _onValueChange(e)
     {
@@ -150,12 +168,19 @@ export default class NbItemPopUp extends NbBase
                                 <NdTextBox id={"txtPrice"} parent={this} simple={true} inputAttr={{ class: 'dx-texteditor-input txtbox-center' }} value={this.data.PRICE}/>
                             </div>
                             <div className='col-6'>
-                                <NdSelectBox simple={true} parent={this} id="cmbGroup" height='fit-content' 
+                                <NdSelectBox simple={true} parent={this} id="cmbUnit" height='fit-content' 
                                 displayExpr="NAME"                       
                                 valueExpr="GUID"
-                                // value= {this.props.data.UNIT}
                                 searchEnabled={true}
-                                // data={{source:[{GUID:this.props.data.UNIT,NAME:this.props.data.UNIT_NAME}]}}
+                                onValueChanged={(async(e)=>
+                                    {
+                                        if(e.value != '00000000-0000-0000-0000-000000000000' && e.value != '')
+                                        {
+                                            this.data.UNIT_FACTOR = this.cmbUnit.data.datatable.where({'GUID':e.value})[0].FACTOR
+                                            this.data.UNIT = e.value
+                                            this._onValueChange(this.data)
+                                        }
+                                    }).bind(this)}
                                 />
                             </div>
                         </div>

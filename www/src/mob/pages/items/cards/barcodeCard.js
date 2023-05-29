@@ -112,7 +112,6 @@ export default class barcodeCard extends React.Component
             let tmpGuid = this.cmbBarUnit.data.datatable.where({'TYPE':0})[0].GUID
             this.cmbBarUnit.value = tmpGuid;
             this.txtUnitTypeName.setState({value:this.t("MainUnit")})
-           
         }
     }
    render()
