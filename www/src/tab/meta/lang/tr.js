@@ -81,5 +81,42 @@ export const langTr =
             btn02: "Vazgeç",
             msg: "Kaydı silmek istediğinize eminmisiniz ?"
         },
+        msgCustomerSelect:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen Müşteri Seçiniz.."
+        },
+        msgDepotSelect:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen Depo Seçiniz.."
+        },
+        msgLineNotFound:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Ürün Eklemeden Evrak Kayıt Edilemez !"
+        },
+        popDocs:
+        {
+            title : "Evrak Seçimi",
+            btn01 : "Evrakları Getir",
+            btn02 : "Seç" 
+        },
+        cmbDocType : 
+        {
+            order :"Sipariş",
+            invoice : "Fatura"
+        },
+        grdDocs : 
+        {
+            clmRef : "Seri",
+            clmRefNo : "Sıra",
+            clmInputName : "Müşteri",
+            clmDate : "Tarih",
+            clmTotal : "Tutar"
+        }
     }
 }

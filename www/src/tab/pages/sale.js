@@ -27,6 +27,7 @@ export default class Sale extends React.PureComponent
         this.lang = App.instance.lang;
         this.docObj = new docCls();
         this.docLines = new datatable()
+        this.docType = 0
         this.tmpPageLimit = 21
         this.tmpStartPage = 0
         this.tmpEndPage = 0
@@ -55,6 +56,7 @@ export default class Sale extends React.PureComponent
         this.getItems()
         this.popCustomer.show()
         this.cmbGroup.value = ''
+        this.docType = 0
     }
     async getItems()
     {
@@ -121,9 +123,51 @@ export default class Sale extends React.PureComponent
         }
         await this.grdCustomer.dataRefresh(tmpSource)
     }
+    async _getOrders()
+    {
+        let tmpSource =
+        {
+            source : 
+            {
+                groupBy : this.groupList,
+                select : 
+                {
+                    query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,DOC_DATE_CONVERT,DOC_ADDRESS,TOTAL FROM DOC_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 60 AND REBATE = 0  AND DOC_DATE > GETDATE()-30 ORDER BY DOC_DATE,REF_NO DESC ",
+                },
+                sql : this.core.sql
+            }
+        }
+        await this.grdDocs.dataRefresh(tmpSource)
+    }
+    async _getInvoices()
+    {
+        let tmpSource =
+        {
+            source : 
+            {
+                groupBy : this.groupList,
+                select : 
+                {
+                    query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,DOC_DATE_CONVERT,TOTAL FROM DOC_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 20 AND REBATE = 0 AND DOC_DATE > GETDATE()-30 ORDER BY DOC_DATE,REF_NO DESC ",
+                },
+                sql : this.core.sql
+            }
+        }
+        await this.grdDocs.dataRefresh(tmpSource)
+    }
     addItem(e)
     {
-        let tmpdocOrders = {...this.docObj.docOrders.empty}
+        let tmpdocOrders
+        if(this.docType == 60 || this.docType == 0)
+        {
+            tmpdocOrders = {...this.docObj.docOrders.empty}
+        }
+        else if(this.docType == 20)
+        {
+            tmpdocOrders = {...this.docObj.docItems.empty}
+        }
+
+        tmpdocOrders.GUID = datatable.uuidv4()
         tmpdocOrders.DOC_GUID = this.docObj.dt()[0].GUID
         tmpdocOrders.TYPE = this.docObj.dt()[0].TYPE
         tmpdocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
@@ -150,7 +194,6 @@ export default class Sale extends React.PureComponent
     }
     onValueChange(e)
     {
-
         let tmpLine = this.docLines.where({'ITEM':e.GUID})
         if(tmpLine.length > 0)
         {
@@ -172,7 +215,10 @@ export default class Sale extends React.PureComponent
         }
         else
         {
-            this.addItem(e)
+            if(e.QUANTITY > 0)
+            {
+                this.addItem(e)
+            }
         }
     }        
     async _calculateTotal()
@@ -204,42 +250,51 @@ export default class Sale extends React.PureComponent
     }    
     async orderSave()
     {
-        let tmpQuery = 
+        if(this.docObj.dt()[0].REF_NO == 0)
         {
-            query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 60 AND REF = @REF ",
-            param : ['REF:string|25'],
-            value : [this.docObj.dt()[0].REF]
+            let tmpQuery = 
+            {
+                query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 60 AND REF = @REF ",
+                param : ['REF:string|25'],
+                value : [this.docObj.dt()[0].REF]
+            }
+            let tmpData = await this.core.sql.execute(tmpQuery) 
+            if(tmpData.result.recordset.length > 0)
+            {
+                this.docObj.dt()[0].REF_NO = tmpData.result.recordset[0].REF_NO
+            }
+            this.docObj.dt()[0].TYPE = 1 
+            this.docObj.dt()[0].DOC_TYPE = 60
+            for (let i = 0; i < this.docLines.length; i++) 
+            {
+                let tmpDocOrders = {...this.docObj.docOrders.empty}
+                tmpDocOrders.DOC_GUID = this.docLines[i].DOC_GUID
+                tmpDocOrders.TYPE = this.docObj.dt()[0].TYPE
+                tmpDocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                tmpDocOrders.LINE_NO = this.docLines[i].LINE_NO
+                tmpDocOrders.REF = this.docObj.dt()[0].REF
+                tmpDocOrders.REF_NO = this.docObj.dt()[0].REF_NO
+                tmpDocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
+                tmpDocOrders.INPUT = this.docObj.dt()[0].INPUT
+                tmpDocOrders.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                tmpDocOrders.ITEM_CODE = this.docLines[i].ITEM_CODE
+                tmpDocOrders.ITEM = this.docLines[i].ITEM
+                tmpDocOrders.ITEM_NAME = this.docLines[i].ITEM_NAME
+                tmpDocOrders.VAT_RATE = this.docLines[i].VAT_RATE
+                tmpDocOrders.QUANTITY = this.docLines[i].QUANTITY
+                tmpDocOrders.PRICE = this.docLines[i].PRICE
+                tmpDocOrders.AMOUNT = this.docLines[i].AMOUNT
+                tmpDocOrders.TOTALHT = this.docLines[i].TOTALHT
+                tmpDocOrders.VAT = this.docLines[i].VAT
+                tmpDocOrders.TOTAL = this.docLines[i].TOTAL
+                tmpDocOrders.UNIT = this.docLines[i].UNIT
+                tmpDocOrders.UNIT_FACTOR = this.docLines[i].UNIT_FACTOR
+                this.docObj.docOrders.addEmpty(tmpDocOrders)
+            }
         }
-        let tmpData = await this.core.sql.execute(tmpQuery) 
-        if(tmpData.result.recordset.length > 0)
+        else
         {
-            this.docObj.dt()[0].REF_NO = tmpData.result.recordset[0].REF_NO
-        }
-        this.docObj.dt()[0].TYPE = 1 
-        this.docObj.dt()[0].DOC_TYPE = 60
-        for (let i = 0; i < this.docLines.length; i++) 
-        {
-            let tmpDocOrders = {...this.docObj.docOrders.empty}
-            tmpDocOrders.DOC_GUID = this.docLines[i].DOC_GUID
-            tmpDocOrders.TYPE = this.docObj.dt()[0].TYPE
-            tmpDocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-            tmpDocOrders.LINE_NO = this.docLines[i].LINE_NO
-            tmpDocOrders.REF = this.docObj.dt()[0].REF
-            tmpDocOrders.REF_NO = this.docObj.dt()[0].REF_NO
-            tmpDocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
-            tmpDocOrders.INPUT = this.docObj.dt()[0].INPUT
-            tmpDocOrders.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-            tmpDocOrders.ITEM_CODE = this.docLines[i].ITEM_CODE
-            tmpDocOrders.ITEM = this.docLines[i].ITEM
-            tmpDocOrders.ITEM_NAME = this.docLines[i].ITEM_NAME
-            tmpDocOrders.VAT_RATE = this.docLines[i].VAT_RATE
-            tmpDocOrders.QUANTITY = this.docLines[i].QUANTITY
-            tmpDocOrders.PRICE = this.docLines[i].PRICE
-            tmpDocOrders.AMOUNT = this.docLines[i].AMOUNT
-            tmpDocOrders.TOTALHT = this.docLines[i].TOTALHT
-            tmpDocOrders.VAT = this.docLines[i].VAT
-            tmpDocOrders.TOTAL = this.docLines[i].TOTAL
-            this.docObj.docOrders.addEmpty(tmpDocOrders)
+            this.docObj.docOrders.datatable = this.docLines
         }
 
         let tmpConfObj1 =
@@ -260,55 +315,75 @@ export default class Sale extends React.PureComponent
     }
     async factureSave()
     {
-        let tmpQuery = 
+        if(this.docObj.dt()[0].REF_NO == 0)
         {
-            query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 20  AND REBATE = 0",
-        }
-        let tmpData = await this.core.sql.execute(tmpQuery) 
-        if(tmpData.result.recordset.length > 0)
-        {
-            this.docObj.dt()[0].REF_NO = tmpData.result.recordset[0].REF_NO
-        }
-        this.docObj.dt()[0].TYPE = 1 
-        this.docObj.dt()[0].DOC_TYPE = 20
+            let tmpQuery = 
+            {
+                query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 20  AND REBATE = 0",
+            }
+            let tmpData = await this.core.sql.execute(tmpQuery) 
+            if(tmpData.result.recordset.length > 0)
+            {
+                this.docObj.dt()[0].REF_NO = tmpData.result.recordset[0].REF_NO
+            }
+            this.docObj.dt()[0].TYPE = 1 
+            this.docObj.dt()[0].DOC_TYPE = 20
 
-        
-        let tmpDocCustomer = {...this.docObj.docCustomer.empty}
-        tmpDocCustomer.DOC_GUID = this.docObj.dt()[0].GUID
-        tmpDocCustomer.TYPE = this.docObj.dt()[0].TYPE
-        tmpDocCustomer.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-        tmpDocCustomer.REBATE = this.docObj.dt()[0].REBATE
-        tmpDocCustomer.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-        tmpDocCustomer.AMOUNT = this.docObj.dt()[0].TOTAL
-        tmpDocCustomer.REF = this.docObj.dt()[0].REF
-        tmpDocCustomer.REF_NO = this.docObj.dt()[0].REF_NO
-        tmpDocCustomer.OUTPUT = this.docObj.dt()[0].OUTPUT
-        tmpDocCustomer.INPUT = this.docObj.dt()[0].INPUT
-        this.docObj.docCustomer.addEmpty(tmpDocCustomer)
+            
+            let tmpDocCustomer = {...this.docObj.docCustomer.empty}
+            tmpDocCustomer.DOC_GUID = this.docObj.dt()[0].GUID
+            tmpDocCustomer.TYPE = this.docObj.dt()[0].TYPE
+            tmpDocCustomer.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+            tmpDocCustomer.REBATE = this.docObj.dt()[0].REBATE
+            tmpDocCustomer.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+            tmpDocCustomer.AMOUNT = this.docObj.dt()[0].TOTAL
+            tmpDocCustomer.REF = this.docObj.dt()[0].REF
+            tmpDocCustomer.REF_NO = this.docObj.dt()[0].REF_NO
+            tmpDocCustomer.OUTPUT = this.docObj.dt()[0].OUTPUT
+            tmpDocCustomer.INPUT = this.docObj.dt()[0].INPUT
+            this.docObj.docCustomer.addEmpty(tmpDocCustomer)
 
-        for (let i = 0; i < this.docLines.length; i++) 
+            for (let i = 0; i < this.docLines.length; i++) 
+            {
+                let tmpDocItems = {...this.docObj.docItems.empty}
+                tmpDocItems.DOC_GUID = this.docLines[i].DOC_GUID
+                tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+                tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                tmpDocItems.LINE_NO = this.docLines[i].LINE_NO
+                tmpDocItems.REF = this.docObj.dt()[0].REF
+                tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+                tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+                tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+                tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                tmpDocItems.ITEM_CODE = this.docLines[i].ITEM_CODE
+                tmpDocItems.ITEM = this.docLines[i].ITEM
+                tmpDocItems.ITEM_NAME = this.docLines[i].ITEM_NAME
+                tmpDocItems.VAT_RATE = this.docLines[i].VAT_RATE
+                tmpDocItems.QUANTITY = this.docLines[i].QUANTITY
+                tmpDocItems.PRICE = this.docLines[i].PRICE
+                tmpDocItems.AMOUNT = this.docLines[i].AMOUNT
+                tmpDocItems.TOTALHT = this.docLines[i].TOTALHT
+                tmpDocItems.VAT = this.docLines[i].VAT
+                tmpDocItems.TOTAL = this.docLines[i].TOTAL
+                tmpDocItems.UNIT = this.docLines[i].UNIT
+                tmpDocItems.UNIT_FACTOR = this.docLines[i].UNIT_FACTOR
+                this.docObj.docItems.addEmpty(tmpDocItems)
+            }
+        }
+        else
         {
-            let tmpDocItems = {...this.docObj.docItems.empty}
-            tmpDocItems.DOC_GUID = this.docLines[i].DOC_GUID
-            tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
-            tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-            tmpDocItems.LINE_NO = this.docLines[i].LINE_NO
-            tmpDocItems.REF = this.docObj.dt()[0].REF
-            tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
-            tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
-            tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
-            tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-            tmpDocItems.ITEM_CODE = this.docLines[i].ITEM_CODE
-            tmpDocItems.ITEM = this.docLines[i].ITEM
-            tmpDocItems.ITEM_NAME = this.docLines[i].ITEM_NAME
-            tmpDocItems.VAT_RATE = this.docLines[i].VAT_RATE
-            tmpDocItems.QUANTITY = this.docLines[i].QUANTITY
-            tmpDocItems.PRICE = this.docLines[i].PRICE
-            tmpDocItems.AMOUNT = this.docLines[i].AMOUNT
-            tmpDocItems.TOTALHT = this.docLines[i].TOTALHT
-            tmpDocItems.VAT = this.docLines[i].VAT
-            tmpDocItems.TOTAL = this.docLines[i].TOTAL
-            this.docObj.docOrders.addEmpty(tmpDocItems)
+            console.log(this.docLines)
+            this.docObj.docItems.datatable = this.docLines
+            this.docObj.docCustomer.DOC_GUID = this.docObj.dt()[0].GUID
+            this.docObj.docCustomer.TYPE = this.docObj.dt()[0].TYPE
+            this.docObj.docCustomer.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+            this.docObj.docCustomer.REBATE = this.docObj.dt()[0].REBATE
+            this.docObj.docCustomer.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+            this.docObj.docCustomer.AMOUNT = this.docObj.dt()[0].TOTAL
+            this.docObj.docCustomer.REF = this.docObj.dt()[0].REF
+            this.docObj.docCustomer.REF_NO = this.docObj.dt()[0].REF_NO
+            this.docObj.docCustomer.OUTPUT = this.docObj.dt()[0].OUTPUT
+            this.docObj.docCustomer.INPUT = this.docObj.dt()[0].INPUT
         }
 
         let tmpConfObj1 =
@@ -326,6 +401,30 @@ export default class Sale extends React.PureComponent
             tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
             await dialog(tmpConfObj1);
         }
+    }
+    async getDoc(pGuid,pRef,pRefno,pDocType)
+    {
+        console.log(pDocType)
+        this.docObj.clearAll()
+        this.setState({isExecute:true})
+        await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:1,DOC_TYPE:pDocType});
+        if(pDocType == 60)
+        {
+            console.log(11)
+            this.docType = 60
+            this.docLines = this.docObj.docOrders.dt()
+        }
+        else if(pDocType == 20)
+        {
+            console.log(12)
+            this.docType = 20
+            this.docLines = this.docObj.docItems.dt()
+        }
+        await this.grdSale.dataRefresh({source:this.docLines});
+        console.log(this.docObj)
+        this.setState({isExecute:false})
+        this.itemView.setItemAll()
+        console.log(this.docLines)
     }
     render()
     {
@@ -432,7 +531,49 @@ export default class Sale extends React.PureComponent
                                                     <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"40px",width:"40px"}}
                                                     onClick={async()=>
                                                     {
-                                                        
+                                                        if(this.docLines.length == 0)
+                                                        {
+                                                            let tmpConfObj = 
+                                                            {
+                                                                id:'msgLineNotFound',showTitle:true,title:this.t("msgLineNotFound.title"),showCloseButton:true,width:'400px',height:'200px',
+                                                                button:[{id:"btn01",caption:this.t("msgLineNotFound.btn01"),location:'after'}],
+                                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgLineNotFound.msg")}</div>)
+                                                            }
+                                                            await dialog(tmpConfObj);
+                                                            return
+                                                        }
+                                                        if(this.docObj.dt()[0].INPUT == "")
+                                                        {
+                                                            let tmpConfObj = 
+                                                            {
+                                                                id:'msgCustomerSelect',showTitle:true,title:this.t("msgCustomerSelect.title"),showCloseButton:true,width:'350px',height:'200px',
+                                                                button:[{id:"btn01",caption:this.t("msgCustomerSelect.btn01"),location:'after'}],
+                                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerSelect.msg")}</div>)
+                                                            }
+                                                            await dialog(tmpConfObj);
+                                                            return
+                                                        }
+                                                        if(this.docObj.dt()[0].OUTPUT == "")
+                                                        {
+                                                            let tmpConfObj = 
+                                                            {
+                                                                id:'msgDepotSelect',showTitle:true,title:this.t("msgDepotSelect.title"),showCloseButton:true,width:'350px',height:'200px',
+                                                                button:[{id:"btn01",caption:this.t("msgDepotSelect.btn01"),location:'after'}],
+                                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDepotSelect.msg")}</div>)
+                                                            }
+                                                            await dialog(tmpConfObj);
+                                                            return
+                                                        }
+                                                       
+                                                        if(this.docType == 20)
+                                                        {
+                                                            this.orderSave()
+                                                        }
+                                                        else if(docType == 60)
+                                                        {
+                                                            this.factureSave()
+                                                        }
+
                                                         let tmpConfObj =
                                                         {
                                                             id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
@@ -452,6 +593,15 @@ export default class Sale extends React.PureComponent
                                                     }}>
                                                         <i className="fa-solid fa-floppy-disk fa-1x"></i>
                                                     </NbButton>                                                    
+                                                </Item>
+                                                <Item location="after" locateInMenu="auto">
+                                                    <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"40px",width:"40px"}}
+                                                    onClick={()=>
+                                                    {
+                                                        this.popDocs.show()
+                                                    }}>
+                                                        <i className="fa-solid fa-folder-open"></i>
+                                                    </NbButton>
                                                 </Item>
                                                 <Item location="after" locateInMenu="auto">
                                                     <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"40px",width:"40px"}}
@@ -760,7 +910,6 @@ export default class Sale extends React.PureComponent
                                             <NbButton className="btn btn-block btn-primary" style={{width:"100%"}}
                                             onClick={(async()=>
                                             {
-                                                console.log(console.log(this))
                                                 this.docObj.dt()[0].INPUT = this.grdCustomer.getSelectedData()[0].GUID
                                                 this.docObj.dt()[0].INPUT_NAME =  this.grdCustomer.getSelectedData()[0].TITLE
                                                 this.docObj.dt()[0].INPUT_CODE =  this.grdCustomer.getSelectedData()[0].CODE
@@ -792,7 +941,91 @@ export default class Sale extends React.PureComponent
                                     </div>
                                 </div>
                             </NbPopUp>
-                        </div>                                               
+                        </div>     
+                         {/* EVRAK SECIMI POPUP */}
+                         <div>                            
+                            <NbPopUp id={"popDocs"} parent={this} title={""} fullscreen={true}>
+                                <div>
+                                    <div className='row' style={{paddingTop:"10px"}}>
+                                        <div className='col-10' align={"left"}>
+                                            <h2 className='text-danger'>{this.t('popDocs.title')}</h2>
+                                        </div>
+                                        <div className='col-2' align={"right"}>
+                                            <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"40px",width:"40px"}}
+                                            onClick={()=>
+                                            {
+                                                this.popDocs.hide();
+                                            }}>
+                                                <i className="fa-solid fa-xmark fa-1x"></i>
+                                            </NbButton>
+                                        </div>
+                                    </div>   
+                                    <div className='row' style={{paddingTop:"10px"}}>
+                                        <div className="col-4" align="right" style={{paddingRight:'25px',paddingTop:'5px'}}>
+                                            <NdSelectBox simple={true} parent={this} id="cmbDocType" notRefresh = {true}
+                                            displayExpr="VALUE"                       
+                                            valueExpr="ID"
+                                            value={60}
+                                            searchEnabled={true}
+                                            onValueChanged={(async()=>
+                                                {
+                                                }).bind(this)}
+                                            data={{source:[{ID:60,VALUE:this.t("cmbDocType.order")},{ID:20,VALUE:this.t("cmbDocType.invoice")}]}}
+                                            >
+                                            </NdSelectBox>
+                                        </div>           
+                                    </div>
+                                    <div className='row' style={{paddingTop:"10px"}}>
+                                        <div className='col-6'>
+                                            <NbButton className="btn btn-block btn-primary" style={{width:"100%"}}
+                                            onClick={()=>
+                                            {
+                                                if(this.cmbDocType.value == 60)
+                                                {
+                                                    this._getOrders()
+                                                }
+                                                else
+                                                {
+                                                    this._getInvoices()
+                                                }
+                                            }}>
+                                                {this.t('popDocs.btn01')}
+                                            </NbButton>
+                                        </div>
+                                        <div className='col-6'>
+                                            <NbButton className="btn btn-block btn-primary" style={{width:"100%"}}
+                                            onClick={(async()=>
+                                            {
+                                               this.getDoc(this.grdDocs.getSelectedData()[0].GUID,this.grdDocs.getSelectedData()[0].REF,this.grdDocs.getSelectedData()[0].REF_NO,this.cmbDocType.value)
+                                            }).bind(this)}>
+                                                {this.t('popDocs.btn02')}
+                                            </NbButton>
+                                        </div>
+                                    </div>
+                                    <div className='row'>
+                                        <div className='col-12'>
+                                            <NdGrid parent={this} id={"grdDocs"} 
+                                            showBorders={true} 
+                                            columnsAutoWidth={true} 
+                                            headerFilter={{visible:true}}
+                                            selection={{mode:"single"}}
+                                            height={'400'}
+                                            width={'100%'}
+                                            >
+                                                <Paging defaultPageSize={10} />
+                                                <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
+                                                <Scrolling mode="standart" />
+                                                <Column dataField="REF" caption={this.t("grdDocs.clmRef")} width={150}/>
+                                                <Column dataField="REF_NO" caption={this.t("grdDocs.clmName")} width={100}/>
+                                                <Column dataField="INPUT_NAME" caption={this.t("grdDocs.clmInputName")} width={250}/>
+                                                <Column dataField="DOC_DATE_CONVERT" caption={this.t("grdDocs.clmDate")} width={150}/>
+                                                <Column dataField="TOTAL" caption={this.t("grdDocs.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 3}} width={150}/>
+                                            </NdGrid>
+                                        </div>
+                                    </div>
+                                </div>
+                            </NbPopUp>
+                        </div>                                             
                     </ScrollView>
                 </div>
             </div>

@@ -4,9 +4,15 @@
   "certificate": "(NF525) B_0527-1",
   "description": "",
   "main": "index.js",
-  "databases" : [{"CODE":"GENDB"},{"CODE":"PIQSOFT"}],
-  "scale": 
-  {
+  "databases": [
+    {
+      "CODE": "GENDB"
+    },
+    {
+      "CODE": "PIQSOFT"
+    }
+  ],
+  "scale": {
     "version": "1.0.1",
     "certificate": "LNE-000000",
     "sha": "5d733495732cf990723d6253fe0642dfe5a1f40f0dbe743f53485601fee3fdba"

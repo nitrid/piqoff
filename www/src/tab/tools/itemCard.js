@@ -14,7 +14,7 @@ export default class NbItemCard extends NbBase
         {
             image : typeof this.props.image == 'undefined' ? '../css/img/noimage.jpg' : this.props.image,
             name : typeof this.props.name == 'undefined' ? '' : this.props.name,
-            price : typeof this.props.price == 'undefined' ? 0 : this.props.price,
+            price : typeof this.props.price == 'undefined' ? 0 : Number(this.props.price).round(3),
         }
 
         this.data = this.props.data
@@ -24,7 +24,6 @@ export default class NbItemCard extends NbBase
     }
     _onValueChange(e)
     {
-        console.log(e)
         if(typeof this.props.onValueChange != 'undefined')
         {
             this.props.onValueChange(e);
@@ -44,6 +43,8 @@ export default class NbItemCard extends NbBase
         {
             this["txtQuantity" + this.props.id].value = tmpDt[0].QUANTITY / tmpDt[0].UNIT_FACTOR
             this.cmbUnit.value = tmpDt[0].UNIT
+            let tmpPrice = Number(tmpDt[0].PRICE * tmpDt[0].UNIT_FACTOR).round(3)
+            this.setState({price:tmpPrice})
         }
         else
         {

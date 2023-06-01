@@ -70,6 +70,7 @@ export default class NbItemPopUp extends NbBase
         if(this.cmbUnit.data.datatable.length > 0)
         {
             this.cmbUnit.value = this.data.UNIT;
+            this.txtPrice.value = Number(this.data.PRICE * this.data.UNIT_FACTOR).round(3)
         }
     }
     _onValueChange(e)
@@ -178,6 +179,7 @@ export default class NbItemPopUp extends NbBase
                                         {
                                             this.data.UNIT_FACTOR = this.cmbUnit.data.datatable.where({'GUID':e.value})[0].FACTOR
                                             this.data.UNIT = e.value
+                                            this.txtPrice.value = Number(this.data.PRICE * this.data.UNIT_FACTOR).round(3)
                                             this._onValueChange(this.data)
                                         }
                                     }).bind(this)}
