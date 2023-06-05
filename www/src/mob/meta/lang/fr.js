@@ -9,7 +9,7 @@ export const langFr =
     msgWarning: "Attention",
     btnYes : "Oui",
     btnNo : "Nom",
-    msgClose : "Voulez-vous vraiment fermer la page ?",
+    msgClose : "Voulez-vous vraiment fermer la page ?", 
     txtLangSelect : "Sélection de la langue",
     userListTitle : "Liste d'utilisateurs", 
     txtUser : "Utilisateur",

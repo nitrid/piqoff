@@ -602,7 +602,7 @@ export const langFr =
         msg : "Souhaitez-vous imprimer le ticket ?",
         btn01 : "Imprimer",
         btn02 : "Annuler",
-        btn03 : "Envoyer Par Mail" // BAK
+        btn03 : "Envoyer en E-Mail"
     },
     mailPopup : 
     {
@@ -752,8 +752,8 @@ export const langFr =
     },
     msgConnectOut: 
     {
-        title : "Dikkat",   // BAK
-        msg : "Sunucu ile bağlantınız koptu.. ",   // BAK
-        btn01 : "Tamam"   // BAK
+        title : "Attention", 
+        msg : "La connexion avec le serveur est interrompu ", 
+        btn01 : "D'accord"  
     },
 }
