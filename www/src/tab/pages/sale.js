@@ -57,7 +57,6 @@ export default class Sale extends React.PureComponent
         this.docObj.addEmpty(tmpDoc);
         this.docLines.clear()
 
-        this.getItems()
         this.popCustomer.show()
         this.cmbGroup.value = ''
         this.docType = 0
@@ -573,7 +572,7 @@ export default class Sale extends React.PureComponent
                                                         {
                                                             this.orderSave()
                                                         }
-                                                        else if(docType == 60)
+                                                        else if(this.docType == 60)
                                                         {
                                                             this.factureSave()
                                                         }
@@ -963,7 +962,7 @@ export default class Sale extends React.PureComponent
                                                 this.docObj.dt()[0].INPUT_NAME =  this.grdCustomer.getSelectedData()[0].TITLE
                                                 this.docObj.dt()[0].INPUT_CODE =  this.grdCustomer.getSelectedData()[0].CODE
                                                 this.docObj.dt()[0].REF = this.grdCustomer.getSelectedData()[0].CODE
-                                               
+                                                this.getItems()
                                                 this.popCustomer.hide();
                                             }).bind(this)}>
                                                 {this.t('popCustomer.btn02')}
