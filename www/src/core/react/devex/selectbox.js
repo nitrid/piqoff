@@ -58,7 +58,6 @@ export default class NdSelectBox extends Base
         if(e.value == null)
         {
             this.value = ""
-
         }
         else
         {

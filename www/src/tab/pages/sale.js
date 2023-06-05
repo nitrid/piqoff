@@ -413,13 +413,11 @@ export default class Sale extends React.PureComponent
         await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:1,DOC_TYPE:pDocType});
         if(pDocType == 60)
         {
-            console.log(11)
             this.docType = 60
             this.docLines = this.docObj.docOrders.dt()
         }
         else if(pDocType == 20)
         {
-            console.log(12)
             this.docType = 20
             this.docLines = this.docObj.docItems.dt()
         }
@@ -919,7 +917,11 @@ export default class Sale extends React.PureComponent
                         </div>
                         {/* CARI SECIMI POPUP */}
                         <div>                            
-                            <NbPopUp id={"popCustomer"} parent={this} title={""} fullscreen={true}>
+                            <NbPopUp id={"popCustomer"} parent={this} title={""} fullscreen={true} 
+                                onHideing={(async()=>
+                                {
+                                    this.getItems()
+                                }).bind(this)}>
                                 <div>
                                     <div className='row' style={{paddingTop:"10px"}}>
                                         <div className='col-10' align={"left"}>
@@ -962,7 +964,6 @@ export default class Sale extends React.PureComponent
                                                 this.docObj.dt()[0].INPUT_NAME =  this.grdCustomer.getSelectedData()[0].TITLE
                                                 this.docObj.dt()[0].INPUT_CODE =  this.grdCustomer.getSelectedData()[0].CODE
                                                 this.docObj.dt()[0].REF = this.grdCustomer.getSelectedData()[0].CODE
-                                                this.getItems()
                                                 this.popCustomer.hide();
                                             }).bind(this)}>
                                                 {this.t('popCustomer.btn02')}
