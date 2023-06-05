@@ -68,6 +68,8 @@ export default class salesOrder extends React.PureComponent
     {
         this.docObj.clearAll()
         this.extraObj.clearAll()
+        this.grdSlsOrder.devGrid.clearFilter("row")
+
 
         this.docObj.ds.on('onAddRow',(pTblName,pData) =>
         {

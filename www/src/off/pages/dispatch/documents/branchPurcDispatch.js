@@ -63,6 +63,8 @@ export default class branchSaleDispatch extends React.PureComponent
     {
         this.docObj.clearAll()
         this.extraObj.clearAll()
+        this.grdSlsDispatch.devGrid.clearFilter("row")
+
 
         this.docObj.ds.on('onAddRow',(pTblName,pData) =>
         {

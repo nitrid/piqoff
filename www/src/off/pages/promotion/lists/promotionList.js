@@ -177,6 +177,39 @@ export default class promotionList extends React.PureComponent
                                         })
                                     }
                                 }} />
+                                <Item location="after" locateInMenu="auto">
+                                    <NdButton id="btnDelete" parent={this} icon="trash" type="default"
+                                    onClick={async()=>
+                                    {                                        
+                                        let tmpConfObj =
+                                        {
+                                            id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'200px',
+                                            button:[{id:"btn01",caption:this.t("msgDelete.btn01"),location:'before'},{id:"btn02",caption:this.t("msgDelete.btn02"),location:'after'}],
+                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDelete.msg")}</div>)
+                                        }
+                                        
+                                        let pResult = await dialog(tmpConfObj);
+                                        if(pResult == 'btn01')
+                                        {
+                                            App.instance.setState({isExecute:true})
+                                            for (let i = 0; i < this.grdListe.getSelectedData().length; i++) 
+                                            {
+                                                let tmpQuery = 
+                                                {
+                                                    query : "EXEC [dbo].[PRD_PROMO_DELETE] " + 
+                                                            "@CUSER = @PCUSER, " + 
+                                                            "@UPDATE = 1, " + 
+                                                            "@CODE = @PCODE ", 
+                                                    param : ['PCUSER:string|50','PCODE:string|25'],
+                                                    value : [this.user.CODE,this.grdListe.getSelectedData()[i].CODE]
+                                                }
+                                                await this.core.sql.execute(tmpQuery) 
+                                            }
+                                            App.instance.setState({isExecute:false})
+                                            this._btnGetirClick()
+                                        }
+                                    }}/>
+                                </Item>
                                 <Item location="after"
                                 locateInMenu="auto"
                                 widget="dxButton"
@@ -237,7 +270,7 @@ export default class promotionList extends React.PureComponent
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <NdGrid id="grdListe" parent={this} 
-                            selection={{mode:"single"}} 
+                            selection={{mode:"multiple"}} 
                             showBorders={true}
                             filterRow={{visible:true}} 
                             headerFilter={{visible:true}}

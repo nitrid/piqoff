@@ -16,6 +16,7 @@ export const langTr =
     btnNo : "Hayır",
     msgClose : "Sayfayı Kapatmak İstediğinize Eminmisiniz ?",
     txtLangSelect : "Dil Seçimi",
+    txtDbSelect : "Database Seçimi",
     userListTitle : "Kullanıcı Listesi",
     txtUser : "Kullanıcı",
     txtPass : "Şifre",
@@ -45,6 +46,11 @@ export const langTr =
     dtLastYear : "Geçen Yıl",
     txtTotalTicket : "Toplam Fiş Sayısı",
     txtTicketAvg : "Ortalama Fiş Tutarı",
+    popDbList :
+    {
+        title : "Database Seçimi",
+        clmCode : "KODU"
+    },
     popPassword : 
     {
         title: "Kullanıcı Şifrenizi Giriniz",
@@ -144,6 +150,7 @@ export const langTr =
         stk_01_010: "Birim Tanımlama",
         stk_01_011 : "Vergi Tanımlama",
         stk_01_012 : "Bağlı Ürün Tanımlama",
+        stk_01_013 : "Ürün Resim Tanımlama",
         stk_02_001: "Sayım Evrakı",
         stk_02_002: "Depo/Mağaza Arası Sevk",
         stk_02_003: "Kayıp Ürün Çıkışı",
@@ -1071,6 +1078,44 @@ export const langTr =
             title : "Stok Seçimi",
             clmCode : "KODU",
             clmName : "ADI",
+        },
+        msgSave:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kayıt etmek istediğinize eminmisiniz !"
+        },
+        msgSaveResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Kayıt işleminiz başarılı !",
+            msgFailed: "Kayıt işleminiz başarısız !"
+        },
+        msgSaveValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen gerekli alanları doldurunuz !"
+        },
+        msgDelete:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        },
+    },
+    stk_01_013 : // "Ürün Resim Tanımlama"
+    {
+        txtRef : "Referans",
+        pg_txtRef:
+        {
+            title: "Stok Seçimi",
+            clmCode: "KODU",
+            clmName: "ADI",
+            clmStatus: "DURUM"
         },
         msgSave:
         {
@@ -9631,7 +9676,14 @@ export const langTr =
             clmAppBarcode : "Uygulama Barkodu",
             clmAppQuantity : "Uygulama Miktarı",
             clmAppAmount : "Uygulama Tutarı",
-        }
+        },
+        msgDelete:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Seçtiğiniz promosyonları silmek istediğinize eminmisiniz ?"
+        },
     },
     promo_02_002: //  "Promosyon Detay Listesi"
     {
@@ -9660,6 +9712,7 @@ export const langTr =
             clmAppBarcode : "Uygulama Barkodu",
             clmAppQuantity : "Uygulama Miktarı",
             clmAppAmount : "Uygulama Tutarı",
+            clmAppValue : "Değer"
         }
     },
     irs_01_001 : // "Alış İrsaliye Listesi"

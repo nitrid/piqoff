@@ -70,6 +70,7 @@ export default class rebateInvoice extends React.PureComponent
     {
         this.docObj.clearAll()
         this.paymentObj.clearAll()
+        this.grdRebtInv.devGrid.clearFilter("row")
 
         this.docObj.ds.on('onAddRow',(pTblName,pData) =>
         {

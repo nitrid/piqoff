@@ -74,6 +74,11 @@ export const menu = (e) =>
                             text: e.t('menuOff.stk_01_012'),//'Bağlı Ürün Tanımları',
                             path: 'items/cards/itemRelated.js',
                         },
+                        {
+                            id: 'stk_01_013',
+                            text: e.t('menuOff.stk_01_013'),//'Ürün Resim Tanımları',
+                            path: 'items/cards/itemImage.js',
+                        },
                     ]
                 },
                 {

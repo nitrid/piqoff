@@ -75,6 +75,7 @@ export default class purchaseDispatch extends React.PureComponent
         this.extraObj.clearAll()
         this.newPrice.clear()
         this.newPriceDate.clear()
+        this.grdPurcDispatch.devGrid.clearFilter("row")
 
         this.docObj.ds.on('onAddRow',(pTblName,pData) =>
         {

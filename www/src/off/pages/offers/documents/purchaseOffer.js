@@ -65,6 +65,7 @@ export default class purchaseoffer extends React.PureComponent
     {
         this.docObj.clearAll()
         this.extraObj.clearAll()
+        this.grdPurcoffers.devGrid.clearFilter("row")
 
         this.docObj.ds.on('onAddRow',(pTblName,pData) =>
         {

@@ -39,6 +39,10 @@ export default class NdTextBox extends Base
     _onInitialized(e) 
     {
         this.dev = e.component;    
+        if(typeof this.props.dt != 'undefined' && typeof this.props.dt.data != 'undefined' && typeof this.props.dt.field != 'undefined')
+        {
+            this.onRefresh()
+        }
     }
     _onValueChanged(e) 
     {       
@@ -127,7 +131,7 @@ export default class NdTextBox extends Base
                 tmp.push (
                     <Button key={i}
                         name={"btn_" + this.props.button[i].id}
-                        location="after"                                               
+                        location= {typeof this.props.button[i].location == 'undefined' ? "after" : this.props.button[i].location}
                         options=
                         {
                             {
@@ -172,6 +176,7 @@ export default class NdTextBox extends Base
                 maxLength={this.props.maxLength}
                 placeholder={this.state.placeholder}
                 style={this.props.style}
+                inputAttr={this.props.inputAttr}
                 elementAttr={this.props.elementAttr}
                 valueChangeEvent="keyup" onValueChanged={this._onValueChanged} 
                 onEnterKey={this._onEnterKey} onFocusIn={this._onFocusIn} onFocusOut={this._onFocusOut}

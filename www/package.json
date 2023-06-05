@@ -1,9 +1,10 @@
 {
   "name": "piqsoft",
-  "version": "1.0.2d",
+  "version": "1.0.3a",
   "certificate": "(NF525) B_0527-1",
   "description": "",
   "main": "index.js",
+  "databases" : [{"CODE":"GENDB"},{"CODE":"PIQSOFT"}],
   "scale": {
     "version": "1.0.1",
     "certificate": "LNE-000000",
@@ -56,7 +57,7 @@
     "react-bootstrap-wizard": "0.0.9",
     "react-dom": "17.0.2",
     "react-idle-timer": "4.6.4",
-    "react-router-dom": "6.3.0",
+    "react-router-dom": "6.11.1",
     "react-simple-keyboard": "3.4.139",
     "reactstrap": "9.1.1",
     "remove-files-webpack-plugin": "1.5.0",

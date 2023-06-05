@@ -69,6 +69,7 @@ export default class purchaseOrder extends React.PureComponent
     {
         this.docObj.clearAll()
         this.extraObj.clearAll()
+        this.grdPurcOrders.devGrid.clearFilter("row")
 
         this.docObj.ds.on('onAddRow',(pTblName,pData) =>
         {
@@ -449,7 +450,7 @@ export default class purchaseOrder extends React.PureComponent
                 value={e.value}
                 onChange={(r)=>
                 {
-                    this.grdSlsOrder.devGrid.cellValue(e.rowIndex,"DISCOUNT",r.component._changedValue)
+                    this.grdPurcOrders.devGrid.cellValue(e.rowIndex,"DISCOUNT",r.component._changedValue)
                 }}
                 button=
                 {
@@ -492,7 +493,7 @@ export default class purchaseOrder extends React.PureComponent
                 value={e.value}
                 onChange={(r)=>
                 {
-                    this.grdSlsOrder.devGrid.cellValue(e.rowIndex,"DISCOUNT_RATE",r.component._changedValue)
+                    this.grdPurcOrders.devGrid.cellValue(e.rowIndex,"DISCOUNT_RATE",r.component._changedValue)
                 }}
                 button=
                 {

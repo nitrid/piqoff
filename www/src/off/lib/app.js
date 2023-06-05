@@ -201,13 +201,17 @@ export default class App extends React.PureComponent
                 }
                 App.instance.setState({splash:tmpSplash});
             }
-            console.log(this.core.auth.data)
             //SUNUCUYA BAĞLANDIKDAN SONRA AUTH ILE LOGIN DENETLENIYOR
             if((await this.core.auth.login(window.sessionStorage.getItem('auth'),'OFF')))
-            {
+            {                
                 App.instance.setState({logined:true,connected:true});
                 await this.core.util.waitUntil()
                 this.setUser()
+                //ÇOKLU DATABASE SEÇİMİ İÇİN YAPILDI
+                if(window.sessionStorage.getItem('selectedDb') != null)
+                {
+                    this.core.sql.selectedDb = window.sessionStorage.getItem('selectedDb')
+                }
             }
             else
             {
@@ -238,7 +242,7 @@ export default class App extends React.PureComponent
                 this.core.auth.logout()
                 window.location.reload()
             }
-        })
+        })        
     }
     menuClick(data)
     {
@@ -324,7 +328,7 @@ export default class App extends React.PureComponent
                 options : 
                 {
                     width: 80,
-                    items: [{id:"en",text:"EN"},{id:"fr",text:"FR"},{id:"tr",text:"TR"}],
+                    items: [{id:"de",text:"DE"},{id:"en",text:"EN"},{id:"fr",text:"FR"},{id:"tr",text:"TR"}],
                     valueExpr: 'id',
                     displayExpr: 'text',
                     value: localStorage.getItem('lang') == null ? 'en' : localStorage.getItem('lang'),
@@ -353,7 +357,8 @@ export default class App extends React.PureComponent
                 {
                     icon : 'fa-solid fa-arrow-right-to-bracket',
                     onClick : () => 
-                    {                                                        
+                    {    
+                        window.sessionStorage.removeItem('selectedDb')                                                    
                         this.core.auth.logout()
                         window.location.reload()
                     }
@@ -385,7 +390,6 @@ export default class App extends React.PureComponent
         {
             clearTimeout(this.isExecuteTimeOut)
         }
-           
 
         if(!connected)
         {

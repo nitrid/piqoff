@@ -9,28 +9,20 @@ import "@fortawesome/fontawesome-free/js/all.js";
 import "@fortawesome/fontawesome-free/css/all.css";
 
 import React from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import LoadIndicator from 'devextreme-react/load-indicator';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import {core} from '../../core/core.js'
 import enMessages from '../meta/lang/devexpress/en.js';
 import frMessages from '../meta/lang/devexpress/fr.js';
 import trMessages from '../meta/lang/devexpress/tr.js';
 import { locale, loadMessages, formatMessage } from 'devextreme/localization';
 import i18n from './i18n.js'
-import Drawer from 'devextreme-react/drawer';
-import Toolbar from 'devextreme-react/toolbar';
-import TextBox from 'devextreme-react/text-box';
-import Button from 'devextreme-react/button';
-import SelectBox from 'devextreme-react/select-box';
-import { LoadPanel } from 'devextreme-react/load-panel';
-
-import HTMLReactParser from 'html-react-parser';
-
-import Navigation from './navigation.js'
 import Login from './login.js'
 import NdDialog,{dialog} from '../../core/react/devex/dialog';
-import Page from './page';
-
+import NbButton from '../../core/react/bootstrap/button';
+import NbPopUp from '../../core/react/bootstrap/popup';
 import * as appInfo from '../../../package.json'
+import transferCls from './transfer';
 
 export default class App extends React.PureComponent
 {
@@ -46,8 +38,8 @@ export default class App extends React.PureComponent
         locale(localStorage.getItem('lang') == null ? 'tr' : localStorage.getItem('lang'));
         i18n.changeLanguage(localStorage.getItem('lang') == null ? 'tr' : localStorage.getItem('lang'))
         this.lang = i18n;  
-        moment.locale(localStorage.getItem('lang') == null ? 'tr' : localStorage.getItem('lang'));
-        
+        moment.locale(localStorage.getItem('lang') == null ? 'tr' : localStorage.getItem('lang'));        
+
         this.style =
         {
             splash_body : 
@@ -66,7 +58,6 @@ export default class App extends React.PureComponent
         }
         this.state = 
         {
-            opened : true,
             logined : false,
             connected : false,
             splash : 
@@ -75,67 +66,13 @@ export default class App extends React.PureComponent
                 headers : 'Warning',
                 title : 'Sunucu ile bağlantı kuruluyor.',
             },
-            vtadi : '',
-            isExecute:false,
-            page:{id: 'main_01_001',text: 'main',path: 'main'}
+            page:'dashboard.js'
         }
-        this.toolbarItems = 
-        [
-            {
-                widget : 'dxButton',
-                location : 'before',
-                options : 
-                {
-                    icon : 'menu',
-                    onClick : () => this.setState({opened: !this.state.opened})
-                }
-            },
-            {
-                widget : 'dxSelectBox',
-                location : 'after',
-                options : 
-                {
-                    width: 80,
-                    items: [{id:"en",text:"EN"},{id:"fr",text:"FR"},{id:"tr",text:"TR"}],
-                    valueExpr: 'id',
-                    displayExpr: 'text',
-                    value: localStorage.getItem('lang') == null ? 'tr' : localStorage.getItem('lang'),
-                    onValueChanged: (args) => 
-                    {
-                        localStorage.setItem('lang',args.value)
-                        i18n.changeLanguage(args.value)
-                        locale(args.value)
-                        window.location.reload()
-                    }
-                }
-            },
-            {
-                widget : 'dxButton',
-                location : 'after',
-                options : 
-                {
-                    icon : 'refresh',
-                    onClick : () => window.location.reload()
-                }
-            },
-            {
-                widget : 'dxButton',
-                location : 'after',
-                options : 
-                {
-                    icon : 'fa-solid fa-arrow-right-to-bracket',
-                    onClick : () => 
-                    {                                                        
-                        this.core.auth.logout()
-                        window.location.reload()
-                    }
-                }
-            }
-        ];
 
         if(window.origin.substring(0,4) == 'http')
         {
             this.device = false
+            this.init();
         }
         else
         {
@@ -145,39 +82,33 @@ export default class App extends React.PureComponent
             js.src = "../../cordova.js";
             body.appendChild(js);
             this.device = true
-        }
-
-        this.core = new core(io(this.device ? 'http://'+localStorage.host : window.origin,{timeout:100000,transports : ['websocket']}));
-        this.textValueChanged = this.textValueChanged.bind(this)
-        this.onDbClick = this.onDbClick.bind(this)
+            document.addEventListener('deviceready', ()=>
+            {
+                this.init();
+            }, false);
+        }        
+    }
+    init()
+    {
+        this.core = new core(io(this.device ? 'http://' + localStorage.host : window.origin,{timeout:100000,transports : ['websocket']}));
         this.core.appInfo = appInfo
-        
+        this.transfer = new transferCls()
+
         if(!App.instance)
         {
             App.instance = this;
         }
 
         this.core.socket.on('connect',async () => 
-        {
-            if((await this.core.sql.try()).status == 1)
+        {            
+            if((await this.core.sql.try()).status > 0)
             {
                 let tmpSplash = 
                 {
                     type : 0,
-                    headers : 'Warning',
-                    title: 'Sql sunucuya bağlanılamıyor.',
+                    headers : this.lang.t('msgWarning'),
+                    title: this.lang.t('msgSqlService1'),
                 }
-                App.instance.setState({logined:false,connected:false,splash:tmpSplash});
-            }
-            else if((await this.core.sql.try()).status == 2)
-            {
-                let tmpSplash = 
-                {
-                    type : 1,
-                    headers : 'Veritabanı yok. Oluşturmak istermisiniz.',
-                    title: '',
-                }
-
                 App.instance.setState({logined:false,connected:false,splash:tmpSplash});
             }
             else
@@ -185,16 +116,15 @@ export default class App extends React.PureComponent
                 let tmpSplash = 
                 {
                     type : 0,
-                    headers : 'Warning',
-                    title : 'Sunucu ile bağlantı kuruluyor.',
+                    headers : this.lang.t('msgWarning'),
+                    title : this.lang.t('serverConnection'),
                 }
                 App.instance.setState({splash:tmpSplash});
             }
             //SUNUCUYA BAĞLANDIKDAN SONRA AUTH ILE LOGIN DENETLENIYOR
-            if((await this.core.auth.login(window.sessionStorage.getItem('auth'),'MOB')))
+            if((await this.core.auth.login(window.sessionStorage.getItem('auth'),'TAB')))
             {
                 App.instance.setState({logined:true,connected:true});
-               
             }
             else
             {
@@ -227,52 +157,9 @@ export default class App extends React.PureComponent
             }
         })
     }
-    menuClick(data)
-    {
-        if(typeof data.path != 'undefined')
-        {
-            this.setState({opened: !this.state.opened,page:data})
-        }
-    }
-    textValueChanged(e) 
-    {      
-        if(e.element.id == 'VtAdi')
-        {
-            this.setState({vtadi: e.value});
-        } 
-    }
-    async onDbClick(e)
-    {
-        if(this.state.vtadi == '')
-        {
-            return;
-        }
-
-        let tmpResult = await this.core.sql.createDb(this.state.vtadi)
-        if(tmpResult.msg == "")
-        {
-            let tmpSplash = 
-            {
-                type : 1,
-                headers : 'Veritabanı yok. Oluşturmak istermisiniz.',
-                title: 'Vt kurulumu başarılı.Lütfen config dosyasını kontrol edip sunucuyu restart ediniz.',
-            }
-            App.instance.setState({logined:false,connected:false,splash:tmpSplash});
-        }
-        else
-        {
-            let tmpSplash = 
-            {
-                type : 1,
-                headers : 'Veritabanı yok. Oluşturmak istermisiniz.',
-                title: tmpResult.msg,
-            }
-            App.instance.setState({logined:false,connected:false,splash:tmpSplash});
-        }
-    }
     render() 
     {
-        const { opened,logined,connected,splash } = this.state;
+        const { logined,connected,splash } = this.state;
 
         if(!connected)
         {
@@ -295,58 +182,141 @@ export default class App extends React.PureComponent
                     </div>
                 )                
             }
-            else
-            {
-                //VERITABANI OLUŞTURMAK İÇİN AÇILAN EKRAN.
-                return(
-                    <div style={this.style.splash_body}>
-                        <div className="card" style={this.style.splash_box}>
-                            <div className="card-header" style={{height:'40px'}}>{splash.headers}</div>
-                            <div className="card-body">
-                                <div className="row">
-                                    <div className="col-12 pb-2">
-                                        <h6 className="text-center">{splash.title}</h6>
-                                    </div>
-                                </div>
-                                <div className="dx-field">
-                                    <div className="dx-field-label">Veritabanı Adı</div>
-                                    <div className="dx-field-value">
-                                        <TextBox id="VtAdi" showClearButton={true} height='fit-content' valueChangeEvent="keyup" onValueChanged={this.textValueChanged} />
-                                    </div>
-                                </div>
-                                <div className="dx-field">
-                                    <Button
-                                        width={'100%'}
-                                        height='fit-content'
-                                        text="Oluştur"
-                                        type="default"
-                                        stylingMode="contained"
-                                        onClick={this.onDbClick}
-                                    />
-                                </div>
-                            </div>                        
-                        </div>
-                    </div>
-                )                
-            }
         }
+
         if(!logined)
         {
             return <Login />
         }
-        
+
+        const Page = React.lazy(() => import('../pages/' + this.state.page));
+
         return (
-            <div>
-                <LoadPanel shadingColor="rgba(0,0,0,0.4)" position={{ of: '#root' }} visible={this.state.isExecute} showIndicator={true} shading={true} showPane={true}/>
-                <div className="top-bar">
-                    <Toolbar className="main-toolbar" height={45} items={this.toolbarItems}/>
+            <div style={{height:'90%'}}>
+                <div className="top-bar row shadow" style={{backgroundColor: "#0d6efd",height:"65px"}}>
+                    <div className="col-4" style={{paddingLeft:"25px",paddingTop:"10px"}}>
+                        <img src="./css/img/logo.png" width="45px" height="45px"/>
+                    </div>
+                    <div className="col-4" style={{paddingTop:"10px"}} align="center">
+                        <NbButton className="form-group btn btn-primary btn-block" style={{height:"45px",width:"20%"}}
+                        onClick={()=>
+                        {
+                            if(!this.popMenu.state.show)
+                            {
+                                this.popMenu.show()
+                            }
+                            else
+                            {
+                                this.popMenu.hide()
+                            }
+                        }}>
+                            <i className="fa-solid fa-bars fa-2x"></i>
+                        </NbButton>
+                    </div>
+                    <div className="col-4" style={{paddingRight:"25px",paddingTop:"10px"}} align="right">
+                        <NbButton className="form-group btn btn-primary btn-block" style={{height:"45px",width:"20%"}}
+                        onClick={()=>
+                        {
+                            
+                        }}>
+                            <i className="fa-solid fa-user fa-2x"></i>
+                        </NbButton>
+                    </div>
                 </div>
+                <React.Suspense fallback={<div style={{position: 'relative',margin:'auto',top: '40%',left:'50%'}}><LoadIndicator height={40} width={40} /></div>}>
+                    <Page/>
+                </React.Suspense>
                 <div>
-                    <Drawer className="main-drawer"  opened={opened} openedStateMode={'shrink'} position={'left'} revealMode={'slide'} component={Navigation} >
+                    <NbPopUp id={"popMenu"} parent={this} title={""} fullscreen={true}>
                         <div>
-                            <Page data={this.state.page}/>
+                            {/* 1 */}
+                            <div className='row' style={{paddingTop:"30px"}}>
+                                {/* DASHBOARD */}
+                                <div className='col-12'>
+                                    <NbButton className="form-group btn btn-block" style={{height:"100%",width:"100%",backgroundColor:'#0d6efd'}}
+                                    onClick={()=>
+                                    {
+                                        this.popMenu.hide()
+                                        this.setState({page:'dashboard.js'})
+                                    }}>
+                                        <div className='row py-2'>
+                                            <div className='col-12'>
+                                                <i className="fa-solid fa-chart-pie fa-4x" style={{color:'#ecf0f1'}}></i>
+                                            </div>
+                                        </div>
+                                        <div className='row'>
+                                            <div className='col-12'>
+                                                <h3 style={{color:'#ecf0f1'}}>{this.lang.t('menu.dashboard')}</h3>
+                                            </div>
+                                        </div>
+                                    </NbButton>
+                                </div>
+                            </div>
+                            {/* 2 */}
+                            <div className='row' style={{paddingTop:"30px"}}>
+                                {/* SATIŞ */}
+                                <div className='col-4'>
+                                    <NbButton className="form-group btn btn-block" style={{height:"100%",width:"100%",backgroundColor:'#0d6efd'}}
+                                    onClick={()=>
+                                    {
+                                        this.popMenu.hide()
+                                        this.setState({page:'sale.js'})
+                                    }}>
+                                        <div className='row py-2'>
+                                            <div className='col-12'>
+                                                <i className="fa-solid fa-scale-balanced fa-4x" style={{color:'#ecf0f1'}}></i>
+                                            </div>
+                                        </div>
+                                        <div className='row'>
+                                            <div className='col-12'>
+                                                <h3 style={{color:'#ecf0f1'}}>{this.lang.t('menu.sale')}</h3>
+                                            </div>
+                                        </div>                                        
+                                    </NbButton>
+                                </div>
+                                {/* MÜŞTERİ EKSTRESİ */}
+                                <div className='col-4'>
+                                    <NbButton className="form-group btn btn-block" style={{height:"100%",width:"100%",backgroundColor:'#0d6efd'}}
+                                    onClick={()=>
+                                    {
+                                        this.popMenu.hide()
+                                        this.setState({page:'extract.js'})
+                                    }}>
+                                        <div className='row py-2'>
+                                            <div className='col-12'>
+                                                <i className="fa-solid fa-receipt fa-4x" style={{color:'#ecf0f1'}}></i>
+                                            </div>
+                                        </div>
+                                        <div className='row'>
+                                            <div className='col-12'>
+                                                <h3 style={{color:'#ecf0f1'}}>{this.lang.t('menu.customerAccount')}</h3>
+                                            </div>
+                                        </div>                                        
+                                    </NbButton>
+                                </div>
+                                {/* ÜRÜN  */}
+                                <div className='col-4'>
+                                    <NbButton className="form-group btn btn-block" style={{height:"100%",width:"100%",backgroundColor:'#0d6efd'}}
+                                    onClick={()=>
+                                    {
+                                        this.popMenu.hide()
+                                        this.setState({page:'itemDetail.js'})
+                                    }}>
+                                        <div className='row py-2'>
+                                            <div className='col-12'>
+                                                <i className="fa-solid fa-circle-info fa-4x" style={{color:'#ecf0f1'}}></i>
+                                            </div>
+                                        </div>
+                                        <div className='row'>
+                                            <div className='col-12'>
+                                                <h3 style={{color:'#ecf0f1'}}>{this.lang.t('menu.itemDetail')}</h3>
+                                            </div>
+                                        </div>                                        
+                                    </NbButton>
+                                </div>
+                            </div>                            
                         </div>
-                    </Drawer>
+                    </NbPopUp>
                 </div>
             </div>
         );

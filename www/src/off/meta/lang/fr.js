@@ -16,6 +16,7 @@ export const langFr =
     btnNo : "Non",
     msgClose : "Etes-vous sûr(e) de vouloir quitter la page ?",
     txtLangSelect : "Choix de la langue",
+    txtDbSelect : "Choix de la database",
     userListTitle : "Liste d'utilisateur", 
     txtUser : "Utilisateur",
     txtPass : "Mot de passe",
@@ -45,6 +46,11 @@ export const langFr =
     dtLastYear : "Année Dernière",
     txtTotalTicket : "Total des tickets de caisses",   
     txtTicketAvg : "Montant moyen des tickets de caisses", 
+    popDbList : 
+    {
+        title : "Database Seçimi", //BAK
+        clmCode : "KODU" //BAK
+    },
     popPassword : 
     {
         title: "Entrez votre mot de passe utilisateur",  
@@ -9637,7 +9643,14 @@ export const langFr =
             clmAppBarcode : "Application de barre code",
             clmAppQuantity : "Application de quantité",
             clmAppAmount : "Application de montant",
-        }
+        },
+        msgDelete:
+        {
+            title: "Dikkat",   // BAK
+            btn01: "Tamam",   // BAK
+            btn02: "Vazgeç",   // BAK
+            msg: "Seçtiğiniz promosyonları silmek istediğinize eminmisiniz ?"   // BAK
+        },
     },
     promo_02_002: //  "Promosyon Detay Listesi"
     {
@@ -9666,6 +9679,7 @@ export const langFr =
             clmAppBarcode : "Application de barre code",
             clmAppQuantity : "Application de quantité",
             clmAppAmount : "Application de montant",
+            clmAppValue : "Değer" // BAK
         }
     },
     irs_01_001 : // "Alış İrsaliye Listesi"
