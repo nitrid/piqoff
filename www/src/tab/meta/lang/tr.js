@@ -117,6 +117,102 @@ export const langTr =
             clmInputName : "Müşteri",
             clmDate : "Tarih",
             clmTotal : "Tutar"
-        }
+        },
+        popVatRate:
+        {
+            title : "Vergi Oranları",
+        },
+        grdVatRate :
+        {
+            clmRate : "Vergi Oranı",
+            clmVat : "Vergi Tutarı",
+            clmTotalHt : "Tutar",
+        },
+        btnVatToZero : "Vergiyi Sıfırla",
+        btnCancel : "Kapat",
+        popDiscount : 
+        {
+            title: "Satır İndirimi",
+            chkFirstDiscount : "Satırdaki 1. İndirimleri Güncelleme",
+            chkDocDiscount : "Evrak İndirimi Olarak Uygula",
+            Percent1 : "1. İnd. Yüzde",
+            Price1 : "1. İnd. Tutar",
+            Percent2 : "2. İnd. Yüzde",
+            Price2 : "2. İnd. Tutar",
+            Percent3 : "3. İnd. Yüzde",
+            Price3 : "3. İnd. Tutar"
+        },
+        popDocDiscount : 
+        {
+            title: "Evrak İndirimi",
+            Percent1 : "1. İnd. Yüzde",
+            Price1 : "1. İnd. Tutar",
+            Percent2 : "2. İnd. Yüzde",
+            Price2 : "2. İnd. Tutar",
+            Percent3 : "3. İnd. Yüzde",
+            Price3 : "3. İnd. Tutar"
+        },
+    },
+    extract :
+    {
+        txtCustomerCode : "Lütfen Müşteri Seçiniz",
+        btnGet :"Getir",
+        grdListe : 
+        {
+            clmDocDate: "Tarih",
+            clmTypeName : "Evrak Tipi",           
+            clmRef : "Evrak Seri",
+            clmRefNo : "Evrak Sıra",
+            clmDebit : "Borç",
+            clmReceive : "Alacak",
+            clmBalance : "Bakiye",
+        },
+        txtTotalBalance : "Bakiye",
+        popCustomer:
+        {
+            title : "Müşteri Seçimi",
+            btn01 : "Ara",
+            btn02 : "Seç",
+            clmCode : "KODU",
+            clmName : "ADI"
+        },
+        msgNotCustomer:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen Müşteri Seçiniz..!"
+        },
+    },
+    itemDetail :
+    {
+        txtItem : "Lütfen Ürün Seçiniz",
+        txtItemGroup : "Ürün Grubu",
+        txtItemPrice : "Fiyat",
+        grdListe : 
+        {
+           clmName : "Depo",
+           clmQuantity : "Miktar"
+        },
+        popItem:
+        {
+            title : "Müşteri Seçimi",
+            btn01 : "Ara",
+            btn02 : "Seç",
+            clmCode : "KODU",
+            clmName : "ADI"
+        },
+        msgNotItem:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen Ürün Seçiniz..!"
+        },
+    },
+    dashboard: 
+    {
+        lastDocumant : "Son Sipariş",
+        mountSales : "Bu Ayki Sipariş Toplamı",
+        yearSales : "Bu Yılki Sipariş Toplamı",
+        sale : "Satış Tutarı"
     }
 }

@@ -9643,7 +9643,14 @@ export const langFr =
             clmAppBarcode : "Application de barre code",
             clmAppQuantity : "Application de quantité",
             clmAppAmount : "Application de montant",
-        }
+        },
+        msgDelete:
+        {
+            title: "Dikkat",   // BAK
+            btn01: "Tamam",   // BAK
+            btn02: "Vazgeç",   // BAK
+            msg: "Seçtiğiniz promosyonları silmek istediğinize eminmisiniz ?"   // BAK
+        },
     },
     promo_02_002: //  "Promosyon Detay Listesi"
     {
@@ -9672,6 +9679,7 @@ export const langFr =
             clmAppBarcode : "Application de barre code",
             clmAppQuantity : "Application de quantité",
             clmAppAmount : "Application de montant",
+            clmAppValue : "Değer" // BAK
         }
     },
     irs_01_001 : // "Alış İrsaliye Listesi"

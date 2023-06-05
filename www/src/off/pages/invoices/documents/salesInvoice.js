@@ -78,6 +78,8 @@ export default class salesInvoice extends React.PureComponent
         this.docObj.clearAll()
         this.paymentObj.clearAll()
         this.extraObj.clearAll()
+        this.grdSlsInv.devGrid.clearFilter("row")
+
 
         this.docObj.ds.on('onAddRow',(pTblName,pData) =>
         {

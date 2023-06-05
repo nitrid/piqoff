@@ -9676,7 +9676,14 @@ export const langTr =
             clmAppBarcode : "Uygulama Barkodu",
             clmAppQuantity : "Uygulama Miktarı",
             clmAppAmount : "Uygulama Tutarı",
-        }
+        },
+        msgDelete:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Seçtiğiniz promosyonları silmek istediğinize eminmisiniz ?"
+        },
     },
     promo_02_002: //  "Promosyon Detay Listesi"
     {
@@ -9705,6 +9712,7 @@ export const langTr =
             clmAppBarcode : "Uygulama Barkodu",
             clmAppQuantity : "Uygulama Miktarı",
             clmAppAmount : "Uygulama Tutarı",
+            clmAppValue : "Değer"
         }
     },
     irs_01_001 : // "Alış İrsaliye Listesi"

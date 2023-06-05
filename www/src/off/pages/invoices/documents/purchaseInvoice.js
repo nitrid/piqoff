@@ -85,7 +85,7 @@ export default class purchaseInvoice extends React.PureComponent
         this.newPrice.clear()
         this.newPriceDate.clear()
         this.newVat.clear()
-
+        this.grdPurcInv.devGrid.clearFilter("row")
 
         this.docObj.ds.on('onAddRow',(pTblName,pData) =>
         {
@@ -3169,7 +3169,7 @@ export default class purchaseInvoice extends React.PureComponent
                                         columnsAutoWidth={true} 
                                         allowColumnReordering={true} 
                                         allowColumnResizing={true} 
-                                        headerFilter={{visible:true}}
+                                        headerFilter={{visible:false}}
                                         height={'400'} 
                                         width={'100%'}
                                         dbApply={false}
@@ -3499,9 +3499,6 @@ export default class purchaseInvoice extends React.PureComponent
                                                                 icon:'more',
                                                                 onClick:()  =>
                                                                 {
-                                                                    console.log(this.docObj.dt()[0].SUBTOTAL)
-                                                                    console.log(this.docObj.dt()[0].DOC_DISCOUNT_1)
-                                                                    console.log( Number(this.docObj.dt()[0].SUBTOTAL).rate2Num(this.docObj.dt()[0].DOC_DISCOUNT_1,5))
                                                                     if(this.docObj.dt()[0].DOC_DISCOUNT > 0 )
                                                                     {
                                                                         this.txtDocDiscountPercent1.value  = Number(this.docObj.dt()[0].SUBTOTAL).rate2Num(this.docObj.dt()[0].DOC_DISCOUNT_1,5)

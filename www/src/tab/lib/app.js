@@ -279,7 +279,8 @@ export default class App extends React.PureComponent
                                     <NbButton className="form-group btn btn-block" style={{height:"100%",width:"100%",backgroundColor:'#0d6efd'}}
                                     onClick={()=>
                                     {
-                                        this.setState({page:{id: 'main_01_001',fileName: 'last.js',path: '/tab'}})
+                                        this.popMenu.hide()
+                                        this.setState({page:'extract.js'})
                                     }}>
                                         <div className='row py-2'>
                                             <div className='col-12'>
@@ -298,7 +299,8 @@ export default class App extends React.PureComponent
                                     <NbButton className="form-group btn btn-block" style={{height:"100%",width:"100%",backgroundColor:'#0d6efd'}}
                                     onClick={()=>
                                     {
-                                        this.setState({page:{id: 'main_01_001',fileName: 'last.js',path: '/tab'}})
+                                        this.popMenu.hide()
+                                        this.setState({page:'itemDetail.js'})
                                     }}>
                                         <div className='row py-2'>
                                             <div className='col-12'>

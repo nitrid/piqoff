@@ -67,6 +67,8 @@ export default class rebateDispatch extends React.PureComponent
     {
         this.docObj.clearAll()
         this.extraObj.clearAll()
+        this.grdRebtDispatch.devGrid.clearFilter("row")
+
 
         this.docObj.ds.on('onAddRow',(pTblName,pData) =>
         {
@@ -717,9 +719,9 @@ export default class rebateDispatch extends React.PureComponent
             this.docObj.docItems.dt()[pIndex].MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
             this.docObj.docItems.dt()[pIndex].PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4))
             this.docObj.docItems.dt()[pIndex].VAT = parseFloat((tmpData.result.recordset[0].PRICE * (pData.VAT / 100)).toFixed(4))
-            this.docObj.docItems.dt()[pIndex].AMOUNT = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4))
-            this.docObj.docItems.dt()[pIndex].TOTAL = parseFloat((tmpData.result.recordset[0].PRICE + this.docObj.docItems.dt()[pIndex].VAT).toFixed(4))
-            this.docObj.docItems.dt()[pIndex].TOTALHT = parseFloat((this.docObj.docItems.dt()[pIndex].AMOUNT - this.docObj.docItems.dt()[pIndex].DISCOUNT).toFixed(4))
+            this.docObj.docItems.dt()[pIndex].AMOUNT = Number(tmpData.result.recordset[0].PRICE  * pQuantity).round(2)
+            this.docObj.docItems.dt()[pIndex].TOTAL = Number(((tmpData.result.recordset[0].PRICE * pQuantity) + this.docObj.docItems.dt()[pIndex].VAT)).round(2)
+            this.docObj.docItems.dt()[pIndex].TOTALHT = Number((this.docObj.docItems.dt()[pIndex].AMOUNT - this.docObj.docItems.dt()[pIndex].DISCOUNT)).round(2)
             this.docObj.docItems.dt()[pIndex].SUB_PRICE = Number(parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4)) / this.docObj.docItems.dt()[pIndex].SUB_FACTOR).round(2)
 
             this._calculateTotal()
