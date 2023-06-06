@@ -1,60 +1,26 @@
 export const langTr = 
 {
     popGrid: {btnSelection:"Seç",btnSearch:"Listele"},
-    btnSave: "Kaydet",
-    btnCancel: "İptal",
-    btnPrint :"Yazdır",
-    btnOk: "Tamam",
-    btnGet: "Getir",
-    msgWarning: "Dikkat",
-    btnYes : "Evet",
-    btnNo : "Hayır",
-    msgClose : "Sayfayı Kapatmak İstediğinize Eminmisiniz ?",
     txtLangSelect : "Dil Seçimi",
     userListTitle : "Kullanıcı Listesi",
     txtUser : "Kullanıcı",
     txtPass : "Şifre",
-    btnUserSelect : "Kullanıcı Seçimi",
     btnLogin : "Giriş",
     btnLogout : "Çıkış",
-    msgNotAccess :"Kullanıcının Giriş Yetkisi Yok.",
-    msgInvalidUser : "Kullanıcı Adı veya Şifre Hatalı.",
-    txtCardRead :"Lütfen Kullanıcı Kartınızı Okutunuz.",
-    checkAll :"Tümünü Uygula",
+    btnUserSelect : "Kullanıcı Seçimi",
+    serverConnection : "Sunucu İle Bağlantı Kuruluyor",
+    msgWarning : "Dikkat",
+    msgSqlService1 : "Sql sunucuya bağlanılamıyor.",
     msgAnotherUserAlert: 
     {
         title : "Dikkat",
         msg : "Sizin kullanıcı bilgileriniz ile başka bir cihazdan giriş yapıldı",
         btn01 : "Tamam"
     },
-    menuMob:
+    menu:
     {
-        stk: "Stok",                
-        stk_01: "Tanımlar",
-        stk_01_001: "Fiyat Gör",
-        stk_01_002: "Tedarikçi Gör",
-        stk_01_003: "Barkod Tanımlama",
-        stk_01_004: "Ü.Grubu Gör-Değiştir",
-        stk_01_005: "Fiyat Güncelle",
-        stk_01_006: "Barkod Ekle",
-        stk_01_007: "Ü.Grubu Güncelle",
-        stk_02: "Evraklar",
-        stk_02_001: "Etiket Basımı",
-        stk_02_002: "İade Ürün Toplama",
-        stk_02_003: "Sayım Evrakı",
-        stk_02_004: "Skt Girişi",
-        stk_02_005 : "Depolar Arası Sevk",
-        ord: "Sipariş",                
-        ord_01: "Evraklar",
-        ord_01_001: "Satış Sipariş",
-        ord_01_002: "Alış Sipariş",
-        ord_01_003: "Toplu Siparis",
-        irs: "İrsaliyeler",
-        irs_01: "Evraklar",
-        irs_01_001: "İade İrsaliyesi",
-        irs_01_002 : "Alış İrsaliyesi",
-        irs_01_003 : "Satış İrsaliyesi",
-        irs_01_004 : "Şube Satış İrsaliyesi"
+        dashboard : "Dashboard",
+        order : "Sipariş"
     },
     login:
     {
