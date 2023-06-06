@@ -129,17 +129,18 @@
     -webkit-user-drag: none;
     padding: 3px;
 }
-.btn-transparent.btn-primary
+.btn-purple.btn-primary
 {
     color: #fff;
-    border-color: #ffffff00;
-    background-color: #ffffff00;
+    border-color: #5f27cd;
+    background-color: #5f27cd;
 }
 .btn-purple-light.btn-primary
 {
     color: #fff;
     border-color: #5f27cd;
-    background: radial-gradient(circle, #9a74e5, #5f27cd);
+    /* background: radial-gradient(circle, #9a74e5, #5f27cd); */
+    background-color: #5f27cd;
 }
 /* .dx-texteditor-input {
     padding: 2px;   

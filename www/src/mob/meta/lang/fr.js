@@ -19,8 +19,8 @@ export const langFr =
     },
     menu: //BAK
     {
-        dashboard : "Dashboard",
-        order : "Sipariş"
+        dash : "Dashboard",
+        stk : "Stok İşlemleri"
     },
     login:
     {

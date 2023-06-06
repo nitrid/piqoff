@@ -21,7 +21,7 @@ export default class Login extends React.PureComponent
         {
             body : 
             {
-                background : 'radial-gradient(circle, #9a74e5, #5f27cd)',                
+                backgroundColor: '#5f27cd',
                 height : '100%',
                 paddingTop : '100px' 
             },
@@ -162,7 +162,7 @@ export default class Login extends React.PureComponent
                                     height='fit-content'
                                     text={this.lang.t("btnUserSelect")}
                                     type="success"
-                                    stylingMode="outlined"
+                                    stylingMode="contained"
                                     onClick={this.getUserList}
                                     />
                                 </div>
@@ -176,7 +176,7 @@ export default class Login extends React.PureComponent
                                     height='fit-content'
                                     text={this.lang.t("btnLogin")}
                                     type="default"
-                                    stylingMode="outlined"
+                                    stylingMode="contained"
                                     onClick={this.onLoginClick}
                                     />
                                 </div>
@@ -188,7 +188,7 @@ export default class Login extends React.PureComponent
                                     height='fit-content'
                                     text={this.lang.t("btnLogout")}
                                     type="danger"
-                                    stylingMode="outlined"
+                                    stylingMode="contained"
                                     onClick={this.closePage}
                                     />
                                 </div>

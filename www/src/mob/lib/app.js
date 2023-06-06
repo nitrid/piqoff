@@ -9,6 +9,7 @@ import io from "socket.io-client";
 import {core} from '../../core/core.js'
 import * as appInfo from '../../../package.json'
 import Login from './login.js'
+import { MenuView } from './menu';
 
 import NbButton from '../../core/react/bootstrap/button';
 import NdDialog,{dialog} from '../../core/react/devex/dialog';
@@ -82,7 +83,7 @@ export default class App extends React.PureComponent
             {
                 this.init();
             }, false);
-        }        
+        }
     }
     init()
     {
@@ -186,16 +187,16 @@ export default class App extends React.PureComponent
 
         return (
             <div style={{height:'90%'}}>
-                <div className="top-bar row shadow" style={{background: 'radial-gradient(ellipse 200px 200px at center, #5f27cd, #9a74e5)',height:"55px"}}>
+                <div className="top-bar row shadow" style={{backgroundColor: '#5f27cd',height:"55px"}}>
                     <div className="col-4" style={{paddingLeft:"25px",paddingTop:"8px"}}>
                         <img src="./css/img/logo.png" width="40px" height="40px"/>
                     </div>
                     <div className="col-4" style={{paddingTop:"5px"}} align="center">
-                        <NbButton className="form-group btn btn-primary btn-transparent btn-block" style={{height:"45px"}}
+                        <NbButton className="form-group btn btn-primary btn-purple btn-block" style={{height:"45px"}}
                         onClick={()=>
                         {
-                            if(!this.popMenu.state.show)
-                            {
+                            if(!this.popMenu.isShowed)
+                            {                                
                                 this.popMenu.show()
                             }
                             else
@@ -216,9 +217,14 @@ export default class App extends React.PureComponent
                     </div>
                 </React.Suspense>
                 <div>
-                    <NbPopUp id={"popMenu"} parent={this} title={""} fullscreen={true}>
+                    <MenuView id={"popMenu"} parent={this} lang={this.lang} onMenuClick={(e)=>
+                    {
+                        this.setState({page:e.path})
+                    }}/>
+                    {/* <NbPopUp id={"popMenu"} parent={this} title={""} fullscreen={true}>
                         <div>
-                            {/* <div className='row' >
+                            
+                            <div className='row' >
                                 <div className='col-12'>
                                     <NbButton className="form-group btn btn-primary btn-purple-light btn-block" style={{height:"100%",width:"100%"}}
                                     onClick={()=>
@@ -238,11 +244,10 @@ export default class App extends React.PureComponent
                                         </div>
                                     </NbButton>
                                 </div>
-                            </div> */}
+                            </div>
                             <div className='row' style={{paddingTop:"10px"}}>
-                                {/* SATIŞ */}
                                 <div className='col-4 pb-2'>
-                                    <NbButton className="form-group btn btn-primary btn-purple-light btn-block" style={{height:"100%",width:"100%",backgroundColor:'#0d6efd'}}
+                                    <NbButton className="form-group btn btn-primary btn-purple-light btn-block" style={{height:"100%",width:"100%"}}
                                     onClick={()=>
                                     {
                                         this.popMenu.hide()
@@ -260,9 +265,8 @@ export default class App extends React.PureComponent
                                         </div>                                        
                                     </NbButton>
                                 </div>
-                                {/* SATIŞ */}
                                 <div className='col-4 pb-2'>
-                                    <NbButton className="form-group btn btn-primary btn-purple-light btn-block" style={{height:"100%",width:"100%",backgroundColor:'#0d6efd'}}
+                                    <NbButton className="form-group btn btn-primary btn-purple-light btn-block" style={{height:"100%",width:"100%"}}
                                     onClick={()=>
                                     {
                                         this.popMenu.hide()
@@ -280,9 +284,8 @@ export default class App extends React.PureComponent
                                         </div>                                        
                                     </NbButton>
                                 </div>
-                                {/* SATIŞ */}
                                 <div className='col-4 pb-2'>
-                                    <NbButton className="form-group btn btn-primary btn-purple-light btn-block" style={{height:"100%",width:"100%",backgroundColor:'#0d6efd'}}
+                                    <NbButton className="form-group btn btn-primary btn-purple-light btn-block" style={{height:"100%",width:"100%"}}
                                     onClick={()=>
                                     {
                                         this.popMenu.hide()
@@ -300,9 +303,8 @@ export default class App extends React.PureComponent
                                         </div>                                        
                                     </NbButton>
                                 </div>
-                                {/* SATIŞ */}
                                 <div className='col-4 pb-2'>
-                                    <NbButton className="form-group btn btn-primary btn-purple-light btn-block" style={{height:"100%",width:"100%",backgroundColor:'#0d6efd'}}
+                                    <NbButton className="form-group btn btn-primary btn-purple-light btn-block" style={{height:"100%",width:"100%"}}
                                     onClick={()=>
                                     {
                                         this.popMenu.hide()
@@ -320,9 +322,8 @@ export default class App extends React.PureComponent
                                         </div>                                        
                                     </NbButton>
                                 </div>
-                                {/* SATIŞ */}
                                 <div className='col-4 pb-2'>
-                                    <NbButton className="form-group btn btn-primary btn-purple-light btn-block" style={{height:"100%",width:"100%",backgroundColor:'#0d6efd'}}
+                                    <NbButton className="form-group btn btn-primary btn-purple-light btn-block" style={{height:"100%",width:"100%"}}
                                     onClick={()=>
                                     {
                                         this.popMenu.hide()
@@ -342,7 +343,7 @@ export default class App extends React.PureComponent
                                 </div>                                
                             </div>
                         </div>
-                    </NbPopUp>
+                    </NbPopUp> */}
                 </div>
             </div>
         )

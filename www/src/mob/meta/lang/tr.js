@@ -19,8 +19,10 @@ export const langTr =
     },
     menu:
     {
-        dashboard : "Dashboard",
-        order : "Sipariş"
+        dash : "Dashboard",
+        stk : "Stok İşlemleri",
+        stk_01 : "Fiyat Gör",
+        stk_02 : "Tedarikçi Gör"
     },
     login:
     {
