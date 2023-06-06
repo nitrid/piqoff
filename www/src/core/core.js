@@ -1562,11 +1562,11 @@ export class datatable
 
             if(arguments.length == 2)
             {
-                tmpVal = parseFloat(tmpVal).toFixed(arguments[1]);
+                tmpVal = Number(tmpVal).round(arguments[1]);
             }
         }
 
-        return tmpVal;
+        return tmpVal.toString();
     }
     max()
     {
@@ -2272,5 +2272,7 @@ Number.prototype.round = function(pDigits)
         tmpNum = tmpNum + "0"
     }
     tmpNum = Number(tmpNum)
-    return Math.round((this + Number.EPSILON) * tmpNum) / tmpNum
+    
+    return Math.round((Number(this.toFixed(pDigits + 1)) + Number.EPSILON) * tmpNum) / tmpNum
+    //return Math.round((this + Number.EPSILON) * tmpNum) / tmpNum
 }

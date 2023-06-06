@@ -50,7 +50,6 @@ export default class promotionList extends React.PureComponent
     {
         setTimeout(async () => 
         {
-
         }, 1000);
     }
     _columnListBox(e)
