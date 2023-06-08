@@ -1562,11 +1562,11 @@ export class datatable
 
             if(arguments.length == 2)
             {
-                tmpVal = Number(tmpVal).round(arguments[1]);
+                tmpVal = Number(tmpVal).toFixed(arguments[1]);
             }
         }
 
-        return tmpVal.toString();
+        return tmpVal;
     }
     max()
     {
