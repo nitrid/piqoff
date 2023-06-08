@@ -2273,6 +2273,6 @@ Number.prototype.round = function(pDigits)
     }
     tmpNum = Number(tmpNum)
     
-    return Math.round((Number(this.toFixed(pDigits + 1)) + Number.EPSILON) * tmpNum) / tmpNum
-    //return Math.round((this + Number.EPSILON) * tmpNum) / tmpNum
+    //return Math.round((Number(this.toFixed(pDigits + 1)) + Number.EPSILON) * tmpNum) / tmpNum
+    return Math.round((this + Number.EPSILON) * tmpNum) / tmpNum
 }
