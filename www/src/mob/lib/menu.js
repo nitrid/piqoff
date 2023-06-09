@@ -22,12 +22,50 @@ export const menu = (e) =>
                     id: 'stk_01',
                     text : e.t('menu.stk_01'), //'Fiyat Gör'
                     icon : "fa-barcode",
+                    path: "dashboard.js"
                 },
                 {
                     id: 'stk_02',
                     text : e.t('menu.stk_02'), //'Tedarikçi Gör'
                     icon : "fa-barcode",
+                    path: "dashboard.js"
                 },
+                {
+                    id: 'stk_03',
+                    text : e.t('menu.stk_03'), //'Barkod Tanımlama'
+                    icon : "fa-barcode",
+                    path: "dashboard.js"
+                },
+                {
+                    id: 'stk_04',
+                    text : e.t('menu.stk_04'), //'Ürün Grubu Tanımlama'
+                    icon : "fa-barcode",
+                    path: "dashboard.js"
+                },
+                {
+                    id: 'stk_05',
+                    text : e.t('menu.stk_05'), //'Sayım'
+                    icon : "fa-barcode",
+                    path: "dashboard.js"
+                },
+                {
+                    id: 'stk_06',
+                    text : e.t('menu.stk_06'), //'Etiket Basımı'
+                    icon : "fa-barcode",
+                    path: "dashboard.js"
+                },
+                {
+                    id: 'stk_07',
+                    text : e.t('menu.stk_07'), //'Özel Etiket Basımı'
+                    icon : "fa-barcode",
+                    path: "dashboard.js"
+                },
+                {
+                    id: 'stk_08',
+                    text : e.t('menu.stk_08'), //'İade Ürünü Toplama'
+                    icon : "fa-barcode",
+                    path: "dashboard.js"
+                }
             ]
         },
     ]
@@ -96,7 +134,6 @@ export class MenuView extends NbBase
     }
     render()
     {
-
         return (
             <NbPopUp id={"popMenu"} parent={this} title={""} fullscreen={true}>
                 <div>

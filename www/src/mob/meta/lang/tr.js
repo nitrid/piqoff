@@ -22,7 +22,13 @@ export const langTr =
         dash : "Dashboard",
         stk : "Stok İşlemleri",
         stk_01 : "Fiyat Gör",
-        stk_02 : "Tedarikçi Gör"
+        stk_02 : "Tedarikçi Gör",
+        stk_03 : "Barkod Tanımlama",
+        stk_04 : "Ürün Grubu Tanımlama",
+        stk_05 : "Sayım",
+        stk_06 : "Etiket Basımı",
+        stk_07 : "Özel Etiket Basımı",
+        stk_08 : "İade Ürünü Toplama",
     },
     login:
     {
