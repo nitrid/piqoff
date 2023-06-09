@@ -22,52 +22,108 @@ export const menu = (e) =>
                     id: 'stk_01',
                     text : e.t('menu.stk_01'), //'Fiyat Gör'
                     icon : "fa-barcode",
-                    path: "dashboard.js"
                 },
                 {
                     id: 'stk_02',
                     text : e.t('menu.stk_02'), //'Tedarikçi Gör'
                     icon : "fa-barcode",
-                    path: "dashboard.js"
                 },
                 {
                     id: 'stk_03',
                     text : e.t('menu.stk_03'), //'Barkod Tanımlama'
                     icon : "fa-barcode",
-                    path: "dashboard.js"
                 },
                 {
                     id: 'stk_04',
-                    text : e.t('menu.stk_04'), //'Ürün Grubu Tanımlama'
+                    text : e.t('menu.stk_04'), //'Ürün Grubu Güncelle'
                     icon : "fa-barcode",
-                    path: "dashboard.js"
                 },
                 {
                     id: 'stk_05',
-                    text : e.t('menu.stk_05'), //'Sayım'
+                    text : e.t('menu.stk_05'), //'İade Ürünü Toplama'
                     icon : "fa-barcode",
-                    path: "dashboard.js"
                 },
                 {
                     id: 'stk_06',
-                    text : e.t('menu.stk_06'), //'Etiket Basımı'
+                    text : e.t('menu.stk_06'), //'Sayım'
                     icon : "fa-barcode",
-                    path: "dashboard.js"
                 },
                 {
                     id: 'stk_07',
-                    text : e.t('menu.stk_07'), //'Özel Etiket Basımı'
+                    text : e.t('menu.stk_07'), //'Etiket Basımı'
                     icon : "fa-barcode",
-                    path: "dashboard.js"
                 },
                 {
                     id: 'stk_08',
-                    text : e.t('menu.stk_08'), //'İade Ürünü Toplama'
+                    text : e.t('menu.stk_08'), //'Özel Etiket Basımı'
                     icon : "fa-barcode",
-                    path: "dashboard.js"
                 }
             ]
         },
+        {
+            id: 'dep',
+            text: e.t('menu.dep'),
+            icon : "fa-barcode",
+            items: 
+            [
+                {
+                    id: 'dep_01',
+                    text : e.t('menu.dep_01'), //'Depolar Arası Sevk'
+                    icon : "fa-barcode",
+                },
+                {
+                    id: 'dep_02',
+                    text : e.t('menu.dep_02'), //'Depo Siparişi'
+                    icon : "fa-barcode",
+                },
+                {
+                    id: 'dep_03',
+                    text : e.t('menu.dep_03'), //'Depo Mal Kabul'
+                    icon : "fa-barcode",
+                }
+            ]
+        },
+        {
+            id: 'irs',
+            text: e.t('menu.irs'),
+            icon : "fa-barcode",
+            items: 
+            [
+                {
+                    id: 'irs_01',
+                    text : e.t('menu.irs_01'), //'Alış İrsaliye'
+                    icon : "fa-barcode",
+                },
+                {
+                    id: 'irs_02',
+                    text : e.t('menu.irs_02'), //'Satış İrsaliye'
+                    icon : "fa-barcode",
+                },
+                {
+                    id: 'irs_03',
+                    text : e.t('menu.irs_03'), //'Şube Satış İrsaliye'
+                    icon : "fa-barcode",
+                },
+            ]
+        },
+        {
+            id: 'sip',
+            text: e.t('menu.sip'),
+            icon : "fa-barcode",
+            items: 
+            [
+                {
+                    id: 'sip_01',
+                    text : e.t('menu.sip_01'), //'Sipariş Eşleştirme'
+                    icon : "fa-barcode",
+                },
+                {
+                    id: 'sip_02',
+                    text : e.t('menu.sip_02'), //'Sipariş Mal Kabul'
+                    icon : "fa-barcode",
+                }
+            ]
+        }
     ]
 }
 export class MenuView extends NbBase
