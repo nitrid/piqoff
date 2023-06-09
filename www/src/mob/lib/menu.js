@@ -21,12 +21,12 @@ export const menu = (e) =>
                 {
                     id: 'stk_01',
                     text : e.t('menu.stk_01'), //'Fiyat Gör'
-                    icon : "fa-barcode",
+                    icon : "fa-money-check",
                 },
                 {
                     id: 'stk_02',
                     text : e.t('menu.stk_02'), //'Tedarikçi Gör'
-                    icon : "fa-barcode",
+                    icon : "fa-user-tie",
                 },
                 {
                     id: 'stk_03',
@@ -36,91 +36,91 @@ export const menu = (e) =>
                 {
                     id: 'stk_04',
                     text : e.t('menu.stk_04'), //'Ürün Grubu Güncelle'
-                    icon : "fa-barcode",
+                    icon : "fa-chart-bar",
                 },
                 {
                     id: 'stk_05',
-                    text : e.t('menu.stk_05'), //'İade Ürünü Toplama'
-                    icon : "fa-barcode",
+                    text : e.t('menu.stk_05'), //'Sayım '
+                    icon : "fa-paste",
                 },
                 {
                     id: 'stk_06',
-                    text : e.t('menu.stk_06'), //'Sayım'
-                    icon : "fa-barcode",
+                    text : e.t('menu.stk_06'), //'Etiket '
+                    icon : "fa-tag",
                 },
                 {
                     id: 'stk_07',
-                    text : e.t('menu.stk_07'), //'Etiket Basımı'
-                    icon : "fa-barcode",
+                    text : e.t('menu.stk_07'), //'Özel Etiket Basımı'
+                    icon : "fa-tags",
                 },
                 {
                     id: 'stk_08',
-                    text : e.t('menu.stk_08'), //'Özel Etiket Basımı'
-                    icon : "fa-barcode",
+                    text : e.t('menu.stk_08'), //'İade Ürünü Toplama'
+                    icon : "fa-arrow-right-arrow-left",
                 }
             ]
         },
         {
             id: 'dep',
             text: e.t('menu.dep'),
-            icon : "fa-barcode",
+            icon : "fa-warehouse",
             items: 
             [
                 {
                     id: 'dep_01',
                     text : e.t('menu.dep_01'), //'Depolar Arası Sevk'
-                    icon : "fa-barcode",
+                    icon : "fa-dolly",
                 },
                 {
                     id: 'dep_02',
                     text : e.t('menu.dep_02'), //'Depo Siparişi'
-                    icon : "fa-barcode",
+                    icon : "fa-box-open",
                 },
                 {
                     id: 'dep_03',
                     text : e.t('menu.dep_03'), //'Depo Mal Kabul'
-                    icon : "fa-barcode",
+                    icon : "fa-boxes-packing",
                 }
             ]
         },
         {
             id: 'irs',
             text: e.t('menu.irs'),
-            icon : "fa-barcode",
+            icon : "fa-file-lines",
             items: 
             [
                 {
                     id: 'irs_01',
                     text : e.t('menu.irs_01'), //'Alış İrsaliye'
-                    icon : "fa-barcode",
+                    icon : "fa-file-arrow-up",
                 },
                 {
                     id: 'irs_02',
                     text : e.t('menu.irs_02'), //'Satış İrsaliye'
-                    icon : "fa-barcode",
+                    icon : "fa-file-arrow-down",
                 },
                 {
                     id: 'irs_03',
                     text : e.t('menu.irs_03'), //'Şube Satış İrsaliye'
-                    icon : "fa-barcode",
+                    icon : "fa-copy",
                 },
             ]
         },
         {
             id: 'sip',
             text: e.t('menu.sip'),
-            icon : "fa-barcode",
+            icon : "fa-cart-flatbed",
             items: 
             [
                 {
                     id: 'sip_01',
                     text : e.t('menu.sip_01'), //'Sipariş Eşleştirme'
-                    icon : "fa-barcode",
+                    icon : "fa-paste",
                 },
                 {
                     id: 'sip_02',
                     text : e.t('menu.sip_02'), //'Sipariş Mal Kabul'
-                    icon : "fa-barcode",
+                    icon : "fa-boxes-packing",
                 }
             ]
         }
