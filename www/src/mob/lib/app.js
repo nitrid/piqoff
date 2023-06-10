@@ -219,7 +219,7 @@ export default class App extends React.PureComponent
                     </div>
                 </div>
                 <React.Suspense fallback={<div style={{position: 'relative',margin:'auto',top: '40%',left:'50%'}}><LoadIndicator height={40} width={40} /></div>}>
-                    <div style={{position:'relative',top:'55px'}}>
+                    <div style={{position:'relative',top:'55px',height:'100%'}}>
                         <Page/>
                     </div>
                 </React.Suspense>

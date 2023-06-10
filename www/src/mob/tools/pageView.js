@@ -1,6 +1,7 @@
 import React from 'react';
 import NbButton from '../../core/react/bootstrap/button';
 import NbBase from '../../core/react/bootstrap/base';
+import ScrollView from 'devextreme-react/scroll-view';
 
 export class PageView extends NbBase
 {
@@ -47,6 +48,10 @@ export class PageContent extends NbBase
         super(props)
         this.state = {opened : false}
     }
+    componentDidMount()
+    {
+        console.log(window.innerHeight)
+    }
     open()
     {
         this.setState({opened:true})
@@ -58,8 +63,10 @@ export class PageContent extends NbBase
     render()
     {
         return(
-            <div style={{visibility:this.state.opened ? 'visible' : 'hidden',position:'fixed'}}>
-                {this.props.children}
+            <div style={{visibility:this.state.opened ? 'visible' : 'hidden',position:this.state.opened ? '' : 'fixed'}}>
+                <ScrollView height={(window.innerHeight - 146).toString() + 'px'}>
+                    {this.props.children}
+                </ScrollView>
             </div>
         )
     }
