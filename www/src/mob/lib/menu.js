@@ -60,6 +60,7 @@ export const menu = (e) =>
                 }
             ]
         },
+        //Depo
         {
             id: 'dep',
             text: e.t('menu.dep'),
@@ -83,6 +84,7 @@ export const menu = (e) =>
                 }
             ]
         },
+        //İrsaliye
         {
             id: 'irs',
             text: e.t('menu.irs'),
@@ -106,6 +108,7 @@ export const menu = (e) =>
                 },
             ]
         },
+        //Sipariş
         {
             id: 'sip',
             text: e.t('menu.sip'),
@@ -121,6 +124,7 @@ export const menu = (e) =>
                     id: 'sip_02',
                     text : e.t('menu.sip_02'), //'Alış Siparişi'
                     icon : "fa-file-import",
+                    path: "order/purchaseOrder.js"
                 },
                 {
                     id: 'sip_03',
@@ -129,6 +133,7 @@ export const menu = (e) =>
                 }
             ]
         },
+        //Sipariş Karşılama
         {
             id: 'kar',
             text: e.t('menu.kar'),

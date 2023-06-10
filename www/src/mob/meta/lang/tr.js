@@ -23,7 +23,7 @@ export const langTr =
         stk : "Stok İşlemleri",
         dep : "Depo İşlemleri",
         irs : "İrsaliye İşlemleri",
-        sip : "Sipariş",
+        sip : "Sipariş İşlemleri",
         kar : "Sipariş Karşılama",
         stk_01 : "Fiyat Gör",
         stk_02 : "Tedarikçi Gör",
@@ -41,7 +41,7 @@ export const langTr =
         irs_03 : "Şube Satış İrsaliye",
         sip_01 : "Satış Siparişi",
         sip_02 : "Alış Siparişi",
-        sip_03 : "Toplu Sipariş Toplama",
+        sip_03 : "Toplu Sipariş",
         kar_01 : "Sipariş Eşleştirme",
         kar_02 : "Sipariş Mal Kabul"
     },

@@ -23,7 +23,8 @@ export const langFr =
         stk : "Stok İşlemleri",
         dep : "Depo İşlemleri",
         irs : "İrsaliye İşlemleri",
-        sip : "Sipariş Karşılama",
+        sip : "Sipariş İşlemleri",
+        kar : "Sipariş Karşılama",
         stk_01 : "Fiyat Gör",
         stk_02 : "Tedarikçi Gör",
         stk_03 : "Barkod Tanımlama",
@@ -38,8 +39,11 @@ export const langFr =
         irs_01 : "Alış İrsaliye",
         irs_02 : "Satış İrsaliye",
         irs_03 : "Şube Satış İrsaliye",
-        sip_01 : "Sipariş Eşleştirme",
-        sip_02 : "Sipariş Mal Kabul",
+        sip_01 : "Satış Siparişi",
+        sip_02 : "Alış Siparişi",
+        sip_03 : "Toplu Sipariş",
+        kar_01 : "Sipariş Eşleştirme",
+        kar_02 : "Sipariş Mal Kabul"
     },
     login:
     {

@@ -186,8 +186,8 @@ export default class App extends React.PureComponent
         const Page = React.lazy(() => import('../pages/' + this.state.page));
 
         return (
-            <div style={{height:'90%'}}>
-                <div className="top-bar row shadow" style={{backgroundColor: '#5f27cd',height:"55px"}}>
+            <div style={{overflow:'hidden'}}>
+                <div className="top-bar row" style={{backgroundColor: '#5f27cd',height:"55px"}}>
                     <div className="col-4" style={{paddingLeft:"25px",paddingTop:"8px"}}>
                         <img src="./css/img/logo.png" width="40px" height="40px"/>
                     </div>
@@ -212,7 +212,7 @@ export default class App extends React.PureComponent
                     </div>
                 </div>
                 <React.Suspense fallback={<div style={{position: 'relative',margin:'auto',top: '40%',left:'50%'}}><LoadIndicator height={40} width={40} /></div>}>
-                    <div style={{paddingTop:'60px'}}>
+                    <div style={{position:'relative',top:'55px'}}>
                         <Page/>
                     </div>
                 </React.Suspense>
@@ -221,129 +221,6 @@ export default class App extends React.PureComponent
                     {
                         this.setState({page:e.path})
                     }}/>
-                    {/* <NbPopUp id={"popMenu"} parent={this} title={""} fullscreen={true}>
-                        <div>
-                            
-                            <div className='row' >
-                                <div className='col-12'>
-                                    <NbButton className="form-group btn btn-primary btn-purple-light btn-block" style={{height:"100%",width:"100%"}}
-                                    onClick={()=>
-                                    {
-                                        this.popMenu.hide()
-                                        this.setState({page:'dashboard.js'})
-                                    }}>
-                                        <div className='row py-2'>
-                                            <div className='col-12'>
-                                                <i className="fa-solid fa-chart-pie fa-3x" style={{color:'#ecf0f1'}}></i>
-                                            </div>
-                                        </div>
-                                        <div className='row'>
-                                            <div className='col-12'>
-                                                <h6 className='overflow-hidden d-flex align-items-center justify-content-center' style={{color:'#ecf0f1',height:'40px'}}>{this.lang.t('menu.dashboard')}</h6>
-                                            </div>
-                                        </div>
-                                    </NbButton>
-                                </div>
-                            </div>
-                            <div className='row' style={{paddingTop:"10px"}}>
-                                <div className='col-4 pb-2'>
-                                    <NbButton className="form-group btn btn-primary btn-purple-light btn-block" style={{height:"100%",width:"100%"}}
-                                    onClick={()=>
-                                    {
-                                        this.popMenu.hide()
-                                        this.setState({page:'sale.js'})
-                                    }}>
-                                        <div className='row py-2'>
-                                            <div className='col-12'>
-                                                <i className="fa-solid fa-barcode fa-2x" style={{color:'#ecf0f1'}}></i>
-                                            </div>
-                                        </div>
-                                        <div className='row'>
-                                            <div className='col-12'>
-                                                <h6 className='overflow-hidden d-flex align-items-center justify-content-center' style={{color:'#ecf0f1',height:'40px'}}>Stok İşlemleri</h6>
-                                            </div>
-                                        </div>                                        
-                                    </NbButton>
-                                </div>
-                                <div className='col-4 pb-2'>
-                                    <NbButton className="form-group btn btn-primary btn-purple-light btn-block" style={{height:"100%",width:"100%"}}
-                                    onClick={()=>
-                                    {
-                                        this.popMenu.hide()
-                                        this.setState({page:'sale.js'})
-                                    }}>
-                                        <div className='row py-2'>
-                                            <div className='col-12'>
-                                                <i className="fa-solid fa-warehouse fa-2x" style={{color:'#ecf0f1'}}></i>
-                                            </div>
-                                        </div>
-                                        <div className='row'>
-                                            <div className='col-12'>
-                                                <h6 className='overflow-hidden d-flex align-items-center justify-content-center' style={{color:'#ecf0f1',height:'40px'}}>Depo İşlemleri</h6>
-                                            </div>
-                                        </div>                                        
-                                    </NbButton>
-                                </div>
-                                <div className='col-4 pb-2'>
-                                    <NbButton className="form-group btn btn-primary btn-purple-light btn-block" style={{height:"100%",width:"100%"}}
-                                    onClick={()=>
-                                    {
-                                        this.popMenu.hide()
-                                        this.setState({page:'sale.js'})
-                                    }}>
-                                        <div className='row py-2'>
-                                            <div className='col-12'>
-                                                <i className="fa-solid fa-rectangle-list fa-2x" style={{color:'#ecf0f1'}}></i>
-                                            </div>
-                                        </div>
-                                        <div className='row'>
-                                            <div className='col-12'>
-                                                <h6 className='overflow-hidden d-flex align-items-center justify-content-center' style={{color:'#ecf0f1',height:'40px'}}>Sipariş İşlemleri</h6>
-                                            </div>
-                                        </div>                                        
-                                    </NbButton>
-                                </div>
-                                <div className='col-4 pb-2'>
-                                    <NbButton className="form-group btn btn-primary btn-purple-light btn-block" style={{height:"100%",width:"100%"}}
-                                    onClick={()=>
-                                    {
-                                        this.popMenu.hide()
-                                        this.setState({page:'sale.js'})
-                                    }}>
-                                        <div className='row py-2'>
-                                            <div className='col-12'>
-                                                <i className="fa-solid fa-clipboard-list fa-2x" style={{color:'#ecf0f1'}}></i>
-                                            </div>
-                                        </div>
-                                        <div className='row'>
-                                            <div className='col-12'>
-                                                <h6 className='overflow-hidden d-flex align-items-center justify-content-center' style={{color:'#ecf0f1',height:'40px'}}>İrsaliye İşlemleri</h6>
-                                            </div>
-                                        </div>                                        
-                                    </NbButton>
-                                </div>
-                                <div className='col-4 pb-2'>
-                                    <NbButton className="form-group btn btn-primary btn-purple-light btn-block" style={{height:"100%",width:"100%"}}
-                                    onClick={()=>
-                                    {
-                                        this.popMenu.hide()
-                                        this.setState({page:'sale.js'})
-                                    }}>
-                                        <div className='row py-2'>
-                                            <div className='col-12'>
-                                                <i className="fa-solid fa-window-restore fa-2x" style={{color:'#ecf0f1'}}></i>
-                                            </div>
-                                        </div>
-                                        <div className='row'>
-                                            <div className='col-12'>
-                                                <h6 className='overflow-hidden d-flex align-items-center justify-content-center' style={{color:'#ecf0f1',height:'40px'}}>Sipariş Karşılama</h6>
-                                            </div>
-                                        </div>                                        
-                                    </NbButton>
-                                </div>                                
-                            </div>
-                        </div>
-                    </NbPopUp> */}
                 </div>
             </div>
         )

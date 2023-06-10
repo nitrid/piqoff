@@ -142,6 +142,10 @@
     /* background: radial-gradient(circle, #9a74e5, #5f27cd); */
     background-color: #5f27cd;
 }
+.dx-scrollable-native.dx-scrollable-native-ios .dx-scrollable-content
+{
+    min-height: 100%;
+}
 /* .dx-texteditor-input {
     padding: 2px;   
 }
