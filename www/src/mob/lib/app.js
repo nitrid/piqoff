@@ -187,7 +187,7 @@ export default class App extends React.PureComponent
 
         return (
             <div style={{overflow:'hidden'}}>
-                <div className="top-bar row" style={{backgroundColor: '#5f27cd',height:"55px"}}>
+                <div className="top-bar row" style={{backgroundColor: '#5f27cd',height:"55px",borderBottom:'2px solid #9670df'}}>
                     <div className="col-4" style={{paddingLeft:"25px",paddingTop:"8px"}}>
                         <img src="./css/img/logo.png" width="40px" height="40px"/>
                     </div>
@@ -207,8 +207,15 @@ export default class App extends React.PureComponent
                             <i className="fa-solid fa-bars fa-2x"></i>
                         </NbButton>
                     </div>
-                    <div className="col-4" style={{paddingRight:"25px",paddingTop:"10px"}} align="right">
-                        
+                    <div className="col-4" style={{paddingTop:"5px"}} align="right">
+                        <NbButton className="form-group btn btn-primary btn-purple btn-block" style={{height:"45px"}}
+                        onClick={()=>
+                        {
+                            this.core.auth.logout()
+                            window.location.reload()
+                        }}>
+                            <i className="fa-solid fa-arrow-right-from-bracket fa-2x"></i>
+                        </NbButton>
                     </div>
                 </div>
                 <React.Suspense fallback={<div style={{position: 'relative',margin:'auto',top: '40%',left:'50%'}}><LoadIndicator height={40} width={40} /></div>}>
