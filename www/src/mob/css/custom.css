@@ -146,6 +146,10 @@
 {
     min-height: 100%;
 }
+.btn-outline-light
+{
+    border-color: #f8f9fa00;
+}
 /* .dx-texteditor-input {
     padding: 2px;   
 }
