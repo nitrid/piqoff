@@ -20,7 +20,26 @@ export const langFr =
     menu: //BAK
     {
         dash : "Dashboard",
-        stk : "Stok İşlemleri"
+        stk : "Stok İşlemleri",
+        dep : "Depo İşlemleri",
+        irs : "İrsaliye İşlemleri",
+        sip : "Sipariş Karşılama",
+        stk_01 : "Fiyat Gör",
+        stk_02 : "Tedarikçi Gör",
+        stk_03 : "Barkod Tanımlama",
+        stk_04 : "Ürün Grup Tanımlama",
+        stk_05 : "Sayım",
+        stk_06 : "Etiket Basımı",
+        stk_07 : "Özel Etiket Basımı",
+        stk_08 : "İade Ürünü Toplama",
+        dep_01 : "Depolar Arası Sevk",
+        dep_02 : "Depo Siparişi",
+        dep_03 : "Depo Mal Kabul",
+        irs_01 : "Alış İrsaliye",
+        irs_02 : "Satış İrsaliye",
+        irs_03 : "Şube Satış İrsaliye",
+        sip_01 : "Sipariş Eşleştirme",
+        sip_02 : "Sipariş Mal Kabul",
     },
     login:
     {

@@ -1,8 +1,8 @@
 import React from 'react';
-import App from '../lib/app.js';
+import App from '../../lib/app';
 import ScrollView from 'devextreme-react/scroll-view';
 
-export default class Xx extends React.PureComponent
+export default class purchaseOrder extends React.PureComponent
 {
     constructor(props)
     {
