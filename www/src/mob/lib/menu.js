@@ -109,17 +109,40 @@ export const menu = (e) =>
         {
             id: 'sip',
             text: e.t('menu.sip'),
-            icon : "fa-cart-flatbed",
+            icon : "fa-file-pen",
             items: 
             [
                 {
                     id: 'sip_01',
-                    text : e.t('menu.sip_01'), //'Sipariş Eşleştirme'
-                    icon : "fa-paste",
+                    text : e.t('menu.sip_01'), //'Satış Siparişi'
+                    icon : "fa-file-export",
                 },
                 {
                     id: 'sip_02',
-                    text : e.t('menu.sip_02'), //'Sipariş Mal Kabul'
+                    text : e.t('menu.sip_02'), //'Alış Siparişi'
+                    icon : "fa-file-import",
+                },
+                {
+                    id: 'sip_03',
+                    text : e.t('menu.sip_03'), //'Toplu Sipariş Toplama'
+                    icon : "fa-file-circle-plus",
+                }
+            ]
+        },
+        {
+            id: 'kar',
+            text: e.t('menu.kar'),
+            icon : "fa-cart-flatbed",
+            items: 
+            [
+                {
+                    id: 'kar_01',
+                    text : e.t('menu.kar_01'), //'Sipariş Eşleştirme'
+                    icon : "fa-paste",
+                },
+                {
+                    id: 'kar_02',
+                    text : e.t('menu.kar_02'), //'Sipariş Mal Kabul'
                     icon : "fa-boxes-packing",
                 }
             ]
