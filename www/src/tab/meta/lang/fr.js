@@ -101,118 +101,118 @@ export const langFr =
         },
         popDocs:
         {
-            title : "Evrak Seçimi",  // BAK
-            btn01 : "Evrakları Getir",  // BAK
-            btn02 : "Seç"   // BAK
+            title : "Choix du document", 
+            btn01 : "Apportez les documents", 
+            btn02 : "Choisir" 
         },
         cmbDocType : 
         {
-            order :"Sipariş", // BAK
-            invoice : "Fatura" // BAK
+            order :"Commande", 
+            invoice : "Facture" 
         },
         grdDocs : 
         {
-            clmRef : "Seri",  // BAK
-            clmRefNo : "Sıra",  // BAK
-            clmInputName : "Müşteri",  // BAK
-            clmDate : "Tarih",  // BAK
-            clmTotal : "Tutar"  // BAK
+            clmRef : "Série",  
+            clmRefNo : "Ligne", 
+            clmInputName : "Client", 
+            clmDate : "Date", 
+            clmTotal : "Montant" 
         },
         popVatRate:
         {
-            title : "Vergi Oranları", // BAK
+            title : "Les taux d'imposition",
         },
         grdVatRate :
         {
-            clmRate : "Vergi Oranı", // BAK
-            clmVat : "Vergi Tutarı", // BAK
-            clmTotalHt : "Tutar", // BAK
+            clmRate : "Taux d'imposition",
+            clmVat : "Montant du taux", 
+            clmTotalHt : "Montant", 
         },
-        btnVatToZero : "Vergiyi Sıfırla", // BAK
-        btnCancel : "Kapat", // BAK
+        btnVatToZero : "Mettre à 0 le taux", 
+        btnCancel : "Fermez", 
         popDiscount : 
         {
-            title: "Satır İndirimi",  // BAK
-            chkFirstDiscount : "Satırdaki 1. İndirimleri Güncelleme",  // BAK
-            chkDocDiscount : "Evrak İndirimi Olarak Uygula",  // BAK
-            Percent1 : "1. İnd. Yüzde",  // BAK
-            Price1 : "1. İnd. Tutar",  // BAK
-            Percent2 : "2. İnd. Yüzde",  // BAK
-            Price2 : "2. İnd. Tutar",  // BAK
-            Percent3 : "3. İnd. Yüzde",  // BAK
-            Price3 : "3. İnd. Tutar"  // BAK
+            title: "Remise lignes",  
+            chkFirstDiscount : "Mettre à jour les 1 ère remise en ligne ", 
+            chkDocDiscount : "Remise totale HT",  
+            Percent1 : "1. remise %",  
+            Price1 : "1. remise montant",  
+            Percent2 : "2. remise %",  
+            Price2 : "2. remise montant",  
+            Percent3 : "3. remise %", 
+            Price3 : "3. remise montant" 
         },
         popDocDiscount : 
         {
-            title: "Evrak İndirimi",  // BAK
-            Percent1 : "1. İnd. Yüzde",  // BAK
-            Price1 : "1. İnd. Tutar",  // BAK
-            Percent2 : "2. İnd. Yüzde",  // BAK
-            Price2 : "2. İnd. Tutar",  // BAK
-            Percent3 : "3. İnd. Yüzde",  // BAK
-            Price3 : "3. İnd. Tutar"  // BAK
+            title: "Remise totale HT",  
+            Percent1 : "1. remise %",  
+            Price1 : "1. remise montant",  
+            Percent2 : "2. remise %", 
+            Price2 : "2. remise montant",  
+            Percent3 : "3. remise %",  
+            Price3 : "3. remise montant" 
         },
     },
     extract :
     {
-        txtCustomerCode : "Lütfen Müşteri Seçiniz",  // BAK
-        btnGet :"Getir",  // BAK
+        txtCustomerCode : "Choissiez un client s'il vous plaît", 
+        btnGet :"Apportez", 
         grdListe : 
         {
-            clmDocDate: "Tarih",   // BAK
-            clmTypeName : "Evrak Tipi",              // BAK
-            clmRef : "Evrak Seri",   // BAK
-            clmRefNo : "Evrak Sıra",   // BAK
-            clmDebit : "Borç",   // BAK
-            clmReceive : "Alacak",   // BAK
-            clmBalance : "Bakiye",   // BAK
+            clmDocDate: "Date",   
+            clmTypeName : "Type de document",             
+            clmRef : "Série du document",  
+            clmRefNo : "Ligne du document",  
+            clmDebit : "Dette",   
+            clmReceive : "Recevoir",  
+            clmBalance : "Equilibre",   
         },
-        txtTotalBalance : "Bakiye",  // BAK
+        txtTotalBalance : "Equilibre",  
         popCustomer:
         {
-            title : "Müşteri Seçimi",  // BAK
-            btn01 : "Ara",  // BAK
-            btn02 : "Seç",  // BAK
-            clmCode : "KODU",  // BAK
-            clmName : "ADI"  // BAK
+            title : "Choix du client", 
+            btn01 : "Rechercher", 
+            btn02 : "Choisir",  
+            clmCode : "Code",  
+            clmName : "Nom"  
         },
         msgNotCustomer:
         {
-            title: "Dikkat",// BAK
-            btn01: "Tamam",// BAK
-            msg: "Lütfen Müşteri Seçiniz..!"// BAK
+            title: "Attention",
+            btn01: "D'accord",
+            msg: "S'il vous plaît choisissez un client"
         },
     },
     itemDetail :
     {
-        txtItem : "Lütfen Ürün Seçiniz",  // BAK
-        txtItemGroup : "Ürün Grubu",  // BAK
-        txtItemPrice : "Fiyat",  // BAK
+        txtItem : "S'il vous plait choissisez un produit", 
+        txtItemGroup : "Groupe de produit",  
+        txtItemPrice : "Prix",  
         grdListe : 
         {
-           clmName : "Depo",  // BAK
-           clmQuantity : "Miktar"  // BAK
+           clmName : "Dépôt",  
+           clmQuantity : "Quantité"  
         },
         popItem:
         {
-            title : "Müşteri Seçimi",  // BAK
-            btn01 : "Ara",  // BAK
-            btn02 : "Seç",  // BAK
-            clmCode : "KODU",  // BAK
-            clmName : "ADI"  // BAK
+            title : "Choix du client",  
+            btn01 : "Rechercher",  
+            btn02 : "Choisir", 
+            clmCode : "Code",  
+            clmName : "Nom" 
         },
         msgNotItem:
         {
-            title: "Dikkat",  // BAK
-            btn01: "Tamam",  // BAK
-            msg: "Lütfen Ürün Seçiniz..!"  // BAK
+            title: "Attention", 
+            btn01: "D'accord", 
+            msg: "S'il vous plaît choissiez un produit" 
         },
     },
     dashboard: 
     {
-        lastDocumant : "Son Sipariş",   // BAK
-        mountSales : "Bu Ayki Sipariş Toplamı",   // BAK
-        yearSales : "Bu Yılki Sipariş Toplamı",   // BAK
-        sale : "Satış Tutarı"   // BAK
+        lastDocumant : "Dernière commande",  
+        mountSales : "Total des commandes de ce mois", 
+        yearSales : "Total des commandes de cette année", 
+        sale : "Montant des ventes"  
     }
 }

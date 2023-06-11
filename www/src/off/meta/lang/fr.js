@@ -48,8 +48,8 @@ export const langFr =
     txtTicketAvg : "Montant moyen des tickets de caisses", 
     popDbList : 
     {
-        title : "Database Seçimi", //BAK
-        clmCode : "KODU" //BAK
+        title : "Choix de la base de donnée", 
+        clmCode : "Code" 
     },
     popPassword : 
     {
@@ -9646,10 +9646,10 @@ export const langFr =
         },
         msgDelete:
         {
-            title: "Dikkat",   // BAK
-            btn01: "Tamam",   // BAK
-            btn02: "Vazgeç",   // BAK
-            msg: "Seçtiğiniz promosyonları silmek istediğinize eminmisiniz ?"   // BAK
+            title: "Attention",   
+            btn01: "D'accord",   
+            btn02: "Abandonnez",  
+            msg: "Etes-vous sûr de vouloir supprimer les promotions séletionnées?" 
         },
     },
     promo_02_002: //  "Promosyon Detay Listesi"
@@ -9679,7 +9679,7 @@ export const langFr =
             clmAppBarcode : "Application de barre code",
             clmAppQuantity : "Application de quantité",
             clmAppAmount : "Application de montant",
-            clmAppValue : "Değer" // BAK
+            clmAppValue : "Valeur"
         }
     },
     irs_01_001 : // "Alış İrsaliye Listesi"

@@ -182,7 +182,7 @@ export default class labelPrinting extends React.PureComponent
                         tmpDocItems.REF = this.mainLblObj.dt()[0].REF
                         tmpDocItems.REF_NO = this.mainLblObj.dt()[0].REF_NO
                         this.lblObj.addEmpty(tmpDocItems)
-                        this.addItem(lblCombineObj.dt()[i],this.lblObj.dt().length - 1)
+                        await this.addItem(lblCombineObj.dt()[i],this.lblObj.dt().length - 1)
                     }
                 }
             }
@@ -1283,6 +1283,7 @@ export default class labelPrinting extends React.PureComponent
                                     allowColumnReordering={true} 
                                     allowColumnResizing={true} 
                                     filterRow={{visible:true}} 
+                                    paging={{enabled:false}}
                                     height={'660'} 
                                     width={'100%'}
                                     dbApply={false}
@@ -1307,8 +1308,6 @@ export default class labelPrinting extends React.PureComponent
                                         this.calculateCount()
                                     }}
                                     >
-                                        <Paging defaultPageSize={10} />
-                                        <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
                                         <Scrolling mode="standard" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
