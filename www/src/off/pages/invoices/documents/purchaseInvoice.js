@@ -1121,6 +1121,10 @@ export default class purchaseInvoice extends React.PureComponent
                     tmpDocItems.DISCOUNT_2 = data[i].DISCOUNT_2
                     tmpDocItems.DISCOUNT_3 = data[i].DISCOUNT_3
                     tmpDocItems.DISCOUNT = data[i].DISCOUNT
+                    tmpDocItems.UNIT = data[i].UNIT
+                    tmpDocItems.CUSTOMER_PRICE = data[i].CUSTOMER_PRICE
+                    tmpDocItems.DIFF_PRICE = data[i].DIFF_PRICE
+                    tmpDocItems.COST_PRICE = data[i].COST_PRICE
 
                     await this.docObj.docItems.addEmpty(tmpDocItems,false)
                     await this.core.util.waitUntil(100)

@@ -1284,7 +1284,7 @@ export default class labelPrinting extends React.PureComponent
                                     allowColumnResizing={true} 
                                     filterRow={{visible:true}} 
                                     paging={{enabled:false}}
-                                    height={'660'} 
+                                    height={'600'} 
                                     width={'100%'}
                                     dbApply={false}
                                     loadPanel={{enabled:true}}
@@ -1310,6 +1310,7 @@ export default class labelPrinting extends React.PureComponent
                                     >
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
                                         <Scrolling mode="standard" />
+                                        <Paging defaultPageSize={250}/>
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                         <Export fileName={this.lang.t("menu.stk_02_004")} enabled={true} allowExportSelectedData={true} />
                                         <Column dataField="CUSER_NAME" caption={this.t("grdLabelQueue.clmCuser")} width={100} allowEditing={false}/>

@@ -967,6 +967,8 @@ export default class salesInvoice extends React.PureComponent
                     tmpDocItems.DISCOUNT_2 = data[i].DISCOUNT_2
                     tmpDocItems.DISCOUNT_3 = data[i].DISCOUNT_3
                     tmpDocItems.DISCOUNT = data[i].DISCOUNT
+                    tmpDocItems.UNIT = data[i].UNIT
+
     
                     await this.docObj.docItems.addEmpty(tmpDocItems,false)
                     await this.core.util.waitUntil(100)
@@ -1066,6 +1068,7 @@ export default class salesInvoice extends React.PureComponent
                     tmpDocItems.SUB_QUANTITY = data[i].SUB_QUANTITY
                     tmpDocItems.SUB_SYMBOL = data[i].SUB_SYMBOL
                     tmpDocItems.UNIT_SHORT = data[i].UNIT_SHORT
+                    tmpDocItems.UNIT = data[i].UNIT
 
                     await this.docObj.docItems.addEmpty(tmpDocItems)
                     await this.core.util.waitUntil(100)
@@ -1149,6 +1152,7 @@ export default class salesInvoice extends React.PureComponent
                     tmpDocItems.DISCOUNT_2 = data[i].DISCOUNT_2
                     tmpDocItems.DISCOUNT_3 = data[i].DISCOUNT_3
                     tmpDocItems.TOTALHT = data[i].TOTALHT
+                    tmpDocItems.UNIT = data[i].UNIT
 
                     await this.docObj.docItems.addEmpty(tmpDocItems)
                     await this.core.util.waitUntil(100)
@@ -1405,12 +1409,15 @@ export default class salesInvoice extends React.PureComponent
     {
         for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
         {
-            this.docObj.docItems.dt()[i].INPUT = this.docObj.dt()[0].INPUT
-            this.docObj.docItems.dt()[i].OUTPUT = this.docObj.dt()[0].OUTPUT
-            this.docObj.docItems.dt()[i].DOC_DATE = this.docObj.dt()[0].DOC_DATE
-            this.docObj.docItems.dt()[i].SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
-            this.docObj.docItems.dt()[i].REF = this.docObj.dt()[0].REF
-            this.docObj.docItems.dt()[i].REF_NO = this.docObj.dt()[0].REF_NO
+            if(this.docObj.docItems.dt()[i].DOC_TYPE == 20)
+            {
+                this.docObj.docItems.dt()[i].INPUT = this.docObj.dt()[0].INPUT
+                this.docObj.docItems.dt()[i].OUTPUT = this.docObj.dt()[0].OUTPUT
+                this.docObj.docItems.dt()[i].DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                this.docObj.docItems.dt()[i].SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
+                this.docObj.docItems.dt()[i].REF = this.docObj.dt()[0].REF
+                this.docObj.docItems.dt()[i].REF_NO = this.docObj.dt()[0].REF_NO
+            }
         }
 
         this.docObj.docCustomer.dt()[i].INPUT = this.docObj.dt()[0].INPUT
