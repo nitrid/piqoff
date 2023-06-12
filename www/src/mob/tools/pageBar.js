@@ -9,42 +9,91 @@ export class PageBar extends NbBase
         super(props)
         this.state = 
         {
-            isBack : false,
-            isTitle : false,
-            title : ""
+            title : '',
+            activeContent : {}
         }
     }
-    build()
+    activePage(pPage)
     {
-        this
-    }
-    sector1()
-    {
-
+        if(typeof this.props.content != 'undefined' && Array.isArray(this.props.content))
+        {
+            this.setState({activeContent:this.props.content.find(x => x.name == pPage)})
+        }
     }
     render()
     {
-        const tmpSector1 = (
-        <div className='col-2'>
-            <div className='btn btn-outline-light d-flex justify-content-start pt-2'>
-                <i className={"bi bi-align-center fa-solid " + "fa-bars-staggered" + " fa-lg"} style={{color:'#858585'}}></i>
-            </div>
-        </div>)
+        let tmpContent = this.state.activeContent
+        let tmpLeftBar = (<div></div>)
+        let tmpCenterBar = (<div></div>)
+        let tmpRightBar = (<div></div>)
+
+        if(tmpContent.isBack)
+        {
+            tmpLeftBar = (
+                <NbButton className="btn btn-outline-light d-flex justify-content-start" style={{height:"40px",paddingTop:'10px'}}
+                onClick={()=>
+                {
+                    if(typeof this.props.onBackClick != 'undefined')
+                    {
+                        this.props.onBackClick()
+                    }
+                }}>
+                    <i className={"bi bi-align-center fa-solid fa-arrow-left fa-lg"} style={{color:'#858585'}}></i>
+                </NbButton>
+            )
+        }
+        
+        if(tmpContent.isTitle)
+        {
+            tmpCenterBar = (<h5 className='overflow-hidden d-flex justify-content-center align-items-center' style={{color:'#858585',height:'40px',fontSize:'16px'}}>{this.props.title}</h5>)
+        }
+        else if(typeof tmpContent.shortcuts != 'undefined' && Array.isArray(tmpContent.shortcuts))
+        {
+            let tmpShortcuts = []
+            let tmpKey = 0
+            tmpContent.shortcuts.map((item) =>
+            {
+                tmpShortcuts.push(
+                    <NbButton key={tmpKey} className="btn btn-outline-light d-flex justify-content-center mx-2" style={{height:"40px",paddingTop:'10px'}}
+                    onClick={()=>
+                    {
+                        if(typeof item.onClick != 'undefined')
+                        {
+                            item.onClick()
+                        }
+                    }}>
+                        <i className={"bi bi-align-center fa-solid " + item.icon + " fa-lg"} style={{color:'#858585'}}></i>
+                    </NbButton>
+                )
+                tmpKey++
+            })
+
+            tmpCenterBar = (<div className='d-flex justify-content-center'>{tmpShortcuts}</div>)
+        }
+
+        if(typeof tmpContent.menu != 'undefined' && Array.isArray(tmpContent.menu))
+        {
+            tmpRightBar = (
+                <NbButton className="btn btn-outline-light d-flex justify-content-end" style={{height:"40   px",paddingTop:'10px'}}
+                onClick={()=>
+                {
+                    
+                }}>
+                    <i className={"bi bi-align-center fa-solid fa-bars-staggered fa-lg"} style={{color:'#858585'}}></i>
+                </NbButton>
+            )
+        }
 
         const tmpMain = (
             <React.Fragment>
                 <div className='col-2'>
-                    {/* <div className='btn btn-outline-light d-flex justify-content-start pt-2'>
-                        <i className={"bi bi-align-center fa-solid " + "fa-bars-staggered" + " fa-lg"} style={{color:'#858585'}}></i>
-                    </div> */}
+                    {tmpLeftBar}
                 </div>
                 <div className='col-8'>
-                    <h5 className='overflow-hidden d-flex justify-content-center align-items-center' style={{color:'#858585',height:'40px',fontSize:'16px'}}>Alış Siparişi</h5>
+                    {tmpCenterBar}
                 </div>
                 <div className='col-2'>
-                    <div className='btn btn-outline-light d-flex justify-content-end pt-2'>
-                        <i className={"bi bi-align-center fa-solid " + "fa-bars-staggered" + " fa-lg"} style={{color:'#858585'}}></i>
-                    </div>
+                    {tmpRightBar}
                 </div>
             </React.Fragment>);
         
