@@ -32,11 +32,11 @@ export function print()
         // ÜST BİLGİ
         ()=>{return {font:"a",style:"b",align:"ct",data: data.firm.length > 0 ? data.firm[0].ADDRESS1 : "7 ALLEE DU MIDI"}},
         ()=>{return {font:"a",style:"b",align:"ct",data: data.firm.length > 0 ? data.firm[0].ZIPCODE + " " + data.firm[0].CITY + " " + data.firm[0].COUNTRY_NAME : "54270 ESSEY LES NANCY FRANCE"}},
-        ()=>{return {font:"a",style:"b",align:"ct",data: data.firm.length > 0 ? "Tel : " + data.firm[0].TEL : "Tel : 03 83 93 33 07"}},
-        ()=>{return {font:"a",style:"b",align:"ct",data: data.firm.length > 0 ? data.firm[0].MAIL : "nancy@prodorplus.fr"}},
-        ()=>{return {font:"a",style:"b",align:"ct",data:"www.prodorplus.fr"}},
-        ()=>{return {font:"a",style:"b",align:"ct",data: data.firm.length > 0 ? "Siret " + data.firm[0].SIRET_ID + " - APE " + data.firm[0].APE_CODE : "Siret 88 533 969 700 017 - APE 4722Z"}},
-        ()=>{return {font:"a",style:"b",align:"ct",data: data.firm.length > 0 ? "Nr. TVA " + data.firm[0].INT_VAT_NO : "Nr. TVA FR23885339697"}},
+        ()=>{return {font:"a",style:"b",align:"ct",data: data.firm.length > 0 ? "Tel : " + data.firm[0].TEL : "Tel : 03 83 52 62 34"}},
+        ()=>{return {font:"a",style:"b",align:"ct",data: data.firm.length > 0 ? data.firm[0].MAIL : "info@piqsoft.fr"}},
+        ()=>{return {font:"a",style:"b",align:"ct",data: data.firm.length > 0 ? data.firm[0].WEB : "www.piqsoft.fr"}},
+        ()=>{return {font:"a",style:"b",align:"ct",data: data.firm.length > 0 ? "Siret " + data.firm[0].SIRET_ID + " - APE " + data.firm[0].APE_CODE : "Siret 94 929 096 900 011 - APE 6201Z"}},
+        ()=>{return {font:"a",style:"b",align:"ct",data: data.firm.length > 0 ? "Nr. TVA " + data.firm[0].INT_VAT_NO : "Nr. TVA FR61949290969"}},
         ()=>
         {       
             let tmpArr = []
@@ -103,7 +103,25 @@ export function print()
             } 
             return tmpArr.length > 0 ? tmpArr : undefined
         },
-        // BAŞLIK
+        // BAŞLIK 1 (TERAZİ SERTİFİKASI İÇİN)
+        ()=>
+        {
+            let tmpTitle = {}
+            if(data.special.type != 'Fatura')
+            {
+                tmpTitle = {font:"b",style:"b",align:"lt", 
+                pdf:{fontSize:8,grid:[{x:3,charS:0,charE:2,align:'left'},{x:6,charS:2,charE:33,align:'left'},{x:70,charS:34,charE:47},{x:80,charS:48,charE:55},{x:90,charS:56,charE:63}]},
+                data:"  " + "".space(32) + " " + "".space(8) + " " + "   Prix".space(11) + " " + "  Prix".space(8)}
+            }
+            else
+            {
+                tmpTitle = {font:"b",style:"b",align:"lt",
+                pdf:{fontSize:8,grid:[{x:3,charS:0,charE:2,align:'left'},{x:6,charS:2,charE:33,align:'left'},{x:70,charS:34,charE:47},{x:80,charS:48,charE:55},{x:90,charS:56,charE:63}]},
+                data:"  " + "".space(32) + " " + "".space(8) + " " + "  Prix HT".space(11) + " " + "  Prix".space(8)}
+            }
+            return tmpTitle
+        },
+        // BAŞLIK 2
         ()=>
         {
             let tmpTitle = {}
@@ -111,13 +129,13 @@ export function print()
             {
                 tmpTitle = {font:"b",style:"bu",align:"lt",
                 pdf:{fontSize:8,grid:[{x:3,charS:0,charE:2,align:'left'},{x:6,charS:2,charE:33,align:'left'},{x:70,charS:34,charE:47},{x:80,charS:48,charE:55},{x:90,charS:56,charE:63}]},
-                data:"T " + "Libelle".space(32) + " " + "Qte".space(8) + " " + "Prix(u/kg)".space(11) + " " + "Prix EUR".space(8)}
+                data:"T " + "Libelle".space(32) + " " + "Qte".space(8) + " " + "U ou EUR/kg".space(11) + " " + "  T. EUR".space(8)}
             }
             else if(data.special.type == 'Fatura')
             {
                 tmpTitle = {font:"b",style:"bu",align:"lt",
                 pdf:{fontSize:8,grid:[{x:3,charS:0,charE:2,align:'left'},{x:6,charS:2,charE:33,align:'left'},{x:70,charS:34,charE:47},{x:80,charS:48,charE:55},{x:90,charS:56,charE:63}]},
-                data:"T " + "Libelle".space(32) + " " + "Qte".space(8) + " " + "P.HT(u/kg)".space(11) + " " + "T.HT EUR".space(8)}
+                data:"T " + "Libelle".space(32) + " " + "Qte".space(8) + " " + "U ou EUR/kg".space(11) + " " + "T.HT EUR".space(8)}
             }
             return tmpTitle
         },

@@ -31,7 +31,7 @@ import NbKeyboard from "../../core/react/bootstrap/keyboard.js";
 import IdleTimer from 'react-idle-timer'
 import NdButton from "../../core/react/devex/button.js";
 
-import { posCls,posSaleCls,posPaymentCls,posPluCls,posDeviceCls,posPromoCls, posExtraCls } from "../../core/cls/pos.js";
+import { posCls,posSaleCls,posPaymentCls,posPluCls,posDeviceCls,posPromoCls, posExtraCls, posLcdCls } from "../../core/cls/pos.js";
 import { posScaleCls } from "../../core/cls/scale.js";
 import { docCls} from "../../core/cls/doc.js"
 import transferCls from "../lib/transfer.js";
@@ -63,6 +63,7 @@ export default class posDoc extends React.PureComponent
         this.posObj = new posCls()
         this.posDevice = new posDeviceCls();
         this.posScale = new posScaleCls();
+        this.posLcd = new posLcdCls();
         this.parkDt = new datatable();        
         this.cheqDt = new datatable();
         this.lastPosDt = new datatable();
@@ -355,6 +356,7 @@ export default class posDoc extends React.PureComponent
         {
             await this.posDevice.load({CODE:this.posObj.dt()[this.posObj.dt().length - 1].DEVICE})
             this.posScale = new posScaleCls(this.posDevice.dt()[0].SCALE_PORT)
+            this.posLcd = new posLcdCls(this.posDevice.dt()[0].LCD_PORT)
         }
         this.posDevice.scanner();       
          
@@ -484,7 +486,7 @@ export default class posDoc extends React.PureComponent
         
         setTimeout(() => 
         {
-            this.posDevice.lcdPrint
+            this.posLcd.print
             ({
                 blink : 0,
                 text :  "Bonjour".space(20) + moment(new Date()).format("DD.MM.YYYY").space(20)
@@ -493,38 +495,6 @@ export default class posDoc extends React.PureComponent
         
         await this.calcGrandTotal(false) 
         
-        this.posObj.ds.on('onEdit',(pTblName,pData) =>
-        {
-            if(pTblName == "POS_SALE" && typeof pData.data != 'undefined' && (typeof pData.data.QUANTITY != 'undefined' || typeof pData.data.PRICE != 'undefined'))
-            {
-                setTimeout(() => 
-                {
-                    let tmpPayRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).toFixed(2))
-                
-                    if(pData.rowData.WEIGHING)
-                    {
-                        this.posDevice.lcdPrint
-                        ({
-                            blink : 0,
-                            text :  parseFloat(Number(pData.rowData.QUANTITY)).toFixed(3).space(5) + "kg X " +
-                                    (parseFloat(Number(pData.rowData.PRICE) - (Number(pData.rowData.DISCOUNT) / Number(pData.rowData.QUANTITY))).toFixed(2) + "EU/kg").space(10,"s") +
-                                    pData.rowData.ITEM_NAME.toString().space(11) + "=" +  (parseFloat(Number(pData.rowData.TOTAL)).toFixed(2) + "EUR").space(8,"s")
-                        })
-                    }
-                    else
-                    {
-                        this.posDevice.lcdPrint
-                        ({
-                            blink : 0,
-                            text :  pData.rowData.ITEM_NAME.toString().space(7) + " " + Number(pData.rowData.QUANTITY).toString().space(3,"s") + "X" +
-                                    (parseFloat(Number(pData.rowData.PRICE) - (Number(pData.rowData.DISCOUNT) / Number(pData.rowData.QUANTITY))).toFixed(2) + "EU").space(8,"s") +
-                                    "TOTAL : " + (parseFloat(tmpPayRest).toFixed(2) + "EUR").space(12,"s")
-                        })
-                    }
-                }, 500);                
-            }
-        })
-
         this.core.util.logPath = "\\www\\log\\pos_" + this.posObj.dt()[this.posObj.dt().length - 1].DEVICE + ".txt"        
 
         if(this.posObj.dt()[this.posObj.dt().length - 1].DEVICE == '')
@@ -1186,26 +1156,30 @@ export default class posDoc extends React.PureComponent
                 
                 if(tmpPosSale.length > 0)
                 {
-                    if(tmpPosSale[tmpPosSale.length - 1].WEIGHING)
+                    setTimeout(() => 
                     {
-                        this.posDevice.lcdPrint
-                        ({
-                            blink : 0,
-                            text :  parseFloat(Number(tmpPosSale[tmpPosSale.length - 1].QUANTITY)).toFixed(3).space(5) + "kg X " +
-                                    (parseFloat(Number(tmpPosSale[tmpPosSale.length - 1].PRICE) - (Number(tmpPosSale[tmpPosSale.length - 1].DISCOUNT) / Number(tmpPosSale[tmpPosSale.length - 1].QUANTITY))).toFixed(2) + "EU/kg").space(10,"s") +
-                                    tmpPosSale[tmpPosSale.length - 1].ITEM_NAME.toString().space(11) + "=" +  (parseFloat(Number(tmpPosSale[tmpPosSale.length - 1].TOTAL)).toFixed(2) + "EUR").space(8,"s")
-                        })
-                    }
-                    else
-                    {
-                        this.posDevice.lcdPrint
-                        ({
-                            blink : 0,
-                            text :  tmpPosSale[tmpPosSale.length - 1].ITEM_NAME.toString().space(7) + " " + Number(tmpPosSale[tmpPosSale.length - 1].QUANTITY).toString().space(3,"s") + "X" +
-                                    (parseFloat(Number(tmpPosSale[tmpPosSale.length - 1].PRICE) - (Number(tmpPosSale[tmpPosSale.length - 1].DISCOUNT) / Number(tmpPosSale[tmpPosSale.length - 1].QUANTITY))).toFixed(2) + "EU").space(8,"s") +
-                                    "TOTAL : " + (parseFloat(tmpPayRest).toFixed(2) + "EUR").space(12,"s")
-                        })
-                    }
+                        console.log(this.grdList.devGrid.getKeyByRowIndex(0).SCALE_MANUEL)
+                        if(this.grdList.devGrid.getKeyByRowIndex(0).WEIGHING)
+                        {
+                            this.posLcd.print
+                            ({
+                                blink : 0,
+                                text :  ((this.grdList.devGrid.getKeyByRowIndex(0).SCALE_MANUEL ? 'M' : '') + parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).QUANTITY)).toFixed(3)).toString().space(7) + "kg" +
+                                        (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).PRICE) - (Number(this.grdList.devGrid.getKeyByRowIndex(0).DISCOUNT) / Number(this.grdList.devGrid.getKeyByRowIndex(0).QUANTITY))).toFixed(2) + "EUR/kg").space(11,"s") +
+                                        this.grdList.devGrid.getKeyByRowIndex(0).ITEM_NAME.toString().space(9) + "=" +  (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).TOTAL)).toFixed(2) + "EUR").space(10,"s")
+                            })
+                        }
+                        else
+                        {
+                            this.posLcd.print
+                            ({
+                                blink : 0,
+                                text :  this.grdList.devGrid.getKeyByRowIndex(0).ITEM_NAME.toString().space(7) + Number(this.grdList.devGrid.getKeyByRowIndex(0).QUANTITY).toString().space(3,"s") + "X" +
+                                        (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).PRICE) - (Number(this.grdList.devGrid.getKeyByRowIndex(0).DISCOUNT) / Number(this.grdList.devGrid.getKeyByRowIndex(0).QUANTITY))).toFixed(2) + "EUR").space(9,"s") +
+                                        ("TOTAL : " + (parseFloat(tmpPayRest).toFixed(2) + "EUR")).space(20,"s")
+                            })
+                        }
+                    }, 100);                    
                 }
             }            
             //console.log("100 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS")) 
@@ -1424,11 +1398,15 @@ export default class posDoc extends React.PureComponent
             this.core.util.writeLog("saleClosed : " + pPayRest + " - " + this.posObj.dt().length + " - " + this.posObj.dt()[0].AMOUNT)
             if(pPayRest == 0 && this.posObj.dt().length > 0 && this.posObj.dt()[0].AMOUNT > 0) //FIYATSIZ VE MİKTAR SIFIR ÜRÜNLER İÇİN KONTROL EKLENDİ. BU ŞEKİLDE SATIŞIN KAPANMASI ENGELLENDİ.
             {
-                this.posDevice.lcdPrint
-                ({
-                    blink : 0,
-                    text :  "A tres bientot".space(20)
-                })
+                setTimeout(() => 
+                {
+                    this.posLcd.print
+                    ({
+                        blink : 0,
+                        text :  "A tres bientot".space(20)
+                    })
+                }, 500);
+                
 
                 this.posObj.dt()[0].STATUS = 1
                 //***** TICKET İMZALAMA *****/
@@ -3154,7 +3132,7 @@ export default class posDoc extends React.PureComponent
                                     alignment={"center"} cssClass={"cell-fontsize"}/>                                    
                                     <Column dataField="ITEM_SNAME" caption={this.lang.t("grdList.ITEM_NAME")} width={250} cssClass={"cell-fontsize"}/>
                                     <Column dataField="QUANTITY" caption={this.lang.t("grdList.QUANTITY")} width={80} cellRender={(e)=>{return (e.data.SCALE_MANUEL == true ? "M-" : "") + e.value + e.data.UNIT_SHORT}} cssClass={"cell-fontsize"}/>
-                                    <Column dataField="PRICE" caption={this.lang.t("grdList.PRICE")} width={60} format={"#,##0.00" + Number.money.sign} cssClass={"cell-fontsize"}/>
+                                    <Column dataField="PRICE" caption={this.lang.t("grdList.PRICE")} width={80} cellRender={(e)=>{return e.value + Number.money.sign + '/' + e.data.UNIT_SHORT}} cssClass={"cell-fontsize"}/>
                                     <Column dataField="AMOUNT" alignment={"right"} caption={this.lang.t("grdList.AMOUNT")} width={60} format={"#,##0.00" + Number.money.sign} cssClass={"cell-fontsize"}/>                                                
                                 </NdGrid>
                             </div>
@@ -6479,7 +6457,7 @@ export default class posDoc extends React.PureComponent
                                 await this.descSave("PRICE DESC",e,this.grdList.devGrid.getSelectedRowKeys()[0].GUID,this.grdList.devGrid.getSelectedRowKeys()[0].PRICE)                                
                                 if((await this.priceCheck(this.grdList.devGrid.getSelectedRowKeys()[0],tmpResult)))
                                 {
-                                    let tmpData = {QUANTITY:this.grdList.devGrid.getSelectedRowKeys()[0].QUANTITY,PRICE:Number(tmpResult)}
+                                    let tmpData = {QUANTITY:this.grdList.devGrid.getSelectedRowKeys()[0].QUANTITY,SCALE_MANUEL:this.grdList.devGrid.getSelectedRowKeys()[0].SCALE_MANUEL,PRICE:Number(tmpResult)}
                                     this.saleRowUpdate(this.grdList.devGrid.getSelectedRowKeys()[0],tmpData)
                                 }
                             }                            
