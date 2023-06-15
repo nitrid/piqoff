@@ -1225,10 +1225,8 @@ export default class purchaseInvoice extends React.PureComponent
                 }
                 this._calculateTotal()
                 App.instance.setState({isExecute:false})
-
             }
         }
-
     }
     async _getOffers()
     {
@@ -1666,7 +1664,7 @@ export default class purchaseInvoice extends React.PureComponent
                         {
                             let tmpQuery = 
                             {
-                                query : "SELECT TOP 1 PRICE_SALE_GUID AS PRICE_GUID,PRICE_SALE AS SALE_PRICE,CUSTOMER_PRICE_GUID AS CUSTOMER_PRICE_GUID,VAT AS VAT_RATE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE  GUID = @ITEM AND CUSTOMER_GUID = @CUSTOMER",
+                                query : "SELECT TOP 1 PRICE_SALE_GUID AS PRICE_GUID,PRICE_SALE AS SALE_PRICE,VAT AS VAT,CUSTOMER_PRICE_GUID AS CUSTOMER_PRICE_GUID,VAT AS VAT_RATE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE  GUID = @ITEM AND CUSTOMER_GUID = @CUSTOMER",
                                 param : ['ITEM:string|50','CUSTOMER:string|50'],
                                 value : [this.docObj.docItems.dt()[i].ITEM,this.docObj.docItems.dt()[i].OUTPUT]
                             }
@@ -1676,11 +1674,12 @@ export default class purchaseInvoice extends React.PureComponent
                                 let tmpItemData = [{...this.docObj.docItems.dt()[i]}]
                                 tmpItemData[0].SALE_PRICE_GUID = tmpData.result.recordset[0].PRICE_GUID
                                 tmpItemData[0].SALE_PRICE = tmpData.result.recordset[0].SALE_PRICE
-                                let tmpExVat = tmpData.result.recordset[0].SALE_PRICE / ((tmpItemData[0].VAT_RATE / 100) + 1)
+                                tmpItemData[0].ITEM_VAT = tmpData.result.recordset[0].VAT
+                                let tmpExVat = tmpData.result.recordset[0].SALE_PRICE / ((tmpItemData[0].ITEM_VAT / 100) + 1)
                                 let tmpMargin = tmpExVat - tmpItemData[0].PRICE;
                                 let tmpMarginRate = ((tmpMargin / tmpItemData[0].PRICE)) * 100
                                 tmpItemData[0].PRICE_MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
-                                let tmpNetExVat = tmpData.result.recordset[0].SALE_PRICE / ((tmpItemData[0].VAT_RATE / 100) + 1)
+                                let tmpNetExVat = tmpData.result.recordset[0].SALE_PRICE / ((tmpItemData[0].ITEM_VAT / 100) + 1)
                                 let tmpNetMargin = (tmpNetExVat - tmpItemData[0].PRICE) / 1.15;
                                 let tmpNetMarginRate = (((tmpNetMargin / tmpItemData[0].PRICE))) * 100
                                 tmpItemData[0].NET_MARGIN = tmpNetMargin.toFixed(2) + "€ / %" +  tmpNetMarginRate.toFixed(2); 
@@ -1788,17 +1787,17 @@ export default class purchaseInvoice extends React.PureComponent
                             {0
                                 let tmpQuery = 
                                 {
-                                    query : "SELECT TOP 1 PRICE_SALE_GUID AS PRICE_GUID,PRICE_SALE AS SALE_PRICE,CUSTOMER_PRICE_GUID AS CUSTOMER_PRICE_GUID,VAT AS VAT_RATE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE  GUID = @ITEM AND CUSTOMER_GUID = @CUSTOMER",
+                                    query : "SELECT TOP 1 PRICE_SALE_GUID AS PRICE_GUID,PRICE_SALE AS SALE_PRICE,VAT AS VAT,CUSTOMER_PRICE_GUID AS CUSTOMER_PRICE_GUID,VAT AS VAT_RATE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE  GUID = @ITEM AND CUSTOMER_GUID = @CUSTOMER",
                                     param : ['ITEM:string|50','CUSTOMER:string|50'],
                                     value : [this.docObj.docItems.dt()[i].ITEM,this.docObj.docItems.dt()[i].OUTPUT]
                                 }
                                 let tmpData = await this.core.sql.execute(tmpQuery)
                                 if(tmpData.result.recordset.length > 0)
                                 {
-                                    console.log(tmpData.result.recordset)
                                     let tmpItemData = [{...this.docObj.docItems.dt()[i]}]
                                     tmpItemData[0].SALE_PRICE_GUID = tmpData.result.recordset[0].PRICE_GUID
                                     tmpItemData[0].SALE_PRICE = tmpData.result.recordset[0].SALE_PRICE
+                                    tmpItemData[0].ITEM_VAT = tmpData.result.recordset[0].VAT
                                     let tmpExVat = tmpData.result.recordset[0].SALE_PRICE / ((tmpItemData[0].VAT_RATE / 100) + 1)
                                     let tmpMargin = tmpExVat - tmpItemData[0].PRICE;
                                     let tmpMarginRate = ((tmpMargin / tmpItemData[0].PRICE)) * 100
@@ -4984,11 +4983,11 @@ export default class purchaseInvoice extends React.PureComponent
                                     onRowRemoved={async (e)=>{
                                     }}
                                     onRowUpdated={async(e)=>{
-                                        let tmpExVat = e.key.SALE_PRICE / ((e.key.VAT_RATE / 100) + 1)
+                                        let tmpExVat = e.key.SALE_PRICE / ((e.key.ITEM_VAT / 100) + 1)
                                         let tmpMargin = tmpExVat -  e.key.PRICE;
                                         let tmpMarginRate = ((tmpMargin /  e.key.PRICE)) * 100
                                         e.key.PRICE_MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
-                                        let tmpNetExVat = e.key.SALE_PRICE / ((e.key.VAT_RATE / 100) + 1)
+                                        let tmpNetExVat = e.key.SALE_PRICE / ((e.key.ITEM_VAT / 100) + 1)
                                         let tmpNetMargin = (tmpNetExVat - e.key.PRICE) / 1.15;
                                         let tmpNetMarginRate = (((tmpNetMargin / e.key.PRICE) )) * 100
                                         e.key.NET_MARGIN = tmpNetMargin.toFixed(2) + "€ / %" +  tmpNetMarginRate.toFixed(2); 
