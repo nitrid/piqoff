@@ -1329,40 +1329,6 @@ export class posDeviceCls
             }
         })
     }
-    lcdPrint(pData)
-    {
-        if(!core.instance.util.isElectron())
-        {
-            return
-        }
-        
-        let device  = new this.escpos.Serial(this.dt().length > 0 ? this.dt()[0].LCD_PORT : "", { baudRate: 9600, autoOpen: false });
-        let options = { encoding: "GB18030" /* default */ }
-        let usbScreen = new this.escpos.Screen(device,options);
-
-        device.open(function(error)
-        {
-            usbScreen.blink(pData.blink);
-            usbScreen.clear();
-            usbScreen.text(pData.text).close();
-        });
-    }
-    lcdClear()
-    {
-        if(!core.instance.util.isElectron())
-        {
-            return
-        }
-
-        let device  = new this.escpos.Serial(this.dt().length > 0 ? this.dt()[0].LCD_PORT : "", { baudRate: 9600, autoOpen: false });
-        let options = { encoding: "GB18030" /* default */ }
-        let usbScreen = new this.escpos.Screen(device,options);
-
-        device.open(function(error)
-        {
-            usbScreen.clear();
-        });
-    }
     caseOpen()
     {
         return new Promise((resolve) =>
@@ -2230,5 +2196,57 @@ export class posEnddayCls
             this.ds.delete()
             resolve(await this.ds.update()); 
         });
+    }
+}
+export class posLcdCls
+{
+    constructor(pPort)
+    {
+        if(!core.instance.util.isElectron())
+        {
+            return
+        }
+
+        this.escpos = global.require('escpos');
+        this.escpos.Serial = global.require('escpos-serialport');
+        //this.escpos.Screen = global.require('escpos-screen');
+        
+        this.port = typeof pPort == 'undefined' ? '' : pPort
+    }
+    print(pData)
+    {
+        if(!core.instance.util.isElectron())
+        {
+            return
+        }
+        
+        let device = new this.escpos.Serial(this.port, { baudRate: 9600, stopBits:1, dataBits:8, autoOpen: false });
+
+        device.open(async(err)=>
+        {
+            device.write('\x0c')
+            //pData.text = pData.text.replaceAll('€',String.fromCharCode(15))
+            device.write(pData.text)
+
+            setTimeout(() => 
+            {
+                device.close();    
+            }, 100);
+        })
+    }
+    clear()
+    {
+        if(!core.instance.util.isElectron())
+        {
+            return
+        }
+
+        let device = new this.escpos.Serial(this.port, { baudRate: 9600, autoOpen: false });
+        let usbScreen = new this.escpos.Screen(device,{ encoding: "GB18030" });
+
+        device.open((err)=>
+        {
+            usbScreen.clear();
+        })
     }
 }
