@@ -132,7 +132,7 @@ export default class purchaseOrder extends React.PureComponent
                             <div className='row px-2'>
                                 <div className='col-12'>
                                     <div className='row pb-2'>
-                                        <div className='col-3 d-flex justify-content-end align-items-center font-size-14'>
+                                        <div className='col-3 d-flex justify-content-end align-items-center text-size-14'>
                                             Seri - Sıra :
                                         </div>
                                         <div className='col-9'>
@@ -170,7 +170,7 @@ export default class purchaseOrder extends React.PureComponent
                                         </div>
                                     </div>
                                     <div className='row pb-2'>
-                                        <div className='col-3 d-flex justify-content-end align-items-center font-size-14'>
+                                        <div className='col-3 d-flex justify-content-end align-items-center text-size-14'>
                                             Depo :
                                         </div>
                                         <div className='col-9'>
@@ -188,7 +188,7 @@ export default class purchaseOrder extends React.PureComponent
                                         </div>
                                     </div>
                                     <div className='row pb-2'>
-                                        <div className='col-3 d-flex justify-content-end align-items-center font-size-14'>
+                                        <div className='col-3 d-flex justify-content-end align-items-center text-size-14'>
                                             Cari Kodu :
                                         </div>
                                         <div className='col-9'>
@@ -210,7 +210,7 @@ export default class purchaseOrder extends React.PureComponent
                                         </div>
                                     </div>
                                     <div className='row pb-2'>
-                                        <div className='col-3 d-flex justify-content-end align-items-center'>
+                                        <div className='col-3 d-flex justify-content-end align-items-center text-size-14'>
                                             Cari Adı :
                                         </div>
                                         <div className='col-9'>
