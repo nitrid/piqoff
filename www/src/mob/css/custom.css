@@ -163,9 +163,8 @@
 {
     position: absolute;
     height: 100%;
-    width: 50%;
+    width: 70%;
     top: 45px;
-    /* left: 50%; */
     background-color: white;
     border-left: 2px solid #dcdde1;    
     box-shadow: -5px 0px 20px 0px rgba(0,0,0,0.1);
@@ -173,7 +172,7 @@
 }
 .pageBarSide.sideOpen
 {
-    left: 50%;
+    left: 30%;
     animation-name: animPageBarSideOpen;
     animation-duration: 0.5s;
 }
@@ -186,12 +185,24 @@
 @keyframes animPageBarSideOpen
 {
   0%   {left:100%;}
-  100% {left:50%}
+  100% {left:30%}
 }
 @keyframes animPageBarSideClose
 {
-  0%   {left:50%;}
+  0%   {left:30%;}
   100% {left:100%}
+}
+.nav-link
+{
+    color: #885ddf;
+}
+.nav-link:focus, .nav-link:hover 
+{
+    color: #5f27cd;
+}
+.text-size-14
+{
+    font-size: 14px;
 }
 /* .dx-texteditor-input {
     padding: 2px;   

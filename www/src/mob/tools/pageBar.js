@@ -2,6 +2,7 @@ import React from 'react';
 import NbButton from '../../core/react/bootstrap/button';
 import NbBase from '../../core/react/bootstrap/base';
 import { right } from '@popperjs/core';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export class PageBar extends NbBase
 {
@@ -23,7 +24,7 @@ export class PageBar extends NbBase
             const elementLeft = window.getComputedStyle(document.querySelector('.pageBarSide')).getPropertyValue('left')
             const percentageLeft = (parseFloat(elementLeft) / document.querySelector('.pageBarSide').parentElement.offsetWidth) * 100
             
-            if (percentageLeft == 50) 
+            if (percentageLeft == 30) 
             {
                 this.setState({ rightSide: false });
             }
@@ -42,6 +43,7 @@ export class PageBar extends NbBase
         let tmpLeftBar = (<div></div>)
         let tmpCenterBar = (<div></div>)
         let tmpRightBar = (<div></div>)
+        let tmpSideBar = (<div></div>)
 
         if(tmpContent.isBack)
         {
@@ -105,6 +107,38 @@ export class PageBar extends NbBase
                     <i className={"bi bi-align-center fa-solid fa-bars-staggered fa-lg"} style={{color:'#858585'}}></i>
                 </NbButton>
             )
+
+            let tmpMenuArr = []
+            let tmpKey = 0
+            tmpContent?.menu?.map(item =>
+            {
+                tmpMenuArr.push(
+                    <li className="nav-item" key={tmpKey}>
+                        <a href="#" className="nav-link" aria-current="page" onClick={item.onClick}>
+                            {(()=>
+                            {
+                                if(typeof item.icon != 'undefined')
+                                {
+                                    return <FontAwesomeIcon icon={["fa",item.icon]} size="lg" style={{paddingRight:"10px"}}/>
+                                }
+                                else
+                                {
+                                    return
+                                }
+                            })()}
+                            {item.text}
+                        </a>
+                    </li>
+                )
+                tmpKey++                                        
+            })
+            
+            tmpSideBar = (
+            <div className="d-flex flex-column flex-shrink-0 p-3" style={{width: '280px'}}>
+                <ul className="nav nav-pills flex-column mb-auto">
+                    {tmpMenuArr}
+                </ul>
+            </div>)
         }
 
         const tmpMain = (
@@ -145,7 +179,7 @@ export class PageBar extends NbBase
                         this.setState({rightSideHidden:true})
                     }
                 }}>
-                    ALI KEMAL
+                    {tmpSideBar}
                 </div>
             </div>
         )
