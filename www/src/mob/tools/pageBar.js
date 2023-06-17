@@ -1,6 +1,7 @@
 import React from 'react';
 import NbButton from '../../core/react/bootstrap/button';
 import NbBase from '../../core/react/bootstrap/base';
+import { right } from '@popperjs/core';
 
 export class PageBar extends NbBase
 {
@@ -10,8 +11,23 @@ export class PageBar extends NbBase
         this.state = 
         {
             title : '',
-            activeContent : {}
+            activeContent : {},
+            rightSide : false,
+            rightSideHidden : true
         }
+    }
+    componentDidMount()
+    {
+        document.addEventListener("click", (e)=>
+        {
+            const elementLeft = window.getComputedStyle(document.querySelector('.pageBarSide')).getPropertyValue('left')
+            const percentageLeft = (parseFloat(elementLeft) / document.querySelector('.pageBarSide').parentElement.offsetWidth) * 100
+            
+            if (percentageLeft == 50) 
+            {
+                this.setState({ rightSide: false });
+            }
+        });
     }
     activePage(pPage)
     {
@@ -77,7 +93,14 @@ export class PageBar extends NbBase
                 <NbButton className="btn btn-outline-light d-flex justify-content-end" style={{height:"40   px",paddingTop:'10px'}}
                 onClick={()=>
                 {
-                    
+                    if(this.state.rightSide)
+                    {
+                        this.setState({rightSide:false})
+                    }
+                    else
+                    {
+                        this.setState({rightSide:true})
+                    }                    
                 }}>
                     <i className={"bi bi-align-center fa-solid fa-bars-staggered fa-lg"} style={{color:'#858585'}}></i>
                 </NbButton>
@@ -98,9 +121,31 @@ export class PageBar extends NbBase
             </React.Fragment>);
         
         return(
-            <div style={{height:'45px',backgroundColor:'white',position:'fixed',width:'100%',zIndex:'1000',borderBottom:'2px solid #dcdde1'}}>
-                <div className='row'>
-                    {tmpMain}
+            <div>
+                <div className='pageBar'>
+                    <div className='row'>
+                        {tmpMain}
+                    </div>
+                </div>
+                <div className={'pageBarSide ' + (this.state.rightSide ? 'sideOpen' : 'sideClose')} 
+                style={{visibility: this.state.rightSideHidden ? 'hidden' : 'visible'}}
+                onAnimationStart={
+                (e)=>
+                {
+                    if(e.animationName == 'animPageBarSideOpen')
+                    {
+                        this.setState({rightSideHidden:false})
+                    }
+                }}
+                onAnimationEnd={
+                (e)=>
+                {
+                    if(e.animationName == 'animPageBarSideClose')
+                    {
+                        this.setState({rightSideHidden:true})
+                    }
+                }}>
+                    ALI KEMAL
                 </div>
             </div>
         )
