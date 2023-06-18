@@ -929,6 +929,17 @@ export default class promotionCard extends React.PureComponent
                                     <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup={"frmPromo"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
+                                        if(this.condDt[0].AMOUNT == 0 && this.condDt[0].QUANTITY == 0)
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgQuantityOrAmount',showTitle:true,title:this.t("msgQuantityOrAmount.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgQuantityOrAmount.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgQuantityOrAmount.msg")}</div>)
+                                            }
+                                            await dialog(tmpConfObj);
+                                            return
+                                        }
                                         if(e.validationGroup.validate().status == "valid")
                                         {
                                             let tmpConfObj =

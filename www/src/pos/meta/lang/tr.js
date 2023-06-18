@@ -246,6 +246,7 @@ export const langTr =
     remainderPay : "Kalan Ödeme : ",
     discountpercent: "İndirim % -",
     applyDiscountPercent : "İndirim Uygula (%)",
+    applyDiscountAmount : "İndirim Uygula ",
     discountPrice : "İndirim",
     msgDeletePayForDiscount: 
     {

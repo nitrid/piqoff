@@ -246,6 +246,7 @@ export const langFr =
     remainderPay : " Montant restant ",
     discountpercent: " Remise % -",
     applyDiscountPercent : " Effectuer Remise (%)",
+    applyDiscountAmount : "Effectuer Remise ",
     discountPrice : " Remise ",
     msgDeletePayForDiscount: 
     {

@@ -18,6 +18,7 @@ import NdPopUp from '../../../../core/react/devex/popup.js';
 import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
+import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
 import NdImageUpload from '../../../../core/react/devex/imageupload.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
@@ -181,6 +182,7 @@ export default class labelPrinting extends React.PureComponent
                         let tmpDocItems = {...this.lblObj.empty}
                         tmpDocItems.REF = this.mainLblObj.dt()[0].REF
                         tmpDocItems.REF_NO = this.mainLblObj.dt()[0].REF_NO
+                        tmpDocItems.LINE_NO = this.lblObj.dt().length
                         this.lblObj.addEmpty(tmpDocItems)
                         await this.addItem(lblCombineObj.dt()[i],this.lblObj.dt().length - 1)
                     }
@@ -446,6 +448,56 @@ export default class labelPrinting extends React.PureComponent
                 await dialog(tmpConfObj);
             }
         }
+        else if(this.chkPromotionItems.value == true)
+        {
+            let tmpQuery = 
+            {
+                query :"SELECT *,  " +
+                "CASE WHEN UNDER_UNIT_VALUE =0    " +
+                "THEN 0   " +
+                "ELSE   " +
+                "ROUND((PRICE / UNDER_UNIT_VALUE),2) END AS UNDER_UNIT_PRICE FROM   " +
+                "(SELECT   " +
+                "COND_ITEM_GUID AS GUID,  " +
+                "CDATE AS CDATE,  " +
+                "COND_ITEM_CODE AS CODE,  " +
+                "COND_ITEM_NAME AS NAME,  " +
+                "ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = [PROMO_COND_APP_VW_01].COND_ITEM_GUID ORDER BY CDATE DESC),'') AS BARCODE,  " +
+                "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = [PROMO_COND_APP_VW_01].COND_ITEM_GUID ORDER BY LDATE DESC),COND_ITEM_CODE) AS MULTICODE,    " +
+                "ISNULL((SELECT MAIN_GRP FROM ITEMS_VW_01 WHERE ITEMS_VW_01.GUID =  [PROMO_COND_APP_VW_01].COND_ITEM_GUID), '' ) AS ITEM_GRP,  " +
+                "ISNULL((SELECT MAIN_GRP_NAME FROM ITEMS_VW_01 WHERE ITEMS_VW_01.GUID =  [PROMO_COND_APP_VW_01].COND_ITEM_GUID), '' ) AS ITEM_GRP_NAME,  " +
+                "ISNULL((SELECT NAME FROM COUNTRY WHERE COUNTRY.CODE = (SELECT ORGINS FROM ITEMS_VW_01 WHERE ITEMS_VW_01.GUID =  [PROMO_COND_APP_VW_01].COND_ITEM_GUID)),'') AS ORGINS,  " +
+                "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 1 AND ITEM_UNIT.ITEM = [PROMO_COND_APP_VW_01].COND_ITEM_GUID),0) AS UNDER_UNIT_VALUE,  " +
+                "CASE APP_TYPE WHEN 5 THEN APP_AMOUNT WHEN 0 THEN ROUND((SELECT [dbo].[FN_PRICE_SALE](COND_ITEM_GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000')) / ((APP_AMOUNT / 100) +1),2) END AS PRICE " +
+                "FROM [dbo].[PROMO_COND_APP_VW_01]  WHERE COND_TYPE = 0 AND APP_TYPE IN(0,5) AND START_DATE >= @FIRST_DATE AND FINISH_DATE <= @LAST_DATE) AS TMP",
+                param : ['FIRST_DATE:date','LAST_DATE:date'],
+                value : [this.dtDate.startDate,this.dtDate.endDate]
+            }
+            App.instance.setState({isExecute:true})
+            let tmpData = await this.core.sql.execute(tmpQuery) 
+            App.instance.setState({isExecute:false})
+            if(tmpData.result.recordset.length > 0)
+            {
+                for (let i = 0; i < tmpData.result.recordset.length; i++) 
+                {
+                    this.addAutoItem(tmpData.result.recordset[i])
+                }
+                await this.grdLabelQueue.devGrid.deleteRow(this.lblObj.dt().length - 1)
+                this.popWizard.hide()
+                
+            }
+            else
+            {
+                let tmpConfObj =
+                {
+                    id:'msgItemNotFound',showTitle:true,title:this.t("msgItemNotFound.title"),showCloseButton:true,width:'500px',height:'200px',
+                    button:[{id:"btn01",caption:this.t("msgItemNotFound.btn01"),location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemNotFound.msg")}</div>)
+                }
+    
+                await dialog(tmpConfObj);
+            }
+        }
         else if(this.chkAllItems.value == true)
         {
             let tmpQuery = 
@@ -547,22 +599,22 @@ export default class labelPrinting extends React.PureComponent
                             let tmpQuery = 
                             {
                                 query :"SELECT  *, " +
-                               "CASE WHEN UNDER_UNIT_VALUE =0 " +
-                               "THEN 0 " +
-                               "ELSE " +
-                               "ROUND((PRICE / UNDER_UNIT_VALUE),2) " +
-                               "END AS UNDER_UNIT_PRICE " +
-                               "FROM (  SELECT GUID,  " +
-                               "CODE,  " +
-                               "NAME,  " +
-                               "ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE,  " +
+                                "CASE WHEN UNDER_UNIT_VALUE =0 " +
+                                "THEN 0 " +
+                                "ELSE " +
+                                "ROUND((PRICE / UNDER_UNIT_VALUE),2) " +
+                                "END AS UNDER_UNIT_PRICE " +
+                                "FROM (  SELECT GUID,  " +
+                                "CODE,  " +
+                                "NAME,  " +
+                                "ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE,  " +
                                 "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),ITEMS_VW_01.CODE) AS MULTICODE,   " +
                                 "ISNULL((SELECT NAME FROM COUNTRY WHERE COUNTRY.CODE = ORGINS),'') AS ORGINS, " +
-                               "MAIN_GRP AS ITEM_GRP,  " +
-                               "MAIN_GRP_NAME AS ITEM_GRP_NAME,  " +
-                               "(SELECT [dbo].[FN_PRICE_SALE](GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000')) AS PRICE  ," +
-                               "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 1 AND ITEM_UNIT.ITEM = ITEMS_VW_01.GUID),0) AS UNDER_UNIT_VALUE " +
-                               "FROM ITEMS_VW_01 WHERE ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID),'') <> '') AS TMP WHERE CODE = @CODE  ",
+                                "MAIN_GRP AS ITEM_GRP,  " +
+                                "MAIN_GRP_NAME AS ITEM_GRP_NAME,  " +
+                                "(SELECT [dbo].[FN_PRICE_SALE](GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000')) AS PRICE  ," +
+                                "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 1 AND ITEM_UNIT.ITEM = ITEMS_VW_01.GUID),0) AS UNDER_UNIT_VALUE " +
+                                "FROM ITEMS_VW_01 WHERE ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM = ITEMS_VW_01.GUID),'') <> '') AS TMP WHERE CODE = @CODE  ",
                                 param : ['CODE:string|50'],
                                 value : [r.component._changedValue]
                             }
@@ -613,6 +665,7 @@ export default class labelPrinting extends React.PureComponent
                                                 let tmpDocItems = {...this.lblObj.empty}
                                                 tmpDocItems.REF = this.mainLblObj.dt()[0].REF
                                                 tmpDocItems.REF_NO = this.mainLblObj.dt()[0].REF_NO
+                                                tmpDocItems.LINE_NO = this.lblObj.dt().length
                                                 this.lblObj.addEmpty(tmpDocItems)
                                                 this.addItem(data[i],this.lblObj.dt().length -1)
                                             }
@@ -645,7 +698,7 @@ export default class labelPrinting extends React.PureComponent
                 let pResult = await dialog(tmpConfObj);
                 if(pResult == 'btn01')
                 {
-                    await this.grdLabelQueue.devGrid.deleteRow(pIndex)
+                    await this.grdLabelQueue.devGrid.deleteRow(0)
                     return
                 }
                 else
@@ -667,7 +720,6 @@ export default class labelPrinting extends React.PureComponent
         this.lblObj.dt()[pIndex].UNDER_UNIT_PRICE = pData.UNDER_UNIT_PRICE
         this.lblObj.dt()[pIndex].UNDER_UNIT_SYMBOL = pData.UNDER_UNIT_SYMBOL
         this.lblObj.dt()[pIndex].PRICE = pData.PRICE
-        this.lblObj.dt()[pIndex].LINE_NO = pIndex + 1
         this.lblObj.dt()[pIndex].ORGINS =pData.ORGINS
         this.calculateCount()
         App.instance.setState({isExecute:false})
@@ -689,7 +741,7 @@ export default class labelPrinting extends React.PureComponent
         tmpDocItems.UNDER_UNIT_PRICE = pData.UNDER_UNIT_PRICE
         tmpDocItems.UNDER_UNIT_SYMBOL = pData.UNDER_UNIT_SYMBOL
         tmpDocItems.PRICE = pData.PRICE
-        tmpDocItems.LINE_NO = this.lblObj.dt().length + 1
+        tmpDocItems.LINE_NO = this.lblObj.dt().length
         this.lblObj.addEmpty(tmpDocItems)
         this.calculateCount()
         App.instance.setState({isExecute:false})
@@ -1050,6 +1102,7 @@ export default class labelPrinting extends React.PureComponent
                                                         let tmpDocItems = {...this.lblObj.empty}
                                                         tmpDocItems.REF = this.mainLblObj.dt()[0].REF
                                                         tmpDocItems.REF_NO = this.mainLblObj.dt()[0].REF_NO
+                                                        tmpDocItems.LINE_NO = this.lblObj.dt().length
                                                         this.lblObj.addEmpty(tmpDocItems)
                                                         
                                                         this.addItem(tmpData.result.recordset[0],this.lblObj.dt().length - 1)
@@ -1079,6 +1132,7 @@ export default class labelPrinting extends React.PureComponent
                                                                         let tmpDocItems = {...this.lblObj.empty}
                                                                         tmpDocItems.REF = this.mainLblObj.dt()[0].REF
                                                                         tmpDocItems.REF_NO = this.mainLblObj.dt()[0].REF_NO
+                                                                        tmpDocItems.LINE_NO = this.lblObj.dt().length
                                                                         this.lblObj.addEmpty(tmpDocItems)
                                                                         
                                                                         this.addItem(tmpData.result.recordset[0],this.lblObj.dt().length - 1)
@@ -1130,6 +1184,7 @@ export default class labelPrinting extends React.PureComponent
                                                 let tmpDocItems = {...this.lblObj.empty}
                                                 tmpDocItems.REF = this.mainLblObj.dt()[0].REF
                                                 tmpDocItems.REF_NO = this.mainLblObj.dt()[0].REF_NO
+                                                tmpDocItems.LINE_NO = this.lblObj.dt().length
                                                 this.lblObj.addEmpty(tmpDocItems)
                                             }
                                             this.addItem(tmpData.result.recordset[0],this.lblObj.dt().length - 1)
@@ -1202,6 +1257,7 @@ export default class labelPrinting extends React.PureComponent
                                                                     let tmpDocItems = {...this.lblObj.empty}
                                                                     tmpDocItems.REF = this.mainLblObj.dt()[0].REF
                                                                     tmpDocItems.REF_NO = this.mainLblObj.dt()[0].REF_NO
+                                                                    tmpDocItems.LINE_NO = this.lblObj.dt().length
                                                                     this.lblObj.addEmpty(tmpDocItems)
                                                                     this.addItem(data[i],this.lblObj.dt().length -1)
                                                                 }
@@ -1214,6 +1270,7 @@ export default class labelPrinting extends React.PureComponent
                                             let tmpDocItems = {...this.lblObj.empty}
                                             tmpDocItems.REF = this.mainLblObj.dt()[0].REF
                                             tmpDocItems.REF_NO = this.mainLblObj.dt()[0].REF_NO
+                                            tmpDocItems.LINE_NO = this.lblObj.dt().length
                                             this.txtRef.readOnly = true
                                             this.txtRefno.readOnly = true
                                             this.lblObj.addEmpty(tmpDocItems)
@@ -1237,6 +1294,7 @@ export default class labelPrinting extends React.PureComponent
                                                             let tmpDocItems = {...this.lblObj.empty}
                                                             tmpDocItems.REF = this.mainLblObj.dt()[0].REF
                                                             tmpDocItems.REF_NO = this.mainLblObj.dt()[0].REF_NO
+                                                            tmpDocItems.LINE_NO = this.lblObj.dt().length
                                                             this.lblObj.addEmpty(tmpDocItems)
                                                             this.addItem(data[i],this.lblObj.dt().length -1)
                                                         }
@@ -1310,9 +1368,11 @@ export default class labelPrinting extends React.PureComponent
                                     >
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
                                         <Scrolling mode="standard" />
-                                        <Paging defaultPageSize={250}/>
+                                        <Paging defaultPageSize={20}/>
+                                        <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                         <Export fileName={this.lang.t("menu.stk_02_004")} enabled={true} allowExportSelectedData={true} />
+                                        <Column dataField="LINE_NO" caption={this.t("LINE_NO")} visible={false} width={50} dataType={'number'} allowEditing={false} defaultSortOrder="desc"/>
                                         <Column dataField="CUSER_NAME" caption={this.t("grdLabelQueue.clmCuser")} width={100} allowEditing={false}/>
                                         <Column dataField="CODE" caption={this.t("grdLabelQueue.clmItemCode")} width={110} editCellRender={this._cellRoleRender}/>
                                         <Column dataField="BARCODE" caption={this.t("grdLabelQueue.clmBarcode")} width={130} allowEditing={false} />
@@ -1420,6 +1480,7 @@ export default class labelPrinting extends React.PureComponent
                                     access={this.access.filter({ELEMENT:'chkLastChange',USERS:this.user.CODE})}
                                     onValueChanged={(async()=>
                                     {
+                                        this.chkPromotionItems.setState({value:false});
                                         this.chkSelectChange.setState({value:false});
                                         this.chkSelectPriceChange.setState({value:false});
                                         this.chkGroup.setState({value:false});
@@ -1435,6 +1496,7 @@ export default class labelPrinting extends React.PureComponent
                                     access={this.access.filter({ELEMENT:'chkSelectChange',USERS:this.user.CODE})}
                                     onValueChanged={(async()=>
                                         {
+                                            this.chkPromotionItems.setState({value:false});
                                             this.chkLastChange.setState({value:false});
                                             this.chkSelectPriceChange.setState({value:false});
                                             this.chkGroup.setState({value:false});
@@ -1453,6 +1515,7 @@ export default class labelPrinting extends React.PureComponent
                                     access={this.access.filter({ELEMENT:'chkSelectPriceChange',USERS:this.user.CODE})}
                                     onValueChanged={(async()=>
                                         {
+                                            this.chkPromotionItems.setState({value:false});
                                             this.chkLastChange.setState({value:false});
                                             this.chkSelectChange.setState({value:false});
                                             this.chkGroup.setState({value:false});
@@ -1471,6 +1534,7 @@ export default class labelPrinting extends React.PureComponent
                                     access={this.access.filter({ELEMENT:'chkGroup',USERS:this.user.CODE})}
                                     onValueChanged={(async()=>
                                     {
+                                        this.chkPromotionItems.setState({value:false});
                                         this.chkLastChange.setState({value:false});
                                         this.chkSelectChange.setState({value:false});
                                         this.chkSelectPriceChange.setState({value:false});
@@ -1500,6 +1564,7 @@ export default class labelPrinting extends React.PureComponent
                                     access={this.access.filter({ELEMENT:'chkCustomer',USERS:this.user.CODE})}
                                     onValueChanged={(async()=>
                                     {
+                                        this.chkPromotionItems.setState({value:false});
                                         this.chkLastChange.setState({value:false});
                                         this.chkSelectChange.setState({value:false});
                                         this.chkSelectPriceChange.setState({value:false});
@@ -1524,13 +1589,34 @@ export default class labelPrinting extends React.PureComponent
                                     </NdSelectBox>
                                 </Item>
                                 <Item>
+                                    <NdCheckBox id="chkPromotionItems" parent={this} defaultValue={false} 
+                                    onValueChanged={(async()=>
+                                    {
+                                        this.chkLastChange.setState({value:false});
+                                        this.chkSelectChange.setState({value:false});
+                                        this.chkGroup.setState({value:false});
+                                        this.chkSelectPriceChange.setState({value:false});
+                                        this.chkCustomer.setState({value:false});
+                                        this.chkAllItems.setState({value:false});
+                                    }).bind(this)}
+                                    />
+                                    <Label text={this.t("chkPromotionItems")} alignment="right" />
+                                </Item>
+                                <Item>
+                                <div className="col-12">
+                                    <NbDateRange id={"dtDate"} parent={this} startDate={moment(new Date())} endDate={moment(new Date())}/>
+                                </div>
+                                </Item>
+                                <Item>
                                     <NdCheckBox id="chkAllItems" parent={this} defaultValue={false} 
                                     param={this.param.filter({ELEMENT:'chkAllItems',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'chkAllItems',USERS:this.user.CODE})}
                                     onValueChanged={(async()=>
                                     {
+                                        this.chkPromotionItems.setState({value:false});
                                         this.chkLastChange.setState({value:false});
                                         this.chkSelectChange.setState({value:false});
+                                        this.chkSelectPriceChange.setState({value:false});
                                         this.chkGroup.setState({value:false});
                                         this.chkCustomer.setState({value:false});
                                     }).bind(this)}
