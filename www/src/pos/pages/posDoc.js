@@ -7635,7 +7635,7 @@ export default class posDoc extends React.PureComponent
                                 <NbLabel id="blnAbtCertificate" parent={this} value={this.lang.t("blnAbtCertificate") + this.core.appInfo.scale.certificate}/>
                             </Item>
                             <Item>
-                                <NbLabel id="blnAbtSha" parent={this} value={"Sha : " + this.core.appInfo.scale.sha}/>
+                                <NbLabel id="blnAbtSha" parent={this} value={"Signature : " + this.core.appInfo.scale.sha}/>
                             </Item>
                         </Form>
                     </NdPopUp>
