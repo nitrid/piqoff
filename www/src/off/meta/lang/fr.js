@@ -9615,6 +9615,12 @@ export const langFr =
             btn01: "OK",
             msg: "Le produit que vous essayez d'ajouter est déjà présent dans votre liste !",
         },
+        msgQuantityOrAmount:
+        {
+            title: "Dikkat",   // BAK
+            btn01: "Tamam",   // BAK
+            msg: "Lütfen Adet veya Tutar Giriniz !",   // BAK
+        },
     },
     promo_02_001: //  "Promosyon Listesi"
     {

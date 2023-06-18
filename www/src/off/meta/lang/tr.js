@@ -9648,6 +9648,12 @@ export const langTr =
             btn01: "Tamam",
             msg: "Eklemeye çalıştığınız ürün zaten listenizde var !",
         },
+        msgQuantityOrAmount:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen Adet veya Tutar Giriniz !",
+        },
     },
     promo_02_001: //  "Promosyon Listesi"
     {

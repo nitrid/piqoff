@@ -5294,7 +5294,7 @@ export default class posDoc extends React.PureComponent
                                         await dialog(tmpConfObj);
                                     }                               
                                 }}>
-                                    <div>İndirim Uygula ({Number.money.sign})</div>
+                                    <div>{this.lang.t("applyDiscountAmount") + Number.money.sign} </div>
                                 </NbButton>
                             </div>
                         </div>
@@ -6526,6 +6526,7 @@ export default class posDoc extends React.PureComponent
                                 this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].LINE_NO = this.posObj.posPay.dt().length
                                 this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].AMOUNT = Number(parseFloat(this.posObj.dt()[0].TOTAL).toFixed(2))
                                 this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].CHANGE = 0
+                                await this.posDevice.caseOpen();
                             }
                             else if(tmpResult == 'btn02') //İade Çeki
                             {

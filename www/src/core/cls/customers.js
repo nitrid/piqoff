@@ -75,7 +75,7 @@ export class customersCls
                     "@RISK_LIMIT = @PRISK_LIMIT, " +
                     "@STATUS = @PSTATUS ",
             param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PTITLE:string|50','PCODE:string|50','PGENUS:int','PCUSTOMER_GRP:string|25','PWEB:string|100','PNOTE:string|1500',
-                        'PSIRET_ID:string|25','PSIREN_NO:string|25','PRCS:string|25','PAPE_CODE:string|50','PTAX_OFFICE:string|25','PTAX_NO:string|25','PINT_VAT_NO:string|50','PINSURANCE_NO:string|50',
+                        'PSIRET_ID:string|100','PSIREN_NO:string|100','PRCS:string|100','PAPE_CODE:string|100','PTAX_OFFICE:string|100','PTAX_NO:string|100','PINT_VAT_NO:string|100','PINSURANCE_NO:string|100',
                        'PTAX_TYPE:int','PCAPITAL:float','PREBATE:bit','PTAX_SUCRE:bit','PDEB:bit','PEXPIRY_DAY:float','PRISK_LIMIT:float','PSTATUS:bit'],
             dataprm : ['GUID','CUSER','TYPE','TITLE','CODE','GENUS','CUSTOMER_GRP','WEB','NOTE','SIRET_ID','SIREN_NO','RCS','APE_CODE','TAX_OFFICE','TAX_NO','INT_VAT_NO','INSURANCE_NO','TAX_TYPE','CAPITAL'
                         ,'REBATE','TAX_SUCRE','DEB','EXPIRY_DAY','RISK_LIMIT','STATUS']
@@ -109,7 +109,7 @@ export class customersCls
                     "@RISK_LIMIT = @PRISK_LIMIT, " +
                     "@STATUS = @PSTATUS ",
             param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PTITLE:string|50','PCODE:string|50','PGENUS:int','PCUSTOMER_GRP:string|25','PWEB:string|100','PNOTE:string|1500',
-                        'PSIRET_ID:string|25','PSIREN_NO:string|25','PRCS:string|25','PAPE_CODE:string|50','PTAX_OFFICE:string|25','PTAX_NO:string|25','PINT_VAT_NO:string|50','PINSURANCE_NO:string|50',
+                        'PSIRET_ID:string|100','PSIREN_NO:string|100','PRCS:string|100','PAPE_CODE:string|100','PTAX_OFFICE:string|100','PTAX_NO:string|100','PINT_VAT_NO:string|100','PINSURANCE_NO:string|100',
                        'PTAX_TYPE:int','PCAPITAL:float','PREBATE:bit','PTAX_SUCRE:bit','PDEB:bit','PEXPIRY_DAY:float','PRISK_LIMIT:float','PSTATUS:bit'],
             dataprm : ['GUID','CUSER','TYPE','TITLE','CODE','GENUS','CUSTOMER_GRP','WEB','NOTE','SIRET_ID','SIREN_NO','RCS','APE_CODE','TAX_OFFICE','TAX_NO','INT_VAT_NO','INSURANCE_NO','TAX_TYPE','CAPITAL'
                         ,'REBATE','TAX_SUCRE','DEB','EXPIRY_DAY','RISK_LIMIT','STATUS']
@@ -244,7 +244,7 @@ export class customerOfficalCls
                     "@OTHER_PHONE = @POTHER_PHONE, " +
                     "@EMAIL = @PEMAIL ",
             param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PCUSTOMER:string|50','PNAME:string|50','PLAST_NAME:string|50',
-                    'PPHONE1:string|50','PPHONE2:string|50','PGSM_PHONE:string|50','POTHER_PHONE:string|50','PEMAIL:string|50'],
+                    'PPHONE1:string|50','PPHONE2:string|50','PGSM_PHONE:string|50','POTHER_PHONE:string|50','PEMAIL:string|100'],
             dataprm : ['GUID','CUSER','TYPE','CUSTOMER','NAME','LAST_NAME','PHONE1','PHONE2','GSM_PHONE','OTHER_PHONE','EMAIL']
         }
         tmpDt.updateCmd = 
@@ -262,7 +262,7 @@ export class customerOfficalCls
                     "@OTHER_PHONE = @POTHER_PHONE, " +
                     "@EMAIL = @PEMAIL ",
             param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PCUSTOMER:string|50','PNAME:string|50','PLAST_NAME:string|50',
-                    'PPHONE1:string|50','PPHONE2:string|50','PGSM_PHONE:string|50','POTHER_PHONE:string|50','PEMAIL:string|50'],
+                    'PPHONE1:string|50','PPHONE2:string|50','PGSM_PHONE:string|50','POTHER_PHONE:string|50','PEMAIL:string|100'],
             dataprm : ['GUID','CUSER','TYPE','CUSTOMER','NAME','LAST_NAME','PHONE1','PHONE2','GSM_PHONE','OTHER_PHONE','EMAIL']
         }
         tmpDt.deleteCmd = 
@@ -388,7 +388,7 @@ export class customerAdressCls
                     "@CITY = @PCITY, " +
                     "@COUNTRY = @PCOUNTRY, " +
                     "@ADRESS_NO = @PADRESS_NO ",
-            param : ['PGUID:string|50','PCUSER:string|50','PTYPE:int','PCUSTOMER:string|50','PADRESS:string|500','PZIPCODE:string|10','PCITY:string|25','PCOUNTRY:string|5','PADRESS_NO:int'],
+            param : ['PGUID:string|50','PCUSER:string|50','PTYPE:int','PCUSTOMER:string|50','PADRESS:string|500','PZIPCODE:string|10','PCITY:string|100','PCOUNTRY:string|5','PADRESS_NO:int'],
             dataprm : ['GUID','CUSER','TYPE','CUSTOMER','ADRESS','ZIPCODE','CITY','COUNTRY','ADRESS_NO']
         }
         tmpDt.updateCmd = 
@@ -403,7 +403,7 @@ export class customerAdressCls
                     "@CITY = @PCITY, " +
                     "@COUNTRY = @PCOUNTRY, " +
                     "@ADRESS_NO = @PADRESS_NO ",
-            param : ['PGUID:string|50','PCUSER:string|50','PTYPE:int','PCUSTOMER:string|50','PADRESS:string|500','PZIPCODE:string|10','PCITY:string|25','PCOUNTRY:string|5','PADRESS_NO:int'],
+            param : ['PGUID:string|50','PCUSER:string|50','PTYPE:int','PCUSTOMER:string|50','PADRESS:string|500','PZIPCODE:string|10','PCITY:string|100','PCOUNTRY:string|5','PADRESS_NO:int'],
             dataprm : ['GUID','CUSER','TYPE','CUSTOMER','ADRESS','ZIPCODE','CITY','COUNTRY','ADRESS_NO']
         }
         tmpDt.deleteCmd = 
