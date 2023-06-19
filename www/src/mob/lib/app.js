@@ -14,6 +14,9 @@ import { MenuView } from './menu';
 import NbButton from '../../core/react/bootstrap/button';
 import NdDialog,{dialog} from '../../core/react/devex/dialog';
 import NbPopUp from '../../core/react/bootstrap/popup';
+import { param,access } from '../../core/core.js';
+import {prm} from '../meta/prm.js'
+import {acs} from '../meta/acs.js'
 
 import "@fortawesome/fontawesome-free/js/all.js";
 import "@fortawesome/fontawesome-free/css/all.css";
@@ -63,7 +66,8 @@ export default class App extends React.PureComponent
                 headers : 'Warning',
                 title : 'Sunucu ile bağlantı kuruluyor.',
             },
-            page:'dashboard.js'
+            page:'dashboard.js',
+            pageId: 'dash'
         }
 
         if(window.origin.substring(0,4) == 'http')
@@ -183,7 +187,22 @@ export default class App extends React.PureComponent
             return <Login />
         }
         
-        const Page = React.lazy(() => import('../pages/' + this.state.page));
+        const Page = React.lazy(() => import('../pages/' + this.state.page).then(async (obj)=>
+        {
+            //SAYFA YÜKLENMEDEN ÖNCE PARAMETRE, DİL, YETKİLENDİRME DEĞERLERİ GETİRİLİP CLASS PROTOTYPE A SET EDİLİYOR.
+            let tmpPrm = new param(prm);
+            await tmpPrm.load({APP:'MOB'})
+            
+            let tmpAcs = new access(acs);
+            await tmpAcs.load({APP:'MOB'})
+            console.log(tmpPrm)
+
+            obj.default.prototype.param = tmpPrm.filter({PAGE:this.state.pageId});
+            obj.default.prototype.sysParam = tmpPrm.filter({TYPE:0});
+            obj.default.prototype.access = tmpAcs.filter({PAGE:this.state.pageId});
+            obj.default.prototype.user = this.core.auth.data;
+            return obj;
+        }));
 
         return (
             <div style={{overflow:'hidden'}}>
@@ -226,7 +245,7 @@ export default class App extends React.PureComponent
                 <div>
                     <MenuView id={"popMenu"} parent={this} lang={this.lang} onMenuClick={(e)=>
                     {
-                        this.setState({page:e.path})
+                        this.setState({page:e.path,pageId:e.id})
                     }}/>
                 </div>
             </div>
