@@ -1621,6 +1621,7 @@ export const langFr =
         chkLastChange : "Dernière Modification Après Impression" ,
         chkSelectChange :"Dernière Modification Après Date Sélectionnée" ,
         chkSelectPriceChange :"Modification de Prix Vente Après Date Sélectionnée", 
+        chkPromotionItems : "Produits en promotion",
         btnLabelCombine : "Regrouper Les Etiquettes Saisies",
         chkGroup : "Groupe" ,
         chkCustomer : "Produits Fournisseur",

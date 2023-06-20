@@ -130,6 +130,7 @@ export const langTr =
         },
         btnVatToZero : "Vergiyi Sıfırla",
         btnCancel : "Kapat",
+        btnSave : "Kaydet",
         popDiscount : 
         {
             title: "Satır İndirimi",

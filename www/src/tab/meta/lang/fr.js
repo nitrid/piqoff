@@ -130,6 +130,7 @@ export const langFr =
         },
         btnVatToZero : "Mettre à 0 le taux", 
         btnCancel : "Fermez", 
+        btnSave: "Enregistrer",
         popDiscount : 
         {
             title: "Remise lignes",  

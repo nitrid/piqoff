@@ -1662,6 +1662,7 @@ export const langTr =
         chkLastChange : "Son yazdırma tarihinden itibaren değişenler",
         chkSelectChange : "Seçilen tarihten itibaren değişenler",
         chkSelectPriceChange :"Seçilen  tarihten satış fiyatı değişenler",
+        chkPromotionItems : "Promosyondaki ürünler",
         btnLabelCombine : "Etiket Birleştirme",
         chkGroup : "Grup",
         chkCustomer : "Tedarikçi Ürünleri",
