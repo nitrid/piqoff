@@ -195,12 +195,44 @@ export default class App extends React.PureComponent
             
             let tmpAcs = new access(acs);
             await tmpAcs.load({APP:'MOB'})
-            console.log(tmpPrm)
 
             obj.default.prototype.param = tmpPrm.filter({PAGE:this.state.pageId});
             obj.default.prototype.sysParam = tmpPrm.filter({TYPE:0});
             obj.default.prototype.access = tmpAcs.filter({PAGE:this.state.pageId});
             obj.default.prototype.user = this.core.auth.data;
+            obj.default.prototype.lang = App.instance.lang;
+            obj.default.prototype.t = App.instance.lang.getFixedT(null,null,this.state.pageId)
+
+            obj.default.prototype.init = (function()
+            {
+                let tmpCached = obj.default.prototype.init;
+                return function()
+                {          
+                    tmpCached.apply(this,arguments)
+                    this.emit('onInit')
+                }
+            }());
+
+            //EVENT PAGE - ALI KEMAL KARACA - 25.01.2022 *****/
+            obj.default.prototype.listeners = Object();
+            obj.default.prototype.on = function(pEvt, pCallback) 
+            {
+                if (!this.listeners.hasOwnProperty(pEvt))
+                this.listeners[pEvt] = Array();
+                this.listeners[pEvt].push(pCallback); 
+            }
+            obj.default.prototype.emit = function(pEvt, pParams)
+            {
+                if (pEvt in this.listeners) 
+                {
+                    let callbacks = this.listeners[pEvt];
+                    for (var x in callbacks)
+                    {
+                        callbacks[x](pParams);
+                    }
+                } 
+            }
+            
             return obj;
         }));
 

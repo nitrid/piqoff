@@ -198,7 +198,7 @@ export class MenuView extends NbBase
         {
             tmpMenuItem.push(
                 <div className='col-4 pb-2' key={item.id}>
-                    <NbButton className="form-group btn btn-primary btn-purple-light btn-block" style={{height:"100%",width:"100%"}} onClick={this.onClick.bind(this,item)}>
+                    <NbButton className="form-group btn btn-primary btn-purple btn-block" style={{height:"100%",width:"100%"}} onClick={this.onClick.bind(this,item)}>
                         <div className='row py-2'>
                             <div className='col-12'>
                                 <i className={"fa-solid " + item.icon + " fa-2x"} style={{color:'#ecf0f1'}}></i>
@@ -237,7 +237,7 @@ export class MenuView extends NbBase
                             return(
                             <div className='row' style={{paddingTop:"10px"}}>
                                 <div className='col-12 pb-2'>
-                                    <NbButton className="form-group btn btn-primary btn-purple-light btn-block" style={{height:"100%",width:"100%"}} 
+                                    <NbButton className="form-group btn btn-primary btn-purple btn-block" style={{height:"100%",width:"100%"}} 
                                     onClick=
                                     {
                                         ()=>

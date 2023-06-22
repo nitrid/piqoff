@@ -138,9 +138,12 @@
 .btn-purple-light.btn-primary
 {
     color: #fff;
-    border-color: #5f27cd;
-    /* background: radial-gradient(circle, #9a74e5, #5f27cd); */
-    background-color: #5f27cd;
+    border-color: #885ddf;
+    background-color: #885ddf;
+}
+.text-purple-light
+{
+    color: #885ddf;
 }
 .dx-scrollable-native.dx-scrollable-native-ios .dx-scrollable-content
 {
@@ -204,6 +207,10 @@
 {
     font-size: 12px;
     font-weight: 500;
+}
+.dx-button-mode-contained.dx-button-default 
+{
+    background-color: #5f27cd;
 }
 /* .dx-texteditor-input {
     padding: 2px;   

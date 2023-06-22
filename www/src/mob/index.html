@@ -1,7 +1,7 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
         <meta http-equiv="Content-Security-Policy" content="default-src gap://ready file://* * blob: data: gap:; style-src 'self' http://* https://* file://* 'unsafe-inline' blob: data: gap:; script-src 'self' http://* https://* file://* 'unsafe-inline' 'unsafe-eval' blob: data: gap:; img-src 'self' data: *">
         <style>
             .txtbox-center
@@ -11,6 +11,9 @@
         </style>
     </head>
     <body style="background-color: #f5f6fa;">
+        <audio id="Sound">
+            <source src="sound/beep.mp3" type="audio/mpeg">
+        </audio>
         <div>
             <div id="root"></div>
         </div>

@@ -80,7 +80,7 @@ export class PageBar extends NbBase
                             item.onClick()
                         }
                     }}>
-                        <i className={"bi bi-align-center fa-solid " + item.icon + " fa-lg"} style={{color:'#858585'}}></i>
+                        <FontAwesomeIcon icon={["fa",item.icon]} size="lg" style={{color:'#858585'}}/>
                     </NbButton>
                 )
                 tmpKey++

@@ -48,6 +48,13 @@ export class PageContent extends NbBase
         super(props)
         this.state = {opened : false}
     }
+    componentDidUpdate(prevProps,prevState)
+    {
+        if(prevState.opened == false && typeof this.props.onActive != 'undefined')
+        {
+            this.props.onActive();
+        }
+    }
     open()
     {
         this.setState({opened:true})

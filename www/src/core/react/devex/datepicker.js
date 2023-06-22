@@ -17,6 +17,7 @@ export default class NdDatePicker extends Base
         this.state.pickerType = typeof props.pickerType == 'undefined' ? 'calendar' : props.pickerType
         this.state.type = typeof props.type == 'undefined' ? 'date' : props.type
         this.state.editorOptions = typeof props.editorOptions == 'undefined' ? undefined : props.editorOptions
+        this.state.readOnly = typeof props.readOnly == 'undefined' ? false : props.readOnly 
         
         this._onInitialized = this._onInitialized.bind(this);
         this._onValueChanged = this._onValueChanged.bind(this)
@@ -67,6 +68,7 @@ export default class NdDatePicker extends Base
             valueChangeEvent="keyup" 
             value={moment(this.state.value).format("YYYY-MM-DD") == '1970-01-01' ? null : moment(this.state.value)} 
             disabled={this.state.editable}
+            readOnly={this.state.readOnly}
             type={this.state.type}
             dateSerializationFormat={"yyyy-MM-dd HH:mm"}
             onInitialized={this._onInitialized}
@@ -122,6 +124,14 @@ export default class NdDatePicker extends Base
         
         this.setState({value:e})        
     } 
+    get readOnly()
+    {
+        return this.state.readOnly
+    }
+    set readOnly(e)
+    {
+        this.setState({readOnly:e})
+    }
     render()
     {
         // YETKİLENDİRMEDEN GELEN GÖRÜNÜR GÖRÜNMEZ DURUMU. DEĞER BASE DEN GELİYOR.

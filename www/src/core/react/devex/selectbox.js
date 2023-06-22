@@ -12,6 +12,8 @@ export default class NdSelectBox extends Base
         this.dev = null;
 
         this.state.value = typeof props.value != 'undefined' ? props.value : ''
+        this.state.readOnly = typeof props.readOnly == 'undefined' ? false : props.readOnly 
+
         this._onInitialized = this._onInitialized.bind(this);
         this._onValueChanged = this._onValueChanged.bind(this);
         this._onChange = this._onChange.bind(this);
@@ -30,6 +32,7 @@ export default class NdSelectBox extends Base
     {
         return (
             <SelectBox id={this.props.id}
+            readOnly={this.state.readOnly}
             acceptCustomValue={this.props.acceptCustomValue}
             dataSource={typeof this.state.data == 'undefined' ? typeof this.props.dataSource != 'undefined' ? this.props.dataSource : undefined : this.state.data.store} 
             displayExpr={this.props.displayExpr} 
@@ -138,6 +141,14 @@ export default class NdSelectBox extends Base
         }
         
         this.setState({value:e == null ? '' : e})
+    }
+    get readOnly()
+    {
+        return this.state.readOnly
+    }
+    set readOnly(e)
+    {
+        this.setState({readOnly:e})
     }
     get displayValue()
     {
