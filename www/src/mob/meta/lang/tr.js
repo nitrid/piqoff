@@ -986,6 +986,12 @@ export const langTr =
         txtBarcodePlace : "Lütfen Barkod Okutunuz",
         txtQuantity : "Miktar",
         chkAutoAdd : "Oto Ekle",
+        msgBarcodeCheck:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen Barkod Okutunuz !",
+        },
     },
     stk_02_004 : // "Skt Girişi",
     {

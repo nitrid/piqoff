@@ -138,7 +138,7 @@ export default class itemCount extends React.PureComponent
     }
     async addItem(pQuantity)
     {    
-        if(this.txtBarcode.value == "")
+        if(this.barcode.code == "")
         {
             let tmpConfObj = 
             {
