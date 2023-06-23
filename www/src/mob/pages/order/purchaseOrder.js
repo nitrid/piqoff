@@ -20,7 +20,7 @@ import moment from 'moment';
 export default class purchaseOrder extends React.PureComponent
 {
     constructor(props)
-    {
+    { 
         super(props)
         this.core = App.instance.core;
         this.docObj = new docCls();
