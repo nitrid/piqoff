@@ -116,6 +116,8 @@ export default class purchaseOrder extends React.PureComponent
     {
         return new Promise(async resolve => 
         {
+            this.clearEntry();
+            
             this.itemDt.selectCmd.value = [pCode]
             await this.itemDt.refresh();  
             
@@ -138,9 +140,7 @@ export default class purchaseOrder extends React.PureComponent
                 this.txtQuantity.focus();
             }
             else
-            {
-                this.clearEntry();
-                
+            {                               
                 document.getElementById("Sound").play(); 
                 this.alertContent.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAlert.msgBarcodeNotFound")}</div>)
                 await dialog(this.alertContent);
@@ -242,7 +242,7 @@ export default class purchaseOrder extends React.PureComponent
 
         this.docObj.docOrders.addEmpty(tmpDocItems)
         this.clearEntry()
-        
+
         this.save()
     }
     async save()
@@ -336,23 +336,23 @@ export default class purchaseOrder extends React.PureComponent
                         },
                         {
                             name : 'Process',isBack : true,isTitle : false,
-                            menu :
-                            [
-                                {
-                                    text : "Yeni Evrak",
-                                    onClick : ()=>
-                                    {
+                            // menu :
+                            // [
+                            //     {
+                            //         text : "Yeni Evrak",
+                            //         onClick : ()=>
+                            //         {
                                         
-                                    }
-                                },
-                                {
-                                    text : "Yeni Evrak",
-                                    onClick : ()=>
-                                    {
+                            //         }
+                            //     },
+                            //     {
+                            //         text : "Yeni Evrak",
+                            //         onClick : ()=>
+                            //         {
                                         
-                                    }
-                                }
-                            ],
+                            //         }
+                            //     }
+                            // ],
                             shortcuts :
                             [
                                 {icon : "fa-barcode",onClick : this.onClickBarcodeShortcut.bind(this)}
