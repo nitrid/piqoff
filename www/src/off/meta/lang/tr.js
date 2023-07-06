@@ -1662,6 +1662,7 @@ export const langTr =
         chkLastChange : "Son yazdırma tarihinden itibaren değişenler",
         chkSelectChange : "Seçilen tarihten itibaren değişenler",
         chkSelectPriceChange :"Seçilen  tarihten satış fiyatı değişenler",
+        chkPromotionItems : "Promosyondaki ürünler",
         btnLabelCombine : "Etiket Birleştirme",
         chkGroup : "Grup",
         chkCustomer : "Tedarikçi Ürünleri",
@@ -9648,6 +9649,12 @@ export const langTr =
             btn01: "Tamam",
             msg: "Eklemeye çalıştığınız ürün zaten listenizde var !",
         },
+        msgQuantityOrAmount:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen Adet veya Tutar Giriniz !",
+        },
     },
     promo_02_001: //  "Promosyon Listesi"
     {
@@ -12466,6 +12473,7 @@ export const langTr =
             title: "Birim Seçimi",
             btn01: "Onayla",
         },
+        txtTotalHt : "Total Ht",
         validRef :"Seri Boş Geçilemez",
         validRefNo : "Sıra Boş Geçilemez",
         validDepot : "Depo Seçmelisiniz",

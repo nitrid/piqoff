@@ -1081,7 +1081,7 @@ export default class Sale extends React.PureComponent
                             visible={false}
                             showCloseButton={true}
                             showTitle={true}
-                            title={this.lang.t("popVatRate.title")}
+                            title={this.t("popVatRate.title")}
                             container={"#root"} 
                             width={'500'}
                             height={'250'}
@@ -1104,15 +1104,15 @@ export default class Sale extends React.PureComponent
                                             <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
                                             <Scrolling mode="standart" />
                                             <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
-                                            <Column dataField="RATE" caption={this.lang.t("grdVatRate.clmRate")} width={120}  headerFilter={{visible:true}} allowEditing={false} />
-                                            <Column dataField="VAT" caption={this.lang.t("grdVatRate.clmVat")} format={{ style: "currency", currency: "EUR",precision: 3}} dataType={'number'} width={120} headerFilter={{visible:true}}/>
-                                            <Column dataField="TOTALHT" caption={this.lang.t("grdVatRate.clmTotalHt")} format={{ style: "currency", currency: "EUR",precision: 3}} dataType={'number'} width={120} headerFilter={{visible:true}}/>
+                                            <Column dataField="RATE" caption={this.t("grdVatRate.clmRate")} width={120}  headerFilter={{visible:true}} allowEditing={false} />
+                                            <Column dataField="VAT" caption={this.t("grdVatRate.clmVat")} format={{ style: "currency", currency: "EUR",precision: 3}} dataType={'number'} width={120} headerFilter={{visible:true}}/>
+                                            <Column dataField="TOTALHT" caption={this.t("grdVatRate.clmTotalHt")} format={{ style: "currency", currency: "EUR",precision: 3}} dataType={'number'} width={120} headerFilter={{visible:true}}/>
                                         </NdGrid>
                                     </Item>
                                     <Item>
                                         <div className='row'>
                                             <div className='col-6'>
-                                                <NdButton text={this.lang.t("btnVatToZero")} type="normal" stylingMode="contained" width={'100%'} 
+                                                <NdButton text={this.t("btnVatToZero")} type="normal" stylingMode="contained" width={'100%'} 
                                                 onClick={async ()=>
                                                 {       
                                                     let tmpConfObj =
@@ -1137,7 +1137,7 @@ export default class Sale extends React.PureComponent
                                                 }}/>
                                             </div>
                                             <div className='col-6'>
-                                                <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                                <NdButton text={this.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
                                                 onClick={()=>
                                                 {
                                                     this.popVatRate.hide();  
@@ -1317,7 +1317,7 @@ export default class Sale extends React.PureComponent
                                     <Item>
                                         <div className='row'>
                                             <div className='col-6'>
-                                                <NdButton text={this.lang.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} 
+                                                <NdButton text={this.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} 
                                                 onClick={async ()=>
                                                 {           
                                                     
@@ -1349,7 +1349,7 @@ export default class Sale extends React.PureComponent
                                                 }}/>
                                             </div>
                                             <div className='col-6'>
-                                                <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                                <NdButton text={this.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
                                                 onClick={()=>
                                                 {
                                                     this.popDiscount.hide();  
@@ -1522,7 +1522,7 @@ export default class Sale extends React.PureComponent
                                     <Item>
                                         <div className='row'>
                                             <div className='col-6'>
-                                                <NdButton text={this.lang.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} 
+                                                <NdButton text={this.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} 
                                                 onClick={async ()=>
                                                 {           
                                                     
@@ -1550,7 +1550,7 @@ export default class Sale extends React.PureComponent
                                                 }}/>
                                             </div>
                                             <div className='col-6'>
-                                                <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                                <NdButton text={this.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
                                                 onClick={()=>
                                                 {
                                                     this.popDocDiscount.hide();  
