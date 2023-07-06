@@ -315,14 +315,8 @@ export default class purchaseOrder extends React.PureComponent
                             menu :
                             [
                                 {
-                                    text : "Yeni Evrak",
-                                    onClick : ()=>
-                                    {
-                                        
-                                    }
-                                },
-                                {
-                                    text : "Yeni Evrak",
+                                    icon : "fa-percent",
+                                    text : "Satır İndirim",
                                     onClick : ()=>
                                     {
                                         
@@ -336,23 +330,6 @@ export default class purchaseOrder extends React.PureComponent
                         },
                         {
                             name : 'Process',isBack : true,isTitle : false,
-                            // menu :
-                            // [
-                            //     {
-                            //         text : "Yeni Evrak",
-                            //         onClick : ()=>
-                            //         {
-                                        
-                            //         }
-                            //     },
-                            //     {
-                            //         text : "Yeni Evrak",
-                            //         onClick : ()=>
-                            //         {
-                                        
-                            //         }
-                            //     }
-                            // ],
                             shortcuts :
                             [
                                 {icon : "fa-barcode",onClick : this.onClickBarcodeShortcut.bind(this)}
