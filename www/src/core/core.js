@@ -159,7 +159,14 @@ export class sql
                 //SQL SINIFINDAKI DATABASE DEĞİŞKENİ BOŞTAN FARKLI İSE GÖNDERİLEN SORGUNUN DATABASE ADI BU DEĞİŞKENDEN VERİLİYOR.BU ŞEKİLDE UYGULAMA İÇİNDE BİRDEN FAZLA DB İLE ÇALIŞMAK MÜMKÜN.
                 if(this.selectedDb != '')
                 {
-                    TmpQuery.db = this.selectedDb
+                    if(Array.isArray(TmpQuery) && TmpQuery.length > 0)
+                    {
+                        TmpQuery[0].db = this.selectedDb
+                    }
+                    else
+                    {
+                        TmpQuery.db = this.selectedDb
+                    }
                 }
 
                 core.instance.socket.emit('sql',TmpQuery,(data) =>
