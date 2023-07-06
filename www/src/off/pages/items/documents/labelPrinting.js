@@ -741,6 +741,7 @@ export default class labelPrinting extends React.PureComponent
         tmpDocItems.UNDER_UNIT_PRICE = pData.UNDER_UNIT_PRICE
         tmpDocItems.UNDER_UNIT_SYMBOL = pData.UNDER_UNIT_SYMBOL
         tmpDocItems.PRICE = pData.PRICE
+        tmpDocItems.ORGINS = pData.ORGINS
         tmpDocItems.LINE_NO = this.lblObj.dt().length
         this.lblObj.addEmpty(tmpDocItems)
         this.calculateCount()
