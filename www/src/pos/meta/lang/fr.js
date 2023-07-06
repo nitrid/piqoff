@@ -164,7 +164,7 @@ export const langFr =
         btn01 : "OK",
     },
     totalLine : "Nbr Ligne : ",
-    totalQuantity : "Qte Art.:",
+    totalQuantity : "Nbr Art.:",
     loyaltyDiscount : "Remise fidélité :",
     ticketRect : "Ticket Rest. : ",
     amount : "Sous-total :",

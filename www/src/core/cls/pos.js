@@ -1868,7 +1868,10 @@ export class posDeviceCls
                     }
                     else
                     {
-                        docPdf.text(tmpArr[i].data,tmpX,tmpY,{align: tmpAlign,charSpace:tmpCharSpace})
+                        if(typeof tmpArr[i].data != 'undefined')
+                        {
+                            docPdf.text(tmpArr[i].data,tmpX,tmpY,{align: tmpAlign,charSpace:tmpCharSpace})
+                        }
                     }
 
                     tmpY += 8

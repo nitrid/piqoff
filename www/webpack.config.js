@@ -104,6 +104,7 @@ module.exports =
                 { from: "./src/off/css/icons/", to: "./off/css/icons/" },
                 { from: "./src/off/printview.html", to: "./off/printview.html" },
                 { from: "./src/off/sound/", to: "./off/sound/" },
+                { from: "./src/off/resources/", to: "./off/resources/" },
                 { from: "./src/mob/css/img/", to: "./mob/css/img/" },
                 { from: "./src/mob/css/icons/", to: "./mob/css/icons/" },
                 { from: "./src/mob/appUpdate.html", to: "./mob/appUpdate.html" },
