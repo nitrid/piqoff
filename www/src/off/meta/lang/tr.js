@@ -12473,6 +12473,7 @@ export const langTr =
             title: "Birim Seçimi",
             btn01: "Onayla",
         },
+        txtTotalHt : "Total Ht",
         validRef :"Seri Boş Geçilemez",
         validRefNo : "Sıra Boş Geçilemez",
         validDepot : "Depo Seçmelisiniz",

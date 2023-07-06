@@ -984,6 +984,12 @@ export const langFr =
         txtBarcodePlace : "Veuillez scanner le code-barres",
         txtQuantity : "Quantité",
         chkAutoAdd : "Ajouter automatiquement",
+        msgBarcodeCheck:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Veuillez scanner le code-barres !",
+        },
     },
     stk_02_004 : // "Skt Girişi",
     {
