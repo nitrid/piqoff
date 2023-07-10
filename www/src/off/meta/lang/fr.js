@@ -16049,14 +16049,14 @@ export const langFr =
         btnGet :"Apporter",  
         grdListe :    
         {   
-            clmRef: "Colonne facture",   
-            clmRefNo : "Ligne facture",  
+            clmRef: "Ref. Facture",   
+            clmRefNo : "Nr. Facture",  
             clmDocDate : "Date de facture",   
-            clmOutputCode : "Code fournisseur",   
-            clmOutputName : "Nom fournisseur", 
+            clmOutputCode : "Ref Fournisseur",   
+            clmOutputName : "Nom Fournisseur", 
             clmQuantity : "Quantité",    
-            clmCode: "Code",     
-            clmName : "Nom",               
+            clmCode: "Ref. Produit",     
+            clmName : "Nom du produit",               
             clmAmount : "Montant de la taxe",     
             clmLitre : "Unité litre" 
         },

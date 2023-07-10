@@ -16150,7 +16150,7 @@ export const langTr =
             clmOutputCode : "Teadrikçi Kodu",
             clmOutputName : "Tedarikçi Adı",
             clmQuantity : "Miktar",   
-            clmCode: "Kodu",   
+            clmCode: "Ürün Kodu",   
             clmName : "Adı",              
             clmAmount : "Vergi Tutarı",   
             clmLitre : "Birim Litre"
