@@ -1,4 +1,4 @@
-export const langTr = 
+export const langDe = 
 {
     popGrid: {btnSelection: "Auswählen", btnSearch: "Auflisten"},
     serverConnection: "Verbindung zum Server wird hergestellt",

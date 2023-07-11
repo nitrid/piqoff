@@ -1000,7 +1000,7 @@ export default class posDoc extends React.PureComponent
                             await dialog(tmpConfObj);
                             resolve()
                         }
-                        else if(tmpResult > 100)
+                        else if(tmpResult >= 100)
                         {
                             let tmpConfObj =
                             {
@@ -3125,7 +3125,7 @@ export default class posDoc extends React.PureComponent
                                                     return
                                                 }
 
-                                                if(tmpResult > 100)
+                                                if(tmpResult >= 100)
                                                 {
                                                     let tmpConfObj =
                                                     {
@@ -7132,6 +7132,23 @@ export default class posDoc extends React.PureComponent
                                                         id:'msgZeroValidation',showTitle:true,title:this.lang.t("msgZeroValidation.title"),showCloseButton:true,width:'500px',height:'200px',
                                                         button:[{id:"btn01",caption:this.lang.t("msgZeroValidation.btn01"),location:'after'}],
                                                         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgZeroValidation.msg")}</div>)
+                                                    }
+                                                    await dialog(tmpConfObj);
+                                                    return
+                                                }
+                                                
+                                                if(tmpResult >= 100)
+                                                {
+                                                    let tmpConfObj =
+                                                    {
+                                                        id:'msgMaxQuantity',
+                                                        showTitle:true,
+                                                        title:this.lang.t("msgMaxQuantity.title"),
+                                                        showCloseButton:true,
+                                                        width:'500px',
+                                                        height:'200px',
+                                                        button:[{id:"btn01",caption:this.lang.t("msgMaxQuantity.btn01"),location:'after'}],
+                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgMaxQuantity.msg")}</div>)
                                                     }
                                                     await dialog(tmpConfObj);
                                                     return
