@@ -51,9 +51,9 @@ export const langFr =
     },
     msgMaxQuantity :
     {
-        title : "Uyarı",  // BAK
-        msg : "Miktar 99.999'dan büyük giremezsiniz !",  // BAK
-        btn01 : "Tamam",  // BAK
+        title : "Attention",  // BAK
+        msg : "Vous ne pouvez entrer une quantité supérieure à 99.999 !",  // BAK
+        btn01 : "OK",  // BAK
     },
     msgPriceNotFound : 
     {

@@ -1987,13 +1987,23 @@ export default class posDoc extends React.PureComponent
     {
         if(this.posObj.posSale.dt().length > 1)
         {
+            let tmpData = this.grdList.devGrid.getSelectedRowKeys()[0]
+
             if(this.grdList.devGrid.getSelectedRowKeys().length > 0)
-            {
+            {                
                 this.grdList.devGrid.deleteRow(this.grdList.devGrid.getRowIndexByKey(this.grdList.devGrid.getSelectedRowKeys()[0]))
             }
             await this.posObj.posSale.dt().delete()
             this.promoApply()
             await this.calcGrandTotal()
+
+            this.posLcd.print
+            ({
+                blink : 0,
+                text :  tmpData.ITEM_NAME.toString().space(9) + "-" +  (parseFloat(Number(tmpData.TOTAL)).toFixed(2) + "EUR").space(10,"s") +
+                        (parseFloat(Number(this.posObj.dt()[0].TOTAL)).toFixed(2) + "EUR").space(20,"s")
+                        
+            })
         }
         else
         {
@@ -3164,8 +3174,8 @@ export default class posDoc extends React.PureComponent
                                     }}
                                     alignment={"center"} cssClass={"cell-fontsize"}/>                                    
                                     <Column dataField="ITEM_SNAME" caption={this.lang.t("grdList.ITEM_NAME")} width={220} cssClass={"cell-fontsize"}/>
-                                    <Column dataField="QUANTITY" caption={this.lang.t("grdList.QUANTITY")} width={80} cellRender={(e)=>{return (e.data.SCALE_MANUEL == true ? "M-" : "") + e.value.toFixed(3) + e.data.UNIT_SHORT}} format={"#,##0.000" } cssClass={"cell-fontsize"}/>
-                                    <Column dataField="PRICE" caption={this.lang.t("grdList.PRICE")} width={80} cellRender={(e)=>{return e.value + Number.money.sign + '/' + e.data.UNIT_SHORT}} cssClass={"cell-fontsize"}/>
+                                    <Column dataField="QUANTITY" caption={this.lang.t("grdList.QUANTITY")} width={80} cellRender={(e)=>{return (e.data.SCALE_MANUEL == true ? "M-" : "") + (e.data.UNIT_SHORT == 'kg' ? e.value.toFixed(3) : e.value) + e.data.UNIT_SHORT}} format={"#,##0.000" } cssClass={"cell-fontsize"}/>
+                                    <Column dataField="PRICE" caption={this.lang.t("grdList.PRICE")} width={80} cellRender={(e)=>{return e.value.toFixed(2) + Number.money.sign + '/' + e.data.UNIT_SHORT}} cssClass={"cell-fontsize"}/>
                                     <Column dataField="AMOUNT" alignment={"right"} caption={this.lang.t("grdList.AMOUNT")} width={60} format={"#,##0.00" + Number.money.sign} cssClass={"cell-fontsize"}/>                                                
                                 </NdGrid>
                             </div>
