@@ -869,7 +869,7 @@ export default class posDoc extends React.PureComponent
                 else
                 {   
                     //EĞER OKUTULAN BARKODUN FİYAT SIFIR İSE KULLANICIYA FİYAT 
-                    let tmpResult = await this.popNumber.show('Fiyat',0)
+                    let tmpResult = await this.popNumber.show(this.lang.t("price"),0)
                     if(typeof tmpResult != 'undefined' && tmpResult != '')
                     {
                         //FIYAT DURUM KONTROLÜ
@@ -981,7 +981,7 @@ export default class posDoc extends React.PureComponent
             {
                 if(e == 'btn01')
                 {
-                    let tmpResult = await this.popNumber.show('Miktar',0)
+                    let tmpResult = await this.popNumber.show(this.lang.t("qunatity"),0)
                     if(typeof tmpResult != 'undefined' && tmpResult != '')
                     {
                         if(tmpResult <= 0)
@@ -996,6 +996,22 @@ export default class posDoc extends React.PureComponent
                                 height:'200px',
                                 button:[{id:"btn01",caption:this.lang.t("msgZeroValidation.btn01"),location:'after'}],
                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgZeroValidation.msg")}</div>)
+                            }
+                            await dialog(tmpConfObj);
+                            resolve()
+                        }
+                        else if(tmpResult >= 100)
+                        {
+                            let tmpConfObj =
+                            {
+                                id:'msgMaxQuantity',
+                                showTitle:true,
+                                title:this.lang.t("msgMaxQuantity.title"),
+                                showCloseButton:true,
+                                width:'500px',
+                                height:'200px',
+                                button:[{id:"btn01",caption:this.lang.t("msgMaxQuantity.btn01"),location:'after'}],
+                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgMaxQuantity.msg")}</div>)
                             }
                             await dialog(tmpConfObj);
                             resolve()
@@ -1971,13 +1987,23 @@ export default class posDoc extends React.PureComponent
     {
         if(this.posObj.posSale.dt().length > 1)
         {
+            let tmpData = this.grdList.devGrid.getSelectedRowKeys()[0]
+
             if(this.grdList.devGrid.getSelectedRowKeys().length > 0)
-            {
+            {                
                 this.grdList.devGrid.deleteRow(this.grdList.devGrid.getRowIndexByKey(this.grdList.devGrid.getSelectedRowKeys()[0]))
             }
             await this.posObj.posSale.dt().delete()
             this.promoApply()
             await this.calcGrandTotal()
+
+            this.posLcd.print
+            ({
+                blink : 0,
+                text :  tmpData.ITEM_NAME.toString().space(9) + "-" +  (parseFloat(Number(tmpData.TOTAL)).toFixed(2) + "EUR").space(10,"s") +
+                        (parseFloat(Number(this.posObj.dt()[0].TOTAL)).toFixed(2) + "EUR").space(20,"s")
+                        
+            })
         }
         else
         {
@@ -3094,7 +3120,7 @@ export default class posDoc extends React.PureComponent
                                     {
                                         if(this.prmObj.filter({ID:'QuantityEdit',TYPE:0}).getValue() == true)
                                         {                                
-                                            let tmpResult = await this.popNumber.show('Miktar',Number(e.value) / Number(e.data.UNIT_FACTOR))
+                                            let tmpResult = await this.popNumber.show(this.lang.t("qunatity"),Number(e.value) / Number(e.data.UNIT_FACTOR))
                                             if(typeof tmpResult != 'undefined' && tmpResult != '')
                                             {
                                                 if(this.prmObj.filter({ID:'QuantityCheckZero',TYPE:0}).getValue() == true && tmpResult == 0)
@@ -3104,6 +3130,23 @@ export default class posDoc extends React.PureComponent
                                                         id:'msgZeroValidation',showTitle:true,title:this.lang.t("msgZeroValidation.title"),showCloseButton:true,width:'500px',height:'200px',
                                                         button:[{id:"btn01",caption:this.lang.t("msgZeroValidation.btn01"),location:'after'}],
                                                         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgZeroValidation.msg")}</div>)
+                                                    }
+                                                    await dialog(tmpConfObj);
+                                                    return
+                                                }
+
+                                                if(tmpResult >= 100)
+                                                {
+                                                    let tmpConfObj =
+                                                    {
+                                                        id:'msgMaxQuantity',
+                                                        showTitle:true,
+                                                        title:this.lang.t("msgMaxQuantity.title"),
+                                                        showCloseButton:true,
+                                                        width:'500px',
+                                                        height:'200px',
+                                                        button:[{id:"btn01",caption:this.lang.t("msgMaxQuantity.btn01"),location:'after'}],
+                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgMaxQuantity.msg")}</div>)
                                                     }
                                                     await dialog(tmpConfObj);
                                                     return
@@ -3130,9 +3173,9 @@ export default class posDoc extends React.PureComponent
                                         cellElement.innerText = this.posObj.posSale.dt().length - cellInfo.rowIndex
                                     }}
                                     alignment={"center"} cssClass={"cell-fontsize"}/>                                    
-                                    <Column dataField="ITEM_SNAME" caption={this.lang.t("grdList.ITEM_NAME")} width={250} cssClass={"cell-fontsize"}/>
-                                    <Column dataField="QUANTITY" caption={this.lang.t("grdList.QUANTITY")} width={80} cellRender={(e)=>{return (e.data.SCALE_MANUEL == true ? "M-" : "") + e.value + e.data.UNIT_SHORT}} cssClass={"cell-fontsize"}/>
-                                    <Column dataField="PRICE" caption={this.lang.t("grdList.PRICE")} width={80} cellRender={(e)=>{return e.value + Number.money.sign + '/' + e.data.UNIT_SHORT}} cssClass={"cell-fontsize"}/>
+                                    <Column dataField="ITEM_SNAME" caption={this.lang.t("grdList.ITEM_NAME")} width={220} cssClass={"cell-fontsize"}/>
+                                    <Column dataField="QUANTITY" caption={this.lang.t("grdList.QUANTITY")} width={80} cellRender={(e)=>{return (e.data.SCALE_MANUEL == true ? "M-" : "") + (e.data.UNIT_SHORT == 'kg' ? e.value.toFixed(3) : e.value) + e.data.UNIT_SHORT}} format={"#,##0.000" } cssClass={"cell-fontsize"}/>
+                                    <Column dataField="PRICE" caption={this.lang.t("grdList.PRICE")} width={80} cellRender={(e)=>{return e.value.toFixed(2) + Number.money.sign + '/' + e.data.UNIT_SHORT}} cssClass={"cell-fontsize"}/>
                                     <Column dataField="AMOUNT" alignment={"right"} caption={this.lang.t("grdList.AMOUNT")} width={60} format={"#,##0.00" + Number.money.sign} cssClass={"cell-fontsize"}/>                                                
                                 </NdGrid>
                             </div>
@@ -5542,7 +5585,7 @@ export default class posDoc extends React.PureComponent
                                             <NbButton id={"btnPopLastSaleTRest"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"50px",width:"100%"}}
                                             onClick={async ()=>
                                             {
-                                                let tmpResult = await this.popNumber.show('Miktar',0)
+                                                let tmpResult = await this.popNumber.show(this.lang.t("qunatity"),0)
                                                 if(typeof tmpResult != 'undefined' && tmpResult != '')
                                                 {
                                                     let tmpLastPos = new datatable();
@@ -6451,7 +6494,7 @@ export default class posDoc extends React.PureComponent
                                 }
                             }
                             
-                            let tmpResult = await this.popNumber.show('Fiyat',this.grdList.devGrid.getSelectedRowKeys()[0].PRICE)                                            
+                            let tmpResult = await this.popNumber.show(this.lang.t("price"),this.grdList.devGrid.getSelectedRowKeys()[0].PRICE)                                            
                             if(typeof tmpResult != 'undefined' && tmpResult != '')
                             {
                                 await this.descSave("PRICE DESC",e,this.grdList.devGrid.getSelectedRowKeys()[0].GUID,this.grdList.devGrid.getSelectedRowKeys()[0].PRICE)                                
@@ -6621,7 +6664,7 @@ export default class posDoc extends React.PureComponent
                     <NdDialog id={"msgWeighing"} container={"#root"} parent={this}
                     position={{of:'#root'}} 
                     showTitle={true} 
-                    title={"Uyarı"} 
+                    title={this.lang.t("msgWeighing.title")} 
                     showCloseButton={false}
                     width={"500px"}
                     height={"200px"}
@@ -7088,7 +7131,7 @@ export default class posDoc extends React.PureComponent
                                     {
                                         if(this.prmObj.filter({ID:'QuantityEdit',TYPE:0}).getValue() == true)
                                         {                                            
-                                            let tmpResult = await this.popNumber.show('Miktar',Number(e.value) / Number(e.key.UNIT_FACTOR))
+                                            let tmpResult = await this.popNumber.show(this.lang.t("qunatity"),Number(e.value) / Number(e.key.UNIT_FACTOR))
                                                                                         
                                             if(typeof tmpResult != 'undefined' && tmpResult != '')
                                             {
@@ -7099,6 +7142,23 @@ export default class posDoc extends React.PureComponent
                                                         id:'msgZeroValidation',showTitle:true,title:this.lang.t("msgZeroValidation.title"),showCloseButton:true,width:'500px',height:'200px',
                                                         button:[{id:"btn01",caption:this.lang.t("msgZeroValidation.btn01"),location:'after'}],
                                                         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgZeroValidation.msg")}</div>)
+                                                    }
+                                                    await dialog(tmpConfObj);
+                                                    return
+                                                }
+                                                
+                                                if(tmpResult >= 100)
+                                                {
+                                                    let tmpConfObj =
+                                                    {
+                                                        id:'msgMaxQuantity',
+                                                        showTitle:true,
+                                                        title:this.lang.t("msgMaxQuantity.title"),
+                                                        showCloseButton:true,
+                                                        width:'500px',
+                                                        height:'200px',
+                                                        button:[{id:"btn01",caption:this.lang.t("msgMaxQuantity.btn01"),location:'after'}],
+                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgMaxQuantity.msg")}</div>)
                                                     }
                                                     await dialog(tmpConfObj);
                                                     return

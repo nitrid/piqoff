@@ -484,9 +484,15 @@ export default class Sale extends React.PureComponent
                             value= ""
                             searchEnabled={true}
                             showClearButton={true}
-                            onValueChanged={(async()=>
+                            onValueChanged={(async(e)=>
                             {
-                                this.getItems()
+                                console.log(e.value)
+                                console.log(e.previousValue)
+                                if((e.value != '' && typeof e.previousValue != 'null') || (e.previousValue != '' && typeof e.value != 'null'))
+                                {
+                                    console.log(123)
+                                    this.getItems()
+                                }
                             }).bind(this)}
                             data={{source:{select:{query : "SELECT CODE,NAME,GUID FROM ITEM_GROUP ORDER BY NAME ASC"},sql:this.core.sql}}}
                             />

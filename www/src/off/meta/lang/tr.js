@@ -12473,6 +12473,7 @@ export const langTr =
             title: "Birim Seçimi",
             btn01: "Onayla",
         },
+        txtTotalHt : "Total Ht",
         validRef :"Seri Boş Geçilemez",
         validRefNo : "Sıra Boş Geçilemez",
         validDepot : "Depo Seçmelisiniz",
@@ -16149,7 +16150,7 @@ export const langTr =
             clmOutputCode : "Teadrikçi Kodu",
             clmOutputName : "Tedarikçi Adı",
             clmQuantity : "Miktar",   
-            clmCode: "Kodu",   
+            clmCode: "Ürün Kodu",   
             clmName : "Adı",              
             clmAmount : "Vergi Tutarı",   
             clmLitre : "Birim Litre"
