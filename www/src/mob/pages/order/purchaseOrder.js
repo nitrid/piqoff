@@ -9,6 +9,8 @@ import NdTextBox from '../../../core/react/devex/textbox';
 import NdSelectBox from '../../../core/react/devex/selectbox';
 import NdDatePicker from '../../../core/react/devex/datepicker';
 import NdPopGrid from '../../../core/react/devex/popgrid';
+import NdNumberBox from '../../../core/react/devex/numberbox';
+import NdPopUp from '../../../core/react/devex/popup';
 import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export,ColumnChooser,StateStoring} from '../../../core/react/devex/grid';
 import NdDialog, { dialog } from '../../../core/react/devex/dialog.js';
 import NbLabel from '../../../core/react/bootstrap/label';
@@ -42,7 +44,7 @@ export default class purchaseOrder extends React.PureComponent
         }
         this.priceDt.selectCmd = 
         {
-            query : "SELECT dbo.FN_PRICE_SALE_VAT_EXT(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,'') AS PRICE",
+            query : "SELECT dbo.FN_CUSTOMER_PRICE(@GUID,@CUSTOMER,@QUANTITY,GETDATE()) AS PRICE",
             param : ['GUID:string|50','QUANTITY:float','CUSTOMER:string|50'],
         }
 
@@ -96,7 +98,7 @@ export default class purchaseOrder extends React.PureComponent
         this.priceDt.clear();
         this.orderDt.clear();
 
-        this.orderDt.push({UNIT:"",FACTOR:0,QUANTITY:0,PRICE:0,AMOUNT:0,DISCOUNT:0,VAT:0,SUM_AMOUNT:0})
+        this.orderDt.push({UNIT:"",FACTOR:0,QUANTITY:0,PRICE:0,AMOUNT:0,DISCOUNT:0,DISCOUNT_RATE:0,VAT:0,SUM_AMOUNT:0})
 
         this.lblItemName.value = ""
         this.lblDepotQuantity.value = 0
@@ -133,7 +135,7 @@ export default class purchaseOrder extends React.PureComponent
                 {
                     this.cmbUnit.value = this.unitDt.where({TYPE:0})[0].GUID
                     this.txtFactor.value = this.unitDt.where({TYPE:0})[0].FACTOR
-                    this.txtFactor.props.onChange()
+                    this.txtFactor.props.onValueChanged()
                 }
 
                 this.txtBarcode.value = ""
@@ -167,14 +169,18 @@ export default class purchaseOrder extends React.PureComponent
     {
         if(this.txtFactor.value != 0 || this.txtQuantity.value != 0 || this.txtPrice.value != 0)
         {
+            console.log(this.txtDiscount.value)
             let tmpQuantity = this.txtFactor.value * this.txtQuantity.value;
-            this.txtPrice.value = Number((await this.getPrice(this.itemDt[0].GUID,tmpQuantity,this.docObj.dt()[0].OUTPUT))).round(2)
+            if((arguments.length > 0 && arguments[0]) || arguments.length == 0)
+            {
+                this.txtPrice.value = Number((await this.getPrice(this.itemDt[0].GUID,tmpQuantity,this.docObj.dt()[0].OUTPUT))).round(2)
+            }
             this.txtAmount.value = Number(this.txtPrice.value * tmpQuantity).round(2)
-            this.txtVat.value = Number(this.txtAmount.value).rateInc(this.itemDt[0].VAT,2)
-            this.txtSumAmount.value =  Number(this.txtAmount.value).rateExc(this.itemDt[0].VAT,2)
+            this.txtVat.value = Number(this.txtAmount.value - this.txtDiscount.value).rateInc(this.itemDt[0].VAT,2)
+            this.txtSumAmount.value = Number(this.txtAmount.value - this.txtDiscount.value).rateExc(this.itemDt[0].VAT,2)
         }
     }
-    async addItem(pQuantity)
+    async addItem()
     {
         if(this.itemDt.length == 0)
         {
@@ -189,35 +195,54 @@ export default class purchaseOrder extends React.PureComponent
             return
         }
 
-        // for (let i = 0; i < this.docObj.docOrders.dt().length; i++) 
-        // {
-        //     if(this.docObj.docOrders.dt()[i].ITEM_CODE == this.barcode.code)
-        //     {
-        //         document.getElementById("Sound2").play(); 
-        //         let tmpConfObj = 
-        //         {
-        //             id:'msgCombineItem',showTitle:true,title:this.t("msgCombineItem.title"),showCloseButton:true,width:'350px',height:'200px',
-        //             button:[{id:"btn01",caption:this.t("msgCombineItem.btn01"),location:'before'},{id:"btn02",caption:this.t("msgCombineItem.btn02"),location:'after'}],
-        //             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCombineItem.msg")}</div>)
-        //         }
-        //         let pResult = await dialog(tmpConfObj);
-        //         if(pResult == 'btn01')
-        //         {                   
-        //             this.docObj.docOrders.dt()[i].QUANTITY = this.docObj.docOrders.dt()[i].QUANTITY + pQuantity
-        //             this.docObj.docOrders.dt()[i].VAT = parseFloat((this.docObj.docOrders.dt()[i].VAT + (this.docObj.docOrders.dt()[i].PRICE * (this.docObj.docOrders.dt()[i].VAT_RATE / 100)) * pQuantity).toFixed(3))
-        //             this.docObj.docOrders.dt()[i].AMOUNT = parseFloat((this.docObj.docOrders.dt()[i].QUANTITY * this.docObj.docOrders.dt()[i].PRICE).toFixed(3))
-        //             this.docObj.docOrders.dt()[i].TOTAL = parseFloat((((this.docObj.docOrders.dt()[i].QUANTITY * this.docObj.docOrders.dt()[i].PRICE) - this.docObj.docOrders.dt()[i].DISCOUNT) + this.docObj.docOrders.dt()[i].VAT).toFixed(3))
-        //             this._calculateTotal()
-        //             this.barcodeReset()
-        //             return
-        //         }
-        //         else
-        //         {
-        //             break
-        //         }
-                
-        //     }
-        // }
+        let prmRowMerge = this.param.filter({TYPE:1,USERS:this.user.CODE,ID:'rowMerge'}).getValue().value
+
+        if(prmRowMerge > 0)
+        {     
+            let tmpFnMergeRow = async (i) =>
+            {
+                let tmpQuantity = this.orderDt[0].QUANTITY * this.orderDt[0].FACTOR
+                this.docObj.docOrders.dt()[i].QUANTITY = this.docObj.docOrders.dt()[i].QUANTITY + tmpQuantity
+                this.docObj.docOrders.dt()[i].VAT = parseFloat((this.docObj.docOrders.dt()[i].VAT + (this.docObj.docOrders.dt()[i].PRICE * (this.docObj.docOrders.dt()[i].VAT_RATE / 100)) * tmpQuantity).toFixed(3))
+                this.docObj.docOrders.dt()[i].AMOUNT = parseFloat((this.docObj.docOrders.dt()[i].QUANTITY * this.docObj.docOrders.dt()[i].PRICE).toFixed(3))
+                this.docObj.docOrders.dt()[i].TOTAL = parseFloat((((this.docObj.docOrders.dt()[i].QUANTITY * this.docObj.docOrders.dt()[i].PRICE) - this.docObj.docOrders.dt()[i].DISCOUNT) + this.docObj.docOrders.dt()[i].VAT).toFixed(3))
+                this.clearEntry()
+                await this.save()
+            }       
+
+            for (let i = 0; i < this.docObj.docOrders.dt().length; i++) 
+            {
+                if(this.docObj.docOrders.dt()[i].ITEM_CODE == this.itemDt[0].CODE)
+                {
+                    if(prmRowMerge == 2)
+                    {
+                        document.getElementById("Sound2").play(); 
+                        let tmpConfObj = 
+                        {
+                            id:'msgCombineItem',showTitle:true,title:this.lang.t("msgCombineItem.title"),showCloseButton:true,width:'350px',height:'200px',
+                            button:[{id:"btn01",caption:this.lang.t("msgCombineItem.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgCombineItem.btn02"),location:'after'}],
+                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgCombineItem.msg")}</div>)
+                        }
+                        let pResult = await dialog(tmpConfObj);
+                        if(pResult == 'btn01')
+                        {                   
+                            tmpFnMergeRow(i)
+                            return
+                        }
+                        else
+                        {
+                            break
+                        }
+                    }
+                    else
+                    {
+                        tmpFnMergeRow(i)
+                        return
+                    }
+                }
+            }
+        }
+        
         let tmpDocItems = {...this.docObj.docOrders.empty}
 
         tmpDocItems.REF = this.docObj.dt()[0].REF
@@ -231,6 +256,9 @@ export default class purchaseOrder extends React.PureComponent
         tmpDocItems.LINE_NO = this.docObj.docOrders.dt().length
         tmpDocItems.UNIT = this.orderDt[0].UNIT
         tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+        tmpDocItems.DISCOUNT = this.orderDt[0].DISCOUNT
+        tmpDocItems.DISCOUNT_1 = this.orderDt[0].DISCOUNT
+        tmpDocItems.DISCOUNT_RATE = this.orderDt[0].DISCOUNT_RATE
         tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
         tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
         tmpDocItems.QUANTITY = this.orderDt[0].QUANTITY * this.orderDt[0].FACTOR
@@ -238,46 +266,73 @@ export default class purchaseOrder extends React.PureComponent
         tmpDocItems.PRICE = this.orderDt[0].PRICE
         tmpDocItems.VAT = this.orderDt[0].VAT
         tmpDocItems.AMOUNT = this.orderDt[0].AMOUNT
+        tmpDocItems.TOTALHT = Number(this.orderDt[0].AMOUNT - this.orderDt[0].DISCOUNT).round(2)
         tmpDocItems.TOTAL = this.orderDt[0].SUM_AMOUNT
 
+        console.log(tmpDocItems)
         this.docObj.docOrders.addEmpty(tmpDocItems)
         this.clearEntry()
 
-        this.save()
+        await this.save()
     }
     async save()
     {
-        this.docObj.dt()[0].AMOUNT = this.docObj.docOrders.dt().sum("AMOUNT",2)
-        this.docObj.dt()[0].DISCOUNT = this.docObj.docOrders.dt().sum("DISCOUNT",2)
-        this.docObj.dt()[0].VAT = this.docObj.docOrders.dt().sum("VAT",2)
-        this.docObj.dt()[0].TOTAL = this.docObj.docOrders.dt().sum("TOTAL",2)
-        await this.docObj.save()
+        return new Promise(async resolve => 
+        {
+            if(this.docObj.dt().length > 0)
+            {
+                let tmpVat = 0
+                for (let i = 0; i < this.docObj.docOrders.dt().groupBy('VAT_RATE').length; i++) 
+                {
+                    tmpVat = tmpVat + parseFloat(this.docObj.docOrders.dt().where({'VAT_RATE':this.docObj.docOrders.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("VAT",2))
+                }
+                this.docObj.dt()[0].AMOUNT = this.docObj.docOrders.dt().sum("AMOUNT",2)
+                this.docObj.dt()[0].DISCOUNT = Number(parseFloat(this.docObj.docOrders.dt().sum("AMOUNT",2)) - parseFloat(this.docObj.docOrders.dt().sum("TOTALHT",2))).round(2)
+                this.docObj.dt()[0].DOC_DISCOUNT_1 = this.docObj.docOrders.dt().sum("DOC_DISCOUNT_1",4)
+                this.docObj.dt()[0].DOC_DISCOUNT_2 = this.docObj.docOrders.dt().sum("DOC_DISCOUNT_2",4)
+                this.docObj.dt()[0].DOC_DISCOUNT_3 = this.docObj.docOrders.dt().sum("DOC_DISCOUNT_3",4)
+                this.docObj.dt()[0].DOC_DISCOUNT = Number((parseFloat(this.docObj.docOrders.dt().sum("DOC_DISCOUNT_1",4)) + parseFloat(this.docObj.docOrders.dt().sum("DOC_DISCOUNT_2",4)) + parseFloat(this.docObj.docOrders.dt().sum("DOC_DISCOUNT_3",4)))).round(2)
+                this.docObj.dt()[0].VAT = Number(tmpVat).round(2)
+                this.docObj.dt()[0].SUBTOTAL = parseFloat(this.docObj.docOrders.dt().sum("TOTALHT",2))
+                this.docObj.dt()[0].TOTALHT = parseFloat(parseFloat(this.docObj.docOrders.dt().sum("TOTALHT",2)) - parseFloat(this.docObj.docOrders.dt().sum("DOC_DISCOUNT",2))).round(2)
+                this.docObj.dt()[0].TOTAL = Number((parseFloat(this.docObj.dt()[0].TOTALHT)) + parseFloat(this.docObj.dt()[0].VAT)).round(2)
+            }
+            await this.docObj.save()
+            resolve()
+        })
+    }
+    async deleteAll()
+    {
+        this.docObj.dt('DOC').removeAt(0)
+        await this.docObj.dt('DOC').delete();
+        this.init()
+        this.pageView.activePage('Main')
     }
     async onClickBarcodeShortcut()
     {
-        // if(this.docObj.dt()[0].INPUT == '')
-        // {
-        //     this.alertContent.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAlert.msgDepot")}</div>)
-        //     await dialog(this.alertContent);
-        //     return
-        // }
-        // if(this.docObj.dt()[0].OUTPUT == '')
-        // {
-        //     this.alertContent.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAlert.msgCustomer")}</div>)
-        //     await dialog(this.alertContent);
-        //     return
-        // }
+        if(this.docObj.dt()[0].INPUT == '')
+        {
+            this.alertContent.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAlert.msgDepot")}</div>)
+            await dialog(this.alertContent);
+            return
+        }
+        if(this.docObj.dt()[0].OUTPUT == '')
+        {
+            this.alertContent.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAlert.msgCustomer")}</div>)
+            await dialog(this.alertContent);
+            return
+        }
 
         this.pageView.activePage('Entry')
     }
     async onClickProcessShortcut()
     {
-        // if(this.docObj.dt("DOC_ORDERS").length == 0)
-        // {
-        //     this.alertContent.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAlert.msgProcess")}</div>)
-        //     await dialog(this.alertContent);
-        //     return
-        // }
+        if(this.docObj.dt("DOC_ORDERS").length == 0)
+        {
+            this.alertContent.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAlert.msgProcess")}</div>)
+            await dialog(this.alertContent);
+            return
+        }
 
         this.pageView.activePage('Process')
     }
@@ -305,7 +360,10 @@ export default class purchaseOrder extends React.PureComponent
                                     text : "Evrak Sil",
                                     onClick : ()=>
                                     {
-                                        
+                                        if(this.docObj.dt().length > 0)
+                                        {
+                                            this.deleteAll();
+                                        }
                                     }
                                 }
                             ]
@@ -319,7 +377,7 @@ export default class purchaseOrder extends React.PureComponent
                                     text : "Satır İndirim",
                                     onClick : ()=>
                                     {
-                                        
+                                        this.popDiscount.show()
                                     }
                                 }
                             ],
@@ -355,18 +413,27 @@ export default class purchaseOrder extends React.PureComponent
                                                     <NdTextBox id="txtRef" parent={this} simple={true} readOnly={true} maxLength={32} dt={{data:this.docObj.dt('DOC'),field:"REF"}}
                                                     onChange={(async(e)=>
                                                     {
-                                                        let tmpQuery = 
+                                                        try 
                                                         {
-                                                            query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 0 AND DOC_TYPE = 60 AND REF = @REF ",
-                                                            param : ['REF:string|25'],
-                                                            value : [e]
+                                                            let tmpQuery = 
+                                                            {
+                                                                query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 0 AND DOC_TYPE = 60 AND REF = @REF ",
+                                                                param : ['REF:string|25'],
+                                                                value : [typeof e.component == 'undefined' ? e : this.txtRef.value]
+                                                            }
+
+                                                            let tmpData = await this.core.sql.execute(tmpQuery) 
+
+                                                            if(tmpData.result.recordset.length > 0)
+                                                            {
+                                                                this.txtRefNo.value = tmpData.result.recordset[0].REF_NO
+                                                            }
                                                         }
-                                                        let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                        catch (error) 
+                                                        {
+                                                            console.log("Hata oluştu: ", error);
+                                                        }
                                                         
-                                                        if(tmpData.result.recordset.length > 0)
-                                                        {
-                                                            this.txtRefNo.value = tmpData.result.recordset[0].REF_NO
-                                                        }
                                                     }).bind(this)}
                                                     />
                                                 </div>
@@ -409,7 +476,7 @@ export default class purchaseOrder extends React.PureComponent
                                                     showBorders={true}
                                                     width={'100%'}
                                                     height={'100%'}
-                                                    title={this.t("popDoc.title")} 
+                                                    title={this.lang.t("popDoc.title")} 
                                                     data = 
                                                     {{
                                                         source:
@@ -422,11 +489,11 @@ export default class purchaseOrder extends React.PureComponent
                                                         }
                                                     }}
                                                     >
-                                                        <Column dataField="REF" caption={this.t("popDoc.clmRef")} width={120} />
-                                                        <Column dataField="REF_NO" caption={this.t("popDoc.clmRefNo")} width={100}  />
-                                                        <Column dataField="DOC_DATE_CONVERT" caption={this.t("popDoc.clmDate")} width={100}  />
-                                                        <Column dataField="OUTPUT_NAME" caption={this.t("popDoc.clmOutputName")} width={200}  />
-                                                        <Column dataField="OUTPUT_CODE" caption={this.t("popDoc.clmOutputCode")} width={150}  />
+                                                        <Column dataField="REF" caption={this.lang.t("popDoc.clmRef")} width={120} />
+                                                        <Column dataField="REF_NO" caption={this.lang.t("popDoc.clmRefNo")} width={100}  />
+                                                        <Column dataField="DOC_DATE_CONVERT" caption={this.lang.t("popDoc.clmDate")} width={100}  />
+                                                        <Column dataField="OUTPUT_NAME" caption={this.lang.t("popDoc.clmOutputName")} width={200}  />
+                                                        <Column dataField="OUTPUT_CODE" caption={this.lang.t("popDoc.clmOutputCode")} width={150}  />
                                                     </NdPopGrid>
                                                 </div>
                                             </div>
@@ -464,7 +531,7 @@ export default class purchaseOrder extends React.PureComponent
                                                                     if(this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()?.value ==  true)
                                                                     {
                                                                         this.txtRef.value = data[0].CODE;
-                                                                        this.txtRef.props.onChange()
+                                                                        this.txtRef.props.onChange(data[0].CODE)
                                                                     }
                                                                     if(this.cmbDepot.value != '' && this.docLocked == false)
                                                                     {
@@ -485,7 +552,7 @@ export default class purchaseOrder extends React.PureComponent
                                             showBorders={true}
                                             width={'100%'}
                                             height={'100%'}
-                                            title={this.t("popCustomer.title")} 
+                                            title={this.lang.t("popCustomer.title")} 
                                             search={true}
                                             data = 
                                             {{
@@ -500,10 +567,10 @@ export default class purchaseOrder extends React.PureComponent
                                                 }
                                             }}
                                             >
-                                                <Column dataField="CODE" caption={this.t("popCustomer.clmCode")} width={150} />
-                                                <Column dataField="TITLE" caption={this.t("popCustomer.clmTitle")} width={500} defaultSortOrder="asc" />
-                                                <Column dataField="TYPE_NAME" caption={this.t("popCustomer.clmTypeName")} width={100} />
-                                                <Column dataField="GENUS_NAME" caption={this.t("popCustomer.clmGenusName")} width={100} />
+                                                <Column dataField="CODE" caption={this.lang.t("popCustomer.clmCode")} width={150} />
+                                                <Column dataField="TITLE" caption={this.lang.t("popCustomer.clmTitle")} width={500} defaultSortOrder="asc" />
+                                                <Column dataField="TYPE_NAME" caption={this.lang.t("popCustomer.clmTypeName")} width={100} />
+                                                <Column dataField="GENUS_NAME" caption={this.lang.t("popCustomer.clmGenusName")} width={100} />
                                             </NdPopGrid>
                                         </div>
                                     </div>
@@ -578,7 +645,14 @@ export default class purchaseOrder extends React.PureComponent
                                                         icon:'more',
                                                         onClick:async()=>
                                                         {
-                                                            this.popDoc.show()
+                                                            this.popItem.show()
+                                                            this.popItem.onClick = (data) =>
+                                                            {
+                                                                if(data.length > 0)
+                                                                {
+                                                                    this.getItem(data[0].CODE)
+                                                                }
+                                                            }
                                                         }
                                                     },
                                                     {
@@ -586,12 +660,60 @@ export default class purchaseOrder extends React.PureComponent
                                                         icon:'photo',
                                                         onClick:()=>
                                                         {
-
+                                                            if(typeof cordova == "undefined")
+                                                            {
+                                                                return;
+                                                            }
+                                                            cordova.plugins.barcodeScanner.scan(
+                                                                async function (result) 
+                                                                {
+                                                                    if(result.cancelled == false)
+                                                                    {
+                                                                        this.txtBarcode.value = result.text;
+                                                                        this.getItem(result.text)
+                                                                    }
+                                                                }.bind(this),
+                                                                function (error) 
+                                                                {
+                                                                    
+                                                                },
+                                                                {
+                                                                  prompt : "Scan",
+                                                                  orientation : "portrait"
+                                                                }
+                                                            );
                                                         }
                                                     }
                                                 ]
                                             }>
                                             </NdTextBox>
+                                            {/*STOK SEÇİM */}
+                                            <NdPopGrid id={"popItem"} parent={this} container={"#root"}
+                                            selection={{mode:"single"}}
+                                            visible={false}
+                                            position={{of:'#root'}} 
+                                            showTitle={true} 
+                                            showBorders={true}
+                                            width={'100%'}
+                                            height={'100%'}
+                                            search={true}
+                                            title={this.lang.t("popItem.title")} 
+                                            data = 
+                                            {{
+                                                source:
+                                                {
+                                                    select:
+                                                    {
+                                                        query : "SELECT CODE,NAME FROM ITEMS_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL))",
+                                                        param : ['VAL:string|50']
+                                                    },
+                                                    sql:this.core.sql
+                                                }
+                                            }}
+                                            >
+                                                <Column dataField="CODE" caption={this.lang.t("popItem.clmCode")} width={120} />
+                                                <Column dataField="NAME" caption={this.lang.t("popItem.clmName")} width={100} />
+                                            </NdPopGrid>
                                         </div>
                                     </div>
                                     <div className='row pb-2'>
@@ -624,7 +746,7 @@ export default class purchaseOrder extends React.PureComponent
                                                     if(tmpFactor.length > 0)
                                                     {
                                                         this.txtFactor.value = tmpFactor[0].FACTOR
-                                                        this.txtFactor.props.onChange()
+                                                        this.txtFactor.props.onValueChanged()
                                                     }
                                                 }
                                             }}/>
@@ -635,13 +757,15 @@ export default class purchaseOrder extends React.PureComponent
                                             <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.t("lblQuantity")}</label>                                            
                                         </div>
                                         <div className='col-4'>
-                                            <NdTextBox id="txtFactor" parent={this} simple={true} maxLength={32} readOnly={true} onChange={this.calcEntry.bind(this)} dt={{data:this.orderDt,field:"FACTOR"}}/>
+                                            <NdTextBox id="txtFactor" parent={this} simple={true} maxLength={32} readOnly={true} onValueChanged={this.calcEntry.bind(this)} dt={{data:this.orderDt,field:"FACTOR"}}
+                                            onEnterKey={this.addItem.bind(this)}/>
                                         </div>
                                         <div className='col-1 d-flex align-items-center justify-content-center'>
                                             <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>X</label>                                            
                                         </div>
                                         <div className='col-4'>
-                                            <NdTextBox id="txtQuantity" parent={this} simple={true} maxLength={32} onChange={this.calcEntry.bind(this)} dt={{data:this.orderDt,field:"QUANTITY"}}/>
+                                            <NdTextBox id="txtQuantity" parent={this} simple={true} maxLength={32} onValueChanged={this.calcEntry.bind(this)} dt={{data:this.orderDt,field:"QUANTITY"}}
+                                            onEnterKey={this.addItem.bind(this)}/>
                                         </div>
                                     </div>
                                     <div className='row pb-2'>
@@ -649,7 +773,8 @@ export default class purchaseOrder extends React.PureComponent
                                             <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.t("lblPrice")}</label>                                            
                                         </div>
                                         <div className='col-4'>
-                                            <NdTextBox id="txtPrice" parent={this} simple={true} maxLength={32} onChange={this.calcEntry.bind(this)} dt={{data:this.orderDt,field:"PRICE"}}/>
+                                            <NdTextBox id="txtPrice" parent={this} simple={true} maxLength={32} onValueChanged={this.calcEntry.bind(this,false)} dt={{data:this.orderDt,field:"PRICE"}} 
+                                            onEnterKey={this.addItem.bind(this)}/>
                                         </div>
                                     </div>
                                     <div className='row pb-2'>
@@ -687,13 +812,66 @@ export default class purchaseOrder extends React.PureComponent
                                     <div className='row pb-2'>
                                         <div className='col-12'>
                                             <NbButton className="form-group btn btn-primary btn-purple btn-block" style={{height:"100%",width:"100%"}} 
-                                            onClick={this.addItem.bind(this)}>
-                                                Ekle
+                                            onClick={this.addItem.bind(this)}>{this.t("lblAdd")}
                                             </NbButton>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            {/* İNDİRİM POPUP */}
+                            <NdPopUp parent={this} id={"popDiscount"} 
+                            visible={false}                        
+                            showCloseButton={false}
+                            showTitle={true}
+                            title={this.lang.t("popDiscount.title")}
+                            container={"#root"} 
+                            width={"250"}
+                            height={"190"}
+                            position={{of:"#root"}}
+                            >
+                                <div className='row p-1'>
+                                    <div className='col-4 d-flex align-items-center justify-content-end'>
+                                        <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.lang.t("popDiscount.lblPopDisc")}</label>                                            
+                                    </div>
+                                    <div className='col-8'>
+                                        <NdTextBox id="txtPopDisc" parent={this} simple={true} maxLength={32} 
+                                        onValueChanged={() =>
+                                        {
+                                            this.txtPopDiscRate.value = Number(this.txtPrice.value * this.txtQuantity.value).rate2Num(this.txtPopDisc.value)
+                                        }} 
+                                        dt={{data:this.orderDt,field:"DISCOUNT"}} 
+                                        onEnterKey={{}}/>
+                                    </div>
+                                </div>
+                                <div className='row p-1'>
+                                    <div className='col-4 d-flex align-items-center justify-content-end'>
+                                        <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.lang.t("popDiscount.lblPopDiscRate")}</label>                                            
+                                    </div>
+                                    <div className='col-8'>
+                                        <NdTextBox id="txtPopDiscRate" parent={this} simple={true} maxLength={32} 
+                                        onValueChanged={() =>
+                                        {
+                                            this.txtPopDisc.value = Number(this.txtPrice.value * this.txtQuantity.value).rateInc(this.txtPopDiscRate.value,4)
+                                        }}
+                                        dt={{data:this.orderDt,field:"DISCOUNT_RATE"}} 
+                                        onEnterKey={{}}/>
+                                    </div>
+                                </div>
+                                <div className="row p-1">
+                                    <div className='col-12'>
+                                        <NbButton className="form-group btn btn-primary btn-purple btn-block" style={{height:"100%",width:"100%"}} 
+                                            onClick={(() =>
+                                            {
+                                                
+                                                this.calcEntry(false)
+                                                console.log(this.popDiscount)
+                                                this.popDiscount.hide()
+                                            }).bind(this)
+                                        }>{this.t("lblAdd")}
+                                        </NbButton>
+                                    </div>
+                                </div>
+                            </NdPopUp>
                         </PageContent>
                         <PageContent id={"Process"}>
                             <div className='row px-2'>
@@ -709,6 +887,89 @@ export default class purchaseOrder extends React.PureComponent
                                             height={'350'} 
                                             width={'100%'}
                                             dbApply={false}
+                                            onRowRemoving={async (e)=>
+                                            {
+                                                if(e.key.SHIPMENT_LINE_GUID != '00000000-0000-0000-0000-000000000000')
+                                                {
+                                                    e.cancel = true
+                                                    this.alertContent.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAlert.msgRowNotDelete")}</div>)
+                                                    await dialog(this.alertContent);
+                                                    e.component.cancelEditData()
+                                                }
+                                            }}
+                                            onRowRemoved={async (e)=>
+                                            {
+                                                if(this.docObj.docOrders.dt().length == 0)
+                                                {
+                                                    this.deleteAll()
+                                                }
+                                                else
+                                                {
+                                                    await this.save()
+                                                }
+                                                
+                                            }}
+                                            onRowUpdating={async (e)=>
+                                            {
+                                                if(e.key.SHIPMENT_LINE_GUID != '00000000-0000-0000-0000-000000000000')
+                                                {
+                                                    e.cancel = true
+                                                    this.alertContent.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAlert.msgRowNotUpdate")}</div>)
+                                                    await dialog(this.alertContent);
+                                                    e.component.cancelEditData()
+                                                }
+                                            }}
+                                            onRowUpdated={async(e)=>
+                                            {
+                                                if(typeof e.data.QUANTITY != 'undefined')
+                                                {
+                                                    e.key.SUB_QUANTITY =  e.data.QUANTITY * e.key.SUB_FACTOR
+                                                    e.key.PRICE = Number((await this.getPrice(e.key.ITEM,e.data.QUANTITY,this.docObj.dt()[0].OUTPUT))).round(2)
+                                                    await this.save()
+                                                }
+                                                if(typeof e.data.PRICE != 'undefined')
+                                                {
+                                                    e.key.SUB_PRICE = e.data.PRICE / e.key.SUB_FACTOR
+                                                }
+                                                if(typeof e.data.DISCOUNT_RATE != 'undefined')
+                                                {
+                                                    e.key.DISCOUNT = Number(e.key.PRICE * e.key.QUANTITY).rateInc(e.data.DISCOUNT_RATE,4)
+                                                    e.key.DISCOUNT_1 = Number(e.key.PRICE * e.key.QUANTITY).rateInc( e.data.DISCOUNT_RATE,4)
+                                                    e.key.DISCOUNT_2 = 0
+                                                    e.key.DISCOUNT_3 = 0
+                                                }
+                                                if(typeof e.data.DISCOUNT != 'undefined')
+                                                {
+                                                    e.key.DISCOUNT_1 = e.data.DISCOUNT
+                                                    e.key.DISCOUNT_2 = 0
+                                                    e.key.DISCOUNT_3 = 0
+                                                    e.key.DISCOUNT_RATE = Number(e.key.PRICE * e.key.QUANTITY).rate2Num(e.data.DISCOUNT)
+                                                }
+                                                
+                                                if(e.key.DISCOUNT > (e.key.PRICE * e.key.QUANTITY))
+                                                {
+                                                    this.alertContent.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAlert.msgDiscount")}</div>)
+                                                    await dialog(this.alertContent);
+                                                    
+                                                    e.key.DISCOUNT = 0 
+                                                    e.key.DISCOUNT_1 = 0
+                                                    e.key.DISCOUNT_2 = 0
+                                                    e.key.DISCOUNT_3 = 0
+                                                    e.key.DISCOUNT_RATE = 0
+                                                    return
+                                                }
+        
+                                                e.key.VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - (parseFloat(e.key.DISCOUNT) + parseFloat(e.key.DOC_DISCOUNT))) * (e.key.VAT_RATE) / 100))).round(6);
+                                                e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3)).round(2)
+                                                e.key.TOTALHT = Number((parseFloat((e.key.PRICE * e.key.QUANTITY)) - (parseFloat(e.key.DISCOUNT)))).round(2)
+                                                e.key.TOTAL = Number(((e.key.TOTALHT - e.key.DOC_DISCOUNT) + e.key.VAT)).round(2)
+        
+                                                if(e.key.DISCOUNT > 0)
+                                                {
+                                                    e.key.DISCOUNT_RATE = parseFloat((100 - ((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) / (e.key.PRICE * e.key.QUANTITY)) * 100)).toFixed(4))
+                                                }
+                                                await this.save()
+                                            }}
                                             >
                                                 <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
                                                 <Scrolling mode="standart" />
@@ -744,10 +1005,60 @@ export default class purchaseOrder extends React.PureComponent
                                     </div>
                                     <div className='row pb-2'>
                                         <div className='col-8 d-flex align-items-center justify-content-end'>
+                                            <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.t("lblDocDiscount")}</label>                                            
+                                        </div>
+                                        <div className='col-4'>
+                                            <NdTextBox id="txtDocDiscount" parent={this} simple={true} readOnly={true} maxLength={32} dt={{data:this.docObj.dt('DOC'),field:"DOC_DISCOUNT"}}
+                                            button=
+                                            {
+                                                [
+                                                    {
+                                                        id:'01',
+                                                        icon:'more',
+                                                        onClick:()  =>
+                                                        {
+                                                            console.log(this.docObj.dt()[0].SUBTOTAL)
+                                                            console.log(this.docObj.dt()[0].DOC_DISCOUNT_1)
+                                                            console.log( Number(this.docObj.dt()[0].SUBTOTAL).rate2Num(this.docObj.dt()[0].DOC_DISCOUNT_1,5))
+                                                            if(this.docObj.dt()[0].DOC_DISCOUNT > 0 )
+                                                            {
+                                                                this.txtDocDiscountPercent1.value  = Number(this.docObj.dt()[0].SUBTOTAL).rate2Num(this.docObj.dt()[0].DOC_DISCOUNT_1,5)
+                                                                this.txtDocDiscountPrice1.value = this.docObj.dt()[0].DOC_DISCOUNT_1
+                                                                this.txtDocDiscountPercent2.value  = Number(this.docObj.dt()[0].SUBTOTAL-parseFloat(this.docObj.dt()[0].DOC_DISCOUNT_1)).rate2Num(this.docObj.dt()[0].DOC_DISCOUNT_2,5)
+                                                                this.txtDocDiscountPrice2.value = this.docObj.dt()[0].DOC_DISCOUNT_2
+                                                                this.txtDocDiscountPercent3.value  = Number(this.docObj.dt()[0].SUBTOTAL-(parseFloat(this.docObj.dt()[0].DOC_DISCOUNT_1)+parseFloat(this.docObj.dt()[0].DOC_DISCOUNT_2))).rate2Num(this.docObj.dt()[0].DOC_DISCOUNT_3,5)
+                                                                this.txtDocDiscountPrice3.value = this.docObj.dt()[0].DOC_DISCOUNT_3
+                                                            }
+                                                            else
+                                                            {
+                                                                this.txtDocDiscountPercent1.value  = 0
+                                                                this.txtDocDiscountPrice1.value = 0
+                                                                this.txtDocDiscountPercent2.value  = 0
+                                                                this.txtDocDiscountPrice2.value = 0
+                                                                this.txtDocDiscountPercent3.value  = 0
+                                                                this.txtDocDiscountPrice3.value = 0
+                                                            }
+                                                            this.popDocDiscount.show()
+                                                        }
+                                                    }
+                                                ]
+                                            }/>
+                                        </div>
+                                    </div>
+                                    <div className='row pb-2'>
+                                        <div className='col-8 d-flex align-items-center justify-content-end'>
+                                            <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.t("lblTotalHt")}</label>                                            
+                                        </div>
+                                        <div className='col-4'>
+                                            <NdTextBox id="txtTotalHt" parent={this} simple={true} readOnly={true} maxLength={32} dt={{data:this.docObj.dt('DOC'),field:"TOTALHT"}}/>
+                                        </div>
+                                    </div>
+                                    <div className='row pb-2'>
+                                        <div className='col-8 d-flex align-items-center justify-content-end'>
                                             <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.t("lblVat")}</label>                                            
                                         </div>
                                         <div className='col-4'>
-                                            <NdTextBox id="txtCustomerName" parent={this} simple={true} readOnly={true} maxLength={32} dt={{data:this.docObj.dt('DOC'),field:"VAT"}}/>
+                                            <NdTextBox id="txtDocVat" parent={this} simple={true} readOnly={true} maxLength={32} dt={{data:this.docObj.dt('DOC'),field:"VAT"}}/>
                                         </div>
                                     </div>
                                     <div className='row pb-2'>
@@ -755,11 +1066,222 @@ export default class purchaseOrder extends React.PureComponent
                                             <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.t("lblGenAmount")}</label>                                            
                                         </div>
                                         <div className='col-4'>
-                                            <NdTextBox id="txtCustomerName" parent={this} simple={true} readOnly={true} maxLength={32} dt={{data:this.docObj.dt('DOC'),field:"TOTAL"}}/>
+                                            <NdTextBox id="txtTotal" parent={this} simple={true} readOnly={true} maxLength={32} dt={{data:this.docObj.dt('DOC'),field:"TOTAL"}}/>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            {/*Evrak İndirim PopUp */}
+                            <NdPopUp parent={this} id={"popDocDiscount"} 
+                            visible={false}                        
+                            showCloseButton={false}
+                            showTitle={true}
+                            title={this.lang.t("popDocDiscount.title")}
+                            container={"#root"} 
+                            width={"300"}
+                            height={"400"}
+                            position={{of:"#root"}}
+                            >
+                                <div className='row p-1'>
+                                    <div className='col-4 offset-2 d-flex align-items-center justify-content-end'>
+                                        <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.lang.t("popDocDiscount.Percent1")}</label>                                            
+                                    </div>
+                                    <div className='col-6'>
+                                        <NdTextBox id="txtDocDiscountPercent1" parent={this} simple={true} maxLength={32} 
+                                        onValueChanged={(async()=>
+                                        {
+                                            if( this.txtDocDiscountPercent1.value > 100)
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgDiscountPercent',showTitle:true,title:this.t("msgDiscountPercent.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgDiscountPercent.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPercent.msg")}</div>)
+                                                }
+                                    
+                                                await dialog(tmpConfObj);
+                                                this.txtDocDiscountPercent1.value = 0;
+                                                this.txtDocDiscountPrice1.value = 0;
+                                                return
+                                            }
+
+                                            this.txtDocDiscountPrice1.value =  Number(this.docObj.dt()[0].SUBTOTAL).rateInc(this.txtDocDiscountPercent1.value,2)
+                                        }).bind(this)}
+                                        onEnterKey={{}}/>
+                                    </div>
+                                </div>
+                                <div className='row p-1'>
+                                    <div className='col-4 offset-2 d-flex align-items-center justify-content-end'>
+                                        <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.lang.t("popDocDiscount.Price1")}</label>                                            
+                                    </div>
+                                    <div className='col-6'>
+                                        <NdTextBox id="txtDocDiscountPrice1" parent={this} simple={true} maxLength={32} 
+                                        onValueChanged={(async()=>
+                                        {
+                                            if( this.txtDocDiscountPrice1.value > this.docObj.dt()[0].SUBTOTAL)
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgDiscountPrice',showTitle:true,title:this.t("msgDiscountPrice.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgDiscountPrice.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPrice.msg")}</div>)
+                                                }
+                                    
+                                                await dialog(tmpConfObj);
+                                                this.txtDocDiscountPercent1.value = 0;
+                                                this.txtDocDiscountPrice1.value = 0;
+                                                return
+                                            }
+                                            
+                                            this.txtDocDiscountPercent1.value = Number(this.docObj.dt()[0].SUBTOTAL).rate2Num(this.txtDocDiscountPrice1.value)
+                                        }).bind(this)}
+                                        onEnterKey={{}}/>
+                                    </div>
+                                </div>
+                                <div className='row p-1'>
+                                    <div className='col-4 offset-2 d-flex align-items-center justify-content-end'>
+                                        <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.lang.t("popDocDiscount.Percent2")}</label>                                            
+                                    </div>
+                                    <div className='col-6'>
+                                        <NdTextBox id="txtDocDiscountPercent2" parent={this} simple={true} maxLength={32} 
+                                        onValueChanged={(async()=>
+                                        {
+                                            if(this.txtDocDiscountPercent2.value > 100)
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgDiscountPercent',showTitle:true,title:this.t("msgDiscountPercent.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgDiscountPercent.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPercent.msg")}</div>)
+                                                }
+                                    
+                                                await dialog(tmpConfObj);
+                                                this.txtDocDiscountPercent2.value = 0;
+                                                this.txtDocDiscountPrice2.value = 0;
+                                                return
+                                            }
+
+                                            this.txtDocDiscountPrice2.value =  Number(this.docObj.dt()[0].SUBTOTAL).rateInc(this.txtDocDiscountPercent2.value,2)
+                                        }).bind(this)}
+                                        onEnterKey={{}}/>
+                                    </div>
+                                </div>
+                                <div className='row p-1'>
+                                    <div className='col-4 offset-2 d-flex align-items-center justify-content-end'>
+                                        <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.lang.t("popDocDiscount.Price2")}</label>                                            
+                                    </div>
+                                    <div className='col-6'>
+                                        <NdTextBox id="txtDocDiscountPrice2" parent={this} simple={true} maxLength={32} 
+                                        onValueChanged={(async()=>
+                                        {
+                                            if( this.txtDocDiscountPrice2.value > this.docObj.dt()[0].SUBTOTAL)
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgDiscountPrice',showTitle:true,title:this.t("msgDiscountPrice.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgDiscountPrice.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPrice.msg")}</div>)
+                                                }
+                                    
+                                                await dialog(tmpConfObj);
+                                                this.txtDocDiscountPercent2.value = 0;
+                                                this.txtDocDiscountPrice2.value = 0;
+                                                return
+                                            }
+                                            
+                                            this.txtDocDiscountPercent2.value = Number(this.docObj.dt()[0].SUBTOTAL).rate2Num(this.txtDocDiscountPrice2.value)
+                                        }).bind(this)}
+                                        onEnterKey={{}}/>
+                                    </div>
+                                </div>
+                                <div className='row p-1'>
+                                    <div className='col-4 offset-2 d-flex align-items-center justify-content-end'>
+                                        <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.lang.t("popDocDiscount.Percent3")}</label>                                            
+                                    </div>
+                                    <div className='col-6'>
+                                        <NdTextBox id="txtDocDiscountPercent3" parent={this} simple={true} maxLength={32} 
+                                        onValueChanged={(async()=>
+                                        {
+                                            if( this.txtDocDiscountPercent3.value > 100)
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgDiscountPercent',showTitle:true,title:this.t("msgDiscountPercent.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgDiscountPercent.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPercent.msg")}</div>)
+                                                }
+                                    
+                                                await dialog(tmpConfObj);
+                                                this.txtDocDiscountPercent3.value = 0;
+                                                this.txtDocDiscountPrice3.value = 0;
+                                                return
+                                            }
+
+                                            this.txtDocDiscountPrice3.value =  Number(this.docObj.dt()[0].SUBTOTAL).rateInc(this.txtDocDiscountPercent3.value,2)
+                                        }).bind(this)}
+                                        onEnterKey={{}}/>
+                                    </div>
+                                </div>
+                                <div className='row p-1'>
+                                    <div className='col-4 offset-2 d-flex align-items-center justify-content-end'>
+                                        <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.lang.t("popDocDiscount.Price3")}</label>                                            
+                                    </div>
+                                    <div className='col-6'>
+                                        <NdTextBox id="txtDocDiscountPrice3" parent={this} simple={true} maxLength={32} 
+                                        onValueChanged={(async()=>
+                                        {
+                                            if( this.txtDocDiscountPrice3.value > this.docObj.dt()[0].SUBTOTAL)
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgDiscountPrice',showTitle:true,title:this.t("msgDiscountPrice.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgDiscountPrice.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPrice.msg")}</div>)
+                                                }
+                                    
+                                                await dialog(tmpConfObj);
+                                                this.txtDocDiscountPercent3.value = 0;
+                                                this.txtDocDiscountPrice3.value = 0;
+                                                return
+                                            }
+                                            
+                                            this.txtDocDiscountPercent3.value = Number(this.docObj.dt()[0].SUBTOTAL).rate2Num(this.txtDocDiscountPrice3.value)
+                                        }).bind(this)}
+                                        onEnterKey={{}}/>
+                                    </div>
+                                </div>
+                                <div className="row p-1">
+                                    <div className='col-12'>
+                                        <NbButton className="form-group btn btn-primary btn-purple btn-block" style={{height:"100%",width:"100%"}} 
+                                            onClick={(async () =>
+                                            {
+                                                for (let i = 0; i < this.docObj.docOrders.dt().length; i++) 
+                                                {
+                                                    let tmpDocData = this.docObj.docOrders.dt()[i]
+                                                    
+                                                    tmpDocData.DOC_DISCOUNT_1 = Number(tmpDocData.TOTALHT).rateInc(this.txtDocDiscountPercent1.value,4)
+                                                    tmpDocData.DOC_DISCOUNT_2 = Number(((tmpDocData.TOTALHT) - tmpDocData.DOC_DISCOUNT_1)).rateInc(this.txtDocDiscountPercent2.value,4)
+
+                                                    tmpDocData.DOC_DISCOUNT_3 =  Number(((tmpDocData.TOTALHT)-(tmpDocData.DOC_DISCOUNT_1+tmpDocData.DOC_DISCOUNT_2))).rateInc(this.txtDocDiscountPercent3.value,4)
+                                                    
+                                                    tmpDocData.DOC_DISCOUNT = parseFloat((tmpDocData.DOC_DISCOUNT_1 + tmpDocData.DOC_DISCOUNT_2 + tmpDocData.DOC_DISCOUNT_3).toFixed(4))
+                                                    tmpDocData.AMOUNT = parseFloat(((tmpDocData.PRICE * tmpDocData.QUANTITY))).round(2)
+                                                    
+                                                    if(tmpDocData.VAT > 0)
+                                                    {
+                                                        tmpDocData.VAT = parseFloat(((tmpDocData.TOTALHT - tmpDocData.DOC_DISCOUNT) * (tmpDocData.VAT_RATE / 100)).toFixed(6))
+                                                    }
+                                                    tmpDocData.TOTAL = parseFloat(((tmpDocData.TOTALHT - tmpDocData.DOC_DISCOUNT) + tmpDocData.VAT)).round(2)
+                                                    tmpDocData.DISCOUNT_RATE = Number((tmpDocData.PRICE * tmpDocData.QUANTITY)).rate2Num((tmpDocData.DISCOUNT_1 + tmpDocData.DISCOUNT_2 + tmpDocData.DISCOUNT_3),2)
+                                                }
+                                                await this.save()
+                                                this.popDocDiscount.hide()
+                                            }).bind(this)
+                                        }>{this.t("lblAdd")}
+                                        </NbButton>
+                                    </div>
+                                </div>
+                            </NdPopUp> 
                         </PageContent>
                     </PageView>
                 </div>

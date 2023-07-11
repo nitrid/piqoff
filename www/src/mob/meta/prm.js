@@ -166,5 +166,27 @@ export const prm =
             }
         }
     },
+    //rowMerge
+    {
+        TYPE : 1,
+        ID :"rowMerge",
+        VALUE : 
+        {
+            value : 2
+        },
+        SPECIAL : "",
+        PAGE : "sip_02",
+        ELEMENT : "",
+        APP : "MOB",
+        VIEW : 
+        {
+            TYPE : "combobox",
+            PAGE_NAME : "Alış Sipariş",
+            CAPTION : "Satır Birleştir",
+            DISPLAY : "NAME",
+            FIELD : "CODE",
+            DATA : [{CODE:0,NAME:"Birleştir"},{CODE:1,NAME:"Birleştirme"},{CODE:2,NAME:"Kullanıcıya Sor"}]
+        }
+    },
     //#endregion
 ]
