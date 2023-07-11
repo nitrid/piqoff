@@ -486,8 +486,11 @@ export default class Sale extends React.PureComponent
                             showClearButton={true}
                             onValueChanged={(async(e)=>
                             {
-                                if(e.value != '' && e.previousValue != null)
+                                console.log(e.value)
+                                console.log(e.previousValue)
+                                if((e.value != '' && typeof e.previousValue != 'null') || (e.previousValue != '' && typeof e.value != 'null'))
                                 {
+                                    console.log(123)
                                     this.getItems()
                                 }
                             }).bind(this)}

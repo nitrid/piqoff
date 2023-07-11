@@ -35,6 +35,8 @@ export const langFr =
     blnAbtSw : "Version : ",
     blnAbtCertificate : "Numéro de certificat : ",
     pleaseWait : "Veuillez patienter...",
+    qunatity : "Qte.",
+    price : "Prix",
     msgCustomerNotFound : 
     {
         title : "Attention",
@@ -46,6 +48,12 @@ export const langFr =
         title : "Attention",
         msg : "Le montant ne peut être 0 !",
         btn01 : "OK",
+    },
+    msgMaxQuantity :
+    {
+        title : "Uyarı",  // BAK
+        msg : "Miktar 99.999'dan büyük giremezsiniz !",  // BAK
+        btn01 : "Tamam",  // BAK
     },
     msgPriceNotFound : 
     {
@@ -349,7 +357,7 @@ export const langFr =
     {
         title : "Attention",
         msg :" Veuillez attendre une réponse de la balance",
-        btn01 : " Somme entrée",
+        btn01 : "Saisie Manuelle",
         btn02 : "Abandonner",
     },
     msgCardPayment: 
