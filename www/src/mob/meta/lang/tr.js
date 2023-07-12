@@ -17,6 +17,54 @@ export const langTr =
         msg : "Sizin kullanıcı bilgileriniz ile başka bir cihazdan giriş yapıldı",
         btn01 : "Tamam"
     },
+    msgCombineItem:
+    {
+        title: "Dikkat",
+        btn01: "Birleştir",
+        btn02: "Yeni Ekle",
+        msg: "Eklemek İstediğiniz Ürün Evrakta Mevcut ! Satır Birleştirilsin mi ?"
+    },
+    popCustomer : 
+    {
+        title : "Cari Seçim",
+        clmCode :  "Kodu",
+        clmTitle : "Unvan",
+        clmTypeName : "Tipi",
+        clmGenusName : "Cinsi"
+    },
+    popDoc : 
+    {
+        title : "Evrak Seçim",
+        clmRef :  "Ref",
+        clmRefNo : "Ref No",
+        clmDate : "Tarih",
+        clmOutputName : "Cari Adı",
+        clmOutputCode : "Cari Kodu"
+    },
+    popItem : 
+    {
+        title : "Stok Seçim",
+        clmCode : "Kodu",
+        clmName : "Adı",
+    },
+    popDiscount:
+    {
+        title: "Satır İndirim",
+        lblPopDisc : "Tutar",
+        lblPopDiscRate : "Yüzde",
+        btnSave: "Kaydet"
+    },
+    popDocDiscount:
+    {
+        title: "Evrak İndirim",
+        Percent1: "1. Yüzde",
+        Price1: "1. Tutar",
+        Percent2: "2. Yüzde",
+        Price2: "2. Tutar",
+        Percent3: "3. Yüzde",
+        Price3: "3. Tutar",
+        btnSave: "Kaydet"
+    },
     menu:
     {
         dash : "Dashboard",
@@ -63,10 +111,13 @@ export const langTr =
         lblQuantity : "Miktar :",
         lblPrice : "Fiyat :",
         lblAmount : "Tutar :",
-        lblDiscount : "İndirim :",
+        lblDiscount : "Satır İndirim :",
+        lblDocDiscount : "Evrak İndirim :",
+        lblTotalHt: "Ara Toplam :",
         lblVat : "Kdv :",
         lblSumAmount : "Toplam Tutar :",
         lblGenAmount : "Genel Toplam :",
+        lblAdd: "Ekle",
         msgAlert :
         {
             btn01 : "Tamam",
@@ -76,24 +127,10 @@ export const langTr =
             msgProcess : "Henüz girilmiş bir ürün yok !",
             msgBarcodeNotFound : "Barkod bulunamadı !",
             msgBarcodeCheck : "Lütfen barkod okutunuz !",
-            msgQuantityCheck : "Miktar girmeden ürün ekleyemezsiniz !"
-        },
-        popCustomer : 
-        {
-            title : "Cari Seçim",
-            clmCode :  "Kodu",
-            clmTitle : "Unvan",
-            clmTypeName : "Tipi",
-            clmGenusName : "Cinsi"
-        },
-        popDoc : 
-        {
-            title : "Evrak Seçim",
-            clmRef :  "Ref",
-            clmRefNo : "Ref No",
-            clmDate : "Tarih",
-            clmOutputName : "Cari Adı",
-            clmOutputCode : "Cari Kodu"
+            msgQuantityCheck : "Miktar girmeden ürün ekleyemezsiniz !",
+            msgRowNotDelete : "Bu satır fatura yada irsaliyeye çevrilmiştir silme işlemi yapamazsınız !",
+            msgRowNotUpdate : "Bu satır fatura yada irsaliyeden geldiği için miktarı değiştirilemez!",
+            msgDiscount : "İndirim Tutardan Yüksek Olamaz !"
         },
         grdList : 
         {
@@ -105,6 +142,6 @@ export const langTr =
             clmDiscountRate : "İndirim %",
             clmVat : "Kdv",
             clmTotal : "Tutar"
-        }
+        },
     },
 }
