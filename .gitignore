@@ -13,3 +13,4 @@ www/public--
 archiveFiscal/
 plugins/devprint/repx
 plugins/mailer.js
+plugins/devprint
