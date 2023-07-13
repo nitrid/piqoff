@@ -2013,7 +2013,7 @@ export default class posDoc extends React.PureComponent
             ({
                 blink : 0,
                 text :  tmpData.ITEM_NAME.toString().space(9) + "-" +  (parseFloat(Number(tmpData.TOTAL)).toFixed(2) + "EUR").space(10,"s") +
-                        (parseFloat(Number(this.posObj.dt()[0].TOTAL)).toFixed(2) + "EUR").space(20,"s")
+                        ( "TOTAL : " + parseFloat(Number(this.posObj.dt()[0].TOTAL)).toFixed(2) + "EUR").space(20,"s")
                         
             })
         }
@@ -7701,13 +7701,16 @@ export default class posDoc extends React.PureComponent
                     showTitle={true}
                     container={"#root"} 
                     width={'600'}
-                    height={'250'}
+                    height={'260'}
                     title={"Balance " + this.lang.t("about")}
                     position={{my:'bottom',of:'#root'}}
                     >
                         <Form colCount={1} height={'fit-content'}>
                             <Item>
                                 <NbLabel id="blnAbtCompany" parent={this} value={this.lang.t("blnAbtCompany")} textSize={"28px"}/>
+                            </Item>
+                            <Item>
+                                <NbLabel id="abtPiqsoft" parent={this} value={this.lang.t("abtPiqsoft")}/>
                             </Item>
                             <Item>
                                 <NbLabel id="blnAbtType" parent={this} value={this.lang.t("blnAbtType")}/>
@@ -7720,9 +7723,6 @@ export default class posDoc extends React.PureComponent
                             </Item>
                             <Item>
                                 <NbLabel id="blnAbtSha" parent={this} value={"Signature : " + this.core.appInfo.scale.sha}/>
-                            </Item>
-                            <Item>
-                                <NbLabel id="abtPiqsoft" parent={this} value={this.lang.t("abtPiqsoft")}/>
                             </Item>
                         </Form>
                     </NdPopUp>
