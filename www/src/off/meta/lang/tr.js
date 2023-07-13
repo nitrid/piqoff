@@ -9546,6 +9546,8 @@ export const langTr =
             clmBarcode: "Barcodu",
             clmCode: "Kodu",
             clmName: "Adi", 
+            clmStartDate : "Başlangıç",
+            clmFinishDate : "Bitiş",
             clmGrpName: "Grubu", 
             clmPrice : "Fiyat",
             btnItem: "Promosyon Uygulanacak Ürün yada Ürünleri Seç"
