@@ -30,11 +30,14 @@ export const langTr =
     abtNrCertificate : "Sertifika No : B_0527-1",
     abtLicence : "Lisans : XXXXXXXXXXXXXXXXX",
     abtVersion : "Versiyon : ",
+    abtPiqsoft : "Logiciel : Piqsoft-POS",
     blnAbtCompany : "Şirket : Piqsoft SAS",
     blnAbtType : "Tip : Piqsoft - Pos",
     blnAbtSw : "S/W : Scale.js",
     blnAbtCertificate : "Sertifika No : ",
     pleaseWait : "Lütfen Bekleyin...",
+    qunatity : "Miktar",
+    price : "Fiyat",
     msgCustomerNotFound : 
     {
         title : "Dikkat",
@@ -45,6 +48,12 @@ export const langTr =
     {
         title : "Uyarı",
         msg : "Miktar sıfır giremezsiniz !",
+        btn01 : "Tamam",
+    },
+    msgMaxQuantity :
+    {
+        title : "Uyarı",
+        msg : "Miktar 99.999'dan büyük giremezsiniz !",
         btn01 : "Tamam",
     },
     msgPriceNotFound : 

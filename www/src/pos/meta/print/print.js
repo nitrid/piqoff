@@ -243,7 +243,7 @@ export function print()
                     }
                     else
                     {
-                        tmpQt = parseFloat(parseFloat(tmpSaleItem.QUANTITY / tmpSaleItem.UNIT_FACTOR).toFixed(3));
+                        tmpQt = parseFloat(tmpSaleItem.QUANTITY / tmpSaleItem.UNIT_FACTOR).toFixed(3);
                     }
                     
                     if(tmpSaleItem.UNIT_FACTOR > 1)

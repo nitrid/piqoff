@@ -30,11 +30,14 @@ export const langFr =
     abtNrCertificate : "Numéro Certificat : B_0527-1",
     abtLicence : "Licence : XXXXXXXXXXXXXXXXX",
     abtVersion : "Version : ",
+    abtPiqsoft :  "Nom de Tpv : Piqsoft-POS",
     blnAbtCompany : "Société : Piqsoft SAS",
     blnAbtType : " Logiciel à caractère légal  : Scale.js",
     blnAbtSw : "Version : ",
     blnAbtCertificate : "Numéro de certificat : ",
     pleaseWait : "Veuillez patienter...",
+    qunatity : "Qte.",
+    price : "Prix",
     msgCustomerNotFound : 
     {
         title : "Attention",
@@ -46,6 +49,12 @@ export const langFr =
         title : "Attention",
         msg : "Le montant ne peut être 0 !",
         btn01 : "OK",
+    },
+    msgMaxQuantity :
+    {
+        title : "Attention",  // BAK
+        msg : "Vous ne pouvez entrer une quantité supérieure à 99.999 !",  // BAK
+        btn01 : "OK",  // BAK
     },
     msgPriceNotFound : 
     {
@@ -349,7 +358,7 @@ export const langFr =
     {
         title : "Attention",
         msg :" Veuillez attendre une réponse de la balance",
-        btn01 : " Somme entrée",
+        btn01 : "Saisie Manuelle",
         btn02 : "Abandonner",
     },
     msgCardPayment: 

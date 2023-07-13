@@ -150,7 +150,7 @@ export default class Login extends React.PureComponent
                 options : 
                 {
                     width: 80,
-                    items: [{id:"en",text:"EN"},{id:"fr",text:"FR"},{id:"tr",text:"TR"}],
+                    items: [{id:"de",text:"DE"},{id:"en",text:"EN"},{id:"fr",text:"FR"},{id:"tr",text:"TR"}],
                     valueExpr: 'id',
                     displayExpr: 'text',
                     value: localStorage.getItem('lang') == null ? 'en' : localStorage.getItem('lang'),
