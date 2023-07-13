@@ -237,13 +237,13 @@ export function print()
                     let tmpQt = ""            
                     let tmpFactStr = ""
 
-                    if(tmpSaleItem.UNIT_FACTOR != 'kg')
+                    if(Number.isInteger(parseFloat(tmpSaleItem.QUANTITY)))
                     {
                         tmpQt = parseInt(tmpSaleItem.QUANTITY / tmpSaleItem.UNIT_FACTOR);
                     }
                     else
                     {
-                        tmpQt = parseFloat(parseFloat(tmpSaleItem.QUANTITY / tmpSaleItem.UNIT_FACTOR).toFixed(3));
+                        tmpQt = parseFloat(tmpSaleItem.QUANTITY / tmpSaleItem.UNIT_FACTOR).toFixed(3);
                     }
                     
                     if(tmpSaleItem.UNIT_FACTOR > 1)

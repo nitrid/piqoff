@@ -77,7 +77,8 @@ export default class posDoc extends React.PureComponent
         this.posPromoObj = new posPromoCls();
 
         this.loading = React.createRef();
-        this.loadingPay = React.createRef();        
+        this.loadingPay = React.createRef();      
+        this.scaleTimeout  
 
         this.state =
         {
@@ -1112,6 +1113,7 @@ export default class posDoc extends React.PureComponent
     }
     async calcGrandTotal(pSave)
     {
+        clearTimeout(this.scaleTimeout)
         let tmpPayRest = 0;
         let tmpPayChange = 0;
         return new Promise(async resolve => 
@@ -1184,6 +1186,16 @@ export default class posDoc extends React.PureComponent
                                         (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).PRICE) - (Number(this.grdList.devGrid.getKeyByRowIndex(0).DISCOUNT) / Number(this.grdList.devGrid.getKeyByRowIndex(0).QUANTITY))).toFixed(2) + "EUR/kg").space(11,"s") +
                                         this.grdList.devGrid.getKeyByRowIndex(0).ITEM_NAME.toString().space(9) + "=" +  (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).TOTAL)).toFixed(2) + "EUR").space(10,"s")
                             })
+
+                            this.scaleTimeout = setTimeout(() => 
+                            {
+                                this.posLcd.print
+                                ({
+                                    blink : 0,
+                                    text :this.grdList.devGrid.getKeyByRowIndex(0).ITEM_NAME.toString().space(9) + "=" +  (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).TOTAL)).toFixed(2) + "EUR").space(10,"s") + 
+                                            ("TOTAL : " + (parseFloat(tmpPayRest).toFixed(2) + "EUR")).space(20,"s")
+                                })
+                            }, 3000);
                         }
                         else
                         {
@@ -5250,6 +5262,7 @@ export default class posDoc extends React.PureComponent
                                             let tmpData = this.grdDiscList.getSelectedData()[i]
                                             let tmpCalc = this.calcSaleTotal(tmpData.PRICE,tmpData.QUANTITY,tmpDiscount,tmpData.LOYALTY,tmpData.VAT_RATE)
                                             
+                                            this.grdDiscList.getSelectedData()[i].LDATE = moment(new Date()).utcOffset(0, true)
                                             this.grdDiscList.getSelectedData()[i].FAMOUNT = tmpCalc.FAMOUNT
                                             this.grdDiscList.getSelectedData()[i].AMOUNT = tmpCalc.AMOUNT
                                             this.grdDiscList.getSelectedData()[i].DISCOUNT = tmpDiscount
@@ -5874,7 +5887,7 @@ export default class posDoc extends React.PureComponent
                             {/* cmbPopLastSaleUser */} 
                             <div className="col-2">
                                 <NdSelectBox simple={true} parent={this} id="cmbPopLastSaleUser" displayExpr={'NAME'} valueExpr={'CODE'}
-                                data={{source:{select:{query : "SELECT '' AS CODE,'ALL' AS NAME UNION ALL SELECT CODE,NAME FROM USERS",local:{type : "select",query:"SELECT '' AS CODE,'ALL' AS NAME UNION ALL SELECT CODE,NAME FROM USERS;"}},sql:this.core.sql}}}/>
+                                data={{source:{select:{query : "SELECT '' AS CODE,'ALL' AS NAME UNION ALL SELECT CODE,NAME FROM USERS WHERE STATUS = 1",local:{type : "select",query:"SELECT '' AS CODE,'ALL' AS NAME UNION ALL SELECT CODE,NAME FROM USERS;"}},sql:this.core.sql}}}/>
                             </div>
                             {/* txtPopLastRef */} 
                             <div className="col-2">
