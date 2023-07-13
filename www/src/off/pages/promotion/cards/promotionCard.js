@@ -1232,7 +1232,7 @@ export default class promotionCard extends React.PureComponent
                                             width={'90%'}
                                             height={'90%'}
                                             title={this.t("pg_Grid.title")} 
-                                            data={{source:{select:{query : "SELECT CODE,NAME,START_DATE,FINISH_DATE FROM PROMO_VW_01 GROUP BY CODE,NAME"},sql:this.core.sql}}}
+                                            data={{source:{select:{query : "SELECT CODE,NAME,START_DATE,FINISH_DATE FROM PROMO_VW_01 GROUP BY CODE,NAME,START_DATE,FINISH_DATE "},sql:this.core.sql}}}
                                             >
                                                 <Column dataField="CODE" caption={this.t("pg_Grid.clmCode")} width={150} />
                                                 <Column dataField="NAME" caption={this.t("pg_Grid.clmName")} width={350} defaultSortOrder="asc" />
