@@ -7667,9 +7667,6 @@ export default class posDoc extends React.PureComponent
                             <Item>
                                 <NbLabel id="abtVersion" parent={this} value={this.lang.t("abtVersion") + this.core.appInfo.version}/>
                             </Item>
-                            <Item>
-                                <NbLabel id="abtPiqsoft" parent={this} value={this.lang.t("abtPiqsoft")}/>
-                            </Item>
                         </Form>
                     </NdPopUp>
                 </div>
@@ -7700,6 +7697,9 @@ export default class posDoc extends React.PureComponent
                             </Item>
                             <Item>
                                 <NbLabel id="blnAbtSha" parent={this} value={"Signature : " + this.core.appInfo.scale.sha}/>
+                            </Item>
+                            <Item>
+                                <NbLabel id="abtPiqsoft" parent={this} value={this.lang.t("abtPiqsoft")}/>
                             </Item>
                         </Form>
                     </NdPopUp>
