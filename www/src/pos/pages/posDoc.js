@@ -31,8 +31,8 @@ import NbKeyboard from "../../core/react/bootstrap/keyboard.js";
 import IdleTimer from 'react-idle-timer'
 import NdButton from "../../core/react/devex/button.js";
 
-import { posCls,posSaleCls,posPaymentCls,posPluCls,posDeviceCls,posPromoCls, posExtraCls, posLcdCls } from "../../core/cls/pos.js";
-import { posScaleCls } from "../../core/cls/scale.js";
+import { posCls,posSaleCls,posPaymentCls,posPluCls,posDeviceCls,posPromoCls, posExtraCls, } from "../../core/cls/pos.js";
+import { posScaleCls,posLcdCls } from "../../core/cls/scale.js";
 import { docCls} from "../../core/cls/doc.js"
 import transferCls from "../lib/transfer.js";
 import { promoCls } from "../../core/cls/promotion.js";
@@ -2819,6 +2819,11 @@ export default class posDoc extends React.PureComponent
                 <IdleTimer timeout={this.prmObj.filter({ID:'ScreenTimeOut',TYPE:0}).getValue()}
                 onIdle={()=>
                 {
+                    this.posLcd.print
+                    ({
+                        blink : 0,
+                        text :  "Bonjour".space(20) + moment(new Date()).format("DD.MM.YYYY").space(20)
+                    })    
                     this.core.auth.logout()
                     window.location.reload()
                 }}/>           
@@ -3018,7 +3023,12 @@ export default class posDoc extends React.PureComponent
                             <div className="col-1 ps-1 pe-3">
                                 <NbButton id={"btnClose"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"55px",width:"100%"}}
                                 onClick={()=>
-                                {                                                        
+                                {                   
+                                    this.posLcd.print
+                                    ({
+                                        blink : 0,
+                                        text :  "Bonjour".space(20) + moment(new Date()).format("DD.MM.YYYY").space(20)
+                                    })    
                                     this.core.auth.logout()
                                     window.location.reload()
                                 }}>
