@@ -7667,6 +7667,9 @@ export default class posDoc extends React.PureComponent
                             <Item>
                                 <NbLabel id="abtVersion" parent={this} value={this.lang.t("abtVersion") + this.core.appInfo.version}/>
                             </Item>
+                            <Item>
+                                <NbLabel id="abtPiqsoft" parent={this} value={this.lang.t("abtPiqsoft")}/>
+                            </Item>
                         </Form>
                     </NdPopUp>
                 </div>

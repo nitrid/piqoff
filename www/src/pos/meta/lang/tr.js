@@ -30,6 +30,7 @@ export const langTr =
     abtNrCertificate : "Sertifika No : B_0527-1",
     abtLicence : "Lisans : XXXXXXXXXXXXXXXXX",
     abtVersion : "Versiyon : ",
+    abtPiqsoft : "Logiciel : Piqsoft-POS",
     blnAbtCompany : "Şirket : Piqsoft SAS",
     blnAbtType : "Tip : Piqsoft - Pos",
     blnAbtSw : "S/W : Scale.js",

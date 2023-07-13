@@ -30,6 +30,7 @@ export const langDe =
     abtNrCertificate: "Zertifikatsnummer: B_0527-1",
     abtLicence: "Lizenz: XXXXXXXXXXXXXXXXX",
     abtVersion: "Version: ",
+    abtPiqsoft : "Logiciel : Piqsoft-POS",
     blnAbtCompany: "Firma: Piqsoft SAS",
     blnAbtType: "Typ: Piqsoft - Pos",
     blnAbtSw: "S/W: Scale.js",
