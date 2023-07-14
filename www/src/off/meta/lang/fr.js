@@ -9552,9 +9552,9 @@ export const langFr =
             clmBarcode: "Code-barres", 
             clmCode: "Code",
             clmName: "Nom", 
-            clmStartDate : "Başlangıç",   // BAK
-            clmFinishDate : "Bitiş",  // BAK
-            clmItem : "Ürün", // BAK
+            clmStartDate : "Date Début",
+            clmFinishDate : "Date Fin", 
+            clmItem : "Nom De Produit",
             clmGrpName: "Groupe", 
             clmPrice : "Prix", 
             btnItem: "Sélection de produits promotionnels", 
