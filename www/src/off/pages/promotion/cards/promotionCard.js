@@ -212,6 +212,42 @@ export default class promotionCard extends React.PureComponent
             </div>
         )
     }
+    async getDocs(pType)
+    {
+        let tmpQuery 
+        if(pType == 0)
+        {
+            tmpQuery = 
+            {
+                query : "SELECT GUID,CODE,NAME,START_DATE,FINISH_DATE,ISNULL((SELECT TOP 1 COND_ITEM_NAME FROM PROMO_COND_APP_VW_01 WHERE PROMO_COND_APP_VW_01.GUID =PROMO_VW_01.GUID),'') AS ITEM FROM PROMO_VW_01 WHERE CDATE > GETDATE() - 30 GROUP BY GUID,CODE,NAME,START_DATE,FINISH_DATE "
+            }
+        }
+        else
+        {
+            tmpQuery = 
+            {
+                query : "SELECT GUID,CODE,NAME,START_DATE,FINISH_DATE,ISNULL((SELECT TOP 1 COND_ITEM_NAME FROM PROMO_COND_APP_VW_01 WHERE PROMO_COND_APP_VW_01.GUID =PROMO_VW_01.GUID),'') AS ITEM FROM PROMO_VW_01 GROUP BY GUID,CODE,NAME,START_DATE,FINISH_DATE "
+            }
+        }
+
+        let tmpData = await this.core.sql.execute(tmpQuery) 
+        let tmpRows = []
+        console.log(tmpData)
+        if(tmpData.result.recordset.length > 0)
+        {
+            tmpRows = tmpData.result.recordset
+        }
+        await this.pg_txtCode.setData(tmpRows)
+     
+        this.pg_txtCode.show()
+        this.pg_txtCode.onClick = (data) =>
+        {
+            if(data.length > 0)
+            {
+                this.getPromotion(data[0].CODE)
+            }
+        }
+    }
     itemTemplate(pItem)
     {               
         if(pItem.SECTOR == 'COND')
@@ -1189,14 +1225,7 @@ export default class promotionCard extends React.PureComponent
                                                         icon:'more',
                                                         onClick:()=>
                                                         {
-                                                            this.pg_txtCode.show()
-                                                            this.pg_txtCode.onClick = (data) =>
-                                                            {
-                                                                if(data.length > 0)
-                                                                {
-                                                                    this.getPromotion(data[0].CODE)
-                                                                }
-                                                            }
+                                                           this.getDocs(0)
                                                         }
                                                     },
                                                     {
@@ -1232,12 +1261,26 @@ export default class promotionCard extends React.PureComponent
                                             width={'90%'}
                                             height={'90%'}
                                             title={this.t("pg_Grid.title")} 
-                                            data={{source:{select:{query : "SELECT CODE,NAME,START_DATE,FINISH_DATE FROM PROMO_VW_01 GROUP BY CODE,NAME,START_DATE,FINISH_DATE "},sql:this.core.sql}}}
+                                            button=
+                                            {
+                                                [
+                                                    {
+                                                        id:'01',
+                                                        icon:'more',
+                                                        onClick:()=>
+                                                        {
+                                                        this.getDocs(1)
+                                                        }
+                                                    }
+                                                ]
+                                                
+                                            }
                                             >
                                                 <Column dataField="CODE" caption={this.t("pg_Grid.clmCode")} width={150} />
                                                 <Column dataField="NAME" caption={this.t("pg_Grid.clmName")} width={350} defaultSortOrder="asc" />
                                                 <Column dataField="START_DATE" caption={this.t("pg_Grid.clmStartDate")} width={150} dataType="datetime" format={"dd/MM/yyyy"} />
                                                 <Column dataField="FINISH_DATE" caption={this.t("pg_Grid.clmFinishDate")} width={150} dataType="datetime" format={"dd/MM/yyyy"}/>
+                                                <Column dataField="ITEM" caption={this.t("pg_Grid.clmItem")} width={350} defaultSortOrder="asc" />
                                             </NdPopGrid>    
                                         </Item>
                                         {/* txtName */}
