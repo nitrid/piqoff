@@ -1277,8 +1277,8 @@ export default class promotionCard extends React.PureComponent
                                             }
                                             >
                                                 <Column dataField="CODE" caption={this.t("pg_Grid.clmCode")} width={150} />
-                                                <Column dataField="NAME" caption={this.t("pg_Grid.clmName")} width={350} defaultSortOrder="asc" />
-                                                <Column dataField="START_DATE" caption={this.t("pg_Grid.clmStartDate")} width={150} dataType="datetime" format={"dd/MM/yyyy"} />
+                                                <Column dataField="NAME" caption={this.t("pg_Grid.clmName")} width={350}  />
+                                                <Column dataField="START_DATE" caption={this.t("pg_Grid.clmStartDate")} width={150} dataType="datetime" format={"dd/MM/yyyy"} defaultSortOrder="asc"/>
                                                 <Column dataField="FINISH_DATE" caption={this.t("pg_Grid.clmFinishDate")} width={150} dataType="datetime" format={"dd/MM/yyyy"}/>
                                                 <Column dataField="ITEM" caption={this.t("pg_Grid.clmItem")} width={350} defaultSortOrder="asc" />
                                             </NdPopGrid>    
