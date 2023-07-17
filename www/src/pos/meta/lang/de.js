@@ -16,7 +16,7 @@ export const langDe =
     userListTitle: "Benutzerliste",
     txtUser: "Benutzer",
     txtPass: "Passwort",
-    btnUserSelect: "Benutzer auswählen",
+    btnUserSelect: "Benutzerwahl",
     btnLogin: "Anmelden",
     btnLogout: "Abmelden",
     msgNotAccess: "Benutzer hat keine Zugriffsberechtigung.",
@@ -30,7 +30,7 @@ export const langDe =
     abtNrCertificate: "Zertifikatsnummer: B_0527-1",
     abtLicence: "Lizenz: XXXXXXXXXXXXXXXXX",
     abtVersion: "Version: ",
-    abtPiqsoft : "Logiciel : Piqsoft-POS",
+    abtPiqsoft : "Warenwirtschaft : Piqsoft-POS",
     blnAbtCompany: "Firma: Piqsoft SAS",
     blnAbtType: "Typ: Piqsoft - Pos",
     blnAbtSw: "S/W: Scale.js",
@@ -46,39 +46,39 @@ export const langDe =
     },
     msgZeroValidation:
     {
-        title: "Warnung",
+        title: "Achtung",
         msg: "Sie können keine Nullmenge eingeben!",
         btn01: "OK",
     },
     msgMaxQuantity:
     {
-        title: "Warnung",
+        title: "Achtung",
         msg: "Sie können keine Menge größer als 99.999 eingeben!",
         btn01: "OK",
     },
     msgPriceNotFound:
     {
-        title: "Warnung",
+        title: "Achtung",
         msg: "Es sind keine Preisinformationen für das Produkt vorhanden! Möchten Sie den Vorgang fortsetzen?",
         btn01: "Ja",
         btn02: "Nein"
     },
     msgBarcodeNotFound:
     {
-        title: "Warnung",
+        title: "Achtung",
         msg: "Der gescannte Barcode konnte nicht gefunden werden!",
         btn01: "OK",
     },
     msgSpecialTicketAlert:
     {
-        title: "Warnung",
-        msg: "Bei speziellen Etiketten können Sie keine Änderungen vornehmen!",
+        title: "Achtung",
+        msg: "Bei Artikeln mit Sonderpreisauszeichnung können Sie keine Änderungen vornehmen!",
         btn01: "OK",
     },
     msgMoneyChange:
     {
         title: "Information",
-        msg: "Bitte geben Sie das Wechselgeld ein.",
+        msg: "Wechselgeld eingeben.",
         btn01: "OK",
     },
     msgBigAmount:
@@ -89,7 +89,7 @@ export const langDe =
     },
     msgPayCheck:
     {
-        title: "Warnung",
+        title: "Achtung",
         msg: "Sind Sie sicher, dass Sie die Zahlung erhalten haben?",
         btn01: "OK",
         btn02: "Abbrechen"
@@ -102,118 +102,118 @@ export const langDe =
     },
     msgBonDavoir:
     {
-        title: "Warnung",
-        msg: "Bitte löschen Sie die eingegebenen Zahlungen, bevor Sie einen Bon d'avoir eingeben!",
+        title: "Achtung",
+        msg: "Löschen Sie bitte alle eingegebenen Zahlungen, bevor Sie einen Gutschrift erstellen!",
         btn01: "OK"
     },
     msgInvalidTicket:
     {
-        title: "Warnung",
+        title: "Achtung",
         msg: "Ungültiges Ticket.",
         btn01: "OK",
     },
     msgStolenTicket:
     {
-        title: "Warnung",
+        title: "Achtung",
         msg: "Gestohlenes Ticket.",
         btn01: "OK",
     },
     msgUsedTicket : 
     {
-        title: "Warnung",
+        title: "Achtung",
         msg: "Bereits verwendetes Ticket.",
         btn01: "OK",
     },
     msgOldTicket: 
     {
-        title: "Warnung",
+        title: "Achtung",
         msg: "Abgelaufenes Ticket.",
         btn01: "OK",
     },
     msgDoubleRebate: 
     {
-        title: "Warnung",
-        msg: "Die Quittung, die Sie eingescannt haben, wurde bereits zurückerstattet!",
+        title: "Achtung",
+        msg: "Zum eingescannten Beleg/Quittung wurde bereits Gutschrift erstellt!",
         btn01: "OK",
     },
     msgRebateNotMatch: 
     {
-        title: "Warnung",
-        msg: "Ein oder mehrere Produkte auf dem eingescannten Beleg stimmen nicht überein!",
+        title: "Achtung",
+        msg: "Einer oder mehrere der Artikel auf dem eingescannten Beleg stimmen nicht überein!",
         btn01: "OK",
     },
     msgItemOrQuantityNotMatch: 
     {
-        title: "Warnung",
-        msg: "Die Produkte oder die Menge auf dem eingescannten Beleg stimmen nicht überein!",
+        title: "Achtung",
+        msg: "Die Artikel oder die Mengen auf dem eingescannten Beleg stimmen nicht überein!",
         btn01: "OK",
     },
     msgInvalidSafeTicket: 
     {
-        title: "Warnung",
+        title: "Achtung",
         msg: "Ungültiges Kassenbeleg!",
         btn01: "OK",
     },
     msgPriceNotDoesZero: 
     {
-        title: "Warnung",
+        title: "Achtung",
         msg: "Der Preis darf nicht Null sein!",
         btn01: "OK",
     },
     msgMinPrice: 
     {
-        title: "Warnung",
+        title: "Achtung",
         msg: "Der Preis darf nicht unter dem Mindestpreis liegen!",
         btn01: "OK",
     },
     msgCostPrice: 
     {
-        title: "Warnung",
+        title: "Achtung",
         msg: "Der Preis darf nicht unter dem Kostenpreis liegen!",
         btn01: "OK",
     },
     totalLine: "Gesamtzeile: ",
     totalQuantity: "Gesamtmenge: ",
     loyaltyDiscount: "Treue-Rabatt: ",
-    ticketRect: "Ticket-Rest: ",
+    ticketRect: "Ticket-Resto/Gutschein: ",
     amount: "Zwischensumme: ",
     vat: "MwSt.: ",
     discount: "Rabatt: ",
     msgCollectForSale: 
     {
-        title: "Warnung",
-        msg: "Sie können keine Zahlungen erfassen, ohne einen Verkauf durchzuführen!",
+        title: "Achtung",
+        msg: "Sie können keine Zahlungen erfassen, ohne einen Verkauf durchgeführt zu haben!",
         btn01: "OK",
     },
     msgTicketForNotCustomer: 
     {
-        title: "Warnung",
-        msg: "Sie können keine Treuepunkte bei Zahlungen mit dem Ticket-Rest vergeben. Bitte wählen Sie einen anderen Kunden aus!",
+        title: "Achtung",
+        msg: "Bei Zahlungen mit dem Ticket-Resto/Gutschein können Sie keine Treuepunkte vergeben. Bitte wählen Sie einen anderen Kunden aus!",
         btn01: "OK",
     },
     msgPayForSelling: 
     {
-        title: "Warnung",
-        msg: "Sie können keine Zahlungen entgegennehmen, ohne einen Verkauf durchzuführen!",
+        title: "Achtung",
+        msg: "Sie können keine Zahlungen entgegennehmen, ohne einen Verkauf durchgeführt zu haben!",
         btn01: "OK",
     },
     msgCustomerSelect: 
     {
-        title: "Warnung",
+        title: "Achtung",
         msg: "Bitte wählen Sie einen Kunden aus!",
         btn01: "OK",
     },
     msgLineDeleteConfirm: 
     {
-        title: "Warnung",
+        title: "Achtung",
         msg: "Sind Sie sicher, dass Sie die Zeile stornieren möchten?",
         btn01: "OK",
         btn02: "Abbrechen",
     },
     msgDocDeleteConfirm: 
     {
-        title: "Warnung",
-        msg: "Sind Sie sicher, dass Sie das Dokument stornieren möchten?",
+        title: "Achtung",
+        msg: "Sind Sie sicher, dass Sie den Beleg stornieren möchten?",
         btn01: "OK",
         btn02: "Abbrechen",
     },
@@ -237,25 +237,25 @@ export const langDe =
     },
     msgCancelCustomerConfirm: 
     {
-        title: "Warnung",
+        title: "Achtung",
         msg: "Sind Sie sicher, dass Sie den ausgewählten Kunden verlassen möchten?",
         btn01: "OK",
         btn02: "Abbrechen",
     },
-    total: "Gesamt: ",
+    total: "Gesamtbetrag: ",
     remainder: "Restbetrag: ",
     moneyChange: "Rückgeld: ",
-    trDeatil: "TR-Detail",
+    trDeatil: "Ticket Restodetail",
     lineDelete: "Zeile stornieren",
     cancel: "Abbrechen",
     send: "Senden",
     select: "Auswählen",
-    lastRead: "Zuletzt gescannt: ",
-    totalRead: "Gesamt gescannt: ",
+    lastRead: "Zuletzt gescanntes: ",
+    totalRead: "Gesamt gescanntes: ",
     remainderPay: "Ausstehende Zahlung: ",
     discountpercent: "Rabatt % -",
-    applyDiscountPercent: "Rabatt anwenden (%)",
-    applyDiscountAmount: "Rabatt anwenden ",
+    applyDiscountPercent: "Prozentualer Rabatt anwenden (%)",
+    applyDiscountAmount: "Betragsrabatt anwenden ",
     discountPrice: "Rabattpreis",
     msgDeletePayForDiscount: 
     {
@@ -266,7 +266,7 @@ export const langDe =
     msgDiscountNotBigAmount: 
     {
         title: "Achtung",
-        msg: "Der Rabattbetrag kann den Betrag nicht überschreiten!",
+        msg: "Der Rabattbetrag darf den Gesamtbetrag nicht überschreiten!",
         btn01: "OK",
     },
     popLoyalty: 
@@ -275,7 +275,7 @@ export const langDe =
         availablePoint: "Verfügbare Punkte: ",
         usePoint: "Verwendete Punkte: ",
         remainderPoint: "Restpunkte: ",
-        pointtoCash: "Punkte in €: ",
+        pointtoCash: "Punktwert in €: ",
     },
     msgPointNotBigToPoint: 
     {
@@ -293,10 +293,10 @@ export const langDe =
     {
         title: "Letzte Verkaufsliste",
     },
-    txtPopLastRefPholder: "Bitte den Barcode auf dem Ticket scannen...",
+    txtPopLastRefPholder: "Bitte den Barcode auf dem Ticket scannen.",
     popLastTotal: 
     {
-        title: "Letzte Verkaufsabrechnung"
+        title: "Letzte Zahlung"
     },
     msgPayNotBigToPay: 
     {
@@ -313,43 +313,43 @@ export const langDe =
     popPriceDesc: 
     {
         head: "Preisbeschreibung",
-        title: "Bitte geben Sie eine Beschreibung ein"
+        title: "Bitte geben Sie eine Beschreibung ein."
     },
     popParkDesc: 
     {
         head: "Parkbeschreibung",
-        title: "Bitte geben Sie eine Beschreibung ein"
+        title: "Bitte geben Sie eine Beschreibung ein."
     },
     popDeleteDesc: 
     {
         head: "Löschbeschreibung",
-        title: "Bitte geben Sie einen Grund für die Löschung ein"
+        title: "Bitte geben Sie einen Grund für die Löschung ein."
     },
     popRowDeleteDesc: 
     {
         head: "Beschreibung für Zeilenlöschung",
-        title: "Bitte geben Sie einen Grund für die Löschung ein"
+        title: "Bitte geben Sie einen Grund für die Löschung ein."
     },
     popItemReturnDesc: 
     {
         head: "Rückgabe-Beschreibung",
-        title: "Bitte geben Sie einen Grund für die Rückgabe ein"
+        title: "Bitte geben Sie einen Grund für die Rückgabe ein."
     },
     popRePrintDesc: 
     {
         head: "Beschreibung für erneuten Druck",
-        title: "Bitte geben Sie einen Grund für den erneuten Druck ein"
+        title: "Bitte geben Sie einen Grund für den erneuten Druck ein."
     },
     msgItemReturnTicket: 
     {
-        title: "Warnung",
-        msg: "Bitte scannen Sie das rückzugebende Ticket!",
+        title: "Achtung",
+        msg: "Bitte scannen Sie die Rückgabe-Ticketsrestorants ein!",
         btn01: "OK",
         btn02: "Abbrechen",
     },
     msgItemReturnType: 
     {
-        title: "Warnung",
+        title: "Achtung",
         msg: "Bitte wählen Sie den Rückgabetyp aus!",
         btn01: "Bar",
         btn02: "Gutschein",
@@ -375,7 +375,7 @@ export const langDe =
     },
     popTRDetail: 
     {
-        title: "Ticker Restaurant"
+        title: "Ticket-Restaurant"
     },
     popAdvance: 
     {
@@ -413,7 +413,7 @@ export const langDe =
     },
     popBarcodeList:
     {
-        title: "Barcode-Liste"
+        title: "Barcodeliste"
     },
     popItemList:
     {
@@ -445,7 +445,7 @@ export const langDe =
     },
     grdList:
     {
-        LDATE: "LDATE",
+        LDATE: "DATUM",
         ITEM_NAME: "NAME",
         QUANTITY: "MENGE",
         DISCOUNT: "RABATT",
@@ -460,8 +460,8 @@ export const langDe =
     },
     grdPopParkList:
     {
-        LUSER_NAME: "D. BENUTZER",
-        LDATE: "D. DATUM",
+        LUSER_NAME: "BENUTZER",
+        LDATE: "DATUM",
         TOTAL: "GESAMT",
         DESCRIPTION: "BESCHREIBUNG",
     },
@@ -472,7 +472,7 @@ export const langDe =
     },
     grdDiscList:
     {
-        LDATE: "D DATUM",
+        LDATE: "DATUM",
         ITEM_NAME: "NAME",
         INDIRIM: "RABATT",
         DISCOUNT: "RABATT",
@@ -483,7 +483,7 @@ export const langDe =
     grdLastPos:
     {
         LDATE: "DATUM",
-        REF: "REF",
+        REF: "REFERENZ",
         CUSTOMER_NAME: "KUNDE",
         CUSER_NAME: "BENUTZER",
         DISCOUNT: "RABATT",
@@ -531,29 +531,29 @@ export const langDe =
     listed: "Auflisten",
     msgDeviceEntryAlert:
     {
-        title: "Warnung",
+        title: "Achtung",
         msg: "Bitte geben Sie den Gerätecode ein!",
         btn01: "OK",
     },
     msgDeviceDetectAlert : 
     {
-        title : "Warnung",
+        title : "Achtung",
         msgLcd : "Keine Verbindung zum LCD-Bildschirm hergestellt.",
         msgPay : "Keine Verbindung zum Zahlungsgerät hergestellt.",
         msgScale : "Keine Verbindung zur Waage hergestellt.",
         msgScan : "Keine Verbindung zum Barcode-Gerät hergestellt.",
         btn01 : "OK",
     },
-    popTitleDevice : "Kassen-Code-Eingabe",
+    popTitleDevice : "Eingabe Kassenpasswort",
     msgDeviceNotChange : 
     {
-        title : "Warnung",
+        title : "Achtung",
         msg : "Kassenwechsel während des Verkaufs nicht möglich! Bitte den Verkauf stornieren.",
         btn01 : "OK",
     },
     msgDbTransferAlert : 
     {
-        title : "Warnung",
+        title : "Achtung",
         msg : "Möchten Sie die lokale Datenbank aktualisieren?",
         btn01 : "OK",
         btn02 : "Abbrechen",
@@ -591,13 +591,13 @@ export const langDe =
     msgNotWeighing: 
     {
         title : "Achtung",
-        msg : "Produkt konnte nicht gewogen werden. Bitte erneut hinzufügen.",
+        msg : "Produkt konnte nicht gewogen werden. Bitte erneut abwiegen.",
         btn01 : "OK"
     },
     msgAnotherUserAlert: 
     {
         title : "Achtung",
-        msg : "Es wurde sich mit Ihren Benutzerdaten von einem anderen Gerät angemeldet.",
+        msg : "Mit Ihren Benutzerdaten wurde von einem anderen Gerät aus angemeldet.",
         btn01 : "OK"
     },
     msgPayAmountAlert: 
@@ -608,11 +608,11 @@ export const langDe =
     },
     msgPrintAlert: 
     {
-        title : "Warnung",
+        title : "Achtung",
         msg : "Möchten Sie den Beleg drucken?",
         btn01 : "OK",
         btn02 : "Abbrechen",
-        btn03 : "Per E-Mail senden"
+        btn03 : "Beleg per E-Mail senden"
     },
     mailPopup : 
     {
@@ -620,8 +620,8 @@ export const langDe =
     },
     msgRePrint: 
     {
-        title : "Warnung",
-        msg : "Sie haben das Drucklimit erreicht!",
+        title : "Achtung",
+        msg : "Sie haben das Belegdrucklimit erreicht!",
         btn01 : "OK",
     },
     acsDialog:
@@ -669,23 +669,23 @@ export const langDe =
     },
     msgSaveFailAlert : 
     {
-        title : "Warnung",
+        title : "Achtung",
         msg : "Speichern fehlgeschlagen!",
         btn01 : "OK",
         btn02 : "Erneut senden",
     },
     msgCheckRecord : 
     {
-        title : "Warnung",
-        msg1 : "Es gibt noch ausstehende Aufzeichnungen. Bitte warten Sie!",
-        msg2 : "Ausstehende Aufzeichnung: ",
+        title : "Achtung",
+        msg1 : "Es gibt noch ausstehende Vorgänge. Bitte warten Sie!",
+        msg2 : "Ausstehende Vorgänge: ",
         btn01 : "OK",
     },
     popCustomerAdd : 
     {
         title: "Kunden hinzufügen",
-        txtPopCustomerCode: "Code",
-        txtPopCustomerFirmName: "Firma Name",
+        txtPopCustomerCode: "Kundencode",
+        txtPopCustomerFirmName: "Firmenname",
         txtPopCustomerName: "Vorname",
         txtPopCustomerSurname: "Nachname",
         txtPopCustomerAddress: "Adresse",
@@ -711,31 +711,31 @@ export const langDe =
     },
     popCustomerAddList: 
     {
-        title: "Kundenauswahl",
+        title: "Kunden auswählen",
     },
     popCustomerAddCountry: 
     {
-        title: "Landauswahl",
+        title: "Land auswählen",
     },
     popCustomerAddCity: 
     {
-        title: "Stadtauswahl",
+        title: "Stadt auswählen",
     },
     popCustomerAddZipCode: 
     {
-        title: "Postleitzahlauswahl",
+        title: "PLZ. auswählen",
     },
     msgPrintFacAlert: 
     {
-        title: "Warnung",
+        title: "Achtung",
         msg: "Möchten Sie eine Rechnung oder einen Beleg drucken?",
         btn01: "Rechnung",
         btn02: "Beleg"
     },
     msgPrintCustomerAlert: 
     {
-        title: "Warnung",
-        msg: "Bitte wählen Sie einen Kunden aus, um als Rechnung zu drucken!",
+        title: "Achtung",
+        msg: "Um eine Rechnung zu drucken, wählen Sie bitte einen Kunden aus!",
         btn01: "Kunde auswählen",
         btn02: "Abbrechen"
     },
@@ -744,20 +744,20 @@ export const langDe =
         title: "Achtung",
         btn01: "OK",
         btn02: "Abbrechen",
-        msg: "Um einem Kunden an einem Tag mehr als 3 Punkte zu gewähren, geben Sie bitte das Autorisierungspasswort ein!"
+        msg: "Geben Sie bitte Adminpasswort ein, um einem Kunden können an einem Tag mehr als 3 Treuepunkte gewähren zu können!"
     },
     msgGetOrder: 
     {
-        title: "Warnung",
-        msg: "Dieser Auftrag wurde bereits im POS-Bildschirm aufgerufen. Möchten Sie fortfahren?",
+        title: "Achtung",
+        msg: "Dieser Auftrag wurde bereits auf POS-Terminal zum Bearbeiten aufgerufen. Möchten Sie fortfahren?",
         btn01: "Ja",
         btn02: "Nein"
     },
     popSettings: 
     {
-        lcdPort: "LCD-Port",
-        scalePort: "Waagen-Port",
-        payCardPort: "Zahlungskarten-Port",
+        lcdPort: "LCD-Anschluss",
+        scalePort: "Waagen-Anschluss",
+        payCardPort: "PayCard-Anschluss",
         printDesing: "Druckdesign"
     },
     msgConnectOut: 

@@ -97,6 +97,7 @@ export default class NbItemCard extends NbBase
                     <div className='row'>
                         <div className='col-12'>
                             <NdTextBox id={"txtQuantity" + this.props.id} mode="number" parent={this} simple={true} inputAttr={{ class: 'dx-texteditor-input txtbox-center' }}
+                            selectAll={false}
                             value={0}
                             onChange={(async(e)=>
                             {
