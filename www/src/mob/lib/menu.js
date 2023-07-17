@@ -119,6 +119,7 @@ export const menu = (e) =>
                     id: 'sip_01',
                     text : e.t('menu.sip_01'), //'Satış Siparişi'
                     icon : "fa-file-export",
+                    path: "order/salesOrder.js"
                 },
                 {
                     id: 'sip_02',

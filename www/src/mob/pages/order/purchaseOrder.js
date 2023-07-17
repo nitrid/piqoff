@@ -341,7 +341,7 @@ export default class purchaseOrder extends React.PureComponent
         return(
             <div>
                 <div>
-                    <PageBar id={"pageBar"} parent={this} title={"Alış Siparişi"} content=
+                    <PageBar id={"pageBar"} parent={this} title={this.lang.t("menu.sip_02")} content=
                     {[
                         {
                             name : 'Main',isBack : false,isTitle : true,
@@ -476,7 +476,7 @@ export default class purchaseOrder extends React.PureComponent
                                                     showBorders={true}
                                                     width={'100%'}
                                                     height={'100%'}
-                                                    title={this.lang.t("popDoc.title")} 
+                                                    title={this.t("popDoc.title")} 
                                                     data = 
                                                     {{
                                                         source:
@@ -489,11 +489,11 @@ export default class purchaseOrder extends React.PureComponent
                                                         }
                                                     }}
                                                     >
-                                                        <Column dataField="REF" caption={this.lang.t("popDoc.clmRef")} width={120} />
-                                                        <Column dataField="REF_NO" caption={this.lang.t("popDoc.clmRefNo")} width={100}  />
-                                                        <Column dataField="DOC_DATE_CONVERT" caption={this.lang.t("popDoc.clmDate")} width={100}  />
-                                                        <Column dataField="OUTPUT_NAME" caption={this.lang.t("popDoc.clmOutputName")} width={200}  />
-                                                        <Column dataField="OUTPUT_CODE" caption={this.lang.t("popDoc.clmOutputCode")} width={150}  />
+                                                        <Column dataField="REF" caption={this.t("popDoc.clmRef")} width={120} />
+                                                        <Column dataField="REF_NO" caption={this.t("popDoc.clmRefNo")} width={100}  />
+                                                        <Column dataField="DOC_DATE_CONVERT" caption={this.t("popDoc.clmDate")} width={100}  />
+                                                        <Column dataField="OUTPUT_NAME" caption={this.t("popDoc.clmOutputName")} width={200}  />
+                                                        <Column dataField="OUTPUT_CODE" caption={this.t("popDoc.clmOutputCode")} width={150}  />
                                                     </NdPopGrid>
                                                 </div>
                                             </div>
@@ -1076,7 +1076,7 @@ export default class purchaseOrder extends React.PureComponent
                             visible={false}                        
                             showCloseButton={false}
                             showTitle={true}
-                            title={this.lang.t("popDocDiscount.title")}
+                            title={this.t("popDocDiscount.title")}
                             container={"#root"} 
                             width={"300"}
                             height={"400"}
@@ -1084,7 +1084,7 @@ export default class purchaseOrder extends React.PureComponent
                             >
                                 <div className='row p-1'>
                                     <div className='col-4 offset-2 d-flex align-items-center justify-content-end'>
-                                        <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.lang.t("popDocDiscount.Percent1")}</label>                                            
+                                        <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.t("popDocDiscount.Percent1")}</label>                                            
                                     </div>
                                     <div className='col-6'>
                                         <NdTextBox id="txtDocDiscountPercent1" parent={this} simple={true} maxLength={32} 
@@ -1112,7 +1112,7 @@ export default class purchaseOrder extends React.PureComponent
                                 </div>
                                 <div className='row p-1'>
                                     <div className='col-4 offset-2 d-flex align-items-center justify-content-end'>
-                                        <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.lang.t("popDocDiscount.Price1")}</label>                                            
+                                        <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.t("popDocDiscount.Price1")}</label>                                            
                                     </div>
                                     <div className='col-6'>
                                         <NdTextBox id="txtDocDiscountPrice1" parent={this} simple={true} maxLength={32} 
@@ -1140,7 +1140,7 @@ export default class purchaseOrder extends React.PureComponent
                                 </div>
                                 <div className='row p-1'>
                                     <div className='col-4 offset-2 d-flex align-items-center justify-content-end'>
-                                        <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.lang.t("popDocDiscount.Percent2")}</label>                                            
+                                        <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.t("popDocDiscount.Percent2")}</label>                                            
                                     </div>
                                     <div className='col-6'>
                                         <NdTextBox id="txtDocDiscountPercent2" parent={this} simple={true} maxLength={32} 
@@ -1168,7 +1168,7 @@ export default class purchaseOrder extends React.PureComponent
                                 </div>
                                 <div className='row p-1'>
                                     <div className='col-4 offset-2 d-flex align-items-center justify-content-end'>
-                                        <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.lang.t("popDocDiscount.Price2")}</label>                                            
+                                        <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.t("popDocDiscount.Price2")}</label>                                            
                                     </div>
                                     <div className='col-6'>
                                         <NdTextBox id="txtDocDiscountPrice2" parent={this} simple={true} maxLength={32} 
@@ -1196,7 +1196,7 @@ export default class purchaseOrder extends React.PureComponent
                                 </div>
                                 <div className='row p-1'>
                                     <div className='col-4 offset-2 d-flex align-items-center justify-content-end'>
-                                        <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.lang.t("popDocDiscount.Percent3")}</label>                                            
+                                        <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.t("popDocDiscount.Percent3")}</label>                                            
                                     </div>
                                     <div className='col-6'>
                                         <NdTextBox id="txtDocDiscountPercent3" parent={this} simple={true} maxLength={32} 
@@ -1224,7 +1224,7 @@ export default class purchaseOrder extends React.PureComponent
                                 </div>
                                 <div className='row p-1'>
                                     <div className='col-4 offset-2 d-flex align-items-center justify-content-end'>
-                                        <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.lang.t("popDocDiscount.Price3")}</label>                                            
+                                        <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.t("popDocDiscount.Price3")}</label>                                            
                                     </div>
                                     <div className='col-6'>
                                         <NdTextBox id="txtDocDiscountPrice3" parent={this} simple={true} maxLength={32} 

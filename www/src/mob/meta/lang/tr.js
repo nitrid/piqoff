@@ -32,15 +32,6 @@ export const langTr =
         clmTypeName : "Tipi",
         clmGenusName : "Cinsi"
     },
-    popDoc : 
-    {
-        title : "Evrak Seçim",
-        clmRef :  "Ref",
-        clmRefNo : "Ref No",
-        clmDate : "Tarih",
-        clmOutputName : "Cari Adı",
-        clmOutputCode : "Cari Kodu"
-    },
     popItem : 
     {
         title : "Stok Seçim",
@@ -99,6 +90,60 @@ export const langTr =
         logout : "Çıkış",
         selectUser : "Kullanıcı Seçim",
     },
+    sip_01 : // "Satış Siparişi"
+    {
+        lblRef : "Seri - Sıra :",
+        lblDepot : "Depo :",
+        lblCustomerCode : "Cari Kodu :",
+        lblCustomerName : "Cari Adı :",
+        lblDate : "Tarih :",
+        lblDepotQuantity : "Depo Miktar :",
+        lblUnit : "Birim :",
+        lblQuantity : "Miktar :",
+        lblPrice : "Fiyat :",
+        lblAmount : "Tutar :",
+        lblDiscount : "Satır İndirim :",
+        lblDocDiscount : "Evrak İndirim :",
+        lblTotalHt: "Ara Toplam :",
+        lblVat : "Kdv :",
+        lblSumAmount : "Toplam Tutar :",
+        lblGenAmount : "Genel Toplam :",
+        lblAdd: "Ekle",
+        msgAlert :
+        {
+            btn01 : "Tamam",
+            title : "Uyarı",
+            msgDepot : "Lütfen depo seçiniz !",
+            msgCustomer : "Lütfen cari seçiniz !",
+            msgProcess : "Henüz girilmiş bir ürün yok !",
+            msgBarcodeNotFound : "Barkod bulunamadı !",
+            msgBarcodeCheck : "Lütfen barkod okutunuz !",
+            msgQuantityCheck : "Miktar girmeden ürün ekleyemezsiniz !",
+            msgRowNotDelete : "Bu satır fatura yada irsaliyeye çevrilmiştir silme işlemi yapamazsınız !",
+            msgRowNotUpdate : "Bu satır fatura yada irsaliyeden geldiği için miktarı değiştirilemez!",
+            msgDiscount : "İndirim Tutardan Yüksek Olamaz !"
+        },
+        grdList : 
+        {
+            clmItemName : "Adı",
+            clmQuantity :  "Miktar",
+            clmPrice : "Fiyat",
+            clmAmount : "Tutar",
+            clmDiscount : "İndirim",
+            clmDiscountRate : "İndirim %",
+            clmVat : "Kdv",
+            clmTotal : "Tutar"
+        },
+        popDoc : 
+        {
+            title : "Evrak Seçim",
+            clmRef :  "Ref",
+            clmRefNo : "Ref No",
+            clmDate : "Tarih",
+            clmInputName : "Cari Adı",
+            clmInputCode : "Cari Kodu",
+        },
+    },
     sip_02 : // "Alış Siparişi"
     {
         lblRef : "Seri - Sıra :",
@@ -142,6 +187,15 @@ export const langTr =
             clmDiscountRate : "İndirim %",
             clmVat : "Kdv",
             clmTotal : "Tutar"
+        },
+        popDoc : 
+        {
+            title : "Evrak Seçim",
+            clmRef :  "Ref",
+            clmRefNo : "Ref No",
+            clmDate : "Tarih",
+            clmOutputName : "Cari Adı",
+            clmOutputCode : "Cari Kodu",
         },
     },
 }
