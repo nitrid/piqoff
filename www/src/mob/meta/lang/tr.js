@@ -90,6 +90,48 @@ export const langTr =
         logout : "Çıkış",
         selectUser : "Kullanıcı Seçim",
     },
+    stk_05 : // "Sayım"
+    {
+        lblRef : "Seri - Sıra :",
+        lblDepot : "Depo :",
+        lblDate : "Tarih :",
+        lblDepotQuantity : "Depo Miktar :",
+        lblUnit : "Birim :",
+        lblQuantity : "Miktar :",
+        lblAdd: "Ekle",
+        lblTotalLine : "Toplam Satır",
+        lblTotalCount : "Toplam Ürün",
+        msgAlert :
+        {
+            btn01 : "Tamam",
+            title : "Uyarı",
+            msgDepot : "Lütfen depo seçiniz !",
+            msgCustomer : "Lütfen cari seçiniz !",
+            msgProcess : "Henüz girilmiş bir ürün yok !",
+            msgBarcodeNotFound : "Barkod bulunamadı !",
+            msgBarcodeCheck : "Lütfen barkod okutunuz !",
+            msgQuantityCheck : "Miktar girmeden ürün ekleyemezsiniz !",
+            msgRowNotDelete : "Bu satır fatura yada irsaliyeye çevrilmiştir silme işlemi yapamazsınız !",
+            msgRowNotUpdate : "Bu sayım kesinleşmiştir değiştirilemez!",
+            msgDiscount : "İndirim Tutardan Yüksek Olamaz !",
+            msgNotSave : "Kayıt İşlemi Başarısız",
+        },
+        grdList : 
+        {
+            clmItemName : "Adı",
+            clmQuantity :  "Miktar",
+        },
+        popDoc : 
+        {
+            title : "Evrak Seçim",
+            clmRef :  "Ref",
+            clmRefNo : "Ref No",
+            clmDate : "Tarih",
+            clmDepotName : "Depo",
+            clmTotalLine : "Tolam Satır",
+            clmQuantity : "Toplam Ürün"
+        },
+    },
     sip_01 : // "Satış Siparişi"
     {
         lblRef : "Seri - Sıra :",

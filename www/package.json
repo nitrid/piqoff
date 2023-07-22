@@ -9,7 +9,14 @@
     "certificate": "LNE-000000",
     "sha": "5d733495732cf990723d6253fe0642dfe5a1f40f0dbe743f53485601fee3fdba"
   },
-  "databases":[{"CODE":"GENDB"},{"CODE":"TEST"}],
+  "databases": [
+    {
+      "CODE": "GENDB"
+    },
+    {
+      "CODE": "TEST"
+    }
+  ],
   "scripts": {
     "start": "webpack-dev-server --mode development",
     "build": "webpack --mode production"

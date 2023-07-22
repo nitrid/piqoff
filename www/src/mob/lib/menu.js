@@ -42,6 +42,7 @@ export const menu = (e) =>
                     id: 'stk_05',
                     text : e.t('menu.stk_05'), //'Sayım '
                     icon : "fa-paste",
+                    path: "items/itemCount.js"
                 },
                 {
                     id: 'stk_06',
