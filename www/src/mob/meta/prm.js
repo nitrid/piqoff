@@ -648,4 +648,63 @@ export const prm =
         }
     },
     //#endregion
+    //#region Etiket Bas
+    //txtRef
+    {
+        TYPE : 2,
+        ID :"txtRef",
+        VALUE : 
+        {
+            value : ""
+        },
+        SPECIAL : "",
+        PAGE : "stk_06",
+        ELEMENT : "txtRef",
+        APP : "MOB",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Etiket Bas",
+            CAPTION : "Ref",           
+        }
+    },
+    //chkAutoAdd
+    {
+        TYPE : 2,
+        ID :"chkAutoAdd",
+        VALUE : false,
+        SPECIAL : "",
+        PAGE : "stk_06",
+        ELEMENT : "chkAutoAdd",
+        APP : "MOB",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Etiket Bas",
+            CAPTION : "Otomatik Ekle",
+        }
+    },
+    //rowMerge
+    {
+        TYPE : 1,
+        ID :"rowMerge",
+        VALUE : 
+        {
+            value : 2
+        },
+        SPECIAL : "",
+        PAGE : "stk_06",
+        ELEMENT : "",
+        APP : "MOB",
+        VIEW : 
+        {
+            TYPE : "combobox",
+            PAGE_NAME : "Etiket Bas",
+            CAPTION : "Satır Birleştir",
+            DISPLAY : "NAME",
+            FIELD : "CODE",
+            DATA : [{CODE:0,NAME:"Birleştir"},{CODE:1,NAME:"Birleştirme"},{CODE:2,NAME:"Kullanıcıya Sor"}]
+        }
+    },
+    //#endregion
 ]

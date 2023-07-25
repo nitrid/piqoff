@@ -48,6 +48,7 @@ export const menu = (e) =>
                     id: 'stk_06',
                     text : e.t('menu.stk_06'), //'Etiket '
                     icon : "fa-tag",
+                    path : "items/labelPrint.js",
                 },
                 {
                     id: 'stk_07',

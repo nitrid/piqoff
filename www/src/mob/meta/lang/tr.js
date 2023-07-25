@@ -22,6 +22,7 @@ export const langTr =
         title: "Dikkat",
         btn01: "Birleştir",
         btn02: "Yeni Ekle",
+        btn03 : "Vazgeç",
         msg: "Eklemek İstediğiniz Ürün Evrakta Mevcut ! Satır Birleştirilsin mi ?"
     },
     popCustomer : 
