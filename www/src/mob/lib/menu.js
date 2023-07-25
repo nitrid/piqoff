@@ -132,6 +132,7 @@ export const menu = (e) =>
                     id: 'sip_03',
                     text : e.t('menu.sip_03'), //'Toplu Sipariş Toplama'
                     icon : "fa-file-circle-plus",
+                    path: "order/collectiveOrder.js"
                 }
             ]
         },
