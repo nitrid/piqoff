@@ -189,7 +189,7 @@ export const prm =
         }
     },
     //#endregion
-    //#region Alış Sipariş
+    //#region Satış Sipariş
     //txtRef
     {
         TYPE : 2,
@@ -205,7 +205,7 @@ export const prm =
         VIEW : 
         {
             TYPE : "text",
-            PAGE_NAME : "Alış Sipariş",
+            PAGE_NAME : "Satış Sipariş",
             CAPTION : "Ref",           
         }
     },
@@ -224,7 +224,7 @@ export const prm =
         VIEW : 
         {
             TYPE : "combobox",
-            PAGE_NAME : "Alış Sipariş",
+            PAGE_NAME : "Satış Sipariş",
             CAPTION : "Depo",
             DISPLAY : "NAME",
             FIELD : "GUID",
@@ -249,7 +249,7 @@ export const prm =
         VIEW : 
         {
             TYPE : "checkbox",
-            PAGE_NAME : "Alış Sipariş",
+            PAGE_NAME : "Satış Sipariş",
             CAPTION : "Otomatik Ekle",
         }
     },
@@ -329,6 +329,159 @@ export const prm =
         },
         SPECIAL : "",
         PAGE : "sip_01",
+        ELEMENT : "",
+        APP : "MOB",
+        VIEW : 
+        {
+            TYPE : "combobox",
+            PAGE_NAME : "Satış Sipariş",
+            CAPTION : "Satır Birleştir",
+            DISPLAY : "NAME",
+            FIELD : "CODE",
+            DATA : [{CODE:0,NAME:"Birleştir"},{CODE:1,NAME:"Birleştirme"},{CODE:2,NAME:"Kullanıcıya Sor"}]
+        }
+    },
+    //#endregion
+    //#region Toplu Sipariş
+    //txtRef
+    {
+        TYPE : 2,
+        ID :"txtRef",
+        VALUE : 
+        {
+            value : ""
+        },
+        SPECIAL : "",
+        PAGE : "sip_03",
+        ELEMENT : "txtRef",
+        APP : "MOB",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Toplu Sipariş",
+            CAPTION : "Ref",           
+        }
+    },
+    //cmbDepot
+    {
+        TYPE : 2,
+        ID :"cmbDepot",
+        VALUE : 
+        {
+            value : ""
+        },
+        SPECIAL : "",
+        PAGE : "sip_03",
+        ELEMENT : "cmbDepot",
+        APP : "MOB",
+        VIEW : 
+        {
+            TYPE : "combobox",
+            PAGE_NAME : "Toplu Sipariş",
+            CAPTION : "Depo",
+            DISPLAY : "NAME",
+            FIELD : "GUID",
+            DATA :
+            {
+                select:
+                {
+                    query : "SELECT GUID,CODE,NAME FROM DEPOT WHERE STATUS = 1 AND DELETED = 0 ORDER BY CODE ASC"
+                },
+            }
+        }
+    },
+    //chkAutoAdd
+    {
+        TYPE : 2,
+        ID :"chkAutoAdd",
+        VALUE : false,
+        SPECIAL : "",
+        PAGE : "sip_03",
+        ELEMENT : "chkAutoAdd",
+        APP : "MOB",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Alış Sipariş",
+            CAPTION : "Otomatik Ekle",
+        }
+    },
+    //txtQuantity
+    {
+        TYPE : 2,
+        ID :"txtQuantity",
+        VALUE : 
+        {
+            value : 0,
+            validation :
+            {
+                grp : "frmBarcode",
+                val : 
+                [
+                    {
+                        type : "range",
+                        msg : "Ne peut pas saisir 0!",
+                        min : 0.01
+                    }
+                ]
+            }
+        },
+        SPECIAL : "",
+        PAGE : "sip_03",
+        ELEMENT : "txtQuantity",
+        APP : "MOB",
+        VIEW : 
+        {
+            TYPE : "popInput",
+            PAGE_NAME : "Toplu Sipariş",
+            CAPTION : "Miktar",
+            DISPLAY : "value",
+            FORM: 
+            {
+                width:"400",
+                height:"200",
+                colCount : 1,
+                item:
+                [
+                    {type:"text",caption:"Value",field:"value",id:"txtPopTxtQuantity"},
+                    {type:"popInput",caption:"Validation",field:"validation",id:"txtPopTxtQuantityValidation",display:"grp",
+                        form : 
+                        {
+                            width:"400",
+                            height:"230",
+                            colCount:1,
+                            item:
+                            [
+                                {type:"text",caption:"Grp",field:"grp",id:"txtPopTxtQuantityGrp"},
+                                {type:"popObjectList",caption:"Validation",field:"val",id:"lstPopTxtQuantityVal",
+                                    form:
+                                    {
+                                        width:"800",
+                                        height:"600",
+                                        formWidth:"600",
+                                        formHeight:"260",
+                                        allowAdding : false,
+                                        allowUpdating : true,
+                                        allowDeleting : false
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                ]
+            }
+        }
+    },
+    //rowMerge
+    {
+        TYPE : 1,
+        ID :"rowMerge",
+        VALUE : 
+        {
+            value : 2
+        },
+        SPECIAL : "",
+        PAGE : "sip_03",
         ELEMENT : "",
         APP : "MOB",
         VIEW : 
