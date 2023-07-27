@@ -28,6 +28,7 @@ export default class labelPrint extends React.PureComponent
         this.lblObj = new labelCls();
         this.mainLblObj = new labelMainCls()
         this.itemDt = new datatable();
+        this.pageCount = 0;
 
         this.itemDt.selectCmd = 
         {
@@ -224,6 +225,7 @@ export default class labelPrint extends React.PureComponent
                 await dialog(this.alertContent);
             }
             this.txtBarcode.focus()
+            this.calculateCount()
             resolve()
         })
     }
@@ -240,8 +242,6 @@ export default class labelPrint extends React.PureComponent
     }
     async onClickBarcodeShortcut()
     {
-      
-
         this.pageView.activePage('Entry')
     }
     async onClickProcessShortcut()
@@ -276,7 +276,13 @@ export default class labelPrint extends React.PureComponent
                 this.getDoc(data[0].GUID)
             }
         }
-    } 
+    }
+    calculateCount()
+    {
+        this.txtPageCount.value = Math.ceil(this.lblObj.dt().length /this.pageCount)
+        this.txtFreeLabel.value = this.pageCount - (this.lblObj.dt().length % this.pageCount)
+        this.txtLine.value = this.lblObj.dt().length
+    }
     render()
     {
         return(
@@ -412,7 +418,7 @@ export default class labelPrint extends React.PureComponent
                                                                 icon:'more',
                                                                 onClick:()=>
                                                                 {
-                                                                    this.pg_Docs.hide()
+                                                                    this.popDoc.hide()
                                                                     this.getDocs('0,1')
                                                                 }
                                                             }
@@ -428,7 +434,7 @@ export default class labelPrint extends React.PureComponent
                                         </div>
                                     </div>
                                     <div className='row pb-2'>
-                                        <div className='col-3 d-flex justify-content-end align-items-center text-size-12'>{this.t("lblDepot")}</div>
+                                        <div className='col-3 d-flex justify-content-end align-items-center text-size-12'>{this.t("lblDesing")}</div>
                                         <div className='col-9'>
                                             <NdSelectBox simple={true} parent={this} id="cmbDesing" notRefresh = {true} displayExpr="DESIGN_NAME" valueExpr="TAG" value="" searchEnabled={false}
                                             dt={{data:this.mainLblObj.dt('MAIN_LABEL_QUEUE'),field:"DESING"}}
@@ -444,6 +450,24 @@ export default class labelPrint extends React.PureComponent
                                                     this.calculateCount()
                                                 }).bind(this)}
                                             />
+                                        </div>
+                                    </div>
+                                    <div className='row pb-2'>
+                                        <div className='col-3 d-flex justify-content-end align-items-center text-size-12'>{this.t("lblPageCount")}</div>
+                                        <div className='col-9'>
+                                            <NdTextBox id="txtPageCount" parent={this} simple={true} readOnly={true} maxLength={32}/>
+                                        </div>
+                                    </div>
+                                    <div className='row pb-2'>
+                                        <div className='col-3 d-flex justify-content-end align-items-center text-size-12'>{this.t("lblFreeLabel")}</div>
+                                        <div className='col-9'>
+                                            <NdTextBox id="txtFreeLabel" parent={this} simple={true} readOnly={true} maxLength={32}/>
+                                        </div>
+                                    </div>
+                                    <div className='row pb-2'>
+                                        <div className='col-3 d-flex justify-content-end align-items-center text-size-12'>{this.t("lblLine")}</div>
+                                        <div className='col-9'>
+                                            <NdTextBox id="txtLine" parent={this} simple={true} readOnly={true} maxLength={32}/>
                                         </div>
                                     </div>
                                     <div className='row pb-2'>
@@ -639,25 +663,10 @@ export default class labelPrint extends React.PureComponent
                                                 <Paging defaultPageSize={10} />
                                                 {/* <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} /> */}
                                                 <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
-                                                <Column dataField="ITEM_NAME" caption={this.t("grdList.clmItemName")} width={150} />
-                                                <Column dataField="QUANTITY" caption={this.t("grdList.clmQuantity")} dataType={'number'} width={40}/>
+                                                <Column dataField="BARCODE" caption={this.t("grdList.clmBarcode")} width={150} />
+                                                <Column dataField="NAME" caption={this.t("grdList.clmName")} width={150} />
+                                                <Column dataField="PRICE" caption={this.t("grdList.clmPrice")}  width={100}/>
                                             </NdGrid>
-                                        </div>
-                                    </div>
-                                    <div className='row pb-2'>
-                                        <div className='col-8 d-flex align-items-center justify-content-end'>
-                                            <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.t("lblTotalLine")}</label>                                            
-                                        </div>
-                                        <div className='col-4'>
-                                            <NdTextBox id="txtTotalLine" parent={this} simple={true} readOnly={true} maxLength={32}/>
-                                        </div>
-                                    </div>
-                                    <div className='row pb-2'>
-                                        <div className='col-8 d-flex align-items-center justify-content-end'>
-                                            <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.t("lblTotalCount")}</label>                                            
-                                        </div>
-                                        <div className='col-4'>
-                                            <NdTextBox id="txtTotalCount" parent={this} simple={true} readOnly={true} maxLength={32}/>
                                         </div>
                                     </div>
                                 </div>
