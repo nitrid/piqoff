@@ -8,15 +8,15 @@ export const langFr =
     btnPrint :"Imprimer",
     btnOk: "OK",
     msgWarning: "Attention",
-    msgSqlService1: "Impossible de se connecter au serveur database", 
+    msgSqlService1: "Impossible de se connecter au serveur base de données", 
     msgSqlService2: "Il n'y a pas de base de données. Souhaitez-vous créér ?", 
-    msgSqlService3: "L'installation de database a réussi. Veuillez vérifier le fichier de configuration et redémarrer le serveur.", 
+    msgSqlService3: "L'installation de base de données a réussi. Veuillez vérifier le fichier de configuration et redémarrer le serveur.", 
     btnYes : "Oui",
     btnGet: "Valider",
     btnNo : "Non",
     msgClose : "Etes-vous sûr(e) de vouloir quitter la page ?",
     txtLangSelect : "Choix de la langue",
-    txtDbSelect : "Choix de la database",
+    txtDbSelect : "Choix de la base de données ",
     userListTitle : "Liste d'utilisateur", 
     txtUser : "Utilisateur",
     txtPass : "Mot de passe",
@@ -150,6 +150,7 @@ export const langFr =
         stk_01_010: "Définir unité",
         stk_01_011: "Définir taux de TVA",
         stk_01_012 :"Identification du produit lié", 
+        stk_01_013 :"Identification de l'image du produit", 
         stk_02_001: "Document inventaire",
         stk_02_002: "Transfert interne dépot/magasin",
         stk_02_003: "Sortie perte",
@@ -1104,7 +1105,45 @@ export const langFr =
             msg : "Etes-vous sûr de vouloir surpprimer l'enregistrement?"
         },
     },
-    stk_02_001 : // Sayım Evrakı"
+    stk_01_013 : // "Identification de l'image du produit" 
+    {
+        txtRef : "Référence",
+        pg_txtRef:
+        {
+            title: "Choix du stock",
+            clmCode: "Code",
+            clmName: "Nom",
+            clmStatus: "Etat"
+        },
+        msgSave:
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            btn02: "Annuler",
+            msg: "Etes-vous sûr de vouloir enregistrer?"
+        },
+        msgSaveResult:
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            msgSuccess: "Votre enregistrement est effectué!",
+            msgFailed: "Votre enregistrement n'est pas effectué!"
+        },
+        msgSaveValid:
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            msg: "Veuillez remplir les champs nécessaires."
+        },
+        msgDelete:
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            btn02: "Annuler",
+            msg: "Etes-vous sûr de vouloir supprimer l'enregistrement?"
+        },
+    },
+    stk_02_001 : // Inventaire"
     {
         txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Dépôt inventaire",
@@ -3603,7 +3642,7 @@ export const langFr =
         dtDocDate : "Date",
         txtAmount : "Total" ,
         txtDiscount : "Remise sur les lignes",   
-        txtDocDiscount : "Remise total général",   
+        txtDocDiscount : "Remise sous-total",   
         txtSubTotal : "Sous-total",  
         txtMargin : "Marge",
         txtVat : "TVA",
@@ -3729,7 +3768,7 @@ export const langFr =
         {
            title: "Remise sur les lignes", 
             chkFirstDiscount : "Ne pas changer les remises de la 1ère ligne",
-            chkDocDiscount : "Remise total général", 
+            chkDocDiscount : "Remise sous-total", 
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -3739,7 +3778,7 @@ export const langFr =
         },
         popDocDiscount : 
         {
-           title: "Remise total général",
+           title: "Remise sous-total",
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -4168,7 +4207,7 @@ export const langFr =
         dtDocDate : "Date",
         txtAmount : "Total" ,
         txtDiscount : "Remise sur les lignes",    
-        txtDocDiscount : "Remise total général",   
+        txtDocDiscount : "Remise sous-total",   
         txtSubTotal : "Sous-total",   
         txtMargin : "Marge",
         txtVat : "TVA",
@@ -4288,7 +4327,7 @@ export const langFr =
         {
            title: "Remise sur les lignes", 
             chkFirstDiscount : "Ne pas changer les remises de la 1ère ligne",
-            chkDocDiscount : "Remise total général",
+            chkDocDiscount : "Remise sous-total",
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -4298,7 +4337,7 @@ export const langFr =
         },
         popDocDiscount : 
         {
-           title: "Remise total général",
+           title: "Remise sous-total",
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -4708,7 +4747,7 @@ export const langFr =
         dtDocDate : "Date",
         txtAmount : "Total" ,
         txtDiscount : "Remise sur les lignes",    
-        txtDocDiscount : "Remise total général",   
+        txtDocDiscount : "Remise sous-total",   
         txtSubTotal : "Sous-total",    
         txtMargin : "Marge",
         txtVat : "TVA",
@@ -4825,7 +4864,7 @@ export const langFr =
         {
            title: "Remise sur les lignes", 
             chkFirstDiscount : "Ne pas changer les remises de la 1ère ligne",
-            chkDocDiscount : "Remise total général",
+            chkDocDiscount : "Remise sous-total",
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -4835,7 +4874,7 @@ export const langFr =
         },
         popDocDiscount : 
         {
-           title: "Remise total général", 
+           title: "Remise sous-total", 
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -5182,7 +5221,7 @@ export const langFr =
         dtDocDate : "Date",
         txtAmount : "Total" ,
         txtDiscount : "Remise sur les lignes",   
-        txtDocDiscount : "Remise total général",    
+        txtDocDiscount : "Remise sous-total",    
         txtSubTotal : "Sous-total",    
         txtMargin : "Marge",
         txtVat : "TVA",
@@ -5292,7 +5331,7 @@ export const langFr =
         {
            title: "Remise sur les lignes", 
             chkFirstDiscount : "Ne pas changer les remises de la 1ère ligne",
-            chkDocDiscount : "Remise total général",
+            chkDocDiscount : "Remise sous-total",
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -5302,7 +5341,7 @@ export const langFr =
         },
         popDocDiscount : 
         {
-           title: "Remise total général",
+           title: "Remise sous-total",
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -5626,7 +5665,7 @@ export const langFr =
         dtDocDate : "Date",
         txtAmount : "Total" ,
         txtDiscount : "Remise sur les lignes",  
-        txtDocDiscount : "Remise total général",   
+        txtDocDiscount : "Remise sous-total",   
         txtSubTotal : "Sous-total",   
         txtMargin : "Marge",
         txtVat : "TVA",
@@ -5738,7 +5777,7 @@ export const langFr =
         {
            title: "Remise sur les lignes",  
             chkFirstDiscount : "Ne pas changer les remises de la 1ère ligne",
-            chkDocDiscount : "Remise total général", 
+            chkDocDiscount : "Remise sous-total", 
             Percent1 : "1. Remise % ", 
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -5748,7 +5787,7 @@ export const langFr =
         },
         popDocDiscount : 
         {
-           title: "Remise total général",
+           title: "Remise sous-total",
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -6103,7 +6142,7 @@ export const langFr =
         dtDocDate : "Date",
         txtAmount : "Total" ,
         txtDiscount : "Remise sur les lignes",    
-        txtDocDiscount : "Remise total général", 
+        txtDocDiscount : "Remise sous-total", 
         txtSubTotal : "Sous-total",  
         txtMargin : "Marge",
         txtVat : "TVA",
@@ -6209,7 +6248,7 @@ export const langFr =
         {
            title: "Remise sur les lignes", 
             chkFirstDiscount : "Ne pas changer les remises de la 1ère ligne",
-            chkDocDiscount : "Remise total général",
+            chkDocDiscount : "Remise sous-total",
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -6219,7 +6258,7 @@ export const langFr =
         },
         popDocDiscount : 
         {
-           title: "Remise total général", 
+           title: "Remise sous-total", 
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -6516,7 +6555,7 @@ export const langFr =
         dtDocDate : "Date",
         txtAmount : "Total" ,
         txtDiscount : "Remise sur les lignes",    
-        txtDocDiscount : "Remise total général",    
+        txtDocDiscount : "Remise sous-total",    
         txtSubTotal : "Sous-total",   
         txtMargin : "Marge",
         txtVat : "TVA",
@@ -6628,7 +6667,7 @@ export const langFr =
         {
            title: "Remise sur les lignes",
             chkFirstDiscount : "Ne pas changer les remises de la 1ère ligne",
-            chkDocDiscount : "Remise total général",
+            chkDocDiscount : "Remise sous-total",
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -6638,7 +6677,7 @@ export const langFr =
         },
         popDocDiscount : 
         {
-           title: "Remise total général",
+           title: "Remise sous-total",
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -6958,7 +6997,7 @@ export const langFr =
         dtDocDate : "Date",
         txtAmount : "Total" ,
         txtDiscount : "Remise sur les lignes",    
-        txtDocDiscount : "Remise total général",   
+        txtDocDiscount : "Remise sous-total",   
         txtSubTotal : "Sous-total",    
         txtMargin : "Marge",
         txtVat : "TVA",
@@ -7072,7 +7111,7 @@ export const langFr =
         {
            title: "Remise sur les lignes", 
             chkFirstDiscount : "Ne pas changer les remises de la 1ère ligne",
-            chkDocDiscount : "Remise total général",
+            chkDocDiscount : "Remise sous-total",
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -7082,7 +7121,7 @@ export const langFr =
         },
         popDocDiscount : 
         {
-           title: "Remise total général",
+           title: "Remise sous-total",
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -7429,7 +7468,7 @@ export const langFr =
         dtDocDate : "Date",
         txtAmount : "Total",
         txtDiscount : "Remise sur les lignes",    
-        txtDocDiscount : "Remise total général",  
+        txtDocDiscount : "Remise sous-total",  
         txtSubTotal : "Sous-total", 
         txtMargin : "Marge",
         txtVat : "TVA",
@@ -7536,7 +7575,7 @@ export const langFr =
         {
            title: "Remise sur les lignes", 
             chkFirstDiscount : "Ne pas changer les remises de la 1ère ligne",
-            chkDocDiscount : "Remise total général",
+            chkDocDiscount : "Remise sous-total",
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -7546,7 +7585,7 @@ export const langFr =
         },
         popDocDiscount : 
         {
-           title: "Remise total général", 
+           title: "Remise sous-total", 
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -7776,7 +7815,7 @@ export const langFr =
         dtDocDate : "Date",
         txtAmount : "Total" ,
         txtDiscount : "Remise sur les lignes",    
-        txtDocDiscount : "Remise total général",   
+        txtDocDiscount : "Remise sous-total",   
         txtSubTotal : "Sous-total",  
         txtMargin : "Marge",
         txtVat : "TVA",
@@ -7886,7 +7925,7 @@ export const langFr =
         {
            title: "Remise sur les lignes",
             chkFirstDiscount : "Ne pas changer les remises de la 1ère ligne",
-            chkDocDiscount : "Remise total général", 
+            chkDocDiscount : "Remise sous-total", 
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -7896,7 +7935,7 @@ export const langFr =
         },
         popDocDiscount : 
         {
-           title: "Remise total général",
+           title: "Remise sous-total",
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -8203,7 +8242,7 @@ export const langFr =
         dtDocDate : "Date",
         txtAmount : "Total" ,
         txtDiscount : "Remise sur les lignes",   
-        txtDocDiscount : "Remise total général",   
+        txtDocDiscount : "Remise sous-total",   
         txtSubTotal : "Sous-total",   
         txtMargin : "Marge",
         txtVat : "TVA",
@@ -8319,7 +8358,7 @@ export const langFr =
         {
            title: "Remise sur les lignes", 
             chkFirstDiscount : "Ne pas changer les remises de la 1ère ligne",
-            chkDocDiscount : "Remise total général", 
+            chkDocDiscount : "Remise sous-total", 
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -8329,7 +8368,7 @@ export const langFr =
         },
         popDocDiscount : 
         {
-           title: "Remise total général", 
+           title: "Remise sous-total", 
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -8714,7 +8753,7 @@ export const langFr =
         dtDocDate : "Date",
         txtAmount : "Total" ,
         txtDiscount : "Remise sur les lignes",   
-        txtDocDiscount : "Remise total général",   
+        txtDocDiscount : "Remise sous-total",   
         txtSubTotal : "Sous-total", 
         txtMargin : "Marge",
         txtVat : "TVA",
@@ -8824,7 +8863,7 @@ export const langFr =
         {
            title: "Remise sur les lignes",
             chkFirstDiscount : "Ne pas changer les remises de la 1ère ligne",
-            chkDocDiscount : "Remise total général", 
+            chkDocDiscount : "Remise sous-total", 
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -8834,7 +8873,7 @@ export const langFr =
         },
         popDocDiscount : 
         {
-           title: "Remise total général", 
+           title: "Remise sous-total", 
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -9075,7 +9114,7 @@ export const langFr =
         dtDocDate : "Date",
         txtAmount : "Total" ,
         txtDiscount : "Remise sur les lignes",    
-        txtDocDiscount : "Remise total général",    
+        txtDocDiscount : "Remise sous-total",    
         txtSubTotal : "Sous-total",    
         txtMargin : "Marge",
         txtVat : "TVA",
@@ -9184,7 +9223,7 @@ export const langFr =
         {
            title: "Remise sur les lignes", 
             chkFirstDiscount : "Ne pas changer les remises de la 1ère ligne",
-            chkDocDiscount : "Remise total général", 
+            chkDocDiscount : "Remise sous-total", 
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -9194,7 +9233,7 @@ export const langFr =
         },
         popDocDiscount : 
         {
-           title: "Remise total général", 
+           title: "Remise sous-total", 
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -9513,6 +9552,9 @@ export const langFr =
             clmBarcode: "Code-barres", 
             clmCode: "Code",
             clmName: "Nom", 
+            clmStartDate : "Date Début",
+            clmFinishDate : "Date Fin", 
+            clmItem : "Nom De Produit",
             clmGrpName: "Groupe", 
             clmPrice : "Prix", 
             btnItem: "Sélection de produits promotionnels", 
@@ -9618,9 +9660,9 @@ export const langFr =
         },
         msgQuantityOrAmount:
         {
-            title: "Dikkat",   // BAK
-            btn01: "Tamam",   // BAK
-            msg: "Lütfen Adet veya Tutar Giriniz !",   // BAK
+            title: "Attention",   
+            btn01: "OK",   
+            msg: "Veluillez saisir la quantité ou le montant !",   
         },
     },
     promo_02_001: //  "Promosyon Listesi"
@@ -9821,7 +9863,7 @@ export const langFr =
         dtDocDate : "Date",
         txtAmount : "Total" ,
         txtDiscount : "Remise sur les lignes",  
-        txtDocDiscount : "Remise total général",
+        txtDocDiscount : "Remise sous-total",
         txtSubTotal : "Sous-total", 
         txtMargin : "Marge",
         txtVat : "TVA",
@@ -9892,7 +9934,7 @@ export const langFr =
         {
            title: "Remise sur les lignes", 
             chkFirstDiscount : "Ne pas changer les remises de la 1ère ligne",
-            chkDocDiscount : "Remise total général", 
+            chkDocDiscount : "Remise sous-total", 
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -9902,7 +9944,7 @@ export const langFr =
         },
         popDocDiscount : 
         {
-           title: "Remise total général",
+           title: "Remise sous-total",
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -10230,7 +10272,7 @@ export const langFr =
         dtDocDate : "Date",
         txtAmount : "Total" ,
         txtDiscount : "Remise sur les lignes",  
-        txtDocDiscount : "Remise total général",  
+        txtDocDiscount : "Remise sous-total",  
         txtSubTotal : "Sous-total",
         txtMargin : "Marge",
         txtVat : "TVA",
@@ -10306,7 +10348,7 @@ export const langFr =
         {
            title: "Remise sur les lignes",
             chkFirstDiscount : "Ne pas changer les remises de la 1ère ligne",
-            chkDocDiscount : "Remise total général",
+            chkDocDiscount : "Remise sous-total",
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -10316,7 +10358,7 @@ export const langFr =
         },
         popDocDiscount : 
         {
-           title: "Remise total général", 
+           title: "Remise sous-total", 
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -10643,7 +10685,7 @@ export const langFr =
         dtDocDate : "Date",
         txtAmount : "Total" ,
         txtDiscount : "Remise sur les lignes", 
-        txtDocDiscount : "Remise total général",  
+        txtDocDiscount : "Remise sous-total",  
         txtSubTotal : "Sous-total", 
         txtMargin : "Marge",
         txtVat : "TVA",
@@ -10719,7 +10761,7 @@ export const langFr =
         {
            title: "Remise sur les lignes", 
             chkFirstDiscount : "Ne pas changer les remises de la 1ère ligne",
-            chkDocDiscount : "Remise total général",
+            chkDocDiscount : "Remise sous-total",
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -10729,7 +10771,7 @@ export const langFr =
         },
         popDocDiscount : 
         {
-           title: "Remise total général",
+           title: "Remise sous-total",
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -10979,7 +11021,7 @@ export const langFr =
         dtDocDate : "Date",
         txtAmount : "Total" ,
         txtDiscount : "Remise sur les lignes",  
-        txtDocDiscount : "Remise total général",   
+        txtDocDiscount : "Remise sous-total",   
         txtSubTotal : "Sous-total",  
         txtMargin : "Marge",
         txtVat : "TVA",
@@ -11050,7 +11092,7 @@ export const langFr =
         {
            title: "Remise sur les lignes", 
             chkFirstDiscount : "Ne pas changer les remises de la 1ère ligne",
-            chkDocDiscount : "Remise total général", 
+            chkDocDiscount : "Remise sous-total", 
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -11060,7 +11102,7 @@ export const langFr =
         },
         popDocDiscount : 
         {
-           title: "Remise total général", 
+           title: "Remise sous-total", 
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -11366,7 +11408,7 @@ export const langFr =
         dtDocDate : "Date",
         txtAmount : "Total" ,
         txtDiscount : "Remise sur les lignes",    
-        txtDocDiscount : "Remise total général",    
+        txtDocDiscount : "Remise sous-total",    
         txtSubTotal : "Sous-total",   
         txtMargin : "Marge",
         txtVat : "TVA",
@@ -11437,7 +11479,7 @@ export const langFr =
         {
            title: "Remise sur les lignes", 
             chkFirstDiscount : "Ne pas changer les remises de la 1ère ligne",
-            chkDocDiscount : "Remise total général", 
+            chkDocDiscount : "Remise sous-total", 
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -11447,7 +11489,7 @@ export const langFr =
         },
         popDocDiscount : 
         {
-           title: "Remise total général", 
+           title: "Remise sous-total", 
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -11683,7 +11725,7 @@ export const langFr =
         dtDocDate : "Date",
         txtAmount : "Total" ,
         txtDiscount : "Remise sur les lignes",   
-        txtDocDiscount : "Remise total général",   
+        txtDocDiscount : "Remise sous-total",   
         txtSubTotal : "Sous-total",  
         txtMargin : "Marge",
         txtVat : "TVA",
@@ -11754,7 +11796,7 @@ export const langFr =
         {
            title: "Remise sur les lignes", 
             chkFirstDiscount : "Ne pas changer les remises de la 1ère ligne",
-            chkDocDiscount : "Remise total général",
+            chkDocDiscount : "Remise sous-total",
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -11764,7 +11806,7 @@ export const langFr =
         },
         popDocDiscount : 
         {
-           title: "Remise total général", 
+           title: "Remise sous-total", 
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -12137,7 +12179,7 @@ export const langFr =
         dtDocDate : "Date",
         txtAmount : "Total" ,
         txtDiscount : "Remise sur les lignes", 
-        txtDocDiscount : "Remise total général",  
+        txtDocDiscount : "Remise sous-total",  
         txtSubTotal : "Sous-total", 
         txtMargin : "Marge",
         txtVat : "TVA",
@@ -12212,7 +12254,7 @@ export const langFr =
         {
            title: "Remise sur les lignes", 
             chkFirstDiscount : "Ne pas changer les remises de la 1ère ligne",
-            chkDocDiscount : "Remise total général",
+            chkDocDiscount : "Remise sous-total",
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -12222,7 +12264,7 @@ export const langFr =
         },
         popDocDiscount : 
         {
-           title: "Remise total général", 
+           title: "Remise sous-total", 
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -12500,7 +12542,7 @@ export const langFr =
         dtDocDate : "Date",
         txtAmount : "Total" ,
         txtDiscount : "Remise sur les lignes",  
-        txtDocDiscount : "Remise total général",   
+        txtDocDiscount : "Remise sous-total",   
         txtSubTotal : "Sous-total",  
         txtMargin : "Marge",
         txtVat : "TVA",
@@ -12574,7 +12616,7 @@ export const langFr =
         {
            title: "Remise sur les lignes",
             chkFirstDiscount : "Ne pas changer les remises de la 1ère ligne",
-            chkDocDiscount : "Remise total général",
+            chkDocDiscount : "Remise sous-total",
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -12584,7 +12626,7 @@ export const langFr =
         },
         popDocDiscount : 
         {
-           title: "Remise total général", 
+           title: "Remise sous-total", 
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -14975,7 +15017,7 @@ export const langFr =
         dtDocDate : "Date",
         txtAmount : "Total" ,
         txtDiscount : "Remise sur les lignes",  
-        txtDocDiscount : "Remise total général", 
+        txtDocDiscount : "Remise sous-total", 
         txtSubTotal : "Sous-total", 
         txtMargin : "Marge",
         txtVat : "TVA",
@@ -15037,7 +15079,7 @@ export const langFr =
         {
            title: "Remise sur les lignes", 
             chkFirstDiscount : "Ne pas changer les remises de la 1ère ligne",
-            chkDocDiscount : "Remise total général",
+            chkDocDiscount : "Remise sous-total",
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -15047,7 +15089,7 @@ export const langFr =
         },
         popDocDiscount : 
         {
-           title: "Remise total général",
+           title: "Remise sous-total",
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -15298,7 +15340,7 @@ export const langFr =
         dtDocDate : "Date",
         txtAmount : "Total" ,
         txtDiscount : "Remise sur les lignes",  
-        txtDocDiscount : "Remise total général",  
+        txtDocDiscount : "Remise sous-total",  
         txtSubTotal : "Sous-total", 
         txtMargin : "Marge",
         txtVat : "TVA",
@@ -15363,7 +15405,7 @@ export const langFr =
         {
            title: "Remise sur les lignes", 
             chkFirstDiscount : "Ne pas changer les remises de la 1ère ligne",
-            chkDocDiscount : "Remise total général", 
+            chkDocDiscount : "Remise sous-total", 
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -15373,7 +15415,7 @@ export const langFr =
         },
         popDocDiscount : 
         {
-           title: "Remise total général",
+           title: "Remise sous-total",
             Percent1 : "1. Remise % ",
             Price1 : "1. Remise",
             Percent2 : "2. Remise %",
@@ -16010,14 +16052,14 @@ export const langFr =
         btnGet :"Apporter",  
         grdListe :    
         {   
-            clmRef: "Colonne facture",   
-            clmRefNo : "Ligne facture",  
+            clmRef: "Ref. Facture",   
+            clmRefNo : "Nr. Facture",  
             clmDocDate : "Date de facture",   
-            clmOutputCode : "Code fournisseur",   
-            clmOutputName : "Nom fournisseur", 
+            clmOutputCode : "Ref Fournisseur",   
+            clmOutputName : "Nom Fournisseur", 
             clmQuantity : "Quantité",    
-            clmCode: "Code",     
-            clmName : "Nom",               
+            clmCode: "Ref. Produit",     
+            clmName : "Nom du produit",               
             clmAmount : "Montant de la taxe",     
             clmLitre : "Unité litre" 
         },

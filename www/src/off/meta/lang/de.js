@@ -1,32 +1,32 @@
 export const langDe = 
 {
     popGrid: {btnSelection: "Auswählen", btnSearch: "Auflisten"},
-    serverConnection: "Verbindung zum Server wird hergestellt",
-    loading: "Wird geladen",
-    btnSave: "Speichern",
-    btnCancel: "Abbrechen",
+    serverConnection: "Verbindung zum Server wird hergestellt.",
+    loading: "Wird geladen!",
+    btnSpeichern: "Speichern",
+    btnAbbrechen: "Abbrechen",
     btnPrint: "Drucken",
     btnOk: "OK",
-    btnGet: "Abrufen",
-    msgWarning: "Achtung",
+    btnGet: "Suchen",
+    msgWarning: "Hinweis!",
     msgSqlService1: "Es konnte keine Verbindung zum SQL-Server hergestellt werden.", //BAK
-    msgSqlService2: "Datenbank nicht vorhanden. Möchten Sie sie erstellen?", //BAK
+    msgSqlService2: "Datenbank nicht vorhanden. Möchten Sie neue Datenbank erstellen?", //BAK
     msgSqlService3: "Die Datenbankinstallation war erfolgreich. Bitte überprüfen Sie die Konfigurationsdatei und starten Sie den Server neu.", //BAK
     btnYes: "Ja",
     btnNo: "Nein",
-    msgClose: "Sind Sie sicher, dass Sie die Seite schließen möchten?",
-    txtLangSelect: "Sprachauswahl",
+    msgClose: "Sind Sie sicher, dass Sie diese Seite schließen möchten?",
+    txtLangSelect: "Sprache!",
     userListTitle: "Benutzerliste",
     txtUser: "Benutzer",
     txtPass: "Passwort",
-    btnUserSelect: "Benutzer auswählen",
+    btnUserSelect: "Benutzer wählen",
     btnLogin: "Anmelden",
     btnLogout: "Abmelden",
-    msgNotAccess: "Keine Zugriffsberechtigung für den Benutzer.",
-    msgInvalidUser: "Benutzername oder Passwort ist falsch.",
-    txtCardRead: "Bitte Karte des Benutzers scannen.",
+    msgNotAccess: "Keine Zugriffsberechtigung für den Benutzer!",
+    msgInvalidUser: "Benutzername oder Passwort ist falsch!",
+    txtCardRead: "Bitte Benutzerkarte scannen.",
     checkAll: "Alles auswählen",
-    msgUserAccess: "Kein Zugriff gestattet",
+    msgUserAccess: "Kein Zugriff gestattet!",
     collectiveItemAdd: "Massenhafte Artikel hinzufügen",
     constructionMsg: "Diese Seite befindet sich im Aufbau und wird Ihnen bald zur Verfügung stehen.",
     about: "Über uns",
@@ -47,7 +47,7 @@ export const langDe =
     txtTicketAvg: "Durchschnittlicher Belegbetrag",
     popPassword: 
     {
-        title: "Benutzer Passwort eingeben",
+        title: "Benutzerpasswort eingeben!",
         Password: "Passwort",
         btnApprove: "Bestätigen"
     },
@@ -59,8 +59,8 @@ export const langDe =
     },
     msgAnotherUserAlert: 
     {
-        title: "Achtung",
-        msg: "Es wurde mit Ihren Benutzerdaten von einem anderen Gerät aus eingeloggt",
+        title: "Hinweis",
+        msg: "Es wurde mit Ihren Benutzerdaten von einem anderen Gerät aus eingeloggt!",
         btn01: "OK"
     },
     msgisExecuteClose: 
@@ -71,14 +71,14 @@ export const langDe =
     },
     popOpenTike: 
     {
-        title: "Offene Tickets"
+        title: "Offene Vorgänge."
     },
     grdOpenTike: 
     {
         clmUser: "Benutzer",
         clmDevice: "Gerät",
         clmDate: "Datum",
-        clmTicketId: "Ticket Nr.",
+        clmTicketId: "Vorgangsnummer",
         clmTotal: "Gesamt",
         clmDescription: "Beschreibung"
     },
@@ -86,8 +86,8 @@ export const langDe =
     {
         title: "Achtung",
         btn01: "OK",
-        btn02: "Produkte anzeigen",
-        msg: "Es gibt Produkte, deren Verfallsdatum bevorsteht. Bitte überprüfen Sie diese!"
+        btn02: "Artikel anzeigen",
+        msg: "Es gibt Artikel, deren Verfallsdatum bevorsteht. Bitte überprüfen Sie diese!"
     },
     msgNotRow:
     {
@@ -111,7 +111,7 @@ export const langDe =
     popDeleteDesc:
     {
         head: "Löschvorgangbeschreibung",
-        title: "Bitte geben Sie den Löschgrund ein"
+        title: "Bitte geben Sie den Löschgrund ein."
     },
     popVatRate:
     {
@@ -123,43 +123,43 @@ export const langDe =
         clmVat: "Steuerbetrag",
     clmTotalHt: "Gesamtbetrag",
     },
-    btnVatToZero: "Steuern auf Null setzen",
+    btnVatToZero: "Steuern auf Null setzen!",
     menuOff:
     {
-        stk: "Bestand",
-        stk_01: "Definitionen",
-        stk_02: "Dokumente",
+        stk: "Artikel",
+        stk_01: "Vorgänge",
+        stk_02: "Belege",
         stk_03: "Listen",
-        stk_04: "Operationen",
+        stk_04: "Vorgänge",
         stk_05: "Berichte",
-        stk_01_001: "Neue Bestandsdefinition",
-        stk_01_002: "Barcode-Definitionen",
-        stk_01_003: "Preisdefinitionen",
-        stk_01_004: "Einheitendefinitionen",
+        stk_01_001: "Neue Artikel erstellen",
+        stk_01_002: "Barcode erzeugen",
+        stk_01_003: "Preise definieren",
+        stk_01_004: "Einheiten festlegen",
         stk_01_005: "Mehrfachcode-Definitionen",
-        stk_01_006: "Lager/Geschäftsstellen-Definitionen",
+        stk_01_006: "Lager/Geschäftsstellen erstellen",
         stk_01_007: "Dienstleistungsdefinitionen",
-        stk_01_008: "Produktgruppen-Definition",
-        stk_01_009: "Untergruppen-Definition",
-        stk_01_010: "Einheitsdefinition",
-        stk_01_011: "Steuerndefinition",
-        stk_01_012: "Verbundene Produktdefinition",
-        stk_01_013: "Produktbild-Definition",
+        stk_01_008: "Artikelgruppen erstellen ",
+        stk_01_009: "Untergruppen erstellen",
+        stk_01_010: "Einheiten bestimmen",
+        stk_01_011: "Steuern festlegen",
+        stk_01_012: "Verbundene Artikeldefinition",
+        stk_01_013: "Artikelbild bearbeiten",
         stk_02_001: "Bestandsdokument",
         stk_02_002: "Lager/Geschäftsstellen-Transfer",
-        stk_02_003: "Verlust von Produktaustritt",
-        stk_02_004: "Etikettendruck",
-        stk_02_005: "Rücknahme von Produkten",
-        stk_02_006: "Sonderetikettendruck",
+        stk_02_003: "Verlust von Artikelaustritt",
+        stk_02_004: "Etikett drucken",
+        stk_02_005: "Rücknahme von Artikeln",
+        stk_02_006: "Sonderetikett drucken",
         stk_02_007: "Haltbarkeitsdatumseingabe",
-        stk_02_008: "Bestandszugangsschein",
-        stk_02_009: "Bestandsabgangsschein",
-        stk_03_001: "Bestandsliste",
+        stk_02_008: "Warenzugangsschein",
+        stk_02_009: "Warensabgangsschein",
+        stk_03_001: "Artikelliste",
         stk_03_002: "Preisliste",
         stk_03_003: "Barcode-Liste",
         stk_03_004: "Lager/Geschäftsstellen-Liste",
         stk_03_005: "Mehrfachcode-Liste",
-        stk_03_006: "Lagerproduktmengenliste",
+        stk_03_006: "LagerArtikelmengenliste",
         stk_04_001: "Massenbestandsbearbeitung",
         stk_04_002: "Rücknahmeoperationen",
         stk_04_003: "Bestandszählung abschließen",
@@ -168,21 +168,21 @@ export const langDe =
         stk_05_002: "Bericht über sich ändernde Einkaufspreise",
         stk_05_003: "Bestandszählungsbericht",
         cri: "Kunden",
-        cri_01: "Definitionen",
+        cri_01: "Vorgänge",
         cri_02: "Listen",
         cri_03: "Operationen",
         cri_04: "Berichte",
-        cri_01_001: "Kundendefinitionen",
-        cri_01_002: "Adressdefinitionen",
-        cri_01_003: "Gruppendefinitionen",
+        cri_01_001: "Neukunde anlegen",
+        cri_01_002: "Adressen bearbeiten",
+        cri_01_003: "Gruppen erstellen",
         cri_02_001: "Kundenliste",
         cri_02_002: "Adressliste",
         cri_02_003: "Gruppenliste",
         cri_03_001: "Massenhafte Kundenhinzufügung",
-        cri_04_001: "Kundenauszug-Bericht",
-        cri_04_002: "Kundenkontostand-Bericht",
-        cri_04_003: "Kundenpunkte-Bericht",
-        cri_04_004: "Kontostandbasierte Kundenauszug-Bericht",
+        cri_04_001: "Kundenauszug",
+        cri_04_002: "Kundenkontostand",
+        cri_04_003: "Kundenpunkte",
+        cri_04_004: "Kontostandbasierte Kundenauszug",
         ftr: "Rechnung",
         ftr_01: "Listen",
         ftr_02: "Dokumente",
@@ -271,18 +271,18 @@ export const langDe =
         pos_02_005: "Geänderte Belege-Bericht",
         pos_02_006: "Tagesabschluss-Bericht",
         pos_02_007: "POS-Vorschuss-Bericht",
-        pos_02_008: "Produktverkaufsbericht",
+        pos_02_008: "Artikelverkaufsbericht",
         pos_02_009: "Gruppenbasierter Verkaufsbericht",
-        pos_02_010: "Produktdetailierter Verkaufsbericht",
-        pos_02_011: "Produktvergleichsbericht",
+        pos_02_010: "Artikeldetailierter Verkaufsbericht",
+        pos_02_011: "Artikelvergleichsbericht",
         pos_03: "Operationen",
         pos_03_001: "Tagesabschluss",
-        promo: "Promotion",
+        promo: "Angebot",
         promo_01: "Definitionen",
-        promo_01_001: "Promotion-Definition",
+        promo_01_001: "Angebot-Definition",
         promo_02: "Listen",
-        promo_02_001: "Promotionsliste",
-        promo_02_002: "Promotionsdetailliste",
+        promo_02_001: "Angebotsliste",
+        promo_02_002: "Angebotsdetailliste",
         promo_03: "Berichte",
         set: "Einstellungen",
         set_01: "Kosten und Zusatzsteuern",
@@ -301,7 +301,7 @@ export const langDe =
         set_03_002: "Gelöschte Zeilen",
         proces: "Massenoperationen",
         proces_01: "Bestandsoperationen",
-        proces_01_001: "Produktgruppenaktualisierung",
+        proces_01_001: "Artikelgruppenaktualisierung",
         tkf: "Angebot",
         tkf_01: "Listen",
         tkf_02: "Dokumente",
@@ -352,15 +352,15 @@ export const langDe =
         slsRpt_01_002: "Gruppenbasierter Verkaufsbericht",
         slsRpt_01_003: "Verkaufsrechnungen nach Datum sortiert",
         slsRpt_01_004: "Verkaufsbericht",
-        slsRpt_01_005: "Produktverkaufs- und Rückgabebericht",
+        slsRpt_01_005: "Artikelverkaufs- und Rückgabebericht",
         slsRpt_01_006: "Verkaufs- und Rückgabebericht nach Kunden",
         slsRpt_01_007: "Rückgaberechnungsbericht",
-        slsRpt_01_008: "Produktdetailierter Verkaufsbericht",
+        slsRpt_01_008: "Artikeldetailierter Verkaufsbericht",
         purchaseReport: "Berichte",
-        slsRpt_02_001: "Allesrechnungen nach Datum sortiert",
+        slsRpt_02_001: "Alle Rechnungen nach Datum sortiert",
         slsRpt_02_002: "DEB-Bericht",
         slsRpt_02_003: "Zuckersteuerbericht",
-        slsRpt_02_004: "Produktdetailierter Einkaufsbericht"
+        slsRpt_02_004: "Detailierter Artikel Einkaufsbericht"
     },
     login:
     {
@@ -377,22 +377,22 @@ export const langDe =
     stk_01_001:  // "Neue Lagerdefinition"
     {
         txtRef: "Referenz",
-        cmbItemGrp: "Produktgruppe",
+        cmbItemGrp: "Artikelgruppe",
         txtCustomer: "Lieferant",
-        cmbItemGenus: "Produktart",
+        cmbItemGenus: "Artikelart",
         txtBarcode: "Barcode",
         cmbTax: "Steuersatz",
         cmbMainUnit: "Haupteinheit",
         cmbOrigin: "Herkunft",
         cmbUnderUnit: "Untereinheit",
-        txtItemName: "Produktname",
+        txtItemName: "Artikelname",
         txtShortName: "Kurzname",
         chkActive: "Aktiv",
-        chkCaseWeighed: "Auf der Kasse wiegen",
+        chkCaseWeighed: "An der Kasse wiegen.",
         chkLineMerged: "Verkauf mit getrennten Positionen",
         chkTicketRest: "Ticket-Rest.",
         chkInterfel : "Interfel",
-        txtCostPrice: "Kostenpreis",
+        txtCostPrice: "Einkaufspreis",
         txtSalePrice : "Verkaufspreis",
         txtMinSalePrice: "Min. Verkaufspreis",
         txtMaxSalePrice: "Max. Verkaufspreis",
@@ -436,7 +436,7 @@ export const langDe =
         },
         pg_txtRef: 
         {
-            title: "Auswahl des Bestands",
+            title: "Auswahl der Artikel",
             clmCode: "CODE",
             clmName: "NAME",
             clmStatus: "STATUS"
@@ -480,7 +480,7 @@ export const langDe =
             title: "Lieferant hinzufügen",
             txtPopCustomerCode: "Code",
             txtPopCustomerName: "Name",
-            txtPopCustomerItemCode: "Bestandscode des Lieferanten",
+            txtPopCustomerItemCode: "Artikelcode des Lieferanten",
             txtPopCustomerPrice: "Preis"
         },
         grdPrice: 
@@ -526,10 +526,10 @@ export const langDe =
         {
             clmCode: "Code",
             clmName: "Name",
-            clmPriceUserName: "Benutzer",
+            clmPriceUserName: "Benutzer/in",
             clmPriceDate: "Letztes Preisdatum",
             clmPrice: "Preis",
-            clmMulticode: "Lieferantenbestandscode"
+            clmMulticode: "LieferantenArtikelcode"
         },
         grdSalesContract: 
         {
@@ -538,24 +538,24 @@ export const langDe =
             clmName: "Name",
             clmDate: "Letztes Preisdatum",
             clmPrice: "Preis",
-            clmMulticode: "Lieferantenbestandscode"
+            clmMulticode: "LieferantenArtikelcode"
         },
         grdCustomerPrice: 
         {
-            clmUser: "Benutzer",
+            clmUser: "Benutzer/in",
             clmCode: "Code",
             clmName: "Name",
             clmDate: "Letztes Preisdatum",
             clmPrice: "Preis",
-            clmMulticode: "Lieferantenbestandscode"
+            clmMulticode: "LieferantenArtikelcode"
         },
         grdOtherShop: 
         {
-            clmCode: "Produktcode",
-            clmName: "Produktname",
+            clmCode: "Artikelcode",
+            clmName: "Artikelname",
             clmBarcode: "Barcode",
             clmPrice: "Preis",
-            clmMulticode: "Lieferantenbestandscode",
+            clmMulticode: "LieferantenArtikelcode",
             clmCustomer: "Lieferant",
             clmCustomerPrice: "Lieferantenpreis",
             clmShop: "Filiale",
@@ -564,45 +564,45 @@ export const langDe =
         msgRef: 
         {
             title: "Achtung",
-            btn01: "Zum Produkt gehen",
+            btn01: "Zum Artikel gehen",
             btn02: "OK",
             msg: "Der eingegebene Bestand ist im System vorhanden!"
         },
         msgBarcode: 
         {
             title: "Achtung",
-            btn01: "Zum Produkt gehen",
+            btn01: "Zum Artikel gehen",
             btn02: "OK",
             msg: "Der eingegebene Barcode ist im System vorhanden!"
         },
         msgCustomer: 
         {
             title: "Achtung",
-            btn01: "Zum Produkt gehen",
+            btn01: "Zum Artikel gehen",
             btn02: "OK",
-            msg: "Der eingegebene Lieferantenbestandscode ist im System vorhanden!"
+            msg: "Der eingegebene LieferantenArtikelcode ist im System vorhanden!"
         },
-        msgPriceSave: 
+        msgPriceSpeichern: 
         {
             title: "Achtung",
             btn01: "OK",
             msg: "Bitte geben Sie einen Preis ein!"
         },
-        msgSave: 
+        msgSpeichern: 
         {
             title: "Achtung",
             btn01: "OK",
             btn02: "Abbrechen",
             msg: "Möchten Sie den Eintrag speichern?"
         },
-        msgSaveResult: 
+        msgSpeichernResult: 
         {
             title: "Achtung",
             btn01: "OK",
             msgSuccess: "Ihr Eintrag wurde erfolgreich gespeichert!",
             msgFailed: "Ihr Eintrag konnte nicht gespeichert werden!"
         },
-        msgSaveValid:
+        msgSpeichernValid:
         {
             title: "Achtung",
             btn01: "OK",
@@ -630,16 +630,16 @@ export const langDe =
         tabTitleSalesPriceHistory : "Verkaufspreisverlauf",
         grdSalesPrice : 
         {
-            clmUser : "Benutzer",
+            clmUser : "Benutzer/in",
             clmDate : "Änderungsdatum",
             clmPrice : "Preis",
         },
         grdItemInfo: 
         {
             cDate: "Erstellungsdatum",
-            cUser: "Ersteller-Benutzer",
+            cUser: "Ersteller-Benutzer/in",
             lDate: "Letztes Änderungsdatum",
-            lUser : "Letzter Änderungs-Benutzer",
+            lUser : "Letzter Benutzer/in",
         },
         msgCheckPrice:
         {
@@ -665,7 +665,7 @@ export const langDe =
         },
         popDescription :
         {
-            title : "Produktbeschreibung"
+            title : "Artikelbeschreibung"
         },
         grdAnalysis: 
         {
@@ -678,12 +678,12 @@ export const langDe =
         },
         dtFirstAnalysis : "Start",
         dtLastAnalysis : "Ende",
-        btnGet : "Abrufen",
+        btnGet : "Suchen",
         msgNotDelete:
         {
             title: "Achtung",
             btn01: "OK",
-            msg: "Dieses Produkt kann nicht gelöscht werden, da es verarbeitet wurde!"
+            msg: "Dieser Artikel kann nicht gelöscht werden, da Transaktione exisieren!"
         },
         cmbItemGenusData :
         {
@@ -714,17 +714,17 @@ export const langDe =
         MainUnit :"Dieser Barcode wird der Basiseinheit zugeordnet",
         SubUnit : "Dieser Barcode wird der Unterunit zugeordnet",
         txtUnitTypeName :"Beschreibung",
-        barcodePlace : "Geben Sie den Barcode ein, den Sie für das ausgewählte Produkt hinzufügen möchten...",
+        BarcodePlace : "Geben Sie den Barcode ein, den Sie für den ausgewählten Artikel hinzufügen möchten.",
         pg_txtItem:
         {
-            title: "Produktauswahl",
+            title: "Artikelauswahl",
             clmCode: "CODE",
             clmName: "NAME", 
         },
         pg_txtBarcode:
         {
             title: "Barcode-Auswahl",
-            clmBarcode: "BARCODE",
+            clmBarcode: "Barcode",
             clmItemName: "ARTIKELNAME", 
             clmItemCode: "ARTIKELCODE"
         },      
@@ -733,7 +733,7 @@ export const langDe =
             title: "Achtung",
             btn01: "Zum Barcode gehen",
             btn02: "OK",
-            msg: "Der eingegebene Barcode ist bereits im System registriert! Produkt wurde gefunden."
+            msg: "Der eingegebene Barcode ist bereits im System registriert! Artikel wurde gefunden."
         },
         msgBarcode:
         {
@@ -742,21 +742,21 @@ export const langDe =
             btn02: "OK",
             msg: "Der eingegebene Barcode ist bereits im System registriert!"
         },
-        msgSave:
+        msgSpeichern:
         {
             title: "Achtung",
             btn01: "OK",
             btn02: "Abbrechen",
             msg: "Sind Sie sicher, dass Sie den Eintrag speichern möchten?"
         },
-        msgSaveResult:
+        msgSpeichernResult:
         {
             title: "Achtung",
             btn01: "OK",
             msgSuccess: "Ihr Eintrag wurde erfolgreich gespeichert!",
             msgFailed: "Ihr Eintrag konnte nicht gespeichert werden!"
         },
-        msgSaveValid:
+        msgSpeichernValid:
         {
             title: "Achtung",
             btn01: "OK",
@@ -782,55 +782,55 @@ export const langDe =
             normal : "Zentral",
             rebate : "Rabatt",
             shop : "Shop",
-            outage : "Ausfall",
+            outage : "Verderb",
         },
         pg_txtCode :
         {
-            title: "Warehouse Selection",
+            title: "Lager wählen.",
             clmCode: "Code",
             clmName: "Name",
             clmType: "Type",
         },
-        msgSave:
+        msgSpeichern:
         {
-            title: "Attention",
+            title: "Achtung!",
             btn01: "OK",
-            btn02: "Cancel",
-            msg: "Are you sure you want to save the record?"
+            btn02: "Abbrechen",
+            msg: "Sind Sie sicher, dass Sie den Eintrag löschen möchten?"
         },
-        msgSaveResult:
+        msgSpeichernResult:
         {
-            title: "Attention",
+            title: "Achtung!",
             btn01: "OK",
-            msgSuccess: "Record saved successfully!",
-            msgFailed: "Record saving failed!",
+            msgSuccess: "Eintrag erfolgreich gespeichert!",
+            msgFailed: "Ihr Eintrag konnte nicht gespeichert werden!",
         },
-        msgSaveValid:
+        msgSpeichernValid:
         {
-            title: "Attention",
+            title: "Achtung!",
             btn01: "OK",
-            msg: "Please fill in the required fields!",
+            msg: "Bitte füllen Sie alle erforderlichen Felder aus!",
         },
         msgDelete:
         {
-            title: "Attention",
+            title: "Achtung!",
             btn01: "OK",
-            btn02: "Cancel",
-            msg: "Are you sure you want to delete the record?",
+            btn02: "Abbrechen",
+            msg: "Sind Sie sicher, dass Sie den Eintrag löschen möchten?",
         },
         msgCode:
         {
-            title: "Attention",
-            btn01: "Go to Cash Register",
+            title: "Achtung!",
+            btn01: "Gehen Sie zur Kasse.",
             btn02: "OK",
-            msg: "The entered code is already registered in the system!",
+            msg: "Der eingegebene Code ist bereits im System registriert!",
         },
-        chkActive: "Active",
+        chkActive: "Aktive",
         msgNotDeleted:
         {
-            title: "Attention",
+            title: "Achtung!",
             btn01: "OK",
-            msg: "This warehouse cannot be deleted because transactions have been performed on it!",
+            msg: "Dieser Lager kann nicht gelöscht werden, da Transaktione exisieren!",
         },
     },
     stk_01_007: // "Service Definitions"
@@ -838,62 +838,62 @@ export const langDe =
         txtCode: "Code",
         txtName: "Name",
         cmbType: "Type",
-        validCode: "Code field cannot be empty!",
+        validCode: "Code-Feld darf nicht leer sein!",
         
         pg_txtCode:
         {
-            title: "Service Card Selection",
+            title: "Servicekartenauswahl",
             clmCode: "Code",
             clmName: "Name",
             clmType: "Type",
         },
-        msgSave:
+        msgSpeichern:
         {
-            title: "Attention",
+            title: "Achtung!",
             btn01: "OK",
-            btn02: "Cancel",
-            msg: "Are you sure you want to save the record?",
+            btn02: "Abbrechen",
+            msg: "Sind Sie sicher, dass Sie den Eintrag speichern möchten?",
         },
-        msgSaveResult:
+        msgSpeichernResult:
         {
-            title: "Attention",
+            title: "Achtung!",
             btn01: "OK",
-            msgSuccess: "Record saved successfully!",
-            msgFailed: "Record saving failed!",
+            msgSuccess: "Eintrag erfolgreich gespeichert! ",
+            msgFailed: "Ihr Eintrag konnte nicht gespeichert werden!",
         },
-        msgSaveValid:
+        msgSpeichernValid:
         {
-            title: "Attention",
+            title: "Achtung!",
             btn01: "OK",
-            msg: "Please fill in the required fields!",
+            msg: "Bitte füllen Sie alle erforderlichen Felder aus!",
         },
         msgDelete:
         {
-            title: "Attention",
+            title: "Achtung!",
             btn01: "OK",
-            btn02: "Cancel",
-            msg: "Are you sure you want to delete the record?",
+            btn02: "Abbrechen",
+            msg: "Sind Sie sicher, dass Sie den Eintrag löschen möchten?",
         },
         msgCode:
         {
-            title: "Attention",
-            btn01: "Go to Card",
+            title: "Achtung!",
+            btn01: "Gehen Sie zur Karte",
             btn02: "OK",
-            msg: "The entered service code is already registered in the system!",
+            msg: "Der eingegebene Servicecode ist bereits im System registriert!",
         },
-        chkActive: "Active",
-        cmbTax: "Tax",
+        chkActive: "Aktive",
+        cmbTax: "Steuer",
         msgNotDelete:
         {
-            title: "Attention",
+            title: "Achtung!",
             btn01: "OK",
-            msg: "This card cannot be deleted because transactions have been performed on it!",
+            msg: "Dieser Karte kann nicht gelöscht werden, da Transaktione exisieren!",
         },
         msgNotUpdate:
         {
-            title: "Attention",
+            title: "Achtung!",
             btn01: "OK",
-            msg: "Changes cannot be made to this card because transactions have been performed on it!",
+            msg: "Änderungen auf dieser Karte nicht möglich, da Transaktione exisieren!",
         },
         },
         stk_01_008: // "Product Group Definitions"
@@ -901,48 +901,48 @@ export const langDe =
         txtCode: "Code",
         txtName: "Name",
         cmbType: "Type",
-        validCode: "Code field cannot be empty!",
+        validCode: "Code-Feld darf nicht leer sein!",
         pg_txtCode:
         {
-            title: "Product Group Selection",
+            title: "Artikelgruppenauswahl",
             clmCode: "Code",
             clmName: "Name",
         },
-        msgSave:
+        msgSpeichern:
         {
-            title: "Attention",
+            title: "Achtung!",
             btn01: "OK",
-            btn02: "Cancel",
-            msg: "Are you sure you want to save the record?",
+            btn02: "Abbrechen",
+            msg: "Sind Sie sicher, dass Sie den Eintrag löschen möchten?",
         },
-        msgSaveResult:
+        msgSpeichernResult:
         {
-            title: "Attention",
+            title: "Achtung!",
             btn01: "OK",
-            msgSuccess: "Record saved successfully!",
-            msgFailed: "Record saving failed!",
+            msgSuccess: "Eintrag erfolgreich gespeichert! ",
+            msgFailed: "Ihr Eintrag konnte nicht gespeichert werden!",
         },
-        msgSaveValid:
+        msgSpeichernValid:
         {
-            title: "Attention",
+            title: "Achtung!",
             btn01: "OK",
-            msg: "Please fill in the required fields!",
+            msg: "Bitte füllen Sie alle erforderlichen Felder aus!",
         },
         msgDelete:
         {
-            title: "Attention",
+            title: "Achtung!",
             btn01: "OK",
-            btn02: "Cancel",
-            msg: "Are you sure you want to delete the record?",
+            btn02: "Abbrechen",
+            msg: "Sind Sie sicher, dass Sie den Eintrag löschen möchten?",
         },
         msgCode:
         {
-            title: "Attention",
-            btn01: "Go to Cash Register",
+            title: "Achtung!",
+            btn01: "Gehen Sie zur Kasse.",
             btn02: "OK",
-            msg: "The entered code is already registered in the system!",
+            msg: "Der eingegebene Code ist bereits im System registriert!",
         },
-        chkActive: "Active",
+        chkActive: "Aktive",
         },
         stk_01_010: // "Unit Definitions"
         {
@@ -950,51 +950,51 @@ export const langDe =
         txtName: "Name",
         txtSymbol: "Symbol",
         cmbType: "Type",
-        validCode: "Code field cannot be empty!",
+        validCode: "Code-Feld darf nicht leer sein!",
         pg_txtCode:
         {
-            title: "Product Group Selection",
+            title: "Artikelgruppenauswahl",
             clmId: "ID",
             clmName: "Name",
             clmSymbol: "Symbol",
         },
-        msgSave:
+        msgSpeichern:
         {
-            title: "Attention",
+            title: "Achtung!",
             btn01: "OK",
-            btn02: "Cancel",
-            msg: "Are you sure you want to save the record?",
+            btn02: "Abbrechen",
+            msg: "Sind Sie sicher, dass Sie den Eintrag löschen möchten?",
         },
-        msgSaveResult:
+        msgSpeichernResult:
         {
-            title: "Attention",
+            title: "Achtung!",
             btn01: "OK",
-            msgSuccess: "Record saved successfully!",
-            msgFailed: "Record saving failed!",
+            msgSuccess: "Eintrag erfolgreich gespeichert! ",
+            msgFailed: "Ihr Eintrag konnte nicht gespeichert werden!",
         },
-        msgSaveValid:
+        msgSpeichernValid:
         {
-            title: "Attention",
+            title: "Achtung!",
             btn01: "OK",
-            msg: "Please fill in the required fields!",
+            msg: "Bitte füllen Sie alle erforderlichen Felder aus!",
         },
         msgDelete:
         {
-            title: "Attention",
+            title: "Achtung!",
             btn01: "OK",
-            btn02: "Cancel",
-            msg: "Are you sure you want to delete the record?",
+            btn02: "Abbrechen",
+            msg: "Sind Sie sicher, dass Sie den Eintrag löschen möchten?",
         },
         msgCode:
         {
-            title: "Attention",
-            btn01: "Go to Cash Register",
+            title: "Achtung!",
+            btn01: "Gehen Sie zur Kasse.",
             btn02: "OK",
-            msg: "The entered ID is already registered in the system!",
+            msg: "Der eingegebene ID ist bereits im System registriert!",
         },
-        chkActive: "Active",
+        chkActive: "Aktive",
     },
-    stk_01_011: // "Birim Tanımları"
+    stk_01_011: // "Birim Tanimlari"
     {
         txtId: "I.D",
         txtVat: "Steuersatz",
@@ -1003,26 +1003,26 @@ export const langDe =
         validCode: "Das Feld 'Code' darf nicht leer sein!",
         pg_txtCode:
         {
-            title: "Auswahl der Produktgruppe",
+            title: "Artikelgruppenauswahl",
             clmId: "I.D",
             clmVat: "Steuersatz",
             clmType: "Typ",
         },
-        msgSave:
+        msgSpeichern:
         {
             title: "Achtung",
             btn01: "OK",
             btn02: "Abbrechen",
             msg: "Möchten Sie den Datensatz speichern?"
         },
-        msgSaveResult:
+        msgSpeichernResult:
         {
             title: "Achtung",
             btn01: "OK",
             msgSuccess: "Datensatz erfolgreich gespeichert!",
             msgFailed: "Fehler beim Speichern des Datensatzes!",
         },
-        msgSaveValid:
+        msgSpeichernValid:
         {
             title: "Achtung",
             btn01: "OK",
@@ -1044,7 +1044,7 @@ export const langDe =
         },
         chkActive: "Aktiv",
     },
-    stk_01_012: // "Bağlı Ürün Tanımlama"
+    stk_01_012: // "Bağli Ürün Tanimlama"
     {
         txtCode: "Code",
         txtName: "Name",
@@ -1053,7 +1053,7 @@ export const langDe =
         {
             title: "Achtung",
             btn01: "OK",
-            msg: "Es können keine Zeilen hinzugefügt werden, ohne ein Produkt auszuwählen!",
+            msg: "Es können keine Zeilen hinzugefügt werden, ohne vorher ein Artikel ausgewählt wurde!",
         },
         grdRelated:
         {
@@ -1063,31 +1063,31 @@ export const langDe =
         },
         popRelatedSelect:
         {
-            title: "Bestandsauswahl",
+            title: "Artikelauswahl",
             clmCode: "Code",
             clmName: "Name",
         },
         popItemSelect:
         {
-            title: "Bestandsauswahl",
+            title: "Artikelauswahl",
             clmCode: "Code",
             clmName: "Name",
         },
-        msgSave:
+        msgSpeichern:
         {
             title: "Achtung",
             btn01: "OK",
             btn02: "Abbrechen",
             msg: "Möchten Sie den Datensatz speichern?",
         },
-        msgSaveResult:
+        msgSpeichernResult:
         {
             title: "Achtung",
             btn01: "OK",
             msgSuccess: "Datensatz erfolgreich gespeichert!",
             msgFailed: "Fehler beim Speichern des Datensatzes!",
         },
-        msgSaveValid:
+        msgSpeichernValid:
         {
             title: "Achtung",
             btn01: "OK",
@@ -1101,31 +1101,31 @@ export const langDe =
             msg: "Möchten Sie den Datensatz löschen?",
         },
     },
-    stk_01_013: // "Ürün Resim Tanımlama"
+    stk_01_013: // "Ürün Resim Tanimlama"
     {
         txtRef: "Referenz",
         pg_txtRef:
         {
-            title: "Bestandsauswahl",
+            title: "Artikelauswahl",
             clmCode: "Code",
             clmName: "Name",
             clmStatus: "Status",
         },
-        msgSave:
+        msgSpeichern:
         {
             title: "Achtung",
             btn01: "OK",
             btn02: "Abbrechen",
             msg: "Möchten Sie den Datensatz speichern?",
         },
-        msgSaveResult:
+        msgSpeichernResult:
         {
             title: "Achtung",
             btn01: "OK",
             msgSuccess: "Datensatz erfolgreich gespeichert!",
             msgFailed: "Fehler beim Speichern des Datensatzes!",
         },
-        msgSaveValid:
+        msgSpeichernValid:
         {
             title: "Achtung",
             btn01: "OK",
@@ -1139,10 +1139,10 @@ export const langDe =
             msg: "Möchten Sie den Datensatz löschen?",
         },
     },
-    stk_02_001: // "Sayım Evrakı"
+    stk_02_001: // "Sayim Evraki"
     {
         txtRefRefno: "Seriennummer",
-        cmbDepot: "Bestandslager",
+        cmbDepot: "Artikellager",
         dtDocDate: "Datum",
         txtBarcode: "Barcode hinzufügen",
         txtQuantity: "Menge",
@@ -1155,14 +1155,14 @@ export const langDe =
             clmRefNo: "Nummer",
             clmDocDate: "Datum",
             clmDepotName: "Lager",
-            clmQuantity: "Gesamtproduktmenge",
+            clmQuantity: "GesamtArtikelmenge",
             clmTotalLine: "Zeilenanzahl",
         },
         pg_txtItemsCode:
         {
-            title: "Bestandsauswahl",
-            clmCode: "Bestandscode",
-            clmName: "Bestandsname",
+            title: "Artikelauswahl",
+            clmCode: "Artikelcode",
+            clmName: "Artikelname",
         },
         grdItemCount:
         {
@@ -1188,9 +1188,9 @@ export const langDe =
         {
             title: "Achtung",
             btn01: "OK",
-            msg: "Sie können keinen Bestand eingeben, ohne die Dokumentenstammdaten abzuschließen!",
+            msg: "Sie können keinen Artikel eingeben, ohne die Dokumentenstammdaten abzuschließen!",
         },
-        msgSave:
+        msgSpeichern:
         {
             title: "Achtung",
             btn01: "OK",
@@ -1204,14 +1204,14 @@ export const langDe =
             btn02: "Abbrechen",
             msg: "Bitte Menge eingeben!"
         },
-        msgSaveResult:
+        msgSpeichernResult:
         {
             title: "Achtung",
             btn01: "OK",
             msgSuccess: "Ihr Eintrag wurde erfolgreich gespeichert!",
             msgFailed: "Fehler beim Speichern Ihres Eintrags!",
         },
-        msgSaveValid:
+        msgSpeichernValid:
         {
             title: "Achtung",
             btn01: "OK",
@@ -1253,7 +1253,7 @@ export const langDe =
         {
             title: "Achtung",
             btn01: "OK",
-            msg: "Das Dokument ist gesperrt! Um Änderungen zu speichern, müssen Sie es mit dem Administratorpasswort entsperren!"
+            msg: "Das Dokument ist gesperrt! Änderungen vorzunehmen und zu speichern nur mit Administratorpasswort möglich!"
         },
         msgDocLocked:
         {
@@ -1277,7 +1277,7 @@ export const langDe =
         },
         validRef :"Seriennummer darf nicht leer sein",
         validRefNo : "Nummer darf nicht leer sein",
-        validDepot : "Sie müssen ein Lager auswählen",
+        validDepot : "Sie müssen einen Lager auswählen",
         validCustomerCode : "Kundennummer darf nicht leer sein",
         validDocDate : "Bitte wählen Sie ein Datum",
         popDesign : 
@@ -1357,21 +1357,21 @@ export const langDe =
             btn01: "OK",
             msg: "Das Eingangs- und Ausgangsdepot können nicht identisch sein!"
         },
-        msgSave:
+        msgSpeichern:
         {
             title: "Achtung",
             btn01: "OK",
             btn02: "Abbrechen",
             msg: "Möchten Sie den Eintrag speichern?"
         },
-        msgSaveResult:
+        msgSpeichernResult:
         {
             title: "Achtung",
             btn01: "OK",
             msgSuccess: "Ihr Transfer wurde erfolgreich durchgeführt und gespeichert!",
             msgFailed: "Fehler beim Speichern des Transfers!"
         },
-        msgSaveValid:
+        msgSpeichernValid:
         {
             title: "Achtung",
             btn01: "OK",
@@ -1446,7 +1446,7 @@ export const langDe =
             title: "Achtung",
             btn01: "Hinzufügen",
             btn02: "Abbrechen",
-            msg: "Bitte geben Sie eine Menge ein!"
+            msg: "Menge eingeben!"
         },
         txtQuantity : "Menge",
         },
@@ -1482,7 +1482,7 @@ export const langDe =
             clmQuantity : "Menge",
             clmCreateDate: "Erstellungsdatum",
             clmDescription :"Beschreibung",
-            clmCostPrice : "Kostenpreis",
+            clmCostPrice : "Einkaufspreis",
             clmCuser : "Benutzer"
         },
         pg_dispatchGrid : 
@@ -1504,96 +1504,96 @@ export const langDe =
         msgGetLocked:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             msg: "Dokument ist gesperrt! Um Änderungen zu speichern, müssen Sie das Administratorpasswort verwenden, um es zu entsperren!"
         },
         msgDocLocked:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             msg: "Es können keine Aktionen durchgeführt werden, solange das Dokument gesperrt ist!"
         },
         msgDocValid:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             msg: "Es können keine Bestandsänderungen vorgenommen werden, solange die Dokumenteninformationen nicht vollständig sind!"
         },
         msgEmpDescription:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             msg: "Zeilenbeschreibungen dürfen nicht leer sein!"
         },
-        msgSave:
+        msgSpeichern:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             btn02: "Abbrechen",
             msg: "Sind Sie sicher, dass Sie speichern möchten?"
         },
-        msgSaveResult:
+        msgSpeichernResult:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             msgSuccess: "Ihr Speichervorgang war erfolgreich!",
             msgFailed: "Ihr Speichervorgang ist fehlgeschlagen!"
         },
-        msgSaveValid:
+        msgSpeichernValid:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             msg: "Bitte füllen Sie alle erforderlichen Felder aus!"
         },
         msgDelete:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             btn02: "Abbrechen",
             msg: "Sind Sie sicher, dass Sie den Datensatz löschen möchten?"
         },
         msgLocked:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             msg: "Das Dokument wurde gespeichert und gesperrt!"
         },
         msgPasswordSucces:
         {
             title: "Erfolgreich",
-            btn01: "Okay",
+            btn01: "OK",
             msg: "Das Dokument wurde entsperrt!"
         },
         msgPasswordWrong:
         {
             title: "Fehlgeschlagen",
-            btn01: "Okay",
+            btn01: "OK",
             msg: "Ihr Passwort ist falsch!"
         },
         msgGetLocked:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             msg: "Das Dokument ist gesperrt! Um Änderungen zu speichern, müssen Sie das Administratorpasswort verwenden, um es zu entsperren!"
         },
         msgDocLocked:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             msg: "Es können keine Aktionen durchgeführt werden, solange das Dokument gesperrt ist!"
         },
         msgItemNotFound:
         {
             title: "Achtung",
-            btn01: "Okay",
-            msg: "Bestand nicht gefunden!"
+            btn01: "OK",
+            msg: "Artikel nicht gefunden!"
         },
         msgCombineItem:
         {
             title: "Achtung",
             btn01: "Kombinieren",
             btn02: "Neu hinzufügen",
-            msg: "Das Produkt, das Sie hinzufügen möchten, ist bereits im Dokument vorhanden! Sollen die Zeilen kombiniert werden?"
+            msg: "Das Artikel, das Sie hinzufügen möchten, ist bereits im Dokument vorhanden! Sollen die Zeilen kombiniert werden?"
         },
         validRef :"Die Seriennummer darf nicht leer sein",
         validRefNo : "Die Reihenfolge darf nicht leer sein",
@@ -1602,12 +1602,12 @@ export const langDe =
         validDocDate : "Sie müssen ein Datum auswählen",
         pg_quickDesc : 
         {
-            title : "Schnelle Beschreibungsauswahl",
+            title : "Kurzbeschreibungsauswahl",
             clmDesc:  "BESCHREIBUNG"
         },
         popQDescAdd : 
         {
-            title : "Schnelle Beschreibung hinzufügen",
+            title : "Kurzbeschreibung hinzufügen",
             description : "Neue Beschreibung",
             btnApprove : "Speichern"
         },
@@ -1620,7 +1620,7 @@ export const langDe =
         msgNotQuantity:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             msg: "Die Lagermenge kann nicht negativ werden! Höchstmögliche Menge, die hinzugefügt werden kann:"
         },
         pg_txtBarcode : 
@@ -1642,24 +1642,24 @@ export const langDe =
             title: "Achtung",
             btn01: "Hinzufügen",
             btn02: "Abbrechen",
-            msg: "Bitte geben Sie eine Menge ein!"
+            msg: "Menge eingeben!"
         },
         txtQuantity : "Menge",
     },
     stk_02_004 : //Etikettendruck
     {
-        txtRefRefno : "Serien-Nummer",
+        txtRefRefno : "Seriennummer",
         design : "Design",
         txtPage : "Seite",
         txtFreeLabel : "Freies Feld",
-        txtLineCount : "Gelesene Zeile",
+        txtLineCount : "Zeilenanzahl",
         chkLastChange : "Geändert seit letztem Druck",
         chkSelectChange : "Geändert seit ausgewähltem Datum",
         chkSelectPriceChange :"Verkaufspreis geändert seit ausgewähltem Datum",
         btnLabelCombine : "Etiketten kombinieren",
         chkGroup : "Gruppe",
-        chkCustomer : "Lieferantenprodukte",
-        chkAllItems : "Alle Produkte",
+        chkCustomer : "LieferantenArtikel",
+        chkAllItems : "Alle Artikel",
         AddItems : "Hinzufügen",
         txtBarcode : "Barcode hinzufügen",
         validDesign : "Bitte Design auswählen",
@@ -1670,7 +1670,7 @@ export const langDe =
             clmRef : "Serie",
             clmRefNo : "Nummer",
             clmDocDate : "Datum",
-            clmCount : "Produktanzahl",
+            clmCount : "Artikelanzahl",
             clmPrint : "Gedruckt",
         },
         pg_DocsCombine : 
@@ -1679,20 +1679,20 @@ export const langDe =
             clmRef : "Serie",
             clmRefNo : "Nummer",
             clmDocDate : "Datum",
-            clmCount : "Produktanzahl"
+            clmCount : "Artikelanzahl"
         },
         pg_txtItemsCode : 
         {
-            title : "Produktauswahl",
-            clmCode :  "PRODUKT CODE",
-            clmName : "PRODUKT NAME",
+            title : "Artikelauswahl",
+            clmCode :  "Artikelcode",
+            clmName : "Artikelname",
         },
         grdLabelQueue: 
         {
             clmItemCode: "Code",
             clmBarcode : "Barcode",
             clmItemName: "Name",
-            clmItemGrpName : "Produktgruppe",
+            clmItemGrpName : "Artikelgruppe",
             clmPrice: "Preis",
             clmUnderUnit : "Untere Einheit",
             clmUnderUnit : "Untere Einheit",
@@ -1705,9 +1705,9 @@ export const langDe =
         {
             title: "Achtung",
             btn01: "OK",
-            msg: "Produkte können nicht hinzugefügt werden, solange die Dokumentkopfdaten nicht vollständig sind!"
+            msg: "Artikel können nicht hinzugefügt werden, solange die Dokumentkopfdaten nicht vollständig sind!"
         },
-        msgNotSave:
+        msgNotSpeichern:
         {
             title: "Achtung",
             btn01: "OK",
@@ -1718,23 +1718,23 @@ export const langDe =
             title: "Achtung",
             btn01: "OK",
             btn02: "Abbrechen",
-            msg: "Produkte, die den ausgewählten Kriterien entsprechen, werden hinzugefügt. Sind Sie sicher?"
+            msg: "Artikel, die den ausgewählten Kriterien entsprechen, werden hinzugefügt. Sind Sie sicher?"
         },
-        msgSave:
+        msgSpeichern:
         {
             title: "Achtung",
             btn01: "OK",
             btn02: "Abbrechen",
             msg: "Möchten Sie speichern?"
         },
-        msgSaveResult:
+        msgSpeichernResult:
         {
             title: "Achtung",
             btn01: "OK",
             msgSuccess: "Speichern erfolgreich!",
             msgFailed: "Speichern fehlgeschlagen!"
         },
-        msgSaveValid:
+        msgSpeichernValid:
         {
             title: "Achtung",
             btn01: "OK",
@@ -1769,7 +1769,7 @@ export const langDe =
         {
             title: "Achtung",
             btn01: "OK",
-            msg: "Das Dokument ist gesperrt! Um Änderungen zu speichern, müssen Sie es mit dem Administratorpasswort entsperren!"
+            msg: "Das Dokument ist gesperrt! Änderungen und Speichern nur mit dem Administratorpasswort möglich!"
         },
         msgDocLocked:
         {
@@ -1781,18 +1781,18 @@ export const langDe =
         {
             title: "Achtung",
             btn01: "OK",
-            msg: "Produkt nicht gefunden!"
+            msg: "Artikel nicht gefunden!"
         },
         msgCombineItem:
         {
             title: "Achtung",
             btn01: "Abbrechen",
             btn02: "Neue Zeile hinzufügen",
-            msg: "Das ausgewählte Produkt ist im Dokument vorhanden! Soll eine neue Zeile hinzugefügt werden?"
+            msg: "Der ausgewälte Artikel ist im Dokument vorhanden! Soll eine neue Zeile hinzugefügt werden?"
         },
         popWizard : 
         {
-            title : "Produktauswahl-Assistent",
+            title : "Artikelauswahl-Assistent",
         },
         validRef :"Die Serie darf nicht leer sein",
         validRefNo : "Die Nummer darf nicht leer sein",
@@ -1808,15 +1808,15 @@ export const langDe =
         pg_txtBarcode : 
         {
             title : "Barcode-Auswahl",
-            clmCode :  "PRODUKT CODE",
-            clmName : "PRODUKT NAME",
-            clmMulticode : "LIEFERANTEN CODE",
-            clmBarcode : "BARCODE"
+            clmCode :  "Artikelcode",
+            clmName : "Artikelname",
+            clmMulticode : "Lieferantencode",
+            clmBarcode : "Barcode"
         },
     },
-    stk_02_005 : // "Rücknahmeprodukte sammeln"
+    stk_02_005 : // "RücknahmeArtikel sammeln"
     {
-        txtRefRefno : "Serien-Nummer",
+        txtRefRefno : "Seriennummer",
         cmbDepot1: "Ausgangsdepot",
         cmbDepot2: "Rücknahme-Depot",
         dtDocDate : "Datum",
@@ -1834,9 +1834,9 @@ export const langDe =
         },
         pg_txtItemsCode : 
         {
-            title : "Produktauswahl",
-            clmCode :  "PRODUKT CODE",
-            clmName : "PRODUKT NAME",
+            title : "Artikelauswahl",
+            clmCode :  "Artikelcode",
+            clmName : "Artikelname",
         },
         grdRebItems: 
         {
@@ -1859,21 +1859,21 @@ export const langDe =
             btn01: "OK",
             msg: "Es können keine Bestände erfasst werden, solange die Dokumentenüberschrift nicht vollständig ist!"
         },
-        msgSave:
+        msgSpeichern:
         {
             title: "Achtung",
             btn01: "OK",
             btn02: "Abbrechen",
             msg: "Möchten Sie den Eintrag speichern?"
         },
-        msgSaveResult:
+        msgSpeichernResult:
         {
             title: "Achtung",
             btn01: "OK",
             msgSuccess: "Ihr Eintrag wurde erfolgreich gespeichert!",
             msgFailed: "Ihr Eintrag konnte nicht gespeichert werden!"
         },
-        msgSaveValid:
+        msgSpeichernValid:
         {
             title: "Achtung",
             btn01: "OK",
@@ -1920,7 +1920,7 @@ export const langDe =
         {
             title: "Achtung",
             btn01: "OK",
-            msg: "Bestand nicht gefunden!"
+            msg: "Artikel nicht gefunden!"
         },
         msgCombineItem:
         {
@@ -1965,7 +1965,7 @@ export const langDe =
             title: "Achtung",
             btn01: "Hinzufügen",
             btn02: "Abbrechen",
-            msg: "Bitte geben Sie eine Menge ein!"
+            msg: "Menge eingeben!"
         },
         txtQuantity: "Menge",
     },
@@ -2017,58 +2017,58 @@ export const langDe =
             btn01: "OK",
             msg: "Es können keine Bestände erfasst werden, solange die Dokumentenüberschrift nicht vollständig ist!"
         },
-        msgNotSave:
+        msgNotSpeichern:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             msg: "Änderungen am Dokument vorgenommen! Bitte speichern Sie oder nehmen Sie die Änderungen zurück."
         },
         msgAddItems:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             btn02: "Abbrechen",
-            msg: "Produkte, die den ausgewählten Kriterien entsprechen, werden hinzugefügt. Sind Sie damit einverstanden?"
+            msg: "Artikel, die den ausgewählten Kriterien entsprechen, werden hinzugefügt. Sind Sie damit einverstanden?"
         },
-        msgSave:
+        msgSpeichern:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             btn02: "Abbrechen",
             msg: "Sind Sie sicher, dass Sie speichern möchten?"
         },
-        msgSaveResult:
+        msgSpeichernResult:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             msgSuccess: "Ihr Eintrag wurde erfolgreich gespeichert!",
             msgFailed: "Speichern fehlgeschlagen!"
         },
-        msgSaveValid:
+        msgSpeichernValid:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             msg: "Bitte füllen Sie alle erforderlichen Felder aus!"
         },
         msgDelete:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             btn02: "Abbrechen",
             msg: "Sind Sie sicher, dass Sie den Eintrag löschen möchten?"
         },
         msgItemNotFound:
         {
             title: "Achtung",
-            btn01: "Okay",
-            msg: "Produkt nicht gefunden!"
+            btn01: "OK",
+            msg: "Artikel nicht gefunden!"
         },
         msgCombineItem:
         {
             title: "Achtung",
             btn01: "Abbrechen",
             btn02: "Neu hinzufügen",
-            msg: "Das Produkt, das Sie hinzufügen möchten, ist bereits im Dokument vorhanden! Soll eine neue Zeile hinzugefügt werden?"
+            msg: "Das Artikel, das Sie hinzufügen möchten, ist bereits im Dokument vorhanden! Soll eine neue Zeile hinzugefügt werden?"
         },
         validDepot : "Sie müssen ein Lager auswählen",
         validDocDate : "Sie müssen ein Datum auswählen",
@@ -2078,7 +2078,7 @@ export const langDe =
             clmCode :  "ARTIKELCODE",
             clmName : "ARTIKELNAME",
             clmMulticode : "LIEFERANTENCODE",
-            clmBarcode : "BARCODE"
+            clmBarcode : "Barcode"
         },
         msgQuantity:
         {
@@ -2122,7 +2122,7 @@ export const langDe =
         },
         pg_dispatchGrid : 
         {
-            title : "Lieferschein Auswahl",
+            title : "Lieferscheinauswahl",
             clmReferans : "Seriennummer",
             clmCode : "Code",
             clmName : "Name",
@@ -2139,51 +2139,51 @@ export const langDe =
         msgGetLocked:
         {
             title: "Achtung",
-            btn01: "Okay",
-            msg: "Das Dokument ist gesperrt! Um Änderungen zu speichern, müssen Sie es mit dem Administratorpasswort entsperren!"
+            btn01: "OK",
+            msg: "Das Dokument ist gesperrt! Änderungen und Speichern nur mit dem Administratorpasswort möglich!"
         },
         msgDocLocked:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             msg: "Es können keine Änderungen vorgenommen werden, solange das Dokument gesperrt ist!"
         },
         msgDocValid:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             msg: "Sie können keine Bestände erfassen, bevor die Dokumentkopfdaten vollständig ausgefüllt sind!"
         },
         msgEmpDescription:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             msg: "Beschreibungen dürfen nicht leer sein!"
         },
-        msgSave:
+        msgSpeichern:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             btn02: "Abbrechen",
             msg: "Sind Sie sicher, dass Sie speichern möchten?"
         },
-        msgSaveResult:
+        msgSpeichernResult:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             msgSuccess: "Ihr Eintrag wurde erfolgreich gespeichert!",
             msgFailed: "Speichern fehlgeschlagen!"
         },
-        msgSaveValid:
+        msgSpeichernValid:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             msg: "Bitte füllen Sie alle erforderlichen Felder aus!"
         },
         msgDelete:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             btn02: "Abbrechen",
             msg: "Sind Sie sicher, dass Sie den Eintrag löschen möchten?"
         },
@@ -2237,12 +2237,12 @@ export const langDe =
         validDocDate: "Sie müssen ein Datum auswählen",
         pg_quickDesc:
         {
-            title: "Schnelle Beschreibungsauswahl",
+            title: "Kurzbeschreibungsauswahl",
             clmDesc: "BESCHREIBUNG"
         },
         popQDescAdd:
         {
-            title: "Schnelle Beschreibung hinzufügen",
+            title: "Kurzbeschreibung hinzufügen",
             description: "Neue Beschreibung",
             btnApprove: "Speichern"
         },
@@ -2284,7 +2284,7 @@ export const langDe =
     stk_02_009: // "Ausgabeschein"
     {
         txtRefRefno: "Seriennummer-Reihenfolge",
-        cmbOutDepot: "Ausgabelager",
+        cmbOutDepot: "Ausgangslager",
         dtDocDate: "Datum",
         txtBarcode: "Barcode hinzufügen",
         getDispatch: "Lieferschein hinzufügen",
@@ -2355,21 +2355,21 @@ export const langDe =
             btn01: "Ok",
             msg: "Beschreibungen dürfen nicht leer sein!"
         },
-        msgSave:
+        msgSpeichern:
         {
             title: "Achtung",
             btn01: "Ok",
             btn02: "Abbrechen",
             msg: "Sind Sie sicher, dass Sie speichern möchten!"
         },
-        msgSaveResult:
+        msgSpeichernResult:
         {
             title: "Achtung",
             btn01: "Ok",
             msgSuccess: "Ihr Eintrag wurde erfolgreich gespeichert!",
             msgFailed: "Ihr Eintrag konnte nicht gespeichert werden!"
         },
-        msgSaveValid:
+        msgSpeichernValid:
         {
             title: "Achtung",
             btn01: "OK",
@@ -2432,12 +2432,12 @@ export const langDe =
         validDocDate: "Sie müssen ein Datum auswählen",
         pg_quickDesc:
         {
-            title: "Schnelle Beschlagsauswahl",
+            title: "Kurzbeschreibungsauswahl",
             clmDesc: "BESCHREIBUNG"
         },
         popQDescAdd:
         {
-            title: "Schnelle Beschreibung hinzufügen",
+            title: "Kurzbeschreibung hinzufügen",
             description: "Neue Beschreibung",
             btnApprove: "Speichern"
         },
@@ -2478,56 +2478,56 @@ export const langDe =
     },
     stk_03_001: // "Bestandsliste"
     {
-        txtItemName: "Produktname",
+        txtItemName: "Artikelname",
         txtBarkod: "Barcode",
         cmbCustomer: "Lieferant",
-        cmbMainGrp: "Produktgruppe",
+        cmbMainGrp: "Artikelgruppe",
         btnCheck: "Aktiv",
         btnGet: "Abrufen",
         chkMasterBarcode: "Barcodes zusammenführen",
         chkLastCustomer: "Letzte Lieferanten abrufen",
         txtMulticode: "Lieferantencode",
-        multicodePlaceHolder: "Geben Sie Lieferantencodes ein, nach denen Sie suchen möchten",
-        barkodPlaceHolder: "Geben Sie eine oder mehrere Produktcodes oder Barcodes ein, nach denen Sie suchen möchten",
-        ItemNamePlaceHolder: "Geben Sie den vollständigen Produktnamen oder einen Teil davon ein",
+        multicodePlaceHolder: "Geben Sie Lieferantencode/s ein, nach denen Sie suchen möchten",
+        barkodPlaceHolder: "Geben Sie eine oder mehrere Artikelcode/s oder Barcode/s ein, nach denen Sie suchen möchten",
+        ItemNamePlaceHolder: "Geben Sie den vollständigen Artikelnamen oder einen Teil davon ein",
         txtTotalCount: "Gesamte Einträge",
         txtTotalActive: "Anzahl aktiver Einträge",
         txtTotalPassive: "Anzahl inaktiver Einträge",
         grdListe:
         {
-            clmCode: "Produktcode",
-            clmName: "Produktname",
-            clmMainGrp: "Produktgruppe",
+            clmCode: "Artikelcode",
+            clmName: "Artikelname",
+            clmMainGrp: "Artikelgruppe",
             clmCustomer: "Kunde",
-            clmSname: "Produktkurzname",
+            clmSname: "Artikelkurzname",
             clmMulticode: "L.Code",
             clmUnit: "Einheit",
             clmBarcode: "Barcode",
-            clmCostPrice: "Kostenpreis",
+            clmCostPrice: "Einkaufspreis",
             clmPriceSale: "Verkaufspreis",
             clmVat: "Steuer",
             clmMinPrice: "Mindestpreis",
-            clmMaxPrice: "Maximaler Preis",
+            clmMaxPrice: "Höchstpreis",
             clmStatus: "Status",
             clmNetMargin: "Nettomarge",
             clmMargin: "Bruttomarge",
             clmCustomerPrice: "K.Preis",
             clmOrgin: "Herkunft",
-            clmPriceSaleVatExt: "Preis ohne Steuer"
+            clmPriceSaleVatExt: "Preis ohne MwSt."
         },
     },
     stk_03_002: //"Preisliste"
     {
         cmbCustomer: "Kunde",
-        txtItemName: "Produktname",
-        cmbMainGrp: "Produktgruppe",
+        txtItemName: "Artikelname",
+        cmbMainGrp: "Artikelgruppe",
         btnCheck: "Aktiv",
         btnGet: "Abrufen",
         grdListe:
         {
             clmCode: "Code",
             clmName: "Name",
-            clmMainGrp: "Produktgruppe",
+            clmMainGrp: "Artikelgruppe",
             clmPrice: "Preis",
             clmCustomer: "Kunde",
             clmQuantity: "Menge",
@@ -2539,8 +2539,8 @@ export const langDe =
     stk_03_003: //"Barcode-Liste"
     {
         cmbCustomer: "Kunde",
-        txtItemName: "Produktname",
-        cmbMainGrp: "Produktgruppe",
+        txtItemName: "Artikelname",
+        cmbMainGrp: "Artikelgruppe",
         btnCheck: "Aktiv",
         btnGet: "Abrufen",
         grdListe:
@@ -2549,28 +2549,28 @@ export const langDe =
             clmName: "Name",
             clmBarcode: "Barcode",
             clmUnit: "Einheit",
-            clmMainGrp: "Produktgruppe",
+            clmMainGrp: "Artikelgruppe",
         },
     },
     stk_03_005: //"Multi-Code-Liste"
     {
-        txtItemName: "Produktname",
+        txtItemName: "Artikelname",
         txtBarkod: "Barcode",
         cmbCustomer: "Lieferant",
-        cmbMainGrp: "Produktgruppe",
+        cmbMainGrp: "Artikelgruppe",
         btnCheck: "Aktiv",
         btnGet: "Abrufen",
         grdListe:
         {
-            clmCode: "Produktcode",
-            clmName: "Produktname",
-            clmMainGrp: "Produktgruppe",
+            clmCode: "Artikelcode",
+            clmName: "Artikelname",
+            clmMainGrp: "Artikelgruppe",
             clmCustomer: "Kunde",
-            clmSname: "Produktkurzname",
+            clmSname: "Artikelkurzname",
             clmMulticode: "Lieferantencode",
             clmUnit: "Einheit",
             clmBarcode: "Barcode",
-            clmCostPrice: "Kostenpreis",
+            clmCostPrice: "Einkaufspreis",
             clmVat: "Steuer",
             clmMinPrice: "Mindestverkaufspreis",
             clmMaxPrice: "Höchstverkaufspreis",
@@ -2586,7 +2586,7 @@ export const langDe =
     },
     stk_03_006: //"Liste der Lagerbestandsmengen"
     {
-        txtItemName: "Produktname",
+        txtItemName: "Artikelname",
         chkZeroQuantity: "Nullmengen anzeigen",
         cmbDepot: "Lager",
         btnCheck: "Aktiv",
@@ -2600,25 +2600,25 @@ export const langDe =
             clmUnit: "Einheit",
         },
         txtTotalQuantity: "Gesamtmenge",
-        ItemNamePlaceHolder: "Geben Sie den Produktnamen ein..."
+        ItemNamePlaceHolder: "Geben Sie den Artikelnamen ein..."
     },
     stk_04_001: //"Massenbearbeitung des Bestands"
     {
         txtCustomerCode: "Kunde",
-        codePlaceHolder: "Geben Sie den Produktcode, Barcode oder Lieferantencode ein, nach dem Sie suchen möchten",
-        namePlaceHolder: "Geben Sie den vollständigen Produktnamen oder einen Teil davon ein",
+        codePlaceHolder: "Geben Sie den Artikelcode, Barcode oder Lieferantencode ein, nach dem Sie suchen möchten",
+        namePlaceHolder: "Geben Sie den vollständigen Artikelnamen oder einen Teil davon ein",
         pg_txtCustomerCode:
         {
             title: "Kundenauswahl",
             clmCode: "KUNDENCODE",
             clmTitle: "KUNDENNAME",
             clmTypeName: "TYP",
-            clmGenusName: "GATTUNG"
+            clmGenusName: "ART"
         },
-        cmbItemGroup: 'Produktgruppe',
+        cmbItemGroup: 'Artikelgruppe',
         btnGet: 'Abrufen',
-        txtCode: 'Produktcode',
-        txtName: 'Produktname',
+        txtCode: 'Artikelcode',
+        txtName: 'Artikelname',
         grdItemList:
         {
             clmCode: "Code",
@@ -2638,17 +2638,17 @@ export const langDe =
             clmNetMargin: "Nettomarge",
             clmGrossMargin: "Bruttomarge",
         },
-        msgSave:
+        msgSpeichern:
         {
             title: "Achtung",
             btn01: "Bestätigen",
             btn02: "Abbrechen",
             msg: "Sind Sie sicher, dass Sie den Eintrag speichern möchten?"
         },
-        msgSaveResult:
+        msgSpeichernResult:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             msgSuccess: "Eintrag erfolgreich gespeichert!",
             msgFailed: "Fehler beim Speichern des Eintrags!"
         },
@@ -2657,14 +2657,14 @@ export const langDe =
     {
         txtCustomerCode : "Kunde",
         validDepot : "Bitte wählen Sie ein Lager aus",
-        ItemNamePlaceHolder :"Geben Sie den vollständigen Namen des Produkts oder einen teilweisen Namen ein",
+        ItemNamePlaceHolder :"Geben Sie den vollständigen Artikelname oder einen Teil ein",
         pg_txtCustomerCode : 
         {
             title : "Kundenauswahl",
             clmCode :  "KUNDENCODE",
             clmTitle : "KUNDENNAME",
             clmTypeName : "TYP",
-            clmGenusName : "GATTUNG"
+            clmGenusName : "ART"
         },
         cmbDepot : 'Lager',
         btnGet : 'Abrufen',
@@ -2678,37 +2678,37 @@ export const langDe =
             clmCustomer : "Kunde",
             clmPrice : "Preis"
         },
-        msgSave:
+        msgSpeichern:
         {
             title: "Achtung",
             btn01: "Bestätigen",
             btn02: "Abbrechen",
             msg: "Sind Sie sicher, dass Sie die ausgewählten Zeilen zurückgeben möchten?"
         },
-        msgSaveResult:
+        msgSpeichernResult:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             msgSuccess: "Rückgabebelege wurden erstellt!",
             msgFailed: "Fehler beim Speichern des Eintrags!"
         },
         msgDublicateItem : 
         {
             title: "Achtung",
-            btn01 : "Okay",
-            msg : "Das Produkt wurde für mehrere Kunden ausgewählt. Bitte überprüfen Sie dies."
+            btn01 : "OK",
+            msg : "Das Artikel wurde für mehrere Kunden ausgewählt. Bitte überprüfen Sie dies."
         },
         msgCustomerFound : 
         {
             title: "Achtung",
-            btn01 : "Okay",
-            msg : "Nicht definierte Produkte für den Kunden können nicht ausgewählt werden. Bitte definieren Sie einen Kunden."
+            btn01 : "OK",
+            msg : "Nicht definierte Artikel für den Kunden können nicht ausgewählt werden. Bitte definieren Sie einen Kunden."
         }
     },
     stk_04_003 : //"Inventur abschließen"
     {
         cmbDepot : "Lager",
-        chkNotCountItems : "Nicht gezählte Produkte auf Null setzen",
+        chkNotCountItems : "Nicht gezählte Artikel auf Null setzen",
         btnGet : 'Abrufen',
         btnAddCount : "Zählung zusammenführen",
         dtFirstDate :"Erstes Datum",
@@ -2732,24 +2732,24 @@ export const langDe =
             clmCode : "Code",
             clmQuantity : "Gezählte Menge",
         },
-        msgSave:
+        msgSpeichern:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             btn02: "Abbrechen",
             msg: "Sind Sie sicher, dass Sie den Eintrag speichern möchten?"
         },
-        msgSaveResult:
+        msgSpeichernResult:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             msgSuccess: "Dokument mit Seriennummer wurde erstellt!",
             msgFailed: "Fehler beim Speichern des Eintrags!"
         },
         msgNotItems:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             msg: "Lagerbestände sind aktuell! Es wurde kein neuer Eintrag erstellt.",
         },
     },
@@ -2759,9 +2759,9 @@ export const langDe =
         dtFirstdate : "Erstes Datum",
         dtLastDate : "Letztes Datum",
         btnGet : "Abrufen",
-        btnPrint : "Etikett für ausgewähltes Produkt drucken",
+        btnPrint : "Etikett für ausgewähltes Artikel drucken",
         txtCustomerCode : "Kunde",
-        cmbItemGroup : "Produktgruppe",
+        cmbItemGroup : "Artikelgruppe",
         grdExpdateList:  
         {
             clmQuantity : "Menge",
@@ -2783,11 +2783,11 @@ export const langDe =
             title : "Mengen- und Preisangabe",
             txtQuantity : "Menge",
             txtPrice : "Preis",
-            btnSave : "Speichern und Drucken"
+            btnSpeichern : "Speichern und Drucken"
         },
         pg_txtRef:
         {
-            title: "Bestandsauswahl",
+            title: "Artikelauswahl",
             clmCode: "CODE",
             clmName: "NAME",
             clmStatus: "STATUS"
@@ -2798,20 +2798,20 @@ export const langDe =
             clmCode :  "KUNDENCODE",
             clmTitle : "KUNDENNAME",
             clmTypeName : "TYP",
-            clmGenusName : "GATTUNG"
+            clmGenusName : "ART"
         },
         msgDoublePrint:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             btn02: "Abbrechen",
-            msg: "Für das ausgewählte Produkt wurde bereits ein spezielles Etikett erstellt! Sind Sie sicher, dass Sie es erneut erstellen möchten?"
+            msg: "Für diesen Artikel wurde bereits ein spezielles Etikett erstellt! Möchten Sie es erneut erstellen?"
         },
         msgLabelCount:
         {
             title: "Achtung",  
-            btn01: "Okay",  
-            msg: "Sie können nicht mehr Etiketten drucken als die verbleibende Produktmenge." 
+            btn01: "OK",  
+            msg: "Sie können nicht mehr als die verbleibende Artikelmenge an Etiketten drucken." 
         },
     },
     stk_05_001 : // "Lagerbestandsbericht"
@@ -2841,16 +2841,16 @@ export const langDe =
         graphicTitle : "Preisänderungsdiagramm",
         typePurc : "Einkauf",
         typeSale : "Verkauf",
-        dlbClikMsg : "Doppelklicken Sie auf eine Zeile, um Details und Diagramm anzuzeigen",
+        dlbClikMsg : "Um Details und Diagramm anzuzeigen, machen Sie einen Doppelklick auf eine Zeile.",
         cmbCustomer : "Lieferant",
-        cmbMainGrp : "Produktgruppe",
+        cmbMainGrp : "Artikelgruppe",
         grdItemPurcPriceReport: 
         {
-            clmCode : "Produktcode",
-            clmName: "Produktname",
+            clmCode : "Artikelcode",
+            clmName: "Artikelname",
             clmCustomer: "Lieferant",
             clmLdate: "Letztes Änderungsdatum",
-            clmFamount : "Betrag ohne Steuer",
+            clmFamount : "Betrag ohne MwSt.",
             clmTotalCost : "Letzter Einkaufspreis",
             clmSale : "Verkaufspreis",
             clmFisrtCost : "Vorheriger Einkaufspreis",
@@ -2897,7 +2897,7 @@ export const langDe =
         tabTitleLegal : "Rechtlich",
         tabTitleOffical : "Kontakt",
         tabCustomerBank : "Bankdaten",
-        tabTitleFinanceDetail : "Finanzinformationen",
+        tabTitleFinanceDetail : "Finanzliche Informationen",
         txtLegal :"Rechtliche Informationen",
         chkRebate :"Rabatt gewähren",
         txtExpiryDay : "Zahlungsziel",
@@ -2975,21 +2975,21 @@ export const langDe =
             txtPopOtherPhone : "Andere Telefonnummer",
             txtPopMail :"E-Mail"
         },
-        msgSave:
+        msgSpeichern:
         {
             title: "Achtung",
             btn01: "OK",
             btn02: "Abbrechen",
             msg: "Sind Sie sicher, dass Sie speichern möchten?"
         },
-        msgSaveResult:
+        msgSpeichernResult:
         {
             title: "Achtung",
             btn01: "OK",
             msgSuccess: "Der Speichervorgang war erfolgreich!",
             msgFailed: "Der Speichervorgang ist fehlgeschlagen!"
         },
-        msgSaveValid:
+        msgSpeichernValid:
         {
             title: "Achtung",
             btn01: "OK",
@@ -3044,7 +3044,7 @@ export const langDe =
             btn02: "OK",
             msg : "Der eingegebene Kunde ist bereits im System registriert!"
         },
-        chkTaxSucre : "Tax Sugar",
+        chkTaxSucre : "Zuckersteuer",
         tabTitleDetail : "Detailinformationen",
         validation :
         {
@@ -3081,21 +3081,21 @@ export const langDe =
             cmbPopCity :"Stadt",
             cmbPopCountry :"Land",
         },
-        msgSave:
+        msgSpeichern:
         {
             title: "Achtung",
             btn01: "OK",
             btn02: "Abbrechen",
             msg: "Sind Sie sicher, dass Sie speichern möchten?"
         },
-        msgSaveResult:
+        msgSpeichernResult:
         {
             title: "Achtung",
             btn01: "OK",
             msgSuccess: "Der Speichervorgang war erfolgreich!",
             msgFailed: "Der Speichervorgang ist fehlgeschlagen!"
         },
-        msgSaveValid:
+        msgSpeichernValid:
         {
             title: "Achtung",
             btn01: "OK",
@@ -3122,17 +3122,17 @@ export const langDe =
     },
     cri_02_001: // "Kundenliste"
     {
-        customerPlace: "Bitte geben Sie den Kundennamen oder -code zur Suche ein.",
+        customerPlace: "Bitte geben Sie den Kundennamen oder -code zum Suchen ein.",
         txtCustomerName : "Kundenname",
-        cmbGenus :"Art",
-        menu: "Kundenbezeichnungen",
+        cmbGenus :"Geschlecht",
+        menu: "Kundenbezeichnunge",
         btnGet : "Abrufen",
         grdListe : 
         {
             clmCode: "Kunden-Code",
             clmTitle : "Firma",
             clmType : "Typ",
-            clmGenus : "Art",
+            clmGenus : "Geschlecht",
             clmAdress :"Adresse",
             clmZipcode : "Postleitzahl",
             clmCountry :"Land",
@@ -3144,7 +3144,7 @@ export const langDe =
         },
         cmbGenusData:
         {
-            allGenus : "Alle",
+            allGenus : "Alle Geschlechter",
             Customer : "Kunde",
             supplier : "Lieferant",
             both : "Beides",
@@ -3153,9 +3153,9 @@ export const langDe =
     },
     cri_02_002: //  "Adressliste"
     {
-        customerPlace: "Bitte geben Sie den Kundennamen oder -code zur Suche ein.",
+        customerPlace: "Bitte geben Sie den Kundennamen oder -code zum Suchen ein.",
         txtCustomerName : "Kundenname",
-        cmbGenus :"Art",
+        cmbGenus :"Geschlecht",
         menu: "Kundenbezeichnungen",
         btnGet : "Abrufen",
         grdListe : 
@@ -3163,7 +3163,7 @@ export const langDe =
             clmCode: "Kunden-Code",
             clmTitle : "Firma",
             clmType : "Typ",
-            clmGenus : "Art",
+            clmGenus : "Geschlecht",
             clmAddress : "Adresse",
             clmCity : "Stadt",
             clmCountry : "Land",
@@ -3171,7 +3171,7 @@ export const langDe =
         },
         cmbGenusData:
         {
-            allGenus : "Alle",
+            allGenus : "Alle Geschlechter",
             Customer : "Kunde",
             supplier : "Lieferant",
             both : "Beides",
@@ -3181,7 +3181,7 @@ export const langDe =
     cri_03_001: // "Massenkundendefinition"
     {
         cmbType :"Typ",
-        cmbGenus :"Art",
+        cmbGenus :"Geschlecht",
         txtCode : "Code",
         txtTitle : "Firma",
         txtCustomerName : "Name",
@@ -3219,9 +3219,9 @@ export const langDe =
             clmApeCode : "APE-Code",
             clmTaxOffice : "Steueramt",
             clmTaxNo : "Steuernummer",
-            clmIntVatNo : "Internationale MwSt.-Nr.",
+            clmIntVatNo : "Umsatzsteuer-Identifikationsnummer",
             clmTaxType : "Steuerart",
-            clmSirenID : "SIREN",
+            clmSirenID : "Steuernummer",
             clmRcs : "Handelsregister",
             clmCapital : "Kapital",
             clmInsurance : "Versicherungsnummer"
@@ -3269,21 +3269,21 @@ export const langDe =
             txtPopOtherPhone : "Sonstiges Telefon",
             txtPopMail :"E-Mail"
         },
-        msgSave:
+        msgSpeichern:
         {
             title: "Achtung",
             btn01: "Ok",
             btn02: "Abbrechen",
             msg: "Möchten Sie den Eintrag speichern?"
         },
-        msgSaveResult:
+        msgSpeichernResult:
         {
             title: "Achtung",
             btn01: "Ok",
             msgSuccess: "Der Eintrag wurde erfolgreich gespeichert!",
             msgFailed: "Das Speichern des Eintrags ist fehlgeschlagen!"
         },
-        msgSaveValid:
+        msgSpeichernValid:
         {
             title: "Achtung",
             btn01: "Ok",
@@ -3293,13 +3293,13 @@ export const langDe =
         {
             title: "Achtung",
             btn01: "Ok",
-            msg: "Bitte füllen Sie die Felder im Rechtlich-Bereich aus!"
+            msg: "Bitte füllen Sie die Felder im Rechtlichen-Bereich aus!"
         },
         msgAdressNotValid:
         {
             title: "Achtung",
             btn01: "Ok",
-            msg: "Bitte wählen Sie das Land des Kunden im Adress-Bereich aus!"
+            msg: "Bitte wählen Sie das Land des Kunden im Adressbereich aus!"
         },
         msgDelete:
         {
@@ -3336,7 +3336,7 @@ export const langDe =
         {
             title : "Einstellungen",
             txtStartRef : "Startreferenz",
-            txtFinishRef : "Endreferenz",
+            txtFinishRef : "Endereferenz",
             txtTotal : "Gesamtanzahl",
             chkDigit : "EAN-Ziffer"
         },
@@ -3359,21 +3359,21 @@ export const langDe =
         txtTotalBalance : "Kontostand",
         pg_txtCustomerCode : 
         {
-            title : "Kunden Auswahl",
+            title : "Kundenauswahl",
             clmCode :  "KUNDENCODE",
             clmTitle : "KUNDENNAME",
             clmTypeName : "TYP",
-            clmGenusName : "ART",
+            clmGenusName : "GESCHLECHT",
             clmBalance : "KONTOSTAND",
         },
         msgNotCustomer:
         {
             title: "Achtung",
             btn01: "OK",
-            msg: "Bitte wählen Sie einen Kunden aus..!"
+            msg: "Bitte wählen Sie ein Kunde aus!"
         },
     },
-    cri_04_002 : // "Kundenkontostand-Bericht"
+    cri_04_002 : // "Kundenkontostandsbericht"
     {
         chkZeroBalance : "Nullstände anzeigen",
         txtCustomerCode : "Kunde",
@@ -3389,11 +3389,11 @@ export const langDe =
         txtTotalBalance : "Gesamtbetrag",
         pg_txtCustomerCode : 
         {
-            title : "Kunden Auswahl",
+            title : "Kundenauswahl",
             clmCode :  "KUNDENCODE",
             clmTitle : "KUNDENNAME",
             clmTypeName : "TYP",
-            clmGenusName : "ART",
+            clmGenusName : "GESCHLECHT",
             clmBalance : "KONTOSTAND",
         },
     },
@@ -3406,7 +3406,7 @@ export const langDe =
         txtAmount : "Gesamtbetrag",
         pg_txtCustomerCode : 
         {
-            title : "Kunden Auswahl",
+            title : "Kundenauswahl",
             clmCode :  "KUNDENCODE",
             clmTitle : "KUNDENNAME",
             clmTypeName : "TYP",
@@ -3429,13 +3429,13 @@ export const langDe =
             clmDate : "Datum",
             clmPoint : "Punkte",
             clmPointType : "Typ",
-            clmPosId :"Beleg Nr.",
+            clmPosId :"Belegnummer",
             clmDescription :"Beschreibung",
         },
         grdSaleTicketItems :
         {
             clmBarcode : "Barcode",
-            clmName : "Produktname",
+            clmName : "Artikelname",
             clmQuantity : "Menge",
             clmPrice : "Preis",
             clmTotal : "Betrag"
@@ -3456,7 +3456,7 @@ export const langDe =
         },
         trDeatil: "T.R Detail", 
         lineDelete :"Zeile stornieren", 
-        cancel : "Abbrechen", 
+        Abbrechen : "Abbrechen", 
         btnAddpoint : "Punkte hinzufügen/abziehen",
         popPointEntry : 
         {
@@ -3475,10 +3475,10 @@ export const langDe =
         {
             title: "Achtung",  
             btn01: "OK",   
-            msg: "Bitte geben Sie eine Beschreibung mit mindestens 15 Zeichen ein.."
+            msg: "Bitte geben Sie einen Text mit mindestens 15 Zeichen ein."
         },
         btnAdd : "Hinzufügen",
-        descriptionPlace : "Bitte geben Sie eine Beschreibung mit mindestens 15 Zeichen ein.."
+        descriptionPlace : "Bitte geben Sie einen Text mit mindestens 15 Zeichen ein."
     },
     ftr_01_001 : // "Einkaufsrechnungsliste"
     {
@@ -3486,7 +3486,7 @@ export const langDe =
         menu:"Einkaufsrechnung",
         pg_txtCustomerCode : 
         {
-            title : "Kunden Auswahl",
+            title : "Kundenauswahl",
             clmCode :  "KUNDENCODE",
             clmTitle : "KUNDENNAME",
             clmTypeName : "TYP",
@@ -3503,7 +3503,7 @@ export const langDe =
             clmOutputCode : "Kundencode",
             clmOutputName : "Kundenname",
             clmDate: "Datum",
-            clmVat : "MwSt.",
+            clmVat : "..",
             clmAmount : "Betrag",
             clmTotal : "Gesamt",
             clmInputName : "Lager",
@@ -3516,7 +3516,7 @@ export const langDe =
         menu:"Verkaufsrechnung",
         pg_txtCustomerCode : 
         {
-            title : "Kunden Auswahl",
+            title : "Kundenauswahl",
             clmCode :  "KUNDENCODE",
             clmTitle : "KUNDENNAME",
             clmTypeName : "TYP",
@@ -3533,7 +3533,7 @@ export const langDe =
             clmInputCode : "Kundencode",
             clmInputName : "Kundenname",
             clmDate: "Datum",
-            clmVat : "MwSt.",
+            clmVat : "..",
             clmAmount : "Betrag",
             clmTotal : "Gesamt",
             clmOutputName :"Lager",
@@ -3546,7 +3546,7 @@ export const langDe =
         menu:"Rückgaberechnung",
         pg_txtCustomerCode : 
         {
-            title : "Kunden Auswahl",
+            title : "Kundenauswahl",
             clmCode :  "KUNDENCODE",
             clmTitle : "KUNDENNAME",
             clmTypeName : "TYP",
@@ -3563,7 +3563,7 @@ export const langDe =
             clmInputCode : "Kundencode",
             clmInputName : "Kundenname",
             clmDate: "Datum",
-            clmVat : "MwSt.",
+            clmVat : "..",
             clmAmount : "Betrag",
             clmTotal : "Gesamt",
         },
@@ -3575,7 +3575,7 @@ export const langDe =
         menu:"Preisdifferenzrechnung",
         pg_txtCustomerCode : 
         {
-            title : "Kunden Auswahl",
+            title : "Kundenauswahl",
             clmCode :  "KUNDENCODE",
             clmTitle : "KUNDENNAME",
             clmTypeName : "TYP",
@@ -3592,7 +3592,7 @@ export const langDe =
             clmInputCode : "Kundencode",
             clmInputName : "Kundenname",
             clmDate: "Datum",
-            clmVat : "MwSt.",
+            clmVat : "..",
             clmAmount : "Betrag",
             clmTotal : "Gesamt",
         },
@@ -3604,7 +3604,7 @@ export const langDe =
         menu:"Filialverkaufsrechnung",
         pg_txtCustomerCode : 
         {
-            title : "Kunden Auswahl",
+            title : "Kundenauswahl",
             clmCode :  "KUNDENCODE",
             clmTitle : "KUNDENNAME",
             clmTypeName : "TYP",
@@ -3621,7 +3621,7 @@ export const langDe =
             clmInputCode : "Kundennummer",
             clmInputName : "Kundenname",
             clmDate: "Datum",
-            clmVat : "MwSt.",
+            clmVat : "..",
             clmAmount : "Betrag",
             clmTotal : "Gesamt",
             clmOutputName :"Lager",
@@ -3640,7 +3640,7 @@ export const langDe =
         txtDocDiscount : "Dokumentrabatt",
         txtSubTotal : "Zwischensumme",
         txtMargin : "Marge",
-        txtVat : "MwSt.",
+        txtVat : "..",
         txtTotal : "Gesamtsumme",
         dtShipDate :"Versanddatum",
         getDispatch : "Lieferschein holen",
@@ -3654,7 +3654,7 @@ export const langDe =
         cmbCashSafe : "Kassenwahl",
         cmbCheckSafe : "Scheckkasse",
         cmbBank : "Bankwahl",
-        txtPayInvoıceTotal : "Rechnungsbetrag",
+        txtPayInvoiceTotal : "Rechnungsbetrag",
         txtPayTotal : "Gesamtzahlung",
         txtRemainder : "Offener Rechnungsbetrag",
         txtBarcode : "Barcode hinzufügen",
@@ -3663,11 +3663,11 @@ export const langDe =
         getOrders : "Bestellung holen",
         popExcel : {title:"Die Spaltenüberschriften Ihrer Excel-Datei müssen korrekt sein"},
         excelAdd : "Aus Excel hinzufügen",
-        shemaSave : "Schema speichern",
+        shemaSpeichern : "Schema speichern",
         tabTitleSubtotal : "Rechnungssumme",
         tabTitlePayments : "Zahlungsinformationen des Dokuments",
         txtDiffrentTotal : "Gesamtunterschied",
-        tabTitleOldInvoices : "Frühere Rechnungsinformationen",
+        tabTitleOldInvoices : "Alte Rechnungen",
         txtDiffrentNegative : "Differenz für gesunkene Preise",
         txtDiffrentPositive : "Differenz für gestiegene Preise",
         txtDiffrentInv : "Rechnung für Preisunterschied erstellen",
@@ -3692,7 +3692,7 @@ export const langDe =
             clmRefNo : "NUMMER",
             clmOutputName : "KUNDENNAME",
             clmOutputCode  : "KUNDENNUMMER",
-            clmTotal : "GESAMT INKL. MwSt."
+            clmTotal : "GESAMT INKL. .."
         },
         pg_txtCustomerCode : 
         {
@@ -3700,7 +3700,7 @@ export const langDe =
             clmCode :  "KUNDENNUMMER",
             clmTitle : "KUNDENNAME",
             clmTypeName : "TYP",
-            clmGenusName : "GATTUNG"
+            clmGenusName : "ART"
         },
         pg_txtItemsCode : 
         {
@@ -3730,10 +3730,10 @@ export const langDe =
             clmQuantity : "Menge",
             clmDiscount : "Rabatt",
             clmDiscountRate : "Rabatt %",
-            clmVat : "MwSt.",
+            clmVat : "..",
             clmAmount : "Betrag",
             clmTotal : "Gesamt",
-            clmTotalHt : "Gesamt exkl. MwSt.",
+            clmTotalHt : "Gesamt ohne ..",
             clmDispatch : "Lieferschein Nr.",
             clmCreateDate: "Erstellungsdatum",
             clmMargin :"Marge",
@@ -3799,21 +3799,21 @@ export const langDe =
             btn01: "OK",
             msg: "Es können keine Zahlungen eingegeben werden, die den verbleibenden Betrag überschreiten!"
         },
-        msgSave:
+        msgSpeichern:
         {
             title: "Achtung",
             btn01: "OK",
             btn02: "Abbrechen",
             msg: "Möchten Sie den Eintrag speichern?"
         },
-        msgSaveResult:
+        msgSpeichernResult:
         {
             title: "Achtung",
             btn01: "OK",
             msgSuccess: "Ihr Eintrag wurde erfolgreich gespeichert!",
             msgFailed: "Speichern fehlgeschlagen!"
         },
-        msgSaveValid:
+        msgSpeichernValid:
         {
             title: "Achtung",
             btn01: "OK",
@@ -3848,49 +3848,49 @@ export const langDe =
         msgLocked:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             msg: "Dokument wurde gespeichert und gesperrt!"
         },
         msgPasswordSucces:
         {
             title: "Erfolgreich",
-            btn01: "Okay",
+            btn01: "OK",
             msg: "Die Sperre des Dokuments wurde aufgehoben!",
         },
         msgPasswordWrong:
         {
             title: "Fehlgeschlagen",
-            btn01: "Okay",
+            btn01: "OK",
             msg: "Falsches Passwort!"
         },
         msgGetLocked:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             msg: "Dokument ist gesperrt! Sie müssen das Dokument mit dem Administratorpasswort entsperren, um Änderungen vorzunehmen!"
         },
         msgPayNotDeleted:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             msg: "Das Zahlungsdokument kann nicht gelöscht werden, da die Zahlung bereits erfolgt ist!"
         },
         msgDocLocked:
         {
             title: "Achtung",
-            btn01: "Okay",
-            msg: "Aktion kann nicht ausgeführt werden, solange das Dokument gesperrt ist!"
+            btn01: "OK",
+            msg: "Vorgang kann nicht ausgeführt werden, solange das Dokument gesperrt ist!"
         },
         msgDiscount:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             msg: "Der Rabatt darf nicht höher sein als der Betrag!"
         },
         msgItemNotFound:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             msg: "Artikel nicht gefunden!"
         },
         msgCustomerNotFound:
@@ -3903,21 +3903,21 @@ export const langDe =
         msgNotCustomer:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             msg: "Kunde nicht gefunden!"
         },
         msgUnderPrice1:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             btn02: "Abbrechen",
-            msg: "Sie verkaufen unterhalb des Kostenpreises!"
+            msg: "Sie verkaufen unterhalb des Einkaufspreises!"
         },
         msgUnderPrice2:
         {
             title: "Achtung",
-            btn01: "Okay",
-            msg: "Verkauf unter dem Kostenpreis ist nicht erlaubt!"
+            btn01: "OK",
+            msg: "Verkauf unter dem Einkaufspreis ist nicht erlaubt!"
         },
         msgCombineItem:
         {
@@ -3929,8 +3929,8 @@ export const langDe =
         msgCustomerSelect:
         {
             title: "Achtung",
-            btn01: "Okay",
-            msg: "Bitte wählen Sie einen Kunden aus!"
+            btn01: "OK",
+            msg: "Bitte wählen Sie ein Kunde aus!"
         },
         popCash : 
         {
@@ -3956,21 +3956,21 @@ export const langDe =
         msgMissItemCode:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             msg: "Nicht gefundene Codes:"
         },
         msgMultiCodeCount:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             msg: "Anzahl der hinzugefügten Artikel"
         },
         popMultiItem:
         {
             title: "Massenhinzufügung von Artikeln",
             btnApprove: "Artikel abrufen",
-            btnClear : "Leeren",
-            btnSave : "Zeilen hinzufügen",
+            btnClear : "Löschen",
+            btnSpeichern : "Zeilen hinzufügen",
         },
         cmbMultiItemType : 
         {
@@ -4013,7 +4013,7 @@ export const langDe =
         {
             title: "Einheitsauswahl",
             btn01: "Bestätigen",
-            btnFactorSave : "Lagerkarte aktualisieren"
+            btnFactorSpeichern : "Lagerkarte aktualisieren"
         },
         validRef :"Seriennummer darf nicht leer sein",
         validRefNo : "Reihenfolge darf nicht leer sein",
@@ -4026,35 +4026,35 @@ export const langDe =
             title: "Achtung",
             btn01: "Keine Aktualisierung",
             btn02: "Ausgewählte Preise aktualisieren",
-            msg: "Bitte wählen Sie die Artikel aus, deren Lieferantenpreis aktualisiert werden soll.. "
+            msg: "Bitte wählen Sie die Artikel aus, deren Lieferantenpreis aktualisiert werden soll. "
         },
         msgNewPriceDate : 
         {
             title: "Achtung",
             btn01: "Keine Aktualisierung",
             btn02: "Ausgewählte Preise aktualisieren",
-            msg: "Bitte wählen Sie die Artikel aus, deren Datum aktualisiert werden soll.. "
+            msg: "Bitte wählen Sie die Artikel aus, deren Datum aktualisiert werden soll. "
         },
         grdNewPrice: 
         {
             clmCode: "Kennung",
             clmName: "Name",
-            clmPrice: "Alter L. Preis",
+            clmPrice: "Alter Preis",
             clmPrice2: "Neuer Preis",
             clmSalePrice :"Verkaufspreis", 
             clmMargin : "Bruttomarge",
-            clmCostPrice : "Kostenpreis",
+            clmCostPrice : "Einkaufspreis",
             clmNetMargin : "Nettomarge"
         },
         grdNewPriceDate: 
         {
             clmCode: "Kennung",
             clmName: "Name",
-            clmPrice: "Alter L. Preis",
+            clmPrice: "Alter Preis",
             clmPrice2: "Neuer Preis",
             clmSalePrice :"Verkaufspreis", 
             clmMargin : "Bruttomarge",
-            clmCostPrice : "Kostenpreis",
+            clmCostPrice : "Einkaufspreis",
             clmNetMargin : "Nettomarge"
         },
         msgPriceDateUpdate :
@@ -4069,14 +4069,14 @@ export const langDe =
             title: "Achtung",
             btn01: "Keine Aktualisierung",
             btn02: "Ausgewählte Sätze aktualisieren",
-            msg: "Die Rechnung weist unterschiedliche Mehrwertsteuersätze auf als das System.. "
+            msg: "Die Rechnung weist unterschiedliche Mehrwertsteuersätze auf als das System. "
         },
         grdNewVat: 
         {
             clmCode: "Kennung",
             clmName: "Name",
-            clmVat: "System-MwSt.",
-            clmVat2: "Neue MwSt.",
+            clmVat: "System ..",
+            clmVat2: "Neue ..",
         },
         serviceAdd : "Dienstleistung hinzufügen",
         pg_service : 
@@ -4091,7 +4091,7 @@ export const langDe =
             clmCode :  "ARTIKELKENNUNG",
             clmName : "ARTIKELNAME",
             clmMulticode : "LIEFERANTENKENNUNG",
-            clmBarcode : "BARCODE"
+            clmBarcode : "Barcode"
         },
         msgQuantity:
         {
@@ -4161,7 +4161,7 @@ export const langDe =
         {
             title: "Achtung",
             btn01: "Ok",
-            msg: "Das ausgewählte Produkt ist dem Kunden nicht zugeordnet!"
+            msg: "Der ausgewälte Artikel ist dem Kunden nicht zugeordnet!"
         },
         msgWorngRound:
         {
@@ -4193,7 +4193,7 @@ export const langDe =
         txtDiscountPer2: "2. Rabatt",
         txtDiscountPer3: "3. Rabatt",
     },
-    ftr_02_002 : // "Satış Faturası"
+    ftr_02_002 : // "Satiş Faturasi"
     {
         txtRefRefno : "Reihenfolge",
         cmbDepot: "Lager",
@@ -4205,7 +4205,7 @@ export const langDe =
         txtDocDiscount : "Dokumentenrabatt",
         txtSubTotal : "Zwischensumme",
         txtMargin : "Marge",
-        txtVat : "MwSt.",
+        txtVat : "..",
         txtTotal : "Gesamtsumme",
         dtShipDate :"Versanddatum",
         getDispatch : "Lieferschein abrufen",
@@ -4219,7 +4219,7 @@ export const langDe =
         cmbCashSafe : "Kassenwahl",
         cmbCheckSafe : "Scheckkasse",
         cmbBank : "Bankwahl",
-        txtPayInvoıceTotal : "Rechnungsbetrag",
+        txtPayInvoiceTotal : "Rechnungsbetrag",
         txtPayTotal : "Gesamtzahlung",
         txtRemainder : "Restbetrag",
         txtBarcode : "Barcode hinzufügen",
@@ -4228,7 +4228,7 @@ export const langDe =
         getOrders : "Bestellung abrufen",
         tabTitleSubtotal : "Rechnungssumme",
         tabTitlePayments : "Zahlungsinformationen",
-        tabTitleOldInvoices : "Frühere Rechnungsinformationen",
+        tabTitleOldInvoices : "Alte Rechnungen",
         getRemainder : "Restbetrag abrufen",
         txtbalance : "Aktueller Kontostand",
         txtUnitFactor : "Einheitsfaktor",
@@ -4241,7 +4241,7 @@ export const langDe =
         getProforma : "Proforma abrufen",
         btnView : "Anzeigen",
         btnMailsend : "E-Mail senden",
-        placeMailHtmlEditor : "Geben Sie eine Beschreibung für Ihre E-Mail ein.",
+        placeMailHtmlEditor : "Geben Sie einen Text für Ihre E-Mail ein.",
         validDesign : "Bitte wählen Sie ein Design aus.",
         validMail : "Bitte lassen Sie dieses Feld nicht leer.",
         getPreInvoice : "Vorläufige Rechnung abrufen",
@@ -4292,7 +4292,7 @@ export const langDe =
             clmQuantity : "Menge",
             clmDiscount : "Rabatt",
             clmDiscountRate : "Rabatt %",
-            clmVat : "MwSt",
+            clmVat : ".",
             clmAmount : "Betrag",
             clmTotal : "Gesamtsumme",
             clmTotalHt : "Nettogesamtsumme",
@@ -4301,7 +4301,7 @@ export const langDe =
             clmMargin :"Marge",
             clmDescription :"Beschreibung",
             clmCuser :"Benutzer",
-            clmVatRate : "MwSt %",
+            clmVatRate : ".. %",
             clmOrigin : "Herkunft",
             clmSubQuantity : "Untereinheit",
             clmSubPrice : "Untereinheitspreis",
@@ -4366,21 +4366,21 @@ export const langDe =
             btn02: "Nein",
             msg: "Interfel anwenden?"
         },
-        msgSave:
+        msgSpeichern:
         {
             title: "Achtung",
             btn01: "OK",
             btn02: "Abbrechen",
             msg: "Sind Sie sicher, dass Sie speichern möchten?"
         },
-        msgSaveResult:
+        msgSpeichernResult:
         {
             title: "Achtung",
             btn01: "OK",
             msgSuccess: "Ihr Eintrag wurde erfolgreich gespeichert!",
             msgFailed: "Ihr Eintrag konnte nicht gespeichert werden!"
         },
-        msgSaveValid:
+        msgSpeichernValid:
         {
             title: "Achtung",
             btn01: "OK",
@@ -4458,7 +4458,7 @@ export const langDe =
         {
             title: "Achtung",
             btn01: "OK",
-            msg: "Das Dokument mit geleisteter Zahlung kann nicht gelöscht werden!"
+            msg: "Ein Dokument mit geleisteter Zahlung kann nicht gelöscht werden!"
         },
         msgDocLocked:
         {
@@ -4489,13 +4489,13 @@ export const langDe =
             title: "Achtung",
             btn01: "Verbinden",
             btn02: "Neu hinzufügen",
-            msg: "Das Produkt, das Sie hinzufügen möchten, ist bereits im Dokument vorhanden! Sollen die Zeilen zusammengeführt werden?"
+            msg: "Der Artikel, den Sie hinzufügen möchten, ist bereits im Dokument vorhanden! Sollen die Zeilen zusammengeführt werden?"
         },
         msgCustomerSelect:
         {
             title: "Achtung",
             btn01: "OK",
-            msg: "Bitte wählen Sie einen Kunden aus!"
+            msg: "Bitte wählen Sie ein Kunde aus!"
         },
         popCash:
         {
@@ -4528,26 +4528,26 @@ export const langDe =
         {
             title: "Achtung",
             btn01: "OK",
-            msg: "Anzahl der hinzugefügten Produkte"
+            msg: "Anzahl der hinzugefügten Artikel"
         },
         popMultiItem:
         {
-            title: "Massenhafte Produkt-Eingabe",
-            btnApprove: "Produkte abrufen",
+            title: "Massenhafte Artikel-Eingabe",
+            btnApprove: "Artikel abrufen",
             btnClear: "Löschen",
-            btnSave: "Zeilen hinzufügen",
+            btnSpeichern: "Zeilen hinzufügen",
         },
         cmbMultiItemType:
         {
             title: "Suchmethode",
             customerCode: "Nach Lieferantennummer",
-            ItemCode: "Nach Produktcode"
+            ItemCode: "Nach Artikelcode"
         },
         grdMultiItem:
         {
-            clmCode: "Produktcode",
+            clmCode: "Artikelcode",
             clmMulticode: "Lieferantennummer",
-            clmName: "Produktname",
+            clmName: "Artikelname",
             clmQuantity: "Menge"
         },
         msgMultiData:
@@ -4555,19 +4555,19 @@ export const langDe =
             title: "Achtung",
             btn01: "Liste löschen und alles hinzufügen",
             btn02: "Neu geschriebene zur Liste hinzufügen",
-            msg: "Produkte in der Liste vorhanden!"
+            msg: "Artikel in der Liste vorhanden!"
         },
         msgUnit:
         {
             title: "Auswahleinheit",
             btn01: "Bestätigen",
         },
-        validRef: "Seriennummer darf nicht leer sein",
-        validRefNo: "Laufnummer darf nicht leer sein",
-        validDepot: "Sie müssen ein Lager auswählen",
-        validCustomerCode: "Lieferantennummer darf nicht leer sein",
-        validDocDate: "Bitte wählen Sie ein Datum",
-        tagItemCodePlaceholder: "Bitte geben Sie die gewünschten Codes ein",
+        validRef: "Seriennummer darf nicht leer sein.",
+        validRefNo: "Laufnummer darf nicht leer sein.",
+        validDepot: "Sie müssen ein Lager auswählen.",
+        validCustomerCode: "Lieferantennummer darf nicht leer sein.",
+        validDocDate: "Bitte wählen Sie ein Datum.",
+        tagItemCodePlaceholder: "Bitte geben Sie die gewünschten Codes ein.",
         msgNotQuantity:
         {
             title: "Achtung",
@@ -4580,13 +4580,13 @@ export const langDe =
             clmCode: "LAGERCODE",
             clmName: "LAGERNAME",
             clmMulticode: "LIEFERANTENNUMMER",
-            clmBarcode: "BARCODE"
+            clmBarcode: "Barcode"
         },
         msgQuantity:
         {
             title: "Menge",
             btn01: "Hinzufügen",
-            msg: "Bitte geben Sie die Menge ein"
+            msg: "Bitte geben Sie die Menge ein."
         },
         pg_ordersGrid:
         {
@@ -4663,13 +4663,13 @@ export const langDe =
             title: "Achtung",
             btn01: "OK",
             btn02: "Abbrechen",
-            msg: "Sie verkaufen unter den Kosten!!"
+            msg: "Sie verkaufen unter den Kosten!"
         },
         msgUnderPrice2:
         {
             title: "Achtung",
             btn01: "OK",
-            msg: "Verkaufspreis darf nicht unter den Kostenpreis liegen!!"
+            msg: "Verkaufspreis darf nicht unter den Einkaufspreis liegen!!"
         },
         popMailSend:
         {
@@ -4734,7 +4734,7 @@ export const langDe =
             calculateInterfel: "Interfel berechnen",
         },
     },
-    ftr_02_003 : // "İade Faturası"
+    ftr_02_003 : // "İade Faturasi"
     {
         txtRefRefno : "Reihenfolge",
         cmbDepot: "Lager",
@@ -4746,7 +4746,7 @@ export const langDe =
         txtDocDiscount : "Dokumentenrabatt",
         txtSubTotal : "Zwischensumme",
         txtMargin : "Marge",
-        txtVat : "MwSt.",
+        txtVat : "..",
         txtTotal : "Gesamtsumme",
         dtShipDate :"Versanddatum",
         getPayment : "Zahlungseingang",
@@ -4760,7 +4760,7 @@ export const langDe =
         cmbCashSafe : "Kassenauswahl",
         cmbCheckSafe : "Scheckkasse",
         cmbBank : "Bankauswahl",
-        txtPayInvoıceTotal : "Rechnungsbetrag",
+        txtPayInvoiceTotal : "Rechnungsbetrag",
         txtPayTotal : "Gesamteinnahmen",
         txtRemainder : "Restbetrag",
         txtBarcode : "Barcode hinzufügen",
@@ -4768,7 +4768,7 @@ export const langDe =
         txtQuantity :"Menge",
         tabTitleSubtotal : "Rechnungssumme",
         tabTitlePayments : "Zahlungsinformationen",
-        tabTitleOldInvoices : "Vergangene Rechnungsinformationen",
+        tabTitleOldInvoices : "Alte Rechnungen",
         getRemainder : "Restbetrag abrufen",
         txtbalance : "Kontoguthaben",
         txtUnitFactor : "Einheitsfaktor",
@@ -4780,7 +4780,7 @@ export const langDe =
         getProforma : "Proforma abrufen",
         btnView : "Anzeigen",
         btnMailsend : "E-Mail senden",
-        placeMailHtmlEditor : "Geben Sie eine Beschreibung für Ihre E-Mail ein.",
+        placeMailHtmlEditor : "Geben Sie einen Text für Ihre E-Mail ein.",
         validDesign : "Bitte wählen Sie ein Design aus.",
         validMail : "Bitte füllen Sie das Feld aus.",
         txtTotalHt : "Rabattierter Betrag",
@@ -4828,10 +4828,10 @@ export const langDe =
             clmQuantity : "Anzahl",
             clmDiscount : "Rabatt",
             clmDiscountRate : "Rabatt %",
-            clmVat : "MwSt.",
+            clmVat : "..",
             clmAmount : "Betrag",
             clmTotal : "Gesamtsumme",
-            clmTotalHt : "Gesamtbetrag exkl. MwSt.",
+            clmTotalHt : "Gesamtbetrag ohne ..",
             clmDispatch : "Lieferschein Nr.",
             clmCreateDate: "Erstellungsdatum",
             clmMargin :"Marge",
@@ -4839,7 +4839,7 @@ export const langDe =
             clmCuser :"Benutzer",
             clmMulticode : "T.Code",
             clmBarcode : "Barcode",
-            clmVatRate :"MwSt. %",
+            clmVatRate :".. %",
             clmSubQuantity : "Untereinheit",
             clmSubPrice : "Preis der Untereinheit",
             clmSubFactor : "Faktor",
@@ -4896,21 +4896,21 @@ export const langDe =
             btn01: "Ok",
             msg: "Sie können keinen Betrag eingeben, der größer als der offene Betrag ist!"
         },
-        msgSave:
+        msgSpeichern:
         {
             title: "Achtung",
             btn01: "Ok",
             btn02: "Abbrechen",
             msg: "Sind Sie sicher, dass Sie speichern möchten!"
         },
-        msgSaveResult:
+        msgSpeichernResult:
         {
             title: "Achtung",
             btn01: "Ok",
             msgSuccess: "Ihr Speichervorgang war erfolgreich!",
             msgFailed: "Ihr Speichervorgang ist fehlgeschlagen!"
         },
-        msgSaveValid:
+        msgSpeichernValid:
         {
             title: "Achtung",
             btn01: "Ok",
@@ -5046,13 +5046,13 @@ export const langDe =
             clmCode :  "ARTIKELNUMMER",
             clmName : "ARTIKELNAME",
             clmMulticode : "LIEFERANTENNUMMER",
-            clmBarcode : "BARCODE"
+            clmBarcode : "Barcode"
         },
         msgQuantity:
         {
             title: "Menge",
             btn01: "Hinzufügen",
-            msg: "Bitte geben Sie eine Menge ein"
+            msg: "Menge eingeben"
         },
         cmbPayType : {
             title : "Zahlungsart",
@@ -5114,7 +5114,7 @@ export const langDe =
         msgMailSendResult:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             msgSuccess: "E-Mail erfolgreich gesendet!",
             msgFailed: "E-Mail konnte nicht gesendet werden!"
         },
@@ -5126,7 +5126,7 @@ export const langDe =
         msgWorngRound:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             msg1: "Der Unterschied zwischen den Beträgen, die Sie runden möchten, darf höchstens ",
             msg2: " betragen!"
         },
@@ -5157,13 +5157,13 @@ export const langDe =
         msgMissItemCode:
         {
             title: "Achtung",
-            btn01: "Okay",
-            msg: "Nicht gefunden Codes:"
+            btn01: "OK",
+            msg: "Kein Code gefunden!"
         },
         msgMultiCodeCount:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             msg: "Anzahl der hinzugefügten Artikel"
         },
         popMultiItem:
@@ -5171,7 +5171,7 @@ export const langDe =
             title: "Massenelement hinzufügen",
             btnApprove: "Elemente abrufen",
             btnClear : "Löschen",
-            btnSave : "Zeilen hinzufügen",
+            btnSpeichern : "Zeilen hinzufügen",
         },
         cmbMultiItemType : 
         {
@@ -5213,7 +5213,7 @@ export const langDe =
         txtDocDiscount : "Dokumentrabatt",
         txtSubTotal : "Zwischensumme",
         txtMargin : "Gewinnspanne",
-        txtVat : "MwSt.",
+        txtVat : "..",
         txtTotal : "Gesamtsumme",
         dtShipDate :"Versanddatum",
         getContract : "Einkaufsrechnung auswählen",
@@ -5227,7 +5227,7 @@ export const langDe =
         cmbCashSafe : "Kasse auswählen",
         cmbCheckSafe : "Scheckkasse",
         cmbBank : "Bank auswählen",
-        txtPayInvoıceTotal : "Rechnungsbetrag",
+        txtPayInvoiceTotal : "Rechnungsbetrag",
         txtPayTotal : "Gesamtbetrag",
         txtRemainder : "Restbetrag",
         txtBarcode : "Barcode hinzufügen",
@@ -5235,7 +5235,7 @@ export const langDe =
         txtQuantity :"Menge",
         tabTitleSubtotal : "Rechnungssumme",
         tabTitlePayments : "Zahlungsinformationen",
-        tabTitleOldInvoices : "Vorherige Rechnungsinformationen",
+        tabTitleOldInvoices : "Alte Rechnungen",
         getRemainder : "Restbetrag abrufen",
         txtbalance : "Aktueller Kundenkontostand",
         getProforma : "Proforma-Rechnung abrufen",
@@ -5247,7 +5247,7 @@ export const langDe =
         dtExpDate : "Fälligkeitsdatum", 
         btnView : "Anzeigen",
         btnMailsend : "E-Mail senden",
-        placeMailHtmlEditor : "Geben Sie hier eine Beschreibung für Ihre E-Mail ein.",
+        placeMailHtmlEditor : "Geben Sie hier einen Text für Ihre E-Mail ein.",
         validDesign : "Bitte wählen Sie ein Design aus.",
         validMail : "Bitte füllen Sie dieses Feld aus.",
         txtTotalHt : "Rabattierter Betrag",
@@ -5290,10 +5290,10 @@ export const langDe =
             clmQuantity : "Menge",
             clmDiscount : "Rabatt",
             clmDiscountRate : "Rabatt %",
-            clmVat : "MwSt.",
+            clmVat : "..",
             clmAmount : "Betrag",
             clmTotal : "Gesamtsumme",
-            clmTotalHt : "Gesamtsumme (ohne MwSt.)",
+            clmTotalHt : "Gesamtsumme (ohne ..)",
             clmCreateDate: "Erstellungsdatum",
             clmInvNo : "Rechnungsnummer",
             clmInvDate : "Rechnungsdatum",
@@ -5302,7 +5302,7 @@ export const langDe =
             clmMulticode : "Lieferantencode",
             clmCustomerPrice : "Kundenpreis",
             clmPurcPrice : "Rechnungspreis",
-            clmVatRate : "MwSt. %"
+            clmVatRate : ".. %"
         },
         grdInvoicePayment: 
         {
@@ -5350,21 +5350,21 @@ export const langDe =
             btn01: "OK",
             msg: "Es können keine Bestände erfasst werden, bevor die Dokumentkopfdaten vervollständigt sind!"
         },
-        msgSave:
+        msgSpeichern:
         {
             title: "Achtung",
             btn01: "OK",
             btn02: "Abbrechen",
             msg: "Sind Sie sicher, dass Sie speichern möchten?"
         },
-        msgSaveResult:
+        msgSpeichernResult:
         {
             title: "Achtung",
             btn01: "OK",
             msgSuccess: "Ihr Speichervorgang war erfolgreich!",
             msgFailed: "Ihr Speichervorgang ist fehlgeschlagen!"
         },
-        msgSaveValid:
+        msgSpeichernValid:
         {
             title: "Achtung",
             btn01: "OK",
@@ -5448,7 +5448,7 @@ export const langDe =
         {
             title: "Achtung",
             btn01: "OK",
-            msg: "Bestand nicht gefunden!!"
+            msg: "Artikel nicht gefunden!!"
         },
         msgNotCustomer:
         {
@@ -5500,7 +5500,7 @@ export const langDe =
             clmCode :  "ARTIKELCODE",
             clmName : "ARTIKELNAME",
             clmMulticode : "LIEFERANTENCODE",
-            clmBarcode : "BARCODE"
+            clmBarcode : "Barcode"
         },
         msgQuantity:
         {
@@ -5608,7 +5608,7 @@ export const langDe =
             title: "Massenhinzufügung von Artikeln",
             btnApprove: "Artikel abrufen",
             btnClear : "Löschen",
-            btnSave : "Zeilen hinzufügen",
+            btnSpeichern : "Zeilen hinzufügen",
         },
         cmbMultiItemType : 
         {
@@ -5626,8 +5626,8 @@ export const langDe =
         msgMultiData:
         {
             title: "Achtung",
-            btn01: "Liste löschen und alle hinzufügen",
-            btn02: "Neu geschriebene zur Liste hinzufügen",
+            btn01: "Alte Liste löschen und neue Liste erstellen",
+            btn02: "Alte Liste behalten und neugeschriebene zur Liste hinzufügen",
             msg: "Es gibt Artikel in der Liste!"
         },
         tagItemCodePlaceholder: "Bitte geben Sie die Codes ein, die Sie hinzufügen möchten",
@@ -5638,7 +5638,7 @@ export const langDe =
             msg: "Das Dokument kann erst gedruckt werden, nachdem es gesperrt wurde!"
         },
     },
-    ftr_02_005 : // "Şube Satış Faturası"
+    ftr_02_005 : // "Şube Satiş Faturasi"
     {
         txtRefRefno : "Seriennummer",
         cmbDepot: "Lager",
@@ -5650,7 +5650,7 @@ export const langDe =
         txtDocDiscount : "Dokumentenrabatt",
         txtSubTotal : "Zwischensumme",
         txtMargin : "Marge",
-        txtVat : "MwSt.",
+        txtVat : "..",
         txtTotal : "Gesamtsumme",
         dtShipDate :"Versanddatum",
         getDispatch : "Lieferschein abrufen",
@@ -5664,7 +5664,7 @@ export const langDe =
         cmbCashSafe : "Kassenauswahl",
         cmbCheckSafe : "Scheckkasse",
         cmbBank : "Bankauswahl",
-        txtPayInvoıceTotal : "Rechnungsbetrag",
+        txtPayInvoiceTotal : "Rechnungsbetrag",
         txtPayTotal : "Gesamtzahlung",
         txtRemainder : "Restbetrag",
         txtBarcode : "Barcode hinzufügen",
@@ -5673,7 +5673,7 @@ export const langDe =
         getOrders : "Bestellung abrufen",
         tabTitleSubtotal : "Rechnungssumme",
         tabTitlePayments : "Zahlungsinformationen",
-        tabTitleOldInvoices : "Frühere Rechnungsinformationen",
+        tabTitleOldInvoices : "Alte Rechnungen",
         getRemainder : "Restbetrag abrufen",
         txtbalance : "Gesamtsaldo",
         txtUnitFactor : "Einheitsfaktor",
@@ -5684,7 +5684,7 @@ export const langDe =
         dtExpDate : "Fälligkeitsdatum", 
         btnView : "Anzeigen",
         btnMailsend : "E-Mail senden",
-        placeMailHtmlEditor : "Geben Sie eine Beschreibung für Ihre E-Mail ein.",
+        placeMailHtmlEditor : "Geben Sie einen Text für Ihre E-Mail ein.",
         validDesign : "Bitte wählen Sie ein Design aus.",
         validMail : "Bitte füllen Sie das Feld aus.",
         pg_Docs : 
@@ -5702,7 +5702,7 @@ export const langDe =
             clmCode :  "KUNDENNUMMER",
             clmTitle : "KUNDENNAME",
             clmTypeName : "TYP",
-            clmGenusName : "GATTUNG"
+            clmGenusName : "ART"
         },
         pg_txtItemsCode : 
         {
@@ -5729,16 +5729,16 @@ export const langDe =
             clmQuantity : "Menge",
             clmDiscount : "Rabatt",
             clmDiscountRate : "Rabattsatz",
-            clmVat : "MwSt.",
+            clmVat : "..",
             clmAmount : "Betrag",
             clmTotal : "Gesamtsumme",
-            clmTotalHt : "Gesamtbetrag (exkl. MwSt.)",
+            clmTotalHt : "Gesamtbetrag (ohne. ..)",
             clmDispatch : "Lieferschein-Nr.",
             clmCreateDate: "Erstellungsdatum",
             clmMargin :"Marge",
             clmDescription :"Beschreibung",
             clmCuser :"Benutzer",
-            clmVatRate : "MwSt.-Satz",
+            clmVatRate : "..-Satz",
             clmSubQuantity : "Untereinheit",
             clmSubPrice : "Preis pro Untereinheit",
             clmSubFactor : "Faktor",
@@ -5795,21 +5795,21 @@ export const langDe =
             btn01: "Ok",
             msg: "Es können keine Zahlungen erfasst werden, die den offenen Betrag überschreiten!"
         },
-        msgSave:
+        msgSpeichern:
         {
             title: "Achtung",
             btn01: "Ok",
             btn02: "Abbrechen",
             msg: "Sind Sie sicher, dass Sie speichern möchten?"
         },
-        msgSaveResult:
+        msgSpeichernResult:
         {
             title: "Achtung",
             btn01: "Ok",
             msgSuccess: "Ihre Daten wurden erfolgreich gespeichert!",
             msgFailed: "Fehler beim Speichern der Daten!"
         },
-        msgSaveValid:
+        msgSpeichernValid:
         {
             title: "Achtung",
             btn01: "Ok",
@@ -5946,7 +5946,7 @@ export const langDe =
             title: "Massenhinzufügung von Artikeln",
             btnApprove: "Artikel abrufen",
             btnClear : "Leeren",
-            btnSave : "Zeilen hinzufügen",
+            btnSpeichern : "Zeilen hinzufügen",
         },
         cmbMultiItemType:
         {
@@ -6048,7 +6048,7 @@ export const langDe =
         {
             title: "Achtung",
             btn01: "Zum Dokument gehen",
-            msg: "Dokumentgefunden"
+            msg: "Dokument gefunden"
         },
         popMailSend:
         {
@@ -6123,7 +6123,7 @@ export const langDe =
             msg: "Das Dokument kann nicht gedruckt werden, solange es gesperrt ist!"
         },
     },
-    ftr_02_006 : // "Fiyat Farkı Alış Faturası"
+    ftr_02_006 : // "Preis Farki Aliş Faturasi"
     {
         txtRefRefno: "Seriennummer",
         cmbDepot: "Lager",
@@ -6135,7 +6135,7 @@ export const langDe =
         txtDocDiscount: "Dokumentrabatt",
         txtSubTotal: "Zwischensumme",
         txtMargin: "Marge",
-        txtVat: "MwSt.",
+        txtVat: "..",
         txtTotal: "Gesamtsumme",
         dtShipDate: "Lieferdatum",
         getContract: "Einkaufsrechnung auswählen",
@@ -6149,7 +6149,7 @@ export const langDe =
         cmbCashSafe: "Kassenauswahl",
         cmbCheckSafe: "Scheckkassse",
         cmbBank: "Bankauswahl",
-        txtPayInvoıceTotal: "Rechnungsbetrag",
+        txtPayInvoiceTotal: "Rechnungsbetrag",
         txtPayTotal: "Gesamtzahlung",
         txtRemainder: "Restbetrag",
         txtBarcode: "Barcode hinzufügen",
@@ -6157,7 +6157,7 @@ export const langDe =
         txtQuantity: "Menge",
         tabTitleSubtotal: "Rechnungssumme",
         tabTitlePayments: "Dokumentzahlungsinformationen",
-        tabTitleOldInvoices: "Vergangene Rechnungsinformationen",
+        tabTitleOldInvoices: "Alte Rechnungen",
         getRemainder: "Restbetrag abrufen",
         txtbalance: "Gesamtsaldo",
         getProforma: "Proforma abrufen",
@@ -6184,7 +6184,7 @@ export const langDe =
             clmCode: "KUNDENNUMMER",
             clmTitle: "KUNDENNAME",
             clmTypeName: "TYP",
-            clmGenusName: "GATTUNG"
+            clmGenusName: "ART"
         },
         pg_txtItemsCode: 
         {
@@ -6208,7 +6208,7 @@ export const langDe =
             clmQuantity: "Anzahl",
             clmDiscount: "Rabatt",
             clmDiscountRate: "Rabatt %",
-            clmVat: "MwSt.",
+            clmVat: "..",
             clmAmount: "Betrag",
             clmTotal: "Gesamt",
             clmTotalHt: "Nettobetrag",
@@ -6220,7 +6220,7 @@ export const langDe =
             clmMulticode: "T-Code",
             clmCustomerPrice: "Kundenpreis",
             clmPurcPrice: "Rechnungspreis",
-            clmVatRate: "MwSt. %"
+            clmVatRate: ".. %"
         },
         grdInvoicePayment: 
         {
@@ -6267,21 +6267,21 @@ export const langDe =
             btn01: "OK",
             msg: "Sie können keinen Bestand erfassen, bevor die Dokumentkopfdaten vervollständigt sind!"
         },
-        msgSave:
+        msgSpeichern:
         {
             title: "Achtung",
             btn01: "OK",
             btn02: "Abbrechen",
             msg: "Sind Sie sicher, dass Sie den Eintrag speichern möchten?"
         },
-        msgSaveResult:
+        msgSpeichernResult:
         {
             title: "Achtung",
             btn01: "OK",
             msgSuccess: "Ihr Eintrag wurde erfolgreich gespeichert!",
             msgFailed: "Fehler beim Speichern Ihres Eintrags!"
         },
-        msgSaveValid:
+        msgSpeichernValid:
         {
             title: "Achtung",
             btn01: "OK",
@@ -6341,7 +6341,7 @@ export const langDe =
         {
             title: "Achtung",
             btn01: "OK",
-            msg: "Das Dokument ist gesperrt! Um Änderungen zu speichern, müssen Sie es mit dem Administratorpasswort entsperren!"
+            msg: "Das Dokument ist gesperrt! Änderungen und Speichern nur mit dem Administratorpasswort möglich!"
         },
         msgPayNotDeleted:
         {
@@ -6475,10 +6475,10 @@ export const langDe =
             title : "Eingabe des Rabattbetrags",
             btn01 : "Bestätigen"
         },
-        txtDiscount1 : "Rabattbetrag 1",
-        txtDiscount2 : "Rabattbetrag 2",
-        txtDiscount3 : "Rabattbetrag 3",
-        txtTotalDiscount :"Gesamtrabattbetrag",
+        txtDiscount1 : "1. ",
+        txtDiscount2 : "2. ",
+        txtDiscount3 : "3. ",
+        tTotalDiscount :"Gesamtrabattbetrag",
         msgDiscountPerEntry : 
         {
             title : "Prozentuale Rabatteingabe",
@@ -6497,33 +6497,33 @@ export const langDe =
         msgMissItemCode:
         {
             title: "Achtung",
-            btn01: "Okay",
-            msg: "Nicht gefunden Codes:"
+            btn01: "OK",
+            msg: "Kein Code gefunden!"
         },
         msgMultiCodeCount:
         {
             title: "Achtung",
-            btn01: "Okay",
-            msg: "Hinzugefügte Produktmenge"
+            btn01: "OK",
+            msg: "Hinzugefügte Artikelmenge"
         },
         popMultiItem:
         {
-            title: "Massenhinzufügung von Produkten",
-            btnApprove: "Produkte abrufen",
+            title: "Massenhinzufügung von Artikeln",
+            btnApprove: "Artikel abrufen",
             btnClear : "Löschen",
-            btnSave : "Zeilen hinzufügen",
+            btnSpeichern : "Zeilen hinzufügen",
         },
         cmbMultiItemType : 
         {
             title : "Suchmethode",
-            customerCode : "Nach Lieferantencode",
-            ItemCode : "Nach Produktcode"
+            customerCode : "Nach Lieferantencode suchen",
+            ItemCode : "Nach Artikelcode suchen"
         },
         grdMultiItem : 
         {
-            clmCode : "Produktcode",
+            clmCode : "Artikelcode",
             clmMulticode : "Lieferantencode",
-            clmName : "Produktname",
+            clmName : "Artikelname",
             clmQuantity : "Menge"
         },
         msgMultiData:
@@ -6531,7 +6531,7 @@ export const langDe =
             title: "Achtung",
             btn01: "Liste löschen und alles hinzufügen",
             btn02: "Neu geschriebene zur Liste hinzufügen",
-            msg: "Es gibt Produkte in der Liste!"
+            msg: "Es gibt Artikel in der Liste!"
         },
         tagItemCodePlaceholder: "Bitte geben Sie die gewünschten Codes ein",
     },
@@ -6547,7 +6547,7 @@ export const langDe =
         txtDocDiscount : "Dokumentenrabatt",
         txtSubTotal : "Zwischensumme",
         txtMargin : "Marge",
-        txtVat : "MwSt.",
+        txtVat : "..",
         txtTotal : "Gesamtsumme",
         dtShipDate :"Versanddatum",
         getPayment : "Zahlungseingang",
@@ -6561,7 +6561,7 @@ export const langDe =
         cmbCashSafe : "Kasse auswählen",
         cmbCheckSafe : "Scheckkasse",
         cmbBank : "Bank auswählen",
-        txtPayInvoıceTotal : "Rechnungsbetrag",
+        txtPayInvoiceTotal : "Rechnungsbetrag",
         txtPayTotal : "Gesamtzahlung",
         txtRemainder : "Restbetrag",
         txtBarcode : "Barcode hinzufügen",
@@ -6569,7 +6569,7 @@ export const langDe =
         txtQuantity :"Menge",
         tabTitleSubtotal : "Rechnungssumme",
         tabTitlePayments : "Zahlungsinformationen",
-        tabTitleOldInvoices : "Vorherige Rechnungsinformationen",
+        tabTitleOldInvoices : "Alte Rechnungen",
         getRemainder : "Restbetrag abrufen",
         txtbalance : "Gesamtsaldo",
         txtUnitFactor : "Einheitsfaktor",
@@ -6600,9 +6600,9 @@ export const langDe =
         },
         pg_txtItemsCode : 
         {
-            title : "Produktauswahl",
-            clmCode :  "PRODUKTCODE",
-            clmName : "PRODUKTNAME",
+            title : "Artikelauswahl",
+            clmCode :  "ArtikelCODE",
+            clmName : "ArtikelNAME",
             clmPrice : "VERKAUFSPREIS"
         },
         pg_dispatchGrid : 
@@ -6624,7 +6624,7 @@ export const langDe =
             clmQuantity : "Menge",
             clmDiscount : "Rabatt",
             clmDiscountRate : "Rabattsatz %",
-            clmVat : "MwSt.",
+            clmVat : "..",
             clmAmount : "Betrag",
             clmTotal : "Gesamtsumme",
             clmTotalHt : "Nettobetrag",
@@ -6635,7 +6635,7 @@ export const langDe =
             clmCuser :"Benutzer",
             clmMulticode : "Lieferantencode",
             clmBarcode : "Barcode",
-            clmVatRate :"MwSt. %",
+            clmVatRate :".. %",
             clmSubQuantity : "Untereinheit",
             clmSubPrice : "Untereinheitspreis",
             clmSubFactor : "Faktor",
@@ -6683,113 +6683,113 @@ export const langDe =
         msgDocValid:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             msg: "Es können keine Bestände erfasst werden, solange die Dokumentkopfinformationen nicht vollständig sind!"
         },
         msgMoreAmount:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             msg: "Es können keine Zahlungen über dem verbleibenden Betrag erfasst werden!"
         },
-        msgSave:
+        msgSpeichern:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             btn02: "Abbrechen",
             msg: "Sind Sie sicher, dass Sie speichern möchten?"
         },
-        msgSaveResult:
+        msgSpeichernResult:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             msgSuccess: "Ihr Speichervorgang war erfolgreich!",
             msgFailed: "Ihr Speichervorgang ist fehlgeschlagen!"
         },
-        msgSaveValid:
+        msgSpeichernValid:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             msg: "Bitte füllen Sie alle erforderlichen Felder aus!"
         },
         msgDelete:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             btn02: "Abbrechen",
             msg: "Sind Sie sicher, dass Sie den Datensatz löschen möchten?"
         },
         msgVatDelete:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             btn02: "Abbrechen",
             msg: "Möchten Sie die Steuer wirklich auf Null setzen?"
         },
         msgDiscountPrice:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             msg: "Es kann kein Rabatt gewährt werden, der den Betrag überschreitet!"
         },
         msgDiscountPercent:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             msg: "Es kann kein Rabatt gewährt werden, der den Betrag überschreitet!"
         },
         msgLocked:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             msg: "Das Dokument wurde gespeichert und gesperrt!"
         },
         msgPasswordSucces:
         {
             title: "Erfolgreich",
-            btn01: "Okay",
+            btn01: "OK",
             msg: "Das Dokument wurde entsperrt!"
         },
         msgPasswordWrong:
         {
             title: "Fehlgeschlagen",
-            btn01: "Okay",
+            btn01: "OK",
             msg: "Ihr Passwort ist falsch!"
         },
         msgGetLocked:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             msg: "Das Dokument ist gesperrt! Sie müssen das Administratorpasswort eingeben, um Änderungen zu speichern!"
         },
         msgPayNotDeleted:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             msg: "Ein bezahltes Dokument kann nicht gelöscht werden!"
         },
         msgDocLocked:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             msg: "Es können keine Aktionen durchgeführt werden, solange das Dokument gesperrt ist!"
         },
         msgDiscount:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             msg: "Der Rabattbetrag darf nicht höher als der Gesamtbetrag sein!"
         },
         msgItemNotFound:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             msg: "Artikel nicht gefunden!"
         },
         msgNotCustomer:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             msg: "Kunde nicht gefunden!"
         },
         msgCombineItem:
@@ -6802,7 +6802,7 @@ export const langDe =
         msgCustomerSelect:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             msg: "Bitte wählen Sie einen Kunden aus!"
         },
         popCash : 
@@ -6848,7 +6848,7 @@ export const langDe =
         {
             title: "Menge",
             btn01: "Hinzufügen",
-            msg: "Bitte geben Sie eine Menge ein"
+            msg: "Bitte geben Sie die Menge ein"
         },
         cmbPayType : {
             title : "Zahlungsart",
@@ -6953,7 +6953,7 @@ export const langDe =
             title: "Massenhinzufügung von Artikeln",
             btnApprove: "Artikel abrufen",
             btnClear : "Löschen",
-            btnSave : "Zeilen hinzufügen",
+            btnSpeichern : "Zeilen hinzufügen",
         },
         cmbMultiItemType :
         {
@@ -6977,7 +6977,7 @@ export const langDe =
         },
         tagItemCodePlaceholder: "Bitte geben Sie die gewünschten Codes ein",
     },
-    ftr_02_008 : // "Şube Alış Faturası"
+    ftr_02_008 : // "Şube Aliş Faturasi"
     {
         txtRefRefno: "Seriennummer",
         cmbDepot: "Lager",
@@ -6989,7 +6989,7 @@ export const langDe =
         txtDocDiscount: "Dokumentenrabatt",
         txtSubTotal: "Zwischensumme",
         txtMargin: "Marge",
-        txtVat: "MwSt.",
+        txtVat: "..",
         txtTotal: "Gesamtsumme",
         dtShipDate: "Versanddatum",
         getDispatch: "Lieferschein abrufen",
@@ -7003,7 +7003,7 @@ export const langDe =
         cmbCashSafe: "Kasse auswählen",
         cmbCheckSafe: "Scheckkasse",
         cmbBank: "Bank auswählen",
-        txtPayInvoıceTotal: "Rechnungsbetrag",
+        txtPayInvoiceTotal: "Rechnungsbetrag",
         txtPayTotal: "Gesamtzahlung",
         txtRemainder: "Restbetrag",
         txtBarcode: "Barcode hinzufügen",
@@ -7011,19 +7011,19 @@ export const langDe =
         txtQuantity: "Menge",
         getOrders: "Bestellung abrufen",
         tabTitleSubtotal: "Rechnungssumme",
-        tabTitlePayments: "Dokumentenzahlungsinformationen",
-        tabTitleOldInvoices: "Vergangene Rechnungsinformationen",
+        tabTitlePayments: "Zahlungen",
+        tabTitleOldInvoices: "Alte Rechnungen",
         getRemainder: "Restbetrag abrufen",
         txtbalance: "Gesamtguthaben",
         txtUnitFactor: "Einheitsfaktor",
         txtUnitQuantity: "Einheitsmenge",
         txtTotalQuantity: "Gesamtmenge",
-        txtUnitPrice: "Einzelpreis",
+        txtUnitPrice: "Kundenpreis",
         txtExpFee: "Verzugsgebühr",
         dtExpDate: "Fälligkeitsdatum",
         btnView: "Anzeigen",
         btnMailsend: "E-Mail senden",
-        placeMailHtmlEditor: "Geben Sie eine Beschreibung für Ihre E-Mail ein.",
+        placeMailen: "Text",
         validDesign: "Bitte wählen Sie ein Design aus.",
         validMail: "Bitte füllen Sie das Feld aus.",
         txtTotalHt: "Rabattierter Betrag",
@@ -7069,7 +7069,7 @@ export const langDe =
           clmQuantity: "Menge",
           clmDiscount: "Rabatt",
           clmDiscountRate: "Rabatt %",
-          clmVat: "MwSt.",
+          clmVat: "..",
           clmAmount: "Betrag",
           clmTotal: "Gesamt",
           clmTotalHt: "Nettogesamt",
@@ -7078,7 +7078,7 @@ export const langDe =
           clmMargin: "Marge",
           clmDescription: "Beschreibung",
           clmCuser: "Benutzer",
-          clmVatRate: "MwSt. %",
+          clmVatRate: ".. %",
           clmSubQuantity: "Untereinheit",
           clmSubPrice: "Untereinheitspreis",
           clmSubFactor: "Faktor",
@@ -7134,21 +7134,21 @@ export const langDe =
             btn01: "Ok",
             msg: "Es können keine Zahlungen eingegeben werden, die den Restbetrag übersteigen!"
         },
-        msgSave:
+        msgSpeichern:
         {
             title: "Achtung",
             btn01: "Ok",
             btn02: "Abbrechen",
             msg: "Sind Sie sicher, dass Sie speichern möchten?"
         },
-        msgSaveResult:
+        msgSpeichernResult:
         {
             title: "Achtung",
             btn01: "Ok",
             msgSuccess: "Ihr Speichervorgang war erfolgreich!",
             msgFailed: "Ihr Speichervorgang ist fehlgeschlagen!"
         },
-        msgSaveValid:
+        msgSpeichernValid:
         {
             title: "Achtung",
             btn01: "Ok",
@@ -7202,7 +7202,7 @@ export const langDe =
         {
             title: "Achtung",
             btn01: "Ok",
-            msg: "Das Dokument ist gesperrt! Um Änderungen zu speichern, müssen Sie es mit dem Administratorpasswort entsperren!"
+            msg: "Das Dokument ist gesperrt! Änderungen und Speichern nur mit dem Administratorpasswort möglich!"
         },
         msgPayNotDeleted:
         {
@@ -7239,7 +7239,7 @@ export const langDe =
             title: "Achtung",
             btn01: "Kombinieren",
             btn02: "Neu hinzufügen",
-            msg: "Das Produkt, das Sie hinzufügen möchten, ist bereits im Dokument vorhanden! Sollen die Zeilen kombiniert werden?"
+            msg: "Der Artikel, den Sie hinzufügen möchten, ist bereits im Dokument vorhanden! Sollen die Zeilen kombiniert werden?"
         },
         msgCustomerSelect:
         {
@@ -7278,14 +7278,14 @@ export const langDe =
         {
             title: "Achtung",
             btn01: "Ok",
-            msg: "Anzahl der hinzugefügten Produkte"
+            msg: "Anzahl der hinzugefügten Artikel"
         },
         popMultiItem:
         {
             title: "Massenartikel hinzufügen",
-            btnApprove: "Produkte abrufen",
+            btnApprove: "Artikel abrufen",
             btnClear : "Löschen",
-            btnSave : "Zeilen hinzufügen",
+            btnSpeichern : "Zeilen hinzufügen",
         },
         cmbMultiItemType : 
         {
@@ -7322,7 +7322,7 @@ export const langDe =
         {
             title: "Achtung",
             btn01: "Ok",
-            msg: "Der Lagerbestand kann nicht negativ werden! Höchstmögliche Menge, die hinzugefügt werden kann:"
+            msg: "Der Lagerbestand kann nicht negativ werden! Höchstmögliche Menge, die hinzugefügt werden kann ist:"
         },
         pg_txtBarcode : 
         {
@@ -7330,7 +7330,7 @@ export const langDe =
             clmCode :  "LAGERCODE",
             clmName : "LAGERNAME",
             clmMulticode : "LIEFERANTENCODE",
-            clmBarcode : "BARCODE"
+            clmBarcode : "Barcode"
         },
         msgQuantity:
         {
@@ -7454,7 +7454,7 @@ export const langDe =
             clmName : "Name"
         },
     },
-    ftr_04_001 : // "Proforma Fiyat Farkı Faturası"
+    ftr_04_001 : // "Proforma Preis Farki Faturasi"
     {
         txtRefRefno : "Reihenfolge",
         cmbDepot: "Lager",
@@ -7466,7 +7466,7 @@ export const langDe =
         txtDocDiscount : "Dokumentenrabatt",
         txtSubTotal : "Zwischensumme",
         txtMargin : "Marge",
-        txtVat : "MwSt.",
+        txtVat : "..",
         txtTotal : "Gesamtsumme",
         dtShipDate :"Lieferdatum",
         getContract : "Einkaufsrechnung auswählen",
@@ -7480,14 +7480,14 @@ export const langDe =
         cmbCashSafe : "Kassenauswahl",
         cmbCheckSafe : "Scheckkasse",
         cmbBank : "Bankauswahl",
-        txtPayInvoıceTotal : "Rechnungsbetrag",
+        txtPayInvoiceTotal : "Rechnungsbetrag",
         txtPayTotal : "Gesamtzahlung",
         txtRemainder : "Restbetrag",
         txtBarcode : "Barcode hinzufügen",
         txtBarcodePlace: "Barcode scannen",
         txtQuantity :"Menge",
         tabTitleSubtotal : "Gesamtsumme der Rechnung",
-        tabTitlePayments : "Dokumentenzahlungsinformationen",
+        tabTitlePayments : "Zahlungen",
         tabTitleOldInvoices : "Historische Rechnungsinformationen",
         getRemainder : "Restbetrag abrufen",
         txtUnitFactor : "Einheitsfaktor",
@@ -7540,19 +7540,19 @@ export const langDe =
             clmQuantity : "Anzahl",
             clmDiscount : "Rabatt",
             clmDiscountRate : "Rabatt %",
-            clmVat : "MwSt.",
+            clmVat : "..",
             clmAmount : "Betrag",
             clmTotal : "Gesamt",
-            clmTotalHt : "Gesamtbetrag exkl. MwSt.",
+            clmTotalHt : "Gesamtbetrag ohne. ..",
             clmCreateDate: "Erstellungsdatum",
             clmInvNo : "Rechnungsnummer",
             clmInvDate : "Rechnungsdatum",
             clmDescription :"Beschreibung",
             clmCuser :"Benutzer",
-            clmMulticode : "Einzelpreis",
+            clmMulticode : "Kundenpreis",
             clmCustomerPrice : "Kundenpreis",
             clmPurcPrice : "Rechnungspreis",
-            clmVatRate : "MwSt. %"
+            clmVatRate : ".. %"
         },
         grdInvoicePayment: 
         {
@@ -7600,21 +7600,21 @@ export const langDe =
             btn01: "OK",
             msg: "Es können keine Bestände erfasst werden, solange die Dokumentkopfdaten nicht vollständig sind!"
         },
-        msgSave:
+        msgSpeichern:
         {
             title: "Achtung",
             btn01: "OK",
             btn02: "Abbrechen",
             msg: "Möchten Sie den Eintrag speichern?"
         },
-        msgSaveResult:
+        msgSpeichernResult:
         {
             title: "Achtung",
             btn01: "OK",
             msgSuccess: "Der Eintrag wurde erfolgreich gespeichert!",
             msgFailed: "Der Eintrag konnte nicht gespeichert werden!"
         },
-        msgSaveValid:
+        msgSpeichernValid:
         {
             title: "Achtung",
             btn01: "OK",
@@ -7638,7 +7638,7 @@ export const langDe =
         {
             title: "Achtung",
             btn01: "OK",
-            msg: "Es können nicht mehr Zahlungen eingegeben werden als der ausstehende Betrag!"
+            msg: "Es können keine Zahlungen mehr als der ausstehende Betrag eingegeben werden!"
         },
         msgDiscountPrice:
         {
@@ -7705,7 +7705,7 @@ export const langDe =
             title: "Achtung",
             btn01: "Kombinieren",
             btn02: "Neu hinzufügen",
-            msg: "Das gewünschte Produkt ist bereits im Dokument vorhanden! Sollen die Zeilen zusammengeführt werden?"
+            msg: "Das gewünschte Artikel ist bereits im Dokument vorhanden! Sollen die Zeilen zusammengeführt werden?"
         },
         popCash:
         {
@@ -7750,7 +7750,7 @@ export const langDe =
         {
             title: "Menge",
             btn01: "Hinzufügen",
-            msg: "Geben Sie eine Menge ein"
+            msg: "Geben Sie die Menge ein"
         },
         cmbPayType: 
         {
@@ -7802,7 +7802,7 @@ export const langDe =
             clmName: "Name"
         },
     },
-    ftr_04_002 : // "Proforma Satış Faturası"
+    ftr_04_002 : // "Proforma Satiş Faturasi"
     {
         txtRefRefno: "Seriennummer",
         cmbDepot: "Lager",
@@ -7814,7 +7814,7 @@ export const langDe =
         txtDocDiscount: "Dokumentrabatt",
         txtSubTotal: "Zwischensumme",
         txtMargin: "Marge",
-        txtVat: "MwSt.",
+        txtVat: "..",
         txtTotal: "Gesamtsumme",
         dtShipDate: "Lieferdatum",
         getDispatch: "Lieferschein abrufen",
@@ -7828,7 +7828,7 @@ export const langDe =
         cmbCashSafe: "Kasse auswählen",
         cmbCheckSafe: "Scheckkasse",
         cmbBank: "Bank auswählen",
-        txtPayInvoıceTotal: "Rechnungsbetrag",
+        txtPayInvoiceTotal: "Rechnungsbetrag",
         txtPayTotal: "Gesamtzahlung",
         txtRemainder: "Restbetrag",
         txtBarcode: "Barcode hinzufügen",
@@ -7837,7 +7837,7 @@ export const langDe =
         getOrders: "Bestellungen abrufen",
         tabTitleSubtotal: "Rechnungssumme",
         tabTitlePayments: "Dokumentzahlungsinformationen",
-        tabTitleOldInvoices: "Frühere Rechnungsinformationen",
+        tabTitleOldInvoices: "Alte Rechnungen",
         getRemainder: "Restbetrag abrufen",
         txtbalance: "Gesamtguthaben",
         txtUnitFactor: "Einheitsfaktor",
@@ -7891,16 +7891,16 @@ export const langDe =
             clmQuantity: "Menge",
             clmDiscount: "Rabatt",
             clmDiscountRate: "Rabatt %",
-            clmVat: "MwSt.",
+            clmVat: "..",
             clmAmount: "Betrag",
             clmTotal: "Gesamtsumme",
-            clmTotalHt: "Gesamtsumme (ohne MwSt.)",
+            clmTotalHt: "Gesamtsumme (ohne ..)",
             clmDispatch: "Lieferschein-Nr.",
             clmCreateDate: "Erstellungsdatum",
             clmMargin: "Marge",
             clmDescription: "Beschreibung",
             clmCuser: "Benutzer",
-            clmVatRate: "MwSt.-Satz",
+            clmVatRate: "..-Satz",
             clmSubQuantity: "Untereinheit",
             clmSubPrice: "Untereinheitspreis",
             clmSubFactor: "Faktor",
@@ -7949,7 +7949,7 @@ export const langDe =
         {
             title: "Achtung",
             btn01: "OK",
-            msg: "Es können keine Lagerbestände eingegeben werden, bevor die Dokumentkopfdaten ausgefüllt sind!"
+            msg: "Es können keine Lagerbestände eingegeben werden, bevor die Dokumentkopfdaten nicht ausgefüllt sind!"
         },
         msgMoreAmount:
         {
@@ -7957,21 +7957,21 @@ export const langDe =
             btn01: "OK",
             msg: "Es können keine Zahlungen über dem ausstehenden Betrag eingetragen werden!"
         },
-        msgSave:
+        msgSpeichern:
         {
             title: "Achtung",
             btn01: "OK",
             btn02: "Abbrechen",
             msg: "Sind Sie sicher, dass Sie speichern möchten!"
         },
-        msgSaveResult:
+        msgSpeichernResult:
         {
             title: "Achtung",
             btn01: "OK",
             msgSuccess: "Ihr Speichervorgang war erfolgreich!",
             msgFailed: "Ihr Speichervorgang ist fehlgeschlagen!"
         },
-        msgSaveValid:
+        msgSpeichernValid:
         {
             title: "Achtung",
             btn01: "OK",
@@ -8062,7 +8062,7 @@ export const langDe =
             title: "Achtung",
             btn01: "Kombinieren",
             btn02: "Neu hinzufügen",
-            msg: "Das Produkt, das Sie hinzufügen möchten, ist bereits im Dokument vorhanden! Sollen die Zeilen kombiniert werden?"
+            msg: "Das Artikel, das Sie hinzufügen möchten, ist bereits im Dokument vorhanden! Sollen die Zeilen kombiniert werden?"
         },
         msgCustomerSelect:
         {
@@ -8108,13 +8108,13 @@ export const langDe =
             title: "Massenhinzufügung von Artikeln",
             btnApprove: "Artikel abrufen",
             btnClear: "Löschen",
-            btnSave: "Zeilen hinzufügen",
+            btnSpeichern: "Zeilen hinzufügen",
         },
         cmbMultiItemType: 
         {
             title: "Suchmethode",
-            customerCode: "Nach Lieferantenkodierung",
-            ItemCode: "Nach Artikelcode"
+            customerCode: "Nach Lieferantencode suchen",
+            ItemCode: "Nach Artikelcode suchen"
         },
         grdMultiItem: 
         {
@@ -8153,7 +8153,7 @@ export const langDe =
             clmCode: "LAGERCODE",
             clmName: "LAGERNAME",
             clmMulticode: "LIEFERANTENCODE",
-            clmBarcode: "BARCODE"
+            clmBarcode: "Barcode"
         },
         msgQuantity:
         {
@@ -8229,7 +8229,7 @@ export const langDe =
             clmName: "Name"
         },
     },
-    ftr_04_003 : // "Proforma Alış Faturası"
+    ftr_04_003 : // "Proforma Aliş Faturasi"
     {
         txtRefRefno : "Seriennummer",
         cmbDepot: "Lager",
@@ -8241,7 +8241,7 @@ export const langDe =
         txtDocDiscount : "Dokumentrabatt",
         txtSubTotal : "Zwischensumme",
         txtMargin : "Marge",
-        txtVat : "MwSt.",
+        txtVat : "..",
         txtTotal : "Gesamtsumme",
         dtShipDate :"Versanddatum",
         getDispatch : "Lieferschein abrufen",
@@ -8255,7 +8255,7 @@ export const langDe =
         cmbCashSafe : "Kasse auswählen",
         cmbCheckSafe : "Scheckkasse",
         cmbBank : "Bank auswählen",
-        txtPayInvoıceTotal : "Rechnungsbetrag",
+        txtPayInvoiceTotal : "Rechnungsbetrag",
         txtPayTotal : "Gesamtzahlung",
         txtRemainder : "Ausstehender Rechnungsbetrag",
         txtBarcode : "Barcode hinzufügen",
@@ -8264,7 +8264,7 @@ export const langDe =
         getOrders : "Bestellung abrufen",
         popExcel : {title:"Die Spaltenüberschriften Ihrer Excel-Datei müssen korrekt sein."},
         excelAdd : "Aus Excel hinzufügen",
-        shemaSave : "Schema speichern",
+        shemaSpeichern : "Schema speichern",
         tabTitleSubtotal : "Gesamtsumme der Rechnung",
         tabTitlePayments : "Dokumentzahlungsinformationen",
         txtDiffrentTotal : "Gesamtunterschied",
@@ -8277,7 +8277,7 @@ export const langDe =
         txtUnitFactor : "Einheitsfaktor",
         txtUnitQuantity : "Einheitsmenge",
         txtTotalQuantity : "Gesamtmenge",
-        txtUnitPrice: "Einzelpreis",
+        txtUnitPrice: "Kundenpreis",
         txtExpFee : "Verzugsgebühr",
         dtExpDate : "Fälligkeitsdatum",
         getOffers : "Angebot abrufen",
@@ -8326,17 +8326,17 @@ export const langDe =
             clmQuantity : "Menge",
             clmDiscount : "Rabatt",
             clmDiscountRate : "Rabattsatz",
-            clmVat : "MwSt.",
+            clmVat : "..",
             clmAmount : "Betrag",
             clmTotal : "Gesamtsumme",
-            clmTotalHt : "Gesamtsumme exkl. MwSt.",
+            clmTotalHt : "Gesamtsumme ohne. ..",
             clmDispatch : "Lieferscheinnummer",
             clmCreateDate: "Erstellungsdatum",
             clmMargin :"Marge",
             clmDiffPrice : "Differenz",
             clmCustomerPrice : "Kundenpreis",
-            clmDescription :"Beschreibung",
-            clmCuser :"Benutzer",
+            clmDescription: "Beschreibung",
+            clmCuser: "Benutzer",
         },
         grdInvoicePayment: 
         {
@@ -8381,7 +8381,7 @@ export const langDe =
         {
             title: "Achtung",
             btn01: "OK",
-            msg: "Es können keine Bestände erfasst werden, bevor die Dokumentenkopfdaten vollständig sind!"
+            msg: "Es können keine Bestände erfasst werden, bevor die Dokumentenkopfdaten nicht vollständig sind!"
         },
         msgMoreAmount:
         {
@@ -8389,21 +8389,21 @@ export const langDe =
             btn01: "OK",
             msg: "Es können keine Zahlungen über dem verbleibenden Betrag vorgenommen werden!"
         },
-        msgSave:
+        msgSpeichern:
         {
             title: "Achtung",
             btn01: "OK",
             btn02: "Abbrechen",
             msg: "Sind Sie sicher, dass Sie speichern möchten?"
         },
-        msgSaveResult:
+        msgSpeichernResult:
         {
             title: "Achtung",
             btn01: "OK",
             msgSuccess: "Ihr Eintrag wurde erfolgreich gespeichert!",
             msgFailed: "Fehler beim Speichern Ihres Eintrags!"
         },
-        msgSaveValid:
+        msgSpeichernValid:
         {
             title: "Achtung",
             btn01: "OK",
@@ -8481,7 +8481,7 @@ export const langDe =
         {
             title: "Achtung",
             btn01: "OK",
-            msg: "Bestand nicht gefunden!"
+            msg: "Artikel nicht gefunden!"
         },
         msgCustomerNotFound:
         {
@@ -8501,13 +8501,13 @@ export const langDe =
             title: "Achtung",
             btn01: "OK",
             btn02: "Abbrechen",
-            msg: "Sie verkaufen zu einem niedrigeren Preis als den Kostenpreis!"
+            msg: "Sie verkaufen zu einem niedrigeren Preis als den Einkaufspreis!"
         },
         msgUnderPrice2:
         {
             title: "Achtung",
             btn01: "OK",
-            msg: "Der Verkaufspreis kann nicht niedriger sein als der Kostenpreis!"
+            msg: "Der Verkaufspreis kann nicht niedriger sein als der Einkaufspreis!"
         },
         msgCombineItem:
         {
@@ -8560,7 +8560,7 @@ export const langDe =
             title: "Massenhinzufügung von Artikeln",
             btnApprove: "Artikel abrufen",
             btnClear : "Löschen",
-            btnSave : "Zeilen hinzufügen",
+            btnSpeichern : "Zeilen hinzufügen",
         },
         cmbMultiItemType : 
         {
@@ -8632,7 +8632,7 @@ export const langDe =
           clmPrice2: "Neuer Preis",
           clmSalePrice: "Verkaufspreis",
           clmMargin: "Bruttomarge",
-          clmCostPrice: "Kostenpreis",
+          clmCostPrice: "Einkaufspreis",
           clmNetMargin: "Nettomarge"
         },
         grdNewPriceDate: 
@@ -8643,7 +8643,7 @@ export const langDe =
           clmPrice2: "Neuer Preis",
           clmSalePrice: "Verkaufspreis",
           clmMargin: "Bruttomarge",
-          clmCostPrice: "Kostenpreis",
+          clmCostPrice: "Einkaufspreis",
           clmNetMargin: "Nettomarge"
         },
         msgPriceDateUpdate: 
@@ -8664,8 +8664,8 @@ export const langDe =
         {
           clmCode: "Code",
           clmName: "Name",
-          clmVat: "Vorhandene MwSt.",
-          clmVat2: "Neue MwSt."
+          clmVat: "Vorhandene ..",
+          clmVat2: "Neue .."
         },
         serviceAdd: "Dienstleistung hinzufügen",
         pg_service: 
@@ -8680,7 +8680,7 @@ export const langDe =
           clmCode: "ARTIKELCODE",
           clmName: "ARTIKELNAME",
           clmMulticode: "LIEFERANTENCODE",
-          clmBarcode: "BARCODE"
+          clmBarcode: "Barcode"
         },
         msgQuantity:
         {
@@ -8744,7 +8744,7 @@ export const langDe =
         txtDocDiscount: "Dokumentenrabatt",
         txtSubTotal: "Zwischensumme",
         txtMargin: "Marge",
-        txtVat: "MwSt.",
+        txtVat: "..",
         txtTotal: "Gesamtsumme",
         dtShipDate: "Versanddatum",
         getPayment: "Zahlungseingang",
@@ -8758,7 +8758,7 @@ export const langDe =
         cmbCashSafe: "Kassen-Auswahl",
         cmbCheckSafe: "Scheckkasse",
         cmbBank: "Bank-Auswahl",
-        txtPayInvoıceTotal: "Rechnungsbetrag",
+        txtPayInvoiceTotal: "Rechnungsbetrag",
         txtPayTotal: "Gesamtzahlung",
         txtRemainder: "Restbetrag",
         txtBarcode: "Barcode hinzufügen",
@@ -8766,7 +8766,7 @@ export const langDe =
         txtQuantity: "Menge",
         tabTitleSubtotal: "Rechnungsgesamtsumme",
         tabTitlePayments: "Zahlungsinformationen",
-        tabTitleOldInvoices: "Vergangene Rechnungsinformationen",
+        tabTitleOldInvoices: "Alte Rechnungen",
         getRemainder: "Restbetrag abrufen",
         txtBalance: "Gesamtsaldo des Kunden",
         txtUnitFactor: "Einheitsfaktor",
@@ -8819,10 +8819,10 @@ export const langDe =
             clmQuantity : "Menge",
             clmDiscount : "Rabatt",
             clmDiscountRate : "Rabattsatz",
-            clmVat : "MwSt.",
+            clmVat : "..",
             clmAmount : "Betrag",
             clmTotal : "Gesamtsumme",
-            clmTotalHt : "Gesamtsumme (ohne MwSt.)",
+            clmTotalHt : "Gesamtsumme (ohne ..)",
             clmDispatch : "Lieferschein-Nr.",
             clmCreateDate: "Erstellungsdatum",
             clmMargin :"Marge",
@@ -8830,7 +8830,7 @@ export const langDe =
             clmCuser :"Benutzer",
             clmMulticode : "T-Code",
             clmBarcode : "Barcode",
-            clmVatRate :"MwSt.-Satz",
+            clmVatRate :"..-Satz",
             clmSubQuantity : "Untereinheit",
             clmSubPrice : "Untereinheitspreis",
             clmSubFactor : "Faktor",
@@ -8887,21 +8887,21 @@ export const langDe =
             btn01: "OK",
             msg: "Es können keine Zahlungen eingegeben werden, die den Restbetrag überschreiten!"
         },
-        msgSave:
+        msgSpeichern:
         {
             title: "Achtung",
             btn01: "OK",
             btn02: "Abbrechen",
             msg: "Sind Sie sicher, dass Sie speichern möchten?"
         },
-        msgSaveResult:
+        msgSpeichernResult:
         {
             title: "Achtung",
             btn01: "OK",
             msgSuccess: "Speichern erfolgreich!",
             msgFailed: "Speichern fehlgeschlagen!"
         },
-        msgSaveValid:
+        msgSpeichernValid:
         {
             title: "Achtung",
             btn01: "OK",
@@ -8992,7 +8992,7 @@ export const langDe =
             title: "Achtung",
             btn01: "Zusammenführen",
             btn02: "Neu hinzufügen",
-            msg: "Das gewünschte Produkt ist bereits im Dokument vorhanden! Sollen die Zeilen zusammengeführt werden?"
+            msg: "Das gewünschte Artikel ist bereits im Dokument vorhanden! Sollen die Zeilen zusammengeführt werden?"
         },
         msgCustomerSelect:
         {
@@ -9105,7 +9105,7 @@ export const langDe =
         txtDocDiscount : "Dokumentenrabatt",
         txtSubTotal : "Zwischensumme",
         txtMargin : "Marge",
-        txtVat : "MwSt.",
+        txtVat : "..",
         txtTotal : "Gesamtsumme",
         dtShipDate :"Versanddatum",
         getDispatch : "Lieferschein abrufen",
@@ -9119,7 +9119,7 @@ export const langDe =
         cmbCashSafe : "Kassenauswahl",
         cmbCheckSafe : "Scheckkasse",
         cmbBank : "Bankauswahl",
-        txtPayInvoıceTotal : "Rechnungsbetrag",
+        txtPayInvoiceTotal : "Rechnungsbetrag",
         txtPayTotal : "Gesamtbetrag",
         txtRemainder : "Restbetrag",
         txtBarcode : "Barcode hinzufügen",
@@ -9127,8 +9127,8 @@ export const langDe =
         txtQuantity :"Menge",
         getOrders : "Bestellung abrufen",
         tabTitleSubtotal : "Rechnungssumme",
-        tabTitlePayments : "Dokumentenzahlungsinformationen",
-        tabTitleOldInvoices : "Vergangene Rechnungsinformationen",
+        tabTitlePayments : "Zahlungen",
+        tabTitleOldInvoices : "Alte Rechnungen",
         getRemainder : "Restbetrag abrufen",
         txtBalance : "Gesamtguthaben",
         txtUnitFactor : "Einheitsfaktor",
@@ -9181,7 +9181,7 @@ export const langDe =
             clmQuantity : "Menge",
             clmDiscount : "Rabatt",
             clmDiscountRate : "Rabatt %",
-            clmVat : "MwSt.",
+            clmVat : "..",
             clmAmount : "Betrag",
             clmTotal : "Gesamtsumme",
             clmTotalHt : "Nettobetrag",
@@ -9190,7 +9190,7 @@ export const langDe =
             clmMargin :"Marge",
             clmDescription :"Beschreibung",
             clmCuser :"Benutzer",
-            clmVatRate : "MwSt. %",
+            clmVatRate : ".. %",
             clmSubQuantity : "Untereinheit",
             clmSubPrice : "Untereinheitspreis",
             clmSubFactor : "Faktor",
@@ -9247,21 +9247,21 @@ export const langDe =
             btn01: "OK",
             msg: "Es können keine Zahlungen eingegeben werden, die den Restbetrag überschreiten!"
         },
-        msgSave:
+        msgSpeichern:
         {
             title: "Achtung",
             btn01: "OK",
             btn02: "Abbrechen",
             msg: "Möchten Sie die Aufzeichnung speichern?"
         },
-        msgSaveResult:
+        msgSpeichernResult:
         {
             title: "Achtung",
             btn01: "OK",
             msgSuccess: "Ihr Eintrag wurde erfolgreich gespeichert!",
             msgFailed: "Fehler beim Speichern Ihres Eintrags!"
         },
-        msgSaveValid:
+        msgSpeichernValid:
         {
             title: "Achtung",
             btn01: "OK",
@@ -9398,7 +9398,7 @@ export const langDe =
             title: "Massenartikel hinzufügen",
             btnApprove: "Artikel abrufen",
             btnClear : "Leeren",
-            btnSave : "Zeilen hinzufügen",
+            btnSpeichern : "Zeilen hinzufügen",
         },
         cmbMultiItemType : 
         {
@@ -9443,7 +9443,7 @@ export const langDe =
             clmCode :  "LAGERCODE",
             clmName : "LAGERNAME",
             clmMulticode : "LIEFERANTENCODE",
-            clmBarcode : "BARCODE"
+            clmBarcode : "Barcode"
         },
         msgQuantity:
         {
@@ -9508,7 +9508,7 @@ export const langDe =
             clmName : "Name"
         },
     },
-    promo_01_001: // "Promotionsdefinitions"
+    promo_01_001: // "Angebotsdefinitions"
     {
         txtCode: "Code",        
         txtName: "Name",
@@ -9517,9 +9517,9 @@ export const langDe =
         cmbDepot: "Lager",
         txtCustomerCode: "Kundencode",
         txtCustomerName: "Kundenname",
-        cmbPrmType: "Promotionstyp",
+        cmbPrmType: "Angebotstyp",
         txtPrmItem: "Artikel",
-        btnPrmItem: "Promotionsartikel auswählen / Artikelübersicht", 
+        btnPrmItem: "Angebotsartikel auswählen / Artikelübersicht", 
         txtPrmItemGrp: "Gruppe",
         txtPrmQuantity: "Menge",
         txtPrmAmount: "Betrag",
@@ -9529,10 +9529,10 @@ export const langDe =
         cmbRstItemType: "Typ",
         txtRstItemQuantity: "Menge",
         txtRstItemAmount: "Wert",
-        txtCodePlace: "Bitte den Promotionscode eingeben",
-        txtNamePlace: "Bitte den Promotionsnamen eingeben",
-        txtCustomerCodePlace: "Sie können den Kunden für die Promotion auswählen",
-        txtRstItemPlace: "Bitte den Artikel auswählen, auf den die Promotion angewendet wird",
+        txtCodePlace: "Bitte den Angebotscode eingeben",
+        txtNamePlace: "Bitte den Angebotsnamen eingeben",
+        txtCustomerCodePlace: "Sie können den Kunden für die Angebot auswählen",
+        txtRstItemPlace: "Bitte den Artikel auswählen, auf den die Angebot angewendet wird",
         pg_Grid:
         {
             title: "Auswahl",
@@ -9541,39 +9541,39 @@ export const langDe =
             clmName: "Name", 
             clmGrpName: "Gruppe", 
             clmPrice : "Preis",
-            btnItem: "Artikel oder Artikel für die Promotion auswählen"
+            btnItem: "Artikel oder Artikel für die Angebot auswählen"
         },
         msgRef:
         {
             title: "Achtung",
-            btn01: "Zur Promotion gehen",
-            btn02: "Okay",
-            msg: "Die eingegebene Promotion ist im System vorhanden!"
+            btn01: "Zur Angebot gehen",
+            btn02: "OK",
+            msg: "Die eingegebene Angebot ist im System vorhanden!"
         },
-        msgSave:
+        msgSpeichern:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             btn02: "Abbrechen",
             msg: "Sind Sie sicher, dass Sie speichern möchten?"
         },
-        msgSaveResult:
+        msgSpeichernResult:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             msgSuccess: "Ihr Eintrag wurde erfolgreich gespeichert!",
             msgFailed: "Ihr Eintrag konnte nicht gespeichert werden!"
         },
-        msgSaveValid:
+        msgSpeichernValid:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             msg: "Bitte füllen Sie alle erforderlichen Felder aus!"
         },
         msgDelete:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             btn02: "Abbrechen",
             msg: "Möchten Sie den Eintrag wirklich löschen?"
         },
@@ -9588,7 +9588,7 @@ export const langDe =
             title: "Rabatt",
             txtDiscRate: "Prozentsatz",
             txtDiscAmount: "Preis",
-            btnSave: "Speichern"
+            btnSpeichern: "Speichern"
         },
         msgDiscRate:
         {
@@ -9598,7 +9598,7 @@ export const langDe =
         },
         cmbType:
         {
-            item: "Produkt",
+            item: "Artikel",
             generalAmount: "Gesamtmenge",
             discountRate: "Rabatt",
             moneyPoint: "Treuepunkte",
@@ -9612,16 +9612,16 @@ export const langDe =
         {
             title: "Erklärung",
             btn01: "Ok",
-            condItemQuantity: "Geben Sie die Anzahl der Produkte ein, für die die Promotion gelten soll. Z.B.: Wenn Sie den Wert auf 5 setzen, wird die Promotion ab dem 5. Produkt angewendet.",
-            condItemAmount: "Geben Sie den Gesamtbetrag an, ab dem die Promotion für das ausgewählte Produkt oder die ausgewählten Produkte gültig sein soll. Z.B.: Wenn Sie den Betrag auf 10€ setzen, wird die Promotion angewendet, sobald der Gesamtbetrag der ausgewählten Produkte 10€ erreicht.",
-            condGeneralAmount: "Geben Sie den Betrag an, ab dem die Promotion auf den Gesamtbestellwert angewendet werden soll. Z.B.: Wenn Sie den Betrag auf 10€ setzen, wird die Promotion angewendet, sobald der Gesamtbestellwert 10€ erreicht.",
-            appDiscRate: "Legen Sie den Rabattprozentsatz fest, der angewendet werden soll, wenn die Bedingung erfüllt ist. Z.B.: Wenn der Rabatt 10% betragen soll, wenn die Bedingung erfüllt ist.",
-            appDiscAmount: "Legen Sie den Rabattbetrag fest, der angewendet werden soll, wenn die Bedingung erfüllt ist. Z.B.: Wenn der Preis auf 0,99€ festgelegt werden soll, wenn die Bedingung erfüllt ist und die ausgewählten Produkte in der Bedingung enthalten sind.",
-            appPoint: "Legen Sie den Punktebetrag fest, der dem Kunden gutgeschrieben werden soll, wenn die Bedingung erfüllt ist. Z.B.: Wenn dem Kunden 100 Punkte gutgeschrieben werden sollen, wenn die Bedingung erfüllt ist.",
-            appGiftCheck: "Legen Sie den Wert des Geschenkgutscheins fest, der dem Kunden gegeben werden soll, wenn die Bedingung erfüllt ist. Z.B.: Wenn ein Geschenkgutschein im Wert von 100€ erstellt werden soll, wenn die Bedingung erfüllt ist.",
-            appGeneralAmount: "Legen Sie den Betrag des Gesamtrabatts fest, der dem Kunden gewährt werden soll, wenn die Bedingung erfüllt ist. Z.B.: Wenn dem Kunden ein Rabatt in Höhe von 10€ auf den Bestellwert gewährt werden soll, wenn die Bedingung erfüllt ist.",
-            appItemQuantity: "Geben Sie die Anzahl der ausgewählten Produkte ein, für die der prozentuale Rabatt oder Preis gültig sein soll, wenn die Bedingung erfüllt ist. Z.B.: Wenn der Wert auf 5 gesetzt wird, wird der prozentuale Rabatt oder Preis für die ausgewählten Produkte bis zu einer Menge von 5 angewendet.",
-            appItemAmount: "Geben Sie den Preis ein, zu dem die ausgewählten Produkte gültig sein sollen, wenn die Bedingung erfüllt ist. Z.B.: Wenn der Preis auf 1€ oder 10% festgelegt werden soll, wird der Preis oder Rabatt von 1€ oder 10% für die ausgewählten Produkte angewendet.",
+            condItemQuantity: "Geben Sie die Anzahl der Artikel ein, für die das Angebot gelten soll. Z.B.: Wenn Sie den Wert auf 5 setzen, wird die Angebot ab dem 5. Artikel angewendet.",
+            condItemAmount: "Geben Sie den Gesamtbetrag an, ab dem das Angebot für Der ausgewälte Artikel oder die ausgewählten Artikel gültig sein soll. Z.B.: Wenn Sie den Betrag auf 10€ setzen, wird die Angebot angewendet, sobald der Gesamtbetrag der ausgewählten Artikel 10€ erreicht.",
+            condGeneralAmount: "Geben Sie den Betrag an, ab dem das Angebot auf den Gesamtbestellwert angewendet werden soll. Z.B.: Wenn Sie den Betrag auf 10€ setzen, wird die Angebot angewendet, sobald der Gesamtbestellwert 10€ erreicht.",
+            appDiscRate: "Legen Sie den Rabattprozentsatz fest, der angewendet werden soll, wenn die Bedingung erfüllt ist. Z.B.: Der Rabatt soll 10% betragen, wenn die Bedingung erfüllt ist.",
+            appDiscAmount: "Legen Sie den Rabattbetrag fest, der angewendet werden soll, wenn die Bedingung erfüllt ist. Z.B.: Der Preis soll auf 0,99€ festgelegt werden, wenn die Bedingung erfüllt ist und die ausgewählten Artikel in der Bedingung enthalten sind.",
+            appPoint: "Legen Sie den Punktebetrag fest, der dem Kunden gutgeschrieben werden soll, wenn die Bedingung erfüllt ist. Z.B.: Dem Kunden sollen 100 Punkte gutgeschrieben werden, wenn die Bedingung erfüllt ist.",
+            appGiftCheck: "Legen Sie den Wert des Geschenkgutscheins fest, der dem Kunden gegeben werden soll, wenn die Bedingung erfüllt ist. Z.B.: Ein Geschenkgutschein im Wert von 100€ soll erstellt werden, wenn die Bedingung erfüllt ist.",
+            appGeneralAmount: "Legen Sie den Betrag des Gesamtrabatts fest, der dem Kunden gewährt werden soll, wenn die Bedingung erfüllt ist. Z.B.: Dem Kunden soll ein Rabatt in Höhe von 10€ auf den Bestellwert gewährt werden, wenn die Bedingung erfüllt ist.",
+            appItemQuantity: "Geben Sie die Anzahl der ausgewählten Artikel ein, für die der prozentuale Rabatt oder Preis gültig sein soll, wenn die Bedingung erfüllt ist. Z.B.: Wenn der Wert auf 5 gesetzt wird, wird der prozentuale Rabatt oder Preis für die 5 ausgewählten Artikel angewendet.",
+            appItemAmount: "Geben Sie den Preis ein, zu dem die ausgewählten Artikel gültig sein sollen, wenn die Bedingung erfüllt ist. Z.B.: Wenn der Preis auf 1€ oder 10% festgelegt werden soll, wird der Preis oder Rabatt von 1€ oder 10% für die ausgewählten Artikel angewendet.",
         },
         validation:
         {
@@ -9640,62 +9640,62 @@ export const langDe =
         {
             title: "Achtung",
             btn01: "OK",
-            msg: "Das Produkt, das Sie hinzufügen möchten, ist bereits in Ihrer Liste!",
+            msg: "Der Artikel, den Sie hinzufügen möchten, ist bereits in Ihrer Liste!",
         },
     },
     promo_02_001: //  "Promosyon Listesi"
     {
         txtCode: "Code",
         txtName: "Name",
-        dtStartDate: "Start Date",
-        dtFinishDate: "Finish Date",
-        txtCodePlace: "Enter the promotion code or product barcode",
-        txtNamePlace: "Enter the promotion code or product name",
-        btnGet: "Get",
+        dtStartDate: "Startdatum",
+        dtFinishDate: "Enddatum",
+        txtCodePlace: "Geben Sie bitte Angebotscode oder Artikelbarcode ein.",
+        txtNamePlace: "Geben Sie bitte Angebotscode oder Artikelname ein.",
+        btnGet: "Suchen",
         grdListe:
         {
             clmCode: "Code",
             clmName: "Name",
-            clmStartDate: "Start Date",
-            clmFinishDate: "Finish Date",
-            clmCondTypeName: "Condition Type",
-            clmCondItemCode: "Condition Code",
-            clmCondItemName: "Condition Name",
-            clmCondBarcode: "Condition Barcode",
-            clmCondQuantity: "Condition Quantity",
-            clmCondAmount: "Condition Amount",
-            clmAppTypeName: "Application Type",
-            clmAppItemCode: "Application Code",
-            clmAppItemName: "Application Name",
-            clmAppBarcode: "Application Barcode",
-            clmAppQuantity: "Application Quantity",
-            clmAppAmount: "Application Amount",
+            clmStartDate: "Startdatum",
+            clmFinishDate: "Enddatum",
+            clmCondTypeName: "Bedingungstyp",
+            clmCondItemCode: "Bedingungscode",
+            clmCondItemName: "Bedingungsname",
+            clmCondBarcode: "Bedingungsbarcode",
+            clmCondQuantity: "Bedingungsmenge",
+            clmCondAmount: "Bedingungsbetrag",
+            clmAppTypeName: "Anwendungstyp",
+            clmAppItemCode: "Anwendungscode",
+            clmAppItemName: "Anwendungsname",
+            clmAppBarcode: "Anwendungsbarcode",
+            clmAppQuantity: "Anwendungsmenge",
+            clmAppAmount: "Anwendungsbetrag",
         }
     },
-    promo_02_002: // "Promotion Detail List"
+    promo_02_002: // "Angebot Detail List"
     {
         txtCode: "Code",
         txtName: "Name",
-        dtStartDate: "Start Date",
-        dtFinishDate: "Finish Date",
-        txtCodePlace: "Enter the promotion code or product barcode",
-        txtNamePlace: "Enter the promotion code or product name",
-        btnGet: "Get",
+        dtStartDate: "Startdatum",
+        dtFinishDate: "Enddatum",
+        txtCodePlace: "Geben Sie bitte Angebotscode oder Artikelbarcode ein.",
+        txtNamePlace: "Geben Sie bitte Angebotscode oder Artikelname ein.",
+        btnGet: "Suchen",
         grdListe:
         {
             clmCode: "Code",
             clmName: "Name",
-            clmStartDate: "Start Date",
-            clmFinishDate: "Finish Date",
-            clmCondTypeName: "Condition Type",
-            clmCondItemCode: "Condition Code",
-            clmCondItemName: "Condition Name",
-            clmCondBarcode: "Condition Barcode",
-            clmCondQuantity: "Condition Quantity",
-            clmCondAmount: "Condition Amount",
-            clmAppTypeName: "Application Type",
-            clmAppItemCode: "Application Code",
-            clmAppItemName: "Application Name",
+            clmStartDate: "Startdatum",
+            clmFinishDate: "Enddatum",
+            clmCondTypeName: "Bedingungstyp",
+            clmCondItemCode: "Bedingungscode",
+            clmCondItemName: "Bedingungsname",
+            clmCondBarcode: "Bedingungsbarcode",
+            clmCondQuantity: "Bedingungsmenge",
+            clmCondAmount: "Bedingungsbetrag",
+            clmAppTypeName: "Anwendungstyp",
+            clmAppItemCode: "Anwendungscode",
+            clmAppItemName: "Anwendungsname",
             clmAppBarcode: "Application Barcode",
             clmAppQuantity: "Application Quantity",
             clmAppAmount: "Application Amount",
@@ -9703,208 +9703,208 @@ export const langDe =
     },
     irs_01_001: // "Purchase Dispatch List"
     {
-        cmbCustomer: "Customer",
-        btnGet: "Get",
-        dtFirst: "First Date",
-        dtLast: "Last Date",
-        txtCustomerCode: "Customer",
+        cmbCustomer: "Kunde",
+        btnGet: "Suchen",
+        dtFirst: "Erstes Datum",
+        dtLast: "Letztes Datum",
+        txtCustomerCode: "Kunde",
         menu: "Purchase Dispatch",
         pg_txtCustomerCode:
         {
-            title: "Customer Selection",
-            clmCode: "CUSTOMER CODE",
-            clmTitle: "CUSTOMER NAME",
-            clmTypeName: "TYPE",
+            title: "Kunden auswählen",
+            clmCode: "Kundencode",
+            clmTitle: "Kundenname",
+            clmTypeName: "TYP",
             clmGenusName: "GENUS"
         },
         grdPurcDisList:
         {
-            clmRef: "Series",
-            clmRefNo: "Number",
-            clmPrice: "Price",
-            clmOutputCode: "Customer Code",
-            clmOutputName: "Customer Name",
-            clmDate: "Date",
-            clmVat: "VAT",
-            clmAmount: "Amount",
-            clmTotal: "Total",
-            clmInputName: "Warehouse",
+            clmRef: "Serie",
+            clmRefNo: "Nummer",
+            clmPrice: "Preis",
+            clmOutputCode: "Kundencode",
+            clmOutputName: "Kundenname",
+            clmDate: "Datum",
+            clmVat: "Steuern",
+            clmAmount: "Betrag",
+            clmTotal: "Summe",
+            clmInputName: "Lager",
         },
     
     },
-    irs_01_002: // "Sales Dispatch List"
+    irs_01_002: // "Verkaufsversand List"
     {
-        cmbCustomer: "Customer",
-        btnGet: "Get",
-        dtFirst: "First Date",
-        dtLast: "Last Date",
-        txtCustomerCode: "Customer",
-        menu: "Sales Dispatch",
-        chkOpenDispatch: "Show Only Uninvoiced",
+        cmbCustomer: "Kunde",
+        btnGet: "Suchen",
+        dtFirst: "Erstes Datum",
+        dtLast: "Letztes Datum",
+        txtCustomerCode: "Kunde",
+        menu: "Lieferschein",
+        chkOpenDispatch: "Noch nicht in Rechnung umgewandelten Belege anzeigen.",
         pg_txtCustomerCode:
         {
-            title: "Customer Selection",
-            clmCode: "CUSTOMER CODE",
-            clmTitle: "CUSTOMER NAME",
+            title: "Kunden auswählen",
+            clmCode: "Kundencode",
+            clmTitle: "Kundenname",
             clmTypeName: "TYPE",
             clmGenusName: "GENUS"
         },
         grdSlsDisList:
         {
-            clmRef: "Series",
-            clmRefNo: "Number",
-            clmPrice: "Price",
-            clmInputCode: "Customer Code",
-            clmInputName: "Customer Name",
-            clmDate: "Date",
-            clmVat: "VAT",
-            clmAmount: "Amount",
-            clmTotal: "Total",
-            clmOutputName: "Warehouse",
+            clmRef: "Serie",
+            clmRefNo: "Nummer",
+            clmPrice: "Preis",
+            clmInputCode: "Kundencode",
+            clmInputName: "Kundenname",
+            clmDate: "Datum",
+            clmVat: "Steuern",
+            clmAmount: "Betrag",
+            clmTotal: "Summe",
+            clmOutputName: "Lager",
         },
     
     },
     irs_01_003: // "Return Dispatch List"
     {
-        cmbCustomer: "Customer",
-        btnGet: "Get",
-        dtFirst: "First Date",
-        dtLast: "Last Date",
-        txtCustomerCode: "Customer",
+        cmbCustomer: "Kunde",
+        btnGet: "Suchen",
+        dtFirst: "Erstes Datum",
+        dtLast: "Letztes Datum",
+        txtCustomerCode: "Kundencode",
         menu: "Return Dispatch",
         pg_txtCustomerCode:
         {
-            title: "Customer Selection",
-            clmCode: "CUSTOMER CODE",
-            clmTitle: "CUSTOMER NAME",
+            title: "Kunden auswählen",
+            clmCode: "Kundencode",
+            clmTitle: "Kundenname",
             clmTypeName: "TYPE",
             clmGenusName: "GENUS"
         },
         grdSlsDisList:
         {
-            clmRef: "Series",
-            clmRefNo: "Number",
-            clmPrice: "Price",
-            clmInputCode: "Customer Code",
-            clmInputName: "Customer Name",
-            clmDate: "Date",
-            clmVat: "VAT",
-            clmAmount: "Amount",
+            clmRef: "Serie",
+            clmRefNo: "Nummer",
+            clmPrice: "Preis",
+            clmInputCode: "Kundencode",
+            clmInputName: "Kundenname",
+            clmDate: "Datum",
+            clmVat: "Steuern",
+            clmAmount: "Betrag",
             clmTotal: "Total",
         },
     
     },
-    irs_01_004: // "Branch Sales Dispatch List"
+    irs_01_004: // "Branch Verkaufsversand List"
     {
-        cmbCustomer: "Customer",
-        btnGet: "Get",
-        dtFirst: "First Date",
-        dtLast: "Last Date",
-        txtCustomerCode: "Customer",
-        menu: "Branch Sales Dispatch",
+        cmbCustomer: "Kunde",
+        btnGet: "Succhen",
+        dtFirst: "Erstes Datum",
+        dtLast: "Letztes Datum",
+        txtCustomerCode: "Kundencode",
+        menu: "Filial-Verkaufsversand",
         pg_txtCustomerCode:
         {
-            title: "Customer Selection",
-            clmCode: "CUSTOMER CODE",
-            clmTitle: "CUSTOMER NAME",
+            title: "Kunden auswählen",
+            clmCode: "Kundencode",
+            clmTitle: "Kundenname",
             clmTypeName: "TYPE",
             clmGenusName: "GENUS"
         },
         grdSlsDisList:
         {
-            clmRef: "Series",
-            clmRefNo: "Number",
-            clmPrice: "Price",
-            clmInputCode: "Customer Code",
-            clmInputName: "Customer Name",
-            clmDate: "Date",
-            clmVat: "VAT",
-            clmAmount: "Amount",
-            clmTotal: "Total",
-            clmOutputName: "Warehouse",
+            clmRef: "Serie",
+            clmRefNo: "Nummer",
+            clmPrice: "Preis",
+            clmInputCode: "Kundencode",
+            clmInputName: "Kundenname",
+            clmDate: "Datum",
+            clmVat: "Steuern",
+            clmAmount: "Betrag",
+            clmTotal: "Summe",
+            clmOutputName: "Lager",
         },
     },
-    irs_01_006: // "Sales Dispatch List"
+    irs_01_006: // "Verkaufsversand List"
     {
-        cmbCustomer: "Customer",
-        btnGet: "Get",
-        dtFirst: "First Date",
-        dtLast: "Last Date",
-        txtCustomerCode: "Customer",
-        menu: "Sales Dispatch",
+        cmbCustomer: "Kunde",
+        btnGet: "Suchen",
+        dtFirst: "Erstes Datum",
+        dtLast: "Letztes Datum",
+        txtCustomerCode: "Kundencode",
+        menu: "Verkaufsversand",
         pg_txtCustomerCode:
         {
-            title: "Customer Selection",
-            clmCode: "CUSTOMER CODE",
-            clmTitle: "CUSTOMER NAME",
+            title: "Kunden auswählen",
+            clmCode: "Kundencode",
+            clmTitle: "Kundenname",
             clmTypeName: "TYPE",
             clmGenusName: "GENUS"
         },
         grdSlsDisList:
         {
-            clmRef: "Series",
-            clmRefNo: "Number",
-            clmPrice: "Price",
-            clmInputCode: "Customer Code",
-            clmInputName: "Customer Name",
-            clmDate: "Date",
-            clmVat: "VAT",
-            clmAmount: "Amount",
-            clmTotal: "Total",
-            clmOutputName: "Warehouse",
+            clmRef: "Serie",
+            clmRefNo: "Nummer",
+            clmPrice: "Preis",
+            clmInputCode: "Kundencode",
+            clmInputName: "Kundenname",
+            clmDate: "Datum",
+            clmVat: "Steuern",
+            clmAmount: "Betrag",
+            clmTotal: "Summe",
+            clmOutputName: "Lager",
         },
     
     },
     irs_02_001: // "Purchase Dispatch"
     {
-        txtRefRefno: "Series-Number",
-        cmbDepot: "Warehouse",
-        txtCustomerCode: "Customer Code",
-        txtCustomerName: "Customer Name",
-        dtDocDate: "Date",
-        txtAmount: "Amount",
-        txtDiscount: "Line Discount",
-        txtDocDiscount: "Document Discount",
-        txtSubTotal: "Subtotal",
-        txtMargin: "Margin",
-        txtVat: "VAT",
-        txtTotal: "Total",
-        dtShipDate: "Delivery Date",
-        txtBarcode: "Add Barcode",
-        txtBarcodePlace: "Scan Barcode",
-        txtQuantity: "Quantity",
-        getOrders: "Get Orders",
-        txtUnitFactor: "Unit Factor",
-        txtUnitQuantity: "Unit Quantity",
-        txtTotalQuantity: "Total Quantity",
-        txtUnitPrice: "Unit Price",
-        txtTotalHt: "Discounted Amount",
-        txtDocNo: "Document No",
-        cmbOrigin: "Origin",
+        txtRefRefno: "Serie-Nummer",
+        cmbDepot: "Lager",
+        txtCustomerCode: "Kundencode",
+        txtCustomerName: "Kundenname",
+        dtDocDate: "Datum",
+        txtAmount: "Betrag",
+        txtDiscount: "Zeilenrabat",
+        txtDocDiscount: "Belegrabat",
+        txtSubTotal: "Zwischensumme",
+        txtMargin: "Marge",
+        txtVat: "Steuern",
+        txtTotal: "Summe",
+        dtShipDate: "Versanddatum",
+        txtBarcode: "Barcode hinzufügen",
+        txtBarcodePlace: "Barcode scannen",
+        txtQuantity: "Menge",
+        getOrders: "Bestellung suchen",
+        txtUnitFactor: "Einheitsfaktor",
+        txtUnitQuantity: "Einheitsmenge",
+        txtTotalQuantity: "Gesamtmenge",
+        txtUnitPrice: "Einheitspreis",
+        txtTotalHt: "Rabattierter Betrag",
+        txtDocNo: "Belegnummer",
+        cmbOrigin: "Herkunft",
         pg_Docs:
         {
-            title: "Document Selection",
-            clmDate: "DATE",
-            clmRef: "SERIES",
-            clmRefNo: "NUMBER",
-            clmOutputName: "CUSTOMER NAME",
-            clmOutputCode: "CUSTOMER CODE",
+            title: "Belege auswählen",
+            clmDate: "DATUM",
+            clmRef: "SERIE",
+            clmRefNo: "NUMMER",
+            clmOutputName: "Kundenname",
+            clmOutputCode: "Kundencode",
         },
         pg_txtCustomerCode:
         {
-            title: "Customer Selection",
-            clmCode: "CUSTOMER CODE",
-            clmTitle: "CUSTOMER NAME",
+            title: "Kunden auswählen",
+            clmCode: "Kundencode",
+            clmTitle: "Kundenname",
             clmTypeName: "TYPE",
             clmGenusName: "GENUS"
         },
         pg_txtItemsCode:
         {
-            title: "Product Selection",
-            clmCode: "PRODUCT CODE",
-            clmName: "PRODUCT NAME",
-            clmMulticode: "SUPPLIER CODE",
-            clmPrice: "PURCHASE PRICE"
+            title: "Artikel auswählen",
+            clmCode: "Artikelcode",
+            clmName: "Artikelname",
+            clmMulticode: "Lieferantencode",
+            clmPrice: "Einkaufspreis"
         },
         grdPurcDispatch: 
         {
@@ -9914,7 +9914,7 @@ export const langDe =
             clmQuantity: "Menge",
             clmDiscount: "Rabatt",
             clmDiscountRate: "Rabatt %",
-            clmVat: "MwSt.",
+            clmVat: "..",
             clmAmount: "Betrag",
             clmTotal: "Gesamtsumme",
             clmTotalHt: "Nettogesamtsumme",
@@ -9924,13 +9924,13 @@ export const langDe =
             clmOrder: "Bestellnummer",
             clmCuser: "Benutzer",
             clmMulticode: "T-Code",
-            clmVatRate: "MwSt. %",
+            clmVatRate: ".. %",
             clmOrigin: "Herkunft",
             clmSubQuantity: "Untereinheit",
             clmSubPrice: "Untereinheitspreis",
             clmSubFactor: "Faktor",
-            clmDiffPrice: "Differenz",
-            clmCustomerPrice: "Einzelpreis"
+            clmDiffPrice: "Preisdifferenz",
+            clmCustomerPrice: "Kundenpreis"
         },
         popDiscount: 
         {
@@ -9966,21 +9966,21 @@ export const langDe =
             btn01: "OK",
             msg: "Es können keine Bestände eingegeben werden, solange die Kopfdaten des Dokuments nicht vollständig sind!"
         },
-        msgSave:
+        msgSpeichern:
         {
             title: "Achtung",
             btn01: "OK",
             btn02: "Abbrechen",
             msg: "Sind Sie sicher, dass Sie speichern möchten?"
         },
-        msgSaveResult:
+        msgSpeichernResult:
         {
             title: "Achtung",
             btn01: "OK",
             msgSuccess: "Ihr Speichervorgang war erfolgreich!",
             msgFailed: "Ihr Speichervorgang ist fehlgeschlagen!"
         },
-        msgSaveValid:
+        msgSpeichernValid:
         {
             title: "Achtung",
             btn01: "OK",
@@ -10040,7 +10040,7 @@ export const langDe =
         {
             title: "Achtung",
             btn01: "OK",
-            msg: "Das Dokument ist gesperrt! Um Änderungen zu speichern, müssen Sie es mit dem Administratorpasswort entsperren!"
+            msg: "Das Dokument ist gesperrt! Änderungen und Speichern nur mit dem Administratorpasswort möglich!"
         },
         msgDocLocked:
         {
@@ -10058,14 +10058,14 @@ export const langDe =
         {
             title: "Achtung",
             btn01: "OK",
-            msg: "Bestand nicht gefunden!"
+            msg: "Artikel nicht gefunden!"
         },
         msgCustomerNotFound:
         {
             title: "Achtung",
             btn01: "Weiter",
             btn02: "Abbrechen",
-            msg: "Das ausgewählte Produkt ist nicht für den Kunden definiert! Möchten Sie den Vorgang fortsetzen?"
+            msg: "Der ausgewälte Artikel ist nicht für den Kunden definiert! Möchten Sie den Vorgang fortsetzen?"
         },
         msgNotCustomer:
         {
@@ -10101,171 +10101,171 @@ export const langDe =
         popMultiItem:
         {
             title: "Mass Product Addition",
-            btnApprove: "Get Products",
-            btnClear : "Clear",
-            btnSave : "Add Rows",
+            btnApprove: "Artikel abrufen",
+            btnClear : "Leeren",
+            btnSpeichern : "Hinzufügen",
         },
         cmbMultiItemType : 
         {
-            title : "Search Type",
-            customerCode : "By Supplier Code",
-            ItemCode : "By Item Code"
+            title : "Suche nach",
+            customerCode : "Nach Lieferantencode suchen",
+            ItemCode : "Nach Item code suchen"
         },
         grdMultiItem : 
         {
             clmCode : "Item Code",
-            clmMulticode : "Supplier Code",
+            clmMulticode : "Lieferantencode",
             clmName : "Item Name",
-            clmQuantity : "Quantity"
+            clmQuantity : "Menge"
         },
         msgMultiData:
         {
-            title: "Attention",
-            btn01: "Clear the List and Add All",
-            btn02: "Add Newly Written to the List",
-            msg: "There are Items in the List!"
+            title: "Achtung!",
+            btn01: "Liste löschen und alles hinzufügen",
+            btn02: "Neue Eingabe zur Liste hinzufügen",
+            msg: "Es gibt Elemente in der Liste!"
         },
         msgUnit:
         {
-            title: "Unit Selection",
-            btn01: "Confirm",
-            btnFactorSave : "Update Item Card"
+            title: "Einheit auswählen",
+            btn01: "Bestätigen",
+            btnFactorSpeichern : "Update Item Card"
         },
         msgGrdOrigins:
         {
-            title: "Change of Origin",
-            btn01: "Save",
+            title: "Herkunft ändern",
+            btn01: "Speichern",
         },
-        validRef :"Series Cannot be Empty",
-        validRefNo : "Number Cannot be Empty",
-        validDepot : "You Must Select a Warehouse",
-        validCustomerCode : "Customer Code Cannot be Empty",
-        validDocDate : "You Must Select a Date",
-        tagItemCodePlaceholder: "Please Enter the Codes You Want to Add",
+        validRef :"Serie darf nicht leer sein",
+        validRefNo : "Nummer darf nicht leer sein",
+        validDepot : "Sie müssen einen Lager wählen",
+        validCustomerCode : "Kundencode darf nicht leer sein",
+        validDocDate : "Sie müssen Datum auswählen",
+        tagItemCodePlaceholder: "Bitte Codes eingeben, die Sie hinzufügen möchten.",
         pg_txtBarcode : 
         {
-            title : "Barcode Selection",
-            clmCode :  "PRODUCT CODE",
-            clmName : "PRODUCT NAME",
-            clmMulticode : "SUPPLIER CODE",
-            clmBarcode : "BARCODE"
+            title : "Barcode wählen",
+            clmCode :  "Artikelcode",
+            clmName : "Artikelname",
+            clmMulticode : "Lieferantencode",
+            clmBarcode : "Barcode"
         },
         msgQuantity:
         {
-            title: "Quantity",
-            btn01: "Add",
-            msg: "Please Enter a Quantity"
+            title: "Menge",
+            btn01: "Hinzufügen",
+            msg: "Bitte die Menge angeben!"
         },
         pg_ordersGrid : 
         {
-            title : "Order Selection",
-            clmReferans : "Series - Number",
+            title : "Auftragsauswahl",
+            clmReferans : "Serie - Nummer",
             clmCode : "Code",
             clmName : "Name",
-            clmQuantity : "Quantity",
-            clmTotal : "Total",
-            clmPrice : "Price",
+            clmQuantity : "Menge",
+            clmTotal : "Summe",
+            clmPrice : "Preis",
         },
         msgCustomerSelect:
         {
-            title: "Attention",
+            title: "Achtung!",
             btn01: "OK",
-            msg: "Please Select a Customer!"
+            msg: "Bitte wählen Sie einen Kunden aus!"
         },
         msgRowNotUpdate:
         {
-            title: "Attention",
+            title: "Achtung!",
             btn01: "OK",
             msg: "This Row has been Converted to an Invoice, You Cannot Make Changes!"
         },
         msgRowNotDelete :
         {
-            title: "Attention",
+            title: "Achtung!",
             btn01: "OK",
-            msg: "This Row has been Converted to an Invoice, You Cannot Delete it!"
+            msg: "Diese Zeile wurde in eine Rechnung umgewandelt, Sie können sie nicht meh löschen!!"
         },
         msgdocNotDelete : 
         {
-            title: "Attention",
+            title: "Achtung!",
             btn01: "OK",
-            msg: "There is a Converted Row to an Invoice in Your Document. This document cannot be deleted!"
+            msg: "Es gibt eine in eine Rechnung umgewandelte Zeile in Ihrem Beleg. Beleg kann nicht gelöscht werden!"
         },
         pg_adress : 
         {
-            title : "Address Selection",
-            clmAdress : "ADDRESS",
+            title : "Adressauswahl",
+            clmAdress : "ADDRESSE",
             clmCiyt : "CITY",
-            clmZipcode : "POSTAL CODE",
-            clmCountry : "COUNTRY",
+            clmZipcode : "POSTLEITZAHL",
+            clmCountry : "LAND",
         },
         msgCode : 
         {
-            title: "Attention",
-            btn01: "Go to Document",
-            msg: "Document Found"
+            title: "Achtung!",
+            btn01: "Gehe zur Beleg!",
+            msg: "Kein Beleg gefunden!"
         },
         msgDiscountEntry : 
         {
-            title : "Total Discount Entry",
-            btn01 : "Confirm"
+            title : "Gesamtrabatteingabe",
+            btn01 : "Bestätigen"
         },
-        txtDiscount1 : "Discount 1 Amount",
-        txtDiscount2 : "Discount 2 Amount",
-        txtDiscount3 : "Discount 3 Amount",
-        txtTotalDiscount :"Total Discount Amount",
+        txtDiscount1 : "1. Rabattbetrag",
+        txtDiscount2 : "2. Rabattbetrag",
+        txtDiscount3 : "3. Rabattbetrag",
+        txtTotalDiscount :"Gesamtrabattbetrag",
         msgDiscountPerEntry : 
         {
-            title : "Percentage Discount Entry",
-            btn01 : "Confirm"
+            title : "Rabattprozenteingabe",
+            btn01 : "Bestätigen"
         },
-        txtDiscountPer1 : "Discount 1 Percentage",
-        txtDiscountPer2 : "Discount 2 Percentage",
-        txtDiscountPer3 : "Discount 3 Percentage",
+        txtDiscountPer1 : "1. Rabattprozent",
+        txtDiscountPer2 : "2. Rabattprozent",
+        txtDiscountPer3 : "3. Rabattprozent",
         msgNewPrice : 
         {
-            title: "Attention",
-            btn01: "Don't Update Any",
-            btn02: "Update Selected Prices",
-            msg: "Please Select the Products for Which You Want to Update the Supplier Price.. "
+            title: "Achtung!",
+            btn01: "Keine Aktualisierung",
+            btn02: "Ausgewählte Preise aktualisieren.",
+            msg: "Bitte wählen Sie die Produkte aus, für die Sie den Lieferantenpreis aktualisieren möchten."
         },
         msgNewPriceDate : 
         {
-            title: "Attention",
-            btn01: "Don't Update Any",
-            btn02: "Update Selected Prices",
-            msg: "Please Select the Products for Which You Want to Update the Dates.. "
+            title: "Achtung!",
+            btn01: "Keine Aktualisierung",
+            btn02: "Ausgewählte Preise aktualisieren.",
+            msg: "Bitte wählen Sie die Produkte aus, für die Sie das Datum aktualisieren möchten. "
         },
         grdNewPrice: 
         {
             clmCode: "Code",
             clmName: "Name",
-            clmPrice: "Old S. Price",
-            clmPrice2: "New Price",
-            clmSalePrice :"Sale Price", 
-            clmMargin : "Gross Margin",
-            clmCostPrice : "Cost Price",
-            clmNetMargin : "Net Margin"
+            clmPrice: "Alter Preis",
+            clmPrice2: "Neuer Preis",
+            clmSalePrice :"Verkaufspreis", 
+            clmMargin : "Bruttomarge",
+            clmCostPrice : "Kostenpreis",
+            clmNetMargin : "Nettomarge"
         },
         grdNewPriceDate: 
         {
             clmCode: "Code",
             clmName: "Name",
-            clmPrice: "Old S. Price",
-            clmPrice2: "New Price",
-            clmSalePrice :"Sale Price", 
-            clmMargin : "Gross Margin",
-            clmCostPrice : "Cost Price",
-            clmNetMargin : "Net Margin"
+            clmPrice: "Alter Preis",
+            clmPrice2: "Neuer Preis",
+            clmSalePrice :"Verkaufspreis", 
+            clmMargin : "Bruttomarge",
+            clmCostPrice : "Kostenpreis",
+            clmNetMargin : "Nettomarge"
         },
         msgPriceDateUpdate :
         {
-            msg : "Do You Want to Update the Dates of Unchanged Prices?",
-            btn01 : "Yes",
-            btn02 : "No",
-            title : "Attention"
+            msg : "Möchten Sie die Daten der unveränderten Preise aktualisieren?",
+            btn01 : "JA",
+            btn02 : "NEIN",
+            title : "Achtung!"
         }
     },
-    irs_02_002 : // Satış İrsaliyesi"
+    irs_02_002 : // Satiş İrsaliyesi"
     {
         txtRefRefno: "Seriennummer",
         cmbDepot: "Lager",
@@ -10277,7 +10277,7 @@ export const langDe =
         txtDocDiscount: "Dokumentenrabatt",
         txtSubTotal: "Zwischensumme",
         txtMargin: "Marge",
-        txtVat: "MwSt.",
+        txtVat: "..",
         txtTotal: "Gesamtsumme",
         dtShipDate: "Versanddatum",
         txtBarcode: "Barcode hinzufügen",
@@ -10290,7 +10290,7 @@ export const langDe =
         txtUnitPrice: "Stückpreis",
         btnView: "Anzeigen",
         btnMailsend: "E-Mail senden",
-        placeMailHtmlEditor: "Geben Sie eine Beschreibung für Ihre E-Mail ein.",
+        placeMailen: "Text",
         validDesign: "Bitte wählen Sie ein Design aus.",
         validMail: "Bitte geben Sie eine E-Mail-Adresse ein.",
         txtTotalHt: "Rabattierter Betrag",
@@ -10330,7 +10330,7 @@ export const langDe =
           clmQuantity: "Anzahl",
           clmDiscount: "Rabatt",
           clmDiscountRate: "Rabatt %",
-          clmVat: "MwSt.",
+          clmVat: "..",
           clmAmount: "Betrag",
           clmTotal: "Gesamtsumme",
           clmTotalHt: "Nettogesamtsumme",
@@ -10340,7 +10340,7 @@ export const langDe =
           clmOrder: "Bestellnummer",
           clmCuser: "Benutzer",
           clmBarcode: "Barcode",
-          clmVatRate: "MwSt. %",
+          clmVatRate: ".. %",
           clmOrigin: "Herkunft",
           clmSubQuantity: "Untereinheit",
           clmSubPrice: "Untereinheitspreis",
@@ -10387,21 +10387,21 @@ export const langDe =
           btn02: "Nein",
           msg: "Interfel anwenden?"
         },
-        msgSave: 
+        msgSpeichern: 
         {
           title: "Achtung",
           btn01: "OK",
           btn02: "Abbrechen",
           msg: "Möchten Sie die Änderungen speichern?"
         },
-        msgSaveResult: 
+        msgSpeichernResult: 
         {
           title: "Achtung",
           btn01: "OK",
           msgSuccess: "Die Änderungen wurden erfolgreich gespeichert!",
           msgFailed: "Das Speichern der Änderungen ist fehlgeschlagen!"
         },
-        msgSaveValid:
+        msgSpeichernValid:
         {
           title: "Achtung",
           btn01: "OK",
@@ -10461,7 +10461,7 @@ export const langDe =
         {
             title: "Achtung",
             btn01: "OK",
-            msg: "Das Dokument ist gesperrt! Um Änderungen zu speichern, müssen Sie es mit dem Administratorpasswort entsperren!"
+            msg: "Das Dokument ist gesperrt! Änderungen und Speichern nur mit dem Administratorpasswort möglich!"
         },
         msgDocLocked:
         {
@@ -10492,13 +10492,13 @@ export const langDe =
             title: "Achtung",
             btn01: "OK",
             btn02: "Abbrechen",
-            msg: "Sie verkaufen unter dem Kostenpreis!"
+            msg: "Sie verkaufen unter dem Einkaufspreis!"
         },
         msgUnderPrice2:
         {
             title: "Achtung",
             btn01: "OK",
-            msg: "Der Verkaufspreis darf nicht unter dem Kostenpreis liegen!"
+            msg: "Der Verkaufspreis darf nicht unter dem Einkaufspreis liegen!"
         },
         msgCombineItem:
         {
@@ -10530,7 +10530,7 @@ export const langDe =
             title: "Massenhinzufügung von Artikeln",
             btnApprove: "Artikel abrufen",
             btnClear : "Löschen",
-            btnSave : "Zeilen hinzufügen",
+            btnSpeichern : "Zeilen hinzufügen",
         },
         cmbMultiItemType :
         {
@@ -10575,7 +10575,7 @@ export const langDe =
             clmCode : "ARTIKELCODE",
             clmName : "ARTIKELNAME",
             clmMulticode : "LIEFERANTENCODE",
-            clmBarcode : "BARCODE"
+            clmBarcode : "Barcode"
         },
         msgQuantity:
         {
@@ -10595,9 +10595,9 @@ export const langDe =
         },
         msgCustomerSelect:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Lütfen Cari Seçiniz !"
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Lütfen Kunde Seçiniz !"
         },
         msgRowNotUpdate:
         {
@@ -10690,7 +10690,7 @@ export const langDe =
         txtDocDiscount : "Dokumentrabatt",
         txtSubTotal : "Zwischensumme",
         txtMargin : "Marge",
-        txtVat : "MwSt",
+        txtVat : "MwSt.",
         txtTotal : "Gesamtsumme",
         dtShipDate :"Versanddatum",
         txtBarcode : "Barcode hinzufügen",
@@ -10701,7 +10701,7 @@ export const langDe =
         txtTotalQuantity : "Gesamtmenge",
         btnView : "Anzeigen",
         btnMailsend : "E-Mail senden",
-        placeMailHtmlEditor : "Geben Sie eine Beschreibung für Ihre E-Mail ein.",
+        placeMailen: "Text",
         validDesign : "Bitte wählen Sie ein Design aus.",
         validMail : "Bitte füllen Sie das Feld aus.",
         txtTotalHt : "Reduzierter Betrag",
@@ -10745,7 +10745,7 @@ export const langDe =
             clmQuantity : "Stückzahl",
             clmDiscount : "Rabatt",
             clmDiscountRate : "Rabattsatz",
-            clmVat : "MwSt",
+            clmVat : "MwSt.",
             clmAmount : "Betrag",
             clmTotal : "Gesamt",
             clmTotalHt : "Nettobetrag",
@@ -10793,21 +10793,21 @@ export const langDe =
             btn01: "OK",
             msg: "Es können keine Bestände erfasst werden, solange die Dokumentkopfdaten nicht vollständig sind!"
         },
-        msgSave:
+        msgSpeichern:
         {
             title: "Achtung",
             btn01: "OK",
             btn02: "Abbrechen",
             msg: "Sind Sie sicher, dass Sie speichern möchten?"
         },
-        msgSaveResult:
+        msgSpeichernResult:
         {
             title: "Achtung",
             btn01: "OK",
             msgSuccess: "Ihr Speichervorgang war erfolgreich!",
             msgFailed: "Ihr Speichervorgang ist fehlgeschlagen!"
         },
-        msgSaveValid:
+        msgSpeichernValid:
         {
             title: "Achtung",
             btn01: "OK",
@@ -10866,45 +10866,45 @@ export const langDe =
         msgGetLocked:
         {
             title: "Achtung",
-            btn01: "Okay",
-            msg: "Dokument ist gesperrt! \n Sie müssen das Kennwort des Administrators eingeben, um die Änderungen zu speichern und das Dokument zu entsperren!"
+            btn01: "OK",
+            msg: "Dokument ist gesperrt! \n Sie müssen das Administratorpasswort eingeben, um die Änderungen zu speichern und das Dokument zu entsperren!"
         },
         msgDocLocked:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             msg: "Aktion nicht möglich! Das Dokument ist gesperrt!"
         },
         msgDiscount:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             msg: "Der Rabatt darf nicht höher als der Betrag sein!"
         },
         msgItemNotFound:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             msg: "Artikel nicht gefunden!"
         },
         msgNotCustomer:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             msg: "Kunde nicht gefunden!"
         },
         msgUnderPrice1:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             btn02: "Abbrechen",
             msg: "Sie verkaufen unter dem Stückpreis!"
         },
         msgUnderPrice2:
         {
             title: "Achtung",
-            btn01: "Okay",
-            msg: "Der Verkaufspreis darf nicht niedriger sein als der Kostenpreis!"
+            btn01: "OK",
+            msg: "Der Verkaufspreis darf nicht niedriger sein als der Einkaufspreis!"
         },
         msgCombineItem:
         {
@@ -10946,19 +10946,19 @@ export const langDe =
         msgRowNotUpdate:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             msg: "Diese Zeile wurde bereits in eine Rechnung umgewandelt. Sie können keine Änderungen mehr vornehmen!"
         },
         msgRowNotDelete :
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             msg: "Diese Zeile wurde bereits in eine Rechnung umgewandelt. Sie können sie nicht löschen!"
         },
         msgdocNotDelete : 
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             msg: "Das Dokument enthält Zeilen, die bereits in eine Rechnung umgewandelt wurden. Es kann nicht gelöscht werden!"
         },
         pg_adress : 
@@ -10992,7 +10992,7 @@ export const langDe =
         msgMailSendResult:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             msgSuccess: "E-Mail wurde erfolgreich gesendet!",
             msgFailed: "E-Mail konnte nicht gesendet werden!"
         },
@@ -11039,7 +11039,7 @@ export const langDe =
         txtUnitPrice: "Stückpreis",
         btnView : "Anzeigen",
         btnMailsend : "E-Mail senden",
-        placeMailHtmlEditor : "Geben Sie eine Beschreibung für Ihre E-Mail ein.",
+        placeMailen: "Text",
         validDesign : "Bitte wählen Sie ein Design aus.",
         validMail : "Bitte geben Sie eine E-Mail-Adresse ein.",
         txtTotalHt : "Gesamtmenge mit Rabatt",
@@ -11125,21 +11125,21 @@ export const langDe =
             btn01: "OK",
             msg: "Es können keine Bestände erfasst werden, bevor die Dokumenteninformationen ausgefüllt sind!"
         },
-        msgSave:
+        msgSpeichern:
         {
             title: "Achtung",
             btn01: "OK",
             btn02: "Abbrechen",
             msg: "Möchten Sie die Änderungen speichern?"
         },
-        msgSaveResult:
+        msgSpeichernResult:
         {
             title: "Achtung",
             btn01: "OK",
             msgSuccess: "Der Speichervorgang war erfolgreich!",
             msgFailed: "Der Speichervorgang ist fehlgeschlagen!"
         },
-        msgSaveValid:
+        msgSpeichernValid:
         {
             title: "Achtung",
             btn01: "OK",
@@ -11217,7 +11217,7 @@ export const langDe =
         {
             title: "Achtung",
             btn01: "OK",
-            msg: "Bestand nicht gefunden!"
+            msg: "Artikel nicht gefunden!"
         },
         msgNotCustomer:
         {
@@ -11236,14 +11236,14 @@ export const langDe =
         {
             title: "Warnung",
             btn01: "OK",
-            msg: "Der Verkaufspreis darf nicht unter dem Kostenpreis liegen!"
+            msg: "Der Verkaufspreis darf nicht unter dem Einkaufspreis liegen!"
         },
         msgCombineItem:
         {
             title: "Achtung",
             btn01: "Kombinieren",
             btn02: "Neu hinzufügen",
-            msg: "Das Produkt, das Sie hinzufügen möchten, ist bereits im Dokument vorhanden! Sollen die Zeilen kombiniert werden?"
+            msg: "Das Artikel, das Sie hinzufügen möchten, ist bereits im Dokument vorhanden! Sollen die Zeilen kombiniert werden?"
         },
         popDesign:
         {
@@ -11261,26 +11261,26 @@ export const langDe =
         {
             title: "Achtung",
             btn01: "OK",
-            msg: "Anzahl der hinzugefügten Produkte"
+            msg: "Anzahl der hinzugefügten Artikel"
         },
         popMultiItem:
         {
-            title: "Massenhinzufügung von Produkten",
-            btnApprove: "Produkte abrufen",
+            title: "Massenhinzufügung von Artikeln",
+            btnApprove: "Artikel abrufen",
             btnClear: "Löschen",
-            btnSave: "Zeilen hinzufügen",
+            btnSpeichern: "Zeilen hinzufügen",
         },
         cmbMultiItemType:
         {
             title: "Suchmethode",
             customerCode: "Nach Lieferantennummer",
-            ItemCode: "Nach Produktcode"
+            ItemCode: "Nach Artikelcode"
         },
         grdMultiItem:
         {
-            clmCode: "Produktcode",
+            clmCode: "Artikelcode",
             clmMulticode: "Lieferantennummer",
-            clmName: "Produktname",
+            clmName: "Artikelname",
             clmQuantity: "Menge"
         },
         msgMultiData:
@@ -11288,7 +11288,7 @@ export const langDe =
             title: "Achtung",
             btn01: "Liste löschen und alle hinzufügen",
             btn02: "Neue hinzufügen",
-            msg: "Die Liste enthält bereits Produkte!"
+            msg: "Die Liste enthält bereits Artikel!"
         },
         msgUnit:
         {
@@ -11401,9 +11401,9 @@ export const langDe =
         txtDiscountPer2 : "2. Rabattprozentsatz",
         txtDiscountPer3 : "3. Rabattprozentsatz",
     },
-    irs_02_005 : // "İade Alış İrsaliyesi"
+    irs_02_005 : // "İade Aliş İrsaliyesi"
     {
-        getRebate: "Rückgabe aus dem Depot holen",
+        getRebate: "Rückgabe aus dem Lager holen",
         txtRefRefno: "Seriennummer",
         cmbDepot: "Lager",
         txtCustomerCode: "Kundennummer",
@@ -11512,21 +11512,21 @@ export const langDe =
             btn01: "OK",
             msg: "Artikel können nicht erfasst werden, solange die Dokumentkopfdaten nicht vollständig sind!",
         },
-        msgSave: 
+        msgSpeichern: 
         {
             title: "Achtung",
             btn01: "OK",
             btn02: "Abbrechen",
             msg: "Sind Sie sicher, dass Sie speichern möchten?",
         },
-        msgSaveResult: 
+        msgSpeichernResult: 
         {
             title: "Achtung",
             btn01: "OK",
             msgSuccess: "Ihr Speichervorgang war erfolgreich!",
             msgFailed: "Ihr Speichervorgang ist fehlgeschlagen!",
         },
-        msgSaveValid: 
+        msgSpeichernValid: 
         {
             title: "Achtung",
             btn01: "OK",
@@ -11623,14 +11623,14 @@ export const langDe =
         {
             title: "Achtung",
             btn01: "OK",
-            msg: "Kann nicht unter dem Kostenpreis verkauft werden!"
+            msg: "Kann nicht unter dem Einkaufspreis verkauft werden!"
         },
         msgCombineItem:
         {
             title: "Achtung",
             btn01: "Kombinieren",
             btn02: "Neu hinzufügen",
-            msg: "Das Produkt, das Sie hinzufügen möchten, ist bereits im Dokument vorhanden! Sollen die Zeilen kombiniert werden?"
+            msg: "Das Artikel, das Sie hinzufügen möchten, ist bereits im Dokument vorhanden! Sollen die Zeilen kombiniert werden?"
         },
         popDesign:
         {
@@ -11654,13 +11654,13 @@ export const langDe =
             clmCode: "ARTIKELNUMMER",
             clmName: "ARTIKELNAME",
             clmMulticode: "LIEFERANTENKODE",
-            clmBarcode: "BARCODE"
+            clmBarcode: "Barcode"
         },
         msgQuantity:
         {
             title: "Menge",
             btn01: "Hinzufügen",
-            msg: "Geben Sie eine Menge ein"
+            msg:"Menge eingeben"
         },
         msgRowNotUpdate:
         {
@@ -11693,7 +11693,7 @@ export const langDe =
             title: "Achtung",
             btn01: "Weiter",
             btn02: "Abbrechen",
-            msg: "Das ausgewählte Produkt ist nicht beim Kunden hinterlegt! Möchten Sie den Vorgang fortsetzen?"
+            msg: "Der ausgewälte Artikel ist nicht beim Kunden hinterlegt! Möchten Sie den Vorgang fortsetzen?"
         },
         msgCode:
         {
@@ -11706,20 +11706,20 @@ export const langDe =
             title: "Eingabe des Mengenrabatts",
             btn01: "Bestätigen"
         },
-        txtDiscount1: "Rabattbetrag 1",
-        txtDiscount2: "Rabattbetrag 2",
-        txtDiscount3: "Rabattbetrag 3",
+        txtDiscount1: "1. Rabattbetrag",
+        txtDiscount2: "2. Rabattbetrag",
+        txtDiscount3: "3. Rabattbetrag",
         txtTotalDiscount: "Gesamtrabattbetrag",
         msgDiscountPerEntry:
         {
             title: "Eingabe des prozentualen Rabatts",
             btn01: "Bestätigen"
         },
-        txtDiscountPer1: "Rabatt % 1",
-        txtDiscountPer2: "Rabatt % 2",
-        txtDiscountPer3: "Rabatt % 3",
+        txtDiscountPer1: "1. Rabattprozent",
+        txtDiscountPer2: "2. Rabattprozent",
+        txtDiscountPer3: "3. Rabattprozent",
     },
-    irs_02_006 : // Şube Alış İrsaliyesi"
+    irs_02_006 : // Şube Aliş İrsaliyesi"
     {
         txtRefRefno: "Seriennummer",
         cmbDepot: "Lager",
@@ -11744,7 +11744,7 @@ export const langDe =
         txtUnitPrice: "Einheitspreis",
         btnView: "Anzeigen",
         btnMailsend: "E-Mail senden",
-        placeMailHtmlEditor: "Geben Sie eine Beschreibung für Ihre E-Mail ein.",
+        placeMailen: "Text",
         validDesign: "Bitte wählen Sie ein Design aus.",
         validMail: "Bitte füllen Sie das Feld aus.",
         txtTotalHt: "Rabattierter Betrag",
@@ -11764,13 +11764,13 @@ export const langDe =
             clmCode: "KUNDENNUMMER",
             clmTitle: "KUNDENNAME",
             clmTypeName: "TYP",
-            clmGenusName: "GATTUNG"
+            clmGenusName: "ART"
         },
         pg_txtItemsCode: 
         {
-            title: "Produktauswahl",
-            clmCode: "PRODUKTNUMMER",
-            clmName: "PRODUKTNAME",
+            title: "Artikelauswahl",
+            clmCode: "ArtikelNUMMER",
+            clmName: "ArtikelNAME",
         },
         grdSlsDispatch: 
         {
@@ -11790,7 +11790,7 @@ export const langDe =
             clmOrder: "Bestellnummer",
             clmCuser: "Benutzer",
             clmBarcode: "Barcode",
-            clmVatRate: "MwSt. %",
+            clmVatRate: "MwSt.-Satz",
             clmOrigin: "Ursprung",
             clmSubQuantity: "Untereinheit",
             clmSubPrice: "Untereinheitspreis",
@@ -11830,21 +11830,21 @@ export const langDe =
             btn01: "OK",
             msg: "Die Kopfdaten des Dokuments müssen ausgefüllt sein, bevor Sie Artikel eingeben können!"
         },
-        msgSave: 
+        msgSpeichern: 
         {
             title: "Achtung",
             btn01: "OK",
             btn02: "Abbrechen",
             msg: "Sind Sie sicher, dass Sie speichern möchten?"
         },
-        msgSaveResult: 
+        msgSpeichernResult: 
         {
             title: "Achtung",
             btn01: "OK",
             msgSuccess: "Der Speichervorgang war erfolgreich!",
             msgFailed: "Der Speichervorgang ist fehlgeschlagen!"
         },
-        msgSaveValid: 
+        msgSpeichernValid: 
         {
             title: "Achtung",
             btn01: "OK",
@@ -11935,20 +11935,20 @@ export const langDe =
             title: "Achtung",
             btn01: "OK",
             btn02: "Abbrechen",
-            msg: "Sie verkaufen zu einem Preis unter dem Kostenpreis!"
+            msg: "Sie verkaufen zu einem Preis unter dem Einkaufspreis!"
         },
         msgUnderPrice2: 
         {
             title: "Warnung",
             btn01: "OK",
-            msg: "Der Verkaufspreis darf nicht unter dem Kostenpreis liegen!"
+            msg: "Der Verkaufspreis darf nicht unter dem Einkaufspreis liegen!"
         },
         msgCombineItem: 
         {
             title: "Achtung",
             btn01: "Kombinieren",
             btn02: "Neu hinzufügen",
-            msg: "Das gewünschte Produkt ist bereits im Dokument vorhanden! Sollen die Zeilen zusammengeführt werden?"
+            msg: "Das gewünschte Artikel ist bereits im Dokument vorhanden! Sollen die Zeilen zusammengeführt werden?"
         },
         popDesign: 
         {
@@ -11973,13 +11973,13 @@ export const langDe =
             title: "Mehrere Artikel hinzufügen",
             btnApprove: "Artikel abrufen",
             btnClear: "Löschen",
-            btnSave: "Zeilen hinzufügen",
+            btnSpeichern: "Zeilen hinzufügen",
         },
         cmbMultiItemType : 
         {
             title : "Suchmethode",
-            customerCode : "Nach Lieferantennummer",
-            ItemCode : "Nach Artikelnummer"
+            customerCode : "Nach Lieferantennummer suchen.",
+            ItemCode : "Nach Artikelnummer suchen."
         },
         grdMultiItem : 
         {
@@ -11992,7 +11992,7 @@ export const langDe =
         {
             title: "Achtung",
             btn01: "Liste leeren und alle hinzufügen",
-            btn02: "Neu geschriebenes zur Liste hinzufügen",
+            btn02: "Neue Eingabe zur Liste hinzufügen",
             msg: "Es gibt Artikel in der Liste!"
         },
         msgUnit:
@@ -12018,7 +12018,7 @@ export const langDe =
             clmCode :  "ARTIKELNUMMER",
             clmName : "ARTIKELNAME",
             clmMulticode : "LIEFERANTENNUMMER",
-            clmBarcode : "BARCODE"
+            clmBarcode : "Barcode"
         },
         msgQuantity:
         {
@@ -12217,18 +12217,18 @@ export const langDe =
         pg_txtItemsCode : 
         {
             title : "Bestandauswahl",
-            clmCode :  "BESTANDSCODE",
-            clmName : "BESTANDSNAME",
+            clmCode :  "Artikelcode",
+            clmName : "Artikelname",
             clmMulticode : "LIEFERANTENCODE",
             clmPrice : "EINKAUFSPREIS"
         },
         pg_txtBarcode : 
         {
             title : "Barcodeauswahl",
-            clmCode :  "BESTANDSCODE",
-            clmName : "BESTANDSNAME",
+            clmCode :  "Artikelcode",
+            clmName : "Artikelname",
             clmMulticode : "LIEFERANTENCODE",
-            clmBarcode : "BARCODE"
+            clmBarcode : "Barcode"
         },
         grdPurcOrders: 
         {
@@ -12294,21 +12294,21 @@ export const langDe =
             btn01: "OK",
             msg: "Die oberen Dokumentinformationen müssen ausgefüllt werden, bevor Artikel hinzugefügt werden können!"
           },
-          msgSave: 
+          msgSpeichern: 
           {
             title: "Achtung",
             btn01: "OK",
             btn02: "Abbrechen",
             msg: "Möchten Sie die Änderungen speichern?"
           },
-          msgSaveResult: 
+          msgSpeichernResult: 
           {
             title: "Achtung",
             btn01: "OK",
             msgSuccess: "Ihre Änderungen wurden erfolgreich gespeichert!",
             msgFailed: "Fehler beim Speichern der Änderungen!"
           },
-          msgSaveValid: 
+          msgSpeichernValid: 
           {
             title: "Achtung",
             btn01: "OK",
@@ -12425,7 +12425,7 @@ export const langDe =
             title: "Massenhinzufügen von Artikeln",
             btnApprove: "Artikel abrufen",
             btnClear: "Löschen",
-            btnSave: "Zeilen hinzufügen",
+            btnSpeichern: "Zeilen hinzufügen",
           },
           cmbMultiItemType: 
           {
@@ -12460,11 +12460,11 @@ export const langDe =
           tagItemCodePlaceholder: "Bitte geben Sie die gewünschten Codes ein",
           popUnderPrice: 
           {
-            title: "Es gibt einen günstigeren Lieferanten für dieses Produkt"
+            title: "Es gibt einen günstigeren Lieferanten für dieses Artikel"
           },
           grdUnderPrice: 
           {
-            clmItemName: "Produkt",
+            clmItemName: "Artikel",
             clmCustomerName: "Kundenname",
             clmPrice: "Preis",
             clmCode: "Code",
@@ -12563,7 +12563,7 @@ export const langDe =
         txtUnitPrice: "Einheitspreis",
         btnView : "Anzeigen",
         btnMailsend : "E-Mail senden",
-        placeMailHtmlEditor : "Geben Sie eine Beschreibung für Ihre E-Mail ein.",
+        placeMailen: "Text",
         validDesign : "Bitte wählen Sie ein Design aus.",
         validMail : "Bitte lassen Sie dieses Feld nicht leer.",
         txtTotalHt : "Rabattierter Gesamtbetrag",
@@ -12585,7 +12585,7 @@ export const langDe =
             clmCode :  "KUNDENNUMMER",
             clmTitle : "KUNDENNAME",
             clmTypeName : "TYP",
-            clmGenusName : "GATTUNG"
+            clmGenusName : "ART"
         },
         pg_txtItemsCode : 
         {
@@ -12605,7 +12605,7 @@ export const langDe =
             clmVat : "MwSt.",
             clmAmount : "Betrag",
             clmTotal : "Gesamt",
-            clmTotalHt : "Gesamt exkl. MwSt.",
+            clmTotalHt : "Gesamt ohne. ..",
             clmCreateDate: "Erstellungsdatum",
             clmMargin :"Marge",
             clmDescription :"Beschreibung",
@@ -12651,21 +12651,21 @@ export const langDe =
             btn01: "OK",
             msg: "Es können keine Bestände erfasst werden, solange die Dokumentkopfdaten nicht vollständig sind!"
         },
-        msgSave:
+        msgSpeichern:
         {
             title: "Achtung",
             btn01: "OK",
             btn02: "Abbrechen",
             msg: "Sind Sie sicher, dass Sie speichern möchten?"
         },
-        msgSaveResult:
+        msgSpeichernResult:
         {
             title: "Achtung",
             btn01: "OK",
             msgSuccess: "Ihr Eintrag wurde erfolgreich gespeichert!",
             msgFailed: "Fehler beim Speichern Ihres Eintrags!"
         },
-        msgSaveValid:
+        msgSpeichernValid:
         {
             title: "Achtung",
             btn01: "OK",
@@ -12743,7 +12743,7 @@ export const langDe =
         {
             title: "Achtung",
             btn01: "OK",
-            msg: "Bestand nicht gefunden!"
+            msg: "Artikel nicht gefunden!"
         },
         msgNotCustomer:
         {
@@ -12756,13 +12756,13 @@ export const langDe =
             title: "Achtung",
             btn01: "OK",
             btn02: "Abbrechen",
-            msg: "Sie verkaufen zu einem niedrigeren Preis als den Kostenpreis!"
+            msg: "Sie verkaufen zu einem niedrigeren Preis als den Einkaufspreis!"
         },
         msgUnderPrice2:
         {
             title: "Achtung",
             btn01: "OK",
-            msg: "Der Verkaufspreis kann nicht niedriger als der Kostenpreis sein!"
+            msg: "Der Verkaufspreis kann nicht niedriger als der Einkaufspreis sein!"
         },
         msgCombineItem:
         {
@@ -12794,7 +12794,7 @@ export const langDe =
             title: "Massenhinzufügung von Artikeln",
             btnApprove: "Artikel abrufen",
             btnClear : "Löschen",
-            btnSave : "Zeilen hinzufügen",
+            btnSpeichern : "Zeilen hinzufügen",
         },
         cmbMultiItemType : 
         {
@@ -12831,7 +12831,7 @@ export const langDe =
         {
             title: "Menge",
             btn01: "Hinzufügen",
-            msg: "Bitte geben Sie eine Menge ein"
+            msg: "Menge eingeben"
         },
         pg_txtBarcode: 
         {
@@ -12928,7 +12928,7 @@ export const langDe =
     {
         txtCustomerCode: "Kunde",
         validDepot: "Bitte wählen Sie ein Depot aus",
-        ItemNamePlaceHolder: "Geben Sie den vollständigen Produktnamen oder einen Teil davon ein",
+        ItemNamePlaceHolder: "Geben Sie den vollständigen Artikelnamen oder einen Teil davon ein",
         pg_txtCustomerCode: 
         {
             title: "Kundenauswahl",
@@ -12948,14 +12948,14 @@ export const langDe =
             clmCustomer: "Kunde",
             clmPrice: "Preis"
         },
-        msgSave: 
+        msgSpeichern: 
         {
             title: "Achtung",
             btn01: "Bestätigen",
             btn02: "Abbrechen",
             msg: "Sind Sie sicher, dass Sie die ausgewählten Zeilen stornieren möchten?"
         },
-        msgSaveResult: 
+        msgSpeichernResult: 
         {
             title: "Achtung",
             btn01: "OK",
@@ -12966,13 +12966,13 @@ export const langDe =
         {
             title: "Achtung",
             btn01: "OK",
-            msg: "Das Produkt wurde für mehrere Kunden ausgewählt. Bitte überprüfen Sie dies."
+            msg: "Das Artikel wurde für mehrere Kunden ausgewählt. Bitte überprüfen Sie dies."
         },
         msgCustomerFound: 
         {
             title: "Achtung",
             btn01: "OK",
-            msg: "Produkte ohne Kundenzuordnung können nicht ausgewählt werden. Bitte weisen Sie einen Kunden zu."
+            msg: "Artikel ohne Kundenzuordnung können nicht ausgewählt werden. Bitte weisen Sie einen Kunden zu."
         }
     },
     cnt_01_001: 
@@ -12991,10 +12991,10 @@ export const langDe =
         grdPurcContList: 
         {
             clmCreateDate: "Erstellungsdatum",
-            clmCode: "Produktcode",
-            clmName: "Produktname",
+            clmCode: "Artikelcode",
+            clmName: "Artikelname",
             clmCustomerName: "Kundenname",
-            clmPrıce: "Preis",
+            clmPrice: "Preis",
             clmQuantity: "Menge",
             clmStartDate: "Startdatum",
             clmFinishDate: "Enddatum",
@@ -13003,7 +13003,7 @@ export const langDe =
             clmDepotName: "Depot",
         },
     },
-    cnt_01_002:  //  "Satış Anlaşmaları Listesi"
+    cnt_01_002:  //  "Satiş Anlaşmalari Listesi"
     {
         txtCustomerCode: "Kunde",
         menu: "Verkaufsvereinbarungen",
@@ -13019,10 +13019,10 @@ export const langDe =
         grdPurcContList: 
         {
             clmCreateDate: "Erstellungsdatum",
-            clmCode: "Produktcode",
-            clmName: "Produktname",
+            clmCode: "Artikelcode",
+            clmName: "Artikelname",
             clmCustomerName: "Kundenname",
-            clmPrıce: "Preis",
+            clmPrice: "Preis",
             clmQuantity: "Menge",
             clmStartDate: "Startdatum",
             clmFinishDate: "Enddatum",
@@ -13056,8 +13056,8 @@ export const langDe =
         pg_txtPopItemsCode : 
         {
             title : "Auswahl des Bestands",
-            clmCode :  "BESTANDSCODE",
-            clmName : "BESTANDSNAME",
+            clmCode :  "Artikelcode",
+            clmName : "Artikelname",
             clmMulticode : "LIEFERANTENCODE"
         },
         msgContractValid:
@@ -13066,21 +13066,21 @@ export const langDe =
             btn01: "OK",
             msg: "Es können keine Zeilen hinzugefügt werden, ohne einen Kunden auszuwählen!"
         },
-        msgSave:
+        msgSpeichern:
         {
             title: "Achtung",
             btn01: "OK",
             btn02: "Abbrechen",
             msg: "Sind Sie sicher, dass Sie speichern möchten?"
         },
-        msgSaveResult:
+        msgSpeichernResult:
         {
             title: "Achtung",
             btn01: "OK",
             msgSuccess: "Ihr Speichervorgang war erfolgreich!",
             msgFailed: "Ihr Speichervorgang ist fehlgeschlagen!"
         },
-        msgSaveValid:
+        msgSpeichernValid:
         {
             title: "Achtung",
             btn01: "OK",
@@ -13117,8 +13117,8 @@ export const langDe =
             clmDepotName : "Lager",
             clmMargin :"Marge",
             clmVatExtPrice : "Ohne MwSt.",
-            clmCostPrice : "Kostenpreis",
-            clmMulticode : "L.Code",
+            clmCostPrice : "Einkaufspreis",
+            clmMulticode : "Lieferantencode",
             clmUnit : "Einheit",
             clmUnitPrice : "Einheitspreis",
             clmOrgins : "Herkunft",
@@ -13126,8 +13126,8 @@ export const langDe =
         popItems: 
         {
             title: "Vereinbarung hinzufügen",
-            txtPopItemsCode : "Bestandscode",
-            txtPopItemsName: "Bestandsname",
+            txtPopItemsCode : "Artikelcode",
+            txtPopItemsName: "Artikelname",
             txtPopItemsPrice : "Preis",
             txtPopItemsQuantity : "Menge",
             dtPopStartDate :"Start",
@@ -13156,7 +13156,7 @@ export const langDe =
             title: "Mehrere Artikel hinzufügen",
             btnApprove: "Artikel abrufen",
             btnClear : "Löschen",
-            btnSave : "Zeilen hinzufügen",
+            btnSpeichern : "Zeilen hinzufügen",
         },
         cmbMultiItemType : 
         {
@@ -13212,12 +13212,12 @@ export const langDe =
         msgMailSendResult:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             msgSuccess: "E-Mail-Versand erfolgreich!",
             msgFailed: "E-Mail-Versand fehlgeschlagen!"
         },
     },
-    cnt_02_002 : // "Satış Anlaşması"
+    cnt_02_002 : // "Satiş Anlaşmasi"
     {
         validDate: "Bitte Datum auswählen.",
         cmbDepot: "Lager",
@@ -13257,21 +13257,21 @@ export const langDe =
             btn01: "OK",
             msg: "Es kann keine Zeile hinzugefügt werden, ohne einen Kunden auszuwählen!"
         },
-        msgSave:
+        msgSpeichern:
         {
             title: "Achtung",
             btn01: "OK",
             btn02: "Abbrechen",
             msg: "Sind Sie sicher, dass Sie speichern möchten?"
         },
-        msgSaveResult:
+        msgSpeichernResult:
         {
             title: "Achtung",
             btn01: "OK",
             msgSuccess: "Ihr Eintrag wurde erfolgreich gespeichert!",
             msgFailed: "Fehler beim Speichern Ihres Eintrags!"
         },
-        msgSaveValid:
+        msgSpeichernValid:
         {
             title: "Achtung",
             btn01: "OK",
@@ -13303,7 +13303,7 @@ export const langDe =
             clmDepotName: "Lager",
             clmMargin: "Marge",
             clmVatExtPrice: "Nettopreis",
-            clmCostPrice: "Kostenpreis",
+            clmCostPrice: "Einkaufspreis",
             clmUnit: "Einheit",
             clmUnitPrice: "Stückpreis",
             clmOrgins: "Ursprung",
@@ -13347,7 +13347,7 @@ export const langDe =
             title: "Massenartikel hinzufügen",
             btnApprove: "Artikel abrufen",
             btnClear: "Löschen",
-            btnSave: "Zeilen hinzufügen",
+            btnSpeichern: "Zeilen hinzufügen",
         },
         cmbMultiItemType:
         {
@@ -13375,7 +13375,7 @@ export const langDe =
         {
             title: "Achtung",
             btn01: "OK",
-            msg: "Der Dokumentenheader muss ausgefüllt sein, um Bestände eingeben zu können!"
+            msg: "Der Dokumentenkopf muss ausgefüllt sein, um Bestände eingeben zu können!"
         },
         validCode : "Der Code darf nicht leer sein!",
         popDesign : 
@@ -13454,7 +13454,7 @@ export const langDe =
             clmCostPrice : "EINKAUFSPREIS",
             clmSalesPrice :"VERKAUFSPREIS"
         },
-        msgSaveResult:
+        msgSpeichernResult:
         {
             title: "Achtung",
             btn01: "OK",
@@ -13576,7 +13576,7 @@ export const langDe =
         txtDocDiscount : "Dokumentenrabatt",
         txtSubTotal : "Zwischensumme",
         txtMargin : "Marge",
-        txtVat : "MwSt",
+        txtVat : "MwSt.",
         txtTotal : "Gesamtsumme",
         dtShipDate :"Lieferdatum",
         getDispatch : "Lieferschein abrufen",
@@ -13637,21 +13637,21 @@ export const langDe =
             btn01: "OK",
             msg: "Es können keine Bestandsdaten erfasst werden, solange die Dokumentkopfdaten nicht vollständig sind!"
         },
-        msgSave:
+        msgSpeichern:
         {
             title: "Achtung",
             btn01: "OK",
             btn02: "Abbrechen",
             msg: "Sind Sie sicher, dass Sie speichern möchten?"
         },
-        msgSaveResult:
+        msgSpeichernResult:
         {
             title: "Achtung",
             btn01: "OK",
             msgSuccess: "Ihr Speichervorgang war erfolgreich!",
             msgFailed: "Ihr Speichervorgang ist fehlgeschlagen!"
         },
-        msgSaveValid:
+        msgSpeichernValid:
         {
             title: "Achtung",
             btn01: "OK",
@@ -13797,21 +13797,21 @@ export const langDe =
             btn01: "OK",
             msg: "Es können keine Lagerbestände erfasst werden, solange die Dokumentkopfdaten nicht vollständig sind!"
         },
-        msgSave:
+        msgSpeichern:
         {
             title: "Achtung",
             btn01: "OK",
             btn02: "Abbrechen",
             msg: "Sind Sie sicher, dass Sie speichern möchten!"
         },
-        msgSaveResult:
+        msgSpeichernResult:
         {
             title: "Achtung",
             btn01: "OK",
             msgSuccess: "Ihr Speichervorgang war erfolgreich!",
             msgFailed: "Ihr Speichervorgang ist fehlgeschlagen!"
         },
-        msgSaveValid:
+        msgSpeichernValid:
         {
             title: "Achtung",
             btn01: "OK",
@@ -13846,7 +13846,7 @@ export const langDe =
         {
             title: "Achtung",
             btn01: "OK",
-            msg: "Das Dokument ist gesperrt! Um Änderungen zu speichern, müssen Sie es mit dem Administratorpasswort entsperren!"
+            msg: "Das Dokument ist gesperrt! Änderungen und Speichern nur mit dem Administratorpasswort möglich!"
         },
         msgDocLocked:
         {
@@ -13906,21 +13906,21 @@ export const langDe =
             clmName : "NAME",
             clmType : "TYP",
         },
-        msgSave:
+        msgSpeichern:
         {
             title: "Achtung",
             btn01: "OK",
             btn02: "Abbrechen",
             msg: "Sind Sie sicher, dass Sie speichern möchten!"
         },
-        msgSaveResult:
+        msgSpeichernResult:
         {
             title: "Achtung",
             btn01: "OK",
             msgSuccess: "Ihr Speichervorgang war erfolgreich!",
             msgFailed: "Ihr Speichervorgang ist fehlgeschlagen!"
         },
-        msgSaveValid:
+        msgSpeichernValid:
         {
             title: "Achtung",
             btn01: "OK",
@@ -13961,21 +13961,21 @@ export const langDe =
             clmName : "NAME",
             clmIban : "IBAN",
         },
-        msgSave:
+        msgSpeichern:
         {
             title: "Achtung",
             btn01: "OK",
             btn02: "Abbrechen",
             msg: "Sind Sie sicher, dass Sie speichern möchten!"
         },
-        msgSaveResult:
+        msgSpeichernResult:
         {
             title: "Achtung",
             btn01: "OK",
             msgSuccess: "Ihr Speichervorgang war erfolgreich!",
             msgFailed: "Ihr Speichervorgang ist fehlgeschlagen!"
         },
-        msgSaveValid:
+        msgSpeichernValid:
         {
             title: "Achtung",
             btn01: "OK",
@@ -14035,21 +14035,21 @@ export const langDe =
             btn01: "OK",
             msg: "Dokumentenkopf muss ausgefüllt werden, bevor Lagerbestand eingegeben werden kann!"
         },
-        msgSave:
+        msgSpeichern:
         {
             title: "Achtung",
             btn01: "OK",
             btn02: "Abbrechen",
             msg: "Sind Sie sicher, dass Sie speichern möchten?"
         },
-        msgSaveResult:
+        msgSpeichernResult:
         {
             title: "Achtung",
             btn01: "OK",
             msgSuccess: "Ihr Eintrag wurde erfolgreich gespeichert!",
             msgFailed: "Speichern fehlgeschlagen!"
         },
-        msgSaveValid:
+        msgSpeichernValid:
         {
             title: "Achtung",
             btn01: "OK",
@@ -14100,17 +14100,17 @@ export const langDe =
         },
         popSafeToSafe: 
         {
-            title: "Transfer von Safe zu Safe",
+            title: "Transfer von Tresor zu Tresor",
             btnApprove : "Hinzufügen",
         },
         popSafeToBank: 
         {
-            title: "Transfer von Safe zur Bank",
+            title: "Transfer von Tresor zur Bank",
             btnApprove : "Hinzufügen",
         },
         popBankToSafe: 
         {
-            title: "Transfer von Bank zum Safe",
+            title: "Transfer von Bank zum Tresor",
             btnApprove : "Hinzufügen",
         },
         popBankToBank: 
@@ -14119,16 +14119,16 @@ export const langDe =
             btnApprove : "Hinzufügen",
         },
         
-        validRef : "Seri darf nicht leer sein",
-        validRefNo : "Sıra darf nicht leer sein",
+        validRef : "Serie darf nicht leer sein",
+        validRefNo : "Nummer darf nicht leer sein",
         validAccount : "Bitte wählen Sie ein Konto aus",
         validDocDate : "Bitte wählen Sie ein Datum aus",
     },
     fns_05_001 : //"Masseneinzugseingabe"
     {
-        txtRefRefno : "Seri-Sıra",
-        cmbCashSafe : "Safe auswählen",
-        cmbCheckSafe : "Scheck-Safe",
+        txtRefRefno : "Serie-Nummer",
+        cmbCashSafe : "Tresor auswählen",
+        cmbCheckSafe : "Scheck-Tresor",
         cmbBank : "Bank auswählen",
         txtCustomerCode : "Kundennummer",
         txtCustomerName : "Kundenname",
@@ -14146,7 +14146,7 @@ export const langDe =
             clmDate : "Datum",
             clmDesc : "Beschreibung",
             clmAmount : "Betrag",
-            shemaSave : "Schema speichern"
+            shemaSpeichern : "Schema speichern"
         },
         cmbPayType : 
         {
@@ -14172,7 +14172,7 @@ export const langDe =
             clmCustomerCode : "Kundennummer",
             clmCustomerName : "Kundenname",
             clmAmount : "Betrag",
-            clmInputName : "Safe/Bank",
+            clmInputName : "Tresor/Bank",
             clmDescription : "Beschreibung",
         },
         msgDocValid:
@@ -14181,21 +14181,21 @@ export const langDe =
             btn01: "OK",
             msg: "Dokumentenkopf muss ausgefüllt werden, bevor Lagerbestand eingegeben werden kann!"
         },
-        msgSave:
+        msgSpeichern:
         {
             title: "Achtung",
             btn01: "OK",
             btn02: "Abbrechen",
             msg: "Sind Sie sicher, dass Sie speichern möchten?"
         },
-        msgSaveResult:
+        msgSpeichernResult:
         {
             title: "Achtung",
             btn01: "OK",
             msgSuccess: "Ihr Eintrag wurde erfolgreich gespeichert!",
             msgFailed: "Speichern fehlgeschlagen!"
         },
-        msgSaveValid:
+        msgSpeichernValid:
         {
             title: "Achtung",
             btn01: "OK",
@@ -14222,28 +14222,28 @@ export const langDe =
             title: "Banküberweisung",
             btnApprove : "Hinzufügen"
         },
-        validRef :"Seri darf nicht leer sein",
+        validRef :"Serie darf nicht leer sein",
         validCustomerCode : "Kundennummer darf nicht leer sein",
     },
     set_01_002 : // "Interfel"
     {
         txtFrRate : "Rate für Frankreich - Inlandverkauf",
         txtNotFrRate : "Rate für Frankreich - Auslandverkauf",
-        msgSave:
+        msgSpeichern:
         {
             title: "Achtung",
             btn01: "OK",
             btn02: "Abbrechen",
             msg: "Sind Sie sicher, dass Sie speichern möchten?"
         },
-        msgSaveResult:
+        msgSpeichernResult:
         {
             title: "Achtung",
             btn01: "OK",
             msgSuccess: "Ihr Eintrag wurde erfolgreich gespeichert!",
             msgFailed: "Speichern fehlgeschlagen!"
         },
-        msgSaveValid:
+        msgSpeichernValid:
         {
             title: "Achtung",
             btn01: "Ok",
@@ -14268,25 +14268,25 @@ export const langDe =
         txtApeCode : "Ape-Code",
         txtTaxOffice : "Steueramt",
         txtTaxNo : "Steuernummer",
-        txtIntVatNo : "Internationale MwSt.-Nr.",
+        txtIntVatNo : "Steueridentnummer.",
         txtSirenNo : "Siren-Nummer",
         txtRSC : "Handelsregisternummer",
-        txtCapital : "Kapital",
-        msgSave:
+        txtCapital : "Stamkapital",
+        msgSpeichern:
         {
             title: "Achtung",
             btn01: "Ok",
             btn02: "Abbrechen",
             msg: "Sind Sie sicher, dass Sie den Eintrag speichern möchten?"
         },
-        msgSaveResult:
+        msgSpeichernResult:
         {
             title: "Achtung",
             btn01: "Ok",
             msgSuccess: "Der Eintrag wurde erfolgreich gespeichert!",
             msgFailed: "Fehler beim Speichern des Eintrags!"
         },
-        msgSaveValid:
+        msgSpeichernValid:
         {
             title: "Achtung",
             btn01: "Ok",
@@ -14407,21 +14407,21 @@ export const langDe =
             clmCode : "CODE",
             clmName : "NAME",
         },
-        msgSave:
+        msgSpeichern:
         {
             title: "Achtung",
             btn01: "Ok",
             btn02: "Abbrechen",
             msg: "Sind Sie sicher, dass Sie den Eintrag speichern möchten?"
         },
-        msgSaveResult:
+        msgSpeichernResult:
         {
             title: "Achtung",
             btn01: "Ok",
             msgSuccess: "Der Eintrag wurde erfolgreich gespeichert!",
             msgFailed: "Fehler beim Speichern des Eintrags!"
         },
-        msgSaveValid:
+        msgSpeichernValid:
         {
             title: "Achtung",
             btn01: "Ok",
@@ -14464,79 +14464,79 @@ export const langDe =
             clmCode: "KUNDENCODE",
             clmTitle: "KUNDENNAME",
             clmTypeName: "TYP",
-            clmGenusName: "GATTUNG"
+            clmGenusName: "ART"
         },
         grdSaleTicketReport:
         {
-            clmDate: "Tarih",
-            clmTime: "Saat",
-            slmUser: "Kullanıcı",
-            clmCustomer: "Cari",
-            clmCardId: "Kard Id",
-            clmDiscount: "İndirim",
+            clmDate: "Datum",
+            clmTime: "Uhrzeit",
+            slmUser: "Benutzer",
+            clmCustomer: "Kunde",
+            clmCardId: "Karten-Id",
+            clmDiscount: "Rabatt",
             clmLoyalyt: "Loyalyt",
-            clmHT: "Ara Toplam",
-            clmVTA: "Vergi",
-            clmTTC: "Toplam",
-            clmTicketID: "Fiş I.D",
+            clmHT: "Zwischensumme",
+            clmVTA: "Steuern",
+            clmTTC: "Summe",
+            clmTicketID: "Beleg-ID",
         },
         pg_txtItem:
         {
-            title: "Ürün Seçim",
-            clmCode: "KODU",
-            clmName: "ADI",
+            title: "Artikelauswahl",
+            clmCode: "Artikelcode",
+            clmName: "Artikelname",
         },
         grdSaleTicketItems:
         {
-            clmBarcode: "Barkod",
-            clmName: "Ürün Adı",
-            clmQuantity: "Adet",
-            clmPrice: "Fiyat",
-            clmTotal: "Tutar"
+            clmBarcode: "Barcode",
+            clmName: "Artikelname",
+            clmQuantity: "Menge",
+            clmPrice: "Preis",
+            clmTotal: "Betrag"
         },
         grdSaleTicketPays:
         {
-            clmPayName: "Ödeme Tipi",
-            clmTotal: "Tutar",
+            clmPayName: "Zahlungsart",
+            clmTotal: "Betrag",
         },
         popDetail:
         {
-            title: "Fiş Detayı"
+            title: "Belegdetails"
         },
         cmbPayType:
         {
-            title: "Ödeme Tipi",
-            esc: "Nakit",
-            cb: "K. Kartı",
-            check: "Çek",
-            ticket: "T.Rest",
-            bonD: "İade Fişi",
-            avoir: "İade",
-            virment: "Havale",
-            prlv: "Oto. Ödeme",
-            all: "Tümü",
+            title: "Zahlungsart",
+            esc: "Barzahlung",
+            cb: "Kartenzahlungen",
+            check: "Scheck",
+            ticket: "Ticketrestaurant",
+            bonD: "İade Beleg-",
+            Davoir: "İade",
+            virment: "Überweisung",
+            prlv: "Abbuchung/Lastschrift",
+            all: "Alle",
         },
-        payChangeNote: "Fiş üzerinde yapılan değişiklikler istisnai olarak yapılmalı ve hataların düzeltilmesine izin verilmelidir!",
-        payChangeNote2: "Değişikliklerin geçmişi kaydedilir!",
-        txtPayChangeDescPlace: "Lütfen Açıklama Giriniz",
-        txtPayChangeDesc: "Ödeme tipi hatalı girilmiştir. Düzeltmesi yapıldı.",
+        payChangeNote: "Änderungen am Dokument sollten ausnahmsweise vorgenommen und Fehler korrigiert werden dürfen!",
+        payChangeNote2: "Änderungsverlauf wird gespeichert!",
+        txtPayChangeDescPlace: "Bitte geben Sie den Grund für Ihre Änderungen ein",
+        txtPayChangeDesc: "Zahlungsart wurde falsch eingegeben. Die Korrektur wurde vorgenommen.",
         popLastTotal:
         {
-            title: "Tahsilat"
+            title: "Zahlung"
         },
         trDeatil: "T.R Detay",
-        lineDelete: "Satır İptal",
-        cancel: "Vazgeç",
+        lineDelete: "Satir İptal",
+        Abbrechen: "Abbrechen",
         popOpenTike:
         {
-            title: "Tamamlanmamış Fişler"
+            title: "Nicht validierte Belege"
         },
         grdOpenTike:
         {
             clmUser: "Benutzer",
             clmDevice: "Gerät",
             clmDate: "Datum",
-            clmTicketId: "Quittungsnummer",
+            clmTicketId: "Kassenzettel",
             clmTotal: "Betrag",
             clmDescription: "Beschreibung"
         },
@@ -14556,7 +14556,7 @@ export const langDe =
             title: "Achtung",
             btn01: "OK",
             btn02: "Abbrechen",
-            msg: "Die ausgewählten Quittungen werden in eine Rechnung umgewandelt. Sind Sie damit einverstanden?"
+            msg: "Die ausgewählten Kassenzettel als Rechnung drucken. Sind Sie damit einverstanden?"
         },
         msgFactureCustomer:
         {
@@ -14603,7 +14603,7 @@ export const langDe =
         grdSaleTicketItems:
         {
             clmBarcode: "Barcode",
-            clmName: "Produktname",
+            clmName: "Artikelname",
             clmQuantity: "Menge",
             clmPrice: "Preis",
             clmTotal: "Betrag"
@@ -14624,7 +14624,7 @@ export const langDe =
         },
         trDeatil: "T.R. Detail",
         lineDelete: "Zeile löschen",
-        cancel: "Abbrechen",
+        Abbrechen: "Abbrechen",
         btnAddpoint: "Punkte hinzufügen/abbuchen",
         popPointEntry:
         {
@@ -14643,10 +14643,10 @@ export const langDe =
         {
             title: "Achtung",
             btn01: "OK",
-            msg: "Bitte geben Sie eine Beschreibung mit mindestens 15 Zeichen ein."
+            msg: "Bitte geben Sie einen Text mit mindestens 15 Zeichen ein."
         },
         btnAdd: "Hinzufügen",
-        descriptionPlace: "Bitte geben Sie eine Beschreibung mit mindestens 15 Zeichen ein."
+        descriptionPlace: "Bitte geben Sie einen Text mit mindestens 15 Zeichen ein."
     },
     pos_02_005: // "Bericht über geänderte Quittungen"
     {
@@ -14661,7 +14661,7 @@ export const langDe =
         numFirstTicketAmount: "Unterer Betrag",
         numLastTicketAmount: "Oberer Betrag",
         cmbUser: "Benutzer",
-        txtItem: "Produktcode",
+        txtItem: "Artikelcode",
         ckhDoublePay: "Mehrere Zahlungen",
         cmbType: "Beschreibungstyp",
         cmbTypeData:
@@ -14689,14 +14689,14 @@ export const langDe =
         },
         pg_txtItem:
         {
-            title: "Produktauswahl",
+            title: "Artikelauswahl",
             clmCode: "Code",
             clmName: "Name",
         },
         grdSaleTicketItems :
         {
-            clmBarcode : "Strichcode",
-            clmName : "Produktname",
+            clmBarcode : "Barcode",
+            clmName : "Artikelname",
             clmQuantity : "Menge",
             clmPrice : "Preis",
             clmTotal : "Gesamt",
@@ -14716,13 +14716,13 @@ export const langDe =
         {
             title : "Zahlungsart",
             esc:"Bar",
-            cb : "Kreditkarte",
+            cb : "Kartenzahlungen",
             check : "Scheck",
             ticket : "Restbetrag",
             bonD : "Rückgabebeleg",
             avoir : "Gutschrift",
             virment : "Überweisung",
-            prlv :"Autom. Zahlung",
+            prlv :"Abbuchung/Lastschrift",
             all :"Alle",
         },
         payChangeNote : "Änderungen an der Quittung sollten nur in Ausnahmefällen vorgenommen und Fehler korrigiert werden!",
@@ -14735,7 +14735,7 @@ export const langDe =
         },
         trDeatil: "TR-Detail",
         lineDelete :"Zeile stornieren",
-        cancel : "Abbrechen",
+        Abbrechen : "Abbrechen",
         popOpenTike :
         {
             title : "Offene Belege"
@@ -14762,15 +14762,15 @@ export const langDe =
             clmTime: "Uhrzeit",
             clmUser: "Benutzer",
             clmCash: "Eingezahltes Bargeld",
-            clmCredit: "Eingezahlte Kreditkarte",
+            clmCredit: "Eingezahlte Kartenzahlungen",
             clmCheck: "Eingezogener Scheck",
             clmTicket: "Eingezahltes Restaurant Ticket",
             clmPosCash: "Bargeld",
-            clmPosCredit: "Kreditkarte",
+            clmPosCredit: "Kartenzahlungen",
             clmPosCheck: "Scheck",
             clmPosTicket: "Restaurant Ticket",
             clmAdvance: "Vorschuss",
-            clmSafe: "Kasse"
+            clmSafe: "Tresor/Kasse"
         },
     },
     pos_02_007: // "POS Vorschussbericht",
@@ -14778,25 +14778,25 @@ export const langDe =
         btnGet: "Abrufen",
         dtFirst: "Erstes Datum",
         dtLast: "Letztes Datum",
-        cmbDevice: "Kasse",
+        cmbDevice: "Tresor/Kasse",
         grdAdvanceData:
         {
             clmDate: "Datum",
             clmTime: "Uhrzeit",
             clmUser: "Benutzer",
             clmCash: "Vorschussbetrag",
-            clmSafe: "Kasse"
+            clmSafe: "Tresor/Kasse"
         },
         msgDeviceSelect:
         {
             title: "Achtung",
             btn01: "OK",
-            msg: "Bitte wählen Sie eine Kasse aus!"
+            msg: "Bitte wählen Sie Tresor/Kasse aus!"
         },
     },
-    pos_02_008: // "Produktverkaufsbericht",
+    pos_02_008: // "Artikelverkaufsbericht",
     {
-        txtRef: "Produkt",
+        txtRef: "Artikel",
         cmbCustomer: "Kunde",
         btnGet: "Abrufen",
         dtFirst: "Erstes Datum",
@@ -14807,14 +14807,14 @@ export const langDe =
         numFirstTicketAmount: "Unterer Betrag",
         numLastTicketAmount: "Oberer Betrag",
         cmbUser: "Benutzer",
-        txtItem: "Produktcode",
+        txtItem: "Artikelcode",
         ckhDoublePay: "Mehrere Zahlungen",
         cmbType: "Beschreibungstyp",
         dtDate: "Datum",
         txtTotal: "Gesamtverkauf",
         grdItemSaleReport:
         {
-            itemName: "Produktname",
+            itemName: "Artikelname",
             clmFirstDate: "Erstes Datum",
             clmLastDate: "Letztes Datum",
             clmQuantity: "Menge",
@@ -14826,20 +14826,20 @@ export const langDe =
         },
         pg_txtRef:
         {
-            title: "Produktauswahl",
+            title: "Artikelauswahl",
             clmCode: "CODE",
             clmName: "NAME",
             clmStatus: "STATUS"
         },
-        cancel: "Abbrechen",
+        Abbrechen: "Abbrechen",
         msgItemSelect:
         {
             title: "Achtung",
             btn01: "OK",
-            msg: "Bitte wählen Sie ein Produkt aus!"
+            msg: "Bitte wählen Sie ein Artikel aus!"
         },
     },
-    pos_02_009: // "Produktgruppenbericht"
+    pos_02_009: // "Artikelgruppenbericht"
     {
         btnGet: "Abrufen",
         txtAmount: "Gesamtbetrag",
@@ -14853,8 +14853,8 @@ export const langDe =
         chkTicket: "Berechne Beleganzahl pro Gruppe",
         grdGroupSalesReport:
         {
-            clmGrpCode: "Produktgruppencode",
-            clmGrpName: "Produktgruppenname",
+            clmGrpCode: "Artikelgruppencode",
+            clmGrpName: "Artikelgruppenname",
             clmTicket: "Belege",
             clmTotalCost: "Gesamtkosten",
             clmFamount: "Betrag ohne Steuern",
@@ -14864,8 +14864,8 @@ export const langDe =
         },
         grpGrpDetail:
         {
-            clmCode: "Produktcode",
-            clmName: "Produktname",
+            clmCode: "Artikelcode",
+            clmName: "Artikelname",
             clmQuantity: "Menge",
             clmTotalCost: "Gesamtkosten",
             clmFamount: "Betrag ohne Steuern",
@@ -14882,7 +14882,7 @@ export const langDe =
             title: "Verkaufsdiagramm"
         },
     },
-    pos_02_010: // "Detaillierter Produktverkaufsbericht"
+    pos_02_010: // "Detaillierter Artikelverkaufsbericht"
     {
         btnGet: "Abrufen",
         grdListe:
@@ -14895,15 +14895,15 @@ export const langDe =
             clmTotal: "Gesamt",
         },
     },
-    pos_02_011: // "Detaillierter Produktverkaufsbericht"
+    pos_02_011: // "Detaillierter Artikelverkaufsbericht"
     {
         btnGet: "Abrufen",
         dtDate: "Datum",
-        txtRef: "Produkt",
+        txtRef: "Artikel",
         grdListe:
         {
-            clmCode: "Produktcode",
-            clmName: "Produktname",
+            clmCode: "Artikelcode",
+            clmName: "Artikelname",
             clmTotalCost: "Gesamtkosten",
             clmFamount: "Betrag ohne Steuern",
             clmVat: "Steuerbetrag",
@@ -14913,7 +14913,7 @@ export const langDe =
         },
         pg_txtRef:
         {
-            title: "Produktauswahl",
+            title: "Artikelauswahl",
             clmCode: "CODE",
             clmName: "NAME",
             clmStatus: "STATUS"
@@ -14921,12 +14921,12 @@ export const langDe =
     },
     pos_03_001: // "Gün Sonu"
     {
-        TicketId: "Fiş I.D",
-        title: "GÜN SONU İŞLEMİ",
-        start: "Başlangıç",
+        TicketId: "Beleg-ID",
+        title: "Tagesabschluss",
+        start: "Beginn",
         advance: "Vorschuss",
         cash: "Bargeld",
-        debitCard: "Kreditkarte",
+        debitCard: "Kartenzahlungen",
         check: "Scheck",
         ticketRest: "Restaurant-Ticket",
         previous: "Zurück",
@@ -14936,10 +14936,10 @@ export const langDe =
         cmbSafe: "Gerät ID",
         txtAdvance: "Vorschuss",
         txtCash: "Bargeld",
-        txtCreditCard: "Kreditkarte",
+        txtCreditCard: "Kartenzahlungen",
         txtCheck: "Scheck",
         txtRestorant: "Restaurant-Ticket",
-        txtReal: "Echt",
+        txtReal: "Richtig",
         payTransfer: "Betrag übertragen",
         validPriceFloat: "Der Vorschussbetrag muss größer als 0 sein",
         popFinish:
@@ -14981,14 +14981,14 @@ export const langDe =
         {
             title: "Achtung",
             btn01: "OK",
-            msg: "Für diese Kasse wurde bereits ein Vorschuss eingegeben! Bitte bearbeiten Sie ihn in der Tabelle..."
+            msg: "Für diese Kasse wurde bereits ein Vorschuss eingegeben! Bitte bearbeiten Sie ihn in der Tabelle."
         },
         advanceMsg1: "Bitte stellen Sie sicher, dass Ihr Vorschussbetrag",
         advanceMsg2: "beträgt",
         grdSaleTicketItems:
         {
-            clmBarcode: "Strichcode",
-            clmName: "Produktname",
+            clmBarcode: "Barcode",
+            clmName: "Artikelname",
             clmQuantity: "Menge",
             clmPrice: "Preis",
             clmTotal: "Betrag"
@@ -15098,7 +15098,7 @@ export const langDe =
         txtUnitFactor : "Einheitsfaktor",
         txtUnitQuantity : "Einheitsmenge",
         txtTotalQuantity : "Gesamtmenge",
-        txtUnitPrice: "Einzelpreis",
+        txtUnitPrice: "Kundenpreis",
         pg_Docs : 
         {
             title : "Dokumentenauswahl",
@@ -15142,7 +15142,7 @@ export const langDe =
             clmBarcode :"Barcode",
             clmDescription :"Beschreibung",
             clmCuser :"Benutzer",
-            clmVatRate : "MwSt. %"
+            clmVatRate : "MwSt.-Satz %"
         },
         popDiscount : 
         {
@@ -15184,21 +15184,21 @@ export const langDe =
             btn01: "Ok",
             msg: "Die Informationen im Kopfbereich des Dokuments müssen ausgefüllt sein, bevor Artikel hinzugefügt werden können!"
         },
-        msgSave:
+        msgSpeichern:
         {
             title: "Achtung",
             btn01: "Ok",
             btn02: "Abbrechen",
             msg: "Sind Sie sicher, dass Sie speichern möchten?"
         },
-        msgSaveResult:
+        msgSpeichernResult:
         {
             title: "Achtung",
             btn01: "Ok",
             msgSuccess: "Ihr Eintrag wurde erfolgreich gespeichert!",
             msgFailed: "Fehler beim Speichern Ihres Eintrags!"
         },
-        msgSaveValid:
+        msgSpeichernValid:
         {
             title: "Achtung",
             btn01: "Ok",
@@ -15315,7 +15315,7 @@ export const langDe =
             title: "Massenartikel hinzufügen",
             btnApprove: "Artikel abrufen",
             btnClear : "Löschen",
-            btnSave : "Zeilen hinzufügen",
+            btnSpeichern : "Zeilen hinzufügen",
         },
         cmbMultiItemType : 
         {
@@ -15347,12 +15347,12 @@ export const langDe =
         validDepot : "Sie müssen ein Lager auswählen",
         validCustomerCode : "Kundennummer darf nicht leer sein",
         validDocDate : "Sie müssen ein Datum auswählen",
-        tagItemCodePlaceholder: "Bitte geben Sie die gewünschten Codes ein",
+        tagItemCodePlaceholder: "Bitte geben Sie die gewünschten Codes ein.",
         msgQuantity:
         {
             title: "Menge",
             btn01: "Hinzufügen",
-            msg: "Bitte geben Sie eine Menge ein"
+            msg: "Menge eingeben"
         },
         pg_txtBarcode : 
         {
@@ -15360,7 +15360,7 @@ export const langDe =
             clmCode :  "ARTIKELNUMMER",
             clmName : "ARTIKELNAME",
             clmMulticode : "LIEFERANTENNUMMER",
-            clmBarcode : "BARCODE"
+            clmBarcode : "Barcode"
         },
         msgRowNotUpdate:
         {
@@ -15386,10 +15386,10 @@ export const langDe =
             btn01: "Zum Dokument gehen",
             msg: "Dokument gefunden"
         },
-        txtDiscount1 : "Rabattbetrag 1",
-        txtDiscount2 : "Rabattbetrag 2",
-        txtDiscount3 : "Rabattbetrag 3",
-        txtTotalDiscount :"Gesamtrabattbetrag",
+        txtDiscount1 : "1. Rabatt",
+        txtDiscount2 : "2. Rabatt",
+        txtDiscount3 : "3. Rabatt",
+        tTotalDiscount :"Gesamtrabattbetrag",
         msgDiscountPerEntry : 
         {
             title : "Prozentualer Rabatteingabe",
@@ -15400,7 +15400,7 @@ export const langDe =
         txtDiscountPer3 : "Rabattprozent 3",
         txtTotalHt: "Gesamtmenge mit Rabatt",
     },
-    tkf_02_002 : // "Satış Teklifi",
+    tkf_02_002 : // "Satiş Teklifi",
     {
         txtRefRefno: "Reihenfolge",
         cmbDepot: "Lager",
@@ -15412,7 +15412,7 @@ export const langDe =
         txtDocDiscount: "Dokumentenrabatt",
         txtSubTotal: "Zwischensumme",
         txtMargin: "Marge",
-        txtVat: "MwSt",
+        txtVat: "MwSt.",
         txtTotal: "Gesamtsumme",
         dtShipDate: "Lieferdatum",
         txtBarcode: "Barcode hinzufügen",
@@ -15424,7 +15424,7 @@ export const langDe =
         txtUnitPrice: "Stückpreis",
         btnView: "Anzeigen",
         btnMailsend: "E-Mail senden",
-        placeMailHtmlEditor: "Geben Sie eine Beschreibung für Ihre E-Mail ein.",
+        placeMailen: "Text",
         validDesign: "Bitte wählen Sie ein Design aus.",
         validMail: "Bitte füllen Sie dieses Feld aus.",
         pg_Docs: 
@@ -15446,9 +15446,9 @@ export const langDe =
         },
         pg_txtItemsCode: 
         {
-            title: "Produktauswahl",
-            clmCode: "PRODUKTKODE",
-            clmName: "PRODUKTNAME",
+            title: "Artikelauswahl",
+            clmCode: "ArtikelKODE",
+            clmName: "ArtikelNAME",
             clmPrice: "VERKAUFSPREIS"
         },
         grdSlsOffer: 
@@ -15459,7 +15459,7 @@ export const langDe =
             clmQuantity: "Anzahl",
             clmDiscount: "Rabatt",
             clmDiscountRate: "Rabatt %",
-            clmVat: "MwSt",
+            clmVat: "MwSt.",
             clmAmount: "Betrag",
             clmTotal: "Gesamtsumme",
             clmTotalHt: "Nettogesamtsumme",
@@ -15468,7 +15468,7 @@ export const langDe =
             clmDescription: "Beschreibung",
             clmCuser: "Benutzer",
             clmBarcode: "Barcode",
-            clmVatRate: "MwSt %"
+            clmVatRate: "MwSt.-Satz %"
         },
         popDiscount: 
         {
@@ -15504,21 +15504,21 @@ export const langDe =
             btn01: "Ok",
             msg: "Es können keine Artikel eingegeben werden, solange die Dokumentkopfdaten nicht vollständig sind!"
         },
-        msgSave: 
+        msgSpeichern: 
         {
             title: "Achtung",
             btn01: "Ok",
             btn02: "Abbrechen",
             msg: "Sind Sie sicher, dass Sie speichern möchten?"
         },
-        msgSaveResult: 
+        msgSpeichernResult: 
         {
             title: "Achtung",
             btn01: "Ok",
             msgSuccess: "Ihr Speichervorgang war erfolgreich!",
             msgFailed: "Ihr Speichervorgang ist fehlgeschlagen!"
         },
-        msgSaveValid: 
+        msgSpeichernValid: 
         {
             title: "Achtung",
             btn01: "Ok",
@@ -15609,13 +15609,13 @@ export const langDe =
             title: "Achtung",
             btn01: "Ok",
             btn02: "Abbrechen",
-            msg: "Sie verkaufen unterhalb des Kostenpreises!"
+            msg: "Sie verkaufen unterhalb des Einkaufspreises!"
         },
         msgUnderPrice2: 
         {
             title: "Achtung",
             btn01: "Ok",
-            msg: "Der Verkaufspreis darf nicht unter dem Kostenpreis liegen!"
+            msg: "Der Verkaufspreis darf nicht unter dem Einkaufspreis liegen!"
         },
         msgCombineItem: 
         {
@@ -15647,7 +15647,7 @@ export const langDe =
             title: "Massenartikel hinzufügen",
             btnApprove: "Artikel abrufen",
             btnClear: "Löschen",
-            btnSave: "Zeilen hinzufügen",
+            btnSpeichern: "Zeilen hinzufügen",
         },
         cmbMultiItemType: 
         {
@@ -15692,7 +15692,7 @@ export const langDe =
         {
             title: "Menge",
             btn01: "Hinzufügen",
-            msg: "Bitte geben Sie eine Menge ein"
+            msg: "Menge eingeben"
         },
         pg_txtBarcode : 
         {
@@ -15700,24 +15700,24 @@ export const langDe =
             clmCode :  "ARTIKELCODE",
             clmName : "ARTIKELNAME",
             clmMulticode : "LIEFERANTENCODE",
-            clmBarcode : "BARCODE"
+            clmBarcode : "Barcode"
         },
         msgRowNotUpdate:
         {
             title: "Achtung",   
-            btn01: "Okay",   
+            btn01: "OK",   
             msg: "Diese Zeile wurde in eine Bestellung umgewandelt. Sie können keine Änderungen vornehmen!"   
         },  
         msgRowNotDelete :
         {
             title: "Achtung",  
-            btn01: "Okay",  
+            btn01: "OK",  
             msg: "Diese Zeile wurde in eine Bestellung umgewandelt. Sie können sie nicht löschen!"  
         },
         msgdocNotDelete : 
         {
             title: "Achtung",   
-            btn01: "Okay",   
+            btn01: "OK",   
             msg: "In Ihrem Dokument gibt es umgewandelte Bestellzeilen. Dieses Dokument kann nicht gelöscht werden!"   
         },
         msgCode :
@@ -15736,14 +15736,14 @@ export const langDe =
         msgMailSendResult:
         {
             title: "Achtung",
-            btn01: "Okay",
+            btn01: "OK",
             msgSuccess: "E-Mail erfolgreich gesendet!",
             msgFailed: "E-Mail konnte nicht gesendet werden!"
         },
-        txtDiscount1 : "Rabattbetrag 1",
-        txtDiscount2 : "Rabattbetrag 2",
-        txtDiscount3 : "Rabattbetrag 3",
-        txtTotalDiscount :"Gesamtrabattbetrag",
+        txtDiscount1 : "1. ",
+        txtDiscount2 : "2. ",
+        txtDiscount3 : "3. ",
+        tTotalDiscount :"Gesamtrabattbetrag",
         msgDiscountPerEntry : 
         {
             title : "Prozentualer Rabatteingabe",
@@ -15764,32 +15764,32 @@ export const langDe =
     },
     proces_01_001 : // "Ürün Grubu Güncelleme"
     {
-        txtItemName : "Produktname",
+        txtItemName : "Artikelname",
         txtBarkod : "Barcode",
         cmbCustomer : "Lieferant",
-        cmbMainGrp : "Produktgruppe",
+        cmbMainGrp : "Artikelgruppe",
         btnCheck : "Aktivieren",
         btnGet :"Abrufen",
         chkMasterBarcode : "Barcodes zusammenführen",
         txtMulticode : "Lieferantenkode",
         multicodePlaceHolder : "Geben Sie die Lieferantenkodes ein, nach denen Sie suchen möchten",
-        barkodPlaceHolder :"Geben Sie einen oder mehrere Produktcodes oder Barcodes ein, nach denen Sie suchen möchten",
-        ItemNamePlaceHolder :"Geben Sie den vollständigen Produktnamen oder einen Teil davon ein",
+        barkodPlaceHolder :"Geben Sie einen oder mehrere Artikelcodes oder Barcodes ein, nach denen Sie suchen möchten",
+        ItemNamePlaceHolder :"Geben Sie den vollständigen Artikelnamen oder einen Teil davon ein",
         btnOk : "Aktualisieren",
-        toolMenu01: "Bestandsdefinitionen",
+        toolMenu01: "Artikeldefinitionen",
         grdListe : 
         {
-            clmCode: "Produktcode",
-            clmName : "Produktname",
-            clmMainGrp : "Produktgruppe",
+            clmCode: "Artikelcode",
+            clmName : "Artikelname",
+            clmMainGrp : "Artikelgruppe",
             clmCustomer : "Kunde",
-            clmSname : "Produktkurzname",
+            clmSname : "Artikelkurzname",
             clmMulticode : "L.Kode",
             clmUnit : "Einheit",
             clmBarcode : "Barcode",
-            clmCostPrice : "Kostenpreis",
+            clmCostPrice : "Einkaufspreis",
             clmPriceSale : "Verkaufspreis",
-            clmVat : "Steuer",
+            clmVat : "MwSt.",
             clmMinPrice : "Min Preis",
             clmMaxPrice : "Max Preis",
             clmStatus : "Status",
@@ -15799,18 +15799,18 @@ export const langDe =
         msgWarning : 
         {
             title : "Achtung",
-            msg: "Die Produktgruppen der ausgewählten Produkte werden geändert. Sind Sie damit einverstanden?",
+            msg: "Die Artikelgruppen der ausgewählten Artikel werden geändert. Sind Sie damit einverstanden?",
             btn01 : "Abbrechen",
             btn02 : "Bestätigen"
         },
-        msgSave:
+        msgSpeichern:
         {
             title: "Achtung",
             btn01: "OK",
             btn02: "Abbrechen",
             msg: "Sind Sie sicher, dass Sie speichern möchten!"
         },
-        msgSaveResult:
+        msgSpeichernResult:
         {
             title: "Achtung",
             btn01: "OK",
@@ -15824,33 +15824,33 @@ export const langDe =
         txtRef: "Referenz",
         txtPrice : "Preis",
         txtDescription : "Beschreibung",
-        txtItemName : "Produktname",
+        txtItemName : "Artikelname",
         txtQuantity : "Menge",
         valPrice : "Preis darf nicht kleiner als 0 sein",
         valCode : "Bitte geben Sie den Bestand ein",
-        valName : "Produktname darf nicht leer sein",
+        valName : "Artikelname darf nicht leer sein",
         pg_txtRef:
         {
-            title: "Bestandsauswahl",
+            title: "Artikelauswahl",
             clmCode: "KODE",
             clmName: "NAME", 
             clmPrice: "PREIS"
         },
-        msgSave:
+        msgSpeichern:
         {
             title: "Achtung",
             btn01: "OK",
             btn02: "Abbrechen",
             msg: "Sind Sie sicher, dass Sie speichern möchten!"
         },
-        msgSaveResult:
+        msgSpeichernResult:
         {
             title: "Achtung",
             btn01: "OK",
             msgSuccess: "Ihr Speichervorgang war erfolgreich!",
             msgFailed: "Ihr Speichervorgang ist fehlgeschlagen!"
         },
-        msgSaveValid:
+        msgSpeichernValid:
         {
             title: "Achtung",
             btn01: "OK",
@@ -15866,7 +15866,7 @@ export const langDe =
         {
             title: "Achtung",
             btn01: "OK",
-            msg: "Produktname ist zu lang. Bitte korrigieren Sie ihn und speichern Sie erneut!"
+            msg: "Artikelname ist zu lang. Bitte korrigieren Sie ihn und speichern Sie erneut!"
         },
     },
     pos_02_003 : // "POS-Verkaufsbericht"
@@ -15880,7 +15880,7 @@ export const langDe =
         mailSubject : "Betreff",
         mailSubjectPlace: "Geben Sie bitte den Betreff der Support-Mail ein",
         btnApprove : "Senden",
-        msgSaveResult:
+        msgSpeichernResult:
         {
             title: "Achtung",
             btn01: "OK",
@@ -15905,7 +15905,7 @@ export const langDe =
         txtPopSubject : "Betreff",
         txtPopProcess : "Durchgeführte Aktion",
         btnApprove : "Speichern",
-        btnCancel : "Schließen",
+        btnAbbrechen : "Schließen",
         txtPopUser : "Erstellender Benutzer"
     },
     slsRpt_01_001 : // "Ürün Grubu Raporu"
@@ -15924,7 +15924,7 @@ export const langDe =
             clmCollection : "Zahlungseingang",
         },
     },
-    slsRpt_01_002 : // "Produktgruppenbericht"
+    slsRpt_01_002 : // "Artikelgruppenbericht"
     {
         btnGet :"Abrufen",
         txtAmount : "Gesamtbetrag",
@@ -15937,8 +15937,8 @@ export const langDe =
         btnGetAnalysis : "Grafische Ansicht",
         grdGroupSalesReport: 
         {
-            clmGrpCode : "Produktgruppencode",
-            clmGrpName: "Produktgruppenname",
+            clmGrpCode : "Artikelgruppencode",
+            clmGrpName: "Artikelgruppenname",
             clmTotalCost: "Gesamtkosten",
             clmFamount : "Betrag ohne Steuer",
             clmVat : "Steuerbetrag",
@@ -15947,8 +15947,8 @@ export const langDe =
         },
         grpGrpDetail : 
         {
-            clmCode : "Produktcode",
-            clmName : "Produktname",
+            clmCode : "Artikelcode",
+            clmName : "Artikelname",
             clmQuantity : "Menge",
             clmTotalCost :"Gesamtkosten",
             clmFamount :"Betrag ohne Steuer",
@@ -16001,7 +16001,7 @@ export const langDe =
     slsRpt_01_005 : // "Verkaufsbericht nach Datum sortiert"
     {
         chkZeroBalance : "0 Salden angezeigt",
-        txtItemCode : "Produktauswahl",
+        txtItemCode : "Artikelauswahl",
         btnGet :"Abrufen",
         grdListe : 
         {
@@ -16026,8 +16026,8 @@ export const langDe =
         btnGet :"Abrufen", 
         grdListe : 
         {
-            clmCode : "Bestandscode",  
-            clmName: "Bestandsname",  
+            clmCode : "Artikelcode",  
+            clmName: "Artikelname",  
             clmDispatch : "Liefermenge",             
             clmInvoice : "Rechnungsmenge",  
             clmRebate : "Rückgabemenge"  
@@ -16045,7 +16045,7 @@ export const langDe =
     slsRpt_01_007 : // "Rückgaberechnungsbericht"
     {
         chkZeroBalance : "0 Salden angezeigt",
-        txtItemCode : "Produktauswahl",
+        txtItemCode : "Artikelauswahl",
         btnGet :"Abrufen",
         grdListe : 
         {
@@ -16067,7 +16067,7 @@ export const langDe =
         },
         validCode : "Bitte wählen Sie einen Bestand aus"
     },
-    slsRpt_01_008 : // "Detaillierter Verkaufsbericht nach Produkt"
+    slsRpt_01_008 : // "Detaillierter Verkaufsbericht nach Artikel"
     {
         btnGet :"Abrufen",
         grdListe :
@@ -16134,7 +16134,7 @@ export const langDe =
             clmLitre : "Liter pro Einheit"
         },
     },
-    slsRpt_02_004 : // "Detaillierter Verkaufsbericht nach Produkt"
+    slsRpt_02_004 : // "Detaillierter Verkaufsbericht nach Artikel"
     {
         btnGet :"Abrufen",
         grdListe :

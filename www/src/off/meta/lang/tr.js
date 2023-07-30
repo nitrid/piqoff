@@ -9546,6 +9546,9 @@ export const langTr =
             clmBarcode: "Barcodu",
             clmCode: "Kodu",
             clmName: "Adi", 
+            clmItem : "Ürün",
+            clmStartDate : "Başlangıç",
+            clmFinishDate : "Bitiş",
             clmGrpName: "Grubu", 
             clmPrice : "Fiyat",
             btnItem: "Promosyon Uygulanacak Ürün yada Ürünleri Seç"
@@ -16150,7 +16153,7 @@ export const langTr =
             clmOutputCode : "Teadrikçi Kodu",
             clmOutputName : "Tedarikçi Adı",
             clmQuantity : "Miktar",   
-            clmCode: "Kodu",   
+            clmCode: "Ürün Kodu",   
             clmName : "Adı",              
             clmAmount : "Vergi Tutarı",   
             clmLitre : "Birim Litre"

@@ -902,9 +902,9 @@ export default class purchaseInvoice extends React.PureComponent
                 this.docObj.docItems.dt()[pIndex].DISCOUNT_1 = this.docObj.docItems.dt()[pIndex].DISCOUNT
             }
 
-            this.docObj.docItems.dt()[pIndex].VAT = parseFloat((((pPrice * pQuantity) - this.docObj.docItems.dt()[pIndex].DISCOUNT) * (this.docObj.docItems.dt()[pIndex].VAT_RATE / 100) ).toFixed(6))
-            this.docObj.docItems.dt()[pIndex].AMOUNT = parseFloat((pPrice  * pQuantity)).round(2)
             this.docObj.docItems.dt()[pIndex].TOTALHT = Number(((pPrice  * pQuantity) - this.docObj.docItems.dt()[pIndex].DISCOUNT)).round(2)
+            this.docObj.docItems.dt()[pIndex].VAT = parseFloat((this.docObj.docItems.dt()[pIndex].TOTALHT * (this.docObj.docItems.dt()[pIndex].VAT_RATE / 100) ).toFixed(6))
+            this.docObj.docItems.dt()[pIndex].AMOUNT = parseFloat((pPrice  * pQuantity)).round(2)
             this.docObj.docItems.dt()[pIndex].TOTAL = Number((this.docObj.docItems.dt()[pIndex].TOTALHT + this.docObj.docItems.dt()[pIndex].VAT)).round(2)
             this._calculateTotal()
         }
