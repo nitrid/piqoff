@@ -78,6 +78,7 @@ export const menu = (e) =>
                     id: 'dep_01',
                     text : e.t('menu.dep_01'), //'Depolar Arası Sevk'
                     icon : "fa-dolly",
+                    path: "depot/depotTransfer.js"
                 },
                 {
                     id: 'dep_02',
