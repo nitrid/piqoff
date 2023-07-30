@@ -393,11 +393,7 @@ export const langTr =
         title :"Bilgi",
         msg :"Kayıt İşlemi Başarılı..",
         btn01 : "Tamam",
-    },
-    popSettings: 
-    {
-        title :"Ayarlar"
-    },
+    },    
     popDiscount :
     {
         title :"İskonto",
@@ -754,11 +750,13 @@ export const langTr =
         btn02 : "Hayır"
     },
     popSettings: 
-    {
+    {     
+        title :"Ayarlar",   
         lcdPort : "LCD port",
         scalePort : "Scale port",
         payCardPort : "Pay card port",
-        printDesing : "Yazdırma dizaynı"
+        printDesing : "Yazdırma dizaynı",
+        scannerPort : "Scanner port"
     },
     msgConnectOut: 
     {

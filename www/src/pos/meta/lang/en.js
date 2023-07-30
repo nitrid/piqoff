@@ -393,11 +393,7 @@ export const langEn =
         title :"Information",
         msg :"Record saved successfully",
         btn01 : "OK",
-    },
-    popSettings: 
-    {
-        title :"Settings"
-    },
+    },    
     popDiscount:
     {
         title: "Discounted",
@@ -755,10 +751,12 @@ export const langEn =
     },
     popSettings:
     {
+        title :"Settings",
         lcdPort: "Display Port",
         scalePort: "Scale Port",
         payCardPort: "Card Payment Terminal Port",
-        printDesing: "Printer Design"
+        printDesing: "Printer Design",
+        scannerPort : "Scanner port"
     },
     msgConnectOut:
     {

@@ -393,11 +393,7 @@ export const langDe =
         title: "Information",
         msg: "Speichern erfolgreich.",
         btn01: "OK",
-    },
-    popSettings: 
-    {
-        title: "Einstellungen"
-    },
+    },    
     popDiscount:
     {
         title: "Rabatt"
@@ -755,10 +751,12 @@ export const langDe =
     },
     popSettings: 
     {
+        title: "Einstellungen",
         lcdPort: "LCD-Anschluss",
         scalePort: "Waagen-Anschluss",
         payCardPort: "PayCard-Anschluss",
-        printDesing: "Druckdesign"
+        printDesing: "Druckdesign",
+        scannerPort : "Scanner port"
     },
     msgConnectOut: 
     {

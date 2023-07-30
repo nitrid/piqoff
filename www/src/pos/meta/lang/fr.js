@@ -393,11 +393,7 @@ export const langFr =
         title :"Information",
         msg :"Enregistrement effectué avec succès ",
         btn01 : "OK",
-    },
-    popSettings: 
-    {
-        title :"Réglage"
-    },
+    },    
     popDiscount :
     {
         title :"Remisé",
@@ -755,10 +751,12 @@ export const langFr =
     },
     popSettings: 
     {
+        title :"Réglage",
         lcdPort : "Afficheur display port",
         scalePort : "Balance port",
         payCardPort : "TPE port",
-        printDesing : "Design d’imprimante"
+        printDesing : "Design d’imprimante",
+        scannerPort : "Scanner port"
     },
     msgConnectOut: 
     {

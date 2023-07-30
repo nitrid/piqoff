@@ -129,13 +129,17 @@ export default class posDoc extends React.PureComponent
         })
 
         this.init();
-
+        
         this.core.socket.on('connect',async () => 
-        {               
+        {   
             if(!this.state.isConnected)
             {
-                this.sendJet({CODE:"120",NAME:"Le système est online"}) ///Kasa offline dan online a döndü.
+                this.sendJet({CODE:"120",NAME:"Le système est online"}) ///Kasa offline dan online a döndü.                
 
+                await this.transferLocal();
+
+                this.sendJet({CODE:"123",NAME:"Les saisies ont été enregistrés dans la base suite à online."}) ////Eldeki kayıtlar online a gönderildi.
+                
                 let tmpConfObj =
                 {
                     id:'msgOnlineAlert',showTitle:true,title:this.lang.t("msgOnlineAlert.title"),showCloseButton:true,width:'650px',height:'220px',
@@ -153,10 +157,6 @@ export default class posDoc extends React.PureComponent
                 }
                 await dialog(tmpConfObj);
 
-                await this.transferLocal();
-
-                this.sendJet({CODE:"123",NAME:"Les saisies ont été enregistrés dans la base suite à online."}) ////Eldeki kayıtlar online a gönderildi.
-                
                 window.location.reload()
             }
             this.setState({isConnected:true})            
@@ -168,7 +168,6 @@ export default class posDoc extends React.PureComponent
         });
         this.core.socket.on('disconnect',async () => 
         {
-
             this.setState({isConnected:false})
             // let tmpConfObj12 =
             // {
@@ -178,24 +177,7 @@ export default class posDoc extends React.PureComponent
             // }
             // await dialog(tmpConfObj12)
             // this.core.auth.logout()
-            // window.location.reload()
-            
-            let tmpConfObj =
-            {
-                id:'msgOfflineAlert',showTitle:true,title:this.lang.t("msgOfflineAlert.title"),showCloseButton:true,width:'650px',height:'220px',
-                button:[{id:"btn01",caption:this.lang.t("msgOfflineAlert.btn01"),location:'after'}],
-                content:(
-                    <div>
-                        <div className="row">
-                            <div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgOfflineAlert.msg1")}</div>
-                        </div>
-                        <div className="row">
-                            <div style={{textAlign:"center",fontSize:"20px",fontWeight:"bold",color:"red"}}>{this.lang.t("msgOfflineAlert.msg2")}</div>
-                        </div>
-                    </div>
-                )
-            }
-            await dialog(tmpConfObj);
+            // window.location.reload()            
 
             //OFFLINE MODA DÖNDÜĞÜNDE EĞER EKRANDA KAYITLAR VARSA LOCAL DB YE GÖNDERİLİYOR
             for (let i = 0; i < this.posObj.dt("POS").length; i++) 
@@ -259,7 +241,7 @@ export default class posDoc extends React.PureComponent
             for (let i = 0; i < this.cheqDt.length; i++) 
             {
                 let tmpCtrl = await this.core.local.select({query:`SELECT * FROM CHEQPAY_VW_01 WHERE GUID = '${this.cheqDt[i].GUID}'`})
-                console.log(this.cheqDt)
+                
                 this.cheqDt.insertCmd = 
                 {
                     local : 
@@ -318,6 +300,24 @@ export default class posDoc extends React.PureComponent
                 }
             }
             await this.cheqDt.update()
+
+            let tmpConfObj =
+            {
+                id:'msgOfflineAlert',showTitle:true,title:this.lang.t("msgOfflineAlert.title"),showCloseButton:true,width:'650px',height:'220px',
+                button:[{id:"btn01",caption:this.lang.t("msgOfflineAlert.btn01"),location:'after'}],
+                content:(
+                    <div>
+                        <div className="row">
+                            <div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgOfflineAlert.msg1")}</div>
+                        </div>
+                        <div className="row">
+                            <div style={{textAlign:"center",fontSize:"20px",fontWeight:"bold",color:"red"}}>{this.lang.t("msgOfflineAlert.msg2")}</div>
+                        </div>
+                    </div>
+                )
+            }
+            await dialog(tmpConfObj);
+
             setTimeout(()=>{window.location.reload()},500)
             //*************************************************************************** */
         })
@@ -326,7 +326,7 @@ export default class posDoc extends React.PureComponent
         this.sendJet({CODE:"120",NAME:"Le système est offline."}) ///Kasa offline dan online a döndü.        
     }
     async init()
-    {
+    {                
         setInterval(()=>
         {
             this.lblTime.value = moment(new Date(),"HH:mm:ss").format("HH:mm:ss")
@@ -515,7 +515,7 @@ export default class posDoc extends React.PureComponent
                 await this.getDoc(this.parkDt[i].GUID)                 
                 return
             }
-        }        
+        }             
     }
     async deviceEntry()
     {
@@ -1659,7 +1659,6 @@ export default class posDoc extends React.PureComponent
                     }
                     else
                     {
-                        console.log(11)
                         //POS_EXTRA TABLOSUNA YAZDIRMA BİLDİRİMİ GÖNDERİLİYOR                    
                         let tmpInsertQuery = 
                         {
@@ -1681,12 +1680,9 @@ export default class posDoc extends React.PureComponent
                                 values : [datatable.uuidv4(),this.posObj.dt()[0].CUSER,"REPRINT",this.posObj.dt()[0].GUID,"00000000-0000-0000-0000-000000000000","",this.core.appInfo.version,""]
                             }
                         }
-                        console.log(12)
                         await this.core.sql.execute(tmpInsertQuery)
                         //***************************************************/
-                        console.log(13)
                         await this.print(tmpData,0)
-                        console.log(14)
                     }
                     //***************************************************/
                     //TICKET REST. ALDIĞINDA KASA AÇMA İŞLEMİ 
@@ -2974,6 +2970,7 @@ export default class posDoc extends React.PureComponent
                                         this.txtPopSettingsScale.value = this.posDevice.dt()[0].SCALE_PORT
                                         this.txtPopSettingsPayCard.value = this.posDevice.dt()[0].PAY_CARD_PORT
                                         this.txtPopSettingsPrint.value = this.posDevice.dt()[0].PRINT_DESING
+                                        this.txtPopSettingsScanner.value = this.posDevice.dt()[0].SCANNER_PORT
                                     }
                                     this.keyPopSettings.clearInput();
                                     this.popSettings.show();
@@ -7009,7 +7006,7 @@ export default class posDoc extends React.PureComponent
                     title={this.lang.t("popSettings.title")}
                     container={"#root"} 
                     width={"600"}
-                    height={"520"}
+                    height={"580"}
                     position={{of:"#root"}}
                     >
                         <Form colCount={2} height={'fit-content'} id={"frmSettings"}>
@@ -7069,6 +7066,20 @@ export default class posDoc extends React.PureComponent
                                     this.keyPopSettings.setInput(this.txtPopSettingsPrint.value)
                                 }}/>
                             </Item>
+                            <Item>
+                                <Label text={this.lang.t("popSettings.scannerPort")} alignment="right" />
+                                <NdTextBox id={"txtPopSettingsScanner"} parent={this} simple={true} valueChangeEvent="keyup" 
+                                onValueChanging={(e)=>
+                                {
+                                    this.keyPopSettings.setCaretPosition(e.length)
+                                    this.keyPopSettings.setInput(e)
+                                }}
+                                onFocusIn={()=>
+                                {
+                                    this.keyPopSettings.inputName = "txtPopSettingsScanner"
+                                    this.keyPopSettings.setInput(this.txtPopSettingsScanner.value)
+                                }}/>
+                            </Item>
                         </Form>
                         <div className="row py-1">
                             <div className="col-12">
@@ -7086,6 +7097,7 @@ export default class posDoc extends React.PureComponent
                                         this.posDevice.dt()[0].SCALE_PORT = this.txtPopSettingsScale.value
                                         this.posDevice.dt()[0].PAY_CARD_PORT = this.txtPopSettingsPayCard.value
                                         this.posDevice.dt()[0].PRINT_DESING = this.txtPopSettingsPrint.value
+                                        this.posDevice.dt()[0].SCANNER_PORT = this.txtPopSettingsScanner.value
                                     }
                                     else
                                     {
@@ -7096,6 +7108,7 @@ export default class posDoc extends React.PureComponent
                                         this.posDevice.dt()[0].SCALE_PORT = this.txtPopSettingsScale.value
                                         this.posDevice.dt()[0].PAY_CARD_PORT = this.txtPopSettingsPayCard.value
                                         this.posDevice.dt()[0].PRINT_DESING = this.txtPopSettingsPrint.value
+                                        this.posDevice.dt()[0].SCANNER_PORT = this.txtPopSettingsScanner.value
                                     }                                
                                     await this.posDevice.save()
                                     this.popSettings.hide()

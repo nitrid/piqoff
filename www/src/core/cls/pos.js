@@ -1152,6 +1152,7 @@ export class posDeviceCls
             SCALE_PORT : '',
             PAY_CARD_PORT : '',
             PRINT_DESING : '',
+            SCANNER_PORT : '',
         }
         this.listeners = Object();
         this.payPort = null;
@@ -1204,25 +1205,43 @@ export class posDeviceCls
                     "@LCD_PORT = @PLCD_PORT, " +
                     "@SCALE_PORT = @PSCALE_PORT, " +
                     "@PAY_CARD_PORT = @PPAY_CARD_PORT, " +
-                    "@PRINT_DESING = @PPRINT_DESING " ,
-                   
-            param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|50','PNAME:string|50','PLCD_PORT:string|50','PSCALE_PORT:string|50','PPAY_CARD_PORT:string|50','PPRINT_DESING:string|50'],
-            dataprm : ['GUID','CUSER','CODE','NAME','LCD_PORT','SCALE_PORT','PAY_CARD_PORT','PRINT_DESING']
+                    "@PRINT_DESING = @PPRINT_DESING, " +
+                    "@SCANNER_PORT = @PSCANNER_PORT " ,                   
+            param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|50','PNAME:string|50','PLCD_PORT:string|50','PSCALE_PORT:string|50','PPAY_CARD_PORT:string|50','PPRINT_DESING:string|50','PSCANNER_PORT:string|50'],
+            dataprm : ['GUID','CUSER','CODE','NAME','LCD_PORT','SCALE_PORT','PAY_CARD_PORT','PRINT_DESING','SCANNER_PORT'],
+            local : 
+            {
+                type : "insert",
+                query : `INSERT INTO POS_DEVICE_VW_01 (GUID, CDATE, CUSER, LDATE, LUSER, CODE, NAME, LCD_PORT, SCALE_PORT, PAY_CARD_PORT, SCANNER_PORT, PRINT_DESING)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
+                values : [{GUID : {map:'GUID'},CDATE : moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),CUSER : {map:'CUSER'},LDATE : moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
+                        LUSER : {map:'LUSER'},CODE : {map:'CODE'},NAME : {map:'NAME'},LCD_PORT : {map:'LCD_PORT'},SCALE_PORT : {map:'SCALE_PORT'},PAY_CARD_PORT : {map:'PAY_CARD_PORT'},
+                        SCANNER_PORT : {map:'SCANNER_PORT'},PRINT_DESING : {map:'PRINT_DESING'}}]
+            }
         } 
         tmpDt.updateCmd = 
         {
             query : "EXEC [dbo].[PRD_POS_DEVICE_UPDATE] " + 
-            "@GUID = @PGUID, " +
-            "@CUSER = @PCUSER, " + 
-            "@CODE = @PCODE, " + 
-            "@NAME = @PNAME, " + 
-            "@LCD_PORT = @PLCD_PORT, " +
-            "@SCALE_PORT = @PSCALE_PORT, " +
-            "@PAY_CARD_PORT = @PPAY_CARD_PORT, " +
-            "@PRINT_DESING = @PPRINT_DESING " ,
-           
-            param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|50','PNAME:string|50','PLCD_PORT:string|50','PSCALE_PORT:string|50','PPAY_CARD_PORT:string|50','PPRINT_DESING:string|50'],
-            dataprm : ['GUID','CUSER','CODE','NAME','LCD_PORT','SCALE_PORT','PAY_CARD_PORT','PRINT_DESING']
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " + 
+                    "@CODE = @PCODE, " + 
+                    "@NAME = @PNAME, " + 
+                    "@LCD_PORT = @PLCD_PORT, " +
+                    "@SCALE_PORT = @PSCALE_PORT, " +
+                    "@PAY_CARD_PORT = @PPAY_CARD_PORT, " +
+                    "@PRINT_DESING = @PPRINT_DESING, " +
+                    "@SCANNER_PORT = @PSCANNER_PORT " ,
+            param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|50','PNAME:string|50','PLCD_PORT:string|50','PSCALE_PORT:string|50','PPAY_CARD_PORT:string|50','PPRINT_DESING:string|50','PSCANNER_PORT:string|50'],
+            dataprm : ['GUID','CUSER','CODE','NAME','LCD_PORT','SCALE_PORT','PAY_CARD_PORT','PRINT_DESING','SCANNER_PORT'],
+            local : 
+            {
+                type : "update",
+                query : `UPDATE POS_DEVICE_VW_01 
+                        SET CDATE = ?, CUSER = ?, LDATE = ?, LUSER = ?, CODE = ?, NAME = ?, LCD_PORT = ?, SCALE_PORT = ?, PAY_CARD_PORT = ?, SCANNER_PORT = ?, PRINT_DESING = ? WHERE GUID = ?;`,
+                values : [{CDATE : moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),CUSER : {map:'CUSER'},LDATE : moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),LUSER : {map:'LUSER'},
+                        CODE : {map:'CODE'},NAME : {map:'NAME'},LCD_PORT : {map:'LCD_PORT'},SCALE_PORT : {map:'SCALE_PORT'},PAY_CARD_PORT : {map:'PAY_CARD_PORT'},SCANNER_PORT : {map:'SCANNER_PORT'},
+                        PRINT_DESING : {map:'PRINT_DESING'},GUID : {map:'GUID'}}]
+            }
         } 
         tmpDt.deleteCmd = 
         {
@@ -1231,7 +1250,7 @@ export class posDeviceCls
                     "@UPDATE = 1, " + 
                     "@GUID = @PGUID ",
             param : ['PCUSER:string|25','PGUID:string|50'],
-            dataprm : ['CUSER','GUID']
+            dataprm : ['CUSER','GUID'],
         }
 
         this.ds.add(tmpDt);
