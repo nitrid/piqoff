@@ -30,11 +30,14 @@ export const langTr =
     abtNrCertificate : "Sertifika No : B_0527-1",
     abtLicence : "Lisans : XXXXXXXXXXXXXXXXX",
     abtVersion : "Versiyon : ",
+    abtPiqsoft : "Logiciel : Piqsoft-POS",
     blnAbtCompany : "Şirket : Piqsoft SAS",
     blnAbtType : "Tip : Piqsoft - Pos",
     blnAbtSw : "S/W : Scale.js",
     blnAbtCertificate : "Sertifika No : ",
     pleaseWait : "Lütfen Bekleyin...",
+    qunatity : "Miktar",
+    price : "Fiyat",
     msgCustomerNotFound : 
     {
         title : "Dikkat",
@@ -45,6 +48,12 @@ export const langTr =
     {
         title : "Uyarı",
         msg : "Miktar sıfır giremezsiniz !",
+        btn01 : "Tamam",
+    },
+    msgMaxQuantity :
+    {
+        title : "Uyarı",
+        msg : "Miktar 99.999'dan büyük giremezsiniz !",
         btn01 : "Tamam",
     },
     msgPriceNotFound : 
@@ -384,11 +393,7 @@ export const langTr =
         title :"Bilgi",
         msg :"Kayıt İşlemi Başarılı..",
         btn01 : "Tamam",
-    },
-    popSettings: 
-    {
-        title :"Ayarlar"
-    },
+    },    
     popDiscount :
     {
         title :"İskonto",
@@ -745,11 +750,13 @@ export const langTr =
         btn02 : "Hayır"
     },
     popSettings: 
-    {
+    {     
+        title :"Ayarlar",   
         lcdPort : "LCD port",
         scalePort : "Scale port",
         payCardPort : "Pay card port",
-        printDesing : "Yazdırma dizaynı"
+        printDesing : "Yazdırma dizaynı",
+        scannerPort : "Scanner port"
     },
     msgConnectOut: 
     {

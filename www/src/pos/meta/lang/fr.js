@@ -30,11 +30,14 @@ export const langFr =
     abtNrCertificate : "Numéro Certificat : B_0527-1",
     abtLicence : "Licence : XXXXXXXXXXXXXXXXX",
     abtVersion : "Version : ",
+    abtPiqsoft :  "Nom de Tpv : Piqsoft-POS",
     blnAbtCompany : "Société : Piqsoft SAS",
     blnAbtType : " Logiciel à caractère légal  : Scale.js",
     blnAbtSw : "Version : ",
     blnAbtCertificate : "Numéro de certificat : ",
     pleaseWait : "Veuillez patienter...",
+    qunatity : "Qte.",
+    price : "Prix",
     msgCustomerNotFound : 
     {
         title : "Attention",
@@ -46,6 +49,12 @@ export const langFr =
         title : "Attention",
         msg : "Le montant ne peut être 0 !",
         btn01 : "OK",
+    },
+    msgMaxQuantity :
+    {
+        title : "Attention",  // BAK
+        msg : "Vous ne pouvez entrer une quantité supérieure à 99.999 !",  // BAK
+        btn01 : "OK",  // BAK
     },
     msgPriceNotFound : 
     {
@@ -164,7 +173,7 @@ export const langFr =
         btn01 : "OK",
     },
     totalLine : "Nbr Ligne : ",
-    totalQuantity : "Qte Art.:",
+    totalQuantity : "Nbr Art.:",
     loyaltyDiscount : "Remise fidélité :",
     ticketRect : "Ticket Rest. : ",
     amount : "Sous-total :",
@@ -349,7 +358,7 @@ export const langFr =
     {
         title : "Attention",
         msg :" Veuillez attendre une réponse de la balance",
-        btn01 : " Somme entrée",
+        btn01 : "Saisie Manuelle",
         btn02 : "Abandonner",
     },
     msgCardPayment: 
@@ -384,11 +393,7 @@ export const langFr =
         title :"Information",
         msg :"Enregistrement effectué avec succès ",
         btn01 : "OK",
-    },
-    popSettings: 
-    {
-        title :"Réglage"
-    },
+    },    
     popDiscount :
     {
         title :"Remisé",
@@ -746,10 +751,12 @@ export const langFr =
     },
     popSettings: 
     {
+        title :"Réglage",
         lcdPort : "Afficheur display port",
         scalePort : "Balance port",
         payCardPort : "TPE port",
-        printDesing : "Design d’imprimante"
+        printDesing : "Design d’imprimante",
+        scannerPort : "Scanner port"
     },
     msgConnectOut: 
     {

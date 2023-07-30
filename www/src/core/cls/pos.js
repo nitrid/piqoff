@@ -1152,6 +1152,7 @@ export class posDeviceCls
             SCALE_PORT : '',
             PAY_CARD_PORT : '',
             PRINT_DESING : '',
+            SCANNER_PORT : '',
         }
         this.listeners = Object();
         this.payPort = null;
@@ -1204,25 +1205,43 @@ export class posDeviceCls
                     "@LCD_PORT = @PLCD_PORT, " +
                     "@SCALE_PORT = @PSCALE_PORT, " +
                     "@PAY_CARD_PORT = @PPAY_CARD_PORT, " +
-                    "@PRINT_DESING = @PPRINT_DESING " ,
-                   
-            param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|50','PNAME:string|50','PLCD_PORT:string|50','PSCALE_PORT:string|50','PPAY_CARD_PORT:string|50','PPRINT_DESING:string|50'],
-            dataprm : ['GUID','CUSER','CODE','NAME','LCD_PORT','SCALE_PORT','PAY_CARD_PORT','PRINT_DESING']
+                    "@PRINT_DESING = @PPRINT_DESING, " +
+                    "@SCANNER_PORT = @PSCANNER_PORT " ,                   
+            param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|50','PNAME:string|50','PLCD_PORT:string|50','PSCALE_PORT:string|50','PPAY_CARD_PORT:string|50','PPRINT_DESING:string|50','PSCANNER_PORT:string|50'],
+            dataprm : ['GUID','CUSER','CODE','NAME','LCD_PORT','SCALE_PORT','PAY_CARD_PORT','PRINT_DESING','SCANNER_PORT'],
+            local : 
+            {
+                type : "insert",
+                query : `INSERT INTO POS_DEVICE_VW_01 (GUID, CDATE, CUSER, LDATE, LUSER, CODE, NAME, LCD_PORT, SCALE_PORT, PAY_CARD_PORT, SCANNER_PORT, PRINT_DESING)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
+                values : [{GUID : {map:'GUID'},CDATE : moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),CUSER : {map:'CUSER'},LDATE : moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
+                        LUSER : {map:'LUSER'},CODE : {map:'CODE'},NAME : {map:'NAME'},LCD_PORT : {map:'LCD_PORT'},SCALE_PORT : {map:'SCALE_PORT'},PAY_CARD_PORT : {map:'PAY_CARD_PORT'},
+                        SCANNER_PORT : {map:'SCANNER_PORT'},PRINT_DESING : {map:'PRINT_DESING'}}]
+            }
         } 
         tmpDt.updateCmd = 
         {
             query : "EXEC [dbo].[PRD_POS_DEVICE_UPDATE] " + 
-            "@GUID = @PGUID, " +
-            "@CUSER = @PCUSER, " + 
-            "@CODE = @PCODE, " + 
-            "@NAME = @PNAME, " + 
-            "@LCD_PORT = @PLCD_PORT, " +
-            "@SCALE_PORT = @PSCALE_PORT, " +
-            "@PAY_CARD_PORT = @PPAY_CARD_PORT, " +
-            "@PRINT_DESING = @PPRINT_DESING " ,
-           
-            param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|50','PNAME:string|50','PLCD_PORT:string|50','PSCALE_PORT:string|50','PPAY_CARD_PORT:string|50','PPRINT_DESING:string|50'],
-            dataprm : ['GUID','CUSER','CODE','NAME','LCD_PORT','SCALE_PORT','PAY_CARD_PORT','PRINT_DESING']
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " + 
+                    "@CODE = @PCODE, " + 
+                    "@NAME = @PNAME, " + 
+                    "@LCD_PORT = @PLCD_PORT, " +
+                    "@SCALE_PORT = @PSCALE_PORT, " +
+                    "@PAY_CARD_PORT = @PPAY_CARD_PORT, " +
+                    "@PRINT_DESING = @PPRINT_DESING, " +
+                    "@SCANNER_PORT = @PSCANNER_PORT " ,
+            param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|50','PNAME:string|50','PLCD_PORT:string|50','PSCALE_PORT:string|50','PPAY_CARD_PORT:string|50','PPRINT_DESING:string|50','PSCANNER_PORT:string|50'],
+            dataprm : ['GUID','CUSER','CODE','NAME','LCD_PORT','SCALE_PORT','PAY_CARD_PORT','PRINT_DESING','SCANNER_PORT'],
+            local : 
+            {
+                type : "update",
+                query : `UPDATE POS_DEVICE_VW_01 
+                        SET CDATE = ?, CUSER = ?, LDATE = ?, LUSER = ?, CODE = ?, NAME = ?, LCD_PORT = ?, SCALE_PORT = ?, PAY_CARD_PORT = ?, SCANNER_PORT = ?, PRINT_DESING = ? WHERE GUID = ?;`,
+                values : [{CDATE : moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),CUSER : {map:'CUSER'},LDATE : moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),LUSER : {map:'LUSER'},
+                        CODE : {map:'CODE'},NAME : {map:'NAME'},LCD_PORT : {map:'LCD_PORT'},SCALE_PORT : {map:'SCALE_PORT'},PAY_CARD_PORT : {map:'PAY_CARD_PORT'},SCANNER_PORT : {map:'SCANNER_PORT'},
+                        PRINT_DESING : {map:'PRINT_DESING'},GUID : {map:'GUID'}}]
+            }
         } 
         tmpDt.deleteCmd = 
         {
@@ -1231,7 +1250,7 @@ export class posDeviceCls
                     "@UPDATE = 1, " + 
                     "@GUID = @PGUID ",
             param : ['PCUSER:string|25','PGUID:string|50'],
-            dataprm : ['CUSER','GUID']
+            dataprm : ['CUSER','GUID'],
         }
 
         this.ds.add(tmpDt);
@@ -1868,7 +1887,10 @@ export class posDeviceCls
                     }
                     else
                     {
-                        docPdf.text(tmpArr[i].data,tmpX,tmpY,{align: tmpAlign,charSpace:tmpCharSpace})
+                        if(typeof tmpArr[i].data != 'undefined')
+                        {
+                            docPdf.text(tmpArr[i].data,tmpX,tmpY,{align: tmpAlign,charSpace:tmpCharSpace})
+                        }
                     }
 
                     tmpY += 8
@@ -2196,57 +2218,5 @@ export class posEnddayCls
             this.ds.delete()
             resolve(await this.ds.update()); 
         });
-    }
-}
-export class posLcdCls
-{
-    constructor(pPort)
-    {
-        if(!core.instance.util.isElectron())
-        {
-            return
-        }
-
-        this.escpos = global.require('escpos');
-        this.escpos.Serial = global.require('escpos-serialport');
-        //this.escpos.Screen = global.require('escpos-screen');
-        
-        this.port = typeof pPort == 'undefined' ? '' : pPort
-    }
-    print(pData)
-    {
-        if(!core.instance.util.isElectron())
-        {
-            return
-        }
-        
-        let device = new this.escpos.Serial(this.port, { baudRate: 9600, stopBits:1, dataBits:8, autoOpen: false });
-
-        device.open(async(err)=>
-        {
-            device.write('\x0c')
-            //pData.text = pData.text.replaceAll('€',String.fromCharCode(15))
-            device.write(pData.text)
-
-            setTimeout(() => 
-            {
-                device.close();    
-            }, 100);
-        })
-    }
-    clear()
-    {
-        if(!core.instance.util.isElectron())
-        {
-            return
-        }
-
-        let device = new this.escpos.Serial(this.port, { baudRate: 9600, autoOpen: false });
-        let usbScreen = new this.escpos.Screen(device,{ encoding: "GB18030" });
-
-        device.open((err)=>
-        {
-            usbScreen.clear();
-        })
     }
 }

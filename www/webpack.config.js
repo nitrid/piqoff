@@ -5,6 +5,21 @@ const copyPlugin = require("copy-webpack-plugin");
 const zipPlugin = require('zip-webpack-plugin');
 const removePlugin = require('remove-files-webpack-plugin');
 
+const crypto = require('crypto');
+const fs = require('fs');
+const pack = require('./package.json')
+const fileBuffer = fs.readFileSync('./src/core/cls/scale.js')
+const hashSum = crypto.createHash('sha256');
+
+hashSum.update(fileBuffer);
+const hex = hashSum.digest('hex');
+
+if(pack.scale.sha != hex)
+{
+    console.log("invalide scale.js - " + hex)
+    return
+}
+
 module.exports = 
 {
     entry: 
@@ -104,6 +119,7 @@ module.exports =
                 { from: "./src/off/css/icons/", to: "./off/css/icons/" },
                 { from: "./src/off/printview.html", to: "./off/printview.html" },
                 { from: "./src/off/sound/", to: "./off/sound/" },
+                { from: "./src/off/resources/", to: "./off/resources/" },
                 { from: "./src/mob/css/img/", to: "./mob/css/img/" },
                 { from: "./src/mob/css/icons/", to: "./mob/css/icons/" },
                 { from: "./src/mob/sound/", to: "./mob/sound/" },

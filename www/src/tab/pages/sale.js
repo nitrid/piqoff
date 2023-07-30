@@ -1,5 +1,7 @@
 import React from 'react';
 import App from '../lib/app.js';
+import { nf525Cls } from '../../core/cls/nf525.js';
+
 import ScrollView from 'devextreme-react/scroll-view';
 import NbButton from '../../core/react/bootstrap/button';
 import NdTextBox,{ Button,Validator, NumericRule, RequiredRule, CompareRule } from '../../core/react/devex/textbox'
@@ -31,6 +33,7 @@ export default class Sale extends React.PureComponent
         this.docObj = new docCls();
         this.docLines = new datatable()
         this.vatRate =  new datatable()
+        this.nf525 = new nf525Cls();
         this.docType = 0
         this.tmpPageLimit = 21
         this.tmpStartPage = 0
@@ -389,6 +392,10 @@ export default class Sale extends React.PureComponent
             this.docObj.docCustomer.INPUT = this.docObj.dt()[0].INPUT
         }
 
+        let tmpSignedData = await this.nf525.signatureDoc(this.docObj.dt()[0],this.docObj.docItems.dt())                
+        this.docObj.dt()[0].SIGNATURE = tmpSignedData.SIGNATURE
+        this.docObj.dt()[0].SIGNATURE_SUM = tmpSignedData.SIGNATURE_SUM
+
         let tmpConfObj1 =
         {
             id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
@@ -482,9 +489,8 @@ export default class Sale extends React.PureComponent
                             displayExpr="NAME"                       
                             valueExpr="CODE"
                             value= ""
-                            searchEnabled={true}
                             showClearButton={true}
-                            onValueChanged={(async()=>
+                            onValueChanged={(async(e)=>
                             {
                                 this.getItems()
                             }).bind(this)}
