@@ -55,15 +55,16 @@ export const menu = (e) =>
                     icon : "fa-tag",
                     path : "items/labelPrint.js",
                 },
-                {
-                    id: 'stk_07',
-                    text : e.t('menu.stk_07'), //'Özel Etiket Basımı'
-                    icon : "fa-tags",
-                },
+                // {
+                //     id: 'stk_07',
+                //     text : e.t('menu.stk_07'), //'Özel Etiket Basımı'
+                //     icon : "fa-tags",
+                // },
                 {
                     id: 'stk_08',
                     text : e.t('menu.stk_08'), //'İade Ürünü Toplama'
                     icon : "fa-arrow-right-arrow-left",
+                    path : "items/rebateTransfer.js",
                 }
             ]
         },
@@ -103,16 +104,25 @@ export const menu = (e) =>
                     id: 'irs_01',
                     text : e.t('menu.irs_01'), //'Alış İrsaliye'
                     icon : "fa-file-arrow-up",
+                    path: "dispatch/purchaseDispatch.js"
                 },
                 {
                     id: 'irs_02',
                     text : e.t('menu.irs_02'), //'Satış İrsaliye'
                     icon : "fa-file-arrow-down",
+                    path: "dispatch/salesDispatch.js"
                 },
                 {
                     id: 'irs_03',
                     text : e.t('menu.irs_03'), //'Şube Satış İrsaliye'
                     icon : "fa-copy",
+                    path: "dispatch/branchSaleDispatch.js"
+                },
+                {
+                    id: 'irs_04',
+                    text : e.t('menu.irs_04'), //'İade İrsaliye'
+                    icon : "fa-arrow-right-arrow-left",
+                    path: "dispatch/rebateDispatch.js"
                 },
             ]
         },
@@ -140,6 +150,12 @@ export const menu = (e) =>
                     text : e.t('menu.sip_03'), //'Toplu Sipariş Toplama'
                     icon : "fa-file-circle-plus",
                     path: "order/collectiveOrder.js"
+                },
+                {
+                    id: 'sip_04',
+                    text : e.t('menu.sip_04'), //'Toplu Sipariş Toplama'
+                    icon : "fa-solid fa-bag-shopping",
+                    path: "order/posOrder.js"
                 }
             ]
         },

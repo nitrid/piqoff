@@ -114,7 +114,7 @@ export default class itemGroupCard extends React.PureComponent
         return(
             <div>
                 <div>
-                <PageBar id={"pageBar"} parent={this} title={this.lang.t("menu.stk_02")} content=
+                <PageBar id={"pageBar"} parent={this} title={this.lang.t("menu.stk_04")} content=
                 {[
                     {
                         name : 'Main',isBack : false,isTitle : true,
