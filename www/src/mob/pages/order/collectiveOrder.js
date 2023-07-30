@@ -104,6 +104,7 @@ export default class purchaseOrder extends React.PureComponent
         this.lblItemName.value = ""
         this.lblDepotQuantity.value = 0
         this.cmbUnit.setData([])
+        this.txtBarcode.focus()
     }
     async getDoc(pGuid,pRef,pRefno)
     {
@@ -685,7 +686,7 @@ export default class purchaseOrder extends React.PureComponent
                                             <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>X</label>                                            
                                         </div>
                                         <div className='col-4'>
-                                            <NdTextBox id="txtQuantity" parent={this} simple={true} maxLength={32} onValueChanged={this.calcEntry.bind(this)} dt={{data:this.orderDt,field:"QUANTITY"}}
+                                            <NdNumberBox id="txtQuantity" parent={this} simple={true} maxLength={32} onValueChanged={this.calcEntry.bind(this)} dt={{data:this.orderDt,field:"QUANTITY"}}
                                             onEnterKey={this.addItem.bind(this)}/>
                                         </div>
                                     </div>
