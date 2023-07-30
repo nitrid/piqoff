@@ -103,6 +103,7 @@ export default class purchaseOrder extends React.PureComponent
         this.lblItemName.value = ""
         this.lblDepotQuantity.value = 0
         this.cmbUnit.setData([])
+        this.txtBarcode.focus()
     }
     async getDoc(pGuid,pRef,pRefno)
     {
@@ -268,7 +269,6 @@ export default class purchaseOrder extends React.PureComponent
         tmpDocItems.TOTALHT = Number(this.orderDt[0].AMOUNT - this.orderDt[0].DISCOUNT).round(2)
         tmpDocItems.TOTAL = this.orderDt[0].SUM_AMOUNT
 
-        console.log(tmpDocItems)
         this.docObj.docOrders.addEmpty(tmpDocItems)
         this.clearEntry()
 
@@ -763,7 +763,7 @@ export default class purchaseOrder extends React.PureComponent
                                             <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>X</label>                                            
                                         </div>
                                         <div className='col-4'>
-                                            <NdTextBox id="txtQuantity" parent={this} simple={true} maxLength={32} onValueChanged={this.calcEntry.bind(this)} dt={{data:this.orderDt,field:"QUANTITY"}}
+                                            <NdNumberBox id="txtQuantity" parent={this} simple={true} maxLength={32} onValueChanged={this.calcEntry.bind(this)} dt={{data:this.orderDt,field:"QUANTITY"}}
                                             onEnterKey={this.addItem.bind(this)}/>
                                         </div>
                                     </div>
