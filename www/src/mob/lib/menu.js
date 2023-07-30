@@ -22,21 +22,26 @@ export const menu = (e) =>
                     id: 'stk_01',
                     text : e.t('menu.stk_01'), //'Fiyat Gör'
                     icon : "fa-money-check",
+                    path : "items/priceCheck.js",
                 },
                 {
                     id: 'stk_02',
                     text : e.t('menu.stk_02'), //'Tedarikçi Gör'
                     icon : "fa-user-tie",
+                    path : "items/customerCheck.js",
                 },
                 {
                     id: 'stk_03',
                     text : e.t('menu.stk_03'), //'Barkod Tanımlama'
                     icon : "fa-barcode",
+                    path : "items/barcodeCard.js",
                 },
                 {
                     id: 'stk_04',
                     text : e.t('menu.stk_04'), //'Ürün Grubu Güncelle'
                     icon : "fa-chart-bar",
+                    path : "items/itemGroupCard.js",
+
                 },
                 {
                     id: 'stk_05',

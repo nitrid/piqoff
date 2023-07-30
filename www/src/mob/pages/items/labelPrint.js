@@ -5,10 +5,12 @@ import { labelCls,labelMainCls} from '../../../core/cls/label.js'
 
 import ScrollView from 'devextreme-react/scroll-view';
 import NbButton from '../../../core/react/bootstrap/button';
+import Form, { Item } from 'devextreme-react/form';
 import NdTextBox from '../../../core/react/devex/textbox';
 import NdSelectBox from '../../../core/react/devex/selectbox';
 import NdDatePicker from '../../../core/react/devex/datepicker';
 import NdPopGrid from '../../../core/react/devex/popgrid';
+import NdCheckBox  from '../../../core/react/devex/checkbox';
 import NdNumberBox from '../../../core/react/devex/numberbox';
 import NdPopUp from '../../../core/react/devex/popup';
 import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export,ColumnChooser,StateStoring} from '../../../core/react/devex/grid';
@@ -74,6 +76,7 @@ export default class labelPrint extends React.PureComponent
         this.mainLblObj.addEmpty(tmpLbl);
 
         this.cmbDesing.value = '',
+        this.chkAutoAdd.value = this.param.filter({TYPE:2,USERS:this.user.CODE,ELEMENT:'chkAutoAdd'}).getValue().value
 
         await this.cmbDesing.dataRefresh({source:{select:{query : "SELECT TAG,DESIGN_NAME,PAGE_COUNT FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '01'"},sql:this.core.sql}});
 
@@ -97,8 +100,11 @@ export default class labelPrint extends React.PureComponent
     {
         this.itemDt.clear();
 
-
-        this.lblItemName.value = ""
+        if(this.chkAutoAdd.value != true)
+        {
+            this.lblItemName.value = ""
+        }
+        this.txtPrice.value = 0
     }
     async getDoc(pGuid)
     {
@@ -107,6 +113,14 @@ export default class labelPrint extends React.PureComponent
         await this.lblObj.load({GUID:pGuid});
         await this.mainLblObj.load({GUID:pGuid});
 
+        for (let i = 0; i < this.cmbDesing.data.datatable.length; i++) 
+        {
+            if(this.cmbDesing.data.datatable[i].TAG == this.mainLblObj.dt()[0].DESING)
+            {
+                this.pageCount = this.cmbDesing.data.datatable[i].PAGE_COUNT
+            }
+        }
+        this.calculateCount()
         this.txtRef.readOnly = true
         this.txtRefNo.readOnly = true
     }
@@ -122,8 +136,12 @@ export default class labelPrint extends React.PureComponent
             if(this.itemDt.length > 0)
             {
                 this.lblItemName.value = this.itemDt[0].NAME
-
+                this.txtPrice.value = this.itemDt[0].PRICE
                 this.txtBarcode.value = ""
+                if(this.chkAutoAdd.value == true)
+                {
+                    this.addItem()
+                }
             }
             else
             {                               
@@ -136,10 +154,6 @@ export default class labelPrint extends React.PureComponent
             resolve();
         });
     }
-    async calcEntry()
-    {
-       
-    }
     async addItem()
     {
         if(this.itemDt.length == 0)
@@ -151,16 +165,8 @@ export default class labelPrint extends React.PureComponent
 
         let prmRowMerge = this.param.filter({TYPE:1,USERS:this.user.CODE,ID:'rowMerge'}).getValue().value
 
-        console.log(prmRowMerge)
         if(prmRowMerge > 0)
         {     
-            let tmpFnMergeRow = async (i) =>
-            {
-                let tmpQuantity = this.countDt[0].QUANTITY * this.countDt[0].FACTOR
-                this.lblObj.dt()[i].QUANTITY = this.lblObj.dt()[i].QUANTITY + tmpQuantity
-                this.clearEntry()
-                await this.save()
-            }
             for (let i = 0; i < this.lblObj.dt().length; i++) 
             {
                 if(this.lblObj.dt()[i].CODE == this.itemDt[0].CODE)
@@ -192,7 +198,7 @@ export default class labelPrint extends React.PureComponent
         tmpDocItems.NAME = this.itemDt[0].NAME
         tmpDocItems.CODE = this.itemDt[0].CODE
         tmpDocItems.BARCODE = this.itemDt[0].BARCODE
-        tmpDocItems.PRICE = this.itemDt[0].PRICE
+        tmpDocItems.PRICE = this.txtPrice.value
         tmpDocItems.MULTICODE = this.itemDt[0].MULTICODE
         tmpDocItems.ITEM_GRP = this.itemDt[0].ITEM_GRP
         tmpDocItems.ITEM_GRP_NAME = this.itemDt[0].ITEM_GRP_NAME
@@ -216,16 +222,14 @@ export default class labelPrint extends React.PureComponent
             await this.mainLblObj.save()
             if((await this.mainLblObj.save()) == 0)
             {
-                this.txtTotalLine.value = this.lblObj.dt().length
-                this.txtTotalCount.value = this.lblObj.dt().sum("QUANTITY",3)
+                this.txtBarcode.focus()
+                this.calculateCount()
             }
             else
             {
                 this.alertContent.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAlert.msgNotSave")}</div>)
                 await dialog(this.alertContent);
             }
-            this.txtBarcode.focus()
-            this.calculateCount()
             resolve()
         })
     }
@@ -600,11 +604,28 @@ export default class labelPrint extends React.PureComponent
                                             </NdPopGrid>
                                         </div>
                                     </div>
+                                    <div className='row pb-1'>
+                                        <div className='col-8 d-flex align-items-center justify-content-end'>
+                                                                                     
+                                        </div>
+                                        <div className='col-4'>
+                                            <NdCheckBox id="chkAutoAdd" text={this.t("lblAutoAdd")} parent={this} value={true} defaultValue={true} />
+                                        </div>
+                                    </div>
                                     <div className='row pb-2'>
                                         <div className='col-12'>
                                             <h6 style={{height:'60px',textAlign:"center",overflow:"hidden"}}>
                                                 <NbLabel id="lblItemName" parent={this} value={""}/>
                                             </h6>
+                                        </div>
+                                    </div>
+                                    <div className='row pb-2'>
+                                        <div className='col-8 d-flex align-items-center justify-content-end'>
+                                            <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.t("lblPrice")}</label>                                            
+                                        </div>
+                                        <div className='col-4'>
+                                            <NdTextBox id="txtPrice" parent={this} simple={true} maxLength={32} 
+                                            onEnterKey={this.addItem.bind(this)}/>
                                         </div>
                                     </div>
                                     <div className='row pb-2'>

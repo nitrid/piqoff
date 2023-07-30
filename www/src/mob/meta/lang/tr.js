@@ -91,6 +91,87 @@ export const langTr =
         logout : "Çıkış",
         selectUser : "Kullanıcı Seçim",
     },
+    stk_01 : // "Fiyat Gör"
+    {
+        msgAlert :
+        {
+            btn01 : "Tamam",
+            title : "Uyarı",
+            msgBarcodeNotFound : "Barkod bulunamadı !",
+            msgBarcodeCheck : "Lütfen barkod okutunuz !",
+        },
+        grdPrice : 
+        {
+            clmDate : "Bitiş Tarihi",
+            clmQuantity :  "Miktar",
+            clmPrice : "Fiyat"
+        },
+        grdCustomer : 
+        {
+            clmMulticode :  "Tedarikçi Kodu",
+            clmPrice : "Tedarikçi Fiyatı",
+            clmCustomer : "Tedarikçi"
+        },
+    },
+    stk_02 : // "Tedarikçi Gör"
+    {
+        msgAlert :
+        {
+            btn01 : "Tamam",
+            title : "Uyarı",
+            msgBarcodeNotFound : "Barkod bulunamadı !",
+            msgBarcodeCheck : "Lütfen barkod okutunuz !",
+        },
+        grdCustomer : 
+        {
+            clmMulticode :  "Tedarikçi Kodu",
+            clmPrice : "Tedarikçi Fiyatı",
+            clmCustomer : "Tedarikçi"
+        },
+    },
+    stk_03 : // "BARKOD TANIMLA"
+    {
+        lblBarcode : "Barkod",
+        lblType : "Barkod Tipi",
+        lblUnit : "Birim",
+        lblFactor : "Katsayı",
+        lblSave  : "Kaydet",
+        msgAlert :
+        {
+            btn01 : "Tamam",
+            title : "Uyarı",
+            msgBarcodeNotFound : "Barkod bulunamadı !",
+            msgDblBarcode : "Okuttuğunuz barkod sistemde mevcut tekrar kayıt edilemez !",
+            msgBarcodeCheck : "Lütfen Ürün Seçiniz.",
+            msgSave : "Kayıt Başarılı",
+            msgNotSave : "Kayıt Başarısız",
+            
+        },
+        grdCustomer : 
+        {
+            clmMulticode :  "Tedarikçi Kodu",
+            clmPrice : "Tedarikçi Fiyatı",
+            clmCustomer : "Tedarikçi"
+        },
+    },
+    stk_04 : // "ÜRÜN GRUP"
+    {
+        lblBarcode : "Barkod",
+        lblSave  : "Kaydet",
+        lblAutoAdd : "Oto. Kaydet",
+        lblGroup : "Ürün Grubu",
+        msgAlert :
+        {
+            btn01 : "Tamam",
+            title : "Uyarı",
+            msgBarcodeNotFound : "Barkod bulunamadı !",
+            msgDblBarcode : "Okuttuğunuz barkod sistemde mevcut tekrar kayıt edilemez !",
+            msgBarcodeCheck : "Lütfen Ürün Seçiniz.",
+            msgSave : "Kayıt Başarılı",
+            msgNotSave : "Kayıt Başarısız",
+            
+        },
+    },
     stk_05 : // "Sayım"
     {
         lblRef : "Seri - Sıra :",
@@ -131,6 +212,38 @@ export const langTr =
             clmDepotName : "Depo",
             clmTotalLine : "Tolam Satır",
             clmQuantity : "Toplam Ürün"
+        },
+    },
+    stk_06 : // "Etiket Bas"
+    {
+        lblRef : "Seri - Sıra :",
+        lblDesing : "Dizayn :",
+        lblPageCount : "Sayfa Sayısı :",
+        lblFreeLabel : "Boş Alan :",
+        lblLine : "Toplam Satır :",
+        lblAdd: "Ekle",
+        lblPrice : "Fiyat",
+        lblAutoAdd : "Oto. Ekle",
+        msgAlert :
+        {
+            btn01 : "Tamam",
+            title : "Uyarı",
+            msgProcess : "Henüz girilmiş bir ürün yok !",
+            msgBarcodeNotFound : "Barkod bulunamadı !",
+            msgBarcodeCheck : "Lütfen barkod okutunuz !",
+            msgNotSave : "Kayıt İşlemi Başarısız",
+        },
+        grdList : 
+        {
+            clmBarcode : "Barkod",
+            clmName :  "Ürün Adı",
+            clmPrice : "Fiyat"
+        },
+        popDoc : 
+        {
+            title : "Evrak Seçim",
+            clmRef :  "Ref",
+            clmRefNo : "Ref No",
         },
     },
     sip_01 : // "Satış Siparişi"
