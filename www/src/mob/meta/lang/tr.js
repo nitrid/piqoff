@@ -11,6 +11,7 @@ export const langTr =
     serverConnection : "Sunucu İle Bağlantı Kuruluyor",
     msgWarning : "Dikkat",
     msgSqlService1 : "Sql sunucuya bağlanılamıyor.",
+    comingSoon : "Yakında Aktif Olacak... ",
     msgAnotherUserAlert: 
     {
         title : "Dikkat",
@@ -108,6 +109,7 @@ export const langTr =
             title : "Uyarı",
             msgBarcodeNotFound : "Barkod bulunamadı !",
             msgBarcodeCheck : "Lütfen barkod okutunuz !",
+            msgNotSave : "Kayıt İşlemi Başarısız",
         },
         grdPrice : 
         {
@@ -130,6 +132,7 @@ export const langTr =
             title : "Uyarı",
             msgBarcodeNotFound : "Barkod bulunamadı !",
             msgBarcodeCheck : "Lütfen barkod okutunuz !",
+            msgNotSave : "Kayıt İşlemi Başarısız",
         },
         grdCustomer : 
         {
@@ -154,7 +157,6 @@ export const langTr =
             msgBarcodeCheck : "Lütfen Ürün Seçiniz.",
             msgSave : "Kayıt Başarılı",
             msgNotSave : "Kayıt Başarısız",
-            
         },
         grdCustomer : 
         {
@@ -285,7 +287,8 @@ export const langTr =
             msgQuantityCheck : "Miktar girmeden ürün ekleyemezsiniz !",
             msgRowNotDelete : "Bu satır fatura yada irsaliyeye çevrilmiştir silme işlemi yapamazsınız !",
             msgRowNotUpdate : "Bu satır fatura yada irsaliyeden geldiği için miktarı değiştirilemez !",
-            msgDiscount : "İndirim Tutardan Yüksek Olamaz !"
+            msgDiscount : "İndirim Tutardan Yüksek Olamaz !",
+            msgNotSave : "Kayıt İşlemi Başarısız",
         },
         grdList : 
         {
@@ -339,7 +342,8 @@ export const langTr =
             msgQuantityCheck : "Miktar girmeden ürün ekleyemezsiniz !",
             msgRowNotDelete : "Bu satır fatura yada irsaliyeye çevrilmiştir silme işlemi yapamazsınız !",
             msgRowNotUpdate : "Bu satır fatura yada irsaliyeden geldiği için miktarı değiştirilemez!",
-            msgDiscount : "İndirim Tutardan Yüksek Olamaz !"
+            msgDiscount : "İndirim Tutardan Yüksek Olamaz !",
+            msgNotSave : "Kayıt İşlemi Başarısız",
         },
         grdList : 
         {
@@ -393,7 +397,8 @@ export const langTr =
             msgQuantityCheck : "Miktar girmeden ürün ekleyemezsiniz !",
             msgRowNotDelete : "Bu satır fatura yada irsaliyeye çevrilmiştir silme işlemi yapamazsınız !",
             msgRowNotUpdate : "Bu satır fatura yada irsaliyeden geldiği için miktarı değiştirilemez!",
-            msgDiscount : "İndirim Tutardan Yüksek Olamaz !"
+            msgDiscount : "İndirim Tutardan Yüksek Olamaz !",
+            msgNotSave : "Kayıt İşlemi Başarısız",
         },
         grdList : 
         {
@@ -444,7 +449,8 @@ export const langTr =
             msgQuantityCheck : "Miktar girmeden ürün ekleyemezsiniz !",
             msgRowNotDelete : "Bu satır fatura yada irsaliyeye çevrilmiştir silme işlemi yapamazsınız !",
             msgRowNotUpdate : "Bu satır fatura yada irsaliyeden geldiği için miktarı değiştirilemez !",
-            msgDiscount : "İndirim Tutardan Yüksek Olamaz !"
+            msgDiscount : "İndirim Tutardan Yüksek Olamaz !",
+            msgNotSave : "Kayıt İşlemi Başarısız",
         },
         grdList : 
         {
@@ -498,7 +504,8 @@ export const langTr =
             msgQuantityCheck : "Miktar girmeden ürün ekleyemezsiniz !",
             msgRowNotDelete : "Bu satır fatura yada irsaliyeye çevrilmiştir silme işlemi yapamazsınız !",
             msgRowNotUpdate : "Bu satır fatura yada irsaliyeden geldiği için miktarı değiştirilemez!",
-            msgDiscount : "İndirim Tutardan Yüksek Olamaz !"
+            msgDiscount : "İndirim Tutardan Yüksek Olamaz !",
+            msgNotSave : "Kayıt İşlemi Başarısız",
         },
         grdList : 
         {
@@ -551,7 +558,8 @@ export const langTr =
             msgQuantityCheck : "Miktar girmeden ürün ekleyemezsiniz !",
             msgRowNotDelete : "Bu satır fatura yada irsaliyeye çevrilmiştir silme işlemi yapamazsınız !",
             msgRowNotUpdate : "Bu satır fatura yada irsaliyeden geldiği için miktarı değiştirilemez !",
-            msgDiscount : "İndirim Tutardan Yüksek Olamaz !"
+            msgDiscount : "İndirim Tutardan Yüksek Olamaz !",
+            msgNotSave : "Kayıt İşlemi Başarısız",
         },
         grdList : 
         {
@@ -605,7 +613,8 @@ export const langTr =
             msgQuantityCheck : "Miktar girmeden ürün ekleyemezsiniz !",
             msgRowNotDelete : "Bu satır faturaye çevrilmiştir silme işlemi yapamazsınız !",
             msgRowNotUpdate : "Bu satır faturaye geldiği için miktarı değiştirilemez!",
-            msgDiscount : "İndirim Tutardan Yüksek Olamaz !"
+            msgDiscount : "İndirim Tutardan Yüksek Olamaz !",
+            msgNotSave : "Kayıt İşlemi Başarısız",
         },
         grdList : 
         {
@@ -659,7 +668,8 @@ export const langTr =
             msgQuantityCheck : "Miktar girmeden ürün ekleyemezsiniz !",
             msgRowNotDelete : "Bu satır faturaya  çevrilmiştir silme işlemi yapamazsınız !",
             msgRowNotUpdate : "Bu satır faturaya geldiği için miktarı değiştirilemez!",
-            msgDiscount : "İndirim Tutardan Yüksek Olamaz !"
+            msgDiscount : "İndirim Tutardan Yüksek Olamaz !",
+            msgNotSave : "Kayıt İşlemi Başarısız",
         },
         grdList : 
         {
@@ -713,7 +723,8 @@ export const langTr =
             msgQuantityCheck : "Miktar girmeden ürün ekleyemezsiniz !",
             msgRowNotDelete : "Bu satır faturaya  çevrilmiştir silme işlemi yapamazsınız !",
             msgRowNotUpdate : "Bu satır faturaya geldiği için miktarı değiştirilemez!",
-            msgDiscount : "İndirim Tutardan Yüksek Olamaz !"
+            msgDiscount : "İndirim Tutardan Yüksek Olamaz !",
+            msgNotSave : "Kayıt İşlemi Başarısız",
         },
         grdList : 
         {
@@ -767,7 +778,8 @@ export const langTr =
             msgQuantityCheck : "Miktar girmeden ürün ekleyemezsiniz !",
             msgRowNotDelete : "Bu satır faturaya  çevrilmiştir silme işlemi yapamazsınız !",
             msgRowNotUpdate : "Bu satır faturaya geldiği için miktarı değiştirilemez!",
-            msgDiscount : "İndirim Tutardan Yüksek Olamaz !"
+            msgDiscount : "İndirim Tutardan Yüksek Olamaz !",
+            msgNotSave : "Kayıt İşlemi Başarısız",
         },
         grdList : 
         {
