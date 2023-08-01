@@ -85,11 +85,13 @@ export const menu = (e) =>
                     id: 'dep_02',
                     text : e.t('menu.dep_02'), //'Depo Siparişi'
                     icon : "fa-box-open",
+                    path : "empty.js",
                 },
                 {
                     id: 'dep_03',
                     text : e.t('menu.dep_03'), //'Depo Mal Kabul'
                     icon : "fa-boxes-packing",
+                    path : "empty.js",
                 }
             ]
         },
@@ -170,11 +172,13 @@ export const menu = (e) =>
                     id: 'kar_01',
                     text : e.t('menu.kar_01'), //'Sipariş Eşleştirme'
                     icon : "fa-paste",
+                    path : "empty.js",
                 },
                 {
                     id: 'kar_02',
                     text : e.t('menu.kar_02'), //'Sipariş Mal Kabul'
                     icon : "fa-boxes-packing",
+                    path : "empty.js",
                 }
             ]
         }
