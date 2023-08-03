@@ -43,7 +43,7 @@ export default class priceCheck extends React.PureComponent
         }
         this.priceDt.selectCmd = 
         {
-            query : "SELECT * FROM ITEM_PRICE_VW_01 WHERE (ITEM_CODE = @CODE) OR (@CODE = '') AND TYPE = 0",
+            query : "SELECT * FROM ITEM_PRICE_VW_01 WHERE ((ITEM_CODE = @CODE) OR (@CODE = '')) AND TYPE = 0",
             param : ['CODE:string|25'],
         }
 

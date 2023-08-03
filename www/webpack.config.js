@@ -16,7 +16,7 @@ const hex = hashSum.digest('hex');
 
 if(pack.scale.sha != hex)
 {
-    console.log("invalide scale.js - " + hex)
+    console.log("invalide scale.js - ")
     return
 }
 
