@@ -14841,6 +14841,7 @@ export const langFr =
             clmTotal : "Montant total",
             clmRestTotal : "Bénéfice total sans taxe", 
             clmMargin : "Marge", 
+            clmQuantity : "Quantité",
         },
         pg_txtRef:
         {

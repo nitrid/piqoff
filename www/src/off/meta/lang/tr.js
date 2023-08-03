@@ -14935,6 +14935,7 @@ export const langTr =
             clmTotal : "Toplam Tutar",
             clmRestTotal : "Vergisiz Toplam Kar",
             clmMargin : "Marj",
+            clmQuantity: "Miktar"
         },
         pg_txtRef:
         {
