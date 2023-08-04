@@ -64,7 +64,7 @@ export default class itemSaleReport extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT ITEM_CODE,ITEM_NAME, " +
+                    query : "SELECT ITEM_CODE,ITEM_NAME,SUM(QUANTITY) AS QUANTITY, " +
                     "ROUND(SUM(TOTAL),2) AS TOTAL,  " +
                     "ROUND(SUM(FAMOUNT),2) AS FAMOUNT,  " +
                     "ROUND(SUM(VAT),2) AS VAT,  " +
@@ -272,6 +272,7 @@ export default class itemSaleReport extends React.PureComponent
                                 <Export fileName={this.lang.t("menu.pos_02_008")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="ITEM_CODE" caption={this.t("grdListe.clmCode")} visible={true} width={100}/> 
                                 <Column dataField="ITEM_NAME" caption={this.t("grdListe.clmName")} visible={true} width={300}/> 
+                                <Column dataField="QUANTITY" caption={this.t("grdListe.clmQuantity")} visible={true} width={100}/> 
                                 <Column dataField="TOTAL_COST" caption={this.t("grdListe.clmTotalCost")} visible={true} format={{ style: "currency", currency: "EUR",precision: 2}}  width={150} allowHeaderFiltering={false}/> 
                                 <Column dataField="FAMOUNT" caption={this.t("grdListe.clmFamount")} visible={true} format={{ style: "currency", currency: "EUR",precision: 2}}  width={150} allowHeaderFiltering={false}/> 
                                 <Column dataField="VAT" caption={this.t("grdListe.clmVat")} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}} visible={true} width={150} allowHeaderFiltering={false}/> 

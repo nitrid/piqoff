@@ -643,7 +643,7 @@ export default class posDoc extends React.PureComponent
             let tmpCustomerDt = new datatable(); 
             tmpCustomerDt.selectCmd = 
             {
-                query : "SELECT GUID,CUSTOMER_TYPE,CODE,TITLE,ADRESS,ZIPCODE,CITY,COUNTRY_NAME,CUSTOMER_POINT, " +
+                query : "SELECT GUID,CUSTOMER_TYPE,CODE,TITLE,ADRESS,ZIPCODE,CITY,COUNTRY_NAME,CUSTOMER_POINT,EMAIL, " +
                         "ISNULL((SELECT COUNT(TYPE) FROM CUSTOMER_POINT WHERE TYPE = 0 AND CUSTOMER = CUSTOMER_VW_02.GUID AND CONVERT(DATE,LDATE) = CONVERT(DATE,GETDATE())),0) AS POINT_COUNT " + 
                         "FROM [dbo].[CUSTOMER_VW_02] WHERE CODE LIKE SUBSTRING(@CODE,0,14) + '%'",
                 param : ['CODE:string|50'],
@@ -692,6 +692,8 @@ export default class posDoc extends React.PureComponent
                 this.posObj.dt()[0].CUSTOMER_CITY = tmpCustomerDt[0].CITY
                 this.posObj.dt()[0].CUSTOMER_COUNTRY = tmpCustomerDt[0].COUNTRY_NAME
                 this.posObj.dt()[0].CUSTOMER_POINT = tmpCustomerDt[0].CUSTOMER_POINT
+                this.posObj.dt()[0].CUSTOMER_MAIL = tmpCustomerDt[0].EMAIL
+                
 
                 //PROMOSYON GETİR.
                 await this.getPromoDb()
@@ -1633,6 +1635,10 @@ export default class posDoc extends React.PureComponent
                             await this.core.sql.execute(tmpInsertQuery)
                             //***************************************************/
                             await this.print(tmpData,0)
+                            if(this.posObj.dt()[0].CUSTOMER_MAIL != '')
+                            {
+                                await this.print(tmpData,2)
+                            }
                         }
                         else if(pResult == 'btn03')
                         {
@@ -1683,6 +1689,10 @@ export default class posDoc extends React.PureComponent
                         await this.core.sql.execute(tmpInsertQuery)
                         //***************************************************/
                         await this.print(tmpData,0)
+                        if(this.posObj.dt()[0].CUSTOMER_MAIL != '')
+                        {
+                            await this.print(tmpData,2)
+                        }
                     }
                     //***************************************************/
                     //TICKET REST. ALDIĞINDA KASA AÇMA İŞLEMİ 
@@ -2453,6 +2463,10 @@ export default class posDoc extends React.PureComponent
                 {
                     this.mailPopup._onClick()
                     await this.posDevice.pdfPrint(tmpPrint,this.txtMail.value)
+                }
+                else if(pType == 2)
+                {
+                    await this.posDevice.pdfPrint(tmpPrint,this.posObj.dt()[0].CUSTOMER_MAIL)
                 }
                 resolve()
             })

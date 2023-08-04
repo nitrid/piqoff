@@ -1070,6 +1070,7 @@ export default class purchaseDispatch extends React.PureComponent
                                 let tmpItemData = [{...this.docObj.docItems.dt()[i]}]
                                 tmpItemData[0].SALE_PRICE_GUID = tmpData.result.recordset[0].PRICE_GUID
                                 tmpItemData[0].SALE_PRICE = tmpData.result.recordset[0].SALE_PRICE
+                                tmpItemData[0].CUSER = this.user.CODE
                                 let tmpExVat = tmpData.result.recordset[0].SALE_PRICE / ((tmpItemData[0].VAT_RATE / 100) + 1)
                                 let tmpMargin = tmpExVat - tmpItemData[0].PRICE;
                                 let tmpMarginRate = ((tmpMargin / tmpItemData[0].PRICE)) * 100
@@ -1181,6 +1182,7 @@ export default class purchaseDispatch extends React.PureComponent
                                     let tmpItemData = [{...this.docObj.docItems.dt()[i]}]
                                     tmpItemData[0].SALE_PRICE_GUID = tmpData.result.recordset[0].PRICE_GUID
                                     tmpItemData[0].SALE_PRICE = tmpData.result.recordset[0].SALE_PRICE
+                                    tmpItemData[0].CUSER = this.user.CODE
                                     let tmpExVat = tmpData.result.recordset[0].SALE_PRICE / ((tmpItemData[0].VAT_RATE / 100) + 1)
                                     let tmpMargin = tmpExVat - tmpItemData[0].PRICE;
                                     let tmpMarginRate = ((tmpMargin / tmpItemData[0].PRICE)) * 100
