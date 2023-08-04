@@ -182,7 +182,6 @@ export function print()
                             {
                                 tmpQt = parseFloat(parseFloat(tmpProSale[0].QUANTITY / tmpProSale[0].UNIT_FACTOR).toFixed(3));
                             }
-
                             if(tmpProSale[0].UNIT_FACTOR > 1)
                             {
                                 tmpFactStr = "X" + tmpProSale[0].UNIT_FACTOR.toString().substring(0,2)
@@ -236,14 +235,14 @@ export function print()
                 {
                     let tmpQt = ""            
                     let tmpFactStr = ""
-
-                    if(tmpSaleItem.UNIT_FACTOR != 'kg')
+                    
+                    if(tmpSaleItem.UNIT_SHORT != 'kg')
                     {
                         tmpQt = parseInt(tmpSaleItem.QUANTITY / tmpSaleItem.UNIT_FACTOR);
                     }
                     else
                     {
-                        tmpQt = parseFloat(parseFloat(tmpSaleItem.QUANTITY / tmpSaleItem.UNIT_FACTOR).toFixed(3));
+                        tmpQt = parseFloat(tmpSaleItem.QUANTITY / tmpSaleItem.UNIT_FACTOR).toFixed(3);
                     }
                     
                     if(tmpSaleItem.UNIT_FACTOR > 1)
