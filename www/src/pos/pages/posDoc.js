@@ -1187,17 +1187,7 @@ export default class posDoc extends React.PureComponent
                                 text :  ((this.grdList.devGrid.getKeyByRowIndex(0).SCALE_MANUEL ? 'M' : '') + parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).QUANTITY)).toFixed(3)).toString().space(7) + "kg" +
                                         (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).PRICE) - (Number(this.grdList.devGrid.getKeyByRowIndex(0).DISCOUNT) / Number(this.grdList.devGrid.getKeyByRowIndex(0).QUANTITY))).toFixed(2) + "EUR/kg").space(11,"s") +
                                         this.grdList.devGrid.getKeyByRowIndex(0).ITEM_NAME.toString().space(9) + "=" +  (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).TOTAL)).toFixed(2) + "EUR").space(10,"s")
-                            })
-
-                            this.scaleTimeout = setTimeout(() => 
-                            {
-                                this.posLcd.print
-                                ({
-                                    blink : 0,
-                                    text :this.grdList.devGrid.getKeyByRowIndex(0).ITEM_NAME.toString().space(9) + "=" +  (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).TOTAL)).toFixed(2) + "EUR").space(10,"s") + 
-                                            ("TOTAL : " + (parseFloat(tmpPayRest).toFixed(2) + "EUR")).space(20,"s")
-                                })
-                            }, 3000);
+                            })                            
                         }
                         else
                         {
@@ -1206,9 +1196,19 @@ export default class posDoc extends React.PureComponent
                                 blink : 0,
                                 text :  this.grdList.devGrid.getKeyByRowIndex(0).ITEM_NAME.toString().space(7) + Number(this.grdList.devGrid.getKeyByRowIndex(0).QUANTITY).toString().space(3,"s") + "X" +
                                         (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).PRICE) - (Number(this.grdList.devGrid.getKeyByRowIndex(0).DISCOUNT) / Number(this.grdList.devGrid.getKeyByRowIndex(0).QUANTITY))).toFixed(2) + "EUR").space(9,"s") +
-                                        ("TOTAL : " + (parseFloat(tmpPayRest).toFixed(2) + "EUR")).space(20,"s")
+                                        ("TOTAL : " + (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).TOTAL)).toFixed(2) + "EUR")).space(20,"s")
                             })
                         }
+
+                        this.scaleTimeout = setTimeout(() => 
+                        {
+                            this.posLcd.print
+                            ({
+                                blink : 0,
+                                text :this.grdList.devGrid.getKeyByRowIndex(0).ITEM_NAME.toString().space(9) + "=" +  (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).TOTAL)).toFixed(2) + "EUR").space(10,"s") + 
+                                        ("TOTAL : " + (parseFloat(tmpPayRest).toFixed(2) + "EUR")).space(20,"s")
+                            })
+                        }, 3000);
                     }, 100);                    
                 }
             }            
@@ -3322,6 +3322,15 @@ export default class posDoc extends React.PureComponent
                                             //     }
                                             // }
                                             //*************************************************** */
+                                            let tmpPayRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).toFixed(2));
+
+                                            this.posLcd.print
+                                            ({
+                                                blink : 0,
+                                                text : ("").space(20,"s") + 
+                                                       ("TOTAL : " + (parseFloat(tmpPayRest).toFixed(2) + "EUR")).space(20,"s")
+                                            })
+
                                             this.rbtnPayType.value = 0                                                                       
                                             this.popTotal.show();
                                             this.txtPopTotal.newStart = true;
@@ -3387,6 +3396,14 @@ export default class posDoc extends React.PureComponent
                                             //     }
                                             // } 
                                             //*************************************************** */
+                                            let tmpPayRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).toFixed(2));
+                                            
+                                            this.posLcd.print
+                                            ({
+                                                blink : 0,
+                                                text : ("").space(20,"s") + 
+                                                       ("TOTAL : " + (parseFloat(tmpPayRest).toFixed(2) + "EUR")).space(20,"s")
+                                            })
                                             this.popCardPay.show();
                                             this.txtPopCardPay.newStart = true;
                                         }}>
@@ -3497,6 +3514,14 @@ export default class posDoc extends React.PureComponent
                                             //     }
                                             // } 
                                             //****************************************************************************************************************************************** */                
+                                            let tmpPayRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).toFixed(2));
+                                            
+                                            this.posLcd.print
+                                            ({
+                                                blink : 0,
+                                                text : ("").space(20,"s") + 
+                                                       ("TOTAL : " + (parseFloat(tmpPayRest).toFixed(2) + "EUR")).space(20,"s")
+                                            })
                                             this.popCashPay.show();
                                             this.txtPopCashPay.newStart = true;
                                         }}>
