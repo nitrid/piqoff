@@ -212,7 +212,10 @@ export default class posSalesReport extends React.PureComponent
                                     area: "column",
                                     selector: (e) =>
                                     {
-                                        return e.VAT_RATE
+                                        if(e.VAT_RATE != 0)
+                                        {
+                                            return e.VAT_RATE
+                                        }
                                     },
                                     expanded: true
                                 },
