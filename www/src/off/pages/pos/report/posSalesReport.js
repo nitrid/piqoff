@@ -119,7 +119,7 @@ export default class posSalesReport extends React.PureComponent
                                             "POS.VAT_RATE AS VAT_RATE, " +
                                             "CASE WHEN POS.TYPE = 0 THEN SUM(POS.VAT) ELSE SUM(POS.VAT) * -1 END AS AMOUNT " +
                                             "FROM POS_SALE_VW_01 AS POS " +
-                                            "WHERE POS.STATUS = 1 AND POS.DOC_DATE >= @START AND POS.DOC_DATE <= @END AND POS.DEVICE <> '9999' " +
+                                            "WHERE POS.STATUS = 1 AND POS.DOC_DATE >= @START AND POS.DOC_DATE <= @END AND POS.DEVICE <> '9999' AND POS.TOTAL <> 0 " +
                                             "GROUP BY POS.DOC_DATE,POS.TYPE,POS.VAT_RATE,POS.DEVICE " +
                                             "UNION ALL " +
                                             "SELECT " +
