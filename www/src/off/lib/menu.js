@@ -1055,8 +1055,13 @@ export const menu = (e) =>
                     [
                         {
                             id: 'pos_01_001',
-                            text: e.t('menuOff.pos_01_001'),//'Promosyon Tanımları',
+                            text: e.t('menuOff.pos_01_001'),//'Cihaz Tanımları',
                             path: 'pos/card/posDeviceCard'
+                        },
+                        {
+                            id: 'pos_01_002',
+                            text: e.t('menuOff.pos_01_002'),//'Plu Kopyalama',
+                            path: 'pos/card/pluCopy'
                         }
                     ]
                 },

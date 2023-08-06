@@ -269,6 +269,7 @@ export const langTr =
         pos: "Pos İşlemleri",
         pos_01 : "Tanımlar",
         pos_01_001 : "Pos Cihaz Tanıtım",
+        pos_01_002 : "Pos Plu Kopyalama",
         pos_02 : "Raporlar",
         pos_02_001 : "Satış Fiş Raporu",
         pos_02_002 : "Müşteri Puanı Raporu",
@@ -14467,6 +14468,36 @@ export const langTr =
             msg : "Girmiş olduğunuz Cihaz Kodu sistem de kayıtlı !"
         }
       
+    },
+    pos_01_002 : // "Pos Plu Kopyalama",
+    {
+        cmbUser : "Kopyalanacak Kullanıcı",
+        btnSave :"Kaydet",
+        grdUserList : 
+        {
+            clmCode : "KULLANICI KODU",
+            clmName : "KULLANICI ADI",
+        },
+        msgSave:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kayıt etmek istediğinize eminmisiniz !"
+        },
+        msgSaveResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Kayıt işleminiz başarılı !",
+            msgFailed: "Kayıt işleminiz başarısız !"
+        },
+        msgUserNotFound:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen kullanıcı Seçiniz !"
+        },
     },
     pos_02_001 : // "Satış Fiş Raporu",
     {

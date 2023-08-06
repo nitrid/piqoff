@@ -263,6 +263,7 @@ export const langDe =
         pos: "POS-Transaktionen",
         pos_01: "Definitionen",
         pos_01_001: "POS-Gerätepräsentation",
+        pos_01_002: "Pos Plu Kopyalama",  // BAK
         pos_02: "Berichte",
         pos_02_001: "Verkaufsbeleg-Bericht",
         pos_02_002: "Kundenpunkte-Bericht",
@@ -14442,6 +14443,36 @@ export const langDe =
             msg : "Der eingegebene Gerätecode ist bereits im System registriert!"
         }
       
+    },
+    pos_01_002 : // "Pos Plu Kopyalama",
+    {
+        cmbUser : "Kopyalanacak Kullanıcı",  // BAK
+        btnSave :"Kaydet",  // BAK
+        grdUserList : 
+        {
+            clmCode : "KULLANICI KODU",  // BAK
+            clmName : "KULLANICI ADI",  // BAK
+        },
+        msgSave:
+        {
+            title: "Dikkat",   // BAK
+            btn01: "Tamam",   // BAK
+            btn02: "Vazgeç",   // BAK
+            msg: "Kayıt etmek istediğinize eminmisiniz !"   // BAK
+        },
+        msgSaveResult:
+        {
+            title: "Dikkat",  // BAK
+            btn01: "Tamam",  // BAK
+            msgSuccess: "Kayıt işleminiz başarılı !",  // BAK
+            msgFailed: "Kayıt işleminiz başarısız !"  // BAK
+        },
+        msgUserNotFound:
+        {  
+            title: "Dikkat",  // BAK
+            btn01: "Tamam",  // BAK
+            msg: "Lütfen kullanıcı Seçiniz !"  // BAK
+        },
     },
     pos_02_001 : // "Belegbericht"
     {

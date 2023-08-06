@@ -268,6 +268,7 @@ export const langFr =
         pos: "Traitement Pos",
         pos_01 : "Saisie",
         pos_01_001 : "Identifier Caisse",
+        pos_01_002 : "Pos Plu Kopyalama", // BAK
         pos_02 : "Rapports",
         pos_02_001 : "Recherche ticket de Vente",
         pos_02_002 : "Rapport point fidelité client",
@@ -14373,6 +14374,36 @@ export const langFr =
             msg : "Le code d'appareil que vous avez entré est enregistré dans le système !" 
         }
       
+    },
+    pos_01_002 : // "Pos Plu Kopyalama",
+    {
+        cmbUser : "Kopyalanacak Kullanıcı",  // BAK
+        btnSave :"Kaydet",  // BAK
+        grdUserList : 
+        {
+            clmCode : "KULLANICI KODU",  // BAK
+            clmName : "KULLANICI ADI",  // BAK
+        },
+        msgSave:
+        {
+            title: "Dikkat",   // BAK
+            btn01: "Tamam",   // BAK
+            btn02: "Vazgeç",   // BAK
+            msg: "Kayıt etmek istediğinize eminmisiniz !"   // BAK
+        },
+        msgSaveResult:
+        {
+            title: "Dikkat",  // BAK
+            btn01: "Tamam",  // BAK
+            msgSuccess: "Kayıt işleminiz başarılı !",  // BAK
+            msgFailed: "Kayıt işleminiz başarısız !"  // BAK
+        },
+        msgUserNotFound:
+        {  
+            title: "Dikkat",  // BAK
+            btn01: "Tamam",  // BAK
+            msg: "Lütfen kullanıcı Seçiniz !"  // BAK
+        },
     },
     pos_02_001 : // "Satış Fiş Raporu",
     {
