@@ -3199,7 +3199,8 @@ export default class posDoc extends React.PureComponent
                                 }}
                                 >
                                     <Editing confirmDelete={false}/>
-                                    <Scrolling mode="infinite" />
+                                    <Scrolling mode="standard" />
+                                    <Paging defaultPageSize={5} />
                                     <Column dataField="LDATE" caption={this.lang.t("grdList.LDATE")} width={40} alignment={"center"} dataType={"datetime"} format={"dd-MM-yyyy - HH:mm:ss SSSZ"} defaultSortOrder="desc" visible={false} cssClass={"cell-fontsize"}/>
                                     <Column dataField="NO" caption={""} width={30} cellTemplate={(cellElement,cellInfo)=>
                                     {
