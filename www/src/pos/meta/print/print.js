@@ -514,25 +514,25 @@ export function print()
                 tmpArr.push({font:"b",style:"b",align:"ct",size : [1,0],data:"Bon d'avoir : " + decimal(parseFloat(data.pos[0].REBATE_CHEQPAY.substring(7,12) / 100).toFixed(2)) + "EUR"});
                 tmpArr.push({align:"ct",barcode:data.pos[0].REBATE_CHEQPAY,options:{width: 1,height:90}});
                 tmpArr.push({font:"b",style:"b",align:"lt",data:" ".space(64)});
-                tmpArr.push({font:"b",style:"b",align:"ct",data:"Avoir valable 3 mois apres edition..."});
+                tmpArr.push({font:"b",style:"b",align:"ct",data:"Avoir valable 3 mois après édition..."});
             }
             else if(data.pos[0].REBATE_CHEQPAY != '' && data.pospay.where({PAY_TYPE:4}).length > 0 && data.pos[0].TYPE == 0 && data.pospay.where({CHANGE:{'>':0}}).length > 0)
             {
                 tmpArr.push({font:"b",style:"b",align:"ct",size : [1,0],data:"Reste Bon d'avoir : " + decimal(parseFloat(data.pos[0].REBATE_CHEQPAY.substring(7,12) / 100).toFixed(2)) + "EUR"});
                 tmpArr.push({align:"ct",barcode:data.pos[0].REBATE_CHEQPAY,options:{width: 1,height:90}});
                 tmpArr.push({font:"b",style:"b",align:"lt",data:" ".space(64)});
-                tmpArr.push({font:"b",style:"b",align:"ct",data:"Avoir valable 3 mois apres edition..."});
+                tmpArr.push({font:"b",style:"b",align:"ct",data:"Avoir valable 3 mois après édition..."});
             }
             return tmpArr.length > 0 ? tmpArr : undefined
         },
         ()=>{return {font:"b",align:"ct",data:"Conservez moi comme preuve d'achat pour les"}},
-        ()=>{return {font:"b",align:"ct",data:"garanties, echanges, ou remboursement sous 1 mois"}},
-        ()=>{return {font:"b",align:"ct",data:"Ne sont ni repris ni echanges les produits suivants :"}},
+        ()=>{return {font:"b",align:"ct",data:"garanties, échanges, ou remboursement sous 1 mois"}},
+        ()=>{return {font:"b",align:"ct",data:"Ne sont ni repris ni échangés les produits suivants :"}},
         ()=>{return {font:"b",align:"ct",data:"Produits Frais, Viandes, Fromages."}},
         ()=>{return {font:"b",style:"b",align:"ct",data:"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"}},
         ()=>{return {font:"b",style:"b",align:"ct",data:"AUCUN REMBOURSEMENT ESPECES NE SERA EFFECTUE"}},
         ()=>{return {font:"b",style:"b",align:"ct",data:"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"}},
-        ()=>{return {font:"b",style:"b",align:"ct",data:"Merci de votre fidelite a tres bientot ..."}},
+        ()=>{return {font:"b",style:"b",align:"ct",data:"Merci de votre fidélité à très bientôt ..."}},
         ()=>
         {
             if(data.special.type == 'Fatura')
@@ -550,7 +550,7 @@ export function print()
             {
                 let tmpArr = []
 
-                tmpArr.push({font:"b",style:"b",align:"ct",data:"Numéro de Reimpression " + (data.special.reprint - 1)})
+                tmpArr.push({font:"b",style:"b",align:"ct",data:"Numéro de Réimpression " + (data.special.reprint - 1)})
                 tmpArr.push({font:"b",align:"ct",data:moment(new Date()).locale('fr').format('dddd DD.MM.YYYY HH:mm:ss')})
                 tmpArr.push({font:"b",style:"b",align:"ct",data:data.special.dupCertificate})
 
