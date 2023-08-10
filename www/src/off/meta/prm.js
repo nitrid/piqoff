@@ -1986,6 +1986,28 @@ export const prm =
             CAPTION : "Sıra"
         }
     },
+    //Tax Sugar
+    {
+        TYPE : 1,
+        ID :"taxSugarGroupValidation",
+        VALUE : ['DA5704B6-D1A3-490B-BE86-E3FBCAF2EA29','1E4E0371-11E4-4FB3-828D-9D6E408EE0C9','60FE2360-029B-4284-B7FB-6D5DD842EA58'],
+        SPECIAL : "",
+        PAGE : "ftr_02_001",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "popTextList",
+            PAGE_NAME : "Alış Faturası",
+            CAPTION : "Tax Sugar Uygulanacak Gruplar",
+            FORM: 
+            {
+                width:"400",
+                height:"400",
+                textHeight:"260"
+            }
+        }
+    },
     //cmbDepot
     {
         TYPE : 2,

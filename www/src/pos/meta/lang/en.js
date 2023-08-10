@@ -38,6 +38,12 @@ export const langEn =
     pleaseWait : "Please wait...",
     qunatity : "Qty.",
     price : "Price",
+    msgDeviceChange : 
+    {
+        title : "Dikkat",   // BAK
+        msg : "Getirmek istediğiniz fişde ödeme mevcut işleme ödemenin alındğını kasadan devam edebilirsiniz ! Kasa Kodu : ",   // BAK
+        btn01 : "Tamam",   // BAK
+    },
     msgCustomerNotFound : 
     {
         title : "Attention",

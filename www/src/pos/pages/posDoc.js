@@ -84,7 +84,6 @@ export default class posDoc extends React.PureComponent
         {
             date:"00.00.0000",
             isPluEdit:false,
-            isBtnInfo:false,            
             isConnected:this.core.offline ? false : true,
             isFormation:false
         }   
@@ -541,6 +540,24 @@ export default class posDoc extends React.PureComponent
         {
             this.posObj.clearAll()
             await this.posObj.load({GUID:pGuid})
+            if(this.posObj.posPay.dt().length > 0 && this.posObj.dt()[0].DEVICE != window.localStorage.getItem('device'))
+            {
+                let tmpConfObj =
+                {
+                    id:'msgDeviceChange',
+                    showTitle:true,
+                    title:this.lang.t("msgDeviceChange.title"),
+                    showCloseButton:true,
+                    width:'500px',
+                    height:'200px',
+                    button:[{id:"btn01",caption:this.lang.t("msgDeviceChange.btn01"),location:'before'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgDeviceChange.msg")  + ' ' + this.posObj.dt()[0].DEVICE}</div>)
+                }
+                
+                await dialog(tmpConfObj);
+                this.init()
+                return
+            }
             this.posObj.dt()[0].DEVICE = this.state.isFormation ? '9999' : window.localStorage.getItem('device')
             this.posObj.dt()[0].DOC_DATE =  moment(new Date()).format("YYYY-MM-DD"),            
             //PROMOSYON GETİR.
@@ -793,7 +810,7 @@ export default class posDoc extends React.PureComponent
             {
                 tmpPrice = tmpPriceDt[0].PRICE
                 //FİYAT GÖR
-                if(this.state.isBtnInfo)
+                if(this.btnInfo.lock)
                 {
                     let tmpConfObj =
                     {
@@ -807,7 +824,7 @@ export default class posDoc extends React.PureComponent
                         content:(<div><h3 className="text-primary text-center">{tmpItemsDt[0].NAME}</h3><h3 className="text-danger text-center">{tmpPrice + " EUR"}</h3></div>)
                     }
                     await dialog(tmpConfObj);
-                    this.setState({isBtnInfo:false})
+                    this.btnInfo.setUnLock({backgroundColor:"#0dcaf0",borderColor:"#0dcaf0",height:"70px",width:"100%"})
                     this.loading.current.instance.hide()
                     return;
                 }
@@ -1273,7 +1290,7 @@ export default class posDoc extends React.PureComponent
     {
         if(pType == 'SALE')
         {
-            let tmpData = this.posObj.posSale.dt().where({ITEM_GUID:pData.GUID}).where({SUBTOTAL:0}).where({QUANTITY:{'>':0}}).where({PRICE:pData.PRICE})
+            let tmpData = this.posObj.posSale.dt().where({ITEM_GUID:pData.GUID}).where({SUBTOTAL:0}).where({QUANTITY:{'>':0}}).where({PRICE:pData.PRICE}).where({PROMO_TYPE:{'<>':1}})
             if(tmpData.length > 0)
             {
                 //UNIQ ÜRÜN İÇİN pData.INPUT == pData.UNIQ_CODE
@@ -3679,16 +3696,16 @@ export default class posDoc extends React.PureComponent
                                     </div>
                                     {/* Info */}
                                     <div className="col-2 px-1">
-                                        <NbButton id={"btnInfo"} parent={this} className={this.state.isBtnInfo == true ? "form-group btn btn-danger btn-block my-1" : "form-group btn btn-info btn-block my-1"} style={{height:"70px",width:"100%"}}
+                                        <NbButton id={"btnInfo"} parent={this} className={"form-group btn btn-info btn-block my-1"} style={{height:"70px",width:"100%"}}
                                         onClick={()=>
                                         {
-                                            if(this.state.isBtnInfo)
+                                            if(this.btnInfo.lock)
                                             {
-                                                this.setState({isBtnInfo:false})
+                                                this.btnInfo.setUnLock({backgroundColor:"#0dcaf0",borderColor:"#0dcaf0",height:"70px",width:"100%"})
                                             }
                                             else
                                             {
-                                                this.setState({isBtnInfo:true})
+                                                this.btnInfo.setLock({backgroundColor:"#dc3545",borderColor:"#dc3545",height:"70px",width:"100%"})
                                             }
                                         }}>
                                             <i className="text-white fa-solid fa-circle-info" style={{fontSize: "24px"}} />
@@ -3957,7 +3974,7 @@ export default class posDoc extends React.PureComponent
                                             tmpOrderList.selectCmd = 
                                             {
                                                 query : "SELECT REF,REF_NO,DOC_DATE,INPUT_CODE,INPUT_NAME,DOC_GUID,SUM(TOTAL) AS TOTAL " +
-                                                        "FROM DOC_ORDERS_VW_01 WHERE TYPE = 1 AND CLOSED < 2 GROUP BY REF,REF_NO,DOC_DATE,INPUT_CODE,INPUT_NAME,DOC_GUID ",
+                                                        "FROM DOC_ORDERS_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 62 AND CLOSED < 2 GROUP BY REF,REF_NO,DOC_DATE,INPUT_CODE,INPUT_NAME,DOC_GUID ",
                                             }
                                             await tmpOrderList.refresh()
                                             await this.grdPopOrderList.dataRefresh({source:tmpOrderList});
