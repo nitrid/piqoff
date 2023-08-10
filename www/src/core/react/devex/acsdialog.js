@@ -198,7 +198,13 @@ export default class NdAcsDialog extends NdBase
                             {
                                 query : "SELECT TOP 1 * FROM USERS WHERE CARDID = @CARDID", 
                                 param : ['CARDID:string|50'],
-                                value : [this["txt" + this.props.id + "cardRead"].value]
+                                value : [this["txt" + this.props.id + "cardRead"].value],
+                                local : 
+                                {
+                                    type : "select",
+                                    query : "SELECT * FROM USERS WHERE CARDID = ?;",
+                                    values : [this["txt" + this.props.id + "cardRead"].value]
+                                }
                             }
                             let tmpData = await this.core.sql.execute(tmpQuery)
                             if(tmpData.result.recordset.length > 0)

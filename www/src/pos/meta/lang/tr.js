@@ -38,6 +38,12 @@ export const langTr =
     pleaseWait : "Lütfen Bekleyin...",
     qunatity : "Miktar",
     price : "Fiyat",
+    msgDeviceChange : 
+    {
+        title : "Dikkat",
+        msg : "Getirmek istediğiniz fişde ödeme mevcut işleme ödemenin alındğını kasadan devam edebilirsiniz ! Kasa Kodu : ",
+        btn01 : "Tamam",
+    },
     msgCustomerNotFound : 
     {
         title : "Dikkat",

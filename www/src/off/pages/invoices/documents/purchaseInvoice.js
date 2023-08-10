@@ -1648,6 +1648,18 @@ export default class purchaseInvoice extends React.PureComponent
             let tmpData = this.sysParam.filter({ID:'purcInvoıcePriceSave',USERS:this.user.CODE}).getValue()
             if(typeof tmpData != 'undefined' && tmpData.value ==  true)
             {
+                // let tmpTaxSucre = 0
+                // let tmpQuery = 
+                // {
+                //     query : "SELECT TAX_SUCRE FROM CUSTOMER_VW_01 WHERE GUID = @CUSTOMER",
+                //     param : ['CUSTOMER:string|50'],
+                //     value : [this.docObj.dt()[0].OUTPUT]
+                // }
+                // let tmpData = await this.core.sql.execute(tmpQuery)
+                // if(tmpData.result.recordset.length > 0)
+                // {
+                //     tmpTaxSucre = tmpData.result.recordset[0].TAX_SUCRE
+                // }
                 App.instance.setState({isExecute:true})
                 this.newPrice.clear()
                 this.newVat.clear()
@@ -1671,6 +1683,24 @@ export default class purchaseInvoice extends React.PureComponent
                             if(tmpData.result.recordset.length > 0)
                             {
                                 let tmpItemData = [{...this.docObj.docItems.dt()[i]}]
+                                // if(tmpTaxSucre == 1)
+                                // {
+                                //     let tmpQuery2 = 
+                                //     {
+                                //         query : "SELECT MAIN_GUID FROM ITEMS_VW_01 WHERE GUID = @ITEM",
+                                //         param : ['ITEM:string|50'],
+                                //         value : [this.docObj.docItems.dt()[i].ITEM]
+                                //     }
+                                //     let tmpData2 = await this.core.sql.execute(tmpQuery2)
+                                //     if(tmpData2.result.recordset.length > 0)
+                                //     {
+                                //         let tmpData = this.prmObj.filter({ID:'taxSugarGroupValidation'}).getValue()
+                                //         if((typeof tmpData != 'undefined' && Array.isArray(tmpData) && typeof tmpData.find(x => x == tmpData2.result.recordset[0].MAIN_GUID) != 'undefined'))
+                                //         {
+                                            
+                                //         }
+                                //     }
+                                // }
                                 tmpItemData[0].SALE_PRICE_GUID = tmpData.result.recordset[0].PRICE_GUID
                                 tmpItemData[0].SALE_PRICE = tmpData.result.recordset[0].SALE_PRICE
                                 tmpItemData[0].ITEM_VAT = tmpData.result.recordset[0].VAT

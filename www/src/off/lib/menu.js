@@ -719,6 +719,11 @@ export const menu = (e) =>
                                     text: e.t('menuOff.sip_02_002'),//'Satış Sipariş',
                                     path: 'orders/documents/salesOrder'
                                 },
+                                {
+                                    id: 'sip_02_003',
+                                    text: e.t('menuOff.sip_02_003'),//'Pos Satış Sipariş',
+                                    path: 'orders/documents/posSalesOrder'
+                                },
                             ]
                         },
                         {
