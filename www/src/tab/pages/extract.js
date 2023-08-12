@@ -116,7 +116,7 @@ export default class extract extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL + '%') OR UPPER(TITLE) LIKE UPPER(@VAL + '%')) AND STATUS = 1",
+                    query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_02 WHERE (UPPER(CODE) LIKE UPPER(@VAL + '%') OR UPPER(TITLE) LIKE UPPER(@VAL + '%')) AND STATUS = 1",
                     param : ['VAL:string|50'],
                     value : [this.txtCustomerSearch.value]
                 },
