@@ -1569,7 +1569,8 @@ export class datatable
 
             if(arguments.length == 2)
             {
-                tmpVal = Number(tmpVal).toFixed(arguments[1]);
+                tmpVal = Number(tmpVal).round(arguments[1]);
+                tmpVal = tmpVal.toFixed(arguments[1])
             }
         }
 
@@ -2280,6 +2281,6 @@ Number.prototype.round = function(pDigits)
     }
     tmpNum = Number(tmpNum)
     
-    //return Math.round((Number(this.toFixed(pDigits + 1)) + Number.EPSILON) * tmpNum) / tmpNum
-    return Math.round((this + Number.EPSILON) * tmpNum) / tmpNum
+    return Math.round((Number(this.toFixed(pDigits + 1)) + Number.EPSILON) * tmpNum) / tmpNum
+    //return Math.round((this + Number.EPSILON) * tmpNum) / tmpNum
 }

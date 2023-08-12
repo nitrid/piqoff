@@ -152,7 +152,7 @@ export default class promotionList extends React.PureComponent
                                         {
                                             id: 'cri_01_001',
                                             text: this.t('menu'),
-                                            path: 'customers/cards/customerCard.js'
+                                            path: 'promotion/cards/promotionCard.js'
                                         })
                                     }
                                 }} />
