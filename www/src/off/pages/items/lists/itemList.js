@@ -125,6 +125,7 @@ export default class itemList extends React.PureComponent
     }
     async _btnGetirClick()
     {
+        console.log(Number(9.075).round(2))
         let tmpStatus
         if(this.chkAktif.value == true)
         {
