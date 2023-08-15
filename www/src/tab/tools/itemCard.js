@@ -24,12 +24,11 @@ export default class NbItemCard extends NbBase
     }
     componentDidMount()
     {        
-        this.cmbUnit.data.onLoaded = (pData)=>
+        this.cmbUnit.data.onLoaded = async(pData)=>
         {
-            console.log(this.props.defaultUnit)
             if(typeof this.props.defaultUnit != 'undefined' && typeof pData.data.find(option => option.NAME === this.props.defaultUnit)?.GUID != 'undefined')
             {
-                this.cmbUnit.value = pData.data.find(option => option.NAME === this.props.defaultUnit)?.GUID
+                this.cmbUnit._onValueChanged({value:pData.data.find(option => option.NAME === this.props.defaultUnit)?.GUID})
             }
         }
     }
@@ -84,6 +83,7 @@ export default class NbItemCard extends NbBase
                             data={{source:{select:{query : "SELECT GUID,NAME,FACTOR,TYPE FROM ITEM_UNIT_VW_01 WHERE ITEM_GUID ='"+ this.props.data.GUID +"'"},sql:this.core.sql}}}
                             onValueChanged={(async(e)=>
                             {
+                                await this.core.util.waitUntil(300)
                                 if(e.value != '00000000-0000-0000-0000-000000000000' && e.value != '')
                                 {
                                     this.props.data.UNIT_FACTOR = this.cmbUnit.data.datatable.where({'GUID':e.value})[0].FACTOR
