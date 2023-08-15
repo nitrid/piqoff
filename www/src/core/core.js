@@ -1564,12 +1564,13 @@ export class datatable
         {            
             tmpVal = this.reduce((a,b) =>
             {
-                return {[arguments[0]] : Number(a[arguments[0]]).round(5) + Number(b[arguments[0]]).round(5)}
+                return {[arguments[0]] : Number(a[arguments[0]]) + Number(b[arguments[0]])}
             },{[arguments[0]]:0})[arguments[0]]
 
             if(arguments.length == 2)
             {
-                tmpVal = Number(tmpVal).toFixed(arguments[1]);
+                tmpVal = Number(tmpVal).round(arguments[1]);
+                tmpVal = tmpVal.toFixed(arguments[1])
             }
         }
 
@@ -2280,6 +2281,7 @@ Number.prototype.round = function(pDigits)
     }
     tmpNum = Number(tmpNum)
     
-    //return Math.round((Number(this.toFixed(pDigits + 1)) + Number.EPSILON) * tmpNum) / tmpNum
-    return Math.round((this + Number.EPSILON) * tmpNum) / tmpNum
+    return Number(Math.round(Number(this)+'e'+pDigits)+'e-'+pDigits)
+    return Math.round((Number(this.toFixed(pDigits + 1)) + Number.EPSILON) * tmpNum) / tmpNum
+    //return Math.round((this + Number.EPSILON) * tmpNum) / tmpNum
 }

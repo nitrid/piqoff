@@ -54,8 +54,8 @@ export function print()
             }   
             return tmpArr.length > 0 ? tmpArr : undefined
         },
-        ()=>{return {font:"b",align:"lt",pdf:{fontSize:12},data:moment(new Date(data.pos[0].LDATE).toISOString()).utcOffset(0,false).locale('fr').format('dddd DD.MM.YYYY HH:mm:ss')}},
-        ()=>{return {font:"b",align:"lt",pdf:{fontSize:12},data:("Caissier: " + data.pos[0].CUSER).space(34,'e') + ("Caisse: " + data.pos[0].DEVICE).space(30,'s')}},
+        ()=>{return {font:"b",align:"lt",pdf:{fontSize:11},data:moment(new Date(data.pos[0].LDATE).toISOString()).utcOffset(0,false).locale('fr').format('dddd DD.MM.YYYY HH:mm:ss')}},
+        ()=>{return {font:"b",align:"lt",pdf:{fontSize:11},data:("Caissier: " + data.pos[0].CUSER).space(32,'e') + ("Caisse: " + data.pos[0].DEVICE).space(30,'s')}},
         //FIS NO BARKODU
         ()=>{return {align:"ct",barcode:data.pos[0].GUID.substring(19,36),options:{width: 1,height:40,position:'OFF'}}},
         ()=>{return {font:"a",style:"b",align:"ct",data:"****** Numero de Ticket De Caisse ******"}},
@@ -110,13 +110,13 @@ export function print()
             if(data.special.type != 'Fatura')
             {
                 tmpTitle = {font:"b",style:"b",align:"lt", 
-                pdf:{fontSize:8,grid:[{x:3,charS:0,charE:2,align:'left'},{x:6,charS:2,charE:33,align:'left'},{x:70,charS:34,charE:47},{x:80,charS:48,charE:55},{x:90,charS:56,charE:63}]},
+                pdf:{fontSize:8,grid:[{x:3,charS:0,charE:2,align:'left'},{x:6,charS:2,charE:33,align:'left'},{x:70,charS:34,charE:47},{x:80,charS:40,charE:54},{x:93,charS:55,charE:65}]},
                 data:"  " + "".space(32) + " " + "".space(8) + " " + "   Prix".space(11) + " " + "  Prix".space(8)}
             }
             else
             {
                 tmpTitle = {font:"b",style:"b",align:"lt",
-                pdf:{fontSize:8,grid:[{x:3,charS:0,charE:2,align:'left'},{x:6,charS:2,charE:33,align:'left'},{x:70,charS:34,charE:47},{x:80,charS:48,charE:55},{x:90,charS:56,charE:63}]},
+                pdf:{fontSize:8,grid:[{x:3,charS:0,charE:2,align:'left'},{x:6,charS:2,charE:33,align:'left'},{x:70,charS:34,charE:47},{x:80,charS:40,charE:54},{x:93,charS:55,charE:65}]},
                 data:"  " + "".space(32) + " " + "".space(8) + " " + "  Prix HT".space(11) + " " + "  Prix".space(8)}
             }
             return tmpTitle
@@ -128,13 +128,13 @@ export function print()
             if(data.special.type != 'Fatura')
             {
                 tmpTitle = {font:"b",style:"bu",align:"lt",
-                pdf:{fontSize:8,grid:[{x:3,charS:0,charE:2,align:'left'},{x:6,charS:2,charE:33,align:'left'},{x:70,charS:34,charE:47},{x:80,charS:48,charE:55},{x:90,charS:56,charE:63}]},
+                pdf:{fontSize:8,grid:[{x:3,charS:0,charE:2,align:'left'},{x:6,charS:2,charE:33,align:'left'},{x:65,charS:34,charE:47},{x:80,charS:48,charE:55},{x:91,charS:56,charE:66}]},
                 data:"T " + "Libelle".space(32) + " " + "Qte".space(8) + " " + "U ou EUR/kg".space(11) + " " + "Prix EUR".space(8)}
             }
             else if(data.special.type == 'Fatura')
             {
                 tmpTitle = {font:"b",style:"bu",align:"lt",
-                pdf:{fontSize:8,grid:[{x:3,charS:0,charE:2,align:'left'},{x:6,charS:2,charE:33,align:'left'},{x:70,charS:34,charE:47},{x:80,charS:48,charE:55},{x:90,charS:56,charE:63}]},
+                pdf:{fontSize:8,grid:[{x:3,charS:0,charE:2,align:'left'},{x:6,charS:2,charE:33,align:'left'},{x:65,charS:34,charE:47},{x:80,charS:48,charE:55},{x:91,charS:56,charE:66}]},
                 data:"T " + "Libelle".space(32) + " " + "Qte".space(8) + " " + "U ou EUR/kg".space(11) + " " + "T.HT EUR".space(8)}
             }
             return tmpTitle
