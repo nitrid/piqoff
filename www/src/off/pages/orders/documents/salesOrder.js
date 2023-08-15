@@ -3290,6 +3290,9 @@ export default class salesOrder extends React.PureComponent
                                         }).bind(this)}
                                    data={{source:[{ID:"FR",VALUE:"FR"},{ID:"DE",VALUE:"DE"},{ID:"TR",VALUE:"TR"}]}}
                                     >
+                                         <Validator validationGroup={"frmSlsOrderMail" + this.tabIndex}>
+                                            <RequiredRule message={this.t("validDesign")} />
+                                        </Validator> 
                                     </NdSelectBox>
                                 </Item>
                                 <Item>

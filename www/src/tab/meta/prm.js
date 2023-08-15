@@ -25,7 +25,7 @@ export const prm =
         ID :"defaultUnit",
         VALUE : 
         {
-            value : "Kilogramme"
+            value : "Colis"
         },
         SPECIAL : "",
         PAGE : "sale.js",
