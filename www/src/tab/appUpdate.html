@@ -42,7 +42,10 @@
                         </div>
                         <div class="row mb-2">
                             <div class="col-12">
-                                <input type="text" class="form-control" name="app" id="app" placeholder="App">
+                                <select class="form-control" name="app" id="app">
+                                    <option value="tab">Tab</option>
+                                    <option value="mob">Mob</option>
+                                </select>
                             </div>
                         </div>
                         <div class="row mb-2">
@@ -103,24 +106,33 @@
                 sync: function(Host,App,Callback)
                 {        
                     var TmpHost = Host;
-
                     var url = "http://" + TmpHost + "/public.zip";
+
                     var sync = ContentSync.sync({ src: url, id: 'piqapp', copyCordovaAssets: true });
 
                     var setProgress = this.setProgress; 
-
+                    
                     sync.on('progress', function(progress) 
-                    {
+                    {                        
                         app.setProgress(progress);
                     });
 
                     sync.on('complete', function(data) 
-                    {                        
+                    { 
                         window.resolveLocalFileSystemURL("file://" + data.localPath + "/public/" + App + "/index.html", 
-                        function()
-                        {
-                            document.location = data.localPath + "/public/" + App + "/index.html";    
-                            localStorage.path = data.localPath;
+                        function(fileEntry)
+                        {          
+                            console.log(fileEntry.nativeURL)                  
+                            if(device.platform === 'iOS')
+                            {
+                                localStorage.path = window.WkWebView.convertFilePath(fileEntry.toURL());
+                                window.location = window.WkWebView.convertFilePath(fileEntry.toURL());                                
+                            }
+                            else if(device.platform === 'Android')
+                            {
+                                localStorage.path = fileEntry.nativeURL;
+                                window.location = fileEntry.nativeURL;                                
+                            }
                         },
                         function()
                         {
