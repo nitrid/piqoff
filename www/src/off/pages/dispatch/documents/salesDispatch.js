@@ -3286,6 +3286,9 @@ export default class salesDispatch extends React.PureComponent
                                         }).bind(this)}
                                    data={{source:[{ID:"FR",VALUE:"FR"},{ID:"DE",VALUE:"DE"},{ID:"TR",VALUE:"TR"}]}}
                                     >
+                                         <Validator validationGroup={"frmSlsDispatch"  + this.tabIndex}>
+                                            <RequiredRule message={this.t("validDesign")} />
+                                        </Validator> 
                                     </NdSelectBox>
                                 </Item>
                                 <Item>
