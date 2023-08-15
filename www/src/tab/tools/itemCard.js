@@ -20,7 +20,18 @@ export default class NbItemCard extends NbBase
         this.data = this.props.data
         this.value = 0
         this._onValueChange = this._onValueChange.bind(this);
-        this._onClick = this._onClick.bind(this);
+        this._onClick = this._onClick.bind(this);        
+    }
+    componentDidMount()
+    {        
+        this.cmbUnit.data.onLoaded = (pData)=>
+        {
+            console.log(this.props.defaultUnit)
+            if(typeof this.props.defaultUnit != 'undefined' && typeof pData.data.find(option => option.NAME === this.props.defaultUnit)?.GUID != 'undefined')
+            {
+                this.cmbUnit.value = pData.data.find(option => option.NAME === this.props.defaultUnit)?.GUID
+            }
+        }
     }
     _onValueChange(e)
     {
@@ -70,7 +81,6 @@ export default class NbItemCard extends NbBase
                             displayExpr="NAME"                       
                             valueExpr="GUID"
                             value= {this.props.data.UNIT}
-                            searchEnabled={true}
                             data={{source:{select:{query : "SELECT GUID,NAME,FACTOR,TYPE FROM ITEM_UNIT_VW_01 WHERE ITEM_GUID ='"+ this.props.data.GUID +"'"},sql:this.core.sql}}}
                             onValueChanged={(async(e)=>
                             {

@@ -414,7 +414,6 @@ export default class Sale extends React.PureComponent
     }
     async getDoc(pGuid,pRef,pRefno,pDocType)
     {
-        console.log(pDocType)
         this.docObj.clearAll()
         this.setState({isExecute:true})
         await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:1,DOC_TYPE:pDocType});
@@ -429,10 +428,8 @@ export default class Sale extends React.PureComponent
             this.docLines = this.docObj.docItems.dt()
         }
         await this.grdSale.dataRefresh({source:this.docLines});
-        console.log(this.docObj)
         this.setState({isExecute:false})
         this.itemView.setItemAll()
-        console.log(this.docLines)
     }
     render()
     {
@@ -503,7 +500,7 @@ export default class Sale extends React.PureComponent
                     <ScrollView showScrollbar={'never'} useNative={false}>
                         <div className='row'>
                             <div className='col-12'>
-                                <NbItemView id="itemView" parent={this} dt={this.docLines} onValueChange={this.onValueChange}/>
+                                <NbItemView id="itemView" parent={this} dt={this.docLines} onValueChange={this.onValueChange} defaultUnit={this.param.filter({TYPE:1,USERS:this.user.CODE,ID:'defaultUnit'}).getValue().value}/>
                             </div>
                         </div>
                         <div className='row'>                            

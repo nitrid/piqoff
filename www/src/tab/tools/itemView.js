@@ -59,7 +59,8 @@ export default class NbItemView extends NbBase
                         return (
                             <div className='col-lg-3 col-md-4 pb-2' key={'div' + i}>
                                 <NbItemCard id={'itemCard' + i} parent={this} key={'itemCard' + i} price={object.PRICE} name={object.NAME}
-                                image={object.IMAGE} data={object} dt={this.props.dt} onValueChange={this._onValueChange} onClick={this._onClick}/>
+                                image={object.IMAGE} data={object} dt={this.props.dt} onValueChange={this._onValueChange} onClick={this._onClick}
+                                defaultUnit={this.props.defaultUnit}/>
                             </div>)
                     }).bind(this))}                
                 </div>    

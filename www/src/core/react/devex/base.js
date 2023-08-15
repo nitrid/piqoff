@@ -490,6 +490,13 @@ export default class NdBase extends React.PureComponent
 
                             return x
                         },
+                        onLoaded: function (result) 
+                        {
+                            if(typeof tmpThis.props.data != 'undefined' && typeof tmpThis.props.data.onLoaded != 'undefined')
+                            {
+                                tmpThis.props.data.onLoaded(result)
+                            }
+                        },
                     }),
                 }
             });
