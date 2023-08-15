@@ -42,7 +42,10 @@
                         </div>
                         <div class="row mb-2">
                             <div class="col-12">
-                                <input type="text" class="form-control" name="app" id="app" placeholder="App">
+                                <select class="form-control" name="app" id="app">
+                                    <option value="tab">Tab</option>
+                                    <option value="mob">Mob</option>
+                                </select>
                             </div>
                         </div>
                         <div class="row mb-2">
@@ -58,10 +61,11 @@
         <script>
             var app = 
             {
-                initialize: function() {
+                initialize: function() 
+                {
                     this.bindEvents();
-                    document.getElementById('host').value = localStorage.host;
-                    document.getElementById('app').value = localStorage.app;
+                    document.getElementById('host').value = localStorage.getItem("host");
+                    document.getElementById('app').value = localStorage.getItem("app");
                 },
                 bindEvents: function() {
                     document.addEventListener('deviceready', this.onDeviceReady, false);
@@ -103,24 +107,32 @@
                 sync: function(Host,App,Callback)
                 {        
                     var TmpHost = Host;
-
                     var url = "http://" + TmpHost + "/public.zip";
+
                     var sync = ContentSync.sync({ src: url, id: 'piqapp', copyCordovaAssets: true });
 
                     var setProgress = this.setProgress; 
-
+                    
                     sync.on('progress', function(progress) 
-                    {
+                    {                        
                         app.setProgress(progress);
                     });
 
                     sync.on('complete', function(data) 
-                    {                        
+                    { 
                         window.resolveLocalFileSystemURL("file://" + data.localPath + "/public/" + App + "/index.html", 
-                        function()
-                        {
-                            document.location = data.localPath + "/public/" + App + "/index.html";    
-                            localStorage.path = data.localPath;
+                        function(fileEntry)
+                        {              
+                            if(device.platform === 'iOS')
+                            {                                
+                                window.location = window.WkWebView.convertFilePath(fileEntry.toURL());                                
+                            }
+                            else if(device.platform === 'Android')
+                            {
+                                window.location = fileEntry.nativeURL;                                
+                            }
+                            localStorage.setItem("path",data.localPath);
+                            localStorage.setItem("app",App);
                         },
                         function()
                         {
@@ -145,7 +157,7 @@
                             Callback(false);
                         }
                     });
-                }    
+                }       
             };
             app.initialize();
             function BtnKaydet()
@@ -158,9 +170,8 @@
                     }
                     else
                     {
-                        localStorage.host = document.getElementById('host').value;
-                        localStorage.app = document.getElementById('app').value;
-                        localStorage.mode = "true";
+                        localStorage.setItem("host",document.getElementById('host').value)
+                        localStorage.setItem("app",document.getElementById('app').value)
                     }
                 });
             }
