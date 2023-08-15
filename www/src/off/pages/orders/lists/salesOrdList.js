@@ -415,7 +415,7 @@ export default class salesOrdList extends React.PureComponent
                                     onValueChanged={(async()=>
                                         {
                                         }).bind(this)}
-                                    data={{source:[{ID:"FR",VALUE:"FR"},{ID:"TR",VALUE:"TR"}]}}
+                                   data={{source:[{ID:"FR",VALUE:"FR"},{ID:"DE",VALUE:"DE"},{ID:"TR",VALUE:"TR"}]}}
                                     >
                                     </NdSelectBox>
                                 </Item>
@@ -430,7 +430,7 @@ export default class salesOrdList extends React.PureComponent
                                                     let tmpQuery = 
                                                     {
                                                         query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ORDERS_FOR_PRINT](@DOC_GUID) ORDER BY LINE_NO " ,
-                                                        param:  ['DOC_GUID:string|50','DESIGN:string|25'],
+                                                        param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
                                                         value:  [this.printGuid,this.cmbDesignList.value]
                                                     }
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
@@ -471,7 +471,7 @@ export default class salesOrdList extends React.PureComponent
                                                     let tmpQuery = 
                                                     {
                                                         query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ORDERS_FOR_PRINT](@DOC_GUID) ORDER BY LINE_NO " ,
-                                                        param:  ['DOC_GUID:string|50','DESIGN:string|25'],
+                                                        param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
                                                         value:  [this.printGuid,this.cmbDesignList.value]
                                                     }
                                                     App.instance.setState({isExecute:true})

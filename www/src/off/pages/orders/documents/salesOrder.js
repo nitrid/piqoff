@@ -3288,7 +3288,7 @@ export default class salesOrder extends React.PureComponent
                                     onValueChanged={(async()=>
                                         {
                                         }).bind(this)}
-                                    data={{source:[{ID:"FR",VALUE:"FR"},{ID:"TR",VALUE:"TR"}]}}
+                                   data={{source:[{ID:"FR",VALUE:"FR"},{ID:"DE",VALUE:"DE"},{ID:"TR",VALUE:"TR"}]}}
                                     >
                                     </NdSelectBox>
                                 </Item>
@@ -3303,8 +3303,8 @@ export default class salesOrder extends React.PureComponent
                                                     let tmpQuery = 
                                                     {
                                                         query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ORDERS_FOR_PRINT](@DOC_GUID) ORDER BY LINE_NO " ,
-                                                        param:  ['DOC_GUID:string|50','DESIGN:string|25'],
-                                                        value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value]
+                                                        param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
+                                                        value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
                                                     }
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
                                                     console.log(JSON.stringify(tmpData.result.recordset)) // BAK
@@ -3344,8 +3344,8 @@ export default class salesOrder extends React.PureComponent
                                                     let tmpQuery = 
                                                     {
                                                         query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ORDERS_FOR_PRINT](@DOC_GUID) ORDER BY LINE_NO " ,
-                                                        param:  ['DOC_GUID:string|50','DESIGN:string|25'],
-                                                        value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value]
+                                                        param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
+                                                        value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
                                                     }
                                                     App.instance.setState({isExecute:true})
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
@@ -3781,8 +3781,8 @@ export default class salesOrder extends React.PureComponent
                                                     let tmpQuery = 
                                                     {
                                                         query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ORDERS_FOR_PRINT](@DOC_GUID) ORDER BY LINE_NO " ,
-                                                        param:  ['DOC_GUID:string|50','DESIGN:string|25'],
-                                                        value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value]
+                                                        param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
+                                                        value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
                                                     }
                                                     App.instance.setState({isExecute:true})
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
