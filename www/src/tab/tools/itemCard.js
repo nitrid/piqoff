@@ -16,7 +16,7 @@ export default class NbItemCard extends NbBase
             name : typeof this.props.name == 'undefined' ? '' : this.props.name,
             price : typeof this.props.price == 'undefined' ? 0 : Number(this.props.price).round(3),
         }
-
+        
         this.data = this.props.data
         this.value = 0
         this._onValueChange = this._onValueChange.bind(this);
@@ -101,7 +101,7 @@ export default class NbItemCard extends NbBase
                     </div>
                     <div className='row pb-1'>
                         <div className='col-12'>
-                            <div className="overflow-hidden" style={{height:'75px'}}>{this.state.name}</div>
+                            <div className="overflow-hidden" style={{height:'75px'}}>{this.data.CODE + " - " + this.state.name}</div>
                         </div>
                     </div>
                     <div className='row'>

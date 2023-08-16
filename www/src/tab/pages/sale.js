@@ -707,6 +707,7 @@ export default class Sale extends React.PureComponent
                                                     allowColumnReordering={true} 
                                                     allowColumnResizing={true} 
                                                     headerFilter={{visible:true}}
+                                                    sorting={{ mode: 'single' }}
                                                     height={'400'} 
                                                     width={'100%'}
                                                     dbApply={false}
@@ -774,6 +775,7 @@ export default class Sale extends React.PureComponent
                                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
                                                         <Scrolling mode="standart" />
                                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
+                                                        <Column dataField="LINE_NO" caption={"Line No"} width={70} dataType={'number'} defaultSortOrder="asc" visible={false}/>
                                                         <Column dataField="ITEM_NAME" caption={this.t("grdSale.clmItemName")} width={200} allowHeaderFiltering={false}/>
                                                         <Column dataField="QUANTITY" caption={this.t("grdSale.clmQuantity")} width={70} dataType={'number'} />
                                                         <Column dataField="PRICE" caption={this.t("grdSale.clmPrice")} width={70} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
@@ -994,8 +996,8 @@ export default class Sale extends React.PureComponent
                                 </div>
                             </NbPopUp>
                         </div>     
-                         {/* EVRAK SECIMI POPUP */}
-                         <div>                            
+                        {/* EVRAK SECIMI POPUP */}
+                        <div>                            
                             <NbPopUp id={"popDocs"} parent={this} title={""} fullscreen={true}>
                                 <div>
                                     <div className='row' style={{paddingTop:"10px"}}>
@@ -1078,7 +1080,7 @@ export default class Sale extends React.PureComponent
                                 </div>
                             </NbPopUp>
                         </div> 
-                        {/* KDV PopUp */}
+                        {/* KDV POPUP */}
                         <div>
                             <NdPopUp parent={this} id={"popVatRate"} 
                             visible={false}
@@ -1151,7 +1153,7 @@ export default class Sale extends React.PureComponent
                                 </Form>
                             </NdPopUp>
                         </div>    
-                        {/* İndirim PopUp */}
+                        {/* İNDİRİM POPUP */}
                         <div>
                             <NdPopUp parent={this} id={"popDiscount"} 
                             visible={false}
@@ -1363,7 +1365,7 @@ export default class Sale extends React.PureComponent
                                 </Form>
                             </NdPopUp>
                         </div> 
-                         {/*Evrak İndirim PopUp */}
+                         {/* EVRAK İNDİRİM POPUP */}
                         <div>
                             <NdPopUp parent={this} id={"popDocDiscount"} 
                             visible={false}

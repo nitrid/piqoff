@@ -17,10 +17,10 @@ export default class NbItemPopUp extends NbBase
         this.state =
         {
             images : [],
-            minImgStyle1 : {border:"solid 2px rgb(13, 110, 253)",padding:"2px"},
-            minImgStyle2 : {padding:"2px"},
-            minImgStyle3 : {padding:"2px"},
-            minImgStyle4 : {padding:"2px"}
+            minImgStyle1 : {border:"solid 2px rgb(13, 110, 253)",padding:"2px",height:'90px'},
+            minImgStyle2 : {border:"solid 1px rgb(223, 230, 233)",padding:"2px",height:'90px'},
+            minImgStyle3 : {border:"solid 1px rgb(223, 230, 233)",padding:"2px",height:'90px'},
+            minImgStyle4 : {border:"solid 1px rgb(223, 230, 233)",padding:"2px",height:'90px'}
         }
         this.data = []
     }
@@ -111,47 +111,47 @@ export default class NbItemPopUp extends NbBase
                                         {
                                             if(e == i)
                                             {
-                                                this.setState({["minImgStyle" + (i + 1)] : {border:"solid 2px rgb(13, 110, 253)",padding:"2px"}})
+                                                this.setState({["minImgStyle" + (i + 1)] : {border:"solid 2px rgb(13, 110, 253)",padding:"2px",height:'90px'}})
                                             }
                                             else
                                             {
-                                                this.setState({["minImgStyle" + (i + 1)] : {padding:"2px"}})
+                                                this.setState({["minImgStyle" + (i + 1)] : {border:"solid 1px rgb(223, 230, 233)",padding:"2px",height:'90px'}})
                                             }
                                         }
                                     }}>
                                         <Carousel.Item>
-                                            <img className="d-block w-100 h-100" src={this.data.IMAGE1}/>
+                                            <img className="d-block h-100" style={{margin: 'auto auto'}} src={this.data.IMAGE1}/>
                                         </Carousel.Item>
                                         <Carousel.Item>
-                                            <img className="d-block w-100 h-100" src={this.data.IMAGE2}/>
+                                            <img className="d-block h-100" style={{margin: 'auto auto'}} src={this.data.IMAGE2}/>
                                         </Carousel.Item>
                                         <Carousel.Item>
-                                            <img className="d-block w-100 h-100" src={this.data.IMAGE3}/>
+                                            <img className="d-block h-100" style={{margin: 'auto auto'}} src={this.data.IMAGE3}/>
                                         </Carousel.Item>
                                         <Carousel.Item>
-                                            <img className="d-block w-100 h-100" src={this.data.IMAGE4}/>
+                                            <img className="d-block h-100" style={{margin: 'auto auto'}} src={this.data.IMAGE4}/>
                                         </Carousel.Item>
                                     </Carousel>
                                 </div>
                             </div>
                             <div className='row pt-3'>
-                                <div className='col-3' style={{height:'90px'}}>
-                                    <img className="d-block w-100 h-100" style={this.state.minImgStyle1} src={this.data.IMAGE1}/>
+                                <div className='col-3' style={this.state.minImgStyle1}>
+                                    <img className="d-block h-100" style={{margin: 'auto auto'}} src={this.data.IMAGE1}/>
                                 </div>
-                                <div className='col-3' style={{height:'90px'}}>
-                                    <img className="d-block w-100 h-100" style={this.state.minImgStyle2} src={this.data.IMAGE2}/>
+                                <div className='col-3' style={this.state.minImgStyle2}>
+                                    <img className="d-block h-100" style={{margin: 'auto auto'}} src={this.data.IMAGE2}/>
                                 </div>
-                                <div className='col-3' style={{height:'90px'}}>
-                                    <img className="d-block w-100 h-100" style={this.state.minImgStyle3} src={this.data.IMAGE3}/>
+                                <div className='col-3' style={this.state.minImgStyle3}>
+                                    <img className="d-block h-100" style={{margin: 'auto auto'}} src={this.data.IMAGE3}/>
                                 </div>
-                                <div className='col-3' style={{height:'90px'}}>
-                                    <img className="d-block w-100 h-100" style={this.state.minImgStyle4} src={this.data.IMAGE4}/>
+                                <div className='col-3' style={this.state.minImgStyle4}>
+                                    <img className="d-block h-100" style={{margin: 'auto auto'}} src={this.data.IMAGE4}/>
                                 </div>
                             </div>
                         </div>
                         <div className='row pt-2'>
                             <div className='col-12'>
-                                <h5 className="text-danger">{this.data.NAME}</h5>
+                                <h5 className="text-danger">{this.data.CODE + " - " + this.data.NAME}</h5>
                             </div>                            
                         </div>
                         <div className='row pt-2'>
