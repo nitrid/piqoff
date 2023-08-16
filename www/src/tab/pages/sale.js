@@ -75,8 +75,8 @@ export default class Sale extends React.PureComponent
         let tmpQuery = 
         {
             query :"SELECT  GUID,CODE,NAME,VAT,PRICE,IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR FROM ITEMS_VW_02 " +
-            "WHERE STATUS = 1 AND IMAGE <> '' AND " +
-            " UPPER(NAME) LIKE UPPER(@VAL + '%') AND ((MAIN_GRP = @MAIN_GRP) OR (@MAIN_GRP = ''))",
+            "WHERE STATUS = 1 AND ((UPPER(CODE) LIKE UPPER(@VAL + '%')) OR (UPPER(NAME) LIKE UPPER(@VAL + '%'))) AND " +
+            "((MAIN_GRP = @MAIN_GRP) OR (@MAIN_GRP = ''))",
             param : ['VAL:string|50','MAIN_GRP:string|50'],
             value : [this.txtSearch.value,this.cmbGroup.value],
             buffer : true
@@ -414,7 +414,6 @@ export default class Sale extends React.PureComponent
     }
     async getDoc(pGuid,pRef,pRefno,pDocType)
     {
-        console.log(pDocType)
         this.docObj.clearAll()
         this.setState({isExecute:true})
         await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:1,DOC_TYPE:pDocType});
@@ -429,10 +428,8 @@ export default class Sale extends React.PureComponent
             this.docLines = this.docObj.docItems.dt()
         }
         await this.grdSale.dataRefresh({source:this.docLines});
-        console.log(this.docObj)
         this.setState({isExecute:false})
         this.itemView.setItemAll()
-        console.log(this.docLines)
     }
     render()
     {
@@ -503,7 +500,7 @@ export default class Sale extends React.PureComponent
                     <ScrollView showScrollbar={'never'} useNative={false}>
                         <div className='row'>
                             <div className='col-12'>
-                                <NbItemView id="itemView" parent={this} dt={this.docLines} onValueChange={this.onValueChange}/>
+                                <NbItemView id="itemView" parent={this} dt={this.docLines} onValueChange={this.onValueChange} defaultUnit={this.param.filter({TYPE:1,USERS:this.user.CODE,ID:'defaultUnit'}).getValue().value}/>
                             </div>
                         </div>
                         <div className='row'>                            
@@ -710,6 +707,7 @@ export default class Sale extends React.PureComponent
                                                     allowColumnReordering={true} 
                                                     allowColumnResizing={true} 
                                                     headerFilter={{visible:true}}
+                                                    sorting={{ mode: 'single' }}
                                                     height={'400'} 
                                                     width={'100%'}
                                                     dbApply={false}
@@ -777,6 +775,7 @@ export default class Sale extends React.PureComponent
                                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
                                                         <Scrolling mode="standart" />
                                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
+                                                        <Column dataField="LINE_NO" caption={"Line No"} width={70} dataType={'number'} defaultSortOrder="asc" visible={false}/>
                                                         <Column dataField="ITEM_NAME" caption={this.t("grdSale.clmItemName")} width={200} allowHeaderFiltering={false}/>
                                                         <Column dataField="QUANTITY" caption={this.t("grdSale.clmQuantity")} width={70} dataType={'number'} />
                                                         <Column dataField="PRICE" caption={this.t("grdSale.clmPrice")} width={70} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
@@ -997,8 +996,8 @@ export default class Sale extends React.PureComponent
                                 </div>
                             </NbPopUp>
                         </div>     
-                         {/* EVRAK SECIMI POPUP */}
-                         <div>                            
+                        {/* EVRAK SECIMI POPUP */}
+                        <div>                            
                             <NbPopUp id={"popDocs"} parent={this} title={""} fullscreen={true}>
                                 <div>
                                     <div className='row' style={{paddingTop:"10px"}}>
@@ -1081,7 +1080,7 @@ export default class Sale extends React.PureComponent
                                 </div>
                             </NbPopUp>
                         </div> 
-                        {/* KDV PopUp */}
+                        {/* KDV POPUP */}
                         <div>
                             <NdPopUp parent={this} id={"popVatRate"} 
                             visible={false}
@@ -1154,7 +1153,7 @@ export default class Sale extends React.PureComponent
                                 </Form>
                             </NdPopUp>
                         </div>    
-                        {/* İndirim PopUp */}
+                        {/* İNDİRİM POPUP */}
                         <div>
                             <NdPopUp parent={this} id={"popDiscount"} 
                             visible={false}
@@ -1366,7 +1365,7 @@ export default class Sale extends React.PureComponent
                                 </Form>
                             </NdPopUp>
                         </div> 
-                         {/*Evrak İndirim PopUp */}
+                         {/* EVRAK İNDİRİM POPUP */}
                         <div>
                             <NdPopUp parent={this} id={"popDocDiscount"} 
                             visible={false}

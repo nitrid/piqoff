@@ -2255,7 +2255,7 @@ export default class salesOrder extends React.PureComponent
                                         <Column dataField="ITEM_CODE" caption={this.t("grdSlsOrder.clmItemCode")} width={75} editCellRender={this._cellRoleRender}/>
                                         <Column dataField="ITEM_NAME" caption={this.t("grdSlsOrder.clmItemName")} width={240} />
                                         <Column dataField="ITEM_BARCODE" caption={this.t("grdSlsOrder.clmBarcode")} width={100} allowEditing={false}/>
-                                        <Column dataField="QUANTITY" caption={this.t("grdSlsOrder.clmQuantity")} width={70} dataType={'number'} cellRender={(e)=>{return e.value + " / " + e.data.UNIT_SHORT}}/>
+                                        <Column dataField="QUANTITY" caption={this.t("grdSlsOrder.clmQuantity")} width={70} dataType={'number'} cellRender={(e)=>{return e.value + " / " + e.data.UNIT_SHORT}} editCellRender={this._cellRoleRender}/>
                                         <Column dataField="SUB_FACTOR" caption={this.t("grdSlsOrder.clmSubFactor")} width={70} allowEditing={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
                                         <Column dataField="SUB_QUANTITY" caption={this.t("grdSlsOrder.clmSubQuantity")} dataType={'number'} width={70} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
                                         <Column dataField="PRICE" caption={this.t("grdSlsOrder.clmPrice")} width={70} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
@@ -3288,8 +3288,11 @@ export default class salesOrder extends React.PureComponent
                                     onValueChanged={(async()=>
                                         {
                                         }).bind(this)}
-                                    data={{source:[{ID:"FR",VALUE:"FR"},{ID:"TR",VALUE:"TR"}]}}
+                                   data={{source:[{ID:"FR",VALUE:"FR"},{ID:"DE",VALUE:"DE"},{ID:"TR",VALUE:"TR"}]}}
                                     >
+                                         <Validator validationGroup={"frmSlsOrderMail" + this.tabIndex}>
+                                            <RequiredRule message={this.t("validDesign")} />
+                                        </Validator> 
                                     </NdSelectBox>
                                 </Item>
                                 <Item>
@@ -3303,8 +3306,8 @@ export default class salesOrder extends React.PureComponent
                                                     let tmpQuery = 
                                                     {
                                                         query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ORDERS_FOR_PRINT](@DOC_GUID) ORDER BY LINE_NO " ,
-                                                        param:  ['DOC_GUID:string|50','DESIGN:string|25'],
-                                                        value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value]
+                                                        param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
+                                                        value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
                                                     }
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
                                                     console.log(JSON.stringify(tmpData.result.recordset)) // BAK
@@ -3344,8 +3347,8 @@ export default class salesOrder extends React.PureComponent
                                                     let tmpQuery = 
                                                     {
                                                         query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ORDERS_FOR_PRINT](@DOC_GUID) ORDER BY LINE_NO " ,
-                                                        param:  ['DOC_GUID:string|50','DESIGN:string|25'],
-                                                        value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value]
+                                                        param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
+                                                        value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
                                                     }
                                                     App.instance.setState({isExecute:true})
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
@@ -3781,8 +3784,8 @@ export default class salesOrder extends React.PureComponent
                                                     let tmpQuery = 
                                                     {
                                                         query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ORDERS_FOR_PRINT](@DOC_GUID) ORDER BY LINE_NO " ,
-                                                        param:  ['DOC_GUID:string|50','DESIGN:string|25'],
-                                                        value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value]
+                                                        param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
+                                                        value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
                                                     }
                                                     App.instance.setState({isExecute:true})
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 

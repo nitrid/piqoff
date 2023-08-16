@@ -16,11 +16,21 @@ export default class NbItemCard extends NbBase
             name : typeof this.props.name == 'undefined' ? '' : this.props.name,
             price : typeof this.props.price == 'undefined' ? 0 : Number(this.props.price).round(3),
         }
-
+        
         this.data = this.props.data
         this.value = 0
         this._onValueChange = this._onValueChange.bind(this);
-        this._onClick = this._onClick.bind(this);
+        this._onClick = this._onClick.bind(this);        
+    }
+    componentDidMount()
+    {        
+        this.cmbUnit.data.onLoaded = async(pData)=>
+        {
+            if(typeof this.props.defaultUnit != 'undefined' && typeof pData.data.find(option => option.NAME === this.props.defaultUnit)?.GUID != 'undefined')
+            {
+                this.cmbUnit._onValueChanged({value:pData.data.find(option => option.NAME === this.props.defaultUnit)?.GUID})
+            }
+        }
     }
     _onValueChange(e)
     {
@@ -70,10 +80,10 @@ export default class NbItemCard extends NbBase
                             displayExpr="NAME"                       
                             valueExpr="GUID"
                             value= {this.props.data.UNIT}
-                            searchEnabled={true}
                             data={{source:{select:{query : "SELECT GUID,NAME,FACTOR,TYPE FROM ITEM_UNIT_VW_01 WHERE ITEM_GUID ='"+ this.props.data.GUID +"'"},sql:this.core.sql}}}
                             onValueChanged={(async(e)=>
                             {
+                                await this.core.util.waitUntil(300)
                                 if(e.value != '00000000-0000-0000-0000-000000000000' && e.value != '')
                                 {
                                     this.props.data.UNIT_FACTOR = this.cmbUnit.data.datatable.where({'GUID':e.value})[0].FACTOR
@@ -91,7 +101,7 @@ export default class NbItemCard extends NbBase
                     </div>
                     <div className='row pb-1'>
                         <div className='col-12'>
-                            <div className="overflow-hidden" style={{height:'75px'}}>{this.state.name}</div>
+                            <div className="overflow-hidden" style={{height:'75px'}}>{this.data.CODE + " - " + this.state.name}</div>
                         </div>
                     </div>
                     <div className='row'>

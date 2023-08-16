@@ -288,8 +288,7 @@ export default class itemImage extends React.PureComponent
                         <div className="col-2">
                             <div className='row'>
                                 <div className='col-12'>
-                                    <NdImageUpload id="imgFile1" parent={this} dt={{data:this.itemImageObj.dt(),field:"IMAGE",filter:{SORT:0}}} imageWidth={"120"} imageScale={true} buttonTrigger={"#btnSmallImg"}
-                                    height={'150px'}
+                                    <NdImageUpload id="imgFile1" parent={this} dt={{data:this.itemImageObj.dt(),field:"IMAGE",filter:{SORT:0}}} imageWidth={"120"} imageHeight={"90"} imageScale={true} buttonTrigger={"#btnSmallImg"}
                                     onValueChanged={async(e)=>
                                     {
                                         let tmpResolution = await this.imgFile1.getResolution()
@@ -320,8 +319,7 @@ export default class itemImage extends React.PureComponent
                         <div className="col-2">
                             <div className='row'>
                                 <div className='col-12'>                                
-                                    <NdImageUpload id="imgFile2" parent={this} dt={{data:this.itemImageObj.dt(),field:"IMAGE",filter:{SORT:1}}} imageWidth={"620"} imageScale={true} buttonTrigger={"#btnLargeImg1"}
-                                    height={'150px'}
+                                    <NdImageUpload id="imgFile2" parent={this} dt={{data:this.itemImageObj.dt(),field:"IMAGE",filter:{SORT:1}}} imageWidth={"620"} imageHeight={"465"} imageScale={true} buttonTrigger={"#btnLargeImg1"}
                                     onValueChanged={async(e)=>
                                     {
                                         let tmpResolution = await this.imgFile2.getResolution()
@@ -346,7 +344,6 @@ export default class itemImage extends React.PureComponent
                             <div className='row'>
                                 <div className='col-12'>                                
                                     <NdImageUpload id="imgFile3" parent={this} dt={{data:this.itemImageObj.dt(),field:"IMAGE",filter:{SORT:2}}} imageWidth={"620"} imageScale={true} buttonTrigger={"#btnLargeImg2"}
-                                    height={'150px'}
                                     onValueChanged={async(e)=>
                                     {
                                         let tmpResolution = await this.imgFile3.getResolution()
@@ -371,7 +368,6 @@ export default class itemImage extends React.PureComponent
                             <div className='row'>
                                 <div className='col-12'>                                
                                     <NdImageUpload id="imgFile4" parent={this} dt={{data:this.itemImageObj.dt(),field:"IMAGE",filter:{SORT:3}}} imageWidth={"620"} imageScale={true} buttonTrigger={"#btnLargeImg3"}
-                                    height={'150px'}
                                     onValueChanged={async(e)=>
                                     {
                                         let tmpResolution = await this.imgFile4.getResolution()
@@ -396,7 +392,6 @@ export default class itemImage extends React.PureComponent
                             <div className='row'>
                                 <div className='col-12'>                                
                                     <NdImageUpload id="imgFile5" parent={this} dt={{data:this.itemImageObj.dt(),field:"IMAGE",filter:{SORT:4}}} imageWidth={"620"} imageScale={true} buttonTrigger={"#btnLargeImg4"}
-                                    height={'150px'}
                                     onValueChanged={async(e)=>
                                     {
                                         let tmpResolution = await this.imgFile5.getResolution()

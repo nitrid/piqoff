@@ -268,7 +268,7 @@ export default class CustomerCard extends React.PureComponent
                                     <NdTextBox id="txtBrandName" parent={this} simple={true} tabIndex={this.tabIndex} 
                                     dt={{data:this.companyObj.dt('COMPANY'),field:"BRAND_NAME"}}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    maxLength={32}
+                                    maxLength={50}
                                     >
                                     </NdTextBox>
                                 </Item>
@@ -278,7 +278,7 @@ export default class CustomerCard extends React.PureComponent
                                     <NdTextBox id="txtCustomerName" parent={this} simple={true} tabIndex={this.tabIndex} 
                                     dt={{data:this.companyObj.dt('COMPANY'),field:"OFFICIAL_NAME"}}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    maxLength={32}
+                                    maxLength={50}
                                     >                
                                         <Validator validationGroup={"frmCompany"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validation.notValid")} />
@@ -291,7 +291,7 @@ export default class CustomerCard extends React.PureComponent
                                         <NdTextBox id="txtCustomerLastname" parent={this} simple={true} tabIndex={this.tabIndex} 
                                         upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                         dt={{data:this.companyObj.dt('COMPANY'),field:"OFFICIAL_SURNAME"}}
-                                        maxLength={32}
+                                        maxLength={50}
                                         >       
                                         <Validator validationGroup={"frmCompany"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validation.notValid")} />
@@ -404,24 +404,24 @@ export default class CustomerCard extends React.PureComponent
                                 <Item>
                                     <Label text={this.t("txtPhone")} alignment="right" />
                                     <NdTextBox id="txtPhone" parent={this} simple={true} dt={{data:this.companyObj.dt('COMPANY'),field:"TEL"}}
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value} maxLength={32}/>
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value} maxLength={50}/>
                                 </Item>
                                 {/* txtEmail */}
                                 <Item>
                                     <Label text={this.t("txtEmail")} alignment="right" />
-                                    <NdTextBox id="txtEmail" upper={false} parent={this} simple={true} dt={{data:this.companyObj.dt('COMPANY'),field:"MAIL"}} maxLength={32} />
+                                    <NdTextBox id="txtEmail" upper={false} parent={this} simple={true} dt={{data:this.companyObj.dt('COMPANY'),field:"MAIL"}} maxLength={50} />
                                 </Item>
                                 {/* txtWeb */}
                                 <Item>
                                     <Label text={this.t("txtWeb")} alignment="right" />
-                                    <NdTextBox id="txtWeb" upper={false} parent={this} simple={true} dt={{data:this.companyObj.dt('COMPANY'),field:"WEB"}} maxLength={32}/>
+                                    <NdTextBox id="txtWeb" upper={false} parent={this} simple={true} dt={{data:this.companyObj.dt('COMPANY'),field:"WEB"}} maxLength={50}/>
                                 </Item>
                                 {/* txtRSC */}
                                 <Item>
                                     <Label text={this.t("txtRSC")} alignment="right" />
                                     <NdTextBox id="txtRSC" parent={this} simple={true} dt={{data:this.companyObj.dt('COMPANY'),field:"RCS"}} 
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    maxLength={32}
+                                    maxLength={50}
                                     />
                                 </Item>
                                 {/* txtApeCode */}
@@ -429,7 +429,7 @@ export default class CustomerCard extends React.PureComponent
                                     <Label text={this.t("txtApeCode")} alignment="right" />
                                         <NdTextBox id="txtApeCode" parent={this} simple={true} dt={{data:this.companyObj.dt('COMPANY'),field:"APE_CODE"}} 
                                         upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                        maxLength={32}
+                                        maxLength={50}
 
                                         />
                                 </Item>
@@ -438,7 +438,7 @@ export default class CustomerCard extends React.PureComponent
                                     <Label text={this.t("txtTaxOffice")} alignment="right" />
                                         <NdTextBox id="txtTaxOffice" parent={this} simple={true} dt={{data:this.companyObj.dt('COMPANY'),field:"TAX_OFFICE"}} 
                                         upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                        maxLength={32}
+                                        maxLength={50}
 
                                         />
                                 </Item>
@@ -447,7 +447,7 @@ export default class CustomerCard extends React.PureComponent
                                     <Label text={this.t("txtTaxNo")} alignment="right" />
                                         <NdTextBox id="txtTaxNo" parent={this} simple={true} dt={{data:this.companyObj.dt('COMPANY'),field:"TAX_NO"}} 
                                         upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                        maxLength={32}
+                                        maxLength={50}
 
                                         />
                                 </Item>
@@ -456,7 +456,7 @@ export default class CustomerCard extends React.PureComponent
                                     <Label text={this.t("txtIntVatNo")} alignment="right" />
                                         <NdTextBox id="txtIntVatNo" parent={this} simple={true} dt={{data:this.companyObj.dt('COMPANY'),field:"INT_VAT_NO"}} 
                                         upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                        maxLength={32}
+                                        maxLength={50}
 
                                         />
                                 </Item>
@@ -465,7 +465,7 @@ export default class CustomerCard extends React.PureComponent
                                     <Label text={this.t("txtSirenNo")} alignment="right" />
                                     <NdTextBox id="txtSirenNo" parent={this} simple={true} dt={{data:this.companyObj.dt('COMPANY'),field:"SIREN_NO"}} 
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    maxLength={32}
+                                    maxLength={50}
                                     />
                                 </Item>
                                   {/* txtSiretId */}
@@ -473,7 +473,7 @@ export default class CustomerCard extends React.PureComponent
                                     <Label text={this.t("txtSiretId")} alignment="right" />
                                         <NdTextBox id="txtSiretId" parent={this} simple={true} dt={{data:this.companyObj.dt('COMPANY'),field:"SIRET_ID"}} 
                                         upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                        maxLength={32}
+                                        maxLength={50}
 
                                         />
                                 </Item>
@@ -481,7 +481,7 @@ export default class CustomerCard extends React.PureComponent
                                 {/* txtCapital */}
                                 <Item>
                                     <Label text={this.t("txtCapital")} alignment="right" />
-                                    <NdNumberBox id="txtCapital" parent={this} simple={true} dt={{data:this.companyObj.dt('COMPANY'),field:"CAPITAL"}} maxLength={32}/>
+                                    <NdNumberBox id="txtCapital" parent={this} simple={true} dt={{data:this.companyObj.dt('COMPANY'),field:"CAPITAL"}} maxLength={50}/>
                                 </Item>
                             </Form>
                         </div>

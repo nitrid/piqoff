@@ -1442,7 +1442,7 @@ export default class itemCard extends React.PureComponent
                         <div className="col-3">
                             <div className='row'>
                                 <div className='col-12'>                                
-                                    <NdImageUpload id="imgFile" parent={this} dt={{data:this.itemsObj.dt('ITEM_IMAGE'),field:"IMAGE"}} imageWidth={"120"} imageScale={true} buttonTrigger={"#btnNewImg"}
+                                    <NdImageUpload id="imgFile" parent={this} dt={{data:this.itemsObj.dt('ITEM_IMAGE'),field:"IMAGE"}} imageWidth={"120"} buttonTrigger={"#btnNewImg"}
                                     onValueChanged={async (e)=>
                                     {
                                         if(this.itemsObj.dt('ITEM_IMAGE').length == 0)

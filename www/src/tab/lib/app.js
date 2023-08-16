@@ -11,7 +11,7 @@ import "@fortawesome/fontawesome-free/css/all.css";
 import React from 'react';
 import LoadIndicator from 'devextreme-react/load-indicator';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import {core} from '../../core/core.js'
+import {core,param,access} from '../../core/core.js'
 import enMessages from '../meta/lang/devexpress/en.js';
 import frMessages from '../meta/lang/devexpress/fr.js';
 import trMessages from '../meta/lang/devexpress/tr.js';
@@ -23,6 +23,8 @@ import NbButton from '../../core/react/bootstrap/button';
 import NbPopUp from '../../core/react/bootstrap/popup';
 import * as appInfo from '../../../package.json'
 import transferCls from './transfer';
+import {prm} from '../meta/prm.js'
+import {acs} from '../meta/acs.js'
 
 export default class App extends React.PureComponent
 {
@@ -189,7 +191,22 @@ export default class App extends React.PureComponent
             return <Login />
         }
 
-        const Page = React.lazy(() => import('../pages/' + this.state.page));
+        const Page = React.lazy(() => import('../pages/' + this.state.page).then(async (obj)=>
+        {
+            //SAYFA YÜKLENMEDEN ÖNCE PARAMETRE, DİL, YETKİLENDİRME DEĞERLERİ GETİRİLİP CLASS PROTOTYPE A SET EDİLİYOR.
+            let tmpPrm = new param(prm);
+            await tmpPrm.load({APP:'TAB'})
+
+            let tmpAcs = new access(acs);
+            await tmpAcs.load({APP:'TAB'})
+
+            obj.default.prototype.param = tmpPrm.filter({PAGE:this.state.page});
+            obj.default.prototype.sysParam = tmpPrm.filter({TYPE:0});
+            obj.default.prototype.access = tmpAcs.filter({PAGE:this.state.page});
+            obj.default.prototype.user = this.core.auth.data;
+
+            return obj;
+        }));
 
         return (
             <div style={{height:'90%'}}>
