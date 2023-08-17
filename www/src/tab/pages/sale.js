@@ -78,7 +78,7 @@ export default class Sale extends React.PureComponent
         {
             query :"SELECT  GUID,CODE,NAME,VAT,PRICE,IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR FROM ITEMS_VW_02 " +
             "WHERE STATUS = 1 AND ((UPPER(CODE) LIKE UPPER(@VAL + '%')) OR (UPPER(NAME) LIKE UPPER(@VAL + '%'))) AND " +
-            "((MAIN_GRP = @MAIN_GRP) OR (@MAIN_GRP = ''))",
+            "((MAIN_GRP = @MAIN_GRP) OR (@MAIN_GRP = '')) ORDER BY NAME",
             param : ['VAL:string|50','MAIN_GRP:string|50'],
             value : [this.txtSearch.value,this.cmbGroup.value],
             buffer : true
@@ -122,7 +122,7 @@ export default class Sale extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_02 WHERE (UPPER(CODE) LIKE UPPER(@VAL + '%') OR UPPER(TITLE) LIKE UPPER(@VAL + '%')) AND STATUS = 1",
+                    query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_02 WHERE (UPPER(CODE) LIKE UPPER('%' + @VAL + '%') OR UPPER(TITLE) LIKE UPPER('%' + @VAL + '%')) AND STATUS = 1",
                     param : ['VAL:string|50'],
                     value : [this.txtCustomerSearch.value]
                 },
