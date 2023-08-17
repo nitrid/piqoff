@@ -3,6 +3,7 @@ import App from '../lib/app.js';
 import { nf525Cls } from '../../core/cls/nf525.js';
 
 import ScrollView from 'devextreme-react/scroll-view';
+import RadioGroup from 'devextreme-react/radio-group';
 import NbButton from '../../core/react/bootstrap/button';
 import NdTextBox,{ Button,Validator, NumericRule, RequiredRule, CompareRule } from '../../core/react/devex/textbox'
 import NdSelectBox from '../../core/react/devex/selectbox'
@@ -43,6 +44,7 @@ export default class Sale extends React.PureComponent
         {
             isExecute : false
         }
+        this.radioPriorities = ['Low', 'Normal', 'Urgent', 'High']
 
         this._customerSearch = this._customerSearch.bind(this)
         this.onValueChange = this.onValueChange.bind(this)
@@ -458,6 +460,7 @@ export default class Sale extends React.PureComponent
                             <NbButton className="form-group btn btn-block btn-outline-secondary" style={{height:"100%",width:"100%"}}
                             onClick={()=>
                             {
+                                this.popCriter.show()
                             }}>
                                 <i className="fa-solid fa-filter"></i>
                             </NbButton>
@@ -698,6 +701,13 @@ export default class Sale extends React.PureComponent
                                                     }).bind(this)}
                                                     >
                                                     </NdDatePicker>
+                                                </Item>
+                                                <Item>
+                                                    <Label text={this.t("popCart.txtDescription")} alignment="right" />
+                                                    <NdTextBox id="txtDescription" parent={this} simple={true} upper={true} dt={{data:this.docObj.dt('DOC'),field:"DESCRIPTION"}}
+                                                    selectAll={true}                           
+                                                    >     
+                                                    </NdTextBox>
                                                 </Item>
                                                 {/* GRID */}
                                                 <Item>
@@ -1565,7 +1575,24 @@ export default class Sale extends React.PureComponent
                                     </Item>
                                 </Form>
                             </NdPopUp>
-                        </div>    
+                        </div>
+                            {/* İNDİRİM POPUP
+                            <div>
+                            <NdPopUp parent={this} id={"popCriter"} 
+                            visible={false}
+                            showCloseButton={true}
+                            showTitle={true}
+                            title={this.t("popCriter.title")}
+                            container={"#root"} 
+                            width={'500'}
+                            height={'500'}
+                            position={{of:'#root'}}
+                            >
+                                <div className="dx-field-value">
+                                    <RadioGroup items={this.priorities}  />
+                                </div>
+                            </NdPopUp>
+                        </div>  */}
                     </ScrollView>
                 </div>
             </div>

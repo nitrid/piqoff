@@ -37,7 +37,8 @@ export const langTr =
             txtVat : "Vergi",
             txtTotal : "Genel Toplam",
             cmbDepot : "Depo",
-            dtDocDate : "Tarih"
+            dtDocDate : "Tarih",
+            txtDescription : "Açıklama"
         },
         popCustomer:
         {

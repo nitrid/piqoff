@@ -37,7 +37,8 @@ export const langFr =
             txtVat : "Taxe",
             txtTotal : "Total",
             cmbDepot : "Dépôt",
-            dtDocDate : "Date"
+            dtDocDate : "Date",
+            txtDescription : "Information",
         },
         popCustomer:
         {
