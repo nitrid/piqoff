@@ -21,10 +21,10 @@ export default class Dashboard extends React.PureComponent
         console.log(1)
         this.msgDataTransfer.show()
         await App.instance.transfer.transferSql(true)
-        let x = await this.core.local.select({query:"SELECT * FROM ITEMS_VW_02"})
-        console.log(x)
-        this.msgDataTransfer.hide()
         console.log(2)
+        let x = await this.core.local.select({query:"SELECT * FROM ITEMS_VW_02"})
+        console.log(x.result.recordset.length)
+        this.msgDataTransfer.hide()        
     }
     async init()
     {
