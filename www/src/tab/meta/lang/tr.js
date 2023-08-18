@@ -40,6 +40,12 @@ export const langTr =
             dtDocDate : "Tarih",
             txtDescription : "Açıklama"
         },
+        itemPopup : 
+        {
+            txtFactor : "Katsayı", // BAK
+            txtPrice  :"Fiyat",
+            cmbUnit : "Birim"
+        },
         popCustomer:
         {
             title : "Müşteri Seçimi",

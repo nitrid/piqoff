@@ -7806,6 +7806,7 @@ export default class posDoc extends React.PureComponent
                     container={"#root"} 
                     width={"800"}
                     height={"600"}
+                    showCloseButton={false}
                     position={{of:"#root"}}
                     >
                         {/* txtMail */}
