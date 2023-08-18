@@ -159,6 +159,11 @@ export default class App extends React.PureComponent
             }
         })
     }
+    async componentDidMount()
+    {
+        await this.core.util.waitUntil(0)
+        await this.transfer.init('TAB')
+    }
     render() 
     {
         const { logined,connected,splash } = this.state;

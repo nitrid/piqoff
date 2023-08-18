@@ -73,7 +73,9 @@ export default class Login extends React.PureComponent
         
         if((await this.core.auth.login(this.state.kullanici,this.state.sifre,'TAB')))
         {
-           
+            console.log(1)
+            await App.instance.transfer.transferSql(true)
+            console.log(2)
             App.instance.setState({logined:true});
         }
         else

@@ -76,9 +76,9 @@ export default class Sale extends React.PureComponent
         this.itemView.items = []
         let tmpQuery = 
         {
-            query :"SELECT GUID,CODE,NAME,VAT,PRICE,IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR FROM ITEMS_VW_02 " +
-            "WHERE STATUS = 1 AND ((UPPER(CODE) LIKE UPPER('%' + @VAL + '%')) OR (UPPER(NAME) LIKE UPPER('%' + @VAL + '%'))) AND " +
-            "((MAIN_GRP = @MAIN_GRP) OR (@MAIN_GRP = '')) ORDER BY NAME",
+            query : "SELECT GUID,CODE,NAME,VAT,PRICE,IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR FROM ITEMS_VW_02 " +
+                    "WHERE STATUS = 1 AND ((UPPER(CODE) LIKE UPPER('%' + @VAL + '%')) OR (UPPER(NAME) LIKE UPPER('%' + @VAL + '%'))) AND " +
+                    "((MAIN_GRP = @MAIN_GRP) OR (@MAIN_GRP = '')) ORDER BY NAME",
             param : ['VAL:string|50','MAIN_GRP:string|50'],
             value : [this.txtSearch.value.replaceAll(' ','%'),this.cmbGroup.value],
             buffer : true
