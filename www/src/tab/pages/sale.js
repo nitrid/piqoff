@@ -60,11 +60,34 @@ export default class Sale extends React.PureComponent
         this.docObj.clearAll()
         let tmpDoc = {...this.docObj.empty}
         this.docObj.addEmpty(tmpDoc);
-        this.docLines.clear()
-
-        this.popCustomer.show()
+        this.docLines.clear()        
         this.cmbGroup.value = ''
         this.docType = 0
+
+        if(localStorage.getItem("data") != null)
+        {
+            let tmpConfObj1 =
+            {
+                id:'msgMemRecord',showTitle:true,title:this.t("msgMemRecord.title"),showCloseButton:true,width:'500px',height:'200px',
+                button:[{id:"btn01",caption:this.t("msgMemRecord.btn01"),location:'after'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgMemRecord.msg")}</div>)
+            }
+            await dialog(tmpConfObj1);
+            
+            this.docLines.import(JSON.parse(localStorage.getItem("data")))
+
+            if(this.docLines.length > 0)
+            {
+                this.docObj.dt()[0].GUID = this.docLines[0].DOC_GUID
+                this._calculateTotal();
+                this.getItems()
+            }         
+        }
+        else
+        {
+            this.popCustomer.show()
+        }
+        
     }
     async getItems()
     {
@@ -74,19 +97,90 @@ export default class Sale extends React.PureComponent
         this.tmpEndPage = 0
         this.bufferId = ''
         this.itemView.items = []
-        let tmpQuery = 
+        //CORDOVA YADA ELECTRON İSE SQLLİTE LOCALDB KULLANILIYOR.
+        if(this.core.local.platform != '')
         {
-            query : "SELECT GUID,CODE,NAME,VAT,PRICE,IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR FROM ITEMS_VW_02 " +
-                    "WHERE STATUS = 1 AND ((UPPER(CODE) LIKE UPPER('%' + @VAL + '%')) OR (UPPER(NAME) LIKE UPPER('%' + @VAL + '%'))) AND " +
-                    "((MAIN_GRP = @MAIN_GRP) OR (@MAIN_GRP = '')) ORDER BY NAME",
-            param : ['VAL:string|50','MAIN_GRP:string|50'],
-            value : [this.txtSearch.value.replaceAll(' ','%'),this.cmbGroup.value],
-            buffer : true
+            let tmpQuery = 
+            {
+                query : "SELECT GUID,CODE,NAME,VAT,PRICE,IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR FROM ITEMS_VW_02 " +
+                        "WHERE ((UPPER(CODE) LIKE UPPER('%' || ? || '%')) OR (UPPER(NAME) LIKE UPPER('%' || ? || '%'))) AND " +
+                        "((MAIN_GRP = ?) OR (? = '')) ORDER BY NAME ASC LIMIT " + this.tmpPageLimit + " OFFSET " + this.tmpStartPage,
+                values : [this.txtSearch.value.replaceAll(' ','%'),this.txtSearch.value.replaceAll(' ','%'),this.cmbGroup.value,this.cmbGroup.value],
+            }
+            
+            let tmpBuf = await this.core.local.select(tmpQuery) 
+
+            if(typeof tmpBuf.result.err == 'undefined')
+            {
+                for (let i = 0; i < tmpBuf.result.recordset.length; i++) 
+                {
+                    this.itemView.items.push(tmpBuf.result.recordset[i])
+                }
+                this.itemView.items = this.itemView.items
+                this.tmpStartPage = this.tmpStartPage + this.tmpPageLimit
+            }
+            
+            this.itemView.setItemAll()
         }
-        let tmpBuf = await this.core.sql.execute(tmpQuery) 
-        if(typeof tmpBuf.result.err == 'undefined')
+        else //CORDOVA YADA ELECTRON DEĞİL İSE SUNUCUDAN GETİRİLİYOR.
         {
-            this.bufferId = tmpBuf.result.bufferId
+            let tmpQuery = 
+            {
+                query : "SELECT GUID,CODE,NAME,VAT,PRICE,IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR FROM ITEMS_VW_02 " +
+                        "WHERE STATUS = 1 AND ((UPPER(CODE) LIKE UPPER('%' + @VAL + '%')) OR (UPPER(NAME) LIKE UPPER('%' + @VAL + '%'))) AND " +
+                        "((MAIN_GRP = @MAIN_GRP) OR (@MAIN_GRP = '')) ORDER BY NAME ASC",
+                param : ['VAL:string|50','MAIN_GRP:string|50'],
+                value : [this.txtSearch.value.replaceAll(' ','%'),this.cmbGroup.value],
+                buffer : true
+            }
+            let tmpBuf = await this.core.sql.execute(tmpQuery) 
+            if(typeof tmpBuf.result.err == 'undefined')
+            {
+                this.bufferId = tmpBuf.result.bufferId
+                this.tmpEndPage = this.tmpStartPage + this.tmpPageLimit
+                let tmpItems = await this.core.sql.buffer({start : this.tmpStartPage,end : this.tmpEndPage,bufferId : this.bufferId})  
+                for (let i = 0; i < tmpItems.result.recordset.length; i++) 
+                {
+                    this.itemView.items.push(tmpItems.result.recordset[i])
+                }
+                this.itemView.items = this.itemView.items
+                this.tmpStartPage = this.tmpStartPage + this.tmpPageLimit
+            }
+            this.itemView.setItemAll()
+        }
+        
+        this.setState({isExecute:false})
+    }
+    async loadMore()
+    {
+        this.setState({isExecute:true})
+        //CORDOVA YADA ELECTRON İSE SQLLİTE LOCALDB KULLANILIYOR.
+        if(this.core.local.platform != '')
+        {
+            let tmpQuery = 
+            {
+                query : "SELECT GUID,CODE,NAME,VAT,PRICE,IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR FROM ITEMS_VW_02 " +
+                        "WHERE ((UPPER(CODE) LIKE UPPER('%' || ? || '%')) OR (UPPER(NAME) LIKE UPPER('%' || ? || '%'))) AND " +
+                        "((MAIN_GRP = ?) OR (? = '')) ORDER BY NAME ASC LIMIT " + this.tmpPageLimit + " OFFSET " + this.tmpStartPage,
+                values : [this.txtSearch.value.replaceAll(' ','%'),this.txtSearch.value.replaceAll(' ','%'),this.cmbGroup.value,this.cmbGroup.value],
+            }
+            
+            let tmpBuf = await this.core.local.select(tmpQuery) 
+
+            if(typeof tmpBuf.result.err == 'undefined')
+            {
+                for (let i = 0; i < tmpBuf.result.recordset.length; i++) 
+                {
+                    this.itemView.items.push(tmpBuf.result.recordset[i])
+                }
+                this.itemView.items = this.itemView.items
+                this.tmpStartPage = this.tmpStartPage + this.tmpPageLimit
+            }
+            
+            this.itemView.setItemAll()
+        }
+        else //CORDOVA YADA ELECTRON DEĞİL İSE SUNUCUDAN GETİRİLİYOR.
+        {
             this.tmpEndPage = this.tmpStartPage + this.tmpPageLimit
             let tmpItems = await this.core.sql.buffer({start : this.tmpStartPage,end : this.tmpEndPage,bufferId : this.bufferId})  
             for (let i = 0; i < tmpItems.result.recordset.length; i++) 
@@ -95,22 +189,9 @@ export default class Sale extends React.PureComponent
             }
             this.itemView.items = this.itemView.items
             this.tmpStartPage = this.tmpStartPage + this.tmpPageLimit
+            this.itemView.setItemAll()
         }
-        this.itemView.setItemAll()
-        this.setState({isExecute:false})
-    }
-    async loadMore()
-    {
-        this.setState({isExecute:true})
-        this.tmpEndPage = this.tmpStartPage + this.tmpPageLimit
-        let tmpItems = await this.core.sql.buffer({start : this.tmpStartPage,end : this.tmpEndPage,bufferId : this.bufferId})  
-        for (let i = 0; i < tmpItems.result.recordset.length; i++) 
-        {
-            this.itemView.items.push(tmpItems.result.recordset[i])
-        }
-        this.itemView.items = this.itemView.items
-        this.tmpStartPage = this.tmpStartPage + this.tmpPageLimit
-        this.itemView.setItemAll()
+        
         this.setState({isExecute:false})
     }
     async _customerSearch()
@@ -198,6 +279,7 @@ export default class Sale extends React.PureComponent
         tmpDocOrders.VAT = parseFloat(((tmpDocOrders.TOTALHT ) * (e.VAT / 100)).toFixed(4))
         tmpDocOrders.TOTAL = parseFloat(((tmpDocOrders.TOTALHT) + tmpDocOrders.VAT)).round(2)
         this.docLines.push(tmpDocOrders)
+
         this._calculateTotal()
     }
     onValueChange(e)
@@ -246,6 +328,8 @@ export default class Sale extends React.PureComponent
         this.docObj.dt()[0].SUBTOTAL = parseFloat(this.docLines.sum("TOTALHT",2))
         this.docObj.dt()[0].TOTALHT = parseFloat(parseFloat(this.docLines.sum("TOTALHT",2)) - parseFloat(this.docLines.sum("DOC_DISCOUNT",2))).round(2)
         this.docObj.dt()[0].TOTAL = Number((parseFloat(this.docObj.dt()[0].TOTALHT)) + parseFloat(this.docObj.dt()[0].VAT)).round(2)
+
+        localStorage.setItem("data",JSON.stringify(this.docLines.toArray()))
     }
     async checkRow()
     {
@@ -314,6 +398,7 @@ export default class Sale extends React.PureComponent
         {                                                    
             tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
             await dialog(tmpConfObj1);
+            localStorage.removeItem("data")
         }
         else
         {
@@ -407,6 +492,8 @@ export default class Sale extends React.PureComponent
         {                                                    
             tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
             await dialog(tmpConfObj1);
+
+            localStorage.removeItem("data")
         }
         else
         {
@@ -526,10 +613,23 @@ export default class Sale extends React.PureComponent
                                             <Toolbar>
                                                 <Item location="after" locateInMenu="auto">
                                                     <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"40px",width:"40px"}}
-                                                    onClick={()=>
+                                                    onClick={async()=>
                                                     {
-                                                        this.init()
-                                                        this.popCart.hide();
+                                                        let tmpConfObj1 =
+                                                        {
+                                                            id:'msgNew',showTitle:true,title:this.t("msgNew.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                            button:[{id:"btn01",caption:this.t("msgNew.btn01"),location:'before'},{id:"btn02",caption:this.t("msgNew.btn02"),location:'after'}],
+                                                            content:(<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgNew.msg")}</div>)
+                                                        }
+
+                                                        let pResult = await dialog(tmpConfObj1);
+                                                        
+                                                        if(pResult == 'btn01')
+                                                        {
+                                                            localStorage.removeItem("data");
+                                                            this.init()
+                                                            this.popCart.hide();
+                                                        }
                                                     }}>
                                                         <i className="fa-solid fa-file fa-1x"></i>
                                                     </NbButton>

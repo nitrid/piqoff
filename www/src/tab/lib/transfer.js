@@ -56,7 +56,7 @@ export default class transferCls
                         UNIT_FACTOR REAL,
                         MAIN_GRP TEXT,
                         MAIN_GRP_NAME TEXT);`
-            },
+            }
         ]
 
         return tmpTbl
@@ -71,7 +71,7 @@ export default class transferCls
                 from : 
                 {
                     type : "select",
-                    query : `SELECT GUID,CODE,NAME,VAT,PRICE,IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR FROM ITEMS_VW_02`,
+                    query : `SELECT GUID,CODE,NAME,VAT,PRICE,IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR,MAIN_GRP,MAIN_GRP_NAME FROM ITEMS_VW_02 WHERE STATUS = 1`,
                 },
                 to : 
                 {
@@ -500,21 +500,42 @@ export default class transferCls
 
                         if(tmpInserts.querys.length > 0)
                         {
-                            this.core.local.db.serialize(() => 
+                            if(this.core.local.platform == 'cordova')
                             {
-                                this.core.local.db.run('BEGIN TRANSACTION;');
+                                let tmpArr = []
                                 for (let i = 0; i < tmpInserts.querys.length; i++) 
                                 {
-                                    this.core.local.db.run(tmpInserts.querys[i], typeof tmpInserts.values[i] == 'undefined' ? [] : tmpInserts.values[i],(err) => 
-                                    {
-                                        if (err) 
-                                        {
-                                            console.log(err.message + " - " + pTemp.name)
-                                        }
-                                    });
+                                    tmpArr.push([tmpInserts.querys[i],tmpInserts.values[i]])
                                 }
-                                this.core.local.db.run('COMMIT;');
-                            })
+
+                                this.core.local.db.sqlBatch(tmpArr, 
+                                () => 
+                                {
+                                    console.log('Tab is now populated.');
+                                },
+                                (error) => 
+                                {
+                                    console.log('Populate table error: ' + error.message);
+                                })
+                            }
+                            else if(this.core.local.platform == 'electron')
+                            {
+                                this.core.local.db.serialize(() => 
+                                {
+                                    this.core.local.db.run('BEGIN TRANSACTION;');
+                                    for (let i = 0; i < tmpInserts.querys.length; i++) 
+                                    {
+                                        this.core.local.db.run(tmpInserts.querys[i], typeof tmpInserts.values[i] == 'undefined' ? [] : tmpInserts.values[i],(err) => 
+                                        {
+                                            if (err) 
+                                            {
+                                                console.log(err.message + " - " + pTemp.name)
+                                            }
+                                        });
+                                    }
+                                    this.core.local.db.run('COMMIT;');
+                                })
+                            }                            
                         }
                     }
                     tmpInserts = null;

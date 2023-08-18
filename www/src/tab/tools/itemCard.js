@@ -26,7 +26,7 @@ export default class NbItemCard extends NbBase
     {        
         this.cmbUnit.data.onLoaded = async(pData)=>
         {
-            if(typeof this.props.defaultUnit != 'undefined' && typeof pData.data.find(option => option.NAME === this.props.defaultUnit)?.GUID != 'undefined')
+            if(typeof this.props.defaultUnit != 'undefined' && typeof pData.data.find(option => option.NAME === this.props.defaultUnit)?.GUID != 'undefined' && typeof this.data.QUANTITY == 'undefined')
             {
                 this.cmbUnit._onValueChanged({value:pData.data.find(option => option.NAME === this.props.defaultUnit)?.GUID})
             }
@@ -54,6 +54,8 @@ export default class NbItemCard extends NbBase
             this["txtQuantity" + this.props.id].value = tmpDt[0].QUANTITY / tmpDt[0].UNIT_FACTOR
             this.cmbUnit.value = tmpDt[0].UNIT
             let tmpPrice = Number(tmpDt[0].PRICE * tmpDt[0].UNIT_FACTOR).round(3)
+            this.data.UNIT = tmpDt[0].UNIT
+            this.data.QUANTITY = tmpDt[0].QUANTITY / tmpDt[0].UNIT_FACTOR
             this.setState({price:tmpPrice})
         }
         else

@@ -28,7 +28,6 @@ export default class NbItemPopUp extends NbBase
     async open(pData)
     {        
         this.data = pData.data
-        
         let tmpQuery = 
         {
             query :"SELECT IMAGE AS IMAGE1,  " +
@@ -66,27 +65,7 @@ export default class NbItemPopUp extends NbBase
             }
             this.setState({images:[]})
             this.popCard.show();
-        }
-        let tmpSource =
-        {
-            source : 
-            {
-                select : 
-                {
-                    query : "SELECT GUID,NAME,FACTOR,TYPE FROM ITEM_UNIT_VW_01 WHERE ITEM_GUID =@ITEM_GUID",
-                    param : ['ITEM_GUID:string|50'],
-                    value : [this.data.GUID]
-                },
-                sql : this.core.sql
-            }
-        }
-        await this.cmbUnit.dataRefresh(tmpSource)
-
-        if(this.cmbUnit.data.datatable.length > 0)
-        {
-            this.cmbUnit.value = this.data.UNIT;
-            this.txtPrice.value = Number(this.data.PRICE * this.data.UNIT_FACTOR).round(3)
-        }
+        }                
     }
     _onValueChange(e)
     {
@@ -99,7 +78,32 @@ export default class NbItemPopUp extends NbBase
     {
         return(
             <React.Fragment>
-            <NbPopUp id={"popCard"} parent={this} title={""} fullscreen={true}>
+            <NbPopUp id={"popCard"} parent={this} title={""} fullscreen={true}
+            onShowed={async()=>
+            {
+                await this.core.util.waitUntil(0)
+                
+                let tmpSource =
+                {
+                    source : 
+                    {
+                        select : 
+                        {
+                            query : "SELECT GUID,NAME,FACTOR,TYPE FROM ITEM_UNIT_VW_01 WHERE ITEM_GUID = @ITEM_GUID",
+                            param : ['ITEM_GUID:string|50'],
+                            value : [this.data.GUID]
+                        },
+                        sql : this.core.sql
+                    }
+                }
+                await this.cmbUnit.dataRefresh(tmpSource)
+
+                if(this.cmbUnit.data.datatable.length > 0)
+                {
+                    this.cmbUnit.value = this.data.UNIT;
+                    this.txtPrice.value = Number(this.data.PRICE * this.data.UNIT_FACTOR).round(3)
+                }
+            }}>
                 <div>
                     <div className='row' style={{paddingTop:"10px"}}>
                         <div className='col-12' align={"right"}>
@@ -193,15 +197,16 @@ export default class NbItemPopUp extends NbBase
                                         valueExpr="GUID"
                                         searchEnabled={true}
                                         onValueChanged={(async(e)=>
-                                            {
-                                                if(e.value != '00000000-0000-0000-0000-000000000000' && e.value != '')
-                                                {
-                                                    this.data.UNIT_FACTOR = this.cmbUnit.data.datatable.where({'GUID':e.value})[0].FACTOR
-                                                    this.data.UNIT = e.value
-                                                    this.txtPrice.value = Number(this.data.PRICE * this.data.UNIT_FACTOR).round(3)
-                                                    this._onValueChange(this.data)
-                                                }
-                                            }).bind(this)}
+                                        {
+                                            if(e.value != '00000000-0000-0000-0000-000000000000' && e.value != '')
+                                            {                                                
+                                                this.data.UNIT_FACTOR = this.cmbUnit.data.datatable.where({'GUID':e.value})[0].FACTOR
+                                                this.data.UNIT = e.value
+                                                this.txtPrice.value = Number(this.data.PRICE * this.data.UNIT_FACTOR).round(3)
+                                                this.txtFactor.value = this.cmbUnit.data.datatable.where({'GUID':e.value})[0].FACTOR
+                                                this._onValueChange(this.data)
+                                            }
+                                        }).bind(this)}
                                         />
                                     </Item>
                                 </Form>

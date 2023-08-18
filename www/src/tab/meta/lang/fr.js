@@ -24,6 +24,11 @@ export const langFr =
         msg : "Connexion avec vos informations d'utilisateur à partir d'un autre appareil.",
         btn01 : "D'accord"
     },
+    msgDataTransfer: 
+    {
+        title : "Lütfen Bekleyiniz !", //BAK
+        msg : "Verileriniz güncelleniyor..." //BAK,
+    },
     sale:  // "Vente"
     {
         loadMore : "Afficher plus",
@@ -160,6 +165,19 @@ export const langFr =
             Percent3 : "3. remise %",  
             Price3 : "3. remise montant" 
         },
+        msgMemRecord:
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Evrak a dönüşmemiş kayıtlarınız mevcut ! Lütfen işlemlerinizi kontrol ediniz." //BAK
+        },
+        msgNew:
+        {
+            title: "Dikkat", //BAK
+            btn01: "Evet", //BAK
+            btn02: "Hayır", //BAK
+            msg: "Yeni evrak oluşturmak istediğinize eminmisiniz ?" //BAK
+        },
     },
     extract :
     {
@@ -221,11 +239,6 @@ export const langFr =
         lastDocumant : "Dernière commande",  
         mountSales : "Total des commandes de ce mois", 
         yearSales : "Total des commandes de cette année", 
-        sale : "Montant des ventes",
-        msgDataTransfer: 
-        {
-            title : "Lütfen Bekleyiniz !", //BAK
-            msg : "Verileriniz güncelleniyor..." //BAK,
-        },
+        sale : "Montant des ventes",        
     }
 }

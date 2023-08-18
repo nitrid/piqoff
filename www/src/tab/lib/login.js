@@ -10,6 +10,7 @@ import NdPopUp from '../../core/react/devex/popup.js';
 import NdGrid,{Column,Editing,Paging,Scrolling,KeyboardNavigation,Export} from '../../core/react/devex/grid.js';
 import i18n from './i18n.js'
 import { locale, loadMessages, formatMessage } from 'devextreme/localization';
+import NdDialog from '../../core/react/devex/dialog.js';
 
 export default class Login extends React.PureComponent
 {
@@ -71,8 +72,15 @@ export default class Login extends React.PureComponent
         }
         
         if((await this.core.auth.login(this.state.kullanici,this.state.sifre,'TAB')))
-        {            
-            App.instance.setState({logined:true});
+        {
+            if(this.core.local.platform != '')
+            {
+                this.msgDataTransfer.show()
+                await App.instance.transfer.transferSql(true)
+                this.msgDataTransfer.hide()        
+            }
+            
+            App.instance.setState({logined:true});            
         }
         else
         {
@@ -207,7 +215,24 @@ export default class Login extends React.PureComponent
                         </NdPopGrid>
                    </div>
                 </div>
-                <div className="p-2"></div>                
+                <div className="p-2"></div>
+                {/* Data Transfer Popup */} 
+                <div>
+                    <NdDialog id={"msgDataTransfer"} container={"#root"} parent={this}
+                    position={{of:'#root'}} 
+                    showTitle={true} 
+                    title={this.lang.t("msgDataTransfer.title")} 
+                    showCloseButton={false}
+                    width={"400px"}
+                    height={"120px"}
+                    >
+                        <div className="row">
+                            <div className="col-12 py-2">
+                                <div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgDataTransfer.msg")}</div>
+                            </div>
+                        </div>
+                    </NdDialog>
+                </div>
             </div>
         )
     }
