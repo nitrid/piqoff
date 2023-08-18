@@ -221,6 +221,11 @@ export const langTr =
         lastDocumant : "Son Sipariş",
         mountSales : "Bu Ayki Sipariş Toplamı",
         yearSales : "Bu Yılki Sipariş Toplamı",
-        sale : "Satış Tutarı"
+        sale : "Satış Tutarı",
+        msgDataTransfer: 
+        {
+            title : "Lütfen Bekleyiniz !",
+            msg : "Verileriniz güncelleniyor...",
+        },
     }
 }

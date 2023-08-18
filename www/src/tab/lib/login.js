@@ -10,7 +10,6 @@ import NdPopUp from '../../core/react/devex/popup.js';
 import NdGrid,{Column,Editing,Paging,Scrolling,KeyboardNavigation,Export} from '../../core/react/devex/grid.js';
 import i18n from './i18n.js'
 import { locale, loadMessages, formatMessage } from 'devextreme/localization';
-import { dialog } from '../../core/react/devex/dialog.js';
 
 export default class Login extends React.PureComponent
 {
@@ -72,10 +71,7 @@ export default class Login extends React.PureComponent
         }
         
         if((await this.core.auth.login(this.state.kullanici,this.state.sifre,'TAB')))
-        {
-            console.log(1)
-            await App.instance.transfer.transferSql(true)
-            console.log(2)
+        {            
             App.instance.setState({logined:true});
         }
         else
@@ -211,7 +207,7 @@ export default class Login extends React.PureComponent
                         </NdPopGrid>
                    </div>
                 </div>
-                <div className="p-2"></div>
+                <div className="p-2"></div>                
             </div>
         )
     }

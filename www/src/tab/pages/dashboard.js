@@ -2,6 +2,7 @@ import React from 'react';
 import App from '../lib/app.js';
 import ScrollView from 'devextreme-react/scroll-view';
 import {Chart, Series, CommonSeriesSettings, Label, Format, Legend, Export} from 'devextreme-react/chart';
+import NdDialog from '../../core/react/devex/dialog.js';
 
 export default class Dashboard extends React.PureComponent
 {
@@ -16,6 +17,14 @@ export default class Dashboard extends React.PureComponent
     async componentDidMount()
     {
         this.init()
+
+        console.log(1)
+        this.msgDataTransfer.show()
+        await App.instance.transfer.transferSql(true)
+        let x = await this.core.local.select({query:"SELECT * FROM ITEMS_VW_02"})
+        console.log(x)
+        this.msgDataTransfer.hide()
+        console.log(2)
     }
     async init()
     {
@@ -118,6 +127,23 @@ export default class Dashboard extends React.PureComponent
                         </div>
                     </div>   
                 </ScrollView>
+                {/* Data Transfer Popup */} 
+                <div>
+                    <NdDialog id={"msgDataTransfer"} container={"#root"} parent={this}
+                    position={{of:'#root'}} 
+                    showTitle={true} 
+                    title={this.t("msgDataTransfer.title")} 
+                    showCloseButton={false}
+                    width={"400px"}
+                    height={"120px"}
+                    >
+                        <div className="row">
+                            <div className="col-12 py-2">
+                                <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDataTransfer.msg")}</div>
+                            </div>
+                        </div>
+                    </NdDialog>
+                </div>
             </div>
         )
     }

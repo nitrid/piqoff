@@ -221,6 +221,11 @@ export const langFr =
         lastDocumant : "Dernière commande",  
         mountSales : "Total des commandes de ce mois", 
         yearSales : "Total des commandes de cette année", 
-        sale : "Montant des ventes"  
+        sale : "Montant des ventes",
+        msgDataTransfer: 
+        {
+            title : "Lütfen Bekleyiniz !", //BAK
+            msg : "Verileriniz güncelleniyor..." //BAK,
+        },
     }
 }
