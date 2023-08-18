@@ -76,7 +76,7 @@ export default class Sale extends React.PureComponent
         this.itemView.items = []
         let tmpQuery = 
         {
-            query :"SELECT  GUID,CODE,NAME,VAT,PRICE,IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR FROM ITEMS_VW_02 " +
+            query :"SELECT GUID,CODE,NAME,VAT,PRICE,IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR FROM ITEMS_VW_02 " +
             "WHERE STATUS = 1 AND ((UPPER(CODE) LIKE UPPER('%' + @VAL + '%')) OR (UPPER(NAME) LIKE UPPER('%' + @VAL + '%'))) AND " +
             "((MAIN_GRP = @MAIN_GRP) OR (@MAIN_GRP = '')) ORDER BY NAME",
             param : ['VAL:string|50','MAIN_GRP:string|50'],
@@ -165,39 +165,39 @@ export default class Sale extends React.PureComponent
     }
     addItem(e)
     {
-        let tmpdocOrders
+        let tmpDocOrders
         if(this.docType == 60 || this.docType == 0)
         {
-            tmpdocOrders = {...this.docObj.docOrders.empty}
+            tmpDocOrders = {...this.docObj.docOrders.empty}
         }
         else if(this.docType == 20)
         {
-            tmpdocOrders = {...this.docObj.docItems.empty}
+            tmpDocOrders = {...this.docObj.docItems.empty}
         }
 
-        tmpdocOrders.GUID = datatable.uuidv4()
-        tmpdocOrders.DOC_GUID = this.docObj.dt()[0].GUID
-        tmpdocOrders.TYPE = this.docObj.dt()[0].TYPE
-        tmpdocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-        tmpdocOrders.LINE_NO = this.docLines.length
-        tmpdocOrders.REF = this.docObj.dt()[0].REF
-        tmpdocOrders.REF_NO = this.docObj.dt()[0].REF_NO
-        tmpdocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
-        tmpdocOrders.INPUT = this.docObj.dt()[0].INPUT
-        tmpdocOrders.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-        tmpdocOrders.ITEM_CODE = e.CODE
-        tmpdocOrders.ITEM = e.GUID
-        tmpdocOrders.ITEM_NAME = e.NAME
-        tmpdocOrders.VAT_RATE = e.VAT
-        tmpdocOrders.QUANTITY = e.QUANTITY * e.UNIT_FACTOR
-        tmpdocOrders.UNIT = e.UNIT
-        tmpdocOrders.UNIT_FACTOR = e.UNIT_FACTOR
-        tmpdocOrders.PRICE = e.PRICE
-        tmpdocOrders.AMOUNT = parseFloat(((tmpdocOrders.PRICE * tmpdocOrders.QUANTITY))).round(2)
-        tmpdocOrders.TOTALHT = parseFloat(((tmpdocOrders.PRICE * tmpdocOrders.QUANTITY))).round(2)
-        tmpdocOrders.VAT = parseFloat(((tmpdocOrders.TOTALHT ) * (e.VAT / 100)).toFixed(4))
-        tmpdocOrders.TOTAL = parseFloat(((tmpdocOrders.TOTALHT) + tmpdocOrders.VAT)).round(2)
-        this.docLines.push(tmpdocOrders)
+        tmpDocOrders.GUID = datatable.uuidv4()
+        tmpDocOrders.DOC_GUID = this.docObj.dt()[0].GUID
+        tmpDocOrders.TYPE = this.docObj.dt()[0].TYPE
+        tmpDocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+        tmpDocOrders.LINE_NO = this.docLines.length
+        tmpDocOrders.REF = this.docObj.dt()[0].REF
+        tmpDocOrders.REF_NO = this.docObj.dt()[0].REF_NO
+        tmpDocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
+        tmpDocOrders.INPUT = this.docObj.dt()[0].INPUT
+        tmpDocOrders.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+        tmpDocOrders.ITEM_CODE = e.CODE
+        tmpDocOrders.ITEM = e.GUID
+        tmpDocOrders.ITEM_NAME = e.NAME
+        tmpDocOrders.VAT_RATE = e.VAT
+        tmpDocOrders.QUANTITY = e.QUANTITY * e.UNIT_FACTOR
+        tmpDocOrders.UNIT = e.UNIT
+        tmpDocOrders.UNIT_FACTOR = e.UNIT_FACTOR
+        tmpDocOrders.PRICE = e.PRICE
+        tmpDocOrders.AMOUNT = parseFloat(((tmpDocOrders.PRICE * tmpDocOrders.QUANTITY))).round(2)
+        tmpDocOrders.TOTALHT = parseFloat(((tmpDocOrders.PRICE * tmpDocOrders.QUANTITY))).round(2)
+        tmpDocOrders.VAT = parseFloat(((tmpDocOrders.TOTALHT ) * (e.VAT / 100)).toFixed(4))
+        tmpDocOrders.TOTAL = parseFloat(((tmpDocOrders.TOTALHT) + tmpDocOrders.VAT)).round(2)
+        this.docLines.push(tmpDocOrders)
         this._calculateTotal()
     }
     onValueChange(e)
