@@ -444,7 +444,7 @@ export default class transferCls
             }
 
             let tmpCount = 0
-            let tmpPageLimit = 1000
+            let tmpPageLimit = 50
             let tmpPageCount = 0
             let tmpStartPage = 0
             let tmpEndPage = 0
@@ -452,8 +452,9 @@ export default class transferCls
             let tmpDataQuery = {...pTemp.from}
             tmpDataQuery.query = tmpDataQuery.query.toString().replace('{0}',pClear ? '' : typeof tmpDataQuery.where == 'undefined' ? '' : tmpDataQuery.where)
             tmpDataQuery.buffer = true;
-
+            
             let tmpBuf = await this.core.sql.execute(tmpDataQuery)
+            
             if(typeof tmpBuf.result.err == 'undefined')
             {
                 tmpCount = tmpBuf.result.count
@@ -540,7 +541,7 @@ export default class transferCls
                     }
                     tmpInserts = null;
                     tmpData = null;
-                    this.emit('onState',{tag:'progress',count:tmpCount,index:tmpEndPage})                
+                    this.emit('onState',{tag:'progress',count:tmpCount,index:tmpEndPage})
                 }
                 //SQL DEKI BUFFER TEMIZLENIYOR.
                 this.core.sql.bufferRemove({bufferId : tmpBuf.result.bufferId})
