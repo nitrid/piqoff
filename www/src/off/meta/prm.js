@@ -1,6 +1,22 @@
 export const prm =
 [
     //#region Sistem
+     //Bütük Harf
+     {
+        TYPE : 0,
+        ID :"secondFactor",
+        VALUE : 
+        {
+            value : "003"
+        },
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Sistem",
+            CAPTION : "İkinci Birim ID"
+        }
+    },
     //Bütük Harf
     {
         TYPE : 0,
@@ -1712,6 +1728,27 @@ export const prm =
             TYPE : "checkbox",
             PAGE_NAME : "Satış Faturası",
             CAPTION : "Eksiye Düşemeye İzin Verme"
+        }
+    },
+     // autoMailAdress
+    {
+        TYPE : 1,
+        ID :"autoMailAdress",
+        VALUE : 
+        {
+            value : "",
+            tag : "",
+            lang: ""
+        },
+        SPECIAL : "",
+        PAGE : "ftr_02_002",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Satış Faturası",
+            CAPTION : "Otomatik mail gönderilcek adress"
         }
     },
     //#endregion

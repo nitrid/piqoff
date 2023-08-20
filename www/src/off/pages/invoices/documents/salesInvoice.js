@@ -164,7 +164,7 @@ export default class salesInvoice extends React.PureComponent
         this.docObj.clearAll()
         this.paymentObj.clearAll()
         App.instance.setState({isExecute:true})
-        await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:1,DOC_TYPE:20});
+        await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:1,DOC_TYPE:20,SUB_FACTOR:this.sysParam.filter({ID:'secondFactor',USERS:this.user.CODE}).getValue().value});
         App.instance.setState({isExecute:false})
 
         this._calculateMargin()
@@ -607,10 +607,10 @@ export default class salesInvoice extends React.PureComponent
         App.instance.setState({isExecute:true})
         let tmpGrpQuery = 
         {
-            query :"SELECT ORGINS,UNIT_SHORT,ISNULL((SELECT top 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID AND ITEM_UNIT_VW_01.TYPE = 1),1) AS SUB_FACTOR, " +
-             "ISNULL((SELECT top 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID AND ITEM_UNIT_VW_01.TYPE = 1),'') AS SUB_SYMBOL FROM ITEMS_VW_01 WHERE GUID = @GUID ",
-            param : ['GUID:string|50'],
-            value : [pData.GUID]
+            query :"SELECT ORGINS,UNIT_SHORT,ISNULL((SELECT top 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID AND ITEM_UNIT_VW_01.ID = @ID ),1) AS SUB_FACTOR, " +
+             "ISNULL((SELECT top 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID AND ITEM_UNIT_VW_01.ID = @ID),'') AS SUB_SYMBOL FROM ITEMS_VW_01 WHERE GUID = @GUID ",
+            param : ['GUID:string|50','ID:string|20'],
+            value : [pData.GUID,this.sysParam.filter({ID:'secondFactor',USERS:this.user.CODE}).getValue().value]
         }
         let tmpGrpData = await this.core.sql.execute(tmpGrpQuery) 
         if(tmpGrpData.result.recordset.length > 0)
@@ -682,7 +682,7 @@ export default class salesInvoice extends React.PureComponent
                         if(e == 'btn01')
                         {
                             this.docObj.docItems.dt()[i].QUANTITY = this.docObj.docItems.dt()[i].QUANTITY + pQuantity
-                            this.docObj.docItems.dt()[i].SUB_QUANTITY = this.docObj.docItems.dt()[i].SUB_QUANTITY * this.docObj.docItems.dt()[i].SUB_FACTOR
+                            this.docObj.docItems.dt()[i].SUB_QUANTITY = this.docObj.docItems.dt()[i].SUB_QUANTITY / this.docObj.docItems.dt()[i].SUB_FACTOR
                             this.docObj.docItems.dt()[i].VAT = parseFloat((this.docObj.docItems.dt()[i].VAT + (this.docObj.docItems.dt()[i].PRICE * (this.docObj.docItems.dt()[i].VAT_RATE / 100) * pQuantity)).toFixed(6))
                             this.docObj.docItems.dt()[i].AMOUNT = parseFloat((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE).toFixed(4)).round(2)
                             this.docObj.docItems.dt()[i].TOTAL = Number((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT)).round(2)
@@ -718,7 +718,7 @@ export default class salesInvoice extends React.PureComponent
                 {
                 
                     this.docObj.docItems.dt()[i].QUANTITY = this.docObj.docItems.dt()[i].QUANTITY + pQuantity
-                    this.docObj.docItems.dt()[i].SUB_QUANTITY = this.docObj.docItems.dt()[i].SUB_QUANTITY * this.docObj.docItems.dt()[i].SUB_FACTOR
+                    this.docObj.docItems.dt()[i].SUB_QUANTITY = this.docObj.docItems.dt()[i].SUB_QUANTITY / this.docObj.docItems.dt()[i].SUB_FACTOR
                     this.docObj.docItems.dt()[i].VAT = Number((this.docObj.docItems.dt()[i].VAT + (this.docObj.docItems.dt()[i].PRICE * (this.docObj.docItems.dt()[i].VAT_RATE / 100) * pQuantity))).round(6)
                     this.docObj.docItems.dt()[i].AMOUNT = Number((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE)).round(4)
                     this.docObj.docItems.dt()[i].TOTAL = Number((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT)).round(2)
@@ -744,7 +744,7 @@ export default class salesInvoice extends React.PureComponent
         this.docObj.docItems.dt()[pIndex].DISCOUNT = 0
         this.docObj.docItems.dt()[pIndex].DISCOUNT_RATE = 0
         this.docObj.docItems.dt()[pIndex].QUANTITY = pQuantity
-        this.docObj.docItems.dt()[pIndex].SUB_QUANTITY = pQuantity * this.docObj.docItems.dt()[pIndex].SUB_FACTOR
+        this.docObj.docItems.dt()[pIndex].SUB_QUANTITY = pQuantity / this.docObj.docItems.dt()[pIndex].SUB_FACTOR
       
         if(typeof pPrice == 'undefined')
         {
@@ -1420,12 +1420,12 @@ export default class salesInvoice extends React.PureComponent
             }
         }
 
-        this.docObj.docCustomer.dt()[i].INPUT = this.docObj.dt()[0].INPUT
-        this.docObj.docCustomer.dt()[i].OUTPUT = this.docObj.dt()[0].OUTPUT
-        this.docObj.docCustomer.dt()[i].DOC_DATE = this.docObj.dt()[0].DOC_DATE
-        this.docObj.docCustomer.dt()[i].SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
-        this.docObj.docCustomer.dt()[i].REF = this.docObj.dt()[0].REF
-        this.docObj.docCustomer.dt()[i].REF_NO = this.docObj.dt()[0].REF_NO
+        this.docObj.docCustomer.dt()[0].INPUT = this.docObj.dt()[0].INPUT
+        this.docObj.docCustomer.dt()[0].OUTPUT = this.docObj.dt()[0].OUTPUT
+        this.docObj.docCustomer.dt()[0].DOC_DATE = this.docObj.dt()[0].DOC_DATE
+        this.docObj.docCustomer.dt()[0].SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
+        this.docObj.docCustomer.dt()[0].REF = this.docObj.dt()[0].REF
+        this.docObj.docCustomer.dt()[0].REF_NO = this.docObj.dt()[0].REF_NO
     }
     async _getBarcodes()
     {
@@ -1750,7 +1750,36 @@ export default class salesInvoice extends React.PureComponent
                                                 this.docObj.dt()[0].SIGNATURE_SUM = tmpSignedData.SIGNATURE_SUM
 
                                                 if((await this.docObj.save()) == 0)
-                                                {                                                    
+                                                {                              
+                                                    if(typeof this.prmObj.filter({ID:'autoMailAdress',USERS:this.user.CODE}).getValue().value != 'undefined' && this.prmObj.filter({ID:'autoMailAdress',USERS:this.user.CODE}).getValue().value != '')
+                                                    {
+                                                        let tmpQuery = 
+                                                        {
+                                                            query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG)ORDER BY DOC_DATE,LINE_NO " ,
+                                                            param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
+                                                            value:  [this.docObj.dt()[0].GUID,this.prmObj.filter({ID:'autoMailAdress',USERS:this.user.CODE}).getValue().tag,this.prmObj.filter({ID:'autoMailAdress',USERS:this.user.CODE}).getValue().lang]
+                                                        }
+                                                        App.instance.setState({isExecute:true})
+                                                        let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                        App.instance.setState({isExecute:false})
+                                                        this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
+                                                        {
+                                                            let tmpAttach = pResult.split('|')[1]
+                                                            let tmpHtml = this.htmlEditor.value
+                                                            if(this.htmlEditor.value.length == 0)
+                                                            {
+                                                                tmpHtml = ''
+                                                            }
+                                                            if(pResult.split('|')[0] != 'ERR')
+                                                            {
+                                                            }
+                                                            let tmpMailData = {html:tmpHtml,subject:'',sendMail:this.prmObj.filter({ID:'autoMailAdress',USERS:this.user.CODE}).getValue().value,attachName:"facture.pdf",attachData:tmpAttach,text:""}
+                                                            this.core.socket.emit('mailer',tmpMailData,async(pResult1) => 
+                                                            {   
+                                                             
+                                                            });
+                                                        });
+                                                    }                      
                                                     let tmpConfObj =
                                                     {
                                                         id:'msgLocked',showTitle:true,title:this.t("msgLocked.title"),showCloseButton:true,width:'500px',height:'200px',
@@ -2930,7 +2959,7 @@ export default class salesInvoice extends React.PureComponent
                                         {
                                             if(typeof e.data.QUANTITY != 'undefined')
                                             {
-                                                e.key.SUB_QUANTITY =  e.data.QUANTITY * e.key.SUB_FACTOR
+                                                e.key.SUB_QUANTITY =  e.data.QUANTITY / e.key.SUB_FACTOR
                                                 let tmpQuery = 
                                                 {
                                                     query :"SELECT [dbo].[FN_PRICE_SALE_VAT_EXT](@ITEM_GUID,@QUANTITY,GETDATE(),@CUSTOMER_GUID,@CONTRACT_CODE) AS PRICE",
@@ -2941,21 +2970,21 @@ export default class salesInvoice extends React.PureComponent
                                                 if(tmpData.result.recordset.length > 0)
                                                 {
                                                     e.key.PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(3))
-                                                    e.key.SUB_PRICE = Number(((tmpData.result.recordset[0].PRICE).toFixed(3)) / e.key.SUB_FACTOR).round(2)
+                                                    e.key.SUB_PRICE = Number(((tmpData.result.recordset[0].PRICE).toFixed(3)) * e.key.SUB_FACTOR).round(2)
                                                     this._calculateTotal()
                                                 }
                                             }
                                             if(typeof e.data.SUB_QUANTITY != 'undefined')
                                             {
-                                                e.key.QUANTITY = e.data.SUB_QUANTITY / e.key.SUB_FACTOR
+                                                e.key.QUANTITY = e.data.SUB_QUANTITY * e.key.SUB_FACTOR
                                             }
                                             if(typeof e.data.PRICE != 'undefined')
                                             {
-                                                e.key.SUB_PRICE = e.data.PRICE / e.key.SUB_FACTOR
+                                                e.key.SUB_PRICE = e.data.PRICE * e.key.SUB_FACTOR
                                             }
                                             if(typeof e.data.SUB_PRICE != 'undefined')
                                             {
-                                                e.key.PRICE = e.data.SUB_PRICE * e.key.SUB_FACTOR
+                                                e.key.PRICE = e.data.SUB_PRICE / e.key.SUB_FACTOR
                                             }
                                             if(typeof e.data.DISCOUNT_RATE != 'undefined')
                                             {
