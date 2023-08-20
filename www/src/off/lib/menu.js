@@ -835,6 +835,11 @@ export const menu = (e) =>
                                     text: e.t('menuOff.ftr_02_007'),//'İade Alış Faturası',
                                     path: 'invoices/documents/rebatePurcInvoice'
                                 },
+                                {
+                                    id: 'ftr_02_009',
+                                    text: e.t('menuOff.ftr_02_009'),//'Fire Alış Faturası',
+                                    path: 'invoices/documents/outagePurcInvoice'
+                                },
                             ]
                         },
                         {
