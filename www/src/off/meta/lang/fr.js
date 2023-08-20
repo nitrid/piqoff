@@ -4115,6 +4115,7 @@ export const langFr =
             clmQuantity : "Quantité",  
             clmTotal : "Total",  
             clmPrice : "Prix",  
+            clmlineNo : "No"
         },
         cmbPayType : {
             title : "Mode de paiement",   
@@ -4603,6 +4604,7 @@ export const langFr =
             clmQuantity : "Quantité",  
             clmTotal : "Total",  
             clmPrice : "Prix",  
+            clmlineNo : "No"
         },
         cmbPayType : {
             title : "Mode de paiement",   
@@ -6028,6 +6030,7 @@ export const langFr =
             clmQuantity : "Quantité",  
             clmTotal : "Total",  
             clmPrice : "Prix",  
+            clmlineNo : "No"
         },
         cmbPayType : {
             title : "Mode de paiement",   
@@ -7362,6 +7365,7 @@ export const langFr =
             clmQuantity : "Quantité",  
             clmTotal : "Total",  
             clmPrice : "Prix",  
+            clmlineNo : "No"
         },
         cmbPayType : {
             title : "Mode de paiement",   
@@ -8176,6 +8180,7 @@ export const langFr =
             clmQuantity : "Quantité",  
             clmTotal : "Total",  
             clmPrice : "Prix",  
+            clmlineNo : "No"
         },
         cmbPayType : {
             title : "Mode de paiement",   
@@ -8703,7 +8708,8 @@ export const langFr =
             clmName : "Nom",  
             clmQuantity : "Quantité",  
             clmTotal : "Total",  
-            clmPrice : "Prix",  
+            clmPrice : "Prix", 
+            clmlineNo : "No"
         },
         cmbPayType : {
             title : "Mode de paiement",   
@@ -9474,6 +9480,7 @@ export const langFr =
             clmQuantity : "Quantité",  
             clmTotal : "Total",  
             clmPrice : "Prix",  
+            clmlineNo : "No"
         },
         cmbPayType : {
             title : "Mode de paiement",   
@@ -10164,7 +10171,8 @@ export const langFr =
             clmName : "Nom",   
             clmQuantity : "Quantité",   
             clmTotal : "Total",   
-            clmPrice : "Prix",   
+            clmPrice : "Prix", 
+            clmlineNo : "No"
         },
         msgCustomerSelect:
         {
@@ -10592,6 +10600,7 @@ export const langFr =
             clmQuantity : "Quantité",   
             clmTotal : "Total",   
             clmPrice : "Prix",   
+            clmlineNo : "No"
         },
         msgCustomerSelect:
         {
@@ -11329,6 +11338,7 @@ export const langFr =
             clmQuantity : "Quantité",   
             clmTotal : "Total",   
             clmPrice : "Prix",   
+            clmlineNo : "No"
         },
         msgCustomerSelect:
         {
@@ -12033,6 +12043,7 @@ export const langFr =
             clmQuantity : "Quantité",   
             clmTotal : "Total",   
             clmPrice : "Prix",   
+            clmlineNo : "No"
         },
         msgCustomerSelect:
         {

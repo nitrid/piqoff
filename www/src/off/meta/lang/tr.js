@@ -4117,6 +4117,7 @@ export const langTr =
             clmQuantity : "Adet",
             clmTotal : "Tutar",
             clmPrice : "Fiyat",
+            clmlineNo : "No"
         },
         cmbPayType : {
             title : "Ödeme Tipi",
@@ -4606,6 +4607,7 @@ export const langTr =
             clmQuantity : "Adet",
             clmTotal : "Tutar",
             clmPrice : "Fiyat",
+            clmlineNo : "No"
         },
         cmbPayType : {
             title : "Ödeme Tipi",
@@ -6017,6 +6019,7 @@ export const langTr =
             clmQuantity : "Adet",
             clmTotal : "Tutar",
             clmPrice : "Fiyat",
+            clmlineNo : "No"
         },
         cmbPayType : {
             title : "Ödeme Tipi",
@@ -7358,6 +7361,7 @@ export const langTr =
             clmQuantity : "Adet",
             clmTotal : "Tutar",
             clmPrice : "Fiyat",
+            clmlineNo : "No"
         },
         cmbPayType : {
             title : "Ödeme Tipi",
@@ -8179,6 +8183,7 @@ export const langTr =
             clmQuantity : "Adet",
             clmTotal : "Tutar",
             clmPrice : "Fiyat",
+            clmlineNo : "No"
         },
         cmbPayType : {
             title : "Ödeme Tipi",
@@ -8707,6 +8712,7 @@ export const langTr =
             clmQuantity : "Adet",
             clmTotal : "Tutar",
             clmPrice : "Fiyat",
+            clmlineNo : "No"
         },
         cmbPayType : {
             title : "Ödeme Tipi",
@@ -9469,6 +9475,7 @@ export const langTr =
             clmQuantity : "Adet",
             clmTotal : "Tutar",
             clmPrice : "Fiyat",
+            clmlineNo : "No"
         },
         cmbPayType : {
             title : "Ödeme Tipi",
@@ -10191,6 +10198,7 @@ export const langTr =
             clmQuantity : "Adet",
             clmTotal : "Tutar",
             clmPrice : "Fiyat",
+            clmlineNo : "No"
         },
         msgCustomerSelect:
         {
@@ -10618,6 +10626,7 @@ export const langTr =
             clmQuantity : "Adet",
             clmTotal : "Tutar",
             clmPrice : "Fiyat",
+            clmlineNo : "No"
         },
         msgCustomerSelect:
         {
@@ -11356,6 +11365,7 @@ export const langTr =
             clmQuantity : "Adet",
             clmTotal : "Tutar",
             clmPrice : "Fiyat",
+            clmlineNo : "No"
         },
         msgCustomerSelect:
         {
@@ -12061,6 +12071,7 @@ export const langTr =
             clmQuantity : "Adet",
             clmTotal : "Tutar",
             clmPrice : "Fiyat",
+            clmlineNo : "No"
         },
         msgCustomerSelect:
         {
