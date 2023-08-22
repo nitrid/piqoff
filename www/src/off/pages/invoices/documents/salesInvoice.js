@@ -4663,7 +4663,8 @@ export default class salesInvoice extends React.PureComponent
                     title={this.t("pg_ordersGrid.title")} //
                     >
                         <Paging defaultPageSize={22} />
-                        <Column dataField="REFERANS" caption={this.t("pg_ordersGrid.clmReferans")} width={200} defaultSortOrder="asc"/>
+                        <Column dataField="REFERANS" caption={this.t("pg_ordersGrid.clmReferans")} width={200} />
+                        <Column dataField="LINE_NO" caption={this.t("pg_ordersGrid.clmlineNo")} width={80} defaultSortOrder="asc"/>
                         <Column dataField="ITEM_CODE" caption={this.t("pg_ordersGrid.clmCode")} width={200}/>
                         <Column dataField="ITEM_NAME" caption={this.t("pg_ordersGrid.clmName")} width={500} />
                         <Column dataField="QUANTITY" caption={this.t("pg_ordersGrid.clmQuantity")} width={200} />
