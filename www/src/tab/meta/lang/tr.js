@@ -24,6 +24,11 @@ export const langTr =
         msg : "Sizin kullanıcı bilgileriniz ile başka bir cihazdan giriş yapıldı",
         btn01 : "Tamam"
     },
+    msgDataTransfer: 
+    {
+        title : "Lütfen Bekleyiniz !",
+        msg : "Verileriniz güncelleniyor...",
+    },
     sale:  // "Satış"
     {
         loadMore : "Daha Fazla Göster",
@@ -37,7 +42,14 @@ export const langTr =
             txtVat : "Vergi",
             txtTotal : "Genel Toplam",
             cmbDepot : "Depo",
-            dtDocDate : "Tarih"
+            dtDocDate : "Tarih",
+            txtDescription : "Açıklama"
+        },
+        itemPopup : 
+        {
+            txtFactor : "Katsayı", // BAK
+            txtPrice  :"Fiyat",
+            cmbUnit : "Birim"
         },
         popCustomer:
         {
@@ -153,6 +165,19 @@ export const langTr =
             Percent3 : "3. İnd. Yüzde",
             Price3 : "3. İnd. Tutar"
         },
+        msgMemRecord:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrak a dönüşmemiş kayıtlarınız mevcut ! Lütfen işlemlerinizi kontrol ediniz."
+        },
+        msgNew:
+        {
+            title: "Dikkat",
+            btn01: "Evet",
+            btn02: "Hayır",
+            msg: "Yeni evrak oluşturmak istediğinize eminmisiniz ?"
+        },
     },
     extract :
     {
@@ -214,6 +239,6 @@ export const langTr =
         lastDocumant : "Son Sipariş",
         mountSales : "Bu Ayki Sipariş Toplamı",
         yearSales : "Bu Yılki Sipariş Toplamı",
-        sale : "Satış Tutarı"
+        sale : "Satış Tutarı",        
     }
 }

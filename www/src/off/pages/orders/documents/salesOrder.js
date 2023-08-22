@@ -132,7 +132,7 @@ export default class salesOrder extends React.PureComponent
         console.log(pGuid)
         this.docObj.clearAll()
         App.instance.setState({isExecute:true})
-        await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:1,DOC_TYPE:60});
+        await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:1,DOC_TYPE:60,SUB_FACTOR:this.sysParam.filter({ID:'secondFactor',USERS:this.user.CODE}).getValue().value});
         App.instance.setState({isExecute:false})
         this._calculateMargin()
         this._calculateTotalMargin()
@@ -563,10 +563,10 @@ export default class salesOrder extends React.PureComponent
         App.instance.setState({isExecute:true})
         let tmpGrpQuery = 
         {
-            query :"SELECT ORGINS,UNIT_SHORT,ISNULL((SELECT top 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID AND ITEM_UNIT_VW_01.TYPE = 1),1) AS SUB_FACTOR, " +
-             "ISNULL((SELECT top 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID AND ITEM_UNIT_VW_01.TYPE = 1),'') AS SUB_SYMBOL FROM ITEMS_VW_01 WHERE GUID = @GUID ",
-            param : ['GUID:string|50'],
-            value : [pData.GUID]
+            query :"SELECT ORGINS,UNIT_SHORT,ISNULL((SELECT top 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID AND ITEM_UNIT_VW_01.ID = @ID),1) AS SUB_FACTOR, " +
+             "ISNULL((SELECT top 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID AND ITEM_UNIT_VW_01.ID = @ID),'') AS SUB_SYMBOL FROM ITEMS_VW_01 WHERE GUID = @GUID ",
+            param : ['GUID:string|50','ID:string|20'],
+            value : [pData.GUID,this.sysParam.filter({ID:'secondFactor',USERS:this.user.CODE}).getValue().value]
         }
         let tmpGrpData = await this.core.sql.execute(tmpGrpQuery) 
         if(tmpGrpData.result.recordset.length > 0)
@@ -597,7 +597,7 @@ export default class salesOrder extends React.PureComponent
                         if(e == 'btn01')
                         {
                             this.docObj.docOrders.dt()[i].QUANTITY = this.docObj.docOrders.dt()[i].QUANTITY + pQuantity
-                            this.docObj.docOrders.dt()[i].SUB_QUANTITY = this.docObj.docOrders.dt()[i].SUB_QUANTITY + this.docObj.docOrders.dt()[i].SUB_FACTOR
+                            this.docObj.docOrders.dt()[i].SUB_QUANTITY = this.docObj.docOrders.dt()[i].SUB_QUANTITY / this.docObj.docOrders.dt()[i].SUB_FACTOR
                             this.docObj.docOrders.dt()[i].VAT = Number((this.docObj.docOrders.dt()[i].VAT + (this.docObj.docOrders.dt()[i].PRICE * (this.docObj.docOrders.dt()[i].VAT_RATE / 100)) * pQuantity)).round(6)
                             this.docObj.docOrders.dt()[i].AMOUNT = Number((this.docObj.docOrders.dt()[i].QUANTITY * this.docObj.docOrders.dt()[i].PRICE)).round(2)
                             this.docObj.docOrders.dt()[i].TOTAL = Number((((this.docObj.docOrders.dt()[i].QUANTITY * this.docObj.docOrders.dt()[i].PRICE) - this.docObj.docOrders.dt()[i].DISCOUNT) + this.docObj.docOrders.dt()[i].VAT)).round(2)
@@ -632,7 +632,7 @@ export default class salesOrder extends React.PureComponent
                 else if(this.combineNew == false)
                 {
                     this.docObj.docOrders.dt()[i].QUANTITY = this.docObj.docOrders.dt()[i].QUANTITY + pQuantity
-                    this.docObj.docOrders.dt()[i].SUB_QUANTITY = this.docObj.docOrders.dt()[i].SUB_QUANTITY + this.docObj.docOrders.dt()[i].SUB_FACTOR
+                    this.docObj.docOrders.dt()[i].SUB_QUANTITY = this.docObj.docOrders.dt()[i].SUB_QUANTITY / this.docObj.docOrders.dt()[i].SUB_FACTOR
                     this.docObj.docOrders.dt()[i].VAT = parseFloat((this.docObj.docOrders.dt()[i].VAT + (this.docObj.docOrders.dt()[i].PRICE * (this.docObj.docOrders.dt()[i].VAT_RATE / 100)) * pQuantity).toFixed(6))
                     this.docObj.docOrders.dt()[i].AMOUNT = parseFloat((this.docObj.docOrders.dt()[i].QUANTITY * this.docObj.docOrders.dt()[i].PRICE).toFixed(4))
                     this.docObj.docOrders.dt()[i].TOTAL = Number((((this.docObj.docOrders.dt()[i].QUANTITY * this.docObj.docOrders.dt()[i].PRICE) - this.docObj.docOrders.dt()[i].DISCOUNT) + this.docObj.docOrders.dt()[i].VAT)).round(2)
@@ -658,7 +658,7 @@ export default class salesOrder extends React.PureComponent
         this.docObj.docOrders.dt()[pIndex].DISCOUNT = 0
         this.docObj.docOrders.dt()[pIndex].DISCOUNT_RATE = 0
         this.docObj.docOrders.dt()[pIndex].QUANTITY = pQuantity
-        this.docObj.docOrders.dt()[pIndex].SUB_QUANTITY = pQuantity * this.docObj.docOrders.dt()[pIndex].SUB_FACTOR
+        this.docObj.docOrders.dt()[pIndex].SUB_QUANTITY = pQuantity / this.docObj.docOrders.dt()[pIndex].SUB_FACTOR
         let tmpQuery = 
         {
             query :"SELECT dbo.FN_PRICE_SALE_VAT_EXT(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,@CONTRACT_CODE) AS PRICE",
@@ -676,7 +676,7 @@ export default class salesOrder extends React.PureComponent
             this.docObj.docOrders.dt()[pIndex].AMOUNT = parseFloat((tmpData.result.recordset[0].PRICE * pQuantity).toFixed(4))
             this.docObj.docOrders.dt()[pIndex].TOTAL = Number(((tmpData.result.recordset[0].PRICE * pQuantity)+ this.docObj.docOrders.dt()[pIndex].VAT)).round(2)
             this.docObj.docOrders.dt()[pIndex].TOTALHT = Number((this.docObj.docOrders.dt()[pIndex].AMOUNT - this.docObj.docOrders.dt()[pIndex].DISCOUNT)).round(2)
-            this.docObj.docOrders.dt()[pIndex].SUB_PRICE = Number(parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4)) / this.docObj.docOrders.dt()[pIndex].SUB_FACTOR).round(2)
+            this.docObj.docOrders.dt()[pIndex].SUB_PRICE = Number(parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4)) * this.docObj.docOrders.dt()[pIndex].SUB_FACTOR).round(2)
             this._calculateTotal()
         }
         //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
@@ -994,16 +994,27 @@ export default class salesOrder extends React.PureComponent
         let tmpQuery 
         if(pType == 0)
         {
-            tmpQuery = 
+            if(this.prmObj.filter({ID:'closedOrder',USERS:this.user.CODE}).getValue().value == true)
             {
-                query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,DOC_DATE_CONVERT,DOC_ADDRESS FROM DOC_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 60 AND REBATE = 0  AND DOC_DATE > GETDATE()-30 ORDER BY DOC_DATE DESC"
+                tmpQuery = 
+                {
+                    query : "SELECT DOC_GUID AS GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,CONVERT(NVARCHAR,DOC_DATE,104) AS DOC_DATE_CONVERT,SUM(TOTAL) FROM DOC_ORDERS_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 60 AND SHIPMENT_DOC_GUID = '00000000-0000-0000-0000-000000000000' GROUP BY DOC_GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,DOC_DATE ORDER BY DOC_DATE DESC"
+                }
             }
+            else
+            {
+                tmpQuery = 
+                {
+                    query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,DOC_DATE_CONVERT,DOC_ADDRESS,TOTAL FROM DOC_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 60 AND REBATE = 0  AND DOC_DATE > GETDATE()-30 ORDER BY DOC_DATE DESC"
+                }
+            }
+            
         }
         else
         {
             tmpQuery = 
             {
-                query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,DOC_DATE_CONVERT,DOC_ADDRESS FROM DOC_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 60 AND REBATE = 0 ORDER BY DOC_DATE DESC"
+                query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,DOC_DATE_CONVERT,DOC_ADDRESS,TOTAL FROM DOC_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 60 AND REBATE = 0 ORDER BY DOC_DATE DESC"
             }
         }
 
@@ -1422,7 +1433,7 @@ export default class salesOrder extends React.PureComponent
                                         <Column dataField="INPUT_CODE" caption={this.t("pg_Docs.clmInputCode")} width={200} />
                                         <Column dataField="INPUT_NAME" caption={this.t("pg_Docs.clmInputName")} width={300} />
                                         <Column dataField="DOC_ADDRESS" caption={this.t("pg_Docs.clmAddress")} width={300} />
-                                        
+                                        <Column dataField="TOTAL" format={{ style: "currency", currency: "EUR",precision: 2}} caption={this.t("pg_Docs.clmTotal")} width={300} />
                                     </NdPopGrid>
                                 </Item>
                                 {/* cmbDepot */}
@@ -2157,7 +2168,7 @@ export default class salesOrder extends React.PureComponent
 
                                         if(typeof e.data.QUANTITY != 'undefined')
                                         {
-                                            e.key.SUB_QUANTITY =  e.data.QUANTITY * e.key.SUB_FACTOR
+                                            e.key.SUB_QUANTITY =  e.data.QUANTITY / e.key.SUB_FACTOR
                                             let tmpQuery = 
                                             {
                                                 query :"SELECT [dbo].[FN_PRICE_SALE_VAT_EXT](@ITEM_GUID,@QUANTITY,GETDATE(),@CUSTOMER_GUID,@CONTRACT_CODE) AS PRICE",
@@ -2168,21 +2179,21 @@ export default class salesOrder extends React.PureComponent
                                             if(tmpData.result.recordset.length > 0)
                                             {
                                                 e.key.PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4))
-                                                
+                                                e.key.SUB_PRICE = Number(((tmpData.result.recordset[0].PRICE).toFixed(3)) * e.key.SUB_FACTOR).round(2)
                                                 this._calculateTotal()
                                             }
                                         }
                                         if(typeof e.data.SUB_QUANTITY != 'undefined')
                                         {
-                                            e.key.QUANTITY = e.data.SUB_QUANTITY / e.key.SUB_FACTOR
+                                            e.key.QUANTITY = e.data.SUB_QUANTITY * e.key.SUB_FACTOR
                                         }
                                         if(typeof e.data.PRICE != 'undefined')
                                         {
-                                            e.key.SUB_PRICE = e.data.PRICE / e.key.SUB_FACTOR
+                                            e.key.SUB_PRICE = e.data.PRICE * e.key.SUB_FACTOR
                                         }
                                         if(typeof e.data.SUB_PRICE != 'undefined')
                                         {
-                                            e.key.PRICE = e.data.SUB_PRICE * e.key.SUB_FACTOR
+                                            e.key.PRICE = e.data.SUB_PRICE / e.key.SUB_FACTOR
                                         }
                                         if(typeof e.data.DISCOUNT_RATE != 'undefined')
                                         {
@@ -2219,7 +2230,7 @@ export default class salesOrder extends React.PureComponent
                                         }
 
                                         e.key.TOTALHT = Number((parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3)) - (parseFloat(e.key.DISCOUNT)))).round(2)
-                                        e.key.VAT = parseFloat(((((e.key.TOTALHT) - (parseFloat(e.key.DISCOUNT) + parseFloat(e.key.DOC_DISCOUNT))) * (e.key.VAT_RATE) / 100))).round(6);
+                                        e.key.VAT = parseFloat(((((e.key.TOTALHT) - (parseFloat(e.key.DOC_DISCOUNT))) * (e.key.VAT_RATE) / 100))).round(6);
                                         e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3)).round(2)
                                         e.key.TOTAL = Number(((e.key.TOTALHT - e.key.DOC_DISCOUNT) + e.key.VAT)).round(2)
 

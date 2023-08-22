@@ -195,7 +195,7 @@ export class local
         this.db = null;  
         this.sqllite = null
         this.platform = ''
-
+        
         if(core.instance.util.isElectron())
         {
             this.sqllite = global.require('sqlite3').verbose()
@@ -210,13 +210,13 @@ export class local
     async init(pDb)
     {
         return new Promise(async resolve => 
-        {                        
+        {         
             if(this.sqllite == null)
             {
                 resolve(false);
                 return
             }
-
+            
             if(this.platform == 'electron')
             {
                 this.db = new this.sqllite.Database('./resources/' + pDb.name + '.db', async(err) => 
@@ -243,7 +243,6 @@ export class local
             else if(this.platform == 'cordova')
             {
                 this.db = this.sqllite.openDatabase({ name: pDb.name + '.db', location: 'default' });
-
                 this.db.transaction((tx) =>
                 {
                     for (var i = 0; i < pDb.tables.length; i++) 
@@ -339,8 +338,12 @@ export class local
                 {
                     tx.executeSql(tmpQuery.query, typeof tmpQuery.values == 'undefined' ? [] : tmpQuery.values, (tx, result) =>
                     {
-                        console.log(result)
-                        resolve({result:{state:true,recordset:result}})
+                        let tmpArr = []
+                        for (let i = 0; i < result.rows.length; i++) 
+                        {
+                            tmpArr.push(result.rows.item(i))
+                        }
+                        resolve({result:{state:true,recordset:tmpArr}})
                     }, (tx, err) =>
                     {
                         console.log(err + ' ' + tmpQuery.query)

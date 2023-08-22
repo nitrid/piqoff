@@ -15,7 +15,7 @@ export default class Dashboard extends React.PureComponent
     }
     async componentDidMount()
     {
-        this.init()
+        this.init()        
     }
     async init()
     {
@@ -117,7 +117,7 @@ export default class Dashboard extends React.PureComponent
                             </div>
                         </div>
                     </div>   
-                </ScrollView>
+                </ScrollView>                
             </div>
         )
     }

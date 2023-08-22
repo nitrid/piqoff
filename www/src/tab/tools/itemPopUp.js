@@ -3,6 +3,7 @@ import App from "../lib/app.js";
 import NbBase from "../../core/react/bootstrap/base.js";
 import NbPopUp from '../../core/react/bootstrap/popup';
 import NbButton from '../../core/react/bootstrap/button';
+import Form, { Label, EmptyItem } from 'devextreme-react/form';
 import Toolbar,{Item} from 'devextreme-react/toolbar';
 import Carousel from 'react-bootstrap/Carousel';
 import NdTextBox,{ Button } from '../../core/react/devex/textbox'
@@ -27,7 +28,6 @@ export default class NbItemPopUp extends NbBase
     async open(pData)
     {        
         this.data = pData.data
-        
         let tmpQuery = 
         {
             query :"SELECT IMAGE AS IMAGE1,  " +
@@ -42,10 +42,10 @@ export default class NbItemPopUp extends NbBase
         let tmpData = await this.core.sql.execute(tmpQuery)
         if(tmpData.result.recordset.length > 0)
         {
-            this.data.IMAGE1 = tmpData.result.recordset[0].IMAGE1
-            this.data.IMAGE2 = tmpData.result.recordset[0].IMAGE2
-            this.data.IMAGE3 = tmpData.result.recordset[0].IMAGE3
-            this.data.IMAGE4 = tmpData.result.recordset[0].IMAGE4
+            this.data.IMAGE1 = tmpData.result.recordset[0].IMAGE1 == '' ? './css/img/noimage.jpg' : tmpData.result.recordset[0].IMAGE1
+            this.data.IMAGE2 = tmpData.result.recordset[0].IMAGE2 == '' ? './css/img/noimage.jpg' : tmpData.result.recordset[0].IMAGE2
+            this.data.IMAGE3 = tmpData.result.recordset[0].IMAGE3 == '' ? './css/img/noimage.jpg' : tmpData.result.recordset[0].IMAGE3
+            this.data.IMAGE4 = tmpData.result.recordset[0].IMAGE3 == '' ? './css/img/noimage.jpg' : tmpData.result.recordset[0].IMAGE4
             if(typeof this.data.QUANTITY == 'undefined')
             {
                 this.data.QUANTITY = 0
@@ -53,25 +53,19 @@ export default class NbItemPopUp extends NbBase
             this.setState({images:[]})
             this.popCard.show();
         }
-        let tmpSource =
+        else
         {
-            source : 
+            this.data.IMAGE1 = './css/img/noimage.jpg'
+            this.data.IMAGE2 = './css/img/noimage.jpg'
+            this.data.IMAGE3 = './css/img/noimage.jpg'
+            this.data.IMAGE4 = './css/img/noimage.jpg'
+            if(typeof this.data.QUANTITY == 'undefined')
             {
-                select : 
-                {
-                    query : "SELECT GUID,NAME,FACTOR,TYPE FROM ITEM_UNIT_VW_01 WHERE ITEM_GUID =@ITEM_GUID",
-                    param : ['ITEM_GUID:string|50'],
-                    value : [this.data.GUID]
-                },
-                sql : this.core.sql
+                this.data.QUANTITY = 0
             }
-        }
-        await this.cmbUnit.dataRefresh(tmpSource)
-        if(this.cmbUnit.data.datatable.length > 0)
-        {
-            this.cmbUnit.value = this.data.UNIT;
-            this.txtPrice.value = Number(this.data.PRICE * this.data.UNIT_FACTOR).round(3)
-        }
+            this.setState({images:[]})
+            this.popCard.show();
+        }                
     }
     _onValueChange(e)
     {
@@ -84,7 +78,32 @@ export default class NbItemPopUp extends NbBase
     {
         return(
             <React.Fragment>
-            <NbPopUp id={"popCard"} parent={this} title={""} fullscreen={true}>
+            <NbPopUp id={"popCard"} parent={this} title={""} fullscreen={true}
+            onShowed={async()=>
+            {
+                await this.core.util.waitUntil(0)
+                
+                let tmpSource =
+                {
+                    source : 
+                    {
+                        select : 
+                        {
+                            query : "SELECT GUID,NAME,FACTOR,TYPE FROM ITEM_UNIT_VW_01 WHERE ITEM_GUID = @ITEM_GUID",
+                            param : ['ITEM_GUID:string|50'],
+                            value : [this.data.GUID]
+                        },
+                        sql : this.core.sql
+                    }
+                }
+                await this.cmbUnit.dataRefresh(tmpSource)
+
+                if(this.cmbUnit.data.datatable.length > 0)
+                {
+                    this.cmbUnit.value = this.data.UNIT;
+                    this.txtPrice.value = Number(this.data.PRICE * this.data.UNIT_FACTOR).round(3)
+                }
+            }}>
                 <div>
                     <div className='row' style={{paddingTop:"10px"}}>
                         <div className='col-12' align={"right"}>
@@ -165,66 +184,82 @@ export default class NbItemPopUp extends NbBase
                             </div>
                         </div>
                         <div className='row pt-2'>
-                            <div className='col-6'>
-                                <NdTextBox id={"txtPrice"} parent={this} simple={true} inputAttr={{ class: 'dx-texteditor-input txtbox-center' }} value={this.data.PRICE}/>
-                            </div>
-                            <div className='col-6'>
-                                <NdSelectBox simple={true} parent={this} id="cmbUnit" height='fit-content' 
-                                displayExpr="NAME"                       
-                                valueExpr="GUID"
-                                searchEnabled={true}
-                                onValueChanged={(async(e)=>
-                                    {
-                                        if(e.value != '00000000-0000-0000-0000-000000000000' && e.value != '')
+                            <div className='col-12'>
+                                <Form colCount={2}>
+                                    <Item>
+                                        <Label text={this.t("itemPopup.txtPrice")} alignment="right" />
+                                        <NdTextBox id={"txtPrice"} parent={this} simple={true} inputAttr={{ class: 'dx-texteditor-input txtbox-center' }} value={this.data.PRICE}/>
+                                    </Item>
+                                    <Item>
+                                        <Label text={this.t("itemPopup.cmbUnit")} alignment="right" />
+                                        <NdSelectBox simple={true} parent={this} id="cmbUnit" height='fit-content' 
+                                        displayExpr="NAME"                       
+                                        valueExpr="GUID"
+                                        searchEnabled={true}
+                                        onValueChanged={(async(e)=>
                                         {
-                                            this.data.UNIT_FACTOR = this.cmbUnit.data.datatable.where({'GUID':e.value})[0].FACTOR
-                                            this.data.UNIT = e.value
-                                            this.txtPrice.value = Number(this.data.PRICE * this.data.UNIT_FACTOR).round(3)
-                                            this._onValueChange(this.data)
-                                        }
-                                    }).bind(this)}
-                                />
+                                            if(e.value != '00000000-0000-0000-0000-000000000000' && e.value != '')
+                                            {                                                
+                                                this.data.UNIT_FACTOR = this.cmbUnit.data.datatable.where({'GUID':e.value})[0].FACTOR
+                                                this.data.UNIT = e.value
+                                                this.txtPrice.value = Number(this.data.PRICE * this.data.UNIT_FACTOR).round(3)
+                                                this.txtFactor.value = this.cmbUnit.data.datatable.where({'GUID':e.value})[0].FACTOR
+                                                this._onValueChange(this.data)
+                                            }
+                                        }).bind(this)}
+                                        />
+                                    </Item>
+                                </Form>
                             </div>
                         </div>
                         <div className='row pt-2'>
                             <div className='col-12'>
-                                <NdTextBox id={"txtQuantity"} parent={this} simple={true} inputAttr={{ class: 'dx-texteditor-input txtbox-center' }}
-                                value={this.data.QUANTITY}
-                                onChange={(async(e)=>
-                                {
-                                    this.data.QUANTITY = this.txtQuantity.value
-                                    this._onValueChange(this.data)
-                                }).bind(this)}
-                                button={
-                                [
-                                    {
-                                        id:'01',
-                                        icon:'minus',
-                                        location:'before',
-                                        onClick:async()=>
+                            <Form colCount={2}>
+                                    <Item>
+                                        <Label text={this.t("itemPopup.txtFactor")} alignment="right" />
+                                        <NdTextBox id={"txtFactor"} parent={this} simple={true} inputAttr={{ class: 'dx-texteditor-input txtbox-center' }} value={this.data.UNIT_FACTOR}/>
+                                    </Item>
+                                    <Item>
+                                        <NdTextBox id={"txtQuantity"} parent={this} simple={true} inputAttr={{ class: 'dx-texteditor-input txtbox-center' }}
+                                        value={this.data.QUANTITY}
+                                        onChange={(async(e)=>
                                         {
-                                            if(this["txtQuantity" + this.props.id].value > 0)
-                                            {
-                                                this.txtQuantity.value = Number(this.txtQuantity.value) - 1 
-                                                this.data.QUANTITY = this.txtQuantity.value
-                                                this._onValueChange(this.data)
-                                            }
-                                            
-                                        }
-                                    },
-                                    {
-                                        id:'02',
-                                        icon:'plus',
-                                        location:'after',
-                                        onClick:async()=>
-                                        {
-                                            this.txtQuantity.value = Number(this.txtQuantity.value) + 1 
                                             this.data.QUANTITY = this.txtQuantity.value
                                             this._onValueChange(this.data)
-                                        }
-                                    }                                                    
-                                ]}>
-                                </NdTextBox>
+                                        }).bind(this)}
+                                        button={
+                                        [
+                                            {
+                                                id:'01',
+                                                icon:'minus',
+                                                location:'before',
+                                                onClick:async()=>
+                                                {
+                                                    if(this["txtQuantity" + this.props.id].value > 0)
+                                                    {
+                                                        this.txtQuantity.value = Number(this.txtQuantity.value) - 1 
+                                                        this.data.QUANTITY = this.txtQuantity.value
+                                                        this._onValueChange(this.data)
+                                                    }
+                                                    
+                                                }
+                                            },
+                                            {
+                                                id:'02',
+                                                icon:'plus',
+                                                location:'after',
+                                                onClick:async()=>
+                                                {
+                                                    this.txtQuantity.value = Number(this.txtQuantity.value) + 1 
+                                                    this.data.QUANTITY = this.txtQuantity.value
+                                                    this._onValueChange(this.data)
+                                                }
+                                            }                                                    
+                                        ]}>
+                                        </NdTextBox>
+                                    </Item>
+                                </Form>
+                               
                             </div>                                            
                         </div>
                     </div>

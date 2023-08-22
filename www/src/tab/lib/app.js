@@ -88,13 +88,14 @@ export default class App extends React.PureComponent
             {
                 this.init();
             }, false);
-        }        
+        }
     }
-    init()
+    async init()
     {
         this.core = new core(io(this.device ? 'http://' + localStorage.host : window.origin,{timeout:100000,transports : ['websocket']}));
         this.core.appInfo = appInfo
         this.transfer = new transferCls()
+        await this.transfer.init('TAB')
 
         if(!App.instance)
         {

@@ -16,6 +16,10 @@ export default class NbPopUp extends NbBase
     show()
     {
         this.setState({show:true})
+        if(typeof this.props.onShowed != 'undefined')
+        {
+            this.props.onShowed()
+        }
     }
     hide()
     {  

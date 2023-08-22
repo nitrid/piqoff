@@ -2234,7 +2234,7 @@ export default class purchaseOrder extends React.PureComponent
                                         }
 
                                         e.key.TOTALHT = Number((parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3)) - (parseFloat(e.key.DISCOUNT)))).round(2)
-                                        e.key.VAT = parseFloat(((((e.key.TOTALHT) - (parseFloat(e.key.DISCOUNT) + parseFloat(e.key.DOC_DISCOUNT))) * (e.key.VAT_RATE) / 100))).round(6);
+                                        e.key.VAT = parseFloat(((((e.key.TOTALHT) - (parseFloat(e.key.DOC_DISCOUNT))) * (e.key.VAT_RATE) / 100))).round(6);
                                         e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3)).round(2)
                                         e.key.TOTAL = Number(((e.key.TOTALHT - e.key.DOC_DISCOUNT) + e.key.VAT)).round(2)
 
@@ -2267,7 +2267,7 @@ export default class purchaseOrder extends React.PureComponent
                                         <Column dataField="MULTICODE" caption={this.t("grdPurcOrders.clmMulticode")} width={100} allowEditing={false}/>
                                         <Column dataField="ITEM_NAME" caption={this.t("grdPurcOrders.clmItemName")} width={230} />
                                         <Column dataField="ITEM_BARCODE" caption={this.t("grdPurcOrders.clmBarcode")} width={110} allowEditing={false}/>
-                                        <Column dataField="QUANTITY" caption={this.t("grdPurcOrders.clmQuantity")} width={65} dataType={'number'} cellRender={(e)=>{return e.value + " / " + e.data.UNIT_SHORT}}/>
+                                        <Column dataField="QUANTITY" caption={this.t("grdPurcOrders.clmQuantity")} width={65} dataType={'number'} cellRender={(e)=>{return e.value + " / " + e.data.UNIT_SHORT}} editCellRender={this._cellRoleRender}/>
                                         <Column dataField="SUB_FACTOR" caption={this.t("grdPurcOrders.clmSubFactor")} width={65} allowEditing={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
                                         <Column dataField="SUB_QUANTITY" caption={this.t("grdPurcOrders.clmSubQuantity")} dataType={'number'} width={65} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
                                         <Column dataField="PRICE" caption={this.t("grdPurcOrders.clmPrice")} width={65} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>

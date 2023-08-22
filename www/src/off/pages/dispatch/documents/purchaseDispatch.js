@@ -1373,14 +1373,14 @@ export default class purchaseDispatch extends React.PureComponent
         {
             tmpQuery = 
             {
-                query : "SELECT GUID,REF,REF_NO,OUTPUT_CODE,OUTPUT_NAME,DOC_DATE_CONVERT FROM DOC_VW_01 WHERE TYPE = 0 AND DOC_TYPE = 40 AND REBATE = 0 AND DOC_DATE > GETDATE()-30 ORDER BY DOC_DATE DESC"
+                query : "SELECT GUID,REF,REF_NO,OUTPUT_CODE,OUTPUT_NAME,DOC_DATE_CONVERT,TOTAL FROM DOC_VW_01 WHERE TYPE = 0 AND DOC_TYPE = 40 AND REBATE = 0 AND DOC_DATE > GETDATE()-30 ORDER BY DOC_DATE DESC"
             }
         }
         else
         {
             tmpQuery = 
             {
-                query : "SELECT GUID,REF,REF_NO,OUTPUT_CODE,OUTPUT_NAME,DOC_DATE_CONVERT FROM DOC_VW_01 WHERE TYPE = 0 AND DOC_TYPE = 40 AND REBATE = 0 ORDER BY DOC_DATE DESC"
+                query : "SELECT GUID,REF,REF_NO,OUTPUT_CODE,OUTPUT_NAME,DOC_DATE_CONVERT,TOTAL FROM DOC_VW_01 WHERE TYPE = 0 AND DOC_TYPE = 40 AND REBATE = 0 ORDER BY DOC_DATE DESC"
             }
         }
 
@@ -1740,7 +1740,7 @@ export default class purchaseDispatch extends React.PureComponent
                                         <Column dataField="DOC_DATE_CONVERT" caption={this.t("pg_Docs.clmDate")} width={300}  />
                                         <Column dataField="OUTPUT_NAME" caption={this.t("pg_Docs.clmOutputName")} width={300} />
                                         <Column dataField="OUTPUT_CODE" caption={this.t("pg_Docs.clmOutputCode")} width={300} />
-                                        
+                                        <Column dataField="TOTAL" format={{ style: "currency", currency: "EUR",precision: 2}} caption={this.t("pg_Docs.clmTotal")} width={300} />
                                     </NdPopGrid>
                                 </Item>
                                 {/* cmbDepot */}
@@ -2488,7 +2488,7 @@ export default class purchaseDispatch extends React.PureComponent
                                         }
                                         e.key.TOTALHT = Number((parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3)) - (parseFloat(e.key.DISCOUNT)))).round(2)
 
-                                        e.key.VAT = parseFloat(((((e.key.TOTALHT) - (parseFloat(e.key.DISCOUNT) + parseFloat(e.key.DOC_DISCOUNT))) * (e.key.VAT_RATE) / 100))).round(6);
+                                        e.key.VAT = parseFloat(((((e.key.TOTALHT) - (parseFloat(e.key.DOC_DISCOUNT))) * (e.key.VAT_RATE) / 100))).round(6);
                                         e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3)).round(2)
                                         e.key.DIFF_PRICE = e.key.PRICE - e.key.CUSTOMER_PRICE
                                         e.key.TOTAL = Number(((e.key.TOTALHT - e.key.DOC_DISCOUNT) + e.key.VAT)).round(2)
@@ -2529,7 +2529,7 @@ export default class purchaseDispatch extends React.PureComponent
                                         <Column dataField="MULTICODE" caption={this.t("grdPurcDispatch.clmMulticode")} width={105} allowEditing={false}/>
                                         <Column dataField="ITEM_NAME" caption={this.t("grdPurcDispatch.clmItemName")} width={330} />
                                         <Column dataField="ORIGIN" caption={this.t("grdPurcDispatch.clmOrigin")} width={60} allowEditing={true} editCellRender={this._cellRoleRender}/>
-                                        <Column dataField="QUANTITY" caption={this.t("grdPurcDispatch.clmQuantity")} width={65} dataType={'number'} cellRender={(e)=>{return e.value + " / " + e.data.UNIT_SHORT}}/>
+                                        <Column dataField="QUANTITY" caption={this.t("grdPurcDispatch.clmQuantity")} width={65} dataType={'number'} cellRender={(e)=>{return e.value + " / " + e.data.UNIT_SHORT}} editCellRender={this._cellRoleRender}/>
                                         <Column dataField="SUB_FACTOR" caption={this.t("grdPurcDispatch.clmSubFactor")} width={65} allowEditing={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
                                         <Column dataField="SUB_QUANTITY" caption={this.t("grdPurcDispatch.clmSubQuantity")} dataType={'number'} width={65} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
                                         <Column dataField="PRICE" caption={this.t("grdPurcDispatch.clmPrice")} width={65} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>

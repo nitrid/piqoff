@@ -97,7 +97,7 @@ export class docCls
                     "@SIGNATURE = @PSIGNATURE, " +
                     "@SIGNATURE_SUM = @PSIGNATURE_SUM ",
             param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PDOC_TYPE:int','PREBATE:int','PREF:string|25','PREF_NO:int','PDOC_NO:string|50','PDOC_DATE:date','PSHIPMENT_DATE:date','PINPUT:string|50',
-                        'POUTPUT:string|50','PAMOUNT:float','PDISCOUNT:float','PDOC_DISCOUNT_1:float','PDOC_DISCOUNT_2:float','PDOC_DISCOUNT_3:float','PINTERFEL:float','PVAT:float','PTOTAL:float','PDESCRIPTION:string|100','PADDRESS:int','PLOCKED:int','PCERTIFICATE:string|250',
+                        'POUTPUT:string|50','PAMOUNT:float','PDISCOUNT:float','PDOC_DISCOUNT_1:float','PDOC_DISCOUNT_2:float','PDOC_DISCOUNT_3:float','PINTERFEL:float','PVAT:float','PTOTAL:float','PDESCRIPTION:string|500','PADDRESS:int','PLOCKED:int','PCERTIFICATE:string|250',
                         'PSIGNATURE:string|max','PSIGNATURE_SUM:string|max'],
             dataprm : ['GUID','CUSER','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_NO','DOC_DATE','SHIPMENT_DATE','INPUT','OUTPUT','AMOUNT','DISCOUNT','DOC_DISCOUNT_1','DOC_DISCOUNT_2','DOC_DISCOUNT_3','INTERFEL','VAT','TOTAL','DESCRIPTION','ADDRESS',
                         'LOCKED','CERTIFICATE','SIGNATURE','SIGNATURE_SUM']
@@ -131,7 +131,7 @@ export class docCls
                     "@SIGNATURE = @PSIGNATURE, " +
                     "@SIGNATURE_SUM = @PSIGNATURE_SUM ",
             param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PDOC_TYPE:int','PREBATE:int','PREF:string|25','PREF_NO:int','PDOC_NO:string|50','PDOC_DATE:date','PSHIPMENT_DATE:date','PINPUT:string|50',
-                        'POUTPUT:string|50','PAMOUNT:float','PDISCOUNT:float','PDOC_DISCOUNT_1:float','PDOC_DISCOUNT_2:float','PDOC_DISCOUNT_3:float','PINTERFEL:float','PVAT:float','PTOTAL:float','PDESCRIPTION:string|100','PADDRESS:int','PLOCKED:int',
+                        'POUTPUT:string|50','PAMOUNT:float','PDISCOUNT:float','PDOC_DISCOUNT_1:float','PDOC_DISCOUNT_2:float','PDOC_DISCOUNT_3:float','PINTERFEL:float','PVAT:float','PTOTAL:float','PDESCRIPTION:string|500','PADDRESS:int','PLOCKED:int',
                         'PSIGNATURE:string|max','PSIGNATURE_SUM:string|max'],
             dataprm : ['GUID','CUSER','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_NO','DOC_DATE','SHIPMENT_DATE','INPUT','OUTPUT','AMOUNT','DISCOUNT','DOC_DISCOUNT_1','DOC_DISCOUNT_2','DOC_DISCOUNT_3','INTERFEL','VAT','TOTAL','DESCRIPTION','ADDRESS',
                         'LOCKED','SIGNATURE','SIGNATURE_SUM']
@@ -197,7 +197,7 @@ export class docCls
         //PARAMETRE OLARAK OBJE GÖNDERİLİR YADA PARAMETRE BOŞ İSE TÜMÜ GETİRİLİR ÖRN: {CODE:''}
         return new Promise(async resolve =>
         {
-            let tmpPrm = {GUID:'00000000-0000-0000-0000-000000000000',REF:'',REF_NO:0,TYPE:-1,DOC_TYPE: -1,PAYMENT_DOC_GUID:'00000000-0000-0000-0000-000000000000'}
+            let tmpPrm = {GUID:'00000000-0000-0000-0000-000000000000',REF:'',REF_NO:0,TYPE:-1,DOC_TYPE: -1,PAYMENT_DOC_GUID:'00000000-0000-0000-0000-000000000000',DOC_DATE:'19700101',SUB_FACTOR:''}
             if(arguments.length > 0)
             {
                 tmpPrm.GUID = typeof arguments[0].GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].GUID;
@@ -207,6 +207,7 @@ export class docCls
                 tmpPrm.DOC_TYPE = typeof arguments[0].DOC_TYPE == 'undefined' ? -1 : arguments[0].DOC_TYPE;
                 tmpPrm.PAYMENT_DOC_GUID = typeof arguments[0].PAYMENT_DOC_GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].PAYMENT_DOC_GUID;
                 tmpPrm.DOC_DATE = typeof arguments[0].DOC_DATE == 'undefined' ? '19700101' : arguments[0].DOC_DATE;
+                tmpPrm.SUB_FACTOR = typeof arguments[0].SUB_FACTOR == 'undefined' ? '' : arguments[0].SUB_FACTOR;
             }
             this.ds.get('DOC').selectCmd.value = Object.values(tmpPrm);
 
@@ -214,9 +215,9 @@ export class docCls
 
             if(this.ds.get('DOC').length > 0)
             {  
-                await this.docItems.load({DOC_GUID:this.ds.get('DOC')[0].GUID})
+                await this.docItems.load({DOC_GUID:this.ds.get('DOC')[0].GUID,SUB_FACTOR:tmpPrm.SUB_FACTOR})
                 await this.docCustomer.load({GUID:this.ds.get('DOC')[0].GUID})
-                await this.docOrders.load({DOC_GUID:this.ds.get('DOC')[0].GUID})
+                await this.docOrders.load({DOC_GUID:this.ds.get('DOC')[0].GUID,SUB_FACTOR:tmpPrm.SUB_FACTOR})
                 await this.docOffers.load({DOC_GUID:this.ds.get('DOC')[0].GUID})
             }
             resolve(this.ds.get('DOC'))
@@ -313,9 +314,14 @@ export class docItemsCls
     {
         let tmpDt = new datatable('DOC_ITEMS');
         tmpDt.selectCmd = 
-        {
-            query : "SELECT * FROM [dbo].[DOC_ITEMS_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND (((DOC_GUID = @DOC_GUID) OR (INVOICE_DOC_GUID = @DOC_GUID AND DOC_TYPE IN(40,42))) OR (@DOC_GUID = '00000000-0000-0000-0000-000000000000'))  AND ((REF = @REF) OR (@REF = '')) AND ((REF_NO = @REF_NO) OR (@REF_NO = 0))",
-            param : ['GUID:string|50','DOC_GUID:string|50','REF:string|25','REF_NO:int']
+        {  
+            query : "SELECT *,  " +
+            "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ITEMS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_FACTOR,  " +
+            "ISNULL((SELECT TOP 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ITEMS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),'') AS SUB_SYMBOL,  " +
+            "QUANTITY / ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ITEMS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_QUANTITY, " + 
+            "PRICE * ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ITEMS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_PRICE " + 
+            " FROM [dbo].[DOC_ITEMS_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND (((DOC_GUID = @DOC_GUID) OR (INVOICE_DOC_GUID = @DOC_GUID AND DOC_TYPE IN(40,42))) OR (@DOC_GUID = '00000000-0000-0000-0000-000000000000'))  AND ((REF = @REF) OR (@REF = '')) AND ((REF_NO = @REF_NO) OR (@REF_NO = 0))",
+            param : ['GUID:string|50','DOC_GUID:string|50','REF:string|25','REF_NO:int','SUB_FACTOR:string|50']
         }
         tmpDt.insertCmd = 
         {
@@ -472,15 +478,17 @@ export class docItemsCls
         //PARAMETRE OLARAK OBJE GÖNDERİLİR YADA PARAMETRE BOŞ İSE TÜMÜ GETİRİLİR.
         return new Promise(async resolve =>
         {
-            let tmpPrm = {GUID:'00000000-0000-0000-0000-000000000000',DOC_GUID:'00000000-0000-0000-0000-000000000000',REF:'',REF_NO:0}
+            let tmpPrm = {GUID:'00000000-0000-0000-0000-000000000000',DOC_GUID:'00000000-0000-0000-0000-000000000000',REF:'',REF_NO:0,SUB_FACTOR:''}
             if(arguments.length > 0)
             {
                 tmpPrm.GUID = typeof arguments[0].GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].GUID;
                 tmpPrm.DOC_GUID = typeof arguments[0].DOC_GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].DOC_GUID;
                 tmpPrm.REF = typeof arguments[0].REF == 'undefined' ? '' : arguments[0].REF;
                 tmpPrm.REF_NO = typeof arguments[0].REF_NO == 'undefined' ? 0 : arguments[0].REF_NO;
+                tmpPrm.SUB_FACTOR = typeof arguments[0].SUB_FACTOR == 'undefined' ? '' : arguments[0].SUB_FACTOR;
             }
 
+            console.log(tmpPrm)
             this.ds.get('DOC_ITEMS').selectCmd.value = Object.values(tmpPrm);
 
             await this.ds.get('DOC_ITEMS').refresh();
@@ -895,8 +903,13 @@ export class docOrdersCls
         let tmpDt = new datatable('DOC_ORDERS');
         tmpDt.selectCmd = 
         {
-            query : "SELECT * FROM [dbo].[DOC_ORDERS_VW_01] WHERE ((DOC_GUID = @DOC_GUID) OR (@DOC_GUID = '00000000-0000-0000-0000-000000000000')) AND ((REF = @REF) OR (@REF = '')) AND ((REF_NO = @REF_NO) OR (@REF_NO = 0))",
-            param : ['DOC_GUID:string|50','REF:string|25','REF_NO:int']
+            query : "SELECT *,  " +
+            "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ORDERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_FACTOR,  " +
+            "ISNULL((SELECT TOP 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ORDERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),'') AS SUB_SYMBOL,  " +
+            "QUANTITY / ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ORDERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_QUANTITY, " + 
+            "PRICE * ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ORDERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_PRICE " + 
+            " FROM [dbo].[DOC_ORDERS_VW_01] WHERE ((DOC_GUID = @DOC_GUID) OR (@DOC_GUID = '00000000-0000-0000-0000-000000000000')) AND ((REF = @REF) OR (@REF = '')) AND ((REF_NO = @REF_NO) OR (@REF_NO = 0))",
+            param : ['DOC_GUID:string|50','REF:string|25','REF_NO:int','SUB_FACTOR:string|10']
         }
         tmpDt.insertCmd = 
         {
@@ -1038,12 +1051,13 @@ export class docOrdersCls
         //PARAMETRE OLARAK OBJE GÖNDERİLİR YADA PARAMETRE BOŞ İSE TÜMÜ GETİRİLİR.
         return new Promise(async resolve =>
         {
-            let tmpPrm = {DOC_GUID:'00000000-0000-0000-0000-000000000000',REF:'',REF_NO:0}
+            let tmpPrm = {DOC_GUID:'00000000-0000-0000-0000-000000000000',REF:'',REF_NO:0,SUB_FACTOR:''}
             if(arguments.length > 0)
             {
                 tmpPrm.DOC_GUID = typeof arguments[0].DOC_GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].DOC_GUID;
                 tmpPrm.REF = typeof arguments[0].REF == 'undefined' ? '' : arguments[0].REF;
                 tmpPrm.REF_NO = typeof arguments[0].REF_NO == 'undefined' ? 0 : arguments[0].REF_NO;
+                tmpPrm.SUB_FACTOR = typeof arguments[0].SUB_FACTOR == 'undefined' ? '' : arguments[0].SUB_FACTOR;
             }
 
             this.ds.get('DOC_ORDERS').selectCmd.value = Object.values(tmpPrm);
