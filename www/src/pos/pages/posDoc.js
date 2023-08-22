@@ -632,9 +632,14 @@ export default class posDoc extends React.PureComponent
     }
     async getItem(pCode)
     {
+       
         this.txtBarcode.value = ""; 
         let tmpQuantity = 1
-        let tmpPrice = 0                
+        let tmpPrice = 0          
+        if(pCode.replace(/^\s+/, '').replace(/\s+$/, '') == '')
+        {
+           return
+        }      
         //PARAMETREDE TANIMLI ÜRÜNLER İÇİN UYARI.
         await this.getItemWarning(pCode)
         
@@ -3862,6 +3867,7 @@ export default class posDoc extends React.PureComponent
                                                 {
                                                     if(this.grdList.devGrid.getSelectedRowKeys().length > 0)
                                                     {
+                                                        console.log(this.posObj.posPay.dt())
                                                         if(this.posObj.posPay.dt().length > 0)
                                                         {
                                                             let tmpConfObj =

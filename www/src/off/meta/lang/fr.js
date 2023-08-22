@@ -4264,6 +4264,7 @@ export const langFr =
             clmRefNo : "Numéro",
             clmInputName : "Nom Client",
             clmInputCode  : "Code Client",
+            clmTotal : "Total TTC"
         },
         pg_txtCustomerCode : 
         {
@@ -4800,6 +4801,7 @@ export const langFr =
             clmRefNo : "Numéro",
             clmInputName : "Nom Fournisseur",
             clmInputCode  : "Code Client",
+            clmTotal : "Total TTC"
         },
         pg_txtCustomerCode : 
         {
@@ -5274,6 +5276,7 @@ export const langFr =
             clmRefNo : "Numéro",
             clmInputName : "Nom Fournisseur",
             clmInputCode  : "Code Client",
+            clmTotal : "Total TTC"
         },
         pg_txtCustomerCode : 
         {
@@ -5716,6 +5719,7 @@ export const langFr =
             clmRefNo : "Numéro",
             clmInputName : "Nom Fournisseur",
             clmInputCode  : "Code Client",
+            clmTotal : "Total TTC"
         },
         pg_txtCustomerCode : 
         {
@@ -6190,6 +6194,7 @@ export const langFr =
             clmRefNo : "Numéro",
             clmInputName : "Nom Fournisseur",
             clmInputCode  : "Code Client",
+            clmTotal : "Total TTC"
         },
         pg_txtCustomerCode : 
         {
@@ -6603,6 +6608,7 @@ export const langFr =
             clmRefNo : "Numéro",
             clmInputName : "Nom Fournisseur",
             clmInputCode  : "Code Client",
+            clmTotal : "Total TTC"
         },
         pg_txtCustomerCode : 
         {
@@ -7050,6 +7056,7 @@ export const langFr =
             clmRefNo : "Numéro",
             clmInputName : "Nom Fournisseur",
             clmInputCode  : "Code Client",
+            clmTotal : "Total TTC"
         },
         pg_txtCustomerCode : 
         {
@@ -7516,6 +7523,7 @@ export const langFr =
             clmRefNo : "Numéro",
             clmInputName : "Nom Fournisseur",
             clmInputCode  : "Code Client",
+            clmTotal : "Total TTC"
         },
         pg_txtCustomerCode : 
         {
@@ -7960,6 +7968,7 @@ export const langFr =
             clmRefNo : "Réf.No",
             clmInputName : "Nom Client",
             clmInputCode  : "Code Client",
+            clmTotal : "Total TTC"
         },
         pg_txtCustomerCode : 
         {
@@ -8306,6 +8315,7 @@ export const langFr =
             clmRefNo : "Numéro",
             clmInputName : "Nom Client",
             clmInputCode  : "Code Client",
+            clmTotal : "Total TTC"
         },
         pg_txtCustomerCode : 
         {
@@ -8740,6 +8750,7 @@ export const langFr =
             clmRefNo : "Numéro",
             clmOutputName : "Nom Fournisseur",
             clmOutputCode  : "Code Client",
+            clmTotal : "Total TTC"
         },
         pg_txtCustomerCode : 
         {
@@ -9242,6 +9253,7 @@ export const langFr =
             clmRefNo : "Numéro",
             clmInputName : "Nom Fournisseur",
             clmInputCode  : "Code Client",
+            clmTotal : "Total TTC"
         },
         pg_txtCustomerCode : 
         {
@@ -9604,6 +9616,7 @@ export const langFr =
             clmRefNo : "Numéro",
             clmInputName : "Nom Client",
             clmInputCode  : "Code Client",
+            clmTotal : "Total TTC"
         },
         pg_txtCustomerCode : 
         {
@@ -10332,6 +10345,7 @@ export const langFr =
             clmRefNo : "Numéro",
             clmOutputName : "Nom Fournisseur",
             clmOutputCode  : "Code Client",
+            clmTotal : "Total TTC"
         },
         pg_txtCustomerCode : 
         {
@@ -10748,7 +10762,8 @@ export const langFr =
             clmRefNo : "Numéro",
             clmInputName : "Nom Fournisseur",
             clmInputCode  : "Code Client",
-            clmAddress : "Adresse"
+            clmAddress : "Adresse",
+            clmTotal : "Total TTC"
         },
         pg_txtCustomerCode : 
         {
@@ -11157,6 +11172,7 @@ export const langFr =
             clmRefNo : "Numéro",
             clmInputName : "Nom Fournisseur",
             clmInputCode  : "Code Client",
+            clmTotal : "Total TTC"
         },
         pg_txtCustomerCode : 
         {
@@ -11495,6 +11511,7 @@ export const langFr =
             clmRefNo : "Numéro",
             clmInputName : "Nom Magasin",
             clmInputCode  : "Code Magasin",
+            clmTotal : "Total TTC"
         },
         pg_txtCustomerCode : 
         {
@@ -11875,6 +11892,7 @@ export const langFr =
             clmRefNo : "Numéro",
             clmInputName : "Nom Fournisseur",
             clmInputCode  : "Code Client",
+            clmTotal : "Total TTC"
         },
         pg_txtCustomerCode : 
         {
@@ -12199,6 +12217,7 @@ export const langFr =
             clmRefNo : "Numéro",
             clmInputName : "Nom Magasin",
             clmInputCode  : "Code Magasin",
+            clmTotal : "Total TTC"
         },
         pg_txtCustomerCode : 
         {
@@ -12646,6 +12665,7 @@ export const langFr =
             clmRefNo : "Numéro",
             clmOutputName : "Nom Fournisseur",
             clmOutputCode  : "Code Client",
+            clmTotal : "Total TTC"
         },
         pg_txtCustomerCode : 
         {
@@ -13017,7 +13037,8 @@ export const langFr =
             clmRefNo : "Numéro",
             clmInputName : "Nom Client",
             clmInputCode  : "Code Client",
-            clmAddress : "Adresse"
+            clmAddress : "Adresse",
+            clmTotal : "Total TTC"
         },
         pg_txtCustomerCode : 
         {
@@ -13404,7 +13425,8 @@ export const langFr =
             clmRefNo : "Numéro",
             clmInputName : "Nom Client",
             clmInputCode  : "Code Client",
-            clmAddress : "Adresse"
+            clmAddress : "Adresse",
+            clmTotal : "Total TTC"
         },
         pg_txtCustomerCode : 
         {
@@ -13872,6 +13894,7 @@ export const langFr =
             clmName : "Nom",
             clmOutputName : "Nom Fournisseur",
             clmOutputCode  : "Code Client",
+            clmTotal : "Total TTC"
         },
         pg_txtCustomerCode : 
         {
@@ -14061,6 +14084,7 @@ export const langFr =
             clmName : "Nom",     
             clmOutputName : "Nom Client",     
             clmOutputCode  : "Code Client",     
+            clmTotal : "Total TTC"
         },     
         pg_txtCustomerCode : 
         {
@@ -14249,6 +14273,7 @@ export const langFr =
             clmName : "Nom",     
             clmOutputName : "Nom Client",     
             clmOutputCode  : "Code Client",     
+            clmTotal : "Total TTC"
         },
         grdContracts: 
         {
@@ -14430,6 +14455,7 @@ export const langFr =
             clmRefNo : "Séquence",
             clmInputName : "Nom Client",
             clmInputCode  : "Code Client",
+            clmTotal : "Total TTC"
         },
         pg_invoices : 
         {
@@ -14590,6 +14616,7 @@ export const langFr =
             clmRefNo : "Réf. No",
             clmOutputName : "Nom Client",
             clmOutputCode  : "Code Client",
+            clmTotal : "Total TTC"
         },
         pg_invoices : 
         {
@@ -14845,7 +14872,8 @@ export const langFr =
             clmDate : "Date",
             clmRef : "Référence",
             clmRefNo : "Réf No",
-           clmDate : "Date"
+            clmDate : "Date",
+            clmTotal : "Total TTC"
         },
         grdDocVirement: 
         {
@@ -15901,6 +15929,7 @@ export const langFr =
             clmRefNo : "Numéro",
             clmOutputName : "Nom Fournisseur",
             clmOutputCode  : "Code Client",
+            clmTotal : "Total TTC"
         },
         pg_txtCustomerCode : 
         {
@@ -16229,6 +16258,7 @@ export const langFr =
             clmRefNo : "Numéro",
             clmInputName : "Nom Client",
             clmInputCode  : "Code Client",
+            clmTotal : "Total TTC"
         },
         pg_txtCustomerCode : 
         {
