@@ -4268,6 +4268,7 @@ export const langTr =
             clmRefNo : "SIRA",
             clmInputName : "CARİ ADI",
             clmInputCode  : "CARİ KODU",
+            clmTotal : "KDVLİ TOPLAM"
         },
         pg_txtCustomerCode : 
         {
@@ -4805,6 +4806,7 @@ export const langTr =
             clmRefNo : "SIRA",
             clmInputName : "CARİ ADI",
             clmInputCode  : "CARİ KODU",
+            clmTotal : "KDVLİ TOPLAM"
         },
         pg_txtCustomerCode : 
         {
@@ -5272,6 +5274,7 @@ export const langTr =
             clmRefNo : "SIRA",
             clmInputName : "CARİ ADI",
             clmInputCode  : "CARİ KODU",
+            clmTotal : "KDVLİ TOPLAM"
         },
         pg_txtCustomerCode : 
         {
@@ -5707,6 +5710,7 @@ export const langTr =
             clmRefNo : "SIRA",
             clmInputName : "CARİ ADI",
             clmInputCode  : "CARİ KODU",
+            clmTotal : "KDVLİ TOPLAM"
         },
         pg_txtCustomerCode : 
         {
@@ -6189,6 +6193,7 @@ export const langTr =
             clmRefNo : "SIRA",
             clmInputName : "CARİ ADI",
             clmInputCode  : "CARİ KODU",
+            clmTotal : "KDVLİ TOPLAM"
         },
         pg_txtCustomerCode : 
         {
@@ -6602,6 +6607,7 @@ export const langTr =
             clmRefNo : "SIRA",
             clmInputName : "CARİ ADI",
             clmInputCode  : "CARİ KODU",
+            clmTotal : "KDVLİ TOPLAM"
         },
         pg_txtCustomerCode : 
         {
@@ -7049,6 +7055,7 @@ export const langTr =
             clmRefNo : "SIRA",
             clmInputName : "CARİ ADI",
             clmInputCode  : "CARİ KODU",
+            clmTotal : "KDVLİ TOPLAM"
         },
         pg_txtCustomerCode : 
         {
@@ -7523,6 +7530,7 @@ export const langTr =
             clmRefNo : "SIRA",
             clmInputName : "CARİ ADI",
             clmInputCode  : "CARİ KODU",
+            clmTotal : "KDVLİ TOPLAM"
         },
         pg_txtCustomerCode : 
         {
@@ -7967,6 +7975,7 @@ export const langTr =
             clmRefNo : "SIRA",
             clmInputName : "CARİ ADI",
             clmInputCode  : "CARİ KODU",
+            clmTotal : "KDVLİ TOPLAM"
         },
         pg_txtCustomerCode : 
         {
@@ -8313,6 +8322,7 @@ export const langTr =
             clmRefNo : "SIRA",
             clmInputName : "CARİ ADI",
             clmInputCode  : "CARİ KODU",
+            clmTotal : "KDVLİ TOPLAM"
         },
         pg_txtCustomerCode : 
         {
@@ -8748,6 +8758,7 @@ export const langTr =
             clmRefNo : "SIRA",
             clmOutputName : "CARİ ADI",
             clmOutputCode  : "CARİ KODU",
+            clmTotal : "KDVLİ TOPLAM"
         },
         pg_txtCustomerCode : 
         {
@@ -9244,6 +9255,7 @@ export const langTr =
             clmRefNo : "SIRA",
             clmInputName : "CARİ ADI",
             clmInputCode  : "CARİ KODU",
+            clmTotal : "KDVLİ TOPLAM"
         },
         pg_txtCustomerCode : 
         {
@@ -9605,6 +9617,7 @@ export const langTr =
             clmRefNo : "SIRA",
             clmInputName : "CARİ ADI",
             clmInputCode  : "CARİ KODU",
+            clmTotal : "KDVLİ TOPLAM"
         },
         pg_txtCustomerCode : 
         {
@@ -10365,6 +10378,7 @@ export const langTr =
             clmRefNo : "SIRA",
             clmOutputName : "CARİ ADI",
             clmOutputCode  : "CARİ KODU",
+            clmTotal : "KDVLİ TOPLAM"
         },
         pg_txtCustomerCode : 
         {
@@ -10782,7 +10796,8 @@ export const langTr =
             clmRefNo : "SIRA",
             clmInputName : "CARİ ADI",
             clmInputCode  : "CARİ KODU",
-            clmAddress : "ADRES"
+            clmAddress : "ADRES",
+            clmTotal : "KDVLİ TOPLAM"
         },
         pg_txtCustomerCode : 
         {
@@ -11192,6 +11207,7 @@ export const langTr =
             clmRefNo : "SIRA",
             clmInputName : "CARİ ADI",
             clmInputCode  : "CARİ KODU",
+            clmTotal : "KDVLİ TOPLAM"
         },
         pg_txtCustomerCode : 
         {
@@ -11530,6 +11546,7 @@ export const langTr =
             clmRefNo : "SIRA",
             clmInputName : "CARİ ADI",
             clmInputCode  : "CARİ KODU",
+            clmTotal : "KDVLİ TOPLAM"
         },
         pg_txtCustomerCode : 
         {
@@ -11912,6 +11929,7 @@ export const langTr =
             clmRefNo : "SIRA",
             clmInputName : "CARİ ADI",
             clmInputCode  : "CARİ KODU",
+            clmTotal : "KDVLİ TOPLAM"
         },
         pg_txtCustomerCode : 
         {
@@ -12236,6 +12254,7 @@ export const langTr =
             clmRefNo : "SIRA",
             clmInputName : "CARİ ADI",
             clmInputCode  : "CARİ KODU",
+            clmTotal : "KDVLİ TOPLAM"
         },
         pg_txtCustomerCode : 
         {
@@ -12685,6 +12704,7 @@ export const langTr =
             clmRefNo : "SIRA",
             clmOutputName : "CARİ ADI",
             clmOutputCode  : "CARİ KODU",
+            clmTotal : "KDVLİ TOPLAM"
         },
         pg_txtCustomerCode : 
         {
@@ -13058,7 +13078,8 @@ export const langTr =
             clmRefNo : "SIRA",
             clmInputName : "CARİ ADI",
             clmInputCode  : "CARİ KODU",
-            clmAddress : "ADRES"
+            clmAddress : "ADRES",
+            clmTotal : "KDVLİ TOPLAM"
         },
         pg_txtCustomerCode : 
         {
@@ -13444,7 +13465,8 @@ export const langTr =
             clmRefNo : "SIRA",
             clmInputName : "CARİ ADI",
             clmInputCode  : "CARİ KODU",
-            clmAddress : "ADRES"
+            clmAddress : "ADRES",
+            clmTotal : "KDVLİ TOPLAM"
         },
         pg_txtCustomerCode : 
         {
@@ -13911,6 +13933,7 @@ export const langTr =
             clmName : "ADI",
             clmOutputName : "CARİ ADI",
             clmOutputCode  : "CARİ KODU",
+            clmTotal : "KDVLİ TOPLAM"
         },
         pg_txtCustomerCode : 
         {
@@ -14100,6 +14123,7 @@ export const langTr =
             clmName : "ADI",
             clmOutputName : "CARİ ADI",
             clmOutputCode  : "CARİ KODU",
+            clmTotal : "KDVLİ TOPLAM"
         },
         pg_txtCustomerCode : 
         {
@@ -14288,6 +14312,7 @@ export const langTr =
             clmName : "ADI",
             clmOutputName : "CARİ ADI",
             clmOutputCode  : "CARİ KODU",
+            clmTotal : "KDVLİ TOPLAM"
         },
         grdContracts: 
         {
@@ -14471,6 +14496,7 @@ export const langTr =
             clmRefNo : "SIRA",
             clmInputName : "CARİ ADI",
             clmInputCode  : "CARİ KODU",
+            clmTotal : "KDVLİ TOPLAM"
         },
         pg_invoices : 
         {
@@ -14631,6 +14657,7 @@ export const langTr =
             clmRefNo : "SIRA",
             clmOutputName : "CARİ ADI",
             clmOutputCode  : "CARİ KODU",
+            clmTotal : "KDVLİ TOPLAM"
         },
         pg_invoices : 
         {
@@ -14886,7 +14913,8 @@ export const langTr =
             clmDate : "TARIH",
             clmRef : "SERİ",
             clmRefNo : "SIRA",
-           clmDate : "TARİH"
+           clmDate : "TARİH",
+           clmTotal : "KDVLİ TOPLAM"
         },
         grdDocVirement: 
         {
@@ -16005,6 +16033,7 @@ export const langTr =
             clmRefNo : "SIRA",
             clmOutputName : "CARİ ADI",
             clmOutputCode  : "CARİ KODU",
+            clmTotal : "KDVLİ TOPLAM"
         },
         pg_txtCustomerCode : 
         {
@@ -16333,6 +16362,7 @@ export const langTr =
             clmRefNo : "SIRA",
             clmInputName : "CARİ ADI",
             clmInputCode  : "CARİ KODU",
+            clmTotal : "KDVLİ TOPLAM"
         },
         pg_txtCustomerCode : 
         {

@@ -1730,7 +1730,7 @@ export const prm =
             CAPTION : "Eksiye Düşemeye İzin Verme"
         }
     },
-     // autoMailAdress
+    // autoMailAdress
     {
         TYPE : 1,
         ID :"autoMailAdress",
@@ -2855,5 +2855,26 @@ export const prm =
                 }
             }
         },
+    //#endregion
+    //#region Satış İrsaliye
+    // negativeQuantity
+    {
+        TYPE : 1,
+        ID :"closedOrder",
+        VALUE : 
+        {
+            value : true
+        },
+        SPECIAL : "",
+        PAGE : "sip_02_002",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Satış Sipariş",
+            CAPTION : "Kapanmış Sipaişleri Gösterme"
+        }
+    },
     //#endregion
 ]

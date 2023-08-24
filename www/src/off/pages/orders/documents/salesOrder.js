@@ -994,16 +994,27 @@ export default class salesOrder extends React.PureComponent
         let tmpQuery 
         if(pType == 0)
         {
-            tmpQuery = 
+            if(this.prmObj.filter({ID:'closedOrder',USERS:this.user.CODE}).getValue().value == true)
             {
-                query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,DOC_DATE_CONVERT,DOC_ADDRESS FROM DOC_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 60 AND REBATE = 0  AND DOC_DATE > GETDATE()-30 ORDER BY DOC_DATE DESC"
+                tmpQuery = 
+                {
+                    query : "SELECT DOC_GUID AS GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,CONVERT(NVARCHAR,DOC_DATE,104) AS DOC_DATE_CONVERT,SUM(TOTAL) FROM DOC_ORDERS_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 60 AND SHIPMENT_DOC_GUID = '00000000-0000-0000-0000-000000000000' GROUP BY DOC_GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,DOC_DATE ORDER BY DOC_DATE DESC"
+                }
             }
+            else
+            {
+                tmpQuery = 
+                {
+                    query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,DOC_DATE_CONVERT,DOC_ADDRESS,TOTAL FROM DOC_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 60 AND REBATE = 0  AND DOC_DATE > GETDATE()-30 ORDER BY DOC_DATE DESC"
+                }
+            }
+            
         }
         else
         {
             tmpQuery = 
             {
-                query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,DOC_DATE_CONVERT,DOC_ADDRESS FROM DOC_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 60 AND REBATE = 0 ORDER BY DOC_DATE DESC"
+                query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,DOC_DATE_CONVERT,DOC_ADDRESS,TOTAL FROM DOC_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 60 AND REBATE = 0 ORDER BY DOC_DATE DESC"
             }
         }
 
@@ -1422,7 +1433,7 @@ export default class salesOrder extends React.PureComponent
                                         <Column dataField="INPUT_CODE" caption={this.t("pg_Docs.clmInputCode")} width={200} />
                                         <Column dataField="INPUT_NAME" caption={this.t("pg_Docs.clmInputName")} width={300} />
                                         <Column dataField="DOC_ADDRESS" caption={this.t("pg_Docs.clmAddress")} width={300} />
-                                        
+                                        <Column dataField="TOTAL" format={{ style: "currency", currency: "EUR",precision: 2}} caption={this.t("pg_Docs.clmTotal")} width={300} />
                                     </NdPopGrid>
                                 </Item>
                                 {/* cmbDepot */}
@@ -2219,7 +2230,7 @@ export default class salesOrder extends React.PureComponent
                                         }
 
                                         e.key.TOTALHT = Number((parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3)) - (parseFloat(e.key.DISCOUNT)))).round(2)
-                                        e.key.VAT = parseFloat(((((e.key.TOTALHT) - (parseFloat(e.key.DISCOUNT) + parseFloat(e.key.DOC_DISCOUNT))) * (e.key.VAT_RATE) / 100))).round(6);
+                                        e.key.VAT = parseFloat(((((e.key.TOTALHT) - (parseFloat(e.key.DOC_DISCOUNT))) * (e.key.VAT_RATE) / 100))).round(6);
                                         e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3)).round(2)
                                         e.key.TOTAL = Number(((e.key.TOTALHT - e.key.DOC_DISCOUNT) + e.key.VAT)).round(2)
 
