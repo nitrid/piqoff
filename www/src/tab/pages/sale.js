@@ -102,7 +102,7 @@ export default class Sale extends React.PureComponent
         {
             let tmpQuery = 
             {
-                query : "SELECT GUID,CODE,NAME,VAT,PRICE,IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR FROM ITEMS_VW_02 " +
+                query : "SELECT GUID,CODE,NAME,VAT,ROUND(PRICE,3) AS PRICE,IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR FROM ITEMS_VW_02 " +
                         "WHERE ((UPPER(CODE) LIKE UPPER('%' || ? || '%')) OR (UPPER(NAME) LIKE UPPER('%' || ? || '%'))) AND " +
                         "((MAIN_GRP = ?) OR (? = '')) ORDER BY NAME ASC LIMIT " + this.tmpPageLimit + " OFFSET " + this.tmpStartPage,
                 values : [this.txtSearch.value.replaceAll(' ','%'),this.txtSearch.value.replaceAll(' ','%'),this.cmbGroup.value,this.cmbGroup.value],
@@ -112,6 +112,7 @@ export default class Sale extends React.PureComponent
 
             if(typeof tmpBuf.result.err == 'undefined')
             {
+                console.log(tmpBuf.result.recordset)
                 for (let i = 0; i < tmpBuf.result.recordset.length; i++) 
                 {
                     this.itemView.items.push(tmpBuf.result.recordset[i])
@@ -126,7 +127,7 @@ export default class Sale extends React.PureComponent
         {
             let tmpQuery = 
             {
-                query : "SELECT GUID,CODE,NAME,VAT,PRICE,IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR FROM ITEMS_VW_02 " +
+                query : "SELECT GUID,CODE,NAME,VAT,ROUND(PRICE,3) AS PRICE,IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR FROM ITEMS_VW_02 " +
                         "WHERE STATUS = 1 AND ((UPPER(CODE) LIKE UPPER('%' + @VAL + '%')) OR (UPPER(NAME) LIKE UPPER('%' + @VAL + '%'))) AND " +
                         "((MAIN_GRP = @MAIN_GRP) OR (@MAIN_GRP = '')) ORDER BY NAME ASC",
                 param : ['VAL:string|50','MAIN_GRP:string|50'],
@@ -136,9 +137,11 @@ export default class Sale extends React.PureComponent
             let tmpBuf = await this.core.sql.execute(tmpQuery) 
             if(typeof tmpBuf.result.err == 'undefined')
             {
+
                 this.bufferId = tmpBuf.result.bufferId
                 this.tmpEndPage = this.tmpStartPage + this.tmpPageLimit
                 let tmpItems = await this.core.sql.buffer({start : this.tmpStartPage,end : this.tmpEndPage,bufferId : this.bufferId})  
+                console.log(...tmpItems.result.recordset)
                 for (let i = 0; i < tmpItems.result.recordset.length; i++) 
                 {
                     this.itemView.items.push(tmpItems.result.recordset[i])
@@ -159,7 +162,7 @@ export default class Sale extends React.PureComponent
         {
             let tmpQuery = 
             {
-                query : "SELECT GUID,CODE,NAME,VAT,PRICE,IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR FROM ITEMS_VW_02 " +
+                query : "SELECT GUID,CODE,NAME,VAT,ROUND(PRICE,3) AS PRICE,IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR FROM ITEMS_VW_02 " +
                         "WHERE ((UPPER(CODE) LIKE UPPER('%' || ? || '%')) OR (UPPER(NAME) LIKE UPPER('%' || ? || '%'))) AND " +
                         "((MAIN_GRP = ?) OR (? = '')) ORDER BY NAME ASC LIMIT " + this.tmpPageLimit + " OFFSET " + this.tmpStartPage,
                 values : [this.txtSearch.value.replaceAll(' ','%'),this.txtSearch.value.replaceAll(' ','%'),this.cmbGroup.value,this.cmbGroup.value],
