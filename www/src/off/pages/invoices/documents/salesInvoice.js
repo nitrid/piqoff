@@ -157,7 +157,6 @@ export default class salesInvoice extends React.PureComponent
             this.txtRefno.value = tmpData.result.recordset[0].REF_NO
             this.docObj.docCustomer.dt()[0].REF_NO = tmpData.result.recordset[0].REF_NO
         }
-        this.extraCost.value = 0
     }
     async getDoc(pGuid,pRef,pRefno)
     {
@@ -176,14 +175,6 @@ export default class salesInvoice extends React.PureComponent
         if(this.docObj.dt()[0].LOCKED != 0)
         {
             this.docLocked = true
-            let tmpConfObj =
-            {
-                id:'msgGetLocked',showTitle:true,title:this.t("msgGetLocked.title"),showCloseButton:true,width:'500px',height:'200px',
-                button:[{id:"btn01",caption:this.t("msgGetLocked.btn01"),location:'after'}],
-                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgGetLocked.msg")}</div>)
-            }
-
-            await dialog(tmpConfObj);
             this.frmSalesInv.option('disabled',false)
         }
         else
@@ -192,7 +183,6 @@ export default class salesInvoice extends React.PureComponent
             this.frmSalesInv.option('disabled',false)
         }
         this._getPayment(this.docObj.dt()[0].GUID)
-        this.extraCost.value = this.docObj.dt()[0].INTERFEL
     }
     async checkDoc(pGuid,pRef,pRefno)
     {
@@ -258,7 +248,6 @@ export default class salesInvoice extends React.PureComponent
 
         this.docObj.docCustomer.dt()[0].AMOUNT = this.docObj.dt()[0].TOTAL
         this.docObj.dt()[0].INTERFEL = this.docObj.docItems.dt().where({'ITEM_CODE':'INTERFEL'}).sum("TOTALHT",2)
-        this.extraCost.value = this.docObj.dt()[0].INTERFEL
         this._calculateTotalMargin()
         this._calculateMargin()
     }
@@ -1621,7 +1610,6 @@ export default class salesInvoice extends React.PureComponent
                             this.docObj.docItems.dt().where({'ITEM_CODE':'INTERFEL'})[0].TOTALHT = this.docObj.dt()[0].INTERFEL
                             this.docObj.docItems.dt().where({'ITEM_CODE':'INTERFEL'})[0].TOTAL = parseFloat((this.docObj.docItems.dt().where({'ITEM_CODE':'INTERFEL'})[0].TOTALHT +  parseFloat(this.docObj.docItems.dt().where({'ITEM_CODE':'INTERFEL'})[0].VAT)).toFixed(2))
                             this.popExtraCost.hide()
-                            this.extraCost.value = this.docObj.dt()[0].INTERFEL
                             resolve()
                             return
                         }
@@ -1644,7 +1632,6 @@ export default class salesInvoice extends React.PureComponent
                         this.popExtraCost.hide()
                     }
                 }        
-                this.extraCost.value = this.docObj.dt()[0].INTERFEL
             }
             resolve()
         })
@@ -1784,6 +1771,7 @@ export default class salesInvoice extends React.PureComponent
                                                     }
 
                                                     await dialog(tmpConfObj);
+                                                    this.getDoc(this.docObj.dt()[0].GUID,this.docObj.dt()[0].REF,this.docObj.dt()[0].REF_NO)
                                                     this.frmSalesInv.option('disabled',true)
                                                 }
                                                 else
@@ -1828,9 +1816,11 @@ export default class salesInvoice extends React.PureComponent
                                             }
                                         }
                                         this.numDetailQuantity2.value = tmpQuantity2.toFixed(3)
-                                        let tmpExVat = Number(this.docObj.docItems.dt().sum("PRICE",2))
-                                        let tmpMargin = Number(tmpExVat) - Number(this.docObj.docItems.dt().sum("COST_PRICE",2)) 
-                                        let tmpMarginRate = ((tmpMargin / Number(this.docObj.docItems.dt().sum("COST_PRICE",2)))) * 100
+                                        let tmpExVat = Number(this.docObj.docItems.dt().sum("TOTALHT",2))
+                                        console.log(tmpExVat)
+                                        let tmpMargin = Number(tmpExVat) - Number(this.docObj.docItems.dt().sum("TOTAL_COST",2)) 
+                                        console.log(tmpMargin)
+                                        let tmpMarginRate = ((tmpMargin / Number(this.docObj.docItems.dt().sum("TOTAL_COST",2)))) * 100
                                         this.txtDetailMargin.value = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2);                 
                                         this.popDetail.show()
                                     }}/>
@@ -2828,8 +2818,7 @@ export default class salesInvoice extends React.PureComponent
                                             if(e.isEditing == true)
                                             {
                                                 e.rowElement.style.backgroundColor ="#b1cbbb"
-                                                this.grdSlsOrder.devGrid.selectRowsByIndexes(e.rowIndex)
-                                                console.log(this.grdSlsOrder)
+                                                this.grdSlsInv.devGrid.selectRowsByIndexes(e.rowIndex)
                                             }
                                             else
                                             {

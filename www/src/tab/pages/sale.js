@@ -258,12 +258,11 @@ export default class Sale extends React.PureComponent
         {
             tmpDocOrders = {...this.docObj.docItems.empty}
         }
-
         tmpDocOrders.GUID = datatable.uuidv4()
         tmpDocOrders.DOC_GUID = this.docObj.dt()[0].GUID
         tmpDocOrders.TYPE = this.docObj.dt()[0].TYPE
         tmpDocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-        tmpDocOrders.LINE_NO = this.docLines.length
+        tmpDocOrders.LINE_NO = this.docLines.max("LINE_NO") + 1
         tmpDocOrders.REF = this.docObj.dt()[0].REF
         tmpDocOrders.REF_NO = this.docObj.dt()[0].REF_NO
         tmpDocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
