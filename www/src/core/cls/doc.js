@@ -1007,6 +1007,7 @@ export class docOrdersCls
         }
 
         this.ds.add(tmpDt);
+        this.ds.get('DOC_ORDERS').noColumnEdit = ['MARGIN','CUSER']
     }
     //#region
     dt()
