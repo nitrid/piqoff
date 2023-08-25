@@ -302,6 +302,7 @@ export class docItemsCls
             CONNECT_REF : '',
             CONNECT_DOC_DATE : '',
             COST_PRICE : 0,
+            TOTAL_COST : 0,
             MARGIN : 0,
             DEPOT_QUANTITY : 0,
             ITEM_BARCODE : '',
@@ -1007,6 +1008,7 @@ export class docOrdersCls
         }
 
         this.ds.add(tmpDt);
+        this.ds.get('DOC_ORDERS').noColumnEdit = ['MARGIN','CUSER']
     }
     //#region
     dt()
