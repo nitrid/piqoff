@@ -35,6 +35,8 @@ export default class Sale extends React.PureComponent
         this.docLines = new datatable()
         this.vatRate =  new datatable()
         this.nf525 = new nf525Cls();
+        this.extraObj = new docExtraCls();
+
         this.docType = 0
         this.tmpPageLimit = 21
         this.tmpStartPage = 0
@@ -58,6 +60,7 @@ export default class Sale extends React.PureComponent
     async init()
     {
         this.docObj.clearAll()
+        this.extraObj.clearAll()
         let tmpDoc = {...this.docObj.empty}
         this.docObj.addEmpty(tmpDoc);
         this.docLines.clear()        
@@ -87,7 +90,6 @@ export default class Sale extends React.PureComponent
         {
             this.popCustomer.show()
         }
-        
     }
     async getItems()
     {
@@ -520,6 +522,55 @@ export default class Sale extends React.PureComponent
         this.setState({isExecute:false})
         this.itemView.setItemAll()
     }
+    cordovaPrint(pdfObj,pdfData)
+    {
+        pdfObj.eventBus.on('print',async()=>
+        {
+            let pdfSave = (base64Data) =>
+            {
+                return new Promise((resolve, reject) => 
+                {
+                    let binaryData = atob(base64Data);
+                    let length = binaryData.length;
+                    let buffer = new ArrayBuffer(length);
+                    let view = new Uint8Array(buffer);
+                    for (let i = 0; i < length; i++) 
+                    {
+                        view[i] = binaryData.charCodeAt(i);
+                    }
+            
+                    window.resolveLocalFileSystemURL(cordova.file.dataDirectory, function(directoryEntry) 
+                    {
+                        directoryEntry.getFile('pdf.pdf', { create: true }, function(fileEntry) 
+                        {
+                            fileEntry.createWriter(function(fileWriter) 
+                            {
+                                fileWriter.onwriteend = function() 
+                                {
+                                    resolve(fileEntry.nativeURL);
+                                };
+                                fileWriter.onerror = function(e) 
+                                {
+                                    reject(e);
+                                };
+            
+                                var blob = new Blob([view], { type: 'application/pdf' });
+                                fileWriter.write(blob);
+                            }, function(error) 
+                            {
+                                reject(error);
+                            });
+                        }, function(error) 
+                        {
+                            reject(error);
+                        });
+                    });
+                });
+            }
+            let tmpFilePath = await pdfSave(pdfData);
+            cordova.plugins.printer.print(tmpFilePath);
+        })
+    }
     render()
     {
         return(
@@ -672,13 +723,15 @@ export default class Sale extends React.PureComponent
                                                             return
                                                         }
                                                        
-                                                        if(this.docType == 20)
+                                                        if(this.docType == 60)
                                                         {
                                                             this.orderSave()
+                                                            return;
                                                         }
-                                                        else if(this.docType == 60)
+                                                        else if(this.docType == 20)
                                                         {
                                                             this.factureSave()
+                                                            return;
                                                         }
 
                                                         let tmpConfObj =
@@ -699,6 +752,18 @@ export default class Sale extends React.PureComponent
                                                         }
                                                     }}>
                                                         <i className="fa-solid fa-floppy-disk fa-1x"></i>
+                                                    </NbButton>                                                    
+                                                </Item>
+                                                <Item location="after" locateInMenu="auto">
+                                                    <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"40px",width:"40px"}}
+                                                    onClick={async()=>
+                                                    {
+                                                        if(this.docObj.dt()[0].DOC_TYPE == 20)
+                                                        {
+                                                            this.popDesign.show()
+                                                        }
+                                                    }}>
+                                                        <i className="fa-solid fa-print fa-1x"></i>
                                                     </NbButton>                                                    
                                                 </Item>
                                                 <Item location="after" locateInMenu="auto">
@@ -1475,7 +1540,7 @@ export default class Sale extends React.PureComponent
                                 </Form>
                             </NdPopUp>
                         </div> 
-                         {/* EVRAK İNDİRİM POPUP */}
+                        {/* EVRAK İNDİRİM POPUP */}
                         <div>
                             <NdPopUp parent={this} id={"popDocDiscount"} 
                             visible={false}
@@ -1676,23 +1741,154 @@ export default class Sale extends React.PureComponent
                                 </Form>
                             </NdPopUp>
                         </div>
-                            {/* İNDİRİM POPUP
-                            <div>
-                            <NdPopUp parent={this} id={"popCriter"} 
+                        {/* DIZAYN SECIM POPUP */}
+                        <div>
+                            <NdPopUp parent={this} id={"popDesign"} 
                             visible={false}
                             showCloseButton={true}
                             showTitle={true}
-                            title={this.t("popCriter.title")}
+                            title={this.t("popDesign.title")}
                             container={"#root"} 
                             width={'500'}
-                            height={'500'}
+                            height={'280'}
                             position={{of:'#root'}}
                             >
-                                <div className="dx-field-value">
-                                    <RadioGroup items={this.priorities}  />
-                                </div>
+                                <Form colCount={1} height={'fit-content'}>
+                                    <Item>
+                                        <Label text={this.t("popDesign.design")} alignment="right" />
+                                        <NdSelectBox simple={true} parent={this} id="cmbDesignList" notRefresh = {true}
+                                        displayExpr="DESIGN_NAME"                       
+                                        valueExpr="TAG"
+                                        value=""
+                                        searchEnabled={true}
+                                        onValueChanged={(async()=>
+                                        {
+                                        }).bind(this)}
+                                        data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '15'"},sql:this.core.sql}}}
+                                        param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
+                                        access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
+                                        >
+                                            <Validator validationGroup={"frmSalesInvPrint" + this.tabIndex}>
+                                                <RequiredRule message={this.t("validDesign")} />
+                                            </Validator> 
+                                        </NdSelectBox>
+                                    </Item>
+                                    <Item>
+                                        <Label text={this.t("popDesign.lang")} alignment="right" />
+                                        <NdSelectBox simple={true} parent={this} id="cmbDesignLang" notRefresh = {true}
+                                        displayExpr="VALUE"                       
+                                        valueExpr="ID"
+                                        value=""
+                                        searchEnabled={true}
+                                        onValueChanged={(async()=>
+                                        {
+                                        }).bind(this)}
+                                        data={{source:[{ID:"FR",VALUE:"FR"},{ID:"DE",VALUE:"DE"},{ID:"TR",VALUE:"TR"}]}}
+                                        >
+                                            <Validator validationGroup={"frmSalesInvPrint" + this.tabIndex}>
+                                                <RequiredRule message={this.t("validDesign")} />
+                                            </Validator> 
+                                        </NdSelectBox>
+                                    </Item>
+                                    <Item>
+                                        <div className='row'>
+                                            <div className='col-6'>
+                                                <NdButton text={this.t("popDesign.btnPrint")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmSalesInvPrint" + this.tabIndex}
+                                                onClick={async (e)=>
+                                                {       
+                                                    if(e.validationGroup.validate().status == "valid")
+                                                    {
+                                                        this.setState({isExecute:true})
+                                                        let tmpLastSignature = await this.nf525.signatureDocDuplicate(this.docObj.dt()[0])
+                                                        let tmpExtra = {...this.extraObj.empty}
+                                                        tmpExtra.DOC = this.docObj.dt()[0].GUID
+                                                        tmpExtra.DESCRIPTION = ''
+                                                        tmpExtra.TAG = 'PRINT'
+                                                        tmpExtra.SIGNATURE = tmpLastSignature.SIGNATURE
+                                                        tmpExtra.SIGNATURE_SUM = tmpLastSignature.SIGNATURE_SUM
+                                                        this.extraObj.addEmpty(tmpExtra);
+                                                        await this.extraObj.save()
+
+                                                        let tmpQuery = 
+                                                        {
+                                                            query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG) ORDER BY DOC_DATE,LINE_NO " ,
+                                                            param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
+                                                            value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
+                                                        }
+
+                                                        this.setState({isExecute:true})                                                        
+                                                        let tmpData = await this.core.sql.execute(tmpQuery)                                                         
+                                                        this.setState({isExecute:false})                                                        
+                                                        //console.log(JSON.stringify(tmpData.result.recordset)) // BAK
+                                                        this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",async(pResult) => 
+                                                        {
+                                                            if(pResult.split('|')[0] != 'ERR')
+                                                            {     
+                                                                let base64ToUint8Array = (base64)=>
+                                                                {
+                                                                    let raw = atob(base64);
+                                                                    let uint8Array = new Uint8Array(raw.length);
+                                                                    for (let i = 0; i < raw.length; i++) 
+                                                                    {
+                                                                        uint8Array[i] = raw.charCodeAt(i);
+                                                                    }
+                                                                    return uint8Array;
+                                                                }
+
+                                                                this.popPrintView.show()
+
+                                                                document.getElementById('printView').innerHTML = '<iframe id="pdfFrame" style="width:100%;height:100%;"></iframe>'
+                                                                let pdfViewerFrame = document.getElementById("pdfFrame");
+                                                                let tmpBase64 = base64ToUint8Array(pResult.split('|')[1])
+
+                                                                pdfViewerFrame.onload = (async function() 
+                                                                {
+                                                                    await pdfViewerFrame.contentWindow.PDFViewerApplication.open(tmpBase64);
+                                                                    if(App.instance.core.local.platform == 'cordova')
+                                                                    {
+                                                                        this.cordovaPrint(pdfViewerFrame.contentWindow.PDFViewerApplication,pResult.split('|')[1])
+                                                                    }
+                                                                }).bind(this)
+                                                                pdfViewerFrame.setAttribute("src","./lib/pdf/web/viewer.html?file=");
+                                                            }
+                                                        });
+                                                        this.popDesign.hide();  
+                                                    }
+                                                }}/>
+                                            </div>
+                                            <div className='col-6'>
+                                                <NdButton text={this.t("popDesign.btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                                onClick={()=>
+                                                {
+                                                    this.popDesign.hide();  
+                                                }}/>
+                                            </div>
+                                        </div>
+                                    </Item>
+                                </Form>
                             </NdPopUp>
-                        </div>  */}
+                        </div>
+                        {/* PRINTVIEW POPUP */}
+                        <div>
+                            <NbPopUp id={"popPrintView"} parent={this} title={""} fullscreen={true}>
+                                <div className='row' style={{paddingTop:"10px",paddingBottom:"10px"}}>
+                                    <div className='col-12' align={"right"}>
+                                        <Toolbar>
+                                            <Item location="after" locateInMenu="auto">
+                                                <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"40px",width:"40px"}}
+                                                onClick={()=>
+                                                {
+                                                    this.popPrintView.hide();
+                                                }}>
+                                                    <i className="fa-solid fa-xmark fa-1x"></i>
+                                                </NbButton>
+                                            </Item>
+                                        </Toolbar>
+                                    </div>
+                                </div>
+                                <div id={"printView"}></div>
+                            </NbPopUp>
+                        </div>
                     </ScrollView>
                 </div>
             </div>

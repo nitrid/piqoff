@@ -2793,7 +2793,6 @@ export default class posDoc extends React.PureComponent
             }
             this.core.socket.emit('nf525',{cmd:"jet",data:tmpJetData})
         }
-
     }
     async factureInsert(pData,pSaleData)
     {    
