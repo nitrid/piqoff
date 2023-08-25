@@ -259,10 +259,9 @@ export default class salesInvoice extends React.PureComponent
         {
             tmpTotalCost += this.docObj.docItems.dt()[i].COST_PRICE * this.docObj.docItems.dt()[i].QUANTITY
         }
-        let tmpMargin = ((this.docObj.dt()[0].TOTAL - this.docObj.dt()[0].VAT) - tmpTotalCost)
-        let tmpMarginRate = (tmpMargin / (this.docObj.dt()[0].TOTAL - this.docObj.dt()[0].VAT)) * 100
+        let tmpMargin = ((this.docObj.dt()[0].TOTALHT ) - tmpTotalCost)
+        let tmpMarginRate = (tmpMargin / (this.docObj.dt()[0].TOTALHT)) * 100
         this.docObj.dt()[0].MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
-        this.txtMargin.setState({value:this.docObj.dt()[0].MARGIN})
     }
     async _calculateMargin()
     {
@@ -990,9 +989,14 @@ export default class salesInvoice extends React.PureComponent
         {
             let tmpQuery = 
             {
-                query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ORDERS_VW_01 WHERE INPUT = @INPUT AND SHIPMENT_LINE_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 1 AND DOC_TYPE IN(60)",
-                param : ['INPUT:string|50'],
-                value : [this.docObj.dt()[0].INPUT]
+                query : "SELECT *," + 
+                        "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ORDERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_FACTOR,  " +
+                        "ISNULL((SELECT TOP 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ORDERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),'') AS SUB_SYMBOL,  " +
+                        "QUANTITY / ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ORDERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_QUANTITY, " + 
+                        "PRICE * ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ORDERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_PRICE, " + 
+                        "REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ORDERS_VW_01 WHERE INPUT = @INPUT AND SHIPMENT_LINE_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 1 AND DOC_TYPE IN(60)",
+                param : ['INPUT:string|50','SUB_FACTOR:string|10'],
+                value : [this.docObj.dt()[0].INPUT,this.sysParam.filter({ID:'secondFactor',USERS:this.user.CODE}).getValue().value]
             }
             let tmpData = await this.core.sql.execute(tmpQuery) 
             if(tmpData.result.recordset.length > 0)
@@ -1010,6 +1014,7 @@ export default class salesInvoice extends React.PureComponent
                 App.instance.setState({isExecute:true})
                 for (let i = 0; i < data.length; i++) 
                 {
+                    console.log(data[i])
                     let tmpDocItems = {...this.docObj.docItems.empty}
                     tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
                     tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
@@ -1771,7 +1776,6 @@ export default class salesInvoice extends React.PureComponent
                                                     }
 
                                                     await dialog(tmpConfObj);
-                                                    this.getDoc(this.docObj.dt()[0].GUID,this.docObj.dt()[0].REF,this.docObj.dt()[0].REF_NO)
                                                     this.frmSalesInv.option('disabled',true)
                                                 }
                                                 else
@@ -1821,7 +1825,7 @@ export default class salesInvoice extends React.PureComponent
                                         let tmpMargin = Number(tmpExVat) - Number(this.docObj.docItems.dt().sum("TOTAL_COST",2)) 
                                         console.log(tmpMargin)
                                         let tmpMarginRate = ((tmpMargin / Number(this.docObj.docItems.dt().sum("TOTAL_COST",2)))) * 100
-                                        this.txtDetailMargin.value = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2);                 
+                                        this.txtDetailMargin.value = this.docObj.dt()[0].MARGIN                
                                         this.popDetail.show()
                                     }}/>
                                 </Item>
