@@ -172,3 +172,8 @@
 {
     font-size: 13px;
 }
+.dx-widget.dx-datagrid-pager.dx-pager
+{
+    padding-top: 1px;
+    padding-bottom: 1px;
+}
