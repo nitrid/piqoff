@@ -616,6 +616,13 @@ export const langFr =
         btn02 : "Annuler",
         btn03 : "Envoyer en E-Mail"
     },
+    msgMailPrintAlert:
+    {
+        title: "Avertissement",
+        msg: "Souhaitez-vous envoyer un e-mail au imprimer ?",
+        btn01: "E-Mail",
+        btn02: "Imprimer"
+    },
     mailPopup : 
     {
         title : "Envoyer Ticket De Vente",

@@ -1473,7 +1473,6 @@ export default class posDoc extends React.PureComponent
                     })
                 }, 500);
                 
-
                 this.posObj.dt()[0].STATUS = 1
                 //***** TICKET İMZALAMA *****/
                 let tmpSignedData = await this.nf525.signatureSale(this.posObj.dt()[0],this.posObj.posSale.dt())                
@@ -1564,7 +1563,7 @@ export default class posDoc extends React.PureComponent
                 //POS_PROMO TABLOSUNA KAYIT EDİLİYOR.
                 await this.posPromoObj.save()
                 //******************************** */
-                if(typeof pPrint == 'undefined' || pPrint)
+                if((typeof pPrint == 'undefined' || pPrint) && this.prmObj.filter({ID:'SaleClosePrint',TYPE:0}).getValue() == true)
                 {       
                     let tmpType = 'Fis'  
                     let tmpFactCert = ''                  
@@ -1694,9 +1693,7 @@ export default class posDoc extends React.PureComponent
                             }
 
                             this.mailPopup.tmpData = tmpData;
-                            await this.mailPopup.show().then(async (e) =>
-                            {
-                            });
+                            await this.mailPopup.show()
                         }
                     }
                     else
@@ -2919,6 +2916,37 @@ export default class posDoc extends React.PureComponent
                 }
 
                 this.sendJet({CODE:"155",NAME:"Duplicata ticket imprimé."}) //// Duplicate fiş yazdırıldı.
+
+                //YAZDIRMA İŞLEMİNDEN ÖNCE KULLANICIYA SORULUYOR
+                let tmpConfObj =
+                {
+                    id:'msgMailPrintAlert',showTitle:true,title:this.lang.t("msgMailPrintAlert.title"),showCloseButton:true,width:'500px',height:'250px',
+                    button:[{id:"btn01",caption:this.lang.t("msgMailPrintAlert.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgMailPrintAlert.btn02"),location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgMailPrintAlert.msg")}</div>)
+                }
+                let pResult = await dialog(tmpConfObj);
+                if(pResult == 'btn01')
+                {
+                    if(this.posObj.dt()[0].CUSTOMER_GUID != '00000000-0000-0000-0000-000000000000')
+                    { 
+                        let tmpQuery = 
+                        {
+                            query :"SELECT EMAIL FROM CUSTOMER_VW_02 WHERE GUID = @GUID",
+                            param:  ['GUID:string|50'],
+                            value:  [this.posObj.dt()[0].CUSTOMER_GUID]
+                        }
+                        let tmpMailData = await this.core.sql.execute(tmpQuery) 
+                        if(tmpMailData.result.recordset.length > 0)
+                        {
+                            this.txtMail.value = tmpMailData.result.recordset[0].EMAIL
+                        }
+                    }
+
+                    this.mailPopup.tmpData = tmpData;
+                    await this.mailPopup.show()
+                    return
+                }
+                
                 await this.print(tmpData,0)
             } 
         }
@@ -4447,7 +4475,7 @@ export default class posDoc extends React.PureComponent
                                                     value:  [tmpLastPosDt[0].GUID]
                                                 } 
                                                 await tmpLastPosPromoDt.refresh()
-
+                                                
                                                 this.rePrint(tmpLastPosDt,tmpLastPosSaleDt,tmpLastPosPayDt,tmpLastPosPromoDt)
                                             }
                                         }}>

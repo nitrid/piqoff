@@ -616,6 +616,13 @@ export const langTr =
         btn02 : "İptal",
         btn03 : "Mail Gönder"
     },
+    msgMailPrintAlert: 
+    {
+        title : "Uyarı",
+        msg : "Mail göndermek istermisiniz ?",
+        btn01 : "Tamam",
+        btn02 : "İptal",
+    },
     mailPopup : 
     {
         title : "Mail Gönderimi",
