@@ -1096,5 +1096,21 @@ export const prm =
             CAPTION : "Terazi Fiyat Çarpanı"
         }
     },
+    //Satış Sonu Yazdır
+    {
+        TYPE : 0,
+        ID :"SaleClosePrint",
+        VALUE : false,
+        SPECIAL : "",
+        PAGE : "pos",
+        ELEMENT : "",
+        APP : "POS",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Pos",
+            CAPTION : "Satış Sonu Yazdır"
+        }
+    },
     //#endregion
 ]

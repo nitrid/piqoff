@@ -1207,53 +1207,53 @@ export default class transferCls
                 }
             },
             //POS_DEVICE_VW_01
-            {
-                from : 
-                {
-                    name : "POS_DEVICE_VW_01",
-                    type : "select",
-                    query : "SELECT * FROM POS_DEVICE_VW_01"
-                },
-                to : 
-                {
-                    insert : 
-                    {
-                        query : "EXEC [dbo].[PRD_POS_DEVICE_INSERT] " + 
-                                "@GUID = @PGUID, " +
-                                "@CUSER = @PCUSER, " + 
-                                "@CODE = @PCODE, " + 
-                                "@NAME = @PNAME, " + 
-                                "@LCD_PORT = @PLCD_PORT, " +
-                                "@SCALE_PORT = @PSCALE_PORT, " +
-                                "@PAY_CARD_PORT = @PPAY_CARD_PORT, " +
-                                "@PRINT_DESING = @PPRINT_DESING, " +
-                                "@SCANNER_PORT = @PSCANNER_PORT " ,
-                        param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|50','PNAME:string|50','PLCD_PORT:string|50','PSCALE_PORT:string|50','PPAY_CARD_PORT:string|50','PPRINT_DESING:string|50','PSCANNER_PORT:string|50'],
-                        dataprm : ['GUID','CUSER','CODE','NAME','LCD_PORT','SCALE_PORT','PAY_CARD_PORT','PRINT_DESING','SCANNER_PORT']
-                    },
-                    update : 
-                    {
-                        query : "EXEC [dbo].[PRD_POS_DEVICE_UPDATE] " + 
-                                "@GUID = @PGUID, " +
-                                "@CUSER = @PCUSER, " + 
-                                "@CODE = @PCODE, " + 
-                                "@NAME = @PNAME, " + 
-                                "@LCD_PORT = @PLCD_PORT, " +
-                                "@SCALE_PORT = @PSCALE_PORT, " +
-                                "@PAY_CARD_PORT = @PPAY_CARD_PORT, " +
-                                "@PRINT_DESING = @PPRINT_DESING, " +
-                                "@SCANNER_PORT = @PSCANNER_PORT " ,
-                        param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|50','PNAME:string|50','PLCD_PORT:string|50','PSCALE_PORT:string|50','PPAY_CARD_PORT:string|50','PPRINT_DESING:string|50','PSCANNER_PORT:string|50'],
-                        dataprm : ['GUID','CUSER','CODE','NAME','LCD_PORT','SCALE_PORT','PAY_CARD_PORT','PRINT_DESING','SCANNER_PORT']
-                    },
-                    control :
-                    {
-                        query : "SELECT * FROM [dbo].[POS_DEVICE_VW_01] WHERE GUID = @GUID",
-                        param : ['GUID:string|50'],
-                        dataprm : ['GUID'],
-                    }
-                }
-            },
+            // {
+            //     from : 
+            //     {
+            //         name : "POS_DEVICE_VW_01",
+            //         type : "select",
+            //         query : "SELECT * FROM POS_DEVICE_VW_01"
+            //     },
+            //     to : 
+            //     {
+            //         insert : 
+            //         {
+            //             query : "EXEC [dbo].[PRD_POS_DEVICE_INSERT] " + 
+            //                     "@GUID = @PGUID, " +
+            //                     "@CUSER = @PCUSER, " + 
+            //                     "@CODE = @PCODE, " + 
+            //                     "@NAME = @PNAME, " + 
+            //                     "@LCD_PORT = @PLCD_PORT, " +
+            //                     "@SCALE_PORT = @PSCALE_PORT, " +
+            //                     "@PAY_CARD_PORT = @PPAY_CARD_PORT, " +
+            //                     "@PRINT_DESING = @PPRINT_DESING, " +
+            //                     "@SCANNER_PORT = @PSCANNER_PORT " ,
+            //             param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|50','PNAME:string|50','PLCD_PORT:string|50','PSCALE_PORT:string|50','PPAY_CARD_PORT:string|50','PPRINT_DESING:string|50','PSCANNER_PORT:string|50'],
+            //             dataprm : ['GUID','CUSER','CODE','NAME','LCD_PORT','SCALE_PORT','PAY_CARD_PORT','PRINT_DESING','SCANNER_PORT']
+            //         },
+            //         update : 
+            //         {
+            //             query : "EXEC [dbo].[PRD_POS_DEVICE_UPDATE] " + 
+            //                     "@GUID = @PGUID, " +
+            //                     "@CUSER = @PCUSER, " + 
+            //                     "@CODE = @PCODE, " + 
+            //                     "@NAME = @PNAME, " + 
+            //                     "@LCD_PORT = @PLCD_PORT, " +
+            //                     "@SCALE_PORT = @PSCALE_PORT, " +
+            //                     "@PAY_CARD_PORT = @PPAY_CARD_PORT, " +
+            //                     "@PRINT_DESING = @PPRINT_DESING, " +
+            //                     "@SCANNER_PORT = @PSCANNER_PORT " ,
+            //             param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|50','PNAME:string|50','PLCD_PORT:string|50','PSCALE_PORT:string|50','PPAY_CARD_PORT:string|50','PPRINT_DESING:string|50','PSCANNER_PORT:string|50'],
+            //             dataprm : ['GUID','CUSER','CODE','NAME','LCD_PORT','SCALE_PORT','PAY_CARD_PORT','PRINT_DESING','SCANNER_PORT']
+            //         },
+            //         control :
+            //         {
+            //             query : "SELECT * FROM [dbo].[POS_DEVICE_VW_01] WHERE GUID = @GUID",
+            //             param : ['GUID:string|50'],
+            //             dataprm : ['GUID'],
+            //         }
+            //     }
+            // },
         ]
         return tmpSchema
     }

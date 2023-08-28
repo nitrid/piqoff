@@ -48,9 +48,10 @@ module.exports =
             {
                 test: /\.css$/,
                 use: ["style-loader", "css-loader"]
-            }
+            },
         ]
     },
+    
     resolve: 
     { 
         alias: 
@@ -126,8 +127,9 @@ module.exports =
                 { from: "./src/mob/css/bootstrap.min.css", to: "./mob/css/bootstrap.min.css" },
                 { from: "./src/mob/lib/bootstrap.bundle.min.js", to: "./mob/lib/bootstrap.bundle.min.js" },
                 { from: "./src/tab/css/", to: "./tab/css/" },
+                { from: "./src/tab/lib/pdf", to: "./tab/lib/pdf" },
                 { from: "./src/tab/appUpdate.html", to: "./tab/appUpdate.html" },
-                { from: "./src/tab/lib/bootstrap.bundle.min.js", to: "./tab/lib/bootstrap.bundle.min.js" },
+                { from: "./src/tab/lib/bootstrap.bundle.min.js", to: "./tab/lib/bootstrap.bundle.min.js" },          
             ]
         }),
         new htmlWebPackPlugin(

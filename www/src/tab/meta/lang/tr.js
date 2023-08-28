@@ -178,6 +178,16 @@ export const langTr =
             btn02: "Hayır",
             msg: "Yeni evrak oluşturmak istediğinize eminmisiniz ?"
         },
+        popDesign : 
+        {
+            title: "Dizayn seçimi",
+            design : "Dizayn",
+            lang : "Evrak Dili",            
+            btnPrint :"Yazdır",
+            btnCancel: "İptal",
+            btnView : "Görüntüle",
+            btnMailsend : "Mail Gönder",
+        },
     },
     extract :
     {

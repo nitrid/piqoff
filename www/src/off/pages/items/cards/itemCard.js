@@ -548,7 +548,6 @@ export default class itemCard extends React.PureComponent
     itemGrpForOrginsValidCheck()
     {
         let tmpData = this.prmObj.filter({ID:'ItemGrpForOrginsValidation'}).getValue()
-        console.log(tmpData)
         if(typeof tmpData != 'undefined' && Array.isArray(tmpData) && typeof tmpData.find(x => x == this.cmbItemGrp.value) != 'undefined')
         {
             console.log(1)
@@ -556,7 +555,6 @@ export default class itemCard extends React.PureComponent
         }
         else
         {
-            console.log(2)
             this.setState({isItemGrpForOrginsValid:false})
         }
     }
