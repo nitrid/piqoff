@@ -1563,88 +1563,142 @@ export default class posDoc extends React.PureComponent
                 //POS_PROMO TABLOSUNA KAYIT EDİLİYOR.
                 await this.posPromoObj.save()
                 //******************************** */
-                if((typeof pPrint == 'undefined' || pPrint) && this.prmObj.filter({ID:'SaleClosePrint',TYPE:0}).getValue() == true)
+                if(typeof pPrint == 'undefined' || pPrint)
                 {       
-                    let tmpType = 'Fis'  
-                    let tmpFactCert = ''                  
-                    //FİŞ Mİ FATURAMI SORULUYOR
-                    if(this.posObj.dt()[0].CUSTOMER_CODE != '' && this.posObj.dt()[0].CUSTOMER_TYPE == 1)
+                    if(this.prmObj.filter({ID:'SaleClosePrint',TYPE:0}).getValue() == true)
                     {
-                        let tmpConfObj =
+                        let tmpType = 'Fis'  
+                        let tmpFactCert = ''                  
+                        //FİŞ Mİ FATURAMI SORULUYOR
+                        if(this.posObj.dt()[0].CUSTOMER_CODE != '' && this.posObj.dt()[0].CUSTOMER_TYPE == 1)
                         {
-                            id:'msgPrintFacAlert',showTitle:true,title:this.lang.t("msgPrintFacAlert.title"),showCloseButton:true,width:'500px',height:'250px',
-                            button:[{id:"btn01",caption:this.lang.t("msgPrintFacAlert.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgPrintFacAlert.btn02"),location:'after'}],
-                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgPrintFacAlert.msg")}</div>)
-                        }
-                        if((await dialog(tmpConfObj)) == 'btn01')
-                        {
-                            tmpType = 'Fatura'
-
-                            let tmpLastSignature = await this.nf525.signaturePosFactDuplicate(this.posObj.dt()[0])
-
-                            let tmpInsertQuery = 
+                            let tmpConfObj =
                             {
-                                query : "EXEC [dbo].[PRD_POS_EXTRA_INSERT] " + 
-                                        "@CUSER = @PCUSER, " + 
-                                        "@TAG = @PTAG, " +
-                                        "@POS_GUID = @PPOS_GUID, " +
-                                        "@LINE_GUID = @PLINE_GUID, " +
-                                        "@DATA =@PDATA, " +
-                                        "@DATA_EXTRA1 = @PDATA_EXTRA1, " +
-                                        "@APP_VERSION = @PAPP_VERSION, " +
-                                        "@DESCRIPTION = @PDESCRIPTION ", 
-                                param : ['PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|max','PDATA_EXTRA1:string|max','PAPP_VERSION:string|25','PDESCRIPTION:string|max'],
-                                value : [this.posObj.dt()[0].CUSER,"REPRINTFACT",this.posObj.dt()[0].GUID,"00000000-0000-0000-0000-000000000000",tmpLastSignature.SIGNATURE,tmpLastSignature.SIGNATURE_SUM,this.core.appInfo.version,'']
+                                id:'msgPrintFacAlert',showTitle:true,title:this.lang.t("msgPrintFacAlert.title"),showCloseButton:true,width:'500px',height:'250px',
+                                button:[{id:"btn01",caption:this.lang.t("msgPrintFacAlert.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgPrintFacAlert.btn02"),location:'after'}],
+                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgPrintFacAlert.msg")}</div>)
                             }
-
-                            await this.core.sql.execute(tmpInsertQuery)
-
-                            let tmpFactData = await this.factureInsert(this.posObj.dt(),this.posObj.posSale.dt())
-                            let tmpSigned = "-"
-
-                            if(tmpFactData.length > 0)
+                            if((await dialog(tmpConfObj)) == 'btn01')
                             {
-                                if(tmpFactData[0].SIGNATURE != '')
+                                tmpType = 'Fatura'
+    
+                                let tmpLastSignature = await this.nf525.signaturePosFactDuplicate(this.posObj.dt()[0])
+    
+                                let tmpInsertQuery = 
                                 {
-                                    tmpSigned = tmpFactData[0].SIGNATURE.substring(2,3) + tmpFactData[0].SIGNATURE.substring(6,7) + tmpFactData[0].SIGNATURE.substring(12,13) + tmpFactData[0].SIGNATURE.substring(18,19)
+                                    query : "EXEC [dbo].[PRD_POS_EXTRA_INSERT] " + 
+                                            "@CUSER = @PCUSER, " + 
+                                            "@TAG = @PTAG, " +
+                                            "@POS_GUID = @PPOS_GUID, " +
+                                            "@LINE_GUID = @PLINE_GUID, " +
+                                            "@DATA =@PDATA, " +
+                                            "@DATA_EXTRA1 = @PDATA_EXTRA1, " +
+                                            "@APP_VERSION = @PAPP_VERSION, " +
+                                            "@DESCRIPTION = @PDESCRIPTION ", 
+                                    param : ['PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|max','PDATA_EXTRA1:string|max','PAPP_VERSION:string|25','PDESCRIPTION:string|max'],
+                                    value : [this.posObj.dt()[0].CUSER,"REPRINTFACT",this.posObj.dt()[0].GUID,"00000000-0000-0000-0000-000000000000",tmpLastSignature.SIGNATURE,tmpLastSignature.SIGNATURE_SUM,this.core.appInfo.version,'']
                                 }
-
-                                tmpFactCert = this.core.appInfo.name + " version : " + tmpFactData[0].APP_VERSION + " - " + this.core.appInfo.certificate + " - " + tmpSigned
+    
+                                await this.core.sql.execute(tmpInsertQuery)
+    
+                                let tmpFactData = await this.factureInsert(this.posObj.dt(),this.posObj.posSale.dt())
+                                let tmpSigned = "-"
+    
+                                if(tmpFactData.length > 0)
+                                {
+                                    if(tmpFactData[0].SIGNATURE != '')
+                                    {
+                                        tmpSigned = tmpFactData[0].SIGNATURE.substring(2,3) + tmpFactData[0].SIGNATURE.substring(6,7) + tmpFactData[0].SIGNATURE.substring(12,13) + tmpFactData[0].SIGNATURE.substring(18,19)
+                                    }
+    
+                                    tmpFactCert = this.core.appInfo.name + " version : " + tmpFactData[0].APP_VERSION + " - " + this.core.appInfo.certificate + " - " + tmpSigned
+                                }
+                            }
+                        }                    
+                        //***************************************************/
+                        let tmpData = 
+                        {
+                            pos : this.posObj.dt(),
+                            possale : this.posObj.posSale.dt(),
+                            pospay : this.posObj.posPay.dt(),
+                            pospromo : this.posPromoObj.dt(),
+                            firm : this.firm,
+                            special : 
+                            {
+                                type: tmpType,
+                                ticketCount:0,
+                                reprint: 1,
+                                repas: 0,
+                                factCertificate : tmpFactCert,
+                                dupCertificate : '',
+                                customerUsePoint:this.popCustomerUsePoint.value,
+                                customerPoint:this.customerPoint.value,
+                                customerGrowPoint:this.popCustomerGrowPoint.value
                             }
                         }
-                    }                    
-                    //***************************************************/
-                    let tmpData = 
-                    {
-                        pos : this.posObj.dt(),
-                        possale : this.posObj.posSale.dt(),
-                        pospay : this.posObj.posPay.dt(),
-                        pospromo : this.posPromoObj.dt(),
-                        firm : this.firm,
-                        special : 
+                        //YAZDIRMA İŞLEMİNDEN ÖNCE KULLANICIYA SORULUYOR
+                        if(this.prmObj.filter({ID:'PrintAlert',TYPE:0}).getValue() == true)
                         {
-                            type: tmpType,
-                            ticketCount:0,
-                            reprint: 1,
-                            repas: 0,
-                            factCertificate : tmpFactCert,
-                            dupCertificate : '',
-                            customerUsePoint:this.popCustomerUsePoint.value,
-                            customerPoint:this.customerPoint.value,
-                            customerGrowPoint:this.popCustomerGrowPoint.value
+                            let tmpConfObj =
+                            {
+                                id:'msgPrintAlert',showTitle:true,title:this.lang.t("msgPrintAlert.title"),showCloseButton:true,width:'500px',height:'250px',
+                                button:[{id:"btn01",caption:this.lang.t("msgPrintAlert.btn01"),location:'before'},{id:"btn03",caption:this.lang.t("msgPrintAlert.btn03"),location:'before'},{id:"btn02",caption:this.lang.t("msgPrintAlert.btn02"),location:'after'}],
+                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgPrintAlert.msg")}</div>)
+                            }
+                            let pResult = await dialog(tmpConfObj);
+                            if(pResult == 'btn01')
+                            {
+                                //POS_EXTRA TABLOSUNA YAZDIRMA BİLDİRİMİ GÖNDERİLİYOR                    
+                                let tmpInsertQuery = 
+                                {
+                                    query : "EXEC [dbo].[PRD_POS_EXTRA_INSERT] " + 
+                                            "@CUSER = @PCUSER, " + 
+                                            "@TAG = @PTAG, " +
+                                            "@POS_GUID = @PPOS_GUID, " +
+                                            "@LINE_GUID = @PLINE_GUID, " +
+                                            "@DATA = @PDATA, " +
+                                            "@DATA_EXTRA1 = @PDATA_EXTRA1, " +
+                                            "@APP_VERSION = @PAPP_VERSION, " +
+                                            "@DESCRIPTION = @PDESCRIPTION ", 
+                                    param : ['PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|max','PDATA_EXTRA1:string|max','PAPP_VERSION:string|25','PDESCRIPTION:string|max'],
+                                    value : [this.posObj.dt()[0].CUSER,"REPRINT",this.posObj.dt()[0].GUID,"00000000-0000-0000-0000-000000000000","","",this.core.appInfo.version,""],
+                                    local : 
+                                    {
+                                        type : "insert",
+                                        query : `INSERT INTO POS_EXTRA_VW_01 (GUID, CUSER, TAG, POS_GUID, LINE_GUID, DATA, APP_VERSION, DESCRIPTION) VALUES (?, ?, ?, ?, ?, ?, ?, ?);`,
+                                        values : [datatable.uuidv4(),this.posObj.dt()[0].CUSER,"REPRINT",this.posObj.dt()[0].GUID,"00000000-0000-0000-0000-000000000000","",this.core.appInfo.version,""]
+                                    }
+                                }
+                                await this.core.sql.execute(tmpInsertQuery)
+                                //***************************************************/
+                                await this.print(tmpData,0)
+                                if(this.posObj.dt()[0].CUSTOMER_MAIL != '')
+                                {
+                                    await this.print(tmpData,2)
+                                }
+                            }
+                            else if(pResult == 'btn03')
+                            {
+                                if(this.posObj.dt()[0].CUSTOMER_GUID != '00000000-0000-0000-0000-000000000000')
+                                { 
+                                    let tmpQuery = 
+                                    {
+                                        query :"SELECT EMAIL FROM CUSTOMER_VW_02 WHERE GUID = @GUID",
+                                        param:  ['GUID:string|50'],
+                                        value:  [this.posObj.dt()[0].CUSTOMER_GUID]
+                                    }
+                                    let tmpMailData = await this.core.sql.execute(tmpQuery) 
+                                    if(tmpMailData.result.recordset.length > 0)
+                                    {
+                                        this.txtMail.value = tmpMailData.result.recordset[0].EMAIL
+                                    }
+                                }
+    
+                                this.mailPopup.tmpData = tmpData;
+                                await this.mailPopup.show()
+                            }
                         }
-                    }
-                    //YAZDIRMA İŞLEMİNDEN ÖNCE KULLANICIYA SORULUYOR
-                    if(this.prmObj.filter({ID:'PrintAlert',TYPE:0}).getValue() == true)
-                    {
-                        let tmpConfObj =
-                        {
-                            id:'msgPrintAlert',showTitle:true,title:this.lang.t("msgPrintAlert.title"),showCloseButton:true,width:'500px',height:'250px',
-                            button:[{id:"btn01",caption:this.lang.t("msgPrintAlert.btn01"),location:'before'},{id:"btn03",caption:this.lang.t("msgPrintAlert.btn03"),location:'before'},{id:"btn02",caption:this.lang.t("msgPrintAlert.btn02"),location:'after'}],
-                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgPrintAlert.msg")}</div>)
-                        }
-                        let pResult = await dialog(tmpConfObj);
-                        if(pResult == 'btn01')
+                        else
                         {
                             //POS_EXTRA TABLOSUNA YAZDIRMA BİLDİRİMİ GÖNDERİLİYOR                    
                             let tmpInsertQuery = 
@@ -1674,57 +1728,6 @@ export default class posDoc extends React.PureComponent
                             {
                                 await this.print(tmpData,2)
                             }
-                        }
-                        else if(pResult == 'btn03')
-                        {
-                            if(this.posObj.dt()[0].CUSTOMER_GUID != '00000000-0000-0000-0000-000000000000')
-                            { 
-                                let tmpQuery = 
-                                {
-                                    query :"SELECT EMAIL FROM CUSTOMER_VW_02 WHERE GUID = @GUID",
-                                    param:  ['GUID:string|50'],
-                                    value:  [this.posObj.dt()[0].CUSTOMER_GUID]
-                                }
-                                let tmpMailData = await this.core.sql.execute(tmpQuery) 
-                                if(tmpMailData.result.recordset.length > 0)
-                                {
-                                    this.txtMail.value = tmpMailData.result.recordset[0].EMAIL
-                                }
-                            }
-
-                            this.mailPopup.tmpData = tmpData;
-                            await this.mailPopup.show()
-                        }
-                    }
-                    else
-                    {
-                        //POS_EXTRA TABLOSUNA YAZDIRMA BİLDİRİMİ GÖNDERİLİYOR                    
-                        let tmpInsertQuery = 
-                        {
-                            query : "EXEC [dbo].[PRD_POS_EXTRA_INSERT] " + 
-                                    "@CUSER = @PCUSER, " + 
-                                    "@TAG = @PTAG, " +
-                                    "@POS_GUID = @PPOS_GUID, " +
-                                    "@LINE_GUID = @PLINE_GUID, " +
-                                    "@DATA = @PDATA, " +
-                                    "@DATA_EXTRA1 = @PDATA_EXTRA1, " +
-                                    "@APP_VERSION = @PAPP_VERSION, " +
-                                    "@DESCRIPTION = @PDESCRIPTION ", 
-                            param : ['PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|max','PDATA_EXTRA1:string|max','PAPP_VERSION:string|25','PDESCRIPTION:string|max'],
-                            value : [this.posObj.dt()[0].CUSER,"REPRINT",this.posObj.dt()[0].GUID,"00000000-0000-0000-0000-000000000000","","",this.core.appInfo.version,""],
-                            local : 
-                            {
-                                type : "insert",
-                                query : `INSERT INTO POS_EXTRA_VW_01 (GUID, CUSER, TAG, POS_GUID, LINE_GUID, DATA, APP_VERSION, DESCRIPTION) VALUES (?, ?, ?, ?, ?, ?, ?, ?);`,
-                                values : [datatable.uuidv4(),this.posObj.dt()[0].CUSER,"REPRINT",this.posObj.dt()[0].GUID,"00000000-0000-0000-0000-000000000000","",this.core.appInfo.version,""]
-                            }
-                        }
-                        await this.core.sql.execute(tmpInsertQuery)
-                        //***************************************************/
-                        await this.print(tmpData,0)
-                        if(this.posObj.dt()[0].CUSTOMER_MAIL != '')
-                        {
-                            await this.print(tmpData,2)
                         }
                     }
                     //***************************************************/
