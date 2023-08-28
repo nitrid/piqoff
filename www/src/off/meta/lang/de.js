@@ -363,7 +363,8 @@ export const langDe =
         slsRpt_02_001: "Alle Rechnungen nach Datum sortiert",
         slsRpt_02_002: "DEB-Bericht",
         slsRpt_02_003: "Zuckersteuerbericht",
-        slsRpt_02_004: "Detailierter Artikel Einkaufsbericht"
+        slsRpt_02_004: "Detailierter Artikel Einkaufsbericht",
+        slsRpt_02_005 : "DEB Detay Raporu" // BAK
     },
     login:
     {
@@ -410,6 +411,7 @@ export const langDe =
         tabTitleSalesContract: "Verkaufsverträge",
         tabTitleInfo: "Informationen",
         tabTitleOtherShop :"Andere Filialinformationen",
+        tabTitleDetail : "Detay Bilgileri", // BAK
         txtTaxSugar: "Zuckergehalt (100ML/GR)",
         txtTotalExtraCost : "Zusätzliche Kosten",
         clmtaxSugar : "Zuckersteuer",
@@ -432,6 +434,7 @@ export const langDe =
         chkMountAnalysis: "Monatlich",
         txtUnitFactor: "Einheitsfaktor",
         cmbAnlysType: "Typ",
+        txtCustoms : "Gümrük Kodu", // BAK
         cmbAnlysTypeData:         
         {
             pos: "POS",
@@ -705,6 +708,12 @@ export const langDe =
             btn01: "OK",
             msg: "Sie können die Basiseinheit oder die Unterunit nicht löschen!"
         },
+        pg_customsCode : 
+        {
+            title : "Gümrük Kodları",   // BAK
+            clmCode : "KODU",   // BAK
+            clmName : "ADI"   // BAK
+        } 
     },
     stk_01_002:  //"Barcode-Definitionen"
     {

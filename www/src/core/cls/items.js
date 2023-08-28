@@ -35,7 +35,8 @@ export class itemsCls
             TICKET_REST: false,
             SUGAR_RATE: 0,
             INTERFEL: false,
-            DESCRIPTION : ''
+            DESCRIPTION : '',
+            CUSTOMS_CODE: ''
         }
 
         this.itemUnit = new itemUnitCls();
@@ -88,12 +89,13 @@ export class itemsCls
                     "@TICKET_REST = @PTICKET_REST, " +
                     "@SUGAR_RATE = @PSUGAR_RATE, " +
                     "@INTERFEL = @PINTERFEL, " + 
-                    "@DESCRIPTION = @PDESCRIPTION ",  
+                    "@DESCRIPTION = @PDESCRIPTION, " + 
+                    "@CUSTOMS_CODE = @PCUSTOMS_CODE " ,
             param : ['PGUID:string|50','PCUSER:string|25','PTYPE:string|25','PSPECIAL:string|50','PCODE:string|25','PNAME:string|250','PSNAME:string|50','PVAT:float',
                      'PCOST_PRICE:float','PMIN_PRICE:float','PMAX_PRICE:float','PSTATUS:bit','PMAIN:string|50','PSUB:string|50',
-                     'PORGINS:string|50','PSECTOR:string|50','PRAYON:string|50','PSHELF:string|50','PWEIGHING:bit','PSALE_JOIN_LINE:bit','PTICKET_REST:bit','PSUGAR_RATE:float','PINTERFEL:bit','PDESCRIPTION:string|max'],
+                     'PORGINS:string|50','PSECTOR:string|50','PRAYON:string|50','PSHELF:string|50','PWEIGHING:bit','PSALE_JOIN_LINE:bit','PTICKET_REST:bit','PSUGAR_RATE:float','PINTERFEL:bit','PDESCRIPTION:string|max','PCUSTOMS_CODE:string|50'],
             dataprm : ['GUID','CUSER','TYPE','SPECIAL','CODE','NAME','SNAME','VAT','COST_PRICE','MIN_PRICE','MAX_PRICE','STATUS','MAIN_GUID','SUB_GRP','ORGINS','SECTOR','RAYON',
-                       'SHELF','WEIGHING','SALE_JOIN_LINE','TICKET_REST','SUGAR_RATE','INTERFEL','DESCRIPTION'],
+                       'SHELF','WEIGHING','SALE_JOIN_LINE','TICKET_REST','SUGAR_RATE','INTERFEL','DESCRIPTION','CUSTOMS_CODE'],
             local : 
             {
                 type : "insert",
@@ -152,12 +154,13 @@ export class itemsCls
                     "@TICKET_REST = @PTICKET_REST, " +
                     "@SUGAR_RATE = @PSUGAR_RATE, " +
                     "@INTERFEL = @PINTERFEL, " + 
-                    "@DESCRIPTION = @PDESCRIPTION ",  
+                    "@DESCRIPTION = @PDESCRIPTION, " + 
+                    "@CUSTOMS_CODE = @PCUSTOMS_CODE " ,
             param : ['PGUID:string|50','PCUSER:string|25','PTYPE:string|25','PSPECIAL:string|50','PCODE:string|25','PNAME:string|250','PSNAME:string|50','PVAT:float',
                      'PCOST_PRICE:float','PMIN_PRICE:float','PMAX_PRICE:float','PSTATUS:bit','PMAIN:string|50','PSUB:string|50',
-                     'PORGINS:string|50','PSECTOR:string|50','PRAYON:string|50','PSHELF:string|50','PWEIGHING:bit','PSALE_JOIN_LINE:bit','PTICKET_REST:bit','PSUGAR_RATE:float','PINTERFEL:bit','PDESCRIPTION:string|max'],
+                     'PORGINS:string|50','PSECTOR:string|50','PRAYON:string|50','PSHELF:string|50','PWEIGHING:bit','PSALE_JOIN_LINE:bit','PTICKET_REST:bit','PSUGAR_RATE:float','PINTERFEL:bit','PDESCRIPTION:string|max','PCUSTOMS_CODE:string|50'],
             dataprm : ['GUID','CUSER','TYPE','SPECIAL','CODE','NAME','SNAME','VAT','COST_PRICE','MIN_PRICE','MAX_PRICE','STATUS','MAIN_GUID','SUB_GRP','ORGINS',
-                       'SECTOR','RAYON','SHELF','WEIGHING','SALE_JOIN_LINE','TICKET_REST','SUGAR_RATE','INTERFEL','DESCRIPTION'],
+                       'SECTOR','RAYON','SHELF','WEIGHING','SALE_JOIN_LINE','TICKET_REST','SUGAR_RATE','INTERFEL','DESCRIPTION','CUSTOMS_CODE'],
             local : 
             {
                 type : "update",

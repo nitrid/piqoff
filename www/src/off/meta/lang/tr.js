@@ -370,6 +370,7 @@ export const langTr =
         slsRpt_02_002 : "DEB Raporu",
         slsRpt_02_003 : "Şeker Vergisi Raporu",
         slsRpt_02_004 : "Ürün Detaylı Alış Raporu",
+        slsRpt_02_005 : "DEB Detay Raporu"
     },
     login:
     {
@@ -416,6 +417,7 @@ export const langTr =
         tabTitleSalesContract: "Satış Anlaşmaları",
         tabTitleInfo: "Bilgi",
         tabTitleOtherShop :"Diğer Şube Bilgileri",
+        tabTitleDetail : "Detay Bilgileri",
         txtTaxSugar: "Şeker Oranı(100ML/GR)",
         txtTotalExtraCost : "Ek Maliyetler",
         clmtaxSugar : "Şeker Vergisi",
@@ -438,6 +440,7 @@ export const langTr =
         chkMountAnalysis : "Aylık",
         txtUnitFactor : "Birim Mikarı",
         cmbAnlysType : "Tip",
+        txtCustoms : "Gümrük Kodu",
         cmbAnlysTypeData : 
         {
             pos: "Pos",
@@ -711,6 +714,12 @@ export const langTr =
             btn01: "Tamam",
             msg: "Ana birim yada Alt birim i silemezsiniz !"
         },
+        pg_customsCode : 
+        {
+            title : "Gümrük Kodları",
+            clmCode : "KODU",
+            clmName : "ADI"
+        }
     },
     stk_01_002:  //"Barkod Tanımları"
     {
