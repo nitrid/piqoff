@@ -157,7 +157,6 @@ export default class salesInvoice extends React.PureComponent
             this.txtRefno.value = tmpData.result.recordset[0].REF_NO
             this.docObj.docCustomer.dt()[0].REF_NO = tmpData.result.recordset[0].REF_NO
         }
-        this.extraCost.value = 0
     }
     async getDoc(pGuid,pRef,pRefno)
     {
@@ -176,14 +175,6 @@ export default class salesInvoice extends React.PureComponent
         if(this.docObj.dt()[0].LOCKED != 0)
         {
             this.docLocked = true
-            let tmpConfObj =
-            {
-                id:'msgGetLocked',showTitle:true,title:this.t("msgGetLocked.title"),showCloseButton:true,width:'500px',height:'200px',
-                button:[{id:"btn01",caption:this.t("msgGetLocked.btn01"),location:'after'}],
-                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgGetLocked.msg")}</div>)
-            }
-
-            await dialog(tmpConfObj);
             this.frmSalesInv.option('disabled',false)
         }
         else
@@ -192,7 +183,6 @@ export default class salesInvoice extends React.PureComponent
             this.frmSalesInv.option('disabled',false)
         }
         this._getPayment(this.docObj.dt()[0].GUID)
-        this.extraCost.value = this.docObj.dt()[0].INTERFEL
     }
     async checkDoc(pGuid,pRef,pRefno)
     {
@@ -258,7 +248,6 @@ export default class salesInvoice extends React.PureComponent
 
         this.docObj.docCustomer.dt()[0].AMOUNT = this.docObj.dt()[0].TOTAL
         this.docObj.dt()[0].INTERFEL = this.docObj.docItems.dt().where({'ITEM_CODE':'INTERFEL'}).sum("TOTALHT",2)
-        this.extraCost.value = this.docObj.dt()[0].INTERFEL
         this._calculateTotalMargin()
         this._calculateMargin()
     }
@@ -270,10 +259,9 @@ export default class salesInvoice extends React.PureComponent
         {
             tmpTotalCost += this.docObj.docItems.dt()[i].COST_PRICE * this.docObj.docItems.dt()[i].QUANTITY
         }
-        let tmpMargin = ((this.docObj.dt()[0].TOTAL - this.docObj.dt()[0].VAT) - tmpTotalCost)
-        let tmpMarginRate = (tmpMargin / (this.docObj.dt()[0].TOTAL - this.docObj.dt()[0].VAT)) * 100
+        let tmpMargin = ((this.docObj.dt()[0].TOTALHT ) - tmpTotalCost)
+        let tmpMarginRate = (tmpMargin / (this.docObj.dt()[0].TOTALHT)) * 100
         this.docObj.dt()[0].MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
-        this.txtMargin.setState({value:this.docObj.dt()[0].MARGIN})
     }
     async _calculateMargin()
     {
@@ -322,7 +310,6 @@ export default class salesInvoice extends React.PureComponent
                                         tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
                                         tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
                                         tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
-                                        tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
                                         tmpDocItems.REF = this.docObj.dt()[0].REF
                                         tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
                                         tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
@@ -406,7 +393,6 @@ export default class salesInvoice extends React.PureComponent
                                                 tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
                                                 tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
                                                 tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
-                                                tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
                                                 tmpDocItems.REF = this.docObj.dt()[0].REF
                                                 tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
                                                 tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
@@ -744,6 +730,7 @@ export default class salesInvoice extends React.PureComponent
         this.docObj.docItems.dt()[pIndex].DISCOUNT = 0
         this.docObj.docItems.dt()[pIndex].DISCOUNT_RATE = 0
         this.docObj.docItems.dt()[pIndex].QUANTITY = pQuantity
+        this.docObj.docItems.dt()[pIndex].LINE_NO = this.docObj.docItems.dt().max("LINE_NO") + 1
         this.docObj.docItems.dt()[pIndex].SUB_QUANTITY = pQuantity / this.docObj.docItems.dt()[pIndex].SUB_FACTOR
       
         if(typeof pPrice == 'undefined')
@@ -824,7 +811,6 @@ export default class salesInvoice extends React.PureComponent
                         tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
                         tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
                         tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
-                        tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
                         tmpDocItems.REF = this.docObj.dt()[0].REF
                         tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
                         tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
@@ -1003,9 +989,14 @@ export default class salesInvoice extends React.PureComponent
         {
             let tmpQuery = 
             {
-                query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ORDERS_VW_01 WHERE INPUT = @INPUT AND SHIPMENT_LINE_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 1 AND DOC_TYPE IN(60)",
-                param : ['INPUT:string|50'],
-                value : [this.docObj.dt()[0].INPUT]
+                query : "SELECT *," + 
+                        "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ORDERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_FACTOR,  " +
+                        "ISNULL((SELECT TOP 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ORDERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),'') AS SUB_SYMBOL,  " +
+                        "QUANTITY / ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ORDERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_QUANTITY, " + 
+                        "PRICE * ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ORDERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_PRICE, " + 
+                        "REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ORDERS_VW_01 WHERE INPUT = @INPUT AND SHIPMENT_LINE_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 1 AND DOC_TYPE IN(60)",
+                param : ['INPUT:string|50','SUB_FACTOR:string|10'],
+                value : [this.docObj.dt()[0].INPUT,this.sysParam.filter({ID:'secondFactor',USERS:this.user.CODE}).getValue().value]
             }
             let tmpData = await this.core.sql.execute(tmpQuery) 
             if(tmpData.result.recordset.length > 0)
@@ -1023,6 +1014,7 @@ export default class salesInvoice extends React.PureComponent
                 App.instance.setState({isExecute:true})
                 for (let i = 0; i < data.length; i++) 
                 {
+                    console.log(data[i])
                     let tmpDocItems = {...this.docObj.docItems.empty}
                     tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
                     tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
@@ -1390,7 +1382,6 @@ export default class salesInvoice extends React.PureComponent
             tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
             tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
             tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
-            tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
             tmpDocItems.REF = this.docObj.dt()[0].REF
             tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
             tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
@@ -1624,7 +1615,6 @@ export default class salesInvoice extends React.PureComponent
                             this.docObj.docItems.dt().where({'ITEM_CODE':'INTERFEL'})[0].TOTALHT = this.docObj.dt()[0].INTERFEL
                             this.docObj.docItems.dt().where({'ITEM_CODE':'INTERFEL'})[0].TOTAL = parseFloat((this.docObj.docItems.dt().where({'ITEM_CODE':'INTERFEL'})[0].TOTALHT +  parseFloat(this.docObj.docItems.dt().where({'ITEM_CODE':'INTERFEL'})[0].VAT)).toFixed(2))
                             this.popExtraCost.hide()
-                            this.extraCost.value = this.docObj.dt()[0].INTERFEL
                             resolve()
                             return
                         }
@@ -1634,7 +1624,6 @@ export default class salesInvoice extends React.PureComponent
                         tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
                         tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
                         tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
-                        tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
                         tmpDocItems.REF = this.docObj.dt()[0].REF
                         tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
                         tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
@@ -1648,7 +1637,6 @@ export default class salesInvoice extends React.PureComponent
                         this.popExtraCost.hide()
                     }
                 }        
-                this.extraCost.value = this.docObj.dt()[0].INTERFEL
             }
             resolve()
         })
@@ -1832,10 +1820,12 @@ export default class salesInvoice extends React.PureComponent
                                             }
                                         }
                                         this.numDetailQuantity2.value = tmpQuantity2.toFixed(3)
-                                        let tmpExVat = Number(this.docObj.docItems.dt().sum("PRICE",2))
-                                        let tmpMargin = Number(tmpExVat) - Number(this.docObj.docItems.dt().sum("COST_PRICE",2)) 
-                                        let tmpMarginRate = ((tmpMargin / Number(this.docObj.docItems.dt().sum("COST_PRICE",2)))) * 100
-                                        this.txtDetailMargin.value = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2);                 
+                                        let tmpExVat = Number(this.docObj.docItems.dt().sum("TOTALHT",2))
+                                        console.log(tmpExVat)
+                                        let tmpMargin = Number(tmpExVat) - Number(this.docObj.docItems.dt().sum("TOTAL_COST",2)) 
+                                        console.log(tmpMargin)
+                                        let tmpMarginRate = ((tmpMargin / Number(this.docObj.docItems.dt().sum("TOTAL_COST",2)))) * 100
+                                        this.txtDetailMargin.value = this.docObj.dt()[0].MARGIN                
                                         this.popDetail.show()
                                     }}/>
                                 </Item>
@@ -2284,7 +2274,6 @@ export default class salesInvoice extends React.PureComponent
                                                         tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
                                                         tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
                                                         tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
-                                                        tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
                                                         tmpDocItems.REF = this.docObj.dt()[0].REF
                                                         tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
                                                         tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
@@ -2322,7 +2311,6 @@ export default class salesInvoice extends React.PureComponent
                                                                         tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
                                                                         tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
                                                                         tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
-                                                                        tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
                                                                         tmpDocItems.REF = this.docObj.dt()[0].REF
                                                                         tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
                                                                         tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
@@ -2393,7 +2381,6 @@ export default class salesInvoice extends React.PureComponent
                                                     tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
                                                     tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
                                                     tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
-                                                    tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
                                                     tmpDocItems.REF = this.docObj.dt()[0].REF
                                                     tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
                                                     tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
@@ -2447,7 +2434,6 @@ export default class salesInvoice extends React.PureComponent
                                                                 tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
                                                                 tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
                                                                 tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
-                                                                tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
                                                                 tmpDocItems.REF = this.docObj.dt()[0].REF
                                                                 tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
                                                                 tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
@@ -2472,7 +2458,6 @@ export default class salesInvoice extends React.PureComponent
                                                                 tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
                                                                 tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
                                                                 tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
-                                                                tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
                                                                 tmpDocItems.REF = this.docObj.dt()[0].REF
                                                                 tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
                                                                 tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
@@ -2572,7 +2557,6 @@ export default class salesInvoice extends React.PureComponent
                                                                     tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
                                                                     tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
                                                                     tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
-                                                                    tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
                                                                     tmpDocItems.REF = this.docObj.dt()[0].REF
                                                                     tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
                                                                     tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
@@ -2601,7 +2585,6 @@ export default class salesInvoice extends React.PureComponent
                                                 tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
                                                 tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
                                                 tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
-                                                tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
                                                 tmpDocItems.REF = this.docObj.dt()[0].REF
                                                 tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
                                                 tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
@@ -2633,7 +2616,6 @@ export default class salesInvoice extends React.PureComponent
                                                             tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
                                                             tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
                                                             tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
-                                                            tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
                                                             tmpDocItems.REF = this.docObj.dt()[0].REF
                                                             tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
                                                             tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
@@ -2699,7 +2681,6 @@ export default class salesInvoice extends React.PureComponent
                                                                     tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
                                                                     tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
                                                                     tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
-                                                                    tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
                                                                     tmpDocItems.REF = this.docObj.dt()[0].REF
                                                                     tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
                                                                     tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
@@ -2724,7 +2705,6 @@ export default class salesInvoice extends React.PureComponent
                                             tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
                                             tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
                                             tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
-                                            tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
                                             tmpDocItems.REF = this.docObj.dt()[0].REF
                                             tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
                                             tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
@@ -2761,7 +2741,6 @@ export default class salesInvoice extends React.PureComponent
                                                             tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
                                                             tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
                                                             tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
-                                                            tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
                                                             tmpDocItems.REF = this.docObj.dt()[0].REF
                                                             tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
                                                             tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
@@ -2829,6 +2808,7 @@ export default class salesInvoice extends React.PureComponent
                                         width={'100%'}
                                         dbApply={false}
                                         sorting={false}
+                                        selection={{mode:"single"}}
                                         onRowPrepared={async(e)=>
                                         {
                                             if(e.rowType == 'data' && e.data.ITEM_TYPE == 1)
@@ -2838,6 +2818,15 @@ export default class salesInvoice extends React.PureComponent
                                             if(e.rowType == 'data' && e.data.ITEM_TYPE == 2)
                                             {
                                                 e.rowElement.style.color ="#86af49"
+                                            }
+                                            if(e.isEditing == true)
+                                            {
+                                                e.rowElement.style.backgroundColor ="#b1cbbb"
+                                                this.grdSlsInv.devGrid.selectRowsByIndexes(e.rowIndex)
+                                            }
+                                            else
+                                            {
+                                                e.rowElement.style.backgroundColor =""
                                             }
                                         }}
                                         onRowUpdating={async(e)=>
@@ -3053,7 +3042,6 @@ export default class salesInvoice extends React.PureComponent
                                             <ColumnChooser enabled={true} />
                                             <Paging defaultPageSize={10} />
                                             <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
-                                            <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
                                             <Scrolling mode="standart" />
                                             <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                             <Export fileName={this.lang.t("menu.ftr_02_002")} enabled={true} allowExportSelectedData={true} />
@@ -3066,7 +3054,7 @@ export default class salesInvoice extends React.PureComponent
                                             <Column dataField="QUANTITY" caption={this.t("grdSlsInv.clmQuantity")} width={70} dataType={'number'} cellRender={(e)=>{return e.value + " / " + e.data.UNIT_SHORT}} editCellRender={this._cellRoleRender}/>
                                             <Column dataField="SUB_FACTOR" caption={this.t("grdSlsInv.clmSubFactor")} width={70} allowEditing={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
                                             <Column dataField="SUB_QUANTITY" caption={this.t("grdSlsInv.clmSubQuantity")} dataType={'number'} width={70} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
-                                            <Column dataField="PRICE" caption={this.t("grdSlsInv.clmPrice")} width={70} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
+                                            <Column dataField="PRICE" caption={this.t("grdSlsInv.clmPrice")} width={70} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}} editorOptions={{step:0}}/>
                                             <Column dataField="SUB_PRICE" caption={this.t("grdSlsInv.clmSubPrice")} dataType={'number'} format={'€#,##0.000'} width={70} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + "€/ " + e.data.SUB_SYMBOL}}/>
                                             <Column dataField="AMOUNT" caption={this.t("grdSlsInv.clmAmount")} width={80} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
                                             <Column dataField="DISCOUNT" caption={this.t("grdSlsInv.clmDiscount")} dataType={'number'} width={60} editCellRender={this._cellRoleRender} format={{ style: "currency", currency: "EUR",precision: 3}}/>

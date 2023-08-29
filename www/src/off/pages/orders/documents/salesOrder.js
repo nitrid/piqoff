@@ -297,7 +297,6 @@ export default class salesOrder extends React.PureComponent
                                                 tmpdocOrders.DOC_GUID = this.docObj.dt()[0].GUID
                                                 tmpdocOrders.TYPE = this.docObj.dt()[0].TYPE
                                                 tmpdocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                                                tmpdocOrders.LINE_NO = this.docObj.docOrders.dt().length
                                                 tmpdocOrders.REF = this.docObj.dt()[0].REF
                                                 tmpdocOrders.REF_NO = this.docObj.dt()[0].REF_NO
                                                 tmpdocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
@@ -382,7 +381,6 @@ export default class salesOrder extends React.PureComponent
                                                     tmpdocOrders.DOC_GUID = this.docObj.dt()[0].GUID
                                                     tmpdocOrders.TYPE = this.docObj.dt()[0].TYPE
                                                     tmpdocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                                                    tmpdocOrders.LINE_NO = this.docObj.docOrders.dt().length
                                                     tmpdocOrders.REF = this.docObj.dt()[0].REF
                                                     tmpdocOrders.REF_NO = this.docObj.dt()[0].REF_NO
                                                     tmpdocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
@@ -658,6 +656,7 @@ export default class salesOrder extends React.PureComponent
         this.docObj.docOrders.dt()[pIndex].DISCOUNT = 0
         this.docObj.docOrders.dt()[pIndex].DISCOUNT_RATE = 0
         this.docObj.docOrders.dt()[pIndex].QUANTITY = pQuantity
+        this.docObj.docOrders.dt()[pIndex].LINE_NO = this.docObj.docOrders.dt().max("LINE_NO") + 1
         this.docObj.docOrders.dt()[pIndex].SUB_QUANTITY = pQuantity / this.docObj.docOrders.dt()[pIndex].SUB_FACTOR
         let tmpQuery = 
         {
@@ -718,7 +717,6 @@ export default class salesOrder extends React.PureComponent
                         tmpDocOrders.DOC_GUID = this.docObj.dt()[0].GUID
                         tmpDocOrders.TYPE = this.docObj.dt()[0].TYPE
                         tmpDocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                        tmpDocOrders.LINE_NO = this.docObj.docOrders.dt().length
                         tmpDocOrders.REF = this.docObj.dt()[0].REF
                         tmpDocOrders.REF_NO = this.docObj.dt()[0].REF_NO
                         tmpDocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
@@ -879,7 +877,6 @@ export default class salesOrder extends React.PureComponent
             tmpdocOrders.DOC_GUID = this.docObj.dt()[0].GUID
             tmpdocOrders.TYPE = this.docObj.dt()[0].TYPE
             tmpdocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-            tmpdocOrders.LINE_NO = this.docObj.docOrders.dt().length
             tmpdocOrders.REF = this.docObj.dt()[0].REF
             tmpdocOrders.REF_NO = this.docObj.dt()[0].REF_NO
             tmpdocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
@@ -1687,7 +1684,6 @@ export default class salesOrder extends React.PureComponent
                                                                     tmpdocOrders.DOC_GUID = this.docObj.dt()[0].GUID
                                                                     tmpdocOrders.TYPE = this.docObj.dt()[0].TYPE
                                                                     tmpdocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                                                                    tmpdocOrders.LINE_NO = this.docObj.docOrders.dt().length
                                                                     tmpdocOrders.REF = this.docObj.dt()[0].REF
                                                                     tmpdocOrders.REF_NO = this.docObj.dt()[0].REF_NO
                                                                     tmpdocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
@@ -1708,7 +1704,6 @@ export default class salesOrder extends React.PureComponent
                                                                         tmpdocOrders.DOC_GUID = this.docObj.dt()[0].GUID
                                                                         tmpdocOrders.TYPE = this.docObj.dt()[0].TYPE
                                                                         tmpdocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                                                                        tmpdocOrders.LINE_NO = this.docObj.docOrders.dt().length
                                                                         tmpdocOrders.REF = this.docObj.dt()[0].REF
                                                                         tmpdocOrders.REF_NO = this.docObj.dt()[0].REF_NO
                                                                         tmpdocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
@@ -1785,11 +1780,11 @@ export default class salesOrder extends React.PureComponent
                                                 }
                                                 await this.msgQuantity.show().then(async (e) =>
                                                 {
+                                                    console.log(this.docObj.docOrders.dt().max("LINE_NO"))
                                                     let tmpdocOrders = {...this.docObj.docOrders.empty}
                                                     tmpdocOrders.DOC_GUID = this.docObj.dt()[0].GUID
                                                     tmpdocOrders.TYPE = this.docObj.dt()[0].TYPE
                                                     tmpdocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                                                    tmpdocOrders.LINE_NO = this.docObj.docOrders.dt().length
                                                     tmpdocOrders.REF = this.docObj.dt()[0].REF
                                                     tmpdocOrders.REF_NO = this.docObj.dt()[0].REF_NO
                                                     tmpdocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
@@ -1841,7 +1836,6 @@ export default class salesOrder extends React.PureComponent
                                                                 tmpdocOrders.DOC_GUID = this.docObj.dt()[0].GUID
                                                                 tmpdocOrders.TYPE = this.docObj.dt()[0].TYPE
                                                                 tmpdocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                                                                tmpdocOrders.LINE_NO = this.docObj.docOrders.dt().length
                                                                 tmpdocOrders.REF = this.docObj.dt()[0].REF
                                                                 tmpdocOrders.REF_NO = this.docObj.dt()[0].REF_NO
                                                                 tmpdocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
@@ -1862,7 +1856,6 @@ export default class salesOrder extends React.PureComponent
                                                                     tmpdocOrders.DOC_GUID = this.docObj.dt()[0].GUID
                                                                     tmpdocOrders.TYPE = this.docObj.dt()[0].TYPE
                                                                     tmpdocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                                                                    tmpdocOrders.LINE_NO = this.docObj.docOrders.dt().length
                                                                     tmpdocOrders.REF = this.docObj.dt()[0].REF
                                                                     tmpdocOrders.REF_NO = this.docObj.dt()[0].REF_NO
                                                                     tmpdocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
@@ -1962,7 +1955,6 @@ export default class salesOrder extends React.PureComponent
                                                                         tmpdocOrders.DOC_GUID = this.docObj.dt()[0].GUID
                                                                         tmpdocOrders.TYPE = this.docObj.dt()[0].TYPE
                                                                         tmpdocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                                                                        tmpdocOrders.LINE_NO = this.docObj.docOrders.dt().length
                                                                         tmpdocOrders.REF = this.docObj.dt()[0].REF
                                                                         tmpdocOrders.REF_NO = this.docObj.dt()[0].REF_NO
                                                                         tmpdocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
@@ -1990,7 +1982,6 @@ export default class salesOrder extends React.PureComponent
                                                 tmpdocOrders.DOC_GUID = this.docObj.dt()[0].GUID
                                                 tmpdocOrders.TYPE = this.docObj.dt()[0].TYPE
                                                 tmpdocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                                                tmpdocOrders.LINE_NO = this.docObj.docOrders.dt().length
                                                 tmpdocOrders.REF = this.docObj.dt()[0].REF
                                                 tmpdocOrders.REF_NO = this.docObj.dt()[0].REF_NO
                                                 tmpdocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
@@ -2022,7 +2013,6 @@ export default class salesOrder extends React.PureComponent
                                                                 tmpdocOrders.DOC_GUID = this.docObj.dt()[0].GUID
                                                                 tmpdocOrders.TYPE = this.docObj.dt()[0].TYPE
                                                                 tmpdocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                                                                tmpdocOrders.LINE_NO = this.docObj.docOrders.dt().length
                                                                 tmpdocOrders.REF = this.docObj.dt()[0].REF
                                                                 tmpdocOrders.REF_NO = this.docObj.dt()[0].REF_NO
                                                                 tmpdocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
@@ -2088,11 +2078,22 @@ export default class salesOrder extends React.PureComponent
                                     width={'100%'}
                                     dbApply={false}
                                     sorting={false}
+                                    selection={{mode:"single"}}
                                     onRowPrepared={(e) =>
                                     {
                                         if(e.rowType == 'data' && e.data.SHIPMENT_LINE_GUID  != '00000000-0000-0000-0000-000000000000')
                                         {
                                             e.rowElement.style.color ="Silver"
+                                        }
+                                        if(e.isEditing == true)
+                                        {
+                                            e.rowElement.style.backgroundColor ="#b1cbbb"
+                                            this.grdSlsOrder.devGrid.selectRowsByIndexes(e.rowIndex)
+                                            console.log(this.grdSlsOrder)
+                                        }
+                                        else
+                                        {
+                                            e.rowElement.style.backgroundColor =""
                                         }
                                     }}
                                     onRowUpdating={async (e)=>
@@ -2256,7 +2257,6 @@ export default class salesOrder extends React.PureComponent
                                         <ColumnChooser enabled={true} />
                                         <Paging defaultPageSize={10} />
                                         <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
-                                        <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
                                         <Scrolling mode="standart" />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                         <Export fileName={this.lang.t("menu.sip_02_002")} enabled={true} allowExportSelectedData={true} />
@@ -2269,7 +2269,7 @@ export default class salesOrder extends React.PureComponent
                                         <Column dataField="QUANTITY" caption={this.t("grdSlsOrder.clmQuantity")} width={70} dataType={'number'} cellRender={(e)=>{return e.value + " / " + e.data.UNIT_SHORT}} editCellRender={this._cellRoleRender}/>
                                         <Column dataField="SUB_FACTOR" caption={this.t("grdSlsOrder.clmSubFactor")} width={70} allowEditing={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
                                         <Column dataField="SUB_QUANTITY" caption={this.t("grdSlsOrder.clmSubQuantity")} dataType={'number'} width={70} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
-                                        <Column dataField="PRICE" caption={this.t("grdSlsOrder.clmPrice")} width={70} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}}/>
+                                        <Column dataField="PRICE" caption={this.t("grdSlsOrder.clmPrice")} width={70} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}} editorOptions={{step:0}}/>
                                         <Column dataField="SUB_PRICE" caption={this.t("grdSlsOrder.clmSubPrice")} dataType={'number'} format={'€#,##0.000'} width={70} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + "€/ " + e.data.SUB_SYMBOL}}/>
                                         <Column dataField="AMOUNT" caption={this.t("grdSlsOrder.clmAmount")} width={80} allowEditing={false} format={{ style: "currency", currency: "EUR",precision: 3}}/>
                                         <Column dataField="DISCOUNT" caption={this.t("grdSlsOrder.clmDiscount")}  width={60} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}} editCellRender={this._cellRoleRender}/>

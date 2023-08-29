@@ -367,7 +367,8 @@ export const langFr =
         slsRpt_02_001 : "Rapport des Factures d'Achat", 
         slsRpt_02_002 : "Rapport DEB ", 
         slsRpt_02_003 : "Rapport du taux de sucre", 
-        slsRpt_02_004 : ""
+        slsRpt_02_004 : "Ürün Detaylı Alış Raporu" ,  // BAK
+        slsRpt_02_005 : "DEB Detay Raporu" // BAK
     },
     login:
     {
@@ -414,6 +415,7 @@ export const langFr =
         tabTitleSalesContract: "Accord de Vente",
         tabTitleInfo: "Information",
         tabTitleOtherShop :"Autre information sur les Magasins",
+        tabTitleDetail : "Detay Bilgileri", // BAK
         txtTaxSugar: "Taux Sucre(100ML/GR)",
         txtTotalExtraCost : "Charge Supp.",
         clmtaxSugar : "Taxe Sucre",
@@ -436,6 +438,7 @@ export const langFr =
         chkMountAnalysis : "Mensuel",  
         txtUnitFactor : "Quantité unitaire", 
         cmbAnlysType : "Type", 
+        txtCustoms : "Gümrük Kodu",  // BAK
         cmbAnlysTypeData : 
         {
             pos: "Pos", 
@@ -709,6 +712,12 @@ export const langFr =
             btn01: "OK",
             msg: "Vous ne pouvez pas supprimé l'unité principale et la sous-unité !" 
         },
+        pg_customsCode : 
+        {
+            title : "Gümrük Kodları",   // BAK
+            clmCode : "KODU",   // BAK
+            clmName : "ADI"   // BAK
+        } 
     },
     stk_01_002:  //"Identification des codes-barres" 
     {

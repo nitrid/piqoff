@@ -332,7 +332,29 @@ export default class App extends React.PureComponent
                                         </div>                                        
                                     </NbButton>
                                 </div>
-                            </div>                            
+                            </div>      
+                            <div className='row' style={{paddingTop:"30px"}}>
+                              {/* TAHSİLAT */}
+                              <div className='col-4'>
+                                    <NbButton className="form-group btn btn-block" style={{height:"100%",width:"100%",backgroundColor:'#0d6efd'}}
+                                    onClick={()=>
+                                    {
+                                        this.popMenu.hide()
+                                        this.setState({page:'collection.js'})
+                                    }}>
+                                        <div className='row py-2'>
+                                            <div className='col-12'>
+                                                <i className="fa-solid fa-scale-balanced fa-4x" style={{color:'#ecf0f1'}}></i>
+                                            </div>
+                                        </div>
+                                        <div className='row'>
+                                            <div className='col-12'>
+                                                <h3 style={{color:'#ecf0f1'}}>{this.lang.t('menu.collection')}</h3>
+                                            </div>
+                                        </div>                                        
+                                    </NbButton>
+                                </div>    
+                            </div>                  
                         </div>
                     </NbPopUp>
                 </div>
