@@ -1251,11 +1251,20 @@ export default class posDoc extends React.PureComponent
                 }
             }            
             //HER EKLEME İŞLEMİNDEN SONRA İLK SATIR SEÇİLİYOR.
-            this.grdList.devGrid.navigateToRow(this.posObj.posSale.dt()[0])
-            await this.core.util.waitUntil(500)
-            this.grdList.devGrid.selectRowsByIndexes(0)
-            this.grdList.devGrid.option('focusedRowIndex',0)
-            
+            await this.core.util.waitUntil(300)
+            this.grdList.devGrid.getDataSource().store().load().done((res)=>
+            {
+                let tmpRes = res.data.sort(function(a, b) 
+                {
+                    var dateA = new Date(a.LDATE);
+                    var dateB = new Date(b.LDATE);
+                    return dateB - dateA;
+                });
+                
+                this.grdList.devGrid.navigateToRow(tmpRes[0])
+                this.grdList.devGrid.selectRows(tmpRes[0],false)
+            })
+
             if(typeof pSave == 'undefined' || pSave)
             {                
                 let tmpClose = await this.saleClosed(true,tmpPayRest,tmpPayChange)
@@ -1563,7 +1572,7 @@ export default class posDoc extends React.PureComponent
                 //POS_PROMO TABLOSUNA KAYIT EDİLİYOR.
                 await this.posPromoObj.save()
                 //******************************** */
-                if(typeof pPrint == 'undefined' || pPrint)
+                if((typeof pPrint == 'undefined' || pPrint) && this.prmObj.filter({ID:'SaleClosePrint',TYPE:0}).getValue() == true)
                 {       
                     if(this.prmObj.filter({ID:'SaleClosePrint',TYPE:0}).getValue() == true)
                     {
