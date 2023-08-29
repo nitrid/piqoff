@@ -677,16 +677,19 @@ export default class itemCard extends React.PureComponent
                 value : [this.itemsObj.dt()[0].GUID]
             }
             let tmpData = await this.core.sql.execute(tmpQuery) 
+            console.log(tmpData)
             if(tmpData.result.recordset.length >0)
             {
                 console.log(tmpData.result.recordset[0].DOC_GUID)
                 let tmpItemQuery = 
                 {
-                    query : "SELECT * FROM DOC_ITEMS_VW_01 WHERE (DOC_GUID = @DOC_GUID OR INVOICE_LINE_GUID = @DOC_GUID) OR DOC_GUID IN (SELECT INVOICE_LINE_GUID FROM DOC_ITEMS_VW_01 WHERE DOC_GUID = @DOC_GUID)",
+                    query : "SELECT * FROM DOC_ITEMS_VW_01 WHERE (DOC_GUID = @DOC_GUID OR INVOICE_DOC_GUID = @DOC_GUID)",
                     param : ['DOC_GUID:string|50'],
                     value : [tmpData.result.recordset[0].DOC_GUID]
                 }
                 let tmpItemData = await this.core.sql.execute(tmpItemQuery)
+                console.log(tmpItemData)
+
                 if(tmpItemData.result.recordset.length >0)
                 {
                     let tmpServices = []
@@ -697,6 +700,8 @@ export default class itemCard extends React.PureComponent
                             tmpServices.push(tmpItemData.result.recordset[i])
                         }
                     }
+                    console.log(tmpServices)
+
                     for (let x = 0; x < tmpServices.length; x++) 
                     {
                         let tmpQuantity = 0
