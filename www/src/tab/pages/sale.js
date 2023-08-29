@@ -89,6 +89,7 @@ export default class Sale extends React.PureComponent
         else
         {
             this.popCustomer.show()
+            this.txtCustomerSearch.focus()
         }
     }
     async getItems()
@@ -498,6 +499,22 @@ export default class Sale extends React.PureComponent
             await dialog(tmpConfObj1);
 
             localStorage.removeItem("data")
+            
+            let tmpConfObj2 =
+            {
+                id:'msgCollection',showTitle:true,title:this.t("msgCollection.title"),showCloseButton:true,width:'500px',height:'200px',
+                button:[{id:"btn01",caption:this.t("msgCollection.btn01"),location:'before'},{id:"btn02",caption:this.t("msgCollection.btn02"),location:'after'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgCollection.msg")}</div>)
+            }
+
+            let pResult = await dialog(tmpConfObj2);
+            
+            if(pResult == 'btn01')
+            {
+                App.instance.pagePrm = {GUID:this.docObj.dt()[0].GUID}
+                App.instance.setState({page:'collection.js'})
+            }
+
         }
         else
         {

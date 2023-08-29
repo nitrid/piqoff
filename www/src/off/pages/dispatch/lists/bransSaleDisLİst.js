@@ -49,6 +49,7 @@ export default class salesDisList extends React.PureComponent
     {
         setTimeout(async () => 
         {
+            console.log(this)
             this.Init()
         }, 1000);
     }

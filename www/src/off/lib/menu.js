@@ -652,7 +652,7 @@ export const menu = (e) =>
                             path: 'report/purchase/debReport'
                         },
                         {
-                            id: 'slsRpt_02_002',
+                            id: 'slsRpt_02_005',
                             text: e.t('menuOff.slsRpt_02_005'),//'DEB Detay Raporu',
                             path: 'report/purchase/debDetailReport'
                         },

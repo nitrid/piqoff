@@ -68,8 +68,9 @@ export default class App extends React.PureComponent
                 headers : 'Warning',
                 title : 'Sunucu ile bağlantı kuruluyor.',
             },
-            page:'dashboard.js'
+            page:'dashboard.js',
         }
+        this.pagePrm = null
 
         if(window.origin.substring(0,4) == 'http')
         {
