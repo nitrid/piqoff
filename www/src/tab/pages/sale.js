@@ -35,6 +35,8 @@ export default class Sale extends React.PureComponent
         this.docLines = new datatable()
         this.vatRate =  new datatable()
         this.nf525 = new nf525Cls();
+        this.extraObj = new docExtraCls();
+
         this.docType = 0
         this.tmpPageLimit = 21
         this.tmpStartPage = 0
@@ -58,6 +60,7 @@ export default class Sale extends React.PureComponent
     async init()
     {
         this.docObj.clearAll()
+        this.extraObj.clearAll()
         let tmpDoc = {...this.docObj.empty}
         this.docObj.addEmpty(tmpDoc);
         this.docLines.clear()        
@@ -86,8 +89,8 @@ export default class Sale extends React.PureComponent
         else
         {
             this.popCustomer.show()
+            this.txtCustomerSearch.focus()
         }
-        
     }
     async getItems()
     {
@@ -102,7 +105,7 @@ export default class Sale extends React.PureComponent
         {
             let tmpQuery = 
             {
-                query : "SELECT GUID,CODE,NAME,VAT,PRICE,IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR FROM ITEMS_VW_02 " +
+                query : "SELECT GUID,CODE,NAME,VAT,ROUND(PRICE,3) AS PRICE,IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR FROM ITEMS_VW_02 " +
                         "WHERE ((UPPER(CODE) LIKE UPPER('%' || ? || '%')) OR (UPPER(NAME) LIKE UPPER('%' || ? || '%'))) AND " +
                         "((MAIN_GRP = ?) OR (? = '')) ORDER BY NAME ASC LIMIT " + this.tmpPageLimit + " OFFSET " + this.tmpStartPage,
                 values : [this.txtSearch.value.replaceAll(' ','%'),this.txtSearch.value.replaceAll(' ','%'),this.cmbGroup.value,this.cmbGroup.value],
@@ -112,6 +115,7 @@ export default class Sale extends React.PureComponent
 
             if(typeof tmpBuf.result.err == 'undefined')
             {
+                console.log(tmpBuf.result.recordset)
                 for (let i = 0; i < tmpBuf.result.recordset.length; i++) 
                 {
                     this.itemView.items.push(tmpBuf.result.recordset[i])
@@ -126,7 +130,7 @@ export default class Sale extends React.PureComponent
         {
             let tmpQuery = 
             {
-                query : "SELECT GUID,CODE,NAME,VAT,PRICE,IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR FROM ITEMS_VW_02 " +
+                query : "SELECT GUID,CODE,NAME,VAT,ROUND(PRICE,3) AS PRICE,IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR FROM ITEMS_VW_02 " +
                         "WHERE STATUS = 1 AND ((UPPER(CODE) LIKE UPPER('%' + @VAL + '%')) OR (UPPER(NAME) LIKE UPPER('%' + @VAL + '%'))) AND " +
                         "((MAIN_GRP = @MAIN_GRP) OR (@MAIN_GRP = '')) ORDER BY NAME ASC",
                 param : ['VAL:string|50','MAIN_GRP:string|50'],
@@ -136,9 +140,11 @@ export default class Sale extends React.PureComponent
             let tmpBuf = await this.core.sql.execute(tmpQuery) 
             if(typeof tmpBuf.result.err == 'undefined')
             {
+
                 this.bufferId = tmpBuf.result.bufferId
                 this.tmpEndPage = this.tmpStartPage + this.tmpPageLimit
                 let tmpItems = await this.core.sql.buffer({start : this.tmpStartPage,end : this.tmpEndPage,bufferId : this.bufferId})  
+                console.log(...tmpItems.result.recordset)
                 for (let i = 0; i < tmpItems.result.recordset.length; i++) 
                 {
                     this.itemView.items.push(tmpItems.result.recordset[i])
@@ -159,7 +165,7 @@ export default class Sale extends React.PureComponent
         {
             let tmpQuery = 
             {
-                query : "SELECT GUID,CODE,NAME,VAT,PRICE,IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR FROM ITEMS_VW_02 " +
+                query : "SELECT GUID,CODE,NAME,VAT,ROUND(PRICE,3) AS PRICE,IMAGE,UNIT,UNIT_NAME,UNIT_FACTOR FROM ITEMS_VW_02 " +
                         "WHERE ((UPPER(CODE) LIKE UPPER('%' || ? || '%')) OR (UPPER(NAME) LIKE UPPER('%' || ? || '%'))) AND " +
                         "((MAIN_GRP = ?) OR (? = '')) ORDER BY NAME ASC LIMIT " + this.tmpPageLimit + " OFFSET " + this.tmpStartPage,
                 values : [this.txtSearch.value.replaceAll(' ','%'),this.txtSearch.value.replaceAll(' ','%'),this.cmbGroup.value,this.cmbGroup.value],
@@ -255,12 +261,11 @@ export default class Sale extends React.PureComponent
         {
             tmpDocOrders = {...this.docObj.docItems.empty}
         }
-
         tmpDocOrders.GUID = datatable.uuidv4()
         tmpDocOrders.DOC_GUID = this.docObj.dt()[0].GUID
         tmpDocOrders.TYPE = this.docObj.dt()[0].TYPE
         tmpDocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-        tmpDocOrders.LINE_NO = this.docLines.length
+        tmpDocOrders.LINE_NO = this.docLines.max("LINE_NO") + 1
         tmpDocOrders.REF = this.docObj.dt()[0].REF
         tmpDocOrders.REF_NO = this.docObj.dt()[0].REF_NO
         tmpDocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
@@ -494,6 +499,22 @@ export default class Sale extends React.PureComponent
             await dialog(tmpConfObj1);
 
             localStorage.removeItem("data")
+            
+            let tmpConfObj2 =
+            {
+                id:'msgCollection',showTitle:true,title:this.t("msgCollection.title"),showCloseButton:true,width:'500px',height:'200px',
+                button:[{id:"btn01",caption:this.t("msgCollection.btn01"),location:'before'},{id:"btn02",caption:this.t("msgCollection.btn02"),location:'after'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgCollection.msg")}</div>)
+            }
+
+            let pResult = await dialog(tmpConfObj2);
+            
+            if(pResult == 'btn01')
+            {
+                App.instance.pagePrm = {GUID:this.docObj.dt()[0].GUID}
+                App.instance.setState({page:'collection.js'})
+            }
+
         }
         else
         {
@@ -519,6 +540,55 @@ export default class Sale extends React.PureComponent
         await this.grdSale.dataRefresh({source:this.docLines});
         this.setState({isExecute:false})
         this.itemView.setItemAll()
+    }
+    cordovaPrint(pdfObj,pdfData)
+    {
+        pdfObj.eventBus.on('print',async()=>
+        {
+            let pdfSave = (base64Data) =>
+            {
+                return new Promise((resolve, reject) => 
+                {
+                    let binaryData = atob(base64Data);
+                    let length = binaryData.length;
+                    let buffer = new ArrayBuffer(length);
+                    let view = new Uint8Array(buffer);
+                    for (let i = 0; i < length; i++) 
+                    {
+                        view[i] = binaryData.charCodeAt(i);
+                    }
+            
+                    window.resolveLocalFileSystemURL(cordova.file.dataDirectory, function(directoryEntry) 
+                    {
+                        directoryEntry.getFile('pdf.pdf', { create: true }, function(fileEntry) 
+                        {
+                            fileEntry.createWriter(function(fileWriter) 
+                            {
+                                fileWriter.onwriteend = function() 
+                                {
+                                    resolve(fileEntry.nativeURL);
+                                };
+                                fileWriter.onerror = function(e) 
+                                {
+                                    reject(e);
+                                };
+            
+                                var blob = new Blob([view], { type: 'application/pdf' });
+                                fileWriter.write(blob);
+                            }, function(error) 
+                            {
+                                reject(error);
+                            });
+                        }, function(error) 
+                        {
+                            reject(error);
+                        });
+                    });
+                });
+            }
+            let tmpFilePath = await pdfSave(pdfData);
+            cordova.plugins.printer.print(tmpFilePath);
+        })
     }
     render()
     {
@@ -672,13 +742,15 @@ export default class Sale extends React.PureComponent
                                                             return
                                                         }
                                                        
-                                                        if(this.docType == 20)
+                                                        if(this.docType == 60)
                                                         {
                                                             this.orderSave()
+                                                            return;
                                                         }
-                                                        else if(this.docType == 60)
+                                                        else if(this.docType == 20)
                                                         {
                                                             this.factureSave()
+                                                            return;
                                                         }
 
                                                         let tmpConfObj =
@@ -699,6 +771,18 @@ export default class Sale extends React.PureComponent
                                                         }
                                                     }}>
                                                         <i className="fa-solid fa-floppy-disk fa-1x"></i>
+                                                    </NbButton>                                                    
+                                                </Item>
+                                                <Item location="after" locateInMenu="auto">
+                                                    <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"40px",width:"40px"}}
+                                                    onClick={async()=>
+                                                    {
+                                                        if(this.docObj.dt()[0].DOC_TYPE == 20)
+                                                        {
+                                                            this.popDesign.show()
+                                                        }
+                                                    }}>
+                                                        <i className="fa-solid fa-print fa-1x"></i>
                                                     </NbButton>                                                    
                                                 </Item>
                                                 <Item location="after" locateInMenu="auto">
@@ -1475,7 +1559,7 @@ export default class Sale extends React.PureComponent
                                 </Form>
                             </NdPopUp>
                         </div> 
-                         {/* EVRAK İNDİRİM POPUP */}
+                        {/* EVRAK İNDİRİM POPUP */}
                         <div>
                             <NdPopUp parent={this} id={"popDocDiscount"} 
                             visible={false}
@@ -1676,23 +1760,154 @@ export default class Sale extends React.PureComponent
                                 </Form>
                             </NdPopUp>
                         </div>
-                            {/* İNDİRİM POPUP
-                            <div>
-                            <NdPopUp parent={this} id={"popCriter"} 
+                        {/* DIZAYN SECIM POPUP */}
+                        <div>
+                            <NdPopUp parent={this} id={"popDesign"} 
                             visible={false}
                             showCloseButton={true}
                             showTitle={true}
-                            title={this.t("popCriter.title")}
+                            title={this.t("popDesign.title")}
                             container={"#root"} 
                             width={'500'}
-                            height={'500'}
+                            height={'280'}
                             position={{of:'#root'}}
                             >
-                                <div className="dx-field-value">
-                                    <RadioGroup items={this.priorities}  />
-                                </div>
+                                <Form colCount={1} height={'fit-content'}>
+                                    <Item>
+                                        <Label text={this.t("popDesign.design")} alignment="right" />
+                                        <NdSelectBox simple={true} parent={this} id="cmbDesignList" notRefresh = {true}
+                                        displayExpr="DESIGN_NAME"                       
+                                        valueExpr="TAG"
+                                        value=""
+                                        searchEnabled={true}
+                                        onValueChanged={(async()=>
+                                        {
+                                        }).bind(this)}
+                                        data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '15'"},sql:this.core.sql}}}
+                                        param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
+                                        access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
+                                        >
+                                            <Validator validationGroup={"frmSalesInvPrint" + this.tabIndex}>
+                                                <RequiredRule message={this.t("validDesign")} />
+                                            </Validator> 
+                                        </NdSelectBox>
+                                    </Item>
+                                    <Item>
+                                        <Label text={this.t("popDesign.lang")} alignment="right" />
+                                        <NdSelectBox simple={true} parent={this} id="cmbDesignLang" notRefresh = {true}
+                                        displayExpr="VALUE"                       
+                                        valueExpr="ID"
+                                        value=""
+                                        searchEnabled={true}
+                                        onValueChanged={(async()=>
+                                        {
+                                        }).bind(this)}
+                                        data={{source:[{ID:"FR",VALUE:"FR"},{ID:"DE",VALUE:"DE"},{ID:"TR",VALUE:"TR"}]}}
+                                        >
+                                            <Validator validationGroup={"frmSalesInvPrint" + this.tabIndex}>
+                                                <RequiredRule message={this.t("validDesign")} />
+                                            </Validator> 
+                                        </NdSelectBox>
+                                    </Item>
+                                    <Item>
+                                        <div className='row'>
+                                            <div className='col-6'>
+                                                <NdButton text={this.t("popDesign.btnPrint")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmSalesInvPrint" + this.tabIndex}
+                                                onClick={async (e)=>
+                                                {       
+                                                    if(e.validationGroup.validate().status == "valid")
+                                                    {
+                                                        this.setState({isExecute:true})
+                                                        let tmpLastSignature = await this.nf525.signatureDocDuplicate(this.docObj.dt()[0])
+                                                        let tmpExtra = {...this.extraObj.empty}
+                                                        tmpExtra.DOC = this.docObj.dt()[0].GUID
+                                                        tmpExtra.DESCRIPTION = ''
+                                                        tmpExtra.TAG = 'PRINT'
+                                                        tmpExtra.SIGNATURE = tmpLastSignature.SIGNATURE
+                                                        tmpExtra.SIGNATURE_SUM = tmpLastSignature.SIGNATURE_SUM
+                                                        this.extraObj.addEmpty(tmpExtra);
+                                                        await this.extraObj.save()
+
+                                                        let tmpQuery = 
+                                                        {
+                                                            query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG) ORDER BY DOC_DATE,LINE_NO " ,
+                                                            param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
+                                                            value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
+                                                        }
+
+                                                        this.setState({isExecute:true})                                                        
+                                                        let tmpData = await this.core.sql.execute(tmpQuery)                                                         
+                                                        this.setState({isExecute:false})                                                        
+                                                        //console.log(JSON.stringify(tmpData.result.recordset)) // BAK
+                                                        this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",async(pResult) => 
+                                                        {
+                                                            if(pResult.split('|')[0] != 'ERR')
+                                                            {     
+                                                                let base64ToUint8Array = (base64)=>
+                                                                {
+                                                                    let raw = atob(base64);
+                                                                    let uint8Array = new Uint8Array(raw.length);
+                                                                    for (let i = 0; i < raw.length; i++) 
+                                                                    {
+                                                                        uint8Array[i] = raw.charCodeAt(i);
+                                                                    }
+                                                                    return uint8Array;
+                                                                }
+
+                                                                this.popPrintView.show()
+
+                                                                document.getElementById('printView').innerHTML = '<iframe id="pdfFrame" style="width:100%;height:100%;"></iframe>'
+                                                                let pdfViewerFrame = document.getElementById("pdfFrame");
+                                                                let tmpBase64 = base64ToUint8Array(pResult.split('|')[1])
+
+                                                                pdfViewerFrame.onload = (async function() 
+                                                                {
+                                                                    await pdfViewerFrame.contentWindow.PDFViewerApplication.open(tmpBase64);
+                                                                    if(App.instance.core.local.platform == 'cordova')
+                                                                    {
+                                                                        this.cordovaPrint(pdfViewerFrame.contentWindow.PDFViewerApplication,pResult.split('|')[1])
+                                                                    }
+                                                                }).bind(this)
+                                                                pdfViewerFrame.setAttribute("src","./lib/pdf/web/viewer.html?file=");
+                                                            }
+                                                        });
+                                                        this.popDesign.hide();  
+                                                    }
+                                                }}/>
+                                            </div>
+                                            <div className='col-6'>
+                                                <NdButton text={this.t("popDesign.btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                                onClick={()=>
+                                                {
+                                                    this.popDesign.hide();  
+                                                }}/>
+                                            </div>
+                                        </div>
+                                    </Item>
+                                </Form>
                             </NdPopUp>
-                        </div>  */}
+                        </div>
+                        {/* PRINTVIEW POPUP */}
+                        <div>
+                            <NbPopUp id={"popPrintView"} parent={this} title={""} fullscreen={true}>
+                                <div className='row' style={{paddingTop:"10px",paddingBottom:"10px"}}>
+                                    <div className='col-12' align={"right"}>
+                                        <Toolbar>
+                                            <Item location="after" locateInMenu="auto">
+                                                <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"40px",width:"40px"}}
+                                                onClick={()=>
+                                                {
+                                                    this.popPrintView.hide();
+                                                }}>
+                                                    <i className="fa-solid fa-xmark fa-1x"></i>
+                                                </NbButton>
+                                            </Item>
+                                        </Toolbar>
+                                    </div>
+                                </div>
+                                <div id={"printView"}></div>
+                            </NbPopUp>
+                        </div>
                     </ScrollView>
                 </div>
             </div>

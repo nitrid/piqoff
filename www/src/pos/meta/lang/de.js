@@ -616,6 +616,13 @@ export const langDe =
         btn02 : "Abbrechen",
         btn03 : "Beleg per E-Mail senden"
     },
+    msgMailPrintAlert:
+    {
+    title: "Warnung",
+    msg: "Möchten Sie eine E-Mail senden?",
+    btn01: "OK",
+    btn02: "Abbrechen"
+    },
     mailPopup : 
     {
         title : "E-Mail-Versand",
