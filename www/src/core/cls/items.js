@@ -270,12 +270,19 @@ export class itemsCls
             
             if(this.ds.get('ITEMS').length > 0)
             {
+                console.log("1 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
                 await this.itemUnit.load({ITEM_GUID:this.ds.get('ITEMS')[0].GUID})
+                console.log("2 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
                 await this.itemPrice.load({ITEM_GUID:this.ds.get('ITEMS')[0].GUID,TYPE:0})
+                console.log("3 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
                 await this.itemBarcode.load({ITEM_GUID:this.ds.get('ITEMS')[0].GUID})
+                console.log("4 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
                 await this.itemMultiCode.load({ITEM_GUID:this.ds.get('ITEMS')[0].GUID})
+                console.log("5 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
                 await this.itemImage.load({ITEM_GUID:this.ds.get('ITEMS')[0].GUID})
+                console.log("6 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
                 await this.itemPriceLog.load({ITEM_GUID:this.ds.get('ITEMS')[0].GUID})
+                console.log("7 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
             }
             resolve(this.ds.get('ITEMS'));    
         });

@@ -616,6 +616,13 @@ export const langIt =
         btn02: "Annulla",
         btn03: "Invia per Email"
     },
+    msgMailPrintAlert:
+    {
+        title: "Avviso",
+        msg: "Desideri inviare una e-mail?",
+        btn01: "Ok",
+        btn02: "Annulla"
+    },
     mailPopup: 
     {
         title: "Invio Email",

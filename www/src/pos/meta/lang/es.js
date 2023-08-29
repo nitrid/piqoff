@@ -616,6 +616,13 @@ export const langEs =
         btn02: "Cancelar",
         btn03: "Enviar por correo"
     },
+    msgMailPrintAlert:
+    {
+        title: "Advertencia",
+        msg: "Le gustaría enviar un correo electrónico?",
+        btn01: "Aceptar",
+        btn02: "Cancelar"
+    },
     mailPopup: 
     {
         title: "Envío de Correo",

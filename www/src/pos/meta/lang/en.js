@@ -616,6 +616,13 @@ export const langEn =
         btn02: "Cancel",
         btn03: "Send via E-Mail"
     },
+    msgMailPrintAlert:
+    {
+        title: "Warning",
+        msg: "Would you like to send an email?",
+        btn01: "OK",
+        btn02: "Cancel"
+    },
     mailPopup:
     {
         title: "Send Sales Receipt",

@@ -632,7 +632,23 @@ export default class posDoc extends React.PureComponent
     }
     async getItem(pCode)
     {
-       
+        //SATIŞ İÇERİSİNDE ÜRÜN BUL
+        if(this.btnItemSearch.lock)
+        {
+            let tmpItemSrcData = this.posObj.posSale.dt().where({INPUT:pCode})
+
+            if(tmpItemSrcData.length > 0)
+            {
+                this.grdList.devGrid.navigateToRow(tmpItemSrcData[0])
+                await this.core.util.waitUntil(200)
+                this.grdList.devGrid.selectRowsByIndexes(this.grdList.devGrid.getRowIndexByKey(tmpItemSrcData[0]))    
+            }
+
+            this.txtBarcode.value = "";
+            this.btnItemSearch.setUnLock({backgroundColor:"#0dcaf0",borderColor:"#0dcaf0",height:"70px",width:"100%"})
+            return
+        }
+
         this.txtBarcode.value = ""; 
         let tmpQuantity = 1
         let tmpPrice = 0          
@@ -1234,14 +1250,21 @@ export default class posDoc extends React.PureComponent
                     }, 100);                    
                 }
             }            
-            //console.log("100 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS")) 
             //HER EKLEME İŞLEMİNDEN SONRA İLK SATIR SEÇİLİYOR.
-            setTimeout(async() => 
+            await this.core.util.waitUntil(300)
+            this.grdList.devGrid.getDataSource().store().load().done((res)=>
             {
-                this.grdList.devGrid.selectRowsByIndexes(0)
-                this.grdList.devGrid.option('focusedRowIndex',0)
-            }, 100);
-            
+                let tmpRes = res.data.sort(function(a, b) 
+                {
+                    var dateA = new Date(a.LDATE);
+                    var dateB = new Date(b.LDATE);
+                    return dateB - dateA;
+                });
+                
+                this.grdList.devGrid.navigateToRow(tmpRes[0])
+                this.grdList.devGrid.selectRows(tmpRes[0],false)
+            })
+
             if(typeof pSave == 'undefined' || pSave)
             {                
                 let tmpClose = await this.saleClosed(true,tmpPayRest,tmpPayChange)
@@ -1459,7 +1482,6 @@ export default class posDoc extends React.PureComponent
                     })
                 }, 500);
                 
-
                 this.posObj.dt()[0].STATUS = 1
                 //***** TICKET İMZALAMA *****/
                 let tmpSignedData = await this.nf525.signatureSale(this.posObj.dt()[0],this.posObj.posSale.dt())                
@@ -1550,7 +1572,7 @@ export default class posDoc extends React.PureComponent
                 //POS_PROMO TABLOSUNA KAYIT EDİLİYOR.
                 await this.posPromoObj.save()
                 //******************************** */
-                if(typeof pPrint == 'undefined' || pPrint)
+                if((typeof pPrint == 'undefined' || pPrint) && this.prmObj.filter({ID:'SaleClosePrint',TYPE:0}).getValue() == true)
                 {       
                     let tmpType = 'Fis'  
                     let tmpFactCert = ''                  
@@ -1680,9 +1702,7 @@ export default class posDoc extends React.PureComponent
                             }
 
                             this.mailPopup.tmpData = tmpData;
-                            await this.mailPopup.show().then(async (e) =>
-                            {
-                            });
+                            await this.mailPopup.show()
                         }
                     }
                     else
@@ -2798,7 +2818,6 @@ export default class posDoc extends React.PureComponent
             }
             this.core.socket.emit('nf525',{cmd:"jet",data:tmpJetData})
         }
-
     }
     async factureInsert(pData,pSaleData)
     {    
@@ -2842,6 +2861,114 @@ export default class posDoc extends React.PureComponent
 
             resolve([])
         })
+    }
+    async rePrint(pPosDt,pPosSaleDt,pPosPayDt,pPosPromoDt)
+    {
+        let tmpQuery = 
+        {
+            query : "SELECT COUNT(TAG) AS PRINT_COUNT FROM POS_EXTRA WHERE POS_GUID = @POS_GUID AND TAG = @TAG", 
+            param : ['POS_GUID:string|50','TAG:string|25'],
+            value : [pPosDt[0].GUID,"REPRINT"]
+        }
+
+        let tmpPrintCount = (await this.core.sql.execute(tmpQuery)).result.recordset[0].PRINT_COUNT
+        
+        if(tmpPrintCount < 5)
+        {
+            let tmpRePrintResult = await this.popRePrintDesc.show()
+
+            if(typeof tmpRePrintResult != 'undefined')
+            {
+                let tmpDupSignature = await this.nf525.signaturePosDuplicate(pPosDt[0])
+                let tmpDupSign = ''
+
+                if(tmpDupSignature != '')
+                {
+                    tmpDupSign = tmpDupSignature.SIGNATURE.substring(2,3) + tmpDupSignature.SIGNATURE.substring(6,7) + tmpDupSignature.SIGNATURE.substring(12,13) + tmpDupSignature.SIGNATURE.substring(18,19)
+                }
+
+                let tmpInsertQuery = 
+                {
+                    query : "EXEC [dbo].[PRD_POS_EXTRA_INSERT] " + 
+                            "@CUSER = @PCUSER, " + 
+                            "@TAG = @PTAG, " +
+                            "@POS_GUID = @PPOS_GUID, " +
+                            "@LINE_GUID = @PLINE_GUID, " +
+                            "@DATA =@PDATA, " +
+                            "@DATA_EXTRA1 = @PDATA_EXTRA1, " +
+                            "@APP_VERSION = @PAPP_VERSION, " +
+                            "@DESCRIPTION = @PDESCRIPTION ", 
+                    param : ['PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|max','PDATA_EXTRA1:string|max','PAPP_VERSION:string|25','PDESCRIPTION:string|max'],
+                    value : [pPosDt[0].CUSER,"REPRINT",pPosDt[0].GUID,"00000000-0000-0000-0000-000000000000",tmpDupSignature.SIGNATURE,tmpDupSignature.SIGNATURE_SUM,this.core.appInfo.version,tmpRePrintResult]
+                }
+
+                await this.core.sql.execute(tmpInsertQuery)
+                let tmpData = 
+                {
+                    pos : pPosDt,
+                    possale : pPosSaleDt,
+                    pospay : pPosPayDt,
+                    pospromo : pPosPromoDt,
+                    firm : this.firm,
+                    special : 
+                    {
+                        type : 'Fis',
+                        ticketCount : 0,
+                        reprint : tmpPrintCount + 1,
+                        repas : 0,
+                        factCertificate : '',
+                        dupCertificate : this.core.appInfo.name + " version : " + this.core.appInfo.version + " - " + this.core.appInfo.certificate + " - " + tmpDupSign,
+                        customerUsePoint : Math.floor(pPosDt[0].LOYALTY * 100),
+                        customerPoint : (pPosDt[0].CUSTOMER_POINT + Math.floor(pPosDt[0].LOYALTY * 100)) - Math.floor(pPosDt[0].TOTAL),
+                        customerGrowPoint : pPosDt[0].CUSTOMER_POINT - Math.floor(pPosDt[0].TOTAL)
+                    }
+                }
+
+                this.sendJet({CODE:"155",NAME:"Duplicata ticket imprimé."}) //// Duplicate fiş yazdırıldı.
+
+                //YAZDIRMA İŞLEMİNDEN ÖNCE KULLANICIYA SORULUYOR
+                let tmpConfObj =
+                {
+                    id:'msgMailPrintAlert',showTitle:true,title:this.lang.t("msgMailPrintAlert.title"),showCloseButton:true,width:'500px',height:'250px',
+                    button:[{id:"btn01",caption:this.lang.t("msgMailPrintAlert.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgMailPrintAlert.btn02"),location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgMailPrintAlert.msg")}</div>)
+                }
+                let pResult = await dialog(tmpConfObj);
+                if(pResult == 'btn01')
+                {
+                    if(this.posObj.dt()[0].CUSTOMER_GUID != '00000000-0000-0000-0000-000000000000')
+                    { 
+                        let tmpQuery = 
+                        {
+                            query :"SELECT EMAIL FROM CUSTOMER_VW_02 WHERE GUID = @GUID",
+                            param:  ['GUID:string|50'],
+                            value:  [this.posObj.dt()[0].CUSTOMER_GUID]
+                        }
+                        let tmpMailData = await this.core.sql.execute(tmpQuery) 
+                        if(tmpMailData.result.recordset.length > 0)
+                        {
+                            this.txtMail.value = tmpMailData.result.recordset[0].EMAIL
+                        }
+                    }
+
+                    this.mailPopup.tmpData = tmpData;
+                    await this.mailPopup.show()
+                    return
+                }
+                
+                await this.print(tmpData,0)
+            } 
+        }
+        else
+        {
+            let tmpConfObj =
+            {
+                id:'msgRePrint',showTitle:true,title:this.lang.t("msgRePrint.title"),showCloseButton:true,width:'500px',height:'200px',
+                button:[{id:"btn01",caption:this.lang.t("msgRePrint.btn01"),location:'after'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgRePrint.msg")}</div>)
+            }
+            await dialog(tmpConfObj);
+        }
     }
     render()
     {
@@ -3143,7 +3270,7 @@ export default class posDoc extends React.PureComponent
                                 loadPanel={{enabled:false}}
                                 sorting={{ mode: 'none' }}
                                 onRowPrepared={(e)=>
-                                {
+                                {                                    
                                     if(e.rowType == "header")
                                     {
                                         e.rowElement.style.fontWeight = "bold";    
@@ -3788,15 +3915,16 @@ export default class posDoc extends React.PureComponent
                                         <div className="row">                                            
                                             <div className="col-12 px-1">
                                                 <NbButton id={"btnUp"} parent={this} className="form-group btn btn-success btn-block my-1" style={{height:"70px",width:"100%"}}
-                                                onClick={()=>
+                                                onClick={async()=>
                                                 {
                                                     if(this.grdList.devGrid.getSelectedRowKeys().length > 0)
                                                     {
-                                                        let tmpRowIndex = this.grdList.devGrid.getRowIndexByKey(this.grdList.devGrid.getSelectedRowKeys()[0]);
+                                                        let tmpRowIndex = this.posObj.posSale.dt().getIndexByKey(this.grdList.devGrid.getSelectedRowKeys()[0]);
+                                                                                                                
                                                         if(tmpRowIndex > 0)
                                                         {
-                                                            this.grdList.devGrid.selectRowsByIndexes(tmpRowIndex - 1)
-                                                            this.grdList.devGrid.navigateToRow(this.grdList.devGrid.getSelectedRowKeys()[0])
+                                                            this.grdList.devGrid.navigateToRow(this.posObj.posSale.dt()[tmpRowIndex - 1])
+                                                            this.grdList.devGrid.selectRows(this.posObj.posSale.dt()[tmpRowIndex - 1],false)
                                                         }
                                                     }
                                                 }}>
@@ -3808,15 +3936,15 @@ export default class posDoc extends React.PureComponent
                                         <div className="row">
                                             <div className="col-12 px-1">
                                                 <NbButton id={"btnDown"} parent={this} className="form-group btn btn-success btn-block my-1" style={{height:"70px",width:"100%"}}
-                                                onClick={()=>
+                                                onClick={async()=>
                                                 {
                                                     if(this.grdList.devGrid.getSelectedRowKeys().length > 0)
                                                     {
-                                                        let tmpRowIndex = this.grdList.devGrid.getRowIndexByKey(this.grdList.devGrid.getSelectedRowKeys()[0]);
-                                                        if(tmpRowIndex < (this.grdList.devGrid.totalCount() - 1))
+                                                        let tmpRowIndex = this.posObj.posSale.dt().getIndexByKey(this.grdList.devGrid.getSelectedRowKeys()[0]);
+                                                        if(tmpRowIndex < (this.posObj.posSale.dt().length - 1))
                                                         {
-                                                            this.grdList.devGrid.selectRowsByIndexes(tmpRowIndex + 1)
-                                                            this.grdList.devGrid.navigateToRow(this.grdList.devGrid.getSelectedRowKeys()[0])
+                                                            this.grdList.devGrid.navigateToRow(this.posObj.posSale.dt()[tmpRowIndex + 1])
+                                                            this.grdList.devGrid.selectRows(this.posObj.posSale.dt()[tmpRowIndex + 1],false)
                                                         }
                                                     }
                                                 }}>
@@ -3958,35 +4086,21 @@ export default class posDoc extends React.PureComponent
                                             <i className="text-white fa-solid fa-retweet" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
-                                    {/* Order List */}
-                                    <div className="col px-1">
-                                        <NbButton id={"btnOrderList"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt"}}
-                                        onClick={async()=>
+                                    {/* Item Search */}
+                                    <div className="col-2 px-1">
+                                        <NbButton id={"btnItemSearch"} parent={this} className={"form-group btn btn-info btn-block my-1"} style={{height:"70px",width:"100%"}}
+                                        onClick={()=>
                                         {
-                                            //LOCAL DB İÇİN YAPILDI - ALI KEMAL KARACA 24.08.2022
-                                            if(this.core.offline)
+                                            if(this.btnItemSearch.lock)
                                             {
-                                                let tmpConfObj =
-                                                {
-                                                    id:'msgOfflineWarning',showTitle:true,title:this.lang.t("msgOfflineWarning.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:this.lang.t("msgOfflineWarning.btn01"),location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgOfflineWarning.msg")}</div>)
-                                                }
-                                                await dialog(tmpConfObj);
-                                                return
+                                                this.btnItemSearch.setUnLock({backgroundColor:"#0dcaf0",borderColor:"#0dcaf0",height:"70px",width:"100%"})
                                             }
-                                                      
-                                            let tmpOrderList = new datatable();
-                                            tmpOrderList.selectCmd = 
+                                            else
                                             {
-                                                query : "SELECT REF,REF_NO,DOC_DATE,INPUT_CODE,INPUT_NAME,DOC_GUID,SUM(TOTAL) AS TOTAL " +
-                                                        "FROM DOC_ORDERS_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 62 AND CLOSED < 2 GROUP BY REF,REF_NO,DOC_DATE,INPUT_CODE,INPUT_NAME,DOC_GUID ",
+                                                this.btnItemSearch.setLock({backgroundColor:"#dc3545",borderColor:"#dc3545",height:"70px",width:"100%"})
                                             }
-                                            await tmpOrderList.refresh()
-                                            await this.grdPopOrderList.dataRefresh({source:tmpOrderList});
-                                            this.popOrderList.show();
                                         }}>
-                                            <i className="text-white fa-solid fa-business-time" style={{fontSize: "24px"}} />
+                                            <i className="text-white fa-solid fa-magnifying-glass-chart" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
                                     {/* Blank */}
@@ -4001,9 +4115,31 @@ export default class posDoc extends React.PureComponent
                                     <div className="col px-1">
                                         <NbButton id={"btn"} parent={this} className="form-group btn btn-secondary btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt"}}></NbButton>
                                     </div>
-                                    {/* Blank */}
+                                    {/* Advance */}
                                     <div className="col px-1">
-                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-secondary btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt"}}></NbButton>
+                                        <NbButton id={"btnAdvance"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}
+                                        onClick={async()=>
+                                        {
+                                            //LOCAL DB İÇİN YAPILDI - ALI KEMAL KARACA 24.08.2022
+                                            if(this.core.offline)
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgOfflineWarning',showTitle:true,title:this.lang.t("msgOfflineWarning.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.lang.t("msgOfflineWarning.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgOfflineWarning.msg")}</div>)
+                                                }
+                                                await dialog(tmpConfObj);
+                                                return
+                                            }
+
+                                            this.rbtnAdvanceType.value = 0
+                                            this.txtPopAdvance.value = 0
+                                            this.txtPopAdvance.newStart = true
+                                            this.popAdvance.show()
+                                        }}>
+                                            <i className="text-white fa-solid fa-circle-dollar-to-slot" style={{fontSize: "24px"}} />
+                                        </NbButton>
                                     </div>
                                 </div>
                                 {/* Line 6 */}
@@ -4070,9 +4206,33 @@ export default class posDoc extends React.PureComponent
                                     <div className="col px-1">
                                         <NbButton id={"btn"} parent={this} className="form-group btn btn-secondary btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt"}}></NbButton>
                                     </div>
-                                    {/* Blank */}
+                                    {/* Formation */}
                                     <div className="col px-1">
-                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-secondary btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt"}}></NbButton>
+                                        <NbButton id={"btnFormation"} parent={this} className={this.state.isFormation == false ? "form-group btn btn-info btn-block my-1" : "form-group btn btn-danger btn-block my-1"} style={{height:"70px",width:"100%",fontSize:"18pt",color:"white"}}
+                                        onClick={async()=>
+                                        {             
+                                            let tmpResult = await acsDialog({id:"AcsDialog",parent:this,type:0})
+
+                                            if(!tmpResult)
+                                            {
+                                                return
+                                            }
+
+                                            if(this.state.isFormation == false)
+                                            {
+                                                this.sendJet({CODE:"100",NAME:"Mode formation lancé."}) ////Formasyon başladı.
+                                            }
+                                            else
+                                            {
+                                                this.sendJet({CODE:"105",NAME:"Mode formation terminé."}) //// Formasyon sonlandı.
+                                            }
+
+                                            this.setState({isFormation:this.state.isFormation ? false : true})
+                                            this.formation.value = this.state.isFormation ? 'FORMATION' : ''
+                                            this.init()
+                                        }}>
+                                            <i className="fa-solid fa-highlighter"></i>
+                                        </NbButton>
                                     </div>
                                 </div>
                                 {/* Line 7 */}
@@ -4146,37 +4306,46 @@ export default class posDoc extends React.PureComponent
                                             <i className="text-white fa-solid fa-user-plus" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
-                                    {/* Formation */}
+                                    {/* Customer List */}
                                     <div className="col px-1">
-                                        <NbButton id={"btnFormation"} parent={this} className={this.state.isFormation == false ? "form-group btn btn-info btn-block my-1" : "form-group btn btn-danger btn-block my-1"} style={{height:"70px",width:"100%",fontSize:"18pt",color:"white"}}
+                                        <NbButton id={"btnCustomerList"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}
+                                        onClick={()=>
+                                        {                             
+                                            this.popCustomerList.show();
+                                        }}>
+                                            <i className="text-white fa-solid fa-users" style={{fontSize: "24px"}} />
+                                        </NbButton>
+                                    </div>                                
+                                    {/* Order List */}
+                                    <div className="col px-1">
+                                        <NbButton id={"btnOrderList"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt"}}
                                         onClick={async()=>
-                                        {             
-                                            let tmpResult = await acsDialog({id:"AcsDialog",parent:this,type:0})
-
-                                            if(!tmpResult)
+                                        {
+                                            //LOCAL DB İÇİN YAPILDI - ALI KEMAL KARACA 24.08.2022
+                                            if(this.core.offline)
                                             {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgOfflineWarning',showTitle:true,title:this.lang.t("msgOfflineWarning.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.lang.t("msgOfflineWarning.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgOfflineWarning.msg")}</div>)
+                                                }
+                                                await dialog(tmpConfObj);
                                                 return
                                             }
-
-                                            if(this.state.isFormation == false)
+                                                      
+                                            let tmpOrderList = new datatable();
+                                            tmpOrderList.selectCmd = 
                                             {
-                                                this.sendJet({CODE:"100",NAME:"Mode formation lancé."}) ////Formasyon başladı.
+                                                query : "SELECT REF,REF_NO,DOC_DATE,INPUT_CODE,INPUT_NAME,DOC_GUID,SUM(TOTAL) AS TOTAL " +
+                                                        "FROM DOC_ORDERS_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 62 AND CLOSED < 2 GROUP BY REF,REF_NO,DOC_DATE,INPUT_CODE,INPUT_NAME,DOC_GUID ",
                                             }
-                                            else
-                                            {
-                                                this.sendJet({CODE:"105",NAME:"Mode formation terminé."}) //// Formasyon sonlandı.
-                                            }
-
-                                            this.setState({isFormation:this.state.isFormation ? false : true})
-                                            this.formation.value = this.state.isFormation ? 'FORMATION' : ''
-                                            this.init()
+                                            await tmpOrderList.refresh()
+                                            await this.grdPopOrderList.dataRefresh({source:tmpOrderList});
+                                            this.popOrderList.show();
                                         }}>
-                                            <i className="fa-solid fa-highlighter"></i>
+                                            <i className="text-white fa-solid fa-business-time" style={{fontSize: "24px"}} />
                                         </NbButton>
-                                    </div>
-                                    {/* Blank */}
-                                    <div className="col px-1">
-                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-secondary btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt"}}></NbButton>
                                     </div>
                                     {/* Offline */}
                                     <div className="col px-1">
@@ -4273,41 +4442,58 @@ export default class posDoc extends React.PureComponent
                                             <i className="text-white fa-solid fa-print" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
-                                    {/* Advance */}
+                                    {/* Print Last */}
                                     <div className="col px-1">
-                                        <NbButton id={"btnAdvance"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}
+                                        <NbButton id={"btnLastPrint"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}
                                         onClick={async()=>
                                         {
-                                            //LOCAL DB İÇİN YAPILDI - ALI KEMAL KARACA 24.08.2022
-                                            if(this.core.offline)
-                                            {
-                                                let tmpConfObj =
-                                                {
-                                                    id:'msgOfflineWarning',showTitle:true,title:this.lang.t("msgOfflineWarning.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:this.lang.t("msgOfflineWarning.btn01"),location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgOfflineWarning.msg")}</div>)
-                                                }
-                                                await dialog(tmpConfObj);
-                                                return
-                                            }
+                                            let tmpLastPosDt = new datatable();
+                                            let tmpLastPosSaleDt = new datatable();
+                                            let tmpLastPosPayDt = new datatable();
+                                            let tmpLastPosPromoDt = new datatable();  
 
-                                            this.rbtnAdvanceType.value = 0
-                                            this.txtPopAdvance.value = 0
-                                            this.txtPopAdvance.newStart = true
-                                            this.popAdvance.show()
+                                            tmpLastPosDt.selectCmd = 
+                                            {
+                                                query:  "SELECT TOP 1 *,CONVERT(NVARCHAR,LDATE,104) + '-' + CONVERT(NVARCHAR,LDATE,108) AS CONVERT_DATE, " +
+                                                        "SUBSTRING(CONVERT(NVARCHAR(50),GUID),20,36) AS REF_NO " + 
+                                                        "FROM POS_" + (this.state.isFormation ? 'FRM_' : '') + "VW_01 WHERE LUSER = @LUSER AND STATUS = 1 ORDER BY LDATE DESC",
+                                                param:  ["LUSER:string|25"],
+                                                value:  [this.user.CODE]
+                                            }
+                                            await tmpLastPosDt.refresh()
+                                            if(tmpLastPosDt.length > 0)
+                                            {
+                                                tmpLastPosSaleDt.selectCmd = 
+                                                {
+                                                    query:  "SELECT * FROM POS_SALE_VW_01 WHERE POS_GUID = @POS_GUID ORDER BY LDATE DESC",
+                                                    param:  ["POS_GUID:string|50"],
+                                                    value:  [tmpLastPosDt[0].GUID]
+                                                }                                                
+                                                await tmpLastPosSaleDt.refresh()
+                                                tmpLastPosPayDt.selectCmd = 
+                                                {
+                                                    query:  "SELECT * FROM POS_PAYMENT_VW_01 WHERE POS_GUID = @POS_GUID ORDER BY LDATE DESC",
+                                                    param:  ["POS_GUID:string|50"],
+                                                    value:  [tmpLastPosDt[0].GUID]
+                                                }
+                                                await tmpLastPosPayDt.refresh()
+                                                tmpLastPosPromoDt.selectCmd = 
+                                                {
+                                                    query : "SELECT * FROM [dbo].[POS_PROMO_VW_01] WHERE POS_GUID = @POS_GUID",
+                                                    param : ['POS_GUID:string|50'],
+                                                    value:  [tmpLastPosDt[0].GUID]
+                                                } 
+                                                await tmpLastPosPromoDt.refresh()
+                                                
+                                                this.rePrint(tmpLastPosDt,tmpLastPosSaleDt,tmpLastPosPayDt,tmpLastPosPromoDt)
+                                            }
                                         }}>
-                                            <i className="text-white fa-solid fa-circle-dollar-to-slot" style={{fontSize: "24px"}} />
+                                            <i className="text-white fa-solid fa-sheet-plastic" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
-                                    {/* Customer List */}
+                                    {/* Blank */}
                                     <div className="col px-1">
-                                        <NbButton id={"btnCustomerList"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}
-                                        onClick={()=>
-                                        {                             
-                                            this.popCustomerList.show();
-                                        }}>
-                                            <i className="text-white fa-solid fa-users" style={{fontSize: "24px"}} />
-                                        </NbButton>
+                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-secondary btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt"}}></NbButton>
                                     </div>
                                     {/* Calculator */}
                                     <div className="col-2 px-1">
@@ -5610,251 +5796,69 @@ export default class posDoc extends React.PureComponent
                         <div className="row pb-1">
                             <div className="offset-8 col-4">
                                 <div className="row px-2">
-                                        <div className="col-2 p-1">
+                                    <div className="col-2 p-1">
+                                    
+                                    </div>
+                                    <div className="col-2 p-1">
                                         
-                                        </div>
-                                        <div className="col-2 p-1">
+                                    </div>
+                                    {/* btnLastSaleSendMail */}
+                                    <div className="col-2 p-1">
+                                        <NbButton id={"btnLastSaleSendMail"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"50px",width:"100%"}}
+                                        onClick={async()=>
+                                        {
+                                            let tmpLastPos = new datatable();
+                                            tmpLastPos.import(this.grdLastPos.devGrid.getSelectedRowKeys())
                                             
-                                        </div>
-                                        {/* btnLastSaleSendMail */}
-                                        <div className="col-2 p-1">
-                                            <NbButton id={"btnLastSaleSendMail"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"50px",width:"100%"}}
-                                            onClick={async()=>
+                                            if(tmpLastPos.length > 0)
+                                            {
+                                                let tmpDupSignature = await this.nf525.signaturePosFactDuplicate(tmpLastPos[0])
+                                                let tmpDupSign = ''
+
+                                                if(tmpDupSignature != '')
+                                                {
+                                                    tmpDupSign = tmpDupSignature.SIGNATURE.substring(2,3) + tmpDupSignature.SIGNATURE.substring(6,7) + tmpDupSignature.SIGNATURE.substring(12,13) + tmpDupSignature.SIGNATURE.substring(18,19)
+                                                }
+                                                let tmpData = 
+                                                {
+                                                    pos : tmpLastPos,
+                                                    possale : this.lastPosSaleDt,
+                                                    pospay : this.lastPosPayDt,
+                                                    pospromo : this.lastPosPromoDt,
+                                                    firm : this.firm,
+                                                    special : 
+                                                    {
+                                                        type : tmpLastPos[0].FACT_REF == 0 ? 'Fis' : 'Fatura',
+                                                        ticketCount : 0,
+                                                        reprint :  1,
+                                                        repas : 0,
+                                                        factCertificate : '',
+                                                        dupCertificate : this.core.appInfo.name + " version : " + this.core.appInfo.version + " - " + this.core.appInfo.certificate + " - " + tmpDupSign,
+                                                        customerUsePoint : Math.floor(tmpLastPos[0].LOYALTY * 100),
+                                                        customerPoint : (tmpLastPos[0].CUSTOMER_POINT + Math.floor(tmpLastPos[0].LOYALTY * 100)) - Math.floor(tmpLastPos[0].TOTAL),
+                                                        customerGrowPoint : tmpLastPos[0].CUSTOMER_POINT - Math.floor(tmpLastPos[0].TOTAL)
+                                                    }
+                                                }
+
+                                                this.mailPopup.tmpData = tmpData;
+                                                await this.mailPopup.show().then(async (e) =>
+                                                {
+                                                });
+                                            }
+                                        }}>
+                                            <i className="text-white fa-solid fa-envelope" style={{fontSize: "16px"}} />
+                                        </NbButton>
+                                    </div>
+                                    {/* btnPopLastSaleTRest */}
+                                    <div className="col-2 p-1">
+                                        <NbButton id={"btnPopLastSaleTRest"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"50px",width:"100%"}}
+                                        onClick={async ()=>
+                                        {
+                                            let tmpResult = await this.popNumber.show(this.lang.t("qunatity"),0)
+                                            if(typeof tmpResult != 'undefined' && tmpResult != '')
                                             {
                                                 let tmpLastPos = new datatable();
                                                 tmpLastPos.import(this.grdLastPos.devGrid.getSelectedRowKeys())
-                                                
-                                                if(tmpLastPos.length > 0)
-                                                {
-                                                    let tmpDupSignature = await this.nf525.signaturePosFactDuplicate(tmpLastPos[0])
-                                                    let tmpDupSign = ''
-
-                                                    if(tmpDupSignature != '')
-                                                    {
-                                                        tmpDupSign = tmpDupSignature.SIGNATURE.substring(2,3) + tmpDupSignature.SIGNATURE.substring(6,7) + tmpDupSignature.SIGNATURE.substring(12,13) + tmpDupSignature.SIGNATURE.substring(18,19)
-                                                    }
-                                                    let tmpData = 
-                                                    {
-                                                        pos : tmpLastPos,
-                                                        possale : this.lastPosSaleDt,
-                                                        pospay : this.lastPosPayDt,
-                                                        pospromo : this.lastPosPromoDt,
-                                                        firm : this.firm,
-                                                        special : 
-                                                        {
-                                                            type : tmpLastPos[0].FACT_REF == 0 ? 'Fis' : 'Fatura',
-                                                            ticketCount : 0,
-                                                            reprint :  1,
-                                                            repas : 0,
-                                                            factCertificate : '',
-                                                            dupCertificate : this.core.appInfo.name + " version : " + this.core.appInfo.version + " - " + this.core.appInfo.certificate + " - " + tmpDupSign,
-                                                            customerUsePoint : Math.floor(tmpLastPos[0].LOYALTY * 100),
-                                                            customerPoint : (tmpLastPos[0].CUSTOMER_POINT + Math.floor(tmpLastPos[0].LOYALTY * 100)) - Math.floor(tmpLastPos[0].TOTAL),
-                                                            customerGrowPoint : tmpLastPos[0].CUSTOMER_POINT - Math.floor(tmpLastPos[0].TOTAL)
-                                                        }
-                                                    }
-
-                                                    this.mailPopup.tmpData = tmpData;
-                                                    await this.mailPopup.show().then(async (e) =>
-                                                    {
-                                                    });
-                                                }
-                                            }}>
-                                                <i className="text-white fa-solid fa-envelope" style={{fontSize: "16px"}} />
-                                            </NbButton>
-                                        </div>
-                                        {/* btnPopLastSaleTRest */}
-                                        <div className="col-2 p-1">
-                                            <NbButton id={"btnPopLastSaleTRest"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"50px",width:"100%"}}
-                                            onClick={async ()=>
-                                            {
-                                                let tmpResult = await this.popNumber.show(this.lang.t("qunatity"),0)
-                                                if(typeof tmpResult != 'undefined' && tmpResult != '')
-                                                {
-                                                    let tmpLastPos = new datatable();
-                                                    tmpLastPos.import(this.grdLastPos.devGrid.getSelectedRowKeys())
-                                                    if(tmpLastPos.length > 0)
-                                                    {
-                                                        let tmpQuery = 
-                                                        {
-                                                            query : "SELECT COUNT(TAG) AS PRINT_COUNT FROM POS_EXTRA WHERE POS_GUID = @POS_GUID AND TAG = @TAG", 
-                                                            param : ['POS_GUID:string|50','TAG:string|25'],
-                                                            value : [tmpLastPos[0].GUID,"REPRINT"]
-                                                        }
-        
-                                                        let tmpPrintCount = (await this.core.sql.execute(tmpQuery)).result.recordset[0].PRINT_COUNT
-                                                        if(tmpPrintCount < 2)
-                                                        {
-                                                            let tmpRePrintResult = await this.popRePrintDesc.show()
-                                                            if(typeof tmpRePrintResult != 'undefined')
-                                                            {
-                                                                let tmpLastSignature = await this.nf525.signaturePosDuplicate(tmpLastPos[0])
-                                                                let tmpInsertQuery = 
-                                                                {
-                                                                    query : "EXEC [dbo].[PRD_POS_EXTRA_INSERT] " + 
-                                                                            "@CUSER = @PCUSER, " + 
-                                                                            "@TAG = @PTAG, " +
-                                                                            "@POS_GUID = @PPOS_GUID, " +
-                                                                            "@LINE_GUID = @PLINE_GUID, " +
-                                                                            "@DATA = @PDATA, " +
-                                                                            "@DATA_EXTRA1 = @PDATA_EXTRA1, " +
-                                                                            "@APP_VERSION = @PAPP_VERSION, " +
-                                                                            "@DESCRIPTION = @PDESCRIPTION ", 
-                                                                    param : ['PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|max','PDATA_EXTRA1:string|max','PAPP_VERSION:string|25','PDESCRIPTION:string|max'],
-                                                                    value : [tmpLastPos[0].CUSER,"REPRINT",tmpLastPos[0].GUID,"00000000-0000-0000-0000-000000000000",tmpLastSignature.SIGNATURE,tmpLastSignature.SIGNATURE_SUM,this.core.appInfo.version,tmpRePrintResult]
-                                                                }
-        
-                                                                await this.core.sql.execute(tmpInsertQuery)
-                                                                let tmpData = 
-                                                                {
-                                                                    pos : tmpLastPos,
-                                                                    possale : this.lastPosSaleDt,
-                                                                    pospay : this.lastPosPayDt,
-                                                                    pospromo : this.lastPosPromoDt,
-                                                                    firm : this.firm,
-                                                                    special : 
-                                                                    {
-                                                                        type : 'Repas',
-                                                                        ticketCount : 0,
-                                                                        reprint : tmpPrintCount + 1,
-                                                                        repas : tmpResult,
-                                                                        customerUsePoint : Math.floor(tmpLastPos[0].LOYALTY * 100),
-                                                                        customerPoint : (tmpLastPos[0].CUSTOMER_POINT + Math.floor(tmpLastPos[0].LOYALTY * 100)) - Math.floor(tmpLastPos[0].TOTAL),
-                                                                        customerGrowPoint : tmpLastPos[0].CUSTOMER_POINT - Math.floor(tmpLastPos[0].TOTAL)
-                                                                    }
-                                                                }
-                                                                await this.print(tmpData,0)
-                                                            }                                                        
-                                                        }
-                                                        else
-                                                        {
-                                                            let tmpConfObj =
-                                                            {
-                                                                id:'msgRePrint',showTitle:true,title:this.lang.t("msgRePrint.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                                button:[{id:"btn01",caption:this.lang.t("msgRePrint.btn01"),location:'after'}],
-                                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgRePrint.msg")}</div>)
-                                                            }
-                                                            await dialog(tmpConfObj);
-                                                        } 
-                                                    }                                                
-                                                }
-                                            }}>
-                                                <i className="text-white fa-solid fa-utensils" style={{fontSize: "16px"}} />
-                                            </NbButton>
-                                        </div>
-                                        {/* btnPopLastSaleFile */}
-                                        <div className="col-2 p-1">
-                                            <NbButton id={"btnPopLastSaleFile"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"50px",width:"100%"}}
-                                            onClick={async()=>
-                                            {
-                                                let tmpLastPos = new datatable();
-                                                tmpLastPos.import(this.grdLastPos.devGrid.getSelectedRowKeys())
-                                                
-                                                if(this.grdLastPos.devGrid.getSelectedRowKeys().length > 0 && this.grdLastPos.devGrid.getSelectedRowKeys()[0].CUSTOMER_CODE == '')
-                                                {
-                                                    let tmpConfObj =
-                                                    {
-                                                        id:'msgPrintCustomerAlert',showTitle:true,title:this.lang.t("msgPrintCustomerAlert.title"),showCloseButton:true,width:'500px',height:'250px',
-                                                        button:[{id:"btn01",caption:this.lang.t("msgPrintCustomerAlert.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgPrintCustomerAlert.btn02"),location:'after'}],
-                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgPrintCustomerAlert.msg")}</div>)
-                                                    }
-                                                    if((await dialog(tmpConfObj)) == 'btn01')
-                                                    {
-                                                        this.popPrintCustomerList.POS_GUID = this.grdLastPos.devGrid.getSelectedRowKeys()[0].GUID
-                                                        this.popPrintCustomerList.show()
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    let tmpQuery = 
-                                                    {
-                                                        query : "SELECT COUNT(TAG) AS PRINT_COUNT FROM POS_EXTRA WHERE POS_GUID = @POS_GUID AND TAG = @TAG", 
-                                                        param : ['POS_GUID:string|50','TAG:string|25'],
-                                                        value : [tmpLastPos[0].GUID,"REPRINTFACT"]
-                                                    }
-
-                                                    let tmpPrintCount = (await this.core.sql.execute(tmpQuery)).result.recordset[0].PRINT_COUNT
-
-                                                    let tmpRePrintResult = await this.popRePrintDesc.show()
-                                                    let tmpDupSignature = await this.nf525.signaturePosFactDuplicate(tmpLastPos[0])
-                                                    let tmpDupSign = ''
-
-                                                    if(tmpDupSignature != '')
-                                                    {
-                                                        tmpDupSign = tmpDupSignature.SIGNATURE.substring(2,3) + tmpDupSignature.SIGNATURE.substring(6,7) + tmpDupSignature.SIGNATURE.substring(12,13) + tmpDupSignature.SIGNATURE.substring(18,19)
-                                                    }
-
-                                                    if(typeof tmpRePrintResult != 'undefined')
-                                                    {
-                                                        let tmpInsertQuery = 
-                                                        {
-                                                            query : "EXEC [dbo].[PRD_POS_EXTRA_INSERT] " + 
-                                                                    "@CUSER = @PCUSER, " + 
-                                                                    "@TAG = @PTAG, " +
-                                                                    "@POS_GUID = @PPOS_GUID, " +
-                                                                    "@LINE_GUID = @PLINE_GUID, " +
-                                                                    "@DATA = @PDATA, " +
-                                                                    "@DATA_EXTRA1 = @PDATA_EXTRA1, " +
-                                                                    "@APP_VERSION = @PAPP_VERSION, " +
-                                                                    "@DESCRIPTION = @PDESCRIPTION ", 
-                                                            param : ['PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|max','PDATA_EXTRA1:string|max','PAPP_VERSION:string|25','PDESCRIPTION:string|max'],
-                                                            value : [tmpLastPos[0].CUSER,"REPRINTFACT",tmpLastPos[0].GUID,"00000000-0000-0000-0000-000000000000",tmpDupSignature.SIGNATURE,tmpDupSignature.SIGNATURE_SUM,this.core.appInfo.version,tmpRePrintResult]
-                                                        }
-
-                                                        await this.core.sql.execute(tmpInsertQuery)
-                                                    }
-
-                                                    this.sendJet({CODE:"155",NAME:"Duplicata facture imprimé."})
-
-                                                    let tmpFactData = await this.factureInsert(tmpLastPos,this.lastPosSaleDt)
-                                                    let tmpSigned = "-"
-                                                    let tmpAppVers = ""
-
-                                                    if(tmpFactData.length > 0)
-                                                    {
-                                                        tmpAppVers = tmpFactData[0].APP_VERSION
-
-                                                        if(tmpFactData[0].SIGNATURE != '')
-                                                        {
-                                                            tmpSigned = tmpFactData[0].SIGNATURE.substring(2,3) + tmpFactData[0].SIGNATURE.substring(6,7) + tmpFactData[0].SIGNATURE.substring(12,13) + tmpFactData[0].SIGNATURE.substring(18,19)
-                                                        }
-                                                    }
-
-                                                    let tmpData = 
-                                                    {
-                                                        pos : tmpLastPos,
-                                                        possale : this.lastPosSaleDt,
-                                                        pospay : this.lastPosPayDt,
-                                                        pospromo : this.lastPosPromoDt,
-                                                        firm : this.firm,
-                                                        special : 
-                                                        {
-                                                            type : 'Fatura',
-                                                            ticketCount : 0,
-                                                            reprint : tmpPrintCount + 1,
-                                                            repas : 0,
-                                                            factCertificate : this.core.appInfo.name + " version : " + tmpAppVers + " - " + this.core.appInfo.certificate + " - " + tmpSigned,
-                                                            dupCertificate : this.core.appInfo.name + " version : " + this.core.appInfo.version + " - " + this.core.appInfo.certificate + " - " + tmpDupSign,
-                                                            customerUsePoint : Math.floor(tmpLastPos[0].LOYALTY * 100),
-                                                            customerPoint : (tmpLastPos[0].CUSTOMER_POINT + Math.floor(tmpLastPos[0].LOYALTY * 100)) - Math.floor(tmpLastPos[0].TOTAL),
-                                                            customerGrowPoint : tmpLastPos[0].CUSTOMER_POINT - Math.floor(tmpLastPos[0].TOTAL)
-                                                        }
-                                                    }
-                                                    await this.print(tmpData,0)
-                                                }
-                                                
-                                            }}>
-                                                <i className="text-white fa-solid fa-file-lines" style={{fontSize: "16px"}} />
-                                            </NbButton>
-                                        </div>
-                                        {/* btnPopLastSalePrint */}
-                                        <div className="col-2 p-1">
-                                            <NbButton id={"btnPopLastSalePrint"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"50px",width:"100%"}}
-                                            onClick={async()=>
-                                            {
-                                                let tmpLastPos = new datatable();
-                                                tmpLastPos.import(this.grdLastPos.devGrid.getSelectedRowKeys())
-                                                
                                                 if(tmpLastPos.length > 0)
                                                 {
                                                     let tmpQuery = 
@@ -5863,23 +5867,14 @@ export default class posDoc extends React.PureComponent
                                                         param : ['POS_GUID:string|50','TAG:string|25'],
                                                         value : [tmpLastPos[0].GUID,"REPRINT"]
                                                     }
-
+    
                                                     let tmpPrintCount = (await this.core.sql.execute(tmpQuery)).result.recordset[0].PRINT_COUNT
-                                                    
-                                                    if(tmpPrintCount < 5)
+                                                    if(tmpPrintCount < 2)
                                                     {
                                                         let tmpRePrintResult = await this.popRePrintDesc.show()
-
                                                         if(typeof tmpRePrintResult != 'undefined')
                                                         {
-                                                            let tmpDupSignature = await this.nf525.signaturePosDuplicate(tmpLastPos[0])
-                                                            let tmpDupSign = ''
-
-                                                            if(tmpDupSignature != '')
-                                                            {
-                                                                tmpDupSign = tmpDupSignature.SIGNATURE.substring(2,3) + tmpDupSignature.SIGNATURE.substring(6,7) + tmpDupSignature.SIGNATURE.substring(12,13) + tmpDupSignature.SIGNATURE.substring(18,19)
-                                                            }
-
+                                                            let tmpLastSignature = await this.nf525.signaturePosDuplicate(tmpLastPos[0])
                                                             let tmpInsertQuery = 
                                                             {
                                                                 query : "EXEC [dbo].[PRD_POS_EXTRA_INSERT] " + 
@@ -5887,14 +5882,14 @@ export default class posDoc extends React.PureComponent
                                                                         "@TAG = @PTAG, " +
                                                                         "@POS_GUID = @PPOS_GUID, " +
                                                                         "@LINE_GUID = @PLINE_GUID, " +
-                                                                        "@DATA =@PDATA, " +
+                                                                        "@DATA = @PDATA, " +
                                                                         "@DATA_EXTRA1 = @PDATA_EXTRA1, " +
                                                                         "@APP_VERSION = @PAPP_VERSION, " +
                                                                         "@DESCRIPTION = @PDESCRIPTION ", 
                                                                 param : ['PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|max','PDATA_EXTRA1:string|max','PAPP_VERSION:string|25','PDESCRIPTION:string|max'],
-                                                                value : [tmpLastPos[0].CUSER,"REPRINT",tmpLastPos[0].GUID,"00000000-0000-0000-0000-000000000000",tmpDupSignature.SIGNATURE,tmpDupSignature.SIGNATURE_SUM,this.core.appInfo.version,tmpRePrintResult]
+                                                                value : [tmpLastPos[0].CUSER,"REPRINT",tmpLastPos[0].GUID,"00000000-0000-0000-0000-000000000000",tmpLastSignature.SIGNATURE,tmpLastSignature.SIGNATURE_SUM,this.core.appInfo.version,tmpRePrintResult]
                                                             }
-
+    
                                                             await this.core.sql.execute(tmpInsertQuery)
                                                             let tmpData = 
                                                             {
@@ -5905,21 +5900,17 @@ export default class posDoc extends React.PureComponent
                                                                 firm : this.firm,
                                                                 special : 
                                                                 {
-                                                                    type : 'Fis',
+                                                                    type : 'Repas',
                                                                     ticketCount : 0,
                                                                     reprint : tmpPrintCount + 1,
-                                                                    repas : 0,
-                                                                    factCertificate : '',
-                                                                    dupCertificate : this.core.appInfo.name + " version : " + this.core.appInfo.version + " - " + this.core.appInfo.certificate + " - " + tmpDupSign,
+                                                                    repas : tmpResult,
                                                                     customerUsePoint : Math.floor(tmpLastPos[0].LOYALTY * 100),
                                                                     customerPoint : (tmpLastPos[0].CUSTOMER_POINT + Math.floor(tmpLastPos[0].LOYALTY * 100)) - Math.floor(tmpLastPos[0].TOTAL),
                                                                     customerGrowPoint : tmpLastPos[0].CUSTOMER_POINT - Math.floor(tmpLastPos[0].TOTAL)
                                                                 }
                                                             }
-
-                                                            this.sendJet({CODE:"155",NAME:"Duplicata ticket imprimé."}) //// Duplicate fiş yazdırıldı.
                                                             await this.print(tmpData,0)
-                                                        } 
+                                                        }                                                        
                                                     }
                                                     else
                                                     {
@@ -5930,7 +5921,129 @@ export default class posDoc extends React.PureComponent
                                                             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgRePrint.msg")}</div>)
                                                         }
                                                         await dialog(tmpConfObj);
-                                                    }                                                                                                
+                                                    } 
+                                                }                                                
+                                            }
+                                        }}>
+                                            <i className="text-white fa-solid fa-utensils" style={{fontSize: "16px"}} />
+                                        </NbButton>
+                                    </div>
+                                    {/* btnPopLastSaleFile */}
+                                    <div className="col-2 p-1">
+                                        <NbButton id={"btnPopLastSaleFile"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"50px",width:"100%"}}
+                                        onClick={async()=>
+                                        {
+                                            let tmpLastPos = new datatable();
+                                            tmpLastPos.import(this.grdLastPos.devGrid.getSelectedRowKeys())
+                                            
+                                            if(this.grdLastPos.devGrid.getSelectedRowKeys().length > 0 && this.grdLastPos.devGrid.getSelectedRowKeys()[0].CUSTOMER_CODE == '')
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgPrintCustomerAlert',showTitle:true,title:this.lang.t("msgPrintCustomerAlert.title"),showCloseButton:true,width:'500px',height:'250px',
+                                                    button:[{id:"btn01",caption:this.lang.t("msgPrintCustomerAlert.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgPrintCustomerAlert.btn02"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgPrintCustomerAlert.msg")}</div>)
+                                                }
+                                                if((await dialog(tmpConfObj)) == 'btn01')
+                                                {
+                                                    this.popPrintCustomerList.POS_GUID = this.grdLastPos.devGrid.getSelectedRowKeys()[0].GUID
+                                                    this.popPrintCustomerList.show()
+                                                }
+                                            }
+                                            else
+                                            {
+                                                let tmpQuery = 
+                                                {
+                                                    query : "SELECT COUNT(TAG) AS PRINT_COUNT FROM POS_EXTRA WHERE POS_GUID = @POS_GUID AND TAG = @TAG", 
+                                                    param : ['POS_GUID:string|50','TAG:string|25'],
+                                                    value : [tmpLastPos[0].GUID,"REPRINTFACT"]
+                                                }
+
+                                                let tmpPrintCount = (await this.core.sql.execute(tmpQuery)).result.recordset[0].PRINT_COUNT
+
+                                                let tmpRePrintResult = await this.popRePrintDesc.show()
+                                                let tmpDupSignature = await this.nf525.signaturePosFactDuplicate(tmpLastPos[0])
+                                                let tmpDupSign = ''
+
+                                                if(tmpDupSignature != '')
+                                                {
+                                                    tmpDupSign = tmpDupSignature.SIGNATURE.substring(2,3) + tmpDupSignature.SIGNATURE.substring(6,7) + tmpDupSignature.SIGNATURE.substring(12,13) + tmpDupSignature.SIGNATURE.substring(18,19)
+                                                }
+
+                                                if(typeof tmpRePrintResult != 'undefined')
+                                                {
+                                                    let tmpInsertQuery = 
+                                                    {
+                                                        query : "EXEC [dbo].[PRD_POS_EXTRA_INSERT] " + 
+                                                                "@CUSER = @PCUSER, " + 
+                                                                "@TAG = @PTAG, " +
+                                                                "@POS_GUID = @PPOS_GUID, " +
+                                                                "@LINE_GUID = @PLINE_GUID, " +
+                                                                "@DATA = @PDATA, " +
+                                                                "@DATA_EXTRA1 = @PDATA_EXTRA1, " +
+                                                                "@APP_VERSION = @PAPP_VERSION, " +
+                                                                "@DESCRIPTION = @PDESCRIPTION ", 
+                                                        param : ['PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|max','PDATA_EXTRA1:string|max','PAPP_VERSION:string|25','PDESCRIPTION:string|max'],
+                                                        value : [tmpLastPos[0].CUSER,"REPRINTFACT",tmpLastPos[0].GUID,"00000000-0000-0000-0000-000000000000",tmpDupSignature.SIGNATURE,tmpDupSignature.SIGNATURE_SUM,this.core.appInfo.version,tmpRePrintResult]
+                                                    }
+
+                                                    await this.core.sql.execute(tmpInsertQuery)
+                                                }
+
+                                                this.sendJet({CODE:"155",NAME:"Duplicata facture imprimé."})
+
+                                                let tmpFactData = await this.factureInsert(tmpLastPos,this.lastPosSaleDt)
+                                                let tmpSigned = "-"
+                                                let tmpAppVers = ""
+
+                                                if(tmpFactData.length > 0)
+                                                {
+                                                    tmpAppVers = tmpFactData[0].APP_VERSION
+
+                                                    if(tmpFactData[0].SIGNATURE != '')
+                                                    {
+                                                        tmpSigned = tmpFactData[0].SIGNATURE.substring(2,3) + tmpFactData[0].SIGNATURE.substring(6,7) + tmpFactData[0].SIGNATURE.substring(12,13) + tmpFactData[0].SIGNATURE.substring(18,19)
+                                                    }
+                                                }
+
+                                                let tmpData = 
+                                                {
+                                                    pos : tmpLastPos,
+                                                    possale : this.lastPosSaleDt,
+                                                    pospay : this.lastPosPayDt,
+                                                    pospromo : this.lastPosPromoDt,
+                                                    firm : this.firm,
+                                                    special : 
+                                                    {
+                                                        type : 'Fatura',
+                                                        ticketCount : 0,
+                                                        reprint : tmpPrintCount + 1,
+                                                        repas : 0,
+                                                        factCertificate : this.core.appInfo.name + " version : " + tmpAppVers + " - " + this.core.appInfo.certificate + " - " + tmpSigned,
+                                                        dupCertificate : this.core.appInfo.name + " version : " + this.core.appInfo.version + " - " + this.core.appInfo.certificate + " - " + tmpDupSign,
+                                                        customerUsePoint : Math.floor(tmpLastPos[0].LOYALTY * 100),
+                                                        customerPoint : (tmpLastPos[0].CUSTOMER_POINT + Math.floor(tmpLastPos[0].LOYALTY * 100)) - Math.floor(tmpLastPos[0].TOTAL),
+                                                        customerGrowPoint : tmpLastPos[0].CUSTOMER_POINT - Math.floor(tmpLastPos[0].TOTAL)
+                                                    }
+                                                }
+                                                await this.print(tmpData,0)
+                                            }
+                                            
+                                        }}>
+                                            <i className="text-white fa-solid fa-file-lines" style={{fontSize: "16px"}} />
+                                        </NbButton>
+                                    </div>
+                                    {/* btnPopLastSalePrint */}
+                                    <div className="col-2 p-1">
+                                            <NbButton id={"btnPopLastSalePrint"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"50px",width:"100%"}}
+                                            onClick={async()=>
+                                            {
+                                                let tmpLastPos = new datatable();
+                                                tmpLastPos.import(this.grdLastPos.devGrid.getSelectedRowKeys())
+                                                
+                                                if(tmpLastPos.length > 0)
+                                                {
+                                                    this.rePrint(tmpLastPos,this.lastPosSaleDt,this.lastPosPayDt,this.lastPosPromoDt)
                                                 }
                                             }}>
                                                 <i className="text-white fa-solid fa-print" style={{fontSize: "16px"}} />
