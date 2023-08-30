@@ -1,7 +1,7 @@
 export const prm =
 [
     //#region Sistem
-     //Bütük Harf
+     //İkinci Birim
      {
         TYPE : 0,
         ID :"secondFactor",
@@ -120,7 +120,7 @@ export const prm =
         {
             TYPE : "checkbox",
             PAGE_NAME : "Sistem",
-            CAPTION : "Ödeme İşlemleir İçin Fatura Seçme Zorunluluğu"
+            CAPTION : "Ödeme İşlemleri İçin Fatura Seçme Zorunluluğu"
         }
     },
     //Para Sembolu
@@ -191,7 +191,7 @@ export const prm =
         ID :"costForInvoıces",
         VALUE : 
         {
-            value : false
+            value : true
         },
         SPECIAL : "",
         ELEMENT : "",
