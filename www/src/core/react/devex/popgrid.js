@@ -233,7 +233,11 @@ export default class NdPopGrid extends Base
     }    
     async show()
     {
-        this["pop_" + this.props.id].show();
+        return new Promise(async resolve => 
+        {
+            await this["pop_" + this.props.id].show();
+            resolve();
+        })
     }
     hide()
     {

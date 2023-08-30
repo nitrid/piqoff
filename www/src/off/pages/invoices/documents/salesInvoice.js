@@ -886,6 +886,8 @@ export default class salesInvoice extends React.PureComponent
         }
         else
         {
+            await this.pg_dispatchGrid.show()
+            
             let tmpQuery = 
             {
                 query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ITEMS_VW_01 WHERE INPUT = @INPUT AND INVOICE_DOC_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 1 AND ITEM_CODE <> 'INTERFEL' AND REBATE = 0 AND DOC_TYPE IN(40)",
@@ -901,7 +903,7 @@ export default class salesInvoice extends React.PureComponent
             {
                 await this.pg_dispatchGrid.setData([])
             }
-            this.pg_dispatchGrid.show()
+            
             this.pg_dispatchGrid.onClick = async(data) =>
             {
                 App.instance.setState({isExecute:true})
@@ -1594,7 +1596,7 @@ export default class salesInvoice extends React.PureComponent
                 {
                     if(tmpData.result.recordset[0].COUNTRY == 'FR')
                     {
-                    this.docObj.dt()[0].INTERFEL = Number(((tmpInterfelHt * tmpData.result.recordset[0].FR) / 100)).round(2)
+                        this.docObj.dt()[0].INTERFEL = Number(((tmpInterfelHt * tmpData.result.recordset[0].FR) / 100)).round(2)
                     }
                     else
                     {
@@ -3121,8 +3123,9 @@ export default class salesInvoice extends React.PureComponent
                                                         {
                                                             id:'01',
                                                             icon:'more',
-                                                            onClick:()  =>
+                                                            onClick:async()  =>
                                                             {
+                                                                await this.popDiscount.show()
                                                                 if(this.docObj.dt()[0].DISCOUNT > 0 )
                                                                 {
                                                                     this.txtDiscountPercent1.value  = Number(this.docObj.dt()[0].AMOUNT).rate2Num(this.docObj.docItems.dt().sum("DISCOUNT_1",3),3)
@@ -3141,7 +3144,6 @@ export default class salesInvoice extends React.PureComponent
                                                                     this.txtDiscountPercent3.value  = 0
                                                                     this.txtDiscountPrice3.value = 0
                                                                 }
-                                                                this.popDiscount.show()
                                                             }
                                                         },
                                                     ]
@@ -3166,11 +3168,9 @@ export default class salesInvoice extends React.PureComponent
                                                         {
                                                             id:'01',
                                                             icon:'more',
-                                                            onClick:()  =>
+                                                            onClick:async()  =>
                                                             {
-                                                                console.log(this.docObj.dt()[0].SUBTOTAL)
-                                                                console.log(this.docObj.dt()[0].DOC_DISCOUNT_1)
-                                                                console.log( Number(this.docObj.dt()[0].SUBTOTAL).rate2Num(this.docObj.dt()[0].DOC_DISCOUNT_1,5))
+                                                                await this.popDocDiscount.show()
                                                                 if(this.docObj.dt()[0].DOC_DISCOUNT > 0 )
                                                                 {
                                                                     this.txtDocDiscountPercent1.value  = Number(this.docObj.dt()[0].SUBTOTAL).rate2Num(this.docObj.dt()[0].DOC_DISCOUNT_1,5)
@@ -3189,7 +3189,6 @@ export default class salesInvoice extends React.PureComponent
                                                                     this.txtDocDiscountPercent3.value  = 0
                                                                     this.txtDocDiscountPrice3.value = 0
                                                                 }
-                                                                this.popDocDiscount.show()
                                                             }
                                                         },
                                                     ]
@@ -3309,6 +3308,7 @@ export default class salesInvoice extends React.PureComponent
                         width={'500'}
                         height={'500'}
                         position={{of:'#root'}}
+                        deferRendering={true}
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
@@ -3409,7 +3409,7 @@ export default class salesInvoice extends React.PureComponent
                                         }).bind(this)}
                                     ></NdNumberBox>
                                 </Item>
-                                 <Item>
+                                <Item>
                                     <Label text={this.t("popDiscount.Percent3")} alignment="right" />
                                     <NdNumberBox id="txtDiscountPercent3" parent={this} simple={true}
                                             maxLength={32}
@@ -3521,6 +3521,7 @@ export default class salesInvoice extends React.PureComponent
                         width={'500'}
                         height={'500'}
                         position={{of:'#root'}}
+                        deferRendering={true}
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
@@ -3621,7 +3622,7 @@ export default class salesInvoice extends React.PureComponent
                                         }).bind(this)}
                                     ></NdNumberBox>
                                 </Item>
-                                 <Item>
+                                <Item>
                                     <Label text={this.t("popDocDiscount.Percent3")} alignment="right" />
                                     <NdNumberBox id="txtDocDiscountPercent3" parent={this} simple={true}
                                             maxLength={32}
@@ -3722,6 +3723,7 @@ export default class salesInvoice extends React.PureComponent
                         width={'500'}
                         height={'250'}
                         position={{of:'#root'}}
+                        deferRendering={true}
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
@@ -3766,7 +3768,7 @@ export default class salesInvoice extends React.PureComponent
                         </NdPopUp>
                     </div>  
                     {/* Yönetici PopUp */}
-                     <div>
+                    <div>
                         <NdPopUp parent={this} id={"popPassword"} 
                         visible={false}
                         showCloseButton={true}
@@ -3776,6 +3778,7 @@ export default class salesInvoice extends React.PureComponent
                         width={'500'}
                         height={'200'}
                         position={{of:'#root'}}
+                        deferRendering={true}
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
@@ -3847,6 +3850,7 @@ export default class salesInvoice extends React.PureComponent
                         width={'500'}
                         height={'200'}
                         position={{of:'#root'}}
+                        deferRendering={true}
                         >
                             <Form colCount={2} height={'fit-content'}>
                                 <Item>
@@ -3865,35 +3869,40 @@ export default class salesInvoice extends React.PureComponent
                         </NdPopUp>
                     </div> 
                     {/* İrsaliye Grid */}
-                    <NdPopGrid id={"pg_dispatchGrid"} parent={this} container={"#root"}
-                    visible={false}
-                    position={{of:'#root'}} 
-                    showTitle={true} 
-                    showBorders={true}
-                    width={'90%'}
-                    height={'90%'}
-                    selection={{mode:"multiple"}}
-                    title={this.t("pg_dispatchGrid.title")} //
-                    >
-                        <Column dataField="REFERANS" caption={this.t("pg_dispatchGrid.clmReferans")} width={200} defaultSortOrder="asc"/>
-                        <Column dataField="DOC_DATE" caption={this.t("pg_dispatchGrid.clmDate")}   dataType="date" width={200} />
-                        <Column dataField="ITEM_CODE" caption={this.t("pg_dispatchGrid.clmCode")} width={200}/>
-                        <Column dataField="ITEM_NAME" caption={this.t("pg_dispatchGrid.clmName")} width={300} />
-                        <Column dataField="QUANTITY" caption={this.t("pg_dispatchGrid.clmQuantity")} width={300} />
-                        <Column dataField="PRICE" caption={this.t("pg_dispatchGrid.clmPrice")} format={{ style: "currency", currency: "EUR",precision: 3}} width={300} />
-                        <Column dataField="TOTAL" caption={this.t("pg_dispatchGrid.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 3}} width={300} />
-                    </NdPopGrid>
+                    <div>
+                        <NdPopGrid id={"pg_dispatchGrid"} parent={this} container={"#root"}
+                        visible={false}
+                        position={{of:'#root'}} 
+                        showTitle={true} 
+                        showBorders={true}
+                        width={'90%'}
+                        height={'90%'}
+                        selection={{mode:"multiple"}}
+                        title={this.t("pg_dispatchGrid.title")} //
+                        deferRendering={true}
+                        >
+                            <Column dataField="REFERANS" caption={this.t("pg_dispatchGrid.clmReferans")} width={200} defaultSortOrder="asc"/>
+                            <Column dataField="DOC_DATE" caption={this.t("pg_dispatchGrid.clmDate")}   dataType="date" width={200} />
+                            <Column dataField="ITEM_CODE" caption={this.t("pg_dispatchGrid.clmCode")} width={200}/>
+                            <Column dataField="ITEM_NAME" caption={this.t("pg_dispatchGrid.clmName")} width={300} />
+                            <Column dataField="QUANTITY" caption={this.t("pg_dispatchGrid.clmQuantity")} width={300} />
+                            <Column dataField="PRICE" caption={this.t("pg_dispatchGrid.clmPrice")} format={{ style: "currency", currency: "EUR",precision: 3}} width={300} />
+                            <Column dataField="TOTAL" caption={this.t("pg_dispatchGrid.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 3}} width={300} />
+                        </NdPopGrid>
+                    </div>
                     {/* Stok Grid */}
-                    <NdPopGrid id={"pg_txtItemsCode"} parent={this} container={"#root"}
-                    visible={false}
-                    position={{of:'#root'}} 
-                    showTitle={true} 
-                    showBorders={true}
-                    width={'90%'}
-                    height={'90%'}
-                    title={this.t("pg_txtItemsCode.title")} //
-                    search={true}
-                     onRowPrepared={(e) =>
+                    <div>
+                        <NdPopGrid id={"pg_txtItemsCode"} parent={this} container={"#root"}
+                        visible={false}
+                        position={{of:'#root'}} 
+                        showTitle={true} 
+                        showBorders={true}
+                        width={'90%'}
+                        height={'90%'}
+                        title={this.t("pg_txtItemsCode.title")} //
+                        search={true}
+                        deferRendering={true}
+                        onRowPrepared={(e) =>
                         {
                             if(e.rowType == 'data' && e.data.STATUS == false)
                             {
@@ -3904,37 +3913,41 @@ export default class salesInvoice extends React.PureComponent
                                 e.rowElement.style.color ="Black"
                             }
                         }}
-                    data = 
-                    {{
-                        source:
-                        {
-                            select:
+                        data = 
+                        {{
+                            source:
                             {
-                                query : "SELECT GUID,CODE,NAME,VAT,COST_PRICE,UNIT,STATUS,(SELECT [dbo].[FN_PRICE_SALE_VAT_EXT](GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000',NULL)) AS PRICE FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
-                                param : ['VAL:string|50']
-                            },
-                            sql:this.core.sql
-                        }
-                    }}
-                    >
-                        <Column dataField="CODE" caption={this.t("pg_txtItemsCode.clmCode")} width={150} />
-                        <Column dataField="NAME" caption={this.t("pg_txtItemsCode.clmName")} width={450} defaultSortOrder="asc" />
-                        <Column dataField="PRICE" caption={this.t("pg_txtItemsCode.clmPrice")} width={200}  format={{ style: "currency", currency: "EUR",precision: 2}}/>
-                    </NdPopGrid>
+                                select:
+                                {
+                                    query : "SELECT GUID,CODE,NAME,VAT,COST_PRICE,UNIT,STATUS,(SELECT [dbo].[FN_PRICE_SALE_VAT_EXT](GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000',NULL)) AS PRICE FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
+                                    param : ['VAL:string|50']
+                                },
+                                sql:this.core.sql
+                            }
+                        }}
+                        >
+                            <Column dataField="CODE" caption={this.t("pg_txtItemsCode.clmCode")} width={150} />
+                            <Column dataField="NAME" caption={this.t("pg_txtItemsCode.clmName")} width={450} defaultSortOrder="asc" />
+                            <Column dataField="PRICE" caption={this.t("pg_txtItemsCode.clmPrice")} width={200}  format={{ style: "currency", currency: "EUR",precision: 2}}/>
+                        </NdPopGrid>
+                    </div>
                     {/* Hizmet Grid */}
-                    <NdPopGrid id={"pg_service"} parent={this} container={"#root"}
-                    visible={false}
-                    position={{of:'#root'}} 
-                    showTitle={true} 
-                    showBorders={true}
-                    width={'90%'}
-                    height={'90%'}
-                    title={this.t("pg_service.title")} 
-                    data={{source:{select:{query : "SELECT *,1 AS ITEM_TYPE FROM SERVICE_ITEMS_VW_01 WHERE STATUS = 1"},sql:this.core.sql}}}
-                    >
-                        <Column dataField="CODE" caption={this.t("pg_service.clmCode")} width={200}/>
-                        <Column dataField="NAME" caption={this.t("pg_service.clmName")} width={300} defaultSortOrder="asc"/>
-                    </NdPopGrid>
+                    <div>
+                        <NdPopGrid id={"pg_service"} parent={this} container={"#root"}
+                        visible={false}
+                        position={{of:'#root'}} 
+                        showTitle={true} 
+                        showBorders={true}
+                        width={'90%'}
+                        height={'90%'}
+                        title={this.t("pg_service.title")} 
+                        data={{source:{select:{query : "SELECT *,1 AS ITEM_TYPE FROM SERVICE_ITEMS_VW_01 WHERE STATUS = 1"},sql:this.core.sql}}}
+                        deferRendering={true}
+                        >
+                            <Column dataField="CODE" caption={this.t("pg_service.clmCode")} width={200}/>
+                            <Column dataField="NAME" caption={this.t("pg_service.clmName")} width={300} defaultSortOrder="asc"/>
+                        </NdPopGrid>
+                    </div>
                     {/* Finans PopUp */}
                     <div>
                         <NdPopUp parent={this} id={"popPayment"} 
@@ -3946,6 +3959,7 @@ export default class salesInvoice extends React.PureComponent
                         width={'800'}
                         height={'800'}
                         position={{of:'#root'}}
+                        deferRendering={true}
                         >
                             <Form colCount={3} height={'fit-content'}>
                                 <Item location="after">
@@ -4023,6 +4037,7 @@ export default class salesInvoice extends React.PureComponent
                         width={'500'}
                         height={'400'}
                         position={{of:'#root'}}
+                        deferRendering={true}
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 {/* cmbPayType */}
@@ -4172,7 +4187,7 @@ export default class salesInvoice extends React.PureComponent
                             </Form>
                         </NdPopUp>
                     </div> 
-                    {/* check PopUp */}
+                    {/* Check PopUp */}
                     <div>
                         <NdPopUp parent={this} id={"popCheck"} 
                         visible={false}
@@ -4183,6 +4198,7 @@ export default class salesInvoice extends React.PureComponent
                         width={'500'}
                         height={'500'}
                         position={{of:'#root'}}
+                        deferRendering={true}
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
@@ -4232,6 +4248,7 @@ export default class salesInvoice extends React.PureComponent
                         width={'500'}
                         height={'280'}
                         position={{of:'#root'}}
+                        deferRendering={true}
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
@@ -4409,6 +4426,7 @@ export default class salesInvoice extends React.PureComponent
                         width={'900'}
                         height={'700'}
                         position={{of:'#root'}}
+                        deferRendering={true}
                         >
                             <Form colCount={2} height={'fit-content'}>
                                 <Item colSpan={2}>
@@ -4485,51 +4503,57 @@ export default class salesInvoice extends React.PureComponent
                             </Form>
                         </NdPopUp>
                     </div> 
-                    {/* combineItem Dialog  */}
-                    <NdDialog id={"msgCombineItem"} container={"#root"} parent={this}
-                    position={{of:'#root'}} 
-                    showTitle={true} 
-                    title={this.t("msgCombineItem.title")} 
-                    showCloseButton={false}
-                    width={"500px"}
-                    height={"250px"}
-                    button={[{id:"btn01",caption:this.t("msgCombineItem.btn01"),location:'before'},{id:"btn02",caption:this.t("msgCombineItem.btn02"),location:'after'}]}
-                    >
-                        <div className="row">
-                            <div className="col-12 py-2">
-                                <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCombineItem.msg")}</div>
+                    {/* CombineItem Dialog  */}
+                    <div>
+                        <NdDialog id={"msgCombineItem"} container={"#root"} parent={this}
+                        position={{of:'#root'}} 
+                        showTitle={true} 
+                        title={this.t("msgCombineItem.title")} 
+                        showCloseButton={false}
+                        width={"500px"}
+                        height={"250px"}
+                        button={[{id:"btn01",caption:this.t("msgCombineItem.btn01"),location:'before'},{id:"btn02",caption:this.t("msgCombineItem.btn02"),location:'after'}]}
+                        >
+                            <div className="row">
+                                <div className="col-12 py-2">
+                                    <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCombineItem.msg")}</div>
+                                </div>
+                                <div className="col-12 py-2">
+                                    <Form>
+                                        {/* checkCustomer */}
+                                        <Item>
+                                            <Label text={this.lang.t("checkAll")} alignment="right" />
+                                            <NdCheckBox id="checkCombine" parent={this} simple={true} value ={false}/>
+                                        </Item>
+                                    </Form>
+                                </div>
                             </div>
-                            <div className="col-12 py-2">
-                                <Form>
-                                    {/* checkCustomer */}
-                                    <Item>
-                                        <Label text={this.lang.t("checkAll")} alignment="right" />
-                                        <NdCheckBox id="checkCombine" parent={this} simple={true} value ={false}/>
-                                    </Item>
-                                </Form>
+                            <div className='row'>
                             </div>
-                        </div>
-                        <div className='row'>
-                        </div>
-                    </NdDialog>  
-                    {/* BARKOD POPUP */}
-                    <NdPopGrid id={"pg_txtBarcode"} parent={this} container={"#root"}
-                    visible={false}
-                    position={{of:'#root'}} 
-                    showTitle={true} 
-                    showBorders={true}
-                    width={'90%'}
-                    height={'90%'}
-                    title={this.t("pg_txtBarcode.title")} //
-                    search={true}
-                    >
-                        <Column dataField="BARCODE" caption={this.t("pg_txtBarcode.clmBarcode")} width={150} />
-                        <Column dataField="CODE" caption={this.t("pg_txtBarcode.clmCode")} width={150} />
-                        <Column dataField="NAME" caption={this.t("pg_txtBarcode.clmName")} width={300} defaultSortOrder="asc" />
-                        <Column dataField="MULTICODE" caption={this.t("pg_txtBarcode.clmMulticode")} width={200}/>
-                    </NdPopGrid>
+                        </NdDialog>
+                    </div>
+                    {/* Barkod PopUp */}
+                    <div>
+                        <NdPopGrid id={"pg_txtBarcode"} parent={this} container={"#root"}
+                        visible={false}
+                        position={{of:'#root'}} 
+                        showTitle={true} 
+                        showBorders={true}
+                        width={'90%'}
+                        height={'90%'}
+                        title={this.t("pg_txtBarcode.title")} //
+                        search={true}
+                        deferRendering={true}
+                        >
+                            <Column dataField="BARCODE" caption={this.t("pg_txtBarcode.clmBarcode")} width={150} />
+                            <Column dataField="CODE" caption={this.t("pg_txtBarcode.clmCode")} width={150} />
+                            <Column dataField="NAME" caption={this.t("pg_txtBarcode.clmName")} width={300} defaultSortOrder="asc" />
+                            <Column dataField="MULTICODE" caption={this.t("pg_txtBarcode.clmMulticode")} width={200}/>
+                        </NdPopGrid>
+                    </div>
                     {/* Miktar Dialog  */}
-                    <NdDialog id={"msgQuantity"} container={"#root"} parent={this}
+                    <div>
+                        <NdDialog id={"msgQuantity"} container={"#root"} parent={this}
                         position={{of:'#root'}} 
                         showTitle={true} 
                         title={this.t("msgQuantity.title")} 
@@ -4537,6 +4561,7 @@ export default class salesInvoice extends React.PureComponent
                         width={"400px"}
                         height={"410px"}
                         button={[{id:"btn01",caption:this.t("msgQuantity.btn01"),location:'after'}]}
+                        deferRendering={true}
                         >
                             <div className="row">
                                 <div className="col-12 py-2">
@@ -4548,7 +4573,7 @@ export default class salesInvoice extends React.PureComponent
                                     <Item>
                                         <Label text={this.t("txtQuantity")} alignment="right" />
                                         <NdNumberBox id="txtPopQuantity" parent={this} simple={true} 
-                                         onEnterKey={(async(e)=>
+                                            onEnterKey={(async(e)=>
                                         {
                                             this.msgQuantity._onClick()
                                         }).bind(this)} 
@@ -4601,7 +4626,7 @@ export default class salesInvoice extends React.PureComponent
                                     maxLength={32}
                                     onValueChanged={(async(e)=>
                                     {
-                                       
+                                        
                                     }).bind(this)}
                                     >
                                     </NdNumberBox>
@@ -4609,93 +4634,103 @@ export default class salesInvoice extends React.PureComponent
                                 </Form>
                             </div>
                             </div>
-                            <div className='row'>
-                            
-                            </div>
-                        
-                    </NdDialog>  
+                            <div className='row'></div>
+                        </NdDialog>
+                    </div>
                     {/* Evrak Silme Açıklaması Dialog  */}
-                    <NdDialog id={"msgDelDesc"} container={"#root"} parent={this}
-                    position={{of:'#root'}} 
-                    showTitle={true} 
-                    title={this.t("msgDelDesc.title")} 
-                    showCloseButton={false}
-                    width={"350px"}
-                    height={"250px"}
-                    button={[{id:"btn01",caption:this.t("msgDelDesc.btn01"),location:'after'}]}
-                    >
-                        <div className="row">
-                            <div className="col-12 py-2">
-                                <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDelDesc.msg")}</div>
+                    <div>
+                        <NdDialog id={"msgDelDesc"} container={"#root"} parent={this}
+                        position={{of:'#root'}} 
+                        showTitle={true} 
+                        title={this.t("msgDelDesc.title")} 
+                        showCloseButton={false}
+                        width={"350px"}
+                        height={"250px"}
+                        button={[{id:"btn01",caption:this.t("msgDelDesc.btn01"),location:'after'}]}
+                        deferRendering={true}
+                        >
+                            <div className="row">
+                                <div className="col-12 py-2">
+                                    <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDelDesc.msg")}</div>
+                                </div>
+                                <div className="col-12 py-2">
+                                    <Form>
+                                        <Item>
+                                            <NdTextBox id="txtDelDesc" parent={this} simple={true}/>
+                                        </Item>
+                                    </Form>
+                                </div>
                             </div>
-                            <div className="col-12 py-2">
-                                <Form>
-                                    <Item>
-                                        <NdTextBox id="txtDelDesc" parent={this} simple={true}/>
-                                    </Item>
-                                </Form>
+                            <div className='row'>
                             </div>
-                        </div>
-                        <div className='row'>
-                        </div>
-                    </NdDialog>   
+                        </NdDialog>
+                    </div>
                     {/* Sipariş Grid */}
-                    <NdPopGrid id={"pg_ordersGrid"} parent={this} container={"#root"}
-                    visible={false}
-                    position={{of:'#root'}} 
-                    showTitle={true} 
-                    showBorders={true}
-                    width={'90%'}
-                    height={'90%'}
-                    selection={{mode:"multiple"}}
-                    title={this.t("pg_ordersGrid.title")} //
-                    >
-                        <Paging defaultPageSize={22} />
-                        <Column dataField="REFERANS" caption={this.t("pg_ordersGrid.clmReferans")} width={200} />
-                        <Column dataField="LINE_NO" caption={this.t("pg_ordersGrid.clmlineNo")} width={80} defaultSortOrder="asc"/>
-                        <Column dataField="ITEM_CODE" caption={this.t("pg_ordersGrid.clmCode")} width={200}/>
-                        <Column dataField="ITEM_NAME" caption={this.t("pg_ordersGrid.clmName")} width={500} />
-                        <Column dataField="QUANTITY" caption={this.t("pg_ordersGrid.clmQuantity")} width={200} />
-                        <Column dataField="PRICE" caption={this.t("pg_ordersGrid.clmPrice")} width={200} format={{ style: "currency", currency: "EUR",precision: 2}} />
-                        <Column dataField="TOTAL" caption={this.t("pg_ordersGrid.clmTotal")} width={200} format={{ style: "currency", currency: "EUR",precision: 2}} />
-                    </NdPopGrid>
+                    <div>
+                        <NdPopGrid id={"pg_ordersGrid"} parent={this} container={"#root"}
+                        visible={false}
+                        position={{of:'#root'}} 
+                        showTitle={true} 
+                        showBorders={true}
+                        width={'90%'}
+                        height={'90%'}
+                        selection={{mode:"multiple"}}
+                        title={this.t("pg_ordersGrid.title")}
+                        deferRendering={true}
+                        >
+                            <Paging defaultPageSize={22} />
+                            <Column dataField="REFERANS" caption={this.t("pg_ordersGrid.clmReferans")} width={200} />
+                            <Column dataField="LINE_NO" caption={this.t("pg_ordersGrid.clmlineNo")} width={80} defaultSortOrder="asc"/>
+                            <Column dataField="ITEM_CODE" caption={this.t("pg_ordersGrid.clmCode")} width={200}/>
+                            <Column dataField="ITEM_NAME" caption={this.t("pg_ordersGrid.clmName")} width={500} />
+                            <Column dataField="QUANTITY" caption={this.t("pg_ordersGrid.clmQuantity")} width={200} />
+                            <Column dataField="PRICE" caption={this.t("pg_ordersGrid.clmPrice")} width={200} format={{ style: "currency", currency: "EUR",precision: 2}} />
+                            <Column dataField="TOTAL" caption={this.t("pg_ordersGrid.clmTotal")} width={200} format={{ style: "currency", currency: "EUR",precision: 2}} />
+                        </NdPopGrid>
+                    </div>
                     {/* Teklif Grid */}
-                    <NdPopGrid id={"pg_offersGrid"} parent={this} container={"#root"}
-                    visible={false}
-                    position={{of:'#root'}} 
-                    showTitle={true} 
-                    showBorders={true}
-                    width={'90%'}
-                    height={'90%'}
-                    selection={{mode:"multiple"}}
-                    title={this.t("pg_offersGrid.title")} //
-                    >
-                        <Paging defaultPageSize={22} />
-                        <Column dataField="REFERANS" caption={this.t("pg_offersGrid.clmReferans")} width={200} defaultSortOrder="asc"/>
-                        <Column dataField="ITEM_CODE" caption={this.t("pg_offersGrid.clmCode")} width={200}/>
-                        <Column dataField="ITEM_NAME" caption={this.t("pg_offersGrid.clmName")} width={500} />
-                        <Column dataField="QUANTITY" caption={this.t("pg_offersGrid.clmQuantity")} width={200} />
-                        <Column dataField="PRICE" caption={this.t("pg_offersGrid.clmPrice")} width={200} format={{ style: "currency", currency: "EUR",precision: 2}} />
-                        <Column dataField="TOTAL" caption={this.t("pg_offersGrid.clmTotal")} width={200} format={{ style: "currency", currency: "EUR",precision: 2}} />
-                    </NdPopGrid>
+                    <div>
+                        <NdPopGrid id={"pg_offersGrid"} parent={this} container={"#root"}
+                        visible={false}
+                        position={{of:'#root'}} 
+                        showTitle={true} 
+                        showBorders={true}
+                        width={'90%'}
+                        height={'90%'}
+                        selection={{mode:"multiple"}}
+                        title={this.t("pg_offersGrid.title")}
+                        deferRendering={true}
+                        >
+                            <Paging defaultPageSize={22} />
+                            <Column dataField="REFERANS" caption={this.t("pg_offersGrid.clmReferans")} width={200} defaultSortOrder="asc"/>
+                            <Column dataField="ITEM_CODE" caption={this.t("pg_offersGrid.clmCode")} width={200}/>
+                            <Column dataField="ITEM_NAME" caption={this.t("pg_offersGrid.clmName")} width={500} />
+                            <Column dataField="QUANTITY" caption={this.t("pg_offersGrid.clmQuantity")} width={200} />
+                            <Column dataField="PRICE" caption={this.t("pg_offersGrid.clmPrice")} width={200} format={{ style: "currency", currency: "EUR",precision: 2}} />
+                            <Column dataField="TOTAL" caption={this.t("pg_offersGrid.clmTotal")} width={200} format={{ style: "currency", currency: "EUR",precision: 2}} />
+                        </NdPopGrid>
+                    </div>
                     {/* Proforma Grid */}
-                    <NdPopGrid id={"pg_proformaGrid"} parent={this} container={"#root"}
-                    visible={false}
-                    position={{of:'#root'}} 
-                    showTitle={true} 
-                    showBorders={true}
-                    width={'90%'}
-                    height={'90%'}
-                    selection={{mode:"multiple"}}
-                    title={this.t("pg_proformaGrid.title")} //
-                    >
-                        <Column dataField="REFERANS" caption={this.t("pg_proformaGrid.clmReferans")} width={200} defaultSortOrder="asc"/>
-                        <Column dataField="ITEM_CODE" caption={this.t("pg_proformaGrid.clmCode")} width={200}/>
-                        <Column dataField="ITEM_NAME" caption={this.t("pg_proformaGrid.clmName")} width={450} />
-                        <Column dataField="QUANTITY" caption={this.t("pg_proformaGrid.clmQuantity")} width={200} />
-                        <Column dataField="PRICE" caption={this.t("pg_proformaGrid.clmPrice")} width={200} format={{ style: "currency", currency: "EUR",precision: 3}}/>
-                        <Column dataField="TOTAL" caption={this.t("pg_proformaGrid.clmTotal")} width={200} format={{ style: "currency", currency: "EUR",precision: 3}}/>
-                    </NdPopGrid>
+                    <div>
+                        <NdPopGrid id={"pg_proformaGrid"} parent={this} container={"#root"}
+                        visible={false}
+                        position={{of:'#root'}} 
+                        showTitle={true} 
+                        showBorders={true}
+                        width={'90%'}
+                        height={'90%'}
+                        selection={{mode:"multiple"}}
+                        title={this.t("pg_proformaGrid.title")}
+                        deferRendering={true}
+                        >
+                            <Column dataField="REFERANS" caption={this.t("pg_proformaGrid.clmReferans")} width={200} defaultSortOrder="asc"/>
+                            <Column dataField="ITEM_CODE" caption={this.t("pg_proformaGrid.clmCode")} width={200}/>
+                            <Column dataField="ITEM_NAME" caption={this.t("pg_proformaGrid.clmName")} width={450} />
+                            <Column dataField="QUANTITY" caption={this.t("pg_proformaGrid.clmQuantity")} width={200} />
+                            <Column dataField="PRICE" caption={this.t("pg_proformaGrid.clmPrice")} width={200} format={{ style: "currency", currency: "EUR",precision: 3}}/>
+                            <Column dataField="TOTAL" caption={this.t("pg_proformaGrid.clmTotal")} width={200} format={{ style: "currency", currency: "EUR",precision: 3}}/>
+                        </NdPopGrid>
+                    </div>
                     {/* Detay PopUp */}
                     <div>
                         <NdPopUp parent={this} id={"popDetail"} 
@@ -4707,6 +4742,7 @@ export default class salesInvoice extends React.PureComponent
                         width={'500'}
                         height={'300'}
                         position={{of:'#root'}}
+                        deferRendering={true}
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
@@ -4776,6 +4812,7 @@ export default class salesInvoice extends React.PureComponent
                         width={'500'}
                         height={'250'}
                         position={{of:'#root'}}
+                        deferRendering={true}
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
@@ -4801,23 +4838,26 @@ export default class salesInvoice extends React.PureComponent
                             </Form>
                         </NdPopUp>
                     </div>  
-                    {/* Adres Seçim POPUP */}
-                    <NdPopGrid id={"pg_adress"} showCloseButton={false} parent={this} container={"#root"}
-                    visible={false}
-                    position={{of:'#root'}} 
-                    showTitle={true} 
-                    showBorders={true}
-                    width={'90%'}
-                    height={'90%'}
-                    title={this.t("pg_adress.title")} //
-                    >
-                        <Column dataField="ADRESS" caption={this.t("pg_adress.clmAdress")} width={250} />
-                        <Column dataField="CITY" caption={this.t("pg_adress.clmCiyt")} width={150} />
-                        <Column dataField="ZIPCODE" caption={this.t("pg_adress.clmZipcode")} width={300} defaultSortOrder="asc" />
-                        <Column dataField="COUNTRY" caption={this.t("pg_adress.clmCountry")} width={200}/>
-                    </NdPopGrid>
-                     {/* Birim PopUp */}
-                     <div>
+                    {/* Adres Seçim PopUp */}
+                    <div>
+                        <NdPopGrid id={"pg_adress"} showCloseButton={false} parent={this} container={"#root"}
+                        visible={false}
+                        position={{of:'#root'}} 
+                        showTitle={true} 
+                        showBorders={true}
+                        width={'90%'}
+                        height={'90%'}
+                        title={this.t("pg_adress.title")}
+                        deferRendering={true}
+                        >
+                            <Column dataField="ADRESS" caption={this.t("pg_adress.clmAdress")} width={250} />
+                            <Column dataField="CITY" caption={this.t("pg_adress.clmCiyt")} width={150} />
+                            <Column dataField="ZIPCODE" caption={this.t("pg_adress.clmZipcode")} width={300} defaultSortOrder="asc" />
+                            <Column dataField="COUNTRY" caption={this.t("pg_adress.clmCountry")} width={200}/>
+                        </NdPopGrid>
+                    </div>
+                    {/* Birim PopUp */}
+                    <div>
                         <NdDialog parent={this} id={"msgUnit"} 
                         visible={false}
                         showCloseButton={true}
@@ -4828,6 +4868,7 @@ export default class salesInvoice extends React.PureComponent
                         height={'400'}
                         position={{of:'#root'}}
                         button={[{id:"btn01",caption:this.t("msgUnit.btn01"),location:'after'}]}
+                        deferRendering={true}
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
@@ -4894,6 +4935,7 @@ export default class salesInvoice extends React.PureComponent
                         height={'400'}
                         position={{of:'#root'}}
                         button={[{id:"btn01",caption:this.t("msgDiscountEntry.btn01"),location:'after'}]}
+                        deferRendering={true}
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
@@ -4943,6 +4985,7 @@ export default class salesInvoice extends React.PureComponent
                         height={'400'}
                         position={{of:'#root'}}
                         button={[{id:"btn01",caption:this.t("msgDiscountPerEntry.btn01"),location:'after'}]}
+                        deferRendering={true}
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
@@ -5001,6 +5044,7 @@ export default class salesInvoice extends React.PureComponent
                         width={'600'}
                         height={'600'}
                         position={{of:'#root'}}
+                        deferRendering={true}
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
@@ -5111,6 +5155,7 @@ export default class salesInvoice extends React.PureComponent
                         width={'500'}
                         height={'250'}
                         position={{of:'#root'}}
+                        deferRendering={true}
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item >
