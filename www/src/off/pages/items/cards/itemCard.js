@@ -1072,11 +1072,10 @@ export default class itemCard extends React.PureComponent
                                             }
                                         }
                                         App.instance.setState({isExecute:false})
-                                        this.popAnalysis.show()
+                                        await this.popAnalysis.show()
                                     }}/>
                                 </Item>
-                                <Item location="after"
-                                locateInMenu="auto"
+                                <Item location="after" locateInMenu="auto"
                                 widget="dxButton"
                                 options=
                                 {
@@ -1187,6 +1186,7 @@ export default class itemCard extends React.PureComponent
                                             }
                                         ]
                                     }
+                                    deferRendering={true}
                                     >
                                         <Column dataField="CODE" caption={this.t("pg_txtRef.clmCode")} width={'20%'} />
                                         <Column dataField="NAME" caption={this.t("pg_txtRef.clmName")} width={'70%'} defaultSortOrder="asc" />
@@ -1228,13 +1228,13 @@ export default class itemCard extends React.PureComponent
                                     {
                                         id:'001',
                                         icon:'add',
-                                        onClick:()=>
-                                        {
+                                        onClick:async ()=>
+                                        {                                            
+                                            await this.popCustomer.show();
                                             this.txtPopCustomerCode.value = "";
                                             this.txtPopCustomerName.value = "";
                                             this.txtPopCustomerItemCode.value = "";
                                             this.txtPopCustomerPrice.value = 0;
-                                            this.popCustomer.show();
                                             setTimeout(async () => 
                                             {
                                                this.txtPopCustomerCode.focus()
@@ -1270,11 +1270,13 @@ export default class itemCard extends React.PureComponent
                                                 icon:'add',
                                                 onClick:async()=>
                                                 {
+                                                    
+                                                    await this.popBarcode.show();
                                                     await this.cmbPopBarUnit.dataRefresh({source : this.itemsObj.dt('ITEM_UNIT').where({TYPE:0})})
                                                     this.txtPopBarcode.value = "";
                                                     this.cmbPopBarType.value = "0";
                                                     this.cmbPopBarUnit.value = this.itemsObj.dt('ITEM_UNIT').where({TYPE:0}).length > 0 ? this.itemsObj.dt('ITEM_UNIT').where({TYPE:0})[0].GUID : ''
-                                                    this.popBarcode.show();
+
                                                     setTimeout(async () => 
                                                     {
                                                         this.txtPopBarcode.focus()
@@ -1507,8 +1509,8 @@ export default class itemCard extends React.PureComponent
                                     param={this.param.filter({ELEMENT:'chkTicketRest',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'chkTicketRest',USERS:this.user.CODE})}/>
                                 </Item>
-                                 {/* chkInterfel */}
-                                 <Item>
+                                {/* chkInterfel */}
+                                <Item>
                                     <Label text={this.t("chkInterfel")} alignment="right" />
                                     <NdCheckBox id="chkInterfel" parent={this} defaultValue={false} dt={{data:this.itemsObj.dt('ITEMS'),field:"INTERFEL"}}
                                      param={this.param.filter({ELEMENT:'chkInterfel',USERS:this.user.CODE})}
@@ -1573,15 +1575,16 @@ export default class itemCard extends React.PureComponent
                                                 <Item location="after">
                                                         <Button icon="add"
                                                         text={this.t("sellPriceAdd")}
-                                                        onClick={()=>
-                                                        {                                                        
+                                                        onClick={async()=>
+                                                        {   
+                                                            await this.popPrice.show();
+                                                            
                                                             this.dtPopPriStartDate.value = "1970-01-01"
                                                             this.dtPopPriEndDate.value = "1970-01-01"
                                                             this.txtPopPriQuantity.value = 1
-                                                            this.txtPopPriPrice.value = 0
+                                                            this.txtPopPriPrice.value = 10
                                                             this.txtPopPriPriceVatExt.value = 0
 
-                                                            this.popPrice.show();
                                                             setTimeout(async () => 
                                                             {
                                                                this.txtPopPriPrice.focus()
@@ -1691,8 +1694,10 @@ export default class itemCard extends React.PureComponent
                                             <Toolbar>
                                                 <Item location="after">
                                                     <Button icon="add"
-                                                    onClick={()=>
+                                                    onClick={async()=>
                                                     {                                                        
+                                                        await this.popUnit.show();
+
                                                         this.cmbPopUnitType.value = "2"
                                                         this.cmbPopUnitName.value = "001"
                                                         this.txtPopUnitFactor.value = "0"
@@ -1701,8 +1706,6 @@ export default class itemCard extends React.PureComponent
                                                         this.txtPopUnitWidth.value = "0";
                                                         this.txtPopUnitHeight.value = "0"
                                                         this.txtPopUnitSize.value = "0"
-
-                                                        this.popUnit.show();
                                                     }}/>
                                                 </Item>
                                             </Toolbar>
@@ -1756,12 +1759,14 @@ export default class itemCard extends React.PureComponent
                                                 <Item location="after">
                                                     <Button icon="add"
                                                     onClick={async ()=>
-                                                    {
+                                                    {                                                        
+                                                        await this.popBarcode.show();
+
                                                         await this.cmbPopBarUnit.dataRefresh({source : this.itemsObj.dt('ITEM_UNIT').where({TYPE:{'in':[0,2]}})})
                                                         this.txtPopBarcode.value = "";
                                                         this.cmbPopBarType.value = "0";
                                                         this.cmbPopBarUnit.value = this.itemsObj.dt('ITEM_UNIT').where({TYPE:0}).length > 0 ? this.itemsObj.dt('ITEM_UNIT').where({TYPE:0})[0].GUID : ''
-                                                        this.popBarcode.show();
+
                                                         setTimeout(async () => 
                                                         {
                                                            this.txtPopBarcode.focus()
@@ -1803,12 +1808,12 @@ export default class itemCard extends React.PureComponent
                                             <Toolbar>
                                                 <Item location="after">
                                                     <Button icon="add"
-                                                    onClick={()=>
+                                                    onClick={async()=>
                                                     {
-                                                        
+                                                        await this.popCustomer.show();
                                                         this.txtPopCustomerItemCode.value = "";
                                                         this.txtPopCustomerPrice.value = 0;
-                                                        this.popCustomer.show();
+
                                                         setTimeout(async () => 
                                                         {
                                                            this.txtPopCustomerCode.focus()
@@ -2120,6 +2125,7 @@ export default class itemCard extends React.PureComponent
                         width={'500'}
                         height={'400'}
                         position={{of:'#root'}}
+                        deferRendering={true}
                         >
                             <Form colCount={1} height={'fit-content'} id={"frmPrice" + this.tabIndex}>
                                 <Item>
@@ -2255,6 +2261,7 @@ export default class itemCard extends React.PureComponent
                         width={'500'}
                         height={'510'}
                         position={{of:'#root'}}
+                        deferRendering={true}
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
@@ -2346,6 +2353,7 @@ export default class itemCard extends React.PureComponent
                         width={'500'}
                         height={'275'}
                         position={{of:'#root'}}
+                        deferRendering={true}
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
@@ -2477,6 +2485,7 @@ export default class itemCard extends React.PureComponent
                         width={'500'}
                         height={'320'}
                         position={{of:'#root'}}
+                        deferRendering={true}
                         >
                             <Form colCount={1} height={'fit-content'} id={"frmItemCustomer" + + this.tabIndex}>
                                 <Item>
@@ -2550,6 +2559,7 @@ export default class itemCard extends React.PureComponent
                                             sql:this.core.sql
                                         }
                                     }}
+                                    deferRendering={true}
                                     >           
                                     <Scrolling mode="standart" />                         
                                     <Column dataField="TITLE" caption={this.t("pg_txtPopCustomerCode.clmName")} width={650} defaultSortOrder="asc" />
@@ -2662,6 +2672,7 @@ export default class itemCard extends React.PureComponent
                         width={'1200'}
                         height={'700'}
                         position={{of:'#root'}}
+                        deferRendering={true}
                         >
                             <Form colCount={3} height={'fit-content'}>
                                 <Item colSpan={2}>
@@ -2841,6 +2852,7 @@ export default class itemCard extends React.PureComponent
                         height={'230'}
                         position={{of:'#root'}}
                         button={[{id:"btn01",caption:this.t("msgUnit.btn01"),location:'after'}]}
+                        deferRendering={true}
                         >
                             <div className='row py-2'>
                                 <div className='col-5'>
@@ -2888,6 +2900,7 @@ export default class itemCard extends React.PureComponent
                         width={'800'}
                         height={'500'}
                         position={{of:'#root'}}
+                        deferRendering={true}
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>

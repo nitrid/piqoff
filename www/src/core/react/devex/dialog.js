@@ -117,6 +117,7 @@ export default class NdDialog extends Base
             height={this.state.height}
             position={this.state.position}
             scroll={false}
+            deferRendering={typeof this.props.deferRendering == 'undefined' ? false : this.props.deferRendering}
             >
                 <Position
                 at="bottom"
@@ -150,6 +151,7 @@ export const dialog = function()
             height={arguments[0].height}
             button={arguments[0].button}
             timeout={arguments[0].timeout}
+            deferRendering={typeof arguments[0].deferRendering == 'undefined' ? false : arguments[0].deferRendering}
             onHiding={()=>
             {
                 if(tmpObj.current.result == null)

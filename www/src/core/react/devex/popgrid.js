@@ -233,36 +233,11 @@ export default class NdPopGrid extends Base
     }    
     async show()
     {
-        this.grid.devGrid.clearSelection()
-        if(typeof this.props.search == 'undefined' || this.props.search == false)
-        {
-            //this.setState({show:true})
-            this["pop_" + this.props.id].show();
-            this.grid = await this._isGrid();
-            await this.grid.dataRefresh(this.state.data)
-        }
-        else
-        {                    
-            if(this["txt" + this.props.id].value == '')
-            {
-                this.grid.devGrid.clearFilter()
-                await this.grid.dataRefresh({source:[]})
-                this["txt" + this.props.id].setState({value:''})
-            }
-           
-            this["pop_" + this.props.id].show();
-            setTimeout(() => 
-            {
-                this["txt" + this.props.id].focus()
-            }, 700);
-            
-        }
-       
+        this["pop_" + this.props.id].show();
     }
     hide()
     {
         this["pop_" + this.props.id].hide();
-        //this.setState({show:false})
     }
     async setVal(pValue)
     {
@@ -318,7 +293,32 @@ export default class NdPopGrid extends Base
                     container={this.state.container}
                     width={this.state.width}
                     height={this.state.height}
-                    position={this.state.position}                    
+                    position={this.state.position}
+                    deferRendering={typeof this.props.deferRendering == 'undefined' ? false : this.props.deferRendering}
+                    onShowed={async()=>
+                    {
+                        this.grid = await this._isGrid();
+                        this.grid.devGrid.clearSelection()
+
+                        if(typeof this.props.search == 'undefined' || this.props.search == false)
+                        {
+                            await this.grid.dataRefresh(this.state.data)
+                        }
+                        else
+                        {                    
+                            if(this["txt" + this.props.id].value == '')
+                            {
+                                this.grid.devGrid.clearFilter()
+                                await this.grid.dataRefresh({source:[]})
+                                this["txt" + this.props.id].setState({value:''})
+                            }
+                        
+                            setTimeout(() => 
+                            {
+                                this["txt" + this.props.id].focus()
+                            }, 700);
+                        }
+                    }}
                 >
                     {this._buttonView()}
                     {this._formView()}      

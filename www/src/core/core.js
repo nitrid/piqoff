@@ -715,15 +715,9 @@ export class util
             });
         });
     }
-    waitUntil()
+    async waitUntil()
     {
-        return new Promise(async resolve => 
-        {
-            setTimeout(() => 
-            {
-                resolve()
-            }, typeof arguments[0] == 'undefined' ? 0 : arguments[0]);
-        })
+        await new Promise(resolve => setTimeout(resolve, typeof arguments[0] == 'undefined' ? 0 : arguments[0]));
     }
     isElectron() 
     {
