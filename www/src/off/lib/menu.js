@@ -248,11 +248,21 @@ export const menu = (e) =>
                             text: e.t('menuOff.cri_01_002'),//'Adres Tanımları',
                             path: 'customers/cards/customerAddressCard'
                         },
-                        // {
-                        //     id: 'cri_01_003',
-                        //     text: e.t('menuOff.cri_01_003'),//'Grup Tanımları',
-                        //     path: 'customers/cards/customerCard'
-                        // }
+                        {
+                            id: 'cri_01_003',
+                            text: e.t('menuOff.cri_01_003'),//'Grup Tanımları',
+                            path: 'customers/cards/customerCard'
+                        },
+                        {
+                            id: 'cri_01_004',
+                            text: e.t('menuOff.cri_01_004'),//'Bölge Tanımları',
+                            path: 'customers/cards/areaCard'
+                        },
+                        {
+                            id: 'cri_01_005',
+                            text: e.t('menuOff.cri_01_005'),//'Sektör Tanımları',
+                            path: 'customers/cards/sectorCard'
+                        }
                     ]
                 },
                 {

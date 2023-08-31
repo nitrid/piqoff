@@ -181,6 +181,8 @@ export const langFr =
         cri_01_001: "Fournisseur-Client saisie",
         cri_01_002: "Adresse saisie",
         cri_01_003: "Catégorie saisie",
+        cri_01_004: "Bölge Tanımları",  // BAK
+        cri_01_005: "Sektör Tanımları",   // BAK
         cri_02_001: "Liste Fournisseur-Client",
         cri_02_002: "Liste adresse",
         cri_02_003: "Liste Catégorie ",
@@ -3136,6 +3138,102 @@ export const langFr =
         {
             frmCustomerAddress: "Vous ne pouvez pas passer le code vide !",
         }
+    },
+    cri_01_004 : // "Bölge Tanımları"    /// Komple BAK
+    {
+        txtCode : "Kodu",
+        txtName :"Adı",
+        cmbType :"Tip",
+        validCode :"Kodu Boş Geçemezsiniz !",
+        pg_txtCode : 
+        {
+            title : "Bölge Seçimi",
+            clmCode : "KODU",
+            clmName : "ADI",
+            clmType : "TİPİ",
+        },
+        msgSave:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kayıt etmek istediğinize eminmisiniz !"
+        },
+        msgSaveResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Kayıt işleminiz başarılı !",
+            msgFailed: "Kayıt işleminiz başarısız !"
+        },
+        msgSaveValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen gerekli alanları doldurunuz !"
+        },
+        msgDelete:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        },
+        msgCode : 
+        {
+            title: "Dikkat",
+            btn01: "Kasaya Git",
+            btn02: "Tamam",
+            msg : "Girmiş olduğunuz Kasa sistem de kayıtlı !"
+        },
+    },
+    cri_01_005 : // "Sektör Tanımları"    /// Komple BAK
+    {
+        txtCode : "Kodu",
+        txtName :"Adı",
+        cmbType :"Tip",
+        validCode :"Kodu Boş Geçemezsiniz !",
+        pg_txtCode : 
+        {
+            title : "Bölge Seçimi",
+            clmCode : "KODU",
+            clmName : "ADI",
+            clmType : "TİPİ",
+        },
+        msgSave:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kayıt etmek istediğinize eminmisiniz !"
+        },
+        msgSaveResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Kayıt işleminiz başarılı !",
+            msgFailed: "Kayıt işleminiz başarısız !"
+        },
+        msgSaveValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen gerekli alanları doldurunuz !"
+        },
+        msgDelete:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        },
+        msgCode : 
+        {
+            title: "Dikkat",
+            btn01: "Kasaya Git",
+            btn02: "Tamam",
+            msg : "Girmiş olduğunuz Kasa sistem de kayıtlı !"
+        },
     },
     cri_02_001: // "Cari Listesi"
     {

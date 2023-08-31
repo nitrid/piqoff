@@ -491,7 +491,7 @@ export default class Sale extends React.PureComponent
         let tmpConfObj1 =
         {
             id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
-            button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
+            button:[{id:"btn01",caption:this.t("msgSaveResult.btn01"),location:'after'}],
         }
         if((await this.docObj.save()) == 0)
         {                                                    

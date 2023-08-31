@@ -29,6 +29,18 @@ export class customersCls
             TAX_SUCRE : false,
             DEB : false,
             STATUS :true,
+            SECTOR : '00000000-0000-0000-0000-000000000000',
+            SECTOR_NAME : '',
+            SECTOR_CODE : '',
+            AREA : '00000000-0000-0000-0000-000000000000',
+            AREA_NAME : '',
+            AREA_CODE : '',
+            MAIN_CUSTOMER : '00000000-0000-0000-0000-000000000000',
+            MAIN_CUSTOMER_NAME : '',
+            MAIN_CUSTOMER_CODE : '',
+            SUB_CUSTOMER : '00000000-0000-0000-0000-000000000000',
+            SUB_CUSTOMER_NAME : '',
+            SUB_CUSTOMER_CODE : '',
         }
 
         this.customerOffical = new customerOfficalCls();
@@ -73,12 +85,16 @@ export class customersCls
                     "@DEB = @PDEB, " +
                     "@EXPIRY_DAY = @PEXPIRY_DAY, " +
                     "@RISK_LIMIT = @PRISK_LIMIT, " +
-                    "@STATUS = @PSTATUS ",
+                    "@STATUS = @PSTATUS, " +
+                    "@SECTOR = @PSECTOR, " +
+                    "@AREA = @PAREA, " +
+                    "@MAIN_CUSTOMER = @PMAIN_CUSTOMER, " +
+                    "@SUB_CUSTOMER = @PSUB_CUSTOMER ",
             param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PTITLE:string|50','PCODE:string|50','PGENUS:int','PCUSTOMER_GRP:string|25','PWEB:string|100','PNOTE:string|1500',
                         'PSIRET_ID:string|100','PSIREN_NO:string|100','PRCS:string|100','PAPE_CODE:string|100','PTAX_OFFICE:string|100','PTAX_NO:string|100','PINT_VAT_NO:string|100','PINSURANCE_NO:string|100',
-                       'PTAX_TYPE:int','PCAPITAL:float','PREBATE:bit','PTAX_SUCRE:bit','PDEB:bit','PEXPIRY_DAY:float','PRISK_LIMIT:float','PSTATUS:bit'],
+                       'PTAX_TYPE:int','PCAPITAL:float','PREBATE:bit','PTAX_SUCRE:bit','PDEB:bit','PEXPIRY_DAY:float','PRISK_LIMIT:float','PSTATUS:bit','PSECTOR:string|50','PAREA:string|50','PMAIN_CUSTOMER:string|50','PSUB_CUSTOMER:string|50'],
             dataprm : ['GUID','CUSER','TYPE','TITLE','CODE','GENUS','CUSTOMER_GRP','WEB','NOTE','SIRET_ID','SIREN_NO','RCS','APE_CODE','TAX_OFFICE','TAX_NO','INT_VAT_NO','INSURANCE_NO','TAX_TYPE','CAPITAL'
-                        ,'REBATE','TAX_SUCRE','DEB','EXPIRY_DAY','RISK_LIMIT','STATUS']
+                        ,'REBATE','TAX_SUCRE','DEB','EXPIRY_DAY','RISK_LIMIT','STATUS','SECTOR','AREA','MAIN_CUSTOMER','SUB_CUSTOMER']
         }
         tmpDt.updateCmd = 
         {
@@ -107,12 +123,16 @@ export class customersCls
                     "@DEB = @PDEB, " +
                     "@EXPIRY_DAY = @PEXPIRY_DAY, " +
                     "@RISK_LIMIT = @PRISK_LIMIT, " +
-                    "@STATUS = @PSTATUS ",
+                    "@STATUS = @PSTATUS, " +
+                    "@SECTOR = @PSECTOR, " +
+                    "@AREA = @PAREA, " +
+                    "@MAIN_CUSTOMER = @PMAIN_CUSTOMER, " +
+                    "@SUB_CUSTOMER = @PSUB_CUSTOMER ",
             param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PTITLE:string|50','PCODE:string|50','PGENUS:int','PCUSTOMER_GRP:string|25','PWEB:string|100','PNOTE:string|1500',
                         'PSIRET_ID:string|100','PSIREN_NO:string|100','PRCS:string|100','PAPE_CODE:string|100','PTAX_OFFICE:string|100','PTAX_NO:string|100','PINT_VAT_NO:string|100','PINSURANCE_NO:string|100',
-                       'PTAX_TYPE:int','PCAPITAL:float','PREBATE:bit','PTAX_SUCRE:bit','PDEB:bit','PEXPIRY_DAY:float','PRISK_LIMIT:float','PSTATUS:bit'],
+                       'PTAX_TYPE:int','PCAPITAL:float','PREBATE:bit','PTAX_SUCRE:bit','PDEB:bit','PEXPIRY_DAY:float','PRISK_LIMIT:float','PSTATUS:bit','PSECTOR:string|50','PAREA:string|50','PMAIN_CUSTOMER:string|50','PSUB_CUSTOMER:string|50'],
             dataprm : ['GUID','CUSER','TYPE','TITLE','CODE','GENUS','CUSTOMER_GRP','WEB','NOTE','SIRET_ID','SIREN_NO','RCS','APE_CODE','TAX_OFFICE','TAX_NO','INT_VAT_NO','INSURANCE_NO','TAX_TYPE','CAPITAL'
-                        ,'REBATE','TAX_SUCRE','DEB','EXPIRY_DAY','RISK_LIMIT','STATUS']
+                        ,'REBATE','TAX_SUCRE','DEB','EXPIRY_DAY','RISK_LIMIT','STATUS','SECTOR','AREA','MAIN_CUSTOMER','SUB_CUSTOMER']
         }
         tmpDt.deleteCmd = 
         {
@@ -609,6 +629,262 @@ export class customerBankCls
             
             resolve(this.ds.get('CUSTOMER_BANK'));
             
+        });
+    }
+    save()
+    {
+        return new Promise(async resolve => 
+        {
+            this.ds.delete()
+            resolve(await this.ds.update()); 
+        });
+    }
+}
+export class sectorCls
+{
+    constructor()
+    {
+        this.core = core.instance;
+        this.ds = new dataset();
+        this.empty = 
+        {
+            GUID : '00000000-0000-0000-0000-000000000000',
+            CDATE : moment(new Date()).format("YYYY-MM-DD"),
+            CUSER : this.core.auth.data.CODE,
+            CUSER_NAME : '',
+            LDATE : moment(new Date()).format("YYYY-MM-DD"),
+            LUSER : this.core.auth.data.CODE,
+            LUSER_NAME : '',
+            CODE : '',
+            NAME : '',           
+        }
+
+        this._initDs();
+    }
+    //#region Private
+    _initDs()
+    {
+        let tmpDt = new datatable('CUSTOMER_SECTOR');            
+        tmpDt.selectCmd = 
+        {
+            query : "SELECT * FROM [dbo].[CUSTOMER_SECTOR_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND ((CODE = @CODE) OR (@CODE = ''))",
+            param : ['GUID:string|50','CODE:string|25']
+        } 
+        tmpDt.insertCmd = 
+        {
+            query : "EXEC [dbo].[PRD_CUSTOMER_SECTOR_INSERT] " + 
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " + 
+                    "@CODE = @PCODE, " + 
+                    "@NAME = @PNAME " , 
+            param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|50','PNAME:string|50'],
+            dataprm : ['GUID','CUSER','CODE','NAME']
+        } 
+        tmpDt.updateCmd = 
+        {
+            query : "EXEC [dbo].[PRD_CUSTOMER_SECTOR_UPDATE] " + 
+            "@GUID = @PGUID, " +
+            "@CUSER = @PCUSER, " + 
+            "@CODE = @PCODE, " + 
+            "@NAME = @PNAME " , 
+            param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|50','PNAME:string|50'],
+            dataprm : ['GUID','CUSER','CODE','NAME']
+        } 
+        tmpDt.deleteCmd = 
+        {
+            query : "EXEC [dbo].[PRD_CUSTOMER_SECTOR_DELETE] " + 
+                    "@CUSER = @PCUSER, " + 
+                    "@UPDATE = 1, " + 
+                    "@GUID = @PGUID ",
+            param : ['PCUSER:string|25','PGUID:string|50'],
+            dataprm : ['CUSER','GUID']
+        }
+
+        this.ds.add(tmpDt);
+    }
+    //#endregion
+    dt()
+    {
+        if(arguments.length > 0)
+        {
+            return this.ds.get(arguments[0]);
+        }
+
+        return this.ds.get(0)
+    }
+    addEmpty()
+    {
+        if(typeof this.dt('CUSTOMER_SECTOR') == 'undefined')
+        {
+            return;
+        }
+        let tmp = {}
+        if(arguments.length > 0)
+        {
+            tmp = {...arguments[0]}            
+        }
+        else
+        {
+            tmp = {...this.empty}
+        }
+        tmp.GUID = datatable.uuidv4();
+        this.dt('CUSTOMER_SECTOR').push(tmp)
+    }
+    clearAll()
+    {
+        for (let i = 0; i < this.ds.length; i++) 
+        {
+            this.dt(i).clear()
+        }
+    }
+    load()
+    {
+        //PARAMETRE OLARAK OBJE GÖNDERİLİR YADA PARAMETRE BOŞ İSE TÜMÜ GETİRİLİ.
+        return new Promise(async resolve => 
+        {
+            let tmpPrm = 
+            {
+                GUID : '00000000-0000-0000-0000-000000000000',
+                CODE : ''
+            }          
+
+            if(arguments.length > 0)
+            {
+                tmpPrm.GUID = typeof arguments[0].GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].GUID;
+                tmpPrm.CODE = typeof arguments[0].CODE == 'undefined' ? '' : arguments[0].CODE;
+            }
+            this.ds.get('CUSTOMER_SECTOR').selectCmd.value = Object.values(tmpPrm)
+
+            await this.ds.get('CUSTOMER_SECTOR').refresh();
+            resolve(this.ds.get('CUSTOMER_SECTOR'));    
+        });
+    }
+    save()
+    {
+        return new Promise(async resolve => 
+        {
+            this.ds.delete()
+            resolve(await this.ds.update()); 
+        });
+    }
+}
+export class areaCls
+{
+    constructor()
+    {
+        this.core = core.instance;
+        this.ds = new dataset();
+        this.empty = 
+        {
+            GUID : '00000000-0000-0000-0000-000000000000',
+            CDATE : moment(new Date()).format("YYYY-MM-DD"),
+            CUSER : this.core.auth.data.CODE,
+            CUSER_NAME : '',
+            LDATE : moment(new Date()).format("YYYY-MM-DD"),
+            LUSER : this.core.auth.data.CODE,
+            LUSER_NAME : '',
+            CODE : '',
+            NAME : '',           
+        }
+
+        this._initDs();
+    }
+    //#region Private
+    _initDs()
+    {
+        let tmpDt = new datatable('CUSTOMER_AREA');            
+        tmpDt.selectCmd = 
+        {
+            query : "SELECT * FROM [dbo].[CUSTOMER_AREA_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND ((CODE = @CODE) OR (@CODE = ''))",
+            param : ['GUID:string|50','CODE:string|25']
+        } 
+        tmpDt.insertCmd = 
+        {
+            query : "EXEC [dbo].[PRD_CUSTOMER_AREA_INSERT] " + 
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " + 
+                    "@CODE = @PCODE, " + 
+                    "@NAME = @PNAME " , 
+            param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|50','PNAME:string|50'],
+            dataprm : ['GUID','CUSER','CODE','NAME']
+        } 
+        tmpDt.updateCmd = 
+        {
+            query : "EXEC [dbo].[PRD_CUSTOMER_AREA_UPDATE] " + 
+            "@GUID = @PGUID, " +
+            "@CUSER = @PCUSER, " + 
+            "@CODE = @PCODE, " + 
+            "@NAME = @PNAME " , 
+            param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|50','PNAME:string|50'],
+            dataprm : ['GUID','CUSER','CODE','NAME']
+        } 
+        tmpDt.deleteCmd = 
+        {
+            query : "EXEC [dbo].[PRD_CUSTOMER_AREA_DELETE] " + 
+                    "@CUSER = @PCUSER, " + 
+                    "@UPDATE = 1, " + 
+                    "@GUID = @PGUID ",
+            param : ['PCUSER:string|25','PGUID:string|50'],
+            dataprm : ['CUSER','GUID']
+        }
+
+        this.ds.add(tmpDt);
+    }
+    //#endregion
+    dt()
+    {
+        if(arguments.length > 0)
+        {
+            return this.ds.get(arguments[0]);
+        }
+
+        return this.ds.get(0)
+    }
+    addEmpty()
+    {
+        if(typeof this.dt('CUSTOMER_AREA') == 'undefined')
+        {
+            return;
+        }
+        let tmp = {}
+        if(arguments.length > 0)
+        {
+            tmp = {...arguments[0]}            
+        }
+        else
+        {
+            tmp = {...this.empty}
+        }
+        tmp.GUID = datatable.uuidv4();
+        this.dt('CUSTOMER_AREA').push(tmp)
+    }
+    clearAll()
+    {
+        for (let i = 0; i < this.ds.length; i++) 
+        {
+            this.dt(i).clear()
+        }
+    }
+    load()
+    {
+        //PARAMETRE OLARAK OBJE GÖNDERİLİR YADA PARAMETRE BOŞ İSE TÜMÜ GETİRİLİ.
+        return new Promise(async resolve => 
+        {
+            let tmpPrm = 
+            {
+                GUID : '00000000-0000-0000-0000-000000000000',
+                CODE : ''
+            }          
+
+            if(arguments.length > 0)
+            {
+                tmpPrm.GUID = typeof arguments[0].GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].GUID;
+                tmpPrm.CODE = typeof arguments[0].CODE == 'undefined' ? '' : arguments[0].CODE;
+            }
+            this.ds.get('CUSTOMER_AREA').selectCmd.value = Object.values(tmpPrm)
+
+            await this.ds.get('CUSTOMER_AREA').refresh();
+            resolve(this.ds.get('CUSTOMER_AREA'));    
         });
     }
     save()
