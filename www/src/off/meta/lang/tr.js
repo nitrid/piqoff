@@ -181,6 +181,8 @@ export const langTr =
         cri_01_001: "Müşteri Tanımları",
         cri_01_002: "Adres Tanımları",
         cri_01_003: "Grup Tanımları",
+        cri_01_004: "Bölge Tanımları",
+        cri_01_005: "Sektör Tanımları",
         cri_02_001: "Müşteri Listesi",
         cri_02_002: "Adres Listesi",
         cri_02_003: "Grup Listesi",
@@ -3068,7 +3070,40 @@ export const langTr =
         validation :
         {
             frmCustomers: "Kodu boş geçemezsiniz !",
-        }
+        },
+        txtSubCustomer : "Alt Cari",
+        pg_subCustomer : 
+        {
+            title : "Alt Cari Seçim",
+            clmCode : "KODU",
+            clmTitle : "Ünvan",
+            clmName : "Adı",
+            clmLastName  : "Soyadı",
+        },
+        txtMainCustomer : "Ana Cari",
+        pg_mainCustomer : 
+        {
+            title : "Ana Cari Seçim",
+            clmCode : "KODU",
+            clmTitle : "Ünvan",
+            clmName : "Adı",
+            clmLastName  : "Soyadı",
+        },
+        txtArea : "Bölge",
+        pg_AreaCode : 
+        {
+            title : "Bölge Seçim",
+            clmCode : "KODU",
+            clmName : "Adı",
+        },
+        txtSector : "Sektör",
+        pg_SectorCode : 
+        {
+            title : "Bölge Seçim",
+            clmCode : "KODU",
+            clmName : "Adı",
+        },
+
     },
     cri_01_002: // "Adres Tanımları"
     {
@@ -3138,6 +3173,102 @@ export const langTr =
         {
             frmCustomerAddress: "Kodu boş geçemezsiniz !",
         }
+    },
+    cri_01_004 : // "Bölge Tanımları"
+    {
+        txtCode : "Kodu",
+        txtName :"Adı",
+        cmbType :"Tip",
+        validCode :"Kodu Boş Geçemezsiniz !",
+        pg_txtCode : 
+        {
+            title : "Bölge Seçimi",
+            clmCode : "KODU",
+            clmName : "ADI",
+            clmType : "TİPİ",
+        },
+        msgSave:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kayıt etmek istediğinize eminmisiniz !"
+        },
+        msgSaveResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Kayıt işleminiz başarılı !",
+            msgFailed: "Kayıt işleminiz başarısız !"
+        },
+        msgSaveValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen gerekli alanları doldurunuz !"
+        },
+        msgDelete:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        },
+        msgCode : 
+        {
+            title: "Dikkat",
+            btn01: "Kasaya Git",
+            btn02: "Tamam",
+            msg : "Girmiş olduğunuz Kasa sistem de kayıtlı !"
+        },
+    },
+    cri_01_005 : // "Sektör Tanımları"
+    {
+        txtCode : "Kodu",
+        txtName :"Adı",
+        cmbType :"Tip",
+        validCode :"Kodu Boş Geçemezsiniz !",
+        pg_txtCode : 
+        {
+            title : "Bölge Seçimi",
+            clmCode : "KODU",
+            clmName : "ADI",
+            clmType : "TİPİ",
+        },
+        msgSave:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kayıt etmek istediğinize eminmisiniz !"
+        },
+        msgSaveResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Kayıt işleminiz başarılı !",
+            msgFailed: "Kayıt işleminiz başarısız !"
+        },
+        msgSaveValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen gerekli alanları doldurunuz !"
+        },
+        msgDelete:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        },
+        msgCode : 
+        {
+            title: "Dikkat",
+            btn01: "Kasaya Git",
+            btn02: "Tamam",
+            msg : "Girmiş olduğunuz Kasa sistem de kayıtlı !"
+        },
     },
     cri_02_001: // "Müşteri Listesi"
     {

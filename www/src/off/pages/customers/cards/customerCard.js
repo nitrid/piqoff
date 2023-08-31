@@ -4,7 +4,7 @@ import { customersCls,customerAdressCls, customerOfficalCls } from '../../../../
 
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
-import Form, { Label,Item } from 'devextreme-react/form';
+import Form, { Label,Item,EmptyItem} from 'devextreme-react/form';
 import TabPanel from 'devextreme-react/tab-panel';
 import { Button } from 'devextreme-react/button';
 
@@ -842,7 +842,223 @@ export default class CustomerCard extends React.PureComponent
                                     <Item title={this.t("tabTitleDetail")}>
                                         <div className='row px-2 py-2'>
                                             <div className='col-12'>
-                                               <Form colCount={6}>
+                                               <Form colCount={4}>
+                                                {/* txtSector */}
+                                                <Item>                                    
+                                                    <Label text={this.t("txtSector")} alignment="right" />
+                                                    <NdTextBox id="txtSector" parent={this} simple={true} tabIndex={this.tabIndex} dt={{data:this.customerObj.dt('CUSTOMERS'),field:"SECTOR_NAME"}} 
+                                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value} readOnly={true}
+                                                    button=
+                                                    {
+                                                        [
+                                                            {
+                                                                id:'01',
+                                                                icon:'more',
+                                                                onClick:()=>
+                                                                {
+                                                                    this.pg_SectorCode.show()
+                                                                    this.pg_SectorCode.onClick = (data) =>
+                                                                    {
+                                                                        if(data.length > 0)
+                                                                        {
+                                                                            this.customerObj.dt()[0].SECTOR_CODE = data[0].CODE
+                                                                            this.customerObj.dt()[0].SECTOR_NAME = data[0].NAME
+                                                                            this.customerObj.dt()[0].SECTOR = data[0].GUID
+                                                                        }
+                                                                    }
+                                                                }
+                                                            },
+                                                        ]
+                                                    }
+                                                    onChange={(async()=>
+                                                    {
+                                                        let tmpResult = await this.checkItem(this.txtRef.value)
+                                                        if(tmpResult == 3)
+                                                        {
+                                                            this.txtRef.value = "";
+                                                        }
+                                                    }).bind(this)} 
+                                                    selectAll={true}                           
+                                                    >     
+                                                    </NdTextBox>      
+                                                    {/*SEKTÖR KODU POPUP */}
+                                                    <NdPopGrid id={"pg_SectorCode"} parent={this} container={"#root"} 
+                                                    visible={false}
+                                                    position={{of:'#root'}} 
+                                                    showTitle={true} 
+                                                    showBorders={true}
+                                                    width={'90%'}
+                                                    height={'90%'}
+                                                    title={this.t("pg_SectorCode.title")} 
+                                                    selection={{mode:"single"}}
+                                                    data={{source:{select:{query : "SELECT GUID,CODE,NAME FROM CUSTOMER_SECTOR_VW_01"},sql:this.core.sql}}}
+                                                    >
+                                                        <Column dataField="CODE" caption={this.t("pg_SectorCode.clmCode")} width={'20%'} />
+                                                        <Column dataField="NAME" caption={this.t("pg_SectorCode.clmName")} width={'70%'} defaultSortOrder="asc" />
+                                                    </NdPopGrid>
+                                                </Item>
+                                                {/* txtArea */}
+                                                <Item>                                    
+                                                    <Label text={this.t("txtArea")} alignment="right" />
+                                                    <NdTextBox id="txtArea" parent={this} simple={true} tabIndex={this.tabIndex} dt={{data:this.customerObj.dt('CUSTOMERS'),field:"AREA_NAME"}} 
+                                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value} readOnly={true}
+                                                    button=
+                                                    {
+                                                        [
+                                                            {
+                                                                id:'01',
+                                                                icon:'more',
+                                                                onClick:()=>
+                                                                {
+                                                                    this.pg_AreaCode.show()
+                                                                    this.pg_AreaCode.onClick = (data) =>
+                                                                    {
+                                                                        if(data.length > 0)
+                                                                        {
+                                                                            this.customerObj.dt()[0].AREA_CODE = data[0].CODE
+                                                                            this.customerObj.dt()[0].AREA_NAME = data[0].NAME
+                                                                            this.customerObj.dt()[0].AREA = data[0].GUID
+                                                                        }
+                                                                    }
+                                                                }
+                                                            },
+                                                        ]
+                                                    }
+                                                    onChange={(async()=>
+                                                    {
+                                                        let tmpResult = await this.checkItem(this.txtRef.value)
+                                                        if(tmpResult == 3)
+                                                        {
+                                                            this.txtRef.value = "";
+                                                        }
+                                                    }).bind(this)} 
+                                                    selectAll={true}                           
+                                                    >     
+                                                    </NdTextBox>      
+                                                    {/*BÖLGE KODU POPUP */}
+                                                    <NdPopGrid id={"pg_AreaCode"} parent={this} container={"#root"} 
+                                                    visible={false}
+                                                    position={{of:'#root'}} 
+                                                    showTitle={true} 
+                                                    showBorders={true}
+                                                    width={'90%'}
+                                                    height={'90%'}
+                                                    title={this.t("pg_AreaCode.title")} 
+                                                    selection={{mode:"single"}}
+                                                    data={{source:{select:{query : "SELECT GUID,CODE,NAME FROM CUSTOMER_AREA_VW_01"},sql:this.core.sql}}}
+                                                    >
+                                                        <Column dataField="CODE" caption={this.t("pg_AreaCode.clmCode")} width={'20%'} />
+                                                        <Column dataField="NAME" caption={this.t("pg_AreaCode.clmName")} width={'70%'} defaultSortOrder="asc" />
+                                                    </NdPopGrid>
+                                                </Item>
+                                                 {/* txtMainCustomer */}
+                                                 <Item>                                    
+                                                    <Label text={this.t("txtMainCustomer")} alignment="right" />
+                                                    <NdTextBox id="txtMainCustomer" parent={this} simple={true} tabIndex={this.tabIndex} dt={{data:this.customerObj.dt('CUSTOMERS'),field:"MAIN_CUSTOMER_NAME"}} 
+                                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value} readOnly={true}
+                                                    button=
+                                                    {
+                                                        [
+                                                            {
+                                                                id:'01',
+                                                                icon:'more',
+                                                                onClick:()=>
+                                                                {
+                                                                    this.pg_mainCustomer.show()
+                                                                    this.pg_mainCustomer.onClick = (data) =>
+                                                                    {
+                                                                        if(data.length > 0)
+                                                                        {
+                                                                            this.customerObj.dt()[0].MAIN_CUSTOMER_CODE = data[0].CODE
+                                                                            this.customerObj.dt()[0].MAIN_CUSTOMER_NAME = data[0].NAME
+                                                                            this.customerObj.dt()[0].MAIN_CUSTOMER = data[0].GUID
+                                                                        }
+                                                                    }
+                                                                }
+                                                            },
+                                                        ]
+                                                    }
+                                                    onChange={(async()=>
+                                                    {
+                                                        let tmpResult = await this.checkItem(this.txtRef.value)
+                                                        if(tmpResult == 3)
+                                                        {
+                                                            this.txtRef.value = "";
+                                                        }
+                                                    }).bind(this)} 
+                                                    selectAll={true}                           
+                                                    >     
+                                                    </NdTextBox>      
+                                                    {/*ANA CARİ POPUP */}
+                                                    <NdPopGrid id={"pg_mainCustomer"} parent={this} container={"#root"} 
+                                                    visible={false}
+                                                    position={{of:'#root'}} 
+                                                    showTitle={true} 
+                                                    showBorders={true}
+                                                    width={'90%'}
+                                                    height={'90%'}
+                                                    title={this.t("pg_mainCustomer.title")} 
+                                                    selection={{mode:"single"}}
+                                                    data={{source:{select:{query : "SELECT GUID,CODE,TITLE FROM CUSTOMER_VW_02"},sql:this.core.sql}}}
+                                                    >
+                                                        <Column dataField="CODE" caption={this.t("pg_mainCustomer.clmCode")} width={'20%'} />
+                                                        <Column dataField="TITLE" caption={this.t("pg_mainCustomer.clmName")} width={'70%'} defaultSortOrder="asc" />
+                                                    </NdPopGrid>
+                                                </Item>
+                                                  {/* txtSubCustomer */}
+                                                  <Item>                                    
+                                                    <Label text={this.t("txtSubCustomer")} alignment="right" />
+                                                    <NdTextBox id="txtSubCustomer" parent={this} simple={true} tabIndex={this.tabIndex} dt={{data:this.customerObj.dt('CUSTOMERS'),field:"SUB_CUSTOMER_NAME"}} 
+                                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value} readOnly={true}
+                                                    button=
+                                                    {
+                                                        [
+                                                            {
+                                                                id:'01',
+                                                                icon:'more',
+                                                                onClick:()=>
+                                                                {
+                                                                    this.pg_subCustomer.show()
+                                                                    this.pg_subCustomer.onClick = (data) =>
+                                                                    {
+                                                                        if(data.length > 0)
+                                                                        {
+                                                                            this.customerObj.dt()[0].SUB_CUSTOMER_CODE = data[0].CODE
+                                                                            this.customerObj.dt()[0].SUB_CUSTOMER_NAME = data[0].NAME
+                                                                            this.customerObj.dt()[0].SUB_CUSTOMER = data[0].GUID
+                                                                        }
+                                                                    }
+                                                                }
+                                                            },
+                                                        ]
+                                                    }
+                                                    onChange={(async()=>
+                                                    {
+                                                        let tmpResult = await this.checkItem(this.txtRef.value)
+                                                        if(tmpResult == 3)
+                                                        {
+                                                            this.txtRef.value = "";
+                                                        }
+                                                    }).bind(this)} 
+                                                    selectAll={true}                           
+                                                    >     
+                                                    </NdTextBox>      
+                                                    {/*ALT CARİ KODU POPUP */}
+                                                    <NdPopGrid id={"pg_subCustomer"} parent={this} container={"#root"} 
+                                                    visible={false}
+                                                    position={{of:'#root'}} 
+                                                    showTitle={true} 
+                                                    showBorders={true}
+                                                    width={'90%'}
+                                                    height={'90%'}
+                                                    title={this.t("pg_subCustomer.title")} 
+                                                    selection={{mode:"single"}}
+                                                    data={{source:{select:{query : "SELECT GUID,CODE,TITLE FROM CUSTOMER_VW_02"},sql:this.core.sql}}}
+                                                    >
+                                                        <Column dataField="CODE" caption={this.t("pg_subCustomer.clmCode")} width={'20%'} />
+                                                        <Column dataField="TITLE" caption={this.t("pg_subCustomer.clmName")} width={'70%'} defaultSortOrder="asc" />
+                                                    </NdPopGrid>
+                                                </Item>
                                                  {/* chkRebate */}
                                                 <Item>
                                                     <Label text={this.t("chkRebate")} alignment="right" />
@@ -857,6 +1073,7 @@ export default class CustomerCard extends React.PureComponent
                                                     <Label text={"DEB"} alignment="right" />
                                                     <NdCheckBox id="chkDeb" parent={this} value={false}  dt={{data:this.customerObj.dt('CUSTOMERS'),field:"DEB"}} ></NdCheckBox>
                                                 </Item>
+                                                <EmptyItem/>
                                                </Form>
                                             </div>
                                         </div>

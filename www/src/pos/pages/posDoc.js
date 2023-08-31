@@ -2871,9 +2871,15 @@ export default class posDoc extends React.PureComponent
         {
             query : "SELECT COUNT(TAG) AS PRINT_COUNT FROM POS_EXTRA WHERE POS_GUID = @POS_GUID AND TAG = @TAG", 
             param : ['POS_GUID:string|50','TAG:string|25'],
-            value : [pPosDt[0].GUID,"REPRINT"]
+            value : [pPosDt[0].GUID,"REPRINT"],
+            local : 
+            {
+                type : "select",
+                query : "SELECT COUNT(TAG) AS PRINT_COUNT FROM POS_EXTRA_VW_01 WHERE POS_GUID = ? AND TAG = ?",
+                values : [pPosDt[0].GUID,"REPRINT"]
+            }
         }
-
+        
         let tmpPrintCount = (await this.core.sql.execute(tmpQuery)).result.recordset[0].PRINT_COUNT
         
         if(tmpPrintCount < 5)
@@ -2882,30 +2888,37 @@ export default class posDoc extends React.PureComponent
 
             if(typeof tmpRePrintResult != 'undefined')
             {
-                let tmpDupSignature = await this.nf525.signaturePosDuplicate(pPosDt[0])
-                let tmpDupSign = ''
-
-                if(tmpDupSignature != '')
+                let tmpDupCert = ""
+                if(tmpPrintCount > 0 && !this.core.offline)
                 {
-                    tmpDupSign = tmpDupSignature.SIGNATURE.substring(2,3) + tmpDupSignature.SIGNATURE.substring(6,7) + tmpDupSignature.SIGNATURE.substring(12,13) + tmpDupSignature.SIGNATURE.substring(18,19)
-                }
+                    let tmpDupSignature = await this.nf525.signaturePosDuplicate(pPosDt[0])
+                    let tmpDupSign = ''
+    
+                    if(tmpDupSignature != '')
+                    {
+                        tmpDupSign = tmpDupSignature.SIGNATURE.substring(2,3) + tmpDupSignature.SIGNATURE.substring(6,7) + tmpDupSignature.SIGNATURE.substring(12,13) + tmpDupSignature.SIGNATURE.substring(18,19)
+                    }
 
-                let tmpInsertQuery = 
-                {
-                    query : "EXEC [dbo].[PRD_POS_EXTRA_INSERT] " + 
-                            "@CUSER = @PCUSER, " + 
-                            "@TAG = @PTAG, " +
-                            "@POS_GUID = @PPOS_GUID, " +
-                            "@LINE_GUID = @PLINE_GUID, " +
-                            "@DATA =@PDATA, " +
-                            "@DATA_EXTRA1 = @PDATA_EXTRA1, " +
-                            "@APP_VERSION = @PAPP_VERSION, " +
-                            "@DESCRIPTION = @PDESCRIPTION ", 
-                    param : ['PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|max','PDATA_EXTRA1:string|max','PAPP_VERSION:string|25','PDESCRIPTION:string|max'],
-                    value : [pPosDt[0].CUSER,"REPRINT",pPosDt[0].GUID,"00000000-0000-0000-0000-000000000000",tmpDupSignature.SIGNATURE,tmpDupSignature.SIGNATURE_SUM,this.core.appInfo.version,tmpRePrintResult]
-                }
+                    let tmpInsertQuery = 
+                    {
+                        query : "EXEC [dbo].[PRD_POS_EXTRA_INSERT] " + 
+                                "@CUSER = @PCUSER, " + 
+                                "@TAG = @PTAG, " +
+                                "@POS_GUID = @PPOS_GUID, " +
+                                "@LINE_GUID = @PLINE_GUID, " +
+                                "@DATA =@PDATA, " +
+                                "@DATA_EXTRA1 = @PDATA_EXTRA1, " +
+                                "@APP_VERSION = @PAPP_VERSION, " +
+                                "@DESCRIPTION = @PDESCRIPTION ", 
+                        param : ['PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|max','PDATA_EXTRA1:string|max','PAPP_VERSION:string|25','PDESCRIPTION:string|max'],
+                        value : [pPosDt[0].CUSER,"REPRINT",pPosDt[0].GUID,"00000000-0000-0000-0000-000000000000",tmpDupSignature.SIGNATURE,tmpDupSignature.SIGNATURE_SUM,this.core.appInfo.version,tmpRePrintResult]
+                    }
 
-                await this.core.sql.execute(tmpInsertQuery)
+                    await this.core.sql.execute(tmpInsertQuery)
+
+                    tmpDupCert = this.core.appInfo.name + " version : " + this.core.appInfo.version + " - " + this.core.appInfo.certificate + " - " + tmpDupSign
+                }
+                
                 let tmpData = 
                 {
                     pos : pPosDt,
@@ -2920,15 +2933,17 @@ export default class posDoc extends React.PureComponent
                         reprint : tmpPrintCount + 1,
                         repas : 0,
                         factCertificate : '',
-                        dupCertificate : this.core.appInfo.name + " version : " + this.core.appInfo.version + " - " + this.core.appInfo.certificate + " - " + tmpDupSign,
+                        dupCertificate : tmpDupCert,
                         customerUsePoint : Math.floor(pPosDt[0].LOYALTY * 100),
                         customerPoint : (pPosDt[0].CUSTOMER_POINT + Math.floor(pPosDt[0].LOYALTY * 100)) - Math.floor(pPosDt[0].TOTAL),
                         customerGrowPoint : pPosDt[0].CUSTOMER_POINT - Math.floor(pPosDt[0].TOTAL)
                     }
                 }
 
-                this.sendJet({CODE:"155",NAME:"Duplicata ticket imprimé."}) //// Duplicate fiş yazdırıldı.
-
+                if(tmpPrintCount > 0 && !this.core.offline)
+                {
+                    this.sendJet({CODE:"155",NAME:"Duplicata ticket imprimé."}) //// Duplicate fiş yazdırıldı.
+                }
                 //YAZDIRMA İŞLEMİNDEN ÖNCE KULLANICIYA SORULUYOR
                 let tmpConfObj =
                 {
@@ -4461,7 +4476,19 @@ export default class posDoc extends React.PureComponent
                                                         "SUBSTRING(CONVERT(NVARCHAR(50),GUID),20,36) AS REF_NO " + 
                                                         "FROM POS_" + (this.state.isFormation ? 'FRM_' : '') + "VW_01 WHERE LUSER = @LUSER AND STATUS = 1 ORDER BY LDATE DESC",
                                                 param:  ["LUSER:string|25"],
-                                                value:  [this.user.CODE]
+                                                value:  [this.user.CODE],
+                                                local : 
+                                                {
+                                                    type : "select",
+                                                    query : `SELECT *, 
+                                                            strftime('%d-%m-%Y', LDATE) || '-' || strftime('%H:%M:%S', LDATE) AS CONVERT_DATE, 
+                                                            SUBSTR(GUID, 20, 36) AS REF_NO 
+                                                            FROM POS_VW_01 
+                                                            WHERE LUSER = ? AND STATUS = 1 
+                                                            ORDER BY LDATE DESC
+                                                            LIMIT 1;`,
+                                                    values : [this.user.CODE]
+                                                }
                                             }
                                             await tmpLastPosDt.refresh()
                                             if(tmpLastPosDt.length > 0)
@@ -4470,21 +4497,39 @@ export default class posDoc extends React.PureComponent
                                                 {
                                                     query:  "SELECT * FROM POS_SALE_VW_01 WHERE POS_GUID = @POS_GUID ORDER BY LDATE DESC",
                                                     param:  ["POS_GUID:string|50"],
-                                                    value:  [tmpLastPosDt[0].GUID]
+                                                    value:  [tmpLastPosDt[0].GUID],
+                                                    local : 
+                                                    {
+                                                        type : "select",
+                                                        query : `SELECT * FROM POS_SALE_VW_01 WHERE POS_GUID = ? ORDER BY LDATE DESC`,
+                                                        values : [tmpLastPosDt[0].GUID]
+                                                    }
                                                 }                                                
                                                 await tmpLastPosSaleDt.refresh()
                                                 tmpLastPosPayDt.selectCmd = 
                                                 {
                                                     query:  "SELECT * FROM POS_PAYMENT_VW_01 WHERE POS_GUID = @POS_GUID ORDER BY LDATE DESC",
                                                     param:  ["POS_GUID:string|50"],
-                                                    value:  [tmpLastPosDt[0].GUID]
+                                                    value:  [tmpLastPosDt[0].GUID],
+                                                    local : 
+                                                    {
+                                                        type : "select",
+                                                        query : `SELECT * FROM POS_PAYMENT_VW_01 WHERE POS_GUID = ? ORDER BY LDATE DESC`,
+                                                        values : [tmpLastPosDt[0].GUID]
+                                                    }
                                                 }
                                                 await tmpLastPosPayDt.refresh()
                                                 tmpLastPosPromoDt.selectCmd = 
                                                 {
                                                     query : "SELECT * FROM [dbo].[POS_PROMO_VW_01] WHERE POS_GUID = @POS_GUID",
                                                     param : ['POS_GUID:string|50'],
-                                                    value:  [tmpLastPosDt[0].GUID]
+                                                    value:  [tmpLastPosDt[0].GUID],
+                                                    local : 
+                                                    {
+                                                        type : "select",
+                                                        query : `SELECT * FROM POS_PROMO_VW_01 WHERE POS_GUID = ?`,
+                                                        values : [tmpLastPosDt[0].GUID]
+                                                    }
                                                 } 
                                                 await tmpLastPosPromoDt.refresh()
                                                 
