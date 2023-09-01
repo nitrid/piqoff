@@ -3738,6 +3738,66 @@ export const langDe =
         },
     
     },
+    ftr_01_006 : // "Gelen İade Fatura Listesi"  // KOPMLE BAK
+    {
+        txtCustomerCode : "Müşteri",
+        menu:"İade Faturası",
+        pg_txtCustomerCode : 
+        {
+            title : "Müşteri Seçimi",
+            clmCode :  "CARİ KODU",
+            clmTitle : "CARİ ADI",
+            clmTypeName : "TİPİ",
+            clmGenusName : "CİNSİ"
+        },
+        btnGet :"Getir",
+        dtFirst : "İlk Tarih",
+        dtLast : "Son Tarih",
+        grdSlsIvcList: 
+        {
+            clmRef: "Seri",
+            clmRefNo: "Sıra",
+            clmPrice: "Fiyat",
+            clmOutputCode : "Müşteri Kodu",
+            clmOutputName : "Müşteri Adı",
+            clmInputName : "Depo",
+            clmDate: "Tarih",
+            clmVat : "KDV",
+            clmAmount : "Tutar",
+            clmTotal : "Toplam",
+        },
+
+    },
+    ftr_01_007 : // "Gelen İade Fatura Listesi"  // KOPMLE BAK
+    {
+        txtCustomerCode : "Müşteri",
+        menu:"İade Faturası",
+        pg_txtCustomerCode : 
+        {
+            title : "Müşteri Seçimi",
+            clmCode :  "CARİ KODU",
+            clmTitle : "CARİ ADI",
+            clmTypeName : "TİPİ",
+            clmGenusName : "CİNSİ"
+        },
+        btnGet :"Getir",
+        dtFirst : "İlk Tarih",
+        dtLast : "Son Tarih",
+        grdSlsIvcList: 
+        {
+            clmRef: "Seri",
+            clmRefNo: "Sıra",
+            clmPrice: "Fiyat",
+            clmOutputCode : "Müşteri Kodu",
+            clmOutputName : "Müşteri Adı",
+            clmInputName : "Depo",
+            clmDate: "Tarih",
+            clmVat : "KDV",
+            clmAmount : "Tutar",
+            clmTotal : "Toplam",
+        },
+
+    },
     ftr_02_001 : // "Einkaufsrechnung"
     {
         txtRefRefno : "Serie-Nummer",
@@ -6691,6 +6751,8 @@ export const langDe =
         getProforma : "Proforma abrufen",
         txtTotalHt : "Nettobetrag",
         txtDocNo : "Dokumentennummer",
+        btnView: "Anzeigen",
+        btnMailsend: "E-Mail senden",
         pg_Docs : 
         {
             title : "Dokumentauswahl",
@@ -7086,6 +7148,20 @@ export const langDe =
             msg: "Es sind Artikel in der Liste vorhanden!",
         },
         tagItemCodePlaceholder: "Bitte geben Sie die gewünschten Codes ein",
+        popMailSend : 
+        {
+            title :"E-Mail senden",
+            txtMailSubject : "E-Mail-Betreff",
+            txtSendMail : "E-Mail-Adresse",
+            btnSend : "Senden"
+        },
+        msgMailSendResult:
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msgSuccess: "E-Mail erfolgreich gesendet!",
+            msgFailed: "E-Mail konnte nicht gesendet werden!"
+        },
     },
     ftr_02_008 : // "Şube Aliş Faturasi"
     {
@@ -7564,7 +7640,7 @@ export const langDe =
             clmName : "Name"
         },
     },
-    ftr_02_007 : // "Fire Faturası"
+    ftr_02_009 : // "Fire Faturası"
     {
         txtRefRefno : "Seriennummer-Folge",
         cmbDepot: "Lager",
@@ -7610,6 +7686,8 @@ export const langDe =
         getProforma : "Proforma abrufen",
         txtTotalHt : "Nettobetrag",
         txtDocNo : "Dokumentennummer",
+        btnView: "Anzeigen",
+        btnMailsend: "E-Mail senden",
         pg_Docs : 
         {
             title : "Dokumentauswahl",
@@ -8005,6 +8083,20 @@ export const langDe =
             msg: "Es sind Artikel in der Liste vorhanden!",
         },
         tagItemCodePlaceholder: "Bitte geben Sie die gewünschten Codes ein",
+        popMailSend : 
+        {
+            title :"E-Mail senden",
+            txtMailSubject : "E-Mail-Betreff",
+            txtSendMail : "E-Mail-Adresse",
+            btnSend : "Senden"
+        },
+        msgMailSendResult:
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msgSuccess: "E-Mail erfolgreich gesendet!",
+            msgFailed: "E-Mail konnte nicht gesendet werden!"
+        },
     },
     ftr_04_001 : // "Proforma Preis Farki Faturasi"
     {

@@ -868,11 +868,21 @@ export const menu = (e) =>
                                     text: e.t('menuOff.ftr_01_002'),//'Satış Fatura Listesi',
                                     path: 'invoices/lists/salesInvList'
                                 },
-                                                              {
+                                {
                                     id: 'ftr_01_005',
                                     text: e.t('menuOff.ftr_01_005'),//'Şube satış  Fatura Listesi',
                                     path: 'invoices/lists/brancSaleInvList'
-                                }
+                                },
+                                {
+                                    id: 'ftr_01_006',
+                                    text: e.t('menuOff.ftr_01_006'),//'Gelen İade  Fatura Listesi',
+                                    path: 'invoices/lists/rebatePurcInvList'
+                                },
+                                {
+                                    id: 'ftr_01_007',
+                                    text: e.t('menuOff.ftr_01_007'),//'Fire  Fatura Listesi',
+                                    path: 'invoices/lists/outageInvList'
+                                },
                             ]
                         },
                         {

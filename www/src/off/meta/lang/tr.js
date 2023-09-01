@@ -201,6 +201,8 @@ export const langTr =
         ftr_01_003: "İade Fatura Listesi",
         ftr_01_004: "Fiyat Farkı Fatura Listesi",
         ftr_01_005: "Şubeler Arası Satış Fatura Listesi",
+        ftr_01_006 : "Gelen İade Fatura Listesi",
+        ftr_01_007 : "Fire Fatura Listesi",
         ftr_02_001: "Alış Faturası",
         ftr_02_002: "Satış Faturası",
         ftr_02_003: "Gönderilen İade Faturası",
@@ -3778,6 +3780,66 @@ export const langTr =
         },
 
     },
+    ftr_01_006 : // "Gelen İade Fatura Listesi"
+    {
+        txtCustomerCode : "Müşteri",
+        menu:"İade Faturası",
+        pg_txtCustomerCode : 
+        {
+            title : "Müşteri Seçimi",
+            clmCode :  "CARİ KODU",
+            clmTitle : "CARİ ADI",
+            clmTypeName : "TİPİ",
+            clmGenusName : "CİNSİ"
+        },
+        btnGet :"Getir",
+        dtFirst : "İlk Tarih",
+        dtLast : "Son Tarih",
+        grdSlsIvcList: 
+        {
+            clmRef: "Seri",
+            clmRefNo: "Sıra",
+            clmPrice: "Fiyat",
+            clmOutputCode : "Müşteri Kodu",
+            clmOutputName : "Müşteri Adı",
+            clmInputName : "Depo",
+            clmDate: "Tarih",
+            clmVat : "KDV",
+            clmAmount : "Tutar",
+            clmTotal : "Toplam",
+        },
+
+    },
+    ftr_01_007 : // "Gelen İade Fatura Listesi"
+    {
+        txtCustomerCode : "Müşteri",
+        menu:"İade Faturası",
+        pg_txtCustomerCode : 
+        {
+            title : "Müşteri Seçimi",
+            clmCode :  "CARİ KODU",
+            clmTitle : "CARİ ADI",
+            clmTypeName : "TİPİ",
+            clmGenusName : "CİNSİ"
+        },
+        btnGet :"Getir",
+        dtFirst : "İlk Tarih",
+        dtLast : "Son Tarih",
+        grdSlsIvcList: 
+        {
+            clmRef: "Seri",
+            clmRefNo: "Sıra",
+            clmPrice: "Fiyat",
+            clmOutputCode : "Müşteri Kodu",
+            clmOutputName : "Müşteri Adı",
+            clmInputName : "Depo",
+            clmDate: "Tarih",
+            clmVat : "KDV",
+            clmAmount : "Tutar",
+            clmTotal : "Toplam",
+        },
+
+    },
     ftr_02_001 : //  "Alış Faturası"
     {
         txtRefRefno : "Seri-Sıra",
@@ -6220,20 +6282,6 @@ export const langTr =
             msgSuccess: "Mail gönderimi başarılı !",
             msgFailed: "Mail gönderimi başarısız !"
         },
-        popMailSend : 
-        {
-            title :"E-Mail Gönder",
-            txtMailSubject : "E-Mail Başlığı",
-            txtSendMail : "E-Mail Adresi",
-            btnSend : "Gönder"
-        },
-        msgMailSendResult:
-        {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msgSuccess: "Mail gönderimi başarılı !",
-            msgFailed: "Mail gönderimi başarısız !"
-        },
         popRound : 
         {
             title : "Lütfen Tuvarlamak İstediğiniz Tutarı Giriniz",
@@ -6739,6 +6787,8 @@ export const langTr =
         getProforma : "Proforma Getir",
         txtTotalHt : "İndirimli Tutar",
         txtDocNo : "Belgo No",
+        btnView : "Görüntüle",
+        btnMailsend : "Mail Gönder",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -7135,6 +7185,20 @@ export const langTr =
             msg: "Listede Ürünler Var! "
         },
         tagItemCodePlaceholder: "Lütfen Eklemek İstediğiniz Kodları Giriniz",
+        popMailSend : 
+        {
+            title :"E-Mail Gönder",
+            txtMailSubject : "E-Mail Başlığı",
+            txtSendMail : "E-Mail Adresi",
+            btnSend : "Gönder"
+        },
+        msgMailSendResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Mail gönderimi başarılı !",
+            msgFailed: "Mail gönderimi başarısız !"
+        },
     },
     ftr_02_008 : // "Şube Alış Faturası"
     {
@@ -7662,6 +7726,8 @@ export const langTr =
         getProforma : "Proforma Getir",
         txtTotalHt : "İndirimli Tutar",
         txtDocNo : "Belgo No",
+        btnView : "Görüntüle",
+        btnMailsend : "Mail Gönder",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -8058,6 +8124,20 @@ export const langTr =
             msg: "Listede Ürünler Var! "
         },
         tagItemCodePlaceholder: "Lütfen Eklemek İstediğiniz Kodları Giriniz",
+        popMailSend : 
+        {
+            title :"E-Mail Gönder",
+            txtMailSubject : "E-Mail Başlığı",
+            txtSendMail : "E-Mail Adresi",
+            btnSend : "Gönder"
+        },
+        msgMailSendResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Mail gönderimi başarılı !",
+            msgFailed: "Mail gönderimi başarısız !"
+        },
     },
     ftr_04_001 : // "Proforma Fiyat Farkı Faturası"
     {
