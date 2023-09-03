@@ -151,6 +151,7 @@ export const langTr =
         stk_01_011 : "Vergi Tanımlama",
         stk_01_012 : "Bağlı Ürün Tanımlama",
         stk_01_013 : "Ürün Resim Tanımlama",
+        stk_01_014 : "Ürün Cinsi Tanımlama",
         stk_02_001: "Sayım Evrakı",
         stk_02_002: "Depo/Mağaza Arası Sevk",
         stk_02_003: "Kayıp Ürün Çıkışı",
@@ -312,6 +313,7 @@ export const langTr =
         set_03 : "Evrak Ayarları",
         set_03_001 : "Silinmiş Evraklar",
         set_03_002 : "Silinmiş Satırlar",
+        set_03_003 : "Taşıyıcı Kodu Tanımlama",
         proces : "Toplu işlemler",
         proces_01 : "Ürün İşlemleri",
         proces_01_001 : "Ürün Grubu Güncelleme",
@@ -445,6 +447,7 @@ export const langTr =
         txtUnitFactor : "Birim Mikarı",
         cmbAnlysType : "Tip",
         txtCustoms : "Gümrük Kodu",
+        txtGenus : "Ürün Cinsi",
         cmbAnlysTypeData : 
         {
             pos: "Pos",
@@ -723,7 +726,13 @@ export const langTr =
             title : "Gümrük Kodları",
             clmCode : "KODU",
             clmName : "ADI"
-        }
+        },
+        pg_txtGenre : 
+        {
+            title : "Ürün Cinsi",   
+            clmCode : "KODU",   
+            clmName : "ADI"   
+        } 
     },
     stk_01_002:  //"Barkod Tanımları"
     {
@@ -1159,6 +1168,53 @@ export const langTr =
             btn01: "Tamam",
             btn02: "Vazgeç",
             msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        },
+    },
+    stk_01_014 : // "Ürün Cinsi Tanımları"
+    {
+        txtCode : "Kodu",
+        txtName :"Adı",
+        cmbType :"Tip",
+        validCode :"Kodu Boş Geçemezsiniz !",
+        pg_txtCode : 
+        {
+            title : "Kayıt Seçimi",
+            clmCode : "KODU",
+            clmName : "ADI",
+        },
+        msgSave:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kayıt etmek istediğinize eminmisiniz !"
+        },
+        msgSaveResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Kayıt işleminiz başarılı !",
+            msgFailed: "Kayıt işleminiz başarısız !"
+        },
+        msgSaveValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen gerekli alanları doldurunuz !"
+        },
+        msgDelete:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        },
+        msgCode : 
+        {
+            title: "Dikkat",
+            btn01: "Kasaya Git",
+            btn02: "Tamam",
+            msg : "Girmiş olduğunuz Kasa sistem de kayıtlı !"
         },
     },
     stk_02_001 : // Sayım Evrakı"
@@ -3232,7 +3288,7 @@ export const langTr =
         validCode :"Kodu Boş Geçemezsiniz !",
         pg_txtCode : 
         {
-            title : "Bölge Seçimi",
+            title : "Sektör Seçimi",
             clmCode : "KODU",
             clmName : "ADI",
             clmType : "TİPİ",
@@ -3896,6 +3952,8 @@ export const langTr =
         txtTotalHt : "İndirimli Tutar",
         txtDocNo : "Belgo No",
         cmbOrigin: "Menşei",
+        txtTransport : "Taşıma Türü",
+        tabTitleDetail : "Detay Bilgileri",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -4405,6 +4463,12 @@ export const langTr =
         txtDiscountPer1 : "1. İndirim Oranı",
         txtDiscountPer2 : "2. İndirim Oranı",
         txtDiscountPer3 : "3. İndirim Oranı",
+        pg_transportType : 
+        {
+            title : "Taşıyıcı Kodları",
+            clmCode : "KODU",
+            clmName : "ADI"
+        }
     },
     ftr_02_002 : // "Satış Faturası"
     {
@@ -15506,6 +15570,54 @@ export const langTr =
             salesOffer : "Satış Teklif",
         },
     },
+    set_03_003 : // "Taşıyıcı Kodu Tanımları"
+    {
+        txtCode : "Kodu",
+        txtName :"Adı",
+        cmbType :"Tip",
+        validCode :"Kodu Boş Geçemezsiniz !",
+        pg_txtCode : 
+        {
+            title : "Kayıt Seçimi",
+            clmCode : "KODU",
+            clmName : "ADI",
+            clmType : "TİPİ",
+        },
+        msgSave:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kayıt etmek istediğinize eminmisiniz !"
+        },
+        msgSaveResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Kayıt işleminiz başarılı !",
+            msgFailed: "Kayıt işleminiz başarısız !"
+        },
+        msgSaveValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen gerekli alanları doldurunuz !"
+        },
+        msgDelete:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        },
+        msgCode : 
+        {
+            title: "Dikkat",
+            btn01: "Kasaya Git",
+            btn02: "Tamam",
+            msg : "Girmiş olduğunuz Kasa sistem de kayıtlı !"
+        },
+    },
     pos_01_001 : // "Pos Cihaz Tanıtım",
     {
         txtCode : "Kodu",
@@ -17295,5 +17407,30 @@ export const langTr =
             clmTotal : "Toplam",
         },
     },
-    
+    slsRpt_02_005 : // "DEB raporu"
+    {
+        chkZeroBalance : "0 Bakiyeler Gösterilsin",   
+        txtCustomerCode : "Müşteri",   
+        btnCheck : "Aktif",   
+        btnGet :"Getir",   
+        grdListe :    
+        {   
+            clmCustomsNo : "Gümrük Kodu",   
+            clmOrigin: "Menşei",   
+            clmRegime : "Sektör",              
+            Quantity : "Miktar",   
+            clmKg : "Kilogram",   
+            clmLinge : "Şişe Adedi",   
+            clmNature : "Ürün Cinsi",
+            clmTransport : "Taşıma Türü",
+            clmZipcode : "Bölge",   
+            clmRefno : "Fatura No",   
+            clmCustomerName : "Tedarikçi",   
+            clmDocDate : "Fatura Tarih",   
+            clmMulticode : "T. Kodu",   
+            clmItemBarcode : "Barkod",
+            clmDescription : "Açıklama",   
+            clmCountry : "T. Ülkesi",   
+        },
+    },
 }

@@ -673,7 +673,7 @@ export default class purchaseInvoice extends React.PureComponent
         {
             this._getPayment(this.docObj.dt()[0].GUID)
         }
-        else if(e.itemData.title == this.t("tabTitleOldInvoices"))
+        else if(e.itemData.title == this.t("tabTitleDetail"))
         {
         }
     }
@@ -3670,6 +3670,66 @@ export default class purchaseInvoice extends React.PureComponent
                                                     </div>
                                                 </Item>
                                             </Form>
+                                        </div>
+                                    </div>
+                                </Item>
+                                <Item title={this.t("tabTitleDetail")}>
+                                    <div className="row px-2 pt-2">
+                                        <div className="col-12">
+                                        <Form colCount={4}>
+                                            {/* txtTransport */}
+                                            <Item>                                    
+                                                <Label text={this.t("txtTransport")} alignment="right" />
+                                                <NdTextBox id="txtTransport" parent={this} simple={true} tabIndex={this.tabIndex} dt={{data:this.docObj.dt('DOC'),field:"TRANSPORT_TYPE"}} 
+                                                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value} readOnly={true}
+                                                button=
+                                                {
+                                                    [
+                                                        {
+                                                            id:'01',
+                                                            icon:'more',
+                                                            onClick:()=>
+                                                            {
+                                                                this.pg_transportType.show()
+                                                                this.pg_transportType.onClick = (data) =>
+                                                                {
+                                                                    if(data.length > 0)
+                                                                    {
+                                                                        this.docObj.dt()[0].TRANSPORT_TYPE = data[0].CODE
+                                                                    }
+                                                                }
+                                                            }
+                                                        },
+                                                    ]
+                                                }
+                                                onChange={(async()=>
+                                                {
+                                                    let tmpResult = await this.checkItem(this.txtRef.value)
+                                                    if(tmpResult == 3)
+                                                    {
+                                                        this.txtRef.value = "";
+                                                    }
+                                                }).bind(this)} 
+                                                selectAll={true}                           
+                                                >     
+                                                </NdTextBox>      
+                                                {/*GÜMRÜK KODU POPUP */}
+                                                <NdPopGrid id={"pg_transportType"} parent={this} container={"#root"} 
+                                                visible={false}
+                                                position={{of:'#root'}} 
+                                                showTitle={true} 
+                                                showBorders={true}
+                                                width={'90%'}
+                                                height={'90%'}
+                                                title={this.t("pg_transportType.title")} 
+                                                selection={{mode:"single"}}
+                                                data={{source:{select:{query : "SELECT TYPE_NO AS CODE,TYPE_NAME AS NAME FROM TRANSPORT_TYPE_VW_01"},sql:this.core.sql}}}
+                                                >
+                                                    <Column dataField="CODE" caption={this.t("pg_transportType.clmCode")} width={'20%'} />
+                                                    <Column dataField="NAME" caption={this.t("pg_transportType.clmName")} width={'70%'} defaultSortOrder="asc" />
+                                                </NdPopGrid>
+                                            </Item>
+                                        </Form>
                                         </div>
                                     </div>
                                 </Item>

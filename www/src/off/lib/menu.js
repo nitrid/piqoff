@@ -79,6 +79,11 @@ export const menu = (e) =>
                             text: e.t('menuOff.stk_01_013'),//'Ürün Resim Tanımları',
                             path: 'items/cards/itemImage.js',
                         },
+                        {
+                            id: 'stk_01_014',
+                            text: e.t('menuOff.stk_01_014'),//'Cins Tanımları',
+                            path: 'items/cards/genreCard'
+                        }
                     ]
                 },
                 {
@@ -131,7 +136,7 @@ export const menu = (e) =>
                             id: 'stk_02_009',
                             text: e.t('menuOff.stk_02_009'),//'Stok  Çıkış ',
                             path: 'items/documents/itemOutDoc'
-                        },
+                        }
                     ]
                 },
                 {
@@ -1342,6 +1347,11 @@ export const menu = (e) =>
                             id: 'set_03_002',
                             text: e.t('menuOff.set_03_002'),//'Silinmiş Satırlar',
                             path: 'setting/documentSetting/deletedDocRows'
+                        },
+                        {
+                            id: 'set_03_003',
+                            text: e.t('menuOff.set_03_003'),//'Taşıyıcı  Kodu',
+                            path: 'setting/documentSetting/transportTypeCard'
                         }
                     ]
                 },
