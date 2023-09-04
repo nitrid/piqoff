@@ -1999,6 +1999,58 @@ export default class itemCard extends React.PureComponent
                                     <div className='row px-2 py-2'>
                                         <div className='col-12'>
                                         <Form colCount={4} >
+                                                 {/* txtGenus */}
+                                                 <Item>                                    
+                                                <Label text={this.t("txtGenus")} alignment="right" />
+                                                <NdTextBox id="txtGenus" parent={this} simple={true} tabIndex={this.tabIndex} dt={{data:this.itemsObj.dt('ITEMS'),field:"GENRE"}} 
+                                                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value} readOnly={true}
+                                                button=
+                                                {
+                                                    [
+                                                        {
+                                                            id:'01',
+                                                            icon:'more',
+                                                            onClick:()=>
+                                                            {
+                                                                this.pg_txtGenre.show()
+                                                                this.pg_txtGenre.onClick = (data) =>
+                                                                {
+                                                                    if(data.length > 0)
+                                                                    {
+                                                                        this.itemsObj.dt()[0].GENRE = data[0].CODE
+                                                                    }
+                                                                }
+                                                            }
+                                                        },
+                                                    ]
+                                                }
+                                                onChange={(async()=>
+                                                {
+                                                    let tmpResult = await this.checkItem(this.txtRef.value)
+                                                    if(tmpResult == 3)
+                                                    {
+                                                        this.txtRef.value = "";
+                                                    }
+                                                }).bind(this)} 
+                                                selectAll={true}                           
+                                                >     
+                                                </NdTextBox>      
+                                                {/*CİNS KODU POPUP */}
+                                                <NdPopGrid id={"pg_txtGenre"} parent={this} container={"#root"} 
+                                                visible={false}
+                                                position={{of:'#root'}} 
+                                                showTitle={true} 
+                                                showBorders={true}
+                                                width={'90%'}
+                                                height={'90%'}
+                                                title={this.t("pg_txtGenre.title")} 
+                                                selection={{mode:"single"}}
+                                                data={{source:{select:{query : "SELECT CODE,NAME FROM ITEM_GENRE_VW_01"},sql:this.core.sql}}}
+                                                >
+                                                    <Column dataField="CODE" caption={this.t("pg_txtGenre.clmCode")} width={'20%'} />
+                                                    <Column dataField="NAME" caption={this.t("pg_txtGenre.clmName")} width={'70%'} defaultSortOrder="asc" />
+                                                </NdPopGrid>
+                                            </Item>
                                             {/* txtCustoms */}
                                             <Item>                                    
                                                 <Label text={this.t("txtCustoms")} alignment="right" />

@@ -6,7 +6,7 @@ import Toolbar,{Item} from 'devextreme-react/toolbar';
 import Form, { Label,EmptyItem } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 
-import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export, Summary, TotalItem} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export, Summary, TotalItem,StateStoring} from '../../../../core/react/devex/grid.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js'
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
@@ -344,6 +344,8 @@ export default class customerBalanceReport extends React.PureComponent
                             allowColumnResizing={true}
                             loadPanel={{enabled:true}}
                             >                            
+                                <StateStoring enabled={true} type="localStorage" storageKey={this.props.data.id + "_grdSlsInv"}/>
+                                <ColumnChooser enabled={true} />
                                 <Paging defaultPageSize={20} />
                                 <Pager visible={true} allowedPageSizes={[5,10,20,50]} showPageSizeSelector={true} />
                                 <Export fileName={this.lang.t("menu.cri_04_001")} enabled={true} allowExportSelectedData={true} />

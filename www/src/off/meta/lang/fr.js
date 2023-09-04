@@ -151,6 +151,7 @@ export const langFr =
         stk_01_011: "Définir taux de TVA",
         stk_01_012 :"Identification du produit lié", 
         stk_01_013 :"Identification de l'image du produit", 
+        stk_01_014 : "Ürün Cinsi Tanımlama", // BAK
         stk_02_001: "Document inventaire",
         stk_02_002: "Transfert interne dépot/magasin",
         stk_02_003: "Sortie perte",
@@ -201,6 +202,8 @@ export const langFr =
         ftr_01_003: "Liste Facture retour",
         ftr_01_004: "Liste Facture différence de prix",
         ftr_01_005: "Liste Factures de vente interne", 
+        ftr_01_006 : "Gelen İade Fatura Listesi",   // BAK
+        ftr_01_007 : "Fire Fatura Listesi",   // BAK
         ftr_02_001: "Saisie Facture d'achat",
         ftr_02_002: "Saisie Facture de vente",
         ftr_02_003: "Saisie Facture retour",
@@ -308,6 +311,7 @@ export const langFr =
         set_03 : "Réglages Documents",   
         set_03_001 : "Documents Effacés",   
         set_03_002 : "Lignes Effacées", 
+        set_03_003 : "Taşıyıcı Kodu Tanımlama",  // BAK
         proces : "Saisie groupée",
         proces_01 : "Traitement Produit",
         proces_01_001 : "MAJ Famille Produit",
@@ -441,6 +445,7 @@ export const langFr =
         txtUnitFactor : "Quantité unitaire", 
         cmbAnlysType : "Type", 
         txtCustoms : "Gümrük Kodu",  // BAK
+        txtGenus : "Ürün Cinsi", // BAK
         cmbAnlysTypeData : 
         {
             pos: "Pos", 
@@ -717,6 +722,12 @@ export const langFr =
         pg_customsCode : 
         {
             title : "Gümrük Kodları",   // BAK
+            clmCode : "KODU",   // BAK
+            clmName : "ADI"   // BAK
+        },
+        pg_txtGenre : 
+        {
+            title : "Ürün Cinsi",   // BAK
             clmCode : "KODU",   // BAK
             clmName : "ADI"   // BAK
         } 
@@ -1155,6 +1166,53 @@ export const langFr =
             btn01: "D'accord",
             btn02: "Annuler",
             msg: "Etes-vous sûr de vouloir supprimer l'enregistrement?"
+        },
+    },
+    stk_01_014 : // "Ürün Cinsi Tanımları"  // BAK
+    {
+        txtCode : "Kodu",
+        txtName :"Adı",
+        cmbType :"Tip",
+        validCode :"Kodu Boş Geçemezsiniz !",
+        pg_txtCode : 
+        {
+            title : "Kayıt Seçimi",
+            clmCode : "KODU",
+            clmName : "ADI",
+        },
+        msgSave:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kayıt etmek istediğinize eminmisiniz !"
+        },
+        msgSaveResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Kayıt işleminiz başarılı !",
+            msgFailed: "Kayıt işleminiz başarısız !"
+        },
+        msgSaveValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen gerekli alanları doldurunuz !"
+        },
+        msgDelete:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        },
+        msgCode : 
+        {
+            title: "Dikkat",
+            btn01: "Kasaya Git",
+            btn02: "Tamam",
+            msg : "Girmiş olduğunuz Kasa sistem de kayıtlı !"
         },
     },
     stk_02_001 : // Inventaire"
@@ -3743,7 +3801,67 @@ export const langFr =
         },
 
     },
-    ftr_02_001 : //  "Alış Faturası"
+    ftr_01_006 : // "Gelen İade Fatura Listesi"  // KOPMLE BAK
+    {
+        txtCustomerCode : "Müşteri",
+        menu:"İade Faturası",
+        pg_txtCustomerCode : 
+        {
+            title : "Müşteri Seçimi",
+            clmCode :  "CARİ KODU",
+            clmTitle : "CARİ ADI",
+            clmTypeName : "TİPİ",
+            clmGenusName : "CİNSİ"
+        },
+        btnGet :"Getir",
+        dtFirst : "İlk Tarih",
+        dtLast : "Son Tarih",
+        grdSlsIvcList: 
+        {
+            clmRef: "Seri",
+            clmRefNo: "Sıra",
+            clmPrice: "Fiyat",
+            clmOutputCode : "Müşteri Kodu",
+            clmOutputName : "Müşteri Adı",
+            clmInputName : "Depo",
+            clmDate: "Tarih",
+            clmVat : "KDV",
+            clmAmount : "Tutar",
+            clmTotal : "Toplam",
+        },
+
+    },
+    ftr_01_007 : // "Gelen İade Fatura Listesi"  // KOPMLE BAK
+    {
+        txtCustomerCode : "Müşteri",
+        menu:"İade Faturası",
+        pg_txtCustomerCode : 
+        {
+            title : "Müşteri Seçimi",
+            clmCode :  "CARİ KODU",
+            clmTitle : "CARİ ADI",
+            clmTypeName : "TİPİ",
+            clmGenusName : "CİNSİ"
+        },
+        btnGet :"Getir",
+        dtFirst : "İlk Tarih",
+        dtLast : "Son Tarih",
+        grdSlsIvcList: 
+        {
+            clmRef: "Seri",
+            clmRefNo: "Sıra",
+            clmPrice: "Fiyat",
+            clmOutputCode : "Müşteri Kodu",
+            clmOutputName : "Müşteri Adı",
+            clmInputName : "Depo",
+            clmDate: "Tarih",
+            clmVat : "KDV",
+            clmAmount : "Tutar",
+            clmTotal : "Toplam",
+        },
+
+    },
+    ftr_02_001 : //  "Alış Faturası"   
     {
         txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
@@ -4308,6 +4426,12 @@ export const langFr =
         txtDiscountPer1 : "1. Remise % ",  
         txtDiscountPer2 : "2. Remise % ",  
         txtDiscountPer3 : "3. Remise % ",  
+        pg_transportType : 
+        {
+            title : "Taşıyıcı Kodları",   // BAK
+            clmCode : "KODU",   // BAK
+            clmName : "ADI"   // BAK
+        }
     },
     ftr_02_002 : // "Satış Faturası"
     {
@@ -4364,6 +4488,8 @@ export const langFr =
         txtDocNo : "Numéro de document", 
         extraCost : "Supplément",
         cmbPriceContract : "Accord de prix",
+        txtTransport : "Taşıma Türü", // BAK
+        tabTitleDetail : "Detay Bilgileri", // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -6710,6 +6836,8 @@ export const langFr =
         getProforma : "Rechercher Proforma ", 
         txtTotalHt : "Total HT",
         txtDocNo : "Numéro de document", 
+        btnView : "Aperçu", 
+        btnMailsend : "Envoyer Mail", 
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -7106,6 +7234,20 @@ export const langFr =
             msg: "Produits Présents dans la Liste! "
         },
         tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
+        popMailSend : 
+        {
+            title :"Envoyer E-Mail",   
+            txtMailSubject : "Objet E-Mail",   
+            txtSendMail : "Adresse E-Mail ",   
+            btnSend : "Envoyer"   
+        },
+        msgMailSendResult:
+        {
+            title: "Attention",   
+            btn01: "OK",   
+            msgSuccess: "Mail envoyé avec succès !",   
+            msgFailed: "Echec envoie mail  !"   
+        },
     },
     ftr_02_008 : // "Şube Alış Faturası"
     {
@@ -7580,7 +7722,7 @@ export const langFr =
             clmName : "Nom"   
         },
     },
-    ftr_02_009 : // "İade Alış Faturası"
+    ftr_02_009 : // "Fire Alış Faturası"
     {
         txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
@@ -7626,6 +7768,8 @@ export const langFr =
         getProforma : "Rechercher Proforma ", 
         txtTotalHt : "Total HT",
         txtDocNo : "Numéro de document", 
+        btnView : "Aperçu", 
+        btnMailsend : "Envoyer Mail", 
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -8022,6 +8166,20 @@ export const langFr =
             msg: "Produits Présents dans la Liste! "
         },
         tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
+        popMailSend : 
+        {
+            title :"Envoyer E-Mail",   
+            txtMailSubject : "Objet E-Mail",   
+            txtSendMail : "Adresse E-Mail ",   
+            btnSend : "Envoyer"   
+        },
+        msgMailSendResult:
+        {
+            title: "Attention",   
+            btn01: "OK",   
+            msgSuccess: "Mail envoyé avec succès !",   
+            msgFailed: "Echec envoie mail  !"   
+        },
     },
     ftr_04_001 : // "Proforma Fiyat Farkı Faturası" 
     {
@@ -15300,6 +15458,54 @@ export const langFr =
             salesOffer : "Offre de Vente",   
         },
     },
+    set_03_003 : // "Taşıyıcı Kodu Tanımları"  // BAK
+    {
+        txtCode : "Kodu",
+        txtName :"Adı",
+        cmbType :"Tip",
+        validCode :"Kodu Boş Geçemezsiniz !",
+        pg_txtCode : 
+        {
+            title : "Kayıt Seçimi",
+            clmCode : "KODU",
+            clmName : "ADI",
+            clmType : "TİPİ",
+        },
+        msgSave:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kayıt etmek istediğinize eminmisiniz !"
+        },
+        msgSaveResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Kayıt işleminiz başarılı !",
+            msgFailed: "Kayıt işleminiz başarısız !"
+        },
+        msgSaveValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen gerekli alanları doldurunuz !"
+        },
+        msgDelete:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        },
+        msgCode : 
+        {
+            title: "Dikkat",
+            btn01: "Kasaya Git",
+            btn02: "Tamam",
+            msg : "Girmiş olduğunuz Kasa sistem de kayıtlı !"
+        },
+    },
     pos_01_001 : // "Pos Cihaz Tanıtım",
     {
         txtCode : "Nr. Caisse",
@@ -17086,6 +17292,32 @@ export const langFr =
             clmAmount : "Montant",  
             clmVat : "Taxe",  
             clmTotal : "Montant total", 
+        },
+    },
+    slsRpt_02_005 : // "DEB raporu"
+    {
+        chkZeroBalance : "0 Bakiyeler Gösterilsin",     // BAK
+        txtCustomerCode : "Müşteri",     // BAK
+        btnCheck : "Aktif",     // BAK
+        btnGet :"Getir",     // BAK
+        grdListe :    
+        {   
+            clmCustomsNo : "Nomenclature",    
+            clmOrigin: "Pays origine",    
+            clmRegime : "Regime",            
+            Quantity : "Valeur",    
+            clmKg : "Masse nette",    
+            clmLinge : "Unités supplémentaires",    
+            clmNature : "Nature transaction A",
+            clmTransport : "Mode de transport",
+            clmZipcode : "Département",    
+            clmRefno : "Nr Facture",    
+            clmCustomerName : "Fournisseur",    
+            clmDocDate : "Date de Fac",    
+            clmMulticode : "FRN.Code",
+            clmItemBarcode : "Code Barre", 
+            clmDescription : "Motif",    
+            clmCountry : "PAYS provenance",    
         },
     },
 }
