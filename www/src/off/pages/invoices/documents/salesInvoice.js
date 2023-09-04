@@ -110,7 +110,10 @@ export default class salesInvoice extends React.PureComponent
             this.btnBack.setState({disabled:true});
             this.btnNew.setState({disabled:false});
             this.btnSave.setState({disabled:true});
-            this.btnPrint.setState({disabled:false});          
+            this.btnPrint.setState({disabled:false});         
+            
+            this._calculateMargin()
+            this._calculateTotalMargin()
         })
         this.docObj.ds.on('onDelete',(pTblName) =>
         {            
@@ -165,9 +168,6 @@ export default class salesInvoice extends React.PureComponent
         App.instance.setState({isExecute:true})
         await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:1,DOC_TYPE:20,SUB_FACTOR:this.sysParam.filter({ID:'secondFactor',USERS:this.user.CODE}).getValue().value});
         App.instance.setState({isExecute:false})
-
-        this._calculateMargin()
-        this._calculateTotalMargin()
 
         this.txtRef.readOnly = true
         this.txtRefno.readOnly = true
@@ -260,18 +260,17 @@ export default class salesInvoice extends React.PureComponent
             tmpTotalCost += this.docObj.docItems.dt()[i].COST_PRICE * this.docObj.docItems.dt()[i].QUANTITY
         }
         let tmpMargin = ((this.docObj.dt()[0].TOTALHT ) - tmpTotalCost)
-        let tmpMarginRate = (tmpMargin / (this.docObj.dt()[0].TOTALHT)) * 100
+        let tmpMarginRate = Number(tmpTotalCost).rate2Num(tmpMargin,2)
         this.docObj.dt()[0].MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
     }
     async _calculateMargin()
     {
         for(let  i= 0; i < this.docObj.docItems.dt().length; i++)
         {
-            let tmpMargin = (this.docObj.docItems.dt()[i].TOTAL - this.docObj.docItems.dt()[i].VAT) - (this.docObj.docItems.dt()[i].COST_PRICE * this.docObj.docItems.dt()[i].QUANTITY)
-            let tmpMarginRate = (tmpMargin /(this.docObj.docItems.dt()[i].TOTAL - this.docObj.docItems.dt()[i].VAT)) * 100
+            let tmpMargin = Number(this.docObj.docItems.dt()[i].TOTAL - this.docObj.docItems.dt()[i].VAT).round(4) - Number(this.docObj.docItems.dt()[i].COST_PRICE * this.docObj.docItems.dt()[i].QUANTITY).round(4)
+            let tmpMarginRate = Number((this.docObj.docItems.dt()[i].COST_PRICE * this.docObj.docItems.dt()[i].QUANTITY)).rate2Num(tmpMargin,2)
             this.docObj.docItems.dt()[i].MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
         }
-       
     }
     _cellRoleRender(e)
     {
@@ -2827,7 +2826,7 @@ export default class salesInvoice extends React.PureComponent
                                             else
                                             {
                                                 e.rowElement.style.backgroundColor =""
-                                            }
+                                            }                                            
                                         }}
                                         onRowUpdating={async(e)=>
                                         {
@@ -3059,7 +3058,7 @@ export default class salesInvoice extends React.PureComponent
                                             <Column dataField="AMOUNT" caption={this.t("grdSlsInv.clmAmount")} width={80} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
                                             <Column dataField="DISCOUNT" caption={this.t("grdSlsInv.clmDiscount")} dataType={'number'} width={60} editCellRender={this._cellRoleRender} format={{ style: "currency", currency: "EUR",precision: 3}}/>
                                             <Column dataField="DISCOUNT_RATE" caption={this.t("grdSlsInv.clmDiscountRate")} width={60} dataType={'number'} editCellRender={this._cellRoleRender}/>
-                                            <Column dataField="MARGIN" caption={this.t("grdSlsInv.clmMargin")} width={80} allowEditing={false}/>
+                                            <Column dataField="MARGIN" caption={this.t("grdSlsInv.clmMargin")} dataType={'text'} width={80} allowEditing={false}/>
                                             <Column dataField="VAT" caption={this.t("grdSlsInv.clmVat")} width={70} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
                                             <Column dataField="VAT_RATE" caption={this.t("grdSlsInv.clmVatRate")} width={50} allowEditing={false}/>
                                             <Column dataField="TOTALHT" caption={this.t("grdSlsInv.clmTotalHt")} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false} width={90} allowHeaderFiltering={false}/>
