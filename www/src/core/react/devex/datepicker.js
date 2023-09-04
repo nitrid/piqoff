@@ -91,7 +91,6 @@ export default class NdDatePicker extends Base
             e = '1970-01-01';
         }
         //VALUE DEĞİŞTİĞİNDE BU DEĞİŞİKLİK DATATABLE A YANSITMAK İÇİN YAPILDI.
-        console.log(123)
         if(typeof this.props.dt != 'undefined' && typeof this.props.dt.data != 'undefined' && this.props.dt.data.length > 0 && typeof this.props.dt.field != 'undefined')
         {            
             if(typeof this.props.dt.filter == 'undefined')

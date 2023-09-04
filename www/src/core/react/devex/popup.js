@@ -39,10 +39,12 @@ export default class NdPopUp extends Base
         }
         else if(typeof this.props.scroll != 'undefined' || this.props.scroll == false)
         {
-            return(
-                this.props.children
-            )
+            return(this.props.children)
         }
+    }
+    _toolbarView()
+    {
+        return(this.props.toolbarItem)
     }
     show()
     {  
@@ -148,6 +150,7 @@ export default class NdPopUp extends Base
                         return this._contentView()
                     }}
                     >
+                    {this.props.toolbarItem}
                 </Popup>
             </React.Fragment>
         )

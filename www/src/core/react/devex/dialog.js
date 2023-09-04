@@ -37,12 +37,20 @@ export default class NdDialog extends Base
         {
             this.props.onShowed();
         }
+        if(typeof this["on"] != 'undefined')
+        {
+            this["on"]()
+        }
+    }
+    Showed()
+    {
+
     }
     async show(pClose)
     {
         this.result = null;
         this["dia_" + this.props.id].setState({show:true})
-        this._onShowed()
+        //this._onShowed()
         
         return new Promise(async resolve => 
         {
@@ -104,6 +112,31 @@ export default class NdDialog extends Base
     }
     render()
     {
+        if(typeof this.props.deferRendering == 'undefined' || this.props.deferRendering == false)
+        {
+            return (
+                <NdPopUp parent={this} id={"dia_" + this.props.id} 
+                visible={this.state.show}
+                onHiding={this._onHiding}
+                closeOnOutsideClick={this.state.closeOnOutsideClick}
+                showCloseButton={this.state.showCloseButton}
+                showTitle={this.state.showTitle}
+                title={this.state.title}
+                container={this.state.container}
+                width={this.state.width}
+                height={this.state.height}
+                position={this.state.position}
+                scroll={false}
+                deferRendering={typeof this.props.deferRendering == 'undefined' ? false : this.props.deferRendering}
+                onShowed={this._onShowed.bind(this)}
+                >
+                    <Position at="bottom" my="center" of={''}/>
+                    {this._buttonView(this.props.button)}
+                    {this.props.children}
+                </NdPopUp>
+            )
+        }
+        
         return (
             <NdPopUp parent={this} id={"dia_" + this.props.id} 
             visible={this.state.show}
@@ -118,13 +151,9 @@ export default class NdDialog extends Base
             position={this.state.position}
             scroll={false}
             deferRendering={typeof this.props.deferRendering == 'undefined' ? false : this.props.deferRendering}
+            onShowed={this._onShowed.bind(this)}
+            toolbarItem={this._buttonView(this.props.button)}
             >
-                <Position
-                at="bottom"
-                my="center"
-                of={''}
-                />
-                {this._buttonView(this.props.button)}
                 {this.props.children}
             </NdPopUp>
         )
