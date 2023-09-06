@@ -3161,7 +3161,15 @@ export const langTr =
             clmCode : "KODU",
             clmName : "Adı",
         },
-
+        popNote : 
+        {
+            title : "Not Ekle",
+        },
+        tabTitleNote : "Notlar",
+        grdNote:
+        {
+            clmNote : "NOT"
+        }
     },
     cri_01_002: // "Adres Tanımları"
     {
