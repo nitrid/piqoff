@@ -312,6 +312,7 @@ export const langFr =
         set_03_001 : "Documents Effacés",   
         set_03_002 : "Lignes Effacées", 
         set_03_003 : "Identification du code du transporteur",
+        set_02_008 : "Gümrük Kodu Excel Kayıt", // BAK
         proces : "Saisie groupée",
         proces_01 : "Traitement Produit",
         proces_01_001 : "MAJ Famille Produit",
@@ -15546,6 +15547,33 @@ export const langFr =
             btn02: "D'accord",
             msg : "La caisse que vous avez saisie est enregistrée dans le système!"
         },
+    },
+    set_02_008:  // Gümrük kodu // BAK
+    {
+        excelAdd : "Excelden Kaydet",
+        txtCustomerCode : "Tedarikçi Kodu",
+        txtCustomerName : "Tedarikçi Adı",
+        pg_txtCustomerCode : 
+        {
+            title : "Tedarikçi Seçimi",
+            clmCode :  "Tedarikçi KODU",
+            clmTitle : "Tedarikçi ADI",
+            clmTypeName : "TİPİ",
+            clmGenusName : "CİNSİ"
+        },
+        msgSucces:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Kayıt Başarılı !"
+        },
+        popExcel :
+        {
+            title : "Excel",
+            txtMulticode : "Tedarikçi Kodu",
+            txtCustoms : "Gümrük Kodu",
+            txtOrigin :"Menşei"
+        }
     },
     pos_01_001 : // "Pos Cihaz Tanıtım",
     {

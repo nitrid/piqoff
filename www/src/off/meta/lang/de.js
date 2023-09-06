@@ -305,6 +305,7 @@ export const langDe =
         set_03_001: "Gelöschte Dokumente",
         set_03_002: "Gelöschte Zeilen",
         set_03_003 : "Taşıyıcı Kodu Tanımlama", // BAK
+        set_02_008 : "Gümrük Kodu Excel Kayıt", // BAK
         proces: "Massenoperationen",
         proces_01: "Bestandsoperationen",
         proces_01_001: "Artikelgruppenaktualisierung",
@@ -15572,6 +15573,33 @@ export const langDe =
             btn02: "Tamam",
             msg : "Girmiş olduğunuz Kasa sistem de kayıtlı !"
         },
+    },
+    set_02_008:  // Gümrük kodu // BAK
+    {
+        excelAdd : "Excelden Kaydet",
+        txtCustomerCode : "Tedarikçi Kodu",
+        txtCustomerName : "Tedarikçi Adı",
+        pg_txtCustomerCode : 
+        {
+            title : "Tedarikçi Seçimi",
+            clmCode :  "Tedarikçi KODU",
+            clmTitle : "Tedarikçi ADI",
+            clmTypeName : "TİPİ",
+            clmGenusName : "CİNSİ"
+        },
+        msgSucces:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Kayıt Başarılı !"
+        },
+        popExcel :
+        {
+            title : "Excel",
+            txtMulticode : "Tedarikçi Kodu",
+            txtCustoms : "Gümrük Kodu",
+            txtOrigin :"Menşei"
+        }
     },
     pos_01_001 : // "POS-Gerätekonfiguration"
     {

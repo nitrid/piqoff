@@ -1311,6 +1311,11 @@ export const menu = (e) =>
                             text: e.t('menuOff.set_02_003'),//'anydesk',
                             path: 'construction.js',
                         },
+                        {
+                            id: 'set_02_008',
+                            text: e.t('menuOff.set_02_008'),//'Gümrük Kodu Excel',
+                            path: 'setting/officialSettings/customsCodeImport'
+                        },
 
                     ]
                 },
