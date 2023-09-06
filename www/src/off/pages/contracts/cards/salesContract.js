@@ -298,8 +298,8 @@ export default class salesContract extends React.PureComponent
     {
         for(let  i= 0; i < this.contractObj.dt().length; i++)
         {
-            let tmpMargin = (this.contractObj.dt()[i].PRICE_VAT_EXT) - (this.contractObj.dt()[i].COST_PRICE )
-            let tmpMarginRate = (tmpMargin ) * 100
+            let tmpMargin = (this.contractObj.dt()[i].PRICE_VAT_EXT) - (this.contractObj.dt()[i].COST_PRICE)
+            let tmpMarginRate = Number(this.contractObj.dt()[i].COST_PRICE).rate2Num(tmpMargin,2) //(tmpMargin ) * 100
             this.contractObj.dt()[i].MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
         }
     }
@@ -860,7 +860,9 @@ export default class salesContract extends React.PureComponent
                                         }
                                         this._calculateMargin()
                                     }}
-                                    onRowRemoved={async (e)=>{
+                                    onRowPrepared={async (e)=>
+                                    {
+                                        this._calculateMargin()
                                     }}
                                     >
                                         <ColumnChooser enabled={true} />
@@ -875,8 +877,8 @@ export default class salesContract extends React.PureComponent
                                         <Column dataField="ORGINS_NAME" caption={this.t("grdContracts.clmOrgins")} width={110} allowEditing={false}/>
                                         <Column dataField="MAIN_GRP_NAME" caption={this.t("grdContracts.clmGrpName")} width={150} allowEditing={false}/>
                                         <Column dataField="COST_PRICE" caption={this.t("grdContracts.clmCostPrice")} width={80} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>
-                                        <Column dataField="PRICE_VAT_EXT" caption={this.t("grdContracts.clmVatExtPrice")} width={80} allowEditing={false} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}} />
-                                        <Column dataField="PRICE" caption={this.t("grdContracts.clmPrice")} dataType={'number'} allowEditing={false} width={80} format={{ style: "currency", currency: "EUR",precision: 2}}/>
+                                        <Column dataField="PRICE_VAT_EXT" caption={this.t("grdContracts.clmVatExtPrice")} width={80} allowEditing={true} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}} />
+                                        <Column dataField="PRICE" caption={this.t("grdContracts.clmPrice")} dataType={'number'} allowEditing={true} width={80} format={{ style: "currency", currency: "EUR",precision: 2}}/>
                                         <Column dataField="UNIT_NAME" caption={this.t("grdContracts.clmUnit")} width={100} editCellRender={this._cellRoleRender}/>
                                         <Column dataField="UNIT_PRICE" caption={this.t("grdContracts.clmUnitPrice")} allowEditing={false} dataType={'number'} width={80} format={{ style: "currency", currency: "EUR",precision: 2}}/>
                                         <Column dataField="QUANTITY" caption={this.t("grdContracts.clmQuantity")} width={80} dataType={'number'}/>
