@@ -3118,6 +3118,47 @@ export const langDe =
         validation :
         {
             frmCustomers: "Das Feld 'Kundennummer' darf nicht leer sein!",
+        },
+        txtSubCustomer : "Alt Cari",  // BAK
+        pg_subCustomer : 
+        {
+            title : "Alt Cari Seçim",   // BAK
+            clmCode : "KODU",   // BAK
+            clmTitle : "Ünvan",   // BAK
+            clmName : "Adı",   // BAK
+            clmLastName  : "Soyadı",   // BAK
+        },
+        txtMainCustomer : "Ana Cari",   // BAK
+        pg_mainCustomer : 
+        {
+            title : "Ana Cari Seçim",   // BAK
+            clmCode : "KODU",   // BAK
+            clmTitle : "Ünvan",   // BAK
+            clmName : "Adı",   // BAK
+            clmLastName  : "Soyadı",   // BAK
+        },
+        txtArea : "Bölge",    // BAK
+        pg_AreaCode : 
+        {
+            title : "Bölge Seçim",   // BAK
+            clmCode : "KODU",   // BAK
+            clmName : "Adı",   // BAK
+        },
+        txtSector : "Sektör",   // BAK
+        pg_SectorCode : 
+        {
+            title : "Bölge Seçim",    // BAK
+            clmCode : "KODU",    // BAK
+            clmName : "Adı",    // BAK
+        },
+        popNote : 
+        {
+            title : "Not Ekle",  // BAK
+        },
+        tabTitleNote : "Notlar",   // BAK
+        grdNote:
+        {
+            clmNote : "NOT"  // BAK
         }
     },
     cri_01_002: // "Adressdefinitionen"

@@ -16,6 +16,7 @@ import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
 import NdGrid,{Column,Editing,Paging,Scrolling} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
+import NdTextArea from '../../../../core/react/devex/textarea.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdImageUpload from '../../../../core/react/devex/imageupload.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
@@ -241,6 +242,10 @@ export default class CustomerCard extends React.PureComponent
         if(e.itemData.title == this.t("tabTitleDetail"))
         {        
            
+        }
+        if(e.itemData.title == this.t("tabTitleNote"))
+        {        
+            await this.grdNote.dataRefresh({source:this.customerObj.customerNote.dt('CUSTOMER_NOTE')});
         }
     }
     _cellRoleRender(e)
@@ -1117,11 +1122,42 @@ export default class CustomerCard extends React.PureComponent
                                             </div>
                                         </div>
                                     </Item>  
-                                                                 
+                                    <Item title={this.t("tabTitleNote")}>
+                                    <div className='row px-2 py-2'>
+                                            <div className='col-12'>
+                                                <Toolbar>
+                                                    <Item location="after">
+                                                        <Button icon="add"
+                                                        onClick={async ()=>
+                                                        {
+                                                            this.txtCustomerNote.value = "";
+                                                            this.popNote.show();
+                                                        }}/>
+                                                    </Item>
+                                                </Toolbar>
+                                            </div>
+                                        </div>
+                                        <div className='row px-2 py-2'>
+                                            <div className='col-12'>
+                                                <NdGrid parent={this} id={"grdNote"} 
+                                                showBorders={true} 
+                                                columnsAutoWidth={true} 
+                                                allowColumnReordering={true} 
+                                                allowColumnResizing={true} 
+                                                height={'100%'} 
+                                                width={'100%'}
+                                                dbApply={false}
+                                                >
+                                                    <Paging defaultPageSize={5} />
+                                                    <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
+                                                    <Column dataField="NOTE" caption={this.t("grdNote.clmName")}/>
+                                                </NdGrid>
+                                            </div>
+                                        </div>
+                                    </Item>                  
                                 </TabPanel>
                             </div>
                         </div> 
-                       
                     </div>
                      {/* Adres POPUP */}
                      <div>
@@ -1392,6 +1428,52 @@ export default class CustomerCard extends React.PureComponent
                                             onClick={()=>
                                             {
                                                 this.popBank.hide();  
+                                            }}/>
+                                        </div>
+                                    </div>
+                                </Item>
+                            </Form>
+                        </NdPopUp>
+                    </div> 
+                        {/* Banka POPUP */}
+                        <div>
+                        <NdPopUp parent={this} id={"popNote"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.t("popNote.title")}
+                        container={"#root"} 
+                        width={'500'}
+                        height={'350'}
+                        position={{of:'#root'}}
+                        >
+                            <Form colCount={1} height={'fit-content'}>
+                            <Item>
+                                    <NdTextArea simple={true} parent={this} id="txtCustomerNote" height='200px'
+                                    />
+                                </Item>   
+                                <Item>
+                                    <div className='row'>
+                                        <div className='col-6'>
+                                            <NdButton text={this.lang.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} 
+                                            onClick={async ()=>
+                                            {
+                                                let tmpEmpty = {...this.customerObj.customerBank.empty};
+                                               
+                                                
+                                                tmpEmpty.NOTE = this.txtCustomerNote.value
+                                                tmpEmpty.CUSTOMER = this.customerObj.dt()[0].GUID 
+
+                                                this.customerObj.customerNote.addEmpty(tmpEmpty);    
+                                                this.popNote.hide(); 
+                                                
+                                            }}/>
+                                        </div>
+                                        <div className='col-6'>
+                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                            onClick={()=>
+                                            {
+                                                this.popNote.hide();  
                                             }}/>
                                         </div>
                                     </div>
