@@ -34,7 +34,7 @@ export default class debReport extends React.PureComponent
             {CODE : "CUSTOMS_NO",NAME : this.t("grdListe.clmCustomsNo")},                                   
             {CODE : "ORIGIN",NAME : this.t("grdListe.clmOrigin")},
             {CODE : "REGIME",NAME : this.t("grdListe.clmRegime")},
-            {CODE : "QUANTITY",NAME : this.t("grdListe.Quantity")},
+            {CODE : "QUANTITY",NAME : this.t("grdListe.clmQuantity")},
             {CODE : "KG",NAME : this.t("grdListe.clmKg")},
             {CODE : "LINGE",NAME : this.t("grdListe.clmLinge")},
             {CODE : "ZIPCODE",NAME : this.t("grdListe.clmZipcode")},
@@ -175,26 +175,26 @@ export default class debReport extends React.PureComponent
                 select : 
                 { 
                     query : "SELECT " +
-                    "(SELECT CUSTOMS_CODE FROM ITEMS_GRP WHERE ITEMS_GRP.ITEM = DOC_ITEMS_VW_01.ITEM) AS CUSTOMS_NO,   " +
+                    "(SELECT TOP 1  CUSTOMS_CODE FROM ITEMS_GRP WHERE ITEMS_GRP.ITEM = DOC_ITEMS_VW_01.ITEM) AS CUSTOMS_NO,   " +
                     "ORIGIN,   " +
                     "(SELECT TOP 1 SECTOR_NO FROM COMPANY) AS REGIME,   " +
                     "QUANTITY,   " +
-                    "QUANTITY * ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE ID = '002' AND ITEM_UNIT.ITEM = DOC_ITEMS_VW_01.ITEM AND DELETED = 0),0)AS KG,   " +
-                    "QUANTITY AS LINGE,   " +
+                    "ROUND(QUANTITY * ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE (ID = '002' OR ID = '005') AND ITEM_UNIT.ITEM = DOC_ITEMS_VW_01.ITEM AND DELETED = 0),0),3) AS KG,   " +
+                    "CASE WHEN ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE ID = '005' AND ITEM_UNIT.ITEM = DOC_ITEMS_VW_01.ITEM AND DELETED = 0),0) <> 0 THEN QUANTITY ELSE 0 END  AS LINGE,   " +
                     "(SELECT TOP 1 GENRE FROM ITEMS_GRP WHERE ITEMS_GRP.ITEM = DOC_ITEMS_VW_01.ITEM) AS NATURE,   " +
                     "(SELECT TOP 1 TRANSPORT_TYPE FROM DOC WHERE DOC.GUID = DOC_ITEMS_VW_01.DOC_GUID) AS TRANSPORT,   " +
                     "(SELECT TOP 1 SUBSTRING(ZIPCODE,0,3) FROM COMPANY) AS ZIPCODE,   " +
-                    "(SELECT COUNTRY FROM CUSTOMER_ADRESS WHERE CUSTOMER_ADRESS.ADRESS_NO = 0 AND CUSTOMER_ADRESS.CUSTOMER = DOC_ITEMS_VW_01.OUTPUT AND DELETED = 0) AS COUNTRY,   " +
+                    "(SELECT TOP 1 COUNTRY FROM CUSTOMER_ADRESS WHERE CUSTOMER_ADRESS.ADRESS_NO = 0 AND CUSTOMER_ADRESS.CUSTOMER = DOC_ITEMS_VW_01.OUTPUT AND DELETED = 0) AS COUNTRY,   " +
                     "REF_NO,   " +
-                    "(SELECT TITLE FROM CUSTOMER_VW_02 WHERE CUSTOMER_VW_02.GUID = DOC_ITEMS_VW_01.OUTPUT) AS CUSTOMER_NAME,   " +
+                    "(SELECT TOP 1  TITLE FROM CUSTOMER_VW_02 WHERE CUSTOMER_VW_02.GUID = DOC_ITEMS_VW_01.OUTPUT) AS CUSTOMER_NAME,   " +
                     "DOC_DATE AS DOC_DATE,   " +
                     "MULTICODE,   " +
                     "ITEM_BARCODE,   " +
                     "DESCRIPTION   " +
                     "FROM DOC_ITEMS_VW_01   " +
                     "WHERE    DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE AND " +
-                    "(SELECT COUNTRY FROM CUSTOMER_ADRESS WHERE CUSTOMER_ADRESS.ADRESS_NO = 0 AND CUSTOMER_ADRESS.CUSTOMER = DOC_ITEMS_VW_01.OUTPUT AND DELETED = 0) <> 'FR'   " +
-                    "AND TYPE = 0 AND (DOC_TYPE = 20 OR  (DOC_TYPE = 40 AND INVOICE_DOC_GUID <> '00000000-0000-0000-0000-000000000000')) " ,
+                    "(SELECT TOP 1 COUNTRY FROM CUSTOMER_ADRESS WHERE CUSTOMER_ADRESS.ADRESS_NO = 0 AND CUSTOMER_ADRESS.CUSTOMER = DOC_ITEMS_VW_01.OUTPUT AND DELETED = 0) <> 'FR'   " +
+                    "AND TYPE = 0 AND (DOC_TYPE = 20 OR  (DOC_TYPE = 40 AND INVOICE_DOC_GUID <> '00000000-0000-0000-0000-000000000000')) ORDER BY OUTPUT" ,
                     param : ['FIRST_DATE:date','LAST_DATE:date'], 
                     value : [this.dtDate.startDate,this.dtDate.endDate]
                 },
@@ -245,7 +245,7 @@ export default class debReport extends React.PureComponent
                         <div className="col-12">
                             <Form colCount={2} id="frmKriter">
                             <Item>
-                                <NbDateRange id={"dtDate"} parent={this} startDate={moment().startOf('year')} endDate={moment().endOf('year')}/>
+                                <NbDateRange id={"dtDate"} parent={this} startDate={moment().subtract(1, 'month').startOf('month')} endDate={ moment().subtract(1, 'month').endOf('month')}/>
                             </Item>
                             </Form>
                         </div>
@@ -275,8 +275,8 @@ export default class debReport extends React.PureComponent
                             <NdGrid id="grdListe" parent={this} 
                             selection={{mode:"multiple"}} 
                             showBorders={true}
-                            filterRow={{visible:false}} 
-                            headerFilter={{visible:false}}
+                            filterRow={{visible:true}} 
+                            headerFilter={{visible:true}}
                             height={'690'} 
                             width={'100%'}
                             columnAutoWidth={true}
@@ -290,16 +290,16 @@ export default class debReport extends React.PureComponent
                                 <Column dataField="CUSTOMS_NO" caption={this.t("grdListe.clmCustomsNo")} visible={true} /> 
                                 <Column dataField="ORIGIN" caption={this.t("grdListe.clmOrigin")} visible={true}/> 
                                 <Column dataField="REGIME" caption={this.t("grdListe.clmRegime")} visible={true} /> 
-                                <Column dataField="QUANTITY" caption={this.t("grdListe.clm:Quantity")} visible={true} /> 
+                                <Column dataField="QUANTITY" caption={this.t("grdListe.clmQuantity")} visible={true} /> 
                                 <Column dataField="KG" caption={this.t("grdListe.clmKg")}  visible={true} /> 
                                 <Column dataField="LINGE" caption={this.t("grdListe.clmLinge")}  visible={true} /> 
                                 <Column dataField="NATURE" caption={this.t("grdListe.clmNature")}  visible={true} /> 
                                 <Column dataField="TRANSPORT" caption={this.t("grdListe.clmTransport")}  visible={true} /> 
                                 <Column dataField="ZIPCODE" caption={this.t("grdListe.clmZipcode")}  visible={true} /> 
-                                <Column dataField="REF_NO" caption={this.t("grdListe.clmRefno")}  visible={true} /> 
                                 <Column dataField="COUNTRY" caption={this.t("grdListe.clmCountry")}  visible={true} /> 
+                                <Column dataField="REF_NO" caption={this.t("grdListe.clmRefno")}  visible={true} /> 
                                 <Column dataField="CUSTOMER_NAME" caption={this.t("grdListe.clmCustomerName")}  visible={true} /> 
-                                <Column dataField="DOC_DATE" caption={this.t("grdListe.clmDocDate")}  visible={true} /> 
+                                <Column dataField="DOC_DATE" caption={this.t("grdListe.clmDocDate")}  visible={true}  dataType="datetime" format={"dd/MM/yyyy"} /> 
                                 <Column dataField="MULTICODE" caption={this.t("grdListe.clmMulticode")}  visible={true} /> 
                                 <Column dataField="ITEM_BARCODE" caption={this.t("grdListe.clmItemBarcode")}  visible={true} /> 
                                 <Column dataField="DESCRIPTION" caption={this.t("grdListe.clmDescription")}  visible={true} /> 
