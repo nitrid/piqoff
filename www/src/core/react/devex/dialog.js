@@ -145,7 +145,7 @@ export const dialog = function()
             position={{of:typeof arguments[0].position == 'undefined' ? '#root' : arguments[0].position}} 
             showTitle={arguments[0].showTitle} 
             title={arguments[0].title} 
-            showCloseButton={false}
+            showCloseButton={true}
             width={arguments[0].width}
             height={arguments[0].height}
             button={arguments[0].button}
