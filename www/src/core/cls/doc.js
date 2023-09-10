@@ -495,7 +495,6 @@ export class docItemsCls
                 tmpPrm.SUB_FACTOR = typeof arguments[0].SUB_FACTOR == 'undefined' ? '' : arguments[0].SUB_FACTOR;
             }
 
-            console.log(tmpPrm)
             this.ds.get('DOC_ITEMS').selectCmd.value = Object.values(tmpPrm);
 
             await this.ds.get('DOC_ITEMS').refresh();

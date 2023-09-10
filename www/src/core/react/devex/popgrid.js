@@ -12,6 +12,8 @@ export default class NdPopGrid extends Base
     {
         super(props);
         
+        this.listeners = Object(); 
+
         this.state.show = typeof props.visible == 'undefined' ? false : props.visible
         this.state.closeOnOutsideClick = typeof props.closeOnOutsideClick == 'undefined' ? false : props.closeOnOutsideClick
         this.state.showCloseButton = typeof props.showCloseButton == 'undefined' ? true : props.showCloseButton
@@ -213,6 +215,24 @@ export default class NdPopGrid extends Base
             this.props.onRowPrepared(e);
         }
     }
+    on(pEvt, pCallback) 
+    {
+        if (!this.listeners.hasOwnProperty(pEvt))
+        this.listeners[pEvt] = Array();
+
+        this.listeners[pEvt].push(pCallback); 
+    }
+    emit(pEvt, pParams)
+    {
+        if (pEvt in this.listeners) 
+        {
+            let callbacks = this.listeners[pEvt];
+            for (var x in callbacks)
+            {
+                callbacks[x](pParams);
+            }
+        } 
+    }
     //#endregion
     async componentDidMount()
     {
@@ -235,7 +255,9 @@ export default class NdPopGrid extends Base
     {
         return new Promise(async resolve => 
         {
+            this.emit('showing')
             await this["pop_" + this.props.id].show();
+            this.emit('showed')
             resolve();
         })
     }

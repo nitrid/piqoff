@@ -75,6 +75,13 @@ export default class NdPopUp extends Base
             title: pVal
         });
     }
+    onShowing()
+    {
+        if(typeof this.props.onShowing != 'undefined')
+        {
+            this.props.onShowing();
+        }
+    }
     onShowed()
     {
         if(typeof this.props.onShowed != 'undefined')
@@ -113,6 +120,7 @@ export default class NdPopUp extends Base
                             this.devPop = e.component
                         }}
                         onShown={this.onShowed.bind(this)}
+                        onShowing={this.onShowing.bind(this)}
                         >
                         {this._contentView()}
                     </Popup>
@@ -141,6 +149,7 @@ export default class NdPopUp extends Base
                     position={this.state.position}
                     deferRendering={false}
                     onShown={this.onShowed.bind(this)}
+                    onShowing={this.onShowing.bind(this)}
                     onInitialized={(e)=>
                     {
                         this.devPop = e.component
