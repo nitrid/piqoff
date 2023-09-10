@@ -310,6 +310,7 @@ export const langTr =
         set_02_005 : "Versiyon Yenilikleri",
         set_02_006 : "Destek Talebi Oluştur",
         set_02_007 : "Destek Talebi Geçmişi",
+        set_02_008 : "Gümrük Kodu Excel Kayıt",
         set_03 : "Evrak Ayarları",
         set_03_001 : "Silinmiş Evraklar",
         set_03_002 : "Silinmiş Satırlar",
@@ -3161,7 +3162,15 @@ export const langTr =
             clmCode : "KODU",
             clmName : "Adı",
         },
-
+        popNote : 
+        {
+            title : "Not Ekle",
+        },
+        tabTitleNote : "Notlar",
+        grdNote:
+        {
+            clmNote : "NOT"
+        }
     },
     cri_01_002: // "Adres Tanımları"
     {
@@ -15617,6 +15626,33 @@ export const langTr =
             btn02: "Tamam",
             msg : "Girmiş olduğunuz Kasa sistem de kayıtlı !"
         },
+    },
+    set_02_008:
+    {
+        excelAdd : "Excelden Kaydet",
+        txtCustomerCode : "Tedarikçi Kodu",
+        txtCustomerName : "Tedarikçi Adı",
+        pg_txtCustomerCode : 
+        {
+            title : "Tedarikçi Seçimi",
+            clmCode :  "Tedarikçi KODU",
+            clmTitle : "Tedarikçi ADI",
+            clmTypeName : "TİPİ",
+            clmGenusName : "CİNSİ"
+        },
+        msgSucces:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Kayıt Başarılı !"
+        },
+        popExcel :
+        {
+            title : "Excel",
+            txtMulticode : "Tedarikçi Kodu",
+            txtCustoms : "Gümrük Kodu",
+            txtOrigin :"Menşei"
+        }
     },
     pos_01_001 : // "Pos Cihaz Tanıtım",
     {

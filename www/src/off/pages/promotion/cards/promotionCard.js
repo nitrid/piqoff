@@ -90,9 +90,10 @@ export default class promotionCard extends React.PureComponent
             this.promo.app.addEmpty();
         }
 
+        console.log(this.promo.cond)
         this.condDt.import(this.promo.cond.dt().groupBy('WITHAL').toArray())
         this.appDt.import(this.promo.app.dt().groupBy('WITHAL').toArray())
-
+        console.log(this.condDt)
         this.setState({discPrice : 0})
         
         await this.core.util.waitUntil(0);
@@ -965,6 +966,8 @@ export default class promotionCard extends React.PureComponent
                                     <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup={"frmPromo"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
+                                        console.log(this["itemList" + this.condDt[0].WITHAL])
+                                        console.log(this.promo.cond.dt())
                                         if(this.condDt[0].AMOUNT == 0 && this.condDt[0].QUANTITY == 0)
                                         {
                                             let tmpConfObj =
@@ -994,6 +997,7 @@ export default class promotionCard extends React.PureComponent
                                                     button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
                                                 }
                                                 
+                                                console.log(this.condDt)
                                                 this.condDt.forEach((item)=>
                                                 {
                                                     if(item.TYPE == 0)
@@ -1128,6 +1132,7 @@ export default class promotionCard extends React.PureComponent
                                                     }
                                                 })
 
+                                                this.promo.cond.dt()._deleteList = this["itemList" + this.condDt[0].WITHAL]._deleteList
                                                 await this.core.util.waitUntil(0)
                                                 
                                                 if((await this.promo.save()) == 0)

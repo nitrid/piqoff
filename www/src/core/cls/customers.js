@@ -46,6 +46,8 @@ export class customersCls
         this.customerOffical = new customerOfficalCls();
         this.customerAdress = new customerAdressCls();
         this.customerBank = new customerBankCls();
+        this.customerNote = new customerNoteCls();
+
 
         this._initDs();
     }
@@ -148,6 +150,7 @@ export class customersCls
         this.ds.add(this.customerOffical.dt('CUSTOMER_OFFICAL'))
         this.ds.add(this.customerAdress.dt('CUSTOMER_ADRESS'))
         this.ds.add(this.customerBank.dt('CUSTOMER_BANK'))
+        this.ds.add(this.customerNote.dt('CUSTOMER_NOTE'))
     }
     //#endregion
     dt()
@@ -205,6 +208,7 @@ export class customersCls
                 await this.customerAdress.load({CUSTOMER:this.ds.get('CUSTOMERS')[0].GUID})
                 await this.customerOffical.load({CUSTOMER:this.ds.get('CUSTOMERS')[0].GUID})
                 await this.customerBank.load({CUSTOMER:this.ds.get('CUSTOMERS')[0].GUID})
+                await this.customerNote.load({CUSTOMER:this.ds.get('CUSTOMERS')[0].GUID})
             }
             resolve(this.ds.get('CUSTOMERS'))
         });
