@@ -37,20 +37,15 @@ export default class NdDialog extends Base
         {
             this.props.onShowed();
         }
-        if(typeof this["on"] != 'undefined')
+        if(typeof this.onShowed != 'undefined')
         {
-            this["on"]()
+            this.onShowed()
         }
-    }
-    Showed()
-    {
-
     }
     async show(pClose)
     {
         this.result = null;
         this["dia_" + this.props.id].setState({show:true})
-        //this._onShowed()
         
         return new Promise(async resolve => 
         {

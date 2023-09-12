@@ -79,7 +79,7 @@ export default class purchaseInvoice extends DocBase
         tmpDocCustomer.REBATE = this.docObj.dt()[0].REBATE
         tmpDocCustomer.DOC_DATE = this.docObj.dt()[0].DOC_DATE
         this.docObj.docCustomer.addEmpty(tmpDocCustomer)
-
+        
         this.txtRef.readOnly = false
         this.txtRefno.readOnly = false
         this.docLocked = false
@@ -102,7 +102,7 @@ export default class purchaseInvoice extends DocBase
                         query : "SELECT GUID,CODE,NAME,VAT,ITEMS_VW_01.UNIT,0 AS ITEM_TYPE," + 
                                 "ISNULL((SELECT TOP 1 CUSTOMER_PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '" + this.docObj.dt()[0].OUTPUT + "'),COST_PRICE) AS PURC_PRICE,COST_PRICE, " +
                                 "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '" + this.docObj.dt()[0].OUTPUT + "'),'') AS MULTICODE,STATUS " +
-                                "FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)" ,
+                                "FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL) " ,
                         param : ['VAL:string|50']
                     },
                     sql:this.core.sql
@@ -194,7 +194,6 @@ export default class purchaseInvoice extends DocBase
                 {
                     if(k.event.key == 'F10' || k.event.key == 'ArrowRight')
                     {
-                        await this.pg_txtItemsCode.setVal(e.value)
                         this.pg_txtItemsCode.onClick = async(data) =>
                         {
                             this.customerControl = true
@@ -216,11 +215,12 @@ export default class purchaseInvoice extends DocBase
                                     else
                                     {
                                         await this.core.util.waitUntil(100)
-                                        await this.addItem(data[i],this.docObj.docItems.dt().length - 1)
+                                        await this.addItem(data[i],null)
                                     }
                                 }
                             }
                         }
+                        this.pg_txtItemsCode.setVal(e.value)
                     }
                 }}
                 onValueChanged={(v)=>
@@ -288,12 +288,12 @@ export default class purchaseInvoice extends DocBase
                                             else
                                             {
                                                 await this.core.util.waitUntil(100)
-                                                await this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                                await this.addItem(data[i],null)
                                             }
                                         }
                                     }
                                 }
-                                await this.pg_txtItemsCode.show()
+                                this.pg_txtItemsCode.show()
                             }
                         },
                     ]
@@ -320,7 +320,7 @@ export default class purchaseInvoice extends DocBase
                             icon:'more',
                             onClick:async ()  =>
                             {
-                                this.msgUnit.on = async ()=>
+                                this.msgUnit.onShowed = async ()=>
                                 {
                                     let tmpQuery = 
                                     {
@@ -405,7 +405,7 @@ export default class purchaseInvoice extends DocBase
                             icon:'more',
                             onClick:async ()  =>
                             {
-                                this.msgDiscountEntry.on = async ()=>
+                                this.msgDiscountEntry.onShowed = async ()=>
                                 {
                                     this.txtDiscount1.value = e.data.DISCOUNT_1
                                     this.txtDiscount2.value = e.data.DISCOUNT_2
@@ -451,7 +451,7 @@ export default class purchaseInvoice extends DocBase
                             icon:'more',
                             onClick:async ()  =>
                             {
-                                this.msgDiscountPerEntry.on = async ()=>
+                                this.msgDiscountPerEntry.onShowed = async ()=>
                                 {
                                     this.txtDiscountPer1.value = Number(e.data.QUANTITY*e.data.PRICE).rate2Num(e.data.DISCOUNT_1,4)
                                     this.txtDiscountPer2.value = Number((e.data.QUANTITY*e.data.PRICE)-e.data.DISCOUNT_1).rate2Num(e.data.DISCOUNT_2,4)
@@ -495,7 +495,7 @@ export default class purchaseInvoice extends DocBase
                             icon:'more',
                             onClick:async ()  =>
                             {
-                                this.msgUnit.on = async ()=>
+                                this.msgUnit.onShowed = async ()=>
                                 {
                                     this.cmbOrigin.value = e.data.ORIGIN
                                 }
@@ -535,9 +535,10 @@ export default class purchaseInvoice extends DocBase
     }
     async _onItemRendered(e)
     {
-        await this.core.util.waitUntil(10)
+        await this.core.util.waitUntil(100)
         if(e.itemData.title == this.t("tabTitlePayments"))
         {
+            console.log(this.txtMainRemainder)
             this._getPayment(this.docObj.dt()[0].GUID)
         }
     }
@@ -548,19 +549,48 @@ export default class purchaseInvoice extends DocBase
         this.txtRef.readOnly = true
         this.txtRefno.readOnly = true
 
-        let tmpDocItems = {...this.docObj.docItems.empty}
-        tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
-        tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
-        tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-        tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
-        tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
-        tmpDocItems.REF = this.docObj.dt()[0].REF
-        tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
-        tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
-        tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
-        tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-        tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
-        this.docObj.docItems.addEmpty(tmpDocItems)
+        if(typeof pQuantity == 'undefined')
+        {
+            pQuantity = 1
+        }
+        //GRID DE AYNI ÜRÜNDEN OLUP OLMADIĞI KONTROL EDİLİYOR VE KULLANICIYA SORULUYOR,CEVAP A GÖRE SATIR BİRLİŞTERİLİYOR.
+        if(pData.ITEM_TYPE == 0)
+        {
+            let tmpMergDt = await this.mergeItem(pData.CODE)
+            if(typeof tmpMergDt != 'undefined' && this.combineNew == false)
+            {
+                tmpMergDt[0].QUANTITY = tmpMergDt[0].QUANTITY + pQuantity
+                tmpMergDt[0].SUB_QUANTITY = tmpMergDt[0].SUB_QUANTITY / tmpMergDt[0].SUB_FACTOR
+                tmpMergDt[0].VAT = Number((tmpMergDt[0].VAT + (tmpMergDt[0].PRICE * (tmpMergDt[0].VAT_RATE / 100) * pQuantity))).round(6)
+                tmpMergDt[0].AMOUNT = Number((tmpMergDt[0].QUANTITY * tmpMergDt[0].PRICE)).round(4)
+                tmpMergDt[0].TOTAL = Number((((tmpMergDt[0].QUANTITY * tmpMergDt[0].PRICE) - tmpMergDt[0].DISCOUNT) + tmpMergDt[0].VAT)).round(2)
+                tmpMergDt[0].TOTALHT =  Number((tmpMergDt[0].AMOUNT - tmpMergDt[0].DISCOUNT)).round(2)
+                this.calculateTotal()
+                //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
+                await this.itemRelated(pData.GUID,tmpMergDt[0].QUANTITY)
+                //*****************************************/
+                App.instance.setState({isExecute:false})
+                return
+            }
+        }
+        //******************************************************************************************************************/
+        if(pIndex == null)
+        {
+            let tmpDocItems = {...this.docObj.docItems.empty}
+            tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+            tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+            tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+            tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
+            tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
+            tmpDocItems.REF = this.docObj.dt()[0].REF
+            tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+            tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+            tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+            tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+            tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
+            this.docObj.docItems.addEmpty(tmpDocItems)
+            pIndex = this.docObj.docItems.dt().length - 1
+        }
 
         let tmpGrpQuery = 
         {
@@ -590,10 +620,6 @@ export default class purchaseInvoice extends DocBase
             {
                 pData.ITEM_TYPE = tmpType.result.recordset[0].TYPE
             }
-        }
-        if(typeof pQuantity == 'undefined')
-        {
-            pQuantity = 1
         }
         
         if(pData.ITEM_TYPE == 0)
@@ -649,69 +675,6 @@ export default class purchaseInvoice extends DocBase
                     })
                     if(tmpCustomerBtn == 'btn02')
                     {
-                        return
-                    }
-                }
-            }
-           
-            for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
-            {
-                if(this.docObj.docItems.dt()[i].ITEM_CODE == pData.CODE)
-                {
-                    if(this.combineControl == true)
-                    {
-                        let tmpCombineBtn = ''
-                        App.instance.setState({isExecute:false})
-                        await this.msgCombineItem.show().then(async (e) =>
-                        {        
-                            if(e == 'btn01')
-                            {
-                                this.docObj.docItems.dt()[i].QUANTITY = this.docObj.docItems.dt()[i].QUANTITY + pQuantity
-                                this.docObj.docItems.dt()[i].VAT = parseFloat((this.docObj.docItems.dt()[i].VAT + (this.docObj.docItems.dt()[i].PRICE * (this.docObj.docItems.dt()[i].VAT_RATE / 100) * pQuantity)).toFixed(6))
-                                this.docObj.docItems.dt()[i].AMOUNT = parseFloat((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE)).round(2)
-                                this.docObj.docItems.dt()[i].TOTAL = Number((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT)).round(2)
-                                this.docObj.docItems.dt()[i].TOTALHT = Number((this.docObj.docItems.dt()[i].AMOUNT - this.docObj.docItems.dt()[i].DISCOUNT)).round(2)
-                                this.calculateTotal()
-                                await this.grdPurcInv.devGrid.deleteRow(0)
-                                //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
-                                await this.itemRelated(pData.GUID,this.docObj.docItems.dt()[i].QUANTITY)
-                                //*****************************************/
-                                if(this.checkCombine.value == true)
-                                {
-                                    this.combineControl = false
-                                }
-                                tmpCombineBtn = e
-                                return
-                            }
-                            if(e == 'btn02')
-                            {
-                                if(this.checkCombine.value == true)
-                                {
-                                    this.combineControl = false
-                                    this.combineNew = true
-                                }
-                                return
-                            }
-                        })
-                        if(tmpCombineBtn == 'btn01')
-                        {
-                            return
-                        }
-                    }
-                    else if(this.combineNew == false)
-                    {
-                        this.docObj.docItems.dt()[i].QUANTITY = this.docObj.docItems.dt()[i].QUANTITY + pQuantity
-                        this.docObj.docItems.dt()[i].SUB_QUANTITY = this.docObj.docItems.dt()[i].SUB_QUANTITY / this.docObj.docItems.dt()[i].SUB_FACTOR
-                        this.docObj.docItems.dt()[i].VAT = parseFloat((this.docObj.docItems.dt()[i].VAT + (this.docObj.docItems.dt()[i].PRICE * (this.docObj.docItems.dt()[i].VAT_RATE / 100) * pQuantity)).toFixed(6))
-                        this.docObj.docItems.dt()[i].AMOUNT = parseFloat((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE)).round(2)
-                        this.docObj.docItems.dt()[i].TOTAL = Number((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT)).round(2)
-                        this.docObj.docItems.dt()[i].TOTALHT = Number((this.docObj.docItems.dt()[i].AMOUNT - this.docObj.docItems.dt()[i].DISCOUNT)).round(2)
-                        this.calculateTotal()
-                        await this.grdPurcInv.devGrid.deleteRow(0)
-                        //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
-                        await this.itemRelated(pData.GUID,this.docObj.docItems.dt()[i].QUANTITY)
-                        //*****************************************/
-                        App.instance.setState({isExecute:false})
                         return
                     }
                 }
@@ -847,14 +810,20 @@ export default class purchaseInvoice extends DocBase
             {
                 this.txtPayTotal.value = parseFloat(this.payObj.docCustomer.dt().sum("AMOUNT",2))
                 let tmpRemainder = (this.docObj.dt()[0].TOTAL - this.txtPayTotal.value).toFixed(2)
-                this.txtRemainder.setState({value:tmpRemainder});
-                this.txtMainRemainder.setState({value:tmpRemainder});
+                this.txtRemainder.value = tmpRemainder
+                if(typeof this.txtMainRemainder != 'undefined')
+                {
+                    this.txtMainRemainder.value = tmpRemainder
+                }
             }
             else
             {
                 this.txtPayTotal.value = 0
-                this.txtRemainder.setState({value:this.docObj.dt()[0].TOTAL});
-                this.txtMainRemainder.setState({value:this.docObj.dt()[0].TOTAL});
+                this.txtRemainder.value = this.docObj.dt()[0].TOTAL
+                if(typeof this.txtMainRemainder != 'undefined')
+                {
+                    this.txtMainRemainder.value = this.docObj.dt()[0].TOTAL
+                }
             }
             let tmpQuery = 
             {
@@ -1077,7 +1046,7 @@ export default class purchaseInvoice extends DocBase
             if(tmpData.result.recordset.length > 0)
             {
                 await this.core.util.waitUntil(100)
-                await this.addItem(tmpData.result.recordset[0],this.docObj.docItems.dt().length-1,pdata[i][tmpShema.QTY],pdata[i][tmpShema.PRICE],pdata[i][tmpShema.DISC],pdata[i][tmpShema.DISC_PER],pdata[i][tmpShema.TVA])
+                await this.addItem(tmpData.result.recordset[0],null,pdata[i][tmpShema.QTY],pdata[i][tmpShema.PRICE],pdata[i][tmpShema.DISC],pdata[i][tmpShema.DISC_PER],pdata[i][tmpShema.TVA])
                 tmpCounter = tmpCounter + 1
             }
             else
@@ -1114,7 +1083,7 @@ export default class purchaseInvoice extends DocBase
         for (let i = 0; i < this.multiItemData.length; i++) 
         {
             await this.core.util.waitUntil(100)
-            await this.addItem(this.multiItemData[i],this.docObj.docItems.dt().length-1,this.multiItemData[i].QUANTITY)
+            await this.addItem(this.multiItemData[i],null,this.multiItemData[i].QUANTITY)
             this.popMultiItem.hide()
         }
     }
@@ -1410,7 +1379,7 @@ export default class purchaseInvoice extends DocBase
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup={"frmPurcInv"  + this.tabIndex}
+                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup={"frmDoc"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         if(this.docLocked == true)
@@ -1623,7 +1592,7 @@ export default class purchaseInvoice extends DocBase
                     {/* Form */}
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={3} id={"frmPurcInv"  + this.tabIndex}>
+                            <Form colCount={3} id={"frmDoc"  + this.tabIndex}>
                                 {/* txtRef-Refno */}
                                 <Item>
                                     <Label text={this.t("txtRefRefno")} alignment="right" />
@@ -1640,7 +1609,7 @@ export default class purchaseInvoice extends DocBase
                                             param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             >
-                                                <Validator validationGroup={"frmPurcInv"  + this.tabIndex}>
+                                                <Validator validationGroup={"frmDoc"  + this.tabIndex}>
                                                     <RequiredRule message={this.t("validRef")} />
                                                 </Validator>  
                                             </NdTextBox>
@@ -1706,7 +1675,7 @@ export default class purchaseInvoice extends DocBase
                                             param={this.param.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             >
-                                                <Validator validationGroup={"frmPurcInv"  + this.tabIndex}>
+                                                <Validator validationGroup={"frmDoc"  + this.tabIndex}>
                                                     <RequiredRule message={this.t("validRefNo")} />
                                                     <RangeRule min={1} message={this.t("validRefNo")}/>
                                                 </Validator> 
@@ -1736,7 +1705,7 @@ export default class purchaseInvoice extends DocBase
                                         param={this.param.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                         access={this.access.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                         >
-                                            <Validator validationGroup={"frmPurcInv"  + this.tabIndex}>
+                                            <Validator validationGroup={"frmDoc"  + this.tabIndex}>
                                                 <RequiredRule message={this.t("validDepot")} />
                                             </Validator> 
                                         </NdSelectBox>
@@ -1795,10 +1764,6 @@ export default class purchaseInvoice extends DocBase
                                                         }
                                                     }
                                                 }
-                                                else
-                                                {
-                                                    await this.pg_adress.setData([])
-                                                }
                                             }
                                         }
                                         await this.pg_txtCustomerCode.setVal(this.txtCustomerCode.value)
@@ -1816,7 +1781,6 @@ export default class purchaseInvoice extends DocBase
                                                     {
                                                         if(data.length > 0)
                                                         {
-                                                            console.log(1)
                                                             this.docObj.dt()[0].OUTPUT = data[0].GUID
                                                             this.docObj.docCustomer.dt()[0].OUTPUT = data[0].GUID
                                                             this.docObj.dt()[0].OUTPUT_CODE = data[0].CODE
@@ -1850,10 +1814,6 @@ export default class purchaseInvoice extends DocBase
                                                                     }
                                                                 }
                                                             }
-                                                            else
-                                                            {
-                                                                await this.pg_adress.setData([])
-                                                            }
                                                         }
                                                     }
                                                     await this.pg_txtCustomerCode.show()
@@ -1864,7 +1824,7 @@ export default class purchaseInvoice extends DocBase
                                     param={this.param.filter({ELEMENT:'txtCustomerCode',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtCustomerCode',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmPurcInv"  + this.tabIndex}>
+                                        <Validator validationGroup={"frmDoc"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validCustomerCode")} />
                                         </Validator>  
                                     </NdTextBox>
@@ -1894,7 +1854,7 @@ export default class purchaseInvoice extends DocBase
                                         this.docObj.docCustomer.dt()[0].DOC_DATE = this.dtDocDate.value
                                     }).bind(this)}
                                     >
-                                        <Validator validationGroup={"frmPurcInv"  + this.tabIndex}>
+                                        <Validator validationGroup={"frmDoc"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validDocDate")} />
                                         </Validator> 
                                     </NdDatePicker>
@@ -1909,14 +1869,14 @@ export default class purchaseInvoice extends DocBase
                                         this.checkRow()
                                     }).bind(this)}
                                     >
-                                        <Validator validationGroup={"frmPurcInv"  + this.tabIndex}>
+                                        <Validator validationGroup={"frmDoc"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validDocDate")} />
                                         </Validator> 
                                     </NdDatePicker>
                                 </Item>
                                 {/* Boş */}
                                 <EmptyItem />
-                                {/* BARKOD EKLEME */}
+                                {/* Barkod Ekleme */}
                                 <Item>
                                     <Label text={this.t("txtBarcode")} alignment="right" />
                                     <NdTextBox id="txtBarcode" parent={this} simple={true}  placeholder={this.t("txtBarcodePlace")}
@@ -1957,7 +1917,7 @@ export default class purchaseInvoice extends DocBase
         
                                                             if(data.length == 1)
                                                             {
-                                                                await this.addItem(data[0],this.docObj.docItems.dt().length -1)
+                                                                await this.addItem(data[0],null)
                                                             }
                                                             else if(data.length > 1)
                                                             {
@@ -1965,19 +1925,18 @@ export default class purchaseInvoice extends DocBase
                                                                 {
                                                                     if(i == 0)
                                                                     {
-                                                                        await this.addItem(data[i],this.docObj.docItems.dt().length -1)
+                                                                        await this.addItem(data[i],null)
                                                                     }
                                                                     else
                                                                     {
                                                                         await this.core.util.waitUntil(100)
-                                                                        await this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                                                        await this.addItem(data[i],null)
                                                                     }
                                                                 }
                                                             }
                                                         }
                                                     }
-                                                    await this.pg_txtBarcode.show()
-                                                    await this.pg_txtBarcode.setVal(this.txtBarcode.value)
+                                                    this.pg_txtBarcode.setVal(this.txtBarcode.value)
                                                 }
                                             }
                                         ]
@@ -2005,46 +1964,78 @@ export default class purchaseInvoice extends DocBase
                                         let tmpData = await this.core.sql.execute(tmpQuery) 
                                         if(tmpData.result.recordset.length > 0)
                                         {
-                                            this.msgQuantity.on = async ()=>
+                                            this.msgQuantity.onShowed = async ()=>
                                             {
+                                                this.txtPopQteUnitQuantity.value = 1
                                                 this.txtPopQuantity.value = 1
                                                 this.txtPopQuantity.focus()
+
+                                                let tmpUnitQuery = 
+                                                {
+                                                    query: "SELECT GUID,ISNULL((SELECT NAME FROM UNIT WHERE UNIT.ID = ITEM_UNIT.ID),'') AS NAME,FACTOR,TYPE FROM ITEM_UNIT WHERE DELETED = 0 AND ITEM = @ITEM ORDER BY TYPE" ,
+                                                    param:  ['ITEM:string|50'],
+                                                    value:  [tmpData.result.recordset[0].GUID]
+                                                }
+                                                let tmpUnitData = await this.core.sql.execute(tmpUnitQuery) 
+                                                if(tmpUnitData.result.recordset.length > 0)
+                                                {   
+                                                    this.cmbPopQteUnit.setData(tmpUnitData.result.recordset)
+                                                    this.cmbPopQteUnit.value = tmpData.result.recordset[0].UNIT
+                                                    this.txtPopQteUnitFactor.value = 1
+                                                }
                                             }
-                                            
                                             await this.msgQuantity.show()
-                                            this.addItem(tmpData.result.recordset[0],(typeof this.docObj.docItems.dt()[0] == 'undefined' ? 0 : this.docObj.docItems.dt().length-1),this.txtPopQuantity.value)
+                                            this.addItem(tmpData.result.recordset[0],null,this.txtPopQteUnitQuantity.value)
+                                            this.txtBarcode.focus()
                                         }
                                         else
                                         {
-                                            await this.pg_txtItemsCode.setVal(this.txtBarcode.value)
                                             this.pg_txtItemsCode.onClick = async(data) =>
                                             {
-                                                await this.core.util.waitUntil(100)
                                                 this.customerControl = true
                                                 this.customerClear = false
                                                 this.combineControl = true
                                                 this.combineNew = false
-                                                if(data.length == 1)
+                                                if(data.length > 0)
                                                 {
-                                                    await this.addItem(data[0],this.docObj.docItems.dt().length-1)
-                                                }
-                                                else if(data.length > 1)
-                                                {
-                                                    for (let i = 0; i < data.length; i++) 
+                                                    if(data.length == 1)
                                                     {
-                                                        if(i == 0)
+                                                        this.msgQuantity.onShowed = async ()=>
                                                         {
-                                                            await this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                                            this.txtPopQteUnitQuantity.value = 1
+                                                            this.txtPopQuantity.value = 1
+                                                            this.txtPopQuantity.focus()
+
+                                                            let tmpUnitQuery = 
+                                                            {
+                                                                query: "SELECT GUID,ISNULL((SELECT NAME FROM UNIT WHERE UNIT.ID = ITEM_UNIT.ID),'') AS NAME,FACTOR,TYPE FROM ITEM_UNIT WHERE DELETED = 0 AND ITEM = @ITEM ORDER BY TYPE" ,
+                                                                param:  ['ITEM:string|50'],
+                                                                value:  [data[0].GUID]
+                                                            }
+                                                            let tmpUnitData = await this.core.sql.execute(tmpUnitQuery) 
+                                                            if(tmpUnitData.result.recordset.length > 0)
+                                                            {   
+                                                                this.cmbPopQteUnit.setData(tmpUnitData.result.recordset)
+                                                                this.cmbPopQteUnit.value = data[0].UNIT
+                                                                this.txtPopQteUnitFactor.value = 1
+                                                            }
                                                         }
-                                                        else
+
+                                                        await this.msgQuantity.show()
+                                                        await this.addItem(data[0],null,this.txtPopQteUnitQuantity.value)
+                                                        this.txtBarcode.focus()
+                                                    }
+                                                    else if(data.length > 1)
+                                                    {
+                                                        for (let i = 0; i < data.length; i++) 
                                                         {
                                                             await this.core.util.waitUntil(100)
-                                                            await this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                                            await this.addItem(data[i],null)
                                                         }
                                                     }
                                                 }
                                             }
-                                            await this.pg_txtItemsCode.show()
+                                            this.pg_txtItemsCode.setVal(this.txtBarcode.value)
                                         }
                                         this.txtBarcode.value = ''
                                     }).bind(this)}
@@ -2063,7 +2054,7 @@ export default class purchaseInvoice extends DocBase
                                         
                                     }).bind(this)}
                                     >
-                                        <Validator validationGroup={"frmPurcInv"  + this.tabIndex}>
+                                        <Validator validationGroup={"frmDoc"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validDocDate")} />
                                         </Validator> 
                                     </NdDatePicker>
@@ -2080,7 +2071,7 @@ export default class purchaseInvoice extends DocBase
                             }}>                                
                                 <Item colSpan={3}>
                                     <Button icon="add"
-                                    validationGroup={"frmPurcInv"  + this.tabIndex}
+                                    validationGroup={"frmDoc"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         if(e.validationGroup.validate().status == "valid")
@@ -2097,7 +2088,7 @@ export default class purchaseInvoice extends DocBase
                                                         this.combineNew = false
                                                         if(data.length == 1)
                                                         {
-                                                            await this.addItem(data[0],this.docObj.docItems.dt().length-1)
+                                                            await this.addItem(data[0],null)
                                                         }
                                                         else if(data.length > 1)
                                                         {
@@ -2105,17 +2096,17 @@ export default class purchaseInvoice extends DocBase
                                                             {
                                                                 if(i == 0)
                                                                 {
-                                                                    await this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                                                    await this.addItem(data[i],null)
                                                                 }
                                                                 else
                                                                 {
                                                                     await this.core.util.waitUntil(100)
-                                                                    await this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                                                    await this.addItem(data[i],null)
                                                                 }
                                                             }
                                                         }
                                                     }
-                                                    await this.pg_txtItemsCode.show()
+                                                    this.pg_txtItemsCode.show()
                                                     return
                                                 }
                                             }
@@ -2128,7 +2119,7 @@ export default class purchaseInvoice extends DocBase
                                                 this.combineNew = false
                                                 if(data.length == 1)
                                                 {
-                                                    await this.addItem(data[0],this.docObj.docItems.dt().length-1)
+                                                    await this.addItem(data[0],null)
                                                 }
                                                 else if(data.length > 1)
                                                 {
@@ -2136,17 +2127,17 @@ export default class purchaseInvoice extends DocBase
                                                     {
                                                         if(i == 0)
                                                         {
-                                                            await this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                                            await this.addItem(data[i],null)
                                                         }
                                                         else
                                                         {
                                                             await this.core.util.waitUntil(100)
-                                                            await this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                                            await this.addItem(data[i],null)
                                                         }
                                                     }
                                                 }
                                             }
-                                            await this.pg_txtItemsCode.show()
+                                            this.pg_txtItemsCode.show()
                                         }
                                         else
                                         {
@@ -2161,7 +2152,7 @@ export default class purchaseInvoice extends DocBase
                                         }
                                     }}/>
                                     <Button icon="add" text={this.t("serviceAdd")}
-                                    validationGroup={"frmPurcInv"  + this.tabIndex}
+                                    validationGroup={"frmDoc"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         if(e.validationGroup.validate().status == "valid")
@@ -2178,7 +2169,7 @@ export default class purchaseInvoice extends DocBase
                                                         this.combineNew = false
                                                         if(data.length == 1)
                                                         {
-                                                            await this.addItem(data[0],this.docObj.docItems.dt().length-1)
+                                                            await this.addItem(data[0],null)
                                                         }
                                                         else if(data.length > 1)
                                                         {
@@ -2186,12 +2177,12 @@ export default class purchaseInvoice extends DocBase
                                                             {
                                                                 if(i == 0)
                                                                 {
-                                                                    await this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                                                    await this.addItem(data[i],null)
                                                                 }
                                                                 else
                                                                 {
                                                                     await this.core.util.waitUntil(100)
-                                                                    await this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                                                    await this.addItem(data[i],null)
                                                                 }
                                                             }
                                                         }
@@ -2211,7 +2202,7 @@ export default class purchaseInvoice extends DocBase
                                                 this.combineNew = false
                                                 if(data.length == 1)
                                                 {
-                                                    await this.addItem(data[0],this.docObj.docItems.dt().length-1)
+                                                    await this.addItem(data[0],null)
                                                 }
                                                 else if(data.length > 1)
                                                 {
@@ -2219,12 +2210,12 @@ export default class purchaseInvoice extends DocBase
                                                     {
                                                         if(i == 0)
                                                         {
-                                                            await this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                                            await this.addItem(data[i],null)
                                                         }
                                                         else
                                                         {
                                                             await this.core.util.waitUntil(100)
-                                                            await this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                                            await this.addItem(data[i],null)
                                                         }
                                                     }
                                                 }
@@ -2244,7 +2235,7 @@ export default class purchaseInvoice extends DocBase
                                         }
                                     }}/>
                                     <Button icon="add" text={this.lang.t("collectiveItemAdd")}
-                                    validationGroup={"frmPurcInv"  + this.tabIndex}
+                                    validationGroup={"frmDoc"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         if(e.validationGroup.validate().status == "valid")
@@ -2271,7 +2262,7 @@ export default class purchaseInvoice extends DocBase
                                         }
                                     }}/>  
                                     <Button icon="xlsxfile" text={this .t("excelAdd")}
-                                    validationGroup={"frmPurcInv"  + this.tabIndex}
+                                    validationGroup={"frmDoc"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         await this.popExcel.show()
@@ -2301,7 +2292,7 @@ export default class purchaseInvoice extends DocBase
                                         height={'400'} 
                                         width={'100%'}
                                         dbApply={false}
-                                        sorting={false}
+                                        sorting={{mode:'none'}}
                                         filterRow={{visible:true}}
                                         onRowPrepared={(e) =>
                                         {
@@ -2513,7 +2504,7 @@ export default class purchaseInvoice extends DocBase
                                 <Item title={this.t("tabTitleSubtotal")}>
                                     <div className="row px-2 pt-2">
                                         <div className="col-12">
-                                            <Form colCount={4} parent={this} id={"frmPurcInv"  + this.tabIndex}>
+                                            <Form colCount={4} parent={this} id={"frmDoc"  + this.tabIndex}>
                                                 {/* Ara Toplam */}
                                                 <EmptyItem colSpan={1}/>
                                                 <Item  >
@@ -2717,7 +2708,7 @@ export default class purchaseInvoice extends DocBase
                                 <Item title={this.t("tabTitlePayments")}>
                                     <div className="row px-2 pt-2">
                                         <div className="col-12">
-                                            <Form colCount={4} parent={this} id={"frmPurcInv"  + this.tabIndex}>
+                                            <Form colCount={4} parent={this} id={"frmDoc"  + this.tabIndex}>
                                                 {/* Ödeme Toplam */}
                                                 <EmptyItem colSpan={2}/>
                                                 <Item>
@@ -2728,25 +2719,19 @@ export default class purchaseInvoice extends DocBase
                                                 </Item>
                                                 <Item>
                                                     <Label text={this.t("txtPayTotal")} alignment="right" />
-                                                    <NdTextBox id="txtPayTotal" format={{ style: "currency", currency: "EUR",precision: 2}} parent={this} simple={true} readOnly={true}
-                                                    maxLength={32}
-                                                    ></NdTextBox>
+                                                    <NdTextBox id="txtPayTotal" format={{ style: "currency", currency: "EUR",precision: 2}} parent={this} simple={true} readOnly={true} maxLength={32}></NdTextBox>
                                                 </Item>
                                                 {/* Kalan */}
                                                 <EmptyItem colSpan={3}/>
                                                 <Item>
                                                     <Label text={this.t("txtRemainder")} alignment="right" />
-                                                    <NdTextBox id="txtRemainder" format={{ style: "currency", currency: "EUR",precision: 2}} parent={this} simple={true} readOnly={true}
-                                                    maxLength={32}
-                                                    ></NdTextBox>
+                                                    <NdTextBox id="txtRemainder" format={{ style: "currency", currency: "EUR",precision: 2}} parent={this} simple={true} readOnly={true} maxLength={32}></NdTextBox>
                                                 </Item>
                                                 {/* Kalan */}
                                                 <EmptyItem colSpan={3}/>
                                                 <Item>
                                                     <Label text={this.t("txtbalance")} alignment="right" />
-                                                    <NdTextBox id="txtbalance" format={{ style: "currency", currency: "EUR",precision: 2}} parent={this} simple={true} readOnly={true}
-                                                    maxLength={32}
-                                                    ></NdTextBox>
+                                                    <NdTextBox id="txtbalance" format={{ style: "currency", currency: "EUR",precision: 2}} parent={this} simple={true} readOnly={true} maxLength={32}></NdTextBox>
                                                 </Item>
                                                 <EmptyItem colSpan={3}/>
                                                 <Item>
@@ -2829,6 +2814,164 @@ export default class purchaseInvoice extends DocBase
                                 </Item>
                             </TabPanel>
                         </div>
+                    </div>
+                    {/* Dizayn Seçim PopUp */}
+                    <div>
+                        <NdPopUp parent={this} id={"popDesign"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.t("popDesign.title")}
+                        container={"#root"} 
+                        width={'500'}
+                        height={'250'}
+                        position={{of:'#root'}}
+                        deferRendering={true}
+                        >
+                            <Form colCount={1} height={'fit-content'}>
+                                <Item>
+                                    <Label text={this.t("popDesign.design")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbDesignList" notRefresh = {true}
+                                    displayExpr="DESIGN_NAME"                       
+                                    valueExpr="TAG"
+                                    value=""
+                                    searchEnabled={true}
+                                    onValueChanged={(async()=>
+                                        {
+                                        }).bind(this)}
+                                    data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '14'"},sql:this.core.sql}}}
+                                    param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
+                                    >
+                                        <Validator validationGroup={"frmPurcOrderPrint"  + this.tabIndex}>
+                                            <RequiredRule message={this.t("validDesign")} />
+                                        </Validator> 
+                                    </NdSelectBox>
+                                </Item>
+                                <Item>
+                                <Label text={this.t("popDesign.lang")} alignment="right" />
+                                <NdSelectBox simple={true} parent={this} id="cmbDesignLang" notRefresh = {true}
+                                    displayExpr="VALUE"                       
+                                    valueExpr="ID"
+                                    value=""
+                                    searchEnabled={true}
+                                    onValueChanged={(async()=>
+                                        {
+                                        }).bind(this)}
+                                    data={{source:[{ID:"FR",VALUE:"FR"},{ID:"DE",VALUE:"DE"},{ID:"TR",VALUE:"TR"}]}}
+                                    >
+                                    </NdSelectBox>
+                                </Item>
+                                <Item>
+                                    <div className='row'>
+                                        <div className='col-6'>
+                                            <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'} 
+                                            onClick={async ()=>
+                                            {       
+                                                App.instance.setState({isExecute:true})
+                                                let tmpQuery = 
+                                                {
+                                                    query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG)ORDER BY LINE_NO " ,
+                                                    param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
+                                                    value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
+                                                }
+                                                let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                console.log(JSON.stringify(tmpData.result.recordset))
+                                                this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
+                                                {
+                                                    App.instance.setState({isExecute:false})
+                                                    if(pResult.split('|')[0] != 'ERR')
+                                                    {
+                                                        var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");                                                         
+
+                                                        mywindow.onload = function() 
+                                                        {
+                                                            mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
+                                                        } 
+                                                        // let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
+                                                        // mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");  
+                                                    }
+                                                });
+                                                this.popDesign.hide();  
+                                            }}/>
+                                        </div>
+                                        <div className='col-6'>
+                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                            onClick={()=>
+                                            {
+                                                this.popDesign.hide();  
+                                            }}/>
+                                        </div>
+                                    </div>
+                                </Item>
+                            </Form>
+                        </NdPopUp>
+                    </div>
+                    {/* Detay PopUp */}
+                    <div>
+                        <NdPopUp parent={this} id={"popDetail"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.t("popDetail.title")}
+                        container={"#root"} 
+                        width={'500'}
+                        height={'250'}
+                        position={{of:'#root'}}
+                        deferRendering={true}
+                        >
+                            <Form colCount={1} height={'fit-content'}>
+                                <Item>
+                                    <Label text={this.t("popDetail.count")} alignment="right" />
+                                    <NdNumberBox id="numDetailCount" parent={this} simple={true} readOnly={true} maxLength={32}/>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("popDetail.quantity")} alignment="right" />
+                                    <NdNumberBox id="numDetailQuantity" parent={this} simple={true} readOnly={true} maxLength={32}/>
+                                </Item>
+                                <Item>
+                                    <Label text={this.t("popDetail.quantity2")} alignment="right" />
+                                    <NdTextBox id="numDetailQuantity2" parent={this} simple={true} readOnly={true}
+                                        maxLength={32}
+                                        button=
+                                        {
+                                            [
+                                                {
+                                                    id:'01',
+                                                    icon:'more',
+                                                    onClick:async ()  =>
+                                                    {
+                                                        let tmpQuery = 
+                                                        {
+                                                            query : "SELECT " +
+                                                                    "NAME,ROUND(SUM(UNIT_FACTOR * QUANTITY),2) AS UNIT_FACTOR " +
+                                                                    "FROM ( " +
+                                                                    "SELECT ITEM_CODE,QUANTITY, " +
+                                                                    "(SELECT TOP 1 NAME FROM ITEM_UNIT_VW_01 WHERE ITEM_GUID= ITEM AND TYPE = 1 ) AS NAME, " +
+                                                                    "(SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_GUID= ITEM AND TYPE = 1 ) AS UNIT_FACTOR " +
+                                                                    "FROM DOC_ITEMS_VW_01 WHERE DOC_GUID = @DOC_GUID OR INVOICE_DOC_GUID = @DOC_GUID ) AS TMP GROUP BY NAME ",
+                                                            param : ['DOC_GUID:string|50'],
+                                                            value : [this.docObj.dt()[0].GUID]
+                                                        }
+                                                        let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                        this.unitDetailData.clear()
+                                                        if(tmpData.result.recordset.length > 0)
+                                                        {   
+                                                            await this.popUnit2.show();
+                                                            await this.grdUnit2.dataRefresh({source:this.unitDetailData});
+                                                            for (let i = 0; i < tmpData.result.recordset.length; i++) 
+                                                            {
+                                                                this.unitDetailData.push(tmpData.result.recordset[i])
+                                                            }
+                                                        }
+                                                    }
+                                                },
+                                            ]
+                                        }
+                                    ></NdTextBox>
+                                </Item>
+                            </Form>
+                        </NdPopUp>
                     </div>
                     <div>{super.render()}</div>
                 </ScrollView>     

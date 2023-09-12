@@ -26,8 +26,7 @@ import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdImageUpload from '../../../../core/react/devex/imageupload.js';
 import NdTagBox from '../../../../core/react/devex/tagbox.js';
 import NdDialog, { dialog } from '../../../../core/react/devex/dialog.js';
-import { datatable } from '../../../../core/core.js';
-import tr from '../../../meta/lang/devexpress/tr.js';
+import NdHtmlEditor from '../../../../core/react/devex/htmlEditor.js';
 
 export default class salesInvoice extends DocBase
 {
@@ -66,6 +65,8 @@ export default class salesInvoice extends DocBase
         this.grdSlsInv.devGrid.clearFilter("row")
         this.dtDocDate.value = moment(new Date())
         this.dtShipDate.value = moment(new Date())
+        
+        this.quantityControl = this.prmObj.filter({ID:'negativeQuantity',USERS:this.user.CODE}).getValue().value
 
         let tmpDocCustomer = {...this.docObj.docCustomer.empty}
         tmpDocCustomer.DOC_GUID = this.docObj.dt()[0].GUID
@@ -157,7 +158,6 @@ export default class salesInvoice extends DocBase
                 {
                     if(k.event.key == 'F10' || k.event.key == 'ArrowRight')
                     {
-                        await this.pg_txtItemsCode.setVal(e.value)
                         this.pg_txtItemsCode.onClick = async(data) =>
                         {
                             this.combineControl = true
@@ -177,12 +177,12 @@ export default class salesInvoice extends DocBase
                                     else
                                     {
                                         await this.core.util.waitUntil(100)
-                                        await this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                        await this.addItem(data[i],null)
                                     }
                                 }
                             }
                         }
-                        await this.pg_txtItemsCode.show()
+                        this.pg_txtItemsCode.setVal(e.value)
                     }
                 }}
                 onValueChanged={(v)=>
@@ -246,12 +246,12 @@ export default class salesInvoice extends DocBase
                                             else
                                             {
                                                 await this.core.util.waitUntil(100)
-                                                await this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                                await this.addItem(data[i],null)
                                             }
                                         }
                                     }
                                 }
-                                await this.pg_txtItemsCode.show()
+                                this.pg_txtItemsCode.show()
                             }
                         },
                     ]
@@ -278,7 +278,7 @@ export default class salesInvoice extends DocBase
                             icon:'more',
                             onClick:async ()  =>
                             {
-                                this.msgUnit.on = async ()=>
+                                this.msgUnit.onShowed = async ()=>
                                 {
                                     let tmpQuery = 
                                     {
@@ -356,7 +356,7 @@ export default class salesInvoice extends DocBase
                             icon:'more',
                             onClick:async ()  =>
                             {
-                                this.msgDiscountEntry.on = async ()=>
+                                this.msgDiscountEntry.onShowed = async ()=>
                                 {
                                     this.txtDiscount1.value = e.data.DISCOUNT_1
                                     this.txtDiscount2.value = e.data.DISCOUNT_2
@@ -403,7 +403,7 @@ export default class salesInvoice extends DocBase
                             icon:'more',
                             onClick:async ()  =>
                             {
-                                this.msgDiscountPerEntry.on = async ()=>
+                                this.msgDiscountPerEntry.onShowed = async ()=>
                                 {
                                     this.txtDiscountPer1.value = Number(e.data.QUANTITY*e.data.PRICE).rate2Num(e.data.DISCOUNT_1,4)
                                     this.txtDiscountPer2.value = Number((e.data.QUANTITY*e.data.PRICE)-e.data.DISCOUNT_1).rate2Num(e.data.DISCOUNT_2,4)
@@ -449,24 +449,50 @@ export default class salesInvoice extends DocBase
         
         this.txtRef.readOnly = true
         this.txtRefno.readOnly = true
-
-        let tmpDocItems = {...this.docObj.docItems.empty}
-        tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
-        tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
-        tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-        tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
-        tmpDocItems.REF = this.docObj.dt()[0].REF
-        tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
-        tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
-        tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
-        tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-        tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
-        this.docObj.docItems.addEmpty(tmpDocItems)
-
+        
+        if(typeof pQuantity == 'undefined')
+        {
+            pQuantity = 1
+        }
+        //GRID DE AYNI ÜRÜNDEN OLUP OLMADIĞI KONTROL EDİLİYOR VE KULLANICIYA SORULUYOR,CEVAP A GÖRE SATIR BİRLİŞTERİLİYOR.
+        let tmpMergDt = await this.mergeItem(pData.CODE)
+        if(typeof tmpMergDt != 'undefined' && this.combineNew == false)
+        {
+            tmpMergDt[0].QUANTITY = tmpMergDt[0].QUANTITY + pQuantity
+            tmpMergDt[0].SUB_QUANTITY = tmpMergDt[0].SUB_QUANTITY / tmpMergDt[0].SUB_FACTOR
+            tmpMergDt[0].VAT = Number((tmpMergDt[0].VAT + (tmpMergDt[0].PRICE * (tmpMergDt[0].VAT_RATE / 100) * pQuantity))).round(6)
+            tmpMergDt[0].AMOUNT = Number((tmpMergDt[0].QUANTITY * tmpMergDt[0].PRICE)).round(4)
+            tmpMergDt[0].TOTAL = Number((((tmpMergDt[0].QUANTITY * tmpMergDt[0].PRICE) - tmpMergDt[0].DISCOUNT) + tmpMergDt[0].VAT)).round(2)
+            tmpMergDt[0].TOTALHT =  Number((tmpMergDt[0].AMOUNT - tmpMergDt[0].DISCOUNT)).round(2)
+            this.calculateTotal()
+            //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
+            await this.itemRelated(pData.GUID,tmpMergDt[0].QUANTITY)
+            //*****************************************/
+            App.instance.setState({isExecute:false})
+            return
+        }
+        //******************************************************************************************************************/
+        if(pIndex == null)
+        {
+            let tmpDocItems = {...this.docObj.docItems.empty}
+            tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+            tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+            tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+            tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
+            tmpDocItems.REF = this.docObj.dt()[0].REF
+            tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+            tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+            tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+            tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+            tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
+            this.docObj.docItems.addEmpty(tmpDocItems)
+            pIndex = this.docObj.docItems.dt().length - 1
+        }
+        
         let tmpGrpQuery = 
         {
-            query :"SELECT ORGINS,UNIT_SHORT,ISNULL((SELECT top 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID AND ITEM_UNIT_VW_01.ID = @ID ),1) AS SUB_FACTOR, " +
-             "ISNULL((SELECT top 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID AND ITEM_UNIT_VW_01.ID = @ID),'') AS SUB_SYMBOL FROM ITEMS_VW_01 WHERE GUID = @GUID ",
+            query : "SELECT ORGINS,UNIT_SHORT,ISNULL((SELECT top 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID AND ITEM_UNIT_VW_01.ID = @ID ),1) AS SUB_FACTOR, " +
+                    "ISNULL((SELECT top 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID AND ITEM_UNIT_VW_01.ID = @ID),'') AS SUB_SYMBOL FROM ITEMS_VW_01 WHERE GUID = @GUID ",
             param : ['GUID:string|50','ID:string|20'],
             value : [pData.GUID,this.sysParam.filter({ID:'secondFactor',USERS:this.user.CODE}).getValue().value]
         }
@@ -492,10 +518,7 @@ export default class salesInvoice extends DocBase
                 pData.ITEM_TYPE = tmpType.result.recordset[0].TYPE
             }
         }
-        if(typeof pQuantity == 'undefined')
-        {
-            pQuantity = 1
-        }
+        
         if(typeof this.quantityControl != 'undefined' && this.quantityControl ==  true)
         {
             let tmpCheckQuery = 
@@ -525,70 +548,6 @@ export default class salesInvoice extends DocBase
                {
                     this.docObj.docItems.dt()[pIndex].DEPOT_QUANTITY = tmpQuantity.result.recordset[0].QUANTITY
                }
-            }
-        }
-        for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
-        {
-            if(this.docObj.docItems.dt()[i].ITEM_CODE == pData.CODE)
-            {
-                if(this.combineControl == true)
-                {
-                    let tmpCombineBtn = ''
-                    App.instance.setState({isExecute:false})
-                    await this.msgCombineItem.show().then(async (e) =>
-                    {
-                        if(e == 'btn01')
-                        {
-                            this.docObj.docItems.dt()[i].QUANTITY = this.docObj.docItems.dt()[i].QUANTITY + pQuantity
-                            this.docObj.docItems.dt()[i].SUB_QUANTITY = this.docObj.docItems.dt()[i].SUB_QUANTITY / this.docObj.docItems.dt()[i].SUB_FACTOR
-                            this.docObj.docItems.dt()[i].VAT = parseFloat((this.docObj.docItems.dt()[i].VAT + (this.docObj.docItems.dt()[i].PRICE * (this.docObj.docItems.dt()[i].VAT_RATE / 100) * pQuantity)).toFixed(6))
-                            this.docObj.docItems.dt()[i].AMOUNT = parseFloat((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE).toFixed(4)).round(2)
-                            this.docObj.docItems.dt()[i].TOTAL = Number((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT)).round(2)
-                            this.docObj.docItems.dt()[i].TOTALHT =  Number((this.docObj.docItems.dt()[i].AMOUNT - this.docObj.docItems.dt()[i].DISCOUNT)).round(2)
-                            this.calculateTotal()
-                            await this.grdSlsInv.devGrid.deleteRow(0)
-                            //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
-                            await this.itemRelated(pData.GUID,this.docObj.docItems.dt()[i].QUANTITY)
-                            //*****************************************/
-                            if(this.checkCombine.value == true)
-                            {
-                                this.combineControl = false
-                            }
-                            tmpCombineBtn = e
-                            return
-                        }
-                        if(e == 'btn02')
-                        {
-                            if(this.checkCombine.value == true)
-                            {
-                                this.combineControl = false
-                                this.combineNew = true
-                            }
-                            return
-                        }
-                    })
-                    if(tmpCombineBtn == 'btn01')
-                    {
-                        return
-                    }
-                }
-                else if(this.combineNew == false)
-                {
-                
-                    this.docObj.docItems.dt()[i].QUANTITY = this.docObj.docItems.dt()[i].QUANTITY + pQuantity
-                    this.docObj.docItems.dt()[i].SUB_QUANTITY = this.docObj.docItems.dt()[i].SUB_QUANTITY / this.docObj.docItems.dt()[i].SUB_FACTOR
-                    this.docObj.docItems.dt()[i].VAT = Number((this.docObj.docItems.dt()[i].VAT + (this.docObj.docItems.dt()[i].PRICE * (this.docObj.docItems.dt()[i].VAT_RATE / 100) * pQuantity))).round(6)
-                    this.docObj.docItems.dt()[i].AMOUNT = Number((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE)).round(4)
-                    this.docObj.docItems.dt()[i].TOTAL = Number((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT)).round(2)
-                    this.docObj.docItems.dt()[i].TOTALHT =  Number((this.docObj.docItems.dt()[i].AMOUNT - this.docObj.docItems.dt()[i].DISCOUNT)).round(2)
-                    this.calculateTotal()
-                    await this.grdSlsInv.devGrid.deleteRow(0)
-                    //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
-                    await this.itemRelated(pData.GUID,this.docObj.docItems.dt()[i].QUANTITY)
-                    //*****************************************/
-                    App.instance.setState({isExecute:false})
-                    return
-                }
             }
         }
         
@@ -702,19 +661,19 @@ export default class salesInvoice extends DocBase
             {
                 this.txtPayTotal.value = parseFloat(this.payObj.docCustomer.dt().sum("AMOUNT",2))
                 let tmpRemainder = (this.docObj.dt()[0].TOTAL - this.payObj.dt()[0].TOTAL).toFixed(2)
-                this.txtRemainder.setState({value:tmpRemainder});
+                this.txtRemainder.value = tmpRemainder
                 if(typeof this.txtMainRemainder != 'undefined')
                 {
-                    this.txtMainRemainder.setState({value:tmpRemainder});
+                    this.txtMainRemainder.value = tmpRemainder
                 }
             }
             else
             {
                 this.txtPayTotal.value = 0
-                this.txtRemainder.setState({value:this.docObj.dt()[0].TOTAL});
+                this.txtRemainder.value = this.docObj.dt()[0].TOTAL
                 if(typeof this.txtMainRemainder != 'undefined')
                 {
-                    this.txtMainRemainder.setState({value:this.docObj.dt()[0].TOTAL});
+                    this.txtMainRemainder.value = this.docObj.dt()[0].TOTAL
                 }
             }
             let tmpQuery = 
@@ -922,7 +881,7 @@ export default class salesInvoice extends DocBase
         for (let i = 0; i < this.multiItemData.length; i++) 
         {
             await this.core.util.waitUntil(100)
-            await this.addItem(this.multiItemData[i],this.docObj.docItems.dt().length-1,this.multiItemData[i].QUANTITY)
+            await this.addItem(this.multiItemData[i],null,this.multiItemData[i].QUANTITY)
             this.popMultiItem.hide()
         }
     }
@@ -987,7 +946,7 @@ export default class salesInvoice extends DocBase
                             return
                         }
 
-                        await this.addItem(tmpCvoData.result.recordset[0],this.docObj.docItems.dt().length -1,1,this.docObj.dt()[0].INTERFEL)
+                        await this.addItem(tmpCvoData.result.recordset[0],null,1,this.docObj.dt()[0].INTERFEL)
                         this.popExtraCost.hide()
                     }
                 }        
@@ -1019,7 +978,7 @@ export default class salesInvoice extends DocBase
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup={"frmSalesInv"  + this.tabIndex}
+                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup={"frmDoc"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         console.log(this.docObj.dt())
@@ -1231,7 +1190,7 @@ export default class salesInvoice extends DocBase
                     {/* Form */}
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={3} id="frmSalesInv">
+                            <Form colCount={3} id="frmDoc">
                                 {/* txtRef-Refno */}
                                 <Item>
                                     <Label text={this.t("txtRefRefno")} alignment="right" />
@@ -1249,7 +1208,7 @@ export default class salesInvoice extends DocBase
                                             param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             >
-                                            <Validator validationGroup={"frmSalesInv"  + this.tabIndex}>
+                                            <Validator validationGroup={"frmDoc"  + this.tabIndex}>
                                                     <RequiredRule message={this.t("validRef")} />
                                                 </Validator>  
                                             </NdTextBox>
@@ -1306,7 +1265,7 @@ export default class salesInvoice extends DocBase
                                             param={this.param.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             >
-                                            <Validator validationGroup={"frmSalesInv"  + this.tabIndex}>
+                                            <Validator validationGroup={"frmDoc"  + this.tabIndex}>
                                                     <RequiredRule message={this.t("validRefNo")} />
                                                     <RangeRule min={1} message={this.t("validRefNo")}/>
                                                 </Validator> 
@@ -1336,7 +1295,7 @@ export default class salesInvoice extends DocBase
                                     param={this.param.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmSalesInv"  + this.tabIndex}>
+                                        <Validator validationGroup={"frmDoc"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validDepot")} />
                                         </Validator> 
                                     </NdSelectBox>
@@ -1403,10 +1362,6 @@ export default class salesInvoice extends DocBase
                                                             }
                                                         }
                                                     }
-                                                    else
-                                                    {
-                                                        await this.pg_adress.setData([])
-                                                    }
                                                 }
                                             }
                                         }
@@ -1460,10 +1415,6 @@ export default class salesInvoice extends DocBase
                                                                     }
                                                                 }
                                                             }
-                                                            else
-                                                            {
-                                                                await this.pg_adress.setData([])
-                                                            }
                                                         }
                                                     }
                                                 }
@@ -1473,7 +1424,7 @@ export default class salesInvoice extends DocBase
                                     param={this.param.filter({ELEMENT:'txtCustomerCode',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtCustomerCode',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmSalesInv"  + this.tabIndex}>
+                                        <Validator validationGroup={"frmDoc"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validCustomerCode")} />
                                         </Validator>  
                                     </NdTextBox>
@@ -1502,7 +1453,7 @@ export default class salesInvoice extends DocBase
                                         this.docObj.docCustomer.dt()[0].DOC_DATE = this.dtDocDate.value 
                                     }).bind(this)}
                                     >
-                                        <Validator validationGroup={"frmSalesInv"  + this.tabIndex}>
+                                        <Validator validationGroup={"frmDoc"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validDocDate")} />
                                         </Validator> 
                                     </NdDatePicker>
@@ -1517,14 +1468,14 @@ export default class salesInvoice extends DocBase
                                         this.checkRow()
                                     }).bind(this)}
                                     >
-                                        <Validator validationGroup={"frmSalesInv"  + this.tabIndex}>
+                                        <Validator validationGroup={"frmDoc"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validDocDate")} />
                                         </Validator> 
                                     </NdDatePicker>
                                 </Item>
                                 {/* Boş */}
                                 <EmptyItem />
-                                {/* BARKOD EKLEME */}
+                                {/* Barkod Ekleme */}
                                 <Item>
                                     <Label text={this.t("txtBarcode")} alignment="right" />
                                     <NdTextBox id="txtBarcode" parent={this} simple={true}  placeholder={this.t("txtBarcodePlace")}
@@ -1551,8 +1502,6 @@ export default class salesInvoice extends DocBase
                                                         return
                                                     }
                                                     
-                                                    await this.pg_txtBarcode.show()
-                                                    await this.pg_txtBarcode.setVal(this.txtBarcode.value)
                                                     this.pg_txtBarcode.onClick = async(data) =>
                                                     {
                                                         this.txtBarcode.setState({value:""})
@@ -1567,7 +1516,7 @@ export default class salesInvoice extends DocBase
         
                                                             if(data.length == 1)
                                                             {
-                                                                await this.addItem(data[0],this.docObj.docItems.dt().length -1)
+                                                                await this.addItem(data[0],null)
                                                             }
                                                             else if(data.length > 1)
                                                             {
@@ -1575,17 +1524,18 @@ export default class salesInvoice extends DocBase
                                                                 {
                                                                     if(i == 0)
                                                                     {
-                                                                        await this.addItem(data[i],this.docObj.docItems.dt().length -1)
+                                                                        await this.addItem(data[i],null)
                                                                     }
                                                                     else
                                                                     {
                                                                         await this.core.util.waitUntil(100)
-                                                                        await this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                                                        await this.addItem(data[i],null)
                                                                     }
                                                                 }
                                                             }
                                                         }
                                                     }
+                                                    this.pg_txtBarcode.setVal(this.txtBarcode.value)
                                                 }
                                             }
                                         ]
@@ -1614,7 +1564,7 @@ export default class salesInvoice extends DocBase
                                         let tmpData = await this.core.sql.execute(tmpQuery) 
                                         if(tmpData.result.recordset.length > 0)
                                         {
-                                            this.msgQuantity.on = async ()=>
+                                            this.msgQuantity.onShowed = async ()=>
                                             {
                                                 this.txtPopQteUnitQuantity.value = 1
                                                 this.txtPopQuantity.value = 1
@@ -1634,9 +1584,8 @@ export default class salesInvoice extends DocBase
                                                     this.txtPopQteUnitFactor.value = 1
                                                 }
                                             }
-
                                             await this.msgQuantity.show()
-                                            this.addItem(tmpData.result.recordset[0],(typeof this.docObj.docItems.dt()[0] == 'undefined' ? 0 : this.docObj.docItems.dt().length-1),this.txtPopQteUnitQuantity.value)
+                                            this.addItem(tmpData.result.recordset[0],null,this.txtPopQteUnitQuantity.value)
                                             this.txtBarcode.focus()
                                         }
                                         else
@@ -1650,7 +1599,7 @@ export default class salesInvoice extends DocBase
                                                 {
                                                     if(data.length == 1)
                                                     {
-                                                        this.msgQuantity.on = async ()=>
+                                                        this.msgQuantity.onShowed = async ()=>
                                                         {
                                                             this.txtPopQteUnitQuantity.value = 1
                                                             this.txtPopQuantity.value = 1
@@ -1674,7 +1623,7 @@ export default class salesInvoice extends DocBase
                                                         await this.msgQuantity.show().then(async (e) =>
                                                         {
                                                             await this.core.util.waitUntil(100)
-                                                            await this.addItem(data[0],this.docObj.docItems.dt().length -1,this.txtPopQteUnitQuantity.value)
+                                                            await this.addItem(data[0],null,this.txtPopQteUnitQuantity.value)
                                                             this.txtBarcode.focus()
                                                         });
                                                     }
@@ -1683,13 +1632,12 @@ export default class salesInvoice extends DocBase
                                                         for (let i = 0; i < data.length; i++) 
                                                         {
                                                             await this.core.util.waitUntil(100)
-                                                            await this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                                            await this.addItem(data[i],null)
                                                         }
                                                     }
                                                 }
                                             }
-                                            await this.pg_txtItemsCode.setVal(this.txtBarcode.value)
-                                            await this.pg_txtItemsCode.show()
+                                            this.pg_txtItemsCode.setVal(this.txtBarcode.value)
                                         }
                                         this.txtBarcode.value = ''
                                         
@@ -1741,7 +1689,7 @@ export default class salesInvoice extends DocBase
                             }}>
                                 <Item location="after">
                                     <Button icon="add"
-                                    validationGroup={"frmSalesInv"  + this.tabIndex}
+                                    validationGroup={"frmDoc"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         if(e.validationGroup.validate().status == "valid")
@@ -1756,7 +1704,7 @@ export default class salesInvoice extends DocBase
                                                         this.combineNew = false
                                                         if(data.length == 1)
                                                         {
-                                                            await this.addItem(data[0],this.docObj.docItems.dt().length-1)
+                                                            await this.addItem(data[0],null)
                                                         }
                                                         else if(data.length > 1)
                                                         {
@@ -1764,17 +1712,17 @@ export default class salesInvoice extends DocBase
                                                             {
                                                                 if(i == 0)
                                                                 {
-                                                                    await this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                                                    await this.addItem(data[i],null)
                                                                 }
                                                                 else
                                                                 {
                                                                     await this.core.util.waitUntil(100)
-                                                                    await this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                                                    await this.addItem(data[i],null)
                                                                 }
                                                             }
                                                         }
                                                     }
-                                                    await this.pg_txtItemsCode.show()
+                                                    this.pg_txtItemsCode.show()
                                                     return
                                                 }
                                             }
@@ -1786,7 +1734,7 @@ export default class salesInvoice extends DocBase
                                                 this.combineNew = false
                                                 if(data.length == 1)
                                                 {
-                                                    await this.addItem(data[0],this.docObj.docItems.dt().length-1)
+                                                    await this.addItem(data[0],null)
                                                 }
                                                 else if(data.length > 1)
                                                 {
@@ -1794,17 +1742,17 @@ export default class salesInvoice extends DocBase
                                                     {
                                                         if(i == 0)
                                                         {
-                                                            await this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                                            await this.addItem(data[i],null)
                                                         }
                                                         else
                                                         {
                                                             await this.core.util.waitUntil(100)
-                                                            await this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                                            await this.addItem(data[i],null)
                                                         }
                                                     }
                                                 }
                                             }
-                                            await this.pg_txtItemsCode.show()
+                                            this.pg_txtItemsCode.show()
                                         }
                                         else
                                         {
@@ -1837,7 +1785,7 @@ export default class salesInvoice extends DocBase
                                                         this.combineNew = false
                                                         if(data.length == 1)
                                                         {
-                                                            await this.addItem(data[0],this.docObj.docItems.dt().length-1)
+                                                            await this.addItem(data[0],null)
                                                         }
                                                         else if(data.length > 1)
                                                         {
@@ -1845,12 +1793,12 @@ export default class salesInvoice extends DocBase
                                                             {
                                                                 if(i == 0)
                                                                 {
-                                                                    await this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                                                    await this.addItem(data[i],null)
                                                                 }
                                                                 else
                                                                 {
                                                                     await this.core.util.waitUntil(100)
-                                                                    await this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                                                    await this.addItem(data[i],null)
                                                                 }
                                                             }
                                                         }
@@ -1869,7 +1817,7 @@ export default class salesInvoice extends DocBase
                                                 this.combineNew = false
                                                 if(data.length == 1)
                                                 {
-                                                    await this.addItem(data[0],this.docObj.docItems.dt().length-1)
+                                                    await this.addItem(data[0],null)
                                                 }
                                                 else if(data.length > 1)
                                                 {
@@ -1877,12 +1825,12 @@ export default class salesInvoice extends DocBase
                                                     {
                                                         if(i == 0)
                                                         {
-                                                            await this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                                            await this.addItem(data[i],null)
                                                         }
                                                         else
                                                         {
                                                             await this.core.util.waitUntil(100)
-                                                            await this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                                            await this.addItem(data[i],null)
                                                         }
                                                     }
                                                 }
@@ -1902,7 +1850,7 @@ export default class salesInvoice extends DocBase
                                         }
                                     }}/>
                                      <Button icon="increaseindent" text={this.lang.t("collectiveItemAdd")}
-                                    validationGroup={"frmSalesInv"  + this.tabIndex}
+                                    validationGroup={"frmDoc"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         if(e.validationGroup.validate().status == "valid")
@@ -2450,9 +2398,6 @@ export default class salesInvoice extends DocBase
                                     valueExpr="TAG"
                                     value=""
                                     searchEnabled={true}
-                                    onValueChanged={(async()=>
-                                    {
-                                    }).bind(this)}
                                     data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '15'"},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
@@ -2469,9 +2414,6 @@ export default class salesInvoice extends DocBase
                                     valueExpr="ID"
                                     value=""
                                     searchEnabled={true}
-                                    onValueChanged={(async()=>
-                                    {
-                                    }).bind(this)}
                                     data={{source:[{ID:"FR",VALUE:"FR"},{ID:"DE",VALUE:"DE"},{ID:"TR",VALUE:"TR"}]}}
                                     >
                                         <Validator validationGroup={"frmSalesInvPrint" + this.tabIndex}>
@@ -2674,6 +2616,117 @@ export default class salesInvoice extends DocBase
                                     <Label text={this.t("popDetail.margin")} alignment="right" />
                                     <NdTextBox id="txtDetailMargin" parent={this} simple={true} readOnly={true}
                                     maxLength={32}/>
+                                </Item>
+                            </Form>
+                        </NdPopUp>
+                    </div>
+                    {/* Mail Send PopUp */}
+                    <div>
+                        <NdPopUp parent={this} id={"popMailSend"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.t("popMailSend.title")}
+                        container={"#root"} 
+                        width={'600'}
+                        height={'600'}
+                        position={{of:'#root'}}
+                        deferRendering={true}
+                        >
+                            <Form colCount={1} height={'fit-content'}>
+                                <Item>
+                                    <Label text={this.t("popMailSend.txtMailSubject")} alignment="right" />
+                                    <NdTextBox id="txtMailSubject" parent={this} simple={true}
+                                    maxLength={32}
+                                    >
+                                        <Validator validationGroup={"frmMailsend" + this.tabIndex}>
+                                            <RequiredRule message={this.t("validMail")} />
+                                        </Validator> 
+                                    </NdTextBox>
+                                </Item>
+                                <Item>
+                                <Label text={this.t("popMailSend.txtSendMail")} alignment="right" />
+                                    <NdTextBox id="txtSendMail" parent={this} simple={true}
+                                    maxLength={32}
+                                    >
+                                        <Validator validationGroup={"frmMailsend" + this.tabIndex}>
+                                            <RequiredRule message={this.t("validMail")} />
+                                        </Validator> 
+                                    </NdTextBox>
+                                </Item>
+                                <Item>
+                                    <NdHtmlEditor id="htmlEditor" parent={this} height={300} placeholder={this.t("placeMailHtmlEditor")}/>
+                                </Item>
+                                <Item>
+                                    <div className='row'>
+                                        <div className='col-6'>
+                                            <NdButton text={this.t("popMailSend.btnSend")} type="normal" stylingMode="contained" width={'100%'}  
+                                            validationGroup={"frmMailsend"  + this.tabIndex}
+                                            onClick={async (e)=>
+                                            {       
+                                                if(e.validationGroup.validate().status == "valid")
+                                                {
+                                                    let tmpQuery = 
+                                                    {
+                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG)ORDER BY DOC_DATE,LINE_NO " ,
+                                                        param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
+                                                        value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
+                                                    }
+                                                    App.instance.setState({isExecute:true})
+                                                    let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                    App.instance.setState({isExecute:false})
+                                                    this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
+                                                    {
+                                                        App.instance.setState({isExecute:true})
+                                                        let tmpAttach = pResult.split('|')[1]
+                                                        let tmpHtml = this.htmlEditor.value
+                                                        if(this.htmlEditor.value.length == 0)
+                                                        {
+                                                            tmpHtml = ''
+                                                        }
+                                                        if(pResult.split('|')[0] != 'ERR')
+                                                        {
+                                                        }
+                                                        let tmpMailData = {html:tmpHtml,subject:this.txtMailSubject.value,sendMail:this.txtSendMail.value,attachName:"facture.pdf",attachData:tmpAttach,text:""}
+                                                        this.core.socket.emit('mailer',tmpMailData,async(pResult1) => 
+                                                        {
+                                                            App.instance.setState({isExecute:false})
+                                                            let tmpConfObj1 =
+                                                            {
+                                                                id:'msgMailSendResult',showTitle:true,title:this.t("msgMailSendResult.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                                button:[{id:"btn01",caption:this.t("msgMailSendResult.btn01"),location:'after'}],
+                                                            }
+                                                            
+                                                            if((pResult1) == 0)
+                                                            {  
+                                                                tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgMailSendResult.msgSuccess")}</div>)
+                                                                await dialog(tmpConfObj1);
+                                                                this.htmlEditor.value = '',
+                                                                this.txtMailSubject.value = '',
+                                                                this.txtSendMail.value = ''
+                                                                this.popMailSend.hide();  
+
+                                                            }
+                                                            else
+                                                            {
+                                                                tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgMailSendResult.msgFailed")}</div>)
+                                                                await dialog(tmpConfObj1);
+                                                                this.popMailSend.hide(); 
+                                                            }
+                                                        });
+                                                    });
+                                                }
+                                                    
+                                            }}/>
+                                        </div>
+                                        <div className='col-6'>
+                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                            onClick={()=>
+                                            {
+                                                this.popMailSend.hide();  
+                                            }}/>
+                                        </div>
+                                    </div>
                                 </Item>
                             </Form>
                         </NdPopUp>

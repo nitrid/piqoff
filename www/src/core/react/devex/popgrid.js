@@ -269,7 +269,8 @@ export default class NdPopGrid extends Base
     {
         if(typeof pValue != 'undefined')
         {
-            await this["pop_" + this.props.id].show();
+            await this.show();
+            //await this["pop_" + this.props.id].show();
             await this["txt" + this.props.id].setState({value:pValue})
             await this.getData()
         }
