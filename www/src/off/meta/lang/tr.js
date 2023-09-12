@@ -16307,7 +16307,7 @@ export const langTr =
         {
             title: "Dikkat",
             btn01: "Tamam",
-            msg: "650€ dan yüksek avans giremezsiniz ! "
+            msg: "1000€ dan yüksek avans giremezsiniz ! "
         },
     },
     tkf_01_001 : // "Alış Teklifi Listesi",

@@ -25,6 +25,7 @@ import NdImageUpload from '../../../../core/react/devex/imageupload.js';
 import NdDialog, { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
 import tr from '../../../meta/lang/devexpress/tr.js';
+import NdHtmlEditor from '../../../../core/react/devex/htmlEditor.js';
 
 export default class outagePurcInvoice extends React.PureComponent
 {
