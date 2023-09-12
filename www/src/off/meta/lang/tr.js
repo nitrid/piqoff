@@ -3878,7 +3878,7 @@ export const langTr =
     ftr_01_007 : // "Gelen İade Fatura Listesi"
     {
         txtCustomerCode : "Müşteri",
-        menu:"İade Faturası",
+        menu:"Fire Faturası",
         pg_txtCustomerCode : 
         {
             title : "Müşteri Seçimi",

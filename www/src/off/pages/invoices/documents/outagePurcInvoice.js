@@ -3687,7 +3687,7 @@ export default class outagePurcInvoice extends React.PureComponent
                     title={this.t("popDesign.title")}
                     container={"#root"} 
                     width={'500'}
-                    height={'250'}
+                    height={'350'}
                     position={{of:'#root'}}
                     >
                         <Form colCount={1} height={'fit-content'}>
@@ -3763,7 +3763,7 @@ export default class outagePurcInvoice extends React.PureComponent
                                 </div>
                                 <div className='row py-2'>
                                         <div className='col-6'>
-                                            <NdButton text={this.t("btnView")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmSalesInvPrint" + this.tabIndex}
+                                            <NdButton text={this.t("btnView")} type="normal" stylingMode="contained" width={'100%'} 
                                             onClick={async (e)=>
                                             {       
                                                 if(e.validationGroup.validate().status == "valid")
@@ -3794,7 +3794,7 @@ export default class outagePurcInvoice extends React.PureComponent
                                             }}/>
                                         </div>
                                         <div className='col-6'>
-                                            <NdButton text={this.t("btnMailsend")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmSalesInvPrint" + this.tabIndex}
+                                            <NdButton text={this.t("btnMailsend")} type="normal" stylingMode="contained" width={'100%'} 
                                             onClick={async (e)=>
                                             {    
                                                 if(e.validationGroup.validate().status == "valid")
