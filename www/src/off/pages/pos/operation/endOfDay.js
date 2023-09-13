@@ -512,11 +512,11 @@ export default class endOfDay extends React.PureComponent
           this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_DATE = this.dtDocDate.value
           this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].REF = 'POS'
           this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].REF_NO = this.docObj.dt()[0].REF_NO
-          this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].INPUT =  this.prmObj.filter({ID:'SafeCenter',TYPE:1}).getValue()
-          this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].INPUT_NAME =  this.cmbSafe.displayValue
+          this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].INPUT = this.prmObj.filter({ID:'SafeCenter',TYPE:1}).getValue()
+          this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].INPUT_NAME =  ''
           this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].OUTPUT = tmpSafe 
           this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].PAY_TYPE = 20
-          this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].AMOUNT = this.txtCash.value
+          this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].AMOUNT = Number(this.txtCash.value + this.txtAdvance.value).round(2)
           this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DESCRIPTION = ''
         }
         if(this.txtCreditCard.value > 0)
@@ -530,7 +530,7 @@ export default class endOfDay extends React.PureComponent
           this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].REF_NO = this.docObj.dt()[0].REF_NO
           this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].INPUT = this.prmObj.filter({ID:'BankSafe',TYPE:1}).getValue()
           this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].INPUT_NAME =  this.cmbSafe.displayValue
-          this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].OUTPUT = tmpSafe
+          this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].OUTPUT = '00000000-0000-0000-0000-000000000000'
           this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].PAY_TYPE = 21
           this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].AMOUNT = this.txtCreditCard.value
           this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DESCRIPTION = ''
@@ -546,7 +546,7 @@ export default class endOfDay extends React.PureComponent
           this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].REF_NO = this.docObj.dt()[0].REF_NO
           this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].INPUT = this.prmObj.filter({ID:'TicketRestSafe',TYPE:1}).getValue()
           this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].INPUT_NAME =  this.cmbSafe.displayValue
-          this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].OUTPUT = tmpSafe
+          this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].OUTPUT = '00000000-0000-0000-0000-000000000000'
           this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].PAY_TYPE = 20
           this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].AMOUNT = this.txtRestorant.value
           this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DESCRIPTION = ''
@@ -567,9 +567,23 @@ export default class endOfDay extends React.PureComponent
           this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].AMOUNT = this.txtCheck.value
           this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DESCRIPTION = ''
         }
+        this.docObj.docCustomer.addEmpty()
+        this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].TYPE = 2
+        this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_GUID = this.docObj.dt()[0].GUID
+        this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_TYPE = 201
+        this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_DATE = this.dtDocDate.value
+        this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].REF = 'POS'
+        this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].REF_NO = this.docObj.dt()[0].REF_NO
+        this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].INPUT =tmpSafe
+        this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].INPUT_NAME =  this.cmbSafe.displayValue
+        this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].OUTPUT = this.prmObj.filter({ID:'SafeCenter',TYPE:1}).getValue()
+        this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].PAY_TYPE = 20
+        this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].AMOUNT = this.txtPopAdvance.value
+        this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DESCRIPTION = ''
 
-        this.docObj.dt()[0].AMOUNT = this.docObj.docItems.dt().sum("AMOUNT",2)
-        this.docObj.dt()[0].TOTAL = this.docObj.docItems.dt().sum("AMOUNT",2)
+        this.docObj.dt()[0].AMOUNT = Number(this.txtAdvance.value + this.txtCash.value).round(2)
+        this.docObj.dt()[0].TOTAL = Number(this.txtAdvance.value + this.txtCash.value).round(2)
+        console.log(111)
         await this.docObj.save()
     }
     render()
@@ -647,14 +661,14 @@ export default class endOfDay extends React.PureComponent
                             </div>
                             <div>
                               <Form colCount={1}>
-                                {/* <Item>
-                                  <NdButton text={this.t("payTransfer")}
-                                  onClick={async ()=>
-                                    {       
-                                      this.safeTransfer()
-                                    }}
-                                  />
-                                  </Item> */}
+                              <Item>
+                                <NdButton text={this.t("btnNotTrue")}
+                                onClick={async ()=>
+                                  {       
+                                    this.popFinish.hide()
+                                  }}
+                                />
+                                </Item>
                                 <Item>
                                 <NdButton text={this.t("addAdvance")}
                                 onClick={async ()=>
@@ -766,7 +780,7 @@ export default class endOfDay extends React.PureComponent
                                                   return
                                                 }
                                               }
-                                              else if(this.txtPopAdvance.value > 650)
+                                              else if(this.txtPopAdvance.value > 1000)
                                               {
                                                 let tmpConfObj =
                                                 {
@@ -789,20 +803,7 @@ export default class endOfDay extends React.PureComponent
                                               }
                                               let tmpData = await this.core.sql.execute(tmpQuery) 
                                               let tmpSafe = tmpData.result.recordset[0].GUID
-                                              let tmpAmountQuery = 
-                                              {
-                                                  query : "SELECT ROUND((SUM(AMOUNT) - ISNULL((SELECT SUM(AMOUNT) FROM DOC_CUSTOMER_VW_01 AS DOCOUT WHERE DOCOUT.OUTPUT = DOCIN.INPUT AND TYPE = 2 AND DOC_TYPE = 201 AND PAY_TYPE = 20),0)),2) AS AMOUNT FROM DOC_CUSTOMER_VW_01 AS DOCIN " + 
-                                                  "WHERE INPUT_CODE = @INPUT_CODE  AND TYPE = 2 AND DOC_TYPE = 201 AND PAY_TYPE = 20 GROUP BY INPUT", 
-                                                  param : ['INPUT_CODE:string|50'],
-                                                  value : [this.cmbSafe.value]
-                                              }
-                                              let tmpAmountData = await this.core.sql.execute(tmpAmountQuery) 
-                                              let tmpOutAmount = 0
-                                              if(tmpAmountData.result.recordset.length > 0)
-                                              {
-                                                tmpOutAmount = tmpAmountData.result.recordset[0].AMOUNT
-                                              }
-                                              
+                                           
                                               if(this.docObj.dt().length == 0)
                                               {
                                                 this.docObj.addEmpty()
@@ -812,40 +813,27 @@ export default class endOfDay extends React.PureComponent
                                                 this.docObj.dt()[0].REF_NO = Math.floor(Date.now() / 1000)
                                                 this.docObj.dt()[0].DOC_DATE = this.dtDocDate.value
                                                 this.docObj.dt()[0].INPUT = tmpSafe
-                                                this.docObj.dt()[0].OUTPUT = this.prmObj.filter({ID:'SafeCenter',TYPE:1}).getValue()
-                                                this.docObj.dt()[0].AMOUNT = this.txtPopAdvance.value
-                                                this.docObj.dt()[0].TOTAL = this.txtPopAdvance.value
+                                                this.docObj.dt()[0].OUTPUT = '00000000-0000-0000-0000-000000000000'
+                                                this.docObj.dt()[0].AMOUNT =  Number(this.txtAdvance.value + this.txtCash.value).round(2)
+                                                this.docObj.dt()[0].TOTAL = Number(this.txtAdvance.value + this.txtCash.value).round(2)
                                               }
                                                 
-                                                this.docObj.docCustomer.addEmpty()
-                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].TYPE = 2
-                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_GUID = this.docObj.dt()[0].GUID
-                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_TYPE = 201
-                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_DATE = this.dtDocDate.value
-                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].REF = 'POS'
-                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].REF_NO = this.docObj.dt()[0].REF_NO
-                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].INPUT =tmpSafe
-                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].INPUT_NAME =  this.cmbSafe.displayValue
-                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].OUTPUT = this.docObj.dt()[0].OUTPUT
-                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].PAY_TYPE = 20
-                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].AMOUNT = this.txtPopAdvance.value
-                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DESCRIPTION = ''
+                                              this.docObj.docCustomer.addEmpty()
+                                              this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].TYPE = 2
+                                              this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_GUID = this.docObj.dt()[0].GUID
+                                              this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_TYPE = 201
+                                              this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_DATE = this.dtDocDate.value
+                                              this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].REF = 'POS'
+                                              this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].REF_NO = this.docObj.dt()[0].REF_NO
+                                              this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].INPUT =tmpSafe
+                                              this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].INPUT_NAME =  this.cmbSafe.displayValue
+                                              this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].OUTPUT = '00000000-0000-0000-0000-000000000000'
+                                              this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].PAY_TYPE = 20
+                                              this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].AMOUNT = Number(this.txtCash.value).round(2)
+                                              this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DESCRIPTION = ''
                                                 
-                                                this.docObj.docCustomer.addEmpty()
-                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].TYPE = 2
-                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_GUID = this.docObj.dt()[0].GUID
-                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_TYPE = 201
-                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_DATE = this.dtDocDate.value
-                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].REF = 'POS'
-                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].REF_NO = this.docObj.dt()[0].REF_NO
-                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].INPUT = this.docObj.dt()[0].OUTPUT
-                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].INPUT_NAME =  this.cmbSafe.displayValue
-                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].OUTPUT = tmpSafe
-                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].PAY_TYPE = 20
-                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].AMOUNT = tmpOutAmount
-                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DESCRIPTION = ''
                                                 
-                                                await this.docObj.save()
+                                                this.safeTransfer()
                                                 this.popAdvance.hide()
                                                 this.popFinish.hide()
                                             }

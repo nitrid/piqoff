@@ -16228,7 +16228,7 @@ export const langFr =
         {
             title: "Attention",   
             btn01: "OK",   
-            msg: "Vous ne pouvez pas entrer le montant du fond de tiroir supérieur à 600 € ! "   
+            msg: "Vous ne pouvez pas entrer le montant du fond de tiroir supérieur à 1000 € ! "   
         },
     },
     tkf_01_001 : // "Alış Teklifi Listesi",

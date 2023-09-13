@@ -16253,7 +16253,7 @@ export const langDe =
         {
             title: "Achtung",
             btn01: "OK",
-            msg: "Sie können keinen Vorschuss über 650€ eingeben!"
+            msg: "Sie können keinen Vorschuss über 1000€ eingeben!"
         },
     },
     tkf_01_001 : // "Angebotsliste Einkauf",
