@@ -2,8 +2,6 @@ import moment from 'moment';
 
 import React from 'react';
 import App from '../../../lib/app.js';
-import { docCls,docItemsCls, docCustomerCls,docExtraCls } from '../../../../core/cls/doc.js';
-import { nf525Cls } from '../../../../core/cls/nf525.js';
 import DocBase from '../../../tools/DocBase.js';
 
 import ScrollView from 'devextreme-react/scroll-view';
@@ -16,15 +14,10 @@ import { Button } from 'devextreme-react/button';
 import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
 import NdNumberBox from '../../../../core/react/devex/numberbox.js';
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
-import NdCheckBox from '../../../../core/react/devex/checkbox.js';
-import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
 import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export,ColumnChooser,StateStoring} from '../../../../core/react/devex/grid.js';
-import NbPopDescboard from "../../../tools/popdescboard.js";
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
-import NdImageUpload from '../../../../core/react/devex/imageupload.js';
-import NdTagBox from '../../../../core/react/devex/tagbox.js';
 import NdDialog, { dialog } from '../../../../core/react/devex/dialog.js';
 import NdHtmlEditor from '../../../../core/react/devex/htmlEditor.js';
 
@@ -124,6 +117,21 @@ export default class salesInvoice extends DocBase
                 }
             })
         })
+        this.pg_txtCustomerCode.on('showing',()=>
+        {
+            this.pg_txtCustomerCode.setSource(
+            {
+                source:
+                {
+                    select:
+                    {
+                        query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME],EXPIRY_DAY,TAX_NO,ISNULL((SELECT TOP 1 ZIPCODE FROM CUSTOMER_ADRESS_VW_01 WHERE ADRESS_NO = 0),'') AS ZIPCODE FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
+                        param : ['VAL:string|50']
+                    },
+                    sql:this.core.sql
+                }
+            })
+        })
     }
     async getDoc(pGuid,pRef,pRefno)
     {
@@ -170,15 +178,8 @@ export default class salesInvoice extends DocBase
                             {
                                 for (let i = 0; i < data.length; i++) 
                                 {
-                                    if(i == 0)
-                                    {
-                                        await this.addItem(data[i],e.rowIndex)
-                                    }
-                                    else
-                                    {
-                                        await this.core.util.waitUntil(100)
-                                        await this.addItem(data[i],null)
-                                    }
+                                    await this.core.util.waitUntil(100)
+                                    await this.addItem(data[i],e.rowIndex)
                                 }
                             }
                         }
@@ -239,15 +240,8 @@ export default class salesInvoice extends DocBase
                                     {
                                         for (let i = 0; i < data.length; i++) 
                                         {
-                                            if(i == 0)
-                                            {
-                                                await this.addItem(data[i],e.rowIndex)
-                                            }
-                                            else
-                                            {
-                                                await this.core.util.waitUntil(100)
-                                                await this.addItem(data[i],null)
-                                            }
+                                            await this.core.util.waitUntil(100)
+                                            await this.addItem(data[i],e.rowIndex)
                                         }
                                     }
                                 }
@@ -278,58 +272,29 @@ export default class salesInvoice extends DocBase
                             icon:'more',
                             onClick:async ()  =>
                             {
-                                this.msgUnit.onShowed = async ()=>
+                                this.msgUnit.tmpData = e.data
+                                await this.msgUnit.show();
+                                
+                                e.key.UNIT = this.cmbUnit.value
+                                e.key.UNIT_FACTOR = this.txtUnitFactor.value
+                                if(this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].TYPE == 1)
                                 {
-                                    let tmpQuery = 
-                                    {
-                                        query: "SELECT GUID,ISNULL((SELECT NAME FROM UNIT WHERE UNIT.ID = ITEM_UNIT.ID),'') AS NAME,FACTOR,TYPE FROM ITEM_UNIT WHERE DELETED = 0 AND ITEM = @ITEM ORDER BY TYPE" ,
-                                        param:  ['ITEM:string|50'],
-                                        value:  [e.data.ITEM]
-                                    }
-                                    let tmpData = await this.core.sql.execute(tmpQuery) 
-                                    if(tmpData.result.recordset.length > 0)
-                                    {   
-                                        this.cmbUnit.setData(tmpData.result.recordset)
-                                        this.cmbUnit.value = e.data.UNIT
-                                        this.txtUnitFactor.value = e.data.UNIT_FACTOR
-                                        this.txtTotalQuantity.value =  e.data.QUANTITY
-                                        this.txtUnitQuantity.value = e.data.QUANTITY / e.data.UNIT_FACTOR
-                                        if(this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].TYPE == 1)
-                                        {
-                                            this.txtUnitQuantity.value = e.data.QUANTITY * e.data.UNIT_FACTOR
-                                            this.txtUnitPrice.value = e.data.PRICE / e.data.UNIT_FACTOR
-                                        }
-                                        else
-                                        {
-                                            this.txtUnitQuantity.value = e.data.QUANTITY / e.data.UNIT_FACTOR
-                                            this.txtUnitPrice.value = e.data.PRICE * e.data.UNIT_FACTOR
-                                        }
-                                    }
+                                    e.data.PRICE = parseFloat((this.txtUnitPrice.value * this.txtUnitFactor.value).toFixed(4))
                                 }
-
-                                await this.msgUnit.show().then(async () =>
+                                else
                                 {
-                                    e.key.UNIT = this.cmbUnit.value
-                                    e.key.UNIT_FACTOR = this.txtUnitFactor.value
-                                    if(this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].TYPE == 1)
-                                    {
-                                        e.data.PRICE = parseFloat((this.txtUnitPrice.value * this.txtUnitFactor.value).toFixed(4))
-                                    }
-                                    else
-                                    {
-                                        e.data.PRICE = parseFloat((this.txtUnitPrice.value / this.txtUnitFactor.value).toFixed(4))
-                                    }
-                                    e.data.QUANTITY = this.txtTotalQuantity.value
-                                    e.data.VAT = Number(((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) * (e.data.VAT_RATE) / 100))).round(6)
-                                    e.data.AMOUNT = Number((e.data.PRICE * e.data.QUANTITY)).round(2)
-                                    e.data.TOTALHT = Number(((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT)).round(2)
-                                    e.data.TOTAL = Number((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) +e.data.VAT)).round(2)
-                                    e.data.DISCOUNT_RATE = Number(e.data.AMOUNT).rate2Num(e.data.DISCOUNT,4)
-                                    //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
-                                    await this.itemRelatedUpdate(e.data.ITEM,this.txtTotalQuantity.value)
-                                    //*****************************************/
-                                    this.calculateTotal()
-                                });  
+                                    e.data.PRICE = parseFloat((this.txtUnitPrice.value / this.txtUnitFactor.value).toFixed(4))
+                                }
+                                e.data.QUANTITY = this.txtTotalQuantity.value
+                                e.data.VAT = Number(((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) * (e.data.VAT_RATE) / 100))).round(6)
+                                e.data.AMOUNT = Number((e.data.PRICE * e.data.QUANTITY)).round(2)
+                                e.data.TOTALHT = Number(((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT)).round(2)
+                                e.data.TOTAL = Number((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) +e.data.VAT)).round(2)
+                                e.data.DISCOUNT_RATE = Number(e.data.AMOUNT).rate2Num(e.data.DISCOUNT,4)
+                                //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
+                                await this.itemRelatedUpdate(e.data.ITEM,this.txtTotalQuantity.value)
+                                //*****************************************/
+                                this.calculateTotal()  
                             }
                         },
                     ]
@@ -364,19 +329,18 @@ export default class salesInvoice extends DocBase
                                     this.txtTotalDiscount.value = (parseFloat(e.data.DISCOUNT_1) + parseFloat(e.data.DISCOUNT_2) + parseFloat(e.data.DISCOUNT_3))
                                 }
 
-                                await this.msgDiscountEntry.show().then(async () =>
-                                {
-                                    e.data.DISCOUNT_1 = this.txtDiscount1.value
-                                    e.data.DISCOUNT_2 = this.txtDiscount2.value
-                                    e.data.DISCOUNT_3 = this.txtDiscount3.value
-                                    e.data.DISCOUNT = (parseFloat(this.txtDiscount1.value) + parseFloat(this.txtDiscount2.value) + parseFloat(this.txtDiscount3.value))
-                                    e.data.VAT = parseFloat(((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) * (e.data.VAT_RATE) / 100)).toFixed(6));
-                                    e.data.AMOUNT = parseFloat((e.data.PRICE * e.data.QUANTITY).toFixed(4))
-                                    e.data.TOTALHT = parseFloat(((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT).toFixed(4))
-                                    e.data.TOTAL = parseFloat((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) +e.data.VAT)).round(2)
-                                    e.data.DISCOUNT_RATE = Number(e.data.AMOUNT).rate2Num(e.data.DISCOUNT,4)
-                                    this.calculateTotal()
-                                });  
+                                await this.msgDiscountEntry.show()
+                                
+                                e.data.DISCOUNT_1 = this.txtDiscount1.value
+                                e.data.DISCOUNT_2 = this.txtDiscount2.value
+                                e.data.DISCOUNT_3 = this.txtDiscount3.value
+                                e.data.DISCOUNT = (parseFloat(this.txtDiscount1.value) + parseFloat(this.txtDiscount2.value) + parseFloat(this.txtDiscount3.value))
+                                e.data.VAT = parseFloat(((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) * (e.data.VAT_RATE) / 100)).toFixed(6));
+                                e.data.AMOUNT = parseFloat((e.data.PRICE * e.data.QUANTITY).toFixed(4))
+                                e.data.TOTALHT = parseFloat(((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT).toFixed(4))
+                                e.data.TOTAL = parseFloat((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) +e.data.VAT)).round(2)
+                                e.data.DISCOUNT_RATE = Number(e.data.AMOUNT).rate2Num(e.data.DISCOUNT,4)
+                                this.calculateTotal()
                             }
                         },
                     ]
@@ -409,19 +373,19 @@ export default class salesInvoice extends DocBase
                                     this.txtDiscountPer2.value = Number((e.data.QUANTITY*e.data.PRICE)-e.data.DISCOUNT_1).rate2Num(e.data.DISCOUNT_2,4)
                                     this.txtDiscountPer3.value = Number((e.data.QUANTITY*e.data.PRICE)-((e.data.DISCOUNT_1+e.data.DISCOUNT_2))).rate2Num(e.data.DISCOUNT_3,4)
                                 }
-                                await this.msgDiscountPerEntry.show().then(async () =>
-                                {
-                                    e.data.DISCOUNT_1 = Number(e.data.AMOUNT).rateInc(this.txtDiscountPer1.value,4) 
-                                    e.data.DISCOUNT_2 = Number(e.data.AMOUNT-e.data.DISCOUNT_1).rateInc(this.txtDiscountPer2.value,4) 
-                                    e.data.DISCOUNT_3 = Number(e.data.AMOUNT-e.data.DISCOUNT_1-e.data.DISCOUNT_2).rateInc(this.txtDiscountPer3.value,4) 
-                                    e.data.DISCOUNT = (e.data.DISCOUNT_1 + e.data.DISCOUNT_2 + e.data.DISCOUNT_3)
-                                    e.data.VAT = parseFloat(((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) * (e.data.VAT_RATE) / 100)).toFixed(6));
-                                    e.data.AMOUNT = parseFloat((e.data.PRICE * e.data.QUANTITY)).round(2)
-                                    e.data.TOTALHT = parseFloat(((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT).toFixed(4))
-                                    e.data.TOTAL = parseFloat((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) +e.data.VAT)).round(2)
-                                    e.data.DISCOUNT_RATE = Number(e.data.AMOUNT).rate2Num(e.data.DISCOUNT,4)
-                                    this.calculateTotal()
-                                });  
+                                
+                                await this.msgDiscountPerEntry.show()
+                                
+                                e.data.DISCOUNT_1 = Number(e.data.AMOUNT).rateInc(this.txtDiscountPer1.value,4) 
+                                e.data.DISCOUNT_2 = Number(e.data.AMOUNT-e.data.DISCOUNT_1).rateInc(this.txtDiscountPer2.value,4) 
+                                e.data.DISCOUNT_3 = Number(e.data.AMOUNT-e.data.DISCOUNT_1-e.data.DISCOUNT_2).rateInc(this.txtDiscountPer3.value,4) 
+                                e.data.DISCOUNT = (e.data.DISCOUNT_1 + e.data.DISCOUNT_2 + e.data.DISCOUNT_3)
+                                e.data.VAT = parseFloat(((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) * (e.data.VAT_RATE) / 100)).toFixed(6));
+                                e.data.AMOUNT = parseFloat((e.data.PRICE * e.data.QUANTITY)).round(2)
+                                e.data.TOTALHT = parseFloat(((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT).toFixed(4))
+                                e.data.TOTAL = parseFloat((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) +e.data.VAT)).round(2)
+                                e.data.DISCOUNT_RATE = Number(e.data.AMOUNT).rate2Num(e.data.DISCOUNT,4)
+                                this.calculateTotal()
                             }
                         },
                     ]
@@ -434,11 +398,7 @@ export default class salesInvoice extends DocBase
     async _onItemRendered(e)
     {
         await this.core.util.waitUntil(10)
-        if(e.itemData.title == this.t("tabTitleSubtotal"))
-        {        
-           
-        }
-        else if(e.itemData.title == this.t("tabTitlePayments"))
+        if(e.itemData.title == this.t("tabTitlePayments"))
         {
             this._getPayment(this.docObj.dt()[0].GUID)
         }
@@ -725,62 +685,62 @@ export default class salesInvoice extends DocBase
             this.payObj.addEmpty(tmpPay);
         }
         let tmpPayment = {...this.payObj.docCustomer.empty}
-            tmpPayment.DOC_GUID = this.payObj.dt()[0].GUID
-            tmpPayment.TYPE = this.payObj.dt()[0].TYPE
-            tmpPayment.REF = this.payObj.dt()[0].REF
-            tmpPayment.REF_NO = this.payObj.dt()[0].REF_NO
-            tmpPayment.DOC_TYPE = this.payObj.dt()[0].DOC_TYPE
-            tmpPayment.DOC_DATE = this.payObj.dt()[0].DOC_DATE
-            tmpPayment.OUTPUT = this.payObj.dt()[0].OUTPUT
-            tmpPayment.INVOICE_GUID = this.docObj.dt()[0].GUID                                   
+        tmpPayment.DOC_GUID = this.payObj.dt()[0].GUID
+        tmpPayment.TYPE = this.payObj.dt()[0].TYPE
+        tmpPayment.REF = this.payObj.dt()[0].REF
+        tmpPayment.REF_NO = this.payObj.dt()[0].REF_NO
+        tmpPayment.DOC_TYPE = this.payObj.dt()[0].DOC_TYPE
+        tmpPayment.DOC_DATE = this.payObj.dt()[0].DOC_DATE
+        tmpPayment.OUTPUT = this.payObj.dt()[0].OUTPUT
+        tmpPayment.INVOICE_GUID = this.docObj.dt()[0].GUID                                   
 
-            if(pType == 0)
-            {
-                tmpPayment.INPUT = this.cmbCashSafe.value
-                tmpPayment.INPUT_NAME = this.cmbCashSafe.displayValue
-                tmpPayment.PAY_TYPE = 0
-                tmpPayment.AMOUNT = pAmount
-                tmpPayment.DESCRIPTION = this.cashDescription.value
-            }
-            else if (pType == 1)
-            {
-                tmpPayment.INPUT = this.cmbCashSafe.value
-                tmpPayment.INPUT_NAME = this.cmbCashSafe.displayValue
-                tmpPayment.PAY_TYPE = 1
-                tmpPayment.AMOUNT = pAmount
-                tmpPayment.DESCRIPTION = this.cashDescription.value
+        if(pType == 0)
+        {
+            tmpPayment.INPUT = this.cmbCashSafe.value
+            tmpPayment.INPUT_NAME = this.cmbCashSafe.displayValue
+            tmpPayment.PAY_TYPE = 0
+            tmpPayment.AMOUNT = pAmount
+            tmpPayment.DESCRIPTION = this.cashDescription.value
+        }
+        else if (pType == 1)
+        {
+            tmpPayment.INPUT = this.cmbCashSafe.value
+            tmpPayment.INPUT_NAME = this.cmbCashSafe.displayValue
+            tmpPayment.PAY_TYPE = 1
+            tmpPayment.AMOUNT = pAmount
+            tmpPayment.DESCRIPTION = this.cashDescription.value
 
-                let tmpCheck = {...this.payObj.checkCls.empty}
-                tmpCheck.DOC_GUID = this.payObj.dt()[0].GUID
-                tmpCheck.REF = checkReference.value
-                tmpCheck.DOC_DATE =  this.payObj.dt()[0].DOC_DATE
-                tmpCheck.CHECK_DATE =  this.payObj.dt()[0].DOC_DATE
-                tmpCheck.CUSTOMER =   this.payObj.dt()[0].OUTPUT
-                tmpCheck.AMOUNT =  this.numcheck.value
-                tmpCheck.SAFE =  this.cmbCashSafe.value
-                this.payObj.checkCls.addEmpty(tmpCheck)
-            }
-            else if (pType == 2)
-            {
-                tmpPayment.INPUT = this.cmbCashSafe.value
-                tmpPayment.INPUT_NAME = this.cmbCashSafe.displayValue
-                tmpPayment.PAY_TYPE = 2
-                tmpPayment.AMOUNT = pAmount
-                tmpPayment.DESCRIPTION = this.cashDescription.value
-            }
+            let tmpCheck = {...this.payObj.checkCls.empty}
+            tmpCheck.DOC_GUID = this.payObj.dt()[0].GUID
+            tmpCheck.REF = checkReference.value
+            tmpCheck.DOC_DATE =  this.payObj.dt()[0].DOC_DATE
+            tmpCheck.CHECK_DATE =  this.payObj.dt()[0].DOC_DATE
+            tmpCheck.CUSTOMER =   this.payObj.dt()[0].OUTPUT
+            tmpCheck.AMOUNT =  this.numcheck.value
+            tmpCheck.SAFE =  this.cmbCashSafe.value
+            this.payObj.checkCls.addEmpty(tmpCheck)
+        }
+        else if (pType == 2)
+        {
+            tmpPayment.INPUT = this.cmbCashSafe.value
+            tmpPayment.INPUT_NAME = this.cmbCashSafe.displayValue
+            tmpPayment.PAY_TYPE = 2
+            tmpPayment.AMOUNT = pAmount
+            tmpPayment.DESCRIPTION = this.cashDescription.value
+        }
 
-            await this.payObj.docCustomer.addEmpty(tmpPayment)
-            this.payObj.dt()[0].AMOUNT = this.payObj.docCustomer.dt().sum("AMOUNT",2)
-            this.payObj.dt()[0].TOTAL = this.payObj.docCustomer.dt().sum("AMOUNT",2)
+        await this.payObj.docCustomer.addEmpty(tmpPayment)
+        this.payObj.dt()[0].AMOUNT = this.payObj.docCustomer.dt().sum("AMOUNT",2)
+        this.payObj.dt()[0].TOTAL = this.payObj.docCustomer.dt().sum("AMOUNT",2)
+        
+        if((await this.payObj.save()) == 0)
+        {
             
-            if((await this.payObj.save()) == 0)
-            {
-              
-            }
-            
-            await this.popPayment.show()
-            await this._getPayment()
-            await this.grdInvoicePayment.dataRefresh({source:this.payObj.docCustomer.dt()});
+        }
+        
+        await this.popPayment.show()
+        await this._getPayment()
+        await this.grdInvoicePayment.dataRefresh({source:this.payObj.docCustomer.dt()});
     }
     async multiItemAdd()
     {
@@ -1195,7 +1155,7 @@ export default class salesInvoice extends DocBase
                                 <Item>
                                     <Label text={this.t("txtRefRefno")} alignment="right" />
                                     <div className="row">
-                                        <div className="col-4 pe-0">
+                                        <div className="col-6 pe-0">
                                             <NdTextBox id="txtRef" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF"}}
                                             upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                             readOnly={true}
@@ -1213,23 +1173,21 @@ export default class salesInvoice extends DocBase
                                                 </Validator>  
                                             </NdTextBox>
                                         </div>
-                                        <div className="col-5 ps-0">
+                                        <div className="col-6 ps-0">
                                             <NdTextBox id="txtRefno" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF_NO"}}
                                             upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                             readOnly={true}
-                                            button=
-                                            {
-                                                [
+                                            button={
+                                            [
+                                                {
+                                                    id:'01',
+                                                    icon:'more',
+                                                    onClick:()=>
                                                     {
-                                                        id:'01',
-                                                        icon:'more',
-                                                        onClick:()=>
-                                                        {
-                                                           this.getDocs(0)
-                                                        }
-                                                    },
-                                                ]
-                                            }
+                                                        this.getDocs(0)
+                                                    }
+                                                },
+                                            ]}
                                             onChange={(async()=>
                                             {
                                                 let tmpQuery = 
@@ -1318,7 +1276,7 @@ export default class salesInvoice extends DocBase
                                     dt={{data:this.docObj.dt('DOC'),field:"INPUT_CODE"}} 
                                     onEnterKey={(async()=>
                                     {
-                                        await this.pg_txtCustomerCode.setVal(this.txtCustomerCode.value)
+                                        this.pg_txtCustomerCode.setVal(this.txtCustomerCode.value)
                                         this.pg_txtCustomerCode.show()
                                         this.pg_txtCustomerCode.onClick = async(data) =>
                                         {
@@ -1342,7 +1300,7 @@ export default class salesInvoice extends DocBase
                                                     {
                                                         this.frmSalesInv.option('disabled',false)
                                                     }
-                                                        let tmpQuery = 
+                                                    let tmpQuery = 
                                                     {
                                                         query : "SELECT * FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER = @CUSTOMER",
                                                         param : ['CUSTOMER:string|50'],
@@ -1395,7 +1353,7 @@ export default class salesInvoice extends DocBase
                                                             {
                                                                 this.frmSalesInv.option('disabled',false)
                                                             }
-                                                             let tmpQuery = 
+                                                            let tmpQuery = 
                                                             {
                                                                 query : "SELECT * FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER = @CUSTOMER",
                                                                 param : ['CUSTOMER:string|50'],
@@ -1564,26 +1522,7 @@ export default class salesInvoice extends DocBase
                                         let tmpData = await this.core.sql.execute(tmpQuery) 
                                         if(tmpData.result.recordset.length > 0)
                                         {
-                                            this.msgQuantity.onShowed = async ()=>
-                                            {
-                                                this.txtPopQteUnitQuantity.value = 1
-                                                this.txtPopQuantity.value = 1
-                                                this.txtPopQuantity.focus()
-
-                                                let tmpUnitQuery = 
-                                                {
-                                                    query: "SELECT GUID,ISNULL((SELECT NAME FROM UNIT WHERE UNIT.ID = ITEM_UNIT.ID),'') AS NAME,FACTOR,TYPE FROM ITEM_UNIT WHERE DELETED = 0 AND ITEM = @ITEM ORDER BY TYPE" ,
-                                                    param:  ['ITEM:string|50'],
-                                                    value:  [tmpData.result.recordset[0].GUID]
-                                                }
-                                                let tmpUnitData = await this.core.sql.execute(tmpUnitQuery) 
-                                                if(tmpUnitData.result.recordset.length > 0)
-                                                {   
-                                                    this.cmbPopQteUnit.setData(tmpUnitData.result.recordset)
-                                                    this.cmbPopQteUnit.value = tmpData.result.recordset[0].UNIT
-                                                    this.txtPopQteUnitFactor.value = 1
-                                                }
-                                            }
+                                            this.msgQuantity.tmpData = tmpData.result.recordset[0]
                                             await this.msgQuantity.show()
                                             this.addItem(tmpData.result.recordset[0],null,this.txtPopQteUnitQuantity.value)
                                             this.txtBarcode.focus()
@@ -1599,33 +1538,10 @@ export default class salesInvoice extends DocBase
                                                 {
                                                     if(data.length == 1)
                                                     {
-                                                        this.msgQuantity.onShowed = async ()=>
-                                                        {
-                                                            this.txtPopQteUnitQuantity.value = 1
-                                                            this.txtPopQuantity.value = 1
-                                                            this.txtPopQuantity.focus()
-
-                                                            let tmpUnitQuery = 
-                                                            {
-                                                                query: "SELECT GUID,ISNULL((SELECT NAME FROM UNIT WHERE UNIT.ID = ITEM_UNIT.ID),'') AS NAME,FACTOR,TYPE FROM ITEM_UNIT WHERE DELETED = 0 AND ITEM = @ITEM ORDER BY TYPE" ,
-                                                                param:  ['ITEM:string|50'],
-                                                                value:  [data[0].GUID]
-                                                            }
-                                                            let tmpUnitData = await this.core.sql.execute(tmpUnitQuery) 
-                                                            if(tmpUnitData.result.recordset.length > 0)
-                                                            {   
-                                                                this.cmbPopQteUnit.setData(tmpUnitData.result.recordset)
-                                                                this.cmbPopQteUnit.value = data[0].UNIT
-                                                                this.txtPopQteUnitFactor.value = 1
-                                                            }
-                                                        }
-
-                                                        await this.msgQuantity.show().then(async (e) =>
-                                                        {
-                                                            await this.core.util.waitUntil(100)
-                                                            await this.addItem(data[0],null,this.txtPopQteUnitQuantity.value)
-                                                            this.txtBarcode.focus()
-                                                        });
+                                                        this.msgQuantity.tmpData = data[0]
+                                                        await this.msgQuantity.show();
+                                                        await this.addItem(data[0],null,this.txtPopQteUnitQuantity.value)
+                                                        this.txtBarcode.focus()
                                                     }
                                                     else if(data.length > 1)
                                                     {
@@ -1710,15 +1626,8 @@ export default class salesInvoice extends DocBase
                                                         {
                                                             for (let i = 0; i < data.length; i++) 
                                                             {
-                                                                if(i == 0)
-                                                                {
-                                                                    await this.addItem(data[i],null)
-                                                                }
-                                                                else
-                                                                {
-                                                                    await this.core.util.waitUntil(100)
-                                                                    await this.addItem(data[i],null)
-                                                                }
+                                                                await this.core.util.waitUntil(100)
+                                                                await this.addItem(data[i],null)
                                                             }
                                                         }
                                                     }
@@ -1740,15 +1649,8 @@ export default class salesInvoice extends DocBase
                                                 {
                                                     for (let i = 0; i < data.length; i++) 
                                                     {
-                                                        if(i == 0)
-                                                        {
-                                                            await this.addItem(data[i],null)
-                                                        }
-                                                        else
-                                                        {
-                                                            await this.core.util.waitUntil(100)
-                                                            await this.addItem(data[i],null)
-                                                        }
+                                                        await this.core.util.waitUntil(100)
+                                                        await this.addItem(data[i],null)
                                                     }
                                                 }
                                             }
@@ -1791,15 +1693,8 @@ export default class salesInvoice extends DocBase
                                                         {
                                                             for (let i = 0; i < data.length; i++) 
                                                             {
-                                                                if(i == 0)
-                                                                {
-                                                                    await this.addItem(data[i],null)
-                                                                }
-                                                                else
-                                                                {
-                                                                    await this.core.util.waitUntil(100)
-                                                                    await this.addItem(data[i],null)
-                                                                }
+                                                                await this.core.util.waitUntil(100)
+                                                                await this.addItem(data[i],null)
                                                             }
                                                         }
                                                     }
@@ -1823,15 +1718,8 @@ export default class salesInvoice extends DocBase
                                                 {
                                                     for (let i = 0; i < data.length; i++) 
                                                     {
-                                                        if(i == 0)
-                                                        {
-                                                            await this.addItem(data[i],null)
-                                                        }
-                                                        else
-                                                        {
-                                                            await this.core.util.waitUntil(100)
-                                                            await this.addItem(data[i],null)
-                                                        }
+                                                        await this.core.util.waitUntil(100)
+                                                        await this.addItem(data[i],null)
                                                     }
                                                 }
                                             }
@@ -1849,7 +1737,7 @@ export default class salesInvoice extends DocBase
                                             await dialog(tmpConfObj);
                                         }
                                     }}/>
-                                     <Button icon="increaseindent" text={this.lang.t("collectiveItemAdd")}
+                                    <Button icon="increaseindent" text={this.lang.t("collectiveItemAdd")}
                                     validationGroup={"frmDoc"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
@@ -1858,7 +1746,7 @@ export default class salesInvoice extends DocBase
                                             await this.popMultiItem.show()
                                             await this.grdMultiItem.dataRefresh({source:this.multiItemData});
                                             this.multiItemData.clear()
-                                            if( typeof this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1] != 'undefined' && this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
+                                            if(typeof this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1] != 'undefined' && this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
                                             {
                                                 await this.grdSlsInv.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
                                             }
@@ -2603,11 +2491,9 @@ export default class salesInvoice extends DocBase
                                                     {
                                                         this.unitDetailData.push(tmpData.result.recordset[i])
                                                     }
-
                                                     await this.popUnit2.show()
                                                     await this.grdUnit2.dataRefresh({source:this.unitDetailData})
                                                 }
-
                                             }
                                         },
                                     ]}/>

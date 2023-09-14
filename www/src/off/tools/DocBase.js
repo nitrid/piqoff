@@ -135,8 +135,8 @@ export default class DocBase extends React.PureComponent
                 {
                     this.btnDelete.setState({disabled:false});
                 }
-                // this.calculateMargin()
-                // this.calculateTotalMargin()        
+                this.calculateMargin()
+                this.calculateTotalMargin()        
             })
             this.docObj.ds.on('onDelete',(pTblName) =>
             {            
@@ -168,7 +168,54 @@ export default class DocBase extends React.PureComponent
             {
                 await this.grdNewVat.dataRefresh({source:this.newVat})
             }
-            
+            this.msgQuantity.onShowed = async ()=>
+            {
+                this.txtPopQteUnitQuantity.value = 1
+                this.txtPopQuantity.value = 1
+                this.txtPopQuantity.focus()
+                
+                let tmpUnitQuery = 
+                {
+                    query: "SELECT GUID,ISNULL((SELECT NAME FROM UNIT WHERE UNIT.ID = ITEM_UNIT.ID),'') AS NAME,FACTOR,TYPE FROM ITEM_UNIT WHERE DELETED = 0 AND ITEM = @ITEM ORDER BY TYPE" ,
+                    param: ['ITEM:string|50'],
+                    value: [this.msgQuantity.tmpData.GUID]
+                }
+                let tmpUnitData = await this.core.sql.execute(tmpUnitQuery) 
+                if(tmpUnitData.result.recordset.length > 0)
+                {   
+                    this.cmbPopQteUnit.setData(tmpUnitData.result.recordset)
+                    this.cmbPopQteUnit.value = this.msgQuantity.tmpData.UNIT
+                    this.txtPopQteUnitFactor.value = 1
+                }
+            }
+            this.msgUnit.onShowed = async ()=>
+            {
+                let tmpQuery = 
+                {
+                    query: "SELECT GUID,ISNULL((SELECT NAME FROM UNIT WHERE UNIT.ID = ITEM_UNIT.ID),'') AS NAME,FACTOR,TYPE FROM ITEM_UNIT WHERE DELETED = 0 AND ITEM = @ITEM ORDER BY TYPE" ,
+                    param:  ['ITEM:string|50'],
+                    value:  [this.msgUnit.tmpData.ITEM]
+                }
+                let tmpData = await this.core.sql.execute(tmpQuery) 
+                if(tmpData.result.recordset.length > 0)
+                {   
+                    this.cmbUnit.setData(tmpData.result.recordset)
+                    this.cmbUnit.value = this.msgUnit.tmpData.UNIT
+                    this.txtUnitFactor.value = this.msgUnit.tmpData.UNIT_FACTOR
+                    this.txtTotalQuantity.value =  this.msgUnit.tmpData.QUANTITY
+                    this.txtUnitQuantity.value = this.msgUnit.tmpData.QUANTITY / this.msgUnit.tmpData.UNIT_FACTOR
+                    if(this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].TYPE == 1)
+                    {
+                        this.txtUnitQuantity.value = this.msgUnit.tmpData.QUANTITY * this.msgUnit.tmpData.UNIT_FACTOR
+                        this.txtUnitPrice.value = this.msgUnit.tmpData.PRICE / this.msgUnit.tmpData.UNIT_FACTOR
+                    }
+                    else
+                    {
+                        this.txtUnitQuantity.value = this.msgUnit.tmpData.QUANTITY / this.msgUnit.tmpData.UNIT_FACTOR
+                        this.txtUnitPrice.value = this.msgUnit.tmpData.PRICE * this.msgUnit.tmpData.UNIT_FACTOR
+                    }
+                }
+            }
             resolve()
         })
     }
@@ -179,13 +226,12 @@ export default class DocBase extends React.PureComponent
             this.docObj.clearAll()
             this.payObj.clearAll()
             await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:this.type,DOC_TYPE:this.docType,SUB_FACTOR:this.sysParam.filter({ID:'secondFactor',USERS:this.user.CODE}).getValue().value});
-
+            
             if(this.docObj.dt().length == 0)
             {
                 resolve()
                 return
             }
-
             if(this.docObj.dt()[0].LOCKED != 0)
             {
                 this.docLocked = true
@@ -195,7 +241,6 @@ export default class DocBase extends React.PureComponent
                     button:[{id:"btn01",caption:this.t("msgGetLocked.btn01"),location:'after'}],
                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgGetLocked.msg")}</div>)
                 }
-    
                 await dialog(tmpConfObj);
             }
             else
@@ -207,21 +252,21 @@ export default class DocBase extends React.PureComponent
     }
     async getDocs(pType)
     {
-        let tmpQuery 
+        let tmpQuery = {}
         if(pType == 0)
         {
             if(this.type == 0)
             {
                 tmpQuery = 
                 {
-                    query : "SELECT GUID,REF,REF_NO,OUTPUT_CODE,OUTPUT_NAME,DOC_DATE_CONVERT,TOTAL FROM DOC_VW_01 WHERE TYPE = 0 AND DOC_TYPE = 20 AND REBATE = 0 AND DOC_DATE > GETDATE()-30 ORDER BY DOC_DATE DESC"
+                    query : "SELECT GUID,REF,REF_NO,OUTPUT_CODE,OUTPUT_NAME,DOC_DATE_CONVERT,TOTAL FROM DOC_VW_01 WHERE TYPE = " + this.type + " AND DOC_TYPE = " + this.docType + " AND REBATE = 0 AND DOC_DATE > GETDATE()-30 ORDER BY DOC_DATE DESC"
                 }
             }
             else
             {
                 tmpQuery = 
                 {
-                    query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,DOC_DATE_CONVERT,TOTAL FROM DOC_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 20 AND REBATE = 0 AND DOC_DATE > GETDATE()-30 ORDER BY DOC_DATE DESC"
+                    query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,DOC_DATE_CONVERT,TOTAL FROM DOC_VW_01 WHERE TYPE = " + this.type + " AND DOC_TYPE = " + this.docType + " AND REBATE = 0 AND DOC_DATE > GETDATE()-30 ORDER BY DOC_DATE DESC"
                 }
             }
         }
@@ -782,18 +827,18 @@ export default class DocBase extends React.PureComponent
                     height={'90%'}
                     title={this.t("pg_txtCustomerCode.title")} //
                     search={true}
-                    data = 
-                    {{
-                        source:
-                        {
-                            select:
-                            {
-                                query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME],EXPIRY_DAY,TAX_NO,ISNULL((SELECT TOP 1 ZIPCODE FROM CUSTOMER_ADRESS_VW_01 WHERE ADRESS_NO = 0),'') AS ZIPCODE FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
-                                param : ['VAL:string|50']
-                            },
-                            sql:this.core.sql
-                        }
-                    }}
+                    // data = 
+                    // {{
+                    //     source:
+                    //     {
+                    //         select:
+                    //         {
+                    //             query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME],EXPIRY_DAY,TAX_NO,ISNULL((SELECT TOP 1 ZIPCODE FROM CUSTOMER_ADRESS_VW_01 WHERE ADRESS_NO = 0),'') AS ZIPCODE FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
+                    //             param : ['VAL:string|50']
+                    //         },
+                    //         sql:this.core.sql
+                    //     }
+                    // }}
                     deferRendering={true}
                     >
                         <Column dataField="CODE" caption={this.t("pg_txtCustomerCode.clmCode")} width={150} />
