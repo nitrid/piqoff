@@ -16217,11 +16217,18 @@ export const langDe =
         dtAdvanceDate: "Datum",
         cmbPopSafe: "Kasse",
         addAdvance: "Vorschuss hinzufügen",
+        btnNotTrue : "Tekrar Giriş", // BAK
         msgDoubleAdvence:
         {
             title: "Achtung",
             btn01: "OK",
             msg: "Für diese Kasse wurde bereits ein Vorschuss eingegeben! Bitte bearbeiten Sie ihn in der Tabelle."
+        },
+        msgSucces:
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Gün Sonu Kayıt Edildi.."  // BAK
         },
         advanceMsg1: "Bitte stellen Sie sicher, dass Ihr Vorschussbetrag",
         advanceMsg2: "beträgt",

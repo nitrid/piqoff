@@ -583,8 +583,15 @@ export default class endOfDay extends React.PureComponent
 
         this.docObj.dt()[0].AMOUNT = Number(this.txtAdvance.value + this.txtCash.value).round(2)
         this.docObj.dt()[0].TOTAL = Number(this.txtAdvance.value + this.txtCash.value).round(2)
-        console.log(111)
         await this.docObj.save()
+        let tmpConfObj =
+        {
+          id:'msgSucces',showTitle:true,title:this.t("msgSucces.title"),showCloseButton:true,width:'500px',height:'200px',
+          button:[{id:"btn01",caption:this.t("msgSucces.btn01"),location:'after'}],
+          content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSucces.msg")}</div>)
+        }
+        
+       dialog(tmpConfObj);
     }
     render()
     {
@@ -660,7 +667,7 @@ export default class endOfDay extends React.PureComponent
                               </div>
                             </div>
                             <div>
-                              <Form colCount={1}>
+                              <Form colCount={2}>
                               <Item>
                                 <NdButton text={this.t("btnNotTrue")}
                                 onClick={async ()=>
