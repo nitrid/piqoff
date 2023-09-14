@@ -777,10 +777,22 @@ export default class Sale extends React.PureComponent
                                                     <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"40px",width:"40px"}}
                                                     onClick={async()=>
                                                     {
-                                                        if(this.docObj.dt()[0].DOC_TYPE == 20)
-                                                        {
-                                                            this.popDesign.show()
+                                                        let tmpQuery = 
+                                                        {   
+                                                            query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '15'"
                                                         }
+
+                                                        if(this.docObj.dt()[0].DOC_TYPE != 20)
+                                                        {
+                                                            tmpQuery = 
+                                                            {   
+                                                                query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '11'"
+                                                            }
+                                                        }
+                                                        
+                                                        let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                        await this.cmbDesignList.dataRefresh({source:tmpData.result.recordset});
+                                                        this.popDesign.show()
                                                     }}>
                                                         <i className="fa-solid fa-print fa-1x"></i>
                                                     </NbButton>                                                    
@@ -1783,7 +1795,7 @@ export default class Sale extends React.PureComponent
                                         onValueChanged={(async()=>
                                         {
                                         }).bind(this)}
-                                        data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '15'"},sql:this.core.sql}}}
+                                        // data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '15'"},sql:this.core.sql}}}
                                         param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                         access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                         >
@@ -1818,23 +1830,36 @@ export default class Sale extends React.PureComponent
                                                     if(e.validationGroup.validate().status == "valid")
                                                     {
                                                         this.setState({isExecute:true})
-                                                        let tmpLastSignature = await this.nf525.signatureDocDuplicate(this.docObj.dt()[0])
-                                                        let tmpExtra = {...this.extraObj.empty}
-                                                        tmpExtra.DOC = this.docObj.dt()[0].GUID
-                                                        tmpExtra.DESCRIPTION = ''
-                                                        tmpExtra.TAG = 'PRINT'
-                                                        tmpExtra.SIGNATURE = tmpLastSignature.SIGNATURE
-                                                        tmpExtra.SIGNATURE_SUM = tmpLastSignature.SIGNATURE_SUM
-                                                        this.extraObj.addEmpty(tmpExtra);
-                                                        await this.extraObj.save()
-
-                                                        let tmpQuery = 
+                                                        let tmpQuery = {}
+                                                        if(this.docObj.dt()[0].DOC_TYPE == 20)
                                                         {
-                                                            query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG) ORDER BY DOC_DATE,LINE_NO " ,
-                                                            param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
-                                                            value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
-                                                        }
+                                                            let tmpLastSignature = await this.nf525.signatureDocDuplicate(this.docObj.dt()[0])
+                                                            let tmpExtra = {...this.extraObj.empty}
+                                                            tmpExtra.DOC = this.docObj.dt()[0].GUID
+                                                            tmpExtra.DESCRIPTION = ''
+                                                            tmpExtra.TAG = 'PRINT'
+                                                            tmpExtra.SIGNATURE = tmpLastSignature.SIGNATURE
+                                                            tmpExtra.SIGNATURE_SUM = tmpLastSignature.SIGNATURE_SUM
+                                                            this.extraObj.addEmpty(tmpExtra);
+                                                            await this.extraObj.save()
 
+                                                            tmpQuery = 
+                                                            {
+                                                                query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG) ORDER BY DOC_DATE,LINE_NO" ,
+                                                                param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
+                                                                value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            tmpQuery = 
+                                                            {
+                                                                query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ORDERS_FOR_PRINT](@DOC_GUID) ORDER BY LINE_NO" ,
+                                                                param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
+                                                                value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
+                                                            }
+                                                        }
+                                                        
                                                         this.setState({isExecute:true})                                                        
                                                         let tmpData = await this.core.sql.execute(tmpQuery)                                                         
                                                         this.setState({isExecute:false})                                                        
