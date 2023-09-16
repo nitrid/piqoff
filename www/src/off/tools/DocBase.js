@@ -38,6 +38,7 @@ export default class DocBase extends React.PureComponent
         this.tabIndex = props.data.tabkey
         this.type = 0;
         this.docType = 0;
+        this.rebate = 0;
         this.quantityControl = false
 
         this.calculateTotal = this.calculateTotal.bind(this)
@@ -153,7 +154,8 @@ export default class DocBase extends React.PureComponent
             let tmpDoc = {...this.docObj.empty}
             tmpDoc.TYPE = this.type
             tmpDoc.DOC_TYPE = this.docType
-            tmpDoc.TYPE_NAME = 'FAC'
+            tmpDoc.REBATE = this.rebate
+
             this.docObj.addEmpty(tmpDoc);       
             
             this.msgNewPrice.onShowed = async ()=>
@@ -259,14 +261,14 @@ export default class DocBase extends React.PureComponent
             {
                 tmpQuery = 
                 {
-                    query : "SELECT GUID,REF,REF_NO,OUTPUT_CODE,OUTPUT_NAME,DOC_DATE_CONVERT,TOTAL FROM DOC_VW_01 WHERE TYPE = " + this.type + " AND DOC_TYPE = " + this.docType + " AND REBATE = 0 AND DOC_DATE > GETDATE()-30 ORDER BY DOC_DATE DESC"
+                    query : "SELECT GUID,REF,REF_NO,OUTPUT_CODE,OUTPUT_NAME,DOC_DATE_CONVERT,TOTAL FROM DOC_VW_01 WHERE TYPE = " + this.type + " AND DOC_TYPE = " + this.docType + " AND REBATE = " + this.rebate + " AND DOC_DATE > GETDATE() - 30 ORDER BY DOC_DATE DESC"
                 }
             }
             else
             {
                 tmpQuery = 
                 {
-                    query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,DOC_DATE_CONVERT,TOTAL FROM DOC_VW_01 WHERE TYPE = " + this.type + " AND DOC_TYPE = " + this.docType + " AND REBATE = 0 AND DOC_DATE > GETDATE()-30 ORDER BY DOC_DATE DESC"
+                    query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,DOC_DATE_CONVERT,TOTAL FROM DOC_VW_01 WHERE TYPE = " + this.type + " AND DOC_TYPE = " + this.docType + " AND REBATE = " + this.rebate + " AND DOC_DATE > GETDATE() - 30 ORDER BY DOC_DATE DESC"
                 }
             }
         }
@@ -276,14 +278,14 @@ export default class DocBase extends React.PureComponent
             {
                 tmpQuery = 
                 {
-                    query : "SELECT GUID,REF,REF_NO,OUTPUT_CODE,OUTPUT_NAME,DOC_DATE_CONVERT,TOTAL FROM DOC_VW_01 WHERE TYPE = 0 AND DOC_TYPE = 20 AND REBATE = 0 ORDER BY DOC_DATE DESC"
+                    query : "SELECT GUID,REF,REF_NO,OUTPUT_CODE,OUTPUT_NAME,DOC_DATE_CONVERT,TOTAL FROM DOC_VW_01 WHERE TYPE = " + this.type + " AND DOC_TYPE = " + this.docType + " AND REBATE = " + this.rebate + " ORDER BY DOC_DATE DESC"
                 }
             }
             else
             {
                 tmpQuery = 
                 {
-                    query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,DOC_DATE_CONVERT,TOTAL FROM DOC_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 20 AND REBATE = 0 ORDER BY DOC_DATE DESC"
+                    query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,DOC_DATE_CONVERT,TOTAL FROM DOC_VW_01 WHERE TYPE = " + this.type + " AND DOC_TYPE = " + this.docType + " AND REBATE = " + this.rebate + " ORDER BY DOC_DATE DESC"
                 }
             }
         }
@@ -440,9 +442,8 @@ export default class DocBase extends React.PureComponent
                     
                     if(tmpRelatedItemData.result.recordset.length > 0)
                     {
-                        
                         await this.core.util.waitUntil(100)
-                        await this.addItem(tmpRelatedItemData.result.recordset[0],this.docObj.docItems.dt().length-1,tmpRelatedQt)
+                        await this.addItem(tmpRelatedItemData.result.recordset[0],null,tmpRelatedQt)
                     }
                 }
             }
@@ -827,18 +828,6 @@ export default class DocBase extends React.PureComponent
                     height={'90%'}
                     title={this.t("pg_txtCustomerCode.title")} //
                     search={true}
-                    // data = 
-                    // {{
-                    //     source:
-                    //     {
-                    //         select:
-                    //         {
-                    //             query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME],EXPIRY_DAY,TAX_NO,ISNULL((SELECT TOP 1 ZIPCODE FROM CUSTOMER_ADRESS_VW_01 WHERE ADRESS_NO = 0),'') AS ZIPCODE FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
-                    //             param : ['VAL:string|50']
-                    //         },
-                    //         sql:this.core.sql
-                    //     }
-                    // }}
                     deferRendering={true}
                     >
                         <Column dataField="CODE" caption={this.t("pg_txtCustomerCode.clmCode")} width={150} />
@@ -885,7 +874,7 @@ export default class DocBase extends React.PureComponent
                                 tmpArr.push(<Column key={"TOTAL"} dataField="TOTAL" format={{ style: "currency", currency: "EUR",precision: 2}} caption={this.t("pg_Docs.clmTotal")} width={300} />)
                                 return tmpArr
                             }
-                            else
+                            else if(this.type == 1)
                             {
                                 let tmpArr = []
                                 tmpArr.push(<Column key={"REF"} dataField="REF" caption={this.t("pg_Docs.clmRef")} width={150}/>)
@@ -1348,9 +1337,14 @@ export default class DocBase extends React.PureComponent
                                                     button:[{id:"btn01",caption:this.t("msgPasswordSucces.btn01"),location:'after'}],
                                                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgPasswordSucces.msg")}</div>)
                                                 }
-                                    
+
                                                 await dialog(tmpConfObj);
                                                 this.popPassword.hide();  
+
+                                                if(typeof this.popPassword.onStatus != 'undefined')
+                                                {
+                                                    this.popPassword.onStatus(true)
+                                                }
                                             }
                                             else
                                             {
@@ -1362,6 +1356,11 @@ export default class DocBase extends React.PureComponent
                                                 }
                                     
                                                 await dialog(tmpConfObj);
+
+                                                if(typeof this.popPassword.onStatus != 'undefined')
+                                                {
+                                                    this.popPassword.onStatus(false)
+                                                }
                                             }
                                         }}/>
                                     </div>
@@ -2400,7 +2399,7 @@ export default class DocBase extends React.PureComponent
                         </Form>
                     </NdPopUp>
                 </div>  
-                {/* Adres Seçim POPUP */}
+                {/* Adres Seçim PopUp */}
                 <div>
                     <NdPopGrid id={"pg_adress"} showCloseButton={false} parent={this} container={"#root"}
                     visible={false}

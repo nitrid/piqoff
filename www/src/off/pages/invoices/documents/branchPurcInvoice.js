@@ -30,12 +30,13 @@ export default class branchSaleInvoice extends DocBase
 
         this.type = 0;
         this.docType = 22;
+        this.rebate = 0;
 
         this._cellRoleRender = this._cellRoleRender.bind(this)
         this._addPayment = this._addPayment.bind(this)
         this._onItemRendered = this._onItemRendered.bind(this)
 
-        this.frmSalesInv = undefined;
+        this.frmDocItems = undefined;
         this.docLocked = false;        
         this.combineControl = true
         this.combineNew = false
@@ -71,7 +72,7 @@ export default class branchSaleInvoice extends DocBase
         this.txtRefno.readOnly = false
         this.docLocked = false
         
-        this.frmSalesInv.option('disabled',true)
+        this.frmDocItems.option('disabled',true)
 
         this.pg_txtItemsCode.on('showing',()=>
         {
@@ -120,6 +121,10 @@ export default class branchSaleInvoice extends DocBase
                 }
             })
         })
+        this.popPassword.onStatus = (e)=>
+        {
+            this.frmDocItems.option('disabled',this.docLocked)
+        }
     }
     async getDoc(pGuid,pRef,pRefno)
     {
@@ -129,7 +134,7 @@ export default class branchSaleInvoice extends DocBase
 
         this.txtRef.readOnly = true
         this.txtRefno.readOnly = true
-        this.frmSalesInv.option('disabled',this.docLocked ? false : true)
+        this.frmDocItems.option('disabled',this.docLocked)
         
         this._getPayment(this.docObj.dt()[0].GUID)
     }
@@ -530,14 +535,19 @@ export default class branchSaleInvoice extends DocBase
             if(this.payObj.dt().length > 0)
             {
                 let tmpRemainder = (this.docObj.dt()[0].TOTAL - this.payObj.dt()[0].TOTAL).toFixed(2)
-                this.txtRemainder.setState({value:tmpRemainder});
-                this.txtMainRemainder.setState({value:tmpRemainder});
-                
+                this.txtRemainder.value = tmpRemainder
+                if(typeof this.txtMainRemainder != 'undefined')
+                {
+                    this.txtMainRemainder.value = tmpRemainder
+                }
             }
             else
             {
-                this.txtRemainder.setState({value:this.docObj.dt()[0].TOTAL});
-                this.txtMainRemainder.setState({value:this.docObj.dt()[0].TOTAL});
+                this.txtRemainder.value = this.docObj.dt()[0].TOTAL;
+                if(typeof this.txtMainRemainder != 'undefined')
+                {
+                    this.txtMainRemainder.value = this.docObj.dt()[0].TOTAL
+                }
             }
         }
     }
@@ -761,7 +771,7 @@ export default class branchSaleInvoice extends DocBase
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup={"frmSalesInv"  + this.tabIndex}
+                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup={"frmDocItems"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         if(this.docLocked == true)
@@ -933,7 +943,7 @@ export default class branchSaleInvoice extends DocBase
                                                 }
 
                                                 await dialog(tmpConfObj);
-                                                this.frmSalesInv.option('disabled',true)
+                                                this.frmDocItems.option('disabled',true)
                                             }
                                             else
                                             {
@@ -1013,7 +1023,7 @@ export default class branchSaleInvoice extends DocBase
                     {/* Form */}
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={3} id="frmSalesInv">
+                            <Form colCount={3} id="frmDocItems">
                                 {/* txtRef-Refno */}
                                 <Item>
                                     <Label text={this.t("txtRefRefno")} alignment="right" />
@@ -1030,7 +1040,7 @@ export default class branchSaleInvoice extends DocBase
                                             param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             >
-                                            <Validator validationGroup={"frmSalesInv"  + this.tabIndex}>
+                                            <Validator validationGroup={"frmDocItems"  + this.tabIndex}>
                                                     <RequiredRule message={this.t("validRef")} />
                                                 </Validator>  
                                             </NdTextBox>
@@ -1066,7 +1076,7 @@ export default class branchSaleInvoice extends DocBase
                                             param={this.param.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             >
-                                                <Validator validationGroup={"frmSalesInv"  + this.tabIndex}>
+                                                <Validator validationGroup={"frmDocItems"  + this.tabIndex}>
                                                     <RequiredRule message={this.t("validRefNo")} />
                                                     <RangeRule min={1} message={this.t("validRefNo")}/>
                                                 </Validator> 
@@ -1121,14 +1131,14 @@ export default class branchSaleInvoice extends DocBase
                                             this.docObj.docCustomer.dt()[0].INPUT = this.cmbDepot.value
                                             if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
                                             {
-                                                this.frmSalesInv.option('disabled',false)
+                                                this.frmDocItems.option('disabled',false)
                                             }
                                         }).bind(this)}
                                     data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01 WHERE TYPE IN(0,2)"},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmSalesInv"  + this.tabIndex}>
+                                        <Validator validationGroup={"frmDocItems"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validDepot")} />
                                         </Validator> 
                                     </NdSelectBox>
@@ -1170,7 +1180,7 @@ export default class branchSaleInvoice extends DocBase
                                                 }
                                                 if(this.cmbDepot.value != '' && this.docLocked == false)
                                                 {
-                                                    this.frmSalesInv.option('disabled',false)
+                                                    this.frmDocItems.option('disabled',false)
                                                 }
                                                 let tmpQuery = 
                                                 {
@@ -1180,9 +1190,7 @@ export default class branchSaleInvoice extends DocBase
                                                 }
                                                 let tmpAdressData = await this.core.sql.execute(tmpQuery) 
                                                 if(tmpAdressData.result.recordset.length > 1)
-                                                {   
-                                                    await this.pg_adress.show()
-                                                    await this.pg_adress.setData(tmpAdressData.result.recordset)
+                                                {
                                                     this.pg_adress.onClick = async(pdata) =>
                                                     {
                                                         if(pdata.length > 0)
@@ -1191,6 +1199,8 @@ export default class branchSaleInvoice extends DocBase
                                                             this.docObj.dt()[0].ZIPCODE = pdata[0].ZIPCODE
                                                         }
                                                     }
+                                                    await this.pg_adress.show()
+                                                    await this.pg_adress.setData(tmpAdressData.result.recordset)
                                                 }
                                             }
                                         }
@@ -1222,9 +1232,9 @@ export default class branchSaleInvoice extends DocBase
                                                             }
                                                             if(this.cmbDepot.value != '' && this.docLocked == false)
                                                             {
-                                                                this.frmSalesInv.option('disabled',false)
+                                                                this.frmDocItems.option('disabled',false)
                                                             }
-                                                             let tmpQuery = 
+                                                            let tmpQuery = 
                                                             {
                                                                 query : "SELECT * FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER = @CUSTOMER",
                                                                 param : ['CUSTOMER:string|50'],
@@ -1232,9 +1242,7 @@ export default class branchSaleInvoice extends DocBase
                                                             }
                                                             let tmpAdressData = await this.core.sql.execute(tmpQuery) 
                                                             if(tmpAdressData.result.recordset.length > 1)
-                                                            {   
-                                                                await this.pg_adress.show()
-                                                                await this.pg_adress.setData(tmpAdressData.result.recordset)
+                                                            {
                                                                 this.pg_adress.onClick = async(pdata) =>
                                                                 {
                                                                     if(pdata.length > 0)
@@ -1243,6 +1251,8 @@ export default class branchSaleInvoice extends DocBase
                                                                         this.docObj.dt()[0].ZIPCODE = pdata[0].ZIPCODE
                                                                     }
                                                                 }
+                                                                await this.pg_adress.show()
+                                                                await this.pg_adress.setData(tmpAdressData.result.recordset)
                                                             }
                                                         }
                                                     }
@@ -1253,7 +1263,7 @@ export default class branchSaleInvoice extends DocBase
                                     param={this.param.filter({ELEMENT:'txtCustomerCode',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtCustomerCode',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmSalesInv"  + this.tabIndex}>
+                                        <Validator validationGroup={"frmDocItems"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validCustomerCode")} />
                                         </Validator>  
                                     </NdTextBox>
@@ -1284,7 +1294,7 @@ export default class branchSaleInvoice extends DocBase
  
                                     }).bind(this)}
                                     >
-                                        <Validator validationGroup={"frmSalesInv"  + this.tabIndex}>
+                                        <Validator validationGroup={"frmDocItems"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validDocDate")} />
                                         </Validator> 
                                     </NdDatePicker>
@@ -1299,7 +1309,7 @@ export default class branchSaleInvoice extends DocBase
                                         this.checkRow()
                                     }).bind(this)}
                                     >
-                                        <Validator validationGroup={"frmSalesInv"  + this.tabIndex}>
+                                        <Validator validationGroup={"frmDocItems"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validDocDate")} />
                                         </Validator> 
                                     </NdDatePicker>
@@ -1454,11 +1464,11 @@ export default class branchSaleInvoice extends DocBase
                         <div className="col-12">
                             <Form colCount={1} onInitialized={(e)=>
                             {
-                                this.frmSalesInv = e.component
+                                this.frmDocItems = e.component
                             }}>
                                 <Item location="after">
                                     <Button icon="add"
-                                    validationGroup={"frmSalesInv"  + this.tabIndex}
+                                    validationGroup={"frmDocItems"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         if(e.validationGroup.validate().status == "valid")
@@ -1522,7 +1532,7 @@ export default class branchSaleInvoice extends DocBase
                                         }
                                     }}/>
                                       <Button icon="add" text={this.t("serviceAdd")}
-                                    validationGroup={"frmSalesInv"  + this.tabIndex}
+                                    validationGroup={"frmDocItems"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         if(e.validationGroup.validate().status == "valid")
@@ -1589,7 +1599,7 @@ export default class branchSaleInvoice extends DocBase
                                         }
                                     }}/>
                                      <Button icon="increaseindent" text={this.lang.t("collectiveItemAdd")}
-                                    validationGroup={"frmSalesInv"  + this.tabIndex}
+                                    validationGroup={"frmDocItems"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         if(e.validationGroup.validate().status == "valid")

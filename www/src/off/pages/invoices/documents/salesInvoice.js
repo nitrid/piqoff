@@ -29,6 +29,7 @@ export default class salesInvoice extends DocBase
 
         this.type = 1;
         this.docType = 20;
+        this.rebate = 0;
 
         this._cellRoleRender = this._cellRoleRender.bind(this)
         this._getPayment = this._getPayment.bind(this)
@@ -36,7 +37,7 @@ export default class salesInvoice extends DocBase
         this._onItemRendered = this._onItemRendered.bind(this)
         this._calculateInterfel = this._calculateInterfel.bind(this)
 
-        this.frmSalesInv = undefined;
+        this.frmDocItems = undefined;
         this.docLocked = false;        
         this.combineControl = true
         this.combineNew = false
@@ -55,6 +56,9 @@ export default class salesInvoice extends DocBase
     async init()
     {
         await super.init()
+
+        this.docObj.dt()[0].TYPE_NAME = 'FAC'
+
         this.grdSlsInv.devGrid.clearFilter("row")
         this.dtDocDate.value = moment(new Date())
         this.dtShipDate.value = moment(new Date())
@@ -73,7 +77,7 @@ export default class salesInvoice extends DocBase
         this.txtRefno.readOnly = true
         this.docLocked = false
         
-        this.frmSalesInv.option('disabled',true)
+        this.frmDocItems.option('disabled',true)
 
         let tmpQuery = 
         {
@@ -132,6 +136,10 @@ export default class salesInvoice extends DocBase
                 }
             })
         })
+        this.popPassword.onStatus = (e)=>
+        {
+            this.frmDocItems.option('disabled',this.docLocked)
+        }
     }
     async getDoc(pGuid,pRef,pRefno)
     {
@@ -141,7 +149,7 @@ export default class salesInvoice extends DocBase
 
         this.txtRef.readOnly = true
         this.txtRefno.readOnly = true
-        this.frmSalesInv.option('disabled',this.docLocked ? false : true)
+        this.frmDocItems.option('disabled',this.docLocked)
         
         this._getPayment(this.docObj.dt()[0].GUID)
     }
@@ -1049,7 +1057,7 @@ export default class salesInvoice extends DocBase
                                                     }
 
                                                     await dialog(tmpConfObj);
-                                                    this.frmSalesInv.option('disabled',true)
+                                                    this.frmDocItems.option('disabled',true)
                                                 }
                                                 else
                                                 {
@@ -1246,7 +1254,7 @@ export default class salesInvoice extends DocBase
                                         this.docObj.docCustomer.dt()[0].OUTPUT = this.cmbDepot.value
                                         if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
                                         {
-                                            this.frmSalesInv.option('disabled',false)
+                                            this.frmDocItems.option('disabled',false)
                                         }
                                     }).bind(this)}
                                     data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01 WHERE TYPE IN(0,2)"},sql:this.core.sql}}}
@@ -1298,7 +1306,7 @@ export default class salesInvoice extends DocBase
                                                     }
                                                     if(this.cmbDepot.value != '' && this.docLocked == false)
                                                     {
-                                                        this.frmSalesInv.option('disabled',false)
+                                                        this.frmDocItems.option('disabled',false)
                                                     }
                                                     let tmpQuery = 
                                                     {
@@ -1308,9 +1316,7 @@ export default class salesInvoice extends DocBase
                                                     }
                                                     let tmpAdressData = await this.core.sql.execute(tmpQuery) 
                                                     if(tmpAdressData.result.recordset.length > 1)
-                                                    {   
-                                                        await this.pg_adress.show()
-                                                        await this.pg_adress.setData(tmpAdressData.result.recordset)                                                            
+                                                    {
                                                         this.pg_adress.onClick = async(pdata) =>
                                                         {
                                                             if(pdata.length > 0)
@@ -1319,6 +1325,8 @@ export default class salesInvoice extends DocBase
                                                                 this.docObj.dt()[0].ZIPCODE = pdata[0].ZIPCODE
                                                             }
                                                         }
+                                                        await this.pg_adress.show()
+                                                        await this.pg_adress.setData(tmpAdressData.result.recordset)
                                                     }
                                                 }
                                             }
@@ -1351,7 +1359,7 @@ export default class salesInvoice extends DocBase
                                                             }
                                                             if(this.cmbDepot.value != '' && this.docLocked == false)
                                                             {
-                                                                this.frmSalesInv.option('disabled',false)
+                                                                this.frmDocItems.option('disabled',false)
                                                             }
                                                             let tmpQuery = 
                                                             {
@@ -1361,9 +1369,7 @@ export default class salesInvoice extends DocBase
                                                             }
                                                             let tmpAdressData = await this.core.sql.execute(tmpQuery) 
                                                             if(tmpAdressData.result.recordset.length > 1)
-                                                            {   
-                                                                await this.pg_adress.show()
-                                                                await this.pg_adress.setData(tmpAdressData.result.recordset)
+                                                            {
                                                                 this.pg_adress.onClick = async(pdata) =>
                                                                 {
                                                                     if(pdata.length > 0)
@@ -1372,6 +1378,8 @@ export default class salesInvoice extends DocBase
                                                                         this.docObj.dt()[0].ZIPCODE = pdata[0].ZIPCODE
                                                                     }
                                                                 }
+                                                                await this.pg_adress.show()
+                                                                await this.pg_adress.setData(tmpAdressData.result.recordset)
                                                             }
                                                         }
                                                     }
@@ -1601,7 +1609,7 @@ export default class salesInvoice extends DocBase
                         <div className="col-12">
                             <Form colCount={1} onInitialized={(e)=>
                             {
-                                this.frmSalesInv = e.component
+                                this.frmDocItems = e.component
                             }}>
                                 <Item location="after">
                                     <Button icon="add"
@@ -2290,7 +2298,7 @@ export default class salesInvoice extends DocBase
                                     param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmSalesInvPrint" + this.tabIndex}>
+                                        <Validator validationGroup={"frmDocItemsPrint" + this.tabIndex}>
                                             <RequiredRule message={this.t("validDesign")} />
                                         </Validator> 
                                     </NdSelectBox>
@@ -2304,7 +2312,7 @@ export default class salesInvoice extends DocBase
                                     searchEnabled={true}
                                     data={{source:[{ID:"FR",VALUE:"FR"},{ID:"DE",VALUE:"DE"},{ID:"TR",VALUE:"TR"}]}}
                                     >
-                                        <Validator validationGroup={"frmSalesInvPrint" + this.tabIndex}>
+                                        <Validator validationGroup={"frmDocItemsPrint" + this.tabIndex}>
                                             <RequiredRule message={this.t("validDesign")} />
                                         </Validator> 
                                     </NdSelectBox>
@@ -2312,7 +2320,7 @@ export default class salesInvoice extends DocBase
                                 <Item>
                                     <div className='row'>
                                         <div className='col-6'>
-                                            <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmSalesInvPrint" + this.tabIndex}
+                                            <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmDocItemsPrint" + this.tabIndex}
                                             onClick={async (e)=>
                                             {       
                                                 if(e.validationGroup.validate().status == "valid")
@@ -2377,7 +2385,7 @@ export default class salesInvoice extends DocBase
                                     </div>
                                     <div className='row py-2'>
                                         <div className='col-6'>
-                                            <NdButton text={this.t("btnView")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmSalesInvPrint" + this.tabIndex}
+                                            <NdButton text={this.t("btnView")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmDocItemsPrint" + this.tabIndex}
                                             onClick={async (e)=>
                                             {       
                                                 if(e.validationGroup.validate().status == "valid")
@@ -2408,7 +2416,7 @@ export default class salesInvoice extends DocBase
                                             }}/>
                                         </div>
                                         <div className='col-6'>
-                                            <NdButton text={this.t("btnMailsend")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmSalesInvPrint" + this.tabIndex}
+                                            <NdButton text={this.t("btnMailsend")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmDocItemsPrint" + this.tabIndex}
                                             onClick={async (e)=>
                                             {    
                                                 if(e.validationGroup.validate().status == "valid")

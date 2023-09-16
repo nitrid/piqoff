@@ -29,6 +29,7 @@ export default class purchaseInvoice extends DocBase
 
         this.type = 0;
         this.docType = 20;
+        this.rebate = 0;
 
         this._cellRoleRender = this._cellRoleRender.bind(this)
         this._addPayment = this._addPayment.bind(this)
@@ -128,16 +129,21 @@ export default class purchaseInvoice extends DocBase
                 }
             })
         })
+        this.popPassword.onStatus = (e)=>
+        {
+            this.frmDocItems.option('disabled',this.docLocked)
+        }
     }
     async getDoc(pGuid,pRef,pRefno)
     {
         App.instance.setState({isExecute:true})
         await super.getDoc(pGuid,pRef,pRefno);
         App.instance.setState({isExecute:false})
-        this.frmDocItems.option('disabled',false)
+        
         this.txtRef.readOnly = true
         this.txtRefno.readOnly = true
-        
+        this.frmDocItems.option('disabled',this.docLocked)
+
         let tmpQuery = 
         {
             query : "SELECT ISNULL(ROUND(SUM(AMOUNT),2),0) AS TOTAL FROM DOC_ITEMS_VW_01 " + 
@@ -495,7 +501,6 @@ export default class purchaseInvoice extends DocBase
         await this.core.util.waitUntil(100)
         if(e.itemData.title == this.t("tabTitlePayments"))
         {
-            console.log(this.txtMainRemainder)
             this._getPayment(this.docObj.dt()[0].GUID)
         }
     }
@@ -1709,9 +1714,7 @@ export default class purchaseInvoice extends DocBase
                                                 }
                                                 let tmpAdressData = await this.core.sql.execute(tmpQuery) 
                                                 if(tmpAdressData.result.recordset.length > 1)
-                                                {   
-                                                    await this.pg_adress.show()
-                                                    await this.pg_adress.setData(tmpAdressData.result.recordset)
+                                                {
                                                     this.pg_adress.onClick = async(pdata) =>
                                                     {
                                                         if(pdata.length > 0)
@@ -1719,6 +1722,8 @@ export default class purchaseInvoice extends DocBase
                                                             this.docObj.dt()[0].ADDRESS = pdata[0].ADRESS_NO
                                                         }
                                                     }
+                                                    await this.pg_adress.show()
+                                                    await this.pg_adress.setData(tmpAdressData.result.recordset)
                                                 }
                                             }
                                         }
@@ -1758,9 +1763,7 @@ export default class purchaseInvoice extends DocBase
                                                             }
                                                             let tmpAdressData = await this.core.sql.execute(tmpQuery) 
                                                             if(tmpAdressData.result.recordset.length > 1)
-                                                            {   
-                                                                await this.pg_adress.show()
-                                                                await this.pg_adress.setData(tmpAdressData.result.recordset)
+                                                            {
                                                                 this.pg_adress.onClick = async(pdata) =>
                                                                 {
                                                                     if(pdata.length > 0)
@@ -1768,6 +1771,8 @@ export default class purchaseInvoice extends DocBase
                                                                         this.docObj.dt()[0].ADDRESS = pdata[0].ADRESS_NO
                                                                     }
                                                                 }
+                                                                await this.pg_adress.show()
+                                                                await this.pg_adress.setData(tmpAdressData.result.recordset)
                                                             }
                                                         }
                                                     }
