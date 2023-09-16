@@ -1999,7 +1999,8 @@ export default class outagePurcInvoice extends DocBase
                                         <div className='col-6'>
                                             <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'} 
                                             onClick={async ()=>
-                                            {   let tmpQuery = 
+                                            {   
+                                                let tmpQuery = 
                                                 {
                                                     query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG)ORDER BY LINE_NO " ,
                                                     param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
