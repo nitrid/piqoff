@@ -220,7 +220,7 @@ export default class customsCodeImport extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgNotCustomer',showTitle:true,title:this.t("msgNotCustomer.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgNotCustomer',showTitle:true,title:this.t("msgNotCustomer.title"),showCloseButton:false,width:'500px',height:'200px',
                                                 button:[{id:"btn01",caption:this.t("msgNotCustomer.btn01"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNotCustomer.msg")}</div>)
                                             }

@@ -17446,6 +17446,8 @@ export const langDe =
             clmItemBarcode : "Barkod",  // BAK
             clmDescription : "Açıklama",     // BAK
             clmCountry : "T. Ülkesi",     // BAK
+            clmItemCode : "Ürün Kodu",
+            clmItemName : "Ürün Adı"
         },
     },
 }

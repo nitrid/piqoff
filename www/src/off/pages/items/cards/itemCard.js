@@ -2019,14 +2019,6 @@ export default class itemCard extends React.PureComponent
                                                         },
                                                     ]
                                                 }
-                                                onChange={(async()=>
-                                                {
-                                                    let tmpResult = await this.checkItem(this.txtRef.value)
-                                                    if(tmpResult == 3)
-                                                    {
-                                                        this.txtRef.value = "";
-                                                    }
-                                                }).bind(this)} 
                                                 selectAll={true}                           
                                                 >     
                                                 </NdTextBox>      
@@ -2050,7 +2042,7 @@ export default class itemCard extends React.PureComponent
                                             <Item>                                    
                                                 <Label text={this.t("txtCustoms")} alignment="right" />
                                                 <NdTextBox id="txtCustoms" parent={this} simple={true} tabIndex={this.tabIndex} dt={{data:this.itemsObj.dt('ITEMS'),field:"CUSTOMS_CODE"}} 
-                                                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value} readOnly={true}
+                                                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value} 
                                                 button=
                                                 {
                                                     [
@@ -2071,14 +2063,6 @@ export default class itemCard extends React.PureComponent
                                                         },
                                                     ]
                                                 }
-                                                onChange={(async()=>
-                                                {
-                                                    let tmpResult = await this.checkItem(this.txtRef.value)
-                                                    if(tmpResult == 3)
-                                                    {
-                                                        this.txtRef.value = "";
-                                                    }
-                                                }).bind(this)} 
                                                 selectAll={true}                           
                                                 >     
                                                 </NdTextBox>      

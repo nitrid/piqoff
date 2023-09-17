@@ -17502,6 +17502,8 @@ export const langTr =
             clmItemBarcode : "Barkod",
             clmDescription : "Açıklama",   
             clmCountry : "T. Ülkesi",   
+            clmItemCode : "Ürün Kodu",
+            clmItemName : "Ürün Adı"
         },
     },
 }
