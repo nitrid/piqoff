@@ -3878,7 +3878,7 @@ export const langTr =
     ftr_01_007 : // "Gelen İade Fatura Listesi"
     {
         txtCustomerCode : "Müşteri",
-        menu:"İade Faturası",
+        menu:"Fire Faturası",
         pg_txtCustomerCode : 
         {
             title : "Müşteri Seçimi",
@@ -16277,11 +16277,18 @@ export const langTr =
         dtAdvanceDate : "Tarih",
         cmbPopSafe :"Kasa",
         addAdvance : "Avans Girişi",
+        btnNotTrue : "Tekrar Giriş",
         msgDoubleAdvence:
         {
             title: "Dikkat",
             btn01: "Tamam",
             msg: "Bu kasaya avans girilmiş ! Lütfen Grid Üzerinden düzenleyiniz..."
+        },
+        msgSucces:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Gün Sonu Kayıt Edildi.."
         },
         advanceMsg1 : "Lütfen Avans Tutarınızın",
         advanceMsg2 : "Olduğundan Emin Olunuz",
@@ -16313,7 +16320,7 @@ export const langTr =
         {
             title: "Dikkat",
             btn01: "Tamam",
-            msg: "650€ dan yüksek avans giremezsiniz ! "
+            msg: "1000€ dan yüksek avans giremezsiniz ! "
         },
     },
     tkf_01_001 : // "Alış Teklifi Listesi",

@@ -16198,11 +16198,18 @@ export const langFr =
         dtAdvanceDate : "date",
         cmbPopSafe :"Caisse",
         addAdvance : "Fond De Caisse",
+        btnNotTrue : "Tekrar Giriş", // BAK
         msgDoubleAdvence:
         {
             title: "Attention",
             btn01: "OK",
             msg: "Le fond de caisse est déjà saisi. Il faut modifier ceci à partir du tableau."
+        },
+        msgSucces:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Gün Sonu Kayıt Edildi.." // BAK
         },
         advanceMsg1 : "Soyez sûr que le fond de caisse est de",
         advanceMsg2 : "Etre sûr!!!",
@@ -16234,7 +16241,7 @@ export const langFr =
         {
             title: "Attention",   
             btn01: "OK",   
-            msg: "Vous ne pouvez pas entrer le montant du fond de tiroir supérieur à 600 € ! "   
+            msg: "Vous ne pouvez pas entrer le montant du fond de tiroir supérieur à 1000 € ! "   
         },
     },
     tkf_01_001 : // "Alış Teklifi Listesi",
