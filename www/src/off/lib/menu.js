@@ -1192,6 +1192,18 @@ export const menu = (e) =>
                             text: e.t('menuOff.pos_02_011'),
                             path: 'pos/report/itemComparisonReport'
                         },
+                        //Loyalty 
+                        {
+                            id: 'pos_02_012',
+                            text: e.t('menuOff.pos_02_012'),
+                            path: 'pos/report/loyaltyReport'
+                        },
+                         //Loyalty 
+                         {
+                            id: 'pos_02_013',
+                            text: e.t('menuOff.pos_02_013'),
+                            path: 'pos/report/discountReport'
+                        },
                     ]
                 },
             ]

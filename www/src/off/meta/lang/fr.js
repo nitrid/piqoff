@@ -288,6 +288,8 @@ export const langFr =
         pos_02_009 : "Rapport de Vente par famille de produits",
         pos_02_010 : "Rapport de vente détaillé du produit", 
         pos_02_011 : "Rapport de comparaison de produit",
+        pos_02_012 : "Pos Puan Kullanım Raporu",  // BAK
+        pos_02_013 : "Pos İndirim Raporu",  // BAK
         pos_03 : "Les opérations", 
         pos_03_001 : "Opérations de fin de journée",
         promo: "Promotion",
@@ -16132,6 +16134,26 @@ export const langFr =
             clmCode: "Code", 
             clmName: "Nom",  
             clmStatus : "Etat"  
+        },
+    },
+    pos_02_012 : // "Loyalty",  // BAK
+    {
+        btnGet :"Getir",
+        txtTotalTicket : "Toplam Fiş Adedi",
+        grdListe: 
+        {
+            clmDocDate: "Tarih",
+            clmLoyalty: "Kullanılan Sadakat Puan Tutarı",
+        },
+    },
+    pos_02_013 : // "İndirim Raporu",  // BAK
+    {
+        btnGet :"Getir",
+        txtTotalTicket : "Toplam Fiş Adedi",
+        grdListe: 
+        {
+            clmDocDate: "Tarih",
+            clmDiscount: "İndirim Tutarı",
         },
     },
     pos_03_001 : // "Gün sonu"
