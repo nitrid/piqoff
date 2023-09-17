@@ -15646,6 +15646,12 @@ export const langTr =
             btn01: "Tamam",
             msg: "Kayıt Başarılı !"
         },
+        msgNotCustomer:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen Tedarikçi Seçiniz !"
+        },
         popExcel :
         {
             title : "Excel",

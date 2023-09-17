@@ -15573,7 +15573,13 @@ export const langFr =
             txtMulticode : "Tedarikçi Kodu",
             txtCustoms : "Gümrük Kodu",
             txtOrigin :"Menşei"
-        }
+        },
+        msgNotCustomer:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen Tedarikçi Seçiniz !"
+        },
     },
     pos_01_001 : // "Pos Cihaz Tanıtım",
     {
