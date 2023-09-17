@@ -169,7 +169,7 @@ export const prm =
     },
      //Otomatik Interfel
      {
-        TYPE : 0,
+        TYPE : 1,
         ID :"autoInterfel",
         VALUE : 
         {
@@ -2508,7 +2508,7 @@ export const prm =
     {
         TYPE : 1,
         ID :"SafeCenter",
-        VALUE : "df8b4f69-9e2d-449a-996a-0001abcf0308",
+        VALUE : "FB529408-4AE5-4B34-9262-7956E3477F47",
         SPECIAL : "",
         PAGE : "pos_03_001",
         ELEMENT : "",

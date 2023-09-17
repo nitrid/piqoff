@@ -670,7 +670,7 @@ export default class itemCard extends React.PureComponent
         {
             let tmpQuery = 
             {
-                query : "SELECT TOP 1 DOC_GUID FROM DOC_ITEMS_VW_01 WHERE ITEM = @ITEM AND ISNULL((SELECT TOP 1 ITEM_TYPE FROM DOC_ITEMS WHERE ((DOC_ITEMS.DOC_GUID = DOC_ITEMS_VW_01.DOC_GUID) OR (DOC_ITEMS.DOC_GUID = DOC_ITEMS_VW_01.INVOICE_LINE_GUID)) AND ITEM_TYPE = 1),0) = 1 ORDER BY DOC_DATE DESC",
+                query : "SELECT TOP 1 DOC_GUID FROM DOC_ITEMS_VW_01 WHERE ITEM = @ITEM AND REBATE = 0 AND ISNULL((SELECT TOP 1 ITEM_TYPE FROM DOC_ITEMS WHERE ((DOC_ITEMS.DOC_GUID = DOC_ITEMS_VW_01.DOC_GUID) OR (DOC_ITEMS.DOC_GUID = DOC_ITEMS_VW_01.INVOICE_LINE_GUID)) AND ITEM_TYPE = 1),0) = 1 ORDER BY DOC_DATE DESC",
                 param : ['ITEM:string|50'],
                 value : [this.itemsObj.dt()[0].GUID]
             }

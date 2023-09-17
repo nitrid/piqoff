@@ -848,7 +848,7 @@ export default class purchaseInvoice extends React.PureComponent
         }
         else
         {
-            this.docObj.docItems.dt()[pIndex].VAT_RATE = pVat
+            this.docObj.docItems.dt()[pIndex].VAT_RATE = Number(pVat)
             this.docObj.docItems.dt()[pIndex].OLD_VAT = pData.VAT
         }
         this.docObj.docItems.dt()[pIndex].ITEM_NAME = pData.NAME

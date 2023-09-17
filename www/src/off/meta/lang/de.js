@@ -280,6 +280,8 @@ export const langDe =
         pos_02_009: "Gruppenbasierter Verkaufsbericht",
         pos_02_010: "Artikeldetailierter Verkaufsbericht",
         pos_02_011: "Artikelvergleichsbericht",
+        pos_02_012 : "Pos Puan Kullanım Raporu",  // BAK
+        pos_02_013 : "Pos İndirim Raporu",  // BAK
         pos_03: "Operationen",
         pos_03_001: "Tagesabschluss",
         promo: "Angebot",
@@ -15599,7 +15601,13 @@ export const langDe =
             txtMulticode : "Tedarikçi Kodu",
             txtCustoms : "Gümrük Kodu",
             txtOrigin :"Menşei"
-        }
+        },
+        msgNotCustomer:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen Tedarikçi Seçiniz !"
+        },
     },
     pos_01_001 : // "POS-Gerätekonfiguration"
     {
@@ -16159,6 +16167,26 @@ export const langDe =
             clmStatus: "STATUS"
         },
     },
+    pos_02_012 : // "Loyalty",  // BAK
+    {
+        btnGet :"Getir",
+        txtTotalTicket : "Toplam Fiş Adedi",
+        grdListe: 
+        {
+            clmDocDate: "Tarih",
+            clmLoyalty: "Kullanılan Sadakat Puan Tutarı",
+        },
+    },
+    pos_02_013 : // "İndirim Raporu",  // BAK
+    {
+        btnGet :"Getir",
+        txtTotalTicket : "Toplam Fiş Adedi",
+        grdListe: 
+        {
+            clmDocDate: "Tarih",
+            clmDiscount: "İndirim Tutarı",
+        },
+    },
     pos_03_001: // "Gün Sonu"
     {
         TicketId: "Beleg-ID",
@@ -16217,11 +16245,18 @@ export const langDe =
         dtAdvanceDate: "Datum",
         cmbPopSafe: "Kasse",
         addAdvance: "Vorschuss hinzufügen",
+        btnNotTrue : "Tekrar Giriş", // BAK
         msgDoubleAdvence:
         {
             title: "Achtung",
             btn01: "OK",
             msg: "Für diese Kasse wurde bereits ein Vorschuss eingegeben! Bitte bearbeiten Sie ihn in der Tabelle."
+        },
+        msgSucces:
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Gün Sonu Kayıt Edildi.."  // BAK
         },
         advanceMsg1: "Bitte stellen Sie sicher, dass Ihr Vorschussbetrag",
         advanceMsg2: "beträgt",
@@ -16253,7 +16288,7 @@ export const langDe =
         {
             title: "Achtung",
             btn01: "OK",
-            msg: "Sie können keinen Vorschuss über 650€ eingeben!"
+            msg: "Sie können keinen Vorschuss über 1000€ eingeben!"
         },
     },
     tkf_01_001 : // "Angebotsliste Einkauf",

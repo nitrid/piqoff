@@ -175,7 +175,7 @@ export default class debReport extends React.PureComponent
                 select : 
                 { 
                     query : "SELECT " +
-                    "(SELECT TOP 1  CUSTOMS_CODE FROM ITEMS_GRP WHERE ITEMS_GRP.ITEM = DOC_ITEMS_VW_01.ITEM) AS CUSTOMS_NO,   " +
+                    "(SELECT TOP 1  CASE WHEN LEN(CUSTOMS_CODE) = 7 THEN '0'+ CUSTOMS_CODE ELSE CUSTOMS_CODE END FROM ITEMS_GRP WHERE ITEMS_GRP.ITEM = DOC_ITEMS_VW_01.ITEM) AS CUSTOMS_NO,   " +
                     "ORIGIN,   " +
                     "(SELECT TOP 1 SECTOR_NO FROM COMPANY) AS REGIME,   " +
                     "QUANTITY,   " +
@@ -303,15 +303,6 @@ export default class debReport extends React.PureComponent
                                 <Column dataField="MULTICODE" caption={this.t("grdListe.clmMulticode")}  visible={true} /> 
                                 <Column dataField="ITEM_BARCODE" caption={this.t("grdListe.clmItemBarcode")}  visible={true} /> 
                                 <Column dataField="DESCRIPTION" caption={this.t("grdListe.clmDescription")}  visible={true} /> 
-                                <Summary>
-                                    <TotalItem
-                                    column="TOTALHT"
-                                    summaryType="sum"
-                                    valueFormat={{ style: "currency", currency: "EUR",precision: 2}} />
-                                     <TotalItem
-                                    column="KG"
-                                    summaryType="sum" valueFormat={'##0.00'}/>
-                                </Summary> 
                             </NdGrid>
                         </div>
                     </div>

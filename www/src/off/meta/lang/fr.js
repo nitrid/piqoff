@@ -288,6 +288,8 @@ export const langFr =
         pos_02_009 : "Rapport de Vente par famille de produits",
         pos_02_010 : "Rapport de vente détaillé du produit", 
         pos_02_011 : "Rapport de comparaison de produit",
+        pos_02_012 : "Pos Puan Kullanım Raporu",  // BAK
+        pos_02_013 : "Pos İndirim Raporu",  // BAK
         pos_03 : "Les opérations", 
         pos_03_001 : "Opérations de fin de journée",
         promo: "Promotion",
@@ -15573,7 +15575,13 @@ export const langFr =
             txtMulticode : "Tedarikçi Kodu",
             txtCustoms : "Gümrük Kodu",
             txtOrigin :"Menşei"
-        }
+        },
+        msgNotCustomer:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen Tedarikçi Seçiniz !"
+        },
     },
     pos_01_001 : // "Pos Cihaz Tanıtım",
     {
@@ -16134,6 +16142,26 @@ export const langFr =
             clmStatus : "Etat"  
         },
     },
+    pos_02_012 : // "Loyalty",  // BAK
+    {
+        btnGet :"Getir",
+        txtTotalTicket : "Toplam Fiş Adedi",
+        grdListe: 
+        {
+            clmDocDate: "Tarih",
+            clmLoyalty: "Kullanılan Sadakat Puan Tutarı",
+        },
+    },
+    pos_02_013 : // "İndirim Raporu",  // BAK
+    {
+        btnGet :"Getir",
+        txtTotalTicket : "Toplam Fiş Adedi",
+        grdListe: 
+        {
+            clmDocDate: "Tarih",
+            clmDiscount: "İndirim Tutarı",
+        },
+    },
     pos_03_001 : // "Gün sonu"
     {
         TicketId :"Numéro de ticket",
@@ -16192,11 +16220,18 @@ export const langFr =
         dtAdvanceDate : "date",
         cmbPopSafe :"Caisse",
         addAdvance : "Fond De Caisse",
+        btnNotTrue : "Tekrar Giriş", // BAK
         msgDoubleAdvence:
         {
             title: "Attention",
             btn01: "OK",
             msg: "Le fond de caisse est déjà saisi. Il faut modifier ceci à partir du tableau."
+        },
+        msgSucces:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Gün Sonu Kayıt Edildi.." // BAK
         },
         advanceMsg1 : "Soyez sûr que le fond de caisse est de",
         advanceMsg2 : "Etre sûr!!!",
@@ -16228,7 +16263,7 @@ export const langFr =
         {
             title: "Attention",   
             btn01: "OK",   
-            msg: "Vous ne pouvez pas entrer le montant du fond de tiroir supérieur à 600 € ! "   
+            msg: "Vous ne pouvez pas entrer le montant du fond de tiroir supérieur à 1000 € ! "   
         },
     },
     tkf_01_001 : // "Alış Teklifi Listesi",
