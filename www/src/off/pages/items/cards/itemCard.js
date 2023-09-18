@@ -36,7 +36,6 @@ export default class itemCard extends React.PureComponent
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
 
         this.itemsObj = new itemsCls();
-        this.itemsPriceSupply = new itemPriceCls();   
         this.itemsPriceLogObj = new itemLogPriceCls();    
         this.salesPriceLogObj = new datatable()
         this.salesPriceLogObj.selectCmd =
@@ -99,7 +98,6 @@ export default class itemCard extends React.PureComponent
         this.prevCode = ""
         this.itemsObj.clearAll();
 
-        this.itemsPriceSupply.clearAll();     
         this.itemsPriceLogObj.clearAll();     
         this.salesPriceLogObj.clear()   
         this.salesContractObj.clear()   
@@ -128,9 +126,7 @@ export default class itemCard extends React.PureComponent
             this.underPrice();
             //MARGIN HESAPLAMASI
             this.grossMargin()                 
-            this.netMargin()                 
-            this.taxSugarValidCheck()
-            this.taxSugarCalculate()
+            this.netMargin()       
         })
         this.itemsObj.ds.on('onEdit',(pTblName,pData) =>
         {            
@@ -167,7 +163,11 @@ export default class itemCard extends React.PureComponent
             this.underPrice()
             //MARGIN HESAPLAMASI
             this.grossMargin()                 
-            this.netMargin()                 
+            this.netMargin()
+            if(pTblName == 'ITEM_MULTICODE')
+            {
+                this.taxSugarValidCheck()
+            }
         })
         this.itemsObj.ds.on('onDelete',(pTblName) =>
         {            
@@ -234,8 +234,8 @@ export default class itemCard extends React.PureComponent
         this.imgFile.value = ""; 
         await this.itemsObj.load({CODE:pCode});
         //TEDARİKÇİ FİYAT GETİR İŞLEMİ.  
-        await this.itemsPriceSupply.load({ITEM_GUID:this.itemsObj.dt()[0].GUID,TYPE:1})  
-        await this.itemsPriceLogObj.load({ITEM_GUID:this.itemsObj.dt()[0].GUID})
+        this.itemsPriceLogObj.load({ITEM_GUID:this.itemsObj.dt()[0].GUID})
+
         if(this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE').length > 0 && this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE').length == 1)
         {
             this.txtLastBuyPrice.value = this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')[0].CUSTOMER_PRICE
@@ -243,22 +243,22 @@ export default class itemCard extends React.PureComponent
         else if(this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE').length > 0)
         {
             this.txtLastBuyPrice.value = this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')[1].CUSTOMER_PRICE
-        }        
-
+        }
         this.txtBarcode.readOnly = true;
 
         this.salesPriceLogObj.selectCmd.value = [this.itemsObj.dt()[0].GUID]
-        await this.salesPriceLogObj.refresh();
-        this.salesContractObj.selectCmd.value = [this.itemsObj.dt()[0].GUID]
-        await this.salesContractObj.refresh();
-        this.otherShopObj.selectCmd.value = [this.itemsObj.dt()[0].GUID]
-        await this.otherShopObj.refresh();
-
-        if(this.salesPriceLogObj.length > 0)
+        this.salesPriceLogObj.refresh().then(()=>
         {
-            this.txtLastSalePrice.value = this.salesPriceLogObj[0].PRICE
-        }
-       
+            if(this.salesPriceLogObj.length > 0)
+            {
+                this.txtLastSalePrice.value = this.salesPriceLogObj[0].PRICE
+            }
+        })
+        this.salesContractObj.selectCmd.value = [this.itemsObj.dt()[0].GUID]
+        this.salesContractObj.refresh();
+        this.otherShopObj.selectCmd.value = [this.itemsObj.dt()[0].GUID]
+        this.otherShopObj.refresh();
+
         App.instance.setState({isExecute:false})
         if(typeof this.txtSalePrice != 'undefined')
         {
@@ -282,13 +282,13 @@ export default class itemCard extends React.PureComponent
             }
         }
         this.prevCode = this.itemsObj.dt('ITEMS').length > 0 ? this.itemsObj.dt('ITEMS')[0].CODE : '';
-        console.log("12 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
-        console.log({data:this.itemsObj.dt('ITEM_IMAGE'),field:"IMAGE"})
+
         if(typeof this.itemsObj.dt('ITEM_IMAGE')[0] != 'undefined')
         {
             this.imgFile.value = this.itemsObj.dt('ITEM_IMAGE')[0].IMAGE
         }
         this.itemGrpForOrginsValidCheck();   
+        console.log("12 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
     }
     async checkItem(pCode)
     {
@@ -550,7 +550,6 @@ export default class itemCard extends React.PureComponent
         let tmpData = this.prmObj.filter({ID:'ItemGrpForOrginsValidation'}).getValue()
         if(typeof tmpData != 'undefined' && Array.isArray(tmpData) && typeof tmpData.find(x => x == this.cmbItemGrp.value) != 'undefined')
         {
-            console.log(1)
             this.setState({isItemGrpForOrginsValid:true})
         }
         else
@@ -591,6 +590,7 @@ export default class itemCard extends React.PureComponent
                     {
                         this.setState({isTaxSugar:true})
                         this.txtTaxSugar.readOnly = false
+                        this.taxSugarCalculate()
                         return
                     }
                 }
@@ -636,10 +636,6 @@ export default class itemCard extends React.PureComponent
                         let tmpUnit = this.txtUnderUnit.value / 100
                         let tmpTaxSucre = tmpUnit * tmpData.result.recordset[0].PRICE
                         this.taxSugarPrice = Number(tmpTaxSucre.toFixed(3))
-                        if(this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE').length > 0)
-                        {
-                          
-                        }
                     }
                     this.extraCostCalculate()
                 }
@@ -650,7 +646,6 @@ export default class itemCard extends React.PureComponent
                 }
             }
         }
-       
     }
     async extraCostCalculate()
     {
@@ -675,10 +670,9 @@ export default class itemCard extends React.PureComponent
                 value : [this.itemsObj.dt()[0].GUID]
             }
             let tmpData = await this.core.sql.execute(tmpQuery) 
-            console.log(tmpData)
+            
             if(tmpData.result.recordset.length >0)
             {
-                console.log(tmpData.result.recordset[0].DOC_GUID)
                 let tmpItemQuery = 
                 {
                     query : "SELECT * FROM DOC_ITEMS_VW_01 WHERE (DOC_GUID = @DOC_GUID OR INVOICE_DOC_GUID = @DOC_GUID)",
@@ -686,7 +680,6 @@ export default class itemCard extends React.PureComponent
                     value : [tmpData.result.recordset[0].DOC_GUID]
                 }
                 let tmpItemData = await this.core.sql.execute(tmpItemQuery)
-                console.log(tmpItemData)
 
                 if(tmpItemData.result.recordset.length >0)
                 {
@@ -698,7 +691,6 @@ export default class itemCard extends React.PureComponent
                             tmpServices.push(tmpItemData.result.recordset[i])
                         }
                     }
-                    console.log(tmpServices)
 
                     for (let x = 0; x < tmpServices.length; x++) 
                     {
@@ -772,7 +764,6 @@ export default class itemCard extends React.PureComponent
                                 let tmpMaxData = this.prmObj.filter({ID:'ItemMaxPricePercent'}).getValue()
                                 let tmpMAxPrice = e.data.CUSTOMER_PRICE + (e.data.CUSTOMER_PRICE * tmpMaxData) /100
                                 this.txtMaxSalePrice.value = Number((tmpMAxPrice).toFixed(2))
-                                this.taxSugarValidCheck()
                             }
                         },
                     ]
@@ -984,7 +975,6 @@ export default class itemCard extends React.PureComponent
                                         this.txtBarcode.value = ""; 
                                         this.txtBarcode.readOnly = true;   
                                         this.imgFile.value = ""; 
-                                        this.itemsPriceSupply.clearAll();     
                                         this.itemsPriceLogObj.clearAll();     
                                         this.salesPriceLogObj.clear()   
                                         this.salesContractObj.clear()   
@@ -1032,8 +1022,6 @@ export default class itemCard extends React.PureComponent
                                 
                                         this.itemGrpForOrginsValidCheck();   
                                         this.itemGrpForMinMaxAccessCheck();  
-                                        this.taxSugarValidCheck()
-
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
@@ -1348,10 +1336,10 @@ export default class itemCard extends React.PureComponent
                                     access={this.access.filter({ELEMENT:'cmbOrigin',USERS:this.user.CODE})}
                                     data={{source:{select:{query : "SELECT CODE,NAME FROM COUNTRY ORDER BY CODE ASC"},sql:this.core.sql}}}
                                     onValueChanged={(e)=>
-                                        {
-                                            this.btnSave.setState({disabled:false});
-                                            this.taxSugarValidCheck()
-                                        }}
+                                    {
+                                        this.btnSave.setState({disabled:false});
+                                        this.taxSugarValidCheck()
+                                    }}
                                     >
                                         <Validator validationGroup={this.state.isItemGrpForOrginsValid ? "frmItems" + this.tabIndex : ''}>
                                             <RequiredRule message={this.t("validOrigin")}   
