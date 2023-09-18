@@ -665,7 +665,7 @@ export default class itemCard extends React.PureComponent
         {
             let tmpQuery = 
             {
-                query : "SELECT TOP 1 DOC_GUID FROM DOC_ITEMS_VW_01 WHERE ITEM = @ITEM AND ISNULL((SELECT TOP 1 ITEM_TYPE FROM DOC_ITEMS WHERE ((DOC_ITEMS.DOC_GUID = DOC_ITEMS_VW_01.DOC_GUID) OR (DOC_ITEMS.DOC_GUID = DOC_ITEMS_VW_01.INVOICE_LINE_GUID)) AND ITEM_TYPE = 1),0) = 1 ORDER BY DOC_DATE DESC",
+                query : "SELECT TOP 1 DOC_GUID FROM DOC_ITEMS_VW_01 WHERE ITEM = @ITEM AND REBATE = 0 AND ISNULL((SELECT TOP 1 ITEM_TYPE FROM DOC_ITEMS WHERE ((DOC_ITEMS.DOC_GUID = DOC_ITEMS_VW_01.DOC_GUID) OR (DOC_ITEMS.DOC_GUID = DOC_ITEMS_VW_01.INVOICE_LINE_GUID)) AND ITEM_TYPE = 1),0) = 1 ORDER BY DOC_DATE DESC",
                 param : ['ITEM:string|50'],
                 value : [this.itemsObj.dt()[0].GUID]
             }
@@ -2012,14 +2012,6 @@ export default class itemCard extends React.PureComponent
                                                         },
                                                     ]
                                                 }
-                                                onChange={(async()=>
-                                                {
-                                                    let tmpResult = await this.checkItem(this.txtRef.value)
-                                                    if(tmpResult == 3)
-                                                    {
-                                                        this.txtRef.value = "";
-                                                    }
-                                                }).bind(this)} 
                                                 selectAll={true}                           
                                                 >     
                                                 </NdTextBox>      
@@ -2043,7 +2035,7 @@ export default class itemCard extends React.PureComponent
                                             <Item>                                    
                                                 <Label text={this.t("txtCustoms")} alignment="right" />
                                                 <NdTextBox id="txtCustoms" parent={this} simple={true} tabIndex={this.tabIndex} dt={{data:this.itemsObj.dt('ITEMS'),field:"CUSTOMS_CODE"}} 
-                                                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value} readOnly={true}
+                                                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value} 
                                                 button=
                                                 {
                                                     [
@@ -2064,14 +2056,6 @@ export default class itemCard extends React.PureComponent
                                                         },
                                                     ]
                                                 }
-                                                onChange={(async()=>
-                                                {
-                                                    let tmpResult = await this.checkItem(this.txtRef.value)
-                                                    if(tmpResult == 3)
-                                                    {
-                                                        this.txtRef.value = "";
-                                                    }
-                                                }).bind(this)} 
                                                 selectAll={true}                           
                                                 >     
                                                 </NdTextBox>      

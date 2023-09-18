@@ -288,6 +288,8 @@ export const langFr =
         pos_02_009 : "Rapport de Vente par famille de produits",
         pos_02_010 : "Rapport de vente détaillé du produit", 
         pos_02_011 : "Rapport de comparaison de produit",
+        pos_02_012 : "Pos Puan Kullanım Raporu",  // BAK
+        pos_02_013 : "Pos İndirim Raporu",  // BAK
         pos_03 : "Les opérations", 
         pos_03_001 : "Opérations de fin de journée",
         promo: "Promotion",
@@ -15550,30 +15552,36 @@ export const langFr =
     },
     set_02_008:  // Gümrük kodu // BAK
     {
-        excelAdd : "Excelden Kaydet",
-        txtCustomerCode : "Tedarikçi Kodu",
-        txtCustomerName : "Tedarikçi Adı",
+        excelAdd : "Inscription à partir d'Excel",
+        txtCustomerCode : "Code Fournisseur",
+        txtCustomerName : "Nom Fournisseur",
         pg_txtCustomerCode : 
         {
-            title : "Tedarikçi Seçimi",
-            clmCode :  "Tedarikçi KODU",
-            clmTitle : "Tedarikçi ADI",
-            clmTypeName : "TİPİ",
-            clmGenusName : "CİNSİ"
+            title : "Sélection Fournisseur",
+            clmCode :  "Code Fournisseur",
+            clmTitle : "Nom Fournisseur",
+            clmTypeName : "Type",
+            clmGenusName : "Type"
         },
         msgSucces:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Kayıt Başarılı !"
+            title: "Réussi",  
+            btn01: "OK",  
+            msg: "Enregistré avec succès !"  
         },
         popExcel :
         {
             title : "Excel",
-            txtMulticode : "Tedarikçi Kodu",
-            txtCustoms : "Gümrük Kodu",
-            txtOrigin :"Menşei"
-        }
+            txtMulticode : "Fournisseur Code",
+            txtCustoms : "Nomenclature",
+            txtOrigin :"Origine"
+        },
+        msgNotCustomer:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Choix Fournisseur !!"
+        },
     },
     pos_01_001 : // "Pos Cihaz Tanıtım",
     {
@@ -16132,6 +16140,26 @@ export const langFr =
             clmCode: "Code", 
             clmName: "Nom",  
             clmStatus : "Etat"  
+        },
+    },
+    pos_02_012 : // "Loyalty",  // BAK
+    {
+        btnGet :"Getir",
+        txtTotalTicket : "Toplam Fiş Adedi",
+        grdListe: 
+        {
+            clmDocDate: "Tarih",
+            clmLoyalty: "Kullanılan Sadakat Puan Tutarı",
+        },
+    },
+    pos_02_013 : // "İndirim Raporu",  // BAK
+    {
+        btnGet :"Getir",
+        txtTotalTicket : "Toplam Fiş Adedi",
+        grdListe: 
+        {
+            clmDocDate: "Tarih",
+            clmDiscount: "İndirim Tutarı",
         },
     },
     pos_03_001 : // "Gün sonu"
@@ -17394,6 +17422,8 @@ export const langFr =
             clmItemBarcode : "Code Barre", 
             clmDescription : "Motif",    
             clmCountry : "PAYS provenance",    
+            clmItemName: "Nom Produit", 
+            clmItemCode: "Référence Produit"
         },
     },
 }

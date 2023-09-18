@@ -25,7 +25,7 @@ export default class debReport extends React.PureComponent
 
         this.state = 
         {
-            columnListValue : ['CUSTOMS_NO','ORIGIN','REGIME','QUANTITY','KG','LINGE','NATURE','TRANSPORT','ZIPCODE','REF_NO','CUSTOMER_NAME','DOC_DATE','COUNTRY','MULTICODE','ITEM_BARCODE','DESCRIPTION']
+            columnListValue : ['CUSTOMS_NO','ORIGIN','REGIME','QUANTITY','KG','LINGE','NATURE','TRANSPORT','ZIPCODE','REF_NO','CUSTOMER_NAME','DOC_DATE','COUNTRY','MULTICODE','ITEM_NAME','ITEM_CODE','ITEM_BARCODE','DESCRIPTION']
         }
         
         this.core = App.instance.core;
@@ -43,6 +43,8 @@ export default class debReport extends React.PureComponent
             {CODE : "DOC_DATE",NAME : this.t("grdListe.clmDocDate")},
             {CODE : "MULTICODE",NAME : this.t("grdListe.clmMulticode")},
             {CODE : "ITEM_BARCODE",NAME : this.t("grdListe.clmItemBarcode")},
+            {CODE : "ITEM_CODE",NAME : this.t("grdListe.clmItemCode")},
+            {CODE : "ITEM_NAME",NAME : this.t("grdListe.clmItemName")},
             {CODE : "DESCRIPTION",NAME : this.t("grdListe.clmDescription")},
             {CODE : "COUNTRY",NAME : this.t("grdListe.clmCountry")},
             {CODE : "NATURE",NAME : this.t("grdListe.clmNature")},
@@ -110,6 +112,14 @@ export default class debReport extends React.PureComponent
                 {
                     this.groupList.push('MULTICODE')
                 }
+                if(typeof e.value.find(x => x == 'ITEM_NAME') != 'undefined')
+                {
+                    this.groupList.push('ITEM_NAME')
+                }
+                if(typeof e.value.find(x => x == 'ITEM_CODE') != 'undefined')
+                {
+                    this.groupList.push('ITEM_CODE')
+                }
                 if(typeof e.value.find(x => x == 'ITEM_BARCODE') != 'undefined')
                 {
                     this.groupList.push('ITEM_BARCODE')
@@ -175,7 +185,7 @@ export default class debReport extends React.PureComponent
                 select : 
                 { 
                     query : "SELECT " +
-                    "(SELECT TOP 1  CUSTOMS_CODE FROM ITEMS_GRP WHERE ITEMS_GRP.ITEM = DOC_ITEMS_VW_01.ITEM) AS CUSTOMS_NO,   " +
+                    "(SELECT TOP 1  CASE WHEN LEN(CUSTOMS_CODE) = 7 THEN '0'+ CUSTOMS_CODE ELSE CUSTOMS_CODE END FROM ITEMS_GRP WHERE ITEMS_GRP.ITEM = DOC_ITEMS_VW_01.ITEM) AS CUSTOMS_NO,   " +
                     "ORIGIN,   " +
                     "(SELECT TOP 1 SECTOR_NO FROM COMPANY) AS REGIME,   " +
                     "QUANTITY,   " +
@@ -190,10 +200,12 @@ export default class debReport extends React.PureComponent
                     "DOC_DATE AS DOC_DATE,   " +
                     "MULTICODE,   " +
                     "ITEM_BARCODE,   " +
+                    "ITEM_NAME,   " +
+                    "ITEM_CODE,   " +
                     "DESCRIPTION   " +
                     "FROM DOC_ITEMS_VW_01   " +
                     "WHERE    DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE AND " +
-                    "(SELECT TOP 1 COUNTRY FROM CUSTOMER_ADRESS WHERE CUSTOMER_ADRESS.ADRESS_NO = 0 AND CUSTOMER_ADRESS.CUSTOMER = DOC_ITEMS_VW_01.OUTPUT AND DELETED = 0) <> 'FR'   " +
+                    "(SELECT TOP 1 DEB FROM CUSTOMERS WHERE CUSTOMERS.GUID = DOC_ITEMS_VW_01.OUTPUT AND DELETED = 0) = 1 AND ITEM_TYPE  = 0 AND (SELECT TOP 1 TYPE FROM ITEMS WHERE ITEMS.GUID = DOC_ITEMS_VW_01.ITEM) = 0 " +
                     "AND TYPE = 0 AND (DOC_TYPE = 20 OR  (DOC_TYPE = 40 AND INVOICE_DOC_GUID <> '00000000-0000-0000-0000-000000000000')) ORDER BY OUTPUT" ,
                     param : ['FIRST_DATE:date','LAST_DATE:date'], 
                     value : [this.dtDate.startDate,this.dtDate.endDate]
@@ -301,17 +313,10 @@ export default class debReport extends React.PureComponent
                                 <Column dataField="CUSTOMER_NAME" caption={this.t("grdListe.clmCustomerName")}  visible={true} /> 
                                 <Column dataField="DOC_DATE" caption={this.t("grdListe.clmDocDate")}  visible={true}  dataType="datetime" format={"dd/MM/yyyy"} /> 
                                 <Column dataField="MULTICODE" caption={this.t("grdListe.clmMulticode")}  visible={true} /> 
+                                <Column dataField="ITEM_NAME" caption={this.t("grdListe.clmItemName")}  visible={true} /> 
+                                <Column dataField="ITEM_CODE" caption={this.t("grdListe.clmItemCode")}  visible={true} /> 
                                 <Column dataField="ITEM_BARCODE" caption={this.t("grdListe.clmItemBarcode")}  visible={true} /> 
                                 <Column dataField="DESCRIPTION" caption={this.t("grdListe.clmDescription")}  visible={true} /> 
-                                <Summary>
-                                    <TotalItem
-                                    column="TOTALHT"
-                                    summaryType="sum"
-                                    valueFormat={{ style: "currency", currency: "EUR",precision: 2}} />
-                                     <TotalItem
-                                    column="KG"
-                                    summaryType="sum" valueFormat={'##0.00'}/>
-                                </Summary> 
                             </NdGrid>
                         </div>
                     </div>

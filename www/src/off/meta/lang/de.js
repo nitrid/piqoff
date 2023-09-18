@@ -280,6 +280,8 @@ export const langDe =
         pos_02_009: "Gruppenbasierter Verkaufsbericht",
         pos_02_010: "Artikeldetailierter Verkaufsbericht",
         pos_02_011: "Artikelvergleichsbericht",
+        pos_02_012 : "Pos Puan Kullanım Raporu",  // BAK
+        pos_02_013 : "Pos İndirim Raporu",  // BAK
         pos_03: "Operationen",
         pos_03_001: "Tagesabschluss",
         promo: "Angebot",
@@ -15599,7 +15601,13 @@ export const langDe =
             txtMulticode : "Tedarikçi Kodu",
             txtCustoms : "Gümrük Kodu",
             txtOrigin :"Menşei"
-        }
+        },
+        msgNotCustomer:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen Tedarikçi Seçiniz !"
+        },
     },
     pos_01_001 : // "POS-Gerätekonfiguration"
     {
@@ -16157,6 +16165,26 @@ export const langDe =
             clmCode: "CODE",
             clmName: "NAME",
             clmStatus: "STATUS"
+        },
+    },
+    pos_02_012 : // "Loyalty",  // BAK
+    {
+        btnGet :"Getir",
+        txtTotalTicket : "Toplam Fiş Adedi",
+        grdListe: 
+        {
+            clmDocDate: "Tarih",
+            clmLoyalty: "Kullanılan Sadakat Puan Tutarı",
+        },
+    },
+    pos_02_013 : // "İndirim Raporu",  // BAK
+    {
+        btnGet :"Getir",
+        txtTotalTicket : "Toplam Fiş Adedi",
+        grdListe: 
+        {
+            clmDocDate: "Tarih",
+            clmDiscount: "İndirim Tutarı",
         },
     },
     pos_03_001: // "Gün Sonu"
@@ -17418,6 +17446,8 @@ export const langDe =
             clmItemBarcode : "Barkod",  // BAK
             clmDescription : "Açıklama",     // BAK
             clmCountry : "T. Ülkesi",     // BAK
+            clmItemCode : "Ürün Kodu",
+            clmItemName : "Ürün Adı"
         },
     },
 }
