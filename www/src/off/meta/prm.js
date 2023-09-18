@@ -169,7 +169,7 @@ export const prm =
     },
      //Otomatik Interfel
      {
-        TYPE : 0,
+        TYPE : 1,
         ID :"autoInterfel",
         VALUE : 
         {
@@ -191,7 +191,7 @@ export const prm =
         ID :"costForInvoıces",
         VALUE : 
         {
-            value : true
+            value : false
         },
         SPECIAL : "",
         ELEMENT : "",

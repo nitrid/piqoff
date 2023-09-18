@@ -289,6 +289,8 @@ export const langTr =
         pos_02_009 : "Grup Bazlı Satış Raporu",
         pos_02_010 : "Ürün Detaylı Satış Raporu",
         pos_02_011 : "Ürün Karşılaştırma Raporu",
+        pos_02_012 : "Pos Puan Kullanım Raporu",
+        pos_02_013 : "Pos İndirim Raporu",
         pos_03 :"Operasyonlar",
         pos_03_001 : "Gün Sonu",
         promo: "Promosyon",
@@ -15646,6 +15648,12 @@ export const langTr =
             btn01: "Tamam",
             msg: "Kayıt Başarılı !"
         },
+        msgNotCustomer:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen Tedarikçi Seçiniz !"
+        },
         popExcel :
         {
             title : "Excel",
@@ -16211,6 +16219,26 @@ export const langTr =
             clmCode: "KODU",
             clmName: "ADI", 
             clmStatus : "DURUM"
+        },
+    },
+    pos_02_012 : // "Loyalty",
+    {
+        btnGet :"Getir",
+        txtTotalTicket : "Toplam Fiş Adedi",
+        grdListe: 
+        {
+            clmDocDate: "Tarih",
+            clmLoyalty: "Kullanılan Sadakat Puan Tutarı",
+        },
+    },
+    pos_02_013 : // "İndirim Raporu",
+    {
+        btnGet :"Getir",
+        txtTotalTicket : "Toplam Fiş Adedi",
+        grdListe: 
+        {
+            clmDocDate: "Tarih",
+            clmDiscount: "İndirim Tutarı",
         },
     },
     pos_03_001 : // "Gün Sonu",
@@ -17474,6 +17502,8 @@ export const langTr =
             clmItemBarcode : "Barkod",
             clmDescription : "Açıklama",   
             clmCountry : "T. Ülkesi",   
+            clmItemCode : "Ürün Kodu",
+            clmItemName : "Ürün Adı"
         },
     },
 }

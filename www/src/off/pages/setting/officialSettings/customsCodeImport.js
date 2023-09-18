@@ -40,11 +40,11 @@ export default class customsCodeImport extends React.PureComponent
     {
        this.txtPopMulticode.value = "MULTICODE",
        this.txtPopCustoms.value = "CUSTOMS",
-       this.txtPopOrigin.value = "ORIGIN"
+       this.txtPopOrigin.value = "ORIGIN",
+       this.customerGuid = ''
     }
     async excelAdd(pData)
     {
-
         this.customsData.insertCmd = 
         {
             query : "EXEC [dbo].[PRD_ITEMS_CUSTOMS_DATA_INSERT] " + 
@@ -216,8 +216,22 @@ export default class customsCodeImport extends React.PureComponent
                                     validationGroup={"frmslsDoc"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
+                                        if(this.customerGuid == '')
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgNotCustomer',showTitle:true,title:this.t("msgNotCustomer.title"),showCloseButton:false,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgNotCustomer.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNotCustomer.msg")}</div>)
+                                            }
+                                            
+                                            let pResult = await dialog(tmpConfObj);
+                                            if(pResult == 'btn01')
+                                            {
+                                               return
+                                            }
+                                        }
                                         this.popExcel.show()
-                                    
                                     }}/>  
                                 </Item>
                             </Form>

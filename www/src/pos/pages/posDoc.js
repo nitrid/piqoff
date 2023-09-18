@@ -4273,13 +4273,13 @@ export default class posDoc extends React.PureComponent
                                         <NbButton id={"btnSubtotal"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}
                                         onClick={async()=>
                                         {
-                                            let tmpData = this.posObj.posSale.dt().where({SUBTOTAL:0})
-                                            let tmpMaxSub = this.posObj.posSale.dt().where({SUBTOTAL:{'<>':-1}}).max('SUBTOTAL') + 1
-                                            for (let i = 0; i < tmpData.length; i++) 
-                                            {
-                                                tmpData[i].SUBTOTAL = tmpMaxSub
-                                            }
-                                            this.calcGrandTotal()
+                                            // let tmpData = this.posObj.posSale.dt().where({SUBTOTAL:0})
+                                            // let tmpMaxSub = this.posObj.posSale.dt().where({SUBTOTAL:{'<>':-1}}).max('SUBTOTAL') + 1
+                                            // for (let i = 0; i < tmpData.length; i++) 
+                                            // {
+                                            //     tmpData[i].SUBTOTAL = tmpMaxSub
+                                            // }
+                                            // this.calcGrandTotal()
                                         }}>
                                             <i className="text-white fa-solid fa-square-root-variable" style={{fontSize: "24px"}} />
                                         </NbButton>
