@@ -21,6 +21,7 @@ import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export,C
 import NbPopDescboard from "./popdescboard.js";
 import NdDatePicker from '../../core/react/devex/datepicker.js';
 import NdTagBox from '../../core/react/devex/tagbox.js';
+import * as xlsx from 'xlsx'
 
 export default class DocBase extends React.PureComponent
 {
