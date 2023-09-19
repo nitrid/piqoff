@@ -6452,8 +6452,9 @@ export const langDe =
             clmDate: "DATUM",
             clmRef: "SERIE",
             clmRefNo: "NUMMER",
-            clmInputName: "KUNDENNAME",
-            clmInputCode: "KUNDENNUMMER",
+            clmOutputName: "KUNDENNAME",
+            clmOutputCode: "KUNDENNUMMER",
+            clmTotal : "TOTAL"
         },
         pg_txtCustomerCode: 
         {
@@ -6866,8 +6867,9 @@ export const langDe =
             clmDate : "DATUM",
             clmRef : "SERIE",
             clmRefNo : "FOLGE",
-            clmInputName : "KUNDENNAME",
-            clmInputCode  : "KUNDENNUMMER",
+            clmOutputName : "KUNDENNAME",
+            clmOutputCode  : "KUNDENNUMMER",
+            clmTotal : "TOTAL"
         },
         pg_txtCustomerCode : 
         {
@@ -7801,8 +7803,9 @@ export const langDe =
             clmDate : "DATUM",
             clmRef : "SERIE",
             clmRefNo : "FOLGE",
-            clmInputName : "KUNDENNAME",
-            clmInputCode  : "KUNDENNUMMER",
+            clmOutputName : "KUNDENNAME",
+            clmOutputCode  : "KUNDENNUMMER",
+            clmTotal : "TOTAL"
         },
         pg_txtCustomerCode : 
         {
