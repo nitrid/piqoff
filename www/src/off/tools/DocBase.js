@@ -855,6 +855,7 @@ export default class DocBase extends React.PureComponent
                                 icon:'more',
                                 onClick:()=>
                                 {
+                                    this.pg_Docs.hide()
                                     this.getDocs(1)
                                 }
                             }
