@@ -121,10 +121,6 @@ export default class branchSaleInvoice extends DocBase
                 }
             })
         })
-        this.popPassword.onStatus = (e)=>
-        {
-            this.frmDocItems.option('disabled',this.docLocked)
-        }
     }
     async getDoc(pGuid,pRef,pRefno)
     {
@@ -134,7 +130,7 @@ export default class branchSaleInvoice extends DocBase
 
         this.txtRef.readOnly = true
         this.txtRefno.readOnly = true
-        this.frmDocItems.option('disabled',this.docLocked)
+        this.frmDocItems.option('disabled',false)
         
         this._getPayment(this.docObj.dt()[0].GUID)
     }

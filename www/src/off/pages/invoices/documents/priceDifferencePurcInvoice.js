@@ -130,10 +130,6 @@ export default class priceDifferenceInvoice extends DocBase
                 }
             })
         })
-        this.popPassword.onStatus = (e)=>
-        {
-            this.frmDocItems.option('disabled',this.docLocked)
-        }
     }
     async getDoc(pGuid,pRef,pRefno)
     {
