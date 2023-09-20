@@ -1577,7 +1577,6 @@ export default class outagePurcInvoice extends DocBase
                                         {
                                             await this.popMultiItem.show()
                                             await this.grdMultiItem.dataRefresh({source:this.multiItemData});
-                                            this.multiItemData.clear()
                                             if( typeof this.docObj.docItems.dt()[0] != 'undefined' && this.docObj.docItems.dt()[0].ITEM_CODE == '')
                                             {
                                                 await this.grdRebtInv.devGrid.deleteRow(0)

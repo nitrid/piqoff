@@ -60,6 +60,7 @@ export default class purchaseOrder extends React.PureComponent
         this.docObj.clearAll()
         this.extraObj.clearAll()
 
+        console.log(this.param)
         this.dtDocDate.value = moment(new Date())
 
         await this.cmbDepot.dataRefresh({source:{select:{query : "SELECT * FROM DEPOT_VW_01"},sql:this.core.sql}});
@@ -115,12 +116,49 @@ export default class purchaseOrder extends React.PureComponent
         this.cmbDepot.readOnly = true
         this.dtDocDate.readOnly = true
     }
+    getBarPattern(pBarcode)
+    {
+        pBarcode = pBarcode.toString().trim()
+        let tmpPrm =  this.param.filter({TYPE:1,USERS:this.user.CODE,ID:'BarcodePattern'}).getValue()
+        
+        console.log(tmpPrm)
+        if(typeof tmpPrm == 'undefined' || tmpPrm.length == 0)
+        {            
+            return {barcode:pBarcode}
+        }
+        //201234012550 0211234012550
+        for (let i = 0; i < tmpPrm.length; i++) 
+        {
+            let tmpFlag = tmpPrm[i].substring(0,tmpPrm[i].indexOf('N'))
+            if(tmpFlag != '' && tmpPrm[i].length == pBarcode.length && pBarcode.substring(0,tmpFlag.length) == tmpFlag)
+            {
+                let tmpMoney = pBarcode.substring(tmpPrm[i].indexOf('M'),tmpPrm[i].lastIndexOf('M') + 1)
+                let tmpMoneyFlag = tmpPrm[i].substring(tmpPrm[i].indexOf('M'),tmpPrm[i].lastIndexOf('M') + 1)
+                let tmpCent = pBarcode.substring(tmpPrm[i].indexOf('C'),tmpPrm[i].lastIndexOf('C') + 1)
+                let tmpCentFlag = tmpPrm[i].substring(tmpPrm[i].indexOf('C'),tmpPrm[i].lastIndexOf('C') + 1)
+                let tmpKg = pBarcode.substring(tmpPrm[i].indexOf('K'),tmpPrm[i].lastIndexOf('K') + 1)
+                let tmpKgFlag = tmpPrm[i].substring(tmpPrm[i].indexOf('K'),tmpPrm[i].lastIndexOf('K') + 1)
+                let tmpGram = pBarcode.substring(tmpPrm[i].indexOf('G'),tmpPrm[i].lastIndexOf('G') + 1)
+                let tmpGramFlag = tmpPrm[i].substring(tmpPrm[i].indexOf('G'),tmpPrm[i].lastIndexOf('G') + 1)
+                let tmpSumFlag = tmpPrm[i].substring(tmpPrm[i].indexOf('F'),tmpPrm[i].lastIndexOf('F') + 1)
+                
+                return {
+                    barcode : pBarcode.substring(0,tmpPrm[i].lastIndexOf('N') + 1) + tmpMoneyFlag + tmpCentFlag + tmpKgFlag + tmpGramFlag + tmpSumFlag,
+                    price : parseFloat((tmpMoney == '' ? "0" : tmpMoney) + "." + (tmpCent == '' ? "0" : tmpCent)) * this.param.filter({TYPE:1,USERS:this.user.CODE,ID:'ScalePriceFactory'}).getValue(),
+                    quantity : parseFloat((tmpKg == '' ? "0" : tmpKg) + "." + (tmpGram == '' ? "0" : tmpGram))
+                }
+            }
+        }
+
+        return {barcode : pBarcode}
+    }
     getItem(pCode)
     {
         return new Promise(async resolve => 
         {
             this.clearEntry();
-            
+            let tmptest = this.getBarPattern(pCode)
+            console.log(tmptest)
             this.itemDt.selectCmd.value = [pCode]
             await this.itemDt.refresh();  
             

@@ -2123,8 +2123,6 @@ export default class purchaseInvoice extends DocBase
                                         {
                                             await this.popMultiItem.show()
                                             await this.grdMultiItem.dataRefresh({source:this.multiItemData});
-                                            this.tagItemCode.dev.reset()
-                                            this.multiItemData.clear()
                                             if( typeof this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1] != 'undefined' && this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
                                             {
                                                 await this.grdPurcInv.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)

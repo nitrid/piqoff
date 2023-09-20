@@ -95,6 +95,8 @@ export default class DocBase extends React.PureComponent
             this.newPrice.clear()
             this.newPriceDate.clear()
             this.newVat.clear()
+            this.multiItemData.clear()
+            this.popMultiItem.tmpTagItemCode = undefined
     
             this.docObj.ds.on('onAddRow',(pTblName,pData) =>
             {
