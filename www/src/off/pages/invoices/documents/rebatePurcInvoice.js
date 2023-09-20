@@ -1566,7 +1566,6 @@ export default class rebateInvoice extends DocBase
                                         if(e.validationGroup.validate().status == "valid")
                                         {
                                             await this.popMultiItem.show()
-                                            this.multiItemData.clear()
                                             await this.grdMultiItem.dataRefresh({source:this.multiItemData});
                                             if( typeof this.docObj.docItems.dt()[0] != 'undefined' && this.docObj.docItems.dt()[0].ITEM_CODE == '')
                                             {
