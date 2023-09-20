@@ -2,6 +2,7 @@ import { core,dataset,datatable } from "../core.js";
 import moment from 'moment';
 import { jsPDF } from "jspdf";
 import "jspdf-barcode";
+import io from "socket.io-client";
 
 export class posCls
 {
@@ -2218,6 +2219,191 @@ export class posEnddayCls
         {
             this.ds.delete()
             resolve(await this.ds.update()); 
+        });
+    }
+}
+export class posUsbTSECls
+{
+    constructor()
+    {
+        this.ws = null;
+        this.connected = false;
+        this.serviceInfo = undefined;
+        this.deviceInfo = undefined;
+        this.deviceData = undefined;
+        this.deviceStatus = undefined;
+        this.deviceId = "";
+        this.status = false;
+        this.lastTransaction = undefined
+    }
+    init()
+    {
+        this.ws = new WebSocket("ws://127.0.0.1:10001")
+        this.ioEvents()
+    }
+    ioEvents()
+    {
+        this.ws.onopen = async()=>
+        {
+            this.connected = true
+            this.serviceInfo = await this.command('{"Command":"GetServiceInfo"}')
+            this.deviceInfo = await this.command('{"Command":"GetDeviceInfo"}')
+            this.deviceData = await this.command('{"Command":"GetDeviceData","Name":"SerialNumber"}')
+            this.deviceStatus = await this.command('{"Command":"GetDeviceStatus"}')
+            
+            if(typeof this.deviceStatus != 'undefined' && this.deviceStatus.Status == "ok" && this.deviceStatus.MFC.FiscalMode)
+            {
+                this.status = true
+            }
+            else
+            {
+                this.status = false
+            }
+            
+            console.log("TSE Connected")
+        }
+        this.ws.onerror = ()=>
+        {
+            this.connected = false
+            this.serviceInfo = undefined;
+            this.deviceInfo = undefined;
+            this.deviceData = undefined;
+            this.deviceStatus = undefined;
+            this.status = false
+            console.log("TSE Connect Error")
+        }
+        this.ws.onclose = ()=>
+        {
+            this.connected = false
+            this.serviceInfo = undefined;
+            this.deviceInfo = undefined;
+            this.deviceData = undefined;
+            this.deviceStatus = undefined;
+            this.status = false
+            console.log("TSE Connect Closed")
+        }
+    }
+    async event(pObj)
+    {
+        if(pObj.Event == 'DeviceStatus')
+        {
+            if(pObj.DeviceStatus == 'idle')
+            {
+                this.deviceStatus = await this.command('{"Command":"GetDeviceStatus"}')
+                if(typeof this.deviceStatus != 'undefined' && this.deviceStatus.Status == "ok" && this.deviceStatus.MFC.FiscalMode)
+                {
+                    this.status = true
+                }
+                else
+                {
+                    this.status = false
+                }
+            }
+            else if(pObj.DeviceStatus == 'error')
+            {
+                this.status = false
+            }
+        }    
+    }
+    command(pParam)
+    {
+        return new Promise(async resolve => 
+        {
+            if(!this.connected)
+            {
+                console.log("Process Command : Connection status failed")
+                resolve()
+                return
+            }
+            this.ws.send('\x02' + pParam + '\x03')
+            this.ws.onmessage = async(e)=>
+            {
+                if(e.data != '')
+                {
+                    try
+                    {
+                        let tmpStr = e.data.toString().replace('\x02','').toString().replace('\x03','')
+                        let tmpJson = JSON.parse(tmpStr)
+
+                        if(typeof tmpJson.Event != 'undefined')
+                        {
+                            this.event(tmpJson)
+                        }
+                        else
+                        {
+                            if(tmpJson.Status == 'ok')
+                            {
+                                resolve(tmpJson)
+                                return
+                            }
+                            else
+                            {
+                                console.log(tmpJson)
+                                resolve();
+                                return
+                            }
+                        }
+                    } 
+                    catch (e) 
+                    {
+                        console.log("Process Command : Could not be converted to object")
+                        resolve();
+                        return
+                    }
+                }
+                else
+                {
+                    console.log("Process Command : Data value is empty")
+                    resolve()
+                    return
+                }
+            }
+        })
+    }
+    transaction(pData)
+    {
+        this.lastTransaction = undefined;
+        return new Promise(async resolve => 
+        {
+            if(this.status)
+            {
+                let tmpStartT = await this.command('{"Command":"StartTransaction","ClientID":"POS' + this.deviceId + '","Data64":"' + btoa(pData) + '","Password":"MTIzNDU="}')
+                if(typeof tmpStartT.Status != 'undefined' && tmpStartT.Status == "ok")
+                {
+                    let tmpFinishT = await this.command('{"Command":"FinishTransaction","ClientID":"POS' + this.deviceId + '","TransactionNumber":' + tmpStartT.TransactionNumber + ',"Data64":"' + btoa(pData) + '","Password":"MTIzNDU="}')
+                 
+                    if(typeof tmpFinishT.Status != 'undefined' && tmpFinishT.Status == "ok")
+                    {
+                        this.lastTransaction = 
+                        {
+                            status:true,
+                            fLogTime:tmpStartT.LogTime,
+                            sLogTime:tmpFinishT.LogTime,
+                            signature:tmpFinishT.Signature,
+                            signatureCounter:tmpFinishT.SignatureCounter,
+                            transactionNumber:tmpStartT.TransactionNumber,
+                            serialNumber:tmpStartT.SerialNumber
+                        }
+
+                        resolve(this.lastTransaction)
+                    }
+                    else
+                    {
+                        this.lastTransaction = {status:false}
+                        resolve(this.lastTransaction)
+                    }
+                }
+                else
+                {
+                    this.lastTransaction = {status:false}
+                    resolve(this.lastTransaction)
+                }
+            }
+            else
+            {
+                this.lastTransaction = {status:false}
+                resolve(this.lastTransaction)
+            }
         });
     }
 }

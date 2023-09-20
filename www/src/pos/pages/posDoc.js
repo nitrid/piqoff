@@ -31,7 +31,7 @@ import NbKeyboard from "../../core/react/bootstrap/keyboard.js";
 import IdleTimer from 'react-idle-timer'
 import NdButton from "../../core/react/devex/button.js";
 
-import { posCls,posSaleCls,posPaymentCls,posPluCls,posDeviceCls,posPromoCls, posExtraCls, } from "../../core/cls/pos.js";
+import { posCls,posSaleCls,posPaymentCls,posPluCls,posDeviceCls,posPromoCls,posExtraCls,posUsbTSECls} from "../../core/cls/pos.js";
 import { posScaleCls,posLcdCls } from "../../core/cls/scale.js";
 import { docCls} from "../../core/cls/doc.js"
 import transferCls from "../lib/transfer.js";
@@ -72,7 +72,7 @@ export default class posDoc extends React.PureComponent
         this.lastPosPromoDt = new datatable();  
         this.firm = new datatable();
         this.customerObj = new customersCls();
-
+        
         this.promoObj = new promoCls();
         this.posPromoObj = new posPromoCls();
 
@@ -322,7 +322,7 @@ export default class posDoc extends React.PureComponent
         })
 
         this.sendJet({CODE:"80",NAME:"Démarrage terminal lancé."}) ////Kasa işleme başladı.
-        this.sendJet({CODE:"120",NAME:"Le système est offline."}) ///Kasa offline dan online a döndü.        
+        this.sendJet({CODE:"120",NAME:"Le système est offline."}) ///Kasa offline dan online a döndü.
     }
     async init()
     {                
@@ -358,10 +358,18 @@ export default class posDoc extends React.PureComponent
             this.posScale = new posScaleCls(this.posDevice.dt()[0].SCALE_PORT)
             this.posLcd = new posLcdCls(this.posDevice.dt()[0].LCD_PORT)
         }
-        this.posDevice.scanner();       
-         
+        this.posDevice.scanner();
+
         if(!this.isFirstOpen)
         {
+            //ALMANYA TSE USB CİHAZLAR İÇİN YAPILDI
+            if(this.prmObj.filter({ID:'TSEUsb',TYPE:0}).getValue() == true)
+            {
+                this.posUsbTSE = new posUsbTSECls();
+                this.posUsbTSE.deviceId = this.posObj.dt()[this.posObj.dt().length - 1].DEVICE
+                this.posUsbTSE.init()
+            }
+            //*********************************** */
             this.isFirstOpen = true
             let tmpDetect = await this.posDevice.detectPort()
             if(tmpDetect.isElectron && tmpDetect.isData)
@@ -1483,7 +1491,8 @@ export default class posDoc extends React.PureComponent
                 }, 500);
                 
                 this.posObj.dt()[0].STATUS = 1
-                //***** TICKET İMZALAMA *****/
+                
+                //***** TICKET İMZALAMA NF525 *****/
                 let tmpSignedData = await this.nf525.signatureSale(this.posObj.dt()[0],this.posObj.posSale.dt())                
                 this.posObj.dt()[0].REF = tmpSignedData.REF
                 this.posObj.dt()[0].SIGNATURE = tmpSignedData.SIGNATURE
@@ -1496,6 +1505,23 @@ export default class posDoc extends React.PureComponent
                 this.posObj.dt()[this.posObj.dt().length - 1].CERTIFICATE = this.core.appInfo.name + " version : " + this.core.appInfo.version + " - " + this.core.appInfo.certificate + " - " + tmpSigned;
                 //************************* */
 
+                //ALMANYA TSE USB CİHAZLAR İÇİN YAPILDI.
+                if(this.prmObj.filter({ID:'TSEUsb',TYPE:0}).getValue() == true)
+                {
+                    await this.posUsbTSE.transaction(JSON.stringify(this.posObj.dt().toArray()))
+                    if(typeof this.posUsbTSE.lastTransaction != 'undefined' && this.posUsbTSE.lastTransaction.status)
+                    {
+                        this.posObj.dt()[0].SIGNATURE = this.posUsbTSE.lastTransaction.signature
+                        this.posObj.dt()[0].SIGNATURE_SUM = JSON.stringify(this.posObj.dt().toArray())
+                    }
+                    else
+                    {
+                        return
+                    }
+                    console.log(this.posUsbTSE.lastTransaction)
+                }
+                //***************************************/
+                
                 if(this.posObj.posPay.dt().length > 0)
                 {
                     //this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].AMOUNT = this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].AMOUNT - pPayChange
