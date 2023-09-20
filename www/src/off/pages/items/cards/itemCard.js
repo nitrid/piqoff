@@ -1575,7 +1575,7 @@ export default class itemCard extends React.PureComponent
                                                             this.dtPopPriStartDate.value = "1970-01-01"
                                                             this.dtPopPriEndDate.value = "1970-01-01"
                                                             this.txtPopPriQuantity.value = 1
-                                                            this.txtPopPriPrice.value = 10
+                                                            this.txtPopPriPrice.value = 0
                                                             this.txtPopPriPriceVatExt.value = 0
 
                                                             setTimeout(async () => 
