@@ -129,10 +129,6 @@ export default class purchaseInvoice extends DocBase
                 }
             })
         })
-        this.popPassword.onStatus = (e)=>
-        {
-            this.frmDocItems.option('disabled',this.docLocked)
-        }
     }
     async getDoc(pGuid,pRef,pRefno)
     {
@@ -142,7 +138,7 @@ export default class purchaseInvoice extends DocBase
         
         this.txtRef.readOnly = true
         this.txtRefno.readOnly = true
-        this.frmDocItems.option('disabled',this.docLocked)
+        this.frmDocItems.option('disabled',false)
 
         let tmpQuery = 
         {

@@ -855,6 +855,7 @@ export default class DocBase extends React.PureComponent
                                 icon:'more',
                                 onClick:()=>
                                 {
+                                    this.pg_Docs.hide()
                                     this.getDocs(1)
                                 }
                             }
@@ -1761,6 +1762,18 @@ export default class DocBase extends React.PureComponent
                     height={'900'}
                     position={{of:'#root'}}
                     deferRendering={true}
+                    onHiding={()=>
+                    {
+                        this.popMultiItem.tmpTagItemCode = this.tagItemCode.value
+                    }}
+                    onShowed={()=>
+                    {
+                        if(typeof this.popMultiItem.tmpTagItemCode != 'undefined')
+                        {
+                            this.tagItemCode.value = this.popMultiItem.tmpTagItemCode
+                            this.popMultiItem.tmpTagItemCode = undefined
+                        }
+                    }}
                     >
                         <Form colCount={2} height={'fit-content'}>
                             <Item colSpan={2}>

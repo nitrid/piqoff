@@ -6454,8 +6454,8 @@ export const langTr =
             clmDate : "TARIH",
             clmRef : "SERİ",
             clmRefNo : "SIRA",
-            clmInputName : "CARİ ADI",
-            clmInputCode  : "CARİ KODU",
+            clmOutputName : "CARİ ADI",
+            clmOutputCode  : "CARİ KODU",
             clmTotal : "KDVLİ TOPLAM"
         },
         pg_txtCustomerCode : 
@@ -6816,7 +6816,7 @@ export const langTr =
         },
         tagItemCodePlaceholder: "Lütfen Eklemek İstediğiniz Kodları Giriniz",
     },
-    ftr_02_007 : // "İade ALış Faturası"
+    ftr_02_007 : // "İade Alış Faturası"
     {
         txtRefRefno : "Seri-Sıra",
         cmbDepot: "Depo",
@@ -6870,8 +6870,8 @@ export const langTr =
             clmDate : "TARIH",
             clmRef : "SERİ",
             clmRefNo : "SIRA",
-            clmInputName : "CARİ ADI",
-            clmInputCode  : "CARİ KODU",
+            clmOutputName : "CARİ ADI",
+            clmOutputCode  : "CARİ KODU",
             clmTotal : "KDVLİ TOPLAM"
         },
         pg_txtCustomerCode : 
@@ -7809,8 +7809,8 @@ export const langTr =
             clmDate : "TARIH",
             clmRef : "SERİ",
             clmRefNo : "SIRA",
-            clmInputName : "CARİ ADI",
-            clmInputCode  : "CARİ KODU",
+            clmOutputName : "CARİ ADI",
+            clmOutputCode  : "CARİ KODU",
             clmTotal : "KDVLİ TOPLAM"
         },
         pg_txtCustomerCode : 
