@@ -91,12 +91,12 @@ export function print()
                 tmpArr.push({font:"a",style:"b",align:"ct",data:"Numero De Facture : " + (data.pos[0].DEVICE == '9999' ? "" : data.pos[0].FACT_REF)})
                 tmpArr.push({font:"b",style:"b",align:"ct",data: " ".space(44)})
             }
-            else if(data.pospay.where({TYPE:0}).length > 0 && data.pos[0].TYPE == 1)
+            else if(data.pospay.where({PAY_TYPE:0}).length > 0 && data.pos[0].TYPE == 1)
             {
                 tmpArr.push({font:"b",style:"b",size : [1,1],align:"ct",data:"REMBOURSEMENT"})
                 tmpArr.push({font:"b",style:"b",align:"ct",data: " ".space(44)})
             }
-            else if(data.pospay.where({TYPE:4}).length > 0)
+            else if(data.pospay.where({PAY_TYPE:4}).length > 0)
             {
                 tmpArr.push({font:"b",style:"b",size : [1,1],align:"ct",data:"BON D'AVOIR"})
                 tmpArr.push({font:"b",style:"b",align:"ct",data: " ".space(44)})
