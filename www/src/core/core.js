@@ -1597,6 +1597,21 @@ export class datatable
             return tmpVal;
         }
     }
+    orderBy(pKey,pSort)
+    {
+        if(typeof pKey != 'undefined')
+        {
+            if(typeof pSort != 'undefined' && pSort == 'desc')
+            {
+                return this.sort((a, b) => b[pKey] - a[pKey])
+            }
+            else
+            {
+                return this.sort((a, b) => a[pKey] - b[pKey])
+            }
+        }
+        return this
+    }
 }
 export class param extends datatable
 {
