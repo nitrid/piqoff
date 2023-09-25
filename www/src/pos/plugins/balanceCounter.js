@@ -45,7 +45,7 @@ posDoc.prototype.getItem = async function(pCode)
                     return
                 }
             }
-
+            
             for (let i = 0; i < tmpBalanceDt.length; i++) 
             {
                 let tmpItemsDt = await this.getItemDb(tmpBalanceDt[i].ITEM_CODE)
