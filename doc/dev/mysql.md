@@ -12,4 +12,4 @@
 
 şifre 1: root22
 şifre 2: @keaD22!
-şifre 3: sev&234
+şifre 3: sev&234 
