@@ -1116,7 +1116,7 @@ export const prm =
     {
         TYPE : 0,
         ID :"TSEUsb",
-        VALUE : true,
+        VALUE : false,
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "",

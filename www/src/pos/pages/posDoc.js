@@ -2915,34 +2915,55 @@ export default class posDoc extends React.PureComponent
             if(typeof tmpRePrintResult != 'undefined')
             {
                 let tmpDupCert = ""
-                if(tmpPrintCount > 0 && !this.core.offline)
+                if(!this.core.offline)
                 {
-                    let tmpDupSignature = await this.nf525.signaturePosDuplicate(pPosDt[0])
-                    let tmpDupSign = ''
-    
-                    if(tmpDupSignature != '')
+                    let tmpInsertQuery = {}
+                    if(tmpPrintCount > 0)
                     {
-                        tmpDupSign = tmpDupSignature.SIGNATURE.substring(2,3) + tmpDupSignature.SIGNATURE.substring(6,7) + tmpDupSignature.SIGNATURE.substring(12,13) + tmpDupSignature.SIGNATURE.substring(18,19)
-                    }
+                        let tmpDupSignature = await this.nf525.signaturePosDuplicate(pPosDt[0])
+                        let tmpDupSign = ''
+        
+                        if(tmpDupSignature != '')
+                        {
+                            tmpDupSign = tmpDupSignature.SIGNATURE.substring(2,3) + tmpDupSignature.SIGNATURE.substring(6,7) + tmpDupSignature.SIGNATURE.substring(12,13) + tmpDupSignature.SIGNATURE.substring(18,19)
+                        }
 
-                    let tmpInsertQuery = 
+                        tmpInsertQuery = 
+                        {
+                            query : "EXEC [dbo].[PRD_POS_EXTRA_INSERT] " + 
+                                    "@CUSER = @PCUSER, " + 
+                                    "@TAG = @PTAG, " +
+                                    "@POS_GUID = @PPOS_GUID, " +
+                                    "@LINE_GUID = @PLINE_GUID, " +
+                                    "@DATA =@PDATA, " +
+                                    "@DATA_EXTRA1 = @PDATA_EXTRA1, " +
+                                    "@APP_VERSION = @PAPP_VERSION, " +
+                                    "@DESCRIPTION = @PDESCRIPTION ", 
+                            param : ['PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|max','PDATA_EXTRA1:string|max','PAPP_VERSION:string|25','PDESCRIPTION:string|max'],
+                            value : [pPosDt[0].CUSER,"REPRINT",pPosDt[0].GUID,"00000000-0000-0000-0000-000000000000",tmpDupSignature.SIGNATURE,tmpDupSignature.SIGNATURE_SUM,this.core.appInfo.version,tmpRePrintResult]
+                        }
+
+                        tmpDupCert = this.core.appInfo.name + " version : " + this.core.appInfo.version + " - " + this.core.appInfo.certificate + " - " + tmpDupSign
+                    }
+                    else
                     {
-                        query : "EXEC [dbo].[PRD_POS_EXTRA_INSERT] " + 
-                                "@CUSER = @PCUSER, " + 
-                                "@TAG = @PTAG, " +
-                                "@POS_GUID = @PPOS_GUID, " +
-                                "@LINE_GUID = @PLINE_GUID, " +
-                                "@DATA =@PDATA, " +
-                                "@DATA_EXTRA1 = @PDATA_EXTRA1, " +
-                                "@APP_VERSION = @PAPP_VERSION, " +
-                                "@DESCRIPTION = @PDESCRIPTION ", 
-                        param : ['PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|max','PDATA_EXTRA1:string|max','PAPP_VERSION:string|25','PDESCRIPTION:string|max'],
-                        value : [pPosDt[0].CUSER,"REPRINT",pPosDt[0].GUID,"00000000-0000-0000-0000-000000000000",tmpDupSignature.SIGNATURE,tmpDupSignature.SIGNATURE_SUM,this.core.appInfo.version,tmpRePrintResult]
+                        tmpInsertQuery = 
+                        {
+                            query : "EXEC [dbo].[PRD_POS_EXTRA_INSERT] " + 
+                                    "@CUSER = @PCUSER, " + 
+                                    "@TAG = @PTAG, " +
+                                    "@POS_GUID = @PPOS_GUID, " +
+                                    "@LINE_GUID = @PLINE_GUID, " +
+                                    "@DATA =@PDATA, " +
+                                    "@DATA_EXTRA1 = @PDATA_EXTRA1, " +
+                                    "@APP_VERSION = @PAPP_VERSION, " +
+                                    "@DESCRIPTION = @PDESCRIPTION ", 
+                            param : ['PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|max','PDATA_EXTRA1:string|max','PAPP_VERSION:string|25','PDESCRIPTION:string|max'],
+                            value : [pPosDt[0].CUSER,"REPRINT",pPosDt[0].GUID,"00000000-0000-0000-0000-000000000000","","",this.core.appInfo.version,""]
+                        }
                     }
 
                     await this.core.sql.execute(tmpInsertQuery)
-
-                    tmpDupCert = this.core.appInfo.name + " version : " + this.core.appInfo.version + " - " + this.core.appInfo.certificate + " - " + tmpDupSign
                 }
                 
                 let tmpData = 
@@ -2965,7 +2986,7 @@ export default class posDoc extends React.PureComponent
                         customerGrowPoint : pPosDt[0].CUSTOMER_POINT - Math.floor(pPosDt[0].TOTAL)
                     }
                 }
-
+                
                 if(tmpPrintCount > 0 && !this.core.offline)
                 {
                     this.sendJet({CODE:"155",NAME:"Duplicata ticket imprimé."}) //// Duplicate fiş yazdırıldı.
@@ -3047,7 +3068,7 @@ export default class posDoc extends React.PureComponent
                 showPane={true}
                 message={this.lang.t("pleaseWait")}
                 ref={this.loadingPay}
-                />               
+                />
                 <div className="top-bar row">
                     <div className="col-12">                    
                         <div className="row m-2">
@@ -3401,8 +3422,8 @@ export default class posDoc extends React.PureComponent
                                     }}
                                     alignment={"center"} cssClass={"cell-fontsize"}/>                                    
                                     <Column dataField="ITEM_SNAME" caption={this.lang.t("grdList.ITEM_NAME")} width={220} cssClass={"cell-fontsize"}/>
-                                    <Column dataField="QUANTITY" caption={this.lang.t("grdList.QUANTITY")} width={80} cellRender={(e)=>{return (e.data.SCALE_MANUEL == true ? "M-" : "") + (e.data.UNIT_SHORT == 'kg' ? e.value.toFixed(3) : e.value) + e.data.UNIT_SHORT}} format={"#,##0.000" } cssClass={"cell-fontsize"}/>
-                                    <Column dataField="PRICE" caption={this.lang.t("grdList.PRICE")} width={80} cellRender={(e)=>{return e.value.toFixed(2) + Number.money.sign + '/' + e.data.UNIT_SHORT}} cssClass={"cell-fontsize"}/>
+                                    <Column dataField="QUANTITY" caption={this.lang.t("grdList.QUANTITY")} width={80} cellRender={(e)=>{return (e.data.SCALE_MANUEL == true ? "M-" : "") + (e.data.UNIT_SHORT == 'kg' ? Number(e.value).round(2) : e.value) + e.data.UNIT_SHORT}} format={"#,##0.000" } cssClass={"cell-fontsize"}/>
+                                    <Column dataField="PRICE" caption={this.lang.t("grdList.PRICE")} width={80} cellRender={(e)=>{return Number(e.value).round(2) + Number.money.sign + '/' + e.data.UNIT_SHORT}} cssClass={"cell-fontsize"}/>
                                     <Column dataField="AMOUNT" alignment={"right"} caption={this.lang.t("grdList.AMOUNT")} width={60} format={"#,##0.00" + Number.money.sign} cssClass={"cell-fontsize"}/>                                                
                                 </NdGrid>
                             </div>
