@@ -78,7 +78,6 @@ export default class collectiveItemEdit extends React.PureComponent
         App.instance.setState({isExecute:false})
         this.netMargin()
         this.grossMargin()
-       
     }
     _cellRoleRender(e)
     {
@@ -206,11 +205,10 @@ export default class collectiveItemEdit extends React.PureComponent
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <Form colCount={2} id="frmCriter">
-                            {/* txtCode */}
-                            <Item>
+                                {/* txtCode */}
+                                <Item>
                                     <Label text={this.t("txtCode")} alignment="right" />
-                                        <NdTagBox id="txtCode" parent={this} simple={true} value={[]} placeholder={this.t("codePlaceHolder")}
-                                        />
+                                    <NdTagBox id="txtCode" parent={this} simple={true} value={[]} placeholder={this.t("codePlaceHolder")}/>
                                 </Item>
                                 <Item>
                                     <Label text={this.t("txtCustomerCode")} alignment="right" />
@@ -220,7 +218,6 @@ export default class collectiveItemEdit extends React.PureComponent
                                         data={{source: {select : {query:"SELECT CODE,TITLE FROM CUSTOMER_VW_01 WHERE GENUS IN(1,2) ORDER BY TITLE ASC"},sql : this.core.sql}}}
                                         />
                                 </Item>
-                                
                                 {/* txtName */}
                                 <Item>
                                     <Label text={this.t("txtName")} alignment="right" />

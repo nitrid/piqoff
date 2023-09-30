@@ -110,8 +110,8 @@ export const langFr =
     popDescbordValidation2 :
     {
         title : "Attention",
-        msg1 : "İnformation saisie",
-        msg2 : " Ne peut être inférieur à ... caractères ", 
+        msg1 : "Le motif saisi ne peut être inférieur à ",
+        msg2 : "   caractères. ", 
         btn01 : "Ok",
     },
     popDeleteDesc : 

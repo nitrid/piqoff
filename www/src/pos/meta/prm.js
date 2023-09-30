@@ -1112,5 +1112,21 @@ export const prm =
             CAPTION : "Satış Sonu Yazdır"
         }
     },
+    //TSE Usb
+    {
+        TYPE : 0,
+        ID :"TSEUsb",
+        VALUE : false,
+        SPECIAL : "",
+        PAGE : "pos",
+        ELEMENT : "",
+        APP : "POS",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Pos",
+            CAPTION : "TSE Usb"
+        }
+    },
     //#endregion
 ]
