@@ -879,7 +879,7 @@ export default class transferCls
                 {
                     type : "select",
                     query : `SELECT * FROM CUSTOMER_VW_02 {0}`,
-                    where : `WHERE LDATE >= GETDATE() - 100`
+                    where : `WHERE LDATE >= GETDATE() - 10`
                 },
                 to : 
                 {
