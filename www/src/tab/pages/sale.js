@@ -51,6 +51,8 @@ export default class Sale extends React.PureComponent
         this._customerSearch = this._customerSearch.bind(this)
         this.onValueChange = this.onValueChange.bind(this)
         this.getItems = this.getItems.bind(this)
+
+        this.docLocked = false;
     }
     async componentDidMount()
     {
@@ -66,6 +68,7 @@ export default class Sale extends React.PureComponent
         this.docLines.clear()        
         this.cmbGroup.value = ''
         this.docType = 0
+        this.docLocked = false;
 
         if(localStorage.getItem("data") != null)
         {
@@ -403,6 +406,7 @@ export default class Sale extends React.PureComponent
         {                                                    
             tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
             await dialog(tmpConfObj1);
+
             localStorage.removeItem("data")
         }
         else
@@ -413,6 +417,18 @@ export default class Sale extends React.PureComponent
     }
     async factureSave()
     {
+        if(this.docLocked == true)
+        {
+            let tmpConfObj =
+            {
+                id:'msgDocLocked',showTitle:true,title:this.t("msgGetLocked.title"),showCloseButton:true,width:'500px',height:'200px',
+                button:[{id:"btn01",caption:this.t("msgGetLocked.btn01"),location:'after'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgGetLocked.msg")}</div>)
+            }
+            
+            await dialog(tmpConfObj);
+            return
+        }
         if(this.docObj.dt()[0].REF_NO == 0)
         {
             let tmpQuery = 
@@ -484,6 +500,9 @@ export default class Sale extends React.PureComponent
             this.docObj.docCustomer.INPUT = this.docObj.dt()[0].INPUT
         }
 
+        this.docObj.dt()[0].LOCKED = 1
+        this.docLocked = true
+
         let tmpSignedData = await this.nf525.signatureDoc(this.docObj.dt()[0],this.docObj.docItems.dt())                
         this.docObj.dt()[0].SIGNATURE = tmpSignedData.SIGNATURE
         this.docObj.dt()[0].SIGNATURE_SUM = tmpSignedData.SIGNATURE_SUM
@@ -497,6 +516,8 @@ export default class Sale extends React.PureComponent
         {                                                    
             tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
             await dialog(tmpConfObj1);
+            console.log(this.frmGrdSale)
+            this.frmGrdSale.option('disabled',true)
 
             localStorage.removeItem("data")
             
@@ -531,13 +552,26 @@ export default class Sale extends React.PureComponent
         {
             this.docType = 60
             this.docLines = this.docObj.docOrders.dt()
+            this.docLocked = false
         }
         else if(pDocType == 20)
         {
             this.docType = 20
             this.docLines = this.docObj.docItems.dt()
+
+            if(this.docObj.dt()[0].LOCKED != 0)
+            {
+                this.docLocked = true
+                this.frmGrdSale.option('disabled',true)
+            }
+            else
+            {
+                this.docLocked = false
+                this.frmGrdSale.option('disabled',false)
+            }
         }
         await this.grdSale.dataRefresh({source:this.docLines});
+
         this.setState({isExecute:false})
         this.itemView.setItemAll()
     }
@@ -845,7 +879,7 @@ export default class Sale extends React.PureComponent
                                     </div>
                                     <div className='row pt-2'>
                                         <div className='col-12'>
-                                            <Form colCount={1}>
+                                            <Form colCount={1} > 
                                                 {/* MUSTERI */}
                                                 <Item>
                                                     <Label text={this.t("popCart.txtCustomer")} alignment="right" />
@@ -917,6 +951,10 @@ export default class Sale extends React.PureComponent
                                                     height={'400'} 
                                                     width={'100%'}
                                                     dbApply={false}
+                                                    onInitialized={(e)=>
+                                                    {
+                                                        this.frmGrdSale = e.component
+                                                    }}
                                                     onRowPrepared={(e) =>
                                                     {
                                                     }}
@@ -1014,8 +1052,10 @@ export default class Sale extends React.PureComponent
                                                                             {
                                                                                 id:'01',
                                                                                 icon:'more',
-                                                                                onClick:()  =>
+                                                                                onClick:async ()  =>
                                                                                 {
+                                                                                    this.popDiscount.show()
+                                                                                    await this.core.util.waitUntil(200)
                                                                                     if(this.docObj.dt()[0].DISCOUNT > 0 )
                                                                                     {
                                                                                         this.txtDiscountPercent1.value  = Number(this.docObj.dt()[0].AMOUNT).rate2Num(this.docObj.docItems.dt().sum("DISCOUNT_1",3),3)
@@ -1034,7 +1074,7 @@ export default class Sale extends React.PureComponent
                                                                                         this.txtDiscountPercent3.value  = 0
                                                                                         this.txtDiscountPrice3.value = 0
                                                                                     }
-                                                                                    this.popDiscount.show()
+                                                                                    
                                                                                 }
                                                                             },
                                                                         ]
@@ -1051,8 +1091,10 @@ export default class Sale extends React.PureComponent
                                                                             {
                                                                                 id:'01',
                                                                                 icon:'more',
-                                                                                onClick:()  =>
+                                                                                onClick:async ()  =>
                                                                                 {
+                                                                                    this.popDocDiscount.show()
+                                                                                    await this.core.util.waitUntil(200)
                                                                                     if(this.docObj.dt()[0].DOC_DISCOUNT > 0 )
                                                                                     {
                                                                                         this.txtDocDiscountPercent1.value  = Number(this.docObj.dt()[0].SUBTOTAL).rate2Num(this.docObj.dt()[0].DOC_DISCOUNT_1,5)
@@ -1071,7 +1113,6 @@ export default class Sale extends React.PureComponent
                                                                                         this.txtDocDiscountPercent3.value  = 0
                                                                                         this.txtDocDiscountPrice3.value = 0
                                                                                     }
-                                                                                    this.popDocDiscount.show()
                                                                                 }
                                                                             },
                                                                         ]
@@ -1361,15 +1402,9 @@ export default class Sale extends React.PureComponent
                         </div>    
                         {/* İNDİRİM POPUP */}
                         <div>
-                            <NdPopUp parent={this} id={"popDiscount"} 
-                            visible={false}
-                            showCloseButton={true}
-                            showTitle={true}
+                            <NbPopUp parent={this} id={"popDiscount"} 
+                            centered={true}
                             title={this.t("popDiscount.title")}
-                            container={"#root"} 
-                            width={'500'}
-                            height={'500'}
-                            position={{of:'#root'}}
                             >
                                 <Form colCount={1} height={'fit-content'}>
                                     <Item>
@@ -1532,10 +1567,10 @@ export default class Sale extends React.PureComponent
                                                 onClick={async ()=>
                                                 {           
                                                     
-                                                    for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
+                                                    for (let i = 0; i < this.docLines.length; i++) 
                                                     {
-                                                        let tmpDocData = this.docObj.docItems.dt()[i]
-
+                                                        let tmpDocData = this.docLines[i]
+                                                        console.log(tmpDocData)
                                                         if(this.chkFirstDiscount.value == false)
                                                         {
                                                             tmpDocData.DISCOUNT_1 = Number(tmpDocData.PRICE * tmpDocData.QUANTITY).rateInc(this.txtDiscountPercent1.value,4)
@@ -1555,6 +1590,7 @@ export default class Sale extends React.PureComponent
                                                         tmpDocData.TOTAL = parseFloat(((tmpDocData.TOTALHT - tmpDocData.DOC_DISCOUNT) + tmpDocData.VAT)).round(2)
                                                         tmpDocData.DISCOUNT_RATE = Number((tmpDocData.PRICE * tmpDocData.QUANTITY)).rate2Num((tmpDocData.DISCOUNT_1 + tmpDocData.DISCOUNT_2 + tmpDocData.DISCOUNT_3),2)
                                                     }
+                                                    console.log(this.txtDiscountPercent1.value)
                                                     this._calculateTotal()
                                                     this.popDiscount.hide(); 
                                                 }}/>
@@ -1569,19 +1605,13 @@ export default class Sale extends React.PureComponent
                                         </div>
                                     </Item>
                                 </Form>
-                            </NdPopUp>
+                            </NbPopUp>
                         </div> 
                         {/* EVRAK İNDİRİM POPUP */}
                         <div>
-                            <NdPopUp parent={this} id={"popDocDiscount"} 
-                            visible={false}
-                            showCloseButton={true}
-                            showTitle={true}
+                            <NbPopUp parent={this} id={"popDocDiscount"} 
+                            centered={true}
                             title={this.t("popDocDiscount.title")}
-                            container={"#root"} 
-                            width={'500'}
-                            height={'500'}
-                            position={{of:'#root'}}
                             >
                                 <Form colCount={1} height={'fit-content'}>
                                     <Item>
@@ -1737,9 +1767,9 @@ export default class Sale extends React.PureComponent
                                                 onClick={async ()=>
                                                 {           
                                                     
-                                                    for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
+                                                    for (let i = 0; i < this.docLines.length; i++) 
                                                     {
-                                                        let tmpDocData = this.docObj.docItems.dt()[i]
+                                                        let tmpDocData = this.docLines[i]
                                                         
                                                         tmpDocData.DOC_DISCOUNT_1 = Number(tmpDocData.TOTALHT).rateInc(this.txtDocDiscountPercent1.value,4)
                                                         tmpDocData.DOC_DISCOUNT_2 = Number(((tmpDocData.TOTALHT) - tmpDocData.DOC_DISCOUNT_1)).rateInc(this.txtDocDiscountPercent2.value,4)
@@ -1770,7 +1800,7 @@ export default class Sale extends React.PureComponent
                                         </div>
                                     </Item>
                                 </Form>
-                            </NdPopUp>
+                            </NbPopUp>
                         </div>
                         {/* DIZAYN SECIM POPUP */}
                         <div>

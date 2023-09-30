@@ -1186,8 +1186,8 @@ export const menu = (e) =>
                             text: e.t('menuOff.pos_02_010'),
                             path: 'pos/report/itemSalesReport'
                         },
-                         //Ürün Grup Satış Raporu
-                         {
+                        //Ürün Grup Satış Raporu
+                        {
                             id: 'pos_02_011',
                             text: e.t('menuOff.pos_02_011'),
                             path: 'pos/report/itemComparisonReport'
@@ -1198,11 +1198,17 @@ export const menu = (e) =>
                             text: e.t('menuOff.pos_02_012'),
                             path: 'pos/report/loyaltyReport'
                         },
-                         //Loyalty 
-                         {
+                        //Loyalty 
+                        {
                             id: 'pos_02_013',
                             text: e.t('menuOff.pos_02_013'),
                             path: 'pos/report/discountReport'
+                        },
+                        //Okunmamış Terazi Fişleri Raporu 
+                        {
+                            id: 'pos_02_014',
+                            text: e.t('menuOff.pos_02_014'),
+                            path: 'pos/report/balanceUnreadTicket'
                         },
                     ]
                 },

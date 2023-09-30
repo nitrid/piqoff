@@ -201,7 +201,7 @@ export class local
             this.sqllite = global.require('sqlite3').verbose()
             this.platform = 'electron'
         }
-        else if(typeof window.sqlitePlugin != 'undefined')
+        else if(typeof window != 'undefined' && typeof window.sqlitePlugin != 'undefined')
         {
             this.sqllite = window.sqlitePlugin
             this.platform = 'cordova'
