@@ -1166,23 +1166,23 @@ export default class posDoc extends React.PureComponent
 
                 this.posObj.dt()[0].CDATE = moment(new Date()).utcOffset(0, true)
                 this.posObj.dt()[0].LDATE = moment(new Date()).utcOffset(0, true)
-                this.posObj.dt()[0].FAMOUNT = Number(parseFloat(tmpPosSale.sum('FAMOUNT',2)).toFixed(2))
-                this.posObj.dt()[0].AMOUNT = Number(parseFloat(tmpPosSale.sum('AMOUNT',2)).toFixed(2))
-                this.posObj.dt()[0].DISCOUNT = Number(parseFloat(tmpPosSale.sum('DISCOUNT',2)).toFixed(2))
-                this.posObj.dt()[0].LOYALTY = Number(parseFloat(tmpPosSale.sum('LOYALTY',2)).toFixed(2))
-                this.posObj.dt()[0].VAT = Number(parseFloat(tmpPosSale.sum('VAT',2)).toFixed(2))
-                this.posObj.dt()[0].TOTAL = Number(parseFloat(tmpPosSale.sum('TOTAL',2)).toFixed(2))
+                this.posObj.dt()[0].FAMOUNT = Number(parseFloat(tmpPosSale.sum('FAMOUNT',2)).round(2))
+                this.posObj.dt()[0].AMOUNT = Number(parseFloat(tmpPosSale.sum('AMOUNT',2)).round(2))
+                this.posObj.dt()[0].DISCOUNT = Number(parseFloat(tmpPosSale.sum('DISCOUNT',2)).round(2))
+                this.posObj.dt()[0].LOYALTY = Number(parseFloat(tmpPosSale.sum('LOYALTY',2)).round(2))
+                this.posObj.dt()[0].VAT = Number(parseFloat(tmpPosSale.sum('VAT',2)).round(2))
+                this.posObj.dt()[0].TOTAL = Number(parseFloat(tmpPosSale.sum('TOTAL',2)).round(2))
                 
-                tmpPayRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).toFixed(2)); 
-                tmpPayChange = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) >= 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).toFixed(2)) * -1
+                tmpPayRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).round(2)); 
+                tmpPayChange = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) >= 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).round(2)) * -1
 
                 this.core.util.writeLog("calcGrandTotal : " + tmpPayRest + " - " + tmpPayChange)
 
                 this.customerName.value = this.posObj.dt()[0].CUSTOMER_NAME.toString()
                 this.customerPoint.value = this.posObj.dt()[0].CUSTOMER_POINT
                 this.popCustomerPoint.value = this.posObj.dt()[0].CUSTOMER_POINT
-                this.popCustomerUsePoint.value = Number(parseFloat(this.posObj.dt()[0].LOYALTY * 100).toFixed(0))
-                this.popCustomerGrowPoint.value = Number(parseInt(this.customerPoint.value - Number(parseFloat(this.posObj.dt()[0].LOYALTY * 100).toFixed(0))))                
+                this.popCustomerUsePoint.value = Number(parseFloat(this.posObj.dt()[0].LOYALTY * 100).round(0))
+                this.popCustomerGrowPoint.value = Number(parseInt(this.customerPoint.value - Number(parseFloat(this.posObj.dt()[0].LOYALTY * 100).round(0))))                
 
                 this.totalRowCount.value = tmpPosSale.length
                 this.totalItemCount.value = tmpPosSale.sum('QUANTITY',2)
@@ -1209,7 +1209,7 @@ export default class posDoc extends React.PureComponent
                 this.payRest2.value = tmpPayRest
                 this.payRest3.value = tmpPayRest
                 this.cheqTotalAmount.value = this.cheqDt.sum('AMOUNT',2)
-                this.txtTicRest.value = this.cheqDt.length + '/' + parseFloat(this.cheqTotalAmount.value).toFixed(2) + ' ' + Number.money.sign
+                this.txtTicRest.value = this.cheqDt.length + '/' + parseFloat(this.cheqTotalAmount.value).round(2) + ' ' + Number.money.sign
                 this.cheqLastAmount.value = this.cheqDt.length > 0 ? this.cheqDt[0].AMOUNT : 0
                 
                 if(tmpPosSale.length > 0)
@@ -1222,9 +1222,9 @@ export default class posDoc extends React.PureComponent
                             this.posLcd.print
                             ({
                                 blink : 0,
-                                text :  ((this.grdList.devGrid.getKeyByRowIndex(0).SCALE_MANUEL ? 'M' : '') + parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).QUANTITY)).toFixed(3)).toString().space(7) + "kg" +
-                                        (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).PRICE) - (Number(this.grdList.devGrid.getKeyByRowIndex(0).DISCOUNT) / Number(this.grdList.devGrid.getKeyByRowIndex(0).QUANTITY))).toFixed(2) + "EUR/kg").space(11,"s") +
-                                        this.grdList.devGrid.getKeyByRowIndex(0).ITEM_NAME.toString().space(9) + "=" +  (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).TOTAL)).toFixed(2) + "EUR").space(10,"s")
+                                text :  ((this.grdList.devGrid.getKeyByRowIndex(0).SCALE_MANUEL ? 'M' : '') + parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).QUANTITY)).round(3)).toString().space(7) + "kg" +
+                                        (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).PRICE) - (Number(this.grdList.devGrid.getKeyByRowIndex(0).DISCOUNT) / Number(this.grdList.devGrid.getKeyByRowIndex(0).QUANTITY))).round(2) + "EUR/kg").space(11,"s") +
+                                        this.grdList.devGrid.getKeyByRowIndex(0).ITEM_NAME.toString().space(9) + "=" +  (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).TOTAL)).round(2) + "EUR").space(10,"s")
                             })                            
                         }
                         else
@@ -1233,8 +1233,8 @@ export default class posDoc extends React.PureComponent
                             ({
                                 blink : 0,
                                 text :  this.grdList.devGrid.getKeyByRowIndex(0).ITEM_NAME.toString().space(7) + Number(this.grdList.devGrid.getKeyByRowIndex(0).QUANTITY).toString().space(3,"s") + "X" +
-                                        (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).PRICE) - (Number(this.grdList.devGrid.getKeyByRowIndex(0).DISCOUNT) / Number(this.grdList.devGrid.getKeyByRowIndex(0).QUANTITY))).toFixed(2) + "EUR").space(9,"s") +
-                                        ("TOTAL : " + (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).TOTAL)).toFixed(2) + "EUR")).space(20,"s")
+                                        (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).PRICE) - (Number(this.grdList.devGrid.getKeyByRowIndex(0).DISCOUNT) / Number(this.grdList.devGrid.getKeyByRowIndex(0).QUANTITY))).round(2) + "EUR").space(9,"s") +
+                                        ("TOTAL : " + (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).TOTAL)).round(2) + "EUR")).space(20,"s")
                             })
                         }
 
@@ -1243,8 +1243,8 @@ export default class posDoc extends React.PureComponent
                             this.posLcd.print
                             ({
                                 blink : 0,
-                                text :this.grdList.devGrid.getKeyByRowIndex(0).ITEM_NAME.toString().space(9) + "=" +  (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).TOTAL)).toFixed(2) + "EUR").space(10,"s") + 
-                                        ("TOTAL : " + (parseFloat(tmpPayRest).toFixed(2) + "EUR")).space(20,"s")
+                                text :this.grdList.devGrid.getKeyByRowIndex(0).ITEM_NAME.toString().space(9) + "=" +  (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).TOTAL)).round(2) + "EUR").space(10,"s") + 
+                                        ("TOTAL : " + (parseFloat(tmpPayRest).round(2) + "EUR")).space(20,"s")
                             })
                         }, 3000);
                     }, 100);                    
@@ -1297,21 +1297,21 @@ export default class posDoc extends React.PureComponent
     }    
     calcSaleTotal(pPrice,pQuantity,pDiscount,pLoyalty,pVatRate)
     {
-        let tmpAmount = Number(parseFloat((pPrice * pQuantity).toFixed(2)))
-        let tmpFAmount = Number(Number(Number(tmpAmount)) - Number(Number(pDiscount)).toFixed(2))
-        //let tmpFAmount = Number(parseFloat((pPrice * pQuantity) - (pDiscount)).toFixed(2))
-        tmpFAmount = Number((tmpFAmount - pLoyalty).toFixed(2))
+        let tmpAmount = Number(parseFloat((pPrice * pQuantity).round(2)))
+        let tmpFAmount = Number(Number(Number(tmpAmount)) - Number(Number(pDiscount)).round(2))
+        //let tmpFAmount = Number(parseFloat((pPrice * pQuantity) - (pDiscount)).round(2))
+        tmpFAmount = Number((tmpFAmount - pLoyalty).round(2))
         let tmpVat = Number(parseFloat(tmpFAmount - (tmpFAmount / ((pVatRate / 100) + 1))))
     
         return {
             QUANTITY:pQuantity,
             PRICE:pPrice,
             FAMOUNT:Number(parseFloat(tmpFAmount - tmpVat)),
-            AMOUNT:Number(parseFloat(tmpAmount).toFixed(2)),
-            DISCOUNT:Number(parseFloat(pDiscount).toFixed(2)),
-            LOYALTY:Number(parseFloat(pLoyalty).toFixed(2)),
+            AMOUNT:Number(parseFloat(tmpAmount).round(2)),
+            DISCOUNT:Number(parseFloat(pDiscount).round(2)),
+            LOYALTY:Number(parseFloat(pLoyalty).round(2)),
             VAT:tmpVat,
-            TOTAL:Number(parseFloat(tmpFAmount).toFixed(2))
+            TOTAL:Number(parseFloat(tmpFAmount).round(2))
         }
     }
     isRowMerge(pType,pData)
@@ -1345,12 +1345,12 @@ export default class posDoc extends React.PureComponent
         //SATIR BİRLEŞTİR        
         if(typeof tmpRowData != 'undefined')
         {
-            pItemData.QUANTITY = Number(parseFloat((pItemData.QUANTITY * pItemData.UNIT_FACTOR) + Number(tmpRowData.QUANTITY)).toFixed(3))
+            pItemData.QUANTITY = Number(parseFloat((pItemData.QUANTITY * pItemData.UNIT_FACTOR) + Number(tmpRowData.QUANTITY)).round(3))
             this.saleRowUpdate(tmpRowData,pItemData)
         }
         else
         {            
-            pItemData.QUANTITY = Number(parseFloat(pItemData.QUANTITY * pItemData.UNIT_FACTOR).toFixed(3))
+            pItemData.QUANTITY = Number(parseFloat(pItemData.QUANTITY * pItemData.UNIT_FACTOR).round(3))
             this.saleRowAdd(pItemData)                  
         }                
     }
@@ -1523,7 +1523,7 @@ export default class posDoc extends React.PureComponent
                         }
                         if(this.popCustomerUsePoint.value > 0)
                         {
-                            await this.customerPointSave(1,Number(parseFloat(this.posObj.dt()[0].LOYALTY * 100).toFixed(0)))
+                            await this.customerPointSave(1,Number(parseFloat(this.posObj.dt()[0].LOYALTY * 100).round(0)))
                         }
                     }
                     else
@@ -1538,7 +1538,7 @@ export default class posDoc extends React.PureComponent
                 //PROMOSYONDA HEDİYE ÇEKİ VARSA UYGULANIYOR
                 if(this.posPromoObj.dt().where({APP_TYPE:2}).length > 0)
                 {
-                    this.posObj.dt()[0].REBATE_CHEQPAY = 'Q' + new Date().toISOString().substring(2, 10).replace('-','').replace('-','') + Math.round(Number(parseFloat(this.posPromoObj.dt().where({APP_TYPE:2})[0].APP_AMOUNT).toFixed(2)) * 100).toString().padStart(5,'0') + Date.now().toString().substring(7,12);
+                    this.posObj.dt()[0].REBATE_CHEQPAY = 'Q' + new Date().toISOString().substring(2, 10).replace('-','').replace('-','') + Math.round(Number(parseFloat(this.posPromoObj.dt().where({APP_TYPE:2})[0].APP_AMOUNT).round(2)) * 100).toString().padStart(5,'0') + Date.now().toString().substring(7,12);
                     await this.cheqpaySave(this.posObj.dt()[0].REBATE_CHEQPAY,this.posPromoObj.dt().where({APP_TYPE:2})[0].APP_AMOUNT,0,1);
                 }
                 //**************************** */
@@ -1546,7 +1546,7 @@ export default class posDoc extends React.PureComponent
                 {
                     if(this.posObj.posPay.dt().length > 0 && this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].PAY_TYPE == 4)
                     {
-                        this.posObj.dt()[0].REBATE_CHEQPAY = 'Q' + new Date().toISOString().substring(2, 10).replace('-','').replace('-','') + Math.round(Number(parseFloat(pPayChange).toFixed(2)) * 100).toString().padStart(5,'0') + Date.now().toString().substring(7,12);
+                        this.posObj.dt()[0].REBATE_CHEQPAY = 'Q' + new Date().toISOString().substring(2, 10).replace('-','').replace('-','') + Math.round(Number(parseFloat(pPayChange).round(2)) * 100).toString().padStart(5,'0') + Date.now().toString().substring(7,12);
                         await this.cheqpaySave(this.posObj.dt()[0].REBATE_CHEQPAY,pPayChange,0,1);
                     }
                     else if(this.posObj.posPay.dt().where({TYPE:0}).length > 0)
@@ -1870,7 +1870,7 @@ export default class posDoc extends React.PureComponent
             //SATIR BİRLEŞTİR        
             if(typeof tmpRowData != 'undefined')
             {    
-                await this.payRowUpdate(tmpRowData,{AMOUNT:Number(parseFloat(Number(pAmount) + tmpRowData.AMOUNT).toFixed(2)),CHANGE:0})
+                await this.payRowUpdate(tmpRowData,{AMOUNT:Number(parseFloat(Number(pAmount) + tmpRowData.AMOUNT).round(2)),CHANGE:0})
             }
             else
             {
@@ -1902,7 +1902,7 @@ export default class posDoc extends React.PureComponent
             this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].PAY_TYPE = pPayData.PAY_TYPE
             this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].PAY_TYPE_NAME = tmpTypeName
             this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].LINE_NO = tmpMaxLine + 1
-            this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].AMOUNT = Number(parseFloat(pPayData.AMOUNT).toFixed(2))
+            this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].AMOUNT = Number(parseFloat(pPayData.AMOUNT).round(2))
             this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].CHANGE = pPayData.CHANGE
             this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].DELETED = false
 
@@ -2063,8 +2063,8 @@ export default class posDoc extends React.PureComponent
             this.posLcd.print
             ({
                 blink : 0,
-                text :  tmpData.ITEM_NAME.toString().space(9) + "-" +  (parseFloat(Number(tmpData.TOTAL)).toFixed(2) + "EUR").space(10,"s") +
-                        ( "TOTAL : " + parseFloat(Number(this.posObj.dt()[0].TOTAL)).toFixed(2) + "EUR").space(20,"s")
+                text :  tmpData.ITEM_NAME.toString().space(9) + "-" +  (parseFloat(Number(tmpData.TOTAL)).round(2) + "EUR").space(10,"s") +
+                        ( "TOTAL : " + parseFloat(Number(this.posObj.dt()[0].TOTAL)).round(2) + "EUR").space(20,"s")
                         
             })
         }
@@ -2091,7 +2091,7 @@ export default class posDoc extends React.PureComponent
             tmpType = 1
             tmpStatus = 1
             tmpPayType = 4
-            tmpAmount = Number(parseFloat(pCode.substring(7,12) / 100).toFixed(2))
+            tmpAmount = Number(parseFloat(pCode.substring(7,12) / 100).round(2))
 
             tmpDt.selectCmd = 
             {
@@ -2152,7 +2152,7 @@ export default class posDoc extends React.PureComponent
             {
                 tmpTicket = pCode.substring(9,14)
             }    
-            tmpAmount = Number(parseFloat(tmpTicket / 100).toFixed(2))
+            tmpAmount = Number(parseFloat(tmpTicket / 100).round(2))
             tmpYear = (parseInt(parseFloat(moment(new Date(),"YY").format("YY")) / 10) * 10) + parseInt(tmpYear)
 
             if(moment(new Date()).diff(moment('20' + tmpYear + '0101'),"day") > 395 || moment(new Date()).diff(moment('20' + tmpYear + '0101'),"day") < -365)
@@ -2444,7 +2444,7 @@ export default class posDoc extends React.PureComponent
                 resolve(false)
                 return
             }
-            if(this.prmObj.filter({ID:'MinPriceCheck',TYPE:0}).getValue() == true && Number(pPrice) < Number(parseFloat(pData.MIN_PRICE).toFixed(2)))
+            if(this.prmObj.filter({ID:'MinPriceCheck',TYPE:0}).getValue() == true && Number(pPrice) < Number(parseFloat(pData.MIN_PRICE).round(2)))
             {
                 let tmpConfObj =
                 {
@@ -2456,7 +2456,7 @@ export default class posDoc extends React.PureComponent
                 resolve(false)
                 return
             }
-            if(this.prmObj.filter({ID:'CostPriceCheck',TYPE:0}).getValue() == true && Number(pPrice) < Number(parseFloat(pData.COST_PRICE).toFixed(2)))
+            if(this.prmObj.filter({ID:'CostPriceCheck',TYPE:0}).getValue() == true && Number(pPrice) < Number(parseFloat(pData.COST_PRICE).round(2)))
             {
                 let tmpConfObj =
                 {
@@ -3489,13 +3489,13 @@ export default class posDoc extends React.PureComponent
                                             //     }
                                             // }
                                             //*************************************************** */
-                                            let tmpPayRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).toFixed(2));
+                                            let tmpPayRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).round(2));
 
                                             this.posLcd.print
                                             ({
                                                 blink : 0,
                                                 text : ("").space(20,"s") + 
-                                                       ("TOTAL : " + (parseFloat(tmpPayRest).toFixed(2) + "EUR")).space(20,"s")
+                                                       ("TOTAL : " + (parseFloat(tmpPayRest).round(2) + "EUR")).space(20,"s")
                                             })
 
                                             this.rbtnPayType.value = 0                                                                       
@@ -3563,13 +3563,13 @@ export default class posDoc extends React.PureComponent
                                             //     }
                                             // } 
                                             //*************************************************** */
-                                            let tmpPayRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).toFixed(2));
+                                            let tmpPayRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).round(2));
                                             
                                             this.posLcd.print
                                             ({
                                                 blink : 0,
                                                 text : ("").space(20,"s") + 
-                                                       ("TOTAL : " + (parseFloat(tmpPayRest).toFixed(2) + "EUR")).space(20,"s")
+                                                       ("TOTAL : " + (parseFloat(tmpPayRest).round(2) + "EUR")).space(20,"s")
                                             })
                                             this.popCardPay.show();
                                             this.txtPopCardPay.newStart = true;
@@ -3681,13 +3681,13 @@ export default class posDoc extends React.PureComponent
                                             //     }
                                             // } 
                                             //****************************************************************************************************************************************** */                
-                                            let tmpPayRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).toFixed(2));
+                                            let tmpPayRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).round(2));
                                             
                                             this.posLcd.print
                                             ({
                                                 blink : 0,
                                                 text : ("").space(20,"s") + 
-                                                       ("TOTAL : " + (parseFloat(tmpPayRest).toFixed(2) + "EUR")).space(20,"s")
+                                                       ("TOTAL : " + (parseFloat(tmpPayRest).round(2) + "EUR")).space(20,"s")
                                             })
                                             this.popCashPay.show();
                                             this.txtPopCashPay.newStart = true;
@@ -5317,8 +5317,8 @@ export default class posDoc extends React.PureComponent
                                                     MAX_PRICE: 0.0,
                                                     MIN_PRICE: 0.0,
                                                     NAME: items.ITEM_NAME,
-                                                    PRICE: Number(items.TOTAL / items.QUANTITY).toFixed(2),
-                                                    QUANTITY: Number(items.QUANTITY).toFixed(2),
+                                                    PRICE: Number(items.TOTAL / items.QUANTITY).round(2),
+                                                    QUANTITY: Number(items.QUANTITY).round(2),
                                                     SALE_JOIN_LINE: true,
                                                     SNAME: items.ITEM_NAME,
                                                     SPECIAL: "",
@@ -5412,7 +5412,7 @@ export default class posDoc extends React.PureComponent
                                     let tmpRowData = this.isRowMerge('PAY',{TYPE:3})
                                     if(typeof e.data.AMOUNT != 'undefined' && typeof tmpRowData != 'undefined' && typeof tmpRowData.AMOUNT != 'undefined')
                                     {
-                                        await this.payRowUpdate(tmpRowData,{AMOUNT:Number(parseFloat(Number(tmpRowData.AMOUNT) - Number(e.data.AMOUNT)).toFixed(2)),CHANGE:0})
+                                        await this.payRowUpdate(tmpRowData,{AMOUNT:Number(parseFloat(Number(tmpRowData.AMOUNT) - Number(e.data.AMOUNT)).round(2)),CHANGE:0})
                                     }
                                 }}
                                 >
@@ -5498,15 +5498,15 @@ export default class posDoc extends React.PureComponent
                                         e.value = tmpVal
                                         e.text = tmpVal
                                         e.displayValue = tmpVal
-                                        e.cellElement.innerHTML  = tmpVal.toFixed(2) + " %"
+                                        e.cellElement.innerHTML  = tmpVal.round(2) + " %"
                                     }
                                     else if(e.rowType == 'data' && e.column.index == 5)
                                     {
-                                        let tmpVal = Number(parseFloat((e.data.AMOUNT - e.data.DISCOUNT) / e.data.QUANTITY).toFixed(2))
+                                        let tmpVal = Number(parseFloat((e.data.AMOUNT - e.data.DISCOUNT) / e.data.QUANTITY).round(2))
                                         e.value = tmpVal
                                         e.text = tmpVal
                                         e.displayValue = tmpVal
-                                        e.cellElement.innerHTML  = Number(tmpVal.toFixed(2)).currency()
+                                        e.cellElement.innerHTML  = Number(tmpVal.round(2)).currency()
                                     }
                                 }}
                                 >
@@ -5743,7 +5743,7 @@ export default class posDoc extends React.PureComponent
                                         this.popCustomerPointToEuro.value = 0 
                                         return
                                     }
-                                    this.popCustomerPointToEuro.value = Number(parseFloat(e.value / 100).toFixed(2)).toString()
+                                    this.popCustomerPointToEuro.value = Number(parseFloat(e.value / 100).round(2)).toString()
                                 }}>     
                                 </NdTextBox> 
                             </div>
@@ -5796,7 +5796,7 @@ export default class posDoc extends React.PureComponent
                                         return;
                                     }
                                                                         
-                                    if(Number(parseFloat(Number(this.txtPopLoyalty.value) / 100).toFixed(2)) > this.posObj.dt()[0].TOTAL)
+                                    if(Number(parseFloat(Number(this.txtPopLoyalty.value) / 100).round(2)) > this.posObj.dt()[0].TOTAL)
                                     {
                                         let tmpConfObj =
                                         {
@@ -5808,13 +5808,13 @@ export default class posDoc extends React.PureComponent
                                         return;
                                     }
 
-                                    let tmpLoyalty = Number(parseFloat(this.txtPopLoyalty.value / 100).toFixed(2))
-                                    let tmpLoyaltyRate = Number(Number(Number(this.posObj.dt()[0].AMOUNT).toFixed(2)) - Number(Number(this.posObj.dt()[0].DISCOUNT).toFixed(2))).rate2Num(tmpLoyalty)
+                                    let tmpLoyalty = Number(parseFloat(this.txtPopLoyalty.value / 100).round(2))
+                                    let tmpLoyaltyRate = Number(Number(Number(this.posObj.dt()[0].AMOUNT).round(2)) - Number(Number(this.posObj.dt()[0].DISCOUNT).round(2))).rate2Num(tmpLoyalty)
                                     
                                     for (let i = 0; i < this.posObj.posSale.dt().length; i++) 
                                     {                                        
                                         let tmpData = this.posObj.posSale.dt()[i]
-                                        let tmpRowLoyalty = Number(Number(Number(tmpData.AMOUNT).toFixed(2)) - Number(Number(tmpData.DISCOUNT).toFixed(2))).rateInc(tmpLoyaltyRate,2)
+                                        let tmpRowLoyalty = Number(Number(Number(tmpData.AMOUNT).round(2)) - Number(Number(tmpData.DISCOUNT).round(2))).rateInc(tmpLoyaltyRate,2)
                                         let tmpCalc = this.calcSaleTotal(tmpData.PRICE,tmpData.QUANTITY,tmpData.DISCOUNT,tmpRowLoyalty,tmpData.VAT_RATE)
 
                                         this.posObj.posSale.dt()[i].FAMOUNT = tmpCalc.FAMOUNT
@@ -6344,7 +6344,7 @@ export default class posDoc extends React.PureComponent
                                     if(this.lastPosPayDt.length > 0)
                                     {
                                         this.rbtnTotalPayType.value = 0
-                                        this.lastPayRest.value = this.lastPosSaleDt[0].GRAND_TOTAL - this.lastPosPayDt.sum('AMOUNT') < 0 ? 0 : Number(this.lastPosSaleDt[0].GRAND_TOTAL).toFixed(2) - Number(this.lastPosPayDt.sum('AMOUNT')).toFixed(2)
+                                        this.lastPayRest.value = this.lastPosSaleDt[0].GRAND_TOTAL - this.lastPosPayDt.sum('AMOUNT') < 0 ? 0 : Number(this.lastPosSaleDt[0].GRAND_TOTAL).round(2) - Number(this.lastPosPayDt.sum('AMOUNT')).round(2)
                                         this.txtPopLastTotal.value = this.lastPosSaleDt[0].GRAND_TOTAL;
                                         this.popLastTotal.show()
                                         
@@ -6520,7 +6520,7 @@ export default class posDoc extends React.PureComponent
                                                     if(this.grdLastTotalPay.devGrid.getSelectedRowKeys().length > 0)
                                                     {                                                        
                                                         this.grdLastTotalPay.devGrid.deleteRow(this.grdLastTotalPay.devGrid.getRowIndexByKey(this.grdLastTotalPay.devGrid.getSelectedRowKeys()[0]))
-                                                        this.lastPayRest.value = this.lastPosSaleDt[0].GRAND_TOTAL - this.lastPosPayDt.sum('AMOUNT') < 0 ? 0 : Number(this.lastPosSaleDt[0].GRAND_TOTAL).toFixed(2) - Number(this.lastPosPayDt.sum('AMOUNT')).toFixed(2)
+                                                        this.lastPayRest.value = this.lastPosSaleDt[0].GRAND_TOTAL - this.lastPosPayDt.sum('AMOUNT') < 0 ? 0 : Number(this.lastPosSaleDt[0].GRAND_TOTAL).round(2) - Number(this.lastPosPayDt.sum('AMOUNT')).round(2)
                                                         this.txtPopLastTotal.newStart = true;
 
                                                         //HER EKLEME İŞLEMİNDEN SONRA İLK SATIR SEÇİLİYOR.
@@ -6551,8 +6551,8 @@ export default class posDoc extends React.PureComponent
                                                 onClick={async()=>
                                                 {
                                                     let tmpTypeName = ""
-                                                    let tmpAmount = Number(parseFloat(this.txtPopLastTotal.value).toFixed(2))
-                                                    let tmpChange = Number(parseFloat(this.lastPosSaleDt[0].GRAND_TOTAL - (this.lastPosPayDt.sum('AMOUNT') + tmpAmount)).toFixed(2))
+                                                    let tmpAmount = Number(parseFloat(this.txtPopLastTotal.value).round(2))
+                                                    let tmpChange = Number(parseFloat(this.lastPosSaleDt[0].GRAND_TOTAL - (this.lastPosPayDt.sum('AMOUNT') + tmpAmount)).round(2))
 
                                                     if(this.rbtnTotalPayType.value == 0)
                                                     {                                                        
@@ -6626,7 +6626,7 @@ export default class posDoc extends React.PureComponent
                                                             CHANGE : tmpChange
                                                         }
                                                         this.lastPosPayDt.push(tmpData)
-                                                        this.lastPayRest.value = this.lastPosSaleDt[0].GRAND_TOTAL - this.lastPosPayDt.sum('AMOUNT') < 0 ? 0 : Number(this.lastPosSaleDt[0].GRAND_TOTAL).toFixed(2) - Number(this.lastPosPayDt.sum('AMOUNT')).toFixed(2)
+                                                        this.lastPayRest.value = this.lastPosSaleDt[0].GRAND_TOTAL - this.lastPosPayDt.sum('AMOUNT') < 0 ? 0 : Number(this.lastPosSaleDt[0].GRAND_TOTAL).round(2) - Number(this.lastPosPayDt.sum('AMOUNT')).round(2)
                                                         this.txtPopLastTotal.newStart = true;
                                                     }
 
@@ -6811,7 +6811,7 @@ export default class posDoc extends React.PureComponent
                                 this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].PAY_TYPE = 0
                                 this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].PAY_TYPE_NAME = 'ESC'
                                 this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].LINE_NO = this.posObj.posPay.dt().length
-                                this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].AMOUNT = Number(parseFloat(this.posObj.dt()[0].TOTAL).toFixed(2))
+                                this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].AMOUNT = Number(parseFloat(this.posObj.dt()[0].TOTAL).round(2))
                                 this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].CHANGE = 0
                                 await this.posDevice.caseOpen();
                             }
@@ -6822,10 +6822,10 @@ export default class posDoc extends React.PureComponent
                                 this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].PAY_TYPE = 4
                                 this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].PAY_TYPE_NAME = "BON D'AVOIR"
                                 this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].LINE_NO = this.posObj.posPay.dt().length
-                                this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].AMOUNT = Number(parseFloat(this.posObj.dt()[0].TOTAL).toFixed(2))
+                                this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].AMOUNT = Number(parseFloat(this.posObj.dt()[0].TOTAL).round(2))
                                 this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].CHANGE = 0
 
-                                this.posObj.dt()[0].REBATE_CHEQPAY = 'Q' + new Date().toISOString().substring(2, 10).replace('-','').replace('-','') + Math.round(Number(parseFloat(this.posObj.dt()[0].TOTAL).toFixed(2)) * 100).toString().padStart(5,'0') + Date.now().toString().substring(7,12);
+                                this.posObj.dt()[0].REBATE_CHEQPAY = 'Q' + new Date().toISOString().substring(2, 10).replace('-','').replace('-','') + Math.round(Number(parseFloat(this.posObj.dt()[0].TOTAL).round(2)) * 100).toString().padStart(5,'0') + Date.now().toString().substring(7,12);
 
                                 await this.cheqpaySave(this.posObj.dt()[0].REBATE_CHEQPAY,this.posObj.dt()[0].TOTAL,0,1);
                             }
