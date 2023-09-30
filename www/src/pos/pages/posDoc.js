@@ -2889,34 +2889,55 @@ export default class posDoc extends React.PureComponent
             if(typeof tmpRePrintResult != 'undefined')
             {
                 let tmpDupCert = ""
-                if(tmpPrintCount > 0 && !this.core.offline)
+                if(!this.core.offline)
                 {
-                    let tmpDupSignature = await this.nf525.signaturePosDuplicate(pPosDt[0])
-                    let tmpDupSign = ''
-    
-                    if(tmpDupSignature != '')
+                    let tmpInsertQuery = {}
+                    if(tmpPrintCount > 0)
                     {
-                        tmpDupSign = tmpDupSignature.SIGNATURE.substring(2,3) + tmpDupSignature.SIGNATURE.substring(6,7) + tmpDupSignature.SIGNATURE.substring(12,13) + tmpDupSignature.SIGNATURE.substring(18,19)
-                    }
+                        let tmpDupSignature = await this.nf525.signaturePosDuplicate(pPosDt[0])
+                        let tmpDupSign = ''
+        
+                        if(tmpDupSignature != '')
+                        {
+                            tmpDupSign = tmpDupSignature.SIGNATURE.substring(2,3) + tmpDupSignature.SIGNATURE.substring(6,7) + tmpDupSignature.SIGNATURE.substring(12,13) + tmpDupSignature.SIGNATURE.substring(18,19)
+                        }
 
-                    let tmpInsertQuery = 
+                        tmpInsertQuery = 
+                        {
+                            query : "EXEC [dbo].[PRD_POS_EXTRA_INSERT] " + 
+                                    "@CUSER = @PCUSER, " + 
+                                    "@TAG = @PTAG, " +
+                                    "@POS_GUID = @PPOS_GUID, " +
+                                    "@LINE_GUID = @PLINE_GUID, " +
+                                    "@DATA =@PDATA, " +
+                                    "@DATA_EXTRA1 = @PDATA_EXTRA1, " +
+                                    "@APP_VERSION = @PAPP_VERSION, " +
+                                    "@DESCRIPTION = @PDESCRIPTION ", 
+                            param : ['PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|max','PDATA_EXTRA1:string|max','PAPP_VERSION:string|25','PDESCRIPTION:string|max'],
+                            value : [pPosDt[0].CUSER,"REPRINT",pPosDt[0].GUID,"00000000-0000-0000-0000-000000000000",tmpDupSignature.SIGNATURE,tmpDupSignature.SIGNATURE_SUM,this.core.appInfo.version,tmpRePrintResult]
+                        }
+
+                        tmpDupCert = this.core.appInfo.name + " version : " + this.core.appInfo.version + " - " + this.core.appInfo.certificate + " - " + tmpDupSign
+                    }
+                    else
                     {
-                        query : "EXEC [dbo].[PRD_POS_EXTRA_INSERT] " + 
-                                "@CUSER = @PCUSER, " + 
-                                "@TAG = @PTAG, " +
-                                "@POS_GUID = @PPOS_GUID, " +
-                                "@LINE_GUID = @PLINE_GUID, " +
-                                "@DATA =@PDATA, " +
-                                "@DATA_EXTRA1 = @PDATA_EXTRA1, " +
-                                "@APP_VERSION = @PAPP_VERSION, " +
-                                "@DESCRIPTION = @PDESCRIPTION ", 
-                        param : ['PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|max','PDATA_EXTRA1:string|max','PAPP_VERSION:string|25','PDESCRIPTION:string|max'],
-                        value : [pPosDt[0].CUSER,"REPRINT",pPosDt[0].GUID,"00000000-0000-0000-0000-000000000000",tmpDupSignature.SIGNATURE,tmpDupSignature.SIGNATURE_SUM,this.core.appInfo.version,tmpRePrintResult]
+                        tmpInsertQuery = 
+                        {
+                            query : "EXEC [dbo].[PRD_POS_EXTRA_INSERT] " + 
+                                    "@CUSER = @PCUSER, " + 
+                                    "@TAG = @PTAG, " +
+                                    "@POS_GUID = @PPOS_GUID, " +
+                                    "@LINE_GUID = @PLINE_GUID, " +
+                                    "@DATA =@PDATA, " +
+                                    "@DATA_EXTRA1 = @PDATA_EXTRA1, " +
+                                    "@APP_VERSION = @PAPP_VERSION, " +
+                                    "@DESCRIPTION = @PDESCRIPTION ", 
+                            param : ['PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|max','PDATA_EXTRA1:string|max','PAPP_VERSION:string|25','PDESCRIPTION:string|max'],
+                            value : [pPosDt[0].CUSER,"REPRINT",pPosDt[0].GUID,"00000000-0000-0000-0000-000000000000","","",this.core.appInfo.version,""]
+                        }
                     }
 
                     await this.core.sql.execute(tmpInsertQuery)
-
-                    tmpDupCert = this.core.appInfo.name + " version : " + this.core.appInfo.version + " - " + this.core.appInfo.certificate + " - " + tmpDupSign
                 }
                 
                 let tmpData = 
