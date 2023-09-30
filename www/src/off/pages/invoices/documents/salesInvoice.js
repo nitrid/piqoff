@@ -67,10 +67,13 @@ export default class salesInvoice extends React.PureComponent
     async componentDidMount()
     {
         await this.core.util.waitUntil(100)
-        await this.init()
         if(typeof this.pagePrm != 'undefined')
         {
-            this.getDoc(this.pagePrm.GUID,'',0)
+            await this.getDoc(this.pagePrm.GUID,'',0)
+        }
+        else
+        {
+            await this.init()
         }
     }
     async init()
@@ -993,7 +996,7 @@ export default class salesInvoice extends React.PureComponent
                         "ISNULL((SELECT TOP 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ORDERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),'') AS SUB_SYMBOL,  " +
                         "QUANTITY / ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ORDERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_QUANTITY, " + 
                         "PRICE * ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ORDERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_PRICE, " + 
-                        "REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ORDERS_VW_01 WHERE INPUT = @INPUT AND SHIPMENT_LINE_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 1 AND DOC_TYPE IN(60)",
+                        "REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ORDERS_VW_01 WHERE INPUT = @INPUT AND SHIPMENT_LINE_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 1 AND DOC_TYPE IN(60) ORDER BY REF + '-' + CONVERT(VARCHAR,REF_NO),LINE_NO",
                 param : ['INPUT:string|50','SUB_FACTOR:string|10'],
                 value : [this.docObj.dt()[0].INPUT,this.sysParam.filter({ID:'secondFactor',USERS:this.user.CODE}).getValue().value]
             }
@@ -1013,12 +1016,11 @@ export default class salesInvoice extends React.PureComponent
                 App.instance.setState({isExecute:true})
                 for (let i = 0; i < data.length; i++) 
                 {
-                    console.log(data[i])
                     let tmpDocItems = {...this.docObj.docItems.empty}
                     tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
                     tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
                     tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                    tmpDocItems.LINE_NO = data[i].LINE_NO
+                    tmpDocItems.LINE_NO = this.docObj.docItems.dt().max("LINE_NO") + 1
                     tmpDocItems.REF = this.docObj.dt()[0].REF
                     tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
                     tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
@@ -1094,7 +1096,6 @@ export default class salesInvoice extends React.PureComponent
                 value : [this.docObj.dt()[0].INPUT]
             }
             let tmpData = await this.core.sql.execute(tmpQuery) 
-            console.log(tmpData)
             if(tmpData.result.recordset.length > 0)
             {   
                 await this.pg_offersGrid.setData(tmpData.result.recordset)
@@ -1491,7 +1492,6 @@ export default class salesInvoice extends React.PureComponent
                 param : ['INPUT:string|50'],
                 value : [this.docObj.dt()[0].INPUT]
             }
-            console.log(this.docObj.dt()[0].INPUT)
             let tmpData = await this.core.sql.execute(tmpQuery) 
             if(tmpData.result.recordset.length > 0)
             {   
@@ -1572,7 +1572,6 @@ export default class salesInvoice extends React.PureComponent
                 let tmpData = await this.core.sql.execute(tmpQuery) 
                 if(tmpData.result.recordset.length > 0)
                 {
-                    console.log(tmpData.result.recordset[0])
                     if(tmpData.result.recordset[0].INTERFEL == true)
                     {
                         tmpInterfelHt += this.docObj.docItems.dt()[i].TOTALHT
@@ -1667,7 +1666,6 @@ export default class salesInvoice extends React.PureComponent
                                     <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup={"frmSalesInv"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
-                                        console.log(this.docObj.dt())
                                         if(this.docLocked == true)
                                         {
                                             let tmpConfObj =
@@ -1820,9 +1818,7 @@ export default class salesInvoice extends React.PureComponent
                                         }
                                         this.numDetailQuantity2.value = tmpQuantity2.toFixed(3)
                                         let tmpExVat = Number(this.docObj.docItems.dt().sum("TOTALHT",2))
-                                        console.log(tmpExVat)
                                         let tmpMargin = Number(tmpExVat) - Number(this.docObj.docItems.dt().sum("TOTAL_COST",2)) 
-                                        console.log(tmpMargin)
                                         let tmpMarginRate = ((tmpMargin / Number(this.docObj.docItems.dt().sum("TOTAL_COST",2)))) * 100
                                         this.txtDetailMargin.value = this.docObj.dt()[0].MARGIN                
                                         this.popDetail.show()
@@ -1888,7 +1884,6 @@ export default class salesInvoice extends React.PureComponent
                                             maxLength={32}
                                             onValueChanged={(async(e)=>
                                             {
-                                                console.log(e)
                                                 this.docObj.docCustomer.dt()[0].REF = e.value
                                             }).bind(this)}
                                             param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
@@ -2977,7 +2972,6 @@ export default class salesInvoice extends React.PureComponent
                                             }
                                             if(typeof e.data.DISCOUNT_RATE != 'undefined')
                                             {
-                                                console.log(Number(e.key.PRICE * e.key.QUANTITY).rateInc(e.data.DISCOUNT_RATE,4))
                                                 e.key.DISCOUNT = Number(e.key.PRICE * e.key.QUANTITY).rateInc(e.data.DISCOUNT_RATE,4)
                                                 e.key.DISCOUNT_1 = Number(e.key.PRICE * e.key.QUANTITY).rateInc( e.data.DISCOUNT_RATE,4)
                                                 e.key.DISCOUNT_2 = 0
@@ -3167,9 +3161,6 @@ export default class salesInvoice extends React.PureComponent
                                                             icon:'more',
                                                             onClick:()  =>
                                                             {
-                                                                console.log(this.docObj.dt()[0].SUBTOTAL)
-                                                                console.log(this.docObj.dt()[0].DOC_DISCOUNT_1)
-                                                                console.log( Number(this.docObj.dt()[0].SUBTOTAL).rate2Num(this.docObj.dt()[0].DOC_DISCOUNT_1,5))
                                                                 if(this.docObj.dt()[0].DOC_DISCOUNT > 0 )
                                                                 {
                                                                     this.txtDocDiscountPercent1.value  = Number(this.docObj.dt()[0].SUBTOTAL).rate2Num(this.docObj.dt()[0].DOC_DISCOUNT_1,5)
@@ -4295,7 +4286,6 @@ export default class salesInvoice extends React.PureComponent
                                                     }
                                                     App.instance.setState({isExecute:true})
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                    console.log(tmpData)
                                                     App.instance.setState({isExecute:false})
                                                     let tmpQuery2 = 
                                                     { 
@@ -4305,7 +4295,6 @@ export default class salesInvoice extends React.PureComponent
                                                     }
                                                     let tmpData2 = await this.core.sql.execute(tmpQuery2) 
                                                     let tmpObj = {data1:tmpData.result.recordset,data2:tmpData2.result.recordset}
-                                                    console.log(JSON.stringify(tmpData.result.recordset)) // BAK
                                                     this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",async(pResult) => 
                                                     {
                                                         if(pResult.split('|')[0] != 'ERR')
@@ -4651,7 +4640,7 @@ export default class salesInvoice extends React.PureComponent
                     >
                         <Paging defaultPageSize={22} />
                         <Column dataField="REFERANS" caption={this.t("pg_ordersGrid.clmReferans")} width={200} />
-                        <Column dataField="LINE_NO" caption={this.t("pg_ordersGrid.clmlineNo")} width={80} defaultSortOrder="asc"/>
+                        <Column dataField="LINE_NO" caption={this.t("pg_ordersGrid.clmlineNo")} width={80}/>
                         <Column dataField="ITEM_CODE" caption={this.t("pg_ordersGrid.clmCode")} width={200}/>
                         <Column dataField="ITEM_NAME" caption={this.t("pg_ordersGrid.clmName")} width={500} />
                         <Column dataField="QUANTITY" caption={this.t("pg_ordersGrid.clmQuantity")} width={200} />
