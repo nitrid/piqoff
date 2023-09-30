@@ -526,7 +526,8 @@ export function print()
             return tmpArr.length > 0 ? tmpArr : undefined
         },
         ()=>{return {font:"b",align:"ct",data:"Conservez moi comme preuve d'achat pour les"}},
-        ()=>{return {font:"b",align:"ct",data:"garanties, échanges, ou remboursement sous 1 mois"}},
+        ()=>{return {font:"b",align:"ct",data:"Garanties, Echanges, ou Remboursement "}},
+        ()=>{return {font:"b",align:"ct",data:"Sous 1 semaine en bon d'achat."}},
         ()=>{return {font:"b",align:"ct",data:"Ne sont ni repris ni échangés les produits suivants :"}},
         ()=>{return {font:"b",align:"ct",data:"Produits Frais, Viandes, Fromages."}},
         ()=>{return {font:"b",style:"b",align:"ct",data:"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"}},

@@ -139,7 +139,7 @@ export default class itemCard extends React.PureComponent
                 this.btnCopy.setState({disabled:false});
 
                 pData.rowData.CUSER = this.user.CODE
-                this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')[0].CUSER = this.user.CODE
+                //this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')[0].CUSER = this.user.CODE
             }    
             if(pTblName == 'ITEM_PRICE' || pTblName == 'ITEM_UNIT')
             {

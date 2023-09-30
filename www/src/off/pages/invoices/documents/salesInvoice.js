@@ -47,10 +47,13 @@ export default class salesInvoice extends DocBase
     async componentDidMount()
     {
         await this.core.util.waitUntil(100)
-        await this.init()
         if(typeof this.pagePrm != 'undefined')
         {
-            this.getDoc(this.pagePrm.GUID,'',0)
+            await this.getDoc(this.pagePrm.GUID,'',0)
+        }
+        else
+        {
+            await this.init()
         }
     }
     async init()
@@ -865,7 +868,6 @@ export default class salesInvoice extends DocBase
                 let tmpData = await this.core.sql.execute(tmpQuery) 
                 if(tmpData.result.recordset.length > 0)
                 {
-                    console.log(tmpData.result.recordset[0])
                     if(tmpData.result.recordset[0].INTERFEL == true)
                     {
                         tmpInterfelHt += this.docObj.docItems.dt()[i].TOTALHT
@@ -945,7 +947,6 @@ export default class salesInvoice extends DocBase
                                     <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup={"frmDoc"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
-                                        console.log(this.docObj.dt())
                                         if(this.docLocked == true)
                                         {
                                             let tmpConfObj =
@@ -1166,7 +1167,6 @@ export default class salesInvoice extends DocBase
                                             maxLength={32}
                                             onValueChanged={(async(e)=>
                                             {
-                                                console.log(e)
                                                 this.docObj.docCustomer.dt()[0].REF = e.value
                                             }).bind(this)}
                                             param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
@@ -1949,7 +1949,6 @@ export default class salesInvoice extends DocBase
                                             }
                                             if(typeof e.data.DISCOUNT_RATE != 'undefined')
                                             {
-                                                console.log(Number(e.key.PRICE * e.key.QUANTITY).rateInc(e.data.DISCOUNT_RATE,4))
                                                 e.key.DISCOUNT = Number(e.key.PRICE * e.key.QUANTITY).rateInc(e.data.DISCOUNT_RATE,4)
                                                 e.key.DISCOUNT_1 = Number(e.key.PRICE * e.key.QUANTITY).rateInc( e.data.DISCOUNT_RATE,4)
                                                 e.key.DISCOUNT_2 = 0
@@ -2338,7 +2337,6 @@ export default class salesInvoice extends DocBase
                                                     }
                                                     App.instance.setState({isExecute:true})
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                    console.log(tmpData)
                                                     App.instance.setState({isExecute:false})
                                                     let tmpQuery2 = 
                                                     { 
@@ -2348,7 +2346,6 @@ export default class salesInvoice extends DocBase
                                                     }
                                                     let tmpData2 = await this.core.sql.execute(tmpQuery2) 
                                                     let tmpObj = {data1:tmpData.result.recordset,data2:tmpData2.result.recordset}
-                                                    console.log(JSON.stringify(tmpData.result.recordset)) // BAK
                                                     this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",async(pResult) => 
                                                     {
                                                         if(pResult.split('|')[0] != 'ERR')

@@ -291,6 +291,7 @@ export const langTr =
         pos_02_011 : "Ürün Karşılaştırma Raporu",
         pos_02_012 : "Pos Puan Kullanım Raporu",
         pos_02_013 : "Pos İndirim Raporu",
+        pos_02_014 : "Okunmamış Terazi Fişleri",
         pos_03 :"Operasyonlar",
         pos_03_001 : "Gün Sonu",
         promo: "Promosyon",
@@ -16239,6 +16240,19 @@ export const langTr =
         {
             clmDocDate: "Tarih",
             clmDiscount: "İndirim Tutarı",
+        },
+    },
+    pos_02_014 : // "Okunmamış Terazi Fişleri Raporu"
+    {
+        btnGet :"Getir",
+        grdListe : 
+        {
+            clmCode: "Kodu",
+            clmName : "Adı",           
+            clmQuantity : "Miktar",
+            clmPrice : "Fiyat",
+            clmCDate : "Tarih",
+            clmTicketNo : "Fiş No",
         },
     },
     pos_03_001 : // "Gün Sonu",
