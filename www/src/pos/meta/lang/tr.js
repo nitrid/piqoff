@@ -786,4 +786,22 @@ export const langTr =
         msg : "Sunucu ile bağlantınız koptu.. ",
         btn01 : "Tamam"
     },
+    msgNotBarcodeWeighing: 
+    {
+        title : "Dikkat",
+        msg : "Tartılan ürün ile okutulan barkod toplam miktarı eşleşmedi !",
+        btn01 : "Tamam"
+    },
+    msgBarcodeWeighing: 
+    {
+        title : "Dikkat",
+        msg : "Okutulan satır : {0} - Toplam tutar : {1}",
+        btn01 : "Tamam"
+    },
+    msgTSENotFound: 
+    {
+        title : "Dikkat",
+        msg : "TSE cihazı ile iletişim kurulamadı !",
+        btn01 : "Tamam"
+    },
 }

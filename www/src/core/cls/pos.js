@@ -1372,7 +1372,11 @@ export class posDeviceCls
                     await core.instance.util.waitUntil(500)
                     resolve()
                 })
-            }catch(err){}
+            }
+            catch(err)
+            {
+                resolve()
+            }
         });
     }
     async cardPayment(pAmount)
@@ -1423,6 +1427,7 @@ export class posDeviceCls
         }
         return new Promise(async (resolve) =>
         {
+            await this.core.util.waitUntil(100);
             this.core.util.writeLog("signal : 1")
             if(this.payPort == null || !this.payPort.isOpen)
             {
@@ -1438,50 +1443,54 @@ export class posDeviceCls
 
                 if((!ack && String.fromCharCode(6) == String.fromCharCode(data[0])) || String.fromCharCode(21) == String.fromCharCode(data[0]))
                 {   
-                        this.core.util.writeLog("signal : 4")
-                        let tmpData = 
-                        {
-                            'pos_number': '01',
-                            'amount_msg': ('0000000' + (pAmount * 100).toFixed(0)).substr(-8),
-                            'answer_flag': '0',
-                            'payment_mode': payMethod  == 'check' ? 'C' : '1',  
-                            'transaction_type': '0',
-                            'currency_numeric': 978, 
-                            'private': '          ',
-                            'delay': 'A010',
-                            'auto': 'B010'
-                        };
-                        
-                        let msg = Object.keys(tmpData).map( k => tmpData[k] ).join('');
-                        if (msg.length > 34) 
-                        {
-                            await this.payPort.close();
-                            resolve({tag:"response",msg:"error"});                 
-                            console.log('ERR. : failed data > 34 characters.', msg);
-                            return
-                        }
-                        let real_msg_with_etx = msg.toString().concat(String.fromCharCode(3));//ETX
-                        
-                        let lrc = generate_lrc(real_msg_with_etx);
-                        //STX + msg + lrc
-                        let tpe_msg = (String.fromCharCode(2)).concat(real_msg_with_etx).concat(String.fromCharCode(lrc));
-                        this.payPort.write(tpe_msg)
-                        ack = true
-                        
-                        this.core.util.writeLog("send data : " + tpe_msg)
+                    await this.core.util.waitUntil(100);
+                    this.core.util.writeLog("signal : 4")
+                    let tmpData = 
+                    {
+                        'pos_number': '01',
+                        'amount_msg': ('0000000' + (pAmount * 100).toFixed(0)).substr(-8),
+                        'answer_flag': '0',
+                        'payment_mode': payMethod  == 'check' ? 'C' : '1',  
+                        'transaction_type': '0',
+                        'currency_numeric': 978, 
+                        'private': '          ',
+                        'delay': 'A010',
+                        'auto': 'B010'
+                    };
+                    
+                    let msg = Object.keys(tmpData).map( k => tmpData[k] ).join('');
+                    if (msg.length > 34) 
+                    {
+                        await this.payPort.close();
+                        resolve({tag:"response",msg:"error"});                 
+                        console.log('ERR. : failed data > 34 characters.', msg);
+                        return
+                    }
+                    let real_msg_with_etx = msg.toString().concat(String.fromCharCode(3));//ETX
+                    
+                    let lrc = generate_lrc(real_msg_with_etx);
+                    //STX + msg + lrc
+                    let tpe_msg = (String.fromCharCode(2)).concat(real_msg_with_etx).concat(String.fromCharCode(lrc));
+                    this.payPort.write(tpe_msg)
+                    ack = true
+                    
+                    this.core.util.writeLog("send data : " + tpe_msg)
                 }
                 else if(ack && String.fromCharCode(6) == String.fromCharCode(data[0]))
                 {
+                    await this.core.util.waitUntil(100);
                     this.core.util.writeLog("send eot")
                     this.payPort.write(String.fromCharCode(4))
                 }
                 else if(String.fromCharCode(5) == String.fromCharCode(data[0]))
                 {
+                    await this.core.util.waitUntil(100);
                     this.core.util.writeLog("send ack")
                     this.payPort.write(String.fromCharCode(6))
                 }                
                 else if(data.length >= 25)
                 {
+                    await this.core.util.waitUntil(100);
                     let str = "";
                     if(String.fromCharCode(data[0]) == String.fromCharCode(2))
                     {
@@ -1514,6 +1523,7 @@ export class posDeviceCls
                 }
                 else if(checkSum(4,data))
                 {
+                    await this.core.util.waitUntil(100);
                     this.core.util.writeLog("signal : 8")
                     if(this.payPort.isOpen)
                     {
@@ -2234,8 +2244,28 @@ export class posUsbTSECls
         this.deviceStatus = undefined;
         this.deviceId = "";
         this.status = false;
-        this.lastTransaction = undefined
+        this.lastTransaction = undefined;
+        this.listeners = Object();
     }
+    //#region  "EVENT"
+    on(pEvt, pCallback) 
+    {
+        if (!this.listeners.hasOwnProperty(pEvt))
+            this.listeners[pEvt] = Array();
+            this.listeners[pEvt].push(pCallback); 
+    }
+    emit(pEvt, pParams)
+    {
+        if (pEvt in this.listeners) 
+        {
+            let callbacks = this.listeners[pEvt];
+            for (var x in callbacks)
+            {
+                callbacks[x](pParams);
+            }
+        } 
+    }
+    //#endregion
     init()
     {
         this.ws = new WebSocket("ws://127.0.0.1:10001")
@@ -2251,16 +2281,17 @@ export class posUsbTSECls
             this.deviceData = await this.command('{"Command":"GetDeviceData","Name":"SerialNumber"}')
             this.deviceStatus = await this.command('{"Command":"GetDeviceStatus"}')
             
-            if(typeof this.deviceStatus != 'undefined' && this.deviceStatus.Status == "ok" && this.deviceStatus.MFC.FiscalMode)
+            if(typeof this.deviceStatus != 'undefined' && typeof this.deviceInfo != 'undefined' && this.deviceStatus.Status == "ok" && this.deviceInfo.Status == "ok" && this.deviceStatus.MFC.FiscalMode)
             {
                 this.status = true
+                this.emit('status',this.status)
+                console.log("TSE Connected")
             }
             else
             {
                 this.status = false
+                this.emit('status',this.status)
             }
-            
-            console.log("TSE Connected")
         }
         this.ws.onerror = ()=>
         {
@@ -2270,6 +2301,7 @@ export class posUsbTSECls
             this.deviceData = undefined;
             this.deviceStatus = undefined;
             this.status = false
+            this.emit('status',this.status)
             console.log("TSE Connect Error")
         }
         this.ws.onclose = ()=>
@@ -2281,6 +2313,7 @@ export class posUsbTSECls
             this.deviceStatus = undefined;
             this.status = false
             console.log("TSE Connect Closed")
+            this.emit('status',this.status)
         }
     }
     async event(pObj)
@@ -2293,15 +2326,18 @@ export class posUsbTSECls
                 if(typeof this.deviceStatus != 'undefined' && this.deviceStatus.Status == "ok" && this.deviceStatus.MFC.FiscalMode)
                 {
                     this.status = true
+                    this.emit('status',this.status)
                 }
                 else
                 {
                     this.status = false
+                    this.emit('status',this.status)
                 }
             }
             else if(pObj.DeviceStatus == 'error')
             {
                 this.status = false
+                this.emit('status',this.status)
             }
         }    
     }

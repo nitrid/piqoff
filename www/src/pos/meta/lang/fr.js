@@ -786,4 +786,10 @@ export const langFr =
         msg : "La connexion avec le serveur est interrompu ", 
         btn01 : "D'accord"  
     },
+    msgNotBarcodeWeighing: //BAK
+    {
+        title: "Attention",
+        msg: "La quantité totale du produit pesé ne correspond pas au code-barres lu !",
+        btn01: "D'accord"
+    }
 }

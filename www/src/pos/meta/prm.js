@@ -34,7 +34,7 @@ export const prm =
         ID :"BarcodePattern",
         VALUE : 
         [
-            '20NNNNMMMCCF',
+            '20XXXXXMMMCCF',
             '21NNNNNMMMCCF',
             '29NNNNMMMCCF',
             '29NNNNNMMMCCF',
@@ -1116,7 +1116,7 @@ export const prm =
     {
         TYPE : 0,
         ID :"TSEUsb",
-        VALUE : false,
+        VALUE : true,
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "",
@@ -1126,6 +1126,38 @@ export const prm =
             TYPE : "checkbox",
             PAGE_NAME : "Pos",
             CAPTION : "TSE Usb"
+        }
+    },
+    //Terazi Barkod Kontrolü
+    {
+        TYPE : 0,
+        ID :"ScaleBarcodeControl",
+        VALUE : 
+        {
+            active : true,
+            tolerans : 0.030
+        },
+        SPECIAL : "",
+        PAGE : "pos",
+        ELEMENT : "",
+        APP : "POS",
+        VIEW : 
+        {
+            TYPE : "popInput",
+            PAGE_NAME : "Pos",
+            CAPTION : "Terazi Barkod Kontrolü",
+            DISPLAY : "disable",
+            FORM: 
+            {
+                width:"400",
+                height:"180",
+                colCount:1,
+                item:
+                [
+                    {type:"checkbox",caption:"Aktif",field:"active",id:"chkPopScaleBarcodeControlActive"},
+                    {type:"text",caption:"Tolerans",field:"tolerans",id:"txtPopScaleBarcodeControlTolerans"},
+                ]
+            }
         }
     },
     //#endregion
