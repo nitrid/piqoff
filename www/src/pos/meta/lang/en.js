@@ -298,6 +298,15 @@ export const langEn =
     popLastSaleList : 
     {
         title :"Last Sales List",
+        cmbPopLastSalePayType : 
+        {
+            optionAll : "All",
+            optionEspece : "Espece",
+            optionTPE : "Carte Bancaire TPE",
+            optionCheque1 : "Cheque",
+            optionCheque2 : "CHEQue",
+            optionAvoir : "Bon D'Avoir"
+        }
     },
     txtPopLastRefPholder : "Please scan the barcode on the ticket...",
     popLastTotal :  

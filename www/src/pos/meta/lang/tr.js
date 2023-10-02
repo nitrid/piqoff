@@ -298,6 +298,15 @@ export const langTr =
     popLastSaleList : 
     {
         title : "Son Satış Listesi",
+        cmbPopLastSalePayType : 
+        {
+            optionAll : "Tümü",
+            optionEspece : "Espece",
+            optionTPE : "Carte Bancaire TPE",
+            optionCheque1 : "Cheque",
+            optionCheque2 : "CHEQue",
+            optionAvoir : "Bon D'Avoir"
+        }
     },
     txtPopLastRefPholder : "Lütfen ticket üzerindeki barkodu okutunuz...",
     popLastTotal : 

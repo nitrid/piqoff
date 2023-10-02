@@ -4320,13 +4320,13 @@ export default class posDoc extends React.PureComponent
                                         <NbButton id={"btnSubtotal"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}
                                         onClick={async()=>
                                         {
-                                            // let tmpData = this.posObj.posSale.dt().where({SUBTOTAL:0})
-                                            // let tmpMaxSub = this.posObj.posSale.dt().where({SUBTOTAL:{'<>':-1}}).max('SUBTOTAL') + 1
-                                            // for (let i = 0; i < tmpData.length; i++) 
-                                            // {
-                                            //     tmpData[i].SUBTOTAL = tmpMaxSub
-                                            // }
-                                            // this.calcGrandTotal()
+                                            let tmpData = this.posObj.posSale.dt().where({SUBTOTAL:0})
+                                            let tmpMaxSub = this.posObj.posSale.dt().where({SUBTOTAL:{'<>':-1}}).max('SUBTOTAL') + 1
+                                            for (let i = 0; i < tmpData.length; i++) 
+                                            {
+                                                tmpData[i].SUBTOTAL = tmpMaxSub
+                                            }
+                                            this.calcGrandTotal()
                                         }}>
                                             <i className="text-white fa-solid fa-square-root-variable" style={{fontSize: "24px"}} />
                                         </NbButton>
@@ -6160,7 +6160,15 @@ export default class posDoc extends React.PureComponent
                             {/* cmbPopLastSalePayType */} 
                             <div className="col-2">
                                 <NdSelectBox simple={true} parent={this} id="cmbPopLastSalePayType" displayExpr={'NAME'} valueExpr={'ID'} value={-1}
-                                data={{source:[{ID:-1,NAME:"Tümü"},{ID:0,NAME:"Espece"},{ID:1,NAME:"Carte Bancaire TPE"},{ID:2,NAME:"Cheque"},{ID:3,NAME:"CHEQue"},{ID:4,NAME:"Bon D'Avoir"}]}}/>
+                                data={{source : 
+                                [
+                                    {ID:-1,NAME:this.lang.t("popLastSaleList.cmbPopLastSalePayType.optionAll")},
+                                    {ID:0,NAME:this.lang.t("popLastSaleList.cmbPopLastSalePayType.optionEspece")},
+                                    {ID:1,NAME:this.lang.t("popLastSaleList.cmbPopLastSalePayType.optionTPE")},
+                                    {ID:2,NAME:this.lang.t("popLastSaleList.cmbPopLastSalePayType.optionCheque1")},
+                                    {ID:3,NAME:this.lang.t("popLastSaleList.cmbPopLastSalePayType.optionCheque2")},
+                                    {ID:4,NAME:this.lang.t("popLastSaleList.cmbPopLastSalePayType.optionAvoir")}
+                                ]}}/>
                             </div>
                             {/* cmbPopLastSaleUser */} 
                             <div className="col-2">
