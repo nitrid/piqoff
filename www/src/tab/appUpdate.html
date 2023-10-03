@@ -49,10 +49,17 @@
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <div class="d-grid">
-                                <button class="btn btn-primary" onclick="BtnKaydet()">Update</button>
+                            <div class="col-6">
+                                <div class="d-grid">
+                                    <button class="btn btn-primary" onclick="BtnKaydet()">Update</button>
+                                </div>
                             </div>
-                        </div>                      
+                            <div class="col-6">
+                                <div class="d-grid">
+                                    <button class="btn btn-primary" onclick="BtnExit()">Exit</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>           
                 </div>
             </div>
@@ -174,6 +181,10 @@
                         localStorage.setItem("app",document.getElementById('app').value)
                     }
                 });
+            }
+            function BtnExit()
+            {
+                window.location = "index.html"
             }
         </script>
     </body>
