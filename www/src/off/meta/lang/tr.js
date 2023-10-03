@@ -4480,7 +4480,13 @@ export const langTr =
             title : "Taşıyıcı Kodları",
             clmCode : "KODU",
             clmName : "ADI"
-        }
+        },
+        msgCustomerLock:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !"
+        },
     },
     ftr_02_002 : // "Satış Faturası"
     {
@@ -5024,6 +5030,12 @@ export const langTr =
             interfel : "Interfel",
             calculateInterfel : "Interfeli Hesapla",
         },
+        msgCustomerLock:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !"
+        },
     },
     ftr_02_003 : // "İade Faturası"
     {
@@ -5492,6 +5504,12 @@ export const langTr =
             btn01: "Tamam",
             msg: "Evrak Kilitlenmeden Yazdırılamaz !"
         },
+        msgCustomerLock:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !"
+        },
     },
     ftr_02_004 : // "Fiyat Farkı Faturası"
     {
@@ -5929,6 +5947,12 @@ export const langTr =
             title: "Dikkat",
             btn01: "Tamam",
             msg: "Evrak Kilitlenmeden Yazdırılamaz !"
+        },
+        msgCustomerLock:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !"
         },
     },
     ftr_02_005 : // "Şube Satış Faturası"
@@ -6402,6 +6426,12 @@ export const langTr =
             btn01: "Tamam",
             msg: "Evrak Kilitlenmeden Yazdırılamaz !"
         },
+        msgCustomerLock:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !"
+        },
     },
     ftr_02_006 : // "Fiyat Farkı Alış Faturası"
     {
@@ -6816,6 +6846,12 @@ export const langTr =
             msg: "Listede Ürünler Var! "
         },
         tagItemCodePlaceholder: "Lütfen Eklemek İstediğiniz Kodları Giriniz",
+        msgCustomerLock:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !"
+        },
     },
     ftr_02_007 : // "İade Alış Faturası"
     {
@@ -7274,6 +7310,12 @@ export const langTr =
             btn01: "Tamam",
             msgSuccess: "Mail gönderimi başarılı !",
             msgFailed: "Mail gönderimi başarısız !"
+        },
+        msgCustomerLock:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !"
         },
     },
     ftr_02_008 : // "Şube Alış Faturası"
@@ -7755,6 +7797,12 @@ export const langTr =
             clmCode : "Kod",
             clmName : "Adı"
         },
+        msgCustomerLock:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !"
+        },
     },
     ftr_02_009 : // "Fire ALış Faturası"
     {
@@ -8214,6 +8262,12 @@ export const langTr =
             msgSuccess: "Mail gönderimi başarılı !",
             msgFailed: "Mail gönderimi başarısız !"
         },
+        msgCustomerLock:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !"
+        },
     },
     ftr_04_001 : // "Proforma Fiyat Farkı Faturası"
     {
@@ -8561,6 +8615,12 @@ export const langTr =
             title : "Hizmetler",
             clmCode : "Kod",
             clmName : "Adı"
+        },
+        msgCustomerLock:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !"
         },
     },
     ftr_04_002 : // "Proforma Satış Faturası"
@@ -8990,6 +9050,12 @@ export const langTr =
             title : "Hizmetler",
             clmCode : "Kod",
             clmName : "Adı"
+        },
+        msgCustomerLock:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !"
         },
     },
     ftr_04_003 : // "Proforma Alış Faturası"
@@ -9497,6 +9563,12 @@ export const langTr =
             clmTotal : "Tutar",
             clmPrice : "Fiyat",
         },
+        msgCustomerLock:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !"
+        },
     },
     ftr_04_004 : // "Proforma İade Faturası"
     {
@@ -9857,6 +9929,12 @@ export const langTr =
             title : "Hizmetler",
             clmCode : "Kod",
             clmName : "Adı"
+        },
+        msgCustomerLock:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !"
         },
     },
     ftr_04_005 : // "Şube Satış Faturası"
@@ -10274,6 +10352,12 @@ export const langTr =
             title : "Hizmetler",
             clmCode : "Kod",
             clmName : "Adı"
+        },
+        msgCustomerLock:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !"
         },
     },
     promo_01_001: //  "Promosyon Tanımları"
@@ -11050,7 +11134,13 @@ export const langTr =
             btn01 : "Evet",
             btn02 : "Hayır",
             title : "Dikkat"
-        }
+        },
+        msgCustomerLock:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !"
+        },
     },
     irs_02_002 : // Satış İrsaliyesi"
     {
@@ -11465,6 +11555,12 @@ export const langTr =
             quantity2: "2. Birim Toplamı ",
             margin : "Marj"
         },
+        msgCustomerLock:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !"
+        },
     },
     irs_02_003 : // "İade İrsaliyesi"
     {
@@ -11803,6 +11899,12 @@ export const langTr =
         txtDiscountPer1 : "1. İndirim Oranı",
         txtDiscountPer2 : "2. İndirim Oranı",
         txtDiscountPer3 : "3. İndirim Oranı",
+        msgCustomerLock:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !"
+        },
     },
     irs_02_004 : // Şube Satış İrsaliyesi"
     {
@@ -12192,6 +12294,12 @@ export const langTr =
         txtDiscountPer1 : "1. İndirim Oranı",
         txtDiscountPer2 : "2. İndirim Oranı",
         txtDiscountPer3 : "3. İndirim Oranı",
+        msgCustomerLock:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !"
+        },
     },
     irs_02_005 : // "İade Alış İrsaliyesi"
     {
@@ -12511,6 +12619,12 @@ export const langTr =
         txtDiscountPer1 : "1. İndirim Oranı",
         txtDiscountPer2 : "2. İndirim Oranı",
         txtDiscountPer3 : "3. İndirim Oranı",
+        msgCustomerLock:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !"
+        },
     },
     irs_02_006 : // Şube Alış İrsaliyesi"
     {
@@ -12900,6 +13014,12 @@ export const langTr =
         txtDiscountPer1 : "1. İndirim Oranı",
         txtDiscountPer2 : "2. İndirim Oranı",
         txtDiscountPer3 : "3. İndirim Oranı",
+        msgCustomerLock:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !"
+        },
     },
     sip_01_001 : // "Alış Sipariş Listesi"
     {
@@ -13334,6 +13454,12 @@ export const langTr =
         txtDiscountPer2 : "2. İndirim Oranı",
         txtDiscountPer3 : "3. İndirim Oranı",
         txtTotalHt : "İndirimli Tutar",
+        msgCustomerLock:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !"
+        },
     },
     sip_02_002 : // "Satış Sipariş"
     {
@@ -13721,6 +13847,12 @@ export const langTr =
             quantity2: "2. Birim Toplamı ",
             margin : "Marj"
         },
+        msgCustomerLock:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !"
+        },
     },
     sip_02_003 : // "Pos Satış Sipariş"
     {
@@ -14107,6 +14239,12 @@ export const langTr =
             quantity: "Toplam Miktar",
             quantity2: "2. Birim Toplamı ",
             margin : "Marj"
+        },
+        msgCustomerLock:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !"
         },
     },
     sip_04_001 : // "Sipariş Ayrıştırma" 
