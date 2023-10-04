@@ -820,7 +820,7 @@ export default class itemCard extends React.PureComponent
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnBack" parent={this} icon="revert" type="default"
-                                    onClick={()=>
+                                    onClick={async()=>
                                     {
                                         if(this.prevCode != '')
                                         {
