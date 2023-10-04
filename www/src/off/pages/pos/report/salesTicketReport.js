@@ -154,13 +154,12 @@ export default class salesOrdList extends React.PureComponent
         App.instance.setState({isExecute:true})
         await this.grdSaleTicketReport.dataRefresh(tmpSource)
         App.instance.setState({isExecute:false})
-
     }
     async btnGetDetail(pGuid)
     {
         this.lastPosSaleDt.selectCmd = 
         {
-            query :  "SELECT * FROM POS_SALE_VW_01  WHERE POS_GUID = @POS_GUID ",
+            query :  "SELECT CONVERT(NVARCHAR,CDATE,108) AS TIME,* FROM POS_SALE_VW_01  WHERE POS_GUID = @POS_GUID ",
             param : ['POS_GUID:string|50'],
             value : [pGuid]
         }
@@ -832,6 +831,7 @@ export default class salesOrdList extends React.PureComponent
                                     <Paging defaultPageSize={20} />
                                     <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
                                     <Export fileName={this.lang.t("menu.pos_02_001")} enabled={true} allowExportSelectedData={true} />
+                                    <Column dataField="TIME" caption={this.t("grdSaleTicketItems.clmTime")} visible={true} width={150}/> 
                                     <Column dataField="BARCODE" caption={this.t("grdSaleTicketItems.clmBarcode")} visible={true} width={150}/> 
                                     <Column dataField="ITEM_NAME" caption={this.t("grdSaleTicketItems.clmName")} visible={true} width={250}/> 
                                     <Column dataField="QUANTITY" caption={this.t("grdSaleTicketItems.clmQuantity")} visible={true} width={100}/> 

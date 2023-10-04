@@ -290,7 +290,7 @@ export const langFr =
         pos_02_011 : "Rapport de comparaison de produit",
         pos_02_012 : "Pos Puan Kullanım Raporu",  // BAK
         pos_02_013 : "Pos İndirim Raporu",  // BAK
-        pos_02_014 : "Okunmamış Terazi Fişleri", //BAK
+        pos_02_014 : "Okunmamış Terazi Fişleri", // BAK
         pos_03 : "Les opérations", 
         pos_03_001 : "Opérations de fin de journée",
         promo: "Promotion",
@@ -4476,7 +4476,13 @@ export const langFr =
             title : "Codes transporteurs",  
             clmCode : "Code",  
             clmName : "Nom" 
-        }
+        },
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+        },
     },
     ftr_02_002 : // "Facture de vente"
     {
@@ -5020,7 +5026,13 @@ export const langFr =
             title : "Supplément",  
             interfel : "Interfel", 
             calculateInterfel : "Calcul de l'interfel",
-        }
+        },
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+        },
     },
     ftr_02_003 : // "İade Faturası"
     {
@@ -5496,6 +5508,12 @@ export const langFr =
             btn01: "OK",   
             msg: "Le document ne peut pas être imprimé sans être verouillé!"  
         },
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+        },
     },
     ftr_02_004 : // "Fiyat Farkı Faturası"
     {
@@ -5940,6 +5958,12 @@ export const langFr =
             title: "Attention",  
             btn01: "OK",   
             msg: "Le document ne peut pas être imprimé sans être verouillé !" 
+        },
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
         },
     },
     ftr_02_005 : // "Şube Satış Faturası"
@@ -6420,6 +6444,12 @@ export const langFr =
             btn01: "OK",  
             msg: "Le document ne peut pas être imprimé sans être vérouillé !"  
         },
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+        },
     },
     ftr_02_006 : // "Fiyat Farkı Alış Faturası"
     {
@@ -6834,6 +6864,12 @@ export const langFr =
             msg: "Produits Présents dans la Liste! "
         },
         tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+        },
     },
     ftr_02_007 : // "İade Alış Faturası"
     {
@@ -7292,6 +7328,12 @@ export const langFr =
             btn01: "OK",   
             msgSuccess: "Mail envoyé avec succès !",   
             msgFailed: "Echec envoie mail  !"   
+        },
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
         },
     },
     ftr_02_008 : // "Şube Alış Faturası"
@@ -7766,6 +7808,12 @@ export const langFr =
             clmCode : "Code",   
             clmName : "Nom"   
         },
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+        },
     },
     ftr_02_009 : // "Fire Alış Faturası"
     {
@@ -8225,6 +8273,12 @@ export const langFr =
             msgSuccess: "Mail envoyé avec succès !",   
             msgFailed: "Echec envoie mail  !"   
         },
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+        },
     },
     ftr_04_001 : // "Proforma Fiyat Farkı Faturası" 
     {
@@ -8572,6 +8626,12 @@ export const langFr =
             title : "Prestations de service",   
             clmCode : "Code",   
             clmName : "Nom"   
+        },
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
         },
     },
     ftr_04_002 : // "Proforma Satış Faturası" 
@@ -9001,6 +9061,12 @@ export const langFr =
             title : "Prestations de service",   
             clmCode : "Code",   
             clmName : "Nom"   
+        },
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
         },
     },    
     ftr_04_003 : // "Proforma Alış Faturası"
@@ -9515,6 +9581,12 @@ export const langFr =
             clmCode : "Code",   
             clmName : "Nom"   
         },
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+        },
     },
     ftr_04_004 : // "Proforma İade Faturası"
     {
@@ -9876,6 +9948,12 @@ export const langFr =
             title : "Prestations de service",   
             clmCode : "Code",   
             clmName : "Nom"   
+        },
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
         },
     },
     ftr_04_005 : // "Şube Satış Faturası"
@@ -10294,6 +10372,12 @@ export const langFr =
             title : "Prestations de service",   
             clmCode : "Code",   
             clmName : "Nom"   
+        },
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
         },
     },
     promo_01_001: //  "Promosyon Tanımları"
@@ -11039,6 +11123,12 @@ export const langFr =
             btn02 : "Non", 
             title : "Attention" 
         },
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+        },
     },
     irs_02_002 : // Satış İrsaliyesi"
     {
@@ -11453,6 +11543,12 @@ export const langFr =
             quantity2: "Total 2eme Unit ",
             margin: "Marge"
         },
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+        },
     },
     irs_02_003 : // "İade İrsaliyesi"
     {
@@ -11791,6 +11887,12 @@ export const langFr =
         txtDiscountPer1 : "1. Remise % ", 
         txtDiscountPer2 : "2. Remise % ", 
         txtDiscountPer3 : "3. Remise % ", 
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+        },
     },
     irs_02_004 : // Şube Satış İrsaliyesi"
     {
@@ -12179,6 +12281,12 @@ export const langFr =
         txtDiscountPer1 : "1. Remise % ",  
         txtDiscountPer2 : "2. Remise % ",  
         txtDiscountPer3 : "3. Remise % ",  
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+        },
     },
     irs_02_005 : // "İade Alış İrsaliyesi"
     {
@@ -12498,6 +12606,12 @@ export const langFr =
         txtDiscountPer1 : "1. Remise % ", 
         txtDiscountPer2 : "2. Remise % ", 
         txtDiscountPer3 : "3. Remise % ",  
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+        },
     },
     irs_02_006 : // Şube Alış İrsaliyesi"
     {
@@ -12886,6 +13000,12 @@ export const langFr =
         txtDiscountPer1 : "1. Remise % ", 
         txtDiscountPer2 : "2. Remise % ", 
         txtDiscountPer3 : "3. Remise % ", 
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+        },
     },
     sip_01_001 : // "Alış Sipariş Listesi"
     {
@@ -13318,6 +13438,12 @@ export const langFr =
         txtDiscountPer1 : "1. Remise % ",  
         txtDiscountPer2 : "2. Remise % ",  
         txtDiscountPer3 : "3. Remise % ", 
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+        },
     },
     sip_02_002 : // "Satış Sipariş"
     {
@@ -13706,6 +13832,12 @@ export const langFr =
             quantity2: "Total 2eme Unit ",
             margin: "Marge"
         },
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+        },
     },
     sip_02_003 : // "Pos Satış Sipariş"
     {
@@ -14093,6 +14225,12 @@ export const langFr =
             quantity: "Quantité Totale",
             quantity2: "Total 2eme Unit ",
             margin: "Marge"
+        },
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
         },
     },
     sip_04_001 : // "Sipariş Ayrıştırma"
@@ -15909,6 +16047,8 @@ export const langFr =
             clmDate: "Date",
             clmTicketId: "Ticket No",
             clmDescription: "Motif",
+            clmTime: "Saat", // BAK
+            clmTotal: "Tutar", // BAK
         },
         pg_txtItem:
         {
@@ -15925,6 +16065,7 @@ export const langFr =
             clmTotal : "Total",
             clmLastData : "Premier prix",
             clmDescription : "Motif",
+            clmTime: "Saat", // BAK
         },
         grdSaleTicketPays : 
         {
