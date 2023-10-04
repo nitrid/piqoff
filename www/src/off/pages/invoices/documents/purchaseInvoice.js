@@ -998,9 +998,9 @@ export default class purchaseInvoice extends DocBase
                 param : ['VALUE:string|50'],
                 value : [pdata[i][tmpShema.CODE]]
             }
-            console.log(pdata[i][tmpShema.CODE])
+            App.instance.setState({isExecute:true})
             let tmpData = await this.core.sql.execute(tmpQuery) 
-            console.log(tmpData.result.recordset)
+            App.instance.setState({isExecute:false})
             if(tmpData.result.recordset.length > 0)
             {
                 await this.core.util.waitUntil(100)

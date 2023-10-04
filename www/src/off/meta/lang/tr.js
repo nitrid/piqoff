@@ -15932,7 +15932,8 @@ export const langTr =
             clmName : "Ürün Adı",
             clmQuantity : "Adet",
             clmPrice : "Fiyat",
-            clmTotal : "Tutar"
+            clmTotal : "Tutar",
+            clmTime : "Saat"
         },
         grdSaleTicketPays : 
         {
@@ -16126,6 +16127,8 @@ export const langTr =
             clmDate: "Tarih",
             clmTicketId: "Fiş I.D",
             clmDescription: "Açıklama",
+            clmTime: "Saat",
+            clmTotal: "Tutar",
         },
         pg_txtItem:
         {
@@ -16142,6 +16145,7 @@ export const langTr =
             clmTotal : "Tutar",
             clmLastData : "İlk Fiyat",
             clmDescription : "Açıklama",
+            clmTime: "Saat",
         },
         grdSaleTicketPays : 
         {
