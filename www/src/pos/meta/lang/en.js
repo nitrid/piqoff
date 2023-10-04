@@ -791,5 +791,17 @@ export const langEn =
         title: "Attention",
         msg: "The total quantity of the weighed product does not match the scanned barcode!",
         btn01: "OK"
+    },
+    msgBarcodeWeighing:
+    {
+        title: "Attention",
+        msg: "Scanned line: {0} - Total amount: {1}",
+        btn01: "OK"
+    },
+    msgTSENotFound:
+    {
+        title: "Attention",
+        msg: "Communication with the TSE device could not be established!",
+        btn01: "OK"
     }
 }

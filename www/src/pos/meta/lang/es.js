@@ -791,5 +791,17 @@ export const langEs =
         title: "Atención",
         msg: "La cantidad total del producto pesado no coincide con el código de barras escaneado.",
         btn01: "Aceptar"
+    },
+    msgBarcodeWeighing:
+    {
+        title: "Atención",
+        msg: "Línea escaneada: {0} - Monto total: {1}",
+        btn01: "Aceptar"
+    },
+    msgTSENotFound:
+    {
+        title: "Atención",
+        msg: "¡No se pudo establecer comunicación con el dispositivo TSE!",
+        btn01: "Aceptar"
     }
 }
