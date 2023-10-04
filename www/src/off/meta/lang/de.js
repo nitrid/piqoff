@@ -262,6 +262,7 @@ export const langDe =
         fns_04: "Berichte",
         fns_04_001: "Bankauszugsbericht",
         fns_04_002: "Kontosaldo-Bericht",
+        fns_04_003 : "Kasa Ekstre Raporu",
         fns_05: "Operationen",
         fns_05_001: "Masseneinzahlungseingabe",
         fns_05_002: "Massenzahlungseingabe",
@@ -15446,6 +15447,38 @@ export const langDe =
         validRefNo : "Nummer darf nicht leer sein",
         validAccount : "Bitte wählen Sie ein Konto aus",
         validDocDate : "Bitte wählen Sie ein Datum aus",
+    },
+    fns_04_001 : // "Banka Ekstre Raporu"
+    {
+        cmbBank : "Banka Seçimi",  // BAK
+        btnCheck : "Aktif",  // BAK
+        btnGet :"Getir",  // BAK
+        grdListe : 
+        {
+            clmOutputName : "Çıkış Hesabı",   // BAK
+            clmInputName : "Giriş Hesabı",   // BAK
+            clmAmount : "Tutar",    // BAK
+            clmDocDate : "Tarih",    // BAK
+            clmRef : "Seri",   // BAK
+            clmRefNo : "Sıra",    // BAK
+        },
+     
+    },
+    fns_04_003 : // "Kasa Ekstre Raporu"
+    {
+        cmbSafe : "Kasa Seçimi",  // BAK
+        btnCheck : "Aktif",  // BAK
+        btnGet :"Getir",  // BAK
+        grdListe : 
+        {
+            clmOutputName : "Çıkış Hesabı",   // BAK
+            clmInputName : "Giriş Hesabı",   // BAK
+            clmAmount : "Tutar",    // BAK
+            clmDocDate : "Tarih",    // BAK
+            clmRef : "Seri",   // BAK
+            clmRefNo : "Sıra",    // BAK
+        },
+     
     },
     fns_05_001 : //"Masseneinzugseingabe"
     {

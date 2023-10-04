@@ -270,6 +270,7 @@ export const langTr =
         fns_03_003 : "Hesaplar Arası Virman",
         fns_04 : "Raporlar",
         fns_04_001 : "Banka Ekstre Raporu",
+        fns_04_003 : "Kasa Ekstre Raporu",
         fns_04_002 : "Müşteri Bakiye Raporu",
         fns_05 : "Operasyonlar",
         fns_05_001 : "Toplu Tahsilat Girişi",
@@ -15492,6 +15493,38 @@ export const langTr =
         validRefNo : "Sıra Boş Geçilemez",
         validAccount : "Hesap Seçmelisiniz",
         validDocDate : "Tarih Seçmelisiniz",
+    },
+    fns_04_001 : // "Banka Ekstre Raporu"
+    {
+        cmbBank : "Banka Seçimi",
+        btnCheck : "Aktif",
+        btnGet :"Getir",
+        grdListe : 
+        {
+            clmOutputName : "Çıkış Hesabı",
+            clmInputName : "Giriş Hesabı",
+            clmAmount : "Tutar", 
+            clmDocDate : "Tarih", 
+            clmRef : "Seri",
+            clmRefNo : "Sıra", 
+        },
+     
+    },
+    fns_04_003 : // "Kasa Ekstre Raporu"
+    {
+        cmbSafe : "Kasa Seçimi",
+        btnCheck : "Aktif",
+        btnGet :"Getir",
+        grdListe : 
+        {
+            clmOutputName : "Çıkış Hesabı",
+            clmInputName : "Giriş Hesabı",
+            clmAmount : "Tutar", 
+            clmDocDate : "Tarih", 
+            clmRef : "Seri",
+            clmRefNo : "Sıra", 
+        },
+     
     },
     fns_05_001 : //"Toplu Tahsilat Girişi"
     {

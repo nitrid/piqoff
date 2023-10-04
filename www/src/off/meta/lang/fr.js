@@ -270,6 +270,7 @@ export const langFr =
         fns_04 : "Rapports",
         fns_04_001 : "Rapport sur les relevés bancaires",   
         fns_04_002 : "Rapport sur le solde actuel",  
+        fns_04_003 : "Kasa Ekstre Raporu",
         fns_05 : "Opérations", 
         fns_05_001 : "Saisie Multi Encaissement", 
         fns_05_002 : "Saisie Multi Paiement", 
@@ -15476,6 +15477,38 @@ export const langFr =
         validRefNo : "Saisir Réf No ",
         validAccount : "Sélectionner un Compte ",
         validDocDate : "Sélectionner Date" ,
+    },
+    fns_04_001 : // "Banka Ekstre Raporu"
+    {
+        cmbBank : "Banka Seçimi",  // BAK
+        btnCheck : "Aktif",  // BAK
+        btnGet :"Getir",  // BAK
+        grdListe : 
+        {
+            clmOutputName : "Çıkış Hesabı",   // BAK
+            clmInputName : "Giriş Hesabı",   // BAK
+            clmAmount : "Tutar",    // BAK
+            clmDocDate : "Tarih",    // BAK
+            clmRef : "Seri",   // BAK
+            clmRefNo : "Sıra",    // BAK
+        },
+     
+    },
+    fns_04_003 : // "Kasa Ekstre Raporu"
+    {
+        cmbSafe : "Kasa Seçimi",  // BAK
+        btnCheck : "Aktif",  // BAK
+        btnGet :"Getir",  // BAK
+        grdListe : 
+        {
+            clmOutputName : "Çıkış Hesabı",   // BAK
+            clmInputName : "Giriş Hesabı",   // BAK
+            clmAmount : "Tutar",    // BAK
+            clmDocDate : "Tarih",    // BAK
+            clmRef : "Seri",   // BAK
+            clmRefNo : "Sıra",    // BAK
+        },
+     
     },
     set_01_001 : // "Tax Sugar"
     {
