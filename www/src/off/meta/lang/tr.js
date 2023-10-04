@@ -174,6 +174,7 @@ export const langTr =
         stk_05_001 : "Depo Envanter Raporu",
         stk_05_002 : "Değişen Alış Fiyatları Raporu",
         stk_05_003 : "Sayım Envanter Raporu",
+        stk_05_004 : "Kayıp Ürün Raporu",
         cri: "Müşteri",
         cri_01: "Tanımlar",
         cri_02: "Listeler",
@@ -736,7 +737,14 @@ export const langTr =
             title : "Ürün Cinsi",   
             clmCode : "KODU",   
             clmName : "ADI"   
-        } 
+        },
+        msgNewItem:
+        {
+            title: "Dikkat",
+            btn01: "Evet",
+            btn02: "Vazgeç",
+            msg: "Yeni ürüne geçmek istediğinize eminmisiniz !"
+        },
     },
     stk_01_002:  //"Barkod Tanımları"
     {
@@ -2941,7 +2949,7 @@ export const langTr =
             clmNetMargin : "Net Marj",
         },
     },
-    stk_05_001 : // "Sayım Envanter Raporu"
+    stk_05_003 : // "Sayım Envanter Raporu"
     {
         chkZeroQuantity : "0 Miktarlar Gösterilsin",
         cmbDepot : "Depo",
@@ -2957,6 +2965,30 @@ export const langTr =
             clmTotalCost : "Envanter Değeri", 
             clmSalePrice : "Satış Fiyatı", 
             clmTotalPrice : "Toplam Satış Değeri" 
+        },
+        txtTotalQuantity : "Toplam Miktar",
+        txtTotalCost : "Envanter Değeri",
+        cmbDepot : "Depo"
+    },
+    stk_05_004 : // "Kayıp Ürün Raporu"
+    {
+        chkZeroQuantity : "0 Miktarlar Gösterilsin",
+        cmbDepot : "Depo",
+        btnCheck : "Aktif",
+        btnGet :"Getir",
+        grdListe : 
+        {
+            clmCode: "Kodu",
+            clmName : "Adı",           
+            clmQuantity : "Adet",
+            clmOutputCode : "Depo Kodu",
+            clmOutputName : "Depo Adı",
+            clmCostPrice : "Maliyet Fiyatı", 
+            clmTotalCost : "Toplam Maliyet", 
+            clmDocDate : "Tarih", 
+            clmRef : "Seri",
+            clmRefNo : "Sıra", 
+            clmDescription : "Açıklama"
         },
         txtTotalQuantity : "Toplam Miktar",
         txtTotalCost : "Envanter Değeri",
@@ -13777,7 +13809,8 @@ export const langTr =
             title : "Ürün Seçimi",
             clmCode :  "ÜRÜN KODU",
             clmName : "ÜRÜN ADI",
-            clmPrice : "SATIŞ FİYATI"
+            clmPrice : "SATIŞ FİYATI",
+            clmBarcode : "Barkod"
         },
         grdSlsOrder: 
         {

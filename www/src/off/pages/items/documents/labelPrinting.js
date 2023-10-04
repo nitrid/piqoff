@@ -1168,7 +1168,7 @@ export default class labelPrinting extends React.PureComponent
                                             "ITEMS.MAIN_GRP AS ITEM_GRP, " +
                                             "ITEMS.MAIN_GRP_NAME AS ITEM_GRP_NAME, " +
                                             "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS.GUID),'') AS CUSTOMER_NAME, " +
-                                            "(SELECT [dbo].[FN_PRICE_SALE](ITEMS.GUID,ITEM_BARCODE.UNIT_FACTOR,GETDATE(),'00000000-0000-0000-0000-000000000000')) * ISNULL(ITEM_BARCODE.UNIT_FACTOR,1) AS PRICE  ,  " +
+                                            "(SELECT [dbo].[FN_PRICE_SALE](ITEMS.GUID,ISNULL(ITEM_BARCODE.UNIT_FACTOR,1),GETDATE(),'00000000-0000-0000-0000-000000000000')) * ISNULL(ITEM_BARCODE.UNIT_FACTOR,1) AS PRICE  ,  " +
                                             "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 1 AND ITEM_UNIT.ITEM = ITEMS.GUID),0) AS UNDER_UNIT_VALUE, " +
                                             "ISNULL((SELECT TOP 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE TYPE = 1 AND ITEM_UNIT_VW_01.ITEM_GUID = ITEMS.GUID),0) AS UNDER_UNIT_SYMBOL " +
                                             "FROM ITEMS_VW_01 AS ITEMS LEFT OUTER  JOIN ITEM_BARCODE_VW_01 AS ITEM_BARCODE ON ITEMS.GUID = ITEM_BARCODE.ITEM_GUID  " +

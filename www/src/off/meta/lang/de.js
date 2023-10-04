@@ -167,6 +167,7 @@ export const langDe =
         stk_05_001: "Lagerinventarbericht",
         stk_05_002: "Bericht über sich ändernde Einkaufspreise",
         stk_05_003: "Bestandszählungsbericht",
+        stk_05_004 : "Kayıp Ürün Raporu", // BAK
         cri: "Kunden",
         cri_01: "Vorgänge",
         cri_02: "Listen",
@@ -727,7 +728,14 @@ export const langDe =
             title : "Ürün Cinsi",   // BAK
             clmCode : "KODU",   // BAK
             clmName : "ADI"   // BAK
-        } 
+        },
+        msgNewItem:
+        {
+            title: "Dikkat",   // BAK
+            btn01: "Evet",   // BAK
+            btn02: "Vazgeç",   // BAK
+            msg: "Yeni ürüne geçmek istediğinize eminmisiniz !"   // BAK
+        },
     },
     stk_01_002:  //"Barcode-Definitionen"
     {
@@ -2931,7 +2939,7 @@ export const langDe =
             clmNetMargin : "Nettomarge",
         },
     },
-    stk_05_001 : // Bestandsbericht
+    stk_05_003 : // Bestandsbericht
     {
         chkZeroQuantity : "Nullmengen anzeigen",
         cmbDepot : "Lager",
@@ -2951,6 +2959,30 @@ export const langDe =
         txtTotalQuantity : "Gesamtmenge",
         txtTotalCost : "Bestandswert",
         cmbDepot : "Lager"
+    },
+    stk_05_004 : // "Kayıp Ürün Raporu"
+    {
+        chkZeroQuantity : "0 Miktarlar Gösterilsin",  // BAK
+        cmbDepot : "Depo",  // BAK
+        btnCheck : "Aktif",  // BAK
+        btnGet :"Getir",  // BAK
+        grdListe : 
+        {
+            clmCode: "Kodu",  // BAK
+            clmName : "Adı",             // BAK
+            clmQuantity : "Adet",  // BAK
+            clmOutputCode : "Depo Kodu",  // BAK
+            clmOutputName : "Depo Adı",  // BAK
+            clmCostPrice : "Maliyet Fiyatı",   // BAK
+            clmTotalCost : "Toplam Maliyet",   // BAK
+            clmDocDate : "Tarih",   // BAK
+            clmRef : "Seri",  // BAK
+            clmRefNo : "Sıra",   // BAK
+            clmDescription : "Açıklama"  // BAK
+        },
+        txtTotalQuantity : "Toplam Miktar",  // BAK
+        txtTotalCost : "Envanter Değeri",  // BAK
+        cmbDepot : "Depo"  // BAK
     },
     cri_01_001: // Kundendefinitionen
     {
@@ -13733,7 +13765,8 @@ export const langDe =
           title : "Artikelauswahl",
           clmCode :  "ARTIKELNUMMER",
           clmName : "ARTIKELNAME",
-          clmPrice : "VERKAUFSPREIS"
+          clmPrice : "VERKAUFSPREIS",
+          clmBarcode : "BARCODE",
       },
       grdSlsOrder: 
       {

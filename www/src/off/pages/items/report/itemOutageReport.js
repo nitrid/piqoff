@@ -25,22 +25,25 @@ export default class rebateInvoiceReport extends React.PureComponent
 
         this.state = 
         {
-            columnListValue : ['ITEM_CODE','ITEM_NAME','OUTPUT_NAME','QUANTITY','TOTAL_COST']
+            columnListValue : ['OUTPUT_NAME','OUTPUT_NAME','REF','REF_NO','DOC_DATE','ITEM_CODE','ITEM_NAME','QUANTITY','TOTAL_COST','COST_PRICE','DESCRIPTION']
         }
         
         this.core = App.instance.core;
         this.columnListData = 
         [
-            {CODE : "DOC_DATE",NAME : this.t("grdListe.clmDate")},                                   
-            {CODE : "OUTPUT_CODE",NAME : this.t("grdListe.clmCode")},                                   
-            {CODE : "OUTPUT_NAME",NAME : this.t("grdListe.clmName")},
+            {CODE : "OUTPUT_CODE",NAME : this.t("grdListe.clmOutputCode")},                                   
+            {CODE : "OUTPUT_NAME",NAME : this.t("grdListe.clmOutputName")},                                   
             {CODE : "REF",NAME : this.t("grdListe.clmRef")},
-            {CODE : "AMOUNT",NAME : this.t("grdListe.clmAmount")},
-            {CODE : "DISCOUNT",NAME : this.t("grdListe.clmDiscount")},
-            {CODE : "TOTALHT",NAME : this.t("grdListe.clmTotalHt")},
-            {CODE : "VAT",NAME : this.t("grdListe.clmVat")},
-            {CODE : "TOTAL",NAME : this.t("grdListe.clmTotal")},
+            {CODE : "REF_NO",NAME : this.t("grdListe.clmRefNo")},
+            {CODE : "DOC_DATE",NAME : this.t("grdListe.clmDocDate")},
+            {CODE : "ITEM_CODE",NAME : this.t("grdListe.clmCode")},
+            {CODE : "ITEM_NAME",NAME : this.t("grdListe.clmName")},
+            {CODE : "QUANTITY",NAME : this.t("grdListe.clmQuantity")},
+            {CODE : "COST_PRICE",NAME : this.t("grdListe.clmCostPrice")},
+            {CODE : "TOTAL_COST",NAME : this.t("grdListe.clmTotalCost")},
+            {CODE : "DESCRIPTION",NAME : this.t("grdListe.clmDescription")},
         ]
+      
         this.groupList = [];
         this._btnGetirClick = this._btnGetirClick.bind(this)
         this._columnListBox = this._columnListBox.bind(this)
@@ -58,41 +61,49 @@ export default class rebateInvoiceReport extends React.PureComponent
             if (e.name == 'selectedItemKeys') 
             {
                 this.groupList = [];
-                if(typeof e.value.find(x => x == 'DOC_DATE') != 'undefined')
+                if(typeof e.value.find(x => x == 'OUTPUT_NAME') != 'undefined')
                 {
-                    this.groupList.push('DOC_DATE')
-                }
-                if(typeof e.value.find(x => x == 'OUTPUT_CODE') != 'undefined')
-                {
-                    this.groupList.push('OUTPUT_CODE')
+                    this.groupList.push('OUTPUT_NAME')
                 }
                 if(typeof e.value.find(x => x == 'OUTPUT_NAME') != 'undefined')
                 {
                     this.groupList.push('OUTPUT_NAME')
-                }                
+                }
                 if(typeof e.value.find(x => x == 'REF') != 'undefined')
                 {
                     this.groupList.push('REF')
-                }
-                if(typeof e.value.find(x => x == 'AMOUNT') != 'undefined')
+                }                
+                if(typeof e.value.find(x => x == 'REF_NO') != 'undefined')
                 {
-                    this.groupList.push('AMOUNT')
+                    this.groupList.push('REF_NO')
                 }
-                if(typeof e.value.find(x => x == 'DISCOUNT') != 'undefined')
+                if(typeof e.value.find(x => x == 'DOC_DATE') != 'undefined')
                 {
-                    this.groupList.push('DISCOUNT')
+                    this.groupList.push('DOC_DATE')
                 }
-                if(typeof e.value.find(x => x == 'TOTALHT') != 'undefined')
+                if(typeof e.value.find(x => x == 'ITEM_CODE') != 'undefined')
                 {
-                    this.groupList.push('TOTALHT')
+                    this.groupList.push('ITEM_CODE')
                 }
-                if(typeof e.value.find(x => x == 'VAT') != 'undefined')
+                if(typeof e.value.find(x => x == 'ITEM_NAME') != 'undefined')
                 {
-                    this.groupList.push('VAT')
+                    this.groupList.push('ITEM_NAME')
                 }
-                if(typeof e.value.find(x => x == 'TOTAL') != 'undefined')
+                if(typeof e.value.find(x => x == 'QUANTITY') != 'undefined')
                 {
-                    this.groupList.push('TOTAL')
+                    this.groupList.push('QUANTITY')
+                }
+                if(typeof e.value.find(x => x == 'TOTAL_COST') != 'undefined')
+                {
+                    this.groupList.push('TOTAL_COST')
+                }
+                if(typeof e.value.find(x => x == 'COST_PRICE') != 'undefined')
+                {
+                    this.groupList.push('COST_PRICE')
+                }
+                if(typeof e.value.find(x => x == 'DESCRIPTION') != 'undefined')
+                {
+                    this.groupList.push('DESCRIPTION')
                 }
                 
                 for (let i = 0; i < this.grdListe.devGrid.columnCount(); i++) 
@@ -139,7 +150,7 @@ export default class rebateInvoiceReport extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT DOC_DATE,OUTPUT_CODE,OUTPUT_NAME,REF +'-'+ CONVERT(NVARCHAR,REF_NO) AS REF,AMOUNT,DISCOUNT,TOTALHT,VAT,TOTAL FROM DOC_VW_01 WHERE TYPE = 0 AND DOC_TYPE = 20 AND REBATE = 1 AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE ORDER BY DOC_DATE" ,
+                    query : "SELECT * FROM DOC_ITEMS_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 1 AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE ORDER BY DOC_DATE" ,
                     param : ['FIRST_DATE:date','LAST_DATE:date'],
                     value : [this.dtDate.startDate,this.dtDate.endDate]
                 },
@@ -232,7 +243,7 @@ export default class rebateInvoiceReport extends React.PureComponent
                                 <Paging defaultPageSize={20} />
                                 <Pager visible={true} allowedPageSizes={[5,10,20,50]} showPageSizeSelector={true} />
                                 <Export fileName={this.lang.t("menuOff.slsRpt_01_003")} enabled={true} allowExportSelectedData={true} />
-                                <Column dataField="DOC_DATE" caption={this.t("grdListe.clmDate")} visible={true} dataType="date" width={100}
+                                <Column dataField="DOC_DATE" caption={this.t("grdListe.clmDocDate")} visible={true} dataType="date" width={100}
                                 editorOptions={{value:null}}
                                 cellRender={(e) => 
                                 {
@@ -243,33 +254,23 @@ export default class rebateInvoiceReport extends React.PureComponent
                                     
                                     return
                                 }}/>
-                                <Column dataField="OUTPUT_CODE" caption={this.t("grdListe.clmCode")} visible={true} /> 
-                                <Column dataField="OUTPUT_NAME" caption={this.t("grdListe.clmName")} visible={true}/> 
-                                <Column dataField="REF" caption={this.t("grdListe.clmRef")} visible={true}/> 
-                                <Column dataField="AMOUNT" caption={this.t("grdListe.clmAmount")} width={120} format={{ style: "currency", currency: "EUR",precision: 2}} visible={true}/> 
-                                <Column dataField="DISCOUNT" caption={this.t("grdListe.clmDiscount")} width={120} format={{ style: "currency", currency: "EUR",precision: 2}} visible={true}/> 
-                                <Column dataField="TOTALHT" caption={this.t("grdListe.clmTotalHt")} width={120} format={{ style: "currency", currency: "EUR",precision: 2}} visible={true}/> 
-                                <Column dataField="VAT" caption={this.t("grdListe.clmVat")} width={120} format={{ style: "currency", currency: "EUR",precision: 2}} visible={true}/> 
-                                <Column dataField="TOTAL" caption={this.t("grdListe.clmTotal")} width={120} format={{ style: "currency", currency: "EUR",precision: 2}} visible={true}/> 
+                                <Column dataField="OUTPUT_CODE" caption={this.t("grdListe.clmOutputCode")} width={60} visible={true} /> 
+                                <Column dataField="OUTPUT_NAME" caption={this.t("grdListe.clmOutputName")} width={120} visible={true}/> 
+                                <Column dataField="REF" caption={this.t("grdListe.clmRef")} width={80} visible={true}/> 
+                                <Column dataField="REF_NO" caption={this.t("grdListe.clmRefNo")} width={60} visible={true}/> 
+                                <Column dataField="ITEM_CODE" caption={this.t("grdListe.clmCode")} width={100} visible={true}/> 
+                                <Column dataField="ITEM_NAME" caption={this.t("grdListe.clmName")} width={180} visible={true}/> 
+                                <Column dataField="QUANTITY" caption={this.t("grdListe.clmQuantity")} width={80} visible={true}/> 
+                                <Column dataField="COST_PRICE" caption={this.t("grdListe.clmCostPrice")} width={90} format={{ style: "currency", currency: "EUR",precision: 2}} visible={true}/> 
+                                <Column dataField="TOTAL_COST" caption={this.t("grdListe.clmTotalCost")} width={90} format={{ style: "currency", currency: "EUR",precision: 2}} visible={true}/> 
+                                <Column dataField="DESCRIPTION" caption={this.t("grdListe.clmDescription")} width={120}  visible={true}/> 
                                 <Summary>
                                     <TotalItem
-                                    column="AMOUNT"
+                                    column="QUANTITY"
                                     summaryType="sum"
                                     valueFormat={{ style: "currency", currency: "EUR",precision: 2}} />
-                                     <TotalItem
-                                    column="DISCOUNT"
-                                    summaryType="sum"
-                                    valueFormat={{ style: "currency", currency: "EUR",precision: 2}} />
-                                       <TotalItem
-                                    column="TOTALHT"
-                                    summaryType="sum"
-                                    valueFormat={{ style: "currency", currency: "EUR",precision: 2}} />
-                                      <TotalItem
-                                    column="VAT"
-                                    summaryType="sum"
-                                    valueFormat={{ style: "currency", currency: "EUR",precision: 2}} />
-                                     <TotalItem
-                                    column="TOTAL"
+                                    <TotalItem
+                                    column="TOTAL_COST"
                                     summaryType="sum"
                                     valueFormat={{ style: "currency", currency: "EUR",precision: 2}} />
                                 </Summary> 

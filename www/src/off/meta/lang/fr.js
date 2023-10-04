@@ -174,6 +174,7 @@ export const langFr =
         stk_05_001: "Rapport Inventaire Dépôt", 
         stk_05_002: "Rapport sur la modification des prix d'achat", 
         stk_05_003: "Rapport inventaire", 
+        stk_05_004 : "Kayıp Ürün Raporu", // BAK
         cri: "Fournisseur - Client",
         cri_01: "Saisie",
         cri_02: "Listes",
@@ -734,7 +735,14 @@ export const langFr =
             title : "Type de produit",  
             clmCode : "Code", 
             clmName : "Nom"  
-        } 
+        },
+        msgNewItem:
+        {
+            title: "Dikkat",   // BAK
+            btn01: "Evet",   // BAK
+            btn02: "Vazgeç",   // BAK
+            msg: "Yeni ürüne geçmek istediğinize eminmisiniz !"   // BAK
+        },
     },
     stk_01_002:  //"Identification des codes-barres" 
     {
@@ -2959,6 +2967,30 @@ export const langFr =
         txtTotalQuantity : "Total Quantité",
         txtTotalCost : "Montant de l'inventaire",
         cmbDepot : "Réserve"
+    },
+    stk_05_004 : // "Kayıp Ürün Raporu"
+    {
+        chkZeroQuantity : "0 Miktarlar Gösterilsin",  // BAK
+        cmbDepot : "Depo",  // BAK
+        btnCheck : "Aktif",  // BAK
+        btnGet :"Getir",  // BAK
+        grdListe : 
+        {
+            clmCode: "Kodu",  // BAK
+            clmName : "Adı",             // BAK
+            clmQuantity : "Adet",  // BAK
+            clmOutputCode : "Depo Kodu",  // BAK
+            clmOutputName : "Depo Adı",  // BAK
+            clmCostPrice : "Maliyet Fiyatı",   // BAK
+            clmTotalCost : "Toplam Maliyet",   // BAK
+            clmDocDate : "Tarih",   // BAK
+            clmRef : "Seri",  // BAK
+            clmRefNo : "Sıra",   // BAK
+            clmDescription : "Açıklama"  // BAK
+        },
+        txtTotalQuantity : "Toplam Miktar",  // BAK
+        txtTotalCost : "Envanter Değeri",  // BAK
+        cmbDepot : "Depo"  // BAK
     },
     cri_01_001: // "Cari Tanımları"
     {
@@ -13762,7 +13794,8 @@ export const langFr =
             title : "Sélectionner Produit",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
-            clmPrice : "Prix de Vente" 
+            clmPrice : "Prix de Vente",
+            clmBarcode : "Code Barre",
         },
         grdSlsOrder: 
         {

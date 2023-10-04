@@ -3129,6 +3129,7 @@ export default class posSalesOrder extends React.PureComponent
                         <Paging defaultPageSize={22} />
                         <Column dataField="CODE" caption={this.t("pg_txtItemsCode.clmCode")} width={150} />
                         <Column dataField="NAME" caption={this.t("pg_txtItemsCode.clmName")} width={450} defaultSortOrder="asc" />
+                        <Column dataField="BARCODE" caption={this.t("pg_txtItemsCode.clmBarcode")} width={450} defaultSortOrder="asc" />
                         <Column dataField="PRICE" caption={this.t("pg_txtItemsCode.clmPrice")} width={200}  format={{ style: "currency", currency: "EUR",precision: 2}}/>
                     </NdPopGrid>
                       {/* BARKOD POPUP */}
