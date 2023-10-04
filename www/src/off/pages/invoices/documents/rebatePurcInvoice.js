@@ -68,8 +68,6 @@ export default class rebateInvoice extends DocBase
         tmpDocCustomer.DOC_DATE = this.docObj.dt()[0].DOC_DATE
         this.docObj.docCustomer.addEmpty(tmpDocCustomer)
 
-        this.txtRef.readOnly = false
-        this.txtRefno.readOnly = true
         this.docLocked = false
         this.frmDocItems.option('disabled',true)
         
@@ -140,8 +138,6 @@ export default class rebateInvoice extends DocBase
         await super.getDoc(pGuid,pRef,pRefno);
         App.instance.setState({isExecute:false})
 
-        this.txtRef.readOnly = true
-        this.txtRefno.readOnly = true
     }
     async calculateTotal()
     {
@@ -404,8 +400,6 @@ export default class rebateInvoice extends DocBase
     {
         App.instance.setState({isExecute:true})
 
-        this.txtRef.readOnly = true
-        this.txtRefno.readOnly = true
         
         if(typeof pQuantity == 'undefined')
         {
@@ -1027,11 +1021,16 @@ export default class rebateInvoice extends DocBase
                                         <div className="col-4 pe-0">
                                             <NdTextBox id="txtRef" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF"}}
                                             upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                            readOnly={true}
                                             maxLength={32}
-                                            onValueChanged={(async(e)=>
+                                            onChange={(async()=>
                                             {
                                                 this.docObj.docCustomer.dt()[0].REF = this.txtRef.value
+                                                this.checkRow()
+                                                let tmpResult = await this.checkDoc('00000000-0000-0000-0000-000000000000',this.txtRef.value,this.txtRefno.value)
+                                                if(tmpResult == 3)
+                                                {
+                                                    this.txtRef.value = "";
+                                                }
                                             }).bind(this)}
                                             param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
@@ -1043,7 +1042,6 @@ export default class rebateInvoice extends DocBase
                                         </div>
                                         <div className="col-5 ps-0">
                                             <NdTextBox id="txtRefno" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF_NO"}}
-                                            readOnly={true}
                                             button=
                                             {
                                                 [
@@ -1082,6 +1080,7 @@ export default class rebateInvoice extends DocBase
                                                     }
                                                 }
                                                 this.docObj.docCustomer.dt()[0].REF_NO = this.txtRefno.value
+                                                this.checkRow()
                                                 let tmpResult = await this.checkDoc('00000000-0000-0000-0000-000000000000',this.txtRef.value,this.txtRefno.value)
                                                 if(tmpResult == 3)
                                                 {

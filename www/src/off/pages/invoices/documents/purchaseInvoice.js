@@ -68,8 +68,6 @@ export default class purchaseInvoice extends DocBase
         tmpDocCustomer.DOC_DATE = this.docObj.dt()[0].DOC_DATE
         this.docObj.docCustomer.addEmpty(tmpDocCustomer)
         
-        this.txtRef.readOnly = false
-        this.txtRefno.readOnly = false
         this.docLocked = false
         
         this.frmDocItems.option('disabled',true)        
@@ -136,8 +134,6 @@ export default class purchaseInvoice extends DocBase
         await super.getDoc(pGuid,pRef,pRefno);
         App.instance.setState({isExecute:false})
         
-        this.txtRef.readOnly = true
-        this.txtRefno.readOnly = true
         this.frmDocItems.option('disabled',false)
 
         let tmpQuery = 
@@ -504,9 +500,6 @@ export default class purchaseInvoice extends DocBase
     {
         App.instance.setState({isExecute:true})
         
-        this.txtRef.readOnly = true
-        this.txtRefno.readOnly = true
-
         if(typeof pQuantity == 'undefined')
         {
             pQuantity = 1
@@ -1558,11 +1551,16 @@ export default class purchaseInvoice extends DocBase
                                         <div className="col-6 pe-0">
                                             <NdTextBox id="txtRef" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF"}}
                                             upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                            readOnly={true}
                                             maxLength={32}
-                                            onValueChanged={(async(e)=>
+                                            onChange={(async()=>
                                             {
-                                              
+                                                this.docObj.docCustomer.dt()[0].REF = this.txtRef.value
+                                                this.checkRow()
+                                                let tmpResult = await this.checkDoc('00000000-0000-0000-0000-000000000000',this.txtRef.value,this.txtRefno.value)
+                                                if(tmpResult == 3)
+                                                {
+                                                    this.txtRef.value = "";
+                                                }
                                             }).bind(this)}
                                             param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
@@ -1574,7 +1572,6 @@ export default class purchaseInvoice extends DocBase
                                         </div>
                                         <div className="col-6 ps-0">
                                             <NdTextBox id="txtRefno" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF_NO"}}
-                                            readOnly={true}
                                             maxLength={10}
                                             button={
                                             [
@@ -1600,7 +1597,7 @@ export default class purchaseInvoice extends DocBase
                                             {
                                                 let tmpQuery = 
                                                 {
-                                                    query : "SELECT DELETED FROM DOC WHERE REF = @REF AND REF_NO = @REF_NO AND  TYPE = 0 AND DOC_TYPE = 20 ",
+                                                    query : "SELECT DELETED FROM DOC WHERE REF = @REF AND REF_NO = @REF_NO AND TYPE = 0 AND DOC_TYPE = 20 ",
                                                     param : ['REF:string|50','REF_NO:int'],
                                                     value : [this.txtRef.value,this.txtRefno.value]
                                                 }
