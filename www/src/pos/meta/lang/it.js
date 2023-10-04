@@ -786,4 +786,22 @@ export const langIt =
         msg : "La connessione al server è stata interrotta...",
         btn01 : "Ok"
     },
+    msgNotBarcodeWeighing:
+    {
+        title: "Attenzione",
+        msg: "La quantità totale del prodotto pesato non corrisponde al codice a barre scannerizzato!",
+        btn01: "OK"
+    },
+    msgBarcodeWeighing:
+    {
+        title: "Attenzione",
+        msg: "Linea scannerizzata : {0} - Importo totale : {1}",
+        btn01: "OK"
+    },
+    msgTSENotFound:
+    {
+        title: "Attenzione",
+        msg: "Impossibile stabilire la comunicazione con il dispositivo TSE !",
+        btn01: "OK"
+    }
 }

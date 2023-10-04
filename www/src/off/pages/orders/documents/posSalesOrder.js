@@ -1373,6 +1373,18 @@ export default class posSalesOrder extends React.PureComponent
                                     dt={{data:this.docObj.dt('DOC'),field:"INPUT_CODE"}} 
                                     onEnterKey={(async()=>
                                         {
+                                            if(this.docObj.docOrders.dt().length > 0)
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgCustomerLock',showTitle:true,title:this.t("msgCustomerLock.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgCustomerLock.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerLock.msg")}</div>)
+                                                }
+                                                
+                                                await dialog(tmpConfObj);
+                                                return;
+                                            }
                                             await this.pg_txtCustomerCode.setVal(this.txtCustomerCode.value)
                                             this.pg_txtCustomerCode.show()
                                             this.pg_txtCustomerCode.onClick = async(data) =>
@@ -1426,8 +1438,20 @@ export default class posSalesOrder extends React.PureComponent
                                             {
                                                 id:'01',
                                                 icon:'more',
-                                                onClick:()=>
+                                                onClick:async()=>
                                                 {
+                                                    if(this.docObj.docOrders.dt().length > 0)
+                                                    {
+                                                        let tmpConfObj =
+                                                        {
+                                                            id:'msgCustomerLock',showTitle:true,title:this.t("msgCustomerLock.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                            button:[{id:"btn01",caption:this.t("msgCustomerLock.btn01"),location:'after'}],
+                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerLock.msg")}</div>)
+                                                        }
+                                                        
+                                                        await dialog(tmpConfObj);
+                                                        return;
+                                                    }
                                                     this.pg_txtCustomerCode.show()
                                                     this.pg_txtCustomerCode.onClick = async(data) =>
                                                     {
@@ -1446,13 +1470,13 @@ export default class posSalesOrder extends React.PureComponent
                                                             {
                                                                 this.frmdocOrders.option('disabled',false)
                                                             }
-                                                             let tmpQuery = 
-                                                    {
-                                                        query : "SELECT * FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER = @CUSTOMER",
-                                                        param : ['CUSTOMER:string|50'],
-                                                        value : [ data[0].GUID]
-                                                    }
-                                                    let tmpAdressData = await this.core.sql.execute(tmpQuery) 
+                                                            let tmpQuery = 
+                                                            {
+                                                                query : "SELECT * FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER = @CUSTOMER",
+                                                                param : ['CUSTOMER:string|50'],
+                                                                value : [ data[0].GUID]
+                                                            }
+                                                            let tmpAdressData = await this.core.sql.execute(tmpQuery) 
                                                             if(tmpAdressData.result.recordset.length > 1)
                                                             {   
                                                                 await this.pg_adress.setData(tmpAdressData.result.recordset)
