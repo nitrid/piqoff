@@ -745,6 +745,13 @@ export const langTr =
             btn02: "Vazgeç",
             msg: "Yeni ürüne geçmek istediğinize eminmisiniz !"
         },
+        msgItemBack:
+        {
+            title: "Dikkat",
+            btn01: "Evet",
+            btn02: "Vazgeç",
+            msg: "Ürünü tekrar getirmek istediğinize eminmisiniz !"
+        },
     },
     stk_01_002:  //"Barkod Tanımları"
     {

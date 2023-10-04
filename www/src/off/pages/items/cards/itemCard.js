@@ -824,6 +824,18 @@ export default class itemCard extends React.PureComponent
                                     {
                                         if(this.prevCode != '')
                                         {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgItemBack',showTitle:true,title:this.t("msgItemBack.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgItemBack.btn01"),location:'before'},{id:"btn02",caption:this.t("msgItemBack.btn02"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemBack.msg")}</div>)
+                                            }
+                                            
+                                            let pResult = await dialog(tmpConfObj);
+                                            if(pResult == 'btn02')
+                                            {
+                                                return;
+                                            }    
                                             this.getItem(this.prevCode); 
                                         }
                                     }}/>
@@ -832,21 +844,19 @@ export default class itemCard extends React.PureComponent
                                     <NdButton id="btnNew" parent={this} icon="file" type="default"
                                     onClick={async()=>
                                     {
-                                        if(this.btnSave.state.disabled == false)
+                                       
+                                        let tmpConfObj =
                                         {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgNewItem',showTitle:true,title:this.t("msgNewItem.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgNewItem.btn01"),location:'before'},{id:"btn02",caption:this.t("msgNewItem.btn02"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNewItem.msg")}</div>)
-                                            }
-                                            
-                                            let pResult = await dialog(tmpConfObj);
-                                            if(pResult == 'btn02')
-                                            {
-                                                return;
-                                            }    
+                                            id:'msgNewItem',showTitle:true,title:this.t("msgNewItem.title"),showCloseButton:true,width:'500px',height:'200px',
+                                            button:[{id:"btn01",caption:this.t("msgNewItem.btn01"),location:'before'},{id:"btn02",caption:this.t("msgNewItem.btn02"),location:'after'}],
+                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNewItem.msg")}</div>)
                                         }
+                                        
+                                        let pResult = await dialog(tmpConfObj);
+                                        if(pResult == 'btn02')
+                                        {
+                                            return;
+                                        }    
                                         this.init(); 
                                     }}/>
                                 </Item>

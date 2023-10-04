@@ -736,6 +736,13 @@ export const langDe =
             btn02: "Vazgeç",   // BAK
             msg: "Yeni ürüne geçmek istediğinize eminmisiniz !"   // BAK
         },
+        msgItemBack:
+        {
+            title: "Dikkat",  // BAK
+            btn01: "Evet",  // BAK
+            btn02: "Vazgeç",  // BAK
+            msg: "Ürünü tekrar getirmek istediğinize eminmisiniz !"  // BAK
+        },
     },
     stk_01_002:  //"Barcode-Definitionen"
     {
