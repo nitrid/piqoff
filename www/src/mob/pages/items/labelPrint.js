@@ -104,6 +104,7 @@ export default class labelPrint extends React.PureComponent
         {
             this.lblItemName.value = ""
         }
+        this.txtPrice.readOnly = true
         this.txtPrice.value = 0
     }
     async getDoc(pGuid)
@@ -138,6 +139,7 @@ export default class labelPrint extends React.PureComponent
                 this.lblItemName.value = this.itemDt[0].NAME
                 this.txtPrice.value = this.itemDt[0].PRICE
                 this.txtBarcode.value = ""
+                this.txtPrice.readOnly = false
                 if(this.chkAutoAdd.value == true)
                 {
                     this.addItem()

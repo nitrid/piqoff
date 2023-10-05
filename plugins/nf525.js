@@ -6,19 +6,20 @@ import rsa from 'jsrsasign'
 import { pem } from '../pem.js'
 import AdmZip from 'adm-zip'
 import { createHash } from 'crypto'
-import cron from 'node-cron';
 
 class nf525
 {
     constructor()
     {
+        this.socket = null;
         this.core = core.instance;
+        this.timer = null
         this.connEvt = this.connEvt.bind(this)
         this.core.socket.on('connection',this.connEvt)
 
         this.appInfo = JSON.parse(fs.readFileSync(this.core.root_path + '/www/package.json', 'utf8'))
-        
-        this.processRun()
+
+       setTimeout(this.processRun.bind(this), 1000);
     }
     connEvt(pSocket)
     {       
@@ -47,12 +48,13 @@ class nf525
     }
     async processRun()
     {
-        cron.schedule('0 2 * * *', async () => 
-        {
-            await this.processGrandTotal()
-            await this.processArchive()
-            await this.processSignatureVerify()
-        })
+        await this.processGrandTotal()
+        await this.processArchive()
+        await this.processSignatureVerify()
+
+        let tmpMin = moment.utc('02:00:00', 'HH:mm:ss').diff(moment.utc(moment(new Date).utc(true), 'HH:mm:ss'), 'minutes')
+        tmpMin = tmpMin < 0 ? 1440 + tmpMin : tmpMin
+        setTimeout(this.processRun.bind(this),tmpMin * 60000)
     }
     async processGrandTotal()
     {       

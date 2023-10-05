@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkpiqsoft=self.webpackChunkpiqsoft||[]).push([[7673],{47673:(s,e,i)=>{i.r(e),i.d(e,{menu:()=>p});var p=[{id:"acs_pos",text:"POS",expanded:!1,items:[{id:"acs_piqpos_01",text:"Kullanıcı Yetkilendimeleri",path:"../../plugins/admin/access/pos/user_acs.js"}]}]}}]);

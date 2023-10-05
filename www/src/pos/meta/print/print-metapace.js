@@ -91,12 +91,12 @@ export function print()
                 tmpArr.push({font:"a",style:"b",align:"ct",data:"Numero De Facture : " + (data.pos[0].DEVICE == '9999' ? "" : data.pos[0].FACT_REF)})
                 tmpArr.push({font:"b",style:"b",align:"ct",data: " ".space(44)})
             }
-            else if(data.pospay.where({PAY_TYPE:0}).length > 0 && data.pos[0].TYPE == 1)
+            else if(data.pospay.where({TYPE:0}).length > 0 && data.pos[0].TYPE == 1)
             {
                 tmpArr.push({font:"b",style:"b",size : [1,1],align:"ct",data:"REMBOURSEMENT"})
                 tmpArr.push({font:"b",style:"b",align:"ct",data: " ".space(44)})
             }
-            else if(data.pospay.where({PAY_TYPE:4}).length > 0)
+            else if(data.pospay.where({TYPE:4}).length > 0)
             {
                 tmpArr.push({font:"b",style:"b",size : [1,1],align:"ct",data:"BON D'AVOIR"})
                 tmpArr.push({font:"b",style:"b",align:"ct",data: " ".space(44)})
@@ -525,7 +525,8 @@ export function print()
             return tmpArr.length > 0 ? tmpArr : undefined
         },
         ()=>{return {font:"b",align:"ct",data:"Conservez moi comme preuve d'achat pour les"}},
-        ()=>{return {font:"b",align:"ct",data:"garanties, echanges, ou remboursement sous 1 mois"}},
+        ()=>{return {font:"b",align:"ct",data:"Garanties, Echanges, ou Remboursement "}},
+        ()=>{return {font:"b",align:"ct",data:"Sous 1 semaine en bon d’achat."}},
         ()=>{return {font:"b",align:"ct",data:"Ne sont ni repris ni echanges les produits suivants :"}},
         ()=>{return {font:"b",align:"ct",data:"Produits Frais, Viandes, Fromages."}},
         ()=>{return {font:"b",style:"b",align:"ct",data:"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"}},

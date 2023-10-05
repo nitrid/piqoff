@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkpiqsoft=self.webpackChunkpiqsoft||[]).push([[2581],{82581:(i,s,e)=>{e.r(s),e.d(s,{menu:()=>t});var t=[{id:"lic",text:"Lisans",expanded:!1,items:[{id:"lic_01",text:"Lisans Listesi",path:"../../plugins/admin/licence/licence_list.js"}]}]}}]);

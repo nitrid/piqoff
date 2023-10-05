@@ -12,8 +12,6 @@ export default class NdPopGrid extends Base
     {
         super(props);
         
-        this.listeners = Object(); 
-
         this.state.show = typeof props.visible == 'undefined' ? false : props.visible
         this.state.closeOnOutsideClick = typeof props.closeOnOutsideClick == 'undefined' ? false : props.closeOnOutsideClick
         this.state.showCloseButton = typeof props.showCloseButton == 'undefined' ? true : props.showCloseButton
@@ -215,24 +213,6 @@ export default class NdPopGrid extends Base
             this.props.onRowPrepared(e);
         }
     }
-    on(pEvt, pCallback) 
-    {
-        if (!this.listeners.hasOwnProperty(pEvt))
-        this.listeners[pEvt] = Array();
-
-        this.listeners[pEvt].push(pCallback); 
-    }
-    emit(pEvt, pParams)
-    {
-        if (pEvt in this.listeners) 
-        {
-            let callbacks = this.listeners[pEvt];
-            for (var x in callbacks)
-            {
-                callbacks[x](pParams);
-            }
-        } 
-    }
     //#endregion
     async componentDidMount()
     {
@@ -253,24 +233,42 @@ export default class NdPopGrid extends Base
     }    
     async show()
     {
-        return new Promise(async resolve => 
+        this.grid.devGrid.clearSelection()
+        if(typeof this.props.search == 'undefined' || this.props.search == false)
         {
-            this.emit('showing')
-            await this["pop_" + this.props.id].show();
-            this.emit('showed')
-            resolve();
-        })
+            //this.setState({show:true})
+            this["pop_" + this.props.id].show();
+            this.grid = await this._isGrid();
+            await this.grid.dataRefresh(this.state.data)
+        }
+        else
+        {                    
+            if(this["txt" + this.props.id].value == '')
+            {
+                this.grid.devGrid.clearFilter()
+                await this.grid.dataRefresh({source:[]})
+                this["txt" + this.props.id].setState({value:''})
+            }
+           
+            this["pop_" + this.props.id].show();
+            setTimeout(() => 
+            {
+                this["txt" + this.props.id].focus()
+            }, 700);
+            
+        }
+       
     }
     hide()
     {
         this["pop_" + this.props.id].hide();
+        //this.setState({show:false})
     }
     async setVal(pValue)
     {
         if(typeof pValue != 'undefined')
         {
-            await this.show();
-            //await this["pop_" + this.props.id].show();
+            await this["pop_" + this.props.id].show();
             await this["txt" + this.props.id].setState({value:pValue})
             await this.getData()
         }
@@ -320,32 +318,7 @@ export default class NdPopGrid extends Base
                     container={this.state.container}
                     width={this.state.width}
                     height={this.state.height}
-                    position={this.state.position}
-                    deferRendering={typeof this.props.deferRendering == 'undefined' ? false : this.props.deferRendering}
-                    onShowed={async()=>
-                    {
-                        this.grid = await this._isGrid();
-                        this.grid.devGrid.clearSelection()
-
-                        if(typeof this.props.search == 'undefined' || this.props.search == false)
-                        {
-                            await this.grid.dataRefresh(this.state.data)
-                        }
-                        else
-                        {                    
-                            if(this["txt" + this.props.id].value == '')
-                            {
-                                this.grid.devGrid.clearFilter()
-                                await this.grid.dataRefresh({source:[]})
-                                this["txt" + this.props.id].setState({value:''})
-                            }
-                        
-                            setTimeout(() => 
-                            {
-                                this["txt" + this.props.id].focus()
-                            }, 700);
-                        }
-                    }}
+                    position={this.state.position}                    
                 >
                     {this._buttonView()}
                     {this._formView()}      

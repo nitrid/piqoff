@@ -24,8 +24,6 @@ export default class NdPopUp extends Base
         this.state.position = typeof props.position == 'undefined' ? undefined : props.position
         
         this.onHiding = this.onHiding.bind(this);
-
-        this.devPop = null
     }
     _contentView()
     {
@@ -39,26 +37,33 @@ export default class NdPopUp extends Base
         }
         else if(typeof this.props.scroll != 'undefined' || this.props.scroll == false)
         {
-            return(this.props.children)
+            return(
+                this.props.children
+            )
         }
     }
-    _toolbarView()
+    componentWillReceiveProps(pProps) 
     {
-        return(this.props.toolbarItem)
-    }
+        // this.setState(
+        //     {
+        //         show : pProps.visible,
+        //         dragEnabled : pProps.dragEnabled,
+        //         showCloseButton : pProps.showCloseButton,
+        //         showTitle : pProps.showTitle,
+        //         title : pProps.title,
+        //         width : pProps.width,
+        //         height : pProps.height,
+        //         position : pProps.position
+        //     }
+        // )       
+    }  
     show()
     {  
+        this.onShowed()
         this.setState(
         {
             show: true
         });
-        return new Promise(async resolve => 
-        {
-            this.devPop.on('shown',()=>
-            {
-                resolve()
-            })
-        })
     } 
     hide()
     {      
@@ -74,13 +79,6 @@ export default class NdPopUp extends Base
             showTitle: true,
             title: pVal
         });
-    }
-    onShowing()
-    {
-        if(typeof this.props.onShowing != 'undefined')
-        {
-            this.props.onShowing();
-        }
     }
     onShowed()
     {
@@ -99,40 +97,6 @@ export default class NdPopUp extends Base
     }
     render()
     {   
-        if(typeof this.props.deferRendering == 'undefined' || this.props.deferRendering == false)
-        {
-            return (
-                <React.Fragment>
-                    <Popup
-                        visible={this.state.show}
-                        onHiding={this.onHiding}
-                        dragEnabled={this.state.dragEnabled}
-                        closeOnOutsideClick={this.state.closeOnOutsideClick}
-                        showCloseButton={this.state.showCloseButton}
-                        showTitle={this.state.showTitle}
-                        title={this.state.title}
-                        container={this.state.container}
-                        width={this.state.width}
-                        height={this.state.height}
-                        position={this.state.position}
-                        onInitialized={(e)=>
-                        {
-                            this.devPop = e.component
-                        }}
-                        onShown={this.onShowed.bind(this)}
-                        onShowing={this.onShowing.bind(this)}
-                        >
-                        {this._contentView()}
-                    </Popup>
-                </React.Fragment>
-            )
-        }
-        
-        if(!this.state.show)
-        {
-            return null
-        }
-
         return (
             <React.Fragment>
                 <Popup
@@ -147,19 +111,8 @@ export default class NdPopUp extends Base
                     width={this.state.width}
                     height={this.state.height}
                     position={this.state.position}
-                    deferRendering={false}
-                    onShown={this.onShowed.bind(this)}
-                    onShowing={this.onShowing.bind(this)}
-                    onInitialized={(e)=>
-                    {
-                        this.devPop = e.component
-                    }}
-                    contentRender={()=>
-                    {
-                        return this._contentView()
-                    }}
                     >
-                    {this.props.toolbarItem}
+                    {this._contentView()}
                 </Popup>
             </React.Fragment>
         )

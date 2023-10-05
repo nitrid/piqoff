@@ -27,7 +27,6 @@ import NdDialog,{dialog} from '../../core/react/devex/dialog';
 
 import * as appInfo from '../../../package.json'
 import '../plugins/balanceCounter.js'
-
 export default class App extends React.Component
 {
     static instance = null;
@@ -114,7 +113,7 @@ export default class App extends React.Component
             tmpHost = localStorage.getItem('host')
         }
         
-        this.core = new core(io(tmpHost,{timeout:100000,transports : ['websocket']}));
+        this.core = new core(io(tmpHost,{timeout:100000}));
         this.transfer = new transferCls()
         this.core.appInfo = appInfo
 

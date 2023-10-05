@@ -20,6 +20,7 @@ export default class NdTagBox extends Base
     //#region Private
     _onInitialized(e) 
     {
+        console.log(e)
         this.dev = e.component;
     }  
     _TagBoxView()
@@ -34,7 +35,6 @@ export default class NdTagBox extends Base
             showClearButton ={true}
             maxFilterQueryLength={10000}
             noDataText=""
-            value={this.state.value}
             >
                 {this.props.children}
                 {this.validationView()}

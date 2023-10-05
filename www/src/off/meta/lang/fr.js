@@ -290,7 +290,6 @@ export const langFr =
         pos_02_011 : "Rapport de comparaison de produit",
         pos_02_012 : "Pos Puan Kullanım Raporu",  // BAK
         pos_02_013 : "Pos İndirim Raporu",  // BAK
-        pos_02_014 : "Okunmamış Terazi Fişleri", //BAK
         pos_03 : "Les opérations", 
         pos_03_001 : "Opérations de fin de journée",
         promo: "Promotion",
@@ -6473,8 +6472,8 @@ export const langFr =
             clmDate : "Date",
             clmRef : "Référence",
             clmRefNo : "Numéro",
-            clmOutputName : "Nom Fournisseur",
-            clmOutputCode  : "Code Client",
+            clmInputName : "Nom Fournisseur",
+            clmInputCode  : "Code Client",
             clmTotal : "Total TTC"
         },
         pg_txtCustomerCode : 
@@ -6889,8 +6888,8 @@ export const langFr =
             clmDate : "Date",
             clmRef : "Référence",
             clmRefNo : "Numéro",
-            clmOutputName : "Nom Fournisseur",
-            clmOutputCode  : "Code Client",
+            clmInputName : "Nom Fournisseur",
+            clmInputCode  : "Code Client",
             clmTotal : "Total TTC"
         },
         pg_txtCustomerCode : 
@@ -7821,8 +7820,8 @@ export const langFr =
             clmDate : "Date",
             clmRef : "Référence",
             clmRefNo : "Numéro",
-            clmOutputName : "Nom Fournisseur",
-            clmOutputCode  : "Code Client",
+            clmInputName : "Nom Fournisseur",
+            clmInputCode  : "Code Client",
             clmTotal : "Total TTC"
         },
         pg_txtCustomerCode : 
@@ -16161,19 +16160,6 @@ export const langFr =
         {
             clmDocDate: "Tarih",
             clmDiscount: "İndirim Tutarı",
-        },
-    },
-    pos_02_014 : // "Okunmamış Terazi Fişleri Raporu" // BAK
-    {
-        btnGet :"Getir",
-        grdListe : 
-        {
-            clmCode: "Kodu",
-            clmName : "Adı",           
-            clmQuantity : "Miktar",
-            clmPrice : "Fiyat",
-            clmCDate : "Tarih",
-            clmTicketNo : "Fiş No",
         },
     },
     pos_03_001 : // "Gün sonu"

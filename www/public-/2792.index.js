@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkpiqsoft=self.webpackChunkpiqsoft||[]).push([[2792],{42792:(e,s,i)=>{i.r(s),i.d(s,{menu:()=>a});var a=[{id:"acs_off",text:"OFF",expanded:!1,items:[{id:"acs_piqoff_01",text:"Kullanıcı Yetkilendimeleri",path:"../../plugins/admin/access/off/user_acs.js"}]}]}}]);

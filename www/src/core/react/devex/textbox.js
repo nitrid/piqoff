@@ -24,6 +24,7 @@ export default class NdTextBox extends Base
         this.state.titleAlign = typeof props.titleAlign == 'undefined' ? 'left' : props.titleAlign
         this.state.showClearButton = typeof props.showClearButton == 'undefined' ? false : props.showClearButton
         this.state.readOnly = typeof props.readOnly == 'undefined' ? false : props.readOnly   
+
         
         this._onInitialized = this._onInitialized.bind(this);
         this._onValueChanged = this._onValueChanged.bind(this);
@@ -171,9 +172,7 @@ export default class NdTextBox extends Base
     _txtView()
     {                        
         return (
-            <TextBox id={this.props.id} mode={this.state.mode} showClearButton={this.state.showClearButton} height='fit-content'
-                mask={this.props.mask}
-                maskChar={typeof this.props.maskChar == 'undefined' ? "_" : this.props.maskChar}
+            <TextBox id={this.props.id} mode={this.state.mode} showClearButton={this.state.showClearButton} height='fit-content'  
                 maxLength={this.props.maxLength}
                 placeholder={this.state.placeholder}
                 style={this.props.style}

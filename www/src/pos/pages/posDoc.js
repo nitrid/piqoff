@@ -31,7 +31,7 @@ import NbKeyboard from "../../core/react/bootstrap/keyboard.js";
 import IdleTimer from 'react-idle-timer'
 import NdButton from "../../core/react/devex/button.js";
 
-import { posCls,posSaleCls,posPaymentCls,posPluCls,posDeviceCls,posPromoCls,posExtraCls,posUsbTSECls} from "../../core/cls/pos.js";
+import { posCls,posSaleCls,posPaymentCls,posPluCls,posDeviceCls,posPromoCls, posExtraCls, } from "../../core/cls/pos.js";
 import { posScaleCls,posLcdCls } from "../../core/cls/scale.js";
 import { docCls} from "../../core/cls/doc.js"
 import transferCls from "../lib/transfer.js";
@@ -72,7 +72,7 @@ export default class posDoc extends React.PureComponent
         this.lastPosPromoDt = new datatable();  
         this.firm = new datatable();
         this.customerObj = new customersCls();
-        
+
         this.promoObj = new promoCls();
         this.posPromoObj = new posPromoCls();
 
@@ -322,7 +322,7 @@ export default class posDoc extends React.PureComponent
         })
 
         this.sendJet({CODE:"80",NAME:"Démarrage terminal lancé."}) ////Kasa işleme başladı.
-        this.sendJet({CODE:"120",NAME:"Le système est offline."}) ///Kasa offline dan online a döndü.
+        this.sendJet({CODE:"120",NAME:"Le système est offline."}) ///Kasa offline dan online a döndü.        
     }
     async init()
     {                
@@ -358,18 +358,10 @@ export default class posDoc extends React.PureComponent
             this.posScale = new posScaleCls(this.posDevice.dt()[0].SCALE_PORT)
             this.posLcd = new posLcdCls(this.posDevice.dt()[0].LCD_PORT)
         }
-        this.posDevice.scanner();
-
+        this.posDevice.scanner();       
+         
         if(!this.isFirstOpen)
         {
-            //ALMANYA TSE USB CİHAZLAR İÇİN YAPILDI
-            if(this.prmObj.filter({ID:'TSEUsb',TYPE:0}).getValue() == true)
-            {
-                this.posUsbTSE = new posUsbTSECls();
-                this.posUsbTSE.deviceId = this.posObj.dt()[this.posObj.dt().length - 1].DEVICE
-                this.posUsbTSE.init()
-            }
-            //*********************************** */
             this.isFirstOpen = true
             let tmpDetect = await this.posDevice.detectPort()
             if(tmpDetect.isElectron && tmpDetect.isData)
@@ -606,7 +598,7 @@ export default class posDoc extends React.PureComponent
             {
                 tmpDt.selectCmd = 
                 {
-                    query : "SELECT TOP 1 *,@CODE AS INPUT FROM ITEMS_POS_VW_01 WHERE UNIQ_CODE = @CODE AND STATUS = 1 ORDER BY UNIT_FACTOR",
+                    query : "SELECT TOP 1 *,@CODE AS INPUT FROM ITEMS_POS_VW_01 WHERE UNIQ_CODE = @CODE AND STATUS = 1",
                     param : ['CODE:string|25'],
                     value: [pCode],
                     local : 
@@ -1491,8 +1483,7 @@ export default class posDoc extends React.PureComponent
                 }, 500);
                 
                 this.posObj.dt()[0].STATUS = 1
-                
-                //***** TICKET İMZALAMA NF525 *****/
+                //***** TICKET İMZALAMA *****/
                 let tmpSignedData = await this.nf525.signatureSale(this.posObj.dt()[0],this.posObj.posSale.dt())                
                 this.posObj.dt()[0].REF = tmpSignedData.REF
                 this.posObj.dt()[0].SIGNATURE = tmpSignedData.SIGNATURE
@@ -1505,23 +1496,6 @@ export default class posDoc extends React.PureComponent
                 this.posObj.dt()[this.posObj.dt().length - 1].CERTIFICATE = this.core.appInfo.name + " version : " + this.core.appInfo.version + " - " + this.core.appInfo.certificate + " - " + tmpSigned;
                 //************************* */
 
-                //ALMANYA TSE USB CİHAZLAR İÇİN YAPILDI.
-                if(this.prmObj.filter({ID:'TSEUsb',TYPE:0}).getValue() == true)
-                {
-                    await this.posUsbTSE.transaction(JSON.stringify(this.posObj.dt().toArray()))
-                    if(typeof this.posUsbTSE.lastTransaction != 'undefined' && this.posUsbTSE.lastTransaction.status)
-                    {
-                        this.posObj.dt()[0].SIGNATURE = this.posUsbTSE.lastTransaction.signature
-                        this.posObj.dt()[0].SIGNATURE_SUM = JSON.stringify(this.posObj.dt().toArray())
-                    }
-                    else
-                    {
-                        return
-                    }
-                    console.log(this.posUsbTSE.lastTransaction)
-                }
-                //***************************************/
-                
                 if(this.posObj.posPay.dt().length > 0)
                 {
                     //this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].AMOUNT = this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].AMOUNT - pPayChange
@@ -2915,55 +2889,34 @@ export default class posDoc extends React.PureComponent
             if(typeof tmpRePrintResult != 'undefined')
             {
                 let tmpDupCert = ""
-                if(!this.core.offline)
+                if(tmpPrintCount > 0 && !this.core.offline)
                 {
-                    let tmpInsertQuery = {}
-                    if(tmpPrintCount > 0)
+                    let tmpDupSignature = await this.nf525.signaturePosDuplicate(pPosDt[0])
+                    let tmpDupSign = ''
+    
+                    if(tmpDupSignature != '')
                     {
-                        let tmpDupSignature = await this.nf525.signaturePosDuplicate(pPosDt[0])
-                        let tmpDupSign = ''
-        
-                        if(tmpDupSignature != '')
-                        {
-                            tmpDupSign = tmpDupSignature.SIGNATURE.substring(2,3) + tmpDupSignature.SIGNATURE.substring(6,7) + tmpDupSignature.SIGNATURE.substring(12,13) + tmpDupSignature.SIGNATURE.substring(18,19)
-                        }
-
-                        tmpInsertQuery = 
-                        {
-                            query : "EXEC [dbo].[PRD_POS_EXTRA_INSERT] " + 
-                                    "@CUSER = @PCUSER, " + 
-                                    "@TAG = @PTAG, " +
-                                    "@POS_GUID = @PPOS_GUID, " +
-                                    "@LINE_GUID = @PLINE_GUID, " +
-                                    "@DATA =@PDATA, " +
-                                    "@DATA_EXTRA1 = @PDATA_EXTRA1, " +
-                                    "@APP_VERSION = @PAPP_VERSION, " +
-                                    "@DESCRIPTION = @PDESCRIPTION ", 
-                            param : ['PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|max','PDATA_EXTRA1:string|max','PAPP_VERSION:string|25','PDESCRIPTION:string|max'],
-                            value : [pPosDt[0].CUSER,"REPRINT",pPosDt[0].GUID,"00000000-0000-0000-0000-000000000000",tmpDupSignature.SIGNATURE,tmpDupSignature.SIGNATURE_SUM,this.core.appInfo.version,tmpRePrintResult]
-                        }
-
-                        tmpDupCert = this.core.appInfo.name + " version : " + this.core.appInfo.version + " - " + this.core.appInfo.certificate + " - " + tmpDupSign
+                        tmpDupSign = tmpDupSignature.SIGNATURE.substring(2,3) + tmpDupSignature.SIGNATURE.substring(6,7) + tmpDupSignature.SIGNATURE.substring(12,13) + tmpDupSignature.SIGNATURE.substring(18,19)
                     }
-                    else
+
+                    let tmpInsertQuery = 
                     {
-                        tmpInsertQuery = 
-                        {
-                            query : "EXEC [dbo].[PRD_POS_EXTRA_INSERT] " + 
-                                    "@CUSER = @PCUSER, " + 
-                                    "@TAG = @PTAG, " +
-                                    "@POS_GUID = @PPOS_GUID, " +
-                                    "@LINE_GUID = @PLINE_GUID, " +
-                                    "@DATA =@PDATA, " +
-                                    "@DATA_EXTRA1 = @PDATA_EXTRA1, " +
-                                    "@APP_VERSION = @PAPP_VERSION, " +
-                                    "@DESCRIPTION = @PDESCRIPTION ", 
-                            param : ['PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|max','PDATA_EXTRA1:string|max','PAPP_VERSION:string|25','PDESCRIPTION:string|max'],
-                            value : [pPosDt[0].CUSER,"REPRINT",pPosDt[0].GUID,"00000000-0000-0000-0000-000000000000","","",this.core.appInfo.version,""]
-                        }
+                        query : "EXEC [dbo].[PRD_POS_EXTRA_INSERT] " + 
+                                "@CUSER = @PCUSER, " + 
+                                "@TAG = @PTAG, " +
+                                "@POS_GUID = @PPOS_GUID, " +
+                                "@LINE_GUID = @PLINE_GUID, " +
+                                "@DATA =@PDATA, " +
+                                "@DATA_EXTRA1 = @PDATA_EXTRA1, " +
+                                "@APP_VERSION = @PAPP_VERSION, " +
+                                "@DESCRIPTION = @PDESCRIPTION ", 
+                        param : ['PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|max','PDATA_EXTRA1:string|max','PAPP_VERSION:string|25','PDESCRIPTION:string|max'],
+                        value : [pPosDt[0].CUSER,"REPRINT",pPosDt[0].GUID,"00000000-0000-0000-0000-000000000000",tmpDupSignature.SIGNATURE,tmpDupSignature.SIGNATURE_SUM,this.core.appInfo.version,tmpRePrintResult]
                     }
 
                     await this.core.sql.execute(tmpInsertQuery)
+
+                    tmpDupCert = this.core.appInfo.name + " version : " + this.core.appInfo.version + " - " + this.core.appInfo.certificate + " - " + tmpDupSign
                 }
                 
                 let tmpData = 
@@ -2986,7 +2939,7 @@ export default class posDoc extends React.PureComponent
                         customerGrowPoint : pPosDt[0].CUSTOMER_POINT - Math.floor(pPosDt[0].TOTAL)
                     }
                 }
-                
+
                 if(tmpPrintCount > 0 && !this.core.offline)
                 {
                     this.sendJet({CODE:"155",NAME:"Duplicata ticket imprimé."}) //// Duplicate fiş yazdırıldı.
@@ -3068,7 +3021,7 @@ export default class posDoc extends React.PureComponent
                 showPane={true}
                 message={this.lang.t("pleaseWait")}
                 ref={this.loadingPay}
-                />
+                />               
                 <div className="top-bar row">
                     <div className="col-12">                    
                         <div className="row m-2">

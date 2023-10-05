@@ -282,7 +282,6 @@ export const langDe =
         pos_02_011: "Artikelvergleichsbericht",
         pos_02_012 : "Pos Puan Kullanım Raporu",  // BAK
         pos_02_013 : "Pos İndirim Raporu",  // BAK
-        pos_02_014 : "Okunmamış Terazi Fişleri", //BAK
         pos_03: "Operationen",
         pos_03_001: "Tagesabschluss",
         promo: "Angebot",
@@ -6453,9 +6452,8 @@ export const langDe =
             clmDate: "DATUM",
             clmRef: "SERIE",
             clmRefNo: "NUMMER",
-            clmOutputName: "KUNDENNAME",
-            clmOutputCode: "KUNDENNUMMER",
-            clmTotal : "TOTAL"
+            clmInputName: "KUNDENNAME",
+            clmInputCode: "KUNDENNUMMER",
         },
         pg_txtCustomerCode: 
         {
@@ -6868,9 +6866,8 @@ export const langDe =
             clmDate : "DATUM",
             clmRef : "SERIE",
             clmRefNo : "FOLGE",
-            clmOutputName : "KUNDENNAME",
-            clmOutputCode  : "KUNDENNUMMER",
-            clmTotal : "TOTAL"
+            clmInputName : "KUNDENNAME",
+            clmInputCode  : "KUNDENNUMMER",
         },
         pg_txtCustomerCode : 
         {
@@ -7804,9 +7801,8 @@ export const langDe =
             clmDate : "DATUM",
             clmRef : "SERIE",
             clmRefNo : "FOLGE",
-            clmOutputName : "KUNDENNAME",
-            clmOutputCode  : "KUNDENNUMMER",
-            clmTotal : "TOTAL"
+            clmInputName : "KUNDENNAME",
+            clmInputCode  : "KUNDENNUMMER",
         },
         pg_txtCustomerCode : 
         {
@@ -16189,19 +16185,6 @@ export const langDe =
         {
             clmDocDate: "Tarih",
             clmDiscount: "İndirim Tutarı",
-        },
-    },
-    pos_02_014 : // "Okunmamış Terazi Fişleri Raporu" // BAK
-    {
-        btnGet :"Getir",
-        grdListe : 
-        {
-            clmCode: "Kodu",
-            clmName : "Adı",           
-            clmQuantity : "Miktar",
-            clmPrice : "Fiyat",
-            clmCDate : "Tarih",
-            clmTicketNo : "Fiş No",
         },
     },
     pos_03_001: // "Gün Sonu"

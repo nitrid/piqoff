@@ -36,6 +36,7 @@ export default class itemCard extends React.PureComponent
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
 
         this.itemsObj = new itemsCls();
+        this.itemsPriceSupply = new itemPriceCls();   
         this.itemsPriceLogObj = new itemLogPriceCls();    
         this.salesPriceLogObj = new datatable()
         this.salesPriceLogObj.selectCmd =
@@ -98,6 +99,7 @@ export default class itemCard extends React.PureComponent
         this.prevCode = ""
         this.itemsObj.clearAll();
 
+        this.itemsPriceSupply.clearAll();     
         this.itemsPriceLogObj.clearAll();     
         this.salesPriceLogObj.clear()   
         this.salesContractObj.clear()   
@@ -126,7 +128,9 @@ export default class itemCard extends React.PureComponent
             this.underPrice();
             //MARGIN HESAPLAMASI
             this.grossMargin()                 
-            this.netMargin()       
+            this.netMargin()                 
+            this.taxSugarValidCheck()
+            this.taxSugarCalculate()
         })
         this.itemsObj.ds.on('onEdit',(pTblName,pData) =>
         {            
@@ -163,11 +167,7 @@ export default class itemCard extends React.PureComponent
             this.underPrice()
             //MARGIN HESAPLAMASI
             this.grossMargin()                 
-            this.netMargin()
-            if(pTblName == 'ITEM_MULTICODE')
-            {
-                this.taxSugarValidCheck()
-            }
+            this.netMargin()                 
         })
         this.itemsObj.ds.on('onDelete',(pTblName) =>
         {            
@@ -234,8 +234,8 @@ export default class itemCard extends React.PureComponent
         this.imgFile.value = ""; 
         await this.itemsObj.load({CODE:pCode});
         //TEDARİKÇİ FİYAT GETİR İŞLEMİ.  
-        this.itemsPriceLogObj.load({ITEM_GUID:this.itemsObj.dt()[0].GUID})
-
+        await this.itemsPriceSupply.load({ITEM_GUID:this.itemsObj.dt()[0].GUID,TYPE:1})  
+        await this.itemsPriceLogObj.load({ITEM_GUID:this.itemsObj.dt()[0].GUID})
         if(this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE').length > 0 && this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE').length == 1)
         {
             this.txtLastBuyPrice.value = this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')[0].CUSTOMER_PRICE
@@ -243,22 +243,22 @@ export default class itemCard extends React.PureComponent
         else if(this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE').length > 0)
         {
             this.txtLastBuyPrice.value = this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')[1].CUSTOMER_PRICE
-        }
+        }        
+
         this.txtBarcode.readOnly = true;
 
         this.salesPriceLogObj.selectCmd.value = [this.itemsObj.dt()[0].GUID]
-        this.salesPriceLogObj.refresh().then(()=>
-        {
-            if(this.salesPriceLogObj.length > 0)
-            {
-                this.txtLastSalePrice.value = this.salesPriceLogObj[0].PRICE
-            }
-        })
+        await this.salesPriceLogObj.refresh();
         this.salesContractObj.selectCmd.value = [this.itemsObj.dt()[0].GUID]
-        this.salesContractObj.refresh();
+        await this.salesContractObj.refresh();
         this.otherShopObj.selectCmd.value = [this.itemsObj.dt()[0].GUID]
-        this.otherShopObj.refresh();
+        await this.otherShopObj.refresh();
 
+        if(this.salesPriceLogObj.length > 0)
+        {
+            this.txtLastSalePrice.value = this.salesPriceLogObj[0].PRICE
+        }
+       
         App.instance.setState({isExecute:false})
         if(typeof this.txtSalePrice != 'undefined')
         {
@@ -282,13 +282,13 @@ export default class itemCard extends React.PureComponent
             }
         }
         this.prevCode = this.itemsObj.dt('ITEMS').length > 0 ? this.itemsObj.dt('ITEMS')[0].CODE : '';
-
+        console.log("12 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
+        console.log({data:this.itemsObj.dt('ITEM_IMAGE'),field:"IMAGE"})
         if(typeof this.itemsObj.dt('ITEM_IMAGE')[0] != 'undefined')
         {
             this.imgFile.value = this.itemsObj.dt('ITEM_IMAGE')[0].IMAGE
         }
         this.itemGrpForOrginsValidCheck();   
-        console.log("12 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
     }
     async checkItem(pCode)
     {
@@ -550,6 +550,7 @@ export default class itemCard extends React.PureComponent
         let tmpData = this.prmObj.filter({ID:'ItemGrpForOrginsValidation'}).getValue()
         if(typeof tmpData != 'undefined' && Array.isArray(tmpData) && typeof tmpData.find(x => x == this.cmbItemGrp.value) != 'undefined')
         {
+            console.log(1)
             this.setState({isItemGrpForOrginsValid:true})
         }
         else
@@ -590,7 +591,6 @@ export default class itemCard extends React.PureComponent
                     {
                         this.setState({isTaxSugar:true})
                         this.txtTaxSugar.readOnly = false
-                        this.taxSugarCalculate()
                         return
                     }
                 }
@@ -636,6 +636,10 @@ export default class itemCard extends React.PureComponent
                         let tmpUnit = this.txtUnderUnit.value / 100
                         let tmpTaxSucre = tmpUnit * tmpData.result.recordset[0].PRICE
                         this.taxSugarPrice = Number(tmpTaxSucre.toFixed(3))
+                        if(this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE').length > 0)
+                        {
+                          
+                        }
                     }
                     this.extraCostCalculate()
                 }
@@ -646,6 +650,7 @@ export default class itemCard extends React.PureComponent
                 }
             }
         }
+       
     }
     async extraCostCalculate()
     {
@@ -670,9 +675,10 @@ export default class itemCard extends React.PureComponent
                 value : [this.itemsObj.dt()[0].GUID]
             }
             let tmpData = await this.core.sql.execute(tmpQuery) 
-            
+            console.log(tmpData)
             if(tmpData.result.recordset.length >0)
             {
+                console.log(tmpData.result.recordset[0].DOC_GUID)
                 let tmpItemQuery = 
                 {
                     query : "SELECT * FROM DOC_ITEMS_VW_01 WHERE (DOC_GUID = @DOC_GUID OR INVOICE_DOC_GUID = @DOC_GUID)",
@@ -680,6 +686,7 @@ export default class itemCard extends React.PureComponent
                     value : [tmpData.result.recordset[0].DOC_GUID]
                 }
                 let tmpItemData = await this.core.sql.execute(tmpItemQuery)
+                console.log(tmpItemData)
 
                 if(tmpItemData.result.recordset.length >0)
                 {
@@ -691,6 +698,7 @@ export default class itemCard extends React.PureComponent
                             tmpServices.push(tmpItemData.result.recordset[i])
                         }
                     }
+                    console.log(tmpServices)
 
                     for (let x = 0; x < tmpServices.length; x++) 
                     {
@@ -764,6 +772,7 @@ export default class itemCard extends React.PureComponent
                                 let tmpMaxData = this.prmObj.filter({ID:'ItemMaxPricePercent'}).getValue()
                                 let tmpMAxPrice = e.data.CUSTOMER_PRICE + (e.data.CUSTOMER_PRICE * tmpMaxData) /100
                                 this.txtMaxSalePrice.value = Number((tmpMAxPrice).toFixed(2))
+                                this.taxSugarValidCheck()
                             }
                         },
                     ]
@@ -975,6 +984,7 @@ export default class itemCard extends React.PureComponent
                                         this.txtBarcode.value = ""; 
                                         this.txtBarcode.readOnly = true;   
                                         this.imgFile.value = ""; 
+                                        this.itemsPriceSupply.clearAll();     
                                         this.itemsPriceLogObj.clearAll();     
                                         this.salesPriceLogObj.clear()   
                                         this.salesContractObj.clear()   
@@ -1022,6 +1032,8 @@ export default class itemCard extends React.PureComponent
                                 
                                         this.itemGrpForOrginsValidCheck();   
                                         this.itemGrpForMinMaxAccessCheck();  
+                                        this.taxSugarValidCheck()
+
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
@@ -1065,10 +1077,11 @@ export default class itemCard extends React.PureComponent
                                             }
                                         }
                                         App.instance.setState({isExecute:false})
-                                        await this.popAnalysis.show()
+                                        this.popAnalysis.show()
                                     }}/>
                                 </Item>
-                                <Item location="after" locateInMenu="auto"
+                                <Item location="after"
+                                locateInMenu="auto"
                                 widget="dxButton"
                                 options=
                                 {
@@ -1179,7 +1192,6 @@ export default class itemCard extends React.PureComponent
                                             }
                                         ]
                                     }
-                                    deferRendering={true}
                                     >
                                         <Column dataField="CODE" caption={this.t("pg_txtRef.clmCode")} width={'20%'} />
                                         <Column dataField="NAME" caption={this.t("pg_txtRef.clmName")} width={'70%'} defaultSortOrder="asc" />
@@ -1221,13 +1233,13 @@ export default class itemCard extends React.PureComponent
                                     {
                                         id:'001',
                                         icon:'add',
-                                        onClick:async ()=>
-                                        {                                            
-                                            await this.popCustomer.show();
+                                        onClick:()=>
+                                        {
                                             this.txtPopCustomerCode.value = "";
                                             this.txtPopCustomerName.value = "";
                                             this.txtPopCustomerItemCode.value = "";
                                             this.txtPopCustomerPrice.value = 0;
+                                            this.popCustomer.show();
                                             setTimeout(async () => 
                                             {
                                                this.txtPopCustomerCode.focus()
@@ -1263,13 +1275,11 @@ export default class itemCard extends React.PureComponent
                                                 icon:'add',
                                                 onClick:async()=>
                                                 {
-                                                    
-                                                    await this.popBarcode.show();
                                                     await this.cmbPopBarUnit.dataRefresh({source : this.itemsObj.dt('ITEM_UNIT').where({TYPE:0})})
                                                     this.txtPopBarcode.value = "";
                                                     this.cmbPopBarType.value = "0";
                                                     this.cmbPopBarUnit.value = this.itemsObj.dt('ITEM_UNIT').where({TYPE:0}).length > 0 ? this.itemsObj.dt('ITEM_UNIT').where({TYPE:0})[0].GUID : ''
-
+                                                    this.popBarcode.show();
                                                     setTimeout(async () => 
                                                     {
                                                         this.txtPopBarcode.focus()
@@ -1336,10 +1346,10 @@ export default class itemCard extends React.PureComponent
                                     access={this.access.filter({ELEMENT:'cmbOrigin',USERS:this.user.CODE})}
                                     data={{source:{select:{query : "SELECT CODE,NAME FROM COUNTRY ORDER BY CODE ASC"},sql:this.core.sql}}}
                                     onValueChanged={(e)=>
-                                    {
-                                        this.btnSave.setState({disabled:false});
-                                        this.taxSugarValidCheck()
-                                    }}
+                                        {
+                                            this.btnSave.setState({disabled:false});
+                                            this.taxSugarValidCheck()
+                                        }}
                                     >
                                         <Validator validationGroup={this.state.isItemGrpForOrginsValid ? "frmItems" + this.tabIndex : ''}>
                                             <RequiredRule message={this.t("validOrigin")}   
@@ -1502,8 +1512,8 @@ export default class itemCard extends React.PureComponent
                                     param={this.param.filter({ELEMENT:'chkTicketRest',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'chkTicketRest',USERS:this.user.CODE})}/>
                                 </Item>
-                                {/* chkInterfel */}
-                                <Item>
+                                 {/* chkInterfel */}
+                                 <Item>
                                     <Label text={this.t("chkInterfel")} alignment="right" />
                                     <NdCheckBox id="chkInterfel" parent={this} defaultValue={false} dt={{data:this.itemsObj.dt('ITEMS'),field:"INTERFEL"}}
                                      param={this.param.filter({ELEMENT:'chkInterfel',USERS:this.user.CODE})}
@@ -1568,16 +1578,15 @@ export default class itemCard extends React.PureComponent
                                                 <Item location="after">
                                                         <Button icon="add"
                                                         text={this.t("sellPriceAdd")}
-                                                        onClick={async()=>
-                                                        {   
-                                                            await this.popPrice.show();
-                                                            
+                                                        onClick={()=>
+                                                        {                                                        
                                                             this.dtPopPriStartDate.value = "1970-01-01"
                                                             this.dtPopPriEndDate.value = "1970-01-01"
                                                             this.txtPopPriQuantity.value = 1
                                                             this.txtPopPriPrice.value = 0
                                                             this.txtPopPriPriceVatExt.value = 0
 
+                                                            this.popPrice.show();
                                                             setTimeout(async () => 
                                                             {
                                                                this.txtPopPriPrice.focus()
@@ -1687,10 +1696,8 @@ export default class itemCard extends React.PureComponent
                                             <Toolbar>
                                                 <Item location="after">
                                                     <Button icon="add"
-                                                    onClick={async()=>
+                                                    onClick={()=>
                                                     {                                                        
-                                                        await this.popUnit.show();
-
                                                         this.cmbPopUnitType.value = "2"
                                                         this.cmbPopUnitName.value = "001"
                                                         this.txtPopUnitFactor.value = "0"
@@ -1699,6 +1706,8 @@ export default class itemCard extends React.PureComponent
                                                         this.txtPopUnitWidth.value = "0";
                                                         this.txtPopUnitHeight.value = "0"
                                                         this.txtPopUnitSize.value = "0"
+
+                                                        this.popUnit.show();
                                                     }}/>
                                                 </Item>
                                             </Toolbar>
@@ -1752,14 +1761,12 @@ export default class itemCard extends React.PureComponent
                                                 <Item location="after">
                                                     <Button icon="add"
                                                     onClick={async ()=>
-                                                    {                                                        
-                                                        await this.popBarcode.show();
-
+                                                    {
                                                         await this.cmbPopBarUnit.dataRefresh({source : this.itemsObj.dt('ITEM_UNIT').where({TYPE:{'in':[0,2]}})})
                                                         this.txtPopBarcode.value = "";
                                                         this.cmbPopBarType.value = "0";
                                                         this.cmbPopBarUnit.value = this.itemsObj.dt('ITEM_UNIT').where({TYPE:0}).length > 0 ? this.itemsObj.dt('ITEM_UNIT').where({TYPE:0})[0].GUID : ''
-
+                                                        this.popBarcode.show();
                                                         setTimeout(async () => 
                                                         {
                                                            this.txtPopBarcode.focus()
@@ -1801,12 +1808,12 @@ export default class itemCard extends React.PureComponent
                                             <Toolbar>
                                                 <Item location="after">
                                                     <Button icon="add"
-                                                    onClick={async()=>
+                                                    onClick={()=>
                                                     {
-                                                        await this.popCustomer.show();
+                                                        
                                                         this.txtPopCustomerItemCode.value = "";
                                                         this.txtPopCustomerPrice.value = 0;
-
+                                                        this.popCustomer.show();
                                                         setTimeout(async () => 
                                                         {
                                                            this.txtPopCustomerCode.focus()
@@ -2154,7 +2161,6 @@ export default class itemCard extends React.PureComponent
                         width={'500'}
                         height={'400'}
                         position={{of:'#root'}}
-                        deferRendering={true}
                         >
                             <Form colCount={1} height={'fit-content'} id={"frmPrice" + this.tabIndex}>
                                 <Item>
@@ -2290,7 +2296,6 @@ export default class itemCard extends React.PureComponent
                         width={'500'}
                         height={'510'}
                         position={{of:'#root'}}
-                        deferRendering={true}
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
@@ -2382,7 +2387,6 @@ export default class itemCard extends React.PureComponent
                         width={'500'}
                         height={'275'}
                         position={{of:'#root'}}
-                        deferRendering={true}
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
@@ -2514,7 +2518,6 @@ export default class itemCard extends React.PureComponent
                         width={'500'}
                         height={'320'}
                         position={{of:'#root'}}
-                        deferRendering={true}
                         >
                             <Form colCount={1} height={'fit-content'} id={"frmItemCustomer" + + this.tabIndex}>
                                 <Item>
@@ -2588,7 +2591,6 @@ export default class itemCard extends React.PureComponent
                                             sql:this.core.sql
                                         }
                                     }}
-                                    deferRendering={true}
                                     >           
                                     <Scrolling mode="standart" />                         
                                     <Column dataField="TITLE" caption={this.t("pg_txtPopCustomerCode.clmName")} width={650} defaultSortOrder="asc" />
@@ -2701,7 +2703,6 @@ export default class itemCard extends React.PureComponent
                         width={'1200'}
                         height={'700'}
                         position={{of:'#root'}}
-                        deferRendering={true}
                         >
                             <Form colCount={3} height={'fit-content'}>
                                 <Item colSpan={2}>
@@ -2881,7 +2882,6 @@ export default class itemCard extends React.PureComponent
                         height={'230'}
                         position={{of:'#root'}}
                         button={[{id:"btn01",caption:this.t("msgUnit.btn01"),location:'after'}]}
-                        deferRendering={true}
                         >
                             <div className='row py-2'>
                                 <div className='col-5'>
@@ -2929,7 +2929,6 @@ export default class itemCard extends React.PureComponent
                         width={'800'}
                         height={'500'}
                         position={{of:'#root'}}
-                        deferRendering={true}
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
