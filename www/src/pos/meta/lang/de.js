@@ -298,6 +298,15 @@ export const langDe =
     popLastSaleList: 
     {
         title: "Letzte Verkaufsliste",
+        cmbPopLastSalePayType : 
+        {
+            optionAll : "Alle",
+            optionEspece : "Espece",
+            optionTPE : "Carte Bancaire TPE",
+            optionCheque1 : "Cheque",
+            optionCheque2 : "CHEQue",
+            optionAvoir : "Bon D'Avoir"
+        }
     },
     txtPopLastRefPholder: "Bitte den Barcode auf dem Ticket scannen.",
     popLastTotal: 
@@ -776,5 +785,23 @@ export const langDe =
         title: "Achtung",
         msg: "Die Verbindung zum Server wurde getrennt.",
         btn01: "OK"
+    },
+    msgNotBarcodeWeighing:
+    {
+        title: "Achtung",
+        msg: "Die Gesamtmenge des gewogenen Produkts stimmt nicht mit dem gescannten Barcode überein!",
+        btn01: "OK"
+    },
+    msgBarcodeWeighing:
+    {
+        title: "Achtung",
+        msg: "Gescannte Zeile : {0} - Gesamtbetrag : {1}",
+        btn01: "Okay"
+    },
+    msgTSENotFound:
+    {
+        title: "Achtung",
+        msg: "Die Kommunikation mit dem TSE-Gerät konnte nicht hergestellt werden !",
+        btn01: "Okay"
     }
 }

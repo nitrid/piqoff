@@ -298,6 +298,15 @@ export const langFr =
     popLastSaleList : 
     {
         title :" Dernière liste de vente ",
+        cmbPopLastSalePayType : 
+        {
+            optionAll : "Tous",
+            optionEspece : "Espece",
+            optionTPE : "Carte Bancaire TPE",
+            optionCheque1 : "Cheque",
+            optionCheque2 : "CHEQue",
+            optionAvoir : "Bon D'Avoir"
+        }
     },
     txtPopLastRefPholder : "Veuillez scanner le code barre présent sur le ticket ... ",
     popLastTotal :  
@@ -777,4 +786,22 @@ export const langFr =
         msg : "La connexion avec le serveur est interrompu ", 
         btn01 : "D'accord"  
     },
+    msgNotBarcodeWeighing: //BAK
+    {
+        title: "Attention",
+        msg: "La quantité totale du produit pesé ne correspond pas au code-barres lu !",
+        btn01: "D'accord"
+    },
+    msgBarcodeWeighing: //BAK
+    {
+        title: "Attention",
+        msg: "Ligne lue : {0} - Montant total : {1}",
+        btn01: "D'accord"
+    },
+    msgTSENotFound: //BAK
+    {
+        title: "Attention",
+        msg: "La communication avec l'appareil TSE n'a pas pu être établie !",
+        btn01: "D'accord"
+    }
 }

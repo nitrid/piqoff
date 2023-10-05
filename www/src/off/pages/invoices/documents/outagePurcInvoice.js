@@ -68,8 +68,6 @@ export default class outagePurcInvoice extends DocBase
         tmpDocCustomer.DOC_DATE = this.docObj.dt()[0].DOC_DATE
         this.docObj.docCustomer.addEmpty(tmpDocCustomer)
 
-        this.txtRef.readOnly = false
-        this.txtRefno.readOnly = true
         this.docLocked = false
         
         this.frmDocItems.option('disabled',true)
@@ -141,8 +139,6 @@ export default class outagePurcInvoice extends DocBase
         await super.getDoc(pGuid,pRef,pRefno);
         App.instance.setState({isExecute:false})
 
-        this.txtRef.readOnly = true
-        this.txtRefno.readOnly = true
     }
     async calculateTotal()
     {
@@ -405,8 +401,6 @@ export default class outagePurcInvoice extends DocBase
     {
         App.instance.setState({isExecute:true})
 
-        this.txtRef.readOnly = true
-        this.txtRefno.readOnly = true
         
         if(typeof pQuantity == 'undefined')
         {
@@ -1030,11 +1024,16 @@ export default class outagePurcInvoice extends DocBase
                                         <div className="col-4 pe-0">
                                             <NdTextBox id="txtRef" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF"}}
                                             upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                            readOnly={true}
                                             maxLength={32}
-                                            onValueChanged={(async(e)=>
+                                            onChange={(async()=>
                                             {
                                                 this.docObj.docCustomer.dt()[0].REF = this.txtRef.value
+                                                this.checkRow()
+                                                let tmpResult = await this.checkDoc('00000000-0000-0000-0000-000000000000',this.txtRef.value,this.txtRefno.value)
+                                                if(tmpResult == 3)
+                                                {
+                                                    this.txtRef.value = "";
+                                                }
                                             }).bind(this)}
                                             param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
@@ -1046,7 +1045,6 @@ export default class outagePurcInvoice extends DocBase
                                         </div>
                                         <div className="col-5 ps-0">
                                             <NdTextBox id="txtRefno" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF_NO"}}
-                                            readOnly={true}
                                             button=
                                             {
                                                 [
@@ -1085,6 +1083,7 @@ export default class outagePurcInvoice extends DocBase
                                                     }
                                                 }
                                                 this.docObj.docCustomer.dt()[0].REF_NO = this.txtRefno.value
+                                                this.checkRow()
                                                 let tmpResult = await this.checkDoc('00000000-0000-0000-0000-000000000000',this.txtRef.value,this.txtRefno.value)
                                                 if(tmpResult == 3)
                                                 {
@@ -1147,6 +1146,18 @@ export default class outagePurcInvoice extends DocBase
                                     dt={{data:this.docObj.dt('DOC'),field:"OUTPUT_CODE"}} 
                                     onEnterKey={(async()=>
                                     {
+                                        if(this.docObj.docItems.dt().length > 0)
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgCustomerLock',showTitle:true,title:this.t("msgCustomerLock.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgCustomerLock.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerLock.msg")}</div>)
+                                            }
+                                            
+                                            await dialog(tmpConfObj);
+                                            return;
+                                        }
                                         await this.pg_txtCustomerCode.setVal(this.txtCustomerCode.value)
                                         this.pg_txtCustomerCode.onClick = async(data) =>
                                         {
@@ -1193,8 +1204,20 @@ export default class outagePurcInvoice extends DocBase
                                             {
                                                 id:'01',
                                                 icon:'more',
-                                                onClick:()=>
+                                                onClick:async()=>
                                                 {
+                                                    if(this.docObj.docItems.dt().length > 0)
+                                                    {
+                                                        let tmpConfObj =
+                                                        {
+                                                            id:'msgCustomerLock',showTitle:true,title:this.t("msgCustomerLock.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                            button:[{id:"btn01",caption:this.t("msgCustomerLock.btn01"),location:'after'}],
+                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerLock.msg")}</div>)
+                                                        }
+                                                        
+                                                        await dialog(tmpConfObj);
+                                                        return;
+                                                    }
                                                     this.pg_txtCustomerCode.show()
                                                     this.pg_txtCustomerCode.onClick = async(data) =>
                                                     {

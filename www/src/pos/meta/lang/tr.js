@@ -298,6 +298,15 @@ export const langTr =
     popLastSaleList : 
     {
         title : "Son Satış Listesi",
+        cmbPopLastSalePayType : 
+        {
+            optionAll : "Tümü",
+            optionEspece : "Espece",
+            optionTPE : "Carte Bancaire TPE",
+            optionCheque1 : "Cheque",
+            optionCheque2 : "CHEQue",
+            optionAvoir : "Bon D'Avoir"
+        }
     },
     txtPopLastRefPholder : "Lütfen ticket üzerindeki barkodu okutunuz...",
     popLastTotal : 
@@ -775,6 +784,24 @@ export const langTr =
     {
         title : "Dikkat",
         msg : "Sunucu ile bağlantınız koptu.. ",
+        btn01 : "Tamam"
+    },
+    msgNotBarcodeWeighing: 
+    {
+        title : "Dikkat",
+        msg : "Tartılan ürün ile okutulan barkod toplam miktarı eşleşmedi !",
+        btn01 : "Tamam"
+    },
+    msgBarcodeWeighing: 
+    {
+        title : "Dikkat",
+        msg : "Okutulan satır : {0} - Toplam tutar : {1}",
+        btn01 : "Tamam"
+    },
+    msgTSENotFound: 
+    {
+        title : "Dikkat",
+        msg : "TSE cihazı ile iletişim kurulamadı !",
         btn01 : "Tamam"
     },
 }

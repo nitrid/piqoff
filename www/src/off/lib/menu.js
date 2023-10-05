@@ -226,6 +226,11 @@ export const menu = (e) =>
                             text : e.t('menuOff.stk_05_003'),//'',
                             path: 'items/report/countInventoryReport'
                         },
+                        {
+                            id: 'stk_05_004',
+                            text : e.t('menuOff.stk_05_004'),//'',
+                            path: 'items/report/itemOutageReport'
+                        },
                     ]
                 }
             ]
@@ -1068,7 +1073,12 @@ export const menu = (e) =>
                         {
                             id: 'fns_04_001',
                             text: e.t('menuOff.fns_04_001'),//'Banka Ekstre Raporu',
-                            path: 'construction.js',
+                            path: 'finance/report/bankEkstreReport'
+                        },
+                        {
+                            id: 'fns_04_003',
+                            text: e.t('menuOff.fns_04_003'),//'Banka Ekstre Raporu',
+                            path: 'finance/report/safeEkstreReport'
                         },
                         {
                             id: 'fns_04_002',

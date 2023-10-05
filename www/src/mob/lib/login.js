@@ -116,7 +116,7 @@ export default class Login extends React.PureComponent
                             </div>
                             <div className="col-2 pb-2">
                                 <Button icon="preferences" visible={App.instance.device}
-                                onClick={()=>window.location="../tab/appUpdate.html"}
+                                onClick={()=>window.location="../mob/appUpdate.html"}
                                 />
                             </div>
                         </div>

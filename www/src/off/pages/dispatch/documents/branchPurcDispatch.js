@@ -1390,6 +1390,18 @@ export default class branchSaleDispatch extends React.PureComponent
                                     dt={{data:this.docObj.dt('DOC'),field:"OUTPUT_CODE"}} 
                                     onEnterKey={(async()=>
                                         {
+                                            if(this.docObj.docItems.dt().length > 0)
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgCustomerLock',showTitle:true,title:this.t("msgCustomerLock.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgCustomerLock.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerLock.msg")}</div>)
+                                                }
+                                                
+                                                await dialog(tmpConfObj);
+                                                return;
+                                            }
                                             await this.pg_txtCustomerCode.setVal(this.txtCustomerCode.value)
                                             this.pg_txtCustomerCode.show()
                                             this.pg_txtCustomerCode.onClick = async(data) =>
@@ -1443,8 +1455,20 @@ export default class branchSaleDispatch extends React.PureComponent
                                             {
                                                 id:'01',
                                                 icon:'more',
-                                                onClick:()=>
+                                                onClick:async()=>
                                                 {
+                                                    if(this.docObj.docItems.dt().length > 0)
+                                                    {
+                                                        let tmpConfObj =
+                                                        {
+                                                            id:'msgCustomerLock',showTitle:true,title:this.t("msgCustomerLock.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                            button:[{id:"btn01",caption:this.t("msgCustomerLock.btn01"),location:'after'}],
+                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerLock.msg")}</div>)
+                                                        }
+                                                        
+                                                        await dialog(tmpConfObj);
+                                                        return;
+                                                    }
                                                     this.pg_txtCustomerCode.show()
                                                     this.pg_txtCustomerCode.onClick = async(data) =>
                                                     {
