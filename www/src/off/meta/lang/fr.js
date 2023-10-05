@@ -16448,7 +16448,7 @@ export const langFr =
         dtAdvanceDate : "date",
         cmbPopSafe :"Caisse",
         addAdvance : "Fond De Caisse",
-        btnNotTrue : "Tekrar Giriş", // BAK
+        btnNotTrue : "Correction saisie",
         msgDoubleAdvence:
         {
             title: "Attention",
