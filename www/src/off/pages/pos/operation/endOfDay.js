@@ -31,9 +31,9 @@ import tr from '../../../meta/lang/devexpress/tr.js';
 
 export default class endOfDay extends React.PureComponent
 {
-    constructor()
+    constructor(props)
     {
-        super()
+        super(props)
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
@@ -46,6 +46,8 @@ export default class endOfDay extends React.PureComponent
         this.lastPosPayDt = new datatable();
         this.state={ticketId :""}
 
+        this.reactWizardRef = React.createRef();
+
         this.finishButtonClick = this.finishButtonClick.bind(this)
         ReactWizard.defaultProps = {
           validate: true,
@@ -55,13 +57,11 @@ export default class endOfDay extends React.PureComponent
           color: "primary",
           progressbar: false
         };    
-        
         this.steps = [
             {
               stepName: this.t("start"),
               stepIcon: "tim-icons icon-single-02",
               component: this.stepStart(),
-              
             },
             {
               stepName: this.t("advance"),
@@ -109,7 +109,7 @@ export default class endOfDay extends React.PureComponent
     {
         await this.core.util.waitUntil(0)
         this.init();
-
+        console.log(this.reactWizardRef.current)
     }
     async init()
     {
@@ -591,7 +591,23 @@ export default class endOfDay extends React.PureComponent
           content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSucces.msg")}</div>)
         }
         
-       dialog(tmpConfObj);
+        let pResult = await dialog(tmpConfObj);
+        console.log(pResult)
+        if(pResult == 'btn01')
+        { 
+          this.reactWizardRef.current.setState({
+            currentStep: 0,
+            nextButton: true,
+            previousButton: false,
+            finishButton: false,
+            width: "16.666666666666668%",
+        })
+          this.txtCash.value = 0
+          this.txtCreditCard.value = 0
+          this.txtRestorant.value = 0
+          this.txtCheck.value = 0
+          this.cmbSafe.value = ''
+        }
     }
     render()
     {
@@ -601,7 +617,7 @@ export default class endOfDay extends React.PureComponent
                     <div className={"panel-body container-fluid"}>
                         <div className={'row'}>
                             <div className={'col-12'}>
-                            <ReactWizard color={"green"} steps={this.steps} progressbar={true}  title={this.t("title")} finishButtonClick={this.finishButtonClick}>
+                            <ReactWizard ref={this.reactWizardRef} color={"green"} steps={this.steps} progressbar={true} title={this.t("title")} finishButtonClick={this.finishButtonClick}>
                             </ReactWizard>
                             </div>
                         </div>

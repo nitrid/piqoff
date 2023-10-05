@@ -161,7 +161,7 @@ export default class Login extends React.Component
                         <div className='row'>
                             <div className='col-4'></div>
                             <div className='col-8'>
-                                <img src="./css/img/Piqsoft_Logo.png" height="48px"/>
+                                <img src="./css/img/piqsoftlogo.png" height="48px"/>
                             </div>
                         </div>
                     </div>
@@ -266,10 +266,15 @@ export default class Login extends React.Component
                                 </div>
                             </div> */}
                              <div className="row">
-                                <div className="col-5">
+                                <div className="col-3">
                                 </div>
-                                <div className="col-4">
-                                    <img src="./css/img/Logo_NF_525-e1569399608233.jpg" height="70px"/>
+                                <div className="col-3">
+                                    <img src="./css/img/LogoNF525.jpg" height="70px"/>
+                                </div>
+                                <div className="col-3">
+                                    <img src="./css/img/lnelogo.jpg" height="70px"/>
+                                </div>
+                                <div className="col-3">
                                 </div>
                             </div>     
                             <div className="row">

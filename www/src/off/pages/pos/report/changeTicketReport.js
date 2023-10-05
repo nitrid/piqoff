@@ -86,7 +86,7 @@ export default class salesOrdList extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT POS_GUID,LUSER_NAME, SUBSTRING(CONVERT(NVARCHAR(50),POS_GUID),20,25) AS TICKET_ID,CONVERT(NVARCHAR,(SELECT TOP 1 DOC_DATE FROM POS WHERE POS.GUID = POS_EXTRA_VW_01.POS_GUID),104) AS DATE,DESCRIPTION FROM POS_EXTRA_VW_01 WHERE (SELECT TOP 1 DOC_DATE FROM POS WHERE POS.GUID = POS_EXTRA_VW_01.POS_GUID) >=@FIRST_DATE AND (SELECT TOP 1 DOC_DATE FROM POS WHERE POS.GUID = POS_EXTRA_VW_01.POS_GUID) <= @LAST_DATE AND TAG = @TAG" ,
+                    query : "SELECT POS_GUID,LUSER_NAME, SUBSTRING(CONVERT(NVARCHAR(50),POS_GUID),20,25) AS TICKET_ID,(SELECT TOTAL FROM POS WHERE GUID = POS_GUID) AS TOTAL,CONVERT(NVARCHAR,(SELECT TOP 1 DOC_DATE FROM POS WHERE POS.GUID = POS_EXTRA_VW_01.POS_GUID),104) AS DATE,CONVERT(NVARCHAR,CDATE,108) AS HOUR,DESCRIPTION FROM POS_EXTRA_VW_01 WHERE (SELECT TOP 1 DOC_DATE FROM POS WHERE POS.GUID = POS_EXTRA_VW_01.POS_GUID) >=@FIRST_DATE AND (SELECT TOP 1 DOC_DATE FROM POS WHERE POS.GUID = POS_EXTRA_VW_01.POS_GUID) <= @LAST_DATE AND TAG = @TAG" ,
                     param : ['FIRST_DATE:date','LAST_DATE:date','TAG:string|50'],
                     value : [this.dtFirst.value,this.dtLast.value,this.cmbType.value]
                 },
@@ -107,6 +107,7 @@ export default class salesOrdList extends React.PureComponent
             "ISNULL((SELECT TOP 1 DATA FROM POS_EXTRA WHERE POS_EXTRA.LINE_GUID = POS_SALE.GUID AND TAG = 'PRICE DESC'),'') AS LAST_DATA,  " +
             "ISNULL((SELECT TOP 1 DESCRIPTION FROM POS_EXTRA WHERE POS_EXTRA.LINE_GUID = POS_SALE.GUID ORDER BY TAG DESC),ISNULL((SELECT TOP 1 DESCRIPTION FROM POS_EXTRA WHERE POS_EXTRA.POS_GUID = POS_SALE.POS AND TAG = 'FULL DELETE' ORDER BY TAG DESC),'')) AS DESCRIPTION,  " +
             "QUANTITY AS QUANTITY,  " +
+            "CONVERT(NVARCHAR,CDATE,108) AS HOUR, " +
             "PRICE AS PRICE,  " +
             "TOTAL AS TOTAL,  " +
             "DELETED AS DELETED  " +
@@ -270,8 +271,10 @@ export default class salesOrdList extends React.PureComponent
                             >                            
                                 <Scrolling mode="standart" />
                                 <Export fileName={this.lang.t("menu.pos_02_001")} enabled={true} allowExportSelectedData={true} />
-                                <Column dataField="DATE" caption={this.t("grdSaleTicketReport.clmDate")} visible={true} width={150}/> 
                                 <Column dataField="LUSER_NAME" caption={this.t("grdSaleTicketReport.clmUser")} visible={true} width={150}/> 
+                                <Column dataField="DATE" caption={this.t("grdSaleTicketReport.clmDate")} visible={true} width={150}/> 
+                                <Column dataField="HOUR" caption={this.t("grdSaleTicketReport.clmTime")} width={90} allowEditing={false} />
+                                <Column dataField="TOTAL" caption={this.t("grdSaleTicketReport.clmTotal")} width={90} allowEditing={false} />
                                 <Column dataField="TICKET_ID" caption={this.t("grdSaleTicketReport.clmTicketId")} visible={true} width={200}/> 
                                 <Column dataField="DESCRIPTION" caption={this.t("grdSaleTicketReport.clmDescription")} visible={true} width={400}/> 
                             </NdGrid>
@@ -296,7 +299,7 @@ export default class salesOrdList extends React.PureComponent
                           <div className="row">
                           <div className="col-1 pe-0"></div>
                             <div className="col-7 pe-0">
-                            <NdGrid id="grdSaleTicketItems" parent={this} 
+                            <NdGrid id="grdSaleTicketItems" parent={this}
                                 selection={{mode:"single"}} 
                                 showBorders={true}
                                 filterRow={{visible:true}} 
@@ -323,6 +326,7 @@ export default class salesOrdList extends React.PureComponent
                                     <Paging defaultPageSize={20} />
                                     <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
                                     <Export fileName={this.lang.t("menu.pos_02_001")} enabled={true} allowExportSelectedData={true} />
+                                    <Column dataField="HOUR" caption={this.t("grdSaleTicketItems.clmTime")} visible={true} width={130}/> 
                                     <Column dataField="BARCODE" caption={this.t("grdSaleTicketItems.clmBarcode")} visible={true} width={130}/> 
                                     <Column dataField="ITEM_NAME" caption={this.t("grdSaleTicketItems.clmName")} visible={true} width={250}/> 
                                     <Column dataField="QUANTITY" caption={this.t("grdSaleTicketItems.clmQuantity")} visible={true} width={60}/> 

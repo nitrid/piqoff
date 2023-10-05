@@ -235,7 +235,10 @@ export default class itemCard extends React.PureComponent
         await this.itemsObj.load({CODE:pCode});
         //TEDARİKÇİ FİYAT GETİR İŞLEMİ.  
         this.itemsPriceLogObj.load({ITEM_GUID:this.itemsObj.dt()[0].GUID})
-
+        if(typeof this.itemsObj.itemBarcode.dt()[0] == 'undefined')
+        {
+            this.txtBarcode.value = "";
+        }
         if(this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE').length > 0 && this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE').length == 1)
         {
             this.txtLastBuyPrice.value = this.itemsObj.itemMultiCode.dt('ITEM_MULTICODE')[0].CUSTOMER_PRICE
@@ -817,18 +820,43 @@ export default class itemCard extends React.PureComponent
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnBack" parent={this} icon="revert" type="default"
-                                    onClick={()=>
+                                    onClick={async()=>
                                     {
                                         if(this.prevCode != '')
                                         {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgItemBack',showTitle:true,title:this.t("msgItemBack.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgItemBack.btn01"),location:'before'},{id:"btn02",caption:this.t("msgItemBack.btn02"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemBack.msg")}</div>)
+                                            }
+                                            
+                                            let pResult = await dialog(tmpConfObj);
+                                            if(pResult == 'btn02')
+                                            {
+                                                return;
+                                            }    
                                             this.getItem(this.prevCode); 
                                         }
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnNew" parent={this} icon="file" type="default"
-                                    onClick={()=>
+                                    onClick={async()=>
                                     {
+                                       
+                                        let tmpConfObj =
+                                        {
+                                            id:'msgNewItem',showTitle:true,title:this.t("msgNewItem.title"),showCloseButton:true,width:'500px',height:'200px',
+                                            button:[{id:"btn01",caption:this.t("msgNewItem.btn01"),location:'before'},{id:"btn02",caption:this.t("msgNewItem.btn02"),location:'after'}],
+                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNewItem.msg")}</div>)
+                                        }
+                                        
+                                        let pResult = await dialog(tmpConfObj);
+                                        if(pResult == 'btn02')
+                                        {
+                                            return;
+                                        }    
                                         this.init(); 
                                     }}/>
                                 </Item>

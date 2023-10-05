@@ -368,6 +368,24 @@ export default class posDoc extends React.PureComponent
                 this.posUsbTSE = new posUsbTSECls();
                 this.posUsbTSE.deviceId = this.posObj.dt()[this.posObj.dt().length - 1].DEVICE
                 this.posUsbTSE.init()
+                this.posUsbTSE.on('status',async(pStatus)=>
+                {
+                    if(!pStatus)
+                    {
+                        let tmpConfObj =
+                        {
+                            id:'msgTSENotFound',
+                            showTitle:true,
+                            title:this.lang.t("msgTSENotFound.title"),
+                            showCloseButton:true,
+                            width:'500px',
+                            height:'200px',
+                            button:[{id:"btn01",caption:this.lang.t("msgTSENotFound.btn01"),location:'after'}],
+                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgTSENotFound.msg")}</div>)
+                        }
+                        await dialog(tmpConfObj);
+                    }
+                })
             }
             //*********************************** */
             this.isFirstOpen = true
@@ -703,6 +721,7 @@ export default class posDoc extends React.PureComponent
             tmpCustomerDt.selectCmd.value = [pCode]
             await tmpCustomerDt.refresh();
 
+            console.log(tmpCustomerDt)
             if(tmpCustomerDt.length > 0)
             {
                 if(tmpCustomerDt[0].POINT_COUNT > 3)
@@ -1326,7 +1345,7 @@ export default class posDoc extends React.PureComponent
     {
         if(pType == 'SALE')
         {
-            let tmpData = this.posObj.posSale.dt().where({ITEM_GUID:pData.GUID}).where({SUBTOTAL:0}).where({QUANTITY:{'>':0}}).where({PRICE:pData.PRICE}).where({PROMO_TYPE:{'<>':1}})
+            let tmpData = this.posObj.posSale.dt().where({ITEM_GUID:pData.GUID}).where({SUBTOTAL:0}).where({QUANTITY:{'>':0}}).where({PRICE:pData.PRICE}).where({PROMO_TYPE:{'<>':1}}).where({UNIT_FACTOR:pData.UNIT_FACTOR})
             if(tmpData.length > 0)
             {
                 //UNIQ ÜRÜN İÇİN pData.INPUT == pData.UNIQ_CODE
@@ -1508,11 +1527,11 @@ export default class posDoc extends React.PureComponent
                 //ALMANYA TSE USB CİHAZLAR İÇİN YAPILDI.
                 if(this.prmObj.filter({ID:'TSEUsb',TYPE:0}).getValue() == true)
                 {
-                    await this.posUsbTSE.transaction(JSON.stringify(this.posObj.dt().toArray()))
+                    await this.posUsbTSE.transaction(tmpSignedData.SIGNATURE_SUM)
                     if(typeof this.posUsbTSE.lastTransaction != 'undefined' && this.posUsbTSE.lastTransaction.status)
                     {
                         this.posObj.dt()[0].SIGNATURE = this.posUsbTSE.lastTransaction.signature
-                        this.posObj.dt()[0].SIGNATURE_SUM = JSON.stringify(this.posObj.dt().toArray())
+                        //this.posObj.dt()[0].SIGNATURE_SUM = JSON.stringify(this.posObj.dt().toArray())
                     }
                     else
                     {
@@ -1764,14 +1783,15 @@ export default class posDoc extends React.PureComponent
                                 await this.print(tmpData,2)
                             }
                         }
-                    }
-                    //***************************************************/
-                    //TICKET REST. ALDIĞINDA KASA AÇMA İŞLEMİ 
-                    if(this.posObj.posPay.dt().where({PAY_TYPE:3}).length > 0)
-                    {
-                        await this.posDevice.caseOpen();
+                        //***************************************************/
                     }
                 }
+                //TICKET REST. ALDIĞINDA KASA AÇMA İŞLEMİ 
+                if(this.posObj.posPay.dt().where({PAY_TYPE:3}).length > 0)
+                {
+                    await this.posDevice.caseOpen();
+                }
+                //***************************************************/
                 //POS_SALE DEKİ TÜM KAYITLARI TEKRAR SQL E DURUMU NEW OLARAK GÖNDERİYORUZ. PRD_POS_SALE_INSERT PROSEDÜRÜNÜN İÇERİSİNE UPDATE İŞLEMİNİ DE YERLEŞTİRDİK.
                 if (!this.core.offline)
                 {
@@ -3422,8 +3442,8 @@ export default class posDoc extends React.PureComponent
                                     }}
                                     alignment={"center"} cssClass={"cell-fontsize"}/>                                    
                                     <Column dataField="ITEM_SNAME" caption={this.lang.t("grdList.ITEM_NAME")} width={220} cssClass={"cell-fontsize"}/>
-                                    <Column dataField="QUANTITY" caption={this.lang.t("grdList.QUANTITY")} width={80} cellRender={(e)=>{return (e.data.SCALE_MANUEL == true ? "M-" : "") + (e.data.UNIT_SHORT == 'kg' ? Number(e.value).round(2) : e.value) + e.data.UNIT_SHORT}} format={"#,##0.000" } cssClass={"cell-fontsize"}/>
-                                    <Column dataField="PRICE" caption={this.lang.t("grdList.PRICE")} width={80} cellRender={(e)=>{return Number(e.value).round(2) + Number.money.sign + '/' + e.data.UNIT_SHORT}} cssClass={"cell-fontsize"}/>
+                                    <Column dataField="QUANTITY" caption={this.lang.t("grdList.QUANTITY")} width={80} cellRender={(e)=>{return (e.data.SCALE_MANUEL == true ? "M-" : "") + (e.data.UNIT_SHORT == 'kg' ? Number(e.value / e.data.UNIT_FACTOR).round(2) : Number(e.value / e.data.UNIT_FACTOR).round(0)) + e.data.UNIT_SHORT}} format={"#,##0.000" } cssClass={"cell-fontsize"}/>
+                                    <Column dataField="PRICE" caption={this.lang.t("grdList.PRICE")} width={80} cellRender={(e)=>{return Number(e.value * e.data.UNIT_FACTOR).round(2) + Number.money.sign + '/' + e.data.UNIT_SHORT}} cssClass={"cell-fontsize"}/>
                                     <Column dataField="AMOUNT" alignment={"right"} caption={this.lang.t("grdList.AMOUNT")} width={60} format={"#,##0.00" + Number.money.sign} cssClass={"cell-fontsize"}/>                                                
                                 </NdGrid>
                             </div>
@@ -4320,13 +4340,13 @@ export default class posDoc extends React.PureComponent
                                         <NbButton id={"btnSubtotal"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%"}}
                                         onClick={async()=>
                                         {
-                                            // let tmpData = this.posObj.posSale.dt().where({SUBTOTAL:0})
-                                            // let tmpMaxSub = this.posObj.posSale.dt().where({SUBTOTAL:{'<>':-1}}).max('SUBTOTAL') + 1
-                                            // for (let i = 0; i < tmpData.length; i++) 
-                                            // {
-                                            //     tmpData[i].SUBTOTAL = tmpMaxSub
-                                            // }
-                                            // this.calcGrandTotal()
+                                            let tmpData = this.posObj.posSale.dt().where({SUBTOTAL:0})
+                                            let tmpMaxSub = this.posObj.posSale.dt().where({SUBTOTAL:{'<>':-1}}).max('SUBTOTAL') + 1
+                                            for (let i = 0; i < tmpData.length; i++) 
+                                            {
+                                                tmpData[i].SUBTOTAL = tmpMaxSub
+                                            }
+                                            this.calcGrandTotal()
                                         }}>
                                             <i className="text-white fa-solid fa-square-root-variable" style={{fontSize: "24px"}} />
                                         </NbButton>
@@ -6160,7 +6180,15 @@ export default class posDoc extends React.PureComponent
                             {/* cmbPopLastSalePayType */} 
                             <div className="col-2">
                                 <NdSelectBox simple={true} parent={this} id="cmbPopLastSalePayType" displayExpr={'NAME'} valueExpr={'ID'} value={-1}
-                                data={{source:[{ID:-1,NAME:"Tümü"},{ID:0,NAME:"Espece"},{ID:1,NAME:"Carte Bancaire TPE"},{ID:2,NAME:"Cheque"},{ID:3,NAME:"CHEQue"},{ID:4,NAME:"Bon D'Avoir"}]}}/>
+                                data={{source : 
+                                [
+                                    {ID:-1,NAME:this.lang.t("popLastSaleList.cmbPopLastSalePayType.optionAll")},
+                                    {ID:0,NAME:this.lang.t("popLastSaleList.cmbPopLastSalePayType.optionEspece")},
+                                    {ID:1,NAME:this.lang.t("popLastSaleList.cmbPopLastSalePayType.optionTPE")},
+                                    {ID:2,NAME:this.lang.t("popLastSaleList.cmbPopLastSalePayType.optionCheque1")},
+                                    {ID:3,NAME:this.lang.t("popLastSaleList.cmbPopLastSalePayType.optionCheque2")},
+                                    {ID:4,NAME:this.lang.t("popLastSaleList.cmbPopLastSalePayType.optionAvoir")}
+                                ]}}/>
                             </div>
                             {/* cmbPopLastSaleUser */} 
                             <div className="col-2">
@@ -7494,9 +7522,9 @@ export default class posDoc extends React.PureComponent
                                     }}
                                     alignment={"center"}/>                                    
                                     <Column dataField="ITEM_SNAME" caption={this.lang.t("grdList.ITEM_NAME")} width={390}/>
-                                    <Column dataField="QUANTITY" caption={this.lang.t("grdList.QUANTITY")} cellRender={(e)=>{return (e.data.SCALE_MANUEL == true ? "M-" : "") + e.value + e.data.UNIT_SHORT}} width={100}/>
+                                    <Column dataField="QUANTITY" caption={this.lang.t("grdList.QUANTITY")} cellRender={(e)=>{return (e.data.SCALE_MANUEL == true ? "M-" : "") + (e.data.UNIT_SHORT == 'kg' ? Number(e.value / e.data.UNIT_FACTOR).round(2) : Number(e.value / e.data.UNIT_FACTOR).round(0)) + e.data.UNIT_SHORT}} width={100}/>
                                     <Column dataField="DISCPRICE" caption={this.lang.t("grdList.DISCOUNT")} width={100} format={"#,##0.00" + Number.money.sign}/>
-                                    <Column dataField="PRICE" caption={this.lang.t("grdList.PRICE")} width={70} format={"#,##0.00" + Number.money.sign}/>
+                                    <Column dataField="PRICE" caption={this.lang.t("grdList.PRICE")} cellRender={(e)=>{return Number(e.value * e.data.UNIT_FACTOR).round(2) + Number.money.sign + '/' + e.data.UNIT_SHORT}} width={70} format={"#,##0.00" + Number.money.sign}/>
                                     <Column dataField="TOTAL" alignment={"right"} caption={this.lang.t("grdList.AMOUNT")} width={60} format={"#,##0.00" + Number.money.sign}/>                                                
                                 </NdGrid>
                             </div>

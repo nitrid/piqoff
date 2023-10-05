@@ -17,7 +17,7 @@ import NdButton from '../../../../core/react/devex/button.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 
-export default class itemOutageReport extends React.PureComponent
+export default class safeEkstreReport extends React.PureComponent
 {
     constructor(props)
     {
@@ -25,23 +25,18 @@ export default class itemOutageReport extends React.PureComponent
 
         this.state = 
         {
-            columnListValue : ['OUTPUT_NAME','OUTPUT_NAME','REF','REF_NO','DOC_DATE','ITEM_CODE','ITEM_NAME','QUANTITY','TOTAL_COST','COST_PRICE','DESCRIPTION']
+            columnListValue : ['INPUT_NAME','OUTPUT_NAME','REF','REF_NO','DOC_DATE','DOC_AMOUNT']
         }
         
         this.core = App.instance.core;
         this.columnListData = 
         [
-            {CODE : "OUTPUT_CODE",NAME : this.t("grdListe.clmOutputCode")},                                   
+            {CODE : "INPUT_NAME",NAME : this.t("grdListe.clmInputName")},                                   
             {CODE : "OUTPUT_NAME",NAME : this.t("grdListe.clmOutputName")},                                   
             {CODE : "REF",NAME : this.t("grdListe.clmRef")},
             {CODE : "REF_NO",NAME : this.t("grdListe.clmRefNo")},
             {CODE : "DOC_DATE",NAME : this.t("grdListe.clmDocDate")},
-            {CODE : "ITEM_CODE",NAME : this.t("grdListe.clmCode")},
-            {CODE : "ITEM_NAME",NAME : this.t("grdListe.clmName")},
-            {CODE : "QUANTITY",NAME : this.t("grdListe.clmQuantity")},
-            {CODE : "COST_PRICE",NAME : this.t("grdListe.clmCostPrice")},
-            {CODE : "TOTAL_COST",NAME : this.t("grdListe.clmTotalCost")},
-            {CODE : "DESCRIPTION",NAME : this.t("grdListe.clmDescription")},
+            {CODE : "DOC_AMOUNT",NAME : this.t("grdListe.clmAmount")},
         ]
       
         this.groupList = [];
@@ -65,9 +60,9 @@ export default class itemOutageReport extends React.PureComponent
                 {
                     this.groupList.push('OUTPUT_NAME')
                 }
-                if(typeof e.value.find(x => x == 'OUTPUT_NAME') != 'undefined')
+                if(typeof e.value.find(x => x == 'INPUT_NAME') != 'undefined')
                 {
-                    this.groupList.push('OUTPUT_NAME')
+                    this.groupList.push('INPUT_NAME')
                 }
                 if(typeof e.value.find(x => x == 'REF') != 'undefined')
                 {
@@ -81,29 +76,9 @@ export default class itemOutageReport extends React.PureComponent
                 {
                     this.groupList.push('DOC_DATE')
                 }
-                if(typeof e.value.find(x => x == 'ITEM_CODE') != 'undefined')
+                if(typeof e.value.find(x => x == 'DOC_AMOUNT') != 'undefined')
                 {
-                    this.groupList.push('ITEM_CODE')
-                }
-                if(typeof e.value.find(x => x == 'ITEM_NAME') != 'undefined')
-                {
-                    this.groupList.push('ITEM_NAME')
-                }
-                if(typeof e.value.find(x => x == 'QUANTITY') != 'undefined')
-                {
-                    this.groupList.push('QUANTITY')
-                }
-                if(typeof e.value.find(x => x == 'TOTAL_COST') != 'undefined')
-                {
-                    this.groupList.push('TOTAL_COST')
-                }
-                if(typeof e.value.find(x => x == 'COST_PRICE') != 'undefined')
-                {
-                    this.groupList.push('COST_PRICE')
-                }
-                if(typeof e.value.find(x => x == 'DESCRIPTION') != 'undefined')
-                {
-                    this.groupList.push('DESCRIPTION')
+                    this.groupList.push('DOC_AMOUNT')
                 }
                 
                 for (let i = 0; i < this.grdListe.devGrid.columnCount(); i++) 
@@ -150,9 +125,9 @@ export default class itemOutageReport extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT * FROM DOC_ITEMS_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 1 AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE ORDER BY DOC_DATE" ,
-                    param : ['FIRST_DATE:date','LAST_DATE:date'],
-                    value : [this.dtDate.startDate,this.dtDate.endDate]
+                    query : "SELECT *,CASE WHEN INPUT = @SAFE THEN AMOUNT ELSE (AMOUNT * -1) END AS DOC_AMOUNT FROM DOC_CUSTOMER_VW_01 WHERE ((INPUT = @SAFE) OR (OUTPUT  = @SAFE)) AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE ORDER BY DOC_DATE" ,
+                    param : ['FIRST_DATE:date','LAST_DATE:date','SAFE:string|50'],
+                    value : [this.dtDate.startDate,this.dtDate.endDate,this.cmbSafe.value]
                 },
                 sql : this.core.sql
             }
@@ -200,9 +175,25 @@ export default class itemOutageReport extends React.PureComponent
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <Form colCount={2} id="frmKriter">
-                            <Item>
-                                <NbDateRange id={"dtDate"} parent={this} startDate={moment().startOf('month')} endDate={moment().endOf('month')}/>
-                            </Item>
+                                <Item>
+                                    <Label text={this.t("cmbSafe")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbSafe"
+                                    displayExpr="NAME"                       
+                                    valueExpr="GUID"
+                                    value=""
+                                    searchEnabled={true}
+                                    notRefresh={true}
+                                    onValueChanged={(async()=>
+                                        {
+
+                                        }).bind(this)}
+                                    data={{source:{select:{query : "SELECT * FROM SAFE_VW_01"},sql:this.core.sql}}}
+                                    >
+                                    </NdSelectBox>
+                                </Item>
+                                <Item>
+                                    <NbDateRange id={"dtDate"} parent={this} startDate={moment().startOf('month')} endDate={moment().endOf('month')}/>
+                                </Item>
                             </Form>
                         </div>
                     </div>
@@ -254,23 +245,14 @@ export default class itemOutageReport extends React.PureComponent
                                     
                                     return
                                 }}/>
-                                <Column dataField="OUTPUT_CODE" caption={this.t("grdListe.clmOutputCode")} width={60} visible={true} /> 
                                 <Column dataField="OUTPUT_NAME" caption={this.t("grdListe.clmOutputName")} width={120} visible={true}/> 
-                                <Column dataField="REF" caption={this.t("grdListe.clmRef")} width={80} visible={true}/> 
-                                <Column dataField="REF_NO" caption={this.t("grdListe.clmRefNo")} width={60} visible={true}/> 
-                                <Column dataField="ITEM_CODE" caption={this.t("grdListe.clmCode")} width={100} visible={true}/> 
-                                <Column dataField="ITEM_NAME" caption={this.t("grdListe.clmName")} width={180} visible={true}/> 
-                                <Column dataField="QUANTITY" caption={this.t("grdListe.clmQuantity")} width={80} visible={true}/> 
-                                <Column dataField="COST_PRICE" caption={this.t("grdListe.clmCostPrice")} width={90} format={{ style: "currency", currency: "EUR",precision: 2}} visible={true}/> 
-                                <Column dataField="TOTAL_COST" caption={this.t("grdListe.clmTotalCost")} width={90} format={{ style: "currency", currency: "EUR",precision: 2}} visible={true}/> 
-                                <Column dataField="DESCRIPTION" caption={this.t("grdListe.clmDescription")} width={120}  visible={true}/> 
+                                <Column dataField="INPUT_NAME" caption={this.t("grdListe.clmInputName")} width={120} visible={true}/> 
+                                <Column dataField="REF" caption={this.t("grdListe.clmRef")} width={90} visible={true}/> 
+                                <Column dataField="REF_NO" caption={this.t("grdListe.clmRefNo")} width={90} visible={true}/> 
+                                <Column dataField="DOC_AMOUNT" caption={this.t("grdListe.clmCode")} width={100} visible={true}/> 
                                 <Summary>
                                     <TotalItem
-                                    column="QUANTITY"
-                                    summaryType="sum"
-                                    valueFormat={{ style: "currency", currency: "EUR",precision: 2}} />
-                                    <TotalItem
-                                    column="TOTAL_COST"
+                                    column="DOC_AMOUNT"
                                     summaryType="sum"
                                     valueFormat={{ style: "currency", currency: "EUR",precision: 2}} />
                                 </Summary> 
