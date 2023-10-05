@@ -721,6 +721,7 @@ export default class posDoc extends React.PureComponent
             tmpCustomerDt.selectCmd.value = [pCode]
             await tmpCustomerDt.refresh();
 
+            console.log(tmpCustomerDt)
             if(tmpCustomerDt.length > 0)
             {
                 if(tmpCustomerDt[0].POINT_COUNT > 3)

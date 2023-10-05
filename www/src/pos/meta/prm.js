@@ -34,7 +34,7 @@ export const prm =
         ID :"BarcodePattern",
         VALUE : 
         [
-            '20XXXXXMMMCCF',
+            '20NNNNMMMCCF',
             '21NNNNNMMMCCF',
             '29NNNNMMMCCF',
             '29NNNNNMMMCCF',
@@ -1116,7 +1116,7 @@ export const prm =
     {
         TYPE : 0,
         ID :"TSEUsb",
-        VALUE : true,
+        VALUE : false,
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "",
