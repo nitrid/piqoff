@@ -350,7 +350,7 @@ export default class purchaseOrder extends React.PureComponent
                             [
                                 {
                                     icon : "fa-file",
-                                    text : "Yeni Evrak",
+                                    text : this.lang.t("btnNewDoc"),
                                     onClick : ()=>
                                     {
                                         this.init()
@@ -358,7 +358,7 @@ export default class purchaseOrder extends React.PureComponent
                                 },
                                 {
                                     icon : "fa-trash",
-                                    text : "Evrak Sil",
+                                    text : this.lang.t("btnDocDelete"),
                                     onClick : ()=>
                                     {
                                         if(this.docObj.dt().length > 0)
@@ -375,7 +375,7 @@ export default class purchaseOrder extends React.PureComponent
                             [
                                 {
                                     icon : "fa-percent",
-                                    text : "Satır İndirim",
+                                    text : this.lang.t("btnLineDisc"),
                                     onClick : ()=>
                                     {
                                         this.popDiscount.show()
@@ -598,7 +598,7 @@ export default class purchaseOrder extends React.PureComponent
                                                 </div>
                                                 <div className='row'>
                                                     <div className='col-12'>
-                                                        <h6 className='overflow-hidden d-flex align-items-center justify-content-center' style={{color:'#ecf0f1',height:'20px'}}>Barkod Giriş</h6>
+                                                        <h6 className='overflow-hidden d-flex align-items-center justify-content-center' style={{color:'#ecf0f1',height:'20px'}}>{this.lang.t("btnBarcodeEntry")}</h6>
                                                     </div>
                                                 </div>
                                             </NbButton>
@@ -613,7 +613,7 @@ export default class purchaseOrder extends React.PureComponent
                                                 </div>
                                                 <div className='row'>
                                                     <div className='col-12'>
-                                                        <h6 className='overflow-hidden d-flex align-items-center justify-content-center' style={{color:'#ecf0f1',height:'20px'}}>İşlem Satırları</h6>
+                                                        <h6 className='overflow-hidden d-flex align-items-center justify-content-center' style={{color:'#ecf0f1',height:'20px'}}>{this.lang.t("btnProcessLines")}</h6>
                                                     </div>
                                                 </div>
                                             </NbButton>
