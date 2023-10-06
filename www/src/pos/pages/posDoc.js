@@ -326,6 +326,11 @@ export default class posDoc extends React.PureComponent
     }
     async init()
     {
+        if(this.core.util.isElectron())
+        {
+            let x = global.require('fs');
+            console.log(x)
+        }
         setInterval(()=>
         {
             this.lblTime.value = moment(new Date(),"HH:mm:ss").format("HH:mm:ss")
