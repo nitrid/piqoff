@@ -60,7 +60,7 @@ posDoc.prototype.getItem = async function(pCode)
                         return
                     }
                     
-                    if(tmpQuantity >= tmpDQuantity - tmpTolerans && tmpQuantity <= tmpDQuantity + tmpTolerans)
+                    if(tmpQuantity >= Number(tmpDQuantity) - Number(tmpTolerans) && tmpQuantity <= Number(tmpDQuantity) + Number(tmpTolerans))
                     {
                         let tmpLangMsg = this.lang.t("msgBarcodeWeighing.msg")
                         tmpLangMsg = tmpLangMsg.replace('{0}',tmpBalanceDt.length)
