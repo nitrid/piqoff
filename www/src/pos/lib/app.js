@@ -22,13 +22,14 @@ import HTMLReactParser from 'html-react-parser';
 
 import Login from './login.js'
 import Pos from '../pages/posDoc.js'
+import Lcd from '../pages/posLcd.js'
 import transferCls from './transfer.js'
 import NdDialog,{dialog} from '../../core/react/devex/dialog';
 
 import * as appInfo from '../../../package.json'
 import '../plugins/balanceCounter.js'
 
-export default class App extends React.Component
+export default class App extends React.PureComponent
 {
     static instance = null;
 
@@ -65,7 +66,8 @@ export default class App extends React.Component
             opened : true,
             logined : false,
             splash : true,
-            vtadi : ''
+            vtadi : '',
+            lcd : false
         }
         this.toolbarItems = 
         [
@@ -125,12 +127,18 @@ export default class App extends React.Component
             App.instance = this;
         }        
 
+        //LCD DE LOGIN OLMAYI ENGELLEMEK İÇİN YAPILDI.
+        if(this.state.lcd)
+        {
+            return
+        }
+
+        let tmpOneShoot = false;
         this.core.socket.on('connect',async () => 
-        {   
-            this.core.offline = false;                     
+        {
+            this.core.offline = false;
             this.login()
         })
-        let tmpOneShoot = false;
         this.core.socket.on('connect_error',async(error) => 
         {
             this.core.offline = true;
@@ -197,13 +205,25 @@ export default class App extends React.Component
     }
     async componentDidMount()
     {
-        await this.core.util.waitUntil(0)
-        await this.transfer.init('POS')
+        const urlParams = new URLSearchParams(window.location.search);
+        if(urlParams.get('lcd') != null)
+        {
+            this.setState({lcd:true})
+        }
+        else
+        {
+            await this.core.util.waitUntil(0)
+            await this.transfer.init('POS') 
+        }
     }
     render() 
     {
-        const { logined,splash } = this.state;
-
+        const { logined,splash,lcd } = this.state;
+        if(lcd)
+        {
+            return <Lcd/>
+        }
+        
         if(splash)
         {
             return(

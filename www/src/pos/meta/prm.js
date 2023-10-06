@@ -1116,7 +1116,7 @@ export const prm =
     {
         TYPE : 0,
         ID :"TSEUsb",
-        VALUE : true,
+        VALUE : false,
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "",
@@ -1134,7 +1134,7 @@ export const prm =
         ID :"ScaleBarcodeControl",
         VALUE : 
         {
-            active : true,
+            active : false,
             tolerans : 0.030
         },
         SPECIAL : "",

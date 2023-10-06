@@ -325,7 +325,7 @@ export default class posDoc extends React.PureComponent
         this.sendJet({CODE:"120",NAME:"Le système est offline."}) ///Kasa offline dan online a döndü.
     }
     async init()
-    {                
+    {
         setInterval(()=>
         {
             this.lblTime.value = moment(new Date(),"HH:mm:ss").format("HH:mm:ss")
