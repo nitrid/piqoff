@@ -35,7 +35,7 @@ posDoc.prototype.getItem = async function(pCode)
                         tmpTolerans = this.prmObj.filter({ID:'ScaleBarcodeControl',TYPE:0}).getValue().tolerans
                     }
                     //TERAZİYE İSTEK YAPILIYOR.
-                    let tmpWResult = await this.getWeighing(Number(tmpBalanceDt.sum('AMOUNT')).round(2))
+                    let tmpWResult = await this.getWeighing(0.1)
                     if(typeof tmpWResult != 'undefined')
                     {
                         if(typeof tmpWResult.Result == 'undefined')
@@ -60,7 +60,7 @@ posDoc.prototype.getItem = async function(pCode)
                         return
                     }
                     
-                    if(tmpQuantity >= tmpDQuantity - tmpTolerans && tmpQuantity <= tmpDQuantity + tmpTolerans)
+                    if(tmpQuantity >= Number(tmpDQuantity) - Number(tmpTolerans) && tmpQuantity <= Number(tmpDQuantity) + Number(tmpTolerans))
                     {
                         let tmpLangMsg = this.lang.t("msgBarcodeWeighing.msg")
                         tmpLangMsg = tmpLangMsg.replace('{0}',tmpBalanceDt.length)
