@@ -739,10 +739,10 @@ export const langFr =
         },
         msgNewItem:
         {
-            title: "Dikkat",   // BAK
-            btn01: "Evet",   // BAK
-            btn02: "Vazgeç",   // BAK
-            msg: "Yeni ürüne geçmek istediğinize eminmisiniz !"   // BAK
+            title: "Attention",   
+            btn01: "OK",
+            btn02: "Abandonner",
+            msg: "Êtes-vous sûr(e) de vouloir actualiser la page ?"  
         },
         msgItemBack:
         {
@@ -16448,7 +16448,7 @@ export const langFr =
         dtAdvanceDate : "date",
         cmbPopSafe :"Caisse",
         addAdvance : "Fond De Caisse",
-        btnNotTrue : "Tekrar Giriş", // BAK
+        btnNotTrue : "Correction saisie",
         msgDoubleAdvence:
         {
             title: "Attention",

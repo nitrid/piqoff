@@ -12,6 +12,11 @@ export const langTr =
     msgWarning : "Dikkat",
     msgSqlService1 : "Sql sunucuya bağlanılamıyor.",
     comingSoon : "Yakında Aktif Olacak... ",
+    btnBarcodeEntry: "Barkod Giriş",
+    btnProcessLines: "İşlem Satırları",
+    btnNewDoc: "Yeni Evrak",
+    btnDocDelete: "Evrak Sil",
+    btnLineDisc: "Satır İndirim",
     msgAnotherUserAlert: 
     {
         title : "Dikkat",

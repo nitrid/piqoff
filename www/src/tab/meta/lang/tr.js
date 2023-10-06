@@ -37,7 +37,7 @@ export const langTr =
         {
             txtCustomer: "Müşteri",
             txtAmount : "Toplam Tutar",
-            txtDiscount : "Satır İndirim",
+            txtDiscount : this.lang.t("btnLineDisc"),
             txtDocDiscount: "Evrak İndirim",
             txtTotalHt : "Ara Toplam",
             txtVat : "Vergi",
