@@ -8,7 +8,7 @@ import NdGrid,{Column,Editing,Paging,Scrolling} from "../../core/react/devex/gri
 import { dataset,datatable,param,access } from "../../core/core.js";
 import {prm} from '../meta/prm.js'
 
-export default class posLcd extends React.PureComponent
+export default class customerInfoScreen extends React.PureComponent
 {
     constructor()
     {
@@ -28,17 +28,22 @@ export default class posLcd extends React.PureComponent
     }
     async componentDidMount()
     {
-        await this.grdList.dataRefresh({source:[{ITEM_SNAME:"DENEME",QUANTITY:1,PRICE:10,AMOUNT:10}]});
-
         if(this.core.util.isElectron())
         {
-            const ipcMain = global.require('electron');
-            // Uygulama 1'den veriyi iste
-            console.log(ipcMain)
-            ipcMain.ipcRenderer.on('share-data', (event, data) => {
-                // Veriyi al ve işle
-                console.log(data);
-              });
+            App.instance.electron.ipcRenderer.on('receive', async(event, data) => 
+            {
+                this.txtCustomer.value = data.data.posObj[0].CUSTOMER_NAME
+                this.totalRowCount.value = data.data.posObj.length
+                this.totalItemCount.value = data.data.totalItemQ
+                this.totalLoyalty.value = data.data.posObj[0].LOYALTY
+                this.txtTicRest.value = data.data.cheqLength + '/' + parseFloat(data.data.cheqTotal).round(2) + ' ' + Number.money.sign
+                this.totalSub.value = data.data.posObj[0].FAMOUNT
+                this.totalVat.value = data.data.posObj[0].VAT
+                this.totalDiscount.value = Number(data.data.posObj[0].DISCOUNT) * -1
+                this.totalGrand.value = data.data.grandTotal
+
+                await this.grdList.dataRefresh({source:data.data.posSaleObj});
+            });
         }
     }
     render()
@@ -47,7 +52,7 @@ export default class posLcd extends React.PureComponent
             <div>
                 <div className="row" style={{backgroundColor:"#0984e3",height:"60px"}}>
                     <div className="col-8 ps-4 align-middle" style={{margin:"auto",color:"white",fontSize:"18px",fontWeight:"bold"}}>
-                        <NbLabel id="txtCustomer" parent={this} value={"ALI KEMAL KARACA"}/>
+                        <NbLabel id="txtCustomer" parent={this} value={""}/>
                     </div>
                     <div className="col-4 align-middle" style={{textAlign:"center",margin:"auto",color:"white",fontSize:"18px",fontWeight:"bold"}}>
                         <NbLabel id="txtTime" parent={this} value={""}/>
@@ -110,14 +115,54 @@ export default class posLcd extends React.PureComponent
                         </NdGrid>
                     </div>
                 </div>
-                <div className="row">
-                    <div className="col-12 py-2 align-middle" style={{textAlign:"right",margin:"auto",paddingLeft:"18px",paddingRight:"18px",fontSize:"30px",fontWeight:"bold"}}>
-                        <NbLabel id="txtTotal" parent={this} value={"TOTAL : 10.00€"}/>
+                {/* Grand Total */}
+                <div className="row p-2">
+                    <div className="col-6">
+                        <div className="row">
+                            <div className="col-6">
+                                <p className="fs-4 text-primary text-start m-0">{this.lang.t("totalLine")}<span className="text-dark"><NbLabel id="totalRowCount" parent={this} value={"0"}/></span></p>    
+                            </div>
+                            <div className="col-6">
+                                <p className="fs-4 text-primary text-start m-0">{this.lang.t("totalQuantity")}<span className="text-dark"><NbLabel id="totalItemCount" parent={this} value={"0"}/></span></p>    
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-12">
+                                <p className="fs-4 text-primary text-start m-0">{this.lang.t("loyaltyDiscount")}<span className="text-dark"><NbLabel id="totalLoyalty" parent={this} value={"0.00"} format={"currency"}/></span></p>    
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-12">
+                                <p className="fs-4 text-primary text-start m-0">{this.lang.t("ticketRect")}<span className="text-dark"><NbLabel id="txtTicRest" parent={this} value={""}/></span></p>    
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col-6">
+                        <div className="row">
+                            <div className="col-12">
+                                <p className="fs-4 text-primary text-end m-0">{this.lang.t("amount")}<span className="text-dark"><NbLabel id="totalSub" parent={this} value={"0.00"} format={"currency"}/></span></p>    
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-12">
+                                <p className="fs-4 text-primary text-end m-0">{this.lang.t("vat")}<span className="text-dark"><NbLabel id="totalVat" parent={this} value={"0.00 " + Number.money.sign} format={"currency"}/></span></p>    
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-12">
+                                <p className="fs-4 text-primary text-end m-0">{this.lang.t("discount")}<span className="text-dark"><NbLabel id="totalDiscount" parent={this} value={"0.00"} format={"currency"}/></span></p>    
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="row p-2">
+                    <div className="col-12">
+                        <p className="fs-1 fw-bold text-center m-0"><NbLabel id="totalGrand" parent={this} value={"0.00"} format={"currency"}/></p>
                     </div>
                 </div>
                 <div className='row'>
-                    <div className='col-12' style={{textAlign:"center"}}>
-                        <img src="./css/img/piqsoftlogo.png" height="28px"/>
+                    <div className='col-12' style={{textAlign:"right"}}>
+                        <img src="./css/img/piqsoftlogo.png" height="32px"/>
                     </div>
                 </div>
             </div>

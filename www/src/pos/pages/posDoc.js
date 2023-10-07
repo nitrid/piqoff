@@ -326,11 +326,6 @@ export default class posDoc extends React.PureComponent
     }
     async init()
     {
-        if(this.core.util.isElectron())
-        {
-            let x = global.require('fs');
-            console.log(x)
-        }
         setInterval(()=>
         {
             this.lblTime.value = moment(new Date(),"HH:mm:ss").format("HH:mm:ss")
@@ -1248,7 +1243,6 @@ export default class posDoc extends React.PureComponent
                 {
                     setTimeout(() => 
                     {
-                        console.log(this.grdList.devGrid.getKeyByRowIndex(0).SCALE_MANUEL)
                         if(this.grdList.devGrid.getKeyByRowIndex(0).WEIGHING)
                         {
                             this.posLcd.print
@@ -1296,7 +1290,22 @@ export default class posDoc extends React.PureComponent
                 this.grdList.devGrid.navigateToRow(tmpRes[0])
                 this.grdList.devGrid.selectRows(tmpRes[0],false)
             })
-
+            //********************************************* */
+            //MÜŞTERİ BİLGİ EKRANINA VERİ GÖNDERİMİ.
+            App.instance.electronSend(
+            {
+                tag : "lcd",
+                data :
+                {
+                    posObj : JSON.parse(JSON.stringify(this.posObj.dt().toArray())),
+                    posSaleObj : JSON.parse(JSON.stringify(this.posObj.dt("POS_SALE").toArray())),
+                    grandTotal : tmpPayRest,
+                    cheqLength : this.cheqDt.length,
+                    cheqTotal : this.cheqTotalAmount.value,
+                    totalItemQ : this.posObj.posSale.dt().where({GUID:{'<>' : '00000000-0000-0000-0000-000000000000'}}).sum('QUANTITY',2)
+                }
+            })
+            //********************************************* */
             if(typeof pSave == 'undefined' || pSave)
             {                
                 let tmpClose = await this.saleClosed(true,tmpPayRest,tmpPayChange)

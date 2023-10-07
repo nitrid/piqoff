@@ -22,7 +22,7 @@ import HTMLReactParser from 'html-react-parser';
 
 import Login from './login.js'
 import Pos from '../pages/posDoc.js'
-import Lcd from '../pages/posLcd.js'
+import CustomerInfoScreen from '../pages/customerInfoScreen.js'
 import transferCls from './transfer.js'
 import NdDialog,{dialog} from '../../core/react/devex/dialog';
 
@@ -125,12 +125,11 @@ export default class App extends React.PureComponent
         if(!App.instance)
         {
             App.instance = this;
-        }        
+        }
 
-        //LCD DE LOGIN OLMAYI ENGELLEMEK İÇİN YAPILDI.
-        if(this.state.lcd)
+        if(this.core.util.isElectron())
         {
-            return
+            this.electron = global.require('electron');
         }
 
         let tmpOneShoot = false;
@@ -175,7 +174,7 @@ export default class App extends React.PureComponent
                 this.core.auth.logout()
                 window.location.reload()
             }
-        })     
+        })
     }
     async login()
     {
@@ -203,6 +202,22 @@ export default class App extends React.PureComponent
             this.setState({vtadi: e.value});
         } 
     }
+    electronSend(pData)
+    {
+        //ELECTRONJS ILE HABERLEŞMEK İÇİN YAPILDI.AYNI UYGULAMA ÜZERİNDE AÇILMIŞ DİĞER PENCERELER İLE HABERLEŞİLEBİLİR.
+        if(this.core.util.isElectron())
+        {
+            return new Promise(async resolve => 
+            {
+                this.electron.ipcRenderer.send('get',pData);
+                this.electron.ipcRenderer.on('receive', (event, data) => 
+                {
+                    resolve(data)
+                });
+            })
+        }
+        //********************************************************************************************************** */
+    }
     async componentDidMount()
     {
         const urlParams = new URLSearchParams(window.location.search);
@@ -212,6 +227,13 @@ export default class App extends React.PureComponent
         }
         else
         {
+            //DEVICE ID VE DİĞER PARAMETRELER ELECTRONJS ÜZERİNDEKİ CONFIG DEN GETIRILIYOR.
+            let tmpData = await this.electronSend({tag:"arguments"})
+            if(typeof tmpData != 'undefined' && typeof tmpData.data != 'undefined' && typeof tmpData.data != 'undefined' && typeof tmpData.data.deviceId != 'undefined')
+            {
+                localStorage.setItem('device',tmpData.data.deviceId)
+            }
+            //************************************************************************** */
             await this.core.util.waitUntil(0)
             await this.transfer.init('POS') 
         }
@@ -221,7 +243,7 @@ export default class App extends React.PureComponent
         const { logined,splash,lcd } = this.state;
         if(lcd)
         {
-            return <Lcd/>
+            return <CustomerInfoScreen/>
         }
         
         if(splash)
