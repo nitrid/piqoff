@@ -9176,6 +9176,7 @@ export const langTr =
             clmCode :  "ÜRÜN KODU",
             clmName : "ÜRÜN ADI",
             clmMulticode : "TEDARİKÇİ KODU",
+            clmPrice : "ALIŞ FİYATI"
         },
         pg_dispatchGrid : 
         {
@@ -9474,6 +9475,7 @@ export const langTr =
         {
             title: "Birim Seçimi",
             btn01: "Onayla",
+            btnFactorSave : "Ürün Kartını Güncelle"
         },
         validRef :"Seri Boş Geçilemez",
         validRefNo : "Sıra Boş Geçilemez",

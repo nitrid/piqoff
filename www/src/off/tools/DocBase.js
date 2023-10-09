@@ -57,7 +57,7 @@ export default class DocBase extends React.PureComponent
     }
     get docDetailObj()
     {
-        if((this.docType >= 20 && this.docType <= 59) || this.docType == 121)
+        if((this.docType >= 20 && this.docType <= 59) || (this.docType >= 120 && this.docType <= 129))
         {
             return this.docObj.docItems
         }
@@ -72,7 +72,7 @@ export default class DocBase extends React.PureComponent
     }
     set docDetailObj(pVal)
     {
-        if((this.docType >= 20 && this.docType <= 59) || this.docType == 121)
+        if((this.docType >= 20 && this.docType <= 59) || (this.docType >= 120 && this.docType <= 129))
         {
             this.docObj.docItems = pVal
         }

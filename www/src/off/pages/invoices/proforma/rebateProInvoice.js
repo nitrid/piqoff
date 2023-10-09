@@ -29,6 +29,11 @@ export default class rebateInvoice extends React.PureComponent
     constructor(props)
     {
         super(props)
+
+        this.type = 1;
+        this.docType = 120;
+        this.rebate = 1;
+
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});

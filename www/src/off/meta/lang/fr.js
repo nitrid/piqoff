@@ -9187,6 +9187,7 @@ export const langFr =
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
             clmMulticode : "FRN.Code",
+            clmPrice : "Prix d'Achat" 
         },
         pg_dispatchGrid : 
         {
@@ -9484,7 +9485,8 @@ export const langFr =
         msgUnit:
         {
             title: "Sélection de l'unité",  
-            btn01: "Valider",  
+            btn01: "Valider",
+            btnFactorSave : "Mettre à jour la carte de stock" 
         },
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",

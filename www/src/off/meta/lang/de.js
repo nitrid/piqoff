@@ -9167,6 +9167,7 @@ export const langDe =
             clmCode :  "ARTIKELNUMMER",
             clmName : "ARTIKELNAME",
             clmMulticode : "LIEFERANTENNUMMER",
+            clmPrice : "EINKAUFSPREIS"
         },
         pg_dispatchGrid : 
         {
@@ -9464,6 +9465,7 @@ export const langDe =
         {
             title: "Einheitsauswahl",
             btn01: "Bestätigen",
+            btnFactorSpeichern : "Lagerkarte aktualisieren"
         },
         validRef :"Die Seriennummer darf nicht leer sein",
         validRefNo : "Die Reihennummer darf nicht leer sein",
@@ -9598,9 +9600,9 @@ export const langDe =
             btn01: "Tamam", //BAK
             msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
         },
-      },
-      ftr_04_004: // "Proforma-Rücksenderechnung"
-      {
+    },
+    ftr_04_004: // "Proforma-Rücksenderechnung"
+    {
         txtRefRefno: "Serie-Nummer",
         cmbDepot: "Lager",
         txtCustomerCode: "Kundennummer",
