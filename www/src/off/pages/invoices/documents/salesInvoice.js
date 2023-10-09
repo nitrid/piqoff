@@ -1293,7 +1293,6 @@ export default class salesInvoice extends DocBase
                                             return;
                                         }
                                         this.pg_txtCustomerCode.setVal(this.txtCustomerCode.value)
-                                        this.pg_txtCustomerCode.show()
                                         this.pg_txtCustomerCode.onClick = async(data) =>
                                         {
                                             if(data.length > 0)
