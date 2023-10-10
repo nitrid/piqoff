@@ -1261,6 +1261,7 @@ export const langTr =
             title : "Ürün Seçimi",
             clmCode :  "ÜRÜN KODU",
             clmName : "ÜRÜN ADI",
+            clmPrice : "ALIS FIYATI",
         },
         grdItemCount: 
         {
@@ -9680,6 +9681,7 @@ export const langTr =
             title : "Ürün Seçimi",
             clmCode :  "ÜRÜN KODU",
             clmName : "ÜRÜN ADI",
+            clmPrice : "SATIŞ FIYATI"
         },
         pg_dispatchGrid : 
         {
@@ -12721,6 +12723,7 @@ export const langTr =
             title : "Ürün Seçimi",
             clmCode :  "ÜRÜN KODU",
             clmName : "ÜRÜN ADI",
+            clmPrice : "SATIŞ FIYATI"
         },
         grdSlsDispatch: 
         {

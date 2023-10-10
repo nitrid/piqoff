@@ -9668,6 +9668,7 @@ export const langDe =
           title: "Artikelauswahl",
           clmCode: "ARTIKELNUMMER",
           clmName: "ARTIKELNAME",
+          clmPrice : "EINKAUFSPREIS"
         },
         pg_dispatchGrid: 
         {

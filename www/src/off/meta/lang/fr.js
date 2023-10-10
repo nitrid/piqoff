@@ -9698,6 +9698,7 @@ export const langFr =
             title : "Sélectionner Produit",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
+            clmPrice : "Prix d'Achat",
         },
         pg_dispatchGrid : 
         {
