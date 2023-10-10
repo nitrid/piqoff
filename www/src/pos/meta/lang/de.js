@@ -798,6 +798,12 @@ export const langDe =
         msg: "Gescannte Zeile : {0} - Gesamtbetrag : {1}",
         btn01: "Okay"
     },
+    msgBarcodeWeighingUnit: 
+    {
+        title : "Achtung",
+        msg : "Das gescannte Etikett enthält einzelne Produkte. Sie müssen die Mengen auf der Waage nicht abgleichen.",
+        btn01 : "OK"
+    },
     msgTSENotFound:
     {
         title: "Achtung",
