@@ -1705,7 +1705,6 @@ export default class purchaseInvoice extends DocBase
                                                 if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                 {
                                                     this.txtRef.value = data[0].CODE
-                                                    this.txtRef.props.onValueChanged()
                                                 }
                                                 if(this.cmbDepot.value != '' && this.docLocked == false)
                                                 {
@@ -1766,7 +1765,6 @@ export default class purchaseInvoice extends DocBase
                                                             if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                             {
                                                                 this.txtRef.value = data[0].CODE
-                                                                this.txtRef.props.onValueChanged()
                                                             }
                                                             if(this.cmbDepot.value != '' && this.docLocked == false)
                                                             {

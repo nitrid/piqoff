@@ -798,6 +798,12 @@ export const langEn =
         msg: "Scanned line: {0} - Total amount: {1}",
         btn01: "OK"
     },
+    msgBarcodeWeighingUnit: 
+    {
+        title : "Attention",
+        msg : "The scanned label contains individual products. You do not need to match quantities on the scale.",
+        btn01 : "OK"
+    },
     msgTSENotFound:
     {
         title: "Attention",
