@@ -8361,6 +8361,7 @@ export const langFr =
         txtTotalQuantity : "Quantité totale",  
         txtUnitPrice : "Prix unitaire",
         txtTotalHt : "Total HT",
+        validDesign : "Veuillez choisir le design de l'étiquette",
         txtDocNo : "Numéro de document", 
         msgDiscount:
         {
@@ -8391,6 +8392,7 @@ export const langFr =
             title : "Choix Stock",
             clmCode :  "CODE STOCK",
             clmName : "NOM STOCK",
+            clmPrice : "Prix de Vente"
         },
         pg_contractGrid : 
         {
@@ -10780,6 +10782,7 @@ export const langFr =
         txtTotalQuantity : "Quantité totale",  
         txtUnitPrice : "Prix unitaire", 
         cmbOrigin: "Origine",
+        validDesign : "Veuillez choisir le design de l'étiquette",
         txtTotalHt : "Total HT",
         pg_Docs : 
         {

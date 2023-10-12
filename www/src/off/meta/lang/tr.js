@@ -8352,6 +8352,7 @@ export const langTr =
         txtUnitPrice: "Birim Fiyatı",
         txtTotalHt : "İndirimli Tutar",
         txtDocNo : "Belgo No",
+        validDesign : "Lütfen Dizayn seçiniz.",
         msgDiscount:
         {
             title: "Dikkat",
@@ -8381,6 +8382,7 @@ export const langTr =
             title : "Ürün Seçimi",
             clmCode :  "ÜRÜN KODU",
             clmName : "ÜRÜN ADI",
+            clmPrice : "SATIŞ FİYATI"
         },
         pg_contractGrid : 
         {
@@ -10794,6 +10796,7 @@ export const langTr =
         txtTotalHt : "İndirimli Tutar",
         txtDocNo : "Belgo No",
         cmbOrigin : "Menşei",
+        validDesign : "Lütfen Dizayn Seçin",
         pg_Docs : 
         {
             title : "Evrak Seçimi",

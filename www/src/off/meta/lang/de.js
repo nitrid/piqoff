@@ -8344,6 +8344,7 @@ export const langDe =
         txtTotalQuantity : "Gesamtmenge",
         txtUnitPrice: "Stückpreis",
         txtTotalHt : "Rabattierter Betrag",
+        validDesign : "Bitte Design auswählen",
         txtDocNo : "Belge Nr.",
         msgDiscount:
         {
@@ -8373,6 +8374,7 @@ export const langDe =
             title : "Artikelauswahl",
             clmCode :  "ARTIKELNUMMER",
             clmName : "ARTIKELNAME",
+            clmPrice : "VERKAUFSPREIS"
         },
         pg_contractGrid : 
         {
@@ -10762,6 +10764,7 @@ export const langDe =
         txtUnitPrice: "Einheitspreis",
         txtTotalHt: "Rabattierter Betrag",
         txtDocNo: "Belegnummer",
+        validDesign : "Bitte Design auswählen",
         cmbOrigin: "Herkunft",
         pg_Docs:
         {
