@@ -756,7 +756,7 @@ export default class branchSaleDispatch extends DocBase
                                         }
                                         else if(this.docObj.dt()[0].LOCKED == 1)
                                         {
-                                            this.popPassword.show()
+                                            await this.popPassword.show()
                                             this.txtPassword.value = ''
                                         }
                                         else if(this.docObj.dt()[0].LOCKED == 2)
