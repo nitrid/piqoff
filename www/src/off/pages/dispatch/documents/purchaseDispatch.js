@@ -62,7 +62,7 @@ export default class purchaseDispatch extends DocBase
         this.docLocked = false
         
         this.frmDocItems.option('disabled',true)
-        
+
         this.pg_txtItemsCode.on('showing',()=>
         {
             this.pg_txtItemsCode.setSource(
@@ -1206,64 +1206,59 @@ export default class purchaseDispatch extends DocBase
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     dt={{data:this.docObj.dt('DOC'),field:"OUTPUT_CODE"}} 
                                     onEnterKey={(async()=>
+                                    {
+                                        if(this.docObj.docItems.dt().length > 0)
                                         {
-                                            if(this.docObj.docItems.dt().length > 0)
+                                            let tmpConfObj =
                                             {
-                                                let tmpConfObj =
-                                                {
-                                                    id:'msgCustomerLock',showTitle:true,title:this.t("msgCustomerLock.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:this.t("msgCustomerLock.btn01"),location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerLock.msg")}</div>)
-                                                }
-                                                
-                                                await dialog(tmpConfObj);
-                                                return;
+                                                id:'msgCustomerLock',showTitle:true,title:this.t("msgCustomerLock.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgCustomerLock.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerLock.msg")}</div>)
                                             }
-                                            await this.pg_txtCustomerCode.setVal(this.txtCustomerCode.value)
-                                            this.pg_txtCustomerCode.show()
-                                            this.pg_txtCustomerCode.onClick = async(data) =>
+                                            
+                                            await dialog(tmpConfObj);
+                                            return;
+                                        }
+                                        await this.pg_txtCustomerCode.setVal(this.txtCustomerCode.value)
+                                        this.pg_txtCustomerCode.show()
+                                        this.pg_txtCustomerCode.onClick = async(data) =>
+                                        {
+                                            if(data.length > 0)
                                             {
-                                                if(data.length > 0)
+                                                this.docObj.dt()[0].OUTPUT = data[0].GUID
+                                                this.docObj.dt()[0].OUTPUT_CODE = data[0].CODE
+                                                this.docObj.dt()[0].OUTPUT_NAME = data[0].TITLE
+                                                let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
+                                                if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                 {
-                                                    this.docObj.dt()[0].OUTPUT = data[0].GUID
-                                                    this.docObj.dt()[0].OUTPUT_CODE = data[0].CODE
-                                                    this.docObj.dt()[0].OUTPUT_NAME = data[0].TITLE
-                                                    let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
-                                                    if(typeof tmpData != 'undefined' && tmpData.value ==  true)
+                                                    this.txtRef.value = data[0].CODE;
+                                                }
+                                                if(this.cmbDepot.value != '' && this.docLocked == false)
+                                                {
+                                                    this.frmDocItems.option('disabled',false)
+                                                }
+                                                let tmpQuery = 
+                                                {
+                                                    query : "SELECT * FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER = @CUSTOMER",
+                                                    param : ['CUSTOMER:string|50'],
+                                                    value : [ data[0].GUID]
+                                                }
+                                                let tmpAdressData = await this.core.sql.execute(tmpQuery) 
+                                                if(tmpAdressData.result.recordset.length > 1)
+                                                {   
+                                                    this.pg_adress.onClick = async(pdata) =>
                                                     {
-                                                        this.txtRef.value = data[0].CODE;
-                                                    }
-                                                    if(this.cmbDepot.value != '' && this.docLocked == false)
-                                                    {
-                                                        this.frmDocItems.option('disabled',false)
-                                                    }
-                                                    let tmpQuery = 
-                                                    {
-                                                        query : "SELECT * FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER = @CUSTOMER",
-                                                        param : ['CUSTOMER:string|50'],
-                                                        value : [ data[0].GUID]
-                                                    }
-                                                    let tmpAdressData = await this.core.sql.execute(tmpQuery) 
-                                                    if(tmpAdressData.result.recordset.length > 1)
-                                                    {   
-                                                        this.pg_adress.onClick = async(pdata) =>
+                                                        if(pdata.length > 0)
                                                         {
-                                                            if(pdata.length > 0)
-                                                            {
-                                                                this.docObj.dt()[0].ADDRESS = pdata[0].ADRESS_NO
-                                                            }
+                                                            this.docObj.dt()[0].ADDRESS = pdata[0].ADRESS_NO
                                                         }
-                                                        await this.pg_adress.show()
-                                                        await this.pg_adress.setData(tmpAdressData.result.recordset)
-                                                        
                                                     }
-                                                    else
-                                                    {
-                                                        await this.pg_adress.setData([])
-                                                    }
+                                                    await this.pg_adress.show()
+                                                    await this.pg_adress.setData(tmpAdressData.result.recordset)
                                                 }
                                             }
-                                        }).bind(this)}
+                                        }
+                                    }).bind(this)}
                                     button=
                                     {
                                         [
