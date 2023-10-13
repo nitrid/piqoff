@@ -607,8 +607,7 @@ export default class purchaseInvoice extends DocBase
                     }
                     await this.msgCustomerNotFound.show().then(async (e) =>
                     {
-    
-                       if(e == 'btn01' && this.checkCustomer.value == true)
+                        if(e == 'btn01' && this.checkCustomer.value == true)
                         {
                             this.customerControl = false
                             return

@@ -1,47 +1,36 @@
 import React from 'react';
 import App from '../../../lib/app.js';
-import { docCls,docItemsCls, docCustomerCls,docExtraCls } from '../../../../core/cls/doc.js';
+import DocBase from '../../../tools/DocBase.js';
 import moment from 'moment';
 
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
 import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
 import ContextMenu from 'devextreme-react/context-menu';
-import TabPanel from 'devextreme-react/tab-panel';
 import { Button } from 'devextreme-react/button';
 
 import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
-import NdNumberBox from '../../../../core/react/devex/numberbox.js';
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
-import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
 import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export,ColumnChooser,StateStoring} from '../../../../core/react/devex/grid.js';
-import NbPopDescboard from "../../../tools/popdescboard.js";
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
-import NdImageUpload from '../../../../core/react/devex/imageupload.js';
 import NdDialog, { dialog } from '../../../../core/react/devex/dialog.js';
-import { datatable } from '../../../../core/core.js';
-import tr from '../../../meta/lang/devexpress/tr.js';
 import NdHtmlEditor from '../../../../core/react/devex/htmlEditor.js';
 
-export default class rebateDispatch extends React.PureComponent
+export default class rebateDispatch extends DocBase
 {
     constructor(props)
     {
         super(props)
-        this.core = App.instance.core;
-        this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
-        this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
-        this.docObj = new docCls();
-        this.extraObj = new docExtraCls();
-        this.tabIndex = props.data.tabkey
+
+        this.type = 1;
+        this.docType = 40;
+        this.rebate = 1;
 
         this._cellRoleRender = this._cellRoleRender.bind(this)
-        this._calculateTotal = this._calculateTotal.bind(this)
         this._getRebate = this._getRebate.bind(this)
-        this._getBarcodes = this._getBarcodes.bind(this)
 
         this.frmDocItems = undefined;
         this.docLocked = false;
@@ -51,8 +40,6 @@ export default class rebateDispatch extends React.PureComponent
         this.combineNew = false        
 
         this.rightItems = [{ text: this.t("getRebate"), }]
-        this.vatRate =  new datatable
-
     }
     async componentDidMount()
     {
@@ -65,64 +52,9 @@ export default class rebateDispatch extends React.PureComponent
     }
     async init()
     {
-        this.docObj.clearAll()
-        this.extraObj.clearAll()
+        await super.init()
+
         this.grdRebtDispatch.devGrid.clearFilter("row")
-
-
-        this.docObj.ds.on('onAddRow',(pTblName,pData) =>
-        {
-            if(pData.stat == 'new')
-            {
-                this.btnNew.setState({disabled:false});
-                this.btnBack.setState({disabled:false});
-                this.btnNew.setState({disabled:false});
-                this.btnBack.setState({disabled:true});
-                this.btnSave.setState({disabled:false});
-                this.btnDelete.setState({disabled:false});
-                this.btnCopy.setState({disabled:false});
-                this.btnPrint.setState({disabled:false});
-            }
-        })
-        this.docObj.ds.on('onEdit',(pTblName,pData) =>
-        {            
-            if(pData.rowData.stat == 'edit')
-            {
-                this.btnBack.setState({disabled:false});
-                this.btnNew.setState({disabled:true});
-                this.btnSave.setState({disabled:false});
-                this.btnDelete.setState({disabled:false});
-                this.btnCopy.setState({disabled:false});
-                this.btnPrint.setState({disabled:false});
-
-                pData.rowData.CUSER = this.user.CODE
-            }                 
-        })
-        this.docObj.ds.on('onRefresh',(pTblName) =>
-        {            
-            this.btnBack.setState({disabled:true});
-            this.btnNew.setState({disabled:false});
-            this.btnSave.setState({disabled:false});
-            this.btnDelete.setState({disabled:false});
-            this.btnCopy.setState({disabled:false});
-            this.btnPrint.setState({disabled:false});          
-        })
-        this.docObj.ds.on('onDelete',(pTblName) =>
-        {            
-            this.btnBack.setState({disabled:false});
-            this.btnNew.setState({disabled:false});
-            this.btnSave.setState({disabled:false});
-            this.btnDelete.setState({disabled:false});
-            this.btnCopy.setState({disabled:false});
-            this.btnPrint.setState({disabled:false});
-        })
-
-
-        let tmpDoc = {...this.docObj.empty}
-        tmpDoc.TYPE = 1
-        tmpDoc.DOC_TYPE = 40
-        tmpDoc.REBATE = 1
-        this.docObj.addEmpty(tmpDoc);
 
         this.txtRef.readOnly = false
         this.txtRefno.readOnly = false
@@ -133,124 +65,71 @@ export default class rebateDispatch extends React.PureComponent
         {
             this.txtRefno.value = Math.floor(Date.now() / 1000)
         }
+
+        this.pg_txtItemsCode.on('showing',()=>
+        {
+            this.pg_txtItemsCode.setSource(
+            {
+                source:
+                {
+                    select:
+                    {
+                        query : "SELECT GUID,CODE,NAME,VAT,UNIT,STATUS,COST_PRICE FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
+                        param : ['VAL:string|50']
+                    },
+                    sql:this.core.sql
+                }
+            })
+        })
+        this.pg_txtBarcode.on('showing',()=>
+        {
+            this.pg_txtBarcode.setSource(
+            {
+                source:
+                {
+                    select:
+                    {   
+                        query : "SELECT ITEMS_VW_01.GUID,CODE,NAME,COST_PRICE,VAT,BARCODE,ITEMS_VW_01.UNIT,ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_01.GUID AND ITEM_MULTICODE.CUSTOMER = '" + this.docObj.dt()[0].INPUT + "' AND DELETED = 0 ORDER BY LDATE DESC),'') AS MULTICODE, " + 
+                                "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_MULTICODE_VW_01.ITEM_GUID = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS CUSTOMER_NAME " + 
+                                "FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE  ITEM_BARCODE_VW_01.BARCODE LIKE  '%' + @BARCODE",
+                        param : ['BARCODE:string|50'],
+                    },
+                    sql:this.core.sql
+                }
+            })
+        })
+        this.pg_txtCustomerCode.on('showing',()=>
+        {
+            this.pg_txtCustomerCode.setSource(
+            {
+                source:
+                {
+                    select:
+                    {
+                        query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
+                        param : ['VAL:string|50']
+                    },
+                    sql:this.core.sql
+                }
+            })
+        })
     }
     async getDoc(pGuid,pRef,pRefno)
     {
-        this.docObj.clearAll()
         App.instance.setState({isExecute:true})
-        await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:1,DOC_TYPE:40});
+        await super.getDoc(pGuid,pRef,pRefno);
         App.instance.setState({isExecute:false})
-        this._calculateMargin()
-        this._calculateTotalMargin()
+
+        this.calculateMargin()
+        this.calculateTotalMargin()
 
         this.txtRef.readOnly = true
         this.txtRefno.readOnly = true
-        
-        if(this.docObj.dt()[0].LOCKED != 0)
-        {
-            this.docLocked = true
-            let tmpConfObj =
-            {
-                id:'msgGetLocked',showTitle:true,title:this.t("msgGetLocked.title"),showCloseButton:true,width:'500px',height:'200px',
-                button:[{id:"btn01",caption:this.t("msgGetLocked.btn01"),location:'after'}],
-                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgGetLocked.msg")}</div>)
-            }
-
-            await dialog(tmpConfObj);
-            this.frmDocItems.option('disabled',true)
-        }
-        else
-        {
-            this.docLocked = false
-            this.frmDocItems.option('disabled',false)
-        }
-        this._getBarcodes()
     }
-    async checkDoc(pGuid,pRef,pRefno)
+    async calculateTotal()
     {
-        return new Promise(async resolve =>
-        {
-            if(pRef !== '')
-            {
-                let tmpData = await new docCls().load({GUID:pGuid,REF:pRef,REF_NO:pRefno});
-
-                if(tmpData.length > 0)
-                {
-                    let tmpConfObj = 
-                    {
-                        id: 'msgCode',
-                        showTitle:true,
-                        title:this.t("msgCode.title"),
-                        showCloseButton:true,
-                        width:'500px',
-                        height:'200px',
-                        button:[{id:"btn01",caption:this.t("msgCode.btn01"),location:'before'}],
-                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCode.msg")}</div>)
-                    }
-    
-                    let pResult = await dialog(tmpConfObj);
-                    if(pResult == 'btn01')
-                    {
-                        this.getDoc(pGuid,pRef,pRefno)
-                        resolve(2) //KAYIT VAR
-                    }
-                    else
-                    {
-                        resolve(3) // TAMAM BUTONU
-                    }
-                }
-                else
-                {
-                    resolve(1) // KAYIT BULUNAMADI
-                }
-            }
-            else
-            {
-                resolve(0) //PARAMETRE BOŞ
-            }
-        });
-    }
-    async _calculateTotal()
-    {
-        let tmpVat = 0
-        for (let i = 0; i < this.docObj.docItems.dt().groupBy('VAT_RATE').length; i++) 
-        {
-            tmpVat = tmpVat + parseFloat(this.docObj.docItems.dt().where({'VAT_RATE':this.docObj.docItems.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("VAT",2))
-        }
-        this.docObj.dt()[0].AMOUNT = this.docObj.docItems.dt().sum("AMOUNT",2)
-        this.docObj.dt()[0].DISCOUNT = Number(parseFloat(this.docObj.docItems.dt().sum("AMOUNT",2)) - parseFloat(this.docObj.docItems.dt().sum("TOTALHT",2))).round(2)
-        this.docObj.dt()[0].DOC_DISCOUNT_1 = this.docObj.docItems.dt().sum("DOC_DISCOUNT_1",4)
-        this.docObj.dt()[0].DOC_DISCOUNT_2 = this.docObj.docItems.dt().sum("DOC_DISCOUNT_2",4)
-        this.docObj.dt()[0].DOC_DISCOUNT_3 = this.docObj.docItems.dt().sum("DOC_DISCOUNT_3",4)
-        this.docObj.dt()[0].DOC_DISCOUNT = Number((parseFloat(this.docObj.docItems.dt().sum("DOC_DISCOUNT_1",4)) + parseFloat(this.docObj.docItems.dt().sum("DOC_DISCOUNT_2",4)) + parseFloat(this.docObj.docItems.dt().sum("DOC_DISCOUNT_3",4)))).round(2)
-        this.docObj.dt()[0].VAT = Number(tmpVat).round(2)
-        this.docObj.dt()[0].SUBTOTAL = parseFloat(this.docObj.docItems.dt().sum("TOTALHT",2))
-        this.docObj.dt()[0].TOTALHT = parseFloat(parseFloat(this.docObj.docItems.dt().sum("TOTALHT",2)) - parseFloat(this.docObj.docItems.dt().sum("DOC_DISCOUNT",2))).round(2)
-        this.docObj.dt()[0].TOTAL = Number((parseFloat(this.docObj.dt()[0].TOTALHT)) + parseFloat(this.docObj.dt()[0].VAT)).round(2)
-
-        this._calculateTotalMargin()
-    }
-    async _calculateTotalMargin()
-    {
-        let tmpTotalCost = 0
-
-        for (let  i= 0; i < this.docObj.docItems.dt().length; i++) 
-        {
-            tmpTotalCost += this.docObj.docItems.dt()[i].COST_PRICE * this.docObj.docItems.dt()[i].QUANTITY
-        }
-        let tmpMargin = ((this.docObj.dt()[0].TOTAL - this.docObj.dt()[0].VAT) - tmpTotalCost)
-        let tmpMarginRate = ((( this.docObj.dt()[0].TOTAL - this.docObj.dt()[0].VAT) - tmpTotalCost) ) * 100
-        this.docObj.dt()[0].MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
-    }
-    async _calculateMargin()
-    {
-        for(let  i= 0; i < this.docObj.docItems.dt().length; i++)
-        {
-            let tmpMargin = (this.docObj.docItems.dt()[i].TOTAL - this.docObj.docItems.dt()[i].VAT) - (this.docObj.docItems.dt()[i].COST_PRICE * this.docObj.docItems.dt()[i].QUANTITY)
-            let tmpMarginRate = (tmpMargin) * 100
-            this.docObj.docItems.dt()[i].MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
-        }
-       
+        super.calculateTotal()
+        this.calculateTotalMargin()
     }
     _cellRoleRender(e)
     {
@@ -262,142 +141,83 @@ export default class rebateDispatch extends React.PureComponent
                 value={e.value}
                 onKeyDown={async(k)=>
                 {
-                    console.log(k)
                     if(k.event.key == 'F10' || k.event.key == 'ArrowRight')
                     {
                         this.combineControl = true
                         this.combineNew = false
-                        await this.pg_txtItemsCode.setVal(e.value)
                         this.pg_txtItemsCode.onClick = async(data) =>
                         {
                             this.combineControl = true
                             this.combineNew = false
                             if(data.length > 0)
                             {
-                                if(data.length == 1)
+                                for (let i = 0; i < data.length; i++) 
                                 {
-                                    await this.addItem(data[0],e.rowIndex)
-                                }
-                                else if(data.length > 1)
-                                {
-                                    for (let i = 0; i < data.length; i++) 
-                                    {
-                                        if(i == 0)
-                                        {
-                                            await this.addItem(data[i],e.rowIndex)
-                                        }
-                                        else
-                                        {
-                                            let tmpDocItems = {...this.docObj.docItems.empty}
-                                            tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
-                                            tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
-                                            tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                                            tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
-                                            tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
-                                            tmpDocItems.REF = this.docObj.dt()[0].REF
-                                            tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
-                                            tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
-                                            tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
-                                            tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                                            tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
-                                            this.txtRef.readOnly = true
-                                            this.txtRefno.readOnly = true
-                                            this.docObj.docItems.addEmpty(tmpDocItems)
-                                            await this.core.util.waitUntil(100)
-                                            await this.addItem(data[i],this.docObj.docItems.dt().length-1)
-                                        }
-                                    }
+                                    await this.core.util.waitUntil(100)
+                                    await this.addItem(data[i],e.rowIndex)
                                 }
                             }
                         }
+                        await this.pg_txtItemsCode.setVal(e.value)
                     }
                 }}
-                    onValueChanged={(v)=>
-                    {
-                        e.value = v.value
-                    }}
+                onValueChanged={(v)=>
+                {
+                    e.value = v.value
+                }}
                 onChange={(async(r)=>
+                {
+                    if(typeof r.event.isTrusted == 'undefined')
                     {
-                        if(typeof r.event.isTrusted == 'undefined')
+                        let tmpQuery = 
                         {
-                            let tmpQuery = 
-                            {
-                                query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,VAT,COST_PRICE,ITEMS_VW_01.UNIT FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE",
-                                param : ['CODE:string|50'],
-                                value : [r.component._changedValue]
-                            }
-                            let tmpData = await this.core.sql.execute(tmpQuery) 
-                            if(tmpData.result.recordset.length > 0)
-                            {
-                             
-                                this.combineControl = true
-                                this.combineNew = false
-                                await this.addItem(tmpData.result.recordset[0],e.rowIndex)
-                            }
-                            else
-                            {
-                                let tmpConfObj =
-                                {
-                                    id:'msgItemNotFound',showTitle:true,title:this.t("msgItemNotFound.title"),showCloseButton:true,width:'500px',height:'200px',
-                                    button:[{id:"btn01",caption:this.t("msgItemNotFound.btn01"),location:'after'}],
-                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemNotFound.msg")}</div>)
-                                }
-                    
-                                await dialog(tmpConfObj);
-                            }
+                            query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,VAT,COST_PRICE,ITEMS_VW_01.UNIT FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE",
+                            param : ['CODE:string|50'],
+                            value : [r.component._changedValue]
                         }
-                    }).bind(this)}
+                        let tmpData = await this.core.sql.execute(tmpQuery) 
+                        if(tmpData.result.recordset.length > 0)
+                        {
+                            
+                            this.combineControl = true
+                            this.combineNew = false
+                            await this.addItem(tmpData.result.recordset[0],e.rowIndex)
+                        }
+                        else
+                        {
+                            let tmpConfObj =
+                            {
+                                id:'msgItemNotFound',showTitle:true,title:this.t("msgItemNotFound.title"),showCloseButton:true,width:'500px',height:'200px',
+                                button:[{id:"btn01",caption:this.t("msgItemNotFound.btn01"),location:'after'}],
+                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemNotFound.msg")}</div>)
+                            }
+                
+                            await dialog(tmpConfObj);
+                        }
+                    }
+                }).bind(this)}
                 button=
                 {
                     [
                         {
                             id:'01',
                             icon:'more',
-                            onClick:()  =>
+                            onClick:() =>
                             {
-                                this.pg_txtItemsCode.show()
                                 this.pg_txtItemsCode.onClick = async(data) =>
                                 {
                                     this.combineControl = true
                                     this.combineNew = false
                                     if(data.length > 0)
                                     {
-                                        if(data.length == 1)
+                                        for (let i = 0; i < data.length; i++) 
                                         {
-                                            await this.addItem(data[0],e.rowIndex)
-                                        }
-                                        else if(data.length > 1)
-                                        {
-                                            for (let i = 0; i < data.length; i++) 
-                                            {
-                                                if(i == 0)
-                                                {
-                                                    await this.addItem(data[i],e.rowIndex)
-                                                }
-                                                else
-                                                {
-                                                    let tmpDocItems = {...this.docObj.docItems.empty}
-                                                    tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
-                                                    tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
-                                                    tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                                                    tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
-                                                    tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
-                                                    tmpDocItems.REF = this.docObj.dt()[0].REF
-                                                    tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
-                                                    tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
-                                                    tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
-                                                    tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                                                    tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
-                                                    this.txtRef.readOnly = true
-                                                    this.txtRefno.readOnly = true
-                                                    this.docObj.docItems.addEmpty(tmpDocItems)
-                                                    await this.core.util.waitUntil(100)
-                                                    await this.addItem(data[i],this.docObj.docItems.dt().length-1)
-                                                }
-                                            }
+                                            await this.core.util.waitUntil(100)
+                                            await this.addItem(data[i],e.rowIndex)
                                         }
                                     }
                                 }
+                                this.pg_txtItemsCode.show()
                             }
                         },
                     ]
@@ -424,54 +244,29 @@ export default class rebateDispatch extends React.PureComponent
                             icon:'more',
                             onClick:async ()  =>
                             {
-                                let tmpQuery = 
+                                this.msgUnit.tmpData = e.data
+                                await this.msgUnit.show()
+                                
+                                e.key.UNIT = this.cmbUnit.value
+                                e.key.UNIT_FACTOR = this.txtUnitFactor.value
+                                if(this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].TYPE == 1)
                                 {
-                                    query: "SELECT GUID,ISNULL((SELECT NAME FROM UNIT WHERE UNIT.ID = ITEM_UNIT.ID),'') AS NAME,FACTOR,TYPE FROM ITEM_UNIT WHERE DELETED = 0 AND ITEM = @ITEM ORDER BY TYPE" ,
-                                    param:  ['ITEM:string|50'],
-                                    value:  [e.data.ITEM]
+                                    e.data.PRICE = parseFloat((this.txtUnitPrice.value * this.txtUnitFactor.value).toFixed(4))
                                 }
-                                let tmpData = await this.core.sql.execute(tmpQuery) 
-                                if(tmpData.result.recordset.length > 0)
-                                {   
-                                    this.cmbUnit.setData(tmpData.result.recordset)
-                                    this.cmbUnit.value = e.data.UNIT
-                                    this.txtUnitFactor.value = e.data.UNIT_FACTOR
-                                    this.txtTotalQuantity.value =  e.data.QUANTITY
-                                    this.txtUnitQuantity.value = e.data.QUANTITY / e.data.UNIT_FACTOR
-                                    if(this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].TYPE == 1)
-                                    {
-                                        this.txtUnitQuantity.value = e.data.QUANTITY * e.data.UNIT_FACTOR
-                                        this.txtUnitPrice.value = e.data.PRICE / e.data.UNIT_FACTOR
-                                    }
-                                    else
-                                    {
-                                        this.txtUnitQuantity.value = e.data.QUANTITY / e.data.UNIT_FACTOR
-                                        this.txtUnitPrice.value = e.data.PRICE * e.data.UNIT_FACTOR
-                                    }
-                                }
-                                await this.msgUnit.show().then(async () =>
+                                else
                                 {
-                                    e.key.UNIT = this.cmbUnit.value
-                                    e.key.UNIT_FACTOR = this.txtUnitFactor.value
-                                    if(this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].TYPE == 1)
-                                    {
-                                        e.data.PRICE = parseFloat((this.txtUnitPrice.value * this.txtUnitFactor.value).toFixed(4))
-                                    }
-                                    else
-                                    {
-                                        e.data.PRICE = parseFloat((this.txtUnitPrice.value / this.txtUnitFactor.value).toFixed(4))
-                                    }
-                                    e.data.QUANTITY = this.txtTotalQuantity.value
-                                    e.data.VAT = parseFloat(((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) * (e.data.VAT_RATE) / 100)).toFixed(6));
-                                    e.data.AMOUNT = parseFloat((e.data.PRICE * e.data.QUANTITY).toFixed(4))
-                                    e.data.TOTALHT = parseFloat(((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT).toFixed(4))
-                                    e.data.TOTAL = parseFloat((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) +e.data.VAT).toFixed(4))
-                                    e.data.DISCOUNT_RATE = Number(e.data.AMOUNT).rate2Num(e.data.DISCOUNT,4)
-                                    //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
-                                    await this.itemRelatedUpdate(e.data.ITEM,this.txtTotalQuantity.value)
-                                    //*****************************************/
-                                    this._calculateTotal()
-                                });  
+                                    e.data.PRICE = parseFloat((this.txtUnitPrice.value / this.txtUnitFactor.value).toFixed(4))
+                                }
+                                e.data.QUANTITY = this.txtTotalQuantity.value
+                                e.data.VAT = parseFloat(((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) * (e.data.VAT_RATE) / 100)).toFixed(6));
+                                e.data.AMOUNT = parseFloat((e.data.PRICE * e.data.QUANTITY).toFixed(4))
+                                e.data.TOTALHT = parseFloat(((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT).toFixed(4))
+                                e.data.TOTAL = parseFloat((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) +e.data.VAT).toFixed(4))
+                                e.data.DISCOUNT_RATE = Number(e.data.AMOUNT).rate2Num(e.data.DISCOUNT,4)
+                                //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
+                                await this.itemRelatedUpdate(e.data.ITEM,this.txtTotalQuantity.value)
+                                //*****************************************/
+                                this.calculateTotal()  
                             }
                         },
                     ]
@@ -513,7 +308,7 @@ export default class rebateDispatch extends React.PureComponent
                                     e.data.TOTAL = parseFloat((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) +e.data.VAT).toFixed(4))
                                     e.data.TOTALHT = parseFloat(((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT).toFixed(4))
                                     e.data.DISCOUNT_RATE = Number(e.data.AMOUNT).rate2Num(e.data.DISCOUNT,2)
-                                    this._calculateTotal()
+                                    this.calculateTotal()
                                 });  
                             }
                         },
@@ -555,7 +350,7 @@ export default class rebateDispatch extends React.PureComponent
                                     e.data.TOTALHT = parseFloat(((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT).toFixed(4))
                                     e.data.TOTAL = parseFloat((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) +e.data.VAT).toFixed(4))
                                     e.data.DISCOUNT_RATE = Number(e.data.AMOUNT).rate2Num(e.data.DISCOUNT,4)
-                                    this._calculateTotal()
+                                    this.calculateTotal()
                                 });  
                             }
                         },
@@ -569,9 +364,51 @@ export default class rebateDispatch extends React.PureComponent
     async addItem(pData,pIndex,pQuantity)
     {
         App.instance.setState({isExecute:true})
+
+        this.txtRef.readOnly = true
+        this.txtRefno.readOnly = true
+
         if(typeof pQuantity == 'undefined')
         {
             pQuantity = 1
+        }
+        //GRID DE AYNI ÜRÜNDEN OLUP OLMADIĞI KONTROL EDİLİYOR VE KULLANICIYA SORULUYOR,CEVAP A GÖRE SATIR BİRLİŞTERİLİYOR.
+        if(pData.ITEM_TYPE == 0)
+        {
+            let tmpMergDt = await this.mergeItem(pData.CODE)
+            if(typeof tmpMergDt != 'undefined' && this.combineNew == false)
+            {
+                tmpMergDt[0].QUANTITY = tmpMergDt[0].QUANTITY + pQuantity
+                tmpMergDt[0].SUB_QUANTITY = tmpMergDt[0].SUB_QUANTITY / tmpMergDt[0].SUB_FACTOR
+                tmpMergDt[0].VAT = Number((tmpMergDt[0].VAT + (tmpMergDt[0].PRICE * (tmpMergDt[0].VAT_RATE / 100) * pQuantity))).round(6)
+                tmpMergDt[0].AMOUNT = Number((tmpMergDt[0].QUANTITY * tmpMergDt[0].PRICE)).round(4)
+                tmpMergDt[0].TOTAL = Number((((tmpMergDt[0].QUANTITY * tmpMergDt[0].PRICE) - tmpMergDt[0].DISCOUNT) + tmpMergDt[0].VAT)).round(2)
+                tmpMergDt[0].TOTALHT =  Number((tmpMergDt[0].AMOUNT - tmpMergDt[0].DISCOUNT)).round(2)
+                this.calculateTotal()
+                //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
+                await this.itemRelated(pData.GUID,tmpMergDt[0].QUANTITY)
+                //*****************************************/
+                App.instance.setState({isExecute:false})
+                return
+            }
+        }
+        //******************************************************************************************************************/
+        if(pIndex == null)
+        {
+            let tmpDocItems = {...this.docObj.docItems.empty}
+            tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+            tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+            tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+            tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
+            tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
+            tmpDocItems.REF = this.docObj.dt()[0].REF
+            tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+            tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+            tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+            tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+            tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
+            this.docObj.docItems.addEmpty(tmpDocItems)
+            pIndex = this.docObj.docItems.dt().length - 1
         }
 
         let tmpGrpQuery = 
@@ -610,8 +447,7 @@ export default class rebateDispatch extends React.PureComponent
                 App.instance.setState({isExecute:false})
                 await this.msgCustomerNotFound.show().then(async (e) =>
                 {
-
-                   if(e == 'btn01' && this.checkCustomer.value == true)
+                    if(e == 'btn01' && this.checkCustomer.value == true)
                     {
                         this.customerControl = false
                         return
@@ -633,68 +469,7 @@ export default class rebateDispatch extends React.PureComponent
                 }
             }
         }
-        for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
-        {
-            if(this.docObj.docItems.dt()[i].ITEM_CODE == pData.CODE)
-            {
-                if(this.combineControl == true)
-                {
-                    let tmpCombineBtn = ''
-                    App.instance.setState({isExecute:false})
-                    await this.msgCombineItem.show().then(async (e) =>
-                    {
-                        if(e == 'btn01')
-                        {
-                            this.docObj.docItems.dt()[i].QUANTITY = this.docObj.docItems.dt()[i].QUANTITY + pQuantity
-                            this.docObj.docItems.dt()[i].SUB_QUANTITY = this.docObj.docItems.dt()[i].SUB_QUANTITY * this.docObj.docItems.dt()[i].SUB_FACTOR
-                            this.docObj.docItems.dt()[i].VAT = parseFloat((this.docObj.docItems.dt()[i].VAT + (this.docObj.docItems.dt()[i].PRICE * (this.docObj.docItems.dt()[i].VAT_RATE / 100) * pQuantity)).toFixed(6))
-                            this.docObj.docItems.dt()[i].AMOUNT = parseFloat((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE).toFixed(4))
-                            this.docObj.docItems.dt()[i].TOTAL = parseFloat((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT).toFixed(4))
-                            this._calculateTotal()
-                            await this.grdRebtDispatch.devGrid.deleteRow(0)
-                            //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
-                            await this.itemRelated(pData.GUID,this.docObj.docItems.dt()[i].QUANTITY)
-                            //*****************************************/
-                            if(this.checkCombine.value == true)
-                            {
-                                this.combineControl = false
-                            }
-                            tmpCombineBtn = e
-                            return
-                        }
-                        if(e == 'btn02')
-                        {
-                            if(this.checkCombine.value == true)
-                            {
-                                this.combineControl = false
-                                this.combineNew = true
-                            }
-                            return
-                        }
-                    })
-                    if(tmpCombineBtn == 'btn01')
-                    {
-                        return
-                    }
-                }
-                else if(this.combineNew == false)
-                {
-                
-                    this.docObj.docItems.dt()[i].QUANTITY = this.docObj.docItems.dt()[i].QUANTITY + pQuantity
-                    this.docObj.docItems.dt()[i].SUB_QUANTITY = this.docObj.docItems.dt()[i].SUB_QUANTITY * this.docObj.docItems.dt()[i].SUB_FACTOR
-                    this.docObj.docItems.dt()[i].VAT = parseFloat((this.docObj.docItems.dt()[i].VAT + (this.docObj.docItems.dt()[i].PRICE * (this.docObj.docItems.dt()[i].VAT_RATE / 100) * pQuantity)).toFixed(6))
-                    this.docObj.docItems.dt()[i].AMOUNT = parseFloat((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE).toFixed(4))
-                    this.docObj.docItems.dt()[i].TOTAL = parseFloat((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT).toFixed(4))
-                    this._calculateTotal()
-                    await this.grdRebtDispatch.devGrid.deleteRow(0)
-                    //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
-                    await this.itemRelated(pData.GUID,this.docObj.docItems.dt()[i].QUANTITY)
-                    //*****************************************/
-                    App.instance.setState({isExecute:false})
-                    return
-                }
-            }
-        }
+        
         this.docObj.docItems.dt()[pIndex].ITEM_CODE = pData.CODE
         this.docObj.docItems.dt()[pIndex].ITEM = pData.GUID
         this.docObj.docItems.dt()[pIndex].VAT_RATE = pData.VAT
@@ -724,107 +499,12 @@ export default class rebateDispatch extends React.PureComponent
             this.docObj.docItems.dt()[pIndex].TOTALHT = Number((this.docObj.docItems.dt()[pIndex].AMOUNT - this.docObj.docItems.dt()[pIndex].DISCOUNT)).round(2)
             this.docObj.docItems.dt()[pIndex].SUB_PRICE = Number(parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4)) / this.docObj.docItems.dt()[pIndex].SUB_FACTOR).round(2)
 
-            this._calculateTotal()
+            this.calculateTotal()
         }
         //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
         await this.itemRelated(pData.GUID,pQuantity)
         //*****************************************/
         App.instance.setState({isExecute:false})
-    }
-    itemRelated(pGuid,pQuantity)
-    {
-        return new Promise(async resolve =>
-        {
-            let tmpRelatedQuery = 
-            {
-                query :"SELECT ITEM_GUID,ITEM_CODE,ITEM_NAME,ITEM_QUANTITY,RELATED_GUID,RELATED_CODE,RELATED_NAME,RELATED_QUANTITY FROM ITEM_RELATED_VW_01 WHERE ITEM_GUID = @ITEM_GUID",
-                param : ['ITEM_GUID:string|50'],
-                value : [pGuid]
-            }
-    
-            let tmpRelatedData = await this.core.sql.execute(tmpRelatedQuery)            
-            
-            for (let i = 0; i < tmpRelatedData.result.recordset.length; i++) 
-            {
-                let tmpRelatedQt = Math.floor(pQuantity / tmpRelatedData.result.recordset[i].ITEM_QUANTITY) * tmpRelatedData.result.recordset[i].RELATED_QUANTITY
-                
-                if(tmpRelatedQt > 0)
-                {
-                    let tmpRelatedItemQuery = 
-                    {   
-                        query :"SELECT GUID,CODE,NAME,COST_PRICE,UNIT_GUID AS UNIT,VAT,MULTICODE,CUSTOMER_NAME,BARCODE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE GUID = @GUID",
-                        param : ['GUID:string|50'],
-                        value : [tmpRelatedData.result.recordset[i].RELATED_GUID]
-                    }
-    
-                    let tmpRelatedItemData = await this.core.sql.execute(tmpRelatedItemQuery)
-                    
-                    if(tmpRelatedItemData.result.recordset.length > 0)
-                    {
-                        let tmpDocItems = {...this.docObj.docItems.empty}
-                        tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
-                        tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
-                        tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                        tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
-                        tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
-                        tmpDocItems.REF = this.docObj.dt()[0].REF
-                        tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
-                        tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
-                        tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
-                        tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                        tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
-                        this.txtRef.readOnly = true
-                        this.txtRefno.readOnly = true
-                        this.docObj.docItems.addEmpty(tmpDocItems)
-                        await this.core.util.waitUntil(100)
-                        await this.addItem(tmpRelatedItemData.result.recordset[0],this.docObj.docItems.dt().length-1,tmpRelatedQt)
-                    }
-                }
-            }
-            resolve()
-        })
-    }
-    itemRelatedUpdate(pGuid,pQuantity)
-    {
-        return new Promise(async resolve =>
-        {
-            await this.core.util.waitUntil()
-            let tmpRelatedQuery = 
-            {
-                query :"SELECT ITEM_GUID,ITEM_CODE,ITEM_NAME,ITEM_QUANTITY,RELATED_GUID,RELATED_CODE,RELATED_NAME,RELATED_QUANTITY FROM ITEM_RELATED_VW_01 WHERE ITEM_GUID = @ITEM_GUID",
-                param : ['ITEM_GUID:string|50'],
-                value : [pGuid]
-            }
-            
-            let tmpRelatedData = await this.core.sql.execute(tmpRelatedQuery)                        
-            
-            for (let i = 0; i < tmpRelatedData.result.recordset.length; i++) 
-            {
-                let tmpExist = false
-                for (let x = 0; x < this.docObj.docItems.dt().length; x++) 
-                {
-                    if(this.docObj.docItems.dt()[x].ITEM_CODE == tmpRelatedData.result.recordset[i].RELATED_CODE)
-                    {                
-                        let tmpRelatedQt = Math.floor(pQuantity / tmpRelatedData.result.recordset[i].ITEM_QUANTITY) * tmpRelatedData.result.recordset[i].RELATED_QUANTITY
-                        
-                        if(tmpRelatedQt > 0)
-                        {
-                            this.docObj.docItems.dt()[x].QUANTITY = tmpRelatedQt
-                            this.docObj.docItems.dt()[x].VAT = parseFloat((this.docObj.docItems.dt()[x].VAT + (this.docObj.docItems.dt()[x].PRICE * (this.docObj.docItems.dt()[x].VAT_RATE / 100) * pQuantity)).toFixed(6))
-                            this.docObj.docItems.dt()[x].AMOUNT = parseFloat((this.docObj.docItems.dt()[x].QUANTITY * this.docObj.docItems.dt()[x].PRICE).toFixed(4))
-                            this.docObj.docItems.dt()[x].TOTAL = parseFloat((((this.docObj.docItems.dt()[x].QUANTITY * this.docObj.docItems.dt()[x].PRICE) - this.docObj.docItems.dt()[x].DISCOUNT) + this.docObj.docItems.dt()[x].VAT).toFixed(4))
-                            this.docObj.docItems.dt()[x].TOTALHT =  parseFloat((this.docObj.docItems.dt()[x].AMOUNT - this.docObj.docItems.dt()[x].DISCOUNT).toFixed(4))
-                        }
-                        tmpExist = true
-                    }
-                }
-                if(!tmpExist)
-                {
-                    await this.itemRelated(pGuid,pQuantity)
-                }
-            }
-            resolve()
-        })
     }
     async _getRebate()
     {
@@ -843,7 +523,7 @@ export default class rebateDispatch extends React.PureComponent
         {
             this.pg_RebateGrid.setData([])
         }
-        this.pg_RebateGrid.show()
+        
         this.pg_RebateGrid.onClick = async(data) =>
         {
             for (let i = 0; i < data.length; i++) 
@@ -872,72 +552,9 @@ export default class rebateDispatch extends React.PureComponent
                 await this.core.util.waitUntil(100)
             }
             this.docObj.docItems.dt().emit('onRefresh')
-            this._calculateTotal()
+            this.calculateTotal()
         }
-    }
-    async checkRow()
-    {
-        for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
-        {
-            this.docObj.docItems.dt()[i].INPUT = this.docObj.dt()[0].INPUT
-            this.docObj.docItems.dt()[i].OUTPUT = this.docObj.dt()[0].OUTPUT
-            this.docObj.docItems.dt()[i].DOC_DATE = this.docObj.dt()[0].DOC_DATE
-            this.docObj.docItems.dt()[i].SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
-            this.docObj.docItems.dt()[i].REF = this.docObj.dt()[0].REF
-            this.docObj.docItems.dt()[i].REF_NO = this.docObj.dt()[0].REF_NO
-        }
-    }
-    async _getBarcodes()
-    {
-        let tmpSource =
-        {
-            source:
-            {
-                select:
-                {   query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,COST_PRICE,VAT,BARCODE,ITEMS_VW_01.UNIT,ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_01.GUID AND ITEM_MULTICODE.CUSTOMER = '"+this.docObj.dt()[0].INPUT+"' AND DELETED = 0 ORDER BY LDATE DESC),'') AS MULTICODE,  " + 
-                    "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_MULTICODE_VW_01.ITEM_GUID = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS CUSTOMER_NAME " + 
-                    " FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE  ITEM_BARCODE_VW_01.BARCODE LIKE  '%' +@BARCODE",
-                    param : ['BARCODE:string|50'],
-                },
-                sql:this.core.sql
-            }
-        }
-        this.pg_txtBarcode.setSource(tmpSource)
-    } 
-    async getDocs(pType)
-    {
-        let tmpQuery 
-        if(pType == 0)
-        {
-            tmpQuery = 
-            {
-                query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,DOC_DATE_CONVERT,TOTAL FROM DOC_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 40 AND REBATE = 1 AND DOC_DATE > GETDATE()-30 ORDER BY DOC_DATE DESC"
-            }
-        }
-        else
-        {
-            tmpQuery = 
-            {
-                query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,DOC_DATE_CONVERT,TOTAL FROM DOC_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 40 AND REBATE = 1 ORDER BY DOC_DATE DESC"
-            }
-        }
-
-        let tmpData = await this.core.sql.execute(tmpQuery) 
-        let tmpRows = []
-        if(tmpData.result.recordset.length > 0)
-        {
-            tmpRows = tmpData.result.recordset
-        }
-        await this.pg_Docs.setData(tmpRows)
-     
-        this.pg_Docs.show()
-        this.pg_Docs.onClick = (data) =>
-        {
-            if(data.length > 0)
-            {
-                this.getDoc(data[0].GUID,data[0].REF,data[0].REF_NO)
-            }
-        }
+        await this.pg_RebateGrid.show()
     }
     render()
     {
@@ -1128,7 +745,7 @@ export default class rebateDispatch extends React.PureComponent
                                         }
                                         else if(this.docObj.dt()[0].LOCKED == 1)
                                         {
-                                            this.popPassword.show()
+                                            await this.popPassword.show()
                                             this.txtPassword.value = ''
                                         }
                                         else if(this.docObj.dt()[0].LOCKED == 2)
@@ -1226,7 +843,7 @@ export default class rebateDispatch extends React.PureComponent
                                             </NdTextBox>
                                         </div>
                                         <div className="col-5 ps-0">
-                                            <NdTextBox id="txtRefno" mode="number" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF_NO"}}
+                                            <NdTextBox id="txtRefno" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF_NO"}}
                                             readOnly={true}
                                             button=
                                             {
@@ -1290,37 +907,6 @@ export default class rebateDispatch extends React.PureComponent
                                             </NdTextBox>
                                         </div>
                                     </div>
-                                    {/*EVRAK SEÇİM */}
-                                    <NdPopGrid id={"pg_Docs"} parent={this} container={"#root"}
-                                    visible={false}
-                                    position={{of:'#root'}} 
-                                    showTitle={true} 
-                                    showBorders={true}
-                                    width={'90%'}
-                                    height={'90%'}
-                                    title={this.t("pg_Docs.title")} 
-                                    button=
-                                    {
-                                        [
-                                            {
-                                                id:'01',
-                                                icon:'more',
-                                                onClick:()=>
-                                                {
-                                                    this.getDocs(1)
-                                                }
-                                            }
-                                        ]
-                                        
-                                    }
-                                    >
-                                        <Column dataField="REF" caption={this.t("pg_Docs.clmRef")} width={150}/>
-                                        <Column dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={120} />
-                                        <Column dataField="DOC_DATE_CONVERT" caption={this.t("pg_Docs.clmDate")} width={300}  />
-                                        <Column dataField="INPUT_NAME" caption={this.t("pg_Docs.clmInputName")} width={300} />
-                                        <Column dataField="INPUT_CODE" caption={this.t("pg_Docs.clmInputCode")} width={300} />
-                                        <Column dataField="TOTAL" format={{ style: "currency", currency: "EUR",precision: 2}} caption={this.t("pg_Docs.clmTotal")} width={300} />
-                                    </NdPopGrid>
                                 </Item>
                                 {/* cmbDepot */}
                                 <Item>
@@ -1357,65 +943,60 @@ export default class rebateDispatch extends React.PureComponent
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     dt={{data:this.docObj.dt('DOC'),field:"INPUT_CODE"}} 
                                     onEnterKey={(async()=>
+                                    {
+                                        if(this.docObj.docItems.dt().length > 0)
                                         {
-                                            if(this.docObj.docItems.dt().length > 0)
+                                            let tmpConfObj =
                                             {
-                                                let tmpConfObj =
-                                                {
-                                                    id:'msgCustomerLock',showTitle:true,title:this.t("msgCustomerLock.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:this.t("msgCustomerLock.btn01"),location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerLock.msg")}</div>)
-                                                }
-                                                
-                                                await dialog(tmpConfObj);
-                                                return;
+                                                id:'msgCustomerLock',showTitle:true,title:this.t("msgCustomerLock.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgCustomerLock.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerLock.msg")}</div>)
                                             }
-                                            await this.pg_txtCustomerCode.setVal(this.txtCustomerCode.value)
-                                            this.pg_txtCustomerCode.show()
-                                            this.pg_txtCustomerCode.onClick = async(data) =>
+                                            
+                                            await dialog(tmpConfObj);
+                                            return;
+                                        }
+                                        
+                                        this.pg_txtCustomerCode.onClick = async(data) =>
+                                        {
+                                            if(data.length > 0)
                                             {
-                                                if(data.length > 0)
+                                                this.docObj.dt()[0].INPUT = data[0].GUID
+                                                this.docObj.dt()[0].INPUT_CODE = data[0].CODE
+                                                this.docObj.dt()[0].INPUT_NAME = data[0].TITLE
+                                                let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
+                                                if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                 {
-                                                    this.docObj.dt()[0].INPUT = data[0].GUID
-                                                    this.docObj.dt()[0].INPUT_CODE = data[0].CODE
-                                                    this.docObj.dt()[0].INPUT_NAME = data[0].TITLE
-                                                    let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
-                                                    if(typeof tmpData != 'undefined' && tmpData.value ==  true)
+                                                    this.txtRef.value = data[0].CODE;
+                                                    this.txtRef.props.onChange()
+                                                }
+                                                if(this.cmbDepot.value != '' && this.docLocked == false)
+                                                {
+                                                    this.frmDocItems.option('disabled',false)
+                                                }
+                                                    let tmpQuery = 
+                                                {
+                                                    query : "SELECT * FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER = @CUSTOMER",
+                                                    param : ['CUSTOMER:string|50'],
+                                                    value : [ data[0].GUID]
+                                                }
+                                                let tmpAdressData = await this.core.sql.execute(tmpQuery) 
+                                                if(tmpAdressData.result.recordset.length > 1)
+                                                {
+                                                    this.pg_adress.onClick = async(pdata) =>
                                                     {
-                                                        this.txtRef.value = data[0].CODE;
-                                                        this.txtRef.props.onChange()
-                                                    }
-                                                    if(this.cmbDepot.value != '' && this.docLocked == false)
-                                                    {
-                                                        this.frmDocItems.option('disabled',false)
-                                                    }
-                                                     let tmpQuery = 
-                                                    {
-                                                        query : "SELECT * FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER = @CUSTOMER",
-                                                        param : ['CUSTOMER:string|50'],
-                                                        value : [ data[0].GUID]
-                                                    }
-                                                    let tmpAdressData = await this.core.sql.execute(tmpQuery) 
-                                                    if(tmpAdressData.result.recordset.length > 1)
-                                                    {   
-                                                        await this.pg_adress.setData(tmpAdressData.result.recordset)
-                                                        this.pg_adress.show()
-                                                        this.pg_adress.onClick = async(pdata) =>
+                                                        if(pdata.length > 0)
                                                         {
-                                                            if(pdata.length > 0)
-                                                            {
-                                                                this.docObj.dt()[0].ADDRESS = pdata[0].ADRESS_NO
-                                                            }
+                                                            this.docObj.dt()[0].ADDRESS = pdata[0].ADRESS_NO
                                                         }
                                                     }
-                                                    else
-                                                    {
-                                                        await this.pg_adress.setData([])
-                                                    }
+                                                    await this.pg_adress.show()
+                                                    await this.pg_adress.setData(tmpAdressData.result.recordset)
                                                 }
-                                                this._getBarcodes()
                                             }
-                                        }).bind(this)}
+                                        }
+                                        await this.pg_txtCustomerCode.setVal(this.txtCustomerCode.value)
+                                    }).bind(this)}
                                     button=
                                     {
                                         [
@@ -1436,7 +1017,7 @@ export default class rebateDispatch extends React.PureComponent
                                                         await dialog(tmpConfObj);
                                                         return;
                                                     }
-                                                    this.pg_txtCustomerCode.show()
+                                                    
                                                     this.pg_txtCustomerCode.onClick = async(data) =>
                                                     {
                                                         if(data.length > 0)
@@ -1454,17 +1035,15 @@ export default class rebateDispatch extends React.PureComponent
                                                             {
                                                                 this.frmDocItems.option('disabled',false)
                                                             }
-                                                             let tmpQuery = 
-                                                    {
-                                                        query : "SELECT * FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER = @CUSTOMER",
-                                                        param : ['CUSTOMER:string|50'],
-                                                        value : [ data[0].GUID]
-                                                    }
-                                                    let tmpAdressData = await this.core.sql.execute(tmpQuery) 
+                                                            let tmpQuery = 
+                                                            {
+                                                                query : "SELECT * FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER = @CUSTOMER",
+                                                                param : ['CUSTOMER:string|50'],
+                                                                value : [ data[0].GUID]
+                                                            }
+                                                            let tmpAdressData = await this.core.sql.execute(tmpQuery) 
                                                             if(tmpAdressData.result.recordset.length > 1)
-                                                            {   
-                                                                await this.pg_adress.setData(tmpAdressData.result.recordset)
-                                                                this.pg_adress.show()
+                                                            {
                                                                 this.pg_adress.onClick = async(pdata) =>
                                                                 {
                                                                     if(pdata.length > 0)
@@ -1472,14 +1051,12 @@ export default class rebateDispatch extends React.PureComponent
                                                                         this.docObj.dt()[0].ADDRESS = pdata[0].ADRESS_NO
                                                                     }
                                                                 }
-                                                            }
-                                                            else
-                                                            {
-                                                                await this.pg_adress.setData([])
+                                                                await this.pg_adress.show()
+                                                                await this.pg_adress.setData(tmpAdressData.result.recordset)
                                                             }
                                                         }
-                                                        this._getBarcodes()
                                                     }
+                                                    this.pg_txtCustomerCode.show()
                                                 }
                                             },
                                         ]
@@ -1491,46 +1068,6 @@ export default class rebateDispatch extends React.PureComponent
                                             <RequiredRule message={this.t("validCustomerCode")} />
                                         </Validator>  
                                     </NdTextBox>
-                                    {/*CARI SECIMI POPUP */}
-                                    <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={"#root"}
-                                    visible={false}
-                                    position={{of:'#root'}} 
-                                    showTitle={true} 
-                                    showBorders={true}
-                                    width={'90%'}
-                                    height={'90%'}
-                                    title={this.t("pg_txtCustomerCode.title")} //
-                                    search={true}
-                                    data = 
-                                    {{
-                                        source:
-                                        {
-                                            select:
-                                            {
-                                                query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
-                                                param : ['VAL:string|50']
-                                            },
-                                            sql:this.core.sql
-                                        }
-                                    }}
-                                    button=
-                                    {
-                                        {
-                                            id:'01',
-                                            icon:'more',
-                                            onClick:()=>
-                                            {
-                                                console.log(1111)
-                                            }
-                                        }
-                                    }
-                                    >
-                                        <Column dataField="CODE" caption={this.t("pg_txtCustomerCode.clmCode")} width={150} />
-                                        <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmTitle")} width={500} defaultSortOrder="asc" />
-                                        <Column dataField="TYPE_NAME" caption={this.t("pg_txtCustomerCode.clmTypeName")} width={150} />
-                                        <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150} />
-                                        
-                                    </NdPopGrid>
                                 </Item> 
                                 {/* txtCustomerName */}
                                 <Item>
@@ -1604,28 +1141,10 @@ export default class rebateDispatch extends React.PureComponent
                                                         this.txtBarcode.setState({value:""})
                                                         return
                                                     }
-                                                  
-                                                    await this.pg_txtBarcode.setVal(this.txtBarcode.value)
-                                                    this.pg_txtBarcode.show()
+                                                    
                                                     this.pg_txtBarcode.onClick = async(data) =>
                                                     {
                                                         this.txtBarcode.setState({value:""})
-                                                        let tmpDocItems = {...this.docObj.docItems.empty}
-                                                        tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
-                                                        tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
-                                                        tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                                                        tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
-                                                        tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
-                                                        tmpDocItems.REF = this.docObj.dt()[0].REF
-                                                        tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
-                                                        tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
-                                                        tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
-                                                        tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                                                        tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
-                                                        this.txtRef.readOnly = true
-                                                        this.txtRefno.readOnly = true
-                                                        this.docObj.docItems.addEmpty(tmpDocItems)
-                                                        await this.core.util.waitUntil(100)
                                                         await this.core.util.waitUntil(100)
 
                                                         if(data.length > 0)
@@ -1635,43 +1154,14 @@ export default class rebateDispatch extends React.PureComponent
                                                             this.combineControl = true
                                                             this.combineNew = false
         
-                                                            if(data.length == 1)
+                                                            for (let i = 0; i < data.length; i++) 
                                                             {
-                                                                await this.addItem(data[0],this.docObj.docItems.dt().length -1)
-                                                            }
-                                                            else if(data.length > 1)
-                                                            {
-                                                                for (let i = 0; i < data.length; i++) 
-                                                                {
-                                                                    if(i == 0)
-                                                                    {
-                                                                        await this.addItem(data[i],this.docObj.docItems.dt().length -1)
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        let tmpDocItems = {...this.docObj.docItems.empty}
-                                                                        tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
-                                                                        tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
-                                                                        tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                                                                        tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
-                                                                        tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
-                                                                        tmpDocItems.REF = this.docObj.dt()[0].REF
-                                                                        tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
-                                                                        tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
-                                                                        tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
-                                                                        tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                                                                        tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
-                                                                        this.txtRef.readOnly = true
-                                                                        this.txtRefno.readOnly = true
-                                                                        this.docObj.docItems.addEmpty(tmpDocItems)
-        
-                                                                        await this.core.util.waitUntil(100)
-                                                                        await this.addItem(data[i],this.docObj.docItems.dt().length-1)
-                                                                    }
-                                                                }
+                                                                await this.core.util.waitUntil(100)
+                                                                await this.addItem(data[i],null)
                                                             }
                                                         }
                                                     }
+                                                    await this.pg_txtBarcode.setVal(this.txtBarcode.value)
                                                 }
                                             }
                                         ]
@@ -1700,97 +1190,30 @@ export default class rebateDispatch extends React.PureComponent
                                         let tmpData = await this.core.sql.execute(tmpQuery) 
                                         if(tmpData.result.recordset.length > 0)
                                         {
-                                            this.txtPopQuantity.value = 1
-                                            setTimeout(async () => 
-                                            {
-                                               this.txtPopQuantity.focus()
-                                            }, 700);
-                                            await this.msgQuantity.show().then(async (e) =>
-                                            {
-                                                let tmpDocItems = {...this.docObj.docItems.empty}
-                                                tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
-                                                tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
-                                                tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                                                tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
-                                                tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
-                                                tmpDocItems.REF = this.docObj.dt()[0].REF
-                                                tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
-                                                tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
-                                                tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
-                                                tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                                                tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
-                                                this.txtRef.readOnly = true
-                                                this.txtRefno.readOnly = true
-                                                this.docObj.docItems.addEmpty(tmpDocItems)
-                                                await this.core.util.waitUntil(100)
-                                            });
-                                            this.addItem(tmpData.result.recordset[0],(typeof this.docObj.docItems.dt()[0] == 'undefined' ? 0 : this.docObj.docItems.dt().length-1),this.txtPopQuantity.value)
+                                            this.msgQuantity.tmpData = tmpData.result.recordset[0]
+                                            await this.msgQuantity.show()
+                                            this.addItem(tmpData.result.recordset[0],null,this.txtPopQuantity.value)
                                             this.txtBarcode.focus()
                                         }
                                         else
                                         {
-                                            await this.pg_txtItemsCode.setVal(this.txtBarcode.value)
-                                            this.pg_txtItemsCode.show()
                                             this.pg_txtItemsCode.onClick = async(data) =>
                                             {
-                                                let tmpDocItems = {...this.docObj.docItems.empty}
-                                                tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
-                                                tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
-                                                tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                                                tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
-                                                tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
-                                                tmpDocItems.REF = this.docObj.dt()[0].REF
-                                                tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
-                                                tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
-                                                tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
-                                                tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                                                tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
-                                                this.txtRef.readOnly = true
-                                                this.txtRefno.readOnly = true
-                                                this.docObj.docItems.addEmpty(tmpDocItems)
-                                                await this.core.util.waitUntil(100)
                                                 if(data.length > 0)
                                                 {
                                                     this.customerControl = true
                                                     this.customerClear = false
                                                     this.combineControl = true
                                                     this.combineNew = false
-                                                    if(data.length == 1)
+                                                    
+                                                    for (let i = 0; i < data.length; i++) 
                                                     {
-                                                        await this.addItem(data[0],this.docObj.docItems.dt().length -1)
-                                                    }
-                                                    else if(data.length > 1)
-                                                    {
-                                                        for (let i = 0; i < data.length; i++) 
-                                                        {
-                                                            if(i == 0)
-                                                            {
-                                                                await this.addItem(data[i],this.docObj.docItems.dt().length -1)
-                                                            }
-                                                            else
-                                                            {
-                                                                let tmpDocItems = {...this.docObj.docItems.empty}
-                                                                tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
-                                                                tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
-                                                                tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                                                                tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
-                                                                tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
-                                                                tmpDocItems.REF = this.docObj.dt()[0].REF
-                                                                tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
-                                                                tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
-                                                                tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
-                                                                tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                                                                tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
-                                                                this.txtRef.readOnly = true
-                                                                this.txtRefno.readOnly = true
-                                                                this.docObj.docItems.addEmpty(tmpDocItems)
-                                                                await this.core.util.waitUntil(100)
-                                                                await this.addItem(data[i],this.docObj.docItems.dt().length-1)
-                                                            }
-                                                        }
+                                                        await this.core.util.waitUntil(100)
+                                                        await this.addItem(data[i],null)
                                                     }
                                                 }
                                             }
+                                            await this.pg_txtItemsCode.setVal(this.txtBarcode.value)
                                         }
                                         this.txtBarcode.value = ''
                                     }).bind(this)}
@@ -1820,7 +1243,6 @@ export default class rebateDispatch extends React.PureComponent
                                             {
                                                 if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
                                                 {
-                                                    this.pg_txtItemsCode.show()
                                                     this.pg_txtItemsCode.onClick = async(data) =>
                                                     {
                                                         this.customerControl = true
@@ -1829,65 +1251,20 @@ export default class rebateDispatch extends React.PureComponent
                                                         this.combineNew = false
                                                         if(data.length > 0)
                                                         {
-                                                            if(data.length == 1)
+                                                            for (let i = 0; i < data.length; i++) 
                                                             {
-                                                                await this.addItem(data[0],this.docObj.docItems.dt().length -1)
-                                                            }
-                                                            else if(data.length > 1)
-                                                            {
-                                                                for (let i = 0; i < data.length; i++) 
-                                                                {
-                                                                    if(i == 0)
-                                                                    {
-                                                                        await this.addItem(data[i],this.docObj.docItems.dt().length -1)
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        let tmpDocItems = {...this.docObj.docItems.empty}
-                                                                        tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
-                                                                        tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
-                                                                        tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                                                                        tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
-                                                                        tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
-                                                                        tmpDocItems.REF = this.docObj.dt()[0].REF
-                                                                        tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
-                                                                        tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
-                                                                        tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
-                                                                        tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                                                                        tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
-                                                                        this.txtRef.readOnly = true
-                                                                        this.txtRefno.readOnly = true
-                                                                        this.docObj.docItems.addEmpty(tmpDocItems)
-                                                                        await this.core.util.waitUntil(100)
-                                                                        await this.addItem(data[i],this.docObj.docItems.dt().length-1)
-                                                                    }
-                                                                }
+                                                                await this.core.util.waitUntil(100)
+                                                                await this.addItem(data[i],null)
                                                             }
                                                         }
                                                     }
+                                                    this.pg_txtItemsCode.show()
                                                     return
                                                 }
                                             }
                                            
-                                            
-                                            this.pg_txtItemsCode.show()
                                             this.pg_txtItemsCode.onClick = async(data) =>
                                             {
-                                                let tmpDocItems = {...this.docObj.docItems.empty}
-                                                tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
-                                                tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
-                                                tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                                                tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
-                                                tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
-                                                tmpDocItems.REF = this.docObj.dt()[0].REF
-                                                tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
-                                                tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
-                                                tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
-                                                tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                                                tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
-                                                this.txtRef.readOnly = true
-                                                this.txtRefno.readOnly = true
-                                                this.docObj.docItems.addEmpty(tmpDocItems)
                                                 await this.core.util.waitUntil(100)
                                                 if(data.length > 0)
                                                 {
@@ -1895,43 +1272,14 @@ export default class rebateDispatch extends React.PureComponent
                                                     this.customerClear = false
                                                     this.combineControl = true
                                                     this.combineNew = false
-                                                    if(data.length == 1)
+                                                    for (let i = 0; i < data.length; i++) 
                                                     {
-                                                        await this.addItem(data[0],this.docObj.docItems.dt().length -1)
-                                                    }
-                                                    else if(data.length > 1)
-                                                    {
-                                                        for (let i = 0; i < data.length; i++) 
-                                                        {
-                                                            if(i == 0)
-                                                            {
-                                                                await this.addItem(data[i],this.docObj.docItems.dt().length -1)
-                                                            }
-                                                            else
-                                                            {
-                                                                let tmpDocItems = {...this.docObj.docItems.empty}
-                                                                tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
-                                                                tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
-                                                                tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                                                                tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
-                                                                tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
-                                                                tmpDocItems.REF = this.docObj.dt()[0].REF
-                                                                tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
-                                                                tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
-                                                                tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
-                                                                tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                                                                tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
-                                                                this.txtRef.readOnly = true
-                                                                this.txtRefno.readOnly = true
-                                                                this.docObj.docItems.addEmpty(tmpDocItems)
-                                                                await this.core.util.waitUntil(100)
-                                                                await this.addItem(data[i],this.docObj.docItems.dt().length-1)
-                                                            }
-                                                        }
+                                                        await this.core.util.waitUntil(100)
+                                                        await this.addItem(data[i],null)
                                                     }
                                                 }
                                             }
-                                            
+                                            this.pg_txtItemsCode.show()
                                         }
                                         else
                                         {
@@ -2003,8 +1351,8 @@ export default class rebateDispatch extends React.PureComponent
                                             e.component.cancelEditData()
                                         }
                                     }}
-                                    onRowUpdated={async(e)=>{
-
+                                    onRowUpdated={async(e)=>
+                                    {
                                         if(typeof e.data.QUANTITY != 'undefined')
                                         {
                                             e.key.SUB_QUANTITY =  e.data.QUANTITY * e.key.SUB_FACTOR
@@ -2020,7 +1368,7 @@ export default class rebateDispatch extends React.PureComponent
                                                 e.key.PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4))
                                                 e.key.SUB_PRICE = Number(((tmpData.result.recordset[0].PRICE).toFixed(3)) / e.key.SUB_FACTOR).round(2)
                                                 
-                                                this._calculateTotal()
+                                                this.calculateTotal()
                                             }
                                         }
                                       
@@ -2068,10 +1416,11 @@ export default class rebateDispatch extends React.PureComponent
                                         {
                                            e.key.DISCOUNT_RATE = Number(e.key.PRICE * e.key.QUANTITY).rate2Num(e.key.DISCOUNT)
                                         }
-                                        this._calculateTotal()
+                                        this.calculateTotal()
                                     }}
-                                    onRowRemoved={async (e)=>{
-                                        this._calculateTotal()
+                                    onRowRemoved={async (e)=>
+                                    {
+                                        this.calculateTotal()
                                     }}
                                     onReady={async()=>
                                     {
@@ -2139,8 +1488,9 @@ export default class rebateDispatch extends React.PureComponent
                                             {
                                                 id:'01',
                                                 icon:'more',
-                                                onClick:()  =>
+                                                onClick:async() =>
                                                 {
+                                                    await this.popDiscount.show()
                                                     if(this.docObj.dt()[0].DISCOUNT > 0 )
                                                     {
                                                         this.txtDiscountPercent1.value  = Number(this.docObj.dt()[0].AMOUNT).rate2Num(this.docObj.docItems.dt().sum("DISCOUNT_1",3),3)
@@ -2159,7 +1509,6 @@ export default class rebateDispatch extends React.PureComponent
                                                         this.txtDiscountPercent3.value  = 0
                                                         this.txtDiscountPrice3.value = 0
                                                     }
-                                                    this.popDiscount.show()
                                                 }
                                             },
                                         ]
@@ -2184,11 +1533,9 @@ export default class rebateDispatch extends React.PureComponent
                                             {
                                                 id:'01',
                                                 icon:'more',
-                                                onClick:()  =>
+                                                onClick:async() =>
                                                 {
-                                                    console.log(this.docObj.dt()[0].SUBTOTAL)
-                                                    console.log(this.docObj.dt()[0].DOC_DISCOUNT_1)
-                                                    console.log( Number(this.docObj.dt()[0].SUBTOTAL).rate2Num(this.docObj.dt()[0].DOC_DISCOUNT_1,5))
+                                                    await this.popDocDiscount.show()
                                                     if(this.docObj.dt()[0].DOC_DISCOUNT > 0 )
                                                     {
                                                         this.txtDocDiscountPercent1.value  = Number(this.docObj.dt()[0].SUBTOTAL).rate2Num(this.docObj.dt()[0].DOC_DISCOUNT_1,5)
@@ -2207,7 +1554,6 @@ export default class rebateDispatch extends React.PureComponent
                                                         this.txtDocDiscountPercent3.value  = 0
                                                         this.txtDocDiscountPrice3.value = 0
                                                     }
-                                                    this.popDocDiscount.show()
                                                 }
                                             },
                                         ]
@@ -2234,6 +1580,7 @@ export default class rebateDispatch extends React.PureComponent
                                                 icon:'more',
                                                 onClick:async ()  =>
                                                 {
+                                                    await this.popVatRate.show()
                                                     this.vatRate.clear()
                                                     for (let i = 0; i < this.docObj.docItems.dt().groupBy('VAT_RATE').length; i++) 
                                                     {
@@ -2243,7 +1590,6 @@ export default class rebateDispatch extends React.PureComponent
                                                         this.vatRate.push(tmpData)
                                                     }
                                                     await this.grdVatRate.dataRefresh({source:this.vatRate})
-                                                    this.popVatRate.show()
                                                 }
                                             },
                                         ]
@@ -2262,549 +1608,26 @@ export default class rebateDispatch extends React.PureComponent
                             </Form>
                         </div>
                     </div>
-                      {/* İndirim PopUp */}
-                      <div>
-                        <NdPopUp parent={this} id={"popDiscount"} 
-                        visible={false}
-                        showCloseButton={true}
-                        showTitle={true}
-                        title={this.t("popDiscount.title")}
-                        container={"#root"} 
-                        width={'500'}
-                        height={'500'}
-                        position={{of:'#root'}}
-                        >
-                            <Form colCount={1} height={'fit-content'}>
-                                <Item>
-                                    <Label text={this.t("popDiscount.Percent1")} alignment="right" />
-                                    <NdNumberBox id="txtDiscountPercent1" parent={this} simple={true}
-                                            maxLength={32}
-                                            onValueChanged={(async()=>
-                                                {
-                                                    if( this.txtDiscountPercent1.value > 100)
-                                                    {
-                                                        let tmpConfObj =
-                                                        {
-                                                            id:'msgDiscountPercent',showTitle:true,title:this.t("msgDiscountPercent.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                            button:[{id:"btn01",caption:this.t("msgDiscountPercent.btn01"),location:'after'}],
-                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPercent.msg")}</div>)
-                                                        }
-                                            
-                                                        await dialog(tmpConfObj);
-                                                        this.txtDiscountPercent1.value = 0;
-                                                        this.txtDiscountPrice1.value = 0;
-                                                        return
-                                                    }
-
-                                                    this.txtDiscountPrice1.value =  Number(this.docObj.dt()[0].AMOUNT).rateInc(this.txtDiscountPercent1.value,2)
-                                            }).bind(this)}
-                                    ></NdNumberBox>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popDiscount.Price1")} alignment="right" />
-                                    <NdNumberBox id="txtDiscountPrice1" parent={this} simple={true}
-                                        maxLength={32}
-                                        onValueChanged={(async()=>
-                                            {
-                                                if( this.txtDiscountPrice1.value > this.docObj.dt()[0].AMOUNT)
-                                                {
-                                                    let tmpConfObj =
-                                                    {
-                                                        id:'msgDiscountPrice',showTitle:true,title:this.t("msgDiscountPrice.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                        button:[{id:"btn01",caption:this.t("msgDiscountPrice.btn01"),location:'after'}],
-                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPrice.msg")}</div>)
-                                                    }
-                                        
-                                                    await dialog(tmpConfObj);
-                                                    this.txtDiscountPercent1.value = 0;
-                                                    this.txtDiscountPrice1.value = 0;
-                                                    return
-                                                }
-                                                
-                                                this.txtDiscountPercent1.value = Number(this.docObj.dt()[0].AMOUNT).rate2Num(this.txtDiscountPrice1.value)
-                                        }).bind(this)}
-                                    ></NdNumberBox>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popDiscount.Percent2")} alignment="right" />
-                                    <NdNumberBox id="txtDiscountPercent2" parent={this} simple={true}
-                                            maxLength={32}
-                                            onValueChanged={(async()=>
-                                                {
-                                                    if( this.txtDiscountPercent1.value > 100)
-                                                    {
-                                                        let tmpConfObj =
-                                                        {
-                                                            id:'msgDiscountPercent',showTitle:true,title:this.t("msgDiscountPercent.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                            button:[{id:"btn01",caption:this.t("msgDiscountPercent.btn01"),location:'after'}],
-                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPercent.msg")}</div>)
-                                                        }
-                                            
-                                                        await dialog(tmpConfObj);
-                                                        this.txtDiscountPercent2.value = 0;
-                                                        this.txtDiscountPrice2.value = 0;
-                                                        return
-                                                    }
-                                                    this.txtDiscountPrice2.value =  Number(this.docObj.dt()[0].AMOUNT - Number(this.txtDiscountPrice1.value)).rateInc(this.txtDiscountPercent2.value,2)
-                                            }).bind(this)}
-                                    ></NdNumberBox>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popDiscount.Price2")} alignment="right" />
-                                    <NdNumberBox id="txtDiscountPrice2" parent={this} simple={true}
-                                        maxLength={32}
-                                        onValueChanged={(async()=>
-                                            {
-                                                if( this.txtDiscountPrice2.value > this.docObj.dt()[0].AMOUNT)
-                                                {
-                                                    let tmpConfObj =
-                                                    {
-                                                        id:'msgDiscountPrice',showTitle:true,title:this.t("msgDiscountPrice.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                        button:[{id:"btn01",caption:this.t("msgDiscountPrice.btn01"),location:'after'}],
-                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPrice.msg")}</div>)
-                                                    }
-                                        
-                                                    await dialog(tmpConfObj);
-                                                    this.txtDiscountPercent2.value = 0;
-                                                    this.txtDiscountPrice2.value = 0;
-                                                    return
-                                                }
-                                                this.txtDiscountPercent2.value = Number(this.docObj.dt()[0].AMOUNT - Number(this.txtDiscountPrice1.value)).rate2Num(this.txtDiscountPrice2.value)
-                                        }).bind(this)}
-                                    ></NdNumberBox>
-                                </Item>
-                                 <Item>
-                                    <Label text={this.t("popDiscount.Percent3")} alignment="right" />
-                                    <NdNumberBox id="txtDiscountPercent3" parent={this} simple={true}
-                                            maxLength={32}
-                                            onValueChanged={(async()=>
-                                                {
-                                                    if( this.txtDiscountPercent1.value > 100)
-                                                    {
-                                                        let tmpConfObj =
-                                                        {
-                                                            id:'msgDiscountPercent',showTitle:true,title:this.t("msgDiscountPercent.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                            button:[{id:"btn01",caption:this.t("msgDiscountPercent.btn01"),location:'after'}],
-                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPercent.msg")}</div>)
-                                                        }
-                                            
-                                                        await dialog(tmpConfObj);
-                                                        this.txtDiscountPercent3.value = 0;
-                                                        this.txtDiscountPrice3.value = 0;
-                                                        return
-                                                    }
-                                                    this.txtDiscountPrice3.value = Number(this.docObj.dt()[0].AMOUNT - (Number(this.txtDiscountPrice1.value) + Number(this.txtDiscountPrice2.value))).rateInc(this.txtDiscountPercent3.value,2)
-                                            }).bind(this)}
-                                    ></NdNumberBox>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popDiscount.Price3")} alignment="right" />
-                                    <NdNumberBox id="txtDiscountPrice3" parent={this} simple={true}
-                                        maxLength={32}
-                                        onValueChanged={(async()=>
-                                            {
-                                                if( this.txtDiscountPrice3.value > this.docObj.dt()[0].AMOUNT)
-                                                {
-                                                    let tmpConfObj =
-                                                    {
-                                                        id:'msgDiscountPrice',showTitle:true,title:this.t("msgDiscountPrice.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                        button:[{id:"btn01",caption:this.t("msgDiscountPrice.btn01"),location:'after'}],
-                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPrice.msg")}</div>)
-                                                    }
-                                        
-                                                    await dialog(tmpConfObj);
-                                                    this.txtDiscountPercent3.value = 0;
-                                                    this.txtDiscountPrice3.value = 0;
-                                                    return
-                                                }
-                                                this.txtDiscountPercent3.value = Number(this.docObj.dt()[0].AMOUNT - (Number(this.txtDiscountPrice1.value) + Number(this.txtDiscountPrice2.value))).rate2Num(this.txtDiscountPrice3.value)
-                                        }).bind(this)}
-                                    ></NdNumberBox>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popDiscount.chkFirstDiscount")} alignment="right" />
-                                    <NdCheckBox id="chkFirstDiscount" parent={this} simple={true}  
-                                    value ={false}
-                                    >
-                                    </NdCheckBox>
-                                </Item>
-                                <Item>
-                                    <div className='row'>
-                                        <div className='col-6'>
-                                            <NdButton text={this.lang.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} 
-                                            onClick={async ()=>
-                                            {           
-                                                
-                                                for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
-                                                {
-                                                    let tmpDocData = this.docObj.docItems.dt()[i]
-
-                                                    if(this.chkFirstDiscount.value == false)
-                                                    {
-                                                        tmpDocData.DISCOUNT_1 = Number(tmpDocData.PRICE * tmpDocData.QUANTITY).rateInc(this.txtDiscountPercent1.value,4)
-                                                    }
-                                                    tmpDocData.DISCOUNT_2 = Number(((tmpDocData.PRICE * tmpDocData.QUANTITY) - tmpDocData.DISCOUNT_1)).rateInc(this.txtDiscountPercent2.value,4)
-
-                                                    tmpDocData.DISCOUNT_3 =  Number(((tmpDocData.PRICE * tmpDocData.QUANTITY)-(tmpDocData.DISCOUNT_1+tmpDocData.DISCOUNT_2))).rateInc(this.txtDiscountPercent3.value,4)
-                                                    
-                                                    tmpDocData.DISCOUNT = parseFloat((tmpDocData.DISCOUNT_1 + tmpDocData.DISCOUNT_2 + tmpDocData.DISCOUNT_3)).round(2)
-                                                    tmpDocData.AMOUNT = parseFloat(((tmpDocData.PRICE * tmpDocData.QUANTITY))).round(2)
-                                                    tmpDocData.TOTALHT = parseFloat((Number((tmpDocData.PRICE * tmpDocData.QUANTITY)) - parseFloat(Number(tmpDocData.DISCOUNT_1) + Number(tmpDocData.DISCOUNT_2) + Number(tmpDocData.DISCOUNT_3)).round(4))).round(2)
-                                                    
-                                                    if(tmpDocData.VAT > 0)
-                                                    {
-                                                        tmpDocData.VAT = parseFloat(((tmpDocData.TOTALHT - tmpDocData.DOC_DISCOUNT) * (tmpDocData.VAT_RATE / 100)).toFixed(6))
-                                                    }
-                                                    tmpDocData.TOTAL = parseFloat(((tmpDocData.TOTALHT - tmpDocData.DOC_DISCOUNT) + tmpDocData.VAT)).round(2)
-                                                    tmpDocData.DISCOUNT_RATE = Number((tmpDocData.PRICE * tmpDocData.QUANTITY)).rate2Num((tmpDocData.DISCOUNT_1 + tmpDocData.DISCOUNT_2 + tmpDocData.DISCOUNT_3),2)
-                                                }
-                                                this._calculateTotal()
-                                                this.popDiscount.hide(); 
-                                            }}/>
-                                        </div>
-                                        <div className='col-6'>
-                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
-                                            onClick={()=>
-                                            {
-                                                this.popDiscount.hide();  
-                                            }}/>
-                                        </div>
-                                    </div>
-                                </Item>
-                            </Form>
-                        </NdPopUp>
-                    </div>  
-                    {/*Evrak İndirim PopUp */}
+                    {/* İrsaliye Grid */}
                     <div>
-                        <NdPopUp parent={this} id={"popDocDiscount"} 
+                        <NdPopGrid id={"pg_RebateGrid"} parent={this} container={"#root"}
                         visible={false}
-                        showCloseButton={true}
-                        showTitle={true}
-                        title={this.t("popDocDiscount.title")}
-                        container={"#root"} 
-                        width={'500'}
-                        height={'500'}
-                        position={{of:'#root'}}
+                        position={{of:'#root'}} 
+                        showTitle={true} 
+                        showBorders={true}
+                        width={'90%'}
+                        height={'90%'}
+                        selection={{mode:"multiple"}}
+                        title={this.t("pg_RebateGrid.title")}
+                        deferRendering={true}
                         >
-                            <Form colCount={1} height={'fit-content'}>
-                                <Item>
-                                    <Label text={this.t("popDocDiscount.Percent1")} alignment="right" />
-                                    <NdNumberBox id="txtDocDiscountPercent1" parent={this} simple={true}
-                                            maxLength={32}
-                                            onValueChanged={(async()=>
-                                                {
-                                                    if( this.txtDocDiscountPercent1.value > 100)
-                                                    {
-                                                        let tmpConfObj =
-                                                        {
-                                                            id:'msgDiscountPercent',showTitle:true,title:this.t("msgDiscountPercent.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                            button:[{id:"btn01",caption:this.t("msgDiscountPercent.btn01"),location:'after'}],
-                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPercent.msg")}</div>)
-                                                        }
-                                            
-                                                        await dialog(tmpConfObj);
-                                                        this.txtDocDiscountPercent1.value = 0;
-                                                        this.txtDocDiscountPrice1.value = 0;
-                                                        return
-                                                    }
-
-                                                    this.txtDocDiscountPrice1.value =  Number(this.docObj.dt()[0].SUBTOTAL).rateInc(this.txtDocDiscountPercent1.value,2)
-                                            }).bind(this)}
-                                    ></NdNumberBox>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popDocDiscount.Price1")} alignment="right" />
-                                    <NdNumberBox id="txtDocDiscountPrice1" parent={this} simple={true}
-                                        maxLength={32}
-                                        onValueChanged={(async()=>
-                                            {
-                                                if( this.txtDocDiscountPrice1.value > this.docObj.dt()[0].SUBTOTAL)
-                                                {
-                                                    let tmpConfObj =
-                                                    {
-                                                        id:'msgDiscountPrice',showTitle:true,title:this.t("msgDiscountPrice.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                        button:[{id:"btn01",caption:this.t("msgDiscountPrice.btn01"),location:'after'}],
-                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPrice.msg")}</div>)
-                                                    }
-                                        
-                                                    await dialog(tmpConfObj);
-                                                    this.txtDocDiscountPercent1.value = 0;
-                                                    this.txtDocDiscountPrice1.value = 0;
-                                                    return
-                                                }
-                                                
-                                                this.txtDocDiscountPercent1.value = Number(this.docObj.dt()[0].SUBTOTAL).rate2Num(this.txtDocDiscountPrice1.value)
-                                        }).bind(this)}
-                                    ></NdNumberBox>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popDocDiscount.Percent2")} alignment="right" />
-                                    <NdNumberBox id="txtDocDiscountPercent2" parent={this} simple={true}
-                                            maxLength={32}
-                                            onValueChanged={(async()=>
-                                                {
-                                                    if( this.txtDocDiscountPercent1.value > 100)
-                                                    {
-                                                        let tmpConfObj =
-                                                        {
-                                                            id:'msgDiscountPercent',showTitle:true,title:this.t("msgDiscountPercent.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                            button:[{id:"btn01",caption:this.t("msgDiscountPercent.btn01"),location:'after'}],
-                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPercent.msg")}</div>)
-                                                        }
-                                            
-                                                        await dialog(tmpConfObj);
-                                                        this.txtDocDiscountPercent2.value = 0;
-                                                        this.txtDocDiscountPrice2.value = 0;
-                                                        return
-                                                    }
-                                                    this.txtDocDiscountPrice2.value =  Number(this.docObj.dt()[0].SUBTOTAL - Number(this.txtDocDiscountPrice1.value)).rateInc(this.txtDocDiscountPercent2.value,2)
-                                            }).bind(this)}
-                                    ></NdNumberBox>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popDocDiscount.Price2")} alignment="right" />
-                                    <NdNumberBox id="txtDocDiscountPrice2" parent={this} simple={true}
-                                        maxLength={32}
-                                        onValueChanged={(async()=>
-                                            {
-                                                if( this.txtDocDiscountPrice2.value > this.docObj.dt()[0].SUBTOTAL)
-                                                {
-                                                    let tmpConfObj =
-                                                    {
-                                                        id:'msgDiscountPrice',showTitle:true,title:this.t("msgDiscountPrice.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                        button:[{id:"btn01",caption:this.t("msgDiscountPrice.btn01"),location:'after'}],
-                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPrice.msg")}</div>)
-                                                    }
-                                        
-                                                    await dialog(tmpConfObj);
-                                                    this.txtDocDiscountPercent2.value = 0;
-                                                    this.txtDocDiscountPrice2.value = 0;
-                                                    return
-                                                }
-                                                this.txtDocDiscountPercent2.value = Number(this.docObj.dt()[0].SUBTOTAL - Number(this.txtDocDiscountPrice1.value)).rate2Num(this.txtDocDiscountPrice2.value)
-                                        }).bind(this)}
-                                    ></NdNumberBox>
-                                </Item>
-                                 <Item>
-                                    <Label text={this.t("popDocDiscount.Percent3")} alignment="right" />
-                                    <NdNumberBox id="txtDocDiscountPercent3" parent={this} simple={true}
-                                            maxLength={32}
-                                            onValueChanged={(async()=>
-                                                {
-                                                    if( this.txtDocDiscountPercent1.value > 100)
-                                                    {
-                                                        let tmpConfObj =
-                                                        {
-                                                            id:'msgDiscountPercent',showTitle:true,title:this.t("msgDiscountPercent.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                            button:[{id:"btn01",caption:this.t("msgDiscountPercent.btn01"),location:'after'}],
-                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPercent.msg")}</div>)
-                                                        }
-                                            
-                                                        await dialog(tmpConfObj);
-                                                        this.txtDocDiscountPercent3.value = 0;
-                                                        this.txtDocDiscountPrice3.value = 0;
-                                                        return
-                                                    }
-                                                    this.txtDocDiscountPrice3.value = Number(this.docObj.dt()[0].SUBTOTAL - (Number(this.txtDocDiscountPrice1.value) + Number(this.txtDocDiscountPrice2.value))).rateInc(this.txtDocDiscountPercent3.value,2)
-                                            }).bind(this)}
-                                    ></NdNumberBox>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popDocDiscount.Price3")} alignment="right" />
-                                    <NdNumberBox id="txtDocDiscountPrice3" parent={this} simple={true}
-                                        maxLength={32}
-                                        onValueChanged={(async()=>
-                                            {
-                                                if( this.txtDocDiscountPrice3.value > this.docObj.dt()[0].SUBTOTAL)
-                                                {
-                                                    let tmpConfObj =
-                                                    {
-                                                        id:'msgDiscountPrice',showTitle:true,title:this.t("msgDiscountPrice.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                        button:[{id:"btn01",caption:this.t("msgDiscountPrice.btn01"),location:'after'}],
-                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPrice.msg")}</div>)
-                                                    }
-                                        
-                                                    await dialog(tmpConfObj);
-                                                    this.txtDocDiscountPercent3.value = 0;
-                                                    this.txtDocDiscountPrice3.value = 0;
-                                                    return
-                                                }
-                                                this.txtDocDiscountPercent3.value = Number(this.docObj.dt()[0].SUBTOTAL - (Number(this.txtDocDiscountPrice1.value) + Number(this.txtDocDiscountPrice2.value))).rate2Num(this.txtDocDiscountPrice3.value)
-                                        }).bind(this)}
-                                    ></NdNumberBox>
-                                </Item>
-                                <Item>
-                                    <div className='row'>
-                                        <div className='col-6'>
-                                            <NdButton text={this.lang.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} 
-                                            onClick={async ()=>
-                                            {           
-                                                
-                                                for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
-                                                {
-                                                    let tmpDocData = this.docObj.docItems.dt()[i]
-                                                    
-                                                    tmpDocData.DOC_DISCOUNT_1 = Number(tmpDocData.TOTALHT).rateInc(this.txtDocDiscountPercent1.value,4)
-                                                    tmpDocData.DOC_DISCOUNT_2 = Number(((tmpDocData.TOTALHT) - tmpDocData.DOC_DISCOUNT_1)).rateInc(this.txtDocDiscountPercent2.value,4)
-
-                                                    tmpDocData.DOC_DISCOUNT_3 =  Number(((tmpDocData.TOTALHT)-(tmpDocData.DOC_DISCOUNT_1+tmpDocData.DOC_DISCOUNT_2))).rateInc(this.txtDocDiscountPercent3.value,4)
-                                                    
-                                                    tmpDocData.DOC_DISCOUNT = parseFloat((tmpDocData.DOC_DISCOUNT_1 + tmpDocData.DOC_DISCOUNT_2 + tmpDocData.DOC_DISCOUNT_3).toFixed(4))
-                                                    tmpDocData.AMOUNT = parseFloat(((tmpDocData.PRICE * tmpDocData.QUANTITY))).round(2)
-                                                    
-                                                    if(tmpDocData.VAT > 0)
-                                                    {
-                                                        tmpDocData.VAT = parseFloat(((tmpDocData.TOTALHT - tmpDocData.DOC_DISCOUNT) * (tmpDocData.VAT_RATE / 100)).toFixed(6))
-                                                    }
-                                                    tmpDocData.TOTAL = parseFloat(((tmpDocData.TOTALHT - tmpDocData.DOC_DISCOUNT) + tmpDocData.VAT)).round(2)
-                                                    tmpDocData.DISCOUNT_RATE = Number((tmpDocData.PRICE * tmpDocData.QUANTITY)).rate2Num((tmpDocData.DISCOUNT_1 + tmpDocData.DISCOUNT_2 + tmpDocData.DISCOUNT_3),2)
-                                                }
-                                                this._calculateTotal()
-                                                this.popDocDiscount.hide(); 
-                                            }}/>
-                                        </div>
-                                        <div className='col-6'>
-                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
-                                            onClick={()=>
-                                            {
-                                                this.popDocDiscount.hide();  
-                                            }}/>
-                                        </div>
-                                    </div>
-                                </Item>
-                            </Form>
-                        </NdPopUp>
-                    </div> 
-                     {/* Yönetici PopUp */}
-                     <div>
-                        <NdPopUp parent={this} id={"popPassword"} 
-                        visible={false}
-                        showCloseButton={true}
-                        showTitle={true}
-                        title={this.t("popPassword.title")}
-                        container={"#root"} 
-                        width={'500'}
-                        height={'200'}
-                        position={{of:'#root'}}
-                        >
-                            <Form colCount={1} height={'fit-content'}>
-                                <Item>
-                                    <Label text={this.t("popPassword.Password")} alignment="right" />
-                                    <NdTextBox id="txtPassword" mode="password" parent={this} simple={true}
-                                            maxLength={32}
-
-                                    ></NdTextBox>
-                                </Item>
-                                <Item>
-                                    <div className='row'>
-                                        <div className='col-6'>
-                                            <NdButton text={this.t("popPassword.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
-                                            onClick={async ()=>
-                                            {       
-                                                let tmpPass = btoa(this.txtPassword.value);
-                                                let tmpQuery = 
-                                                {
-                                                    query : "SELECT TOP 1 * FROM USERS WHERE PWD = @PWD AND ROLE = 'Administrator' AND STATUS = 1", 
-                                                    param : ['PWD:string|50'],
-                                                    value : [tmpPass],
-                                                }
-                                                let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                if(tmpData.result.recordset.length > 0)
-                                                {
-                                                    this.docObj.dt()[0].LOCKED = 0
-                                                    this.frmDocItems.option('disabled',false)
-                                                    this.docLocked = false
-                                                    let tmpConfObj =
-                                                    {
-                                                        id:'msgPasswordSucces',showTitle:true,title:this.t("msgPasswordSucces.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                        button:[{id:"btn01",caption:this.t("msgPasswordSucces.btn01"),location:'after'}],
-                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgPasswordSucces.msg")}</div>)
-                                                    }
-                                        
-                                                    await dialog(tmpConfObj);
-                                                    this.popPassword.hide();  
-                                                }
-                                                else
-                                                {
-                                                    let tmpConfObj =
-                                                    {
-                                                        id:'msgPasswordWrong',showTitle:true,title:this.t("msgPasswordWrong.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                        button:[{id:"btn01",caption:this.t("msgPasswordWrong.btn01"),location:'after'}],
-                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgPasswordWrong.msg")}</div>)
-                                                    }
-                                        
-                                                    await dialog(tmpConfObj);
-                                                }
-                                            }}/>
-                                        </div>
-                                        <div className='col-6'>
-                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
-                                            onClick={()=>
-                                            {
-                                                this.popPassword.hide();  
-                                            }}/>
-                                        </div>
-                                    </div>
-                                </Item>
-                            </Form>
-                        </NdPopUp>
-                    </div> 
-                     {/* İrsaliye Grid */}
-                   <NdPopGrid id={"pg_RebateGrid"} parent={this} container={"#root"}
-                    visible={false}
-                    position={{of:'#root'}} 
-                    showTitle={true} 
-                    showBorders={true}
-                    width={'90%'}
-                    height={'90%'}
-                    selection={{mode:"multiple"}}
-                    title={this.t("pg_RebateGrid.title")} //
-                    >
-                        <Column dataField="ITEM_CODE" caption={this.t("pg_RebateGrid.clmCode")} width={200}/>
-                        <Column dataField="ITEM_NAME" caption={this.t("pg_RebateGrid.clmName")} width={300} />
-                        <Column dataField="QUANTITY" caption={this.t("pg_RebateGrid.clmQuantity")} width={300} />
-                    </NdPopGrid>
-                    {/* Stok */}
-                    <NdPopGrid id={"pg_txtItemsCode"} parent={this} container={"#root"}
-                    visible={false}
-                    position={{of:'#root'}} 
-                    showTitle={true} 
-                    showBorders={true}
-                    width={'90%'}
-                    height={'90%'}
-                    title={this.t("pg_txtItemsCode.title")} //
-                    search={true}
-                    onRowPrepared={(e) =>
-                        {
-                            if(e.rowType == 'data' && e.data.STATUS == false)
-                            {
-                                e.rowElement.style.color ="Silver"
-                            }
-                            else if(e.rowType == 'data' && e.data.STATUS == true)
-                            {
-                                e.rowElement.style.color ="Black"
-                            }
-                        }}
-                    data = 
-                    {{
-                        source:
-                        {
-                            select:
-                            {
-                                query : "SELECT GUID,CODE,NAME,VAT,UNIT,STATUS,COST_PRICE FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
-                                param : ['VAL:string|50']
-                            },
-                            sql:this.core.sql
-                        }
-                    }}
-                    >
-                        <Paging defaultPageSize={22}/>
-                        <Column dataField="CODE" caption={this.t("pg_txtItemsCode.clmCode")} width={150} />
-                        <Column dataField="NAME" caption={this.t("pg_txtItemsCode.clmName")} width={300} defaultSortOrder="asc" />
-                        <Column dataField="COST_PRICE" caption={this.t("pg_txtItemsCode.clmPrice")} width={300}  />
-                    </NdPopGrid>
-                        {/* Dizayn Seçim PopUp */}
-                        <div>
+                            <Column dataField="ITEM_CODE" caption={this.t("pg_RebateGrid.clmCode")} width={200}/>
+                            <Column dataField="ITEM_NAME" caption={this.t("pg_RebateGrid.clmName")} width={300} />
+                            <Column dataField="QUANTITY" caption={this.t("pg_RebateGrid.clmQuantity")} width={300} />
+                        </NdPopGrid>
+                    </div>
+                    {/* Dizayn Seçim PopUp */}
+                    <div>
                         <NdPopUp parent={this} id={"popDesign"} 
                         visible={false}
                         showCloseButton={true}
@@ -2814,6 +1637,7 @@ export default class rebateDispatch extends React.PureComponent
                         width={'500'}
                         height={'280'}
                         position={{of:'#root'}}
+                        deferRendering={true}
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
@@ -2864,8 +1688,6 @@ export default class rebateDispatch extends React.PureComponent
                                                         value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
                                                     }
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                    console.log(tmpData)
-                                                    console.log(JSON.stringify(tmpData.result.recordset)) // BAK
                                                     this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
                                                     {
                                                         var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
@@ -2933,12 +1755,12 @@ export default class rebateDispatch extends React.PureComponent
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
                                                     if(tmpData.result.recordset.length > 0)
                                                     {
+                                                        await this.popMailSend.show()
                                                         this.txtSendMail.value = tmpData.result.recordset[0].EMAIL
-                                                        this.popMailSend.show()
                                                     }
                                                     else
                                                     {
-                                                        this.popMailSend.show()
+                                                        await this.popMailSend.show()
                                                     }
                                                 }
                                             }}/>
@@ -2947,215 +1769,6 @@ export default class rebateDispatch extends React.PureComponent
                                 </Item>
                             </Form>
                         </NdPopUp>
-                    </div> 
-                     {/* combineItem Dialog  */}
-                     <NdDialog id={"msgCombineItem"} container={"#root"} parent={this}
-                        position={{of:'#root'}} 
-                        showTitle={true} 
-                        title={this.t("msgCombineItem.title")} 
-                        showCloseButton={false}
-                        width={"500px"}
-                        height={"250px"}
-                        button={[{id:"btn01",caption:this.t("msgCombineItem.btn01"),location:'before'},{id:"btn02",caption:this.t("msgCombineItem.btn02"),location:'after'}]}
-                        >
-                            <div className="row">
-                                <div className="col-12 py-2">
-                                    <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCombineItem.msg")}</div>
-                                </div>
-                                <div className="col-12 py-2">
-                                <Form>
-                                    {/* checkCustomer */}
-                                    <Item>
-                                        <Label text={this.lang.t("checkAll")} alignment="right" />
-                                        <NdCheckBox id="checkCombine" parent={this} simple={true}  
-                                        value ={false}
-                                        >
-                                        </NdCheckBox>
-                                    </Item>
-                                </Form>
-                            </div>
-                            </div>
-                            <div className='row'>
-                        
-                            </div>
-                        
-                    </NdDialog>  
-                      {/* BARKOD POPUP */}
-                    <NdPopGrid id={"pg_txtBarcode"} parent={this} container={"#root"}
-                        visible={false}
-                        position={{of:'#root'}} 
-                        showTitle={true} 
-                        showBorders={true}
-                        width={'90%'}
-                        height={'90%'}
-                        title={this.t("pg_txtBarcode.title")} //
-                        search={true}
-                        >
-                        <Column dataField="BARCODE" caption={this.t("pg_txtBarcode.clmBarcode")} width={150} />
-                        <Column dataField="CODE" caption={this.t("pg_txtBarcode.clmCode")} width={150} />
-                        <Column dataField="NAME" caption={this.t("pg_txtBarcode.clmName")} width={300} defaultSortOrder="asc" />
-                        <Column dataField="MULTICODE" caption={this.t("pg_txtBarcode.clmMulticode")} width={200}/>
-                    </NdPopGrid>
-                     {/* Miktar Dialog  */}
-                     <NdDialog id={"msgQuantity"} container={"#root"} parent={this}
-                        position={{of:'#root'}} 
-                        showTitle={true} 
-                        title={this.t("msgQuantity.title")} 
-                        showCloseButton={false}
-                        width={"350px"}
-                        height={"250px"}
-                        button={[{id:"btn01",caption:this.t("msgQuantity.btn01"),location:'after'}]}
-                        >
-                            <div className="row">
-                                <div className="col-12 py-2">
-                                    <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgQuantity.msg")}</div>
-                                </div>
-                                <div className="col-12 py-2">
-                                <Form>
-                                    <Item>
-                                        <Label text={this.t("txtQuantity")} alignment="right" />
-                                        <NdNumberBox id="txtPopQuantity" parent={this} simple={true}  
-                                        onEnterKey={(async(e)=>
-                                        {
-                                            this.msgQuantity._onClick()
-                                        }).bind(this)}
-                                        >
-                                    </NdNumberBox>
-                                    </Item>
-                                </Form>
-                            </div>
-                            </div>
-                            <div className='row'>
-                            
-                            </div>
-                    </NdDialog>  
-                     {/* Adres Seçim POPUP */}
-                     <NdPopGrid id={"pg_adress"} showCloseButton={false} parent={this} container={"#root"}
-                        visible={false}
-                        position={{of:'#root'}} 
-                        showTitle={true} 
-                        showBorders={true}
-                        width={'90%'}
-                        height={'90%'}
-                        title={this.t("pg_adress.title")} //
-                        >
-                            <Column dataField="ADRESS" caption={this.t("pg_adress.clmAdress")} width={250} />
-                            <Column dataField="CITY" caption={this.t("pg_adress.clmCiyt")} width={150} />
-                            <Column dataField="ZIPCODE" caption={this.t("pg_adress.clmZipcode")} width={300} defaultSortOrder="asc" />
-                            <Column dataField="COUNTRY" caption={this.t("pg_adress.clmCountry")} width={200}/>
-                        </NdPopGrid>
-                            {/* notCustomer Dialog  */}
-                    <NdDialog id={"msgCustomerNotFound"} container={"#root"} parent={this}
-                        position={{of:'#root'}} 
-                        showTitle={true} 
-                        title={this.t("msgCustomerNotFound.title")} 
-                        showCloseButton={false}
-                        width={"500px"}
-                        height={"250px"}
-                        button={[{id:"btn01",caption:this.t("msgCustomerNotFound.btn01"),location:'before'},{id:"btn02",caption:this.t("msgCustomerNotFound.btn02"),location:'after'}]}
-                        >
-                            <div className="row">
-                                <div className="col-12 py-2">
-                                    <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerNotFound.msg")}</div>
-                                </div>
-                                <div className="col-12 py-2">
-                                <Form>
-                                    {/* checkCustomer */}
-                                    <Item>
-                                        <Label text={this.lang.t("checkAll")} alignment="right" />
-                                        <NdCheckBox id="checkCustomer" parent={this} simple={true}  
-                                        value ={false}
-                                        >
-                                        </NdCheckBox>
-                                    </Item>
-                                </Form>
-                            </div>
-                            </div>
-                            <div className='row'>
-                        
-                            </div>
-                        
-                    </NdDialog>  
-                    {/* Birim PopUp */}
-                    <div>
-                        <NdDialog parent={this} id={"msgUnit"} 
-                        visible={false}
-                        showCloseButton={true}
-                        showTitle={true}
-                        title={this.t("msgUnit.title")}
-                        container={"#root"} 
-                        width={'500'}
-                        height={'400'}
-                        position={{of:'#root'}}
-                        button={[{id:"btn01",caption:this.t("msgUnit.btn01"),location:'after'}]}
-                        >
-                            <Form colCount={1} height={'fit-content'}>
-                                <Item>
-                                    <NdSelectBox simple={true} parent={this} id="cmbUnit"
-                                    displayExpr="NAME"                       
-                                    valueExpr="GUID"
-                                    value=""
-                                    searchEnabled={true}
-                                    onValueChanged={(async(e)=>
-                                    {
-                                        this.txtUnitFactor.setState({value:this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].FACTOR});
-                                        this.txtTotalQuantity.value = Number(this.txtUnitQuantity.value * this.txtUnitFactor.value);
-                                    }).bind(this)}
-                                    >
-                                    </NdSelectBox>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("txtUnitFactor")} alignment="right" />
-                                    <NdNumberBox id="txtUnitFactor" parent={this} simple={true}
-                                    readOnly={true}
-                                    maxLength={32}
-                                    >
-                                    </NdNumberBox>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("txtUnitQuantity")} alignment="right" />
-                                    <NdNumberBox id="txtUnitQuantity" parent={this} simple={true}
-                                    maxLength={32}
-                                    onValueChanged={(async(e)=>
-                                    {
-                                       this.txtTotalQuantity.value = Number(this.txtUnitQuantity.value * this.txtUnitFactor.value)
-                                    }).bind(this)}
-                                    >
-                                    </NdNumberBox>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("txtTotalQuantity")} alignment="right" />
-                                    <NdNumberBox id="txtTotalQuantity" parent={this} simple={true}  readOnly={true}
-                                    maxLength={32}
-                                    >
-                                    </NdNumberBox>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("txtUnitPrice")} alignment="right" />
-                                    <NdNumberBox id="txtUnitPrice" parent={this} simple={true} 
-                                    maxLength={32}
-                                    >
-                                    </NdNumberBox>
-                                </Item>
-                            </Form>
-                        </NdDialog>
-                    </div>  
-                    {/* Delete Description Popup */} 
-                    <div>
-                    <NbPopDescboard id={"popDeleteDesc"} parent={this} width={"900"} height={"450"} position={"#root"} head={this.lang.t("popDeleteDesc.head")} title={this.lang.t("popDeleteDesc.title")} 
-                    param={this.sysParam.filter({ID:'DocDelDescription',TYPE:0})}
-                    onClick={async (e)=>
-                    {
-                        let tmpExtra = {...this.extraObj.empty}
-                        tmpExtra.DOC = this.docObj.dt()[0].GUID
-                        tmpExtra.DESCRIPTION = e
-                        tmpExtra.TAG = 'DOC_DELETE'
-                        this.extraObj.addEmpty(tmpExtra);
-                        this.extraObj.save()
-                        this.docObj.dt('DOC').removeAt(0)
-                        await this.docObj.dt('DOC').delete();
-                        this.init()
-                    }}></NbPopDescboard>
                     </div>
                     {/* Mail Send PopUp */}
                     <div>
@@ -3168,6 +1781,7 @@ export default class rebateDispatch extends React.PureComponent
                         width={'600'}
                         height={'600'}
                         position={{of:'#root'}}
+                        deferRendering={true}
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
@@ -3242,7 +1856,6 @@ export default class rebateDispatch extends React.PureComponent
                                                                 this.txtMailSubject.value = '',
                                                                 this.txtSendMail.value = ''
                                                                 this.popMailSend.hide();  
-
                                                             }
                                                             else
                                                             {
@@ -3267,79 +1880,8 @@ export default class rebateDispatch extends React.PureComponent
                                 </Item>
                             </Form>
                         </NdPopUp>
-                    </div>  
-                    {/* KDV PopUp */}
-                    <div>
-                        <NdPopUp parent={this} id={"popVatRate"} 
-                        visible={false}
-                        showCloseButton={true}
-                        showTitle={true}
-                        title={this.lang.t("popVatRate.title")}
-                        container={"#root"} 
-                        width={'500'}
-                        height={'250'}
-                        position={{of:'#root'}}
-                        >
-                            <Form colCount={1} height={'fit-content'}>
-                                <Item >
-                                    <NdGrid parent={this} id={"grdVatRate"} 
-                                    showBorders={true} 
-                                    columnsAutoWidth={true} 
-                                    allowColumnReordering={true} 
-                                    allowColumnResizing={true} 
-                                    height={'100%'} 
-                                    width={'100%'}
-                                    dbApply={false}
-                                    onRowRemoved={async (e)=>{
-                                    
-                                    }}
-                                    >
-                                        <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
-                                        <Scrolling mode="standart" />
-                                        <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
-                                        <Column dataField="RATE" caption={this.lang.t("grdVatRate.clmRate")} width={120}  headerFilter={{visible:true}} allowEditing={false} />
-                                       <Column dataField="VAT" caption={this.lang.t("grdVatRate.clmVat")} format={{ style: "currency", currency: "EUR",precision: 3}} dataType={'number'} width={120} headerFilter={{visible:true}}/>
-                                    </NdGrid>
-                                </Item>
-                                <Item>
-                                    <div className='row'>
-                                        <div className='col-6'>
-                                            <NdButton text={this.lang.t("btnVatToZero")} type="normal" stylingMode="contained" width={'100%'} 
-                                            onClick={async ()=>
-                                            {       
-                                                let tmpConfObj =
-                                                {
-                                                    id:'msgVatDelete',showTitle:true,title:this.t("msgVatDelete.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:this.t("msgVatDelete.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgVatDelete.msg")}</div>)
-                                                }
-                                                
-                                                let pResult = await dialog(tmpConfObj);
-                                                if(pResult == 'btn01')
-                                                {
-                                                    for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
-                                                    {
-                                                        this.docObj.docItems.dt()[i].VAT = 0  
-                                                        this.docObj.docItems.dt()[i].VAT_RATE = 0
-                                                        this.docObj.docItems.dt()[i].TOTAL = (this.docObj.docItems.dt()[i].PRICE * this.docObj.docItems.dt()[i].QUANTITY) - this.docObj.docItems.dt()[i].DISCOUNT
-                                                        this._calculateTotal()
-                                                    }
-                                                    this.popVatRate.hide()
-                                                }
-                                            }}/>
-                                        </div>
-                                        <div className='col-6'>
-                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
-                                            onClick={()=>
-                                            {
-                                                this.popVatRate.hide();  
-                                            }}/>
-                                        </div>
-                                    </div>
-                                </Item>
-                            </Form>
-                        </NdPopUp>
-                    </div>  
+                    </div>
+                    <div>{super.render()}</div>
                 </ScrollView>                
             </div>
         )
