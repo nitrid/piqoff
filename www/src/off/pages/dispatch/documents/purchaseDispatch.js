@@ -1471,7 +1471,7 @@ export default class purchaseDispatch extends DocBase
                                         {
                                             this.msgQuantity.tmpData = tmpData.result.recordset[0]
                                             await this.msgQuantity.show()
-                                            this.addItem(tmpData.result.recordset[0],null,this.txtPopQuantity.value)
+                                            this.addItem(tmpData.result.recordset[0],null,this.txtPopQteUnitQuantity.value)
                                             this.txtBarcode.focus()
                                         }
                                         else
@@ -1605,7 +1605,7 @@ export default class purchaseDispatch extends DocBase
                                     height={'450'} 
                                     width={'100%'}
                                     dbApply={false}
-                                    sorting={false}
+                                    sorting={{mode:'none'}}
                                     filterRow={{visible:true}}
                                     onCellPrepared={(e) =>
                                         {

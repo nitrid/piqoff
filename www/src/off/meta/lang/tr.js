@@ -12378,9 +12378,9 @@ export const langTr =
             clmDate : "TARIH",
             clmRef : "SERİ",
             clmRefNo : "SIRA",
-            clmInputName : "CARİ ADI",
-            clmInputCode  : "CARİ KODU",
-            clmTotal : "KDVLİ TOPLAM"
+            clmOutputName : "CARİ ADI",
+            clmOutputCode  : "CARİ KODU",
+            clmTotal : "KDVLİ TOPLAM",
         },
         pg_txtCustomerCode : 
         {
@@ -12395,6 +12395,7 @@ export const langTr =
             title : "Ürün Seçimi",
             clmCode :  "ÜRÜN KODU",
             clmName : "ÜRÜN ADI",
+            clmMulticode : "MULTICODE",
             clmPrice : "SATIŞ FİYATI"
         },
         pg_RebateGrid : 

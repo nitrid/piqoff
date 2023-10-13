@@ -12364,8 +12364,8 @@ export const langFr =
             clmDate : "Date",
             clmRef : "Référence",
             clmRefNo : "Numéro",
-            clmInputName : "Nom Fournisseur",
-            clmInputCode  : "Code Client",
+            clmOutputName : "Nom Fournisseur",
+            clmOutputCode  : "Code Client",
             clmTotal : "Total TTC"
         },
         pg_txtCustomerCode : 
@@ -12381,6 +12381,7 @@ export const langFr =
             title : "Sélectionner Produit",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
+            clmMulticode : "Multicode",
             clmPrice : "Prix de Vente" 
         },
         pg_RebateGrid : 
