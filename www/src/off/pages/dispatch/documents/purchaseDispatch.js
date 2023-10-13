@@ -54,11 +54,15 @@ export default class purchaseDispatch extends DocBase
 
         this.grdPurcDispatch.devGrid.clearFilter("row")
 
-        if(this.sysParam.filter({ID:'randomRefNo',USERS:this.user.CODE}).getValue().value == true)
-        {
-            this.txtRefno.value = Math.floor(Date.now() / 1000)
-        }
+        this.dtDocDate.value = moment(new Date())
+        this.dtShipDate.value = moment(new Date())
 
+        this.txtRef.readOnly = false
+        this.txtRefno.readOnly = false
+        this.docLocked = false
+        
+        this.frmDocItems.option('disabled',true)
+        
         this.pg_txtItemsCode.on('showing',()=>
         {
             this.pg_txtItemsCode.setSource(
