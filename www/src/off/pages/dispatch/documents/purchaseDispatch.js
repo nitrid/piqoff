@@ -204,8 +204,8 @@ export default class purchaseDispatch extends DocBase
                                     {
                                         for (let i = 0; i < data.length; i++) 
                                         {
-                                            await this.addItem(data[0],e.rowIndex)
                                             await this.core.util.waitUntil(100)
+                                            await this.addItem(data[0],e.rowIndex)
                                         }
                                     }
                                 }
