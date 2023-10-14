@@ -1901,6 +1901,7 @@ export default class branchSaleDispatch extends DocBase
                         width={'600'}
                         height={'600'}
                         position={{of:'#root'}}
+                        deferRendering={true}
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
