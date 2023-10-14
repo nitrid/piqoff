@@ -1605,7 +1605,7 @@ export default class salesDispatch extends DocBase
                                     height={'450'} 
                                     width={'100%'}
                                     dbApply={false}
-                                    sorting={false}
+                                    sorting={{mode:'none'}}
                                     onRowPrepared={(e) =>
                                     {
                                         
