@@ -39,7 +39,6 @@ export default class salesDispatch extends DocBase
         this.combineNew = false
 
         this.rightItems = [{ text: this.t("getOrders")}]
-
     }
     async componentDidMount()
     {
@@ -1574,7 +1573,7 @@ export default class salesDispatch extends DocBase
                                     {
                                         if(e.validationGroup.validate().status == "valid")
                                         {
-                                            this.popMultiItem.show()
+                                            await this.popMultiItem.show()
                                             await this.grdMultiItem.dataRefresh({source:this.multiItemData});
                                             if( typeof this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1] != 'undefined' && this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
                                             {
