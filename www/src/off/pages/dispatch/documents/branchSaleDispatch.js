@@ -772,13 +772,16 @@ export default class branchSaleDispatch extends DocBase
                                     {
                                         if(this.docObj.dt()[0].LOCKED == 0)
                                         {
+                                            console.log(1)
                                             this.docObj.dt()[0].LOCKED = 1
                                             if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
                                             {
                                                 await this.grdSlsDispatch.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
                                             }
+                                            console.log(2)
                                             if((await this.docObj.save()) == 0)
-                                            {                                                    
+                                            {             
+                                                console.log(3)                                       
                                                 let tmpConfObj =
                                                 {
                                                     id:'msgLocked',showTitle:true,title:this.t("msgLocked.title"),showCloseButton:true,width:'500px',height:'200px',
@@ -786,11 +789,13 @@ export default class branchSaleDispatch extends DocBase
                                                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgLocked.msg")}</div>)
                                                 }
 
+                                                console.log(4)
                                                 await dialog(tmpConfObj);
                                                 this.frmDocItems.option('disabled',true)
                                             }
                                             else
                                             {
+                                                console.log(5)
                                                 tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
                                                 await dialog(tmpConfObj1);
                                             }
@@ -798,11 +803,13 @@ export default class branchSaleDispatch extends DocBase
                                         }
                                         else if(this.docObj.dt()[0].LOCKED == 1)
                                         {
+                                            console.log(6)
                                             await this.popPassword.show()
-                                            this.txtPassword.value = ''
+                                            this.txtPassword.value = '';
                                         }
                                         else if(this.docObj.dt()[0].LOCKED == 2)
                                         {
+                                            console.log(7)
                                             let tmpConfObj =
                                             {
                                                 id:'msgLockedType2',showTitle:true,title:this.t("msgLockedType2.title"),showCloseButton:true,width:'500px',height:'200px',
@@ -810,6 +817,7 @@ export default class branchSaleDispatch extends DocBase
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgLockedType2.msg")}</div>)
                                             }
 
+                                            console.log(8)
                                             await dialog(tmpConfObj);
                                         }
                                         
