@@ -1192,7 +1192,7 @@ export default class rebateDispatch extends DocBase
                                         {
                                             this.msgQuantity.tmpData = tmpData.result.recordset[0]
                                             await this.msgQuantity.show()
-                                            this.addItem(tmpData.result.recordset[0],null,this.txtPopQuantity.value)
+                                            this.addItem(tmpData.result.recordset[0],null,this.txtPopQteUnitQuantity.value)
                                             this.txtBarcode.focus()
                                         }
                                         else
@@ -1305,7 +1305,7 @@ export default class rebateDispatch extends DocBase
                                     height={'450'} 
                                     width={'100%'}
                                     dbApply={false}
-                                    sorting={false}
+                                    sorting={{mode:'none'}}
                                     onRowPrepared={(e) =>
                                     {
                                         if(e.rowType == 'data' && e.data.INVOICE_LINE_GUID  != '00000000-0000-0000-0000-000000000000')
