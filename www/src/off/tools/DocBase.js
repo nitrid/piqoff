@@ -61,7 +61,7 @@ export default class DocBase extends React.PureComponent
         {
             return this.docObj.docItems
         }
-        else if(this.docType == 60 && this.docType == 62)
+        else if(this.docType == 60 || this.docType == 62)
         {
             return this.docObj.docOrders
         }
