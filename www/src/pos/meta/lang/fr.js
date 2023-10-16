@@ -40,9 +40,9 @@ export const langFr =
     price : "Prix",
     msgDeviceChange : 
     {
-        title : "Dikkat",   // BAK
-        msg : "Getirmek istediğiniz fişde ödeme mevcut işleme ödemenin alındğını kasadan devam edebilirsiniz ! Kasa Kodu : ",   // BAK
-        btn01 : "Tamam",   // BAK
+        title : "Attention",   // BAK
+        msg : "Il y a un paiement dans le reçu que vous souhaitez apporter. Vous pouvez continuer la transaction en encaissant au comptoir ! Code de caisse : ",   // BAK
+        btn01 : "OK",   // BAK
     },
     msgCustomerNotFound : 
     {

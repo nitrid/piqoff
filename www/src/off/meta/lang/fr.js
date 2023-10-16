@@ -174,7 +174,7 @@ export const langFr =
         stk_05_001: "Rapport Inventaire Dépôt", 
         stk_05_002: "Rapport sur la modification des prix d'achat", 
         stk_05_003: "Rapport inventaire", 
-        stk_05_004 : "Kayıp Ürün Raporu", // BAK
+        stk_05_004 : "Rapport sur les produits perdus", // BAK
         cri: "Fournisseur - Client",
         cri_01: "Saisie",
         cri_02: "Listes",
@@ -290,9 +290,9 @@ export const langFr =
         pos_02_009 : "Rapport de Vente par famille de produits",
         pos_02_010 : "Rapport de vente détaillé du produit", 
         pos_02_011 : "Rapport de comparaison de produit",
-        pos_02_012 : "Pos Puan Kullanım Raporu",  // BAK
-        pos_02_013 : "Pos İndirim Raporu",  // BAK
-        pos_02_014 : "Okunmamış Terazi Fişleri", // BAK
+        pos_02_012 : "Rapport d'utilisation des points Pos",  // BAK
+        pos_02_013 : "Rapport de réduction Pos",  // BAK
+        pos_02_014 : "Tickets de balance non lus", // BAK
         pos_03 : "Les opérations", 
         pos_03_001 : "Opérations de fin de journée",
         promo: "Promotion",
@@ -317,7 +317,7 @@ export const langFr =
         set_03_001 : "Documents Effacés",   
         set_03_002 : "Lignes Effacées", 
         set_03_003 : "Identification du code du transporteur",
-        set_02_008 : "Gümrük Kodu Excel Kayıt", // BAK
+        set_02_008 : "Enregistrement Excel du code douanier", // BAK
         proces : "Saisie groupée",
         proces_01 : "Traitement Produit",
         proces_01_001 : "MAJ Famille Produit",
@@ -746,10 +746,10 @@ export const langFr =
         },
         msgItemBack:
         {
-            title: "Dikkat",  // BAK
-            btn01: "Evet",  // BAK
-            btn02: "Vazgeç",  // BAK
-            msg: "Ürünü tekrar getirmek istediğinize eminmisiniz !"  // BAK
+            title: "Attention",  // BAK
+            btn01: "OK",  // BAK
+            btn02: "Abandonner",  // BAK
+            msg: "Êtes-vous sûr de vouloir ramener le produit ?"  // BAK
         },
     },
     stk_01_002:  //"Identification des codes-barres" 
@@ -2978,27 +2978,27 @@ export const langFr =
     },
     stk_05_004 : // "Kayıp Ürün Raporu"
     {
-        chkZeroQuantity : "0 Miktarlar Gösterilsin",  // BAK
-        cmbDepot : "Depo",  // BAK
-        btnCheck : "Aktif",  // BAK
-        btnGet :"Getir",  // BAK
+        chkZeroQuantity : "Afficher les quantités de 0",  // BAK
+        cmbDepot : "Dépôt",  // BAK
+        btnCheck : "Actif",  // BAK
+        btnGet :"Rechercher",  // BAK
         grdListe : 
         {
-            clmCode: "Kodu",  // BAK
-            clmName : "Adı",             // BAK
-            clmQuantity : "Adet",  // BAK
-            clmOutputCode : "Depo Kodu",  // BAK
-            clmOutputName : "Depo Adı",  // BAK
-            clmCostPrice : "Maliyet Fiyatı",   // BAK
-            clmTotalCost : "Toplam Maliyet",   // BAK
-            clmDocDate : "Tarih",   // BAK
-            clmRef : "Seri",  // BAK
-            clmRefNo : "Sıra",   // BAK
-            clmDescription : "Açıklama"  // BAK
+            clmCode: "Code",  // BAK
+            clmName : "Nom",  // BAK
+            clmQuantity : "Quantité",  // BAK
+            clmOutputCode : "Code du dépôt",  // BAK
+            clmOutputName : "Nom du dépôt",  // BAK
+            clmCostPrice : "Coût",   // BAK
+            clmTotalCost : "Coût total",   // BAK
+            clmDocDate : "Date",   // BAK
+            clmRef : "Référence",  // BAK
+            clmRefNo : "Ligne",   // BAK
+            clmDescription : "Déscription"  // BAK
         },
-        txtTotalQuantity : "Toplam Miktar",  // BAK
-        txtTotalCost : "Envanter Değeri",  // BAK
-        cmbDepot : "Depo"  // BAK
+        txtTotalQuantity : "Quantité totale",  // BAK
+        txtTotalCost : "Montant de l'inventaire",  // BAK
+        cmbDepot : "Dépôt"  // BAK
     },
     cri_01_001: // "Cari Tanımları"
     {
@@ -15487,33 +15487,33 @@ export const langFr =
     },
     fns_04_001 : // "Banka Ekstre Raporu"
     {
-        cmbBank : "Banka Seçimi",  // BAK
-        btnCheck : "Aktif",  // BAK
-        btnGet :"Getir",  // BAK
+        cmbBank : "Sélection Banque",  // BAK
+        btnCheck : "Actif",  // BAK
+        btnGet :"Rechercher",  // BAK
         grdListe : 
         {
-            clmOutputName : "Çıkış Hesabı",   // BAK
-            clmInputName : "Giriş Hesabı",   // BAK
-            clmAmount : "Tutar",    // BAK
-            clmDocDate : "Tarih",    // BAK
-            clmRef : "Seri",   // BAK
-            clmRefNo : "Sıra",    // BAK
+            clmOutputName : "Compte sortant",   // BAK
+            clmInputName : "Compte entrant",   // BAK
+            clmAmount : "Montant",    // BAK
+            clmDocDate : "Date",    // BAK
+            clmRef : "Référence",   // BAK
+            clmRefNo : "Ligne",    // BAK
         },
      
     },
     fns_04_003 : // "Kasa Ekstre Raporu"
     {
-        cmbSafe : "Kasa Seçimi",  // BAK
-        btnCheck : "Aktif",  // BAK
-        btnGet :"Getir",  // BAK
+        cmbSafe : "Caisse No",  // BAK
+        btnCheck : "Actif",  // BAK
+        btnGet :"Rechercher",  // BAK
         grdListe : 
         {
-            clmOutputName : "Çıkış Hesabı",   // BAK
-            clmInputName : "Giriş Hesabı",   // BAK
-            clmAmount : "Tutar",    // BAK
-            clmDocDate : "Tarih",    // BAK
-            clmRef : "Seri",   // BAK
-            clmRefNo : "Sıra",    // BAK
+            clmOutputName : "Compte sortant",   // BAK
+            clmInputName : "Compte entrant",   // BAK
+            clmAmount : "Montant",    // BAK
+            clmDocDate : "Date",    // BAK
+            clmRef : "Référence",   // BAK
+            clmRefNo : "Ligne",    // BAK
         },
      
     },
@@ -16127,8 +16127,8 @@ export const langFr =
             clmDate: "Date",
             clmTicketId: "Ticket No",
             clmDescription: "Motif",
-            clmTime: "Saat", // BAK
-            clmTotal: "Tutar", // BAK
+            clmTime: "Heure", // BAK
+            clmTotal: "Total", // BAK
         },
         pg_txtItem:
         {
@@ -16145,7 +16145,7 @@ export const langFr =
             clmTotal : "Total",
             clmLastData : "Premier prix",
             clmDescription : "Motif",
-            clmTime: "Saat", // BAK
+            clmTime: "Heure", // BAK
         },
         grdSaleTicketPays : 
         {
@@ -16366,35 +16366,35 @@ export const langFr =
     },
     pos_02_012 : // "Loyalty",  // BAK
     {
-        btnGet :"Getir",
-        txtTotalTicket : "Toplam Fiş Adedi",
+        btnGet :"Rechercher",
+        txtTotalTicket : "Total des tickets de caisses",
         grdListe: 
         {
-            clmDocDate: "Tarih",
-            clmLoyalty: "Kullanılan Sadakat Puan Tutarı",
+            clmDocDate: "Date",
+            clmLoyalty: "Montant de points de fidélité utilisés",
         },
     },
     pos_02_013 : // "İndirim Raporu",  // BAK
     {
-        btnGet :"Getir",
-        txtTotalTicket : "Toplam Fiş Adedi",
+        btnGet :"Rechercher",
+        txtTotalTicket : "Total des tickets de caisses",
         grdListe: 
         {
-            clmDocDate: "Tarih",
-            clmDiscount: "İndirim Tutarı",
+            clmDocDate: "Date",
+            clmDiscount: "Remise",
         },
     },
     pos_02_014 : // "Okunmamış Terazi Fişleri Raporu" // BAK
     {
-        btnGet :"Getir",
+        btnGet :"Rechercher",
         grdListe : 
         {
-            clmCode: "Kodu",
-            clmName : "Adı",           
-            clmQuantity : "Miktar",
-            clmPrice : "Fiyat",
-            clmCDate : "Tarih",
-            clmTicketNo : "Fiş No",
+            clmCode: "Code",
+            clmName : "Nom",           
+            clmQuantity : "Quantité",
+            clmPrice : "Prix",
+            clmCDate : "Date",
+            clmTicketNo : "Numéro de ticket",
         },
     },
     pos_03_001 : // "Gün sonu"
@@ -16466,7 +16466,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Gün Sonu Kayıt Edildi.." // BAK
+            msg: "La clôture de la journée a été enregistrée." // BAK
         },
         advanceMsg1 : "Soyez sûr que le fond de caisse est de",
         advanceMsg2 : "Etre sûr!!!",
