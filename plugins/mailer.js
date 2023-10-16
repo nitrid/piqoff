@@ -28,19 +28,18 @@ class mailer
         {
             var transporter = nodemailer.createTransport({
                 //service: 'imap.ionos.fr',
-                host: 'smtp.ionos.fr',
-                port: 465,
-                secure: true,
+                host: 'smtp.office365.com',
+                port: 587,
+                secureConnection: false,
                 auth: 
                 {
-                  user: "vente.esseylesnancy@ppsupermarche.fr",
-                  pass: "24Prodorplus69*/"
+                  user: "vente.prointer-montagneverte@outlook.fr",
+                  pass: "PIQSOFT2023"
                 },
-                //tls : { rejectUnauthorized: false }
+                tls : { rejectUnauthorized: false, ciphers:'SSLv3' }
               });
-              console.log(pData.text)
               var mailOptions = {
-                from: "vente.longeville@ppsupermarche.fr",
+                from: "vente.prointer-montagneverte@outlook.fr",
                 to: pData.sendMail,
                 subject: pData.subject,
                 html:pData.html,

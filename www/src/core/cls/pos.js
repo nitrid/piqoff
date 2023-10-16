@@ -1797,7 +1797,7 @@ export class posDeviceCls
                     let img = new Image()
                     img.src = tmpArr[i].logo
                     docPdf.addImage(img, 'png', 15, tmpY, undefined, undefined)
-                    tmpY += 20
+                    tmpY += 25
                 }
                 else
                 {
@@ -1920,7 +1920,7 @@ export class posDeviceCls
            " \n"+
            " \n"+
            "Cordialment \n"+
-           "P&P Supermarche & Boucherie \n" + 
+           "Pro-Inter Montagneverte \n" + 
            " \n"+
            " \n"+ 
            "Ce message est confidentiel. Toute publication, utilisation ou diffusion,même partielle, doit être autorisée préalablement. Si vous n'êtes pas destinataire de ce message, merci d'en avertir immédiatement l'expéditeur et de procéder à sa destruction. \n" +

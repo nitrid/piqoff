@@ -100,7 +100,7 @@ module.exports =
         {
             "/socket.io": 
             {
-                target: 'http://localhost',
+                target: 'http://localhost:81',
                 ws: true
             }
         }
@@ -124,7 +124,6 @@ module.exports =
                 { from: "./src/mob/css/img/", to: "./mob/css/img/" },
                 { from: "./src/mob/css/icons/", to: "./mob/css/icons/" },
                 { from: "./src/mob/sound/", to: "./mob/sound/" },
-                { from: "./src/mob/appUpdate.html", to: "./mob/appUpdate.html" },
                 { from: "./src/mob/css/bootstrap.min.css", to: "./mob/css/bootstrap.min.css" },
                 { from: "./src/mob/lib/bootstrap.bundle.min.js", to: "./mob/lib/bootstrap.bundle.min.js" },
                 { from: "./src/tab/css/", to: "./tab/css/" },
