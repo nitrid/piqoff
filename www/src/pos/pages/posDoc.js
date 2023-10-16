@@ -6156,6 +6156,36 @@ export default class posDoc extends React.PureComponent
                                                         customerGrowPoint : tmpLastPos[0].CUSTOMER_POINT - Math.floor(tmpLastPos[0].TOTAL)
                                                     }
                                                 }
+                                                //YAZDIRMA İŞLEMİNDEN ÖNCE KULLANICIYA SORULUYOR
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgMailPrintAlert',showTitle:true,title:this.lang.t("msgMailPrintAlert.title"),showCloseButton:true,width:'500px',height:'250px',
+                                                    button:[{id:"btn01",caption:this.lang.t("msgMailPrintAlert.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgMailPrintAlert.btn02"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgMailPrintAlert.msg")}</div>)
+                                                }
+                                                let pResult = await dialog(tmpConfObj);
+                                                if(pResult == 'btn01')
+                                                {
+                                                    if(this.posObj.dt()[0].CUSTOMER_GUID != '00000000-0000-0000-0000-000000000000')
+                                                    { 
+                                                        let tmpQuery = 
+                                                        {
+                                                            query :"SELECT EMAIL FROM CUSTOMER_VW_02 WHERE GUID = @GUID",
+                                                            param:  ['GUID:string|50'],
+                                                            value:  [this.posObj.dt()[0].CUSTOMER_GUID]
+                                                        }
+                                                        let tmpMailData = await this.core.sql.execute(tmpQuery) 
+                                                        if(tmpMailData.result.recordset.length > 0)
+                                                        {
+                                                            this.txtMail.value = tmpMailData.result.recordset[0].EMAIL
+                                                        }
+                                                    }
+
+                                                    this.mailPopup.tmpData = tmpData;
+                                                    await this.mailPopup.show()
+                                                    return
+                                                }
+
                                                 await this.print(tmpData,0)
                                             }
                                             
