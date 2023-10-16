@@ -1160,5 +1160,21 @@ export const prm =
             }
         }
     },
+    //Z Raporu
+    {
+        TYPE : 0,
+        ID :"ZReport",
+        VALUE : true,
+        SPECIAL : "",
+        PAGE : "pos",
+        ELEMENT : "",
+        APP : "POS",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Pos",
+            CAPTION : "Z Raporu"
+        }
+    },
     //#endregion
 ]

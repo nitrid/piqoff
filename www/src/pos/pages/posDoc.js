@@ -1340,10 +1340,10 @@ export default class posDoc extends React.PureComponent
     {
         let tmpAmount = Number(Number(Number(pPrice) * Number(pQuantity)).round(3)).round(2)
         
-        let tmpFAmount = Number(Number(Number(tmpAmount)) - Number(Number(pDiscount)).round(3)).round(2)
+        let tmpFAmount = Number(Number(Number(tmpAmount)) - Number(Number(pDiscount)).round(2))
         //let tmpFAmount = Number(parseFloat((pPrice * pQuantity) - (pDiscount)).round(2))
-        tmpFAmount = Number(Number(tmpFAmount - pLoyalty).round(3)).round(2)
-        let tmpVat = Number(Number(tmpFAmount - (tmpFAmount / ((pVatRate / 100) + 1))).round(3)).round(2)
+        tmpFAmount = Number(Number(tmpFAmount - pLoyalty).round(2))
+        let tmpVat = Number(parseFloat(tmpFAmount - (tmpFAmount / ((pVatRate / 100) + 1))))
     
         return {
             QUANTITY:pQuantity,
@@ -3070,6 +3070,52 @@ export default class posDoc extends React.PureComponent
             await dialog(tmpConfObj);
         }
     }
+    async ZReport()
+    {
+        let tmpArr = 
+        [
+            {font:"a",style:"b",align:"ct",data: "Z REPORT"},
+        ]
+
+        let tmpDt = new datatable()
+        tmpDt.selectCmd = 
+        {
+            query : "SELECT * FROM POS_SALE_VW_01 WHERE DEVICE = @DEVICE AND DOC_DATE = @DOC_DATE",
+            param : ['DEVICE:string|10','DOC_DATE:date'],
+            value : [window.localStorage.getItem('device'),moment(new Date()).format("YYYY-MM-DD")]
+        }
+        await tmpDt.refresh()
+
+        if(tmpDt.length > 0)
+        {
+            let tmpVatLst = tmpDt.groupBy('VAT_RATE').orderBy('VAT_RATE','asc')
+            for (let i = 0; i < tmpVatLst.length; i++) 
+            {
+                tmpArr.push(
+                {
+                    font: "b",
+                    align: "rt",
+                    data: tmpVatLst[i].VAT_TYPE.space(5) + " " +
+                        (tmpVatLst[i].VAT_RATE + "%").space(10) + " " +
+                        tmpDt.where({VAT_RATE:tmpVatLst[i].VAT_RATE}).sum('FAMOUNT',2).space(10) + " " + 
+                        tmpDt.where({VAT_RATE:tmpVatLst[i].VAT_RATE}).sum('VAT',2).space(10) + " " + 
+                        tmpDt.where({VAT_RATE:tmpVatLst[i].VAT_RATE}).sum('TOTAL',2).space(10)
+                })
+            }
+
+            tmpArr.push(
+            {
+                font: "b",
+                align: "rt",
+                data: ("Total : ").space(18) +
+                    tmpDt.sum('FAMOUNT',2).space(10) + " " + 
+                    tmpDt.sum('VAT',2).space(10) + " " + 
+                    tmpDt.sum('TOTAL',2).space(10)
+            })
+        }
+        //console.log(tmpArr)
+        await this.posDevice.escPrinter(tmpArr)
+    }
     render()
     {
         return(
@@ -4203,9 +4249,27 @@ export default class posDoc extends React.PureComponent
                                             <i className="text-white fa-solid fa-magnifying-glass-chart" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
-                                    {/* Blank */}
+                                    {/* Z Report */}
                                     <div className="col px-1">
-                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-secondary btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt"}}></NbButton>
+                                        {(()=>
+                                        {
+                                            if(this.prmObj.filter({ID:'ZReport',TYPE:0}).getValue() == false)
+                                            {
+                                                return <NbButton id={"btn"} parent={this} className="form-group btn btn-secondary btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt"}}></NbButton>
+                                            }
+                                            else
+                                            {
+                                                return (
+                                                    <NbButton id={"btnZReport"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt"}}
+                                                    onClick={()=>
+                                                    {
+                                                        this.ZReport()
+                                                    }}>
+                                                        <i className="text-white fa-solid fa-magnifying-glass-chart" style={{fontSize: "24px"}} />
+                                                    </NbButton>
+                                                )
+                                            }
+                                        })()}
                                     </div>
                                     {/* Blank */}
                                     <div className="col px-1">
