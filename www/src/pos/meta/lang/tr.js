@@ -798,6 +798,12 @@ export const langTr =
         msg : "Okutulan satır : {0} - Toplam tutar : {1}",
         btn01 : "Tamam"
     },
+    msgBarcodeWeighingUnit: 
+    {
+        title : "Dikkat",
+        msg : "Okutmuş olduğunuz etiket de adet ürün var. Terazi de miktar eşleşmesi yapmanıza gerek yoktur.",
+        btn01 : "Tamam"
+    },
     msgTSENotFound: 
     {
         title : "Dikkat",

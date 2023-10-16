@@ -8361,6 +8361,7 @@ export const langFr =
         txtTotalQuantity : "Quantité totale",  
         txtUnitPrice : "Prix unitaire",
         txtTotalHt : "Total HT",
+        validDesign : "Veuillez choisir le design de l'étiquette",
         txtDocNo : "Numéro de document", 
         msgDiscount:
         {
@@ -8391,6 +8392,7 @@ export const langFr =
             title : "Choix Stock",
             clmCode :  "CODE STOCK",
             clmName : "NOM STOCK",
+            clmPrice : "Prix de Vente"
         },
         pg_contractGrid : 
         {
@@ -9187,6 +9189,7 @@ export const langFr =
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
             clmMulticode : "FRN.Code",
+            clmPrice : "Prix d'Achat" 
         },
         pg_dispatchGrid : 
         {
@@ -9484,7 +9487,8 @@ export const langFr =
         msgUnit:
         {
             title: "Sélection de l'unité",  
-            btn01: "Valider",  
+            btn01: "Valider",
+            btnFactorSave : "Mettre à jour la carte de stock" 
         },
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
@@ -9696,6 +9700,7 @@ export const langFr =
             title : "Sélectionner Produit",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
+            clmPrice : "Prix d'Achat",
         },
         pg_dispatchGrid : 
         {
@@ -10777,6 +10782,7 @@ export const langFr =
         txtTotalQuantity : "Quantité totale",  
         txtUnitPrice : "Prix unitaire", 
         cmbOrigin: "Origine",
+        validDesign : "Veuillez choisir le design de l'étiquette",
         txtTotalHt : "Total HT",
         pg_Docs : 
         {
@@ -12358,8 +12364,8 @@ export const langFr =
             clmDate : "Date",
             clmRef : "Référence",
             clmRefNo : "Numéro",
-            clmInputName : "Nom Fournisseur",
-            clmInputCode  : "Code Client",
+            clmOutputName : "Nom Fournisseur",
+            clmOutputCode  : "Code Client",
             clmTotal : "Total TTC"
         },
         pg_txtCustomerCode : 
@@ -12375,6 +12381,7 @@ export const langFr =
             title : "Sélectionner Produit",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
+            clmMulticode : "Multicode",
             clmPrice : "Prix de Vente" 
         },
         pg_RebateGrid : 

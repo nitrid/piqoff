@@ -798,6 +798,12 @@ export const langIt =
         msg: "Linea scannerizzata : {0} - Importo totale : {1}",
         btn01: "OK"
     },
+    msgBarcodeWeighingUnit: 
+    {
+        title : "Attenzione",
+        msg : "L'etichetta scansionata contiene prodotti singoli. Non è necessario corrispondere le quantità sulla bilancia.",
+        btn01 : "OK"
+    },
     msgTSENotFound:
     {
         title: "Attenzione",
