@@ -171,6 +171,22 @@
 .dx-data-row .cell-fontsize 
 {
     font-size: 13px;
+    overflow:hidden;
+    white-space:nowrap;
+}
+.dx-datagrid-rowsview .dx-row > td, .dx-datagrid-rowsview .dx-row > tr > td 
+{
+    text-overflow:clip
+}
+.dx-data-row .lcd-cell-fontsize 
+{
+    font-size: 18px;
+    overflow:hidden;
+    white-space:nowrap;
+}
+.lcd-cell-fontsize[role="columnheader"]
+{  
+    font-size: 18px;  
 }
 .dx-widget.dx-datagrid-pager.dx-pager
 {

@@ -4265,7 +4265,7 @@ export default class posDoc extends React.PureComponent
                                                     {
                                                         this.ZReport()
                                                     }}>
-                                                        <i className="text-white fa-solid fa-magnifying-glass-chart" style={{fontSize: "24px"}} />
+                                                        <i className="text-white fa-solid fa-chart-pie" style={{fontSize: "24px"}} />
                                                     </NbButton>
                                                 )
                                             }
