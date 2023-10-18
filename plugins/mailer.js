@@ -33,14 +33,14 @@ class mailer
                 secure: true,
                 auth: 
                 {
-                  user: "vente.esseylesnancy@ppsupermarche.fr",
+                  user: "vente.mondelange@ppsupermarche.fr",
                   pass: "24Prodorplus69*/"
                 },
                 //tls : { rejectUnauthorized: false }
               });
               console.log(pData.text)
               var mailOptions = {
-                from: "vente.longeville@ppsupermarche.fr",
+                from: "vente.mondelange@ppsupermarche.fr",
                 to: pData.sendMail,
                 subject: pData.subject,
                 html:pData.html,
