@@ -27,20 +27,20 @@ class mailer
         return new Promise(resolve =>
         {
             var transporter = nodemailer.createTransport({
-                //service: 'imap.ionos.fr',
-                host: 'smtp.ionos.fr',
-                port: 465,
-                secure: true,
+                service:'gmail',
+                // host: 'smtp.ionos.fr',
+                // port: 465,
+                // secure: true,
                 auth: 
                 {
-                  user: "vente.esseylesnancy@ppsupermarche.fr",
-                  pass: "24Prodorplus69*/"
+                  user: "tevhidgoral58@gmail.com",
+                  pass: "azegidzlxukuaecn"
                 },
                 //tls : { rejectUnauthorized: false }
               });
               console.log(pData.text)
               var mailOptions = {
-                from: "vente.longeville@ppsupermarche.fr",
+                from: "tevhidgoral58@gmail.com",
                 to: pData.sendMail,
                 subject: pData.subject,
                 html:pData.html,
