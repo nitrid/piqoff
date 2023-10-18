@@ -33,7 +33,7 @@ class mailer
                 secure: true,
                 auth: 
                 {
-                  user: "vente.esseylesnancy@ppsupermarche.fr",
+                  user: "vente.longeville@ppsupermarche.fr",
                   pass: "24Prodorplus69*/"
                 },
                 //tls : { rejectUnauthorized: false }
