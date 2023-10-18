@@ -40,7 +40,7 @@ class mailer
               });
               console.log(pData.text)
               var mailOptions = {
-                from: "vente.longeville@ppsupermarche.fr",
+                from: "vente.esseylesnancy@ppsupermarche.fr",
                 to: pData.sendMail,
                 subject: pData.subject,
                 html:pData.html,
