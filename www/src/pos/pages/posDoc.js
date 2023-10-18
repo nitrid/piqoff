@@ -1324,10 +1324,11 @@ export default class posDoc extends React.PureComponent
     }    
     calcSaleTotal(pPrice,pQuantity,pDiscount,pLoyalty,pVatRate)
     {
-        let tmpAmount = Number(parseFloat((pPrice * pQuantity).round(2)))
+        let tmpAmount = Number(Number(Number(pPrice) * Number(pQuantity)).round(3)).round(2)
+        
         let tmpFAmount = Number(Number(Number(tmpAmount)) - Number(Number(pDiscount)).round(2))
         //let tmpFAmount = Number(parseFloat((pPrice * pQuantity) - (pDiscount)).round(2))
-        tmpFAmount = Number((tmpFAmount - pLoyalty).round(2))
+        tmpFAmount = Number(Number(tmpFAmount - pLoyalty).round(2))
         let tmpVat = Number(parseFloat(tmpFAmount - (tmpFAmount / ((pVatRate / 100) + 1))))
     
         return {
@@ -6141,6 +6142,37 @@ export default class posDoc extends React.PureComponent
                                                         customerGrowPoint : tmpLastPos[0].CUSTOMER_POINT - Math.floor(tmpLastPos[0].TOTAL)
                                                     }
                                                 }
+                                                //YAZDIRMA İŞLEMİNDEN ÖNCE KULLANICIYA SORULUYOR
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgMailPrintAlert',showTitle:true,title:this.lang.t("msgMailPrintAlert.title"),showCloseButton:true,width:'500px',height:'250px',
+                                                    button:[{id:"btn01",caption:this.lang.t("msgMailPrintAlert.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgMailPrintAlert.btn02"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgMailPrintAlert.msg")}</div>)
+                                                }
+                                                let pResult = await dialog(tmpConfObj);
+                                                if(pResult == 'btn01')
+                                                {
+                                                    if(tmpLastPos[0].CUSTOMER_GUID != '00000000-0000-0000-0000-000000000000')
+                                                    { 
+                                                        let tmpQuery = 
+                                                        {
+                                                            query :"SELECT EMAIL FROM CUSTOMER_VW_02 WHERE GUID = @GUID",
+                                                            param:  ['GUID:string|50'],
+                                                            value:  [tmpLastPos[0].CUSTOMER_GUID]
+                                                        }
+
+                                                        let tmpMailData = await this.core.sql.execute(tmpQuery)
+                                                        if(tmpMailData.result.recordset.length > 0)
+                                                        {
+                                                            this.txtMail.value = tmpMailData.result.recordset[0].EMAIL
+                                                        }
+                                                    }
+
+                                                    this.mailPopup.tmpData = tmpData;
+                                                    await this.mailPopup.show()
+                                                    return
+                                                }
+                                                
                                                 await this.print(tmpData,0)
                                             }
                                             

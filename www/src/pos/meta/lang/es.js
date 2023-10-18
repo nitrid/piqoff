@@ -798,6 +798,12 @@ export const langEs =
         msg: "Línea escaneada: {0} - Monto total: {1}",
         btn01: "Aceptar"
     },
+    msgBarcodeWeighingUnit: 
+    {
+        title : "Atención",
+        msg : "La etiqueta escaneada contiene productos individuales. No es necesario que coincidan las cantidades en la balanza.",
+        btn01 : "Aceptar"
+    },
     msgTSENotFound:
     {
         title: "Atención",

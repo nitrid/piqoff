@@ -34,6 +34,7 @@ export const prm =
         ID :"BarcodePattern",
         VALUE : 
         [
+            '22XXXXXMMMCCF',
             '20NNNNMMMCCF',
             '21NNNNNMMMCCF',
             '29NNNNMMMCCF',
@@ -1112,8 +1113,8 @@ export const prm =
             CAPTION : "Satış Sonu Yazdır"
         }
     },
-    //TSE Usb
-    {
+      //TSE Usb
+      {
         TYPE : 0,
         ID :"TSEUsb",
         VALUE : false,
