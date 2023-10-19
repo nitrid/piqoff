@@ -20,6 +20,7 @@ import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdDialog, { dialog } from '../../../../core/react/devex/dialog.js';
 import NdHtmlEditor from '../../../../core/react/devex/htmlEditor.js';
+import { LoadPanel } from 'devextreme-react/load-panel';
 
 export default class salesInvoice extends DocBase
 {
@@ -42,6 +43,7 @@ export default class salesInvoice extends DocBase
         this.combineControl = true
         this.combineNew = false
 
+        this.loading = React.createRef();
         this.rightItems = [{ text: this.t("getDispatch"),},{ text: this.t("getOrders")},{ text: this.t("getOffers")},{ text: this.t("getProforma")}]
     }
     async componentDidMount()
@@ -925,6 +927,15 @@ export default class salesInvoice extends DocBase
         return(
             <div>
                 <ScrollView>
+                    <LoadPanel
+                    shadingColor="rgba(0,0,0,0.0)"
+                    position={{ of: '#root' }}
+                    showIndicator={true}
+                    shading={true}
+                    showPane={true}
+                    message={""}
+                    ref={this.loading}
+                    />
                     {/* Toolbar */}
                     <div className="row px-2 pt-2">
                         <div className="col-12">
@@ -1081,6 +1092,7 @@ export default class salesInvoice extends DocBase
                                     onClick={async()=>
                                     {
                                         await this.popDetail.show()
+                                        this.loading.current.instance.show()
                                         
                                         this.numDetailCount.value = this.docObj.docItems.dt().length
                                         this.numDetailQuantity.value =  Number(this.docObj.docItems.dt().sum("QUANTITY",2))
@@ -1100,11 +1112,8 @@ export default class salesInvoice extends DocBase
                                             }
                                         }
                                         this.numDetailQuantity2.value = tmpQuantity2.toFixed(3)
-                                        let tmpExVat = Number(this.docObj.docItems.dt().sum("TOTALHT",2))
-                                        
-                                        let tmpMargin = Number(tmpExVat) - Number(this.docObj.docItems.dt().sum("TOTAL_COST",2)) 
-                                        let tmpMarginRate = ((tmpMargin / Number(this.docObj.docItems.dt().sum("TOTAL_COST",2)))) * 100
-                                        this.txtDetailMargin.value = this.docObj.dt()[0].MARGIN                                                        
+                                        this.txtDetailMargin.value = this.docObj.dt()[0].MARGIN;
+                                        this.loading.current.instance.hide()
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
@@ -2470,6 +2479,7 @@ export default class salesInvoice extends DocBase
                         container={"#root"} 
                         width={'500'}
                         height={'300'}
+                        loadPanel={{enabled:false}}
                         position={{of:'#root'}}
                         deferRendering={true}
                         >
