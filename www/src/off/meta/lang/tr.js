@@ -396,6 +396,12 @@ export const langTr =
         btn01: "Tamam",
         msg: "Bu Evrak Numarasıyla Silinmiş Evrak! Lütfen Yetkili İle Görüşün.."
     },
+    msgCheckDocNo:
+    {
+        title: "Dikkat",
+        btn01: "Tamam",
+        msg: "Girmiş olduğunuz belge no daha önceden kayıt edilmiş !"
+    },
     stk_01_001:  // "Yeni Ürün Tanımlama"
     {
         txtRef: "Referans",
@@ -5076,7 +5082,7 @@ export const langTr =
             title: "Dikkat",
             btn01: "Tamam",
             msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !"
-        },
+        }
     },
     ftr_02_003 : // "İade Faturası"
     {

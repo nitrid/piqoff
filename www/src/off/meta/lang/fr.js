@@ -394,6 +394,12 @@ export const langFr =
         btn01: "OK",   
         msg: "Document Numéroté Supprimé !Veuillez vous Renseigner Auprès d'un Responsable.."   
     },
+    msgCheckDocNo:
+    {
+        title: "Attention",
+        btn01: "OK",
+        msg: "Le numéro de document est déjà enregistré !."
+    },
     stk_01_001:  // "Identification du nouveau stock" 
     {
         txtRef: "Référence",

@@ -816,6 +816,34 @@ export default class DocBase extends React.PureComponent
             }
         })
     }
+    async checkDocNo(pDocNo)
+    {
+        console.log(this.prmObj.filter({ID:'checkDocNo',USERS:this.user.CODE}).getValue())
+        if(this.prmObj.filter({ID:'checkDocNo',USERS:this.user.CODE}).getValue())
+        {
+            if(pDocNo != '')
+            {
+                let tmpQuery = 
+                {
+                    query : "SELECT * FROM DOC_VW_01 WHERE DOC_NO = @DOC_NO AND TYPE = @TYPE AND DOC_TYPE = @DOC_TYPE AND REBATE = @REBATE",
+                    param : ['DOC_NO:string|50','TYPE:int','DOC_TYPE:int','REBATE:bit'],
+                    value : [pDocNo,this.type,this.docType,this.rebate]
+                }
+                let tmpResult = await this.core.sql.execute(tmpQuery) 
+                if(tmpResult.result.recordset.length > 0)
+                {
+                    let tmpConfObj =
+                    {
+                        id:'msgCheckDocNo',showTitle:true,title:this.lang.t("msgCheckDocNo.title"),showCloseButton:true,width:'500px',height:'200px',
+                        button:[{id:"btn01",caption:this.lang.t("msgCheckDocNo.btn01"),location:'after'}],
+                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgCheckDocNo.msg")}</div>)
+                    }
+                    
+                    await dialog(tmpConfObj);
+                }
+            }
+        }
+    }
     render()
     {
         return(

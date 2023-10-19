@@ -387,6 +387,12 @@ export const langDe =
         btn01: "OK",
         msg: "Dieses Dokument wurde mit der Dokumentennummer gelöscht! Bitte wenden Sie sich an einen autorisierten Mitarbeiter."
     },
+    msgCheckDocNo:
+    {
+        title: "Achtung",
+        btn01: "OK",
+        msg: "Die von Ihnen eingegebene Dokumentennummer wurde bereits gespeichert!"
+    },
     stk_01_001:  // "Neue Lagerdefinition"
     {
         txtRef: "Referenz",
