@@ -16,7 +16,7 @@ posDoc.prototype.rowDelete = async function()
         if(this.posObj.posSale.dt().length > 1)
         {
             if(this.grdList.devGrid.getSelectedRowKeys().length > 0)
-            {            
+            {                
                 let tmpDt = new datatable(); 
                 tmpDt.selectCmd = 
                 {

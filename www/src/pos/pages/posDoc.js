@@ -325,7 +325,7 @@ export default class posDoc extends React.PureComponent
         this.sendJet({CODE:"120",NAME:"Le système est offline."}) ///Kasa offline dan online a döndü.
     }
     async init()
-    {                
+    {
         setInterval(()=>
         {
             this.lblTime.value = moment(new Date(),"HH:mm:ss").format("HH:mm:ss")
@@ -1243,7 +1243,6 @@ export default class posDoc extends React.PureComponent
                 {
                     setTimeout(() => 
                     {
-                        console.log(this.grdList.devGrid.getKeyByRowIndex(0).SCALE_MANUEL)
                         if(this.grdList.devGrid.getKeyByRowIndex(0).WEIGHING)
                         {
                             this.posLcd.print
@@ -1291,7 +1290,22 @@ export default class posDoc extends React.PureComponent
                 this.grdList.devGrid.navigateToRow(tmpRes[0])
                 this.grdList.devGrid.selectRows(tmpRes[0],false)
             })
-
+            //********************************************* */
+            //MÜŞTERİ BİLGİ EKRANINA VERİ GÖNDERİMİ.
+            App.instance.electronSend(
+            {
+                tag : "lcd",
+                data :
+                {
+                    posObj : JSON.parse(JSON.stringify(this.posObj.dt().toArray())),
+                    posSaleObj : JSON.parse(JSON.stringify(this.posObj.dt("POS_SALE").toArray())),
+                    grandTotal : tmpPayRest,
+                    cheqLength : this.cheqDt.length,
+                    cheqTotal : this.cheqTotalAmount.value,
+                    totalItemQ : this.posObj.posSale.dt().where({GUID:{'<>' : '00000000-0000-0000-0000-000000000000'}}).sum('QUANTITY',2)
+                }
+            })
+            //********************************************* */
             if(typeof pSave == 'undefined' || pSave)
             {                
                 let tmpClose = await this.saleClosed(true,tmpPayRest,tmpPayChange)
@@ -1324,8 +1338,7 @@ export default class posDoc extends React.PureComponent
     }    
     calcSaleTotal(pPrice,pQuantity,pDiscount,pLoyalty,pVatRate)
     {
-        let tmpAmount = Number(Number(Number(pPrice) * Number(pQuantity)).round(3)).round(2)
-        
+        let tmpAmount = Number(Number(Number(pPrice) * Number(pQuantity)).round(5)).round(2)
         let tmpFAmount = Number(Number(Number(tmpAmount)) - Number(Number(pDiscount)).round(2))
         //let tmpFAmount = Number(parseFloat((pPrice * pQuantity) - (pDiscount)).round(2))
         tmpFAmount = Number(Number(tmpFAmount - pLoyalty).round(2))
@@ -3056,6 +3069,52 @@ export default class posDoc extends React.PureComponent
             await dialog(tmpConfObj);
         }
     }
+    async ZReport()
+    {
+        let tmpArr = 
+        [
+            {font:"a",style:"b",align:"ct",data: "Z REPORT"},
+        ]
+
+        let tmpDt = new datatable()
+        tmpDt.selectCmd = 
+        {
+            query : "SELECT * FROM POS_SALE_VW_01 WHERE DEVICE = @DEVICE AND DOC_DATE = @DOC_DATE",
+            param : ['DEVICE:string|10','DOC_DATE:date'],
+            value : [window.localStorage.getItem('device'),moment(new Date()).format("YYYY-MM-DD")]
+        }
+        await tmpDt.refresh()
+
+        if(tmpDt.length > 0)
+        {
+            let tmpVatLst = tmpDt.groupBy('VAT_RATE').orderBy('VAT_RATE','asc')
+            for (let i = 0; i < tmpVatLst.length; i++) 
+            {
+                tmpArr.push(
+                {
+                    font: "b",
+                    align: "rt",
+                    data: tmpVatLst[i].VAT_TYPE.space(5) + " " +
+                        (tmpVatLst[i].VAT_RATE + "%").space(10) + " " +
+                        tmpDt.where({VAT_RATE:tmpVatLst[i].VAT_RATE}).sum('FAMOUNT',2).space(10) + " " + 
+                        tmpDt.where({VAT_RATE:tmpVatLst[i].VAT_RATE}).sum('VAT',2).space(10) + " " + 
+                        tmpDt.where({VAT_RATE:tmpVatLst[i].VAT_RATE}).sum('TOTAL',2).space(10)
+                })
+            }
+
+            tmpArr.push(
+            {
+                font: "b",
+                align: "rt",
+                data: ("Total : ").space(18) +
+                    tmpDt.sum('FAMOUNT',2).space(10) + " " + 
+                    tmpDt.sum('VAT',2).space(10) + " " + 
+                    tmpDt.sum('TOTAL',2).space(10)
+            })
+        }
+        //console.log(tmpArr)
+        await this.posDevice.escPrinter(tmpArr)
+    }
     render()
     {
         return(
@@ -3443,8 +3502,8 @@ export default class posDoc extends React.PureComponent
                                     }}
                                     alignment={"center"} cssClass={"cell-fontsize"}/>                                    
                                     <Column dataField="ITEM_SNAME" caption={this.lang.t("grdList.ITEM_NAME")} width={220} cssClass={"cell-fontsize"}/>
-                                    <Column dataField="QUANTITY" caption={this.lang.t("grdList.QUANTITY")} width={80} cellRender={(e)=>{return (e.data.SCALE_MANUEL == true ? "M-" : "") + (e.data.UNIT_SHORT.toLowerCase() == 'kg' ? Number(e.value / e.data.UNIT_FACTOR).round(2) : Number(e.value / e.data.UNIT_FACTOR).round(0)) + e.data.UNIT_SHORT}} format={"#,##0.000" } cssClass={"cell-fontsize"}/>
-                                    <Column dataField="PRICE" caption={this.lang.t("grdList.PRICE")} width={80} cellRender={(e)=>{return Number(e.value * e.data.UNIT_FACTOR).round(2) + Number.money.sign + '/' + e.data.UNIT_SHORT}} cssClass={"cell-fontsize"}/>
+                                    <Column dataField="QUANTITY" caption={this.lang.t("grdList.QUANTITY")} width={80} cellRender={(e)=>{return (e.data.SCALE_MANUEL == true ? "M-" : "") + (e.data.UNIT_SHORT.toLowerCase() == 'kg' ? Number(e.value / e.data.UNIT_FACTOR).toFixed(3) : Number(e.value / e.data.UNIT_FACTOR).toFixed(0)) + e.data.UNIT_SHORT}} format={"#,##0.000" } cssClass={"cell-fontsize"}/>
+                                    <Column dataField="PRICE" caption={this.lang.t("grdList.PRICE")} width={80} cellRender={(e)=>{return Number(e.value * e.data.UNIT_FACTOR).toFixed(2) + Number.money.sign + '/' + e.data.UNIT_SHORT}} cssClass={"cell-fontsize"}/>
                                     <Column dataField="AMOUNT" alignment={"right"} caption={this.lang.t("grdList.AMOUNT")} width={60} format={"#,##0.00" + Number.money.sign} cssClass={"cell-fontsize"}/>                                                
                                 </NdGrid>
                             </div>
@@ -4189,9 +4248,27 @@ export default class posDoc extends React.PureComponent
                                             <i className="text-white fa-solid fa-magnifying-glass-chart" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
-                                    {/* Blank */}
+                                    {/* Z Report */}
                                     <div className="col px-1">
-                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-secondary btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt"}}></NbButton>
+                                        {(()=>
+                                        {
+                                            if(this.prmObj.filter({ID:'ZReport',TYPE:0}).getValue() == false)
+                                            {
+                                                return <NbButton id={"btn"} parent={this} className="form-group btn btn-secondary btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt"}}></NbButton>
+                                            }
+                                            else
+                                            {
+                                                return (
+                                                    <NbButton id={"btnZReport"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt"}}
+                                                    onClick={()=>
+                                                    {
+                                                        this.ZReport()
+                                                    }}>
+                                                        <i className="text-white fa-solid fa-chart-pie" style={{fontSize: "24px"}} />
+                                                    </NbButton>
+                                                )
+                                            }
+                                        })()}
                                     </div>
                                     {/* Blank */}
                                     <div className="col px-1">
@@ -6172,7 +6249,6 @@ export default class posDoc extends React.PureComponent
                                                     await this.mailPopup.show()
                                                     return
                                                 }
-                                                
                                                 await this.print(tmpData,0)
                                             }
                                             

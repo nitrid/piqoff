@@ -607,8 +607,7 @@ export default class purchaseInvoice extends DocBase
                     }
                     await this.msgCustomerNotFound.show().then(async (e) =>
                     {
-    
-                       if(e == 'btn01' && this.checkCustomer.value == true)
+                        if(e == 'btn01' && this.checkCustomer.value == true)
                         {
                             this.customerControl = false
                             return
@@ -1705,7 +1704,6 @@ export default class purchaseInvoice extends DocBase
                                                 if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                 {
                                                     this.txtRef.value = data[0].CODE
-                                                    this.txtRef.props.onValueChanged()
                                                 }
                                                 if(this.cmbDepot.value != '' && this.docLocked == false)
                                                 {
@@ -1766,7 +1764,6 @@ export default class purchaseInvoice extends DocBase
                                                             if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                             {
                                                                 this.txtRef.value = data[0].CODE
-                                                                this.txtRef.props.onValueChanged()
                                                             }
                                                             if(this.cmbDepot.value != '' && this.docLocked == false)
                                                             {

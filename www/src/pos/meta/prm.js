@@ -1135,7 +1135,7 @@ export const prm =
         ID :"ScaleBarcodeControl",
         VALUE : 
         {
-            active : true,
+            active : false,
             tolerans : 0.030
         },
         SPECIAL : "",
@@ -1159,6 +1159,22 @@ export const prm =
                     {type:"text",caption:"Tolerans",field:"tolerans",id:"txtPopScaleBarcodeControlTolerans"},
                 ]
             }
+        }
+    },
+    //Z Raporu
+    {
+        TYPE : 0,
+        ID :"ZReport",
+        VALUE : true,
+        SPECIAL : "",
+        PAGE : "pos",
+        ELEMENT : "",
+        APP : "POS",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Pos",
+            CAPTION : "Z Raporu"
         }
     },
     //#endregion

@@ -1261,6 +1261,7 @@ export const langTr =
             title : "Ürün Seçimi",
             clmCode :  "ÜRÜN KODU",
             clmName : "ÜRÜN ADI",
+            clmPrice : "ALIS FIYATI",
         },
         grdItemCount: 
         {
@@ -8351,6 +8352,7 @@ export const langTr =
         txtUnitPrice: "Birim Fiyatı",
         txtTotalHt : "İndirimli Tutar",
         txtDocNo : "Belgo No",
+        validDesign : "Lütfen Dizayn seçiniz.",
         msgDiscount:
         {
             title: "Dikkat",
@@ -8380,6 +8382,7 @@ export const langTr =
             title : "Ürün Seçimi",
             clmCode :  "ÜRÜN KODU",
             clmName : "ÜRÜN ADI",
+            clmPrice : "SATIŞ FİYATI"
         },
         pg_contractGrid : 
         {
@@ -9176,6 +9179,7 @@ export const langTr =
             clmCode :  "ÜRÜN KODU",
             clmName : "ÜRÜN ADI",
             clmMulticode : "TEDARİKÇİ KODU",
+            clmPrice : "ALIŞ FİYATI"
         },
         pg_dispatchGrid : 
         {
@@ -9474,6 +9478,7 @@ export const langTr =
         {
             title: "Birim Seçimi",
             btn01: "Onayla",
+            btnFactorSave : "Ürün Kartını Güncelle"
         },
         validRef :"Seri Boş Geçilemez",
         validRefNo : "Sıra Boş Geçilemez",
@@ -9678,6 +9683,7 @@ export const langTr =
             title : "Ürün Seçimi",
             clmCode :  "ÜRÜN KODU",
             clmName : "ÜRÜN ADI",
+            clmPrice : "SATIŞ FIYATI"
         },
         pg_dispatchGrid : 
         {
@@ -10790,6 +10796,7 @@ export const langTr =
         txtTotalHt : "İndirimli Tutar",
         txtDocNo : "Belgo No",
         cmbOrigin : "Menşei",
+        validDesign : "Lütfen Dizayn Seçin",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -12371,9 +12378,9 @@ export const langTr =
             clmDate : "TARIH",
             clmRef : "SERİ",
             clmRefNo : "SIRA",
-            clmInputName : "CARİ ADI",
-            clmInputCode  : "CARİ KODU",
-            clmTotal : "KDVLİ TOPLAM"
+            clmOutputName : "CARİ ADI",
+            clmOutputCode  : "CARİ KODU",
+            clmTotal : "KDVLİ TOPLAM",
         },
         pg_txtCustomerCode : 
         {
@@ -12388,6 +12395,7 @@ export const langTr =
             title : "Ürün Seçimi",
             clmCode :  "ÜRÜN KODU",
             clmName : "ÜRÜN ADI",
+            clmMulticode : "MULTICODE",
             clmPrice : "SATIŞ FİYATI"
         },
         pg_RebateGrid : 
@@ -12719,6 +12727,7 @@ export const langTr =
             title : "Ürün Seçimi",
             clmCode :  "ÜRÜN KODU",
             clmName : "ÜRÜN ADI",
+            clmPrice : "SATIŞ FIYATI"
         },
         grdSlsDispatch: 
         {
