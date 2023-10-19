@@ -2541,24 +2541,24 @@ export default class posDoc extends React.PureComponent
             {
                 let tmpPrint = e.print(pData)
 
-                // let tmpArr = [];
-                // for (let i = 0; i < tmpPrint.length; i++) 
-                // {
-                //     let tmpObj = tmpPrint[i]
-                //     if(typeof tmpPrint[i] == 'function')
-                //     {
-                //         tmpObj = tmpPrint[i]()
-                //     }
-                //     if(Array.isArray(tmpObj))
-                //     {
-                //         tmpArr.push(...tmpObj)
-                //     }
-                //     else if(typeof tmpObj == 'object')
-                //     {
-                //         tmpArr.push(tmpObj)
-                //     }
-                // }
-                // console.log(JSON.stringify(tmpArr))
+                let tmpArr = [];
+                for (let i = 0; i < tmpPrint.length; i++) 
+                {
+                    let tmpObj = tmpPrint[i]
+                    if(typeof tmpPrint[i] == 'function')
+                    {
+                        tmpObj = tmpPrint[i]()
+                    }
+                    if(Array.isArray(tmpObj))
+                    {
+                        tmpArr.push(...tmpObj)
+                    }
+                    else if(typeof tmpObj == 'object')
+                    {
+                        tmpArr.push(tmpObj)
+                    }
+                }
+                console.log(JSON.stringify(tmpArr))
                 
                 if(pType == 0)
                 {

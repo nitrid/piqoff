@@ -660,20 +660,20 @@ export default class salesOrdList extends React.PureComponent
                                     access={this.access.filter({ELEMENT:'cmbUser',USERS:this.user.CODE})}
                                     />
                                 </Item>
-                                    {/* txtTicketno */}
-                                    <Item>
-                                        <Label text={this.t("txtTicketno")} alignment="right" />
-                                        <NdTextBox id="txtTicketno" title={this.t("txtTicketno")} parent={this} simple={true} 
-                                            param={this.param.filter({ELEMENT:'txtTicketno',USERS:this.user.CODE})}
-                                            access={this.access.filter({ELEMENT:'txtTicketno',USERS:this.user.CODE})}
-                                            onValueChanged={(e)=>
-                                            {
-                                            
-                                            }}>
-                                        </NdTextBox>
-                                    </Item>
-                                       {/* txtItem */}
-                                       <Item>                                    
+                                {/* txtTicketno */}
+                                <Item>
+                                    <Label text={this.t("txtTicketno")} alignment="right" />
+                                    <NdTextBox id="txtTicketno" title={this.t("txtTicketno")} parent={this} simple={true} 
+                                        param={this.param.filter({ELEMENT:'txtTicketno',USERS:this.user.CODE})}
+                                        access={this.access.filter({ELEMENT:'txtTicketno',USERS:this.user.CODE})}
+                                        onValueChanged={(e)=>
+                                        {
+                                        
+                                        }}>
+                                    </NdTextBox>
+                                </Item>
+                                {/* txtItem */}
+                                <Item>                                    
                                     <Label text={this.t("txtItem")} alignment="right" />
                                     <NdTextBox id="txtItem" parent={this} simple={true} tabIndex={this.tabIndex}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
@@ -689,7 +689,7 @@ export default class salesOrdList extends React.PureComponent
                                                     this.pg_txtItem.show()
                                                     this.pg_txtItem.onClick = (data) =>
                                                     {
-                                                        this.txtItem.setState({value:data[0].CODE})
+                                                        this.txtItem.setState({value:data[0].CODE})  
                                                     }
                                                 }
                                             },
@@ -717,7 +717,7 @@ export default class salesOrdList extends React.PureComponent
                                         {
                                             select:
                                             {
-                                                query : "SELECT GUID,CODE,NAME FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
+                                                query : "SELECT GUID,CODE,NAME FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL) OR BARCODE LIKE @VAL",
                                                 param : ['VAL:string|50']
                                             },
                                             sql:this.core.sql
@@ -731,6 +731,7 @@ export default class salesOrdList extends React.PureComponent
                                                 icon:'more',
                                                 onClick:()=>
                                                 {
+                                                    console.log('click1')
                                                 }
                                             }
                                         ]
