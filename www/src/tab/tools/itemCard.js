@@ -55,6 +55,7 @@ export default class NbItemCard extends NbBase
             this.cmbUnit.value = tmpDt[0].UNIT
             let tmpPrice = Number(tmpDt[0].PRICE * tmpDt[0].UNIT_FACTOR).round(3)
             this.data.UNIT = tmpDt[0].UNIT
+            this.data.UNIT_FACTOR = tmpDt[0].UNIT_FACTOR
             this.data.QUANTITY = tmpDt[0].QUANTITY / tmpDt[0].UNIT_FACTOR
             this.setState({price:tmpPrice})
         }
