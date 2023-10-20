@@ -608,7 +608,7 @@ export default class posDoc extends React.PureComponent
             let tmpDt = new datatable(); 
             tmpDt.selectCmd = 
             {
-                query : "SELECT TOP 1 *,@CODE AS INPUT FROM ITEMS_POS_VW_01 WHERE CODE = @CODE OR BARCODE = @CODE AND STATUS = 1",
+                query : "SELECT TOP 1 *,@CODE AS INPUT FROM ITEMS_POS_VW_01 WHERE CODE = @CODE OR BARCODE = @CODE AND STATUS = 1 ORDER BY UNIT_TYPE ASC",
                 param : ['CODE:string|25'],
                 value: [pCode],
                 local : 
