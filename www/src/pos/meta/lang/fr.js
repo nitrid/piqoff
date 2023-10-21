@@ -348,7 +348,7 @@ export const langFr =
     PopBalanceCounterDesc :
     {
         head : "Description de Contrôle de Balance",
-        title : "Veuillez Entrer la Raison de la Suppression"
+        title : "Veuillez Entrer la Raison du Contrôle de Balance"
     },
     popItemReturnDesc : 
     {

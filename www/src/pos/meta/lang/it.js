@@ -348,7 +348,7 @@ export const langIt =
     PopBalanceCounterDesc :
     {
         head : "Descrizione Controllo Bilancia",
-        title : "Si prega di inserire il motivo dell'eliminazione"
+        title : "Inserisci il motivo del controllo della bilancia"
     },
     popItemReturnDesc:
     {

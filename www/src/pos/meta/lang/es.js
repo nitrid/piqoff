@@ -348,7 +348,7 @@ export const langEs =
     PopBalanceCounterDesc :
     {
         head : "Descripción de Control de Báscula",
-        title : "Por favor, introduzca el motivo de la eliminación"
+        title : "Por favor, introduzca el motivo del control de la báscula"
     },
     popItemReturnDesc : 
     {

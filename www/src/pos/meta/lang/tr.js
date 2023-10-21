@@ -348,7 +348,7 @@ export const langTr =
     popBalanceCounterDesc : 
     {
         head : "Terazi Kontrol Açıklamasi",
-        title : "Lütfen Silme Nedeninizi Giriniz"
+        title : "Terazi Kontrol Nedeninizi Giriniz"
     },
     popItemReturnDesc : 
     {

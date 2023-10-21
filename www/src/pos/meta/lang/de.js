@@ -348,7 +348,7 @@ export const langDe =
     PopBalanceCounterDesc :
     {
         head : "Waagekontrollbeschreibung",
-        title : "Bitte geben Sie den Löschungsgrund ein"
+        title : "Bitte geben Sie den Grund für die Waagenkontrolle ein"
     },
     popItemReturnDesc: 
     {

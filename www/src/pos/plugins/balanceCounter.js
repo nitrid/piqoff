@@ -166,27 +166,42 @@ posDoc.prototype.getItem = async function(pCode)
                             {
                                 id:'msgNotBarcodeWeighing',showTitle:true,title:this.lang.t("msgNotBarcodeWeighing.title"),showCloseButton:true,width:'550px',height:'250px',
                                 button:[{id:"btn02",caption:this.lang.t("msgNotBarcodeWeighing.btn02"),location:'after'},{id:"btn01",caption:this.lang.t("msgNotBarcodeWeighing.btn01"),location:'before'}],
-                                content:(
+                                content:
+                                (
                                     <div style={{textAlign:"center",fontSize:"20px"}}>
                                         <div className="row">{this.lang.t("msgNotBarcodeWeighing.msg")}</div>
                                         <div className="row" style={{textAlign:"center",fontSize:"20px",padding:"10px"}}>
                                             <div className="col-12" style={{ padding: "5px" }}>
-                                                <span style={{ fontWeight: tmpQuantity > tmpDQuantity ? "bold" : "normal" }}>{this.lang.t("msgNotBarcodeWeighing.msgTicket")}{tmpQuantity} kg</span>
+                                                <span style={{fontWeight: tmpQuantity > tmpDQuantity ? "bold" : "normal" }}>{this.lang.t("msgNotBarcodeWeighing.msgTicket")}{tmpQuantity} kg</span>
                                             </div>
                                             <div className="col-12"style={{padding:"5px"}}>{this.lang.t("msgNotBarcodeWeighing.msgBarkod")}{tmpDQuantity} kg</div>
-                                            <div className="col-12">  
-                                                <span style={{ color: resultQuantity > tmpTolerans ? "red" : "red"}}>{this.lang.t("msgNotBarcodeWeighing.msgDifference")}{resultQuantity} kg</span>
+                                            <div className="col-12">
+                                                <span style={{color: resultQuantity > tmpTolerans ? "red" : "red"}}>{this.lang.t("msgNotBarcodeWeighing.msgDifference")}{resultQuantity} kg</span>
                                             </div>
                                         </div>
                                     </div>
                                 )
                             }
-                            await dialog(tmpConfObj);
-                            this.popBalanceCounterDesc.show()
-                            this.loading.current.instance.hide()
-                            return
+                            let tmpConfResult = await dialog(tmpConfObj)
+                            if(tmpConfResult == 'btn01')
+                            {
+                                this.loading.current.instance.hide()
+                                return
+                            }
+                            else
+                            {
+                                let tmpBalResult = await this.popBalanceCounterDesc.show()
+                                if(typeof tmpBalResult != 'undefined')
+                                {
+                                    await this.descSave("BALANCE COUNTER",tmpBalResult,"00000000-0000-0000-0000-000000000000")
+                                }
+                                else
+                                {
+                                    this.loading.current.instance.hide()
+                                    return
+                                }
+                            }
                         }
-     
                     }
                     else
                     {
