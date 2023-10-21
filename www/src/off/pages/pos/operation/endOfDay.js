@@ -49,89 +49,88 @@ export default class endOfDay extends React.PureComponent
         this.reactWizardRef = React.createRef();
 
         this.finishButtonClick = this.finishButtonClick.bind(this)
-        ReactWizard.defaultProps = {
-          validate: true,
-          previousButtonText: this.t("previous"),
-          finishButtonText: this.t("finish"),
-          nextButtonText: this.t("next"),
-          color: "primary",
-          progressbar: false
-        };    
+        ReactWizard.defaultProps = 
+        {
+            validate: true,
+            previousButtonText: this.t("previous"),
+            finishButtonText: this.t("finish"),
+            nextButtonText: this.t("next"),
+            color: "primary",
+            progressbar: false
+        };
+
         this.steps = [
-            {
-              stepName: this.t("start"),
-              stepIcon: "tim-icons icon-single-02",
-              component: this.stepStart(),
-            },
-            {
-              stepName: this.t("advance"),
-              stepIcon: "tim-icons icon-settings-gear-63",
-              component: this.stepAdvance(),
-            },
-            {
-              stepName: this.t("cash"),
-              stepIcon: "tim-icons icon-delivery-fast",
-              component: this.stepCash()
-            }, 
-            {
-              stepName: this.t("debitCard"),
-              stepIcon: "tim-icons icon-settings-gear-63",
-              component: this.stepCreditCard()
-            },
-            {
-              stepName: this.t("check"),
-              stepIcon: "tim-icons icon-settings-gear-63",
-              component: this.stepCheck()
-            },
-            {
-              stepName: this.t("ticketRest"),
-              stepIcon: "tim-icons icon-settings-gear-63",
-              component: this.stepRestorant()
-            },
-          ];
+        {
+            stepName: this.t("start"),
+            stepIcon: "tim-icons icon-single-02",
+            component: this.stepStart(),
+        },
+        {
+            stepName: this.t("advance"),
+            stepIcon: "tim-icons icon-settings-gear-63",
+            component: this.stepAdvance(),
+        },
+        {
+            stepName: this.t("cash"),
+            stepIcon: "tim-icons icon-delivery-fast",
+            component: this.stepCash()
+        }, 
+        {
+            stepName: this.t("debitCard"),
+            stepIcon: "tim-icons icon-settings-gear-63",
+            component: this.stepCreditCard()
+        },
+        {
+            stepName: this.t("check"),
+            stepIcon: "tim-icons icon-settings-gear-63",
+            component: this.stepCheck()
+        },
+        {
+            stepName: this.t("ticketRest"),
+            stepIcon: "tim-icons icon-settings-gear-63",
+            component: this.stepRestorant()
+        }];
 
 
-          this.Cash = '';
-          this.DebitCard = '';
-          this.Check = '';
-          this.TicketRest =  ''
-          this.color =
-          {
+        this.Cash = '';
+        this.DebitCard = '';
+        this.Check = '';
+        this.TicketRest =  ''
+        this.color =
+        {
             cash :"green",
             card :"green",
             check :"green",
             rest :"green",
-          }
-          this.paymentData = new datatable
-
+        }
+        this.paymentData = new datatable
     }
     async componentDidMount()
     {
         await this.core.util.waitUntil(0)
         this.init();
-        console.log(this.reactWizardRef.current)
     }
     async init()
     {
-      this.dtDocDate.value = moment(new Date()).format("YYYY-MM-DD")
-      let tmpSource =
-      {
-          source : 
-          {
-              groupBy : this.groupList,
-              select : 
-              {
-                  query : "SELECT *,CONVERT(NVARCHAR,DOC_DATE,104) AS DATE,SUBSTRING(CONVERT(NVARCHAR(50),GUID),20,25) AS TICKET_ID, " + 
-                  "ISNULL((SELECT TOP 1 DESCRIPTION FROM POS_EXTRA WHERE POS_EXTRA.POS_GUID =POS_VW_01.GUID AND TAG = 'PARK DESC' ),'') AS DESCRIPTION FROM POS_VW_01 WHERE STATUS = 0 ORDER BY DOC_DATE "
-              },
-              sql : this.core.sql
-          }
-      }
-      await this.grdOpenTike.dataRefresh(tmpSource)
-      if(this.grdOpenTike.data.datatable.length > 0)
-      {
-        this.popOpenTike.show()
-      }
+        this.dtDocDate.value = moment(new Date()).format("YYYY-MM-DD")
+        let tmpSource =
+        {
+            source : 
+            {
+                groupBy : this.groupList,
+                select : 
+                {
+                    query : "SELECT *,CONVERT(NVARCHAR,DOC_DATE,104) AS DATE,SUBSTRING(CONVERT(NVARCHAR(50),GUID),20,25) AS TICKET_ID, " + 
+                    "ISNULL((SELECT TOP 1 DESCRIPTION FROM POS_EXTRA WHERE POS_EXTRA.POS_GUID =POS_VW_01.GUID AND TAG = 'PARK DESC' ),'') AS DESCRIPTION FROM POS_VW_01 WHERE STATUS = 0 ORDER BY DOC_DATE "
+                },
+                sql : this.core.sql
+            }
+        }
+        await this.grdOpenTike.dataRefresh(tmpSource)
+        if(this.grdOpenTike.data.datatable.length > 0)
+        {
+            this.popOpenTike.show()
+        }
     }
     async btnGetDetail(pGuid)
     {
@@ -194,291 +193,277 @@ export default class endOfDay extends React.PureComponent
     }
     async finishButtonClick()
     {
-      this.message = this.txtAdvance.value.toLocaleString('en-IN', {style: 'currency',currency: 'eur', minimumFractionDigits: 2})
-      this.Advance = this.txtAdvance.value
-      let tmpQuery = 
-      {
-          query : "SELECT   " +
-                  "MAX(DOC_DATE) AS DOC_DATE,PAY_TYPE AS PAY_TYPE,TYPE AS TYPE,  " +
-                  "PAY_TYPE_NAME AS PAY_TYPE_NAME,   " +
-                  "CASE WHEN TYPE = 0 THEN SUM(AMOUNT - CHANGE) ELSE SUM(AMOUNT) * -1 END AS AMOUNT   " +
-                  "FROM POS_PAYMENT_VW_01 WHERE DOC_DATE = @DOC_DATE AND DEVICE = @DEVICE AND STATUS = 1   " +
-                  "GROUP BY PAY_TYPE_NAME,PAY_TYPE,TYPE " ,
-          param : ['DOC_DATE:date','DEVICE:string|50'],
-          value : [this.dtDocDate.value,this.cmbSafe.value]
-      }
-      let tmpData = await this.core.sql.execute(tmpQuery) 
-      if(tmpData.result.recordset.length > 0)
-      {
-        this.paymentData.clear()
-        for (let i = 0; i < tmpData.result.recordset.length; i++) 
+        this.message = this.txtAdvance.value.toLocaleString('en-IN', {style: 'currency',currency: 'eur', minimumFractionDigits: 2})
+        this.Advance = this.txtAdvance.value
+        let tmpQuery = 
         {
-          this.paymentData.push(tmpData.result.recordset[i])
+            query : "SELECT   " +
+                    "MAX(DOC_DATE) AS DOC_DATE,PAY_TYPE AS PAY_TYPE,TYPE AS TYPE,  " +
+                    "PAY_TYPE_NAME AS PAY_TYPE_NAME,   " +
+                    "CASE WHEN TYPE = 0 THEN SUM(AMOUNT - CHANGE) ELSE SUM(AMOUNT) * -1 END AS AMOUNT   " +
+                    "FROM POS_PAYMENT_VW_01 WHERE DOC_DATE = @DOC_DATE AND DEVICE = @DEVICE AND STATUS = 1   " +
+                    "GROUP BY PAY_TYPE_NAME,PAY_TYPE,TYPE " ,
+            param : ['DOC_DATE:date','DEVICE:string|50'],
+            value : [this.dtDocDate.value,this.cmbSafe.value]
         }
-      }
-      if(parseFloat(this.paymentData.where({'PAY_TYPE':0}).sum('AMOUNT').toFixed(2)) ==  parseFloat((this.txtCash.value - this.txtAdvance.value).toFixed(2)))
-      {
-        this.color.cash = "green"
-        this.Cash = this.t("txtReal")
-        this.setState({Cash:this.t("txtReal")})
-      }
-      else
-      {
-        let tmpCash
-        tmpCash = (parseFloat((parseFloat(this.txtCash.value) - parseFloat(this.txtAdvance.value).toFixed(2))) - parseFloat((this.paymentData.where({'PAY_TYPE':0}).sum('AMOUNT').toFixed(2))))
-        let tmpCashValue
-        if(tmpCash > 0)
+        let tmpData = await this.core.sql.execute(tmpQuery) 
+        if(tmpData.result.recordset.length > 0)
         {
-          this.color.cash = "blue"
-          tmpCashValue = '+' + tmpCash.toLocaleString('en-IN', {style: 'currency',currency: 'eur', minimumFractionDigits: 2})
+            this.paymentData.clear()
+            for (let i = 0; i < tmpData.result.recordset.length; i++) 
+            {
+                this.paymentData.push(tmpData.result.recordset[i])
+            }
+        }
+        if(parseFloat(this.paymentData.where({'PAY_TYPE':0}).sum('AMOUNT').toFixed(2)) ==  parseFloat((this.txtCash.value - this.txtAdvance.value).toFixed(2)))
+        {
+            this.color.cash = "green"
+            this.Cash = this.t("txtReal")
+            this.setState({Cash:this.t("txtReal")})
         }
         else
         {
-          this.color.cash = "red"
-          tmpCashValue = tmpCash.toLocaleString('en-IN', {style: 'currency',currency: 'eur', minimumFractionDigits: 2})
+            let tmpCash
+            tmpCash = (parseFloat((parseFloat(this.txtCash.value) - parseFloat(this.txtAdvance.value).toFixed(2))) - parseFloat((this.paymentData.where({'PAY_TYPE':0}).sum('AMOUNT').toFixed(2))))
+            let tmpCashValue
+            if(tmpCash > 0)
+            {
+                this.color.cash = "blue"
+                tmpCashValue = '+' + tmpCash.toLocaleString('en-IN', {style: 'currency',currency: 'eur', minimumFractionDigits: 2})
+            }
+            else
+            {
+                this.color.cash = "red"
+                tmpCashValue = tmpCash.toLocaleString('en-IN', {style: 'currency',currency: 'eur', minimumFractionDigits: 2})
+            }
+            this.Cash = tmpCashValue
+            this.setState({Cash:tmpCashValue})
         }
-        this.Cash = tmpCashValue
-        this.setState({Cash:tmpCashValue})
-      }
 
-      if((this.paymentData.where({'PAY_TYPE':1}).sum('AMOUNT')).toFixed(2) ==  (this.txtCreditCard.value).toFixed(2))
-      {
-        this.color.card = "green"
-        this.DebitCard = this.t("txtReal")
-        this.setState({DebitCard:this.t("txtReal")})
-      }
-      else 
-      {
-        let tmpDebit
-        tmpDebit = (this.txtCreditCard.value - parseFloat(this.paymentData.where({'PAY_TYPE':1}).sum('AMOUNT'))).toFixed(2)
-        let tmpDebitValue
-        if(tmpDebit > 0)
+        if((this.paymentData.where({'PAY_TYPE':1}).sum('AMOUNT')).toFixed(2) ==  (this.txtCreditCard.value).toFixed(2))
         {
-          this.color.card = "blue"
-          tmpDebitValue = '+' + tmpDebit.toLocaleString('en-IN', {style: 'currency',currency: 'eur', minimumFractionDigits: 2})
+            this.color.card = "green"
+            this.DebitCard = this.t("txtReal")
+            this.setState({DebitCard:this.t("txtReal")})
         }
-        else
+        else 
         {
-          this.color.card = "red"
-          tmpDebitValue = tmpDebit.toLocaleString('en-IN', {style: 'currency',currency: 'eur', minimumFractionDigits: 2})
+            let tmpDebit = (this.txtCreditCard.value - parseFloat(this.paymentData.where({'PAY_TYPE':1}).sum('AMOUNT'))).toFixed(2)
+            let tmpDebitValue
+            if(tmpDebit > 0)
+            {
+                this.color.card = "blue"
+                tmpDebitValue = '+' + tmpDebit.toLocaleString('en-IN', {style: 'currency',currency: 'eur', minimumFractionDigits: 2})
+            }
+            else
+            {
+                this.color.card = "red"
+                tmpDebitValue = tmpDebit.toLocaleString('en-IN', {style: 'currency',currency: 'eur', minimumFractionDigits: 2})
+            }
+            this.DebitCard = tmpDebitValue
+            this.setState({DebitCard:tmpDebitValue})
         }
-        this.DebitCard = tmpDebitValue
-        this.setState({DebitCard:tmpDebitValue})
-      }
-      if(parseFloat((this.paymentData.where({'PAY_TYPE':2}).sum('AMOUNT')).toFixed(2)) ==  this.txtCheck.value)
-      {
-        this.color.check = "green"
-        this.Check = this.t("txtReal")
-        this.setState({Check:this.t("txtReal")})
-      }
-      else 
-      {
-        let tmpCheck
-        tmpCheck = parseFloat((this.txtCheck.value - parseFloat(this.paymentData.where({'PAY_TYPE':2}).sum('AMOUNT'))).toFixed(2))
-        let tmpCheckValue
-        if(tmpCheck > 0)
+        if(parseFloat((this.paymentData.where({'PAY_TYPE':2}).sum('AMOUNT')).toFixed(2)) ==  this.txtCheck.value)
         {
-          this.color.check = "blue"
-          tmpCheckValue = '+' + tmpCheck.toLocaleString('en-IN', {style: 'currency',currency: 'eur', minimumFractionDigits: 2})
+            this.color.check = "green"
+            this.Check = this.t("txtReal")
+            this.setState({Check:this.t("txtReal")})
         }
-        else
+        else 
         {
-          this.color.check = "red"
-          tmpCheckValue = tmpCheck.toLocaleString('en-IN', {style: 'currency',currency: 'eur', minimumFractionDigits: 2})
+            let tmpCheck = parseFloat((this.txtCheck.value - parseFloat(this.paymentData.where({'PAY_TYPE':2}).sum('AMOUNT'))).toFixed(2))
+            let tmpCheckValue
+            if(tmpCheck > 0)
+            {
+                this.color.check = "blue"
+                tmpCheckValue = '+' + tmpCheck.toLocaleString('en-IN', {style: 'currency',currency: 'eur', minimumFractionDigits: 2})
+            }
+            else
+            {
+                this.color.check = "red"
+                tmpCheckValue = tmpCheck.toLocaleString('en-IN', {style: 'currency',currency: 'eur', minimumFractionDigits: 2})
+            }
+            this.Check = tmpCheckValue
+            this.setState({Check:tmpCheckValue})
         }
-        this.Check = tmpCheckValue
-        this.setState({Check:tmpCheckValue})
-      }
 
-      if(parseFloat(this.paymentData.where({'PAY_TYPE':3}).sum('AMOUNT')) ==  this.txtRestorant.value)
-      {
-        this.color.rest = "green"
-        this.TicketRest = this.t("txtReal")
-        this.setState({TicketRest:this.t("txtReal")})
-      }
-      else 
-      {
-        let tmpTikcet
-        tmpTikcet = parseFloat((this.txtRestorant.value - parseFloat(this.paymentData.where({'PAY_TYPE':3}).sum('AMOUNT'))).toFixed(2))
-        let tmpTicketValue
-        if(tmpTikcet > 0)
+        if(parseFloat(this.paymentData.where({'PAY_TYPE':3}).sum('AMOUNT')) ==  this.txtRestorant.value)
         {
-          this.color.rest = "blue"
-          tmpTicketValue = '+' + tmpTikcet.toLocaleString('en-IN', {style: 'currency',currency: 'eur', minimumFractionDigits: 2})
+            this.color.rest = "green"
+            this.TicketRest = this.t("txtReal")
+            this.setState({TicketRest:this.t("txtReal")})
         }
-        else
+        else 
         {
-          this.color.rest = "red"
-          tmpTicketValue = tmpTikcet.toLocaleString('en-IN', {style: 'currency',currency: 'eur', minimumFractionDigits: 2})
+            let tmpTikcet = parseFloat((this.txtRestorant.value - parseFloat(this.paymentData.where({'PAY_TYPE':3}).sum('AMOUNT'))).toFixed(2))
+            let tmpTicketValue
+            if(tmpTikcet > 0)
+            {
+                this.color.rest = "blue"
+                tmpTicketValue = '+' + tmpTikcet.toLocaleString('en-IN', {style: 'currency',currency: 'eur', minimumFractionDigits: 2})
+            }
+            else
+            {
+                this.color.rest = "red"
+                tmpTicketValue = tmpTikcet.toLocaleString('en-IN', {style: 'currency',currency: 'eur', minimumFractionDigits: 2})
+            }
+            this.TicketRest = tmpTicketValue
+            this.setState({TicketRest:tmpTikcet})
         }
-        this.TicketRest = tmpTicketValue
-        this.setState({TicketRest:tmpTikcet})
-      }
-      this.enddayObj.clearAll()
-      let tmpSafeQuery = 
-      {
-          query : "SELECT GUID FROM SAFE_VW_01 WHERE CODE = @INPUT_CODE",
-          param : ['INPUT_CODE:string|50'],
-          value : [this.cmbSafe.value]
-      }
-      let tmpSafeData = await this.core.sql.execute(tmpSafeQuery) 
-      let tmpSafe = tmpSafeData.result.recordset[0].GUID
-      let tmpEndday = {...this.enddayObj.empty}
-      tmpEndday.CASH = this.txtCash.value
-      tmpEndday.CREDIT = this.txtCreditCard.value
-      tmpEndday.CHECK = this.txtCheck.value
-      tmpEndday.TICKET = this.txtRestorant.value
-      tmpEndday.ADVANCE = this.txtAdvance.value
-      tmpEndday.SAFE = tmpSafe
-      
-      this.enddayObj.addEmpty(tmpEndday)
-      console.log(this.enddayObj.dt())
-      this.enddayObj.save()
+        this.enddayObj.clearAll()
+        let tmpSafeQuery = 
+        {
+            query : "SELECT GUID FROM SAFE_VW_01 WHERE CODE = @INPUT_CODE",
+            param : ['INPUT_CODE:string|50'],
+            value : [this.cmbSafe.value]
+        }
+        let tmpSafeData = await this.core.sql.execute(tmpSafeQuery) 
+        let tmpSafe = tmpSafeData.result.recordset[0].GUID
+        let tmpEndday = {...this.enddayObj.empty}
+        tmpEndday.CASH = this.txtCash.value
+        tmpEndday.CREDIT = this.txtCreditCard.value
+        tmpEndday.CHECK = this.txtCheck.value
+        tmpEndday.TICKET = this.txtRestorant.value
+        tmpEndday.ADVANCE = this.txtAdvance.value
+        tmpEndday.SAFE = tmpSafe
+        
+        this.enddayObj.addEmpty(tmpEndday)
+        this.enddayObj.save()
 
-      this.popFinish.show()
+        this.popFinish.show()
     }
     stepStart()
     {
-      return (
-        <Form colCount={2}>
-          <Item>
-              <Label text={this.t("dtDocDate")} alignment="right" />
-              <NdDatePicker simple={true}  parent={this} id={"dtDocDate"}
-               onValueChanged={(async(e)=>
-                {
-                  if(this.cmbSafe.value != '')
-                  {
-                    let tmpQuery = 
+        return (
+            <Form colCount={2}>
+                <Item>
+                    <Label text={this.t("dtDocDate")} alignment="right" />
+                    <NdDatePicker simple={true}  parent={this} id={"dtDocDate"}
+                    onValueChanged={(async(e)=>
                     {
-                      query : "SELECT ROUND((SUM(AMOUNT) - ISNULL((SELECT SUM(AMOUNT) FROM DOC_CUSTOMER_VW_01 AS DOCOUT WHERE DOCOUT.OUTPUT = DOCIN.INPUT AND TYPE = 2 AND DOC_TYPE = 201 AND PAY_TYPE = 20),0)),2) AS AMOUNT FROM DOC_CUSTOMER_VW_01 AS DOCIN " + 
-                      "WHERE INPUT_CODE = @INPUT_CODE AND TYPE = 2 AND DOC_TYPE = 201 AND PAY_TYPE = 20 GROUP BY INPUT", 
-                        param : ['INPUT_CODE:string|50'],
-                        value : [this.cmbSafe.value]
-                    }
-                    let tmpData = await this.core.sql.execute(tmpQuery) 
-                    console.log(tmpData)
-                    if(tmpData.result.recordset.length > 0)
+                        if(this.cmbSafe.value != '')
+                        {
+                            let tmpQuery = 
+                            {
+                                query : "SELECT ROUND((SUM(AMOUNT) - ISNULL((SELECT SUM(AMOUNT) FROM DOC_CUSTOMER_VW_01 AS DOCOUT WHERE DOCOUT.OUTPUT = DOCIN.INPUT AND TYPE = 2 AND DOC_TYPE = 201 AND PAY_TYPE = 20),0)),2) AS AMOUNT FROM DOC_CUSTOMER_VW_01 AS DOCIN " + 
+                                        "WHERE INPUT_CODE = @INPUT_CODE AND TYPE = 2 AND DOC_TYPE = 201 AND PAY_TYPE = 20 GROUP BY INPUT", 
+                                param : ['INPUT_CODE:string|50'],
+                                value : [this.cmbSafe.value]
+                            }
+                            let tmpData = await this.core.sql.execute(tmpQuery) 
+                            
+                            if(tmpData.result.recordset.length > 0)
+                            {
+                                this.txtAdvance.value = tmpData.result.recordset[0].AMOUNT 
+                            }
+                        }
+                    }).bind(this)}
+                    />
+                </Item>
+                <Item>
+                    <Label text={this.t("cmbSafe")} alignment="right" />
+                    <NdSelectBox simple={true} parent={this} id="cmbSafe" notRefresh = {true}
+                    displayExpr="NAME"                       
+                    valueExpr="CODE"
+                    showClearButton={true}
+                    value=""
+                    data={{source:{select:{query : "SELECT NAME,CODE,GUID FROM [dbo].[SAFE_VW_01] WHERE TYPE = 2"},sql:this.core.sql}}}
+                    param={this.param.filter({ELEMENT:'cmbSafe',USERS:this.user.CODE})}
+                    access={this.access.filter({ELEMENT:'cmbSafe',USERS:this.user.CODE})}
+                    onValueChanged={(async(e)=>
                     {
-                      this.txtAdvance.value =tmpData.result.recordset[0].AMOUNT 
-                    }
-                  }
-                  
-                }).bind(this)}
-              >
-              </NdDatePicker>
-          </Item>
-          <Item>
-                <Label text={this.t("cmbSafe")} alignment="right" />
-                <NdSelectBox simple={true} parent={this} id="cmbSafe" notRefresh = {true}
-                displayExpr="NAME"                       
-                valueExpr="CODE"
-                showClearButton={true}
-                value=""
-                data={{source:{select:{query : "SELECT NAME,CODE,GUID FROM [dbo].[SAFE_VW_01] WHERE TYPE = 2"},sql:this.core.sql}}}
-                param={this.param.filter({ELEMENT:'cmbSafe',USERS:this.user.CODE})}
-                access={this.access.filter({ELEMENT:'cmbSafe',USERS:this.user.CODE})}
-                onValueChanged={(async(e)=>
-                  {
-                    let tmpQuery = 
-                    {
-                        query : "SELECT ROUND((SUM(AMOUNT) - ISNULL((SELECT SUM(AMOUNT) FROM DOC_CUSTOMER_VW_01 AS DOCOUT WHERE DOCOUT.OUTPUT = DOCIN.INPUT AND TYPE = 2 AND DOC_TYPE = 201 AND PAY_TYPE = 20),0)),2) AS AMOUNT FROM DOC_CUSTOMER_VW_01 AS DOCIN " + 
-                        "WHERE INPUT_CODE = @INPUT_CODE  AND TYPE = 2 AND DOC_TYPE = 201 AND PAY_TYPE = 20 GROUP BY INPUT", 
-                        param : ['INPUT_CODE:string|50'],
-                        value : [this.cmbSafe.value]
-                    }
-                    let tmpData = await this.core.sql.execute(tmpQuery) 
-                    console.log(tmpData)
-                    if(tmpData.result.recordset.length > 0)
-                    {
-                      this.txtAdvance.value =tmpData.result.recordset[0].AMOUNT 
-                    }
-                  }).bind(this)}
-                >
-                </NdSelectBox>
-          </Item>
-        </Form>
-      )
+                        let tmpQuery = 
+                        {
+                            query : "SELECT ROUND((SUM(AMOUNT) - ISNULL((SELECT SUM(AMOUNT) FROM DOC_CUSTOMER_VW_01 AS DOCOUT WHERE DOCOUT.OUTPUT = DOCIN.INPUT AND TYPE = 2 AND DOC_TYPE = 201 AND PAY_TYPE = 20),0)),2) AS AMOUNT FROM DOC_CUSTOMER_VW_01 AS DOCIN " + 
+                                    "WHERE INPUT_CODE = @INPUT_CODE  AND TYPE = 2 AND DOC_TYPE = 201 AND PAY_TYPE = 20 GROUP BY INPUT", 
+                            param : ['INPUT_CODE:string|50'],
+                            value : [this.cmbSafe.value]
+                        }
+                        let tmpData = await this.core.sql.execute(tmpQuery) 
+                        if(tmpData.result.recordset.length > 0)
+                        {
+                            this.txtAdvance.value = tmpData.result.recordset[0].AMOUNT 
+                        }
+                    }).bind(this)}
+                    />
+                </Item>
+            </Form>
+        )
     }
     stepAdvance()
     {
-      return (
-        <Form colCount={2}>
-          <EmptyItem/>
-          <Item>
-              <Label text={this.t("txtAdvance")} alignment="right" />
-              <NdNumberBox id="txtAdvance" parent={this} simple={true} readOnly={true} 
-              param={this.param.filter({ELEMENT:'txtAdvance',USERS:this.user.CODE})}
-              access={this.access.filter({ELEMENT:'txtAdvance',USERS:this.user.CODE})}
-              >
-              </NdNumberBox>
-          </Item>
-        </Form>
-      )
-      
+        return (
+            <Form colCount={2}>
+                <EmptyItem/>
+                <Item>
+                        <Label text={this.t("txtAdvance")} alignment="right" />
+                        <NdNumberBox id="txtAdvance" parent={this} simple={true} readOnly={true} 
+                        param={this.param.filter({ELEMENT:'txtAdvance',USERS:this.user.CODE})}
+                        access={this.access.filter({ELEMENT:'txtAdvance',USERS:this.user.CODE})}
+                        />
+                </Item>
+            </Form>
+        )
     }
     stepCash()
     {
-      return (
-        <Form colCount={2}>
-          <EmptyItem/>
-          <Item>
-              <Label text={this.t("txtCash")} alignment="right" />
-              <NdNumberBox id="txtCash" parent={this} simple={true} 
-              param={this.param.filter({ELEMENT:'txtCash',USERS:this.user.CODE})}
-              access={this.access.filter({ELEMENT:'txtCash',USERS:this.user.CODE})}
-              >
-              </NdNumberBox>
-          </Item>
-        </Form>
-      )
+        return (
+            <Form colCount={2}>
+                <EmptyItem/>
+                <Item>
+                    <Label text={this.t("txtCash")} alignment="right" />
+                    <NdNumberBox id="txtCash" parent={this} simple={true} 
+                    param={this.param.filter({ELEMENT:'txtCash',USERS:this.user.CODE})}
+                    access={this.access.filter({ELEMENT:'txtCash',USERS:this.user.CODE})}
+                    />
+                </Item>
+            </Form>
+        )
     }
     stepCreditCard()
     {
-      return (
-        <Form colCount={2}>
-          <EmptyItem/>
-          <Item>
-              <Label text={this.t("txtCreditCard")} alignment="right" />
-              <NdNumberBox id="txtCreditCard" parent={this} simple={true}  
-              param={this.param.filter({ELEMENT:'txtCreditCard',USERS:this.user.CODE})}
-              access={this.access.filter({ELEMENT:'txtCreditCard',USERS:this.user.CODE})}
-              >
-              </NdNumberBox>
-          </Item>
-        </Form>      
-      )
+        return (
+            <Form colCount={2}>
+                <EmptyItem/>
+                <Item>
+                    <Label text={this.t("txtCreditCard")} alignment="right" />
+                    <NdNumberBox id="txtCreditCard" parent={this} simple={true}  
+                    param={this.param.filter({ELEMENT:'txtCreditCard',USERS:this.user.CODE})}
+                    access={this.access.filter({ELEMENT:'txtCreditCard',USERS:this.user.CODE})}
+                    />
+                </Item>
+            </Form>      
+        )
     }
     stepCheck()
     {
-      return (
-        <Form colCount={2}>
-          <EmptyItem/>
-          <Item>
-              <Label text={this.t("txtCheck")} alignment="right" />
-              <NdNumberBox id="txtCheck" parent={this} simple={true} 
-              param={this.param.filter({ELEMENT:'txtCheck',USERS:this.user.CODE})}
-              access={this.access.filter({ELEMENT:'txtCheck',USERS:this.user.CODE})}
-              >
-              </NdNumberBox>
-          </Item>
-        </Form>      
-      )
+        return (
+            <Form colCount={2}>
+                <EmptyItem/>
+                <Item>
+                    <Label text={this.t("txtCheck")} alignment="right" />
+                    <NdNumberBox id="txtCheck" parent={this} simple={true} 
+                    param={this.param.filter({ELEMENT:'txtCheck',USERS:this.user.CODE})}
+                    access={this.access.filter({ELEMENT:'txtCheck',USERS:this.user.CODE})}
+                    />
+                </Item>
+            </Form>      
+        )
     }
     stepRestorant()
     {
-      return (
-        <Form colCount={2}>
-          <EmptyItem/>
-          <Item>
-              <Label text={this.t("txtRestorant")} alignment="right" />
-              <NdNumberBox id="txtRestorant" parent={this} simple={true}
-              param={this.param.filter({ELEMENT:'txtRestorant',USERS:this.user.CODE})}
-              access={this.access.filter({ELEMENT:'txtRestorant',USERS:this.user.CODE})}
-              >
-              </NdNumberBox>
-          </Item>
-        </Form>      
-      )
+        return (
+            <Form colCount={2}>
+                <EmptyItem/>
+                <Item>
+                    <Label text={this.t("txtRestorant")} alignment="right" />
+                    <NdNumberBox id="txtRestorant" parent={this} simple={true}
+                    param={this.param.filter({ELEMENT:'txtRestorant',USERS:this.user.CODE})}
+                    access={this.access.filter({ELEMENT:'txtRestorant',USERS:this.user.CODE})}
+                    />
+                </Item>
+            </Form>      
+        )
     }
     async safeTransfer()
     {
@@ -492,81 +477,82 @@ export default class endOfDay extends React.PureComponent
         let tmpSafe = tmpData.result.recordset[0].GUID
         if(this.docObj.dt().length == 0)
         {
-          this.docObj.addEmpty()
-          this.docObj.dt()[0].TYPE = 2
-          this.docObj.dt()[0].DOC_TYPE = 201
-          this.docObj.dt()[0].REF = 'POS'
-          this.docObj.dt()[0].REF_NO = Math.floor(Date.now() / 1000)
-          this.docObj.dt()[0].DOC_DATE = this.dtDocDate.value
-          this.docObj.dt()[0].INPUT = this.prmObj.filter({ID:'SafeCenter',TYPE:1}).getValue()
-          this.docObj.dt()[0].OUTPUT =  tmpSafe
-          this.docObj.dt()[0].AMOUNT =0
-          this.docObj.dt()[0].TOTAL = 0
+            this.docObj.addEmpty()
+            this.docObj.dt()[0].TYPE = 2
+            this.docObj.dt()[0].DOC_TYPE = 201
+            this.docObj.dt()[0].REF = 'POS'
+            this.docObj.dt()[0].REF_NO = Math.floor(Date.now() / 1000)
+            this.docObj.dt()[0].DOC_DATE = this.dtDocDate.value
+            this.docObj.dt()[0].INPUT = this.prmObj.filter({ID:'SafeCenter',TYPE:1}).getValue()
+            this.docObj.dt()[0].OUTPUT =  tmpSafe
+            this.docObj.dt()[0].AMOUNT = 0
+            this.docObj.dt()[0].TOTAL = 0
         }
         if(this.txtCash.value > 0)
         {
-          this.docObj.docCustomer.addEmpty()
-          this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].TYPE = 2
-          this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_GUID = this.docObj.dt()[0].GUID
-          this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_TYPE = 201
-          this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_DATE = this.dtDocDate.value
-          this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].REF = 'POS'
-          this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].REF_NO = this.docObj.dt()[0].REF_NO
-          this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].INPUT = this.prmObj.filter({ID:'SafeCenter',TYPE:1}).getValue()
-          this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].INPUT_NAME =  ''
-          this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].OUTPUT = tmpSafe 
-          this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].PAY_TYPE = 20
-          this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].AMOUNT = Number(this.txtCash.value + this.txtAdvance.value).round(2)
-          this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DESCRIPTION = ''
+            this.docObj.docCustomer.addEmpty()
+            this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].TYPE = 2
+            this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_GUID = this.docObj.dt()[0].GUID
+            this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_TYPE = 201
+            this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_DATE = this.dtDocDate.value
+            this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].REF = 'POS'
+            this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].REF_NO = this.docObj.dt()[0].REF_NO
+            this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].INPUT = this.prmObj.filter({ID:'SafeCenter',TYPE:1}).getValue()
+            this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].INPUT_NAME =  ''
+            this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].OUTPUT = tmpSafe 
+            this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].PAY_TYPE = 20
+            this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].AMOUNT = Number(this.txtCash.value + this.txtAdvance.value).round(2)
+            this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DESCRIPTION = ''
         }
         if(this.txtCreditCard.value > 0)
         {
-          this.docObj.docCustomer.addEmpty()
-          this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].TYPE = 2
-          this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_GUID = this.docObj.dt()[0].GUID
-          this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_TYPE = 201
-          this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_DATE = this.dtDocDate.value
-          this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].REF = 'POS'
-          this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].REF_NO = this.docObj.dt()[0].REF_NO
-          this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].INPUT = this.prmObj.filter({ID:'BankSafe',TYPE:1}).getValue()
-          this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].INPUT_NAME =  this.cmbSafe.displayValue
-          this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].OUTPUT = '00000000-0000-0000-0000-000000000000'
-          this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].PAY_TYPE = 21
-          this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].AMOUNT = this.txtCreditCard.value
-          this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DESCRIPTION = ''
+            this.docObj.docCustomer.addEmpty()
+            this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].TYPE = 2
+            this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_GUID = this.docObj.dt()[0].GUID
+            this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_TYPE = 201
+            this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_DATE = this.dtDocDate.value
+            this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].REF = 'POS'
+            this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].REF_NO = this.docObj.dt()[0].REF_NO
+            this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].INPUT = this.prmObj.filter({ID:'BankSafe',TYPE:1}).getValue()
+            this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].INPUT_NAME =  this.cmbSafe.displayValue
+            this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].OUTPUT = '00000000-0000-0000-0000-000000000000'
+            this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].PAY_TYPE = 21
+            this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].AMOUNT = this.txtCreditCard.value
+            this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DESCRIPTION = ''
         }
         if(this.txtRestorant.value > 0)
         {
-          this.docObj.docCustomer.addEmpty()
-          this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].TYPE = 2
-          this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_GUID = this.docObj.dt()[0].GUID
-          this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_TYPE = 201
-          this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_DATE = this.dtDocDate.value
-          this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].REF = 'POS'
-          this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].REF_NO = this.docObj.dt()[0].REF_NO
-          this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].INPUT = this.prmObj.filter({ID:'TicketRestSafe',TYPE:1}).getValue()
-          this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].INPUT_NAME =  this.cmbSafe.displayValue
-          this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].OUTPUT = '00000000-0000-0000-0000-000000000000'
-          this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].PAY_TYPE = 20
-          this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].AMOUNT = this.txtRestorant.value
-          this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DESCRIPTION = ''
+            this.docObj.docCustomer.addEmpty()
+            this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].TYPE = 2
+            this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_GUID = this.docObj.dt()[0].GUID
+            this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_TYPE = 201
+            this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_DATE = this.dtDocDate.value
+            this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].REF = 'POS'
+            this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].REF_NO = this.docObj.dt()[0].REF_NO
+            this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].INPUT = this.prmObj.filter({ID:'TicketRestSafe',TYPE:1}).getValue()
+            this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].INPUT_NAME =  this.cmbSafe.displayValue
+            this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].OUTPUT = '00000000-0000-0000-0000-000000000000'
+            this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].PAY_TYPE = 20
+            this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].AMOUNT = this.txtRestorant.value
+            this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DESCRIPTION = ''
         }
         if(this.txtCheck.value > 0)
         {
-          this.docObj.docCustomer.addEmpty()
-          this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].TYPE = 2
-          this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_GUID = this.docObj.dt()[0].GUID
-          this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_TYPE = 201
-          this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_DATE = this.dtDocDate.value
-          this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].REF = 'POS'
-          this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].REF_NO = this.docObj.dt()[0].REF_NO
-          this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].INPUT = this.prmObj.filter({ID:'CheckSafe',TYPE:1}).getValue()
-          this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].INPUT_NAME =  this.cmbSafe.displayValue
-          this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].OUTPUT = tmpSafe
-          this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].PAY_TYPE = 20
-          this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].AMOUNT = this.txtCheck.value
-          this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DESCRIPTION = ''
+            this.docObj.docCustomer.addEmpty()
+            this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].TYPE = 2
+            this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_GUID = this.docObj.dt()[0].GUID
+            this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_TYPE = 201
+            this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_DATE = this.dtDocDate.value
+            this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].REF = 'POS'
+            this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].REF_NO = this.docObj.dt()[0].REF_NO
+            this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].INPUT = this.prmObj.filter({ID:'CheckSafe',TYPE:1}).getValue()
+            this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].INPUT_NAME =  this.cmbSafe.displayValue
+            this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].OUTPUT = tmpSafe
+            this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].PAY_TYPE = 20
+            this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].AMOUNT = this.txtCheck.value
+            this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DESCRIPTION = ''
         }
+
         this.docObj.docCustomer.addEmpty()
         this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].TYPE = 2
         this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_GUID = this.docObj.dt()[0].GUID
@@ -586,27 +572,28 @@ export default class endOfDay extends React.PureComponent
         await this.docObj.save()
         let tmpConfObj =
         {
-          id:'msgSucces',showTitle:true,title:this.t("msgSucces.title"),showCloseButton:true,width:'500px',height:'200px',
-          button:[{id:"btn01",caption:this.t("msgSucces.btn01"),location:'after'}],
-          content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSucces.msg")}</div>)
+            id:'msgSucces',showTitle:true,title:this.t("msgSucces.title"),showCloseButton:true,width:'500px',height:'200px',
+            button:[{id:"btn01",caption:this.t("msgSucces.btn01"),location:'after'}],
+            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSucces.msg")}</div>)
         }
         
         let pResult = await dialog(tmpConfObj);
-        console.log(pResult)
+        
         if(pResult == 'btn01')
         { 
-          this.reactWizardRef.current.setState({
-            currentStep: 0,
-            nextButton: true,
-            previousButton: false,
-            finishButton: false,
-            width: "16.666666666666668%",
-        })
-          this.txtCash.value = 0
-          this.txtCreditCard.value = 0
-          this.txtRestorant.value = 0
-          this.txtCheck.value = 0
-          this.cmbSafe.value = ''
+            this.reactWizardRef.current.setState(
+            {
+                currentStep: 0,
+                nextButton: true,
+                previousButton: false,
+                finishButton: false,
+                width: "16.666666666666668%",
+            })
+            this.txtCash.value = 0
+            this.txtCreditCard.value = 0
+            this.txtRestorant.value = 0
+            this.txtCheck.value = 0
+            this.cmbSafe.value = ''
         }
     }
     render()
@@ -623,271 +610,265 @@ export default class endOfDay extends React.PureComponent
                         </div>
                     </div>
                 </div>
-                  {/* Finish PopUp */}
-                  <div>
-                        <NdPopUp parent={this} id={"popFinish"} 
-                        visible={false}
-                        showTitle={true}
-                        title={this.t("popFinish.title")}
-                        container={"#root"} 
-                        width={'500'}
-                        height={'600'}
-                        position={{of:'#root'}}
-                        >
-                          <div className='col-12'>
+                {/* Finish PopUp */}
+                <div>
+                    <NdPopUp parent={this} id={"popFinish"} 
+                    visible={false}
+                    showTitle={true}
+                    title={this.t("popFinish.title")}
+                    container={"#root"} 
+                    width={'500'}
+                    height={'600'}
+                    position={{of:'#root'}}
+                    >
+                        <div className='col-12'>
                             <div className='row'>
-                              <div className='col-6'>
-                                <h2>{this.t("cash")}</h2>
-                              </div>
-                              <div className='col-6' style={{color:this.color.cash}}>
-                                <h2> : {this.Cash}</h2>
-                              </div>
+                                <div className='col-6'>
+                                    <h2>{this.t("cash")}</h2>
+                                </div>
+                                <div className='col-6' style={{color:this.color.cash}}>
+                                    <h2> : {this.Cash}</h2>
+                                </div>
                             </div>
                             <div className='row'>
-                              <div className='col-6'>
-                                <h2>{this.t("debitCard")}</h2>
-                              </div>
-                              <div className='col-6' style={{color:this.color.card}}>
-                                <h2> : {this.DebitCard}</h2>
-                              </div>
+                                <div className='col-6'>
+                                    <h2>{this.t("debitCard")}</h2>
+                                </div>
+                                <div className='col-6' style={{color:this.color.card}}>
+                                    <h2> : {this.DebitCard}</h2>
+                                </div>
                             </div>
                             <div className='row'>
-                              <div className='col-6'>
-                                <h2>{this.t("check")}</h2>
-                              </div>
-                              <div className='col-6' style={{color:this.color.check}}>
-                                <h2> : {this.Check}</h2>
-                              </div>
+                                <div className='col-6'>
+                                    <h2>{this.t("check")}</h2>
+                                </div>
+                                <div className='col-6' style={{color:this.color.check}}>
+                                    <h2> : {this.Check}</h2>
+                                </div>
                             </div>
                             <div className='row'>
-                              <div className='col-6'>
-                                <h2>{this.t("ticketRest")}</h2>
-                              </div>
-                              <div className='col-6' style={{color:this.color.rest}}>
-                                <h2> : {this.TicketRest}</h2>
-                              </div>
-                            </div>
-                             <div className='row px-4'>
-                              <div className='col-12'>
-                                <h2>{this.t("advanceMsg1")}</h2>
-                              </div>
+                                <div className='col-6'>
+                                    <h2>{this.t("ticketRest")}</h2>
+                                </div>
+                                <div className='col-6' style={{color:this.color.rest}}>
+                                    <h2> : {this.TicketRest}</h2>
+                                </div>
                             </div>
                             <div className='row px-4'>
-                              <div className='col-4 offset-4'>
-                                <h2>{this.message}</h2>
-                              </div>
+                                <div className='col-12'>
+                                    <h2>{this.t("advanceMsg1")}</h2>
+                                </div>
                             </div>
                             <div className='row px-4'>
-                              <div className='col-12'>
-                                <h2>{this.t("advanceMsg2")}</h2>
-                              </div>
+                                <div className='col-4 offset-4'>
+                                    <h2>{this.message}</h2>
+                                </div>
+                            </div>
+                            <div className='row px-4'>
+                                <div className='col-12'>
+                                    <h2>{this.t("advanceMsg2")}</h2>
+                                </div>
                             </div>
                             <div>
-                              <Form colCount={2}>
-                              <Item>
-                                <NdButton text={this.t("btnNotTrue")}
-                                onClick={async ()=>
-                                  {       
-                                    this.popFinish.hide()
-                                  }}
-                                />
-                                </Item>
-                                <Item>
-                                <NdButton text={this.t("addAdvance")}
-                                onClick={async ()=>
-                                  {       
-                                    this.popAdvance.show()
-                                  }}
-                                />
-                                </Item>
-                              </Form>
+                                <Form colCount={2}>
+                                    <Item>
+                                        <NdButton text={this.t("btnNotTrue")}
+                                        onClick={async ()=>
+                                        {       
+                                            this.popFinish.hide()
+                                        }}/>
+                                    </Item>
+                                    <Item>
+                                        <NdButton text={this.t("addAdvance")}
+                                        onClick={async ()=>
+                                        {       
+                                            this.popAdvance.show()
+                                        }}/>
+                                    </Item>
+                                </Form>
                             </div>
-                          </div>
-                        </NdPopUp>
-                  </div> 
-                    {/* Açık Fişler PopUp */}
-                    <div>
-                      <NdPopUp parent={this} id={"popOpenTike"} 
-                      visible={false}
-                      showCloseButton={true}
-                      showTitle={true}
-                      title={this.t("popOpenTike.title")}
-                      container={"#root"} 
-                      width={'900'}
-                      height={'500'}
-                      position={{of:'#root'}}
-                      >
-                          <Form colCount={1} height={'fit-content'}>
-                              <Item>
-                               <NdGrid parent={this} id={"grdOpenTike"} 
-                                      showBorders={true} 
-                                      columnsAutoWidth={true} 
-                                      allowColumnReordering={true} 
-                                      allowColumnResizing={true} 
-                                      filterRow={{visible:true}}
-                                      height={350} 
-                                      width={'100%'}
-                                      dbApply={false}
-                                      onRowDblClick={async(e)=>
-                                      {
-                                        this.btnGetDetail(e.data.GUID)
-                                        this.setState({ticketId:e.data.TICKET_ID})
-                                      }}
-                                      onRowRemoved={async (e)=>{
-                                      }}
-                                      >
-                                          <Scrolling mode="standart" />
-                                          <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
-                                          <Column dataField="CUSER_NAME" caption={this.lang.t("grdOpenTike.clmUser")} width={110}  headerFilter={{visible:true}}/>
-                                          <Column dataField="DEVICE" caption={this.lang.t("grdOpenTike.clmDevice")} width={60}  headerFilter={{visible:true}}/>
-                                          <Column dataField="DATE" caption={this.lang.t("grdOpenTike.clmDate")} width={90} allowEditing={false} />
-                                          <Column dataField="TICKET_ID" caption={this.lang.t("grdOpenTike.clmTicketId")} width={150}  headerFilter={{visible:true}}/>
-                                          <Column dataField="TOTAL" caption={this.lang.t("grdOpenTike.clmTotal")} width={100} format={{ style: "currency", currency: "EUR",precision: 2}} headerFilter={{visible:true}}/>
-                                          <Column dataField="DESCRIPTION" caption={this.lang.t("grdOpenTike.clmDescription")} width={250}  headerFilter={{visible:true}}/>
-                                  </NdGrid>
-                             </Item>
-                          </Form>
-                      </NdPopUp>
-                    </div>  
-                      {/* Avans PopUp */}
-                      <div>
-                      <NdPopUp parent={this} id={"popAdvance"} 
-                      visible={false}
-                      showTitle={true}
-                      title={this.t("popAdvance.title")}
-                      container={"#root"} 
-                      width={'450'}
-                      height={'250'}
-                      position={{of:'#root'}}
-                      >
-                          <Form colCount={1} height={'fit-content'} id={"frmAdvance"}>
+                        </div>
+                    </NdPopUp>
+                </div> 
+                {/* Açık Fişler PopUp */}
+                <div>
+                    <NdPopUp parent={this} id={"popOpenTike"} 
+                    visible={false}
+                    showCloseButton={true}
+                    showTitle={true}
+                    title={this.t("popOpenTike.title")}
+                    container={"#root"} 
+                    width={'900'}
+                    height={'500'}
+                    position={{of:'#root'}}
+                    >
+                        <Form colCount={1} height={'fit-content'}>
                             <Item>
-                              <div className='row px-4'>
-                                <div className='col-12'>
-                                  <h4>{this.t("popAdvance.msg")}</h4>
+                                <NdGrid parent={this} id={"grdOpenTike"} 
+                                showBorders={true} 
+                                columnsAutoWidth={true} 
+                                allowColumnReordering={true} 
+                                allowColumnResizing={true} 
+                                filterRow={{visible:true}}
+                                height={350} 
+                                width={'100%'}
+                                dbApply={false}
+                                onRowDblClick={async(e)=>
+                                {
+                                    this.btnGetDetail(e.data.GUID)
+                                    this.setState({ticketId:e.data.TICKET_ID})
+                                }}
+                                >
+                                    <Scrolling mode="standart" />
+                                    <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
+                                    <Column dataField="CUSER_NAME" caption={this.lang.t("grdOpenTike.clmUser")} width={110}  headerFilter={{visible:true}}/>
+                                    <Column dataField="DEVICE" caption={this.lang.t("grdOpenTike.clmDevice")} width={60}  headerFilter={{visible:true}}/>
+                                    <Column dataField="DATE" caption={this.lang.t("grdOpenTike.clmDate")} width={90} allowEditing={false} />
+                                    <Column dataField="TICKET_ID" caption={this.lang.t("grdOpenTike.clmTicketId")} width={150}  headerFilter={{visible:true}}/>
+                                    <Column dataField="TOTAL" caption={this.lang.t("grdOpenTike.clmTotal")} width={100} format={{ style: "currency", currency: "EUR",precision: 2}} headerFilter={{visible:true}}/>
+                                    <Column dataField="DESCRIPTION" caption={this.lang.t("grdOpenTike.clmDescription")} width={250}  headerFilter={{visible:true}}/>
+                                </NdGrid>
+                            </Item>
+                        </Form>
+                    </NdPopUp>
+                </div>  
+                {/* Avans PopUp */}
+                <div>
+                    <NdPopUp parent={this} id={"popAdvance"} 
+                    visible={false}
+                    showTitle={true}
+                    title={this.t("popAdvance.title")}
+                    container={"#root"} 
+                    width={'450'}
+                    height={'250'}
+                    position={{of:'#root'}}
+                    >
+                        <Form colCount={1} height={'fit-content'} id={"frmAdvance"}>
+                            <Item>
+                                <div className='row px-4'>
+                                    <div className='col-12'>
+                                        <h4>{this.t("popAdvance.msg")}</h4>
+                                    </div>
                                 </div>
-                              </div>
                             </Item>
                             <Item>
-                              <Label text={this.t("txtPopAdvance")} alignment="right" />
-                              <NdNumberBox id="txtPopAdvance" parent={this} simple={true} 
-                              >
-                                 <Validator validationGroup={"frmAdvance"}>
-                                 <RangeRule min={0.9} message={this.t("validPriceFloat")}/>
-
-                                 </Validator>
-                              </NdNumberBox>
+                                <Label text={this.t("txtPopAdvance")} alignment="right" />
+                                <NdNumberBox id="txtPopAdvance" parent={this} simple={true}>
+                                    <Validator validationGroup={"frmAdvance"}>
+                                        <RangeRule min={0.9} message={this.t("validPriceFloat")}/>
+                                    </Validator>
+                                </NdNumberBox>
                             </Item>
                             <Item>
-                            <div className='row'>
-                                      <div className='col-6'>
-                                      </div>
-                                      <div className='col-6'>
-                                          <NdButton text={this.t("btnPopAdd")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"frmAdvance"}
-                                          onClick={async (e)=>
-                                          {
+                                <div className='row'>
+                                    <div className='col-6'>
+                                    </div>
+                                    <div className='col-6'>
+                                        <NdButton text={this.t("btnPopAdd")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"frmAdvance"}
+                                        onClick={async (e)=>
+                                        {
                                             if(e.validationGroup.validate().status == "valid")
                                             {  
-                                              if(this.txtPopAdvance.value == 0)
-                                              {
-                                                let tmpConfObj =
+                                                if(this.txtPopAdvance.value == 0)
                                                 {
-                                                  id:'msgZeroQuantity',showTitle:true,title:this.t("msgZeroQuantity.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                  button:[{id:"btn01",caption:this.t("msgZeroQuantity.btn01"),location:'before'},{id:"btn02",caption:this.t("msgZeroQuantity.btn02"),location:'after'}],
-                                                  content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgZeroQuantity.msg")}</div>)
+                                                    let tmpConfObj =
+                                                    {
+                                                        id:'msgZeroQuantity',showTitle:true,title:this.t("msgZeroQuantity.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                        button:[{id:"btn01",caption:this.t("msgZeroQuantity.btn01"),location:'before'},{id:"btn02",caption:this.t("msgZeroQuantity.btn02"),location:'after'}],
+                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgZeroQuantity.msg")}</div>)
+                                                    }
+                                                    
+                                                    let pResult = await dialog(tmpConfObj);
+                                                    if(pResult == 'btn01')
+                                                    {
+                                                        return
+                                                    }
+                                                }
+                                                else if(this.txtPopAdvance.value > 1000)
+                                                {
+                                                    let tmpConfObj =
+                                                    {
+                                                        id:'msgBigAmount',showTitle:true,title:this.t("msgBigAmount.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                        button:[{id:"btn01",caption:this.t("msgBigAmount.btn01"),location:'before'}],
+                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgBigAmount.msg")}</div>)
+                                                    }
+                                                    
+                                                    let pResult = await dialog(tmpConfObj);
+                                                    if(pResult == 'btn01')
+                                                    {
+                                                        return
+                                                    }
+                                                }
+                                                let tmpQuery = 
+                                                {
+                                                    query : "SELECT GUID FROM SAFE_VW_01 WHERE CODE = @INPUT_CODE",
+                                                    param : ['INPUT_CODE:string|50'],
+                                                    value : [this.cmbSafe.value]
+                                                }
+                                                let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                let tmpSafe = tmpData.result.recordset[0].GUID
+                                            
+                                                if(this.docObj.dt().length == 0)
+                                                {
+                                                    this.docObj.addEmpty()
+                                                    this.docObj.dt()[0].TYPE = 2
+                                                    this.docObj.dt()[0].DOC_TYPE = 201
+                                                    this.docObj.dt()[0].REF = 'POS'
+                                                    this.docObj.dt()[0].REF_NO = Math.floor(Date.now() / 1000)
+                                                    this.docObj.dt()[0].DOC_DATE = this.dtDocDate.value
+                                                    this.docObj.dt()[0].INPUT = tmpSafe
+                                                    this.docObj.dt()[0].OUTPUT = '00000000-0000-0000-0000-000000000000'
+                                                    this.docObj.dt()[0].AMOUNT =  Number(this.txtAdvance.value + this.txtCash.value).round(2)
+                                                    this.docObj.dt()[0].TOTAL = Number(this.txtAdvance.value + this.txtCash.value).round(2)
                                                 }
                                                 
-                                                let pResult = await dialog(tmpConfObj);
-                                                if(pResult == 'btn01')
-                                                {
-                                                  return
-                                                }
-                                              }
-                                              else if(this.txtPopAdvance.value > 1000)
-                                              {
-                                                let tmpConfObj =
-                                                {
-                                                  id:'msgBigAmount',showTitle:true,title:this.t("msgBigAmount.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                  button:[{id:"btn01",caption:this.t("msgBigAmount.btn01"),location:'before'}],
-                                                  content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgBigAmount.msg")}</div>)
-                                                }
-                                                
-                                                let pResult = await dialog(tmpConfObj);
-                                                if(pResult == 'btn01')
-                                                {
-                                                  return
-                                                }
-                                              }
-                                              let tmpQuery = 
-                                              {
-                                                  query : "SELECT GUID FROM SAFE_VW_01 WHERE CODE = @INPUT_CODE",
-                                                  param : ['INPUT_CODE:string|50'],
-                                                  value : [this.cmbSafe.value]
-                                              }
-                                              let tmpData = await this.core.sql.execute(tmpQuery) 
-                                              let tmpSafe = tmpData.result.recordset[0].GUID
-                                           
-                                              if(this.docObj.dt().length == 0)
-                                              {
-                                                this.docObj.addEmpty()
-                                                this.docObj.dt()[0].TYPE = 2
-                                                this.docObj.dt()[0].DOC_TYPE = 201
-                                                this.docObj.dt()[0].REF = 'POS'
-                                                this.docObj.dt()[0].REF_NO = Math.floor(Date.now() / 1000)
-                                                this.docObj.dt()[0].DOC_DATE = this.dtDocDate.value
-                                                this.docObj.dt()[0].INPUT = tmpSafe
-                                                this.docObj.dt()[0].OUTPUT = '00000000-0000-0000-0000-000000000000'
-                                                this.docObj.dt()[0].AMOUNT =  Number(this.txtAdvance.value + this.txtCash.value).round(2)
-                                                this.docObj.dt()[0].TOTAL = Number(this.txtAdvance.value + this.txtCash.value).round(2)
-                                              }
-                                                
-                                              this.docObj.docCustomer.addEmpty()
-                                              this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].TYPE = 2
-                                              this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_GUID = this.docObj.dt()[0].GUID
-                                              this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_TYPE = 201
-                                              this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_DATE = this.dtDocDate.value
-                                              this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].REF = 'POS'
-                                              this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].REF_NO = this.docObj.dt()[0].REF_NO
-                                              this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].INPUT =tmpSafe
-                                              this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].INPUT_NAME =  this.cmbSafe.displayValue
-                                              this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].OUTPUT = '00000000-0000-0000-0000-000000000000'
-                                              this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].PAY_TYPE = 20
-                                              this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].AMOUNT = Number(this.txtCash.value).round(2)
-                                              this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DESCRIPTION = ''
-                                                
+                                                this.docObj.docCustomer.addEmpty()
+                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].TYPE = 2
+                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_GUID = this.docObj.dt()[0].GUID
+                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_TYPE = 201
+                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_DATE = this.dtDocDate.value
+                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].REF = 'POS'
+                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].REF_NO = this.docObj.dt()[0].REF_NO
+                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].INPUT =tmpSafe
+                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].INPUT_NAME =  this.cmbSafe.displayValue
+                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].OUTPUT = '00000000-0000-0000-0000-000000000000'
+                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].PAY_TYPE = 20
+                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].AMOUNT = Number(this.txtCash.value).round(2)
+                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DESCRIPTION = ''
                                                 
                                                 this.safeTransfer()
                                                 this.popAdvance.hide()
                                                 this.popFinish.hide()
                                             }
-                                          }}/>
-                                      </div>
-                                  </div>
+                                        }}/>
+                                    </div>
+                                </div>
                             </Item>
-                          </Form>
-                      </NdPopUp>
-                    </div>  
-                    {/* Detay Popup */}
+                        </Form>
+                    </NdPopUp>
+                </div>  
+                {/* Detay Popup */}
+                <div>
                     <NdPopUp parent={this} id={"popDetail"} 
-                        visible={false}                        
-                        showCloseButton={true}
-                        showTitle={true}
-                        title={this.t("popDetail.title")}
-                        container={"#root"} 
-                        width={'100%'}
-                        height={'100%'}
-                        position={{of:'#root'}}
-                        >
-                           <div className="row">
-                         <div className="col-1 pe-0"></div>
+                    visible={false}                        
+                    showCloseButton={true}
+                    showTitle={true}
+                    title={this.t("popDetail.title")}
+                    container={"#root"} 
+                    width={'100%'}
+                    height={'100%'}
+                    position={{of:'#root'}}
+                    >
+                        <div className="row">
+                            <div className="col-1 pe-0"></div>
                             <div className="col-7 pe-0">
-                            {this.t("TicketId")} : {this.state.ticketId}
+                                {this.t("TicketId")} : {this.state.ticketId}
                             </div>
-                         </div>
-                          <div className="row">
-                          <div className="col-1 pe-0"></div>
+                        </div>
+                        <div className="row">
+                            <div className="col-1 pe-0"></div>
                             <div className="col-7 pe-0">
-                            <NdGrid id="grdSaleTicketItems" parent={this} 
+                                <NdGrid id="grdSaleTicketItems" parent={this} 
                                 selection={{mode:"multiple"}} 
                                 showBorders={true}
                                 filterRow={{visible:true}} 
@@ -895,7 +876,6 @@ export default class endOfDay extends React.PureComponent
                                 columnAutoWidth={true}
                                 allowColumnReordering={true}
                                 allowColumnResizing={true}
-                               
                                 >                            
                                     <Paging defaultPageSize={20} />
                                     <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
@@ -905,10 +885,10 @@ export default class endOfDay extends React.PureComponent
                                     <Column dataField="QUANTITY" caption={this.t("grdSaleTicketItems.clmQuantity")} visible={true} width={100}/> 
                                     <Column dataField="PRICE" caption={this.t("grdSaleTicketItems.clmPrice")} visible={true} width={150} format={{ style: "currency", currency: "EUR",precision: 2}}/> 
                                     <Column dataField="TOTAL" caption={this.t("grdSaleTicketItems.clmTotal")} visible={true} width={150} format={{ style: "currency", currency: "EUR",precision: 2}}/> 
-                            </NdGrid>
+                                </NdGrid>
                             </div>
                             <div className="col-3 ps-0">
-                            <NdGrid id="grdSaleTicketPays" parent={this} 
+                                <NdGrid id="grdSaleTicketPays" parent={this} 
                                 selection={{mode:"multiple"}} 
                                 showBorders={true}
                                 filterRow={{visible:true}} 
@@ -917,31 +897,32 @@ export default class endOfDay extends React.PureComponent
                                 allowColumnReordering={true}
                                 allowColumnResizing={true}
                                 onRowClick={async(e)=>
+                                {
+                                    if(this.lastPosPayDt.length > 0)
                                     {
-                                        if(this.lastPosPayDt.length > 0)
+                                        this.rbtnTotalPayType.value = 0
+                                        this.lastPayRest.value = this.lastPosSaleDt[0].GRAND_TOTAL - this.lastPosPayDt.sum('AMOUNT') < 0 ? 0 : Number(this.lastPosSaleDt[0].GRAND_TOTAL - this.lastPosPayDt.sum('AMOUNT'))
+                                        this.txtPopLastTotal.value = this.lastPosSaleDt[0].GRAND_TOTAL;
+                                        this.popLastTotal.show()
+
+                                        //HER EKLEME İŞLEMİNDEN SONRA İLK SATIR SEÇİLİYOR.
+                                        setTimeout(() => 
                                         {
-                                            this.rbtnTotalPayType.value = 0
-                                            this.lastPayRest.value = this.lastPosSaleDt[0].GRAND_TOTAL - this.lastPosPayDt.sum('AMOUNT') < 0 ? 0 : Number(this.lastPosSaleDt[0].GRAND_TOTAL - this.lastPosPayDt.sum('AMOUNT'))
-                                            this.txtPopLastTotal.value = this.lastPosSaleDt[0].GRAND_TOTAL;
-                                            this.popLastTotal.show()
-    
-                                            //HER EKLEME İŞLEMİNDEN SONRA İLK SATIR SEÇİLİYOR.
-                                            setTimeout(() => 
-                                            {
-                                                this.grdLastTotalPay.devGrid.selectRowsByIndexes(0)
-                                            }, 100);
-                                        }
-                                    }}
-                                >                            
+                                            this.grdLastTotalPay.devGrid.selectRowsByIndexes(0)
+                                        }, 100);
+                                    }
+                                }}
+                                >
                                     <Paging defaultPageSize={20} />
                                     <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
                                     <Export fileName={this.lang.t("menu.pos_02_001")} enabled={true} allowExportSelectedData={true} />
                                     <Column dataField="PAY_TYPE_NAME" caption={this.t("grdSaleTicketPays.clmPayName")} visible={true} width={155}/> 
                                     <Column dataField="LINE_TOTAL" caption={this.t("grdSaleTicketPays.clmTotal")} visible={true} format={{ style: "currency", currency: "EUR",precision: 2}}  width={150}/> 
-                            </NdGrid>
+                                </NdGrid>
                             </div>
-                            </div>
+                        </div>
                     </NdPopUp>
+                </div>
             </div>
         )
     }
