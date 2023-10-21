@@ -45,7 +45,6 @@ import {acs} from '../meta/acs.js'
 
 export default class posDoc extends React.PureComponent
 {
-    //CHECKRECORD İŞLEMİ KALDIRILACAK. ŞİMDİLİK BEKLEMEDE.
     constructor()
     {
         super() 
@@ -355,8 +354,25 @@ export default class posDoc extends React.PureComponent
         if(this.posObj.dt()[this.posObj.dt().length - 1].DEVICE != '9999')
         {
             await this.posDevice.load({CODE:this.posObj.dt()[this.posObj.dt().length - 1].DEVICE})
-            this.posScale = new posScaleCls(this.posDevice.dt()[0].SCALE_PORT)
-            this.posLcd = new posLcdCls(this.posDevice.dt()[0].LCD_PORT)
+            if(this.posDevice.dt().where({MACID:localStorage.getItem('macId')}).length > 0)
+            {
+                this.posScale = new posScaleCls(this.posDevice.dt()[0].SCALE_PORT)
+                this.posLcd = new posLcdCls(this.posDevice.dt()[0].LCD_PORT)
+            }
+            else
+            {
+                let tmpConfObj =
+                {
+                    id:'msgMacIdFailed',showTitle:true,title:this.lang.t("msgMacIdFailed.title"),showCloseButton:true,width:'400px',height:'200px',
+                    button:[{id:"btn01",caption:this.lang.t("msgMacIdFailed.btn01"),location:'before'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgMacIdFailed.msg")}</div>)
+                }
+                
+                await dialog(tmpConfObj);
+                
+                this.core.auth.logout()
+                window.location.reload()
+            }
         }
         this.posDevice.scanner();
 
@@ -592,11 +608,6 @@ export default class posDoc extends React.PureComponent
             //************************************************** */
             this.cheqDt.selectCmd.value = [pGuid] 
             await this.cheqDt.refresh(); 
-            //checkRecord İŞLEMİ İÇİN YAPILDI
-            // for (let i = 0; i < this.posObj.posSale.dt().length; i++) 
-            // {
-            //     Object.setPrototypeOf(this.posObj.posSale.dt()[i],{stat:''})
-            // }
             await this.calcGrandTotal(false)
             resolve();
         });        
@@ -1512,7 +1523,7 @@ export default class posDoc extends React.PureComponent
         {
             await this.core.util.waitUntil()
             this.core.util.writeLog("saleClosed : " + pPayRest + " - " + this.posObj.dt().length + " - " + this.posObj.dt()[0].AMOUNT)
-            if(pPayRest == 0 && this.posObj.dt().length > 0 && this.posObj.dt()[0].AMOUNT > 0) //FIYATSIZ VE MİKTAR SIFIR ÜRÜNLER İÇİN KONTROL EKLENDİ. BU ŞEKİLDE SATIŞIN KAPANMASI ENGELLENDİ.
+            if(pPayRest == 0 && this.posObj.dt().length > 0 && this.posObj.dt()[0].AMOUNT > 0 && this.posObj.dt()[0].AMOUNT > this.posObj.dt()[0].DISCOUNT) //FIYATSIZ VE MİKTAR SIFIR ÜRÜNLER İÇİN KONTROL EKLENDİ. BU ŞEKİLDE SATIŞIN KAPANMASI ENGELLENDİ.
             {
                 setTimeout(() => 
                 {
@@ -2842,17 +2853,6 @@ export default class posDoc extends React.PureComponent
             }            
         });
     }
-    // checkRecord()
-    // {
-    //     for (let i = 0; i < this.posObj.posSale.dt().length; i++) 
-    //     {
-    //         if(typeof this.posObj.posSale.dt()[i].stat != 'undefined' && this.posObj.posSale.dt()[i].stat != '')
-    //         {
-    //             return {table:'POS_SALE',item:this.posObj.posSale.dt()[i].ITEM_NAME}
-    //         }
-    //     }
-    //     return
-    // }
     async sendJet(pData)
     {
         if(this.core.offline)
@@ -3073,45 +3073,71 @@ export default class posDoc extends React.PureComponent
     {
         let tmpArr = 
         [
-            {font:"a",style:"b",align:"ct",data: "Z REPORT"},
+            {align:"ct",logo:"./resources/logop.png"},
+            {font:"a",style:"b",size : [1,1],align:"ct",data:""},
+            {font:"a",style:"b",align:"ct",data: this.firm.length > 0 ? this.firm[0].ADDRESS1 : "7 ALLEE DU MIDI"},
+            {font:"a",style:"b",align:"ct",data: this.firm.length > 0 ? this.firm[0].ZIPCODE + " " + this.firm[0].CITY + " " + this.firm[0].COUNTRY_NAME : "54270 ESSEY LES NANCY FRANCE"},
+            {font:"a",style:"b",align:"ct",data: this.firm.length > 0 ? "Tel : " + this.firm[0].TEL : "Tel : 03 83 52 62 34"},
+            {font:"a",style:"b",align:"ct",data: this.firm.length > 0 ? this.firm[0].MAIL : "info@piqsoft.fr"},
+            {font:"a",style:"b",align:"ct",data: this.firm.length > 0 ? this.firm[0].WEB : "www.piqsoft.fr"},
+            {font:"a",style:"b",align:"ct",data: this.firm.length > 0 ? "Siret " + this.firm[0].SIRET_ID + " - APE " + this.firm[0].APE_CODE : "Siret 94 929 096 900 011 - APE 6201Z"},
+            {font:"a",style:"b",align:"ct",data: this.firm.length > 0 ? "Nr. TVA " + this.firm[0].INT_VAT_NO : "Nr. TVA FR61949290969"},
+            {font:"a",style:"b",size : [1,1],align:"ct",data:""},
+            {font:"a",style:"b",size : [1,1],align:"ct",data: "Z REPORT"},
+            {font:"a",style:"b",size : [1,1],align:"ct",data:""},
+            {font:"a",align:"lt",data:moment(new Date().toISOString()).utcOffset(0,false).locale('fr').format('dddd DD.MM.YYYY HH:mm:ss')},
+            {font:"a",align:"lt",pdf:{fontSize:11},data:("Caissier: " + this.user.CODE).space(25,'e') + ("Caisse: " + window.localStorage.getItem('device')).space(23,'s')},
+            {font:"a",style:"b",align:"lt",data:" ".space(48)},
+            {font:"a",style:"bu",align:"rt",data:" ".space(5) + " " + "Taux".space(8) + " " + "HT".space(10) + " " + "TVA".space(10) + " " + "TTC".space(10)}
         ]
 
-        let tmpDt = new datatable()
-        tmpDt.selectCmd = 
+        let tmpSaleDt = new datatable()
+        tmpSaleDt.selectCmd = 
         {
             query : "SELECT * FROM POS_SALE_VW_01 WHERE DEVICE = @DEVICE AND DOC_DATE = @DOC_DATE",
             param : ['DEVICE:string|10','DOC_DATE:date'],
             value : [window.localStorage.getItem('device'),moment(new Date()).format("YYYY-MM-DD")]
         }
-        await tmpDt.refresh()
+        await tmpSaleDt.refresh()
 
-        if(tmpDt.length > 0)
+        if(tmpSaleDt.length > 0)
         {
-            let tmpVatLst = tmpDt.groupBy('VAT_RATE').orderBy('VAT_RATE','asc')
+            let tmpVatLst = tmpSaleDt.groupBy('VAT_RATE').orderBy('VAT_RATE','asc')
             for (let i = 0; i < tmpVatLst.length; i++) 
             {
                 tmpArr.push(
                 {
-                    font: "b",
+                    font: "a",
                     align: "rt",
                     data: tmpVatLst[i].VAT_TYPE.space(5) + " " +
-                        (tmpVatLst[i].VAT_RATE + "%").space(10) + " " +
-                        tmpDt.where({VAT_RATE:tmpVatLst[i].VAT_RATE}).sum('FAMOUNT',2).space(10) + " " + 
-                        tmpDt.where({VAT_RATE:tmpVatLst[i].VAT_RATE}).sum('VAT',2).space(10) + " " + 
-                        tmpDt.where({VAT_RATE:tmpVatLst[i].VAT_RATE}).sum('TOTAL',2).space(10)
+                        (tmpVatLst[i].VAT_RATE + "%").space(8) + " " +
+                        tmpSaleDt.where({VAT_RATE:tmpVatLst[i].VAT_RATE}).sum('FAMOUNT',2).space(10) + " " + 
+                        tmpSaleDt.where({VAT_RATE:tmpVatLst[i].VAT_RATE}).sum('VAT',2).space(10) + " " + 
+                        tmpSaleDt.where({VAT_RATE:tmpVatLst[i].VAT_RATE}).sum('TOTAL',2).space(10)
                 })
             }
-
-            tmpArr.push(
-            {
-                font: "b",
-                align: "rt",
-                data: ("Total : ").space(18) +
-                    tmpDt.sum('FAMOUNT',2).space(10) + " " + 
-                    tmpDt.sum('VAT',2).space(10) + " " + 
-                    tmpDt.sum('TOTAL',2).space(10)
-            })
+            tmpArr.push({font: "a",align: "rt",data: ("Total : ").space(16) + tmpSaleDt.sum('FAMOUNT',2).space(10) + " " + tmpSaleDt.sum('VAT',2).space(10) + " " + tmpSaleDt.sum('TOTAL',2).space(10)})
+            tmpArr.push({font:"a",style:"bu",align:"lt",data:" ".space(48)})
         }
+
+        let tmpPayDt = new datatable()
+        tmpPayDt.selectCmd = 
+        {
+            query : "SELECT PAY_TYPE_NAME,SUM(AMOUNT - CHANGE) AS AMOUNT FROM POS_PAYMENT_VW_01 WHERE DEVICE = @DEVICE AND DOC_DATE = @DOC_DATE GROUP BY PAY_TYPE_NAME,PAY_TYPE ORDER BY PAY_TYPE ASC",
+            param : ['DEVICE:string|10','DOC_DATE:date'],
+            value : [window.localStorage.getItem('device'),moment(new Date()).format("YYYY-MM-DD")]
+        }
+        await tmpPayDt.refresh()
+
+        tmpArr.push({font:"a",style:"b",align:"lt",data:" ".space(48)})
+
+        for (let i = 0; i < tmpPayDt.length; i++) 
+        {
+            tmpArr.push({font: "b",align: "lt",size : [1,1],data: tmpPayDt[i].PAY_TYPE_NAME.space(16) + " " + Number(tmpPayDt[i].AMOUNT).toFixed(2).space(10)})
+            tmpArr.push({font:"a",style:"b",align:"lt",data:" ".space(48)})
+        }
+        tmpArr.push({font: "b",align: "lt",size : [1,1],data: ("Total : ").space(16) + " " + tmpPayDt.sum('AMOUNT',2).space(10)})
+        tmpArr.push({font:"a",style:"b",align:"lt",data:" ".space(48)})
         //console.log(tmpArr)
         await this.posDevice.escPrinter(tmpArr)
     }
@@ -3577,45 +3603,7 @@ export default class posDoc extends React.PureComponent
                                                     return
                                                 }
                                             }  
-                                            //* SATIŞI KAPATMADAN ÖNCE KAYITLAR KONTROL EDİLİYOR */
-                                            // let tmpCheckRecord = this.checkRecord()
-                                            // if(typeof tmpCheckRecord != 'undefined')
-                                            // {
-                                            //     let tmpConfObj = {}
-                                            //     if(tmpCheckRecord.table == 'POS')
-                                            //     {
-                                            //         tmpConfObj =
-                                            //         {
-                                            //             id:'msgCheckRecord',showTitle:true,title:this.lang.t("msgCheckRecord.title"),showCloseButton:false,width:'500px',height:'250px',
-                                            //             button:[{id:"btn01",caption:this.lang.t("msgCheckRecord.btn01"),location:'after'}],
-                                            //             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgCheckRecord.msg1")}</div>)
-                                            //         }
-                                            //     }
-                                            //     else if(tmpCheckRecord.table == 'POS_SALE')
-                                            //     {
-                                            //         tmpConfObj =
-                                            //         {
-                                            //             id:'msgCheckRecord',showTitle:true,title:this.lang.t("msgCheckRecord.title"),showCloseButton:false,width:'500px',height:'250px',
-                                            //             button:[{id:"btn01",caption:this.lang.t("msgCheckRecord.btn01"),location:'after'}],
-                                            //             content:(
-                                            //             <div style={{textAlign:"center",fontSize:"20px"}}>
-                                            //                 <div className="row">
-                                            //                     <div className="col-12">{this.lang.t("msgCheckRecord.msg1")}</div>
-                                            //                 </div>
-                                            //                 <div className="row">
-                                            //                     <div className="col-12">{this.lang.t("msgCheckRecord.msg2")} {tmpCheckRecord.item}</div>
-                                            //                 </div>
-                                            //             </div>)
-                                            //         }
-                                            //     }
-
-                                            //     let tmpMsgResult = await dialog(tmpConfObj);
-                                            //     if(tmpMsgResult == 'btn01')
-                                            //     {
-                                            //         return
-                                            //     }
-                                            // }
-                                            //*************************************************** */
+                                            
                                             let tmpPayRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).round(2));
 
                                             this.posLcd.print
@@ -3651,45 +3639,7 @@ export default class posDoc extends React.PureComponent
                                                     return
                                                 }
                                             }
-                                            //* SATIŞI KAPATMADAN ÖNCE KAYITLAR KONTROL EDİLİYOR */
-                                            // let tmpCheckRecord = this.checkRecord()
-                                            // if(typeof tmpCheckRecord != 'undefined')
-                                            // {
-                                            //     let tmpConfObj = {}
-                                            //     if(tmpCheckRecord.table == 'POS')
-                                            //     {
-                                            //         tmpConfObj =
-                                            //         {
-                                            //             id:'msgCheckRecord',showTitle:true,title:this.lang.t("msgCheckRecord.title"),showCloseButton:false,width:'500px',height:'250px',
-                                            //             button:[{id:"btn01",caption:this.lang.t("msgCheckRecord.btn01"),location:'after'}],
-                                            //             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgCheckRecord.msg1")}</div>)
-                                            //         }
-                                            //     }
-                                            //     else if(tmpCheckRecord.table == 'POS_SALE')
-                                            //     {
-                                            //         tmpConfObj =
-                                            //         {
-                                            //             id:'msgCheckRecord',showTitle:true,title:this.lang.t("msgCheckRecord.title"),showCloseButton:false,width:'500px',height:'250px',
-                                            //             button:[{id:"btn01",caption:this.lang.t("msgCheckRecord.btn01"),location:'after'}],
-                                            //             content:(
-                                            //             <div style={{textAlign:"center",fontSize:"20px"}}>
-                                            //                 <div className="row">
-                                            //                     <div className="col-12">{this.lang.t("msgCheckRecord.msg1")}</div>
-                                            //                 </div>
-                                            //                 <div className="row">
-                                            //                     <div className="col-12">{this.lang.t("msgCheckRecord.msg2")} {tmpCheckRecord.item}</div>
-                                            //                 </div>
-                                            //             </div>)
-                                            //         }
-                                            //     }
-
-                                            //     let tmpMsgResult = await dialog(tmpConfObj);
-                                            //     if(tmpMsgResult == 'btn01')
-                                            //     {
-                                            //         return
-                                            //     }
-                                            // } 
-                                            //*************************************************** */
+                                            
                                             let tmpPayRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).round(2));
                                             
                                             this.posLcd.print
@@ -3769,45 +3719,7 @@ export default class posDoc extends React.PureComponent
                                                     return
                                                 }
                                             }   
-                                            //* SATIŞI KAPATMADAN ÖNCE KAYITLAR KONTROL EDİLİYOR */
-                                            // let tmpCheckRecord = this.checkRecord()
-                                            // if(typeof tmpCheckRecord != 'undefined')
-                                            // {
-                                            //     let tmpConfObj = {}
-                                            //     if(tmpCheckRecord.table == 'POS')
-                                            //     {
-                                            //         tmpConfObj =
-                                            //         {
-                                            //             id:'msgCheckRecord',showTitle:true,title:this.lang.t("msgCheckRecord.title"),showCloseButton:false,width:'500px',height:'250px',
-                                            //             button:[{id:"btn01",caption:this.lang.t("msgCheckRecord.btn01"),location:'after'}],
-                                            //             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgCheckRecord.msg1")}</div>)
-                                            //         }
-                                            //     }
-                                            //     else if(tmpCheckRecord.table == 'POS_SALE')
-                                            //     {
-                                            //         tmpConfObj =
-                                            //         {
-                                            //             id:'msgCheckRecord',showTitle:true,title:this.lang.t("msgCheckRecord.title"),showCloseButton:false,width:'500px',height:'250px',
-                                            //             button:[{id:"btn01",caption:this.lang.t("msgCheckRecord.btn01"),location:'after'}],
-                                            //             content:(
-                                            //             <div style={{textAlign:"center",fontSize:"20px"}}>
-                                            //                 <div className="row">
-                                            //                     <div className="col-12">{this.lang.t("msgCheckRecord.msg1")}</div>
-                                            //                 </div>
-                                            //                 <div className="row">
-                                            //                     <div className="col-12">{this.lang.t("msgCheckRecord.msg2")} {tmpCheckRecord.item}</div>
-                                            //                 </div>
-                                            //             </div>)
-                                            //         }
-                                            //     }
-
-                                            //     let tmpMsgResult = await dialog(tmpConfObj);
-                                            //     if(tmpMsgResult == 'btn01')
-                                            //     {
-                                            //         return
-                                            //     }
-                                            // } 
-                                            //****************************************************************************************************************************************** */                
+                                                        
                                             let tmpPayRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).round(2));
                                             
                                             this.posLcd.print

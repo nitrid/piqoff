@@ -294,6 +294,7 @@ export const langTr =
         pos_02_012 : "Pos Puan Kullanım Raporu",
         pos_02_013 : "Pos İndirim Raporu",
         pos_02_014 : "Okunmamış Terazi Fişleri",
+        pos_02_015 : "Müşteri Bazlı Ürün Satış Raporu",
         pos_03 :"Operasyonlar",
         pos_03_001 : "Gün Sonu",
         promo: "Promosyon",
@@ -15899,6 +15900,7 @@ export const langTr =
         txtLcdPort : "LCD Port",
         txtPayCardPort : "Pay Card Port",
         txtPrintDesing : "Fiş Dizaynı",
+        txtMacId : "Mac Id",
         pg_txtCode : 
         {
             title : "Kasa Seçimi",
@@ -15939,7 +15941,6 @@ export const langTr =
             btn02: "Tamam",
             msg : "Girmiş olduğunuz Cihaz Kodu sistem de kayıtlı !"
         }
-      
     },
     pos_01_002 : // "Pos Plu Kopyalama",
     {
@@ -16483,6 +16484,47 @@ export const langTr =
             clmPrice : "Fiyat",
             clmCDate : "Tarih",
             clmTicketNo : "Fiş No",
+        },
+    },
+    pos_02_015 : // "Müşteri Bazlı Ürün Satış Raporu"
+    {
+        btnGet : "Getir",
+        dtDate : "Tarih Aralığı",
+        txtCustomer : "Müşteri",
+        txtTotal : "Toplam",
+        grdList: 
+        {
+            cuserName: "O.Kullanıcı",
+            luserName: "D.Kullanıcı",
+            device: "Kasa",
+            ref: "Ref",
+            docDate: "Tarih",
+            itemCode: "Ürün Kodu",
+            itemName: "Ürün Adı",
+            itemGrpName: "Ürün Grubu",
+            barcode: "Barkodu",
+            clmQuantity: "Miktar",
+            unitShort: "Birim",
+            clmPrice : "Fiyat",
+            clmFAmount : "Vergisiz Tutar",
+            clmAmount : "Tutar",
+            clmDiscount : "İndirim",
+            clmLoyalty : "Sadakat İnd",
+            clmVat : "Vergi",
+            clmVatRate : "Vergi Oranı",
+            clmTotal : "Toplam"
+        },
+        pg_txtCustomer:
+        {
+            title: "Müşteri Seçim",
+            clmCode: "KODU",
+            clmName: "ADI"
+        },
+        msgCustomerSelect:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen Müşteri Seçiniz !"
         },
     },
     pos_03_001 : // "Gün Sonu",

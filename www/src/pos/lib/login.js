@@ -357,24 +357,27 @@ export default class Login extends React.Component
                                 showCloseButton={true}
                                 showTitle={true}
                                 container={"#root"} 
-                                width={'300'}
+                                width={'580'}
                                 height={'250'}
                                 title={this.lang.t("about")}
                                 position={{my:'bottom',of:'#root'}}
                                 >
                                     <Form colCount={1} height={'fit-content'}>
-                                    <Item>
-                                        <NbLabel id="abtCertificate" parent={this} value={this.lang.t("abtCertificate")} textSize={"28px"}/>
-                                    </Item>
-                                    <Item>
-                                        <NbLabel id="abtNrCertificate" parent={this} value={this.lang.t("abtNrCertificate")}/>
-                                    </Item>
-                                    <Item>
-                                        <NbLabel id="abtLicence" parent={this} value={this.lang.t("abtLicence")}/>
-                                    </Item>
-                                    <Item>
-                                        <NbLabel id="abtVersion" parent={this} value={this.lang.t("abtVersion") + this.core.appInfo.version}/>
-                                    </Item>
+                                        <Item>
+                                            <NbLabel id="abtCertificate" parent={this} value={this.lang.t("abtCertificate")} textSize={"28px"}/>
+                                        </Item>
+                                        <Item>
+                                            <NbLabel id="abtNrCertificate" parent={this} value={this.lang.t("abtNrCertificate")}/>
+                                        </Item>
+                                        <Item>
+                                            <NbLabel id="abtLicence" parent={this} value={this.lang.t("abtLicence")}/>
+                                        </Item>
+                                        <Item>
+                                            <NbLabel id="abtVersion" parent={this} value={this.lang.t("abtVersion") + this.core.appInfo.version}/>
+                                        </Item>
+                                        <Item>
+                                            <NbLabel id="abtMacId" parent={this} value={"MacId : " + localStorage.getItem('macId')}/>
+                                        </Item>
                                     </Form>
                                 </NdPopUp>
                             </div>

@@ -285,6 +285,7 @@ export const langDe =
         pos_02_012 : "Pos Puan Kullanım Raporu",  // BAK
         pos_02_013 : "Pos İndirim Raporu",  // BAK
         pos_02_014 : "Okunmamış Terazi Fişleri", //BAK
+        pos_02_015 : "Müşteri Bazlı Ürün Satış Raporu", //BAK
         pos_03: "Operationen",
         pos_03_001: "Tagesabschluss",
         promo: "Angebot",
@@ -15847,6 +15848,7 @@ export const langDe =
         txtLcdPort : "LCD-Anschluss",
         txtPayCardPort : "Pay Card-Anschluss",
         txtPrintDesing : "Beleglayout",
+        txtMacId : "Mac Id",
         pg_txtCode : 
         {
             title : "Kassenauswahl",
@@ -16429,6 +16431,47 @@ export const langDe =
             clmPrice : "Fiyat",
             clmCDate : "Tarih",
             clmTicketNo : "Fiş No",
+        },
+    },
+    pos_02_015 : // "Müşteri Bazlı Ürün Satış Raporu" //BAK
+    {
+        btnGet : "Getir",
+        dtDate : "Tarih Aralığı",
+        txtCustomer : "Müşteri",
+        txtTotal : "Toplam",
+        grdList: 
+        {
+            cuserName: "O.Kullanıcı",
+            luserName: "D.Kullanıcı",
+            device: "Kasa",
+            ref: "Ref",
+            docDate: "Tarih",
+            itemCode: "Ürün Kodu",
+            itemName: "Ürün Adı",
+            itemGrpName: "Ürün Grubu",
+            barcode: "Barkodu",
+            clmQuantity: "Miktar",
+            unitShort: "Birim",
+            clmPrice : "Fiyat",
+            clmFAmount : "Vergisiz Tutar",
+            clmAmount : "Tutar",
+            clmDiscount : "İndirim",
+            clmLoyalty : "Sadakat İnd",
+            clmVat : "Vergi",
+            clmVatRate : "Vergi Oranı",
+            clmTotal : "Toplam"
+        },
+        pg_txtCustomer:
+        {
+            title: "Müşteri Seçim",
+            clmCode: "KODU",
+            clmName: "ADI"
+        },
+        msgCustomerSelect:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen Müşteri Seçiniz !"
         },
     },
     pos_03_001: // "Gün Sonu"

@@ -569,7 +569,8 @@ export default class transferCls
                         PAY_CARD_PORT TEXT,
                         SCANNER_PORT TEXT,
                         PRINT_DESING TEXT,
-                        SAFE_GUID TEXT);`
+                        SAFE_GUID TEXT,
+                        MACID TEXT);`
             },
             //CUSTOMER_POINT_VW_01
             {
@@ -811,11 +812,11 @@ export default class transferCls
                 to : 
                 {
                     type : "insert",
-                    query : `INSERT OR REPLACE INTO POS_DEVICE_VW_01 (GUID, CDATE, CUSER, LDATE, LUSER, CODE, NAME, LCD_PORT, SCALE_PORT, PAY_CARD_PORT, SCANNER_PORT, PRINT_DESING, SAFE_GUID)
-                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
+                    query : `INSERT OR REPLACE INTO POS_DEVICE_VW_01 (GUID, CDATE, CUSER, LDATE, LUSER, CODE, NAME, LCD_PORT, SCALE_PORT, PAY_CARD_PORT, SCANNER_PORT, PRINT_DESING, SAFE_GUID, MACID)
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
                     values : [{GUID : {map:'GUID'},CDATE : {map:'CDATE',type:'date_time'},CUSER : {map:'CUSER'},LDATE : {map:'LDATE',type:'date_time'},LUSER : {map:'LUSER'},
                     CODE : {map:'CODE'},NAME : {map:'NAME'},LCD_PORT : {map:'LCD_PORT'},SCALE_PORT : {map:'SCALE_PORT'},PAY_CARD_PORT : {map:'PAY_CARD_PORT'},SCANNER_PORT : {map:'SCANNER_PORT'},
-                    PRINT_DESING : {map:'PRINT_DESING'},SAFE_GUID : {map:'SAFE_GUID'}}]
+                    PRINT_DESING : {map:'PRINT_DESING'},SAFE_GUID : {map:'SAFE_GUID'},MACID : {map:'MACID'}}]
                 }
             },
             //PROMO_VW_01

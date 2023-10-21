@@ -293,6 +293,7 @@ export const langFr =
         pos_02_012 : "Rapport d'utilisation des points Pos",  // BAK
         pos_02_013 : "Rapport de réduction Pos",  // BAK
         pos_02_014 : "Tickets de balance non lus", // BAK
+        pos_02_015 : "Müşteri Bazlı Ürün Satış Raporu", // BAK
         pos_03 : "Les opérations", 
         pos_03_001 : "Opérations de fin de journée",
         promo: "Promotion",
@@ -15818,6 +15819,7 @@ export const langFr =
         txtLcdPort : "LCD Port",
         txtPayCardPort : "TPE Port",
         txtPrintDesing : "Design Ticket Imp.",
+        txtMacId : "Mac Id",
         pg_txtCode : 
         {
             title : "Sélection Caisse",
@@ -16401,6 +16403,47 @@ export const langFr =
             clmPrice : "Prix",
             clmCDate : "Date",
             clmTicketNo : "Numéro de ticket",
+        },
+    },
+    pos_02_015 : // "Müşteri Bazlı Ürün Satış Raporu" //BAK
+    {
+        btnGet : "Getir",
+        dtDate : "Tarih Aralığı",
+        txtCustomer : "Müşteri",
+        txtTotal : "Toplam",
+        grdList: 
+        {
+            cuserName: "O.Kullanıcı",
+            luserName: "D.Kullanıcı",
+            device: "Kasa",
+            ref: "Ref",
+            docDate: "Tarih",
+            itemCode: "Ürün Kodu",
+            itemName: "Ürün Adı",
+            itemGrpName: "Ürün Grubu",
+            barcode: "Barkodu",
+            clmQuantity: "Miktar",
+            unitShort: "Birim",
+            clmPrice : "Fiyat",
+            clmFAmount : "Vergisiz Tutar",
+            clmAmount : "Tutar",
+            clmDiscount : "İndirim",
+            clmLoyalty : "Sadakat İnd",
+            clmVat : "Vergi",
+            clmVatRate : "Vergi Oranı",
+            clmTotal : "Toplam"
+        },
+        pg_txtCustomer:
+        {
+            title: "Müşteri Seçim",
+            clmCode: "KODU",
+            clmName: "ADI"
+        },
+        msgCustomerSelect:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen Müşteri Seçiniz !"
         },
     },
     pos_03_001 : // "Gün sonu"

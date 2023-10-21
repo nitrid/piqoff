@@ -814,5 +814,11 @@ export const langIt =
         title: "Attenzione",
         msg: "Impossibile stabilire la comunicazione con il dispositivo TSE !",
         btn01: "OK"
+    },
+    msgMacIdFailed:
+    {
+        title : "Attenzione",
+        msg : "ID del dispositivo non corrisponde! Si prega di contattare piqsoft.",
+        btn01 : "OK"
     }
 }

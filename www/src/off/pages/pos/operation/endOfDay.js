@@ -488,8 +488,8 @@ export default class endOfDay extends React.PureComponent
             this.docObj.dt()[0].AMOUNT = 0
             this.docObj.dt()[0].TOTAL = 0
         }
-        if(this.txtCash.value > 0)
-        {
+        // if(this.txtCash.value > 0)
+        // {
             this.docObj.docCustomer.addEmpty()
             this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].TYPE = 2
             this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_GUID = this.docObj.dt()[0].GUID
@@ -503,7 +503,7 @@ export default class endOfDay extends React.PureComponent
             this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].PAY_TYPE = 20
             this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].AMOUNT = Number(this.txtCash.value + this.txtAdvance.value).round(2)
             this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DESCRIPTION = ''
-        }
+        // }
         if(this.txtCreditCard.value > 0)
         {
             this.docObj.docCustomer.addEmpty()
@@ -829,7 +829,7 @@ export default class endOfDay extends React.PureComponent
                                                 this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_DATE = this.dtDocDate.value
                                                 this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].REF = 'POS'
                                                 this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].REF_NO = this.docObj.dt()[0].REF_NO
-                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].INPUT =tmpSafe
+                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].INPUT = tmpSafe
                                                 this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].INPUT_NAME =  this.cmbSafe.displayValue
                                                 this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].OUTPUT = '00000000-0000-0000-0000-000000000000'
                                                 this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].PAY_TYPE = 20

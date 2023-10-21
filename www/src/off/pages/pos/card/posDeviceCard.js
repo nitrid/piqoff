@@ -280,9 +280,9 @@ export default class posDeviceCard extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={3} id={"frmDevice"  + this.tabIndex}>
-                                 {/* txtCode */}
-                                 <Item>
+                            <Form colCount={2} id={"frmDevice"  + this.tabIndex}>
+                                {/* txtCode */}
+                                <Item>
                                     <Label text={this.t("txtCode")} alignment="right" />
                                     <NdTextBox id="txtCode" parent={this} simple={true} dt={{data:this.deviceObj.dt('POS_DEVICE'),field:"CODE"}}  
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
@@ -368,9 +368,8 @@ export default class posDeviceCard extends React.PureComponent
                                     >
                                     </NdTextBox>
                                 </Item>
-                                <EmptyItem />
-                               {/* txtLcdPort */}
-                               <Item>
+                                {/* txtLcdPort */}
+                                <Item>
                                     <Label text={this.t("txtLcdPort")} alignment="right" />
                                     <NdTextBox id="txtLcdPort" parent={this} simple={true} dt={{data:this.deviceObj.dt('POS_DEVICE'),field:"LCD_PORT"}}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
@@ -384,7 +383,7 @@ export default class posDeviceCard extends React.PureComponent
                                     </NdTextBox>
                                 </Item>
                                 {/* txtScalePort */}
-                               <Item>
+                                <Item>
                                     <Label text={this.t("txtScalePort")} alignment="right" />
                                     <NdTextBox id="txtScalePort" parent={this} simple={true} dt={{data:this.deviceObj.dt('POS_DEVICE'),field:"SCALE_PORT"}}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
@@ -395,9 +394,8 @@ export default class posDeviceCard extends React.PureComponent
                                     >
                                     </NdTextBox>
                                 </Item>
-                                <EmptyItem />
-                                 {/* txtPayCardPort */}
-                               <Item>
+                                {/* txtPayCardPort */}
+                                <Item>
                                     <Label text={this.t("txtPayCardPort")} alignment="right" />
                                     <NdTextBox id="txtPayCardPort" parent={this} simple={true} dt={{data:this.deviceObj.dt('POS_DEVICE'),field:"PAY_CARD_PORT"}}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
@@ -408,8 +406,8 @@ export default class posDeviceCard extends React.PureComponent
                                     >
                                     </NdTextBox>
                                 </Item>
-                                   {/* txtPrintDesing */}
-                               <Item>
+                                {/* txtPrintDesing */}
+                                <Item>
                                     <Label text={this.t("txtPrintDesing")} alignment="right" />
                                     <NdTextBox id="txtPrintDesing" parent={this} simple={true} dt={{data:this.deviceObj.dt('POS_DEVICE'),field:"PRINT_DESING"}}
                                     onChange={(async()=>
@@ -419,10 +417,12 @@ export default class posDeviceCard extends React.PureComponent
                                     >
                                     </NdTextBox>
                                 </Item>
-                                <EmptyItem />
-                                
-                                  
-                               
+                                {/* txtMacId */}
+                                <Item>
+                                    <Label text={this.t("txtMacId")} alignment="right" />
+                                    <NdTextBox id="txtMacId" parent={this} simple={true} dt={{data:this.deviceObj.dt('POS_DEVICE'),field:"MACID"}}>
+                                    </NdTextBox>
+                                </Item>
                             </Form>
                         </div>
                     </div>

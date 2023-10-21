@@ -819,4 +819,10 @@ export const langTr =
         msg : "TSE cihazı ile iletişim kurulamadı !",
         btn01 : "Tamam"
     },
+    msgMacIdFailed:
+    {
+        title : "Dikkat",
+        msg : "Cihaz id uyumsuz ! Lütfen piqsoft ile iletişim kurunuz.",
+        btn01 : "Tamam"
+    }
 }
