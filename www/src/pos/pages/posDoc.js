@@ -8197,6 +8197,18 @@ export default class posDoc extends React.PureComponent
                         </div>     
                     </NdDialog>
                 </div>
+                {/* Balance Counter Description Popup */} 
+                <div>
+                    <NbPopDescboard id={"popBalanceCounterDesc"} parent={this} width={"900"} height={"700"} position={"#root"} head={this.lang.t("popBalanceCounterDesc.head")} title={this.lang.t("popBalanceCounterDesc.title")}         
+                    param={this.prmObj.filter({ID:'popBalanceCounterDesc',TYPE:0})}
+                    onClick={async (e)=>
+                    {
+                        if(typeof e != 'undefined')
+                        {
+                            await this.descSave("BALANCE COUNTER",e,"00000000-0000-0000-0000-000000000000")
+                        }
+                    }}></NbPopDescboard>
+                </div>
             </div>
         )
     }

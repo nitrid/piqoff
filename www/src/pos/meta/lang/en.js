@@ -345,6 +345,11 @@ export const langEn =
         head : "Deleted Line Reason",
         title : "Please enter the deletion reason for the line"
     },
+    PopBalanceCounterDesc :
+    {
+        head : "Balance Check Description",
+        title : "Please Enter the Deletion Reason"
+    },
     popItemReturnDesc : 
     {
         head : "Return Reason",

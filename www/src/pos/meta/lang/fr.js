@@ -345,6 +345,11 @@ export const langFr =
         head : "Motif de la ligne supprimée",
         title : "Veuillez saisir le motif de suppression"
     },
+    PopBalanceCounterDesc :
+    {
+        head : "Description de Contrôle de Balance",
+        title : "Veuillez Entrer la Raison de la Suppression"
+    },
     popItemReturnDesc : 
     {
         head : "Motif de retour ",
