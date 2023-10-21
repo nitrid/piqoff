@@ -345,6 +345,11 @@ export const langEs =
         head : "Descripción de Eliminación de Línea",
         title : "Por favor, ingrese la razón de la eliminación"
     },
+    PopBalanceCounterDesc :
+    {
+        head : "Descripción de Control de Báscula",
+        title : "Por favor, introduzca el motivo del control de la báscula"
+    },
     popItemReturnDesc : 
     {
         head : "Descripción de Devolución",

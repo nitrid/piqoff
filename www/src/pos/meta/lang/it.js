@@ -345,6 +345,11 @@ export const langIt =
         head: "Descrizione Cancellazione Riga",
         title: "Inserisci una ragione per l'annullamento, per favore"
     },
+    PopBalanceCounterDesc :
+    {
+        head : "Descrizione Controllo Bilancia",
+        title : "Inserisci il motivo del controllo della bilancia"
+    },
     popItemReturnDesc:
     {
         head: "Descrizione Reso",

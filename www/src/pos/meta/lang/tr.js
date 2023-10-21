@@ -345,6 +345,11 @@ export const langTr =
         head : "Satır Silme İşlemi Açıklaması",
         title : "Lütfen Silme Nedeninizi Giriniz"
     },
+    popBalanceCounterDesc : 
+    {
+        head : "Terazi Kontrol Açıklamasi",
+        title : "Terazi Kontrol Nedeninizi Giriniz"
+    },
     popItemReturnDesc : 
     {
         head : "İade Açıklaması",
@@ -790,7 +795,11 @@ export const langTr =
     {
         title : "Dikkat",
         msg : "Tartılan ürün ile okutulan barkod toplam miktarı eşleşmedi !",
-        btn01 : "Tamam"
+        msgTicket :"Tartılan miktar : ",
+        msgBarkod : "Etiket miktari : ",
+        msgDifference : "Fark : ",
+        btn01 : "Tamam",
+        btn02 : "Devam"
     },
     msgBarcodeWeighing: 
     {

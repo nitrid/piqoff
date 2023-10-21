@@ -345,6 +345,11 @@ export const langDe =
         head: "Beschreibung für Zeilenlöschung",
         title: "Bitte geben Sie einen Grund für die Löschung ein."
     },
+    PopBalanceCounterDesc :
+    {
+        head : "Waagekontrollbeschreibung",
+        title : "Bitte geben Sie den Grund für die Waagenkontrolle ein"
+    },
     popItemReturnDesc: 
     {
         head: "Rückgabe-Beschreibung",
