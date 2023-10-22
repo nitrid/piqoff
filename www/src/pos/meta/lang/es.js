@@ -345,6 +345,11 @@ export const langEs =
         head : "Descripción de Eliminación de Línea",
         title : "Por favor, ingrese la razón de la eliminación"
     },
+    PopBalanceCounterDesc :
+    {
+        head : "Descripción de Control de Báscula",
+        title : "Por favor, introduzca el motivo del control de la báscula"
+    },
     popItemReturnDesc : 
     {
         head : "Descripción de Devolución",
@@ -809,5 +814,11 @@ export const langEs =
         title: "Atención",
         msg: "¡No se pudo establecer comunicación con el dispositivo TSE!",
         btn01: "Aceptar"
+    },
+    msgMacIdFailed:
+    {
+        title : "Atención",
+        msg : "¡ID del dispositivo no coincide! Por favor, contacte a piqsoft.",
+        btn01 : "Aceptar"
     }
 }

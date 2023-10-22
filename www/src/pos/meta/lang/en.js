@@ -345,6 +345,11 @@ export const langEn =
         head : "Deleted Line Reason",
         title : "Please enter the deletion reason for the line"
     },
+    PopBalanceCounterDesc :
+    {
+        head : "Balance Check Description",
+        title : "Please Enter the Reason for Balance Control"
+    },
     popItemReturnDesc : 
     {
         head : "Return Reason",
@@ -809,5 +814,11 @@ export const langEn =
         title: "Attention",
         msg: "Communication with the TSE device could not be established!",
         btn01: "OK"
+    },
+    msgMacIdFailed:
+    {
+        title : "Attention",
+        msg : "Device ID mismatch! Please contact piqsoft.",
+        btn01 : "OK"
     }
 }

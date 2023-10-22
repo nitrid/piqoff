@@ -232,6 +232,7 @@ export default class App extends React.PureComponent
             if(typeof tmpData != 'undefined' && typeof tmpData.data != 'undefined' && typeof tmpData.data != 'undefined' && typeof tmpData.data.deviceId != 'undefined')
             {
                 localStorage.setItem('device',tmpData.data.deviceId)
+                localStorage.setItem('macId',tmpData.data.macId)
             }
             //************************************************************************** */
             await this.core.util.waitUntil(0)

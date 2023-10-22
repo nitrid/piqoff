@@ -345,6 +345,11 @@ export const langIt =
         head: "Descrizione Cancellazione Riga",
         title: "Inserisci una ragione per l'annullamento, per favore"
     },
+    PopBalanceCounterDesc :
+    {
+        head : "Descrizione Controllo Bilancia",
+        title : "Inserisci il motivo del controllo della bilancia"
+    },
     popItemReturnDesc:
     {
         head: "Descrizione Reso",
@@ -809,5 +814,11 @@ export const langIt =
         title: "Attenzione",
         msg: "Impossibile stabilire la comunicazione con il dispositivo TSE !",
         btn01: "OK"
+    },
+    msgMacIdFailed:
+    {
+        title : "Attenzione",
+        msg : "ID del dispositivo non corrisponde! Si prega di contattare piqsoft.",
+        btn01 : "OK"
     }
 }

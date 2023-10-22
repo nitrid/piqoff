@@ -40,9 +40,9 @@ export const langFr =
     price : "Prix",
     msgDeviceChange : 
     {
-        title : "Dikkat",   // BAK
-        msg : "Getirmek istediğiniz fişde ödeme mevcut işleme ödemenin alındğını kasadan devam edebilirsiniz ! Kasa Kodu : ",   // BAK
-        btn01 : "Tamam",   // BAK
+        title : "Attention",   // BAK
+        msg : "Il y a un paiement dans le reçu que vous souhaitez apporter. Vous pouvez continuer la transaction en encaissant au comptoir ! Code de caisse : ",   // BAK
+        btn01 : "OK",   // BAK
     },
     msgCustomerNotFound : 
     {
@@ -344,6 +344,11 @@ export const langFr =
     {
         head : "Motif de la ligne supprimée",
         title : "Veuillez saisir le motif de suppression"
+    },
+    PopBalanceCounterDesc :
+    {
+        head : "Description de Contrôle de Balance",
+        title : "Veuillez Entrer la Raison du Contrôle de Balance"
     },
     popItemReturnDesc : 
     {
@@ -809,5 +814,11 @@ export const langFr =
         title: "Attention",
         msg: "La communication avec l'appareil TSE n'a pas pu être établie !",
         btn01: "D'accord"
+    },
+    msgMacIdFailed: //BAK
+    {
+        title : "Attention",
+        msg : "ID du périphérique non compatible ! Veuillez contacter piqsoft.",
+        btn01 : "OK"
     }
 }

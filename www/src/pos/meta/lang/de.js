@@ -345,6 +345,11 @@ export const langDe =
         head: "Beschreibung für Zeilenlöschung",
         title: "Bitte geben Sie einen Grund für die Löschung ein."
     },
+    PopBalanceCounterDesc :
+    {
+        head : "Waagekontrollbeschreibung",
+        title : "Bitte geben Sie den Grund für die Waagenkontrolle ein"
+    },
     popItemReturnDesc: 
     {
         head: "Rückgabe-Beschreibung",
@@ -809,5 +814,11 @@ export const langDe =
         title: "Achtung",
         msg: "Die Kommunikation mit dem TSE-Gerät konnte nicht hergestellt werden !",
         btn01: "Okay"
+    },
+    msgMacIdFailed:
+    {
+        title : "Achtung",
+        msg : "Geräte-ID stimmt nicht überein! Bitte kontaktieren Sie piqsoft.",
+        btn01 : "OK"
     }
 }

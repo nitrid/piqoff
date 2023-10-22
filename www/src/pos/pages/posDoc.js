@@ -45,7 +45,6 @@ import {acs} from '../meta/acs.js'
 
 export default class posDoc extends React.PureComponent
 {
-    //CHECKRECORD İŞLEMİ KALDIRILACAK. ŞİMDİLİK BEKLEMEDE.
     constructor()
     {
         super() 
@@ -355,8 +354,25 @@ export default class posDoc extends React.PureComponent
         if(this.posObj.dt()[this.posObj.dt().length - 1].DEVICE != '9999')
         {
             await this.posDevice.load({CODE:this.posObj.dt()[this.posObj.dt().length - 1].DEVICE})
-            this.posScale = new posScaleCls(this.posDevice.dt()[0].SCALE_PORT)
-            this.posLcd = new posLcdCls(this.posDevice.dt()[0].LCD_PORT)
+            if(this.posDevice.dt().where({MACID:localStorage.getItem('macId')}).length > 0)
+            {
+                this.posScale = new posScaleCls(this.posDevice.dt()[0].SCALE_PORT)
+                this.posLcd = new posLcdCls(this.posDevice.dt()[0].LCD_PORT)
+            }
+            else
+            {
+                let tmpConfObj =
+                {
+                    id:'msgMacIdFailed',showTitle:true,title:this.lang.t("msgMacIdFailed.title"),showCloseButton:true,width:'400px',height:'200px',
+                    button:[{id:"btn01",caption:this.lang.t("msgMacIdFailed.btn01"),location:'before'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgMacIdFailed.msg")}</div>)
+                }
+                
+                await dialog(tmpConfObj);
+                
+                this.core.auth.logout()
+                window.location.reload()
+            }
         }
         this.posDevice.scanner();
 
@@ -592,11 +608,6 @@ export default class posDoc extends React.PureComponent
             //************************************************** */
             this.cheqDt.selectCmd.value = [pGuid] 
             await this.cheqDt.refresh(); 
-            //checkRecord İŞLEMİ İÇİN YAPILDI
-            // for (let i = 0; i < this.posObj.posSale.dt().length; i++) 
-            // {
-            //     Object.setPrototypeOf(this.posObj.posSale.dt()[i],{stat:''})
-            // }
             await this.calcGrandTotal(false)
             resolve();
         });        
@@ -608,7 +619,7 @@ export default class posDoc extends React.PureComponent
             let tmpDt = new datatable(); 
             tmpDt.selectCmd = 
             {
-                query : "SELECT TOP 1 *,@CODE AS INPUT FROM ITEMS_POS_VW_01 WHERE CODE = @CODE OR BARCODE = @CODE AND STATUS = 1",
+                query : "SELECT TOP 1 *,@CODE AS INPUT FROM ITEMS_POS_VW_01 WHERE CODE = @CODE OR BARCODE = @CODE AND STATUS = 1 ORDER BY UNIT_TYPE ASC",
                 param : ['CODE:string|25'],
                 value: [pCode],
                 local : 
@@ -1338,12 +1349,11 @@ export default class posDoc extends React.PureComponent
     }    
     calcSaleTotal(pPrice,pQuantity,pDiscount,pLoyalty,pVatRate)
     {
-        let tmpAmount = Number(Number(Number(pPrice) * Number(pQuantity)).round(3)).round(2)
-        
-        let tmpFAmount = Number(Number(Number(tmpAmount)) - Number(Number(pDiscount)).round(3)).round(2)
+        let tmpAmount = Number(Number(Number(pPrice) * Number(pQuantity)).round(5)).round(2)
+        let tmpFAmount = Number(Number(Number(tmpAmount)) - Number(Number(pDiscount)).round(2))
         //let tmpFAmount = Number(parseFloat((pPrice * pQuantity) - (pDiscount)).round(2))
-        tmpFAmount = Number(Number(tmpFAmount - pLoyalty).round(3)).round(2)
-        let tmpVat = Number(Number(tmpFAmount - (tmpFAmount / ((pVatRate / 100) + 1))).round(3)).round(2)
+        tmpFAmount = Number(Number(tmpFAmount - pLoyalty).round(2))
+        let tmpVat = Number(parseFloat(tmpFAmount - (tmpFAmount / ((pVatRate / 100) + 1))))
     
         return {
             QUANTITY:pQuantity,
@@ -1513,7 +1523,7 @@ export default class posDoc extends React.PureComponent
         {
             await this.core.util.waitUntil()
             this.core.util.writeLog("saleClosed : " + pPayRest + " - " + this.posObj.dt().length + " - " + this.posObj.dt()[0].AMOUNT)
-            if(pPayRest == 0 && this.posObj.dt().length > 0 && this.posObj.dt()[0].AMOUNT > 0) //FIYATSIZ VE MİKTAR SIFIR ÜRÜNLER İÇİN KONTROL EKLENDİ. BU ŞEKİLDE SATIŞIN KAPANMASI ENGELLENDİ.
+            if(pPayRest == 0 && this.posObj.dt().length > 0 && this.posObj.dt()[0].AMOUNT > 0 && this.posObj.dt()[0].AMOUNT > this.posObj.dt()[0].DISCOUNT) //FIYATSIZ VE MİKTAR SIFIR ÜRÜNLER İÇİN KONTROL EKLENDİ. BU ŞEKİLDE SATIŞIN KAPANMASI ENGELLENDİ.
             {
                 setTimeout(() => 
                 {
@@ -2843,17 +2853,6 @@ export default class posDoc extends React.PureComponent
             }            
         });
     }
-    // checkRecord()
-    // {
-    //     for (let i = 0; i < this.posObj.posSale.dt().length; i++) 
-    //     {
-    //         if(typeof this.posObj.posSale.dt()[i].stat != 'undefined' && this.posObj.posSale.dt()[i].stat != '')
-    //         {
-    //             return {table:'POS_SALE',item:this.posObj.posSale.dt()[i].ITEM_NAME}
-    //         }
-    //     }
-    //     return
-    // }
     async sendJet(pData)
     {
         if(this.core.offline)
@@ -3069,6 +3068,78 @@ export default class posDoc extends React.PureComponent
             }
             await dialog(tmpConfObj);
         }
+    }
+    async ZReport()
+    {
+        let tmpArr = 
+        [
+            {align:"ct",logo:"./resources/logop.png"},
+            {font:"a",style:"b",size : [1,1],align:"ct",data:""},
+            {font:"a",style:"b",align:"ct",data: this.firm.length > 0 ? this.firm[0].ADDRESS1 : "7 ALLEE DU MIDI"},
+            {font:"a",style:"b",align:"ct",data: this.firm.length > 0 ? this.firm[0].ZIPCODE + " " + this.firm[0].CITY + " " + this.firm[0].COUNTRY_NAME : "54270 ESSEY LES NANCY FRANCE"},
+            {font:"a",style:"b",align:"ct",data: this.firm.length > 0 ? "Tel : " + this.firm[0].TEL : "Tel : 03 83 52 62 34"},
+            {font:"a",style:"b",align:"ct",data: this.firm.length > 0 ? this.firm[0].MAIL : "info@piqsoft.fr"},
+            {font:"a",style:"b",align:"ct",data: this.firm.length > 0 ? this.firm[0].WEB : "www.piqsoft.fr"},
+            {font:"a",style:"b",align:"ct",data: this.firm.length > 0 ? "Siret " + this.firm[0].SIRET_ID + " - APE " + this.firm[0].APE_CODE : "Siret 94 929 096 900 011 - APE 6201Z"},
+            {font:"a",style:"b",align:"ct",data: this.firm.length > 0 ? "Nr. TVA " + this.firm[0].INT_VAT_NO : "Nr. TVA FR61949290969"},
+            {font:"a",style:"b",size : [1,1],align:"ct",data:""},
+            {font:"a",style:"b",size : [1,1],align:"ct",data: "Z REPORT"},
+            {font:"a",style:"b",size : [1,1],align:"ct",data:""},
+            {font:"a",align:"lt",data:moment(new Date().toISOString()).utcOffset(0,false).locale('fr').format('dddd DD.MM.YYYY HH:mm:ss')},
+            {font:"a",align:"lt",pdf:{fontSize:11},data:("Caissier: " + this.user.CODE).space(25,'e') + ("Caisse: " + window.localStorage.getItem('device')).space(23,'s')},
+            {font:"a",style:"b",align:"lt",data:" ".space(48)},
+            {font:"a",style:"bu",align:"rt",data:" ".space(5) + " " + "Taux".space(8) + " " + "HT".space(10) + " " + "TVA".space(10) + " " + "TTC".space(10)}
+        ]
+
+        let tmpSaleDt = new datatable()
+        tmpSaleDt.selectCmd = 
+        {
+            query : "SELECT * FROM POS_SALE_VW_01 WHERE DEVICE = @DEVICE AND DOC_DATE = @DOC_DATE",
+            param : ['DEVICE:string|10','DOC_DATE:date'],
+            value : [window.localStorage.getItem('device'),moment(new Date()).format("YYYY-MM-DD")]
+        }
+        await tmpSaleDt.refresh()
+
+        if(tmpSaleDt.length > 0)
+        {
+            let tmpVatLst = tmpSaleDt.groupBy('VAT_RATE').orderBy('VAT_RATE','asc')
+            for (let i = 0; i < tmpVatLst.length; i++) 
+            {
+                tmpArr.push(
+                {
+                    font: "a",
+                    align: "rt",
+                    data: tmpVatLst[i].VAT_TYPE.space(5) + " " +
+                        (tmpVatLst[i].VAT_RATE + "%").space(8) + " " +
+                        tmpSaleDt.where({VAT_RATE:tmpVatLst[i].VAT_RATE}).sum('FAMOUNT',2).space(10) + " " + 
+                        tmpSaleDt.where({VAT_RATE:tmpVatLst[i].VAT_RATE}).sum('VAT',2).space(10) + " " + 
+                        tmpSaleDt.where({VAT_RATE:tmpVatLst[i].VAT_RATE}).sum('TOTAL',2).space(10)
+                })
+            }
+            tmpArr.push({font: "a",align: "rt",data: ("Total : ").space(16) + tmpSaleDt.sum('FAMOUNT',2).space(10) + " " + tmpSaleDt.sum('VAT',2).space(10) + " " + tmpSaleDt.sum('TOTAL',2).space(10)})
+            tmpArr.push({font:"a",style:"bu",align:"lt",data:" ".space(48)})
+        }
+
+        let tmpPayDt = new datatable()
+        tmpPayDt.selectCmd = 
+        {
+            query : "SELECT PAY_TYPE_NAME,SUM(AMOUNT - CHANGE) AS AMOUNT FROM POS_PAYMENT_VW_01 WHERE DEVICE = @DEVICE AND DOC_DATE = @DOC_DATE GROUP BY PAY_TYPE_NAME,PAY_TYPE ORDER BY PAY_TYPE ASC",
+            param : ['DEVICE:string|10','DOC_DATE:date'],
+            value : [window.localStorage.getItem('device'),moment(new Date()).format("YYYY-MM-DD")]
+        }
+        await tmpPayDt.refresh()
+
+        tmpArr.push({font:"a",style:"b",align:"lt",data:" ".space(48)})
+
+        for (let i = 0; i < tmpPayDt.length; i++) 
+        {
+            tmpArr.push({font: "b",align: "lt",size : [1,1],data: tmpPayDt[i].PAY_TYPE_NAME.space(16) + " " + Number(tmpPayDt[i].AMOUNT).toFixed(2).space(10)})
+            tmpArr.push({font:"a",style:"b",align:"lt",data:" ".space(48)})
+        }
+        tmpArr.push({font: "b",align: "lt",size : [1,1],data: ("Total : ").space(16) + " " + tmpPayDt.sum('AMOUNT',2).space(10)})
+        tmpArr.push({font:"a",style:"b",align:"lt",data:" ".space(48)})
+        //console.log(tmpArr)
+        await this.posDevice.escPrinter(tmpArr)
     }
     render()
     {
@@ -3457,8 +3528,8 @@ export default class posDoc extends React.PureComponent
                                     }}
                                     alignment={"center"} cssClass={"cell-fontsize"}/>                                    
                                     <Column dataField="ITEM_SNAME" caption={this.lang.t("grdList.ITEM_NAME")} width={220} cssClass={"cell-fontsize"}/>
-                                    <Column dataField="QUANTITY" caption={this.lang.t("grdList.QUANTITY")} width={80} cellRender={(e)=>{return (e.data.SCALE_MANUEL == true ? "M-" : "") + (e.data.UNIT_SHORT.toLowerCase() == 'kg' ? Number(e.value / e.data.UNIT_FACTOR).round(2) : Number(e.value / e.data.UNIT_FACTOR).round(0)) + e.data.UNIT_SHORT}} format={"#,##0.000" } cssClass={"cell-fontsize"}/>
-                                    <Column dataField="PRICE" caption={this.lang.t("grdList.PRICE")} width={80} cellRender={(e)=>{return Number(e.value * e.data.UNIT_FACTOR).round(2) + Number.money.sign + '/' + e.data.UNIT_SHORT}} cssClass={"cell-fontsize"}/>
+                                    <Column dataField="QUANTITY" caption={this.lang.t("grdList.QUANTITY")} width={80} cellRender={(e)=>{return (e.data.SCALE_MANUEL == true ? "M-" : "") + (e.data.UNIT_SHORT.toLowerCase() == 'kg' ? Number(e.value / e.data.UNIT_FACTOR).toFixed(3) : Number(e.value / e.data.UNIT_FACTOR).toFixed(0)) + e.data.UNIT_SHORT}} format={"#,##0.000" } cssClass={"cell-fontsize"}/>
+                                    <Column dataField="PRICE" caption={this.lang.t("grdList.PRICE")} width={80} cellRender={(e)=>{return Number(e.value * e.data.UNIT_FACTOR).toFixed(2) + Number.money.sign + '/' + e.data.UNIT_SHORT}} cssClass={"cell-fontsize"}/>
                                     <Column dataField="AMOUNT" alignment={"right"} caption={this.lang.t("grdList.AMOUNT")} width={60} format={"#,##0.00" + Number.money.sign} cssClass={"cell-fontsize"}/>                                                
                                 </NdGrid>
                             </div>
@@ -3532,45 +3603,7 @@ export default class posDoc extends React.PureComponent
                                                     return
                                                 }
                                             }  
-                                            //* SATIŞI KAPATMADAN ÖNCE KAYITLAR KONTROL EDİLİYOR */
-                                            // let tmpCheckRecord = this.checkRecord()
-                                            // if(typeof tmpCheckRecord != 'undefined')
-                                            // {
-                                            //     let tmpConfObj = {}
-                                            //     if(tmpCheckRecord.table == 'POS')
-                                            //     {
-                                            //         tmpConfObj =
-                                            //         {
-                                            //             id:'msgCheckRecord',showTitle:true,title:this.lang.t("msgCheckRecord.title"),showCloseButton:false,width:'500px',height:'250px',
-                                            //             button:[{id:"btn01",caption:this.lang.t("msgCheckRecord.btn01"),location:'after'}],
-                                            //             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgCheckRecord.msg1")}</div>)
-                                            //         }
-                                            //     }
-                                            //     else if(tmpCheckRecord.table == 'POS_SALE')
-                                            //     {
-                                            //         tmpConfObj =
-                                            //         {
-                                            //             id:'msgCheckRecord',showTitle:true,title:this.lang.t("msgCheckRecord.title"),showCloseButton:false,width:'500px',height:'250px',
-                                            //             button:[{id:"btn01",caption:this.lang.t("msgCheckRecord.btn01"),location:'after'}],
-                                            //             content:(
-                                            //             <div style={{textAlign:"center",fontSize:"20px"}}>
-                                            //                 <div className="row">
-                                            //                     <div className="col-12">{this.lang.t("msgCheckRecord.msg1")}</div>
-                                            //                 </div>
-                                            //                 <div className="row">
-                                            //                     <div className="col-12">{this.lang.t("msgCheckRecord.msg2")} {tmpCheckRecord.item}</div>
-                                            //                 </div>
-                                            //             </div>)
-                                            //         }
-                                            //     }
-
-                                            //     let tmpMsgResult = await dialog(tmpConfObj);
-                                            //     if(tmpMsgResult == 'btn01')
-                                            //     {
-                                            //         return
-                                            //     }
-                                            // }
-                                            //*************************************************** */
+                                            
                                             let tmpPayRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).round(2));
 
                                             this.posLcd.print
@@ -3606,45 +3639,7 @@ export default class posDoc extends React.PureComponent
                                                     return
                                                 }
                                             }
-                                            //* SATIŞI KAPATMADAN ÖNCE KAYITLAR KONTROL EDİLİYOR */
-                                            // let tmpCheckRecord = this.checkRecord()
-                                            // if(typeof tmpCheckRecord != 'undefined')
-                                            // {
-                                            //     let tmpConfObj = {}
-                                            //     if(tmpCheckRecord.table == 'POS')
-                                            //     {
-                                            //         tmpConfObj =
-                                            //         {
-                                            //             id:'msgCheckRecord',showTitle:true,title:this.lang.t("msgCheckRecord.title"),showCloseButton:false,width:'500px',height:'250px',
-                                            //             button:[{id:"btn01",caption:this.lang.t("msgCheckRecord.btn01"),location:'after'}],
-                                            //             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgCheckRecord.msg1")}</div>)
-                                            //         }
-                                            //     }
-                                            //     else if(tmpCheckRecord.table == 'POS_SALE')
-                                            //     {
-                                            //         tmpConfObj =
-                                            //         {
-                                            //             id:'msgCheckRecord',showTitle:true,title:this.lang.t("msgCheckRecord.title"),showCloseButton:false,width:'500px',height:'250px',
-                                            //             button:[{id:"btn01",caption:this.lang.t("msgCheckRecord.btn01"),location:'after'}],
-                                            //             content:(
-                                            //             <div style={{textAlign:"center",fontSize:"20px"}}>
-                                            //                 <div className="row">
-                                            //                     <div className="col-12">{this.lang.t("msgCheckRecord.msg1")}</div>
-                                            //                 </div>
-                                            //                 <div className="row">
-                                            //                     <div className="col-12">{this.lang.t("msgCheckRecord.msg2")} {tmpCheckRecord.item}</div>
-                                            //                 </div>
-                                            //             </div>)
-                                            //         }
-                                            //     }
-
-                                            //     let tmpMsgResult = await dialog(tmpConfObj);
-                                            //     if(tmpMsgResult == 'btn01')
-                                            //     {
-                                            //         return
-                                            //     }
-                                            // } 
-                                            //*************************************************** */
+                                            
                                             let tmpPayRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).round(2));
                                             
                                             this.posLcd.print
@@ -3724,45 +3719,7 @@ export default class posDoc extends React.PureComponent
                                                     return
                                                 }
                                             }   
-                                            //* SATIŞI KAPATMADAN ÖNCE KAYITLAR KONTROL EDİLİYOR */
-                                            // let tmpCheckRecord = this.checkRecord()
-                                            // if(typeof tmpCheckRecord != 'undefined')
-                                            // {
-                                            //     let tmpConfObj = {}
-                                            //     if(tmpCheckRecord.table == 'POS')
-                                            //     {
-                                            //         tmpConfObj =
-                                            //         {
-                                            //             id:'msgCheckRecord',showTitle:true,title:this.lang.t("msgCheckRecord.title"),showCloseButton:false,width:'500px',height:'250px',
-                                            //             button:[{id:"btn01",caption:this.lang.t("msgCheckRecord.btn01"),location:'after'}],
-                                            //             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgCheckRecord.msg1")}</div>)
-                                            //         }
-                                            //     }
-                                            //     else if(tmpCheckRecord.table == 'POS_SALE')
-                                            //     {
-                                            //         tmpConfObj =
-                                            //         {
-                                            //             id:'msgCheckRecord',showTitle:true,title:this.lang.t("msgCheckRecord.title"),showCloseButton:false,width:'500px',height:'250px',
-                                            //             button:[{id:"btn01",caption:this.lang.t("msgCheckRecord.btn01"),location:'after'}],
-                                            //             content:(
-                                            //             <div style={{textAlign:"center",fontSize:"20px"}}>
-                                            //                 <div className="row">
-                                            //                     <div className="col-12">{this.lang.t("msgCheckRecord.msg1")}</div>
-                                            //                 </div>
-                                            //                 <div className="row">
-                                            //                     <div className="col-12">{this.lang.t("msgCheckRecord.msg2")} {tmpCheckRecord.item}</div>
-                                            //                 </div>
-                                            //             </div>)
-                                            //         }
-                                            //     }
-
-                                            //     let tmpMsgResult = await dialog(tmpConfObj);
-                                            //     if(tmpMsgResult == 'btn01')
-                                            //     {
-                                            //         return
-                                            //     }
-                                            // } 
-                                            //****************************************************************************************************************************************** */                
+                                                        
                                             let tmpPayRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).round(2));
                                             
                                             this.posLcd.print
@@ -4203,9 +4160,27 @@ export default class posDoc extends React.PureComponent
                                             <i className="text-white fa-solid fa-magnifying-glass-chart" style={{fontSize: "24px"}} />
                                         </NbButton>
                                     </div>
-                                    {/* Blank */}
+                                    {/* Z Report */}
                                     <div className="col px-1">
-                                        <NbButton id={"btn"} parent={this} className="form-group btn btn-secondary btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt"}}></NbButton>
+                                        {(()=>
+                                        {
+                                            if(this.prmObj.filter({ID:'ZReport',TYPE:0}).getValue() == false)
+                                            {
+                                                return <NbButton id={"btn"} parent={this} className="form-group btn btn-secondary btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt"}}></NbButton>
+                                            }
+                                            else
+                                            {
+                                                return (
+                                                    <NbButton id={"btnZReport"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt"}}
+                                                    onClick={()=>
+                                                    {
+                                                        this.ZReport()
+                                                    }}>
+                                                        <i className="text-white fa-solid fa-chart-pie" style={{fontSize: "24px"}} />
+                                                    </NbButton>
+                                                )
+                                            }
+                                        })()}
                                     </div>
                                     {/* Blank */}
                                     <div className="col px-1">
@@ -6156,6 +6131,36 @@ export default class posDoc extends React.PureComponent
                                                         customerGrowPoint : tmpLastPos[0].CUSTOMER_POINT - Math.floor(tmpLastPos[0].TOTAL)
                                                     }
                                                 }
+                                                //YAZDIRMA İŞLEMİNDEN ÖNCE KULLANICIYA SORULUYOR
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgMailPrintAlert',showTitle:true,title:this.lang.t("msgMailPrintAlert.title"),showCloseButton:true,width:'500px',height:'250px',
+                                                    button:[{id:"btn01",caption:this.lang.t("msgMailPrintAlert.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgMailPrintAlert.btn02"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgMailPrintAlert.msg")}</div>)
+                                                }
+                                                let pResult = await dialog(tmpConfObj);
+                                                if(pResult == 'btn01')
+                                                {
+                                                    if(this.posObj.dt()[0].CUSTOMER_GUID != '00000000-0000-0000-0000-000000000000')
+                                                    { 
+                                                        let tmpQuery = 
+                                                        {
+                                                            query :"SELECT EMAIL FROM CUSTOMER_VW_02 WHERE GUID = @GUID",
+                                                            param:  ['GUID:string|50'],
+                                                            value:  [this.posObj.dt()[0].CUSTOMER_GUID]
+                                                        }
+                                                        let tmpMailData = await this.core.sql.execute(tmpQuery) 
+                                                        if(tmpMailData.result.recordset.length > 0)
+                                                        {
+                                                            this.txtMail.value = tmpMailData.result.recordset[0].EMAIL
+                                                        }
+                                                    }
+
+                                                    this.mailPopup.tmpData = tmpData;
+                                                    await this.mailPopup.show()
+                                                    return
+                                                }
+
                                                 await this.print(tmpData,0)
                                             }
                                             
@@ -8103,6 +8108,14 @@ export default class posDoc extends React.PureComponent
                             </div>
                         </div>     
                     </NdDialog>
+                </div>
+                {/* Balance Counter Description Popup */} 
+                <div>
+                    <NbPopDescboard id={"popBalanceCounterDesc"} parent={this} width={"900"} height={"700"} position={"#root"} head={this.lang.t("popBalanceCounterDesc.head")} title={this.lang.t("popBalanceCounterDesc.title")}         
+                    button={[{id:"btn02",caption:this.lang.t("popBalanceCounterDesc.btn02"),location:'after'}]}
+                    param={this.prmObj.filter({ID:'popBalanceCounterDesc',TYPE:0})}
+                    >
+                    </NbPopDescboard>
                 </div>
             </div>
         )
