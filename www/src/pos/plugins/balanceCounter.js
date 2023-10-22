@@ -87,167 +87,174 @@ posDoc.prototype.delete = async function()
 }
 posDoc.prototype.getItem = async function(pCode)
 {
-    getBarPattern = getBarPattern.bind(this)
-    getBalanceCounter = getBalanceCounter.bind(this)
-
-    let tmpTicketNo = getBarPattern(pCode)
-
-    if(typeof tmpTicketNo != 'undefined')
+    if(!this.btnGetCustomer.lock)
     {
-        if(!this.loading.current.instance.option('visible'))
+        getBarPattern = getBarPattern.bind(this)
+        getBalanceCounter = getBalanceCounter.bind(this)
+    
+        let tmpTicketNo = getBarPattern(pCode)
+    
+        if(typeof tmpTicketNo != 'undefined')
         {
-            this.txtBarcode.value = "";
-            this.loading.current.instance.show()
-            let tmpBalanceDt = await getBalanceCounter(tmpTicketNo)
-            
-            if(tmpBalanceDt.length > 0)
+            if(!this.loading.current.instance.option('visible'))
             {
-                //TERAZİYE TOPLAM MİKTAR EŞLEŞMESİ
-                if(typeof this.prmObj.filter({ID:'ScaleBarcodeControl',TYPE:0}).getValue().active != 'undefined' && this.prmObj.filter({ID:'ScaleBarcodeControl',TYPE:0}).getValue().active)
+                this.txtBarcode.value = "";
+                this.loading.current.instance.show()
+                let tmpBalanceDt = await getBalanceCounter(tmpTicketNo)
+                
+                if(tmpBalanceDt.length > 0)
                 {
-                    //ETIKET İÇERİSİNDE ADET ÜRÜN KONTROL EDİLİYOR
-                    if(tmpBalanceDt.where({UNIT:'U'}).length == 0)
+                    //TERAZİYE TOPLAM MİKTAR EŞLEŞMESİ
+                    if(typeof this.prmObj.filter({ID:'ScaleBarcodeControl',TYPE:0}).getValue().active != 'undefined' && this.prmObj.filter({ID:'ScaleBarcodeControl',TYPE:0}).getValue().active)
                     {
-                        let tmpQuantity = 0
-                        let tmpTolerans = 0
-                        let tmpDQuantity = Number(tmpBalanceDt.sum('QUANTITY')).round(3)
-                        if(typeof this.prmObj.filter({ID:'ScaleBarcodeControl',TYPE:0}).getValue().tolerans != 'undefined')
+                        //ETIKET İÇERİSİNDE ADET ÜRÜN KONTROL EDİLİYOR
+                        if(tmpBalanceDt.where({UNIT:'U'}).length == 0)
                         {
-                            tmpTolerans = this.prmObj.filter({ID:'ScaleBarcodeControl',TYPE:0}).getValue().tolerans
-                        }
-                        //TERAZİYE İSTEK YAPILIYOR.
-                        let tmpWResult = await this.getWeighing(0.1)
-                        if(typeof tmpWResult != 'undefined')
-                        {
-                            if(typeof tmpWResult.Result == 'undefined')
+                            let tmpQuantity = 0
+                            let tmpTolerans = 0
+                            let tmpDQuantity = Number(tmpBalanceDt.sum('QUANTITY')).round(3)
+                            if(typeof this.prmObj.filter({ID:'ScaleBarcodeControl',TYPE:0}).getValue().tolerans != 'undefined')
                             {
-                                tmpQuantity = tmpWResult;
+                                tmpTolerans = this.prmObj.filter({ID:'ScaleBarcodeControl',TYPE:0}).getValue().tolerans
                             }
-                            else
+                            //TERAZİYE İSTEK YAPILIYOR.
+                            let tmpWResult = await this.getWeighing(0.1)
+                            if(typeof tmpWResult != 'undefined')
                             {
-                                if(tmpWResult.Type == "02")
+                                if(typeof tmpWResult.Result == 'undefined')
                                 {
-                                    if(tmpWResult.Result.Scale > 0)
+                                    tmpQuantity = tmpWResult;
+                                }
+                                else
+                                {
+                                    if(tmpWResult.Type == "02")
                                     {
-                                        tmpQuantity = tmpWResult.Result.Scale
+                                        if(tmpWResult.Result.Scale > 0)
+                                        {
+                                            tmpQuantity = tmpWResult.Result.Scale
+                                        }
                                     }
                                 }
                             }
-                        }
-        
-                        if(tmpQuantity == 0)
-                        {
-                            this.loading.current.instance.hide()
-                            return
-                        }
-                        
-                        if(tmpQuantity >= Number(tmpDQuantity) - Number(tmpTolerans) && tmpQuantity <= Number(tmpDQuantity) + Number(tmpTolerans))
-                        {
-                            let tmpLangMsg = this.lang.t("msgBarcodeWeighing.msg")
-                            tmpLangMsg = tmpLangMsg.replace('{0}',tmpBalanceDt.length)
-                            tmpLangMsg = tmpLangMsg.replace('{1}',Number(tmpBalanceDt.sum('AMOUNT')).round(2))
+            
+                            if(tmpQuantity == 0)
+                            {
+                                this.loading.current.instance.hide()
+                                return
+                            }
                             
+                            if(tmpQuantity >= Number(tmpDQuantity) - Number(tmpTolerans) && tmpQuantity <= Number(tmpDQuantity) + Number(tmpTolerans))
+                            {
+                                let tmpLangMsg = this.lang.t("msgBarcodeWeighing.msg")
+                                tmpLangMsg = tmpLangMsg.replace('{0}',tmpBalanceDt.length)
+                                tmpLangMsg = tmpLangMsg.replace('{1}',Number(tmpBalanceDt.sum('AMOUNT')).round(2))
+                                
+                                let tmpConfObj =
+                                {
+                                    id:'msgBarcodeWeighing',showTitle:true,title:this.lang.t("msgBarcodeWeighing.title"),showCloseButton:true,width:'400px',height:'200px',
+                                    button:[{id:"btn01",caption:this.lang.t("msgBarcodeWeighing.btn01"),location:'before'}],
+                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{tmpLangMsg}</div>)
+                                }
+                                await dialog(tmpConfObj);
+                            }
+                            else
+                            {
+                                document.getElementById("Sound").play(); 
+                                let tmpConfObj =
+                                {
+                                    id:'msgNotBarcodeWeighing',showTitle:true,title:this.lang.t("msgNotBarcodeWeighing.title"),showCloseButton:true,width:'400px',height:'200px',
+                                    button:[{id:"btn01",caption:this.lang.t("msgNotBarcodeWeighing.btn01"),location:'before'}],
+                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgNotBarcodeWeighing.msg")}</div>)
+                                }
+                                await dialog(tmpConfObj);
+                                this.loading.current.instance.hide()
+                                return
+                            }
+                        }
+                        else
+                        {
                             let tmpConfObj =
                             {
-                                id:'msgBarcodeWeighing',showTitle:true,title:this.lang.t("msgBarcodeWeighing.title"),showCloseButton:true,width:'400px',height:'200px',
-                                button:[{id:"btn01",caption:this.lang.t("msgBarcodeWeighing.btn01"),location:'before'}],
-                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{tmpLangMsg}</div>)
+                                id:'msgBarcodeWeighingUnit',showTitle:true,title:this.lang.t("msgBarcodeWeighingUnit.title"),showCloseButton:true,width:'400px',height:'230px',
+                                button:[{id:"btn01",caption:this.lang.t("msgBarcodeWeighingUnit.btn01"),location:'before'}],
+                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgBarcodeWeighingUnit.msg")}</div>)
                             }
                             await dialog(tmpConfObj);
                         }
-                        else
+                    }
+                    //**************************************************************************************** */
+                    //ÜRÜN KONTROL EDİLİYOR
+                    for (let i = 0; i < tmpBalanceDt.length; i++) 
+                    {
+                        let tmpItemsDt = await this.getItemDb(tmpBalanceDt[i].ITEM_CODE)
+                        if(tmpItemsDt.length == 0)
                         {
                             document.getElementById("Sound").play(); 
                             let tmpConfObj =
                             {
-                                id:'msgNotBarcodeWeighing',showTitle:true,title:this.lang.t("msgNotBarcodeWeighing.title"),showCloseButton:true,width:'400px',height:'200px',
-                                button:[{id:"btn01",caption:this.lang.t("msgNotBarcodeWeighing.btn01"),location:'before'}],
-                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgNotBarcodeWeighing.msg")}</div>)
+                                id:'msgBarcodeNotFound',
+                                showTitle:true,
+                                title:this.lang.t("msgBarcodeNotFound.title"),
+                                showCloseButton:true,
+                                width:'500px',
+                                height:'200px',
+                                button:[{id:"btn01",caption:this.lang.t("msgBarcodeNotFound.btn01"),location:'after'}],
+                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgBarcodeNotFound.msg")}</div>)
                             }
                             await dialog(tmpConfObj);
                             this.loading.current.instance.hide()
                             return
                         }
                     }
-                    else
+                    for (let i = 0; i < tmpBalanceDt.length; i++) 
                     {
-                        let tmpConfObj =
-                        {
-                            id:'msgBarcodeWeighingUnit',showTitle:true,title:this.lang.t("msgBarcodeWeighingUnit.title"),showCloseButton:true,width:'400px',height:'230px',
-                            button:[{id:"btn01",caption:this.lang.t("msgBarcodeWeighingUnit.btn01"),location:'before'}],
-                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgBarcodeWeighingUnit.msg")}</div>)
-                        }
-                        await dialog(tmpConfObj);
-                    }
-                }
-                //**************************************************************************************** */
-                //ÜRÜN KONTROL EDİLİYOR
-                for (let i = 0; i < tmpBalanceDt.length; i++) 
-                {
-                    let tmpItemsDt = await this.getItemDb(tmpBalanceDt[i].ITEM_CODE)
-                    if(tmpItemsDt.length == 0)
-                    {
-                        document.getElementById("Sound").play(); 
-                        let tmpConfObj =
-                        {
-                            id:'msgBarcodeNotFound',
-                            showTitle:true,
-                            title:this.lang.t("msgBarcodeNotFound.title"),
-                            showCloseButton:true,
-                            width:'500px',
-                            height:'200px',
-                            button:[{id:"btn01",caption:this.lang.t("msgBarcodeNotFound.btn01"),location:'after'}],
-                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgBarcodeNotFound.msg")}</div>)
-                        }
-                        await dialog(tmpConfObj);
-                        this.loading.current.instance.hide()
-                        return
-                    }
-                }
-                for (let i = 0; i < tmpBalanceDt.length; i++) 
-                {
-                    let tmpItemsDt = await this.getItemDb(tmpBalanceDt[i].ITEM_CODE)
-                    
-                    if(tmpItemsDt.length > 0)
-                    {
-                        //TERAZİ DEN VERİ GELMEZ İSE KULLANICI ELLE MİKTAR GİRDİĞİNİ TUTAN ALAN
-                        tmpItemsDt[0].SCALE_MANUEL = false;
+                        let tmpItemsDt = await this.getItemDb(tmpBalanceDt[i].ITEM_CODE)
                         
-                        tmpItemsDt[0].QUANTITY = tmpBalanceDt[i].QUANTITY
-                        tmpItemsDt[0].PRICE = tmpBalanceDt[i].PRICE
-                        this.saleAdd(tmpItemsDt[0])
-                        //BALANCE COUNTER STATUS UPDATE İŞLEMİ
-                        let tmpUpdateQuery = 
+                        if(tmpItemsDt.length > 0)
                         {
-                            query : "EXEC [dbo].[PRD_BALANCE_COUNTER_UPDATE] " + 
-                                    "@GUID = @PGUID, " + 
-                                    "@LUSER = @PLUSER, " + 
-                                    "@LDATE = @PLDATE, " +
-                                    "@POS = @PPOS, " +
-                                    "@STATUS = @PSTATUS ", 
-                            param : ['PGUID:string|50','PLUSER:string|25','PLDATE:datetime','PPOS:string|50','PSTATUS:bit'],
-                            value : [tmpBalanceDt[i].GUID,this.posObj.dt()[0].LUSER,new Date(),this.posObj.dt()[0].GUID,1]
+                            //TERAZİ DEN VERİ GELMEZ İSE KULLANICI ELLE MİKTAR GİRDİĞİNİ TUTAN ALAN
+                            tmpItemsDt[0].SCALE_MANUEL = false;
+                            
+                            tmpItemsDt[0].QUANTITY = tmpBalanceDt[i].QUANTITY
+                            tmpItemsDt[0].PRICE = tmpBalanceDt[i].PRICE
+                            this.saleAdd(tmpItemsDt[0])
+                            //BALANCE COUNTER STATUS UPDATE İŞLEMİ
+                            let tmpUpdateQuery = 
+                            {
+                                query : "EXEC [dbo].[PRD_BALANCE_COUNTER_UPDATE] " + 
+                                        "@GUID = @PGUID, " + 
+                                        "@LUSER = @PLUSER, " + 
+                                        "@LDATE = @PLDATE, " +
+                                        "@POS = @PPOS, " +
+                                        "@STATUS = @PSTATUS ", 
+                                param : ['PGUID:string|50','PLUSER:string|25','PLDATE:datetime','PPOS:string|50','PSTATUS:bit'],
+                                value : [tmpBalanceDt[i].GUID,this.posObj.dt()[0].LUSER,new Date(),this.posObj.dt()[0].GUID,1]
+                            }
+                            await this.core.sql.execute(tmpUpdateQuery)
                         }
-                        await this.core.sql.execute(tmpUpdateQuery)
-                    }
-                }    
-            }
-            else
-            {
-                let tmpConfObj =
-                {
-                    id:'msgBarcodeNotFound',
-                    showTitle:true,
-                    title:this.lang.t("msgBarcodeNotFound.title"),
-                    showCloseButton:true,
-                    width:'500px',
-                    height:'200px',
-                    button:[{id:"btn01",caption:this.lang.t("msgBarcodeNotFound.btn01"),location:'after'}],
-                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgBarcodeNotFound.msg")}</div>)
+                    }    
                 }
-                await dialog(tmpConfObj);
+                else
+                {
+                    let tmpConfObj =
+                    {
+                        id:'msgBarcodeNotFound',
+                        showTitle:true,
+                        title:this.lang.t("msgBarcodeNotFound.title"),
+                        showCloseButton:true,
+                        width:'500px',
+                        height:'200px',
+                        button:[{id:"btn01",caption:this.lang.t("msgBarcodeNotFound.btn01"),location:'after'}],
+                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgBarcodeNotFound.msg")}</div>)
+                    }
+                    await dialog(tmpConfObj);
+                }
+                this.loading.current.instance.hide()
             }
-            this.loading.current.instance.hide()
+        }
+        else
+        {
+            orgGetItem.call(this,pCode)
         }
     }
     else

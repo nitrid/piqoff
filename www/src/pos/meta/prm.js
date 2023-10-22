@@ -34,8 +34,7 @@ export const prm =
         ID :"BarcodePattern",
         VALUE : 
         [
-            '20NNNNMMMCCF',
-            '21NNNNNMMMCCF',
+            '21XXXXXMMMCCF',
             '29NNNNMMMCCF',
             '29NNNNNMMMCCF',
             '020NNNNMMMCCF',
@@ -1134,8 +1133,8 @@ export const prm =
         ID :"ScaleBarcodeControl",
         VALUE : 
         {
-            active : false,
-            tolerans : 0.030
+            active : true,
+            tolerans : 0.050
         },
         SPECIAL : "",
         PAGE : "pos",
