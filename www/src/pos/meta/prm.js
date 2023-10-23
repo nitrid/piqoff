@@ -37,7 +37,7 @@ export const prm =
             '21XXXXXMMMCCF',
             '29NNNNMMMCCF',
             '29NNNNNMMMCCF',
-            '020NNNNMMMCCF',
+            '020NNNNMMMCC',
             '27NNNNNKKGGGF',
         ],
         SPECIAL : "",
