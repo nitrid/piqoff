@@ -798,6 +798,7 @@ export const langIt =
         msgTicket: "Quantità pesata: ",
         msgBarkod: "Quantità dell'etichetta: ",
         msgDifference: "Differenza: ",
+        msgTotalAmount : "Total Amount : ",
         btn01: "OK",
         btn02: "Continua"
     },

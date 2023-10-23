@@ -798,6 +798,7 @@ export const langTr =
         msgTicket :"Tartılan miktar : ",
         msgBarkod : "Etiket miktari : ",
         msgDifference : "Fark : ",
+        msgTotalAmount : "Toplam Tutar : ",
         btn01 : "Tamam",
         btn02 : "Devam"
     },

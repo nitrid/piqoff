@@ -798,6 +798,7 @@ export const langFr =
         msgTicket: "Weighed quantity: ",
         msgBarkod: "Label quantity: ",
         msgDifference: "Difference: ",
+        msgTotalAmount : "Total etiquette boucherie : ",
         btn01: "OK",
         btn02: "Continue"
     },
