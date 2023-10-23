@@ -791,11 +791,15 @@ export const langEn =
         msg: "Connection to the server is interrupted",
         btn01: "OK"
     },
-    msgNotBarcodeWeighing:
+    msgNotBarcodeWeighing: 
     {
         title: "Attention",
         msg: "The total quantity of the weighed product does not match the scanned barcode!",
-        btn01: "OK"
+        msgTicket: "Weighed quantity: ",
+        msgBarkod: "Label quantity: ",
+        msgDifference: "Difference: ",
+        btn01: "OK",
+        btn02: "Continue"
     },
     msgBarcodeWeighing:
     {

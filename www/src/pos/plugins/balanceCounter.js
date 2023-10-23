@@ -164,7 +164,7 @@ posDoc.prototype.getItem = async function(pCode)
                             document.getElementById("Sound").play(); 
                             let tmpConfObj =
                             {
-                                id:'msgNotBarcodeWeighing',showTitle:true,title:this.lang.t("msgNotBarcodeWeighing.title"),showCloseButton:true,width:'550px',height:'250px',
+                                id:'msgNotBarcodeWeighing',showTitle:true,title:this.lang.t("msgNotBarcodeWeighing.title"),showCloseButton:true,width:'650px',height:'350px',
                                 button:[{id:"btn02",caption:this.lang.t("msgNotBarcodeWeighing.btn02"),location:'after'},{id:"btn01",caption:this.lang.t("msgNotBarcodeWeighing.btn01"),location:'before'}],
                                 content:
                                 (
