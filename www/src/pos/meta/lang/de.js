@@ -791,11 +791,15 @@ export const langDe =
         msg: "Die Verbindung zum Server wurde getrennt.",
         btn01: "OK"
     },
-    msgNotBarcodeWeighing:
+    msgNotBarcodeWeighing: 
     {
         title: "Achtung",
-        msg: "Die Gesamtmenge des gewogenen Produkts stimmt nicht mit dem gescannten Barcode überein!",
-        btn01: "OK"
+        msg: "Die Gesamtmenge des gewogenen Produkts stimmt nicht mit dem gescannten Barcode überein",
+        msgTicket: "Gewogene Menge: ",
+        msgBarkod: "Menge des Etiketts: ",
+        msgDifference: "Differenz: ",
+        btn01: "OK",
+        btn02: "Weiter"
     },
     msgBarcodeWeighing:
     {

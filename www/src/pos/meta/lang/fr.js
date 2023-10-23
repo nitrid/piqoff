@@ -794,8 +794,12 @@ export const langFr =
     msgNotBarcodeWeighing: //BAK
     {
         title: "Attention",
-        msg: "La quantité totale du produit pesé ne correspond pas au code-barres lu !",
-        btn01: "D'accord"
+        msg: "The total quantity of the weighed product does not match the scanned barcode!",
+        msgTicket: "Weighed quantity: ",
+        msgBarkod: "Label quantity: ",
+        msgDifference: "Difference: ",
+        btn01: "OK",
+        btn02: "Continue"
     },
     msgBarcodeWeighing: //BAK
     {

@@ -791,11 +791,15 @@ export const langEs =
         msg: "¡Se ha perdido la conexión con el servidor!",
         btn01: "Aceptar"
     },
-    msgNotBarcodeWeighing:
+    msgNotBarcodeWeighing: 
     {
         title: "Atención",
-        msg: "La cantidad total del producto pesado no coincide con el código de barras escaneado.",
-        btn01: "Aceptar"
+        msg: "La cantidad total del producto pesado no coincide con el código de barras escaneado",
+        msgTicket: "Cantidad pesada: ",
+        msgBarkod: "Cantidad de etiqueta: ",
+        msgDifference: "Diferencia: ",
+        btn01: "Aceptar",
+        btn02: "Continuar"
     },
     msgBarcodeWeighing:
     {
