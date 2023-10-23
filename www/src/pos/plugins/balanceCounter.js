@@ -148,9 +148,6 @@ posDoc.prototype.getItem = async function(pCode)
                             this.loading.current.instance.hide()
                             return
                         }
-                        console.log(tmpQuantity)
-                        console.log(tmpDQuantity)
-                        console.log(tmpTolerans)
                         let resultQuantity = Number((tmpDQuantity) - (tmpQuantity)).round(3)
                         if(tmpQuantity >= Number(tmpDQuantity) - Number(tmpTolerans) && tmpQuantity <= Number(tmpDQuantity) + Number(tmpTolerans))
                         {
@@ -192,6 +189,11 @@ posDoc.prototype.getItem = async function(pCode)
                                         <div className="row" style={{textAlign:"center",fontSize:"20px"}}>
                                             <div className="col-12">
                                                 <span style={{color: resultQuantity > tmpTolerans ? "red" : "red"}}>{this.lang.t("msgNotBarcodeWeighing.msgDifference")}{resultQuantity} kg</span>
+                                            </div>
+                                        </div>
+                                        <div className="row" style={{textAlign:"center",fontSize:"20px"}}>
+                                            <div className="col-12">
+                                                <span>{this.lang.t("msgNotBarcodeWeighing.msgTotalAmount")}{Number(tmpBalanceDt.sum('AMOUNT')).round(2)}€</span>
                                             </div>
                                         </div>
                                     </div>
