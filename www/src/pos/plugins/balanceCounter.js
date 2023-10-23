@@ -159,7 +159,7 @@ posDoc.prototype.getItem = async function(pCode)
                             {
                                 id:'msgBarcodeWeighing',showTitle:true,title:this.lang.t("msgBarcodeWeighing.title"),showCloseButton:true,width:'400px',height:'200px',
                                 button:[{id:"btn01",caption:this.lang.t("msgBarcodeWeighing.btn01"),location:'before'}],
-                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{tmpLangMsg} </div>)
+                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{tmpLangMsg} {Number.money.sign}</div>)
                             }
                             await dialog(tmpConfObj);
                         }
@@ -193,7 +193,7 @@ posDoc.prototype.getItem = async function(pCode)
                                         </div>
                                         <div className="row" style={{textAlign:"center",fontSize:"20px"}}>
                                             <div className="col-12">
-                                                <span>{this.lang.t("msgNotBarcodeWeighing.msgTotalAmount")}{Number(tmpBalanceDt.sum('AMOUNT')).round(2)}€</span>
+                                                <span>{this.lang.t("msgNotBarcodeWeighing.msgTotalAmount")}{Number(tmpBalanceDt.sum('AMOUNT')).round(2)} €</span>
                                             </div>
                                         </div>
                                     </div>
@@ -336,7 +336,7 @@ function getBalanceCounter(pTicketNo)
         {
             query : "SELECT * FROM BALANCE_COUNTER_VW_01 WHERE TICKET_NO = @TICKET_NO AND CONVERT(NVARCHAR(10),TICKET_DATE,112) >= @TICKET_DATE AND STATUS = 0 ORDER BY TICKET_DATE DESC",
             param : ['TICKET_NO:int','TICKET_DATE:datetime'],
-            value: [Number(pTicketNo),new Date(moment().subtract(1,'days').format('YYYY-MM-DD'))]
+            value: [Number(pTicketNo),new Date(moment().subtract(0,'days').format('YYYY-MM-DD'))]
         }
         await tmpDt.refresh();   
         resolve(tmpDt)

@@ -829,6 +829,7 @@ export default class posDoc extends React.PureComponent
         //******************************************************** */
         //BARKOD DESENİ
         let tmpBarPattern = this.getBarPattern(pCode)
+        console.log(tmpBarPattern)
         tmpPrice = typeof tmpBarPattern.price == 'undefined' || tmpBarPattern.price == 0 ? tmpPrice : tmpBarPattern.price
         tmpQuantity = typeof tmpBarPattern.quantity == 'undefined' || tmpBarPattern.quantity == 0 ? tmpQuantity : tmpBarPattern.quantity
         pCode = tmpBarPattern.barcode     
@@ -1144,11 +1145,26 @@ export default class posDoc extends React.PureComponent
                 let tmpKgFlag = tmpPrm[i].substring(tmpPrm[i].indexOf('K'),tmpPrm[i].lastIndexOf('K') + 1)
                 let tmpGram = pBarcode.substring(tmpPrm[i].indexOf('G'),tmpPrm[i].lastIndexOf('G') + 1)
                 let tmpGramFlag = tmpPrm[i].substring(tmpPrm[i].indexOf('G'),tmpPrm[i].lastIndexOf('G') + 1)
-                let tmpSumFlag = tmpPrm[i].substring(tmpPrm[i].indexOf('F'),tmpPrm[i].lastIndexOf('F') + 1)
+
+                let tmpSumFlag = ""
+                if(tmpPrm[i].indexOf('F') > -1)
+                {
+                    tmpSumFlag = tmpPrm[i].substring(tmpPrm[i].indexOf('F'),tmpPrm[i].lastIndexOf('F') + 1)
+                }
+                else if(tmpPrm[i].indexOf('E') > -1)
+                {
+                    tmpSumFlag = tmpPrm[i].substring(tmpPrm[i].indexOf('E'),tmpPrm[i].lastIndexOf('E') + 1)
+                }
                 
+                let tmpFactory = 1
+                if(tmpSumFlag == 'F')
+                {
+                    tmpFactory =  this.prmObj.filter({ID:'ScalePriceFactory',TYPE:0}).getValue()
+                }
+
                 return {
                     barcode : pBarcode.substring(0,tmpPrm[i].lastIndexOf('N') + 1) + tmpMoneyFlag + tmpCentFlag + tmpKgFlag + tmpGramFlag + tmpSumFlag,
-                    price : parseFloat((tmpMoney == '' ? "0" : tmpMoney) + "." + (tmpCent == '' ? "0" : tmpCent)) * this.prmObj.filter({ID:'ScalePriceFactory',TYPE:0}).getValue(),
+                    price : parseFloat((tmpMoney == '' ? "0" : tmpMoney) + "." + (tmpCent == '' ? "0" : tmpCent)) * tmpFactory,
                     quantity : parseFloat((tmpKg == '' ? "0" : tmpKg) + "." + (tmpGram == '' ? "0" : tmpGram))
                 }
             }
@@ -1633,7 +1649,7 @@ export default class posDoc extends React.PureComponent
                                 width:'500px',
                                 height:'250px',
                                 button:[{id:"btn01",caption:this.lang.t("msgMoneyChange.btn01"),location:'after'}],
-                                content:(<div><h3 className="text-danger text-center">{pPayChange + " EUR"}</h3><h3 className="text-primary text-center">{this.lang.t("msgMoneyChange.msg")}</h3></div>)
+                                content:(<div><h3 className="text-danger text-center">{Number(pPayChange).toFixed(2) + " EUR"}</h3><h3 className="text-primary text-center">{this.lang.t("msgMoneyChange.msg")}</h3></div>)
                             }
                             dialog(tmpConfObj);
                         }
