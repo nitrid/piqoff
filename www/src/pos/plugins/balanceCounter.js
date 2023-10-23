@@ -87,6 +87,13 @@ posDoc.prototype.delete = async function()
 }
 posDoc.prototype.getItem = async function(pCode)
 {
+    //MÜŞTER KARTI BARKODUNU OKUTMAK İÇİN BUTONA BASILMIŞ İSE TERAZİ KONTROLÜNE GİRME.
+    if(this.btnGetCustomer.lock)
+    {
+        orgGetItem.call(this,pCode)
+        return
+    }
+
     getBarPattern = getBarPattern.bind(this)
     getBalanceCounter = getBalanceCounter.bind(this)
 
@@ -141,9 +148,6 @@ posDoc.prototype.getItem = async function(pCode)
                             this.loading.current.instance.hide()
                             return
                         }
-                        console.log(tmpQuantity)
-                        console.log(tmpDQuantity)
-                        console.log(tmpTolerans)
                         let resultQuantity = Number((tmpDQuantity) - (tmpQuantity)).round(3)
                         if(tmpQuantity >= Number(tmpDQuantity) - Number(tmpTolerans) && tmpQuantity <= Number(tmpDQuantity) + Number(tmpTolerans))
                         {
@@ -169,14 +173,27 @@ posDoc.prototype.getItem = async function(pCode)
                                 content:
                                 (
                                     <div style={{textAlign:"center",fontSize:"20px"}}>
-                                        <div className="row">{this.lang.t("msgNotBarcodeWeighing.msg")}</div>
-                                        <div className="row" style={{textAlign:"center",fontSize:"20px",padding:"10px"}}>
+                                        <div className="row">
+                                            <div className="col-12">
+                                                {this.lang.t("msgNotBarcodeWeighing.msg")}
+                                            </div>
+                                        </div>
+                                        <div className="row" style={{textAlign:"center",fontSize:"20px"}}>
                                             <div className="col-12" style={{ padding: "5px" }}>
                                                 <span style={{fontWeight: tmpQuantity > tmpDQuantity ? "bold" : "normal" }}>{this.lang.t("msgNotBarcodeWeighing.msgTicket")}{tmpQuantity} kg</span>
                                             </div>
+                                        </div>
+                                        <div className="row" style={{textAlign:"center",fontSize:"20px"}}>
                                             <div className="col-12"style={{padding:"5px"}}>{this.lang.t("msgNotBarcodeWeighing.msgBarkod")}{tmpDQuantity} kg</div>
+                                        </div>
+                                        <div className="row" style={{textAlign:"center",fontSize:"20px"}}>
                                             <div className="col-12">
                                                 <span style={{color: resultQuantity > tmpTolerans ? "red" : "red"}}>{this.lang.t("msgNotBarcodeWeighing.msgDifference")}{resultQuantity} kg</span>
+                                            </div>
+                                        </div>
+                                        <div className="row" style={{textAlign:"center",fontSize:"20px"}}>
+                                            <div className="col-12">
+                                                <span>{this.lang.t("msgNotBarcodeWeighing.msgTotalAmount")}{Number(tmpBalanceDt.sum('AMOUNT')).round(2)}€</span>
                                             </div>
                                         </div>
                                     </div>
