@@ -791,11 +791,15 @@ export const langIt =
         msg : "La connessione al server è stata interrotta...",
         btn01 : "Ok"
     },
-    msgNotBarcodeWeighing:
+    msgNotBarcodeWeighing: 
     {
         title: "Attenzione",
-        msg: "La quantità totale del prodotto pesato non corrisponde al codice a barre scannerizzato!",
-        btn01: "OK"
+        msg: "La quantità totale del prodotto pesato non corrisponde al codice a barre scansionato",
+        msgTicket: "Quantità pesata: ",
+        msgBarkod: "Quantità dell'etichetta: ",
+        msgDifference: "Differenza: ",
+        btn01: "OK",
+        btn02: "Continua"
     },
     msgBarcodeWeighing:
     {
