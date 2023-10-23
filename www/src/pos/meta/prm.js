@@ -1142,7 +1142,7 @@ export const prm =
     {
         TYPE : 0,
         ID :"TransferTime",
-        VALUE : 6000,
+        VALUE : 3600,
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "",
@@ -1270,7 +1270,7 @@ export const prm =
     {
         TYPE : 0,
         ID :"ZReport",
-        VALUE : true,
+        VALUE : false,
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "",
