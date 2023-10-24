@@ -1190,7 +1190,7 @@ export const prm =
     {
         TYPE : 0,
         ID :"ScalePriceFactory",
-        VALUE : 1,
+        VALUE : 0.1524,
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "",
