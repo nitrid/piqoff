@@ -3569,7 +3569,8 @@ export const langDe =
         cmbTypeData : 
         {
             individual : "Einzelperson",
-            company : "Firma"
+            company : "Firma",
+            association : "Vereinigung"
         },
         cmbGenusData:
         {

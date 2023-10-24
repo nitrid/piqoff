@@ -480,7 +480,7 @@ export default class CustomerCard extends React.PureComponent
                                     <NdSelectBox simple={true} parent={this} id="cmbType" height='fit-content' dt={{data:this.customerObj.dt('CUSTOMERS'),field:"TYPE"}}
                                     displayExpr="VALUE"                       
                                     valueExpr="ID"
-                                    data={{source:[{ID:0,VALUE:this.t("cmbTypeData.individual")},{ID:1,VALUE:this.t("cmbTypeData.company")}]}}
+                                    data={{source:[{ID:0,VALUE:this.t("cmbTypeData.individual")},{ID:1,VALUE:this.t("cmbTypeData.company")},{ID:2,VALUE:this.t("cmbTypeData.association")}]}}
                                     onValueChanged={(async(e)=>
                                     {
                                         if(typeof e != 'undefined')
