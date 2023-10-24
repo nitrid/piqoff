@@ -489,7 +489,7 @@ export function print()
             let tmpArr = [];
             if(data.pos[0].CUSTOMER_CODE != '')
             {            
-                if(data.pos[0].CUSTOMER_POINT_PASSIVE)
+                if(data.pos[0].CUSTOMER_POINT_PASSIVE == false)
                 {
                     tmpArr.push({align:"ct",barcode:data.pos[0].CUSTOMER_CODE,options:{width: 1,height:30}});
                     tmpArr.push({font:"b",style:"b",align:"lt",data:"****************************************************************".space(64)});
@@ -514,9 +514,7 @@ export function print()
                     tmpArr.push({font:"b",align:"lt",data:(" ").space(64)});
                     tmpArr.push({font:"b",align:"lt",data:(" ").space(64)});
                     tmpArr.push({font:"b",align:"lt",data:("SIGNATURE : ").space(64)});
-                    tmpArr.push({font:"b",align:"lt",data:("................................NOME:...........................").space(64)});
-                    tmpArr.push({font:"b",align:"lt",data:(" ").space(64)});
-                    tmpArr.push({font:"b",align:"lt",data:(" ").space(64)});
+                    tmpArr.push({font:"b",align:"lt",data:("......................................NOM:......................").space(64)});
                     tmpArr.push({font:"b",style:"b",align:"lt",data:"****************************************************************".space(64)});
                 }
             }
