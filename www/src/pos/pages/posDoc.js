@@ -1596,7 +1596,8 @@ export default class posDoc extends React.PureComponent
                     {
                         if(Math.floor(this.posObj.dt()[0].TOTAL) > 0)
                         {
-                            let tmpPoint = Math.floor(this.posObj.dt()[0].TOTAL)
+                            let tmpPoint = Math.floor(Number(this.posObj.dt()[0].TOTAL) * (Number(this.prmObj.filter({ID:'CustomerPointFactory',TYPE:0}).getValue()) / 100))
+                            console.log(tmpPoint)
                             //PROMOSYONDA MÜŞTERİ PUANI VARSA EKLENİYOR.
                             if(this.posPromoObj.dt().where({APP_TYPE:1}).length > 0)
                             {
@@ -1607,12 +1608,12 @@ export default class posDoc extends React.PureComponent
                         }
                         if(this.popCustomerUsePoint.value > 0)
                         {
-                            await this.customerPointSave(1,Number(parseFloat(this.posObj.dt()[0].LOYALTY * 100).round(0)))
+                            await this.customerPointSave(1,Number(parseFloat(this.posObj.dt()[0].LOYALTY * Number(this.prmObj.filter({ID:'CustomerPointFactory',TYPE:0}).getValue())).round(0)))
                         }
                     }
                     else
                     {
-                        await this.customerPointSave(1,Math.floor(this.posObj.dt()[0].TOTAL))
+                        await this.customerPointSave(1,Math.floor(this.posObj.dt()[0].TOTAL * (Number(this.prmObj.filter({ID:'CustomerPointFactory',TYPE:0}).getValue()) / 100)))
                     }                    
                 }
                 this.popTotal.hide();
@@ -1726,7 +1727,8 @@ export default class posDoc extends React.PureComponent
                                 dupCertificate : '',
                                 customerUsePoint:this.popCustomerUsePoint.value,
                                 customerPoint:this.customerPoint.value,
-                                customerGrowPoint:this.popCustomerGrowPoint.value
+                                customerGrowPoint:this.popCustomerGrowPoint.value,
+                                customerPointFactory : this.prmObj.filter({ID:'CustomerPointFactory',TYPE:0}).getValue()
                             }
                         }
                         //YAZDIRMA İŞLEMİNDEN ÖNCE KULLANICIYA SORULUYOR
@@ -1772,21 +1774,7 @@ export default class posDoc extends React.PureComponent
                             }
                             else if(pResult == 'btn03')
                             {
-                                if(this.posObj.dt()[0].CUSTOMER_GUID != '00000000-0000-0000-0000-000000000000')
-                                { 
-                                    let tmpQuery = 
-                                    {
-                                        query :"SELECT EMAIL FROM CUSTOMER_VW_02 WHERE GUID = @GUID",
-                                        param:  ['GUID:string|50'],
-                                        value:  [this.posObj.dt()[0].CUSTOMER_GUID]
-                                    }
-                                    let tmpMailData = await this.core.sql.execute(tmpQuery) 
-                                    if(tmpMailData.result.recordset.length > 0)
-                                    {
-                                        this.txtMail.value = tmpMailData.result.recordset[0].EMAIL
-                                    }
-                                }
-    
+                                    
                                 this.mailPopup.tmpData = tmpData;
                                 await this.mailPopup.show()
                             }
@@ -1823,6 +1811,34 @@ export default class posDoc extends React.PureComponent
                             }
                         }
                         //***************************************************/
+                    }
+                }
+                else
+                {
+                    if(this.posObj.dt()[0].CUSTOMER_GUID != '00000000-0000-0000-0000-000000000000' && this.posObj.dt()[0].CUSTOMER_MAIL != '')
+                    {
+                        let tmpData = 
+                        {
+                            pos : this.posObj.dt(),
+                            possale : this.posObj.posSale.dt(),
+                            pospay : this.posObj.posPay.dt(),
+                            pospromo : this.posPromoObj.dt(),
+                            firm : this.firm,
+                            special : 
+                            {
+                                type: 'Fis',
+                                ticketCount:0,
+                                reprint: 1,
+                                repas: 0,
+                                factCertificate : '',
+                                dupCertificate : '',
+                                customerUsePoint:this.popCustomerUsePoint.value,
+                                customerPoint:this.customerPoint.value,
+                                customerGrowPoint:this.popCustomerGrowPoint.value,
+                                customerPointFactory : this.prmObj.filter({ID:'CustomerPointFactory',TYPE:0}).getValue()
+                            }
+                        }
+                        await this.print(tmpData,1,this.posObj.dt()[0].CUSTOMER_MAIL)
                     }
                 }
                 //TICKET REST. ALDIĞINDA KASA AÇMA İŞLEMİ 
@@ -2556,7 +2572,7 @@ export default class posDoc extends React.PureComponent
             resolve(true)
         });        
     }
-    print(pData,pType)
+    print(pData,pType,pMail)
     {
         return new Promise(async resolve => 
         {
@@ -2591,8 +2607,14 @@ export default class posDoc extends React.PureComponent
                 }
                 else if(pType == 1)
                 {
-                    this.mailPopup._onClick()
-                    await this.posDevice.pdfPrint(tmpPrint,this.txtMail.value)
+                    let tmpMail = pMail
+                    if(typeof pMail == 'undefined')
+                    {
+                        this.mailPopup._onClick()
+                        tmpMail = this.txtMail.value
+                    }
+
+                    await this.posDevice.pdfPrint(tmpPrint,tmpMail)
                 }
                 else if(pType == 2)
                 {
@@ -3031,7 +3053,8 @@ export default class posDoc extends React.PureComponent
                         dupCertificate : tmpDupCert,
                         customerUsePoint : Math.floor(pPosDt[0].LOYALTY * 100),
                         customerPoint : (pPosDt[0].CUSTOMER_POINT + Math.floor(pPosDt[0].LOYALTY * 100)) - Math.floor(pPosDt[0].TOTAL),
-                        customerGrowPoint : pPosDt[0].CUSTOMER_POINT - Math.floor(pPosDt[0].TOTAL)
+                        customerGrowPoint : pPosDt[0].CUSTOMER_POINT - Math.floor(pPosDt[0].TOTAL),
+                        customerPointFactory : this.prmObj.filter({ID:'CustomerPointFactory',TYPE:0}).getValue()
                     }
                 }
                 
@@ -3049,19 +3072,27 @@ export default class posDoc extends React.PureComponent
                 let pResult = await dialog(tmpConfObj);
                 if(pResult == 'btn01')
                 {
-                    if(this.posObj.dt()[0].CUSTOMER_GUID != '00000000-0000-0000-0000-000000000000')
+                    if(pPosDt[0].CUSTOMER_GUID != '00000000-0000-0000-0000-000000000000')
                     { 
                         let tmpQuery = 
                         {
                             query :"SELECT EMAIL FROM CUSTOMER_VW_02 WHERE GUID = @GUID",
                             param:  ['GUID:string|50'],
-                            value:  [this.posObj.dt()[0].CUSTOMER_GUID]
+                            value:  [pPosDt[0].CUSTOMER_GUID]
                         }
                         let tmpMailData = await this.core.sql.execute(tmpQuery) 
                         if(tmpMailData.result.recordset.length > 0)
                         {
                             this.txtMail.value = tmpMailData.result.recordset[0].EMAIL
                         }
+                        else
+                        {
+                            this.txtMail.value = ""
+                        }
+                    }
+                    else
+                    {
+                        this.txtMail.value = ""
                     }
 
                     this.mailPopup.tmpData = tmpData;
@@ -5818,7 +5849,7 @@ export default class posDoc extends React.PureComponent
                                         this.popCustomerPointToEuro.value = 0 
                                         return
                                     }
-                                    this.popCustomerPointToEuro.value = Number(parseFloat(e.value / 100).round(2)).toString()
+                                    this.popCustomerPointToEuro.value = Number(parseFloat(e.value / this.prmObj.filter({ID:'CustomerPointFactory',TYPE:0}).getValue()).round(2)).toString()
                                 }}>     
                                 </NdTextBox> 
                             </div>
@@ -5959,14 +5990,36 @@ export default class posDoc extends React.PureComponent
                                                         dupCertificate : this.core.appInfo.name + " version : " + this.core.appInfo.version + " - " + this.core.appInfo.certificate + " - " + tmpDupSign,
                                                         customerUsePoint : Math.floor(tmpLastPos[0].LOYALTY * 100),
                                                         customerPoint : (tmpLastPos[0].CUSTOMER_POINT + Math.floor(tmpLastPos[0].LOYALTY * 100)) - Math.floor(tmpLastPos[0].TOTAL),
-                                                        customerGrowPoint : tmpLastPos[0].CUSTOMER_POINT - Math.floor(tmpLastPos[0].TOTAL)
+                                                        customerGrowPoint : tmpLastPos[0].CUSTOMER_POINT - Math.floor(tmpLastPos[0].TOTAL),
+                                                        customerPointFactory : this.prmObj.filter({ID:'CustomerPointFactory',TYPE:0}).getValue()
                                                     }
                                                 }
 
-                                                this.mailPopup.tmpData = tmpData;
-                                                await this.mailPopup.show().then(async (e) =>
+                                                if(tmpLastPos[0].CUSTOMER_GUID != '00000000-0000-0000-0000-000000000000')
+                                                { 
+                                                    let tmpQuery = 
+                                                    {
+                                                        query :"SELECT EMAIL FROM CUSTOMER_VW_02 WHERE GUID = @GUID",
+                                                        param:  ['GUID:string|50'],
+                                                        value:  [tmpLastPos[0].CUSTOMER_GUID]
+                                                    }
+                                                    let tmpMailData = await this.core.sql.execute(tmpQuery) 
+                                                    if(tmpMailData.result.recordset.length > 0)
+                                                    {
+                                                        this.txtMail.value = tmpMailData.result.recordset[0].EMAIL
+                                                    }
+                                                    else
+                                                    {
+                                                        this.txtMail.value = ""
+                                                    }
+                                                }
+                                                else
                                                 {
-                                                });
+                                                    this.txtMail.value = ""
+                                                }
+                                                
+                                                this.mailPopup.tmpData = tmpData;
+                                                await this.mailPopup.show()
                                             }
                                         }}>
                                             <i className="text-white fa-solid fa-envelope" style={{fontSize: "16px"}} />
@@ -6029,7 +6082,8 @@ export default class posDoc extends React.PureComponent
                                                                     repas : tmpResult,
                                                                     customerUsePoint : Math.floor(tmpLastPos[0].LOYALTY * 100),
                                                                     customerPoint : (tmpLastPos[0].CUSTOMER_POINT + Math.floor(tmpLastPos[0].LOYALTY * 100)) - Math.floor(tmpLastPos[0].TOTAL),
-                                                                    customerGrowPoint : tmpLastPos[0].CUSTOMER_POINT - Math.floor(tmpLastPos[0].TOTAL)
+                                                                    customerGrowPoint : tmpLastPos[0].CUSTOMER_POINT - Math.floor(tmpLastPos[0].TOTAL),
+                                                                    customerPointFactory : this.prmObj.filter({ID:'CustomerPointFactory',TYPE:0}).getValue()
                                                                 }
                                                             }
                                                             await this.print(tmpData,0)
@@ -6146,7 +6200,8 @@ export default class posDoc extends React.PureComponent
                                                         dupCertificate : this.core.appInfo.name + " version : " + this.core.appInfo.version + " - " + this.core.appInfo.certificate + " - " + tmpDupSign,
                                                         customerUsePoint : Math.floor(tmpLastPos[0].LOYALTY * 100),
                                                         customerPoint : (tmpLastPos[0].CUSTOMER_POINT + Math.floor(tmpLastPos[0].LOYALTY * 100)) - Math.floor(tmpLastPos[0].TOTAL),
-                                                        customerGrowPoint : tmpLastPos[0].CUSTOMER_POINT - Math.floor(tmpLastPos[0].TOTAL)
+                                                        customerGrowPoint : tmpLastPos[0].CUSTOMER_POINT - Math.floor(tmpLastPos[0].TOTAL),
+                                                        customerPointFactory : this.prmObj.filter({ID:'CustomerPointFactory',TYPE:0}).getValue()
                                                     }
                                                 }
                                                 //YAZDIRMA İŞLEMİNDEN ÖNCE KULLANICIYA SORULUYOR

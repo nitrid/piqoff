@@ -874,13 +874,13 @@ export const prm =
                 },
                 {
                     id:"btn05",
-                    title:"Description vide.",
-                    text:"Description non saisie."
+                    title:"Cartouche.",
+                    text:"Cartouche."
                 },
                 {
                     id:"btn06",
-                    title:"Description vide.",
-                    text:"Description non saisie."
+                    title:"Rôtisserie.",
+                    text:"Rôtisserie."
                 },
                 {
                     id:"btn07",
@@ -1281,6 +1281,22 @@ export const prm =
             TYPE : "checkbox",
             PAGE_NAME : "Pos",
             CAPTION : "Z Raporu"
+        }
+    },
+    //Müşteri Puan Çarpanı
+    {
+        TYPE : 0,
+        ID :"CustomerPointFactory",
+        VALUE : 150,
+        SPECIAL : "",
+        PAGE : "pos",
+        ELEMENT : "",
+        APP : "POS",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Pos",
+            CAPTION : "Müşteri Puan Katsayısı"
         }
     },
     //#endregion
