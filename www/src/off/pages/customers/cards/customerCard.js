@@ -573,17 +573,6 @@ export default class CustomerCard extends React.PureComponent
                                             sql:this.core.sql
                                         }
                                     }}
-                                    button=
-                                    {
-                                        {
-                                            id:'01',
-                                            icon:'more',
-                                            onClick:()=>
-                                            {
-                                                console.log(1111)
-                                            }
-                                        }
-                                    }
                                     >
                                         <Column dataField="CODE" caption={this.t("pg_txtCode.clmCode")} width={150} />
                                         <Column dataField="TITLE" caption={this.t("pg_txtCode.clmTitle")} width={300} defaultSortOrder="asc" />
