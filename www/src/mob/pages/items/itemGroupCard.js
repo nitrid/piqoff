@@ -103,8 +103,7 @@ export default class itemGroupCard extends React.PureComponent
             param : ['MAIN:string|50','ITEM:string|50'],
             value : [this.cmbGroup.value,this.itemDt[0].GUID]
         }
-        let rmp  = await this.core.sql.execute(tmpQuery) 
-        console.log(rmp)
+        await this.core.sql.execute(tmpQuery)
 
         this.txtBarcode.focus()
         this.clearEntry()
@@ -248,7 +247,7 @@ export default class itemGroupCard extends React.PureComponent
                                     <div className='row pb-2'>
                                         <div className='col-3 d-flex justify-content-end align-items-center text-size-12'>{this.t("lblGroup")}</div>
                                         <div className='col-9'>
-                                            <NdSelectBox simple={true} parent={this} id="cmbGroup" notRefresh = {true} displayExpr="NAME" valueExpr="CODE" value="" searchEnabled={false}
+                                            <NdSelectBox simple={true} parent={this} id="cmbGroup" notRefresh = {true} displayExpr="NAME" valueExpr="GUID" value="" searchEnabled={false}
                                              data={{source:{select:{query : "SELECT GUID,CODE,NAME FROM ITEM_GROUP ORDER BY NAME ASC"},sql:this.core.sql}}}/>
                                         </div>
                                     </div>
