@@ -567,7 +567,7 @@ export default class CustomerCard extends React.PureComponent
                                         {
                                             select:
                                             {
-                                                query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL))",
+                                                query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME],[STATUS] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL))",
                                                 param : ['VAL:string|50']
                                             },
                                             sql:this.core.sql
@@ -585,14 +585,15 @@ export default class CustomerCard extends React.PureComponent
                                         }
                                     }
                                     >
-                                         <Column dataField="CODE" caption={this.t("pg_txtCode.clmCode")} width={150} />
+                                        <Column dataField="CODE" caption={this.t("pg_txtCode.clmCode")} width={150} />
                                         <Column dataField="TITLE" caption={this.t("pg_txtCode.clmTitle")} width={300} defaultSortOrder="asc" />
                                         <Column dataField="NAME" caption={this.t("pg_txtCode.clmName")} width={300} defaultSortOrder="asc" />
                                         <Column dataField="LAST_NAME" caption={this.t("pg_txtCode.clmLastName")} width={300} defaultSortOrder="asc" />
+                                        <Column dataField="STATUS" caption={this.t("pg_txtCode.clmStatus")} width={300} />
                                     </NdPopGrid>
                                 </Item>
-                                 {/* txtTitle */}
-                                 <Item>
+                                {/* txtTitle */}
+                                <Item>
                                     <Label text={this.t("txtTitle")} alignment="right" />
                                     <NdTextBox id="txtTitle" parent={this} simple={true} tabIndex={this.tabIndex} dt={{data:this.customerObj.dt('CUSTOMERS'),field:"TITLE"}}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
@@ -628,8 +629,8 @@ export default class CustomerCard extends React.PureComponent
                                         >                                      
                                     </NdTextBox>
                                 </Item>
-                                 {/* txtPhone1 */}
-                                 <Item>
+                                {/* txtPhone1 */}
+                                <Item>
                                     <Label text={this.t("txtPhone1")} alignment="right" />
                                         <NdTextBox id="txtPhone1" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"PHONE1",filter:{TYPE:0}}}
                                         upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
@@ -637,8 +638,8 @@ export default class CustomerCard extends React.PureComponent
                                         access={this.access.filter({ELEMENT:'txtPhone1',USERS:this.user.CODE})}
                                        />
                                 </Item>
-                                 {/* txtPhone2 */}
-                                 <Item>
+                                {/* txtPhone2 */}
+                                <Item>
                                     <Label text={this.t("txtPhone2")} alignment="right" />
                                         <NdTextBox id="txtPhone2" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"PHONE2",filter:{TYPE:0}}}
                                         upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
@@ -646,8 +647,8 @@ export default class CustomerCard extends React.PureComponent
                                         access={this.access.filter({ELEMENT:'txtPhone2',USERS:this.user.CODE})}
                                         />
                                 </Item>
-                                 {/* txtGsmPhone */}
-                                 <Item>
+                                {/* txtGsmPhone */}
+                                <Item>
                                     <Label text={this.t("txtGsmPhone")} alignment="right" />
                                         <NdTextBox id="txtGsmPhone" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"GSM_PHONE",filter:{TYPE:0}}}
                                         upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
@@ -1159,8 +1160,8 @@ export default class CustomerCard extends React.PureComponent
                             </div>
                         </div> 
                     </div>
-                     {/* Adres POPUP */}
-                     <div>
+                    {/* Adres POPUP */}
+                    <div>
                         <NdPopUp parent={this} id={"popAdress"} 
                         visible={false}
                         showCloseButton={true}
@@ -1370,8 +1371,8 @@ export default class CustomerCard extends React.PureComponent
                             </Form>
                         </NdPopUp>
                     </div>  
-                     {/* Banka POPUP */}
-                     <div>
+                    {/* Banka POPUP */}
+                    <div>
                         <NdPopUp parent={this} id={"popBank"} 
                         visible={false}
                         showCloseButton={true}
@@ -1435,51 +1436,51 @@ export default class CustomerCard extends React.PureComponent
                             </Form>
                         </NdPopUp>
                     </div> 
-                        {/* Banka POPUP */}
-                        <div>
-                        <NdPopUp parent={this} id={"popNote"} 
-                        visible={false}
-                        showCloseButton={true}
-                        showTitle={true}
-                        title={this.t("popNote.title")}
-                        container={"#root"} 
-                        width={'500'}
-                        height={'350'}
-                        position={{of:'#root'}}
-                        >
-                            <Form colCount={1} height={'fit-content'}>
+                    {/* Banka POPUP */}
+                    <div>
+                    <NdPopUp parent={this} id={"popNote"} 
+                    visible={false}
+                    showCloseButton={true}
+                    showTitle={true}
+                    title={this.t("popNote.title")}
+                    container={"#root"} 
+                    width={'500'}
+                    height={'350'}
+                    position={{of:'#root'}}
+                    >
+                        <Form colCount={1} height={'fit-content'}>
+                        <Item>
+                                <NdTextArea simple={true} parent={this} id="txtCustomerNote" height='200px'
+                                />
+                            </Item>   
                             <Item>
-                                    <NdTextArea simple={true} parent={this} id="txtCustomerNote" height='200px'
-                                    />
-                                </Item>   
-                                <Item>
-                                    <div className='row'>
-                                        <div className='col-6'>
-                                            <NdButton text={this.lang.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} 
-                                            onClick={async ()=>
-                                            {
-                                                let tmpEmpty = {...this.customerObj.customerBank.empty};
-                                               
-                                                
-                                                tmpEmpty.NOTE = this.txtCustomerNote.value
-                                                tmpEmpty.CUSTOMER = this.customerObj.dt()[0].GUID 
+                                <div className='row'>
+                                    <div className='col-6'>
+                                        <NdButton text={this.lang.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} 
+                                        onClick={async ()=>
+                                        {
+                                            let tmpEmpty = {...this.customerObj.customerBank.empty};
+                                            
+                                            
+                                            tmpEmpty.NOTE = this.txtCustomerNote.value
+                                            tmpEmpty.CUSTOMER = this.customerObj.dt()[0].GUID 
 
-                                                this.customerObj.customerNote.addEmpty(tmpEmpty);    
-                                                this.popNote.hide(); 
-                                                
-                                            }}/>
-                                        </div>
-                                        <div className='col-6'>
-                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
-                                            onClick={()=>
-                                            {
-                                                this.popNote.hide();  
-                                            }}/>
-                                        </div>
+                                            this.customerObj.customerNote.addEmpty(tmpEmpty);    
+                                            this.popNote.hide(); 
+                                            
+                                        }}/>
                                     </div>
-                                </Item>
-                            </Form>
-                        </NdPopUp>
+                                    <div className='col-6'>
+                                        <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                        onClick={()=>
+                                        {
+                                            this.popNote.hide();  
+                                        }}/>
+                                    </div>
+                                </div>
+                            </Item>
+                        </Form>
+                    </NdPopUp>
                     </div> 
                 </ScrollView>
             </div>

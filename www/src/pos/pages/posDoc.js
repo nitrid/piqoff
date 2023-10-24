@@ -732,7 +732,6 @@ export default class posDoc extends React.PureComponent
             tmpCustomerDt.selectCmd.value = [pCode]
             await tmpCustomerDt.refresh();
 
-            console.log(tmpCustomerDt)
             if(tmpCustomerDt.length > 0)
             {
                 if(tmpCustomerDt[0].POINT_COUNT > 3)
@@ -829,10 +828,9 @@ export default class posDoc extends React.PureComponent
         //******************************************************** */
         //BARKOD DESENİ
         let tmpBarPattern = this.getBarPattern(pCode)
-        console.log(tmpBarPattern)
         tmpPrice = typeof tmpBarPattern.price == 'undefined' || tmpBarPattern.price == 0 ? tmpPrice : tmpBarPattern.price
         tmpQuantity = typeof tmpBarPattern.quantity == 'undefined' || tmpBarPattern.quantity == 0 ? tmpQuantity : tmpBarPattern.quantity
-        pCode = tmpBarPattern.barcode     
+        pCode = tmpBarPattern.barcode
         //console.log("1 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))    
         this.loading.current.instance.show()
         //ÜRÜN GETİRME    
