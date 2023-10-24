@@ -276,7 +276,8 @@ export default class barcodeList extends React.PureComponent
                                 <Column dataField="PHONE1" caption={this.t("grdListe.clmPhone1")} visible={false}/> 
                                 <Column dataField="GSM_PHONE" caption={this.t("grdListe.clmGsm")} visible={false}/> 
                                 <Column dataField="EMAIL" caption={this.t("grdListe.clmEmail")} visible={false}/> 
-                                <Column dataField="IBAN" caption={this.t("grdListe.clmIban")} visible={false}/> 
+                                <Column dataField="IBAN" caption={this.t("grdListe.clmIban")} visible={false}/>
+                                <Column dataField="STATUS" caption={this.t("grdListe.clmStatus")} visible={true}/>
                             </NdGrid>
                         </div>
                     </div>

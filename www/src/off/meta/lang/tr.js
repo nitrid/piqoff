@@ -3409,7 +3409,8 @@ export const langTr =
             clmPhone1 :"Telefon",
             clmGsm : "GSM No.",
             clmEmail :"E-Mail",
-            clmIban :"Iban"
+            clmIban :"Iban",
+            clmStatus :"Durum"
         },
         cmbGenusData:
         {
