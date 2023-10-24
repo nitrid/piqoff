@@ -147,7 +147,7 @@ export default class customerItemSaleReport extends React.PureComponent
                                                     {
                                                         if(data.length > 0)
                                                         {
-                                                            this.txtCustomer.value = data[0].NAME
+                                                            this.txtCustomer.value = data[0].TITLE
                                                             this.txtCustomer.GUID = data[0].GUID
                                                         }
                                                     }
@@ -163,7 +163,7 @@ export default class customerItemSaleReport extends React.PureComponent
                                         {
                                             if(data.length > 0)
                                             {
-                                                this.txtCustomer.value = data[0].NAME
+                                                this.txtCustomer.value = data[0].TITLE
                                                 this.txtCustomer.GUID = data[0].GUID
                                             }
                                         }
