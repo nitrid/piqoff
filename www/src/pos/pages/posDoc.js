@@ -718,7 +718,7 @@ export default class posDoc extends React.PureComponent
             let tmpCustomerDt = new datatable(); 
             tmpCustomerDt.selectCmd = 
             {
-                query : "SELECT GUID,CUSTOMER_TYPE,CODE,TITLE,ADRESS,ZIPCODE,CITY,COUNTRY_NAME,CUSTOMER_POINT,EMAIL, " +
+                query : "SELECT GUID,CUSTOMER_TYPE,CODE,TITLE,ADRESS,ZIPCODE,CITY,COUNTRY_NAME,CUSTOMER_POINT,EMAIL,POINT_PASSIVE, " +
                         "ISNULL((SELECT COUNT(TYPE) FROM CUSTOMER_POINT WHERE TYPE = 0 AND CUSTOMER = CUSTOMER_VW_02.GUID AND CONVERT(DATE,LDATE) = CONVERT(DATE,GETDATE())),0) AS POINT_COUNT " + 
                         "FROM [dbo].[CUSTOMER_VW_02] WHERE CODE LIKE SUBSTRING(@CODE,0,14) + '%'",
                 param : ['CODE:string|50'],
@@ -767,9 +767,9 @@ export default class posDoc extends React.PureComponent
                 this.posObj.dt()[0].CUSTOMER_CITY = tmpCustomerDt[0].CITY
                 this.posObj.dt()[0].CUSTOMER_COUNTRY = tmpCustomerDt[0].COUNTRY_NAME
                 this.posObj.dt()[0].CUSTOMER_POINT = tmpCustomerDt[0].CUSTOMER_POINT
+                this.posObj.dt()[0].CUSTOMER_POINT_PASSIVE = tmpCustomerDt[0].POINT_PASSIVE
                 this.posObj.dt()[0].CUSTOMER_MAIL = tmpCustomerDt[0].EMAIL
                 
-
                 //PROMOSYON GETİR.
                 await this.getPromoDb()
                 this.promoApply()
@@ -1590,7 +1590,7 @@ export default class posDoc extends React.PureComponent
                     }                    
                 }
                 //EĞER MÜŞTERİ KARTI İSE PUAN KAYIT EDİLİYOR.
-                if(this.posObj.dt()[0].CUSTOMER_GUID != '00000000-0000-0000-0000-000000000000')
+                if(this.posObj.dt()[0].CUSTOMER_GUID != '00000000-0000-0000-0000-000000000000' && this.posObj.dt()[0].CUSTOMER_POINT_PASSIVE == false)
                 {
                     if(this.posObj.dt()[0].TYPE == 0)
                     {
@@ -3269,6 +3269,8 @@ export default class posDoc extends React.PureComponent
                                                 this.posObj.dt()[0].CUSTOMER_CITY = ''
                                                 this.posObj.dt()[0].CUSTOMER_COUNTRY = ''
                                                 this.posObj.dt()[0].CUSTOMER_POINT = 0
+                                                this.posObj.dt()[0].CUSTOMER_POINT_PASSIVE = false
+                                                this.posObj.dt()[0].CUSTOMER_MAIL = ''
 
                                                 this.btnPopLoyaltyDel.props.onClick()
 
@@ -5045,7 +5047,7 @@ export default class posDoc extends React.PureComponent
                     {
                         select:
                         {
-                            query : "SELECT GUID,CUSTOMER_TYPE,CODE,TITLE,ADRESS,ZIPCODE,CITY,COUNTRY_NAME,CUSTOMER_POINT, " +
+                            query : "SELECT GUID,CUSTOMER_TYPE,CODE,TITLE,ADRESS,ZIPCODE,CITY,COUNTRY_NAME,CUSTOMER_POINT,POINT_PASSIVE, " +
                                     "ISNULL((SELECT COUNT(TYPE) FROM CUSTOMER_POINT WHERE TYPE = 0 AND CUSTOMER = CUSTOMER_VW_02.GUID AND CONVERT(DATE,LDATE) = CONVERT(DATE,GETDATE())),0) AS POINT_COUNT " + 
                                     "FROM [dbo].[CUSTOMER_VW_02] WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)",
                             param : ['VAL:string|50'],
@@ -5095,6 +5097,8 @@ export default class posDoc extends React.PureComponent
                             this.posObj.dt()[0].CUSTOMER_CITY = pData[0].CITY
                             this.posObj.dt()[0].CUSTOMER_COUNTRY = pData[0].COUNTRY_NAME
                             this.posObj.dt()[0].CUSTOMER_POINT = pData[0].CUSTOMER_POINT
+                            this.posObj.dt()[0].CUSTOMER_POINT_PASSIVE = pData[0].POINT_PASSIVE
+                            this.posObj.dt()[0].CUSTOMER_MAIL = pData[0].EMAIL
                             //PROMOSYON GETİR.
                             await this.getPromoDb()
                             this.promoApply()
