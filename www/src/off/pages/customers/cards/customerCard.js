@@ -567,28 +567,18 @@ export default class CustomerCard extends React.PureComponent
                                         {
                                             select:
                                             {
-                                                query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL))",
+                                                query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME],[STATUS] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL))",
                                                 param : ['VAL:string|50']
                                             },
                                             sql:this.core.sql
                                         }
                                     }}
-                                    button=
-                                    {
-                                        {
-                                            id:'01',
-                                            icon:'more',
-                                            onClick:()=>
-                                            {
-                                                console.log(1111)
-                                            }
-                                        }
-                                    }
                                     >
-                                         <Column dataField="CODE" caption={this.t("pg_txtCode.clmCode")} width={150} />
+                                        <Column dataField="CODE" caption={this.t("pg_txtCode.clmCode")} width={150} />
                                         <Column dataField="TITLE" caption={this.t("pg_txtCode.clmTitle")} width={300} defaultSortOrder="asc" />
                                         <Column dataField="NAME" caption={this.t("pg_txtCode.clmName")} width={300} defaultSortOrder="asc" />
                                         <Column dataField="LAST_NAME" caption={this.t("pg_txtCode.clmLastName")} width={300} defaultSortOrder="asc" />
+                                        <Column dataField="STATUS" caption={this.t("pg_txtCode.clmStatus")} width={300} />
                                     </NdPopGrid>
                                 </Item>
                                  {/* txtTitle */}

@@ -3042,6 +3042,7 @@ export const langTr =
             clmTitle : "Ünvan",
             clmName : "Adı",
             clmLastName  : "Soyadı",
+            clmStatus  : "Durum",   
         },
         grdAdress : 
         {

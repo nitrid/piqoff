@@ -3039,6 +3039,7 @@ export const langFr =
             clmTitle : "Titre",
             clmName : "Nom",
             clmLastName  : "Nom De Famille",
+            clmStatus  : "Statut",
         },
         grdAdress : 
         {

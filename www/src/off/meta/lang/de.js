@@ -3030,6 +3030,7 @@ export const langDe =
             clmTitle : "Firma",
             clmName : "Vorname",
             clmLastName  : "Nachname",
+            clmStatus  : "Statut",
         },
         grdAdress : 
         {
