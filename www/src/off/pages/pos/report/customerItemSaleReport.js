@@ -71,8 +71,8 @@ export default class customerItemSaleReport extends React.PureComponent
                 select : 
                 {
                     query : "SELECT CUSER_NAME,LUSER_NAME,DEVICE,REF,DOC_DATE,ITEM_CODE,ITEM_NAME,ITEM_GRP_NAME,BARCODE,QUANTITY,UNIT_SHORT,PRICE,FAMOUNT,AMOUNT,DISCOUNT, " +
-                            "LOYALTY,VAT,VAT_RATE,TOTAL FROM POS_SALE_VW_01 WHERE CUSTOMER_CODE = '14531453' AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE" ,
-                    param : ['FIRST_DATE:date','LAST_DATE:date','CUSTOMER_CODE:string|50'],
+                            "LOYALTY,VAT,VAT_RATE,TOTAL FROM POS_SALE_VW_01 WHERE CUSTOMER_GUID = @CUSTOMER_GUID AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE" ,
+                    param : ['FIRST_DATE:date','LAST_DATE:date','CUSTOMER_GUID:string|50'],
                     value : [this.dtDate.startDate,this.dtDate.endDate,this.txtCustomer.GUID]
                 },
                 sql : this.core.sql
@@ -188,7 +188,7 @@ export default class customerItemSaleReport extends React.PureComponent
                                         {
                                             select:
                                             {
-                                                query : "SELECT GUID,CODE,NAME FROM CUSTOMER_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
+                                                query : "SELECT GUID,CODE,TITLE FROM CUSTOMER_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)",
                                                 param : ['VAL:string|50']
                                             },
                                             sql:this.core.sql
@@ -196,7 +196,7 @@ export default class customerItemSaleReport extends React.PureComponent
                                     }}
                                     >
                                         <Column dataField="CODE" caption={this.t("pg_txtCustomer.clmCode")} width={'20%'} />
-                                        <Column dataField="NAME" caption={this.t("pg_txtCustomer.clmName")} width={'70%'} defaultSortOrder="asc" />
+                                        <Column dataField="TITLE" caption={this.t("pg_txtCustomer.clmName")} width={'70%'} defaultSortOrder="asc" />
                                     </NdPopGrid>
                                 </Item>
                                 <EmptyItem colSpan={1}/>
