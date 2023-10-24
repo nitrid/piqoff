@@ -36,6 +36,7 @@ export class posCls
             CUSTOMER_COUNTRY : '',
             CUSTOMER_CITY : '',
             CUSTOMER_POINT : 0,
+            CUSTOMER_POINT_PASSIVE : false,
             CUSTOMER_MAIL: '',
             FAMOUNT : 0,
             AMOUNT : 0,
