@@ -1287,7 +1287,7 @@ export const prm =
     {
         TYPE : 0,
         ID :"CustomerPointFactory",
-        VALUE : 150,
+        VALUE : 100,
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "",

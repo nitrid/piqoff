@@ -504,7 +504,7 @@ export function print()
                         tmpArr.push({font:"b",align:"lt",data:"UTILISE POINT ".space(56) + ((parseInt(data.special.customerUsePoint) * -1) + ' Pts').space(8,"s")});
                     }
                     tmpArr.push({font:"b",align:"lt",data:"NOUVEAU CUMUL ".space(56) + (parseInt(data.special.customerGrowPoint) + parseInt(data.pos[0].TOTAL * tmpFactory) + ' Pts').space(8,"s")});
-                    tmpArr.push({font:"b",align:"lt",data:"EQUIVALENT REMISE ".space(56) + (decimal(parseFloat((parseInt(data.special.customerGrowPoint) + parseInt(data.pos[0].TOTAL)) / Number(data.special.customerPointFactory)).toFixed(2)).toString() + 'EUR').space(8,"s")});
+                    tmpArr.push({font:"b",align:"lt",data:"EQUIVALENT REMISE ".space(56) + (decimal(parseFloat((parseInt(data.special.customerGrowPoint) + parseInt(data.pos[0].TOTAL)) / 100).toFixed(2)).toString() + 'EUR').space(8,"s")});
 
                     tmpArr.push({font:"b",style:"b",align:"lt",data:"****************************************************************".space(64)});
                 }
@@ -550,9 +550,6 @@ export function print()
         ()=>{return {font:"b",style:"b",align:"ct",data:"AUCUN REMBOURSEMENT ESPECES NE SERA EFFECTUE"}},
         ()=>{return {font:"b",style:"b",align:"ct",data:"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"}},
         ()=>{return {font:"b",style:"b",align:"ct",data:"Merci de votre fidélité à très bientôt ..."}},
-        ()=>{return {font:"b",style:"b",align:"ct",data:"Grâce à vos achats bénéficiez de réductions."}},
-        ()=>{return {font:"b",style:"b",align:"ct",data:"À partir du 1er janvier 2024: "}},
-        ()=>{return {font:"b",style:"b",align:"ct",data:"Pour 1 € depensé beneficiez d’1 point fidelité."}},
         ()=>
         {
             if(data.special.type == 'Fatura')

@@ -1592,12 +1592,12 @@ export default class posDoc extends React.PureComponent
                 //EĞER MÜŞTERİ KARTI İSE PUAN KAYIT EDİLİYOR.
                 if(this.posObj.dt()[0].CUSTOMER_GUID != '00000000-0000-0000-0000-000000000000' && this.posObj.dt()[0].CUSTOMER_POINT_PASSIVE == false)
                 {
+                    let tmpCustFact = (Number(this.prmObj.filter({ID:'CustomerPointFactory',TYPE:0}).getValue()) / 100)
                     if(this.posObj.dt()[0].TYPE == 0)
                     {
                         if(Math.floor(this.posObj.dt()[0].TOTAL) > 0)
                         {
-                            let tmpPoint = Math.floor(Number(this.posObj.dt()[0].TOTAL) * (Number(this.prmObj.filter({ID:'CustomerPointFactory',TYPE:0}).getValue()) / 100))
-                            console.log(tmpPoint)
+                            let tmpPoint = Math.floor(Number(this.posObj.dt()[0].TOTAL) * tmpCustFact)
                             //PROMOSYONDA MÜŞTERİ PUANI VARSA EKLENİYOR.
                             if(this.posPromoObj.dt().where({APP_TYPE:1}).length > 0)
                             {
@@ -1608,12 +1608,12 @@ export default class posDoc extends React.PureComponent
                         }
                         if(this.popCustomerUsePoint.value > 0)
                         {
-                            await this.customerPointSave(1,Number(parseFloat(this.posObj.dt()[0].LOYALTY * Number(this.prmObj.filter({ID:'CustomerPointFactory',TYPE:0}).getValue())).round(0)))
+                            await this.customerPointSave(1,Number(parseFloat(this.posObj.dt()[0].LOYALTY * 100).round(0)))
                         }
                     }
                     else
                     {
-                        await this.customerPointSave(1,Math.floor(this.posObj.dt()[0].TOTAL * (Number(this.prmObj.filter({ID:'CustomerPointFactory',TYPE:0}).getValue()) / 100)))
+                        await this.customerPointSave(1,Math.floor(this.posObj.dt()[0].TOTAL * tmpCustFact))
                     }                    
                 }
                 this.popTotal.hide();
