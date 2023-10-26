@@ -122,7 +122,7 @@ export default class customerInfoScreen extends React.PureComponent
                             }}
                             alignment={"center"} cssClass={"lcd-cell-fontsize"}/>                                    
                             <Column dataField="ITEM_SNAME" caption={this.lang.t("grdList.ITEM_NAME")} width={"50%"} cssClass={"lcd-cell-fontsize"}/>
-                            <Column dataField="QUANTITY" caption={this.lang.t("grdList.QUANTITY")} width={"15%"} cellRender={(e)=>{return (e.data.SCALE_MANUEL == true ? "M-" : "") + (e.data.UNIT_SHORT == 'kg' ? Number(e.value / e.data.UNIT_FACTOR).round(3) : Number(e.value / e.data.UNIT_FACTOR).round(0)) + e.data.UNIT_SHORT}} format={"#,##0.000" } cssClass={"lcd-cell-fontsize"}/>
+                            <Column dataField="QUANTITY" caption={this.lang.t("grdList.QUANTITY")} width={"15%"} cellRender={(e)=>{return (e.data.SCALE_MANUEL == true ? "M-" : "") + (e.data.UNIT_SHORT.toLowerCase() == 'kg' ? Number(e.value / e.data.UNIT_FACTOR).round(3) : Number(e.value / e.data.UNIT_FACTOR).round(0)) + e.data.UNIT_SHORT}} format={"#,##0.000" } cssClass={"lcd-cell-fontsize"}/>
                             <Column dataField="PRICE" caption={this.lang.t("grdList.PRICE")} width={"15%"} cellRender={(e)=>{return Number(e.value * e.data.UNIT_FACTOR).round(2) + Number.money.sign + '/' + e.data.UNIT_SHORT}} cssClass={"lcd-cell-fontsize"}/>
                             <Column dataField="AMOUNT" alignment={"right"} caption={this.lang.t("grdList.AMOUNT")} width={"15%"} format={"#,##0.00" + Number.money.sign} cssClass={"lcd-cell-fontsize"}/>                                                
                         </NdGrid>
