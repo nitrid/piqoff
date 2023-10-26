@@ -64,15 +64,7 @@ export default class Login extends React.Component
     async componentDidMount()
     {
         await this.core.util.waitUntil(0)
-        this.Kullanici.focus()        
-        //YENİ KURULMUŞ CİHAZLARDA DEFAULT TR SEÇİMİ.
-        if(localStorage.getItem('lang') == null)
-        {
-            localStorage.setItem('lang','tr')
-            i18n.changeLanguage('tr')
-            locale('tr')
-            window.location.reload()
-        }
+        this.Kullanici.focus()
     }
     async onLoginClick(e)
     {
