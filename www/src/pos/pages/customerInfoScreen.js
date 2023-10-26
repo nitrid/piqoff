@@ -13,7 +13,6 @@ export default class customerInfoScreen extends React.PureComponent
     constructor()
     {
         super()
-        console.log(App.instance.lang)
         this.core = App.instance.core
         this.t = App.instance.lang.getFixedT(null,null,"pos");
         this.lang = App.instance.lang;

@@ -40,7 +40,6 @@ export default class App extends React.PureComponent
         loadMessages(enMessages);
         loadMessages(frMessages);
         loadMessages(trMessages);
-        console.log(localStorage.getItem('lang'))
         locale(localStorage.getItem('lang') == null ? 'en' : localStorage.getItem('lang'));
         i18n.changeLanguage(localStorage.getItem('lang') == null ? 'en' : localStorage.getItem('lang'))
         this.lang = i18n;  
