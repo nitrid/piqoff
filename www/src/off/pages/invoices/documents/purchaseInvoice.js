@@ -984,11 +984,17 @@ export default class purchaseInvoice extends DocBase
         {
             let tmpQuery = 
             { 
-                query :"SELECT GUID,CODE,NAME,VAT,UNIT,1 AS QUANTITY,0 AS ITEM_TYPE,COST_PRICE," + 
-                "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].OUTPUT+"'),'') AS MULTICODE"+
-                " FROM ITEMS_VW_01 WHERE ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].OUTPUT+"'),'') = @VALUE AND STATUS = 1 " ,
-                param : ['VALUE:string|50'],
-                value : [pdata[i][tmpShema.CODE]]
+                query : "SELECT " +
+                        "ITEM_GUID AS GUID," +
+                        "ITEM_CODE AS CODE," +
+                        "ITEM_NAME AS NAME," +
+                        "VAT_RATE AS VAT," +
+                        "ISNULL((SELECT TOP 1 GUID FROM ITEM_UNIT WHERE TYPE = 0 AND DELETED = 0 AND ITEM = ITEM_GUID),'00000000-0000-0000-0000-000000000000') AS UNIT," +
+                        "0 AS ITEM_TYPE," +
+                        "ISNULL((SELECT TOP 1 COST_PRICE FROM ITEMS WHERE GUID = ITEM_GUID),0) AS COST_PRICE " +
+                        "FROM ITEM_MULTICODE_VW_01 WHERE CUSTOMER_GUID = @CUSTOMER_GUID AND MULTICODE = @VALUE" ,
+                param : ['CUSTOMER_GUID:string|50','VALUE:string|50'],
+                value : [this.docObj.dt()[0].OUTPUT,pdata[i][tmpShema.CODE]]
             }
             App.instance.setState({isExecute:true})
             let tmpData = await this.core.sql.execute(tmpQuery) 
