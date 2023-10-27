@@ -40,9 +40,9 @@ export const langFr =
     price : "Prix",
     msgDeviceChange : 
     {
-        title : "Dikkat",   // BAK
-        msg : "Getirmek istediğiniz fişde ödeme mevcut işleme ödemenin alındğını kasadan devam edebilirsiniz ! Kasa Kodu : ",   // BAK
-        btn01 : "Tamam",   // BAK
+        title : "Attention",   // BAK
+        msg : "Il y a un paiement dans le reçu que vous souhaitez apporter. Vous pouvez continuer la transaction en encaissant au comptoir ! Code de caisse : ",   // BAK
+        btn01 : "OK",   // BAK
     },
     msgCustomerNotFound : 
     {
@@ -344,6 +344,11 @@ export const langFr =
     {
         head : "Motif de la ligne supprimée",
         title : "Veuillez saisir le motif de suppression"
+    },
+    PopBalanceCounterDesc :
+    {
+        head : "Description de Contrôle de Balance",
+        title : "Veuillez Entrer la Raison du Contrôle de Balance"
     },
     popItemReturnDesc : 
     {
@@ -789,8 +794,12 @@ export const langFr =
     msgNotBarcodeWeighing: //BAK
     {
         title: "Attention",
-        msg: "La quantité totale du produit pesé ne correspond pas au code-barres lu !",
-        btn01: "D'accord"
+        msg: "The total quantity of the weighed product does not match the scanned barcode!",
+        msgTicket: "Weighed quantity: ",
+        msgBarkod: "Label quantity: ",
+        msgDifference: "Difference: ",
+        btn01: "OK",
+        btn02: "Continue"
     },
     msgBarcodeWeighing: //BAK
     {
@@ -798,10 +807,22 @@ export const langFr =
         msg: "Ligne lue : {0} - Montant total : {1}",
         btn01: "D'accord"
     },
+    msgBarcodeWeighingUnit: 
+    {
+        title : "Attention",
+        msg : "L'étiquette scannée contient des produits individuels. Vous n'avez pas besoin de faire correspondre les quantités sur la balance.",
+        btn01 : "D'accord"
+    },
     msgTSENotFound: //BAK
     {
         title: "Attention",
         msg: "La communication avec l'appareil TSE n'a pas pu être établie !",
         btn01: "D'accord"
+    },
+    msgMacIdFailed: //BAK
+    {
+        title : "Attention",
+        msg : "ID du périphérique non compatible ! Veuillez contacter piqsoft.",
+        btn01 : "OK"
     }
 }

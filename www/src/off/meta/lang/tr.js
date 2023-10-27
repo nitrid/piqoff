@@ -294,6 +294,7 @@ export const langTr =
         pos_02_012 : "Pos Puan Kullanım Raporu",
         pos_02_013 : "Pos İndirim Raporu",
         pos_02_014 : "Okunmamış Terazi Fişleri",
+        pos_02_015 : "Müşteri Bazlı Ürün Satış Raporu",
         pos_03 :"Operasyonlar",
         pos_03_001 : "Gün Sonu",
         promo: "Promosyon",
@@ -395,6 +396,12 @@ export const langTr =
         title: "Dikkat",
         btn01: "Tamam",
         msg: "Bu Evrak Numarasıyla Silinmiş Evrak! Lütfen Yetkili İle Görüşün.."
+    },
+    msgCheckDocNo:
+    {
+        title: "Dikkat",
+        btn01: "Tamam",
+        msg: "Girmiş olduğunuz belge no daha önceden kayıt edilmiş !"
     },
     stk_01_001:  // "Yeni Ürün Tanımlama"
     {
@@ -1261,6 +1268,7 @@ export const langTr =
             title : "Ürün Seçimi",
             clmCode :  "ÜRÜN KODU",
             clmName : "ÜRÜN ADI",
+            clmPrice : "ALIS FIYATI",
         },
         grdItemCount: 
         {
@@ -3034,6 +3042,7 @@ export const langTr =
             clmTitle : "Ünvan",
             clmName : "Adı",
             clmLastName  : "Soyadı",
+            clmStatus  : "Durum",   
         },
         grdAdress : 
         {
@@ -3146,7 +3155,8 @@ export const langTr =
         cmbTypeData : 
         {
             individual : "Bireysel",
-            company : "Firma"
+            company : "Firma",
+            association : "Dernek"
         },
         cmbGenusData:
         {
@@ -3400,7 +3410,8 @@ export const langTr =
             clmPhone1 :"Telefon",
             clmGsm : "GSM No.",
             clmEmail :"E-Mail",
-            clmIban :"Iban"
+            clmIban :"Iban",
+            clmStatus :"Durum"
         },
         cmbGenusData:
         {
@@ -5075,7 +5086,7 @@ export const langTr =
             title: "Dikkat",
             btn01: "Tamam",
             msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !"
-        },
+        }
     },
     ftr_02_003 : // "İade Faturası"
     {
@@ -8351,6 +8362,7 @@ export const langTr =
         txtUnitPrice: "Birim Fiyatı",
         txtTotalHt : "İndirimli Tutar",
         txtDocNo : "Belgo No",
+        validDesign : "Lütfen Dizayn seçiniz.",
         msgDiscount:
         {
             title: "Dikkat",
@@ -8380,6 +8392,7 @@ export const langTr =
             title : "Ürün Seçimi",
             clmCode :  "ÜRÜN KODU",
             clmName : "ÜRÜN ADI",
+            clmPrice : "SATIŞ FİYATI"
         },
         pg_contractGrid : 
         {
@@ -9176,6 +9189,7 @@ export const langTr =
             clmCode :  "ÜRÜN KODU",
             clmName : "ÜRÜN ADI",
             clmMulticode : "TEDARİKÇİ KODU",
+            clmPrice : "ALIŞ FİYATI"
         },
         pg_dispatchGrid : 
         {
@@ -9474,6 +9488,7 @@ export const langTr =
         {
             title: "Birim Seçimi",
             btn01: "Onayla",
+            btnFactorSave : "Ürün Kartını Güncelle"
         },
         validRef :"Seri Boş Geçilemez",
         validRefNo : "Sıra Boş Geçilemez",
@@ -9678,6 +9693,7 @@ export const langTr =
             title : "Ürün Seçimi",
             clmCode :  "ÜRÜN KODU",
             clmName : "ÜRÜN ADI",
+            clmPrice : "SATIŞ FIYATI"
         },
         pg_dispatchGrid : 
         {
@@ -10790,6 +10806,7 @@ export const langTr =
         txtTotalHt : "İndirimli Tutar",
         txtDocNo : "Belgo No",
         cmbOrigin : "Menşei",
+        validDesign : "Lütfen Dizayn Seçin",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -12371,9 +12388,9 @@ export const langTr =
             clmDate : "TARIH",
             clmRef : "SERİ",
             clmRefNo : "SIRA",
-            clmInputName : "CARİ ADI",
-            clmInputCode  : "CARİ KODU",
-            clmTotal : "KDVLİ TOPLAM"
+            clmOutputName : "CARİ ADI",
+            clmOutputCode  : "CARİ KODU",
+            clmTotal : "KDVLİ TOPLAM",
         },
         pg_txtCustomerCode : 
         {
@@ -12388,6 +12405,7 @@ export const langTr =
             title : "Ürün Seçimi",
             clmCode :  "ÜRÜN KODU",
             clmName : "ÜRÜN ADI",
+            clmMulticode : "MULTICODE",
             clmPrice : "SATIŞ FİYATI"
         },
         pg_RebateGrid : 
@@ -12719,6 +12737,7 @@ export const langTr =
             title : "Ürün Seçimi",
             clmCode :  "ÜRÜN KODU",
             clmName : "ÜRÜN ADI",
+            clmPrice : "SATIŞ FIYATI"
         },
         grdSlsDispatch: 
         {
@@ -15884,6 +15903,7 @@ export const langTr =
         txtLcdPort : "LCD Port",
         txtPayCardPort : "Pay Card Port",
         txtPrintDesing : "Fiş Dizaynı",
+        txtMacId : "Mac Id",
         pg_txtCode : 
         {
             title : "Kasa Seçimi",
@@ -15924,7 +15944,6 @@ export const langTr =
             btn02: "Tamam",
             msg : "Girmiş olduğunuz Cihaz Kodu sistem de kayıtlı !"
         }
-      
     },
     pos_01_002 : // "Pos Plu Kopyalama",
     {
@@ -16468,6 +16487,47 @@ export const langTr =
             clmPrice : "Fiyat",
             clmCDate : "Tarih",
             clmTicketNo : "Fiş No",
+        },
+    },
+    pos_02_015 : // "Müşteri Bazlı Ürün Satış Raporu"
+    {
+        btnGet : "Getir",
+        dtDate : "Tarih Aralığı",
+        txtCustomer : "Müşteri",
+        txtTotal : "Toplam",
+        grdList: 
+        {
+            cuserName: "O.Kullanıcı",
+            luserName: "D.Kullanıcı",
+            device: "Kasa",
+            ref: "Ref",
+            docDate: "Tarih",
+            itemCode: "Ürün Kodu",
+            itemName: "Ürün Adı",
+            itemGrpName: "Ürün Grubu",
+            barcode: "Barkodu",
+            clmQuantity: "Miktar",
+            unitShort: "Birim",
+            clmPrice : "Fiyat",
+            clmFAmount : "Vergisiz Tutar",
+            clmAmount : "Tutar",
+            clmDiscount : "İndirim",
+            clmLoyalty : "Sadakat İnd",
+            clmVat : "Vergi",
+            clmVatRate : "Vergi Oranı",
+            clmTotal : "Toplam"
+        },
+        pg_txtCustomer:
+        {
+            title: "Müşteri Seçim",
+            clmCode: "KODU",
+            clmName: "ADI"
+        },
+        msgCustomerSelect:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen Müşteri Seçiniz !"
         },
     },
     pos_03_001 : // "Gün Sonu",

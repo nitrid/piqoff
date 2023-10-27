@@ -345,6 +345,11 @@ export const langIt =
         head: "Descrizione Cancellazione Riga",
         title: "Inserisci una ragione per l'annullamento, per favore"
     },
+    PopBalanceCounterDesc :
+    {
+        head : "Descrizione Controllo Bilancia",
+        title : "Inserisci il motivo del controllo della bilancia"
+    },
     popItemReturnDesc:
     {
         head: "Descrizione Reso",
@@ -786,11 +791,15 @@ export const langIt =
         msg : "La connessione al server è stata interrotta...",
         btn01 : "Ok"
     },
-    msgNotBarcodeWeighing:
+    msgNotBarcodeWeighing: 
     {
         title: "Attenzione",
-        msg: "La quantità totale del prodotto pesato non corrisponde al codice a barre scannerizzato!",
-        btn01: "OK"
+        msg: "La quantità totale del prodotto pesato non corrisponde al codice a barre scansionato",
+        msgTicket: "Quantità pesata: ",
+        msgBarkod: "Quantità dell'etichetta: ",
+        msgDifference: "Differenza: ",
+        btn01: "OK",
+        btn02: "Continua"
     },
     msgBarcodeWeighing:
     {
@@ -798,10 +807,22 @@ export const langIt =
         msg: "Linea scannerizzata : {0} - Importo totale : {1}",
         btn01: "OK"
     },
+    msgBarcodeWeighingUnit: 
+    {
+        title : "Attenzione",
+        msg : "L'etichetta scansionata contiene prodotti singoli. Non è necessario corrispondere le quantità sulla bilancia.",
+        btn01 : "OK"
+    },
     msgTSENotFound:
     {
         title: "Attenzione",
         msg: "Impossibile stabilire la comunicazione con il dispositivo TSE !",
         btn01: "OK"
+    },
+    msgMacIdFailed:
+    {
+        title : "Attenzione",
+        msg : "ID del dispositivo non corrisponde! Si prega di contattare piqsoft.",
+        btn01 : "OK"
     }
 }

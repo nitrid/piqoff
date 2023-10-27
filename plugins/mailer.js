@@ -26,42 +26,50 @@ class mailer
     {
         return new Promise(resolve =>
         {
-            var transporter = nodemailer.createTransport({
+            let tmpAttach = [];
+            if(typeof pData.attachName != 'undefined')
+            {
+                tmpAttach = 
+                [
+                    {  
+                        filename: pData.attachName,
+                        content: pData.attachData,
+                        encoding: 'base64'
+                    }
+                ]
+            }
+
+            let transporter = nodemailer.createTransport(
+            {
                 //service: 'imap.ionos.fr',
                 host: 'smtp.ionos.fr',
                 port: 465,
                 secure: true,
                 auth: 
                 {
-                  user: "vente.esseylesnancy@ppsupermarche.fr",
-                  pass: "24Prodorplus69*/"
+                    user: "vente.esseylesnancy@ppsupermarche.fr",
+                    pass: "24Prodorplus69*/"
                 },
                 //tls : { rejectUnauthorized: false }
               });
-              console.log(pData.text)
               var mailOptions = {
                 from: "vente.esseylesnancy@ppsupermarche.fr",
                 to: pData.sendMail,
                 subject: pData.subject,
                 html:pData.html,
                 text:pData.text,
-                attachments: [
-                    {  
-                        filename: pData.attachName,
-                        content: pData.attachData,
-                        encoding: 'base64'
-                    },
-                  
-                ]
+                attachments: tmpAttach
               };
               transporter.sendMail(mailOptions, function(error, info){
                 if (error) {
                     console.log(error)
                     resolve(error);
-                } else {
+                } 
+                else 
+                {
                     resolve(0);
                 }
-              });
+            });
         })
     }
 }
