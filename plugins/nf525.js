@@ -1443,7 +1443,7 @@ class nf525
                     let tmpPosQuery = 
                     {
                         query : "SELECT GUID,DEVICE,TYPE_NAME,DOC_TYPE,DOC_DATE,REF,FAMOUNT,AMOUNT,DISCOUNT,LOYALTY,VAT,TOTAL,CERTIFICATE,SIGNATURE,SIGNATURE_SUM " + 
-                                "FROM POS_VW_01 WHERE DEVICE = @DEVICE AND DOC_DATE = CONVERT(NVARCHAR(10),GETDATE(),112) AND STATUS = 1 ORDER BY REF ASC",
+                                "FROM POS_VW_01 WHERE DEVICE = @DEVICE AND DOC_DATE = CONVERT(NVARCHAR(10),GETDATE() - 1,112) AND STATUS = 1 ORDER BY REF ASC",
                         param : ['DEVICE:string|50'],
                         value : [tmpDeviceDt.result.recordset[i].CODE]
                     }    
