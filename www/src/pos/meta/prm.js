@@ -1271,7 +1271,7 @@ export const prm =
     {
         TYPE : 0,
         ID :"ZReport",
-        VALUE : true,
+        VALUE : false,
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "",
