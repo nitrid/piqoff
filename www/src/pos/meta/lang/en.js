@@ -345,6 +345,11 @@ export const langEn =
         head : "Deleted Line Reason",
         title : "Please enter the deletion reason for the line"
     },
+    PopBalanceCounterDesc :
+    {
+        head : "Balance Check Description",
+        title : "Please Enter the Reason for Balance Control"
+    },
     popItemReturnDesc : 
     {
         head : "Return Reason",
@@ -786,11 +791,15 @@ export const langEn =
         msg: "Connection to the server is interrupted",
         btn01: "OK"
     },
-    msgNotBarcodeWeighing:
+    msgNotBarcodeWeighing: 
     {
         title: "Attention",
         msg: "The total quantity of the weighed product does not match the scanned barcode!",
-        btn01: "OK"
+        msgTicket: "Weighed quantity: ",
+        msgBarkod: "Label quantity: ",
+        msgDifference: "Difference: ",
+        btn01: "OK",
+        btn02: "Continue"
     },
     msgBarcodeWeighing:
     {
@@ -798,10 +807,22 @@ export const langEn =
         msg: "Scanned line: {0} - Total amount: {1}",
         btn01: "OK"
     },
+    msgBarcodeWeighingUnit: 
+    {
+        title : "Attention",
+        msg : "The scanned label contains individual products. You do not need to match quantities on the scale.",
+        btn01 : "OK"
+    },
     msgTSENotFound:
     {
         title: "Attention",
         msg: "Communication with the TSE device could not be established!",
         btn01: "OK"
+    },
+    msgMacIdFailed:
+    {
+        title : "Attention",
+        msg : "Device ID mismatch! Please contact piqsoft.",
+        btn01 : "OK"
     }
 }

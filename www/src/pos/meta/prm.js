@@ -34,7 +34,7 @@ export const prm =
         ID :"BarcodePattern",
         VALUE : 
         [
-            '20NNNNMMMCCF',
+            '20XXXXXMMMCCF',
             '21NNNNNMMMCCF',
             '29NNNNMMMCCF',
             '29NNNNNMMMCCF',
@@ -521,6 +521,113 @@ export const prm =
             }
         }
     },
+    //Terazi Kontrol Aciklamasi
+    {
+        TYPE : 0,
+        ID :"popBalanceCounterDesc",
+        VALUE : 
+        {
+            disable:false,
+            minCharSize:25,
+            buttons:
+            [
+                {
+                    id:"btn01",
+                    title:"Veuillez indiquer une description.",
+                    text:"Veuillez indiquer une description."
+                },
+                {
+                    id:"btn02",
+                    title:"Veuillez indiquer une description.",
+                    text:"Veuillez indiquer une description."
+                },
+                {
+                    id:"btn03",
+                    title:"Veuillez indiquer une description.",
+                    text:"Veuillez indiquer une description."
+                },
+                {
+                    id:"btn04",
+                    title:"Veuillez indiquer une description.",
+                    text:"Veuillez indiquer une description."
+                },
+                {
+                    id:"btn05",
+                    title:"Veuillez indiquer une description.",
+                    text:"Veuillez indiquer une description. "
+                },
+                {
+                    id:"btn06",
+                    title:"Veuillez indiquer une description.",
+                    text:"Veuillez indiquer une description."
+                },
+                {
+                    id:"btn07",
+                    title:"Veuillez indiquer une description.",
+                    text:"Veuillez indiquer une description."
+                },
+                {
+                    id:"btn08",
+                    title:"Veuillez indiquer une description.",
+                    text:"Veuillez indiquer une description."
+                },
+                {
+                    id:"btn09",
+                    title:"Veuillez indiquer une description.",
+                    text:"Veuillez indiquer une description."
+                },
+                {
+                    id:"btn10",
+                    title:"Veuillez indiquer une description.",
+                    text:"Veuillez indiquer une description."
+                },
+                {
+                    id:"btn11",
+                    title:"Veuillez indiquer une description.",
+                    text:"Veuillez indiquer une description."
+                },
+                {
+                    id:"btn12",
+                    title:"Veuillez indiquer une description.",
+                    text:"Veuillez indiquer une description."
+                }
+            ]
+        },
+        SPECIAL : "",
+        PAGE : "pos",
+        ELEMENT : "",
+        APP : "POS",
+        VIEW : 
+        {
+            TYPE : "popInput",
+            PAGE_NAME : "Pos",
+            CAPTION : "Terazi Kontrol Açıklama",
+            DISPLAY : "disable",
+            FORM: 
+            {
+                width:"400",
+                height:"280",
+                colCount:1,
+                item:
+                [
+                    {type:"checkbox",caption:"Pasif",field:"disable",id:"chkPopDocRowDelDescriptionDisable"},
+                    {type:"text",caption:"Min.Karakter",field:"minCharSize",id:"txtPopDocRowDelDescriptionMinChar"},
+                    {type:"popObjectList",caption:"Açıklama",field:"buttons",id:"lstPopDocRowDelDescriptionDesc",
+                        form:
+                        {
+                            width:"800",
+                            height:"600",
+                            formWidth:"600",
+                            formHeight:"260",
+                            allowAdding : false,
+                            allowUpdating : true,
+                            allowDeleting : false
+                        }
+                    }
+                ]
+            }
+        }
+    },
     //Park Açıklama
     {
         TYPE : 0,
@@ -767,13 +874,13 @@ export const prm =
                 },
                 {
                     id:"btn05",
-                    title:"Description vide.",
-                    text:"Description non saisie."
+                    title:"Cartouche.",
+                    text:"Cartouche."
                 },
                 {
                     id:"btn06",
-                    title:"Description vide.",
-                    text:"Description non saisie."
+                    title:"Rôtisserie.",
+                    text:"Rôtisserie."
                 },
                 {
                     id:"btn07",
@@ -1158,6 +1265,38 @@ export const prm =
                     {type:"text",caption:"Tolerans",field:"tolerans",id:"txtPopScaleBarcodeControlTolerans"},
                 ]
             }
+        }
+    },
+    //Z Raporu
+    {
+        TYPE : 0,
+        ID :"ZReport",
+        VALUE : true,
+        SPECIAL : "",
+        PAGE : "pos",
+        ELEMENT : "",
+        APP : "POS",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Pos",
+            CAPTION : "Z Raporu"
+        }
+    },
+    //Müşteri Puan Çarpanı
+    {
+        TYPE : 0,
+        ID :"CustomerPointFactory",
+        VALUE : 100,
+        SPECIAL : "",
+        PAGE : "pos",
+        ELEMENT : "",
+        APP : "POS",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Pos",
+            CAPTION : "Müşteri Puan Katsayısı"
         }
     },
     //#endregion

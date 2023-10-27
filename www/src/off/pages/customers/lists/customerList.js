@@ -241,15 +241,26 @@ export default class barcodeList extends React.PureComponent
                             allowColumnResizing={true}
                             loadPanel={{enabled:true}}
                             onRowDblClick={async(e)=>
+                            {
+                                App.instance.menuClick(
                                 {
-                                    App.instance.menuClick(
-                                        {
-                                            id: 'cri_01_001',
-                                            text: e.data.TITLE.substring(0,10),
-                                            path: 'customers/cards/customerCard.js',
-                                            pagePrm:{GUID:e.data.GUID}
-                                        })
-                                }}
+                                    id: 'cri_01_001',
+                                    text: e.data.TITLE.substring(0,10),
+                                    path: 'customers/cards/customerCard.js',
+                                    pagePrm:{GUID:e.data.GUID}
+                                })
+                            }}
+                            onRowPrepared={(e) =>
+                            {
+                                if(e.rowType == 'data' && e.data.STATUS == false)
+                                {
+                                    e.rowElement.style.color ="Silver"
+                                }
+                                else if(e.rowType == 'data' && e.data.STATUS == true)
+                                {
+                                    e.rowElement.style.color ="Black"
+                                }
+                            }}
                             >                            
                                 <Paging defaultPageSize={15} />
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
@@ -265,7 +276,8 @@ export default class barcodeList extends React.PureComponent
                                 <Column dataField="PHONE1" caption={this.t("grdListe.clmPhone1")} visible={false}/> 
                                 <Column dataField="GSM_PHONE" caption={this.t("grdListe.clmGsm")} visible={false}/> 
                                 <Column dataField="EMAIL" caption={this.t("grdListe.clmEmail")} visible={false}/> 
-                                <Column dataField="IBAN" caption={this.t("grdListe.clmIban")} visible={false}/> 
+                                <Column dataField="IBAN" caption={this.t("grdListe.clmIban")} visible={false}/>
+                                <Column dataField="STATUS" caption={this.t("grdListe.clmStatus")} visible={true}/>
                             </NdGrid>
                         </div>
                     </div>

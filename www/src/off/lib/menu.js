@@ -1202,6 +1202,12 @@ export const menu = (e) =>
                             text: e.t('menuOff.pos_02_011'),
                             path: 'pos/report/itemComparisonReport'
                         },
+                        //Müşteri Bazlı Ürün Satış Raporu 
+                        {
+                            id: 'pos_02_015',
+                            text: e.t('menuOff.pos_02_015'),
+                            path: 'pos/report/customerItemSaleReport'
+                        },
                         //Loyalty 
                         {
                             id: 'pos_02_012',
@@ -1219,7 +1225,7 @@ export const menu = (e) =>
                             id: 'pos_02_014',
                             text: e.t('menuOff.pos_02_014'),
                             path: 'pos/report/balanceUnreadTicket'
-                        },
+                        }
                     ]
                 },
             ]

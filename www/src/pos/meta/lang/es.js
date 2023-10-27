@@ -345,6 +345,11 @@ export const langEs =
         head : "Descripción de Eliminación de Línea",
         title : "Por favor, ingrese la razón de la eliminación"
     },
+    PopBalanceCounterDesc :
+    {
+        head : "Descripción de Control de Báscula",
+        title : "Por favor, introduzca el motivo del control de la báscula"
+    },
     popItemReturnDesc : 
     {
         head : "Descripción de Devolución",
@@ -786,11 +791,15 @@ export const langEs =
         msg: "¡Se ha perdido la conexión con el servidor!",
         btn01: "Aceptar"
     },
-    msgNotBarcodeWeighing:
+    msgNotBarcodeWeighing: 
     {
         title: "Atención",
-        msg: "La cantidad total del producto pesado no coincide con el código de barras escaneado.",
-        btn01: "Aceptar"
+        msg: "La cantidad total del producto pesado no coincide con el código de barras escaneado",
+        msgTicket: "Cantidad pesada: ",
+        msgBarkod: "Cantidad de etiqueta: ",
+        msgDifference: "Diferencia: ",
+        btn01: "Aceptar",
+        btn02: "Continuar"
     },
     msgBarcodeWeighing:
     {
@@ -798,10 +807,22 @@ export const langEs =
         msg: "Línea escaneada: {0} - Monto total: {1}",
         btn01: "Aceptar"
     },
+    msgBarcodeWeighingUnit: 
+    {
+        title : "Atención",
+        msg : "La etiqueta escaneada contiene productos individuales. No es necesario que coincidan las cantidades en la balanza.",
+        btn01 : "Aceptar"
+    },
     msgTSENotFound:
     {
         title: "Atención",
         msg: "¡No se pudo establecer comunicación con el dispositivo TSE!",
         btn01: "Aceptar"
+    },
+    msgMacIdFailed:
+    {
+        title : "Atención",
+        msg : "¡ID del dispositivo no coincide! Por favor, contacte a piqsoft.",
+        btn01 : "Aceptar"
     }
 }
