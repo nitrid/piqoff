@@ -489,36 +489,22 @@ export function print()
             let tmpArr = [];
             if(data.pos[0].CUSTOMER_CODE != '')
             {            
-                if(data.pos[0].CUSTOMER_POINT_PASSIVE == false)
+                let tmpFactory = (Number(data.special.customerPointFactory) / 100)
+
+                tmpArr.push({align:"ct",barcode:data.pos[0].CUSTOMER_CODE,options:{width: 1,height:30}});
+                tmpArr.push({font:"b",style:"b",align:"lt",data:"****************************************************************".space(64)});
+                tmpArr.push({font:"b",align:"lt",data:("CARTE DE FIDELITE / " + data.pos[0].CUSTOMER_CODE).space(64)});
+                tmpArr.push({font:"b",align:"lt",data:"ANCIEN CUMUL ".space(56) + (data.special.customerPoint + ' Pts').space(8,"s")});
+                tmpArr.push({font:"b",align:"lt",data:"POINT ACQUIS SUR CE TICKET ".space(56) + (parseInt(data.pos[0].TOTAL * tmpFactory) + ' Pts').space(8,"s")});
+
+                if(data.special.customerUsePoint > 0)
                 {
-                    let tmpFactory = (Number(data.special.customerPointFactory) / 100)
-
-                    tmpArr.push({align:"ct",barcode:data.pos[0].CUSTOMER_CODE,options:{width: 1,height:30}});
-                    tmpArr.push({font:"b",style:"b",align:"lt",data:"****************************************************************".space(64)});
-                    tmpArr.push({font:"b",align:"lt",data:("CARTE DE FIDELITE / " + data.pos[0].CUSTOMER_CODE).space(64)});
-                    tmpArr.push({font:"b",align:"lt",data:"ANCIEN CUMUL ".space(56) + (data.special.customerPoint + ' Pts').space(8,"s")});
-                    tmpArr.push({font:"b",align:"lt",data:"POINT ACQUIS SUR CE TICKET ".space(56) + (parseInt(data.pos[0].TOTAL * tmpFactory) + ' Pts').space(8,"s")});
-
-                    if(data.special.customerUsePoint > 0)
-                    {
-                        tmpArr.push({font:"b",align:"lt",data:"UTILISE POINT ".space(56) + ((parseInt(data.special.customerUsePoint) * -1) + ' Pts').space(8,"s")});
-                    }
-                    tmpArr.push({font:"b",align:"lt",data:"NOUVEAU CUMUL ".space(56) + (parseInt(data.special.customerGrowPoint) + parseInt(data.pos[0].TOTAL * tmpFactory) + ' Pts').space(8,"s")});
-                    tmpArr.push({font:"b",align:"lt",data:"EQUIVALENT REMISE ".space(56) + (decimal(parseFloat((parseInt(data.special.customerGrowPoint) + parseInt(data.pos[0].TOTAL)) / 100).toFixed(2)).toString() + 'EUR').space(8,"s")});
-
-                    tmpArr.push({font:"b",style:"b",align:"lt",data:"****************************************************************".space(64)});
+                    tmpArr.push({font:"b",align:"lt",data:"UTILISE POINT ".space(56) + ((parseInt(data.special.customerUsePoint) * -1) + ' Pts').space(8,"s")});
                 }
-                else
-                {
-                    tmpArr.push({align:"ct",barcode:data.pos[0].CUSTOMER_CODE,options:{width: 1,height:30}});
-                    tmpArr.push({font:"b",style:"b",align:"lt",data:"****************************************************************".space(64)});
-                    tmpArr.push({font:"b",align:"ct",data:(data.pos[0].CUSTOMER_NAME).space(64)});
-                    tmpArr.push({font:"b",align:"lt",data:(" ").space(64)});
-                    tmpArr.push({font:"b",align:"lt",data:(" ").space(64)});
-                    tmpArr.push({font:"b",align:"lt",data:("SIGNATURE: ").space(64)});
-                    tmpArr.push({font:"b",align:"lt",data:("......................................NOM:......................").space(64)});
-                    tmpArr.push({font:"b",style:"b",align:"lt",data:"****************************************************************".space(64)});
-                }
+                tmpArr.push({font:"b",align:"lt",data:"NOUVEAU CUMUL ".space(56) + (parseInt(data.special.customerGrowPoint) + parseInt(data.pos[0].TOTAL * tmpFactory) + ' Pts').space(8,"s")});
+                tmpArr.push({font:"b",align:"lt",data:"EQUIVALENT REMISE ".space(56) + (decimal(parseFloat((parseInt(data.special.customerGrowPoint) + parseInt(data.pos[0].TOTAL)) / 100).toFixed(2)).toString() + 'EUR').space(8,"s")});
+
+                tmpArr.push({font:"b",style:"b",align:"lt",data:"****************************************************************".space(64)});
             }
             return tmpArr.length > 0 ? tmpArr : undefined
         },
