@@ -345,6 +345,11 @@ export const langTr =
         head : "Satır Silme İşlemi Açıklaması",
         title : "Lütfen Silme Nedeninizi Giriniz"
     },
+    popBalanceCounterDesc : 
+    {
+        head : "Terazi Kontrol Açıklamasi",
+        title : "Terazi Kontrol Nedeninizi Giriniz"
+    },
     popItemReturnDesc : 
     {
         head : "İade Açıklaması",
@@ -790,12 +795,22 @@ export const langTr =
     {
         title : "Dikkat",
         msg : "Tartılan ürün ile okutulan barkod toplam miktarı eşleşmedi !",
-        btn01 : "Tamam"
+        msgTicket :"Tartılan miktar : ",
+        msgBarkod : "Etiket miktari : ",
+        msgDifference : "Fark : ",
+        btn01 : "Tamam",
+        btn02 : "Devam"
     },
     msgBarcodeWeighing: 
     {
         title : "Dikkat",
         msg : "Okutulan satır : {0} - Toplam tutar : {1}",
+        btn01 : "Tamam"
+    },
+    msgBarcodeWeighingUnit: 
+    {
+        title : "Dikkat",
+        msg : "Okutmuş olduğunuz etiket de adet ürün var. Terazi de miktar eşleşmesi yapmanıza gerek yoktur.",
         btn01 : "Tamam"
     },
     msgTSENotFound: 
@@ -804,4 +819,10 @@ export const langTr =
         msg : "TSE cihazı ile iletişim kurulamadı !",
         btn01 : "Tamam"
     },
+    msgMacIdFailed:
+    {
+        title : "Dikkat",
+        msg : "Cihaz id uyumsuz ! Lütfen piqsoft ile iletişim kurunuz.",
+        btn01 : "Tamam"
+    }
 }
