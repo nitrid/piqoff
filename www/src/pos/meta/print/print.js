@@ -549,6 +549,8 @@ export function print()
         ()=>{return {font:"b",style:"b",align:"ct",data:"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"}},
         ()=>{return {font:"b",style:"b",align:"ct",data:"AUCUN REMBOURSEMENT ESPECES NE SERA EFFECTUE"}},
         ()=>{return {font:"b",style:"b",align:"ct",data:"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"}},
+        ()=>{return {font:"b",style:"b",align:"ct",data:"Grâce à vos achats bénéficiez de réductions."}},
+        ()=>{return {font:"b",style:"b",align:"ct",data:"Pour 1 EURO depensé beneficiez d'1 point fidelité."}},
         ()=>{return {font:"b",style:"b",align:"ct",data:"Merci de votre fidélité à très bientôt ..."}},
         ()=>
         {
