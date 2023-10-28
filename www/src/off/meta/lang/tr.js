@@ -8477,6 +8477,30 @@ export const langTr =
         txtTotalHt : "İndirimli Tutar",
         txtDocNo : "Belgo No",
         validDesign : "Lütfen Dizayn seçiniz.",
+        btnView : "Görüntüle",
+        btnMailsend : "Mail Gönder",
+        validMail : "Lütfen Boş Geçmeyin.",
+        placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.",
+        isMsgSave :
+        {  
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrak Kayıt Edilmeden Işlem yapılamaz !"         
+        },
+        msgMailSendResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Mail gönderimi başarılı !",
+            msgFailed: "Mail gönderimi başarısız !"
+        },
+        popMailSend : 
+        {
+            title :"E-Mail Gönder",
+            txtMailSubject : "E-Mail Başlığı",
+            txtSendMail : "E-Mail Adresi",
+            btnSend : "Gönder"
+        },
         msgDiscount:
         {
             title: "Dikkat",
@@ -14154,6 +14178,30 @@ export const langTr =
         txtTotalHt : "İndirimli Tutar",
         txtDocNo : "Belgo No",
         cmbPriceContract : "Fiyat Anlaşması",
+        btnView : "Görüntüle",
+        btnMailsend : "Mail Gönder",
+        validMail : "Lütfen Boş Geçmeyin.",
+        placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.",
+        isMsgSave :
+        {  
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrak Kayıt Edilmeden Işlem yapılamaz !"         
+        },
+        msgMailSendResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Mail gönderimi başarılı !",
+            msgFailed: "Mail gönderimi başarısız !"
+        },
+        popMailSend : 
+        {
+            title :"E-Mail Gönder",
+            txtMailSubject : "E-Mail Başlığı",
+            txtSendMail : "E-Mail Adresi",
+            btnSend : "Gönder"
+        },
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -17256,6 +17304,26 @@ export const langTr =
         placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.",
         validDesign : "Lütfen Dizayn seçiniz.",
         validMail : "Lütfen Boş Geçmeyin.",
+        isMsgSave :
+        {  
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrak Kayıt Edilmeden Işlem yapılamaz !"         
+        },
+        msgMailSendResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Mail gönderimi başarılı !",
+            msgFailed: "Mail gönderimi başarısız !"
+        },
+        popMailSend : 
+        {
+            title :"E-Mail Gönder",
+            txtMailSubject : "E-Mail Başlığı",
+            txtSendMail : "E-Mail Adresi",
+            btnSend : "Gönder"
+        },
         pg_Docs : 
         {
             title : "Evrak Seçimi",
