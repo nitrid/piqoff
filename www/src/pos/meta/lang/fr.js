@@ -345,6 +345,11 @@ export const langFr =
         head : "Motif de la ligne supprimée",
         title : "Veuillez saisir le motif de suppression"
     },
+    PopBalanceCounterDesc :
+    {
+        head : "Description de Contrôle de Balance",
+        title : "Veuillez Entrer la Raison du Contrôle de Balance"
+    },
     popItemReturnDesc : 
     {
         head : "Motif de retour ",
@@ -789,8 +794,12 @@ export const langFr =
     msgNotBarcodeWeighing: //BAK
     {
         title: "Attention",
-        msg: "La quantité totale du produit pesé ne correspond pas au code-barres lu !",
-        btn01: "D'accord"
+        msg: "The total quantity of the weighed product does not match the scanned barcode!",
+        msgTicket: "Weighed quantity: ",
+        msgBarkod: "Label quantity: ",
+        msgDifference: "Difference: ",
+        btn01: "OK",
+        btn02: "Continue"
     },
     msgBarcodeWeighing: //BAK
     {
@@ -809,5 +818,11 @@ export const langFr =
         title: "Attention",
         msg: "La communication avec l'appareil TSE n'a pas pu être établie !",
         btn01: "D'accord"
+    },
+    msgMacIdFailed: //BAK
+    {
+        title : "Attention",
+        msg : "ID du périphérique non compatible ! Veuillez contacter piqsoft.",
+        btn01 : "OK"
     }
 }

@@ -140,9 +140,9 @@ export class nf525Cls
     
                 let tmpQuery = 
                 {
-                    query : "SELECT TOP 1 * FROM [dbo].[POS_VW_01] WHERE DEVICE = @DEVICE AND GUID <> @GUID AND STATUS = 1 ORDER BY LDATE DESC",
-                    param : ['DEVICE:string|25','GUID:string|50'],
-                    value : [pData.DEVICE,pData.GUID]
+                    query : "SELECT * FROM [dbo].[POS_VW_01] WHERE DEVICE = @DEVICE AND REF = (SELECT MAX(REF) FROM POS_VW_01 WHERE DEVICE = @DEVICE AND STATUS = 1) AND STATUS = 1",
+                    param : ['DEVICE:string|25'],
+                    value : [pData.DEVICE]
                 }
                 
                 let tmpResult = await this.core.sql.execute(tmpQuery)

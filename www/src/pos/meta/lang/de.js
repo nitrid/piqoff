@@ -345,6 +345,11 @@ export const langDe =
         head: "Beschreibung für Zeilenlöschung",
         title: "Bitte geben Sie einen Grund für die Löschung ein."
     },
+    PopBalanceCounterDesc :
+    {
+        head : "Waagekontrollbeschreibung",
+        title : "Bitte geben Sie den Grund für die Waagenkontrolle ein"
+    },
     popItemReturnDesc: 
     {
         head: "Rückgabe-Beschreibung",
@@ -786,11 +791,15 @@ export const langDe =
         msg: "Die Verbindung zum Server wurde getrennt.",
         btn01: "OK"
     },
-    msgNotBarcodeWeighing:
+    msgNotBarcodeWeighing: 
     {
         title: "Achtung",
-        msg: "Die Gesamtmenge des gewogenen Produkts stimmt nicht mit dem gescannten Barcode überein!",
-        btn01: "OK"
+        msg: "Die Gesamtmenge des gewogenen Produkts stimmt nicht mit dem gescannten Barcode überein",
+        msgTicket: "Gewogene Menge: ",
+        msgBarkod: "Menge des Etiketts: ",
+        msgDifference: "Differenz: ",
+        btn01: "OK",
+        btn02: "Weiter"
     },
     msgBarcodeWeighing:
     {
@@ -809,5 +818,11 @@ export const langDe =
         title: "Achtung",
         msg: "Die Kommunikation mit dem TSE-Gerät konnte nicht hergestellt werden !",
         btn01: "Okay"
+    },
+    msgMacIdFailed:
+    {
+        title : "Achtung",
+        msg : "Geräte-ID stimmt nicht überein! Bitte kontaktieren Sie piqsoft.",
+        btn01 : "OK"
     }
 }

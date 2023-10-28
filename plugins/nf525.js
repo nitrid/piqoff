@@ -52,6 +52,7 @@ class nf525
             await this.processGrandTotal()
             await this.processArchive()
             await this.processSignatureVerify()
+            await this.checkAnomaly()
         })
     }
     async processGrandTotal()
@@ -1422,6 +1423,136 @@ class nf525
         sig.updateString(pData);
         let isValid = sig.verify(rsa.b64utohex(pSig));
         return isValid
+    }
+    checkAnomaly()
+    {
+        return new Promise(async resolve =>
+        {
+            let tmpMailText = ""
+            try
+            {
+                let tmpDeviceQuery = 
+                {
+                    query : "SELECT CODE FROM POS_DEVICE_VW_01 ORDER BY CODE ASC"
+                }
+
+                let tmpDeviceDt = await core.instance.sql.execute(tmpDeviceQuery)
+
+                for (let i = 0; i < tmpDeviceDt.result.recordset.length; i++) 
+                {
+                    let tmpPosQuery = 
+                    {
+                        query : "SELECT GUID,DEVICE,TYPE_NAME,DOC_TYPE,DOC_DATE,REF,FAMOUNT,AMOUNT,DISCOUNT,LOYALTY,VAT,TOTAL,CERTIFICATE,SIGNATURE,SIGNATURE_SUM " + 
+                                "FROM POS_VW_01 WHERE DEVICE = @DEVICE AND DOC_DATE = CONVERT(NVARCHAR(10),GETDATE() - 1,112) AND STATUS = 1 ORDER BY REF ASC",
+                        param : ['DEVICE:string|50'],
+                        value : [tmpDeviceDt.result.recordset[i].CODE]
+                    }    
+                    let tmpPosSaleQuery = 
+                    {
+                        query : "SELECT POS_GUID,SUM(TOTAL) AS TOTAL FROM POS_SALE_VW_01 WHERE DEVICE = @DEVICE AND DOC_DATE = CONVERT(NVARCHAR(10),GETDATE() - 1,112) AND STATUS = 1 GROUP BY POS_GUID",
+                        param : ['DEVICE:string|50'],
+                        value : [tmpDeviceDt.result.recordset[i].CODE]
+                    }
+                    let tmpPosPayQuery = 
+                    {
+                        query : "SELECT POS_GUID,SUM(AMOUNT-CHANGE) AS TOTAL FROM POS_PAYMENT_VW_01 WHERE DEVICE = @DEVICE AND DOC_DATE = CONVERT(NVARCHAR(10),GETDATE() - 1,112) AND STATUS = 1 GROUP BY POS_GUID",
+                        param : ['DEVICE:string|50'],
+                        value : [tmpDeviceDt.result.recordset[i].CODE]
+                    }
+                    
+                    let tmpPosDt = await core.instance.sql.execute(tmpPosQuery)
+                    let tmpPosSaleDt = await core.instance.sql.execute(tmpPosSaleQuery)
+                    let tmpPosPayDt = await core.instance.sql.execute(tmpPosPayQuery)
+                    
+                    for (let x = 0; x < tmpPosDt.result.recordset.length; x++) 
+                    {
+                        let tmpLastPos = undefined
+                        if(x > 0)
+                        {
+                            tmpLastPos = tmpPosDt.result.recordset[x - 1]
+                        }
+
+                        let tmpPosSaleTotal = 0
+                        let tmpPosPayTotal = 0
+                        if(tmpPosSaleDt.result.recordset.length > 0)
+                        {
+                            let tmpPosSaleFilter = tmpPosSaleDt.result.recordset.filter(item => item.POS_GUID === tmpPosDt.result.recordset[x].GUID)
+                            if(tmpPosSaleFilter.length > 0)
+                            {
+                                tmpPosSaleTotal = Number(Number(tmpPosSaleFilter[0].TOTAL).toFixed(2))
+                            }
+                        }
+                        if(tmpPosPayDt.result.recordset.length > 0)
+                        {
+                            let tmpPosPayFilter = tmpPosPayDt.result.recordset.filter(item => item.POS_GUID === tmpPosDt.result.recordset[x].GUID)
+                            if(tmpPosPayFilter.length > 0)
+                            {
+                                tmpPosPayTotal = Number(Number(tmpPosPayFilter[0].TOTAL).toFixed(2))
+                            }
+                        }
+                        //SATIŞ TUTARI KONTROLÜ
+                        if(Number(tmpPosDt.result.recordset[x].TOTAL) != tmpPosSaleTotal)
+                        {
+                            tmpMailText = tmpMailText + "Satış Tutarı Uyumsuz - DEVICE : " + tmpPosDt.result.recordset[x].DEVICE + " - REF : " + tmpPosDt.result.recordset[x].REF + "\n"
+                        }
+                        //ÖDEME TUTARI KONTROLÜ
+                        if(Number(tmpPosDt.result.recordset[x].TOTAL) != tmpPosPayTotal)
+                        {
+                            tmpMailText = tmpMailText + "Ödeme Tutarı Uyumsuz - DEVICE : " + tmpPosDt.result.recordset[x].DEVICE + " - REF : " + tmpPosDt.result.recordset[x].REF + "\n"
+                        }
+                        //REF NO SIFIR MI KONTROLÜ
+                        if(tmpPosDt.result.recordset[x].REF == 0)
+                        {
+                            tmpMailText = tmpMailText + "Ref No Sıfır - DEVICE : " + tmpPosDt.result.recordset[x].DEVICE + " - REF : " + tmpPosDt.result.recordset[x].REF + "\n"
+                        }
+                        //İMZALANMIŞ MI KONTROLÜ
+                        if(tmpPosDt.result.recordset[x].SIGNATURE == '')
+                        {
+                            tmpMailText = tmpMailText + "İmza Boş - DEVICE : " + tmpPosDt.result.recordset[x].DEVICE + " - REF : " + tmpPosDt.result.recordset[x].REF + "\n"
+                        }
+
+                        //AYNI REF NO DAN BAŞKA BİR KAYIT VARMI KONTROLÜ
+                        let tmpPosRefQuery = 
+                        {
+                            query : "SELECT REF FROM POS_VW_01 WHERE REF = @REF AND STATUS = 1 AND DEVICE = @DEVICE AND GUID <> @GUID",
+                            param : ['REF:int','DEVICE:string|50','GUID:string|50'],
+                            value : [tmpPosDt.result.recordset[x].REF,tmpPosDt.result.recordset[x].DEVICE,tmpPosDt.result.recordset[x].GUID]
+                        }
+                        let tmpPosRefDt = await core.instance.sql.execute(tmpPosRefQuery)
+
+                        if(tmpPosRefDt.result.recordset.length > 0)
+                        {
+                            tmpMailText = tmpMailText + "Duplicate Ref No - DEVICE : " + tmpPosDt.result.recordset[x].DEVICE + " - REF : " + tmpPosDt.result.recordset[x].REF + "\n"
+                        }
+                        //******************************************** */
+                        //İMZA DOĞRULUK KONTROLÜ
+                        let tmpSign = tmpPosDt.result.recordset[x].SIGNATURE_SUM.toString()
+                        if(typeof tmpLastPos != 'undefined' && tmpLastPos.SIGNATURE != tmpSign.substring(tmpSign.lastIndexOf(',') + 1,tmpSign.length))
+                        {
+                            tmpMailText = tmpMailText + "İmza doğru değil - DEVICE : " + tmpPosDt.result.recordset[x].DEVICE + " - REF : " + tmpPosDt.result.recordset[x].REF + "\n"
+                        }
+                        //******************************************** */
+                    }
+                }
+            }
+            catch(err)
+            {
+                tmpMailText = err.toString()
+            }
+            
+            if(tmpMailText != '')
+            {
+                let tmpMailData =
+                {
+                    sendMail : "alikemal@piqsoft.com,zengin.m@ppholding.fr",
+                    subject : "NF525 Anomali Control",
+                    text : tmpMailText
+                }
+                this.core.plugins._mailer.mailSend(tmpMailData)
+            }
+            
+            resolve()
+        })
     }
 }
 export const _nf525 = new nf525()

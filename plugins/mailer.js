@@ -26,6 +26,19 @@ class mailer
     {
         return new Promise(resolve =>
         {
+            let tmpAttach = [];
+            if(typeof pData.attachName != 'undefined')
+            {
+                tmpAttach = 
+                [
+                    {  
+                        filename: pData.attachName,
+                        content: pData.attachData,
+                        encoding: 'base64'
+                    }
+                ]
+            }
+
             var transporter = nodemailer.createTransport({
                 service: "gmail",
                 host: "smtp.gmail.com",
@@ -36,30 +49,24 @@ class mailer
                   pass: "ewiosnmqocuddwsl",
                 },
               });
-              console.log(pData.text)
               var mailOptions = {
                 from: "yellyz.vente@gmail.com",
                 to: pData.sendMail,
                 subject: pData.subject,
                 html:pData.html,
                 text:pData.text,
-                attachments: [
-                    {  
-                        filename: pData.attachName,
-                        content: pData.attachData,
-                        encoding: 'base64'
-                    },
-                  
-                ]
+                attachments: tmpAttach
               };
               transporter.sendMail(mailOptions, function(error, info){
                 if (error) {
                     console.log(error)
                     resolve(error);
-                } else {
+                } 
+                else 
+                {
                     resolve(0);
                 }
-              });
+            });
         })
     }
 }

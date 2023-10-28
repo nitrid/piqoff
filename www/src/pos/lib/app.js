@@ -232,6 +232,15 @@ export default class App extends React.PureComponent
             if(typeof tmpData != 'undefined' && typeof tmpData.data != 'undefined' && typeof tmpData.data != 'undefined' && typeof tmpData.data.deviceId != 'undefined')
             {
                 localStorage.setItem('device',tmpData.data.deviceId)
+                localStorage.setItem('macId',tmpData.data.macId)
+                //YENİ KURULMUŞ CİHAZLARDA DEFAULT DİL SEÇİMİ.
+                if(typeof tmpData.data.lang != 'undefined' && localStorage.getItem('lang') == null)
+                {
+                    localStorage.setItem('lang',tmpData.data.lang)    
+                    i18n.changeLanguage(tmpData.data.lang)
+                    locale(tmpData.data.lang)
+                    window.location.reload()
+                }
             }
             //************************************************************************** */
             await this.core.util.waitUntil(0)

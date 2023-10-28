@@ -87,6 +87,13 @@ posDoc.prototype.delete = async function()
 }
 posDoc.prototype.getItem = async function(pCode)
 {
+    //MÜŞTER KARTI BARKODUNU OKUTMAK İÇİN BUTONA BASILMIŞ İSE TERAZİ KONTROLÜNE GİRME.
+    if(this.btnGetCustomer.lock)
+    {
+        orgGetItem.call(this,pCode)
+        return
+    }
+
     getBarPattern = getBarPattern.bind(this)
     getBalanceCounter = getBalanceCounter.bind(this)
 
@@ -111,6 +118,7 @@ posDoc.prototype.getItem = async function(pCode)
                         let tmpQuantity = 0
                         let tmpTolerans = 0
                         let tmpDQuantity = Number(tmpBalanceDt.sum('QUANTITY')).round(3)
+                        
                         if(typeof this.prmObj.filter({ID:'ScaleBarcodeControl',TYPE:0}).getValue().tolerans != 'undefined')
                         {
                             tmpTolerans = this.prmObj.filter({ID:'ScaleBarcodeControl',TYPE:0}).getValue().tolerans
@@ -140,7 +148,7 @@ posDoc.prototype.getItem = async function(pCode)
                             this.loading.current.instance.hide()
                             return
                         }
-                        
+                        let resultQuantity = Number((tmpDQuantity) - (tmpQuantity)).round(3)
                         if(tmpQuantity >= Number(tmpDQuantity) - Number(tmpTolerans) && tmpQuantity <= Number(tmpDQuantity) + Number(tmpTolerans))
                         {
                             let tmpLangMsg = this.lang.t("msgBarcodeWeighing.msg")
@@ -151,7 +159,7 @@ posDoc.prototype.getItem = async function(pCode)
                             {
                                 id:'msgBarcodeWeighing',showTitle:true,title:this.lang.t("msgBarcodeWeighing.title"),showCloseButton:true,width:'400px',height:'200px',
                                 button:[{id:"btn01",caption:this.lang.t("msgBarcodeWeighing.btn01"),location:'before'}],
-                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{tmpLangMsg}</div>)
+                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{tmpLangMsg} {Number.money.sign}</div>)
                             }
                             await dialog(tmpConfObj);
                         }
@@ -160,13 +168,56 @@ posDoc.prototype.getItem = async function(pCode)
                             document.getElementById("Sound").play(); 
                             let tmpConfObj =
                             {
-                                id:'msgNotBarcodeWeighing',showTitle:true,title:this.lang.t("msgNotBarcodeWeighing.title"),showCloseButton:true,width:'400px',height:'200px',
-                                button:[{id:"btn01",caption:this.lang.t("msgNotBarcodeWeighing.btn01"),location:'before'}],
-                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgNotBarcodeWeighing.msg")}</div>)
+                                id:'msgNotBarcodeWeighing',showTitle:true,title:this.lang.t("msgNotBarcodeWeighing.title"),showCloseButton:true,width:'650px',height:'350px',
+                                button:[{id:"btn02",caption:this.lang.t("msgNotBarcodeWeighing.btn02"),location:'after'},{id:"btn01",caption:this.lang.t("msgNotBarcodeWeighing.btn01"),location:'before'}],
+                                content:
+                                (
+                                    <div style={{textAlign:"center",fontSize:"20px"}}>
+                                        <div className="row">
+                                            <div className="col-12">
+                                                {this.lang.t("msgNotBarcodeWeighing.msg")}
+                                            </div>
+                                        </div>
+                                        <div className="row" style={{textAlign:"center",fontSize:"20px"}}>
+                                            <div className="col-12" style={{ padding: "5px" }}>
+                                                <span style={{fontWeight: tmpQuantity > tmpDQuantity ? "bold" : "normal" }}>{this.lang.t("msgNotBarcodeWeighing.msgTicket")}{tmpQuantity} kg</span>
+                                            </div>
+                                        </div>
+                                        <div className="row" style={{textAlign:"center",fontSize:"20px"}}>
+                                            <div className="col-12"style={{padding:"5px"}}>{this.lang.t("msgNotBarcodeWeighing.msgBarkod")}{tmpDQuantity} kg</div>
+                                        </div>
+                                        <div className="row" style={{textAlign:"center",fontSize:"20px"}}>
+                                            <div className="col-12">
+                                                <span style={{color: resultQuantity > tmpTolerans ? "red" : "red"}}>{this.lang.t("msgNotBarcodeWeighing.msgDifference")}{resultQuantity} kg</span>
+                                            </div>
+                                        </div>
+                                        <div className="row" style={{textAlign:"center",fontSize:"20px"}}>
+                                            <div className="col-12">
+                                                <span>{this.lang.t("msgNotBarcodeWeighing.msgTotalAmount")}{Number(tmpBalanceDt.sum('AMOUNT')).round(2)} €</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )
                             }
-                            await dialog(tmpConfObj);
-                            this.loading.current.instance.hide()
-                            return
+                            let tmpConfResult = await dialog(tmpConfObj)
+                            if(tmpConfResult == 'btn01')
+                            {
+                                this.loading.current.instance.hide()
+                                return
+                            }
+                            else
+                            {
+                                let tmpBalResult = await this.popBalanceCounterDesc.show()
+                                if(typeof tmpBalResult != 'undefined')
+                                {
+                                    await this.descSave("BALANCE COUNTER",tmpBalResult,"00000000-0000-0000-0000-000000000000")
+                                }
+                                else
+                                {
+                                    this.loading.current.instance.hide()
+                                    return
+                                }
+                            }
                         }
                     }
                     else
@@ -285,7 +336,7 @@ function getBalanceCounter(pTicketNo)
         {
             query : "SELECT * FROM BALANCE_COUNTER_VW_01 WHERE TICKET_NO = @TICKET_NO AND CONVERT(NVARCHAR(10),TICKET_DATE,112) >= @TICKET_DATE AND STATUS = 0 ORDER BY TICKET_DATE DESC",
             param : ['TICKET_NO:int','TICKET_DATE:datetime'],
-            value: [Number(pTicketNo),new Date(moment().subtract(1,'days').format('YYYY-MM-DD'))]
+            value: [Number(pTicketNo),new Date(moment().subtract(0,'days').format('YYYY-MM-DD'))]
         }
         await tmpDt.refresh();   
         resolve(tmpDt)
