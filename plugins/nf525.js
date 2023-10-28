@@ -1449,13 +1449,13 @@ class nf525
                     }    
                     let tmpPosSaleQuery = 
                     {
-                        query : "SELECT POS_GUID,SUM(TOTAL) AS TOTAL FROM POS_SALE_VW_01 WHERE DEVICE = @DEVICE AND DOC_DATE = CONVERT(NVARCHAR(10),GETDATE(),112) AND STATUS = 1 GROUP BY POS_GUID",
+                        query : "SELECT POS_GUID,SUM(TOTAL) AS TOTAL FROM POS_SALE_VW_01 WHERE DEVICE = @DEVICE AND DOC_DATE = CONVERT(NVARCHAR(10),GETDATE() - 1,112) AND STATUS = 1 GROUP BY POS_GUID",
                         param : ['DEVICE:string|50'],
                         value : [tmpDeviceDt.result.recordset[i].CODE]
                     }
                     let tmpPosPayQuery = 
                     {
-                        query : "SELECT POS_GUID,SUM(AMOUNT-CHANGE) AS TOTAL FROM POS_PAYMENT_VW_01 WHERE DEVICE = @DEVICE AND DOC_DATE = CONVERT(NVARCHAR(10),GETDATE(),112) AND STATUS = 1 GROUP BY POS_GUID",
+                        query : "SELECT POS_GUID,SUM(AMOUNT-CHANGE) AS TOTAL FROM POS_PAYMENT_VW_01 WHERE DEVICE = @DEVICE AND DOC_DATE = CONVERT(NVARCHAR(10),GETDATE() - 1,112) AND STATUS = 1 GROUP BY POS_GUID",
                         param : ['DEVICE:string|50'],
                         value : [tmpDeviceDt.result.recordset[i].CODE]
                     }
@@ -1539,13 +1539,18 @@ class nf525
             {
                 tmpMailText = err.toString()
             }
-            let tmpMailData =
+            
+            if(tmpMailText != '')
             {
-                sendMail : "alikemal@piqsoft.com,zengin.m@ppholding.fr",
-                subject : "NF525 Anomali Control",
-                text : tmpMailText
+                let tmpMailData =
+                {
+                    sendMail : "alikemal@piqsoft.com,zengin.m@ppholding.fr",
+                    subject : "NF525 Anomali Control",
+                    text : tmpMailText
+                }
+                this.core.plugins._mailer.mailSend(tmpMailData)
             }
-            this.core.plugins._mailer.mailSend(tmpMailData)
+            
             resolve()
         })
     }
