@@ -1124,8 +1124,13 @@ export const menu = (e) =>
                     [
                         {
                             id: 'pos_03_001',
-                            text: e.t('menuOff.pos_03_001'),//'Promosyon Tanımları',
+                            text: e.t('menuOff.pos_03_001'),//'Gün Sonu Operasyonu',
                             path: 'pos/operation/endOfDay'
+                        },
+                        {
+                            id: 'pos_03_002',
+                            text: e.t('menuOff.pos_03_002'),//'Çekiliş Operasyonu',
+                            path: 'pos/operation/posLottery'
                         }
                     ]
                 },
