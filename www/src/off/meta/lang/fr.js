@@ -5645,7 +5645,13 @@ export const langFr =
         validMail : "Veuillez ne pas laisser le champs vide.",  
         txtTotalHt : "Total HT",
         txtDocNo : "Numéro de document", 
-        pg_Docs : 
+        isMsgSave :
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Impossible d'effectuer l'action sans enregistrement du document !"
+        },
+                pg_Docs : 
         {
             title : "Sélection Document",
             clmDate : "Date",
@@ -7526,6 +7532,26 @@ export const langFr =
         validMail : "Veuillez ne pas laisser le champs vide.",  
         txtTotalHt : "Total HT",
         txtDocNo : "Numéro de document", 
+        isMsgSave :
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Impossible d'effectuer l'action sans enregistrement du document !"
+        },
+        msgMailSendResult:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msgSuccess: "Envoi de l'e-mail réussi !",
+            msgFailed: "Échec de l'envoi de l'e-mail !"
+        },
+        popMailSend :
+        {
+            title :"Envoyer un e-mail",
+            txtMailSubject : "Sujet de l'e-mail",
+            txtSendMail : "Adresse e-mail",
+            btnSend : "Envoyer"
+        },
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -9310,6 +9336,31 @@ export const langFr =
         getOffers : "Recherche Proposition", 
         txtTotalHt : "Total HT",
         txtDocNo : "Numéro de document",
+        validDesign : "Veuillez sélectionner une conception.",
+        btnView : "Afficher",
+        btnMailsend : "Envoyer un e-mail",
+        validMail : "Veuillez ne pas laisser ce champ vide.",
+        placeMailHtmlEditor : "Vous pouvez entrer une description pour votre e-mail.",
+        isMsgSave :
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Impossible d'effectuer l'action sans enregistrement du document !"
+        },
+        msgMailSendResult:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msgSuccess: "Envoi de l'e-mail réussi !",
+            msgFailed: "Échec de l'envoi de l'e-mail !"
+        },
+        popMailSend :
+        {
+            title :"Envoyer un e-mail",
+            txtMailSubject : "Sujet de l'e-mail",
+            txtSendMail : "Adresse e-mail",
+            btnSend : "Envoyer"
+        },
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -9822,6 +9873,31 @@ export const langFr =
         dtExpDate : "Date d'Echéance", 
         txtTotalHt : "Total HT",
         txtDocNo : "Numéro de document", 
+        validDesign : "Veuillez sélectionner un design.",
+        btnView : "Afficher",
+        btnMailsend : "Envoyer un courriel",
+        validMail : "Veuillez ne pas laisser ce champ vide.",
+        placeMailHtmlEditor : "Vous pouvez entrer une description de votre courrier.",
+        isMsgSave :
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            msg: "Impossible de procéder sans enregistrement du document !"
+        },
+        msgMailSendResult:
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            msgSuccess: "L'envoi du courrier a réussi !",
+            msgFailed: "L'envoi du courrier a échoué !"
+        },
+        popMailSend :
+        {
+            title :"Envoyer un e-mail",
+            txtMailSubject : "Objet du courriel",
+            txtSendMail : "Adresse e-mail",
+            btnSend : "Envoyer"
+        },
         pg_Docs : 
         {
             title : "Sélection Document",
