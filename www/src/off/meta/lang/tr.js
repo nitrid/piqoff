@@ -297,6 +297,7 @@ export const langTr =
         pos_02_015 : "Müşteri Bazlı Ürün Satış Raporu",
         pos_03 :"Operasyonlar",
         pos_03_001 : "Gün Sonu",
+        pos_03_002 : "Çekiliş",
         promo: "Promosyon",
         promo_01: "Tanımlar",
         promo_01_001: "Promosyon Tanımlama",
@@ -16967,6 +16968,15 @@ export const langTr =
             btn01: "Tamam",
             msg: "1000€ dan yüksek avans giremezsiniz ! "
         },
+    },
+    pos_03_002 : // "Çekiliş",
+    {
+        dtDate : "Tarih",
+        txtLucky : "Talihli",
+        txtPoint : "Puan",
+        btnLottery : "Çekiliş Yap",
+        lblTicketNo : "FİŞ NO",
+        lblCustomer : "MÜŞTERİ"
     },
     tkf_01_001 : // "Alış Teklifi Listesi",
     {

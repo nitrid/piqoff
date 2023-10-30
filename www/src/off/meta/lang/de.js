@@ -288,6 +288,7 @@ export const langDe =
         pos_02_015 : "Müşteri Bazlı Ürün Satış Raporu", //BAK
         pos_03: "Operationen",
         pos_03_001: "Tagesabschluss",
+        pos_03_002: "Auslosung",
         promo: "Angebot",
         promo_01: "Definitionen",
         promo_01_001: "Angebot-Definition",
@@ -16871,6 +16872,15 @@ export const langDe =
             btn01: "OK",
             msg: "Sie können keinen Vorschuss über 1000€ eingeben!"
         },
+    },
+    pos_03_002 : // "Çekiliş" //BAK
+    {
+        dtDate : "Datum",
+        txtLucky : "Gewinner",
+        txtPoint : "Punkte",
+        btnLottery : "Ziehung machen",
+        lblTicketNo : "BELEG NR",
+        lblCustomer : "KUNDE"
     },
     tkf_01_001 : // "Angebotsliste Einkauf",
     {
