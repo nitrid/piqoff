@@ -381,14 +381,14 @@ export const langEn =
         btn01 : "Manual Entry",
         btn02 : "Cancel",
     },
-    msgCardPayment: 
-    {
-        title : "Attention",
-        msg :"Waiting for response from POS terminal",
-        btn01 : "Retry",
-        btn02 : "Cancel",
-        btn03 : "Force",
-    },
+    msgCardPayment: {
+        title: "Attention",
+        msg: "Waiting for the card terminal response.",
+        msgAmount: "Amount :",
+        btn01: "Retry",
+        btn02: "Cancel",
+        btn03: "Force"
+    },    
     msgRePaymentType :
     {
         title : "Which payment method do you choose for the remaining amount?", 
@@ -798,6 +798,7 @@ export const langEn =
         msgTicket: "Weighed quantity: ",
         msgBarkod: "Label quantity: ",
         msgDifference: "Difference: ",
+        msgTotalAmount : "Total Amount",
         btn01: "OK",
         btn02: "Continue"
     },

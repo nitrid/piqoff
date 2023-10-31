@@ -381,13 +381,14 @@ export const langEs =
         btn01: "Ingresar cantidad",
         btn02: "Cancelar",
     },
-    msgCardPayment:
+    msgCardPayment: 
     {
         title: "Atención",
-        msg: "Esperando respuesta desde el dispositivo de tarjeta.",
+        msg: "Esperando la respuesta del terminal de tarjeta.",
+        msgAmount: "Cantidad :",
         btn01: "Reintentar",
         btn02: "Cancelar",
-        btn03: "Forzar",
+        btn03: "Forzar"
     },
     msgRePaymentType:
     {
@@ -798,6 +799,7 @@ export const langEs =
         msgTicket: "Cantidad pesada: ",
         msgBarkod: "Cantidad de etiqueta: ",
         msgDifference: "Diferencia: ",
+        msgTotalAmount : "Monto total",
         btn01: "Aceptar",
         btn02: "Continuar"
     },
