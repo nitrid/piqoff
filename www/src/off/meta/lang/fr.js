@@ -296,6 +296,7 @@ export const langFr =
         pos_02_015 : "Müşteri Bazlı Ürün Satış Raporu", // BAK
         pos_03 : "Les opérations", 
         pos_03_001 : "Opérations de fin de journée",
+        pos_03_002 : "Loterie", //BAK
         promo: "Promotion",
         promo_01: "Saisie",
         promo_01_001: "Saisie promotions", 
@@ -16552,6 +16553,15 @@ export const langFr =
             btn01: "OK",   
             msg: "Vous ne pouvez pas entrer le montant du fond de tiroir supérieur à 1000 € ! "   
         },
+    },
+    pos_03_002 : // "Çekiliş" //BAK
+    {
+        dtDate : "Date",
+        txtLucky : "Heureux",
+        txtPoint : "Points",
+        btnLottery : "Tirage au sort",
+        lblTicketNo : "N° DE TICKET",
+        lblCustomer : "CLIENT"
     },
     tkf_01_001 : // "Alış Teklifi Listesi",
     {

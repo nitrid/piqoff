@@ -125,6 +125,8 @@ export default class rebateDispatch extends DocBase
 
         this.txtRef.readOnly = true
         this.txtRefno.readOnly = true
+
+        this.frmDocItems.option('disabled',this.docLocked)
     }
     async calculateTotal()
     {
