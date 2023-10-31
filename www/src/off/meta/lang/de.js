@@ -16880,7 +16880,8 @@ export const langDe =
         txtPoint : "Punkte",
         btnLottery : "Ziehung machen",
         lblTicketNo : "BELEG NR",
-        lblCustomer : "KUNDE"
+        lblCustomer : "KUNDE",
+        lblCustomerNo : "KUNDE NR"
     },
     tkf_01_001 : // "Angebotsliste Einkauf",
     {

@@ -16892,7 +16892,8 @@ export const langFr =
         txtPoint : "Points",
         btnLottery : "Tirage au sort",
         lblTicketNo : "N° DE TICKET",
-        lblCustomer : "CLIENT"
+        lblCustomer : "CLIENT",
+        lblCustomerNo : "N° CLIENT"
     },
     tkf_01_001 : // "Alış Teklifi Listesi",
     {
