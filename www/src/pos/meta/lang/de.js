@@ -381,10 +381,10 @@ export const langDe =
         btn01: "Mengeneingabe",
         btn02: "Abbrechen",
     },
-    msgCardPayment: 
-    {
+    msgCardPayment: {
         title: "Achtung",
-        msg: "Bitte warten Sie auf eine Antwort vom Kartengerät.",
+        msg: "Warte auf die Antwort des Kartenterminals.",
+        msgAmount: "Betrag :",
         btn01: "Erneut versuchen",
         btn02: "Abbrechen",
         btn03: "Erzwingen"
@@ -798,6 +798,7 @@ export const langDe =
         msgTicket: "Gewogene Menge: ",
         msgBarkod: "Menge des Etiketts: ",
         msgDifference: "Differenz: ",
+        msgTotalAmount : "Gesamtbetrag",
         btn01: "OK",
         btn02: "Weiter"
     },

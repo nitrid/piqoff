@@ -16976,7 +16976,8 @@ export const langTr =
         txtPoint : "Puan",
         btnLottery : "Çekiliş Yap",
         lblTicketNo : "FİŞ NO",
-        lblCustomer : "MÜŞTERİ"
+        lblCustomer : "MÜŞTERİ",
+        lblCustomerNo : "MÜŞTERİ NO"
     },
     tkf_01_001 : // "Alış Teklifi Listesi",
     {

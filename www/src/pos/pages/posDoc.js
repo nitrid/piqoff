@@ -511,7 +511,7 @@ export default class posDoc extends React.PureComponent
 
         this.parkDt.selectCmd =
         {
-            query : "SELECT GUID,LUSER_NAME,LDATE,TOTAL, " + 
+            query : "SELECT GUID,LUSER_NAME,CONVERT(NVARCHAR,LDATE,104) + '-' + CONVERT(NVARCHAR,LDATE,108) AS LDATE,TOTAL, " + 
                     "ISNULL((SELECT TOP 1 DESCRIPTION FROM POS_EXTRA WHERE POS_GUID = POS_" + (this.state.isFormation ? 'FRM_' : '') + "VW_01.GUID AND TAG = 'PARK DESC'),'') AS DESCRIPTION " +
                     "FROM POS_" + (this.state.isFormation ? 'FRM_' : '') + "VW_01 WHERE STATUS = 0 AND (LUSER = @LUSER OR (@LUSER = '')) ORDER BY LDATE DESC",
             param : ["LUSER:string|25"],
@@ -2028,6 +2028,8 @@ export default class posDoc extends React.PureComponent
         {
             let tmpFn = () =>
             {
+                this.txtPaymentPopTotal.value = pAmount
+                console.log(pAmount)
                 this.msgCardPayment.show().then(async (e) =>
                 {                    
                     if(e == 'btn01')
@@ -3099,7 +3101,6 @@ export default class posDoc extends React.PureComponent
                     await this.mailPopup.show()
                     return
                 }
-                
                 await this.print(tmpData,0)
             } 
         }
@@ -3688,7 +3689,6 @@ export default class posDoc extends React.PureComponent
                                             }
                                             
                                             let tmpPayRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).round(2));
-                                            
                                             this.posLcd.print
                                             ({
                                                 blink : 0,
@@ -4920,7 +4920,7 @@ export default class posDoc extends React.PureComponent
                             <div className="col-12">
                                <div className="row">
                                     <div className="col-6">
-                                        <p className="text-primary text-start m-0">{this.lang.t("total")} <span className="text-dark"><NbLabel id="popCardTotalGrand" parent={this} value={"0.00"} format={"currency"}/></span></p>    
+                                        <p className="text-primary text-start m-0">{this.lang.t("total")}<span className="text-dark"><NbLabel id="popCardTotalGrand" parent={this} value={"0.00"} format={"currency"}/></span></p>    
                                     </div>
                                     <div className="col-6">
                                         <p className="text-primary text-start m-0">{this.lang.t("remainder")} <span className="text-dark"><NbLabel id="payRest1" parent={this} value={""} format={"currency"}/></span></p>    
@@ -4931,7 +4931,7 @@ export default class posDoc extends React.PureComponent
                         {/* txtPopCardPay */}
                         <div className="row pt-1">
                             <div className="col-12">
-                                <NdTextBox id="txtPopCardPay" parent={this} simple={true} elementAttr={{style:"font-size:15pt;font-weight:bold;border:3px solid #428bca;"}}>     
+                                <NdTextBox id="txtPopCardPay" parent={this} simple={true} elementAttr={{style:"font-size:15pt;font-weight:bold;border:3px solid #428bca;"}}>
                                 </NdTextBox> 
                             </div>
                         </div> 
@@ -5262,7 +5262,7 @@ export default class posDoc extends React.PureComponent
                                 <NdGrid parent={this} id={"grdPopParkList"} 
                                 showBorders={true} 
                                 columnsAutoWidth={true} 
-                                allowColumnReordering={true} 
+                                allowColumnReordering={false} 
                                 allowColumnResizing={true} 
                                 height={"425px"} 
                                 width={"100%"}
@@ -5282,7 +5282,7 @@ export default class posDoc extends React.PureComponent
                                 }}
                                 >
                                     <Column dataField="LUSER_NAME" caption={this.lang.t("grdPopParkList.LUSER_NAME")} width={120} alignment={"center"}/>
-                                    <Column dataField="LDATE" caption={this.lang.t("grdPopParkList.LDATE")} width={150} dataType="datetime" format={"dd/MM/yyyy - HH:mm:ss"} />
+                                    <Column dataField="LDATE" caption={this.lang.t("grdPopParkList.LDATE")} width={150} alignment={"center"}/>
                                     <Column dataField="TOTAL" caption={this.lang.t("grdPopParkList.TOTAL")} width={100} format={"#,##0.00" + Number.money.sign}/>
                                     <Column dataField="DESCRIPTION" caption={this.lang.t("grdPopParkList.DESCRIPTION")} width={400}/>
                                 </NdGrid>
@@ -7101,8 +7101,13 @@ export default class posDoc extends React.PureComponent
                     button={[{id:"btn01",caption:this.lang.t("msgCardPayment.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgCardPayment.btn02"),location:'center'},{id:"btn03",caption:this.lang.t("msgCardPayment.btn03"),location:'after'}]}
                     >
                         <div className="row">
-                            <div className="col-12 py-2">
-                                <div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgCardPayment.msg")}</div>
+                            <div className="col-12">
+                                <div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgCardPayment.msg")}</div>                              
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-12" style={{textAlign:"center",fontSize:"20px",color:"red",padding:"10px"}}>
+                                {this.lang.t("msgCardPayment.msgAmount" )} <NbLabel id="txtPaymentPopTotal" parent={this} value={"0.00€"} format={"currency"}/>
                             </div>
                         </div>
                     </NdDialog>
