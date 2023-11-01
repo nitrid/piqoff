@@ -1555,6 +1555,7 @@ export default class posDoc extends React.PureComponent
                 //***** TICKET İMZALAMA NF525 *****/
                 let tmpSignedData = await this.nf525.signatureSale(this.posObj.dt()[0],this.posObj.posSale.dt())                
                 this.posObj.dt()[0].REF = tmpSignedData.REF
+                this.posObj.dt()[0].DOC_DATE = moment(new Date()).format("YYYY-MM-DD")
                 this.posObj.dt()[0].SIGNATURE = tmpSignedData.SIGNATURE
                 this.posObj.dt()[0].SIGNATURE_SUM = tmpSignedData.SIGNATURE_SUM
                 let tmpSigned = "-"
