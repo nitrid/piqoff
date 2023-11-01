@@ -1449,13 +1449,13 @@ class nf525
                     }    
                     let tmpPosSaleQuery = 
                     {
-                        query : "SELECT POS_GUID,SUM(TOTAL) AS TOTAL FROM POS_SALE_VW_01 WHERE DEVICE = @DEVICE AND DOC_DATE = CONVERT(NVARCHAR(10),GETDATE(),112) AND STATUS = 1 GROUP BY POS_GUID",
+                        query : "SELECT POS_GUID,SUM(TOTAL) AS TOTAL FROM POS_SALE_VW_01 WHERE DEVICE = @DEVICE AND DOC_DATE = CONVERT(NVARCHAR(10),GETDATE() - 1,112) AND STATUS = 1 GROUP BY POS_GUID",
                         param : ['DEVICE:string|50'],
                         value : [tmpDeviceDt.result.recordset[i].CODE]
                     }
                     let tmpPosPayQuery = 
                     {
-                        query : "SELECT POS_GUID,SUM(AMOUNT-CHANGE) AS TOTAL FROM POS_PAYMENT_VW_01 WHERE DEVICE = @DEVICE AND DOC_DATE = CONVERT(NVARCHAR(10),GETDATE(),112) AND STATUS = 1 GROUP BY POS_GUID",
+                        query : "SELECT POS_GUID,SUM(AMOUNT-CHANGE) AS TOTAL FROM POS_PAYMENT_VW_01 WHERE DEVICE = @DEVICE AND DOC_DATE = CONVERT(NVARCHAR(10),GETDATE() - 1,112) AND STATUS = 1 GROUP BY POS_GUID",
                         param : ['DEVICE:string|50'],
                         value : [tmpDeviceDt.result.recordset[i].CODE]
                     }
@@ -1514,7 +1514,7 @@ class nf525
                         //AYNI REF NO DAN BAŞKA BİR KAYIT VARMI KONTROLÜ
                         let tmpPosRefQuery = 
                         {
-                            query : "SELECT REF FROM POS_VW_01 WHERE REF = @REF AND STATUS = 1 AND DEVICE = @DEVICE AND GUID <> @GUID",
+                            query : "SELECT REF FROM POS WHERE REF = @REF AND STATUS = 1 AND DEVICE = @DEVICE AND GUID <> @GUID",
                             param : ['REF:int','DEVICE:string|50','GUID:string|50'],
                             value : [tmpPosDt.result.recordset[x].REF,tmpPosDt.result.recordset[x].DEVICE,tmpPosDt.result.recordset[x].GUID]
                         }
@@ -1539,13 +1539,18 @@ class nf525
             {
                 tmpMailText = err.toString()
             }
-            let tmpMailData =
+            
+            if(tmpMailText != '')
             {
-                sendMail : "alikemal@piqsoft.com,zengin.m@ppholding.fr",
-                subject : "NF525 Anomali Control",
-                text : tmpMailText
+                let tmpMailData =
+                {
+                    sendMail : "alikemal@piqsoft.com,zengin.m@ppholding.fr",
+                    subject : "NF525 Anomali Control",
+                    text : tmpMailText
+                }
+                this.core.plugins._mailer.mailSend(tmpMailData)
             }
-            this.core.plugins._mailer.mailSend(tmpMailData)
+            
             resolve()
         })
     }
