@@ -1514,7 +1514,7 @@ class nf525
                         //AYNI REF NO DAN BAŞKA BİR KAYIT VARMI KONTROLÜ
                         let tmpPosRefQuery = 
                         {
-                            query : "SELECT REF FROM POS_VW_01 WHERE REF = @REF AND STATUS = 1 AND DEVICE = @DEVICE AND GUID <> @GUID",
+                            query : "SELECT REF FROM POS WHERE REF = @REF AND STATUS = 1 AND DEVICE = @DEVICE AND GUID <> @GUID",
                             param : ['REF:int','DEVICE:string|50','GUID:string|50'],
                             value : [tmpPosDt.result.recordset[x].REF,tmpPosDt.result.recordset[x].DEVICE,tmpPosDt.result.recordset[x].GUID]
                         }
