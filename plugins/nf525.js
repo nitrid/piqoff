@@ -1492,13 +1492,12 @@ class nf525
                         }
                         
                         //SATIŞ TUTARI KONTROLÜ
-                        if(Number(tmpPosDt.result.recordset[x].TOTAL) != tmpPosSaleTotal)
+                        if(Number(tmpPosDt.result.recordset[x].TOTAL).toFixed(2) != tmpPosSaleTotal)
                         {
                             tmpMailText = tmpMailText + "Satış Tutarı Uyumsuz - DEVICE : " + tmpPosDt.result.recordset[x].DEVICE + " - REF : " + tmpPosDt.result.recordset[x].REF + "\n"
                         }
-                        console.log("Ödeme - " + Number(tmpPosDt.result.recordset[x].TOTAL) + " - " + tmpPosPayTotal)
                         //ÖDEME TUTARI KONTROLÜ
-                        if(Number(tmpPosDt.result.recordset[x].TOTAL) != tmpPosPayTotal)
+                        if(Number(tmpPosDt.result.recordset[x].TOTAL).toFixed(2) != tmpPosPayTotal)
                         {
                             tmpMailText = tmpMailText + "Ödeme Tutarı Uyumsuz - DEVICE : " + tmpPosDt.result.recordset[x].DEVICE + " - REF : " + tmpPosDt.result.recordset[x].REF + "\n"
                         }
