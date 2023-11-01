@@ -119,7 +119,6 @@ export default class Login extends React.Component
         {
             if(tmpData[i].CARDID == pValue)
             {
-                console.log(tmpData[i].CARDID + " - " + pValue + " - " + tmpData[i].CODE + " - " + tmpData[i].PWD)
                 if(await this.core.auth.login(tmpData[i].CODE,tmpData[i].PWD,'POS'))
                 {
                     App.instance.setState({logined:true});
