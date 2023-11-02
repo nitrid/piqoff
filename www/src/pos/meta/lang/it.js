@@ -591,6 +591,14 @@ export const langIt =
         msg: "Impossibile eseguire questa operazione in modalità offline!",
         btn01: "Ok"
     },
+    msgDisconnectWarning: 
+    {
+      title: "Attenzione",
+      msg: "Sei sicuro di voler uscire?",
+      btn01: "SÌ",
+      btn02: "NO"
+    },
+
     msgOfflineAlert: 
     {
         title: "Attenzione",

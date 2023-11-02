@@ -590,6 +590,13 @@ export const langDe =
         msg : "Diese Aktion kann nicht im Offline-Modus durchgeführt werden!",
         btn01 : "OK"
     },
+    msgDisconnectWarning: 
+    {
+      title: "Achtung",
+      msg: "Sind Sie sicher, dass Sie gehen möchten?",
+      btn01: "JA",
+      btn02: "NEIN"
+    },
     msgOfflineAlert: 
     {
         title : "Achtung",

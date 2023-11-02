@@ -591,6 +591,14 @@ export const langFr =
         msg : "Vous ne pouvez pas faire cela en mode hors ligne !",
         btn01 : "OK"
     },
+    msgDisconnectWarning: 
+    {
+      title: "Attention",
+      msg: "Êtes-vous sûr de vouloir quitter ?",
+      btn01: "OUI",
+      btn02: "NON"
+    },
+
     msgOfflineAlert: 
     {
         title : "Attention",

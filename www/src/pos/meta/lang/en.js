@@ -590,6 +590,13 @@ export const langEn =
         msg: "You cannot do this in offline mode!",
         btn01: "OK"
     },
+    msgDisconnectWarning: 
+    {
+      title: "Attention",
+      msg: "Are you sure you want to exit?",
+      btn01: "YES",
+      btn02: "NO"
+    },
     msgOfflineAlert:
     {
         title: "Attention",

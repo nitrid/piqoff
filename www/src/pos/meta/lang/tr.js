@@ -591,6 +591,13 @@ export const langTr =
         msg : "Bu işlemi offline modda iken yapamazsınız !",
         btn01 : "Tamam"
     },
+    msgDisconnectWarning: 
+    {
+        title : "Dikkat",
+        msg : "Cıkmak istediğinize emin misiniz ? ",
+        btn01 : "EVET",
+        btn02 : "HAYIR"
+    },
     msgOfflineAlert: 
     {
         title : "Dikkat",

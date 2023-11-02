@@ -3402,15 +3402,25 @@ export default class posDoc extends React.PureComponent
                             </div>
                             <div className="col-1 ps-1 pe-3">
                                 <NbButton id={"btnClose"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"55px",width:"100%"}}
-                                onClick={()=>
+                                onClick={async()=>
                                 {                   
                                     this.posLcd.print
                                     ({
                                         blink : 0,
                                         text :  "Bonjour".space(20) + moment(new Date()).format("DD.MM.YYYY").space(20)
-                                    })    
-                                    this.core.auth.logout()
-                                    window.location.reload()
+                                    })
+                                    let msgDisconnectWarning =
+                                        {
+                                            id:'msgDisconnectWarning',showTitle:true,title:this.lang.t("msgDisconnectWarning.title"),showCloseButton:true,width:'500px',height:'200px',
+                                            button:[{id:"btn01",caption:this.lang.t("msgDisconnectWarning.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgDisconnectWarning.btn02"),location:'after'}],
+                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgDisconnectWarning.msg")}</div>)
+                                        }
+                                    let tmpWarningResult = await dialog(msgDisconnectWarning);
+                                    if(tmpWarningResult === "btn01")
+                                    {
+                                        this.core.auth.logout()
+                                        window.location.reload()
+                                    }                                  
                                 }}>
                                     <i className="text-white fa-solid fa-power-off" style={{fontSize: "16px"}} />
                                 </NbButton>
