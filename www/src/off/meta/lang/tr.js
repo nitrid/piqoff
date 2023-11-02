@@ -966,6 +966,7 @@ export const langTr =
             title : "Ürün Grubu Seçimi",
             clmCode : "KODU",
             clmName : "ADI",
+            clmStatus : "Durum",
         },
         msgSave:
         {

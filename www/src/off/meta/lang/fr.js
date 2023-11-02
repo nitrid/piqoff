@@ -964,6 +964,7 @@ export const langFr =
             title : "Choix Groupe Produit",
             clmCode : "Code",
             clmName : "NOM",
+            clmStatus : "Statut",
         },
         msgSave:
         {

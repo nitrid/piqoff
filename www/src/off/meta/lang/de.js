@@ -956,6 +956,7 @@ export const langDe =
             title: "Artikelgruppenauswahl",
             clmCode: "Code",
             clmName: "Name",
+            clmStatus : "Status",
         },
         msgSpeichern:
         {
