@@ -31,10 +31,10 @@ export default class itemInfoScreen extends React.PureComponent
             <div className="container-fluid" style={{ backgroundColor: '#0B2559' }}>
                 <div className="row">
                     <div className="col-md-6">
-                    <img src="./css/img/piqlogo.png" className="img-fluid" alt="Logo" />
+                        <img src="./css/img/piqlogo.png" className="img-fluid" alt="Logo" />
                     </div>
                     <div className="col-md-6 px-5">
-                    <img src="pos/resources/logoProInter.png" className="float-end img-fluid" alt="Logo" />
+                        <img src="pos/resources/logoProInter.png" className="float-end img-fluid" alt="Logo" />
                     </div>
                 </div>
                 <div className="row pt-2">
@@ -79,7 +79,7 @@ export default class itemInfoScreen extends React.PureComponent
                 </div>
                 <div className="row pt-5">
                     <div className="col-12">
-                    <button type="button" className="btn btn-primary mt-3">VALIDER</button>
+                        <button type="button" className="btn btn-primary mt-3">VALIDER</button>
                     </div>
                 </div>
                 <div className="row" style={{height:'15rem'}}/>
