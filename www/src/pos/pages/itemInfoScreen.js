@@ -41,19 +41,19 @@ export default class itemInfoScreen extends React.PureComponent
                     <div className="col-md-4">
                         <div className="card" style={{ width: '18rem',height: '20rem', }}>
                             <div className="card-body">
-                            IMAGE:
+                                IMAGE:
                             </div>
                         </div>
                         <div className="card mt-3" style={{ width: '18rem',height: '10rem' }}>
                             <div className="card-body">
-                            CODEBARRE:
+                                CODEBARRE:
                             </div>
                         </div>
                     </div>
                     <div className="col-md-8">
                         <div className="card" style={{ height: '18rem', backgroundColor: 'transparent', border: '1px solid aliceblue' }}>
                             <div className="card-body">
-                            NAME:
+                                NAME:
                             </div>
                         </div>
                         <div className="card mt-3">
