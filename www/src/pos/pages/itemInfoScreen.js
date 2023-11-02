@@ -7,7 +7,6 @@ import NdGrid,{Column,Editing,Paging,Scrolling} from "../../core/react/devex/gri
 
 import { dataset,datatable,param,access } from "../../core/core.js";
 import {prm} from '../meta/prm.js';
-import '../css/itemInfoScreen.css'
 
 
 export default class itemInfoScreen extends React.PureComponent
@@ -26,44 +25,65 @@ export default class itemInfoScreen extends React.PureComponent
     {
         
     }
-    render()
+    render() 
     {
         return (
-            <div>
+            <div className="container-fluid" style={{ backgroundColor: '#0B2559' }}>
                 <div className="row">
-                    <div className="col-6">
-                        <img src="./css/img/piqlogo.png" />
+                    <div className="col-md-6">
+                    <img src="./css/img/piqlogo.png" className="img-fluid" alt="Logo" />
                     </div>
-                    <div className="col-6 px-5">
-                        <img src="pos\resources\logoProInter.png" className="float-end" alt="Logo"/>
+                    <div className="col-md-6 px-5">
+                    <img src="pos/resources/logoProInter.png" className="float-end img-fluid" alt="Logo" />
                     </div>
                 </div>
-                <div className="row">
-                    <div className="col-12">
-                        <div className="infoContainer">
-                            <div className="row">
-                                <div className="col-4">
-                                    <div className="productImg">
-                                        IMAGE:
-                                    </div>                    
-                                    <div className="productCodeBarre">
-                                        CODEBARRE:
+                <div className="row pt-2">
+                    <div className="col-md-4">
+                        <div className="card" style={{ width: '18rem',height: '20rem', }}>
+                            <div className="card-body">
+                            IMAGE:
+                            </div>
+                        </div>
+                        <div className="card mt-3" style={{ width: '18rem',height: '10rem' }}>
+                            <div className="card-body">
+                            CODEBARRE:
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col-md-8">
+                        <div className="card" style={{ height: '18rem', backgroundColor: 'transparent', border: '1px solid aliceblue' }}>
+                            <div className="card-body">
+                            NAME:
+                            </div>
+                        </div>
+                        <div className="card mt-3">
+                            <div className="card-body">
+                                <div className="col-12">
+                                    <div className="row" style={{height: '8rem'}}>
+                                        <div className="col-7">
+                                            UNIT
+                                        </div>
+                                        <div className="col-5">
+                                            PRICE
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="col-8">
-                                    <div className="productName">
-                                        NAME:
+                                    <div className="row">
+                                        <div className="offset-7 col-5">
+                                           SUBUNIT
+                                        </div>
                                     </div>
-                                    <div className="productData">
-                                        DATA
-                                    </div>                      
                                 </div>
                             </div>
-                            <button type="button" className="btn btn-success">VALIDER</button>
-                        </div>              
+                        </div>
                     </div>
                 </div>
+                <div className="row pt-5">
+                    <div className="col-12">
+                    <button type="button" className="btn btn-primary mt-3">VALIDER</button>
+                    </div>
+                </div>
+                <div className="row" style={{height:'15rem'}}/>
             </div>
-        )
+        );
     }
 }
