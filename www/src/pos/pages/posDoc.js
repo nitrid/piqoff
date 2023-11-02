@@ -776,7 +776,7 @@ export default class posDoc extends React.PureComponent
                 this.promoApply()
                 //************************************************** */
                 this.core.util.writeLog("calcGrandTotal : 20")
-                this.calcGrandTotal(true);
+                await this.calcGrandTotal(true);
                 this.btnGetCustomer.setUnLock({backgroundColor:"#0dcaf0",borderColor:"#0dcaf0",height:"70px",width:"100%"})
             }
             else
@@ -1206,11 +1206,11 @@ export default class posDoc extends React.PureComponent
     }
     async calcGrandTotal(pSave)
     {
-        clearTimeout(this.scaleTimeout)
-        let tmpPayRest = 0;
-        let tmpPayChange = 0;
         return new Promise(async resolve => 
-        {            
+        {
+            clearTimeout(this.scaleTimeout)
+            let tmpPayRest = 0;
+            let tmpPayChange = 0;
             if(this.posObj.dt().length > 0)
             {   
                 await this.core.util.waitUntil()
@@ -2124,7 +2124,7 @@ export default class posDoc extends React.PureComponent
             {
                 this.posObj.dt()[0].DESCRIPTION = pDesc
                 this.core.util.writeLog("calcGrandTotal : 06")
-                this.calcGrandTotal()
+                await this.calcGrandTotal()
             }
             
             if(tmpDt.length > 0 && pTag == 'PARK DESC')
@@ -3315,7 +3315,7 @@ export default class posDoc extends React.PureComponent
                                                 this.promoApply()
                                                 //************************************************** */
                                                 this.core.util.writeLog("calcGrandTotal : 08")
-                                                this.calcGrandTotal(true);
+                                                await this.calcGrandTotal(true);
                                             }
                                             return
                                         }
@@ -4391,7 +4391,7 @@ export default class posDoc extends React.PureComponent
                                                 tmpData[i].SUBTOTAL = tmpMaxSub
                                             }
                                             this.core.util.writeLog("calcGrandTotal : 10")
-                                            this.calcGrandTotal()
+                                            await this.calcGrandTotal()
                                         }}>
                                             <i className="text-white fa-solid fa-square-root-variable" style={{fontSize: "24px"}} />
                                         </NbButton>
@@ -5144,7 +5144,7 @@ export default class posDoc extends React.PureComponent
                             this.promoApply()
                             //************************************************** */
                             this.core.util.writeLog("calcGrandTotal : 12")
-                            this.calcGrandTotal(false);
+                            await this.calcGrandTotal(false);
                         }
                     }}>
                         <Column dataField="CODE" caption={"CODE"} width={100} />
