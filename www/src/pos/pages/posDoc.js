@@ -1342,7 +1342,24 @@ export default class posDoc extends React.PureComponent
                 {
                     if(tmpClose)
                     {
-                        this.init()
+                        //KAYDIN DOĞRULUĞU KONTROL EDİLİYOR.EĞER BAŞARISIZ İSE STATUS SIFIR OLARAK UPDATE EDİLİYOR.
+                        let tmpCheckResult = await this.checkSaleClose(this.posObj.dt()[0].GUID)
+                        if(tmpCheckResult == false)
+                        {
+                            this.sendJet({CODE:"90",NAME:"Enregistrement échoué."}) /// Kayıt işlemi başarısız.
+                            //KAYIT BAŞARISIZ İSE UYARI AÇILIYOR VE KULLANICI İSTERSE KAYIT İŞLEMİNİ TEKRARLIYOR
+                            let tmpConfObj =
+                            {
+                                id:'msgSaveFailAlert',showTitle:true,title:this.lang.t("msgSaveFailAlert.title"),showCloseButton:true,width:'500px',height:'250px',
+                                button:[{id:"btn01",caption:this.lang.t("msgSaveFailAlert.btn01"),location:'before'}],
+                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgSaveFailAlert.msg")}</div>)
+                            }
+                            await dialog(tmpConfObj)
+                        }
+                        else
+                        {
+                            this.init()
+                        }
                     } 
                 }
                 else
@@ -3193,6 +3210,81 @@ export default class posDoc extends React.PureComponent
         tmpArr.push({font:"a",style:"b",align:"lt",data:" ".space(48)})
         //console.log(tmpArr)
         await this.posDevice.escPrinter(tmpArr)
+    }
+    checkSaleClose(pGuid)
+    {
+        return new Promise(async resolve => 
+        {
+            let tmpPosDt = new datatable()
+
+            tmpPosDt.selectCmd = 
+            {
+                query : "SELECT GUID,REF,ROUND(TOTAL,2) AS TOTAL,SIGNATURE,SIGNATURE_SUM FROM POS WHERE GUID = @GUID",
+                param : ['GUID:string|50'],
+                value : [pGuid]
+            }
+            tmpPosDt.updateCmd = 
+            {
+                query : "EXEC [dbo].[PRD_POS_UPDATE] " + 
+                        "@GUID = @PGUID, " +
+                        "@REF = 0, " +
+                        "@STATUS = 0, " +
+                        "@CERTIFICATE = '', " +
+                        "@SIGNATURE = '', " +
+                        "@SIGNATURE_SUM = '' ",
+                param : ['PGUID:string|50'],
+                value : [pGuid]
+            }
+
+            await tmpPosDt.refresh()
+            
+            if(tmpPosDt.length > 0)
+            {
+                let tmpPosSaleDt = new datatable()
+                let tmpPosPayDt = new datatable()
+                tmpPosSaleDt.selectCmd = 
+                {
+                    query : "SELECT ISNULL(ROUND(SUM(TOTAL),2),0) AS TOTAL FROM POS_SALE WHERE POS = @POS AND DELETED = 0",
+                    param : ['POS:string|50'],
+                    value : [pGuid]
+                }
+                tmpPosPayDt.selectCmd = 
+                {
+                    query : "SELECT ISNULL(ROUND(SUM(AMOUNT - CHANGE),2),0) AS TOTAL FROM POS_PAYMENT WHERE POS = @POS AND DELETED = 0",
+                    param : ['POS:string|50'],
+                    value : [pGuid]
+                }
+                await tmpPosSaleDt.refresh()
+                await tmpPosPayDt.refresh()
+                
+                if(tmpPosSaleDt.length == 0 || tmpPosPayDt.length == 0)
+                {
+                    tmpPosDt.update()
+                    resolve(false)
+                    return
+                }
+                if(tmpPosSaleDt[0].TOTAL == 0 || tmpPosPayDt[0].TOTAL == 0)
+                {
+                    tmpPosDt.update()
+                    resolve(false)
+                    return
+                }
+                if(Number(tmpPosDt[0].TOTAL).toFixed(2) != Number(tmpPosSaleDt[0].TOTAL).toFixed(2) || Number(tmpPosDt[0].TOTAL).toFixed(2) != Number(tmpPosPayDt[0].TOTAL).toFixed(2) || Number(tmpPosSaleDt[0].TOTAL).toFixed(2) != Number(tmpPosPayDt[0].TOTAL).toFixed(2))
+                {
+                    tmpPosDt.update()
+                    resolve(false)
+                    return
+                }
+                resolve(true)
+                return
+            }
+            else
+            {
+                tmpPosDt.update()
+                resolve(false)
+                return
+            }
+        });
     }
     render()
     {
