@@ -534,7 +534,7 @@ export default class posDoc extends React.PureComponent
                 text :  "Bonjour".space(20) + moment(new Date()).format("DD.MM.YYYY").space(20)
             })    
         }, 1000);
-        this.core.util.writeLog("calcGrandTotal : 18")
+        this.core.util.writeLog("calcGrandTotal : 01")
         await this.calcGrandTotal(false) 
         
         this.core.util.logPath = "\\www\\log\\pos_" + this.posObj.dt()[this.posObj.dt().length - 1].DEVICE + ".txt"        
@@ -608,7 +608,7 @@ export default class posDoc extends React.PureComponent
             //************************************************** */
             this.cheqDt.selectCmd.value = [pGuid] 
             await this.cheqDt.refresh(); 
-            this.core.util.writeLog("calcGrandTotal : 19")
+            this.core.util.writeLog("calcGrandTotal : 02")
             await this.calcGrandTotal(false)
             resolve();
         });        
@@ -775,7 +775,8 @@ export default class posDoc extends React.PureComponent
                 await this.getPromoDb()
                 this.promoApply()
                 //************************************************** */
-                this.core.util.writeLog("calcGrandTotal : 20")
+
+                this.core.util.writeLog("calcGrandTotal : 03")
                 await this.calcGrandTotal(true);
                 this.btnGetCustomer.setUnLock({backgroundColor:"#0dcaf0",borderColor:"#0dcaf0",height:"70px",width:"100%"})
             }
@@ -1207,10 +1208,11 @@ export default class posDoc extends React.PureComponent
     async calcGrandTotal(pSave)
     {
         return new Promise(async resolve => 
-        {
+        {    
             clearTimeout(this.scaleTimeout)
             let tmpPayRest = 0;
             let tmpPayChange = 0;
+            
             if(this.posObj.dt().length > 0)
             {   
                 await this.core.util.waitUntil()
@@ -1340,7 +1342,24 @@ export default class posDoc extends React.PureComponent
                 {
                     if(tmpClose)
                     {
-                        this.init()
+                        //KAYDIN DOĞRULUĞU KONTROL EDİLİYOR.EĞER BAŞARISIZ İSE STATUS SIFIR OLARAK UPDATE EDİLİYOR.
+                        let tmpCheckResult = await this.checkSaleClose(this.posObj.dt()[0].GUID)
+                        if(tmpCheckResult == false)
+                        {
+                            this.sendJet({CODE:"90",NAME:"Enregistrement échoué."}) /// Kayıt işlemi başarısız.
+                            //KAYIT BAŞARISIZ İSE UYARI AÇILIYOR VE KULLANICI İSTERSE KAYIT İŞLEMİNİ TEKRARLIYOR
+                            let tmpConfObj =
+                            {
+                                id:'msgSaveFailAlert',showTitle:true,title:this.lang.t("msgSaveFailAlert.title"),showCloseButton:true,width:'500px',height:'250px',
+                                button:[{id:"btn01",caption:this.lang.t("msgSaveFailAlert.btn01"),location:'before'}],
+                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgSaveFailAlert.msg")}</div>)
+                            }
+                            await dialog(tmpConfObj)
+                        }
+                        else
+                        {
+                            this.init()
+                        }
                     } 
                 }
                 else
@@ -1355,7 +1374,7 @@ export default class posDoc extends React.PureComponent
                     }
                     if((await dialog(tmpConfObj)) == 'btn02')
                     {
-                        this.core.util.writeLog("calcGrandTotal : 01")
+                        this.core.util.writeLog("calcGrandTotal : 04")
                         await this.calcGrandTotal()
                     }
                 }
@@ -1478,7 +1497,7 @@ export default class posDoc extends React.PureComponent
         this.posObj.posSale.dt()[this.posObj.posSale.dt().length - 1].DELETED = false
         
         this.promoApply()
-        this.core.util.writeLog("calcGrandTotal : 02")
+        this.core.util.writeLog("calcGrandTotal : 05")
         await this.calcGrandTotal();
     }
     async saleRowUpdate(pRowData,pItemData)
@@ -1530,7 +1549,7 @@ export default class posDoc extends React.PureComponent
         pRowData.SCALE_MANUEL = pItemData.SCALE_MANUEL
 
         this.promoApply()
-        this.core.util.writeLog("calcGrandTotal : 03")
+        this.core.util.writeLog("calcGrandTotal : 06")
         await this.calcGrandTotal();
     } 
     async saleClosed(pPrint,pPayRest,pPayChange)
@@ -2009,7 +2028,7 @@ export default class posDoc extends React.PureComponent
             this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].AMOUNT = Number(parseFloat(pPayData.AMOUNT).round(2))
             this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].CHANGE = pPayData.CHANGE
             this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].DELETED = false
-            this.core.util.writeLog("calcGrandTotal : 04")
+            this.core.util.writeLog("calcGrandTotal : 07")
             await this.calcGrandTotal();
             resolve()
         });
@@ -2020,7 +2039,7 @@ export default class posDoc extends React.PureComponent
         {
             pRowData.AMOUNT = pPayData.AMOUNT
             pRowData.CHANGE = pPayData.CHANGE
-            this.core.util.writeLog("calcGrandTotal : 05")
+            this.core.util.writeLog("calcGrandTotal : 08")
             await this.calcGrandTotal();
             resolve()
         });
@@ -2123,7 +2142,7 @@ export default class posDoc extends React.PureComponent
             if(this.core.offline)
             {
                 this.posObj.dt()[0].DESCRIPTION = pDesc
-                this.core.util.writeLog("calcGrandTotal : 06")
+                this.core.util.writeLog("calcGrandTotal : 09")
                 await this.calcGrandTotal()
             }
             
@@ -2163,7 +2182,7 @@ export default class posDoc extends React.PureComponent
             }
             await this.posObj.posSale.dt().delete()
             this.promoApply()
-            this.core.util.writeLog("calcGrandTotal : 07")
+            this.core.util.writeLog("calcGrandTotal : 10")
             await this.calcGrandTotal()
 
             this.posLcd.print
@@ -3191,6 +3210,81 @@ export default class posDoc extends React.PureComponent
         //console.log(tmpArr)
         await this.posDevice.escPrinter(tmpArr)
     }
+    checkSaleClose(pGuid)
+    {
+        return new Promise(async resolve => 
+        {
+            let tmpPosDt = new datatable()
+
+            tmpPosDt.selectCmd = 
+            {
+                query : "SELECT GUID,REF,ROUND(TOTAL,2) AS TOTAL,SIGNATURE,SIGNATURE_SUM FROM POS WHERE GUID = @GUID",
+                param : ['GUID:string|50'],
+                value : [pGuid]
+            }
+            tmpPosDt.updateCmd = 
+            {
+                query : "EXEC [dbo].[PRD_POS_UPDATE] " + 
+                        "@GUID = @PGUID, " +
+                        "@REF = 0, " +
+                        "@STATUS = 0, " +
+                        "@CERTIFICATE = '', " +
+                        "@SIGNATURE = '', " +
+                        "@SIGNATURE_SUM = '' ",
+                param : ['PGUID:string|50'],
+                value : [pGuid]
+            }
+
+            await tmpPosDt.refresh()
+            
+            if(tmpPosDt.length > 0)
+            {
+                let tmpPosSaleDt = new datatable()
+                let tmpPosPayDt = new datatable()
+                tmpPosSaleDt.selectCmd = 
+                {
+                    query : "SELECT ISNULL(ROUND(SUM(TOTAL),2),0) AS TOTAL FROM POS_SALE WHERE POS = @POS AND DELETED = 0",
+                    param : ['POS:string|50'],
+                    value : [pGuid]
+                }
+                tmpPosPayDt.selectCmd = 
+                {
+                    query : "SELECT ISNULL(ROUND(SUM(AMOUNT - CHANGE),2),0) AS TOTAL FROM POS_PAYMENT WHERE POS = @POS AND DELETED = 0",
+                    param : ['POS:string|50'],
+                    value : [pGuid]
+                }
+                await tmpPosSaleDt.refresh()
+                await tmpPosPayDt.refresh()
+                
+                if(tmpPosSaleDt.length == 0 || tmpPosPayDt.length == 0)
+                {
+                    tmpPosDt.update()
+                    resolve(false)
+                    return
+                }
+                if(tmpPosSaleDt[0].TOTAL == 0 || tmpPosPayDt[0].TOTAL == 0)
+                {
+                    tmpPosDt.update()
+                    resolve(false)
+                    return
+                }
+                if(Number(tmpPosDt[0].TOTAL).toFixed(2) != Number(tmpPosSaleDt[0].TOTAL).toFixed(2) || Number(tmpPosDt[0].TOTAL).toFixed(2) != Number(tmpPosPayDt[0].TOTAL).toFixed(2) || Number(tmpPosSaleDt[0].TOTAL).toFixed(2) != Number(tmpPosPayDt[0].TOTAL).toFixed(2))
+                {
+                    tmpPosDt.update()
+                    resolve(false)
+                    return
+                }
+                resolve(true)
+                return
+            }
+            else
+            {
+                tmpPosDt.update()
+                resolve(false)
+                return
+            }
+        });
+    }
     render()
     {
         return(
@@ -3314,7 +3408,7 @@ export default class posDoc extends React.PureComponent
                                                 await this.getPromoDb()
                                                 this.promoApply()
                                                 //************************************************** */
-                                                this.core.util.writeLog("calcGrandTotal : 08")
+                                                this.core.util.writeLog("calcGrandTotal : 11")
                                                 await this.calcGrandTotal(true);
                                             }
                                             return
@@ -3865,7 +3959,7 @@ export default class posDoc extends React.PureComponent
                                             
                                             await this.cheqDt.refresh();
                                             await this.grdPopCheqpayList.dataRefresh({source:this.cheqDt});
-                                            this.core.util.writeLog("calcGrandTotal : 09")
+                                            this.core.util.writeLog("calcGrandTotal : 12")
                                             await this.calcGrandTotal(false);
                                             await this.core.util.waitUntil(500)
                                             
@@ -4390,7 +4484,7 @@ export default class posDoc extends React.PureComponent
                                             {
                                                 tmpData[i].SUBTOTAL = tmpMaxSub
                                             }
-                                            this.core.util.writeLog("calcGrandTotal : 10")
+                                            this.core.util.writeLog("calcGrandTotal : 13")
                                             await this.calcGrandTotal()
                                         }}>
                                             <i className="text-white fa-solid fa-square-root-variable" style={{fontSize: "24px"}} />
@@ -4764,7 +4858,7 @@ export default class posDoc extends React.PureComponent
                                                             this.grdPopCheqpayList.devGrid.deleteRow(0)
                                                         }
                                                     }
-                                                    this.core.util.writeLog("calcGrandTotal : 11")
+                                                    this.core.util.writeLog("calcGrandTotal : 14")
                                                     await this.calcGrandTotal();
                                                 }}
                                                 >
@@ -5143,7 +5237,7 @@ export default class posDoc extends React.PureComponent
                             await this.getPromoDb()
                             this.promoApply()
                             //************************************************** */
-                            this.core.util.writeLog("calcGrandTotal : 12")
+                            this.core.util.writeLog("calcGrandTotal : 15")
                             await this.calcGrandTotal(false);
                         }
                     }}>
@@ -5689,7 +5783,7 @@ export default class posDoc extends React.PureComponent
                                             this.grdDiscList.getSelectedData()[i].VAT = tmpCalc.VAT
                                             this.grdDiscList.getSelectedData()[i].TOTAL = tmpCalc.TOTAL
                                         }
-                                        this.core.util.writeLog("calcGrandTotal : 13")
+                                        this.core.util.writeLog("calcGrandTotal : 16")
                                         await this.calcGrandTotal();
                                     }
                                     else
@@ -5758,7 +5852,7 @@ export default class posDoc extends React.PureComponent
                                             this.grdDiscList.getSelectedData()[i].VAT = tmpCalc.VAT
                                             this.grdDiscList.getSelectedData()[i].TOTAL = tmpCalc.TOTAL
                                         }
-                                        this.core.util.writeLog("calcGrandTotal : 14")
+                                        this.core.util.writeLog("calcGrandTotal : 17")
                                         await this.calcGrandTotal();
                                     }  
                                     else
@@ -5890,7 +5984,7 @@ export default class posDoc extends React.PureComponent
                                         this.posObj.posSale.dt()[i].VAT = tmpCalc.VAT
                                         this.posObj.posSale.dt()[i].TOTAL = tmpCalc.TOTAL
                                     }
-                                    this.core.util.writeLog("calcGrandTotal : 15")
+                                    this.core.util.writeLog("calcGrandTotal : 18")
                                     await this.calcGrandTotal()
                                     this.popLoyalty.hide()
                                 }}>
@@ -5942,7 +6036,7 @@ export default class posDoc extends React.PureComponent
                                         this.posObj.posSale.dt()[i].VAT = tmpCalc.VAT
                                         this.posObj.posSale.dt()[i].TOTAL = tmpCalc.TOTAL
                                     }
-                                    this.core.util.writeLog("calcGrandTotal : 16")
+                                    this.core.util.writeLog("calcGrandTotal : 19")
                                     await this.calcGrandTotal()
                                     this.popLoyalty.hide()
                                 }}>
@@ -7020,7 +7114,7 @@ export default class posDoc extends React.PureComponent
                             
                             await this.descSave("REBATE",e,'00000000-0000-0000-0000-000000000000'); 
                         }                
-                        this.core.util.writeLog("calcGrandTotal : 17")
+                        this.core.util.writeLog("calcGrandTotal : 20")
                         await this.calcGrandTotal();
                     }}></NbPopDescboard>
                 </div>
