@@ -2164,36 +2164,45 @@ export default class posDoc extends React.PureComponent
         });
     }
     async delete()
-    {        
-        this.posObj.dt().removeAt(0)
-        await this.posObj.save()
-        this.init()
+    {
+        return new Promise(async resolve => 
+        {
+            this.posObj.dt().removeAt(0)
+            await this.posObj.save()
+            this.init()
+            resolve()
+        })
     }
     async rowDelete()
     {
-        if(this.posObj.posSale.dt().length > 1)
+        return new Promise(async resolve => 
         {
-            let tmpData = this.grdList.devGrid.getSelectedRowKeys()[0]
+            if(this.posObj.posSale.dt().length > 1)
+            {
+                let tmpData = this.grdList.devGrid.getSelectedRowKeys()[0]
 
-            if(this.grdList.devGrid.getSelectedRowKeys().length > 0)
-            {                
-                this.grdList.devGrid.deleteRow(this.grdList.devGrid.getRowIndexByKey(this.grdList.devGrid.getSelectedRowKeys()[0]))
+                if(this.grdList.devGrid.getSelectedRowKeys().length > 0)
+                {                
+                    this.grdList.devGrid.deleteRow(this.grdList.devGrid.getRowIndexByKey(this.grdList.devGrid.getSelectedRowKeys()[0]))
+                }
+                await this.posObj.posSale.dt().delete()
+                this.promoApply()
+                this.core.util.writeLog("calcGrandTotal : 10")
+                await this.calcGrandTotal(true)
+
+                let tmpLcdStr = tmpData.ITEM_NAME.toString().space(9) + "-" +  (parseFloat(Number(tmpData.TOTAL)).round(2) + "EUR").space(10,"s") +
+                ( "TOTAL : " + parseFloat(Number(this.posObj.dt()[0].TOTAL)).round(2) + "EUR").space(20,"s")
+
+                this.posLcd.print({blink : 0,text : tmpLcdStr})
+                App.instance.electronSend({tag:"lcd",digit:tmpLcdStr})
+                resolve()
             }
-            await this.posObj.posSale.dt().delete()
-            this.promoApply()
-            this.core.util.writeLog("calcGrandTotal : 10")
-            await this.calcGrandTotal()
-
-            let tmpLcdStr = tmpData.ITEM_NAME.toString().space(9) + "-" +  (parseFloat(Number(tmpData.TOTAL)).round(2) + "EUR").space(10,"s") +
-            ( "TOTAL : " + parseFloat(Number(this.posObj.dt()[0].TOTAL)).round(2) + "EUR").space(20,"s")
-
-            this.posLcd.print({blink : 0,text : tmpLcdStr})
-            App.instance.electronSend({tag:"lcd",digit:tmpLcdStr})
-        }
-        else
-        {
-            this.delete()
-        }
+            else
+            {
+                await this.delete()
+                resolve()
+            }
+        })
     }
     async cheqpayAdd(pCode)
     {
@@ -3214,7 +3223,7 @@ export default class posDoc extends React.PureComponent
 
             tmpPosDt.selectCmd = 
             {
-                query : "SELECT GUID,REF,ROUND(TOTAL,2) AS TOTAL,SIGNATURE,SIGNATURE_SUM FROM POS WHERE GUID = @GUID",
+                query : "SELECT GUID,CUSER,REF,CERTIFICATE,SIGNATURE,SIGNATURE_SUM,ROUND(TOTAL,2) AS TOTAL,ROUND(LOYALTY,2) AS LOYALTY,ROUND(AMOUNT,2) AS AMOUNT FROM POS WHERE GUID = @GUID",
                 param : ['GUID:string|50'],
                 value : [pGuid]
             }
@@ -3222,17 +3231,24 @@ export default class posDoc extends React.PureComponent
             {
                 query : "EXEC [dbo].[PRD_POS_UPDATE] " + 
                         "@GUID = @PGUID, " +
-                        "@REF = 0, " +
-                        "@STATUS = 0, " +
-                        "@CERTIFICATE = '', " +
-                        "@SIGNATURE = '', " +
-                        "@SIGNATURE_SUM = '' ",
-                param : ['PGUID:string|50'],
-                value : [pGuid]
+                        "@CUSER = @PCUSER, " +
+                        "@REF = @PREF, " +
+                        "@STATUS = @PSTATUS, " +
+                        "@CERTIFICATE = @PCERTIFICATE, " +
+                        "@SIGNATURE = @PSIGNATURE, " +
+                        "@SIGNATURE_SUM = @PSIGNATURE_SUM ",
+                param : ['PGUID:string|50','PCUSER:string|25','PREF:int','PSTATUS:int','PCERTIFICATE:string|25','PSIGNATURE:string|25','PSIGNATURE_SUM:string|25'],
+                dataprm : ['GUID','CUSER','REF','STATUS','CERTIFICATE','SIGNATURE','SIGNATURE_SUM'],
             }
 
             await tmpPosDt.refresh()
-            
+
+            tmpPosDt[0].REF = 0
+            tmpPosDt[0].STATUS = 0
+            tmpPosDt[0].CERTIFICATE = ''
+            tmpPosDt[0].SIGNATURE = ''
+            tmpPosDt[0].SIGNATURE_SUM = ''
+
             if(tmpPosDt.length > 0)
             {
                 let tmpPosSaleDt = new datatable()
@@ -3254,19 +3270,25 @@ export default class posDoc extends React.PureComponent
                 
                 if(tmpPosSaleDt.length == 0 || tmpPosPayDt.length == 0)
                 {
-                    tmpPosDt.update()
+                    await tmpPosDt.update()
                     resolve(false)
+                    return
+                }
+                if(Number(tmpPosDt[0].AMOUNT).toFixed(2) == Number(tmpPosDt[0].LOYALTY).toFixed(2))
+                {
+                    resolve(true)
                     return
                 }
                 if(tmpPosSaleDt[0].TOTAL == 0 || tmpPosPayDt[0].TOTAL == 0)
                 {
-                    tmpPosDt.update()
+                    await tmpPosDt.update()
                     resolve(false)
                     return
                 }
-                if(Number(tmpPosDt[0].TOTAL).toFixed(2) != Number(tmpPosSaleDt[0].TOTAL).toFixed(2) || Number(tmpPosDt[0].TOTAL).toFixed(2) != Number(tmpPosPayDt[0].TOTAL).toFixed(2) || Number(tmpPosSaleDt[0].TOTAL).toFixed(2) != Number(tmpPosPayDt[0].TOTAL).toFixed(2))
+                if(Number(tmpPosDt[0].TOTAL).toFixed(2) != Number(tmpPosSaleDt[0].TOTAL).toFixed(2) || Number(tmpPosDt[0].TOTAL).toFixed(2) != Number(tmpPosPayDt[0].TOTAL).toFixed(2) || 
+                Number(tmpPosSaleDt[0].TOTAL).toFixed(2) != Number(tmpPosPayDt[0].TOTAL).toFixed(2))
                 {
-                    tmpPosDt.update()
+                    await tmpPosDt.update()
                     resolve(false)
                     return
                 }
@@ -3275,7 +3297,7 @@ export default class posDoc extends React.PureComponent
             }
             else
             {
-                tmpPosDt.update()
+                await tmpPosDt.update()
                 resolve(false)
                 return
             }
@@ -7048,7 +7070,9 @@ export default class posDoc extends React.PureComponent
                         {
                             await this.descSave("FULL DELETE",e,'00000000-0000-0000-0000-000000000000')
                         }
-                        this.delete()
+                        this.loading.current.instance.show()
+                        await this.delete()
+                        this.loading.current.instance.hide()
                     }}></NbPopDescboard>
                 </div>
                 {/* Row Delete Description Popup */} 
@@ -7062,7 +7086,9 @@ export default class posDoc extends React.PureComponent
                         {
                             await this.descSave("ROW DELETE",e,this.grdList.devGrid.getSelectedRowKeys()[0].GUID)
                         }
-                        this.rowDelete()
+                        this.loading.current.instance.show()
+                        await this.rowDelete()
+                        this.loading.current.instance.hide()
                     }}></NbPopDescboard>
                 </div>
                 {/* Item Return Description Popup */} 
