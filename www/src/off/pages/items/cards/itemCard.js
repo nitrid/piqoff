@@ -1057,6 +1057,7 @@ export default class itemCard extends React.PureComponent
                                     onClick={async ()=>
                                     {
                                         App.instance.setState({isExecute:true})
+                                        await this.popAnalysis.show()
                                         let tmpQuery = 
                                         {
                                             query :"SELECT SUM(QUANTITY) AS QUANTITY,CONVERT(NVARCHAR,DOC_DATE,104) AS DOC_DATE FROM POS_SALE_VW_01 " +
@@ -1093,7 +1094,6 @@ export default class itemCard extends React.PureComponent
                                             }
                                         }
                                         App.instance.setState({isExecute:false})
-                                        await this.popAnalysis.show()
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto"
