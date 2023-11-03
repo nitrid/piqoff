@@ -1057,6 +1057,7 @@ export default class itemCard extends React.PureComponent
                                     onClick={async ()=>
                                     {
                                         App.instance.setState({isExecute:true})
+                                        await this.popAnalysis.show()
                                         let tmpQuery = 
                                         {
                                             query :"SELECT SUM(QUANTITY) AS QUANTITY,CONVERT(NVARCHAR,DOC_DATE,104) AS DOC_DATE FROM POS_SALE_VW_01 " +
@@ -1093,7 +1094,6 @@ export default class itemCard extends React.PureComponent
                                             }
                                         }
                                         App.instance.setState({isExecute:false})
-                                        await this.popAnalysis.show()
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto"
@@ -1228,7 +1228,7 @@ export default class itemCard extends React.PureComponent
                                     notRefresh={true}
                                     param={this.param.filter({ELEMENT:'cmbItemGrp',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbItemGrp',USERS:this.user.CODE})}
-                                    data={{source:{select:{query : "SELECT CODE,NAME,GUID FROM ITEM_GROUP ORDER BY NAME ASC"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : "SELECT CODE,NAME,GUID FROM ITEM_GROUP WHERE STATUS = 1 ORDER BY NAME ASC"},sql:this.core.sql}}}
                                     onValueChanged={(e)=>
                                     {
                                         this.itemGrpForOrginsValidCheck()
