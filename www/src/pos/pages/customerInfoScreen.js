@@ -139,7 +139,7 @@ export default class customerInfoScreen extends React.PureComponent
                             <Paging defaultPageSize={6} />
                             <Column dataField="LDATE" caption={this.lang.t("grdList.LDATE")} width={40} alignment={"center"} dataType={"datetime"} format={"dd-MM-yyyy - HH:mm:ss SSSZ"} defaultSortOrder="desc" visible={false} cssClass={"lcd-cell-fontsize"}/>
                             <Column dataField="ITEM_SNAME" caption={this.lang.t("grdList.ITEM_NAME")} width={"50%"} cssClass={"lcd-cell-fontsize"}/>
-                            <Column dataField="QUANTITY" caption={this.lang.t("grdList.QUANTITY")} width={"15%"} cellRender={(e)=>{return (e.data.SCALE_MANUEL == true ? "M-" : "") + (e.data.UNIT_SHORT.toLowerCase() == 'kg' ? Number(e.value / e.data.UNIT_FACTOR).round(3) : Number(e.value / e.data.UNIT_FACTOR).round(0)) + e.data.UNIT_SHORT}} format={"#,##0.000" } cssClass={"lcd-cell-fontsize"}/>
+                            <Column dataField="QUANTITY" caption={this.lang.t("grdList.QUANTITY")} width={"15%"} cellRender={(e)=>{return (e.data.SCALE_MANUEL == true ? "M-" : "") + (e.data.UNIT_SHORT.toLowerCase() == 'kg' ? Number(e.value / e.data.UNIT_FACTOR).round(3).toFixed(3) : Number(e.value / e.data.UNIT_FACTOR).round(0)) + e.data.UNIT_SHORT}} format={"#,##0.000" } cssClass={"lcd-cell-fontsize"}/>
                             <Column dataField="PRICE" caption={this.lang.t("grdList.PRICE")} width={"15%"} cssClass={"lcd-cell-fontsize"}
                             cellRender={(e)=>
                             {
