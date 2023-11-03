@@ -40,6 +40,7 @@
     "bootstrap-daterangepicker": "3.1.0",
     "devextreme": "21.1.5",
     "devextreme-react": "21.1.5",
+    "dot-matrix-lcd": "^1.0.0",
     "html-react-parser": "1.4.12",
     "html-webpack-plugin": "5.5.0",
     "i18next": "21.6.16",

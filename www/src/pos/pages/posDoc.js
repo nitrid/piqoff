@@ -1273,33 +1273,30 @@ export default class posDoc extends React.PureComponent
                     {
                         if(this.grdList.devGrid.getKeyByRowIndex(0).WEIGHING)
                         {
-                            this.posLcd.print
-                            ({
-                                blink : 0,
-                                text :  ((this.grdList.devGrid.getKeyByRowIndex(0).SCALE_MANUEL ? 'M' : '') + parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).QUANTITY)).round(3)).toString().space(7) + "kg" +
-                                        (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).PRICE) - (Number(this.grdList.devGrid.getKeyByRowIndex(0).DISCOUNT) / Number(this.grdList.devGrid.getKeyByRowIndex(0).QUANTITY))).round(2) + "EUR/kg").space(11,"s") +
-                                        this.grdList.devGrid.getKeyByRowIndex(0).ITEM_NAME.toString().space(9) + "=" +  (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).TOTAL)).round(2) + "EUR").space(10,"s")
-                            })                            
+                            let tmpLcdStr = ((this.grdList.devGrid.getKeyByRowIndex(0).SCALE_MANUEL ? 'M' : '') + parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).QUANTITY)).round(3)).toString().space(7) + "kg" +
+                            (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).PRICE) - (Number(this.grdList.devGrid.getKeyByRowIndex(0).DISCOUNT) / Number(this.grdList.devGrid.getKeyByRowIndex(0).QUANTITY))).round(2) + "EUR/kg").space(11,"s") +
+                            this.grdList.devGrid.getKeyByRowIndex(0).ITEM_NAME.toString().space(9) + "=" +  (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).TOTAL)).round(2) + "EUR").space(10,"s")
+
+                            this.posLcd.print({blink:0,text:tmpLcdStr})
+                            App.instance.electronSend({tag:"lcd",digit:tmpLcdStr})
                         }
                         else
                         {
-                            this.posLcd.print
-                            ({
-                                blink : 0,
-                                text :  this.grdList.devGrid.getKeyByRowIndex(0).ITEM_NAME.toString().space(7) + Number(this.grdList.devGrid.getKeyByRowIndex(0).QUANTITY).toString().space(3,"s") + "X" +
-                                        (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).PRICE) - (Number(this.grdList.devGrid.getKeyByRowIndex(0).DISCOUNT) / Number(this.grdList.devGrid.getKeyByRowIndex(0).QUANTITY))).round(2) + "EUR").space(9,"s") +
-                                        ("TOTAL : " + (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).TOTAL)).round(2) + "EUR")).space(20,"s")
-                            })
+                            let tmpLcdStr = this.grdList.devGrid.getKeyByRowIndex(0).ITEM_NAME.toString().space(7) + Number(this.grdList.devGrid.getKeyByRowIndex(0).QUANTITY).toString().space(3,"s") + "X" +
+                            (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).PRICE) - (Number(this.grdList.devGrid.getKeyByRowIndex(0).DISCOUNT) / Number(this.grdList.devGrid.getKeyByRowIndex(0).QUANTITY))).round(2) + "EUR").space(9,"s") +
+                            ("TOTAL : " + (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).TOTAL)).round(2) + "EUR")).space(20,"s")
+
+                            this.posLcd.print({blink:0,text:tmpLcdStr})
+                            App.instance.electronSend({tag:"lcd",digit:tmpLcdStr})
                         }
 
                         this.scaleTimeout = setTimeout(() => 
                         {
-                            this.posLcd.print
-                            ({
-                                blink : 0,
-                                text :this.grdList.devGrid.getKeyByRowIndex(0).ITEM_NAME.toString().space(9) + "=" +  (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).TOTAL)).round(2) + "EUR").space(10,"s") + 
-                                        ("TOTAL : " + (parseFloat(tmpPayRest).round(2) + "EUR")).space(20,"s")
-                            })
+                            let tmpLcdStr = this.grdList.devGrid.getKeyByRowIndex(0).ITEM_NAME.toString().space(9) + "=" +  (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).TOTAL)).round(2) + "EUR").space(10,"s") + 
+                            ("TOTAL : " + (parseFloat(tmpPayRest).round(2) + "EUR")).space(20,"s")
+
+                            this.posLcd.print({blink:0,text:tmpLcdStr})
+                            App.instance.electronSend({tag:"lcd",digit:tmpLcdStr})
                         }, 3000);
                     }, 100);                    
                 }
@@ -2187,13 +2184,11 @@ export default class posDoc extends React.PureComponent
             this.core.util.writeLog("calcGrandTotal : 10")
             await this.calcGrandTotal()
 
-            this.posLcd.print
-            ({
-                blink : 0,
-                text :  tmpData.ITEM_NAME.toString().space(9) + "-" +  (parseFloat(Number(tmpData.TOTAL)).round(2) + "EUR").space(10,"s") +
-                        ( "TOTAL : " + parseFloat(Number(this.posObj.dt()[0].TOTAL)).round(2) + "EUR").space(20,"s")
-                        
-            })
+            let tmpLcdStr = tmpData.ITEM_NAME.toString().space(9) + "-" +  (parseFloat(Number(tmpData.TOTAL)).round(2) + "EUR").space(10,"s") +
+            ( "TOTAL : " + parseFloat(Number(this.posObj.dt()[0].TOTAL)).round(2) + "EUR").space(20,"s")
+
+            this.posLcd.print({blink : 0,text : tmpLcdStr})
+            App.instance.electronSend({tag:"lcd",digit:tmpLcdStr})
         }
         else
         {
@@ -3764,12 +3759,9 @@ export default class posDoc extends React.PureComponent
                                             
                                             let tmpPayRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).round(2));
 
-                                            this.posLcd.print
-                                            ({
-                                                blink : 0,
-                                                text : ("").space(20,"s") + 
-                                                       ("TOTAL : " + (parseFloat(tmpPayRest).round(2) + "EUR")).space(20,"s")
-                                            })
+                                            let tmpLcdStr = ("").space(20,"s") + ("TOTAL : " + (parseFloat(tmpPayRest).round(2) + "EUR")).space(20,"s")
+                                            this.posLcd.print({blink:0,text:tmpLcdStr})
+                                            App.instance.electronSend({tag:"lcd",digit:tmpLcdStr})
 
                                             this.rbtnPayType.value = 0                                                                       
                                             this.popTotal.show();
@@ -3799,12 +3791,11 @@ export default class posDoc extends React.PureComponent
                                             }
                                             
                                             let tmpPayRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).round(2));
-                                            this.posLcd.print
-                                            ({
-                                                blink : 0,
-                                                text : ("").space(20,"s") + 
-                                                       ("TOTAL : " + (parseFloat(tmpPayRest).round(2) + "EUR")).space(20,"s")
-                                            })
+                                            
+                                            let tmpLcdStr = ("").space(20,"s") + ("TOTAL : " + (parseFloat(tmpPayRest).round(2) + "EUR")).space(20,"s")
+                                            this.posLcd.print({blink : 0,text : tmpLcdStr})
+                                            App.instance.electronSend({tag:"lcd",digit:tmpLcdStr})
+
                                             this.popCardPay.show();
                                             this.txtPopCardPay.newStart = true;
                                         }}>
@@ -3879,12 +3870,10 @@ export default class posDoc extends React.PureComponent
                                                         
                                             let tmpPayRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).round(2));
                                             
-                                            this.posLcd.print
-                                            ({
-                                                blink : 0,
-                                                text : ("").space(20,"s") + 
-                                                       ("TOTAL : " + (parseFloat(tmpPayRest).round(2) + "EUR")).space(20,"s")
-                                            })
+                                            let tmpLcdStr = ("").space(20,"s") + ("TOTAL : " + (parseFloat(tmpPayRest).round(2) + "EUR")).space(20,"s")
+                                            this.posLcd.print({blink : 0,text : tmpLcdStr})
+                                            App.instance.electronSend({tag:"lcd",digit:tmpLcdStr})
+
                                             this.popCashPay.show();
                                             this.txtPopCashPay.newStart = true;
                                         }}>
