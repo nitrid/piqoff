@@ -1924,7 +1924,6 @@ export class itemGroupCls
                     "@CODE = @PCODE, " + 
                     "@NAME = @PNAME, " +
                     "@STATUS = @PSTATUS " , 
-
             param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|50','PNAME:string|50','PSTATUS:bit'],
             dataprm : ['GUID','CUSER','CODE','NAME','STATUS']
         } 

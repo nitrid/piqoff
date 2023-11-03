@@ -511,7 +511,7 @@ export default class posDoc extends React.PureComponent
 
         this.parkDt.selectCmd =
         {
-            query : "SELECT GUID,LUSER_NAME,LDATE,TOTAL, " + 
+            query : "SELECT GUID,LUSER_NAME,CONVERT(NVARCHAR,LDATE,104) + '-' + CONVERT(NVARCHAR,LDATE,108) AS LDATE,TOTAL, " + 
                     "ISNULL((SELECT TOP 1 DESCRIPTION FROM POS_EXTRA WHERE POS_GUID = POS_" + (this.state.isFormation ? 'FRM_' : '') + "VW_01.GUID AND TAG = 'PARK DESC'),'') AS DESCRIPTION " +
                     "FROM POS_" + (this.state.isFormation ? 'FRM_' : '') + "VW_01 WHERE STATUS = 0 AND (LUSER = @LUSER OR (@LUSER = '')) ORDER BY LDATE DESC",
             param : ["LUSER:string|25"],
@@ -777,7 +777,7 @@ export default class posDoc extends React.PureComponent
                 //************************************************** */
 
                 this.core.util.writeLog("calcGrandTotal : 03")
-                this.calcGrandTotal(true);
+                await this.calcGrandTotal(true);
                 this.btnGetCustomer.setUnLock({backgroundColor:"#0dcaf0",borderColor:"#0dcaf0",height:"70px",width:"100%"})
             }
             else
@@ -1207,11 +1207,12 @@ export default class posDoc extends React.PureComponent
     }
     async calcGrandTotal(pSave)
     {
-        clearTimeout(this.scaleTimeout)
-        let tmpPayRest = 0;
-        let tmpPayChange = 0;
         return new Promise(async resolve => 
-        {            
+        {    
+            clearTimeout(this.scaleTimeout)
+            let tmpPayRest = 0;
+            let tmpPayChange = 0;
+            
             if(this.posObj.dt().length > 0)
             {   
                 await this.core.util.waitUntil()
@@ -1272,33 +1273,30 @@ export default class posDoc extends React.PureComponent
                     {
                         if(this.grdList.devGrid.getKeyByRowIndex(0).WEIGHING)
                         {
-                            this.posLcd.print
-                            ({
-                                blink : 0,
-                                text :  ((this.grdList.devGrid.getKeyByRowIndex(0).SCALE_MANUEL ? 'M' : '') + parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).QUANTITY)).round(3)).toString().space(7) + "kg" +
-                                        (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).PRICE) - (Number(this.grdList.devGrid.getKeyByRowIndex(0).DISCOUNT) / Number(this.grdList.devGrid.getKeyByRowIndex(0).QUANTITY))).round(2) + "EUR/kg").space(11,"s") +
-                                        this.grdList.devGrid.getKeyByRowIndex(0).ITEM_NAME.toString().space(9) + "=" +  (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).TOTAL)).round(2) + "EUR").space(10,"s")
-                            })                            
+                            let tmpLcdStr = ((this.grdList.devGrid.getKeyByRowIndex(0).SCALE_MANUEL ? 'M' : '') + parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).QUANTITY)).round(3).toFixed(3)).toString().space(7) + "kg" +
+                            (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).PRICE) - (Number(this.grdList.devGrid.getKeyByRowIndex(0).DISCOUNT) / Number(this.grdList.devGrid.getKeyByRowIndex(0).QUANTITY))).round(2).toFixed(2) + "EUR/kg").space(11,"s") +
+                            this.grdList.devGrid.getKeyByRowIndex(0).ITEM_NAME.toString().space(9) + "=" +  (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).TOTAL)).round(2).toFixed(2) + "EUR").space(10,"s")
+
+                            this.posLcd.print({blink:0,text:tmpLcdStr})
+                            App.instance.electronSend({tag:"lcd",digit:tmpLcdStr})
                         }
                         else
                         {
-                            this.posLcd.print
-                            ({
-                                blink : 0,
-                                text :  this.grdList.devGrid.getKeyByRowIndex(0).ITEM_NAME.toString().space(7) + Number(this.grdList.devGrid.getKeyByRowIndex(0).QUANTITY).toString().space(3,"s") + "X" +
-                                        (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).PRICE) - (Number(this.grdList.devGrid.getKeyByRowIndex(0).DISCOUNT) / Number(this.grdList.devGrid.getKeyByRowIndex(0).QUANTITY))).round(2) + "EUR").space(9,"s") +
-                                        ("TOTAL : " + (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).TOTAL)).round(2) + "EUR")).space(20,"s")
-                            })
+                            let tmpLcdStr = this.grdList.devGrid.getKeyByRowIndex(0).ITEM_NAME.toString().space(7) + Number(this.grdList.devGrid.getKeyByRowIndex(0).QUANTITY).toString().space(3,"s") + "X" +
+                            (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).PRICE) - (Number(this.grdList.devGrid.getKeyByRowIndex(0).DISCOUNT) / Number(this.grdList.devGrid.getKeyByRowIndex(0).QUANTITY))).round(2).toFixed(2) + "EUR").space(9,"s") +
+                            ("TOTAL : " + (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).TOTAL)).round(2).toFixed(2) + "EUR")).space(20,"s")
+
+                            this.posLcd.print({blink:0,text:tmpLcdStr})
+                            App.instance.electronSend({tag:"lcd",digit:tmpLcdStr})
                         }
 
                         this.scaleTimeout = setTimeout(() => 
                         {
-                            this.posLcd.print
-                            ({
-                                blink : 0,
-                                text :this.grdList.devGrid.getKeyByRowIndex(0).ITEM_NAME.toString().space(9) + "=" +  (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).TOTAL)).round(2) + "EUR").space(10,"s") + 
-                                        ("TOTAL : " + (parseFloat(tmpPayRest).round(2) + "EUR")).space(20,"s")
-                            })
+                            let tmpLcdStr = this.grdList.devGrid.getKeyByRowIndex(0).ITEM_NAME.toString().space(9) + "=" +  (parseFloat(Number(this.grdList.devGrid.getKeyByRowIndex(0).TOTAL)).round(2).toFixed(2) + "EUR").space(10,"s") + 
+                            ("TOTAL : " + (parseFloat(tmpPayRest).round(2).toFixed(2) + "EUR")).space(20,"s")
+
+                            this.posLcd.print({blink:0,text:tmpLcdStr})
+                            App.instance.electronSend({tag:"lcd",digit:tmpLcdStr})
                         }, 3000);
                     }, 100);                    
                 }
@@ -1341,7 +1339,24 @@ export default class posDoc extends React.PureComponent
                 {
                     if(tmpClose)
                     {
-                        this.init()
+                        //KAYDIN DOĞRULUĞU KONTROL EDİLİYOR.EĞER BAŞARISIZ İSE STATUS SIFIR OLARAK UPDATE EDİLİYOR.
+                        let tmpCheckResult = await this.checkSaleClose(this.posObj.dt()[0].GUID)
+                        if(tmpCheckResult == false)
+                        {
+                            this.sendJet({CODE:"90",NAME:"Enregistrement échoué."}) /// Kayıt işlemi başarısız.
+                            //KAYIT BAŞARISIZ İSE UYARI AÇILIYOR VE KULLANICI İSTERSE KAYIT İŞLEMİNİ TEKRARLIYOR
+                            let tmpConfObj =
+                            {
+                                id:'msgSaveFailAlert',showTitle:true,title:this.lang.t("msgSaveFailAlert.title"),showCloseButton:true,width:'500px',height:'250px',
+                                button:[{id:"btn01",caption:this.lang.t("msgSaveFailAlert.btn01"),location:'before'}],
+                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgSaveFailAlert.msg")}</div>)
+                            }
+                            await dialog(tmpConfObj)
+                        }
+                        else
+                        {
+                            this.init()
+                        }
                     } 
                 }
                 else
@@ -2032,6 +2047,8 @@ export default class posDoc extends React.PureComponent
         {
             let tmpFn = () =>
             {
+                this.txtPaymentPopTotal.value = pAmount
+                console.log(pAmount)
                 this.msgCardPayment.show().then(async (e) =>
                 {                    
                     if(e == 'btn01')
@@ -2125,7 +2142,7 @@ export default class posDoc extends React.PureComponent
             {
                 this.posObj.dt()[0].DESCRIPTION = pDesc
                 this.core.util.writeLog("calcGrandTotal : 09")
-                this.calcGrandTotal()
+                await this.calcGrandTotal()
             }
             
             if(tmpDt.length > 0 && pTag == 'PARK DESC')
@@ -2147,38 +2164,45 @@ export default class posDoc extends React.PureComponent
         });
     }
     async delete()
-    {        
-        this.posObj.dt().removeAt(0)
-        await this.posObj.save()
-        this.init()
+    {
+        return new Promise(async resolve => 
+        {
+            this.posObj.dt().removeAt(0)
+            await this.posObj.save()
+            this.init()
+            resolve()
+        })
     }
     async rowDelete()
     {
-        if(this.posObj.posSale.dt().length > 1)
+        return new Promise(async resolve => 
         {
-            let tmpData = this.grdList.devGrid.getSelectedRowKeys()[0]
+            if(this.posObj.posSale.dt().length > 1)
+            {
+                let tmpData = this.grdList.devGrid.getSelectedRowKeys()[0]
 
-            if(this.grdList.devGrid.getSelectedRowKeys().length > 0)
-            {                
-                this.grdList.devGrid.deleteRow(this.grdList.devGrid.getRowIndexByKey(this.grdList.devGrid.getSelectedRowKeys()[0]))
+                if(this.grdList.devGrid.getSelectedRowKeys().length > 0)
+                {                
+                    this.grdList.devGrid.deleteRow(this.grdList.devGrid.getRowIndexByKey(this.grdList.devGrid.getSelectedRowKeys()[0]))
+                }
+                await this.posObj.posSale.dt().delete()
+                this.promoApply()
+                this.core.util.writeLog("calcGrandTotal : 10")
+                await this.calcGrandTotal(true)
+
+                let tmpLcdStr = tmpData.ITEM_NAME.toString().space(9) + "-" +  (parseFloat(Number(tmpData.TOTAL)).round(2).toFixed(2) + "EUR").space(10,"s") +
+                ( "TOTAL : " + parseFloat(Number(this.posObj.dt()[0].TOTAL)).round(2).toFixed(2) + "EUR").space(20,"s")
+
+                this.posLcd.print({blink : 0,text : tmpLcdStr})
+                App.instance.electronSend({tag:"lcd",digit:tmpLcdStr})
+                resolve()
             }
-            await this.posObj.posSale.dt().delete()
-            this.promoApply()
-            this.core.util.writeLog("calcGrandTotal : 10")
-            await this.calcGrandTotal()
-
-            this.posLcd.print
-            ({
-                blink : 0,
-                text :  tmpData.ITEM_NAME.toString().space(9) + "-" +  (parseFloat(Number(tmpData.TOTAL)).round(2) + "EUR").space(10,"s") +
-                        ( "TOTAL : " + parseFloat(Number(this.posObj.dt()[0].TOTAL)).round(2) + "EUR").space(20,"s")
-                        
-            })
-        }
-        else
-        {
-            this.delete()
-        }
+            else
+            {
+                await this.delete()
+                resolve()
+            }
+        })
     }
     async cheqpayAdd(pCode)
     {
@@ -3105,7 +3129,6 @@ export default class posDoc extends React.PureComponent
                     await this.mailPopup.show()
                     return
                 }
-                
                 await this.print(tmpData,0)
             } 
         }
@@ -3191,6 +3214,94 @@ export default class posDoc extends React.PureComponent
         tmpArr.push({font:"a",style:"b",align:"lt",data:" ".space(48)})
         //console.log(tmpArr)
         await this.posDevice.escPrinter(tmpArr)
+    }
+    checkSaleClose(pGuid)
+    {
+        return new Promise(async resolve => 
+        {
+            let tmpPosDt = new datatable()
+
+            tmpPosDt.selectCmd = 
+            {
+                query : "SELECT GUID,CUSER,REF,CERTIFICATE,SIGNATURE,SIGNATURE_SUM,ROUND(TOTAL,2) AS TOTAL,ROUND(LOYALTY,2) AS LOYALTY,ROUND(AMOUNT,2) AS AMOUNT FROM POS WHERE GUID = @GUID",
+                param : ['GUID:string|50'],
+                value : [pGuid]
+            }
+            tmpPosDt.updateCmd = 
+            {
+                query : "EXEC [dbo].[PRD_POS_UPDATE] " + 
+                        "@GUID = @PGUID, " +
+                        "@CUSER = @PCUSER, " +
+                        "@REF = @PREF, " +
+                        "@STATUS = @PSTATUS, " +
+                        "@CERTIFICATE = @PCERTIFICATE, " +
+                        "@SIGNATURE = @PSIGNATURE, " +
+                        "@SIGNATURE_SUM = @PSIGNATURE_SUM ",
+                param : ['PGUID:string|50','PCUSER:string|25','PREF:int','PSTATUS:int','PCERTIFICATE:string|25','PSIGNATURE:string|25','PSIGNATURE_SUM:string|25'],
+                dataprm : ['GUID','CUSER','REF','STATUS','CERTIFICATE','SIGNATURE','SIGNATURE_SUM'],
+            }
+
+            await tmpPosDt.refresh()
+
+            tmpPosDt[0].REF = 0
+            tmpPosDt[0].STATUS = 0
+            tmpPosDt[0].CERTIFICATE = ''
+            tmpPosDt[0].SIGNATURE = ''
+            tmpPosDt[0].SIGNATURE_SUM = ''
+
+            if(tmpPosDt.length > 0)
+            {
+                let tmpPosSaleDt = new datatable()
+                let tmpPosPayDt = new datatable()
+                tmpPosSaleDt.selectCmd = 
+                {
+                    query : "SELECT ISNULL(ROUND(SUM(TOTAL),2),0) AS TOTAL FROM POS_SALE WHERE POS = @POS AND DELETED = 0",
+                    param : ['POS:string|50'],
+                    value : [pGuid]
+                }
+                tmpPosPayDt.selectCmd = 
+                {
+                    query : "SELECT ISNULL(ROUND(SUM(AMOUNT - CHANGE),2),0) AS TOTAL FROM POS_PAYMENT WHERE POS = @POS AND DELETED = 0",
+                    param : ['POS:string|50'],
+                    value : [pGuid]
+                }
+                await tmpPosSaleDt.refresh()
+                await tmpPosPayDt.refresh()
+                
+                if(tmpPosSaleDt.length == 0 || tmpPosPayDt.length == 0)
+                {
+                    await tmpPosDt.update()
+                    resolve(false)
+                    return
+                }
+                if(Number(tmpPosDt[0].AMOUNT).toFixed(2) == Number(tmpPosDt[0].LOYALTY).toFixed(2))
+                {
+                    resolve(true)
+                    return
+                }
+                if(tmpPosSaleDt[0].TOTAL == 0 || tmpPosPayDt[0].TOTAL == 0)
+                {
+                    await tmpPosDt.update()
+                    resolve(false)
+                    return
+                }
+                if(Number(tmpPosDt[0].TOTAL).toFixed(2) != Number(tmpPosSaleDt[0].TOTAL).toFixed(2) || Number(tmpPosDt[0].TOTAL).toFixed(2) != Number(tmpPosPayDt[0].TOTAL).toFixed(2) || 
+                Number(tmpPosSaleDt[0].TOTAL).toFixed(2) != Number(tmpPosPayDt[0].TOTAL).toFixed(2))
+                {
+                    await tmpPosDt.update()
+                    resolve(false)
+                    return
+                }
+                resolve(true)
+                return
+            }
+            else
+            {
+                await tmpPosDt.update()
+                resolve(false)
+                return
+            }
+        });
     }
     render()
     {
@@ -3316,7 +3427,7 @@ export default class posDoc extends React.PureComponent
                                                 this.promoApply()
                                                 //************************************************** */
                                                 this.core.util.writeLog("calcGrandTotal : 11")
-                                                this.calcGrandTotal(true);
+                                                await this.calcGrandTotal(true);
                                             }
                                             return
                                         }
@@ -3407,15 +3518,25 @@ export default class posDoc extends React.PureComponent
                             </div>
                             <div className="col-1 ps-1 pe-3">
                                 <NbButton id={"btnClose"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"55px",width:"100%"}}
-                                onClick={()=>
+                                onClick={async()=>
                                 {                   
                                     this.posLcd.print
                                     ({
                                         blink : 0,
                                         text :  "Bonjour".space(20) + moment(new Date()).format("DD.MM.YYYY").space(20)
-                                    })    
-                                    this.core.auth.logout()
-                                    window.location.reload()
+                                    })
+                                    let msgDisconnectWarning =
+                                        {
+                                            id:'msgDisconnectWarning',showTitle:true,title:this.lang.t("msgDisconnectWarning.title"),showCloseButton:true,width:'500px',height:'200px',
+                                            button:[{id:"btn01",caption:this.lang.t("msgDisconnectWarning.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgDisconnectWarning.btn02"),location:'after'}],
+                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgDisconnectWarning.msg")}</div>)
+                                        }
+                                    let tmpWarningResult = await dialog(msgDisconnectWarning);
+                                    if(tmpWarningResult === "btn01")
+                                    {
+                                        this.core.auth.logout()
+                                        window.location.reload()
+                                    }                                  
                                 }}>
                                     <i className="text-white fa-solid fa-power-off" style={{fontSize: "16px"}} />
                                 </NbButton>
@@ -3660,12 +3781,9 @@ export default class posDoc extends React.PureComponent
                                             
                                             let tmpPayRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).round(2));
 
-                                            this.posLcd.print
-                                            ({
-                                                blink : 0,
-                                                text : ("").space(20,"s") + 
-                                                       ("TOTAL : " + (parseFloat(tmpPayRest).round(2) + "EUR")).space(20,"s")
-                                            })
+                                            let tmpLcdStr = ("").space(20,"s") + ("TOTAL : " + (parseFloat(tmpPayRest).round(2).toFixed(2) + "EUR")).space(20,"s")
+                                            this.posLcd.print({blink:0,text:tmpLcdStr})
+                                            App.instance.electronSend({tag:"lcd",digit:tmpLcdStr})
 
                                             this.rbtnPayType.value = 0                                                                       
                                             this.popTotal.show();
@@ -3696,12 +3814,10 @@ export default class posDoc extends React.PureComponent
                                             
                                             let tmpPayRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).round(2));
                                             
-                                            this.posLcd.print
-                                            ({
-                                                blink : 0,
-                                                text : ("").space(20,"s") + 
-                                                       ("TOTAL : " + (parseFloat(tmpPayRest).round(2) + "EUR")).space(20,"s")
-                                            })
+                                            let tmpLcdStr = ("").space(20,"s") + ("TOTAL : " + (parseFloat(tmpPayRest).round(2).toFixed(2) + "EUR")).space(20,"s")
+                                            this.posLcd.print({blink : 0,text : tmpLcdStr})
+                                            App.instance.electronSend({tag:"lcd",digit:tmpLcdStr})
+
                                             this.popCardPay.show();
                                             this.txtPopCardPay.newStart = true;
                                         }}>
@@ -3776,12 +3892,10 @@ export default class posDoc extends React.PureComponent
                                                         
                                             let tmpPayRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).round(2));
                                             
-                                            this.posLcd.print
-                                            ({
-                                                blink : 0,
-                                                text : ("").space(20,"s") + 
-                                                       ("TOTAL : " + (parseFloat(tmpPayRest).round(2) + "EUR")).space(20,"s")
-                                            })
+                                            let tmpLcdStr = ("").space(20,"s") + ("TOTAL : " + (parseFloat(tmpPayRest).round(2).toFixed(2) + "EUR")).space(20,"s")
+                                            this.posLcd.print({blink : 0,text : tmpLcdStr})
+                                            App.instance.electronSend({tag:"lcd",digit:tmpLcdStr})
+
                                             this.popCashPay.show();
                                             this.txtPopCashPay.newStart = true;
                                         }}>
@@ -4392,7 +4506,7 @@ export default class posDoc extends React.PureComponent
                                                 tmpData[i].SUBTOTAL = tmpMaxSub
                                             }
                                             this.core.util.writeLog("calcGrandTotal : 13")
-                                            this.calcGrandTotal()
+                                            await this.calcGrandTotal()
                                         }}>
                                             <i className="text-white fa-solid fa-square-root-variable" style={{fontSize: "24px"}} />
                                         </NbButton>
@@ -4930,7 +5044,7 @@ export default class posDoc extends React.PureComponent
                             <div className="col-12">
                                <div className="row">
                                     <div className="col-6">
-                                        <p className="text-primary text-start m-0">{this.lang.t("total")} <span className="text-dark"><NbLabel id="popCardTotalGrand" parent={this} value={"0.00"} format={"currency"}/></span></p>    
+                                        <p className="text-primary text-start m-0">{this.lang.t("total")}<span className="text-dark"><NbLabel id="popCardTotalGrand" parent={this} value={"0.00"} format={"currency"}/></span></p>    
                                     </div>
                                     <div className="col-6">
                                         <p className="text-primary text-start m-0">{this.lang.t("remainder")} <span className="text-dark"><NbLabel id="payRest1" parent={this} value={""} format={"currency"}/></span></p>    
@@ -4941,7 +5055,7 @@ export default class posDoc extends React.PureComponent
                         {/* txtPopCardPay */}
                         <div className="row pt-1">
                             <div className="col-12">
-                                <NdTextBox id="txtPopCardPay" parent={this} simple={true} elementAttr={{style:"font-size:15pt;font-weight:bold;border:3px solid #428bca;"}}>     
+                                <NdTextBox id="txtPopCardPay" parent={this} simple={true} elementAttr={{style:"font-size:15pt;font-weight:bold;border:3px solid #428bca;"}}>
                                 </NdTextBox> 
                             </div>
                         </div> 
@@ -5145,7 +5259,7 @@ export default class posDoc extends React.PureComponent
                             this.promoApply()
                             //************************************************** */
                             this.core.util.writeLog("calcGrandTotal : 15")
-                            this.calcGrandTotal(false);
+                            await this.calcGrandTotal(false);
                         }
                     }}>
                         <Column dataField="CODE" caption={"CODE"} width={100} />
@@ -5273,7 +5387,7 @@ export default class posDoc extends React.PureComponent
                                 <NdGrid parent={this} id={"grdPopParkList"} 
                                 showBorders={true} 
                                 columnsAutoWidth={true} 
-                                allowColumnReordering={true} 
+                                allowColumnReordering={false} 
                                 allowColumnResizing={true} 
                                 height={"425px"} 
                                 width={"100%"}
@@ -5293,7 +5407,7 @@ export default class posDoc extends React.PureComponent
                                 }}
                                 >
                                     <Column dataField="LUSER_NAME" caption={this.lang.t("grdPopParkList.LUSER_NAME")} width={120} alignment={"center"}/>
-                                    <Column dataField="LDATE" caption={this.lang.t("grdPopParkList.LDATE")} width={150} dataType="datetime" format={"dd/MM/yyyy - HH:mm:ss"} />
+                                    <Column dataField="LDATE" caption={this.lang.t("grdPopParkList.LDATE")} width={150} alignment={"center"}/>
                                     <Column dataField="TOTAL" caption={this.lang.t("grdPopParkList.TOTAL")} width={100} format={"#,##0.00" + Number.money.sign}/>
                                     <Column dataField="DESCRIPTION" caption={this.lang.t("grdPopParkList.DESCRIPTION")} width={400}/>
                                 </NdGrid>
@@ -6956,7 +7070,9 @@ export default class posDoc extends React.PureComponent
                         {
                             await this.descSave("FULL DELETE",e,'00000000-0000-0000-0000-000000000000')
                         }
-                        this.delete()
+                        this.loading.current.instance.show()
+                        await this.delete()
+                        this.loading.current.instance.hide()
                     }}></NbPopDescboard>
                 </div>
                 {/* Row Delete Description Popup */} 
@@ -6970,7 +7086,9 @@ export default class posDoc extends React.PureComponent
                         {
                             await this.descSave("ROW DELETE",e,this.grdList.devGrid.getSelectedRowKeys()[0].GUID)
                         }
-                        this.rowDelete()
+                        this.loading.current.instance.show()
+                        await this.rowDelete()
+                        this.loading.current.instance.hide()
                     }}></NbPopDescboard>
                 </div>
                 {/* Item Return Description Popup */} 
@@ -7114,8 +7232,13 @@ export default class posDoc extends React.PureComponent
                     button={[{id:"btn01",caption:this.lang.t("msgCardPayment.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgCardPayment.btn02"),location:'center'},{id:"btn03",caption:this.lang.t("msgCardPayment.btn03"),location:'after'}]}
                     >
                         <div className="row">
-                            <div className="col-12 py-2">
-                                <div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgCardPayment.msg")}</div>
+                            <div className="col-12">
+                                <div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgCardPayment.msg")}</div>                              
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-12" style={{textAlign:"center",fontSize:"20px",color:"red",padding:"10px"}}>
+                                {this.lang.t("msgCardPayment.msgAmount" )} <NbLabel id="txtPaymentPopTotal" parent={this} value={"0.00€"} format={"currency"}/>
                             </div>
                         </div>
                     </NdDialog>
