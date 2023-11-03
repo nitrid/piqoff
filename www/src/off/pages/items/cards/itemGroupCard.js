@@ -298,12 +298,15 @@ export default class itemGroupCard extends React.PureComponent
                                     <NdPopGrid id={"pg_txtCode"} parent={this} container={"#root"}
                                     visible={false}
                                     position={{of:'#root'}} 
+                                    columnsAutoWidth={false}
+                                    allowColumnReordering={false} 
+                                    allowColumnResizing={false} 
                                     showTitle={true} 
                                     showBorders={true}
                                     width={'90%'}
                                     height={'90%'}
                                     title={this.t("pg_txtCode.title")} //
-                                    data={{source:{select:{query : "SELECT CODE,NAME FROM ITEM_GROUP"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : "SELECT CODE,NAME, STATUS FROM ITEM_GROUP"},sql:this.core.sql}}}
                                     button=
                                     {
                                         {
@@ -316,8 +319,9 @@ export default class itemGroupCard extends React.PureComponent
                                         }
                                     }
                                     >
-                                        <Column dataField="CODE" caption={this.t("pg_txtCode.clmCode")} width={150} />
-                                        <Column dataField="NAME" caption={this.t("pg_txtCode.clmName")} width={300} defaultSortOrder="asc" />
+                                        <Column dataField="CODE" caption={this.t("pg_txtCode.clmCode")} width={"30%"} />
+                                        <Column dataField="NAME" caption={this.t("pg_txtCode.clmName")} width={"50%"} defaultSortOrder="asc" />
+                                        <Column dataField="STATUS" caption={this.t("pg_txtCode.clmStatus")} width={"20%"} />
                                     </NdPopGrid>
                                 </Item>
                                 {/* txtTitle */}

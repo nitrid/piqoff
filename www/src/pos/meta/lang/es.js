@@ -381,13 +381,14 @@ export const langEs =
         btn01: "Ingresar cantidad",
         btn02: "Cancelar",
     },
-    msgCardPayment:
+    msgCardPayment: 
     {
         title: "Atención",
-        msg: "Esperando respuesta desde el dispositivo de tarjeta.",
+        msg: "Esperando la respuesta del terminal de tarjeta.",
+        msgAmount: "Cantidad :",
         btn01: "Reintentar",
         btn02: "Cancelar",
-        btn03: "Forzar",
+        btn03: "Forzar"
     },
     msgRePaymentType:
     {
@@ -589,6 +590,13 @@ export const langEs =
         title: "Atención",
         msg: "¡No puede realizar esta operación mientras está en modo offline!",
         btn01: "Aceptar"
+    },
+    msgDisconnectWarning: 
+    {
+      title: "Atención",
+      msg: "¿Está seguro de que desea salir?",
+      btn01: "SÍ",
+      btn02: "NO"
     },
     msgOfflineAlert: 
     {
@@ -798,7 +806,7 @@ export const langEs =
         msgTicket: "Cantidad pesada: ",
         msgBarkod: "Cantidad de etiqueta: ",
         msgDifference: "Diferencia: ",
-        msgTotalAmount : "Total Amount : ",
+        msgTotalAmount : "Monto total",
         btn01: "Aceptar",
         btn02: "Continuar"
     },

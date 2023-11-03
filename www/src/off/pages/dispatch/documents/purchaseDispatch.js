@@ -374,7 +374,35 @@ export default class purchaseDispatch extends DocBase
                             icon:'more',
                             onClick:async ()  =>
                             {
-                                this.cmbOrigin.value = e.data.ORIGIN
+                                this.msgGrdOrigins.onShowed = async ()=>
+                                {
+                                    this.cmbOrigin.value = e.data.ORIGIN
+                                }
+                                await this.msgGrdOrigins.show().then(async () =>
+                                {
+                                  e.data.ORIGIN = this.cmbOrigin.value 
+                                  let tmpQuery = 
+                                  {
+                                      query :"UPDATE ITEMS_GRP SET LDATE = GETDATE(),LUSER = @PCUSER,ORGINS = @ORGINS WHERE ITEM = @ITEM ",
+                                      param : ['ITEM:string|50','PCUSER:string|25','ORGINS:string|25'],
+                                      value : [e.data.ITEM,this.user.CODE,e.data.ORIGIN]
+                                  }
+                                  let tmpData = await this.core.sql.execute(tmpQuery) 
+                                  if(typeof tmpData.result.err == 'undefined')
+                                  {
+                                     
+                                  }
+                                  else
+                                  {
+                                      let tmpConfObj1 =
+                                      {
+                                          id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                          button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
+                                      }
+                                      tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
+                                      await dialog(tmpConfObj1);
+                                  }
+                                });  
                                 
                             }
                         },
@@ -1676,7 +1704,7 @@ export default class purchaseDispatch extends DocBase
                                     {
                                         if(typeof e.data.QUANTITY != 'undefined')
                                         {
-                                            e.key.QUANTITY = e.data.SUB_QUANTITY / e.key.SUB_FACTOR
+                                            e.key.SUB_QUANTITY =  e.data.QUANTITY * e.key.SUB_FACTOR
                                         }
                                         if(typeof e.data.SUB_QUANTITY != 'undefined')
                                         {

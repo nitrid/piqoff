@@ -381,10 +381,10 @@ export const langDe =
         btn01: "Mengeneingabe",
         btn02: "Abbrechen",
     },
-    msgCardPayment: 
-    {
+    msgCardPayment: {
         title: "Achtung",
-        msg: "Bitte warten Sie auf eine Antwort vom Kartengerät.",
+        msg: "Warte auf die Antwort des Kartenterminals.",
+        msgAmount: "Betrag :",
         btn01: "Erneut versuchen",
         btn02: "Abbrechen",
         btn03: "Erzwingen"
@@ -589,6 +589,13 @@ export const langDe =
         title : "Achtung",
         msg : "Diese Aktion kann nicht im Offline-Modus durchgeführt werden!",
         btn01 : "OK"
+    },
+    msgDisconnectWarning: 
+    {
+      title: "Achtung",
+      msg: "Sind Sie sicher, dass Sie gehen möchten?",
+      btn01: "JA",
+      btn02: "NEIN"
     },
     msgOfflineAlert: 
     {
@@ -798,7 +805,7 @@ export const langDe =
         msgTicket: "Gewogene Menge: ",
         msgBarkod: "Menge des Etiketts: ",
         msgDifference: "Differenz: ",
-        msgTotalAmount : "Total Amount : ",
+        msgTotalAmount : "Gesamtbetrag",
         btn01: "OK",
         btn02: "Weiter"
     },

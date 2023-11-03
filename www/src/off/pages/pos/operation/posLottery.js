@@ -33,7 +33,7 @@ export default class posLottery extends React.PureComponent
         let tmpPosDt = new datatable()
         tmpPosDt.selectCmd = 
         {
-            query : "SELECT GUID,DEVICE,REF,CUSTOMER_GUID,CUSTOMER_NAME FROM POS_VW_01 WHERE CUSTOMER_NAME <> '' AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE AND STATUS = 1",
+            query : "SELECT GUID,CUSTOMER_CODE,DEVICE,REF,CUSTOMER_GUID,CUSTOMER_NAME FROM POS_VW_01 WHERE CUSTOMER_NAME <> '' AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE AND STATUS = 1",
             param : ['FIRST_DATE:date','LAST_DATE:date'],
             value : [this.dtDate.startDate,this.dtDate.endDate]
         }
@@ -48,8 +48,9 @@ export default class posLottery extends React.PureComponent
                 {
                     tmpArr.push(
                         <div key={"header"} className="row px-2 pt-2">
-                            <div className="col-4"><p className="fs-2 text-center text-primary">{this.t("lblTicketNo")}</p></div>
-                            <div className="col-8"><p className="fs-2 text-center text-primary">{this.t("lblCustomer")}</p></div>
+                            <div className="col-4"><p className="fs-4 text-center text-primary">{this.t("lblTicketNo")}</p></div>
+                            <div className="col-4"><p className="fs-4 text-center text-primary">{this.t("lblCustomerNo")}</p></div>
+                            <div className="col-4"><p className="fs-4 text-center text-primary">{this.t("lblCustomer")}</p></div>
                         </div>
                     )
                     this.setState({listItem:tmpArr})
@@ -61,8 +62,9 @@ export default class posLottery extends React.PureComponent
 
                 tmpArr.push(
                     <div key={"item" + i} className="row px-2 pt-2">
-                        <div className="col-4"><p className="fs-3 text-center text-succes">{tmpPosDt[tmpRandIndex].DEVICE + " - " + tmpPosDt[tmpRandIndex].REF}</p></div>
-                        <div className="col-8"><p className="fs-3 text-center text-succes">{tmpPosDt[tmpRandIndex].CUSTOMER_NAME}</p></div>
+                        <div className="col-4"><p className="fs-5 text-center text-succes">{tmpPosDt[tmpRandIndex].DEVICE + " - " + tmpPosDt[tmpRandIndex].REF}</p></div>
+                        <div className="col-4"><p className="fs-5 text-center text-succes">{tmpPosDt[tmpRandIndex].CUSTOMER_CODE}</p></div>
+                        <div className="col-4"><p className="fs-5 text-center text-succes">{tmpPosDt[tmpRandIndex].CUSTOMER_NAME}</p></div>
                     </div>
                 )
                 this.setState({listItem:tmpArr})

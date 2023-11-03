@@ -385,6 +385,7 @@ export const langTr =
     {
         title : "Dikkat",
         msg :"Kart cihazından cevap bekleniyor.",
+        msgAmount: "Miktar :",
         btn01 : "Tekrar",
         btn02 : "Vazgeç",
         btn03 : "Zorla"
@@ -589,6 +590,13 @@ export const langTr =
         title : "Dikkat",
         msg : "Bu işlemi offline modda iken yapamazsınız !",
         btn01 : "Tamam"
+    },
+    msgDisconnectWarning: 
+    {
+        title : "Dikkat",
+        msg : "Cıkmak istediğinize emin misiniz ? ",
+        btn01 : "EVET",
+        btn02 : "HAYIR"
     },
     msgOfflineAlert: 
     {
@@ -798,7 +806,7 @@ export const langTr =
         msgTicket :"Tartılan miktar : ",
         msgBarkod : "Etiket miktari : ",
         msgDifference : "Fark : ",
-        msgTotalAmount : "Toplam Tutar : ",
+        msgTotalAmount : "Toplam Miktar",
         btn01 : "Tamam",
         btn02 : "Devam"
     },
