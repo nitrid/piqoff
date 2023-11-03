@@ -1228,7 +1228,7 @@ export default class itemCard extends React.PureComponent
                                     notRefresh={true}
                                     param={this.param.filter({ELEMENT:'cmbItemGrp',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbItemGrp',USERS:this.user.CODE})}
-                                    data={{source:{select:{query : "SELECT CODE,NAME,GUID FROM ITEM_GROUP ORDER BY NAME ASC"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : "SELECT CODE,NAME,GUID FROM ITEM_GROUP WHERE STATUS = 1 ORDER BY NAME ASC"},sql:this.core.sql}}}
                                     onValueChanged={(e)=>
                                     {
                                         this.itemGrpForOrginsValidCheck()

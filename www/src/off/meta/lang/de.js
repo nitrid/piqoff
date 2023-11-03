@@ -956,6 +956,7 @@ export const langDe =
             title: "Artikelgruppenauswahl",
             clmCode: "Code",
             clmName: "Name",
+            clmStatus : "Status",
         },
         msgSpeichern:
         {
@@ -4583,6 +4584,30 @@ export const langDe =
         txtDocNo : "Dokumentnummer",
         extraCost : "Zusatzkosten",
         cmbPriceContract : "Preisvereinbarung",
+        btnView : "Anzeigen",
+        btnMailsend : "E-Mail senden",
+        validMail : "Bitte lassen Sie dieses Feld nicht leer.",
+        placeMailHtmlEditor : "Sie können eine Beschreibung für Ihre E-Mail eingeben.",
+        isMsgSave :
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Vorgang kann nicht ohne Speicherung des Dokuments durchgeführt werden!"
+        },
+        msgMailSendResult:
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msgSuccess: "E-Mail-Versand erfolgreich!",
+            msgFailed: "E-Mail-Versand fehlgeschlagen!"
+        },
+        popMailSend :
+        {
+            title :"E-Mail senden",
+            txtMailSubject : "Betreff der E-Mail",
+            txtSendMail : "E-Mail-Adresse",
+            btnSend : "Senden"
+        },
         pg_Docs :
         {
             title: "Dokumentenauswahl",
@@ -5598,6 +5623,12 @@ export const langDe =
         validMail : "Bitte füllen Sie dieses Feld aus.",
         txtTotalHt : "Rabattierter Betrag",
         txtDocNo : "Belegnummer",
+        isMsgSave :
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Aktion kann ohne Dokumentenregistrierung nicht durchgeführt werden!"
+        },
         pg_Docs : 
         {
             title : "Dokumentauswahl",
@@ -6229,6 +6260,11 @@ export const langDe =
             btn01: "Ok",
             msg: "Es können keine Aktionen auf das Dokument angewendet werden, solange es gesperrt ist!"
         },
+        isMsgSave: {
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Der Vorgang kann nicht ohne Speicherung des Dokuments durchgeführt werden!"
+        },     
         msgDiscount:
         {
             title: "Achtung",
@@ -6527,6 +6563,12 @@ export const langDe =
         dtExpDate: "Fälligkeitsdatum",
         txtTotalHt: "Rabattierter Betrag",
         txtDocNo: "Dokumentnummer",
+        btnView : "Anzeigen",
+        btnMailsend : "E-Mail senden",
+        validDesign : "Bitte wählen Sie ein Design aus.",
+        validMail : "Bitte füllen Sie dieses Feld aus.",
+        placeMailHtmlEditor : "Sie können eine Beschreibung für Ihre E-Mail eingeben.",
+
         pg_Docs: 
         {
             title: "Dokumentenauswahl",
@@ -6708,6 +6750,17 @@ export const langDe =
             btn01: "OK",
             msg: "Ein Dokument mit einer getätigten Zahlung kann nicht gelöscht werden!"
         },
+        isMsgSave: {
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Der Vorgang kann nicht ohne Speicherung des Dokuments durchgeführt werden!"
+        },
+        msgMailSendResult: {
+            title: "Achtung",
+            btn01: "OK",
+            msgSuccess: "E-Mail-Versand erfolgreich !",
+            msgFailed: "E-Mail-Versand fehlgeschlagen !"
+        },        
         msgDocLocked:
         {
             title: "Achtung",
@@ -6893,12 +6946,18 @@ export const langDe =
             msg: "Es gibt Artikel in der Liste!"
         },
         tagItemCodePlaceholder: "Bitte geben Sie die gewünschten Codes ein",
-        msgCustomerLock: 
-        {
-            title: "Dikkat", //BAK
-            btn01: "Tamam", //BAK
-            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
-        },
+        msgCustomerLock: {
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Der Kunde kann nach Hinzufügen des Produkts nicht mehr geändert werden !"
+        },        
+        popMailSend: {
+            title: "E-Mail senden",
+            txtMailSubject: "Betreff der E-Mail",
+            txtSendMail: "E-Mail-Adresse",
+            btnSend: "Senden"
+        }
+        
     },
     ftr_02_007 : // "Rückgaberechnung"
     {
@@ -6946,8 +7005,11 @@ export const langDe =
         getProforma : "Proforma abrufen",
         txtTotalHt : "Nettobetrag",
         txtDocNo : "Dokumentennummer",
-        btnView: "Anzeigen",
-        btnMailsend: "E-Mail senden",
+        btnView : "Anzeigen",
+        btnMailsend : "E-Mail senden",
+        validDesign : "Bitte wählen Sie ein Design aus.",
+        validMail : "Bitte füllen Sie dieses Feld aus.",
+        placeMailHtmlEditor : "Sie können eine Beschreibung für Ihre E-Mail eingeben.",        
         pg_Docs : 
         {
             title : "Dokumentauswahl",
@@ -7094,6 +7156,23 @@ export const langDe =
             btn02: "Abbrechen",
             msg: "Möchten Sie die Steuer wirklich auf Null setzen?"
         },
+        isMsgSave: {
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Der Vorgang kann nicht ohne Speicherung des Dokuments durchgeführt werden !"
+        },
+        msgMailSendResult: {
+            title: "Achtung",
+            btn01: "OK",
+            msgSuccess: "E-Mail-Versand erfolgreich !",
+            msgFailed: "E-Mail-Versand fehlgeschlagen !"
+        },
+        popMailSend: {
+            title: "E-Mail senden",
+            txtMailSubject: "Betreff der E-Mail",
+            txtSendMail: "E-Mail-Adresse",
+            btnSend: "Senden"
+        },        
         msgDiscountPrice:
         {
             title: "Achtung",
@@ -7416,6 +7495,27 @@ export const langDe =
         validMail: "Bitte füllen Sie das Feld aus.",
         txtTotalHt: "Rabattierter Betrag",
         txtDocNo: "Dokumentnummer",
+        placeMailHtmlEditor : "Sie können eine Beschreibung für Ihre E-Mail eingeben.",
+        isMsgSave :
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Aktion kann ohne Dokumentenregistrierung nicht durchgeführt werden!"
+        },
+        msgMailSendResult:
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msgSuccess: "E-Mail-Versand erfolgreich!",
+            msgFailed: "E-Mail-Versand fehlgeschlagen!"
+        },
+        popMailSend :
+        {
+            title :"E-Mail senden",
+            txtMailSubject : "E-Mail-Betreff",
+            txtSendMail : "E-Mail-Adresse",
+            btnSend : "Senden"
+        },
         pg_Docs: {
           title: "Dokumentauswahl",
           clmDate: "DATUM",
@@ -7894,8 +7994,30 @@ export const langDe =
         getProforma : "Proforma abrufen",
         txtTotalHt : "Nettobetrag",
         txtDocNo : "Dokumentennummer",
-        btnView: "Anzeigen",
-        btnMailsend: "E-Mail senden",
+        btnView : "Anzeigen",
+        btnMailsend : "E-Mail senden",
+        validMail : "Bitte lassen Sie dieses Feld nicht leer.",
+        placeMailHtmlEditor : "Sie können eine Beschreibung für Ihre E-Mail eingeben.",
+        isMsgSave :
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Vorgang kann nicht ohne Speicherung des Dokuments durchgeführt werden!"
+        },
+        msgMailSendResult:
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msgSuccess: "E-Mail-Versand erfolgreich!",
+            msgFailed: "E-Mail-Versand fehlgeschlagen!"
+        },
+        popMailSend :
+        {
+            title :"E-Mail senden",
+            txtMailSubject : "Betreff der E-Mail",
+            txtSendMail : "E-Mail-Adresse",
+            btnSend : "Senden"
+        },
         pg_Docs : 
         {
             title : "Dokumentauswahl",
@@ -8356,6 +8478,30 @@ export const langDe =
         txtTotalHt : "Rabattierter Betrag",
         validDesign : "Bitte Design auswählen",
         txtDocNo : "Belge Nr.",
+        btnView : "Anzeigen",
+        btnMailsend : "E-Mail senden",
+        validMail : "Bitte lassen Sie dieses Feld nicht leer.",
+        placeMailHtmlEditor : "Sie können eine Beschreibung für Ihre E-Mail eingeben.",
+        isMsgSave :
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Vorgang kann nicht ohne Speicherung des Dokuments durchgeführt werden!"
+        },
+        msgMailSendResult:
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msgSuccess: "E-Mail-Versand erfolgreich!",
+            msgFailed: "E-Mail-Versand fehlgeschlagen!"
+        },
+        popMailSend :
+        {
+            title :"E-Mail senden",
+            txtMailSubject : "Betreff der E-Mail",
+            txtSendMail : "E-Mail-Adresse",
+            btnSend : "Senden"
+        },
         msgDiscount:
         {
             title: "Achtung",
@@ -9156,6 +9302,31 @@ export const langDe =
         getOffers : "Angebot abrufen",
         txtTotalHt : "Rabattierter Betrag",
         txtDocNo : "Dokumentnummer",
+        validDesign : "Bitte wählen Sie ein Design.",
+        btnView : "Anzeigen",
+        btnMailsend : "E-Mail senden",
+        validMail : "Bitte nicht leer lassen.",
+        placeMailHtmlEditor : "Sie können eine Beschreibung für Ihre E-Mail eingeben.",
+        isMsgSave :
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Aktion kann ohne Dokumentenregistrierung nicht durchgeführt werden!"
+        },
+        msgMailSendResult:
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msgSuccess: "E-Mail-Versand erfolgreich!",
+            msgFailed: "E-Mail-Versand fehlgeschlagen!"
+        },
+        popMailSend :
+        {
+            title :"E-Mail senden",
+            txtMailSubject : "E-Mail-Betreff",
+            txtSendMail : "E-Mail-Adresse",
+            btnSend : "Senden"
+        },
         pg_Docs : 
         {
             title : "Dokumentauswahl",
@@ -9658,6 +9829,31 @@ export const langDe =
         dtExpDate: "Fälligkeitsdatum", 
         txtTotalHt: "Rabattierter Betrag",
         txtDocNo: "Belge Nr.",
+        validDesign : "Bitte wählen Sie ein Design.",
+        btnView : "Anzeigen",
+        btnMailsend : "E-Mail senden",
+        validMail : "Bitte lassen Sie dieses Feld nicht leer.",
+        placeMailHtmlEditor : "Sie können eine Beschreibung für Ihre E-Mail eingeben.",
+        isMsgSave :
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Vorgang kann nicht ohne Speicherung des Dokuments durchgeführt werden!"
+        },
+        msgMailSendResult:
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msgSuccess: "E-Mail-Versand erfolgreich!",
+            msgFailed: "E-Mail-Versand fehlgeschlagen!"
+        },
+        popMailSend :
+        {
+            title :"E-Mail senden",
+            txtMailSubject : "Betreff der E-Mail",
+            txtSendMail : "E-Mail-Adresse",
+            btnSend : "Senden"
+        },
         pg_Docs: 
         {
           title: "Dokumentenauswahl",
@@ -10027,6 +10223,30 @@ export const langDe =
         dtExpDate : "Fälligkeitsdatum", 
         txtTotalHt : "Rabattierter Betrag",
         txtDocNo : "Belg No",
+        btnView : "Anzeigen",
+        btnMailsend : "E-Mail senden",
+        validMail : "Bitte lassen Sie dieses Feld nicht leer.",
+        placeMailHtmlEditor : "Sie können eine Beschreibung für Ihre E-Mail eingeben.",
+        isMsgSave :
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Vorgang kann nicht ohne Speicherung des Dokuments durchgeführt werden!"
+        },
+        msgMailSendResult:
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msgSuccess: "E-Mail-Versand erfolgreich!",
+            msgFailed: "E-Mail-Versand fehlgeschlagen!"
+        },
+        popMailSend :
+        {
+            title :"E-Mail senden",
+            txtMailSubject : "Betreff der E-Mail",
+            txtSendMail : "E-Mail-Adresse",
+            btnSend : "Senden"
+        },
         pg_Docs : 
         {
             title : "Dokumentauswahl",
@@ -11198,6 +11418,30 @@ export const langDe =
         txtDocNo: "Dokumentnummer",
         extraCost: "Zusatzkosten",
         cmbPriceContract: "Preisvereinbarung",
+        btnView : "Anzeigen",
+        btnMailsend : "E-Mail senden",
+        validMail : "Bitte lassen Sie dieses Feld nicht leer.",
+        placeMailHtmlEditor : "Sie können eine Beschreibung für Ihre E-Mail eingeben.",
+        isMsgSave :
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Vorgang kann nicht ohne Speicherung des Dokuments durchgeführt werden!"
+        },
+        msgMailSendResult:
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msgSuccess: "E-Mail-Versand erfolgreich!",
+            msgFailed: "E-Mail-Versand fehlgeschlagen!"
+        },
+        popMailSend :
+        {
+            title :"E-Mail senden",
+            txtMailSubject : "Betreff der E-Mail",
+            txtSendMail : "E-Mail-Adresse",
+            btnSend : "Senden"
+        },
         pg_Docs: 
         {
           title: "Dokumentauswahl",
@@ -11957,6 +12201,30 @@ export const langDe =
         validMail : "Bitte geben Sie eine E-Mail-Adresse ein.",
         txtTotalHt : "Gesamtmenge mit Rabatt",
         txtDocNo : "Dokumentnummer",
+        btnView : "Anzeigen",
+        btnMailsend : "E-Mail senden",
+        validMail : "Bitte lassen Sie dieses Feld nicht leer.",
+        placeMailHtmlEditor : "Sie können eine Beschreibung für Ihre E-Mail eingeben.",
+        isMsgSave :
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Vorgang kann nicht ohne Speicherung des Dokuments durchgeführt werden!"
+        },
+        msgMailSendResult:
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msgSuccess: "E-Mail-Versand erfolgreich!",
+            msgFailed: "E-Mail-Versand fehlgeschlagen!"
+        },
+        popMailSend :
+        {
+            title :"E-Mail senden",
+            txtMailSubject : "Betreff der E-Mail",
+            txtSendMail : "E-Mail-Adresse",
+            btnSend : "Senden"
+        },
         pg_Docs : 
         {
             title : "Dokumentauswahl",
@@ -13899,6 +14167,30 @@ export const langDe =
         txtTotalHt : "Rabattierter Gesamtbetrag",
         txtDocNo : "Dokumentnummer",
         cmbPriceContract : "Preisvereinbarung",
+        btnView : "Anzeigen",
+        btnMailsend : "E-Mail senden",
+        validMail : "Bitte lassen Sie dieses Feld nicht leer.",
+        placeMailHtmlEditor : "Sie können eine Beschreibung für Ihre E-Mail eingeben.",
+        isMsgSave :
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Vorgang kann nicht ohne Speicherung des Dokuments durchgeführt werden!"
+        },
+        msgMailSendResult:
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msgSuccess: "E-Mail-Versand erfolgreich!",
+            msgFailed: "E-Mail-Versand fehlgeschlagen!"
+        },
+        popMailSend :
+        {
+            title :"E-Mail senden",
+            txtMailSubject : "Betreff der E-Mail",
+            txtSendMail : "E-Mail-Adresse",
+            btnSend : "Senden"
+        },
         pg_Docs : 
         {
             title : "Dokumentauswahl",
@@ -16589,7 +16881,8 @@ export const langDe =
         txtPoint : "Punkte",
         btnLottery : "Ziehung machen",
         lblTicketNo : "BELEG NR",
-        lblCustomer : "KUNDE"
+        lblCustomer : "KUNDE",
+        lblCustomerNo : "KUNDE NR"
     },
     tkf_01_001 : // "Angebotsliste Einkauf",
     {
@@ -16997,11 +17290,30 @@ export const langDe =
         txtUnitQuantity: "Einheitsmenge",
         txtTotalQuantity: "Gesamtmenge",
         txtUnitPrice: "Stückpreis",
-        btnView: "Anzeigen",
-        btnMailsend: "E-Mail senden",
-        placeMailen: "Text",
-        validDesign: "Bitte wählen Sie ein Design aus.",
-        validMail: "Bitte füllen Sie dieses Feld aus.",
+        btnView : "Anzeigen",
+        btnMailsend : "E-Mail senden",
+        validMail : "Bitte lassen Sie dieses Feld nicht leer.",
+        placeMailHtmlEditor : "Sie können eine Beschreibung für Ihre E-Mail eingeben.",
+        isMsgSave :
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Vorgang kann nicht ohne Speicherung des Dokuments durchgeführt werden!"
+        },
+        msgMailSendResult:
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msgSuccess: "E-Mail-Versand erfolgreich!",
+            msgFailed: "E-Mail-Versand fehlgeschlagen!"
+        },
+        popMailSend :
+        {
+            title :"E-Mail senden",
+            txtMailSubject : "Betreff der E-Mail",
+            txtSendMail : "E-Mail-Adresse",
+            btnSend : "Senden"
+        },
         pg_Docs: 
         {
             title: "Dokumentauswahl",

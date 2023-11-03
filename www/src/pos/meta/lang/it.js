@@ -384,11 +384,12 @@ export const langIt =
     msgCardPayment: 
     {
         title: "Attenzione",
-        msg: "In attesa di una risposta dal dispositivo di pagamento con carta.",
+        msg: "In attesa della risposta del terminale della carta.",
+        msgAmount: "Importo :",
         btn01: "Riprova",
         btn02: "Annulla",
-        btn03: "Forza",
-    },
+        btn03: "Forza"
+    },    
     msgRePaymentType:
     {
         title: "Come desideri ricevere il pagamento rimanente?"
@@ -590,6 +591,14 @@ export const langIt =
         msg: "Impossibile eseguire questa operazione in modalità offline!",
         btn01: "Ok"
     },
+    msgDisconnectWarning: 
+    {
+      title: "Attenzione",
+      msg: "Sei sicuro di voler uscire?",
+      btn01: "SÌ",
+      btn02: "NO"
+    },
+
     msgOfflineAlert: 
     {
         title: "Attenzione",
@@ -798,6 +807,7 @@ export const langIt =
         msgTicket: "Quantità pesata: ",
         msgBarkod: "Quantità dell'etichetta: ",
         msgDifference: "Differenza: ",
+        msgTotalAmount : "Importo totale",
         btn01: "OK",
         btn02: "Continua"
     },
