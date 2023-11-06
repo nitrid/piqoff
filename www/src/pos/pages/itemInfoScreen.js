@@ -141,15 +141,15 @@ export default class itemInfoScreen extends React.PureComponent
     render() 
     {
         return (
-            <div>
-                <div style={{position:'absolute',zIndex:1500,width:"100%",height:"100%",backgroundColor:"#000C66",justifyContent:"center",alignItems:"center",display:"flex",visibility:this.state.splash ? 'visible' : 'hidden'}}>
+            <div style={{backgroundColor:"rgb(44 35 98)"}}>
+                <div style={{position:'absolute',zIndex:1500,width:"100%",height:"100%",backgroundColor:"rgb(44 35 98)",justifyContent:"center",alignItems:"center",display:"flex",visibility:this.state.splash ? 'visible' : 'hidden'}}>
                     <div className="row g-0">
                         <div className="col-12">
-                            {/* <div className="row g-0">
+                            <div className="row g-0 py-5">
                                 <div className="col-12 d-flex align-items-center justify-content-center">
-                                    <img src="./css/img/piqsoftlogo.png" className="img-fluid h-75" alt="Logo"/>
+                                    <img src="./css/img/itemInfoLogo.jpeg" className="img-fluid h-75" alt="Logo"/>
                                 </div>
-                            </div> */}
+                            </div>
                             <div className="row g-0">
                                 <div className="col-12">
                                     <h1 className="text-center" style={{fontSize:"50px",color:"#ffeaa7"}}>{this.lang.t("itemInfo.msgSplash")}</h1>
@@ -159,15 +159,12 @@ export default class itemInfoScreen extends React.PureComponent
                     </div>
                 </div>
                 <div className="row g-0 px-5" style={{height:"18%"}}>
-                    <div className="col-md-6 px-2" style={{display:"flex",alignItems:"center"}}>
-                        <img src="./css/img/piqsoftlogo.png" className="img-fluid h-75" alt="Logo"/>
-                    </div>
-                    <div className="col-md-6 px-2" style={{display:"flex",alignItems:"center",justifyContent:"flex-end"}}>
-                        <img src="pos/resources/logop.png" className="float-end img-fluid h-75" alt="Logo" />
+                    <div className="col-12 px-2" style={{display:"flex",alignItems:"center",justifyContent:"center"}}>
+                        <img src="./css/img/itemInfoLogo.jpeg" className="img-fluid" width={"700px"} alt="Logo"/>
                     </div>
                 </div>
                 <div className="row g-0 p-3" style={{height:"82%"}}>
-                    <div className="col-12" style={{backgroundColor:"#000C66",height:"100%",borderRadius:"10px"}}>
+                    <div className="col-12" style={{backgroundColor:"rgb(44 35 98)",height:"100%",borderRadius:"10px"}}>
                         <div className="row g-0 p-2" style={{height:"100%"}}>
                             <div className="col-4" style={{color:"white"}}>
                                 <div className="row g-0" style={{height:"70%"}}>
