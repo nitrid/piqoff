@@ -48,7 +48,7 @@ export class docCls
             TAX_NO : '',
             ZIPCODE : '',
         }
-
+        this.isSaved = false
         this.docItems = new docItemsCls();
         this.docCustomer = new docCustomerCls();
         this.checkCls = new checkCls();
@@ -193,6 +193,7 @@ export class docCls
         for (let i = 0; i < this.ds.length; i++) 
         {
             this.dt(i).clear()
+            this.isSaved = false
         }
     }
     load()
@@ -218,6 +219,7 @@ export class docCls
 
             if(this.ds.get('DOC').length > 0)
             {  
+                this.isSaved = true
                 await this.docItems.load({DOC_GUID:this.ds.get('DOC')[0].GUID,SUB_FACTOR:tmpPrm.SUB_FACTOR})
                 await this.docCustomer.load({GUID:this.ds.get('DOC')[0].GUID})
                 await this.docOrders.load({DOC_GUID:this.ds.get('DOC')[0].GUID,SUB_FACTOR:tmpPrm.SUB_FACTOR})
@@ -227,9 +229,10 @@ export class docCls
         });
     }
     save()
-    {
+    {     
         return new Promise(async resolve => 
         {
+            this.isSaved = true
             this.ds.delete()
             resolve(await this.ds.update()); 
         });

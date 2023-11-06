@@ -383,11 +383,12 @@ export const langFr =
     },
     msgCardPayment: 
     {
-        title : "Attention",
-        msg :" En attente de réponse du TPE",
-        btn01 : "A nouveau",
-        btn02 : "Abandonner",
-        btn03 : "Forcer"
+        title: "Attention",
+        msg: "Attente de la réponse du terminal de carte.",
+        msgAmount: "Montant :",
+        btn01: "Réessayer",
+        btn02: "Annuler",
+        btn03: "Forcer"
     },
     msgRePaymentType :
     {
@@ -590,6 +591,14 @@ export const langFr =
         msg : "Vous ne pouvez pas faire cela en mode hors ligne !",
         btn01 : "OK"
     },
+    msgDisconnectWarning: 
+    {
+      title: "Attention",
+      msg: "Êtes-vous sûr de vouloir quitter ?",
+      btn01: "OUI",
+      btn02: "NON"
+    },
+
     msgOfflineAlert: 
     {
         title : "Attention",
@@ -798,6 +807,7 @@ export const langFr =
         msgTicket: "Weighed quantity: ",
         msgBarkod: "Label quantity: ",
         msgDifference: "Difference: ",
+        msgTotalAmount : "Montant total",
         btn01: "OK",
         btn02: "Continue"
     },

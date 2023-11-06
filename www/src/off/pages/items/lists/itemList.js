@@ -504,7 +504,7 @@ export default class itemList extends React.PureComponent
                                             App.instance.menuClick(
                                             {
                                                 id: 'stk_01_001',
-                                                text: this.t('menu.stk_01_001'),
+                                                text: this.lang.t('menuOff.stk_01_001'),
                                                 path: 'items/cards/itemCard.js'
                                             })
                                         }
