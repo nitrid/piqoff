@@ -8,9 +8,9 @@ export const langFr =
     btnPrint :"Imprimer",
     btnOk: "OK",
     msgWarning: "Attention",
-    msgSqlService1: "Impossible de se connecter au serveur base de données", 
-    msgSqlService2: "Il n'y a pas de base de données. Souhaitez-vous créér ?", 
-    msgSqlService3: "L'installation de base de données a réussi. Veuillez vérifier le fichier de configuration et redémarrer le serveur.", 
+    msgSqlService1: "Connexion imposible à la base de données", 
+    msgSqlService2: "Il n'y a pas de base de données. Souhaitez-vous la créér ?", 
+    msgSqlService3: "Installation réussi de la base de données. Veuillez vérifier le fichier de configuration et redémarrer le serveur.", 
     btnYes : "Oui",
     btnGet: "Valider",
     btnNo : "Non",
@@ -27,9 +27,9 @@ export const langFr =
     msgInvalidUser : "Utilisateur ou mdp faux.",
     txtCardRead :"Veuillez scanner votre badge.",
     checkAll :"Tout saisir",
-    msgUserAccess : "Vous n'êtes pas autorisé",
+    msgUserAccess : "Accès non autorisé",
     collectiveItemAdd: "Ajouter Multi Produit",
-    constructionMsg : "Page en construction mise en service au plus vite.", 
+    constructionMsg : "Page en construction, bientôt disponible.", 
     about : "à propos ",
     abtCertificate : "Certificat: NF525 - NF203",
     abtNrCertificate : "Numéro Certificat: B_0527-1",
@@ -66,7 +66,7 @@ export const langFr =
     msgAnotherUserAlert: 
     {
         title : "Attention",
-        msg : "Vous êtes connecté à partir d'un autre appareil avec vos informations d'utilisateur.",
+        msg : "Connexion à partir d'un autre appareil avec vos informations d'utilisateur.",
         btn01 : "OK"
     },
     msgisExecuteClose: 
@@ -116,7 +116,7 @@ export const langFr =
     },
     popDeleteDesc : 
     {
-        head : "Description du Processus de Suppression",   
+        head : "Description de la Suppression",   
         title : "Veuillez Saisir le motif de la Suppression"   
     },
     popVatRate:
@@ -153,7 +153,7 @@ export const langFr =
         stk_01_013 :"Identification de l'image du produit", 
         stk_01_014 : "Identification du type de produit",
         stk_02_001: "Document inventaire",
-        stk_02_002: "Transfert interne dépot/magasin",
+        stk_02_002: "Transfert interne dépôt/magasin",
         stk_02_003: "Sortie perte",
         stk_02_004: "Imprimer étiquette",
         stk_02_005: "Saisie multi produit retour",
@@ -174,7 +174,7 @@ export const langFr =
         stk_05_001: "Rapport Inventaire Dépôt", 
         stk_05_002: "Rapport sur la modification des prix d'achat", 
         stk_05_003: "Rapport inventaire", 
-        stk_05_004 : "Rapport sur les produits perdus", // BAK
+        stk_05_004 : "Rapport sur les pertes", // BAK
         cri: "Fournisseur - Client",
         cri_01: "Saisie",
         cri_02: "Listes",
@@ -213,7 +213,7 @@ export const langFr =
         ftr_02_006: "Facture Différence Prix Vente", 
         ftr_02_007: "Facture Retour ", 
         ftr_02_008: "Facture d'achat interne magasin", 
-        ftr_02_009: "Facture gaspillées",
+        ftr_02_009: "Facture liée au frais",
         ftr_04_001: "Différence de prix Facture Proforma", 
         ftr_04_002: "Facture Proforma de Vente",   
         ftr_04_003: "Facture Proforma d'Achat",   
@@ -270,7 +270,8 @@ export const langFr =
         fns_04 : "Rapports",
         fns_04_001 : "Rapport sur les relevés bancaires",   
         fns_04_002 : "Rapport sur le solde actuel",  
-        fns_04_003 : "Kasa Ekstre Raporu",
+        fns_04_003 : "Rapport sur les relevés de caisse",
+        fns_04_002 : "Rapport solde de compte",//BAKK
         fns_05 : "Opérations", 
         fns_05_001 : "Saisie Multi Encaissement", 
         fns_05_002 : "Saisie Multi Paiement", 
@@ -290,36 +291,35 @@ export const langFr =
         pos_02_009 : "Rapport de Vente par famille de produits",
         pos_02_010 : "Rapport de vente détaillé du produit", 
         pos_02_011 : "Rapport de comparaison de produit",
-        pos_02_012 : "Rapport d'utilisation des points Pos",  // BAK
-        pos_02_013 : "Rapport de réduction Pos",  // BAK
+        pos_02_012 : "Rapport utilisation points de fidélité",  // BAK
+        pos_02_013 : "Rapport de remise",  // BAK
         pos_02_014 : "Tickets de balance non lus", // BAK
-        pos_02_015 : "Müşteri Bazlı Ürün Satış Raporu", // BAK
         pos_03 : "Les opérations", 
         pos_03_001 : "Opérations de fin de journée",
-        pos_03_002 : "Loterie", //BAK
         promo: "Promotion",
         promo_01: "Saisie",
         promo_01_001: "Saisie promotions", 
         promo_02: "Listes",
         promo_02_001: "Liste promotion",
-        promo_02_002: "Liste Detaille promotion",
+        promo_02_002: "Liste Detaillée promotion",
         promo_03: "Rapports",
         set : "Paramètre / Supplément",
         set_01 : "Coût et taxe annexe",
         set_01_001 : "Taxe sucre",
+        set_01_002 : "Interfel",
         set_02 : "Réglage général",   
         set_02_001 : "Informations sur la société",   
         set_02_002 : "En Rapport",   
         set_02_003 : "Anydesk",   
         set_02_004 : "Mode d'Emploi",  
         set_02_005 : "Nouveautées de Versions",  
-        set_02_006 : "Création de Demande de Soutien",   
-        set_02_007 : "Historique Demande de Soutien",   
+        set_02_006 : "Création Demande d'Assistance",   
+        set_02_007 : "Historique Demande d'Assistance",   
+        set_02_008 : "Enregistrement Excel du code douanier", // BAK
         set_03 : "Réglages Documents",   
         set_03_001 : "Documents Effacés",   
         set_03_002 : "Lignes Effacées", 
         set_03_003 : "Identification du code du transporteur",
-        set_02_008 : "Enregistrement Excel du code douanier", // BAK
         proces : "Saisie groupée",
         proces_01 : "Traitement Produit",
         proces_01_001 : "MAJ Famille Produit",
@@ -327,8 +327,8 @@ export const langFr =
         tkf_01: "Listes",
         tkf_02: "Document",
         tkf_03: "Rapports",
-        tkf_01_001: "Liste achat accord négocié",
-        tkf_01_002: "Liste accord de Vente",
+        tkf_01_001: "Liste proposition achat",
+        tkf_01_002: "Liste proposition vente",
         tkf_02_001: "Saisie Proposition d'Achat",
         tkf_02_002: "Saisie Proposition de Vente",
         purchase : "Processus d'achat",
@@ -369,19 +369,19 @@ export const langFr =
         salesinvoices_03 : "Proforma",
         salesinvoices_04 : "Rapports",
         salesReport : "Rapports",
-        slsRpt_01_001 : "Rapport de Comparaison de Documents", 
-        slsRpt_01_002 : "Rapport de ventes basés sur les familles", 
-        slsRpt_01_003 : "Rapport des Factures de Vente", 
+        slsRpt_01_001 : "Rapport Comparaison Documents", 
+        slsRpt_01_002 : "Rapport ventes basés sur les familles", 
+        slsRpt_01_003 : "Rapport Factures de Vente", 
         slsRpt_01_004 : "Rapport de Vente", 
         slsRpt_01_005 : "Rapport de vente et de retour ", 
-        slsRpt_01_006 : "Rapport actuel sur les ventes et les retours",
-        slsRpt_01_007 : "Rapport des factures de retours",   
-        slsRpt_01_008 : "Rapport de vente du produit détaillé",   
+        slsRpt_01_006 : "Rapport actuel sur les ventes et les retours", //BAK
+        slsRpt_01_007 : "Rapport factures retours",   
+        slsRpt_01_008 : "Rapport vente avec produit détaillé",   
         purchaseReport : "Rapports",
-        slsRpt_02_001 : "Rapport des Factures d'Achat", 
+        slsRpt_02_001 : "Rapport chronologique des Factures d'Achat", //BAK
         slsRpt_02_002 : "Rapport DEB ", 
         slsRpt_02_003 : "Rapport du taux de sucre", 
-        slsRpt_02_004 : "Rapport détaillé d'achat du produit" , 
+        slsRpt_02_004 : "Rapport achat avec produit détaillé" , 
         slsRpt_02_005 : "Rapport détaillé DEB"
     },
     login:
@@ -700,7 +700,7 @@ export const langFr =
         },
         grdAnalysis:  
         {
-            clmToday: "Aujour'hui",
+            clmToday: "Aujourd'hui",
             clmYesterday: "Hier",
             clmWeek: "Cette Semaine",
             clmMount : "Ce Mois-ci",
@@ -714,7 +714,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Produit déja traité vous ne pouvez pas supprimer !!"
+            msg: "Produit déja traité suppression impossible !"
         },
         cmbItemGenusData :
         {
@@ -735,7 +735,7 @@ export const langFr =
         },
         pg_customsCode : 
         {
-            title : "Codes de la douane",  
+            title : "Codes douanier",  
             clmCode : "Code",  
             clmName : "Nom" 
         },
@@ -757,7 +757,7 @@ export const langFr =
             title: "Attention",  // BAK
             btn01: "OK",  // BAK
             btn02: "Abandonner",  // BAK
-            msg: "Êtes-vous sûr de vouloir ramener le produit ?"  // BAK
+            msg: "Êtes-vous sûr(e) de vouloir ramener le produit à nouveau ?"  // BAK
         },
     },
     stk_01_002:  //"Identification des codes-barres" 
@@ -771,7 +771,7 @@ export const langFr =
         MainUnit : "Code barre saisie à l'unité principale" , 
         SubUnit : "Code barre saisie au contenu principal",
         txtUnitTypeName :"Motif",
-        barcodePlace : "Entrer le code barre que vous souhaitez ajouter pour le stock sélectionné.", 
+        barcodePlace : "Veuillez ajouter le code barre au produit sélectionné.", // BAK
         pg_txtItem:
         {
             title: "Sélection Produit",
@@ -817,7 +817,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessairess !" ,
+            msg: "Veuillez saisir les zones nécessaires !" ,
         },
         msgDelete:
         {
@@ -833,7 +833,7 @@ export const langFr =
         txtCode : "Code",
         txtName :"Nom",
         cmbType :"Type",
-        validCode :"Vous ne pouvez ne pas saisir le code !",
+        validCode :"Le champ du code ne peut être vide !", //BAK
         cmbTypeData : 
         {
             normal : "Centrale",
@@ -866,7 +866,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessairess !" ,
+            msg: "Veuillez saisir les zones nécessaires !" ,
         },
         msgDelete:
         {
@@ -895,7 +895,7 @@ export const langFr =
         txtCode : "Code",
         txtName :"Nom",
         cmbType :"Type",
-        validCode :"Vous ne pouvez pas laisser le code vide !",
+        validCode :"Le champ du code ne peut être vide !", //BAK
       
         pg_txtCode : 
         {
@@ -934,12 +934,12 @@ export const langFr =
         msgCode : 
         {
             title: "Attention",
-            btn01: "Entrer la carte",
+            btn01: "Aller à la carte", //BAK
             btn02: "OK",
             msg : "Le code de service que vous avez saisi est enregistré dans le système !"
         },
         chkActive: "Actif",
-        cmbTax : "TVA %",
+        cmbTax : "TVA",
         msgNotDelete : 
         {
             title: "Attention", 
@@ -958,13 +958,12 @@ export const langFr =
         txtCode : "Code",
         txtName :"Nom",
         cmbType :"Type",
-        validCode :"Code ne peut être vide !",
+        validCode :"Le champ du code ne peut être vide !", //BAK
         pg_txtCode : 
         {
             title : "Choix Groupe Produit",
             clmCode : "Code",
             clmName : "NOM",
-            clmStatus : "Statut",
         },
         msgSave:
         {
@@ -1008,7 +1007,7 @@ export const langFr =
         txtName :"Nom",  
         txtSymbol : "Symbole",  
         cmbType :"Type",  
-        validCode :"Vous ne pouvez pas valider le code sans le saisir !", 
+        validCode :"Le champ du code ne peut être vide !", 
         pg_txtCode :   
         {  
             title : "Choix de groupe de produits",
@@ -1058,7 +1057,7 @@ export const langFr =
         txtVat :"Valeur d'impôt", 
         txtType : "Type",   
         cmbType :"Type",   
-        validCode :"Vous ne pouvez pas valider le code sans le saisir !",  
+        validCode :"Le champ du code ne peut être vide !",  
         pg_txtCode :    
         {   
             title : "Choix de groupe de produits",  
@@ -1100,7 +1099,7 @@ export const langFr =
             btn02: "OK", 
             msg : "L'ID que vous avez saisi est enregistré dans le système !" 
         },
-        chkActive: "Aktif", 
+        chkActive: "Actif", 
     },
     stk_01_012 : // "Identification des produits liés"
     {
@@ -1121,13 +1120,13 @@ export const langFr =
         },
         popRelatedSelect : 
         {
-            title : "Sélection du stock",
+            title : "Sélection du produit", //BAK
             clmCode : "Code",
             clmName : "Nom",
         },
         popItemSelect : 
         {
-            title : "Sélection du stock",
+            title : "Sélection du produit", //BAK
             clmCode : "Code",
             clmName : "Nom",
         },
@@ -1136,7 +1135,7 @@ export const langFr =
             title : "Attention",
             btn01 : "D'accord",
             btn02 : "Abandonnerz",
-            msg : "Etes-vous sûr de vouloir valider?"
+            msg : "Êtes-vous sûr(e) de vouloir enregistrer ?"
         },
         msgSaveResult :
         {
@@ -1149,14 +1148,14 @@ export const langFr =
         {
             title : "Attention",
             btn01 : "D'accord",
-            msg : "S'il vous plaît saissisez les rubriques nécessaires"
+            msg : "Veuillez saisir les champs nécessaires" //BAK
         },
         msgDelete :
         {
             title : "Attention",
             btn01 : "D'accord",
-            btn02 : "Abandonnerz",
-            msg : "Etes-vous sûr de vouloir surpprimer l'enregistrement?"
+            btn02 : "Abandonner",
+            msg : "Êtes-vous sûr(e) de vouloir supprimer l'enregistrement?"
         },
     },
     stk_01_013 : // "Identification de l'image du produit" 
@@ -1164,7 +1163,7 @@ export const langFr =
         txtRef : "Référence",
         pg_txtRef:
         {
-            title: "Choix du stock",
+            title: "Choix du produit", //BAK
             clmCode: "Code",
             clmName: "Nom",
             clmStatus: "Etat"
@@ -1174,7 +1173,7 @@ export const langFr =
             title: "Attention",
             btn01: "D'accord",
             btn02: "Annuler",
-            msg: "Etes-vous sûr de vouloir enregistrer?"
+            msg: "Êtes-vous sûr(e) de vouloir supprimer l'enregistrement??"
         },
         msgSaveResult:
         {
@@ -1202,7 +1201,7 @@ export const langFr =
         txtCode : "code",
         txtName :"Nom",
         cmbType :"Type",
-        validCode :"Vous devez saisir le code!",
+        validCode :"Le champ du code ne peut être vide !",
         pg_txtCode : 
         {
             title : "Choix de l'enregistrement",
@@ -1214,7 +1213,7 @@ export const langFr =
             title: "Attention",
             btn01: "D'accord",
             btn02: "Abandonner",
-            msg: "Etes-vous sûr de vouloir enregistrer?"
+            msg: "Êtes-vous sûr(e) de vouloir supprimer l'enregistrement??"
         },
         msgSaveResult:
         {
@@ -1227,14 +1226,14 @@ export const langFr =
         {
             title: "Attention",
             btn01: "D'accord",
-            msg: "S'il vous plaît remplissez les parties demandées!"
+            msg: "Veuillez remplir les champs nécessaires !" //BAK
         },
         msgDelete:
         {
             title: "Attention",
             btn01: "D'accord",
             btn02: "Abandonner",
-            msg: "Etes- vous sûr de vouloir supprimer?"
+            msg: "Êtes-vous sûr(e) de vouloir supprimer l'enregistrement ?" //BAK
         },
         msgCode : 
         {
@@ -1259,7 +1258,7 @@ export const langFr =
             clmRef : "Référence",
             clmRefNo : "Numéro",
             clmDocDate : "Date",
-            clmDepotName : "Dépot ou Magasin",
+            clmDepotName : "Dépôt ou Magasin",
             clmQuantity :"Quantité Totale Produit",
             clmTotalLine : "Numéro de Ligne"
         },
@@ -1268,6 +1267,7 @@ export const langFr =
             title : "Sélectionner Produit",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
+            clmPrice : "Prix D'Achat", //BAK ekleme yaptim
         },
         grdItemCount: 
         {
@@ -1285,7 +1285,7 @@ export const langFr =
         },
         popPassword : 
         {
-            title: "Veuillez Saisir MDP Administrateur pour Accès au Document ",
+            title: "Veuillez Saisir MDP Administrateur pour Accéder au Document ",
             Password : "Mot de passe",
             btnApprove : "Valider" ,
         },
@@ -1300,7 +1300,7 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Etes-vous sûr(e) de vouloir Enregistrer!" ,
+            msg: "Êtes-vous sûr(e) de vouloir Enregistrer!" ,
         },
         msgQuantity:
         {
@@ -1320,21 +1320,21 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessairess !",
+            msg: "Veuillez saisir les champs nécessaires !", //BAK
         },
         msgDelete:
         {
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?",
+            msg: "Êtes-vous sûr(e) de vouloir supprimer l'enregistrement ?",
         },
         msgBigQuantity:
         {
             title: "Attention",
-            btn01: "Continue",
+            btn01: "Continuer",
             btn02: "Abandonner",
-            msg: "Chiffre Saisi Supérieur à 1000 Voulez Voulez-vous Continuer ?",
+            msg: "Chiffre saisi Supérieur à 1000 Voulez-vous continuer ?",
         },
         msgLocked:
         {
@@ -1358,31 +1358,31 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrerles Modifications !"
+            msg: "Document Vérouillé !  \n  Veuillez Dévérouiller Pour Enregistrer les Modifications !"
         },
         msgDoclocked:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez EnregistrerSans Dévérouiller !"
+            msg: "Vous ne Pouvez Enregistrer sans Dévérouiller !"
         },
         msgItemNotFound:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Produit Introuvable !!"
+            msg: "Produit Introuvable !"
         },
         msgCombineItem:
         {
             title: "Attention",
-            btn01: "Regroupe",
+            btn01: "Regrouper",
             btn02: "Modifier",
             btn03: "Abandonner",
-            msg: "Produit Existant dans Document ! Voulez-vous Combiner ?"
+            msg: "Produit Existant dans le Document ! Voulez-vous Combiner ?"
         },
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
-        validDepot : "Sélectionner Dépot",
+        validDepot : "Sélectionner Dépôt",
         validCustomerCode : "Le Code Produit ne peut être Vide ",
         validDocDate : "Sélectionner Date" ,
         popDesign : 
@@ -1393,7 +1393,7 @@ export const langFr =
         },
         pg_txtBarcode : 
         {
-            title : "Sélectionner Barre",
+            title : "Sélectionner Code Barre", 
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
             clmMulticode : "Référence Fournisseur",
@@ -1408,8 +1408,8 @@ export const langFr =
     },
     stk_02_002 : //"Depo/Mağaza Arası Sevk"
     {
-        txtRefRefno : "Réf.-Réf no:",
-        cmbOutDepot: "Sortie Dépot",
+        txtRefRefno : "Réf.-Réf no",
+        cmbOutDepot: "Sortie Dépôt",
         cmbInDepot: "Entrée Dépot",
         dtDocDate : "Date",
         txtBarcode : "Ajouter Code Barre",
@@ -1421,7 +1421,7 @@ export const langFr =
             clmRefNo : "Numéro",
             clmDocDate : "Date",
             clmInputName : "Entrée",
-            clmOutputName : "Entrée",
+            clmOutputName : "Sortie",
         },
         pg_txtItemsCode : 
         {
@@ -1440,7 +1440,7 @@ export const langFr =
         },
         popPassword : 
         {
-            title: "Veuillez Saisir MDP Administrateur pour Accès Document ",
+            title: "Veuillez Saisir MDP Administrateur pour accéder au Document ",
             Password : "Mot de passe",
             btnApprove : "Valider"
         },
@@ -1454,40 +1454,40 @@ export const langFr =
         {
             title: "Attention",
             btn01: "Ok",
-            msg: "La quantité de depôt  saisie ne peut être en négatif ! Quantité existante:"
+            msg: "La quantité présent au depôt ne peut être négatif ! Quantité max pouvant être saisie:" //BAK
         },
         msgDblDepot:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Entrée et Sortie Dépot ne Peuvent Etre Identique !"
+            msg: "Entrée et Sortie Dépôt ne peuvent être Identique !"
         },
         msgSave:
         {
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Etes-vous sûr(e) de vouloir Enregistrer!"
+            msg: "Êtes-vous sûr(e) de vouloir Enregistrer!"
         },
         msgSaveResult:
         {
             title: "Attention",
             btn01: "OK",
-            msgSuccess: "Transfert Réussi et Enregistré Avec Succès  . !",
+            msgSuccess: "Transfert Réussi et Enregistré Avec Succès. !",
             msgFailed: "Enregistrement échoué !"
         },
         msgSaveValid:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessairess !"
+            msg: "Veuillez saisir les champs nécessaires !"
         },
         msgDelete:
         {
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
+            msg: "Êtes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
         },
         msgLocked:
         {
@@ -1511,13 +1511,13 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrerles Modifications !"
+            msg: "Document Vérouillé !  \n  Veuillez Dévérouiller Pour Enregistrer les Modifications !"
         },
         msgDoclocked:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez EnregistrerSans Dévérouiller !"
+            msg: "Vous ne Pouvez Enregistrer sans Dévérouiller !"
         },
         msgItemNotFound:
         {
@@ -1528,9 +1528,9 @@ export const langFr =
         msgCombineItem:
         {
             title: "Attention",
-            btn01: "Regroupe",
+            btn01: "Regrouper",
             btn02: "Nouvel Ajout",
-            msg: "Produit Existant dans Document ! Voulez-vous Combiner ?"
+            msg: "Produit Existant dans le Document ! Voulez-vous Combiner ?"
         },
         popDesign : 
         {
@@ -1540,11 +1540,11 @@ export const langFr =
         },
         pg_txtBarcode : 
         {
-            title : "Sélectionner Code-Barres",
+            title : "Sélectionner Code-Barre",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
             clmMulticode : "Référence Fournisseur",
-            clmBarcode : "Code-Barres"
+            clmBarcode : "Code-Barre"
         },
         msgQuantity:
         {
@@ -1557,8 +1557,8 @@ export const langFr =
     },
     stk_02_003 : // "Kayıp Ürün Çıkışı"
     {
-        txtRefRefno : "Réf.-Réf no:",
-        cmbOutDepot: "Sortie Dépot",
+        txtRefRefno : "Réf.-Réf no",
+        cmbOutDepot: "Sortie Dépôt",
         dtDocDate : "Date",
         txtBarcode : "Ajouter Code Barre",
         getDispatch : "Recherche BL",
@@ -1572,7 +1572,7 @@ export const langFr =
             clmRefNo : "Numéro",
             clmDocDate : "Date",
             clmInputName : "Entrée",
-            clmOutputName : "Entrée",
+            clmOutputName : "Sortie",
         },
         pg_txtItemsCode : 
         {
@@ -1592,7 +1592,7 @@ export const langFr =
         },
         pg_dispatchGrid : 
         {
-            title : "Sélectionner Bon De Livraison" ,
+            title : "Sélectionner Bon de Livraison" ,
             clmReferans : "Série - Réferences",
             clmCode : "Code",
             clmName : "Nom",
@@ -1602,7 +1602,7 @@ export const langFr =
         },
         popPassword : 
         {
-            title: "Veuillez Saisir MDP Administrateur pour Accès au Document ",
+            title: "Veuillez Saisir MDP Administrateur pour Accéder au Document ",
             Password : "Mot de passe",
             btnApprove : "Valider"
         },
@@ -1610,13 +1610,13 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrerles Modifications !"
+            msg: "Document Vérouillé !  \n  Veuillez Dévérouiller Pour Enregistrer les Modifications !"
         },
         msgDocLocked:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez EnregistrerSans Dévérouiller !"
+            msg: "Vous ne Pouvez Enregistrer sans Dévérouiller !"
         },
         msgDocValid:
         {
@@ -1635,7 +1635,7 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Etes-vous sûr(e) de vouloir Enregistrer!"
+            msg: "Êtes-vous sûr(e) de vouloir Enregistrer!"
         },
         msgSaveResult:
         {
@@ -1648,14 +1648,14 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessairess !"
+            msg: "Veuillez saisir les champs nécessaires !"
         },
         msgDelete:
         {
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
+            msg: "Êtes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
         },
         msgLocked:
         {
@@ -1679,13 +1679,13 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrerles Modifications !"
+            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrer les Modifications !"
         },
         msgDoclocked:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez EnregistrerSans Dévérouiller !"
+            msg: "Vous ne Pouvez Enregistrer Sans Dévérouiller !"
         },
         msgItemNotFound:
         {
@@ -1696,14 +1696,13 @@ export const langFr =
         msgCombineItem:
         {
             title: "Attention",
-            btn01: "Regroupe",
+            btn01: "Regrouper",
             btn02: "Nouvel Ajout",
-            msg: "Produit Existant dans Document ! Voulez-vous Combiner ?"
+            msg: "Produit Existant dans le Document ! Voulez-vous Combiner ?"
         },
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
-        validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Langue Document" ,
+        validDepot : "Sélectionner Dépôt",
         validDocDate : "Sélectionner Date" ,
         pg_quickDesc : 
         {
@@ -1714,7 +1713,7 @@ export const langFr =
         {
             title : "Ajoute Saisie Rapide" ,
             description : "Nouvelle Saisie" ,
-            btnApprove : "enregistrer"        
+            btnApprove : "Enregistrer"        
         },
         popDesign : 
         {
@@ -1726,11 +1725,11 @@ export const langFr =
         {
             title: "Attention",
             btn01: "Ok",
-            msg: "La quantité de depôt saisie ne peut être en négatif ! Quantité existante:"
+            msg: "La quantité présent au dépôt ne peut être négative ! Quantité existante:"
         },
         pg_txtBarcode : 
         {
-            title : "Sélectionner Barre",
+            title : "Sélectionner Code Barre",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
             clmMulticode : "Référence Fournisseur",
@@ -1753,15 +1752,15 @@ export const langFr =
     },
     stk_02_004 : //"Etiket Bas"
     {
-        txtRefRefno : "Réf.-Réf no:",
+        txtRefRefno : "Réf.-Réf no",
         design : "Design" ,
         txtPage : "Page" ,
         txtFreeLabel : "Champ Vide" ,
         txtLineCount : "Lecture Ligne" ,
         chkLastChange : "Dernière Modification Après Impression" ,
         chkSelectChange :"Dernière Modification Après Date Sélectionnée" ,
-        chkSelectPriceChange :"Modification de Prix Vente Après Date Sélectionnée", 
-        chkPromotionItems : "Produits en promotion",
+        chkSelectPriceChange :"Modification Prix Vente Après Date Sélectionnée", 
+        chkPromotionItems : "Produit en promotion",
         btnLabelCombine : "Regrouper Les Etiquettes Saisies",
         chkGroup : "Groupe" ,
         chkCustomer : "Produits Fournisseur",
@@ -1817,7 +1816,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Modification Effectué Dans Document ! Veuillez Enregistrerou Annuler Les Modifications" 
+            msg: "Modification Effectué Dans le Document ! Veuillez Enregistrer ou Annuler Les Modifications" 
         },
         msgAddItems:
         {
@@ -1844,7 +1843,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessairess!"
+            msg: "Veuillez saisir les champs nécessairess!"
         },
         msgDelete:
         {
@@ -1875,13 +1874,13 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrerles Modifications !"
+            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrer les Modifications !"
         },
         msgDoclocked:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez EnregistrerSans Dévérouiller !"
+            msg: "Vous ne Pouvez Enregistrer Sans Dévérouiller !"
         },
         msgItemNotFound:
         {
@@ -1894,7 +1893,7 @@ export const langFr =
             title: "Attention",
             btn01: "Abandonner",
             btn02: "Nouvel Ajout",
-            msg: "Produit Sélectionné Déjà Existant Dans Document !Voulez -vous Ajouter une Ligne ? "
+            msg: "Produit Sélectionné Déjà Existant Dans le Document !Voulez-vous Ajouter une Ligne ? "
         },
         popWizard : 
         {
@@ -1902,7 +1901,7 @@ export const langFr =
         },
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
-        validDepot : "Sélectionner Dépot",
+        validDepot : "Sélectionner Dépôt",
         validCustomerCode : "Le Code Produit ne peut être Vide ",
         validDocDate : "Sélectionner Date" ,
         popDesign : 
@@ -1923,8 +1922,8 @@ export const langFr =
     stk_02_005 : // "İade Ürünü Toplama"
     {
         txtRefRefno : "Réf.-Réf no:",
-        cmbDepot1: "Sortie Dépot",
-        cmbDepot2: "Retour Dépot",
+        cmbDepot1: "Sortie Dépôt",
+        cmbDepot2: "Retour Dépôt",
         dtDocDate : "Date",
         getRebate :"Retour depuis l'entrepôt sélectionné", 
         txtBarcode : "Ajouter Code Barre",
@@ -1936,7 +1935,7 @@ export const langFr =
             clmRefNo : "Numéro",
             clmDocDate : "Date",
             clmInputName : "Entrée",
-            clmOutputName : "Entrée",
+            clmOutputName : "Sortie",
         },
         pg_txtItemsCode : 
         {
@@ -1955,7 +1954,7 @@ export const langFr =
         },
         popPassword : 
         {
-            title: "Veuillez Saisir MDP Administrateur pour Accès au Document ",
+            title: "Veuillez Saisir MDP Administrateur pour Accéder au Document ",
             Password : "Mot de passe",
             btnApprove : "Valider"
         },
@@ -1983,7 +1982,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones concernées !"
+            msg: "Veuillez saisir les champs nécessaires !"
         },
         msgDelete:
         {
@@ -2014,13 +2013,13 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrerles Modifications !"
+            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrer les Modifications !"
         },
         msgDoclocked:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez EnregistrerSans Dévérouiller !"
+            msg: "Vous ne Pouvez Enregistrer Sans Dévérouiller !"
         },
         msgItemNotFound:
         {
@@ -2050,7 +2049,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "Ok",
-            msg: "La quantité de depôt  saisie ne peut être en négatif ! Quantité existant:"
+            msg: "La quantité présent au depôt ne peut être négative ! Quantité existant:"
         },
         pg_txtBarcode : 
         {
@@ -2075,6 +2074,10 @@ export const langFr =
         },
         txtQuantity :"Quantité",
     },
+
+
+
+
     stk_02_007 : // "SKT Girişi", 
     {
         design : "Design",
@@ -2141,7 +2144,7 @@ export const langFr =
             title: "Attention",
             btn01: "Ok",
             btn02: "Abandonner",
-            msg: "Êtes-vous sûr de vouloir enregistrer? "
+            msg: "Êtes-vous sûr(e) de vouloir enregistrer? "
         },
         msgSaveResult:
         {
