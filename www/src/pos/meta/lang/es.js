@@ -833,5 +833,9 @@ export const langEs =
         title : "Atención",
         msg : "¡ID del dispositivo no coincide! Por favor, contacte a piqsoft.",
         btn01 : "Aceptar"
+    },
+    itemInfo:
+    {
+        msgSplash: "POR FAVOR, ESCANEE EL CÓDIGO DE BARRAS"
     }
 }
