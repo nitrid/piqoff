@@ -55,9 +55,9 @@ export default class itemInfoScreen extends React.PureComponent
                                 </div>
                             </div>
                             <div className="col-8" style={{color:"white"}}>
-                                <div className="row g-0" style={{height:"30%"}}>
+                                <div className="row g-0 px-2" style={{height:"30%"}}>
                                     <div className="col-12">
-                                        <h1 class="text-center" style={{letterSpacing:"10px"}}>LAVETTE MICROFIBRE MULTI-USAGES 30X30CM LOT DE 2 - 1GREGE + 1 BLEU NEPTUNE</h1>
+                                        <h1 className="text-center" style={{letterSpacing:"10px"}}>LAVETTE MICROFIBRE MULTI-USAGES 30X30CM</h1>
                                     </div>
                                 </div>
                             </div>
