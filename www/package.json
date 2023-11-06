@@ -45,6 +45,7 @@
     "html-webpack-plugin": "5.5.0",
     "i18next": "21.6.16",
     "is-proxy": "1.0.6",
+    "jsbarcode": "^3.11.5",
     "jspdf": "2.5.1",
     "jspdf-barcode": "0.0.12",
     "jsrsasign": "10.6.1",
