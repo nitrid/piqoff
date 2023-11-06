@@ -1225,8 +1225,20 @@ export default class purchaseDispatch extends DocBase
                                         </Validator> 
                                     </NdSelectBox>
                                 </Item>
-                                {/* Boş */}
-                                <EmptyItem />
+                                {/* DOC_NO */}
+                                <Item>
+                                    <Label text={this.t("txtDocNo")} alignment="right" />
+                                    <NdTextBox id="txtDocNo" parent={this} simple={true}  
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                    dt={{data:this.docObj.dt('DOC'),field:"DOC_NO"}} 
+                                    readOnly={false}
+                                    onFocusOut={()=>
+                                    {
+                                        this.checkDocNo(this.txtDocNo.value)
+                                    }}
+                                    >
+                                    </NdTextBox>
+                                </Item>
                                 {/* txtCustomerCode */}
                                 <Item>
                                     <Label text={this.t("txtCustomerCode")} alignment="right" />

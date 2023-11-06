@@ -1425,6 +1425,7 @@ export default class DocBase extends React.PureComponent
                         <Column dataField="ITEM_CODE" caption={this.t("pg_dispatchGrid.clmCode")} width={200}/>
                         <Column dataField="ITEM_NAME" caption={this.t("pg_dispatchGrid.clmName")} width={450} />
                         <Column dataField="QUANTITY" caption={this.t("pg_dispatchGrid.clmQuantity")} width={200} />
+                        <Column dataField="DOC_NO" caption={this.t("pg_dispatchGrid.clmDocNo")} width={200} />
                         <Column dataField="PRICE" caption={this.t("pg_dispatchGrid.clmPrice")} width={200} format={{ style: "currency", currency: "EUR",precision: 3}}/>
                         <Column dataField="TOTAL" caption={this.t("pg_dispatchGrid.clmTotal")} width={200} format={{ style: "currency", currency: "EUR",precision: 3}}/>
                     </NdPopGrid>
@@ -2318,6 +2319,7 @@ export default class DocBase extends React.PureComponent
                         <Paging defaultPageSize={22} />
                         <Column dataField="REFERANS" caption={this.t("pg_ordersGrid.clmReferans")} width={200} defaultSortOrder="asc"/>
                         <Column dataField="ITEM_CODE" caption={this.t("pg_ordersGrid.clmCode")} width={200}/>
+                        <Column dataField="DOC_DATE" caption={this.t("pg_ordersGrid.clmDate")} width={200} dataType={"datetime"} format={"dd-MM-yyyy"} defaultSortOrder="desc"/>
                         <Column dataField="ITEM_NAME" caption={this.t("pg_ordersGrid.clmName")} width={500} />
                         <Column dataField="QUANTITY" caption={this.t("pg_ordersGrid.clmQuantity")} width={200} />
                         <Column dataField="PRICE" caption={this.t("pg_ordersGrid.clmPrice")} width={200} format={{ style: "currency", currency: "EUR",precision: 2}} />

@@ -4050,6 +4050,8 @@ export const langFr =
             clmPrice : "Prix ",
             clmTotal : "Total" ,
             clmDate : "Date",
+            clmDate : "Numéro de Document",
+            
         },
         grdPurcInv: 
         {
@@ -4438,7 +4440,8 @@ export const langFr =
             clmQuantity : "Quantité",  
             clmTotal : "Total",  
             clmPrice : "Prix",  
-            clmlineNo : "No"
+            clmlineNo : "No",
+            clmDate : "Date",
         },
         cmbPayType : {
             title : "Mode de paiement",   
@@ -4652,6 +4655,8 @@ export const langFr =
             clmPrice : "Prix ",
             clmTotal : "Total",
             clmDate : "Date",
+            clmDocNo : "N° de Document",
+
         },
         grdSlsInv: 
         {
@@ -4971,7 +4976,8 @@ export const langFr =
             clmQuantity : "Quantité",  
             clmTotal : "Total",  
             clmPrice : "Prix",  
-            clmlineNo : "No"
+            clmlineNo : "No",
+            clmDate : "Date"
         },
         cmbPayType : {
             title : "Mode de paiement",   
@@ -5201,6 +5207,8 @@ export const langFr =
             clmPrice : "Prix ",
             clmTotal : "Total",
             clmDate : "Date",
+            clmDocNo : "N° de Document",
+        
         },
         grdRebtInv: 
         {
@@ -6136,6 +6144,8 @@ export const langFr =
             clmPrice : "Prix ",
             clmTotal : "Total",
             clmDate : "Date",
+            clmDocNo : "N° de Document",
+
         },
         grdSlsInv: 
         {
@@ -7084,6 +7094,7 @@ export const langFr =
             clmPrice : "Prix ",
             clmTotal : "Total" ,
             clmDate : "Date",
+            clmDocNo : "N° de Document",
         },
         grdRebtInv: 
         {
@@ -12686,6 +12697,18 @@ export const langFr =
             clmOutputName : "Nom Fournisseur",
             clmOutputCode  : "Code Client",
             clmTotal : "Total TTC"
+        },
+        pg_dispatchGrid : 
+        {
+            title : "Sélectionner Bon De Livraison" ,
+            clmReferans : "Références",
+            clmCode : "Code",
+            clmName : "Nom",
+            clmQuantity : "Quantité",
+            clmPrice : "Prix ",
+            clmTotal : "Total" ,
+            clmDate : "Date",
+            clmDocNo : "N° de Document",
         },
         pg_txtCustomerCode : 
         {
