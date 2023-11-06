@@ -701,7 +701,6 @@ export default class DocBase extends React.PureComponent
                 tmpDocItems.DISCOUNT_RATE = data[i].DISCOUNT_RATE
                 tmpDocItems.OFFER_LINE_GUID = data[i].GUID
                 tmpDocItems.OFFER_DOC_GUID = data[i].DOC_GUID
-                tmpDocItems.VAT_RATE = data[i].VAT_RATE
                 tmpDocItems.OLD_VAT = data[i].VAT_RATE
 
                 await this.docObj.docItems.addEmpty(tmpDocItems)
@@ -1966,7 +1965,7 @@ export default class DocBase extends React.PureComponent
                                                 for (let i = 0; i < this.docDetailObj.dt().length; i++) 
                                                 {
                                                     this.docDetailObj.dt()[i].VAT = 0  
-                                                    this.docDetailObj.dt()[i].VAT_RATE = 0
+                                                    this.docDetailObj.dt()[i].VAT_RATE = 0  
                                                     this.docDetailObj.dt()[i].TOTAL = (this.docDetailObj.dt()[i].PRICE * this.docDetailObj.dt()[i].QUANTITY) - (this.docDetailObj.dt()[i].DISCOUNT + this.docDetailObj.dt()[i].DOC_DISCOUNT)
                                                     this.calculateTotal()
                                                 }
@@ -1979,6 +1978,45 @@ export default class DocBase extends React.PureComponent
                                         onClick={()=>
                                         {
                                             this.popVatRate.hide();  
+                                        }}/>
+                                    </div>
+                                </div>
+                            </Item>
+                            <Item>
+                                <div className='row'>
+                                    <div className='col-6'>
+                                        <NdButton text={this.lang.t("btnVatReCalculate")} type="normal" stylingMode="contained" width={'100%'} 
+                                        onClick={async ()=>
+                                        {       
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgVatCalculate',showTitle:true,title:this.lang.t("msgVatCalculate.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.lang.t("msgVatCalculate.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgVatCalculate.btn02"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgVatCalculate.msg")}</div>)
+                                            }
+                                            
+                                            let pResult = await dialog(tmpConfObj);
+                                            if(pResult == 'btn01')
+                                            {
+                                                for (let i = 0; i < this.docDetailObj.dt().length; i++) 
+                                                {
+                                                    let tmpQuery = 
+                                                    {
+                                                        query : "SELECT VAT FROM ITEMS_VW_01 WHERE GUID = @ITEM", 
+                                                        param : ['ITEM:string|50'],
+                                                        value : [this.docDetailObj.dt()[i].ITEM]
+                                                    }
+                                                    let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                    if(typeof tmpData.result.recordset.length != 'undefined')
+                                                    {
+                                                        this.docDetailObj.dt()[i].VAT_RATE = tmpData.result.recordset[0].VAT
+                                                    }
+                                                    this.docDetailObj.dt()[i].VAT = parseFloat(((this.docDetailObj.dt()[i].TOTALHT - this.docDetailObj.dt()[i].DOC_DISCOUNT) * (this.docDetailObj.dt()[i].VAT_RATE / 100)).toFixed(6))
+                                                    this.docDetailObj.dt()[i].TOTAL = ((this.docDetailObj.dt()[i].PRICE * this.docDetailObj.dt()[i].QUANTITY) - (this.docDetailObj.dt()[i].DISCOUNT + this.docDetailObj.dt()[i].DOC_DISCOUNT)) + this.docDetailObj.dt()[i].VAT
+                                                    this.calculateTotal()
+                                                }
+                                                this.popVatRate.hide()
+                                            }
                                         }}/>
                                     </div>
                                 </div>

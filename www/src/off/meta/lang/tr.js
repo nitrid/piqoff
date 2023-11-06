@@ -130,6 +130,14 @@ export const langTr =
         clmTotalHt : "Tutar",
     },
     btnVatToZero : "Vergiyi Sıfırla",
+    btnVatReCalculate : "Vergiyi Hesapla",
+    msgVatCalculate :
+    {
+        title : "Dikkat",
+        msg : "Vergiyi yeniden hesaplamak istediğinize eminmisiniz ",
+        btn01 : "Tamam",
+        btn01 : "İptal",
+    },
     menuOff:
     {
         stk: "Ürün",                
