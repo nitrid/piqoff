@@ -4063,6 +4063,7 @@ export const langTr =
             clmPrice : "Fiyat",
             clmTotal : "Tutar",
             clmDate : "Tarih",
+            clmDocNo : "Belgo No",
         },
         grdPurcInv: 
         {
@@ -4451,7 +4452,8 @@ export const langTr =
             clmQuantity : "Adet",
             clmTotal : "Tutar",
             clmPrice : "Fiyat",
-            clmlineNo : "No"
+            clmlineNo : "No",
+            clmDate : "Tarih",
         },
         cmbPayType : {
             title : "Ödeme Tipi",
@@ -4664,6 +4666,7 @@ export const langTr =
             clmPrice : "Fiyat",
             clmTotal : "Tutar",
             clmDate : "Tarih",
+            clmDocNo : "Belge No"
         },
         grdSlsInv: 
         {
@@ -4978,7 +4981,8 @@ export const langTr =
             clmQuantity : "Adet",
             clmTotal : "Tutar",
             clmPrice : "Fiyat",
-            clmlineNo : "No"
+            clmlineNo : "No",
+            clmlDate : "Tarih"
         },
         cmbPayType : {
             title : "Ödeme Tipi",
@@ -5208,6 +5212,7 @@ export const langTr =
             clmPrice : "Fiyat",
             clmTotal : "Tutar",
             clmDate : "Tarih",
+            clmDocNo : "Belge No"
         },
         grdRebtInv: 
         {
@@ -6129,6 +6134,7 @@ export const langTr =
             clmPrice : "Fiyat",
             clmTotal : "Tutar",
             clmDate : "Tarih",
+            clmDocNo : "Belge No"
         },
         grdSlsInv: 
         {
@@ -7075,6 +7081,7 @@ export const langTr =
             clmPrice : "Fiyat",
             clmTotal : "Tutar",
             clmDate : "Tarih",
+            clmDocNo : "Belge No"
         },
         grdRebtInv: 
         {
@@ -12734,6 +12741,18 @@ export const langTr =
             clmCode :  "ÜRÜN KODU",
             clmName : "ÜRÜN ADI",
             clmQuantity :"MİKTAR"
+        },
+        pg_dispatchGrid : 
+        {
+            title : "İrsaliye Seçimi",
+            clmReferans : "Seri - Sıra",
+            clmCode : "Kodu",
+            clmName : "Adı",
+            clmQuantity : "Adet",
+            clmPrice : "Fiyat",
+            clmTotal : "Tutar",
+            clmDate : "Tarih",
+            clmDocNo : "Belge No",
         },
         grdRebtDispatch: 
         {

@@ -4431,6 +4431,7 @@ export const langDe =
             clmQuantity : "Menge",
             clmTotal : "Gesamtsumme",
             clmPrice : "Preis",
+            clmlDate : "Datum"
         },
         cmbPayType : {
             title : "Zahlungsmethode",
@@ -4642,6 +4643,7 @@ export const langDe =
             clmPrice : "Preis",
             clmTotal : "Betrag",
             clmDate : "Datum",
+            clmDocNo: "Dokumentnummer"
         },
         grdSlsInv: 
         {
@@ -4956,6 +4958,7 @@ export const langDe =
             clmQuantity: "Menge",
             clmTotal: "Gesamtbetrag",
             clmPrice: "Preis",
+            clmlDate : "Datum"
         },
         cmbPayType: {
             title: "Zahlungsart",
@@ -5184,6 +5187,7 @@ export const langDe =
             clmPrice : "Preis",
             clmTotal : "Betrag",
             clmDate : "Datum",
+            clmDocNo: "Dokumentnummer"
         },
         grdRebtInv:
         {
@@ -6103,6 +6107,7 @@ export const langDe =
             clmPrice : "Preis",
             clmTotal : "Betrag",
             clmDate : "Datum",
+            clmDocNo: "Dokumentnummer"
         },
         grdSlsInv: 
         {
@@ -7045,6 +7050,7 @@ export const langDe =
             clmPrice : "Preis",
             clmTotal : "Betrag",
             clmDate : "Datum",
+            clmDocNo: "Dokumentnummer"
         },
         grdRebtInv: 
         {
@@ -12636,6 +12642,18 @@ export const langDe =
             clmName: "ARTIKELNAME",
             clmMulticode : "MULTICODE",
             clmPrice: "VERKAUFSPREIS",
+        },
+        pg_dispatchGrid : 
+        {
+            title : "Lieferscheinauswahl",
+            clmReferans : "Seriennummer-Folge",
+            clmCode : "Code",
+            clmName : "Name",
+            clmQuantity : "Menge",
+            clmPrice : "Preis",
+            clmTotal : "Betrag",
+            clmDate : "Datum",
+            clmDocNo: "Dokumentnummer"
         },
         pg_RebateGrid: 
         {
