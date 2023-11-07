@@ -71,7 +71,8 @@ export default class purchaseDispatch extends DocBase
                 {
                     select:
                     {
-                        query : "SELECT GUID,CODE,NAME,VAT,COST_PRICE,UNIT,STATUS,ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE DELETED = 0 AND ITEM_BARCODE.ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
+                        query : "SELECT GUID,CODE,NAME,VAT,COST_PRICE,UNIT,STATUS, ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_01.GUID AND ITEM_MULTICODE.CUSTOMER = '"+this.docObj.dt()[0].OUTPUT+"' AND DELETED = 0 ORDER BY LDATE DESC),'') AS MULTICODE, "+
+                        "ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE DELETED = 0 AND ITEM_BARCODE.ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
                         param : ['VAL:string|50']
                     },
                     sql:this.core.sql
@@ -1614,6 +1615,7 @@ export default class purchaseDispatch extends DocBase
                                      validationGroup={"frmPurcDispatch"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
+                                        console.log(2)
                                         if(e.validationGroup.validate().status == "valid")
                                         {
                                             await this.popMultiItem.show()

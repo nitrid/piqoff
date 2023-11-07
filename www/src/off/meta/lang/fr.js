@@ -11942,6 +11942,18 @@ export const langFr =
             clmName : "Nom Produit",
             clmQuantity :"Quantité "
         },
+        pg_dispatchGrid :
+        {
+            title : "Sélection du Bon de Livraison",
+            clmReferans : "Série - Numéro",
+            clmCode : "Code",
+            clmName : "Nom",
+            clmQuantity : "Quantité",
+            clmPrice : "Prix",
+            clmTotal : "Montant",
+            clmDate : "Date",
+            clmDocNo : "Numéro de Document"
+        },
         grdRebtDispatch: 
         {
             clmItemCode: "Code",
