@@ -11959,6 +11959,18 @@ export const langTr =
             clmName : "ÜRÜN ADI",
             clmQuantity :"MİKTAR"
         },
+        pg_dispatchGrid : 
+        {
+            title : "İrsaliye Seçimi",
+            clmReferans : "Seri - Sıra",
+            clmCode : "Kodu",
+            clmName : "Adı",
+            clmQuantity : "Adet",
+            clmPrice : "Fiyat",
+            clmTotal : "Tutar",
+            clmDate : "Tarih",
+            clmDocNo : "Belge No"
+        },
         grdRebtDispatch: 
         {
             clmItemCode: "Kodu",

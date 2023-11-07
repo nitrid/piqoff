@@ -833,5 +833,9 @@ export const langTr =
         title : "Dikkat",
         msg : "Cihaz id uyumsuz ! Lütfen piqsoft ile iletişim kurunuz.",
         btn01 : "Tamam"
+    },
+    itemInfo:
+    {
+        msgSplash : "LÜTFEN BARKOD OKUTUNUZ"
     }
 }
