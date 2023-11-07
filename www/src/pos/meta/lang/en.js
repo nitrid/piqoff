@@ -832,5 +832,9 @@ export const langEn =
         title : "Attention",
         msg : "Device ID mismatch! Please contact piqsoft.",
         btn01 : "OK"
+    },
+    itemInfo:
+    {
+        msgSplash: "PLEASE SCAN THE BARCODE"
     }
 }
