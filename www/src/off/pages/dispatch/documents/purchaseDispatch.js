@@ -1556,6 +1556,7 @@ export default class purchaseDispatch extends DocBase
                                     validationGroup={"frmPurcDispatch"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
+                                        console.log(1)
                                         if(e.validationGroup.validate().status == "valid")
                                         {
                                             
