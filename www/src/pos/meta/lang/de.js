@@ -832,5 +832,9 @@ export const langDe =
         title : "Achtung",
         msg : "Geräte-ID stimmt nicht überein! Bitte kontaktieren Sie piqsoft.",
         btn01 : "OK"
+    },
+    itemInfo:
+    {
+        msgSplash: "BITTE DEN BARCODE SCANNEN"
     }
 }

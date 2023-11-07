@@ -834,5 +834,9 @@ export const langFr =
         title : "Attention",
         msg : "ID du périphérique non compatible ! Veuillez contacter piqsoft.",
         btn01 : "OK"
+    },
+    itemInfo:
+    {
+        msgSplash: "VEUILLEZ SCANNER LE CODE BARRE"
     }
 }

@@ -834,5 +834,9 @@ export const langIt =
         title : "Attenzione",
         msg : "ID del dispositivo non corrisponde! Si prega di contattare piqsoft.",
         btn01 : "OK"
+    },
+    itemInfo:
+    {
+        msgSplash: "PER FAVORE SCANSIONA IL CODICE A BARRE"
     }
 }
