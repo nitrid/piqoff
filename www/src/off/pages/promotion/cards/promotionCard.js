@@ -895,7 +895,9 @@ export default class promotionCard extends React.PureComponent
                                             <NdTextBox id={"txtDiscAmount" + pItem.WITHAL} parent={this} simple={true}
                                             onValueChanged={async(e)=>
                                             { 
-                                                if(Number(100 - Number(this.state.discPrice).rate2Num(e.value,2)) >= 0 && Number(100 - Number(this.state.discPrice).rate2Num(e.value,2)) <= 100)
+                                                console.log(Number((e.value.toFixed(3))))
+                                                console.log(this.state.discPrice)
+                                                if(Number(100 - Number(this.state.discPrice).rate2Num(Number(e.value),2)) >= 0 && Number(100 - Number(this.state.discPrice).rate2Num(Number(e.value),2)) <= 100)
                                                 {
                                                     this["txtDiscRate" + pItem.WITHAL].value = Number(100 - Number(this.state.discPrice).rate2Num(e.value,2)).toFixed(2)
                                                 }

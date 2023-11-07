@@ -130,6 +130,14 @@ export const langFr =
         clmTotalHt : "Montant total", 
     },
     btnVatToZero : "Mettre à Zéro la TVA",
+    btnVatReCalculate : "Vergiyi Hesapla", // BAK
+    msgVatCalculate :
+    {
+        title : "Dikkat", // BAK
+        msg : "Vergiyi yeniden hesaplamak istediğinize eminmisiniz ", // BAK
+        btn01 : "Tamam", // BAK
+        btn02 : "İptal", // BAK
+    },
     menuOff:
     {
         stk: "Produit",                

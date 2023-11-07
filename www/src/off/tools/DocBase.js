@@ -251,6 +251,7 @@ export default class DocBase extends React.PureComponent
             else
             {
                 this.docLocked = false
+                this.frmDocItems.option('disabled',false)
             }
             resolve()
         })
@@ -1921,7 +1922,7 @@ export default class DocBase extends React.PureComponent
                     title={this.lang.t("popVatRate.title")}
                     container={"#root"} 
                     width={'500'}
-                    height={'250'}
+                    height={'300'}
                     position={{of:'#root'}}
                     deferRendering={true}
                     >

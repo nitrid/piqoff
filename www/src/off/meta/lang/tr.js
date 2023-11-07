@@ -136,7 +136,7 @@ export const langTr =
         title : "Dikkat",
         msg : "Vergiyi yeniden hesaplamak istediğinize eminmisiniz ",
         btn01 : "Tamam",
-        btn01 : "İptal",
+        btn02 : "İptal",
     },
     menuOff:
     {
