@@ -330,7 +330,7 @@ export default class posDoc extends React.PureComponent
             this.lblTime.value = moment(new Date(),"HH:mm:ss").format("HH:mm:ss")
             this.lblDate.value = new Date().toLocaleDateString('tr-TR',{ year: 'numeric', month: 'numeric', day: 'numeric' })
         },1000)
-
+        
         this.posObj.clearAll()        
 
         await this.prmObj.load({APP:'POS'})
@@ -1332,7 +1332,7 @@ export default class posDoc extends React.PureComponent
             })
             //********************************************* */
             if(typeof pSave == 'undefined' || pSave)
-            {                
+            {
                 let tmpClose = await this.saleClosed(true,tmpPayRest,tmpPayChange)
                 let tmpSaveResult = await this.posObj.save()
                 if(tmpSaveResult == 0)
@@ -3303,6 +3303,14 @@ export default class posDoc extends React.PureComponent
             }
         });
     }
+    isUnitDecimal(pUnit)
+    {
+        if(pUnit.toLowerCase() == 'kg' || pUnit.toLowerCase() == 'm')
+        {
+            return true
+        }
+        return false
+    }
     render()
     {
         return(
@@ -3703,7 +3711,7 @@ export default class posDoc extends React.PureComponent
                                     }}
                                     alignment={"center"} cssClass={"cell-fontsize"}/>                                    
                                     <Column dataField="ITEM_SNAME" caption={this.lang.t("grdList.ITEM_NAME")} width={220} cssClass={"cell-fontsize"}/>
-                                    <Column dataField="QUANTITY" caption={this.lang.t("grdList.QUANTITY")} width={80} cellRender={(e)=>{return (e.data.SCALE_MANUEL == true ? "M-" : "") + (e.data.UNIT_SHORT.toLowerCase() == 'kg' ? Number(e.value / e.data.UNIT_FACTOR).toFixed(3) : Number(e.value / e.data.UNIT_FACTOR).toFixed(0)) + e.data.UNIT_SHORT}} format={"#,##0.000" } cssClass={"cell-fontsize"}/>
+                                    <Column dataField="QUANTITY" caption={this.lang.t("grdList.QUANTITY")} width={80} cellRender={(e)=>{return (e.data.SCALE_MANUEL == true ? "M-" : "") + (this.isUnitDecimal(e.data.UNIT_SHORT) ? Number(e.value / e.data.UNIT_FACTOR).toFixed(3) : Number(e.value / e.data.UNIT_FACTOR).toFixed(0)) + e.data.UNIT_SHORT}} format={"#,##0.000" } cssClass={"cell-fontsize"}/>
                                     <Column dataField="PRICE" caption={this.lang.t("grdList.PRICE")} width={80} cellRender={(e)=>{return Number(e.value * e.data.UNIT_FACTOR).toFixed(2) + Number.money.sign + '/' + e.data.UNIT_SHORT}} cssClass={"cell-fontsize"}/>
                                     <Column dataField="AMOUNT" alignment={"right"} caption={this.lang.t("grdList.AMOUNT")} width={60} format={"#,##0.00" + Number.money.sign} cssClass={"cell-fontsize"}/>                                                
                                 </NdGrid>
@@ -5202,7 +5210,7 @@ export default class posDoc extends React.PureComponent
                     {
                         select:
                         {
-                            query : "SELECT GUID,CUSTOMER_TYPE,CODE,TITLE,ADRESS,ZIPCODE,CITY,COUNTRY_NAME,CUSTOMER_POINT,POINT_PASSIVE, " +
+                            query : "SELECT GUID,CUSTOMER_TYPE,CODE,TITLE,ADRESS,ZIPCODE,CITY,COUNTRY_NAME,CUSTOMER_POINT,POINT_PASSIVE,EMAIL, " +
                                     "ISNULL((SELECT COUNT(TYPE) FROM CUSTOMER_POINT WHERE TYPE = 0 AND CUSTOMER = CUSTOMER_VW_02.GUID AND CONVERT(DATE,LDATE) = CONVERT(DATE,GETDATE())),0) AS POINT_COUNT " + 
                                     "FROM [dbo].[CUSTOMER_VW_02] WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)",
                             param : ['VAL:string|50'],
@@ -7751,7 +7759,7 @@ export default class posDoc extends React.PureComponent
                                     }}
                                     alignment={"center"}/>                                    
                                     <Column dataField="ITEM_SNAME" caption={this.lang.t("grdList.ITEM_NAME")} width={390}/>
-                                    <Column dataField="QUANTITY" caption={this.lang.t("grdList.QUANTITY")} cellRender={(e)=>{return (e.data.SCALE_MANUEL == true ? "M-" : "") + (e.data.UNIT_SHORT.toLowerCase() == 'kg' ? Number(e.value / e.data.UNIT_FACTOR).round(2) : Number(e.value / e.data.UNIT_FACTOR).round(0)) + e.data.UNIT_SHORT}} width={100}/>
+                                    <Column dataField="QUANTITY" caption={this.lang.t("grdList.QUANTITY")} cellRender={(e)=>{return (e.data.SCALE_MANUEL == true ? "M-" : "") + (this.isUnitDecimal(e.data.UNIT_SHORT) ? Number(e.value / e.data.UNIT_FACTOR).toFixed(3) : Number(e.value / e.data.UNIT_FACTOR).toFixed(0)) + e.data.UNIT_SHORT}} width={100}/>
                                     <Column dataField="DISCPRICE" caption={this.lang.t("grdList.DISCOUNT")} width={100} format={"#,##0.00" + Number.money.sign}/>
                                     <Column dataField="PRICE" caption={this.lang.t("grdList.PRICE")} cellRender={(e)=>{return Number(e.value * e.data.UNIT_FACTOR).round(2) + Number.money.sign + '/' + e.data.UNIT_SHORT}} width={70} format={"#,##0.00" + Number.money.sign}/>
                                     <Column dataField="TOTAL" alignment={"right"} caption={this.lang.t("grdList.AMOUNT")} width={60} format={"#,##0.00" + Number.money.sign}/>                                                

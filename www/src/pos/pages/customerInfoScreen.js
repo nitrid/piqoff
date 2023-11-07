@@ -18,6 +18,7 @@ export default class customerInfoScreen extends React.PureComponent
         this.lang = App.instance.lang;
         this.prmObj = new param(prm)
         this.state = {digit : false}
+
         // NUMBER İÇİN PARAMETREDEN PARA SEMBOLÜ ATANIYOR.
         Number.money = this.prmObj.filter({ID:'MoneySymbol',TYPE:0}).getValue()
 
@@ -32,7 +33,6 @@ export default class customerInfoScreen extends React.PureComponent
         {
             App.instance.electron.ipcRenderer.on('receive', async(event, data) => 
             {
-                console.log(data.tag)
                 if(typeof data.data != "undefined")
                 {
                     this.txtCustomer.value = data.data.posObj[0].CUSTOMER_NAME.toString().substring(0,45)
@@ -66,6 +66,14 @@ export default class customerInfoScreen extends React.PureComponent
             pixelSize: 4, // size of each pixel
             pixelColor: "#000", // color of the pixel
         });
+    }
+    isUnitDecimal(pUnit)
+    {
+        if(pUnit.toLowerCase() == 'kg' || pUnit.toLowerCase() == 'm')
+        {
+            return true
+        }
+        return false
     }
     render()
     {
@@ -139,7 +147,7 @@ export default class customerInfoScreen extends React.PureComponent
                             <Paging defaultPageSize={6} />
                             <Column dataField="LDATE" caption={this.lang.t("grdList.LDATE")} width={40} alignment={"center"} dataType={"datetime"} format={"dd-MM-yyyy - HH:mm:ss SSSZ"} defaultSortOrder="desc" visible={false} cssClass={"lcd-cell-fontsize"}/>
                             <Column dataField="ITEM_SNAME" caption={this.lang.t("grdList.ITEM_NAME")} width={"50%"} cssClass={"lcd-cell-fontsize"}/>
-                            <Column dataField="QUANTITY" caption={this.lang.t("grdList.QUANTITY")} width={"15%"} cellRender={(e)=>{return (e.data.SCALE_MANUEL == true ? "M-" : "") + (e.data.UNIT_SHORT.toLowerCase() == 'kg' ? Number(e.value / e.data.UNIT_FACTOR).round(3).toFixed(3) : Number(e.value / e.data.UNIT_FACTOR).round(0)) + e.data.UNIT_SHORT}} format={"#,##0.000" } cssClass={"lcd-cell-fontsize"}/>
+                            <Column dataField="QUANTITY" caption={this.lang.t("grdList.QUANTITY")} width={"15%"} cellRender={(e)=>{return (e.data.SCALE_MANUEL == true ? "M-" : "") + (this.isUnitDecimal(e.data.UNIT_SHORT) ? Number(e.value / e.data.UNIT_FACTOR).round(3).toFixed(3) : Number(e.value / e.data.UNIT_FACTOR).round(0)) + e.data.UNIT_SHORT}} format={"#,##0.000" } cssClass={"lcd-cell-fontsize"}/>
                             <Column dataField="PRICE" caption={this.lang.t("grdList.PRICE")} width={"15%"} cssClass={"lcd-cell-fontsize"}
                             cellRender={(e)=>
                             {
