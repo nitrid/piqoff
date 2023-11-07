@@ -124,6 +124,14 @@ export const langDe =
     clmTotalHt: "Gesamtbetrag",
     },
     btnVatToZero: "Steuern auf Null setzen!",
+    btnVatReCalculate : "Vergiyi Hesapla", // BAK
+    msgVatCalculate :
+    {
+        title : "Dikkat", // BAK
+        msg : "Vergiyi yeniden hesaplamak istediğinize eminmisiniz ", // BAK
+        btn01 : "Tamam", // BAK
+        btn02 : "İptal", // BAK
+    },
     menuOff:
     {
         stk: "Artikel",

@@ -2428,9 +2428,9 @@ export default class purchaseInvoice extends DocBase
                                                                 {
                                                                     let tmpQuery = 
                                                                     {
-                                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = 40),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG)WHERE DIFF_PRICE > 0 ORDER BY LINE_NO " ,
-                                                                        param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
-                                                                        value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
+                                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = 40),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,'FR')WHERE DIFF_PRICE > 0 ORDER BY LINE_NO " ,
+                                                                        param:  ['DOC_GUID:string|50'],
+                                                                        value:  [this.docObj.dt()[0].GUID,]
                                                                     }
                                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
                                                                     this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
