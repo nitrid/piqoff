@@ -613,6 +613,14 @@ export const langIt =
         msg2: "!! PER FAVORE, CONTROLLA GLI ULTIMI PRODOTTI SCANSIONATI !!",
         btn01: "Ok"
     },
+    msgDataTransferAlert: //BAK
+    {
+        title : "Dikkat",
+        msg1 : "Aktarmanız gereken {0} adet kayıt mevcut ! Şimdi verileri aktarın.",
+        msg2 : "Aktarım işlemi başarılı.",
+        msg3 : "Aktarım işlemi başarısız.Tüm işlemler yeniden başlatılıyor.",
+        btn01 : "Tamam"
+    },
     msgNotWeighing: 
     {
         title: "Attenzione",
@@ -793,12 +801,6 @@ export const langIt =
         payCardPort : "Porta Carta di Pagamento",
         printDesing : "Design di Stampa",
         scannerPort : "Scanner port"
-    },
-    msgConnectOut: 
-    {
-        title : "Attenzione",
-        msg : "La connessione al server è stata interrotta...",
-        btn01 : "Ok"
     },
     msgNotBarcodeWeighing: 
     {
