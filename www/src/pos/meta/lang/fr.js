@@ -613,6 +613,14 @@ export const langFr =
         msg2 : "!!!! Veuillez vérifier les derniers articles scannés !!!!",
         btn01 : "OK"
     },
+    msgDataTransferAlert: //BAK
+    {
+        title : "Dikkat",
+        msg1 : "Aktarmanız gereken {0} adet kayıt mevcut ! Şimdi verileri aktarın.",
+        msg2 : "Aktarım işlemi başarılı.",
+        msg3 : "Aktarım işlemi başarısız.Tüm işlemler yeniden başlatılıyor.",
+        btn01 : "Tamam"
+    },
     msgNotWeighing: 
     {
         title : "Attention",
@@ -793,12 +801,6 @@ export const langFr =
         payCardPort : "TPE port",
         printDesing : "Design d’imprimante",
         scannerPort : "Scanner port"
-    },
-    msgConnectOut: 
-    {
-        title : "Attention", 
-        msg : "La connexion avec le serveur est interrompu ", 
-        btn01 : "D'accord"  
     },
     msgNotBarcodeWeighing: //BAK
     {

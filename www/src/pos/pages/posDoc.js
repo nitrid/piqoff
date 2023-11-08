@@ -133,9 +133,6 @@ export default class posDoc extends React.PureComponent
             if(!this.state.isConnected)
             {
                 this.sendJet({CODE:"120",NAME:"Le système est online"}) ///Kasa offline dan online a döndü.                
-
-                await this.transferLocal();
-
                 this.sendJet({CODE:"123",NAME:"Les saisies ont été enregistrés dans la base suite à online."}) ////Eldeki kayıtlar online a gönderildi.
                 
                 let tmpConfObj =
@@ -166,17 +163,7 @@ export default class posDoc extends React.PureComponent
         });
         this.core.socket.on('disconnect',async () => 
         {
-            this.setState({isConnected:false})
-            // let tmpConfObj12 =
-            // {
-            //     id:'msgConnectOut',showTitle:true,title:this.lang.t("msgConnectOut.title"),showCloseButton:true,width:'450px',height:'250px',
-            //     button:[{id:"btn01",caption:this.lang.t("msgConnectOut.btn01"),location:'before'}],
-            //     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgConnectOut.msg")}</div>)
-            // }
-            // await dialog(tmpConfObj12)
-            // this.core.auth.logout()
-            // window.location.reload()            
-
+            this.setState({isConnected:false})        
             //OFFLINE MODA DÖNDÜĞÜNDE EĞER EKRANDA KAYITLAR VARSA LOCAL DB YE GÖNDERİLİYOR
             for (let i = 0; i < this.posObj.dt("POS").length; i++) 
             {
@@ -320,8 +307,10 @@ export default class posDoc extends React.PureComponent
             //*************************************************************************** */
         })
 
-        this.sendJet({CODE:"80",NAME:"Démarrage terminal lancé."}) ////Kasa işleme başladı.
-        this.sendJet({CODE:"120",NAME:"Le système est offline."}) ///Kasa offline dan online a döndü.
+        if(this.core.offline)
+        {
+            this.sendJet({CODE:"120",NAME:"Le système est offline."}) ///Kasa online dan offline a döndü.    
+        }
     }
     async init()
     {
@@ -376,6 +365,10 @@ export default class posDoc extends React.PureComponent
         }
         this.posDevice.scanner();
 
+        //SON REF_NO VE SIGNATURE LOCALSTORE A YENIDEN SET EDILIYOR.
+        await this.nf525.lastSaleSignData(this.posObj.dt()[0]) 
+        await this.nf525.lastSaleFactSignData(this.posObj.dt()[0]) 
+        //*********************************************************/
         if(!this.isFirstOpen)
         {
             //ALMANYA TSE USB CİHAZLAR İÇİN YAPILDI
@@ -439,12 +432,7 @@ export default class posDoc extends React.PureComponent
             this.transfer = new transferCls();
             this.interval = null;
             
-            // TEST İÇİN OFLİNE VE TRASFER KAPATILDI
             this.transferStart();
-            if(!this.core.offline)
-            {
-                this.transferLocal();
-            }
             //DATA TRANSFER İÇİN EVENT.
             this.transfer.on('onState',(pParam)=>
             {
@@ -458,6 +446,37 @@ export default class posDoc extends React.PureComponent
                 }
             })
             //****************************** */
+            this.sendJet({CODE:"80",NAME:"Démarrage terminal lancé."}) ////Kasa işleme başladı.
+            //LOCAL DB DE KAYIT KONTROL EDİLİYOR.EĞER KAYIT VARSA ONLINE DB YE GÖNDERİLİYOR
+            if(!this.core.offline)
+            {
+                let tmpData = await this.core.local.select({name : "POS_VW_01",type : "select",query : "SELECT * FROM POS_VW_01"})
+                if(tmpData.result.recordset.length > 0)
+                {
+                    let tmpConfObj =
+                    {
+                        id:'msgDataTransferAlert',showTitle:true,title:this.lang.t("msgDataTransferAlert.title"),showCloseButton:false,width:'650px',height:'220px',
+                        button:[{id:"btn01",caption:this.lang.t("msgDataTransferAlert.btn01"),location:'after'}],
+                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgDataTransferAlert.msg1").replace('{0}',tmpData.result.recordset.length)}</div>)
+                    }
+                    await dialog(tmpConfObj);
+                    this.loading.current.instance.show()
+                    let tmpTransferResult = await this.transferLocal();
+                    this.loading.current.instance.hide()
+                    if(tmpTransferResult)
+                    {
+                        tmpConfObj.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgDataTransferAlert.msg2")}</div>)
+                        await dialog(tmpConfObj);
+                    }
+                    else
+                    {
+                        tmpConfObj.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgDataTransferAlert.msg3")}</div>)
+                        await dialog(tmpConfObj);
+                    }
+                    window.location.reload()
+                }
+            }
+            //***************************************************************************** */
         }
 
         await this.grdList.dataRefresh({source:this.posObj.posSale.dt()});
@@ -1339,23 +1358,40 @@ export default class posDoc extends React.PureComponent
                 {
                     if(tmpClose)
                     {
-                        //KAYDIN DOĞRULUĞU KONTROL EDİLİYOR.EĞER BAŞARISIZ İSE STATUS SIFIR OLARAK UPDATE EDİLİYOR.
-                        let tmpCheckResult = await this.checkSaleClose(this.posObj.dt()[0].GUID)
-                        if(tmpCheckResult == false)
+                        if(!this.core.offline)
                         {
-                            this.sendJet({CODE:"90",NAME:"Enregistrement échoué."}) /// Kayıt işlemi başarısız.
-                            //KAYIT BAŞARISIZ İSE UYARI AÇILIYOR VE KULLANICI İSTERSE KAYIT İŞLEMİNİ TEKRARLIYOR
-                            let tmpConfObj =
+                            //KAYDIN DOĞRULUĞU KONTROL EDİLİYOR.EĞER BAŞARISIZ İSE STATUS SIFIR OLARAK UPDATE EDİLİYOR.
+                            let tmpCheckResult = await this.checkSaleClose(this.posObj.dt()[0].GUID)
+                            if(tmpCheckResult == false)
                             {
-                                id:'msgSaveFailAlert',showTitle:true,title:this.lang.t("msgSaveFailAlert.title"),showCloseButton:true,width:'500px',height:'250px',
-                                button:[{id:"btn01",caption:this.lang.t("msgSaveFailAlert.btn01"),location:'before'}],
-                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgSaveFailAlert.msg")}</div>)
+                                this.sendJet({CODE:"90",NAME:"Enregistrement échoué."}) /// Kayıt işlemi başarısız.
+                                //KAYIT BAŞARISIZ İSE UYARI AÇILIYOR VE KULLANICI İSTERSE KAYIT İŞLEMİNİ TEKRARLIYOR
+                                let tmpConfObj =
+                                {
+                                    id:'msgSaveFailAlert',showTitle:true,title:this.lang.t("msgSaveFailAlert.title"),showCloseButton:true,width:'500px',height:'250px',
+                                    button:[{id:"btn01",caption:this.lang.t("msgSaveFailAlert.btn01"),location:'before'}],
+                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgSaveFailAlert.msg")}</div>)
+                                }
+                                await dialog(tmpConfObj)
+                                resolve(false)
+                                return
                             }
-                            await dialog(tmpConfObj)
+                            else
+                            {
+                                localStorage.setItem('REF_SALE',this.posObj.dt()[0].REF)
+                                localStorage.setItem('SIG_SALE',this.posObj.dt()[0].SIGNATURE)
+                                this.init()
+                                resolve(true)
+                                return
+                            }
                         }
                         else
                         {
+                            localStorage.setItem('REF_SALE',this.posObj.dt()[0].REF)
+                            localStorage.setItem('SIG_SALE',this.posObj.dt()[0].SIGNATURE)
                             this.init()
+                            resolve(true)
+                            return
                         }
                     } 
                 }
@@ -1374,9 +1410,11 @@ export default class posDoc extends React.PureComponent
                         this.core.util.writeLog("calcGrandTotal : 04")
                         await this.calcGrandTotal()
                     }
+                    resolve(false)
+                    return
                 }
             }    
-            resolve()            
+            resolve(true)
         });
     }    
     calcSaleTotal(pPrice,pQuantity,pDiscount,pLoyalty,pVatRate)
@@ -2168,9 +2206,26 @@ export default class posDoc extends React.PureComponent
         return new Promise(async resolve => 
         {
             this.posObj.dt().removeAt(0)
-            await this.posObj.save()
-            this.init()
-            resolve()
+            let tmpSaveResult = await this.posObj.save()
+            if(tmpSaveResult == 0)
+            {
+                this.init()
+                resolve(true)
+            }
+            else
+            {
+                //KAYIT BAŞARISIZ İSE UYARI AÇILIYOR VE KULLANICI İSTERSE KAYIT İŞLEMİNİ TEKRARLIYOR
+                let tmpConfObj =
+                {
+                    id:'msgSaveFailAlert',showTitle:true,title:this.lang.t("msgSaveFailAlert.title"),showCloseButton:true,width:'500px',height:'250px',
+                    button:[{id:"btn01",caption:this.lang.t("msgSaveFailAlert.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgSaveFailAlert.btn02"),location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgSaveFailAlert.msg")}</div>)
+                }
+                if((await dialog(tmpConfObj)) == 'btn02')
+                {
+                    resolve(await this.delete())
+                }
+            }
         })
     }
     async rowDelete()
@@ -2199,8 +2254,7 @@ export default class posDoc extends React.PureComponent
             }
             else
             {
-                await this.delete()
-                resolve()
+                resolve(await this.delete())
             }
         })
     }
@@ -2669,7 +2723,6 @@ export default class posDoc extends React.PureComponent
                 this.setState({msgTransfer1:this.lang.t("popTransfer.msg2")})
                 this.transferStop()
                 await this.transfer.transferSql(pClear)
-                await this.transfer.transferLocal()
                 this.transferStart()                
             }
         },1000)
@@ -2690,8 +2743,12 @@ export default class posDoc extends React.PureComponent
                 await this.transfer.clearTbl("POS_PAYMENT_VW_01")
                 await this.transfer.clearTbl("POS_EXTRA_VW_01")
                 await this.core.local.remove({query:"DELETE FROM CHEQPAY_VW_01 WHERE TRANSFER = 1"})
+                resolve(true)
             }
-            resolve()
+            else
+            {
+                resolve(false)
+            }
         });
     }
     getPromoDb(pFirstDate,pLastDate)

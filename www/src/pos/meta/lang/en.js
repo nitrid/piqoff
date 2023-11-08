@@ -611,6 +611,14 @@ export const langEn =
         msg2: "!!!! Please check the last scanned items !!!!",
         btn01: "OK"
     },
+    msgDataTransferAlert: //BAK
+    {
+        title : "Dikkat",
+        msg1 : "Aktarmanız gereken {0} adet kayıt mevcut ! Şimdi verileri aktarın.",
+        msg2 : "Aktarım işlemi başarılı.",
+        msg3 : "Aktarım işlemi başarısız.Tüm işlemler yeniden başlatılıyor.",
+        btn01 : "Tamam"
+    },
     msgNotWeighing:
     {
         title: "Attention",
@@ -791,12 +799,6 @@ export const langEn =
         payCardPort: "Card Payment Terminal Port",
         printDesing: "Printer Design",
         scannerPort : "Scanner port"
-    },
-    msgConnectOut:
-    {
-        title: "Attention",
-        msg: "Connection to the server is interrupted",
-        btn01: "OK"
     },
     msgNotBarcodeWeighing: 
     {
