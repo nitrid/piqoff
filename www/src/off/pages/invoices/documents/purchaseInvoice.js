@@ -498,6 +498,7 @@ export default class purchaseInvoice extends DocBase
     }
     async addItem(pData,pIndex,pQuantity,pPrice,pDiscount,pDiscountPer,pVat)
     {
+        console.log(pData.ITEM_TYPE)
         App.instance.setState({isExecute:true})
         
         if(typeof pQuantity == 'undefined')
@@ -505,24 +506,21 @@ export default class purchaseInvoice extends DocBase
             pQuantity = 1
         }
         //GRID DE AYNI ÜRÜNDEN OLUP OLMADIĞI KONTROL EDİLİYOR VE KULLANICIYA SORULUYOR,CEVAP A GÖRE SATIR BİRLİŞTERİLİYOR.
-        if(pData.ITEM_TYPE == 0)
+        let tmpMergDt = await this.mergeItem(pData.CODE)
+        if(typeof tmpMergDt != 'undefined' && this.combineNew == false)
         {
-            let tmpMergDt = await this.mergeItem(pData.CODE)
-            if(typeof tmpMergDt != 'undefined' && this.combineNew == false)
-            {
-                tmpMergDt[0].QUANTITY = tmpMergDt[0].QUANTITY + pQuantity
-                tmpMergDt[0].SUB_QUANTITY = tmpMergDt[0].SUB_QUANTITY / tmpMergDt[0].SUB_FACTOR
-                tmpMergDt[0].VAT = Number((tmpMergDt[0].VAT + (tmpMergDt[0].PRICE * (tmpMergDt[0].VAT_RATE / 100) * pQuantity))).round(6)
-                tmpMergDt[0].AMOUNT = Number((tmpMergDt[0].QUANTITY * tmpMergDt[0].PRICE)).round(4)
-                tmpMergDt[0].TOTAL = Number((((tmpMergDt[0].QUANTITY * tmpMergDt[0].PRICE) - tmpMergDt[0].DISCOUNT) + tmpMergDt[0].VAT)).round(2)
-                tmpMergDt[0].TOTALHT =  Number((tmpMergDt[0].AMOUNT - tmpMergDt[0].DISCOUNT)).round(2)
-                this.calculateTotal()
-                //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
-                await this.itemRelated(pData.GUID,tmpMergDt[0].QUANTITY)
-                //*****************************************/
-                App.instance.setState({isExecute:false})
-                return
-            }
+            tmpMergDt[0].QUANTITY = tmpMergDt[0].QUANTITY + pQuantity
+            tmpMergDt[0].SUB_QUANTITY = tmpMergDt[0].SUB_QUANTITY / tmpMergDt[0].SUB_FACTOR
+            tmpMergDt[0].VAT = Number((tmpMergDt[0].VAT + (tmpMergDt[0].PRICE * (tmpMergDt[0].VAT_RATE / 100) * pQuantity))).round(6)
+            tmpMergDt[0].AMOUNT = Number((tmpMergDt[0].QUANTITY * tmpMergDt[0].PRICE)).round(4)
+            tmpMergDt[0].TOTAL = Number((((tmpMergDt[0].QUANTITY * tmpMergDt[0].PRICE) - tmpMergDt[0].DISCOUNT) + tmpMergDt[0].VAT)).round(2)
+            tmpMergDt[0].TOTALHT =  Number((tmpMergDt[0].AMOUNT - tmpMergDt[0].DISCOUNT)).round(2)
+            this.calculateTotal()
+            //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
+            await this.itemRelated(pData.GUID,tmpMergDt[0].QUANTITY)
+            //*****************************************/
+            App.instance.setState({isExecute:false})
+            return
         }
         //******************************************************************************************************************/
         if(pIndex == null)

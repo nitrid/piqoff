@@ -358,6 +358,7 @@ export default class rebateDispatch extends DocBase
     }
     async addItem(pData,pIndex,pQuantity)
     {
+        console.log(pData.ITEM_TYPE)
         App.instance.setState({isExecute:true})
 
         this.txtRef.readOnly = true

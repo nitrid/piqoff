@@ -804,8 +804,8 @@ export default class DocBase extends React.PureComponent
                         if(this.checkCombine.value == true)
                         {
                             this.combineControl = false
-                            this.combineNew = true
                         }
+                        this.combineNew = true
                     }
                 }
                 resolve(tmpMergeDt)
