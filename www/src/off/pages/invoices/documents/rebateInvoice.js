@@ -1498,12 +1498,15 @@ export default class rebateInvoice extends DocBase
                                     validationGroup={"frmDocItems"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
+                                        console.log(0)
                                         if(e.validationGroup.validate().status == "valid")
                                         {
+                                            console.log(1)
                                             if(typeof this.docObj.docItems.dt()[0] != 'undefined')
-                                            {
+                                            {console.log(2)
                                                 if(this.docObj.docItems.dt()[0].ITEM_CODE == '')
                                                 {
+                                                    console.log(3)
                                                     this.pg_txtItemsCode.onClick = async(data) =>
                                                     {
                                                         this.combineControl = true
