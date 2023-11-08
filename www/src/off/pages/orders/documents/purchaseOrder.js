@@ -310,7 +310,8 @@ export default class purchaseOrder extends DocBase
         }
         if(e.column.dataField == "DISCOUNT_RATE")
         {
-            return (
+            return 
+(
                 <NdTextBox id={"txtGrdDiscountRate"+e.rowIndex} parent={this} simple={true} 
                 upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                 value={e.value}
@@ -608,7 +609,6 @@ export default class purchaseOrder extends DocBase
                                                 button:[{id:"btn01",caption:this.lang.t("msgNotRow.btn01"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgNotRow.msg")}</div>)
                                             }
-
                                             await dialog(tmpConfObj);
                                             this.getDoc(this.docObj.dt()[0].GUID,this.docObj.dt()[0].REF,this.docObj.dt()[0].REF_NO)
                                             return
@@ -623,7 +623,7 @@ export default class purchaseOrder extends DocBase
                                                 let tmpQuery = 
                                                 {
                                                     query : "SELECT ISNULL((SELECT NAME FROM ITEMS WHERE ITEMS.GUID = ITEM_MULTICODE.ITEM),'') AS ITEM_NAME,ISNULL((SELECT CODE FROM ITEMS WHERE ITEMS.GUID = ITEM_MULTICODE.ITEM),'') AS ITEM_CODDE, " +
-                                                            "ISNULL((SELECT TITLE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = ITEM_MULTICODE.CUSTOMER),'') AS CUSTOMER_NAME,CODE AS MULTICODE, "+
+                                                            "ISNULL((SELECT TITLE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = ITEM_MULTICODE.CUSTOMER),'') AS CUSTOMER_NAME,CODE AS MULTICODE, " +
                                                             "(SELECT [dbo].[FN_CUSTOMER_PRICE](ITEM,CUSTOMER,@QUANTITY,GETDATE())) AS PRICE FROM ITEM_MULTICODE WHERE  DELETED = 0 AND ITEM = @ITEM_CODE AND (SELECT [dbo].[FN_CUSTOMER_PRICE](ITEM,CUSTOMER,@QUANTITY,GETDATE())) < @PRICE " ,
                                                     param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50','QUANTITY:float','PRICE:float'],
                                                     value : [this.docObj.docOrders.dt()[i].ITEM,this.docObj.dt()[0].OUTPUT,this.docObj.docOrders.dt()[i].QUANTITY,this.docObj.docOrders.dt()[i].PRICE]
@@ -637,7 +637,6 @@ export default class purchaseOrder extends DocBase
                                                     }
                                                 }
                                             }
-                                            
                                             App.instance.setState({isExecute:false})
                                             if(this.underPriceData.length > 0)
                                             {
