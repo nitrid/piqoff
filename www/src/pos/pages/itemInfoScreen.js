@@ -209,7 +209,7 @@ export default class itemInfoScreen extends React.PureComponent
                                                 timeout : this.timeout
                                             })
                                         }}>
-                                            {"Valid-" + this.state.timeout + "s"}
+                                            {"OK - " + this.state.timeout + "s"}
                                         </NbButton>
                                     </div>
                                 </div>
