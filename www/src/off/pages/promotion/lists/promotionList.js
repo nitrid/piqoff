@@ -136,7 +136,7 @@ export default class promotionList extends React.PureComponent
                             "MAX(APP_ITEM_NAME) AS APP_ITEM_NAME," +
                             "MAX(APP_QUANTITY) AS APP_QUANTITY," +
                             "MAX(APP_AMOUNT) AS APP_AMOUNT, " +
-                            "CASE WHEN MAX(START_DATE) <= GETDATE() AND MAX(FINISH_DATE) >= GETDATE() THEN 1 ELSE 0 END AS ACTIVE " +
+                            "CASE WHEN MAX(START_DATE) <= GETDATE() AND MAX(FINISH_DATE) >= (GETDATE() - 1) THEN 1 ELSE 0 END AS ACTIVE " +
                             "FROM PROMO_COND_APP_VW_01 WHERE ((CODE LIKE '%' + @CODE + '%') OR (COND_ITEM_CODE LIKE '%' + @CODE + '%') OR " + 
                             "(COND_BARCODE LIKE '%' + @CODE + '%') OR (APP_ITEM_CODE LIKE '%' + @CODE + '%') OR (APP_BARCODE LIKE '%' + @CODE + '%') OR (@CODE = '')) AND " + 
                             "((NAME LIKE '%' + @NAME + '%') OR (COND_ITEM_NAME LIKE '%' + @NAME + '%') OR (APP_ITEM_NAME LIKE '%' + @NAME + '%') OR (@NAME = '')) AND " + 

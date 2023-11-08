@@ -1465,34 +1465,41 @@ export default class transferCls
     {
         return new Promise(async resolve => 
         {
-            let tmpSchema = this.sendSchema()
-            for (let i = 0; i < tmpSchema.length; i++) 
+            try
             {
-                this.emit('onState',{tag:'',text: tmpSchema[i].from.name})
-                let tmpResult = await this.sendToSql(tmpSchema[i])
-                if(!tmpResult)
+                let tmpSchema = this.sendSchema()
+                for (let i = 0; i < tmpSchema.length; i++) 
                 {
-                    resolve(false)
-                    return
+                    this.emit('onState',{tag:'',text: tmpSchema[i].from.name})
+                    let tmpResult = await this.sendToSql(tmpSchema[i])
+                    if(!tmpResult)
+                    {
+                        resolve(false)
+                        return
+                    }
                 }
+                let tmpData = await this.core.local.select({name : "NF525_JET",type : "select",query : "SELECT * FROM NF525_JET"})
+                for (let i = 0; i < tmpData.result.recordset.length; i++) 
+                {
+                    let tmpJetData =
+                    {
+                        CUSER:tmpData.result.recordset[i].CUSER,
+                        CDATE:tmpData.result.recordset[i].CDATE,
+                        DEVICE:tmpData.result.recordset[i].DEVICE,  
+                        CODE:tmpData.result.recordset[i].CODE,
+                        NAME:tmpData.result.recordset[i].NAME,
+                        DESCRIPTION:tmpData.result.recordset[i].DESCRIPTION,
+                        APP_VERSION:tmpData.result.recordset[i].APP_VERSION,
+                    }
+                    this.core.socket.emit('nf525',{cmd:"jet",data:tmpJetData})
+                }
+                await this.clearTbl("NF525_JET")
+                resolve(true)
             }
-            let tmpData = await this.core.local.select({from : "NF525_JET"})
-            for (let i = 0; i < tmpData.result.length; i++) 
+            catch(ex)
             {
-                let tmpJetData =
-                {
-                    CUSER:tmpData.result[i].CUSER,    
-                    CDATE:tmpData.result[i].CDATE,            
-                    DEVICE:tmpData.result[i].DEVICE,  
-                    CODE:tmpData.result[i].CODE,
-                    NAME:tmpData.result[i].NAME,
-                    DESCRIPTION:tmpData.result[i].DESCRIPTION,
-                    APP_VERSION:tmpData.result[i].APP_VERSION,
-                }
-                this.core.socket.emit('nf525',{cmd:"jet",data:tmpJetData})
+                resolve(false)
             }
-            await this.clearTbl("NF525_JET")
-            resolve(true)
         });
     }
     //SQL İÇİN DATA İLE SORGUDAKİ PARAMETRELER EŞLEŞTİRİLİYOR GERİ DÖNÜŞ OLARAK VALUES DİZİSİ DÖNDÜRÜLÜYOR.
