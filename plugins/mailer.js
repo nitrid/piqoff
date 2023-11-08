@@ -42,18 +42,18 @@ class mailer
             let transporter = nodemailer.createTransport(
             {
                 //service: 'imap.ionos.fr',
-                host: 'smtp.office365.com',
-                port: 587,
+                host: 'ssl0.ovh.net',
+                port: 465,
                 secureConnection: false,
                 auth: 
                 {
-                  user: "vente.prointer-montagneverte@outlook.fr",
-                  pass: "PIQSOFT2023"
+                  user: "vente.montagneverte@prointer.fr",
+                  pass: "PIQSOFT2023."
                 },
                 tls : { rejectUnauthorized: false, ciphers:'SSLv3' }
               });
               var mailOptions = {
-                from: "vente.prointer-montagneverte@outlook.fr",
+                from: "vente.montagneverte@prointer.fr",
                 to: pData.sendMail,
                 subject: pData.subject,
                 html:pData.html,

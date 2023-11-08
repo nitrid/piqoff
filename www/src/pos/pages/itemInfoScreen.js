@@ -43,7 +43,7 @@ export default class itemInfoScreen extends React.PureComponent
             }
             else
             {
-                if (!event.ctrlKey && !event.altKey && !event.shiftKey && event.key !== "Backspace" && event.key !== "Delete") 
+                if (!event.ctrlKey && !event.altKey && event.key !== "Backspace" && event.key !== "Delete" && event.key !== "Shift") 
                 {
                     this.barcode += event.key;
                 }
@@ -112,7 +112,7 @@ export default class itemInfoScreen extends React.PureComponent
                 {
                     splash : false,
                     name : tmpItemsDt[0].NAME,
-                    price : tmpItemsDt[0].PRICE + Number.money.sign + " / " + tmpItemsDt[0].UNIT_NAME,
+                    price : Number(tmpItemsDt[0].PRICE).toFixed(2) + Number.money.sign + " / " + tmpItemsDt[0].UNIT_NAME,
                     under_unit : (Number(tmpItemsDt[0].UNDER_UNIT_FACTOR) / Number(tmpItemsDt[0].PRICE)).toFixed(2) + Number.money.sign + " / " + Number(tmpItemsDt[0].UNDER_UNIT_FACTOR).toFixed(3) + tmpItemsDt[0].UNDER_UNIT_SYMBOL,
                     itemImg : tmpItemsDt[0].IMAGE,
                     timeout : this.timeout
