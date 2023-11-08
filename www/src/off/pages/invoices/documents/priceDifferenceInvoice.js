@@ -396,6 +396,7 @@ export default class priceDifferenceInvoice extends DocBase
     }
     async addItem(pData,pIndex,pQuantity)
     {
+        console.log(pQuantity)
         App.instance.setState({isExecute:true})
 
         this.txtRef.readOnly = true
@@ -464,6 +465,7 @@ export default class priceDifferenceInvoice extends DocBase
         this.docObj.docItems.dt()[pIndex].UNIT = pData.UNIT
         this.docObj.docItems.dt()[pIndex].DISCOUNT = 0
         this.docObj.docItems.dt()[pIndex].DISCOUNT_RATE = 0
+        this.docObj.docItems.dt()[pIndex].QUANTITY = pQuantity
         let tmpQuery = 
         {
             query :"SELECT dbo.FN_CUSTOMER_PRICE(@GUID,@CUSTOMER,@QUANTITY,GETDATE()) AS PRICE",

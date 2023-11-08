@@ -481,6 +481,7 @@ export default class outagePurcInvoice extends DocBase
         this.docObj.docItems.dt()[pIndex].DISCOUNT = 0
         this.docObj.docItems.dt()[pIndex].DISCOUNT_RATE = 0
         this.docObj.docItems.dt()[pIndex].SUB_QUANTITY = pQuantity * this.docObj.docItems.dt()[pIndex].SUB_FACTOR
+        this.docObj.docItems.dt()[pIndex].QUANTITY = pQuantity
 
         let tmpQuery = 
         {
