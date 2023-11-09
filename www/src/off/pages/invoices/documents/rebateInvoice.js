@@ -37,6 +37,8 @@ export default class rebateInvoice extends DocBase
 
         this.frmDocItems = undefined;
         this.docLocked = false;        
+        this.customerControl = true
+        this.customerClear = false
         this.combineControl = true
         this.combineNew = false
 
@@ -165,6 +167,8 @@ export default class rebateInvoice extends DocBase
                     {
                         this.pg_txtItemsCode.onClick = async(data) =>
                         {
+                            this.customerControl = true
+                            this.customerClear = false
                             this.combineControl = true
                             this.combineNew = false
                             if(data.length == 1)
@@ -200,6 +204,8 @@ export default class rebateInvoice extends DocBase
                         let tmpData = await this.core.sql.execute(tmpQuery) 
                         if(tmpData.result.recordset.length > 0)
                         {
+                            this.customerControl = true
+                            this.customerClear = false
                             this.combineControl = true
                             this.combineNew = false
                             await this.addItem(tmpData.result.recordset[0],e.rowIndex)
@@ -226,6 +232,8 @@ export default class rebateInvoice extends DocBase
                             {
                                 this.pg_txtItemsCode.onClick = async(data) =>
                                 {
+                                    this.customerControl = true
+                                    this.customerClear = false
                                     this.combineControl = true
                                     this.combineNew = false
                                     if(data.length == 1)
@@ -462,6 +470,49 @@ export default class rebateInvoice extends DocBase
             this.docObj.docItems.dt()[pIndex].UNIT_SHORT = tmpGrpData.result.recordset[0].UNIT_SHORT
         }
 
+        if(this.customerControl == true)
+        {
+            let tmpCheckQuery = 
+            {
+                query :"SELECT MULTICODE,(SELECT [dbo].[FN_CUSTOMER_PRICE](ITEM_GUID,CUSTOMER_GUID,@QUANTITY,GETDATE())) AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID",
+                param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
+                value : [pData.CODE,this.docObj.dt()[0].INPUT,pQuantity]
+            }
+            let tmpCheckData = await this.core.sql.execute(tmpCheckQuery) 
+            if(tmpCheckData.result.recordset.length == 0)
+            {   
+                let tmpCustomerBtn = ''
+                if(this.customerClear == true)
+                {
+                    await this.grdRebtInv.devGrid.deleteRow(0)
+                    return 
+                }
+                App.instance.setState({isExecute:false})
+                await this.msgCustomerNotFound.show().then(async (e) =>
+                {
+                    if(e == 'btn01' && this.checkCustomer.value == true)
+                    {
+                        this.customerControl = false
+                        return
+                    }
+                    if(e == 'btn02')
+                    {
+                        tmpCustomerBtn = e
+                        await this.grdRebtInv.devGrid.deleteRow(0)
+                        if(this.checkCustomer.value == true)
+                        {
+                            this.customerClear = true
+                        }
+                        return 
+                    }
+                })
+                if(tmpCustomerBtn == 'btn02')
+                {
+                    return
+                }
+            }
+        }
+        
         if(typeof pData.ITEM_TYPE == 'undefined')
         {
             let tmpTypeQuery = 
@@ -742,6 +793,8 @@ export default class rebateInvoice extends DocBase
     }
     async multiItemSave()
     {
+        this.customerControl = true
+        this.customerClear = false
         this.combineControl = true
         this.combineNew = false
         for (let i = 0; i < this.multiItemData.length; i++) 
@@ -1509,6 +1562,8 @@ export default class rebateInvoice extends DocBase
                                                     console.log(3)
                                                     this.pg_txtItemsCode.onClick = async(data) =>
                                                     {
+                                                        this.customerControl = true
+                                                        this.customerClear = false
                                                         this.combineControl = true
                                                         this.combineNew = false
                                                         if(data.length == 1)
@@ -1530,6 +1585,8 @@ export default class rebateInvoice extends DocBase
                                             }
                                             this.pg_txtItemsCode.onClick = async(data) =>
                                             {
+                                                this.customerControl = true
+                                                this.customerClear = false
                                                 this.combineControl = true
                                                 this.combineNew = false
                                                 if(data.length == 1)

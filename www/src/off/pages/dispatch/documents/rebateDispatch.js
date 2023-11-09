@@ -444,7 +444,7 @@ export default class rebateDispatch extends DocBase
                 let tmpCustomerBtn = ''
                 if(this.customerClear == true)
                 {
-                    await this.grdPurcDispatch.devGrid.deleteRow(0)
+                    await this.grdRebtDispatch.devGrid.deleteRow(0)
                     return 
                 }
                 App.instance.setState({isExecute:false})
@@ -458,7 +458,7 @@ export default class rebateDispatch extends DocBase
                     if(e == 'btn02')
                     {
                         tmpCustomerBtn = e
-                        await this.grdPurcDispatch.devGrid.deleteRow(0)
+                        await this.grdRebtDispatch.devGrid.deleteRow(0)
                         if(this.checkCustomer.value == true)
                         {
                             this.customerClear = true

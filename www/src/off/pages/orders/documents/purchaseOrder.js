@@ -414,6 +414,49 @@ export default class purchaseOrder extends DocBase
             this.docObj.docOrders.dt()[pIndex].UNIT_SHORT = tmpGrpData.result.recordset[0].UNIT_SHORT
         }
 
+        if(this.customerControl == true)
+        {
+            let tmpCheckQuery = 
+            {
+                query :"SELECT MULTICODE,(SELECT [dbo].[FN_CUSTOMER_PRICE](ITEM_GUID,CUSTOMER_GUID,@QUANTITY,GETDATE())) AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID",
+                param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
+                value : [pData.CODE,this.docObj.dt()[0].OUTPUT,pQuantity]
+            }
+            let tmpCheckData = await this.core.sql.execute(tmpCheckQuery) 
+            if(tmpCheckData.result.recordset.length == 0)
+            {   
+                let tmpCustomerBtn = ''
+                if(this.customerClear == true)
+                {
+                    await this.grdPurcOrders.devGrid.deleteRow(0)
+                    return 
+                }
+                App.instance.setState({isExecute:false})
+                await this.msgCustomerNotFound.show().then(async (e) =>
+                {
+                    if(e == 'btn01' && this.checkCustomer.value == true)
+                    {
+                        this.customerControl = false
+                        return
+                    }
+                    if(e == 'btn02')
+                    {
+                        tmpCustomerBtn = e
+                        await this.grdPurcOrders.devGrid.deleteRow(0)
+                        if(this.checkCustomer.value == true)
+                        {
+                            this.customerClear = true
+                        }
+                        return 
+                    }
+                })
+                if(tmpCustomerBtn == 'btn02')
+                {
+                    return
+                }
+            }
+        }
+        
         this.docObj.docOrders.dt()[pIndex].ITEM_CODE = pData.CODE
         this.docObj.docOrders.dt()[pIndex].MULTICODE = pData.MULTICODE
         this.docObj.docOrders.dt()[pIndex].ITEM_BARCODE = pData.BARCODE
@@ -543,6 +586,8 @@ export default class purchaseOrder extends DocBase
     }
     async multiItemSave()
     {
+        this.customerControl = true
+        this.customerClear = false
         this.combineControl = true
         this.combineNew = false
 
@@ -1201,6 +1246,8 @@ export default class purchaseOrder extends DocBase
                                             {
                                                 if(data.length > 0)
                                                 {
+                                                    this.customerControl = true
+                                                    this.customerClear = false
                                                     this.combineControl = true
                                                     this.combineNew = false
                                                     if(data.length == 1)
@@ -1268,6 +1315,8 @@ export default class purchaseOrder extends DocBase
                                                 {
                                                     this.pg_txtItemsCode.onClick = async(data) =>
                                                     {
+                                                        this.customerControl = true
+                                                        this.customerClear = false
                                                         this.combineControl = true
                                                         this.combineNew = false
                                                         if(data.length > 0)
@@ -1287,6 +1336,8 @@ export default class purchaseOrder extends DocBase
                                             {
                                                 if(data.length > 0)
                                                 {
+                                                    this.customerControl = true
+                                                    this.customerClear = false
                                                     this.combineControl = true
                                                     this.combineNew = false
 
