@@ -1096,6 +1096,7 @@ export default class salesInvoice extends DocBase
                                         await this.popDetail.show()
                                         this.loading.current.instance.show()
                                         
+                                        this.txtDetailMargin.value = this.docObj.dt()[0].MARGIN;
                                         this.numDetailCount.value = this.docObj.docItems.dt().length
                                         this.numDetailQuantity.value =  Number(this.docObj.docItems.dt().sum("QUANTITY",2))
                                         let tmpQuantity2 = 0
@@ -1114,7 +1115,6 @@ export default class salesInvoice extends DocBase
                                             }
                                         }
                                         this.numDetailQuantity2.value = tmpQuantity2.toFixed(3)
-                                        this.txtDetailMargin.value = this.docObj.dt()[0].MARGIN;
                                         this.loading.current.instance.hide()
                                     }}/>
                                 </Item>
