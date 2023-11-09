@@ -613,13 +613,13 @@ export const langIt =
         msg2: "!! PER FAVORE, CONTROLLA GLI ULTIMI PRODOTTI SCANSIONATI !!",
         btn01: "Ok"
     },
-    msgDataTransferAlert: //BAK
+    msgDataTransferAlert: 
     {
-        title : "Dikkat",
-        msg1 : "Aktarmanız gereken {0} adet kayıt mevcut ! Şimdi verileri aktarın.",
-        msg2 : "Aktarım işlemi başarılı.",
-        msg3 : "Aktarım işlemi başarısız.Tüm işlemler yeniden başlatılıyor.",
-        btn01 : "Tamam"
+        title : "Attenzione",
+        msg1 : "Hai {0} record da trasferire! Trasferisci i dati adesso.",
+        msg2 : "Processo di trasferimento riuscito.",
+        msg3 : "Processo di trasferimento non riuscito. Tutte le operazioni vengono riavviate.",
+        btn01 : "OK"
     },
     msgNotWeighing: 
     {

@@ -1712,7 +1712,9 @@ export default class posDoc extends React.PureComponent
                     }
                 } 
                 //POS_PROMO TABLOSUNA KAYIT EDİLİYOR.
+                console.log(1)
                 await this.posPromoObj.save()
+                console.log(this.posPromoObj)
                 //******************************** */
                 if((typeof pPrint == 'undefined' || pPrint) && this.prmObj.filter({ID:'SaleClosePrint',TYPE:0}).getValue() == true)
                 {       
