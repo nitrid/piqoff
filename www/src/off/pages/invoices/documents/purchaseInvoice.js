@@ -1214,6 +1214,7 @@ export default class purchaseInvoice extends DocBase
                     this.newPriceDate.clear()
                     for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
                     {
+                        console.log(this.docObj.docItems.dt()[i])
                         if(this.docObj.docItems.dt()[i].ITEM_TYPE == 0)
                         {
                             if(this.docObj.docItems.dt()[i].COST_PRICE == this.docObj.docItems.dt()[i].PRICE && this.docObj.docItems.dt()[i].COST_PRICE != 0 )

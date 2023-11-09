@@ -11927,6 +11927,7 @@ export const langTr =
         validMail : "Lütfen Boş Geçmeyin.",
         txtTotalHt : "İndirimli Tutar",
         txtUnitPrice: "Birim Fiyatı",
+        txtDocNo : "Belgo No",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -12701,6 +12702,7 @@ export const langTr =
         btnMailsend : "Mail Gönder",
         validMail : "Lütfen Boş Geçmeyin.",
         placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.",
+        txtDocNo : "Belgo No",
         isMsgSave :
         {  
             title: "Dikkat",
