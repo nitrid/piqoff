@@ -646,7 +646,10 @@ export default class DocBase extends React.PureComponent
                 tmpDocItems.DOC_DISCOUNT_2 = data[i].DOC_DISCOUNT_2
                 tmpDocItems.DOC_DISCOUNT_3 = data[i].DOC_DISCOUNT_3
                 tmpDocItems.DOC_DISCOUNT = data[i].DOC_DISCOUNT
-
+                tmpDocItems.CUSTOMER_PRICE = data[i].CUSTOMER_PRICE
+                tmpDocItems.DIFF_PRICE = (data[i].PRICE - data[i].CUSTOMER_PRICE).toFixed(3)
+                tmpDocItems.COST_PRICE = data[i].COST_PRICE
+            
                 await this.docObj.docItems.addEmpty(tmpDocItems)
                 await this.core.util.waitUntil(100)
             }
