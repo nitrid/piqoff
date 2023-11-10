@@ -397,6 +397,7 @@ export default class DocBase extends React.PureComponent
     }
     async calculateTotalMargin()
     {
+        console.log(this.docDetailObj.dt())
         let tmpTotalCost = 0
 
         for (let  i= 0; i < this.docDetailObj.dt().length; i++) 
