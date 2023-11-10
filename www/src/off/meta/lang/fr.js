@@ -4025,6 +4025,8 @@ export const langFr =
         txtTotalHt : "Total HT",
         txtDocNo : "Numéro de document", 
         cmbOrigin : "Origine",
+        txtTransport : "Taşıma Türü", // BAK
+        tabTitleDetail : "Detay Bilgileri", // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
