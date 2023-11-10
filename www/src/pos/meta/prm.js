@@ -1303,7 +1303,7 @@ export const prm =
     {
         TYPE : 0,
         ID :"Depot",
-        VALUE : "CF1E87C0-EA37-4C18-8995-A299F0610F75",
+        VALUE : "00000000-0000-0000-0000-000000000000",
         SPECIAL : "",
         PAGE : "pos",
         ELEMENT : "",
