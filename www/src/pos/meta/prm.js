@@ -1070,22 +1070,22 @@ export const prm =
             {
                 items : "299997MMMCCF",
                 title : "Attention Prix Boucherie Manuel",
-                msg : "Attention prix saissie manuel boucherie.",
+                msg : "Attention prix saisie manuel boucherie.",
             },
             {
                 items : "0299997MMMCCF",
                 title : "Attention Prix Boucherie Manuel",
-                msg : "Attention prix saissie manuel boucherie.",
+                msg : "Attention prix saisie manuel boucherie.",
             },
             {
                 items : "102000MMMCCF",
                 title : "Attention Prix Boucherie Manuel",
-                msg : "Attention prix saissie manuel boucherie.",
+                msg : "Attention prix saisie manuel boucherie.",
             },
             {
                 items : "0102000MMMCCF",
                 title : "Attention Prix Boucherie Manuel",
-                msg : "Attention prix saissie manuel boucherie.",
+                msg : "Attention prix saisie manuel boucherie.",
             },
         ],
         SPECIAL : "",
