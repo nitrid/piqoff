@@ -1299,5 +1299,35 @@ export const prm =
             CAPTION : "Müşteri Puan Katsayısı"
         }
     },
+    //Depo
+    {
+        TYPE : 0,
+        ID :"Depot",
+        VALUE : "00000000-0000-0000-0000-000000000000",
+        SPECIAL : "",
+        PAGE : "pos",
+        ELEMENT : "",
+        APP : "POS",
+        VIEW : 
+        {
+            TYPE : "popSelect",
+            PAGE_NAME : "Pos",
+            CAPTION : "Depo",
+            FIELD : "GUID",
+            FORM: 
+            {
+                selection:{mode:"single"},
+                width:"600",
+                height:"500",
+                data:
+                {
+                    select:
+                    {
+                        query : "SELECT GUID,CODE,NAME FROM DEPOT_VW_01 WHERE TYPE = 2 AND STATUS = 1 ORDER BY CODE ASC"
+                    },
+                },
+            }
+        }
+    },
     //#endregion
 ]

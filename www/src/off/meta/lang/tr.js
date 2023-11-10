@@ -493,6 +493,7 @@ export const langTr =
             title: "Fiyat Ekle",
             dtPopPriStartDate: "Baş.Tarih",
             dtPopPriEndDate: "Bit.Tarih", 
+            cmbPopPriDepot: "Depo",
             txtPopPriQuantity: "Miktar",
             txtPopPriPrice: "Fiyat",
             txtPopPriPriceVatExt: "Vargisiz Fiyat"
