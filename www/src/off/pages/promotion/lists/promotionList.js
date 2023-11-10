@@ -171,9 +171,9 @@ export default class promotionList extends React.PureComponent
                                     {
                                         App.instance.menuClick(
                                         {
-                                            id: 'cri_01_001',
-                                            text: this.t('menu'),
-                                            path: 'customers/cards/customerCard.js'
+                                            id: 'promo_01_001',
+                                            text: this.lang.t('menuOff.promo_01_001'),
+                                            path: 'promotion/cards/promotionCard.js'
                                         })
                                     }
                                 }} />
