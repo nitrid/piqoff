@@ -51,6 +51,7 @@ export default class salesInvoice extends DocBase
         await this.core.util.waitUntil(100)
         if(typeof this.pagePrm != 'undefined')
         {
+            await this.init()
             await this.getDoc(this.pagePrm.GUID,'',0)
         }
         else
