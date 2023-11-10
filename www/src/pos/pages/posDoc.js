@@ -337,13 +337,16 @@ export default class posDoc extends React.PureComponent
         this.posObj.addEmpty()
 
         this.posObj.dt()[this.posObj.dt().length - 1].DOC_TYPE = 0
-        this.posObj.dt()[this.posObj.dt().length - 1].DEPOT_GUID = this.prmObj.filter({ID:'Depot',TYPE:0}).getValue()
+        this.posObj.dt()[this.posObj.dt().length - 1].DEPOT_GUID = '00000000-0000-0000-0000-000000000000'
         this.posObj.dt()[this.posObj.dt().length - 1].DEVICE = this.state.isFormation ? '9999' : window.localStorage.getItem('device') == null ? '' : window.localStorage.getItem('device')
         this.device.value = this.posObj.dt()[this.posObj.dt().length - 1].DEVICE
         
         if(this.posObj.dt()[this.posObj.dt().length - 1].DEVICE != '9999')
         {
             await this.posDevice.load({CODE:this.posObj.dt()[this.posObj.dt().length - 1].DEVICE})
+
+            this.posObj.dt()[this.posObj.dt().length - 1].DEPOT_GUID = this.posDevice.dt()[0].DEPOT_GUID
+
             if(this.posDevice.dt().where({MACID:localStorage.getItem('macId')}).length > 0)
             {
                 this.posScale = new posScaleCls(this.posDevice.dt()[0].SCALE_PORT)
@@ -8298,6 +8301,36 @@ export default class posDoc extends React.PureComponent
                             </Item>
                             <Item>
                                 <NbLabel id="abtVersion" parent={this} value={this.lang.t("abtVersion") + this.core.appInfo.version}/>
+                            </Item>
+                            <Item>
+                                <NdButton id={"btnAbtPrint"} parent={this} icon={"print"} stylingMode="contained" width={"100%"} height={"40px"}
+                                onClick={async (e)=>
+                                {
+                                    let tmpArr = 
+                                    [
+                                        {align:"ct",logo:"./resources/logop.png"},
+                                        {font:"a",style:"b",size : [1,1],align:"ct",data:""},
+                                        {font:"a",style:"b",align:"ct",data: this.firm[0].ADDRESS1},
+                                        {font:"a",style:"b",align:"ct",data: this.firm[0].ZIPCODE + " " + this.firm[0].CITY + " " + this.firm[0].COUNTRY_NAME},
+                                        {font:"a",style:"b",align:"ct",data: "Tel : " + this.firm[0].TEL},
+                                        {font:"a",style:"b",align:"ct",data: this.firm[0].MAIL},
+                                        {font:"a",style:"b",align:"ct",data: this.firm[0].WEB},
+                                        {font:"a",style:"b",align:"ct",data: "Siret " + this.firm[0].SIRET_ID + " - APE " + this.firm[0].APE_CODE},
+                                        {font:"a",style:"b",align:"ct",data: "Nr. TVA " + this.firm[0].INT_VAT_NO},
+                                        {font:"a",style:"b",size : [1,1],align:"ct",data:""},
+                                        {font:"a",style:"b",size : [1,1],align:"ct",data: "INFO"},
+                                        {font:"a",style:"b",size : [1,1],align:"ct",data:""},
+                                        {font:"a",align:"lt",data:moment(new Date().toISOString()).utcOffset(0,false).locale('fr').format('dddd DD.MM.YYYY HH:mm:ss')},
+                                        {font:"a",align:"lt",pdf:{fontSize:11},data:("Caissier: " + this.user.CODE).space(25,'e') + ("Caisse: " + window.localStorage.getItem('device')).space(23,'s')},
+                                        {font:"a",style:"b",align:"lt",data:" ".space(48)},
+                                        {font:"a",align:"lt",data:this.lang.t("abtCertificate")},
+                                        {font:"a",align:"lt",data:this.lang.t("abtNrCertificate")},
+                                        {font:"a",align:"lt",data:this.lang.t("abtLicence")},
+                                        {font:"a",align:"lt",data:this.lang.t("abtVersion")},
+                                    ]
+                                    await this.posDevice.escPrinter(tmpArr)
+                                }}>
+                                </NdButton>
                             </Item>
                         </Form>
                     </NdPopUp>

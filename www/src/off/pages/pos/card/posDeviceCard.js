@@ -423,6 +423,21 @@ export default class posDeviceCard extends React.PureComponent
                                     <NdTextBox id="txtMacId" parent={this} simple={true} dt={{data:this.deviceObj.dt('POS_DEVICE'),field:"MACID"}}>
                                     </NdTextBox>
                                 </Item>
+                                {/* cmbDepot */}
+                                <Item>
+                                    <Label text={this.t("cmbDepot")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbDepot" tabIndex={this.tabIndex}
+                                    dt={{data:this.deviceObj.dt('POS_DEVICE'),field:"DEPOT_GUID",display:"DEPOT_NAME"}}
+                                    displayExpr="NAME"                       
+                                    valueExpr="GUID"
+                                    value=""
+                                    searchEnabled={true} 
+                                    showClearButton={true}
+                                    pageSize ={50}
+                                    notRefresh={true}
+                                    data={{source:{select:{query : "SELECT '00000000-0000-0000-0000-000000000000' AS GUID, 'GENERAL' AS NAME UNION ALL SELECT GUID,NAME FROM DEPOT_VW_01 WHERE TYPE = 2 AND STATUS = 1 ORDER BY NAME ASC"},sql:this.core.sql}}}
+                                    />
+                                </Item>
                             </Form>
                         </div>
                     </div>

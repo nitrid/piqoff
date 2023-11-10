@@ -16282,6 +16282,7 @@ export const langTr =
         txtPayCardPort : "Pay Card Port",
         txtPrintDesing : "Fiş Dizaynı",
         txtMacId : "Mac Id",
+        cmbDepot : "Depo",
         pg_txtCode : 
         {
             title : "Kasa Seçimi",

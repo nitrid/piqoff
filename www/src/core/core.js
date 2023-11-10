@@ -890,7 +890,7 @@ export class dataset
                     tmpQuerys.push(e)    
                 });
             }
-            console.log(tmpQuerys)
+            
             let tmpResult = await this.sql.execute(tmpQuerys)
             
             if(typeof tmpResult.result.err == 'undefined')

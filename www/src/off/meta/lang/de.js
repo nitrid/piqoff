@@ -16183,6 +16183,7 @@ export const langDe =
         txtPayCardPort : "Pay Card-Anschluss",
         txtPrintDesing : "Beleglayout",
         txtMacId : "Mac Id",
+        cmbDepot : "Lager",
         pg_txtCode : 
         {
             title : "Kassenauswahl",
