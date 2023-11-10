@@ -16202,6 +16202,7 @@ export const langFr =
         txtPayCardPort : "TPE Port",
         txtPrintDesing : "Design Ticket Imp.",
         txtMacId : "Mac Id",
+        cmbDepot : "Dépot",
         pg_txtCode : 
         {
             title : "Sélection Caisse",

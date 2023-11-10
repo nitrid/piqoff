@@ -337,13 +337,16 @@ export default class posDoc extends React.PureComponent
         this.posObj.addEmpty()
 
         this.posObj.dt()[this.posObj.dt().length - 1].DOC_TYPE = 0
-        this.posObj.dt()[this.posObj.dt().length - 1].DEPOT_GUID = this.prmObj.filter({ID:'Depot',TYPE:0}).getValue()
+        this.posObj.dt()[this.posObj.dt().length - 1].DEPOT_GUID = '00000000-0000-0000-0000-000000000000'
         this.posObj.dt()[this.posObj.dt().length - 1].DEVICE = this.state.isFormation ? '9999' : window.localStorage.getItem('device') == null ? '' : window.localStorage.getItem('device')
         this.device.value = this.posObj.dt()[this.posObj.dt().length - 1].DEVICE
         
         if(this.posObj.dt()[this.posObj.dt().length - 1].DEVICE != '9999')
         {
             await this.posDevice.load({CODE:this.posObj.dt()[this.posObj.dt().length - 1].DEVICE})
+            
+            this.posObj.dt()[this.posObj.dt().length - 1].DEPOT_GUID = this.posDevice.dt()[0].DEPOT_GUID
+
             if(this.posDevice.dt().where({MACID:localStorage.getItem('macId')}).length > 0)
             {
                 this.posScale = new posScaleCls(this.posDevice.dt()[0].SCALE_PORT)
