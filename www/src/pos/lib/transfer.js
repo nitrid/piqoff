@@ -661,7 +661,7 @@ export default class transferCls
                 from : 
                 {
                     type : "select",
-                    query : `SELECT *,dbo.FN_PRICE_SALE(GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000') AS PRICE FROM ITEMS_VW_01 {0}`,
+                    query : `SELECT *,dbo.FN_PRICE_SALE(GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000') AS PRICE FROM ITEMS_VW_01 {0}`,
                     where : `WHERE LDATE >= GETDATE() - 10`
                 },
                 to : 
@@ -684,7 +684,7 @@ export default class transferCls
                 from : 
                 {
                     type : "select",
-                    query : `SELECT *,dbo.FN_PRICE_SALE(GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000') AS PRICE 
+                    query : `SELECT *,dbo.FN_PRICE_SALE(GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000') AS PRICE 
                             FROM ITEMS_POS_VW_01 {0}`,
                     where : `WHERE LDATE >= GETDATE() - 10`
                 },
