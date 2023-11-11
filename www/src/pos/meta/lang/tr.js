@@ -612,6 +612,14 @@ export const langTr =
         msg2 : "!! LÜTFEN SON OKUTTUĞUNUZ ÜRÜNLERİ KONTROL EDİNİZ !!",
         btn01 : "Tamam"
     },
+    msgDataTransferAlert: 
+    {
+        title : "Dikkat",
+        msg1 : "Aktarmanız gereken {0} adet kayıt mevcut ! Şimdi verileri aktarın.",
+        msg2 : "Aktarım işlemi başarılı.",
+        msg3 : "Aktarım işlemi başarısız.Tüm işlemler yeniden başlatılıyor.",
+        btn01 : "Tamam"
+    },
     msgNotWeighing: 
     {
         title : "Dikkat",
@@ -793,12 +801,6 @@ export const langTr =
         printDesing : "Yazdırma dizaynı",
         scannerPort : "Scanner port"
     },
-    msgConnectOut: 
-    {
-        title : "Dikkat",
-        msg : "Sunucu ile bağlantınız koptu.. ",
-        btn01 : "Tamam"
-    },
     msgNotBarcodeWeighing: 
     {
         title : "Dikkat",
@@ -833,5 +835,9 @@ export const langTr =
         title : "Dikkat",
         msg : "Cihaz id uyumsuz ! Lütfen piqsoft ile iletişim kurunuz.",
         btn01 : "Tamam"
+    },
+    itemInfo:
+    {
+        msgSplash : "LÜTFEN BARKOD OKUTUNUZ"
     }
 }

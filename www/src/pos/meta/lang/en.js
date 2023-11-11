@@ -611,6 +611,14 @@ export const langEn =
         msg2: "!!!! Please check the last scanned items !!!!",
         btn01: "OK"
     },
+    msgDataTransferAlert: 
+    {
+        title : "Attention",
+        msg1 : "You have {0} records to transfer! Transfer the data now.",
+        msg2 : "Transfer process successful.",
+        msg3 : "Transfer process failed. All operations are being restarted.",
+        btn01 : "OK"
+    },
     msgNotWeighing:
     {
         title: "Attention",
@@ -792,12 +800,6 @@ export const langEn =
         printDesing: "Printer Design",
         scannerPort : "Scanner port"
     },
-    msgConnectOut:
-    {
-        title: "Attention",
-        msg: "Connection to the server is interrupted",
-        btn01: "OK"
-    },
     msgNotBarcodeWeighing: 
     {
         title: "Attention",
@@ -832,5 +834,9 @@ export const langEn =
         title : "Attention",
         msg : "Device ID mismatch! Please contact piqsoft.",
         btn01 : "OK"
+    },
+    itemInfo:
+    {
+        msgSplash: "PLEASE SCAN THE BARCODE"
     }
 }

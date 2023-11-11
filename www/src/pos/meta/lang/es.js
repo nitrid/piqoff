@@ -612,6 +612,14 @@ export const langEs =
         msg2: "¡POR FAVOR, VERIFIQUE LOS ÚLTIMOS PRODUCTOS ESCANEADOS!",
         btn01: "Aceptar"
     },
+    msgDataTransferAlert: 
+    {
+        title : "Atención",
+        msg1 : "Tiene {0} registros para transferir. Transfiera los datos ahora.",
+        msg2 : "Proceso de transferencia exitoso.",
+        msg3 : "Fallo en el proceso de transferencia. Se están reiniciando todas las operaciones.",
+        btn01 : "Aceptar"
+    },
     msgNotWeighing: 
     {
         title: "Atención",
@@ -793,12 +801,6 @@ export const langEs =
         printDesing: "Diseño de Impresión",
         scannerPort : "Scanner port"
     },
-    msgConnectOut: 
-    {
-        title: "Atención",
-        msg: "¡Se ha perdido la conexión con el servidor!",
-        btn01: "Aceptar"
-    },
     msgNotBarcodeWeighing: 
     {
         title: "Atención",
@@ -833,5 +835,9 @@ export const langEs =
         title : "Atención",
         msg : "¡ID del dispositivo no coincide! Por favor, contacte a piqsoft.",
         btn01 : "Aceptar"
+    },
+    itemInfo:
+    {
+        msgSplash: "POR FAVOR, ESCANEE EL CÓDIGO DE BARRAS"
     }
 }
