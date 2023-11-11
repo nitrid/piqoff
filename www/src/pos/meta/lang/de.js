@@ -611,6 +611,14 @@ export const langDe =
         msg2 : "!! BITTE ÜBERPRÜFEN SIE DIE ZULETZT GESCANNTEN ARTIKEL !!",
         btn01 : "OK"
     },
+    msgDataTransferAlert: 
+    {
+        title : "Achtung",
+        msg1 : "Sie haben {0} Datensätze zu übertragen! Übertragen Sie die Daten jetzt.",
+        msg2 : "Übertragung erfolgreich abgeschlossen.",
+        msg3 : "Übertragung fehlgeschlagen. Alle Vorgänge werden neu gestartet.",
+        btn01 : "OK"
+    },
     msgNotWeighing: 
     {
         title : "Achtung",
@@ -791,12 +799,6 @@ export const langDe =
         payCardPort: "PayCard-Anschluss",
         printDesing: "Druckdesign",
         scannerPort : "Scanner port"
-    },
-    msgConnectOut: 
-    {
-        title: "Achtung",
-        msg: "Die Verbindung zum Server wurde getrennt.",
-        btn01: "OK"
     },
     msgNotBarcodeWeighing: 
     {

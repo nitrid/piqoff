@@ -267,7 +267,7 @@ export default class itemCard extends React.PureComponent
         {
             let tmpQuery = 
             {
-                query :"SELECT [dbo].[FN_PRICE_SALE](@GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000') AS PRICE",
+                query :"SELECT [dbo].[FN_PRICE_SALE](@GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000') AS PRICE",
                 param : ['GUID:string|50'],
                 value : [this.itemsObj.dt()[0].GUID]
             }
@@ -483,7 +483,7 @@ export default class itemCard extends React.PureComponent
         {
             let tmpQuery = 
             {
-                query :"SELECT [dbo].[FN_PRICE_SALE](@GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000') AS PRICE",
+                query :"SELECT [dbo].[FN_PRICE_SALE](@GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000') AS PRICE",
                 param : ['GUID:string|50'],
                 value : [this.itemsObj.dt()[0].GUID]
             }
@@ -1599,12 +1599,13 @@ export default class itemCard extends React.PureComponent
                                                         onClick={async()=>
                                                         {   
                                                             await this.popPrice.show();
-                                                            
+
                                                             this.dtPopPriStartDate.value = "1970-01-01"
                                                             this.dtPopPriEndDate.value = "1970-01-01"
                                                             this.txtPopPriQuantity.value = 1
                                                             this.txtPopPriPrice.value = 0
                                                             this.txtPopPriPriceVatExt.value = 0
+                                                            this.cmbPopPriDepot.value = "00000000-0000-0000-0000-000000000000"
 
                                                             setTimeout(async () => 
                                                             {
@@ -2180,7 +2181,7 @@ export default class itemCard extends React.PureComponent
                         title={this.t("popPrice.title")}
                         container={"#root"} 
                         width={'500'}
-                        height={'400'}
+                        height={'420'}
                         position={{of:'#root'}}
                         deferRendering={true}
                         >
@@ -2197,10 +2198,23 @@ export default class itemCard extends React.PureComponent
                                     <Label text={this.t("popPrice.txtPopPriQuantity")} alignment="right" />
                                     <NdNumberBox id={"txtPopPriQuantity"} parent={this} simple={true}>
                                         <Validator validationGroup={"frmPrice" + this.tabIndex}>
-                                            <RequiredRule message={this.t("validQuantity")}  
-                                             />
+                                            <RequiredRule message={this.t("validQuantity")}/>
                                         </Validator>
                                     </NdNumberBox>
+                                </Item>
+                                {/* cmbPopPriDepot */}
+                                <Item>
+                                    <Label text={this.t("popPrice.cmbPopPriDepot")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbPopPriDepot" tabIndex={this.tabIndex}
+                                    displayExpr="NAME"                       
+                                    valueExpr="GUID"
+                                    value=""
+                                    searchEnabled={true} 
+                                    showClearButton={true}
+                                    pageSize ={50}
+                                    notRefresh={true}
+                                    data={{source:{select:{query : "SELECT '00000000-0000-0000-0000-000000000000' AS GUID, 'GENERAL' AS NAME UNION ALL SELECT GUID,NAME FROM DEPOT_VW_01 WHERE STATUS = 1 ORDER BY NAME ASC"},sql:this.core.sql}}}
+                                    />
                                 </Item>
                                 <Item>
                                     <Label text={this.t("popPrice.txtPopPriPriceVatExt")} alignment="right" />
@@ -2242,6 +2256,7 @@ export default class itemCard extends React.PureComponent
                                                     tmpCheckData = tmpCheckData.where({FINISH_DATE:new Date(moment(this.dtPopPriEndDate.value).format("YYYY-MM-DD")).toISOString()})
                                                     tmpCheckData = tmpCheckData.where({TYPE:0})
                                                     tmpCheckData = tmpCheckData.where({QUANTITY:this.txtPopPriQuantity.value})
+                                                    tmpCheckData = tmpCheckData.where({DEPOT:this.cmbPopPriDepot.value})
                                                     
                                                     if(tmpCheckData.length > 0)
                                                     {
@@ -2273,7 +2288,7 @@ export default class itemCard extends React.PureComponent
                                                     tmpEmpty.TYPE = 0
                                                     tmpEmpty.TYPE_NAME = 'Standart'
                                                     tmpEmpty.ITEM_GUID = this.itemsObj.dt()[0].GUID 
-                                                    tmpEmpty.DEPOT = '00000000-0000-0000-0000-000000000000'
+                                                    tmpEmpty.DEPOT = this.cmbPopPriDepot.value
                                                     tmpEmpty.START_DATE = new Date(moment(this.dtPopPriStartDate.value).format("YYYY-MM-DD")).toISOString()
                                                     tmpEmpty.FINISH_DATE = new Date(moment(this.dtPopPriEndDate.value).format("YYYY-MM-DD")).toISOString()
                                                     tmpEmpty.PRICE = this.txtPopPriPrice.value

@@ -613,6 +613,14 @@ export const langFr =
         msg2 : "!!!! Veuillez vérifier les derniers articles scannés !!!!",
         btn01 : "OK"
     },
+    msgDataTransferAlert: //BAK
+    {
+        title : "Attention",
+        msg1 : "Vous avez {0} enregistrements à transférer ! Transférez les données maintenant.",
+        msg2 : "La transmission a réussi.",
+        msg3 : "La transmission a échoué. Toutes les opérations sont en cours de redémarrage.",
+        btn01 : "D'accord"
+    },
     msgNotWeighing: 
     {
         title : "Attention",
@@ -793,12 +801,6 @@ export const langFr =
         payCardPort : "TPE port",
         printDesing : "Design d’imprimante",
         scannerPort : "Scanner port"
-    },
-    msgConnectOut: 
-    {
-        title : "Attention", 
-        msg : "La connexion avec le serveur est interrompu ", 
-        btn01 : "D'accord"  
     },
     msgNotBarcodeWeighing: //BAK
     {
