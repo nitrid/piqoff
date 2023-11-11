@@ -2184,9 +2184,9 @@ Number.prototype.rateInc = function(pRate,pDigit)
     if(typeof pRate != 'undefined')
     {
         if(typeof pDigit != 'undefined')
-            return Number((this * (pRate / 100)).toFixed(pDigit))
+            return isNaN(Number((this * (pRate / 100)).toFixed(pDigit))) ? 0 : Number((this * (pRate / 100)).toFixed(pDigit))
         else
-            return this * (pRate / 100)
+            return isNaN(this * (pRate / 100)) ? 0 : this * (pRate / 100)
     }
     return 0
 }
@@ -2196,9 +2196,9 @@ Number.prototype.rateExc = function(pRate,pDigit)
     if(typeof pRate != 'undefined')
     {
         if(typeof pDigit != 'undefined')
-            return Number((this * ((pRate / 100) + 1)).toFixed(pDigit))
+            return isNaN(Number((this * ((pRate / 100) + 1)).toFixed(pDigit))) ? 0 : Number((this * ((pRate / 100) + 1)).toFixed(pDigit))
         else
-            return this * ((pRate / 100) + 1)
+            return isNaN(this * ((pRate / 100) + 1)) ? 0 : this * ((pRate / 100) + 1)
     }
     return 0
 }
@@ -2208,9 +2208,9 @@ Number.prototype.rateInNum = function(pRate,pDigit)
     if(typeof pRate != 'undefined')
     {
         if(typeof pDigit != 'undefined')
-            return Number((this / ((pRate / 100) + 1)).toFixed(pDigit))
+            return isNaN(Number((this / ((pRate / 100) + 1)).toFixed(pDigit))) ? 0 : Number((this / ((pRate / 100) + 1)).toFixed(pDigit))
         else
-            return this / ((pRate / 100) + 1)
+            return isNaN(this / ((pRate / 100) + 1)) ? 0 : this / ((pRate / 100) + 1)
     }
     return 0
 }
@@ -2221,11 +2221,11 @@ Number.prototype.rate2In = function(pNum,pDigit)
     {
         if(typeof pDigit != 'undefined')
         {
-            return Number(((pNum / (this - pNum)) * 100).toFixed(pDigit))
+            return isNaN(Number(((pNum / (this - pNum)) * 100).toFixed(pDigit))) ? 0 : Number(((pNum / (this - pNum)) * 100).toFixed(pDigit))
         }
         else
         {
-            return (pNum / (this - pNum)) * 100
+            return isNaN((pNum / (this - pNum)) * 100) ? 0 : (pNum / (this - pNum)) * 100
         }                 
     }
     return 0
@@ -2237,11 +2237,11 @@ Number.prototype.rate2Num = function(pNum,pDigit)
     {
         if(typeof pDigit != 'undefined')
         {
-            return Number(((pNum / this) * 100).toFixed(pDigit))
+            return isNaN(Number(((pNum / this) * 100).toFixed(pDigit))) ? 0 : Number(((pNum / this) * 100).toFixed(pDigit))
         }
         else
         {
-            return (pNum / this) * 100
+            return isNaN((pNum / this) * 100) ? 0 : (pNum / this) * 100
         }                 
     }
     return 0
@@ -2293,7 +2293,7 @@ Number.prototype.round = function(pDigits)
     }
     tmpNum = Number(tmpNum)
     
-    return Number(Math.round(Number(this)+'e'+pDigits)+'e-'+pDigits)
+    return isNaN(Number(Math.round(Number(this)+'e'+pDigits)+'e-'+pDigits)) ? 0 : Number(Math.round(Number(this)+'e'+pDigits)+'e-'+pDigits)
     return Math.round((Number(this.toFixed(pDigits + 1)) + Number.EPSILON) * tmpNum) / tmpNum
     //return Math.round((this + Number.EPSILON) * tmpNum) / tmpNum
 }
