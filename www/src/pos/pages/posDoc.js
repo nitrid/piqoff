@@ -1253,9 +1253,9 @@ export default class posDoc extends React.PureComponent
                 
                 tmpPayRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).round(2)); 
                 tmpPayChange = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) >= 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).round(2)) * -1
-
+                
                 this.core.util.writeLog("calcGrandTotal : " + tmpPayRest + " - " + tmpPayChange)
-
+                
                 this.customerName.value = this.posObj.dt()[0].CUSTOMER_NAME.toString()
                 this.customerPoint.value = this.posObj.dt()[0].CUSTOMER_POINT
                 this.popCustomerPoint.value = this.posObj.dt()[0].CUSTOMER_POINT
@@ -1382,18 +1382,14 @@ export default class posDoc extends React.PureComponent
                             }
                             else
                             {
-                                localStorage.setItem('REF_SALE',this.posObj.dt()[0].REF)
-                                localStorage.setItem('SIG_SALE',this.posObj.dt()[0].SIGNATURE)
-                                this.init()
+                                this.saleCloseSucces()
                                 resolve(true)
                                 return
                             }
                         }
                         else
                         {
-                            localStorage.setItem('REF_SALE',this.posObj.dt()[0].REF)
-                            localStorage.setItem('SIG_SALE',this.posObj.dt()[0].SIGNATURE)
-                            this.init()
+                            this.saleCloseSucces()
                             resolve(true)
                             return
                         }
@@ -1420,15 +1416,15 @@ export default class posDoc extends React.PureComponent
             }    
             resolve(true)
         });
-    }    
+    }
     calcSaleTotal(pPrice,pQuantity,pDiscount,pLoyalty,pVatRate)
     {
-        let tmpAmount = Number(Number(Number(pPrice) * Number(pQuantity)).round(5)).round(2)
-        let tmpFAmount = Number(Number(Number(tmpAmount)) - Number(Number(pDiscount)).round(2))
+        let tmpAmount = isNaN(Number(Number(Number(pPrice) * Number(pQuantity)).round(5)).round(2)) ? 0 : Number(Number(Number(pPrice) * Number(pQuantity)).round(5)).round(2)
+        let tmpFAmount = isNaN(Number(Number(Number(tmpAmount)) - Number(Number(pDiscount)).round(2))) ? 0 : Number(Number(Number(tmpAmount)) - Number(Number(pDiscount)).round(2))
         //let tmpFAmount = Number(parseFloat((pPrice * pQuantity) - (pDiscount)).round(2))
-        tmpFAmount = Number(Number(tmpFAmount - pLoyalty).round(2))
-        let tmpVat = Number(parseFloat(tmpFAmount - (tmpFAmount / ((pVatRate / 100) + 1))))
-    
+        tmpFAmount = isNaN(Number(Number(tmpFAmount - pLoyalty).round(2))) ? 0 : Number(Number(tmpFAmount - pLoyalty).round(2)) 
+        let tmpVat = isNaN(Number(parseFloat(tmpFAmount - (tmpFAmount / ((pVatRate / 100) + 1))))) ? 0 : Number(parseFloat(tmpFAmount - (tmpFAmount / ((pVatRate / 100) + 1))))
+        
         return {
             QUANTITY:pQuantity,
             PRICE:pPrice,
@@ -1650,33 +1646,7 @@ export default class posDoc extends React.PureComponent
                         this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].TICKET_PLUS = pPayChange
                     }                    
                 }
-                //EĞER MÜŞTERİ KARTI İSE PUAN KAYIT EDİLİYOR.
-                if(this.posObj.dt()[0].CUSTOMER_GUID != '00000000-0000-0000-0000-000000000000' && this.posObj.dt()[0].CUSTOMER_POINT_PASSIVE == false)
-                {
-                    let tmpCustFact = (Number(this.prmObj.filter({ID:'CustomerPointFactory',TYPE:0}).getValue()) / 100)
-                    if(this.posObj.dt()[0].TYPE == 0)
-                    {
-                        if(Math.floor(this.posObj.dt()[0].TOTAL) > 0)
-                        {
-                            let tmpPoint = Math.floor(Number(this.posObj.dt()[0].TOTAL) * tmpCustFact)
-                            //PROMOSYONDA MÜŞTERİ PUANI VARSA EKLENİYOR.
-                            if(this.posPromoObj.dt().where({APP_TYPE:1}).length > 0)
-                            {
-                                tmpPoint += this.posPromoObj.dt().where({APP_TYPE:1})[0].APP_AMOUNT
-                            }
-                            //**************************************** */
-                            await this.customerPointSave(0,tmpPoint)
-                        }
-                        if(this.popCustomerUsePoint.value > 0)
-                        {
-                            await this.customerPointSave(1,Number(parseFloat(this.posObj.dt()[0].LOYALTY * 100).round(0)))
-                        }
-                    }
-                    else
-                    {
-                        await this.customerPointSave(1,Math.floor(this.posObj.dt()[0].TOTAL * tmpCustFact))
-                    }                    
-                }
+                
                 this.popTotal.hide();
                 this.popCashPay.hide();
                 this.popCardPay.hide();
@@ -1715,11 +1685,7 @@ export default class posDoc extends React.PureComponent
                         }
                     }
                 } 
-                //POS_PROMO TABLOSUNA KAYIT EDİLİYOR.
-                console.log(1)
-                await this.posPromoObj.save()
-                console.log(this.posPromoObj)
-                //******************************** */
+                
                 if((typeof pPrint == 'undefined' || pPrint) && this.prmObj.filter({ID:'SaleClosePrint',TYPE:0}).getValue() == true)
                 {       
                     if(this.prmObj.filter({ID:'SaleClosePrint',TYPE:0}).getValue() == true)
@@ -1925,7 +1891,44 @@ export default class posDoc extends React.PureComponent
                 resolve(false)
             }
         });
-    }   
+    }
+    async saleCloseSucces()
+    {
+        localStorage.setItem('REF_SALE',this.posObj.dt()[0].REF)
+        localStorage.setItem('SIG_SALE',this.posObj.dt()[0].SIGNATURE)
+
+        //EĞER MÜŞTERİ KARTI İSE PUAN KAYIT EDİLİYOR.
+        if(this.posObj.dt()[0].CUSTOMER_GUID != '00000000-0000-0000-0000-000000000000' && this.posObj.dt()[0].CUSTOMER_POINT_PASSIVE == false)
+        {
+            let tmpCustFact = (Number(this.prmObj.filter({ID:'CustomerPointFactory',TYPE:0}).getValue()) / 100)
+            if(this.posObj.dt()[0].TYPE == 0)
+            {
+                if(Math.floor(this.posObj.dt()[0].TOTAL) > 0)
+                {
+                    let tmpPoint = Math.floor(Number(this.posObj.dt()[0].TOTAL) * tmpCustFact)
+                    //PROMOSYONDA MÜŞTERİ PUANI VARSA EKLENİYOR.
+                    if(this.posPromoObj.dt().where({APP_TYPE:1}).length > 0)
+                    {
+                        tmpPoint += this.posPromoObj.dt().where({APP_TYPE:1})[0].APP_AMOUNT
+                    }
+                    //**************************************** */
+                    await this.customerPointSave(0,tmpPoint)
+                }
+                if(this.popCustomerUsePoint.value > 0)
+                {
+                    await this.customerPointSave(1,Number(parseFloat(this.posObj.dt()[0].LOYALTY * 100).round(0)))
+                }
+            }
+            else
+            {
+                await this.customerPointSave(1,Math.floor(this.posObj.dt()[0].TOTAL * tmpCustFact))
+            }                    
+        }
+        //POS_PROMO TABLOSUNA KAYIT EDİLİYOR.
+        await this.posPromoObj.save()
+        //******************************** */
+        this.init()
+    }
     async payAdd(pType,pAmount)
     {       
         if(Number(this.payRest.value) > 0)
@@ -3286,7 +3289,7 @@ export default class posDoc extends React.PureComponent
 
             tmpPosDt.selectCmd = 
             {
-                query : "SELECT GUID,CUSER,REF,CERTIFICATE,SIGNATURE,SIGNATURE_SUM,ROUND(TOTAL,2) AS TOTAL,ROUND(LOYALTY,2) AS LOYALTY,ROUND(AMOUNT,2) AS AMOUNT FROM POS WHERE GUID = @GUID",
+                query : "SELECT GUID,CUSER,REF,CERTIFICATE,SIGNATURE,SIGNATURE_SUM,ROUND(TOTAL,2) AS TOTAL,ROUND(DISCOUNT,2) AS DISCOUNT,ROUND(LOYALTY,2) AS LOYALTY,ROUND(AMOUNT,2) AS AMOUNT FROM POS WHERE GUID = @GUID",
                 param : ['GUID:string|50'],
                 value : [pGuid]
             }
@@ -3337,7 +3340,7 @@ export default class posDoc extends React.PureComponent
                     resolve(false)
                     return
                 }
-                if(Number(tmpPosDt[0].AMOUNT).toFixed(2) == Number(tmpPosDt[0].LOYALTY).toFixed(2))
+                if(Number(tmpPosDt[0].AMOUNT - tmpPosDt[0].DISCOUNT).round(2) == Number(tmpPosDt[0].LOYALTY).round(2))
                 {
                     resolve(true)
                     return
@@ -6120,7 +6123,7 @@ export default class posDoc extends React.PureComponent
                                         let tmpData = this.posObj.posSale.dt()[i]
                                         let tmpRowLoyalty = Number(Number(Number(tmpData.AMOUNT).round(2)) - Number(Number(tmpData.DISCOUNT).round(2))).rateInc(tmpLoyaltyRate,2)
                                         let tmpCalc = this.calcSaleTotal(tmpData.PRICE,tmpData.QUANTITY,tmpData.DISCOUNT,tmpRowLoyalty,tmpData.VAT_RATE)
-
+                                        
                                         this.posObj.posSale.dt()[i].FAMOUNT = tmpCalc.FAMOUNT
                                         this.posObj.posSale.dt()[i].AMOUNT = tmpCalc.AMOUNT
                                         this.posObj.posSale.dt()[i].DISCOUNT = tmpCalc.DISCOUNT
