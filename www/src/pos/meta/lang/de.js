@@ -611,13 +611,13 @@ export const langDe =
         msg2 : "!! BITTE ÜBERPRÜFEN SIE DIE ZULETZT GESCANNTEN ARTIKEL !!",
         btn01 : "OK"
     },
-    msgDataTransferAlert: //BAK
+    msgDataTransferAlert: 
     {
-        title : "Dikkat",
-        msg1 : "Aktarmanız gereken {0} adet kayıt mevcut ! Şimdi verileri aktarın.",
-        msg2 : "Aktarım işlemi başarılı.",
-        msg3 : "Aktarım işlemi başarısız.Tüm işlemler yeniden başlatılıyor.",
-        btn01 : "Tamam"
+        title : "Achtung",
+        msg1 : "Sie haben {0} Datensätze zu übertragen! Übertragen Sie die Daten jetzt.",
+        msg2 : "Übertragung erfolgreich abgeschlossen.",
+        msg3 : "Übertragung fehlgeschlagen. Alle Vorgänge werden neu gestartet.",
+        btn01 : "OK"
     },
     msgNotWeighing: 
     {

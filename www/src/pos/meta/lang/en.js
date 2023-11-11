@@ -611,13 +611,13 @@ export const langEn =
         msg2: "!!!! Please check the last scanned items !!!!",
         btn01: "OK"
     },
-    msgDataTransferAlert: //BAK
+    msgDataTransferAlert: 
     {
-        title : "Dikkat",
-        msg1 : "Aktarmanız gereken {0} adet kayıt mevcut ! Şimdi verileri aktarın.",
-        msg2 : "Aktarım işlemi başarılı.",
-        msg3 : "Aktarım işlemi başarısız.Tüm işlemler yeniden başlatılıyor.",
-        btn01 : "Tamam"
+        title : "Attention",
+        msg1 : "You have {0} records to transfer! Transfer the data now.",
+        msg2 : "Transfer process successful.",
+        msg3 : "Transfer process failed. All operations are being restarted.",
+        btn01 : "OK"
     },
     msgNotWeighing:
     {

@@ -130,6 +130,14 @@ export const langTr =
         clmTotalHt : "Tutar",
     },
     btnVatToZero : "Vergiyi Sıfırla",
+    btnVatReCalculate : "Vergiyi Hesapla",
+    msgVatCalculate :
+    {
+        title : "Dikkat",
+        msg : "Vergiyi yeniden hesaplamak istediğinize eminmisiniz ",
+        btn01 : "Tamam",
+        btn02 : "İptal",
+    },
     menuOff:
     {
         stk: "Ürün",                
@@ -485,6 +493,7 @@ export const langTr =
             title: "Fiyat Ekle",
             dtPopPriStartDate: "Baş.Tarih",
             dtPopPriEndDate: "Bit.Tarih", 
+            cmbPopPriDepot: "Depo",
             txtPopPriQuantity: "Miktar",
             txtPopPriPrice: "Fiyat",
             txtPopPriPriceVatExt: "Vargisiz Fiyat"
@@ -4055,6 +4064,7 @@ export const langTr =
             clmPrice : "Fiyat",
             clmTotal : "Tutar",
             clmDate : "Tarih",
+            clmDocNo : "Belgo No",
         },
         grdPurcInv: 
         {
@@ -4443,7 +4453,8 @@ export const langTr =
             clmQuantity : "Adet",
             clmTotal : "Tutar",
             clmPrice : "Fiyat",
-            clmlineNo : "No"
+            clmlineNo : "No",
+            clmDate : "Tarih",
         },
         cmbPayType : {
             title : "Ödeme Tipi",
@@ -4656,6 +4667,7 @@ export const langTr =
             clmPrice : "Fiyat",
             clmTotal : "Tutar",
             clmDate : "Tarih",
+            clmDocNo : "Belge No"
         },
         grdSlsInv: 
         {
@@ -4970,7 +4982,8 @@ export const langTr =
             clmQuantity : "Adet",
             clmTotal : "Tutar",
             clmPrice : "Fiyat",
-            clmlineNo : "No"
+            clmlineNo : "No",
+            clmlDate : "Tarih"
         },
         cmbPayType : {
             title : "Ödeme Tipi",
@@ -5200,6 +5213,7 @@ export const langTr =
             clmPrice : "Fiyat",
             clmTotal : "Tutar",
             clmDate : "Tarih",
+            clmDocNo : "Belge No"
         },
         grdRebtInv: 
         {
@@ -6121,6 +6135,7 @@ export const langTr =
             clmPrice : "Fiyat",
             clmTotal : "Tutar",
             clmDate : "Tarih",
+            clmDocNo : "Belge No"
         },
         grdSlsInv: 
         {
@@ -7067,6 +7082,7 @@ export const langTr =
             clmPrice : "Fiyat",
             clmTotal : "Tutar",
             clmDate : "Tarih",
+            clmDocNo : "Belge No"
         },
         grdRebtInv: 
         {
@@ -11912,6 +11928,7 @@ export const langTr =
         validMail : "Lütfen Boş Geçmeyin.",
         txtTotalHt : "İndirimli Tutar",
         txtUnitPrice: "Birim Fiyatı",
+        txtDocNo : "Belgo No",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -11943,6 +11960,18 @@ export const langTr =
             clmCode :  "ÜRÜN KODU",
             clmName : "ÜRÜN ADI",
             clmQuantity :"MİKTAR"
+        },
+        pg_dispatchGrid : 
+        {
+            title : "İrsaliye Seçimi",
+            clmReferans : "Seri - Sıra",
+            clmCode : "Kodu",
+            clmName : "Adı",
+            clmQuantity : "Adet",
+            clmPrice : "Fiyat",
+            clmTotal : "Tutar",
+            clmDate : "Tarih",
+            clmDocNo : "Belge No"
         },
         grdRebtDispatch: 
         {
@@ -12674,6 +12703,7 @@ export const langTr =
         btnMailsend : "Mail Gönder",
         validMail : "Lütfen Boş Geçmeyin.",
         placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.",
+        txtDocNo : "Belgo No",
         isMsgSave :
         {  
             title: "Dikkat",
@@ -12726,6 +12756,18 @@ export const langTr =
             clmCode :  "ÜRÜN KODU",
             clmName : "ÜRÜN ADI",
             clmQuantity :"MİKTAR"
+        },
+        pg_dispatchGrid : 
+        {
+            title : "İrsaliye Seçimi",
+            clmReferans : "Seri - Sıra",
+            clmCode : "Kodu",
+            clmName : "Adı",
+            clmQuantity : "Adet",
+            clmPrice : "Fiyat",
+            clmTotal : "Tutar",
+            clmDate : "Tarih",
+            clmDocNo : "Belge No",
         },
         grdRebtDispatch: 
         {
@@ -16240,6 +16282,7 @@ export const langTr =
         txtPayCardPort : "Pay Card Port",
         txtPrintDesing : "Fiş Dizaynı",
         txtMacId : "Mac Id",
+        cmbDepot : "Depo",
         pg_txtCode : 
         {
             title : "Kasa Seçimi",
