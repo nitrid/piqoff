@@ -1541,6 +1541,11 @@ class nf525
                 tmpMailText = err.toString()
             }
             
+            if(tmpMailText == '')
+            {
+                tmpMailText = 'NF525 Anomali Success'
+            }
+
             if(tmpMailText != '')
             {
                 let tmpMailData =

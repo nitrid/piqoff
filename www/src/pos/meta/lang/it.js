@@ -613,6 +613,14 @@ export const langIt =
         msg2: "!! PER FAVORE, CONTROLLA GLI ULTIMI PRODOTTI SCANSIONATI !!",
         btn01: "Ok"
     },
+    msgDataTransferAlert: 
+    {
+        title : "Attenzione",
+        msg1 : "Hai {0} record da trasferire! Trasferisci i dati adesso.",
+        msg2 : "Processo di trasferimento riuscito.",
+        msg3 : "Processo di trasferimento non riuscito. Tutte le operazioni vengono riavviate.",
+        btn01 : "OK"
+    },
     msgNotWeighing: 
     {
         title: "Attenzione",
@@ -793,12 +801,6 @@ export const langIt =
         payCardPort : "Porta Carta di Pagamento",
         printDesing : "Design di Stampa",
         scannerPort : "Scanner port"
-    },
-    msgConnectOut: 
-    {
-        title : "Attenzione",
-        msg : "La connessione al server è stata interrotta...",
-        btn01 : "Ok"
     },
     msgNotBarcodeWeighing: 
     {
