@@ -58,10 +58,12 @@ class mailer
                 if (error) {
                     console.log(error)
                     resolve(error);
-                } else {
+                } 
+                else 
+                {
                     resolve(0);
                 }
-              });
+            });
         })
     }
 }

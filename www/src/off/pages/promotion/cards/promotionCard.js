@@ -161,7 +161,7 @@ export default class promotionCard extends React.PureComponent
             
             let tmpQuery = 
             {
-                query : "SELECT dbo.FN_PRICE_SALE(@GUID,1,GETDATE(),@CUSTOMER) AS PRICE",
+                query : "SELECT dbo.FN_PRICE_SALE(@GUID,1,GETDATE(),@CUSTOMER,'00000000-0000-0000-0000-000000000000') AS PRICE",
                 param : ['GUID:string|50','CUSTOMER:string|50'],
                 value : [pGuid,this.promo.dt()[0].CUSTOMER_GUID]           
             }
@@ -325,7 +325,7 @@ export default class promotionCard extends React.PureComponent
                                                 select:
                                                 {
                                                     query : "SELECT MAX(ITEM_GUID) AS GUID,MAX(BARCODE) AS BARCODE,ITEM_CODE AS CODE,ITEM_NAME AS NAME,MAIN_GRP_NAME AS MAIN_GRP_NAME, " + 
-                                                            "ISNULL((SELECT dbo.FN_PRICE_SALE(ITEM_GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000')),0) AS PRICE " + 
+                                                            "ISNULL((SELECT dbo.FN_PRICE_SALE(ITEM_GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000')),0) AS PRICE " + 
                                                             "FROM ITEM_BARCODE_VW_01 WHERE (UPPER(ITEM_CODE) LIKE UPPER(@VAL) OR UPPER(ITEM_NAME) LIKE UPPER(@VAL) OR BARCODE LIKE @VAL) AND STATUS = 1 " + 
                                                             "GROUP BY ITEM_CODE,ITEM_NAME,MAIN_GRP_NAME,ITEM_GUID",
                                                     param : ['VAL:string|50']
@@ -895,9 +895,9 @@ export default class promotionCard extends React.PureComponent
                                             <NdTextBox id={"txtDiscAmount" + pItem.WITHAL} parent={this} simple={true}
                                             onValueChanged={async(e)=>
                                             { 
-                                                if(Number(100 - Number(this.state.discPrice).rate2Num(e.value,2)) >= 0 && Number(100 - Number(this.state.discPrice).rate2Num(e.value,2)) <= 100)
+                                                if(Number(100 - Number(this.state.discPrice).rate2Num(Number(e.value.replace(",",".")),2)) >= 0 && Number(100 - Number(this.state.discPrice).rate2Num(Number(e.value.replace(",",".")),2)) <= 100)
                                                 {
-                                                    this["txtDiscRate" + pItem.WITHAL].value = Number(100 - Number(this.state.discPrice).rate2Num(e.value,2)).toFixed(2)
+                                                    this["txtDiscRate" + pItem.WITHAL].value = Number(100 - Number(this.state.discPrice).rate2Num(e.value.replace(",","."),2)).toFixed(2)
                                                 }
                                                 else
                                                 {

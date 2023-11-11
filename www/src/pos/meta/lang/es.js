@@ -298,6 +298,15 @@ export const langEs =
     popLastSaleList : 
     {
         title : "Lista de Últimas Ventas",
+        cmbPopLastSalePayType : 
+        {
+            optionAll : "Todo",
+            optionEspece : "Espece",
+            optionTPE : "Carte Bancaire TPE",
+            optionCheque1 : "Cheque",
+            optionCheque2 : "CHEQue",
+            optionAvoir : "Bon D'Avoir"
+        }
     },
     txtPopLastRefPholder : "Por favor, lea el código de barras en el ticket...",
     popLastTotal : 
@@ -336,6 +345,11 @@ export const langEs =
         head : "Descripción de Eliminación de Línea",
         title : "Por favor, ingrese la razón de la eliminación"
     },
+    PopBalanceCounterDesc :
+    {
+        head : "Descripción de Control de Báscula",
+        title : "Por favor, introduzca el motivo del control de la báscula"
+    },
     popItemReturnDesc : 
     {
         head : "Descripción de Devolución",
@@ -367,13 +381,14 @@ export const langEs =
         btn01: "Ingresar cantidad",
         btn02: "Cancelar",
     },
-    msgCardPayment:
+    msgCardPayment: 
     {
         title: "Atención",
-        msg: "Esperando respuesta desde el dispositivo de tarjeta.",
+        msg: "Esperando la respuesta del terminal de tarjeta.",
+        msgAmount: "Cantidad :",
         btn01: "Reintentar",
         btn02: "Cancelar",
-        btn03: "Forzar",
+        btn03: "Forzar"
     },
     msgRePaymentType:
     {
@@ -576,6 +591,13 @@ export const langEs =
         msg: "¡No puede realizar esta operación mientras está en modo offline!",
         btn01: "Aceptar"
     },
+    msgDisconnectWarning: 
+    {
+      title: "Atención",
+      msg: "¿Está seguro de que desea salir?",
+      btn01: "SÍ",
+      btn02: "NO"
+    },
     msgOfflineAlert: 
     {
         title: "Atención",
@@ -589,6 +611,14 @@ export const langEs =
         msg1: "¡Se ha establecido la conexión con el servidor! Puede continuar con la operación en línea.",
         msg2: "¡POR FAVOR, VERIFIQUE LOS ÚLTIMOS PRODUCTOS ESCANEADOS!",
         btn01: "Aceptar"
+    },
+    msgDataTransferAlert: 
+    {
+        title : "Atención",
+        msg1 : "Tiene {0} registros para transferir. Transfiera los datos ahora.",
+        msg2 : "Proceso de transferencia exitoso.",
+        msg3 : "Fallo en el proceso de transferencia. Se están reiniciando todas las operaciones.",
+        btn01 : "Aceptar"
     },
     msgNotWeighing: 
     {
@@ -771,10 +801,43 @@ export const langEs =
         printDesing: "Diseño de Impresión",
         scannerPort : "Scanner port"
     },
-    msgConnectOut: 
+    msgNotBarcodeWeighing: 
     {
         title: "Atención",
-        msg: "¡Se ha perdido la conexión con el servidor!",
+        msg: "La cantidad total del producto pesado no coincide con el código de barras escaneado",
+        msgTicket: "Cantidad pesada: ",
+        msgBarkod: "Cantidad de etiqueta: ",
+        msgDifference: "Diferencia: ",
+        msgTotalAmount : "Monto total",
+        btn01: "Aceptar",
+        btn02: "Continuar"
+    },
+    msgBarcodeWeighing:
+    {
+        title: "Atención",
+        msg: "Línea escaneada: {0} - Monto total: {1}",
         btn01: "Aceptar"
     },
+    msgBarcodeWeighingUnit: 
+    {
+        title : "Atención",
+        msg : "La etiqueta escaneada contiene productos individuales. No es necesario que coincidan las cantidades en la balanza.",
+        btn01 : "Aceptar"
+    },
+    msgTSENotFound:
+    {
+        title: "Atención",
+        msg: "¡No se pudo establecer comunicación con el dispositivo TSE!",
+        btn01: "Aceptar"
+    },
+    msgMacIdFailed:
+    {
+        title : "Atención",
+        msg : "¡ID del dispositivo no coincide! Por favor, contacte a piqsoft.",
+        btn01 : "Aceptar"
+    },
+    itemInfo:
+    {
+        msgSplash: "POR FAVOR, ESCANEE EL CÓDIGO DE BARRAS"
+    }
 }

@@ -298,6 +298,15 @@ export const langIt =
     popLastSaleList:
     {
         title: "Elenco Ultimi Acquisti",
+        cmbPopLastSalePayType : 
+        {
+            optionAll : "Tutto",
+            optionEspece : "Espece",
+            optionTPE : "Carte Bancaire TPE",
+            optionCheque1 : "Cheque",
+            optionCheque2 : "CHEQue",
+            optionAvoir : "Bon D'Avoir"
+        }
     },
     txtPopLastRefPholder: "Leggi il codice a barre sulla ricevuta...",
     popLastTotal:
@@ -336,6 +345,11 @@ export const langIt =
         head: "Descrizione Cancellazione Riga",
         title: "Inserisci una ragione per l'annullamento, per favore"
     },
+    PopBalanceCounterDesc :
+    {
+        head : "Descrizione Controllo Bilancia",
+        title : "Inserisci il motivo del controllo della bilancia"
+    },
     popItemReturnDesc:
     {
         head: "Descrizione Reso",
@@ -370,11 +384,12 @@ export const langIt =
     msgCardPayment: 
     {
         title: "Attenzione",
-        msg: "In attesa di una risposta dal dispositivo di pagamento con carta.",
+        msg: "In attesa della risposta del terminale della carta.",
+        msgAmount: "Importo :",
         btn01: "Riprova",
         btn02: "Annulla",
-        btn03: "Forza",
-    },
+        btn03: "Forza"
+    },    
     msgRePaymentType:
     {
         title: "Come desideri ricevere il pagamento rimanente?"
@@ -576,6 +591,14 @@ export const langIt =
         msg: "Impossibile eseguire questa operazione in modalità offline!",
         btn01: "Ok"
     },
+    msgDisconnectWarning: 
+    {
+      title: "Attenzione",
+      msg: "Sei sicuro di voler uscire?",
+      btn01: "SÌ",
+      btn02: "NO"
+    },
+
     msgOfflineAlert: 
     {
         title: "Attenzione",
@@ -589,6 +612,14 @@ export const langIt =
         msg1: "Connessione al server ristabilita! Puoi continuare l'operazione online.",
         msg2: "!! PER FAVORE, CONTROLLA GLI ULTIMI PRODOTTI SCANSIONATI !!",
         btn01: "Ok"
+    },
+    msgDataTransferAlert: 
+    {
+        title : "Attenzione",
+        msg1 : "Hai {0} record da trasferire! Trasferisci i dati adesso.",
+        msg2 : "Processo di trasferimento riuscito.",
+        msg3 : "Processo di trasferimento non riuscito. Tutte le operazioni vengono riavviate.",
+        btn01 : "OK"
     },
     msgNotWeighing: 
     {
@@ -771,10 +802,43 @@ export const langIt =
         printDesing : "Design di Stampa",
         scannerPort : "Scanner port"
     },
-    msgConnectOut: 
+    msgNotBarcodeWeighing: 
+    {
+        title: "Attenzione",
+        msg: "La quantità totale del prodotto pesato non corrisponde al codice a barre scansionato",
+        msgTicket: "Quantità pesata: ",
+        msgBarkod: "Quantità dell'etichetta: ",
+        msgDifference: "Differenza: ",
+        msgTotalAmount : "Importo totale",
+        btn01: "OK",
+        btn02: "Continua"
+    },
+    msgBarcodeWeighing:
+    {
+        title: "Attenzione",
+        msg: "Linea scannerizzata : {0} - Importo totale : {1}",
+        btn01: "OK"
+    },
+    msgBarcodeWeighingUnit: 
     {
         title : "Attenzione",
-        msg : "La connessione al server è stata interrotta...",
-        btn01 : "Ok"
+        msg : "L'etichetta scansionata contiene prodotti singoli. Non è necessario corrispondere le quantità sulla bilancia.",
+        btn01 : "OK"
     },
+    msgTSENotFound:
+    {
+        title: "Attenzione",
+        msg: "Impossibile stabilire la comunicazione con il dispositivo TSE !",
+        btn01: "OK"
+    },
+    msgMacIdFailed:
+    {
+        title : "Attenzione",
+        msg : "ID del dispositivo non corrisponde! Si prega di contattare piqsoft.",
+        btn01 : "OK"
+    },
+    itemInfo:
+    {
+        msgSplash: "PER FAVORE SCANSIONA IL CODICE A BARRE"
+    }
 }

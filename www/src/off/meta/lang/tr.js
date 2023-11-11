@@ -130,6 +130,14 @@ export const langTr =
         clmTotalHt : "Tutar",
     },
     btnVatToZero : "Vergiyi Sıfırla",
+    btnVatReCalculate : "Vergiyi Hesapla",
+    msgVatCalculate :
+    {
+        title : "Dikkat",
+        msg : "Vergiyi yeniden hesaplamak istediğinize eminmisiniz ",
+        btn01 : "Tamam",
+        btn02 : "İptal",
+    },
     menuOff:
     {
         stk: "Ürün",                
@@ -174,6 +182,7 @@ export const langTr =
         stk_05_001 : "Depo Envanter Raporu",
         stk_05_002 : "Değişen Alış Fiyatları Raporu",
         stk_05_003 : "Sayım Envanter Raporu",
+        stk_05_004 : "Kayıp Ürün Raporu",
         cri: "Müşteri",
         cri_01: "Tanımlar",
         cri_02: "Listeler",
@@ -269,6 +278,7 @@ export const langTr =
         fns_03_003 : "Hesaplar Arası Virman",
         fns_04 : "Raporlar",
         fns_04_001 : "Banka Ekstre Raporu",
+        fns_04_003 : "Kasa Ekstre Raporu",
         fns_04_002 : "Müşteri Bakiye Raporu",
         fns_05 : "Operasyonlar",
         fns_05_001 : "Toplu Tahsilat Girişi",
@@ -292,8 +302,10 @@ export const langTr =
         pos_02_012 : "Pos Puan Kullanım Raporu",
         pos_02_013 : "Pos İndirim Raporu",
         pos_02_014 : "Okunmamış Terazi Fişleri",
+        pos_02_015 : "Müşteri Bazlı Ürün Satış Raporu",
         pos_03 :"Operasyonlar",
         pos_03_001 : "Gün Sonu",
+        pos_03_002 : "Çekiliş",
         promo: "Promosyon",
         promo_01: "Tanımlar",
         promo_01_001: "Promosyon Tanımlama",
@@ -394,6 +406,12 @@ export const langTr =
         btn01: "Tamam",
         msg: "Bu Evrak Numarasıyla Silinmiş Evrak! Lütfen Yetkili İle Görüşün.."
     },
+    msgCheckDocNo:
+    {
+        title: "Dikkat",
+        btn01: "Tamam",
+        msg: "Girmiş olduğunuz belge no daha önceden kayıt edilmiş !"
+    },
     stk_01_001:  // "Yeni Ürün Tanımlama"
     {
         txtRef: "Referans",
@@ -475,6 +493,7 @@ export const langTr =
             title: "Fiyat Ekle",
             dtPopPriStartDate: "Baş.Tarih",
             dtPopPriEndDate: "Bit.Tarih", 
+            cmbPopPriDepot: "Depo",
             txtPopPriQuantity: "Miktar",
             txtPopPriPrice: "Fiyat",
             txtPopPriPriceVatExt: "Vargisiz Fiyat"
@@ -736,7 +755,21 @@ export const langTr =
             title : "Ürün Cinsi",   
             clmCode : "KODU",   
             clmName : "ADI"   
-        } 
+        },
+        msgNewItem:
+        {
+            title: "Dikkat",
+            btn01: "Evet",
+            btn02: "Vazgeç",
+            msg: "Yeni ürüne geçmek istediğinize eminmisiniz !"
+        },
+        msgItemBack:
+        {
+            title: "Dikkat",
+            btn01: "Evet",
+            btn02: "Vazgeç",
+            msg: "Ürünü tekrar getirmek istediğinize eminmisiniz !"
+        },
     },
     stk_01_002:  //"Barkod Tanımları"
     {
@@ -942,6 +975,7 @@ export const langTr =
             title : "Ürün Grubu Seçimi",
             clmCode : "KODU",
             clmName : "ADI",
+            clmStatus : "Durum",
         },
         msgSave:
         {
@@ -1245,6 +1279,7 @@ export const langTr =
             title : "Ürün Seçimi",
             clmCode :  "ÜRÜN KODU",
             clmName : "ÜRÜN ADI",
+            clmPrice : "ALIS FIYATI",
         },
         grdItemCount: 
         {
@@ -2941,7 +2976,7 @@ export const langTr =
             clmNetMargin : "Net Marj",
         },
     },
-    stk_05_001 : // "Sayım Envanter Raporu"
+    stk_05_003 : // "Sayım Envanter Raporu"
     {
         chkZeroQuantity : "0 Miktarlar Gösterilsin",
         cmbDepot : "Depo",
@@ -2957,6 +2992,30 @@ export const langTr =
             clmTotalCost : "Envanter Değeri", 
             clmSalePrice : "Satış Fiyatı", 
             clmTotalPrice : "Toplam Satış Değeri" 
+        },
+        txtTotalQuantity : "Toplam Miktar",
+        txtTotalCost : "Envanter Değeri",
+        cmbDepot : "Depo"
+    },
+    stk_05_004 : // "Kayıp Ürün Raporu"
+    {
+        chkZeroQuantity : "0 Miktarlar Gösterilsin",
+        cmbDepot : "Depo",
+        btnCheck : "Aktif",
+        btnGet :"Getir",
+        grdListe : 
+        {
+            clmCode: "Kodu",
+            clmName : "Adı",           
+            clmQuantity : "Adet",
+            clmOutputCode : "Depo Kodu",
+            clmOutputName : "Depo Adı",
+            clmCostPrice : "Maliyet Fiyatı", 
+            clmTotalCost : "Toplam Maliyet", 
+            clmDocDate : "Tarih", 
+            clmRef : "Seri",
+            clmRefNo : "Sıra", 
+            clmDescription : "Açıklama"
         },
         txtTotalQuantity : "Toplam Miktar",
         txtTotalCost : "Envanter Değeri",
@@ -2994,6 +3053,7 @@ export const langTr =
             clmTitle : "Ünvan",
             clmName : "Adı",
             clmLastName  : "Soyadı",
+            clmStatus  : "Durum",   
         },
         grdAdress : 
         {
@@ -3106,7 +3166,8 @@ export const langTr =
         cmbTypeData : 
         {
             individual : "Bireysel",
-            company : "Firma"
+            company : "Firma",
+            association : "Dernek"
         },
         cmbGenusData:
         {
@@ -3360,7 +3421,8 @@ export const langTr =
             clmPhone1 :"Telefon",
             clmGsm : "GSM No.",
             clmEmail :"E-Mail",
-            clmIban :"Iban"
+            clmIban :"Iban",
+            clmStatus :"Durum"
         },
         cmbGenusData:
         {
@@ -4002,6 +4064,7 @@ export const langTr =
             clmPrice : "Fiyat",
             clmTotal : "Tutar",
             clmDate : "Tarih",
+            clmDocNo : "Belgo No",
         },
         grdPurcInv: 
         {
@@ -4390,7 +4453,8 @@ export const langTr =
             clmQuantity : "Adet",
             clmTotal : "Tutar",
             clmPrice : "Fiyat",
-            clmlineNo : "No"
+            clmlineNo : "No",
+            clmDate : "Tarih",
         },
         cmbPayType : {
             title : "Ödeme Tipi",
@@ -4480,7 +4544,13 @@ export const langTr =
             title : "Taşıyıcı Kodları",
             clmCode : "KODU",
             clmName : "ADI"
-        }
+        },
+        msgCustomerLock:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !"
+        },
     },
     ftr_02_002 : // "Satış Faturası"
     {
@@ -4538,6 +4608,30 @@ export const langTr =
         txtDocNo : "Belgo No",
         extraCost : "Ek Maliyet",
         cmbPriceContract : "Fiyat Anlaşması",
+        btnView : "Görüntüle",
+        btnMailsend : "Mail Gönder",
+        validMail : "Lütfen Boş Geçmeyin.",
+        placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.",
+        isMsgSave :
+        {  
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrak Kayıt Edilmeden Işlem yapılamaz !"         
+        },
+        msgMailSendResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Mail gönderimi başarılı !",
+            msgFailed: "Mail gönderimi başarısız !"
+        },
+        popMailSend : 
+        {
+            title :"E-Mail Gönder",
+            txtMailSubject : "E-Mail Başlığı",
+            txtSendMail : "E-Mail Adresi",
+            btnSend : "Gönder"
+        },
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -4573,6 +4667,7 @@ export const langTr =
             clmPrice : "Fiyat",
             clmTotal : "Tutar",
             clmDate : "Tarih",
+            clmDocNo : "Belge No"
         },
         grdSlsInv: 
         {
@@ -4887,7 +4982,8 @@ export const langTr =
             clmQuantity : "Adet",
             clmTotal : "Tutar",
             clmPrice : "Fiyat",
-            clmlineNo : "No"
+            clmlineNo : "No",
+            clmlDate : "Tarih"
         },
         cmbPayType : {
             title : "Ödeme Tipi",
@@ -5024,6 +5120,12 @@ export const langTr =
             interfel : "Interfel",
             calculateInterfel : "Interfeli Hesapla",
         },
+        msgCustomerLock:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !"
+        }
     },
     ftr_02_003 : // "İade Faturası"
     {
@@ -5111,6 +5213,7 @@ export const langTr =
             clmPrice : "Fiyat",
             clmTotal : "Tutar",
             clmDate : "Tarih",
+            clmDocNo : "Belge No"
         },
         grdRebtInv: 
         {
@@ -5492,6 +5595,12 @@ export const langTr =
             btn01: "Tamam",
             msg: "Evrak Kilitlenmeden Yazdırılamaz !"
         },
+        msgCustomerLock:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !"
+        },
     },
     ftr_02_004 : // "Fiyat Farkı Faturası"
     {
@@ -5544,6 +5653,12 @@ export const langTr =
         validMail : "Lütfen Boş Geçmeyin.",
         txtTotalHt : "İndirimli Tutar",
         txtDocNo : "Belgo No",
+        isMsgSave :
+        {  
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrak Kayıt Edilmeden Işlem yapılamaz !"         
+        },
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -5930,6 +6045,12 @@ export const langTr =
             btn01: "Tamam",
             msg: "Evrak Kilitlenmeden Yazdırılamaz !"
         },
+        msgCustomerLock:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !"
+        },
     },
     ftr_02_005 : // "Şube Satış Faturası"
     {
@@ -6014,6 +6135,7 @@ export const langTr =
             clmPrice : "Fiyat",
             clmTotal : "Tutar",
             clmDate : "Tarih",
+            clmDocNo : "Belge No"
         },
         grdSlsInv: 
         {
@@ -6108,6 +6230,26 @@ export const langTr =
             title: "Dikkat",
             btn01: "Tamam",
             msg: "Lütfen gerekli alanları doldurunuz !"
+        },
+        isMsgSave :
+        {  
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrak Kayıt Edilmeden Işlem yapılamaz !"         
+        },
+        msgMailSendResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Mail gönderimi başarılı !",
+            msgFailed: "Mail gönderimi başarısız !"
+        },
+        popMailSend : 
+        {
+            title :"E-Mail Gönder",
+            txtMailSubject : "E-Mail Başlığı",
+            txtSendMail : "E-Mail Adresi",
+            btnSend : "Gönder"
         },
         msgDelete:
         {
@@ -6402,6 +6544,12 @@ export const langTr =
             btn01: "Tamam",
             msg: "Evrak Kilitlenmeden Yazdırılamaz !"
         },
+        msgCustomerLock:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !"
+        },
     },
     ftr_02_006 : // "Fiyat Farkı Alış Faturası"
     {
@@ -6447,6 +6595,11 @@ export const langTr =
         txtUnitPrice: "Birim Fiyatı",
         txtExpFee : "Gecikme Cezası",
         dtExpDate : "Vade Tarihi", 
+        btnView : "Görüntüle",
+        btnMailsend : "Mail Gönder",
+        validDesign : "Lütfen Dizayn seçiniz.",
+        validMail : "Lütfen Boş Geçmeyin.",
+        placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.",
         txtTotalHt : "İndirimli Tutar",
         txtDocNo : "Belgo No",
         pg_Docs : 
@@ -6549,12 +6702,25 @@ export const langTr =
             btn01: "Tamam",
             msg: "Evrak Üst Bilgileri Tamalanmadan Ürün Girilemez !"
         },
+        isMsgSave :
+        {  
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrak Kayıt Edilmeden Işlem yapılamaz !"         
+        },
         msgSave:
         {
             title: "Dikkat",
             btn01: "Tamam",
             btn02: "Vazgeç",
             msg: "Kayıt etmek istediğinize eminmisiniz !"
+        },
+        msgMailSendResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Mail gönderimi başarılı !",
+            msgFailed: "Mail gönderimi başarısız !"
         },
         msgSaveResult:
         {
@@ -6816,6 +6982,19 @@ export const langTr =
             msg: "Listede Ürünler Var! "
         },
         tagItemCodePlaceholder: "Lütfen Eklemek İstediğiniz Kodları Giriniz",
+        msgCustomerLock:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !"
+        },
+        popMailSend : 
+        {
+            title :"E-Mail Gönder",
+            txtMailSubject : "E-Mail Başlığı",
+            txtSendMail : "E-Mail Adresi",
+            btnSend : "Gönder"
+        },
     },
     ftr_02_007 : // "İade Alış Faturası"
     {
@@ -6865,6 +7044,9 @@ export const langTr =
         txtDocNo : "Belgo No",
         btnView : "Görüntüle",
         btnMailsend : "Mail Gönder",
+        validDesign : "Lütfen Dizayn seçiniz.",
+        validMail : "Lütfen Boş Geçmeyin.",
+        placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -6900,6 +7082,7 @@ export const langTr =
             clmPrice : "Fiyat",
             clmTotal : "Tutar",
             clmDate : "Tarih",
+            clmDocNo : "Belge No"
         },
         grdRebtInv: 
         {
@@ -6996,6 +7179,26 @@ export const langTr =
             title: "Dikkat",
             btn01: "Tamam",
             msg: "Lütfen gerekli alanları doldurunuz !"
+        },
+        isMsgSave :
+        {  
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrak Kayıt Edilmeden Işlem yapılamaz !"         
+        },
+        msgMailSendResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Mail gönderimi başarılı !",
+            msgFailed: "Mail gönderimi başarısız !"
+        },
+        popMailSend : 
+        {
+            title :"E-Mail Gönder",
+            txtMailSubject : "E-Mail Başlığı",
+            txtSendMail : "E-Mail Adresi",
+            btnSend : "Gönder"
         },
         msgDelete:
         {
@@ -7275,6 +7478,12 @@ export const langTr =
             msgSuccess: "Mail gönderimi başarılı !",
             msgFailed: "Mail gönderimi başarısız !"
         },
+        msgCustomerLock:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !"
+        },
     },
     ftr_02_008 : // "Şube Alış Faturası"
     {
@@ -7327,6 +7536,26 @@ export const langTr =
         validMail : "Lütfen Boş Geçmeyin.",
         txtTotalHt : "İndirimli Tutar",
         txtDocNo : "Belgo No",
+        isMsgSave :
+        {  
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrak Kayıt Edilmeden Işlem yapılamaz !"         
+        },
+        msgMailSendResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Mail gönderimi başarılı !",
+            msgFailed: "Mail gönderimi başarısız !"
+        },
+        popMailSend : 
+        {
+            title :"E-Mail Gönder",
+            txtMailSubject : "E-Mail Başlığı",
+            txtSendMail : "E-Mail Adresi",
+            btnSend : "Gönder"
+        },
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -7755,6 +7984,12 @@ export const langTr =
             clmCode : "Kod",
             clmName : "Adı"
         },
+        msgCustomerLock:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !"
+        },
     },
     ftr_02_009 : // "Fire ALış Faturası"
     {
@@ -7804,6 +8039,28 @@ export const langTr =
         txtDocNo : "Belgo No",
         btnView : "Görüntüle",
         btnMailsend : "Mail Gönder",
+        validMail : "Lütfen Boş Geçmeyin.",
+        placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.",
+        isMsgSave :
+        {  
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrak Kayıt Edilmeden Işlem yapılamaz !"         
+        },
+        msgMailSendResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Mail gönderimi başarılı !",
+            msgFailed: "Mail gönderimi başarısız !"
+        },
+        popMailSend : 
+        {
+            title :"E-Mail Gönder",
+            txtMailSubject : "E-Mail Başlığı",
+            txtSendMail : "E-Mail Adresi",
+            btnSend : "Gönder"
+        },
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -8214,6 +8471,12 @@ export const langTr =
             msgSuccess: "Mail gönderimi başarılı !",
             msgFailed: "Mail gönderimi başarısız !"
         },
+        msgCustomerLock:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !"
+        },
     },
     ftr_04_001 : // "Proforma Fiyat Farkı Faturası"
     {
@@ -8257,6 +8520,31 @@ export const langTr =
         txtUnitPrice: "Birim Fiyatı",
         txtTotalHt : "İndirimli Tutar",
         txtDocNo : "Belgo No",
+        validDesign : "Lütfen Dizayn seçiniz.",
+        btnView : "Görüntüle",
+        btnMailsend : "Mail Gönder",
+        validMail : "Lütfen Boş Geçmeyin.",
+        placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.",
+        isMsgSave :
+        {  
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrak Kayıt Edilmeden Işlem yapılamaz !"         
+        },
+        msgMailSendResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Mail gönderimi başarılı !",
+            msgFailed: "Mail gönderimi başarısız !"
+        },
+        popMailSend : 
+        {
+            title :"E-Mail Gönder",
+            txtMailSubject : "E-Mail Başlığı",
+            txtSendMail : "E-Mail Adresi",
+            btnSend : "Gönder"
+        },
         msgDiscount:
         {
             title: "Dikkat",
@@ -8286,6 +8574,7 @@ export const langTr =
             title : "Ürün Seçimi",
             clmCode :  "ÜRÜN KODU",
             clmName : "ÜRÜN ADI",
+            clmPrice : "SATIŞ FİYATI"
         },
         pg_contractGrid : 
         {
@@ -8561,6 +8850,12 @@ export const langTr =
             title : "Hizmetler",
             clmCode : "Kod",
             clmName : "Adı"
+        },
+        msgCustomerLock:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !"
         },
     },
     ftr_04_002 : // "Proforma Satış Faturası"
@@ -8991,6 +9286,12 @@ export const langTr =
             clmCode : "Kod",
             clmName : "Adı"
         },
+        msgCustomerLock:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !"
+        },
     },
     ftr_04_003 : // "Proforma Alış Faturası"
     {
@@ -9046,6 +9347,31 @@ export const langTr =
         getOffers : "Teklif Getir",
         txtTotalHt : "İndirimli Tutar",
         txtDocNo : "Belgo No",
+        validDesign : "Lütfen Dizayn seçiniz.",
+        btnView : "Görüntüle",
+        btnMailsend : "Mail Gönder",
+        validMail : "Lütfen Boş Geçmeyin.",
+        placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.",
+        isMsgSave :
+        {  
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrak Kayıt Edilmeden Işlem yapılamaz !"         
+        },
+        msgMailSendResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Mail gönderimi başarılı !",
+            msgFailed: "Mail gönderimi başarısız !"
+        },
+        popMailSend : 
+        {
+            title :"E-Mail Gönder",
+            txtMailSubject : "E-Mail Başlığı",
+            txtSendMail : "E-Mail Adresi",
+            btnSend : "Gönder"
+        },
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -9070,6 +9396,7 @@ export const langTr =
             clmCode :  "ÜRÜN KODU",
             clmName : "ÜRÜN ADI",
             clmMulticode : "TEDARİKÇİ KODU",
+            clmPrice : "ALIŞ FİYATI"
         },
         pg_dispatchGrid : 
         {
@@ -9368,6 +9695,7 @@ export const langTr =
         {
             title: "Birim Seçimi",
             btn01: "Onayla",
+            btnFactorSave : "Ürün Kartını Güncelle"
         },
         validRef :"Seri Boş Geçilemez",
         validRefNo : "Sıra Boş Geçilemez",
@@ -9497,6 +9825,12 @@ export const langTr =
             clmTotal : "Tutar",
             clmPrice : "Fiyat",
         },
+        msgCustomerLock:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !"
+        },
     },
     ftr_04_004 : // "Proforma İade Faturası"
     {
@@ -9543,6 +9877,31 @@ export const langTr =
         dtExpDate : "Vade Tarihi", 
         txtTotalHt : "İndirimli Tutar",
         txtDocNo : "Belgo No",
+        validDesign : "Lütfen Dizayn seçiniz.",
+        btnView : "Görüntüle",
+        btnMailsend : "Mail Gönder",
+        validMail : "Lütfen Boş Geçmeyin.",
+        placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.",
+        isMsgSave :
+        {  
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrak Kayıt Edilmeden Işlem yapılamaz !"         
+        },
+        msgMailSendResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Mail gönderimi başarılı !",
+            msgFailed: "Mail gönderimi başarısız !"
+        },
+        popMailSend : 
+        {
+            title :"E-Mail Gönder",
+            txtMailSubject : "E-Mail Başlığı",
+            txtSendMail : "E-Mail Adresi",
+            btnSend : "Gönder"
+        },
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -9566,6 +9925,7 @@ export const langTr =
             title : "Ürün Seçimi",
             clmCode :  "ÜRÜN KODU",
             clmName : "ÜRÜN ADI",
+            clmPrice : "SATIŞ FIYATI"
         },
         pg_dispatchGrid : 
         {
@@ -9858,6 +10218,12 @@ export const langTr =
             clmCode : "Kod",
             clmName : "Adı"
         },
+        msgCustomerLock:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !"
+        },
     },
     ftr_04_005 : // "Şube Satış Faturası"
     {
@@ -9905,6 +10271,30 @@ export const langTr =
         dtExpDate : "Vade Tarihi", 
         txtTotalHt : "İndirimli Tutar",
         txtDocNo : "Belgo No",
+        btnView : "Görüntüle",
+        btnMailsend : "Mail Gönder",
+        validMail : "Lütfen Boş Geçmeyin.",
+        placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.",
+        isMsgSave :
+        {  
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrak Kayıt Edilmeden Işlem yapılamaz !"         
+        },
+        msgMailSendResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Mail gönderimi başarılı !",
+            msgFailed: "Mail gönderimi başarısız !"
+        },
+        popMailSend : 
+        {
+            title :"E-Mail Gönder",
+            txtMailSubject : "E-Mail Başlığı",
+            txtSendMail : "E-Mail Adresi",
+            btnSend : "Gönder"
+        },
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -10274,6 +10664,12 @@ export const langTr =
             title : "Hizmetler",
             clmCode : "Kod",
             clmName : "Adı"
+        },
+        msgCustomerLock:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !"
         },
     },
     promo_01_001: //  "Promosyon Tanımları"
@@ -10666,6 +11062,7 @@ export const langTr =
         txtTotalHt : "İndirimli Tutar",
         txtDocNo : "Belgo No",
         cmbOrigin : "Menşei",
+        validDesign : "Lütfen Dizayn Seçin",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -11050,7 +11447,13 @@ export const langTr =
             btn01 : "Evet",
             btn02 : "Hayır",
             title : "Dikkat"
-        }
+        },
+        msgCustomerLock:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !"
+        },
     },
     irs_02_002 : // Satış İrsaliyesi"
     {
@@ -11084,6 +11487,30 @@ export const langTr =
         txtDocNo : "Belgo No",
         extraCost : "Ek Maliyet",
         cmbPriceContract : "Fiyat Anlaşması",
+        btnView : "Görüntüle",
+        btnMailsend : "Mail Gönder",
+        validMail : "Lütfen Boş Geçmeyin.",
+        placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.",
+        isMsgSave :
+        {  
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrak Kayıt Edilmeden Işlem yapılamaz !"         
+        },
+        msgMailSendResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Mail gönderimi başarılı !",
+            msgFailed: "Mail gönderimi başarısız !"
+        },
+        popMailSend : 
+        {
+            title :"E-Mail Gönder",
+            txtMailSubject : "E-Mail Başlığı",
+            txtSendMail : "E-Mail Adresi",
+            btnSend : "Gönder"
+        },
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -11465,6 +11892,12 @@ export const langTr =
             quantity2: "2. Birim Toplamı ",
             margin : "Marj"
         },
+        msgCustomerLock:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !"
+        },
     },
     irs_02_003 : // "İade İrsaliyesi"
     {
@@ -11495,6 +11928,7 @@ export const langTr =
         validMail : "Lütfen Boş Geçmeyin.",
         txtTotalHt : "İndirimli Tutar",
         txtUnitPrice: "Birim Fiyatı",
+        txtDocNo : "Belgo No",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -11526,6 +11960,18 @@ export const langTr =
             clmCode :  "ÜRÜN KODU",
             clmName : "ÜRÜN ADI",
             clmQuantity :"MİKTAR"
+        },
+        pg_dispatchGrid : 
+        {
+            title : "İrsaliye Seçimi",
+            clmReferans : "Seri - Sıra",
+            clmCode : "Kodu",
+            clmName : "Adı",
+            clmQuantity : "Adet",
+            clmPrice : "Fiyat",
+            clmTotal : "Tutar",
+            clmDate : "Tarih",
+            clmDocNo : "Belge No"
         },
         grdRebtDispatch: 
         {
@@ -11803,6 +12249,12 @@ export const langTr =
         txtDiscountPer1 : "1. İndirim Oranı",
         txtDiscountPer2 : "2. İndirim Oranı",
         txtDiscountPer3 : "3. İndirim Oranı",
+        msgCustomerLock:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !"
+        },
     },
     irs_02_004 : // Şube Satış İrsaliyesi"
     {
@@ -11834,6 +12286,30 @@ export const langTr =
         validMail : "Lütfen Boş Geçmeyin.",
         txtTotalHt : "İndirimli Tutar",
         txtDocNo : "Belgo No",
+        btnView : "Görüntüle",
+        btnMailsend : "Mail Gönder",
+        validMail : "Lütfen Boş Geçmeyin.",
+        placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.",
+        isMsgSave :
+        {  
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrak Kayıt Edilmeden Işlem yapılamaz !"         
+        },
+        msgMailSendResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Mail gönderimi başarılı !",
+            msgFailed: "Mail gönderimi başarısız !"
+        },
+        popMailSend : 
+        {
+            title :"E-Mail Gönder",
+            txtMailSubject : "E-Mail Başlığı",
+            txtSendMail : "E-Mail Adresi",
+            btnSend : "Gönder"
+        },
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -12192,6 +12668,12 @@ export const langTr =
         txtDiscountPer1 : "1. İndirim Oranı",
         txtDiscountPer2 : "2. İndirim Oranı",
         txtDiscountPer3 : "3. İndirim Oranı",
+        msgCustomerLock:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !"
+        },
     },
     irs_02_005 : // "İade Alış İrsaliyesi"
     {
@@ -12217,15 +12699,40 @@ export const langTr =
         txtTotalQuantity : "Toplam Miktar",
         txtUnitPrice: "Birim Fiyatı",
         txtTotalHt : "İndirimli Toplam",
+        btnView : "Görüntüle",
+        btnMailsend : "Mail Gönder",
+        validMail : "Lütfen Boş Geçmeyin.",
+        placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.",
+        txtDocNo : "Belgo No",
+        isMsgSave :
+        {  
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrak Kayıt Edilmeden Işlem yapılamaz !"         
+        },
+        msgMailSendResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Mail gönderimi başarılı !",
+            msgFailed: "Mail gönderimi başarısız !"
+        },
+        popMailSend : 
+        {
+            title :"E-Mail Gönder",
+            txtMailSubject : "E-Mail Başlığı",
+            txtSendMail : "E-Mail Adresi",
+            btnSend : "Gönder"
+        },
         pg_Docs : 
         {
             title : "Evrak Seçimi",
             clmDate : "TARIH",
             clmRef : "SERİ",
             clmRefNo : "SIRA",
-            clmInputName : "CARİ ADI",
-            clmInputCode  : "CARİ KODU",
-            clmTotal : "KDVLİ TOPLAM"
+            clmOutputName : "CARİ ADI",
+            clmOutputCode  : "CARİ KODU",
+            clmTotal : "KDVLİ TOPLAM",
         },
         pg_txtCustomerCode : 
         {
@@ -12240,6 +12747,7 @@ export const langTr =
             title : "Ürün Seçimi",
             clmCode :  "ÜRÜN KODU",
             clmName : "ÜRÜN ADI",
+            clmMulticode : "MULTICODE",
             clmPrice : "SATIŞ FİYATI"
         },
         pg_RebateGrid : 
@@ -12248,6 +12756,18 @@ export const langTr =
             clmCode :  "ÜRÜN KODU",
             clmName : "ÜRÜN ADI",
             clmQuantity :"MİKTAR"
+        },
+        pg_dispatchGrid : 
+        {
+            title : "İrsaliye Seçimi",
+            clmReferans : "Seri - Sıra",
+            clmCode : "Kodu",
+            clmName : "Adı",
+            clmQuantity : "Adet",
+            clmPrice : "Fiyat",
+            clmTotal : "Tutar",
+            clmDate : "Tarih",
+            clmDocNo : "Belge No",
         },
         grdRebtDispatch: 
         {
@@ -12511,6 +13031,12 @@ export const langTr =
         txtDiscountPer1 : "1. İndirim Oranı",
         txtDiscountPer2 : "2. İndirim Oranı",
         txtDiscountPer3 : "3. İndirim Oranı",
+        msgCustomerLock:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !"
+        },
     },
     irs_02_006 : // Şube Alış İrsaliyesi"
     {
@@ -12565,6 +13091,7 @@ export const langTr =
             title : "Ürün Seçimi",
             clmCode :  "ÜRÜN KODU",
             clmName : "ÜRÜN ADI",
+            clmPrice : "SATIŞ FIYATI"
         },
         grdSlsDispatch: 
         {
@@ -12900,6 +13427,12 @@ export const langTr =
         txtDiscountPer1 : "1. İndirim Oranı",
         txtDiscountPer2 : "2. İndirim Oranı",
         txtDiscountPer3 : "3. İndirim Oranı",
+        msgCustomerLock:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !"
+        },
     },
     sip_01_001 : // "Alış Sipariş Listesi"
     {
@@ -13334,6 +13867,12 @@ export const langTr =
         txtDiscountPer2 : "2. İndirim Oranı",
         txtDiscountPer3 : "3. İndirim Oranı",
         txtTotalHt : "İndirimli Tutar",
+        msgCustomerLock:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !"
+        },
     },
     sip_02_002 : // "Satış Sipariş"
     {
@@ -13721,6 +14260,12 @@ export const langTr =
             quantity2: "2. Birim Toplamı ",
             margin : "Marj"
         },
+        msgCustomerLock:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !"
+        },
     },
     sip_02_003 : // "Pos Satış Sipariş"
     {
@@ -13753,6 +14298,30 @@ export const langTr =
         txtTotalHt : "İndirimli Tutar",
         txtDocNo : "Belgo No",
         cmbPriceContract : "Fiyat Anlaşması",
+        btnView : "Görüntüle",
+        btnMailsend : "Mail Gönder",
+        validMail : "Lütfen Boş Geçmeyin.",
+        placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.",
+        isMsgSave :
+        {  
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrak Kayıt Edilmeden Işlem yapılamaz !"         
+        },
+        msgMailSendResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Mail gönderimi başarılı !",
+            msgFailed: "Mail gönderimi başarısız !"
+        },
+        popMailSend : 
+        {
+            title :"E-Mail Gönder",
+            txtMailSubject : "E-Mail Başlığı",
+            txtSendMail : "E-Mail Adresi",
+            btnSend : "Gönder"
+        },
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -13777,7 +14346,8 @@ export const langTr =
             title : "Ürün Seçimi",
             clmCode :  "ÜRÜN KODU",
             clmName : "ÜRÜN ADI",
-            clmPrice : "SATIŞ FİYATI"
+            clmPrice : "SATIŞ FİYATI",
+            clmBarcode : "Barkod"
         },
         grdSlsOrder: 
         {
@@ -14107,6 +14677,12 @@ export const langTr =
             quantity: "Toplam Miktar",
             quantity2: "2. Birim Toplamı ",
             margin : "Marj"
+        },
+        msgCustomerLock:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !"
         },
     },
     sip_04_001 : // "Sipariş Ayrıştırma" 
@@ -15315,6 +15891,38 @@ export const langTr =
         validAccount : "Hesap Seçmelisiniz",
         validDocDate : "Tarih Seçmelisiniz",
     },
+    fns_04_001 : // "Banka Ekstre Raporu"
+    {
+        cmbBank : "Banka Seçimi",
+        btnCheck : "Aktif",
+        btnGet :"Getir",
+        grdListe : 
+        {
+            clmOutputName : "Çıkış Hesabı",
+            clmInputName : "Giriş Hesabı",
+            clmAmount : "Tutar", 
+            clmDocDate : "Tarih", 
+            clmRef : "Seri",
+            clmRefNo : "Sıra", 
+        },
+     
+    },
+    fns_04_003 : // "Kasa Ekstre Raporu"
+    {
+        cmbSafe : "Kasa Seçimi",
+        btnCheck : "Aktif",
+        btnGet :"Getir",
+        grdListe : 
+        {
+            clmOutputName : "Çıkış Hesabı",
+            clmInputName : "Giriş Hesabı",
+            clmAmount : "Tutar", 
+            clmDocDate : "Tarih", 
+            clmRef : "Seri",
+            clmRefNo : "Sıra", 
+        },
+     
+    },
     fns_05_001 : //"Toplu Tahsilat Girişi"
     {
         txtRefRefno : "Seri-Sıra",
@@ -15673,6 +16281,8 @@ export const langTr =
         txtLcdPort : "LCD Port",
         txtPayCardPort : "Pay Card Port",
         txtPrintDesing : "Fiş Dizaynı",
+        txtMacId : "Mac Id",
+        cmbDepot : "Depo",
         pg_txtCode : 
         {
             title : "Kasa Seçimi",
@@ -15713,7 +16323,6 @@ export const langTr =
             btn02: "Tamam",
             msg : "Girmiş olduğunuz Cihaz Kodu sistem de kayıtlı !"
         }
-      
     },
     pos_01_002 : // "Pos Plu Kopyalama",
     {
@@ -15794,7 +16403,8 @@ export const langTr =
             clmName : "Ürün Adı",
             clmQuantity : "Adet",
             clmPrice : "Fiyat",
-            clmTotal : "Tutar"
+            clmTotal : "Tutar",
+            clmTime : "Saat"
         },
         grdSaleTicketPays : 
         {
@@ -15988,6 +16598,8 @@ export const langTr =
             clmDate: "Tarih",
             clmTicketId: "Fiş I.D",
             clmDescription: "Açıklama",
+            clmTime: "Saat",
+            clmTotal: "Tutar",
         },
         pg_txtItem:
         {
@@ -16004,6 +16616,7 @@ export const langTr =
             clmTotal : "Tutar",
             clmLastData : "İlk Fiyat",
             clmDescription : "Açıklama",
+            clmTime: "Saat",
         },
         grdSaleTicketPays : 
         {
@@ -16255,6 +16868,47 @@ export const langTr =
             clmTicketNo : "Fiş No",
         },
     },
+    pos_02_015 : // "Müşteri Bazlı Ürün Satış Raporu"
+    {
+        btnGet : "Getir",
+        dtDate : "Tarih Aralığı",
+        txtCustomer : "Müşteri",
+        txtTotal : "Toplam",
+        grdList: 
+        {
+            cuserName: "O.Kullanıcı",
+            luserName: "D.Kullanıcı",
+            device: "Kasa",
+            ref: "Ref",
+            docDate: "Tarih",
+            itemCode: "Ürün Kodu",
+            itemName: "Ürün Adı",
+            itemGrpName: "Ürün Grubu",
+            barcode: "Barkodu",
+            clmQuantity: "Miktar",
+            unitShort: "Birim",
+            clmPrice : "Fiyat",
+            clmFAmount : "Vergisiz Tutar",
+            clmAmount : "Tutar",
+            clmDiscount : "İndirim",
+            clmLoyalty : "Sadakat İnd",
+            clmVat : "Vergi",
+            clmVatRate : "Vergi Oranı",
+            clmTotal : "Toplam"
+        },
+        pg_txtCustomer:
+        {
+            title: "Müşteri Seçim",
+            clmCode: "KODU",
+            clmName: "ADI"
+        },
+        msgCustomerSelect:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen Müşteri Seçiniz !"
+        },
+    },
     pos_03_001 : // "Gün Sonu",
     {
         TicketId :"Fiş I.D",
@@ -16358,6 +17012,16 @@ export const langTr =
             btn01: "Tamam",
             msg: "1000€ dan yüksek avans giremezsiniz ! "
         },
+    },
+    pos_03_002 : // "Çekiliş",
+    {
+        dtDate : "Tarih",
+        txtLucky : "Talihli",
+        txtPoint : "Puan",
+        btnLottery : "Çekiliş Yap",
+        lblTicketNo : "FİŞ NO",
+        lblCustomer : "MÜŞTERİ",
+        lblCustomerNo : "MÜŞTERİ NO"
     },
     tkf_01_001 : // "Alış Teklifi Listesi",
     {
@@ -16771,6 +17435,26 @@ export const langTr =
         placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.",
         validDesign : "Lütfen Dizayn seçiniz.",
         validMail : "Lütfen Boş Geçmeyin.",
+        isMsgSave :
+        {  
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Evrak Kayıt Edilmeden Işlem yapılamaz !"         
+        },
+        msgMailSendResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Mail gönderimi başarılı !",
+            msgFailed: "Mail gönderimi başarısız !"
+        },
+        popMailSend : 
+        {
+            title :"E-Mail Gönder",
+            txtMailSubject : "E-Mail Başlığı",
+            txtSendMail : "E-Mail Adresi",
+            btnSend : "Gönder"
+        },
         pg_Docs : 
         {
             title : "Evrak Seçimi",

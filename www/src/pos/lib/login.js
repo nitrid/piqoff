@@ -64,15 +64,7 @@ export default class Login extends React.Component
     async componentDidMount()
     {
         await this.core.util.waitUntil(0)
-        this.Kullanici.focus()        
-        //YENİ KURULMUŞ CİHAZLARDA DEFAULT TR SEÇİMİ.
-        if(localStorage.getItem('lang') == null)
-        {
-            localStorage.setItem('lang','tr')
-            i18n.changeLanguage('tr')
-            locale('tr')
-            window.location.reload()
-        }
+        this.Kullanici.focus()
     }
     async onLoginClick(e)
     {
@@ -127,7 +119,7 @@ export default class Login extends React.Component
         {
             if(tmpData[i].CARDID == pValue)
             {
-                if(await this.core.auth.login(tmpData[i].CODE,tmpData[i].PWD,'OFF'))
+                if(await this.core.auth.login(tmpData[i].CODE,tmpData[i].PWD,'POS'))
                 {
                     App.instance.setState({logined:true});
                     idCheck = true
@@ -161,7 +153,7 @@ export default class Login extends React.Component
                         <div className='row'>
                             <div className='col-4'></div>
                             <div className='col-8'>
-                                <img src="./css/img/Piqsoft_Logo.png" height="48px"/>
+                                <img src="./css/img/piqsoftlogo.png" height="48px"/>
                             </div>
                         </div>
                     </div>
@@ -266,10 +258,15 @@ export default class Login extends React.Component
                                 </div>
                             </div> */}
                              <div className="row">
-                                <div className="col-5">
+                                <div className="col-3">
                                 </div>
-                                <div className="col-4">
-                                    <img src="./css/img/Logo_NF_525-e1569399608233.jpg" height="70px"/>
+                                <div className="col-3">
+                                    <img src="./css/img/LogoNF525.jpg" height="70px"/>
+                                </div>
+                                <div className="col-3">
+                                    <img src="./css/img/lnelogo.jpg" height="70px"/>
+                                </div>
+                                <div className="col-3">
                                 </div>
                             </div>     
                             <div className="row">
@@ -352,24 +349,27 @@ export default class Login extends React.Component
                                 showCloseButton={true}
                                 showTitle={true}
                                 container={"#root"} 
-                                width={'300'}
+                                width={'580'}
                                 height={'250'}
                                 title={this.lang.t("about")}
                                 position={{my:'bottom',of:'#root'}}
                                 >
                                     <Form colCount={1} height={'fit-content'}>
-                                    <Item>
-                                        <NbLabel id="abtCertificate" parent={this} value={this.lang.t("abtCertificate")} textSize={"28px"}/>
-                                    </Item>
-                                    <Item>
-                                        <NbLabel id="abtNrCertificate" parent={this} value={this.lang.t("abtNrCertificate")}/>
-                                    </Item>
-                                    <Item>
-                                        <NbLabel id="abtLicence" parent={this} value={this.lang.t("abtLicence")}/>
-                                    </Item>
-                                    <Item>
-                                        <NbLabel id="abtVersion" parent={this} value={this.lang.t("abtVersion") + this.core.appInfo.version}/>
-                                    </Item>
+                                        <Item>
+                                            <NbLabel id="abtCertificate" parent={this} value={this.lang.t("abtCertificate")} textSize={"28px"}/>
+                                        </Item>
+                                        <Item>
+                                            <NbLabel id="abtNrCertificate" parent={this} value={this.lang.t("abtNrCertificate")}/>
+                                        </Item>
+                                        <Item>
+                                            <NbLabel id="abtLicence" parent={this} value={this.lang.t("abtLicence")}/>
+                                        </Item>
+                                        <Item>
+                                            <NbLabel id="abtVersion" parent={this} value={this.lang.t("abtVersion") + this.core.appInfo.version}/>
+                                        </Item>
+                                        <Item>
+                                            <NbLabel id="abtMacId" parent={this} value={"MacId : " + localStorage.getItem('macId')}/>
+                                        </Item>
                                     </Form>
                                 </NdPopUp>
                             </div>

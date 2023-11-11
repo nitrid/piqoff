@@ -298,6 +298,15 @@ export const langEn =
     popLastSaleList : 
     {
         title :"Last Sales List",
+        cmbPopLastSalePayType : 
+        {
+            optionAll : "All",
+            optionEspece : "Espece",
+            optionTPE : "Carte Bancaire TPE",
+            optionCheque1 : "Cheque",
+            optionCheque2 : "CHEQue",
+            optionAvoir : "Bon D'Avoir"
+        }
     },
     txtPopLastRefPholder : "Please scan the barcode on the ticket...",
     popLastTotal :  
@@ -336,6 +345,11 @@ export const langEn =
         head : "Deleted Line Reason",
         title : "Please enter the deletion reason for the line"
     },
+    PopBalanceCounterDesc :
+    {
+        head : "Balance Check Description",
+        title : "Please Enter the Reason for Balance Control"
+    },
     popItemReturnDesc : 
     {
         head : "Return Reason",
@@ -367,14 +381,14 @@ export const langEn =
         btn01 : "Manual Entry",
         btn02 : "Cancel",
     },
-    msgCardPayment: 
-    {
-        title : "Attention",
-        msg :"Waiting for response from POS terminal",
-        btn01 : "Retry",
-        btn02 : "Cancel",
-        btn03 : "Force",
-    },
+    msgCardPayment: {
+        title: "Attention",
+        msg: "Waiting for the card terminal response.",
+        msgAmount: "Amount :",
+        btn01: "Retry",
+        btn02: "Cancel",
+        btn03: "Force"
+    },    
     msgRePaymentType :
     {
         title : "Which payment method do you choose for the remaining amount?", 
@@ -576,6 +590,13 @@ export const langEn =
         msg: "You cannot do this in offline mode!",
         btn01: "OK"
     },
+    msgDisconnectWarning: 
+    {
+      title: "Attention",
+      msg: "Are you sure you want to exit?",
+      btn01: "YES",
+      btn02: "NO"
+    },
     msgOfflineAlert:
     {
         title: "Attention",
@@ -589,6 +610,14 @@ export const langEn =
         msg1: "Connection to the server established! You can continue your transaction online.",
         msg2: "!!!! Please check the last scanned items !!!!",
         btn01: "OK"
+    },
+    msgDataTransferAlert: 
+    {
+        title : "Attention",
+        msg1 : "You have {0} records to transfer! Transfer the data now.",
+        msg2 : "Transfer process successful.",
+        msg3 : "Transfer process failed. All operations are being restarted.",
+        btn01 : "OK"
     },
     msgNotWeighing:
     {
@@ -771,10 +800,43 @@ export const langEn =
         printDesing: "Printer Design",
         scannerPort : "Scanner port"
     },
-    msgConnectOut:
+    msgNotBarcodeWeighing: 
     {
         title: "Attention",
-        msg: "Connection to the server is interrupted",
+        msg: "The total quantity of the weighed product does not match the scanned barcode!",
+        msgTicket: "Weighed quantity: ",
+        msgBarkod: "Label quantity: ",
+        msgDifference: "Difference: ",
+        msgTotalAmount : "Total Amount",
+        btn01: "OK",
+        btn02: "Continue"
+    },
+    msgBarcodeWeighing:
+    {
+        title: "Attention",
+        msg: "Scanned line: {0} - Total amount: {1}",
         btn01: "OK"
     },
+    msgBarcodeWeighingUnit: 
+    {
+        title : "Attention",
+        msg : "The scanned label contains individual products. You do not need to match quantities on the scale.",
+        btn01 : "OK"
+    },
+    msgTSENotFound:
+    {
+        title: "Attention",
+        msg: "Communication with the TSE device could not be established!",
+        btn01: "OK"
+    },
+    msgMacIdFailed:
+    {
+        title : "Attention",
+        msg : "Device ID mismatch! Please contact piqsoft.",
+        btn01 : "OK"
+    },
+    itemInfo:
+    {
+        msgSplash: "PLEASE SCAN THE BARCODE"
+    }
 }

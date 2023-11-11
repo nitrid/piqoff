@@ -154,13 +154,12 @@ export default class salesOrdList extends React.PureComponent
         App.instance.setState({isExecute:true})
         await this.grdSaleTicketReport.dataRefresh(tmpSource)
         App.instance.setState({isExecute:false})
-
     }
     async btnGetDetail(pGuid)
     {
         this.lastPosSaleDt.selectCmd = 
         {
-            query :  "SELECT * FROM POS_SALE_VW_01  WHERE POS_GUID = @POS_GUID ",
+            query :  "SELECT CONVERT(NVARCHAR,CDATE,108) AS TIME,* FROM POS_SALE_VW_01  WHERE POS_GUID = @POS_GUID ",
             param : ['POS_GUID:string|50'],
             value : [pGuid]
         }
@@ -661,20 +660,20 @@ export default class salesOrdList extends React.PureComponent
                                     access={this.access.filter({ELEMENT:'cmbUser',USERS:this.user.CODE})}
                                     />
                                 </Item>
-                                    {/* txtTicketno */}
-                                    <Item>
-                                        <Label text={this.t("txtTicketno")} alignment="right" />
-                                        <NdTextBox id="txtTicketno" title={this.t("txtTicketno")} parent={this} simple={true} 
-                                            param={this.param.filter({ELEMENT:'txtTicketno',USERS:this.user.CODE})}
-                                            access={this.access.filter({ELEMENT:'txtTicketno',USERS:this.user.CODE})}
-                                            onValueChanged={(e)=>
-                                            {
-                                            
-                                            }}>
-                                        </NdTextBox>
-                                    </Item>
-                                       {/* txtItem */}
-                                       <Item>                                    
+                                {/* txtTicketno */}
+                                <Item>
+                                    <Label text={this.t("txtTicketno")} alignment="right" />
+                                    <NdTextBox id="txtTicketno" title={this.t("txtTicketno")} parent={this} simple={true} 
+                                        param={this.param.filter({ELEMENT:'txtTicketno',USERS:this.user.CODE})}
+                                        access={this.access.filter({ELEMENT:'txtTicketno',USERS:this.user.CODE})}
+                                        onValueChanged={(e)=>
+                                        {
+                                        
+                                        }}>
+                                    </NdTextBox>
+                                </Item>
+                                {/* txtItem */}
+                                <Item>                                    
                                     <Label text={this.t("txtItem")} alignment="right" />
                                     <NdTextBox id="txtItem" parent={this} simple={true} tabIndex={this.tabIndex}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
@@ -690,7 +689,7 @@ export default class salesOrdList extends React.PureComponent
                                                     this.pg_txtItem.show()
                                                     this.pg_txtItem.onClick = (data) =>
                                                     {
-                                                        this.txtItem.setState({value:data[0].CODE})
+                                                        this.txtItem.setState({value:data[0].CODE})  
                                                     }
                                                 }
                                             },
@@ -718,7 +717,7 @@ export default class salesOrdList extends React.PureComponent
                                         {
                                             select:
                                             {
-                                                query : "SELECT GUID,CODE,NAME FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
+                                                query : "SELECT GUID,CODE,NAME FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL) OR BARCODE LIKE @VAL",
                                                 param : ['VAL:string|50']
                                             },
                                             sql:this.core.sql
@@ -732,6 +731,7 @@ export default class salesOrdList extends React.PureComponent
                                                 icon:'more',
                                                 onClick:()=>
                                                 {
+                                                    console.log('click1')
                                                 }
                                             }
                                         ]
@@ -832,6 +832,7 @@ export default class salesOrdList extends React.PureComponent
                                     <Paging defaultPageSize={20} />
                                     <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
                                     <Export fileName={this.lang.t("menu.pos_02_001")} enabled={true} allowExportSelectedData={true} />
+                                    <Column dataField="TIME" caption={this.t("grdSaleTicketItems.clmTime")} visible={true} width={150}/> 
                                     <Column dataField="BARCODE" caption={this.t("grdSaleTicketItems.clmBarcode")} visible={true} width={150}/> 
                                     <Column dataField="ITEM_NAME" caption={this.t("grdSaleTicketItems.clmName")} visible={true} width={250}/> 
                                     <Column dataField="QUANTITY" caption={this.t("grdSaleTicketItems.clmQuantity")} visible={true} width={100}/> 

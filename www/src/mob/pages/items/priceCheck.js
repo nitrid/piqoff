@@ -2,19 +2,12 @@ import React from 'react';
 import App from '../../lib/app';
 import {datatable} from '../../../core/core.js'
 
-import ScrollView from 'devextreme-react/scroll-view';
-import NbButton from '../../../core/react/bootstrap/button';
-import Form, { Item } from 'devextreme-react/form';
 import NdTextBox from '../../../core/react/devex/textbox';
-import NdSelectBox from '../../../core/react/devex/selectbox';
-import NdDatePicker from '../../../core/react/devex/datepicker';
 import NdPopGrid from '../../../core/react/devex/popgrid';
-import NdCheckBox  from '../../../core/react/devex/checkbox';
-import NdNumberBox from '../../../core/react/devex/numberbox';
-import NdPopUp from '../../../core/react/devex/popup';
 import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export,ColumnChooser,StateStoring} from '../../../core/react/devex/grid';
 import NdDialog, { dialog } from '../../../core/react/devex/dialog.js';
 import NbLabel from '../../../core/react/bootstrap/label';
+import NbPopNumber from '../../tools/popnumber';
 
 import { PageBar } from '../../tools/pageBar';
 import { PageView,PageContent } from '../../tools/pageView';
@@ -107,16 +100,16 @@ export default class priceCheck extends React.PureComponent
         return(
             <div>
                 <div>
-                <PageBar id={"pageBar"} parent={this} title={this.lang.t("menu.stk_01")} content=
-                {[
-                    {
-                        name : 'Main',isBack : false,isTitle : true,
-                        menu :
-                        [
-                        ]
-                    },
-                ]}
-                onBackClick={()=>{this.pageView.activePage('Main')}}/>
+                    <PageBar id={"pageBar"} parent={this} title={this.lang.t("menu.stk_01")} content=
+                    {[
+                        {
+                            name : 'Main',isBack : false,isTitle : true,
+                            menu :
+                            [
+                            ]
+                        },
+                    ]}
+                    onBackClick={()=>{this.pageView.activePage('Main')}}/>
                 </div>
                 <div style={{position:'relative',top:'50px',height:'100%'}}>
                     <PageView id={"pageView"} parent={this} 
@@ -241,20 +234,40 @@ export default class priceCheck extends React.PureComponent
                                             height={'auto'} 
                                             width={'100%'}
                                             dbApply={false}
+                                            onCellClick={async (e)=>
+                                            {
+                                                if(e.column.dataField == "PRICE")
+                                                {
+                                                    let tmpResult = await this.popNumber.show("PRICE",Number(e.value))
+                                                    if(typeof tmpResult != 'undefined' && tmpResult != '' && Number(e.value) != Number(tmpResult))
+                                                    {
+                                                        let tmpQuery = 
+                                                        {
+                                                            query : "EXEC [dbo].[PRD_ITEM_PRICE_UPDATE] " + 
+                                                                    "@GUID = @PGUID, " +
+                                                                    "@PRICE = @PPRICE ", 
+                                                            param : ['PGUID:string|50','PPRICE:float'],
+                                                            value : [e.data.GUID,Number(tmpResult)]
+                                                        } 
+                                                        await this.core.sql.execute(tmpQuery)
+                                                        e.data.PRICE = Number(tmpResult)
+                                                    }
+                                                }
+                                            }}
                                             >
                                                 <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
                                                 <Scrolling mode="standart" />
                                                 <Paging defaultPageSize={10} />
                                                 <Editing mode="cell" allowUpdating={false} allowDeleting={false} confirmDelete={false}/>
                                                 <Column dataField="FINISH_DATE" caption={this.t("grdPrice.clmDate")} allowEditing={false}  width={120} dataType="datetime" format={"dd/MM/yyyy - HH:mm:ss"}
-                                                 cellRender={(e) => 
+                                                cellRender={(e) => 
+                                                {
+                                                    if(moment(e.value).format("YYYY-MM-DD") != '1970-01-01')
                                                     {
-                                                        if(moment(e.value).format("YYYY-MM-DD") != '1970-01-01')
-                                                        {
-                                                            return e.text
-                                                        }
-                                                        return
-                                                    }}/>
+                                                        return e.text
+                                                    }
+                                                    return
+                                                }}/>
                                                 <Column dataField="QUANTITY" caption={this.t("grdPrice.clmQuantity")} dataType={'number'} width={80}/>
                                                 <Column dataField="PRICE" caption={this.t("grdPrice.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}} width={60}/>
                                             </NdGrid>
@@ -283,6 +296,10 @@ export default class priceCheck extends React.PureComponent
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                            {/* Number Popup */}
+                            <div>
+                                <NbPopNumber id={"popNumber"} parent={this}/>
                             </div>
                         </PageContent>
                     </PageView>

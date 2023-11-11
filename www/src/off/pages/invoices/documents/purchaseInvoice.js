@@ -68,8 +68,6 @@ export default class purchaseInvoice extends DocBase
         tmpDocCustomer.DOC_DATE = this.docObj.dt()[0].DOC_DATE
         this.docObj.docCustomer.addEmpty(tmpDocCustomer)
         
-        this.txtRef.readOnly = false
-        this.txtRefno.readOnly = false
         this.docLocked = false
         
         this.frmDocItems.option('disabled',true)        
@@ -136,8 +134,6 @@ export default class purchaseInvoice extends DocBase
         await super.getDoc(pGuid,pRef,pRefno);
         App.instance.setState({isExecute:false})
         
-        this.txtRef.readOnly = true
-        this.txtRefno.readOnly = true
         this.frmDocItems.option('disabled',false)
 
         let tmpQuery = 
@@ -502,34 +498,29 @@ export default class purchaseInvoice extends DocBase
     }
     async addItem(pData,pIndex,pQuantity,pPrice,pDiscount,pDiscountPer,pVat)
     {
+        console.log(pData.ITEM_TYPE)
         App.instance.setState({isExecute:true})
         
-        this.txtRef.readOnly = true
-        this.txtRefno.readOnly = true
-
         if(typeof pQuantity == 'undefined')
         {
             pQuantity = 1
         }
         //GRID DE AYNI ÜRÜNDEN OLUP OLMADIĞI KONTROL EDİLİYOR VE KULLANICIYA SORULUYOR,CEVAP A GÖRE SATIR BİRLİŞTERİLİYOR.
-        if(pData.ITEM_TYPE == 0)
+        let tmpMergDt = await this.mergeItem(pData.CODE)
+        if(typeof tmpMergDt != 'undefined' && this.combineNew == false)
         {
-            let tmpMergDt = await this.mergeItem(pData.CODE)
-            if(typeof tmpMergDt != 'undefined' && this.combineNew == false)
-            {
-                tmpMergDt[0].QUANTITY = tmpMergDt[0].QUANTITY + pQuantity
-                tmpMergDt[0].SUB_QUANTITY = tmpMergDt[0].SUB_QUANTITY / tmpMergDt[0].SUB_FACTOR
-                tmpMergDt[0].VAT = Number((tmpMergDt[0].VAT + (tmpMergDt[0].PRICE * (tmpMergDt[0].VAT_RATE / 100) * pQuantity))).round(6)
-                tmpMergDt[0].AMOUNT = Number((tmpMergDt[0].QUANTITY * tmpMergDt[0].PRICE)).round(4)
-                tmpMergDt[0].TOTAL = Number((((tmpMergDt[0].QUANTITY * tmpMergDt[0].PRICE) - tmpMergDt[0].DISCOUNT) + tmpMergDt[0].VAT)).round(2)
-                tmpMergDt[0].TOTALHT =  Number((tmpMergDt[0].AMOUNT - tmpMergDt[0].DISCOUNT)).round(2)
-                this.calculateTotal()
-                //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
-                await this.itemRelated(pData.GUID,tmpMergDt[0].QUANTITY)
-                //*****************************************/
-                App.instance.setState({isExecute:false})
-                return
-            }
+            tmpMergDt[0].QUANTITY = tmpMergDt[0].QUANTITY + pQuantity
+            tmpMergDt[0].SUB_QUANTITY = tmpMergDt[0].SUB_QUANTITY / tmpMergDt[0].SUB_FACTOR
+            tmpMergDt[0].VAT = Number((tmpMergDt[0].VAT + (tmpMergDt[0].PRICE * (tmpMergDt[0].VAT_RATE / 100) * pQuantity))).round(6)
+            tmpMergDt[0].AMOUNT = Number((tmpMergDt[0].QUANTITY * tmpMergDt[0].PRICE)).round(4)
+            tmpMergDt[0].TOTAL = Number((((tmpMergDt[0].QUANTITY * tmpMergDt[0].PRICE) - tmpMergDt[0].DISCOUNT) + tmpMergDt[0].VAT)).round(2)
+            tmpMergDt[0].TOTALHT =  Number((tmpMergDt[0].AMOUNT - tmpMergDt[0].DISCOUNT)).round(2)
+            this.calculateTotal()
+            //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
+            await this.itemRelated(pData.GUID,tmpMergDt[0].QUANTITY)
+            //*****************************************/
+            App.instance.setState({isExecute:false})
+            return
         }
         //******************************************************************************************************************/
         if(pIndex == null)
@@ -614,8 +605,7 @@ export default class purchaseInvoice extends DocBase
                     }
                     await this.msgCustomerNotFound.show().then(async (e) =>
                     {
-    
-                       if(e == 'btn01' && this.checkCustomer.value == true)
+                        if(e == 'btn01' && this.checkCustomer.value == true)
                         {
                             this.customerControl = false
                             return
@@ -992,15 +982,21 @@ export default class purchaseInvoice extends DocBase
         {
             let tmpQuery = 
             { 
-                query :"SELECT GUID,CODE,NAME,VAT,UNIT,1 AS QUANTITY,0 AS ITEM_TYPE,COST_PRICE," + 
-                "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].OUTPUT+"'),'') AS MULTICODE"+
-                " FROM ITEMS_VW_01 WHERE ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].OUTPUT+"'),'') = @VALUE AND STATUS = 1 " ,
-                param : ['VALUE:string|50'],
-                value : [pdata[i][tmpShema.CODE]]
+                query : "SELECT " +
+                        "ITEM_GUID AS GUID," +
+                        "ITEM_CODE AS CODE," +
+                        "ITEM_NAME AS NAME," +
+                        "VAT_RATE AS VAT," +
+                        "ISNULL((SELECT TOP 1 GUID FROM ITEM_UNIT WHERE TYPE = 0 AND DELETED = 0 AND ITEM = ITEM_GUID),'00000000-0000-0000-0000-000000000000') AS UNIT," +
+                        "0 AS ITEM_TYPE," +
+                        "ISNULL((SELECT TOP 1 COST_PRICE FROM ITEMS WHERE GUID = ITEM_GUID),0) AS COST_PRICE " +
+                        "FROM ITEM_MULTICODE_VW_01 WHERE CUSTOMER_GUID = @CUSTOMER_GUID AND MULTICODE = @VALUE" ,
+                param : ['CUSTOMER_GUID:string|50','VALUE:string|50'],
+                value : [this.docObj.dt()[0].OUTPUT,pdata[i][tmpShema.CODE]]
             }
-            console.log(pdata[i][tmpShema.CODE])
+            App.instance.setState({isExecute:true})
             let tmpData = await this.core.sql.execute(tmpQuery) 
-            console.log(tmpData.result.recordset)
+            App.instance.setState({isExecute:false})
             if(tmpData.result.recordset.length > 0)
             {
                 await this.core.util.waitUntil(100)
@@ -1218,6 +1214,7 @@ export default class purchaseInvoice extends DocBase
                     this.newPriceDate.clear()
                     for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
                     {
+                        console.log(this.docObj.docItems.dt()[i])
                         if(this.docObj.docItems.dt()[i].ITEM_TYPE == 0)
                         {
                             if(this.docObj.docItems.dt()[i].COST_PRICE == this.docObj.docItems.dt()[i].PRICE && this.docObj.docItems.dt()[i].COST_PRICE != 0 )
@@ -1558,11 +1555,16 @@ export default class purchaseInvoice extends DocBase
                                         <div className="col-6 pe-0">
                                             <NdTextBox id="txtRef" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF"}}
                                             upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                            readOnly={true}
                                             maxLength={32}
-                                            onValueChanged={(async(e)=>
+                                            onChange={(async()=>
                                             {
-                                              
+                                                this.docObj.docCustomer.dt()[0].REF = this.txtRef.value
+                                                this.checkRow()
+                                                let tmpResult = await this.checkDoc('00000000-0000-0000-0000-000000000000',this.txtRef.value,this.txtRefno.value)
+                                                if(tmpResult == 3)
+                                                {
+                                                    this.txtRef.value = "";
+                                                }
                                             }).bind(this)}
                                             param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
@@ -1574,7 +1576,6 @@ export default class purchaseInvoice extends DocBase
                                         </div>
                                         <div className="col-6 ps-0">
                                             <NdTextBox id="txtRefno" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF_NO"}}
-                                            readOnly={true}
                                             maxLength={10}
                                             button={
                                             [
@@ -1600,7 +1601,7 @@ export default class purchaseInvoice extends DocBase
                                             {
                                                 let tmpQuery = 
                                                 {
-                                                    query : "SELECT DELETED FROM DOC WHERE REF = @REF AND REF_NO = @REF_NO AND  TYPE = 0 AND DOC_TYPE = 20 ",
+                                                    query : "SELECT DELETED FROM DOC WHERE REF = @REF AND REF_NO = @REF_NO AND TYPE = 0 AND DOC_TYPE = 20 ",
                                                     param : ['REF:string|50','REF_NO:int'],
                                                     value : [this.txtRef.value,this.txtRefno.value]
                                                 }
@@ -1672,6 +1673,10 @@ export default class purchaseInvoice extends DocBase
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     dt={{data:this.docObj.dt('DOC'),field:"DOC_NO"}} 
                                     readOnly={false}
+                                    onFocusOut={()=>
+                                    {
+                                        this.checkDocNo(this.txtDocNo.value)
+                                    }}
                                     >
                                     </NdTextBox>
                                 </Item>
@@ -1683,6 +1688,18 @@ export default class purchaseInvoice extends DocBase
                                     dt={{data:this.docObj.dt('DOC'),field:"OUTPUT_CODE"}} 
                                     onEnterKey={(async()=>
                                     {
+                                        if(this.docObj.docItems.dt().length > 0)
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgCustomerLock',showTitle:true,title:this.t("msgCustomerLock.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgCustomerLock.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerLock.msg")}</div>)
+                                            }
+                                            
+                                            await dialog(tmpConfObj);
+                                            return;
+                                        }
                                         this.pg_txtCustomerCode.setVal(this.txtCustomerCode.value)
                                         this.pg_txtCustomerCode.onClick = async(data) =>
                                         {
@@ -1696,7 +1713,6 @@ export default class purchaseInvoice extends DocBase
                                                 if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                 {
                                                     this.txtRef.value = data[0].CODE
-                                                    this.txtRef.props.onValueChanged()
                                                 }
                                                 if(this.cmbDepot.value != '' && this.docLocked == false)
                                                 {
@@ -1732,6 +1748,18 @@ export default class purchaseInvoice extends DocBase
                                                 icon:'more',
                                                 onClick:async()=>
                                                 {
+                                                    if(this.docObj.docItems.dt().length > 0)
+                                                    {
+                                                        let tmpConfObj =
+                                                        {
+                                                            id:'msgCustomerLock',showTitle:true,title:this.t("msgCustomerLock.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                            button:[{id:"btn01",caption:this.t("msgCustomerLock.btn01"),location:'after'}],
+                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerLock.msg")}</div>)
+                                                        }
+                                                        
+                                                        await dialog(tmpConfObj);
+                                                        return;
+                                                    }
                                                     this.pg_txtCustomerCode.show()
                                                     this.pg_txtCustomerCode.onClick = async(data) =>
                                                     {
@@ -1745,7 +1773,6 @@ export default class purchaseInvoice extends DocBase
                                                             if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                             {
                                                                 this.txtRef.value = data[0].CODE
-                                                                this.txtRef.props.onValueChanged()
                                                             }
                                                             if(this.cmbDepot.value != '' && this.docLocked == false)
                                                             {
@@ -2400,9 +2427,9 @@ export default class purchaseInvoice extends DocBase
                                                                 {
                                                                     let tmpQuery = 
                                                                     {
-                                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = 40),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG)WHERE DIFF_PRICE > 0 ORDER BY LINE_NO " ,
-                                                                        param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
-                                                                        value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
+                                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = 40),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,'FR')WHERE DIFF_PRICE > 0 ORDER BY LINE_NO " ,
+                                                                        param:  ['DOC_GUID:string|50'],
+                                                                        value:  [this.docObj.dt()[0].GUID,]
                                                                     }
                                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
                                                                     this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 

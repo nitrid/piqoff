@@ -124,6 +124,14 @@ export const langDe =
     clmTotalHt: "Gesamtbetrag",
     },
     btnVatToZero: "Steuern auf Null setzen!",
+    btnVatReCalculate : "Vergiyi Hesapla", // BAK
+    msgVatCalculate :
+    {
+        title : "Dikkat", // BAK
+        msg : "Vergiyi yeniden hesaplamak istediğinize eminmisiniz ", // BAK
+        btn01 : "Tamam", // BAK
+        btn02 : "İptal", // BAK
+    },
     menuOff:
     {
         stk: "Artikel",
@@ -167,6 +175,7 @@ export const langDe =
         stk_05_001: "Lagerinventarbericht",
         stk_05_002: "Bericht über sich ändernde Einkaufspreise",
         stk_05_003: "Bestandszählungsbericht",
+        stk_05_004 : "Kayıp Ürün Raporu", // BAK
         cri: "Kunden",
         cri_01: "Vorgänge",
         cri_02: "Listen",
@@ -261,6 +270,7 @@ export const langDe =
         fns_04: "Berichte",
         fns_04_001: "Bankauszugsbericht",
         fns_04_002: "Kontosaldo-Bericht",
+        fns_04_003 : "Kasa Ekstre Raporu",
         fns_05: "Operationen",
         fns_05_001: "Masseneinzahlungseingabe",
         fns_05_002: "Massenzahlungseingabe",
@@ -283,8 +293,10 @@ export const langDe =
         pos_02_012 : "Pos Puan Kullanım Raporu",  // BAK
         pos_02_013 : "Pos İndirim Raporu",  // BAK
         pos_02_014 : "Okunmamış Terazi Fişleri", //BAK
+        pos_02_015 : "Müşteri Bazlı Ürün Satış Raporu", //BAK
         pos_03: "Operationen",
         pos_03_001: "Tagesabschluss",
+        pos_03_002: "Auslosung",
         promo: "Angebot",
         promo_01: "Definitionen",
         promo_01_001: "Angebot-Definition",
@@ -384,6 +396,12 @@ export const langDe =
         title: "Achtung",
         btn01: "OK",
         msg: "Dieses Dokument wurde mit der Dokumentennummer gelöscht! Bitte wenden Sie sich an einen autorisierten Mitarbeiter."
+    },
+    msgCheckDocNo:
+    {
+        title: "Achtung",
+        btn01: "OK",
+        msg: "Die von Ihnen eingegebene Dokumentennummer wurde bereits gespeichert!"
     },
     stk_01_001:  // "Neue Lagerdefinition"
     {
@@ -727,7 +745,21 @@ export const langDe =
             title : "Ürün Cinsi",   // BAK
             clmCode : "KODU",   // BAK
             clmName : "ADI"   // BAK
-        } 
+        },
+        msgNewItem:
+        {
+            title: "Dikkat",   // BAK
+            btn01: "Evet",   // BAK
+            btn02: "Vazgeç",   // BAK
+            msg: "Yeni ürüne geçmek istediğinize eminmisiniz !"   // BAK
+        },
+        msgItemBack:
+        {
+            title: "Dikkat",  // BAK
+            btn01: "Evet",  // BAK
+            btn02: "Vazgeç",  // BAK
+            msg: "Ürünü tekrar getirmek istediğinize eminmisiniz !"  // BAK
+        },
     },
     stk_01_002:  //"Barcode-Definitionen"
     {
@@ -865,7 +897,6 @@ export const langDe =
         txtName: "Name",
         cmbType: "Type",
         validCode: "Code-Feld darf nicht leer sein!",
-        
         pg_txtCode:
         {
             title: "Servicekartenauswahl",
@@ -921,9 +952,9 @@ export const langDe =
             btn01: "OK",
             msg: "Änderungen auf dieser Karte nicht möglich, da Transaktione exisieren!",
         },
-        },
-        stk_01_008: // "Product Group Definitions"
-        {
+    },
+    stk_01_008: // "Product Group Definitions"
+    {
         txtCode: "Code",
         txtName: "Name",
         cmbType: "Type",
@@ -933,6 +964,7 @@ export const langDe =
             title: "Artikelgruppenauswahl",
             clmCode: "Code",
             clmName: "Name",
+            clmStatus : "Status",
         },
         msgSpeichern:
         {
@@ -969,9 +1001,9 @@ export const langDe =
             msg: "Der eingegebene Code ist bereits im System registriert!",
         },
         chkActive: "Aktive",
-        },
-        stk_01_010: // "Unit Definitions"
-        {
+    },
+    stk_01_010: // "Unit Definitions"
+    {
         txtId: "ID",
         txtName: "Name",
         txtSymbol: "Symbol",
@@ -1373,9 +1405,9 @@ export const langDe =
             btn01: "Zum Dokument gehen",
             msg: "Dokument gefunden"
         },
-        },
-        stk_02_002 : //"Depot/Store Transfer"
-        {
+    },
+    stk_02_002 : //"Depot/Store Transfer"
+    {
         txtRefRefno : "Seriennummer-Reihenfolge",
         cmbOutDepot: "Ausgangsdepot",
         cmbInDepot: "Eingangsdepot",
@@ -1522,9 +1554,9 @@ export const langDe =
             msg: "Menge eingeben!"
         },
         txtQuantity : "Menge",
-        },
-        stk_02_003 : // "Verlust von Artikeln"
-        {
+    },
+    stk_02_003 : // "Verlust von Artikeln"
+    {
         txtRefRefno : "Seriennummer",
         cmbOutDepot: "Lagerort",
         dtDocDate : "Datum",
@@ -2931,7 +2963,7 @@ export const langDe =
             clmNetMargin : "Nettomarge",
         },
     },
-    stk_05_001 : // Bestandsbericht
+    stk_05_003 : // Bestandsbericht
     {
         chkZeroQuantity : "Nullmengen anzeigen",
         cmbDepot : "Lager",
@@ -2951,6 +2983,30 @@ export const langDe =
         txtTotalQuantity : "Gesamtmenge",
         txtTotalCost : "Bestandswert",
         cmbDepot : "Lager"
+    },
+    stk_05_004 : // "Kayıp Ürün Raporu"
+    {
+        chkZeroQuantity : "0 Miktarlar Gösterilsin",  // BAK
+        cmbDepot : "Depo",  // BAK
+        btnCheck : "Aktif",  // BAK
+        btnGet :"Getir",  // BAK
+        grdListe : 
+        {
+            clmCode: "Kodu",  // BAK
+            clmName : "Adı",             // BAK
+            clmQuantity : "Adet",  // BAK
+            clmOutputCode : "Depo Kodu",  // BAK
+            clmOutputName : "Depo Adı",  // BAK
+            clmCostPrice : "Maliyet Fiyatı",   // BAK
+            clmTotalCost : "Toplam Maliyet",   // BAK
+            clmDocDate : "Tarih",   // BAK
+            clmRef : "Seri",  // BAK
+            clmRefNo : "Sıra",   // BAK
+            clmDescription : "Açıklama"  // BAK
+        },
+        txtTotalQuantity : "Toplam Miktar",  // BAK
+        txtTotalCost : "Envanter Değeri",  // BAK
+        cmbDepot : "Depo"  // BAK
     },
     cri_01_001: // Kundendefinitionen
     {
@@ -2984,6 +3040,7 @@ export const langDe =
             clmTitle : "Firma",
             clmName : "Vorname",
             clmLastName  : "Nachname",
+            clmStatus  : "Statut",
         },
         grdAdress : 
         {
@@ -3350,7 +3407,8 @@ export const langDe =
             clmPhone1 :"Telefon",
             clmGsm : "Handynummer",
             clmEmail :"E-Mail",
-            clmIban :"IBAN"
+            clmIban :"IBAN",
+            clmStatus :"Status"
         },
         cmbGenusData:
         {
@@ -3521,7 +3579,8 @@ export const langDe =
         cmbTypeData : 
         {
             individual : "Einzelperson",
-            company : "Firma"
+            company : "Firma",
+            association : "Vereinigung"
         },
         cmbGenusData:
         {
@@ -4380,6 +4439,7 @@ export const langDe =
             clmQuantity : "Menge",
             clmTotal : "Gesamtsumme",
             clmPrice : "Preis",
+            clmlDate : "Datum"
         },
         cmbPayType : {
             title : "Zahlungsmethode",
@@ -4469,7 +4529,13 @@ export const langDe =
             title : "Taşıyıcı Kodları",   // BAK
             clmCode : "KODU",   // BAK
             clmName : "ADI"   // BAK
-        }
+        },
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+        },
     },
     ftr_02_002 : // "Satiş Faturasi"
     {
@@ -4527,6 +4593,30 @@ export const langDe =
         txtDocNo : "Dokumentnummer",
         extraCost : "Zusatzkosten",
         cmbPriceContract : "Preisvereinbarung",
+        btnView : "Anzeigen",
+        btnMailsend : "E-Mail senden",
+        validMail : "Bitte lassen Sie dieses Feld nicht leer.",
+        placeMailHtmlEditor : "Sie können eine Beschreibung für Ihre E-Mail eingeben.",
+        isMsgSave :
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Vorgang kann nicht ohne Speicherung des Dokuments durchgeführt werden!"
+        },
+        msgMailSendResult:
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msgSuccess: "E-Mail-Versand erfolgreich!",
+            msgFailed: "E-Mail-Versand fehlgeschlagen!"
+        },
+        popMailSend :
+        {
+            title :"E-Mail senden",
+            txtMailSubject : "Betreff der E-Mail",
+            txtSendMail : "E-Mail-Adresse",
+            btnSend : "Senden"
+        },
         pg_Docs :
         {
             title: "Dokumentenauswahl",
@@ -4561,6 +4651,7 @@ export const langDe =
             clmPrice : "Preis",
             clmTotal : "Betrag",
             clmDate : "Datum",
+            clmDocNo: "Dokumentnummer"
         },
         grdSlsInv: 
         {
@@ -4875,6 +4966,7 @@ export const langDe =
             clmQuantity: "Menge",
             clmTotal: "Gesamtbetrag",
             clmPrice: "Preis",
+            clmlDate : "Datum"
         },
         cmbPayType: {
             title: "Zahlungsart",
@@ -5011,6 +5103,12 @@ export const langDe =
             interfel: "Interfel",
             calculateInterfel: "Interfel berechnen",
         },
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+        },
     },
     ftr_02_003 : // "İade Faturasi"
     {
@@ -5097,6 +5195,7 @@ export const langDe =
             clmPrice : "Preis",
             clmTotal : "Betrag",
             clmDate : "Datum",
+            clmDocNo: "Dokumentnummer"
         },
         grdRebtInv:
         {
@@ -5478,6 +5577,12 @@ export const langDe =
             btn01: "OK",
             msg: "Dokument kann nicht gedruckt werden, solange es gesperrt ist!"
         },
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+        },
     },
     ftr_02_004 : // "Preisabweichungsrechnung"
     {
@@ -5530,6 +5635,12 @@ export const langDe =
         validMail : "Bitte füllen Sie dieses Feld aus.",
         txtTotalHt : "Rabattierter Betrag",
         txtDocNo : "Belegnummer",
+        isMsgSave :
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Aktion kann ohne Dokumentenregistrierung nicht durchgeführt werden!"
+        },
         pg_Docs : 
         {
             title : "Dokumentauswahl",
@@ -5915,6 +6026,12 @@ export const langDe =
             btn01: "OK",
             msg: "Das Dokument kann erst gedruckt werden, nachdem es gesperrt wurde!"
         },
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+        },
     },
     ftr_02_005 : // "Şube Satiş Faturasi"
     {
@@ -5998,6 +6115,7 @@ export const langDe =
             clmPrice : "Preis",
             clmTotal : "Betrag",
             clmDate : "Datum",
+            clmDocNo: "Dokumentnummer"
         },
         grdSlsInv: 
         {
@@ -6155,6 +6273,11 @@ export const langDe =
             btn01: "Ok",
             msg: "Es können keine Aktionen auf das Dokument angewendet werden, solange es gesperrt ist!"
         },
+        isMsgSave: {
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Der Vorgang kann nicht ohne Speicherung des Dokuments durchgeführt werden!"
+        },     
         msgDiscount:
         {
             title: "Achtung",
@@ -6400,6 +6523,12 @@ export const langDe =
             btn01: "OK",
             msg: "Das Dokument kann nicht gedruckt werden, solange es gesperrt ist!"
         },
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+        },
     },
     ftr_02_006 : // "Preis Farki Aliş Faturasi"
     {
@@ -6447,6 +6576,12 @@ export const langDe =
         dtExpDate: "Fälligkeitsdatum",
         txtTotalHt: "Rabattierter Betrag",
         txtDocNo: "Dokumentnummer",
+        btnView : "Anzeigen",
+        btnMailsend : "E-Mail senden",
+        validDesign : "Bitte wählen Sie ein Design aus.",
+        validMail : "Bitte füllen Sie dieses Feld aus.",
+        placeMailHtmlEditor : "Sie können eine Beschreibung für Ihre E-Mail eingeben.",
+
         pg_Docs: 
         {
             title: "Dokumentenauswahl",
@@ -6628,6 +6763,17 @@ export const langDe =
             btn01: "OK",
             msg: "Ein Dokument mit einer getätigten Zahlung kann nicht gelöscht werden!"
         },
+        isMsgSave: {
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Der Vorgang kann nicht ohne Speicherung des Dokuments durchgeführt werden!"
+        },
+        msgMailSendResult: {
+            title: "Achtung",
+            btn01: "OK",
+            msgSuccess: "E-Mail-Versand erfolgreich !",
+            msgFailed: "E-Mail-Versand fehlgeschlagen !"
+        },        
         msgDocLocked:
         {
             title: "Achtung",
@@ -6813,6 +6959,18 @@ export const langDe =
             msg: "Es gibt Artikel in der Liste!"
         },
         tagItemCodePlaceholder: "Bitte geben Sie die gewünschten Codes ein",
+        msgCustomerLock: {
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Der Kunde kann nach Hinzufügen des Produkts nicht mehr geändert werden !"
+        },        
+        popMailSend: {
+            title: "E-Mail senden",
+            txtMailSubject: "Betreff der E-Mail",
+            txtSendMail: "E-Mail-Adresse",
+            btnSend: "Senden"
+        }
+        
     },
     ftr_02_007 : // "Rückgaberechnung"
     {
@@ -6860,8 +7018,11 @@ export const langDe =
         getProforma : "Proforma abrufen",
         txtTotalHt : "Nettobetrag",
         txtDocNo : "Dokumentennummer",
-        btnView: "Anzeigen",
-        btnMailsend: "E-Mail senden",
+        btnView : "Anzeigen",
+        btnMailsend : "E-Mail senden",
+        validDesign : "Bitte wählen Sie ein Design aus.",
+        validMail : "Bitte füllen Sie dieses Feld aus.",
+        placeMailHtmlEditor : "Sie können eine Beschreibung für Ihre E-Mail eingeben.",        
         pg_Docs : 
         {
             title : "Dokumentauswahl",
@@ -6897,6 +7058,7 @@ export const langDe =
             clmPrice : "Preis",
             clmTotal : "Betrag",
             clmDate : "Datum",
+            clmDocNo: "Dokumentnummer"
         },
         grdRebtInv: 
         {
@@ -7008,6 +7170,23 @@ export const langDe =
             btn02: "Abbrechen",
             msg: "Möchten Sie die Steuer wirklich auf Null setzen?"
         },
+        isMsgSave: {
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Der Vorgang kann nicht ohne Speicherung des Dokuments durchgeführt werden !"
+        },
+        msgMailSendResult: {
+            title: "Achtung",
+            btn01: "OK",
+            msgSuccess: "E-Mail-Versand erfolgreich !",
+            msgFailed: "E-Mail-Versand fehlgeschlagen !"
+        },
+        popMailSend: {
+            title: "E-Mail senden",
+            txtMailSubject: "Betreff der E-Mail",
+            txtSendMail: "E-Mail-Adresse",
+            btnSend: "Senden"
+        },        
         msgDiscountPrice:
         {
             title: "Achtung",
@@ -7272,6 +7451,12 @@ export const langDe =
             msgSuccess: "E-Mail erfolgreich gesendet!",
             msgFailed: "E-Mail konnte nicht gesendet werden!"
         },
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+        },
     },
     ftr_02_008 : // "Şube Aliş Faturasi"
     {
@@ -7324,6 +7509,27 @@ export const langDe =
         validMail: "Bitte füllen Sie das Feld aus.",
         txtTotalHt: "Rabattierter Betrag",
         txtDocNo: "Dokumentnummer",
+        placeMailHtmlEditor : "Sie können eine Beschreibung für Ihre E-Mail eingeben.",
+        isMsgSave :
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Aktion kann ohne Dokumentenregistrierung nicht durchgeführt werden!"
+        },
+        msgMailSendResult:
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msgSuccess: "E-Mail-Versand erfolgreich!",
+            msgFailed: "E-Mail-Versand fehlgeschlagen!"
+        },
+        popMailSend :
+        {
+            title :"E-Mail senden",
+            txtMailSubject : "E-Mail-Betreff",
+            txtSendMail : "E-Mail-Adresse",
+            btnSend : "Senden"
+        },
         pg_Docs: {
           title: "Dokumentauswahl",
           clmDate: "DATUM",
@@ -7749,6 +7955,12 @@ export const langDe =
             clmCode : "Code",
             clmName : "Name"
         },
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+        },
     },
     ftr_02_009 : // "Fire Faturası"
     {
@@ -7796,8 +8008,30 @@ export const langDe =
         getProforma : "Proforma abrufen",
         txtTotalHt : "Nettobetrag",
         txtDocNo : "Dokumentennummer",
-        btnView: "Anzeigen",
-        btnMailsend: "E-Mail senden",
+        btnView : "Anzeigen",
+        btnMailsend : "E-Mail senden",
+        validMail : "Bitte lassen Sie dieses Feld nicht leer.",
+        placeMailHtmlEditor : "Sie können eine Beschreibung für Ihre E-Mail eingeben.",
+        isMsgSave :
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Vorgang kann nicht ohne Speicherung des Dokuments durchgeführt werden!"
+        },
+        msgMailSendResult:
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msgSuccess: "E-Mail-Versand erfolgreich!",
+            msgFailed: "E-Mail-Versand fehlgeschlagen!"
+        },
+        popMailSend :
+        {
+            title :"E-Mail senden",
+            txtMailSubject : "Betreff der E-Mail",
+            txtSendMail : "E-Mail-Adresse",
+            btnSend : "Senden"
+        },
         pg_Docs : 
         {
             title : "Dokumentauswahl",
@@ -8208,6 +8442,12 @@ export const langDe =
             msgSuccess: "E-Mail erfolgreich gesendet!",
             msgFailed: "E-Mail konnte nicht gesendet werden!"
         },
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+        },
     },
     ftr_04_001 : // "Proforma Preis Farki Faturasi"
     {
@@ -8250,7 +8490,32 @@ export const langDe =
         txtTotalQuantity : "Gesamtmenge",
         txtUnitPrice: "Stückpreis",
         txtTotalHt : "Rabattierter Betrag",
+        validDesign : "Bitte Design auswählen",
         txtDocNo : "Belge Nr.",
+        btnView : "Anzeigen",
+        btnMailsend : "E-Mail senden",
+        validMail : "Bitte lassen Sie dieses Feld nicht leer.",
+        placeMailHtmlEditor : "Sie können eine Beschreibung für Ihre E-Mail eingeben.",
+        isMsgSave :
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Vorgang kann nicht ohne Speicherung des Dokuments durchgeführt werden!"
+        },
+        msgMailSendResult:
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msgSuccess: "E-Mail-Versand erfolgreich!",
+            msgFailed: "E-Mail-Versand fehlgeschlagen!"
+        },
+        popMailSend :
+        {
+            title :"E-Mail senden",
+            txtMailSubject : "Betreff der E-Mail",
+            txtSendMail : "E-Mail-Adresse",
+            btnSend : "Senden"
+        },
         msgDiscount:
         {
             title: "Achtung",
@@ -8279,6 +8544,7 @@ export const langDe =
             title : "Artikelauswahl",
             clmCode :  "ARTIKELNUMMER",
             clmName : "ARTIKELNAME",
+            clmPrice : "VERKAUFSPREIS"
         },
         pg_contractGrid : 
         {
@@ -8555,6 +8821,12 @@ export const langDe =
             title: "Dienstleistungen",
             clmCode: "Code",
             clmName: "Name"
+        },
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
         },
     },
     ftr_04_002 : // "Proforma Satiş Faturasi"
@@ -8983,6 +9255,12 @@ export const langDe =
             clmCode: "Code",
             clmName: "Name"
         },
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+        },
     },
     ftr_04_003 : // "Proforma Aliş Faturasi"
     {
@@ -9038,6 +9316,31 @@ export const langDe =
         getOffers : "Angebot abrufen",
         txtTotalHt : "Rabattierter Betrag",
         txtDocNo : "Dokumentnummer",
+        validDesign : "Bitte wählen Sie ein Design.",
+        btnView : "Anzeigen",
+        btnMailsend : "E-Mail senden",
+        validMail : "Bitte nicht leer lassen.",
+        placeMailHtmlEditor : "Sie können eine Beschreibung für Ihre E-Mail eingeben.",
+        isMsgSave :
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Aktion kann ohne Dokumentenregistrierung nicht durchgeführt werden!"
+        },
+        msgMailSendResult:
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msgSuccess: "E-Mail-Versand erfolgreich!",
+            msgFailed: "E-Mail-Versand fehlgeschlagen!"
+        },
+        popMailSend :
+        {
+            title :"E-Mail senden",
+            txtMailSubject : "E-Mail-Betreff",
+            txtSendMail : "E-Mail-Adresse",
+            btnSend : "Senden"
+        },
         pg_Docs : 
         {
             title : "Dokumentauswahl",
@@ -9061,6 +9364,7 @@ export const langDe =
             clmCode :  "ARTIKELNUMMER",
             clmName : "ARTIKELNAME",
             clmMulticode : "LIEFERANTENNUMMER",
+            clmPrice : "EINKAUFSPREIS"
         },
         pg_dispatchGrid : 
         {
@@ -9358,6 +9662,7 @@ export const langDe =
         {
             title: "Einheitsauswahl",
             btn01: "Bestätigen",
+            btnFactorSpeichern : "Lagerkarte aktualisieren"
         },
         validRef :"Die Seriennummer darf nicht leer sein",
         validRefNo : "Die Reihennummer darf nicht leer sein",
@@ -9486,9 +9791,15 @@ export const langDe =
           clmTotal: "Betrag",
           clmPrice: "Preis",
         },
-      },
-      ftr_04_004: // "Proforma-Rücksenderechnung"
-      {
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+        },
+    },
+    ftr_04_004: // "Proforma-Rücksenderechnung"
+    {
         txtRefRefno: "Serie-Nummer",
         cmbDepot: "Lager",
         txtCustomerCode: "Kundennummer",
@@ -9532,6 +9843,31 @@ export const langDe =
         dtExpDate: "Fälligkeitsdatum", 
         txtTotalHt: "Rabattierter Betrag",
         txtDocNo: "Belge Nr.",
+        validDesign : "Bitte wählen Sie ein Design.",
+        btnView : "Anzeigen",
+        btnMailsend : "E-Mail senden",
+        validMail : "Bitte lassen Sie dieses Feld nicht leer.",
+        placeMailHtmlEditor : "Sie können eine Beschreibung für Ihre E-Mail eingeben.",
+        isMsgSave :
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Vorgang kann nicht ohne Speicherung des Dokuments durchgeführt werden!"
+        },
+        msgMailSendResult:
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msgSuccess: "E-Mail-Versand erfolgreich!",
+            msgFailed: "E-Mail-Versand fehlgeschlagen!"
+        },
+        popMailSend :
+        {
+            title :"E-Mail senden",
+            txtMailSubject : "Betreff der E-Mail",
+            txtSendMail : "E-Mail-Adresse",
+            btnSend : "Senden"
+        },
         pg_Docs: 
         {
           title: "Dokumentenauswahl",
@@ -9554,6 +9890,7 @@ export const langDe =
           title: "Artikelauswahl",
           clmCode: "ARTIKELNUMMER",
           clmName: "ARTIKELNAME",
+          clmPrice : "EINKAUFSPREIS"
         },
         pg_dispatchGrid: 
         {
@@ -9847,6 +10184,12 @@ export const langDe =
             clmCode : "Code",
             clmName : "Name"
         },
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+        },
     },
     ftr_04_005 : // "Zweigstellenverkaufsrechnung"
     {
@@ -9894,6 +10237,30 @@ export const langDe =
         dtExpDate : "Fälligkeitsdatum", 
         txtTotalHt : "Rabattierter Betrag",
         txtDocNo : "Belg No",
+        btnView : "Anzeigen",
+        btnMailsend : "E-Mail senden",
+        validMail : "Bitte lassen Sie dieses Feld nicht leer.",
+        placeMailHtmlEditor : "Sie können eine Beschreibung für Ihre E-Mail eingeben.",
+        isMsgSave :
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Vorgang kann nicht ohne Speicherung des Dokuments durchgeführt werden!"
+        },
+        msgMailSendResult:
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msgSuccess: "E-Mail-Versand erfolgreich!",
+            msgFailed: "E-Mail-Versand fehlgeschlagen!"
+        },
+        popMailSend :
+        {
+            title :"E-Mail senden",
+            txtMailSubject : "Betreff der E-Mail",
+            txtSendMail : "E-Mail-Adresse",
+            btnSend : "Senden"
+        },
         pg_Docs : 
         {
             title : "Dokumentauswahl",
@@ -10261,6 +10628,12 @@ export const langDe =
             title : "Dienstleistungen",
             clmCode : "Code",
             clmName : "Name"
+        },
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
         },
     },
     promo_01_001: // "Angebotsdefinitions"
@@ -10635,6 +11008,7 @@ export const langDe =
         txtUnitPrice: "Einheitspreis",
         txtTotalHt: "Rabattierter Betrag",
         txtDocNo: "Belegnummer",
+        validDesign : "Bitte Design auswählen",
         cmbOrigin: "Herkunft",
         pg_Docs:
         {
@@ -11018,7 +11392,13 @@ export const langDe =
             btn01 : "JA",
             btn02 : "NEIN",
             title : "Achtung!"
-        }
+        },
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+        },
     },
     irs_02_002 : // Satiş İrsaliyesi"
     {
@@ -11052,6 +11432,30 @@ export const langDe =
         txtDocNo: "Dokumentnummer",
         extraCost: "Zusatzkosten",
         cmbPriceContract: "Preisvereinbarung",
+        btnView : "Anzeigen",
+        btnMailsend : "E-Mail senden",
+        validMail : "Bitte lassen Sie dieses Feld nicht leer.",
+        placeMailHtmlEditor : "Sie können eine Beschreibung für Ihre E-Mail eingeben.",
+        isMsgSave :
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Vorgang kann nicht ohne Speicherung des Dokuments durchgeführt werden!"
+        },
+        msgMailSendResult:
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msgSuccess: "E-Mail-Versand erfolgreich!",
+            msgFailed: "E-Mail-Versand fehlgeschlagen!"
+        },
+        popMailSend :
+        {
+            title :"E-Mail senden",
+            txtMailSubject : "Betreff der E-Mail",
+            txtSendMail : "E-Mail-Adresse",
+            btnSend : "Senden"
+        },
         pg_Docs: 
         {
           title: "Dokumentauswahl",
@@ -11431,6 +11835,12 @@ export const langDe =
             quantity2: "2. Einheitsmenge",
             margin : "Marge"
         },
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+        },
     },
     irs_02_003 : // "Rücklieferungsschein"
     {
@@ -11491,6 +11901,18 @@ export const langDe =
             clmCode :  "ARTIKELNUMMER",
             clmName : "ARTIKELNAME",
             clmQuantity :"MENGE"
+        },
+        pg_dispatchGrid :
+        {
+            title : "Lieferschein-Auswahl",
+            clmReferans : "Serie - Nummer",
+            clmCode : "Code",
+            clmName : "Name",
+            clmQuantity : "Menge",
+            clmPrice : "Preis",
+            clmTotal : "Betrag",
+            clmDate : "Datum",
+            clmDocNo : "Dokumentennummer"
         },
         grdRebtDispatch: 
         {
@@ -11768,6 +12190,12 @@ export const langDe =
         txtDiscountPer1 : "Rabatt 1",
         txtDiscountPer2 : "Rabatt 2",
         txtDiscountPer3 : "Rabatt 3",
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+        },
     },
     irs_02_004 : // Filialverkaufslieferung
     {
@@ -11799,6 +12227,30 @@ export const langDe =
         validMail : "Bitte geben Sie eine E-Mail-Adresse ein.",
         txtTotalHt : "Gesamtmenge mit Rabatt",
         txtDocNo : "Dokumentnummer",
+        btnView : "Anzeigen",
+        btnMailsend : "E-Mail senden",
+        validMail : "Bitte lassen Sie dieses Feld nicht leer.",
+        placeMailHtmlEditor : "Sie können eine Beschreibung für Ihre E-Mail eingeben.",
+        isMsgSave :
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Vorgang kann nicht ohne Speicherung des Dokuments durchgeführt werden!"
+        },
+        msgMailSendResult:
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msgSuccess: "E-Mail-Versand erfolgreich!",
+            msgFailed: "E-Mail-Versand fehlgeschlagen!"
+        },
+        popMailSend :
+        {
+            title :"E-Mail senden",
+            txtMailSubject : "Betreff der E-Mail",
+            txtSendMail : "E-Mail-Adresse",
+            btnSend : "Senden"
+        },
         pg_Docs : 
         {
             title : "Dokumentauswahl",
@@ -12155,6 +12607,12 @@ export const langDe =
         txtDiscountPer1 : "1. Rabattprozentsatz",
         txtDiscountPer2 : "2. Rabattprozentsatz",
         txtDiscountPer3 : "3. Rabattprozentsatz",
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+        },
     },
     irs_02_005 : // "İade Aliş İrsaliyesi"
     {
@@ -12186,8 +12644,8 @@ export const langDe =
             clmDate: "DATUM",
             clmRef: "SERIE",
             clmRefNo: "NUMMER",
-            clmInputName: "KUNDENNAME",
-            clmInputCode: "KUNDENNUMMER",
+            clmOutputName: "KUNDENNAME",
+            clmOutputCode: "KUNDENNUMMER",
         },
         pg_txtCustomerCode: 
         {
@@ -12202,7 +12660,20 @@ export const langDe =
             title: "Artikelauswahl",
             clmCode: "ARTIKELNUMMER",
             clmName: "ARTIKELNAME",
+            clmMulticode : "MULTICODE",
             clmPrice: "VERKAUFSPREIS",
+        },
+        pg_dispatchGrid : 
+        {
+            title : "Lieferscheinauswahl",
+            clmReferans : "Seriennummer-Folge",
+            clmCode : "Code",
+            clmName : "Name",
+            clmQuantity : "Menge",
+            clmPrice : "Preis",
+            clmTotal : "Betrag",
+            clmDate : "Datum",
+            clmDocNo: "Dokumentnummer"
         },
         pg_RebateGrid: 
         {
@@ -12473,6 +12944,12 @@ export const langDe =
         txtDiscountPer1: "1. Rabattprozent",
         txtDiscountPer2: "2. Rabattprozent",
         txtDiscountPer3: "3. Rabattprozent",
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+        },
     },
     irs_02_006 : // Şube Aliş İrsaliyesi"
     {
@@ -12860,6 +13337,12 @@ export const langDe =
         txtDiscountPer1 : "1. Rabattprozentsatz",
         txtDiscountPer2 : "2. Rabattprozentsatz",
         txtDiscountPer3 : "3. Rabattprozentsatz",
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+        },
     },
     sip_01_001 : // "Einkaufsbestellungsliste"
     {
@@ -13292,9 +13775,15 @@ export const langDe =
         txtDiscountPer2 : "Rabatt % 2",
         txtDiscountPer3 : "Rabatt % 3",
         txtTotalHt : "Rabattierter Gesamtbetrag",
-      },
-      sip_02_002 : // "Verkaufsauftrag"
-      {
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+        },
+    },
+    sip_02_002 : // "Verkaufsauftrag"
+    {
         txtRefRefno : "Seriennummer",
         cmbDepot: "Lager",
         txtCustomerCode : "Kundennummer",
@@ -13678,393 +14167,434 @@ export const langDe =
             quantity2: "Gesamtmenge (2. Einheit)",
             margin: "Marge"
         },
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+        },
     },
     sip_02_003 : // "POS Verkaufsauftrag"
     {
-      txtRefRefno : "Seriennummer",
-      cmbDepot: "Lager",
-      txtCustomerCode : "Kundennummer",
-      txtCustomerName : "Kundenname",
-      dtDocDate : "Datum",
-      txtAmount : "Betrag",
-      txtDiscount : "Zeilenrabatt",
-      txtDocDiscount : "Dokumentrabatt",
-      txtSubTotal : "Zwischensumme",
-      txtMargin : "Marge",
-      txtVat : "MwSt.",
-      txtTotal : "Gesamtsumme",
-      dtShipDate :"Lieferdatum",
-      txtBarcode : "Barcode hinzufügen",
-      txtBarcodePlace: "Barcode scannen",
-      txtQuantity : "Menge",
-      getOffers : "Angebot abrufen",
-      txtUnitFactor : "Einheitsfaktor",
-      txtUnitQuantity : "Einheitsmenge",
-      txtTotalQuantity : "Gesamtmenge",
-      txtUnitPrice: "Einheitspreis",
-      btnView : "Anzeigen",
-      btnMailsend : "E-Mail senden",
-      placeMailen: "Text",
-      validDesign : "Bitte wählen Sie ein Design aus.",
-      validMail : "Bitte lassen Sie dieses Feld nicht leer.",
-      txtTotalHt : "Rabattierter Gesamtbetrag",
-      txtDocNo : "Dokumentnummer",
-      cmbPriceContract : "Preisvereinbarung",
-      pg_Docs : 
+        txtRefRefno : "Seriennummer",
+        cmbDepot: "Lager",
+        txtCustomerCode : "Kundennummer",
+        txtCustomerName : "Kundenname",
+        dtDocDate : "Datum",
+        txtAmount : "Betrag",
+        txtDiscount : "Zeilenrabatt",
+        txtDocDiscount : "Dokumentrabatt",
+        txtSubTotal : "Zwischensumme",
+        txtMargin : "Marge",
+        txtVat : "MwSt.",
+        txtTotal : "Gesamtsumme",
+        dtShipDate :"Lieferdatum",
+        txtBarcode : "Barcode hinzufügen",
+        txtBarcodePlace: "Barcode scannen",
+        txtQuantity : "Menge",
+        getOffers : "Angebot abrufen",
+        txtUnitFactor : "Einheitsfaktor",
+        txtUnitQuantity : "Einheitsmenge",
+        txtTotalQuantity : "Gesamtmenge",
+        txtUnitPrice: "Einheitspreis",
+        btnView : "Anzeigen",
+        btnMailsend : "E-Mail senden",
+        placeMailen: "Text",
+        validDesign : "Bitte wählen Sie ein Design aus.",
+        validMail : "Bitte lassen Sie dieses Feld nicht leer.",
+        txtTotalHt : "Rabattierter Gesamtbetrag",
+        txtDocNo : "Dokumentnummer",
+        cmbPriceContract : "Preisvereinbarung",
+        btnView : "Anzeigen",
+        btnMailsend : "E-Mail senden",
+        validMail : "Bitte lassen Sie dieses Feld nicht leer.",
+        placeMailHtmlEditor : "Sie können eine Beschreibung für Ihre E-Mail eingeben.",
+        isMsgSave :
         {
-          title : "Dokumentauswahl",
-          clmDate : "DATUM",
-          clmRef : "SERIE",
-          clmRefNo : "NUMMER",
-          clmInputName : "KUNDENNAME",
-          clmInputCode  : "KUNDENNUMMER",
-          clmAddress : "ADRESSE"
-      },
-      pg_txtCustomerCode : 
-      {
-          title : "Kundenauswahl",
-          clmCode :  "KUNDENNUMMER",
-          clmTitle : "KUNDENNAME",
-          clmTypeName : "TYP",
-          clmGenusName : "ART"
-      },
-      pg_txtItemsCode : 
-      {
-          title : "Artikelauswahl",
-          clmCode :  "ARTIKELNUMMER",
-          clmName : "ARTIKELNAME",
-          clmPrice : "VERKAUFSPREIS"
-      },
-      grdSlsOrder: 
-      {
-          clmItemCode: "Code",
-          clmItemName: "Name",
-          clmPrice: "Preis",
-          clmQuantity : "Menge",
-          clmDiscount : "Rabatt",
-          clmDiscountRate : "Rabatt %",
-          clmVat : "MwSt.",
-          clmAmount : "Betrag",
-          clmTotal : "Gesamt",
-          clmTotalHt : "Gesamt ohne. ..",
-          clmCreateDate: "Erstellungsdatum",
-          clmMargin :"Marge",
-          clmDescription :"Beschreibung",
-          clmCuser :"Benutzer",
-          clmOffer : "Angebot",
-          clmBarcode : "Barcode",
-          clmVatRate : "MwSt. %",
-          clmSubQuantity : "Untereinheit",
-          clmSubPrice : "Untereinheitspreis",
-          clmSubFactor : "Faktor",
-      },
-      popDiscount : 
-      {
-          title: "Rabatt pro Zeile",
-          chkFirstDiscount : "Aktualisieren des ersten Rabatts in der Zeile",
-          chkDocDiscount : "Als Dokumentenrabatt anwenden",
-          Percent1 : "1. Rabattprozent",
-          Price1 : "1. Rabattbetrag",
-          Percent2 : "2. Rabattprozent",
-          Price2 : "2. Rabattbetrag",
-          Percent3 : "3. Rabattprozent",
-          Price3 : "3. Rabattbetrag"
-      },
-      popDocDiscount : 
-      {
-          title: "Dokumentenrabatt",
-          Percent1 : "1. Rabattprozent",
-          Price1 : "1. Rabattbetrag",
-          Percent2 : "2. Rabattprozent",
-          Price2 : "2. Rabattbetrag",
-          Percent3 : "3. Rabattprozent",
-          Price3 : "3. Rabattbetrag"
-      },
-      popPassword : 
-      {
-          title: "Geben Sie das Administratorpasswort ein, um das Dokument zu öffnen",
-          Password : "Passwort",
-          btnApprove : "Bestätigen"
-      },
-      msgDocValid:
-      {
-          title: "Achtung",
-          btn01: "OK",
-          msg: "Es können keine Bestände erfasst werden, solange die Dokumentkopfdaten nicht vollständig sind!"
-      },
-      msgSpeichern:
-      {
-          title: "Achtung",
-          btn01: "OK",
-          btn02: "Abbrechen",
-          msg: "Sind Sie sicher, dass Sie speichern möchten?"
-      },
-      msgSpeichernResult:
-      {
-          title: "Achtung",
-          btn01: "OK",
-          msgSuccess: "Ihr Eintrag wurde erfolgreich gespeichert!",
-          msgFailed: "Fehler beim Speichern Ihres Eintrags!"
-      },
-      msgSpeichernValid:
-      {
-          title: "Achtung",
-          btn01: "OK",
-          msg: "Bitte füllen Sie alle erforderlichen Felder aus!"
-      },
-      msgDelete:
-      {
-          title: "Achtung",
-          btn01: "OK",
-          btn02: "Abbrechen",
-          msg: "Sind Sie sicher, dass Sie den Eintrag löschen möchten?"
-      },
-      msgVatDelete:
-      {
-          title: "Achtung",
-          btn01: "OK",
-          btn02: "Abbrechen",
-          msg: "Möchten Sie die Mehrwertsteuer auf null setzen?"
-      },
-      msgDiscountPrice:
-      {
-          title: "Achtung",
-          btn01: "OK",
-          msg: "Es kann kein Rabatt größer als der Betrag gewährt werden!"
-      },
-      msgDiscountPercent:
-      {
-          title: "Achtung",
-          btn01: "OK",
-          msg: "Es kann kein Rabatt größer als der Betrag gewährt werden!"
-      },
-      msgLocked:
-      {
-          title: "Achtung",
-          btn01: "OK",
-          msg: "Das Dokument wurde gespeichert und gesperrt!"
-      },
-      msgPasswordSucces:
-      {
-          title: "Erfolgreich",
-          btn01: "OK",
-          msg: "Die Sperre des Dokuments wurde aufgehoben!",
-      },
-      msgPasswordWrong:
-      {
-          title: "Fehlgeschlagen",
-          btn01: "OK",
-          msg: "Falsches Passwort!"
-      },
-      msgLockedType2:
-      {
-          title: "Achtung",
-          btn01: "OK",
-          msg: "Ein Dokument, das in eine Rechnung umgewandelt wurde, kann nicht entsperrt werden."
-      },
-      msgGetLocked:
-      {
-          title: "Achtung",
-          btn01: "OK",
-          msg: "Das Dokument ist gesperrt! Sie müssen das Administratorpasswort eingeben, um Änderungen zu speichern!"
-      },
-      msgDocLocked:
-      {
-          title: "Achtung",
-          btn01: "OK",
-          msg: "Es können keine Änderungen vorgenommen werden, solange das Dokument gesperrt ist!"
-      },
-      msgDiscount:
-      {
-          title: "Achtung",
-          btn01: "OK",
-          msg: "Der Rabatt kann den Betrag nicht übersteigen!"
-      },
-      msgItemNotFound:
-      {
-          title: "Achtung",
-          btn01: "OK",
-          msg: "Artikel nicht gefunden!"
-      },
-      msgNotCustomer:
-      {
-          title: "Achtung",
-          btn01: "OK",
-          msg: "Kunde nicht gefunden!"
-      },
-      msgUnderPrice1:
-      {
-          title: "Achtung",
-          btn01: "OK",
-          btn02: "Abbrechen",
-          msg: "Sie verkaufen zu einem niedrigeren Preis als den Einkaufspreis!"
-      },
-      msgUnderPrice2:
-      {
-          title: "Achtung",
-          btn01: "OK",
-          msg: "Der Verkaufspreis kann nicht niedriger als der Einkaufspreis sein!"
-      },
-      msgCombineItem:
-      {
-          title: "Achtung",
-          btn01: "Kombinieren",
-          btn02: "Neu hinzufügen",
-          msg: "Der Artikel, den Sie hinzufügen möchten, ist bereits im Dokument enthalten! Sollen die Zeilen zusammengeführt werden?"
-      },
-      popDesign : 
-      {
-          title: "Designauswahl",
-          design : "Design",
-          lang : "Dokumentsprache"
-      },
-      msgMissItemCode:
-      {
-          title: "Achtung",
-          btn01: "OK",
-          msg: "Nicht gefundene Codes:"
-      },
-      msgMultiCodeCount:
-      {
-          title: "Achtung",
-          btn01: "OK",
-          msg: "Anzahl der hinzugefügten Artikel"
-      },
-      popMultiItem:
-      {
-          title: "Massenhinzufügung von Artikeln",
-          btnApprove: "Artikel abrufen",
-          btnClear : "Löschen",
-          btnSpeichern : "Zeilen hinzufügen",
-      },
-      cmbMultiItemType : 
-      {
-          title : "Suchmethode",
-          customerCode : "Nach Lieferantennummer",
-          ItemCode : "Nach Artikelnummer"
-      },
-      grdMultiItem : 
-      {
-          clmCode : "Artikelnummer",
-          clmMulticode : "Lieferantennummer",
-          clmName : "Artikelname",
-          clmQuantity : "Menge"
-      },
-      msgMultiData:
-      {
-          title: "Achtung",
-          btn01: "Liste leeren und alle hinzufügen",
-          btn02: "Neu geschriebene zur Liste hinzufügen",
-          msg: "Es sind Artikel in der Liste vorhanden!"
-      },
-      msgUnit:
-      {
-          title: "Auswahl der Einheit",
-          btn01: "Bestätigen",
-      },
-      validRef: "Serienfeld darf nicht leer sein",
-      validRefNo: "Feld für die Reihenfolge darf nicht leer sein",
-      validDepot: "Sie müssen ein Depot auswählen",
-      validCustomerCode: "Kundencode darf nicht leer sein",
-      validDocDate: "Bitte ein Datum auswählen",
-      tagItemCodePlaceholder: "Bitte geben Sie die Codes ein, die Sie hinzufügen möchten",
-      msgQuantity: 
-      {
-          title: "Menge",
-          btn01: "Hinzufügen",
-          msg: "Menge eingeben"
-      },
-      pg_txtBarcode: 
-      {
-          title: "Barcode-Auswahl",
-          clmCode: "Artikelnummer",
-          clmName: "Artikelname",
-          clmMulticode: "Lieferantencode",
-          clmBarcode: "Barcode"
-      },
-      pg_offersGrid: 
-      {
-          title: "Angebotsauswahl",
-          clmReferans: "Serie - Reihenfolge",
-          clmCode: "Code",
-          clmName: "Name",
-          clmQuantity: "Menge",
-          clmTotal: "Gesamt",
-          clmPrice: "Preis"
-      },
-      msgCustomerSelect: 
-      {
-          title: "Achtung",
-          btn01: "OK",
-          msg: "Bitte wählen Sie einen Kunden aus!"
-      },
-      msgRowNotUpdate: 
-      {
-          title: "Achtung",
-          btn01: "OK",
-          msg: "Diese Zeile wurde in einen Lieferschein oder eine Rechnung umgewandelt und kann nicht geändert werden!"
-      },
-      msgRowNotDelete: 
-      {
-          title: "Achtung",
-          btn01: "OK",
-          msg: "Diese Zeile wurde in einen Lieferschein oder eine Rechnung umgewandelt und kann nicht gelöscht werden!"
-      },
-      msgdocNotDelete: 
-      {
-          title: "Achtung",
-          btn01: "OK",
-          msg: "In Ihrem Dokument sind Zeilen vorhanden, die in einen Lieferschein oder eine Rechnung umgewandelt wurden. Dieses Dokument kann nicht gelöscht werden!"
-      },
-      pg_adress: 
-      {
-          title: "Adressauswahl",
-          clmAdress: "ADRESSE",
-          clmCiyt: "STADT",
-          clmZipcode: "POSTLEITZAHL",
-          clmCountry: "LAND"
-      },
-      msgCode: 
-      {
-          title: "Achtung",
-          btn01: "Zum Dokument gehen",
-          msg: "Dokument gefunden"
-      },
-      popMailSend: 
-      {
-          title: "E-Mail senden",
-          txtMailSubject: "E-Mail-Betreff",
-          txtSendMail: "E-Mail-Adresse",
-          btnSend: "Senden"
-      },
-      msgMailSendResult: 
-      {
-          title: "Achtung",
-          btn01: "OK",
-          msgSuccess: "E-Mail wurde erfolgreich gesendet!",
-          msgFailed: "Fehler beim Senden der E-Mail!"
-      },
-      txtDiscount1: "Rabatt 1",
-      txtDiscount2: "Rabatt 2",
-      txtDiscount3: "Rabatt 3",
-      txtTotalDiscount: "Gesamtrabatt",
-      msgDiscountPerEntry: 
-      {
-          title: "Prozentuale Rabatteingabe",
-          btn01: "Bestätigen"
-      },
-      txtDiscountPer1: "Rabatt 1 in Prozent",
-      txtDiscountPer2: "Rabatt 2 in Prozent",
-      txtDiscountPer3: "Rabatt 3 in Prozent",
-      popDetail: 
-      {
-          title: "Dokumentinhalt",
-          count: "Gesamtzeilen",
-          quantity: "Gesamtmenge",
-          quantity2: "Gesamtmenge (2. Einheit)",
-          margin: "Marge"
-      },
-  },
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Vorgang kann nicht ohne Speicherung des Dokuments durchgeführt werden!"
+        },
+        msgMailSendResult:
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msgSuccess: "E-Mail-Versand erfolgreich!",
+            msgFailed: "E-Mail-Versand fehlgeschlagen!"
+        },
+        popMailSend :
+        {
+            title :"E-Mail senden",
+            txtMailSubject : "Betreff der E-Mail",
+            txtSendMail : "E-Mail-Adresse",
+            btnSend : "Senden"
+        },
+        pg_Docs : 
+        {
+            title : "Dokumentauswahl",
+            clmDate : "DATUM",
+            clmRef : "SERIE",
+            clmRefNo : "NUMMER",
+            clmInputName : "KUNDENNAME",
+            clmInputCode  : "KUNDENNUMMER",
+            clmAddress : "ADRESSE"
+        },
+        pg_txtCustomerCode : 
+        {
+            title : "Dokumentauswahl",
+            clmDate : "DATUM",
+            clmRef : "SERIE",
+            clmRefNo : "NUMMER",
+            clmInputName : "KUNDENNAME",
+            clmInputCode  : "KUNDENNUMMER",
+            clmAddress : "ADRESSE"
+        },
+        pg_txtCustomerCode : 
+        {
+            title : "Kundenauswahl",
+            clmCode :  "KUNDENNUMMER",
+            clmTitle : "KUNDENNAME",
+            clmTypeName : "TYP",
+            clmGenusName : "ART"
+        },
+        pg_txtItemsCode : 
+        {
+            title : "Artikelauswahl",
+            clmCode :  "ARTIKELNUMMER",
+            clmName : "ARTIKELNAME",
+            clmPrice : "VERKAUFSPREIS",
+            clmBarcode : "BARCODE",
+        },
+        grdSlsOrder: 
+        {
+            clmItemCode: "Code",
+            clmItemName: "Name",
+            clmPrice: "Preis",
+            clmQuantity : "Menge",
+            clmDiscount : "Rabatt",
+            clmDiscountRate : "Rabatt %",
+            clmVat : "MwSt.",
+            clmAmount : "Betrag",
+            clmTotal : "Gesamt",
+            clmTotalHt : "Gesamt ohne. ..",
+            clmCreateDate: "Erstellungsdatum",
+            clmMargin :"Marge",
+            clmDescription :"Beschreibung",
+            clmCuser :"Benutzer",
+            clmOffer : "Angebot",
+            clmBarcode : "Barcode",
+            clmVatRate : "MwSt. %",
+            clmSubQuantity : "Untereinheit",
+            clmSubPrice : "Untereinheitspreis",
+            clmSubFactor : "Faktor",
+        },
+        popDiscount : 
+        {
+            title: "Rabatt pro Zeile",
+            chkFirstDiscount : "Aktualisieren des ersten Rabatts in der Zeile",
+            chkDocDiscount : "Als Dokumentenrabatt anwenden",
+            Percent1 : "1. Rabattprozent",
+            Price1 : "1. Rabattbetrag",
+            Percent2 : "2. Rabattprozent",
+            Price2 : "2. Rabattbetrag",
+            Percent3 : "3. Rabattprozent",
+            Price3 : "3. Rabattbetrag"
+        },
+        popDocDiscount : 
+        {
+            title: "Dokumentenrabatt",
+            Percent1 : "1. Rabattprozent",
+            Price1 : "1. Rabattbetrag",
+            Percent2 : "2. Rabattprozent",
+            Price2 : "2. Rabattbetrag",
+            Percent3 : "3. Rabattprozent",
+            Price3 : "3. Rabattbetrag"
+        },
+        popPassword : 
+        {
+            title: "Geben Sie das Administratorpasswort ein, um das Dokument zu öffnen",
+            Password : "Passwort",
+            btnApprove : "Bestätigen"
+        },
+        msgDocValid:
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Es können keine Bestände erfasst werden, solange die Dokumentkopfdaten nicht vollständig sind!"
+        },
+        msgSpeichern:
+        {
+            title: "Achtung",
+            btn01: "OK",
+            btn02: "Abbrechen",
+            msg: "Sind Sie sicher, dass Sie speichern möchten?"
+        },
+        msgSpeichernResult:
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msgSuccess: "Ihr Eintrag wurde erfolgreich gespeichert!",
+            msgFailed: "Fehler beim Speichern Ihres Eintrags!"
+        },
+        msgSpeichernValid:
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Bitte füllen Sie alle erforderlichen Felder aus!"
+        },
+        msgDelete:
+        {
+            title: "Achtung",
+            btn01: "OK",
+            btn02: "Abbrechen",
+            msg: "Sind Sie sicher, dass Sie den Eintrag löschen möchten?"
+        },
+        msgVatDelete:
+        {
+            title: "Achtung",
+            btn01: "OK",
+            btn02: "Abbrechen",
+            msg: "Möchten Sie die Mehrwertsteuer auf null setzen?"
+        },
+        msgDiscountPrice:
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Es kann kein Rabatt größer als der Betrag gewährt werden!"
+        },
+        msgDiscountPercent:
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Es kann kein Rabatt größer als der Betrag gewährt werden!"
+        },
+        msgLocked:
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Das Dokument wurde gespeichert und gesperrt!"
+        },
+        msgPasswordSucces:
+        {
+            title: "Erfolgreich",
+            btn01: "OK",
+            msg: "Die Sperre des Dokuments wurde aufgehoben!",
+        },
+        msgPasswordWrong:
+        {
+            title: "Fehlgeschlagen",
+            btn01: "OK",
+            msg: "Falsches Passwort!"
+        },
+        msgLockedType2:
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Ein Dokument, das in eine Rechnung umgewandelt wurde, kann nicht entsperrt werden."
+        },
+        msgGetLocked:
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Das Dokument ist gesperrt! Sie müssen das Administratorpasswort eingeben, um Änderungen zu speichern!"
+        },
+        msgDocLocked:
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Es können keine Änderungen vorgenommen werden, solange das Dokument gesperrt ist!"
+        },
+        msgDiscount:
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Der Rabatt kann den Betrag nicht übersteigen!"
+        },
+        msgItemNotFound:
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Artikel nicht gefunden!"
+        },
+        msgNotCustomer:
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Kunde nicht gefunden!"
+        },
+        msgUnderPrice1:
+        {
+            title: "Achtung",
+            btn01: "OK",
+            btn02: "Abbrechen",
+            msg: "Sie verkaufen zu einem niedrigeren Preis als den Einkaufspreis!"
+        },
+        msgUnderPrice2:
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Der Verkaufspreis kann nicht niedriger als der Einkaufspreis sein!"
+        },
+        msgCombineItem:
+        {
+            title: "Achtung",
+            btn01: "Kombinieren",
+            btn02: "Neu hinzufügen",
+            msg: "Der Artikel, den Sie hinzufügen möchten, ist bereits im Dokument enthalten! Sollen die Zeilen zusammengeführt werden?"
+        },
+        popDesign : 
+        {
+            title: "Designauswahl",
+            design : "Design",
+            lang : "Dokumentsprache"
+        },
+        msgMissItemCode:
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Nicht gefundene Codes:"
+        },
+        msgMultiCodeCount:
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Anzahl der hinzugefügten Artikel"
+        },
+        popMultiItem:
+        {
+            title: "Massenhinzufügung von Artikeln",
+            btnApprove: "Artikel abrufen",
+            btnClear : "Löschen",
+            btnSpeichern : "Zeilen hinzufügen",
+        },
+        cmbMultiItemType : 
+        {
+            title : "Suchmethode",
+            customerCode : "Nach Lieferantennummer",
+            ItemCode : "Nach Artikelnummer"
+        },
+        grdMultiItem : 
+        {
+            clmCode : "Artikelnummer",
+            clmMulticode : "Lieferantennummer",
+            clmName : "Artikelname",
+            clmQuantity : "Menge"
+        },
+        msgMultiData:
+        {
+            title: "Achtung",
+            btn01: "Liste leeren und alle hinzufügen",
+            btn02: "Neu geschriebene zur Liste hinzufügen",
+            msg: "Es sind Artikel in der Liste vorhanden!"
+        },
+        msgUnit:
+        {
+            title: "Auswahl der Einheit",
+            btn01: "Bestätigen",
+        },
+        validRef: "Serienfeld darf nicht leer sein",
+        validRefNo: "Feld für die Reihenfolge darf nicht leer sein",
+        validDepot: "Sie müssen ein Depot auswählen",
+        validCustomerCode: "Kundencode darf nicht leer sein",
+        validDocDate: "Bitte ein Datum auswählen",
+        tagItemCodePlaceholder: "Bitte geben Sie die Codes ein, die Sie hinzufügen möchten",
+        msgQuantity: 
+        {
+            title: "Menge",
+            btn01: "Hinzufügen",
+            msg: "Menge eingeben"
+        },
+        pg_txtBarcode: 
+        {
+            title: "Barcode-Auswahl",
+            clmCode: "Artikelnummer",
+            clmName: "Artikelname",
+            clmMulticode: "Lieferantencode",
+            clmBarcode: "Barcode"
+        },
+        pg_offersGrid: 
+        {
+            title: "Angebotsauswahl",
+            clmReferans: "Serie - Reihenfolge",
+            clmCode: "Code",
+            clmName: "Name",
+            clmQuantity: "Menge",
+            clmTotal: "Gesamt",
+            clmPrice: "Preis"
+        },
+        msgCustomerSelect: 
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Bitte wählen Sie einen Kunden aus!"
+        },
+        msgRowNotUpdate: 
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Diese Zeile wurde in einen Lieferschein oder eine Rechnung umgewandelt und kann nicht geändert werden!"
+        },
+        msgRowNotDelete: 
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Diese Zeile wurde in einen Lieferschein oder eine Rechnung umgewandelt und kann nicht gelöscht werden!"
+        },
+        msgdocNotDelete: 
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msg: "In Ihrem Dokument sind Zeilen vorhanden, die in einen Lieferschein oder eine Rechnung umgewandelt wurden. Dieses Dokument kann nicht gelöscht werden!"
+        },
+        pg_adress: 
+        {
+            title: "Adressauswahl",
+            clmAdress: "ADRESSE",
+            clmCiyt: "STADT",
+            clmZipcode: "POSTLEITZAHL",
+            clmCountry: "LAND"
+        },
+        msgCode: 
+        {
+            title: "Achtung",
+            btn01: "Zum Dokument gehen",
+            msg: "Dokument gefunden"
+        },
+        popMailSend: 
+        {
+            title: "E-Mail senden",
+            txtMailSubject: "E-Mail-Betreff",
+            txtSendMail: "E-Mail-Adresse",
+            btnSend: "Senden"
+        },
+        msgMailSendResult: 
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msgSuccess: "E-Mail wurde erfolgreich gesendet!",
+            msgFailed: "Fehler beim Senden der E-Mail!"
+        },
+        txtDiscount1: "Rabatt 1",
+        txtDiscount2: "Rabatt 2",
+        txtDiscount3: "Rabatt 3",
+        txtTotalDiscount: "Gesamtrabatt",
+        msgDiscountPerEntry: 
+        {
+            title: "Prozentuale Rabatteingabe",
+            btn01: "Bestätigen"
+        },
+        txtDiscountPer1: "Rabatt 1 in Prozent",
+        txtDiscountPer2: "Rabatt 2 in Prozent",
+        txtDiscountPer3: "Rabatt 3 in Prozent",
+        popDetail: 
+        {
+            title: "Dokumentinhalt",
+            count: "Gesamtzeilen",
+            quantity: "Gesamtmenge",
+            quantity2: "Gesamtmenge (2. Einheit)",
+            margin: "Marge"
+        },
+    },
     sip_04_001: 
     {
         txtCustomerCode: "Kunde",
@@ -15027,9 +15557,9 @@ export const langDe =
             btn01: "OK",
             msg: "Sie können keine Vorgänge durchführen, ohne eine Rechnung auszuwählen!"
         },
-        },
-        fns_03_001 : // "Kassenstammdaten"
-        {
+    },
+    fns_03_001 : // "Kassenstammdaten"
+    {
         txtCode : "Code",
         txtName :"Name",
         cmbType :"Typ",
@@ -15081,10 +15611,9 @@ export const langDe =
             btn02: "OK",
             msg : "Die eingegebene Kasse ist im System vorhanden!"
         }
-        
-        },
-        fns_03_002 : // "Bankstammdaten"
-        {
+    },
+    fns_03_002 : // "Bankstammdaten"
+    {
         txtCode : "Code",
         txtName :"Name",
         txtIban :"IBAN",
@@ -15136,10 +15665,9 @@ export const langDe =
             btn02: "OK",
             msg : "Die eingegebene Kasse ist im System vorhanden!"
         }
-        
-        },
-        fns_03_003 : // "Überweisung zwischen Konten"
-        {
+    },
+    fns_03_003 : // "Überweisung zwischen Konten"
+    {
         txtRefRefno : "Seriennummer",
         cmbOutAccount: "Ausgehendes Konto",
         cmbInAccount: "Eingehendes Konto",
@@ -15259,11 +15787,42 @@ export const langDe =
             title: "Transfer von Bank zu Bank",
             btnApprove : "Hinzufügen",
         },
-        
         validRef : "Serie darf nicht leer sein",
         validRefNo : "Nummer darf nicht leer sein",
         validAccount : "Bitte wählen Sie ein Konto aus",
         validDocDate : "Bitte wählen Sie ein Datum aus",
+    },
+    fns_04_001 : // "Banka Ekstre Raporu"
+    {
+        cmbBank : "Banka Seçimi",  // BAK
+        btnCheck : "Aktif",  // BAK
+        btnGet :"Getir",  // BAK
+        grdListe : 
+        {
+            clmOutputName : "Çıkış Hesabı",   // BAK
+            clmInputName : "Giriş Hesabı",   // BAK
+            clmAmount : "Tutar",    // BAK
+            clmDocDate : "Tarih",    // BAK
+            clmRef : "Seri",   // BAK
+            clmRefNo : "Sıra",    // BAK
+        },
+     
+    },
+    fns_04_003 : // "Kasa Ekstre Raporu"
+    {
+        cmbSafe : "Kasa Seçimi",  // BAK
+        btnCheck : "Aktif",  // BAK
+        btnGet :"Getir",  // BAK
+        grdListe : 
+        {
+            clmOutputName : "Çıkış Hesabı",   // BAK
+            clmInputName : "Giriş Hesabı",   // BAK
+            clmAmount : "Tutar",    // BAK
+            clmDocDate : "Tarih",    // BAK
+            clmRef : "Seri",   // BAK
+            clmRefNo : "Sıra",    // BAK
+        },
+     
     },
     fns_05_001 : //"Masseneinzugseingabe"
     {
@@ -15623,6 +16182,8 @@ export const langDe =
         txtLcdPort : "LCD-Anschluss",
         txtPayCardPort : "Pay Card-Anschluss",
         txtPrintDesing : "Beleglayout",
+        txtMacId : "Mac Id",
+        cmbDepot : "Lager",
         pg_txtCode : 
         {
             title : "Kassenauswahl",
@@ -15937,7 +16498,9 @@ export const langDe =
             clmUser: "Benutzer",
             clmDate: "Datum",
             clmTicketId: "Quittungs-ID",
-            clmDescription: "Beschreibung"
+            clmDescription: "Beschreibung",
+            clmTime: "Saat", // BAK
+            clmTotal: "Tutar", // BAK
         },
         pg_txtItem:
         {
@@ -15954,6 +16517,7 @@ export const langDe =
             clmTotal : "Gesamt",
             clmLastData : "Erster Preis",
             clmDescription : "Beschreibung",
+            clmTime: "Saat", // BAK
         },
         grdSaleTicketPays : 
         {
@@ -16204,6 +16768,47 @@ export const langDe =
             clmTicketNo : "Fiş No",
         },
     },
+    pos_02_015 : // "Müşteri Bazlı Ürün Satış Raporu" //BAK
+    {
+        btnGet : "Getir",
+        dtDate : "Tarih Aralığı",
+        txtCustomer : "Müşteri",
+        txtTotal : "Toplam",
+        grdList: 
+        {
+            cuserName: "O.Kullanıcı",
+            luserName: "D.Kullanıcı",
+            device: "Kasa",
+            ref: "Ref",
+            docDate: "Tarih",
+            itemCode: "Ürün Kodu",
+            itemName: "Ürün Adı",
+            itemGrpName: "Ürün Grubu",
+            barcode: "Barkodu",
+            clmQuantity: "Miktar",
+            unitShort: "Birim",
+            clmPrice : "Fiyat",
+            clmFAmount : "Vergisiz Tutar",
+            clmAmount : "Tutar",
+            clmDiscount : "İndirim",
+            clmLoyalty : "Sadakat İnd",
+            clmVat : "Vergi",
+            clmVatRate : "Vergi Oranı",
+            clmTotal : "Toplam"
+        },
+        pg_txtCustomer:
+        {
+            title: "Müşteri Seçim",
+            clmCode: "KODU",
+            clmName: "ADI"
+        },
+        msgCustomerSelect:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen Müşteri Seçiniz !"
+        },
+    },
     pos_03_001: // "Gün Sonu"
     {
         TicketId: "Beleg-ID",
@@ -16307,6 +16912,16 @@ export const langDe =
             btn01: "OK",
             msg: "Sie können keinen Vorschuss über 1000€ eingeben!"
         },
+    },
+    pos_03_002 : // "Çekiliş" //BAK
+    {
+        dtDate : "Datum",
+        txtLucky : "Gewinner",
+        txtPoint : "Punkte",
+        btnLottery : "Ziehung machen",
+        lblTicketNo : "BELEG NR",
+        lblCustomer : "KUNDE",
+        lblCustomerNo : "KUNDE NR"
     },
     tkf_01_001 : // "Angebotsliste Einkauf",
     {
@@ -16714,11 +17329,30 @@ export const langDe =
         txtUnitQuantity: "Einheitsmenge",
         txtTotalQuantity: "Gesamtmenge",
         txtUnitPrice: "Stückpreis",
-        btnView: "Anzeigen",
-        btnMailsend: "E-Mail senden",
-        placeMailen: "Text",
-        validDesign: "Bitte wählen Sie ein Design aus.",
-        validMail: "Bitte füllen Sie dieses Feld aus.",
+        btnView : "Anzeigen",
+        btnMailsend : "E-Mail senden",
+        validMail : "Bitte lassen Sie dieses Feld nicht leer.",
+        placeMailHtmlEditor : "Sie können eine Beschreibung für Ihre E-Mail eingeben.",
+        isMsgSave :
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Vorgang kann nicht ohne Speicherung des Dokuments durchgeführt werden!"
+        },
+        msgMailSendResult:
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msgSuccess: "E-Mail-Versand erfolgreich!",
+            msgFailed: "E-Mail-Versand fehlgeschlagen!"
+        },
+        popMailSend :
+        {
+            title :"E-Mail senden",
+            txtMailSubject : "Betreff der E-Mail",
+            txtSendMail : "E-Mail-Adresse",
+            btnSend : "Senden"
+        },
         pg_Docs: 
         {
             title: "Dokumentauswahl",

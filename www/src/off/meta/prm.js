@@ -1751,8 +1751,24 @@ export const prm =
             CAPTION : "Otomatik mail gönderilcek adress"
         }
     },
+    // checkDocNo
+    {
+        TYPE : 1,
+        ID :"checkDocNo",
+        VALUE : false,
+        SPECIAL : "",
+        PAGE : "ftr_02_002",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Satış Faturası",
+            CAPTION : "Belge no kontrolu"
+        }
+    },
     //#endregion
-    //#region Satış Faturası
+    //#region Fire Alış Faturası
     //txtRef
     {
         TYPE : 2,
@@ -1867,8 +1883,25 @@ export const prm =
             CAPTION : "Eksiye Düşemeye İzin Verme"
         }
     },
+    // checkDocNo
+    {
+        TYPE : 1,
+        ID :"checkDocNo",
+        VALUE : false,
+        SPECIAL : "",
+        PAGE : "ftr_02_009",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Fire Alış Faturası",
+            CAPTION : "Belge no kontrolu"
+        }
+    },
     //#endregion
-    //#region Şubeler ArasıSatış Faturası
+    //#region Şubeler Arası Satış Faturası
+    
     //txtRef
     {
         TYPE : 2,
@@ -1981,6 +2014,60 @@ export const prm =
             TYPE : "checkbox",
             PAGE_NAME : "Şubeler Arası Satış Faturası",
             CAPTION : "Eksiye Düşemeye İzin Verme"
+        }
+    },
+    // checkDocNo
+    {
+        TYPE : 1,
+        ID :"checkDocNo",
+        VALUE : false,
+        SPECIAL : "",
+        PAGE : "ftr_02_005",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Şubeler Arası Alis Faturası",
+            CAPTION : "Belge no kontrolu"
+        }
+    },
+    //#endregion
+    //#region Fiyat Farki Alış Faturası
+
+    // checkDocNo
+    {
+        TYPE : 1,
+        ID :"checkDocNo",
+        VALUE : false,
+        SPECIAL : "",
+        PAGE : "ftr_02_006",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Fiyat Farki Alış Faturası",
+            CAPTION : "Belge no kontrolu"
+        }
+    },
+    //#endregion
+    //#region Gelen İade Alış Faturası
+    
+    // checkDocNo
+    {
+        TYPE : 1,
+        ID :"checkDocNo",
+        VALUE : false,
+        SPECIAL : "",
+        PAGE : "ftr_02_007",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Gelen İade Alış Faturası",
+            CAPTION : "Belge no kontrolu"
         }
     },
     //#endregion
@@ -2153,6 +2240,79 @@ export const prm =
             TYPE : "checkbox",
             PAGE_NAME : "Alış Faturası",
             CAPTION : "Tedarikçişi olmayan ürünü kaydetme"
+        }
+    },
+    // checkDocNo
+    {
+        TYPE : 1,
+        ID :"checkDocNo",
+        VALUE : false,
+        SPECIAL : "",
+        PAGE : "ftr_02_001",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Alış Faturası",
+            CAPTION : "Belge no kontro"
+        }
+    },
+    //#endregion
+    //#region Gönderilen İade Faturası
+    
+    // checkDocNo
+    {
+        TYPE : 1,
+        ID :"checkDocNo",
+        VALUE : false,
+        SPECIAL : "",
+        PAGE : "ftr_02_003",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Gönderilen İade Faturası",
+            CAPTION : "Belge no kontrolu"
+        }
+    },
+    //#endregion
+    //#region Fiyat Farki Faturası
+    
+    // checkDocNo
+    {
+        TYPE : 1,
+        ID :"checkDocNo",
+        VALUE : false,
+        SPECIAL : "",
+        PAGE : "ftr_02_004",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Fiyat Farki Faturası",
+            CAPTION : "Belge no kontrolu"
+        }
+    },
+    //#endregion
+    //#region Şubeler Arası Alis Faturası
+    
+    // checkDocNo
+    {
+        TYPE : 1,
+        ID :"checkDocNo",
+        VALUE : false,
+        SPECIAL : "",
+        PAGE : "ftr_02_008",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Şubeler Arası Alis Faturası",
+            CAPTION : "Belge no kontrolu"
         }
     },
     //#endregion

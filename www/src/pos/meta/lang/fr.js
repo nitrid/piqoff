@@ -40,9 +40,9 @@ export const langFr =
     price : "Prix",
     msgDeviceChange : 
     {
-        title : "Dikkat",   // BAK
-        msg : "Getirmek istediğiniz fişde ödeme mevcut işleme ödemenin alındğını kasadan devam edebilirsiniz ! Kasa Kodu : ",   // BAK
-        btn01 : "Tamam",   // BAK
+        title : "Attention",   // BAK
+        msg : "Il y a un paiement dans le reçu que vous souhaitez apporter. Vous pouvez continuer la transaction en encaissant au comptoir ! Code de caisse : ",   // BAK
+        btn01 : "OK",   // BAK
     },
     msgCustomerNotFound : 
     {
@@ -298,6 +298,15 @@ export const langFr =
     popLastSaleList : 
     {
         title :" Dernière liste de vente ",
+        cmbPopLastSalePayType : 
+        {
+            optionAll : "Tous",
+            optionEspece : "Espece",
+            optionTPE : "Carte Bancaire TPE",
+            optionCheque1 : "Cheque",
+            optionCheque2 : "CHEQue",
+            optionAvoir : "Bon D'Avoir"
+        }
     },
     txtPopLastRefPholder : "Veuillez scanner le code barre présent sur le ticket ... ",
     popLastTotal :  
@@ -336,6 +345,11 @@ export const langFr =
         head : "Motif de la ligne supprimée",
         title : "Veuillez saisir le motif de suppression"
     },
+    PopBalanceCounterDesc :
+    {
+        head : "Description de Contrôle de Balance",
+        title : "Veuillez Entrer la Raison du Contrôle de Balance"
+    },
     popItemReturnDesc : 
     {
         head : "Motif de retour ",
@@ -369,11 +383,12 @@ export const langFr =
     },
     msgCardPayment: 
     {
-        title : "Attention",
-        msg :" En attente de réponse du TPE",
-        btn01 : "A nouveau",
-        btn02 : "Abandonner",
-        btn03 : "Forcer"
+        title: "Attention",
+        msg: "Attente de la réponse du terminal de carte.",
+        msgAmount: "Montant :",
+        btn01: "Réessayer",
+        btn02: "Annuler",
+        btn03: "Forcer"
     },
     msgRePaymentType :
     {
@@ -576,6 +591,14 @@ export const langFr =
         msg : "Vous ne pouvez pas faire cela en mode hors ligne !",
         btn01 : "OK"
     },
+    msgDisconnectWarning: 
+    {
+      title: "Attention",
+      msg: "Êtes-vous sûr de vouloir quitter ?",
+      btn01: "OUI",
+      btn02: "NON"
+    },
+
     msgOfflineAlert: 
     {
         title : "Attention",
@@ -589,6 +612,14 @@ export const langFr =
         msg1 : "Connexion au serveur établie ! Vous pouvez poursuivre votre transaction en ligne.",
         msg2 : "!!!! Veuillez vérifier les derniers articles scannés !!!!",
         btn01 : "OK"
+    },
+    msgDataTransferAlert: //BAK
+    {
+        title : "Attention",
+        msg1 : "Vous avez {0} enregistrements à transférer ! Transférez les données maintenant.",
+        msg2 : "La transmission a réussi.",
+        msg3 : "La transmission a échoué. Toutes les opérations sont en cours de redémarrage.",
+        btn01 : "D'accord"
     },
     msgNotWeighing: 
     {
@@ -771,10 +802,43 @@ export const langFr =
         printDesing : "Design d’imprimante",
         scannerPort : "Scanner port"
     },
-    msgConnectOut: 
+    msgNotBarcodeWeighing: //BAK
     {
-        title : "Attention", 
-        msg : "La connexion avec le serveur est interrompu ", 
-        btn01 : "D'accord"  
+        title: "Attention",
+        msg: "The total quantity of the weighed product does not match the scanned barcode!",
+        msgTicket: "Weighed quantity: ",
+        msgBarkod: "Label quantity: ",
+        msgDifference: "Difference: ",
+        msgTotalAmount : "Montant total",
+        btn01: "OK",
+        btn02: "Continue"
     },
+    msgBarcodeWeighing: //BAK
+    {
+        title: "Attention",
+        msg: "Ligne lue : {0} - Montant total : {1}",
+        btn01: "D'accord"
+    },
+    msgBarcodeWeighingUnit: 
+    {
+        title : "Attention",
+        msg : "L'étiquette scannée contient des produits individuels. Vous n'avez pas besoin de faire correspondre les quantités sur la balance.",
+        btn01 : "D'accord"
+    },
+    msgTSENotFound: //BAK
+    {
+        title: "Attention",
+        msg: "La communication avec l'appareil TSE n'a pas pu être établie !",
+        btn01: "D'accord"
+    },
+    msgMacIdFailed: //BAK
+    {
+        title : "Attention",
+        msg : "ID du périphérique non compatible ! Veuillez contacter piqsoft.",
+        btn01 : "OK"
+    },
+    itemInfo:
+    {
+        msgSplash: "VEUILLEZ SCANNER LE CODE BARRE"
+    }
 }

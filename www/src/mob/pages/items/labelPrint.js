@@ -50,7 +50,7 @@ export default class labelPrint extends React.PureComponent
             "MAIN_GRP AS ITEM_GRP, " +
             "MAIN_GRP_NAME AS ITEM_GRP_NAME, " +
             "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS.GUID),'') AS CUSTOMER_NAME, " +
-            "(SELECT [dbo].[FN_PRICE_SALE](ITEMS.GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000')) AS PRICE  ,  " +
+            "(SELECT [dbo].[FN_PRICE_SALE](ITEMS.GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000')) AS PRICE  ,  " +
             "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 1 AND ITEM_UNIT.ITEM = ITEMS.GUID),0) AS UNDER_UNIT_VALUE, " +
             "ISNULL((SELECT TOP 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE TYPE = 1 AND ITEM_UNIT_VW_01.ITEM_GUID = ITEMS.GUID),0) AS UNDER_UNIT_SYMBOL " +
             "FROM ITEMS_VW_01 AS ITEMS LEFT OUTER  JOIN ITEM_BARCODE ON ITEMS.GUID = ITEM_BARCODE.ITEM  " +
@@ -300,7 +300,7 @@ export default class labelPrint extends React.PureComponent
                         [
                             {
                                 icon : "fa-file",
-                                text : "Yeni Evrak",
+                                text : this.lang.t("btnNewDoc"),
                                 onClick : ()=>
                                 {
                                     this.init()
@@ -308,7 +308,7 @@ export default class labelPrint extends React.PureComponent
                             },
                             {
                                 icon : "fa-trash",
-                                text : "Evrak Sil",
+                                text : this.lang.t("btnDocDelete"),
                                 onClick : ()=>
                                 {
                                     if(this.lblObj.dt().length > 0)
@@ -485,7 +485,7 @@ export default class labelPrint extends React.PureComponent
                                                 </div>
                                                 <div className='row'>
                                                     <div className='col-12'>
-                                                        <h6 className='overflow-hidden d-flex align-items-center justify-content-center' style={{color:'#ecf0f1',height:'20px'}}>Barkod Giriş</h6>
+                                                        <h6 className='overflow-hidden d-flex align-items-center justify-content-center' style={{color:'#ecf0f1',height:'20px'}}>{this.lang.t("btnBarcodeEntry")}</h6>
                                                     </div>
                                                 </div>
                                             </NbButton>
@@ -500,7 +500,7 @@ export default class labelPrint extends React.PureComponent
                                                 </div>
                                                 <div className='row'>
                                                     <div className='col-12'>
-                                                        <h6 className='overflow-hidden d-flex align-items-center justify-content-center' style={{color:'#ecf0f1',height:'20px'}}>İşlem Satırları</h6>
+                                                        <h6 className='overflow-hidden d-flex align-items-center justify-content-center' style={{color:'#ecf0f1',height:'20px'}}>{this.lang.t("btnProcessLines")}</h6>
                                                     </div>
                                                 </div>
                                             </NbButton>

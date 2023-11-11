@@ -8,9 +8,9 @@ export const langFr =
     btnPrint :"Imprimer",
     btnOk: "OK",
     msgWarning: "Attention",
-    msgSqlService1: "Impossible de se connecter au serveur base de données", 
-    msgSqlService2: "Il n'y a pas de base de données. Souhaitez-vous créér ?", 
-    msgSqlService3: "L'installation de base de données a réussi. Veuillez vérifier le fichier de configuration et redémarrer le serveur.", 
+    msgSqlService1: "Connexion imposible à la base de données", 
+    msgSqlService2: "Il n'y a pas de base de données. Souhaitez-vous la créér ?", 
+    msgSqlService3: "Installation réussi de la base de données. Veuillez vérifier le fichier de configuration et redémarrer le serveur.", 
     btnYes : "Oui",
     btnGet: "Valider",
     btnNo : "Non",
@@ -27,9 +27,9 @@ export const langFr =
     msgInvalidUser : "Utilisateur ou mdp faux.",
     txtCardRead :"Veuillez scanner votre badge.",
     checkAll :"Tout saisir",
-    msgUserAccess : "Vous n'êtes pas autorisé",
+    msgUserAccess : "Accès non autorisé",
     collectiveItemAdd: "Ajouter Multi Produit",
-    constructionMsg : "Page en construction mise en service au plus vite.", 
+    constructionMsg : "Page en construction, bientôt disponible.", 
     about : "à propos ",
     abtCertificate : "Certificat: NF525 - NF203",
     abtNrCertificate : "Numéro Certificat: B_0527-1",
@@ -66,7 +66,7 @@ export const langFr =
     msgAnotherUserAlert: 
     {
         title : "Attention",
-        msg : "Vous êtes connecté à partir d'un autre appareil avec vos informations d'utilisateur.",
+        msg : "Connexion à partir d'un autre appareil avec vos informations d'utilisateur.",
         btn01 : "OK"
     },
     msgisExecuteClose: 
@@ -116,7 +116,7 @@ export const langFr =
     },
     popDeleteDesc : 
     {
-        head : "Description du Processus de Suppression",   
+        head : "Description de la Suppression",   
         title : "Veuillez Saisir le motif de la Suppression"   
     },
     popVatRate:
@@ -130,6 +130,14 @@ export const langFr =
         clmTotalHt : "Montant total", 
     },
     btnVatToZero : "Mettre à Zéro la TVA",
+    btnVatReCalculate : "Vergiyi Hesapla", // BAK
+    msgVatCalculate :
+    {
+        title : "Dikkat", // BAK
+        msg : "Vergiyi yeniden hesaplamak istediğinize eminmisiniz ", // BAK
+        btn01 : "Tamam", // BAK
+        btn02 : "İptal", // BAK
+    },
     menuOff:
     {
         stk: "Produit",                
@@ -153,7 +161,7 @@ export const langFr =
         stk_01_013 :"Identification de l'image du produit", 
         stk_01_014 : "Identification du type de produit",
         stk_02_001: "Document inventaire",
-        stk_02_002: "Transfert interne dépot/magasin",
+        stk_02_002: "Transfert interne dépôt/magasin",
         stk_02_003: "Sortie perte",
         stk_02_004: "Imprimer étiquette",
         stk_02_005: "Saisie multi produit retour",
@@ -174,6 +182,7 @@ export const langFr =
         stk_05_001: "Rapport Inventaire Dépôt", 
         stk_05_002: "Rapport sur la modification des prix d'achat", 
         stk_05_003: "Rapport inventaire", 
+        stk_05_004 : "Rapport sur les pertes", // BAK
         cri: "Fournisseur - Client",
         cri_01: "Saisie",
         cri_02: "Listes",
@@ -212,7 +221,7 @@ export const langFr =
         ftr_02_006: "Facture Différence Prix Vente", 
         ftr_02_007: "Facture Retour ", 
         ftr_02_008: "Facture d'achat interne magasin", 
-        ftr_02_009: "Facture gaspillées",
+        ftr_02_009: "Facture liée au frais",
         ftr_04_001: "Différence de prix Facture Proforma", 
         ftr_04_002: "Facture Proforma de Vente",   
         ftr_04_003: "Facture Proforma d'Achat",   
@@ -269,6 +278,8 @@ export const langFr =
         fns_04 : "Rapports",
         fns_04_001 : "Rapport sur les relevés bancaires",   
         fns_04_002 : "Rapport sur le solde actuel",  
+        fns_04_003 : "Rapport sur les relevés de caisse",
+        fns_04_002 : "Rapport solde de compte",//BAKK
         fns_05 : "Opérations", 
         fns_05_001 : "Saisie Multi Encaissement", 
         fns_05_002 : "Saisie Multi Paiement", 
@@ -288,9 +299,9 @@ export const langFr =
         pos_02_009 : "Rapport de Vente par famille de produits",
         pos_02_010 : "Rapport de vente détaillé du produit", 
         pos_02_011 : "Rapport de comparaison de produit",
-        pos_02_012 : "Pos Puan Kullanım Raporu",  // BAK
-        pos_02_013 : "Pos İndirim Raporu",  // BAK
-        pos_02_014 : "Okunmamış Terazi Fişleri", //BAK
+        pos_02_012 : "Rapport utilisation points de fidélité",  // BAK
+        pos_02_013 : "Rapport de remise",  // BAK
+        pos_02_014 : "Tickets de balance non lus", // BAK
         pos_03 : "Les opérations", 
         pos_03_001 : "Opérations de fin de journée",
         promo: "Promotion",
@@ -298,24 +309,25 @@ export const langFr =
         promo_01_001: "Saisie promotions", 
         promo_02: "Listes",
         promo_02_001: "Liste promotion",
-        promo_02_002: "Liste Detaille promotion",
+        promo_02_002: "Liste Detaillée promotion",
         promo_03: "Rapports",
         set : "Paramètre / Supplément",
         set_01 : "Coût et taxe annexe",
         set_01_001 : "Taxe sucre",
+        set_01_002 : "Interfel",
         set_02 : "Réglage général",   
         set_02_001 : "Informations sur la société",   
         set_02_002 : "En Rapport",   
         set_02_003 : "Anydesk",   
         set_02_004 : "Mode d'Emploi",  
         set_02_005 : "Nouveautées de Versions",  
-        set_02_006 : "Création de Demande de Soutien",   
-        set_02_007 : "Historique Demande de Soutien",   
+        set_02_006 : "Création Demande d'Assistance",   
+        set_02_007 : "Historique Demande d'Assistance",   
+        set_02_008 : "Enregistrement Excel du code douanier", // BAK
         set_03 : "Réglages Documents",   
         set_03_001 : "Documents Effacés",   
         set_03_002 : "Lignes Effacées", 
         set_03_003 : "Identification du code du transporteur",
-        set_02_008 : "Gümrük Kodu Excel Kayıt", // BAK
         proces : "Saisie groupée",
         proces_01 : "Traitement Produit",
         proces_01_001 : "MAJ Famille Produit",
@@ -323,8 +335,8 @@ export const langFr =
         tkf_01: "Listes",
         tkf_02: "Document",
         tkf_03: "Rapports",
-        tkf_01_001: "Liste achat accord négocié",
-        tkf_01_002: "Liste accord de Vente",
+        tkf_01_001: "Liste proposition achat",
+        tkf_01_002: "Liste proposition vente",
         tkf_02_001: "Saisie Proposition d'Achat",
         tkf_02_002: "Saisie Proposition de Vente",
         purchase : "Processus d'achat",
@@ -365,19 +377,19 @@ export const langFr =
         salesinvoices_03 : "Proforma",
         salesinvoices_04 : "Rapports",
         salesReport : "Rapports",
-        slsRpt_01_001 : "Rapport de Comparaison de Documents", 
-        slsRpt_01_002 : "Rapport de ventes basés sur les familles", 
-        slsRpt_01_003 : "Rapport des Factures de Vente", 
+        slsRpt_01_001 : "Rapport Comparaison Documents", 
+        slsRpt_01_002 : "Rapport ventes basés sur les familles", 
+        slsRpt_01_003 : "Rapport Factures de Vente", 
         slsRpt_01_004 : "Rapport de Vente", 
         slsRpt_01_005 : "Rapport de vente et de retour ", 
-        slsRpt_01_006 : "Rapport actuel sur les ventes et les retours",
-        slsRpt_01_007 : "Rapport des factures de retours",   
-        slsRpt_01_008 : "Rapport de vente du produit détaillé",   
+        slsRpt_01_006 : "Rapport actuel sur les ventes et les retours", //BAK
+        slsRpt_01_007 : "Rapport factures retours",   
+        slsRpt_01_008 : "Rapport vente avec produit détaillé",   
         purchaseReport : "Rapports",
-        slsRpt_02_001 : "Rapport des Factures d'Achat", 
+        slsRpt_02_001 : "Rapport chronologique des Factures d'Achat", //BAK
         slsRpt_02_002 : "Rapport DEB ", 
         slsRpt_02_003 : "Rapport du taux de sucre", 
-        slsRpt_02_004 : "Rapport détaillé d'achat du produit" , 
+        slsRpt_02_004 : "Rapport achat avec produit détaillé" , 
         slsRpt_02_005 : "Rapport détaillé DEB"
     },
     login:
@@ -391,6 +403,12 @@ export const langFr =
         title: "Attention",   
         btn01: "OK",   
         msg: "Document Numéroté Supprimé !Veuillez vous Renseigner Auprès d'un Responsable.."   
+    },
+    msgCheckDocNo:
+    {
+        title: "Attention",
+        btn01: "OK",
+        msg: "Le numéro de document est déjà enregistré !."
     },
     stk_01_001:  // "Identification du nouveau stock" 
     {
@@ -690,7 +708,7 @@ export const langFr =
         },
         grdAnalysis:  
         {
-            clmToday: "Aujour'hui",
+            clmToday: "Aujourd'hui",
             clmYesterday: "Hier",
             clmWeek: "Cette Semaine",
             clmMount : "Ce Mois-ci",
@@ -704,7 +722,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Produit déja traité vous ne pouvez pas supprimer !!"
+            msg: "Produit déja traité suppression impossible !"
         },
         cmbItemGenusData :
         {
@@ -725,7 +743,7 @@ export const langFr =
         },
         pg_customsCode : 
         {
-            title : "Codes de la douane",  
+            title : "Codes douanier",  
             clmCode : "Code",  
             clmName : "Nom" 
         },
@@ -734,7 +752,21 @@ export const langFr =
             title : "Type de produit",  
             clmCode : "Code", 
             clmName : "Nom"  
-        } 
+        },
+        msgNewItem:
+        {
+            title: "Attention",   
+            btn01: "OK",
+            btn02: "Abandonner",
+            msg: "Êtes-vous sûr(e) de vouloir actualiser la page ?"  
+        },
+        msgItemBack:
+        {
+            title: "Attention",  // BAK
+            btn01: "OK",  // BAK
+            btn02: "Abandonner",  // BAK
+            msg: "Êtes-vous sûr(e) de vouloir ramener le produit à nouveau ?"  // BAK
+        },
     },
     stk_01_002:  //"Identification des codes-barres" 
     {
@@ -747,7 +779,7 @@ export const langFr =
         MainUnit : "Code barre saisie à l'unité principale" , 
         SubUnit : "Code barre saisie au contenu principal",
         txtUnitTypeName :"Motif",
-        barcodePlace : "Entrer le code barre que vous souhaitez ajouter pour le stock sélectionné.", 
+        barcodePlace : "Veuillez ajouter le code barre au produit sélectionné.", // BAK
         pg_txtItem:
         {
             title: "Sélection Produit",
@@ -793,7 +825,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessairess !" ,
+            msg: "Veuillez saisir les zones nécessaires !" ,
         },
         msgDelete:
         {
@@ -809,7 +841,7 @@ export const langFr =
         txtCode : "Code",
         txtName :"Nom",
         cmbType :"Type",
-        validCode :"Vous ne pouvez ne pas saisir le code !",
+        validCode :"Le champ du code ne peut être vide !", //BAK
         cmbTypeData : 
         {
             normal : "Centrale",
@@ -842,7 +874,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessairess !" ,
+            msg: "Veuillez saisir les zones nécessaires !" ,
         },
         msgDelete:
         {
@@ -871,7 +903,7 @@ export const langFr =
         txtCode : "Code",
         txtName :"Nom",
         cmbType :"Type",
-        validCode :"Vous ne pouvez pas laisser le code vide !",
+        validCode :"Le champ du code ne peut être vide !", //BAK
       
         pg_txtCode : 
         {
@@ -910,12 +942,12 @@ export const langFr =
         msgCode : 
         {
             title: "Attention",
-            btn01: "Entrer la carte",
+            btn01: "Aller à la carte", //BAK
             btn02: "OK",
             msg : "Le code de service que vous avez saisi est enregistré dans le système !"
         },
         chkActive: "Actif",
-        cmbTax : "TVA %",
+        cmbTax : "TVA",
         msgNotDelete : 
         {
             title: "Attention", 
@@ -934,7 +966,7 @@ export const langFr =
         txtCode : "Code",
         txtName :"Nom",
         cmbType :"Type",
-        validCode :"Code ne peut être vide !",
+        validCode :"Le champ du code ne peut être vide !", //BAK
         pg_txtCode : 
         {
             title : "Choix Groupe Produit",
@@ -983,7 +1015,7 @@ export const langFr =
         txtName :"Nom",  
         txtSymbol : "Symbole",  
         cmbType :"Type",  
-        validCode :"Vous ne pouvez pas valider le code sans le saisir !", 
+        validCode :"Le champ du code ne peut être vide !", 
         pg_txtCode :   
         {  
             title : "Choix de groupe de produits",
@@ -1033,7 +1065,7 @@ export const langFr =
         txtVat :"Valeur d'impôt", 
         txtType : "Type",   
         cmbType :"Type",   
-        validCode :"Vous ne pouvez pas valider le code sans le saisir !",  
+        validCode :"Le champ du code ne peut être vide !",  
         pg_txtCode :    
         {   
             title : "Choix de groupe de produits",  
@@ -1075,7 +1107,7 @@ export const langFr =
             btn02: "OK", 
             msg : "L'ID que vous avez saisi est enregistré dans le système !" 
         },
-        chkActive: "Aktif", 
+        chkActive: "Actif", 
     },
     stk_01_012 : // "Identification des produits liés"
     {
@@ -1096,13 +1128,13 @@ export const langFr =
         },
         popRelatedSelect : 
         {
-            title : "Sélection du stock",
+            title : "Sélection du produit", //BAK
             clmCode : "Code",
             clmName : "Nom",
         },
         popItemSelect : 
         {
-            title : "Sélection du stock",
+            title : "Sélection du produit", //BAK
             clmCode : "Code",
             clmName : "Nom",
         },
@@ -1111,7 +1143,7 @@ export const langFr =
             title : "Attention",
             btn01 : "D'accord",
             btn02 : "Abandonnerz",
-            msg : "Etes-vous sûr de vouloir valider?"
+            msg : "Êtes-vous sûr(e) de vouloir enregistrer ?"
         },
         msgSaveResult :
         {
@@ -1124,14 +1156,14 @@ export const langFr =
         {
             title : "Attention",
             btn01 : "D'accord",
-            msg : "S'il vous plaît saissisez les rubriques nécessaires"
+            msg : "Veuillez saisir les champs nécessaires" //BAK
         },
         msgDelete :
         {
             title : "Attention",
             btn01 : "D'accord",
-            btn02 : "Abandonnerz",
-            msg : "Etes-vous sûr de vouloir surpprimer l'enregistrement?"
+            btn02 : "Abandonner",
+            msg : "Êtes-vous sûr(e) de vouloir supprimer l'enregistrement?"
         },
     },
     stk_01_013 : // "Identification de l'image du produit" 
@@ -1139,7 +1171,7 @@ export const langFr =
         txtRef : "Référence",
         pg_txtRef:
         {
-            title: "Choix du stock",
+            title: "Choix du produit", //BAK
             clmCode: "Code",
             clmName: "Nom",
             clmStatus: "Etat"
@@ -1149,7 +1181,7 @@ export const langFr =
             title: "Attention",
             btn01: "D'accord",
             btn02: "Annuler",
-            msg: "Etes-vous sûr de vouloir enregistrer?"
+            msg: "Êtes-vous sûr(e) de vouloir supprimer l'enregistrement??"
         },
         msgSaveResult:
         {
@@ -1177,7 +1209,7 @@ export const langFr =
         txtCode : "code",
         txtName :"Nom",
         cmbType :"Type",
-        validCode :"Vous devez saisir le code!",
+        validCode :"Le champ du code ne peut être vide !",
         pg_txtCode : 
         {
             title : "Choix de l'enregistrement",
@@ -1189,7 +1221,7 @@ export const langFr =
             title: "Attention",
             btn01: "D'accord",
             btn02: "Abandonner",
-            msg: "Etes-vous sûr de vouloir enregistrer?"
+            msg: "Êtes-vous sûr(e) de vouloir supprimer l'enregistrement??"
         },
         msgSaveResult:
         {
@@ -1202,14 +1234,14 @@ export const langFr =
         {
             title: "Attention",
             btn01: "D'accord",
-            msg: "S'il vous plaît remplissez les parties demandées!"
+            msg: "Veuillez remplir les champs nécessaires !" //BAK
         },
         msgDelete:
         {
             title: "Attention",
             btn01: "D'accord",
             btn02: "Abandonner",
-            msg: "Etes- vous sûr de vouloir supprimer?"
+            msg: "Êtes-vous sûr(e) de vouloir supprimer l'enregistrement ?" //BAK
         },
         msgCode : 
         {
@@ -1234,7 +1266,7 @@ export const langFr =
             clmRef : "Référence",
             clmRefNo : "Numéro",
             clmDocDate : "Date",
-            clmDepotName : "Dépot ou Magasin",
+            clmDepotName : "Dépôt ou Magasin",
             clmQuantity :"Quantité Totale Produit",
             clmTotalLine : "Numéro de Ligne"
         },
@@ -1243,6 +1275,7 @@ export const langFr =
             title : "Sélectionner Produit",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
+            clmPrice : "Prix D'Achat", //BAK ekleme yaptim
         },
         grdItemCount: 
         {
@@ -1260,7 +1293,7 @@ export const langFr =
         },
         popPassword : 
         {
-            title: "Veuillez Saisir MDP Administrateur pour Accès au Document ",
+            title: "Veuillez Saisir MDP Administrateur pour Accéder au Document ",
             Password : "Mot de passe",
             btnApprove : "Valider" ,
         },
@@ -1275,7 +1308,7 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Etes-vous sûr(e) de vouloir Enregistrer!" ,
+            msg: "Êtes-vous sûr(e) de vouloir Enregistrer!" ,
         },
         msgQuantity:
         {
@@ -1295,21 +1328,21 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessairess !",
+            msg: "Veuillez saisir les champs nécessaires !", //BAK
         },
         msgDelete:
         {
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?",
+            msg: "Êtes-vous sûr(e) de vouloir supprimer l'enregistrement ?",
         },
         msgBigQuantity:
         {
             title: "Attention",
-            btn01: "Continue",
+            btn01: "Continuer",
             btn02: "Abandonner",
-            msg: "Chiffre Saisi Supérieur à 1000 Voulez Voulez-vous Continuer ?",
+            msg: "Chiffre saisi Supérieur à 1000 Voulez-vous continuer ?",
         },
         msgLocked:
         {
@@ -1333,31 +1366,31 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrerles Modifications !"
+            msg: "Document Vérouillé !  \n  Veuillez Dévérouiller Pour Enregistrer les Modifications !"
         },
         msgDoclocked:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez EnregistrerSans Dévérouiller !"
+            msg: "Vous ne Pouvez Enregistrer sans Dévérouiller !"
         },
         msgItemNotFound:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Produit Introuvable !!"
+            msg: "Produit Introuvable !"
         },
         msgCombineItem:
         {
             title: "Attention",
-            btn01: "Regroupe",
+            btn01: "Regrouper",
             btn02: "Modifier",
             btn03: "Abandonner",
-            msg: "Produit Existant dans Document ! Voulez-vous Combiner ?"
+            msg: "Produit Existant dans le Document ! Voulez-vous Combiner ?"
         },
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
-        validDepot : "Sélectionner Dépot",
+        validDepot : "Sélectionner Dépôt",
         validCustomerCode : "Le Code Produit ne peut être Vide ",
         validDocDate : "Sélectionner Date" ,
         popDesign : 
@@ -1368,7 +1401,7 @@ export const langFr =
         },
         pg_txtBarcode : 
         {
-            title : "Sélectionner Barre",
+            title : "Sélectionner Code Barre", 
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
             clmMulticode : "Référence Fournisseur",
@@ -1383,8 +1416,8 @@ export const langFr =
     },
     stk_02_002 : //"Depo/Mağaza Arası Sevk"
     {
-        txtRefRefno : "Réf.-Réf no:",
-        cmbOutDepot: "Sortie Dépot",
+        txtRefRefno : "Réf.-Réf no",
+        cmbOutDepot: "Sortie Dépôt",
         cmbInDepot: "Entrée Dépot",
         dtDocDate : "Date",
         txtBarcode : "Ajouter Code Barre",
@@ -1396,7 +1429,7 @@ export const langFr =
             clmRefNo : "Numéro",
             clmDocDate : "Date",
             clmInputName : "Entrée",
-            clmOutputName : "Entrée",
+            clmOutputName : "Sortie",
         },
         pg_txtItemsCode : 
         {
@@ -1415,7 +1448,7 @@ export const langFr =
         },
         popPassword : 
         {
-            title: "Veuillez Saisir MDP Administrateur pour Accès Document ",
+            title: "Veuillez Saisir MDP Administrateur pour accéder au Document ",
             Password : "Mot de passe",
             btnApprove : "Valider"
         },
@@ -1429,40 +1462,40 @@ export const langFr =
         {
             title: "Attention",
             btn01: "Ok",
-            msg: "La quantité de depôt  saisie ne peut être en négatif ! Quantité existante:"
+            msg: "La quantité présent au depôt ne peut être négatif ! Quantité max pouvant être saisie:" //BAK
         },
         msgDblDepot:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Entrée et Sortie Dépot ne Peuvent Etre Identique !"
+            msg: "Entrée et Sortie Dépôt ne peuvent être Identique !"
         },
         msgSave:
         {
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Etes-vous sûr(e) de vouloir Enregistrer!"
+            msg: "Êtes-vous sûr(e) de vouloir Enregistrer!"
         },
         msgSaveResult:
         {
             title: "Attention",
             btn01: "OK",
-            msgSuccess: "Transfert Réussi et Enregistré Avec Succès  . !",
+            msgSuccess: "Transfert Réussi et Enregistré Avec Succès. !",
             msgFailed: "Enregistrement échoué !"
         },
         msgSaveValid:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessairess !"
+            msg: "Veuillez saisir les champs nécessaires !"
         },
         msgDelete:
         {
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
+            msg: "Êtes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
         },
         msgLocked:
         {
@@ -1486,13 +1519,13 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrerles Modifications !"
+            msg: "Document Vérouillé !  \n  Veuillez Dévérouiller Pour Enregistrer les Modifications !"
         },
         msgDoclocked:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez EnregistrerSans Dévérouiller !"
+            msg: "Vous ne Pouvez Enregistrer sans Dévérouiller !"
         },
         msgItemNotFound:
         {
@@ -1503,9 +1536,9 @@ export const langFr =
         msgCombineItem:
         {
             title: "Attention",
-            btn01: "Regroupe",
+            btn01: "Regrouper",
             btn02: "Nouvel Ajout",
-            msg: "Produit Existant dans Document ! Voulez-vous Combiner ?"
+            msg: "Produit Existant dans le Document ! Voulez-vous Combiner ?"
         },
         popDesign : 
         {
@@ -1515,11 +1548,11 @@ export const langFr =
         },
         pg_txtBarcode : 
         {
-            title : "Sélectionner Code-Barres",
+            title : "Sélectionner Code-Barre",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
             clmMulticode : "Référence Fournisseur",
-            clmBarcode : "Code-Barres"
+            clmBarcode : "Code-Barre"
         },
         msgQuantity:
         {
@@ -1532,8 +1565,8 @@ export const langFr =
     },
     stk_02_003 : // "Kayıp Ürün Çıkışı"
     {
-        txtRefRefno : "Réf.-Réf no:",
-        cmbOutDepot: "Sortie Dépot",
+        txtRefRefno : "Réf.-Réf no",
+        cmbOutDepot: "Sortie Dépôt",
         dtDocDate : "Date",
         txtBarcode : "Ajouter Code Barre",
         getDispatch : "Recherche BL",
@@ -1547,7 +1580,7 @@ export const langFr =
             clmRefNo : "Numéro",
             clmDocDate : "Date",
             clmInputName : "Entrée",
-            clmOutputName : "Entrée",
+            clmOutputName : "Sortie",
         },
         pg_txtItemsCode : 
         {
@@ -1567,7 +1600,7 @@ export const langFr =
         },
         pg_dispatchGrid : 
         {
-            title : "Sélectionner Bon De Livraison" ,
+            title : "Sélectionner Bon de Livraison" ,
             clmReferans : "Série - Réferences",
             clmCode : "Code",
             clmName : "Nom",
@@ -1577,7 +1610,7 @@ export const langFr =
         },
         popPassword : 
         {
-            title: "Veuillez Saisir MDP Administrateur pour Accès au Document ",
+            title: "Veuillez Saisir MDP Administrateur pour Accéder au Document ",
             Password : "Mot de passe",
             btnApprove : "Valider"
         },
@@ -1585,13 +1618,13 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrerles Modifications !"
+            msg: "Document Vérouillé !  \n  Veuillez Dévérouiller Pour Enregistrer les Modifications !"
         },
         msgDocLocked:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez EnregistrerSans Dévérouiller !"
+            msg: "Vous ne Pouvez Enregistrer sans Dévérouiller !"
         },
         msgDocValid:
         {
@@ -1610,7 +1643,7 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Etes-vous sûr(e) de vouloir Enregistrer!"
+            msg: "Êtes-vous sûr(e) de vouloir Enregistrer!"
         },
         msgSaveResult:
         {
@@ -1623,14 +1656,14 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessairess !"
+            msg: "Veuillez saisir les champs nécessaires !"
         },
         msgDelete:
         {
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
+            msg: "Êtes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
         },
         msgLocked:
         {
@@ -1654,13 +1687,13 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrerles Modifications !"
+            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrer les Modifications !"
         },
         msgDoclocked:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez EnregistrerSans Dévérouiller !"
+            msg: "Vous ne Pouvez Enregistrer Sans Dévérouiller !"
         },
         msgItemNotFound:
         {
@@ -1671,14 +1704,13 @@ export const langFr =
         msgCombineItem:
         {
             title: "Attention",
-            btn01: "Regroupe",
+            btn01: "Regrouper",
             btn02: "Nouvel Ajout",
-            msg: "Produit Existant dans Document ! Voulez-vous Combiner ?"
+            msg: "Produit Existant dans le Document ! Voulez-vous Combiner ?"
         },
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
-        validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Langue Document" ,
+        validDepot : "Sélectionner Dépôt",
         validDocDate : "Sélectionner Date" ,
         pg_quickDesc : 
         {
@@ -1689,7 +1721,7 @@ export const langFr =
         {
             title : "Ajoute Saisie Rapide" ,
             description : "Nouvelle Saisie" ,
-            btnApprove : "enregistrer"        
+            btnApprove : "Enregistrer"        
         },
         popDesign : 
         {
@@ -1701,11 +1733,11 @@ export const langFr =
         {
             title: "Attention",
             btn01: "Ok",
-            msg: "La quantité de depôt saisie ne peut être en négatif ! Quantité existante:"
+            msg: "La quantité présent au dépôt ne peut être négative ! Quantité existante:"
         },
         pg_txtBarcode : 
         {
-            title : "Sélectionner Barre",
+            title : "Sélectionner Code Barre",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
             clmMulticode : "Référence Fournisseur",
@@ -1728,15 +1760,15 @@ export const langFr =
     },
     stk_02_004 : //"Etiket Bas"
     {
-        txtRefRefno : "Réf.-Réf no:",
+        txtRefRefno : "Réf.-Réf no",
         design : "Design" ,
         txtPage : "Page" ,
         txtFreeLabel : "Champ Vide" ,
         txtLineCount : "Lecture Ligne" ,
         chkLastChange : "Dernière Modification Après Impression" ,
         chkSelectChange :"Dernière Modification Après Date Sélectionnée" ,
-        chkSelectPriceChange :"Modification de Prix Vente Après Date Sélectionnée", 
-        chkPromotionItems : "Produits en promotion",
+        chkSelectPriceChange :"Modification Prix Vente Après Date Sélectionnée", 
+        chkPromotionItems : "Produit en promotion",
         btnLabelCombine : "Regrouper Les Etiquettes Saisies",
         chkGroup : "Groupe" ,
         chkCustomer : "Produits Fournisseur",
@@ -1792,7 +1824,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Modification Effectué Dans Document ! Veuillez Enregistrerou Annuler Les Modifications" 
+            msg: "Modification Effectué Dans le Document ! Veuillez Enregistrer ou Annuler Les Modifications" 
         },
         msgAddItems:
         {
@@ -1819,7 +1851,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessairess!"
+            msg: "Veuillez saisir les champs nécessairess!"
         },
         msgDelete:
         {
@@ -1850,13 +1882,13 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrerles Modifications !"
+            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrer les Modifications !"
         },
         msgDoclocked:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez EnregistrerSans Dévérouiller !"
+            msg: "Vous ne Pouvez Enregistrer Sans Dévérouiller !"
         },
         msgItemNotFound:
         {
@@ -1869,7 +1901,7 @@ export const langFr =
             title: "Attention",
             btn01: "Abandonner",
             btn02: "Nouvel Ajout",
-            msg: "Produit Sélectionné Déjà Existant Dans Document !Voulez -vous Ajouter une Ligne ? "
+            msg: "Produit Sélectionné Déjà Existant Dans le Document !Voulez-vous Ajouter une Ligne ? "
         },
         popWizard : 
         {
@@ -1877,7 +1909,7 @@ export const langFr =
         },
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
-        validDepot : "Sélectionner Dépot",
+        validDepot : "Sélectionner Dépôt",
         validCustomerCode : "Le Code Produit ne peut être Vide ",
         validDocDate : "Sélectionner Date" ,
         popDesign : 
@@ -1898,8 +1930,8 @@ export const langFr =
     stk_02_005 : // "İade Ürünü Toplama"
     {
         txtRefRefno : "Réf.-Réf no:",
-        cmbDepot1: "Sortie Dépot",
-        cmbDepot2: "Retour Dépot",
+        cmbDepot1: "Sortie Dépôt",
+        cmbDepot2: "Retour Dépôt",
         dtDocDate : "Date",
         getRebate :"Retour depuis l'entrepôt sélectionné", 
         txtBarcode : "Ajouter Code Barre",
@@ -1911,7 +1943,7 @@ export const langFr =
             clmRefNo : "Numéro",
             clmDocDate : "Date",
             clmInputName : "Entrée",
-            clmOutputName : "Entrée",
+            clmOutputName : "Sortie",
         },
         pg_txtItemsCode : 
         {
@@ -1930,7 +1962,7 @@ export const langFr =
         },
         popPassword : 
         {
-            title: "Veuillez Saisir MDP Administrateur pour Accès au Document ",
+            title: "Veuillez Saisir MDP Administrateur pour Accéder au Document ",
             Password : "Mot de passe",
             btnApprove : "Valider"
         },
@@ -1958,7 +1990,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones concernées !"
+            msg: "Veuillez saisir les champs nécessaires !"
         },
         msgDelete:
         {
@@ -1989,13 +2021,13 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrerles Modifications !"
+            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrer les Modifications !"
         },
         msgDoclocked:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez EnregistrerSans Dévérouiller !"
+            msg: "Vous ne Pouvez Enregistrer Sans Dévérouiller !"
         },
         msgItemNotFound:
         {
@@ -2025,7 +2057,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "Ok",
-            msg: "La quantité de depôt  saisie ne peut être en négatif ! Quantité existant:"
+            msg: "La quantité présent au depôt ne peut être négative ! Quantité existant:"
         },
         pg_txtBarcode : 
         {
@@ -2050,6 +2082,10 @@ export const langFr =
         },
         txtQuantity :"Quantité",
     },
+
+
+
+
     stk_02_007 : // "SKT Girişi", 
     {
         design : "Design",
@@ -2116,7 +2152,7 @@ export const langFr =
             title: "Attention",
             btn01: "Ok",
             btn02: "Abandonner",
-            msg: "Êtes-vous sûr de vouloir enregistrer? "
+            msg: "Êtes-vous sûr(e) de vouloir enregistrer? "
         },
         msgSaveResult:
         {
@@ -2960,6 +2996,30 @@ export const langFr =
         txtTotalCost : "Montant de l'inventaire",
         cmbDepot : "Réserve"
     },
+    stk_05_004 : // "Kayıp Ürün Raporu"
+    {
+        chkZeroQuantity : "Afficher les quantités de 0",  // BAK
+        cmbDepot : "Dépôt",  // BAK
+        btnCheck : "Actif",  // BAK
+        btnGet :"Rechercher",  // BAK
+        grdListe : 
+        {
+            clmCode: "Code",  // BAK
+            clmName : "Nom",  // BAK
+            clmQuantity : "Quantité",  // BAK
+            clmOutputCode : "Code du dépôt",  // BAK
+            clmOutputName : "Nom du dépôt",  // BAK
+            clmCostPrice : "Coût",   // BAK
+            clmTotalCost : "Coût total",   // BAK
+            clmDocDate : "Date",   // BAK
+            clmRef : "Référence",  // BAK
+            clmRefNo : "Ligne",   // BAK
+            clmDescription : "Déscription"  // BAK
+        },
+        txtTotalQuantity : "Quantité totale",  // BAK
+        txtTotalCost : "Montant de l'inventaire",  // BAK
+        cmbDepot : "Dépôt"  // BAK
+    },
     cri_01_001: // "Cari Tanımları"
     {
         cmbType :"Type",
@@ -2992,6 +3052,7 @@ export const langFr =
             clmTitle : "Titre",
             clmName : "Nom",
             clmLastName  : "Nom De Famille",
+            clmStatus  : "Statut",
         },
         grdAdress : 
         {
@@ -3347,7 +3408,7 @@ export const langFr =
         btnGet : "Rechercher",
         grdListe : 
         {
-            clmCode: "Sélection Document",
+            clmCode: "Code",
             clmTitle : "Titre",
             clmType : "Type",
             clmGenus : "Genre",
@@ -3358,7 +3419,8 @@ export const langFr =
             clmPhone1 :"Téléphone",
             clmGsm : "Port.No.",
             clmEmail :"E-Mail",
-            clmIban :"Iban"
+            clmIban :"Iban",
+            clmStatus :"Statut"
         },
         cmbGenusData:
         {
@@ -3529,7 +3591,8 @@ export const langFr =
         cmbTypeData : 
         {
             individual :  "Particulier",
-            company :  "Entreprise"
+            company :  "Entreprise",
+            association : "Association"
         },
         cmbGenusData:
         {
@@ -3962,6 +4025,8 @@ export const langFr =
         txtTotalHt : "Total HT",
         txtDocNo : "Numéro de document", 
         cmbOrigin : "Origine",
+        txtTransport : "Taşıma Türü", // BAK
+        tabTitleDetail : "Detay Bilgileri", // BAK
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -3998,6 +4063,8 @@ export const langFr =
             clmPrice : "Prix ",
             clmTotal : "Total" ,
             clmDate : "Date",
+            clmDate : "Numéro de Document",
+            
         },
         grdPurcInv: 
         {
@@ -4386,7 +4453,8 @@ export const langFr =
             clmQuantity : "Quantité",  
             clmTotal : "Total",  
             clmPrice : "Prix",  
-            clmlineNo : "No"
+            clmlineNo : "No",
+            clmDate : "Date",
         },
         cmbPayType : {
             title : "Mode de paiement",   
@@ -4476,7 +4544,13 @@ export const langFr =
             title : "Codes transporteurs",  
             clmCode : "Code",  
             clmName : "Nom" 
-        }
+        },
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+        },
     },
     ftr_02_002 : // "Facture de vente"
     {
@@ -4535,6 +4609,30 @@ export const langFr =
         cmbPriceContract : "Accord de prix",
         txtTransport : "Type de transport",
         tabTitleDetail : "Informations détaillées",
+        btnView : "Afficher",
+        btnMailsend : "Envoyer un courriel",
+        validMail : "Veuillez ne pas laisser ce champ vide.",
+        placeMailHtmlEditor : "Vous pouvez entrer une description de votre courrier.",
+        isMsgSave :
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            msg: "Impossible de procéder sans enregistrement du document !"
+        },
+        msgMailSendResult:
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            msgSuccess: "L'envoi du courrier a réussi !",
+            msgFailed: "L'envoi du courrier a échoué !"
+        },
+        popMailSend :
+        {
+            title :"Envoyer un e-mail",
+            txtMailSubject : "Objet du courriel",
+            txtSendMail : "Adresse e-mail",
+            btnSend : "Envoyer"
+        },
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -4570,6 +4668,8 @@ export const langFr =
             clmPrice : "Prix ",
             clmTotal : "Total",
             clmDate : "Date",
+            clmDocNo : "N° de Document",
+
         },
         grdSlsInv: 
         {
@@ -4659,6 +4759,11 @@ export const langFr =
             btn01: "OK",
             btn02: "Abandonner",
             msg: "Etes-vous sûr(e) de vouloir Enregistrer!"
+        },
+        isMsgSave: {  
+            title: "Attention",
+            btn01: "D'accord",
+            msg: "L'opération ne peut pas être effectuée sans enregistrement du document !"
         },
         msgSaveResult:
         {
@@ -4884,7 +4989,8 @@ export const langFr =
             clmQuantity : "Quantité",  
             clmTotal : "Total",  
             clmPrice : "Prix",  
-            clmlineNo : "No"
+            clmlineNo : "No",
+            clmDate : "Date"
         },
         cmbPayType : {
             title : "Mode de paiement",   
@@ -5020,7 +5126,13 @@ export const langFr =
             title : "Supplément",  
             interfel : "Interfel", 
             calculateInterfel : "Calcul de l'interfel",
-        }
+        },
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+        },
     },
     ftr_02_003 : // "İade Faturası"
     {
@@ -5108,6 +5220,8 @@ export const langFr =
             clmPrice : "Prix ",
             clmTotal : "Total",
             clmDate : "Date",
+            clmDocNo : "N° de Document",
+        
         },
         grdRebtInv: 
         {
@@ -5496,6 +5610,12 @@ export const langFr =
             btn01: "OK",   
             msg: "Le document ne peut pas être imprimé sans être verouillé!"  
         },
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+        },
     },
     ftr_02_004 : // "Fiyat Farkı Faturası"
     {
@@ -5548,7 +5668,13 @@ export const langFr =
         validMail : "Veuillez ne pas laisser le champs vide.",  
         txtTotalHt : "Total HT",
         txtDocNo : "Numéro de document", 
-        pg_Docs : 
+        isMsgSave :
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Impossible d'effectuer l'action sans enregistrement du document !"
+        },
+                pg_Docs : 
         {
             title : "Sélection Document",
             clmDate : "Date",
@@ -5941,6 +6067,12 @@ export const langFr =
             btn01: "OK",   
             msg: "Le document ne peut pas être imprimé sans être verouillé !" 
         },
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+        },
     },
     ftr_02_005 : // "Şube Satış Faturası"
     {
@@ -6025,6 +6157,8 @@ export const langFr =
             clmPrice : "Prix ",
             clmTotal : "Total",
             clmDate : "Date",
+            clmDocNo : "N° de Document",
+
         },
         grdSlsInv: 
         {
@@ -6120,6 +6254,23 @@ export const langFr =
             btn01: "OK",
             msg: "Veuillez saisir les zones nécessaires !"
         },
+        isMsgSave: {  
+            title: "Attention",
+            btn01: "D'accord",
+            msg: "L'opération ne peut pas être effectuée sans enregistrement du document !"
+        },
+        msgMailSendResult: {
+            title: "Attention",
+            btn01: "D'accord",
+            msgSuccess: "L'envoi de l'e-mail a réussi !",
+            msgFailed: "L'envoi de l'e-mail a échoué !"
+        },
+        popMailSend: {
+            title: "Envoyer un e-mail",
+            txtMailSubject: "Objet de l'e-mail",
+            txtSendMail: "Adresse e-mail",
+            btnSend: "Envoyer"
+        },        
         msgDelete:
         {
             title: "Attention",
@@ -6420,6 +6571,12 @@ export const langFr =
             btn01: "OK",  
             msg: "Le document ne peut pas être imprimé sans être vérouillé !"  
         },
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+        },
     },
     ftr_02_006 : // "Fiyat Farkı Alış Faturası"
     {
@@ -6467,6 +6624,12 @@ export const langFr =
         dtExpDate : "Date d'Echéance", 
         txtTotalHt : "Total HT",
         txtDocNo : "Numéro de document", 
+        btnView : "Afficher",
+        btnMailsend : "Envoyer un e-mail",
+        validDesign : "Veuillez sélectionner un design.",
+        validMail : "Veuillez ne pas laisser vide.",
+        placeMailHtmlEditor : "Vous pouvez entrer une description pour votre e-mail.",
+        
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -6573,6 +6736,18 @@ export const langFr =
             btn01: "OK",
             btn02: "Abandonner",
             msg: "Etes-vous sûr(e) de vouloir Enregistrer!"
+        },
+        msgMailSendResult:
+        {
+            title: "Attention",   
+            btn01: "OK",   
+            msgSuccess: "Mail envoyé avec succès !", 
+            msgFailed: "Echec d'envoi de Mail !" 
+        },
+        isMsgSave: {
+            title: "Attention",
+            btn01: "D'accord",
+            msg: "L'opération ne peut pas être effectuée sans enregistrement du document !"
         },
         msgSaveResult:
         {
@@ -6834,6 +7009,17 @@ export const langFr =
             msg: "Produits Présents dans la Liste! "
         },
         tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
+        msgCustomerLock: {
+            title: "Attention",
+            btn01: "D'accord",
+            msg: "Le client ne peut pas être modifié après l'ajout du produit !"
+        },
+        popMailSend: {
+            title: "Envoyer un e-mail",
+            txtMailSubject: "Objet de l'e-mail",
+            txtSendMail: "Adresse e-mail",
+            btnSend: "Envoyer"
+        }     
     },
     ftr_02_007 : // "İade Alış Faturası"
     {
@@ -6881,8 +7067,11 @@ export const langFr =
         getProforma : "Rechercher Proforma ", 
         txtTotalHt : "Total HT",
         txtDocNo : "Numéro de document", 
-        btnView : "Aperçu", 
-        btnMailsend : "Envoyer Mail", 
+        btnView : "Afficher",
+        btnMailsend : "Envoyer un e-mail",
+        validDesign : "Veuillez sélectionner un design.",
+        validMail : "Veuillez ne pas laisser vide.",
+        placeMailHtmlEditor : "Vous pouvez entrer une description pour votre e-mail.",        
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -6918,6 +7107,7 @@ export const langFr =
             clmPrice : "Prix ",
             clmTotal : "Total" ,
             clmDate : "Date",
+            clmDocNo : "N° de Document",
         },
         grdRebtInv: 
         {
@@ -7009,6 +7199,23 @@ export const langFr =
             msgSuccess: "Enregistré avec succès !",
             msgFailed: "Enregistrement échoué !"
         },
+        isMsgSave: {  
+            title: "Attention",
+            btn01: "D'accord",
+            msg: "L'opération ne peut pas être effectuée sans enregistrement du document !"
+        },
+        msgMailSendResult: {
+            title: "Attention",
+            btn01: "D'accord",
+            msgSuccess: "L'envoi de l'e-mail a réussi !",
+            msgFailed: "L'envoi de l'e-mail a échoué !"
+        },
+        popMailSend: {
+            title: "Envoyer un e-mail",
+            txtMailSubject: "Objet de l'e-mail",
+            txtSendMail: "Adresse e-mail",
+            btnSend: "Envoyer"
+        },        
         msgSaveValid:
         {
             title: "Attention",
@@ -7293,6 +7500,12 @@ export const langFr =
             msgSuccess: "Mail envoyé avec succès !",   
             msgFailed: "Echec envoie mail  !"   
         },
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+        },
     },
     ftr_02_008 : // "Şube Alış Faturası"
     {
@@ -7345,6 +7558,26 @@ export const langFr =
         validMail : "Veuillez ne pas laisser le champs vide.",  
         txtTotalHt : "Total HT",
         txtDocNo : "Numéro de document", 
+        isMsgSave :
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Impossible d'effectuer l'action sans enregistrement du document !"
+        },
+        msgMailSendResult:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msgSuccess: "Envoi de l'e-mail réussi !",
+            msgFailed: "Échec de l'envoi de l'e-mail !"
+        },
+        popMailSend :
+        {
+            title :"Envoyer un e-mail",
+            txtMailSubject : "Sujet de l'e-mail",
+            txtSendMail : "Adresse e-mail",
+            btnSend : "Envoyer"
+        },
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -7766,6 +7999,12 @@ export const langFr =
             clmCode : "Code",   
             clmName : "Nom"   
         },
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+        },
     },
     ftr_02_009 : // "Fire Alış Faturası"
     {
@@ -7813,8 +8052,30 @@ export const langFr =
         getProforma : "Rechercher Proforma ", 
         txtTotalHt : "Total HT",
         txtDocNo : "Numéro de document", 
-        btnView : "Aperçu", 
-        btnMailsend : "Envoyer Mail", 
+        btnView : "Afficher",
+        btnMailsend : "Envoyer un courriel",
+        validMail : "Veuillez ne pas laisser ce champ vide.",
+        placeMailHtmlEditor : "Vous pouvez entrer une description de votre courrier.",
+        isMsgSave :
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            msg: "Impossible de procéder sans enregistrement du document !"
+        },
+        msgMailSendResult:
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            msgSuccess: "L'envoi du courrier a réussi !",
+            msgFailed: "L'envoi du courrier a échoué !"
+        },
+        popMailSend :
+        {
+            title :"Envoyer un e-mail",
+            txtMailSubject : "Objet du courriel",
+            txtSendMail : "Adresse e-mail",
+            btnSend : "Envoyer"
+        },
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -8225,6 +8486,12 @@ export const langFr =
             msgSuccess: "Mail envoyé avec succès !",   
             msgFailed: "Echec envoie mail  !"   
         },
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+        },
     },
     ftr_04_001 : // "Proforma Fiyat Farkı Faturası" 
     {
@@ -8267,7 +8534,32 @@ export const langFr =
         txtTotalQuantity : "Quantité totale",  
         txtUnitPrice : "Prix unitaire",
         txtTotalHt : "Total HT",
+        validDesign : "Veuillez choisir le design de l'étiquette",
         txtDocNo : "Numéro de document", 
+        btnView : "Afficher",
+        btnMailsend : "Envoyer un courriel",
+        validMail : "Veuillez ne pas laisser ce champ vide.",
+        placeMailHtmlEditor : "Vous pouvez entrer une description de votre courrier.",
+        isMsgSave :
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            msg: "Impossible de procéder sans enregistrement du document !"
+        },
+        msgMailSendResult:
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            msgSuccess: "L'envoi du courrier a réussi !",
+            msgFailed: "L'envoi du courrier a échoué !"
+        },
+        popMailSend :
+        {
+            title :"Envoyer un e-mail",
+            txtMailSubject : "Objet du courriel",
+            txtSendMail : "Adresse e-mail",
+            btnSend : "Envoyer"
+        },
         msgDiscount:
         {
             title: "Attention",  
@@ -8297,6 +8589,7 @@ export const langFr =
             title : "Choix Stock",
             clmCode :  "CODE STOCK",
             clmName : "NOM STOCK",
+            clmPrice : "Prix de Vente"
         },
         pg_contractGrid : 
         {
@@ -8572,6 +8865,12 @@ export const langFr =
             title : "Prestations de service",   
             clmCode : "Code",   
             clmName : "Nom"   
+        },
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
         },
     },
     ftr_04_002 : // "Proforma Satış Faturası" 
@@ -9002,6 +9301,12 @@ export const langFr =
             clmCode : "Code",   
             clmName : "Nom"   
         },
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+        },
     },    
     ftr_04_003 : // "Proforma Alış Faturası"
     {
@@ -9057,6 +9362,31 @@ export const langFr =
         getOffers : "Recherche Proposition", 
         txtTotalHt : "Total HT",
         txtDocNo : "Numéro de document",
+        validDesign : "Veuillez sélectionner une conception.",
+        btnView : "Afficher",
+        btnMailsend : "Envoyer un e-mail",
+        validMail : "Veuillez ne pas laisser ce champ vide.",
+        placeMailHtmlEditor : "Vous pouvez entrer une description pour votre e-mail.",
+        isMsgSave :
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Impossible d'effectuer l'action sans enregistrement du document !"
+        },
+        msgMailSendResult:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msgSuccess: "Envoi de l'e-mail réussi !",
+            msgFailed: "Échec de l'envoi de l'e-mail !"
+        },
+        popMailSend :
+        {
+            title :"Envoyer un e-mail",
+            txtMailSubject : "Sujet de l'e-mail",
+            txtSendMail : "Adresse e-mail",
+            btnSend : "Envoyer"
+        },
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -9081,6 +9411,7 @@ export const langFr =
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
             clmMulticode : "FRN.Code",
+            clmPrice : "Prix d'Achat" 
         },
         pg_dispatchGrid : 
         {
@@ -9378,7 +9709,8 @@ export const langFr =
         msgUnit:
         {
             title: "Sélection de l'unité",  
-            btn01: "Valider",  
+            btn01: "Valider",
+            btnFactorSave : "Mettre à jour la carte de stock" 
         },
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
@@ -9515,6 +9847,12 @@ export const langFr =
             clmCode : "Code",   
             clmName : "Nom"   
         },
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+        },
     },
     ftr_04_004 : // "Proforma İade Faturası"
     {
@@ -9561,6 +9899,31 @@ export const langFr =
         dtExpDate : "Date d'Echéance", 
         txtTotalHt : "Total HT",
         txtDocNo : "Numéro de document", 
+        validDesign : "Veuillez sélectionner un design.",
+        btnView : "Afficher",
+        btnMailsend : "Envoyer un courriel",
+        validMail : "Veuillez ne pas laisser ce champ vide.",
+        placeMailHtmlEditor : "Vous pouvez entrer une description de votre courrier.",
+        isMsgSave :
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            msg: "Impossible de procéder sans enregistrement du document !"
+        },
+        msgMailSendResult:
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            msgSuccess: "L'envoi du courrier a réussi !",
+            msgFailed: "L'envoi du courrier a échoué !"
+        },
+        popMailSend :
+        {
+            title :"Envoyer un e-mail",
+            txtMailSubject : "Objet du courriel",
+            txtSendMail : "Adresse e-mail",
+            btnSend : "Envoyer"
+        },
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -9584,6 +9947,7 @@ export const langFr =
             title : "Sélectionner Produit",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
+            clmPrice : "Prix d'Achat",
         },
         pg_dispatchGrid : 
         {
@@ -9877,6 +10241,12 @@ export const langFr =
             clmCode : "Code",   
             clmName : "Nom"   
         },
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+        },
     },
     ftr_04_005 : // "Şube Satış Faturası"
     {
@@ -9924,6 +10294,30 @@ export const langFr =
         dtExpDate : "Date d'Echéance", 
         txtTotalHt : "Total HT",
         txtDocNo : "Numéro de document", 
+        btnView : "Afficher",
+        btnMailsend : "Envoyer un courriel",
+        validMail : "Veuillez ne pas laisser ce champ vide.",
+        placeMailHtmlEditor : "Vous pouvez entrer une description de votre courrier.",
+        isMsgSave :
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            msg: "Impossible de procéder sans enregistrement du document !"
+        },
+        msgMailSendResult:
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            msgSuccess: "L'envoi du courrier a réussi !",
+            msgFailed: "L'envoi du courrier a échoué !"
+        },
+        popMailSend :
+        {
+            title :"Envoyer un e-mail",
+            txtMailSubject : "Objet du courriel",
+            txtSendMail : "Adresse e-mail",
+            btnSend : "Envoyer"
+        },
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -10295,6 +10689,12 @@ export const langFr =
             clmCode : "Code",   
             clmName : "Nom"   
         },
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+        },
     },
     promo_01_001: //  "Promosyon Tanımları"
     {
@@ -10653,6 +11053,7 @@ export const langFr =
         txtTotalQuantity : "Quantité totale",  
         txtUnitPrice : "Prix unitaire", 
         cmbOrigin: "Origine",
+        validDesign : "Veuillez choisir le design de l'étiquette",
         txtTotalHt : "Total HT",
         pg_Docs : 
         {
@@ -11039,6 +11440,12 @@ export const langFr =
             btn02 : "Non", 
             title : "Attention" 
         },
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+        },
     },
     irs_02_002 : // Satış İrsaliyesi"
     {
@@ -11072,6 +11479,30 @@ export const langFr =
         txtDocNo : "Numéro de document", 
         extraCost : "Supplément", 
         cmbPriceContract : "Accord de prix",
+        btnView : "Afficher",
+        btnMailsend : "Envoyer un courriel",
+        validMail : "Veuillez ne pas laisser ce champ vide.",
+        placeMailHtmlEditor : "Vous pouvez entrer une description de votre courrier.",
+        isMsgSave :
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            msg: "Impossible de procéder sans enregistrement du document !"
+        },
+        msgMailSendResult:
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            msgSuccess: "L'envoi du courrier a réussi !",
+            msgFailed: "L'envoi du courrier a échoué !"
+        },
+        popMailSend :
+        {
+            title :"Envoyer un e-mail",
+            txtMailSubject : "Objet du courriel",
+            txtSendMail : "Adresse e-mail",
+            btnSend : "Envoyer"
+        },
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -11453,6 +11884,12 @@ export const langFr =
             quantity2: "Total 2eme Unit ",
             margin: "Marge"
         },
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+        },
     },
     irs_02_003 : // "İade İrsaliyesi"
     {
@@ -11514,6 +11951,18 @@ export const langFr =
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
             clmQuantity :"Quantité "
+        },
+        pg_dispatchGrid :
+        {
+            title : "Sélection du Bon de Livraison",
+            clmReferans : "Série - Numéro",
+            clmCode : "Code",
+            clmName : "Nom",
+            clmQuantity : "Quantité",
+            clmPrice : "Prix",
+            clmTotal : "Montant",
+            clmDate : "Date",
+            clmDocNo : "Numéro de Document"
         },
         grdRebtDispatch: 
         {
@@ -11791,6 +12240,12 @@ export const langFr =
         txtDiscountPer1 : "1. Remise % ", 
         txtDiscountPer2 : "2. Remise % ", 
         txtDiscountPer3 : "3. Remise % ", 
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+        },
     },
     irs_02_004 : // Şube Satış İrsaliyesi"
     {
@@ -11822,6 +12277,30 @@ export const langFr =
         validMail : "Veuillez ne pas laisser le champs vide.",  
         txtTotalHt : "Total HT",
         txtDocNo : "Numéro de document", 
+        btnView : "Afficher",
+        btnMailsend : "Envoyer un courriel",
+        validMail : "Veuillez ne pas laisser ce champ vide.",
+        placeMailHtmlEditor : "Vous pouvez entrer une description de votre courrier.",
+        isMsgSave :
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            msg: "Impossible de procéder sans enregistrement du document !"
+        },
+        msgMailSendResult:
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            msgSuccess: "L'envoi du courrier a réussi !",
+            msgFailed: "L'envoi du courrier a échoué !"
+        },
+        popMailSend :
+        {
+            title :"Envoyer un e-mail",
+            txtMailSubject : "Objet du courriel",
+            txtSendMail : "Adresse e-mail",
+            btnSend : "Envoyer"
+        },
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -12179,6 +12658,12 @@ export const langFr =
         txtDiscountPer1 : "1. Remise % ",  
         txtDiscountPer2 : "2. Remise % ",  
         txtDiscountPer3 : "3. Remise % ",  
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+        },
     },
     irs_02_005 : // "İade Alış İrsaliyesi"
     {
@@ -12204,15 +12689,51 @@ export const langFr =
         txtTotalQuantity : "Quantité totale",  
         txtUnitPrice : "Prix unitaire", 
         txtTotalHt : "Total HT",
+        btnView : "Afficher",
+        btnMailsend : "Envoyer un courriel",
+        validMail : "Veuillez ne pas laisser ce champ vide.",
+        placeMailHtmlEditor : "Vous pouvez entrer une description de votre courrier.",
+        isMsgSave :
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            msg: "Impossible de procéder sans enregistrement du document !"
+        },
+        msgMailSendResult:
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            msgSuccess: "L'envoi du courrier a réussi !",
+            msgFailed: "L'envoi du courrier a échoué !"
+        },
+        popMailSend :
+        {
+            title :"Envoyer un e-mail",
+            txtMailSubject : "Objet du courriel",
+            txtSendMail : "Adresse e-mail",
+            btnSend : "Envoyer"
+        },
         pg_Docs : 
         {
             title : "Sélection Document",
             clmDate : "Date",
             clmRef : "Référence",
             clmRefNo : "Numéro",
-            clmInputName : "Nom Fournisseur",
-            clmInputCode  : "Code Client",
+            clmOutputName : "Nom Fournisseur",
+            clmOutputCode  : "Code Client",
             clmTotal : "Total TTC"
+        },
+        pg_dispatchGrid : 
+        {
+            title : "Sélectionner Bon De Livraison" ,
+            clmReferans : "Références",
+            clmCode : "Code",
+            clmName : "Nom",
+            clmQuantity : "Quantité",
+            clmPrice : "Prix ",
+            clmTotal : "Total" ,
+            clmDate : "Date",
+            clmDocNo : "N° de Document",
         },
         pg_txtCustomerCode : 
         {
@@ -12227,6 +12748,7 @@ export const langFr =
             title : "Sélectionner Produit",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
+            clmMulticode : "Multicode",
             clmPrice : "Prix de Vente" 
         },
         pg_RebateGrid : 
@@ -12498,6 +13020,12 @@ export const langFr =
         txtDiscountPer1 : "1. Remise % ", 
         txtDiscountPer2 : "2. Remise % ", 
         txtDiscountPer3 : "3. Remise % ",  
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+        },
     },
     irs_02_006 : // Şube Alış İrsaliyesi"
     {
@@ -12886,6 +13414,12 @@ export const langFr =
         txtDiscountPer1 : "1. Remise % ", 
         txtDiscountPer2 : "2. Remise % ", 
         txtDiscountPer3 : "3. Remise % ", 
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+        },
     },
     sip_01_001 : // "Alış Sipariş Listesi"
     {
@@ -13318,6 +13852,12 @@ export const langFr =
         txtDiscountPer1 : "1. Remise % ",  
         txtDiscountPer2 : "2. Remise % ",  
         txtDiscountPer3 : "3. Remise % ", 
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+        },
     },
     sip_02_002 : // "Satış Sipariş"
     {
@@ -13706,6 +14246,12 @@ export const langFr =
             quantity2: "Total 2eme Unit ",
             margin: "Marge"
         },
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+        },
     },
     sip_02_003 : // "Pos Satış Sipariş"
     {
@@ -13738,6 +14284,30 @@ export const langFr =
         txtTotalHt : "Total HT",
         txtDocNo : "Numéro de document", 
         cmbPriceContract : "Accord de prix",
+        btnView : "Afficher",
+        btnMailsend : "Envoyer un courriel",
+        validMail : "Veuillez ne pas laisser ce champ vide.",
+        placeMailHtmlEditor : "Vous pouvez entrer une description de votre courrier.",
+        isMsgSave :
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            msg: "Impossible de procéder sans enregistrement du document !"
+        },
+        msgMailSendResult:
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            msgSuccess: "L'envoi du courrier a réussi !",
+            msgFailed: "L'envoi du courrier a échoué !"
+        },
+        popMailSend :
+        {
+            title :"Envoyer un e-mail",
+            txtMailSubject : "Objet du courriel",
+            txtSendMail : "Adresse e-mail",
+            btnSend : "Envoyer"
+        },
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -13762,7 +14332,8 @@ export const langFr =
             title : "Sélectionner Produit",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
-            clmPrice : "Prix de Vente" 
+            clmPrice : "Prix de Vente",
+            clmBarcode : "Code Barre",
         },
         grdSlsOrder: 
         {
@@ -14093,6 +14664,12 @@ export const langFr =
             quantity: "Quantité Totale",
             quantity2: "Total 2eme Unit ",
             margin: "Marge"
+        },
+        msgCustomerLock: 
+        {
+            title: "Dikkat", //BAK
+            btn01: "Tamam", //BAK
+            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
         },
     },
     sip_04_001 : // "Sipariş Ayrıştırma"
@@ -15299,6 +15876,38 @@ export const langFr =
         validAccount : "Sélectionner un Compte ",
         validDocDate : "Sélectionner Date" ,
     },
+    fns_04_001 : // "Banka Ekstre Raporu"
+    {
+        cmbBank : "Sélection Banque",  // BAK
+        btnCheck : "Actif",  // BAK
+        btnGet :"Rechercher",  // BAK
+        grdListe : 
+        {
+            clmOutputName : "Compte sortant",   // BAK
+            clmInputName : "Compte entrant",   // BAK
+            clmAmount : "Montant",    // BAK
+            clmDocDate : "Date",    // BAK
+            clmRef : "Référence",   // BAK
+            clmRefNo : "Ligne",    // BAK
+        },
+     
+    },
+    fns_04_003 : // "Kasa Ekstre Raporu"
+    {
+        cmbSafe : "Caisse No",  // BAK
+        btnCheck : "Actif",  // BAK
+        btnGet :"Rechercher",  // BAK
+        grdListe : 
+        {
+            clmOutputName : "Compte sortant",   // BAK
+            clmInputName : "Compte entrant",   // BAK
+            clmAmount : "Montant",    // BAK
+            clmDocDate : "Date",    // BAK
+            clmRef : "Référence",   // BAK
+            clmRefNo : "Ligne",    // BAK
+        },
+     
+    },
     set_01_001 : // "Tax Sugar"
     {
         pg_Docs : 
@@ -15594,6 +16203,8 @@ export const langFr =
         txtLcdPort : "LCD Port",
         txtPayCardPort : "TPE Port",
         txtPrintDesing : "Design Ticket Imp.",
+        txtMacId : "Mac Id",
+        cmbDepot : "Dépot",
         pg_txtCode : 
         {
             title : "Sélection Caisse",
@@ -15909,6 +16520,8 @@ export const langFr =
             clmDate: "Date",
             clmTicketId: "Ticket No",
             clmDescription: "Motif",
+            clmTime: "Heure", // BAK
+            clmTotal: "Total", // BAK
         },
         pg_txtItem:
         {
@@ -15925,6 +16538,7 @@ export const langFr =
             clmTotal : "Total",
             clmLastData : "Premier prix",
             clmDescription : "Motif",
+            clmTime: "Heure", // BAK
         },
         grdSaleTicketPays : 
         {
@@ -16145,35 +16759,76 @@ export const langFr =
     },
     pos_02_012 : // "Loyalty",  // BAK
     {
-        btnGet :"Getir",
-        txtTotalTicket : "Toplam Fiş Adedi",
+        btnGet :"Rechercher",
+        txtTotalTicket : "Total des tickets de caisses",
         grdListe: 
         {
-            clmDocDate: "Tarih",
-            clmLoyalty: "Kullanılan Sadakat Puan Tutarı",
+            clmDocDate: "Date",
+            clmLoyalty: "Montant de points de fidélité utilisés",
         },
     },
     pos_02_013 : // "İndirim Raporu",  // BAK
     {
-        btnGet :"Getir",
-        txtTotalTicket : "Toplam Fiş Adedi",
+        btnGet :"Rechercher",
+        txtTotalTicket : "Total des tickets de caisses",
         grdListe: 
         {
-            clmDocDate: "Tarih",
-            clmDiscount: "İndirim Tutarı",
+            clmDocDate: "Date",
+            clmDiscount: "Remise",
         },
     },
     pos_02_014 : // "Okunmamış Terazi Fişleri Raporu" // BAK
     {
-        btnGet :"Getir",
+        btnGet :"Rechercher",
         grdListe : 
         {
-            clmCode: "Kodu",
-            clmName : "Adı",           
-            clmQuantity : "Miktar",
+            clmCode: "Code",
+            clmName : "Nom",           
+            clmQuantity : "Quantité",
+            clmPrice : "Prix",
+            clmCDate : "Date",
+            clmTicketNo : "Numéro de ticket",
+        },
+    },
+    pos_02_015 : // "Müşteri Bazlı Ürün Satış Raporu" //BAK
+    {
+        btnGet : "Getir",
+        dtDate : "Tarih Aralığı",
+        txtCustomer : "Müşteri",
+        txtTotal : "Toplam",
+        grdList: 
+        {
+            cuserName: "O.Kullanıcı",
+            luserName: "D.Kullanıcı",
+            device: "Kasa",
+            ref: "Ref",
+            docDate: "Tarih",
+            itemCode: "Ürün Kodu",
+            itemName: "Ürün Adı",
+            itemGrpName: "Ürün Grubu",
+            barcode: "Barkodu",
+            clmQuantity: "Miktar",
+            unitShort: "Birim",
             clmPrice : "Fiyat",
-            clmCDate : "Tarih",
-            clmTicketNo : "Fiş No",
+            clmFAmount : "Vergisiz Tutar",
+            clmAmount : "Tutar",
+            clmDiscount : "İndirim",
+            clmLoyalty : "Sadakat İnd",
+            clmVat : "Vergi",
+            clmVatRate : "Vergi Oranı",
+            clmTotal : "Toplam"
+        },
+        pg_txtCustomer:
+        {
+            title: "Müşteri Seçim",
+            clmCode: "KODU",
+            clmName: "ADI"
+        },
+        msgCustomerSelect:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen Müşteri Seçiniz !"
         },
     },
     pos_03_001 : // "Gün sonu"
@@ -16234,7 +16889,7 @@ export const langFr =
         dtAdvanceDate : "date",
         cmbPopSafe :"Caisse",
         addAdvance : "Fond De Caisse",
-        btnNotTrue : "Tekrar Giriş", // BAK
+        btnNotTrue : "Correction saisie",
         msgDoubleAdvence:
         {
             title: "Attention",
@@ -16245,7 +16900,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Gün Sonu Kayıt Edildi.." // BAK
+            msg: "La clôture de la journée a été enregistrée." // BAK
         },
         advanceMsg1 : "Soyez sûr que le fond de caisse est de",
         advanceMsg2 : "Etre sûr!!!",
@@ -16279,6 +16934,16 @@ export const langFr =
             btn01: "OK",   
             msg: "Vous ne pouvez pas entrer le montant du fond de tiroir supérieur à 1000 € ! "   
         },
+    },
+    pos_03_002 : // "Çekiliş" //BAK
+    {
+        dtDate : "Date",
+        txtLucky : "Heureux",
+        txtPoint : "Points",
+        btnLottery : "Tirage au sort",
+        lblTicketNo : "N° DE TICKET",
+        lblCustomer : "CLIENT",
+        lblCustomerNo : "N° CLIENT"
     },
     tkf_01_001 : // "Alış Teklifi Listesi",
     {
@@ -16692,6 +17357,26 @@ export const langFr =
         placeMailHtmlEditor : "Veuillez saisir votre texte .", 
         validDesign : "Veuillez sélectionner le design.",  
         validMail : "Veuillez ne pas laisser le champs vide.",  
+        isMsgSave :
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            msg: "Impossible de procéder sans enregistrement du document !"
+        },
+        msgMailSendResult:
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            msgSuccess: "L'envoi du courrier a réussi !",
+            msgFailed: "L'envoi du courrier a échoué !"
+        },
+        popMailSend :
+        {
+            title :"Envoyer un e-mail",
+            txtMailSubject : "Objet du courriel",
+            txtSendMail : "Adresse e-mail",
+            btnSend : "Envoyer"
+        },
         pg_Docs : 
         {
             title : "Sélection Document",

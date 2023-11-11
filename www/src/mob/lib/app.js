@@ -101,26 +101,6 @@ export default class App extends React.PureComponent
 
         this.core.socket.on('connect',async () => 
         {            
-            if((await this.core.sql.try()).status > 0)
-            {
-                let tmpSplash = 
-                {
-                    type : 0,
-                    headers : this.lang.t('msgWarning'),
-                    title: this.lang.t('msgSqlService1'),
-                }
-                App.instance.setState({logined:false,connected:false,splash:tmpSplash});
-            }
-            else
-            {
-                let tmpSplash = 
-                {
-                    type : 0,
-                    headers : this.lang.t('msgWarning'),
-                    title : this.lang.t('serverConnection'),
-                }
-                App.instance.setState({splash:tmpSplash});
-            }
             //SUNUCUYA BAĞLANDIKDAN SONRA AUTH ILE LOGIN DENETLENIYOR
             if((await this.core.auth.login(window.sessionStorage.getItem('auth'),'MOB')))
             {
@@ -130,15 +110,6 @@ export default class App extends React.PureComponent
             {
                 App.instance.setState({logined:false,connected:true});
             }
-        })
-        this.core.socket.on('connect_error',(error) => 
-        {
-            this.setState({connected:false});
-        })
-        this.core.socket.on('disconnect',async () => 
-        {
-            App.instance.setState({connected:false});
-            this.core.auth.logout()
         })
         this.core.socket.on('general',async(e)=>
         {

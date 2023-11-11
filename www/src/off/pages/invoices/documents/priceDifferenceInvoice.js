@@ -396,6 +396,7 @@ export default class priceDifferenceInvoice extends DocBase
     }
     async addItem(pData,pIndex,pQuantity)
     {
+        console.log(pQuantity)
         App.instance.setState({isExecute:true})
 
         this.txtRef.readOnly = true
@@ -464,6 +465,7 @@ export default class priceDifferenceInvoice extends DocBase
         this.docObj.docItems.dt()[pIndex].UNIT = pData.UNIT
         this.docObj.docItems.dt()[pIndex].DISCOUNT = 0
         this.docObj.docItems.dt()[pIndex].DISCOUNT_RATE = 0
+        this.docObj.docItems.dt()[pIndex].QUANTITY = pQuantity
         let tmpQuery = 
         {
             query :"SELECT dbo.FN_CUSTOMER_PRICE(@GUID,@CUSTOMER,@QUANTITY,GETDATE()) AS PRICE",
@@ -1013,19 +1015,21 @@ export default class priceDifferenceInvoice extends DocBase
                                     <NdButton id="btnPrint" parent={this} icon="print" type="default"
                                        onClick={async()=>
                                         {       
-                                            if(this.docLocked == true)
-                                            {
-                                                this.popDesign.show()
-                                            }
-                                            else
+                                            console.log(this.docObj.isSaved)                             
+                                            if(this.docObj.isSaved == false)
                                             {
                                                 let tmpConfObj =
                                                 {
-                                                    id:'msgPrintforLocked',showTitle:true,title:this.t("msgPrintforLocked.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:this.t("msgPrintforLocked.btn01"),location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgPrintforLocked.msg")}</div>)
+                                                    id:'isMsgSave',showTitle:true,title:this.t("isMsgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("isMsgSave.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("isMsgSave.msg")}</div>)
                                                 }
                                                 await dialog(tmpConfObj);
+                                                return
+                                            }
+                                            else
+                                            {
+                                                this.popDesign.show()
                                             }
                                         }}/>
                                 </Item>
@@ -1174,6 +1178,10 @@ export default class priceDifferenceInvoice extends DocBase
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     dt={{data:this.docObj.dt('DOC'),field:"DOC_NO"}} 
                                     readOnly={false}
+                                    onFocusOut={()=>
+                                    {
+                                        this.checkDocNo(this.txtDocNo.value)
+                                    }}
                                     >
                                     </NdTextBox>
                                 </Item>
@@ -1185,6 +1193,18 @@ export default class priceDifferenceInvoice extends DocBase
                                     dt={{data:this.docObj.dt('DOC'),field:"INPUT_CODE"}} 
                                     onEnterKey={(async(r)=>
                                     {
+                                        if(this.docObj.docItems.dt().length > 0)
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgCustomerLock',showTitle:true,title:this.t("msgCustomerLock.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgCustomerLock.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerLock.msg")}</div>)
+                                            }
+                                            
+                                            await dialog(tmpConfObj);
+                                            return;
+                                        }
                                         await this.pg_txtCustomerCode.setVal(this.txtCustomerCode.value)
                                         this.pg_txtCustomerCode.onClick = async(data) =>
                                         {
@@ -1236,8 +1256,20 @@ export default class priceDifferenceInvoice extends DocBase
                                             {
                                                 id:'01',
                                                 icon:'more',
-                                                onClick:()=>
+                                                onClick:async()=>
                                                 {
+                                                    if(this.docObj.docItems.dt().length > 0)
+                                                    {
+                                                        let tmpConfObj =
+                                                        {
+                                                            id:'msgCustomerLock',showTitle:true,title:this.t("msgCustomerLock.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                            button:[{id:"btn01",caption:this.t("msgCustomerLock.btn01"),location:'after'}],
+                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerLock.msg")}</div>)
+                                                        }
+                                                        
+                                                        await dialog(tmpConfObj);
+                                                        return;
+                                                    }
                                                     this.pg_txtCustomerCode.show()
                                                     this.pg_txtCustomerCode.onClick = async(data) =>
                                                     {
@@ -2012,14 +2044,11 @@ export default class priceDifferenceInvoice extends DocBase
                                     valueExpr="TAG"
                                     value=""
                                     searchEnabled={true}
-                                    onValueChanged={(async()=>
-                                        {
-                                        }).bind(this)}
                                     data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '17'"},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmPriceDiffdes" + this.tabIndex}>
+                                        <Validator validationGroup={"frmPrintPop" + this.tabIndex}>
                                             <RequiredRule message={this.t("validDesign")} />
                                         </Validator> 
                                     </NdSelectBox>
@@ -2031,17 +2060,14 @@ export default class priceDifferenceInvoice extends DocBase
                                     valueExpr="ID"
                                     value=""
                                     searchEnabled={true}
-                                    onValueChanged={(async()=>
-                                    {
-                                    }).bind(this)}
-                                   data={{source:[{ID:"FR",VALUE:"FR"},{ID:"DE",VALUE:"DE"},{ID:"TR",VALUE:"TR"}]}}
+                                    data={{source:[{ID:"FR",VALUE:"FR"},{ID:"DE",VALUE:"DE"},{ID:"TR",VALUE:"TR"}]}}
                                     >
                                     </NdSelectBox>
                                 </Item>
                                 <Item>
                                     <div className='row'>
                                         <div className='col-6'>
-                                            <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"frmPriceDiffdes" + this.tabIndex}
+                                            <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"frmPrintPop" + this.tabIndex}
                                             onClick={async (e)=>
                                             {       
                                                 if(e.validationGroup.validate().status == "valid")
@@ -2091,7 +2117,7 @@ export default class priceDifferenceInvoice extends DocBase
                                     </div>
                                     <div className='row py-2'>
                                         <div className='col-6'>
-                                            <NdButton text={this.t("btnView")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"frmPriceDiffInv" + this.tabIndex}
+                                            <NdButton text={this.t("btnView")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"frmPrintPop" + this.tabIndex}
                                             onClick={async (e)=>
                                             {       
                                                 if(e.validationGroup.validate().status == "valid")
@@ -2121,7 +2147,7 @@ export default class priceDifferenceInvoice extends DocBase
                                             }}/>
                                         </div>
                                         <div className='col-6'>
-                                            <NdButton text={this.t("btnMailsend")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmPriceDiffInv" + this.tabIndex}
+                                            <NdButton text={this.t("btnMailsend")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmPrintPop" + this.tabIndex}
                                             onClick={async (e)=>
                                             {    
                                                 if(e.validationGroup.validate().status == "valid")

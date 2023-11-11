@@ -226,6 +226,11 @@ export const menu = (e) =>
                             text : e.t('menuOff.stk_05_003'),//'',
                             path: 'items/report/countInventoryReport'
                         },
+                        {
+                            id: 'stk_05_004',
+                            text : e.t('menuOff.stk_05_004'),//'',
+                            path: 'items/report/itemOutageReport'
+                        },
                     ]
                 }
             ]
@@ -1068,7 +1073,12 @@ export const menu = (e) =>
                         {
                             id: 'fns_04_001',
                             text: e.t('menuOff.fns_04_001'),//'Banka Ekstre Raporu',
-                            path: 'construction.js',
+                            path: 'finance/report/bankEkstreReport'
+                        },
+                        {
+                            id: 'fns_04_003',
+                            text: e.t('menuOff.fns_04_003'),//'Banka Ekstre Raporu',
+                            path: 'finance/report/safeEkstreReport'
                         },
                         {
                             id: 'fns_04_002',
@@ -1114,8 +1124,13 @@ export const menu = (e) =>
                     [
                         {
                             id: 'pos_03_001',
-                            text: e.t('menuOff.pos_03_001'),//'Promosyon Tanımları',
+                            text: e.t('menuOff.pos_03_001'),//'Gün Sonu Operasyonu',
                             path: 'pos/operation/endOfDay'
+                        },
+                        {
+                            id: 'pos_03_002',
+                            text: e.t('menuOff.pos_03_002'),//'Çekiliş Operasyonu',
+                            path: 'pos/operation/posLottery'
                         }
                     ]
                 },
@@ -1192,6 +1207,12 @@ export const menu = (e) =>
                             text: e.t('menuOff.pos_02_011'),
                             path: 'pos/report/itemComparisonReport'
                         },
+                        //Müşteri Bazlı Ürün Satış Raporu 
+                        {
+                            id: 'pos_02_015',
+                            text: e.t('menuOff.pos_02_015'),
+                            path: 'pos/report/customerItemSaleReport'
+                        },
                         //Loyalty 
                         {
                             id: 'pos_02_012',
@@ -1209,7 +1230,7 @@ export const menu = (e) =>
                             id: 'pos_02_014',
                             text: e.t('menuOff.pos_02_014'),
                             path: 'pos/report/balanceUnreadTicket'
-                        },
+                        }
                     ]
                 },
             ]

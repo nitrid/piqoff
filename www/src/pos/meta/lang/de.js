@@ -298,6 +298,15 @@ export const langDe =
     popLastSaleList: 
     {
         title: "Letzte Verkaufsliste",
+        cmbPopLastSalePayType : 
+        {
+            optionAll : "Alle",
+            optionEspece : "Espece",
+            optionTPE : "Carte Bancaire TPE",
+            optionCheque1 : "Cheque",
+            optionCheque2 : "CHEQue",
+            optionAvoir : "Bon D'Avoir"
+        }
     },
     txtPopLastRefPholder: "Bitte den Barcode auf dem Ticket scannen.",
     popLastTotal: 
@@ -336,6 +345,11 @@ export const langDe =
         head: "Beschreibung für Zeilenlöschung",
         title: "Bitte geben Sie einen Grund für die Löschung ein."
     },
+    PopBalanceCounterDesc :
+    {
+        head : "Waagekontrollbeschreibung",
+        title : "Bitte geben Sie den Grund für die Waagenkontrolle ein"
+    },
     popItemReturnDesc: 
     {
         head: "Rückgabe-Beschreibung",
@@ -367,10 +381,10 @@ export const langDe =
         btn01: "Mengeneingabe",
         btn02: "Abbrechen",
     },
-    msgCardPayment: 
-    {
+    msgCardPayment: {
         title: "Achtung",
-        msg: "Bitte warten Sie auf eine Antwort vom Kartengerät.",
+        msg: "Warte auf die Antwort des Kartenterminals.",
+        msgAmount: "Betrag :",
         btn01: "Erneut versuchen",
         btn02: "Abbrechen",
         btn03: "Erzwingen"
@@ -576,6 +590,13 @@ export const langDe =
         msg : "Diese Aktion kann nicht im Offline-Modus durchgeführt werden!",
         btn01 : "OK"
     },
+    msgDisconnectWarning: 
+    {
+      title: "Achtung",
+      msg: "Sind Sie sicher, dass Sie gehen möchten?",
+      btn01: "JA",
+      btn02: "NEIN"
+    },
     msgOfflineAlert: 
     {
         title : "Achtung",
@@ -588,6 +609,14 @@ export const langDe =
         title : "Achtung",
         msg1 : "Verbindung zum Server hergestellt! Sie können online weiterarbeiten.",
         msg2 : "!! BITTE ÜBERPRÜFEN SIE DIE ZULETZT GESCANNTEN ARTIKEL !!",
+        btn01 : "OK"
+    },
+    msgDataTransferAlert: 
+    {
+        title : "Achtung",
+        msg1 : "Sie haben {0} Datensätze zu übertragen! Übertragen Sie die Daten jetzt.",
+        msg2 : "Übertragung erfolgreich abgeschlossen.",
+        msg3 : "Übertragung fehlgeschlagen. Alle Vorgänge werden neu gestartet.",
         btn01 : "OK"
     },
     msgNotWeighing: 
@@ -771,10 +800,43 @@ export const langDe =
         printDesing: "Druckdesign",
         scannerPort : "Scanner port"
     },
-    msgConnectOut: 
+    msgNotBarcodeWeighing: 
     {
         title: "Achtung",
-        msg: "Die Verbindung zum Server wurde getrennt.",
-        btn01: "OK"
+        msg: "Die Gesamtmenge des gewogenen Produkts stimmt nicht mit dem gescannten Barcode überein",
+        msgTicket: "Gewogene Menge: ",
+        msgBarkod: "Menge des Etiketts: ",
+        msgDifference: "Differenz: ",
+        msgTotalAmount : "Gesamtbetrag",
+        btn01: "OK",
+        btn02: "Weiter"
+    },
+    msgBarcodeWeighing:
+    {
+        title: "Achtung",
+        msg: "Gescannte Zeile : {0} - Gesamtbetrag : {1}",
+        btn01: "Okay"
+    },
+    msgBarcodeWeighingUnit: 
+    {
+        title : "Achtung",
+        msg : "Das gescannte Etikett enthält einzelne Produkte. Sie müssen die Mengen auf der Waage nicht abgleichen.",
+        btn01 : "OK"
+    },
+    msgTSENotFound:
+    {
+        title: "Achtung",
+        msg: "Die Kommunikation mit dem TSE-Gerät konnte nicht hergestellt werden !",
+        btn01: "Okay"
+    },
+    msgMacIdFailed:
+    {
+        title : "Achtung",
+        msg : "Geräte-ID stimmt nicht überein! Bitte kontaktieren Sie piqsoft.",
+        btn01 : "OK"
+    },
+    itemInfo:
+    {
+        msgSplash: "BITTE DEN BARCODE SCANNEN"
     }
 }

@@ -65,7 +65,7 @@ export default class itemPurcPriceReport extends React.PureComponent
                             "PRICE.PRICE AS PURC_PRICE,  " +
                             "ITEMS.VAT AS VAT, " +
                             "ISNULL((SELECT TOP 1 PRICE FROM ITEM_PRICE_LOG_VW_01 WHERE ITEM_PRICE_LOG_VW_01.ITEM_GUID = PRICE.ITEM_GUID AND ITEM_PRICE_LOG_VW_01.CUSTOMER = PRICE.CUSTOMER_GUID AND TYPE = 1 ORDER BY CHANGE_DATE DESC),0) AS FISRT_PRICE," + 
-                            "ISNULL((SELECT [dbo].[FN_PRICE_SALE](ITEMS.GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000')),0) AS PRICE_SALE,  " +
+                            "ISNULL((SELECT [dbo].[FN_PRICE_SALE](ITEMS.GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000')),0) AS PRICE_SALE,  " +
                             "PRICE.CUSTOMER_NAME AS CUSTOMER_NAME, " +
                             "PRICE.CUSTOMER_GUID AS CUSTOMER, " + 
                             "PRICE.LDATE AS LDATE " +
@@ -73,7 +73,7 @@ export default class itemPurcPriceReport extends React.PureComponent
                             "INNER JOIN  " +
                             "ITEM_PRICE_VW_01 AS PRICE  " +
                             "ON ITEMS.GUID = PRICE.ITEM_GUID  " +
-                            "WHERE PRICE.LDATE > @FISRT_DATE AND PRICE.TYPE = 1 AND ((PRICE.CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = '')) AND ((ITEMS.MAIN_GRP = @MAIN_GRP) OR (@MAIN_GRP = ''))) AS TMP  ORDER BY NAME",
+                            "WHERE STATUS = 1 AND PRICE.LDATE > @FISRT_DATE AND PRICE.TYPE = 1 AND ((PRICE.CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = '')) AND ((ITEMS.MAIN_GRP = @MAIN_GRP) OR (@MAIN_GRP = ''))) AS TMP  ORDER BY NAME",
                     param : ['FISRT_DATE:date','LAST_DATE:date','CUSTOMER_CODE:string|50','MAIN_GRP:string|50'],
                     value : [this.dtDate.startDate,this.dtDate.endDate,this.cmbTedarikci.value,this.cmbUrunGrup.value]
                 },

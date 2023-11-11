@@ -68,8 +68,6 @@ export default class outagePurcInvoice extends DocBase
         tmpDocCustomer.DOC_DATE = this.docObj.dt()[0].DOC_DATE
         this.docObj.docCustomer.addEmpty(tmpDocCustomer)
 
-        this.txtRef.readOnly = false
-        this.txtRefno.readOnly = true
         this.docLocked = false
         
         this.frmDocItems.option('disabled',true)
@@ -93,7 +91,7 @@ export default class outagePurcInvoice extends DocBase
                 {
                     select:
                     {
-                        query : "SELECT GUID,CODE,NAME,VAT,UNIT,STATUS,(SELECT [dbo].[FN_PRICE_SALE_VAT_EXT](GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000',NULL)) AS PRICE " + 
+                        query : "SELECT GUID,CODE,NAME,VAT,UNIT,STATUS,(SELECT [dbo].[FN_PRICE_SALE_VAT_EXT](GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000',NULL,'00000000-0000-0000-0000-000000000000')) AS PRICE " + 
                                 "FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
                         param : ['VAL:string|50']
                     },
@@ -141,8 +139,6 @@ export default class outagePurcInvoice extends DocBase
         await super.getDoc(pGuid,pRef,pRefno);
         App.instance.setState({isExecute:false})
 
-        this.txtRef.readOnly = true
-        this.txtRefno.readOnly = true
     }
     async calculateTotal()
     {
@@ -406,8 +402,6 @@ export default class outagePurcInvoice extends DocBase
         console.log(pIndex)
         App.instance.setState({isExecute:true})
 
-        this.txtRef.readOnly = true
-        this.txtRefno.readOnly = true
         
         if(typeof pQuantity == 'undefined')
         {
@@ -489,10 +483,11 @@ export default class outagePurcInvoice extends DocBase
         this.docObj.docItems.dt()[pIndex].DISCOUNT = 0
         this.docObj.docItems.dt()[pIndex].DISCOUNT_RATE = 0
         this.docObj.docItems.dt()[pIndex].SUB_QUANTITY = pQuantity * this.docObj.docItems.dt()[pIndex].SUB_FACTOR
+        this.docObj.docItems.dt()[pIndex].QUANTITY = pQuantity
 
         let tmpQuery = 
         {
-            query :"SELECT dbo.FN_PRICE_SALE_VAT_EXT(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,NULL) AS PRICE",
+            query :"SELECT dbo.FN_PRICE_SALE_VAT_EXT(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,NULL,'00000000-0000-0000-0000-000000000000') AS PRICE",
             param : ['GUID:string|50','QUANTITY:float','CUSTOMER:string|50'],
             value : [pData.GUID,pQuantity,this.docObj.dt()[0].OUTPUT]
         }
@@ -988,9 +983,24 @@ export default class outagePurcInvoice extends DocBase
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnPrint" parent={this} icon="print" type="default"
-                                    onClick={()=>
-                                    {
-                                        this.popDesign.show()
+                                    onClick={async ()=>
+                                    {                            
+                                        if(this.docObj.isSaved == false)
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'isMsgSave',showTitle:true,title:this.t("isMsgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("isMsgSave.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("isMsgSave.msg")}</div>)
+                                            }
+                                            await dialog(tmpConfObj);
+                                            return
+                                        }
+                                        else
+                                        {
+                                            this.popDesign.show()
+                                        }
+                                      
                                     }}/>
                                 </Item>
                                 <Item location="after"
@@ -1032,11 +1042,16 @@ export default class outagePurcInvoice extends DocBase
                                         <div className="col-4 pe-0">
                                             <NdTextBox id="txtRef" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF"}}
                                             upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                            readOnly={true}
                                             maxLength={32}
-                                            onValueChanged={(async(e)=>
+                                            onChange={(async()=>
                                             {
                                                 this.docObj.docCustomer.dt()[0].REF = this.txtRef.value
+                                                this.checkRow()
+                                                let tmpResult = await this.checkDoc('00000000-0000-0000-0000-000000000000',this.txtRef.value,this.txtRefno.value)
+                                                if(tmpResult == 3)
+                                                {
+                                                    this.txtRef.value = "";
+                                                }
                                             }).bind(this)}
                                             param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
@@ -1048,7 +1063,6 @@ export default class outagePurcInvoice extends DocBase
                                         </div>
                                         <div className="col-5 ps-0">
                                             <NdTextBox id="txtRefno" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF_NO"}}
-                                            readOnly={true}
                                             button=
                                             {
                                                 [
@@ -1087,6 +1101,7 @@ export default class outagePurcInvoice extends DocBase
                                                     }
                                                 }
                                                 this.docObj.docCustomer.dt()[0].REF_NO = this.txtRefno.value
+                                                this.checkRow()
                                                 let tmpResult = await this.checkDoc('00000000-0000-0000-0000-000000000000',this.txtRef.value,this.txtRefno.value)
                                                 if(tmpResult == 3)
                                                 {
@@ -1138,6 +1153,10 @@ export default class outagePurcInvoice extends DocBase
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     dt={{data:this.docObj.dt('DOC'),field:"DOC_NO"}} 
                                     readOnly={false}
+                                    onFocusOut={()=>
+                                    {
+                                        this.checkDocNo(this.txtDocNo.value)
+                                    }}
                                     >
                                     </NdTextBox>
                                 </Item>
@@ -1149,6 +1168,18 @@ export default class outagePurcInvoice extends DocBase
                                     dt={{data:this.docObj.dt('DOC'),field:"OUTPUT_CODE"}} 
                                     onEnterKey={(async()=>
                                     {
+                                        if(this.docObj.docItems.dt().length > 0)
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgCustomerLock',showTitle:true,title:this.t("msgCustomerLock.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgCustomerLock.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerLock.msg")}</div>)
+                                            }
+                                            
+                                            await dialog(tmpConfObj);
+                                            return;
+                                        }
                                         await this.pg_txtCustomerCode.setVal(this.txtCustomerCode.value)
                                         this.pg_txtCustomerCode.onClick = async(data) =>
                                         {
@@ -1195,8 +1226,20 @@ export default class outagePurcInvoice extends DocBase
                                             {
                                                 id:'01',
                                                 icon:'more',
-                                                onClick:()=>
+                                                onClick:async()=>
                                                 {
+                                                    if(this.docObj.docItems.dt().length > 0)
+                                                    {
+                                                        let tmpConfObj =
+                                                        {
+                                                            id:'msgCustomerLock',showTitle:true,title:this.t("msgCustomerLock.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                            button:[{id:"btn01",caption:this.t("msgCustomerLock.btn01"),location:'after'}],
+                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerLock.msg")}</div>)
+                                                        }
+                                                        
+                                                        await dialog(tmpConfObj);
+                                                        return;
+                                                    }
                                                     this.pg_txtCustomerCode.show()
                                                     this.pg_txtCustomerCode.onClick = async(data) =>
                                                     {
@@ -1965,14 +2008,11 @@ export default class outagePurcInvoice extends DocBase
                                     valueExpr="TAG"
                                     value=""
                                     searchEnabled={true}
-                                    onValueChanged={(async()=>
-                                        {
-                                        }).bind(this)}
                                     data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '19'"},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmPurcOrderPrint"  + this.tabIndex}>
+                                        <Validator validationGroup={"frmPrintPop"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validDesign")} />
                                         </Validator> 
                                     </NdSelectBox>
@@ -1984,10 +2024,7 @@ export default class outagePurcInvoice extends DocBase
                                     valueExpr="ID"
                                     value=""
                                     searchEnabled={true}
-                                    onValueChanged={(async()=>
-                                        {
-                                        }).bind(this)}
-                                data={{source:[{ID:"FR",VALUE:"FR"},{ID:"DE",VALUE:"DE"},{ID:"TR",VALUE:"TR"}]}}
+                                    data={{source:[{ID:"FR",VALUE:"FR"},{ID:"DE",VALUE:"DE"},{ID:"TR",VALUE:"TR"}]}}
                                     >
                                     </NdSelectBox>
                                 </Item>
@@ -2031,7 +2068,7 @@ export default class outagePurcInvoice extends DocBase
                                     </div>
                                     <div className='row py-2'>
                                             <div className='col-6'>
-                                                <NdButton text={this.t("btnView")} type="normal" stylingMode="contained" width={'100%'} 
+                                                <NdButton text={this.t("btnView")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmPrintPop" + this.tabIndex}
                                                 onClick={async (e)=>
                                                 {       
                                                    
@@ -2060,7 +2097,7 @@ export default class outagePurcInvoice extends DocBase
                                                 }}/>
                                             </div>
                                             <div className='col-6'>
-                                                <NdButton text={this.t("btnMailsend")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmSalesInvPrint" + this.tabIndex}
+                                                <NdButton text={this.t("btnMailsend")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmPrintPop" + this.tabIndex}
                                                 onClick={async (e)=>
                                                 {    
                                                   
