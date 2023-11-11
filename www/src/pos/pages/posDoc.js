@@ -1377,6 +1377,7 @@ export default class posDoc extends React.PureComponent
                                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgSaveFailAlert.msg")}</div>)
                                 }
                                 await dialog(tmpConfObj)
+                                window.location.reload()
                                 resolve(false)
                                 return
                             }
@@ -1405,11 +1406,13 @@ export default class posDoc extends React.PureComponent
                         button:[{id:"btn01",caption:this.lang.t("msgSaveFailAlert.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgSaveFailAlert.btn02"),location:'after'}],
                         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgSaveFailAlert.msg")}</div>)
                     }
-                    if((await dialog(tmpConfObj)) == 'btn02')
-                    {
-                        this.core.util.writeLog("calcGrandTotal : 04")
-                        await this.calcGrandTotal()
-                    }
+                    await dialog(tmpConfObj)
+                    window.location.reload()
+                    // if((await dialog(tmpConfObj)) == 'btn02')
+                    // {
+                    //     this.core.util.writeLog("calcGrandTotal : 04")
+                    //     await this.calcGrandTotal()
+                    // }
                     resolve(false)
                     return
                 }
