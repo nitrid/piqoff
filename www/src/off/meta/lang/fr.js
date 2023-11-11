@@ -3408,7 +3408,7 @@ export const langFr =
         btnGet : "Rechercher",
         grdListe : 
         {
-            clmCode: "Sélection Document",
+            clmCode: "Code",
             clmTitle : "Titre",
             clmType : "Type",
             clmGenus : "Genre",
