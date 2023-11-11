@@ -2722,8 +2722,8 @@ export const langFr =
     stk_04_001 : //"Toplu Stok Düzenleme"
     {
         txtCustomerCode : "Fournisseur",
-        codePlaceHolder : "Veuillez saisir le code produit, le code-barres ou le code fournisseur que vous souhaitez rechercher",  
-        namePlaceHolder :"Entrez le nom complet du produit ou une syllabe le contenant",  
+        codePlaceHolder : "Veuillez saisir le code produit, le code-barres ou le code fournisseur que vous souhaitez Chercher",  
+        namePlaceHolder :"Saissir le nom complet ou une syllabe du produit",  
         pg_txtCustomerCode : 
         {
             title : "Choix Fournisseur",
@@ -2733,7 +2733,7 @@ export const langFr =
             clmGenusName : "Genre"
         },
         cmbItemGroup : "Groupe Produit",
-        btnGet : 'Rechercher',
+        btnGet : 'Chercher',
         txtCode : "Référence Produit",
         txtName : "Nom Produit",
         grdItemList : 
@@ -2743,7 +2743,7 @@ export const langFr =
             clmBarcode : "Code barre",
             clmMulticode : "FRN.Code",
             clmCustomerName : "Fournisseur",
-            clmCustomerPrice : "Prix T.",
+            clmCustomerPrice : "Prix Fournisseur",
             clmPriceSale : "Prix Vente",
             clmVat : "Taxe",
             clmOrgins : "Origine",
@@ -2773,18 +2773,18 @@ export const langFr =
     stk_04_002 : // "İade Les opérationsı"
     {
         txtCustomerCode : "Fournisseur",
-        validDepot : "Sélectionner Dépot",
-        ItemNamePlaceHolder :"Veuillez Entrer le Nom Complet ou une Syllabe",
+        validDepot : "Sélectionner Dépôt",
+        ItemNamePlaceHolder :"Saissir le nom complet ou une syllabe du produit",
         pg_txtCustomerCode : 
         {
             title : "Choix Fournisseur",
-            clmCode :  "Sélection Document",
+            clmCode :  "Code Fournisseur",
             clmTitle : "Nom Fournisseur",
             clmTypeName : "Type",
             clmGenusName : "Genre"
         },
         cmbDepot : 'Dépôt',  
-        btnGet : 'Rechercher',
+        btnGet : 'Chercher',
         btnInvoice : "Convertir En Facture",
         btnDispatch : 'Convertir en Bon de Livraison',
         grdRebateList : 
@@ -2800,7 +2800,7 @@ export const langFr =
             title: "Attention",
             btn01: "Valider",
             btn02: "Abandonner",
-            msg: "Etes-vous sûr(e) de Vouloir Faire Retour des Lignes Sélectionnées !"
+            msg: "Etes-vous sûr(e) de Vouloir Faire le retour des Lignes Sélectionnées !"
         },
         msgSaveResult:
         {
@@ -2813,13 +2813,13 @@ export const langFr =
         {
             title: "Attention",
             btn01 : "OK",
-            msg : "Produit Sélectionné Pour Plusieurs Compte Veuillez Vérifier"
+            msg : "Produit Sélectionné plusieurs fois,Veuillez Vérifier"
         },
         msgCustomerFound : 
         {
             title: "Attention",
             btn01 : "OK",
-            msg : "Compte Produit non Défini.Veuillez Sélectionner un Compte"
+            msg : "Le Produit n'a pas de fournisseur défini.Veuillez le définir !"
         }
     },
     stk_04_003 : //"Sayım Kesinleştirme"
@@ -2831,7 +2831,7 @@ export const langFr =
         dtFirstDate :"Date Début",
         dtLastDate : "Date Fin",
         btnSuccess : "Valider",
-        validDepot : "Sélectionner Dépot",
+        validDepot : "Sélectionner Dépôt",
         popCount : 
         {
             title : "Quantité Produit",
@@ -2867,17 +2867,17 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Quantité Dépot Mis à jour ! ! Nouvelle Création Non Effectuée",
+            msg: "Quantité Dépôt à jour ! ! Pas de nouvelle quantité enregistrée ",
         },
     },
     stk_04_004: // SKT operasyonu
     {
-        txtRef : "Stock",   
+        txtRef : "Produit",   
         dtFirstdate : "Date Début",   
         dtLastDate : "Date Fin",   
         btnGet : "Recherche",   
-        btnPrint : "Impression Spéciale Etiquette Sélectionnée",   
-        txtCustomerCode : "Client", 
+        btnPrint : "Imprimer étiquette spéciale au produit sélectionné",   
+        txtCustomerCode : "Fournisseur", 
         cmbItemGroup : "Catégorie Produit", 
         grdExpdateList:   
         {   
@@ -2887,8 +2887,8 @@ export const langFr =
             clmDiff : "Vente Depuis Date Saisie", 
             clmDate : "DLC",
             clmRemainder : "Restant", 
-            clmCustomer :"Client",
-            clmRebate : "Reprise Retour",
+            clmCustomer :"Fournisseur",
+            clmRebate : "Reprise-Retour",
             clmDescription :"Remarque",
             clmUser : "Utilisateur",
             clmCDate : "Date Entrée" ,
@@ -2897,14 +2897,14 @@ export const langFr =
         },   
         popQuantity :    
         {   
-            title : "Saisie Prix Montant",   
-            txtQuantity : "Montant",   
+            title : "Saisie Quantité-Prix",   
+            txtQuantity : "Quantité",   
             txtPrice : "Prix",   
-            btnSave : "enregistreret Imprimer"   
+            btnSave : "Enregistrer et Imprimer"   
         },  
         pg_txtRef:  
         {  
-            title: "Choix Stock",   
+            title: "Choix produit",   
             clmCode: "Code",   
             clmName: "Nom",   
             clmStatus: "Mode"   
@@ -2912,7 +2912,7 @@ export const langFr =
         pg_txtCustomerCode : 
         {
             title : "Choix Fournisseur",
-            clmCode :  "Sélection Document",
+            clmCode :  "Code Fournisseur",
             clmTitle : "Nom Fournisseur",
             clmTypeName : "Type",
             clmGenusName : "Genre"
@@ -2922,13 +2922,13 @@ export const langFr =
             title: "Attention",  
             btn01: "OK",  
             btn02: "Abandonner",  
-            msg: "Etiquette déjà Imprimé pour le Produit Sélectionné !Etes-vous sûr(e) de Vouloir Imprimer à Nouveau?" 
+            msg: "Etiquette spéciale déja éditer pour le Produit Sélectionné !Êtes-vous sûr(e) de Vouloir le rééditer?" 
         },
         msgLabelCount:
         {
             title: "Attention",  
             btn01: "OK",  
-            msg: "Ne peut Imprimer Plus que la Quantité de Produit Restant.." 
+            msg: "Impossible d'imprimer plus que la quantité du produit restant." 
         },
     },
     stk_05_001 : // "Depo Envanter Raporu"
