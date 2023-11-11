@@ -7947,8 +7947,9 @@ export default class posDoc extends React.PureComponent
                                             this.keyPopCustomerAdd.setInput(this.txtPopCustomerCode.value)
                                         }}
                                         onChange={async(e)=>
-                                        {                                    
-                                            
+                                        {                         
+                                            this.customerObj.clearAll()
+                                            await this.customerObj.load({CODE:this.txtPopCustomerCode.value});
                                         }}>
                                             <Validator validationGroup={"frmCustomerAdd"}>
                                                 <RequiredRule message={this.lang.t("popCustomerAdd.validTxtPopCustomerCode")}/>
