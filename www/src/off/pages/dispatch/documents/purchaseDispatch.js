@@ -33,6 +33,8 @@ export default class purchaseDispatch extends DocBase
     
         this.frmDocItems = undefined;
         this.docLocked = false; 
+        this.customerControl = true
+        this.customerClear = false
         this.combineControl = true
         this.combineNew = false
 
@@ -71,7 +73,8 @@ export default class purchaseDispatch extends DocBase
                 {
                     select:
                     {
-                        query : "SELECT GUID,CODE,NAME,VAT,COST_PRICE,UNIT,STATUS,ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE DELETED = 0 AND ITEM_BARCODE.ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
+                        query : "SELECT GUID,CODE,NAME,VAT,COST_PRICE,UNIT,STATUS, ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_01.GUID AND ITEM_MULTICODE.CUSTOMER = '"+this.docObj.dt()[0].OUTPUT+"' AND DELETED = 0 ORDER BY LDATE DESC),'') AS MULTICODE, "+
+                        "ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE DELETED = 0 AND ITEM_BARCODE.ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
                         param : ['VAL:string|50']
                     },
                     sql:this.core.sql
@@ -138,6 +141,8 @@ export default class purchaseDispatch extends DocBase
                         
                         this.pg_txtItemsCode.onClick = async(data) =>
                         {
+                            this.customerControl = true
+                            this.customerClear = false
                             this.combineControl = true
                             this.combineNew = false
                             if(data.length > 0)
@@ -169,6 +174,8 @@ export default class purchaseDispatch extends DocBase
                         let tmpData = await this.core.sql.execute(tmpQuery) 
                         if(tmpData.result.recordset.length > 0)
                         {
+                            this.customerControl = true
+                            this.customerClear = false
                             this.combineControl = true
                             this.combineNew = false
                             await this.addItem(tmpData.result.recordset[0],e.rowIndex)
@@ -478,6 +485,48 @@ export default class purchaseDispatch extends DocBase
             this.docObj.docItems.dt()[pIndex].UNIT_SHORT = tmpGrpData.result.recordset[0].UNIT_SHORT
         }
 
+        if(this.customerControl == true)
+        {
+            let tmpCheckQuery = 
+            {
+                query :"SELECT MULTICODE,(SELECT [dbo].[FN_CUSTOMER_PRICE](ITEM_GUID,CUSTOMER_GUID,@QUANTITY,GETDATE())) AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID",
+                param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
+                value : [pData.CODE,this.docObj.dt()[0].OUTPUT,pQuantity]
+            }
+            let tmpCheckData = await this.core.sql.execute(tmpCheckQuery) 
+            if(tmpCheckData.result.recordset.length == 0)
+            {   
+                let tmpCustomerBtn = ''
+                if(this.customerClear == true)
+                {
+                    await this.grdPurcDispatch.devGrid.deleteRow(0)
+                    return 
+                }
+                App.instance.setState({isExecute:false})
+                await this.msgCustomerNotFound.show().then(async (e) =>
+                {
+                    if(e == 'btn01' && this.checkCustomer.value == true)
+                    {
+                        this.customerControl = false
+                        return
+                    }
+                    if(e == 'btn02')
+                    {
+                        tmpCustomerBtn = e
+                        await this.grdPurcDispatch.devGrid.deleteRow(0)
+                        if(this.checkCustomer.value == true)
+                        {
+                            this.customerClear = true
+                        }
+                        return 
+                    }
+                })
+                if(tmpCustomerBtn == 'btn02')
+                {
+                    return
+                }
+            }
+        }
         this.docObj.docItems.dt()[pIndex].ITEM_CODE = pData.CODE
         this.docObj.docItems.dt()[pIndex].ITEM = pData.GUID
         this.docObj.docItems.dt()[pIndex].VAT_RATE = pData.VAT
@@ -1225,8 +1274,20 @@ export default class purchaseDispatch extends DocBase
                                         </Validator> 
                                     </NdSelectBox>
                                 </Item>
-                                {/* Boş */}
-                                <EmptyItem />
+                                {/* DOC_NO */}
+                                <Item>
+                                    <Label text={this.t("txtDocNo")} alignment="right" />
+                                    <NdTextBox id="txtDocNo" parent={this} simple={true}  
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                    dt={{data:this.docObj.dt('DOC'),field:"DOC_NO"}} 
+                                    readOnly={false}
+                                    onFocusOut={()=>
+                                    {
+                                        this.checkDocNo(this.txtDocNo.value)
+                                    }}
+                                    >
+                                    </NdTextBox>
+                                </Item>
                                 {/* txtCustomerCode */}
                                 <Item>
                                     <Label text={this.t("txtCustomerCode")} alignment="right" />
@@ -1458,6 +1519,8 @@ export default class purchaseDispatch extends DocBase
 
                                                         if(data.length > 0)
                                                         {
+                                                            this.customerControl = true
+                                                            this.customerClear = false
                                                             this.combineControl = true
                                                             this.combineNew = false
         
@@ -1507,6 +1570,8 @@ export default class purchaseDispatch extends DocBase
                                             this.pg_txtItemsCode.onClick = async(data) =>
                                             {
                                                 await this.core.util.waitUntil(100)
+                                                this.customerControl = true
+                                                this.customerClear = false
                                                 this.combineControl = true
                                                 this.combineNew = false
                                                 if(data.length > 0)
@@ -1544,6 +1609,7 @@ export default class purchaseDispatch extends DocBase
                                     validationGroup={"frmPurcDispatch"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
+                                        console.log(1)
                                         if(e.validationGroup.validate().status == "valid")
                                         {
                                             
@@ -1553,6 +1619,8 @@ export default class purchaseDispatch extends DocBase
                                                 {
                                                     this.pg_txtItemsCode.onClick = async(data) =>
                                                     {
+                                                        this.customerControl = true
+                                                        this.customerClear = false
                                                         this.combineControl = true
                                                         this.combineNew = false
                                                         if(data.length > 0)
@@ -1572,6 +1640,8 @@ export default class purchaseDispatch extends DocBase
                                             this.pg_txtItemsCode.onClick = async(data) =>
                                             {
                                                 await this.core.util.waitUntil(100)
+                                                this.customerControl = true
+                                                this.customerClear = false
                                                 this.combineControl = true
                                                 this.combineNew = false
                                                 if(data.length > 0)
@@ -1601,6 +1671,7 @@ export default class purchaseDispatch extends DocBase
                                      validationGroup={"frmPurcDispatch"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
+                                        console.log(2)
                                         if(e.validationGroup.validate().status == "valid")
                                         {
                                             await this.popMultiItem.show()

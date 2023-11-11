@@ -612,13 +612,13 @@ export const langEs =
         msg2: "¡POR FAVOR, VERIFIQUE LOS ÚLTIMOS PRODUCTOS ESCANEADOS!",
         btn01: "Aceptar"
     },
-    msgDataTransferAlert: //BAK
+    msgDataTransferAlert: 
     {
-        title : "Dikkat",
-        msg1 : "Aktarmanız gereken {0} adet kayıt mevcut ! Şimdi verileri aktarın.",
-        msg2 : "Aktarım işlemi başarılı.",
-        msg3 : "Aktarım işlemi başarısız.Tüm işlemler yeniden başlatılıyor.",
-        btn01 : "Tamam"
+        title : "Atención",
+        msg1 : "Tiene {0} registros para transferir. Transfiera los datos ahora.",
+        msg2 : "Proceso de transferencia exitoso.",
+        msg3 : "Fallo en el proceso de transferencia. Se están reiniciando todas las operaciones.",
+        btn01 : "Aceptar"
     },
     msgNotWeighing: 
     {

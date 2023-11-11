@@ -19,7 +19,6 @@ import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdDialog, { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
 
-
 export default class purchaseOrder extends DocBase
 {
     constructor(props)
@@ -212,7 +211,6 @@ export default class purchaseOrder extends DocBase
                                     {
                                         await this.core.util.waitUntil(100)
                                         await this.addItem(data[i],e.rowIndex)
-                                        
                                     }
                                 }
                             }
@@ -242,7 +240,6 @@ export default class purchaseOrder extends DocBase
                             icon:'more',
                             onClick:async ()  =>
                             {
-                            
                                 this.msgUnit.tmpData = e.data
                                 await this.msgUnit.show() 
                                 e.data.PRICE = parseFloat((this.txtUnitPrice.value * this.txtUnitFactor.value).toFixed(4))
@@ -313,7 +310,8 @@ export default class purchaseOrder extends DocBase
         }
         if(e.column.dataField == "DISCOUNT_RATE")
         {
-            return (
+            return 
+(
                 <NdTextBox id={"txtGrdDiscountRate"+e.rowIndex} parent={this} simple={true} 
                 upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                 value={e.value}
@@ -416,6 +414,49 @@ export default class purchaseOrder extends DocBase
             this.docObj.docOrders.dt()[pIndex].UNIT_SHORT = tmpGrpData.result.recordset[0].UNIT_SHORT
         }
 
+        if(this.customerControl == true)
+        {
+            let tmpCheckQuery = 
+            {
+                query :"SELECT MULTICODE,(SELECT [dbo].[FN_CUSTOMER_PRICE](ITEM_GUID,CUSTOMER_GUID,@QUANTITY,GETDATE())) AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID",
+                param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
+                value : [pData.CODE,this.docObj.dt()[0].OUTPUT,pQuantity]
+            }
+            let tmpCheckData = await this.core.sql.execute(tmpCheckQuery) 
+            if(tmpCheckData.result.recordset.length == 0)
+            {   
+                let tmpCustomerBtn = ''
+                if(this.customerClear == true)
+                {
+                    await this.grdPurcOrders.devGrid.deleteRow(0)
+                    return 
+                }
+                App.instance.setState({isExecute:false})
+                await this.msgCustomerNotFound.show().then(async (e) =>
+                {
+                    if(e == 'btn01' && this.checkCustomer.value == true)
+                    {
+                        this.customerControl = false
+                        return
+                    }
+                    if(e == 'btn02')
+                    {
+                        tmpCustomerBtn = e
+                        await this.grdPurcOrders.devGrid.deleteRow(0)
+                        if(this.checkCustomer.value == true)
+                        {
+                            this.customerClear = true
+                        }
+                        return 
+                    }
+                })
+                if(tmpCustomerBtn == 'btn02')
+                {
+                    return
+                }
+            }
+        }
+        
         this.docObj.docOrders.dt()[pIndex].ITEM_CODE = pData.CODE
         this.docObj.docOrders.dt()[pIndex].MULTICODE = pData.MULTICODE
         this.docObj.docOrders.dt()[pIndex].ITEM_BARCODE = pData.BARCODE
@@ -545,6 +586,8 @@ export default class purchaseOrder extends DocBase
     }
     async multiItemSave()
     {
+        this.customerControl = true
+        this.customerClear = false
         this.combineControl = true
         this.combineNew = false
 
@@ -611,7 +654,6 @@ export default class purchaseOrder extends DocBase
                                                 button:[{id:"btn01",caption:this.lang.t("msgNotRow.btn01"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgNotRow.msg")}</div>)
                                             }
-
                                             await dialog(tmpConfObj);
                                             this.getDoc(this.docObj.dt()[0].GUID,this.docObj.dt()[0].REF,this.docObj.dt()[0].REF_NO)
                                             return
@@ -626,7 +668,7 @@ export default class purchaseOrder extends DocBase
                                                 let tmpQuery = 
                                                 {
                                                     query : "SELECT ISNULL((SELECT NAME FROM ITEMS WHERE ITEMS.GUID = ITEM_MULTICODE.ITEM),'') AS ITEM_NAME,ISNULL((SELECT CODE FROM ITEMS WHERE ITEMS.GUID = ITEM_MULTICODE.ITEM),'') AS ITEM_CODDE, " +
-                                                            "ISNULL((SELECT TITLE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = ITEM_MULTICODE.CUSTOMER),'') AS CUSTOMER_NAME,CODE AS MULTICODE, "+
+                                                            "ISNULL((SELECT TITLE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = ITEM_MULTICODE.CUSTOMER),'') AS CUSTOMER_NAME,CODE AS MULTICODE, " +
                                                             "(SELECT [dbo].[FN_CUSTOMER_PRICE](ITEM,CUSTOMER,@QUANTITY,GETDATE())) AS PRICE FROM ITEM_MULTICODE WHERE  DELETED = 0 AND ITEM = @ITEM_CODE AND (SELECT [dbo].[FN_CUSTOMER_PRICE](ITEM,CUSTOMER,@QUANTITY,GETDATE())) < @PRICE " ,
                                                     param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50','QUANTITY:float','PRICE:float'],
                                                     value : [this.docObj.docOrders.dt()[i].ITEM,this.docObj.dt()[0].OUTPUT,this.docObj.docOrders.dt()[i].QUANTITY,this.docObj.docOrders.dt()[i].PRICE]
@@ -640,7 +682,6 @@ export default class purchaseOrder extends DocBase
                                                     }
                                                 }
                                             }
-                                            
                                             App.instance.setState({isExecute:false})
                                             if(this.underPriceData.length > 0)
                                             {
@@ -721,7 +762,6 @@ export default class purchaseOrder extends DocBase
                                                     button:[{id:"btn01",caption:this.t("msgdocNotDelete.btn01"),location:'after'}],
                                                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgdocNotDelete.msg")}</div>)
                                                 }
-                                            
                                                 await dialog(tmpConfObj);
                                                 return
                                             }
@@ -770,7 +810,6 @@ export default class purchaseOrder extends DocBase
                                                     button:[{id:"btn01",caption:this.t("msgLocked.btn01"),location:'after'}],
                                                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgLocked.msg")}</div>)
                                                 }
-
                                                 await dialog(tmpConfObj);
                                                 this.frmDocOrders.option('disabled',true)
                                             }
@@ -778,8 +817,7 @@ export default class purchaseOrder extends DocBase
                                             {
                                                 tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
                                                 await dialog(tmpConfObj1);
-                                            }
-                                            
+                                            } 
                                         }
                                         else if(this.docObj.dt()[0].LOCKED == 1)
                                         {
@@ -796,7 +834,6 @@ export default class purchaseOrder extends DocBase
                                             }
                                             await dialog(tmpConfObj);
                                         }
-                                        
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
@@ -1021,7 +1058,6 @@ export default class purchaseOrder extends DocBase
                                                     await this.pg_adress.show()
                                                     await this.pg_adress.setData(tmpAdressData.result.recordset)
                                                 }
-                                                
                                             }
                                         }
                                         await this.pg_txtCustomerCode.setVal(this.txtCustomerCode.value)
@@ -1042,7 +1078,6 @@ export default class purchaseOrder extends DocBase
                                                             button:[{id:"btn01",caption:this.t("msgCustomerLock.btn01"),location:'after'}],
                                                             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerLock.msg")}</div>)
                                                         }
-                                                        
                                                         await dialog(tmpConfObj);
                                                         return;
                                                     }
@@ -1066,11 +1101,11 @@ export default class purchaseOrder extends DocBase
                                                             {
                                                                 this.frmDocOrders.option('disabled',false)
                                                             }
-                                                             let tmpQuery = 
-                                                    {
-                                                        query : "SELECT * FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER = @CUSTOMER",
-                                                        param : ['CUSTOMER:string|50'],
-                                                        value : [ data[0].GUID]
+                                                                let tmpQuery = 
+                                                            {
+                                                                query : "SELECT * FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER = @CUSTOMER",
+                                                                param : ['CUSTOMER:string|50'],
+                                                                value : [ data[0].GUID]
                                                             }
                                                             let tmpAdressData = await this.core.sql.execute(tmpQuery) 
                                                             if(tmpAdressData.result.recordset.length > 1)
@@ -1084,8 +1119,7 @@ export default class purchaseOrder extends DocBase
                                                                 }
                                                                 await this.pg_adress.show()
                                                                 await this.pg_adress.setData(tmpAdressData.result.recordset)
-                                                            }
-                                                            
+                                                            }                                                        
                                                         }
                                                     }
                                                     this.pg_txtCustomerCode.show()
@@ -1212,6 +1246,8 @@ export default class purchaseOrder extends DocBase
                                             {
                                                 if(data.length > 0)
                                                 {
+                                                    this.customerControl = true
+                                                    this.customerClear = false
                                                     this.combineControl = true
                                                     this.combineNew = false
                                                     if(data.length == 1)
@@ -1232,8 +1268,7 @@ export default class purchaseOrder extends DocBase
                                                 }
                                             }
                                             await this.pg_txtItemsCode.setVal(this.txtBarcode.value)
-                                        }
-                                        
+                                        }   
                                     }).bind(this)}
                                     param={this.param.filter({ELEMENT:'txtBarcode',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtBarcode',USERS:this.user.CODE})}
@@ -1278,9 +1313,10 @@ export default class purchaseOrder extends DocBase
                                             {
                                                 if(this.docObj.docOrders.dt()[this.docObj.docOrders.dt().length - 1].ITEM_CODE == '')
                                                 {
-                                                    
                                                     this.pg_txtItemsCode.onClick = async(data) =>
                                                     {
+                                                        this.customerControl = true
+                                                        this.customerClear = false
                                                         this.combineControl = true
                                                         this.combineNew = false
                                                         if(data.length > 0)
@@ -1300,6 +1336,8 @@ export default class purchaseOrder extends DocBase
                                             {
                                                 if(data.length > 0)
                                                 {
+                                                    this.customerControl = true
+                                                    this.customerClear = false
                                                     this.combineControl = true
                                                     this.combineNew = false
 
@@ -1620,8 +1658,7 @@ export default class purchaseOrder extends DocBase
                                                         this.txtDocDiscountPrice2.value = 0
                                                         this.txtDocDiscountPercent3.value  = 0
                                                         this.txtDocDiscountPrice3.value = 0
-                                                    }
-                                                    
+                                                    }                                                  
                                                 }
                                             },
                                         ]
@@ -1657,8 +1694,7 @@ export default class purchaseOrder extends DocBase
                                                         let tmpData = {"RATE":this.docObj.docOrders.dt().groupBy('VAT_RATE')[i].VAT_RATE,"VAT":tmpVat,"TOTALHT":tmpTotalHt}
                                                         this.vatRate.push(tmpData)
                                                     }
-                                                    await this.grdVatRate.dataRefresh({source:this.vatRate})
-                                                    
+                                                    await this.grdVatRate.dataRefresh({source:this.vatRate})                                                   
                                                 }
                                             },
                                         ]
@@ -1666,8 +1702,7 @@ export default class purchaseOrder extends DocBase
                                     ></NdTextBox>
                                 </Item>
                                 {/* KDV */}
-                                <EmptyItem colSpan={3}/>
-                                
+                                <EmptyItem colSpan={3}/>       
                                 <Item>
                                     <Label text={this.t("txtTotal")} alignment="right" />
                                     <NdTextBox id="txtTotal" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"TOTAL"}}

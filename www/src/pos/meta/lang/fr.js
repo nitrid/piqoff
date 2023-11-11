@@ -615,11 +615,11 @@ export const langFr =
     },
     msgDataTransferAlert: //BAK
     {
-        title : "Dikkat",
-        msg1 : "Aktarmanız gereken {0} adet kayıt mevcut ! Şimdi verileri aktarın.",
-        msg2 : "Aktarım işlemi başarılı.",
-        msg3 : "Aktarım işlemi başarısız.Tüm işlemler yeniden başlatılıyor.",
-        btn01 : "Tamam"
+        title : "Attention",
+        msg1 : "Vous avez {0} enregistrements à transférer ! Transférez les données maintenant.",
+        msg2 : "La transmission a réussi.",
+        msg3 : "La transmission a échoué. Toutes les opérations sont en cours de redémarrage.",
+        btn01 : "D'accord"
     },
     msgNotWeighing: 
     {
