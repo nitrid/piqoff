@@ -975,6 +975,7 @@ export const langFr =
             title : "Choix Groupe Produit",
             clmCode : "Code",
             clmName : "NOM",
+            clmStatus : "ETAT",
         },
         msgSave:
         {
@@ -1714,6 +1715,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépôt",
+        validCustomerCode : "Müşteri Kodu Boş Geçilemez", // BAK
         validDocDate : "Sélectionner Date" ,
         pg_quickDesc : 
         {
@@ -2085,10 +2087,6 @@ export const langFr =
         },
         txtQuantity :"Quantité",
     },
-
-
-
-
     stk_02_007 : // "SKT Girişi", 
     {
         design : "Design",
