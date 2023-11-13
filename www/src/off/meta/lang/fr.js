@@ -3659,7 +3659,7 @@ export const langFr =
     },
     cri_04_002 : // "Rapport Client/Fournisseur d'équilibre"
     {
-        chkZeroBalance : "Afficher 0 pour l'équilibre", 
+        chkZeroBalance : "Afficher les soldes à 0", 
         txtCustomerCode : "Client/Fournisseur",   
         btnCheck : "Actif",   
         btnGet :"Rechercher",
