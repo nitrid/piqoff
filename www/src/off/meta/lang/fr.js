@@ -302,8 +302,10 @@ export const langFr =
         pos_02_012 : "Rapport utilisation points de fidélité",  // BAK
         pos_02_013 : "Rapport de remise",  // BAK
         pos_02_014 : "Tickets de balance non lus", // BAK
+        pos_02_015 : "Müşteri Bazlı Ürün Satış Raporu", // BAK
         pos_03 : "Les opérations", 
         pos_03_001 : "Opérations de fin de journée",
+        pos_03_002 : "Tirage au sort",
         promo: "Promotion",
         promo_01: "Saisie",
         promo_01_001: "Saisie promotions", 
@@ -491,6 +493,7 @@ export const langFr =
             title: "Ajouter Prix",
             dtPopPriStartDate: "Date Début",
             dtPopPriEndDate: "Date Fin", 
+            cmbPopPriDepot: "Depot",
             txtPopPriQuantity: "Quantité",
             txtPopPriPrice: "Prix de Vente TTC",
             txtPopPriPriceVatExt: "Prix de Vente HT"
