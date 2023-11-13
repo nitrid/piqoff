@@ -198,7 +198,7 @@ export const langFr =
         cri_02_003: "Liste Catégorie ",
         cri_03_001: "Ajouter Multi Client",
         cri_04_001 : "Relevé de compte Client/Fournisseur", 
-        cri_04_002 : 'Rapport sur le solde courant', 
+        cri_04_002 : 'Rapport sur le solde courant Client/Fournisseur', 
         cri_04_003 : "Rapport point fidelité client",
         cri_04_004 : "Rapport sur le bilan actuel",
         ftr: "Facture ",
