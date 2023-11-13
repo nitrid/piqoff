@@ -1395,7 +1395,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépôt",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         popDesign : 
         {
@@ -1915,7 +1915,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépôt",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         popDesign : 
         {
@@ -2351,7 +2351,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Langue Document" ,
+        validCustomerCode : "Le code fournisseur-client ne peut être vide" ,
         validDocDate : "Sélectionner Date" ,
         pg_quickDesc : 
         {
@@ -2546,7 +2546,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Langue Document" ,
+        validCustomerCode : "Le code fournisseur-client ne peut être vide" ,
         validDocDate : "Sélectionner Date" ,
         pg_quickDesc : 
         {
@@ -3161,12 +3161,13 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
+            msg: "Êtes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
         },
         cmbTypeData : 
         {
             individual :  "Particulier",
-            company :  "Entreprise"
+            company :  "Entreprise",
+            association : "Association"
         },
         cmbGenusData:
         {
@@ -3183,7 +3184,7 @@ export const langFr =
         msgCode : 
         {
             title: "Attention",
-            btn01: "Recherche Client",
+            btn01: "Rechercher Client",
             btn02: "OK",
             msg : "Client déjà existant!"
         },
@@ -3193,21 +3194,21 @@ export const langFr =
         {
             frmCustomers: "Le Code ne peut être Vide !",
         },
-        txtSubCustomer : "Client en bas", 
+        txtSubCustomer : "Fournisseur filiale", 
         pg_subCustomer : 
         {
-            title : "Choix du client en bas",  
+            title : "Choix du fournisseur filiale",  
             clmCode : "Code", 
-            clmTitle : "Adresse",
+            clmTitle : "Nom", 
             clmName : "Prénom",  
             clmLastName  : "Nom", 
         },
-        txtMainCustomer : "Client principal",
+        txtMainCustomer : "Fournissseur principal",
         pg_mainCustomer : 
         {
-            title : "Choix du client principal", 
+            title : "Choix du fournisseur principal", 
             clmCode : "Code",   
-            clmTitle : "Adresse",  
+            clmTitle : "Nom",  //KUB
             clmName : "Prénom",   
             clmLastName  : "Nom", 
         },
@@ -3237,7 +3238,7 @@ export const langFr =
     },
     cri_01_002: // "Adres Tanımları"
     {
-        customerPlace: "Veuillez entrer le nom ou le code pour rechercher.", 
+        customerPlace: "Veuillez entrer le nom client ou le code pour rechercher.", 
         txtCode : "Code",
         txtTitle : "Titre",
         txtCustomerName : "Nom",
@@ -4364,7 +4365,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépôt",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
         msgNewPrice :      
@@ -4958,7 +4959,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
         msgNotQuantity: 
@@ -5442,7 +5443,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         pg_txtBarcode : 
         {
@@ -5916,7 +5917,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         pg_txtBarcode : 
         {
@@ -6433,7 +6434,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
         msgNotQuantity: 
@@ -6885,7 +6886,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         pg_txtBarcode : 
         {
@@ -7345,7 +7346,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         pg_txtBarcode : 
         {
@@ -7869,7 +7870,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
         msgNotQuantity: 
@@ -8331,7 +8332,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         pg_txtBarcode : 
         {
@@ -9211,7 +9212,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
         msgNotQuantity: 
@@ -9716,7 +9717,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépôt",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
         msgNewPrice :      
@@ -10179,7 +10180,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         pg_txtBarcode : 
         {
@@ -10609,7 +10610,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
         msgNotQuantity: 
@@ -11315,7 +11316,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
         pg_txtBarcode : 
@@ -11768,7 +11769,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
         msgNotQuantity: 
@@ -12155,7 +12156,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         msgQuantity:
         {
@@ -12556,7 +12557,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépôt",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
         msgNotQuantity: 
@@ -12949,7 +12950,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         msgQuantity:
         {
@@ -13312,7 +13313,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépôt",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
         msgNotQuantity: 
@@ -13772,7 +13773,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
         popUnderPrice :
@@ -14147,7 +14148,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
         msgQuantity:
@@ -14566,7 +14567,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
         msgQuantity:
@@ -14883,7 +14884,7 @@ export const langFr =
             dtPopStartDate :"Début ",
             dtPopEndDate : "Fin "
         },
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         txtCode : "Code",
         txtName : "Nom",
         startDate :"Date Début",    
@@ -15075,7 +15076,7 @@ export const langFr =
             btn01: "OK",
             msg: "Ne Peut Etre Remisé plus que L'Autorisation.!! Montant Autorisé : "
         },
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         txtCode : "Code",
         txtName : "Nom",
         startDate :"Date Début",   
@@ -17276,7 +17277,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
         msgQuantity:
@@ -17636,7 +17637,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
         msgQuantity:
