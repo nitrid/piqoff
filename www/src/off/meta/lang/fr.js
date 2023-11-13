@@ -197,7 +197,7 @@ export const langFr =
         cri_02_002: "Liste adresse",
         cri_02_003: "Liste Catégorie ",
         cri_03_001: "Ajouter Multi Client",
-        cri_04_001 : "Rapport Relevé Fournisseur", 
+        cri_04_001 : "Relevé de compte Client/Fournisseur", 
         cri_04_002 : 'Rapport sur le solde courant', 
         cri_04_003 : "Rapport point fidelité client",
         cri_04_004 : "Rapport sur le bilan actuel",
@@ -3628,7 +3628,7 @@ export const langFr =
     },
     cri_04_001 : // "Cari Extre Raporu"
     {
-        txtCustomerCode : "Actuel", 
+        txtCustomerCode : "Client/Fournisseur", 
         btnGet :"Apporter", 
         grdListe : 
         {
@@ -3643,9 +3643,9 @@ export const langFr =
         txtTotalBalance : "Equillibre", 
         pg_txtCustomerCode : 
         {
-            title : "Choix Fournisseur",
-            clmCode :  "Code Client",
-            clmTitle : "Nom Fournisseur",
+            title : "Choix Client/Fournisseur",
+            clmCode :  "Code Client/Fournisseur",
+            clmTitle : "Nom Client/Fournisseur",
             clmTypeName : "Type",
             clmGenusName : "Genre",
             clmBalance : "Equilibre",  
@@ -3654,13 +3654,13 @@ export const langFr =
         {
             title: "Attention", 
             btn01: "D'accord", 
-            msg: "S'il vous plait choissisez actuel" 
+            msg:  "veuillez choisir le Client/Fournisseur"
         },
     },
-    cri_04_002 : // "Rapport actuel d'équilibre"
+    cri_04_002 : // "Rapport Client/Fournisseur d'équilibre"
     {
-        chkZeroBalance : "0 Afficher l'équilibre", 
-        txtCustomerCode : "Actuel",   
+        chkZeroBalance : "Afficher 0 pour l'équilibre", 
+        txtCustomerCode : "Client/Fournisseur",   
         btnCheck : "Actif",   
         btnGet :"Rechercher",
         grdListe : 
@@ -3673,9 +3673,9 @@ export const langFr =
         txtTotalBalance : "Montant total",
         pg_txtCustomerCode : 
         {
-            title : "Choix Fournisseur",
-            clmCode :  "Code Client",
-            clmTitle : "Nom Fournisseur",
+            title : "Client/Fournisseur",
+            clmCode :  "Code Client/Fournisseur",
+            clmTitle : "Nom Client/Fournisseur",
             clmTypeName : "Type",
             clmGenusName : "Genre",
             clmBalance : "Equilibre",  
