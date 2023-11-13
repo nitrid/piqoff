@@ -304,6 +304,7 @@ export const langFr =
         pos_02_014 : "Tickets de balance non lus", // BAK
         pos_03 : "Les opérations", 
         pos_03_001 : "Opérations de fin de journée",
+        pos_03_002 : "Tirage au sort",
         promo: "Promotion",
         promo_01: "Saisie",
         promo_01_001: "Saisie promotions", 
@@ -16938,7 +16939,7 @@ export const langFr =
     pos_03_002 : // "Çekiliş" //BAK
     {
         dtDate : "Date",
-        txtLucky : "Heureux",
+        txtLucky : "Gagnant(s)",
         txtPoint : "Points",
         btnLottery : "Tirage au sort",
         lblTicketNo : "N° DE TICKET",
