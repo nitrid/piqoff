@@ -2800,7 +2800,7 @@ export const langFr =
             title: "Attention",
             btn01: "Valider",
             btn02: "Abandonner",
-            msg: "Etes-vous sûr(e) de Vouloir Faire le retour des Lignes Sélectionnées !"
+            msg: "Êtes-vous sûr(e) de vouloir Faire le retour des Lignes Sélectionnées !"
         },
         msgSaveResult:
         {
@@ -2826,7 +2826,7 @@ export const langFr =
     {
         cmbDepot : "Réserve",
         chkNotCountItems : "Mise à Zéro des Produits non Comptabilisés",
-        btnGet : 'Recherche',
+        btnGet : 'Rechercher',
         btnAddCount : "Fusionner Inventaire",
         dtFirstDate :"Date Début",
         dtLastDate : "Date Fin",
@@ -2854,7 +2854,7 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Etes-vous sûr(e) de vouloir Enregistrer!"
+            msg: "Êtes-vous sûr(e) de vouloir Enregistrer!"
         },
         msgSaveResult:
         {
@@ -2953,12 +2953,12 @@ export const langFr =
     },
     stk_05_002 : // Alış Fiyatı Raporuu"
     {
-        btnGet :"Allez", 
+        btnGet :"Aller", 
         dtFirst : "Date de début", 
         graphicTitle : "Graphique de changement de prix", 
         typePurc : "Achat", 
         typeSale : "Vente", 
-        dlbClikMsg : "Double-cliquez sur la ligne pour visualiser le graphique en détail.", 
+        dlbClikMsg : "Double-cliquer sur la ligne pour visualiser le graphique en détail.", 
         cmbCustomer : "Fournisseur",
         cmbMainGrp : "Famille produit",
         grdItemPurcPriceReport: 
@@ -2970,7 +2970,7 @@ export const langFr =
             clmFamount : "Montant hors taxe",  
             clmTotalCost : "Dernier prix d'achat",  
             clmSale : "Prix de Vente",  
-            clmFisrtCost : "Dernier prix de revient", 
+            clmFisrtCost : "Dernier prix d'achat", 
             clmMargin : "Marge brute", 
             clmNetMargin : "Marge nette", 
         },
@@ -2998,7 +2998,7 @@ export const langFr =
     },
     stk_05_004 : // "Kayıp Ürün Raporu"
     {
-        chkZeroQuantity : "Afficher les quantités de 0",  // BAK
+        chkZeroQuantity : "Afficher quantité 0",  // BAK
         cmbDepot : "Dépôt",  // BAK
         btnCheck : "Actif",  // BAK
         btnGet :"Rechercher",  // BAK
@@ -3037,10 +3037,10 @@ export const langFr =
         tabTitleAdress : "Adresse",
         tabTitleLegal : "Légal",
         tabTitleOffical : "Administrateur",
-        tabCustomerBank : "Données Bancaire",
-        tabTitleFinanceDetail : "Information Financières", 
+        tabCustomerBank : "Données Bancaires",
+        tabTitleFinanceDetail : "Informations Financières", 
         txtLegal :"Données Légales",
-        chkRebate :"Retour Reprise",
+        chkRebate :"Retour-Reprise",
         txtExpiryDay : "Echéance",  
         txtRiskLimit : "Limite de Risque",  
         expDay : "(Jour)", 
@@ -3050,8 +3050,8 @@ export const langFr =
             title : "Sélectionner Client",
             clmCode : "Code",
             clmTitle : "Titre",
-            clmName : "Nom",
-            clmLastName  : "Nom De Famille",
+            clmName : "Prénom",
+            clmLastName  : "Nom",
             clmStatus  : "Statut",
         },
         grdAdress : 
@@ -3100,7 +3100,7 @@ export const langFr =
         },
         popBank : 
         {
-            title : "Données Bancaire",
+            title : "Données Bancaires",
             txtName : "Nom de Banque",
             txtIban :"IBAN",
             txtOffice :"Centre",
@@ -3198,8 +3198,8 @@ export const langFr =
             title : "Choix du client en bas",  
             clmCode : "Code", 
             clmTitle : "Adresse",
-            clmName : "Nom",  
-            clmLastName  : "Nom de famille", 
+            clmName : "Prénom",  
+            clmLastName  : "Nom", 
         },
         txtMainCustomer : "Client principal",
         pg_mainCustomer : 
@@ -3207,8 +3207,8 @@ export const langFr =
             title : "Choix du client principal", 
             clmCode : "Code",   
             clmTitle : "Adresse",  
-            clmName : "Nom",   
-            clmLastName  : "Nom de famille", 
+            clmName : "Prénom",   
+            clmLastName  : "Nom", 
         },
         txtArea : "Zone", 
         pg_AreaCode : 
@@ -3246,8 +3246,8 @@ export const langFr =
             title : "Sélectionner Client",
             clmCode : "Code",
             clmTitle : "Titre",
-            clmName : "Nom",
-            clmLastName  : "Nom De Famille",
+            clmName : "Prénom",
+            clmLastName  : "Nom",
         },
         grdAdress : 
         {
@@ -3321,13 +3321,13 @@ export const langFr =
             title: "Attention",
             btn01: "D'accord",
             btn02: "Abandonner",
-            msg: "ETes-vous sûr de vouloir enregistrer?"
+            msg: "Êtes-vous sûr(e) de vouloir enregistrer?"
         },
         msgSaveResult:
         {
             title: "Attention",
             btn01: "D'accord",
-            msgSuccess: "Succès de l'enregistrement!",
+            msgSuccess: "Enregistré avec succès!",
             msgFailed: "Echec de l'enregistrement !"
         },
         msgSaveValid:
@@ -3475,16 +3475,16 @@ export const langFr =
         tabTitleAdress : "Adresse",
         tabTitleLegal : "Légal",
         tabTitleOffical : "Administrateur",
-        tabCustomerBank : "Données Bancaire",
+        tabCustomerBank : "Données Bancaires",
         txtLegal :"Données Légales",
-        chkRebate :"Retour Reprise",
+        chkRebate :"Retour-Reprise",
         pg_txtCode : 
         {
             title : "Sélectionner Client",
             clmCode : "Code",
             clmTitle : "Titre",
-            clmName : "Nom",
-            clmLastName  : "Nom De Famille",
+            clmName : "Prénom",
+            clmLastName  : "Nom",
         },
         grdAdress : 
         {
