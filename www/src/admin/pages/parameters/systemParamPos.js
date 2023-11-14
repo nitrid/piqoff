@@ -28,7 +28,6 @@ export default class systemParamPos extends React.PureComponent
         this.ItemGet = ItemGet.bind(this)
 
         this.prmData = null
-        this.loading = React.createRef();
     }
     async componentDidMount()
     {
