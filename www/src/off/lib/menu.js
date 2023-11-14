@@ -1229,7 +1229,7 @@ export const menu = (e) =>
                         {
                             id: 'pos_02_014',
                             text: e.t('menuOff.pos_02_014'),
-                            path: 'pos/report/balanceUnreadTicket'
+                            path: 'pos/report/balanceTicket'
                         }
                     ]
                 },
