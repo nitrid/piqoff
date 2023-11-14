@@ -52,11 +52,8 @@ export default class Login extends React.PureComponent
             if(tmpData[i].ROLE == 'Administrator')
             tmpUsers.push(tmpData[i])
         }
-        console.log(tmpData)
-        console.log(tmpUsers)
         this.setState({Users:tmpUsers})
         this.cmbkullanici.dataRefresh({source:this.state.Users})
-
     }
     textValueChanged(e) 
     {      

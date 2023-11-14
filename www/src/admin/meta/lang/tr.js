@@ -288,6 +288,7 @@ export const langTr =
             clmName : "Adı",
             clmLastName :"Soyadı",
             clmRole : "Rol",
+            clmApp : "App",
             clmStatus : "Durum",
             clmPwd : "Parola",
             clmCardId : "Kart ID"

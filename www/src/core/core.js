@@ -1535,6 +1535,14 @@ export class datatable
                     });
                     tmpData = tmpArr
                 }
+                else if (tmpOp == 'LIKE' || tmpOp == 'like') 
+                {
+                    const regex = new RegExp(tmpValue);
+                    tmpData = tmpData.filter((x) => 
+                    {
+                        return regex.test(x[tmpKey])
+                    });
+                }
             }
             
             let tmpDt = new datatable();
