@@ -301,7 +301,7 @@ export const langFr =
         pos_02_011 : "Rapport de comparaison de produit",
         pos_02_012 : "Rapport utilisation points de fidélité",  // BAK
         pos_02_013 : "Rapport de remise",  // BAK
-        pos_02_014 : "Tickets de balance non lus", // BAK
+        pos_02_014 : "Tickets de balance", // BAK
         pos_02_015 : "Müşteri Bazlı Ürün Satış Raporu", // BAK
         pos_03 : "Les opérations", 
         pos_03_001 : "Opérations de fin de journée",
