@@ -322,8 +322,8 @@ export default class posDoc extends React.PureComponent
         
         this.posObj.clearAll()        
 
-        await this.prmObj.load({APP:'POS'})
-        await this.acsObj.load({APP:'POS'})
+        await this.prmObj.load({APP:'POS',USERS:this.core.auth.data.CODE})
+        await this.acsObj.load({APP:'POS',USERS:this.core.auth.data.CODE})
 
         if(this.state.isFormation)
         {

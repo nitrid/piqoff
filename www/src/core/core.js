@@ -1720,8 +1720,7 @@ export class param extends datatable
                 param : ['PGUID:string|50','PTYPE:int','PID:string|100','PVALUE:string|max','PSPECIAL:string|150','PUSERS:string|25','PPAGE:string|25','PELEMENT:string|250','PAPP:string|50'],
                 dataprm : ['GUID','TYPE','ID','VALUE','SPECIAL','USERS','PAGE','ELEMENT','APP']
             } 
-            await this.update(); 
-            resolve();
+            resolve(await this.update());
         });
     }
     filter()
@@ -1771,7 +1770,15 @@ export class param extends datatable
             if(arguments.length == 0)
             {
                // return JSON.parse(JSON.stringify(this[0].VALUE))
-               return JSON.parse(this[0].VALUE)
+               try
+               {
+                    return JSON.parse(this[0].VALUE)
+               }
+               catch(ex)
+               {
+                    return this[0].VALUE
+               }
+               
             }
             // EĞER PARAMETRE GELMİŞ İSE VE GELEN VERİ NUMBER İSE VERİLEN SATIR I DÖNDÜR.
             else if(arguments.length == 1 && typeof arguments[0] == 'number')
