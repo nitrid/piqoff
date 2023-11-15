@@ -14,6 +14,7 @@ import { Gallery } from 'devextreme-react/gallery';
 import { locale, loadMessages, formatMessage } from 'devextreme/localization';
 import { dialog } from '../../core/react/devex/dialog.js';
 import NbLabel from '../../core/react/bootstrap/label.js';
+import { datatable } from '../../core/core';
 
 export default class Login extends React.PureComponent
 {
@@ -85,8 +86,10 @@ export default class Login extends React.PureComponent
         
         if((await this.core.auth.login(this.state.kullanici,this.state.sifre,'OFF')))
         {
-            // POS KULLANICILARININ GİREMEMESİ İÇİN YAPILDI
-            if(this.core.auth.data.ROLE == 'Pos')
+            // SADECE UYGULAMAYA AİT KULLANICILARININ GİREMEMESİ İÇİN YAPILDI
+            let tmpDt = new datatable()
+            tmpDt.import([this.core.auth.data])
+            if(tmpDt.where({USER_APP : {"LIKE" : "OFF"}}).length == 0)
             {
                 this.setState({logined:false,alert:this.lang.t("msgUserAccess")})
             }
@@ -110,7 +113,10 @@ export default class Login extends React.PureComponent
     async getUserList()
     {        
         let tmpData = await this.core.auth.getUserList()
-        await this.pg_users.setData(tmpData)
+        let tmpDt = new datatable()
+        tmpDt.import(tmpData)
+        tmpDt = tmpDt.where({USER_APP : {"LIKE" : "OFF"}})
+        await this.pg_users.setData(tmpDt)
         this.pg_users.show()
         this.pg_users.onClick = (data) =>
         {
@@ -210,8 +216,18 @@ export default class Login extends React.PureComponent
             {
                 if(await this.core.auth.login(tmpData[i].CODE,tmpData[i].PWD,'OFF'))
                 {
-                    App.instance.setState({logined:true});
-                    idCheck = true
+                    // SADECE UYGULAMAYA AİT KULLANICILARININ GİREMEMESİ İÇİN YAPILDI
+                    let tmpDt = new datatable()
+                    tmpDt.import([this.core.auth.data])
+                    if(tmpDt.where({USER_APP : {"LIKE" : "OFF"}}).length == 0)
+                    {
+                        this.setState({logined:false,alert:this.lang.t("msgUserAccess")})
+                    }
+                    else
+                    {
+                        App.instance.setState({logined:true});
+                        idCheck = true
+                    }
                 }
                 else
                 {

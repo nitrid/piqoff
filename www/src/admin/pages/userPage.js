@@ -5,6 +5,9 @@ import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
 import NdSelectBox from '../../core/react/devex/selectbox.js';
 import { userCls } from '../../core/cls/users.js';
 import ScrollView from 'devextreme-react/scroll-view.js';
+import DropDownBox from 'devextreme-react/drop-down-box';
+import NdListBox from '../../core/react/devex/listbox.js';
+import List from 'devextreme-react/list';
 
 export default class userPage extends React.Component
 {
@@ -14,7 +17,8 @@ export default class userPage extends React.Component
 
         this.core = App.instance.core;
         this.userObj = new userCls()
-        this.RoleCmb = [{CODE: 'Administrator', NAME: 'Administrator'}, {CODE: 'User', NAME: 'User'}, {CODE: 'Pos', NAME: 'Pos'}]
+        this.RoleCmb = [{CODE:'Administrator',NAME:'Administrator'},{CODE:'User',NAME:'User'},{CODE:'Pos',NAME:'Pos'}]
+        this.AppCmb = [{CODE:'OFF',NAME:'OFF'},{CODE: 'POS',NAME:'POS'},{CODE:'MOB',NAME:'MOB'},{CODE:'TAB',NAME:'TAB'},{CODE:'ADMIN',NAME:'ADMIN'}]
 
         this._cellRoleRender = this._cellRoleRender.bind(this)
     }
@@ -34,7 +38,7 @@ export default class userPage extends React.Component
     render()
     {
         return(
-            <ScrollView>            
+            <ScrollView>
                 <div className="row p-2">
                     <div className="col-12">
                         <NdGrid id="grdUserList" parent={this} onSelectionChanged={this.onSelectionChanged} 
@@ -71,7 +75,6 @@ export default class userPage extends React.Component
                                 APP_VERSION:this.core.appInfo.version
                             }
                             this.core.socket.emit('nf525',{cmd:"jet",data:tmpJetData})
-
                             await this.userObj.save()
                         }}
                         onRowInserted={async (e)=>
@@ -113,6 +116,7 @@ export default class userPage extends React.Component
                                 <Item dataField="PWD"/>
                                 <Item dataField="ROLE" />
                                 <Item dataField="SHA" />
+                                <Item dataField="USER_APP" />
                                 <Item dataField="STATUS" editorType="boolean" />
                             </Item>
                             </Form>
@@ -123,7 +127,51 @@ export default class userPage extends React.Component
                             <Column dataField="PWD" editorOptions={{mode:"password"}} caption={this.t("grdUserList.clmPwd")} visible={false}/>
                             <Column dataField="CARDID" caption={this.t("grdUserList.clmCardId")}/>
                             <Column dataField="ROLE" caption={this.t("grdUserList.clmRole")} >
-                            <Lookup dataSource={this.RoleCmb} valueExpr="CODE" displayExpr="CODE" /> </Column>
+                                <Lookup dataSource={this.RoleCmb} valueExpr="CODE" displayExpr="CODE" /> 
+                            </Column>
+                            <Column dataField="USER_APP" caption={this.t("grdUserList.clmApp")} editCellComponent={(e)=>
+                            {
+                                if(typeof e.data.value == 'undefined')
+                                {
+                                    e.data.value = ""
+                                }
+                                return (<DropDownBox 
+                                    dataSource={e.data.column.lookup.dataSource}
+                                    value={e.data.value.split(',')}
+                                    valueExpr="CODE"
+                                    displayExpr="NAME"
+                                    showClearButton={true}
+                                    contentRender={()=>
+                                    {
+                                        return(
+                                            <NdListBox id='columnListBox' parent={this} data={{source: e.data.column.lookup.dataSource}}
+                                            width={'100%'}
+                                            showSelectionControls={true}
+                                            selectionMode={'multiple'}
+                                            displayExpr={'NAME'}
+                                            keyExpr={'CODE'}
+                                            value={e.data.value.split(',')}
+                                            onOptionChanged={(x)=>
+                                            {
+                                                if (x.name == 'selectedItemKeys') 
+                                                {
+                                                    e.data.setValue(x.value.join(','))
+                                                    e.data.data.USER_APP = x.value.join(',')
+                                                }
+                                            }}
+                                            />
+                                        )
+                                    }}
+                                ></DropDownBox>)
+                            }}
+                            cellTemplate={(container, options) => 
+                            {
+                                container.textContent = options.value;
+                                container.title = options.value;
+                            }}
+                            >
+                                <Lookup dataSource={this.AppCmb} valueExpr="CODE" displayExpr="NAME" /> 
+                            </Column>
                             <Column dataField="STATUS" caption={this.t("grdUserList.clmStatus")} dataType="boolean" />
                         </NdGrid>
                     </div>

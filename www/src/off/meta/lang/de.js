@@ -292,7 +292,7 @@ export const langDe =
         pos_02_011: "Artikelvergleichsbericht",
         pos_02_012 : "Pos Puan Kullanım Raporu",  // BAK
         pos_02_013 : "Pos İndirim Raporu",  // BAK
-        pos_02_014 : "Okunmamış Terazi Fişleri", //BAK
+        pos_02_014 : "Waagscheine", //BAK
         pos_02_015 : "Müşteri Bazlı Ürün Satış Raporu", //BAK
         pos_03: "Operationen",
         pos_03_001: "Tagesabschluss",
@@ -5210,6 +5210,7 @@ export const langDe =
             clmTotal : "Gesamtsumme",
             clmTotalHt : "Gesamtbetrag ohne ..",
             clmDispatch : "Lieferschein Nr.",
+            clmDateDispatch : "Datum",
             clmCreateDate: "Erstellungsdatum",
             clmMargin :"Marge",
             clmDescription :"Beschreibung",
@@ -7073,6 +7074,7 @@ export const langDe =
             clmTotal : "Gesamtsumme",
             clmTotalHt : "Nettobetrag",
             clmDispatch : "Lieferschein Nr.",
+            clmDateDispatch : "Datum",
             clmCreateDate: "Erstellungsdatum",
             clmMargin :"Marge",
             clmDescription :"Beschreibung",
@@ -8081,6 +8083,7 @@ export const langDe =
             clmTotal : "Gesamtsumme",
             clmTotalHt : "Nettobetrag",
             clmDispatch : "Lieferschein Nr.",
+            clmDateDispatch : "Datum",
             clmCreateDate: "Erstellungsdatum",
             clmMargin :"Marge",
             clmDescription :"Beschreibung",
@@ -9916,6 +9919,7 @@ export const langDe =
             clmTotal : "Gesamtsumme",
             clmTotalHt : "Gesamtsumme (ohne ..)",
             clmDispatch : "Lieferschein-Nr.",
+            clmDateDispatch : "Datum",
             clmCreateDate: "Erstellungsdatum",
             clmMargin :"Marge",
             clmDescription :"Beschreibung",
