@@ -906,8 +906,8 @@ export default class purchaseInvoice extends DocBase
                 let tmpQuery = 
                 {
                     query :"SELECT GUID,CODE,NAME,VAT,ITEMS_VW_01.UNIT,1 AS QUANTITY,0 AS ITEM_TYPE,COST_PRICE," + 
-                    "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].OUTPUT+"'),'') AS MULTICODE"+
-                    " FROM ITEMS_VW_01 WHERE ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].OUTPUT+"'),'') = @VALUE " ,
+                    "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_01.GUID AND CUSTOMER = '"+this.docObj.dt()[0].OUTPUT+"' AND DELETED = 0),'') AS MULTICODE"+
+                    " FROM ITEMS_VW_01 WHERE ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_01.GUID AND CUSTOMER = '"+this.docObj.dt()[0].OUTPUT+"' AND DELETED = 0),'') = @VALUE " ,
                     param : ['VALUE:string|50'],
                     value : [this.tagItemCode.value[i]]
                 }
