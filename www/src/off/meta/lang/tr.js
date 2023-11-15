@@ -3593,7 +3593,8 @@ export const langTr =
         cmbTypeData : 
         {
             individual : "Bireysel",
-            company : "Firma"
+            company : "Firma",
+            association : "Dernek"
         },
         cmbGenusData:
         {

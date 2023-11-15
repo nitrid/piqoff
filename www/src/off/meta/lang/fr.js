@@ -3199,7 +3199,7 @@ export const langFr =
         {
             title : "Choix du fournisseur filiale",  
             clmCode : "Code", 
-            clmTitle : "Nom", 
+            clmTitle : "Titre", 
             clmName : "Prénom",  
             clmLastName  : "Nom", 
         },
@@ -3208,7 +3208,7 @@ export const langFr =
         {
             title : "Choix du fournisseur principal", 
             clmCode : "Code",   
-            clmTitle : "Nom",  //KUB
+            clmTitle : "Titre",  
             clmName : "Prénom",   
             clmLastName  : "Nom", 
         },
@@ -3271,7 +3271,7 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Etes-vous sûr(e) de vouloir Enregistrer!"
+            msg: "Êtes-vous sûr(e) de vouloir Enregistrer!"
         },
         msgSaveResult:
         {
@@ -3284,7 +3284,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessairess !"
+            msg: "Veuillez saisir les champs nécessaires !"
         },
         msgDelete:
         {
@@ -3302,7 +3302,7 @@ export const langFr =
         },
         validation : 
         {
-            frmCustomerAddress: "Vous ne pouvez pas passer le code vide !",
+            frmCustomerAddress: "Le code ne peut être vide !",
         }
     },
     cri_01_004 : // "Identifications des zones"    
@@ -3336,21 +3336,21 @@ export const langFr =
         {
             title: "Attention",
             btn01: "D'accord",
-            msg: "S'il vous plaît saissisez les parties demandées !"
+            msg: "Veuillez remplir les champs requis !"
         },
         msgDelete:
         {
             title: "Attention",
             btn01: "D'accord",
             btn02: "Abandonner",
-            msg: "Etes-vous sûr de vouloir supprimer?"
+            msg: "Êtes-vous sûr(e) de vouloir supprimer?"
         },
         msgCode : 
         {
             title: "Attention",
             btn01: "Aller à la caisse",
-            btn02: "D'accord",
-            msg : "La caisse que vous avez saisie est enregistrée dans le système!"
+            btn02: "OK",
+            msg : "Le numéro de caisse saisie est enregistré dans le système!"
         },
     },
     cri_01_005 : // "Identifications des secteurs"    
@@ -3358,10 +3358,10 @@ export const langFr =
         txtCode : "Code",
         txtName :"Nom",
         cmbType :"Type",
-        validCode :"Vous devez saisir un code !",
+        validCode :"Veuillez saisir un code !",
         pg_txtCode : 
         {
-            title : "CHoix de la zone",
+            title : "Choix de la zone",
             clmCode : "Code",
             clmName : "Nom",
             clmType : "Type",
@@ -3371,42 +3371,42 @@ export const langFr =
             title: "Attention",
             btn01: "D'accord",
             btn02: "Abandonner",
-            msg: "Etes-vous sûr de vouloir enregistrer? "
+            msg: "Êtes-vous sûr(e) de vouloir enregistrer? "
         },
         msgSaveResult:
         {
             title: "Attention",
             btn01: "D'accord",
-            msgSuccess: "Succès de l'enregistrement!",
+            msgSuccess: "Enregistrer avec succès!",
             msgFailed: "Echec de l'enregistrement !"
         },
         msgSaveValid:
         {
             title: "Attention",
             btn01: "D'accord",
-            msg: "S'il vous plaît saissisez les parties demandées!"
+            msg: "Veuillez remplir les champs nécessaires!"
         },
         msgDelete:
         {
             title: "Attention",
             btn01: "D'accord",
             btn02: "Abandonner",
-            msg: "Etes-vous sûr de vouloir supprimer?"
+            msg: "Êtes-vous sûr(e) de vouloir supprimer?"
         },
         msgCode : 
         {
             title: "Attention",
             btn01: "Aller à la caisse",
             btn02: "D'accord",
-            msg : "La caisse que vous avez saisie est enregistrée dans le système!"
+            msg : "Le numéro de caisse saisie est enregistré dans le système!"
         },
     },
     cri_02_001: // "Cari Listesi"
     {
         customerPlace: "Veuillez entrer le nom ou le code actuel pour rechercher.", 
-        txtCustomerName : "Nom fournisseur",
+        txtCustomerName : "Nom fournisseur-client",
         cmbGenus :"Genre",
-        menu: "Fournisseur saisie",
+        menu: "Fournisseur-Client saisie",
         btnGet : "Rechercher",
         grdListe : 
         {
@@ -3556,7 +3556,7 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Etes-vous sûr(e) de vouloir Enregistrer!"
+            msg: "Êtes-vous sûr(e) de vouloir Enregistrer!"
         },
         msgSaveResult:
         {
@@ -3569,7 +3569,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessairess !"
+            msg: "Veuillez saisir les zones nécessaires !"
         },
         msgLegalNotValid:
         {
@@ -3588,7 +3588,7 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
+            msg: "Êtes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
         },
         cmbTypeData : 
         {
