@@ -31,7 +31,7 @@ export default class salesOrder extends DocBase
 
         this._cellRoleRender = this._cellRoleRender.bind(this)
 
-        this.frmDocOrders = undefined;
+        this.frmDocItems = undefined;
         this.docLocked = false;        
         this.combineControl = true
         this.combineNew = false
@@ -57,7 +57,7 @@ export default class salesOrder extends DocBase
         this.txtRefno.readOnly = false
         this.docLocked = false
         
-        this.frmDocOrders.option('disabled',true)
+        this.frmDocItems.option('disabled',true)
 
         this.pg_txtItemsCode.on('showing',()=>
         {
@@ -120,7 +120,7 @@ export default class salesOrder extends DocBase
         this.txtRef.readOnly = true
         this.txtRefno.readOnly = true
         
-        this.frmDocOrders.option('disabled',this.docLocked)
+        this.frmDocItems.option('disabled',this.docLocked)
     }
     _cellRoleRender(e)
     {
@@ -753,7 +753,7 @@ export default class salesOrder extends DocBase
                                                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgLocked.msg")}</div>)
                                                 }
                                                 await dialog(tmpConfObj);
-                                                this.frmDocOrders.option('disabled',true)
+                                                this.frmDocItems.option('disabled',true)
                                             }
                                             else
                                             {
@@ -974,7 +974,7 @@ export default class salesOrder extends DocBase
                                         this.checkRow()
                                         if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
                                         {
-                                            this.frmDocOrders.option('disabled',false)
+                                            this.frmDocItems.option('disabled',false)
                                         }
                                     }).bind(this)}
                                     data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01 WHERE TYPE IN(0,2)"},sql:this.core.sql}}}
@@ -1023,7 +1023,7 @@ export default class salesOrder extends DocBase
                                                 }
                                                 if(this.cmbDepot.value != '' && this.docLocked == false)
                                                 {
-                                                    this.frmDocOrders.option('disabled',false)
+                                                    this.frmDocItems.option('disabled',false)
                                                 }
                                                 let tmpQuery = 
                                                 {
@@ -1083,7 +1083,7 @@ export default class salesOrder extends DocBase
                                                             }
                                                             if(this.cmbDepot.value != '' && this.docLocked == false)
                                                             {
-                                                                this.frmDocOrders.option('disabled',false)
+                                                                this.frmDocItems.option('disabled',false)
                                                             }
                                                             let tmpQuery = 
                                                             {
@@ -1299,7 +1299,7 @@ export default class salesOrder extends DocBase
                         <div className="col-12">
                             <Form colCount={1} onInitialized={(e)=>
                             {
-                                this.frmDocOrders = e.component
+                                this.frmDocItems = e.component
                             }}>
                                 <Item location="after">
                                     <Button icon="add"
