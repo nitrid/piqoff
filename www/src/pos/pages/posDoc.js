@@ -742,9 +742,9 @@ export default class posDoc extends React.PureComponent
             let tmpCustomerDt = new datatable(); 
             tmpCustomerDt.selectCmd = 
             {
-                query : "SELECT GUID,CUSTOMER_TYPE,CODE,TITLE,ADRESS,ZIPCODE,CITY,COUNTRY_NAME,CUSTOMER_POINT,EMAIL,POINT_PASSIVE, " +
+                query : "SELECT GUID,CUSTOMER_TYPE,CODE,TITLE,ADRESS,ZIPCODE,CITY,COUNTRY_NAME,STATUS,CUSTOMER_POINT,EMAIL,POINT_PASSIVE, " +
                         "ISNULL((SELECT COUNT(TYPE) FROM CUSTOMER_POINT WHERE TYPE = 0 AND CUSTOMER = CUSTOMER_VW_02.GUID AND CONVERT(DATE,LDATE) = CONVERT(DATE,GETDATE())),0) AS POINT_COUNT " + 
-                        "FROM [dbo].[CUSTOMER_VW_02] WHERE CODE LIKE SUBSTRING(@CODE,0,14) + '%'",
+                        "FROM [dbo].[CUSTOMER_VW_02] WHERE CODE LIKE SUBSTRING(@CODE,0,14) + '%' AND STATUS = 1",
                 param : ['CODE:string|50'],
                 local : 
                 {
@@ -797,7 +797,7 @@ export default class posDoc extends React.PureComponent
                 //PROMOSYON GETİR.
                 await this.getPromoDb()
                 this.promoApply()
-                //************************************************** */
+                //***************************************************/
 
                 this.core.util.writeLog("calcGrandTotal : 03")
                 await this.calcGrandTotal(true);
@@ -864,14 +864,14 @@ export default class posDoc extends React.PureComponent
         {     
             //TERAZİ DEN VERİ GELMEZ İSE KULLANICI ELLE MİKTAR GİRDİĞİNİ TUTAN ALAN
             tmpItemsDt[0].SCALE_MANUEL = false;
-            //******************************************************** */
+            //*********************************************************/
             //UNIQ BARKODU
             if(tmpItemsDt[0].UNIQ_CODE == tmpItemsDt[0].INPUT)
             {
                 tmpQuantity = tmpItemsDt[0].UNIQ_QUANTITY
                 tmpPrice = tmpItemsDt[0].UNIQ_PRICE
             }
-            //******************************************************** */
+            //*********************************************************/
             //FIYAT GETİRME
             let tmpPriceDt = new datatable()
             tmpPriceDt.selectCmd = 
@@ -998,14 +998,13 @@ export default class posDoc extends React.PureComponent
                     else
                     {
                         //POPUP KAPATILMIŞ İSE YADA FİYAT BOŞ GİRİLMİŞ İSE...
-                        
                         return
                     }
                 }
             }
-            //**************************************************** */
+            //*****************************************************/
             //FİYAT TANIMSIZ YADA SIFIR İSE
-            //**************************************************** */
+            //*****************************************************/
             if(tmpPrice == 0)
             {
                 this.loading.current.instance.hide()
@@ -1051,7 +1050,7 @@ export default class posDoc extends React.PureComponent
                     return
                 }
             }
-            //**************************************************** */
+            //*****************************************************/
             tmpItemsDt[0].QUANTITY = tmpQuantity
             tmpItemsDt[0].PRICE = tmpPrice
             this.loading.current.instance.hide()
@@ -1074,7 +1073,7 @@ export default class posDoc extends React.PureComponent
             }
             await dialog(tmpConfObj);
         }
-        //******************************************************** */    
+        //*********************************************************/    
     }
     getWeighing(pPrice)
     {
@@ -1338,7 +1337,7 @@ export default class posDoc extends React.PureComponent
                 this.grdList.devGrid.navigateToRow(tmpRes[0])
                 this.grdList.devGrid.selectRows(tmpRes[0],false)
             })
-            //********************************************* */
+            //**********************************************/
             //MÜŞTERİ BİLGİ EKRANINA VERİ GÖNDERİMİ.
             App.instance.electronSend(
             {
@@ -1353,7 +1352,7 @@ export default class posDoc extends React.PureComponent
                     totalItemQ : this.posObj.posSale.dt().where({GUID:{'<>' : '00000000-0000-0000-0000-000000000000'}}).sum('QUANTITY',2)
                 }
             })
-            //********************************************* */
+            //**********************************************/
             if(typeof pSave == 'undefined' || pSave)
             {
                 let tmpClose = await this.saleClosed(true,tmpPayRest,tmpPayChange)
@@ -1660,7 +1659,7 @@ export default class posDoc extends React.PureComponent
                     this.posObj.dt()[0].REBATE_CHEQPAY = 'Q' + new Date().toISOString().substring(2, 10).replace('-','').replace('-','') + Math.round(Number(parseFloat(this.posPromoObj.dt().where({APP_TYPE:2})[0].APP_AMOUNT).round(2)) * 100).toString().padStart(5,'0') + Date.now().toString().substring(7,12);
                     await this.cheqpaySave(this.posObj.dt()[0].REBATE_CHEQPAY,this.posPromoObj.dt().where({APP_TYPE:2})[0].APP_AMOUNT,0,1);
                 }
-                //**************************** */
+                //*****************************/
                 if(pPayChange > 0)
                 {
                     if(this.posObj.posPay.dt().length > 0 && this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].PAY_TYPE == 4)
