@@ -16609,7 +16609,11 @@ export const langFr =
             clmPosCheck : "Chèque",   
             clmPosTicket : "T. Restaurant",   
             clmAdvance : "Fond de Caisse",   
-            clmSafe : "Caisse"   
+            clmSafe : "Caisse",
+            clmDiffCash : "Nakit Fark",  // BAK
+            clmDiffCredit : "K.Kartı Fark",  // BAK
+            clmDiffCheck :"Çek Farkı",  // BAK
+            clmDiffTicket : "T.R Farkı"  // BAK
         },
     },
     pos_02_007 : // "Pos Avans Raporu", 

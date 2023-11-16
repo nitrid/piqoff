@@ -2142,6 +2142,7 @@ export class posEnddayCls
         {
             GUID : '00000000-0000-0000-0000-000000000000',
             CUSER : this.core.auth.data.CODE,
+            CDATE : moment(new Date()).format("YYYY-MM-DD"),
             CUSER_NAME : '',
             CASH : 0,
             CREDIT : 0,
@@ -2168,15 +2169,16 @@ export class posEnddayCls
         {
             query : "EXEC [dbo].[PRD_ENDDAY_DATA_INSERT] " + 
                     "@GUID = @PGUID, " +
-                    "@CUSER = @PCUSER, " + 
+                    "@CUSER = @PCUSER, " +
+                    "@CDATE = @PCDATE, " + 
                     "@CASH =@PCASH, " +
                     "@CREDIT = @PCREDIT, " +
                     "@CHECK = @PCHECK , " +
                     "@TICKET = @PTICKET , " +
                     "@ADVANCE = @PADVANCE , " +
                     "@SAFE = @PSAFE ",
-            param : ['PGUID:string|50','PCUSER:string|25','PCASH:string|25','PCREDIT:float','PCHECK:float','PTICKET:float','PADVANCE:float','PSAFE:string|50'],
-            dataprm : ['GUID','CUSER','CASH','CREDIT','CHECK','TICKET','ADVANCE','SAFE']
+            param : ['PGUID:string|50','PCUSER:string|25','PCDATE:date','PCASH:string|25','PCREDIT:float','PCHECK:float','PTICKET:float','PADVANCE:float','PSAFE:string|50'],
+            dataprm : ['GUID','CUSER','CDATE','CASH','CREDIT','CHECK','TICKET','ADVANCE','SAFE']
           
         } 
 

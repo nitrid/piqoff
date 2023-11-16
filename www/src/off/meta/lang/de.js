@@ -16586,7 +16586,11 @@ export const langDe =
             clmPosCheck: "Scheck",
             clmPosTicket: "Restaurant Ticket",
             clmAdvance: "Vorschuss",
-            clmSafe: "Tresor/Kasse"
+            clmSafe: "Tresor/Kasse",
+            clmDiffCash : "Nakit Fark", // BAK
+            clmDiffCredit : "K.Kartı Fark", // BAK
+            clmDiffCheck :"Çek Farkı", // BAK
+            clmDiffTicket : "T.R Farkı" // BAK
         },
     },
     pos_02_007: // "POS Vorschussbericht",
