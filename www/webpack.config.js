@@ -28,7 +28,8 @@ module.exports =
         off: './src/off/index.js',
         pos: './src/pos/index.js',
         mob: './src/mob/index.js',
-        tab: './src/tab/index.js'
+        tab: './src/tab/index.js',
+        boss: './src/boss/index.js'
     },    
     mode: "development",
     module: 
@@ -93,6 +94,9 @@ module.exports =
             },
             {
                 directory: path.join(__dirname, "public/tab")
+            },
+            {
+                directory: path.join(__dirname, "public/boss")
             }
         ],
         port: 3000,
@@ -130,7 +134,13 @@ module.exports =
                 { from: "./src/tab/css/", to: "./tab/css/" },
                 { from: "./src/tab/lib/pdf", to: "./tab/lib/pdf" },
                 { from: "./src/tab/appUpdate.html", to: "./tab/appUpdate.html" },
-                { from: "./src/tab/lib/bootstrap.bundle.min.js", to: "./tab/lib/bootstrap.bundle.min.js" },          
+                { from: "./src/tab/lib/bootstrap.bundle.min.js", to: "./tab/lib/bootstrap.bundle.min.js" },     
+                { from: "./src/boss/css/img/", to: "./mob/css/img/" },
+                { from: "./src/boss/css/icons/", to: "./boss/css/icons/" },
+                { from: "./src/boss/sound/", to: "./boss/sound/" },
+                { from: "./src/boss/appUpdate.html", to: "./boss/appUpdate.html" },
+                { from: "./src/boss/css/bootstrap.min.css", to: "./boss/css/bootstrap.min.css" },
+                { from: "./src/boss/lib/bootstrap.bundle.min.js", to: "./boss/lib/bootstrap.bundle.min.js" },    
             ]
         }),
         new htmlWebPackPlugin(
@@ -162,6 +172,12 @@ module.exports =
             template: './src/tab/index.html',
             filename: 'tab/index.html',
             chunks: ['tab']
+        }),
+        new htmlWebPackPlugin(
+        {
+            template: './src/boss/index.html',
+            filename: 'boss/index.html',
+            chunks: ['boss']
         }),
         new zipPlugin(
         {
