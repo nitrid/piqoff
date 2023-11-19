@@ -840,5 +840,13 @@ export const langFr =
     itemInfo:
     {
         msgSplash: "VEUILLEZ SCANNER LE CODE BARRE"
-    }
+    },
+    popPasswordChange : 
+    {
+        title:"Şifre Değiştir",  // BAK
+        NewPassword : "Yeni Şifre",  // BAK
+        NewPassword2 : "Yeni Şifre Tekrar",  // BAK
+        btnApprove : "Onayla"  // BAK
+    },
+    passChange :"Şifre Değiştir", // BAK
 }

@@ -838,5 +838,13 @@ export const langDe =
     itemInfo:
     {
         msgSplash: "BITTE DEN BARCODE SCANNEN"
-    }
+    },
+    popPasswordChange : 
+    {
+        title:"Şifre Değiştir",  // BAK
+        NewPassword : "Yeni Şifre",  // BAK
+        NewPassword2 : "Yeni Şifre Tekrar",  // BAK
+        btnApprove : "Onayla"  // BAK
+    },
+    passChange :"Şifre Değiştir", // BAK
 }

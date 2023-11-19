@@ -3420,7 +3420,10 @@ export default class posDoc extends React.PureComponent
                                 <img src="./css/img/logo.png" width="50px" height="50px"/>
                             </div>
                             <div className="col-2">
-                                <div className="row" style={{height:"25px"}}>
+                                <div className="row" style={{height:"25px"}}  onClick={async()=>
+                                {
+                                    this.popPasswordChange.show()
+                                }}>
                                     <div className="col-12">                                        
                                         <span className="text-white"><i className="text-white fa-solid fa-user pe-2"></i>{this.user.CODE}</span>
                                     </div>    
@@ -8433,6 +8436,81 @@ export default class posDoc extends React.PureComponent
                     >
                     </NbPopDescboard>
                 </div>
+                {/* Şifre Değişikliği */}
+                <div>
+                    <NdPopUp parent={this} id={"popPasswordChange"} 
+                    visible={false}
+                    showCloseButton={true}
+                    showTitle={true}
+                    title={this.lang.t("popPasswordChange.title")}
+                    container={"#root"} 
+                    width={'500'}
+                    height={'300'}
+                    position={{of:'#root'}}
+                    >
+                        <Form colCount={1} height={'fit-content'}>
+                            <Item>
+                                <Label text={this.lang.t("popPasswordChange.NewPassword")} alignment="right" />
+                                <NdTextBox id="txtNewPassword" mode="password" parent={this} simple={true}
+                                        maxLength={32}
+                                ></NdTextBox>
+                            </Item>
+                            <Item>
+                                <Label text={this.lang.t("popPasswordChange.NewPassword2")} alignment="right" />
+                                <NdTextBox id="txtNewPassword2" mode="password" parent={this} simple={true}
+                                        maxLength={32}
+                                ></NdTextBox>
+                            </Item>
+                            <Item>
+                                <div className='row'>
+                                    <div className='col-6'>
+                                        <NdButton text={this.lang.t("popPasswordChange.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
+                                        onClick={async ()=>
+                                        {       
+                                            if(this.txtNewPassword.value == this.txtNewPassword2.value)
+                                            {
+                                                let tmpQuery = 
+                                                {
+                                                    query :"UPDATE USERS SET PWD = @PWD WHERE CODE = @CODE " ,
+                                                    param : ['CODE:string|50','PWD:string|max'],
+                                                    value : [this.core.auth.data.CODE,btoa(this.txtNewPassword.value)]
+                                                }
+                                                await this.core.sql.execute(tmpQuery) 
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgPassChange',showTitle:true,title:this.lang.t("msgPassChange.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.lang.t("msgPassChange.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgPassChange.msg")}</div>)
+                                                }
+                                    
+                                                await dialog(tmpConfObj);
+                                                this.popPasswordChange.hide();  
+                                            }
+                                            else
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgPasswordWrong',showTitle:true,title:this.lang.t("msgPasswordWrong.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.lang.t("msgPasswordWrong.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgPasswordWrong.msg")}</div>)
+                                                }
+                                    
+                                                await dialog(tmpConfObj);
+                                            }
+                                        }}/>
+                                    </div>
+                                    <div className='col-6'>
+                                        <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                        onClick={()=>
+                                        {
+                                            this.popPasswordChange.hide();  
+                                        }}/>
+                                    </div>
+                                </div>
+                            </Item>
+                        </Form>
+                    </NdPopUp>
+                </div> 
             </div>
         )
     }

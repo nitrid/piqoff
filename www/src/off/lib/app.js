@@ -117,6 +117,16 @@ export default class App extends React.PureComponent
             },
             {
                 widget : 'dxButton',
+                location : 'after',
+                options : 
+                {
+                    text:this.lang.t("passChange"),
+                    icon : 'repeat',
+                    onClick : this.passChange
+                }
+            },
+            {
+                widget : 'dxButton',
                 icon : 'card',
                 options : 
                 {
@@ -298,12 +308,12 @@ export default class App extends React.PureComponent
         {
             this.state.changeUser = data[0].CODE,
             this.popPassword.show()
-                                            this.txtPassword.value = ''
+            this.txtPassword.value = ''
         }
     }
     async passChange()
     {
-        
+        this.popPasswordChange.show()
     }
     setUser()
     {
@@ -560,6 +570,80 @@ export default class App extends React.PureComponent
                                         onClick={()=>
                                         {
                                             this.popPassword.hide();  
+                                        }}/>
+                                    </div>
+                                </div>
+                            </Item>
+                        </Form>
+                    </NdPopUp>
+                </div> 
+                <div>
+                    <NdPopUp parent={this} id={"popPasswordChange"} 
+                    visible={false}
+                    showCloseButton={true}
+                    showTitle={true}
+                    title={this.lang.t("popPasswordChange.title")}
+                    container={"#root"} 
+                    width={'500'}
+                    height={'300'}
+                    position={{of:'#root'}}
+                    >
+                        <Form colCount={1} height={'fit-content'}>
+                            <Item>
+                                <Label text={this.lang.t("popPasswordChange.NewPassword")} alignment="right" />
+                                <NdTextBox id="txtNewPassword" mode="password" parent={this} simple={true}
+                                        maxLength={32}
+                                ></NdTextBox>
+                            </Item>
+                            <Item>
+                                <Label text={this.lang.t("popPasswordChange.NewPassword2")} alignment="right" />
+                                <NdTextBox id="txtNewPassword2" mode="password" parent={this} simple={true}
+                                        maxLength={32}
+                                ></NdTextBox>
+                            </Item>
+                            <Item>
+                                <div className='row'>
+                                    <div className='col-6'>
+                                        <NdButton text={this.lang.t("popPasswordChange.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
+                                        onClick={async ()=>
+                                        {       
+                                            if(this.txtNewPassword.value == this.txtNewPassword2.value)
+                                            {
+                                                let tmpQuery = 
+                                                {
+                                                    query :"UPDATE USERS SET PWD = @PWD WHERE CODE = @CODE " ,
+                                                    param : ['CODE:string|50','PWD:string|max'],
+                                                    value : [this.core.auth.data.CODE,btoa(this.txtNewPassword.value)]
+                                                }
+                                                await this.core.sql.execute(tmpQuery) 
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgPassChange',showTitle:true,title:this.lang.t("msgPassChange.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.lang.t("msgPassChange.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgPassChange.msg")}</div>)
+                                                }
+                                    
+                                                await dialog(tmpConfObj);
+                                                this.popPasswordChange.hide();  
+                                            }
+                                            else
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgPasswordWrong',showTitle:true,title:this.lang.t("msgPasswordWrong.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.lang.t("msgPasswordWrong.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgPasswordWrong.msg")}</div>)
+                                                }
+                                    
+                                                await dialog(tmpConfObj);
+                                            }
+                                        }}/>
+                                    </div>
+                                    <div className='col-6'>
+                                        <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                        onClick={()=>
+                                        {
+                                            this.popPasswordChange.hide();  
                                         }}/>
                                     </div>
                                 </div>
