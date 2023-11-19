@@ -55,6 +55,7 @@ export default class App extends React.PureComponent
         moment.locale(localStorage.getItem('lang') == null ? 'tr' : localStorage.getItem('lang'));
         
         this.UserChange = this.UserChange.bind(this)
+        this.passChange = this.passChange.bind(this)
         this.timeoutControl = this.timeoutControl.bind(this)
                 
         this.style =
@@ -300,6 +301,10 @@ export default class App extends React.PureComponent
                                             this.txtPassword.value = ''
         }
     }
+    async passChange()
+    {
+        
+    }
     setUser()
     {
         this.setState({toolbarItems:[
@@ -310,6 +315,16 @@ export default class App extends React.PureComponent
                 {
                     icon : 'menu',
                     onClick : () => this.setState({opened: !this.state.opened})
+                }
+            },
+            {
+                widget : 'dxButton',
+                location : 'after',
+                options : 
+                {
+                    text:this.lang.t("passChange"),
+                    icon : 'repeat',
+                    onClick : this.passChange
                 }
             },
             {
