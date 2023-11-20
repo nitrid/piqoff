@@ -21,9 +21,10 @@ const AnimatedText = ({ value, type }) => {
   });
 
   const formatCurrency = (val) => {
-    return new Intl.NumberFormat('en-US', {
+    return new Intl.NumberFormat('fr-FR', {
       style: 'currency',
       currency: 'EUR',
+      currencyDisplay: 'symbol',
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     }).format(val);
