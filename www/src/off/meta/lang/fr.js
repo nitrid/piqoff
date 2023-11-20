@@ -975,6 +975,7 @@ export const langFr =
             title : "Choix Groupe Produit",
             clmCode : "Code",
             clmName : "NOM",
+            clmStatus : "ETAT",
         },
         msgSave:
         {
@@ -1394,7 +1395,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépôt",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         popDesign : 
         {
@@ -1714,6 +1715,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépôt",
+        validCustomerCode : "Müşteri Kodu Boş Geçilemez", // BAK
         validDocDate : "Sélectionner Date" ,
         pg_quickDesc : 
         {
@@ -1913,7 +1915,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépôt",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         popDesign : 
         {
@@ -2085,10 +2087,6 @@ export const langFr =
         },
         txtQuantity :"Quantité",
     },
-
-
-
-
     stk_02_007 : // "SKT Girişi", 
     {
         design : "Design",
@@ -2353,7 +2351,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Langue Document" ,
+        validCustomerCode : "Le code fournisseur-client ne peut être vide" ,
         validDocDate : "Sélectionner Date" ,
         pg_quickDesc : 
         {
@@ -2548,7 +2546,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Langue Document" ,
+        validCustomerCode : "Le code fournisseur-client ne peut être vide" ,
         validDocDate : "Sélectionner Date" ,
         pg_quickDesc : 
         {
@@ -2725,8 +2723,8 @@ export const langFr =
     stk_04_001 : //"Toplu Stok Düzenleme"
     {
         txtCustomerCode : "Fournisseur",
-        codePlaceHolder : "Veuillez saisir le code produit, le code-barres ou le code fournisseur que vous souhaitez rechercher",  
-        namePlaceHolder :"Entrez le nom complet du produit ou une syllabe le contenant",  
+        codePlaceHolder : "Veuillez saisir le code produit, le code-barres ou le code fournisseur que vous souhaitez Chercher",  
+        namePlaceHolder :"Saissir le nom complet ou une syllabe du produit",  
         pg_txtCustomerCode : 
         {
             title : "Choix Fournisseur",
@@ -2736,7 +2734,7 @@ export const langFr =
             clmGenusName : "Genre"
         },
         cmbItemGroup : "Groupe Produit",
-        btnGet : 'Rechercher',
+        btnGet : 'Chercher',
         txtCode : "Référence Produit",
         txtName : "Nom Produit",
         grdItemList : 
@@ -2746,7 +2744,7 @@ export const langFr =
             clmBarcode : "Code barre",
             clmMulticode : "FRN.Code",
             clmCustomerName : "Fournisseur",
-            clmCustomerPrice : "Prix T.",
+            clmCustomerPrice : "Prix Fournisseur",
             clmPriceSale : "Prix Vente",
             clmVat : "Taxe",
             clmOrgins : "Origine",
@@ -2776,18 +2774,18 @@ export const langFr =
     stk_04_002 : // "İade Les opérationsı"
     {
         txtCustomerCode : "Fournisseur",
-        validDepot : "Sélectionner Dépot",
-        ItemNamePlaceHolder :"Veuillez Entrer le Nom Complet ou une Syllabe",
+        validDepot : "Sélectionner Dépôt",
+        ItemNamePlaceHolder :"Saissir le nom complet ou une syllabe du produit",
         pg_txtCustomerCode : 
         {
             title : "Choix Fournisseur",
-            clmCode :  "Sélection Document",
+            clmCode :  "Code Fournisseur",
             clmTitle : "Nom Fournisseur",
             clmTypeName : "Type",
             clmGenusName : "Genre"
         },
         cmbDepot : 'Dépôt',  
-        btnGet : 'Rechercher',
+        btnGet : 'Chercher',
         btnInvoice : "Convertir En Facture",
         btnDispatch : 'Convertir en Bon de Livraison',
         grdRebateList : 
@@ -2803,7 +2801,7 @@ export const langFr =
             title: "Attention",
             btn01: "Valider",
             btn02: "Abandonner",
-            msg: "Etes-vous sûr(e) de Vouloir Faire Retour des Lignes Sélectionnées !"
+            msg: "Êtes-vous sûr(e) de vouloir Faire le retour des Lignes Sélectionnées !"
         },
         msgSaveResult:
         {
@@ -2816,25 +2814,25 @@ export const langFr =
         {
             title: "Attention",
             btn01 : "OK",
-            msg : "Produit Sélectionné Pour Plusieurs Compte Veuillez Vérifier"
+            msg : "Produit Sélectionné plusieurs fois,Veuillez Vérifier"
         },
         msgCustomerFound : 
         {
             title: "Attention",
             btn01 : "OK",
-            msg : "Compte Produit non Défini.Veuillez Sélectionner un Compte"
+            msg : "Le Produit n'a pas de fournisseur défini.Veuillez le définir !"
         }
     },
     stk_04_003 : //"Sayım Kesinleştirme"
     {
         cmbDepot : "Réserve",
         chkNotCountItems : "Mise à Zéro des Produits non Comptabilisés",
-        btnGet : 'Recherche',
+        btnGet : 'Rechercher',
         btnAddCount : "Fusionner Inventaire",
         dtFirstDate :"Date Début",
         dtLastDate : "Date Fin",
         btnSuccess : "Valider",
-        validDepot : "Sélectionner Dépot",
+        validDepot : "Sélectionner Dépôt",
         popCount : 
         {
             title : "Quantité Produit",
@@ -2857,7 +2855,7 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Etes-vous sûr(e) de vouloir Enregistrer!"
+            msg: "Êtes-vous sûr(e) de vouloir Enregistrer!"
         },
         msgSaveResult:
         {
@@ -2870,17 +2868,17 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Quantité Dépot Mis à jour ! ! Nouvelle Création Non Effectuée",
+            msg: "Quantité Dépôt à jour ! ! Pas de nouvelle quantité enregistrée ",
         },
     },
     stk_04_004: // SKT operasyonu
     {
-        txtRef : "Stock",   
+        txtRef : "Produit",   
         dtFirstdate : "Date Début",   
         dtLastDate : "Date Fin",   
         btnGet : "Recherche",   
-        btnPrint : "Impression Spéciale Etiquette Sélectionnée",   
-        txtCustomerCode : "Client", 
+        btnPrint : "Imprimer étiquette spéciale au produit sélectionné",   
+        txtCustomerCode : "Fournisseur", 
         cmbItemGroup : "Catégorie Produit", 
         grdExpdateList:   
         {   
@@ -2890,8 +2888,8 @@ export const langFr =
             clmDiff : "Vente Depuis Date Saisie", 
             clmDate : "DLC",
             clmRemainder : "Restant", 
-            clmCustomer :"Client",
-            clmRebate : "Reprise Retour",
+            clmCustomer :"Fournisseur",
+            clmRebate : "Reprise-Retour",
             clmDescription :"Remarque",
             clmUser : "Utilisateur",
             clmCDate : "Date Entrée" ,
@@ -2900,14 +2898,14 @@ export const langFr =
         },   
         popQuantity :    
         {   
-            title : "Saisie Prix Montant",   
-            txtQuantity : "Montant",   
+            title : "Saisie Quantité-Prix",   
+            txtQuantity : "Quantité",   
             txtPrice : "Prix",   
-            btnSave : "enregistreret Imprimer"   
+            btnSave : "Enregistrer et Imprimer"   
         },  
         pg_txtRef:  
         {  
-            title: "Choix Stock",   
+            title: "Choix produit",   
             clmCode: "Code",   
             clmName: "Nom",   
             clmStatus: "Mode"   
@@ -2915,7 +2913,7 @@ export const langFr =
         pg_txtCustomerCode : 
         {
             title : "Choix Fournisseur",
-            clmCode :  "Sélection Document",
+            clmCode :  "Code Fournisseur",
             clmTitle : "Nom Fournisseur",
             clmTypeName : "Type",
             clmGenusName : "Genre"
@@ -2925,13 +2923,13 @@ export const langFr =
             title: "Attention",  
             btn01: "OK",  
             btn02: "Abandonner",  
-            msg: "Etiquette déjà Imprimé pour le Produit Sélectionné !Etes-vous sûr(e) de Vouloir Imprimer à Nouveau?" 
+            msg: "Etiquette spéciale déja éditer pour le Produit Sélectionné !Êtes-vous sûr(e) de Vouloir le rééditer?" 
         },
         msgLabelCount:
         {
             title: "Attention",  
             btn01: "OK",  
-            msg: "Ne peut Imprimer Plus que la Quantité de Produit Restant.." 
+            msg: "Impossible d'imprimer plus que la quantité du produit restant." 
         },
     },
     stk_05_001 : // "Depo Envanter Raporu"
@@ -2956,12 +2954,12 @@ export const langFr =
     },
     stk_05_002 : // Alış Fiyatı Raporuu"
     {
-        btnGet :"Allez", 
+        btnGet :"Aller", 
         dtFirst : "Date de début", 
         graphicTitle : "Graphique de changement de prix", 
         typePurc : "Achat", 
         typeSale : "Vente", 
-        dlbClikMsg : "Double-cliquez sur la ligne pour visualiser le graphique en détail.", 
+        dlbClikMsg : "Double-cliquer sur la ligne pour visualiser le graphique en détail.", 
         cmbCustomer : "Fournisseur",
         cmbMainGrp : "Famille produit",
         grdItemPurcPriceReport: 
@@ -2973,7 +2971,7 @@ export const langFr =
             clmFamount : "Montant hors taxe",  
             clmTotalCost : "Dernier prix d'achat",  
             clmSale : "Prix de Vente",  
-            clmFisrtCost : "Dernier prix de revient", 
+            clmFisrtCost : "Dernier prix d'achat", 
             clmMargin : "Marge brute", 
             clmNetMargin : "Marge nette", 
         },
@@ -3001,7 +2999,7 @@ export const langFr =
     },
     stk_05_004 : // "Kayıp Ürün Raporu"
     {
-        chkZeroQuantity : "Afficher les quantités de 0",  // BAK
+        chkZeroQuantity : "Afficher quantité 0",  // BAK
         cmbDepot : "Dépôt",  // BAK
         btnCheck : "Actif",  // BAK
         btnGet :"Rechercher",  // BAK
@@ -3040,10 +3038,10 @@ export const langFr =
         tabTitleAdress : "Adresse",
         tabTitleLegal : "Légal",
         tabTitleOffical : "Administrateur",
-        tabCustomerBank : "Données Bancaire",
-        tabTitleFinanceDetail : "Information Financières", 
+        tabCustomerBank : "Données Bancaires",
+        tabTitleFinanceDetail : "Informations Financières", 
         txtLegal :"Données Légales",
-        chkRebate :"Retour Reprise",
+        chkRebate :"Retour-Reprise",
         txtExpiryDay : "Echéance",  
         txtRiskLimit : "Limite de Risque",  
         expDay : "(Jour)", 
@@ -3053,8 +3051,8 @@ export const langFr =
             title : "Sélectionner Client",
             clmCode : "Code",
             clmTitle : "Titre",
-            clmName : "Nom",
-            clmLastName  : "Nom De Famille",
+            clmName : "Prénom",
+            clmLastName  : "Nom",
             clmStatus  : "Statut",
         },
         grdAdress : 
@@ -3103,7 +3101,7 @@ export const langFr =
         },
         popBank : 
         {
-            title : "Données Bancaire",
+            title : "Données Bancaires",
             txtName : "Nom de Banque",
             txtIban :"IBAN",
             txtOffice :"Centre",
@@ -3163,12 +3161,13 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
+            msg: "Êtes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
         },
         cmbTypeData : 
         {
             individual :  "Particulier",
-            company :  "Entreprise"
+            company :  "Entreprise",
+            association : "Association"
         },
         cmbGenusData:
         {
@@ -3185,7 +3184,7 @@ export const langFr =
         msgCode : 
         {
             title: "Attention",
-            btn01: "Recherche Client",
+            btn01: "Rechercher Client",
             btn02: "OK",
             msg : "Client déjà existant!"
         },
@@ -3195,23 +3194,23 @@ export const langFr =
         {
             frmCustomers: "Le Code ne peut être Vide !",
         },
-        txtSubCustomer : "Client en bas", 
+        txtSubCustomer : "Fournisseur filiale", 
         pg_subCustomer : 
         {
-            title : "Choix du client en bas",  
+            title : "Choix du fournisseur filiale",  
             clmCode : "Code", 
-            clmTitle : "Adresse",
-            clmName : "Nom",  
-            clmLastName  : "Nom de famille", 
+            clmTitle : "Nom", 
+            clmName : "Prénom",  
+            clmLastName  : "Nom", 
         },
-        txtMainCustomer : "Client principal",
+        txtMainCustomer : "Fournissseur principal",
         pg_mainCustomer : 
         {
-            title : "Choix du client principal", 
+            title : "Choix du fournisseur principal", 
             clmCode : "Code",   
-            clmTitle : "Adresse",  
-            clmName : "Nom",   
-            clmLastName  : "Nom de famille", 
+            clmTitle : "Nom",  //KUB
+            clmName : "Prénom",   
+            clmLastName  : "Nom", 
         },
         txtArea : "Zone", 
         pg_AreaCode : 
@@ -3239,7 +3238,7 @@ export const langFr =
     },
     cri_01_002: // "Adres Tanımları"
     {
-        customerPlace: "Veuillez entrer le nom ou le code pour rechercher.", 
+        customerPlace: "Veuillez entrer le nom client ou le code pour rechercher.", 
         txtCode : "Code",
         txtTitle : "Titre",
         txtCustomerName : "Nom",
@@ -3249,8 +3248,8 @@ export const langFr =
             title : "Sélectionner Client",
             clmCode : "Code",
             clmTitle : "Titre",
-            clmName : "Nom",
-            clmLastName  : "Nom De Famille",
+            clmName : "Prénom",
+            clmLastName  : "Nom",
         },
         grdAdress : 
         {
@@ -3324,13 +3323,13 @@ export const langFr =
             title: "Attention",
             btn01: "D'accord",
             btn02: "Abandonner",
-            msg: "ETes-vous sûr de vouloir enregistrer?"
+            msg: "Êtes-vous sûr(e) de vouloir enregistrer?"
         },
         msgSaveResult:
         {
             title: "Attention",
             btn01: "D'accord",
-            msgSuccess: "Succès de l'enregistrement!",
+            msgSuccess: "Enregistré avec succès!",
             msgFailed: "Echec de l'enregistrement !"
         },
         msgSaveValid:
@@ -3478,16 +3477,16 @@ export const langFr =
         tabTitleAdress : "Adresse",
         tabTitleLegal : "Légal",
         tabTitleOffical : "Administrateur",
-        tabCustomerBank : "Données Bancaire",
+        tabCustomerBank : "Données Bancaires",
         txtLegal :"Données Légales",
-        chkRebate :"Retour Reprise",
+        chkRebate :"Retour-Reprise",
         pg_txtCode : 
         {
             title : "Sélectionner Client",
             clmCode : "Code",
             clmTitle : "Titre",
-            clmName : "Nom",
-            clmLastName  : "Nom De Famille",
+            clmName : "Prénom",
+            clmLastName  : "Nom",
         },
         grdAdress : 
         {
@@ -4366,7 +4365,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépôt",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
         msgNewPrice :      
@@ -4960,7 +4959,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
         msgNotQuantity: 
@@ -5444,7 +5443,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         pg_txtBarcode : 
         {
@@ -5918,7 +5917,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         pg_txtBarcode : 
         {
@@ -6435,7 +6434,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
         msgNotQuantity: 
@@ -6887,7 +6886,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         pg_txtBarcode : 
         {
@@ -7347,7 +7346,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         pg_txtBarcode : 
         {
@@ -7871,7 +7870,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
         msgNotQuantity: 
@@ -8333,7 +8332,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         pg_txtBarcode : 
         {
@@ -9213,7 +9212,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
         msgNotQuantity: 
@@ -9718,7 +9717,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépôt",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
         msgNewPrice :      
@@ -10181,7 +10180,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         pg_txtBarcode : 
         {
@@ -10611,7 +10610,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
         msgNotQuantity: 
@@ -11317,7 +11316,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
         pg_txtBarcode : 
@@ -11770,7 +11769,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
         msgNotQuantity: 
@@ -12157,7 +12156,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         msgQuantity:
         {
@@ -12558,7 +12557,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépôt",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
         msgNotQuantity: 
@@ -12951,7 +12950,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         msgQuantity:
         {
@@ -13314,7 +13313,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépôt",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
         msgNotQuantity: 
@@ -13774,7 +13773,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
         popUnderPrice :
@@ -14149,7 +14148,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
         msgQuantity:
@@ -14568,7 +14567,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
         msgQuantity:
@@ -14885,7 +14884,7 @@ export const langFr =
             dtPopStartDate :"Début ",
             dtPopEndDate : "Fin "
         },
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         txtCode : "Code",
         txtName : "Nom",
         startDate :"Date Début",    
@@ -15077,7 +15076,7 @@ export const langFr =
             btn01: "OK",
             msg: "Ne Peut Etre Remisé plus que L'Autorisation.!! Montant Autorisé : "
         },
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         txtCode : "Code",
         txtName : "Nom",
         startDate :"Date Début",   
@@ -17278,7 +17277,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
         msgQuantity:
@@ -17638,7 +17637,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
         msgQuantity:
