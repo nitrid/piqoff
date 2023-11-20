@@ -288,6 +288,7 @@ export const langFr =
             clmName : "Prénom",
             clmLastName :"Nom",
             clmRole : "Rôle",
+            clmApp : "App",
             clmStatus : "Etat",
             clmPwd : "MDP",
             clmCardId : "Carte ID"

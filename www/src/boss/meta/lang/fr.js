@@ -1,0 +1,47 @@
+export const langFr = 
+{
+    popGrid: {btnSelection:"Choix",btnSearch:"Listes"},
+    txtLangSelect : "Choix de la langue",
+    userListTitle : "Liste des utilisateurs",
+    txtUser : "Utilisateur",
+    txtPass : "Mot de passe",
+    btnLogin : "Entrer",
+    btnLogout : "Sortie",
+    btnUserSelect : "Choix de l'utilisateur",
+    serverConnection : "Etablissement de la connexion avec le serveur",
+    msgWarning : "Attention",
+    msgSqlService1 : "Impossible de se connecter au serveur Sql",
+    comingSoon : "Bientôt actif... ", 
+    msgAnotherUserAlert: 
+    {
+        title : "Attention",
+        msg : "Vous êtes connecté à partir d'un autre appareil avec vos informations d'utilisateur",
+        btn01 : "OK"
+    },
+    menu:
+    {
+        dash : "Tableau de bord",
+    },
+    login:
+    {
+        login:"Entrer",
+        logout : "Sortie",
+        selectUser : "Choix d'utilisateur",
+    },
+    dashboard: 
+    {
+        dailySalesTotal : "Günlük Satış Toplamı",
+        dailySalesCount : "Günlük Fiş Toplamı",     
+        monthlySalesTotal: "Aylık Satış Toplamı",
+        monthlySalesCount: "Aylık Fiş Toplamı",
+        bestItemGroup: "En Çok Satan Ürün Grubu",
+        lastThreeMonthsData: "Son 3 ay içindeki veriler",
+        dailyPriceChange : "Fiyatı Değiştirilen Ürünler",
+        dailyRowDelete : "İptal edilen Satır Sayısı",
+        dailyFullDelete : "İptal Edilen Evrak Sayısı",
+        dailyRebateTicket : "İade Fiş Sayısı",
+        dailyRebateTotal : "İade Toplamı",
+        dailyCustomerTicket : "Müşteri Kartı Olan Fiş Sayısı",
+        dailyUseLoyalty : "Toplam Kullanılan sadakat indirimi"
+    },
+}

@@ -171,7 +171,8 @@ export default class salesDisList extends React.PureComponent
                                         }
                                     }    
                                 } />
-                                 <Item location="after"
+                                
+                                <Item location="after"
                                 locateInMenu="auto"
                                 widget="dxButton"
                                 options=

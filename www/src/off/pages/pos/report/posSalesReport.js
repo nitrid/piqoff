@@ -14,6 +14,11 @@ import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
 import NdPivot,{FieldChooser,Export} from '../../../../core/react/devex/pivot.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
+//PDF cikti//
+// import { exportDataGrid } from 'devextreme/pdf_exporter';
+// import { jsPDF } from 'jspdf';
+
+// const exportFormats = ['pdf'];
 
 export default class posSalesReport extends React.PureComponent
 {
@@ -48,7 +53,7 @@ export default class posSalesReport extends React.PureComponent
         if(this.grdOpenTike.data.datatable.length > 0)
         {
           this.popOpenTike.show()
-        }
+        }  
     }
     render()
     {
@@ -338,6 +343,56 @@ export default class posSalesReport extends React.PureComponent
                             </Item>
                         </Form>
                     </NdPopUp>
+                    {/* PDF cikti*/}
+                    {/* <Item>
+                        <NdGrid parent={this} id={"pdfExportGrid"} 
+                                showBorders={true} 
+                                columnsAutoWidth={true} 
+                                allowColumnReordering={true} 
+                                allowColumnResizing={true} 
+                                filterRow={{visible:true}}
+                                height={350} 
+                                width={'100%'}
+                                dbApply={false}
+                                onClick={async (e)=>
+                                {
+                                    const onExporting = React.useCallback(({ component }) => 
+                                    {
+                                    const docObj = new jsPDF();
+                                    exportDataGrid
+                                    (
+                                        {
+                                        jsPDFDocument: docObj,
+                                    
+                                        onRowExporting: (e) => {
+                                          const isHeader = e.rowCells[0].text === 'data';
+                                          if (!isHeader) {
+                                            e.rowHeight = 40;
+                                          }
+                                        },
+                                        }).then(() => {
+                                        docObj.save('DataGrid.pdf');
+                                      });
+                                    },);
+                                    onExporting={onExporting}
+                                }}
+                                onRowDblClick={async(e)=>
+                                {
+                                    this.btnGetDetail(e.data.GUID)
+                                    this.setState({ticketId:e.data.TICKET_ID})
+                                }}
+                                >
+                                    <Scrolling mode="standart" />
+                                    <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
+                                    <Export enabled={true} formats={exportFormats} />
+                                    <Column dataField="CUSER_NAME" caption={this.lang.t("grdOpenTike.clmUser")} width={110}  headerFilter={{visible:true}}/>
+                                    <Column dataField="DEVICE" caption={this.lang.t("grdOpenTike.clmDevice")} width={60}  headerFilter={{visible:true}}/>
+                                    <Column dataField="DATE" caption={this.lang.t("grdOpenTike.clmDate")} width={90} allowEditing={false} />
+                                    <Column dataField="TICKET_ID" caption={this.lang.t("grdOpenTike.clmTicketId")} width={150}  headerFilter={{visible:true}}/>
+                                    <Column dataField="TOTAL" caption={this.lang.t("grdOpenTike.clmTotal")} width={100} format={{ style: "currency", currency: "EUR",precision: 2}} headerFilter={{visible:true}}/>
+                                    <Column dataField="DESCRIPTION" caption={this.lang.t("grdOpenTike.clmDescription")} width={250}  headerFilter={{visible:true}}/>
+                        </NdGrid>
+                    </Item> */}
                 </ScrollView>
             </div>
         )
