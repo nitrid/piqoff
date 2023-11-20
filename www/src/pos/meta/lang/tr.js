@@ -839,5 +839,13 @@ export const langTr =
     itemInfo:
     {
         msgSplash : "LÜTFEN BARKOD OKUTUNUZ"
-    }
+    },
+    popPasswordChange : 
+    {
+        title:"Şifre Değiştir",
+        NewPassword : "Yeni Şifre",
+        NewPassword2 : "Yeni Şifre Tekrar",
+        btnApprove : "Onayla"
+    },
+    passChange :"Şifre Değiştir",
 }

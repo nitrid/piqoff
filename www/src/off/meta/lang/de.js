@@ -57,6 +57,21 @@ export const langDe =
         btn01: "OK",
         msg: "Falsches Passwort!"
     },
+    passChange: "Passwort ändern",
+    popPasswordChange:
+    {
+        title: "Passwort ändern",
+        NewPassword: "Neues Passwort",
+        NewPassword2: "Neues Passwort wiederholen",
+        btnApprove: "Speichern"
+    },
+    msgPassChange:
+    {
+        title: "Erfolg",
+        btn01: "OK",
+        msg: "Ihr Passwort wurde geändert!"
+    },
+
     msgAnotherUserAlert: 
     {
         title: "Hinweis",
@@ -292,7 +307,7 @@ export const langDe =
         pos_02_011: "Artikelvergleichsbericht",
         pos_02_012 : "Pos Puan Kullanım Raporu",  // BAK
         pos_02_013 : "Pos İndirim Raporu",  // BAK
-        pos_02_014 : "Okunmamış Terazi Fişleri", //BAK
+        pos_02_014 : "Waagscheine", //BAK
         pos_02_015 : "Müşteri Bazlı Ürün Satış Raporu", //BAK
         pos_03: "Operationen",
         pos_03_001: "Tagesabschluss",
@@ -1251,6 +1266,7 @@ export const langDe =
         dtDocDate: "Datum",
         txtBarcode: "Barcode hinzufügen",
         txtQuantity: "Menge",
+        validDesign : "Bitte Design auswählen",
         txtAmount: "Gesamtwert",
         pg_Docs:
         {
@@ -3195,7 +3211,7 @@ export const langDe =
             title : "Ana Cari Seçim",   // BAK
             clmCode : "KODU",   // BAK
             clmTitle : "Ünvan",   // BAK
-            clmName : "Adı",   // BAK
+            clmName : "Name",   // BAK
             clmLastName  : "Soyadı",   // BAK
         },
         txtArea : "Bölge",    // BAK
@@ -3203,14 +3219,14 @@ export const langDe =
         {
             title : "Bölge Seçim",   // BAK
             clmCode : "KODU",   // BAK
-            clmName : "Adı",   // BAK
+            clmName : "Name",   // BAK
         },
         txtSector : "Sektör",   // BAK
         pg_SectorCode : 
         {
             title : "Bölge Seçim",    // BAK
             clmCode : "KODU",    // BAK
-            clmName : "Adı",    // BAK
+            clmName : "Name",    // BAK
         },
         popNote : 
         {
@@ -3219,7 +3235,8 @@ export const langDe =
         tabTitleNote : "Notlar",   // BAK
         grdNote:
         {
-            clmNote : "NOT"  // BAK
+            clmNote : "NOT", // BAK
+            clmName : "Name",
         }
     },
     cri_01_002: // "Adressdefinitionen"
@@ -5210,6 +5227,7 @@ export const langDe =
             clmTotal : "Gesamtsumme",
             clmTotalHt : "Gesamtbetrag ohne ..",
             clmDispatch : "Lieferschein Nr.",
+            clmDateDispatch : "Datum",
             clmCreateDate: "Erstellungsdatum",
             clmMargin :"Marge",
             clmDescription :"Beschreibung",
@@ -7073,6 +7091,7 @@ export const langDe =
             clmTotal : "Gesamtsumme",
             clmTotalHt : "Nettobetrag",
             clmDispatch : "Lieferschein Nr.",
+            clmDateDispatch : "Datum",
             clmCreateDate: "Erstellungsdatum",
             clmMargin :"Marge",
             clmDescription :"Beschreibung",
@@ -8081,6 +8100,7 @@ export const langDe =
             clmTotal : "Gesamtsumme",
             clmTotalHt : "Nettobetrag",
             clmDispatch : "Lieferschein Nr.",
+            clmDateDispatch : "Datum",
             clmCreateDate: "Erstellungsdatum",
             clmMargin :"Marge",
             clmDescription :"Beschreibung",
@@ -9916,6 +9936,7 @@ export const langDe =
             clmTotal : "Gesamtsumme",
             clmTotalHt : "Gesamtsumme (ohne ..)",
             clmDispatch : "Lieferschein-Nr.",
+            clmDateDispatch : "Datum",
             clmCreateDate: "Erstellungsdatum",
             clmMargin :"Marge",
             clmDescription :"Beschreibung",
