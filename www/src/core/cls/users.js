@@ -17,6 +17,7 @@ export class userCls
             ROLE : '',
             SHA: '',
             CARDID: '',
+            USER_APP:'',
             STATUS : 0,
         }
 
@@ -42,9 +43,10 @@ export class userCls
             "@ROLE = @PROLE, " + 
             "@CARDID = @CARDID, " + 
             "@SHA = @PSHA, " +
+            "@USER_APP = @PUSER_APP, " +
             "@STATUS = @PSTATUS ",
-            param : ['PGUID:string|50','PCODE:string|25','PNAME:string|50','PLAST_NAME:string|50','PPWD:string|50','PROLE:string|25','CARDID:string|25','PSHA:string|200','PSTATUS:bit'],
-            dataprm : ['GUID','CODE','NAME','LAST_NAME','PWD','ROLE','CARDID','SHA','STATUS']
+            param : ['PGUID:string|50','PCODE:string|25','PNAME:string|50','PLAST_NAME:string|50','PPWD:string|50','PROLE:string|25','CARDID:string|25','PSHA:string|200','PUSER_APP:string|200','PSTATUS:bit'],
+            dataprm : ['GUID','CODE','NAME','LAST_NAME','PWD','ROLE','CARDID','SHA','USER_APP','STATUS']
         } 
         tmpDt.updateCmd = 
         {
@@ -57,9 +59,10 @@ export class userCls
             "@ROLE = @PROLE, " + 
             "@CARDID = @CARDID, " + 
             "@SHA = @PSHA, " +
+            "@USER_APP = @PUSER_APP, " +
             "@STATUS = @PSTATUS ",
-            param : ['PGUID:string|50','PCODE:string|25','PNAME:string|50','PLAST_NAME:string|50','PPWD:string|50','PROLE:string|25','CARDID:string|25','PSHA:string|200','PSTATUS:bit'],
-            dataprm : ['GUID','CODE','NAME','LAST_NAME','PWD','ROLE','CARDID','SHA','STATUS']
+            param : ['PGUID:string|50','PCODE:string|25','PNAME:string|50','PLAST_NAME:string|50','PPWD:string|50','PROLE:string|25','CARDID:string|25','PSHA:string|200','PUSER_APP:string|200','PSTATUS:bit'],
+            dataprm : ['GUID','CODE','NAME','LAST_NAME','PWD','ROLE','CARDID','SHA','USER_APP','STATUS']
         } 
 
         this.ds.add(tmpDt);
