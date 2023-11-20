@@ -57,6 +57,20 @@ export const langFr =
         Password : "Code",  
         btnApprove : "Valider"  
     },
+    passChange: "Changer le mot de passe",
+    popPasswordChange:
+    {
+        title: "Changer le mot de passe",
+        NewPassword: "Nouveau mot de passe",
+        NewPassword2: "Répéter le nouveau mot de passe",
+        btnApprove: "Enregistrer"
+    },
+    msgPassChange:
+    {
+        title: "Réussite",
+        btn01: "OK",
+        msg: "Votre mot de passe a été changé !"
+    },
     msgPasswordWrong:
     {
         title: "Echec",
@@ -16503,7 +16517,7 @@ export const langFr =
             clmPrice: "Le prix ne peut pas être inférieur à zéro !",
         },
     },
-    set_01_002 : // "Tax Sugar"
+    set_01_002 : // "Interfel"
     {
         txtFrRate: "Taux d'ajout pour les ventes en France",
         txtNotFrRate: "Taux d'ajout pour les ventes à l'étranger",
@@ -16839,6 +16853,7 @@ export const langFr =
     {
         TicketId :"Ticket I.D",
         cmbCustomer :"Client",
+        validDesign : "Veuillez choisir le design",
         btnGet :"Rechercher",
         dtFirst : "Date Début",
         dtLast : "Date Fin",
@@ -17345,6 +17360,7 @@ export const langFr =
             clmQuantity : "Quantité",
             clmPrice : "Prix",
             clmCDate : "Date",
+            clmStatus : "Etat",
             clmTicketNo : "Numéro de ticket",
         },
     },

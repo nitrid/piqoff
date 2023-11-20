@@ -57,6 +57,21 @@ export const langDe =
         btn01: "OK",
         msg: "Falsches Passwort!"
     },
+    passChange: "Passwort ändern",
+    popPasswordChange:
+    {
+        title: "Passwort ändern",
+        NewPassword: "Neues Passwort",
+        NewPassword2: "Neues Passwort wiederholen",
+        btnApprove: "Speichern"
+    },
+    msgPassChange:
+    {
+        title: "Erfolg",
+        btn01: "OK",
+        msg: "Ihr Passwort wurde geändert!"
+    },
+
     msgAnotherUserAlert: 
     {
         title: "Hinweis",
