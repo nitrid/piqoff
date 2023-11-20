@@ -47,7 +47,7 @@ export default class purchaseInvoice extends DocBase
     async componentDidMount()
     {
         await this.core.util.waitUntil(100)
-        this.init()
+        await this.init()
         if(typeof this.pagePrm != 'undefined')
         {
             this.getDoc(this.pagePrm.GUID,'',0)
