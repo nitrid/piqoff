@@ -30,18 +30,18 @@ export const langFr =
     },
     dashboard: 
     {
-        dailySalesTotal : "Günlük Satış Toplamı",
-        dailySalesCount : "Günlük Fiş Toplamı",     
-        monthlySalesTotal: "Aylık Satış Toplamı",
-        monthlySalesCount: "Aylık Fiş Toplamı",
-        bestItemGroup: "En Çok Satan Ürün Grubu",
-        lastThreeMonthsData: "Son 3 ay içindeki veriler",
-        dailyPriceChange : "Fiyatı Değiştirilen Ürünler",
-        dailyRowDelete : "İptal edilen Satır Sayısı",
-        dailyFullDelete : "İptal Edilen Evrak Sayısı",
-        dailyRebateTicket : "İade Fiş Sayısı",
-        dailyRebateTotal : "İade Toplamı",
-        dailyCustomerTicket : "Müşteri Kartı Olan Fiş Sayısı",
-        dailyUseLoyalty : "Toplam Kullanılan sadakat indirimi"
+        dailySalesTotal : "Total vente journalière",
+        dailySalesCount : "Total ticket journalier",     
+        monthlySalesTotal: "Total vente mensuel",
+        monthlySalesCount: "Total ticket mensuel",
+        bestItemGroup: "Groupe de produit le plus vendu",
+        lastThreeMonthsData: "Données trimestrielles",
+        dailyPriceChange : "Changement prix",
+        dailyRowDelete : "Total ligne supprimée",
+        dailyFullDelete : "Total ticket supprimé",
+        dailyRebateTicket : "Total ticket retour",
+        dailyRebateTotal : "Montant remboursement",
+        dailyCustomerTicket : "Ticket avec carte fidélité",
+        dailyUseLoyalty : "Montant points utilisés"
     },
 }

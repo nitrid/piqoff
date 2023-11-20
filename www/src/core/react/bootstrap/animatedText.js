@@ -21,7 +21,7 @@ const AnimatedText = ({ value, type }) => {
   });
 
   const formatCurrency = (val) => {
-    return new Intl.NumberFormat('en-US', {
+    return new Intl.NumberFormat('fr-FR', {
       style: 'currency',
       currency: 'EUR',
       minimumFractionDigits: 2,
@@ -30,7 +30,7 @@ const AnimatedText = ({ value, type }) => {
   };
 
   const formatNumber = (val) => {
-    return new Intl.NumberFormat('en-US').format(val);
+    return new Intl.NumberFormat('fr-FR').format(val);
   };
 
   return (

@@ -30,18 +30,18 @@ export const langTr =
     },
     dashboard: 
     {
-        dailySalesTotal : "Günlük Satış Toplamı",
-        dailySalesCount : "Günlük Fiş Toplamı",     
-        monthlySalesTotal: "Aylık Satış Toplamı",
-        monthlySalesCount: "Aylık Fiş Toplamı",
+        dailySalesTotal : "Günlük Satış Tutarı",
+        dailySalesCount : "Günlük Fiş Adedi",     
+        monthlySalesTotal: "Aylık Satış Tutarı",
+        monthlySalesCount: "Aylık Fiş Adedi",
         bestItemGroup: "En Çok Satan Ürün Grubu",
         lastThreeMonthsData: "Son 3 ay içindeki veriler",
-        dailyPriceChange : "Fiyatı Değiştirilen Ürünler",
-        dailyRowDelete : "İptal edilen Satır Sayısı",
-        dailyFullDelete : "İptal Edilen Evrak Sayısı",
+        dailyPriceChange : "Fiyatı Değiştirilen Ürünler Adeti",
+        dailyRowDelete : "İptal edilen Satır Adeti",
+        dailyFullDelete : "İptal Edilen Fiş Adeti",
         dailyRebateTicket : "İade Fiş Sayısı",
-        dailyRebateTotal : "İade Toplamı",
-        dailyCustomerTicket : "Müşteri Kartı Olan Fiş Sayısı",
-        dailyUseLoyalty : "Toplam Kullanılan sadakat indirimi"
+        dailyRebateTotal : "Yapılan İade Tutarı",
+        dailyCustomerTicket : "Müşteri Kartı Kulanılan Fiş Adeti",
+        dailyUseLoyalty : "Toplam Kullanılan Sadakat indirimi Tutarı"
     },
 }
