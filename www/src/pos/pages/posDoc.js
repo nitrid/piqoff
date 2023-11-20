@@ -4410,12 +4410,7 @@ export default class posDoc extends React.PureComponent
                                     <div className="col px-1">
                                         {(()=>
                                         {
-                                            console.log(this.prmObj.filter({ID:'ZReport',TYPE:0}).getValue())
-                                            if(this.prmObj.filter({ID:'ZReport',TYPE:0}).getValue() == false)
-                                            {
-                                                return <NbButton id={"btn"} parent={this} className="form-group btn btn-secondary btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt"}}></NbButton>
-                                            }
-                                            else
+                                            if(this.prmObj.filter({ID:'ZReport',TYPE:0}).getValue() == true)
                                             {
                                                 return (
                                                     <NbButton id={"btnZReport"} parent={this} className="form-group btn btn-info btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt"}}
@@ -4426,6 +4421,10 @@ export default class posDoc extends React.PureComponent
                                                         <i className="text-white fa-solid fa-chart-pie" style={{fontSize: "24px"}} />
                                                     </NbButton>
                                                 )
+                                            }
+                                            else
+                                            {
+                                                return <NbButton id={"btn"} parent={this} className="form-group btn btn-secondary btn-block my-1" style={{height:"70px",width:"100%",fontSize:"10pt"}}></NbButton>
                                             }
                                         })()}
                                     </div>
