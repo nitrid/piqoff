@@ -248,19 +248,19 @@ export default class enddayReport extends React.PureComponent
                                 <Column dataField="CDATE" caption={this.t("grdEnddaData.clmDate")} visible={true} dataType="datetime" format={"dd/MM/yyyy"} width={80}/> 
                                 <Column dataField="CUSER_NAME" caption={this.t("grdEnddaData.clmUser")} visible={true} width={90}/> 
                                 <Column dataField="SAFE_NAME" caption={this.t("grdEnddaData.clmSafe")} visible={true} width={110}/> 
-                                <Column dataField="ADVANCE" caption={this.t("grdEnddaData.clmAdvance")} visible={true} /> 
-                                <Column dataField="CASH" caption={this.t("grdEnddaData.clmCash")} visible={true} width={90}/> 
-                                <Column dataField="POS_CASH" caption={this.t("grdEnddaData.clmPosCash")} visible={true} width={90}/> 
-                                <Column dataField="DIFF_CASH" caption={this.t("grdEnddaData.clmDiffCash")} visible={true} width={90}/> 
-                                <Column dataField="CREDIT" caption={this.t("grdEnddaData.clmCredit")} visible={true} width={90}/> 
-                                <Column dataField="POS_CREDIT" caption={this.t("grdEnddaData.clmPosCredit")} visible={true} width={90}/> 
-                                <Column dataField="DIFF_CREDIT" caption={this.t("grdEnddaData.clmDiffCredit")} visible={true} width={90}/> 
-                                <Column dataField="CHECK" caption={this.t("grdEnddaData.clmCheck")} visible={true} width={90}/> 
-                                <Column dataField="POS_CHECK" caption={this.t("grdEnddaData.clmPosCheck")} visible={true} width={90}/> 
-                                <Column dataField="DIFF_CHECK" caption={this.t("grdEnddaData.clmDiffCheck")} visible={true} width={90}/> 
-                                <Column dataField="TICKET" caption={this.t("grdEnddaData.clmTicket")} visible={true} width={90}/> 
-                                <Column dataField="POS_TICKET" caption={this.t("grdEnddaData.clmPosTicket")} visible={true} width={90}/> 
-                                <Column dataField="DIFF_TICKET" caption={this.t("grdEnddaData.clmDiffTicket")} visible={true} width={90}/> 
+                                <Column dataField="ADVANCE" caption={this.t("grdEnddaData.clmAdvance")} visible={true}  format={{ style: "currency", currency: "EUR",precision: 2}} /> 
+                                <Column dataField="CASH" caption={this.t("grdEnddaData.clmCash")} visible={true}  format={{ style: "currency", currency: "EUR",precision: 2}} width={90}/> 
+                                <Column dataField="POS_CASH" caption={this.t("grdEnddaData.clmPosCash")} visible={true}  format={{ style: "currency", currency: "EUR",precision: 2}} width={90}/> 
+                                <Column dataField="DIFF_CASH" caption={this.t("grdEnddaData.clmDiffCash")} visible={true}  format={{ style: "currency", currency: "EUR",precision: 2}} width={90}/> 
+                                <Column dataField="CREDIT" caption={this.t("grdEnddaData.clmCredit")} visible={true}  format={{ style: "currency", currency: "EUR",precision: 2}} width={90}/> 
+                                <Column dataField="POS_CREDIT" caption={this.t("grdEnddaData.clmPosCredit")} visible={true}  format={{ style: "currency", currency: "EUR",precision: 2}} width={90}/> 
+                                <Column dataField="DIFF_CREDIT" caption={this.t("grdEnddaData.clmDiffCredit")} visible={true}  format={{ style: "currency", currency: "EUR",precision: 2}} width={90}/> 
+                                <Column dataField="CHECK" caption={this.t("grdEnddaData.clmCheck")} visible={true}  format={{ style: "currency", currency: "EUR",precision: 2}} width={90}/> 
+                                <Column dataField="POS_CHECK" caption={this.t("grdEnddaData.clmPosCheck")} visible={true}  format={{ style: "currency", currency: "EUR",precision: 2}} width={90}/> 
+                                <Column dataField="DIFF_CHECK" caption={this.t("grdEnddaData.clmDiffCheck")} visible={true}  format={{ style: "currency", currency: "EUR",precision: 2}} width={90}/> 
+                                <Column dataField="TICKET" caption={this.t("grdEnddaData.clmTicket")} visible={true}  format={{ style: "currency", currency: "EUR",precision: 2}} width={90}/> 
+                                <Column dataField="POS_TICKET" caption={this.t("grdEnddaData.clmPosTicket")} visible={true}  format={{ style: "currency", currency: "EUR",precision: 2}} width={90}/> 
+                                <Column dataField="DIFF_TICKET" caption={this.t("grdEnddaData.clmDiffTicket")} visible={true}  format={{ style: "currency", currency: "EUR",precision: 2}} width={90}/> 
                             </NdGrid>
                         </div>
                     </div>

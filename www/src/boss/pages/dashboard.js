@@ -298,6 +298,10 @@ export default class Dashboard extends React.PureComponent
             </Series>
               <Legend horizontalAlignment="center" verticalAlignment="bottom" />
             </PieChart>
+          </div>
+        </div>
+        <div className="row py-1 px-3" style={{height:'100px'}}>
+          <div className="col-12">
             <p className="text-center text-muted">{this.t("lastThreeMonthsData")}</p>
           </div>
         </div>
