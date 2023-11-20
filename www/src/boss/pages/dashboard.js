@@ -267,13 +267,13 @@ export default class Dashboard extends React.PureComponent
                   <h5 className="card-title">{this.t("dailyUseLoyalty")}</h5>
                 </div>
                 <div className="text-center">
-                  <AnimatedText value={parseInt(this.state.dailyUseLoyalty)}  type={'currency'} />
+                  <AnimatedText value={parseInt(this.state.dailyUseLoyalty ? parseInt(this.state.dailyUseLoyalty) : 0)}  type={'currency'} />
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div className="row">
+        <div className="row py-1 px-3">
           <div className="col-12">
             <PieChart
               id="pie"
