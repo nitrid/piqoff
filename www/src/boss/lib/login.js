@@ -128,7 +128,7 @@ export default class Login extends React.PureComponent
                         <div className='row'>
                             <div className='col-4'></div>
                             <div className='col-8'>
-                                <img src="./css/img/logo.png" height="48px"/>
+                                <img src="./css/img/piqsoftlogo.png" height="48px"/>
                             </div>
                         </div>
                     </div>
