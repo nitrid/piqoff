@@ -37,6 +37,7 @@ export default class itemSalesReport extends React.PureComponent
             {CODE : "ITEM_NAME",NAME : this.t("grdListe.clmName")},
             {CODE : "QUANTITY",NAME : this.t("grdListe.clmQuantity")},
             {CODE : "PRICE",NAME : this.t("grdListe.clmPrice")},
+            {CODE : "STATUS",NAME : this.t("grdListe.clmStatus")},
         ]
         this.groupList = [];
         this._btnGetirClick = this._btnGetirClick.bind(this)
@@ -124,13 +125,18 @@ export default class itemSalesReport extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT ITEM_NAME,ITEM_CODE,CDATE,TICKET_NO,QUANTITY,PRICE " +
-                    "FROM BALANCE_COUNTER_VW_01 WHERE (CDATE >= @FIRST_DATE AND CDATE <= @LAST_DATE) AND POS_GUID = '00000000-0000-0000-0000-000000000000' ORDER BY TICKET_NO ASC" ,
+                    query : "SELECT ITEM_NAME,ITEM_CODE,CDATE,TICKET_NO,QUANTITY,PRICE,STATUS " +
+                    "FROM BALANCE_COUNTER_VW_01 WHERE (CDATE >= @FIRST_DATE AND CDATE <= @LAST_DATE) ORDER BY TICKET_NO ASC" ,
                     param : ['FIRST_DATE:date','LAST_DATE:date'],
                     value : [this.dtDate.startDate,this.dtDate.endDate]
                 },
                 sql : this.core.sql
             }
+        }
+
+        if([])
+        {
+
         }
 
         await this.grdListe.dataRefresh(tmpSource)
@@ -214,16 +220,24 @@ export default class itemSalesReport extends React.PureComponent
                             allowColumnReordering={true}
                             allowColumnResizing={true}
                             loadPanel={{enabled:true}}
+                            onRowPrepared={(e) =>
+                            {
+                                if(e.rowType == 'data' && e.data.STATUS  == false)
+                                {
+                                    e.rowElement.style.color ="Silver"
+                                }
+                            }}
                             >                            
                                 <Paging defaultPageSize={20} />
                                 <Pager visible={true} allowedPageSizes={[5,10,20,50]} showPageSizeSelector={true} />
                                 <Export fileName={this.lang.t("menuOff.pos_02_010")} enabled={true} allowExportSelectedData={true} />
-                                <Column dataField="CDATE" caption={this.t("grdListe.clmCDate")} visible={true}  dataType="date" format={{ style: "currency", currency: "EUR",precision: 2}}  width={150}/> 
-                                <Column dataField="ITEM_CODE" caption={this.t("grdListe.clmCode")} visible={true}  dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}  width={150}/> 
+                                <Column dataField="TICKET_DATE" caption={this.t("grdListe.clmCDate")} visible={true}  dataType="date" format={'dd/MM/yyyy'}  width={150}/> 
+                                <Column dataField="ITEM_CODE" caption={this.t("grdListe.clmCode")} visible={true}  dataType="number"  width={150}/> 
                                 <Column dataField="ITEM_NAME" caption={this.t("grdListe.clmName")} visible={true} width={150}/> 
-                                <Column dataField="TICKET_NO" caption={this.t("grdListe.clmTicketNo")} visible={true}  dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}  width={150}/> 
-                                <Column dataField="QUANTITY" caption={this.t("grdListe.clmQuantity")} visible={true}  dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}  width={150}/> 
+                                <Column dataField="TICKET_NO" caption={this.t("grdListe.clmTicketNo")} visible={true}  dataType="number"  width={150}/> 
+                                <Column dataField="QUANTITY" caption={this.t("grdListe.clmQuantity")} visible={true}  dataType="number"  width={150}/> 
                                 <Column dataField="PRICE" caption={this.t("grdListe.clmPrice")} visible={true}  dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}  width={200}/> 
+                                <Column dataField="STATUS" caption={this.t("grdListe.clmStatus")} visible={true}  dataType="boolean"  width={80}/> 
                                 <Summary>
                                     <TotalItem
                                     column="QUANTITY"

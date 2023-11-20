@@ -1,6 +1,6 @@
 {
   "name": "piqsoft",
-  "version": "1.0.6a",
+  "version": "1.0.6b",
   "certificate": "(NF525) B_0527-1",
   "description": "",
   "main": "index.js",
@@ -60,6 +60,7 @@
     "react-idle-timer": "4.6.4",
     "react-router-dom": "6.11.1",
     "react-simple-keyboard": "3.4.139",
+    "react-spring": "^9.7.3",
     "reactstrap": "9.1.1",
     "remove-files-webpack-plugin": "1.5.0",
     "socket.io-client": "4.5.2",

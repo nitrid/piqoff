@@ -14,6 +14,7 @@ import { Gallery } from 'devextreme-react/gallery';
 import { locale, loadMessages, formatMessage } from 'devextreme/localization';
 import NdDialog,{ dialog } from '../../core/react/devex/dialog.js';
 import NbLabel from '../../core/react/bootstrap/label.js';
+import { datatable } from '../../core/core';
 
 export default class Login extends React.Component
 {
@@ -74,8 +75,18 @@ export default class Login extends React.Component
         }
         
         if((await this.core.auth.login(this.Kullanici.value,this.Sifre.value,'POS')))
-        {            
-            App.instance.setState({logined:true});
+        {
+            // SADECE UYGULAMAYA AİT KULLANICILARININ GİREMEMESİ İÇİN YAPILDI
+            let tmpDt = new datatable()
+            tmpDt.import([this.core.auth.data])
+            if(tmpDt.where({USER_APP : {"LIKE" : "POS"}}).length == 0)
+            {
+                this.setState({logined:false,alert:this.lang.t("msgUserAccess")})
+            }
+            else
+            {
+                App.instance.setState({logined:true});
+            }
         }
         else
         {
@@ -85,7 +96,10 @@ export default class Login extends React.Component
     async getUserList()
     {
         let tmpData = await this.core.auth.getUserList()
-        await this.pg_users.setData(tmpData)
+        let tmpDt = new datatable()
+        tmpDt.import(tmpData)
+        tmpDt = tmpDt.where({USER_APP : {"LIKE" : "POS"}})
+        await this.pg_users.setData(tmpDt)
         this.pg_users.show()
         this.pg_users.onClick = (data) =>
         {
@@ -121,8 +135,18 @@ export default class Login extends React.Component
             {
                 if(await this.core.auth.login(tmpData[i].CODE,tmpData[i].PWD,'POS'))
                 {
-                    App.instance.setState({logined:true});
-                    idCheck = true
+                    // SADECE UYGULAMAYA AİT KULLANICILARININ GİREMEMESİ İÇİN YAPILDI
+                    let tmpDt = new datatable()
+                    tmpDt.import([this.core.auth.data])
+                    if(tmpDt.where({USER_APP : {"LIKE" : "POS"}}).length == 0)
+                    {
+                        this.setState({logined:false,alert:this.lang.t("msgUserAccess")})
+                    }
+                    else
+                    {
+                        App.instance.setState({logined:true});
+                        idCheck = true
+                    }
                 }
                 else
                 {
