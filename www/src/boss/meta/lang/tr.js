@@ -12,12 +12,6 @@ export const langTr =
     msgWarning : "Dikkat",
     msgSqlService1 : "Sql sunucuya bağlanılamıyor.",
     comingSoon : "Yakında Aktif Olacak... ",
-    btnBarcodeEntry: "Barkod Giriş",
-    btnProcessLines: "İşlem Satırları",
-    btnNewDoc: "Yeni Evrak",
-    btnDocDelete: "Evrak Sil",
-    btnLineDisc: "Satır İndirim",
-    yeniGelmedikGeriGeldik: "YENİ GELMEDİK GERİ GELDİK",
     msgAnotherUserAlert: 
     {
         title : "Dikkat",
@@ -41,6 +35,13 @@ export const langTr =
         monthlySalesTotal: "Aylık Satış Toplamı",
         monthlySalesCount: "Aylık Fiş Toplamı",
         bestItemGroup: "En Çok Satan Ürün Grubu",
-        lastThreeMonthsData: "Son 3 ay içindeki veriler"
+        lastThreeMonthsData: "Son 3 ay içindeki veriler",
+        dailyPriceChange : "Fiyatı Değiştirilen Ürünler",
+        dailyRowDelete : "İptal edilen Satır Sayısı",
+        dailyFullDelete : "İptal Edilen Evrak Sayısı",
+        dailyRebateTicket : "İade Fiş Sayısı",
+        dailyRebateTotal : "İade Toplamı",
+        dailyCustomerTicket : "Müşteri Kartı Olan Fiş Sayısı",
+        dailyUseLoyalty : "Toplam Kullanılan sadakat indirimi"
     },
 }

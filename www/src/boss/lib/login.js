@@ -115,7 +115,7 @@ export default class Login extends React.PureComponent
                         <div className='row'>
                             <div className='col-4'></div>
                             <div className='col-8'>
-                                <img src="./css/img/piqsoftlogo.png" height="48px"/>
+                                <img src="./css/img/logo.png" height="48px"/>
                             </div>
                         </div>
                     </div>
@@ -131,7 +131,7 @@ export default class Login extends React.PureComponent
                             </div>
                             <div className="col-2 pb-2">
                                 <Button icon="preferences" visible={App.instance.device}
-                                onClick={()=>window.location="../BOSS/appUpdate.html"}
+                                onClick={()=>window.location="../boss/appUpdate.html"}
                                 />
                             </div>
                         </div>

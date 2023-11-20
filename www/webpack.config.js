@@ -135,7 +135,7 @@ module.exports =
                 { from: "./src/tab/lib/pdf", to: "./tab/lib/pdf" },
                 { from: "./src/tab/appUpdate.html", to: "./tab/appUpdate.html" },
                 { from: "./src/tab/lib/bootstrap.bundle.min.js", to: "./tab/lib/bootstrap.bundle.min.js" },     
-                { from: "./src/boss/css/img/", to: "./mob/css/img/" },
+                { from: "./src/boss/css/img/", to: "./boss/css/img/" },
                 { from: "./src/boss/css/icons/", to: "./boss/css/icons/" },
                 { from: "./src/boss/sound/", to: "./boss/sound/" },
                 { from: "./src/boss/appUpdate.html", to: "./boss/appUpdate.html" },

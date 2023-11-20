@@ -28,4 +28,20 @@ export const langFr =
         logout : "Sortie",
         selectUser : "Choix d'utilisateur",
     },
+    dashboard: 
+    {
+        dailySalesTotal : "Günlük Satış Toplamı",
+        dailySalesCount : "Günlük Fiş Toplamı",     
+        monthlySalesTotal: "Aylık Satış Toplamı",
+        monthlySalesCount: "Aylık Fiş Toplamı",
+        bestItemGroup: "En Çok Satan Ürün Grubu",
+        lastThreeMonthsData: "Son 3 ay içindeki veriler",
+        dailyPriceChange : "Fiyatı Değiştirilen Ürünler",
+        dailyRowDelete : "İptal edilen Satır Sayısı",
+        dailyFullDelete : "İptal Edilen Evrak Sayısı",
+        dailyRebateTicket : "İade Fiş Sayısı",
+        dailyRebateTotal : "İade Toplamı",
+        dailyCustomerTicket : "Müşteri Kartı Olan Fiş Sayısı",
+        dailyUseLoyalty : "Toplam Kullanılan sadakat indirimi"
+    },
 }
