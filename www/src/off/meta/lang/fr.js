@@ -57,6 +57,20 @@ export const langFr =
         Password : "Code",  
         btnApprove : "Valider"  
     },
+    passChange: "Changer le mot de passe",
+    popPasswordChange:
+    {
+        title: "Changer le mot de passe",
+        NewPassword: "Nouveau mot de passe",
+        NewPassword2: "Répéter le nouveau mot de passe",
+        btnApprove: "Enregistrer"
+    },
+    msgPassChange:
+    {
+        title: "Réussite",
+        btn01: "OK",
+        msg: "Votre mot de passe a été changé !"
+    },
     msgPasswordWrong:
     {
         title: "Echec",
@@ -130,13 +144,13 @@ export const langFr =
         clmTotalHt : "Montant total", 
     },
     btnVatToZero : "Mettre à Zéro la TVA",
-    btnVatReCalculate : "Vergiyi Hesapla", // BAK
+    btnVatReCalculate: "Recalculer la TVA",
     msgVatCalculate :
     {
-        title : "Dikkat", // BAK
-        msg : "Vergiyi yeniden hesaplamak istediğinize eminmisiniz ", // BAK
-        btn01 : "Tamam", // BAK
-        btn02 : "İptal", // BAK
+        title : "Attention", 
+        msg: "Êtes-vous sûr de vouloir recalculer la TVA ?",
+        btn01 : "OK", 
+        btn02 : "Annuler", 
     },
     menuOff:
     {
@@ -182,7 +196,7 @@ export const langFr =
         stk_05_001: "Rapport Inventaire Dépôt", 
         stk_05_002: "Rapport sur la modification des prix d'achat", 
         stk_05_003: "Rapport inventaire", 
-        stk_05_004 : "Rapport sur les pertes", // BAK
+        stk_05_004 : "Rapport sur les pertes",
         cri: "Fournisseur - Client",
         cri_01: "Saisie",
         cri_02: "Listes",
@@ -279,7 +293,7 @@ export const langFr =
         fns_04_001 : "Rapport sur les relevés bancaires",   
         fns_04_002 : "Rapport sur le solde actuel",  
         fns_04_003 : "Rapport sur les relevés de caisse",
-        fns_04_002 : "Rapport solde de compte",//BAKK
+        fns_04_002 : "Rapport solde de compte", //BAK
         fns_05 : "Opérations", 
         fns_05_001 : "Saisie Multi Encaissement", 
         fns_05_002 : "Saisie Multi Paiement", 
@@ -299,10 +313,10 @@ export const langFr =
         pos_02_009 : "Rapport de Vente par famille de produits",
         pos_02_010 : "Rapport de vente détaillé du produit", 
         pos_02_011 : "Rapport de comparaison de produit",
-        pos_02_012 : "Rapport utilisation points de fidélité",  // BAK
-        pos_02_013 : "Rapport de remise",  // BAK
-        pos_02_014 : "Tickets de balance", // BAK
-        pos_02_015 : "Müşteri Bazlı Ürün Satış Raporu", // BAK
+        pos_02_012 : "Rapport utilisation points de fidélité", 
+        pos_02_013 : "Rapport de remise",  
+        pos_02_014 : "Tickets de balance", 
+        pos_02_015: "Rapport de vente de produits par client",
         pos_03 : "Les opérations", 
         pos_03_001 : "Opérations de fin de journée",
         pos_03_002 : "Tirage au sort",
@@ -325,7 +339,7 @@ export const langFr =
         set_02_005 : "Nouveautées de Versions",  
         set_02_006 : "Création Demande d'Assistance",   
         set_02_007 : "Historique Demande d'Assistance",   
-        set_02_008 : "Enregistrement Excel du code douanier", // BAK
+        set_02_008 : "Enregistrement Excel du code douanier",
         set_03 : "Réglages Documents",   
         set_03_001 : "Documents Effacés",   
         set_03_002 : "Lignes Effacées", 
@@ -765,10 +779,10 @@ export const langFr =
         },
         msgItemBack:
         {
-            title: "Attention",  // BAK
-            btn01: "OK",  // BAK
-            btn02: "Abandonner",  // BAK
-            msg: "Êtes-vous sûr(e) de vouloir ramener le produit à nouveau ?"  // BAK
+            title: "Attention",  
+            btn01: "OK",
+            btn02: "Abandonner", 
+            msg: "Êtes-vous sûr(e) de vouloir ramener le produit à nouveau ?" 
         },
     },
     stk_01_002:  //"Identification des codes-barres" 
@@ -782,7 +796,7 @@ export const langFr =
         MainUnit : "Code barre saisie à l'unité principale" , 
         SubUnit : "Code barre saisie au contenu principal",
         txtUnitTypeName :"Motif",
-        barcodePlace : "Veuillez ajouter le code barre au produit sélectionné.", // BAK
+        barcodePlace : "Veuillez ajouter le code barre au produit sélectionné.",
         pg_txtItem:
         {
             title: "Sélection Produit",
@@ -1716,7 +1730,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépôt",
-        validCustomerCode : "Müşteri Kodu Boş Geçilemez", // BAK
+        validCustomerCode: "Le code client ne peut pas être laissé vide",
         validDocDate : "Sélectionner Date" ,
         pg_quickDesc : 
         {
@@ -3001,26 +3015,26 @@ export const langFr =
     stk_05_004 : // "Kayıp Ürün Raporu"
     {
         chkZeroQuantity : "Afficher quantité 0",  // BAK
-        cmbDepot : "Dépôt",  // BAK
-        btnCheck : "Actif",  // BAK
-        btnGet :"Rechercher",  // BAK
+        cmbDepot : "Dépôt", 
+        btnCheck : "Actif", 
+        btnGet :"Rechercher",  
         grdListe : 
         {
-            clmCode: "Code",  // BAK
-            clmName : "Nom",  // BAK
-            clmQuantity : "Quantité",  // BAK
-            clmOutputCode : "Code du dépôt",  // BAK
-            clmOutputName : "Nom du dépôt",  // BAK
-            clmCostPrice : "Coût",   // BAK
-            clmTotalCost : "Coût total",   // BAK
-            clmDocDate : "Date",   // BAK
-            clmRef : "Référence",  // BAK
-            clmRefNo : "Ligne",   // BAK
-            clmDescription : "Déscription"  // BAK
-        },
-        txtTotalQuantity : "Quantité totale",  // BAK
-        txtTotalCost : "Montant de l'inventaire",  // BAK
-        cmbDepot : "Dépôt"  // BAK
+            clmCode: "Code",
+            clmName : "Nom",  
+            clmQuantity : "Quantité",
+            clmOutputCode : "Code du dépôt", 
+            clmOutputName : "Nom du dépôt", 
+            clmCostPrice : "Coût",
+            clmTotalCost : "Coût total",
+            clmDocDate : "Date",
+            clmRef : "Référence", 
+            clmRefNo : "Ligne", 
+            clmDescription : "Déscription"  
+            },
+        txtTotalQuantity : "Quantité totale",
+        txtTotalCost : "Montant de l'inventaire",
+        cmbDepot : "Dépôt" 
     },
     cri_01_001: // "Cari Tanımları"
     {
@@ -4226,8 +4240,8 @@ export const langFr =
         txtTotalHt : "Total HT",
         txtDocNo : "Numéro de document", 
         cmbOrigin : "Origine",
-        txtTransport : "Type de transport", // BAK
-        tabTitleDetail : "Détails", // BAK
+        txtTransport : "Type de transport",
+        tabTitleDetail : "Détails",
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -16317,37 +16331,37 @@ export const langFr =
     },
     fns_04_001 : // "Banka Ekstre Raporu"
     {
-        cmbBank : "Sélection Banque",  // BAK
-        btnCheck : "Actif",  // BAK
-        btnGet :"Rechercher",  // BAK
+        cmbBank : "Sélection Banque", 
+        btnCheck : "Actif", 
+        btnGet :"Rechercher", 
         grdListe : 
         {
-            clmOutputName : "Compte sortant",   // BAK
-            clmInputName : "Compte entrant",   // BAK
-            clmAmount : "Montant",    // BAK
-            clmDocDate : "Date",    // BAK
-            clmRef : "Référence",   // BAK
-            clmRefNo : "Ligne",    // BAK
+            clmOutputName : "Compte sortant",  
+            clmInputName : "Compte entrant",   
+            clmAmount : "Montant",   
+            clmDocDate : "Date",    
+            clmRef : "Référence",   
+            clmRefNo : "Ligne",  
             clmCode : "Code",
         },
      
     },
     fns_04_002 : // "Banka Ekstre Raporu"
     {
-        cmbBank : "Sélection Banque",  // BAK
-        btnCheck : "Actif",  // BAK
+        cmbBank : "Sélection Banque",
+        btnCheck : "Actif",
         txtCustomerCode : "Code Fournisseur",
-        btnGet :"Rechercher",  // BAK
+        btnGet :"Rechercher", 
         txtTotalBalance : "Equillibre", 
         chkZeroBalance : "Afficher Soldes 0", 
         grdListe : 
         {
-            clmOutputName : "Compte sortant",   // BAK
-            clmInputName : "Compte entrant",   // BAK
-            clmAmount : "Montant",    // BAK
-            clmDocDate : "Date",    // BAK
-            clmRef : "Référence",   // BAK
-            clmRefNo : "Ligne",    // BAK
+            clmOutputName : "Compte sortant",
+            clmInputName : "Compte entrant", 
+            clmAmount : "Montant",
+            clmDocDate : "Date",  
+            clmRef : "Référence", 
+            clmRefNo : "Ligne",   
             clmCode : "Code",
             clmUpdate : "Date de mise à jour", 
             clmBalance : "Equilibre",  
@@ -16366,17 +16380,17 @@ export const langFr =
     },
     fns_04_003 : // "Kasa Ekstre Raporu"
     {
-        cmbSafe : "Caisse No",  // BAK
-        btnCheck : "Actif",  // BAK
-        btnGet :"Rechercher",  // BAK
+        cmbSafe : "N° Caisse",
+        btnCheck : "Actif",  
+        btnGet :"Rechercher", 
         grdListe : 
         {
-            clmOutputName : "Compte sortant",   // BAK
-            clmInputName : "Compte entrant",   // BAK
-            clmAmount : "Montant",    // BAK
-            clmDocDate : "Date",    // BAK
-            clmRef : "Référence",   // BAK
-            clmRefNo : "Ligne",    // BAK
+            clmOutputName : "Compte sortant",
+            clmInputName : "Compte entrant", 
+            clmAmount : "Montant",    
+            clmDocDate : "Date",   
+            clmRef : "Référence",   
+            clmRefNo : "Ligne",    
             clmCode : "Code",
         },
      
@@ -16503,7 +16517,7 @@ export const langFr =
             clmPrice: "Le prix ne peut pas être inférieur à zéro !",
         },
     },
-    set_01_002 : // "Tax Sugar"
+    set_01_002 : // "Interfel"
     {
         txtFrRate: "Taux d'ajout pour les ventes en France",
         txtNotFrRate: "Taux d'ajout pour les ventes à l'étranger",
@@ -16839,6 +16853,7 @@ export const langFr =
     {
         TicketId :"Ticket I.D",
         cmbCustomer :"Client",
+        validDesign : "Veuillez choisir le design",
         btnGet :"Rechercher",
         dtFirst : "Date Début",
         dtLast : "Date Fin",
@@ -17078,8 +17093,8 @@ export const langFr =
             clmDate: "Date",
             clmTicketId: "Ticket No",
             clmDescription: "Motif",
-            clmTime: "Heure", // BAK
-            clmTotal: "Total", // BAK
+            clmTime: "Heure", 
+            clmTotal: "Total",
         },
         pg_txtItem:
         {
@@ -17096,7 +17111,7 @@ export const langFr =
             clmTotal : "Total",
             clmLastData : "Premier prix",
             clmDescription : "Motif",
-            clmTime: "Heure", // BAK
+            clmTime: "Heure",
         },
         grdSaleTicketPays : 
         {
@@ -17345,6 +17360,7 @@ export const langFr =
             clmQuantity : "Quantité",
             clmPrice : "Prix",
             clmCDate : "Date",
+            clmStatus : "Etat",
             clmTicketNo : "Numéro de ticket",
         },
     },
