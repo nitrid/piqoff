@@ -147,7 +147,7 @@ export default class Dashboard extends React.PureComponent
                   <h5 className="card-title">{this.t("dailySalesTotal")}</h5>
                 </div>
                 <div className="text-center">
-                  <AnimatedText value={parseInt(this.state.dailySalesTotal)} type={'currency'} />
+                  <AnimatedText value={this.state.dailySalesTotal ? parseInt(this.state.dailySalesTotal) : 0} type={'currency'} />
                 </div>
               </div>
             </div>
@@ -159,7 +159,7 @@ export default class Dashboard extends React.PureComponent
                   <h5 className="card-title">{this.t("dailySalesCount")}</h5>
                 </div>
                 <div className="text-center">
-                  <AnimatedText value={parseInt(this.state.dailyCountTotal)} type={'number'} />
+                  <AnimatedText value={parseInt(this.state.dailyCountTotal ? parseInt(this.state.dailyCountTotal) : 0)} type={'number'} />
                 </div>
               </div>
             </div>
@@ -171,7 +171,7 @@ export default class Dashboard extends React.PureComponent
                   <h5 className="card-title">{this.t("monthlySalesTotal")}</h5>
                 </div>
                 <div className="text-center">
-                  <AnimatedText value={parseInt(this.state.monthlySalesTotal)} type={'currency'} />
+                  <AnimatedText value={parseInt(this.state.monthlySalesTotal ? parseInt(this.state.monthlySalesTotal) : 0)} type={'currency'} />
                 </div>
               </div>
             </div>
@@ -183,7 +183,7 @@ export default class Dashboard extends React.PureComponent
                   <h5 className="card-title">{this.t("monthlySalesCount")}</h5>
                 </div>
                 <div className="text-center">
-                  <AnimatedText value={parseInt(this.state.monthlyCountTotal)} type={'number'} />
+                  <AnimatedText value={parseInt(this.state.monthlyCountTotal ? parseInt(this.state.monthlyCountTotal) : 0)} type={'number'} />
                 </div>
               </div>
             </div>
@@ -195,7 +195,7 @@ export default class Dashboard extends React.PureComponent
                   <h5 className="card-title">{this.t("dailyPriceChange")}</h5>
                 </div>
                 <div className="text-center">
-                  <AnimatedText value={parseInt(this.state.dailyPriceChange)} type={'number'} />
+                  <AnimatedText value={parseInt(this.state.dailyPriceChange ? parseInt(this.state.dailyPriceChange) : 0)} type={'number'} />
                 </div>
               </div>
             </div>
@@ -207,7 +207,7 @@ export default class Dashboard extends React.PureComponent
                   <h5 className="card-title">{this.t("dailyRowDelete")}</h5>
                 </div>
                 <div className="text-center">
-                  <AnimatedText value={parseInt(this.state.dailyRowDelete)} type={'number'} />
+                  <AnimatedText value={parseInt(this.state.dailyRowDelete ? parseInt(this.state.dailyRowDelete) : 0)} type={'number'} />
                 </div>
               </div>
             </div>
@@ -219,7 +219,7 @@ export default class Dashboard extends React.PureComponent
                   <h5 className="card-title">{this.t("dailyFullDelete")}</h5>
                 </div>
                 <div className="text-center">
-                  <AnimatedText value={parseInt(this.state.dailyFullDelete)} type={'number'} />
+                  <AnimatedText value={parseInt(this.state.dailyFullDelete ? parseInt(this.state.dailyFullDelete) : 0)} type={'number'} />
                 </div>
               </div>
             </div>
@@ -231,7 +231,7 @@ export default class Dashboard extends React.PureComponent
                   <h5 className="card-title">{this.t("dailyRebateTicket")}</h5>
                 </div>
                 <div className="text-center">
-                  <AnimatedText value={parseInt(this.state.dailyRebateTicket)} type={'number'} />
+                  <AnimatedText value={parseInt(this.state.dailyRebateTicket ? parseInt(this.state.dailyRebateTicket) : 0)} type={'number'} />
                 </div>
               </div>
             </div>
@@ -243,7 +243,7 @@ export default class Dashboard extends React.PureComponent
                   <h5 className="card-title">{this.t("dailyRebateTotal")}</h5>
                 </div>
                 <div className="text-center">
-                  <AnimatedText value={parseInt(this.state.dailyRebateTotal)}  type={'currency'}  />
+                  <AnimatedText value={parseInt(this.state.dailyRebateTotal ? parseInt(this.state.dailyRebateTotal) : 0)}  type={'currency'}  />
                 </div>
               </div>
             </div>
@@ -255,7 +255,7 @@ export default class Dashboard extends React.PureComponent
                   <h5 className="card-title">{this.t("dailyCustomerTicket")}</h5>
                 </div>
                 <div className="text-center">
-                  <AnimatedText value={parseInt(this.state.dailyCustomerTicket)} type={'number'} />
+                  <AnimatedText value={parseInt(this.state.dailyCustomerTicket ? parseInt(this.state.dailyCustomerTicket) : 0)} type={'number'} />
                 </div>
               </div>
             </div>
