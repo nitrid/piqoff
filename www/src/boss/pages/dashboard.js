@@ -141,7 +141,7 @@ export default class Dashboard extends React.PureComponent
       <ScrollView>
         <div className="row py-1 px-3">
           <div className="col-sm-12 col-md-6 p-1">
-            <div className="card text-white bg-danger" style={{ width: "100%", textAlign: "center" }}>
+            <div className="card text-white bg-primary" style={{ width: "100%", textAlign: "center" }}>
               <div className="card-body">
                 <div className="text-center">
                   <h5 className="card-title">{this.t("dailySalesTotal")}</h5>
@@ -153,7 +153,7 @@ export default class Dashboard extends React.PureComponent
             </div>
           </div>
           <div className="col-sm-12 col-md-6 p-1">
-            <div className="card text-white bg-primary" style={{ width: "100%", textAlign:"center" }}>
+            <div className="card text-white bg-success" style={{ width: "100%", textAlign:"center" }}>
               <div className="card-body">
                 <div className="text-center">
                   <h5 className="card-title">{this.t("dailySalesCount")}</h5>
@@ -165,7 +165,7 @@ export default class Dashboard extends React.PureComponent
             </div>
           </div>
           <div className="col-sm-12 col-md-6 p-1">
-            <div className="card text-white bg-success" style={{ width: "100%", textAlign:"center" }}>
+            <div className="card text-white bg-primary" style={{ width: "100%", textAlign:"center" }}>
               <div className="card-body">
                 <div className="text-center">
                   <h5 className="card-title">{this.t("monthlySalesTotal")}</h5>
@@ -177,7 +177,7 @@ export default class Dashboard extends React.PureComponent
             </div>
           </div>
           <div className="col-sm-12 col-md-6 p-1">
-            <div className="card text-white bg-secondary" style={{ width: "100%", textAlign:"center" }}>
+            <div className="card text-white bg-success" style={{ width: "100%", textAlign:"center" }}>
               <div className="card-body">
                 <div className="text-center">
                   <h5 className="card-title">{this.t("monthlySalesCount")}</h5>
@@ -189,7 +189,7 @@ export default class Dashboard extends React.PureComponent
             </div>
           </div>
           <div className="col-sm-12 col-md-6 p-1">
-            <div className="card text-white bg-warning" style={{ width: "100%", textAlign:"center" }}>
+            <div className="card text-white" style={{ width: "100%", textAlign:"center" ,backgroundColor:"#9d3948"}}>
               <div className="card-body">
                 <div className="text-center">
                   <h5 className="card-title">{this.t("dailyPriceChange")}</h5>
@@ -201,7 +201,7 @@ export default class Dashboard extends React.PureComponent
             </div>
           </div>
           <div className="col-sm-12 col-md-6 p-1">
-            <div className="card text-white bg-danger" style={{ width: "100%", textAlign:"center" }}>
+            <div className="card text-white " style={{ width: "100%", textAlign:"center" ,backgroundColor:"#972b54"}}>
               <div className="card-body">
                 <div className="text-center">
                   <h5 className="card-title">{this.t("dailyRowDelete")}</h5>
@@ -213,7 +213,7 @@ export default class Dashboard extends React.PureComponent
             </div>
           </div>
           <div className="col-sm-12 col-md-6 p-1">
-            <div className="card text-white bg-secondary" style={{ width: "100%", textAlign:"center" }}>
+            <div className="card text-white" style={{ width: "100%", textAlign:"center" ,backgroundColor:"#9d397a"}}>
               <div className="card-body">
                 <div className="text-center">
                   <h5 className="card-title">{this.t("dailyFullDelete")}</h5>
@@ -225,7 +225,7 @@ export default class Dashboard extends React.PureComponent
             </div>
           </div>
           <div className="col-sm-12 col-md-6 p-1">
-            <div className="card text-white bg-primary" style={{ width: "100%", textAlign:"center" }}>
+            <div className="card text-white" style={{ width: "100%", textAlign:"center",backgroundColor:"#e84393" }}>
               <div className="card-body">
                 <div className="text-center">
                   <h5 className="card-title">{this.t("dailyRebateTicket")}</h5>
@@ -237,7 +237,7 @@ export default class Dashboard extends React.PureComponent
             </div>
           </div>
           <div className="col-sm-12 col-md-6 p-1">
-            <div className="card text-white bg-danger" style={{ width: "100%", textAlign:"center" }}>
+            <div className="card text-white" style={{ width: "100%", textAlign:"center",backgroundColor:"#e84393" }}>
               <div className="card-body">
                 <div className="text-center">
                   <h5 className="card-title">{this.t("dailyRebateTotal")}</h5>
@@ -249,7 +249,7 @@ export default class Dashboard extends React.PureComponent
             </div>
           </div>
           <div className="col-sm-12 col-md-6 p-1">
-            <div className="card text-white bg-primary" style={{ width: "100%", textAlign:"center" }}>
+            <div className="card text-white " style={{ width: "100%", textAlign:"center",backgroundColor:"#532b97" }}>
               <div className="card-body">
                 <div className="text-center">
                   <h5 className="card-title">{this.t("dailyCustomerTicket")}</h5>
@@ -261,7 +261,7 @@ export default class Dashboard extends React.PureComponent
             </div>
           </div>
           <div className="col-sm-12 col-md-6 p-1">
-            <div className="card text-white bg-warning" style={{ width: "100%", textAlign:"center" }}>
+            <div className="card text-white " style={{ width: "100%", textAlign:"center",backgroundColor:"#532b97" }}>
               <div className="card-body">
                 <div className="text-center">
                   <h5 className="card-title">{this.t("dailyUseLoyalty")}</h5>
