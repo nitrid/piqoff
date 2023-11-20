@@ -40,9 +40,9 @@ export const langFr =
     price : "Prix",
     msgDeviceChange : 
     {
-        title : "Attention",   // BAK
+        title : "Attention",
         msg : "Il y a un paiement dans le reçu que vous souhaitez apporter. Vous pouvez continuer la transaction en encaissant au comptoir ! Code de caisse : ",   // BAK
-        btn01 : "OK",   // BAK
+        btn01 : "OK",
     },
     msgCustomerNotFound : 
     {
@@ -58,9 +58,9 @@ export const langFr =
     },
     msgMaxQuantity :
     {
-        title : "Attention",  // BAK
+        title : "Attention",
         msg : "Vous ne pouvez entrer une quantité supérieure à 99.999 !",  // BAK
-        btn01 : "OK",  // BAK
+        btn01 : "OK",
     },
     msgPriceNotFound : 
     {
@@ -841,12 +841,13 @@ export const langFr =
     {
         msgSplash: "VEUILLEZ SCANNER LE CODE BARRE"
     },
-    popPasswordChange : 
+    popPasswordChange:
     {
-        title:"Şifre Değiştir",  // BAK
-        NewPassword : "Yeni Şifre",  // BAK
-        NewPassword2 : "Yeni Şifre Tekrar",  // BAK
-        btnApprove : "Onayla"  // BAK
+        title: "Changer le mot de passe",
+        NewPassword: "Nouveau mot de passe",
+        NewPassword2: "Répéter le nouveau mot de passe",
+        btnApprove: "Enregistrer"
     },
-    passChange :"Şifre Değiştir", // BAK
+    passChange: "Changer le mot de passe",
+    
 }
