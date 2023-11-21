@@ -793,7 +793,25 @@ export default class posDoc extends React.PureComponent
                 this.posObj.dt()[0].CUSTOMER_POINT = tmpCustomerDt[0].CUSTOMER_POINT
                 this.posObj.dt()[0].CUSTOMER_POINT_PASSIVE = tmpCustomerDt[0].POINT_PASSIVE
                 this.posObj.dt()[0].CUSTOMER_MAIL = tmpCustomerDt[0].EMAIL
-                
+
+                if(this.posObj.dt()[0].CUSTOMER_MAIL.length == '')
+                {
+                    let tmpConfObj =
+                    {
+                        id:'msgCustomerMail',showTitle:true,title:this.lang.t("msgCustomerMail.title"),showCloseButton:true,width:'450px',height:'200px',
+                        button:[{id:"btn01",caption:this.lang.t("msgCustomerMail.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgCustomerMail.btn02"),location:'after'}],
+                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgCustomerMail.msg")}</div>)
+                    }
+                    let tmpConfObjResult = await dialog(tmpConfObj)
+                    if(tmpConfObjResult == 'btn01')
+                    {
+                        await this.popAddMail.show()
+                                               
+                        // this.posObj.dt()[0].CUSTOMER_MAIL = NdTextBox.value;                                              
+                        return
+                    }
+                }
+
                 //PROMOSYON GETİR.
                 await this.getPromoDb()
                 this.promoApply()
@@ -4738,6 +4756,35 @@ export default class posDoc extends React.PureComponent
                                                     this.btnGetCustomer.setLock({backgroundColor:"#dc3545",borderColor:"#dc3545",height:"70px",width:"100%"})
                                                 }
                                             }
+                                           
+                                            if(pPosDt[0].CUSTOMER_GUID != '00000000-0000-0000-0000-000000000000')
+                                            { 
+                                                let tmpQuery = 
+                                                {
+                                                    query :"SELECT EMAIL FROM CUSTOMER_VW_02 WHERE GUID = @GUID",
+                                                    param:  ['GUID:string|50'],
+                                                    value:  [pPosDt[0].CUSTOMER_GUID]
+                                                }
+                                                let tmpMailData = await this.core.sql.execute(tmpQuery) 
+                                                if(tmpMailData.result.recordset.length > 0)
+                                                {
+                                                    this.txtMail.value = tmpMailData.result.recordset[0].EMAIL
+                                                }
+                                                else
+                                                {
+                                                    this.txtMail.value = ""
+                                                }
+                                            }
+                                            else
+                                            {
+                                                this.txtMail.value = ""
+                                            }
+
+                                            this.mailPopup.tmpData = tmpData;
+                                            await this.mailPopup.show()
+                                            return
+                                            
+                                           
                                         }}>
                                             <i className="text-white fa-solid fa-circle-user" style={{fontSize: "24px"}} />
                                         </NbButton>
@@ -8393,6 +8440,79 @@ export default class posDoc extends React.PureComponent
                                 <NbLabel id="blnAbtSha" parent={this} value={"Signature : " + this.core.appInfo.scale.sha}/>
                             </Item>
                         </Form>
+                    </NdPopUp>
+                </div>
+                {/* Add mail PopUp */}
+                <div>
+                    <NdPopUp parent={this} id={"popAddMail"} 
+                    visible={false}
+                    showCloseButton={true}
+                    showTitle={true}
+                    container={"#root"} 
+                    width={'800'}
+                    height={'600'}
+                    title={this.lang.t("msgAddCustomerMail.title")}
+                    position={{of:"#root"}}
+                    >
+                        {/* <Form style={{textAlign:"center",fontSize:"20px"}}>       
+                            <Item>
+                                <NbLabel id="msgAddCustomerMail" parent={this} value={this.lang.t("msgAddCustomerMail.msg")}/>
+                            </Item>  
+                            <Item>
+                                <NdTextBox type="text" id="monChamp">                     
+                                </NdTextBox>
+                            </Item>
+                            <NdButton
+                                text={this.lang.t("msgAddCustomerMail.btn01")}
+                                type="normal"
+                                stylingMode="contained"
+                                width={'100%'}
+                            />                                     
+                        </Form> */}
+                         <div className="row pt-1">
+                            <div className="col-12">
+                                <NdTextBox id="txtNewMail" parent={this} simple={true} elementAttr={{style:"font-size:15pt;font-weight:bold;border:3px solid #428bca;"}}>     
+                                </NdTextBox> 
+                            </div>
+                        </div> 
+                        <div className="row py-1">
+                            <div className="col-12">
+                                <NbKeyboard id={"keybordNewMail"} layoutName={"mail"} parent={this} inputName={"txtNewMail"}/>
+                            </div>
+                        </div>     
+                        <div className="row py-1">
+                            <div className="col-6">
+                                <div className="col-12 px-1">
+                                    <NbButton id={"btnMailSave"} parent={this} className="form-group btn btn-success btn-block my-1" style={{height:"70px",width:"100%"}}
+                                    onClick={async()=>
+                                    {
+                                        let tmpQuery = 
+                                        {
+                                            query: "UPDATE CUSTOMER_OFFICAL SET EMAIL = @EMAIL WHERE CUSTOMER = @CUSTOMER AND TYPE = 0",
+                                            param: ['EMAIL:string|100','CUSTOMER:string|50' ],
+                                            value: [this.txtNewMail.value,this.posObj.dt()[0].CUSTOMER_GUID]
+                                        };
+                                        await this.core.sql.execute(tmpQuery);
+                                        this.posObj.dt()[0].CUSTOMER_MAIL = this.txtNewMail.value
+                                        this.txtNewMail.value = ''
+                                        this.popAddMail.hide()
+                                    }}>
+                                        <i className="text-white fa-solid fa-check" style={{fontSize: "24px"}} />
+                                    </NbButton>
+                                </div>   
+                            </div>
+                            <div className="col-6">
+                                <div className="col-12 px-1">
+                                    <NbButton id={"btnMailReject"} parent={this} className="form-group btn btn-danger btn-block my-1" style={{height:"70px",width:"100%"}}
+                                    onClick={async()=>
+                                    {
+                                        this.popAddMail.hide()
+                                    }}>
+                                        <i className="text-white fa-solid fa-close" style={{fontSize: "24px"}} />
+                                    </NbButton>
+                                </div>   
+                            </div>
+                        </div>     
                     </NdPopUp>
                 </div>
                 {/* Mail PopUp */}

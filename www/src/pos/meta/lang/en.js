@@ -241,6 +241,19 @@ export const langEn =
         msg : "Please select the line",
         btn01 : "OK"
     },
+    msgCustomerMail:
+    {
+        title: "Warning",
+        msg: "Do you want to add an email to the customer?",
+        btn01: "Yes",
+        btn02: "Cancel",
+    },
+    msgAddCustomerMail:
+    {
+        title: "Warning",
+        msg: "The customer's email is",
+        btn01: "OK",
+    },
     msgCancelCustomerConfirm: 
     {
         title : "Attention",

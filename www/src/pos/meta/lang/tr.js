@@ -241,6 +241,19 @@ export const langTr =
         msg : "Lütfen satır seçiniz !",
         btn01 : "Tamam"
     },
+    msgCustomerMail: 
+    {
+        title : "Uyarı",
+        msg : "musteriye mail eklemek istermisiniz",
+        btn01 : "Evet",
+        btn02 : "İptal",
+    },
+    msgAddCustomerMail: 
+    {
+        title : "Uyarı",
+        msg : "musterinin mail'i",
+        btn01 : "tamam",
+    },
     msgCancelCustomerConfirm: 
     {
         title : "Uyarı",
