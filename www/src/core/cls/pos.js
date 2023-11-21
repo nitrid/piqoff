@@ -1346,6 +1346,7 @@ export class posDeviceCls
             if(!core.instance.util.isElectron())
             {
                 resolve({isElectron:false})
+                return
             }
     
             let tmpPorts = await this.serialport.list();
