@@ -16704,7 +16704,11 @@ export const langTr =
             clmPosCheck : "Çek",
             clmPosTicket : "T.Restorant",
             clmAdvance : "Avans",
-            clmSafe : "Kasa"
+            clmSafe : "Kasa",
+            clmDiffCash : "Nakit Fark",
+            clmDiffCredit : "K.Kartı Fark",
+            clmDiffCheck :"Çek Farkı",
+            clmDiffTicket : "T.R Farkı"
         },
     },
     pos_02_007 : // "POS Avans Raporu",

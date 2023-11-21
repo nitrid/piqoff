@@ -12,6 +12,14 @@ export const langFr =
     msgWarning : "Attention",
     msgSqlService1 : "Impossible de se connecter au serveur Sql",
     comingSoon : "Bientôt actif... ", 
+    dtToday : "Aujourd'hui",
+    tdLastDay : "Hier",
+    dtThisWeek : "Semaine Courante",
+    dtLastWeek : "Semaine Dernière",
+    dtMount : "Mois Courant",
+    dtLastMount : "Mois Dernier",
+    dtYear : "Année Courante",
+    dtLastYear : "Année Dernière",
     msgAnotherUserAlert: 
     {
         title : "Attention",
@@ -30,18 +38,16 @@ export const langFr =
     },
     dashboard: 
     {
-        dailySalesTotal : "Günlük Satış Toplamı",
-        dailySalesCount : "Günlük Fiş Toplamı",     
-        monthlySalesTotal: "Aylık Satış Toplamı",
-        monthlySalesCount: "Aylık Fiş Toplamı",
-        bestItemGroup: "En Çok Satan Ürün Grubu",
-        lastThreeMonthsData: "Son 3 ay içindeki veriler",
-        dailyPriceChange : "Fiyatı Değiştirilen Ürünler",
-        dailyRowDelete : "İptal edilen Satır Sayısı",
-        dailyFullDelete : "İptal Edilen Evrak Sayısı",
-        dailyRebateTicket : "İade Fiş Sayısı",
-        dailyRebateTotal : "İade Toplamı",
-        dailyCustomerTicket : "Müşteri Kartı Olan Fiş Sayısı",
-        dailyUseLoyalty : "Toplam Kullanılan sadakat indirimi"
+        dailySalesTotal : "Total Vente",
+        dailySalesCount : "Total Ticket",     
+        salesAvg: "Panier Moyen",
+        bestItemGroup: "Groupe de Produit le Plus Vendu",
+        dailyPriceChange : "Changement Prix",
+        dailyRowDelete : "Total Ligne Supprimée",
+        dailyFullDelete : "Total Ticket Supprimé",
+        dailyRebateTicket : "Total Ticket Retour",
+        dailyRebateTotal : "Montant Remboursement",
+        dailyCustomerTicket : "Ticket Avec Carte Fidélité",
+        dailyUseLoyalty : "Montant Points Utilisés"
     },
 }
