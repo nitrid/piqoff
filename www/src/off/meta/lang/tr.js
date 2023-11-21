@@ -46,6 +46,7 @@ export const langTr =
     dtLastYear : "Geçen Yıl",
     txtTotalTicket : "Toplam Fiş Sayısı",
     txtTicketAvg : "Ortalama Fiş Tutarı",
+    passChange :"Şifre Değiştir",
     popDbList :
     {
         title : "Database Seçimi",
@@ -56,6 +57,19 @@ export const langTr =
         title: "Kullanıcı Şifrenizi Giriniz",
         Password : "Şifre",
         btnApprove : "Onayla"
+    },
+    popPasswordChange : 
+    {
+        title:"Şifre Değiştir",
+        NewPassword : "Yeni Şifre",
+        NewPassword2 : "Yeni Şifre Tekrar",
+        btnApprove : "Onayla"
+    },
+    msgPassChange:
+    {
+        title: "Başarılı",
+        btn01: "Tamam",
+        msg: "Şifreniz Değiştirildi !"
     },
     msgPasswordWrong:
     {
@@ -16693,7 +16707,11 @@ export const langTr =
             clmPosCheck : "Çek",
             clmPosTicket : "T.Restorant",
             clmAdvance : "Avans",
-            clmSafe : "Kasa"
+            clmSafe : "Kasa",
+            clmDiffCash : "Nakit Fark",
+            clmDiffCredit : "K.Kartı Fark",
+            clmDiffCheck :"Çek Farkı",
+            clmDiffTicket : "T.R Farkı"
         },
     },
     pos_02_007 : // "POS Avans Raporu",

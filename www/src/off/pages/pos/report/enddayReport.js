@@ -38,6 +38,8 @@ export default class enddayReport extends React.PureComponent
     }
     async Init()
     {
+        this.dtFirst.value =  moment(new Date()).format("YYYY-MM-DD")
+        this.dtLast.value =  moment(new Date()).format("YYYY-MM-DD")
     }
     async _btnGetClick()
     {
@@ -50,12 +52,18 @@ export default class enddayReport extends React.PureComponent
                 select : 
                 {
                     query : "SELECT *, " +
-                           " ISNULL((SELECT SUM(AMOUNT -CHANGE)  FROM POS_PAYMENT_VW_01 AS PAY1 WHERE PAY1.DEVICE = ENDDAY_DATA_VW_01.SAFE_CODE AND DOC_DATE = CONVERT(NVARCHAR,ENDDAY_DATA_VW_01.CDATE,112) AND TYPE = 0 AND PAY_TYPE = 0),0) " +
-                           " - ISNULL((SELECT SUM(AMOUNT -CHANGE)  FROM POS_PAYMENT_VW_01 AS PAY1 WHERE PAY1.DEVICE = ENDDAY_DATA_VW_01.SAFE_CODE AND DOC_DATE = CONVERT(NVARCHAR,ENDDAY_DATA_VW_01.CDATE,112) AND TYPE = 1  AND PAY_TYPE = 0),0) " +
+                           " ROUND(ISNULL((SELECT SUM(AMOUNT -CHANGE)  FROM POS_PAYMENT_VW_01 AS PAY1 WHERE PAY1.DEVICE = ENDDAY_DATA_VW_01.SAFE_CODE AND DOC_DATE = CONVERT(NVARCHAR,ENDDAY_DATA_VW_01.CDATE,112) AND TYPE = 0 AND PAY_TYPE = 0),0) " +
+                           " - ISNULL((SELECT SUM(AMOUNT -CHANGE)  FROM POS_PAYMENT_VW_01 AS PAY1 WHERE PAY1.DEVICE = ENDDAY_DATA_VW_01.SAFE_CODE AND DOC_DATE = CONVERT(NVARCHAR,ENDDAY_DATA_VW_01.CDATE,112) AND TYPE = 1  AND PAY_TYPE = 0),0),2) " +
                            " AS POS_CASH,  " +
-                           " ISNULL((SELECT SUM(AMOUNT -CHANGE)  FROM POS_PAYMENT_VW_01 AS PAY1 WHERE PAY1.DEVICE = ENDDAY_DATA_VW_01.SAFE_CODE AND DOC_DATE = CONVERT(NVARCHAR,ENDDAY_DATA_VW_01.CDATE,112) AND TYPE = 0 AND PAY_TYPE = 1),0) AS POS_CREDIT,  " +
-                           " ISNULL((SELECT SUM(AMOUNT -CHANGE)  FROM POS_PAYMENT_VW_01 AS PAY1 WHERE PAY1.DEVICE = ENDDAY_DATA_VW_01.SAFE_CODE AND DOC_DATE = CONVERT(NVARCHAR,ENDDAY_DATA_VW_01.CDATE,112) AND TYPE = 0 AND PAY_TYPE = 2),0)AS POS_CHECK,  " +
-                           " ISNULL((SELECT SUM(AMOUNT -CHANGE)  FROM POS_PAYMENT_VW_01 AS PAY1 WHERE PAY1.DEVICE = ENDDAY_DATA_VW_01.SAFE_CODE AND DOC_DATE = CONVERT(NVARCHAR,ENDDAY_DATA_VW_01.CDATE,112) AND TYPE = 0 AND PAY_TYPE = 3),0)AS POS_TICKET  " +
+                           " CASH - (ROUND(ISNULL((SELECT SUM(AMOUNT -CHANGE)  FROM POS_PAYMENT_VW_01 AS PAY1 WHERE PAY1.DEVICE = ENDDAY_DATA_VW_01.SAFE_CODE AND DOC_DATE = CONVERT(NVARCHAR,ENDDAY_DATA_VW_01.CDATE,112) AND TYPE = 0 AND PAY_TYPE = 0),0) " +
+                           " - ISNULL((SELECT SUM(AMOUNT -CHANGE)  FROM POS_PAYMENT_VW_01 AS PAY1 WHERE PAY1.DEVICE = ENDDAY_DATA_VW_01.SAFE_CODE AND DOC_DATE = CONVERT(NVARCHAR,ENDDAY_DATA_VW_01.CDATE,112) AND TYPE = 1  AND PAY_TYPE = 0),0),2) + ADVANCE) " +
+                           " AS DIFF_CASH, " +
+                           " ISNULL((SELECT ROUND(SUM(AMOUNT -CHANGE),2)  FROM POS_PAYMENT_VW_01 AS PAY1 WHERE PAY1.DEVICE = ENDDAY_DATA_VW_01.SAFE_CODE AND DOC_DATE = CONVERT(NVARCHAR,ENDDAY_DATA_VW_01.CDATE,112) AND TYPE = 0 AND PAY_TYPE = 1),0) AS POS_CREDIT,  " +
+                           " CREDIT  - ISNULL((SELECT ROUND(SUM(AMOUNT -CHANGE),2)  FROM POS_PAYMENT_VW_01 AS PAY1 WHERE PAY1.DEVICE = ENDDAY_DATA_VW_01.SAFE_CODE AND DOC_DATE = CONVERT(NVARCHAR,ENDDAY_DATA_VW_01.CDATE,112) AND TYPE = 0 AND PAY_TYPE = 1),0) AS DIFF_CREDIT,  " +
+                           " ISNULL((SELECT ROUND(SUM(AMOUNT -CHANGE),2)  FROM POS_PAYMENT_VW_01 AS PAY1 WHERE PAY1.DEVICE = ENDDAY_DATA_VW_01.SAFE_CODE AND DOC_DATE = CONVERT(NVARCHAR,ENDDAY_DATA_VW_01.CDATE,112) AND TYPE = 0 AND PAY_TYPE = 2),0) AS POS_CHECK,  " +
+                           " [CHECK] - ISNULL((SELECT ROUND(SUM(AMOUNT -CHANGE),2)  FROM POS_PAYMENT_VW_01 AS PAY1 WHERE PAY1.DEVICE = ENDDAY_DATA_VW_01.SAFE_CODE AND DOC_DATE = CONVERT(NVARCHAR,ENDDAY_DATA_VW_01.CDATE,112) AND TYPE = 0 AND PAY_TYPE = 2),0) AS DIFF_CHECK,  " +
+                           " ISNULL((SELECT ROUND(SUM(AMOUNT -CHANGE),2)  FROM POS_PAYMENT_VW_01 AS PAY1 WHERE PAY1.DEVICE = ENDDAY_DATA_VW_01.SAFE_CODE AND DOC_DATE = CONVERT(NVARCHAR,ENDDAY_DATA_VW_01.CDATE,112) AND TYPE = 0 AND PAY_TYPE = 3),0) AS POS_TICKET,  " +
+                           " TICKET -ISNULL((SELECT ROUND(SUM(AMOUNT -CHANGE),2)  FROM POS_PAYMENT_VW_01 AS PAY1 WHERE PAY1.DEVICE = ENDDAY_DATA_VW_01.SAFE_CODE AND DOC_DATE = CONVERT(NVARCHAR,ENDDAY_DATA_VW_01.CDATE,112) AND TYPE = 0 AND PAY_TYPE = 3),0)  AS DIFF_TICKET  " +
                             " FROM ENDDAY_DATA_VW_01 WHERE ((SAFE_CODE = @SAFE_CODE) OR (@SAFE_CODE = '')) AND ((CONVERT(NVARCHAR,CDATE,112) >= @START_DATE) OR (@START_DATE = '19700101')) " +
                             "AND ((CONVERT(NVARCHAR,CDATE,112) <= @FINISH_DATE) OR (@FINISH_DATE = '19700101')) ORDER BY CDATE DESC",
                     param : ['SAFE_CODE:string|50','START_DATE:date','FINISH_DATE:date'],
@@ -162,26 +170,97 @@ export default class enddayReport extends React.PureComponent
                             columnAutoWidth={true}
                             allowColumnReordering={true}
                             allowColumnResizing={true}
-                            onRowDblClick={async(e)=>
+                            onCellPrepared={(e) =>
                                 {
-                                    this.getPointDetail(e.data.CODE)
+                                    if(e.rowType === "data" && e.column.dataField === "DIFF_CASH")
+                                    {
+                                        if(e.data.DIFF_CASH < 0 )
+                                        {
+                                            e.cellElement.style.color ="red"
+                                            e.cellElement.style.fontWeight ="bold"
+                                        }
+                                        else if(e.data.DIFF_CASH > 0)
+                                        {
+                                            e.cellElement.style.color ="blue"
+                                            e.cellElement.style.fontWeight ="bold"
+                                        }
+                                        else
+                                        {
+                                            e.cellElement.style.color ="green"
+                                        }
+                                    }
+                                    if(e.rowType === "data" && e.column.dataField === "DIFF_CREDIT")
+                                    {
+                                        if(e.data.DIFF_CREDIT < 0 )
+                                        {
+                                            e.cellElement.style.color ="red"
+                                            e.cellElement.style.fontWeight ="bold"
+                                        }
+                                        else if(e.data.DIFF_CREDIT > 0)
+                                        {
+                                            e.cellElement.style.color ="blue"
+                                            e.cellElement.style.fontWeight ="bold"
+                                        }
+                                        else
+                                        {
+                                            e.cellElement.style.color ="green"
+                                        }
+                                    }
+                                    if(e.rowType === "data" && e.column.dataField === "DIFF_CHECK")
+                                    {
+                                        if(e.data.DIFF_CHECK < 0 )
+                                        {
+                                            e.cellElement.style.color ="red"
+                                            e.cellElement.style.fontWeight ="bold"
+                                        }
+                                        else if(e.data.DIFF_CHECK > 0)
+                                        {
+                                            e.cellElement.style.color ="blue"
+                                            e.cellElement.style.fontWeight ="bold"
+                                        }
+                                        else
+                                        {
+                                            e.cellElement.style.color ="green"
+                                        }
+                                    }
+                                    if(e.rowType === "data" && e.column.dataField === "DIFF_TICKET")
+                                    {
+                                        if(e.data.DIFF_TICKET < 0 )
+                                        {
+                                            e.cellElement.style.color ="red"
+                                            e.cellElement.style.fontWeight ="bold"
+                                        }
+                                        else if(e.data.DIFF_TICKET > 0)
+                                        {
+                                            e.cellElement.style.color ="blue"
+                                            e.cellElement.style.fontWeight ="bold"
+                                        }
+                                        else
+                                        {
+                                            e.cellElement.style.color ="green"
+                                        }
+                                    }
                                 }}
                             >                            
                                 <Paging defaultPageSize={20} />
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
                                 <Export fileName={this.lang.t("menu.pos_02_001")} enabled={true} allowExportSelectedData={true} />
-                                <Column dataField="CDATE_FORMAT" caption={this.t("grdEnddaData.clmDate")} visible={true} width={150}/> 
-                                <Column dataField="CUSER_NAME" caption={this.t("grdEnddaData.clmUser")} visible={true} width={120}/> 
-                                <Column dataField="SAFE_NAME" caption={this.t("grdEnddaData.clmSafe")} visible={true} width={120}/> 
-                                <Column dataField="CASH" caption={this.t("grdEnddaData.clmCash")} visible={true} width={120}/> 
-                                <Column dataField="POS_CASH" caption={this.t("grdEnddaData.clmPosCash")} visible={true} width={120}/> 
-                                <Column dataField="CREDIT" caption={this.t("grdEnddaData.clmCredit")} visible={true} width={120}/> 
-                                <Column dataField="POS_CREDIT" caption={this.t("grdEnddaData.clmPosCredit")} visible={true} width={120}/> 
-                                <Column dataField="CHECK" caption={this.t("grdEnddaData.clmCheck")} visible={true} width={120}/> 
-                                <Column dataField="POS_CHECK" caption={this.t("grdEnddaData.clmPosCheck")} visible={true} width={120}/> 
-                                <Column dataField="TICKET" caption={this.t("grdEnddaData.clmTicket")} visible={true} width={120}/> 
-                                <Column dataField="POS_TICKET" caption={this.t("grdEnddaData.clmPosTicket")} visible={true} width={120}/> 
-                                <Column dataField="ADVANCE" caption={this.t("grdEnddaData.clmAdvance")} visible={true} /> 
+                                <Column dataField="CDATE" caption={this.t("grdEnddaData.clmDate")} visible={true} dataType="datetime" format={"dd/MM/yyyy"} width={80}/> 
+                                <Column dataField="CUSER_NAME" caption={this.t("grdEnddaData.clmUser")} visible={true} width={90}/> 
+                                <Column dataField="SAFE_NAME" caption={this.t("grdEnddaData.clmSafe")} visible={true} width={110}/> 
+                                <Column dataField="ADVANCE" caption={this.t("grdEnddaData.clmAdvance")} visible={true}  format={{ style: "currency", currency: "EUR",precision: 2}} /> 
+                                <Column dataField="CASH" caption={this.t("grdEnddaData.clmCash")} visible={true}  format={{ style: "currency", currency: "EUR",precision: 2}} width={90}/> 
+                                <Column dataField="POS_CASH" caption={this.t("grdEnddaData.clmPosCash")} visible={true}  format={{ style: "currency", currency: "EUR",precision: 2}} width={90}/> 
+                                <Column dataField="DIFF_CASH" caption={this.t("grdEnddaData.clmDiffCash")} visible={true}  format={{ style: "currency", currency: "EUR",precision: 2}} width={90}/> 
+                                <Column dataField="CREDIT" caption={this.t("grdEnddaData.clmCredit")} visible={true}  format={{ style: "currency", currency: "EUR",precision: 2}} width={90}/> 
+                                <Column dataField="POS_CREDIT" caption={this.t("grdEnddaData.clmPosCredit")} visible={true}  format={{ style: "currency", currency: "EUR",precision: 2}} width={90}/> 
+                                <Column dataField="DIFF_CREDIT" caption={this.t("grdEnddaData.clmDiffCredit")} visible={true}  format={{ style: "currency", currency: "EUR",precision: 2}} width={90}/> 
+                                <Column dataField="CHECK" caption={this.t("grdEnddaData.clmCheck")} visible={true}  format={{ style: "currency", currency: "EUR",precision: 2}} width={90}/> 
+                                <Column dataField="POS_CHECK" caption={this.t("grdEnddaData.clmPosCheck")} visible={true}  format={{ style: "currency", currency: "EUR",precision: 2}} width={90}/> 
+                                <Column dataField="DIFF_CHECK" caption={this.t("grdEnddaData.clmDiffCheck")} visible={true}  format={{ style: "currency", currency: "EUR",precision: 2}} width={90}/> 
+                                <Column dataField="TICKET" caption={this.t("grdEnddaData.clmTicket")} visible={true}  format={{ style: "currency", currency: "EUR",precision: 2}} width={90}/> 
+                                <Column dataField="POS_TICKET" caption={this.t("grdEnddaData.clmPosTicket")} visible={true}  format={{ style: "currency", currency: "EUR",precision: 2}} width={90}/> 
+                                <Column dataField="DIFF_TICKET" caption={this.t("grdEnddaData.clmDiffTicket")} visible={true}  format={{ style: "currency", currency: "EUR",precision: 2}} width={90}/> 
                             </NdGrid>
                         </div>
                     </div>

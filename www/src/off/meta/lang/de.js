@@ -57,6 +57,21 @@ export const langDe =
         btn01: "OK",
         msg: "Falsches Passwort!"
     },
+    passChange: "Passwort ändern",
+    popPasswordChange:
+    {
+        title: "Passwort ändern",
+        NewPassword: "Neues Passwort",
+        NewPassword2: "Neues Passwort wiederholen",
+        btnApprove: "Speichern"
+    },
+    msgPassChange:
+    {
+        title: "Erfolg",
+        btn01: "OK",
+        msg: "Ihr Passwort wurde geändert!"
+    },
+
     msgAnotherUserAlert: 
     {
         title: "Hinweis",
@@ -1251,6 +1266,7 @@ export const langDe =
         dtDocDate: "Datum",
         txtBarcode: "Barcode hinzufügen",
         txtQuantity: "Menge",
+        validDesign : "Bitte Design auswählen",
         txtAmount: "Gesamtwert",
         pg_Docs:
         {
@@ -3195,7 +3211,7 @@ export const langDe =
             title : "Ana Cari Seçim",   // BAK
             clmCode : "KODU",   // BAK
             clmTitle : "Ünvan",   // BAK
-            clmName : "Adı",   // BAK
+            clmName : "Name",   // BAK
             clmLastName  : "Soyadı",   // BAK
         },
         txtArea : "Bölge",    // BAK
@@ -3203,14 +3219,14 @@ export const langDe =
         {
             title : "Bölge Seçim",   // BAK
             clmCode : "KODU",   // BAK
-            clmName : "Adı",   // BAK
+            clmName : "Name",   // BAK
         },
         txtSector : "Sektör",   // BAK
         pg_SectorCode : 
         {
             title : "Bölge Seçim",    // BAK
             clmCode : "KODU",    // BAK
-            clmName : "Adı",    // BAK
+            clmName : "Name",    // BAK
         },
         popNote : 
         {
@@ -3219,7 +3235,8 @@ export const langDe =
         tabTitleNote : "Notlar",   // BAK
         grdNote:
         {
-            clmNote : "NOT"  // BAK
+            clmNote : "NOT", // BAK
+            clmName : "Name",
         }
     },
     cri_01_002: // "Adressdefinitionen"
@@ -16593,7 +16610,11 @@ export const langDe =
             clmPosCheck: "Scheck",
             clmPosTicket: "Restaurant Ticket",
             clmAdvance: "Vorschuss",
-            clmSafe: "Tresor/Kasse"
+            clmSafe: "Tresor/Kasse",
+            clmDiffCash : "Nakit Fark", // BAK
+            clmDiffCredit : "K.Kartı Fark", // BAK
+            clmDiffCheck :"Çek Farkı", // BAK
+            clmDiffTicket : "T.R Farkı" // BAK
         },
     },
     pos_02_007: // "POS Vorschussbericht",
