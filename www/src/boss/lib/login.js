@@ -158,6 +158,7 @@ export default class Login extends React.PureComponent
                                 data={{source:[{id:"en",text:"EN"},{id:"fr",text:"FR"},{id:"tr",text:"TR"}]}}
                                 onValueChanged={(async(args)=>
                                 {
+                                    console.log(args.value)
                                     localStorage.setItem('lang',args.value)
                                     i18n.changeLanguage(args.value)
                                     locale(args.value)

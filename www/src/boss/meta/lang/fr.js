@@ -12,6 +12,14 @@ export const langFr =
     msgWarning : "Attention",
     msgSqlService1 : "Impossible de se connecter au serveur Sql",
     comingSoon : "Bientôt actif... ", 
+    dtToday : "Aujourd'hui",
+    tdLastDay : "Hier",
+    dtThisWeek : "Semaine Courante",
+    dtLastWeek : "Semaine Dernière",
+    dtMount : "Mois Courant",
+    dtLastMount : "Mois Dernier",
+    dtYear : "Année Courante",
+    dtLastYear : "Année Dernière",
     msgAnotherUserAlert: 
     {
         title : "Attention",
@@ -30,18 +38,17 @@ export const langFr =
     },
     dashboard: 
     {
-        dailySalesTotal : "Total vente journalière",
-        dailySalesCount : "Total ticket journalier",     
-        monthlySalesTotal: "Total vente mensuel",
-        monthlySalesCount: "Total ticket mensuel",
-        bestItemGroup: "Groupe de produit le plus vendu",
-        lastThreeMonthsData: "Données trimestrielles",
-        dailyPriceChange : "Changement prix",
-        dailyRowDelete : "Total ligne supprimée",
-        dailyFullDelete : "Total ticket supprimé",
-        dailyRebateTicket : "Total ticket retour",
-        dailyRebateTotal : "Montant remboursement",
-        dailyCustomerTicket : "Ticket avec carte fidélité",
-        dailyUseLoyalty : "Montant points utilisés"
+        dailySalesTotal : "Total Vente",
+        dailySalesCount : "Total Ticket",     
+        salesAvg: "Panier Moyen",
+        bestItemGroup: "Groupe de Produit le Plus Vendu",
+        lastThreeMonthsData: "Données Trimestrielles",
+        dailyPriceChange : "Changement Prix",
+        dailyRowDelete : "Total Ligne Supprimée",
+        dailyFullDelete : "Total Ticket Supprimé",
+        dailyRebateTicket : "Total Ticket Retour",
+        dailyRebateTotal : "Montant Remboursement",
+        dailyCustomerTicket : "Ticket Avec Carte Fidélité",
+        dailyUseLoyalty : "Montant Points Utilisés"
     },
 }
