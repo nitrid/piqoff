@@ -297,7 +297,7 @@ export default class Dashboard extends React.PureComponent
               }}
             >
             <Series argumentField="ITEM_GRP_NAME" valueField="QUANTITY">
-              <SmallValuesGrouping mode="topN" topCount={3} />
+              <SmallValuesGrouping mode="topN" topCount={5} />
               <Label
                 visible={true}
                 format="fixedPoint"
