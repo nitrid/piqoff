@@ -42,7 +42,6 @@ export const langFr =
         dailySalesCount : "Total Ticket",     
         salesAvg: "Panier Moyen",
         bestItemGroup: "Groupe de Produit le Plus Vendu",
-        lastThreeMonthsData: "Données Trimestrielles",
         dailyPriceChange : "Changement Prix",
         dailyRowDelete : "Total Ligne Supprimée",
         dailyFullDelete : "Total Ticket Supprimé",

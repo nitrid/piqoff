@@ -23,7 +23,7 @@ export default class Dashboard extends React.PureComponent
       dailySalesTotal : { query : "SELECT SUM(TOTAL) AS DAILY_SALES_TOTAL FROM POS_VW_01 WHERE  DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE AND STATUS = 1 AND TYPE = 0",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date]},
       salesAvg : { query : "SELECT AVG(TOTAL) AS SALES_AVG FROM POS_VW_01 WHERE  DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE  AND STATUS = 1 AND TYPE = 0",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date]},
       dailySalesCount : { query : "SELECT COUNT(*) AS DAILY_SALES_COUNT FROM POS_VW_01 WHERE  DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE  AND STATUS = 1 AND TYPE = 0",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },
-      bestItemGroup : { query : "SELECT TOP 3 COUNT(QUANTITY) AS QUANTITY, ITEM_GRP_NAME FROM POS_SALE_VW_01 WHERE DOC_DATE >= DATEADD(month, -3, GETDATE()) GROUP BY ITEM_GRP_NAME" },
+      bestItemGroup : { query : "SELECT TOP 3 COUNT(QUANTITY) AS QUANTITY, ITEM_GRP_NAME FROM POS_SALE_VW_01 WHERE  DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE GROUP BY ITEM_GRP_NAME", param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },
       dailyPriceChange : { query : "SELECT COUNT(*) AS DAILY_PRICE_CHANGE FROM POS_EXTRA_VW_01 WHERE TAG = 'PRICE DESC' AND  CONVERT(nvarchar,CDATE,110) >= @FISRT_DATE AND CONVERT(nvarchar,CDATE,110) <= @LAST_DATE ",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },    
       dailyRowDelete : { query : "SELECT COUNT(*) AS DAILY_ROW_DELETE FROM POS_EXTRA_VW_01 WHERE TAG = 'ROW DELETE' AND  CONVERT(nvarchar,CDATE,110) >= @FISRT_DATE AND CONVERT(nvarchar,CDATE,110) <= @LAST_DATE ",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },   
       dailyFullDelete : { query : "SELECT COUNT(*) AS DAILY_FULL_DELETE FROM POS_EXTRA_VW_01 WHERE TAG = 'FULL DELETE' AND  CONVERT(nvarchar,CDATE,110) >= @FISRT_DATE AND CONVERT(nvarchar,CDATE,110) <= @LAST_DATE ",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },   
@@ -147,6 +147,7 @@ export default class Dashboard extends React.PureComponent
                   this.query.dailySalesTotal.value = [this.dtDate.startDate,this.dtDate.endDate]
                   this.query.salesAvg.value = [this.dtDate.startDate,this.dtDate.endDate]
                   this.query.dailySalesCount.value =  [this.dtDate.startDate,this.dtDate.endDate]
+                  this.query.bestItemGroup.value =  [this.dtDate.startDate,this.dtDate.endDate]
                   this.query.dailyPriceChange.value =  [this.dtDate.startDate,this.dtDate.endDate]
                   this.query.dailyRowDelete.value =  [this.dtDate.startDate,this.dtDate.endDate]
                   this.query.dailyFullDelete.value =  [this.dtDate.startDate,this.dtDate.endDate]
@@ -307,11 +308,6 @@ export default class Dashboard extends React.PureComponent
             </Series>
               <Legend horizontalAlignment="center" verticalAlignment="bottom" />
             </PieChart>
-          </div>
-        </div>
-        <div className="row py-1 px-3" style={{height:'100px'}}>
-          <div className="col-12">
-            <p className="text-center text-muted">{this.t("lastThreeMonthsData")}</p>
           </div>
         </div>
       </ScrollView>

@@ -43,7 +43,6 @@ export const langTr =
         salesAvg: "Sepet Ortalaması",
         monthlySalesCount: "Aylık Fiş Adedi",
         bestItemGroup: "En Çok Satan Ürün Grubu",
-        lastThreeMonthsData: "Son 3 ay içindeki veriler",
         dailyPriceChange : "Fiyatı Değiştirilen Ürünler Adeti",
         dailyRowDelete : "İptal edilen Satır Adeti",
         dailyFullDelete : "İptal Edilen Fiş Adeti",
