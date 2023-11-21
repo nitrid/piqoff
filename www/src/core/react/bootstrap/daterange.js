@@ -17,6 +17,7 @@ export default class NbDateRange extends NbBase
             startDate : this.props.startDate,
             endDate : this.props.endDate
         }
+        this._onApply = this._onApply.bind(this)
     }
     get startDate()
     {
@@ -34,10 +35,19 @@ export default class NbDateRange extends NbBase
     {
         this.setState({endDate:e})
     }
+    _onApply()
+    {
+        if(typeof this.props.onApply != 'undefined')
+        {
+            this.props.onApply();
+        }
+    }
     render()
     {
         return(
-            <DateRangePicker initialSettings={{ startDate: this.state.startDate, endDate: this.state.endDate, alwaysShowCalendars: true,             
+            <DateRangePicker initialSettings={{ startDate: this.state.startDate, endDate: this.state.endDate, alwaysShowCalendars: true, locale: {
+                format: 'DD/MM/YYYY'
+              },            
             ranges:
             {
                 [this.lang.t("dtToday")] : [moment(), moment()],
@@ -52,7 +62,9 @@ export default class NbDateRange extends NbBase
             onCallback={(start, end, label)=>
             {
                 this.setState({startDate:start,endDate:end})
-            }}>
+            }}
+            onApply={this._onApply}
+            >
                 <input type="text" className="form-control" />
             </DateRangePicker>
         )
