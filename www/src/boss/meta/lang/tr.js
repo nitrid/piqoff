@@ -12,6 +12,14 @@ export const langTr =
     msgWarning : "Dikkat",
     msgSqlService1 : "Sql sunucuya bağlanılamıyor.",
     comingSoon : "Yakında Aktif Olacak... ",
+    dtToday : "Bugün",
+    tdLastDay : "Dün",
+    dtThisWeek : "Bu Hafta",
+    dtLastWeek : "Geçen Hafta",
+    dtMount : "Bu Ay",
+    dtLastMount : "Geçen Ay",
+    dtYear : "Bu Yıl",
+    dtLastYear : "Geçen Yıl",
     msgAnotherUserAlert: 
     {
         title : "Dikkat",
@@ -32,7 +40,7 @@ export const langTr =
     {
         dailySalesTotal : "Günlük Satış Tutarı",
         dailySalesCount : "Günlük Fiş Adedi",     
-        monthlySalesTotal: "Aylık Satış Tutarı",
+        salesAvg: "Sepet Ortalaması",
         monthlySalesCount: "Aylık Fiş Adedi",
         bestItemGroup: "En Çok Satan Ürün Grubu",
         lastThreeMonthsData: "Son 3 ay içindeki veriler",
