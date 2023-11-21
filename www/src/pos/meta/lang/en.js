@@ -798,7 +798,8 @@ export const langEn =
         scalePort: "Scale Port",
         payCardPort: "Card Payment Terminal Port",
         printDesing: "Printer Design",
-        scannerPort : "Scanner port"
+        scannerPort : "Scanner port",
+        printerPort: "Printer port"
     },
     msgNotBarcodeWeighing: 
     {

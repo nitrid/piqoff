@@ -16205,6 +16205,7 @@ export const langDe =
         txtPrintDesing : "Beleglayout",
         txtMacId : "Mac Id",
         cmbDepot : "Lager",
+        txtPrinterPort : "Printer Port",
         pg_txtCode : 
         {
             title : "Kassenauswahl",

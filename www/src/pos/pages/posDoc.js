@@ -3549,6 +3549,7 @@ export default class posDoc extends React.PureComponent
                                         this.txtPopSettingsPayCard.value = this.posDevice.dt()[0].PAY_CARD_PORT
                                         this.txtPopSettingsPrint.value = this.posDevice.dt()[0].PRINT_DESING
                                         this.txtPopSettingsScanner.value = this.posDevice.dt()[0].SCANNER_PORT
+                                        this.txtPopSettingsPrinter.value = this.posDevice.dt()[0].PRINTER_PORT
                                     }
                                     this.keyPopSettings.clearInput();
                                     this.popSettings.show();
@@ -7687,6 +7688,20 @@ export default class posDoc extends React.PureComponent
                                     this.keyPopSettings.setInput(this.txtPopSettingsScanner.value)
                                 }}/>
                             </Item>
+                            <Item>
+                                <Label text={this.lang.t("popSettings.printerPort")} alignment="right" />
+                                <NdTextBox id={"txtPopSettingsPrinter"} parent={this} simple={true} valueChangeEvent="keyup" 
+                                onValueChanging={(e)=>
+                                {
+                                    this.keyPopSettings.setCaretPosition(e.length)
+                                    this.keyPopSettings.setInput(e)
+                                }}
+                                onFocusIn={()=>
+                                {
+                                    this.keyPopSettings.inputName = "txtPopSettingsPrinter"
+                                    this.keyPopSettings.setInput(this.txtPopSettingsPrinter.value)
+                                }}/>
+                            </Item>
                         </Form>
                         <div className="row py-1">
                             <div className="col-12">
@@ -7705,6 +7720,7 @@ export default class posDoc extends React.PureComponent
                                         this.posDevice.dt()[0].PAY_CARD_PORT = this.txtPopSettingsPayCard.value
                                         this.posDevice.dt()[0].PRINT_DESING = this.txtPopSettingsPrint.value
                                         this.posDevice.dt()[0].SCANNER_PORT = this.txtPopSettingsScanner.value
+                                        this.posDevice.dt()[0].PRINTER_PORT = this.txtPopSettingsPrinter.value
                                     }
                                     else
                                     {
@@ -7716,6 +7732,7 @@ export default class posDoc extends React.PureComponent
                                         this.posDevice.dt()[0].PAY_CARD_PORT = this.txtPopSettingsPayCard.value
                                         this.posDevice.dt()[0].PRINT_DESING = this.txtPopSettingsPrint.value
                                         this.posDevice.dt()[0].SCANNER_PORT = this.txtPopSettingsScanner.value
+                                        this.posDevice.dt()[0].PRINTER_PORT = this.txtPopSettingsPrinter.value
                                     }                                
                                     await this.posDevice.save()
                                     this.popSettings.hide()

@@ -800,7 +800,8 @@ export const langIt =
         scalePort : "Porta Bilancia",
         payCardPort : "Porta Carta di Pagamento",
         printDesing : "Design di Stampa",
-        scannerPort : "Scanner port"
+        scannerPort : "Scanner port",
+        printerPort: "Printer port"
     },
     msgNotBarcodeWeighing: 
     {
