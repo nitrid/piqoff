@@ -811,7 +811,8 @@ export const langDe =
         scalePort: "Waagen-Anschluss",
         payCardPort: "PayCard-Anschluss",
         printDesing: "Druckdesign",
-        scannerPort : "Scanner port"
+        scannerPort : "Scanner port",
+        printerPort: "Printer port"
     },
     msgNotBarcodeWeighing: 
     {

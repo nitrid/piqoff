@@ -16781,6 +16781,7 @@ export const langFr =
         txtPrintDesing : "Design Ticket Imp.",
         txtMacId : "Mac Id",
         cmbDepot : "Dépot",
+        txtPrinterPort : "Printer Port",
         pg_txtCode : 
         {
             title : "Sélection Caisse",
