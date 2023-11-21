@@ -310,6 +310,11 @@ export default class Dashboard extends React.PureComponent
             </PieChart>
           </div>
         </div>
+        <div className="row py-1 px-3" style={{height:'100px'}}>
+          <div className="col-12">
+           
+          </div>
+        </div>
       </ScrollView>
     )
   }
