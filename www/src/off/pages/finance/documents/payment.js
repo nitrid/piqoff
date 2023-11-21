@@ -431,9 +431,10 @@ export default class payment extends React.PureComponent
         this.invoices = []
         let tmpQuery = 
         {
-            query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS,TOTAL - ISNULL((SELECT SUM(AMOUNT) FROM DOC_CUSTOMER_VW_01 WHERE DOC_CUSTOMER_VW_01.INVOICE_GUID = DOC_VW_01.GUID),0) AS REMAINING FROM DOC_VW_01 WHERE OUTPUT = @OUTPUT AND DOC_TYPE IN(20,21) AND TYPE = 0 AND  " + 
-            "TOTAL - ISNULL((SELECT SUM(AMOUNT) FROM DOC_CUSTOMER_VW_01 WHERE DOC_CUSTOMER_VW_01.INVOICE_GUID = DOC_VW_01.GUID),0) > 0 ",
-            param : ['OUTPUT:string|50'],
+            query : "SELECT *, " + 
+                    "(SELECT TOP 1 VALUE FROM DB_LANGUAGE WHERE TAG = (SELECT [dbo].[FN_DOC_CUSTOMER_TYPE_NAME](TYPE,DOC_TYPE,REBATE,PAY_TYPE)) AND LANG = @LANG) AS TYPE_NAME " + 
+                    "FROM DOC_CUSTOMER_LINK_VW_02 WHERE CUSTOMER_GUID = @CUSTOMER_GUID AND (TYPE = 1 OR (TYPE = 0 AND DOC_TYPE < 200)) AND BALANCE > 0",
+            param : ['CUSTOMER_GUID:string|50'],
             value : [this.docObj.dt()[0].INPUT]
         }
         let tmpData = await this.core.sql.execute(tmpQuery) 
@@ -782,8 +783,8 @@ export default class payment extends React.PureComponent
                                         
                                     </NdPopGrid>
                                 </Item>
-                               {/* dtDocDate */}
-                               <Item>
+                                {/* dtDocDate */}
+                                <Item>
                                     <Label text={this.t("dtDocDate")} alignment="right" />
                                     <NdDatePicker simple={true}  parent={this} id={"dtDocDate"}
                                     dt={{data:this.docObj.dt('DOC'),field:"DOC_DATE"}}
@@ -797,8 +798,8 @@ export default class payment extends React.PureComponent
                                         </Validator> 
                                     </NdDatePicker>
                                 </Item>
-                                 {/* Boş */}
-                                 <EmptyItem />
+                                {/* Boş */}
+                                <EmptyItem />
                                 {/* txtCustomerCode */}
                                 <Item>
                                     <Label text={this.t("txtCustomerCode")} alignment="right" />
@@ -915,7 +916,6 @@ export default class payment extends React.PureComponent
                                 </Item> 
                                 {/* Boş */}
                                 <EmptyItem />
-                                
                                 {/* Boş */}
                                 <EmptyItem />
                             </Form>
@@ -952,57 +952,57 @@ export default class payment extends React.PureComponent
                                         }
                                     }}/>
                                 </Item>
-                                 <Item colSpan={1}>
-                                 <React.Fragment>
-                                    <NdGrid parent={this} id={"grdDocPayments"} 
-                                    showBorders={true} 
-                                    columnsAutoWidth={true} 
-                                    allowColumnReordering={true} 
-                                    allowColumnResizing={true} 
-                                    height={'500'} 
-                                    width={'100%'}
-                                    dbApply={false}
-                                    onRowUpdated={async(e)=>{
-                                        let rowIndex = e.component.getRowIndexByKey(e.key)
+                                <Item colSpan={1}>
+                                    <React.Fragment>
+                                        <NdGrid parent={this} id={"grdDocPayments"} 
+                                        showBorders={true} 
+                                        columnsAutoWidth={true} 
+                                        allowColumnReordering={true} 
+                                        allowColumnResizing={true} 
+                                        height={'500'} 
+                                        width={'100%'}
+                                        dbApply={false}
+                                        onRowUpdated={async(e)=>{
+                                            let rowIndex = e.component.getRowIndexByKey(e.key)
 
-                                        this._calculateTotal()
-                                    }}
-                                    onRowRemoved={async (e)=>{
-                                        this._calculateTotal()
-                                        await this.docObj.save()
-                                    }}
-                                    >
-                                        <Paging defaultPageSize={10} />
-                                        <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
-                                        <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
-                                        <Scrolling mode="standart" />
-                                        <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
-                                        <Export fileName={this.lang.t("menu.fns_02_001")} enabled={true} allowExportSelectedData={true} />
-                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdDocPayments.clmCreateDate")} width={200} allowEditing={false}/>
-                                        <Column dataField="OUTPUT_NAME" caption={this.t("grdDocPayments.clmOutputName")} allowEditing={false}/>
-                                        <Column dataField="AMOUNT" caption={this.t("grdDocPayments.clmAmount")} format={{ style: "currency", currency: "EUR",precision: 2}} />
-                                        <Column dataField="DESCRIPTION" caption={this.t("grdDocPayments.clmDescription")} />
-                                        <Column dataField="INVOICE_REF" caption={this.t("grdDocPayments.clmInvoice")} />
-                                        <Column dataField="INVOICE_DATE" caption={this.t("grdDocPayments.clmFacDate")}  dataType="date" 
-                                                editorOptions={{value:null}}
-                                                cellRender={(e) => 
-                                                {
-                                                    if(moment(e.value).format("YYYY-MM-DD") != '1970-01-01')
+                                            this._calculateTotal()
+                                        }}
+                                        onRowRemoved={async (e)=>{
+                                            this._calculateTotal()
+                                            await this.docObj.save()
+                                        }}
+                                        >
+                                            <Paging defaultPageSize={10} />
+                                            <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
+                                            <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
+                                            <Scrolling mode="standart" />
+                                            <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
+                                            <Export fileName={this.lang.t("menu.fns_02_001")} enabled={true} allowExportSelectedData={true} />
+                                            <Column dataField="CDATE_FORMAT" caption={this.t("grdDocPayments.clmCreateDate")} width={200} allowEditing={false}/>
+                                            <Column dataField="OUTPUT_NAME" caption={this.t("grdDocPayments.clmOutputName")} allowEditing={false}/>
+                                            <Column dataField="AMOUNT" caption={this.t("grdDocPayments.clmAmount")} format={{ style: "currency", currency: "EUR",precision: 2}} />
+                                            <Column dataField="DESCRIPTION" caption={this.t("grdDocPayments.clmDescription")} />
+                                            <Column dataField="INVOICE_REF" caption={this.t("grdDocPayments.clmInvoice")} />
+                                            <Column dataField="INVOICE_DATE" caption={this.t("grdDocPayments.clmFacDate")}  dataType="date" 
+                                                    editorOptions={{value:null}}
+                                                    cellRender={(e) => 
                                                     {
-                                                        return e.text
-                                                    }
-                                                    
-                                                    return
-                                                }}/>
-                                    </NdGrid>
-                                    <ContextMenu
-                                    dataSource={this.rightItems}
-                                    width={200}
-                                    target="#grdDocPayments"
-                                    onItemClick={(async(e)=>
-                                    {
-                                    }).bind(this)} />
-                                </React.Fragment>     
+                                                        if(moment(e.value).format("YYYY-MM-DD") != '1970-01-01')
+                                                        {
+                                                            return e.text
+                                                        }
+                                                        
+                                                        return
+                                                    }}/>
+                                        </NdGrid>
+                                        <ContextMenu
+                                        dataSource={this.rightItems}
+                                        width={200}
+                                        target="#grdDocPayments"
+                                        onItemClick={(async(e)=>
+                                        {
+                                        }).bind(this)} />
+                                    </React.Fragment>     
                                 </Item>
                             </Form>
                         </div>
@@ -1024,8 +1024,8 @@ export default class payment extends React.PureComponent
                             </Form>
                         </div>
                     </div>
-                     {/* Cash PopUp */}
-                     <div>
+                    {/* Cash PopUp */}
+                    <div>
                         <NdPopUp parent={this} id={"popCash"} 
                         visible={false}
                         showCloseButton={true}
@@ -1197,8 +1197,8 @@ export default class payment extends React.PureComponent
                             </Form>
                         </NdPopUp>
                     </div> 
-                      {/* check PopUp */}
-                      <div>
+                    {/* check PopUp */}
+                    <div>
                         <NdPopUp parent={this} id={"popCheck"} 
                         visible={false}
                         showCloseButton={true}
@@ -1210,7 +1210,6 @@ export default class payment extends React.PureComponent
                         position={{of:'#root'}}
                         >
                             <Form colCount={1} height={'fit-content'}>
-                               
                                 <Item>
                                     <Label text={this.t("checkReference")} alignment="right" />
                                     <div className="col-12 pe-0">
@@ -1247,40 +1246,46 @@ export default class payment extends React.PureComponent
                             </Form>
                         </NdPopUp>
                     </div> 
-                      {/* Fatura Grid */}
-                    <NdPopGrid id={"pg_invoices"} parent={this} container={"#root"}
-                    visible={false}
-                    position={{of:'#root'}} 
-                    showTitle={true} 
-                    showBorders={true}
-                    width={'90%'}
-                    height={'90%'}
-                    selection={{mode:"multiple"}}
-                    title={this.t("pg_invoices.title")} //
-                    >
-                        <Column dataField="REFERANS" caption={this.t("pg_invoices.clmReferans")} width={200} defaultSortOrder="asc"/>
-                        <Column dataField="OUTPUT_NAME" caption={this.t("pg_invoices.clmOutputName")} width={300}/>
-                        <Column dataField="DOC_DATE_CONVERT" caption={this.t("pg_invoices.clmDate")} width={250} />
-                        <Column dataField="TOTAL" caption={this.t("pg_invoices.clmTotal")} width={200} />
-                        <Column dataField="REMAINING" caption={this.t("pg_invoices.clmRemaining")} width={200} />
-                    </NdPopGrid>
+                    {/* Fatura Grid */}
+                    <div>
+                        <NdPopGrid id={"pg_invoices"} parent={this} container={"#root"}
+                        visible={false}
+                        position={{of:'#root'}} 
+                        showTitle={true} 
+                        showBorders={true}
+                        width={'90%'}
+                        height={'90%'}
+                        selection={{mode:"multiple"}}
+                        title={this.t("pg_invoices.title")} //
+                        >
+                            <Column dataField="REF" caption={this.t("pg_invoices.clmReferans")} width={200}/>
+                            <Column dataField="REF_NO" caption={this.t("pg_invoices.clmReferans")} width={200}/>
+                            <Column dataField="TYPE_NAME" caption={this.t("pg_invoices.clmReferans")} width={200}/>
+                            <Column dataField="CUSTOMER_NAME" caption={this.t("pg_invoices.clmOutputName")} width={300}/>
+                            <Column dataField="DOC_DATE" caption={this.t("pg_invoices.clmDate")} width={250} defaultSortOrder="asc"/>
+                            <Column dataField="PAID_AMOUNT" caption={this.t("pg_invoices.clmTotal")} width={200} />
+                            <Column dataField="PAYING_AMOUNT" caption={this.t("pg_invoices.clmTotal")} width={200} />
+                            <Column dataField="BALANCE" caption={this.t("pg_invoices.clmRemaining")} width={200} />
+                        </NdPopGrid>
+                    </div>
                     {/* ÖN ÖDEME EVRAKI SEÇİM */}
-                    <NdPopGrid id={"pre_document"} parent={this} container={"#root"}
-                    visible={false}
-                    position={{of:'#root'}} 
-                    showTitle={true} 
-                    showBorders={true}
-                    width={'90%'}
-                    height={'90%'}
-                    selection={{mode:"single"}}
-                    title={this.t("pre_document.title")} //
-                    >
-                        <Column dataField="REFERANS" caption={this.t("pre_document.clmReferans")} width={200} defaultSortOrder="asc"/>
-                        <Column dataField="OUTPUT_NAME" caption={this.t("pre_document.clmOutputName")} width={300}/>
-                        <Column dataField="DOC_DATE_CONVERT" caption={this.t("pre_document.clmDate")} width={250} />
-                        <Column dataField="TOTAL" caption={this.t("pre_document.clmTotal")} width={200} />
-                    </NdPopGrid>
-                    
+                    <div>
+                        <NdPopGrid id={"pre_document"} parent={this} container={"#root"}
+                        visible={false}
+                        position={{of:'#root'}} 
+                        showTitle={true} 
+                        showBorders={true}
+                        width={'90%'}
+                        height={'90%'}
+                        selection={{mode:"single"}}
+                        title={this.t("pre_document.title")} //
+                        >
+                            <Column dataField="REFERANS" caption={this.t("pre_document.clmReferans")} width={200} defaultSortOrder="asc"/>
+                            <Column dataField="OUTPUT_NAME" caption={this.t("pre_document.clmOutputName")} width={300}/>
+                            <Column dataField="DOC_DATE_CONVERT" caption={this.t("pre_document.clmDate")} width={250} />
+                            <Column dataField="TOTAL" caption={this.t("pre_document.clmTotal")} width={200} />
+                        </NdPopGrid>
+                    </div>
                 </ScrollView>     
             </div>
         )

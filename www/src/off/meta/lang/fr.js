@@ -15503,7 +15503,8 @@ export const langFr =
         btnCash : "Saisie Réglement",
         invoiceSelect : "Sélectionner Facture",
         ValidCash : "Veuillez saisir un montant supérieur à 0", 
-        cmbPayType : {
+        cmbPayType : 
+        {
             title : "Mode de paiement",
             cash : "Espèce",
             check : "Chèque",
@@ -15522,14 +15523,17 @@ export const langFr =
             clmOutputCode  : "Code Client",
             clmTotal : "Total TTC"
         },
-        pg_invoices : 
+        pg_invoices : //BAK
         {
             title : "Sélection de facture",
-            clmReferans : "Référence",
-            clmInputName : "Nom Client",
+            clmRef : "Ref",
+            clmRefNo : "Ref No",
+            clmTypeName : "Type Doc.",
+            clmCustomer : "Nom Client",
             clmDate : "Date",
             clmTotal : "Total",
-            clmRemaining  : "Restant",
+            clmClosed : "Fermé",
+            clmBalance  : "Restant",
         },
         pg_txtCustomerCode : 
         {

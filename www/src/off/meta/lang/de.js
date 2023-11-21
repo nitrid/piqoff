@@ -15440,14 +15440,17 @@ export const langDe =
             clmOutputName: "KUNDENNAME",
             clmOutputCode: "KUNDENCODE",
         },
-        pg_invoices:
+        pg_invoices :
         {
-            title: "Rechnungsauswahl",
-            clmReferans: "REFERENZ",
-            clmInputName: "KUNDENAME",
-            clmDate: "DATUM",
-            clmTotal: "GESAMT",
-            clmRemaining: "OFFEN",
+            title : "Rechnungsauswahl",
+            clmRef : "REFERENZ",
+            clmRefNo : "REFERENZ NR",
+            clmTypeName : "BELEGSART",
+            clmCustomer : "KUNDE NAME",
+            clmDate : "DATUM",
+            clmTotal : "GESAMT",
+            clmClosed : "GESCHLOSSEN",
+            clmBalance : "AUSSTEHEND",
         },
         pg_txtCustomerCode : 
         {

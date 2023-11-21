@@ -15539,11 +15539,14 @@ export const langTr =
         pg_invoices : 
         {
             title : "Fatura Seçimi",
-            clmReferans : "REFERANS",
-            clmInputName : "CARİ ADI",
+            clmRef : "REF",
+            clmRefNo : "REF NO",
+            clmTypeName : "EVRAK TIP",
+            clmCustomer : "CARİ ADI",
             clmDate : "TARIH",
             clmTotal : "TOPLAM",
-            clmRemaining  : "KALAN",
+            clmClosed : "KAPANAN",
+            clmBalance  : "KALAN",
         },
         pg_txtCustomerCode : 
         {
