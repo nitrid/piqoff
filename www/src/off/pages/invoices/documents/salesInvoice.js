@@ -1134,6 +1134,7 @@ export default class salesInvoice extends DocBase
                                             }
                                             await dialog(tmpConfObj);
                                             return
+
                                         }
                                         else
                                         {
@@ -2358,6 +2359,7 @@ export default class salesInvoice extends DocBase
                                             <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmPrintPop" + this.tabIndex}
                                             onClick={async (e)=>
                                             {       
+                                                
                                                 if(e.validationGroup.validate().status == "valid")
                                                 {
                                                     App.instance.setState({isExecute:true})

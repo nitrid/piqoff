@@ -2225,8 +2225,8 @@ export default class rebateInvoice extends DocBase
                                             }}/>
                                         </div>
                                     </div>
-                            </Item>
-                        </Form>
+                                </Item>
+                            </Form>
                         </NdPopUp>
                     </div>                      
                     {/* Detay PopUp */}
