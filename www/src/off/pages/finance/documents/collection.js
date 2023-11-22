@@ -1,6 +1,6 @@
 import React from 'react';
 import App from '../../../lib/app.js';
-import { docCls,docItemsCls, docCustomerCls } from '../../../../core/cls/doc.js';
+import { docCls,docItemsCls,docCustomerCls,deptCreditMatchingCls } from '../../../../core/cls/doc.js';
 import moment from 'moment';
 
 import ScrollView from 'devextreme-react/scroll-view';
@@ -16,7 +16,7 @@ import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
-import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export,Summary,TotalItem} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdImageUpload from '../../../../core/react/devex/imageupload.js';
@@ -33,14 +33,14 @@ export default class collection extends React.PureComponent
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
         this.docObj = new docCls();
+        this.deptCreditMatchingObj = new deptCreditMatchingCls();
         this.tabIndex = props.data.tabkey
         
         this._calculateTotal = this._calculateTotal.bind(this)
         this._addPayment = this._addPayment.bind(this)
        
-        this.invoices = []
+        this.invoices = new datatable()
         this.docLocked = false;        
-
     }
     async componentDidMount()
     {
@@ -50,6 +50,7 @@ export default class collection extends React.PureComponent
     async init()
     {
         this.docObj.clearAll()
+        this.deptCreditMatchingObj.clearAll()
 
         this.docObj.ds.on('onAddRow',(pTblName,pData) =>
         {
@@ -107,7 +108,7 @@ export default class collection extends React.PureComponent
         this.docObj.addEmpty(tmpDoc);
 
         
-        this.invoices = []
+        this.invoices = new datatable()
         this.txtRef.readOnly = false
         this.txtRefno.readOnly = false
         this.docLocked = false
@@ -128,6 +129,8 @@ export default class collection extends React.PureComponent
         this.docObj.clearAll()
         App.instance.setState({isExecute:true})
         await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:0,DOC_TYPE:200});
+        await this.deptCreditMatchingObj.load({PAID_DOC:this.docObj.docCustomer.dt()[0].GUID,PAYING_DOC:this.docObj.docCustomer.dt()[0].GUID})
+
         App.instance.setState({isExecute:false})
 
         this.txtRef.readOnly = true
@@ -203,180 +206,8 @@ export default class collection extends React.PureComponent
     }
     async _addPayment(pType,pAmount)
     {
-        if(this.invoices.length > 0)
+        if(pAmount > 0)
         {
-            let tmpAmount  = pAmount
-            for (let i = 0; i < this.invoices.length; i++) 
-            {
-                if(tmpAmount >= this.invoices[i].REMAINING)
-                {
-                    let tmpDocCustomer = {...this.docObj.docCustomer.empty}
-                    tmpDocCustomer.DOC_GUID = this.docObj.dt()[0].GUID
-                    tmpDocCustomer.TYPE = this.docObj.dt()[0].TYPE
-                    tmpDocCustomer.REF = this.docObj.dt()[0].REF
-                    tmpDocCustomer.REF_NO = this.docObj.dt()[0].REF_NO
-                    tmpDocCustomer.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                    tmpDocCustomer.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                    tmpDocCustomer.OUTPUT = this.docObj.dt()[0].OUTPUT
-                    tmpDocCustomer.INVOICE_GUID = this.invoices[i].GUID 
-                    tmpDocCustomer.INVOICE_REF = this.invoices[i].REFERANS 
-                    tmpDocCustomer.INVOICE_DATE = this.invoices[i].DOC_DATE 
-                    if(pType == 0)
-                    {
-                        tmpDocCustomer.INPUT = this.cmbCashSafe.value
-                        tmpDocCustomer.INPUT_NAME = this.cmbCashSafe.displayValue
-                        tmpDocCustomer.PAY_TYPE = 0
-                        tmpDocCustomer.AMOUNT = this.invoices[i].REMAINING
-                        tmpDocCustomer.DESCRIPTION = this.cashDescription.value
-                    }
-                    else if (pType == 1)
-                    {
-                        tmpDocCustomer.INPUT = this.cmbCashSafe.value
-                        tmpDocCustomer.INPUT_NAME = this.cmbCashSafe.displayValue
-                        tmpDocCustomer.PAY_TYPE = 1
-                        tmpDocCustomer.AMOUNT = this.invoices[i].REMAINING
-                        tmpDocCustomer.DESCRIPTION = this.cashDescription.value
-        
-                        let tmpCheck = {...this.docObj.checkCls.empty}
-                        tmpCheck.DOC_GUID = this.docObj.dt()[0].GUID
-                        tmpCheck.REF = this.checkReference.value
-                        tmpCheck.DOC_DATE =  this.docObj.dt()[0].DOC_DATE
-                        tmpCheck.CHECK_DATE =  this.docObj.dt()[0].DOC_DATE
-                        tmpCheck.CUSTOMER =   this.docObj.dt()[0].INPUT
-                        tmpCheck.AMOUNT =  this.invoices[i].REMAINING
-                        tmpCheck.SAFE =  this.cmbCashSafe.value
-                        this.docObj.checkCls.addEmpty(tmpCheck)
-                    }
-                    else if (pType == 2)
-                    {
-                        tmpDocCustomer.INPUT = this.cmbCashSafe.value
-                        tmpDocCustomer.INPUT_NAME = this.cmbCashSafe.displayValue
-                        tmpDocCustomer.PAY_TYPE = 2
-                        tmpDocCustomer.AMOUNT = this.invoices[i].REMAINING
-                        tmpDocCustomer.DESCRIPTION = this.cashDescription.value
-                    }
-                    this.docObj.docCustomer.addEmpty(tmpDocCustomer)
-                    this._calculateTotal()
-                    tmpAmount = parseFloat((tmpAmount - this.invoices[i].REMAINING).toFixed(2))
-                }
-                else if(tmpAmount < this.invoices[i].REMAINING && tmpAmount != 0)
-                {
-                    let tmpDocCustomer = {...this.docObj.docCustomer.empty}
-                    tmpDocCustomer.DOC_GUID = this.docObj.dt()[0].GUID
-                    tmpDocCustomer.TYPE = this.docObj.dt()[0].TYPE
-                    tmpDocCustomer.REF = this.docObj.dt()[0].REF
-                    tmpDocCustomer.REF_NO = this.docObj.dt()[0].REF_NO
-                    tmpDocCustomer.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                    tmpDocCustomer.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                    tmpDocCustomer.OUTPUT = this.docObj.dt()[0].OUTPUT
-                    tmpDocCustomer.INVOICE_GUID = this.invoices[i].GUID  
-                    tmpDocCustomer.INVOICE_REF = this.invoices[i].REFERANS 
-
-                    if(pType == 0)
-                    {
-                        tmpDocCustomer.INPUT = this.cmbCashSafe.value
-                        tmpDocCustomer.INPUT_NAME = this.cmbCashSafe.displayValue
-                        tmpDocCustomer.PAY_TYPE = 0
-                        tmpDocCustomer.AMOUNT = tmpAmount
-                        tmpDocCustomer.DESCRIPTION = this.cashDescription.value
-                    }
-                    else if (pType == 1)
-                    {
-                        tmpDocCustomer.INPUT = this.cmbCashSafe.value
-                        tmpDocCustomer.INPUT_NAME = this.cmbCashSafe.displayValue
-                        tmpDocCustomer.PAY_TYPE = 1
-                        tmpDocCustomer.AMOUNT = tmpAmount
-                        tmpDocCustomer.DESCRIPTION = this.cashDescription.value
-        
-                        let tmpCheck = {...this.docObj.checkCls.empty}
-                        tmpCheck.DOC_GUID = this.docObj.dt()[0].GUID
-                        tmpCheck.REF = this.checkReference.value
-                        tmpCheck.DOC_DATE =  this.docObj.dt()[0].DOC_DATE
-                        tmpCheck.CHECK_DATE =  this.docObj.dt()[0].DOC_DATE
-                        tmpCheck.CUSTOMER =   this.docObj.dt()[0].OUTPUT
-                        tmpCheck.AMOUNT =  tmpAmount
-                        tmpCheck.SAFE =  this.cmbCashSafe.value
-                        this.docObj.checkCls.addEmpty(tmpCheck)
-                    }
-                    else if (pType == 2)
-                    {
-                        tmpDocCustomer.INPUT = this.cmbCashSafe.value
-                        tmpDocCustomer.INPUT_NAME = this.cmbCashSafe.displayValue
-                        tmpDocCustomer.PAY_TYPE = 2
-                        tmpDocCustomer.AMOUNT = tmpAmount
-                        tmpDocCustomer.DESCRIPTION = this.cashDescription.value
-                    }
-                    this.docObj.docCustomer.addEmpty(tmpDocCustomer)
-                    this._calculateTotal()
-                    tmpAmount = 0
-                }
-            }
-
-
-            if(tmpAmount > 0)
-            {
-                let tmpDocCustomer = {...this.docObj.docCustomer.empty}
-                tmpDocCustomer.DOC_GUID = this.docObj.dt()[0].GUID
-                tmpDocCustomer.TYPE = this.docObj.dt()[0].TYPE
-                tmpDocCustomer.REF = this.docObj.dt()[0].REF
-                tmpDocCustomer.REF_NO = this.docObj.dt()[0].REF_NO
-                tmpDocCustomer.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                tmpDocCustomer.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                tmpDocCustomer.OUTPUT = this.docObj.dt()[0].OUTPUT
-                
-                if(pType == 0)
-                {
-                    tmpDocCustomer.INPUT = this.cmbCashSafe.value
-                    tmpDocCustomer.INPUT_NAME = this.cmbCashSafe.displayValue
-                    tmpDocCustomer.PAY_TYPE = 0
-                    tmpDocCustomer.AMOUNT = tmpAmount
-                    tmpDocCustomer.DESCRIPTION = this.cashDescription.value
-                }
-                else if (pType == 1)
-                {
-                    tmpDocCustomer.INPUT = this.cmbCashSafe.value
-                    tmpDocCustomer.INPUT_NAME = this.cmbCashSafe.displayValue
-                    tmpDocCustomer.PAY_TYPE = 1
-                    tmpDocCustomer.AMOUNT = tmpAmount
-                    tmpDocCustomer.DESCRIPTION = this.cashDescription.value
-    
-                    let tmpCheck = {...this.docObj.checkCls.empty}
-                    tmpCheck.DOC_GUID = this.docObj.dt()[0].GUID
-                    tmpCheck.REF = this.checkReference.value
-                    tmpCheck.DOC_DATE =  this.docObj.dt()[0].DOC_DATE
-                    tmpCheck.CHECK_DATE =  this.docObj.dt()[0].DOC_DATE
-                    tmpCheck.CUSTOMER =   this.docObj.dt()[0].OUTPUT
-                    tmpCheck.AMOUNT =  tmpAmount
-                    tmpCheck.SAFE =  this.cmbCashSafe.value
-                    this.docObj.checkCls.addEmpty(tmpCheck)
-                }
-                else if (pType == 2)
-                {
-                    tmpDocCustomer.INPUT = this.cmbCashSafe.value
-                    tmpDocCustomer.INPUT_NAME = this.cmbCashSafe.displayValue
-                    tmpDocCustomer.PAY_TYPE = 2
-                    tmpDocCustomer.AMOUNT = tmpAmount
-                    tmpDocCustomer.DESCRIPTION = this.cashDescription.value
-                }
-
-                this.docObj.docCustomer.addEmpty(tmpDocCustomer)
-                this._calculateTotal()
-            }
-        }
-        else
-        {
-            if(this.sysParam.filter({ID:'invoicesForPayment',USERS:this.user.CODE}).getValue().value == true)
-            {
-                let tmpConfObj =
-                {
-                    id:'msgInvoiceSelect',showTitle:true,title:this.t("msgInvoiceSelect.title"),showCloseButton:true,width:'500px',height:'200px',
-                    button:[{id:"btn01",caption:this.t("msgInvoiceSelect.btn01"),location:'after'}],
-                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgInvoiceSelect.msg")}</div>)
-                }
-    
-                await dialog(tmpConfObj);
-                return
-            }
             let tmpDocCustomer = {...this.docObj.docCustomer.empty}
             tmpDocCustomer.DOC_GUID = this.docObj.dt()[0].GUID
             tmpDocCustomer.TYPE = this.docObj.dt()[0].TYPE
@@ -422,22 +253,39 @@ export default class collection extends React.PureComponent
             }
 
             this.docObj.docCustomer.addEmpty(tmpDocCustomer)
+            // BORC ALACAK EŞLEŞMESİ İÇİN YAPILDI.*****************************************/
+            let tmpDCPaidDt = this.invoices.where({REMAINDER: {'>' : 0}}).where({TYPE : 1})
+            if(tmpDCPaidDt.length > 0)
+            {
+                tmpDCPaidDt.push
+                (
+                    {
+                        LDATE : moment(new Date()),
+                        TYPE : tmpDocCustomer.TYPE,
+                        DOC : this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length - 1].GUID,
+                        REMAINDER : pAmount * -1,
+                    }
+                )
+                await this.deptCreditMatchingObj.matching(tmpDCPaidDt)
+            }
+            /******************************************************************************/
             this._calculateTotal()
         }
     }
     async getInvoices()
     {
-        this.invoices = []
         let tmpQuery = 
         {
-            query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS,TOTAL - ISNULL((SELECT SUM(AMOUNT) FROM DOC_CUSTOMER_VW_01 WHERE DOC_CUSTOMER_VW_01.INVOICE_GUID = DOC_VW_01.GUID),0) AS REMAINING FROM DOC_VW_01 WHERE INPUT = @OUTPUT AND DOC_TYPE IN(20,21) AND TYPE = 1 AND  " + 
-            "TOTAL - ISNULL((SELECT SUM(AMOUNT) FROM DOC_CUSTOMER_VW_01 WHERE DOC_CUSTOMER_VW_01.INVOICE_GUID = DOC_VW_01.GUID),0) > 0 ",
-            param : ['OUTPUT:string|50'],
-            value : [this.docObj.dt()[0].OUTPUT]
+            query : "SELECT *, " + 
+                    "CASE WHEN TYPE = 1 THEN BALANCE WHEN TYPE = 0 THEN BALANCE * -1 END AS REMAINDER, " +
+                    "(SELECT TOP 1 VALUE FROM DB_LANGUAGE WHERE TAG = (SELECT [dbo].[FN_DOC_TYPE_NAME](TYPE,DOC_TYPE,REBATE)) AND LANG = @LANG) AS TYPE_NAME " + 
+                    "FROM DEPT_CREDIT_MATCHING_VW_02 WHERE CUSTOMER_GUID = @CUSTOMER_GUID AND (TYPE = 1 OR (TYPE = 0 AND DOC_TYPE < 200)) ORDER BY DOC_DATE ASC,LDATE ASC",
+            param : ['CUSTOMER_GUID:string|50','LANG:string|50'],
+            value : [this.docObj.dt()[0].OUTPUT,localStorage.getItem('lang')]
         }
         let tmpData = await this.core.sql.execute(tmpQuery) 
         if(tmpData.result.recordset.length > 0)
-        {   
+        {
             await this.pg_invoices.setData(tmpData.result.recordset)
         }
         else
@@ -448,20 +296,25 @@ export default class collection extends React.PureComponent
         this.pg_invoices.show()
         this.pg_invoices.onClick = async(data) =>
         {
-            this.invoices = data
-            let tmpTotal = 0
-            for (let i = 0; i < data.length; i++) 
+            this.invoices = new datatable()
+            this.invoices.import(data)
+            if(this.invoices.sum('REMAINDER') > 0)
             {
-                tmpTotal = tmpTotal + data[i].REMAINING
+                let tmpDeptCreditMatchingObj = new deptCreditMatchingCls()
+                await tmpDeptCreditMatchingObj.matching(this.invoices)
+                await tmpDeptCreditMatchingObj.save()
+                this.numCash.value = this.invoices.sum('REMAINDER').round(2)
             }
-            this.numCash.value = parseFloat(tmpTotal.toFixed(2))
+            else
+            {
+                this.numCash.value = 0
+            }
         }
     }
     render()
     {
         return(
             <div>
-                
                 <ScrollView>
                     {/* Toolbar */}
                     <div className="row px-2 pt-2">
@@ -516,7 +369,8 @@ export default class collection extends React.PureComponent
                                                 }
                                                 
                                                 if((await this.docObj.save()) == 0)
-                                                {                                                    
+                                                {                       
+                                                    await this.deptCreditMatchingObj.save()                             
                                                     tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
                                                     await dialog(tmpConfObj1);
                                                     this.btnSave.setState({disabled:true});
@@ -559,6 +413,10 @@ export default class collection extends React.PureComponent
                                         {
                                             this.docObj.dt('DOC').removeAt(0)
                                             await this.docObj.dt('DOC').delete();
+
+                                            this.deptCreditMatchingObj.dt().removeAll()
+                                            await this.deptCreditMatchingObj.dt().delete()
+
                                             this.init(); 
                                         }
                                         
@@ -1020,44 +878,44 @@ export default class collection extends React.PureComponent
                                     searchEnabled={true}
                                     notRefresh={true}
                                     onValueChanged={(async(e)=>
+                                    {
+                                        this.cmbCashSafe.value = ''
+                                        let tmpQuery
+                                        if(e.value == 0)
                                         {
-                                            this.cmbCashSafe.value = ''
-                                            let tmpQuery
-                                            if(e.value == 0)
-                                            {
-                                                tmpQuery = {query : "SELECT * FROM SAFE_VW_01 WHERE TYPE = 0"}
-                                            }
-                                            else if(e.value == 1)
-                                            {
-                                                tmpQuery = {query : "SELECT * FROM SAFE_VW_01 WHERE TYPE = 1"}
-                                            }
-                                            else if(e.value == 2)
-                                            {
-                                                tmpQuery = {query : "SELECT * FROM BANK_VW_01 WHERE TYPE = 0"}
-                                            }
-                                            else if(e.value == 3)
-                                            {
-                                                tmpQuery = {query : "SELECT * FROM BANK_VW_01 WHERE TYPE = 0"}
-                                            }
-                                            else if(e.value == 4)
-                                            {
-                                                tmpQuery = {query : "SELECT * FROM SAFE_VW_01 WHERE TYPE = 0"}
-                                            }
-                                            else if(e.value == 5)
-                                            {
-                                                tmpQuery = {query : "SELECT * FROM SAFE_VW_01 WHERE TYPE = 0"}
-                                            }
-                                    
-                                            let tmpData = await this.core.sql.execute(tmpQuery) 
-                                            if(tmpData.result.recordset.length > 0)
-                                            {   
-                                                this.cmbCashSafe.setData(tmpData.result.recordset)
-                                            }
-                                            else
-                                            {
-                                                this.cmbCashSafe.setData([])
-                                            }
-                                        }).bind(this)}
+                                            tmpQuery = {query : "SELECT * FROM SAFE_VW_01 WHERE TYPE = 0"}
+                                        }
+                                        else if(e.value == 1)
+                                        {
+                                            tmpQuery = {query : "SELECT * FROM SAFE_VW_01 WHERE TYPE = 1"}
+                                        }
+                                        else if(e.value == 2)
+                                        {
+                                            tmpQuery = {query : "SELECT * FROM BANK_VW_01 WHERE TYPE = 0"}
+                                        }
+                                        else if(e.value == 3)
+                                        {
+                                            tmpQuery = {query : "SELECT * FROM BANK_VW_01 WHERE TYPE = 0"}
+                                        }
+                                        else if(e.value == 4)
+                                        {
+                                            tmpQuery = {query : "SELECT * FROM SAFE_VW_01 WHERE TYPE = 0"}
+                                        }
+                                        else if(e.value == 5)
+                                        {
+                                            tmpQuery = {query : "SELECT * FROM SAFE_VW_01 WHERE TYPE = 0"}
+                                        }
+                                
+                                        let tmpData = await this.core.sql.execute(tmpQuery) 
+                                        if(tmpData.result.recordset.length > 0)
+                                        {   
+                                            this.cmbCashSafe.setData(tmpData.result.recordset)
+                                        }
+                                        else
+                                        {
+                                            this.cmbCashSafe.setData([])
+                                        }
+                                    }).bind(this)}
                                     data={{source:[{ID:0,VALUE:this.t("cmbPayType.cash")},{ID:1,VALUE:this.t("cmbPayType.check")},{ID:2,VALUE:this.t("cmbPayType.bankTransfer")},{ID:3,VALUE:this.t("cmbPayType.otoTransfer")},{ID:4,VALUE:this.t("cmbPayType.foodTicket")},{ID:5,VALUE:this.t("cmbPayType.bill")}]}}
                                     param={this.param.filter({ELEMENT:'cmbCashSafe',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbCashSafe',USERS:this.user.CODE})}
@@ -1076,10 +934,6 @@ export default class collection extends React.PureComponent
                                     value=""
                                     searchEnabled={true}
                                     notRefresh={true}
-                                    onValueChanged={(async()=>
-                                        {
-
-                                        }).bind(this)}
                                     param={this.param.filter({ELEMENT:'cmbCashSafe',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbCashSafe',USERS:this.user.CODE})}
                                     >
@@ -1091,14 +945,13 @@ export default class collection extends React.PureComponent
                                 <Item>
                                     <Label text={this.t("cash")} alignment="right" />
                                     <div className="col-4 pe-0">
-                                        <NdNumberBox id="numCash" parent={this} simple={true}
-                                        maxLength={32}                                        
+                                        <NdNumberBox id="numCash" parent={this} simple={true} maxLength={32}
                                         param={this.param.filter({ELEMENT:'numCash',USERS:this.user.CODE})}
                                         access={this.access.filter({ELEMENT:'numCash',USERS:this.user.CODE})}
                                         >
-                                        <Validator validationGroup={"frmPayCash"  + this.tabIndex}>
-                                            <RangeRule min={0.1} message={this.t("ValidCash")} />
-                                        </Validator>  
+                                            <Validator validationGroup={"frmPayCash"  + this.tabIndex}>
+                                                <RangeRule min={0.1} message={this.t("ValidCash")} />
+                                            </Validator>  
                                         </NdNumberBox>
                                     </div>
                                 </Item>
@@ -1144,7 +997,6 @@ export default class collection extends React.PureComponent
                                                         this.popCash.hide();  
                                                     }
                                                 }
-                                                
                                             }}/>
                                         </div>
                                         <div className='col-6'>
@@ -1159,8 +1011,8 @@ export default class collection extends React.PureComponent
                             </Form>
                         </NdPopUp>
                     </div> 
-                      {/* check PopUp */}
-                      <div>
+                    {/* Check PopUp */}
+                    <div>
                         <NdPopUp parent={this} id={"popCheck"} 
                         visible={false}
                         showCloseButton={true}
@@ -1168,11 +1020,10 @@ export default class collection extends React.PureComponent
                         title={this.t("popCheck.title")}
                         container={"#root"} 
                         width={'500'}
-                        height={'500'}
+                        height={'180'}
                         position={{of:'#root'}}
                         >
                             <Form colCount={1} height={'fit-content'}>
-                               
                                 <Item>
                                     <Label text={this.t("checkReference")} alignment="right" />
                                     <div className="col-12 pe-0">
@@ -1192,9 +1043,9 @@ export default class collection extends React.PureComponent
                                             validationGroup={"frmCollCheck" + this.tabIndex}
                                             onClick={async (e)=>
                                             {       
-                                                    this._addPayment(1,this.numCash.value)
-                                                    this.popCheck.hide(); 
-                                                    this.popCash.hide();  
+                                                this._addPayment(1,this.numCash.value)
+                                                this.popCheck.hide(); 
+                                                this.popCash.hide();  
                                             }}/>
                                         </div>
                                         <div className='col-6'>
@@ -1209,23 +1060,78 @@ export default class collection extends React.PureComponent
                             </Form>
                         </NdPopUp>
                     </div> 
-                      {/* Fatura Grid */}
-                    <NdPopGrid id={"pg_invoices"} parent={this} container={"#root"}
-                    visible={false}
-                    position={{of:'#root'}} 
-                    showTitle={true} 
-                    showBorders={true}
-                    width={'90%'}
-                    height={'90%'}
-                    selection={{mode:"multiple"}}
-                    title={this.t("pg_invoices.title")} //
-                    >
-                        <Column dataField="REFERANS" caption={this.t("pg_invoices.clmReferans")} width={200} defaultSortOrder="asc"/>
-                        <Column dataField="INPUT_NAME" caption={this.t("pg_invoices.clmInputName")} width={300}/>
-                        <Column dataField="DOC_DATE_CONVERT" caption={this.t("pg_invoices.clmDate")} width={250} />
-                        <Column dataField="TOTAL" caption={this.t("pg_invoices.clmTotal")} width={200} />
-                        <Column dataField="REMAINING" caption={this.t("pg_invoices.clmRemaining")} width={200} />
-                    </NdPopGrid>
+                    {/* Fatura Grid */}
+                    <div>
+                        <NdPopGrid id={"pg_invoices"} parent={this} container={"#root"}
+                        visible={false}
+                        position={{of:'#root'}} 
+                        showTitle={true} 
+                        showBorders={true}
+                        width={'90%'}
+                        height={'90%'}
+                        selection={{mode:"multiple"}}
+                        title={this.t("pg_invoices.title")}
+                        onSelectionChanged={(e)=>
+                        {
+                            e.component.refresh(true);
+                        }}
+                        onRowRemoved={async(e)=>
+                        {
+                            let tmpDeptCreditMatchingObj = new deptCreditMatchingCls()
+                            await tmpDeptCreditMatchingObj.load({PAID_DOC:e.data.DOC,PAYING_DOC:e.data.DOC})
+                            tmpDeptCreditMatchingObj.dt().removeAll()
+                            await tmpDeptCreditMatchingObj.dt().delete()
+
+                            let tmpQuery = 
+                            {
+                                query : "SELECT *, " + 
+                                        "CASE WHEN TYPE = 1 THEN BALANCE WHEN TYPE = 0 THEN BALANCE * -1 END AS REMAINDER, " +
+                                        "(SELECT TOP 1 VALUE FROM DB_LANGUAGE WHERE TAG = (SELECT [dbo].[FN_DOC_TYPE_NAME](TYPE,DOC_TYPE,REBATE)) AND LANG = @LANG) AS TYPE_NAME " + 
+                                        "FROM DEPT_CREDIT_MATCHING_VW_02 WHERE CUSTOMER_GUID = @CUSTOMER_GUID AND (TYPE = 1 OR (TYPE = 0 AND DOC_TYPE < 200)) ORDER BY DOC_DATE ASC,LDATE ASC",
+                                param : ['CUSTOMER_GUID:string|50','LANG:string|50'],
+                                value : [this.docObj.dt()[0].OUTPUT,localStorage.getItem('lang')]
+                            }
+                            let tmpData = await this.core.sql.execute(tmpQuery) 
+                            if(tmpData.result.recordset.length > 0)
+                            {
+                                await this.pg_invoices.setData(tmpData.result.recordset)
+                            }
+                            else
+                            {
+                                await this.pg_invoices.setData([])
+                            }
+                        }}
+                        >
+                            <Editing mode="row" allowDeleting={true} useIcons={true}/>
+                            <Column dataField="DOC_REF" caption={this.t("pg_invoices.clmRef")} width={80}/>
+                            <Column dataField="DOC_REF_NO" caption={this.t("pg_invoices.clmRefNo")} width={100}/>
+                            <Column dataField="TYPE_NAME" caption={this.t("pg_invoices.clmTypeName")} width={100}/>
+                            <Column dataField="CUSTOMER_NAME" caption={this.t("pg_invoices.clmCustomer")} width={300}/>
+                            <Column dataField="DOC_DATE" caption={this.t("pg_invoices.clmDate")} width={100} dataType={"date"} defaultSortOrder="asc"/>
+                            <Column dataField="PAID_AMOUNT" caption={this.t("pg_invoices.clmTotal")} width={100} />
+                            <Column dataField="PAYING_AMOUNT" caption={this.t("pg_invoices.clmClosed")} width={100} />
+                            <Column dataField="REMAINDER" caption={this.t("pg_invoices.clmBalance")} width={100} format={{ style: "currency", currency: "EUR",precision: 3}}/>
+                            <Summary calculateCustomSummary={(options) =>
+                            {
+                                if (options.name === 'SelectedRowsSummary') 
+                                {
+                                    if (options.summaryProcess === 'start') 
+                                    {
+                                        options.totalValue = 0;
+                                    } 
+                                    else if (options.summaryProcess === 'calculate') 
+                                    {
+                                        if (options.component.isRowSelected(options.value)) 
+                                        {
+                                            options.totalValue += Number(options.value.REMAINDER).round(2);
+                                        }
+                                    }
+                                }
+                            }}>
+                                <TotalItem name="SelectedRowsSummary" summaryType="custom" valueFormat={{ style: "currency", currency: "EUR",precision: 3}} displayFormat="Sum: {0}" showInColumn="REMAINDER" />
+                            </Summary>
+                        </NdPopGrid>
+                    </div>
                 </ScrollView>     
             </div>
         )

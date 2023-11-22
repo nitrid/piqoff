@@ -241,6 +241,31 @@ export const langTr =
         msg : "Lütfen satır seçiniz !",
         btn01 : "Tamam"
     },
+    msgPreLottery: 
+    {
+        title: "Uyarı",
+        msg: "BİR DAKİKA..",
+        btn01: "DEVAM",
+    },
+    msgPostLottery: 
+    {
+        title: "Uyarı",
+        msg: "BU MÜŞTERİ ÇEKİLİŞİ KAZANDI !!!",
+        btn01: "Evet",
+    },    
+    msgCustomerMail: 
+    {
+        title : "Uyarı",
+        msg : "musteriye mail eklemek istermisiniz",
+        btn01 : "Evet",
+        btn02 : "İptal",
+    },
+    msgAddCustomerMail: 
+    {
+        title : "Uyarı",
+        msg : "musterinin mail'i",
+        btn01 : "tamam",
+    },
     msgCancelCustomerConfirm: 
     {
         title : "Uyarı",
@@ -799,7 +824,8 @@ export const langTr =
         scalePort : "Scale port",
         payCardPort : "Pay card port",
         printDesing : "Yazdırma dizaynı",
-        scannerPort : "Scanner port"
+        scannerPort : "Scanner port",
+        printerPort : "Printer port"
     },
     msgNotBarcodeWeighing: 
     {
@@ -839,5 +865,13 @@ export const langTr =
     itemInfo:
     {
         msgSplash : "LÜTFEN BARKOD OKUTUNUZ"
-    }
+    },
+    popPasswordChange : 
+    {
+        title:"Şifre Değiştir",
+        NewPassword : "Yeni Şifre",
+        NewPassword2 : "Yeni Şifre Tekrar",
+        btnApprove : "Onayla"
+    },
+    passChange :"Şifre Değiştir",
 }

@@ -521,7 +521,8 @@ export class docCustomerCls
     {
         this.core = core.instance;
         this.ds =  new dataset()
-        this.empty = {
+        this.empty = 
+        {
             GUID : '00000000-0000-0000-0000-000000000000',
             CUSER : this.core.auth.data.CODE,
             CUSER_NAME : this.core.auth.data.NAME,
@@ -552,7 +553,6 @@ export class docCustomerCls
             OUTPUT_BALANCE  : 0,
             ROUND : 0
         }
-
         this._initDs();
     }
     //#region Private
@@ -562,7 +562,7 @@ export class docCustomerCls
         tmpDt.selectCmd = 
         {
             query : "SELECT * FROM [dbo].[DOC_CUSTOMER_VW_01] WHERE ((DOC_GUID = @DOC_GUID) OR (@DOC_GUID = '00000000-0000-0000-0000-000000000000')) AND ((DOC_TYPE = @DOC_TYPE) OR (@DOC_TYPE = -1)) AND " +
-            " ((REF = @REF) OR (@REF = '')) AND ((REF_NO = @REF_NO) OR (@REF_NO = 0)) AND ((INVOICE_GUID = @INVOICE_GUID) OR (@INVOICE_GUID = '00000000-0000-0000-0000-000000000000'))",
+                    "((REF = @REF) OR (@REF = '')) AND ((REF_NO = @REF_NO) OR (@REF_NO = 0)) AND ((INVOICE_GUID = @INVOICE_GUID) OR (@INVOICE_GUID = '00000000-0000-0000-0000-000000000000'))",
             param : ['DOC_GUID:string|50','DOC_TYPE:int','REF:string|25','REF_NO:int','INVOICE_GUID:string|50']
         }
         tmpDt.insertCmd = 
@@ -625,7 +625,6 @@ export class docCustomerCls
             param : ['PCUSER:string|25','PGUID:string|50','PDOC_GUID:string|50'],
             dataprm : ['CUSER','GUID','DOC_GUID']
         }
-
         this.ds.add(tmpDt);
     }
     //#region
@@ -677,13 +676,9 @@ export class docCustomerCls
                 tmpPrm.REF_NO = typeof arguments[0].REF_NO == 'undefined' ? 0 : arguments[0].REF_NO;
                 tmpPrm.INVOICE_GUID = typeof arguments[0].INVOICE_GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].INVOICE_GUID;
             }
-
             this.ds.get('DOC_CUSTOMER').selectCmd.value = Object.values(tmpPrm);
-
             await this.ds.get('DOC_CUSTOMER').refresh();
-
             resolve(this.ds.get('DOC_CUSTOMER'));
-            
         });
     }
     save()
@@ -1607,5 +1602,176 @@ export class transportTypeCls
             this.ds.delete()
             resolve(await this.ds.update()); 
         });
+    }
+}
+export class deptCreditMatchingCls 
+{
+    constructor()
+    {
+        this.core = core.instance;
+        this.ds =  new dataset()
+        this.empty = 
+        {
+            GUID : '00000000-0000-0000-0000-000000000000',
+            TYPE: 0,
+            PAID_DOC : '00000000-0000-0000-0000-000000000000',
+            PAYING_DOC : '00000000-0000-0000-0000-000000000000',
+            PAYING_DAY : 0,
+            PAID_AMOUNT : 0,
+            PAYING_AMOUNT : 0
+        }
+
+        this._initDs();
+    }
+    //#region Private
+    _initDs()
+    {
+        let tmpDt = new datatable('DEPT_CREDIT_MATCHING');
+        tmpDt.selectCmd = 
+        {
+            query : "SELECT * FROM DEPT_CREDIT_MATCHING WHERE PAID_DOC = @PAID_DOC OR PAYING_DOC = @PAYING_DOC",
+            param : ['PAID_DOC:string|50','PAYING_DOC:string|50']
+        }
+        tmpDt.insertCmd = 
+        {
+            query : "EXEC [dbo].[PRD_DEPT_CREDIT_MATCHING_INSERT] " +
+                    "@GUID = @PGUID, " +
+                    "@TYPE = @PTYPE, " +
+                    "@PAID_DOC = @PPAID_DOC, " +
+                    "@PAYING_DOC = @PPAYING_DOC, " +
+                    "@PAYING_DAY = @PPAYING_DAY, " +
+                    "@PAID_AMOUNT = @PPAID_AMOUNT, " +
+                    "@PAYING_AMOUNT = @PPAYING_AMOUNT ",
+            param : ['PGUID:string|50','PTYPE:int','PPAID_DOC:string|50','PPAYING_DOC:string|50','PPAYING_DAY:int','PPAID_AMOUNT:float','PPAYING_AMOUNT:float'],
+            dataprm : ['GUID','TYPE','PAID_DOC','PAYING_DOC','PAYING_DAY','PAID_AMOUNT','PAYING_AMOUNT']
+        }
+        tmpDt.updateCmd = 
+        {
+            query : "EXEC [dbo].[PRD_DEPT_CREDIT_MATCHING_UPDATE] " +
+                    "@GUID = @PGUID, " +
+                    "@TYPE = @PTYPE, " +
+                    "@PAID_DOC = @PPAID_DOC, " +
+                    "@PAYING_DOC = @PPAYING_DOC, " +
+                    "@PAYING_DAY = @PPAYING_DAY, " +
+                    "@PAID_AMOUNT = @PPAID_AMOUNT, " +
+                    "@PAYING_AMOUNT = @PPAYING_AMOUNT ",
+            param : ['PGUID:string|50','PTYPE:int','PPAID_DOC:string|50','PPAYING_DOC:string|50','PPAYING_DAY:int','PPAID_AMOUNT:float','PPAYING_AMOUNT:float'],
+            dataprm : ['GUID','TYPE','PAID_DOC','PAYING_DOC','PAYING_DAY','PAID_AMOUNT','PAYING_AMOUNT']
+        }
+        tmpDt.deleteCmd = 
+        {
+            query : "[dbo].[PRD_DEPT_CREDIT_MATCHING_DELETE] " + 
+                    "@GUID = @PGUID, " + 
+                    "@PAID_DOC = @PPAID_DOC, " + 
+                    "@PAYING_DOC = @PPAYING_DOC ",
+            param : ['PGUID:string|50','PPAID_DOC:string|50','PPAYING_DOC:string|50'],
+            dataprm : ['GUID','PAID_DOC','PAYING_DOC']
+        }
+        this.ds.add(tmpDt);
+    }
+    //#region
+    dt()
+    {
+        if(arguments.length > 0)
+        {
+            return this.ds.get(arguments[0])
+        }
+
+        return this.ds.get(0)
+    }
+    addEmpty()
+    {
+        if(typeof this.dt('DEPT_CREDIT_MATCHING') == 'undefined')
+        {
+            return;
+        }
+        let tmp = {};
+        if(arguments.length > 0)
+        {
+            tmp = {...arguments[0]}
+        }
+        else
+        {
+            tmp = {...this.empty}
+        }
+        tmp.GUID = datatable.uuidv4()
+        this.dt('DEPT_CREDIT_MATCHING').push(tmp)
+    }
+    clearAll()
+    {
+        for(let i = 0; i < this.ds.length; i++)
+        {
+            this.dt(i).clear()
+        }
+    }
+    load()
+    {
+        //PARAMETRE OLARAK OBJE GÖNDERİLİR YADA PARAMETRE BOŞ İSE TÜMÜ GETİRİLİR.
+        return new Promise(async resolve =>
+        {
+            let tmpPrm = {PAID_DOC:'00000000-0000-0000-0000-000000000000',PAYING_DOC:'00000000-0000-0000-0000-000000000000'}
+            if(arguments.length > 0)
+            {
+                tmpPrm.PAID_DOC = typeof arguments[0].PAID_DOC == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].PAID_DOC;
+                tmpPrm.PAYING_DOC = typeof arguments[0].PAYING_DOC == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].PAYING_DOC;
+            }
+
+            this.ds.get('DEPT_CREDIT_MATCHING').selectCmd.value = Object.values(tmpPrm);
+
+            await this.ds.get('DEPT_CREDIT_MATCHING').refresh();
+
+            resolve(this.ds.get('DEPT_CREDIT_MATCHING'));
+        });
+    }
+    save()
+    {
+        return new Promise(async resolve => 
+        {
+            this.ds.delete()
+            resolve(await this.ds.update()); 
+        });
+    }
+    matching(pData)
+    {
+        return new Promise(async resolve =>
+        {
+            let tmpPaidDt = pData.where({TYPE : 1}).orderBy('LDATE',"asc")
+            let tmpPayingDt = pData.where({TYPE : 0}).orderBy('LDATE',"asc")
+            
+            for (let i = 0; i < tmpPaidDt.length; i++) 
+            {
+                for (let x = 0; x < tmpPayingDt.length; x++) 
+                {
+                    if(tmpPaidDt[i].REMAINDER != 0 && tmpPayingDt[x].REMAINDER != 0)
+                    {
+                        let tmpPaying = Number((Number(tmpPaidDt[i].REMAINDER).round(2) + Number(tmpPayingDt[x].REMAINDER).round(2)) >= 0 ? tmpPayingDt[x].REMAINDER * -1 : tmpPaidDt[i].REMAINDER).round(2)                    
+
+                        let tmpDeptCredit = {...this.empty}
+                        tmpDeptCredit.TYPE = tmpPaidDt[i].TYPE
+                        tmpDeptCredit.PAID_DOC = tmpPaidDt[i].DOC
+                        tmpDeptCredit.PAYING_DOC = tmpPayingDt[x].DOC
+                        tmpDeptCredit.PAYING_DAY = 0
+                        tmpDeptCredit.PAID_AMOUNT = Number(tmpPaidDt[i].REMAINDER).round(2)
+                        tmpDeptCredit.PAYING_AMOUNT = tmpPaying
+                        this.addEmpty(tmpDeptCredit)
+
+                        tmpDeptCredit = {...this.empty}
+                        tmpDeptCredit.TYPE = tmpPayingDt[x].TYPE
+                        tmpDeptCredit.PAID_DOC = tmpPayingDt[x].DOC
+                        tmpDeptCredit.PAYING_DOC = tmpPaidDt[i].DOC
+                        tmpDeptCredit.PAYING_DAY = 0
+                        tmpDeptCredit.PAID_AMOUNT = Number(tmpPayingDt[x].REMAINDER * -1).round(2)
+                        tmpDeptCredit.PAYING_AMOUNT = tmpPaying
+                        this.addEmpty(tmpDeptCredit)
+
+                        tmpPaidDt[i].REMAINDER = Number(tmpPaidDt[i].REMAINDER - tmpPaying).round(2)
+                        tmpPayingDt[x].REMAINDER = Number(tmpPayingDt[x].REMAINDER + tmpPaying).round(2)
+                        // tmpPaidDt[i].PAYING_AMOUNT = Number(tmpPaidDt[i].PAYING_AMOUNT + tmpPaying).round(2)
+                        // tmpPayingDt[x].PAYING_AMOUNT = Number(tmpPayingDt[x].PAYING_AMOUNT + tmpPaying).round(2)
+                    }
+                }
+            }
+            resolve()
+        })
     }
 }

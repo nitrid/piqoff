@@ -241,6 +241,31 @@ export const langDe =
         msg: "Bitte wählen Sie eine Zeile aus!",
         btn01: "OK",
     },
+    msgPreLottery:
+    {
+        title: "Warnung",
+        msg: "EINE MINUTE...",
+        btn01: "WEITER",
+    },
+    msgPostLottery:
+    {
+        title: "Warnung",
+        msg: "DIESER KUNDE HAT DIE ZIEHUNG GEWONNEN !!!",
+        btn01: "Ja",
+    },    
+    msgCustomerMail:
+    {
+        title: "Warnung",
+        msg: "Möchten Sie dem Kunden eine E-Mail hinzufügen?",
+        btn01: "Ja",
+        btn02: "Abbrechen",
+    },
+    msgAddCustomerMail:
+    {
+        title: "Warnung",
+        msg: "Die E-Mail des Kunden lautet",
+        btn01: "OK",
+    },
     msgCancelCustomerConfirm: 
     {
         title: "Achtung",
@@ -798,7 +823,8 @@ export const langDe =
         scalePort: "Waagen-Anschluss",
         payCardPort: "PayCard-Anschluss",
         printDesing: "Druckdesign",
-        scannerPort : "Scanner port"
+        scannerPort : "Scanner port",
+        printerPort: "Printer port"
     },
     msgNotBarcodeWeighing: 
     {
@@ -838,5 +864,13 @@ export const langDe =
     itemInfo:
     {
         msgSplash: "BITTE DEN BARCODE SCANNEN"
-    }
+    },
+    popPasswordChange : 
+    {
+        title:"Şifre Değiştir",  // BAK
+        NewPassword : "Yeni Şifre",  // BAK
+        NewPassword2 : "Yeni Şifre Tekrar",  // BAK
+        btnApprove : "Onayla"  // BAK
+    },
+    passChange :"Şifre Değiştir", // BAK
 }

@@ -241,6 +241,31 @@ export const langEn =
         msg : "Please select the line",
         btn01 : "OK"
     },
+    msgPreLottery:
+    {
+        title: "Warning",
+        msg: "ONE MINUTE...",
+        btn01: "CONTINUE",
+    },
+    msgPostLottery:
+    {
+        title: "Warning",
+        msg: "THIS CUSTOMER WON THE DRAW!!!",
+        btn01: "Yes",
+    },
+        msgCustomerMail:
+    {
+        title: "Warning",
+        msg: "Do you want to add an email to the customer?",
+        btn01: "Yes",
+        btn02: "Cancel",
+    },
+    msgAddCustomerMail:
+    {
+        title: "Warning",
+        msg: "The customer's email is",
+        btn01: "OK",
+    },
     msgCancelCustomerConfirm: 
     {
         title : "Attention",
@@ -798,7 +823,8 @@ export const langEn =
         scalePort: "Scale Port",
         payCardPort: "Card Payment Terminal Port",
         printDesing: "Printer Design",
-        scannerPort : "Scanner port"
+        scannerPort : "Scanner port",
+        printerPort: "Printer port"
     },
     msgNotBarcodeWeighing: 
     {
