@@ -17105,6 +17105,31 @@ export const langDe =
         txtUnitQuantity : "Einheitsmenge",
         txtTotalQuantity : "Gesamtmenge",
         txtUnitPrice: "Kundenpreis",
+        validDesign: "Bitte wählen Sie ein Design aus.",
+        validMail: "Bitte füllen Sie das Feld aus.",
+        txtTotalHt: "Rabattierter Betrag",
+        txtDocNo: "Dokumentnummer",
+        placeMailHtmlEditor : "Sie können eine Beschreibung für Ihre E-Mail eingeben.",
+        isMsgSave :
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Aktion kann ohne Dokumentenregistrierung nicht durchgeführt werden!"
+        },
+        msgMailSendResult:
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msgSuccess: "E-Mail-Versand erfolgreich!",
+            msgFailed: "E-Mail-Versand fehlgeschlagen!"
+        },
+        popMailSend :
+        {
+            title :"E-Mail senden",
+            txtMailSubject : "E-Mail-Betreff",
+            txtSendMail : "E-Mail-Adresse",
+            btnSend : "Senden"
+        },
         pg_Docs : 
         {
             title : "Dokumentenauswahl",
