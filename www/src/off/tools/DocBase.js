@@ -2,7 +2,7 @@
 import moment from 'moment';
 import React from 'react';
 import App from '../lib/app.js';
-import { docCls,docItemsCls, docCustomerCls,docExtraCls} from '../../core/cls/doc.js';
+import { docCls,docItemsCls,docCustomerCls,docExtraCls,deptCreditMatchingCls} from '../../core/cls/doc.js';
 import { nf525Cls } from '../../core/cls/nf525.js';
 import { datatable } from '../../core/core.js';
 
@@ -36,6 +36,8 @@ export default class DocBase extends React.PureComponent
         this.payObj = new docCls();
         this.extraObj = new docExtraCls();
         this.nf525 = new nf525Cls();
+        this.deptCreditMatchingObj = new deptCreditMatchingCls();
+        this.deptCreditMatchingObj.lang = this.lang;
         this.tabIndex = props.data.tabkey
         this.type = 0;
         this.docType = 0;
@@ -44,8 +46,10 @@ export default class DocBase extends React.PureComponent
 
         this.calculateTotal = this.calculateTotal.bind(this)
         this.getDispatch = this.getDispatch.bind(this)
+        this.getPayment = this.getPayment.bind(this)    
         this.calculateTotalMargin = this.calculateTotalMargin.bind(this)
         this.calculateMargin = this.calculateMargin.bind(this)
+        this.addPayment = this.addPayment.bind(this)
 
         this.multiItemData = new datatable()
         this.unitDetailData = new datatable()
@@ -96,6 +100,7 @@ export default class DocBase extends React.PureComponent
             this.newPriceDate.clear()
             this.newVat.clear()
             this.multiItemData.clear()
+            this.deptCreditMatchingObj.clearAll()
             this.popMultiItem.tmpTagItemCode = undefined
     
             this.docObj.ds.on('onAddRow',(pTblName,pData) =>
@@ -231,7 +236,12 @@ export default class DocBase extends React.PureComponent
             this.docObj.clearAll()
             this.payObj.clearAll()
             await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:this.type,DOC_TYPE:this.docType,SUB_FACTOR:this.sysParam.filter({ID:'secondFactor',USERS:this.user.CODE}).getValue().value});
-            
+
+            if(this.docObj.docCustomer.dt().length > 0)
+            {
+                await this.deptCreditMatchingObj.load({PAID_DOC:this.docObj.docCustomer.dt()[0].GUID,PAYING_DOC:this.docObj.docCustomer.dt()[0].GUID})
+            }
+
             if(this.docObj.dt().length == 0)
             {
                 resolve()
@@ -397,7 +407,6 @@ export default class DocBase extends React.PureComponent
     }
     async calculateTotalMargin()
     {
-        console.log(this.docDetailObj.dt())
         let tmpTotalCost = 0
 
         for (let  i= 0; i < this.docDetailObj.dt().length; i++) 
@@ -785,6 +794,43 @@ export default class DocBase extends React.PureComponent
             }, 500);
         }
     }
+    async getPayment()
+    {
+        if(typeof this.txtRemainder != 'undefined')
+        {
+            await this.payObj.docCustomer.load({INVOICE_GUID:this.docObj.dt()[0].GUID});
+            if(this.payObj.dt().length > 0)
+            {
+                this.txtPayTotal.value = parseFloat(this.payObj.docCustomer.dt().sum("AMOUNT",2))
+                let tmpRemainder = (this.docObj.dt()[0].TOTAL - this.payObj.dt()[0].TOTAL).toFixed(2)
+                this.txtRemainder.value = tmpRemainder
+                if(typeof this.txtMainRemainder != 'undefined')
+                {
+                    this.txtMainRemainder.value = tmpRemainder
+                }
+            }
+            else
+            {
+                this.txtPayTotal.value = 0
+                this.txtRemainder.value = this.docObj.dt()[0].TOTAL
+                if(typeof this.txtMainRemainder != 'undefined')
+                {
+                    this.txtMainRemainder.value = this.docObj.dt()[0].TOTAL
+                }
+            }
+            let tmpQuery = 
+            {
+                query :"SELECT [dbo].[FN_CUSTOMER_BALANCE](@GUID,GETDATE()) AS BALANCE ",
+                param : ['GUID:string|50'],
+                value : [this.docObj.dt()[0].INPUT]
+            }
+            let tmpData = await this.core.sql.execute(tmpQuery) 
+            if(tmpData.result.recordset.length > 0)
+            {
+                this.txtbalance.value = tmpData.result.recordset[0].BALANCE
+            }
+        }
+    }  
     async mergeItem(pCode)
     {
         return new Promise(async resolve =>
@@ -847,6 +893,122 @@ export default class DocBase extends React.PureComponent
                 }
             }
         }
+    }
+    async addPayment(pType,pAmount)
+    {
+        if(pAmount > this.txtRemainder.value)
+        {
+            let tmpConfObj =
+            {
+                id:'msgMoreAmount',showTitle:true,title:this.t("msgMoreAmount.title"),showCloseButton:true,width:'500px',height:'200px',
+                button:[{id:"btn01",caption:this.t("msgMoreAmount.btn01"),location:'after'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgMoreAmount.msg")}</div>)
+            }
+
+            await dialog(tmpConfObj);
+            return
+        }
+        if(this.payObj.dt().length == 0)
+        {
+            let tmpPay = {...this.payObj.empty}
+            let tmpQuery = 
+            {
+                query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 0 AND DOC_TYPE = 200 AND REF = @REF ",
+                param : ['REF:string|25'],
+                value : [this.txtRef.value]
+            }
+            let tmpData = await this.core.sql.execute(tmpQuery) 
+            if(tmpData.result.recordset.length > 0)
+            {
+                tmpPay.REF = this.txtRef.value
+                tmpPay.REF_NO = tmpData.result.recordset[0].REF_NO
+            }
+            tmpPay.TYPE = 0
+            tmpPay.DOC_TYPE = 200
+            tmpPay.INPUT = '00000000-0000-0000-0000-000000000000'
+            tmpPay.OUTPUT = this.docObj.dt()[0].INPUT 
+            this.payObj.addEmpty(tmpPay);
+        }
+
+        let tmpPayment = {...this.payObj.docCustomer.empty}
+        tmpPayment.DOC_GUID = this.payObj.dt()[0].GUID
+        tmpPayment.TYPE = this.payObj.dt()[0].TYPE
+        tmpPayment.REF = this.payObj.dt()[0].REF
+        tmpPayment.REF_NO = this.payObj.dt()[0].REF_NO
+        tmpPayment.DOC_TYPE = this.payObj.dt()[0].DOC_TYPE
+        tmpPayment.DOC_DATE = this.payObj.dt()[0].DOC_DATE
+        tmpPayment.OUTPUT = this.payObj.dt()[0].OUTPUT
+        //tmpPayment.INVOICE_GUID = this.docObj.dt()[0].GUID
+
+        if(pType == 0)
+        {
+            tmpPayment.INPUT = this.cmbCashSafe.value
+            tmpPayment.INPUT_NAME = this.cmbCashSafe.displayValue
+            tmpPayment.PAY_TYPE = 0
+            tmpPayment.AMOUNT = pAmount
+            tmpPayment.DESCRIPTION = this.cashDescription.value
+        }
+        else if (pType == 1)
+        {
+            tmpPayment.INPUT = this.cmbCashSafe.value
+            tmpPayment.INPUT_NAME = this.cmbCashSafe.displayValue
+            tmpPayment.PAY_TYPE = 1
+            tmpPayment.AMOUNT = pAmount
+            tmpPayment.DESCRIPTION = this.cashDescription.value
+
+            let tmpCheck = {...this.payObj.checkCls.empty}
+            tmpCheck.DOC_GUID = this.payObj.dt()[0].GUID
+            tmpCheck.REF = checkReference.value
+            tmpCheck.DOC_DATE =  this.payObj.dt()[0].DOC_DATE
+            tmpCheck.CHECK_DATE =  this.payObj.dt()[0].DOC_DATE
+            tmpCheck.CUSTOMER =   this.payObj.dt()[0].OUTPUT
+            tmpCheck.AMOUNT =  this.numcheck.value
+            tmpCheck.SAFE =  this.cmbCashSafe.value
+            this.payObj.checkCls.addEmpty(tmpCheck)
+        }
+        else if (pType == 2)
+        {
+            tmpPayment.INPUT = this.cmbCashSafe.value
+            tmpPayment.INPUT_NAME = this.cmbCashSafe.displayValue
+            tmpPayment.PAY_TYPE = 2
+            tmpPayment.AMOUNT = pAmount
+            tmpPayment.DESCRIPTION = this.cashDescription.value
+        }
+
+        await this.payObj.docCustomer.addEmpty(tmpPayment)
+
+        // BORC ALACAK EŞLEŞMESİ İÇİN YAPILDI.*****************************************/
+        let tmpDCPaidDt = new datatable()
+        tmpDCPaidDt.push
+        (
+            {
+                LDATE : moment(new Date()),
+                TYPE : this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length - 1].TYPE,
+                DOC : this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length - 1].GUID,
+                REMAINDER : this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length - 1].TYPE == 1 ? pAmount : pAmount * -1,
+            }
+        )
+        tmpDCPaidDt.push
+        (
+            {
+                LDATE : moment(new Date()),
+                TYPE : this.payObj.docCustomer.dt()[this.payObj.docCustomer.dt().length - 1].TYPE,
+                DOC : this.payObj.docCustomer.dt()[this.payObj.docCustomer.dt().length - 1].GUID,
+                REMAINDER : this.payObj.docCustomer.dt()[this.payObj.docCustomer.dt().length - 1].TYPE == 1 ? pAmount : pAmount * -1,
+            }
+        )
+        await this.deptCreditMatchingObj.matching(tmpDCPaidDt)
+        await this.deptCreditMatchingObj.save()  
+        /******************************************************************************/
+        
+        this.payObj.dt()[0].AMOUNT = this.payObj.docCustomer.dt().sum("AMOUNT",2)
+        this.payObj.dt()[0].TOTAL = this.payObj.docCustomer.dt().sum("AMOUNT",2)
+        
+        await this.payObj.save()
+        
+        await this.popPayment.show()
+        await this.getPayment()
+        await this.grdInvoicePayment.dataRefresh({source:this.payObj.docCustomer.dt()});
     }
     render()
     {
@@ -1538,7 +1700,7 @@ export default class DocBase extends React.PureComponent
                                     this.payObj.save()
                                     await this.popPayment.show()
                                     await this.grdInvoicePayment.dataRefresh({source:this.payObj.docCustomer.dt()});
-                                    await this._getPayment()
+                                    await this.getPayment()
                                 }}
                                 >
                                     <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
@@ -1717,7 +1879,7 @@ export default class DocBase extends React.PureComponent
                                                 }
                                                 else
                                                 {
-                                                    this._addPayment(this.cmbPayType.value,this.numCash.value)
+                                                    this.addPayment(this.cmbPayType.value,this.numCash.value)
                                                     this.popCash.hide();  
                                                 }
                                             }
@@ -1769,7 +1931,7 @@ export default class DocBase extends React.PureComponent
                                         validationGroup={"frmCollCheck" + this.tabIndex}
                                         onClick={async (e)=>
                                         {       
-                                                this._addPayment(1,this.numCash.value)
+                                                this.addPayment(1,this.numCash.value)
                                                 this.popCheck.hide(); 
                                                 this.popCash.hide();  
                                         }}/>

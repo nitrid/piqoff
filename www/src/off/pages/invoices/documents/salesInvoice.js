@@ -32,9 +32,7 @@ export default class salesInvoice extends DocBase
         this.docType = 20;
         this.rebate = 0;
 
-        this._cellRoleRender = this._cellRoleRender.bind(this)
-        this._getPayment = this._getPayment.bind(this)
-        this._addPayment = this._addPayment.bind(this)
+        this._cellRoleRender = this._cellRoleRender.bind(this)            
         this._onItemRendered = this._onItemRendered.bind(this)
         this._calculateInterfel = this._calculateInterfel.bind(this)
 
@@ -153,7 +151,7 @@ export default class salesInvoice extends DocBase
         this.txtRefno.readOnly = true
         this.frmDocItems.option('disabled',false)
         
-        this._getPayment(this.docObj.dt()[0].GUID)
+        this.getPayment(this.docObj.dt()[0].GUID)
     }
     async calculateTotal()
     {
@@ -410,7 +408,7 @@ export default class salesInvoice extends DocBase
         await this.core.util.waitUntil(10)
         if(e.itemData.title == this.t("tabTitlePayments"))
         {
-            this._getPayment(this.docObj.dt()[0].GUID)
+            this.getPayment(this.docObj.dt()[0].GUID)
         }
     }
     async addItem(pData,pIndex,pQuantity,pPrice)
@@ -621,137 +619,7 @@ export default class salesInvoice extends DocBase
             value : [this.docObj.dt()[0].INPUT]
         }
         super.getProforma(tmpQuery)
-    }
-    async _getPayment()
-    {
-        if(typeof this.txtRemainder != 'undefined')
-        {
-            await this.payObj.docCustomer.load({INVOICE_GUID:this.docObj.dt()[0].GUID});
-            if(this.payObj.dt().length > 0)
-            {
-                this.txtPayTotal.value = parseFloat(this.payObj.docCustomer.dt().sum("AMOUNT",2))
-                let tmpRemainder = (this.docObj.dt()[0].TOTAL - this.payObj.dt()[0].TOTAL).toFixed(2)
-                this.txtRemainder.value = tmpRemainder
-                if(typeof this.txtMainRemainder != 'undefined')
-                {
-                    this.txtMainRemainder.value = tmpRemainder
-                }
-            }
-            else
-            {
-                this.txtPayTotal.value = 0
-                this.txtRemainder.value = this.docObj.dt()[0].TOTAL
-                if(typeof this.txtMainRemainder != 'undefined')
-                {
-                    this.txtMainRemainder.value = this.docObj.dt()[0].TOTAL
-                }
-            }
-            let tmpQuery = 
-            {
-                query :"SELECT [dbo].[FN_CUSTOMER_BALANCE](@GUID,GETDATE()) AS BALANCE ",
-                param : ['GUID:string|50'],
-                value : [this.docObj.dt()[0].INPUT]
-            }
-            let tmpData = await this.core.sql.execute(tmpQuery) 
-            if(tmpData.result.recordset.length > 0)
-            {
-                this.txtbalance.value = tmpData.result.recordset[0].BALANCE
-            }
-        }
-    }
-    async _addPayment(pType,pAmount)
-    {
-        if(pAmount > this.txtRemainder.value)
-        {
-            let tmpConfObj =
-            {
-                id:'msgMoreAmount',showTitle:true,title:this.t("msgMoreAmount.title"),showCloseButton:true,width:'500px',height:'200px',
-                button:[{id:"btn01",caption:this.t("msgMoreAmount.btn01"),location:'after'}],
-                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgMoreAmount.msg")}</div>)
-            }
-
-            await dialog(tmpConfObj);
-            return
-        }
-        if(this.payObj.dt().length == 0)
-        {
-            let tmpPay = {...this.payObj.empty}
-            let tmpQuery = 
-            {
-                query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 0 AND DOC_TYPE = 200 AND REF = @REF ",
-                param : ['REF:string|25'],
-                value : [this.txtRef.value]
-            }
-            let tmpData = await this.core.sql.execute(tmpQuery) 
-            if(tmpData.result.recordset.length > 0)
-            {
-                tmpPay.REF = this.txtRef.value
-                tmpPay.REF_NO = tmpData.result.recordset[0].REF_NO
-            }
-            tmpPay.TYPE = 0
-            tmpPay.DOC_TYPE = 200
-            tmpPay.INPUT = '00000000-0000-0000-0000-000000000000'
-            tmpPay.OUTPUT = this.docObj.dt()[0].INPUT 
-            this.payObj.addEmpty(tmpPay);
-        }
-        let tmpPayment = {...this.payObj.docCustomer.empty}
-        tmpPayment.DOC_GUID = this.payObj.dt()[0].GUID
-        tmpPayment.TYPE = this.payObj.dt()[0].TYPE
-        tmpPayment.REF = this.payObj.dt()[0].REF
-        tmpPayment.REF_NO = this.payObj.dt()[0].REF_NO
-        tmpPayment.DOC_TYPE = this.payObj.dt()[0].DOC_TYPE
-        tmpPayment.DOC_DATE = this.payObj.dt()[0].DOC_DATE
-        tmpPayment.OUTPUT = this.payObj.dt()[0].OUTPUT
-        tmpPayment.INVOICE_GUID = this.docObj.dt()[0].GUID                                   
-
-        if(pType == 0)
-        {
-            tmpPayment.INPUT = this.cmbCashSafe.value
-            tmpPayment.INPUT_NAME = this.cmbCashSafe.displayValue
-            tmpPayment.PAY_TYPE = 0
-            tmpPayment.AMOUNT = pAmount
-            tmpPayment.DESCRIPTION = this.cashDescription.value
-        }
-        else if (pType == 1)
-        {
-            tmpPayment.INPUT = this.cmbCashSafe.value
-            tmpPayment.INPUT_NAME = this.cmbCashSafe.displayValue
-            tmpPayment.PAY_TYPE = 1
-            tmpPayment.AMOUNT = pAmount
-            tmpPayment.DESCRIPTION = this.cashDescription.value
-
-            let tmpCheck = {...this.payObj.checkCls.empty}
-            tmpCheck.DOC_GUID = this.payObj.dt()[0].GUID
-            tmpCheck.REF = checkReference.value
-            tmpCheck.DOC_DATE =  this.payObj.dt()[0].DOC_DATE
-            tmpCheck.CHECK_DATE =  this.payObj.dt()[0].DOC_DATE
-            tmpCheck.CUSTOMER =   this.payObj.dt()[0].OUTPUT
-            tmpCheck.AMOUNT =  this.numcheck.value
-            tmpCheck.SAFE =  this.cmbCashSafe.value
-            this.payObj.checkCls.addEmpty(tmpCheck)
-        }
-        else if (pType == 2)
-        {
-            tmpPayment.INPUT = this.cmbCashSafe.value
-            tmpPayment.INPUT_NAME = this.cmbCashSafe.displayValue
-            tmpPayment.PAY_TYPE = 2
-            tmpPayment.AMOUNT = pAmount
-            tmpPayment.DESCRIPTION = this.cashDescription.value
-        }
-
-        await this.payObj.docCustomer.addEmpty(tmpPayment)
-        this.payObj.dt()[0].AMOUNT = this.payObj.docCustomer.dt().sum("AMOUNT",2)
-        this.payObj.dt()[0].TOTAL = this.payObj.docCustomer.dt().sum("AMOUNT",2)
-        
-        if((await this.payObj.save()) == 0)
-        {
-            
-        }
-        
-        await this.popPayment.show()
-        await this._getPayment()
-        await this.grdInvoicePayment.dataRefresh({source:this.payObj.docCustomer.dt()});
-    }
+    }      
     async multiItemAdd()
     {
         let tmpMissCodes = []
@@ -2306,7 +2174,7 @@ export default class salesInvoice extends DocBase
                                                             }
                                                             
                                                             await this.popPayment.show()
-                                                            await this._getPayment()
+                                                            await this.getPayment()
                                                             await this.grdInvoicePayment.dataRefresh({source:this.payObj.docCustomer.dt()});
                                                         }}/>
                                                     </div>
