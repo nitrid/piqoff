@@ -86,16 +86,17 @@ export default class NbItemCard extends NbBase
                             data={{source:{select:{query : "SELECT GUID,NAME,FACTOR,TYPE FROM ITEM_UNIT_VW_01 WHERE ITEM_GUID ='"+ this.props.data.GUID +"'"},sql:this.core.sql}}}
                             onValueChanged={(async(e)=>
                             {
-                                await this.core.util.waitUntil(300)
+                                console.log(e.value)
+                                await this.core.util.waitUntil(400)
                                 if(e.value != '00000000-0000-0000-0000-000000000000' && e.value != '')
                                 {
-                                    this.props.data.UNIT_FACTOR = this.cmbUnit.data.datatable.where({'GUID':e.value})[0].FACTOR
                                     this.props.data.UNIT = e.value
                                     let tmpDt = typeof this.props.dt == 'undefined' ? [] : this.props.dt.where({'ITEM':this.props.data.GUID})
                                     if(tmpDt.length > 0)
                                     {
                                         tmpDt[0].UNIT_FACTOR = this.data.UNIT_FACTOR
                                     }
+                                    this.props.data.UNIT_FACTOR = this.cmbUnit.data.datatable.where({'GUID':e.value})[0].FACTOR
                                     this._onValueChange(this.props.data)
                                 }
                             }).bind(this)}

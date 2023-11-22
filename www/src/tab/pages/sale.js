@@ -118,7 +118,6 @@ export default class Sale extends React.PureComponent
 
             if(typeof tmpBuf.result.err == 'undefined')
             {
-                console.log(tmpBuf.result.recordset)
                 for (let i = 0; i < tmpBuf.result.recordset.length; i++) 
                 {
                     this.itemView.items.push(tmpBuf.result.recordset[i])
@@ -147,7 +146,6 @@ export default class Sale extends React.PureComponent
                 this.bufferId = tmpBuf.result.bufferId
                 this.tmpEndPage = this.tmpStartPage + this.tmpPageLimit
                 let tmpItems = await this.core.sql.buffer({start : this.tmpStartPage,end : this.tmpEndPage,bufferId : this.bufferId})  
-                console.log(...tmpItems.result.recordset)
                 for (let i = 0; i < tmpItems.result.recordset.length; i++) 
                 {
                     this.itemView.items.push(tmpItems.result.recordset[i])
@@ -486,7 +484,6 @@ export default class Sale extends React.PureComponent
         }
         else
         {
-            console.log(this.docLines)
             this.docObj.docItems.datatable = this.docLines
             this.docObj.docCustomer.DOC_GUID = this.docObj.dt()[0].GUID
             this.docObj.docCustomer.TYPE = this.docObj.dt()[0].TYPE
@@ -516,7 +513,6 @@ export default class Sale extends React.PureComponent
         {                                                    
             tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
             await dialog(tmpConfObj1);
-            console.log(this.frmGrdSale)
             this.frmGrdSale.option('disabled',true)
 
             localStorage.removeItem("data")
@@ -1570,7 +1566,6 @@ export default class Sale extends React.PureComponent
                                                     for (let i = 0; i < this.docLines.length; i++) 
                                                     {
                                                         let tmpDocData = this.docLines[i]
-                                                        console.log(tmpDocData)
                                                         if(this.chkFirstDiscount.value == false)
                                                         {
                                                             tmpDocData.DISCOUNT_1 = Number(tmpDocData.PRICE * tmpDocData.QUANTITY).rateInc(this.txtDiscountPercent1.value,4)
@@ -1590,7 +1585,6 @@ export default class Sale extends React.PureComponent
                                                         tmpDocData.TOTAL = parseFloat(((tmpDocData.TOTALHT - tmpDocData.DOC_DISCOUNT) + tmpDocData.VAT)).round(2)
                                                         tmpDocData.DISCOUNT_RATE = Number((tmpDocData.PRICE * tmpDocData.QUANTITY)).rate2Num((tmpDocData.DISCOUNT_1 + tmpDocData.DISCOUNT_2 + tmpDocData.DISCOUNT_3),2)
                                                     }
-                                                    console.log(this.txtDiscountPercent1.value)
                                                     this._calculateTotal()
                                                     this.popDiscount.hide(); 
                                                 }}/>
