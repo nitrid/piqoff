@@ -992,7 +992,7 @@ export default class purchaseOrder extends DocBase
                                     <Label text={this.t("cmbDepot")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbDepot" notRefresh = {true}
                                     dt={{data:this.docObj.dt('DOC'),field:"INPUT"}}  
-                                    displayExpr="NAME"                       
+                                    displayExpr="NAME"   
                                     valueExpr="GUID"
                                     value=""
                                     searchEnabled={true}
@@ -1593,9 +1593,8 @@ export default class purchaseOrder extends DocBase
                                 <Item>
                                     <Label text={this.t("txtAmount")} alignment="right" />
                                     <NdTextBox id="txtAmount" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"AMOUNT"}}
-                                    maxLength={32}
-                                
-                                    ></NdTextBox>
+                                    maxLength={32}>
+                                    </NdTextBox>
                                 </Item>
                                 <Item>
                                     <Label text={this.t("txtDiscount")} alignment="right" />
@@ -1628,7 +1627,6 @@ export default class purchaseOrder extends DocBase
                                                         this.txtDiscountPercent3.value  = 0
                                                         this.txtDiscountPrice3.value = 0
                                                     }
-                                                    
                                                 }
                                             },
                                         ]
