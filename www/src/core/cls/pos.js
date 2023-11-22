@@ -1377,7 +1377,16 @@ export class posDeviceCls
                     resolve()
                     return
                 }
-                let device  = new this.escpos.USB();
+                let device = undefined;
+                if(this.dt()[0].PRINTER_PORT != '' && this.dt()[0].PRINTER_PORT != 'USB')
+                {
+                    device = new this.escpos.Serial(this.dt()[0].PRINTER_PORT,{baudRate: 38400,stopBits:1,dataBits:8, autoOpen: false})
+                }
+                else if(this.dt()[0].PRINTER_PORT == 'USB')
+                {
+                    device = new this.escpos.USB();
+                }
+                
                 let options = { encoding: "GB18030" /* default */ }
                 let printer = new this.escpos.Printer(device, options);
                 
