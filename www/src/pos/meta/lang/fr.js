@@ -254,6 +254,18 @@ export const langFr =
         msg: "L'e-mail du client est",
         btn01: "OK",
     },
+    msgPreLottery:
+    {
+        title: "Avertissement",
+        msg: "UNE MINUTE...",
+        btn01: "CONTINUER",
+    },
+    msgPostLottery:
+    {
+        title: "Avertissement",
+        msg: "CE CLIENT A GAGNÉ AU TIRAGE !!!",
+        btn01: "Oui",
+    },
     msgCancelCustomerConfirm: 
     {
         title : "Attention",
