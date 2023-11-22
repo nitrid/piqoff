@@ -1781,7 +1781,6 @@ export class deptCreditMatchingCls
     }
     async showPopUp(pCustomer)
     {
-        console.log(this.popDeptCreditList)
         let tmpJsx = 
         (
             <NdPopGrid id={"popDeptCreditList"} parent={this} container={"#root"}
@@ -1850,7 +1849,7 @@ export class deptCreditMatchingCls
                 query : "SELECT *, " + 
                         "CASE WHEN TYPE = 1 THEN BALANCE WHEN TYPE = 0 THEN BALANCE * -1 END AS REMAINDER, " +
                         "(SELECT TOP 1 VALUE FROM DB_LANGUAGE WHERE TAG = (SELECT [dbo].[FN_DOC_TYPE_NAME](TYPE,DOC_TYPE,REBATE)) AND LANG = @LANG) AS TYPE_NAME " + 
-                        "FROM DEPT_CREDIT_MATCHING_VW_02 WHERE CUSTOMER_GUID = @CUSTOMER_GUID AND (TYPE = 1 OR (TYPE = 0 AND DOC_TYPE < 200)) ORDER BY DOC_DATE ASC,LDATE ASC",
+                        "FROM DEPT_CREDIT_MATCHING_VW_02 WHERE CUSTOMER_GUID = @CUSTOMER_GUID AND TYPE IN (0,1) ORDER BY DOC_DATE ASC,LDATE ASC",
                 param : ['CUSTOMER_GUID:string|50','LANG:string|50'],
                 value : [pCustomer,this.lang.language.toUpperCase()]
             }

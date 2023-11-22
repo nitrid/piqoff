@@ -922,8 +922,7 @@ export default class salesInvoice extends DocBase
             }
             resolve()
         })
-    }
-    
+    }    
     render()
     {
         return(
@@ -1123,7 +1122,6 @@ export default class salesInvoice extends DocBase
                                     <NdButton id="btnPrint" parent={this} icon="print" type="default"
                                     onClick={async()=>
                                     {
-                                        console.log(this.docObj.isSaved)                             
                                         if(this.docObj.isSaved == false)
                                         {
                                             let tmpConfObj =
@@ -2294,6 +2292,18 @@ export default class salesInvoice extends DocBase
                                                         <NdButton text={this.t("getPayment")} type="normal" stylingMode="contained" width={'100%'} 
                                                         onClick={async (e)=>
                                                         {
+                                                            if(!this.docObj.isSaved)
+                                                            {
+                                                                let tmpConfObj =
+                                                                {
+                                                                    id:'isMsgSave',showTitle:true,title:this.t("isMsgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                                    button:[{id:"btn01",caption:this.t("isMsgSave.btn01"),location:'after'}],
+                                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("isMsgSave.msg")}</div>)
+                                                                }
+                                                                await dialog(tmpConfObj);
+                                                                return
+                                                            }
+                                                            
                                                             await this.popPayment.show()
                                                             await this._getPayment()
                                                             await this.grdInvoicePayment.dataRefresh({source:this.payObj.docCustomer.dt()});
