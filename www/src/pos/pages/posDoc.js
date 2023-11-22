@@ -346,25 +346,27 @@ export default class posDoc extends React.PureComponent
             await this.posDevice.load({CODE:this.posObj.dt()[this.posObj.dt().length - 1].DEVICE})
 
             this.posObj.dt()[this.posObj.dt().length - 1].DEPOT_GUID = this.posDevice.dt()[0].DEPOT_GUID
-
-            if(this.posDevice.dt().where({MACID:localStorage.getItem('macId')}).length > 0)
+            if(this.posDevice.dt().where({MACID:localStorage.getItem('macId') == null ? undefined : localStorage.getItem('macId')}).length > 0)
             {
                 this.posScale = new posScaleCls(this.posDevice.dt()[0].SCALE_PORT)
                 this.posLcd = new posLcdCls(this.posDevice.dt()[0].LCD_PORT)
             }
             else
             {
-                let tmpConfObj =
+                if(this.core.util.isElectron())
                 {
-                    id:'msgMacIdFailed',showTitle:true,title:this.lang.t("msgMacIdFailed.title"),showCloseButton:true,width:'400px',height:'200px',
-                    button:[{id:"btn01",caption:this.lang.t("msgMacIdFailed.btn01"),location:'before'}],
-                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgMacIdFailed.msg")}</div>)
+                    let tmpConfObj =
+                    {
+                        id:'msgMacIdFailed',showTitle:true,title:this.lang.t("msgMacIdFailed.title"),showCloseButton:true,width:'400px',height:'200px',
+                        button:[{id:"btn01",caption:this.lang.t("msgMacIdFailed.btn01"),location:'before'}],
+                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgMacIdFailed.msg")}</div>)
+                    }
+                    
+                    await dialog(tmpConfObj);
+                    
+                    this.core.auth.logout()
+                    window.location.reload()
                 }
-                
-                await dialog(tmpConfObj);
-                
-                this.core.auth.logout()
-                window.location.reload()
             }
         }
         this.posDevice.scanner();
@@ -452,7 +454,7 @@ export default class posDoc extends React.PureComponent
             //****************************** */
             this.sendJet({CODE:"80",NAME:"Démarrage terminal lancé."}) ////Kasa işleme başladı.
             //LOCAL DB DE KAYIT KONTROL EDİLİYOR.EĞER KAYIT VARSA ONLINE DB YE GÖNDERİLİYOR
-            if(!this.core.offline)
+            if(!this.core.offline && this.core.util.isElectron())
             {
                 let tmpData = await this.core.local.select({name : "POS_VW_01",type : "select",query : "SELECT * FROM POS_VW_01"})
                 if(tmpData.result.recordset.length > 0)
@@ -3603,6 +3605,7 @@ export default class posDoc extends React.PureComponent
                                         this.txtPopSettingsPayCard.value = this.posDevice.dt()[0].PAY_CARD_PORT
                                         this.txtPopSettingsPrint.value = this.posDevice.dt()[0].PRINT_DESING
                                         this.txtPopSettingsScanner.value = this.posDevice.dt()[0].SCANNER_PORT
+                                        this.txtPopSettingsPrinter.value = this.posDevice.dt()[0].PRINTER_PORT
                                     }
                                     this.keyPopSettings.clearInput();
                                     this.popSettings.show();
@@ -7770,6 +7773,20 @@ export default class posDoc extends React.PureComponent
                                     this.keyPopSettings.setInput(this.txtPopSettingsScanner.value)
                                 }}/>
                             </Item>
+                            <Item>
+                                <Label text={this.lang.t("popSettings.printerPort")} alignment="right" />
+                                <NdTextBox id={"txtPopSettingsPrinter"} parent={this} simple={true} valueChangeEvent="keyup" 
+                                onValueChanging={(e)=>
+                                {
+                                    this.keyPopSettings.setCaretPosition(e.length)
+                                    this.keyPopSettings.setInput(e)
+                                }}
+                                onFocusIn={()=>
+                                {
+                                    this.keyPopSettings.inputName = "txtPopSettingsPrinter"
+                                    this.keyPopSettings.setInput(this.txtPopSettingsPrinter.value)
+                                }}/>
+                            </Item>
                         </Form>
                         <div className="row py-1">
                             <div className="col-12">
@@ -7788,6 +7805,7 @@ export default class posDoc extends React.PureComponent
                                         this.posDevice.dt()[0].PAY_CARD_PORT = this.txtPopSettingsPayCard.value
                                         this.posDevice.dt()[0].PRINT_DESING = this.txtPopSettingsPrint.value
                                         this.posDevice.dt()[0].SCANNER_PORT = this.txtPopSettingsScanner.value
+                                        this.posDevice.dt()[0].PRINTER_PORT = this.txtPopSettingsPrinter.value
                                     }
                                     else
                                     {
@@ -7799,6 +7817,7 @@ export default class posDoc extends React.PureComponent
                                         this.posDevice.dt()[0].PAY_CARD_PORT = this.txtPopSettingsPayCard.value
                                         this.posDevice.dt()[0].PRINT_DESING = this.txtPopSettingsPrint.value
                                         this.posDevice.dt()[0].SCANNER_PORT = this.txtPopSettingsScanner.value
+                                        this.posDevice.dt()[0].PRINTER_PORT = this.txtPopSettingsPrinter.value
                                     }                                
                                     await this.posDevice.save()
                                     this.popSettings.hide()

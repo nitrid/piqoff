@@ -824,7 +824,8 @@ export const langEs =
         scalePort: "Puerto de la Báscula",
         payCardPort: "Puerto de Tarjeta de Pago",
         printDesing: "Diseño de Impresión",
-        scannerPort : "Scanner port"
+        scannerPort : "Scanner port",
+        printerPort: "Printer port"
     },
     msgNotBarcodeWeighing: 
     {
