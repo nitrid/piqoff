@@ -34,12 +34,12 @@ export default class collection extends React.PureComponent
         this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
         this.docObj = new docCls();
         this.deptCreditMatchingObj = new deptCreditMatchingCls();
+        this.deptCreditMatchingObj.lang = this.lang;
         this.tabIndex = props.data.tabkey
         
         this._calculateTotal = this._calculateTotal.bind(this)
         this._addPayment = this._addPayment.bind(this)
-       
-        this.invoices = new datatable()
+
         this.docLocked = false;        
     }
     async componentDidMount()
@@ -271,46 +271,7 @@ export default class collection extends React.PureComponent
             /******************************************************************************/
             this._calculateTotal()
         }
-    }
-    async getInvoices()
-    {
-        let tmpQuery = 
-        {
-            query : "SELECT *, " + 
-                    "CASE WHEN TYPE = 1 THEN BALANCE WHEN TYPE = 0 THEN BALANCE * -1 END AS REMAINDER, " +
-                    "(SELECT TOP 1 VALUE FROM DB_LANGUAGE WHERE TAG = (SELECT [dbo].[FN_DOC_TYPE_NAME](TYPE,DOC_TYPE,REBATE)) AND LANG = @LANG) AS TYPE_NAME " + 
-                    "FROM DEPT_CREDIT_MATCHING_VW_02 WHERE CUSTOMER_GUID = @CUSTOMER_GUID AND (TYPE = 1 OR (TYPE = 0 AND DOC_TYPE < 200)) ORDER BY DOC_DATE ASC,LDATE ASC",
-            param : ['CUSTOMER_GUID:string|50','LANG:string|50'],
-            value : [this.docObj.dt()[0].OUTPUT,localStorage.getItem('lang')]
-        }
-        let tmpData = await this.core.sql.execute(tmpQuery) 
-        if(tmpData.result.recordset.length > 0)
-        {
-            await this.pg_invoices.setData(tmpData.result.recordset)
-        }
-        else
-        {
-            await this.pg_invoices.setData([])
-        }
-
-        this.pg_invoices.show()
-        this.pg_invoices.onClick = async(data) =>
-        {
-            this.invoices = new datatable()
-            this.invoices.import(data)
-            if(this.invoices.sum('REMAINDER') > 0)
-            {
-                let tmpDeptCreditMatchingObj = new deptCreditMatchingCls()
-                await tmpDeptCreditMatchingObj.matching(this.invoices)
-                await tmpDeptCreditMatchingObj.save()
-                this.numCash.value = this.invoices.sum('REMAINDER').round(2)
-            }
-            else
-            {
-                this.numCash.value = 0
-            }
-        }
-    }
+    }    
     render()
     {
         return(
@@ -973,7 +934,9 @@ export default class collection extends React.PureComponent
                                             <NdButton text={this.t("invoiceSelect")} type="normal" stylingMode="contained" width={'100%'} 
                                             onClick={async (e)=>
                                             {       
-                                                this.getInvoices()
+                                                let tmpPopResult = await this.deptCreditMatchingObj.showPopUp(this.docObj.dt()[0].OUTPUT)
+                                                this.invoices = tmpPopResult
+                                                this.numCash.value = this.invoices.sum('REMAINDER').round(2)
                                             }}/>
                                         </div>
                                     </div>
@@ -1060,78 +1023,6 @@ export default class collection extends React.PureComponent
                             </Form>
                         </NdPopUp>
                     </div> 
-                    {/* Fatura Grid */}
-                    <div>
-                        <NdPopGrid id={"pg_invoices"} parent={this} container={"#root"}
-                        visible={false}
-                        position={{of:'#root'}} 
-                        showTitle={true} 
-                        showBorders={true}
-                        width={'90%'}
-                        height={'90%'}
-                        selection={{mode:"multiple"}}
-                        title={this.t("pg_invoices.title")}
-                        onSelectionChanged={(e)=>
-                        {
-                            e.component.refresh(true);
-                        }}
-                        onRowRemoved={async(e)=>
-                        {
-                            let tmpDeptCreditMatchingObj = new deptCreditMatchingCls()
-                            await tmpDeptCreditMatchingObj.load({PAID_DOC:e.data.DOC,PAYING_DOC:e.data.DOC})
-                            tmpDeptCreditMatchingObj.dt().removeAll()
-                            await tmpDeptCreditMatchingObj.dt().delete()
-
-                            let tmpQuery = 
-                            {
-                                query : "SELECT *, " + 
-                                        "CASE WHEN TYPE = 1 THEN BALANCE WHEN TYPE = 0 THEN BALANCE * -1 END AS REMAINDER, " +
-                                        "(SELECT TOP 1 VALUE FROM DB_LANGUAGE WHERE TAG = (SELECT [dbo].[FN_DOC_TYPE_NAME](TYPE,DOC_TYPE,REBATE)) AND LANG = @LANG) AS TYPE_NAME " + 
-                                        "FROM DEPT_CREDIT_MATCHING_VW_02 WHERE CUSTOMER_GUID = @CUSTOMER_GUID AND (TYPE = 1 OR (TYPE = 0 AND DOC_TYPE < 200)) ORDER BY DOC_DATE ASC,LDATE ASC",
-                                param : ['CUSTOMER_GUID:string|50','LANG:string|50'],
-                                value : [this.docObj.dt()[0].OUTPUT,localStorage.getItem('lang')]
-                            }
-                            let tmpData = await this.core.sql.execute(tmpQuery) 
-                            if(tmpData.result.recordset.length > 0)
-                            {
-                                await this.pg_invoices.setData(tmpData.result.recordset)
-                            }
-                            else
-                            {
-                                await this.pg_invoices.setData([])
-                            }
-                        }}
-                        >
-                            <Editing mode="row" allowDeleting={true} useIcons={true}/>
-                            <Column dataField="DOC_REF" caption={this.t("pg_invoices.clmRef")} width={80}/>
-                            <Column dataField="DOC_REF_NO" caption={this.t("pg_invoices.clmRefNo")} width={100}/>
-                            <Column dataField="TYPE_NAME" caption={this.t("pg_invoices.clmTypeName")} width={100}/>
-                            <Column dataField="CUSTOMER_NAME" caption={this.t("pg_invoices.clmCustomer")} width={300}/>
-                            <Column dataField="DOC_DATE" caption={this.t("pg_invoices.clmDate")} width={100} dataType={"date"} defaultSortOrder="asc"/>
-                            <Column dataField="PAID_AMOUNT" caption={this.t("pg_invoices.clmTotal")} width={100} />
-                            <Column dataField="PAYING_AMOUNT" caption={this.t("pg_invoices.clmClosed")} width={100} />
-                            <Column dataField="REMAINDER" caption={this.t("pg_invoices.clmBalance")} width={100} format={{ style: "currency", currency: "EUR",precision: 3}}/>
-                            <Summary calculateCustomSummary={(options) =>
-                            {
-                                if (options.name === 'SelectedRowsSummary') 
-                                {
-                                    if (options.summaryProcess === 'start') 
-                                    {
-                                        options.totalValue = 0;
-                                    } 
-                                    else if (options.summaryProcess === 'calculate') 
-                                    {
-                                        if (options.component.isRowSelected(options.value)) 
-                                        {
-                                            options.totalValue += Number(options.value.REMAINDER).round(2);
-                                        }
-                                    }
-                                }
-                            }}>
-                                <TotalItem name="SelectedRowsSummary" summaryType="custom" valueFormat={{ style: "currency", currency: "EUR",precision: 3}} displayFormat="Sum: {0}" showInColumn="REMAINDER" />
-                            </Summary>
-                        </NdPopGrid>
-                    </div>
                 </ScrollView>     
             </div>
         )

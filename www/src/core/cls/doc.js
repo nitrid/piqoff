@@ -1,5 +1,9 @@
 import { core,dataset,datatable } from "../core.js";
 import moment from 'moment';
+import React from "react";
+import ReactDOM from 'react-dom';
+import NdPopGrid from '../react/devex/popgrid.js';
+import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export,Summary,TotalItem} from '../react/devex/grid.js';
 
 export class docCls
 {
@@ -1620,6 +1624,7 @@ export class deptCreditMatchingCls
             PAID_AMOUNT : 0,
             PAYING_AMOUNT : 0
         }
+        this.lang = undefined;
 
         this._initDs();
     }
@@ -1772,6 +1777,115 @@ export class deptCreditMatchingCls
                 }
             }
             resolve()
+        })
+    }
+    async showPopUp(pCustomer)
+    {
+        console.log(this.popDeptCreditList)
+        let tmpJsx = 
+        (
+            <NdPopGrid id={"popDeptCreditList"} parent={this} container={"#root"}
+            visible={false}
+            position={{of:'#root'}} 
+            showTitle={true} 
+            showBorders={true}
+            width={'90%'}
+            height={'90%'}
+            selection={{mode:"multiple"}}
+            title={this.lang.t("popDeptCreditList.title")}
+            onSelectionChanged={(e)=>
+            {
+                e.component.refresh(true);
+            }}
+            onRowRemoved={async(e)=>
+            {
+                let tmpDeptCreditMatchingObj = new deptCreditMatchingCls()
+                await tmpDeptCreditMatchingObj.load({PAID_DOC:e.data.DOC,PAYING_DOC:e.data.DOC})
+                tmpDeptCreditMatchingObj.dt().removeAll()
+                await tmpDeptCreditMatchingObj.dt().delete()
+
+                gridRefresh()
+            }}
+            >
+                <Editing mode="row" allowDeleting={true} useIcons={true}/>
+                <Column dataField="DOC_REF" caption={this.lang.t("popDeptCreditList.clmRef")} width={80}/>
+                <Column dataField="DOC_REF_NO" caption={this.lang.t("popDeptCreditList.clmRefNo")} width={100}/>
+                <Column dataField="TYPE_NAME" caption={this.lang.t("popDeptCreditList.clmTypeName")} width={100}/>
+                <Column dataField="CUSTOMER_NAME" caption={this.lang.t("popDeptCreditList.clmCustomer")} width={300}/>
+                <Column dataField="DOC_DATE" caption={this.lang.t("popDeptCreditList.clmDate")} width={100} dataType={"date"} defaultSortOrder="asc"/>
+                <Column dataField="PAID_AMOUNT" caption={this.lang.t("popDeptCreditList.clmTotal")} width={100} />
+                <Column dataField="PAYING_AMOUNT" caption={this.lang.t("popDeptCreditList.clmClosed")} width={100} />
+                <Column dataField="REMAINDER" caption={this.lang.t("popDeptCreditList.clmBalance")} width={100} format={{ style: "currency", currency: "EUR",precision: 3}}/>
+                <Summary calculateCustomSummary={(options) =>
+                {
+                    if (options.name === 'SelectedRowsSummary') 
+                    {
+                        if (options.summaryProcess === 'start') 
+                        {
+                            options.totalValue = 0;
+                        } 
+                        else if (options.summaryProcess === 'calculate') 
+                        {
+                            if (options.component.isRowSelected(options.value)) 
+                            {
+                                options.totalValue += Number(options.value.REMAINDER).round(2);
+                            }
+                        }
+                    }
+                }}>
+                    <TotalItem name="SelectedRowsSummary" summaryType="custom" valueFormat={{ style: "currency", currency: "EUR",precision: 3}} displayFormat="Sum: {0}" showInColumn="REMAINDER" />
+                </Summary>
+            </NdPopGrid>
+        )
+
+        if(typeof this.popDeptCreditList == 'undefined')
+        {
+            ReactDOM.render(tmpJsx,document.body.appendChild(document.createElement('div',{id:'popDeptCreditMatching'})));
+        }
+
+        let gridRefresh = async()=>
+        {
+            let tmpQuery = 
+            {
+                query : "SELECT *, " + 
+                        "CASE WHEN TYPE = 1 THEN BALANCE WHEN TYPE = 0 THEN BALANCE * -1 END AS REMAINDER, " +
+                        "(SELECT TOP 1 VALUE FROM DB_LANGUAGE WHERE TAG = (SELECT [dbo].[FN_DOC_TYPE_NAME](TYPE,DOC_TYPE,REBATE)) AND LANG = @LANG) AS TYPE_NAME " + 
+                        "FROM DEPT_CREDIT_MATCHING_VW_02 WHERE CUSTOMER_GUID = @CUSTOMER_GUID AND (TYPE = 1 OR (TYPE = 0 AND DOC_TYPE < 200)) ORDER BY DOC_DATE ASC,LDATE ASC",
+                param : ['CUSTOMER_GUID:string|50','LANG:string|50'],
+                value : [pCustomer,this.lang.language.toUpperCase()]
+            }
+            let tmpData = await this.core.sql.execute(tmpQuery) 
+            if(tmpData.result.recordset.length > 0)
+            {
+                await this.popDeptCreditList.setData(tmpData.result.recordset)
+            }
+            else
+            {
+                await this.popDeptCreditList.setData([])
+            }
+        }
+        
+        gridRefresh()
+
+        return new Promise(async resolve =>
+        {
+            this.popDeptCreditList.show()
+            this.popDeptCreditList.onClick = async(data) =>
+            {
+                let tmpInvDt = new datatable()
+                tmpInvDt.import(data)
+                if(tmpInvDt.sum('REMAINDER') > 0)
+                {
+                    let tmpDeptCreditMatchingObj = new deptCreditMatchingCls()
+                    await tmpDeptCreditMatchingObj.matching(tmpInvDt)
+                    await tmpDeptCreditMatchingObj.save()
+                    resolve(tmpInvDt)
+                }
+                else
+                {
+                    resolve(new datatable())
+                }
+            }
         })
     }
 }

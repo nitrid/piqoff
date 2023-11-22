@@ -426,6 +426,18 @@ export const langTr =
         btn01: "Tamam",
         msg: "Girmiş olduğunuz belge no daha önceden kayıt edilmiş !"
     },
+    popDeptCreditList : 
+    {
+        title : "Fatura Seçimi",
+        clmRef : "REF",
+        clmRefNo : "REF NO",
+        clmTypeName : "EVRAK TIP",
+        clmCustomer : "CARİ ADI",
+        clmDate : "TARIH",
+        clmTotal : "TOPLAM",
+        clmClosed : "KAPANAN",
+        clmBalance  : "KALAN",
+    },
     stk_01_001:  // "Yeni Ürün Tanımlama"
     {
         txtRef: "Referans",

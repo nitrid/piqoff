@@ -426,6 +426,18 @@ export const langFr =
         btn01: "OK",
         msg: "Le numéro de document est déjà enregistré !."
     },
+    popDeptCreditList : //BAK
+    {
+        title : "Sélection de facture",
+        clmRef : "Ref",
+        clmRefNo : "Ref No",
+        clmTypeName : "Type Doc.",
+        clmCustomer : "Nom Client",
+        clmDate : "Date",
+        clmTotal : "Total",
+        clmClosed : "Fermé",
+        clmBalance  : "Restant",
+    },
     stk_01_001:  // "Identification du nouveau stock" 
     {
         txtRef: "Référence",
@@ -16038,18 +16050,6 @@ export const langFr =
             clmOutputName : "Nom Client",
             clmOutputCode  : "Code Client",
             clmTotal : "Total TTC"
-        },
-        pg_invoices : //BAK
-        {
-            title : "Sélection de facture",
-            clmRef : "Ref",
-            clmRefNo : "Ref No",
-            clmTypeName : "Type Doc.",
-            clmCustomer : "Nom Client",
-            clmDate : "Date",
-            clmTotal : "Total",
-            clmClosed : "Fermé",
-            clmBalance  : "Restant",
         },
         pg_txtCustomerCode : 
         {
