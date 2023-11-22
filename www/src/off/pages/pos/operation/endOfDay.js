@@ -310,25 +310,7 @@ export default class endOfDay extends React.PureComponent
             this.TicketRest = tmpTicketValue
             this.setState({TicketRest:tmpTikcet})
         }
-        this.enddayObj.clearAll()
-        let tmpSafeQuery = 
-        {
-            query : "SELECT GUID FROM SAFE_VW_01 WHERE CODE = @INPUT_CODE",
-            param : ['INPUT_CODE:string|50'],
-            value : [this.cmbSafe.value]
-        }
-        let tmpSafeData = await this.core.sql.execute(tmpSafeQuery) 
-        let tmpSafe = tmpSafeData.result.recordset[0].GUID
-        let tmpEndday = {...this.enddayObj.empty}
-        tmpEndday.CASH = this.txtCash.value
-        tmpEndday.CREDIT = this.txtCreditCard.value
-        tmpEndday.CHECK = this.txtCheck.value
-        tmpEndday.TICKET = this.txtRestorant.value
-        tmpEndday.ADVANCE = this.txtAdvance.value
-        tmpEndday.SAFE = tmpSafe
         
-        this.enddayObj.addEmpty(tmpEndday)
-        this.enddayObj.save()
 
         this.popFinish.show()
     }
@@ -467,6 +449,26 @@ export default class endOfDay extends React.PureComponent
     }
     async safeTransfer()
     {
+        this.enddayObj.clearAll()
+        let tmpSafeQuery = 
+        {
+            query : "SELECT GUID FROM SAFE_VW_01 WHERE CODE = @INPUT_CODE",
+            param : ['INPUT_CODE:string|50'],
+            value : [this.cmbSafe.value]
+        }
+        let tmpSafeData = await this.core.sql.execute(tmpSafeQuery) 
+        let tmpCodeSafe = tmpSafeData.result.recordset[0].GUID
+        let tmpEndday = {...this.enddayObj.empty}
+        tmpEndday.CASH = this.txtCash.value
+        tmpEndday.CDATE = this.dtDocDate.value
+        tmpEndday.CREDIT = this.txtCreditCard.value
+        tmpEndday.CHECK = this.txtCheck.value
+        tmpEndday.TICKET = this.txtRestorant.value
+        tmpEndday.ADVANCE = this.txtAdvance.value
+        tmpEndday.SAFE = tmpCodeSafe
+        
+        this.enddayObj.addEmpty(tmpEndday)
+        this.enddayObj.save()
         let tmpQuery = 
         {
             query : "SELECT GUID FROM SAFE_VW_01 WHERE CODE = @INPUT_CODE",

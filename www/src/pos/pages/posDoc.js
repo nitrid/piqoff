@@ -322,8 +322,8 @@ export default class posDoc extends React.PureComponent
         
         this.posObj.clearAll()        
 
-        await this.prmObj.load({APP:'POS'})
-        await this.acsObj.load({APP:'POS'})
+        await this.prmObj.load({APP:'POS',USERS:this.core.auth.data.CODE})
+        await this.acsObj.load({APP:'POS',USERS:this.core.auth.data.CODE})
 
         if(this.state.isFormation)
         {
@@ -346,25 +346,27 @@ export default class posDoc extends React.PureComponent
             await this.posDevice.load({CODE:this.posObj.dt()[this.posObj.dt().length - 1].DEVICE})
 
             this.posObj.dt()[this.posObj.dt().length - 1].DEPOT_GUID = this.posDevice.dt()[0].DEPOT_GUID
-
-            if(this.posDevice.dt().where({MACID:localStorage.getItem('macId')}).length > 0)
+            if(this.posDevice.dt().where({MACID:localStorage.getItem('macId') == null ? undefined : localStorage.getItem('macId')}).length > 0)
             {
                 this.posScale = new posScaleCls(this.posDevice.dt()[0].SCALE_PORT)
                 this.posLcd = new posLcdCls(this.posDevice.dt()[0].LCD_PORT)
             }
             else
             {
-                let tmpConfObj =
+                if(this.core.util.isElectron())
                 {
-                    id:'msgMacIdFailed',showTitle:true,title:this.lang.t("msgMacIdFailed.title"),showCloseButton:true,width:'400px',height:'200px',
-                    button:[{id:"btn01",caption:this.lang.t("msgMacIdFailed.btn01"),location:'before'}],
-                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgMacIdFailed.msg")}</div>)
+                    let tmpConfObj =
+                    {
+                        id:'msgMacIdFailed',showTitle:true,title:this.lang.t("msgMacIdFailed.title"),showCloseButton:true,width:'400px',height:'200px',
+                        button:[{id:"btn01",caption:this.lang.t("msgMacIdFailed.btn01"),location:'before'}],
+                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgMacIdFailed.msg")}</div>)
+                    }
+                    
+                    await dialog(tmpConfObj);
+                    
+                    this.core.auth.logout()
+                    window.location.reload()
                 }
-                
-                await dialog(tmpConfObj);
-                
-                this.core.auth.logout()
-                window.location.reload()
             }
         }
         this.posDevice.scanner();
@@ -452,7 +454,7 @@ export default class posDoc extends React.PureComponent
             //****************************** */
             this.sendJet({CODE:"80",NAME:"Démarrage terminal lancé."}) ////Kasa işleme başladı.
             //LOCAL DB DE KAYIT KONTROL EDİLİYOR.EĞER KAYIT VARSA ONLINE DB YE GÖNDERİLİYOR
-            if(!this.core.offline)
+            if(!this.core.offline && this.core.util.isElectron())
             {
                 let tmpData = await this.core.local.select({name : "POS_VW_01",type : "select",query : "SELECT * FROM POS_VW_01"})
                 if(tmpData.result.recordset.length > 0)
@@ -742,9 +744,9 @@ export default class posDoc extends React.PureComponent
             let tmpCustomerDt = new datatable(); 
             tmpCustomerDt.selectCmd = 
             {
-                query : "SELECT GUID,CUSTOMER_TYPE,CODE,TITLE,ADRESS,ZIPCODE,CITY,COUNTRY_NAME,CUSTOMER_POINT,EMAIL,POINT_PASSIVE, " +
+                query : "SELECT GUID,CUSTOMER_TYPE,CODE,TITLE,ADRESS,ZIPCODE,CITY,COUNTRY_NAME,STATUS,CUSTOMER_POINT,EMAIL,POINT_PASSIVE, " +
                         "ISNULL((SELECT COUNT(TYPE) FROM CUSTOMER_POINT WHERE TYPE = 0 AND CUSTOMER = CUSTOMER_VW_02.GUID AND CONVERT(DATE,LDATE) = CONVERT(DATE,GETDATE())),0) AS POINT_COUNT " + 
-                        "FROM [dbo].[CUSTOMER_VW_02] WHERE CODE LIKE SUBSTRING(@CODE,0,14) + '%'",
+                        "FROM [dbo].[CUSTOMER_VW_02] WHERE CODE LIKE SUBSTRING(@CODE,0,14) + '%' AND STATUS = 1",
                 param : ['CODE:string|50'],
                 local : 
                 {
@@ -793,11 +795,29 @@ export default class posDoc extends React.PureComponent
                 this.posObj.dt()[0].CUSTOMER_POINT = tmpCustomerDt[0].CUSTOMER_POINT
                 this.posObj.dt()[0].CUSTOMER_POINT_PASSIVE = tmpCustomerDt[0].POINT_PASSIVE
                 this.posObj.dt()[0].CUSTOMER_MAIL = tmpCustomerDt[0].EMAIL
-                
+
+                if(this.posObj.dt()[0].CUSTOMER_MAIL.length == '')
+                {
+                    let tmpConfObj =
+                    {
+                        id:'msgCustomerMail',showTitle:true,title:this.lang.t("msgCustomerMail.title"),showCloseButton:true,width:'450px',height:'200px',
+                        button:[{id:"btn01",caption:this.lang.t("msgCustomerMail.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgCustomerMail.btn02"),location:'after'}],
+                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgCustomerMail.msg")}</div>)
+                    }
+                    let tmpConfObjResult = await dialog(tmpConfObj)
+                    if(tmpConfObjResult == 'btn01')
+                    {
+                        await this.popAddMail.show()
+                                               
+                        // this.posObj.dt()[0].CUSTOMER_MAIL = NdTextBox.value;                                              
+                        return
+                    }
+                }
+
                 //PROMOSYON GETİR.
                 await this.getPromoDb()
                 this.promoApply()
-                //************************************************** */
+                //***************************************************/
 
                 this.core.util.writeLog("calcGrandTotal : 03")
                 await this.calcGrandTotal(true);
@@ -864,14 +884,14 @@ export default class posDoc extends React.PureComponent
         {     
             //TERAZİ DEN VERİ GELMEZ İSE KULLANICI ELLE MİKTAR GİRDİĞİNİ TUTAN ALAN
             tmpItemsDt[0].SCALE_MANUEL = false;
-            //******************************************************** */
+            //*********************************************************/
             //UNIQ BARKODU
             if(tmpItemsDt[0].UNIQ_CODE == tmpItemsDt[0].INPUT)
             {
                 tmpQuantity = tmpItemsDt[0].UNIQ_QUANTITY
                 tmpPrice = tmpItemsDt[0].UNIQ_PRICE
             }
-            //******************************************************** */
+            //*********************************************************/
             //FIYAT GETİRME
             let tmpPriceDt = new datatable()
             tmpPriceDt.selectCmd = 
@@ -998,14 +1018,13 @@ export default class posDoc extends React.PureComponent
                     else
                     {
                         //POPUP KAPATILMIŞ İSE YADA FİYAT BOŞ GİRİLMİŞ İSE...
-                        
                         return
                     }
                 }
             }
-            //**************************************************** */
+            //*****************************************************/
             //FİYAT TANIMSIZ YADA SIFIR İSE
-            //**************************************************** */
+            //*****************************************************/
             if(tmpPrice == 0)
             {
                 this.loading.current.instance.hide()
@@ -1051,7 +1070,7 @@ export default class posDoc extends React.PureComponent
                     return
                 }
             }
-            //**************************************************** */
+            //*****************************************************/
             tmpItemsDt[0].QUANTITY = tmpQuantity
             tmpItemsDt[0].PRICE = tmpPrice
             this.loading.current.instance.hide()
@@ -1074,7 +1093,7 @@ export default class posDoc extends React.PureComponent
             }
             await dialog(tmpConfObj);
         }
-        //******************************************************** */    
+        //*********************************************************/    
     }
     getWeighing(pPrice)
     {
@@ -1338,7 +1357,7 @@ export default class posDoc extends React.PureComponent
                 this.grdList.devGrid.navigateToRow(tmpRes[0])
                 this.grdList.devGrid.selectRows(tmpRes[0],false)
             })
-            //********************************************* */
+            //**********************************************/
             //MÜŞTERİ BİLGİ EKRANINA VERİ GÖNDERİMİ.
             App.instance.electronSend(
             {
@@ -1353,7 +1372,7 @@ export default class posDoc extends React.PureComponent
                     totalItemQ : this.posObj.posSale.dt().where({GUID:{'<>' : '00000000-0000-0000-0000-000000000000'}}).sum('QUANTITY',2)
                 }
             })
-            //********************************************* */
+            //**********************************************/
             if(typeof pSave == 'undefined' || pSave)
             {
                 let tmpClose = await this.saleClosed(true,tmpPayRest,tmpPayChange)
@@ -1660,7 +1679,7 @@ export default class posDoc extends React.PureComponent
                     this.posObj.dt()[0].REBATE_CHEQPAY = 'Q' + new Date().toISOString().substring(2, 10).replace('-','').replace('-','') + Math.round(Number(parseFloat(this.posPromoObj.dt().where({APP_TYPE:2})[0].APP_AMOUNT).round(2)) * 100).toString().padStart(5,'0') + Date.now().toString().substring(7,12);
                     await this.cheqpaySave(this.posObj.dt()[0].REBATE_CHEQPAY,this.posPromoObj.dt().where({APP_TYPE:2})[0].APP_AMOUNT,0,1);
                 }
-                //**************************** */
+                //*****************************/
                 if(pPayChange > 0)
                 {
                     if(this.posObj.posPay.dt().length > 0 && this.posObj.posPay.dt()[this.posObj.posPay.dt().length - 1].PAY_TYPE == 4)
@@ -3421,7 +3440,10 @@ export default class posDoc extends React.PureComponent
                                 <img src="./css/img/logo.png" width="50px" height="50px"/>
                             </div>
                             <div className="col-2">
-                                <div className="row" style={{height:"25px"}}>
+                                <div className="row" style={{height:"25px"}}  onClick={async()=>
+                                {
+                                    this.popPasswordChange.show()
+                                }}>
                                     <div className="col-12">                                        
                                         <span className="text-white"><i className="text-white fa-solid fa-user pe-2"></i>{this.user.CODE}</span>
                                     </div>    
@@ -3547,6 +3569,7 @@ export default class posDoc extends React.PureComponent
                                         this.txtPopSettingsPayCard.value = this.posDevice.dt()[0].PAY_CARD_PORT
                                         this.txtPopSettingsPrint.value = this.posDevice.dt()[0].PRINT_DESING
                                         this.txtPopSettingsScanner.value = this.posDevice.dt()[0].SCANNER_PORT
+                                        this.txtPopSettingsPrinter.value = this.posDevice.dt()[0].PRINTER_PORT
                                     }
                                     this.keyPopSettings.clearInput();
                                     this.popSettings.show();
@@ -4735,6 +4758,35 @@ export default class posDoc extends React.PureComponent
                                                     this.btnGetCustomer.setLock({backgroundColor:"#dc3545",borderColor:"#dc3545",height:"70px",width:"100%"})
                                                 }
                                             }
+                                           
+                                            if(pPosDt[0].CUSTOMER_GUID != '00000000-0000-0000-0000-000000000000')
+                                            { 
+                                                let tmpQuery = 
+                                                {
+                                                    query :"SELECT EMAIL FROM CUSTOMER_VW_02 WHERE GUID = @GUID",
+                                                    param:  ['GUID:string|50'],
+                                                    value:  [pPosDt[0].CUSTOMER_GUID]
+                                                }
+                                                let tmpMailData = await this.core.sql.execute(tmpQuery) 
+                                                if(tmpMailData.result.recordset.length > 0)
+                                                {
+                                                    this.txtMail.value = tmpMailData.result.recordset[0].EMAIL
+                                                }
+                                                else
+                                                {
+                                                    this.txtMail.value = ""
+                                                }
+                                            }
+                                            else
+                                            {
+                                                this.txtMail.value = ""
+                                            }
+
+                                            this.mailPopup.tmpData = tmpData;
+                                            await this.mailPopup.show()
+                                            return
+                                            
+                                           
                                         }}>
                                             <i className="text-white fa-solid fa-circle-user" style={{fontSize: "24px"}} />
                                         </NbButton>
@@ -7685,6 +7737,20 @@ export default class posDoc extends React.PureComponent
                                     this.keyPopSettings.setInput(this.txtPopSettingsScanner.value)
                                 }}/>
                             </Item>
+                            <Item>
+                                <Label text={this.lang.t("popSettings.printerPort")} alignment="right" />
+                                <NdTextBox id={"txtPopSettingsPrinter"} parent={this} simple={true} valueChangeEvent="keyup" 
+                                onValueChanging={(e)=>
+                                {
+                                    this.keyPopSettings.setCaretPosition(e.length)
+                                    this.keyPopSettings.setInput(e)
+                                }}
+                                onFocusIn={()=>
+                                {
+                                    this.keyPopSettings.inputName = "txtPopSettingsPrinter"
+                                    this.keyPopSettings.setInput(this.txtPopSettingsPrinter.value)
+                                }}/>
+                            </Item>
                         </Form>
                         <div className="row py-1">
                             <div className="col-12">
@@ -7703,6 +7769,7 @@ export default class posDoc extends React.PureComponent
                                         this.posDevice.dt()[0].PAY_CARD_PORT = this.txtPopSettingsPayCard.value
                                         this.posDevice.dt()[0].PRINT_DESING = this.txtPopSettingsPrint.value
                                         this.posDevice.dt()[0].SCANNER_PORT = this.txtPopSettingsScanner.value
+                                        this.posDevice.dt()[0].PRINTER_PORT = this.txtPopSettingsPrinter.value
                                     }
                                     else
                                     {
@@ -7714,6 +7781,7 @@ export default class posDoc extends React.PureComponent
                                         this.posDevice.dt()[0].PAY_CARD_PORT = this.txtPopSettingsPayCard.value
                                         this.posDevice.dt()[0].PRINT_DESING = this.txtPopSettingsPrint.value
                                         this.posDevice.dt()[0].SCANNER_PORT = this.txtPopSettingsScanner.value
+                                        this.posDevice.dt()[0].PRINTER_PORT = this.txtPopSettingsPrinter.value
                                     }                                
                                     await this.posDevice.save()
                                     this.popSettings.hide()
@@ -8376,6 +8444,79 @@ export default class posDoc extends React.PureComponent
                         </Form>
                     </NdPopUp>
                 </div>
+                {/* Add mail PopUp */}
+                <div>
+                    <NdPopUp parent={this} id={"popAddMail"} 
+                    visible={false}
+                    showCloseButton={true}
+                    showTitle={true}
+                    container={"#root"} 
+                    width={'800'}
+                    height={'600'}
+                    title={this.lang.t("msgAddCustomerMail.title")}
+                    position={{of:"#root"}}
+                    >
+                        {/* <Form style={{textAlign:"center",fontSize:"20px"}}>       
+                            <Item>
+                                <NbLabel id="msgAddCustomerMail" parent={this} value={this.lang.t("msgAddCustomerMail.msg")}/>
+                            </Item>  
+                            <Item>
+                                <NdTextBox type="text" id="monChamp">                     
+                                </NdTextBox>
+                            </Item>
+                            <NdButton
+                                text={this.lang.t("msgAddCustomerMail.btn01")}
+                                type="normal"
+                                stylingMode="contained"
+                                width={'100%'}
+                            />                                     
+                        </Form> */}
+                         <div className="row pt-1">
+                            <div className="col-12">
+                                <NdTextBox id="txtNewMail" parent={this} simple={true} elementAttr={{style:"font-size:15pt;font-weight:bold;border:3px solid #428bca;"}}>     
+                                </NdTextBox> 
+                            </div>
+                        </div> 
+                        <div className="row py-1">
+                            <div className="col-12">
+                                <NbKeyboard id={"keybordNewMail"} layoutName={"mail"} parent={this} inputName={"txtNewMail"}/>
+                            </div>
+                        </div>     
+                        <div className="row py-1">
+                            <div className="col-6">
+                                <div className="col-12 px-1">
+                                    <NbButton id={"btnMailSave"} parent={this} className="form-group btn btn-success btn-block my-1" style={{height:"70px",width:"100%"}}
+                                    onClick={async()=>
+                                    {
+                                        let tmpQuery = 
+                                        {
+                                            query: "UPDATE CUSTOMER_OFFICAL SET EMAIL = @EMAIL WHERE CUSTOMER = @CUSTOMER AND TYPE = 0",
+                                            param: ['EMAIL:string|100','CUSTOMER:string|50' ],
+                                            value: [this.txtNewMail.value,this.posObj.dt()[0].CUSTOMER_GUID]
+                                        };
+                                        await this.core.sql.execute(tmpQuery);
+                                        this.posObj.dt()[0].CUSTOMER_MAIL = this.txtNewMail.value
+                                        this.txtNewMail.value = ''
+                                        this.popAddMail.hide()
+                                    }}>
+                                        <i className="text-white fa-solid fa-check" style={{fontSize: "24px"}} />
+                                    </NbButton>
+                                </div>   
+                            </div>
+                            <div className="col-6">
+                                <div className="col-12 px-1">
+                                    <NbButton id={"btnMailReject"} parent={this} className="form-group btn btn-danger btn-block my-1" style={{height:"70px",width:"100%"}}
+                                    onClick={async()=>
+                                    {
+                                        this.popAddMail.hide()
+                                    }}>
+                                        <i className="text-white fa-solid fa-close" style={{fontSize: "24px"}} />
+                                    </NbButton>
+                                </div>   
+                            </div>
+                        </div>     
+                    </NdPopUp>
+                </div>
                 {/* Mail PopUp */}
                 <div>
                     <NdDialog parent={this} id={"mailPopup"} 
@@ -8434,6 +8575,81 @@ export default class posDoc extends React.PureComponent
                     >
                     </NbPopDescboard>
                 </div>
+                {/* Şifre Değişikliği */}
+                <div>
+                    <NdPopUp parent={this} id={"popPasswordChange"} 
+                    visible={false}
+                    showCloseButton={true}
+                    showTitle={true}
+                    title={this.lang.t("popPasswordChange.title")}
+                    container={"#root"} 
+                    width={'500'}
+                    height={'300'}
+                    position={{of:'#root'}}
+                    >
+                        <Form colCount={1} height={'fit-content'}>
+                            <Item>
+                                <Label text={this.lang.t("popPasswordChange.NewPassword")} alignment="right" />
+                                <NdTextBox id="txtNewPassword" mode="password" parent={this} simple={true}
+                                        maxLength={32}
+                                ></NdTextBox>
+                            </Item>
+                            <Item>
+                                <Label text={this.lang.t("popPasswordChange.NewPassword2")} alignment="right" />
+                                <NdTextBox id="txtNewPassword2" mode="password" parent={this} simple={true}
+                                        maxLength={32}
+                                ></NdTextBox>
+                            </Item>
+                            <Item>
+                                <div className='row'>
+                                    <div className='col-6'>
+                                        <NdButton text={this.lang.t("popPasswordChange.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
+                                        onClick={async ()=>
+                                        {       
+                                            if(this.txtNewPassword.value == this.txtNewPassword2.value)
+                                            {
+                                                let tmpQuery = 
+                                                {
+                                                    query :"UPDATE USERS SET PWD = @PWD WHERE CODE = @CODE " ,
+                                                    param : ['CODE:string|50','PWD:string|max'],
+                                                    value : [this.core.auth.data.CODE,btoa(this.txtNewPassword.value)]
+                                                }
+                                                await this.core.sql.execute(tmpQuery) 
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgPassChange',showTitle:true,title:this.lang.t("msgPassChange.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.lang.t("msgPassChange.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgPassChange.msg")}</div>)
+                                                }
+                                    
+                                                await dialog(tmpConfObj);
+                                                this.popPasswordChange.hide();  
+                                            }
+                                            else
+                                            {
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgPasswordWrong',showTitle:true,title:this.lang.t("msgPasswordWrong.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.lang.t("msgPasswordWrong.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgPasswordWrong.msg")}</div>)
+                                                }
+                                    
+                                                await dialog(tmpConfObj);
+                                            }
+                                        }}/>
+                                    </div>
+                                    <div className='col-6'>
+                                        <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                        onClick={()=>
+                                        {
+                                            this.popPasswordChange.hide();  
+                                        }}/>
+                                    </div>
+                                </div>
+                            </Item>
+                        </Form>
+                    </NdPopUp>
+                </div> 
             </div>
         )
     }

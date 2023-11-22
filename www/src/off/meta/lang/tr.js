@@ -46,6 +46,7 @@ export const langTr =
     dtLastYear : "Geçen Yıl",
     txtTotalTicket : "Toplam Fiş Sayısı",
     txtTicketAvg : "Ortalama Fiş Tutarı",
+    passChange :"Şifre Değiştir",
     popDbList :
     {
         title : "Database Seçimi",
@@ -56,6 +57,19 @@ export const langTr =
         title: "Kullanıcı Şifrenizi Giriniz",
         Password : "Şifre",
         btnApprove : "Onayla"
+    },
+    popPasswordChange : 
+    {
+        title:"Şifre Değiştir",
+        NewPassword : "Yeni Şifre",
+        NewPassword2 : "Yeni Şifre Tekrar",
+        btnApprove : "Onayla"
+    },
+    msgPassChange:
+    {
+        title: "Başarılı",
+        btn01: "Tamam",
+        msg: "Şifreniz Değiştirildi !"
     },
     msgPasswordWrong:
     {
@@ -301,7 +315,7 @@ export const langTr =
         pos_02_011 : "Ürün Karşılaştırma Raporu",
         pos_02_012 : "Pos Puan Kullanım Raporu",
         pos_02_013 : "Pos İndirim Raporu",
-        pos_02_014 : "Okunmamış Terazi Fişleri",
+        pos_02_014 : "Terazi Fişleri",
         pos_02_015 : "Müşteri Bazlı Ürün Satış Raporu",
         pos_03 :"Operasyonlar",
         pos_03_001 : "Gün Sonu",
@@ -3593,7 +3607,8 @@ export const langTr =
         cmbTypeData : 
         {
             individual : "Bireysel",
-            company : "Firma"
+            company : "Firma",
+            association : "Dernek"
         },
         cmbGenusData:
         {
@@ -5228,6 +5243,7 @@ export const langTr =
             clmTotal : "G.Toplam",
             clmTotalHt : "Ver.Haric Top.",
             clmDispatch : "İrsaliye No",
+            clmDateDispatch : "Tarih",
             clmCreateDate: "Kayıt Tarihi",
             clmMargin :"Marj",
             clmDescription :"Açıklama",
@@ -7097,6 +7113,7 @@ export const langTr =
             clmTotal : "G.Toplam",
             clmTotalHt : "Ver.Haric Top.",
             clmDispatch : "İrsaliye No",
+            clmDateDispatch : "Tarih",
             clmCreateDate: "Kayıt Tarihi",
             clmMargin :"Marj",
             clmDescription :"Açıklama",
@@ -8110,6 +8127,7 @@ export const langTr =
             clmTotal : "G.Toplam",
             clmTotalHt : "Ver.Haric Top.",
             clmDispatch : "İrsaliye No",
+            clmDateDispatch : "Tarih",
             clmCreateDate: "Kayıt Tarihi",
             clmMargin :"Marj",
             clmDescription :"Açıklama",
@@ -9951,6 +9969,7 @@ export const langTr =
             clmTotal : "G.Toplam",
             clmTotalHt : "Ver.Haric Top.",
             clmDispatch : "İrsaliye No",
+            clmDateDispatch : "Tarih",
             clmCreateDate: "Kayıt Tarihi",
             clmMargin :"Marj",
             clmDescription :"Açıklama",
@@ -16283,6 +16302,7 @@ export const langTr =
         txtPrintDesing : "Fiş Dizaynı",
         txtMacId : "Mac Id",
         cmbDepot : "Depo",
+        txtPrinterPort : "Printer Port",
         pg_txtCode : 
         {
             title : "Kasa Seçimi",
@@ -16685,7 +16705,11 @@ export const langTr =
             clmPosCheck : "Çek",
             clmPosTicket : "T.Restorant",
             clmAdvance : "Avans",
-            clmSafe : "Kasa"
+            clmSafe : "Kasa",
+            clmDiffCash : "Nakit Fark",
+            clmDiffCredit : "K.Kartı Fark",
+            clmDiffCheck :"Çek Farkı",
+            clmDiffTicket : "T.R Farkı"
         },
     },
     pos_02_007 : // "POS Avans Raporu",
@@ -16864,6 +16888,7 @@ export const langTr =
             clmName : "Adı",           
             clmQuantity : "Miktar",
             clmPrice : "Fiyat",
+            clmStatus : "Durum",
             clmCDate : "Tarih",
             clmTicketNo : "Fiş No",
         },

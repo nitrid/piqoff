@@ -611,9 +611,9 @@ export const prm =
                 colCount:1,
                 item:
                 [
-                    {type:"checkbox",caption:"Pasif",field:"disable",id:"chkPopDocRowDelDescriptionDisable"},
-                    {type:"text",caption:"Min.Karakter",field:"minCharSize",id:"txtPopDocRowDelDescriptionMinChar"},
-                    {type:"popObjectList",caption:"Açıklama",field:"buttons",id:"lstPopDocRowDelDescriptionDesc",
+                    {type:"checkbox",caption:"Pasif",field:"disable",id:"chkPopBalanceCounterDescDisable"},
+                    {type:"text",caption:"Min.Karakter",field:"minCharSize",id:"txtPopBalanceCounterDescMinChar"},
+                    {type:"popObjectList",caption:"Açıklama",field:"buttons",id:"lstPopBalanceCounterDesc",
                         form:
                         {
                             width:"800",
@@ -1242,7 +1242,7 @@ export const prm =
         ID :"ScaleBarcodeControl",
         VALUE : 
         {
-            active : true,
+            active : false,
             tolerans : 0.030
         },
         SPECIAL : "",
@@ -1254,11 +1254,11 @@ export const prm =
             TYPE : "popInput",
             PAGE_NAME : "Pos",
             CAPTION : "Terazi Barkod Kontrolü",
-            DISPLAY : "disable",
+            DISPLAY : "active",
             FORM: 
             {
                 width:"400",
-                height:"180",
+                height:"220",
                 colCount:1,
                 item:
                 [
