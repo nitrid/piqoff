@@ -781,7 +781,6 @@ export default class posDoc extends React.PureComponent
                         return
                     }
                 }
-                
                 this.posObj.dt()[0].CUSTOMER_GUID = tmpCustomerDt[0].GUID
                 this.posObj.dt()[0].CUSTOMER_TYPE = tmpCustomerDt[0].CUSTOMER_TYPE
                 this.posObj.dt()[0].CUSTOMER_CODE = tmpCustomerDt[0].CODE
@@ -793,7 +792,6 @@ export default class posDoc extends React.PureComponent
                 this.posObj.dt()[0].CUSTOMER_POINT = tmpCustomerDt[0].CUSTOMER_POINT
                 this.posObj.dt()[0].CUSTOMER_POINT_PASSIVE = tmpCustomerDt[0].POINT_PASSIVE
                 this.posObj.dt()[0].CUSTOMER_MAIL = tmpCustomerDt[0].EMAIL
-
                 if(this.posObj.dt()[0].CUSTOMER_MAIL.length == '')
                 {
                     let tmpConfObj =
@@ -805,13 +803,51 @@ export default class posDoc extends React.PureComponent
                     let tmpConfObjResult = await dialog(tmpConfObj)
                     if(tmpConfObjResult == 'btn01')
                     {
-                        await this.popAddMail.show()
-                                               
-                        // this.posObj.dt()[0].CUSTOMER_MAIL = NdTextBox.value;                                              
-                        return
+                        await this.popAddMail.show()                                    
                     }
                 }
 
+                let tmpLotteryDt = new datatable(); 
+                tmpLotteryDt.selectCmd = 
+                {
+                    query : "SELECT * FROM " +
+                            "(SELECT *, " +
+                            "ISNULL((SELECT CUSTOMER_CODE FROM POS_VW_01 WHERE GUID = POS_GUID),'') AS CODE " +
+                            "FROM POS_EXTRA_VW_01 WHERE TAG = 'LOTTERY') AS TMP " +
+                            "WHERE CODE = @CODE AND DESCRIPTION = '' " ,
+                    param : ['CODE:string|50'],
+                    value : [this.posObj.dt()[0].CUSTOMER_CODE]
+                }
+                tmpLotteryDt.updateCmd = 
+                {
+                    query : "UPDATE POS_EXTRA SET DESCRIPTION = @DESCRIPTION WHERE GUID = @GUID",
+                    param : ['DESCRIPTION:string|10','GUID:string|50'],
+                    dataprm : ['DESCRIPTION','GUID']
+                }
+                
+                await tmpLotteryDt.refresh()
+                if(tmpLotteryDt.length > 0)
+                {
+                    let tmpConfObj =
+                    {
+                        id:'msgPreLottery',showTitle:true,title:this.lang.t("msgPreLottery.title"),showCloseButton:true,width:'450px',height:'200px',
+                        button:[{id:"btn01",caption:this.lang.t("msgPreLottery.btn01"),location:'before'}],
+                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgPreLottery.msg")}</div>)
+                    }
+                    let tmpConfObjResult = await dialog(tmpConfObj)
+                    if(tmpConfObjResult == 'btn01')
+                    {
+                        let tmpConfObj =
+                        {
+                            id:'msgPostLottery',showTitle:true,title:this.lang.t("msgPostLottery.title"),showCloseButton:true,width:'450px',height:'200px',
+                            button:[{id:"btn01",caption:this.lang.t("msgPostLottery.btn01"),location:'before'}],
+                            content:(<div style={{textAlign:"center",fontSize:"20px", color:"red"}}>{this.lang.t("msgPostLottery.msg")}</div>)
+                        }                       
+                        await dialog(tmpConfObj)         
+                    }
+                    tmpLotteryDt[0].DESCRIPTION = '1'
+                    await tmpLotteryDt.update()
+                }
                 //PROMOSYON GETİR.
                 await this.getPromoDb()
                 this.promoApply()

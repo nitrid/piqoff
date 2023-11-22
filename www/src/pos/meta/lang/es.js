@@ -229,6 +229,18 @@ export const langEs =
         msg : "¡Por favor, elimine todos los pagos antes de eliminar la línea!",
         btn01 : "Aceptar"
     },
+    msgPreLottery:
+    {
+        title: "Aviso",
+        msg: "UN MINUTO...",
+        btn01: "CONTINUAR",
+    },
+    msgPostLottery:
+    {
+        title: "Aviso",
+        msg: "¡ESTE CLIENTE HA GANADO EL SORTEO!!!",
+        btn01: "Sí",
+    },
     msgDeleteLineSelect: 
     {
         title : "Atención",

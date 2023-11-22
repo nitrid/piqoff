@@ -241,6 +241,18 @@ export const langTr =
         msg : "Lütfen satır seçiniz !",
         btn01 : "Tamam"
     },
+    msgPreLottery: 
+    {
+        title: "Uyarı",
+        msg: "BİR DAKİKA..",
+        btn01: "DEVAM",
+    },
+    msgPostLottery: 
+    {
+        title: "Uyarı",
+        msg: "BU MÜŞTERİ ÇEKİLİŞİ KAZANDI !!!",
+        btn01: "Evet",
+    },    
     msgCustomerMail: 
     {
         title : "Uyarı",
