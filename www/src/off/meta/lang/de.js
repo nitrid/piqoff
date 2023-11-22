@@ -71,7 +71,6 @@ export const langDe =
         btn01: "OK",
         msg: "Ihr Passwort wurde geändert!"
     },
-
     msgAnotherUserAlert: 
     {
         title: "Hinweis",
@@ -417,6 +416,18 @@ export const langDe =
         title: "Achtung",
         btn01: "OK",
         msg: "Die von Ihnen eingegebene Dokumentennummer wurde bereits gespeichert!"
+    },
+    popDeptCreditList :
+    {
+        title : "Rechnungsauswahl",
+        clmRef : "REFERENZ",
+        clmRefNo : "REFERENZ NR",
+        clmTypeName : "BELEGSART",
+        clmCustomer : "KUNDE NAME",
+        clmDate : "DATUM",
+        clmTotal : "GESAMT",
+        clmClosed : "GESCHLOSSEN",
+        clmBalance : "AUSSTEHEND",
     },
     stk_01_001:  // "Neue Lagerdefinition"
     {
@@ -15456,18 +15467,6 @@ export const langDe =
             clmRefNo: "NUMMER",
             clmOutputName: "KUNDENNAME",
             clmOutputCode: "KUNDENCODE",
-        },
-        pg_invoices :
-        {
-            title : "Rechnungsauswahl",
-            clmRef : "REFERENZ",
-            clmRefNo : "REFERENZ NR",
-            clmTypeName : "BELEGSART",
-            clmCustomer : "KUNDE NAME",
-            clmDate : "DATUM",
-            clmTotal : "GESAMT",
-            clmClosed : "GESCHLOSSEN",
-            clmBalance : "AUSSTEHEND",
         },
         pg_txtCustomerCode : 
         {
