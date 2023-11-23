@@ -32,8 +32,7 @@ export default class salesInvoice extends DocBase
         this.docType = 20;
         this.rebate = 0;
 
-        this._cellRoleRender = this._cellRoleRender.bind(this)            
-        this._onItemRendered = this._onItemRendered.bind(this)
+        this._cellRoleRender = this._cellRoleRender.bind(this)
         this._calculateInterfel = this._calculateInterfel.bind(this)
 
         this.frmDocItems = undefined;
@@ -150,8 +149,6 @@ export default class salesInvoice extends DocBase
         this.txtRef.readOnly = true
         this.txtRefno.readOnly = true
         this.frmDocItems.option('disabled',false)
-        
-        this.getPayment(this.docObj.dt()[0].GUID)
     }
     async calculateTotal()
     {
@@ -401,14 +398,6 @@ export default class salesInvoice extends DocBase
                 >  
                 </NdTextBox>
             )
-        }
-    }
-    async _onItemRendered(e)
-    {
-        await this.core.util.waitUntil(10)
-        if(e.itemData.title == this.t("tabTitlePayments"))
-        {
-            this.getPayment(this.docObj.dt()[0].GUID)
         }
     }
     async addItem(pData,pIndex,pQuantity,pPrice)
@@ -1976,7 +1965,7 @@ export default class salesInvoice extends DocBase
                     </div>
                     <div className='row px-2 pt-2'>
                         <div className='col-12'>
-                            <TabPanel height="100%" onItemRendered={this._onItemRendered}>
+                            <TabPanel height="100%">
                                 <Item title={this.t("tabTitleSubtotal")}>
                                     <div className="row px-2 pt-2">
                                     <div className="col-12">
@@ -2119,69 +2108,6 @@ export default class salesInvoice extends DocBase
                                             </Item>
                                         </Form>
                                     </div>
-                                    </div>
-                                </Item>
-                                <Item title={this.t("tabTitlePayments")}>
-                                    <div className="row px-2 pt-2">
-                                        <div className="col-12">
-                                            <Form colCount={4} parent={this} id={"frmSlsInv"  + this.tabIndex}>
-                                                {/* Ödeme Toplam */}
-                                                <EmptyItem colSpan={2}/>
-                                                <Item>
-                                                <Label text={this.t("txtExpFee")} alignment="right" />
-                                                    <NdNumberBox id="txtExpFee" format={{ style: "currency", currency: "EUR",precision: 2}} parent={this} simple={true} dt={{data:this.docObj.docCustomer.dt('DOC_CUSTOMER'),field:"EXPIRY_FEE"}}
-                                                    maxLength={32}
-                                                    ></NdNumberBox>
-                                                </Item>
-                                                <Item>
-                                                <Label text={this.t("txtPayTotal")} alignment="right" />
-                                                    <NdTextBox id="txtPayTotal" format={{ style: "currency", currency: "EUR",precision: 2}} parent={this} simple={true} readOnly={true} dt={{data:this.payObj.dt('DOC'),field:"TOTAL"}}
-                                                    maxLength={32}
-                                                    ></NdTextBox>
-                                                </Item>
-                                                {/* Kalan */}
-                                                <EmptyItem colSpan={3}/>
-                                                <Item>
-                                                <Label text={this.t("txtRemainder")} alignment="right" />
-                                                    <NdNumberBox id="txtRemainder" parent={this} simple={true} readOnly={true}
-                                                    maxLength={32}
-                                                    ></NdNumberBox>
-                                                </Item>
-                                                <EmptyItem colSpan={3}/>
-                                                <Item>
-                                                <Label text={this.t("txtbalance")} alignment="right" />
-                                                    <NdNumberBox id="txtbalance" format={{ style: "currency", currency: "EUR",precision: 2}} parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC_CUSTOMER'),field:"INPUT_BALANCE"}}
-                                                    maxLength={32}
-                                                    ></NdNumberBox>
-                                                </Item>
-                                                <EmptyItem colSpan={3}/>
-                                                <Item>
-                                                <div className='row'>
-                                                    <div className='col-12'>
-                                                        <NdButton text={this.t("getPayment")} type="normal" stylingMode="contained" width={'100%'} 
-                                                        onClick={async (e)=>
-                                                        {
-                                                            if(!this.docObj.isSaved)
-                                                            {
-                                                                let tmpConfObj =
-                                                                {
-                                                                    id:'isMsgSave',showTitle:true,title:this.t("isMsgSave.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                                    button:[{id:"btn01",caption:this.t("isMsgSave.btn01"),location:'after'}],
-                                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("isMsgSave.msg")}</div>)
-                                                                }
-                                                                await dialog(tmpConfObj);
-                                                                return
-                                                            }
-                                                            
-                                                            await this.popPayment.show()
-                                                            await this.getPayment()
-                                                            await this.grdInvoicePayment.dataRefresh({source:this.payObj.docCustomer.dt()});
-                                                        }}/>
-                                                    </div>
-                                                </div>
-                                                </Item>
-                                            </Form>
-                                        </div>
                                     </div>
                                 </Item>
                             </TabPanel>
