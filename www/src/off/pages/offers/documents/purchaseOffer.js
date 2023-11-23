@@ -29,7 +29,7 @@ export default class purchaseOffer extends DocBase
 
         this._cellRoleRender = this._cellRoleRender.bind(this)
 
-        this.frmDocOffers = undefined;
+        this.frmDocItems = undefined;
         this.docLocked = false;   
         this.customerControl = true
         this.customerClear = false
@@ -55,7 +55,7 @@ export default class purchaseOffer extends DocBase
         this.txtRefno.readOnly = false
         this.docLocked = false
         
-        this.frmDocOffers.option('disabled',true)
+        this.frmDocItems.option('disabled',true)
 
         this.pg_txtItemsCode.on('showing',()=>
         {
@@ -117,7 +117,7 @@ export default class purchaseOffer extends DocBase
         this.txtRef.readOnly = true
         this.txtRefno.readOnly = true
         
-        this.frmDocOffers.option('disabled',this.docLocked)
+        this.frmDocItems.option('disabled',this.docLocked)
     }
     _cellRoleRender(e)
     {
@@ -781,7 +781,7 @@ export default class purchaseOffer extends DocBase
                                                 }
 
                                                 await dialog(tmpConfObj);
-                                                this.frmDocOffers.option('disabled',true)
+                                                this.frmDocItems.option('disabled',true)
                                             }
                                             else
                                             {
@@ -971,7 +971,7 @@ export default class purchaseOffer extends DocBase
                                         this.checkRow()
                                         if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
                                         {
-                                            this.frmDocOffers.option('disabled',false)
+                                            this.frmDocItems.option('disabled',false)
                                         }
                                     }).bind(this)}
                                     data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01 WHERE TYPE IN (0,2) AND STATUS = 1"},sql:this.core.sql}}}
@@ -1009,7 +1009,7 @@ export default class purchaseOffer extends DocBase
                                                 }
                                                 if(this.docLocked == false)
                                                 {
-                                                    this.frmDocOffers.option('disabled',false)
+                                                    this.frmDocItems.option('disabled',false)
                                                 }
                                             }
                                         }
@@ -1038,7 +1038,7 @@ export default class purchaseOffer extends DocBase
                                                             }
                                                             if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
                                                             {
-                                                                this.frmDocOffers.option('disabled',false)
+                                                                this.frmDocItems.option('disabled',false)
                                                             }
                                                         }
                                                     }
@@ -1195,7 +1195,7 @@ export default class purchaseOffer extends DocBase
                         <div className="col-12">
                             <Form colCount={1} onInitialized={(e)=>
                             {
-                                this.frmDocOffers = e.component
+                                this.frmDocItems = e.component
                             }}>
                                 <Item location="after">
                                     <Button icon="add"
@@ -1674,7 +1674,7 @@ export default class purchaseOffer extends DocBase
                                                 {
                                                     let tmpQuery = 
                                                     {
-                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG)ORDER BY DOC_DATE,LINE_NO " ,
+                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_OFFERS_FOR_PRINT](@DOC_GUID) ORDER BY LINE_NO" ,
                                                         param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
                                                         value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
                                                     }
@@ -1781,7 +1781,7 @@ export default class purchaseOffer extends DocBase
                                                 {
                                                     let tmpQuery = 
                                                     {
-                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG)ORDER BY DOC_DATE,LINE_NO " ,
+                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_OFFERS_FOR_PRINT](@DOC_GUID) ORDER BY LINE_NO" ,
                                                         param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
                                                         value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
                                                     }
