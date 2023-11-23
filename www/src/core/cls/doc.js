@@ -1625,7 +1625,7 @@ export class deptCreditMatchingCls
             PAYING_AMOUNT : 0
         }
         this.lang = undefined;
-
+        this.popUpList = new datatable()
         this._initDs();
     }
     //#region Private
@@ -1781,6 +1781,7 @@ export class deptCreditMatchingCls
     }
     async showPopUp(pCustomer)
     {
+        this.popUpList = new datatable()
         let tmpJsx = 
         (
             <NdPopGrid id={"popDeptCreditList"} parent={this} container={"#root"}
@@ -1854,6 +1855,7 @@ export class deptCreditMatchingCls
                 value : [pCustomer,this.lang.language.toUpperCase()]
             }
             let tmpData = await this.core.sql.execute(tmpQuery) 
+            console.log(tmpData)
             if(tmpData.result.recordset.length > 0)
             {
                 await this.popDeptCreditList.setData(tmpData.result.recordset)
@@ -1878,11 +1880,12 @@ export class deptCreditMatchingCls
                     let tmpDeptCreditMatchingObj = new deptCreditMatchingCls()
                     await tmpDeptCreditMatchingObj.matching(tmpInvDt)
                     await tmpDeptCreditMatchingObj.save()
+                    this.popUpList = tmpInvDt
                     resolve(tmpInvDt)
                 }
                 else
                 {
-                    resolve(new datatable())
+                    resolve(this.popUpList)
                 }
             }
         })

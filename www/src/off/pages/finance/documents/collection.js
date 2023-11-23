@@ -107,8 +107,6 @@ export default class collection extends React.PureComponent
         tmpDoc.INPUT = '00000000-0000-0000-0000-000000000000'
         this.docObj.addEmpty(tmpDoc);
 
-        
-        this.invoices = new datatable()
         this.txtRef.readOnly = false
         this.txtRefno.readOnly = false
         this.docLocked = false
@@ -254,7 +252,7 @@ export default class collection extends React.PureComponent
 
             this.docObj.docCustomer.addEmpty(tmpDocCustomer)
             // BORC ALACAK EŞLEŞMESİ İÇİN YAPILDI.*****************************************/
-            let tmpDCPaidDt = this.invoices.where({REMAINDER: {'>' : 0}}).where({TYPE : 1})
+            let tmpDCPaidDt = this.deptCreditMatchingObj.popUpList.where({REMAINDER: {'>' : 0}}).where({TYPE : 1})
             if(tmpDCPaidDt.length > 0)
             {
                 tmpDCPaidDt.push
@@ -934,9 +932,8 @@ export default class collection extends React.PureComponent
                                             <NdButton text={this.t("invoiceSelect")} type="normal" stylingMode="contained" width={'100%'} 
                                             onClick={async (e)=>
                                             {       
-                                                let tmpPopResult = await this.deptCreditMatchingObj.showPopUp(this.docObj.dt()[0].OUTPUT)
-                                                this.invoices = tmpPopResult
-                                                this.numCash.value = this.invoices.sum('REMAINDER').round(2)
+                                                await this.deptCreditMatchingObj.showPopUp(this.docObj.dt()[0].OUTPUT)
+                                                this.numCash.value = this.deptCreditMatchingObj.popUpList.sum('REMAINDER').round(2)
                                             }}/>
                                         </div>
                                     </div>
