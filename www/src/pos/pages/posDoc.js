@@ -744,7 +744,7 @@ export default class posDoc extends React.PureComponent
             let tmpCustomerDt = new datatable(); 
             tmpCustomerDt.selectCmd = 
             {
-                query : "SELECT GUID,CUSTOMER_TYPE,CODE,TITLE,ADRESS,ZIPCODE,CITY,COUNTRY_NAME,STATUS,CUSTOMER_POINT,EMAIL,POINT_PASSIVE, " +
+                query : "SELECT GUID,CUSTOMER_TYPE,NAME,LAST_NAME,CODE,TITLE,ADRESS,ZIPCODE,CITY,COUNTRY_NAME,STATUS,CUSTOMER_POINT,EMAIL,POINT_PASSIVE,PHONE1, " +
                         "ISNULL((SELECT COUNT(TYPE) FROM CUSTOMER_POINT WHERE TYPE = 0 AND CUSTOMER = CUSTOMER_VW_02.GUID AND CONVERT(DATE,LDATE) = CONVERT(DATE,GETDATE())),0) AS POINT_COUNT " + 
                         "FROM [dbo].[CUSTOMER_VW_02] WHERE CODE LIKE SUBSTRING(@CODE,0,14) + '%' AND STATUS = 1",
                 param : ['CODE:string|50'],
@@ -796,21 +796,15 @@ export default class posDoc extends React.PureComponent
                 this.posObj.dt()[0].CUSTOMER_POINT_PASSIVE = tmpCustomerDt[0].POINT_PASSIVE
                 this.posObj.dt()[0].CUSTOMER_MAIL = tmpCustomerDt[0].EMAIL
 
-                if(this.posObj.dt()[0].CUSTOMER_MAIL.length == '')
+                if(this.prmObj.filter({ID:'mailControl',TYPE:0}).getValue() == true)
                 {
-                    let tmpConfObj =
+                    if(this.posObj.dt()[0].CUSTOMER_MAIL == '')
                     {
-                        id:'msgCustomerMail',showTitle:true,title:this.lang.t("msgCustomerMail.title"),showCloseButton:true,width:'450px',height:'200px',
-                        button:[{id:"btn01",caption:this.lang.t("msgCustomerMail.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgCustomerMail.btn02"),location:'after'}],
-                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgCustomerMail.msg")}</div>)
-                    }
-                    let tmpConfObjResult = await dialog(tmpConfObj)
-                    if(tmpConfObjResult == 'btn01')
-                    {
+                        this.txtNewCustomerName.value = tmpCustomerDt[0].NAME,
+                        this.txtNewCustomerLastName.value = tmpCustomerDt[0].LAST_NAME,
+                        this.txtNewPhone.value = tmpCustomerDt[0].PHONE1
+
                         await this.popAddMail.show()
-                                               
-                        // this.posObj.dt()[0].CUSTOMER_MAIL = NdTextBox.value;                                              
-                        return
                     }
                 }
 
@@ -8452,28 +8446,49 @@ export default class posDoc extends React.PureComponent
                     showTitle={true}
                     container={"#root"} 
                     width={'800'}
-                    height={'600'}
+                    height={'700'}
                     title={this.lang.t("msgAddCustomerMail.title")}
                     position={{of:"#root"}}
                     >
-                        {/* <Form style={{textAlign:"center",fontSize:"20px"}}>       
-                            <Item>
-                                <NbLabel id="msgAddCustomerMail" parent={this} value={this.lang.t("msgAddCustomerMail.msg")}/>
-                            </Item>  
-                            <Item>
-                                <NdTextBox type="text" id="monChamp">                     
-                                </NdTextBox>
-                            </Item>
-                            <NdButton
-                                text={this.lang.t("msgAddCustomerMail.btn01")}
-                                type="normal"
-                                stylingMode="contained"
-                                width={'100%'}
-                            />                                     
-                        </Form> */}
+                         <div className="row pt-1">
+                            <div className="col-6">
+                                <NdTextBox id="txtNewCustomerName" parent={this} simple={true} placeholder={this.lang.t("txtNewCustomerName")} elementAttr={{style:"font-size:15pt;font-weight:bold;border:3px solid #428bca;"}}
+                                 onFocusIn={()=>
+                                    {                                    
+                                        this.keybordNewMail.inputName = "txtNewCustomerName"
+                                        this.keybordNewMail.setInput(this.txtNewCustomerName.value)
+                                    }}>     
+                                </NdTextBox> 
+                            </div>
+                            <div className="col-6">
+                                <NdTextBox id="txtNewCustomerLastName" parent={this} simple={true} placeholder={this.lang.t("txtNewCustomerLastName")} elementAttr={{style:"font-size:15pt;font-weight:bold;border:3px solid #428bca;"}}
+                                 onFocusIn={()=>
+                                    {                                    
+                                        this.keybordNewMail.inputName = "txtNewCustomerLastName"
+                                        this.keybordNewMail.setInput(this.txtNewCustomerLastName.value)
+                                    }}>     
+                                </NdTextBox> 
+                            </div>
+                        </div> 
+                        <div className="row pt-1">
+                            <div className="col-12">
+                                <NdTextBox id="txtNewPhone" parent={this} simple={true} placeholder={this.lang.t("txtNewPhone")} elementAttr={{style:"font-size:15pt;font-weight:bold;border:3px solid #428bca;"}}
+                                 onFocusIn={()=>
+                                    {                                    
+                                        this.keybordNewMail.inputName = "txtNewPhone"
+                                        this.keybordNewMail.setInput(this.txtNewPhone.value)
+                                    }}>     
+                                </NdTextBox> 
+                            </div>
+                        </div> 
                          <div className="row pt-1">
                             <div className="col-12">
-                                <NdTextBox id="txtNewMail" parent={this} simple={true} elementAttr={{style:"font-size:15pt;font-weight:bold;border:3px solid #428bca;"}}>     
+                                <NdTextBox id="txtNewMail" parent={this} simple={true} placeholder={this.lang.t("txtNewMail")} elementAttr={{style:"font-size:15pt;font-weight:bold;border:3px solid #428bca;"}}
+                                  onFocusIn={()=>
+                                    {                                    
+                                        this.keybordNewMail.inputName = "txtNewMail"
+                                        this.keybordNewMail.setInput(this.txtNewMail.value)
+                                    }}>     
                                 </NdTextBox> 
                             </div>
                         </div> 
@@ -8490,9 +8505,9 @@ export default class posDoc extends React.PureComponent
                                     {
                                         let tmpQuery = 
                                         {
-                                            query: "UPDATE CUSTOMER_OFFICAL SET EMAIL = @EMAIL WHERE CUSTOMER = @CUSTOMER AND TYPE = 0",
-                                            param: ['EMAIL:string|100','CUSTOMER:string|50' ],
-                                            value: [this.txtNewMail.value,this.posObj.dt()[0].CUSTOMER_GUID]
+                                            query: "UPDATE CUSTOMER_OFFICAL SET EMAIL = @EMAIL,NAME = @NAME,LAST_NAME = @LAST_NAME,PHONE1 = @PHONE1 WHERE CUSTOMER = @CUSTOMER AND TYPE = 0",
+                                            param: ['EMAIL:string|100','NAME:string|50','LAST_NAME:string|50','PHONE1:string|50','CUSTOMER:string|50'],
+                                            value: [this.txtNewMail.value,this.txtNewCustomerName.value,this.txtNewCustomerLastName.value,this.txtNewPhone.value,this.posObj.dt()[0].CUSTOMER_GUID]
                                         };
                                         await this.core.sql.execute(tmpQuery);
                                         this.posObj.dt()[0].CUSTOMER_MAIL = this.txtNewMail.value
