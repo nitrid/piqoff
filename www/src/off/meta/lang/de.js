@@ -284,7 +284,8 @@ export const langDe =
         fns_04: "Berichte",
         fns_04_001: "Bankauszugsbericht",
         fns_04_002: "Kontosaldo-Bericht",
-        fns_04_003 : "Kasa Ekstre Raporu",
+        fns_04_003 : "Kasa Ekstre Raporu", //BAK
+        fns_04_003 : "Eine Abgleichsbericht über Schulden und Guthaben", //BAK
         fns_05: "Operationen",
         fns_05_001: "Masseneinzahlungseingabe",
         fns_05_002: "Massenzahlungseingabe",
@@ -15915,8 +15916,35 @@ export const langDe =
             clmDocDate : "Tarih",    // BAK
             clmRef : "Seri",   // BAK
             clmRefNo : "Sıra",    // BAK
+        },     
+    },
+    fns_04_004 : // "Eşleştirmeli Borç Alacak Raporu" //BAK
+    {
+        txtCustomerCode : "Müşteri",
+        txtTotal : "Toplam",
+        menu : "Tahsilat",
+        pg_txtCustomerCode : 
+        {
+            title : "Müşteri Seçimi",
+            clmCode :  "CARİ KODU",
+            clmTitle : "CARİ ADI",
+            clmTypeName : "TİPİ",
+            clmGenusName : "CİNSİ"
         },
-     
+        btnGet :"Getir",
+        dtFirst : "İlk Tarih",
+        dtLast : "Son Tarih",
+        grdColList: 
+        {
+            clmRef: "Seri",
+            clmRefNo: "Sıra",
+            clmPrice: "Fiyat",
+            clmOutputCode : "Müşteri Kodu",
+            clmOutputName : "Müşteri Adı",
+            clmDate: "Tarih",
+            clmTotal : "Tutar",
+            clmInputName :"Kasa/Banka",
+        },
     },
     fns_05_001 : //"Masseneinzugseingabe"
     {

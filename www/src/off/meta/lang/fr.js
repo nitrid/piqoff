@@ -293,7 +293,7 @@ export const langFr =
         fns_04_001 : "Rapport sur les relevés bancaires",   
         fns_04_002 : "Rapport sur le solde actuel",  
         fns_04_003 : "Rapport sur les relevés de caisse",
-        fns_04_002 : "Rapport solde de compte",
+        fns_04_004 : "Rapport de conformité dettes-crédits",//BAK
         fns_05 : "Opérations", 
         fns_05_001 : "Saisie Multi Encaissement", 
         fns_05_002 : "Saisie Multi Paiement", 
@@ -16468,6 +16468,34 @@ export const langFr =
             clmCode : "Code",
         },
      
+    },
+    fns_04_004 : // "Eşleştirmeli Borç Alacak Raporu"
+    {
+        txtCustomerCode : "Fournisseur",
+        txtTotal : "Total",
+        menu : "Encaissement",
+        pg_txtCustomerCode : 
+        {
+            title : "Choix Fournisseur",
+            clmCode :  "Code Client",
+            clmTitle : "Nom Fournisseur",
+            clmTypeName : "Type",
+            clmGenusName : "Genre"
+        },
+        btnGet :"Rechercher",
+        dtFirst : "Date Début",
+        dtLast : "Date Fin",
+        grdColList: 
+        {
+            clmRef: "Référence",
+            clmRefNo: "Ligne",
+            clmPrice: "Prix ",
+            clmOutputCode : "Sélection Document",
+            clmOutputName : "Nom fournisseur",
+            clmDate: "Date",
+            clmTotal : "Total" ,
+            clmInputName :"Caisse/Banque",
+        },
     },
     fns_05_001 : // "Kasa Ekstre Raporu"
     {
