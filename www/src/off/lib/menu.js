@@ -1360,6 +1360,11 @@ export const menu = (e) =>
                             text: e.t('menuOff.set_02_008'),//'Gümrük Kodu Excel',
                             path: 'setting/officialSettings/customsCodeImport'
                         },
+                        {
+                            id: 'set_02_009',
+                            text: e.t('menuOff.set_02_009'),//'Mail ayarlari',
+                            path: 'setting/officialSettings/mailSettings'
+                        },
 
                     ]
                 },
