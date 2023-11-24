@@ -250,9 +250,7 @@ export const langTr =
     },
     msgAddCustomerMail: 
     {
-        title : "Uyarı",
-        msg : "musterinin mail'i",
-        btn01 : "tamam",
+        title : "Lütfen Mail Adresi Giriniz..",
     },
     msgCancelCustomerConfirm: 
     {
@@ -862,4 +860,8 @@ export const langTr =
         btnApprove : "Onayla"
     },
     passChange :"Şifre Değiştir",
+    txtNewMail : "E-Mail",
+    txtNewPhone : "Telefon",
+    txtNewCustomerLastName : "Soyisim",
+    txtNewCustomerName : "İsim"
 }
