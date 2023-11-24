@@ -803,6 +803,7 @@ export default class posDoc extends React.PureComponent
                         this.txtNewCustomerName.value = tmpCustomerDt[0].NAME,
                         this.txtNewCustomerLastName.value = tmpCustomerDt[0].LAST_NAME,
                         this.txtNewPhone.value = tmpCustomerDt[0].PHONE1
+                        this.txtNewMail.value = ''
 
                         await this.popAddMail.show()
                     }
@@ -8505,9 +8506,9 @@ export default class posDoc extends React.PureComponent
                                     {
                                         let tmpQuery = 
                                         {
-                                            query: "UPDATE CUSTOMER_OFFICAL SET EMAIL = @EMAIL,NAME = @NAME,LAST_NAME = @LAST_NAME,PHONE1 = @PHONE1 WHERE CUSTOMER = @CUSTOMER AND TYPE = 0",
-                                            param: ['EMAIL:string|100','NAME:string|50','LAST_NAME:string|50','PHONE1:string|50','CUSTOMER:string|50'],
-                                            value: [this.txtNewMail.value,this.txtNewCustomerName.value,this.txtNewCustomerLastName.value,this.txtNewPhone.value,this.posObj.dt()[0].CUSTOMER_GUID]
+                                            query: "UPDATE CUSTOMER_OFFICAL SET LDATE = GETDATE(),LUSER = @LUSER,EMAIL = @EMAIL,NAME = @NAME,LAST_NAME = @LAST_NAME,PHONE1 = @PHONE1 WHERE CUSTOMER = @CUSTOMER AND TYPE = 0",
+                                            param: ['LUSER:string|100','EMAIL:string|100','NAME:string|50','LAST_NAME:string|50','PHONE1:string|50','CUSTOMER:string|50'],
+                                            value: [this.core.auth.data.CODE,this.txtNewMail.value,this.txtNewCustomerName.value,this.txtNewCustomerLastName.value,this.txtNewPhone.value,this.posObj.dt()[0].CUSTOMER_GUID]
                                         };
                                         await this.core.sql.execute(tmpQuery);
                                         this.posObj.dt()[0].CUSTOMER_MAIL = this.txtNewMail.value
