@@ -48,6 +48,7 @@ export const langFr =
         dailyRebateTicket : "Total Ticket Retour",
         dailyRebateTotal : "Montant Remboursement",
         dailyCustomerTicket : "Ticket Avec Carte Fidélité",
-        dailyUseLoyalty : "Montant Points Utilisés"
+        dailyUseLoyalty : "Montant Points Utilisés",
+        useDiscount : "Montant remises"
     },
 }
