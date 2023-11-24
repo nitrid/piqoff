@@ -10727,6 +10727,7 @@ export const langTr =
             clmFinishDate : "Bitiş",
             clmGrpName: "Grubu", 
             clmPrice : "Fiyat",
+            clmCostPrice: "Maliyet Fiyatı",
             btnItem: "Promosyon Uygulanacak Ürün yada Ürünleri Seç"
         },
         msgRef:

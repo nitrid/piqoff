@@ -10983,6 +10983,7 @@ export const langFr =
             clmItem : "Nom De Produit",
             clmGrpName: "Groupe", 
             clmPrice : "Prix", 
+            clmCostPrice : "Coût",
             btnItem: "Sélection de produits promotionnels", 
         },
         msgRef:
