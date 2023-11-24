@@ -340,6 +340,7 @@ export const langTr =
         set_02_006 : "Destek Talebi Oluştur",
         set_02_007 : "Destek Talebi Geçmişi",
         set_02_008 : "Gümrük Kodu Excel Kayıt",
+        set_02_009: "Mail Ayarlari",
         set_03 : "Evrak Ayarları",
         set_03_001 : "Silinmiş Evraklar",
         set_03_002 : "Silinmiş Satırlar",
@@ -16375,6 +16376,28 @@ export const langTr =
             txtCustoms : "Gümrük Kodu",
             txtOrigin :"Menşei"
         }
+    },
+    set_02_009:
+    {
+        txtMailService : 
+        {
+            title : " 1 - Mail servisi",
+            gmail : "Gmail",
+            outlook : "Outlook",
+            yahoo : "Yahoo",
+            laposte : "Laposte",
+        },
+        txtBoxOther : "Diger",
+        txtBoxOtherPlace : "piqsoft",
+        txtBoxMail: " 2 - Mail adresi ",
+        txtBoxMailPlace: "iletesim@piqsoft.com",
+        txtBoxPsswd : " 3 - Sifre ",
+        txtBoxPsswdPlace: "Piqsoft6..",
+        txtBoxSmtp: " 4 - SMTP ",
+        txtBoxSmtpPlace : "SMTP..",
+        txtBoxPort : " 5 - Port No ",
+        txtBoxPortPlace : "6006",
+        btnSave :"Kaydet",
     },
     pos_01_001 : // "Pos Cihaz Tanıtım",
     {
