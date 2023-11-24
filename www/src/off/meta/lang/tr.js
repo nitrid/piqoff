@@ -2986,6 +2986,7 @@ export const langTr =
             clmTotalCost : "Son Alış Fiyatı",
             clmSale : "Satış Fiyatı",
             clmFisrtCost : "Önceki Alış Fiyatı",
+            clmLastSale : "Önceki Satış Fiyatı",
             clmMargin : "Brüt Marj",
             clmNetMargin : "Net Marj",
         },
