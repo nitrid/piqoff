@@ -32,6 +32,7 @@ export default class Dashboard extends React.PureComponent
       dailyCustomerTicket : { query : "SELECT COUNT(*) AS DAILY_CUSTOMER_COUNT FROM POS_VW_01 WHERE CUSTOMER_GUID <> '00000000-0000-0000-0000-000000000000' AND DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE  AND STATUS = 1" ,  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date]},   
       dailyUseLoyalty : { query : "SELECT SUM(LOYALTY) AS DAILY_LOYALTY FROM POS_VW_01 WHERE CUSTOMER_GUID <> '00000000-0000-0000-0000-000000000000' AND DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE  AND STATUS = 1",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },   
       useDiscount : { query : "SELECT SUM(DISCOUNT) AS USE_DISCOUNT FROM POS_VW_01 WHERE CUSTOMER_GUID <> '00000000-0000-0000-0000-000000000000' AND DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE  AND STATUS = 1",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },   
+      useDiscountTicket : { query : "SELECT COUNT(*) AS USE_DISCOUNT_TICKET FROM POS_VW_01 WHERE CUSTOMER_GUID <> '00000000-0000-0000-0000-000000000000' AND DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE AND DISCOUNT <> 0 AND STATUS = 1",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },   
     }
   }
   async componentDidMount()
@@ -92,6 +93,8 @@ export default class Dashboard extends React.PureComponent
     const { result: { recordset: dailyCustomerTicketRecordset } } = await this.core.sql.execute(this.query.dailyCustomerTicket);
     const { result: { recordset: dailyUseLoyaltyRecordset } } = await this.core.sql.execute(this.query.dailyUseLoyalty);
     const { result: { recordset: useDiscountRecordset } } = await this.core.sql.execute(this.query.useDiscount);
+    const { result: { recordset: useDiscountTicketRecordset } } = await this.core.sql.execute(this.query.useDiscountTicket);
+
 
   
     if(dailyPriceRecordset.length > 0) 
@@ -140,6 +143,11 @@ export default class Dashboard extends React.PureComponent
       const { USE_DISCOUNT } = useDiscountRecordset[0];
       this.setState({ useDiscount: USE_DISCOUNT});
     }
+    if(useDiscountTicketRecordset.length > 0) 
+    {
+      const { USE_DISCOUNT_TICKET } = useDiscountTicketRecordset[0];
+      this.setState({ useDiscount: USE_DISCOUNT_TICKET});
+    }
   }
   render()
   {
@@ -163,7 +171,7 @@ export default class Dashboard extends React.PureComponent
                   this.query.dailyCustomerTicket.value =  [this.dtDate.startDate,this.dtDate.endDate]
                   this.query.dailyUseLoyalty.value =  [this.dtDate.startDate,this.dtDate.endDate]
                   this.query.useDiscount.value =  [this.dtDate.startDate,this.dtDate.endDate]
-
+                  this.query.useDiscountTicket.value =  [this.dtDate.startDate,this.dtDate.endDate]
 
                   this.getSalesTotal();
                   this.getSalesCount();
@@ -292,7 +300,19 @@ export default class Dashboard extends React.PureComponent
             </div>
           </div>
           <div className="col-sm-12 col-md-6 p-1">
-            <div className="card text-white " style={{ width: "100%", textAlign:"center",backgroundColor:"#532b97" }}>
+            <div className="card text-white " style={{ width: "100%", textAlign:"center",backgroundColor:"#791158" }}>
+              <div className="card-body">
+                <div className="text-center">
+                  <h5 className="card-title">{this.t("useDiscountTicket")}</h5>
+                </div>
+                <div className="text-center">
+                  <AnimatedText value={parseFloat(this.state.useDiscountTicket ? parseFloat(this.state.useDiscountTicket) : 0)}  type={'currency'} />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="col-sm-12 col-md-6 p-1">
+            <div className="card text-white " style={{ width: "100%", textAlign:"center",backgroundColor:"#791158" }}>
               <div className="card-body">
                 <div className="text-center">
                   <h5 className="card-title">{this.t("useDiscount")}</h5>

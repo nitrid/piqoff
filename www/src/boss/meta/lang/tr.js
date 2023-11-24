@@ -50,6 +50,7 @@ export const langTr =
         dailyRebateTotal : "Yapılan İade Tutarı",
         dailyCustomerTicket : "Müşteri Kartı Kulanılan Fiş Adeti",
         dailyUseLoyalty : "Toplam Kullanılan Sadakat indirimi Tutarı",
-        useDiscount : "Yapılan İndirim"
+        useDiscount : "Yapılan İndirim",
+        useDiscountTicket : "İndirim Yapılan Fiş Sayısı"
     },
 }
