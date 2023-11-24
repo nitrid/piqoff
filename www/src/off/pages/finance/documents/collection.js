@@ -35,6 +35,7 @@ export default class collection extends React.PureComponent
         this.docObj = new docCls();
         this.deptCreditMatchingObj = new deptCreditMatchingCls();
         this.deptCreditMatchingObj.lang = this.lang;
+        this.deptCreditMatchingObj.type = 1
         this.tabIndex = props.data.tabkey
         
         this._calculateTotal = this._calculateTotal.bind(this)
@@ -260,6 +261,8 @@ export default class collection extends React.PureComponent
                     {
                         LDATE : moment(new Date()),
                         TYPE : tmpDocCustomer.TYPE,
+                        DOC_DATE : tmpDocCustomer.DOC_DATE,
+                        CUSTOMER_GUID : tmpDocCustomer.OUTPUT,
                         DOC : this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length - 1].GUID,
                         REMAINDER : pAmount * -1,
                     }
@@ -358,8 +361,7 @@ export default class collection extends React.PureComponent
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnDelete" parent={this} icon="trash" type="default"
                                     onClick={async()=>
-                                    {
-                                        
+                                    {                                        
                                         let tmpConfObj =
                                         {
                                             id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'200px',

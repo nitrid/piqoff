@@ -1617,7 +1617,9 @@ export class deptCreditMatchingCls
         this.empty = 
         {
             GUID : '00000000-0000-0000-0000-000000000000',
-            TYPE: 0,
+            TYPE : 0,
+            DATE : moment(new Date()).format("YYYY-MM-DD"),
+            CUSTOMER : '00000000-0000-0000-0000-000000000000',
             PAID_DOC : '00000000-0000-0000-0000-000000000000',
             PAYING_DOC : '00000000-0000-0000-0000-000000000000',
             PAYING_DAY : 0,
@@ -1625,6 +1627,7 @@ export class deptCreditMatchingCls
             PAYING_AMOUNT : 0
         }
         this.lang = undefined;
+        this.type = 0; //0 = ÖDEME, 1 = TAHSİLAT
         this.popUpList = new datatable()
         this._initDs();
     }
@@ -1642,26 +1645,30 @@ export class deptCreditMatchingCls
             query : "EXEC [dbo].[PRD_DEPT_CREDIT_MATCHING_INSERT] " +
                     "@GUID = @PGUID, " +
                     "@TYPE = @PTYPE, " +
+                    "@DATE = @PDATE, " +
+                    "@CUSTOMER = @PCUSTOMER, " +
                     "@PAID_DOC = @PPAID_DOC, " +
                     "@PAYING_DOC = @PPAYING_DOC, " +
                     "@PAYING_DAY = @PPAYING_DAY, " +
                     "@PAID_AMOUNT = @PPAID_AMOUNT, " +
                     "@PAYING_AMOUNT = @PPAYING_AMOUNT ",
-            param : ['PGUID:string|50','PTYPE:int','PPAID_DOC:string|50','PPAYING_DOC:string|50','PPAYING_DAY:int','PPAID_AMOUNT:float','PPAYING_AMOUNT:float'],
-            dataprm : ['GUID','TYPE','PAID_DOC','PAYING_DOC','PAYING_DAY','PAID_AMOUNT','PAYING_AMOUNT']
+            param : ['PGUID:string|50','PTYPE:int','PDATE:date','PCUSTOMER:string|50','PPAID_DOC:string|50','PPAYING_DOC:string|50','PPAYING_DAY:int','PPAID_AMOUNT:float','PPAYING_AMOUNT:float'],
+            dataprm : ['GUID','TYPE','DATE','CUSTOMER','PAID_DOC','PAYING_DOC','PAYING_DAY','PAID_AMOUNT','PAYING_AMOUNT']
         }
         tmpDt.updateCmd = 
         {
             query : "EXEC [dbo].[PRD_DEPT_CREDIT_MATCHING_UPDATE] " +
                     "@GUID = @PGUID, " +
                     "@TYPE = @PTYPE, " +
+                    "@DATE = @PDATE, " +
+                    "@CUSTOMER = @PCUSTOMER, " +
                     "@PAID_DOC = @PPAID_DOC, " +
                     "@PAYING_DOC = @PPAYING_DOC, " +
                     "@PAYING_DAY = @PPAYING_DAY, " +
                     "@PAID_AMOUNT = @PPAID_AMOUNT, " +
                     "@PAYING_AMOUNT = @PPAYING_AMOUNT ",
             param : ['PGUID:string|50','PTYPE:int','PPAID_DOC:string|50','PPAYING_DOC:string|50','PPAYING_DAY:int','PPAID_AMOUNT:float','PPAYING_AMOUNT:float'],
-            dataprm : ['GUID','TYPE','PAID_DOC','PAYING_DOC','PAYING_DAY','PAID_AMOUNT','PAYING_AMOUNT']
+            dataprm : ['GUID','TYPE','DATE','CUSTOMER','PAID_DOC','PAYING_DOC','PAYING_DAY','PAID_AMOUNT','PAYING_AMOUNT']
         }
         tmpDt.deleteCmd = 
         {
@@ -1753,6 +1760,9 @@ export class deptCreditMatchingCls
 
                         let tmpDeptCredit = {...this.empty}
                         tmpDeptCredit.TYPE = tmpPaidDt[i].TYPE
+                        tmpDeptCredit.DATE = tmpPaidDt[i].DOC_DATE
+                        tmpDeptCredit.CUSTOMER = tmpPaidDt[i].CUSTOMER_GUID
+                        tmpDeptCredit.PAID_DOC = tmpPaidDt[i].DOC
                         tmpDeptCredit.PAID_DOC = tmpPaidDt[i].DOC
                         tmpDeptCredit.PAYING_DOC = tmpPayingDt[x].DOC
                         tmpDeptCredit.PAYING_DAY = 0
@@ -1762,6 +1772,8 @@ export class deptCreditMatchingCls
 
                         tmpDeptCredit = {...this.empty}
                         tmpDeptCredit.TYPE = tmpPayingDt[x].TYPE
+                        tmpDeptCredit.DATE = tmpPayingDt[x].DOC_DATE
+                        tmpDeptCredit.CUSTOMER = tmpPayingDt[x].CUSTOMER_GUID
                         tmpDeptCredit.PAID_DOC = tmpPayingDt[x].DOC
                         tmpDeptCredit.PAYING_DOC = tmpPaidDt[i].DOC
                         tmpDeptCredit.PAYING_DAY = 0
@@ -1854,8 +1866,9 @@ export class deptCreditMatchingCls
                 param : ['CUSTOMER_GUID:string|50','LANG:string|50'],
                 value : [pCustomer,this.lang.language.toUpperCase()]
             }
+
             let tmpData = await this.core.sql.execute(tmpQuery) 
-            console.log(tmpData)
+
             if(tmpData.result.recordset.length > 0)
             {
                 await this.popDeptCreditList.setData(tmpData.result.recordset)
@@ -1875,17 +1888,35 @@ export class deptCreditMatchingCls
             {
                 let tmpInvDt = new datatable()
                 tmpInvDt.import(data)
-                if(tmpInvDt.sum('REMAINDER') > 0)
+                if(this.type == 0)
                 {
-                    let tmpDeptCreditMatchingObj = new deptCreditMatchingCls()
-                    await tmpDeptCreditMatchingObj.matching(tmpInvDt)
-                    await tmpDeptCreditMatchingObj.save()
-                    this.popUpList = tmpInvDt
-                    resolve(tmpInvDt)
+                    if(tmpInvDt.sum('REMAINDER') < 0)
+                    {
+                        let tmpDeptCreditMatchingObj = new deptCreditMatchingCls()
+                        await tmpDeptCreditMatchingObj.matching(tmpInvDt)
+                        await tmpDeptCreditMatchingObj.save()
+                        this.popUpList = tmpInvDt
+                        resolve(tmpInvDt)
+                    }
+                    else
+                    {
+                        resolve(this.popUpList)
+                    }
                 }
                 else
                 {
-                    resolve(this.popUpList)
+                    if(tmpInvDt.sum('REMAINDER') > 0)
+                    {
+                        let tmpDeptCreditMatchingObj = new deptCreditMatchingCls()
+                        await tmpDeptCreditMatchingObj.matching(tmpInvDt)
+                        await tmpDeptCreditMatchingObj.save()
+                        this.popUpList = tmpInvDt
+                        resolve(tmpInvDt)
+                    }
+                    else
+                    {
+                        resolve(this.popUpList)
+                    }
                 }
             }
         })
