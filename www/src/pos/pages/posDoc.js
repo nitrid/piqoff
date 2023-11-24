@@ -800,12 +800,11 @@ export default class posDoc extends React.PureComponent
                 {
                     if(this.posObj.dt()[0].CUSTOMER_MAIL == '')
                     {
+                        await this.popAddMail.show()
                         this.txtNewCustomerName.value = tmpCustomerDt[0].NAME,
                         this.txtNewCustomerLastName.value = tmpCustomerDt[0].LAST_NAME,
                         this.txtNewPhone.value = tmpCustomerDt[0].PHONE1
                         this.txtNewMail.value = ''
-
-                        await this.popAddMail.show()
                     }
                 }
 
@@ -8447,7 +8446,7 @@ export default class posDoc extends React.PureComponent
                     showTitle={true}
                     container={"#root"} 
                     width={'800'}
-                    height={'700'}
+                    height={'750'}
                     title={this.lang.t("msgAddCustomerMail.title")}
                     position={{of:"#root"}}
                     >
@@ -8495,7 +8494,7 @@ export default class posDoc extends React.PureComponent
                         </div> 
                         <div className="row py-1">
                             <div className="col-12">
-                                <NbKeyboard id={"keybordNewMail"} layoutName={"mail"} parent={this} inputName={"txtNewMail"}/>
+                                <NbKeyboard id={"keybordNewMail"} layoutName={"mail"} parent={this} focusClear={true}/>
                             </div>
                         </div>     
                         <div className="row py-1">
