@@ -208,6 +208,7 @@ export const langDe =
         cri_04_002: "Kundenkontostand",
         cri_04_003: "Kundenpunkte",
         cri_04_004: "Kontostandbasierte Kundenauszug",
+        cri_04_005: "Verkaufsrechnungsaltungsbericht",
         ftr: "Rechnung",
         ftr_01: "Listen",
         ftr_02: "Dokumente",
@@ -3777,6 +3778,30 @@ export const langDe =
         },
         btnAdd : "Hinzufügen",
         descriptionPlace : "Bitte geben Sie einen Text mit mindestens 15 Zeichen ein."
+    },
+    cri_04_005 : // "Satış Faturası Yaşlandırma Raporu" //BAK
+    {
+        txtCustomerCode : "Müşteri",
+        btnGet :"Getir",
+        dtFirst : "İlk Tarih",
+        dtLast : "Son Tarih",
+        pg_txtCustomerCode : 
+        {
+            title : "Müşteri Seçimi",
+            clmCode :  "CARİ KODU",
+            clmTitle : "CARİ ADI",
+            clmTypeName : "TİPİ",
+            clmGenusName : "CİNSİ"
+        },
+        grdList: 
+        {
+            clmDate: "Tarih",
+            clmType: "Evrak",
+            clmCustomerName : "Müşteri Adı",
+            clmDebit : "Borç",
+            clmCredit :"Alacak",
+            clmBalance : "Bakiye"
+        },
     },
     ftr_01_001 : // "Einkaufsrechnungsliste"
     {
@@ -15917,35 +15942,7 @@ export const langDe =
             clmRef : "Seri",   // BAK
             clmRefNo : "Sıra",    // BAK
         },     
-    },
-    fns_04_004 : // "Eşleştirmeli Borç Alacak Raporu" //BAK
-    {
-        txtCustomerCode : "Müşteri",
-        txtTotal : "Toplam",
-        menu : "Tahsilat",
-        pg_txtCustomerCode : 
-        {
-            title : "Müşteri Seçimi",
-            clmCode :  "CARİ KODU",
-            clmTitle : "CARİ ADI",
-            clmTypeName : "TİPİ",
-            clmGenusName : "CİNSİ"
-        },
-        btnGet :"Getir",
-        dtFirst : "İlk Tarih",
-        dtLast : "Son Tarih",
-        grdColList: 
-        {
-            clmRef: "Seri",
-            clmRefNo: "Sıra",
-            clmPrice: "Fiyat",
-            clmOutputCode : "Müşteri Kodu",
-            clmOutputName : "Müşteri Adı",
-            clmDate: "Tarih",
-            clmTotal : "Tutar",
-            clmInputName :"Kasa/Banka",
-        },
-    },
+    },    
     fns_05_001 : //"Masseneinzugseingabe"
     {
         txtRefRefno : "Serie-Nummer",

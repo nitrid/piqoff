@@ -16,31 +16,16 @@ import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
+import { datatable } from '../../../../core/core';
 
-export default class MatchingDebtCreditReport extends React.PureComponent
+export default class invoiceAgingReport extends React.PureComponent
 {
     constructor(props)
     {
         super(props)
-
-        this.state = 
-        {
-            columnListValue : ['REF','REF_NO','OUTPUT_NAME','DOC_DATE_CONVERT','TOTAL']
-        }
         
         this.core = App.instance.core;
-        this.columnListData = 
-        [
-            {CODE : "REF",NAME : this.t("grdColList.clmRef")},
-            {CODE : "REF_NO",NAME : this.t("grdColList.clmRefNo")},
-            {CODE : "OUTPUT_CODE",NAME : this.t("grdColList.clmOutputCode")},                                   
-            {CODE : "OUTPUT_NAME",NAME : this.t("grdColList.clmOutputName")},
-            {CODE : "DOC_DATE_CONVERT",NAME : this.t("grdColList.clmDate")},
-            {CODE : "TOTAL",NAME : this.t("grdColList.clmTotal")},
-        ]
-        this.groupList = [];
         this._btnGetClick = this._btnGetClick.bind(this)
-        this._columnListBox = this._columnListBox.bind(this)
     }
     componentDidMount()
     {
@@ -55,94 +40,61 @@ export default class MatchingDebtCreditReport extends React.PureComponent
         this.dtLast.value=moment(new Date(0)).format("YYYY-MM-DD");
         this.txtCustomerCode.CODE = ''
     }
-    _columnListBox(e)
+    async _btnGetClick()
     {
-        let onOptionChanged = (e) =>
-        {
-            if (e.name == 'selectedItemKeys') 
-            {
-                this.groupList = [];
-                if(typeof e.value.find(x => x == 'REF') != 'undefined')
-                {
-                    this.groupList.push('REF')
-                }
-                if(typeof e.value.find(x => x == 'REF_NO') != 'undefined')
-                {
-                    this.groupList.push('REF_NO')
-                }                
-                if(typeof e.value.find(x => x == 'OUTPUT_NAME') != 'undefined')
-                {
-                    this.groupList.push('OUTPUT_NAME')
-                }
-                if(typeof e.value.find(x => x == 'DOC_DATE_CONVERT') != 'undefined')
-                {
-                    this.groupList.push('DOC_DATE_CONVERT')
-                }
-                if(typeof e.value.find(x => x == 'TOTAL') != 'undefined')
-                {
-                    this.groupList.push('TOTAL')
-                }
-                
-                for (let i = 0; i < this.grdColList.devGrid.columnCount(); i++) 
-                {
-                    if(typeof e.value.find(x => x == this.grdColList.devGrid.columnOption(i).name) == 'undefined')
-                    {
-                        this.grdColList.devGrid.columnOption(i,'visible',false)
-                    }
-                    else
-                    {
-                        this.grdColList.devGrid.columnOption(i,'visible',true)
-                    }
-                }
+        let tmpAllDt = new datatable()
+        let tmpDeptDt = new datatable()
+        let tmpCreditDt = new datatable()
+        let tmpDt = new datatable()
 
-                this.setState(
+        tmpAllDt.selectCmd = 
+        {
+            query : "SELECT *, " + 
+                    "(SELECT TOP 1 VALUE FROM DB_LANGUAGE WHERE TAG = (SELECT [dbo].[FN_DOC_TYPE_NAME](PAID.TYPE,PAID.DOC_TYPE,PAID.REBATE)) AND LANG = @LANG) AS TYPE_NAME, " +
+                    "0 AS BALANCE " +
+                    "FROM DEPT_CREDIT_MATCHING_VW_01 AS PAID " +
+                    "WHERE ((CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = '')) AND "+ 
+                    "((DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101')) ORDER BY DATE ASC",
+            param : ['LANG:string|50','CUSTOMER_CODE:string|50','FIRST_DATE:date','LAST_DATE:date'],
+            value : [this.lang.language.toUpperCase(),this.txtCustomerCode.CODE,this.dtFirst.value,this.dtLast.value]
+        }
+        await tmpAllDt.refresh()
+
+        if(tmpAllDt.length > 0)
+        {
+            tmpDeptDt = tmpAllDt.where({TYPE:1}).groupBy('PAID_DOC');
+            for (let i = 0; i < tmpDeptDt.length; i++) 
+            {
+                tmpDeptDt[i].PAID_AMOUNT = Number(tmpAllDt.where({PAID_DOC:tmpDeptDt[i].PAID_DOC}).sum('PAYING_AMOUNT',2))
+                tmpDeptDt[i].PAYING_AMOUNT = 0
+                tmpDeptDt[i].BALANCE = Number(tmpAllDt.where({PAID_DOC:tmpDeptDt[i].PAID_DOC}).sum('PAYING_AMOUNT',2))
+
+                tmpDt.push(tmpDeptDt[i])
+                
+                tmpCreditDt = tmpAllDt.where({PAYING_DOC:tmpDeptDt[i].PAID_DOC});
+                for (let x = 0; x < tmpCreditDt.length; x++) 
+                {
+                    tmpCreditDt[x].PAID_AMOUNT = 0
+                    tmpCreditDt[x].BALANCE = Number(tmpDt[tmpDt.length - 1].BALANCE - tmpCreditDt[x].PAYING_AMOUNT).round(2)
+                    tmpDt.push(tmpCreditDt[x])
+                }   
+
+                tmpDt.push(
                     {
-                        columnListValue : e.value
+                        TYPE : -1,
+                        DATE : '',
+                        CUSTOMER_NAME : '',
+                        PAID_AMOUNT : tmpDt.sum('PAID_AMOUNT',2),
+                        PAYING_AMOUNT : tmpDt.sum('PAYING_AMOUNT',2),
+                        BALANCE : Number(tmpDt.sum('PAID_AMOUNT',2) - tmpDt.sum('PAYING_AMOUNT',2)).round(2)
                     }
                 )
             }
         }
         
-        return(
-            <NdListBox id='columnListBox' parent={this}
-            data={{source: this.columnListData}}
-            width={'100%'}
-            showSelectionControls={true}
-            selectionMode={'multiple'}
-            displayExpr={'NAME'}
-            keyExpr={'CODE'}
-            value={this.state.columnListValue}
-            onOptionChanged={onOptionChanged}
-            >
-            </NdListBox>
-        )
-    }
-    async _btnGetClick()
-    {
-        
-        let tmpSource =
-        {
-            source : 
-            {
-                groupBy : this.groupList,
-                select : 
-                {
-                    query : "SELECT * FROM DOC_VW_01 " +
-                            "WHERE ((OUTPUT_CODE = @OUTPUT_CODE) OR (@OUTPUT_CODE = '')) AND "+ 
-                            "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))  " +
-                            " AND TYPE = 0 AND DOC_TYPE = 200 ",
-                    param : ['OUTPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date'],
-                    value : [this.txtCustomerCode.CODE,this.dtFirst.value,this.dtLast.value]
-                },
-                sql : this.core.sql
-            }
-        }
         App.instance.setState({isExecute:true})
-        await this.grdColList.dataRefresh(tmpSource)
+        await this.grdList.dataRefresh({source : tmpDt})
         App.instance.setState({isExecute:false})
-
-        let tmpTotal =  this.grdColList.data.datatable.sum("AMOUNT",2)
-        this.txtTotal.setState({value:tmpTotal + ' €'});
     }
     render()
     {
@@ -153,25 +105,6 @@ export default class MatchingDebtCreditReport extends React.PureComponent
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after"
-                                locateInMenu="auto"
-                                widget="dxButton"
-                                options=
-                                {
-                                    {
-                                        type: 'default',
-                                        icon: 'add',
-                                        onClick: async () => 
-                                        {
-                                            App.instance.menuClick(
-                                            {
-                                                id: 'fns_02_002',
-                                                text: this.t('menu'),
-                                                path: 'finance/documents/collection.js'
-                                            })
-                                        }
-                                    }    
-                                } />
-                                 <Item location="after"
                                 locateInMenu="auto"
                                 widget="dxButton"
                                 options=
@@ -305,13 +238,7 @@ export default class MatchingDebtCreditReport extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-3">
-                            <NdDropDownBox simple={true} parent={this} id="cmbColumn"
-                            value={this.state.columnListValue}
-                            displayExpr="NAME"                       
-                            valueExpr="CODE"
-                            data={{source: this.columnListData}}
-                            contentRender={this._columnListBox}
-                            />
+                            
                         </div>
                         <div className="col-3">
                             
@@ -325,41 +252,36 @@ export default class MatchingDebtCreditReport extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <NdGrid id="grdColList" parent={this} 
-                            selection={{mode:"multiple"}} 
+                            <NdGrid id="grdList" parent={this} 
                             showBorders={true}
                             filterRow={{visible:true}} 
                             headerFilter={{visible:true}}
                             columnAutoWidth={true}
                             allowColumnReordering={true}
                             allowColumnResizing={true}
-                            >                            
-                                <Paging defaultPageSize={10} />
+                            sorting={{mode:'none'}}
+                            onRowPrepared={(e) =>
+                            {
+                                if(e.rowType == 'data' && e.data.TYPE == 0)
+                                {
+                                    e.rowElement.style.color = "Red"
+                                }
+                                else if(e.rowType == 'data' && e.data.TYPE == 1)
+                                {
+                                    e.rowElement.style.color = "Green"
+                                }
+                            }}
+                            >
+                                <Paging defaultPageSize={30} />
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
                                 <Export fileName={this.lang.t("menu.fns_01_002")} enabled={true} allowExportSelectedData={true} />
-                                <Column dataField="REF" caption={this.t("grdColList.clmRef")} visible={true} width={200}/> 
-                                <Column dataField="REF_NO" caption={this.t("grdColList.clmRefNo")} visible={true} width={100}/> 
-                                <Column dataField="OUTPUT_CODE" caption={this.t("grdColList.clmOutputCode")} visible={false}/> 
-                                <Column dataField="OUTPUT_NAME" caption={this.t("grdColList.clmOutputName")} visible={true}/> 
-                                <Column dataField="DOC_DATE_CONVERT" caption={this.t("grdColList.clmDate")} visible={true} width={200}/> 
-                                <Column dataField="TOTAL" caption={this.t("grdColList.clmTotal")} visible={true} format={{ style: "currency", currency: "EUR",precision: 2}}/>              
+                                <Column dataField="DATE" caption={this.t("grdList.clmDate")} dataType={"date"} visible={true} width={100}/> 
+                                <Column dataField="TYPE_NAME" caption={this.t("grdList.clmType")} visible={true} width={200}/> 
+                                <Column dataField="CUSTOMER_NAME" caption={this.t("grdList.clmCustomerName")} visible={true}/> 
+                                <Column dataField="PAID_AMOUNT" caption={this.t("grdList.clmDebit")} visible={true} width={200} format={{ style: "currency", currency: "EUR",precision: 2}}/> 
+                                <Column dataField="PAYING_AMOUNT" caption={this.t("grdList.clmCredit")} visible={true} width={200} format={{ style: "currency", currency: "EUR",precision: 2}}/>   
+                                <Column dataField="BALANCE" caption={this.t("grdList.clmBalance")} visible={true} width={200} format={{ style: "currency", currency: "EUR",precision: 2}}/>              
                             </NdGrid>
-                        </div>
-                    </div>
-                    <div className="row px-2 pt-2">
-                        <div className="col-12">
-                            <Form colCount={4} parent={this} >                            
-                                {/* TOPLAM */}
-                                <EmptyItem />
-                                <Item>
-                                <Label text={this.t("txtTotal")} alignment="right" />
-                                    <NdTextBox id="txtTotal" parent={this} simple={true} readOnly={true}
-                                    maxLength={32}
-                                    param={this.param.filter({ELEMENT:'txtTotal',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'txtTotal',USERS:this.user.CODE})}
-                                    ></NdTextBox>
-                                </Item>
-                            </Form>
                         </div>
                     </div>
                 </ScrollView>
