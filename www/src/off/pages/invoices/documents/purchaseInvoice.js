@@ -19,6 +19,7 @@ import NdPopUp from '../../../../core/react/devex/popup.js';
 import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export,ColumnChooser,StateStoring} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
+import NdHtmlEditor from '../../../../core/react/devex/htmlEditor.js';
 import NdDialog, { dialog } from '../../../../core/react/devex/dialog.js';
 
 export default class purchaseInvoice extends DocBase
@@ -32,8 +33,6 @@ export default class purchaseInvoice extends DocBase
         this.rebate = 0;
 
         this._cellRoleRender = this._cellRoleRender.bind(this)
-        this._addPayment = this._addPayment.bind(this)
-        this._onItemRendered = this._onItemRendered.bind(this)
 
         this.frmDocItems = undefined;
         this.docLocked = false;
@@ -155,8 +154,6 @@ export default class purchaseInvoice extends DocBase
         {
             this.txtDiffrentInv.value = 0
         }
-        
-        this._getPayment(this.docObj.dt()[0].GUID)
     }
     async calculateTotal()
     {
@@ -488,14 +485,7 @@ export default class purchaseInvoice extends DocBase
             )
         }
     }
-    async _onItemRendered(e)
-    {
-        await this.core.util.waitUntil(100)
-        if(e.itemData.title == this.t("tabTitlePayments"))
-        {
-            this._getPayment(this.docObj.dt()[0].GUID)
-        }
-    }
+    
     async addItem(pData,pIndex,pQuantity,pPrice,pDiscount,pDiscountPer,pVat)
     {
         console.log(pData.ITEM_TYPE)
@@ -748,137 +738,6 @@ export default class purchaseInvoice extends DocBase
             value : [this.docObj.dt()[0].OUTPUT]
         }
         super.getProforma(tmpQuery)
-    }
-    async _getPayment()
-    {
-        if(typeof this.txtRemainder != 'undefined')
-        {
-            await this.payObj.docCustomer.load({INVOICE_GUID:this.docObj.dt()[0].GUID});
-            if(this.payObj.docCustomer.dt().length > 0)
-            {
-                this.txtPayTotal.value = parseFloat(this.payObj.docCustomer.dt().sum("AMOUNT",2))
-                let tmpRemainder = (this.docObj.dt()[0].TOTAL - this.txtPayTotal.value).toFixed(2)
-                this.txtRemainder.value = tmpRemainder
-                if(typeof this.txtMainRemainder != 'undefined')
-                {
-                    this.txtMainRemainder.value = tmpRemainder
-                }
-            }
-            else
-            {
-                this.txtPayTotal.value = 0
-                this.txtRemainder.value = this.docObj.dt()[0].TOTAL
-                if(typeof this.txtMainRemainder != 'undefined')
-                {
-                    this.txtMainRemainder.value = this.docObj.dt()[0].TOTAL
-                }
-            }
-            let tmpQuery = 
-            {
-                query :"SELECT [dbo].[FN_CUSTOMER_BALANCE](@GUID,GETDATE()) AS BALANCE  ",
-                param : ['GUID:string|50'],
-                value : [this.docObj.dt()[0].OUTPUT]
-            }
-            let tmpData = await this.core.sql.execute(tmpQuery) 
-            if(tmpData.result.recordset.length > 0)
-            {
-                this.txtbalance.value = tmpData.result.recordset[0].BALANCE
-            }
-        }
-    }
-    async _addPayment(pType,pAmount)
-    {
-        if(pAmount > this.txtRemainder.value)
-        {
-            let tmpConfObj =
-            {
-                id:'msgMoreAmount',showTitle:true,title:this.t("msgMoreAmount.title"),showCloseButton:true,width:'500px',height:'200px',
-                button:[{id:"btn01",caption:this.t("msgMoreAmount.btn01"),location:'after'}],
-                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgMoreAmount.msg")}</div>)
-            }
-
-            await dialog(tmpConfObj);
-            await this.popPayment.show()
-            await this.grdInvoicePayment.dataRefresh({source:this.payObj.docCustomer.dt()});
-            return
-        }
-        if(this.payObj.dt().length == 0)
-        {
-            let tmpPay = {...this.payObj.empty}
-            let tmpQuery = 
-            {
-                query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 200 AND REF = @REF ",
-                param : ['REF:string|25'],
-                value : [this.txtRef.value]
-            }
-            let tmpData = await this.core.sql.execute(tmpQuery) 
-            if(tmpData.result.recordset.length > 0)
-            {
-                tmpPay.REF = this.txtRef.value
-                tmpPay.REF_NO = tmpData.result.recordset[0].REF_NO
-            }
-            tmpPay.TYPE = 1
-            tmpPay.DOC_TYPE = 200
-            tmpPay.OUTPUT ='00000000-0000-0000-0000-000000000000'
-            tmpPay.INPUT = this.docObj.dt()[0].OUTPUT
-            this.payObj.addEmpty(tmpPay);
-        }
-        let tmpPayment = {...this.payObj.docCustomer.empty}
-        tmpPayment.DOC_GUID = this.payObj.dt()[0].GUID
-        tmpPayment.TYPE = this.payObj.dt()[0].TYPE
-        tmpPayment.REF = this.payObj.dt()[0].REF
-        tmpPayment.REF_NO = this.payObj.dt()[0].REF_NO
-        tmpPayment.DOC_TYPE = this.payObj.dt()[0].DOC_TYPE
-        tmpPayment.DOC_DATE = this.payObj.dt()[0].DOC_DATE
-        tmpPayment.INPUT = this.payObj.dt()[0].INPUT
-        tmpPayment.INVOICE_GUID = this.docObj.dt()[0].GUID                                   
-
-        if(pType == 0)
-        {
-            tmpPayment.OUTPUT = this.cmbCashSafe.value
-            tmpPayment.OUTPUT_NAME = this.cmbCashSafe.displayValue
-            tmpPayment.PAY_TYPE = 0
-            tmpPayment.AMOUNT = pAmount
-            tmpPayment.DESCRIPTION = this.cashDescription.value
-        }
-        else if (pType == 1)
-        {
-            tmpPayment.OUTPUT = this.cmbCashSafe.value
-            tmpPayment.OUTPUT_NAME = this.cmbCashSafe.displayValue
-            tmpPayment.PAY_TYPE = 1
-            tmpPayment.AMOUNT = pAmount
-            tmpPayment.DESCRIPTION = this.cashDescription.value
-
-            let tmpCheck = {...this.payObj.checkCls.empty}
-            tmpCheck.DOC_GUID = this.payObj.dt()[0].GUID
-            tmpCheck.REF = checkReference.value
-            tmpCheck.DOC_DATE =  this.payObj.dt()[0].DOC_DATE
-            tmpCheck.CHECK_DATE =  this.payObj.dt()[0].DOC_DATE
-            tmpCheck.CUSTOMER =   this.payObj.dt()[0].OUTPUT
-            tmpCheck.AMOUNT = pAmount
-            tmpCheck.SAFE =  this.cmbCashSafe.value
-            this.payObj.checkCls.addEmpty(tmpCheck)
-        }
-        else if (pType == 2)
-        {
-            tmpPayment.OUTPUT = this.cmbCashSafe.value
-            tmpPayment.OUTPUT_NAME = this.cmbCashSafe.displayValue
-            tmpPayment.PAY_TYPE = 2
-            tmpPayment.AMOUNT = pAmount
-            tmpPayment.DESCRIPTION = this.cashDescription.value
-        }
-
-        await this.payObj.docCustomer.addEmpty(tmpPayment)
-        this.payObj.dt()[0].AMOUNT = this.payObj.docCustomer.dt().sum("AMOUNT",2)
-        this.payObj.dt()[0].TOTAL = this.payObj.docCustomer.dt().sum("AMOUNT",2)
-        if((await this.payObj.save()) == 0)
-        {
-            
-        }
-        
-        await this.popPayment.show()
-        await this.grdInvoicePayment.dataRefresh({source:this.payObj.docCustomer.dt()});
-        await this._getPayment()
     }
     async multiItemAdd()
     {
@@ -1299,7 +1158,6 @@ export default class purchaseInvoice extends DocBase
             {                                                    
                 tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
                 await dialog(tmpConfObj1);
-                this._getPayment()
                 this.btnSave.setState({disabled:true});
                 this.btnNew.setState({disabled:false});
             }
@@ -1387,18 +1245,6 @@ export default class purchaseInvoice extends DocBase
                                     <NdButton id="btnDelete" parent={this} icon="trash" type="default"
                                     onClick={async()=>
                                     {
-                                        if(this.payObj.docCustomer.dt().length > 0)
-                                        {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgPayNotDeleted',showTitle:true,title:this.t("msgPayNotDeleted.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgPayNotDeleted.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgPayNotDeleted.msg")}</div>)
-                                            }
-                                
-                                            await dialog(tmpConfObj);
-                                            return
-                                        }
                                         if(this.docObj.dt()[0].LOCKED != 0)
                                         {
                                             this.docLocked = true
@@ -1513,7 +1359,22 @@ export default class purchaseInvoice extends DocBase
                                     <NdButton id="btnPrint" parent={this} icon="print" type="default"
                                     onClick={async()=>
                                     {
-                                        await this.popDesign.show()
+                                        console.log(this.docObj.isSaved)                             
+                                        if(this.docObj.isSaved == false)
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'isMsgSave',showTitle:true,title:this.t("isMsgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("isMsgSave.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("isMsgSave.msg")}</div>)
+                                            }
+                                            await dialog(tmpConfObj);
+                                            return
+                                        }
+                                        else
+                                        {
+                                            this.popDesign.show()
+                                        }
                                     }}/>
                                 </Item>
                                 <Item location="after"
@@ -2406,15 +2267,15 @@ export default class purchaseInvoice extends DocBase
                     </div>
                     <div className='row px-2 pt-2'>
                         <div className='col-12'>
-                            <TabPanel height="100%" onItemRendered={this._onItemRendered}>
+                            <TabPanel height="100%">
                                 <Item title={this.t("tabTitleSubtotal")}>
                                     <div className="row px-2 pt-2">
                                         <div className="col-12">
                                             <Form colCount={4} parent={this} id={"frmDoc"  + this.tabIndex}>
                                                 {/* Ara Toplam */}
                                                 <EmptyItem colSpan={1}/>
-                                                <Item  >
-                                                <Label text={this.t("txtDiffrentPositive")} alignment="right" />
+                                                <Item>
+                                                    <Label text={this.t("txtDiffrentPositive")} alignment="right" />
                                                     <NdTextBox id="txtDiffrentPositive" parent={this} simple={true} readOnly={true} 
                                                     maxLength={32}
                                                     button=
@@ -2454,10 +2315,7 @@ export default class purchaseInvoice extends DocBase
                                                 </Item>
                                                 <Item>
                                                     <Label text={this.t("txtAmount")} alignment="right" />
-                                                    <NdTextBox id="txtAmount" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"AMOUNT"}}
-                                                    maxLength={32}
-                                                
-                                                    ></NdTextBox>
+                                                    <NdTextBox id="txtAmount" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"AMOUNT"}}maxLength={32}></NdTextBox>
                                                 </Item>
                                                 <Item>
                                                     <Label text={this.t("txtDiscount")} alignment="right" />
@@ -2499,18 +2357,13 @@ export default class purchaseInvoice extends DocBase
                                                 </Item>
                                                 {/* İndirim */}
                                                 <EmptyItem colSpan={1}/>
-                                                <Item  >
+                                                <Item>
                                                     <Label text={this.t("txtDiffrentNegative")} alignment="right" />
-                                                    <NdTextBox id="txtDiffrentNegative" parent={this} simple={true} readOnly={true} 
-                                                    maxLength={32}
-                                                
-                                                    ></NdTextBox>
+                                                    <NdTextBox id="txtDiffrentNegative" parent={this} simple={true} readOnly={true} maxLength={32}></NdTextBox>
                                                 </Item>
                                                 <Item>
                                                     <Label text={this.t("txtSubTotal")} alignment="right" />
-                                                    <NdTextBox id="txtSubTotal" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"SUBTOTAL"}}
-                                                    maxLength={32}
-                                                    ></NdTextBox>
+                                                    <NdTextBox id="txtSubTotal" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"SUBTOTAL"}} maxLength={32}></NdTextBox>
                                                 </Item>
                                                 <Item>
                                                     <Label text={this.t("txtDocDiscount")} alignment="right" />
@@ -2553,16 +2406,11 @@ export default class purchaseInvoice extends DocBase
                                                 <EmptyItem colSpan={1}/>
                                                 <Item  >
                                                     <Label text={this.t("txtDiffrentTotal")} alignment="right" />
-                                                    <NdTextBox id="txtDiffrentTotal" parent={this} simple={true} readOnly={true}
-                                                    maxLength={32}
-                                                
-                                                    ></NdTextBox>
+                                                    <NdTextBox id="txtDiffrentTotal" parent={this} simple={true} readOnly={true} maxLength={32}></NdTextBox>
                                                 </Item>
                                                 <Item>
                                                     <Label text={this.t("txtTotalHt")} alignment="right" />
-                                                    <NdTextBox id="txtTotalHt" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"TOTALHT"}}
-                                                    maxLength={32}
-                                                    ></NdTextBox>
+                                                    <NdTextBox id="txtTotalHt" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"TOTALHT"}} maxLength={32}></NdTextBox>
                                                 </Item>
                                                 <Item>
                                                     <Label text={this.t("txtVat")} alignment="right" />
@@ -2596,62 +2444,12 @@ export default class purchaseInvoice extends DocBase
                                                 <EmptyItem colSpan={1}/>
                                                 <Item  >
                                                     <Label text={this.t("txtDiffrentInv")} alignment="right" />
-                                                    <NdTextBox id="txtDiffrentInv" parent={this} simple={true} readOnly={true}
-                                                    maxLength={32}
-                                                    ></NdTextBox>
+                                                    <NdTextBox id="txtDiffrentInv" parent={this} simple={true} readOnly={true} maxLength={32}></NdTextBox>
                                                 </Item>
                                                 <EmptyItem colSpan={1}/>
                                                 <Item>
                                                     <Label text={this.t("txtTotal")} alignment="right" />
-                                                    <NdTextBox id="txtTotal" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"TOTAL"}}
-                                                    maxLength={32}
-                                                    ></NdTextBox>
-                                                </Item>
-                                            </Form>
-                                        </div>
-                                    </div>
-                                </Item>
-                                <Item title={this.t("tabTitlePayments")}>
-                                    <div className="row px-2 pt-2">
-                                        <div className="col-12">
-                                            <Form colCount={4} parent={this} id={"frmDoc"  + this.tabIndex}>
-                                                {/* Ödeme Toplam */}
-                                                <EmptyItem colSpan={2}/>
-                                                <Item>
-                                                    <Label text={this.t("txtExpFee")} alignment="right" />
-                                                    <NdNumberBox id="txtExpFee" format={{ style: "currency", currency: "EUR",precision: 2}} parent={this} simple={true} dt={{data:this.docObj.docCustomer.dt('DOC_CUSTOMER'),field:"EXPIRY_FEE"}}
-                                                    maxLength={32}
-                                                    ></NdNumberBox>
-                                                </Item>
-                                                <Item>
-                                                    <Label text={this.t("txtPayTotal")} alignment="right" />
-                                                    <NdTextBox id="txtPayTotal" format={{ style: "currency", currency: "EUR",precision: 2}} parent={this} simple={true} readOnly={true} maxLength={32}></NdTextBox>
-                                                </Item>
-                                                {/* Kalan */}
-                                                <EmptyItem colSpan={3}/>
-                                                <Item>
-                                                    <Label text={this.t("txtRemainder")} alignment="right" />
-                                                    <NdTextBox id="txtRemainder" format={{ style: "currency", currency: "EUR",precision: 2}} parent={this} simple={true} readOnly={true} maxLength={32}></NdTextBox>
-                                                </Item>
-                                                {/* Kalan */}
-                                                <EmptyItem colSpan={3}/>
-                                                <Item>
-                                                    <Label text={this.t("txtbalance")} alignment="right" />
-                                                    <NdTextBox id="txtbalance" format={{ style: "currency", currency: "EUR",precision: 2}} parent={this} simple={true} readOnly={true} maxLength={32}></NdTextBox>
-                                                </Item>
-                                                <EmptyItem colSpan={3}/>
-                                                <Item>
-                                                    <div className='row'>
-                                                        <div className='col-12'>
-                                                            <NdButton text={this.t("getPayment")} type="normal" stylingMode="contained" width={'100%'} 
-                                                            onClick={async (e)=>
-                                                            {       
-                                                                await this.popPayment.show()
-                                                                await this.grdInvoicePayment.dataRefresh({source:this.payObj.docCustomer.dt()});
-                                                                await this._getPayment()
-                                                            }}/>
-                                                        </div>
-                                                    </div>
+                                                    <NdTextBox id="txtTotal" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"TOTAL"}} maxLength={32}></NdTextBox>
                                                 </Item>
                                             </Form>
                                         </div>
@@ -2742,14 +2540,11 @@ export default class purchaseInvoice extends DocBase
                                     valueExpr="TAG"
                                     value=""
                                     searchEnabled={true}
-                                    onValueChanged={(async()=>
-                                        {
-                                        }).bind(this)}
                                     data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '14'"},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmPurcOrderPrint"  + this.tabIndex}>
+                                        <Validator validationGroup={"frmPrintPop"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validDesign")} />
                                         </Validator> 
                                     </NdSelectBox>
@@ -2761,9 +2556,6 @@ export default class purchaseInvoice extends DocBase
                                     valueExpr="ID"
                                     value=""
                                     searchEnabled={true}
-                                    onValueChanged={(async()=>
-                                        {
-                                        }).bind(this)}
                                     data={{source:[{ID:"FR",VALUE:"FR"},{ID:"DE",VALUE:"DE"},{ID:"TR",VALUE:"TR"}]}}
                                     >
                                     </NdSelectBox>
@@ -2806,6 +2598,71 @@ export default class purchaseInvoice extends DocBase
                                             onClick={()=>
                                             {
                                                 this.popDesign.hide();  
+                                            }}/>
+                                        </div>
+                                    </div>
+                                    <div className='row py-2'>
+                                        <div className='col-6'>
+                                            <NdButton text={this.t("btnView")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmPrintPop" + this.tabIndex}
+                                            onClick={async (e)=>
+                                            {       
+                                                if(e.validationGroup.validate().status == "valid")
+                                                
+                                                {
+                                                    let tmpQuery = 
+                                                    {
+                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG)ORDER BY DOC_DATE,LINE_NO " ,
+                                                        param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
+                                                        value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
+                                                    }
+                                                    console.log(tmpQuery)
+                                                    console.log(1)
+                                                    App.instance.setState({isExecute:true})
+                                                    let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                    App.instance.setState({isExecute:false})
+                                                    this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
+                                                    {
+                                                        console.log(tmpData.result.recordset[0].PATH)
+                                                        console.log(pResult.split('|')[0])
+                                                        console.log(tmpData.result.recordset)
+                                                        if(pResult.split('|')[0] != 'ERR')
+                                                        {
+                                                            var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
+                                                            console.log(mywindow)
+                                                            mywindow.onload = function() 
+                                                            {
+                                                                mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
+                                                            } 
+                                                            // let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
+                                                            // mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
+                                                        }
+                                                    });
+                                                }
+                                            }}/>
+                                        </div>
+                                        <div className='col-6'>
+                                            <NdButton text={this.t("btnMailsend")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmPrintPop" + this.tabIndex}
+                                            onClick={async (e)=>
+                                            {    
+                                                if(e.validationGroup.validate().status == "valid")
+                                                {
+                                                    let tmpQuery = 
+                                                    {
+                                                        query :"SELECT EMAIL FROM CUSTOMER_VW_02 WHERE GUID = @GUID",
+                                                        param:  ['GUID:string|50'],
+                                                        value:  [this.docObj.dt()[0].INPUT]
+                                                    }
+                                                    let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                    if(tmpData.result.recordset.length > 0)
+                                                    {
+                                                        await this.popMailSend.show()
+                                                        this.txtSendMail.value = tmpData.result.recordset[0].EMAIL
+                                                    }
+                                                    else
+                                                    {
+                                                        await this.popMailSend.show()
+                                                    }
+                                                }
                                             }}/>
                                         </div>
                                     </div>
@@ -2875,6 +2732,117 @@ export default class purchaseInvoice extends DocBase
                                             ]
                                         }
                                     ></NdTextBox>
+                                </Item>
+                            </Form>
+                        </NdPopUp>
+                    </div>
+                    {/* Mail Send PopUp */}
+                    <div>
+                        <NdPopUp parent={this} id={"popMailSend"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.t("popMailSend.title")}
+                        container={"#root"} 
+                        width={'600'}
+                        height={'600'}
+                        position={{of:'#root'}}
+                        deferRendering={true}
+                        >
+                            <Form colCount={1} height={'fit-content'}>
+                                <Item>
+                                    <Label text={this.t("popMailSend.txtMailSubject")} alignment="right" />
+                                    <NdTextBox id="txtMailSubject" parent={this} simple={true}
+                                    maxLength={32}
+                                    >
+                                        <Validator validationGroup={"frmMailsend" + this.tabIndex}>
+                                            <RequiredRule message={this.t("validMail")} />
+                                        </Validator> 
+                                    </NdTextBox>
+                                </Item>
+                                <Item>
+                                <Label text={this.t("popMailSend.txtSendMail")} alignment="right" />
+                                    <NdTextBox id="txtSendMail" parent={this} simple={true}
+                                    maxLength={32}
+                                    >
+                                        <Validator validationGroup={"frmMailsend" + this.tabIndex}>
+                                            <RequiredRule message={this.t("validMail")} />
+                                        </Validator> 
+                                    </NdTextBox>
+                                </Item>
+                                <Item>
+                                    <NdHtmlEditor id="htmlEditor" parent={this} height={300} placeholder={this.t("placeMailHtmlEditor")}/>
+                                </Item>
+                                <Item>
+                                    <div className='row'>
+                                        <div className='col-6'>
+                                            <NdButton text={this.t("popMailSend.btnSend")} type="normal" stylingMode="contained" width={'100%'}  
+                                            validationGroup={"frmMailsend"  + this.tabIndex}
+                                            onClick={async (e)=>
+                                            {       
+                                                if(e.validationGroup.validate().status == "valid")
+                                                {
+                                                    let tmpQuery = 
+                                                    {
+                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG)ORDER BY DOC_DATE,LINE_NO " ,
+                                                        param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
+                                                        value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
+                                                    }
+                                                    App.instance.setState({isExecute:true})
+                                                    let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                    App.instance.setState({isExecute:false})
+                                                    this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
+                                                    {
+                                                        App.instance.setState({isExecute:true})
+                                                        let tmpAttach = pResult.split('|')[1]
+                                                        let tmpHtml = this.htmlEditor.value
+                                                        if(this.htmlEditor.value.length == 0)
+                                                        {
+                                                            tmpHtml = ''
+                                                        }
+                                                        if(pResult.split('|')[0] != 'ERR')
+                                                        {
+                                                        }
+                                                        let tmpMailData = {html:tmpHtml,subject:this.txtMailSubject.value,sendMail:this.txtSendMail.value,attachName:"facture.pdf",attachData:tmpAttach,text:""}
+                                                        this.core.socket.emit('mailer',tmpMailData,async(pResult1) => 
+                                                        {
+                                                            App.instance.setState({isExecute:false})
+                                                            let tmpConfObj1 =
+                                                            {
+                                                                id:'msgMailSendResult',showTitle:true,title:this.t("msgMailSendResult.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                                button:[{id:"btn01",caption:this.t("msgMailSendResult.btn01"),location:'after'}],
+                                                            }
+                                                            
+                                                            if((pResult1) == 0)
+                                                            {  
+                                                                tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgMailSendResult.msgSuccess")}</div>)
+                                                                await dialog(tmpConfObj1);
+                                                                this.htmlEditor.value = '',
+                                                                this.txtMailSubject.value = '',
+                                                                this.txtSendMail.value = ''
+                                                                this.popMailSend.hide();  
+
+                                                            }
+                                                            else
+                                                            {
+                                                                tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgMailSendResult.msgFailed")}</div>)
+                                                                await dialog(tmpConfObj1);
+                                                                this.popMailSend.hide(); 
+                                                            }
+                                                        });
+                                                    });
+                                                }
+                                                    
+                                            }}/>
+                                        </div>
+                                        <div className='col-6'>
+                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                            onClick={()=>
+                                            {
+                                                this.popMailSend.hide();  
+                                            }}/>
+                                        </div>
+                                    </div>
                                 </Item>
                             </Form>
                         </NdPopUp>

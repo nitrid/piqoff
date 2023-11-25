@@ -2,7 +2,7 @@
 import moment from 'moment';
 import React from 'react';
 import App from '../lib/app.js';
-import { docCls,docItemsCls, docCustomerCls,docExtraCls} from '../../core/cls/doc.js';
+import { docCls,docItemsCls,docCustomerCls,docExtraCls,deptCreditMatchingCls} from '../../core/cls/doc.js';
 import { nf525Cls } from '../../core/cls/nf525.js';
 import { datatable } from '../../core/core.js';
 
@@ -33,7 +33,6 @@ export default class DocBase extends React.PureComponent
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
         this.docObj = new docCls();
-        this.payObj = new docCls();
         this.extraObj = new docExtraCls();
         this.nf525 = new nf525Cls();
         this.tabIndex = props.data.tabkey
@@ -90,7 +89,6 @@ export default class DocBase extends React.PureComponent
         return new Promise(async resolve =>
         {
             this.docObj.clearAll()
-            this.payObj.clearAll()
             this.extraObj.clearAll()
             this.newPrice.clear()
             this.newPriceDate.clear()
@@ -229,9 +227,8 @@ export default class DocBase extends React.PureComponent
         return new Promise(async resolve =>
         {
             this.docObj.clearAll()
-            this.payObj.clearAll()
             await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:this.type,DOC_TYPE:this.docType,SUB_FACTOR:this.sysParam.filter({ID:'secondFactor',USERS:this.user.CODE}).getValue().value});
-            
+
             if(this.docObj.dt().length == 0)
             {
                 resolve()
@@ -397,7 +394,6 @@ export default class DocBase extends React.PureComponent
     }
     async calculateTotalMargin()
     {
-        console.log(this.docDetailObj.dt())
         let tmpTotalCost = 0
 
         for (let  i= 0; i < this.docDetailObj.dt().length; i++) 
@@ -1498,294 +1494,6 @@ export default class DocBase extends React.PureComponent
                         <Column dataField="NAME" caption={this.t("pg_service.clmName")} width={300} defaultSortOrder="asc"/>
                     </NdPopGrid>
                 </div>
-                {/* Finans PopUp */}
-                <div>
-                    <NdPopUp parent={this} id={"popPayment"} 
-                    visible={false}
-                    showCloseButton={true}
-                    showTitle={true}
-                    title={this.t("popPayment.title")}
-                    container={"#root"} 
-                    width={'800'}
-                    height={'800'}
-                    position={{of:'#root'}}
-                    deferRendering={true}
-                    >
-                        <Form colCount={3} height={'fit-content'}>
-                            <Item location="after">
-                                <Button icon="add" text={this.t("btnCash")}
-                                validationGroup={"frmDoc"  + this.tabIndex}
-                                onClick={async (e)=>
-                                {
-                                    await this.popCash.show()
-                                    this.numCash.value = 0;
-                                    this.cashDescription.value = ''
-                                }}/>
-                            </Item>
-                            </Form>
-                            <NdGrid parent={this} id={"grdInvoicePayment"} 
-                                showBorders={true} 
-                                columnsAutoWidth={true} 
-                                allowColumnReordering={true} 
-                                allowColumnResizing={true} 
-                                headerFilter={{visible:true}}
-                                height={'75%'} 
-                                width={'100%'}
-                                dbApply={false}
-                                onRowRemoved={async (e)=>
-                                {
-                                    this.popPayment.hide()
-                                    this.payObj.save()
-                                    await this.popPayment.show()
-                                    await this.grdInvoicePayment.dataRefresh({source:this.payObj.docCustomer.dt()});
-                                    await this._getPayment()
-                                }}
-                                >
-                                    <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
-                                    <Scrolling mode="standart" />
-                                    <Editing mode="cell" allowUpdating={false} allowDeleting={true} />
-                                    <Column dataField="CDATE_FORMAT" caption={this.t("grdInvoicePayment.clmCreateDate")} width={150} allowEditing={false} headerFilter={{visible:true}}/>
-                                    <Column dataField="AMOUNT" caption={this.t("grdInvoicePayment.clmPrice")} width={150}  headerFilter={{visible:true}}/>
-                                    <Column dataField="OUTPUT_NAME" caption={this.t("grdInvoicePayment.clmInputName")} width={150}  headerFilter={{visible:true}}/>
-                                    <Column dataField="PAY_TYPE_NAME" caption={this.t("grdInvoicePayment.clmTypeName")} width={150}  headerFilter={{visible:true}}/>
-                            </NdGrid>
-                            <div className="row px-2 pt-2">
-                            <div className="col-12">
-                                <Form colCount={2} parent={this} >
-                                    {/* Toplam */}
-                                    <EmptyItem />
-                                    <Item>
-                                        <Label text={this.t("txtPayInvoıceTotal")} alignment="right" />
-                                        <NdTextBox id="txtPayInvoıceTotal" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"TOTAL"}} maxLength={32}></NdTextBox>
-                                    </Item>
-                                    {/* Ödeme Toplam */}
-                                    <EmptyItem />
-                                    <Item>
-                                        <Label text={this.t("txtPayTotal")} alignment="right" />
-                                        <NdTextBox id="txtPayTotal" parent={this} simple={true} readOnly={true} dt={{data:this.payObj.dt('DOC'),field:"TOTAL"}} maxLength={32}></NdTextBox>
-                                    </Item>
-                                    {/* Kalan */}
-                                    <EmptyItem />
-                                    <Item>
-                                        <Label text={this.t("txtRemainder")} alignment="right" />
-                                        <NdTextBox id="txtMainRemainder" parent={this} simple={true} readOnly={true} maxLength={32}></NdTextBox>
-                                    </Item>
-                                </Form>
-                            </div>
-                        </div>
-                    </NdPopUp>
-                </div> 
-                {/* Cash PopUp */}
-                <div>
-                    <NdPopUp parent={this} id={"popCash"} 
-                    visible={false}
-                    showCloseButton={true}
-                    showTitle={true}
-                    title={this.t("popCash.title")}
-                    container={"#root"} 
-                    width={'500'}
-                    height={'400'}
-                    position={{of:'#root'}}
-                    deferRendering={true}
-                    >
-                        <Form colCount={1} height={'fit-content'}>
-                            {/* cmbPayType */}
-                            <Item>
-                                <Label text={this.t("cmbPayType.title")} alignment="right" />
-                                <NdSelectBox simple={true} parent={this} id="cmbPayType"
-                                displayExpr="VALUE"                       
-                                valueExpr="ID"
-                                value=""
-                                searchEnabled={true}
-                                notRefresh={true}
-                                onValueChanged={(async(e)=>
-                                    {
-                                        this.cmbCashSafe.value = ''
-                                        let tmpQuery
-                                        if(e.value == 0)
-                                        {
-                                            tmpQuery = {query : "SELECT * FROM SAFE_VW_01 WHERE TYPE = 0"}
-                                        }
-                                        else if(e.value == 1)
-                                        {
-                                            tmpQuery = {query : "SELECT * FROM SAFE_VW_01 WHERE TYPE = 1"}
-                                        }
-                                        else if(e.value == 2)
-                                        {
-                                            tmpQuery = {query : "SELECT * FROM BANK_VW_01 WHERE TYPE = 0"}
-                                        }
-                                        else if(e.value == 3)
-                                        {
-                                            tmpQuery = {query : "SELECT * FROM BANK_VW_01 WHERE TYPE = 0"}
-                                        }
-                                        else if(e.value == 4)
-                                        {
-                                            tmpQuery = {query : "SELECT * FROM SAFE_VW_01 WHERE TYPE = 0"}
-                                        }
-                                        else if(e.value == 5)
-                                        {
-                                            tmpQuery = {query : "SELECT * FROM SAFE_VW_01 WHERE TYPE = 0"}
-                                        }
-                                
-                                        let tmpData = await this.core.sql.execute(tmpQuery) 
-                                        if(tmpData.result.recordset.length > 0)
-                                        {   
-                                            this.cmbCashSafe.setData(tmpData.result.recordset)
-                                        }
-                                        else
-                                        {
-                                            this.cmbCashSafe.setData([])
-                                        }
-                                    }).bind(this)}
-                                data={{source:[{ID:0,VALUE:this.t("cmbPayType.cash")},{ID:1,VALUE:this.t("cmbPayType.check")},{ID:2,VALUE:this.t("cmbPayType.bankTransfer")},{ID:3,VALUE:this.t("cmbPayType.otoTransfer")},{ID:4,VALUE:this.t("cmbPayType.foodTicket")},{ID:5,VALUE:this.t("cmbPayType.bill")}]}}
-                                param={this.param.filter({ELEMENT:'cmbCashSafe',USERS:this.user.CODE})}
-                                access={this.access.filter({ELEMENT:'cmbCashSafe',USERS:this.user.CODE})}
-                                >
-                                    <Validator validationGroup={"frmPayCash"  + this.tabIndex}>
-                                        <RequiredRule message={this.t("ValidCash")} />
-                                    </Validator> 
-                                </NdSelectBox>
-                            </Item>
-                            {/* cmbCashSafe */}
-                            <Item>
-                                <Label text={this.t("cmbCashSafe")} alignment="right" />
-                                <NdSelectBox simple={true} parent={this} id="cmbCashSafe"
-                                displayExpr="NAME"                       
-                                valueExpr="GUID"
-                                value=""
-                                searchEnabled={true}
-                                notRefresh={true}
-                                onValueChanged={(async()=>
-                                    {
-
-                                    }).bind(this)}
-                                param={this.param.filter({ELEMENT:'cmbCashSafe',USERS:this.user.CODE})}
-                                access={this.access.filter({ELEMENT:'cmbCashSafe',USERS:this.user.CODE})}
-                                >
-                                    <Validator validationGroup={"frmPayCash"  + this.tabIndex}>
-                                        <RequiredRule message={this.t("ValidCash")} />
-                                    </Validator> 
-                                </NdSelectBox>
-                            </Item>
-                            <Item>
-                                <Label text={this.t("cash")} alignment="right" />
-                                <div className='row'>
-                                    <div className="col-4 pe-0">
-                                        <NdNumberBox id="numCash" parent={this} simple={true}
-                                        maxLength={32}                                        
-                                        param={this.param.filter({ELEMENT:'numCash',USERS:this.user.CODE})}
-                                        access={this.access.filter({ELEMENT:'numCash',USERS:this.user.CODE})}
-                                        >
-                                        <Validator validationGroup={"frmPayCash"  + this.tabIndex}>
-                                            <RequiredRule message={this.t("ValidCash")} />
-                                        </Validator>  
-                                        </NdNumberBox>
-                                    </div>
-                                    <div className="col-6 pe-0">
-                                        <Button icon="revert" text={this.t("getRemainder")}
-                                        onClick={async (e)=>
-                                        {
-                                            this.numCash.value = this.txtRemainder.value
-                                        }}/>
-                                    </div>
-                                </div>
-                            </Item>
-                            <Item>
-                                <Label text={this.t("description")} alignment="right" />
-                                <div className="col-12 pe-0">
-                                    <NdTextBox id="cashDescription" parent={this} simple={true} width={500}
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    maxLength={32}                                        
-                                    param={this.param.filter({ELEMENT:'cashDescription',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'cashDescription',USERS:this.user.CODE})}
-                                    >
-                                    </NdTextBox>
-                                </div>
-                            </Item>
-                            <Item>
-                                <div className='row'>
-                                    <div className='col-6'>
-                                        <NdButton text={this.t("popCash.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
-                                        validationGroup={"frmPayCash"  + this.tabIndex}
-                                        onClick={async (e)=>
-                                        {       
-                                            if(e.validationGroup.validate().status == "valid")
-                                            {
-                                                if(this.cmbPayType.value == 1)
-                                                {
-                                                    await this.popCheck.show()
-                                                }
-                                                else
-                                                {
-                                                    this._addPayment(this.cmbPayType.value,this.numCash.value)
-                                                    this.popCash.hide();  
-                                                }
-                                            }
-                                            
-                                        }}/>
-                                    </div>
-                                    <div className='col-6'>
-                                        <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
-                                        onClick={()=>
-                                        {
-                                            this.popCash.hide();  
-                                        }}/>
-                                    </div>
-                                </div>
-                            </Item>
-                        </Form>
-                    </NdPopUp>
-                </div> 
-                {/* Check PopUp */}
-                <div>
-                    <NdPopUp parent={this} id={"popCheck"} 
-                    visible={false}
-                    showCloseButton={true}
-                    showTitle={true}
-                    title={this.t("popCheck.title")}
-                    container={"#root"} 
-                    width={'500'}
-                    height={'500'}
-                    position={{of:'#root'}}
-                    deferRendering={true}
-                    >
-                        <Form colCount={1} height={'fit-content'}>
-                            <Item>
-                                <Label text={this.t("checkReference")} alignment="right" />
-                                <div className="col-12 pe-0">
-                                    <NdTextBox id="checkReference" parent={this} simple={true} width={500}
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    maxLength={32}                                        
-                                    param={this.param.filter({ELEMENT:'checkReference',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'checkReference',USERS:this.user.CODE})}
-                                    >
-                                    </NdTextBox>
-                                </div>
-                            </Item>
-                            <Item>
-                                <div className='row'>
-                                    <div className='col-6'>
-                                        <NdButton text={this.t("popCheck.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
-                                        validationGroup={"frmCollCheck" + this.tabIndex}
-                                        onClick={async (e)=>
-                                        {       
-                                                this._addPayment(1,this.numCash.value)
-                                                this.popCheck.hide(); 
-                                                this.popCash.hide();  
-                                        }}/>
-                                    </div>
-                                    <div className='col-6'>
-                                        <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
-                                        onClick={()=>
-                                        {
-                                            this.popCheck.hide();  
-                                        }}/>
-                                    </div>
-                                </div>
-                            </Item>
-                        </Form>
-                    </NdPopUp>
-                </div>                  
                 {/* Toplu Stok PopUp */}
                 <div>
                     <NdPopUp parent={this} id={"popMultiItem"} 

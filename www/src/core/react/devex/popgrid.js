@@ -38,6 +38,8 @@ export default class NdPopGrid extends Base
         this._onClick = this._onClick.bind(this);
         this._onRowDblClick = this._onRowDblClick.bind(this);
         this._onRowPrepared = this._onRowPrepared.bind(this);
+        this._onRowRemoving = this._onRowRemoving.bind(this);
+        this._onRowRemoved = this._onRowRemoved.bind(this);
         this.setSource = this.setSource.bind(this);
         this.setData = this.setData.bind(this);
         this.setVal = this.setVal.bind(this);
@@ -215,6 +217,20 @@ export default class NdPopGrid extends Base
             this.props.onRowPrepared(e);
         }
     }
+    _onRowRemoving(e)
+    {
+        if(typeof this.props.onRowRemoving != 'undefined')
+        {
+            this.props.onRowRemoving(e);
+        }
+    }
+    _onRowRemoved(e)
+    {
+        if(typeof this.props.onRowRemoved != 'undefined')
+        {
+            this.props.onRowRemoved(e);
+        }
+    }
     on(pEvt, pCallback) 
     {
         if (!this.listeners.hasOwnProperty(pEvt))
@@ -363,6 +379,8 @@ export default class NdPopGrid extends Base
                             onSelectionChanged={this._onSelectionChanged} 
                             onRowDblClick={this._onRowDblClick}
                             onRowPrepared={this._onRowPrepared}
+                            onRowRemoving={this._onRowRemoving}
+                            onRowRemoved={this._onRowRemoved}
                             columns={this.state.columns}
                             filterRow={this.state.filterRow}
                             headerFilter={this.state.headerFilter}
