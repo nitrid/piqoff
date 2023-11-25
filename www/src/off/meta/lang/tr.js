@@ -431,6 +431,8 @@ export const langTr =
     popDeptCreditList : 
     {
         title : "Fatura Seçimi",
+        btnPopDeptCreditListSelection : "Seç",
+        chkPopDeptCreditList : "Kapananları Göster",
         clmRef : "REF",
         clmRefNo : "REF NO",
         clmTypeName : "EVRAK TIP",

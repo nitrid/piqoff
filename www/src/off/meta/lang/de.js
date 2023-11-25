@@ -422,6 +422,8 @@ export const langDe =
     popDeptCreditList :
     {
         title : "Rechnungsauswahl",
+        btnPopDeptCreditListSelection : "Auswählen",
+        chkPopDeptCreditList : "Geschlossene anzeigen",
         clmRef : "REFERENZ",
         clmRefNo : "REFERENZ NR",
         clmTypeName : "BELEGSART",

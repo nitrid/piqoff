@@ -429,6 +429,8 @@ export const langFr =
     popDeptCreditList : //BAK
     {
         title : "Sélection de facture",
+        btnPopDeptCreditListSelection : "Choix",
+        chkPopDeptCreditList : "Afficher les clos",
         clmRef : "Ref",
         clmRefNo : "Ref No",
         clmTypeName : "Type Doc.",
