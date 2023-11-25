@@ -51,5 +51,8 @@ export const langFr =
         dailyUseLoyalty : "Montant Points Utilisés",
         useDiscount : "Montant Remises",
         useDiscountTicket : "Total Ticket Remises",
+        purchaseTotal : "Toplam Alış Tutarı",
+        purchasePrice : "Alış Fiyatı Değişen Ürün Adeti",
+        salePrice : "Satış Fiyatı değişen Ürün Adeti"
     },
 }
