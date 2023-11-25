@@ -8,9 +8,9 @@ export const langFr =
     btnPrint :"Imprimer",
     btnOk: "OK",
     msgWarning: "Attention",
-    msgSqlService1: "Impossible de se connecter au serveur base de données", 
-    msgSqlService2: "Il n'y a pas de base de données. Souhaitez-vous créér ?", 
-    msgSqlService3: "L'installation de base de données a réussi. Veuillez vérifier le fichier de configuration et redémarrer le serveur.", 
+    msgSqlService1: "Connexion imposible à la base de données", 
+    msgSqlService2: "Il n'y a pas de base de données. Souhaitez-vous la créér ?", 
+    msgSqlService3: "Installation réussi de la base de données. Veuillez vérifier le fichier de configuration et redémarrer le serveur.", 
     btnYes : "Oui",
     btnGet: "Valider",
     btnNo : "Non",
@@ -27,9 +27,9 @@ export const langFr =
     msgInvalidUser : "Utilisateur ou mdp faux.",
     txtCardRead :"Veuillez scanner votre badge.",
     checkAll :"Tout saisir",
-    msgUserAccess : "Vous n'êtes pas autorisé",
+    msgUserAccess : "Accès non autorisé",
     collectiveItemAdd: "Ajouter Multi Produit",
-    constructionMsg : "Page en construction mise en service au plus vite.", 
+    constructionMsg : "Page en construction, bientôt disponible.", 
     about : "à propos ",
     abtCertificate : "Certificat: NF525 - NF203",
     abtNrCertificate : "Numéro Certificat: B_0527-1",
@@ -57,6 +57,20 @@ export const langFr =
         Password : "Code",  
         btnApprove : "Valider"  
     },
+    passChange: "Changer le mot de passe",
+    popPasswordChange:
+    {
+        title: "Changer le mot de passe",
+        NewPassword: "Nouveau mot de passe",
+        NewPassword2: "Répéter le nouveau mot de passe",
+        btnApprove: "Enregistrer"
+    },
+    msgPassChange:
+    {
+        title: "Réussite",
+        btn01: "OK",
+        msg: "Votre mot de passe a été changé !"
+    },
     msgPasswordWrong:
     {
         title: "Echec",
@@ -66,7 +80,7 @@ export const langFr =
     msgAnotherUserAlert: 
     {
         title : "Attention",
-        msg : "Vous êtes connecté à partir d'un autre appareil avec vos informations d'utilisateur.",
+        msg : "Connexion à partir d'un autre appareil avec vos informations d'utilisateur.",
         btn01 : "OK"
     },
     msgisExecuteClose: 
@@ -116,7 +130,7 @@ export const langFr =
     },
     popDeleteDesc : 
     {
-        head : "Description du Processus de Suppression",   
+        head : "Description de la Suppression",   
         title : "Veuillez Saisir le motif de la Suppression"   
     },
     popVatRate:
@@ -130,6 +144,14 @@ export const langFr =
         clmTotalHt : "Montant total", 
     },
     btnVatToZero : "Mettre à Zéro la TVA",
+    btnVatReCalculate : "Calculer la TVA", 
+    msgVatCalculate :
+    {
+        title : "Attention", 
+        msg : "Êtes vous sûr(e) de vouloir recalculer la TVA ? ",
+        btn01 : "OK", 
+        btn02 : "Annuler", 
+    },
     menuOff:
     {
         stk: "Produit",                
@@ -153,7 +175,7 @@ export const langFr =
         stk_01_013 :"Identification de l'image du produit", 
         stk_01_014 : "Identification du type de produit",
         stk_02_001: "Document inventaire",
-        stk_02_002: "Transfert interne dépot/magasin",
+        stk_02_002: "Transfert interne dépôt/magasin",
         stk_02_003: "Sortie perte",
         stk_02_004: "Imprimer étiquette",
         stk_02_005: "Saisie multi produit retour",
@@ -174,7 +196,7 @@ export const langFr =
         stk_05_001: "Rapport Inventaire Dépôt", 
         stk_05_002: "Rapport sur la modification des prix d'achat", 
         stk_05_003: "Rapport inventaire", 
-        stk_05_004 : "Rapport sur les produits perdus", // BAK
+        stk_05_004 : "Rapport sur les pertes", 
         cri: "Fournisseur - Client",
         cri_01: "Saisie",
         cri_02: "Listes",
@@ -189,8 +211,8 @@ export const langFr =
         cri_02_002: "Liste adresse",
         cri_02_003: "Liste Catégorie ",
         cri_03_001: "Ajouter Multi Client",
-        cri_04_001 : "Rapport Relevé Fournisseur", 
-        cri_04_002 : 'Rapport sur le solde courant', 
+        cri_04_001 : "Relevé de compte Client/Fournisseur", 
+        cri_04_002 : 'Rapport sur le solde courant Client/Fournisseur', 
         cri_04_003 : "Rapport point fidelité client",
         cri_04_004 : "Rapport sur le bilan actuel",
         ftr: "Facture ",
@@ -213,7 +235,7 @@ export const langFr =
         ftr_02_006: "Facture Différence Prix Vente", 
         ftr_02_007: "Facture Retour ", 
         ftr_02_008: "Facture d'achat interne magasin", 
-        ftr_02_009: "Facture gaspillées",
+        ftr_02_009: "Facture liée au frais",
         ftr_04_001: "Différence de prix Facture Proforma", 
         ftr_04_002: "Facture Proforma de Vente",   
         ftr_04_003: "Facture Proforma d'Achat",   
@@ -270,7 +292,8 @@ export const langFr =
         fns_04 : "Rapports",
         fns_04_001 : "Rapport sur les relevés bancaires",   
         fns_04_002 : "Rapport sur le solde actuel",  
-        fns_04_003 : "Kasa Ekstre Raporu",
+        fns_04_003 : "Rapport sur les relevés de caisse",
+        fns_04_002 : "Rapport solde de compte",
         fns_05 : "Opérations", 
         fns_05_001 : "Saisie Multi Encaissement", 
         fns_05_002 : "Saisie Multi Paiement", 
@@ -290,36 +313,37 @@ export const langFr =
         pos_02_009 : "Rapport de Vente par famille de produits",
         pos_02_010 : "Rapport de vente détaillé du produit", 
         pos_02_011 : "Rapport de comparaison de produit",
-        pos_02_012 : "Rapport d'utilisation des points Pos",  // BAK
-        pos_02_013 : "Rapport de réduction Pos",  // BAK
-        pos_02_014 : "Tickets de balance non lus", // BAK
-        pos_02_015 : "Müşteri Bazlı Ürün Satış Raporu", // BAK
+        pos_02_012 : "Rapport utilisation points de fidélité",  
+        pos_02_013 : "Rapport de remise",  
+        pos_02_014 : "Tickets de balance", 
+        pos_02_015 : "Rapport vente client",
         pos_03 : "Les opérations", 
         pos_03_001 : "Opérations de fin de journée",
-        pos_03_002 : "Loterie", //BAK
+        pos_03_002 : "Tirage au sort",
         promo: "Promotion",
         promo_01: "Saisie",
         promo_01_001: "Saisie promotions", 
         promo_02: "Listes",
         promo_02_001: "Liste promotion",
-        promo_02_002: "Liste Detaille promotion",
+        promo_02_002: "Liste Detaillée promotion",
         promo_03: "Rapports",
         set : "Paramètre / Supplément",
         set_01 : "Coût et taxe annexe",
         set_01_001 : "Taxe sucre",
+        set_01_002 : "Interfel",
         set_02 : "Réglage général",   
         set_02_001 : "Informations sur la société",   
         set_02_002 : "En Rapport",   
         set_02_003 : "Anydesk",   
         set_02_004 : "Mode d'Emploi",  
         set_02_005 : "Nouveautées de Versions",  
-        set_02_006 : "Création de Demande de Soutien",   
-        set_02_007 : "Historique Demande de Soutien",   
+        set_02_006 : "Création Demande d'Assistance",   
+        set_02_007 : "Historique Demande d'Assistance",   
+        set_02_008 : "Enregistrement Excel du code douanier", 
         set_03 : "Réglages Documents",   
         set_03_001 : "Documents Effacés",   
         set_03_002 : "Lignes Effacées", 
         set_03_003 : "Identification du code du transporteur",
-        set_02_008 : "Enregistrement Excel du code douanier", // BAK
         proces : "Saisie groupée",
         proces_01 : "Traitement Produit",
         proces_01_001 : "MAJ Famille Produit",
@@ -327,8 +351,8 @@ export const langFr =
         tkf_01: "Listes",
         tkf_02: "Document",
         tkf_03: "Rapports",
-        tkf_01_001: "Liste achat accord négocié",
-        tkf_01_002: "Liste accord de Vente",
+        tkf_01_001: "Liste proposition achat",
+        tkf_01_002: "Liste proposition vente",
         tkf_02_001: "Saisie Proposition d'Achat",
         tkf_02_002: "Saisie Proposition de Vente",
         purchase : "Processus d'achat",
@@ -369,19 +393,19 @@ export const langFr =
         salesinvoices_03 : "Proforma",
         salesinvoices_04 : "Rapports",
         salesReport : "Rapports",
-        slsRpt_01_001 : "Rapport de Comparaison de Documents", 
-        slsRpt_01_002 : "Rapport de ventes basés sur les familles", 
-        slsRpt_01_003 : "Rapport des Factures de Vente", 
+        slsRpt_01_001 : "Rapport Comparaison Documents", 
+        slsRpt_01_002 : "Rapport ventes basés sur les familles", 
+        slsRpt_01_003 : "Rapport Factures de Vente", 
         slsRpt_01_004 : "Rapport de Vente", 
         slsRpt_01_005 : "Rapport de vente et de retour ", 
-        slsRpt_01_006 : "Rapport actuel sur les ventes et les retours",
-        slsRpt_01_007 : "Rapport des factures de retours",   
-        slsRpt_01_008 : "Rapport de vente du produit détaillé",   
+        slsRpt_01_006 : "Rapport actuel sur les ventes et les retours", //BAK
+        slsRpt_01_007 : "Rapport factures retours",   
+        slsRpt_01_008 : "Rapport vente avec produit détaillé",   
         purchaseReport : "Rapports",
-        slsRpt_02_001 : "Rapport des Factures d'Achat", 
+        slsRpt_02_001 : "Rapport chronologique des Factures d'Achat", //BAK
         slsRpt_02_002 : "Rapport DEB ", 
         slsRpt_02_003 : "Rapport du taux de sucre", 
-        slsRpt_02_004 : "Rapport détaillé d'achat du produit" , 
+        slsRpt_02_004 : "Rapport achat avec produit détaillé" , 
         slsRpt_02_005 : "Rapport détaillé DEB"
     },
     login:
@@ -483,6 +507,7 @@ export const langFr =
             title: "Ajouter Prix",
             dtPopPriStartDate: "Date Début",
             dtPopPriEndDate: "Date Fin", 
+            cmbPopPriDepot: "Depot",
             txtPopPriQuantity: "Quantité",
             txtPopPriPrice: "Prix de Vente TTC",
             txtPopPriPriceVatExt: "Prix de Vente HT"
@@ -700,7 +725,7 @@ export const langFr =
         },
         grdAnalysis:  
         {
-            clmToday: "Aujour'hui",
+            clmToday: "Aujourd'hui",
             clmYesterday: "Hier",
             clmWeek: "Cette Semaine",
             clmMount : "Ce Mois-ci",
@@ -714,7 +739,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Produit déja traité vous ne pouvez pas supprimer !!"
+            msg: "Produit déja traité suppression impossible !"
         },
         cmbItemGenusData :
         {
@@ -735,7 +760,7 @@ export const langFr =
         },
         pg_customsCode : 
         {
-            title : "Codes de la douane",  
+            title : "Codes douanier",  
             clmCode : "Code",  
             clmName : "Nom" 
         },
@@ -754,10 +779,10 @@ export const langFr =
         },
         msgItemBack:
         {
-            title: "Attention",  // BAK
-            btn01: "OK",  // BAK
-            btn02: "Abandonner",  // BAK
-            msg: "Êtes-vous sûr de vouloir ramener le produit ?"  // BAK
+            title: "Attention",  
+            btn01: "OK",  
+            btn02: "Abandonner",  
+            msg: "Êtes-vous sûr(e) de vouloir ramener le produit à nouveau ?"  
         },
     },
     stk_01_002:  //"Identification des codes-barres" 
@@ -771,7 +796,7 @@ export const langFr =
         MainUnit : "Code barre saisie à l'unité principale" , 
         SubUnit : "Code barre saisie au contenu principal",
         txtUnitTypeName :"Motif",
-        barcodePlace : "Entrer le code barre que vous souhaitez ajouter pour le stock sélectionné.", 
+        barcodePlace : "Veuillez ajouter le code barre au produit sélectionné.", 
         pg_txtItem:
         {
             title: "Sélection Produit",
@@ -817,7 +842,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessairess !" ,
+            msg: "Veuillez saisir les zones nécessaires !" ,
         },
         msgDelete:
         {
@@ -833,7 +858,7 @@ export const langFr =
         txtCode : "Code",
         txtName :"Nom",
         cmbType :"Type",
-        validCode :"Vous ne pouvez ne pas saisir le code !",
+        validCode :"Le champ du code ne peut être vide !", //BAK
         cmbTypeData : 
         {
             normal : "Centrale",
@@ -866,7 +891,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessairess !" ,
+            msg: "Veuillez saisir les zones nécessaires !" ,
         },
         msgDelete:
         {
@@ -895,7 +920,7 @@ export const langFr =
         txtCode : "Code",
         txtName :"Nom",
         cmbType :"Type",
-        validCode :"Vous ne pouvez pas laisser le code vide !",
+        validCode :"Le champ du code ne peut être vide !", //BAK
       
         pg_txtCode : 
         {
@@ -934,12 +959,12 @@ export const langFr =
         msgCode : 
         {
             title: "Attention",
-            btn01: "Entrer la carte",
+            btn01: "Aller à la carte", //BAK
             btn02: "OK",
             msg : "Le code de service que vous avez saisi est enregistré dans le système !"
         },
         chkActive: "Actif",
-        cmbTax : "TVA %",
+        cmbTax : "TVA",
         msgNotDelete : 
         {
             title: "Attention", 
@@ -958,12 +983,13 @@ export const langFr =
         txtCode : "Code",
         txtName :"Nom",
         cmbType :"Type",
-        validCode :"Code ne peut être vide !",
+        validCode :"Le champ du code ne peut être vide !", //BAK
         pg_txtCode : 
         {
             title : "Choix Groupe Produit",
             clmCode : "Code",
             clmName : "NOM",
+            clmStatus : "ETAT",
         },
         msgSave:
         {
@@ -1007,7 +1033,7 @@ export const langFr =
         txtName :"Nom",  
         txtSymbol : "Symbole",  
         cmbType :"Type",  
-        validCode :"Vous ne pouvez pas valider le code sans le saisir !", 
+        validCode :"Le champ du code ne peut être vide !", 
         pg_txtCode :   
         {  
             title : "Choix de groupe de produits",
@@ -1057,7 +1083,7 @@ export const langFr =
         txtVat :"Valeur d'impôt", 
         txtType : "Type",   
         cmbType :"Type",   
-        validCode :"Vous ne pouvez pas valider le code sans le saisir !",  
+        validCode :"Le champ du code ne peut être vide !",  
         pg_txtCode :    
         {   
             title : "Choix de groupe de produits",  
@@ -1099,7 +1125,7 @@ export const langFr =
             btn02: "OK", 
             msg : "L'ID que vous avez saisi est enregistré dans le système !" 
         },
-        chkActive: "Aktif", 
+        chkActive: "Actif", 
     },
     stk_01_012 : // "Identification des produits liés"
     {
@@ -1120,13 +1146,13 @@ export const langFr =
         },
         popRelatedSelect : 
         {
-            title : "Sélection du stock",
+            title : "Sélection du produit", //BAK
             clmCode : "Code",
             clmName : "Nom",
         },
         popItemSelect : 
         {
-            title : "Sélection du stock",
+            title : "Sélection du produit", //BAK
             clmCode : "Code",
             clmName : "Nom",
         },
@@ -1135,7 +1161,7 @@ export const langFr =
             title : "Attention",
             btn01 : "D'accord",
             btn02 : "Abandonnerz",
-            msg : "Etes-vous sûr de vouloir valider?"
+            msg : "Êtes-vous sûr(e) de vouloir enregistrer ?"
         },
         msgSaveResult :
         {
@@ -1148,14 +1174,14 @@ export const langFr =
         {
             title : "Attention",
             btn01 : "D'accord",
-            msg : "S'il vous plaît saissisez les rubriques nécessaires"
+            msg : "Veuillez saisir les champs nécessaires" //BAK
         },
         msgDelete :
         {
             title : "Attention",
             btn01 : "D'accord",
-            btn02 : "Abandonnerz",
-            msg : "Etes-vous sûr de vouloir surpprimer l'enregistrement?"
+            btn02 : "Abandonner",
+            msg : "Êtes-vous sûr(e) de vouloir supprimer l'enregistrement?"
         },
     },
     stk_01_013 : // "Identification de l'image du produit" 
@@ -1163,7 +1189,7 @@ export const langFr =
         txtRef : "Référence",
         pg_txtRef:
         {
-            title: "Choix du stock",
+            title: "Choix du produit", //BAK
             clmCode: "Code",
             clmName: "Nom",
             clmStatus: "Etat"
@@ -1173,7 +1199,7 @@ export const langFr =
             title: "Attention",
             btn01: "D'accord",
             btn02: "Annuler",
-            msg: "Etes-vous sûr de vouloir enregistrer?"
+            msg: "Êtes-vous sûr(e) de vouloir supprimer l'enregistrement??"
         },
         msgSaveResult:
         {
@@ -1201,7 +1227,7 @@ export const langFr =
         txtCode : "code",
         txtName :"Nom",
         cmbType :"Type",
-        validCode :"Vous devez saisir le code!",
+        validCode :"Le champ du code ne peut être vide !",
         pg_txtCode : 
         {
             title : "Choix de l'enregistrement",
@@ -1213,7 +1239,7 @@ export const langFr =
             title: "Attention",
             btn01: "D'accord",
             btn02: "Abandonner",
-            msg: "Etes-vous sûr de vouloir enregistrer?"
+            msg: "Êtes-vous sûr(e) de vouloir supprimer l'enregistrement??"
         },
         msgSaveResult:
         {
@@ -1226,14 +1252,14 @@ export const langFr =
         {
             title: "Attention",
             btn01: "D'accord",
-            msg: "S'il vous plaît remplissez les parties demandées!"
+            msg: "Veuillez remplir les champs nécessaires !" //BAK
         },
         msgDelete:
         {
             title: "Attention",
             btn01: "D'accord",
             btn02: "Abandonner",
-            msg: "Etes- vous sûr de vouloir supprimer?"
+            msg: "Êtes-vous sûr(e) de vouloir supprimer l'enregistrement ?" //BAK
         },
         msgCode : 
         {
@@ -1251,6 +1277,7 @@ export const langFr =
         txtBarcode : "Ajouter Code Barre",
         txtQuantity :"Quantité",
         txtAmount : "Valeur Totale",
+        validDesign : "Veuillez choisir le design",
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -1258,7 +1285,7 @@ export const langFr =
             clmRef : "Référence",
             clmRefNo : "Numéro",
             clmDocDate : "Date",
-            clmDepotName : "Dépot ou Magasin",
+            clmDepotName : "Dépôt ou Magasin",
             clmQuantity :"Quantité Totale Produit",
             clmTotalLine : "Numéro de Ligne"
         },
@@ -1267,6 +1294,7 @@ export const langFr =
             title : "Sélectionner Produit",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
+            clmPrice : "Prix D'Achat", //BAK ekleme yaptim
         },
         grdItemCount: 
         {
@@ -1284,7 +1312,7 @@ export const langFr =
         },
         popPassword : 
         {
-            title: "Veuillez Saisir MDP Administrateur pour Accès au Document ",
+            title: "Veuillez Saisir MDP Administrateur pour Accéder au Document ",
             Password : "Mot de passe",
             btnApprove : "Valider" ,
         },
@@ -1299,7 +1327,7 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Etes-vous sûr(e) de vouloir Enregistrer!" ,
+            msg: "Êtes-vous sûr(e) de vouloir Enregistrer!" ,
         },
         msgQuantity:
         {
@@ -1319,21 +1347,21 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessairess !",
+            msg: "Veuillez saisir les champs nécessaires !", //BAK
         },
         msgDelete:
         {
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?",
+            msg: "Êtes-vous sûr(e) de vouloir supprimer l'enregistrement ?",
         },
         msgBigQuantity:
         {
             title: "Attention",
-            btn01: "Continue",
+            btn01: "Continuer",
             btn02: "Abandonner",
-            msg: "Chiffre Saisi Supérieur à 1000 Voulez Voulez-vous Continuer ?",
+            msg: "Chiffre saisi Supérieur à 1000 Voulez-vous continuer ?",
         },
         msgLocked:
         {
@@ -1357,32 +1385,32 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrerles Modifications !"
+            msg: "Document Vérouillé !  \n  Veuillez Dévérouiller Pour Enregistrer les Modifications !"
         },
         msgDoclocked:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez EnregistrerSans Dévérouiller !"
+            msg: "Vous ne Pouvez Enregistrer sans Dévérouiller !"
         },
         msgItemNotFound:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Produit Introuvable !!"
+            msg: "Produit Introuvable !"
         },
         msgCombineItem:
         {
             title: "Attention",
-            btn01: "Regroupe",
+            btn01: "Regrouper",
             btn02: "Modifier",
             btn03: "Abandonner",
-            msg: "Produit Existant dans Document ! Voulez-vous Combiner ?"
+            msg: "Produit Existant dans le Document ! Voulez-vous Combiner ?"
         },
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
-        validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validDepot : "Sélectionner Dépôt",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         popDesign : 
         {
@@ -1392,7 +1420,7 @@ export const langFr =
         },
         pg_txtBarcode : 
         {
-            title : "Sélectionner Barre",
+            title : "Sélectionner Code Barre", 
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
             clmMulticode : "Référence Fournisseur",
@@ -1407,8 +1435,8 @@ export const langFr =
     },
     stk_02_002 : //"Depo/Mağaza Arası Sevk"
     {
-        txtRefRefno : "Réf.-Réf no:",
-        cmbOutDepot: "Sortie Dépot",
+        txtRefRefno : "Réf.-Réf no",
+        cmbOutDepot: "Sortie Dépôt",
         cmbInDepot: "Entrée Dépot",
         dtDocDate : "Date",
         txtBarcode : "Ajouter Code Barre",
@@ -1420,7 +1448,7 @@ export const langFr =
             clmRefNo : "Numéro",
             clmDocDate : "Date",
             clmInputName : "Entrée",
-            clmOutputName : "Entrée",
+            clmOutputName : "Sortie",
         },
         pg_txtItemsCode : 
         {
@@ -1435,11 +1463,11 @@ export const langFr =
             clmQuantity : "Quantité",
             clmCreateDate: "Date d'Enregistrement",
             clmDescription :"Motif",
-            clmUser : "Utilisateur",
+            clmCuser : "Utilisateur",
         },
         popPassword : 
         {
-            title: "Veuillez Saisir MDP Administrateur pour Accès Document ",
+            title: "Veuillez Saisir MDP Administrateur pour accéder au Document ",
             Password : "Mot de passe",
             btnApprove : "Valider"
         },
@@ -1453,40 +1481,40 @@ export const langFr =
         {
             title: "Attention",
             btn01: "Ok",
-            msg: "La quantité de depôt  saisie ne peut être en négatif ! Quantité existante:"
+            msg: "La quantité présent au depôt ne peut être négatif ! Quantité max pouvant être saisie:" //BAK
         },
         msgDblDepot:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Entrée et Sortie Dépot ne Peuvent Etre Identique !"
+            msg: "Entrée et Sortie Dépôt ne peuvent être Identique !"
         },
         msgSave:
         {
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Etes-vous sûr(e) de vouloir Enregistrer!"
+            msg: "Êtes-vous sûr(e) de vouloir Enregistrer!"
         },
         msgSaveResult:
         {
             title: "Attention",
             btn01: "OK",
-            msgSuccess: "Transfert Réussi et Enregistré Avec Succès  . !",
+            msgSuccess: "Transfert Réussi et Enregistré Avec Succès. !",
             msgFailed: "Enregistrement échoué !"
         },
         msgSaveValid:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessairess !"
+            msg: "Veuillez saisir les champs nécessaires !"
         },
         msgDelete:
         {
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
+            msg: "Êtes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
         },
         msgLocked:
         {
@@ -1510,13 +1538,13 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrerles Modifications !"
+            msg: "Document Vérouillé !  \n  Veuillez Dévérouiller Pour Enregistrer les Modifications !"
         },
         msgDoclocked:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez EnregistrerSans Dévérouiller !"
+            msg: "Vous ne Pouvez Enregistrer sans Dévérouiller !"
         },
         msgItemNotFound:
         {
@@ -1527,9 +1555,9 @@ export const langFr =
         msgCombineItem:
         {
             title: "Attention",
-            btn01: "Regroupe",
+            btn01: "Regrouper",
             btn02: "Nouvel Ajout",
-            msg: "Produit Existant dans Document ! Voulez-vous Combiner ?"
+            msg: "Produit Existant dans le Document ! Voulez-vous Combiner ?"
         },
         popDesign : 
         {
@@ -1539,11 +1567,11 @@ export const langFr =
         },
         pg_txtBarcode : 
         {
-            title : "Sélectionner Code-Barres",
+            title : "Sélectionner Code-Barre",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
             clmMulticode : "Référence Fournisseur",
-            clmBarcode : "Code-Barres"
+            clmBarcode : "Code-Barre"
         },
         msgQuantity:
         {
@@ -1556,8 +1584,8 @@ export const langFr =
     },
     stk_02_003 : // "Kayıp Ürün Çıkışı"
     {
-        txtRefRefno : "Réf.-Réf no:",
-        cmbOutDepot: "Sortie Dépot",
+        txtRefRefno : "Réf.-Réf no",
+        cmbOutDepot: "Sortie Dépôt",
         dtDocDate : "Date",
         txtBarcode : "Ajouter Code Barre",
         getDispatch : "Recherche BL",
@@ -1571,7 +1599,7 @@ export const langFr =
             clmRefNo : "Numéro",
             clmDocDate : "Date",
             clmInputName : "Entrée",
-            clmOutputName : "Entrée",
+            clmOutputName : "Sortie",
         },
         pg_txtItemsCode : 
         {
@@ -1587,11 +1615,11 @@ export const langFr =
             clmCreateDate: "Date d'Enregistrement",
             clmDescription :"Motif",
             clmCostPrice : "Prix de Revient" ,
-            clmUser : "Utilisateur",
+            clmCuser : "Utilisateur",
         },
         pg_dispatchGrid : 
         {
-            title : "Sélectionner Bon De Livraison" ,
+            title : "Sélectionner Bon de Livraison" ,
             clmReferans : "Série - Réferences",
             clmCode : "Code",
             clmName : "Nom",
@@ -1601,7 +1629,7 @@ export const langFr =
         },
         popPassword : 
         {
-            title: "Veuillez Saisir MDP Administrateur pour Accès au Document ",
+            title: "Veuillez Saisir MDP Administrateur pour Accéder au Document ",
             Password : "Mot de passe",
             btnApprove : "Valider"
         },
@@ -1609,13 +1637,13 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrerles Modifications !"
+            msg: "Document Vérouillé !  \n  Veuillez Dévérouiller Pour Enregistrer les Modifications !"
         },
         msgDocLocked:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez EnregistrerSans Dévérouiller !"
+            msg: "Vous ne Pouvez Enregistrer sans Dévérouiller !"
         },
         msgDocValid:
         {
@@ -1634,7 +1662,7 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Etes-vous sûr(e) de vouloir Enregistrer!"
+            msg: "Êtes-vous sûr(e) de vouloir Enregistrer!"
         },
         msgSaveResult:
         {
@@ -1647,14 +1675,14 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessairess !"
+            msg: "Veuillez saisir les champs nécessaires !"
         },
         msgDelete:
         {
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
+            msg: "Êtes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
         },
         msgLocked:
         {
@@ -1678,13 +1706,13 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrerles Modifications !"
+            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrer les Modifications !"
         },
         msgDoclocked:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez EnregistrerSans Dévérouiller !"
+            msg: "Vous ne Pouvez Enregistrer Sans Dévérouiller !"
         },
         msgItemNotFound:
         {
@@ -1695,14 +1723,14 @@ export const langFr =
         msgCombineItem:
         {
             title: "Attention",
-            btn01: "Regroupe",
+            btn01: "Regrouper",
             btn02: "Nouvel Ajout",
-            msg: "Produit Existant dans Document ! Voulez-vous Combiner ?"
+            msg: "Produit Existant dans le Document ! Voulez-vous Combiner ?"
         },
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
-        validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Langue Document" ,
+        validDepot : "Sélectionner Dépôt",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         pg_quickDesc : 
         {
@@ -1713,7 +1741,7 @@ export const langFr =
         {
             title : "Ajoute Saisie Rapide" ,
             description : "Nouvelle Saisie" ,
-            btnApprove : "enregistrer"        
+            btnApprove : "Enregistrer"        
         },
         popDesign : 
         {
@@ -1725,11 +1753,11 @@ export const langFr =
         {
             title: "Attention",
             btn01: "Ok",
-            msg: "La quantité de depôt saisie ne peut être en négatif ! Quantité existante:"
+            msg: "La quantité présent au dépôt ne peut être négative ! Quantité existante:"
         },
         pg_txtBarcode : 
         {
-            title : "Sélectionner Barre",
+            title : "Sélectionner Code Barre",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
             clmMulticode : "Référence Fournisseur",
@@ -1752,15 +1780,15 @@ export const langFr =
     },
     stk_02_004 : //"Etiket Bas"
     {
-        txtRefRefno : "Réf.-Réf no:",
+        txtRefRefno : "Réf.-Réf no",
         design : "Design" ,
         txtPage : "Page" ,
         txtFreeLabel : "Champ Vide" ,
         txtLineCount : "Lecture Ligne" ,
         chkLastChange : "Dernière Modification Après Impression" ,
         chkSelectChange :"Dernière Modification Après Date Sélectionnée" ,
-        chkSelectPriceChange :"Modification de Prix Vente Après Date Sélectionnée", 
-        chkPromotionItems : "Produits en promotion",
+        chkSelectPriceChange :"Modification Prix Vente Après Date Sélectionnée", 
+        chkPromotionItems : "Produit en promotion",
         btnLabelCombine : "Regrouper Les Etiquettes Saisies",
         chkGroup : "Groupe" ,
         chkCustomer : "Produits Fournisseur",
@@ -1816,7 +1844,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Modification Effectué Dans Document ! Veuillez Enregistrerou Annuler Les Modifications" 
+            msg: "Modification Effectué Dans le Document ! Veuillez Enregistrer ou Annuler Les Modifications" 
         },
         msgAddItems:
         {
@@ -1843,7 +1871,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessairess!"
+            msg: "Veuillez saisir les champs nécessairess!"
         },
         msgDelete:
         {
@@ -1874,13 +1902,13 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrerles Modifications !"
+            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrer les Modifications !"
         },
         msgDoclocked:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez EnregistrerSans Dévérouiller !"
+            msg: "Vous ne Pouvez Enregistrer Sans Dévérouiller !"
         },
         msgItemNotFound:
         {
@@ -1893,7 +1921,7 @@ export const langFr =
             title: "Attention",
             btn01: "Abandonner",
             btn02: "Nouvel Ajout",
-            msg: "Produit Sélectionné Déjà Existant Dans Document !Voulez -vous Ajouter une Ligne ? "
+            msg: "Produit Sélectionné Déjà Existant Dans le Document !Voulez-vous Ajouter une Ligne ? "
         },
         popWizard : 
         {
@@ -1901,8 +1929,8 @@ export const langFr =
         },
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
-        validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validDepot : "Sélectionner Dépôt",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         popDesign : 
         {
@@ -1922,8 +1950,8 @@ export const langFr =
     stk_02_005 : // "İade Ürünü Toplama"
     {
         txtRefRefno : "Réf.-Réf no:",
-        cmbDepot1: "Sortie Dépot",
-        cmbDepot2: "Retour Dépot",
+        cmbDepot1: "Sortie Dépôt",
+        cmbDepot2: "Retour Dépôt",
         dtDocDate : "Date",
         getRebate :"Retour depuis l'entrepôt sélectionné", 
         txtBarcode : "Ajouter Code Barre",
@@ -1935,7 +1963,7 @@ export const langFr =
             clmRefNo : "Numéro",
             clmDocDate : "Date",
             clmInputName : "Entrée",
-            clmOutputName : "Entrée",
+            clmOutputName : "Sortie",
         },
         pg_txtItemsCode : 
         {
@@ -1950,11 +1978,11 @@ export const langFr =
             clmQuantity : "Quantité",
             clmCreateDate: "Date d'Enregistrement",
             clmDescription :"Motif",
-            clmUser : "Utilisateur",
+            clmCuser : "Utilisateur",
         },
         popPassword : 
         {
-            title: "Veuillez Saisir MDP Administrateur pour Accès au Document ",
+            title: "Veuillez Saisir MDP Administrateur pour Accéder au Document ",
             Password : "Mot de passe",
             btnApprove : "Valider"
         },
@@ -1982,7 +2010,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones concernées !"
+            msg: "Veuillez saisir les champs nécessaires !"
         },
         msgDelete:
         {
@@ -2013,13 +2041,13 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrerles Modifications !"
+            msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrer les Modifications !"
         },
         msgDoclocked:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez EnregistrerSans Dévérouiller !"
+            msg: "Vous ne Pouvez Enregistrer Sans Dévérouiller !"
         },
         msgItemNotFound:
         {
@@ -2049,7 +2077,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "Ok",
-            msg: "La quantité de depôt  saisie ne peut être en négatif ! Quantité existant:"
+            msg: "La quantité présent au depôt ne peut être négative ! Quantité existant:"
         },
         pg_txtBarcode : 
         {
@@ -2114,7 +2142,7 @@ export const langFr =
             clmDate: "DLC",
             clmQuantity : "Quantité",
             clmDescription : "Motif",
-            clmUser : "Utilisateur",
+            clmCuser : "Utilisateur",
         },
         msgDocValid:
         {
@@ -2140,7 +2168,7 @@ export const langFr =
             title: "Attention",
             btn01: "Ok",
             btn02: "Abandonner",
-            msg: "Êtes-vous sûr de vouloir enregistrer? "
+            msg: "Êtes-vous sûr(e) de vouloir enregistrer? "
         },
         msgSaveResult:
         {
@@ -2223,7 +2251,7 @@ export const langFr =
             clmQuantity : "Quantité",
             clmCreateDate: "Date d'Enregistrement",
             clmDescription :"Motif",
-            clmUser : "Utilisateur",
+            clmCuser : "Utilisateur",
         },
         pg_dispatchGrid : 
         {
@@ -2338,7 +2366,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Langue Document" ,
+        validCustomerCode : "Le code fournisseur-client ne peut être vide" ,
         validDocDate : "Sélectionner Date" ,
         pg_quickDesc : 
         {
@@ -2418,7 +2446,7 @@ export const langFr =
             clmCreateDate: "Date d'Enregistrement",
             clmDescription :"Motif",
             clmCostPrice : "Prix de Revient" ,
-            clmUser : "Utilisateur",
+            clmCuser : "Utilisateur",
         },
         pg_dispatchGrid : 
         {
@@ -2533,7 +2561,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Langue Document" ,
+        validCustomerCode : "Le code fournisseur-client ne peut être vide" ,
         validDocDate : "Sélectionner Date" ,
         pg_quickDesc : 
         {
@@ -2710,8 +2738,8 @@ export const langFr =
     stk_04_001 : //"Toplu Stok Düzenleme"
     {
         txtCustomerCode : "Fournisseur",
-        codePlaceHolder : "Veuillez saisir le code produit, le code-barres ou le code fournisseur que vous souhaitez rechercher",  
-        namePlaceHolder :"Entrez le nom complet du produit ou une syllabe le contenant",  
+        codePlaceHolder : "Veuillez saisir le code produit, le code-barres ou le code fournisseur que vous souhaitez Chercher",  
+        namePlaceHolder :"Saissir le nom complet ou une syllabe du produit",  
         pg_txtCustomerCode : 
         {
             title : "Choix Fournisseur",
@@ -2721,7 +2749,7 @@ export const langFr =
             clmGenusName : "Genre"
         },
         cmbItemGroup : "Groupe Produit",
-        btnGet : 'Rechercher',
+        btnGet : 'Chercher',
         txtCode : "Référence Produit",
         txtName : "Nom Produit",
         grdItemList : 
@@ -2731,7 +2759,7 @@ export const langFr =
             clmBarcode : "Code barre",
             clmMulticode : "FRN.Code",
             clmCustomerName : "Fournisseur",
-            clmCustomerPrice : "Prix T.",
+            clmCustomerPrice : "Prix Fournisseur",
             clmPriceSale : "Prix Vente",
             clmVat : "Taxe",
             clmOrgins : "Origine",
@@ -2761,18 +2789,18 @@ export const langFr =
     stk_04_002 : // "İade Les opérationsı"
     {
         txtCustomerCode : "Fournisseur",
-        validDepot : "Sélectionner Dépot",
-        ItemNamePlaceHolder :"Veuillez Entrer le Nom Complet ou une Syllabe",
+        validDepot : "Sélectionner Dépôt",
+        ItemNamePlaceHolder :"Saissir le nom complet ou une syllabe du produit",
         pg_txtCustomerCode : 
         {
             title : "Choix Fournisseur",
-            clmCode :  "Sélection Document",
+            clmCode :  "Code Fournisseur",
             clmTitle : "Nom Fournisseur",
             clmTypeName : "Type",
             clmGenusName : "Genre"
         },
         cmbDepot : 'Dépôt',  
-        btnGet : 'Rechercher',
+        btnGet : 'Chercher',
         btnInvoice : "Convertir En Facture",
         btnDispatch : 'Convertir en Bon de Livraison',
         grdRebateList : 
@@ -2788,7 +2816,7 @@ export const langFr =
             title: "Attention",
             btn01: "Valider",
             btn02: "Abandonner",
-            msg: "Etes-vous sûr(e) de Vouloir Faire Retour des Lignes Sélectionnées !"
+            msg: "Êtes-vous sûr(e) de vouloir Faire le retour des Lignes Sélectionnées !"
         },
         msgSaveResult:
         {
@@ -2801,25 +2829,25 @@ export const langFr =
         {
             title: "Attention",
             btn01 : "OK",
-            msg : "Produit Sélectionné Pour Plusieurs Compte Veuillez Vérifier"
+            msg : "Produit Sélectionné plusieurs fois,Veuillez Vérifier"
         },
         msgCustomerFound : 
         {
             title: "Attention",
             btn01 : "OK",
-            msg : "Compte Produit non Défini.Veuillez Sélectionner un Compte"
+            msg : "Le Produit n'a pas de fournisseur défini.Veuillez le définir !"
         }
     },
     stk_04_003 : //"Sayım Kesinleştirme"
     {
         cmbDepot : "Réserve",
         chkNotCountItems : "Mise à Zéro des Produits non Comptabilisés",
-        btnGet : 'Recherche',
+        btnGet : 'Rechercher',
         btnAddCount : "Fusionner Inventaire",
         dtFirstDate :"Date Début",
         dtLastDate : "Date Fin",
         btnSuccess : "Valider",
-        validDepot : "Sélectionner Dépot",
+        validDepot : "Sélectionner Dépôt",
         popCount : 
         {
             title : "Quantité Produit",
@@ -2842,7 +2870,7 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Etes-vous sûr(e) de vouloir Enregistrer!"
+            msg: "Êtes-vous sûr(e) de vouloir Enregistrer!"
         },
         msgSaveResult:
         {
@@ -2855,17 +2883,17 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Quantité Dépot Mis à jour ! ! Nouvelle Création Non Effectuée",
+            msg: "Quantité Dépôt à jour ! ! Pas de nouvelle quantité enregistrée ",
         },
     },
     stk_04_004: // SKT operasyonu
     {
-        txtRef : "Stock",   
+        txtRef : "Produit",   
         dtFirstdate : "Date Début",   
         dtLastDate : "Date Fin",   
         btnGet : "Recherche",   
-        btnPrint : "Impression Spéciale Etiquette Sélectionnée",   
-        txtCustomerCode : "Client", 
+        btnPrint : "Imprimer étiquette spéciale au produit sélectionné",   
+        txtCustomerCode : "Fournisseur", 
         cmbItemGroup : "Catégorie Produit", 
         grdExpdateList:   
         {   
@@ -2875,8 +2903,8 @@ export const langFr =
             clmDiff : "Vente Depuis Date Saisie", 
             clmDate : "DLC",
             clmRemainder : "Restant", 
-            clmCustomer :"Client",
-            clmRebate : "Reprise Retour",
+            clmCustomer :"Fournisseur",
+            clmRebate : "Reprise-Retour",
             clmDescription :"Remarque",
             clmUser : "Utilisateur",
             clmCDate : "Date Entrée" ,
@@ -2885,14 +2913,14 @@ export const langFr =
         },   
         popQuantity :    
         {   
-            title : "Saisie Prix Montant",   
-            txtQuantity : "Montant",   
+            title : "Saisie Quantité-Prix",   
+            txtQuantity : "Quantité",   
             txtPrice : "Prix",   
-            btnSave : "enregistreret Imprimer"   
+            btnSave : "Enregistrer et Imprimer"   
         },  
         pg_txtRef:  
         {  
-            title: "Choix Stock",   
+            title: "Choix produit",   
             clmCode: "Code",   
             clmName: "Nom",   
             clmStatus: "Mode"   
@@ -2900,7 +2928,7 @@ export const langFr =
         pg_txtCustomerCode : 
         {
             title : "Choix Fournisseur",
-            clmCode :  "Sélection Document",
+            clmCode :  "Code Fournisseur",
             clmTitle : "Nom Fournisseur",
             clmTypeName : "Type",
             clmGenusName : "Genre"
@@ -2910,13 +2938,13 @@ export const langFr =
             title: "Attention",  
             btn01: "OK",  
             btn02: "Abandonner",  
-            msg: "Etiquette déjà Imprimé pour le Produit Sélectionné !Etes-vous sûr(e) de Vouloir Imprimer à Nouveau?" 
+            msg: "Etiquette spéciale déja éditer pour le Produit Sélectionné !Êtes-vous sûr(e) de Vouloir le rééditer?" 
         },
         msgLabelCount:
         {
             title: "Attention",  
             btn01: "OK",  
-            msg: "Ne peut Imprimer Plus que la Quantité de Produit Restant.." 
+            msg: "Impossible d'imprimer plus que la quantité du produit restant." 
         },
     },
     stk_05_001 : // "Depo Envanter Raporu"
@@ -2941,12 +2969,12 @@ export const langFr =
     },
     stk_05_002 : // Alış Fiyatı Raporuu"
     {
-        btnGet :"Allez", 
+        btnGet :"Aller", 
         dtFirst : "Date de début", 
         graphicTitle : "Graphique de changement de prix", 
         typePurc : "Achat", 
         typeSale : "Vente", 
-        dlbClikMsg : "Double-cliquez sur la ligne pour visualiser le graphique en détail.", 
+        dlbClikMsg : "Double-cliquer sur la ligne pour visualiser le graphique en détail.", 
         cmbCustomer : "Fournisseur",
         cmbMainGrp : "Famille produit",
         grdItemPurcPriceReport: 
@@ -2958,7 +2986,7 @@ export const langFr =
             clmFamount : "Montant hors taxe",  
             clmTotalCost : "Dernier prix d'achat",  
             clmSale : "Prix de Vente",  
-            clmFisrtCost : "Dernier prix de revient", 
+            clmFisrtCost : "Dernier prix d'achat", 
             clmMargin : "Marge brute", 
             clmNetMargin : "Marge nette", 
         },
@@ -2986,27 +3014,27 @@ export const langFr =
     },
     stk_05_004 : // "Kayıp Ürün Raporu"
     {
-        chkZeroQuantity : "Afficher les quantités de 0",  // BAK
-        cmbDepot : "Dépôt",  // BAK
-        btnCheck : "Actif",  // BAK
-        btnGet :"Rechercher",  // BAK
+        chkZeroQuantity : "Afficher quantité 0",  
+        cmbDepot : "Dépôt",  
+        btnCheck : "Actif",  
+        btnGet :"Rechercher",  
         grdListe : 
         {
-            clmCode: "Code",  // BAK
-            clmName : "Nom",  // BAK
-            clmQuantity : "Quantité",  // BAK
-            clmOutputCode : "Code du dépôt",  // BAK
-            clmOutputName : "Nom du dépôt",  // BAK
-            clmCostPrice : "Coût",   // BAK
-            clmTotalCost : "Coût total",   // BAK
-            clmDocDate : "Date",   // BAK
-            clmRef : "Référence",  // BAK
-            clmRefNo : "Ligne",   // BAK
-            clmDescription : "Déscription"  // BAK
+            clmCode: "Code",  
+            clmName : "Nom",  
+            clmQuantity : "Quantité",  
+            clmOutputCode : "Code du dépôt",  
+            clmOutputName : "Nom du dépôt",  
+            clmCostPrice : "Coût",   
+            clmTotalCost : "Coût total",   
+            clmDocDate : "Date",   
+            clmRef : "Référence",  
+            clmRefNo : "Ligne",   
+            clmDescription : "Déscription"  
         },
-        txtTotalQuantity : "Quantité totale",  // BAK
-        txtTotalCost : "Montant de l'inventaire",  // BAK
-        cmbDepot : "Dépôt"  // BAK
+        txtTotalQuantity : "Quantité totale",  
+        txtTotalCost : "Montant de l'inventaire",  
+        cmbDepot : "Dépôt"  
     },
     cri_01_001: // "Cari Tanımları"
     {
@@ -3025,10 +3053,10 @@ export const langFr =
         tabTitleAdress : "Adresse",
         tabTitleLegal : "Légal",
         tabTitleOffical : "Administrateur",
-        tabCustomerBank : "Données Bancaire",
-        tabTitleFinanceDetail : "Information Financières", 
+        tabCustomerBank : "Données Bancaires",
+        tabTitleFinanceDetail : "Informations Financières", 
         txtLegal :"Données Légales",
-        chkRebate :"Retour Reprise",
+        chkRebate :"Retour-Reprise",
         txtExpiryDay : "Echéance",  
         txtRiskLimit : "Limite de Risque",  
         expDay : "(Jour)", 
@@ -3038,8 +3066,8 @@ export const langFr =
             title : "Sélectionner Client",
             clmCode : "Code",
             clmTitle : "Titre",
-            clmName : "Nom",
-            clmLastName  : "Nom De Famille",
+            clmName : "Prénom",
+            clmLastName  : "Nom",
             clmStatus  : "Statut",
         },
         grdAdress : 
@@ -3088,7 +3116,7 @@ export const langFr =
         },
         popBank : 
         {
-            title : "Données Bancaire",
+            title : "Données Bancaires",
             txtName : "Nom de Banque",
             txtIban :"IBAN",
             txtOffice :"Centre",
@@ -3148,12 +3176,13 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
+            msg: "Êtes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
         },
         cmbTypeData : 
         {
             individual :  "Particulier",
-            company :  "Entreprise"
+            company :  "Entreprise",
+            association : "Association"
         },
         cmbGenusData:
         {
@@ -3170,7 +3199,7 @@ export const langFr =
         msgCode : 
         {
             title: "Attention",
-            btn01: "Recherche Client",
+            btn01: "Rechercher Client",
             btn02: "OK",
             msg : "Client déjà existant!"
         },
@@ -3180,23 +3209,23 @@ export const langFr =
         {
             frmCustomers: "Le Code ne peut être Vide !",
         },
-        txtSubCustomer : "Client en bas", 
+        txtSubCustomer : "Fournisseur filiale", 
         pg_subCustomer : 
         {
-            title : "Choix du client en bas",  
+            title : "Choix du fournisseur filiale",  
             clmCode : "Code", 
-            clmTitle : "Adresse",
-            clmName : "Nom",  
-            clmLastName  : "Nom de famille", 
+            clmTitle : "Titre", 
+            clmName : "Prénom",  
+            clmLastName  : "Nom", 
         },
-        txtMainCustomer : "Client principal",
+        txtMainCustomer : "Fournissseur principal",
         pg_mainCustomer : 
         {
-            title : "Choix du client principal", 
+            title : "Choix du fournisseur principal", 
             clmCode : "Code",   
-            clmTitle : "Adresse",  
-            clmName : "Nom",   
-            clmLastName  : "Nom de famille", 
+            clmTitle : "Titre",  
+            clmName : "Prénom",   
+            clmLastName  : "Nom", 
         },
         txtArea : "Zone", 
         pg_AreaCode : 
@@ -3219,12 +3248,13 @@ export const langFr =
         tabTitleNote : "Les notes", 
         grdNote:
         {
-            clmNote : "Note" 
+            clmNote : "Note",
+            clmName : "Nom", 
         }
     },
     cri_01_002: // "Adres Tanımları"
     {
-        customerPlace: "Veuillez entrer le nom ou le code pour rechercher.", 
+        customerPlace: "Veuillez entrer le nom client ou le code pour rechercher.", 
         txtCode : "Code",
         txtTitle : "Titre",
         txtCustomerName : "Nom",
@@ -3234,8 +3264,8 @@ export const langFr =
             title : "Sélectionner Client",
             clmCode : "Code",
             clmTitle : "Titre",
-            clmName : "Nom",
-            clmLastName  : "Nom De Famille",
+            clmName : "Prénom",
+            clmLastName  : "Nom",
         },
         grdAdress : 
         {
@@ -3257,7 +3287,7 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Etes-vous sûr(e) de vouloir Enregistrer!"
+            msg: "Êtes-vous sûr(e) de vouloir Enregistrer!"
         },
         msgSaveResult:
         {
@@ -3270,7 +3300,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessairess !"
+            msg: "Veuillez saisir les champs nécessaires !"
         },
         msgDelete:
         {
@@ -3288,7 +3318,202 @@ export const langFr =
         },
         validation : 
         {
-            frmCustomerAddress: "Vous ne pouvez pas passer le code vide !",
+            frmCustomerAddress: "Le code ne peut être vide !",
+        }
+    },
+    cri_01_003: {
+        txtCode : "Code",
+        chkTaxSucre : "Taxe sucrée",
+        chkRebate :"Retour-Reprise",
+        chkActive: "Produit Actif",
+        expDay : "(Jour)", 
+        txtGsmPhone : "Port Tel.",
+        txtCustomerLastname : "Nom De Famille",
+        txtOtherPhone : "Autre Tel.",
+        txtEmail : "E-Mail",
+        txtWeb : "Web",
+        tabTitleAdress : "Adresse",
+        tabTitleLegal : "Légal",
+        tabTitleOffical : "Administrateur",
+        txtPhone1 : "Téléphone 1",
+        txtPhone2 : "Téléphone 2",
+        txtName :"Nom",
+        txtSubCustomer : "Fournisseur filiale", 
+        txtMainCustomer : "Fournissseur principal",
+        txtArea : "Zone", 
+        cmbType :"Type",
+        cmbGenus :"Genre",
+        validCode :"Vous devez saisir un code !",
+        tabTitleAdress : "Adresse",
+        tabTitleLegal : "Légal",
+        tabTitleOffical : "Administrateur",
+        tabCustomerBank : "Données Bancaires",
+        tabTitleDetail : "Informations détaillées",
+        tabTitleFinanceDetail : "Informations Financières", 
+        txtSector : "Secteur",
+        txtExpiryDay : "Echéance",  
+        txtRiskLimit : "Limite de Risque",  
+        tabTitleNote : "Les notes", 
+        grdNote:
+        {
+            clmNote : "Note",
+            clmName : "Nom", 
+        },
+        cmbTypeData : 
+        {
+            individual :  "Particulier",
+            company :  "Entreprise",
+            association : "Association"
+        },
+        validation:  
+        {
+            frmCustomers: "Le Code ne peut être Vide !",
+        },
+        cmbGenusData:
+        {
+            allGenus : "Tout",
+            Customer : "Client",
+            supplier : "Fournisseur",
+            both : "Tous les Deux",
+            branch : "Magasin" 
+        },
+        pg_txtCode : 
+        {
+            title : "Choix de la zone",
+            clmCode : "Code",
+            clmName : "Nom",
+            clmType : "Type",
+        },
+        pg_txtCode : 
+        {
+            title : "Choix de la zone",
+            clmCode : "Code",
+            clmName : "Nom",
+            clmType : "Type",
+        },
+        grdBank : 
+        {
+            clmName : "Nom Banque",
+            clmIban : "IBAN",
+            clmOffice : "Centre",
+            clmSwift : "Code Swift",
+        },
+        grdLegal :   
+        {
+            clmSiretID : "Siret No",
+            clmApeCode : "Code Ape",
+            clmTaxOffice : "Impôt",
+            clmTaxNo : "Numéro Impôt",
+            clmIntVatNo : "No TVA inter.",
+            clmTaxType : "Type de Taxe",
+            clmSirenID : "Siren No",
+            clmRcs : "RCS",
+            clmCapital : "Capital",
+            clmInsurance : "Assurance No" 
+        },
+        popNote : 
+        {
+            title : "Ajouter une note", 
+        },
+        msgSave:
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            btn02: "Abandonner",
+            msg: "Êtes-vous sûr(e) de vouloir enregistrer?"
+        },
+        msgSaveResult:
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            msgSuccess: "Enregistré avec succès!",
+            msgFailed: "Echec de l'enregistrement !"
+        },
+        msgSaveValid:
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            msg: "Veuillez remplir les champs requis !"
+        },
+        msgDelete:
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            btn02: "Abandonner",
+            msg: "Êtes-vous sûr(e) de vouloir supprimer?"
+        },
+        msgCode : 
+        {
+            title: "Attention",
+            btn01: "Aller à la caisse",
+            btn02: "OK",
+            msg : "Le numéro de caisse saisie est enregistré dans le système!"
+        },
+        customerPlace: "Veuillez entrer le nom client ou le code pour rechercher.", 
+        txtCode : "Code",
+        txtTitle : "Titre",
+        txtCustomerName : "Nom",
+        tabTitleAdress : "Adresse",
+        pg_txtCode : 
+        {
+            title : "Sélectionner Client",
+            clmCode : "Code",
+            clmTitle : "Titre",
+            clmName : "Prénom",
+            clmLastName  : "Nom",
+        },
+        grdAdress : 
+        {
+            clmAdress : "Adresse",
+            clmZipcode : "Code Postal",
+            clmCity :"Ville",
+            clmCountry : "Pays",
+        },
+        popAdress : 
+        {
+            title : "Adresse",
+            txtPopAdress : "Adresse",
+            cmbPopZipcode :"Code Postal",
+            cmbPopCity :"Ville",
+            cmbPopCountry :"Pays",
+        },
+        msgSave:
+        {
+            title: "Attention",
+            btn01: "OK",
+            btn02: "Abandonner",
+            msg: "Êtes-vous sûr(e) de vouloir Enregistrer!"
+        },
+        msgSaveResult:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msgSuccess: "Enregistré avec succès !",
+            msgFailed: "Enregistrement échoué !"
+        },
+        msgSaveValid:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Veuillez saisir les champs nécessaires !"
+        },
+        msgDelete:
+        {
+            title: "Attention",
+            btn01: "OK",
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
+        },
+        msgCode : 
+        {
+            title: "Attention",
+            btn01: "Recherche Client",
+            btn02: "OK",
+            msg : "Client déja existant !"
+        },
+        validation : 
+        {
+            frmCustomerAddress: "Le code ne peut être vide !",
         }
     },
     cri_01_004 : // "Identifications des zones"    
@@ -3309,34 +3534,34 @@ export const langFr =
             title: "Attention",
             btn01: "D'accord",
             btn02: "Abandonner",
-            msg: "ETes-vous sûr de vouloir enregistrer?"
+            msg: "Êtes-vous sûr(e) de vouloir enregistrer?"
         },
         msgSaveResult:
         {
             title: "Attention",
             btn01: "D'accord",
-            msgSuccess: "Succès de l'enregistrement!",
+            msgSuccess: "Enregistré avec succès!",
             msgFailed: "Echec de l'enregistrement !"
         },
         msgSaveValid:
         {
             title: "Attention",
             btn01: "D'accord",
-            msg: "S'il vous plaît saissisez les parties demandées !"
+            msg: "Veuillez remplir les champs requis !"
         },
         msgDelete:
         {
             title: "Attention",
             btn01: "D'accord",
             btn02: "Abandonner",
-            msg: "Etes-vous sûr de vouloir supprimer?"
+            msg: "Êtes-vous sûr(e) de vouloir supprimer?"
         },
         msgCode : 
         {
             title: "Attention",
             btn01: "Aller à la caisse",
-            btn02: "D'accord",
-            msg : "La caisse que vous avez saisie est enregistrée dans le système!"
+            btn02: "OK",
+            msg : "Le numéro de caisse saisie est enregistré dans le système!"
         },
     },
     cri_01_005 : // "Identifications des secteurs"    
@@ -3344,10 +3569,10 @@ export const langFr =
         txtCode : "Code",
         txtName :"Nom",
         cmbType :"Type",
-        validCode :"Vous devez saisir un code !",
+        validCode :"Veuillez saisir un code !",
         pg_txtCode : 
         {
-            title : "CHoix de la zone",
+            title : "Choix de la zone",
             clmCode : "Code",
             clmName : "Nom",
             clmType : "Type",
@@ -3357,46 +3582,46 @@ export const langFr =
             title: "Attention",
             btn01: "D'accord",
             btn02: "Abandonner",
-            msg: "Etes-vous sûr de vouloir enregistrer? "
+            msg: "Êtes-vous sûr(e) de vouloir enregistrer? "
         },
         msgSaveResult:
         {
             title: "Attention",
             btn01: "D'accord",
-            msgSuccess: "Succès de l'enregistrement!",
+            msgSuccess: "Enregistrer avec succès!",
             msgFailed: "Echec de l'enregistrement !"
         },
         msgSaveValid:
         {
             title: "Attention",
             btn01: "D'accord",
-            msg: "S'il vous plaît saissisez les parties demandées!"
+            msg: "Veuillez remplir les champs nécessaires!"
         },
         msgDelete:
         {
             title: "Attention",
             btn01: "D'accord",
             btn02: "Abandonner",
-            msg: "Etes-vous sûr de vouloir supprimer?"
+            msg: "Êtes-vous sûr(e) de vouloir supprimer?"
         },
         msgCode : 
         {
             title: "Attention",
             btn01: "Aller à la caisse",
             btn02: "D'accord",
-            msg : "La caisse que vous avez saisie est enregistrée dans le système!"
+            msg : "Le numéro de caisse saisie est enregistré dans le système!"
         },
     },
     cri_02_001: // "Cari Listesi"
     {
         customerPlace: "Veuillez entrer le nom ou le code actuel pour rechercher.", 
-        txtCustomerName : "Nom fournisseur",
+        txtCustomerName : "Nom fournisseur-client",
         cmbGenus :"Genre",
-        menu: "Fournisseur saisie",
+        menu: "Fournisseur-Client saisie",
         btnGet : "Rechercher",
         grdListe : 
         {
-            clmCode: "Sélection Document",
+            clmCode: "Code",
             clmTitle : "Titre",
             clmType : "Type",
             clmGenus : "Genre",
@@ -3463,16 +3688,16 @@ export const langFr =
         tabTitleAdress : "Adresse",
         tabTitleLegal : "Légal",
         tabTitleOffical : "Administrateur",
-        tabCustomerBank : "Données Bancaire",
+        tabCustomerBank : "Données Bancaires",
         txtLegal :"Données Légales",
-        chkRebate :"Retour Reprise",
+        chkRebate :"Retour-Reprise",
         pg_txtCode : 
         {
             title : "Sélectionner Client",
             clmCode : "Code",
             clmTitle : "Titre",
-            clmName : "Nom",
-            clmLastName  : "Nom De Famille",
+            clmName : "Prénom",
+            clmLastName  : "Nom",
         },
         grdAdress : 
         {
@@ -3542,7 +3767,7 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Etes-vous sûr(e) de vouloir Enregistrer!"
+            msg: "Êtes-vous sûr(e) de vouloir Enregistrer!"
         },
         msgSaveResult:
         {
@@ -3555,7 +3780,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les zones nécessairess !"
+            msg: "Veuillez saisir les zones nécessaires !"
         },
         msgLegalNotValid:
         {
@@ -3574,7 +3799,7 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
+            msg: "Êtes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
         },
         cmbTypeData : 
         {
@@ -3613,7 +3838,7 @@ export const langFr =
     },
     cri_04_001 : // "Cari Extre Raporu"
     {
-        txtCustomerCode : "Actuel", 
+        txtCustomerCode : "Client/Fournisseur", 
         btnGet :"Apporter", 
         grdListe : 
         {
@@ -3623,47 +3848,47 @@ export const langFr =
             clmRefNo : "Ordre du document",   
             clmDebit : "Dette",   
             clmReceive : "Avoir",   
-            clmBalance : "Equilibre",   
+            clmBalance : "Solde",   
         },
-        txtTotalBalance : "Equillibre", 
+        txtTotalBalance :"Solde", 
         pg_txtCustomerCode : 
         {
-            title : "Choix Fournisseur",
-            clmCode :  "Code Client",
-            clmTitle : "Nom Fournisseur",
+            title : "Choix Client/Fournisseur",
+            clmCode :  "Code Client/Fournisseur",
+            clmTitle : "Nom Client/Fournisseur",
             clmTypeName : "Type",
             clmGenusName : "Genre",
-            clmBalance : "Equilibre",  
+            clmBalance : "Solde",  
         },
         msgNotCustomer:
         {
             title: "Attention", 
-            btn01: "D'accord", 
-            msg: "S'il vous plait choissisez actuel" 
+            btn01: "OK", 
+            msg:  "veuillez choisir le Client/Fournisseur"
         },
     },
-    cri_04_002 : // "Rapport actuel d'équilibre"
+    cri_04_002 : // "Rapport Client/Fournisseur d'équilibre"
     {
-        chkZeroBalance : "0 Afficher l'équilibre", 
-        txtCustomerCode : "Actuel",   
+        chkZeroBalance : "Afficher les soldes à 0", 
+        txtCustomerCode : "Client/Fournisseur",   
         btnCheck : "Actif",   
         btnGet :"Rechercher",
         grdListe : 
         {
             clmCode: "Code", 
             clmName : "Nom",           
-            clmBalance : "Equilibre", 
+            clmBalance : "Solde", 
             clmUpdate : "Date de mise à jour", 
         },
         txtTotalBalance : "Montant total",
         pg_txtCustomerCode : 
         {
-            title : "Choix Fournisseur",
-            clmCode :  "Code Client",
-            clmTitle : "Nom Fournisseur",
+            title : "Client/Fournisseur",
+            clmCode :  "Code Client/Fournisseur",
+            clmTitle : "Nom Client/Fournisseur",
             clmTypeName : "Type",
             clmGenusName : "Genre",
-            clmBalance : "Equilibre",  
+            clmBalance : "Solde",  
         },
     },
     cri_04_003 : // "Müşteri Puanı Raporu"
@@ -3698,8 +3923,8 @@ export const langFr =
             clmDate : "Date",
             clmPoint : "Point",
             clmPointType : "Type",
-            clmDescription :"Motif",
             clmPosId :"Numéro de ticket",
+            clmDescription :"Motif",
         },
         grdSaleTicketItems :
         {
@@ -3724,7 +3949,7 @@ export const langFr =
             title : "Règlement"
         },
         trDeatil: "T.R Détail", 
-        lineDelete :"Ligne annulé", 
+        lineDelete :"Ligne annulée", 
         cancel : "Abandonner", 
         btnAddpoint : "Entrée et Sortie Point",     
         popPointEntry :     
@@ -3918,6 +4143,7 @@ export const langFr =
             clmRefNo: "Ligne",
             clmPrice: "Prix",
             clmOutputCode : "Code client",
+            clmInputCode  : "Code Client",
             clmOutputName : "Nom du client",
             clmInputName : "Dépôt",
             clmDate: "Date",
@@ -3974,6 +4200,7 @@ export const langFr =
         dtShipDate :"Date Expédition",
         getDispatch : "Recherche BL",
         getPayment : "Paiement",
+        validDesign : "Veuillez sélectionner le design.", 
         cash : "Total" ,
         description :"Motif",
         checkReference : "Référence",
@@ -4013,6 +4240,8 @@ export const langFr =
         txtTotalHt : "Total HT",
         txtDocNo : "Numéro de document", 
         cmbOrigin : "Origine",
+        txtTransport : "Type de Transport", 
+        tabTitleDetail : "Informations complémentaires", 
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -4049,6 +4278,8 @@ export const langFr =
             clmPrice : "Prix ",
             clmTotal : "Total" ,
             clmDate : "Date",
+            clmDate : "Numéro de Document",
+            
         },
         grdPurcInv: 
         {
@@ -4064,6 +4295,7 @@ export const langFr =
             clmTotal : "Total Général",
             clmTotalHt : "Total HT",
             clmDispatch : "No Bon de Livraison",
+            clmDateDispatch : "Date",
             clmCreateDate: "Date d'Enregistrement",
             clmMargin :"Marge",
             clmDiffPrice : "Différence",
@@ -4347,7 +4579,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépôt",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
         msgNewPrice :      
@@ -4437,7 +4669,8 @@ export const langFr =
             clmQuantity : "Quantité",  
             clmTotal : "Total",  
             clmPrice : "Prix",  
-            clmlineNo : "No"
+            clmlineNo : "No",
+            clmDate : "Date",
         },
         cmbPayType : {
             title : "Mode de paiement",   
@@ -4543,7 +4776,8 @@ export const langFr =
         txtCustomerName : "Nom Client",
         dtDocDate : "Date",
         txtAmount : "Total" ,
-        txtDiscount : "Remise sur les lignes",    
+        txtDiscount : "Remise sur les lignes", 
+        LINE_NO: "Numéro de ligne",   
         txtDocDiscount : "Remise sous-total",   
         txtSubTotal : "Sous-total",   
         txtMargin : "Marge",
@@ -4592,6 +4826,30 @@ export const langFr =
         cmbPriceContract : "Accord de prix",
         txtTransport : "Type de transport",
         tabTitleDetail : "Informations détaillées",
+        btnView : "Afficher",
+        btnMailsend : "Envoyer un courriel",
+        validMail : "Veuillez ne pas laisser ce champ vide.",
+        placeMailHtmlEditor : "Vous pouvez entrer une description de votre courrier.",
+        isMsgSave :
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            msg: "Impossible de procéder sans enregistrement du document !"
+        },
+        msgMailSendResult:
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            msgSuccess: "L'envoi du courrier a réussi !",
+            msgFailed: "L'envoi du courrier a échoué !"
+        },
+        popMailSend :
+        {
+            title :"Envoyer un e-mail",
+            txtMailSubject : "Objet du courriel",
+            txtSendMail : "Adresse e-mail",
+            btnSend : "Envoyer"
+        },
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -4627,6 +4885,8 @@ export const langFr =
             clmPrice : "Prix ",
             clmTotal : "Total",
             clmDate : "Date",
+            clmDocNo : "N° de Document",
+
         },
         grdSlsInv: 
         {
@@ -4716,6 +4976,11 @@ export const langFr =
             btn01: "OK",
             btn02: "Abandonner",
             msg: "Etes-vous sûr(e) de vouloir Enregistrer!"
+        },
+        isMsgSave: {  
+            title: "Attention",
+            btn01: "D'accord",
+            msg: "L'opération ne peut pas être effectuée sans enregistrement du document !"
         },
         msgSaveResult:
         {
@@ -4909,7 +5174,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
         msgNotQuantity: 
@@ -4941,7 +5206,8 @@ export const langFr =
             clmQuantity : "Quantité",  
             clmTotal : "Total",  
             clmPrice : "Prix",  
-            clmlineNo : "No"
+            clmlineNo : "No",
+            clmDate : "Date"
         },
         cmbPayType : {
             title : "Mode de paiement",   
@@ -5171,6 +5437,8 @@ export const langFr =
             clmPrice : "Prix ",
             clmTotal : "Total",
             clmDate : "Date",
+            clmDocNo : "N° de Document",
+        
         },
         grdRebtInv: 
         {
@@ -5390,7 +5658,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         pg_txtBarcode : 
         {
@@ -5617,7 +5885,13 @@ export const langFr =
         validMail : "Veuillez ne pas laisser le champs vide.",  
         txtTotalHt : "Total HT",
         txtDocNo : "Numéro de document", 
-        pg_Docs : 
+        isMsgSave :
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Impossible d'effectuer l'action sans enregistrement du document !"
+        },
+            pg_Docs : 
         {
             title : "Sélection Document",
             clmDate : "Date",
@@ -5640,6 +5914,7 @@ export const langFr =
             title : "Sélectionner Produit",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
+            clmPrice : "Prix",
         },
         pg_contractGrid : 
         {
@@ -5858,7 +6133,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         pg_txtBarcode : 
         {
@@ -6044,6 +6319,7 @@ export const langFr =
         cmbCheckSafe : "Caisse Chèque",
         cmbBank : "Sélection Banque",
         txtPayInvoıceTotal : "Total Facture",
+        LINE_NO: "Numéro de ligne",
         txtPayTotal : "Total Encaissement",
         txtRemainder : "Reste",
         txtBarcode: "Code barre",
@@ -6089,6 +6365,7 @@ export const langFr =
             title : "Sélectionner Produit",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
+            clmPrice: "Prix",
         },
         pg_dispatchGrid : 
         {
@@ -6100,6 +6377,8 @@ export const langFr =
             clmPrice : "Prix ",
             clmTotal : "Total",
             clmDate : "Date",
+            clmDocNo : "N° de Document",
+
         },
         grdSlsInv: 
         {
@@ -6195,6 +6474,23 @@ export const langFr =
             btn01: "OK",
             msg: "Veuillez saisir les zones nécessaires !"
         },
+        isMsgSave: {  
+            title: "Attention",
+            btn01: "D'accord",
+            msg: "L'opération ne peut pas être effectuée sans enregistrement du document !"
+        },
+        msgMailSendResult: {
+            title: "Attention",
+            btn01: "D'accord",
+            msgSuccess: "L'envoi de l'e-mail a réussi !",
+            msgFailed: "L'envoi de l'e-mail a échoué !"
+        },
+        popMailSend: {
+            title: "Envoyer un e-mail",
+            txtMailSubject: "Objet de l'e-mail",
+            txtSendMail: "Adresse e-mail",
+            btnSend: "Envoyer"
+        },        
         msgDelete:
         {
             title: "Attention",
@@ -6356,7 +6652,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
         msgNotQuantity: 
@@ -6547,7 +6843,14 @@ export const langFr =
         txtExpFee : "Pénalités de Retard", 
         dtExpDate : "Date d'Echéance", 
         txtTotalHt : "Total HT",
+        LINE_NO: "Numéro de ligne",
         txtDocNo : "Numéro de document", 
+        btnView : "Afficher",
+        btnMailsend : "Envoyer un e-mail",
+        validDesign : "Veuillez sélectionner un design.",
+        validMail : "Veuillez ne pas laisser vide.",
+        placeMailHtmlEditor : "Vous pouvez entrer une description pour votre e-mail.",
+        
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -6571,7 +6874,8 @@ export const langFr =
             title : "Sélectionner Produit",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
-            clmPrice : "Prix de Vente" 
+            clmPrice : "Prix de Vente" ,
+            clmMulticode : "FRN.Code",
         },
         pg_contractGrid : 
         {
@@ -6654,6 +6958,18 @@ export const langFr =
             btn01: "OK",
             btn02: "Abandonner",
             msg: "Etes-vous sûr(e) de vouloir Enregistrer!"
+        },
+        msgMailSendResult:
+        {
+            title: "Attention",   
+            btn01: "OK",   
+            msgSuccess: "Mail envoyé avec succès !", 
+            msgFailed: "Echec d'envoi de Mail !" 
+        },
+        isMsgSave: {
+            title: "Attention",
+            btn01: "D'accord",
+            msg: "L'opération ne peut pas être effectuée sans enregistrement du document !"
         },
         msgSaveResult:
         {
@@ -6790,7 +7106,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         pg_txtBarcode : 
         {
@@ -6915,12 +7231,17 @@ export const langFr =
             msg: "Produits Présents dans la Liste! "
         },
         tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
-        msgCustomerLock: 
-        {
-            title: "Dikkat", //BAK
-            btn01: "Tamam", //BAK
-            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+        msgCustomerLock: {
+            title: "Attention",
+            btn01: "D'accord",
+            msg: "Le client ne peut pas être modifié après l'ajout du produit !"
         },
+        popMailSend: {
+            title: "Envoyer un e-mail",
+            txtMailSubject: "Objet de l'e-mail",
+            txtSendMail: "Adresse e-mail",
+            btnSend: "Envoyer"
+        }     
     },
     ftr_02_007 : // "İade Alış Faturası"
     {
@@ -6947,6 +7268,7 @@ export const langFr =
         btnBank : "Virement",
         cmbCashSafe : "Caisse Espèce",
         cmbCheckSafe : "Caisse Chèque",
+        LINE_NO: "Numéro de ligne",
         cmbBank : "Sélection Banque",
         txtPayInvoıceTotal : "Totale Facture",
         txtPayTotal : "Total Encaissement",
@@ -6968,8 +7290,11 @@ export const langFr =
         getProforma : "Rechercher Proforma ", 
         txtTotalHt : "Total HT",
         txtDocNo : "Numéro de document", 
-        btnView : "Aperçu", 
-        btnMailsend : "Envoyer Mail", 
+        btnView : "Afficher",
+        btnMailsend : "Envoyer un e-mail",
+        validDesign : "Veuillez sélectionner un design.",
+        validMail : "Veuillez ne pas laisser vide.",
+        placeMailHtmlEditor : "Vous pouvez entrer une description pour votre e-mail.",        
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -6993,6 +7318,7 @@ export const langFr =
             title : "Sélectionner Produit",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
+            clmMulticode : "FRN.Code",
             clmPrice : "Prix de Vente" 
         },
         pg_dispatchGrid : 
@@ -7005,6 +7331,7 @@ export const langFr =
             clmPrice : "Prix ",
             clmTotal : "Total" ,
             clmDate : "Date",
+            clmDocNo : "N° de Document",
         },
         grdRebtInv: 
         {
@@ -7019,6 +7346,7 @@ export const langFr =
             clmTotal : "Total Général",
             clmTotalHt : "Total HT",
             clmDispatch : "No Bon de Livraison",
+            clmDateDispatch : "Date",
             clmCreateDate: "Date d'Enregistrement",
             clmMargin :"Marge",
             clmDescription :"Motif",
@@ -7096,6 +7424,23 @@ export const langFr =
             msgSuccess: "Enregistré avec succès !",
             msgFailed: "Enregistrement échoué !"
         },
+        isMsgSave: {  
+            title: "Attention",
+            btn01: "D'accord",
+            msg: "L'opération ne peut pas être effectuée sans enregistrement du document !"
+        },
+        msgMailSendResult: {
+            title: "Attention",
+            btn01: "D'accord",
+            msgSuccess: "L'envoi de l'e-mail a réussi !",
+            msgFailed: "L'envoi de l'e-mail a échoué !"
+        },
+        popMailSend: {
+            title: "Envoyer un e-mail",
+            txtMailSubject: "Objet de l'e-mail",
+            txtSendMail: "Adresse e-mail",
+            btnSend: "Envoyer"
+        },        
         msgSaveValid:
         {
             title: "Attention",
@@ -7224,7 +7569,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         pg_txtBarcode : 
         {
@@ -7437,7 +7782,28 @@ export const langFr =
         validDesign : "Veuillez sélectionner le design.",  
         validMail : "Veuillez ne pas laisser le champs vide.",  
         txtTotalHt : "Total HT",
-        txtDocNo : "Numéro de document", 
+        txtDocNo : "Numéro de document",
+        LINE_NO: "Numéro de ligne",
+        isMsgSave :
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Impossible d'effectuer l'action sans enregistrement du document !"
+        },
+        msgMailSendResult:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msgSuccess: "Envoi de l'e-mail réussi !",
+            msgFailed: "Échec de l'envoi de l'e-mail !"
+        },
+        popMailSend :
+        {
+            title :"Envoyer un e-mail",
+            txtMailSubject : "Sujet de l'e-mail",
+            txtSendMail : "Adresse e-mail",
+            btnSend : "Envoyer"
+        },
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -7461,6 +7827,8 @@ export const langFr =
             title : "Sélectionner Produit",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
+            clmPrice : "Prix",
+            clmMulticode :"FRN.Code",
         },
         pg_dispatchGrid : 
         {
@@ -7728,7 +8096,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
         msgNotQuantity: 
@@ -7883,6 +8251,7 @@ export const langFr =
         dtShipDate :"Date Expédition",
         getPayment : "Encaissement",
         getDispatch : "Recherche BL",
+        LINE_NO: "Numéro de ligne",
         cash : "Total" ,
         description :"Motif",
         checkReference : "Référence",
@@ -7910,10 +8279,34 @@ export const langFr =
         txtExpFee : "Pénalités de Retard", 
         dtExpDate : "Date d'Echéance", 
         getProforma : "Rechercher Proforma ", 
+        validDesign : "Veuillez sélectionner le design.",  
+        validMail : "Veuillez ne pas laisser le champs vide.",  
+        LINE_NO: "Numéro de ligne", 
         txtTotalHt : "Total HT",
         txtDocNo : "Numéro de document", 
-        btnView : "Aperçu", 
-        btnMailsend : "Envoyer Mail", 
+        btnView : "Afficher",
+        btnMailsend : "Envoyer un courriel",
+        placeMailHtmlEditor : "Vous pouvez entrer une description de votre courrier.",
+        isMsgSave :
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            msg: "Impossible de procéder sans enregistrement du document !"
+        },
+        msgMailSendResult:
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            msgSuccess: "L'envoi du courrier a réussi !",
+            msgFailed: "L'envoi du courrier a échoué !"
+        },
+        popMailSend :
+        {
+            title :"Envoyer un e-mail",
+            txtMailSubject : "Objet du courriel",
+            txtSendMail : "Adresse e-mail",
+            btnSend : "Envoyer"
+        },
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -7936,7 +8329,9 @@ export const langFr =
         {
             title : "Sélectionner Produit",
             clmCode :  "Référence Produit",
+            clmMulticode : "FRN.Code",
             clmName : "Nom Produit",
+            clmMulticode : "FRN.Code",
             clmPrice : "Prix de Vente" 
         },
         pg_dispatchGrid : 
@@ -7963,6 +8358,7 @@ export const langFr =
             clmTotal : "Total Général",
             clmTotalHt : "Total HT",
             clmDispatch : "No Bon de Livraison",
+            clmDateDispatch : "Date",
             clmCreateDate: "Date d'Enregistrement",
             clmMargin :"Marge",
             clmDescription :"Motif",
@@ -8168,7 +8564,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         pg_txtBarcode : 
         {
@@ -8374,6 +8770,30 @@ export const langFr =
         txtTotalHt : "Total HT",
         validDesign : "Veuillez choisir le design de l'étiquette",
         txtDocNo : "Numéro de document", 
+        btnView : "Afficher",
+        btnMailsend : "Envoyer un courriel",
+        validMail : "Veuillez ne pas laisser ce champ vide.",
+        placeMailHtmlEditor : "Vous pouvez entrer une description de votre courrier.",
+        isMsgSave :
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            msg: "Impossible de procéder sans enregistrement du document !"
+        },
+        msgMailSendResult:
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            msgSuccess: "L'envoi du courrier a réussi !",
+            msgFailed: "L'envoi du courrier a échoué !"
+        },
+        popMailSend :
+        {
+            title :"Envoyer un e-mail",
+            txtMailSubject : "Objet du courriel",
+            txtSendMail : "Adresse e-mail",
+            btnSend : "Envoyer"
+        },
         msgDiscount:
         {
             title: "Attention",  
@@ -8734,6 +9154,20 @@ export const langFr =
         getOffers : "Teklif Getir",  
         txtTotalHt : "Total HT",
         txtDocNo : "Numéro de document", 
+        LINE_NO: "Numéro de ligne",
+        txtDocNo : "Numéro de document", 
+        btnView : "Afficher",
+        btnMailsend : "Envoyer un e-mail",
+        validDesign : "Veuillez sélectionner un design.",
+        validMail : "Veuillez ne pas laisser vide.",
+        placeMailHtmlEditor : "Vous pouvez entrer une description pour votre e-mail.",
+        popMailSend: 
+        {
+            title: "Envoyer un e-mail",
+            txtMailSubject: "Objet de l'e-mail",
+            txtSendMail: "Adresse e-mail",
+            btnSend: "Envoyer"
+        },
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -8757,6 +9191,8 @@ export const langFr =
             title : "Sélectionner Produit",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
+            clmMulticode : "FRN.Code",
+            clmPrice : "Prix",
         },
         pg_dispatchGrid : 
         {
@@ -9024,7 +9460,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
         msgNotQuantity: 
@@ -9176,6 +9612,31 @@ export const langFr =
         getOffers : "Recherche Proposition", 
         txtTotalHt : "Total HT",
         txtDocNo : "Numéro de document",
+        validDesign : "Veuillez sélectionner une conception.",
+        btnView : "Afficher",
+        btnMailsend : "Envoyer un e-mail",
+        validMail : "Veuillez ne pas laisser ce champ vide.",
+        placeMailHtmlEditor : "Vous pouvez entrer une description pour votre e-mail.",
+        isMsgSave :
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Impossible d'effectuer l'action sans enregistrement du document !"
+        },
+        msgMailSendResult:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msgSuccess: "Envoi de l'e-mail réussi !",
+            msgFailed: "Échec de l'envoi de l'e-mail !"
+        },
+        popMailSend :
+        {
+            title :"Envoyer un e-mail",
+            txtMailSubject : "Sujet de l'e-mail",
+            txtSendMail : "Adresse e-mail",
+            btnSend : "Envoyer"
+        },
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -9504,7 +9965,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépôt",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
         msgNewPrice :      
@@ -9688,6 +10149,31 @@ export const langFr =
         dtExpDate : "Date d'Echéance", 
         txtTotalHt : "Total HT",
         txtDocNo : "Numéro de document", 
+        validDesign : "Veuillez sélectionner un design.",
+        btnView : "Afficher",
+        btnMailsend : "Envoyer un courriel",
+        validMail : "Veuillez ne pas laisser ce champ vide.",
+        placeMailHtmlEditor : "Vous pouvez entrer une description de votre courrier.",
+        isMsgSave :
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            msg: "Impossible de procéder sans enregistrement du document !"
+        },
+        msgMailSendResult:
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            msgSuccess: "L'envoi du courrier a réussi !",
+            msgFailed: "L'envoi du courrier a échoué !"
+        },
+        popMailSend :
+        {
+            title :"Envoyer un e-mail",
+            txtMailSubject : "Objet du courriel",
+            txtSendMail : "Adresse e-mail",
+            btnSend : "Envoyer"
+        },
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -9737,6 +10223,7 @@ export const langFr =
             clmTotal : "Total Général",
             clmTotalHt : "Total HT",
             clmDispatch : "No Bon de Livraison",
+            clmDateDispatch : "Date",
             clmCreateDate: "Date d'Enregistrement",
             clmMargin :"Marge",
             clmDescription :"Motif",
@@ -9942,7 +10429,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         pg_txtBarcode : 
         {
@@ -10058,6 +10545,30 @@ export const langFr =
         dtExpDate : "Date d'Echéance", 
         txtTotalHt : "Total HT",
         txtDocNo : "Numéro de document", 
+        btnView : "Afficher",
+        btnMailsend : "Envoyer un courriel",
+        validMail : "Veuillez ne pas laisser ce champ vide.",
+        placeMailHtmlEditor : "Vous pouvez entrer une description de votre courrier.",
+        isMsgSave :
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            msg: "Impossible de procéder sans enregistrement du document !"
+        },
+        msgMailSendResult:
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            msgSuccess: "L'envoi du courrier a réussi !",
+            msgFailed: "L'envoi du courrier a échoué !"
+        },
+        popMailSend :
+        {
+            title :"Envoyer un e-mail",
+            txtMailSubject : "Objet du courriel",
+            txtSendMail : "Adresse e-mail",
+            btnSend : "Envoyer"
+        },
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -10348,7 +10859,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
         msgNotQuantity: 
@@ -10781,6 +11292,7 @@ export const langFr =
         txtDocDiscount : "Remise sous-total",
         txtSubTotal : "Sous-total", 
         txtMargin : "Marge",
+        txtDocNo : "Numéro de document", 
         txtVat : "TVA",
         txtTotal : "Total Général",
         dtShipDate :"Date Expédition",
@@ -10858,6 +11370,12 @@ export const langFr =
             Price2 : "2. Remise",
             Percent3 : "3. Remise %",
             Price3 : "3. Remise"
+        },
+        isMsgSave :
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            msg: "Impossible de procéder sans enregistrement du document !"
         },
         popDocDiscount : 
         {
@@ -11054,7 +11572,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
         pg_txtBarcode : 
@@ -11219,6 +11737,30 @@ export const langFr =
         txtDocNo : "Numéro de document", 
         extraCost : "Supplément", 
         cmbPriceContract : "Accord de prix",
+        btnView : "Afficher",
+        btnMailsend : "Envoyer un courriel",
+        validMail : "Veuillez ne pas laisser ce champ vide.",
+        placeMailHtmlEditor : "Vous pouvez entrer une description de votre courrier.",
+        isMsgSave :
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            msg: "Impossible de procéder sans enregistrement du document !"
+        },
+        msgMailSendResult:
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            msgSuccess: "L'envoi du courrier a réussi !",
+            msgFailed: "L'envoi du courrier a échoué !"
+        },
+        popMailSend :
+        {
+            title :"Envoyer un e-mail",
+            txtMailSubject : "Objet du courriel",
+            txtSendMail : "Adresse e-mail",
+            btnSend : "Envoyer"
+        },
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -11483,7 +12025,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
         msgNotQuantity: 
@@ -11613,6 +12155,7 @@ export const langFr =
         txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
         txtCustomerCode : "Sélection Document",
+        txtDocNo : "Numéro de document", 
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
         txtAmount : "Total" ,
@@ -11636,6 +12179,12 @@ export const langFr =
         validDesign : "Veuillez sélectionner le design.",  
         validMail : "Veuillez ne pas laisser le champs vide.",
         txtTotalHt : "Total HT",
+        isMsgSave :
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            msg: "Impossible de procéder sans enregistrement du document !"
+        },
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -11667,6 +12216,18 @@ export const langFr =
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
             clmQuantity :"Quantité "
+        },
+        pg_dispatchGrid :
+        {
+            title : "Sélection du Bon de Livraison",
+            clmReferans : "Série - Numéro",
+            clmCode : "Code",
+            clmName : "Nom",
+            clmQuantity : "Quantité",
+            clmPrice : "Prix",
+            clmTotal : "Montant",
+            clmDate : "Date",
+            clmDocNo : "Numéro de Document"
         },
         grdRebtDispatch: 
         {
@@ -11858,7 +12419,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         msgQuantity:
         {
@@ -11980,7 +12541,32 @@ export const langFr =
         validDesign : "Veuillez sélectionner le design.",  
         validMail : "Veuillez ne pas laisser le champs vide.",  
         txtTotalHt : "Total HT",
+        LINE_NO: "Numéro de ligne",
         txtDocNo : "Numéro de document", 
+        btnView : "Afficher",
+        btnMailsend : "Envoyer un courriel",
+        validMail : "Veuillez ne pas laisser ce champ vide.",
+        placeMailHtmlEditor : "Vous pouvez entrer une description de votre courrier.",
+        isMsgSave :
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            msg: "Impossible de procéder sans enregistrement du document !"
+        },
+        msgMailSendResult:
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            msgSuccess: "L'envoi du courrier a réussi !",
+            msgFailed: "L'envoi du courrier a échoué !"
+        },
+        popMailSend :
+        {
+            title :"Envoyer un e-mail",
+            txtMailSubject : "Objet du courriel",
+            txtSendMail : "Adresse e-mail",
+            btnSend : "Envoyer"
+        },
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -12004,6 +12590,7 @@ export const langFr =
             title : "Sélectionner Produit",
             clmCode :  "Référence Produit",
             clmName : "Nom Produit",
+            clmPrice : "Prix",
         },
         grdSlsDispatch: 
         {
@@ -12235,7 +12822,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépôt",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
         msgNotQuantity: 
@@ -12349,9 +12936,12 @@ export const langFr =
     {
         getRebate : "Cherche dépôt retour",
         txtRefRefno : "Réf.-Réf no:",
+        validDesign : "Veuillez sélectionner le design.",  
         cmbDepot: "Réserve",
         txtCustomerCode : "Sélection Document",
         txtCustomerName : "Nom fournisseur",
+        LINE_NO: "Numéro de ligne",
+        txtDocNo : "Numéro de document", 
         dtDocDate : "Date",
         txtAmount : "Total" ,
         txtDiscount : "Remise sur les lignes",    
@@ -12369,6 +12959,30 @@ export const langFr =
         txtTotalQuantity : "Quantité totale",  
         txtUnitPrice : "Prix unitaire", 
         txtTotalHt : "Total HT",
+        btnView : "Afficher",
+        btnMailsend : "Envoyer un courriel",
+        validMail : "Veuillez ne pas laisser ce champ vide.",
+        placeMailHtmlEditor : "Vous pouvez entrer une description de votre courrier.",
+        isMsgSave :
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            msg: "Impossible de procéder sans enregistrement du document !"
+        },
+        msgMailSendResult:
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            msgSuccess: "L'envoi du courrier a réussi !",
+            msgFailed: "L'envoi du courrier a échoué !"
+        },
+        popMailSend :
+        {
+            title :"Envoyer un e-mail",
+            txtMailSubject : "Objet du courriel",
+            txtSendMail : "Adresse e-mail",
+            btnSend : "Envoyer"
+        },
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -12378,6 +12992,18 @@ export const langFr =
             clmOutputName : "Nom Fournisseur",
             clmOutputCode  : "Code Client",
             clmTotal : "Total TTC"
+        },
+        pg_dispatchGrid : 
+        {
+            title : "Sélectionner Bon De Livraison" ,
+            clmReferans : "Références",
+            clmCode : "Code",
+            clmName : "Nom",
+            clmQuantity : "Quantité",
+            clmPrice : "Prix ",
+            clmTotal : "Total" ,
+            clmDate : "Date",
+            clmDocNo : "N° de Document",
         },
         pg_txtCustomerCode : 
         {
@@ -12592,7 +13218,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         msgQuantity:
         {
@@ -12710,6 +13336,14 @@ export const langFr =
             clmInputName : "Nom Magasin",
             clmInputCode  : "Code Magasin",
             clmTotal : "Total TTC"
+        },
+        pg_txtItemsCode : 
+        {
+            title : "Sélectionner Produit",
+            clmCode :  "Référence Produit",
+            clmName : "Nom Produit",
+            clmPrice : "Prix de Vente",
+            clmBarcode : "Code Barre",
         },
         pg_txtCustomerCode : 
         {
@@ -12955,7 +13589,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépôt",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
         msgNotQuantity: 
@@ -13081,6 +13715,10 @@ export const langFr =
             clmTypeName : "Type",
             clmGenusName : "Genre"
         },
+        menu : 
+        {
+            sip_02_001 : "Commande d'achat",
+        },
         grdPurcOrdList: 
         {
             clmRef: "Référence",
@@ -13156,6 +13794,8 @@ export const langFr =
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
         txtUnitPrice : "Prix unitaire", 
+        txtTotalHt : "Total HT",
+        validDesign : "Veuillez sélectionner le design.",  
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -13415,7 +14055,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
         popUnderPrice :
@@ -13534,6 +14174,7 @@ export const langFr =
         txtTotalHt : "Total HT",
         txtDocNo : "Numéro de document", 
         cmbPriceContract : "Accord de prix",
+        LINE_NO: "Numéro de ligne",
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -13544,6 +14185,12 @@ export const langFr =
             clmInputCode  : "Code Client",
             clmAddress : "Adresse",
             clmTotal : "Total TTC"
+        },
+        isMsgSave :
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            msg: "Impossible de procéder sans enregistrement du document !"
         },
         pg_txtCustomerCode : 
         {
@@ -13790,7 +14437,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
         msgQuantity:
@@ -13928,6 +14575,30 @@ export const langFr =
         txtTotalHt : "Total HT",
         txtDocNo : "Numéro de document", 
         cmbPriceContract : "Accord de prix",
+        btnView : "Afficher",
+        btnMailsend : "Envoyer un courriel",
+        validMail : "Veuillez ne pas laisser ce champ vide.",
+        placeMailHtmlEditor : "Vous pouvez entrer une description de votre courrier.",
+        isMsgSave :
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            msg: "Impossible de procéder sans enregistrement du document !"
+        },
+        msgMailSendResult:
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            msgSuccess: "L'envoi du courrier a réussi !",
+            msgFailed: "L'envoi du courrier a échoué !"
+        },
+        popMailSend :
+        {
+            title :"Envoyer un e-mail",
+            txtMailSubject : "Objet du courriel",
+            txtSendMail : "Adresse e-mail",
+            btnSend : "Envoyer"
+        },
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -14185,7 +14856,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
         msgQuantity:
@@ -14346,7 +15017,27 @@ export const langFr =
     cnt_01_001 : // "Alış Anlaşmaları Listesi"
     {
         txtCustomerCode : "Fournisseur",
+        txtCode : "Code",
         menu : "Accord d'achat",
+        txtName : "Nom",
+        startDate :"Date Début",    
+        btnMailsend : "Envoyer E-Mail",
+        finishDate : "Date Fin",   
+        txtCustomerName : "Nom Client",
+        docDate : "Date", 
+        cmbDepot: "Dépôt",
+        validDocDate : "Vous devez choisir une date",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
+        validDesign : "Veuillez sélectionner le design.", 
+        validDocDate : "Vous devez choisir une date", 
+        placeMailHtmlEditor : "Veuillez saisir votre texte .", 
+        popMailSend : 
+        {
+            title :"Envoyer Mail ",   
+            txtMailSubject : "Objet E-Mail ",   
+            txtSendMail : "Adresse E-Mail ",   
+            btnSend : "Envoyer"   
+        },
         pg_txtCustomerCode : 
         {
             title : "Choix Fournisseur",
@@ -14354,6 +15045,63 @@ export const langFr =
             clmTitle : "Nom Fournisseur",
             clmTypeName : "Type",
             clmGenusName : "Genre"
+        },
+        msgDocValid:    
+        {    
+            title: "Attention",    
+            btn01: "OK",    
+            msg: "Veuillez saisir l'en-tête avant l'achèvement !"    
+        },
+        msgDelete:
+        {
+            title: "Attention",
+            btn01: "OK",
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
+        },
+        msgSaveValid:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Veuillez saisir les zones nécessaires !"
+        },
+        popDesign : 
+        {
+            title: "Choix du Design",
+            design : "Design" ,
+            lang : "Langue Document" 
+        },
+        msgContractValid:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Veuillez choisir d'abord le fournisseur !"
+        },
+        msgSave:
+        {
+            title: "Attention",
+            btn01: "OK",
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de vouloir Enregistrer!"
+        },
+        grdContracts: 
+        {
+            clmItemCode: "Code",
+            clmItemName: "Nom",
+            clmPrice: "Prix TTC",
+            clmQuantity : "Quantité",
+            clmStartDate : "Début ",
+            clmFinishDate : "Fin ",
+            clmCreateDate: "Date d'Enregistrement",
+            clmDepotName : "Réserve",
+            clmMargin :"Marge", 
+            clmVatExtPrice : "Prix HT", 
+            clmGrpName: "Groupe",
+            clmCostPrice : "Coût", 
+            clmMulticode : "FRN. Code" ,
+            clmUnit : "Unité",
+            clmUnitPrice : "Unit Prix HT",
+            clmOrgins : "Origine",
         },
         btnGet : "Rechercher",
         grdPurcContList: 
@@ -14373,15 +15121,94 @@ export const langFr =
     },
     cnt_01_002 : //  "Satış Anlaşmaları Listesi"
     {
-        txtCustomerCode : "Client",
-        menu :  "Accord de Vente",
+        txtCustomerCode : "Fournisseur",
+        txtCode : "Code",
+        menu : "Accord d'achat",
+        startDate :"Date Début",    
+        validDate : "Sélection Date.",
+        txtName : "Nom",
+        validCode :"Code ne peut être vide !",
+        finishDate : "Date Fin",   
+        btnMailsend : "Envoyer E-mail",  
+        txtCustomerName : "Nom Client",
+        docDate : "Date", 
+        cmbDepot: "Dépôt",
+        validDocDate : "Vous devez choisir une date",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
+        validDesign : "Veuillez sélectionner le design.", 
+        placeMailHtmlEditor : "Veuillez saisir votre texte.", 
+        validDocDate : "Vous devez choisir une date", 
         pg_txtCustomerCode : 
         {
-            title : "Choix Client",
+            title : "Choix Fournisseur",
             clmCode :  "Code Client",
-            clmTitle : "Nom Client",
+            clmTitle : "Nom Fournisseur",
             clmTypeName : "Type",
             clmGenusName : "Genre"
+        },
+        popMailSend :
+        {
+            title :"Envoyer un e-mail",
+            txtMailSubject : "Objet du courriel",
+            txtSendMail : "Adresse e-mail",
+            btnSend : "Envoyer"
+        },
+        msgContractValid:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Veuillez choisir d'abord le fournisseur !"
+        },
+        msgSave:
+        {
+            title: "Attention",
+            btn01: "OK",
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de vouloir Enregistrer!"
+        },
+        msgDocValid:    
+        {    
+            title: "Attention",    
+            btn01: "OK",    
+            msg: "Veuillez saisir l'en-tête avant l'achèvement !"    
+        },
+        msgDelete:
+        {
+            title: "Attention",
+            btn01: "OK",
+            btn02: "Abandonner",
+            msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
+        },
+        msgSaveValid:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Veuillez saisir les zones nécessaires !"
+        },
+        popDesign : 
+        {
+            title: "Choix du Design",
+            design : "Design" ,
+            lang : "Langue Document" 
+        },
+        grdContracts: 
+        {
+            clmItemCode: "Code",
+            clmItemName: "Nom",
+            clmPrice: "Prix TTC",
+            clmQuantity : "Quantité",
+            clmStartDate : "Début ",
+            clmFinishDate : "Fin ",
+            clmCreateDate: "Date d'Enregistrement",
+            clmDepotName : "Réserve",
+            clmMargin :"Marge", 
+            clmVatExtPrice : "Prix HT", 
+            clmGrpName : "Groupe",
+            clmCostPrice : "Coût", 
+            clmMulticode : "FRN. Code" ,
+            clmUnit : "Unité",
+            clmUnitPrice : "Unit Prix HT",
+            clmOrgins : "Origine",
         },
         btnGet : "Rechercher",
         grdPurcContList: 
@@ -14389,13 +15216,14 @@ export const langFr =
             clmCreateDate: "Date d'Enregistrement",
             clmCode: "Référence Produit",
             clmName: "Nom Produit",
-            clmCustomerName : "Nom Client",
+            clmCustomerName : "Nom fournisseur",
             clmPrıce : "Prix ",
             clmQuantity: "Quantité",
             clmStartDate : "Début ",
             clmFinishDate :"Fin ",
             clmDepot : "Réserve",
-             clmUser : "Utilisateur"
+            clmUser : "Utilisateur",
+            clmDepotName : "Dépot ou Magasin",
         },
     },
     cnt_02_001 : // "Alış Anlaşması"
@@ -14404,6 +15232,8 @@ export const langFr =
         txtCustomerCode : "Sélection Fournisseur",
         txtCustomerName : "Nom fournisseur",
         btnMailsend : "Envoyer E-Mail",
+        validDesign : "Veuillez séléctionner le design.",  
+        validDocDate : "Vous devez choisir une date",
         pg_Docs : 
         {
             title : "Sélection Documents",
@@ -14502,7 +15332,7 @@ export const langFr =
             dtPopStartDate :"Début ",
             dtPopEndDate : "Fin "
         },
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         txtCode : "Code",
         txtName : "Nom",
         startDate :"Date Début",    
@@ -14592,7 +15422,9 @@ export const langFr =
         cmbDepot: "Réserve",
         txtCustomerCode : "Sélection Client",
         txtCustomerName : "Nom Client",
+        placeMailHtmlEditor : "Veuillez saisir votre texte .", 
         validItemsCode : "Sélectionner Produit",
+        validDesign : "Veuillez sélectionner le design.",  
         btnMailsend : "Envoyer E-Mail",
         pg_Docs :      
         {     
@@ -14694,7 +15526,7 @@ export const langFr =
             btn01: "OK",
             msg: "Ne Peut Etre Remisé plus que L'Autorisation.!! Montant Autorisé : "
         },
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         txtCode : "Code",
         txtName : "Nom",
         startDate :"Date Début",   
@@ -15378,6 +16210,7 @@ export const langFr =
         txtTotal : "Total Général",
         description :"Motif",
         amount : "Total" ,
+        validSafe:"Selectionnez un compte",
         cmbSafe :  "Compte Entrant",
         cmbSafe2 :  "Compte Entrant",
         btnSafeToSafe :  "Entre Caisse",
@@ -15498,33 +16331,126 @@ export const langFr =
     },
     fns_04_001 : // "Banka Ekstre Raporu"
     {
-        cmbBank : "Sélection Banque",  // BAK
-        btnCheck : "Actif",  // BAK
-        btnGet :"Rechercher",  // BAK
+        cmbBank : "Sélection Banque", 
+        btnCheck : "Actif", 
+        btnGet :"Rechercher", 
         grdListe : 
         {
-            clmOutputName : "Compte sortant",   // BAK
-            clmInputName : "Compte entrant",   // BAK
-            clmAmount : "Montant",    // BAK
-            clmDocDate : "Date",    // BAK
-            clmRef : "Référence",   // BAK
-            clmRefNo : "Ligne",    // BAK
+            clmOutputName : "Compte sortant",  
+            clmInputName : "Compte entrant",   
+            clmAmount : "Montant",   
+            clmDocDate : "Date",    
+            clmRef : "Référence",   
+            clmRefNo : "Ligne",  
+            clmCode : "Code",
+        },
+     
+    },
+    fns_04_002 : // "Banka Ekstre Raporu"
+    {
+        cmbBank : "Sélection Banque",
+        btnCheck : "Actif",
+        txtCustomerCode : "Code Fournisseur",
+        btnGet :"Rechercher", 
+        txtTotalBalance : "Equillibre", 
+        chkZeroBalance : "Afficher Soldes 0", 
+        grdListe : 
+        {
+            clmOutputName : "Compte sortant",
+            clmInputName : "Compte entrant", 
+            clmAmount : "Montant",
+            clmDocDate : "Date",  
+            clmRef : "Référence", 
+            clmRefNo : "Ligne",   
+            clmCode : "Code",
+            clmUpdate : "Date de mise à jour", 
+            clmBalance : "Equilibre",  
+            clmName : "Nom",    
+        },
+        pg_txtCustomerCode : 
+        {
+            title : "Choix Client/Fournisseur",
+            clmCode :  "Code Client/Fournisseur",
+            clmTitle : "Nom Client/Fournisseur",
+            clmTypeName : "Type",
+            clmGenusName : "Genre",
+            clmBalance : "Equilibre",  
         },
      
     },
     fns_04_003 : // "Kasa Ekstre Raporu"
     {
-        cmbSafe : "Caisse No",  // BAK
-        btnCheck : "Actif",  // BAK
-        btnGet :"Rechercher",  // BAK
+        cmbSafe : "N° Caisse",
+        btnCheck : "Actif",  
+        btnGet :"Rechercher", 
         grdListe : 
         {
-            clmOutputName : "Compte sortant",   // BAK
-            clmInputName : "Compte entrant",   // BAK
-            clmAmount : "Montant",    // BAK
-            clmDocDate : "Date",    // BAK
-            clmRef : "Référence",   // BAK
-            clmRefNo : "Ligne",    // BAK
+            clmOutputName : "Compte sortant",
+            clmInputName : "Compte entrant", 
+            clmAmount : "Montant",    
+            clmDocDate : "Date",   
+            clmRef : "Référence",   
+            clmRefNo : "Ligne",    
+            clmCode : "Code",
+        },
+     
+    },
+    fns_05_001 : // "Kasa Ekstre Raporu"
+    {
+        txtRefRefno : "Réf.-Réf no:",
+        validRef :"Saisir Réf ",
+        cmbCashSafe : "Caisse Espèce",
+        excelAdd : "Inscription à partir d'Excel",
+        popExcel : {title:"Les en-têtes de ligne de votre fichier Excel doivent être corrects"}, 
+        msgDocValid:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Veuillez saisir les en-tête avant l'achèvement !"
+        },
+        msgSaveValid:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Veuillez saisir les zones concernées !"
+        },
+        cmbPayType : 
+        {
+            title : "Mode de Règlement ",
+            esc:"Espèce",
+            cb : "CB",
+            check : "Chèque",
+            ticket : "Chèque",
+            bonD : "Bon D'Avoir",
+            avoir : "Avoir",
+            virment : "Virement",
+            prlv :"Prélèvement ",
+            all :"Tout"
+        },
+        popExcel :
+        {
+            title : "Excel",
+            txtMulticode : "Fournisseur Code",
+            txtCustoms : "Nomenclature",
+            txtOrigin :"Origine",
+           clmDesc :"Description" ,
+           clmAmount :"Montant",
+            clmDate :"Date",
+            shemaSave :"Sauvegarder" ,
+        },
+        grdDocPayments: 
+        {
+            clmCreateDate: "Date d'enregistrement",
+            clmAmount : "Total",
+            clmCustomerName : "Fournisseur",    
+            clmCustomerCode : "Code",    
+            clmCustomerDate : "Date",
+            clmInputName :  "Compte Entrant",
+            clmOutputName : "Coffre-fort/Banque",
+            clmDescription : "Motif",
+            clmInvoice : "Facture payée",
+            clmFacDate : "Date de facture ",
+            clmDate :"Date",
         },
      
     },
@@ -15590,6 +16516,32 @@ export const langFr =
             clmMaxvalue: "Le rapport ne peut pas être inférieur à zéro !",
             clmPrice: "Le prix ne peut pas être inférieur à zéro !",
         },
+    },
+    set_01_002 : // "Interfel"
+    {
+        txtFrRate: "Taux d'ajout pour les ventes en France",
+        txtNotFrRate: "Taux d'ajout pour les ventes à l'étranger",
+        msgSave:
+        {
+            title: "Attention",
+            btn01: "OK",
+            btn02: "Annuler",
+            msg: "Êtes-vous sûr de vouloir enregistrer ?"
+        },
+        msgSaveResult:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msgSuccess: "Votre enregistrement a réussi !",
+            msgFailed: "Échec de l'enregistrement !"
+        },
+        msgSaveValid:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Veuillez remplir les champs obligatoires !"
+        },
+        
     },
     set_02_001 : // "Firma Bilgileri"
     {
@@ -15780,7 +16732,7 @@ export const langFr =
             msg : "La caisse que vous avez saisie est enregistrée dans le système!"
         },
     },
-    set_02_008:  // Gümrük kodu // BAK
+    set_02_008:  // Gümrük kodu 
     {
         excelAdd : "Inscription à partir d'Excel",
         txtCustomerCode : "Code Fournisseur",
@@ -15824,6 +16776,8 @@ export const langFr =
         txtPayCardPort : "TPE Port",
         txtPrintDesing : "Design Ticket Imp.",
         txtMacId : "Mac Id",
+        cmbDepot : "Dépot",
+        txtPrinterPort : "Printer Port",
         pg_txtCode : 
         {
             title : "Sélection Caisse",
@@ -15900,6 +16854,7 @@ export const langFr =
     {
         TicketId :"Ticket I.D",
         cmbCustomer :"Client",
+        validDesign : "Veuillez choisir le design",
         btnGet :"Rechercher",
         dtFirst : "Date Début",
         dtLast : "Date Fin",
@@ -16139,8 +17094,8 @@ export const langFr =
             clmDate: "Date",
             clmTicketId: "Ticket No",
             clmDescription: "Motif",
-            clmTime: "Heure", // BAK
-            clmTotal: "Total", // BAK
+            clmTime: "Heure", 
+            clmTotal: "Total", 
         },
         pg_txtItem:
         {
@@ -16157,7 +17112,7 @@ export const langFr =
             clmTotal : "Total",
             clmLastData : "Premier prix",
             clmDescription : "Motif",
-            clmTime: "Heure", // BAK
+            clmTime: "Heure",
         },
         grdSaleTicketPays : 
         {
@@ -16226,7 +17181,11 @@ export const langFr =
             clmPosCheck : "Chèque",   
             clmPosTicket : "T. Restaurant",   
             clmAdvance : "Fond de Caisse",   
-            clmSafe : "Caisse"   
+            clmSafe : "Caisse",
+            clmDiffCash : "Nakit Fark",  // BAK
+            clmDiffCredit : "K.Kartı Fark",  // BAK
+            clmDiffCheck :"Çek Farkı",  // BAK
+            clmDiffTicket : "T.R Farkı"  // BAK
         },
     },
     pos_02_007 : // "Pos Avans Raporu", 
@@ -16376,7 +17335,7 @@ export const langFr =
             clmStatus : "Etat"  
         },
     },
-    pos_02_012 : // "Loyalty",  // BAK
+    pos_02_012 : // "Loyalty",  
     {
         btnGet :"Rechercher",
         txtTotalTicket : "Total des tickets de caisses",
@@ -16386,7 +17345,7 @@ export const langFr =
             clmLoyalty: "Montant de points de fidélité utilisés",
         },
     },
-    pos_02_013 : // "İndirim Raporu",  // BAK
+    pos_02_013 : // "İndirim Raporu",  
     {
         btnGet :"Rechercher",
         txtTotalTicket : "Total des tickets de caisses",
@@ -16396,7 +17355,7 @@ export const langFr =
             clmDiscount: "Remise",
         },
     },
-    pos_02_014 : // "Okunmamış Terazi Fişleri Raporu" // BAK
+    pos_02_014 : // "Okunmamış Terazi Fişleri Raporu" 
     {
         btnGet :"Rechercher",
         grdListe : 
@@ -16406,6 +17365,7 @@ export const langFr =
             clmQuantity : "Quantité",
             clmPrice : "Prix",
             clmCDate : "Date",
+            clmStatus : "Etat",
             clmTicketNo : "Numéro de ticket",
         },
     },
@@ -16519,7 +17479,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "La clôture de la journée a été enregistrée." // BAK
+            msg: "La clôture de la journée a été enregistrée." 
         },
         advanceMsg1 : "Soyez sûr que le fond de caisse est de",
         advanceMsg2 : "Etre sûr!!!",
@@ -16557,11 +17517,12 @@ export const langFr =
     pos_03_002 : // "Çekiliş" //BAK
     {
         dtDate : "Date",
-        txtLucky : "Heureux",
+        txtLucky : "Gagnant(s)",
         txtPoint : "Points",
         btnLottery : "Tirage au sort",
         lblTicketNo : "N° DE TICKET",
-        lblCustomer : "CLIENT"
+        lblCustomer : "CLIENT",
+        lblCustomerNo : "N° CLIENT"
     },
     tkf_01_001 : // "Alış Teklifi Listesi",
     {
@@ -16578,6 +17539,10 @@ export const langFr =
             clmTitle : "Nom Fournisseur",
             clmTypeName : "Type",
             clmGenusName : "Genre"
+        },
+        menu : 
+        {
+            sip_02_001: "Proposition d'achat",
         },
         grdPurcOrdList: 
         {
@@ -16631,6 +17596,7 @@ export const langFr =
         txtCustomerCode : "Sélection Document",
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
+        validDesign : "Veuillez sélectionner le design.",  
         txtAmount : "Total" ,
         txtDiscount : "Remise sur les lignes",  
         txtDocDiscount : "Remise sous-total", 
@@ -16893,7 +17859,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
         msgQuantity:
@@ -16975,6 +17941,26 @@ export const langFr =
         placeMailHtmlEditor : "Veuillez saisir votre texte .", 
         validDesign : "Veuillez sélectionner le design.",  
         validMail : "Veuillez ne pas laisser le champs vide.",  
+        isMsgSave :
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            msg: "Impossible de procéder sans enregistrement du document !"
+        },
+        msgMailSendResult:
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            msgSuccess: "L'envoi du courrier a réussi !",
+            msgFailed: "L'envoi du courrier a échoué !"
+        },
+        popMailSend :
+        {
+            title :"Envoyer un e-mail",
+            txtMailSubject : "Objet du courriel",
+            txtSendMail : "Adresse e-mail",
+            btnSend : "Envoyer"
+        },
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -17233,7 +18219,7 @@ export const langFr =
         validRef :"Saisir Réf ",
         validRefNo : "Saisir Réf No ",
         validDepot : "Sélectionner Dépot",
-        validCustomerCode : "Le Code Produit ne peut être Vide ",
+        validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
         msgQuantity:

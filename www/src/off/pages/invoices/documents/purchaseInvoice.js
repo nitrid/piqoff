@@ -498,6 +498,7 @@ export default class purchaseInvoice extends DocBase
     }
     async addItem(pData,pIndex,pQuantity,pPrice,pDiscount,pDiscountPer,pVat)
     {
+        console.log(pData.ITEM_TYPE)
         App.instance.setState({isExecute:true})
         
         if(typeof pQuantity == 'undefined')
@@ -505,24 +506,21 @@ export default class purchaseInvoice extends DocBase
             pQuantity = 1
         }
         //GRID DE AYNI ÜRÜNDEN OLUP OLMADIĞI KONTROL EDİLİYOR VE KULLANICIYA SORULUYOR,CEVAP A GÖRE SATIR BİRLİŞTERİLİYOR.
-        if(pData.ITEM_TYPE == 0)
+        let tmpMergDt = await this.mergeItem(pData.CODE)
+        if(typeof tmpMergDt != 'undefined' && this.combineNew == false)
         {
-            let tmpMergDt = await this.mergeItem(pData.CODE)
-            if(typeof tmpMergDt != 'undefined' && this.combineNew == false)
-            {
-                tmpMergDt[0].QUANTITY = tmpMergDt[0].QUANTITY + pQuantity
-                tmpMergDt[0].SUB_QUANTITY = tmpMergDt[0].SUB_QUANTITY / tmpMergDt[0].SUB_FACTOR
-                tmpMergDt[0].VAT = Number((tmpMergDt[0].VAT + (tmpMergDt[0].PRICE * (tmpMergDt[0].VAT_RATE / 100) * pQuantity))).round(6)
-                tmpMergDt[0].AMOUNT = Number((tmpMergDt[0].QUANTITY * tmpMergDt[0].PRICE)).round(4)
-                tmpMergDt[0].TOTAL = Number((((tmpMergDt[0].QUANTITY * tmpMergDt[0].PRICE) - tmpMergDt[0].DISCOUNT) + tmpMergDt[0].VAT)).round(2)
-                tmpMergDt[0].TOTALHT =  Number((tmpMergDt[0].AMOUNT - tmpMergDt[0].DISCOUNT)).round(2)
-                this.calculateTotal()
-                //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
-                await this.itemRelated(pData.GUID,tmpMergDt[0].QUANTITY)
-                //*****************************************/
-                App.instance.setState({isExecute:false})
-                return
-            }
+            tmpMergDt[0].QUANTITY = tmpMergDt[0].QUANTITY + pQuantity
+            tmpMergDt[0].SUB_QUANTITY = tmpMergDt[0].SUB_QUANTITY / tmpMergDt[0].SUB_FACTOR
+            tmpMergDt[0].VAT = Number((tmpMergDt[0].VAT + (tmpMergDt[0].PRICE * (tmpMergDt[0].VAT_RATE / 100) * pQuantity))).round(6)
+            tmpMergDt[0].AMOUNT = Number((tmpMergDt[0].QUANTITY * tmpMergDt[0].PRICE)).round(4)
+            tmpMergDt[0].TOTAL = Number((((tmpMergDt[0].QUANTITY * tmpMergDt[0].PRICE) - tmpMergDt[0].DISCOUNT) + tmpMergDt[0].VAT)).round(2)
+            tmpMergDt[0].TOTALHT =  Number((tmpMergDt[0].AMOUNT - tmpMergDt[0].DISCOUNT)).round(2)
+            this.calculateTotal()
+            //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
+            await this.itemRelated(pData.GUID,tmpMergDt[0].QUANTITY)
+            //*****************************************/
+            App.instance.setState({isExecute:false})
+            return
         }
         //******************************************************************************************************************/
         if(pIndex == null)
@@ -908,8 +906,8 @@ export default class purchaseInvoice extends DocBase
                 let tmpQuery = 
                 {
                     query :"SELECT GUID,CODE,NAME,VAT,ITEMS_VW_01.UNIT,1 AS QUANTITY,0 AS ITEM_TYPE,COST_PRICE," + 
-                    "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].OUTPUT+"'),'') AS MULTICODE"+
-                    " FROM ITEMS_VW_01 WHERE ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].OUTPUT+"'),'') = @VALUE " ,
+                    "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_01.GUID AND CUSTOMER = '"+this.docObj.dt()[0].OUTPUT+"' AND DELETED = 0),'') AS MULTICODE"+
+                    " FROM ITEMS_VW_01 WHERE ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_01.GUID AND CUSTOMER = '"+this.docObj.dt()[0].OUTPUT+"' AND DELETED = 0),'') = @VALUE " ,
                     param : ['VALUE:string|50'],
                     value : [this.tagItemCode.value[i]]
                 }
@@ -1216,6 +1214,7 @@ export default class purchaseInvoice extends DocBase
                     this.newPriceDate.clear()
                     for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
                     {
+                        console.log(this.docObj.docItems.dt()[i])
                         if(this.docObj.docItems.dt()[i].ITEM_TYPE == 0)
                         {
                             if(this.docObj.docItems.dt()[i].COST_PRICE == this.docObj.docItems.dt()[i].PRICE && this.docObj.docItems.dt()[i].COST_PRICE != 0 )
@@ -2428,9 +2427,9 @@ export default class purchaseInvoice extends DocBase
                                                                 {
                                                                     let tmpQuery = 
                                                                     {
-                                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = 40),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG)WHERE DIFF_PRICE > 0 ORDER BY LINE_NO " ,
-                                                                        param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
-                                                                        value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
+                                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = 40),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,'FR')WHERE DIFF_PRICE > 0 ORDER BY LINE_NO " ,
+                                                                        param:  ['DOC_GUID:string|50'],
+                                                                        value:  [this.docObj.dt()[0].GUID,]
                                                                     }
                                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
                                                                     this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 

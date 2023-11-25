@@ -74,7 +74,8 @@ export default class rebateDispatch extends DocBase
                 {
                     select:
                     {
-                        query : "SELECT GUID,CODE,NAME,VAT,UNIT,STATUS,COST_PRICE FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
+                        query : "SELECT GUID,CODE,NAME,VAT,UNIT,STATUS,COST_PRICE, ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_01.GUID AND ITEM_MULTICODE.CUSTOMER = '"+this.docObj.dt()[0].OUTPUT+"' AND DELETED = 0 ORDER BY LDATE DESC),'') AS MULTICODE "+
+                        "FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
                         param : ['VAL:string|50']
                     },
                     sql:this.core.sql
@@ -443,7 +444,7 @@ export default class rebateDispatch extends DocBase
                 let tmpCustomerBtn = ''
                 if(this.customerClear == true)
                 {
-                    await this.grdPurcDispatch.devGrid.deleteRow(0)
+                    await this.grdRebtDispatch.devGrid.deleteRow(0)
                     return 
                 }
                 App.instance.setState({isExecute:false})
@@ -457,7 +458,7 @@ export default class rebateDispatch extends DocBase
                     if(e == 'btn02')
                     {
                         tmpCustomerBtn = e
-                        await this.grdPurcDispatch.devGrid.deleteRow(0)
+                        await this.grdRebtDispatch.devGrid.deleteRow(0)
                         if(this.checkCustomer.value == true)
                         {
                             this.customerClear = true
@@ -773,9 +774,24 @@ export default class rebateDispatch extends DocBase
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnPrint" parent={this} icon="print" type="default"
-                                    onClick={()=>
+                                    onClick={async()=>
                                     {
-                                        this.popDesign.show()
+                                        console.log(this.docObj.isSaved)                             
+                                        if(this.docObj.isSaved == false)
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'isMsgSave',showTitle:true,title:this.t("isMsgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("isMsgSave.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("isMsgSave.msg")}</div>)
+                                            }
+                                            await dialog(tmpConfObj);
+                                            return
+                                        }
+                                        else
+                                        {
+                                            this.popDesign.show()
+                                        }
                                     }}/>
                                 </Item>
                                 <Item location="after"
@@ -936,8 +952,20 @@ export default class rebateDispatch extends DocBase
                                         </Validator> 
                                     </NdSelectBox>
                                 </Item>
-                                {/* Boş */}
-                                <EmptyItem />
+                                {/* DOC_NO */}
+                                <Item>
+                                    <Label text={this.t("txtDocNo")} alignment="right" />
+                                    <NdTextBox id="txtDocNo" parent={this} simple={true}  
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                    dt={{data:this.docObj.dt('DOC'),field:"DOC_NO"}} 
+                                    readOnly={false}
+                                    onFocusOut={()=>
+                                    {
+                                        this.checkDocNo(this.txtDocNo.value)
+                                    }}
+                                    >
+                                    </NdTextBox>
+                                </Item>
                                 {/* txtCustomerCode */}
                                 <Item>
                                     <Label text={this.t("txtCustomerCode")} alignment="right" />
@@ -1185,7 +1213,7 @@ export default class rebateDispatch extends DocBase
                                         }
                                         let tmpQuery = 
                                         {   
-                                            query :"SELECT GUID,CODE,NAME,COST_PRICE,UNIT_GUID AS UNIT,VAT,MULTICODE,CUSTOMER_NAME,BARCODE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE BARCODE = @CODE OR CODE = @CODE OR (MULTICODE = @CODE AND CUSTOMER_GUID = @CUSTOMER)",
+                                            query :"SELECT GUID,CODE,NAME,COST_PRICE,UNIT_GUID AS UNIT,VAT,MULTICODE,CUSTOMER_NAME,BARCODE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE BARCODE = @CODE OR (MULTICODE = @CODE AND CUSTOMER_GUID = @CUSTOMER)",
                                             param : ['CODE:string|50','CUSTOMER:string|50'],
                                             value : [this.txtBarcode.value,this.docObj.dt()[0].INPUT]
                                         }
@@ -1656,7 +1684,7 @@ export default class rebateDispatch extends DocBase
                                     param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmRebtDispatch"  + this.tabIndex}>
+                                        <Validator validationGroup={"frmPrintPop"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validDesign")} />
                                         </Validator> 
                                     </NdSelectBox>
@@ -1671,14 +1699,14 @@ export default class rebateDispatch extends DocBase
                                     onValueChanged={(async()=>
                                         {
                                         }).bind(this)}
-                                   data={{source:[{ID:"FR",VALUE:"FR"},{ID:"DE",VALUE:"DE"},{ID:"TR",VALUE:"TR"}]}}
+                                    data={{source:[{ID:"FR",VALUE:"FR"},{ID:"DE",VALUE:"DE"},{ID:"TR",VALUE:"TR"}]}}
                                     >
                                     </NdSelectBox>
                                 </Item>
                                 <Item>
                                     <div className='row'>
                                         <div className='col-6'>
-                                            <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"frmRebtDispatch"  + this.tabIndex}
+                                            <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"frmPrintPop"  + this.tabIndex}
                                             onClick={async (e)=>
                                             {      
                                                 if(e.validationGroup.validate().status == "valid")
@@ -1712,7 +1740,7 @@ export default class rebateDispatch extends DocBase
                                     </div>
                                     <div className='row py-2'>
                                         <div className='col-6'>
-                                            <NdButton text={this.t("btnView")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmRebtDispatch" + this.tabIndex}
+                                            <NdButton text={this.t("btnView")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmPrintPop" + this.tabIndex}
                                             onClick={async (e)=>
                                             {       
                                                 if(e.validationGroup.validate().status == "valid")
@@ -1743,7 +1771,7 @@ export default class rebateDispatch extends DocBase
                                             }}/>
                                         </div>
                                         <div className='col-6'>
-                                            <NdButton text={this.t("btnMailsend")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmRebtDispatch" + this.tabIndex}
+                                            <NdButton text={this.t("btnMailsend")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmPrintPop" + this.tabIndex}
                                             onClick={async (e)=>
                                             {    
                                                 if(e.validationGroup.validate().status == "valid")

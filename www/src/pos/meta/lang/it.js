@@ -241,6 +241,19 @@ export const langIt =
         msg: "Seleziona una riga, per favore!",
         btn01: "Ok"
     },
+    msgCustomerMail:
+    {
+        title: "Avviso",
+        msg: "Vuoi aggiungere un'email al cliente?",
+        btn01: "Sì",
+        btn02: "Annulla",
+    },
+    msgAddCustomerMail:
+    {
+        title: "Avviso",
+        msg: "L'email del cliente è",
+        btn01: "OK",
+    },
     msgCancelCustomerConfirm:
     {
         title: "Avviso",
@@ -384,11 +397,12 @@ export const langIt =
     msgCardPayment: 
     {
         title: "Attenzione",
-        msg: "In attesa di una risposta dal dispositivo di pagamento con carta.",
+        msg: "In attesa della risposta del terminale della carta.",
+        msgAmount: "Importo :",
         btn01: "Riprova",
         btn02: "Annulla",
-        btn03: "Forza",
-    },
+        btn03: "Forza"
+    },    
     msgRePaymentType:
     {
         title: "Come desideri ricevere il pagamento rimanente?"
@@ -590,6 +604,14 @@ export const langIt =
         msg: "Impossibile eseguire questa operazione in modalità offline!",
         btn01: "Ok"
     },
+    msgDisconnectWarning: 
+    {
+      title: "Attenzione",
+      msg: "Sei sicuro di voler uscire?",
+      btn01: "SÌ",
+      btn02: "NO"
+    },
+
     msgOfflineAlert: 
     {
         title: "Attenzione",
@@ -603,6 +625,14 @@ export const langIt =
         msg1: "Connessione al server ristabilita! Puoi continuare l'operazione online.",
         msg2: "!! PER FAVORE, CONTROLLA GLI ULTIMI PRODOTTI SCANSIONATI !!",
         btn01: "Ok"
+    },
+    msgDataTransferAlert: 
+    {
+        title : "Attenzione",
+        msg1 : "Hai {0} record da trasferire! Trasferisci i dati adesso.",
+        msg2 : "Processo di trasferimento riuscito.",
+        msg3 : "Processo di trasferimento non riuscito. Tutte le operazioni vengono riavviate.",
+        btn01 : "OK"
     },
     msgNotWeighing: 
     {
@@ -783,13 +813,8 @@ export const langIt =
         scalePort : "Porta Bilancia",
         payCardPort : "Porta Carta di Pagamento",
         printDesing : "Design di Stampa",
-        scannerPort : "Scanner port"
-    },
-    msgConnectOut: 
-    {
-        title : "Attenzione",
-        msg : "La connessione al server è stata interrotta...",
-        btn01 : "Ok"
+        scannerPort : "Scanner port",
+        printerPort: "Printer port"
     },
     msgNotBarcodeWeighing: 
     {
@@ -798,6 +823,7 @@ export const langIt =
         msgTicket: "Quantità pesata: ",
         msgBarkod: "Quantità dell'etichetta: ",
         msgDifference: "Differenza: ",
+        msgTotalAmount : "Importo totale",
         btn01: "OK",
         btn02: "Continua"
     },
@@ -824,5 +850,9 @@ export const langIt =
         title : "Attenzione",
         msg : "ID del dispositivo non corrisponde! Si prega di contattare piqsoft.",
         btn01 : "OK"
+    },
+    itemInfo:
+    {
+        msgSplash: "PER FAVORE SCANSIONA IL CODICE A BARRE"
     }
 }

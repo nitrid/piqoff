@@ -568,8 +568,10 @@ export default class transferCls
                         SCALE_PORT TEXT,
                         PAY_CARD_PORT TEXT,
                         SCANNER_PORT TEXT,
+                        PRINTER_PORT TEXT,
                         PRINT_DESING TEXT,
                         SAFE_GUID TEXT,
+                        DEPOT_GUID TEXT,
                         MACID TEXT);`
             },
             //CUSTOMER_POINT_VW_01
@@ -661,7 +663,7 @@ export default class transferCls
                 from : 
                 {
                     type : "select",
-                    query : `SELECT *,dbo.FN_PRICE_SALE(GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000') AS PRICE FROM ITEMS_VW_01 {0}`,
+                    query : `SELECT *,dbo.FN_PRICE_SALE(GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000') AS PRICE FROM ITEMS_VW_01 {0}`,
                     where : `WHERE LDATE >= GETDATE() - 10`
                 },
                 to : 
@@ -684,7 +686,7 @@ export default class transferCls
                 from : 
                 {
                     type : "select",
-                    query : `SELECT *,dbo.FN_PRICE_SALE(GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000') AS PRICE 
+                    query : `SELECT *,dbo.FN_PRICE_SALE(GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000') AS PRICE 
                             FROM ITEMS_POS_VW_01 {0}`,
                     where : `WHERE LDATE >= GETDATE() - 10`
                 },
@@ -812,11 +814,11 @@ export default class transferCls
                 to : 
                 {
                     type : "insert",
-                    query : `INSERT OR REPLACE INTO POS_DEVICE_VW_01 (GUID, CDATE, CUSER, LDATE, LUSER, CODE, NAME, LCD_PORT, SCALE_PORT, PAY_CARD_PORT, SCANNER_PORT, PRINT_DESING, SAFE_GUID, MACID)
-                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
+                    query : `INSERT OR REPLACE INTO POS_DEVICE_VW_01 (GUID, CDATE, CUSER, LDATE, LUSER, CODE, NAME, LCD_PORT, SCALE_PORT, PAY_CARD_PORT, SCANNER_PORT, PRINTER_PORT, PRINT_DESING, SAFE_GUID, DEPOT_GUID, MACID)
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
                     values : [{GUID : {map:'GUID'},CDATE : {map:'CDATE',type:'date_time'},CUSER : {map:'CUSER'},LDATE : {map:'LDATE',type:'date_time'},LUSER : {map:'LUSER'},
                     CODE : {map:'CODE'},NAME : {map:'NAME'},LCD_PORT : {map:'LCD_PORT'},SCALE_PORT : {map:'SCALE_PORT'},PAY_CARD_PORT : {map:'PAY_CARD_PORT'},SCANNER_PORT : {map:'SCANNER_PORT'},
-                    PRINT_DESING : {map:'PRINT_DESING'},SAFE_GUID : {map:'SAFE_GUID'},MACID : {map:'MACID'}}]
+                    PRINTER_PORT : {map:'PRINTER_PORT'},PRINT_DESING : {map:'PRINT_DESING'},SAFE_GUID : {map:'SAFE_GUID'},DEPOT_GUID : {map:'DEPOT_GUID'},MACID : {map:'MACID'}}]
                 }
             },
             //PROMO_VW_01
@@ -1465,34 +1467,41 @@ export default class transferCls
     {
         return new Promise(async resolve => 
         {
-            let tmpSchema = this.sendSchema()
-            for (let i = 0; i < tmpSchema.length; i++) 
+            try
             {
-                this.emit('onState',{tag:'',text: tmpSchema[i].from.name})
-                let tmpResult = await this.sendToSql(tmpSchema[i])
-                if(!tmpResult)
+                let tmpSchema = this.sendSchema()
+                for (let i = 0; i < tmpSchema.length; i++) 
                 {
-                    resolve(false)
-                    return
+                    this.emit('onState',{tag:'',text: tmpSchema[i].from.name})
+                    let tmpResult = await this.sendToSql(tmpSchema[i])
+                    if(!tmpResult)
+                    {
+                        resolve(false)
+                        return
+                    }
                 }
+                let tmpData = await this.core.local.select({name : "NF525_JET",type : "select",query : "SELECT * FROM NF525_JET"})
+                for (let i = 0; i < tmpData.result.recordset.length; i++) 
+                {
+                    let tmpJetData =
+                    {
+                        CUSER:tmpData.result.recordset[i].CUSER,
+                        CDATE:tmpData.result.recordset[i].CDATE,
+                        DEVICE:tmpData.result.recordset[i].DEVICE,  
+                        CODE:tmpData.result.recordset[i].CODE,
+                        NAME:tmpData.result.recordset[i].NAME,
+                        DESCRIPTION:tmpData.result.recordset[i].DESCRIPTION,
+                        APP_VERSION:tmpData.result.recordset[i].APP_VERSION,
+                    }
+                    this.core.socket.emit('nf525',{cmd:"jet",data:tmpJetData})
+                }
+                await this.clearTbl("NF525_JET")
+                resolve(true)
             }
-            let tmpData = await this.core.local.select({from : "NF525_JET"})
-            for (let i = 0; i < tmpData.result.length; i++) 
+            catch(ex)
             {
-                let tmpJetData =
-                {
-                    CUSER:tmpData.result[i].CUSER,    
-                    CDATE:tmpData.result[i].CDATE,            
-                    DEVICE:tmpData.result[i].DEVICE,  
-                    CODE:tmpData.result[i].CODE,
-                    NAME:tmpData.result[i].NAME,
-                    DESCRIPTION:tmpData.result[i].DESCRIPTION,
-                    APP_VERSION:tmpData.result[i].APP_VERSION,
-                }
-                this.core.socket.emit('nf525',{cmd:"jet",data:tmpJetData})
+                resolve(false)
             }
-            await this.clearTbl("NF525_JET")
-            resolve(true)
         });
     }
     //SQL İÇİN DATA İLE SORGUDAKİ PARAMETRELER EŞLEŞTİRİLİYOR GERİ DÖNÜŞ OLARAK VALUES DİZİSİ DÖNDÜRÜLÜYOR.

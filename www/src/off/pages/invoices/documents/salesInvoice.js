@@ -51,6 +51,7 @@ export default class salesInvoice extends DocBase
         await this.core.util.waitUntil(100)
         if(typeof this.pagePrm != 'undefined')
         {
+            await this.init()
             await this.getDoc(this.pagePrm.GUID,'',0)
         }
         else
@@ -103,7 +104,7 @@ export default class salesInvoice extends DocBase
                 {
                     select:
                     {
-                        query : "SELECT GUID,CODE,NAME,VAT,COST_PRICE,UNIT,STATUS,(SELECT [dbo].[FN_PRICE_SALE_VAT_EXT](GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000',NULL)) AS PRICE FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)" ,
+                        query : "SELECT GUID,CODE,NAME,VAT,COST_PRICE,UNIT,STATUS,(SELECT [dbo].[FN_PRICE_SALE_VAT_EXT](GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000',NULL,'00000000-0000-0000-0000-000000000000')) AS PRICE FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)" ,
                         param : ['VAL:string|50']
                     },
                     sql:this.core.sql
@@ -537,7 +538,7 @@ export default class salesInvoice extends DocBase
         {
             let tmpQuery = 
             {
-                query :"SELECT dbo.FN_PRICE_SALE_VAT_EXT(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,@CONTRACT_CODE) AS PRICE",
+                query :"SELECT dbo.FN_PRICE_SALE_VAT_EXT(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,@CONTRACT_CODE,'00000000-0000-0000-0000-000000000000') AS PRICE",
                 param : ['GUID:string|50','QUANTITY:float','CUSTOMER:string|50','CONTRACT_CODE:string|25'],
                 value : [pData.GUID,pQuantity,this.docObj.dt()[0].INPUT,this.cmbPriceContract.value]
             }
@@ -1042,6 +1043,7 @@ export default class salesInvoice extends DocBase
                                                         App.instance.setState({isExecute:false})
                                                         this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
                                                         {
+                                                            
                                                             let tmpAttach = pResult.split('|')[1]
                                                             let tmpHtml = this.htmlEditor.value
                                                             if(this.htmlEditor.value.length == 0)
@@ -1095,6 +1097,7 @@ export default class salesInvoice extends DocBase
                                         await this.popDetail.show()
                                         this.loading.current.instance.show()
                                         
+                                        this.txtDetailMargin.value = this.docObj.dt()[0].MARGIN;
                                         this.numDetailCount.value = this.docObj.docItems.dt().length
                                         this.numDetailQuantity.value =  Number(this.docObj.docItems.dt().sum("QUANTITY",2))
                                         let tmpQuantity2 = 0
@@ -1113,7 +1116,6 @@ export default class salesInvoice extends DocBase
                                             }
                                         }
                                         this.numDetailQuantity2.value = tmpQuantity2.toFixed(3)
-                                        this.txtDetailMargin.value = this.docObj.dt()[0].MARGIN;
                                         this.loading.current.instance.hide()
                                     }}/>
                                 </Item>
@@ -1121,19 +1123,21 @@ export default class salesInvoice extends DocBase
                                     <NdButton id="btnPrint" parent={this} icon="print" type="default"
                                     onClick={async()=>
                                     {
-                                        if(this.docLocked == true)
-                                        {
-                                            await this.popDesign.show()
-                                        }
-                                        else
+                                        console.log(this.docObj.isSaved)                             
+                                        if(this.docObj.isSaved == false)
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgPrintforLocked',showTitle:true,title:this.t("msgPrintforLocked.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgPrintforLocked.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgPrintforLocked.msg")}</div>)
+                                                id:'isMsgSave',showTitle:true,title:this.t("isMsgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("isMsgSave.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("isMsgSave.msg")}</div>)
                                             }
                                             await dialog(tmpConfObj);
+                                            return
+                                        }
+                                        else
+                                        {
+                                            this.popDesign.show()
                                         }
                                     }}/>
                                 </Item>
@@ -1960,7 +1964,7 @@ export default class salesInvoice extends DocBase
                                                 e.key.SUB_QUANTITY =  e.data.QUANTITY / e.key.SUB_FACTOR
                                                 let tmpQuery = 
                                                 {
-                                                    query :"SELECT [dbo].[FN_PRICE_SALE_VAT_EXT](@ITEM_GUID,@QUANTITY,GETDATE(),@CUSTOMER_GUID,@CONTRACT_CODE) AS PRICE",
+                                                    query :"SELECT [dbo].[FN_PRICE_SALE_VAT_EXT](@ITEM_GUID,@QUANTITY,GETDATE(),@CUSTOMER_GUID,@CONTRACT_CODE,'00000000-0000-0000-0000-000000000000') AS PRICE",
                                                     param : ['ITEM_GUID:string|50','CUSTOMER_GUID:string|50','QUANTITY:float','CONTRACT_CODE:string|25'],
                                                     value : [e.key.ITEM,this.docObj.dt()[0].INPUT,e.data.QUANTITY,this.cmbPriceContract.value]
                                                 }
@@ -2329,7 +2333,7 @@ export default class salesInvoice extends DocBase
                                     param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmDocItemsPrint" + this.tabIndex}>
+                                        <Validator validationGroup={"frmPrintPop" + this.tabIndex}>
                                             <RequiredRule message={this.t("validDesign")} />
                                         </Validator> 
                                     </NdSelectBox>
@@ -2343,7 +2347,7 @@ export default class salesInvoice extends DocBase
                                     searchEnabled={true}
                                     data={{source:[{ID:"FR",VALUE:"FR"},{ID:"DE",VALUE:"DE"},{ID:"TR",VALUE:"TR"}]}}
                                     >
-                                        <Validator validationGroup={"frmDocItemsPrint" + this.tabIndex}>
+                                        <Validator validationGroup={"frmPrintPop" + this.tabIndex}>
                                             <RequiredRule message={this.t("validDesign")} />
                                         </Validator> 
                                     </NdSelectBox>
@@ -2351,7 +2355,7 @@ export default class salesInvoice extends DocBase
                                 <Item>
                                     <div className='row'>
                                         <div className='col-6'>
-                                            <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmDocItemsPrint" + this.tabIndex}
+                                            <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmPrintPop" + this.tabIndex}
                                             onClick={async (e)=>
                                             {       
                                                 if(e.validationGroup.validate().status == "valid")
@@ -2414,10 +2418,11 @@ export default class salesInvoice extends DocBase
                                     </div>
                                     <div className='row py-2'>
                                         <div className='col-6'>
-                                            <NdButton text={this.t("btnView")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmDocItemsPrint" + this.tabIndex}
+                                            <NdButton text={this.t("btnView")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmPrintPop" + this.tabIndex}
                                             onClick={async (e)=>
                                             {       
                                                 if(e.validationGroup.validate().status == "valid")
+                                                
                                                 {
                                                     let tmpQuery = 
                                                     {
@@ -2425,16 +2430,22 @@ export default class salesInvoice extends DocBase
                                                         param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
                                                         value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
                                                     }
+                                                    console.log(tmpQuery)
+                                                    console.log(1)
                                                     App.instance.setState({isExecute:true})
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
                                                     App.instance.setState({isExecute:false})
                                                     this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
                                                     {
+                                                        console.log(tmpData.result.recordset[0].PATH)
+                                                        console.log(pResult.split('|')[0])
+                                                        console.log(tmpData.result.recordset)
                                                         if(pResult.split('|')[0] != 'ERR')
                                                         {
                                                             var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
+                                                            console.log(mywindow)
                                                             mywindow.onload = function() 
-                                                            { 
+                                                            {
                                                                 mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
                                                             } 
                                                             // let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
@@ -2445,7 +2456,7 @@ export default class salesInvoice extends DocBase
                                             }}/>
                                         </div>
                                         <div className='col-6'>
-                                            <NdButton text={this.t("btnMailsend")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmDocItemsPrint" + this.tabIndex}
+                                            <NdButton text={this.t("btnMailsend")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmPrintPop" + this.tabIndex}
                                             onClick={async (e)=>
                                             {    
                                                 if(e.validationGroup.validate().status == "valid")

@@ -37,6 +37,8 @@ export default class rebateInvoice extends DocBase
 
         this.frmDocItems = undefined;
         this.docLocked = false;        
+        this.customerControl = true
+        this.customerClear = false
         this.combineControl = true
         this.combineNew = false
 
@@ -165,6 +167,8 @@ export default class rebateInvoice extends DocBase
                     {
                         this.pg_txtItemsCode.onClick = async(data) =>
                         {
+                            this.customerControl = true
+                            this.customerClear = false
                             this.combineControl = true
                             this.combineNew = false
                             if(data.length == 1)
@@ -200,6 +204,8 @@ export default class rebateInvoice extends DocBase
                         let tmpData = await this.core.sql.execute(tmpQuery) 
                         if(tmpData.result.recordset.length > 0)
                         {
+                            this.customerControl = true
+                            this.customerClear = false
                             this.combineControl = true
                             this.combineNew = false
                             await this.addItem(tmpData.result.recordset[0],e.rowIndex)
@@ -226,6 +232,8 @@ export default class rebateInvoice extends DocBase
                             {
                                 this.pg_txtItemsCode.onClick = async(data) =>
                                 {
+                                    this.customerControl = true
+                                    this.customerClear = false
                                     this.combineControl = true
                                     this.combineNew = false
                                     if(data.length == 1)
@@ -462,6 +470,49 @@ export default class rebateInvoice extends DocBase
             this.docObj.docItems.dt()[pIndex].UNIT_SHORT = tmpGrpData.result.recordset[0].UNIT_SHORT
         }
 
+        if(this.customerControl == true)
+        {
+            let tmpCheckQuery = 
+            {
+                query :"SELECT MULTICODE,(SELECT [dbo].[FN_CUSTOMER_PRICE](ITEM_GUID,CUSTOMER_GUID,@QUANTITY,GETDATE())) AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID",
+                param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
+                value : [pData.CODE,this.docObj.dt()[0].INPUT,pQuantity]
+            }
+            let tmpCheckData = await this.core.sql.execute(tmpCheckQuery) 
+            if(tmpCheckData.result.recordset.length == 0)
+            {   
+                let tmpCustomerBtn = ''
+                if(this.customerClear == true)
+                {
+                    await this.grdRebtInv.devGrid.deleteRow(0)
+                    return 
+                }
+                App.instance.setState({isExecute:false})
+                await this.msgCustomerNotFound.show().then(async (e) =>
+                {
+                    if(e == 'btn01' && this.checkCustomer.value == true)
+                    {
+                        this.customerControl = false
+                        return
+                    }
+                    if(e == 'btn02')
+                    {
+                        tmpCustomerBtn = e
+                        await this.grdRebtInv.devGrid.deleteRow(0)
+                        if(this.checkCustomer.value == true)
+                        {
+                            this.customerClear = true
+                        }
+                        return 
+                    }
+                })
+                if(tmpCustomerBtn == 'btn02')
+                {
+                    return
+                }
+            }
+        }
+        
         if(typeof pData.ITEM_TYPE == 'undefined')
         {
             let tmpTypeQuery = 
@@ -742,6 +793,8 @@ export default class rebateInvoice extends DocBase
     }
     async multiItemSave()
     {
+        this.customerControl = true
+        this.customerClear = false
         this.combineControl = true
         this.combineNew = false
         for (let i = 0; i < this.multiItemData.length; i++) 
@@ -995,19 +1048,21 @@ export default class rebateInvoice extends DocBase
                                     <NdButton id="btnPrint" parent={this} icon="print" type="default"
                                     onClick={async()=>
                                     {
-                                        if(this.docLocked == true)
-                                        {
-                                            this.popDesign.show()
-                                        }
-                                        else
+                                        console.log(this.docObj.isSaved)                             
+                                        if(this.docObj.isSaved == false)
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgPrintforLocked',showTitle:true,title:this.t("msgPrintforLocked.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgPrintforLocked.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgPrintforLocked.msg")}</div>)
+                                                id:'isMsgSave',showTitle:true,title:this.t("isMsgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("isMsgSave.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("isMsgSave.msg")}</div>)
                                             }
                                             await dialog(tmpConfObj);
+                                            return
+                                        }
+                                        else
+                                        {
+                                            this.popDesign.show()
                                         }
                                     }}/>
                                 </Item>
@@ -1422,9 +1477,9 @@ export default class rebateInvoice extends DocBase
                                         }
                                         let tmpQuery = 
                                         {   
-                                            query :"SELECT GUID,CODE,NAME,COST_PRICE,UNIT_GUID AS UNIT,VAT,MULTICODE,CUSTOMER_NAME,BARCODE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE BARCODE = @CODE OR CODE = @CODE OR (MULTICODE = @CODE AND CUSTOMER_GUID = @CUSTOMER)",
+                                            query :"SELECT GUID,CODE,NAME,COST_PRICE,UNIT_GUID AS UNIT,VAT,MULTICODE,CUSTOMER_NAME,BARCODE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE BARCODE = @CODE OR (MULTICODE = @CODE AND CUSTOMER_GUID = @CUSTOMER)",
                                             param : ['CODE:string|50','CUSTOMER:string|50'],
-                                            value : [this.txtBarcode.value,this.docObj.dt()[0].OUTPUT]
+                                            value : [this.txtBarcode.value,this.docObj.dt()[0].INPUT]
                                         }
                                         let tmpData = await this.core.sql.execute(tmpQuery) 
                                         if(tmpData.result.recordset.length > 0)
@@ -1496,14 +1551,19 @@ export default class rebateInvoice extends DocBase
                                     validationGroup={"frmDocItems"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
+                                        console.log(0)
                                         if(e.validationGroup.validate().status == "valid")
                                         {
+                                            console.log(1)
                                             if(typeof this.docObj.docItems.dt()[0] != 'undefined')
-                                            {
+                                            {console.log(2)
                                                 if(this.docObj.docItems.dt()[0].ITEM_CODE == '')
                                                 {
+                                                    console.log(3)
                                                     this.pg_txtItemsCode.onClick = async(data) =>
                                                     {
+                                                        this.customerControl = true
+                                                        this.customerClear = false
                                                         this.combineControl = true
                                                         this.combineNew = false
                                                         if(data.length == 1)
@@ -1525,6 +1585,8 @@ export default class rebateInvoice extends DocBase
                                             }
                                             this.pg_txtItemsCode.onClick = async(data) =>
                                             {
+                                                this.customerControl = true
+                                                this.customerClear = false
                                                 this.combineControl = true
                                                 this.combineNew = false
                                                 if(data.length == 1)
@@ -1783,6 +1845,7 @@ export default class rebateInvoice extends DocBase
                                             <Column dataField="VAT_RATE" caption={this.t("grdRebtInv.clmVatRate")} width={50} allowEditing={false}/>
                                             <Column dataField="TOTALHT" caption={this.t("grdRebtInv.clmTotalHt")} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false} width={90} allowHeaderFiltering={false}/>
                                             <Column dataField="TOTAL" caption={this.t("grdRebtInv.clmTotal")} width={110} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
+                                            <Column dataField="DOC_DATE" caption={this.t("grdRebtInv.clmDateDispatch")}  width={110} dataType={'date'}  format={'dd/MM/yyyy'}/>
                                             <Column dataField="CONNECT_REF" caption={this.t("grdRebtInv.clmDispatch")}  width={110} allowEditing={false}  allowHeaderFiltering={false}/>
                                             <Column dataField="DESCRIPTION" caption={this.t("grdRebtInv.clmDescription")} width={100} />
                                         </NdGrid>
@@ -2028,14 +2091,11 @@ export default class rebateInvoice extends DocBase
                                     valueExpr="TAG"
                                     value=""
                                     searchEnabled={true}
-                                    onValueChanged={(async()=>
-                                        {
-                                        }).bind(this)}
                                     data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '18'"},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmRebInv"  + this.tabIndex}>
+                                        <Validator validationGroup={"frmPrintPop"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validDesign")} />
                                         </Validator> 
                                     </NdSelectBox>
@@ -2046,18 +2106,15 @@ export default class rebateInvoice extends DocBase
                                     displayExpr="VALUE"                       
                                     valueExpr="ID"
                                     value=""
-                                    searchEnabled={true}
-                                    onValueChanged={(async()=>
-                                        {
-                                        }).bind(this)}
-                                data={{source:[{ID:"FR",VALUE:"FR"},{ID:"DE",VALUE:"DE"},{ID:"TR",VALUE:"TR"}]}}
+                                    searchEnabled={true}        
+                                    data={{source:[{ID:"FR",VALUE:"FR"},{ID:"DE",VALUE:"DE"},{ID:"TR",VALUE:"TR"}]}}
                                     >
                                     </NdSelectBox>
                                 </Item>
                                 <Item>
                                     <div className='row'>
                                         <div className='col-6'>
-                                            <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"frmRebInv"  + this.tabIndex}
+                                            <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"frmPrintPop"  + this.tabIndex}
                                             onClick={async (e)=>
                                             {   
                                                 if(e.validationGroup.validate().status == "valid")
@@ -2106,24 +2163,31 @@ export default class rebateInvoice extends DocBase
                                     </div>
                                     <div className='row py-2'>
                                         <div className='col-6'>
-                                            <NdButton text={this.t("btnView")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmRebInv"  + this.tabIndex}
+                                            <NdButton text={this.t("btnView")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmPrintPop" + this.tabIndex}
                                             onClick={async (e)=>
                                             {   
                                                 if(e.validationGroup.validate().status == "valid")
                                                 {
                                                     let tmpQuery = 
                                                     {
-                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG)ORDER BY LINE_NO " ,
+                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG)ORDER BY DOC_DATE,LINE_NO " ,
                                                         param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
                                                         value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
                                                     }
+                                                    console.log(tmpQuery)
+                                                    console.log(1)
+                                                    App.instance.setState({isExecute:true})
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                    App.instance.setState({isExecute:false})
                                                     this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
                                                     {
+                                                        console.log(tmpData.result.recordset[0].PATH)
+                                                        console.log(pResult.split('|')[0])
+                                                        console.log(tmpData.result.recordset)
                                                         if(pResult.split('|')[0] != 'ERR')
                                                         {
-                                                            var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");                                                         
-
+                                                            var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
+                                                            console.log(mywindow)
                                                             mywindow.onload = function() 
                                                             {
                                                                 mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
@@ -2136,7 +2200,7 @@ export default class rebateInvoice extends DocBase
                                             }}/>
                                         </div>
                                         <div className='col-6'>
-                                            <NdButton text={this.t("btnMailsend")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmRebInv" + this.tabIndex}
+                                            <NdButton text={this.t("btnMailsend")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmPrintPop" + this.tabIndex}
                                             onClick={async (e)=>
                                             {    
                                                 if(e.validationGroup.validate().status == "valid")

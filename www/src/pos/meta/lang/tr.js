@@ -241,6 +241,17 @@ export const langTr =
         msg : "Lütfen satır seçiniz !",
         btn01 : "Tamam"
     },
+    msgCustomerMail: 
+    {
+        title : "Uyarı",
+        msg : "musteriye mail eklemek istermisiniz",
+        btn01 : "Evet",
+        btn02 : "İptal",
+    },
+    msgAddCustomerMail: 
+    {
+        title : "Lütfen Mail Adresi Giriniz..",
+    },
     msgCancelCustomerConfirm: 
     {
         title : "Uyarı",
@@ -385,6 +396,7 @@ export const langTr =
     {
         title : "Dikkat",
         msg :"Kart cihazından cevap bekleniyor.",
+        msgAmount: "Miktar :",
         btn01 : "Tekrar",
         btn02 : "Vazgeç",
         btn03 : "Zorla"
@@ -590,6 +602,13 @@ export const langTr =
         msg : "Bu işlemi offline modda iken yapamazsınız !",
         btn01 : "Tamam"
     },
+    msgDisconnectWarning: 
+    {
+        title : "Dikkat",
+        msg : "Cıkmak istediğinize emin misiniz ? ",
+        btn01 : "EVET",
+        btn02 : "HAYIR"
+    },
     msgOfflineAlert: 
     {
         title : "Dikkat",
@@ -602,6 +621,14 @@ export const langTr =
         title : "Dikkat",
         msg1 : "Sunucu ile bağlantı kuruldu ! Online olarak işleminize devam edebilirsiniz.",
         msg2 : "!! LÜTFEN SON OKUTTUĞUNUZ ÜRÜNLERİ KONTROL EDİNİZ !!",
+        btn01 : "Tamam"
+    },
+    msgDataTransferAlert: 
+    {
+        title : "Dikkat",
+        msg1 : "Aktarmanız gereken {0} adet kayıt mevcut ! Şimdi verileri aktarın.",
+        msg2 : "Aktarım işlemi başarılı.",
+        msg3 : "Aktarım işlemi başarısız.Tüm işlemler yeniden başlatılıyor.",
         btn01 : "Tamam"
     },
     msgNotWeighing: 
@@ -783,13 +810,8 @@ export const langTr =
         scalePort : "Scale port",
         payCardPort : "Pay card port",
         printDesing : "Yazdırma dizaynı",
-        scannerPort : "Scanner port"
-    },
-    msgConnectOut: 
-    {
-        title : "Dikkat",
-        msg : "Sunucu ile bağlantınız koptu.. ",
-        btn01 : "Tamam"
+        scannerPort : "Scanner port",
+        printerPort : "Printer port"
     },
     msgNotBarcodeWeighing: 
     {
@@ -798,6 +820,7 @@ export const langTr =
         msgTicket :"Tartılan miktar : ",
         msgBarkod : "Etiket miktari : ",
         msgDifference : "Fark : ",
+        msgTotalAmount : "Toplam Miktar",
         btn01 : "Tamam",
         btn02 : "Devam"
     },
@@ -824,5 +847,21 @@ export const langTr =
         title : "Dikkat",
         msg : "Cihaz id uyumsuz ! Lütfen piqsoft ile iletişim kurunuz.",
         btn01 : "Tamam"
-    }
+    },
+    itemInfo:
+    {
+        msgSplash : "LÜTFEN BARKOD OKUTUNUZ"
+    },
+    popPasswordChange : 
+    {
+        title:"Şifre Değiştir",
+        NewPassword : "Yeni Şifre",
+        NewPassword2 : "Yeni Şifre Tekrar",
+        btnApprove : "Onayla"
+    },
+    passChange :"Şifre Değiştir",
+    txtNewMail : "E-Mail",
+    txtNewPhone : "Telefon",
+    txtNewCustomerLastName : "Soyisim",
+    txtNewCustomerName : "İsim"
 }

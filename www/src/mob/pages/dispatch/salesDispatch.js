@@ -44,7 +44,7 @@ export default class salesDispatch extends React.PureComponent
         }
         this.priceDt.selectCmd = 
         {
-            query : "SELECT dbo.FN_PRICE_SALE_VAT_EXT(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,'') AS PRICE",
+            query : "SELECT dbo.FN_PRICE_SALE_VAT_EXT(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,'','00000000-0000-0000-0000-000000000000') AS PRICE",
             param : ['GUID:string|50','QUANTITY:float','CUSTOMER:string|50'],
         }
 

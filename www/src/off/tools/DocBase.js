@@ -251,6 +251,7 @@ export default class DocBase extends React.PureComponent
             else
             {
                 this.docLocked = false
+                this.frmDocItems.option('disabled',false)
             }
             resolve()
         })
@@ -396,6 +397,7 @@ export default class DocBase extends React.PureComponent
     }
     async calculateTotalMargin()
     {
+        console.log(this.docDetailObj.dt())
         let tmpTotalCost = 0
 
         for (let  i= 0; i < this.docDetailObj.dt().length; i++) 
@@ -645,7 +647,10 @@ export default class DocBase extends React.PureComponent
                 tmpDocItems.DOC_DISCOUNT_2 = data[i].DOC_DISCOUNT_2
                 tmpDocItems.DOC_DISCOUNT_3 = data[i].DOC_DISCOUNT_3
                 tmpDocItems.DOC_DISCOUNT = data[i].DOC_DISCOUNT
-
+                tmpDocItems.CUSTOMER_PRICE = data[i].CUSTOMER_PRICE
+                tmpDocItems.DIFF_PRICE = (data[i].PRICE - data[i].CUSTOMER_PRICE).toFixed(3)
+                tmpDocItems.COST_PRICE = data[i].COST_PRICE
+            
                 await this.docObj.docItems.addEmpty(tmpDocItems)
                 await this.core.util.waitUntil(100)
             }
@@ -701,7 +706,6 @@ export default class DocBase extends React.PureComponent
                 tmpDocItems.DISCOUNT_RATE = data[i].DISCOUNT_RATE
                 tmpDocItems.OFFER_LINE_GUID = data[i].GUID
                 tmpDocItems.OFFER_DOC_GUID = data[i].DOC_GUID
-                tmpDocItems.VAT_RATE = data[i].VAT_RATE
                 tmpDocItems.OLD_VAT = data[i].VAT_RATE
 
                 await this.docObj.docItems.addEmpty(tmpDocItems)
@@ -804,8 +808,8 @@ export default class DocBase extends React.PureComponent
                         if(this.checkCombine.value == true)
                         {
                             this.combineControl = false
-                            this.combineNew = true
                         }
+                        this.combineNew = true
                     }
                 }
                 resolve(tmpMergeDt)
@@ -1425,6 +1429,8 @@ export default class DocBase extends React.PureComponent
                         <Column dataField="ITEM_CODE" caption={this.t("pg_dispatchGrid.clmCode")} width={200}/>
                         <Column dataField="ITEM_NAME" caption={this.t("pg_dispatchGrid.clmName")} width={450} />
                         <Column dataField="QUANTITY" caption={this.t("pg_dispatchGrid.clmQuantity")} width={200} />
+                        <Column dataField="DOC_NO" caption={this.t("pg_dispatchGrid.clmDocNo")} width={200} />
+                        <Column dataField="DOC_DATE" caption={this.t("grdRebtInv.clmDateDispatch")}  width={110} dataType={'date'}  format={'dd/MM/yyyy'}/>
                         <Column dataField="PRICE" caption={this.t("pg_dispatchGrid.clmPrice")} width={200} format={{ style: "currency", currency: "EUR",precision: 3}}/>
                         <Column dataField="TOTAL" caption={this.t("pg_dispatchGrid.clmTotal")} width={200} format={{ style: "currency", currency: "EUR",precision: 3}}/>
                     </NdPopGrid>
@@ -1921,7 +1927,7 @@ export default class DocBase extends React.PureComponent
                     title={this.lang.t("popVatRate.title")}
                     container={"#root"} 
                     width={'500'}
-                    height={'250'}
+                    height={'300'}
                     position={{of:'#root'}}
                     deferRendering={true}
                     >
@@ -1966,7 +1972,7 @@ export default class DocBase extends React.PureComponent
                                                 for (let i = 0; i < this.docDetailObj.dt().length; i++) 
                                                 {
                                                     this.docDetailObj.dt()[i].VAT = 0  
-                                                    this.docDetailObj.dt()[i].VAT_RATE = 0
+                                                    this.docDetailObj.dt()[i].VAT_RATE = 0  
                                                     this.docDetailObj.dt()[i].TOTAL = (this.docDetailObj.dt()[i].PRICE * this.docDetailObj.dt()[i].QUANTITY) - (this.docDetailObj.dt()[i].DISCOUNT + this.docDetailObj.dt()[i].DOC_DISCOUNT)
                                                     this.calculateTotal()
                                                 }
@@ -1979,6 +1985,45 @@ export default class DocBase extends React.PureComponent
                                         onClick={()=>
                                         {
                                             this.popVatRate.hide();  
+                                        }}/>
+                                    </div>
+                                </div>
+                            </Item>
+                            <Item>
+                                <div className='row'>
+                                    <div className='col-6'>
+                                        <NdButton text={this.lang.t("btnVatReCalculate")} type="normal" stylingMode="contained" width={'100%'} 
+                                        onClick={async ()=>
+                                        {       
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgVatCalculate',showTitle:true,title:this.lang.t("msgVatCalculate.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.lang.t("msgVatCalculate.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgVatCalculate.btn02"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgVatCalculate.msg")}</div>)
+                                            }
+                                            
+                                            let pResult = await dialog(tmpConfObj);
+                                            if(pResult == 'btn01')
+                                            {
+                                                for (let i = 0; i < this.docDetailObj.dt().length; i++) 
+                                                {
+                                                    let tmpQuery = 
+                                                    {
+                                                        query : "SELECT VAT FROM ITEMS_VW_01 WHERE GUID = @ITEM", 
+                                                        param : ['ITEM:string|50'],
+                                                        value : [this.docDetailObj.dt()[i].ITEM]
+                                                    }
+                                                    let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                    if(typeof tmpData.result.recordset.length != 'undefined')
+                                                    {
+                                                        this.docDetailObj.dt()[i].VAT_RATE = tmpData.result.recordset[0].VAT
+                                                    }
+                                                    this.docDetailObj.dt()[i].VAT = parseFloat(((this.docDetailObj.dt()[i].TOTALHT - this.docDetailObj.dt()[i].DOC_DISCOUNT) * (this.docDetailObj.dt()[i].VAT_RATE / 100)).toFixed(6))
+                                                    this.docDetailObj.dt()[i].TOTAL = ((this.docDetailObj.dt()[i].PRICE * this.docDetailObj.dt()[i].QUANTITY) - (this.docDetailObj.dt()[i].DISCOUNT + this.docDetailObj.dt()[i].DOC_DISCOUNT)) + this.docDetailObj.dt()[i].VAT
+                                                    this.calculateTotal()
+                                                }
+                                                this.popVatRate.hide()
+                                            }
                                         }}/>
                                     </div>
                                 </div>
@@ -2318,6 +2363,7 @@ export default class DocBase extends React.PureComponent
                         <Paging defaultPageSize={22} />
                         <Column dataField="REFERANS" caption={this.t("pg_ordersGrid.clmReferans")} width={200} defaultSortOrder="asc"/>
                         <Column dataField="ITEM_CODE" caption={this.t("pg_ordersGrid.clmCode")} width={200}/>
+                        <Column dataField="DOC_DATE" caption={this.t("pg_ordersGrid.clmDate")} width={200} dataType={"datetime"} format={"dd-MM-yyyy"} defaultSortOrder="desc"/>
                         <Column dataField="ITEM_NAME" caption={this.t("pg_ordersGrid.clmName")} width={500} />
                         <Column dataField="QUANTITY" caption={this.t("pg_ordersGrid.clmQuantity")} width={200} />
                         <Column dataField="PRICE" caption={this.t("pg_ordersGrid.clmPrice")} width={200} format={{ style: "currency", currency: "EUR",precision: 2}} />

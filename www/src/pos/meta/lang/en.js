@@ -241,6 +241,19 @@ export const langEn =
         msg : "Please select the line",
         btn01 : "OK"
     },
+    msgCustomerMail:
+    {
+        title: "Warning",
+        msg: "Do you want to add an email to the customer?",
+        btn01: "Yes",
+        btn02: "Cancel",
+    },
+    msgAddCustomerMail:
+    {
+        title: "Warning",
+        msg: "The customer's email is",
+        btn01: "OK",
+    },
     msgCancelCustomerConfirm: 
     {
         title : "Attention",
@@ -381,14 +394,14 @@ export const langEn =
         btn01 : "Manual Entry",
         btn02 : "Cancel",
     },
-    msgCardPayment: 
-    {
-        title : "Attention",
-        msg :"Waiting for response from POS terminal",
-        btn01 : "Retry",
-        btn02 : "Cancel",
-        btn03 : "Force",
-    },
+    msgCardPayment: {
+        title: "Attention",
+        msg: "Waiting for the card terminal response.",
+        msgAmount: "Amount :",
+        btn01: "Retry",
+        btn02: "Cancel",
+        btn03: "Force"
+    },    
     msgRePaymentType :
     {
         title : "Which payment method do you choose for the remaining amount?", 
@@ -590,6 +603,13 @@ export const langEn =
         msg: "You cannot do this in offline mode!",
         btn01: "OK"
     },
+    msgDisconnectWarning: 
+    {
+      title: "Attention",
+      msg: "Are you sure you want to exit?",
+      btn01: "YES",
+      btn02: "NO"
+    },
     msgOfflineAlert:
     {
         title: "Attention",
@@ -603,6 +623,14 @@ export const langEn =
         msg1: "Connection to the server established! You can continue your transaction online.",
         msg2: "!!!! Please check the last scanned items !!!!",
         btn01: "OK"
+    },
+    msgDataTransferAlert: 
+    {
+        title : "Attention",
+        msg1 : "You have {0} records to transfer! Transfer the data now.",
+        msg2 : "Transfer process successful.",
+        msg3 : "Transfer process failed. All operations are being restarted.",
+        btn01 : "OK"
     },
     msgNotWeighing:
     {
@@ -783,13 +811,8 @@ export const langEn =
         scalePort: "Scale Port",
         payCardPort: "Card Payment Terminal Port",
         printDesing: "Printer Design",
-        scannerPort : "Scanner port"
-    },
-    msgConnectOut:
-    {
-        title: "Attention",
-        msg: "Connection to the server is interrupted",
-        btn01: "OK"
+        scannerPort : "Scanner port",
+        printerPort: "Printer port"
     },
     msgNotBarcodeWeighing: 
     {
@@ -798,6 +821,7 @@ export const langEn =
         msgTicket: "Weighed quantity: ",
         msgBarkod: "Label quantity: ",
         msgDifference: "Difference: ",
+        msgTotalAmount : "Total Amount",
         btn01: "OK",
         btn02: "Continue"
     },
@@ -824,5 +848,9 @@ export const langEn =
         title : "Attention",
         msg : "Device ID mismatch! Please contact piqsoft.",
         btn01 : "OK"
+    },
+    itemInfo:
+    {
+        msgSplash: "PLEASE SCAN THE BARCODE"
     }
 }

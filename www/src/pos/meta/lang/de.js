@@ -241,6 +241,19 @@ export const langDe =
         msg: "Bitte wählen Sie eine Zeile aus!",
         btn01: "OK",
     },
+    msgCustomerMail:
+    {
+        title: "Warnung",
+        msg: "Möchten Sie dem Kunden eine E-Mail hinzufügen?",
+        btn01: "Ja",
+        btn02: "Abbrechen",
+    },
+    msgAddCustomerMail:
+    {
+        title: "Warnung",
+        msg: "Die E-Mail des Kunden lautet",
+        btn01: "OK",
+    },
     msgCancelCustomerConfirm: 
     {
         title: "Achtung",
@@ -381,10 +394,10 @@ export const langDe =
         btn01: "Mengeneingabe",
         btn02: "Abbrechen",
     },
-    msgCardPayment: 
-    {
+    msgCardPayment: {
         title: "Achtung",
-        msg: "Bitte warten Sie auf eine Antwort vom Kartengerät.",
+        msg: "Warte auf die Antwort des Kartenterminals.",
+        msgAmount: "Betrag :",
         btn01: "Erneut versuchen",
         btn02: "Abbrechen",
         btn03: "Erzwingen"
@@ -590,6 +603,13 @@ export const langDe =
         msg : "Diese Aktion kann nicht im Offline-Modus durchgeführt werden!",
         btn01 : "OK"
     },
+    msgDisconnectWarning: 
+    {
+      title: "Achtung",
+      msg: "Sind Sie sicher, dass Sie gehen möchten?",
+      btn01: "JA",
+      btn02: "NEIN"
+    },
     msgOfflineAlert: 
     {
         title : "Achtung",
@@ -602,6 +622,14 @@ export const langDe =
         title : "Achtung",
         msg1 : "Verbindung zum Server hergestellt! Sie können online weiterarbeiten.",
         msg2 : "!! BITTE ÜBERPRÜFEN SIE DIE ZULETZT GESCANNTEN ARTIKEL !!",
+        btn01 : "OK"
+    },
+    msgDataTransferAlert: 
+    {
+        title : "Achtung",
+        msg1 : "Sie haben {0} Datensätze zu übertragen! Übertragen Sie die Daten jetzt.",
+        msg2 : "Übertragung erfolgreich abgeschlossen.",
+        msg3 : "Übertragung fehlgeschlagen. Alle Vorgänge werden neu gestartet.",
         btn01 : "OK"
     },
     msgNotWeighing: 
@@ -783,13 +811,8 @@ export const langDe =
         scalePort: "Waagen-Anschluss",
         payCardPort: "PayCard-Anschluss",
         printDesing: "Druckdesign",
-        scannerPort : "Scanner port"
-    },
-    msgConnectOut: 
-    {
-        title: "Achtung",
-        msg: "Die Verbindung zum Server wurde getrennt.",
-        btn01: "OK"
+        scannerPort : "Scanner port",
+        printerPort: "Printer port"
     },
     msgNotBarcodeWeighing: 
     {
@@ -798,6 +821,7 @@ export const langDe =
         msgTicket: "Gewogene Menge: ",
         msgBarkod: "Menge des Etiketts: ",
         msgDifference: "Differenz: ",
+        msgTotalAmount : "Gesamtbetrag",
         btn01: "OK",
         btn02: "Weiter"
     },
@@ -824,5 +848,17 @@ export const langDe =
         title : "Achtung",
         msg : "Geräte-ID stimmt nicht überein! Bitte kontaktieren Sie piqsoft.",
         btn01 : "OK"
-    }
+    },
+    itemInfo:
+    {
+        msgSplash: "BITTE DEN BARCODE SCANNEN"
+    },
+    popPasswordChange : 
+    {
+        title:"Şifre Değiştir",  // BAK
+        NewPassword : "Yeni Şifre",  // BAK
+        NewPassword2 : "Yeni Şifre Tekrar",  // BAK
+        btnApprove : "Onayla"  // BAK
+    },
+    passChange :"Şifre Değiştir", // BAK
 }

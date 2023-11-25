@@ -63,7 +63,7 @@ export default class salesOrder extends DocBase
                 {
                     select:
                     {
-                        query : "SELECT GUID,CODE,NAME,VAT,COST_PRICE,UNIT,(SELECT [dbo].[FN_PRICE_SALE_VAT_EXT](GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000',NULL)) AS PRICE FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
+                        query : "SELECT GUID,CODE,NAME,VAT,COST_PRICE,UNIT,(SELECT [dbo].[FN_PRICE_SALE_VAT_EXT](GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000',NULL,'00000000-0000-0000-0000-000000000000')) AS PRICE FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
                         param : ['VAL:string|50']
                     },
                     sql:this.core.sql
@@ -433,7 +433,7 @@ export default class salesOrder extends DocBase
         this.docObj.docOffers.dt()[pIndex].QUANTITY = pQuantity
         let tmpQuery = 
         {
-            query :"SELECT dbo.FN_PRICE_SALE_VAT_EXT(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,NULL) AS PRICE",
+            query :"SELECT dbo.FN_PRICE_SALE_VAT_EXT(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,NULL,'00000000-0000-0000-0000-000000000000') AS PRICE",
             param : ['GUID:string|50','QUANTITY:float','CUSTOMER:string|50'],
             value : [pData.GUID,pQuantity,this.docObj.dt()[0].INPUT]
         }
@@ -770,7 +770,22 @@ export default class salesOrder extends DocBase
                                     <NdButton id="btnPrint" parent={this} icon="print" type="default"
                                      onClick={async ()=>
                                     {       
-                                        this.popDesign.show()
+                                        console.log(this.docObj.isSaved)                             
+                                        if(this.docObj.isSaved == false)
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'isMsgSave',showTitle:true,title:this.t("isMsgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("isMsgSave.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("isMsgSave.msg")}</div>)
+                                            }
+                                            await dialog(tmpConfObj);
+                                            return
+                                        }
+                                        else
+                                        {
+                                            this.popDesign.show()
+                                        }
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
@@ -1354,7 +1369,7 @@ export default class salesOrder extends DocBase
                                         {
                                             let tmpQuery = 
                                             {
-                                                query :"SELECT [dbo].[FN_PRICE_SALE_VAT_EXT](@ITEM_GUID,@QUANTITY,GETDATE(),@CUSTOMER_GUID,NULL) AS PRICE",
+                                                query :"SELECT [dbo].[FN_PRICE_SALE_VAT_EXT](@ITEM_GUID,@QUANTITY,GETDATE(),@CUSTOMER_GUID,NULL,'00000000-0000-0000-0000-000000000000') AS PRICE",
                                                 param : ['ITEM_GUID:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
                                                 value : [e.key.ITEM,this.docObj.dt()[0].INPUT,e.data.QUANTITY]
                                             }
@@ -1690,14 +1705,11 @@ export default class salesOrder extends DocBase
                                     valueExpr="TAG"
                                     value=""
                                     searchEnabled={true}
-                                    onValueChanged={(async()=>
-                                        {
-                                        }).bind(this)}
                                     data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '07'"},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmSlsOfferPrint" + this.tabIndex}>
+                                        <Validator validationGroup={"frmPrintPop" + this.tabIndex}>
                                             <RequiredRule message={this.t("validDesign")} />
                                         </Validator> 
                                     </NdSelectBox>
@@ -1709,44 +1721,43 @@ export default class salesOrder extends DocBase
                                     valueExpr="ID"
                                     value=""
                                     searchEnabled={true}
-                                    onValueChanged={(async()=>
-                                        {
-                                        }).bind(this)}
-                                   data={{source:[{ID:"FR",VALUE:"FR"},{ID:"DE",VALUE:"DE"},{ID:"TR",VALUE:"TR"}]}}
+                                    data={{source:[{ID:"FR",VALUE:"FR"},{ID:"DE",VALUE:"DE"},{ID:"TR",VALUE:"TR"}]}}
                                     >
                                     </NdSelectBox>
                                 </Item>
                                 <Item>
                                     <div className='row'>
                                         <div className='col-6'>
-                                            <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"frmSlsOfferPrint" + this.tabIndex}
+                                            <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"frmPrintPop" + this.tabIndex}
                                             onClick={async (e)=>
                                             {       
-                                            
-                                                let tmpQuery = 
+                                                if(e.validationGroup.validate().status == "valid")
                                                 {
-                                                    query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_OFFERS_FOR_PRINT](@DOC_GUID) ORDER BY LINE_NO " ,
-                                                    param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
-                                                    value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
-                                                }
-                                                let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                console.log(JSON.stringify(tmpData.result.recordset)) // BAK
-
-                                                this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
-                                                {
-                                                    var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");                                                         
-
-                                                    mywindow.onload = function() 
+                                                    let tmpQuery = 
                                                     {
-                                                        mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
-                                                    } 
-                                                    // if(pResult.split('|')[0] != 'ERR')
-                                                    // {
-                                                    //     let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
-                                                    //     mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
-                                                    // }
-                                                });
-                                                this.popDesign.hide();  
+                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_OFFERS_FOR_PRINT](@DOC_GUID) ORDER BY LINE_NO " ,
+                                                        param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
+                                                        value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
+                                                    }
+                                                    let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                    console.log(JSON.stringify(tmpData.result.recordset)) // BAK
+
+                                                    this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
+                                                    {
+                                                        var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");                                                         
+
+                                                        mywindow.onload = function() 
+                                                        {
+                                                            mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
+                                                        } 
+                                                        // if(pResult.split('|')[0] != 'ERR')
+                                                        // {
+                                                        //     let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
+                                                        //     mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
+                                                        // }
+                                                    });
+                                                    this.popDesign.hide();
+                                                }  
                                             }}/>
                                         </div>
                                         <div className='col-6'>
@@ -1759,7 +1770,7 @@ export default class salesOrder extends DocBase
                                     </div>
                                     <div className='row py-2'>
                                         <div className='col-6'>
-                                            <NdButton text={this.t("btnView")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmSlsOfferPrint" + this.tabIndex}
+                                            <NdButton text={this.t("btnView")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmPrintPop" + this.tabIndex}
                                             onClick={async (e)=>
                                             {       
                                                 if(e.validationGroup.validate().status == "valid")
@@ -1790,7 +1801,7 @@ export default class salesOrder extends DocBase
                                             }}/>
                                         </div>
                                         <div className='col-6'>
-                                            <NdButton text={this.t("btnMailsend")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmSlsOfferPrint" + this.tabIndex}
+                                            <NdButton text={this.t("btnMailsend")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmPrintPop" + this.tabIndex}
                                             onClick={async (e)=>
                                             {    
                                                 if(e.validationGroup.validate().status == "valid")

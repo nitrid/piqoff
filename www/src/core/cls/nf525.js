@@ -195,9 +195,6 @@ export class nf525Cls
                 tmpSignatureSum = tmpSignatureSum + "," + tmpLastData.LAST_SIGN
                 
                 tmpSignature = this.sign(tmpSignatureSum)
-
-                localStorage.setItem('REF_SALE',Number(tmpLastData.REF) + 1)
-                localStorage.setItem('SIG_SALE',tmpSignature)
             }
 
             resolve({REF:Number(tmpLastData.REF) + 1,SIGNATURE:tmpSignature,SIGNATURE_SUM:tmpSignatureSum})

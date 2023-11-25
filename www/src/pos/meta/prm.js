@@ -610,9 +610,9 @@ export const prm =
                 colCount:1,
                 item:
                 [
-                    {type:"checkbox",caption:"Pasif",field:"disable",id:"chkPopDocRowDelDescriptionDisable"},
-                    {type:"text",caption:"Min.Karakter",field:"minCharSize",id:"txtPopDocRowDelDescriptionMinChar"},
-                    {type:"popObjectList",caption:"Açıklama",field:"buttons",id:"lstPopDocRowDelDescriptionDesc",
+                    {type:"checkbox",caption:"Pasif",field:"disable",id:"chkPopBalanceCounterDescDisable"},
+                    {type:"text",caption:"Min.Karakter",field:"minCharSize",id:"txtPopBalanceCounterDescMinChar"},
+                    {type:"popObjectList",caption:"Açıklama",field:"buttons",id:"lstPopBalanceCounterDesc",
                         form:
                         {
                             width:"800",
@@ -1070,22 +1070,22 @@ export const prm =
             {
                 items : "299997MMMCCF",
                 title : "Attention Prix Boucherie Manuel",
-                msg : "Attention prix saissie manuel boucherie.",
+                msg : "Attention prix saisie manuel boucherie.",
             },
             {
                 items : "0299997MMMCCF",
                 title : "Attention Prix Boucherie Manuel",
-                msg : "Attention prix saissie manuel boucherie.",
+                msg : "Attention prix saisie manuel boucherie.",
             },
             {
                 items : "102000MMMCCF",
                 title : "Attention Prix Boucherie Manuel",
-                msg : "Attention prix saissie manuel boucherie.",
+                msg : "Attention prix saisie manuel boucherie.",
             },
             {
                 items : "0102000MMMCCF",
                 title : "Attention Prix Boucherie Manuel",
-                msg : "Attention prix saissie manuel boucherie.",
+                msg : "Attention prix saisie manuel boucherie.",
             },
         ],
         SPECIAL : "",
@@ -1241,7 +1241,7 @@ export const prm =
         ID :"ScaleBarcodeControl",
         VALUE : 
         {
-            active : true,
+            active : false,
             tolerans : 0.030
         },
         SPECIAL : "",
@@ -1253,11 +1253,11 @@ export const prm =
             TYPE : "popInput",
             PAGE_NAME : "Pos",
             CAPTION : "Terazi Barkod Kontrolü",
-            DISPLAY : "disable",
+            DISPLAY : "active",
             FORM: 
             {
                 width:"400",
-                height:"180",
+                height:"220",
                 colCount:1,
                 item:
                 [
@@ -1297,6 +1297,22 @@ export const prm =
             TYPE : "checkbox",
             PAGE_NAME : "Pos",
             CAPTION : "Müşteri Puan Katsayısı"
+        }
+    },
+     //Mail Kontrolü
+     {
+        TYPE : 0,
+        ID :"mailControl",
+        VALUE : true,
+        SPECIAL : "",
+        PAGE : "pos",
+        ELEMENT : "",
+        APP : "POS",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Pos",
+            CAPTION : "Mail Kontrolü"
         }
     },
     //#endregion

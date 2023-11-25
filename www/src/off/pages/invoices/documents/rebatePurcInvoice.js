@@ -90,7 +90,7 @@ export default class rebateInvoice extends DocBase
                 {
                     select:
                     {
-                        query : "SELECT GUID,CODE,NAME,VAT,UNIT,STATUS,(SELECT [dbo].[FN_PRICE_SALE_VAT_EXT](GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000',NULL)) AS PRICE " + 
+                        query : "SELECT GUID,CODE,NAME,VAT,UNIT,STATUS,(SELECT [dbo].[FN_PRICE_SALE_VAT_EXT](GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000',NULL,'00000000-0000-0000-0000-000000000000')) AS PRICE " + 
                                 "FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
                         param : ['VAL:string|50']
                     },
@@ -478,11 +478,12 @@ export default class rebateInvoice extends DocBase
         this.docObj.docItems.dt()[pIndex].UNIT = pData.UNIT
         this.docObj.docItems.dt()[pIndex].DISCOUNT = 0
         this.docObj.docItems.dt()[pIndex].DISCOUNT_RATE = 0
+        this.docObj.docItems.dt()[pIndex].QUANTITY = pQuantity
         this.docObj.docItems.dt()[pIndex].SUB_QUANTITY = pQuantity * this.docObj.docItems.dt()[pIndex].SUB_FACTOR
 
         let tmpQuery = 
         {
-            query :"SELECT dbo.FN_PRICE_SALE_VAT_EXT(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,NULL) AS PRICE",
+            query :"SELECT dbo.FN_PRICE_SALE_VAT_EXT(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,NULL,'00000000-0000-0000-0000-000000000000') AS PRICE",
             param : ['GUID:string|50','QUANTITY:float','CUSTOMER:string|50'],
             value : [pData.GUID,pQuantity,this.docObj.dt()[0].OUTPUT]
         }
@@ -977,9 +978,24 @@ export default class rebateInvoice extends DocBase
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnPrint" parent={this} icon="print" type="default"
-                                    onClick={()=>
+                                    onClick={async ()=>
                                     {
-                                        this.popDesign.show()
+                                        console.log(this.docObj.isSaved)                             
+                                        if(this.docObj.isSaved == false)
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'isMsgSave',showTitle:true,title:this.t("isMsgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("isMsgSave.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("isMsgSave.msg")}</div>)
+                                            }
+                                            await dialog(tmpConfObj);
+                                            return
+                                        }
+                                        else
+                                        {
+                                            this.popDesign.show()
+                                        }                                     
                                     }}/>
                                 </Item>
                                 <Item location="after"
@@ -1734,6 +1750,7 @@ export default class rebateInvoice extends DocBase
                                             <Column dataField="VAT_RATE" caption={this.t("grdRebtInv.clmVatRate")} width={50} allowEditing={false}/>
                                             <Column dataField="TOTALHT" caption={this.t("grdRebtInv.clmTotalHt")} format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false} width={90} allowHeaderFiltering={false}/>
                                             <Column dataField="TOTAL" caption={this.t("grdRebtInv.clmTotal")} width={100} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
+                                            <Column dataField="DOC_DATE" caption={this.t("grdRebtInv.clmDateDispatch")}  width={110} dataType={'date'}  format={'dd/MM/yyyy'}/>
                                             <Column dataField="CONNECT_REF" caption={this.t("grdRebtInv.clmDispatch")}  width={110} allowEditing={false}  allowHeaderFiltering={false}/>
                                             <Column dataField="DESCRIPTION" caption={this.t("grdRebtInv.clmDescription")} width={100} />
                                         </NdGrid>
@@ -1979,14 +1996,11 @@ export default class rebateInvoice extends DocBase
                                     valueExpr="TAG"
                                     value=""
                                     searchEnabled={true}
-                                    onValueChanged={(async()=>
-                                        {
-                                        }).bind(this)}
                                     data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '16'"},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmPurcOrderPrint"  + this.tabIndex}>
+                                        <Validator validationGroup={"frmPrintPop"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validDesign")} />
                                         </Validator> 
                                     </NdSelectBox>
@@ -1998,17 +2012,14 @@ export default class rebateInvoice extends DocBase
                                     valueExpr="ID"
                                     value=""
                                     searchEnabled={true}
-                                    onValueChanged={(async()=>
-                                        {
-                                        }).bind(this)}
-                                data={{source:[{ID:"FR",VALUE:"FR"},{ID:"DE",VALUE:"DE"},{ID:"TR",VALUE:"TR"}]}}
+                                    data={{source:[{ID:"FR",VALUE:"FR"},{ID:"DE",VALUE:"DE"},{ID:"TR",VALUE:"TR"}]}}
                                     >
                                     </NdSelectBox>
                                 </Item>
                                 <Item>
                                     <div className='row'>
                                         <div className='col-6'>
-                                            <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'} 
+                                            <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"frmPrintPop"  + this.tabIndex}
                                             onClick={async ()=>
                                             {   let tmpQuery = 
                                                 {
@@ -2041,63 +2052,63 @@ export default class rebateInvoice extends DocBase
                                                 this.popDesign.hide();  
                                             }}/>
                                         </div>
-                                        <div className='row py-2'>
-                                            <div className='col-6'>
-                                                <NdButton text={this.t("btnView")} type="normal" stylingMode="contained" width={'100%'}  
-                                                onClick={async (e)=>
-                                                {       
-                                                    if(e.validationGroup.validate().status == "valid")
+                                    </div>
+                                    <div className='row py-2'>
+                                        <div className='col-6'>
+                                            <NdButton text={this.t("btnView")} type="normal" stylingMode="contained" width={'100%'}  
+                                            onClick={async (e)=>
+                                            {       
+                                                if(e.validationGroup.validate().status == "valid")
+                                                {
+                                                    let tmpQuery = 
                                                     {
-                                                        let tmpQuery = 
-                                                        {
-                                                            query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG)ORDER BY DOC_DATE,LINE_NO " ,
-                                                            param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
-                                                            value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
-                                                        }
-                                                        App.instance.setState({isExecute:true})
-                                                        let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                        App.instance.setState({isExecute:false})
-                                                        this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
-                                                        {
-                                                            if(pResult.split('|')[0] != 'ERR')
-                                                            {
-                                                                var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
-                                                                mywindow.onload = function() 
-                                                                { 
-                                                                    mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
-                                                                } 
-                                                                // let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
-                                                                // mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
-                                                            }
-                                                        });
+                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG)ORDER BY DOC_DATE,LINE_NO " ,
+                                                        param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
+                                                        value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
                                                     }
-                                                }}/>
-                                            </div>
-                                            <div className='col-6'>
-                                                <NdButton text={this.t("btnMailsend")} type="normal" stylingMode="contained" width={'100%'}  
-                                                onClick={async (e)=>
-                                                {    
-                                                    if(e.validationGroup.validate().status == "valid")
+                                                    App.instance.setState({isExecute:true})
+                                                    let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                    App.instance.setState({isExecute:false})
+                                                    this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
                                                     {
-                                                        let tmpQuery = 
+                                                        if(pResult.split('|')[0] != 'ERR')
                                                         {
-                                                            query :"SELECT EMAIL FROM CUSTOMER_VW_02 WHERE GUID = @GUID",
-                                                            param:  ['GUID:string|50'],
-                                                            value:  [this.docObj.dt()[0].INPUT]
+                                                            var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
+                                                            mywindow.onload = function() 
+                                                            { 
+                                                                mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
+                                                            } 
+                                                            // let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
+                                                            // mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
                                                         }
-                                                        let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                        if(tmpData.result.recordset.length > 0)
-                                                        {
-                                                            await this.popMailSend.show()
-                                                            this.txtSendMail.value = tmpData.result.recordset[0].EMAIL
-                                                        }
-                                                        else
-                                                        {
-                                                            this.popMailSend.show()
-                                                        }
+                                                    });
+                                                }
+                                            }}/>
+                                        </div>
+                                        <div className='col-6'>
+                                            <NdButton text={this.t("btnMailsend")} type="normal" stylingMode="contained" width={'100%'}  
+                                            onClick={async (e)=>
+                                            {    
+                                                if(e.validationGroup.validate().status == "valid")
+                                                {
+                                                    let tmpQuery = 
+                                                    {
+                                                        query :"SELECT EMAIL FROM CUSTOMER_VW_02 WHERE GUID = @GUID",
+                                                        param:  ['GUID:string|50'],
+                                                        value:  [this.docObj.dt()[0].INPUT]
                                                     }
-                                                }}/>
-                                            </div>
+                                                    let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                    if(tmpData.result.recordset.length > 0)
+                                                    {
+                                                        await this.popMailSend.show()
+                                                        this.txtSendMail.value = tmpData.result.recordset[0].EMAIL
+                                                    }
+                                                    else
+                                                    {
+                                                        this.popMailSend.show()
+                                                    }
+                                                }
+                                            }}/>
                                         </div>
                                     </div>
                                 </Item>

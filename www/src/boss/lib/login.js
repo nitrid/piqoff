@@ -11,6 +11,7 @@ import NdGrid,{Column,Editing,Paging,Scrolling,KeyboardNavigation,Export} from '
 import i18n from './i18n.js'
 import { locale, loadMessages, formatMessage } from 'devextreme/localization';
 import { dialog } from '../../core/react/devex/dialog.js';
+import { datatable } from '../../core/core';
 
 export default class Login extends React.PureComponent
 {
@@ -80,8 +81,17 @@ export default class Login extends React.PureComponent
         
         if((await this.core.auth.login(this.state.kullanici,this.state.sifre,'BOSS')))
         {
-           
-            App.instance.setState({logined:true});
+            // SADECE UYGULAMAYA AİT KULLANICILARININ GİREMEMESİ İÇİN YAPILDI
+            let tmpDt = new datatable()
+            tmpDt.import([this.core.auth.data])
+            if(tmpDt.where({USER_APP : {"LIKE" : "BOSS"}}).length == 0)
+            {
+                this.setState({logined:false,alert:this.lang.t("msgUserAccess")})
+            }
+            else
+            {
+                App.instance.setState({logined:true});
+            }
         }
         else
         {
@@ -91,7 +101,10 @@ export default class Login extends React.PureComponent
     async getUserList()
     {
         let tmpData = await this.core.auth.getUserList()
-        await this.pg_users.setData(tmpData)
+        let tmpDt = new datatable()
+        tmpDt.import(tmpData)
+        tmpDt = tmpDt.where({USER_APP : {"LIKE" : "BOSS"}})
+        await this.pg_users.setData(tmpDt)
         
         this.pg_users.show()
         this.pg_users.onClick = (data) =>
@@ -131,7 +144,7 @@ export default class Login extends React.PureComponent
                             </div>
                             <div className="col-2 pb-2">
                                 <Button icon="preferences" visible={App.instance.device}
-                                onClick={()=>window.location="../BOSS/appUpdate.html"}
+                                onClick={()=>window.location="../boss/appUpdate.html"}
                                 />
                             </div>
                         </div>

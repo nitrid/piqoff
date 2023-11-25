@@ -56,24 +56,24 @@ export default class itemPurcPriceReport extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT *" + 
-                            " FROM " + 
-                            "(SELECT   " +
-                            "ITEMS.GUID,  " +
-                            "ITEMS.NAME,  " +
-                            "ITEMS.CODE,  " +
-                            "PRICE.PRICE AS PURC_PRICE,  " +
-                            "ITEMS.VAT AS VAT, " +
-                            "ISNULL((SELECT TOP 1 PRICE FROM ITEM_PRICE_LOG_VW_01 WHERE ITEM_PRICE_LOG_VW_01.ITEM_GUID = PRICE.ITEM_GUID AND ITEM_PRICE_LOG_VW_01.CUSTOMER = PRICE.CUSTOMER_GUID AND TYPE = 1 ORDER BY CHANGE_DATE DESC),0) AS FISRT_PRICE," + 
-                            "ISNULL((SELECT [dbo].[FN_PRICE_SALE](ITEMS.GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000')),0) AS PRICE_SALE,  " +
-                            "PRICE.CUSTOMER_NAME AS CUSTOMER_NAME, " +
-                            "PRICE.CUSTOMER_GUID AS CUSTOMER, " + 
-                            "PRICE.LDATE AS LDATE " +
-                            "FROM ITEMS_VW_01 AS ITEMS   " +
-                            "INNER JOIN  " +
-                            "ITEM_PRICE_VW_01 AS PRICE  " +
-                            "ON ITEMS.GUID = PRICE.ITEM_GUID  " +
-                            "WHERE STATUS = 1 AND PRICE.LDATE > @FISRT_DATE AND PRICE.TYPE = 1 AND ((PRICE.CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = '')) AND ((ITEMS.MAIN_GRP = @MAIN_GRP) OR (@MAIN_GRP = ''))) AS TMP  ORDER BY NAME",
+                    query : "SELECT *   " +
+                            "FROM    " +
+                            "(SELECT     " +
+                            "ITEMS.GUID,    " +
+                            "ITEMS.NAME,    " +
+                            "ITEMS.CODE,    " +
+                            "PRICE.LAST_PRICE AS PURC_PRICE,    " +
+                            "ITEMS.VAT AS VAT,   " +
+                            "PRICE.FISRT_PRICE AS FISRT_PRICE,   " +
+                            "ISNULL((SELECT [dbo].[FN_PRICE_SALE](ITEMS.GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000')),0) AS PRICE_SALE,    " +
+                            "ISNULL((SELECT  TITLE FROM CUSTOMER_VW_02 WHERE GUID = PRICE.CUSTOMER),'')AS CUSTOMER_NAME,   " +
+                            "PRICE.CUSTOMER AS CUSTOMER,    " +
+                            "PRICE.CDATE AS LDATE   " +
+                            "FROM ITEMS_VW_01 AS ITEMS     " +
+                            "INNER JOIN    " +
+                            "PRICE_HISTORY_VW_01 AS PRICE     " +
+                            "ON ITEMS.GUID = PRICE.ITEM    " +
+                            "WHERE STATUS = 1 AND PRICE.CDATE > @FISRT_DATE AND PRICE.CDATE < @LAST_DATE AND PRICE.TYPE = 1 AND ((PRICE.CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = '')) AND ((ITEMS.MAIN_GRP = @MAIN_GRP) OR (@MAIN_GRP = ''))) AS TMP  ORDER BY NAME",
                     param : ['FISRT_DATE:date','LAST_DATE:date','CUSTOMER_CODE:string|50','MAIN_GRP:string|50'],
                     value : [this.dtDate.startDate,this.dtDate.endDate,this.cmbTedarikci.value,this.cmbUrunGrup.value]
                 },
@@ -205,7 +205,7 @@ export default class itemPurcPriceReport extends React.PureComponent
                                         <NdSelectBox simple={true} parent={this} id="cmbTedarikci" showClearButton={true} notRefresh={true}  searchEnabled={true} 
                                         displayExpr="TITLE"                       
                                         valueExpr="CODE"
-                                        data={{source: {select : {query:"SELECT CODE,TITLE FROM CUSTOMER_VW_01 WHERE GENUS IN(1) ORDER BY TITLE ASC"},sql : this.core.sql}}}
+                                        data={{source: {select : {query:"SELECT CODE,TITLE,GUID FROM CUSTOMER_VW_01 WHERE GENUS IN(1) ORDER BY TITLE ASC"},sql : this.core.sql}}}
                                         />
                                 </Item>
                                 <Item>

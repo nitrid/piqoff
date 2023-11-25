@@ -40,9 +40,9 @@ export const langFr =
     price : "Prix",
     msgDeviceChange : 
     {
-        title : "Attention",   // BAK
+        title : "Attention",
         msg : "Il y a un paiement dans le reçu que vous souhaitez apporter. Vous pouvez continuer la transaction en encaissant au comptoir ! Code de caisse : ",   // BAK
-        btn01 : "OK",   // BAK
+        btn01 : "OK",
     },
     msgCustomerNotFound : 
     {
@@ -58,9 +58,9 @@ export const langFr =
     },
     msgMaxQuantity :
     {
-        title : "Attention",  // BAK
+        title : "Attention",
         msg : "Vous ne pouvez entrer une quantité supérieure à 99.999 !",  // BAK
-        btn01 : "OK",  // BAK
+        btn01 : "OK",
     },
     msgPriceNotFound : 
     {
@@ -241,6 +241,17 @@ export const langFr =
         msg : "Veuillez sélectionner la ligne ",
         btn01 : "OK"
     },
+    msgCustomerMail:
+    {
+        title: "Avertissement",
+        msg: "Voulez-vous ajouter un e-mail au client ?",
+        btn01: "Oui",
+        btn02: "Annuler",
+    },
+    msgAddCustomerMail:
+    {
+        title: "Veuillez saisir votre adresse e-mail.",
+    },
     msgCancelCustomerConfirm: 
     {
         title : "Attention",
@@ -383,11 +394,12 @@ export const langFr =
     },
     msgCardPayment: 
     {
-        title : "Attention",
-        msg :" En attente de réponse du TPE",
-        btn01 : "A nouveau",
-        btn02 : "Abandonner",
-        btn03 : "Forcer"
+        title: "Attention",
+        msg: "Attente de la réponse du terminal de carte.",
+        msgAmount: "Montant :",
+        btn01: "Réessayer",
+        btn02: "Annuler",
+        btn03: "Forcer"
     },
     msgRePaymentType :
     {
@@ -590,6 +602,14 @@ export const langFr =
         msg : "Vous ne pouvez pas faire cela en mode hors ligne !",
         btn01 : "OK"
     },
+    msgDisconnectWarning: 
+    {
+      title: "Attention",
+      msg: "Êtes-vous sûr de vouloir quitter ?",
+      btn01: "OUI",
+      btn02: "NON"
+    },
+
     msgOfflineAlert: 
     {
         title : "Attention",
@@ -603,6 +623,14 @@ export const langFr =
         msg1 : "Connexion au serveur établie ! Vous pouvez poursuivre votre transaction en ligne.",
         msg2 : "!!!! Veuillez vérifier les derniers articles scannés !!!!",
         btn01 : "OK"
+    },
+    msgDataTransferAlert: //BAK
+    {
+        title : "Attention",
+        msg1 : "Vous avez {0} enregistrements à transférer ! Transférez les données maintenant.",
+        msg2 : "La transmission a réussi.",
+        msg3 : "La transmission a échoué. Toutes les opérations sont en cours de redémarrage.",
+        btn01 : "D'accord"
     },
     msgNotWeighing: 
     {
@@ -783,13 +811,8 @@ export const langFr =
         scalePort : "Balance port",
         payCardPort : "TPE port",
         printDesing : "Design d’imprimante",
-        scannerPort : "Scanner port"
-    },
-    msgConnectOut: 
-    {
-        title : "Attention", 
-        msg : "La connexion avec le serveur est interrompu ", 
-        btn01 : "D'accord"  
+        scannerPort : "Scanner port",
+        printerPort: "Printer port"
     },
     msgNotBarcodeWeighing: //BAK
     {
@@ -798,6 +821,7 @@ export const langFr =
         msgTicket: "Weighed quantity: ",
         msgBarkod: "Label quantity: ",
         msgDifference: "Difference: ",
+        msgTotalAmount : "Montant total",
         btn01: "OK",
         btn02: "Continue"
     },
@@ -824,5 +848,22 @@ export const langFr =
         title : "Attention",
         msg : "ID du périphérique non compatible ! Veuillez contacter piqsoft.",
         btn01 : "OK"
-    }
+    },
+    itemInfo:
+    {
+        msgSplash: "VEUILLEZ SCANNER LE CODE BARRE"
+    },
+    popPasswordChange:
+    {
+        title: "Changer le mot de passe",
+        NewPassword: "Nouveau mot de passe",
+        NewPassword2: "Répéter le nouveau mot de passe",
+        btnApprove: "Enregistrer"
+    },
+    passChange: "Changer le mot de passe",
+    txtNewMail : "E-Mail",
+    txtNewPhone : "Numéro de téléphone",
+    txtNewCustomerLastName : "Nom",
+    txtNewCustomerName : "Prenom"
+    
 }

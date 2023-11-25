@@ -241,6 +241,19 @@ export const langEs =
         msg : "¡Por favor, seleccione una línea!",
         btn01 : "Aceptar"
     },
+    msgCustomerMail:
+    {
+        title: "Advertencia",
+        msg: "¿Quieres agregar un correo electrónico al cliente?",
+        btn01: "Sí",
+        btn02: "Cancelar",
+    },
+    msgAddCustomerMail:
+    {
+        title: "Advertencia",
+        msg: "El correo electrónico del cliente es",
+        btn01: "Aceptar",
+    },
     msgCancelCustomerConfirm: 
     {
         title : "Advertencia",
@@ -381,13 +394,14 @@ export const langEs =
         btn01: "Ingresar cantidad",
         btn02: "Cancelar",
     },
-    msgCardPayment:
+    msgCardPayment: 
     {
         title: "Atención",
-        msg: "Esperando respuesta desde el dispositivo de tarjeta.",
+        msg: "Esperando la respuesta del terminal de tarjeta.",
+        msgAmount: "Cantidad :",
         btn01: "Reintentar",
         btn02: "Cancelar",
-        btn03: "Forzar",
+        btn03: "Forzar"
     },
     msgRePaymentType:
     {
@@ -590,6 +604,13 @@ export const langEs =
         msg: "¡No puede realizar esta operación mientras está en modo offline!",
         btn01: "Aceptar"
     },
+    msgDisconnectWarning: 
+    {
+      title: "Atención",
+      msg: "¿Está seguro de que desea salir?",
+      btn01: "SÍ",
+      btn02: "NO"
+    },
     msgOfflineAlert: 
     {
         title: "Atención",
@@ -603,6 +624,14 @@ export const langEs =
         msg1: "¡Se ha establecido la conexión con el servidor! Puede continuar con la operación en línea.",
         msg2: "¡POR FAVOR, VERIFIQUE LOS ÚLTIMOS PRODUCTOS ESCANEADOS!",
         btn01: "Aceptar"
+    },
+    msgDataTransferAlert: 
+    {
+        title : "Atención",
+        msg1 : "Tiene {0} registros para transferir. Transfiera los datos ahora.",
+        msg2 : "Proceso de transferencia exitoso.",
+        msg3 : "Fallo en el proceso de transferencia. Se están reiniciando todas las operaciones.",
+        btn01 : "Aceptar"
     },
     msgNotWeighing: 
     {
@@ -783,13 +812,8 @@ export const langEs =
         scalePort: "Puerto de la Báscula",
         payCardPort: "Puerto de Tarjeta de Pago",
         printDesing: "Diseño de Impresión",
-        scannerPort : "Scanner port"
-    },
-    msgConnectOut: 
-    {
-        title: "Atención",
-        msg: "¡Se ha perdido la conexión con el servidor!",
-        btn01: "Aceptar"
+        scannerPort : "Scanner port",
+        printerPort: "Printer port"
     },
     msgNotBarcodeWeighing: 
     {
@@ -798,6 +822,7 @@ export const langEs =
         msgTicket: "Cantidad pesada: ",
         msgBarkod: "Cantidad de etiqueta: ",
         msgDifference: "Diferencia: ",
+        msgTotalAmount : "Monto total",
         btn01: "Aceptar",
         btn02: "Continuar"
     },
@@ -824,5 +849,9 @@ export const langEs =
         title : "Atención",
         msg : "¡ID del dispositivo no coincide! Por favor, contacte a piqsoft.",
         btn01 : "Aceptar"
+    },
+    itemInfo:
+    {
+        msgSplash: "POR FAVOR, ESCANEE EL CÓDIGO DE BARRAS"
     }
 }

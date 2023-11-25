@@ -890,7 +890,7 @@ export class dataset
                     tmpQuerys.push(e)    
                 });
             }
-            console.log(tmpQuerys)
+            
             let tmpResult = await this.sql.execute(tmpQuerys)
             
             if(typeof tmpResult.result.err == 'undefined')
@@ -1535,6 +1535,14 @@ export class datatable
                     });
                     tmpData = tmpArr
                 }
+                else if (tmpOp == 'LIKE' || tmpOp == 'like') 
+                {
+                    const regex = new RegExp(tmpValue);
+                    tmpData = tmpData.filter((x) => 
+                    {
+                        return regex.test(x[tmpKey])
+                    });
+                }
             }
             
             let tmpDt = new datatable();
@@ -1720,8 +1728,7 @@ export class param extends datatable
                 param : ['PGUID:string|50','PTYPE:int','PID:string|100','PVALUE:string|max','PSPECIAL:string|150','PUSERS:string|25','PPAGE:string|25','PELEMENT:string|250','PAPP:string|50'],
                 dataprm : ['GUID','TYPE','ID','VALUE','SPECIAL','USERS','PAGE','ELEMENT','APP']
             } 
-            await this.update(); 
-            resolve();
+            resolve(await this.update());
         });
     }
     filter()
@@ -1771,7 +1778,15 @@ export class param extends datatable
             if(arguments.length == 0)
             {
                // return JSON.parse(JSON.stringify(this[0].VALUE))
-               return JSON.parse(this[0].VALUE)
+               try
+               {
+                    return JSON.parse(this[0].VALUE)
+               }
+               catch(ex)
+               {
+                    return this[0].VALUE
+               }
+               
             }
             // EĞER PARAMETRE GELMİŞ İSE VE GELEN VERİ NUMBER İSE VERİLEN SATIR I DÖNDÜR.
             else if(arguments.length == 1 && typeof arguments[0] == 'number')
@@ -2184,9 +2199,9 @@ Number.prototype.rateInc = function(pRate,pDigit)
     if(typeof pRate != 'undefined')
     {
         if(typeof pDigit != 'undefined')
-            return Number((this * (pRate / 100)).toFixed(pDigit))
+            return isNaN(Number((this * (pRate / 100)).toFixed(pDigit))) ? 0 : Number((this * (pRate / 100)).toFixed(pDigit))
         else
-            return this * (pRate / 100)
+            return isNaN(this * (pRate / 100)) ? 0 : this * (pRate / 100)
     }
     return 0
 }
@@ -2196,9 +2211,9 @@ Number.prototype.rateExc = function(pRate,pDigit)
     if(typeof pRate != 'undefined')
     {
         if(typeof pDigit != 'undefined')
-            return Number((this * ((pRate / 100) + 1)).toFixed(pDigit))
+            return isNaN(Number((this * ((pRate / 100) + 1)).toFixed(pDigit))) ? 0 : Number((this * ((pRate / 100) + 1)).toFixed(pDigit))
         else
-            return this * ((pRate / 100) + 1)
+            return isNaN(this * ((pRate / 100) + 1)) ? 0 : this * ((pRate / 100) + 1)
     }
     return 0
 }
@@ -2208,9 +2223,9 @@ Number.prototype.rateInNum = function(pRate,pDigit)
     if(typeof pRate != 'undefined')
     {
         if(typeof pDigit != 'undefined')
-            return Number((this / ((pRate / 100) + 1)).toFixed(pDigit))
+            return isNaN(Number((this / ((pRate / 100) + 1)).toFixed(pDigit))) ? 0 : Number((this / ((pRate / 100) + 1)).toFixed(pDigit))
         else
-            return this / ((pRate / 100) + 1)
+            return isNaN(this / ((pRate / 100) + 1)) ? 0 : this / ((pRate / 100) + 1)
     }
     return 0
 }
@@ -2221,11 +2236,11 @@ Number.prototype.rate2In = function(pNum,pDigit)
     {
         if(typeof pDigit != 'undefined')
         {
-            return Number(((pNum / (this - pNum)) * 100).toFixed(pDigit))
+            return isNaN(Number(((pNum / (this - pNum)) * 100).toFixed(pDigit))) ? 0 : Number(((pNum / (this - pNum)) * 100).toFixed(pDigit))
         }
         else
         {
-            return (pNum / (this - pNum)) * 100
+            return isNaN((pNum / (this - pNum)) * 100) ? 0 : (pNum / (this - pNum)) * 100
         }                 
     }
     return 0
@@ -2237,11 +2252,11 @@ Number.prototype.rate2Num = function(pNum,pDigit)
     {
         if(typeof pDigit != 'undefined')
         {
-            return Number(((pNum / this) * 100).toFixed(pDigit))
+            return isNaN(Number(((pNum / this) * 100).toFixed(pDigit))) ? 0 : Number(((pNum / this) * 100).toFixed(pDigit))
         }
         else
         {
-            return (pNum / this) * 100
+            return isNaN((pNum / this) * 100) ? 0 : (pNum / this) * 100
         }                 
     }
     return 0
@@ -2293,7 +2308,7 @@ Number.prototype.round = function(pDigits)
     }
     tmpNum = Number(tmpNum)
     
-    return Number(Math.round(Number(this)+'e'+pDigits)+'e-'+pDigits)
+    return isNaN(Number(Math.round(Number(this)+'e'+pDigits)+'e-'+pDigits)) ? 0 : Number(Math.round(Number(this)+'e'+pDigits)+'e-'+pDigits)
     return Math.round((Number(this.toFixed(pDigits + 1)) + Number.EPSILON) * tmpNum) / tmpNum
     //return Math.round((this + Number.EPSILON) * tmpNum) / tmpNum
 }

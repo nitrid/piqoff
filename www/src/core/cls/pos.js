@@ -1156,6 +1156,10 @@ export class posDeviceCls
             PAY_CARD_PORT : '',
             PRINT_DESING : '',
             SCANNER_PORT : '',
+            PRINTER_PORT : '',
+            DEPOT_GUID : '00000000-0000-0000-0000-000000000000',
+            DEPOT_NAME : 'GENERAL',
+            MACID : '',
         }
         this.listeners = Object();
         this.payPort = null;
@@ -1210,17 +1214,20 @@ export class posDeviceCls
                     "@PAY_CARD_PORT = @PPAY_CARD_PORT, " +
                     "@PRINT_DESING = @PPRINT_DESING, " +
                     "@SCANNER_PORT = @PSCANNER_PORT, " +
-                    "@MACID = @PMACID " ,                   
-            param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|50','PNAME:string|50','PLCD_PORT:string|50','PSCALE_PORT:string|50','PPAY_CARD_PORT:string|50','PPRINT_DESING:string|50','PSCANNER_PORT:string|50','PMACID:string|250'],
-            dataprm : ['GUID','CUSER','CODE','NAME','LCD_PORT','SCALE_PORT','PAY_CARD_PORT','PRINT_DESING','SCANNER_PORT','MACID'],
+                    "@PRINTER_PORT = @PPRINTER_PORT, " +
+                    "@MACID = @PMACID, " + 
+                    "@DEPOT = @PDEPOT " ,
+            param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|50','PNAME:string|50','PLCD_PORT:string|50','PSCALE_PORT:string|50','PPAY_CARD_PORT:string|50',
+                    'PPRINT_DESING:string|50','PSCANNER_PORT:string|50','PPRINTER_PORT:string|50','PMACID:string|250','PDEPOT:string|50'],
+            dataprm : ['GUID','CUSER','CODE','NAME','LCD_PORT','SCALE_PORT','PAY_CARD_PORT','PRINT_DESING','SCANNER_PORT','PRINTER_PORT','MACID','DEPOT_GUID'],
             local : 
             {
                 type : "insert",
-                query : `INSERT INTO POS_DEVICE_VW_01 (GUID, CDATE, CUSER, LDATE, LUSER, CODE, NAME, LCD_PORT, SCALE_PORT, PAY_CARD_PORT, SCANNER_PORT, PRINT_DESING, MACID)
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
+                query : `INSERT INTO POS_DEVICE_VW_01 (GUID, CDATE, CUSER, LDATE, LUSER, CODE, NAME, LCD_PORT, SCALE_PORT, PAY_CARD_PORT, SCANNER_PORT, PRINTER_PORT, PRINT_DESING, MACID, DEPOT)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
                 values : [{GUID : {map:'GUID'},CDATE : moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),CUSER : {map:'CUSER'},LDATE : moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
                         LUSER : {map:'LUSER'},CODE : {map:'CODE'},NAME : {map:'NAME'},LCD_PORT : {map:'LCD_PORT'},SCALE_PORT : {map:'SCALE_PORT'},PAY_CARD_PORT : {map:'PAY_CARD_PORT'},
-                        SCANNER_PORT : {map:'SCANNER_PORT'},PRINT_DESING : {map:'PRINT_DESING'},MACID : {map:'MACID'}}]
+                        SCANNER_PORT : {map:'SCANNER_PORT'},PRINTER_PORT : {map:'PRINTER_PORT'},PRINT_DESING : {map:'PRINT_DESING'},MACID : {map:'MACID'},DEPOT : {map:'DEPOT_GUID'}}]
             }
         } 
         tmpDt.updateCmd = 
@@ -1235,17 +1242,20 @@ export class posDeviceCls
                     "@PAY_CARD_PORT = @PPAY_CARD_PORT, " +
                     "@PRINT_DESING = @PPRINT_DESING, " +
                     "@SCANNER_PORT = @PSCANNER_PORT, " +
-                    "@MACID = @PMACID " ,
-            param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|50','PNAME:string|50','PLCD_PORT:string|50','PSCALE_PORT:string|50','PPAY_CARD_PORT:string|50','PPRINT_DESING:string|50','PSCANNER_PORT:string|50','PMACID:string|250'],
-            dataprm : ['GUID','CUSER','CODE','NAME','LCD_PORT','SCALE_PORT','PAY_CARD_PORT','PRINT_DESING','SCANNER_PORT','MACID'],
+                    "@PRINTER_PORT = @PPRINTER_PORT, " +
+                    "@MACID = @PMACID, " +
+                    "@DEPOT = @PDEPOT " ,
+            param : ['PGUID:string|50','PCUSER:string|25','PCODE:string|50','PNAME:string|50','PLCD_PORT:string|50','PSCALE_PORT:string|50','PPAY_CARD_PORT:string|50','PPRINT_DESING:string|50',
+                    'PSCANNER_PORT:string|50','PPRINTER_PORT:string|50','PMACID:string|250','PDEPOT:string|50'],
+            dataprm : ['GUID','CUSER','CODE','NAME','LCD_PORT','SCALE_PORT','PAY_CARD_PORT','PRINT_DESING','SCANNER_PORT','PRINTER_PORT','MACID','DEPOT_GUID'],
             local : 
             {
                 type : "update",
                 query : `UPDATE POS_DEVICE_VW_01 
-                        SET CDATE = ?, CUSER = ?, LDATE = ?, LUSER = ?, CODE = ?, NAME = ?, LCD_PORT = ?, SCALE_PORT = ?, PAY_CARD_PORT = ?, SCANNER_PORT = ?, PRINT_DESING = ?, MACID = ? WHERE GUID = ?;`,
+                        SET CDATE = ?, CUSER = ?, LDATE = ?, LUSER = ?, CODE = ?, NAME = ?, LCD_PORT = ?, SCALE_PORT = ?, PAY_CARD_PORT = ?, SCANNER_PORT = ?, PRINTER_PORT = ?, PRINT_DESING = ?, MACID = ?, DEPOT = ? WHERE GUID = ?;`,
                 values : [{CDATE : moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),CUSER : {map:'CUSER'},LDATE : moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),LUSER : {map:'LUSER'},
                         CODE : {map:'CODE'},NAME : {map:'NAME'},LCD_PORT : {map:'LCD_PORT'},SCALE_PORT : {map:'SCALE_PORT'},PAY_CARD_PORT : {map:'PAY_CARD_PORT'},SCANNER_PORT : {map:'SCANNER_PORT'},
-                        PRINT_DESING : {map:'PRINT_DESING'},MACID : {map:'MACID'},GUID : {map:'GUID'}}]
+                        PRINTER_PORT : {map:'PRINTER_PORT'},PRINT_DESING : {map:'PRINT_DESING'},MACID : {map:'MACID'},DEPOT : {map:'DEPOT_GUID'},GUID : {map:'GUID'}}]
             }
         } 
         tmpDt.deleteCmd = 
@@ -1336,6 +1346,7 @@ export class posDeviceCls
             if(!core.instance.util.isElectron())
             {
                 resolve({isElectron:false})
+                return
             }
     
             let tmpPorts = await this.serialport.list();
@@ -1366,7 +1377,16 @@ export class posDeviceCls
                     resolve()
                     return
                 }
-                let device  = new this.escpos.USB();
+                let device = undefined;
+                if(this.dt()[0].PRINTER_PORT != '' && this.dt()[0].PRINTER_PORT != 'USB')
+                {
+                    device = new this.escpos.Serial(this.dt()[0].PRINTER_PORT,{baudRate: 38400,stopBits:1,dataBits:8, autoOpen: false})
+                }
+                else if(this.dt()[0].PRINTER_PORT == 'USB')
+                {
+                    device = new this.escpos.USB();
+                }
+                
                 let options = { encoding: "GB18030" /* default */ }
                 let printer = new this.escpos.Printer(device, options);
                 
@@ -1632,8 +1652,17 @@ export class posDeviceCls
                 resolve()
                 return
             }
-    
-            let device  = new this.escpos.USB();
+
+            let device = undefined;
+            if(this.dt()[0].PRINTER_PORT != '' && this.dt()[0].PRINTER_PORT != 'USB')
+            {
+                device = new this.escpos.Serial(this.dt()[0].PRINTER_PORT,{baudRate: 38400,stopBits:1,dataBits:8, autoOpen: false})
+            }
+            else if(this.dt()[0].PRINTER_PORT == 'USB')
+            {
+                device = new this.escpos.USB();
+            }
+
             let options = { encoding: "GB18030" /* default */ }
             let printer = new this.escpos.Printer(device, options);
     
@@ -1647,6 +1676,7 @@ export class posDeviceCls
                     });
                 });
             }
+            
             device.open(async function(error)
             {   
                 let tmpArr = [];
@@ -2135,6 +2165,7 @@ export class posEnddayCls
         {
             GUID : '00000000-0000-0000-0000-000000000000',
             CUSER : this.core.auth.data.CODE,
+            CDATE : moment(new Date()).format("YYYY-MM-DD"),
             CUSER_NAME : '',
             CASH : 0,
             CREDIT : 0,
@@ -2161,15 +2192,16 @@ export class posEnddayCls
         {
             query : "EXEC [dbo].[PRD_ENDDAY_DATA_INSERT] " + 
                     "@GUID = @PGUID, " +
-                    "@CUSER = @PCUSER, " + 
+                    "@CUSER = @PCUSER, " +
+                    "@CDATE = @PCDATE, " + 
                     "@CASH =@PCASH, " +
                     "@CREDIT = @PCREDIT, " +
                     "@CHECK = @PCHECK , " +
                     "@TICKET = @PTICKET , " +
                     "@ADVANCE = @PADVANCE , " +
                     "@SAFE = @PSAFE ",
-            param : ['PGUID:string|50','PCUSER:string|25','PCASH:string|25','PCREDIT:float','PCHECK:float','PTICKET:float','PADVANCE:float','PSAFE:string|50'],
-            dataprm : ['GUID','CUSER','CASH','CREDIT','CHECK','TICKET','ADVANCE','SAFE']
+            param : ['PGUID:string|50','PCUSER:string|25','PCDATE:date','PCASH:string|25','PCREDIT:float','PCHECK:float','PTICKET:float','PADVANCE:float','PSAFE:string|50'],
+            dataprm : ['GUID','CUSER','CDATE','CASH','CREDIT','CHECK','TICKET','ADVANCE','SAFE']
           
         } 
 

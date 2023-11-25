@@ -75,7 +75,7 @@ export default class salesDispatch extends DocBase
                 {
                     select:
                     {
-                        query : "SELECT GUID,CODE,NAME,VAT,UNIT,STATUS,COST_PRICE,(SELECT [dbo].[FN_PRICE_SALE_VAT_EXT](GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000',NULL)) AS PRICE FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
+                        query : "SELECT GUID,CODE,NAME,VAT,UNIT,STATUS,COST_PRICE,(SELECT [dbo].[FN_PRICE_SALE_VAT_EXT](GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000',NULL,'00000000-0000-0000-0000-000000000000')) AS PRICE FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
                         param : ['VAL:string|50']
                     },
                     sql:this.core.sql
@@ -615,7 +615,7 @@ export default class salesDispatch extends DocBase
         {
             let tmpQuery = 
             {
-                query :"SELECT dbo.FN_PRICE_SALE_VAT_EXT(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,@CONTRACT_CODE) AS PRICE",
+                query :"SELECT dbo.FN_PRICE_SALE_VAT_EXT(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,@CONTRACT_CODE,'00000000-0000-0000-0000-000000000000') AS PRICE",
                 param : ['GUID:string|50','QUANTITY:float','CUSTOMER:string|50','CONTRACT_CODE:string|25'],
                 value : [pData.GUID,pQuantity,this.docObj.dt()[0].INPUT,this.cmbPriceContract.value]
             }
@@ -963,9 +963,24 @@ export default class salesDispatch extends DocBase
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnPrint" parent={this} icon="print" type="default"
-                                    onClick={()=>
+                                    onClick={async()=>
                                     {
-                                        this.popDesign.show()
+                                        console.log(this.docObj.isSaved)                             
+                                        if(this.docObj.isSaved == false)
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'isMsgSave',showTitle:true,title:this.t("isMsgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("isMsgSave.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("isMsgSave.msg")}</div>)
+                                            }
+                                            await dialog(tmpConfObj);
+                                            return
+                                        }
+                                        else
+                                        {
+                                            this.popDesign.show()
+                                        }
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
@@ -1189,8 +1204,20 @@ export default class salesDispatch extends DocBase
                                         </Validator> 
                                     </NdSelectBox>
                                 </Item>
-                                {/* Boş */}
-                                <EmptyItem />
+                                {/* DOC_NO */}
+                                <Item>
+                                    <Label text={this.t("txtDocNo")} alignment="right" />
+                                    <NdTextBox id="txtDocNo" parent={this} simple={true}  
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                    dt={{data:this.docObj.dt('DOC'),field:"DOC_NO"}} 
+                                    readOnly={false}
+                                    onFocusOut={()=>
+                                    {
+                                        this.checkDocNo(this.txtDocNo.value)
+                                    }}
+                                    >
+                                    </NdTextBox>
+                                </Item>
                                 {/* txtCustomerCode */}
                                 <Item>
                                     <Label text={this.t("txtCustomerCode")} alignment="right" />
@@ -1713,7 +1740,7 @@ export default class salesDispatch extends DocBase
                                             e.key.SUB_QUANTITY =  e.data.QUANTITY * e.key.SUB_FACTOR
                                             let tmpQuery = 
                                             {
-                                                query :"SELECT [dbo].[FN_PRICE_SALE_VAT_EXT](@ITEM_GUID,@QUANTITY,GETDATE(),@CUSTOMER_GUID,@CONTRACT_CODE) AS PRICE",
+                                                query :"SELECT [dbo].[FN_PRICE_SALE_VAT_EXT](@ITEM_GUID,@QUANTITY,GETDATE(),@CUSTOMER_GUID,@CONTRACT_CODE,'00000000-0000-0000-0000-000000000000') AS PRICE",
                                                 param : ['ITEM_GUID:string|50','CUSTOMER_GUID:string|50','QUANTITY:float','CONTRACT_CODE:string|25'],
                                                 value : [e.key.ITEM,this.docObj.dt()[0].INPUT,e.data.QUANTITY,this.cmbPriceContract.value]
                                             }
@@ -2021,7 +2048,7 @@ export default class salesDispatch extends DocBase
                                     param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmSlsDispatch"  + this.tabIndex}>
+                                        <Validator validationGroup={"frmPrintPop"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validDesign")} />
                                         </Validator> 
                                     </NdSelectBox>
@@ -2033,20 +2060,14 @@ export default class salesDispatch extends DocBase
                                     valueExpr="ID"
                                     value=""
                                     searchEnabled={true}
-                                    onValueChanged={(async()=>
-                                        {
-                                        }).bind(this)}
-                                   data={{source:[{ID:"FR",VALUE:"FR"},{ID:"DE",VALUE:"DE"},{ID:"TR",VALUE:"TR"}]}}
-                                    >
-                                         <Validator validationGroup={"frmSlsDispatch"  + this.tabIndex}>
-                                            <RequiredRule message={this.t("validDesign")} />
-                                        </Validator> 
+                                    data={{source:[{ID:"FR",VALUE:"FR"},{ID:"DE",VALUE:"DE"},{ID:"TR",VALUE:"TR"}]}}
+                                    >                       
                                     </NdSelectBox>
                                 </Item>
                                 <Item>
                                     <div className='row'>
                                         <div className='col-6'>
-                                            <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"frmSlsDispatch"  + this.tabIndex}
+                                            <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"frmPrintPop"  + this.tabIndex}
                                             onClick={async (e)=>
                                             {    
                                                 if(e.validationGroup.validate().status == "valid")
@@ -2096,7 +2117,7 @@ export default class salesDispatch extends DocBase
                                     </div>
                                     <div className='row py-2'>
                                         <div className='col-6'>
-                                            <NdButton text={this.t("btnView")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmSlsDispatch" + this.tabIndex}
+                                            <NdButton text={this.t("btnView")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmPrintPop" + this.tabIndex}
                                             onClick={async (e)=>
                                             {       
                                                 if(e.validationGroup.validate().status == "valid")
@@ -2127,7 +2148,7 @@ export default class salesDispatch extends DocBase
                                             }}/>
                                         </div>
                                         <div className='col-6'>
-                                            <NdButton text={this.t("btnMailsend")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmSlsDispatch" + this.tabIndex}
+                                            <NdButton text={this.t("btnMailsend")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmPrintPop" + this.tabIndex}
                                             onClick={async (e)=>
                                             {    
                                                 if(e.validationGroup.validate().status == "valid")

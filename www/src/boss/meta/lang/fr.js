@@ -12,6 +12,14 @@ export const langFr =
     msgWarning : "Attention",
     msgSqlService1 : "Impossible de se connecter au serveur Sql",
     comingSoon : "Bientôt actif... ", 
+    dtToday : "Aujourd'hui",
+    tdLastDay : "Hier",
+    dtThisWeek : "Semaine Courante",
+    dtLastWeek : "Semaine Dernière",
+    dtMount : "Mois Courant",
+    dtLastMount : "Mois Dernier",
+    dtYear : "Année Courante",
+    dtLastYear : "Année Dernière",
     msgAnotherUserAlert: 
     {
         title : "Attention",
@@ -27,5 +35,24 @@ export const langFr =
         login:"Entrer",
         logout : "Sortie",
         selectUser : "Choix d'utilisateur",
+    },
+    dashboard: 
+    {
+        dailySalesTotal : "Total Vente",
+        dailySalesCount : "Total Ticket",     
+        salesAvg: "Panier Moyen",
+        bestItemGroup: "Groupe de Produit le Plus Vendu",
+        dailyPriceChange : "Changement Prix",
+        dailyRowDelete : "Total Ligne Supprimée",
+        dailyFullDelete : "Total Ticket Supprimé",
+        dailyRebateTicket : "Total Ticket Retour",
+        dailyRebateTotal : "Montant Remboursement",
+        dailyCustomerTicket : "Ticket Avec Carte Fidélité",
+        dailyUseLoyalty : "Montant Points Utilisés",
+        useDiscount : "Montant Remises",
+        useDiscountTicket : "Total Ticket Remises",
+        purchaseTotal : "Toplam Alış Tutarı",
+        purchasePrice : "Alış Fiyatı Değişen Ürün Adeti",
+        salePrice : "Satış Fiyatı değişen Ürün Adeti"
     },
 }

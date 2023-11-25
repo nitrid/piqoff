@@ -23,6 +23,7 @@ import HTMLReactParser from 'html-react-parser';
 import Login from './login.js'
 import Pos from '../pages/posDoc.js'
 import CustomerInfoScreen from '../pages/customerInfoScreen.js'
+import ItemInfoScreen from '../pages/itemInfoScreen.js'
 import transferCls from './transfer.js'
 import NdDialog,{dialog} from '../../core/react/devex/dialog';
 
@@ -67,7 +68,8 @@ export default class App extends React.PureComponent
             logined : false,
             splash : true,
             vtadi : '',
-            lcd : false
+            lcd : false,
+            itemInfo : false,
         }
         this.toolbarItems = 
         [
@@ -241,6 +243,10 @@ export default class App extends React.PureComponent
                     locale(tmpData.data.lang)
                     window.location.reload()
                 }
+                if(typeof tmpData.data.itemInfo != 'undefined' && tmpData.data.itemInfo == true)
+                {
+                    this.setState({itemInfo:true})
+                }
             }
             //************************************************************************** */
             await this.core.util.waitUntil(0)
@@ -249,10 +255,14 @@ export default class App extends React.PureComponent
     }
     render() 
     {
-        const { logined,splash,lcd } = this.state;
+        const { logined,splash,lcd,itemInfo } = this.state;
         if(lcd)
         {
             return <CustomerInfoScreen/>
+        }
+        if(itemInfo)
+        {
+            return <ItemInfoScreen/>
         }
         
         if(splash)

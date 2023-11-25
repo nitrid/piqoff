@@ -24,14 +24,13 @@ const AnimatedText = ({ value, type }) => {
     return new Intl.NumberFormat('fr-FR', {
       style: 'currency',
       currency: 'EUR',
-      currencyDisplay: 'symbol',
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     }).format(val);
   };
 
   const formatNumber = (val) => {
-    return new Intl.NumberFormat('en-US').format(val);
+    return new Intl.NumberFormat('fr-FR').format(val);
   };
 
   return (
