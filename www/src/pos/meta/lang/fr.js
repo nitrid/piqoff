@@ -250,9 +250,7 @@ export const langFr =
     },
     msgAddCustomerMail:
     {
-        title: "Avertissement",
-        msg: "L'e-mail du client est",
-        btn01: "OK",
+        title: "Veuillez saisir votre adresse e-mail.",
     },
     msgPreLottery:
     {
@@ -875,5 +873,9 @@ export const langFr =
         btnApprove: "Enregistrer"
     },
     passChange: "Changer le mot de passe",
+    txtNewMail : "E-Mail",
+    txtNewPhone : "Numéro de téléphone",
+    txtNewCustomerLastName : "Nom",
+    txtNewCustomerName : "Prenom"
     
 }
