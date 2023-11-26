@@ -49,6 +49,15 @@ export const langTr =
         dailyRebateTicket : "İade Fiş Sayısı",
         dailyRebateTotal : "Yapılan İade Tutarı",
         dailyCustomerTicket : "Müşteri Kartı Kulanılan Fiş Adeti",
-        dailyUseLoyalty : "Toplam Kullanılan Sadakat indirimi Tutarı"
+        dailyUseLoyalty : "Toplam Kullanılan Sadakat indirimi Tutarı",
+        useDiscount : "Yapılan İndirim",
+        useDiscountTicket : "İndirim Yapılan Fiş Sayısı",
+        purchaseTotal : "Toplam Alış Tutarı",
+        purchasePrice : "Alış Fiyatı Değişen Ürün Adeti",
+        salePrice : "Satış Fiyatı değişen Ürün Adeti",
+        purchasePriceDown : "Alış Fiyatı Düşen Ürün Adeti",
+        salePriceDown : "Satış Fiyatı Düşen Ürün Adeti",
+        purchasePriceUp : "Alış Fiyatı Artan Ürün Adeti",
+        salePriceUp : "Satış Fiyatı Artan Ürün Adeti"
     },
 }
