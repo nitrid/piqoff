@@ -180,7 +180,7 @@ export function print()
                             }
                             else
                             {
-                                tmpQt = parseFloat(parseFloat(tmpProSale[0].QUANTITY / tmpProSale[0].UNIT_FACTOR).toFixed(3));
+                                tmpQt = parseFloat(tmpProSale[0].QUANTITY / tmpProSale[0].UNIT_FACTOR).toFixed(3);
                             }
 
                             if(tmpProSale[0].UNIT_FACTOR > 1)
