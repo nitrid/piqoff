@@ -993,8 +993,8 @@ export const acs =
             CAPTION : "Seri"
         }
     },
-     //txtRefno
-     {
+    //txtRefno
+    {
         TYPE : 2,
         ID :"txtRefno",
         VALUE : {visible:true,editable:true},

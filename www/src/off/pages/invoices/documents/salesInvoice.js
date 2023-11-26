@@ -33,9 +33,6 @@ export default class salesInvoice extends DocBase
         this.rebate = 0;
 
         this._cellRoleRender = this._cellRoleRender.bind(this)
-        this._getPayment = this._getPayment.bind(this)
-        this._addPayment = this._addPayment.bind(this)
-        this._onItemRendered = this._onItemRendered.bind(this)
         this._calculateInterfel = this._calculateInterfel.bind(this)
 
         this.frmDocItems = undefined;
@@ -152,8 +149,6 @@ export default class salesInvoice extends DocBase
         this.txtRef.readOnly = true
         this.txtRefno.readOnly = true
         this.frmDocItems.option('disabled',false)
-        
-        this._getPayment(this.docObj.dt()[0].GUID)
     }
     async calculateTotal()
     {
@@ -405,14 +400,6 @@ export default class salesInvoice extends DocBase
             )
         }
     }
-    async _onItemRendered(e)
-    {
-        await this.core.util.waitUntil(10)
-        if(e.itemData.title == this.t("tabTitlePayments"))
-        {
-            this._getPayment(this.docObj.dt()[0].GUID)
-        }
-    }
     async addItem(pData,pIndex,pQuantity,pPrice)
     {
         App.instance.setState({isExecute:true})
@@ -621,137 +608,7 @@ export default class salesInvoice extends DocBase
             value : [this.docObj.dt()[0].INPUT]
         }
         super.getProforma(tmpQuery)
-    }
-    async _getPayment()
-    {
-        if(typeof this.txtRemainder != 'undefined')
-        {
-            await this.payObj.docCustomer.load({INVOICE_GUID:this.docObj.dt()[0].GUID});
-            if(this.payObj.dt().length > 0)
-            {
-                this.txtPayTotal.value = parseFloat(this.payObj.docCustomer.dt().sum("AMOUNT",2))
-                let tmpRemainder = (this.docObj.dt()[0].TOTAL - this.payObj.dt()[0].TOTAL).toFixed(2)
-                this.txtRemainder.value = tmpRemainder
-                if(typeof this.txtMainRemainder != 'undefined')
-                {
-                    this.txtMainRemainder.value = tmpRemainder
-                }
-            }
-            else
-            {
-                this.txtPayTotal.value = 0
-                this.txtRemainder.value = this.docObj.dt()[0].TOTAL
-                if(typeof this.txtMainRemainder != 'undefined')
-                {
-                    this.txtMainRemainder.value = this.docObj.dt()[0].TOTAL
-                }
-            }
-            let tmpQuery = 
-            {
-                query :"SELECT [dbo].[FN_CUSTOMER_BALANCE](@GUID,GETDATE()) AS BALANCE ",
-                param : ['GUID:string|50'],
-                value : [this.docObj.dt()[0].INPUT]
-            }
-            let tmpData = await this.core.sql.execute(tmpQuery) 
-            if(tmpData.result.recordset.length > 0)
-            {
-                this.txtbalance.value = tmpData.result.recordset[0].BALANCE
-            }
-        }
-    }
-    async _addPayment(pType,pAmount)
-    {
-        if(pAmount > this.txtRemainder.value)
-        {
-            let tmpConfObj =
-            {
-                id:'msgMoreAmount',showTitle:true,title:this.t("msgMoreAmount.title"),showCloseButton:true,width:'500px',height:'200px',
-                button:[{id:"btn01",caption:this.t("msgMoreAmount.btn01"),location:'after'}],
-                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgMoreAmount.msg")}</div>)
-            }
-
-            await dialog(tmpConfObj);
-            return
-        }
-        if(this.payObj.dt().length == 0)
-        {
-            let tmpPay = {...this.payObj.empty}
-            let tmpQuery = 
-            {
-                query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 0 AND DOC_TYPE = 200 AND REF = @REF ",
-                param : ['REF:string|25'],
-                value : [this.txtRef.value]
-            }
-            let tmpData = await this.core.sql.execute(tmpQuery) 
-            if(tmpData.result.recordset.length > 0)
-            {
-                tmpPay.REF = this.txtRef.value
-                tmpPay.REF_NO = tmpData.result.recordset[0].REF_NO
-            }
-            tmpPay.TYPE = 0
-            tmpPay.DOC_TYPE = 200
-            tmpPay.INPUT = '00000000-0000-0000-0000-000000000000'
-            tmpPay.OUTPUT = this.docObj.dt()[0].INPUT 
-            this.payObj.addEmpty(tmpPay);
-        }
-        let tmpPayment = {...this.payObj.docCustomer.empty}
-        tmpPayment.DOC_GUID = this.payObj.dt()[0].GUID
-        tmpPayment.TYPE = this.payObj.dt()[0].TYPE
-        tmpPayment.REF = this.payObj.dt()[0].REF
-        tmpPayment.REF_NO = this.payObj.dt()[0].REF_NO
-        tmpPayment.DOC_TYPE = this.payObj.dt()[0].DOC_TYPE
-        tmpPayment.DOC_DATE = this.payObj.dt()[0].DOC_DATE
-        tmpPayment.OUTPUT = this.payObj.dt()[0].OUTPUT
-        tmpPayment.INVOICE_GUID = this.docObj.dt()[0].GUID                                   
-
-        if(pType == 0)
-        {
-            tmpPayment.INPUT = this.cmbCashSafe.value
-            tmpPayment.INPUT_NAME = this.cmbCashSafe.displayValue
-            tmpPayment.PAY_TYPE = 0
-            tmpPayment.AMOUNT = pAmount
-            tmpPayment.DESCRIPTION = this.cashDescription.value
-        }
-        else if (pType == 1)
-        {
-            tmpPayment.INPUT = this.cmbCashSafe.value
-            tmpPayment.INPUT_NAME = this.cmbCashSafe.displayValue
-            tmpPayment.PAY_TYPE = 1
-            tmpPayment.AMOUNT = pAmount
-            tmpPayment.DESCRIPTION = this.cashDescription.value
-
-            let tmpCheck = {...this.payObj.checkCls.empty}
-            tmpCheck.DOC_GUID = this.payObj.dt()[0].GUID
-            tmpCheck.REF = checkReference.value
-            tmpCheck.DOC_DATE =  this.payObj.dt()[0].DOC_DATE
-            tmpCheck.CHECK_DATE =  this.payObj.dt()[0].DOC_DATE
-            tmpCheck.CUSTOMER =   this.payObj.dt()[0].OUTPUT
-            tmpCheck.AMOUNT =  this.numcheck.value
-            tmpCheck.SAFE =  this.cmbCashSafe.value
-            this.payObj.checkCls.addEmpty(tmpCheck)
-        }
-        else if (pType == 2)
-        {
-            tmpPayment.INPUT = this.cmbCashSafe.value
-            tmpPayment.INPUT_NAME = this.cmbCashSafe.displayValue
-            tmpPayment.PAY_TYPE = 2
-            tmpPayment.AMOUNT = pAmount
-            tmpPayment.DESCRIPTION = this.cashDescription.value
-        }
-
-        await this.payObj.docCustomer.addEmpty(tmpPayment)
-        this.payObj.dt()[0].AMOUNT = this.payObj.docCustomer.dt().sum("AMOUNT",2)
-        this.payObj.dt()[0].TOTAL = this.payObj.docCustomer.dt().sum("AMOUNT",2)
-        
-        if((await this.payObj.save()) == 0)
-        {
-            
-        }
-        
-        await this.popPayment.show()
-        await this._getPayment()
-        await this.grdInvoicePayment.dataRefresh({source:this.payObj.docCustomer.dt()});
-    }
+    }      
     async multiItemAdd()
     {
         let tmpMissCodes = []
@@ -922,8 +779,7 @@ export default class salesInvoice extends DocBase
             }
             resolve()
         })
-    }
-    
+    }    
     render()
     {
         return(
@@ -1123,7 +979,6 @@ export default class salesInvoice extends DocBase
                                     <NdButton id="btnPrint" parent={this} icon="print" type="default"
                                     onClick={async()=>
                                     {
-                                        console.log(this.docObj.isSaved)                             
                                         if(this.docObj.isSaved == false)
                                         {
                                             let tmpConfObj =
@@ -1134,6 +989,7 @@ export default class salesInvoice extends DocBase
                                             }
                                             await dialog(tmpConfObj);
                                             return
+
                                         }
                                         else
                                         {
@@ -2109,7 +1965,7 @@ export default class salesInvoice extends DocBase
                     </div>
                     <div className='row px-2 pt-2'>
                         <div className='col-12'>
-                            <TabPanel height="100%" onItemRendered={this._onItemRendered}>
+                            <TabPanel height="100%">
                                 <Item title={this.t("tabTitleSubtotal")}>
                                     <div className="row px-2 pt-2">
                                     <div className="col-12">
@@ -2254,57 +2110,6 @@ export default class salesInvoice extends DocBase
                                     </div>
                                     </div>
                                 </Item>
-                                <Item title={this.t("tabTitlePayments")}>
-                                    <div className="row px-2 pt-2">
-                                        <div className="col-12">
-                                            <Form colCount={4} parent={this} id={"frmSlsInv"  + this.tabIndex}>
-                                                {/* Ödeme Toplam */}
-                                                <EmptyItem colSpan={2}/>
-                                                <Item>
-                                                <Label text={this.t("txtExpFee")} alignment="right" />
-                                                    <NdNumberBox id="txtExpFee" format={{ style: "currency", currency: "EUR",precision: 2}} parent={this} simple={true} dt={{data:this.docObj.docCustomer.dt('DOC_CUSTOMER'),field:"EXPIRY_FEE"}}
-                                                    maxLength={32}
-                                                    ></NdNumberBox>
-                                                </Item>
-                                                <Item>
-                                                <Label text={this.t("txtPayTotal")} alignment="right" />
-                                                    <NdTextBox id="txtPayTotal" format={{ style: "currency", currency: "EUR",precision: 2}} parent={this} simple={true} readOnly={true} dt={{data:this.payObj.dt('DOC'),field:"TOTAL"}}
-                                                    maxLength={32}
-                                                    ></NdTextBox>
-                                                </Item>
-                                                {/* Kalan */}
-                                                <EmptyItem colSpan={3}/>
-                                                <Item>
-                                                <Label text={this.t("txtRemainder")} alignment="right" />
-                                                    <NdNumberBox id="txtRemainder" parent={this} simple={true} readOnly={true}
-                                                    maxLength={32}
-                                                    ></NdNumberBox>
-                                                </Item>
-                                                <EmptyItem colSpan={3}/>
-                                                <Item>
-                                                <Label text={this.t("txtbalance")} alignment="right" />
-                                                    <NdNumberBox id="txtbalance" format={{ style: "currency", currency: "EUR",precision: 2}} parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC_CUSTOMER'),field:"INPUT_BALANCE"}}
-                                                    maxLength={32}
-                                                    ></NdNumberBox>
-                                                </Item>
-                                                <EmptyItem colSpan={3}/>
-                                                <Item>
-                                                <div className='row'>
-                                                    <div className='col-12'>
-                                                        <NdButton text={this.t("getPayment")} type="normal" stylingMode="contained" width={'100%'} 
-                                                        onClick={async (e)=>
-                                                        {
-                                                            await this.popPayment.show()
-                                                            await this._getPayment()
-                                                            await this.grdInvoicePayment.dataRefresh({source:this.payObj.docCustomer.dt()});
-                                                        }}/>
-                                                    </div>
-                                                </div>
-                                                </Item>
-                                            </Form>
-                                        </div>
-                                    </div>
-                                </Item>
                             </TabPanel>
                         </div>
                     </div>   
@@ -2358,6 +2163,7 @@ export default class salesInvoice extends DocBase
                                             <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmPrintPop" + this.tabIndex}
                                             onClick={async (e)=>
                                             {       
+
                                                 if(e.validationGroup.validate().status == "valid")
                                                 {
                                                     App.instance.setState({isExecute:true})
@@ -2426,7 +2232,7 @@ export default class salesInvoice extends DocBase
                                                 {
                                                     let tmpQuery = 
                                                     {
-                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG)ORDER BY DOC_DATE,LINE_NO " ,
+                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG) ORDER BY DOC_DATE,LINE_NO  " ,
                                                         param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
                                                         value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
                                                     }

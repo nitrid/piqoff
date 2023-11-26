@@ -327,19 +327,21 @@ export const menu = (e) =>
                             text: e.t('menuOff.cri_04_002'),//'Cari Bakiye Bakiye Raporu',
                             path: 'customers/report/customerBalanceReport'
                         },
-                        // Cari Bakiyeli Extre Raporu
                         {
                             id: 'cri_04_004',
-                            text: e.t('menuOff.cri_04_004'),
+                            text: e.t('menuOff.cri_04_004'),// Cari Bakiyeli Extre Raporu
                             path: 'construction.js',
                         },
-                        //Müşteri Puan Raporu
                         {
                             id: 'cri_04_003',
-                            text: e.t('menuOff.cri_04_003'),
+                            text: e.t('menuOff.cri_04_003'),//Müşteri Puan Raporu
                             path: 'pos/report/customerPointReport'
                         },
-                        
+                        {
+                            id: 'cri_04_005',
+                            text: e.t('menuOff.cri_04_005'),//'Satış Faturası Yaşlandırma Raporu',
+                            path: 'customers/report/saleInvoiceAgingReport'
+                        },
                     ]
                 }
             ]
@@ -1082,9 +1084,9 @@ export const menu = (e) =>
                         },
                         {
                             id: 'fns_04_002',
-                            text: e.t('menuOff.cri_04_002'),//'Cari Bakiye Bakiye Raporu',
+                            text: e.t('menuOff.fns_04_002'),//'Cari Bakiye Bakiye Raporu',
                             path: 'customers/report/customerBalanceReport'
-                        },
+                        }
                     ]
                 }
             ]
@@ -1354,6 +1356,11 @@ export const menu = (e) =>
                             id: 'set_02_008',
                             text: e.t('menuOff.set_02_008'),//'Gümrük Kodu Excel',
                             path: 'setting/officialSettings/customsCodeImport'
+                        },
+                        {
+                            id: 'set_02_009',
+                            text: e.t('menuOff.set_02_009'),//'Mail ayarlari',
+                            path: 'setting/officialSettings/mailSettings'
                         },
 
                     ]

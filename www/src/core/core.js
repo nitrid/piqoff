@@ -1611,11 +1611,11 @@ export class datatable
         {
             if(typeof pSort != 'undefined' && pSort == 'desc')
             {
-                return this.sort((a, b) => b[pKey] - a[pKey])
+                return this.sort((a, b) => b[pKey].localeCompare(a[pKey]))
             }
             else
             {
-                return this.sort((a, b) => a[pKey] - b[pKey])
+                return this.sort((a, b) => a[pKey].localeCompare(b[pKey]))
             }
         }
         return this

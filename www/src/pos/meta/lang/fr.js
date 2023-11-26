@@ -252,6 +252,18 @@ export const langFr =
     {
         title: "Veuillez saisir votre adresse e-mail.",
     },
+    msgPreLottery:
+    {
+        title: "Avertissement",
+        msg: "UNE MINUTE...",
+        btn01: "CONTINUER",
+    },
+    msgPostLottery:
+    {
+        title: "Avertissement",
+        msg: "CE CLIENT A GAGNÉ AU TIRAGE !!!",
+        btn01: "Oui",
+    },
     msgCancelCustomerConfirm: 
     {
         title : "Attention",
