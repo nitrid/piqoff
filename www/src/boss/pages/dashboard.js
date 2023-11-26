@@ -36,6 +36,10 @@ export default class Dashboard extends React.PureComponent
       purchaseTotal : { query : "SELECT SUM(AMOUNT) AS PURCHASE_TOTAL FROM DOC_CUSTOMER_VW_01 WHERE DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE  AND TYPE = 0 AND DOC_TYPE = 20 and REBATE = 0" ,  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date]},   
       purchasePrice : { query : "SELECT COUNT(*) AS PURCHASE_PRICE FROM PRICE_HISTORY AS PRICE WHERE PRICE.CDATE > @FISRT_DATE AND PRICE.CDATE < @LAST_DATE AND PRICE.TYPE = 1 ",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },   
       salePrice : { query : "SELECT COUNT(*) AS SALE_PRICE FROM PRICE_HISTORY AS PRICE WHERE PRICE.CDATE > @FISRT_DATE AND PRICE.CDATE < @LAST_DATE AND PRICE.TYPE = 0 ",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },   
+      purchasePriceDown : { query : "SELECT COUNT(*) AS PURCHASE_PRICE_DOWN FROM PRICE_HISTORY AS PRICE WHERE PRICE.FISRT_PRICE > PRICE.LAST_PRICE AND PRICE.CDATE > @FISRT_DATE AND PRICE.CDATE < @LAST_DATE AND PRICE.TYPE = 1 ",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },   
+      purchasePriceUp : { query : "SELECT COUNT(*) AS PURCHASE_PRICE_UP FROM PRICE_HISTORY AS PRICE WHERE PRICE.FISRT_PRICE < PRICE.LAST_PRICE AND PRICE.CDATE > @FISRT_DATE AND PRICE.CDATE < @LAST_DATE AND PRICE.TYPE = 1 ",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },   
+      salePriceDown : { query : "SELECT COUNT(*) AS SALE_PRICE_DOWN FROM PRICE_HISTORY AS PRICE WHERE PRICE.FISRT_PRICE > PRICE.LAST_PRICE AND PRICE.CDATE > @FISRT_DATE AND PRICE.CDATE < @LAST_DATE AND PRICE.TYPE = 0 ",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },   
+      salePriceUp : { query : "SELECT COUNT(*) AS SALE_PRICE_UP FROM PRICE_HISTORY AS PRICE WHERE PRICE.FISRT_PRICE < PRICE.LAST_PRICE AND PRICE.CDATE > @FISRT_DATE AND PRICE.CDATE < @LAST_DATE AND PRICE.TYPE = 0 ",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },   
     }
   }
   async componentDidMount()
@@ -100,6 +104,12 @@ export default class Dashboard extends React.PureComponent
     const { result: { recordset: purchaseTotalRecordset } } = await this.core.sql.execute(this.query.purchaseTotal);
     const { result: { recordset: purchasePriceRecordset } } = await this.core.sql.execute(this.query.purchasePrice);
     const { result: { recordset: salePriceRecordset } } = await this.core.sql.execute(this.query.salePrice);
+    const { result: { recordset: purchasePriceDownRecordset } } = await this.core.sql.execute(this.query.purchasePriceDown);
+    const { result: { recordset: purchasePriceUpRecordset } } = await this.core.sql.execute(this.query.purchasePriceUp);
+    const { result: { recordset: salePriceDownRecordset } } = await this.core.sql.execute(this.query.salePriceDown);
+    const { result: { recordset: salePriceUpRecordset } } = await this.core.sql.execute(this.query.salePriceUp);
+
+
 
 
 
@@ -171,6 +181,27 @@ export default class Dashboard extends React.PureComponent
       const { SALE_PRICE } = salePriceRecordset[0];
       this.setState({ salePrice: SALE_PRICE});
     }
+    if(purchasePriceDownRecordset.length > 0) 
+    {
+      const { PURCHASE_PRICE_DOWN } = purchasePriceDownRecordset[0];
+      this.setState({ purchasePriceDown: PURCHASE_PRICE_DOWN});
+    }
+    if(purchasePriceUpRecordset.length > 0) 
+    {
+      const { PURCHASE_PRICE_UP } = purchasePriceUpRecordset[0];
+      this.setState({ purchasePriceUp: PURCHASE_PRICE_UP});
+    }
+    if(salePriceDownRecordset.length > 0) 
+    {
+      const { SALE_PRICE_DOWN } = salePriceDownRecordset[0];
+      this.setState({ salePriceDown: SALE_PRICE_DOWN});
+    }
+    if(salePriceUpRecordset.length > 0) 
+    {
+      const { SALE_PRICE_UP } = salePriceUpRecordset[0];
+      this.setState({ salePriceUp: SALE_PRICE_UP});
+    }
+
   }
   render()
   {
@@ -198,6 +229,11 @@ export default class Dashboard extends React.PureComponent
                   this.query.purchaseTotal.value =  [this.dtDate.startDate,this.dtDate.endDate]
                   this.query.purchasePrice.value =  [this.dtDate.startDate,this.dtDate.endDate]
                   this.query.salePrice.value =  [this.dtDate.startDate,this.dtDate.endDate]
+                  this.query.purchasePriceDown.value =  [this.dtDate.startDate,this.dtDate.endDate]
+                  this.query.purchasePriceUp.value =  [this.dtDate.startDate,this.dtDate.endDate]
+                  this.query.salePriceDown.value =  [this.dtDate.startDate,this.dtDate.endDate]
+                  this.query.salePriceUp.value =  [this.dtDate.startDate,this.dtDate.endDate]
+
 
 
                   this.getSalesTotal();
@@ -408,10 +444,58 @@ export default class Dashboard extends React.PureComponent
               <div className="card text-white " style={{ width: "100%", textAlign:"center",backgroundColor:"#224379" }}>
                 <div className="card-body">
                   <div className="text-center">
+                    <h5 className="card-title">{this.t("purchasePriceDown")}</h5>
+                  </div>
+                  <div className="text-center">
+                    <AnimatedText value={parseFloat(this.state.purchasePriceDown ? parseFloat(this.state.purchasePriceDown) : 0)}  type={'number'} />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="col-sm-12 col-md-6 p-1">
+              <div className="card text-white " style={{ width: "100%", textAlign:"center",backgroundColor:"#224379" }}>
+                <div className="card-body">
+                  <div className="text-center">
+                    <h5 className="card-title">{this.t("purchasePriceUp")}</h5>
+                  </div>
+                  <div className="text-center">
+                    <AnimatedText value={parseFloat(this.state.purchasePriceUp ? parseFloat(this.state.purchasePriceUp) : 0)}  type={'number'} />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="col-sm-12 col-md-6 p-1">
+              <div className="card text-white " style={{ width: "100%", textAlign:"center",backgroundColor:"#2b9788" }}>
+                <div className="card-body">
+                  <div className="text-center">
                     <h5 className="card-title">{this.t("salePrice")}</h5>
                   </div>
                   <div className="text-center">
                     <AnimatedText value={parseFloat(this.state.salePrice ? parseFloat(this.state.salePrice) : 0)}  type={'number'} />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="col-sm-12 col-md-6 p-1">
+              <div className="card text-white " style={{ width: "100%", textAlign:"center",backgroundColor:"#2b9788" }}>
+                <div className="card-body">
+                  <div className="text-center">
+                    <h5 className="card-title">{this.t("salePriceDown")}</h5>
+                  </div>
+                  <div className="text-center">
+                    <AnimatedText value={parseFloat(this.state.salePriceDown ? parseFloat(this.state.salePriceDown) : 0)}  type={'number'} />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="col-sm-12 col-md-6 p-1">
+              <div className="card text-white " style={{ width: "100%", textAlign:"center",backgroundColor:"#2b9788" }}>
+                <div className="card-body">
+                  <div className="text-center">
+                    <h5 className="card-title">{this.t("salePriceUp")}</h5>
+                  </div>
+                  <div className="text-center">
+                    <AnimatedText value={parseFloat(this.state.salePriceUp ? parseFloat(this.state.salePriceUp) : 0)}  type={'number'} />
                   </div>
                 </div>
               </div>
