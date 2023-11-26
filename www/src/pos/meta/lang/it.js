@@ -241,6 +241,18 @@ export const langIt =
         msg: "Seleziona una riga, per favore!",
         btn01: "Ok"
     },
+    msgPreLottery:
+    {
+        title: "Avviso",
+        msg: "UN MINUTO...",
+        btn01: "CONTINUA",
+    },
+    msgPostLottery:
+    {
+        title: "Avviso",
+        msg: "QUESTO CLIENTE HA VINTO L'ESTRAZIONE!!!",
+        btn01: "Sì",
+    },    
     msgCustomerMail:
     {
         title: "Avviso",

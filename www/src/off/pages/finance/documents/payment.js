@@ -1,6 +1,6 @@
 import React from 'react';
 import App from '../../../lib/app.js';
-import { docCls,docItemsCls, docCustomerCls } from '../../../../core/cls/doc.js';
+import { docCls,docItemsCls,docCustomerCls,deptCreditMatchingCls } from '../../../../core/cls/doc.js';
 import moment from 'moment';
 
 import ScrollView from 'devextreme-react/scroll-view';
@@ -33,6 +33,9 @@ export default class payment extends React.PureComponent
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
         this.docObj = new docCls();
+        this.deptCreditMatchingObj = new deptCreditMatchingCls();
+        this.deptCreditMatchingObj.lang = this.lang;
+        this.deptCreditMatchingObj.type = 0;
         this.tabIndex = props.data.tabkey
 
         this._calculateTotal = this._calculateTotal.bind(this)
@@ -50,6 +53,7 @@ export default class payment extends React.PureComponent
     async init()
     {
         this.docObj.clearAll()
+        this.deptCreditMatchingObj.clearAll()
 
         this.docObj.ds.on('onAddRow',(pTblName,pData) =>
         {
@@ -129,6 +133,8 @@ export default class payment extends React.PureComponent
         this.docObj.clearAll()
         App.instance.setState({isExecute:true})
         await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:1,DOC_TYPE:200});
+        await this.deptCreditMatchingObj.load({PAID_DOC:this.docObj.docCustomer.dt()[0].GUID,PAYING_DOC:this.docObj.docCustomer.dt()[0].GUID});
+
         App.instance.setState({isExecute:false})
 
         this.txtRef.readOnly = true
@@ -204,180 +210,8 @@ export default class payment extends React.PureComponent
     }
     async _addPayment(pType,pAmount)
     {
-        if(this.invoices.length > 0)
+        if(pAmount > 0)
         {
-            let tmpAmount  = pAmount
-            for (let i = 0; i < this.invoices.length; i++) 
-            {
-                if(tmpAmount >= this.invoices[i].REMAINING)
-                {
-                    let tmpDocCustomer = {...this.docObj.docCustomer.empty}
-                    tmpDocCustomer.DOC_GUID = this.docObj.dt()[0].GUID
-                    tmpDocCustomer.TYPE = this.docObj.dt()[0].TYPE
-                    tmpDocCustomer.REF = this.docObj.dt()[0].REF
-                    tmpDocCustomer.REF_NO = this.docObj.dt()[0].REF_NO
-                    tmpDocCustomer.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                    tmpDocCustomer.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                    tmpDocCustomer.INPUT = this.docObj.dt()[0].INPUT
-                    tmpDocCustomer.INVOICE_GUID = this.invoices[i].GUID 
-                    tmpDocCustomer.INVOICE_REF = this.invoices[i].REFERANS 
-                    tmpDocCustomer.INVOICE_DATE = this.invoices[i].DOC_DATE 
-                    if(pType == 0)
-                    {
-                        tmpDocCustomer.OUTPUT = this.cmbCashSafe.value
-                        tmpDocCustomer.OUTPUT_NAME = this.cmbCashSafe.displayValue
-                        tmpDocCustomer.PAY_TYPE = 0
-                        tmpDocCustomer.AMOUNT = this.invoices[i].REMAINING
-                        tmpDocCustomer.DESCRIPTION = this.cashDescription.value
-                    }
-                    else if (pType == 1)
-                    {
-                        tmpDocCustomer.OUTPUT = this.cmbCashSafe.value
-                        tmpDocCustomer.OUTPUT_NAME = this.cmbCashSafe.displayValue
-                        tmpDocCustomer.PAY_TYPE = 1
-                        tmpDocCustomer.AMOUNT = this.invoices[i].REMAINING
-                        tmpDocCustomer.DESCRIPTION = this.cashDescription.value
-        
-                        let tmpCheck = {...this.docObj.checkCls.empty}
-                        tmpCheck.DOC_GUID = this.docObj.dt()[0].GUID
-                        tmpCheck.REF = this.checkReference.value
-                        tmpCheck.DOC_DATE =  this.docObj.dt()[0].DOC_DATE
-                        tmpCheck.CHECK_DATE =  this.docObj.dt()[0].DOC_DATE
-                        tmpCheck.CUSTOMER =   this.docObj.dt()[0].INPUT
-                        tmpCheck.AMOUNT =  this.invoices[i].REMAINING
-                        tmpCheck.SAFE =  this.cmbCashSafe.value
-                        this.docObj.checkCls.addEmpty(tmpCheck)
-                    }
-                    else if (pType == 2)
-                    {
-                        tmpDocCustomer.OUTPUT = this.cmbCashSafe.value
-                        tmpDocCustomer.OUTPUT_NAME = this.cmbCashSafe.displayValue
-                        tmpDocCustomer.PAY_TYPE = 2
-                        tmpDocCustomer.AMOUNT = this.invoices[i].REMAINING
-                        tmpDocCustomer.DESCRIPTION = this.cashDescription.value
-                    }
-                    this.docObj.docCustomer.addEmpty(tmpDocCustomer)
-                    this._calculateTotal()
-                    tmpAmount = parseFloat((tmpAmount - this.invoices[i].REMAINING).toFixed(2))
-                }
-                else if(tmpAmount < this.invoices[i].REMAINING && tmpAmount != 0)
-                {
-                    console.log(tmpAmount)
-                    let tmpDocCustomer = {...this.docObj.docCustomer.empty}
-                    tmpDocCustomer.DOC_GUID = this.docObj.dt()[0].GUID
-                    tmpDocCustomer.TYPE = this.docObj.dt()[0].TYPE
-                    tmpDocCustomer.REF = this.docObj.dt()[0].REF
-                    tmpDocCustomer.REF_NO = this.docObj.dt()[0].REF_NO
-                    tmpDocCustomer.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                    tmpDocCustomer.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                    tmpDocCustomer.INPUT = this.docObj.dt()[0].INPUT
-                    tmpDocCustomer.INVOICE_GUID = this.invoices[i].GUID  
-                    tmpDocCustomer.INVOICE_REF = this.invoices[i].REFERANS 
-
-                    if(pType == 0)
-                    {
-                        tmpDocCustomer.OUTPUT = this.cmbCashSafe.value
-                        tmpDocCustomer.OUTPUT_NAME = this.cmbCashSafe.displayValue
-                        tmpDocCustomer.PAY_TYPE = 0
-                        tmpDocCustomer.AMOUNT = tmpAmount
-                        tmpDocCustomer.DESCRIPTION = this.cashDescription.value
-                    }
-                    else if (pType == 1)
-                    {
-                        tmpDocCustomer.OUTPUT = this.cmbCashSafe.value
-                        tmpDocCustomer.OUTPUT_NAME = this.cmbCashSafe.displayValue
-                        tmpDocCustomer.PAY_TYPE = 1
-                        tmpDocCustomer.AMOUNT = tmpAmount
-                        tmpDocCustomer.DESCRIPTION = this.cashDescription.value
-        
-                        let tmpCheck = {...this.docObj.checkCls.empty}
-                        tmpCheck.DOC_GUID = this.docObj.dt()[0].GUID
-                        tmpCheck.REF = this.checkReference.value
-                        tmpCheck.DOC_DATE =  this.docObj.dt()[0].DOC_DATE
-                        tmpCheck.CHECK_DATE =  this.docObj.dt()[0].DOC_DATE
-                        tmpCheck.CUSTOMER =   this.docObj.dt()[0].INPUT
-                        tmpCheck.AMOUNT =  tmpAmount
-                        tmpCheck.SAFE =  this.cmbCashSafe.value
-                        this.docObj.checkCls.addEmpty(tmpCheck)
-                    }
-                    else if (pType == 2)
-                    {
-                        tmpDocCustomer.OUTPUT = this.cmbCashSafe.value
-                        tmpDocCustomer.OUTPUT_NAME = this.cmbCashSafe.displayValue
-                        tmpDocCustomer.PAY_TYPE = 2
-                        tmpDocCustomer.AMOUNT = tmpAmount
-                        tmpDocCustomer.DESCRIPTION = this.cashDescription.value
-                    }
-                    this.docObj.docCustomer.addEmpty(tmpDocCustomer)
-                    this._calculateTotal()
-                    tmpAmount = 0
-                }
-            }
-
-            if(tmpAmount > 0)
-            {
-                let tmpDocCustomer = {...this.docObj.docCustomer.empty}
-                tmpDocCustomer.DOC_GUID = this.docObj.dt()[0].GUID
-                tmpDocCustomer.TYPE = this.docObj.dt()[0].TYPE
-                tmpDocCustomer.REF = this.docObj.dt()[0].REF
-                tmpDocCustomer.REF_NO = this.docObj.dt()[0].REF_NO
-                tmpDocCustomer.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                tmpDocCustomer.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                tmpDocCustomer.INPUT = this.docObj.dt()[0].INPUT
-                
-                if(pType == 0)
-                {
-                    tmpDocCustomer.OUTPUT = this.cmbCashSafe.value
-                    tmpDocCustomer.OUTPUT_NAME = this.cmbCashSafe.displayValue
-                    tmpDocCustomer.PAY_TYPE = 0
-                    tmpDocCustomer.AMOUNT = tmpAmount
-                    tmpDocCustomer.DESCRIPTION = this.cashDescription.value
-                }
-                else if (pType == 1)
-                {
-                    tmpDocCustomer.OUTPUT = this.cmbCashSafe.value
-                    tmpDocCustomer.OUTPUT_NAME = this.cmbCashSafe.displayValue
-                    tmpDocCustomer.PAY_TYPE = 1
-                    tmpDocCustomer.AMOUNT = tmpAmount
-                    tmpDocCustomer.DESCRIPTION = this.cashDescription.value
-    
-                    let tmpCheck = {...this.docObj.checkCls.empty}
-                    tmpCheck.DOC_GUID = this.docObj.dt()[0].GUID
-                    tmpCheck.REF = this.checkReference.value
-                    tmpCheck.DOC_DATE =  this.docObj.dt()[0].DOC_DATE
-                    tmpCheck.CHECK_DATE =  this.docObj.dt()[0].DOC_DATE
-                    tmpCheck.CUSTOMER =   this.docObj.dt()[0].INPUT
-                    tmpCheck.AMOUNT =  tmpAmount
-                    tmpCheck.SAFE =  this.cmbCashSafe.value
-                    this.docObj.checkCls.addEmpty(tmpCheck)
-                }
-                else if (pType == 2)
-                {
-                    tmpDocCustomer.OUTPUT = this.cmbCashSafe.value
-                    tmpDocCustomer.OUTPUT_NAME = this.cmbCashSafe.displayValue
-                    tmpDocCustomer.PAY_TYPE = 2
-                    tmpDocCustomer.AMOUNT = tmpAmount
-                    tmpDocCustomer.DESCRIPTION = this.cashDescription.value
-                }
-
-                this.docObj.docCustomer.addEmpty(tmpDocCustomer)
-                this._calculateTotal()
-            }
-        }
-        else
-        {
-            if(this.sysParam.filter({ID:'invoicesForPayment',USERS:this.user.CODE}).getValue().value == true)
-            {
-                let tmpConfObj =
-                {
-                    id:'msgInvoiceSelect',showTitle:true,title:this.t("msgInvoiceSelect.title"),showCloseButton:true,width:'500px',height:'200px',
-                    button:[{id:"btn01",caption:this.t("msgInvoiceSelect.btn01"),location:'after'}],
-                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgInvoiceSelect.msg")}</div>)
-                }
-    
-                await dialog(tmpConfObj);
-                return
-            }
             let tmpDocCustomer = {...this.docObj.docCustomer.empty}
             tmpDocCustomer.DOC_GUID = this.docObj.dt()[0].GUID
             tmpDocCustomer.TYPE = this.docObj.dt()[0].TYPE
@@ -423,6 +257,24 @@ export default class payment extends React.PureComponent
             }
 
             this.docObj.docCustomer.addEmpty(tmpDocCustomer)
+            // BORC ALACAK EŞLEŞMESİ İÇİN YAPILDI.*****************************************/
+            let tmpDCPaidDt = this.deptCreditMatchingObj.popUpList.where({REMAINDER: {'<' : 0}}).where({TYPE : 0})
+            if(tmpDCPaidDt.length > 0)
+            {
+                tmpDCPaidDt.push
+                (
+                    {
+                        LDATE : moment(new Date()),
+                        TYPE : tmpDocCustomer.TYPE,
+                        DOC_DATE : tmpDocCustomer.DOC_DATE,
+                        CUSTOMER_GUID : tmpDocCustomer.INPUT,
+                        DOC : this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length - 1].GUID,
+                        REMAINDER : pAmount,
+                    }
+                )
+                await this.deptCreditMatchingObj.matching(tmpDCPaidDt)
+            }
+            /******************************************************************************/
             this._calculateTotal()
         }
     }
@@ -431,9 +283,10 @@ export default class payment extends React.PureComponent
         this.invoices = []
         let tmpQuery = 
         {
-            query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS,TOTAL - ISNULL((SELECT SUM(AMOUNT) FROM DOC_CUSTOMER_VW_01 WHERE DOC_CUSTOMER_VW_01.INVOICE_GUID = DOC_VW_01.GUID),0) AS REMAINING FROM DOC_VW_01 WHERE OUTPUT = @OUTPUT AND DOC_TYPE IN(20,21) AND TYPE = 0 AND  " + 
-            "TOTAL - ISNULL((SELECT SUM(AMOUNT) FROM DOC_CUSTOMER_VW_01 WHERE DOC_CUSTOMER_VW_01.INVOICE_GUID = DOC_VW_01.GUID),0) > 0 ",
-            param : ['OUTPUT:string|50'],
+            query : "SELECT *, " + 
+                    "(SELECT TOP 1 VALUE FROM DB_LANGUAGE WHERE TAG = (SELECT [dbo].[FN_DOC_CUSTOMER_TYPE_NAME](TYPE,DOC_TYPE,REBATE,PAY_TYPE)) AND LANG = @LANG) AS TYPE_NAME " + 
+                    "FROM DOC_CUSTOMER_LINK_VW_02 WHERE CUSTOMER_GUID = @CUSTOMER_GUID AND (TYPE = 1 OR (TYPE = 0 AND DOC_TYPE < 200)) AND BALANCE > 0",
+            param : ['CUSTOMER_GUID:string|50'],
             value : [this.docObj.dt()[0].INPUT]
         }
         let tmpData = await this.core.sql.execute(tmpQuery) 
@@ -542,7 +395,8 @@ export default class payment extends React.PureComponent
                                                 }
                                                 
                                                 if((await this.docObj.save()) == 0)
-                                                {                                                    
+                                                {
+                                                    await this.deptCreditMatchingObj.save()
                                                     tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
                                                     await dialog(tmpConfObj1);
                                                     this.btnSave.setState({disabled:true});
@@ -571,8 +425,7 @@ export default class payment extends React.PureComponent
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnDelete" parent={this} icon="trash" type="default"
                                     onClick={async()=>
-                                    {
-                                        
+                                    {                                        
                                         let tmpConfObj =
                                         {
                                             id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'200px',
@@ -585,6 +438,9 @@ export default class payment extends React.PureComponent
                                         {
                                             this.docObj.dt('DOC').removeAt(0)
                                             await this.docObj.dt('DOC').delete();
+
+                                            this.deptCreditMatchingObj.dt().removeAll()
+                                            await this.deptCreditMatchingObj.dt().delete()
                                             this.init(); 
                                         }
                                         
@@ -782,8 +638,8 @@ export default class payment extends React.PureComponent
                                         
                                     </NdPopGrid>
                                 </Item>
-                               {/* dtDocDate */}
-                               <Item>
+                                {/* dtDocDate */}
+                                <Item>
                                     <Label text={this.t("dtDocDate")} alignment="right" />
                                     <NdDatePicker simple={true}  parent={this} id={"dtDocDate"}
                                     dt={{data:this.docObj.dt('DOC'),field:"DOC_DATE"}}
@@ -797,8 +653,8 @@ export default class payment extends React.PureComponent
                                         </Validator> 
                                     </NdDatePicker>
                                 </Item>
-                                 {/* Boş */}
-                                 <EmptyItem />
+                                {/* Boş */}
+                                <EmptyItem />
                                 {/* txtCustomerCode */}
                                 <Item>
                                     <Label text={this.t("txtCustomerCode")} alignment="right" />
@@ -915,7 +771,6 @@ export default class payment extends React.PureComponent
                                 </Item> 
                                 {/* Boş */}
                                 <EmptyItem />
-                                
                                 {/* Boş */}
                                 <EmptyItem />
                             </Form>
@@ -952,57 +807,57 @@ export default class payment extends React.PureComponent
                                         }
                                     }}/>
                                 </Item>
-                                 <Item colSpan={1}>
-                                 <React.Fragment>
-                                    <NdGrid parent={this} id={"grdDocPayments"} 
-                                    showBorders={true} 
-                                    columnsAutoWidth={true} 
-                                    allowColumnReordering={true} 
-                                    allowColumnResizing={true} 
-                                    height={'500'} 
-                                    width={'100%'}
-                                    dbApply={false}
-                                    onRowUpdated={async(e)=>{
-                                        let rowIndex = e.component.getRowIndexByKey(e.key)
+                                <Item colSpan={1}>
+                                    <React.Fragment>
+                                        <NdGrid parent={this} id={"grdDocPayments"} 
+                                        showBorders={true} 
+                                        columnsAutoWidth={true} 
+                                        allowColumnReordering={true} 
+                                        allowColumnResizing={true} 
+                                        height={'500'} 
+                                        width={'100%'}
+                                        dbApply={false}
+                                        onRowUpdated={async(e)=>{
+                                            let rowIndex = e.component.getRowIndexByKey(e.key)
 
-                                        this._calculateTotal()
-                                    }}
-                                    onRowRemoved={async (e)=>{
-                                        this._calculateTotal()
-                                        await this.docObj.save()
-                                    }}
-                                    >
-                                        <Paging defaultPageSize={10} />
-                                        <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
-                                        <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
-                                        <Scrolling mode="standart" />
-                                        <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
-                                        <Export fileName={this.lang.t("menu.fns_02_001")} enabled={true} allowExportSelectedData={true} />
-                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdDocPayments.clmCreateDate")} width={200} allowEditing={false}/>
-                                        <Column dataField="OUTPUT_NAME" caption={this.t("grdDocPayments.clmOutputName")} allowEditing={false}/>
-                                        <Column dataField="AMOUNT" caption={this.t("grdDocPayments.clmAmount")} format={{ style: "currency", currency: "EUR",precision: 2}} />
-                                        <Column dataField="DESCRIPTION" caption={this.t("grdDocPayments.clmDescription")} />
-                                        <Column dataField="INVOICE_REF" caption={this.t("grdDocPayments.clmInvoice")} />
-                                        <Column dataField="INVOICE_DATE" caption={this.t("grdDocPayments.clmFacDate")}  dataType="date" 
-                                                editorOptions={{value:null}}
-                                                cellRender={(e) => 
-                                                {
-                                                    if(moment(e.value).format("YYYY-MM-DD") != '1970-01-01')
+                                            this._calculateTotal()
+                                        }}
+                                        onRowRemoved={async (e)=>{
+                                            this._calculateTotal()
+                                            await this.docObj.save()
+                                        }}
+                                        >
+                                            <Paging defaultPageSize={10} />
+                                            <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
+                                            <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
+                                            <Scrolling mode="standart" />
+                                            <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
+                                            <Export fileName={this.lang.t("menu.fns_02_001")} enabled={true} allowExportSelectedData={true} />
+                                            <Column dataField="CDATE_FORMAT" caption={this.t("grdDocPayments.clmCreateDate")} width={200} allowEditing={false}/>
+                                            <Column dataField="OUTPUT_NAME" caption={this.t("grdDocPayments.clmOutputName")} allowEditing={false}/>
+                                            <Column dataField="AMOUNT" caption={this.t("grdDocPayments.clmAmount")} format={{ style: "currency", currency: "EUR",precision: 2}} />
+                                            <Column dataField="DESCRIPTION" caption={this.t("grdDocPayments.clmDescription")} />
+                                            <Column dataField="INVOICE_REF" caption={this.t("grdDocPayments.clmInvoice")} />
+                                            <Column dataField="INVOICE_DATE" caption={this.t("grdDocPayments.clmFacDate")}  dataType="date" 
+                                                    editorOptions={{value:null}}
+                                                    cellRender={(e) => 
                                                     {
-                                                        return e.text
-                                                    }
-                                                    
-                                                    return
-                                                }}/>
-                                    </NdGrid>
-                                    <ContextMenu
-                                    dataSource={this.rightItems}
-                                    width={200}
-                                    target="#grdDocPayments"
-                                    onItemClick={(async(e)=>
-                                    {
-                                    }).bind(this)} />
-                                </React.Fragment>     
+                                                        if(moment(e.value).format("YYYY-MM-DD") != '1970-01-01')
+                                                        {
+                                                            return e.text
+                                                        }
+                                                        
+                                                        return
+                                                    }}/>
+                                        </NdGrid>
+                                        <ContextMenu
+                                        dataSource={this.rightItems}
+                                        width={200}
+                                        target="#grdDocPayments"
+                                        onItemClick={(async(e)=>
+                                        {
+                                        }).bind(this)} />
+                                    </React.Fragment>     
                                 </Item>
                             </Form>
                         </div>
@@ -1024,8 +879,8 @@ export default class payment extends React.PureComponent
                             </Form>
                         </div>
                     </div>
-                     {/* Cash PopUp */}
-                     <div>
+                    {/* Cash PopUp */}
+                    <div>
                         <NdPopUp parent={this} id={"popCash"} 
                         visible={false}
                         showCloseButton={true}
@@ -1147,22 +1002,12 @@ export default class payment extends React.PureComponent
                                             <NdButton text={this.t("invoiceSelect")} type="normal" stylingMode="contained" width={'100%'} 
                                             onClick={async (e)=>
                                             {       
-                                                this.getInvoices()
+                                                await this.deptCreditMatchingObj.showPopUp(this.docObj.dt()[0].INPUT)
+                                                this.numCash.value = Number(this.deptCreditMatchingObj.popUpList.sum('REMAINDER',2) * -1).round(2)
                                             }}/>
                                         </div>
                                     </div>
-                                </Item>
-                                {/* <Item>
-                                    <div className='row'>
-                                        <div className='col-12'>
-                                            <NdButton text={this.t("prePaymentSelect")} type="normal" stylingMode="contained" width={'100%'} 
-                                            onClick={async (e)=>
-                                            {       
-                                                this.getDocumant()
-                                            }}/>
-                                        </div>
-                                    </div>
-                                </Item> */}
+                                </Item>                                
                                 <Item>
                                     <div className='row'>
                                         <div className='col-6'>
@@ -1197,8 +1042,8 @@ export default class payment extends React.PureComponent
                             </Form>
                         </NdPopUp>
                     </div> 
-                      {/* check PopUp */}
-                      <div>
+                    {/* check PopUp */}
+                    <div>
                         <NdPopUp parent={this} id={"popCheck"} 
                         visible={false}
                         showCloseButton={true}
@@ -1210,7 +1055,6 @@ export default class payment extends React.PureComponent
                         position={{of:'#root'}}
                         >
                             <Form colCount={1} height={'fit-content'}>
-                               
                                 <Item>
                                     <Label text={this.t("checkReference")} alignment="right" />
                                     <div className="col-12 pe-0">
@@ -1247,40 +1091,46 @@ export default class payment extends React.PureComponent
                             </Form>
                         </NdPopUp>
                     </div> 
-                      {/* Fatura Grid */}
-                    <NdPopGrid id={"pg_invoices"} parent={this} container={"#root"}
-                    visible={false}
-                    position={{of:'#root'}} 
-                    showTitle={true} 
-                    showBorders={true}
-                    width={'90%'}
-                    height={'90%'}
-                    selection={{mode:"multiple"}}
-                    title={this.t("pg_invoices.title")} //
-                    >
-                        <Column dataField="REFERANS" caption={this.t("pg_invoices.clmReferans")} width={200} defaultSortOrder="asc"/>
-                        <Column dataField="OUTPUT_NAME" caption={this.t("pg_invoices.clmOutputName")} width={300}/>
-                        <Column dataField="DOC_DATE_CONVERT" caption={this.t("pg_invoices.clmDate")} width={250} />
-                        <Column dataField="TOTAL" caption={this.t("pg_invoices.clmTotal")} width={200} />
-                        <Column dataField="REMAINING" caption={this.t("pg_invoices.clmRemaining")} width={200} />
-                    </NdPopGrid>
+                    {/* Fatura Grid */}
+                    <div>
+                        <NdPopGrid id={"pg_invoices"} parent={this} container={"#root"}
+                        visible={false}
+                        position={{of:'#root'}} 
+                        showTitle={true} 
+                        showBorders={true}
+                        width={'90%'}
+                        height={'90%'}
+                        selection={{mode:"multiple"}}
+                        title={this.t("pg_invoices.title")} //
+                        >
+                            <Column dataField="REF" caption={this.t("pg_invoices.clmReferans")} width={200}/>
+                            <Column dataField="REF_NO" caption={this.t("pg_invoices.clmReferans")} width={200}/>
+                            <Column dataField="TYPE_NAME" caption={this.t("pg_invoices.clmReferans")} width={200}/>
+                            <Column dataField="CUSTOMER_NAME" caption={this.t("pg_invoices.clmOutputName")} width={300}/>
+                            <Column dataField="DOC_DATE" caption={this.t("pg_invoices.clmDate")} width={250} defaultSortOrder="asc"/>
+                            <Column dataField="PAID_AMOUNT" caption={this.t("pg_invoices.clmTotal")} width={200} />
+                            <Column dataField="PAYING_AMOUNT" caption={this.t("pg_invoices.clmTotal")} width={200} />
+                            <Column dataField="BALANCE" caption={this.t("pg_invoices.clmRemaining")} width={200} />
+                        </NdPopGrid>
+                    </div>
                     {/* ÖN ÖDEME EVRAKI SEÇİM */}
-                    <NdPopGrid id={"pre_document"} parent={this} container={"#root"}
-                    visible={false}
-                    position={{of:'#root'}} 
-                    showTitle={true} 
-                    showBorders={true}
-                    width={'90%'}
-                    height={'90%'}
-                    selection={{mode:"single"}}
-                    title={this.t("pre_document.title")} //
-                    >
-                        <Column dataField="REFERANS" caption={this.t("pre_document.clmReferans")} width={200} defaultSortOrder="asc"/>
-                        <Column dataField="OUTPUT_NAME" caption={this.t("pre_document.clmOutputName")} width={300}/>
-                        <Column dataField="DOC_DATE_CONVERT" caption={this.t("pre_document.clmDate")} width={250} />
-                        <Column dataField="TOTAL" caption={this.t("pre_document.clmTotal")} width={200} />
-                    </NdPopGrid>
-                    
+                    <div>
+                        <NdPopGrid id={"pre_document"} parent={this} container={"#root"}
+                        visible={false}
+                        position={{of:'#root'}} 
+                        showTitle={true} 
+                        showBorders={true}
+                        width={'90%'}
+                        height={'90%'}
+                        selection={{mode:"single"}}
+                        title={this.t("pre_document.title")} //
+                        >
+                            <Column dataField="REFERANS" caption={this.t("pre_document.clmReferans")} width={200} defaultSortOrder="asc"/>
+                            <Column dataField="OUTPUT_NAME" caption={this.t("pre_document.clmOutputName")} width={300}/>
+                            <Column dataField="DOC_DATE_CONVERT" caption={this.t("pre_document.clmDate")} width={250} />
+                            <Column dataField="TOTAL" caption={this.t("pre_document.clmTotal")} width={200} />
+                        </NdPopGrid>
+                    </div>
                 </ScrollView>     
             </div>
         )

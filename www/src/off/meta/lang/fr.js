@@ -215,6 +215,7 @@ export const langFr =
         cri_04_002 : 'Rapport sur le solde courant Client/Fournisseur', 
         cri_04_003 : "Rapport point fidelité client",
         cri_04_004 : "Rapport sur le bilan actuel",
+        cri_04_005 : "Rapport de Vieillissement des Factures de Vente", //BAK
         ftr: "Facture ",
         ftr_01: "Listes",
         ftr_02: "Document",
@@ -293,7 +294,6 @@ export const langFr =
         fns_04_001 : "Rapport sur les relevés bancaires",   
         fns_04_002 : "Rapport sur le solde actuel",  
         fns_04_003 : "Rapport sur les relevés de caisse",
-        fns_04_002 : "Rapport solde de compte",
         fns_05 : "Opérations", 
         fns_05_001 : "Saisie Multi Encaissement", 
         fns_05_002 : "Saisie Multi Paiement", 
@@ -425,6 +425,20 @@ export const langFr =
         title: "Attention",
         btn01: "OK",
         msg: "Le numéro de document est déjà enregistré !."
+    },
+    popDeptCreditList : //BAK
+    {
+        title : "Sélection de facture",
+        btnPopDeptCreditListSelection : "Choix",
+        chkPopDeptCreditList : "Afficher les clos",
+        clmRef : "Ref",
+        clmRefNo : "Ref No",
+        clmTypeName : "Type Doc.",
+        clmCustomer : "Nom Client",
+        clmDate : "Date",
+        clmTotal : "Total",
+        clmClosed : "Fermé",
+        clmBalance  : "Restant",
     },
     stk_01_001:  // "Identification du nouveau stock" 
     {
@@ -3974,6 +3988,30 @@ export const langFr =
         btnAdd : "Ajoute", 
         descriptionPlace : "Veuillez Saisir au moins 15 Caractères.."
     },
+    cri_04_005 : // "Satış Faturası Yaşlandırma Raporu"
+    {
+        txtCustomerCode : "Fournisseur",
+        btnGet : "Rechercher",
+        dtFirst : "Date Début",
+        dtLast : "Date Fin",
+        pg_txtCustomerCode : 
+        {
+            title : "Choix Fournisseur",
+            clmCode :  "Code Client",
+            clmTitle : "Nom Fournisseur",
+            clmTypeName : "Type",
+            clmGenusName : "Genre"
+        },
+        grdList: 
+        {
+            clmDate: "Date",
+            clmType: "Document",
+            clmCustomerName: "Nom du Client",
+            clmDebit: "Débit",
+            clmCredit: "Crédit",
+            clmBalance : "Balance"
+        }
+    },
     ftr_01_001 : // "Alış Fatura Listesi"
     {
         txtCustomerCode : "Fournisseur",
@@ -4241,7 +4279,32 @@ export const langFr =
         txtDocNo : "Numéro de document", 
         cmbOrigin : "Origine",
         txtTransport : "Type de Transport", 
-        tabTitleDetail : "Informations complémentaires", 
+        tabTitleDetail : "Informations complémentaires",
+        validDesign : "Veuillez séléctionner le design.",   
+        btnView : "Afficher",
+        btnMailsend : "Envoyer Mail", 
+        validMail : "Veuillez ne pas laisser ce champ vide.",
+        placeMailHtmlEditor : "Vous pouvez entrer une description de votre courrier.",
+        isMsgSave :
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            msg: "Impossible de procéder sans enregistrement du document !"
+        },
+        msgMailSendResult:
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            msgSuccess: "L'envoi du courrier a réussi !",
+            msgFailed: "L'envoi du courrier a échoué !"
+        },
+        popMailSend :
+        {
+            title :"Envoyer un e-mail",
+            txtMailSubject : "Objet du courriel",
+            txtSendMail : "Adresse e-mail",
+            btnSend : "Envoyer"
+        },
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -4818,16 +4881,13 @@ export const langFr =
         btnView : "Aperçu", 
         btnMailsend : "Envoyer Mail", 
         placeMailHtmlEditor : "Veuillez saisir votre texte.", 
-        validDesign : "Veuillez séléctionner le design.",  
-        validMail : "Veuillez ne pas laisser le champs vide.",  
+        validDesign : "Veuillez séléctionner le design.",   
         txtTotalHt : "Total HT",
         txtDocNo : "Numéro de document", 
         extraCost : "Supplément",
         cmbPriceContract : "Accord de prix",
         txtTransport : "Type de transport",
         tabTitleDetail : "Informations détaillées",
-        btnView : "Afficher",
-        btnMailsend : "Envoyer un courriel",
         validMail : "Veuillez ne pas laisser ce champ vide.",
         placeMailHtmlEditor : "Vous pouvez entrer une description de votre courrier.",
         isMsgSave :
@@ -11307,6 +11367,30 @@ export const langFr =
         cmbOrigin: "Origine",
         validDesign : "Veuillez choisir le design de l'étiquette",
         txtTotalHt : "Total HT",
+        btnMailsend : "Envoyer Mail", 
+        btnView : "Afficher",
+        validMail : "Veuillez ne pas laisser ce champ vide.",
+        placeMailHtmlEditor : "Vous pouvez entrer une description de votre courrier.",
+        isMsgSave :
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            msg: "Impossible de procéder sans enregistrement du document !"
+        },
+        msgMailSendResult:
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            msgSuccess: "L'envoi du courrier a réussi !",
+            msgFailed: "L'envoi du courrier a échoué !"
+        },
+        popMailSend :
+        {
+            title :"Envoyer un e-mail",
+            txtMailSubject : "Objet du courriel",
+            txtSendMail : "Adresse e-mail",
+            btnSend : "Envoyer"
+        },
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -13795,7 +13879,31 @@ export const langFr =
         txtTotalQuantity : "Quantité totale",  
         txtUnitPrice : "Prix unitaire", 
         txtTotalHt : "Total HT",
-        validDesign : "Veuillez sélectionner le design.",  
+        validDesign : "Veuillez séléctionner le design.",   
+        btnView : "Afficher",
+        btnMailsend : "Envoyer Mail", 
+        validMail : "Veuillez ne pas laisser ce champ vide.",
+        placeMailHtmlEditor : "Vous pouvez entrer une description de votre courrier.",
+        isMsgSave :
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            msg: "Impossible de procéder sans enregistrement du document !"
+        },
+        msgMailSendResult:
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            msgSuccess: "L'envoi du courrier a réussi !",
+            msgFailed: "L'envoi du courrier a échoué !"
+        },
+        popMailSend :
+        {
+            title :"Envoyer un e-mail",
+            txtMailSubject : "Objet du courriel",
+            txtSendMail : "Adresse e-mail",
+            btnSend : "Envoyer"
+        },
         pg_Docs : 
         {
             title : "Sélection Document",
@@ -15949,7 +16057,8 @@ export const langFr =
         btnCash : "Saisie Réglement",
         invoiceSelect : "Sélectionner Facture",
         ValidCash : "Veuillez saisir un montant supérieur à 0", 
-        cmbPayType : {
+        cmbPayType : 
+        {
             title : "Mode de paiement",
             cash : "Espèce",
             check : "Chèque",
@@ -15967,15 +16076,6 @@ export const langFr =
             clmOutputName : "Nom Client",
             clmOutputCode  : "Code Client",
             clmTotal : "Total TTC"
-        },
-        pg_invoices : 
-        {
-            title : "Sélection de facture",
-            clmReferans : "Référence",
-            clmInputName : "Nom Client",
-            clmDate : "Date",
-            clmTotal : "Total",
-            clmRemaining  : "Restant",
         },
         pg_txtCustomerCode : 
         {
@@ -17612,6 +17712,31 @@ export const langFr =
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
         txtUnitPrice : "Prix unitaire", 
+        validDesign : "Veuillez séléctionner le design.",   
+        btnView : "Afficher",
+        btnMailsend : "Envoyer Mail", 
+        validMail : "Veuillez ne pas laisser ce champ vide.",
+        placeMailHtmlEditor : "Vous pouvez entrer une description de votre courrier.",
+        isMsgSave :
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            msg: "Impossible de procéder sans enregistrement du document !"
+        },
+        msgMailSendResult:
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            msgSuccess: "L'envoi du courrier a réussi !",
+            msgFailed: "L'envoi du courrier a échoué !"
+        },
+        popMailSend :
+        {
+            title :"Envoyer un e-mail",
+            txtMailSubject : "Objet du courriel",
+            txtSendMail : "Adresse e-mail",
+            btnSend : "Envoyer"
+        },
         pg_Docs : 
         {
             title : "Sélection Document",
