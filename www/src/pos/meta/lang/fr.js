@@ -252,6 +252,18 @@ export const langFr =
     {
         title: "Veuillez saisir votre adresse e-mail.",
     },
+    msgPreLottery:
+    {
+        title: "Avertissement",
+        msg: "UNE MINUTE...",
+        btn01: "CONTINUER",
+    },
+    msgPostLottery:
+    {
+        title: "Avertissement",
+        msg: "CE CLIENT A GAGNÉ AU TIRAGE !!!",
+        btn01: "Oui",
+    },
     msgCancelCustomerConfirm: 
     {
         title : "Attention",
@@ -859,6 +871,18 @@ export const langFr =
         NewPassword: "Nouveau mot de passe",
         NewPassword2: "Répéter le nouveau mot de passe",
         btnApprove: "Enregistrer"
+    },
+    msgPassChange:
+    {
+        title: "Réussite",
+        btn01: "OK",
+        msg: "Votre mot de passe a été changé !"
+    },
+    msgPasswordWrong:
+    {
+        title: "Echec",
+        btn01: "OK",
+        msg: "Mot de Passe Erroné"
     },
     passChange: "Changer le mot de passe",
     txtNewMail : "E-Mail",

@@ -71,7 +71,6 @@ export const langDe =
         btn01: "OK",
         msg: "Ihr Passwort wurde geändert!"
     },
-
     msgAnotherUserAlert: 
     {
         title: "Hinweis",
@@ -209,6 +208,7 @@ export const langDe =
         cri_04_002: "Kundenkontostand",
         cri_04_003: "Kundenpunkte",
         cri_04_004: "Kontostandbasierte Kundenauszug",
+        cri_04_005: "Verkaufsrechnungsaltungsbericht",
         ftr: "Rechnung",
         ftr_01: "Listen",
         ftr_02: "Dokumente",
@@ -285,7 +285,8 @@ export const langDe =
         fns_04: "Berichte",
         fns_04_001: "Bankauszugsbericht",
         fns_04_002: "Kontosaldo-Bericht",
-        fns_04_003 : "Kasa Ekstre Raporu",
+        fns_04_003 : "Kasa Ekstre Raporu", //BAK
+        fns_04_003 : "Eine Abgleichsbericht über Schulden und Guthaben", //BAK
         fns_05: "Operationen",
         fns_05_001: "Masseneinzahlungseingabe",
         fns_05_002: "Massenzahlungseingabe",
@@ -417,6 +418,20 @@ export const langDe =
         title: "Achtung",
         btn01: "OK",
         msg: "Die von Ihnen eingegebene Dokumentennummer wurde bereits gespeichert!"
+    },
+    popDeptCreditList :
+    {
+        title : "Rechnungsauswahl",
+        btnPopDeptCreditListSelection : "Auswählen",
+        chkPopDeptCreditList : "Geschlossene anzeigen",
+        clmRef : "REFERENZ",
+        clmRefNo : "REFERENZ NR",
+        clmTypeName : "BELEGSART",
+        clmCustomer : "KUNDE NAME",
+        clmDate : "DATUM",
+        clmTotal : "GESAMT",
+        clmClosed : "GESCHLOSSEN",
+        clmBalance : "AUSSTEHEND",
     },
     stk_01_001:  // "Neue Lagerdefinition"
     {
@@ -3766,6 +3781,30 @@ export const langDe =
         btnAdd : "Hinzufügen",
         descriptionPlace : "Bitte geben Sie einen Text mit mindestens 15 Zeichen ein."
     },
+    cri_04_005 : // "Satış Faturası Yaşlandırma Raporu" //BAK
+    {
+        txtCustomerCode : "Müşteri",
+        btnGet :"Getir",
+        dtFirst : "İlk Tarih",
+        dtLast : "Son Tarih",
+        pg_txtCustomerCode : 
+        {
+            title : "Müşteri Seçimi",
+            clmCode :  "CARİ KODU",
+            clmTitle : "CARİ ADI",
+            clmTypeName : "TİPİ",
+            clmGenusName : "CİNSİ"
+        },
+        grdList: 
+        {
+            clmDate: "Tarih",
+            clmType: "Evrak",
+            clmCustomerName : "Müşteri Adı",
+            clmDebit : "Borç",
+            clmCredit :"Alacak",
+            clmBalance : "Bakiye"
+        },
+    },
     ftr_01_001 : // "Einkaufsrechnungsliste"
     {
         txtCustomerCode : "Kunde",
@@ -4032,6 +4071,31 @@ export const langDe =
         cmbOrigin: "Herkunft",
         txtTransport : "Taşıma Türü", // BAK
         tabTitleDetail : "Detay Bilgileri", // BAK
+        validDesign : "Bitte wählen Sie ein Design aus.",
+        btnView : "Anzeigen",
+        btnMailsend : "E-Mail senden",
+        validMail : "Bitte lassen Sie dieses Feld nicht leer.",
+        placeMailHtmlEditor : "Sie können eine Beschreibung für Ihre E-Mail eingeben.",
+        isMsgSave :
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Vorgang kann nicht ohne Speicherung des Dokuments durchgeführt werden!"
+        },
+        msgMailSendResult:
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msgSuccess: "E-Mail-Versand erfolgreich!",
+            msgFailed: "E-Mail-Versand fehlgeschlagen!"
+        },
+        popMailSend :
+        {
+            title :"E-Mail senden",
+            txtMailSubject : "Betreff der E-Mail",
+            txtSendMail : "E-Mail-Adresse",
+            btnSend : "Senden"
+        },
         pg_Docs : 
         {
             title : "Dokumentenauswahl",
@@ -4600,9 +4664,6 @@ export const langDe =
         dtExpDate : "Fälligkeitsdatum",
         getOffers : "Angebote abrufen",
         getProforma : "Proforma abrufen",
-        btnView : "Anzeigen",
-        btnMailsend : "E-Mail senden",
-        placeMailHtmlEditor : "Geben Sie einen Text für Ihre E-Mail ein.",
         validDesign : "Bitte wählen Sie ein Design aus.",
         validMail : "Bitte lassen Sie dieses Feld nicht leer.",
         getPreInvoice : "Vorläufige Rechnung abrufen",
@@ -11031,6 +11092,30 @@ export const langDe =
         txtDocNo: "Belegnummer",
         validDesign : "Bitte Design auswählen",
         cmbOrigin: "Herkunft",
+        btnView : "Anzeigen",
+        btnMailsend : "E-Mail senden",
+        validMail : "Bitte lassen Sie dieses Feld nicht leer.",
+        placeMailHtmlEditor : "Sie können eine Beschreibung für Ihre E-Mail eingeben.",
+        isMsgSave :
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Vorgang kann nicht ohne Speicherung des Dokuments durchgeführt werden!"
+        },
+        msgMailSendResult:
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msgSuccess: "E-Mail-Versand erfolgreich!",
+            msgFailed: "E-Mail-Versand fehlgeschlagen!"
+        },
+        popMailSend :
+        {
+            title :"E-Mail senden",
+            txtMailSubject : "Betreff der E-Mail",
+            txtSendMail : "E-Mail-Adresse",
+            btnSend : "Senden"
+        },
         pg_Docs:
         {
             title: "Belege auswählen",
@@ -13456,6 +13541,31 @@ export const langDe =
         txtUnitQuantity : "Einheitsmenge",
         txtTotalQuantity : "Gesamtmenge",
         txtUnitPrice: "Einheitspreis",
+        btnView : "Anzeigen",
+        btnMailsend : "E-Mail senden",
+        validDesign : "Bitte wählen Sie ein Design aus.",
+        validMail : "Bitte lassen Sie dieses Feld nicht leer.",
+        placeMailHtmlEditor : "Sie können eine Beschreibung für Ihre E-Mail eingeben.",
+        isMsgSave :
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Vorgang kann nicht ohne Speicherung des Dokuments durchgeführt werden!"
+        },
+        msgMailSendResult:
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msgSuccess: "E-Mail-Versand erfolgreich!",
+            msgFailed: "E-Mail-Versand fehlgeschlagen!"
+        },
+        popMailSend :
+        {
+            title :"E-Mail senden",
+            txtMailSubject : "Betreff der E-Mail",
+            txtSendMail : "E-Mail-Adresse",
+            btnSend : "Senden"
+        },
         pg_Docs : 
         {
             title : "Dokumentauswahl",
@@ -15457,15 +15567,6 @@ export const langDe =
             clmOutputName: "KUNDENNAME",
             clmOutputCode: "KUNDENCODE",
         },
-        pg_invoices:
-        {
-            title: "Rechnungsauswahl",
-            clmReferans: "REFERENZ",
-            clmInputName: "KUNDENAME",
-            clmDate: "DATUM",
-            clmTotal: "GESAMT",
-            clmRemaining: "OFFEN",
-        },
         pg_txtCustomerCode : 
         {
             title : "Kundenauswahl",
@@ -15842,9 +15943,8 @@ export const langDe =
             clmDocDate : "Tarih",    // BAK
             clmRef : "Seri",   // BAK
             clmRefNo : "Sıra",    // BAK
-        },
-     
-    },
+        },     
+    },    
     fns_05_001 : //"Masseneinzugseingabe"
     {
         txtRefRefno : "Serie-Nummer",
@@ -17032,6 +17132,31 @@ export const langDe =
         txtUnitQuantity : "Einheitsmenge",
         txtTotalQuantity : "Gesamtmenge",
         txtUnitPrice: "Kundenpreis",
+        validDesign: "Bitte wählen Sie ein Design aus.",
+        validMail: "Bitte füllen Sie das Feld aus.",
+        txtTotalHt: "Rabattierter Betrag",
+        txtDocNo: "Dokumentnummer",
+        placeMailHtmlEditor : "Sie können eine Beschreibung für Ihre E-Mail eingeben.",
+        isMsgSave :
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Aktion kann ohne Dokumentenregistrierung nicht durchgeführt werden!"
+        },
+        msgMailSendResult:
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msgSuccess: "E-Mail-Versand erfolgreich!",
+            msgFailed: "E-Mail-Versand fehlgeschlagen!"
+        },
+        popMailSend :
+        {
+            title :"E-Mail senden",
+            txtMailSubject : "E-Mail-Betreff",
+            txtSendMail : "E-Mail-Adresse",
+            btnSend : "Senden"
+        },
         pg_Docs : 
         {
             title : "Dokumentenauswahl",

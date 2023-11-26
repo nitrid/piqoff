@@ -241,6 +241,18 @@ export const langDe =
         msg: "Bitte wählen Sie eine Zeile aus!",
         btn01: "OK",
     },
+    msgPreLottery:
+    {
+        title: "Warnung",
+        msg: "EINE MINUTE...",
+        btn01: "WEITER",
+    },
+    msgPostLottery:
+    {
+        title: "Warnung",
+        msg: "DIESER KUNDE HAT DIE ZIEHUNG GEWONNEN !!!",
+        btn01: "Ja",
+    },    
     msgCustomerMail:
     {
         title: "Warnung",
