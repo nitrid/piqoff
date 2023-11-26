@@ -241,6 +241,17 @@ export const langFr =
         msg : "Veuillez sélectionner la ligne ",
         btn01 : "OK"
     },
+    msgCustomerMail:
+    {
+        title: "Avertissement",
+        msg: "Voulez-vous ajouter un e-mail au client ?",
+        btn01: "Oui",
+        btn02: "Annuler",
+    },
+    msgAddCustomerMail:
+    {
+        title: "Veuillez saisir votre adresse e-mail.",
+    },
     msgCancelCustomerConfirm: 
     {
         title : "Attention",
@@ -800,7 +811,8 @@ export const langFr =
         scalePort : "Balance port",
         payCardPort : "TPE port",
         printDesing : "Design d’imprimante",
-        scannerPort : "Scanner port"
+        scannerPort : "Scanner port",
+        printerPort: "Printer port"
     },
     msgNotBarcodeWeighing: //BAK
     {
@@ -849,5 +861,9 @@ export const langFr =
         btnApprove: "Enregistrer"
     },
     passChange: "Changer le mot de passe",
+    txtNewMail : "E-Mail",
+    txtNewPhone : "Numéro de téléphone",
+    txtNewCustomerLastName : "Nom",
+    txtNewCustomerName : "Prenom"
     
 }

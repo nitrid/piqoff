@@ -241,6 +241,17 @@ export const langTr =
         msg : "Lütfen satır seçiniz !",
         btn01 : "Tamam"
     },
+    msgCustomerMail: 
+    {
+        title : "Uyarı",
+        msg : "musteriye mail eklemek istermisiniz",
+        btn01 : "Evet",
+        btn02 : "İptal",
+    },
+    msgAddCustomerMail: 
+    {
+        title : "Lütfen Mail Adresi Giriniz..",
+    },
     msgCancelCustomerConfirm: 
     {
         title : "Uyarı",
@@ -799,7 +810,8 @@ export const langTr =
         scalePort : "Scale port",
         payCardPort : "Pay card port",
         printDesing : "Yazdırma dizaynı",
-        scannerPort : "Scanner port"
+        scannerPort : "Scanner port",
+        printerPort : "Printer port"
     },
     msgNotBarcodeWeighing: 
     {
@@ -848,4 +860,8 @@ export const langTr =
         btnApprove : "Onayla"
     },
     passChange :"Şifre Değiştir",
+    txtNewMail : "E-Mail",
+    txtNewPhone : "Telefon",
+    txtNewCustomerLastName : "Soyisim",
+    txtNewCustomerName : "İsim"
 }

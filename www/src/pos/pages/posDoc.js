@@ -346,25 +346,27 @@ export default class posDoc extends React.PureComponent
             await this.posDevice.load({CODE:this.posObj.dt()[this.posObj.dt().length - 1].DEVICE})
 
             this.posObj.dt()[this.posObj.dt().length - 1].DEPOT_GUID = this.posDevice.dt()[0].DEPOT_GUID
-
-            if(this.posDevice.dt().where({MACID:localStorage.getItem('macId')}).length > 0)
+            if(this.posDevice.dt().where({MACID:localStorage.getItem('macId') == null ? undefined : localStorage.getItem('macId')}).length > 0)
             {
                 this.posScale = new posScaleCls(this.posDevice.dt()[0].SCALE_PORT)
                 this.posLcd = new posLcdCls(this.posDevice.dt()[0].LCD_PORT)
             }
             else
             {
-                let tmpConfObj =
+                if(this.core.util.isElectron())
                 {
-                    id:'msgMacIdFailed',showTitle:true,title:this.lang.t("msgMacIdFailed.title"),showCloseButton:true,width:'400px',height:'200px',
-                    button:[{id:"btn01",caption:this.lang.t("msgMacIdFailed.btn01"),location:'before'}],
-                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgMacIdFailed.msg")}</div>)
+                    let tmpConfObj =
+                    {
+                        id:'msgMacIdFailed',showTitle:true,title:this.lang.t("msgMacIdFailed.title"),showCloseButton:true,width:'400px',height:'200px',
+                        button:[{id:"btn01",caption:this.lang.t("msgMacIdFailed.btn01"),location:'before'}],
+                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgMacIdFailed.msg")}</div>)
+                    }
+                    
+                    await dialog(tmpConfObj);
+                    
+                    this.core.auth.logout()
+                    window.location.reload()
                 }
-                
-                await dialog(tmpConfObj);
-                
-                this.core.auth.logout()
-                window.location.reload()
             }
         }
         this.posDevice.scanner();
@@ -452,7 +454,7 @@ export default class posDoc extends React.PureComponent
             //****************************** */
             this.sendJet({CODE:"80",NAME:"Démarrage terminal lancé."}) ////Kasa işleme başladı.
             //LOCAL DB DE KAYIT KONTROL EDİLİYOR.EĞER KAYIT VARSA ONLINE DB YE GÖNDERİLİYOR
-            if(!this.core.offline)
+            if(!this.core.offline && this.core.util.isElectron())
             {
                 let tmpData = await this.core.local.select({name : "POS_VW_01",type : "select",query : "SELECT * FROM POS_VW_01"})
                 if(tmpData.result.recordset.length > 0)
@@ -742,7 +744,7 @@ export default class posDoc extends React.PureComponent
             let tmpCustomerDt = new datatable(); 
             tmpCustomerDt.selectCmd = 
             {
-                query : "SELECT GUID,CUSTOMER_TYPE,CODE,TITLE,ADRESS,ZIPCODE,CITY,COUNTRY_NAME,STATUS,CUSTOMER_POINT,EMAIL,POINT_PASSIVE, " +
+                query : "SELECT GUID,CUSTOMER_TYPE,NAME,LAST_NAME,CODE,TITLE,ADRESS,ZIPCODE,CITY,COUNTRY_NAME,STATUS,CUSTOMER_POINT,EMAIL,POINT_PASSIVE,PHONE1, " +
                         "ISNULL((SELECT COUNT(TYPE) FROM CUSTOMER_POINT WHERE TYPE = 0 AND CUSTOMER = CUSTOMER_VW_02.GUID AND CONVERT(DATE,LDATE) = CONVERT(DATE,GETDATE())),0) AS POINT_COUNT " + 
                         "FROM [dbo].[CUSTOMER_VW_02] WHERE CODE LIKE SUBSTRING(@CODE,0,14) + '%' AND STATUS = 1",
                 param : ['CODE:string|50'],
@@ -793,7 +795,19 @@ export default class posDoc extends React.PureComponent
                 this.posObj.dt()[0].CUSTOMER_POINT = tmpCustomerDt[0].CUSTOMER_POINT
                 this.posObj.dt()[0].CUSTOMER_POINT_PASSIVE = tmpCustomerDt[0].POINT_PASSIVE
                 this.posObj.dt()[0].CUSTOMER_MAIL = tmpCustomerDt[0].EMAIL
-                
+
+                if(this.prmObj.filter({ID:'mailControl',TYPE:0}).getValue() == true)
+                {
+                    if(this.posObj.dt()[0].CUSTOMER_MAIL == '')
+                    {
+                        await this.popAddMail.show()
+                        this.txtNewCustomerName.value = tmpCustomerDt[0].NAME,
+                        this.txtNewCustomerLastName.value = tmpCustomerDt[0].LAST_NAME,
+                        this.txtNewPhone.value = tmpCustomerDt[0].PHONE1
+                        this.txtNewMail.value = ''
+                    }
+                }
+
                 //PROMOSYON GETİR.
                 await this.getPromoDb()
                 this.promoApply()
@@ -3549,6 +3563,7 @@ export default class posDoc extends React.PureComponent
                                         this.txtPopSettingsPayCard.value = this.posDevice.dt()[0].PAY_CARD_PORT
                                         this.txtPopSettingsPrint.value = this.posDevice.dt()[0].PRINT_DESING
                                         this.txtPopSettingsScanner.value = this.posDevice.dt()[0].SCANNER_PORT
+                                        this.txtPopSettingsPrinter.value = this.posDevice.dt()[0].PRINTER_PORT
                                     }
                                     this.keyPopSettings.clearInput();
                                     this.popSettings.show();
@@ -4737,6 +4752,35 @@ export default class posDoc extends React.PureComponent
                                                     this.btnGetCustomer.setLock({backgroundColor:"#dc3545",borderColor:"#dc3545",height:"70px",width:"100%"})
                                                 }
                                             }
+                                           
+                                            if(pPosDt[0].CUSTOMER_GUID != '00000000-0000-0000-0000-000000000000')
+                                            { 
+                                                let tmpQuery = 
+                                                {
+                                                    query :"SELECT EMAIL FROM CUSTOMER_VW_02 WHERE GUID = @GUID",
+                                                    param:  ['GUID:string|50'],
+                                                    value:  [pPosDt[0].CUSTOMER_GUID]
+                                                }
+                                                let tmpMailData = await this.core.sql.execute(tmpQuery) 
+                                                if(tmpMailData.result.recordset.length > 0)
+                                                {
+                                                    this.txtMail.value = tmpMailData.result.recordset[0].EMAIL
+                                                }
+                                                else
+                                                {
+                                                    this.txtMail.value = ""
+                                                }
+                                            }
+                                            else
+                                            {
+                                                this.txtMail.value = ""
+                                            }
+
+                                            this.mailPopup.tmpData = tmpData;
+                                            await this.mailPopup.show()
+                                            return
+                                            
+                                           
                                         }}>
                                             <i className="text-white fa-solid fa-circle-user" style={{fontSize: "24px"}} />
                                         </NbButton>
@@ -7687,6 +7731,20 @@ export default class posDoc extends React.PureComponent
                                     this.keyPopSettings.setInput(this.txtPopSettingsScanner.value)
                                 }}/>
                             </Item>
+                            <Item>
+                                <Label text={this.lang.t("popSettings.printerPort")} alignment="right" />
+                                <NdTextBox id={"txtPopSettingsPrinter"} parent={this} simple={true} valueChangeEvent="keyup" 
+                                onValueChanging={(e)=>
+                                {
+                                    this.keyPopSettings.setCaretPosition(e.length)
+                                    this.keyPopSettings.setInput(e)
+                                }}
+                                onFocusIn={()=>
+                                {
+                                    this.keyPopSettings.inputName = "txtPopSettingsPrinter"
+                                    this.keyPopSettings.setInput(this.txtPopSettingsPrinter.value)
+                                }}/>
+                            </Item>
                         </Form>
                         <div className="row py-1">
                             <div className="col-12">
@@ -7705,6 +7763,7 @@ export default class posDoc extends React.PureComponent
                                         this.posDevice.dt()[0].PAY_CARD_PORT = this.txtPopSettingsPayCard.value
                                         this.posDevice.dt()[0].PRINT_DESING = this.txtPopSettingsPrint.value
                                         this.posDevice.dt()[0].SCANNER_PORT = this.txtPopSettingsScanner.value
+                                        this.posDevice.dt()[0].PRINTER_PORT = this.txtPopSettingsPrinter.value
                                     }
                                     else
                                     {
@@ -7716,6 +7775,7 @@ export default class posDoc extends React.PureComponent
                                         this.posDevice.dt()[0].PAY_CARD_PORT = this.txtPopSettingsPayCard.value
                                         this.posDevice.dt()[0].PRINT_DESING = this.txtPopSettingsPrint.value
                                         this.posDevice.dt()[0].SCANNER_PORT = this.txtPopSettingsScanner.value
+                                        this.posDevice.dt()[0].PRINTER_PORT = this.txtPopSettingsPrinter.value
                                     }                                
                                     await this.posDevice.save()
                                     this.popSettings.hide()
@@ -8376,6 +8436,100 @@ export default class posDoc extends React.PureComponent
                                 <NbLabel id="blnAbtSha" parent={this} value={"Signature : " + this.core.appInfo.scale.sha}/>
                             </Item>
                         </Form>
+                    </NdPopUp>
+                </div>
+                {/* Add mail PopUp */}
+                <div>
+                    <NdPopUp parent={this} id={"popAddMail"} 
+                    visible={false}
+                    showCloseButton={true}
+                    showTitle={true}
+                    container={"#root"} 
+                    width={'800'}
+                    height={'750'}
+                    title={this.lang.t("msgAddCustomerMail.title")}
+                    position={{of:"#root"}}
+                    >
+                         <div className="row pt-1">
+                            <div className="col-6">
+                                <NdTextBox id="txtNewCustomerName" parent={this} simple={true} placeholder={this.lang.t("txtNewCustomerName")} elementAttr={{style:"font-size:15pt;font-weight:bold;border:3px solid #428bca;"}}
+                                 onFocusIn={()=>
+                                    {                                    
+                                        this.keybordNewMail.inputName = "txtNewCustomerName"
+                                        this.keybordNewMail.setInput(this.txtNewCustomerName.value)
+                                    }}>     
+                                </NdTextBox> 
+                            </div>
+                            <div className="col-6">
+                                <NdTextBox id="txtNewCustomerLastName" parent={this} simple={true} placeholder={this.lang.t("txtNewCustomerLastName")} elementAttr={{style:"font-size:15pt;font-weight:bold;border:3px solid #428bca;"}}
+                                 onFocusIn={()=>
+                                    {                                    
+                                        this.keybordNewMail.inputName = "txtNewCustomerLastName"
+                                        this.keybordNewMail.setInput(this.txtNewCustomerLastName.value)
+                                    }}>     
+                                </NdTextBox> 
+                            </div>
+                        </div> 
+                        <div className="row pt-1">
+                            <div className="col-12">
+                                <NdTextBox id="txtNewPhone" parent={this} simple={true} placeholder={this.lang.t("txtNewPhone")} elementAttr={{style:"font-size:15pt;font-weight:bold;border:3px solid #428bca;"}}
+                                 onFocusIn={()=>
+                                    {                                    
+                                        this.keybordNewMail.inputName = "txtNewPhone"
+                                        this.keybordNewMail.setInput(this.txtNewPhone.value)
+                                    }}>     
+                                </NdTextBox> 
+                            </div>
+                        </div> 
+                         <div className="row pt-1">
+                            <div className="col-12">
+                                <NdTextBox id="txtNewMail" parent={this} simple={true} placeholder={this.lang.t("txtNewMail")} elementAttr={{style:"font-size:15pt;font-weight:bold;border:3px solid #428bca;"}}
+                                  onFocusIn={()=>
+                                    {                                    
+                                        this.keybordNewMail.inputName = "txtNewMail"
+                                        this.keybordNewMail.setInput(this.txtNewMail.value)
+                                    }}>     
+                                </NdTextBox> 
+                            </div>
+                        </div> 
+                        <div className="row py-1">
+                            <div className="col-12">
+                                <NbKeyboard id={"keybordNewMail"} layoutName={"mail"} parent={this} focusClear={true}/>
+                            </div>
+                        </div>     
+                        <div className="row py-1">
+                            <div className="col-6">
+                                <div className="col-12 px-1">
+                                    <NbButton id={"btnMailSave"} parent={this} className="form-group btn btn-success btn-block my-1" style={{height:"70px",width:"100%"}}
+                                    onClick={async()=>
+                                    {
+                                        let tmpQuery = 
+                                        {
+                                            query: "UPDATE CUSTOMER_OFFICAL SET LDATE = GETDATE(),LUSER = @LUSER,EMAIL = @EMAIL,NAME = @NAME,LAST_NAME = @LAST_NAME,PHONE1 = @PHONE1 WHERE CUSTOMER = @CUSTOMER AND TYPE = 0",
+                                            param: ['LUSER:string|100','EMAIL:string|100','NAME:string|50','LAST_NAME:string|50','PHONE1:string|50','CUSTOMER:string|50'],
+                                            value: [this.core.auth.data.CODE,this.txtNewMail.value,this.txtNewCustomerName.value,this.txtNewCustomerLastName.value,this.txtNewPhone.value,this.posObj.dt()[0].CUSTOMER_GUID]
+                                        };
+                                        await this.core.sql.execute(tmpQuery);
+                                        this.posObj.dt()[0].CUSTOMER_MAIL = this.txtNewMail.value
+                                        this.txtNewMail.value = ''
+                                        this.popAddMail.hide()
+                                    }}>
+                                        <i className="text-white fa-solid fa-check" style={{fontSize: "24px"}} />
+                                    </NbButton>
+                                </div>   
+                            </div>
+                            <div className="col-6">
+                                <div className="col-12 px-1">
+                                    <NbButton id={"btnMailReject"} parent={this} className="form-group btn btn-danger btn-block my-1" style={{height:"70px",width:"100%"}}
+                                    onClick={async()=>
+                                    {
+                                        this.popAddMail.hide()
+                                    }}>
+                                        <i className="text-white fa-solid fa-close" style={{fontSize: "24px"}} />
+                                    </NbButton>
+                                </div>   
+                            </div>
+                        </div>     
                     </NdPopUp>
                 </div>
                 {/* Mail PopUp */}

@@ -214,20 +214,13 @@ export default class App extends React.PureComponent
                         <img src="./css/img/logo.png" width="40px" height="40px"/>
                     </div>
                     <div className="col-4" style={{paddingTop:"5px"}} align="center">
-                        {/* <NbButton className="form-group btn-primary btn btn-block" style={{height:"45px", backgroundColor:"#0047AB", borderColor:"#0047AB"}}
+                        <NbButton className="form-group btn btn-primary btn-block" style={{height:"45px", backgroundColor:"#0047AB", borderColor:"#0047AB"}}
                         onClick={()=>
                         {
-                            if(!this.popMenu.isShowed)
-                            {                                
-                                this.popMenu.show()
-                            }
-                            else
-                            {
-                                this.popMenu.hide()
-                            }
+                            window.location.reload();
                         }}>
-                            <i className="fa-solid fa-bars fa-2x"></i>
-                        </NbButton> */}
+                            <i className="fa-solid fa-refresh fa-2x"></i>
+                        </NbButton>
                     </div>
                     <div className="col-4" style={{paddingTop:"5px"}} align="right">
                         <NbButton className="form-group btn btn-primary btn-block" style={{height:"45px", backgroundColor:"#0047AB", borderColor:"#0047AB"}}

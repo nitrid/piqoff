@@ -241,6 +241,19 @@ export const langDe =
         msg: "Bitte wählen Sie eine Zeile aus!",
         btn01: "OK",
     },
+    msgCustomerMail:
+    {
+        title: "Warnung",
+        msg: "Möchten Sie dem Kunden eine E-Mail hinzufügen?",
+        btn01: "Ja",
+        btn02: "Abbrechen",
+    },
+    msgAddCustomerMail:
+    {
+        title: "Warnung",
+        msg: "Die E-Mail des Kunden lautet",
+        btn01: "OK",
+    },
     msgCancelCustomerConfirm: 
     {
         title: "Achtung",
@@ -798,7 +811,8 @@ export const langDe =
         scalePort: "Waagen-Anschluss",
         payCardPort: "PayCard-Anschluss",
         printDesing: "Druckdesign",
-        scannerPort : "Scanner port"
+        scannerPort : "Scanner port",
+        printerPort: "Printer port"
     },
     msgNotBarcodeWeighing: 
     {

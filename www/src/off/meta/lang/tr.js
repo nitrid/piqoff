@@ -16302,6 +16302,7 @@ export const langTr =
         txtPrintDesing : "Fiş Dizaynı",
         txtMacId : "Mac Id",
         cmbDepot : "Depo",
+        txtPrinterPort : "Printer Port",
         pg_txtCode : 
         {
             title : "Kasa Seçimi",
