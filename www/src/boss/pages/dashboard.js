@@ -31,15 +31,15 @@ export default class Dashboard extends React.PureComponent
       dailyRebateTotal : { query : "SELECT SUM(TOTAL) AS DAILY_REBATE_TOTAL FROM POS_VW_01 WHERE TYPE = 1 AND DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE  AND STATUS = 1" ,  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date]},   
       dailyCustomerTicket : { query : "SELECT COUNT(*) AS DAILY_CUSTOMER_COUNT FROM POS_VW_01 WHERE CUSTOMER_GUID <> '00000000-0000-0000-0000-000000000000' AND DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE  AND STATUS = 1" ,  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date]},   
       dailyUseLoyalty : { query : "SELECT SUM(LOYALTY) AS DAILY_LOYALTY FROM POS_VW_01 WHERE CUSTOMER_GUID <> '00000000-0000-0000-0000-000000000000' AND DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE  AND STATUS = 1",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },   
-      useDiscount : { query : "SELECT SUM(DISCOUNT) AS USE_DISCOUNT FROM POS_VW_01 WHERE CUSTOMER_GUID <> '00000000-0000-0000-0000-000000000000' AND DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE  AND STATUS = 1",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },   
-      useDiscountTicket : { query : "SELECT COUNT(*) AS USE_DISCOUNT_TICKET FROM POS_VW_01 WHERE CUSTOMER_GUID <> '00000000-0000-0000-0000-000000000000' AND DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE AND DISCOUNT <> 0 AND STATUS = 1",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },
+      useDiscount : { query : "SELECT SUM(DISCOUNT) AS USE_DISCOUNT FROM POS_VW_01 WHERE  DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE  AND STATUS = 1",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },   
+      useDiscountTicket : { query : "SELECT COUNT(*) AS USE_DISCOUNT_TICKET FROM POS_VW_01 WHERE  DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE AND DISCOUNT <> 0 AND STATUS = 1",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },
       purchaseTotal : { query : "SELECT SUM(AMOUNT) AS PURCHASE_TOTAL FROM DOC_CUSTOMER_VW_01 WHERE DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE  AND TYPE = 0 AND DOC_TYPE = 20 and REBATE = 0" ,  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date]},   
-      purchasePrice : { query : "SELECT COUNT(*) AS PURCHASE_PRICE FROM PRICE_HISTORY AS PRICE WHERE CONVERT(nvarchar,CDATE,110) > @FISRT_DATE AND CONVERT(nvarchar,CDATE,110) < @LAST_DATE AND PRICE.TYPE = 1 ",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },   
-      salePrice : { query : "SELECT COUNT(*) AS SALE_PRICE FROM PRICE_HISTORY AS PRICE WHERE CONVERT(nvarchar,CDATE,110) > @FISRT_DATE AND CONVERT(nvarchar,CDATE,110) < @LAST_DATE AND PRICE.TYPE = 0 ",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },   
-      purchasePriceDown : { query : "SELECT COUNT(*) AS PURCHASE_PRICE_DOWN FROM PRICE_HISTORY AS PRICE WHERE PRICE.FISRT_PRICE > PRICE.LAST_PRICE AND CONVERT(nvarchar,CDATE,110) > @FISRT_DATE AND CONVERT(nvarchar,CDATE,110) < @LAST_DATE AND PRICE.TYPE = 1 ",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },   
-      purchasePriceUp : { query : "SELECT COUNT(*) AS PURCHASE_PRICE_UP FROM PRICE_HISTORY AS PRICE WHERE PRICE.FISRT_PRICE < PRICE.LAST_PRICE AND CONVERT(nvarchar,CDATE,110) > @FISRT_DATE AND CONVERT(nvarchar,CDATE,110) < @LAST_DATE AND PRICE.TYPE = 1 ",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },   
-      salePriceDown : { query : "SELECT COUNT(*) AS SALE_PRICE_DOWN FROM PRICE_HISTORY AS PRICE WHERE PRICE.FISRT_PRICE > PRICE.LAST_PRICE AND CONVERT(nvarchar,CDATE,110) > @FISRT_DATE AND CONVERT(nvarchar,CDATE,110) < @LAST_DATE AND PRICE.TYPE = 0 ",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },   
-      salePriceUp : { query : "SELECT COUNT(*) AS SALE_PRICE_UP FROM PRICE_HISTORY AS PRICE WHERE PRICE.FISRT_PRICE < PRICE.LAST_PRICE AND CONVERT(nvarchar,CDATE,110) > @FISRT_DATE AND CONVERT(nvarchar,CDATE,110) < @LAST_DATE AND PRICE.TYPE = 0 ",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },   
+      purchasePrice : { query : "SELECT COUNT(*) AS PURCHASE_PRICE FROM PRICE_HISTORY AS PRICE WHERE CONVERT(nvarchar,CDATE,110) >= @FISRT_DATE AND CONVERT(nvarchar,CDATE,110) <= @LAST_DATE AND PRICE.TYPE = 1 ",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },   
+      salePrice : { query : "SELECT COUNT(*) AS SALE_PRICE FROM PRICE_HISTORY AS PRICE WHERE CONVERT(nvarchar,CDATE,110) >= @FISRT_DATE AND CONVERT(nvarchar,CDATE,110) <= @LAST_DATE AND PRICE.TYPE = 0 ",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },   
+      purchasePriceDown : { query : "SELECT COUNT(*) AS PURCHASE_PRICE_DOWN FROM PRICE_HISTORY AS PRICE WHERE PRICE.FISRT_PRICE > PRICE.LAST_PRICE AND CONVERT(nvarchar,CDATE,110) >= @FISRT_DATE AND CONVERT(nvarchar,CDATE,110) <= @LAST_DATE AND PRICE.TYPE = 1 ",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },   
+      purchasePriceUp : { query : "SELECT COUNT(*) AS PURCHASE_PRICE_UP FROM PRICE_HISTORY AS PRICE WHERE PRICE.FISRT_PRICE < PRICE.LAST_PRICE AND CONVERT(nvarchar,CDATE,110) >= @FISRT_DATE AND CONVERT(nvarchar,CDATE,110) <= @LAST_DATE AND PRICE.TYPE = 1 ",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },   
+      salePriceDown : { query : "SELECT COUNT(*) AS SALE_PRICE_DOWN FROM PRICE_HISTORY AS PRICE WHERE PRICE.FISRT_PRICE > PRICE.LAST_PRICE AND CONVERT(nvarchar,CDATE,110) >= @FISRT_DATE AND CONVERT(nvarchar,CDATE,110) <= @LAST_DATE AND PRICE.TYPE = 0 ",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },   
+      salePriceUp : { query : "SELECT COUNT(*) AS SALE_PRICE_UP FROM PRICE_HISTORY AS PRICE WHERE PRICE.FISRT_PRICE < PRICE.LAST_PRICE AND CONVERT(nvarchar,CDATE,110) >= @FISRT_DATE AND CONVERT(nvarchar,CDATE,110) <= @LAST_DATE AND PRICE.TYPE = 0 ",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },   
     }
   }
   async componentDidMount()
@@ -164,7 +164,7 @@ export default class Dashboard extends React.PureComponent
     if(useDiscountTicketRecordset.length > 0) 
     {
       const { USE_DISCOUNT_TICKET } = useDiscountTicketRecordset[0];
-      this.setState({ useDiscount: USE_DISCOUNT_TICKET});
+      this.setState({ useDiscountTicket: USE_DISCOUNT_TICKET});
     }
     if(purchaseTotalRecordset.length > 0) 
     {
@@ -369,7 +369,7 @@ export default class Dashboard extends React.PureComponent
                   <h5 className="card-title">{this.t("useDiscountTicket")}</h5>
                 </div>
                 <div className="text-center">
-                  <AnimatedText value={parseFloat(this.state.useDiscountTicket ? parseFloat(this.state.useDiscountTicket) : 0)}  type={'currency'} />
+                  <AnimatedText value={parseFloat(this.state.useDiscountTicket ? parseFloat(this.state.useDiscountTicket) : 0)}  type={'number'} />
                 </div>
               </div>
             </div>
