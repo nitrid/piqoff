@@ -241,6 +241,29 @@ export const langFr =
         msg : "Veuillez sélectionner la ligne ",
         btn01 : "OK"
     },
+    msgCustomerMail:
+    {
+        title: "Avertissement",
+        msg: "Voulez-vous ajouter un e-mail au client ?",
+        btn01: "Oui",
+        btn02: "Annuler",
+    },
+    msgAddCustomerMail:
+    {
+        title: "Veuillez saisir votre adresse e-mail.",
+    },
+    msgPreLottery:
+    {
+        title: "Avertissement",
+        msg: "UNE MINUTE...",
+        btn01: "CONTINUER",
+    },
+    msgPostLottery:
+    {
+        title: "Avertissement",
+        msg: "CE CLIENT A GAGNÉ AU TIRAGE !!!",
+        btn01: "Oui",
+    },
     msgCancelCustomerConfirm: 
     {
         title : "Attention",
@@ -800,7 +823,8 @@ export const langFr =
         scalePort : "Balance port",
         payCardPort : "TPE port",
         printDesing : "Design d’imprimante",
-        scannerPort : "Scanner port"
+        scannerPort : "Scanner port",
+        printerPort: "Printer port"
     },
     msgNotBarcodeWeighing: //BAK
     {
@@ -848,6 +872,22 @@ export const langFr =
         NewPassword2: "Répéter le nouveau mot de passe",
         btnApprove: "Enregistrer"
     },
+    msgPassChange:
+    {
+        title: "Réussite",
+        btn01: "OK",
+        msg: "Votre mot de passe a été changé !"
+    },
+    msgPasswordWrong:
+    {
+        title: "Echec",
+        btn01: "OK",
+        msg: "Mot de Passe Erroné"
+    },
     passChange: "Changer le mot de passe",
+    txtNewMail : "E-Mail",
+    txtNewPhone : "Numéro de téléphone",
+    txtNewCustomerLastName : "Nom",
+    txtNewCustomerName : "Prenom"
     
 }

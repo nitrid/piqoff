@@ -241,6 +241,29 @@ export const langTr =
         msg : "Lütfen satır seçiniz !",
         btn01 : "Tamam"
     },
+    msgPreLottery: 
+    {
+        title: "Uyarı",
+        msg: "BİR DAKİKA..",
+        btn01: "DEVAM",
+    },
+    msgPostLottery: 
+    {
+        title: "Uyarı",
+        msg: "BU MÜŞTERİ ÇEKİLİŞİ KAZANDI !!!",
+        btn01: "Evet",
+    },    
+    msgCustomerMail: 
+    {
+        title : "Uyarı",
+        msg : "musteriye mail eklemek istermisiniz",
+        btn01 : "Evet",
+        btn02 : "İptal",
+    },
+    msgAddCustomerMail: 
+    {
+        title : "Lütfen Mail Adresi Giriniz..",
+    },
     msgCancelCustomerConfirm: 
     {
         title : "Uyarı",
@@ -799,7 +822,8 @@ export const langTr =
         scalePort : "Scale port",
         payCardPort : "Pay card port",
         printDesing : "Yazdırma dizaynı",
-        scannerPort : "Scanner port"
+        scannerPort : "Scanner port",
+        printerPort : "Printer port"
     },
     msgNotBarcodeWeighing: 
     {
@@ -847,5 +871,21 @@ export const langTr =
         NewPassword2 : "Yeni Şifre Tekrar",
         btnApprove : "Onayla"
     },
+    msgPassChange:
+    {
+        title: "Başarılı",
+        btn01: "Tamam",
+        msg: "Şifreniz Değiştirildi !"
+    },
+    msgPasswordWrong:
+    {
+        title: "Başarısız",
+        btn01: "Tamam",
+        msg: "Şifreniz Hatalı !"
+    },
     passChange :"Şifre Değiştir",
+    txtNewMail : "E-Mail",
+    txtNewPhone : "Telefon",
+    txtNewCustomerLastName : "Soyisim",
+    txtNewCustomerName : "İsim"
 }

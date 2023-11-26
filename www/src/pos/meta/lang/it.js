@@ -241,6 +241,31 @@ export const langIt =
         msg: "Seleziona una riga, per favore!",
         btn01: "Ok"
     },
+    msgPreLottery:
+    {
+        title: "Avviso",
+        msg: "UN MINUTO...",
+        btn01: "CONTINUA",
+    },
+    msgPostLottery:
+    {
+        title: "Avviso",
+        msg: "QUESTO CLIENTE HA VINTO L'ESTRAZIONE!!!",
+        btn01: "Sì",
+    },    
+    msgCustomerMail:
+    {
+        title: "Avviso",
+        msg: "Vuoi aggiungere un'email al cliente?",
+        btn01: "Sì",
+        btn02: "Annulla",
+    },
+    msgAddCustomerMail:
+    {
+        title: "Avviso",
+        msg: "L'email del cliente è",
+        btn01: "OK",
+    },
     msgCancelCustomerConfirm:
     {
         title: "Avviso",
@@ -800,7 +825,8 @@ export const langIt =
         scalePort : "Porta Bilancia",
         payCardPort : "Porta Carta di Pagamento",
         printDesing : "Design di Stampa",
-        scannerPort : "Scanner port"
+        scannerPort : "Scanner port",
+        printerPort: "Printer port"
     },
     msgNotBarcodeWeighing: 
     {

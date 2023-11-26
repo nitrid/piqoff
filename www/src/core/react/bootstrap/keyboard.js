@@ -10,6 +10,7 @@ export default class NbKeyboard extends NbBase
         super(props);
         this.state.layoutName = typeof this.props.layoutName == 'undefined' ?  "default" : this.props.layoutName
         this.state.inputName = this.props.inputName
+        this.state.inputs = {}
     }
     get inputName()
     {
@@ -21,7 +22,17 @@ export default class NbKeyboard extends NbBase
     }
     setInput(e)
     {
-        this.keyboard.setInput(e)
+        if(typeof this.props.focusClear != 'undefined' && this.props.focusClear == true)
+        {
+            this.state.inputs[this.state.inputName] = ""
+            this.setState({inputs:this.state.inputs})
+            this.keyboard.setInput("")
+            return
+        }
+
+        this.state.inputs[this.state.inputName] = e
+        this.setState({inputs:this.state.inputs})
+        this.keyboard.setInput(e)        
     }
     clearInput()
     {
@@ -41,9 +52,11 @@ export default class NbKeyboard extends NbBase
             <div>
                 <Keyboard keyboardRef={(r) => (this.keyboard = r)}
                 inputName={this.state.inputName}
-                onChange={(input) => 
-                {      
-                    this.props.parent[this.state.inputName].value = input
+                onChangeAll={(inputs) =>
+                {
+                    console.log(inputs)
+                    this.props.parent[this.state.inputName].value = inputs[this.state.inputName]
+                    this.setState({inputs:inputs})
                 }}
                 onKeyPress={(button) => 
                 {
@@ -85,7 +98,8 @@ export default class NbKeyboard extends NbBase
                     "a s d f g h j k l ş - ,",
                     "z x c v b n m ö ç * _ %",
                     "{numbers} {space} {backspace} @",
-                    "hotmail gmail outlook .com"
+                    "hotmail gmail outlook .com",
+                    "outlook orange yahoo .fr"
                     ],
                     numbers: ["1 2 3", "4 5 6", "7 8 9", "{abc} 0 {backspace}"]
                 }}
