@@ -8606,14 +8606,23 @@ export default class posDoc extends React.PureComponent
                             <Item>
                                 <Label text={this.lang.t("popPasswordChange.NewPassword")} alignment="right" />
                                 <NdTextBox id="txtNewPassword" mode="password" parent={this} simple={true}
-                                        maxLength={32}
-                                ></NdTextBox>
+                                 onFocusIn={()=>
+                                {                                    
+                                    this.keyPassChange.inputName = "txtNewPassword"
+                                    this.keyPassChange.setInput(this.txtNewPassword.value)
+                                }}>
+
+                                </NdTextBox>
                             </Item>
                             <Item>
                                 <Label text={this.lang.t("popPasswordChange.NewPassword2")} alignment="right" />
                                 <NdTextBox id="txtNewPassword2" mode="password" parent={this} simple={true}
-                                        maxLength={32}
-                                ></NdTextBox>
+                                onFocusIn={()=>
+                                {                                    
+                                    this.keyPassChange.inputName = "txtNewPassword2"
+                                    this.keyPassChange.setInput(this.txtNewPassword2.value)
+                                }}>
+                                </NdTextBox>
                             </Item>
                             <Item>
                                 <div className="row py-1">
