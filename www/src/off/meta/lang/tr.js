@@ -16409,55 +16409,16 @@ export const langTr =
         {
             title : " Mail ekle" ,
         },
-        cmbMailService:
-        {
-            title : " 1 - Mail servisi",
-        },
-        txtMailService : 
-        {
-            other : "Diger",
-            otherPlace : "piqsoft",
-            mail: " 2 - Mail adresi ",
-            mailPlace: "iletesim@piqsoft.com",
-            password : " 3 - Sifre ",
-            passwordPlace: "Piqsoft6..",
-            smtp: " 4 - SMTP ",
-            smtpPlace : "SMTP..",
-            port : " 5 - Port No ",
-            portPlace : "6006",
-            btnSave :"Kaydet",
-        },
         grdMailSettings:
         {
             clmDate:"Tarih",
             clmUser : "Kullanıcı",
             clmMail: "Mail",
             clmMailService: "Mail servis",
-            clmMailPassword: "Sifre",
-
+            clmMailPassword: "Şifre",
             clmSMTP : "SMTP",
             clmPORT : "Port No",
             clmID : "MAIL_ID",
-        },
-        msgSave:
-        {
-            title: "Dikkat",
-            btn01: "Tamam",
-            btn02: "Vazgeç",
-            msg: "Kayıt etmek istediğinize eminmisiniz !"
-        },
-        msgNotValid:
-        {
-            title: "Dikkat",
-            btn01: "Tamam",
-            msg: "Lütfen Adres Bölümünden Müşterinin Ülkesini Seçiniz!"
-        },
-        msgDelete:
-        {
-            title: "Dikkat",
-            btn01: "Tamam",
-            btn02: "Vazgeç",
-            msg: "Kaydı silmek istediğinize eminmisiniz ?"
         },
     },
     pos_01_001 : // "Pos Cihaz Tanıtım",

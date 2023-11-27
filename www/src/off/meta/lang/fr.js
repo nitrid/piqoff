@@ -16872,21 +16872,6 @@ export const langFr =
         {
             title : " Ajouter un e-mail" ,
         },
-        txtMailService : 
-        {
-            title : " 1 - Service de messagerie",
-            other : "Autre",
-            otherPlace : "piqsoft",
-            mail: " 2 - Adresse e-mail ",
-            mailPlace: "communication@piqsoft.com",
-            password : " 3 - Mot de passe ",
-            passwordPlace: "Piqsoft6..",
-            smtp: " 4 - SMTP ",
-            smtpPlace : "SMTP..",
-            port : " 5 - Numéro de port ",
-            portPlace : "6006",
-            btnSave :"Enregistrer",
-        },
         grdMailSettings:
         {
             clmDate:"Date",
