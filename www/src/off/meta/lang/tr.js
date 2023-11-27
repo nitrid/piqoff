@@ -340,7 +340,7 @@ export const langTr =
         set_02_006 : "Destek Talebi Oluştur",
         set_02_007 : "Destek Talebi Geçmişi",
         set_02_008 : "Gümrük Kodu Excel Kayıt",
-        set_02_009: "Mail Ayarlari",
+        set_02_009: "Mail Ayarları",
         set_03 : "Evrak Ayarları",
         set_03_001 : "Silinmiş Evraklar",
         set_03_002 : "Silinmiş Satırlar",
@@ -16379,25 +16379,60 @@ export const langTr =
     },
     set_02_009:
     {
-        txtMailService : 
+        popAddMail : 
+        {
+            title : " Mail ekle" ,
+        },
+        cmbMailService:
         {
             title : " 1 - Mail servisi",
-            gmail : "Gmail",
-            outlook : "Outlook",
-            yahoo : "Yahoo",
-            laposte : "Laposte",
         },
-        txtBoxOther : "Diger",
-        txtBoxOtherPlace : "piqsoft",
-        txtBoxMail: " 2 - Mail adresi ",
-        txtBoxMailPlace: "iletesim@piqsoft.com",
-        txtBoxPsswd : " 3 - Sifre ",
-        txtBoxPsswdPlace: "Piqsoft6..",
-        txtBoxSmtp: " 4 - SMTP ",
-        txtBoxSmtpPlace : "SMTP..",
-        txtBoxPort : " 5 - Port No ",
-        txtBoxPortPlace : "6006",
-        btnSave :"Kaydet",
+        txtMailService : 
+        {
+            other : "Diger",
+            otherPlace : "piqsoft",
+            mail: " 2 - Mail adresi ",
+            mailPlace: "iletesim@piqsoft.com",
+            password : " 3 - Sifre ",
+            passwordPlace: "Piqsoft6..",
+            smtp: " 4 - SMTP ",
+            smtpPlace : "SMTP..",
+            port : " 5 - Port No ",
+            portPlace : "6006",
+            btnSave :"Kaydet",
+        },
+        grdMailSettings:
+        {
+            clmDate:"Tarih",
+            clmUser : "Kullanıcı",
+            clmMail: "Mail",
+            clmMailService: "Mail servis",
+            clmMailPassword: "Sifre",
+
+            clmSMTP : "SMTP",
+            clmPORT : "Port No",
+            clmID : "MAIL_ID",
+        },
+        msgSave:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kayıt etmek istediğinize eminmisiniz !"
+        },
+        msgNotValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen Adres Bölümünden Müşterinin Ülkesini Seçiniz!"
+        },
+        msgDelete:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        },
     },
     pos_01_001 : // "Pos Cihaz Tanıtım",
     {

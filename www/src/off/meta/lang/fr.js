@@ -340,6 +340,7 @@ export const langFr =
         set_02_006 : "Création Demande d'Assistance",   
         set_02_007 : "Historique Demande d'Assistance",   
         set_02_008 : "Enregistrement Excel du code douanier", 
+        set_02_009: "Paramètres de messagerie",
         set_03 : "Réglages Documents",   
         set_03_001 : "Documents Effacés",   
         set_03_002 : "Lignes Effacées", 
@@ -16837,6 +16838,37 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             msg: "Choix Fournisseur !!"
+        },
+    },
+    set_02_009:
+    {
+        popAddMail : 
+        {
+            title : " Ajouter un e-mail" ,
+        },
+        txtMailService : 
+        {
+            title : " 1 - Service de messagerie",
+            other : "Autre",
+            otherPlace : "piqsoft",
+            mail: " 2 - Adresse e-mail ",
+            mailPlace: "communication@piqsoft.com",
+            password : " 3 - Mot de passe ",
+            passwordPlace: "Piqsoft6..",
+            smtp: " 4 - SMTP ",
+            smtpPlace : "SMTP..",
+            port : " 5 - Numéro de port ",
+            portPlace : "6006",
+            btnSave :"Enregistrer",
+        },
+        grdMailSettings:
+        {
+            clmDate:"Date",
+            clmUser : "Utilisateur",
+            clmMail: "E-mail",
+            clmSMTP : "SMTP",
+            clmPORT : "N° de port",
+            clmID : "MAIL_ID",
         },
     },
     pos_01_001 : // "Pos Cihaz Tanıtım",
