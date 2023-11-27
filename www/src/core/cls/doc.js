@@ -1,5 +1,12 @@
 import { core,dataset,datatable } from "../core.js";
 import moment from 'moment';
+import React from "react";
+import ReactDOM from 'react-dom';
+import NdPopUp from "../react/devex/popup.js";
+import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export,Summary,TotalItem} from '../react/devex/grid.js';
+import NdButton from "../react/devex/button.js";
+import NbDateRange from '../react/bootstrap/daterange.js';
+import NdCheckBox from '../react/devex/checkbox.js';
 
 export class docCls
 {
@@ -1613,14 +1620,18 @@ export class deptCreditMatchingCls
         this.empty = 
         {
             GUID : '00000000-0000-0000-0000-000000000000',
-            TYPE: 0,
+            TYPE : 0,
+            DATE : moment(new Date()).format("YYYY-MM-DD"),
+            CUSTOMER : '00000000-0000-0000-0000-000000000000',
             PAID_DOC : '00000000-0000-0000-0000-000000000000',
             PAYING_DOC : '00000000-0000-0000-0000-000000000000',
             PAYING_DAY : 0,
             PAID_AMOUNT : 0,
             PAYING_AMOUNT : 0
         }
-
+        this.lang = undefined;
+        this.type = 0; //0 = ÖDEME, 1 = TAHSİLAT
+        this.popUpList = new datatable()
         this._initDs();
     }
     //#region Private
@@ -1637,26 +1648,30 @@ export class deptCreditMatchingCls
             query : "EXEC [dbo].[PRD_DEPT_CREDIT_MATCHING_INSERT] " +
                     "@GUID = @PGUID, " +
                     "@TYPE = @PTYPE, " +
+                    "@DATE = @PDATE, " +
+                    "@CUSTOMER = @PCUSTOMER, " +
                     "@PAID_DOC = @PPAID_DOC, " +
                     "@PAYING_DOC = @PPAYING_DOC, " +
                     "@PAYING_DAY = @PPAYING_DAY, " +
                     "@PAID_AMOUNT = @PPAID_AMOUNT, " +
                     "@PAYING_AMOUNT = @PPAYING_AMOUNT ",
-            param : ['PGUID:string|50','PTYPE:int','PPAID_DOC:string|50','PPAYING_DOC:string|50','PPAYING_DAY:int','PPAID_AMOUNT:float','PPAYING_AMOUNT:float'],
-            dataprm : ['GUID','TYPE','PAID_DOC','PAYING_DOC','PAYING_DAY','PAID_AMOUNT','PAYING_AMOUNT']
+            param : ['PGUID:string|50','PTYPE:int','PDATE:date','PCUSTOMER:string|50','PPAID_DOC:string|50','PPAYING_DOC:string|50','PPAYING_DAY:int','PPAID_AMOUNT:float','PPAYING_AMOUNT:float'],
+            dataprm : ['GUID','TYPE','DATE','CUSTOMER','PAID_DOC','PAYING_DOC','PAYING_DAY','PAID_AMOUNT','PAYING_AMOUNT']
         }
         tmpDt.updateCmd = 
         {
             query : "EXEC [dbo].[PRD_DEPT_CREDIT_MATCHING_UPDATE] " +
                     "@GUID = @PGUID, " +
                     "@TYPE = @PTYPE, " +
+                    "@DATE = @PDATE, " +
+                    "@CUSTOMER = @PCUSTOMER, " +
                     "@PAID_DOC = @PPAID_DOC, " +
                     "@PAYING_DOC = @PPAYING_DOC, " +
                     "@PAYING_DAY = @PPAYING_DAY, " +
                     "@PAID_AMOUNT = @PPAID_AMOUNT, " +
                     "@PAYING_AMOUNT = @PPAYING_AMOUNT ",
             param : ['PGUID:string|50','PTYPE:int','PPAID_DOC:string|50','PPAYING_DOC:string|50','PPAYING_DAY:int','PPAID_AMOUNT:float','PPAYING_AMOUNT:float'],
-            dataprm : ['GUID','TYPE','PAID_DOC','PAYING_DOC','PAYING_DAY','PAID_AMOUNT','PAYING_AMOUNT']
+            dataprm : ['GUID','TYPE','DATE','CUSTOMER','PAID_DOC','PAYING_DOC','PAYING_DAY','PAID_AMOUNT','PAYING_AMOUNT']
         }
         tmpDt.deleteCmd = 
         {
@@ -1748,6 +1763,9 @@ export class deptCreditMatchingCls
 
                         let tmpDeptCredit = {...this.empty}
                         tmpDeptCredit.TYPE = tmpPaidDt[i].TYPE
+                        tmpDeptCredit.DATE = tmpPaidDt[i].DOC_DATE
+                        tmpDeptCredit.CUSTOMER = tmpPaidDt[i].CUSTOMER_GUID
+                        tmpDeptCredit.PAID_DOC = tmpPaidDt[i].DOC
                         tmpDeptCredit.PAID_DOC = tmpPaidDt[i].DOC
                         tmpDeptCredit.PAYING_DOC = tmpPayingDt[x].DOC
                         tmpDeptCredit.PAYING_DAY = 0
@@ -1757,6 +1775,8 @@ export class deptCreditMatchingCls
 
                         tmpDeptCredit = {...this.empty}
                         tmpDeptCredit.TYPE = tmpPayingDt[x].TYPE
+                        tmpDeptCredit.DATE = tmpPayingDt[x].DOC_DATE
+                        tmpDeptCredit.CUSTOMER = tmpPayingDt[x].CUSTOMER_GUID
                         tmpDeptCredit.PAID_DOC = tmpPayingDt[x].DOC
                         tmpDeptCredit.PAYING_DOC = tmpPaidDt[i].DOC
                         tmpDeptCredit.PAYING_DAY = 0
@@ -1772,6 +1792,189 @@ export class deptCreditMatchingCls
                 }
             }
             resolve()
+        })
+    }
+    async showPopUp(pCustomer)
+    {
+        this.popUpList = new datatable()
+        let tmpJsx = 
+        (
+            <div>
+                <NdPopUp parent={this} id={"popDeptCreditList"} 
+                visible={false}
+                showCloseButton={true}
+                showTitle={true}
+                title={this.lang.t("popDeptCreditList.title")}
+                container={"#root"} 
+                width={'90%'}
+                height={'90%'}
+                position={{of:'#root'}}
+                >
+                    <div className="row p-2">
+                        <div className="col-10">
+                            <NbDateRange id={"dtPopDeptCreditListDate"} parent={this} startDate={moment().add(-15, 'days')} endDate={moment().add(15, 'days')}
+                            onApply={()=>
+                            {
+                                gridRefresh()
+                            }}/>
+                        </div>
+                        <div className="col-2">
+                            <NdCheckBox id="chkPopDeptCreditList" parent={this} text={this.lang.t("popDeptCreditList.chkPopDeptCreditList")} value={false}
+                            onValueChanged={(e)=>
+                            {
+                                gridRefresh()
+                            }}
+                            ></NdCheckBox>
+                        </div>
+                    </div>
+                    <div className="row p-2">
+                        <div className="col-12">
+                            <NdButton parent={this} id={"btnPopDeptCreditListSelection"} text={this.lang.t('popDeptCreditList.btnPopDeptCreditListSelection')} width={'100%'} type={"default"}
+                            onClick={()=>
+                            {
+                                if(this.grdPopDeptCreditList.getSelectedData().length > 0)
+                                {
+                                    this.popDeptCreditList.hide()
+                                    this.popDeptCreditList.onClick(this.grdPopDeptCreditList.getSelectedData())
+                                }
+                            }}
+                            />
+                        </div>
+                    </div>
+                    <div className="row p-2" style={{height:"85%"}}>
+                        <div className="col-12">
+                            <NdGrid parent={this} id={"grdPopDeptCreditList"} 
+                            height={'100%'} 
+                            width={'100%'}
+                            showBorders={true}
+                            selection={{mode:"multiple"}}
+                            onSelectionChanged={(e)=>
+                            {
+                                e.component.refresh(true);
+                            }}
+                            onRowRemoved={async(e)=>
+                            {
+                                let tmpDeptCreditMatchingObj = new deptCreditMatchingCls()
+                                await tmpDeptCreditMatchingObj.load({PAID_DOC:e.data.DOC,PAYING_DOC:e.data.DOC})
+                                tmpDeptCreditMatchingObj.dt().removeAll()
+                                await tmpDeptCreditMatchingObj.dt().delete()
+                                gridRefresh()
+                            }}
+                            >
+                                <Editing mode="row" allowDeleting={true} useIcons={true}/>
+                                <Column dataField="DOC_REF" caption={this.lang.t("popDeptCreditList.clmRef")} width={80}/>
+                                <Column dataField="DOC_REF_NO" caption={this.lang.t("popDeptCreditList.clmRefNo")} width={100}/>
+                                <Column dataField="TYPE_NAME" caption={this.lang.t("popDeptCreditList.clmTypeName")} width={100}/>
+                                <Column dataField="CUSTOMER_NAME" caption={this.lang.t("popDeptCreditList.clmCustomer")} width={300}/>
+                                <Column dataField="DOC_DATE" caption={this.lang.t("popDeptCreditList.clmDate")} width={100} dataType={"date"} defaultSortOrder="asc"/>
+                                <Column dataField="PAID_AMOUNT" caption={this.lang.t("popDeptCreditList.clmTotal")} width={100} />
+                                <Column dataField="PAYING_AMOUNT" caption={this.lang.t("popDeptCreditList.clmClosed")} width={100} />
+                                <Column dataField="REMAINDER" caption={this.lang.t("popDeptCreditList.clmBalance")} width={100} format={{ style: "currency", currency: "EUR",precision: 3}}/>
+                                <Summary calculateCustomSummary={(options) =>
+                                {
+                                    if (options.name === 'SelectedRowsSummary') 
+                                    {
+                                        if (options.summaryProcess === 'start') 
+                                        {
+                                            options.totalValue = 0;
+                                        } 
+                                        else if (options.summaryProcess === 'calculate') 
+                                        {
+                                            if (options.component.isRowSelected(options.value)) 
+                                            {
+                                                options.totalValue += Number(options.value.REMAINDER).round(2);
+                                            }
+                                        }
+                                    }
+                                }}>
+                                    <TotalItem name="SelectedRowsSummary" summaryType="custom" valueFormat={{ style: "currency", currency: "EUR",precision: 3}} displayFormat="Sum: {0}" showInColumn="REMAINDER" />
+                                </Summary>
+                            </NdGrid>
+                        </div>
+                    </div>
+                </NdPopUp>
+            </div>
+        )
+
+        if(typeof this.popDeptCreditList == 'undefined')
+        {
+            ReactDOM.render(tmpJsx,document.body.appendChild(document.createElement('div',{id:'popDeptCreditMatching'})));
+        }
+
+        let gridRefresh = async()=>
+        {
+            let tmpQuery = 
+            {
+                query : "SELECT *, " + 
+                        "CASE WHEN TYPE = 1 THEN BALANCE WHEN TYPE = 0 THEN BALANCE * -1 END AS REMAINDER, " +
+                        "(SELECT TOP 1 VALUE FROM DB_LANGUAGE WHERE TAG = (SELECT [dbo].[FN_DOC_TYPE_NAME](TYPE,DOC_TYPE,REBATE)) AND LANG = @LANG) AS TYPE_NAME " + 
+                        "FROM DEPT_CREDIT_MATCHING_VW_02 WHERE CUSTOMER_GUID = @CUSTOMER_GUID AND TYPE IN (0,1) AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE {0} " + 
+                        "ORDER BY DOC_DATE ASC,LDATE ASC",
+                param : ['CUSTOMER_GUID:string|50','LANG:string|50','FIRST_DATE:date','LAST_DATE:date'],
+                value : [pCustomer,this.lang.language.toUpperCase(),this.dtPopDeptCreditListDate.startDate,this.dtPopDeptCreditListDate.endDate]
+            }
+            
+            if(this.chkPopDeptCreditList.value == false)
+            {
+                tmpQuery.query = tmpQuery.query.replace('{0}','AND BALANCE <> 0')
+            }
+            else
+            {
+                tmpQuery.query = tmpQuery.query.replace('{0}','')
+            }
+
+            let tmpData = await this.core.sql.execute(tmpQuery) 
+
+            if(tmpData.result.recordset.length > 0)
+            {
+                await this.grdPopDeptCreditList.dataRefresh({source:tmpData.result.recordset})
+            }
+            else
+            {
+                await this.grdPopDeptCreditList.dataRefresh({source:[]})
+            }
+        }
+        
+        gridRefresh()
+
+        return new Promise(async resolve =>
+        {
+            this.popDeptCreditList.show()
+            this.popDeptCreditList.onClick = async(data) =>
+            {
+                let tmpInvDt = new datatable()
+                tmpInvDt.import(data)
+                if(this.type == 0)
+                {
+                    if(tmpInvDt.sum('REMAINDER') < 0)
+                    {
+                        let tmpDeptCreditMatchingObj = new deptCreditMatchingCls()
+                        await tmpDeptCreditMatchingObj.matching(tmpInvDt)
+                        await tmpDeptCreditMatchingObj.save()
+                        this.popUpList = tmpInvDt
+                        resolve(tmpInvDt)
+                    }
+                    else
+                    {
+                        resolve(this.popUpList)
+                    }
+                }
+                else
+                {
+                    if(tmpInvDt.sum('REMAINDER') > 0)
+                    {
+                        let tmpDeptCreditMatchingObj = new deptCreditMatchingCls()
+                        await tmpDeptCreditMatchingObj.matching(tmpInvDt)
+                        await tmpDeptCreditMatchingObj.save()
+                        this.popUpList = tmpInvDt
+                        resolve(tmpInvDt)
+                    }
+                    else
+                    {
+                        resolve(this.popUpList)
+                    }
+                }
+            }
         })
     }
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 import App from '../../../lib/app.js';
-import { docCls,docItemsCls, docCustomerCls } from '../../../../core/cls/doc.js';
+import { docCls,docItemsCls,docCustomerCls,deptCreditMatchingCls } from '../../../../core/cls/doc.js';
 import moment from 'moment';
 
 import ScrollView from 'devextreme-react/scroll-view';
@@ -33,6 +33,9 @@ export default class payment extends React.PureComponent
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
         this.docObj = new docCls();
+        this.deptCreditMatchingObj = new deptCreditMatchingCls();
+        this.deptCreditMatchingObj.lang = this.lang;
+        this.deptCreditMatchingObj.type = 0;
         this.tabIndex = props.data.tabkey
 
         this._calculateTotal = this._calculateTotal.bind(this)
@@ -50,6 +53,7 @@ export default class payment extends React.PureComponent
     async init()
     {
         this.docObj.clearAll()
+        this.deptCreditMatchingObj.clearAll()
 
         this.docObj.ds.on('onAddRow',(pTblName,pData) =>
         {
@@ -129,6 +133,8 @@ export default class payment extends React.PureComponent
         this.docObj.clearAll()
         App.instance.setState({isExecute:true})
         await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:1,DOC_TYPE:200});
+        await this.deptCreditMatchingObj.load({PAID_DOC:this.docObj.docCustomer.dt()[0].GUID,PAYING_DOC:this.docObj.docCustomer.dt()[0].GUID});
+
         App.instance.setState({isExecute:false})
 
         this.txtRef.readOnly = true
@@ -204,180 +210,8 @@ export default class payment extends React.PureComponent
     }
     async _addPayment(pType,pAmount)
     {
-        if(this.invoices.length > 0)
+        if(pAmount > 0)
         {
-            let tmpAmount  = pAmount
-            for (let i = 0; i < this.invoices.length; i++) 
-            {
-                if(tmpAmount >= this.invoices[i].REMAINING)
-                {
-                    let tmpDocCustomer = {...this.docObj.docCustomer.empty}
-                    tmpDocCustomer.DOC_GUID = this.docObj.dt()[0].GUID
-                    tmpDocCustomer.TYPE = this.docObj.dt()[0].TYPE
-                    tmpDocCustomer.REF = this.docObj.dt()[0].REF
-                    tmpDocCustomer.REF_NO = this.docObj.dt()[0].REF_NO
-                    tmpDocCustomer.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                    tmpDocCustomer.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                    tmpDocCustomer.INPUT = this.docObj.dt()[0].INPUT
-                    tmpDocCustomer.INVOICE_GUID = this.invoices[i].GUID 
-                    tmpDocCustomer.INVOICE_REF = this.invoices[i].REFERANS 
-                    tmpDocCustomer.INVOICE_DATE = this.invoices[i].DOC_DATE 
-                    if(pType == 0)
-                    {
-                        tmpDocCustomer.OUTPUT = this.cmbCashSafe.value
-                        tmpDocCustomer.OUTPUT_NAME = this.cmbCashSafe.displayValue
-                        tmpDocCustomer.PAY_TYPE = 0
-                        tmpDocCustomer.AMOUNT = this.invoices[i].REMAINING
-                        tmpDocCustomer.DESCRIPTION = this.cashDescription.value
-                    }
-                    else if (pType == 1)
-                    {
-                        tmpDocCustomer.OUTPUT = this.cmbCashSafe.value
-                        tmpDocCustomer.OUTPUT_NAME = this.cmbCashSafe.displayValue
-                        tmpDocCustomer.PAY_TYPE = 1
-                        tmpDocCustomer.AMOUNT = this.invoices[i].REMAINING
-                        tmpDocCustomer.DESCRIPTION = this.cashDescription.value
-        
-                        let tmpCheck = {...this.docObj.checkCls.empty}
-                        tmpCheck.DOC_GUID = this.docObj.dt()[0].GUID
-                        tmpCheck.REF = this.checkReference.value
-                        tmpCheck.DOC_DATE =  this.docObj.dt()[0].DOC_DATE
-                        tmpCheck.CHECK_DATE =  this.docObj.dt()[0].DOC_DATE
-                        tmpCheck.CUSTOMER =   this.docObj.dt()[0].INPUT
-                        tmpCheck.AMOUNT =  this.invoices[i].REMAINING
-                        tmpCheck.SAFE =  this.cmbCashSafe.value
-                        this.docObj.checkCls.addEmpty(tmpCheck)
-                    }
-                    else if (pType == 2)
-                    {
-                        tmpDocCustomer.OUTPUT = this.cmbCashSafe.value
-                        tmpDocCustomer.OUTPUT_NAME = this.cmbCashSafe.displayValue
-                        tmpDocCustomer.PAY_TYPE = 2
-                        tmpDocCustomer.AMOUNT = this.invoices[i].REMAINING
-                        tmpDocCustomer.DESCRIPTION = this.cashDescription.value
-                    }
-                    this.docObj.docCustomer.addEmpty(tmpDocCustomer)
-                    this._calculateTotal()
-                    tmpAmount = parseFloat((tmpAmount - this.invoices[i].REMAINING).toFixed(2))
-                }
-                else if(tmpAmount < this.invoices[i].REMAINING && tmpAmount != 0)
-                {
-                    console.log(tmpAmount)
-                    let tmpDocCustomer = {...this.docObj.docCustomer.empty}
-                    tmpDocCustomer.DOC_GUID = this.docObj.dt()[0].GUID
-                    tmpDocCustomer.TYPE = this.docObj.dt()[0].TYPE
-                    tmpDocCustomer.REF = this.docObj.dt()[0].REF
-                    tmpDocCustomer.REF_NO = this.docObj.dt()[0].REF_NO
-                    tmpDocCustomer.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                    tmpDocCustomer.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                    tmpDocCustomer.INPUT = this.docObj.dt()[0].INPUT
-                    tmpDocCustomer.INVOICE_GUID = this.invoices[i].GUID  
-                    tmpDocCustomer.INVOICE_REF = this.invoices[i].REFERANS 
-
-                    if(pType == 0)
-                    {
-                        tmpDocCustomer.OUTPUT = this.cmbCashSafe.value
-                        tmpDocCustomer.OUTPUT_NAME = this.cmbCashSafe.displayValue
-                        tmpDocCustomer.PAY_TYPE = 0
-                        tmpDocCustomer.AMOUNT = tmpAmount
-                        tmpDocCustomer.DESCRIPTION = this.cashDescription.value
-                    }
-                    else if (pType == 1)
-                    {
-                        tmpDocCustomer.OUTPUT = this.cmbCashSafe.value
-                        tmpDocCustomer.OUTPUT_NAME = this.cmbCashSafe.displayValue
-                        tmpDocCustomer.PAY_TYPE = 1
-                        tmpDocCustomer.AMOUNT = tmpAmount
-                        tmpDocCustomer.DESCRIPTION = this.cashDescription.value
-        
-                        let tmpCheck = {...this.docObj.checkCls.empty}
-                        tmpCheck.DOC_GUID = this.docObj.dt()[0].GUID
-                        tmpCheck.REF = this.checkReference.value
-                        tmpCheck.DOC_DATE =  this.docObj.dt()[0].DOC_DATE
-                        tmpCheck.CHECK_DATE =  this.docObj.dt()[0].DOC_DATE
-                        tmpCheck.CUSTOMER =   this.docObj.dt()[0].INPUT
-                        tmpCheck.AMOUNT =  tmpAmount
-                        tmpCheck.SAFE =  this.cmbCashSafe.value
-                        this.docObj.checkCls.addEmpty(tmpCheck)
-                    }
-                    else if (pType == 2)
-                    {
-                        tmpDocCustomer.OUTPUT = this.cmbCashSafe.value
-                        tmpDocCustomer.OUTPUT_NAME = this.cmbCashSafe.displayValue
-                        tmpDocCustomer.PAY_TYPE = 2
-                        tmpDocCustomer.AMOUNT = tmpAmount
-                        tmpDocCustomer.DESCRIPTION = this.cashDescription.value
-                    }
-                    this.docObj.docCustomer.addEmpty(tmpDocCustomer)
-                    this._calculateTotal()
-                    tmpAmount = 0
-                }
-            }
-
-            if(tmpAmount > 0)
-            {
-                let tmpDocCustomer = {...this.docObj.docCustomer.empty}
-                tmpDocCustomer.DOC_GUID = this.docObj.dt()[0].GUID
-                tmpDocCustomer.TYPE = this.docObj.dt()[0].TYPE
-                tmpDocCustomer.REF = this.docObj.dt()[0].REF
-                tmpDocCustomer.REF_NO = this.docObj.dt()[0].REF_NO
-                tmpDocCustomer.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                tmpDocCustomer.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                tmpDocCustomer.INPUT = this.docObj.dt()[0].INPUT
-                
-                if(pType == 0)
-                {
-                    tmpDocCustomer.OUTPUT = this.cmbCashSafe.value
-                    tmpDocCustomer.OUTPUT_NAME = this.cmbCashSafe.displayValue
-                    tmpDocCustomer.PAY_TYPE = 0
-                    tmpDocCustomer.AMOUNT = tmpAmount
-                    tmpDocCustomer.DESCRIPTION = this.cashDescription.value
-                }
-                else if (pType == 1)
-                {
-                    tmpDocCustomer.OUTPUT = this.cmbCashSafe.value
-                    tmpDocCustomer.OUTPUT_NAME = this.cmbCashSafe.displayValue
-                    tmpDocCustomer.PAY_TYPE = 1
-                    tmpDocCustomer.AMOUNT = tmpAmount
-                    tmpDocCustomer.DESCRIPTION = this.cashDescription.value
-    
-                    let tmpCheck = {...this.docObj.checkCls.empty}
-                    tmpCheck.DOC_GUID = this.docObj.dt()[0].GUID
-                    tmpCheck.REF = this.checkReference.value
-                    tmpCheck.DOC_DATE =  this.docObj.dt()[0].DOC_DATE
-                    tmpCheck.CHECK_DATE =  this.docObj.dt()[0].DOC_DATE
-                    tmpCheck.CUSTOMER =   this.docObj.dt()[0].INPUT
-                    tmpCheck.AMOUNT =  tmpAmount
-                    tmpCheck.SAFE =  this.cmbCashSafe.value
-                    this.docObj.checkCls.addEmpty(tmpCheck)
-                }
-                else if (pType == 2)
-                {
-                    tmpDocCustomer.OUTPUT = this.cmbCashSafe.value
-                    tmpDocCustomer.OUTPUT_NAME = this.cmbCashSafe.displayValue
-                    tmpDocCustomer.PAY_TYPE = 2
-                    tmpDocCustomer.AMOUNT = tmpAmount
-                    tmpDocCustomer.DESCRIPTION = this.cashDescription.value
-                }
-
-                this.docObj.docCustomer.addEmpty(tmpDocCustomer)
-                this._calculateTotal()
-            }
-        }
-        else
-        {
-            if(this.sysParam.filter({ID:'invoicesForPayment',USERS:this.user.CODE}).getValue().value == true)
-            {
-                let tmpConfObj =
-                {
-                    id:'msgInvoiceSelect',showTitle:true,title:this.t("msgInvoiceSelect.title"),showCloseButton:true,width:'500px',height:'200px',
-                    button:[{id:"btn01",caption:this.t("msgInvoiceSelect.btn01"),location:'after'}],
-                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgInvoiceSelect.msg")}</div>)
-                }
-    
-                await dialog(tmpConfObj);
-                return
-            }
             let tmpDocCustomer = {...this.docObj.docCustomer.empty}
             tmpDocCustomer.DOC_GUID = this.docObj.dt()[0].GUID
             tmpDocCustomer.TYPE = this.docObj.dt()[0].TYPE
@@ -423,6 +257,24 @@ export default class payment extends React.PureComponent
             }
 
             this.docObj.docCustomer.addEmpty(tmpDocCustomer)
+            // BORC ALACAK EŞLEŞMESİ İÇİN YAPILDI.*****************************************/
+            let tmpDCPaidDt = this.deptCreditMatchingObj.popUpList.where({REMAINDER: {'<' : 0}}).where({TYPE : 0})
+            if(tmpDCPaidDt.length > 0)
+            {
+                tmpDCPaidDt.push
+                (
+                    {
+                        LDATE : moment(new Date()),
+                        TYPE : tmpDocCustomer.TYPE,
+                        DOC_DATE : tmpDocCustomer.DOC_DATE,
+                        CUSTOMER_GUID : tmpDocCustomer.INPUT,
+                        DOC : this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length - 1].GUID,
+                        REMAINDER : pAmount,
+                    }
+                )
+                await this.deptCreditMatchingObj.matching(tmpDCPaidDt)
+            }
+            /******************************************************************************/
             this._calculateTotal()
         }
     }
@@ -543,7 +395,8 @@ export default class payment extends React.PureComponent
                                                 }
                                                 
                                                 if((await this.docObj.save()) == 0)
-                                                {                                                    
+                                                {
+                                                    await this.deptCreditMatchingObj.save()
                                                     tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
                                                     await dialog(tmpConfObj1);
                                                     this.btnSave.setState({disabled:true});
@@ -572,8 +425,7 @@ export default class payment extends React.PureComponent
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnDelete" parent={this} icon="trash" type="default"
                                     onClick={async()=>
-                                    {
-                                        
+                                    {                                        
                                         let tmpConfObj =
                                         {
                                             id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'200px',
@@ -586,6 +438,9 @@ export default class payment extends React.PureComponent
                                         {
                                             this.docObj.dt('DOC').removeAt(0)
                                             await this.docObj.dt('DOC').delete();
+
+                                            this.deptCreditMatchingObj.dt().removeAll()
+                                            await this.deptCreditMatchingObj.dt().delete()
                                             this.init(); 
                                         }
                                         
@@ -1147,22 +1002,12 @@ export default class payment extends React.PureComponent
                                             <NdButton text={this.t("invoiceSelect")} type="normal" stylingMode="contained" width={'100%'} 
                                             onClick={async (e)=>
                                             {       
-                                                this.getInvoices()
+                                                await this.deptCreditMatchingObj.showPopUp(this.docObj.dt()[0].INPUT)
+                                                this.numCash.value = Number(this.deptCreditMatchingObj.popUpList.sum('REMAINDER',2) * -1).round(2)
                                             }}/>
                                         </div>
                                     </div>
-                                </Item>
-                                {/* <Item>
-                                    <div className='row'>
-                                        <div className='col-12'>
-                                            <NdButton text={this.t("prePaymentSelect")} type="normal" stylingMode="contained" width={'100%'} 
-                                            onClick={async (e)=>
-                                            {       
-                                                this.getDocumant()
-                                            }}/>
-                                        </div>
-                                    </div>
-                                </Item> */}
+                                </Item>                                
                                 <Item>
                                     <div className='row'>
                                         <div className='col-6'>

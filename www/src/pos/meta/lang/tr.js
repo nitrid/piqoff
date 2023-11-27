@@ -262,9 +262,7 @@ export const langTr =
     },
     msgAddCustomerMail: 
     {
-        title : "Uyarı",
-        msg : "musterinin mail'i",
-        btn01 : "tamam",
+        title : "Lütfen Mail Adresi Giriniz..",
     },
     msgCancelCustomerConfirm: 
     {
@@ -873,5 +871,21 @@ export const langTr =
         NewPassword2 : "Yeni Şifre Tekrar",
         btnApprove : "Onayla"
     },
+    msgPassChange:
+    {
+        title: "Başarılı",
+        btn01: "Tamam",
+        msg: "Şifreniz Değiştirildi !"
+    },
+    msgPasswordWrong:
+    {
+        title: "Başarısız",
+        btn01: "Tamam",
+        msg: "Şifreniz Hatalı !"
+    },
     passChange :"Şifre Değiştir",
+    txtNewMail : "E-Mail",
+    txtNewPhone : "Telefon",
+    txtNewCustomerLastName : "Soyisim",
+    txtNewCustomerName : "İsim"
 }

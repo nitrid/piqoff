@@ -48,6 +48,15 @@ export const langFr =
         dailyRebateTicket : "Total Ticket Retour",
         dailyRebateTotal : "Montant Remboursement",
         dailyCustomerTicket : "Ticket Avec Carte Fidélité",
-        dailyUseLoyalty : "Montant Points Utilisés"
+        dailyUseLoyalty : "Montant Points Utilisés",
+        useDiscount : "Montant Remises",
+        useDiscountTicket : "Total Ticket Remises",
+        purchaseTotal : "Total D'Achat",
+        purchasePrice : "Qte Prix d'Achat Changé", 
+        salePrice : "Qte Prix de Vente Changé",
+        purchasePriceDown : "Qte Prix d'Achat Diminué",
+        salePriceDown : "Qte Prix de Vente Diminué",
+        purchasePriceUp : "Qte Prix d'Achat Augmenté",
+        salePriceUp : "Qte Prix de Vente Augmenté"
     },
 }
