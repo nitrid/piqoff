@@ -208,6 +208,7 @@ export const langDe =
         cri_04_002: "Kundenkontostand",
         cri_04_003: "Kundenpunkte",
         cri_04_004: "Kontostandbasierte Kundenauszug",
+        cri_04_005: "Verkaufsrechnungsaltungsbericht",
         ftr: "Rechnung",
         ftr_01: "Listen",
         ftr_02: "Dokumente",
@@ -284,7 +285,8 @@ export const langDe =
         fns_04: "Berichte",
         fns_04_001: "Bankauszugsbericht",
         fns_04_002: "Kontosaldo-Bericht",
-        fns_04_003 : "Kasa Ekstre Raporu",
+        fns_04_003 : "Kasa Ekstre Raporu", //BAK
+        fns_04_003 : "Eine Abgleichsbericht über Schulden und Guthaben", //BAK
         fns_05: "Operationen",
         fns_05_001: "Masseneinzahlungseingabe",
         fns_05_002: "Massenzahlungseingabe",
@@ -421,6 +423,8 @@ export const langDe =
     popDeptCreditList :
     {
         title : "Rechnungsauswahl",
+        btnPopDeptCreditListSelection : "Auswählen",
+        chkPopDeptCreditList : "Geschlossene anzeigen",
         clmRef : "REFERENZ",
         clmRefNo : "REFERENZ NR",
         clmTypeName : "BELEGSART",
@@ -3777,6 +3781,30 @@ export const langDe =
         },
         btnAdd : "Hinzufügen",
         descriptionPlace : "Bitte geben Sie einen Text mit mindestens 15 Zeichen ein."
+    },
+    cri_04_005 : // "Satış Faturası Yaşlandırma Raporu" //BAK
+    {
+        txtCustomerCode : "Müşteri",
+        btnGet :"Getir",
+        dtFirst : "İlk Tarih",
+        dtLast : "Son Tarih",
+        pg_txtCustomerCode : 
+        {
+            title : "Müşteri Seçimi",
+            clmCode :  "CARİ KODU",
+            clmTitle : "CARİ ADI",
+            clmTypeName : "TİPİ",
+            clmGenusName : "CİNSİ"
+        },
+        grdList: 
+        {
+            clmDate: "Tarih",
+            clmType: "Evrak",
+            clmCustomerName : "Müşteri Adı",
+            clmDebit : "Borç",
+            clmCredit :"Alacak",
+            clmBalance : "Bakiye"
+        },
     },
     ftr_01_001 : // "Einkaufsrechnungsliste"
     {
@@ -15916,9 +15944,8 @@ export const langDe =
             clmDocDate : "Tarih",    // BAK
             clmRef : "Seri",   // BAK
             clmRefNo : "Sıra",    // BAK
-        },
-     
-    },
+        },     
+    },    
     fns_05_001 : //"Masseneinzugseingabe"
     {
         txtRefRefno : "Serie-Nummer",

@@ -215,6 +215,7 @@ export const langTr =
         cri_04_002 : 'Müşteri Bakiye Raporu',
         cri_04_003 : "Müşteri Puanı Raporu",
         cri_04_004 : "Müşteri Bakiyeli Ekstre Raporu",
+        cri_04_005 : "Satış Faturası Yaşlandırma Raporu",
         ftr: "Fatura",
         ftr_01: "Listeler",
         ftr_02: "Evraklar",
@@ -430,6 +431,8 @@ export const langTr =
     popDeptCreditList : 
     {
         title : "Fatura Seçimi",
+        btnPopDeptCreditListSelection : "Seç",
+        chkPopDeptCreditList : "Kapananları Göster",
         clmRef : "REF",
         clmRefNo : "REF NO",
         clmTypeName : "EVRAK TIP",
@@ -3789,6 +3792,30 @@ export const langTr =
         },
         btnAdd : "Ekle",
         descriptionPlace : "Lütfen en az 15 karakter açıklama giriniz.."
+    },
+    cri_04_005 : // "Satış Faturası Yaşlandırma Raporu"
+    {
+        txtCustomerCode : "Müşteri",
+        btnGet : "Getir",
+        dtFirst : "İlk Tarih",
+        dtLast : "Son Tarih",
+        pg_txtCustomerCode : 
+        {
+            title : "Müşteri Seçimi",
+            clmCode :  "CARİ KODU",
+            clmTitle : "CARİ ADI",
+            clmTypeName : "TİPİ",
+            clmGenusName : "CİNSİ"
+        },
+        grdList: 
+        {
+            clmDate: "Tarih",
+            clmType: "Evrak",
+            clmCustomerName : "Müşteri Adı",
+            clmDebit : "Borç",
+            clmCredit :"Alacak",
+            clmBalance : "Bakiye"
+        },
     },
     ftr_01_001 : // "Alış Fatura Listesi"
     {
@@ -15385,7 +15412,6 @@ export const langTr =
             clmTotal : "Tutar",
             clmInputName :"Kasa/Banka",
         },
-
     },
     fns_01_003 : //  "Banka Hareketleri Listesi",
     {

@@ -48,6 +48,11 @@ export const langFr =
         dailyRebateTicket : "Total Ticket Retour",
         dailyRebateTotal : "Montant Remboursement",
         dailyCustomerTicket : "Ticket Avec Carte Fidélité",
-        dailyUseLoyalty : "Montant Points Utilisés"
+        dailyUseLoyalty : "Montant Points Utilisés",
+        useDiscount : "Montant Remises",
+        useDiscountTicket : "Total Ticket Remises",
+        purchaseTotal : "Toplam Alış Tutarı",
+        purchasePrice : "Alış Fiyatı Değişen Ürün Adeti",
+        salePrice : "Satış Fiyatı değişen Ürün Adeti"
     },
 }

@@ -215,6 +215,7 @@ export const langFr =
         cri_04_002 : 'Rapport sur le solde courant Client/Fournisseur', 
         cri_04_003 : "Rapport point fidelité client",
         cri_04_004 : "Rapport sur le bilan actuel",
+        cri_04_005 : "Rapport de Vieillissement des Factures de Vente", //BAK
         ftr: "Facture ",
         ftr_01: "Listes",
         ftr_02: "Document",
@@ -293,7 +294,6 @@ export const langFr =
         fns_04_001 : "Rapport sur les relevés bancaires",   
         fns_04_002 : "Rapport sur le solde actuel",  
         fns_04_003 : "Rapport sur les relevés de caisse",
-        fns_04_002 : "Rapport solde de compte",
         fns_05 : "Opérations", 
         fns_05_001 : "Saisie Multi Encaissement", 
         fns_05_002 : "Saisie Multi Paiement", 
@@ -430,6 +430,8 @@ export const langFr =
     popDeptCreditList : //BAK
     {
         title : "Sélection de facture",
+        btnPopDeptCreditListSelection : "Choix",
+        chkPopDeptCreditList : "Afficher les clos",
         clmRef : "Ref",
         clmRefNo : "Ref No",
         clmTypeName : "Type Doc.",
@@ -3986,6 +3988,30 @@ export const langFr =
         },
         btnAdd : "Ajoute", 
         descriptionPlace : "Veuillez Saisir au moins 15 Caractères.."
+    },
+    cri_04_005 : // "Satış Faturası Yaşlandırma Raporu"
+    {
+        txtCustomerCode : "Fournisseur",
+        btnGet : "Rechercher",
+        dtFirst : "Date Début",
+        dtLast : "Date Fin",
+        pg_txtCustomerCode : 
+        {
+            title : "Choix Fournisseur",
+            clmCode :  "Code Client",
+            clmTitle : "Nom Fournisseur",
+            clmTypeName : "Type",
+            clmGenusName : "Genre"
+        },
+        grdList: 
+        {
+            clmDate: "Date",
+            clmType: "Document",
+            clmCustomerName: "Nom du Client",
+            clmDebit: "Débit",
+            clmCredit: "Crédit",
+            clmBalance : "Balance"
+        }
     },
     ftr_01_001 : // "Alış Fatura Listesi"
     {
