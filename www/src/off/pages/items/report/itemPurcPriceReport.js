@@ -73,7 +73,7 @@ export default class itemPurcPriceReport extends React.PureComponent
                             "INNER JOIN    " +
                             "PRICE_HISTORY_VW_01 AS PRICE     " +
                             "ON ITEMS.GUID = PRICE.ITEM    " +
-                            "WHERE STATUS = 1 AND PRICE.CDATE > @FISRT_DATE AND PRICE.CDATE < @LAST_DATE AND PRICE.TYPE = 1 AND ((PRICE.CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = '')) AND ((ITEMS.MAIN_GRP = @MAIN_GRP) OR (@MAIN_GRP = ''))) AS TMP  ORDER BY NAME",
+                            "WHERE STATUS = 1 AND CONVERT(NVARCHAR,PRICE.CDATE,110) >= @FISRT_DATE AND CONVERT(NVARCHAR,PRICE.CDATE,110) <= @LAST_DATE AND PRICE.TYPE = 1 AND ((PRICE.CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = '')) AND ((ITEMS.MAIN_GRP = @MAIN_GRP) OR (@MAIN_GRP = ''))) AS TMP  ORDER BY NAME",
                     param : ['FISRT_DATE:date','LAST_DATE:date','CUSTOMER_CODE:string|50','MAIN_GRP:string|50'],
                     value : [this.dtDate.startDate,this.dtDate.endDate,this.cmbTedarikci.value,this.cmbUrunGrup.value]
                 },
