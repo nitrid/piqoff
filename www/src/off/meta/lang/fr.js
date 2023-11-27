@@ -4826,9 +4826,9 @@ export const langFr =
         },
         msgCustomerLock: 
         {
-            title: "Attention", //BAK
-            btn01: "OK", //BAK
-            msg: "Impossible de changer le fournisseur après avoir ajouter le produit !" //BAK
+            title: "Attention", 
+            btn01: "OK", 
+            msg: "Impossible de changer le fournisseur après avoir ajouter le produit !" 
         },
     },
     ftr_02_002 : // "Facture de vente"
@@ -5406,9 +5406,9 @@ export const langFr =
         },
         msgCustomerLock: 
         {
-            title: "Attention", //BAK
-            btn01: "OK", //BAK
-            msg: "Impossible de changer le client après avoir ajouter le produit !" //BAK
+            title: "Attention", 
+            btn01: "OK", 
+            msg: "Impossible de changer le client après avoir ajouter le produit !" 
         },
     },
     ftr_02_003 : // "İade Faturası"
@@ -5889,9 +5889,9 @@ export const langFr =
         },
         msgCustomerLock: 
         {
-            title: "Attention", //BAK
-            btn01: "OK", //BAK
-            msg: "Impossible de changer le fournisseur après avoir ajouter le produit !" //BAK
+            title: "Attention", 
+            btn01: "OK", 
+            msg: "Impossible de changer le fournisseur après avoir ajouter le produit !" 
         },
     },
     ftr_02_004 : // "Fiyat Farkı Faturası"
@@ -6347,9 +6347,9 @@ export const langFr =
         },
         msgCustomerLock: 
         {
-            title: "Attention", //BAK
-            btn01: "OK", //BAK
-            msg: "Impossible de changer le fournisseur après avoir ajouter le produit !" //BAK
+            title: "Attention", 
+            btn01: "OK", 
+            msg: "Impossible de changer le fournisseur après avoir ajouter le produit !" 
         },
     },
     ftr_02_005 : // "Şube Satış Faturası"
@@ -6853,9 +6853,9 @@ export const langFr =
         },
         msgCustomerLock: 
         {
-            title: "Attention", //BAK
-            btn01: "OK", //BAK
-            msg: "Impossible de changer le magasin après avoir ajouter le produit !" //BAK
+            title: "Attention", 
+            btn01: "OK", 
+            msg: "Impossible de changer le magasin après avoir ajouter le produit !" 
         },
     },
     ftr_02_006 : // "Fiyat Farkı Alış Faturası"
@@ -7787,9 +7787,9 @@ export const langFr =
         },
         msgCustomerLock: 
         {
-            title: "Attention", //BAK
-            btn01: "OK", //BAK
-            msg: "Impossible de changer le fournisseur après avoir ajouter le produit !" //BAK
+            title: "Attention", 
+            btn01: "OK", 
+            msg: "Impossible de changer le fournisseur après avoir ajouter le produit !" 
         },
     },
     ftr_02_008 : // "Şube Alış Faturası"
