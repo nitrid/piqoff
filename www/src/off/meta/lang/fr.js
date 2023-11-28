@@ -16647,8 +16647,8 @@ export const langFr =
     {
         txtTitle : "Nom de l'entreprise",
         txtBrandName : "Nom d'enseigne",
-        txtCustomerName : "Nom autorisé",
-        txtCustomerLastname : "Nom de famille autorisé",
+        txtCustomerName : "Prénom Gérant",
+        txtCustomerLastname : "Nom Gérant",
         txtAddress1 : "Adresse",
         txtAddress2 : "Adresse 2",
         cmbZipCode : "Code Postal",
@@ -16658,10 +16658,10 @@ export const langFr =
         txtEmail : "E-Mail",
         txtWeb : "Web Site",
         txtSiretId : "Siret No",
-        txtApeCode : "App Code",
-        txtTaxOffice : "Tax Office",
-        txtTaxNo : "Tax No",
-        txtIntVatNo : "Int. Tax No",
+        txtApeCode : "Code APE",
+        txtTaxOffice : "Impôt",
+        txtTaxNo : "Taxe No",
+        txtIntVatNo : "EORI",
         txtSirenNo : "Siren No",
         txtRSC : "RCS",
         txtCapital : "Capital",
@@ -16670,7 +16670,7 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Êtes-vous sûr de vouloir enregistrer? "
+            msg: "Êtes-vous sûr(e) de vouloir enregistrer? "
         },
         msgSaveResult:
         {
