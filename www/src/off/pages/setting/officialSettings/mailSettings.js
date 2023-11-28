@@ -65,10 +65,7 @@ export default class mailSettings extends React.PureComponent
         await this.mailDt.refresh();
         await this.grdMailSettings.dataRefresh({source:this.mailDt});
     }
-    _cellRoleRender(e)
-    {
-        
-    }
+
     render()
     {
         return(
@@ -109,8 +106,7 @@ export default class mailSettings extends React.PureComponent
                                     e.data.MAIL_SMTP = 'smtp.laposte.net'
                                     e.data.MAIL_PORT = '465'
                                 }
-                            }}
-                            >                            
+                            }}>                            
                                 <Paging defaultPageSize={20} />
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
                                 <Editing mode="popup" allowUpdating={true} allowAdding={true} allowDeleting={true}>
