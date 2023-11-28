@@ -65,6 +65,10 @@ export default class mailSettings extends React.PureComponent
         await this.mailDt.refresh();
         await this.grdMailSettings.dataRefresh({source:this.mailDt});
     }
+    _cellRoleRender(e)
+    {
+        
+    }
     render()
     {
         return(
@@ -85,6 +89,26 @@ export default class mailSettings extends React.PureComponent
                             onRowInserting={(e)=>
                             {
                                 e.data.CUSER = this.core.auth.data.CODE
+                                if(e.data.MAIL_SERVICE === 'gmail') 
+                                {
+                                    e.data.MAIL_SMTP = 'smtp.mail.gmail.com'
+                                    e.data.MAIL_PORT = '587'
+                                }
+                                if(e.data.MAIL_SERVICE === 'yahoo') 
+                                {
+                                    e.data.MAIL_SMTP = 'stmp.mail.yahoo.com'
+                                    e.data.MAIL_PORT = '465'
+                                }
+                                if(e.data.MAIL_SERVICE === 'outlook') 
+                                {
+                                   e.data.MAIL_SMTP = 'smtp.office365.com'
+                                   e.data.MAIL_PORT = '587'
+                                }
+                                if(e.data.MAIL_SERVICE === 'laposte') 
+                                {
+                                    e.data.MAIL_SMTP = 'smtp.laposte.net'
+                                    e.data.MAIL_PORT = '465'
+                                }
                             }}
                             >                            
                                 <Paging defaultPageSize={20} />
@@ -96,7 +120,7 @@ export default class mailSettings extends React.PureComponent
                                         <Item dataField="MAIL_ADDRESS" />
                                         <Item dataField="MAIL_PASSWORD" />
                                         <Item dataField="MAIL_SMTP" />
-                                        <Item dataField="MAIL_PORT" />
+                                        <Item dataField="MAIL_PORT"/>
                                     </Form>
                                 </Editing>
                                 <Column dataField="MAIL_SERVICE" caption={this.t("grdMailSettings.clmMailService")} visible={true} allowEditing={true}>
@@ -104,8 +128,8 @@ export default class mailSettings extends React.PureComponent
                                 </Column>
                                 <Column dataField="MAIL_ADDRESS" caption={this.t("grdMailSettings.clmMail")} visible={true}/> 
                                 <Column dataField="MAIL_PASSWORD" editorOptions={{mode:"password"}} caption={this.t("grdMailSettings.clmMailPassword")} visible={true}/>
-                                <Column dataField="MAIL_SMTP" caption={this.t("grdMailSettings.clmSMTP")} visible={true} width={180}/>
-                                <Column dataField="MAIL_PORT" caption={this.t("grdMailSettings.clmPORT")} visible={true} width={80}/>
+                                <Column dataField="MAIL_SMTP" caption={this.t("grdMailSettings.clmSMTP")}  width={180}/>
+                                <Column dataField="MAIL_PORT" caption={this.t("grdMailSettings.clmPORT")}  width={80}/>
                             </NdGrid>
                         </div>
                     </div>
