@@ -58,6 +58,14 @@ export const langTr =
         purchasePriceDown : "Alış Fiyatı Düşen Ürün Adeti",
         salePriceDown : "Satış Fiyatı Düşen Ürün Adeti",
         purchasePriceUp : "Alış Fiyatı Artan Ürün Adeti",
-        salePriceUp : "Satış Fiyatı Artan Ürün Adeti"
+        salePriceUp : "Satış Fiyatı Artan Ürün Adeti",
+        salesTotalDetail : "Satış Detayı",
+        grdSalesVatRate :
+        {
+            vatRate : "KDV %",
+            amount : "Vergisiz",
+            vat : "KDV",
+            total : "Vergili"
+        }
     },
 }

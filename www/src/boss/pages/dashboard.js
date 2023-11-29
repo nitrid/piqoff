@@ -6,7 +6,8 @@ import ScrollView from 'devextreme-react/scroll-view';
 import PieChart, { Series, Label, SmallValuesGrouping, Connector, Legend } from 'devextreme-react/pie-chart';
 import AnimatedText from '../../core/react/bootstrap/animatedText.js';
 import NbDateRange from '../../core/react/bootstrap/daterange.js';
-
+import NbPopUp from '../../core/react/bootstrap/popup.js';
+import NdGrid,{Column,Editing,Paging,Scrolling}  from '../../core/react/devex/grid.js';
 
 
 export default class Dashboard extends React.PureComponent
@@ -203,6 +204,10 @@ export default class Dashboard extends React.PureComponent
     }
 
   }
+  onClick()
+  {
+    console.log(1)
+  }
   render()
   {
     return(
@@ -249,7 +254,40 @@ export default class Dashboard extends React.PureComponent
                   <h5 className="card-title">{this.t("dailySalesTotal")}</h5>
                 </div>
                 <div className="text-center">
-                  <AnimatedText value={this.state.dailySalesTotal ? parseFloat(this.state.dailySalesTotal) : 0} type={'currency'} />
+                  <AnimatedText value={this.state.dailySalesTotal ? parseFloat(this.state.dailySalesTotal) : 0} type={'currency'} onClicks={(async()=>
+                  {
+                    let tmpSource =
+                    {
+                        source : 
+                        {
+                            groupBy : this.groupList,
+                            select : 
+                            {
+                                query : " SELECT PAY_TYPE_NAME,SUM(AMOUNT-CHANGE) AS AMOUNT FROM POS_PAYMENT_VW_01 WHERE DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE  AND TYPE = 0 GROUP BY PAY_TYPE_NAME",
+                                param : ['FISRT_DATE:date','LAST_DATE:date'],
+                                value : [this.dtDate.startDate,this.dtDate.endDate]
+                            },
+                            sql : this.core.sql
+                        }
+                    }
+                    let tmpVatSource =
+                    {
+                        source : 
+                        {
+                            groupBy : this.groupList,
+                            select : 
+                            {
+                                query : " SELECT VAT_RATE,SUM(VAT) AS VAT,SUM(FAMOUNT) AS AMOUNT, SUM(TOTAL) AS TOTAL FROM POS_SALE_VW_01 WHERE VAT_RATE <> 0 AND  DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE  AND TYPE = 0 GROUP BY VAT_RATE",
+                                param : ['FISRT_DATE:date','LAST_DATE:date'],
+                                value : [this.dtDate.startDate,this.dtDate.endDate]
+                            },
+                            sql : this.core.sql
+                        }
+                    }
+                    await this.popSalesTotal.show()
+                    await this.grdSalesTotal.dataRefresh(tmpSource)
+                    await this.grdSalesVatRate.dataRefresh(tmpVatSource)
+                  }).bind(this)}/>
                 </div>
               </div>
             </div>
@@ -505,6 +543,50 @@ export default class Dashboard extends React.PureComponent
         <div className="row py-1 px-3" style={{height:'100px'}}>
 
         </div>
+        <NbPopUp id={"popSalesTotal"} parent={this} title={this.t("salesTotalDetail")} fullscreen={false} centered={true}>
+            <div>
+              <div className="row  p-1">
+                  <div className="col-12">
+                      <NdGrid parent={this} id={"grdSalesTotal"} 
+                      showBorders={true} 
+                      columnsAutoWidth={true} 
+                      allowColumnReordering={true} 
+                      allowColumnResizing={true} 
+                      showRowLines={true}
+                      showColumnLines={true}
+                      showColumnHeaders={false}
+                      height={"138px"} 
+                      width={"100%"}
+                      dbApply={false}
+                      >
+                          <Column dataField="PAY_TYPE_NAME" width={100} alignment={"center"}/>
+                          <Column dataField="AMOUNT" width={40} format={"#,##0.00€"}/>                                                
+                      </NdGrid>
+                  </div>
+              </div>
+              <div className="row  p-1">
+                  <div className="col-12">
+                      <NdGrid parent={this} id={"grdSalesVatRate"} 
+                      showBorders={true} 
+                      columnsAutoWidth={true} 
+                      allowColumnReordering={true} 
+                      allowColumnResizing={true} 
+                      showRowLines={true}
+                      showColumnLines={true}
+                      showColumnHeaders={true}
+                      height={"138px"} 
+                      width={"100%"}
+                      dbApply={false}
+                      >
+                          <Column dataField="VAT_RATE" caption={this.t("grdSalesVatRate.vatRate")} width={60} alignment={"center"}/>
+                          <Column dataField="AMOUNT" caption={this.t("grdSalesVatRate.amount")} width={80} format={"#,##0.00€"}/>       
+                          <Column dataField="VAT" caption={this.t("grdSalesVatRate.vat")} width={80} format={"#,##0.00€"}/>       
+                          <Column dataField="TOTAL" caption={this.t("grdSalesVatRate.total")} width={40} format={"#,##0.00€"}/>                                        
+                      </NdGrid>
+                  </div>
+              </div>
+            </div>
+        </NbPopUp>
       </ScrollView>
     )
   }

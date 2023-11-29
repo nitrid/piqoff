@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSpring, animated, config } from 'react-spring';
 
-const AnimatedText = ({ value, type }) => {
+const AnimatedText = ({ value, type,onClicks }) => {
   const fadeIn = useSpring({
     from: { opacity: 0 },
     to: { opacity: 1 },
@@ -32,10 +32,13 @@ const AnimatedText = ({ value, type }) => {
   const formatNumber = (val) => {
     return new Intl.NumberFormat('fr-FR').format(val);
   };
-
+  const onclick = () =>
+  {
+    onClicks()
+  }
   return (
     <animated.div style={fadeIn}>
-      <animated.h5 style={slideIn} className="card-text">
+      <animated.h5 style={slideIn} className="card-text" onClick={onclick}>
         {type === 'currency' ? number.interpolate((val) => formatCurrency(val)) : formatNumber(value)}
       </animated.h5>
     </animated.div>
