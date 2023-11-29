@@ -4826,9 +4826,9 @@ export const langFr =
         },
         msgCustomerLock: 
         {
-            title: "Attention", //BAK
-            btn01: "OK", //BAK
-            msg: "Impossible de changer le fournisseur après avoir ajouter le produit !" //BAK
+            title: "Attention", 
+            btn01: "OK", 
+            msg: "Impossible de changer le fournisseur après avoir ajouter le produit !" 
         },
     },
     ftr_02_002 : // "Facture de vente"
@@ -5406,9 +5406,9 @@ export const langFr =
         },
         msgCustomerLock: 
         {
-            title: "Attention", //BAK
-            btn01: "OK", //BAK
-            msg: "Impossible de changer le client après avoir ajouter le produit !" //BAK
+            title: "Attention", 
+            btn01: "OK", 
+            msg: "Impossible de changer le client après avoir ajouter le produit !" 
         },
     },
     ftr_02_003 : // "İade Faturası"
@@ -5889,9 +5889,9 @@ export const langFr =
         },
         msgCustomerLock: 
         {
-            title: "Attention", //BAK
-            btn01: "OK", //BAK
-            msg: "Impossible de changer le fournisseur après avoir ajouter le produit !" //BAK
+            title: "Attention", 
+            btn01: "OK", 
+            msg: "Impossible de changer le fournisseur après avoir ajouter le produit !" 
         },
     },
     ftr_02_004 : // "Fiyat Farkı Faturası"
@@ -6347,9 +6347,9 @@ export const langFr =
         },
         msgCustomerLock: 
         {
-            title: "Attention", //BAK
-            btn01: "OK", //BAK
-            msg: "Impossible de changer le fournisseur après avoir ajouter le produit !" //BAK
+            title: "Attention", 
+            btn01: "OK", 
+            msg: "Impossible de changer le fournisseur après avoir ajouter le produit !" 
         },
     },
     ftr_02_005 : // "Şube Satış Faturası"
@@ -6853,9 +6853,9 @@ export const langFr =
         },
         msgCustomerLock: 
         {
-            title: "Attention", //BAK
-            btn01: "OK", //BAK
-            msg: "Impossible de changer le magasin après avoir ajouter le produit !" //BAK
+            title: "Attention", 
+            btn01: "OK", 
+            msg: "Impossible de changer le magasin après avoir ajouter le produit !" 
         },
     },
     ftr_02_006 : // "Fiyat Farkı Alış Faturası"
@@ -7787,9 +7787,9 @@ export const langFr =
         },
         msgCustomerLock: 
         {
-            title: "Attention", //BAK
-            btn01: "OK", //BAK
-            msg: "Impossible de changer le fournisseur après avoir ajouter le produit !" //BAK
+            title: "Attention", 
+            btn01: "OK", 
+            msg: "Impossible de changer le fournisseur après avoir ajouter le produit !" 
         },
     },
     ftr_02_008 : // "Şube Alış Faturası"
@@ -16647,8 +16647,8 @@ export const langFr =
     {
         txtTitle : "Nom de l'entreprise",
         txtBrandName : "Nom d'enseigne",
-        txtCustomerName : "Nom autorisé",
-        txtCustomerLastname : "Nom de famille autorisé",
+        txtCustomerName : "Prénom Gérant",
+        txtCustomerLastname : "Nom Gérant",
         txtAddress1 : "Adresse",
         txtAddress2 : "Adresse 2",
         cmbZipCode : "Code Postal",
@@ -16658,10 +16658,10 @@ export const langFr =
         txtEmail : "E-Mail",
         txtWeb : "Web Site",
         txtSiretId : "Siret No",
-        txtApeCode : "App Code",
-        txtTaxOffice : "Tax Office",
-        txtTaxNo : "Tax No",
-        txtIntVatNo : "Int. Tax No",
+        txtApeCode : "Code APE",
+        txtTaxOffice : "Impôt",
+        txtTaxNo : "Taxe No",
+        txtIntVatNo : "EORI",
         txtSirenNo : "Siren No",
         txtRSC : "RCS",
         txtCapital : "Capital",
@@ -16670,7 +16670,7 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Êtes-vous sûr de vouloir enregistrer? "
+            msg: "Êtes-vous sûr(e) de vouloir enregistrer? "
         },
         msgSaveResult:
         {
