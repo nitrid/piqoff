@@ -99,7 +99,7 @@ export default class NbKeyboard extends NbBase
                     "z x c v b n m ö ç * _ %",
                     "{numbers} {space} {backspace} @",
                     "hotmail gmail outlook .com",
-                    "outlook orange yahoo .fr"
+                    "live orange yahoo .fr"
                     ],
                     numbers: ["1 2 3", "4 5 6", "7 8 9", "{abc} 0 {backspace}"]
                 }}
