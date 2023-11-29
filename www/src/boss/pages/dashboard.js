@@ -579,8 +579,8 @@ export default class Dashboard extends React.PureComponent
                       dbApply={false}
                       >
                           <Column dataField="VAT_RATE" caption={this.t("grdSalesVatRate.vatRate")} width={60} alignment={"center"}/>
-                          <Column dataField="AMOUNT" caption={this.t("grdSalesVatRate.amount")} width={80} format={"#,##0.00€"}/>       
-                          <Column dataField="VAT" caption={this.t("grdSalesVatRate.vat")} width={80} format={"#,##0.00€"}/>       
+                          <Column dataField="AMOUNT" caption={this.t("grdSalesVatRate.amount")} width={90} format={"#,##0.00€"}/>       
+                          <Column dataField="VAT" caption={this.t("grdSalesVatRate.vat")} width={90} format={"#,##0.00€"}/>       
                           <Column dataField="TOTAL" caption={this.t("grdSalesVatRate.total")} width={40} format={"#,##0.00€"}/>                                        
                       </NdGrid>
                   </div>
