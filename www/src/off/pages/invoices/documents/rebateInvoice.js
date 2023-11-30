@@ -143,7 +143,7 @@ export default class rebateInvoice extends DocBase
         this.txtRef.readOnly = true
         this.txtRefno.readOnly = true
     }
-    async calculateTotal()
+    calculateTotal()
     {
         super.calculateTotal()
         
@@ -168,18 +168,12 @@ export default class rebateInvoice extends DocBase
                             this.customerClear = false
                             this.combineControl = true
                             this.combineNew = false
-                            if(data.length == 1)
+                            this.grdRebtInv.devGrid.beginUpdate()
+                            for (let i = 0; i < data.length; i++) 
                             {
-                                await this.addItem(data[0],e.rowIndex)
+                                await this.addItem(data[i],e.rowIndex)
                             }
-                            else if(data.length > 1)
-                            {
-                                for (let i = 0; i < data.length; i++) 
-                                {
-                                    await this.core.util.waitUntil(100)
-                                    await this.addItem(data[i],e.rowIndex)
-                                }
-                            }
+                            this.grdRebtInv.devGrid.endUpdate()
                         }
                         await this.pg_txtItemsCode.setVal(e.value)
                     }
@@ -233,18 +227,12 @@ export default class rebateInvoice extends DocBase
                                     this.customerClear = false
                                     this.combineControl = true
                                     this.combineNew = false
-                                    if(data.length == 1)
+                                    this.grdRebtInv.devGrid.beginUpdate()
+                                    for (let i = 0; i < data.length; i++) 
                                     {
-                                        await this.addItem(data[0],e.rowIndex)
+                                        await this.addItem(data[i],e.rowIndex)
                                     }
-                                    else if(data.length > 1)
-                                    {
-                                        for (let i = 0; i < data.length; i++) 
-                                        {
-                                            await this.core.util.waitUntil(100)
-                                            await this.addItem(data[i],e.rowIndex)
-                                        }
-                                    }
+                                    this.grdRebtInv.devGrid.endUpdate()
                                 }
                                 this.pg_txtItemsCode.show()
                             }
@@ -396,158 +384,167 @@ export default class rebateInvoice extends DocBase
             )
         }
     }    
-    async addItem(pData,pIndex,pQuantity)
+    addItem(pData,pIndex,pQuantity)
     {
-        App.instance.setState({isExecute:true})
+        return new Promise(async resolve =>
+        {
 
-        this.txtRef.readOnly = true
-        this.txtRefno.readOnly = true
-        
-        if(typeof pQuantity == 'undefined')
-        {
-            pQuantity = 1
-        }
-        //GRID DE AYNI ÜRÜNDEN OLUP OLMADIĞI KONTROL EDİLİYOR VE KULLANICIYA SORULUYOR,CEVAP A GÖRE SATIR BİRLİŞTERİLİYOR.
-        let tmpMergDt = await this.mergeItem(pData.CODE)
-        if(typeof tmpMergDt != 'undefined' && this.combineNew == false)
-        {
-            tmpMergDt[0].QUANTITY = tmpMergDt[0].QUANTITY + pQuantity
-            tmpMergDt[0].SUB_QUANTITY = tmpMergDt[0].SUB_QUANTITY / tmpMergDt[0].SUB_FACTOR
-            tmpMergDt[0].VAT = Number((tmpMergDt[0].VAT + (tmpMergDt[0].PRICE * (tmpMergDt[0].VAT_RATE / 100) * pQuantity))).round(6)
-            tmpMergDt[0].AMOUNT = Number((tmpMergDt[0].QUANTITY * tmpMergDt[0].PRICE)).round(4)
-            tmpMergDt[0].TOTAL = Number((((tmpMergDt[0].QUANTITY * tmpMergDt[0].PRICE) - tmpMergDt[0].DISCOUNT) + tmpMergDt[0].VAT)).round(2)
-            tmpMergDt[0].TOTALHT =  Number((tmpMergDt[0].AMOUNT - tmpMergDt[0].DISCOUNT)).round(2)
-            this.calculateTotal()
-            //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
-            await this.itemRelated(pData.GUID,tmpMergDt[0].QUANTITY)
-            //*****************************************/
-            App.instance.setState({isExecute:false})
-            return
-        }
-        //******************************************************************************************************************/
-        if(pIndex == null)
-        {
-            let tmpDocItems = {...this.docObj.docItems.empty}
-            tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
-            tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
-            tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-            tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
-            tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
-            tmpDocItems.REF = this.docObj.dt()[0].REF
-            tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
-            tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
-            tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
-            tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-            tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
-            this.docObj.docItems.addEmpty(tmpDocItems)
-            pIndex = this.docObj.docItems.dt().length - 1
-        }
-
-        let tmpGrpQuery = 
-        {
-            query :"SELECT ORGINS,UNIT_SHORT,ISNULL((SELECT top 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID AND ITEM_UNIT_VW_01.TYPE = 1),1) AS SUB_FACTOR, " +
-             "ISNULL((SELECT top 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID AND ITEM_UNIT_VW_01.TYPE = 1),'') AS SUB_SYMBOL FROM ITEMS_VW_01 WHERE GUID = @GUID ",
-            param : ['GUID:string|50'],
-            value : [pData.GUID]
-        }
-        let tmpGrpData = await this.core.sql.execute(tmpGrpQuery) 
-        if(tmpGrpData.result.recordset.length > 0)
-        {
-            this.docObj.docItems.dt()[pIndex].ORIGIN = tmpGrpData.result.recordset[0].ORGINS
-            this.docObj.docItems.dt()[pIndex].SUB_FACTOR = tmpGrpData.result.recordset[0].SUB_FACTOR
-            this.docObj.docItems.dt()[pIndex].SUB_SYMBOL = tmpGrpData.result.recordset[0].SUB_SYMBOL
-            this.docObj.docItems.dt()[pIndex].UNIT_SHORT = tmpGrpData.result.recordset[0].UNIT_SHORT
-        }
-
-        if(this.customerControl == true)
-        {
-            let tmpCheckQuery = 
+            App.instance.setState({isExecute:true})
+    
+            this.txtRef.readOnly = true
+            this.txtRefno.readOnly = true
+            
+            if(typeof pQuantity == 'undefined')
             {
-                query :"SELECT MULTICODE,(SELECT [dbo].[FN_CUSTOMER_PRICE](ITEM_GUID,CUSTOMER_GUID,@QUANTITY,GETDATE())) AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID",
-                param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
-                value : [pData.CODE,this.docObj.dt()[0].INPUT,pQuantity]
+                pQuantity = 1
             }
-            let tmpCheckData = await this.core.sql.execute(tmpCheckQuery) 
-            if(tmpCheckData.result.recordset.length == 0)
-            {   
-                let tmpCustomerBtn = ''
-                if(this.customerClear == true)
-                {
-                    await this.grdRebtInv.devGrid.deleteRow(0)
-                    return 
-                }
+            //GRID DE AYNI ÜRÜNDEN OLUP OLMADIĞI KONTROL EDİLİYOR VE KULLANICIYA SORULUYOR,CEVAP A GÖRE SATIR BİRLİŞTERİLİYOR.
+            let tmpMergDt = await this.mergeItem(pData.CODE)
+            if(typeof tmpMergDt != 'undefined' && this.combineNew == false)
+            {
+                tmpMergDt[0].QUANTITY = tmpMergDt[0].QUANTITY + pQuantity
+                tmpMergDt[0].SUB_QUANTITY = tmpMergDt[0].SUB_QUANTITY / tmpMergDt[0].SUB_FACTOR
+                tmpMergDt[0].VAT = Number((tmpMergDt[0].VAT + (tmpMergDt[0].PRICE * (tmpMergDt[0].VAT_RATE / 100) * pQuantity))).round(6)
+                tmpMergDt[0].AMOUNT = Number((tmpMergDt[0].QUANTITY * tmpMergDt[0].PRICE)).round(4)
+                tmpMergDt[0].TOTAL = Number((((tmpMergDt[0].QUANTITY * tmpMergDt[0].PRICE) - tmpMergDt[0].DISCOUNT) + tmpMergDt[0].VAT)).round(2)
+                tmpMergDt[0].TOTALHT =  Number((tmpMergDt[0].AMOUNT - tmpMergDt[0].DISCOUNT)).round(2)
+                this.calculateTotal()
+                //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
+                await this.itemRelated(pData.GUID,tmpMergDt[0].QUANTITY)
+                //*****************************************/
                 App.instance.setState({isExecute:false})
-                await this.msgCustomerNotFound.show().then(async (e) =>
-                {
-                    if(e == 'btn01' && this.checkCustomer.value == true)
-                    {
-                        this.customerControl = false
-                        return
-                    }
-                    if(e == 'btn02')
-                    {
-                        tmpCustomerBtn = e
-                        await this.grdRebtInv.devGrid.deleteRow(0)
-                        if(this.checkCustomer.value == true)
-                        {
-                            this.customerClear = true
-                        }
-                        return 
-                    }
-                })
-                if(tmpCustomerBtn == 'btn02')
-                {
-                    return
-                }
+                return
             }
-        }
-        
-        if(typeof pData.ITEM_TYPE == 'undefined')
-        {
-            let tmpTypeQuery = 
+            //******************************************************************************************************************/
+            if(pIndex == null)
             {
-                query :"SELECT TYPE FROM ITEMS WHERE GUID = @GUID ",
+                let tmpDocItems = {...this.docObj.docItems.empty}
+                tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+                tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+                tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
+                tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
+                tmpDocItems.REF = this.docObj.dt()[0].REF
+                tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+                tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+                tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+                tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
+                this.docObj.docItems.addEmpty(tmpDocItems)
+                pIndex = this.docObj.docItems.dt().length - 1
+            }
+    
+            let tmpGrpQuery = 
+            {
+                query :"SELECT ORGINS,UNIT_SHORT,ISNULL((SELECT top 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID AND ITEM_UNIT_VW_01.TYPE = 1),1) AS SUB_FACTOR, " +
+                 "ISNULL((SELECT top 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID AND ITEM_UNIT_VW_01.TYPE = 1),'') AS SUB_SYMBOL FROM ITEMS_VW_01 WHERE GUID = @GUID ",
                 param : ['GUID:string|50'],
                 value : [pData.GUID]
             }
-            let tmpType = await this.core.sql.execute(tmpTypeQuery) 
-            if(tmpType.result.recordset.length > 0)
+            let tmpGrpData = await this.core.sql.execute(tmpGrpQuery) 
+            if(tmpGrpData.result.recordset.length > 0)
             {
-                pData.ITEM_TYPE = tmpType.result.recordset[0].TYPE
+                this.docObj.docItems.dt()[pIndex].ORIGIN = tmpGrpData.result.recordset[0].ORGINS
+                this.docObj.docItems.dt()[pIndex].SUB_FACTOR = tmpGrpData.result.recordset[0].SUB_FACTOR
+                this.docObj.docItems.dt()[pIndex].SUB_SYMBOL = tmpGrpData.result.recordset[0].SUB_SYMBOL
+                this.docObj.docItems.dt()[pIndex].UNIT_SHORT = tmpGrpData.result.recordset[0].UNIT_SHORT
             }
-        }
-
-        this.docObj.docItems.dt()[pIndex].ITEM_CODE = pData.CODE
-        this.docObj.docItems.dt()[pIndex].ITEM = pData.GUID
-        this.docObj.docItems.dt()[pIndex].ITEM_TYPE = pData.ITEM_TYPE
-        this.docObj.docItems.dt()[pIndex].VAT_RATE = pData.VAT
-        this.docObj.docItems.dt()[pIndex].ITEM_NAME = pData.NAME
-        this.docObj.docItems.dt()[pIndex].UNIT = pData.UNIT
-        this.docObj.docItems.dt()[pIndex].DISCOUNT = 0
-        this.docObj.docItems.dt()[pIndex].DISCOUNT_RATE = 0
-        this.docObj.docItems.dt()[pIndex].QUANTITY = pQuantity
-        this.docObj.docItems.dt()[pIndex].SUB_QUANTITY = pQuantity * this.docObj.docItems.dt()[pIndex].SUB_FACTOR
-        let tmpQuery = 
-        {
-            query :"SELECT dbo.[FN_CUSTOMER_PRICE](@GUID,@CUSTOMER,@QUANTITY,GETDATE()) AS PRICE",
-            param : ['GUID:string|50','CUSTOMER:string|50','QUANTITY:float'],
-            value : [pData.GUID,this.docObj.dt()[0].INPUT,pQuantity]
-        }
-        let tmpData = await this.core.sql.execute(tmpQuery) 
-        if(tmpData.result.recordset.length > 0)
-        {
-            this.docObj.docItems.dt()[pIndex].PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4))
-            this.docObj.docItems.dt()[pIndex].VAT = parseFloat((tmpData.result.recordset[0].PRICE * (this.docObj.docItems.dt()[pIndex].VAT_RATE / 100) * pQuantity).toFixed(6))
-            this.docObj.docItems.dt()[pIndex].AMOUNT = parseFloat((tmpData.result.recordset[0].PRICE  * pQuantity)).round(2)
-            this.docObj.docItems.dt()[pIndex].TOTAL = Number(((tmpData.result.recordset[0].PRICE * pQuantity) + this.docObj.docItems.dt()[pIndex].VAT)).round(2)
-            this.docObj.docItems.dt()[pIndex].TOTALHT = Number((this.docObj.docItems.dt()[pIndex].AMOUNT - this.docObj.docItems.dt()[pIndex].DISCOUNT)).round(2)
-            this.docObj.docItems.dt()[pIndex].SUB_PRICE = Number(parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4)) / this.docObj.docItems.dt()[pIndex].SUB_FACTOR).round(2)
-            this.calculateTotal()
-        }
-        //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
-        await this.itemRelated(pData.GUID,pQuantity)
-        //*****************************************/
-        App.instance.setState({isExecute:false})
+    
+            if(this.customerControl == true)
+            {
+                let tmpCheckQuery = 
+                {
+                    query :"SELECT MULTICODE,(SELECT [dbo].[FN_CUSTOMER_PRICE](ITEM_GUID,CUSTOMER_GUID,@QUANTITY,GETDATE())) AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID",
+                    param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
+                    value : [pData.CODE,this.docObj.dt()[0].INPUT,pQuantity]
+                }
+                let tmpCheckData = await this.core.sql.execute(tmpCheckQuery) 
+                if(tmpCheckData.result.recordset.length == 0)
+                {   
+                    let tmpCustomerBtn = ''
+                    if(this.customerClear == true)
+                    {
+                        await this.grdRebtInv.devGrid.deleteRow(0)
+                        resolve()
+                        return 
+                    }
+                    App.instance.setState({isExecute:false})
+                    await this.msgCustomerNotFound.show().then(async (e) =>
+                    {
+                        if(e == 'btn01' && this.checkCustomer.value == true)
+                        {
+                            this.customerControl = false
+                            resolve()
+                            return
+                        }
+                        if(e == 'btn02')
+                        {
+                            tmpCustomerBtn = e
+                            await this.grdRebtInv.devGrid.deleteRow(0)
+                            if(this.checkCustomer.value == true)
+                            {
+                                this.customerClear = true
+                            }
+                            resolve()
+                            return 
+                        }
+                    })
+                    if(tmpCustomerBtn == 'btn02')
+                    {
+                        resolve
+                        return
+                    }
+                }
+            }
+            
+            if(typeof pData.ITEM_TYPE == 'undefined')
+            {
+                let tmpTypeQuery = 
+                {
+                    query :"SELECT TYPE FROM ITEMS WHERE GUID = @GUID ",
+                    param : ['GUID:string|50'],
+                    value : [pData.GUID]
+                }
+                let tmpType = await this.core.sql.execute(tmpTypeQuery) 
+                if(tmpType.result.recordset.length > 0)
+                {
+                    pData.ITEM_TYPE = tmpType.result.recordset[0].TYPE
+                }
+            }
+    
+            this.docObj.docItems.dt()[pIndex].ITEM_CODE = pData.CODE
+            this.docObj.docItems.dt()[pIndex].ITEM = pData.GUID
+            this.docObj.docItems.dt()[pIndex].ITEM_TYPE = pData.ITEM_TYPE
+            this.docObj.docItems.dt()[pIndex].VAT_RATE = pData.VAT
+            this.docObj.docItems.dt()[pIndex].ITEM_NAME = pData.NAME
+            this.docObj.docItems.dt()[pIndex].UNIT = pData.UNIT
+            this.docObj.docItems.dt()[pIndex].DISCOUNT = 0
+            this.docObj.docItems.dt()[pIndex].DISCOUNT_RATE = 0
+            this.docObj.docItems.dt()[pIndex].QUANTITY = pQuantity
+            this.docObj.docItems.dt()[pIndex].SUB_QUANTITY = pQuantity * this.docObj.docItems.dt()[pIndex].SUB_FACTOR
+            let tmpQuery = 
+            {
+                query :"SELECT dbo.[FN_CUSTOMER_PRICE](@GUID,@CUSTOMER,@QUANTITY,GETDATE()) AS PRICE",
+                param : ['GUID:string|50','CUSTOMER:string|50','QUANTITY:float'],
+                value : [pData.GUID,this.docObj.dt()[0].INPUT,pQuantity]
+            }
+            let tmpData = await this.core.sql.execute(tmpQuery) 
+            if(tmpData.result.recordset.length > 0)
+            {
+                this.docObj.docItems.dt()[pIndex].PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4))
+                this.docObj.docItems.dt()[pIndex].VAT = parseFloat((tmpData.result.recordset[0].PRICE * (this.docObj.docItems.dt()[pIndex].VAT_RATE / 100) * pQuantity).toFixed(6))
+                this.docObj.docItems.dt()[pIndex].AMOUNT = parseFloat((tmpData.result.recordset[0].PRICE  * pQuantity)).round(2)
+                this.docObj.docItems.dt()[pIndex].TOTAL = Number(((tmpData.result.recordset[0].PRICE * pQuantity) + this.docObj.docItems.dt()[pIndex].VAT)).round(2)
+                this.docObj.docItems.dt()[pIndex].TOTALHT = Number((this.docObj.docItems.dt()[pIndex].AMOUNT - this.docObj.docItems.dt()[pIndex].DISCOUNT)).round(2)
+                this.docObj.docItems.dt()[pIndex].SUB_PRICE = Number(parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4)) / this.docObj.docItems.dt()[pIndex].SUB_FACTOR).round(2)
+                this.calculateTotal()
+            }
+            //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
+            await this.itemRelated(pData.GUID,pQuantity)
+            //*****************************************/
+            App.instance.setState({isExecute:false})
+            resolve()
+        })
     }
     async getDispatch()
     {
@@ -671,7 +668,6 @@ export default class rebateInvoice extends DocBase
         this.combineNew = false
         for (let i = 0; i < this.multiItemData.length; i++) 
         {
-            await this.core.util.waitUntil(100)
             await this.addItem(this.multiItemData[i],null,this.multiItemData[i].QUANTITY)
             this.popMultiItem.hide()
         }
@@ -1300,18 +1296,12 @@ export default class rebateInvoice extends DocBase
                                                             this.combineControl = true
                                                             this.combineNew = false
         
-                                                            if(data.length == 1)
+                                                            this.grdRebtInv.devGrid.beginUpdate()
+                                                            for (let i = 0; i < data.length; i++) 
                                                             {
-                                                                await this.addItem(data[0],null)
+                                                                await this.addItem(data[i],null)
                                                             }
-                                                            else if(data.length > 1)
-                                                            {
-                                                                for (let i = 0; i < data.length; i++) 
-                                                                {
-                                                                    await this.core.util.waitUntil(100)
-                                                                    await this.addItem(data[i],null)
-                                                                }
-                                                            }
+                                                            this.grdRebtInv.devGrid.endUpdate()
                                                         }
                                                     }
                                                     await this.pg_txtBarcode.setVal(this.txtBarcode.value)
@@ -1356,20 +1346,16 @@ export default class rebateInvoice extends DocBase
                                                 this.customerClear = false
                                                 this.combineControl = true
                                                 this.combineNew = false
-                                                if(data.length == 1)
+                                                
+                                                this.msgQuantity.tmpData = data[0]
+                                                await this.msgQuantity.show();
+                                                await this.addItem(data[0],null)
+                                                this.grdRebtInv.devGrid.beginUpdate()
+                                                for (let i = 0; i < data.length; i++) 
                                                 {
-                                                    this.msgQuantity.tmpData = data[0]
-                                                    await this.msgQuantity.show();
-                                                    await this.addItem(data[0],null)
+                                                    await this.addItem(data[i],null)
                                                 }
-                                                else if(data.length > 1)
-                                                {
-                                                    for (let i = 0; i < data.length; i++) 
-                                                    {
-                                                        await this.core.util.waitUntil(100)
-                                                        await this.addItem(data[i],null)
-                                                    }
-                                                }
+                                                this.grdRebtInv.devGrid.endUpdate()
                                             }
                                             await this.pg_txtItemsCode.setVal(this.txtBarcode.value)
                                         }
@@ -1425,18 +1411,12 @@ export default class rebateInvoice extends DocBase
                                                         this.customerClear = false
                                                         this.combineControl = true
                                                         this.combineNew = false
-                                                        if(data.length == 1)
+                                                        this.grdRebtInv.devGrid.beginUpdate()
+                                                        for (let i = 0; i < data.length; i++) 
                                                         {
-                                                            await this.addItem(data[0],null)
+                                                            await this.addItem(data[i],null)
                                                         }
-                                                        else if(data.length > 1)
-                                                        {
-                                                            for (let i = 0; i < data.length; i++) 
-                                                            {
-                                                                await this.core.util.waitUntil(100)
-                                                                await this.addItem(data[i],null)
-                                                            }
-                                                        }
+                                                        this.grdRebtInv.devGrid.endUpdate()
                                                     }
                                                     this.pg_txtItemsCode.show()
                                                     return
@@ -1448,18 +1428,12 @@ export default class rebateInvoice extends DocBase
                                                 this.customerClear = false
                                                 this.combineControl = true
                                                 this.combineNew = false
-                                                if(data.length == 1)
+                                                this.grdRebtInv.devGrid.beginUpdate()
+                                                for (let i = 0; i < data.length; i++) 
                                                 {
-                                                    await this.addItem(data[0],null)
+                                                    await this.addItem(data[i],null)
                                                 }
-                                                else if(data.length > 1)
-                                                {
-                                                    for (let i = 0; i < data.length; i++) 
-                                                    {
-                                                        await this.core.util.waitUntil(100)
-                                                        await this.addItem(data[i],null)
-                                                    }
-                                                }
+                                                this.grdRebtInv.devGrid.endUpdate()
                                             }
                                             this.pg_txtItemsCode.show()
                                         }
@@ -1490,18 +1464,13 @@ export default class rebateInvoice extends DocBase
                                                         this.customerClear = false
                                                         this.combineControl = true
                                                         this.combineNew = false
-                                                        if(data.length == 1)
+                                                        this.grdRebtInv.devGrid.beginUpdate()
+                                                        for (let i = 0; i < data.length; i++) 
                                                         {
-                                                            await this.addItem(data[0],null)
+                                                            await this.core.util.waitUntil(100)
+                                                            await this.addItem(data[i],null)
                                                         }
-                                                        else if(data.length > 1)
-                                                        {
-                                                            for (let i = 0; i < data.length; i++) 
-                                                            {
-                                                                await this.core.util.waitUntil(100)
-                                                                await this.addItem(data[i],null)
-                                                            }
-                                                        }
+                                                        this.grdRebtInv.devGrid.endUpdate()
                                                     }
                                                     this.pg_service.show()
                                                     return
@@ -1514,18 +1483,12 @@ export default class rebateInvoice extends DocBase
                                                 this.customerClear = false
                                                 this.combineControl = true
                                                 this.combineNew = false
-                                                if(data.length == 1)
+                                                this.grdRebtInv.devGrid.beginUpdate()
+                                                for (let i = 0; i < data.length; i++) 
                                                 {
-                                                    await this.addItem(data[0],null)
+                                                    await this.addItem(data[i],null)
                                                 }
-                                                else if(data.length > 1)
-                                                {
-                                                    for (let i = 0; i < data.length; i++) 
-                                                    {
-                                                        await this.core.util.waitUntil(100)
-                                                        await this.addItem(data[i],null)
-                                                    }
-                                                }
+                                                this.grdRebtInv.devGrid.endUpdate()
                                             }
                                             this.pg_service.show()   
                                         }
