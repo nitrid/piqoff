@@ -60,6 +60,7 @@ export const langTr =
         purchasePriceUp : "Alış Fiyatı Artan Ürün Adeti",
         salePriceUp : "Satış Fiyatı Artan Ürün Adeti",
         salesTotalDetail : "Satış Detayı",
+        detail : "Detay",
         grdSalesVatRate :
         {
             vatRate : "KDV %",

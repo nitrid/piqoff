@@ -59,6 +59,7 @@ export const langFr =
         purchasePriceUp : "Qte Prix d'Achat Augmenté",
         salePriceUp : "Qte Prix de Vente Augmenté",
         salesTotalDetail : "Détail des Ventes",
+        detail : "Détail",
         grdSalesVatRate :
         {
             vatRate : "TVA %",
