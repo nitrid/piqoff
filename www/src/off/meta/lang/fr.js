@@ -4827,16 +4827,16 @@ export const langFr =
         },
         msgCustomerLock: 
         {
-            title: "Dikkat", //BAK
-            btn01: "Tamam", //BAK
-            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+            title: "Attention", 
+            btn01: "OK", 
+            msg: "Impossible de changer le fournisseur après avoir ajouter le produit !" 
         },
     },
     ftr_02_002 : // "Facture de vente"
     {
-        txtRefRefno : "Réf.-Réf no:",
+        txtRefRefno : "Réf.-Réf no",
         cmbDepot: "Réserve",
-        txtCustomerCode : "Sélection Document",
+        txtCustomerCode : "Sélection Client",
         txtCustomerName : "Nom Client",
         dtDocDate : "Date",
         txtAmount : "Total" ,
@@ -5407,9 +5407,9 @@ export const langFr =
         },
         msgCustomerLock: 
         {
-            title: "Dikkat", //BAK
-            btn01: "Tamam", //BAK
-            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+            title: "Attention", 
+            btn01: "OK", 
+            msg: "Impossible de changer le client après avoir ajouter le produit !" 
         },
     },
     ftr_02_003 : // "İade Faturası"
@@ -5890,9 +5890,9 @@ export const langFr =
         },
         msgCustomerLock: 
         {
-            title: "Dikkat", //BAK
-            btn01: "Tamam", //BAK
-            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+            title: "Attention", 
+            btn01: "OK", 
+            msg: "Impossible de changer le fournisseur après avoir ajouter le produit !" 
         },
     },
     ftr_02_004 : // "Fiyat Farkı Faturası"
@@ -6348,9 +6348,9 @@ export const langFr =
         },
         msgCustomerLock: 
         {
-            title: "Dikkat", //BAK
-            btn01: "Tamam", //BAK
-            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+            title: "Attention", 
+            btn01: "OK", 
+            msg: "Impossible de changer le fournisseur après avoir ajouter le produit !" 
         },
     },
     ftr_02_005 : // "Şube Satış Faturası"
@@ -6854,9 +6854,9 @@ export const langFr =
         },
         msgCustomerLock: 
         {
-            title: "Dikkat", //BAK
-            btn01: "Tamam", //BAK
-            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+            title: "Attention", 
+            btn01: "OK", 
+            msg: "Impossible de changer le magasin après avoir ajouter le produit !" 
         },
     },
     ftr_02_006 : // "Fiyat Farkı Alış Faturası"
@@ -7788,9 +7788,9 @@ export const langFr =
         },
         msgCustomerLock: 
         {
-            title: "Dikkat", //BAK
-            btn01: "Tamam", //BAK
-            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+            title: "Attention", 
+            btn01: "OK", 
+            msg: "Impossible de changer le fournisseur après avoir ajouter le produit !" 
         },
     },
     ftr_02_008 : // "Şube Alış Faturası"
@@ -8290,9 +8290,9 @@ export const langFr =
         },
         msgCustomerLock: 
         {
-            title: "Dikkat", //BAK
-            btn01: "Tamam", //BAK
-            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+            title: "Attention", //BAK
+            btn01: "OK", //BAK
+            msg: "Impossible de changer le magasin après avoir ajouter le produit !" //BAK
         },
     },
     ftr_02_009 : // "Fire Alış Faturası"
@@ -8783,9 +8783,9 @@ export const langFr =
         },
         msgCustomerLock: 
         {
-            title: "Dikkat", //BAK
-            btn01: "Tamam", //BAK
-            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+            title: "Attention", //BAK
+            btn01: "OK", //BAK
+            msg: "Impossible de changer le client après avoir ajouter le produit !" //BAK
         },
     },
     ftr_04_001 : // "Proforma Fiyat Farkı Faturası" 
@@ -9163,9 +9163,9 @@ export const langFr =
         },
         msgCustomerLock: 
         {
-            title: "Dikkat", //BAK
-            btn01: "Tamam", //BAK
-            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+            title: "Attention", //BAK
+            btn01: "OK", //BAK
+            msg: "Impossible de changer le client après avoir ajouter le produit !" //BAK
         },
     },
     ftr_04_002 : // "Proforma Satış Faturası" 
@@ -9614,9 +9614,9 @@ export const langFr =
         },
         msgCustomerLock: 
         {
-            title: "Dikkat", //BAK
-            btn01: "Tamam", //BAK
-            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+            title: "Attention", //BAK
+            btn01: "OK", //BAK
+            msg: "Impossible de changer le client après avoir ajouter le produit !" //BAK
         },
     },    
     ftr_04_003 : // "Proforma Alış Faturası"
@@ -10160,9 +10160,9 @@ export const langFr =
         },
         msgCustomerLock: 
         {
-            title: "Dikkat", //BAK
-            btn01: "Tamam", //BAK
-            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+            title: "Attention", //BAK
+            btn01: "OK", //BAK
+            msg: "Impossible de changer le fournisseur après avoir ajouter le produit !" //BAK
         },
     },
     ftr_04_004 : // "Proforma İade Faturası"
@@ -10555,9 +10555,9 @@ export const langFr =
         },
         msgCustomerLock: 
         {
-            title: "Dikkat", //BAK
-            btn01: "Tamam", //BAK
-            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+            title: "Attention", //BAK
+            btn01: "OK", //BAK
+            msg: "Impossible de changer le client après avoir ajouter le produit !" //BAK
         },
     },
     ftr_04_005 : // "Şube Satış Faturası"
@@ -11003,9 +11003,9 @@ export const langFr =
         },
         msgCustomerLock: 
         {
-            title: "Dikkat", //BAK
-            btn01: "Tamam", //BAK
-            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+            title: "Attention", //BAK
+            btn01: "OK", //BAK
+            msg: "Impossible de changer le magasin après avoir ajouter le produit !" //BAK
         },
     },
     promo_01_001: //  "Promosyon Tanımları"
@@ -11785,9 +11785,9 @@ export const langFr =
         },
         msgCustomerLock: 
         {
-            title: "Dikkat", //BAK
-            btn01: "Tamam", //BAK
-            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+            title: "Attention", //BAK
+            btn01: "OK", //BAK
+            msg: "Impossible de changer le fournisseur après avoir ajouter le produit !" //BAK
         },
     },
     irs_02_002 : // Satış İrsaliyesi"
@@ -12229,9 +12229,9 @@ export const langFr =
         },
         msgCustomerLock: 
         {
-            title: "Dikkat", //BAK
-            btn01: "Tamam", //BAK
-            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+            title: "Attention", //BAK
+            btn01: "OK", //BAK
+            msg: "Impossible de changer le client après avoir ajouter le produit !" //BAK
         },
     },
     irs_02_003 : // "İade İrsaliyesi"
@@ -12592,9 +12592,9 @@ export const langFr =
         txtDiscountPer3 : "3. Remise % ", 
         msgCustomerLock: 
         {
-            title: "Dikkat", //BAK
-            btn01: "Tamam", //BAK
-            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+            title: "Attention", //BAK
+            btn01: "OK", //BAK
+            msg: "Impossible de changer le fournisseur après avoir ajouter le produit !" //BAK
         },
     },
     irs_02_004 : // Şube Satış İrsaliyesi"
@@ -13012,9 +13012,9 @@ export const langFr =
         txtDiscountPer3 : "3. Remise % ",  
         msgCustomerLock: 
         {
-            title: "Dikkat", //BAK
-            btn01: "Tamam", //BAK
-            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+            title: "Attention", //BAK
+            btn01: "OK", //BAK
+            msg: "Impossible de changer le client après avoir ajouter le produit !" //BAK
         },
     },
     irs_02_005 : // "İade Alış İrsaliyesi"
@@ -13377,9 +13377,9 @@ export const langFr =
         txtDiscountPer3 : "3. Remise % ",  
         msgCustomerLock: 
         {
-            title: "Dikkat", //BAK
-            btn01: "Tamam", //BAK
-            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+            title: "Attention", //BAK
+            btn01: "OK", //BAK
+            msg: "Impossible de changer le client après avoir ajouter le produit !" //BAK
         },
     },
     irs_02_006 : // Şube Alış İrsaliyesi"
@@ -13779,9 +13779,9 @@ export const langFr =
         txtDiscountPer3 : "3. Remise % ", 
         msgCustomerLock: 
         {
-            title: "Dikkat", //BAK
-            btn01: "Tamam", //BAK
-            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+            title: "Attention", //BAK
+            btn01: "OK", //BAK
+            msg: "Impossible de changer le magasin après avoir ajouter le produit !" //BAK
         },
     },
     sip_01_001 : // "Alış Sipariş Listesi"
@@ -14247,9 +14247,9 @@ export const langFr =
         txtDiscountPer3 : "3. Remise % ", 
         msgCustomerLock: 
         {
-            title: "Dikkat", //BAK
-            btn01: "Tamam", //BAK
-            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+            title: "Attention", //BAK
+            btn01: "OK", //BAK
+            msg: "Impossible de changer le fournisseur après avoir ajouter le produit !" //BAK
         },
     },
     sip_02_002 : // "Satış Sipariş"
@@ -14648,9 +14648,9 @@ export const langFr =
         },
         msgCustomerLock: 
         {
-            title: "Dikkat", //BAK
-            btn01: "Tamam", //BAK
-            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+            title: "Attention", //BAK
+            btn01: "OK", //BAK
+            msg: "Impossible de changer le client après avoir ajouter le produit !" //BAK
         },
     },
     sip_02_003 : // "Pos Satış Sipariş"
@@ -15067,9 +15067,9 @@ export const langFr =
         },
         msgCustomerLock: 
         {
-            title: "Dikkat", //BAK
-            btn01: "Tamam", //BAK
-            msg: "Ürün Eklendikten Sonra Müşteri Değiştirilemez !" //BAK
+            title: "Attention", //BAK
+            btn01: "OK", //BAK
+            msg: "Impossible de changer le client après avoir ajouter le produit !" //BAK
         },
     },
     sip_04_001 : // "Sipariş Ayrıştırma"
@@ -16648,8 +16648,8 @@ export const langFr =
     {
         txtTitle : "Nom de l'entreprise",
         txtBrandName : "Nom d'enseigne",
-        txtCustomerName : "Nom autorisé",
-        txtCustomerLastname : "Nom de famille autorisé",
+        txtCustomerName : "Prénom Gérant",
+        txtCustomerLastname : "Nom Gérant",
         txtAddress1 : "Adresse",
         txtAddress2 : "Adresse 2",
         cmbZipCode : "Code Postal",
@@ -16659,10 +16659,10 @@ export const langFr =
         txtEmail : "E-Mail",
         txtWeb : "Web Site",
         txtSiretId : "Siret No",
-        txtApeCode : "App Code",
-        txtTaxOffice : "Tax Office",
-        txtTaxNo : "Tax No",
-        txtIntVatNo : "Int. Tax No",
+        txtApeCode : "Code APE",
+        txtTaxOffice : "Impôt",
+        txtTaxNo : "Taxe No",
+        txtIntVatNo : "EORI",
         txtSirenNo : "Siren No",
         txtRSC : "RCS",
         txtCapital : "Capital",
@@ -16671,7 +16671,7 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Êtes-vous sûr de vouloir enregistrer? "
+            msg: "Êtes-vous sûr(e) de vouloir enregistrer? "
         },
         msgSaveResult:
         {
@@ -17522,8 +17522,8 @@ export const langFr =
         },
         msgCustomerSelect:
         {
-            title: "Dikkat",
-            btn01: "Tamam",
+            title: "Attention",
+            btn01: "OK",
             msg: "Lütfen Müşteri Seçiniz !"
         },
     },

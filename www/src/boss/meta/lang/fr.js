@@ -51,8 +51,20 @@ export const langFr =
         dailyUseLoyalty : "Montant Points Utilisés",
         useDiscount : "Montant Remises",
         useDiscountTicket : "Total Ticket Remises",
-        purchaseTotal : "Toplam Alış Tutarı",
-        purchasePrice : "Alış Fiyatı Değişen Ürün Adeti",
-        salePrice : "Satış Fiyatı değişen Ürün Adeti"
+        purchaseTotal : "Total D'Achat",
+        purchasePrice : "Qte Prix d'Achat Changé", 
+        salePrice : "Qte Prix de Vente Changé",
+        purchasePriceDown : "Qte Prix d'Achat Diminué",
+        salePriceDown : "Qte Prix de Vente Diminué",
+        purchasePriceUp : "Qte Prix d'Achat Augmenté",
+        salePriceUp : "Qte Prix de Vente Augmenté",
+        salesTotalDetail : "Détail des Ventes",
+        grdSalesVatRate :
+        {
+            vatRate : "TVA %",
+            amount : "HT",
+            vat : "TVA",
+            total : "TTC"
+        }
     },
 }
