@@ -5,6 +5,7 @@ import fs from 'fs'
 import rsa from 'jsrsasign'
 import { pem } from '../pem.js'
 import nodemailer from  'nodemailer'
+import mailSettings from '../www/src/off/pages/setting/officialSettings/mailSettings.js'
 
 class mailer
 {
@@ -15,59 +16,67 @@ class mailer
         this.connEvt = this.connEvt.bind(this)
         this.core.socket.on('connection',this.connEvt)
     }
+
     connEvt(pSocket)
     {
+        console.log(5)
         pSocket.on('mailer',async (pParam,pCallback) =>
         {
             pCallback(await this.mailSend(pParam))
         })
     }
+
     mailSend(pData)
     {
+        console.log(6)
+       
         return new Promise(resolve =>
         {
+            console.log(pData)
             let tmpAttach = [];
             if(typeof pData.attachName != 'undefined')
             {
                 tmpAttach = 
                 [
-                    {  
+                    {
                         filename: pData.attachName,
                         content: pData.attachData,
                         encoding: 'base64'
                     }
                 ]
             }
-
+            console.log(pData)
             let transporter = nodemailer.createTransport(
             {
-                //service: 'imap.ionos.fr',
-                host: 'smtp.ionos.fr',
-                port: 465,
+
+                //service: pData.service,
+                host:  pData.host,
+                port: pData.port,
                 secure: true,
                 auth: 
                 {
-                    user: "vente.esseylesnancy@ppsupermarche.fr",
-                    pass: "24Prodorplus69*/"
+                    user:  pData.userMail,
+                    pass: pData.password,
                 },
                 //tls : { rejectUnauthorized: false }
-                });
-                var mailOptions = 
-                {
-                    from: "vente.longeville@ppsupermarche.fr",
-                    to: pData.sendMail,
-                    subject: pData.subject,
-                    html:pData.html,
-                    text:pData.text,
-                    attachments: tmpAttach
-                };
-                transporter.sendMail(mailOptions, function(error, info){
-                if (error) 
+            });
+            var mailOptions =
+            {
+                from: pData.userMail,
+                to: pData.sendMail,
+                subject: pData.subject,
+                html:pData.html,
+                text:pData.text,
+                attachments: tmpAttach
+            };
+            transporter.sendMail(mailOptions, function(error, info)
+            {
+                if (error)
                 {
                     console.log(error)
                     resolve(error);
-                } 
-                else 
+                }
+                else
                 {
                     resolve(0);
                 }
@@ -77,4 +86,3 @@ class mailer
 }
 
 export const _mailer = new mailer()
-

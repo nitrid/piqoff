@@ -623,7 +623,7 @@ export default class purchaseOffer extends DocBase
                                     <NdButton id="btnNew" parent={this} icon="file" type="default"
                                     onClick={()=>
                                     {
-                                        this.init(); 
+                                        this.init();
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
@@ -690,7 +690,7 @@ export default class purchaseOffer extends DocBase
                                                     await dialog(tmpConfObj1);
                                                 }
                                             }
-                                        }                              
+                                        }
                                         else
                                         {
                                             let tmpConfObj =
@@ -701,7 +701,7 @@ export default class purchaseOffer extends DocBase
                                             }
                                             
                                             await dialog(tmpConfObj);
-                                        }                                                 
+                                        }
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
@@ -721,9 +721,9 @@ export default class purchaseOffer extends DocBase
                                             await dialog(tmpConfObj);
                                             return
                                         }
-                                        for (let i = 0; i < this.docObj.docOffers.dt().length; i++) 
+                                        for (let i = 0; i < this.docObj.docOffers.dt().length; i++)
                                         {
-                                          if(this.docObj.docOffers.dt()[i].ORDER_LINE_GUID != '00000000-0000-0000-0000-000000000000')   
+                                          if(this.docObj.docOffers.dt()[i].ORDER_LINE_GUID != '00000000-0000-0000-0000-000000000000')
                                           {
                                             let tmpConfObj =
                                             {
@@ -772,7 +772,7 @@ export default class purchaseOffer extends DocBase
                                                 await this.grdPurcoffers.devGrid.deleteRow(this.docObj.docOffers.dt().length - 1)
                                             }
                                             if((await this.docObj.save()) == 0)
-                                            {                                                    
+                                            {
                                                 let tmpConfObj =
                                                 {
                                                     id:'msgLocked',showTitle:true,title:this.t("msgLocked.title"),showCloseButton:true,width:'500px',height:'200px',

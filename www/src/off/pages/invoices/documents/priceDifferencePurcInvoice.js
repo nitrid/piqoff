@@ -1821,7 +1821,7 @@ export default class priceDifferenceInvoice extends DocBase
                                     </div>
                                     <div className="row py-2">
                                         <div className='col-6'>
-                                            <NdButton text={this.t("btnView")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmPurcOrderPrint" + this.tabIndex}
+                                            <NdButton text={this.t("btnView")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmPrintPop" + this.tabIndex}
                                             onClick={async (e)=>
                                             {       
                                                 if(e.validationGroup.validate().status == "valid")
@@ -1855,7 +1855,7 @@ export default class priceDifferenceInvoice extends DocBase
                                             }}/>
                                         </div>
                                         <div className='col-6'>
-                                                <NdButton text={this.t("btnMailsend")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmPurcOrderPrint" + this.tabIndex}
+                                                <NdButton text={this.t("btnMailsend")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmPrintPop" + this.tabIndex}
                                                 onClick={async (e)=>
                                                 {    
                                                     if(e.validationGroup.validate().status == "valid")
@@ -1893,13 +1893,27 @@ export default class priceDifferenceInvoice extends DocBase
                         showTitle={true}
                         title={this.t("popMailSend.title")}
                         container={"#root"} 
-                        width={'600'}
+                        width={'650'}
                         height={'600'}
                         position={{of:'#root'}}
                         deferRendering={true}
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
+                                    <Label text={"popMailSend.txtMailSubject"} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbMailAddress"
+                                    displayExpr="MAIL_ADDRESS"                       
+                                    valueExpr="GUID"
+                                    value=""
+                                    searchEnabled={true}
+                                    data={{source:{select:{query : "SELECT GUID,MAIL_ADDRESS FROM [dbo].[MAIL_SETTINGS]"},sql:this.core.sql}}}
+                                    param={this.param.filter({ELEMENT:'cmbMailAddress',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'cmbMailAddress',USERS:this.user.CODE})}
+                                    >
+                                    </NdSelectBox>
+                                </Item>
+                                <Item>
+                                        
                                     <Label text={this.t("popMailSend.txtMailSubject")} alignment="right" />
                                     <NdTextBox id="txtMailSubject" parent={this} simple={true}
                                     maxLength={32}
@@ -1940,8 +1954,20 @@ export default class priceDifferenceInvoice extends DocBase
                                                     App.instance.setState({isExecute:true})
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
                                                     App.instance.setState({isExecute:false})
+                                                    console.log(this.cmbMailAddress.value)
+                                                    let tmpMailQuery = 
+                                                    {
+                                                        query: "SELECT * FROM  [dbo].[MAIL_SETTINGS] WHERE GUID = @GUID" ,
+                                                        param:  ['GUID:string|50'],
+                                                        value:  [this.cmbMailAddress.value]
+                                                    }
+                                                    console.log(1)
+                                                    let tmpMailAdress = await this.core.sql.execute(tmpMailQuery) 
+                                                    console.log(tmpMailAdress)
                                                     this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
                                                     {
+                                                    console.log(2)
+                                                    console.log(tmpMailAdress.result.recordset[0].MAIL_SMTP)
                                                         App.instance.setState({isExecute:true})
                                                         let tmpAttach = pResult.split('|')[1]
                                                         let tmpHtml = this.htmlEditor.value
@@ -1952,9 +1978,25 @@ export default class priceDifferenceInvoice extends DocBase
                                                         if(pResult.split('|')[0] != 'ERR')
                                                         {
                                                         }
-                                                        let tmpMailData = {html:tmpHtml,subject:this.txtMailSubject.value,sendMail:this.txtSendMail.value,attachName:"facture.pdf",attachData:tmpAttach,text:""}
+                                                        
+                                                        let tmpMailData = {html:tmpHtml,subject:this.txtMailSubject.value,sendMail:this.txtSendMail.value,attachName:"facture.pdf",attachData:tmpAttach,text:"",
+                                                                        service:tmpMailAdress.result.recordset[0].MAIL_SERVICE,
+                                                                        host:tmpMailAdress.result.recordset[0].MAIL_SMTP,
+                                                                        port:Number(tmpMailAdress.result.recordset[0].MAIL_PORT),
+                                                                        userMail:tmpMailAdress.result.recordset[0].MAIL_ADDRESS,
+                                                                        password:tmpMailAdress.result.recordset[0].MAIL_PASSWORD}
+                                                                        console.log('ggg')
+                                                                        console.log(tmpMailAdress.result.recordset[0].MAIL_SERVICE)
+                                                                        console.log(tmpMailAdress.result.recordset[0].MAIL_SMTP)
+                                                                        console.log(tmpMailAdress.result.recordset[0].MAIL_PORT)
+                                                                        console.log(tmpMailAdress.result.recordset[0].MAIL_ADDRESS)
+                                                                        console.log(tmpMailAdress.result.recordset[0].MAIL_PASSWORD)
+                                                                        console.log(tmpMailData)
+                                                                        console.log('ttt')
                                                         this.core.socket.emit('mailer',tmpMailData,async(pResult1) => 
                                                         {
+                                                         console.log(4)
+
                                                             App.instance.setState({isExecute:false})
                                                             let tmpConfObj1 =
                                                             {

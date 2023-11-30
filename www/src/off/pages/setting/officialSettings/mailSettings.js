@@ -65,7 +65,7 @@ export default class mailSettings extends React.PureComponent
         await this.mailDt.refresh();
         await this.grdMailSettings.dataRefresh({source:this.mailDt});
     }
-
+    
     render()
     {
         return(
