@@ -17282,10 +17282,10 @@ export const langFr =
             clmPosTicket : "T. Restaurant",   
             clmAdvance : "Fond de Caisse",   
             clmSafe : "Caisse",
-            clmDiffCash : "Nakit Fark",  // BAK
-            clmDiffCredit : "K.Kartı Fark",  // BAK
-            clmDiffCheck :"Çek Farkı",  // BAK
-            clmDiffTicket : "T.R Farkı"  // BAK
+            clmDiffCash : "Différence Espèce",  // BAK
+            clmDiffCredit : "Différence CB",  // BAK
+            clmDiffCheck :"Différence Chèque",  // BAK
+            clmDiffTicket : "Différence Ticket Restaurant"  // BAK
         },
     },
     pos_02_007 : // "Pos Avans Raporu", 
@@ -17471,43 +17471,43 @@ export const langFr =
     },
     pos_02_015 : // "Müşteri Bazlı Ürün Satış Raporu" //BAK
     {
-        btnGet : "Getir",
-        dtDate : "Tarih Aralığı",
-        txtCustomer : "Müşteri",
-        txtTotal : "Toplam",
+        btnGet : "Rechercher",
+        dtDate : "Période",
+        txtCustomer : "Client",
+        txtTotal : "Total",
         grdList: 
         {
-            cuserName: "O.Kullanıcı",
-            luserName: "D.Kullanıcı",
-            device: "Kasa",
+            cuserName: "Créer par",
+            luserName: "Modifier par",
+            device: "Caisse",
             ref: "Ref",
-            docDate: "Tarih",
-            itemCode: "Ürün Kodu",
-            itemName: "Ürün Adı",
-            itemGrpName: "Ürün Grubu",
-            barcode: "Barkodu",
-            clmQuantity: "Miktar",
-            unitShort: "Birim",
-            clmPrice : "Fiyat",
-            clmFAmount : "Vergisiz Tutar",
-            clmAmount : "Tutar",
-            clmDiscount : "İndirim",
-            clmLoyalty : "Sadakat İnd",
-            clmVat : "Vergi",
-            clmVatRate : "Vergi Oranı",
-            clmTotal : "Toplam"
+            docDate: "Date",
+            itemCode: "Code Produit",
+            itemName: "Nom Produit",
+            itemGrpName: "Groupe Produit",
+            barcode: "Code Barre",
+            clmQuantity: "Quantité",
+            unitShort: "Unité",
+            clmPrice : "Prix",
+            clmFAmount : "Total HT",
+            clmAmount : "Total",
+            clmDiscount : "Remise",
+            clmLoyalty : "Remise Fidélité",
+            clmVat : "TVA",
+            clmVatRate : "Taux TVA",
+            clmTotal : "ToTAL"
         },
         pg_txtCustomer:
         {
-            title: "Müşteri Seçim",
-            clmCode: "KODU",
-            clmName: "ADI"
+            title: "Choisir Client",
+            clmCode: "Code",
+            clmName: "Nom"
         },
         msgCustomerSelect:
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Lütfen Müşteri Seçiniz !"
+            msg: "Veuillez choisir un client !"
         },
     },
     pos_03_001 : // "Gün sonu"
