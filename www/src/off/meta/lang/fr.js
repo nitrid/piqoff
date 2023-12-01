@@ -327,7 +327,7 @@ export const langFr =
         promo_02_001: "Liste promotion",
         promo_02_002: "Liste Detaillée promotion",
         promo_03: "Rapports",
-        set : "Paramètre / Supplément",
+        set : "Paramètres supplémentaires",
         set_01 : "Coût et taxe annexe",
         set_01_001 : "Taxe sucre",
         set_01_002 : "Interfel",
