@@ -6202,6 +6202,7 @@ export const langTr =
             title : "Ürün Seçimi",
             clmCode :  "ÜRÜN KODU",
             clmName : "ÜRÜN ADI",
+            clmPrice : "Fiyat"
         },
         pg_dispatchGrid : 
         {
