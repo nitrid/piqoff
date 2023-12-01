@@ -365,7 +365,8 @@ export default class Dashboard extends React.PureComponent
                             groupBy : this.groupList,
                             select : 
                             {
-                                query : " SELECT *,(SELECT ITEM_NAME FROM POS_SALE_VW_01 WHERE GUID = POS_EXTRA_VW_01.LINE_GUID) AS NAME FROM POS_EXTRA_VW_01 WHERE TAG = 'PRICE DESC' AND CONVERT(nvarchar,CDATE,110) >= @FISRT_DATE AND CONVERT(nvarchar,CDATE,110) <= @LAST_DATE",
+                                query : " SELECT *,(SELECT ITEM_NAME FROM POS_SALE_VW_01 WHERE GUID = POS_EXTRA_VW_01.LINE_GUID),(SELECT PRICE FROM POS_SALE_VW_01 WHERE GUID = POS_EXTRA_VW_01.LINE_GUID) AS LAST_PRICE AS NAME "  + 
+                                "FROM POS_EXTRA_VW_01 WHERE TAG = 'PRICE DESC' AND CONVERT(nvarchar,CDATE,110) >= @FISRT_DATE AND CONVERT(nvarchar,CDATE,110) <= @LAST_DATE",
                                 param : ['FISRT_DATE:date','LAST_DATE:date'],
                                 value : [this.dtDate.startDate,this.dtDate.endDate]
                             },
@@ -449,7 +450,26 @@ export default class Dashboard extends React.PureComponent
                   <h5 className="card-title">{this.t("dailyRebateTicket")}</h5>
                 </div>
                 <div className="text-center">
-                  <AnimatedText value={parseFloat(this.state.dailyRebateTicket ? parseFloat(this.state.dailyRebateTicket) : 0)} type={'number'} />
+                  <AnimatedText value={parseFloat(this.state.dailyRebateTicket ? parseFloat(this.state.dailyRebateTicket) : 0)} type={'number'} onClicks={(async()=>
+                  {
+                    let tmpSource =
+                    {
+                        source : 
+                        {
+                            groupBy : this.groupList,
+                            select : 
+                            {
+                                query : " SELECT * FROM POS_SALE_VW_01 WHERE DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE  AND TYPE = 1 ",
+                                param : ['FISRT_DATE:date','LAST_DATE:date'],
+                                value : [this.dtDate.startDate,this.dtDate.endDate]
+                            },
+                            sql : this.core.sql
+                        }
+                    }
+                  
+                    await this.popRebateTicket.show()
+                    await this.grdRebateTicket.dataRefresh(tmpSource)
+                  }).bind(this)}/>
                 </div>
               </div>
             </div>
@@ -740,6 +760,7 @@ export default class Dashboard extends React.PureComponent
                       showRowLines={true}
                       showColumnLines={true}
                       showColumnHeaders={false}
+                      loadPanel={{enabled:true}}
                       height={"138px"} 
                       width={"100%"}
                       dbApply={false}
@@ -759,6 +780,7 @@ export default class Dashboard extends React.PureComponent
                       showRowLines={true}
                       showColumnLines={true}
                       showColumnHeaders={true}
+                      loadPanel={{enabled:true}}
                       height={"138px"} 
                       width={"100%"}
                       dbApply={false}
@@ -784,12 +806,14 @@ export default class Dashboard extends React.PureComponent
                       showRowLines={true}
                       showColumnLines={true}
                       showColumnHeaders={false}
+                      loadPanel={{enabled:true}}
                       height={"350px"} 
                       width={"100%"}
                       dbApply={false}
                       >
                           <Column dataField="NAME" width={250} alignment={"center"}/>
-                          <Column dataField="DATA" width={50} alignment={"center"}/>
+                          <Column dataField="DATA" width={50} alignment={"center"} format={"#,##0.00€"}/>
+                          <Column dataField="LAST_PRICE" width={50} alignment={"center"} format={"#,##0.00€"}/>
                           <Column dataField="DESCRIPTION" width={200} />                                                
                       </NdGrid>
                   </div>
@@ -808,6 +832,7 @@ export default class Dashboard extends React.PureComponent
                       showRowLines={true}
                       showColumnLines={true}
                       showColumnHeaders={false}
+                      loadPanel={{enabled:true}}
                       height={"350px"} 
                       width={"100%"}
                       dbApply={false}
@@ -831,11 +856,37 @@ export default class Dashboard extends React.PureComponent
                       showRowLines={true}
                       showColumnLines={true}
                       showColumnHeaders={false}
+                      loadPanel={{enabled:true}}
                       height={"350px"} 
                       width={"100%"}
                       dbApply={false}
                       >
                           <Column dataField="DESCRIPTION" width={200} alignment={"center"}/>
+                          <Column dataField="TOTAL" width={40} format={"#,##0.00€"}/>                                                
+                      </NdGrid>
+                  </div>
+              </div>
+            </div>
+        </NbPopUp>
+        <NbPopUp id={"popRebateTicket"} parent={this} title={this.t("detail")} fullscreen={false} centered={true}>
+            <div>
+              <div className="row  p-1">
+                  <div className="col-12">
+                      <NdGrid parent={this} id={"grdRebateTicket"} 
+                      showBorders={true} 
+                      columnsAutoWidth={true} 
+                      allowColumnReordering={true} 
+                      allowColumnResizing={true} 
+                      showRowLines={true}
+                      showColumnLines={true}
+                      showColumnHeaders={false}
+                      loadPanel={{enabled:true}}
+                      height={"250px"} 
+                      width={"100%"}
+                      dbApply={false}
+                      >
+                          <Column dataField="ITEM_NAME" width={120}/>
+                          <Column dataField="QUANTITY" width={60} alignment={"center"}/>
                           <Column dataField="TOTAL" width={40} format={"#,##0.00€"}/>                                                
                       </NdGrid>
                   </div>
@@ -854,6 +905,7 @@ export default class Dashboard extends React.PureComponent
                       showRowLines={true}
                       showColumnLines={true}
                       showColumnHeaders={false}
+                      loadPanel={{enabled:true}}
                       height={"138px"} 
                       width={"100%"}
                       dbApply={false}
@@ -877,11 +929,19 @@ export default class Dashboard extends React.PureComponent
                       showRowLines={true}
                       showColumnLines={true}
                       showColumnHeaders={false}
+                      loadPanel={{enabled:true}}
                       height={"350px"} 
                       width={"100%"}
                       dbApply={false}
+                      onCellPrepared={(e) =>
+                      {
+                          if(e.rowType === "data" && e.column.dataField === "LAST_PRICE")
+                          {
+                            e.cellElement.style.color =  "blue" 
+                          }
+                      }}
                       >
-                          <Column dataField="ITEM_NAME" width={200} alignment={"center"}/>
+                          <Column dataField="ITEM_NAME" width={200}/>
                           <Column dataField="FISRT_PRICE" width={60} format={"#,##0.00€"}/>    
                           <Column dataField="LAST_PRICE" width={40} format={"#,##0.00€"}/>                                                
                       </NdGrid>
@@ -901,11 +961,19 @@ export default class Dashboard extends React.PureComponent
                       showRowLines={true}
                       showColumnLines={true}
                       showColumnHeaders={false}
+                      loadPanel={{enabled:true}}
                       height={"350px"} 
                       width={"100%"}
                       dbApply={false}
+                      onCellPrepared={(e) =>
+                        {
+                            if(e.rowType === "data" && e.column.dataField === "LAST_PRICE")
+                            {
+                              e.cellElement.style.color =  "ref" 
+                            }
+                        }}
                       >
-                          <Column dataField="ITEM_NAME" width={200} alignment={"center"}/>
+                          <Column dataField="ITEM_NAME" width={200}/>
                           <Column dataField="FISRT_PRICE" width={60} format={"#,##0.00€"}/>    
                           <Column dataField="LAST_PRICE" width={40} format={"#,##0.00€"}/>                                                
                       </NdGrid>
@@ -925,11 +993,19 @@ export default class Dashboard extends React.PureComponent
                       showRowLines={true}
                       showColumnLines={true}
                       showColumnHeaders={false}
+                      loadPanel={{enabled:true}}
                       height={"350px"} 
                       width={"100%"}
                       dbApply={false}
+                      onCellPrepared={(e) =>
+                        {
+                            if(e.rowType === "data" && e.column.dataField === "LAST_PRICE")
+                            {
+                              e.cellElement.style.color =  "blue" 
+                            }
+                        }}
                       >
-                          <Column dataField="ITEM_NAME" width={200} alignment={"center"}/>
+                          <Column dataField="ITEM_NAME" width={200} />
                           <Column dataField="FISRT_PRICE" width={60} format={"#,##0.00€"}/>    
                           <Column dataField="LAST_PRICE" width={40} format={"#,##0.00€"}/>                                                
                       </NdGrid>
@@ -949,11 +1025,19 @@ export default class Dashboard extends React.PureComponent
                       showRowLines={true}
                       showColumnLines={true}
                       showColumnHeaders={false}
+                      loadPanel={{enabled:true}}
                       height={"350px"} 
                       width={"100%"}
                       dbApply={false}
+                      onCellPrepared={(e) =>
+                        {
+                            if(e.rowType === "data" && e.column.dataField === "LAST_PRICE")
+                            {
+                              e.cellElement.style.color =  "red" 
+                            }
+                        }}
                       >
-                          <Column dataField="ITEM_NAME" width={200} alignment={"center"}/>
+                          <Column dataField="ITEM_NAME" width={200} />
                           <Column dataField="FISRT_PRICE" width={60} format={"#,##0.00€"}/>    
                           <Column dataField="LAST_PRICE" width={40} format={"#,##0.00€"}/>                                                
                       </NdGrid>
