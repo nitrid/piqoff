@@ -1158,10 +1158,6 @@ export default class purchaseDispatch extends DocBase
                                             upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                             readOnly={true}
                                             maxLength={32}
-                                            onChange={(async(e)=>
-                                            {
-                                               
-                                            }).bind(this)}
                                             param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             >
