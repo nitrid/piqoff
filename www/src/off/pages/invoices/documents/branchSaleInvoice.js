@@ -519,6 +519,7 @@ export default class branchSaleInvoice extends DocBase
             await this.itemRelated(pData.GUID,pQuantity)
             //*****************************************/
             App.instance.setState({isExecute:false})
+            resolve()
         })
     }
     async getDispatch()
@@ -639,7 +640,6 @@ export default class branchSaleInvoice extends DocBase
         this.combineNew = false
         for (let i = 0; i < this.multiItemData.length; i++) 
         {
-            await this.core.util.waitUntil(100)
             await this.addItem(this.multiItemData[i],null,this.multiItemData[i].QUANTITY)
             this.popMultiItem.hide()
         }
@@ -1362,7 +1362,6 @@ export default class branchSaleInvoice extends DocBase
                                            
                                             this.pg_txtItemsCode.onClick = async(data) =>
                                             {
-                                                await this.core.util.waitUntil(100)
                                                 this.combineControl = true
                                                 this.combineNew = false
 
@@ -1416,7 +1415,6 @@ export default class branchSaleInvoice extends DocBase
                                                 }
                                             }
                                            
-                                            await this.core.util.waitUntil(100)
                                             await this.pg_service.show()
                                             this.pg_service.onClick = async(data) =>
                                             {

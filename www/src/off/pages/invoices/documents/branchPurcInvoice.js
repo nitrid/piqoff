@@ -365,7 +365,6 @@ export default class branchSaleInvoice extends DocBase
         return new Promise(async resolve => {
             App.instance.setState({isExecute:true})
             
-    
             if(typeof pQuantity == 'undefined')
             {
                 pQuantity = 1
@@ -470,6 +469,7 @@ export default class branchSaleInvoice extends DocBase
             await this.itemRelated(pData.GUID,pQuantity)
             //*****************************************/
             App.instance.setState({isExecute:false})
+            resolve()
         })
     }
     async getDispatch()
@@ -591,7 +591,6 @@ export default class branchSaleInvoice extends DocBase
         this.combineNew = false
         for (let i = 0; i < this.multiItemData.length; i++) 
         {
-            await this.core.util.waitUntil(100)
             await this.addItem(this.multiItemData[i],null,this.multiItemData[i].QUANTITY)
             this.popMultiItem.hide()
         }
@@ -1258,7 +1257,6 @@ export default class branchSaleInvoice extends DocBase
                                                     this.pg_txtBarcode.onClick = async(data) =>
                                                     {
                                                         this.txtBarcode.value = ''
-                                                        await this.core.util.waitUntil(100)
 
                                                         this.customerControl = true
                                                         this.customerClear = false
@@ -1308,7 +1306,6 @@ export default class branchSaleInvoice extends DocBase
                                         {
                                             this.pg_txtItemsCode.onClick = async(data) =>
                                             {
-                                                await this.core.util.waitUntil(100)
                                                 this.customerControl = true
                                                 this.customerClear = false
                                                 this.combineControl = true

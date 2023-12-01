@@ -483,6 +483,7 @@ export default class outagePurcInvoice extends DocBase
             await this.itemRelated(pData.GUID,pQuantity)
             //*****************************************/
             App.instance.setState({isExecute:false})
+            resolve()
         })
     }
     async getDispatch()
@@ -605,7 +606,6 @@ export default class outagePurcInvoice extends DocBase
         this.combineNew = false
         for (let i = 0; i < this.multiItemData.length; i++) 
         {
-            await this.core.util.waitUntil(100)
             await this.addItem(this.multiItemData[i],null,this.multiItemData[i].QUANTITY)
             this.popMultiItem.hide()
         }
@@ -1216,7 +1216,6 @@ export default class outagePurcInvoice extends DocBase
                                                     this.pg_txtBarcode.onClick = async(data) =>
                                                     {
                                                         this.docObj.docItems.addEmpty(tmpDocItems)
-                                                        await this.core.util.waitUntil(100)
 
                                                         if(data.length > 0)
                                                         {
@@ -1266,7 +1265,6 @@ export default class outagePurcInvoice extends DocBase
                                             
                                             this.addItem(tmpData.result.recordset[0],null,this.txtPopQteUnitQuantity.value)
                                             this.txtBarcode.focus()
-                                            
                                         }
                                         else
                                         {

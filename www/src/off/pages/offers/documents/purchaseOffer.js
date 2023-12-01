@@ -137,15 +137,12 @@ export default class purchaseOffer extends DocBase
                                 this.customerClear = false
                                 this.combineControl = true
                                 this.combineNew = false                        
-                                if(data.length > 0)
+                                this.grdPurcoffers.devGrid.beginUpdate()
+                                for (let i = 0; i < data.length; i++) 
                                 {
-                                    this.grdPurcoffers.devGrid.beginUpdate()
-                                    for (let i = 0; i < data.length; i++) 
-                                    {
-                                        await this.addItem(data[i],e.rowIndex)
-                                    }
-                                    this.grdPurcoffers.devGrid.endUpdate()
+                                    await this.addItem(data[i],e.rowIndex)
                                 }
+                                this.grdPurcoffers.devGrid.endUpdate()
                             }
                             await this.pg_txtItemsCode.setVal(e.value)
                         }
@@ -1227,7 +1224,6 @@ export default class purchaseOffer extends DocBase
                                            
                                             this.pg_txtItemsCode.onClick = async(data) =>
                                             {
-                                                await this.core.util.waitUntil(100)
                                                 this.customerControl = true
                                                 this.customerClear = false
                                                 this.combineControl = true

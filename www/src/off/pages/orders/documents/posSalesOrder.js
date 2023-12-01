@@ -191,18 +191,15 @@ export default class posSalesOrder extends DocBase
                             {
                                 this.pg_txtItemsCode.onClick = async(data) =>
                                 {
-                                    if(data.length > 0)
-                                    {
-                                        this.combineControl = true
-                                        this.combineNew = false
+                                    this.combineControl = true
+                                    this.combineNew = false
 
-                                        this.grdSlsOrder.devGrid.beginUpdate()
-                                        for (let i = 0; i < data.length; i++) 
-                                        {
-                                            await this.addItem(data[i],e.rowIndex)
-                                        }
-                                        this.grdSlsOrder.devGrid.endUpdate()
+                                    this.grdSlsOrder.devGrid.beginUpdate()
+                                    for (let i = 0; i < data.length; i++) 
+                                    {
+                                        await this.addItem(data[i],e.rowIndex)
                                     }
+                                    this.grdSlsOrder.devGrid.endUpdate()
                                 }
                                 this.pg_txtItemsCode.show()
                             }
@@ -445,6 +442,7 @@ export default class posSalesOrder extends DocBase
             await this.itemRelated(pData.GUID,pQuantity)
             //*****************************************/
             App.instance.setState({isExecute:false})
+            resolve()
         })
     }
     async multiItemAdd()
@@ -545,7 +543,6 @@ export default class posSalesOrder extends DocBase
         this.combineNew = false
         for (let i = 0; i < this.multiItemData.length; i++) 
         {
-            await this.core.util.waitUntil(100)
             await this.addItem(this.multiItemData[i],null,this.multiItemData[i].QUANTITY)
             this.popMultiItem.hide()
         }
@@ -1140,20 +1137,17 @@ export default class posSalesOrder extends DocBase
                                                     {
                                                         this.pg_txtBarcode.onClick = async(data) =>
                                                         {
-                                                            if(data.length > 0)
+                                                            this.customerControl = true
+                                                            this.customerClear = false
+                                                            this.combineControl = true
+                                                            this.combineNew = false
+        
+                                                            this.grdSlsOrder.devGrid.beginUpdate()
+                                                            for (let i = 0; i < data.length; i++) 
                                                             {
-                                                                this.customerControl = true
-                                                                this.customerClear = false
-                                                                this.combineControl = true
-                                                                this.combineNew = false
-            
-                                                                this.grdSlsOrder.devGrid.beginUpdate()
-                                                                for (let i = 0; i < data.length; i++) 
-                                                                {
-                                                                    await this.addItem(data[i],null)
-                                                                }
-                                                                this.grdSlsOrder.devGrid.endUpdate()
+                                                                await this.addItem(data[i],null)
                                                             }
+                                                            this.grdSlsOrder.devGrid.endUpdate()
                                                         }
                                                         await this.pg_txtBarcode.setVal(this.txtBarcode.value)
                                                     }
@@ -1290,18 +1284,15 @@ export default class posSalesOrder extends DocBase
                                                 {
                                                     this.pg_txtItemsCode.onClick = async(data) =>
                                                     {
-                                                        if(data.length > 0)
-                                                        {
-                                                            this.combineControl = true
-                                                            this.combineNew = false
+                                                        this.combineControl = true
+                                                        this.combineNew = false
 
-                                                            this.grdSlsOrder.devGrid.beginUpdate()
-                                                            for (let i = 0; i < data.length; i++) 
-                                                            {
-                                                                await this.addItem(data[i],null)
-                                                            }
-                                                            this.grdSlsOrder.devGrid.endUpdate()
+                                                        this.grdSlsOrder.devGrid.beginUpdate()
+                                                        for (let i = 0; i < data.length; i++) 
+                                                        {
+                                                            await this.addItem(data[i],null)
                                                         }
+                                                        this.grdSlsOrder.devGrid.endUpdate()
                                                     }
                                                     this.pg_txtItemsCode.show()
                                                     return
@@ -1310,18 +1301,15 @@ export default class posSalesOrder extends DocBase
                                            
                                             this.pg_txtItemsCode.onClick = async(data) =>
                                             {
-                                                if(data.length > 0)
-                                                {
-                                                    this.combineControl = true
-                                                    this.combineNew = false
+                                                this.combineControl = true
+                                                this.combineNew = false
 
-                                                    this.grdSlsOrder.devGrid.beginUpdate()
-                                                    for (let i = 0; i < data.length; i++) 
-                                                    {
-                                                        await this.addItem(data[i],null)
-                                                    }
-                                                    this.grdSlsOrder.devGrid.endUpdate()
+                                                this.grdSlsOrder.devGrid.beginUpdate()
+                                                for (let i = 0; i < data.length; i++) 
+                                                {
+                                                    await this.addItem(data[i],null)
                                                 }
+                                                this.grdSlsOrder.devGrid.endUpdate()
                                             }
                                             this.pg_txtItemsCode.show()
                                         }

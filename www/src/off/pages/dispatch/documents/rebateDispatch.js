@@ -1180,8 +1180,6 @@ export default class rebateDispatch extends DocBase
                                                     this.pg_txtBarcode.onClick = async(data) =>
                                                     {
                                                         this.txtBarcode.setState({value:""})
-                                                        await this.core.util.waitUntil(100)
-
                                                         this.customerControl = true
                                                         this.customerClear = false
                                                         this.combineControl = true

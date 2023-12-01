@@ -1241,20 +1241,15 @@ export default class branchSaleDispatch extends DocBase
                                                     this.pg_txtBarcode.onClick = async(data) =>
                                                     {
                                                         this.txtBarcode.value = ''
-                                                        await this.core.util.waitUntil(100)
 
-                                                        if(data.length > 0)
+                                                        this.combineControl = true
+                                                        this.combineNew = false
+                                                        this.grdSlsDispatch.devGrid.beginUpdate()
+                                                        for (let i = 0; i < data.length; i++) 
                                                         {
-                                                            this.combineControl = true
-                                                            this.combineNew = false
-                                                            this.grdSlsDispatch.devGrid.beginUpdate()
-                                                            for (let i = 0; i < data.length; i++) 
-                                                            {
-                                                                await this.addItem(data[i],null)
-                                                            }
-                                                            this.grdSlsDispatch.devGrid.endUpdate()
-                                                            
+                                                            await this.addItem(data[i],null)
                                                         }
+                                                        this.grdSlsDispatch.devGrid.endUpdate()
                                                     }
                                                     this.pg_txtBarcode.setVal(this.txtBarcode.value)
                                                 }
@@ -1293,7 +1288,6 @@ export default class branchSaleDispatch extends DocBase
                                         {
                                             this.pg_txtItemsCode.onClick = async(data) =>
                                             {
-                                                await this.core.util.waitUntil(100)
                                                 this.combineControl = true
                                                 this.combineNew = false
                                                 this.grdSlsDispatch.devGrid.beginUpdate()
@@ -1351,7 +1345,6 @@ export default class branchSaleDispatch extends DocBase
                                             
                                             this.pg_txtItemsCode.onClick = async(data) =>
                                             {
-                                                await this.core.util.waitUntil(100)
                                                 this.combineControl = true
                                                 this.combineNew = false
                                                 this.grdSlsDispatch.devGrid.beginUpdate()

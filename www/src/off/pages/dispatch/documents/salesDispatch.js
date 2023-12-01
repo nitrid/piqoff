@@ -658,6 +658,7 @@ export default class salesDispatch extends DocBase
             await this.itemRelated(pData.GUID,pQuantity)
             //*****************************************/
             App.instance.setState({isExecute:false})
+            resolve()
         })
     }
     async getOrders()
@@ -735,7 +736,6 @@ export default class salesDispatch extends DocBase
                             resolve()
                             return
                         }
-                        await this.core.util.waitUntil(100)
                         await this.addItem(tmpCvoData.result.recordset[0],null,1,this.docObj.dt()[0].INTERFEL)
                         this.popExtraCost.hide()
                     }
@@ -1489,7 +1489,6 @@ export default class salesDispatch extends DocBase
                                         {
                                             this.pg_txtItemsCode.onClick = async(data) =>
                                             {
-                                                await this.core.util.waitUntil(100)
                                                 this.combineControl = true
                                                 this.combineNew = false
 
@@ -1569,7 +1568,6 @@ export default class salesDispatch extends DocBase
                                             
                                             this.pg_txtItemsCode.onClick = async(data) =>
                                             {
-                                                await this.core.util.waitUntil(100)
                                                 this.combineControl = true
                                                 this.combineNew = false
 

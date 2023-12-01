@@ -602,6 +602,7 @@ export default class branchSaleDispatch extends DocBase
             await this.itemRelated(pData.GUID,pQuantity)
             //*****************************************/
             App.instance.setState({isExecute:false})
+            resolve()
         })
     }
     async getOrders()
@@ -1316,7 +1317,6 @@ export default class branchSaleDispatch extends DocBase
                                             
                                             this.pg_txtItemsCode.onClick = async(data) =>
                                             {
-                                                await this.core.util.waitUntil(100)
                                                 this.combineControl = true
                                                 this.combineNew = false
 
@@ -1376,7 +1376,6 @@ export default class branchSaleDispatch extends DocBase
                                             
                                             this.pg_txtItemsCode.onClick = async(data) =>
                                             {
-                                                await this.core.util.waitUntil(100)
                                                 this.combineControl = true
                                                 this.combineNew = false
 

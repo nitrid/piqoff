@@ -1256,7 +1256,6 @@ export default class priceDifferenceInvoice extends DocBase
                                                     this.pg_txtBarcode.onClick = async(data) =>
                                                     {
                                                         this.txtBarcode.setState({value:""})
-                                                        await this.core.util.waitUntil(100)
 
                                                         this.customerControl = true
                                                         this.customerClear = false
@@ -1308,7 +1307,6 @@ export default class priceDifferenceInvoice extends DocBase
                                             await this.pg_txtItemsCode.setVal(this.txtBarcode.value)
                                             this.pg_txtItemsCode.onClick = async(data) =>
                                             {
-                                                await this.core.util.waitUntil(100)
                                                 this.combineControl = true
                                                 this.combineNew = false
                                                 if(data.length == 1)
@@ -1375,22 +1373,14 @@ export default class priceDifferenceInvoice extends DocBase
                                             }
                                             this.pg_txtItemsCode.onClick = async(data) =>
                                             {
-                                                await this.core.util.waitUntil(100)
                                                 this.combineControl = true
                                                 this.combineNew = false
-                                                if(data.length == 1)
+                                                this.grdDiffInv.devGrid.beginUpdate()
+                                                for (let i = 0; i < data.length; i++) 
                                                 {
-                                                    await this.addItem(data[0],null)
+                                                    await this.addItem(data[i],null)
                                                 }
-                                                else if(data.length > 1)
-                                                {
-                                                    this.grdDiffInv.devGrid.beginUpdate()
-                                                    for (let i = 0; i < data.length; i++) 
-                                                    {
-                                                        await this.addItem(data[i],null)
-                                                    }
-                                                    this.grdDiffInv.devGrid.endUpdate()
-                                                }
+                                                this.grdDiffInv.devGrid.endUpdate()
                                             }
                                             this.pg_txtItemsCode.show()
                                         }

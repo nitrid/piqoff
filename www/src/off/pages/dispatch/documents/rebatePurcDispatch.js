@@ -453,6 +453,7 @@ export default class rebateDispatch extends DocBase
             await this.itemRelated(pData.GUID,pQuantity)
             //*****************************************/
             App.instance.setState({isExecute:false})
+            resolve()
         })
 
     }

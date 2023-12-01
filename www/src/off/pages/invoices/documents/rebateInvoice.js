@@ -388,7 +388,6 @@ export default class rebateInvoice extends DocBase
     {
         return new Promise(async resolve =>
         {
-
             App.instance.setState({isExecute:true})
     
             this.txtRef.readOnly = true
@@ -413,6 +412,7 @@ export default class rebateInvoice extends DocBase
                 await this.itemRelated(pData.GUID,tmpMergDt[0].QUANTITY)
                 //*****************************************/
                 App.instance.setState({isExecute:false})
+                resolve()
                 return
             }
             //******************************************************************************************************************/
@@ -491,7 +491,7 @@ export default class rebateInvoice extends DocBase
                     })
                     if(tmpCustomerBtn == 'btn02')
                     {
-                        resolve
+                        resolve()
                         return
                     }
                 }
@@ -1467,7 +1467,6 @@ export default class rebateInvoice extends DocBase
                                                         this.grdRebtInv.devGrid.beginUpdate()
                                                         for (let i = 0; i < data.length; i++) 
                                                         {
-                                                            await this.core.util.waitUntil(100)
                                                             await this.addItem(data[i],null)
                                                         }
                                                         this.grdRebtInv.devGrid.endUpdate()

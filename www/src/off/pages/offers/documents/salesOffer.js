@@ -439,6 +439,7 @@ export default class salesOrder extends DocBase
             //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
             await this.itemRelated(pData.GUID,this.docObj.docOffers.dt()[pIndex].QUANTITY)
             //*****************************************/
+            resolve()
         })
     }
     async multiItemAdd()
@@ -1081,7 +1082,6 @@ export default class salesOrder extends DocBase
                                                             this.grdSlsOffer.devGrid.beginUpdate()
                                                             for (let i = 0; i < data.length; i++) 
                                                             {
-                                                                await this.core.util.waitUntil(100)
                                                                 await this.addItem(data[i],null)
                                                             }
                                                             this.grdSlsOffer.devGrid.endUpdate()

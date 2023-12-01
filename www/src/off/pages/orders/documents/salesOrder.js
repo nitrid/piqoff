@@ -138,15 +138,12 @@ export default class salesOrder extends DocBase
                             {
                                 this.combineControl = true
                                 this.combineNew = false
-                                if(data.length > 0)
+                                this.grdSlsOrder.devGrid.beginUpdate()
+                                for (let i = 0; i < data.length; i++) 
                                 {
-                                    this.grdSlsOrder.devGrid.beginUpdate()
-                                    for (let i = 0; i < data.length; i++) 
-                                    {
-                                        await this.addItem(data[i],e.rowIndex)
-                                    }
-                                    this.grdSlsOrder.devGrid.endUpdate()
+                                    await this.addItem(data[i],e.rowIndex)
                                 }
+                                this.grdSlsOrder.devGrid.endUpdate()
                             }
                             this.pg_txtItemsCode.setVal(e.value)
                         }
@@ -195,18 +192,15 @@ export default class salesOrder extends DocBase
                             {
                                 this.pg_txtItemsCode.onClick = async(data) =>
                                 {
-                                    if(data.length > 0)
-                                    {
-                                        this.combineControl = true
-                                        this.combineNew = false
+                                    this.combineControl = true
+                                    this.combineNew = false
 
-                                        this.grdSlsOrder.devGrid.beginUpdate()
-                                        for (let i = 0; i < data.length; i++) 
-                                        {
-                                            await this.addItem(data[i],e.rowIndex)
-                                        }
-                                        this.grdSlsOrder.devGrid.endUpdate()
+                                    this.grdSlsOrder.devGrid.beginUpdate()
+                                    for (let i = 0; i < data.length; i++) 
+                                    {
+                                        await this.addItem(data[i],e.rowIndex)
                                     }
+                                    this.grdSlsOrder.devGrid.endUpdate()
                                 }
                                 this.pg_txtItemsCode.show()
                             }
@@ -454,6 +448,7 @@ export default class salesOrder extends DocBase
             await this.itemRelated(pData.GUID,pQuantity)
             //*****************************************/
             App.instance.setState({isExecute:false})
+            resolve()
         })
     }
     async multiItemAdd()
@@ -1318,19 +1313,15 @@ export default class salesOrder extends DocBase
                                            
                                             this.pg_txtItemsCode.onClick = async(data) =>
                                             {
-                                                await this.core.util.waitUntil(100)
-                                                if(data.length > 0)
-                                                {
-                                                    this.combineControl = true
-                                                    this.combineNew = false
+                                                this.combineControl = true
+                                                this.combineNew = false
 
-                                                    this.grdSlsOrder.devGrid.beginUpdate()
-                                                    for (let i = 0; i < data.length; i++) 
-                                                    {
-                                                        await this.addItem(data[i],null)
-                                                    }
-                                                    this.grdSlsOrder.devGrid.endUpdate()
+                                                this.grdSlsOrder.devGrid.beginUpdate()
+                                                for (let i = 0; i < data.length; i++) 
+                                                {
+                                                    await this.addItem(data[i],null)
                                                 }
+                                                this.grdSlsOrder.devGrid.endUpdate()
                                             }
                                             this.pg_txtItemsCode.show()
                                         }

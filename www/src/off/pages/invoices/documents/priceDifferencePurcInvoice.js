@@ -462,7 +462,7 @@ export default class priceDifferenceInvoice extends DocBase
             await this.itemRelated(pData.GUID,pQuantity)
             //*****************************************/
             App.instance.setState({isExecute:false})
-
+            resolve()
         })
     }
     async multiItemAdd()
@@ -563,7 +563,6 @@ export default class priceDifferenceInvoice extends DocBase
         this.combineNew = false
         for (let i = 0; i < this.multiItemData.length; i++) 
         {
-            await this.core.util.waitUntil(100)
             await this.addItem(this.multiItemData[i],null,this.multiItemData[i].QUANTITY)
             this.popMultiItem.hide()
         }
@@ -1215,7 +1214,6 @@ export default class priceDifferenceInvoice extends DocBase
                                             await this.pg_txtItemsCode.setVal(this.txtBarcode.value)
                                             this.pg_txtItemsCode.onClick = async(data) =>
                                             {
-                                                await this.core.util.waitUntil(100)
                                                 this.combineControl = true
                                                 this.combineNew = false
                                                 this.grdDiffInv.devGrid.beginUpdate()
@@ -1276,7 +1274,6 @@ export default class priceDifferenceInvoice extends DocBase
                                             
                                             this.pg_txtItemsCode.onClick = async(data) =>
                                             {
-                                                await this.core.util.waitUntil(100)
                                                 this.combineControl = true
                                                 this.combineNew = false
                                                 this.grdDiffInv.devGrid.beginUpdate()

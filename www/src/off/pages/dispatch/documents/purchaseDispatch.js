@@ -149,7 +149,6 @@ export default class purchaseDispatch extends DocBase
                             this.grdPurcDispatch.devGrid.beginUpdate()
                             for (let i = 0; i < data.length; i++) 
                             {
-                                await this.core.util.waitUntil(100)
                                 await this.addItem(data[i],e.rowIndex)
                             }
                             this.grdPurcDispatch.devGrid.endUpdate()
@@ -1535,7 +1534,6 @@ export default class purchaseDispatch extends DocBase
                                                     this.pg_txtBarcode.onClick = async(data) =>
                                                     {
                                                         this.txtBarcode.value = ''
-                                                        await this.core.util.waitUntil(100)
 
                                                         if(data.length > 0)
                                                         {
@@ -1590,7 +1588,6 @@ export default class purchaseDispatch extends DocBase
                                         {
                                             this.pg_txtItemsCode.onClick = async(data) =>
                                             {
-                                                await this.core.util.waitUntil(100)
                                                 this.customerControl = true
                                                 this.customerClear = false
                                                 this.combineControl = true
@@ -1655,7 +1652,6 @@ export default class purchaseDispatch extends DocBase
                                            
                                             this.pg_txtItemsCode.onClick = async(data) =>
                                             {
-                                                await this.core.util.waitUntil(100)
                                                 this.customerControl = true
                                                 this.customerClear = false
                                                 this.combineControl = true
