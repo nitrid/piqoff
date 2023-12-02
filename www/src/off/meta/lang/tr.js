@@ -174,6 +174,7 @@ export const langTr =
         stk_01_012 : "Bağlı Ürün Tanımlama",
         stk_01_013 : "Ürün Resim Tanımlama",
         stk_01_014 : "Ürün Cinsi Tanımlama",
+        stk_01_015 : "Fiyat Listesi Tanımlama",
         stk_02_001: "Sayım Evrakı",
         stk_02_002: "Depo/Mağaza Arası Sevk",
         stk_02_003: "Kayıp Ürün Çıkışı",
@@ -1284,6 +1285,53 @@ export const langTr =
             btn02: "Tamam",
             msg : "Girmiş olduğunuz Kasa sistem de kayıtlı !"
         },
+    },
+    stk_01_015 : // "Fiyat Listesi Tanımları"
+    {
+        txtNo : "No",
+        txtName :"Adı",
+        cmbVatType : "Vergi Tip",
+        validCode :"Kodu Boş Geçemezsiniz !",
+        pg_txtNo : 
+        {
+            title : "Fiyat Listesi Kartı Seçimi",
+            clmNo : "NO",
+            clmName : "ADI"
+        },
+        msgSave:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kayıt etmek istediğinize eminmisiniz !"
+        },
+        msgSaveResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Kayıt işleminiz başarılı !",
+            msgFailed: "Kayıt işleminiz başarısız !"
+        },
+        msgSaveValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen gerekli alanları doldurunuz !"
+        },
+        msgDelete:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        },
+        msgCode : 
+        {
+            title: "Dikkat",
+            btn01: "Kartı Git",
+            btn02: "Tamam",
+            msg : "Girmiş olduğunuz liste no sistem de kayıtlı !"
+        }
     },
     stk_02_001 : // Sayım Evrakı"
     {

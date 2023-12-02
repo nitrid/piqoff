@@ -65,7 +65,7 @@ export default class itemPurcPriceReport extends React.PureComponent
                             "PRICE.LAST_PRICE AS PURC_PRICE,    " +
                             "ITEMS.VAT AS VAT,   " +
                             "PRICE.FISRT_PRICE AS FISRT_PRICE,   " +
-                            "ISNULL((SELECT [dbo].[FN_PRICE_SALE](ITEMS.GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000')),0) AS PRICE_SALE,    " +
+                            "ISNULL((SELECT [dbo].[FN_PRICE](ITEMS.GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',0,1,0)),0) AS PRICE_SALE," +
                             "ISNULL((SELECT  TITLE FROM CUSTOMER_VW_02 WHERE GUID = PRICE.CUSTOMER),'')AS CUSTOMER_NAME,   " +
                             "PRICE.CUSTOMER AS CUSTOMER,    " +
                             "PRICE.CDATE AS LDATE   " +

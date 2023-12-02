@@ -40,6 +40,11 @@ export const menu = (e) =>
                         //     path: 'customers/cards/customerCard'
                         // },
                         {
+                            id: 'stk_01_015',
+                            text: e.t('menuOff.stk_01_015'), //'Fiyat Listesi Tanımları',
+                            path: 'items/cards/itemPricingListCard'
+                        },
+                        {
                             id: 'stk_01_006',
                             text: e.t('menuOff.stk_01_006'),//'Depo Tanımları',
                             path: 'items/cards/depotCard'

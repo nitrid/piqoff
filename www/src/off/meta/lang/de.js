@@ -167,6 +167,8 @@ export const langDe =
         stk_01_011: "Steuern festlegen",
         stk_01_012: "Verbundene Artikeldefinition",
         stk_01_013: "Artikelbild bearbeiten",  // BAK
+        stk_01_014: "Produktartdefinition",  // BAK
+        stk_01_015: "Preisliste Definition",  // BAK
         stk_02_001: "Bestandsdokument",
         stk_02_002: "Lager/Geschäftsstellen-Transfer",
         stk_02_003: "Verlust von Artikelaustritt",
@@ -1273,6 +1275,53 @@ export const langDe =
             btn02: "Tamam",
             msg : "Girmiş olduğunuz Kasa sistem de kayıtlı !"
         },
+    },
+    stk_01_015: // "Fiyat Listesi Tanımları" //BAK
+    {
+        txtNo: "Nummer",
+        txtName: "Name",
+        cmbVatType: "Steuerart",
+        validCode: "Sie können den Code nicht leer lassen!",
+        pg_txtNo:
+        {
+            title: "Auswahl der Preislistenkarte",
+            clmNo: "NUMMER",
+            clmName: "NAME"
+        },
+        msgSave:
+        {
+            title: "Achtung",
+            btn01: "OK",
+            btn02: "Abbrechen",
+            msg: "Sind Sie sicher, dass Sie speichern möchten?"
+        },
+        msgSaveResult:
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msgSuccess: "Ihr Speichervorgang war erfolgreich!",
+            msgFailed: "Ihr Speichervorgang ist fehlgeschlagen!"
+        },
+        msgSaveValid:
+        {
+            title: "Achtung",
+            btn01: "OK",
+            msg: "Bitte füllen Sie die erforderlichen Felder aus!"
+        },
+        msgDelete:
+        {
+            title: "Achtung",
+            btn01: "OK",
+            btn02: "Abbrechen",
+            msg: "Sind Sie sicher, dass Sie den Datensatz löschen möchten?"
+        },
+        msgCode:
+        {
+            title: "Achtung",
+            btn01: "Zur Karte gehen",
+            btn02: "OK",
+            msg: "Die von Ihnen eingegebene Listennummer ist im System registriert!"
+        }
     },
     stk_02_001: // "Sayim Evraki"
     {

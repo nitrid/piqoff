@@ -1,8 +1,8 @@
 export const prm =
 [
     //#region Sistem
-     //İkinci Birim
-     {
+    //İkinci Birim
+    {
         TYPE : 0,
         ID :"secondFactor",
         VALUE : 
@@ -167,8 +167,8 @@ export const prm =
             CAPTION : "Daha Düşük Fiyatlı Tedarikçi Uyarısı"
         }
     },
-     //Otomatik Interfel
-     {
+    //Otomatik Interfel
+    {
         TYPE : 1,
         ID :"autoInterfel",
         VALUE : 

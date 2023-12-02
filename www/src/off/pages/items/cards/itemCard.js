@@ -267,7 +267,7 @@ export default class itemCard extends React.PureComponent
         {
             let tmpQuery = 
             {
-                query :"SELECT [dbo].[FN_PRICE_SALE](@GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000') AS PRICE",
+                query :"SELECT [dbo].[FN_PRICE](@GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1) AS PRICE",
                 param : ['GUID:string|50'],
                 value : [this.itemsObj.dt()[0].GUID]
             }
@@ -483,7 +483,7 @@ export default class itemCard extends React.PureComponent
         {
             let tmpQuery = 
             {
-                query :"SELECT [dbo].[FN_PRICE_SALE](@GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000') AS PRICE",
+                query :"SELECT [dbo].[FN_PRICE](@GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1) AS PRICE",
                 param : ['GUID:string|50'],
                 value : [this.itemsObj.dt()[0].GUID]
             }

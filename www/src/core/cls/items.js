@@ -618,6 +618,133 @@ export class itemPriceCls
         });
     }
 }
+export class itemPricingListCls
+{
+    constructor()
+    {
+        this.core = core.instance;
+        this.ds = new dataset();
+        this.empty = 
+        {
+            GUID : '00000000-0000-0000-0000-000000000000',
+            CUSER : this.core.auth.data == null ? '' : this.core.auth.data.CODE,
+            CUSER_NAME : this.core.auth.data == null ? '' : this.core.auth.data.NAME,
+            NO : 0,
+            NAME : '',
+            VAT_TYPE : 0
+        }
+
+        this._initDs();
+    }
+    //#region Private
+    _initDs()
+    {
+        let tmpDt = new datatable('ITEM_PRICE_LIST');            
+        tmpDt.selectCmd = 
+        {
+            query : "SELECT * FROM [dbo].[ITEM_PRICE_LIST_VW_01] WHERE ((NO = @NO) OR (@NO IS NULL)) AND ((NAME = @NAME) OR (@NAME IS NULL))",
+            param : ['NO:int','NAME:string|100']
+        }
+        tmpDt.insertCmd = 
+        {
+            query : "EXEC [dbo].[PRD_ITEM_PRICE_LIST_INSERT] " + 
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " + 
+                    "@NO = @PNO, " + 
+                    "@NAME = @PNAME, " + 
+                    "@VAT_TYPE = @PVAT_TYPE ", 
+            param : ['PGUID:string|50','PCUSER:string|25','PNO:int','PNAME:string|100','PVAT_TYPE:int'],
+            dataprm : ['GUID','CUSER','NO','NAME','VAT_TYPE']
+        } 
+        tmpDt.updateCmd = 
+        {
+            query : "EXEC [dbo].[PRD_ITEM_PRICE_LIST_UPDATE] " + 
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " + 
+                    "@NO = @PNO, " + 
+                    "@NAME = @PNAME, " + 
+                    "@VAT_TYPE = @PVAT_TYPE ",
+            param : ['PGUID:string|50','PCUSER:string|25','PNO:int','PNAME:string|100','PVAT_TYPE:int'],
+            dataprm : ['GUID','CUSER','NO','NAME','VAT_TYPE']
+        } 
+        tmpDt.deleteCmd = 
+        {
+            query : "EXEC [dbo].[PRD_ITEM_PRICE_LIST_DELETE] " + 
+                    "@CUSER = @PCUSER, " + 
+                    "@UPDATE = 1, " + 
+                    "@NO = @PNO ", 
+            param : ['PCUSER:string|25','PNO:int'],
+            dataprm : ['CUSER','NO']
+        }
+
+        this.ds.add(tmpDt);
+    }
+    //#endregion
+    dt()
+    {
+        if(arguments.length > 0)
+        {
+            return this.ds.get(arguments[0]);
+        }
+
+        return this.ds.get(0)
+    }
+    addEmpty()
+    {
+        if(typeof this.dt('ITEM_PRICE_LIST') == 'undefined')
+        {
+            return;
+        }
+        let tmp = {}
+        if(arguments.length > 0)
+        {
+            tmp = {...arguments[0]}            
+        }
+        else
+        {
+            tmp = {...this.empty}
+        }
+        tmp.GUID = datatable.uuidv4();
+        this.dt('ITEM_PRICE_LIST').push(tmp)
+    }
+    clearAll()
+    {
+        for (let i = 0; i < this.ds.length; i++) 
+        {
+            this.dt(i).clear()
+        }
+    }
+    load()
+    {
+        //PARAMETRE OLARAK OBJE GÖNDERİLİR YADA PARAMETRE BOŞ İSE TÜMÜ GETİRİLİ.
+        return new Promise(async resolve => 
+        {
+            let tmpPrm = 
+            {
+                NO : null,
+                NAME : null
+            }         
+
+            if(arguments.length > 0)
+            {
+                tmpPrm.NO = typeof arguments[0].NO == 'undefined' ? null : arguments[0].NO;
+                tmpPrm.NAME = typeof arguments[0].NAME == 'undefined' ? null : arguments[0].NAME;
+            }
+            this.ds.get('ITEM_PRICE_LIST').selectCmd.value = Object.values(tmpPrm)
+            
+            await this.ds.get('ITEM_PRICE_LIST').refresh();
+            resolve(this.ds.get('ITEM_PRICE_LIST'));    
+        });
+    }
+    save()
+    {
+        return new Promise(async resolve => 
+        {
+            this.ds.delete()
+            resolve(await this.ds.update()); 
+        });
+    }
+}
 export class itemBarcodeCls
 {
     constructor()

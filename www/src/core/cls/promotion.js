@@ -183,8 +183,12 @@ export class promoCls
             {
                 tmpGuids = tmpGuids + this.ds.get('PROMO')[i].GUID + ","
             }
-            await this.cond.load({PROMO:tmpGuids.substring(0,tmpGuids.length - 1)})
-            await this.app.load({PROMO:tmpGuids.substring(0,tmpGuids.length - 1)})
+
+            if(tmpGuids != '')
+            {
+                await this.cond.load({PROMO:tmpGuids.substring(0,tmpGuids.length - 1)})
+                await this.app.load({PROMO:tmpGuids.substring(0,tmpGuids.length - 1)})
+            }
 
             resolve(this.ds.get('PROMO'));    
         });
