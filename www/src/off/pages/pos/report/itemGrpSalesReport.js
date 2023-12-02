@@ -70,6 +70,7 @@ export default class itemGrpSalesReport extends React.PureComponent
                         "(SELECT COUNT(*) FROM (SELECT COUNT(POS_GUID) AS POS_GUID FROM POS_SALE_VW_01 AS PS WHERE PS.ITEM_GRP_NAME = POS_SALE_DATEIL_REPORT_VW_01.ITEM_GRP_NAME AND PS.DOC_DATE >= @FISRT_DATE AND PS.DOC_DATE <= @LAST_DATE GROUP BY POS_GUID) AS TMP) AS TICKET,  " +
                         "ROUND(SUM(TOTAL),2) AS TOTAL,  " +
                         "ROUND(SUM(FAMOUNT),2) AS FAMOUNT,  " +
+                        "ROUND(SUM(QUANTITY),2) AS QUANTITY,  " +
                         "ROUND(SUM(VAT),2) AS VAT,  " +
                         "ROUND(SUM(COST_PRICE * QUANTITY),2) AS TOTAL_COST,  " +
                         "(SUM(FAMOUNT) - SUM(COST_PRICE * QUANTITY)) AS REST_TOTAL  " +
@@ -98,6 +99,7 @@ export default class itemGrpSalesReport extends React.PureComponent
                         "ROUND(SUM(TOTAL),2) AS TOTAL,  " +
                         "ROUND(SUM(FAMOUNT),2) AS FAMOUNT,  " +
                         "ROUND(SUM(VAT),2) AS VAT,  " +
+                        "ROUND(SUM(QUANTITY),2) AS QUANTITY,  " +
                         "ROUND(SUM(COST_PRICE * QUANTITY),2) AS TOTAL_COST,  " +
                         "(SUM(FAMOUNT) - SUM(COST_PRICE * QUANTITY)) AS REST_TOTAL  " +
                         "FROM POS_SALE_DATEIL_REPORT_VW_01 WHERE DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE GROUP BY ITEM_GRP_NAME,ITEM_GRP_CODE ORDER BY ITEM_GRP_CODE ",
@@ -276,6 +278,7 @@ export default class itemGrpSalesReport extends React.PureComponent
                                 <Column dataField="ITEM_GRP_CODE" caption={this.t("grdGroupSalesReport.clmGrpCode")} visible={true} width={100}/> 
                                 <Column dataField="ITEM_GRP_NAME" caption={this.t("grdGroupSalesReport.clmGrpName")} visible={true} width={300}/> 
                                 <Column dataField="TICKET" caption={this.t("grdGroupSalesReport.clmTicket")} visible={true} width={150} allowHeaderFiltering={false}/> 
+                                <Column dataField="QUANTITY" caption={this.t("grdGroupSalesReport.clmQuantity")} visible={true} width={150} allowHeaderFiltering={false}/> 
                                 <Column dataField="TOTAL_COST" caption={this.t("grdGroupSalesReport.clmTotalCost")} visible={true} format={{ style: "currency", currency: "EUR",precision: 2}}  width={150} allowHeaderFiltering={false}/> 
                                 <Column dataField="FAMOUNT" caption={this.t("grdGroupSalesReport.clmFamount")} visible={true} format={{ style: "currency", currency: "EUR",precision: 2}}  width={150} allowHeaderFiltering={false}/> 
                                 <Column dataField="VAT" caption={this.t("grdGroupSalesReport.clmVat")} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}} visible={true} width={150} allowHeaderFiltering={false}/> 
