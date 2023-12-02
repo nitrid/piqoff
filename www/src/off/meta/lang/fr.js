@@ -17375,7 +17375,8 @@ export const langFr =
             clmFamount : "Montant hors taxe",   
             clmVat : "Montant de taxe",    
             clmTotal : "Montant total",   
-            clmRestTotal : "Bénéfice total hors taxe"   
+            clmRestTotal : "Bénéfice total hors taxe",
+            clmQuantity : "Quantité produits"
         },    
         grpGrpDetail :    
         {
@@ -18602,7 +18603,8 @@ export const langFr =
             clmFamount : "Total HT",  
             clmVat : "Total TVA",  
             clmTotal : "Montant Total",  
-            clmRestTotal : "Total Bénéfice HT"  
+            clmRestTotal : "Total Bénéfice HT",
+            clmQuantity : "Quantité produits"
         },
         grpGrpDetail : 
         {
