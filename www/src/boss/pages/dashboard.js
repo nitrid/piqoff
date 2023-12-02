@@ -572,12 +572,18 @@ export default class Dashboard extends React.PureComponent
               <Label
                 visible={true}
                 format="fixedPoint"
-                customizeText={this.customizeLabel}
+                customizeText={(arg)=>
+                  {
+                    if( arg.valueText  !=0)  
+                    return arg.valueText +"€" + " (" + arg.percentText + ")";  
+                    else  
+                     return arg.valueText+"€";  
+                  }}
               >
               <Connector visible={true} width={1} />
               </Label>
             </Series>
-              <Legend horizontalAlignment="center" verticalAlignment="bottom" />
+              <Legend horizontalAlignment="center" verticalAlignment="bottom" percent={true}/>
             </PieChart>
           </div>
         </div>
