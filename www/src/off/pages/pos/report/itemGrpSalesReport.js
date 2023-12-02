@@ -98,6 +98,7 @@ export default class itemGrpSalesReport extends React.PureComponent
                         "'' AS TICKET,  " +
                         "ROUND(SUM(TOTAL),2) AS TOTAL,  " +
                         "ROUND(SUM(FAMOUNT),2) AS FAMOUNT,  " +
+                        "ROUND(SUM(QUANTITY),2) AS QUANTITY,  " +
                         "ROUND(SUM(VAT),2) AS VAT,  " +
                         "ROUND(SUM(QUANTITY),2) AS QUANTITY,  " +
                         "ROUND(SUM(COST_PRICE * QUANTITY),2) AS TOTAL_COST,  " +
@@ -287,6 +288,10 @@ export default class itemGrpSalesReport extends React.PureComponent
                                 <Summary>
                                     <TotalItem
                                     column="TOTAL_COST"
+                                    summaryType="sum"
+                                    valueFormat={{ style: "currency", currency: "EUR",precision: 2}} />
+                                     <TotalItem
+                                    column="QUANTITY"
                                     summaryType="sum"
                                     valueFormat={{ style: "currency", currency: "EUR",precision: 2}} />
                                      <TotalItem
