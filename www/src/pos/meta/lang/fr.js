@@ -826,16 +826,16 @@ export const langFr =
         scannerPort : "Scanner port",
         printerPort: "Printer port"
     },
-    msgNotBarcodeWeighing: //BAK
+    msgNotBarcodeWeighing: 
     {
-        title: "Attention",
-        msg: "The total quantity of the weighed product does not match the scanned barcode!",
-        msgTicket: "Weighed quantity: ",
-        msgBarkod: "Label quantity: ",
-        msgDifference: "Difference: ",
-        msgTotalAmount : "Montant total",
-        btn01: "OK",
-        btn02: "Continue"
+        title : "Attention",
+        msg : "Quantité pesée ne correspond pas avec quantité sur le ticket!",
+        msgTicket :"Quantité pesé : ",
+        msgBarkod : "Quantité étiquette : ",
+        msgDifference : "Différence: ",
+        msgTotalAmount : "Montant Total",
+        btn01 : "Abandonner",
+        btn02 : "Continuer"
     },
     msgBarcodeWeighing: //BAK
     {
