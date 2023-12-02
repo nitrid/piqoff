@@ -267,6 +267,7 @@ export default class itemGrpSalesReport extends React.PureComponent
                             columnAutoWidth={true}
                             allowColumnReordering={true}
                             allowColumnResizing={true}
+                            loadPanel={{enabled:true}}
                             onRowDblClick={async(e)=>
                                 {
                                     this.getDetail(e.data.ITEM_GRP_NAME)
@@ -291,8 +292,7 @@ export default class itemGrpSalesReport extends React.PureComponent
                                     valueFormat={{ style: "currency", currency: "EUR",precision: 2}} />
                                      <TotalItem
                                     column="QUANTITY"
-                                    summaryType="sum"
-                                    valueFormat={{ style: "currency", currency: "EUR",precision: 2}} />
+                                    summaryType="sum" />
                                      <TotalItem
                                     column="FAMOUNT"
                                     summaryType="sum"
@@ -323,7 +323,7 @@ export default class itemGrpSalesReport extends React.PureComponent
                             <NdButton text={this.t("btnGetAnalysis")} type="danger" width="100%" onClick={this.btnAnalysis}></NdButton>
                         </div>
                     </div>
-                    {/* Puan Detayı PopUp */}
+                    {/* Detayı PopUp */}
                     <div>
                         <NdPopUp parent={this} id={"popGrpDetail"} 
                         visible={false}
@@ -347,6 +347,7 @@ export default class itemGrpSalesReport extends React.PureComponent
                                     columnAutoWidth={true}
                                     allowColumnReordering={true}
                                     allowColumnResizing={true}
+                                    loadPanel={{enabled:true}}
                                     onCellPrepared={(e) =>
                                     {
 
