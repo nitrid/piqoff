@@ -520,6 +520,7 @@ export const langFr =
         popPrice:
         {
             title: "Ajouter Prix",
+            cmbPopPriListNo: "Numéro de Liste", //BAK
             dtPopPriStartDate: "Date Début",
             dtPopPriEndDate: "Date Fin", 
             cmbPopPriDepot: "Depot",
@@ -556,7 +557,7 @@ export const langFr =
         },
         grdPrice: 
         {
-            clmType: "Type",
+            clmListNo: "No. de Liste", //BAK
             clmDepot: "Réserve",
             clmCustomerName: "Fournisseur",
             clmStartDate: "Date Début",
@@ -3302,6 +3303,13 @@ export const langFr =
             title : "Choix de la zone",  
             clmCode : "Code",  
             clmName : "Nom", 
+        },
+        txtPriceListNo: "Numéro Liste Prix", //BAK
+        pg_priceListNo: //BAK
+        {
+            title: "Sélection de la Liste de Prix",
+            clmNo: "Numéro",
+            clmName: "Nom"
         },
         popNote : 
         {

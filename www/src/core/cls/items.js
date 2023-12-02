@@ -453,6 +453,7 @@ export class itemPriceCls
             CUSER_NAME : this.core.auth.data == null ? '' : this.core.auth.data.NAME,
             TYPE : 0,
             TYPE_NAME : '',
+            LIST_NO : 0,
             ITEM_GUID : '00000000-0000-0000-0000-000000000000',
             ITEM_CODE : '',
             ITEM_NAME : '',
@@ -497,6 +498,7 @@ export class itemPriceCls
                     "@GUID = @PGUID, " +
                     "@CUSER = @PCUSER, " + 
                     "@TYPE = @PTYPE, " + 
+                    "@LIST_NO = @PLIST_NO, " + 
                     "@ITEM = @PITEM, " + 
                     "@DEPOT = @PDEPOT, " + 
                     "@START_DATE = @PSTART_DATE, " + 
@@ -504,9 +506,9 @@ export class itemPriceCls
                     "@PRICE = @PPRICE, " + 
                     "@QUANTITY = @PQUANTITY, " + 
                     "@CUSTOMER = @PCUSTOMER ", 
-            param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PITEM:string|50','PDEPOT:string|50','PSTART_DATE:date','PFINISH_DATE:date',
+            param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PLIST_NO:int','PITEM:string|50','PDEPOT:string|50','PSTART_DATE:date','PFINISH_DATE:date',
                      'PPRICE:float','PQUANTITY:float','PCUSTOMER:string|50'],
-            dataprm : ['GUID','CUSER','TYPE','ITEM_GUID','DEPOT','START_DATE','FINISH_DATE','PRICE','QUANTITY','CUSTOMER_GUID']
+            dataprm : ['GUID','CUSER','TYPE','LIST_NO','ITEM_GUID','DEPOT','START_DATE','FINISH_DATE','PRICE','QUANTITY','CUSTOMER_GUID']
         } 
         tmpDt.updateCmd = 
         {
@@ -514,6 +516,7 @@ export class itemPriceCls
                     "@GUID = @PGUID, " +
                     "@CUSER = @PCUSER, " + 
                     "@TYPE = @PTYPE, " + 
+                    "@LIST_NO = @PLIST_NO, " + 
                     "@ITEM = @PITEM, " + 
                     "@DEPOT = @PDEPOT, " + 
                     "@START_DATE = @PSTART_DATE, " + 
@@ -521,9 +524,9 @@ export class itemPriceCls
                     "@PRICE = @PPRICE, " + 
                     "@QUANTITY = @PQUANTITY, " + 
                     "@CUSTOMER = @PCUSTOMER ", 
-            param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PITEM:string|50','PDEPOT:string|50','PSTART_DATE:date','PFINISH_DATE:date',
+            param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PLIST_NO:int','PITEM:string|50','PDEPOT:string|50','PSTART_DATE:date','PFINISH_DATE:date',
                      'PPRICE:float','PQUANTITY:float','PCUSTOMER:string|50'],
-            dataprm : ['GUID','CUSER','TYPE','ITEM_GUID','DEPOT','START_DATE','FINISH_DATE','PRICE','QUANTITY','CUSTOMER_GUID']
+            dataprm : ['GUID','CUSER','TYPE','LIST_NO','ITEM_GUID','DEPOT','START_DATE','FINISH_DATE','PRICE','QUANTITY','CUSTOMER_GUID']
         } 
         tmpDt.deleteCmd = 
         {

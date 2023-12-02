@@ -514,6 +514,7 @@ export const langDe =
         popPrice: 
         {
             title: "Preis hinzufügen",
+            cmbPopPriListNo: "Listennummer", //BAK
             dtPopPriStartDate: "Startdatum",
             dtPopPriEndDate: "Enddatum",
             txtPopPriQuantity: "Menge",
@@ -549,7 +550,7 @@ export const langDe =
         },
         grdPrice: 
         {
-            clmType: "Typ",
+            clmListNo: "Listennummer", //BAK
             clmDepot: "Lager",
             clmCustomerName: "Kunde",
             clmStartDate: "Startdatum",
@@ -3291,6 +3292,13 @@ export const langDe =
             title : "Bölge Seçim",    // BAK
             clmCode : "KODU",    // BAK
             clmName : "Name",    // BAK
+        },
+        txtPriceListNo: "Preislistennummer", //BAK
+        pg_priceListNo: //BAK
+        {
+            title: "Auswahl der Preisliste",
+            clmNo: "Nummer",
+            clmName: "Name"
         },
         popNote : 
         {

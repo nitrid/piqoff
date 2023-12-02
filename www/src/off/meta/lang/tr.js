@@ -522,6 +522,7 @@ export const langTr =
         popPrice:
         {
             title: "Fiyat Ekle",
+            cmbPopPriListNo: "Liste No",
             dtPopPriStartDate: "Baş.Tarih",
             dtPopPriEndDate: "Bit.Tarih", 
             cmbPopPriDepot: "Depo",
@@ -558,7 +559,7 @@ export const langTr =
         },
         grdPrice: 
         {
-            clmType: "Tip",
+            clmListNo: "Liste No",
             clmDepot: "Depo",
             clmCustomerName: "Müşteri",
             clmStartDate: "Baş.Tarih",
@@ -3303,6 +3304,13 @@ export const langTr =
             title : "Bölge Seçim",
             clmCode : "KODU",
             clmName : "Adı",
+        },
+        txtPriceListNo : "Fiyat Liste No",
+        pg_priceListNo : 
+        {
+            title : "Fiyat Liste Seçimi",
+            clmNo : "No",
+            clmName : "Adı"
         },
         popNote : 
         {
