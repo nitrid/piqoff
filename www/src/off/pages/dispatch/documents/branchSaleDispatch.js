@@ -123,7 +123,7 @@ export default class branchSaleDispatch extends DocBase
         this.txtRef.readOnly = true
         this.txtRefno.readOnly = true
     }
-    async calculateTotal()
+    calculateTotal()
     {        
         super.calculateTotal();
         super.calculateTotalMargin();
@@ -224,12 +224,14 @@ export default class branchSaleDispatch extends DocBase
     {
         this.combineControl = true
         this.combineNew = false
+
+        this.grdSlsDispatch.devGrid.beginUpdate()
         for (let i = 0; i < this.multiItemData.length; i++) 
         {
-            await this.core.util.waitUntil(100)
             await this.addItem(this.multiItemData[i],null,this.multiItemData[i].QUANTITY)
             this.popMultiItem.hide()
         }
+        this.grdSlsDispatch.devGrid.endUpdate()
     }
     _cellRoleRender(e)
     {
@@ -248,14 +250,13 @@ export default class branchSaleDispatch extends DocBase
                             {
                                 this.combineControl = true
                                 this.combineNew = false
-                                if(data.length > 0)
+
+                                this.grdSlsDispatch.devGrid.beginUpdate()
+                                for (let i = 0; i < data.length; i++) 
                                 {
-                                    for (let i = 0; i < data.length; i++) 
-                                        {
-                                            await this.core.util.waitUntil(100)
-                                            await this.addItem(data[i],e.rowIndex)
-                                        }
+                                    await this.addItem(data[i],e.rowIndex)
                                 }
+                                this.grdSlsDispatch.devGrid.endUpdate()
                             }
                             this.pg_txtItemsCode.setVal(e.value)
                         }
@@ -307,14 +308,13 @@ export default class branchSaleDispatch extends DocBase
                                 {
                                     this.combineControl = true
                                     this.combineNew = false
-                                    if(data.length > 0)
+
+                                    this.grdSlsDispatch.devGrid.beginUpdate()
+                                    for (let i = 0; i < data.length; i++) 
                                     {
-                                        for (let i = 0; i < data.length; i++) 
-                                        {
-                                                await this.addItem(data[i],e.rowIndex)
-                                                await this.core.util.waitUntil(100)
-                                        }
+                                        await this.addItem(data[i],e.rowIndex)
                                     }
+                                    this.grdSlsDispatch.devGrid.endUpdate()
                                 }
                                 this.pg_txtItemsCode.show()
                             }
@@ -465,139 +465,145 @@ export default class branchSaleDispatch extends DocBase
             )
         }
     }
-    async addItem(pData,pIndex,pQuantity)
+    addItem(pData,pIndex,pQuantity)
     {
-        App.instance.setState({isExecute:true})
-
-        this.txtRef.readOnly = true
-        this.txtRefno.readOnly = true
-
-        if(typeof pQuantity == 'undefined')
+        return new Promise(async resolve =>
         {
-            pQuantity = 1
-        }
-        //GRID DE AYNI ÜRÜNDEN OLUP OLMADIĞI KONTROL EDİLİYOR VE KULLANICIYA SORULUYOR,CEVAP A GÖRE SATIR BİRLİŞTERİLİYOR.
-        if(pData.ITEM_TYPE == 0)
-        {
-            let tmpMergDt = await this.mergeItem(pData.CODE)
-            if(typeof tmpMergDt != 'undefined' && this.combineNew == false)
+            App.instance.setState({isExecute:true})
+    
+            this.txtRef.readOnly = true
+            this.txtRefno.readOnly = true
+    
+            if(typeof pQuantity == 'undefined')
             {
-                tmpMergDt[0].QUANTITY = tmpMergDt[0].QUANTITY + pQuantity
-                tmpMergDt[0].SUB_QUANTITY = tmpMergDt[0].SUB_QUANTITY / tmpMergDt[0].SUB_FACTOR
-                tmpMergDt[0].VAT = Number((tmpMergDt[0].VAT + (tmpMergDt[0].PRICE * (tmpMergDt[0].VAT_RATE / 100) * pQuantity))).round(6)
-                tmpMergDt[0].AMOUNT = Number((tmpMergDt[0].QUANTITY * tmpMergDt[0].PRICE)).round(4)
-                tmpMergDt[0].TOTAL = Number((((tmpMergDt[0].QUANTITY * tmpMergDt[0].PRICE) - tmpMergDt[0].DISCOUNT) + tmpMergDt[0].VAT)).round(2)
-                tmpMergDt[0].TOTALHT =  Number((tmpMergDt[0].AMOUNT - tmpMergDt[0].DISCOUNT)).round(2)
-                this.calculateTotal()
-                //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
-                await this.itemRelated(pData.GUID,tmpMergDt[0].QUANTITY)
-                //*****************************************/
-                App.instance.setState({isExecute:false})
-                return
+                pQuantity = 1
             }
-        }
-        //******************************************************************************************************************/
-        if(pIndex == null)
-        {
-            let tmpDocItems = {...this.docObj.docItems.empty}
-            tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
-            tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
-            tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-            tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
-            tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
-            tmpDocItems.REF = this.docObj.dt()[0].REF
-            tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
-            tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
-            tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
-            tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-            tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
-            this.docObj.docItems.addEmpty(tmpDocItems)
-            pIndex = this.docObj.docItems.dt().length - 1
-        }
-
-        let tmpGrpQuery = 
-        {
-            query : "SELECT ORGINS,UNIT_SHORT,ISNULL((SELECT top 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID AND ITEM_UNIT_VW_01.TYPE = 1),1) AS SUB_FACTOR, " +
-                    "ISNULL((SELECT top 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID AND ITEM_UNIT_VW_01.TYPE = 1),'') AS SUB_SYMBOL FROM ITEMS_VW_01 WHERE GUID = @GUID ",
-            param : ['GUID:string|50'],
-            value : [pData.GUID]
-        }
-        let tmpGrpData = await this.core.sql.execute(tmpGrpQuery) 
-        if(tmpGrpData.result.recordset.length > 0)
-        {
-            this.docObj.docItems.dt()[pIndex].ORIGIN = tmpGrpData.result.recordset[0].ORGINS
-            this.docObj.docItems.dt()[pIndex].SUB_FACTOR = tmpGrpData.result.recordset[0].SUB_FACTOR
-            this.docObj.docItems.dt()[pIndex].SUB_SYMBOL = tmpGrpData.result.recordset[0].SUB_SYMBOL
-            this.docObj.docItems.dt()[pIndex].UNIT_SHORT = tmpGrpData.result.recordset[0].UNIT_SHORT
-        }
-
-        if(typeof this.quantityControl != 'undefined' && this.quantityControl ==  true)
-        {
-            let tmpCheckQuery = 
+            //GRID DE AYNI ÜRÜNDEN OLUP OLMADIĞI KONTROL EDİLİYOR VE KULLANICIYA SORULUYOR,CEVAP A GÖRE SATIR BİRLİŞTERİLİYOR.
+            if(pData.ITEM_TYPE == 0)
             {
-                query :"SELECT [dbo].[FN_DEPOT_QUANTITY](@GUID,@DEPOT,GETDATE()) AS QUANTITY ",
-                param : ['GUID:string|50','DEPOT:string|50'],
-                value : [pData.GUID,this.docObj.dt()[0].OUTPUT]
-            }
-            let tmpQuantity = await this.core.sql.execute(tmpCheckQuery) 
-            if(tmpQuantity.result.recordset.length > 0)
-            {
-               if(tmpQuantity.result.recordset[0].QUANTITY < pQuantity)
-               {
+                let tmpMergDt = await this.mergeItem(pData.CODE)
+                if(typeof tmpMergDt != 'undefined' && this.combineNew == false)
+                {
+                    tmpMergDt[0].QUANTITY = tmpMergDt[0].QUANTITY + pQuantity
+                    tmpMergDt[0].SUB_QUANTITY = tmpMergDt[0].SUB_QUANTITY / tmpMergDt[0].SUB_FACTOR
+                    tmpMergDt[0].VAT = Number((tmpMergDt[0].VAT + (tmpMergDt[0].PRICE * (tmpMergDt[0].VAT_RATE / 100) * pQuantity))).round(6)
+                    tmpMergDt[0].AMOUNT = Number((tmpMergDt[0].QUANTITY * tmpMergDt[0].PRICE)).round(4)
+                    tmpMergDt[0].TOTAL = Number((((tmpMergDt[0].QUANTITY * tmpMergDt[0].PRICE) - tmpMergDt[0].DISCOUNT) + tmpMergDt[0].VAT)).round(2)
+                    tmpMergDt[0].TOTALHT =  Number((tmpMergDt[0].AMOUNT - tmpMergDt[0].DISCOUNT)).round(2)
+                    this.calculateTotal()
+                    //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
+                    await this.itemRelated(pData.GUID,tmpMergDt[0].QUANTITY)
+                    //*****************************************/
                     App.instance.setState({isExecute:false})
-                    let tmpConfObj =
-                    {
-                        id:'msgNotQuantity',showTitle:true,title:this.t("msgNotQuantity.title"),showCloseButton:true,width:'500px',height:'200px',
-                        button:[{id:"btn01",caption:this.t("msgNotQuantity.btn01"),location:'after'}],
-                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNotQuantity.msg") + tmpQuantity.result.recordset[0].QUANTITY}</div>)
-                    }
-        
-                    await dialog(tmpConfObj);
-                    await this.grdSlsDispatch.devGrid.deleteRow(0)
+                    resolve()
                     return
-               }
-               else
-               {
-                    this.docObj.docItems.dt()[pIndex].DEPOT_QUANTITY = tmpQuantity.result.recordset[0].QUANTITY
-               }
+                }
             }
-        }
-        
-        this.docObj.docItems.dt()[pIndex].ITEM_CODE = pData.CODE
-        this.docObj.docItems.dt()[pIndex].ITEM = pData.GUID
-        this.docObj.docItems.dt()[pIndex].VAT_RATE = pData.VAT
-        this.docObj.docItems.dt()[pIndex].ITEM_NAME = pData.NAME
-        this.docObj.docItems.dt()[pIndex].COST_PRICE = pData.COST_PRICE
-        this.docObj.docItems.dt()[pIndex].ITEM_BARCODE = pData.BARCODE
-        this.docObj.docItems.dt()[pIndex].UNIT = pData.UNIT
-        this.docObj.docItems.dt()[pIndex].DISCOUNT = 0
-        this.docObj.docItems.dt()[pIndex].DISCOUNT_RATE = 0
-        this.docObj.docItems.dt()[pIndex].QUANTITY = pQuantity
-        this.docObj.docItems.dt()[pIndex].SUB_QUANTITY = pQuantity * this.docObj.docItems.dt()[pIndex].SUB_FACTOR
-        let tmpQuery = 
-        {
-            query :"SELECT COST_PRICE AS PRICE FROM ITEMS_VW_01 WHERE GUID = @GUID",
-            param : ['GUID:string|50'],
-            value : [pData.GUID]
-        }
-        let tmpData = await this.core.sql.execute(tmpQuery) 
-        if(tmpData.result.recordset.length > 0)
-        {
-            let tmpMargin = tmpData.result.recordset[0].PRICE - this.docObj.docItems.dt()[pIndex].COST_PRICE
-            let tmpMarginRate = ((tmpData.result.recordset[0].PRICE - this.docObj.docItems.dt()[pIndex].COST_PRICE) - tmpData.result.recordset[0].PRICE) * 100
-            this.docObj.docItems.dt()[pIndex].MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
-            this.docObj.docItems.dt()[pIndex].PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(3))
-            this.docObj.docItems.dt()[pIndex].VAT = parseFloat((tmpData.result.recordset[0].PRICE * (pData.VAT / 100) * pQuantity).toFixed(6))
-            this.docObj.docItems.dt()[pIndex].AMOUNT = parseFloat((tmpData.result.recordset[0].PRICE * pQuantity ).toFixed(3))
-            this.docObj.docItems.dt()[pIndex].TOTAL =  parseFloat(((tmpData.result.recordset[0].PRICE * pQuantity) + this.docObj.docItems.dt()[pIndex].VAT).toFixed(2))
-            this.docObj.docItems.dt()[pIndex].TOTALHT =  parseFloat((this.docObj.docItems.dt()[pIndex].AMOUNT - this.docObj.docItems.dt()[pIndex].DISCOUNT).toFixed(2))
-            this.docObj.docItems.dt()[pIndex].SUB_PRICE = Number(parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4)) / this.docObj.docItems.dt()[pIndex].SUB_FACTOR).round(2)
-            this.calculateTotal()
-        }
-        //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
-        await this.itemRelated(pData.GUID,pQuantity)
-        //*****************************************/
-        App.instance.setState({isExecute:false})
+            //******************************************************************************************************************/
+            if(pIndex == null)
+            {
+                let tmpDocItems = {...this.docObj.docItems.empty}
+                tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+                tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+                tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
+                tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
+                tmpDocItems.REF = this.docObj.dt()[0].REF
+                tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+                tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+                tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+                tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
+                this.docObj.docItems.addEmpty(tmpDocItems)
+                pIndex = this.docObj.docItems.dt().length - 1
+            }
+    
+            let tmpGrpQuery = 
+            {
+                query : "SELECT ORGINS,UNIT_SHORT,ISNULL((SELECT top 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID AND ITEM_UNIT_VW_01.TYPE = 1),1) AS SUB_FACTOR, " +
+                        "ISNULL((SELECT top 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID AND ITEM_UNIT_VW_01.TYPE = 1),'') AS SUB_SYMBOL FROM ITEMS_VW_01 WHERE GUID = @GUID ",
+                param : ['GUID:string|50'],
+                value : [pData.GUID]
+            }
+            let tmpGrpData = await this.core.sql.execute(tmpGrpQuery) 
+            if(tmpGrpData.result.recordset.length > 0)
+            {
+                this.docObj.docItems.dt()[pIndex].ORIGIN = tmpGrpData.result.recordset[0].ORGINS
+                this.docObj.docItems.dt()[pIndex].SUB_FACTOR = tmpGrpData.result.recordset[0].SUB_FACTOR
+                this.docObj.docItems.dt()[pIndex].SUB_SYMBOL = tmpGrpData.result.recordset[0].SUB_SYMBOL
+                this.docObj.docItems.dt()[pIndex].UNIT_SHORT = tmpGrpData.result.recordset[0].UNIT_SHORT
+            }
+    
+            if(typeof this.quantityControl != 'undefined' && this.quantityControl ==  true)
+            {
+                let tmpCheckQuery = 
+                {
+                    query :"SELECT [dbo].[FN_DEPOT_QUANTITY](@GUID,@DEPOT,GETDATE()) AS QUANTITY ",
+                    param : ['GUID:string|50','DEPOT:string|50'],
+                    value : [pData.GUID,this.docObj.dt()[0].OUTPUT]
+                }
+                let tmpQuantity = await this.core.sql.execute(tmpCheckQuery) 
+                if(tmpQuantity.result.recordset.length > 0)
+                {
+                   if(tmpQuantity.result.recordset[0].QUANTITY < pQuantity)
+                   {
+                        App.instance.setState({isExecute:false})
+                        let tmpConfObj =
+                        {
+                            id:'msgNotQuantity',showTitle:true,title:this.t("msgNotQuantity.title"),showCloseButton:true,width:'500px',height:'200px',
+                            button:[{id:"btn01",caption:this.t("msgNotQuantity.btn01"),location:'after'}],
+                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNotQuantity.msg") + tmpQuantity.result.recordset[0].QUANTITY}</div>)
+                        }
+            
+                        await dialog(tmpConfObj);
+                        await this.grdSlsDispatch.devGrid.deleteRow(0)
+                        resolve()
+                        return
+                   }
+                   else
+                   {
+                        this.docObj.docItems.dt()[pIndex].DEPOT_QUANTITY = tmpQuantity.result.recordset[0].QUANTITY
+                   }
+                }
+            }
+            
+            this.docObj.docItems.dt()[pIndex].ITEM_CODE = pData.CODE
+            this.docObj.docItems.dt()[pIndex].ITEM = pData.GUID
+            this.docObj.docItems.dt()[pIndex].VAT_RATE = pData.VAT
+            this.docObj.docItems.dt()[pIndex].ITEM_NAME = pData.NAME
+            this.docObj.docItems.dt()[pIndex].COST_PRICE = pData.COST_PRICE
+            this.docObj.docItems.dt()[pIndex].ITEM_BARCODE = pData.BARCODE
+            this.docObj.docItems.dt()[pIndex].UNIT = pData.UNIT
+            this.docObj.docItems.dt()[pIndex].DISCOUNT = 0
+            this.docObj.docItems.dt()[pIndex].DISCOUNT_RATE = 0
+            this.docObj.docItems.dt()[pIndex].QUANTITY = pQuantity
+            this.docObj.docItems.dt()[pIndex].SUB_QUANTITY = pQuantity * this.docObj.docItems.dt()[pIndex].SUB_FACTOR
+            let tmpQuery = 
+            {
+                query :"SELECT COST_PRICE AS PRICE FROM ITEMS_VW_01 WHERE GUID = @GUID",
+                param : ['GUID:string|50'],
+                value : [pData.GUID]
+            }
+            let tmpData = await this.core.sql.execute(tmpQuery) 
+            if(tmpData.result.recordset.length > 0)
+            {
+                let tmpMargin = tmpData.result.recordset[0].PRICE - this.docObj.docItems.dt()[pIndex].COST_PRICE
+                let tmpMarginRate = ((tmpData.result.recordset[0].PRICE - this.docObj.docItems.dt()[pIndex].COST_PRICE) - tmpData.result.recordset[0].PRICE) * 100
+                this.docObj.docItems.dt()[pIndex].MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
+                this.docObj.docItems.dt()[pIndex].PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(3))
+                this.docObj.docItems.dt()[pIndex].VAT = parseFloat((tmpData.result.recordset[0].PRICE * (pData.VAT / 100) * pQuantity).toFixed(6))
+                this.docObj.docItems.dt()[pIndex].AMOUNT = parseFloat((tmpData.result.recordset[0].PRICE * pQuantity ).toFixed(3))
+                this.docObj.docItems.dt()[pIndex].TOTAL =  parseFloat(((tmpData.result.recordset[0].PRICE * pQuantity) + this.docObj.docItems.dt()[pIndex].VAT).toFixed(2))
+                this.docObj.docItems.dt()[pIndex].TOTALHT =  parseFloat((this.docObj.docItems.dt()[pIndex].AMOUNT - this.docObj.docItems.dt()[pIndex].DISCOUNT).toFixed(2))
+                this.docObj.docItems.dt()[pIndex].SUB_PRICE = Number(parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4)) / this.docObj.docItems.dt()[pIndex].SUB_FACTOR).round(2)
+                this.calculateTotal()
+            }
+            //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
+            await this.itemRelated(pData.GUID,pQuantity)
+            //*****************************************/
+            App.instance.setState({isExecute:false})
+            resolve()
+        })
     }
     async getOrders()
     {
@@ -1265,20 +1271,13 @@ export default class branchSaleDispatch extends DocBase
                                                     this.pg_txtBarcode.onClick = async(data) =>
                                                     {
                                                         this.txtBarcode.value = ''
-                                                        await this.core.util.waitUntil(100)
 
-                                                        if(data.length > 0)
+                                                        this.grdSlsDispatch.devGrid.beginUpdate()
+                                                        for (let i = 0; i < data.length; i++) 
                                                         {
-                                                            this.combineControl = true
-                                                            this.combineNew = false
-        
-                                                            for (let i = 0; i < data.length; i++) 
-                                                            {
-                                                                await this.core.util.waitUntil(100)
-                                                                await this.addItem(data[i],null) 
-                                                            } 
-                                                                
+                                                            await this.addItem(data[i],null) 
                                                         }
+                                                        this.grdSlsDispatch.devGrid.endUpdate()
                                                     }
                                                     this.pg_txtBarcode.setVal(this.txtBarcode.value)
                                                 }
@@ -1318,17 +1317,15 @@ export default class branchSaleDispatch extends DocBase
                                             
                                             this.pg_txtItemsCode.onClick = async(data) =>
                                             {
-                                                await this.core.util.waitUntil(100)
                                                 this.combineControl = true
                                                 this.combineNew = false
-                                                if(data.length > 0)
+
+                                                this.grdSlsDispatch.devGrid.beginUpdate()
+                                                for (let i = 0; i < data.length; i++) 
                                                 {
-                                                    for (let i = 0; i < data.length; i++) 
-                                                    {
-                                                        await this.core.util.waitUntil(100)
-                                                        await this.addItem(data[i],null)
-                                                    }
+                                                    await this.addItem(data[i],null)
                                                 }
+                                                this.grdSlsDispatch.devGrid.endUpdate()
                                             }
                                             this.pg_txtItemsCode.setVal(this.txtBarcode.value)
                                         }
@@ -1364,14 +1361,13 @@ export default class branchSaleDispatch extends DocBase
                                                     {
                                                         this.combineControl = true
                                                         this.combineNew = false
-                                                        if(data.length > 0)
+
+                                                        this.grdSlsDispatch.devGrid.beginUpdate()
+                                                        for (let i = 0; i < data.length; i++) 
                                                         {
-                                                            for (let i = 0; i < data.length; i++) 
-                                                            {
-                                                                await this.core.util.waitUntil(100)
-                                                                await this.addItem(data[i],null)
-                                                            }
+                                                            await this.addItem(data[i],null)
                                                         }
+                                                        this.grdSlsDispatch.devGrid.endUpdate()
                                                     }
                                                     this.pg_txtItemsCode.show()
                                                     return
@@ -1380,17 +1376,15 @@ export default class branchSaleDispatch extends DocBase
                                             
                                             this.pg_txtItemsCode.onClick = async(data) =>
                                             {
-                                                await this.core.util.waitUntil(100)
                                                 this.combineControl = true
                                                 this.combineNew = false
-                                                if(data.length > 0)
+
+                                                this.grdSlsDispatch.devGrid.beginUpdate()
+                                                for (let i = 0; i < data.length; i++) 
                                                 {
-                                                    for (let i = 0; i < data.length; i++) 
-                                                    {
-                                                        await this.core.util.waitUntil(100)
-                                                        await this.addItem(data[i],null)
-                                                    }
+                                                    await this.addItem(data[i],null)
                                                 }
+                                                this.grdSlsDispatch.devGrid.endUpdate()
                                             }
                                             this.pg_txtItemsCode.show()
                                             
@@ -1787,9 +1781,6 @@ export default class branchSaleDispatch extends DocBase
                                     valueExpr="TAG"
                                     value=""
                                     searchEnabled={true}
-                                    onValueChanged={(async()=>
-                                        {
-                                        }).bind(this)}
                                     data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '42'"},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
@@ -1806,9 +1797,6 @@ export default class branchSaleDispatch extends DocBase
                                     valueExpr="ID"
                                     value=""
                                     searchEnabled={true}
-                                    onValueChanged={(async()=>
-                                        {
-                                        }).bind(this)}
                                     data={{source:[{ID:"FR",VALUE:"FR"},{ID:"DE",VALUE:"DE"},{ID:"TR",VALUE:"TR"}]}}
                                     >
                                     </NdSelectBox>
