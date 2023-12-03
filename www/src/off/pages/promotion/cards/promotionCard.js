@@ -931,8 +931,8 @@ export default class promotionCard extends React.PureComponent
                                                 }
                                                 else if(this.state["rstType" + pItem.WITHAL] == 5)
                                                 {
-                                                    this["txtRstQuantity" + pItem.WITHAL].value = this["txtDiscAmount" + pItem.WITHAL].value
-                                                    this.appDt.where({WITHAL:pItem.WITHAL})[0].AMOUNT = this["txtDiscAmount" + pItem.WITHAL].value
+                                                    this["txtRstQuantity" + pItem.WITHAL].value = Number(this["txtDiscAmount" + pItem.WITHAL].value)
+                                                    this.appDt.where({WITHAL:pItem.WITHAL})[0].AMOUNT = Number(this["txtDiscAmount" + pItem.WITHAL].value)
                                                 }
 
                                                 
