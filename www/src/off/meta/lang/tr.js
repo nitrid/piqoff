@@ -341,7 +341,7 @@ export const langTr =
         set_02_006 : "Destek Talebi Oluştur",
         set_02_007 : "Destek Talebi Geçmişi",
         set_02_008 : "Gümrük Kodu Excel Kayıt",
-        set_02_009: "Mail Ayarlari",
+        set_02_009: "Mail Ayarları",
         set_03 : "Evrak Ayarları",
         set_03_001 : "Silinmiş Evraklar",
         set_03_002 : "Silinmiş Satırlar",
@@ -6203,6 +6203,7 @@ export const langTr =
             title : "Ürün Seçimi",
             clmCode :  "ÜRÜN KODU",
             clmName : "ÜRÜN ADI",
+            clmPrice : "Fiyat"
         },
         pg_dispatchGrid : 
         {
@@ -16407,25 +16408,21 @@ export const langTr =
     },
     set_02_009:
     {
-        txtMailService : 
+        popAddMail : 
         {
-            title : " 1 - Mail servisi",
-            gmail : "Gmail",
-            outlook : "Outlook",
-            yahoo : "Yahoo",
-            laposte : "Laposte",
+            title : " Mail ekle" ,
         },
-        txtBoxOther : "Diger",
-        txtBoxOtherPlace : "piqsoft",
-        txtBoxMail: " 2 - Mail adresi ",
-        txtBoxMailPlace: "iletesim@piqsoft.com",
-        txtBoxPsswd : " 3 - Sifre ",
-        txtBoxPsswdPlace: "Piqsoft6..",
-        txtBoxSmtp: " 4 - SMTP ",
-        txtBoxSmtpPlace : "SMTP..",
-        txtBoxPort : " 5 - Port No ",
-        txtBoxPortPlace : "6006",
-        btnSave :"Kaydet",
+        grdMailSettings:
+        {
+            clmDate:"Tarih",
+            clmUser : "Kullanıcı",
+            clmMail: "Mail",
+            clmMailService: "Mail servis",
+            clmMailPassword: "Şifre",
+            clmSMTP : "SMTP",
+            clmPORT : "Port No",
+            clmID : "MAIL_ID",
+        },
     },
     pos_01_001 : // "Pos Cihaz Tanıtım",
     {
