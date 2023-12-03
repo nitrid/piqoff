@@ -143,15 +143,12 @@ export default class purchaseOrder extends DocBase
                             this.customerClear = false
                             this.combineControl = true
                             this.combineNew = false
-
-                            if(data.length > 0)
+                            this.grdPurcOrders.devGrid.beginUpdate()
+                            for (let i = 0; i < data.length; i++) 
                             {
-                                for (let i = 0; i < data.length; i++) 
-                                {
-                                    await this.core.util.waitUntil(100)
-                                    await this.addItem(data[i],e.rowIndex)
-                                }
+                                await this.addItem(data[i],e.rowIndex)
                             }
+                            this.grdPurcOrders.devGrid.endUpdate()
                         }
                         await this.pg_txtItemsCode.setVal(e.value)
                     }
@@ -206,14 +203,12 @@ export default class purchaseOrder extends DocBase
                                 this.combineControl = true
                                 this.combineNew = false
 
-                                if(data.length > 0)
+                                this.grdPurcOrders.devGrid.beginUpdate()
+                                for (let i = 0; i < data.length; i++) 
                                 {
-                                    for (let i = 0; i < data.length; i++) 
-                                    {
-                                        await this.core.util.waitUntil(100)
-                                        await this.addItem(data[i],e.rowIndex)
-                                    }
+                                    await this.addItem(data[i],e.rowIndex)
                                 }
+                                this.grdPurcOrders.devGrid.endUpdate()
                             }
                             this.pg_txtItemsCode.show()
                         }
@@ -355,144 +350,153 @@ export default class purchaseOrder extends DocBase
             )
         }
     }
-    async addItem(pData,pIndex,pQuantity)
+    addItem(pData,pIndex,pQuantity)
     {
-        App.instance.setState({isExecute:true})
-
-        this.txtRef.readOnly = true
-        this.txtRefno.readOnly = true
-        if(typeof pQuantity == 'undefined')
+        return new Promise(async resolve => 
         {
-            pQuantity = 1
-        }
-        //GRID DE AYNI ÜRÜNDEN OLUP OLMADIĞI KONTROL EDİLİYOR VE KULLANICIYA SORULUYOR,CEVAP A GÖRE SATIR BİRLİŞTERİLİYOR.
-        let tmpMergDt = await this.mergeItem(pData.CODE)
-        if(typeof tmpMergDt != 'undefined' && this.combineNew == false)
-        {
-            tmpMergDt[0].QUANTITY = tmpMergDt[0].QUANTITY + pQuantity
-            tmpMergDt[0].SUB_QUANTITY = tmpMergDt[0].SUB_QUANTITY / tmpMergDt[0].SUB_FACTOR
-            tmpMergDt[0].VAT = Number((tmpMergDt[0].VAT + (tmpMergDt[0].PRICE * (tmpMergDt[0].VAT_RATE / 100) * pQuantity))).round(6)
-            tmpMergDt[0].AMOUNT = Number((tmpMergDt[0].QUANTITY * tmpMergDt[0].PRICE)).round(4)
-            tmpMergDt[0].TOTAL = Number((((tmpMergDt[0].QUANTITY * tmpMergDt[0].PRICE) - tmpMergDt[0].DISCOUNT) + tmpMergDt[0].VAT)).round(2)
-            tmpMergDt[0].TOTALHT =  Number((tmpMergDt[0].AMOUNT - tmpMergDt[0].DISCOUNT)).round(2)
-            this.calculateTotal()
-            //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
-            await this.itemRelated(pData.GUID,tmpMergDt[0].QUANTITY)
-            //*****************************************/
-            App.instance.setState({isExecute:false})
-            return
-        }
-        //******************************************************************************************************************/
-        if(pIndex == null)
-        {
-            let tmpDocOrders = {...this.docObj.docOrders.empty}
-            tmpDocOrders.DOC_GUID = this.docObj.dt()[0].GUID
-            tmpDocOrders.TYPE = this.docObj.dt()[0].TYPE
-            tmpDocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-            tmpDocOrders.LINE_NO = this.docObj.docOrders.dt().length
-            tmpDocOrders.REF = this.docObj.dt()[0].REF
-            tmpDocOrders.REF_NO = this.docObj.dt()[0].REF_NO
-            tmpDocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
-            tmpDocOrders.INPUT = this.docObj.dt()[0].INPUT
-            tmpDocOrders.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-            this.docObj.docOrders.addEmpty(tmpDocOrders)
-            pIndex = this.docObj.docOrders.dt().length - 1
-        }
-       
-        let tmpGrpQuery = 
-        {
-            query :"SELECT ORGINS,UNIT_SHORT,ISNULL((SELECT top 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID AND ITEM_UNIT_VW_01.TYPE = 1),1) AS SUB_FACTOR, " +
-             "ISNULL((SELECT top 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID AND ITEM_UNIT_VW_01.TYPE = 1),'') AS SUB_SYMBOL FROM ITEMS_VW_01 WHERE GUID = @GUID ",
-            param : ['GUID:string|50'],
-            value : [pData.GUID]
-        }
-        let tmpGrpData = await this.core.sql.execute(tmpGrpQuery) 
-        if(tmpGrpData.result.recordset.length > 0)
-        {
-            this.docObj.docOrders.dt()[pIndex].ORIGIN = tmpGrpData.result.recordset[0].ORGINS
-            this.docObj.docOrders.dt()[pIndex].SUB_FACTOR = tmpGrpData.result.recordset[0].SUB_FACTOR
-            this.docObj.docOrders.dt()[pIndex].SUB_SYMBOL = tmpGrpData.result.recordset[0].SUB_SYMBOL
-            this.docObj.docOrders.dt()[pIndex].UNIT_SHORT = tmpGrpData.result.recordset[0].UNIT_SHORT
-        }
-
-        if(this.customerControl == true)
-        {
-            let tmpCheckQuery = 
+            App.instance.setState({isExecute:true})
+    
+            this.txtRef.readOnly = true
+            this.txtRefno.readOnly = true
+            if(typeof pQuantity == 'undefined')
             {
-                query :"SELECT MULTICODE,(SELECT [dbo].[FN_CUSTOMER_PRICE](ITEM_GUID,CUSTOMER_GUID,@QUANTITY,GETDATE())) AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID",
+                pQuantity = 1
+            }
+            //GRID DE AYNI ÜRÜNDEN OLUP OLMADIĞI KONTROL EDİLİYOR VE KULLANICIYA SORULUYOR,CEVAP A GÖRE SATIR BİRLİŞTERİLİYOR.
+            let tmpMergDt = await this.mergeItem(pData.CODE)
+            if(typeof tmpMergDt != 'undefined' && this.combineNew == false)
+            {
+                tmpMergDt[0].QUANTITY = tmpMergDt[0].QUANTITY + pQuantity
+                tmpMergDt[0].SUB_QUANTITY = tmpMergDt[0].SUB_QUANTITY / tmpMergDt[0].SUB_FACTOR
+                tmpMergDt[0].VAT = Number((tmpMergDt[0].VAT + (tmpMergDt[0].PRICE * (tmpMergDt[0].VAT_RATE / 100) * pQuantity))).round(6)
+                tmpMergDt[0].AMOUNT = Number((tmpMergDt[0].QUANTITY * tmpMergDt[0].PRICE)).round(4)
+                tmpMergDt[0].TOTAL = Number((((tmpMergDt[0].QUANTITY * tmpMergDt[0].PRICE) - tmpMergDt[0].DISCOUNT) + tmpMergDt[0].VAT)).round(2)
+                tmpMergDt[0].TOTALHT =  Number((tmpMergDt[0].AMOUNT - tmpMergDt[0].DISCOUNT)).round(2)
+                this.calculateTotal()
+                //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
+                await this.itemRelated(pData.GUID,tmpMergDt[0].QUANTITY)
+                //*****************************************/
+                App.instance.setState({isExecute:false})
+                resolve()
+                return
+            }
+            //******************************************************************************************************************/
+            if(pIndex == null)
+            {
+                let tmpDocOrders = {...this.docObj.docOrders.empty}
+                tmpDocOrders.DOC_GUID = this.docObj.dt()[0].GUID
+                tmpDocOrders.TYPE = this.docObj.dt()[0].TYPE
+                tmpDocOrders.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                tmpDocOrders.LINE_NO = this.docObj.docOrders.dt().length
+                tmpDocOrders.REF = this.docObj.dt()[0].REF
+                tmpDocOrders.REF_NO = this.docObj.dt()[0].REF_NO
+                tmpDocOrders.OUTPUT = this.docObj.dt()[0].OUTPUT
+                tmpDocOrders.INPUT = this.docObj.dt()[0].INPUT
+                tmpDocOrders.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                this.docObj.docOrders.addEmpty(tmpDocOrders)
+                pIndex = this.docObj.docOrders.dt().length - 1
+            }
+           
+            let tmpGrpQuery = 
+            {
+                query :"SELECT ORGINS,UNIT_SHORT,ISNULL((SELECT top 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID AND ITEM_UNIT_VW_01.TYPE = 1),1) AS SUB_FACTOR, " +
+                 "ISNULL((SELECT top 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID AND ITEM_UNIT_VW_01.TYPE = 1),'') AS SUB_SYMBOL FROM ITEMS_VW_01 WHERE GUID = @GUID ",
+                param : ['GUID:string|50'],
+                value : [pData.GUID]
+            }
+            let tmpGrpData = await this.core.sql.execute(tmpGrpQuery) 
+            if(tmpGrpData.result.recordset.length > 0)
+            {
+                this.docObj.docOrders.dt()[pIndex].ORIGIN = tmpGrpData.result.recordset[0].ORGINS
+                this.docObj.docOrders.dt()[pIndex].SUB_FACTOR = tmpGrpData.result.recordset[0].SUB_FACTOR
+                this.docObj.docOrders.dt()[pIndex].SUB_SYMBOL = tmpGrpData.result.recordset[0].SUB_SYMBOL
+                this.docObj.docOrders.dt()[pIndex].UNIT_SHORT = tmpGrpData.result.recordset[0].UNIT_SHORT
+            }
+    
+            if(this.customerControl == true)
+            {
+                let tmpCheckQuery = 
+                {
+                    query :"SELECT MULTICODE,(SELECT [dbo].[FN_CUSTOMER_PRICE](ITEM_GUID,CUSTOMER_GUID,@QUANTITY,GETDATE())) AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID",
+                    param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
+                    value : [pData.CODE,this.docObj.dt()[0].OUTPUT,pQuantity]
+                }
+                let tmpCheckData = await this.core.sql.execute(tmpCheckQuery) 
+                if(tmpCheckData.result.recordset.length == 0)
+                {   
+                    let tmpCustomerBtn = ''
+                    if(this.customerClear == true)
+                    {
+                        await this.grdPurcOrders.devGrid.deleteRow(0)
+                        resolve()
+                        return 
+                    }
+                    App.instance.setState({isExecute:false})
+                    await this.msgCustomerNotFound.show().then(async (e) =>
+                    {
+                        if(e == 'btn01' && this.checkCustomer.value == true)
+                        {
+                            this.customerControl = false
+                            resolve()
+                            return
+                        }
+                        if(e == 'btn02')
+                        {
+                            tmpCustomerBtn = e
+                            await this.grdPurcOrders.devGrid.deleteRow(0)
+                            if(this.checkCustomer.value == true)
+                            {
+                                this.customerClear = true
+                            }
+                            resolve()
+                            return 
+                        }
+                    })
+                    if(tmpCustomerBtn == 'btn02')
+                    {
+                        resolve()
+                        return
+                    }
+                }
+            }
+            
+            this.docObj.docOrders.dt()[pIndex].ITEM_CODE = pData.CODE
+            this.docObj.docOrders.dt()[pIndex].MULTICODE = pData.MULTICODE
+            this.docObj.docOrders.dt()[pIndex].ITEM_BARCODE = pData.BARCODE
+            this.docObj.docOrders.dt()[pIndex].ITEM = pData.GUID
+            this.docObj.docOrders.dt()[pIndex].VAT_RATE = pData.VAT
+            this.docObj.docOrders.dt()[pIndex].ITEM_NAME = pData.NAME
+            this.docObj.docOrders.dt()[pIndex].UNIT = pData.UNIT
+            this.docObj.docOrders.dt()[pIndex].DISCOUNT = 0
+            this.docObj.docOrders.dt()[pIndex].DISCOUNT_RATE = 0
+            this.docObj.docOrders.dt()[pIndex].QUANTITY = pQuantity
+            this.docObj.docOrders.dt()[pIndex].SUB_QUANTITY = pQuantity * this.docObj.docOrders.dt()[pIndex].SUB_FACTOR
+    
+            let tmpQuery = 
+            {
+                query :"SELECT (SELECT [dbo].[FN_CUSTOMER_PRICE](ITEM_GUID,CUSTOMER_GUID,@QUANTITY,GETDATE())) AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID ORDER BY LDATE DESC",
                 param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
                 value : [pData.CODE,this.docObj.dt()[0].OUTPUT,pQuantity]
             }
-            let tmpCheckData = await this.core.sql.execute(tmpCheckQuery) 
-            if(tmpCheckData.result.recordset.length == 0)
-            {   
-                let tmpCustomerBtn = ''
-                if(this.customerClear == true)
-                {
-                    await this.grdPurcOrders.devGrid.deleteRow(0)
-                    return 
-                }
-                App.instance.setState({isExecute:false})
-                await this.msgCustomerNotFound.show().then(async (e) =>
-                {
-                    if(e == 'btn01' && this.checkCustomer.value == true)
-                    {
-                        this.customerControl = false
-                        return
-                    }
-                    if(e == 'btn02')
-                    {
-                        tmpCustomerBtn = e
-                        await this.grdPurcOrders.devGrid.deleteRow(0)
-                        if(this.checkCustomer.value == true)
-                        {
-                            this.customerClear = true
-                        }
-                        return 
-                    }
-                })
-                if(tmpCustomerBtn == 'btn02')
-                {
-                    return
-                }
+            let tmpData = await this.core.sql.execute(tmpQuery) 
+    
+            if(tmpData.result.recordset.length > 0)
+            {
+                this.docObj.docOrders.dt()[pIndex].PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4))
+                this.docObj.docOrders.dt()[pIndex].VAT = parseFloat((tmpData.result.recordset[0].PRICE * (pData.VAT / 100) * pQuantity).toFixed(6))
+                this.docObj.docOrders.dt()[pIndex].AMOUNT = parseFloat((tmpData.result.recordset[0].PRICE * pQuantity).toFixed(4))
+                this.docObj.docOrders.dt()[pIndex].TOTAL = Number(((tmpData.result.recordset[0].PRICE * pQuantity)+ this.docObj.docOrders.dt()[pIndex].VAT)).round(2)
+                this.docObj.docOrders.dt()[pIndex].TOTALHT = Number((this.docObj.docOrders.dt()[pIndex].AMOUNT - this.docObj.docOrders.dt()[pIndex].DISCOUNT)).round(2)
+                this.docObj.docOrders.dt()[pIndex].SUB_PRICE = Number(parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4)) / this.docObj.docOrders.dt()[pIndex].SUB_FACTOR).round(2)
+    
+                this.calculateTotal()
             }
-        }
-        
-        this.docObj.docOrders.dt()[pIndex].ITEM_CODE = pData.CODE
-        this.docObj.docOrders.dt()[pIndex].MULTICODE = pData.MULTICODE
-        this.docObj.docOrders.dt()[pIndex].ITEM_BARCODE = pData.BARCODE
-        this.docObj.docOrders.dt()[pIndex].ITEM = pData.GUID
-        this.docObj.docOrders.dt()[pIndex].VAT_RATE = pData.VAT
-        this.docObj.docOrders.dt()[pIndex].ITEM_NAME = pData.NAME
-        this.docObj.docOrders.dt()[pIndex].UNIT = pData.UNIT
-        this.docObj.docOrders.dt()[pIndex].DISCOUNT = 0
-        this.docObj.docOrders.dt()[pIndex].DISCOUNT_RATE = 0
-        this.docObj.docOrders.dt()[pIndex].QUANTITY = pQuantity
-        this.docObj.docOrders.dt()[pIndex].SUB_QUANTITY = pQuantity * this.docObj.docOrders.dt()[pIndex].SUB_FACTOR
-
-        let tmpQuery = 
-        {
-            query :"SELECT (SELECT [dbo].[FN_CUSTOMER_PRICE](ITEM_GUID,CUSTOMER_GUID,@QUANTITY,GETDATE())) AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID ORDER BY LDATE DESC",
-            param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
-            value : [pData.CODE,this.docObj.dt()[0].OUTPUT,pQuantity]
-        }
-        let tmpData = await this.core.sql.execute(tmpQuery) 
-
-        if(tmpData.result.recordset.length > 0)
-        {
-            this.docObj.docOrders.dt()[pIndex].PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4))
-            this.docObj.docOrders.dt()[pIndex].VAT = parseFloat((tmpData.result.recordset[0].PRICE * (pData.VAT / 100) * pQuantity).toFixed(6))
-            this.docObj.docOrders.dt()[pIndex].AMOUNT = parseFloat((tmpData.result.recordset[0].PRICE * pQuantity).toFixed(4))
-            this.docObj.docOrders.dt()[pIndex].TOTAL = Number(((tmpData.result.recordset[0].PRICE * pQuantity)+ this.docObj.docOrders.dt()[pIndex].VAT)).round(2)
-            this.docObj.docOrders.dt()[pIndex].TOTALHT = Number((this.docObj.docOrders.dt()[pIndex].AMOUNT - this.docObj.docOrders.dt()[pIndex].DISCOUNT)).round(2)
-            this.docObj.docOrders.dt()[pIndex].SUB_PRICE = Number(parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4)) / this.docObj.docOrders.dt()[pIndex].SUB_FACTOR).round(2)
-
-            this.calculateTotal()
-        }
-        //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
-        await this.itemRelated(pData.GUID,pQuantity)
-        //*****************************************/
-        App.instance.setState({isExecute:false})
+            //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
+            await this.itemRelated(pData.GUID,pQuantity)
+            //*****************************************/
+            App.instance.setState({isExecute:false})
+            resolve()
+        })
     }
     async multiItemAdd()
     {
@@ -594,7 +598,6 @@ export default class purchaseOrder extends DocBase
 
         for (let i = 0; i < this.multiItemData.length; i++) 
         {
-            await this.core.util.waitUntil(100)
             await this.addItem(this.multiItemData[i],null,this.multiItemData[i].QUANTITY)
             this.popMultiItem.hide()
         }
@@ -1195,19 +1198,16 @@ export default class purchaseOrder extends DocBase
                                                     {
                                                         this.pg_txtBarcode.onClick = async(data) =>
                                                         {
-                                                            if(data.length > 0)
+                                                            this.customerControl = true
+                                                            this.customerClear = false
+                                                            this.combineControl = true
+                                                            this.combineNew = false
+                                                            this.grdPurcOrders.devGrid.beginUpdate()
+                                                            for (let i = 0; i < data.length; i++) 
                                                             {
-                                                                this.customerControl = true
-                                                                this.customerClear = false
-                                                                this.combineControl = true
-                                                                this.combineNew = false
-            
-                                                                for (let i = 0; i < data.length; i++) 
-                                                                {
-                                                                    await this.core.util.waitUntil(100)
-                                                                    await this.addItem(data[i],null)
-                                                                }
+                                                                await this.addItem(data[i],null)
                                                             }
+                                                            this.grdPurcOrders.devGrid.endUpdate()
                                                         }
                                                         await this.pg_txtBarcode.setVal(this.txtBarcode.value)
                                                     }
@@ -1274,11 +1274,12 @@ export default class purchaseOrder extends DocBase
                                                     }
                                                     else if(data.length > 1)
                                                     {
+                                                        this.grdPurcOrders.devGrid.beginUpdate()
                                                         for (let i = 0; i < data.length; i++) 
                                                         {
-                                                            await this.core.util.waitUntil(100)
                                                             await this.addItem(data[i],null)
                                                         }
+                                                        this.grdPurcOrders.devGrid.endUpdate()
                                                     }
                                                 }
                                             }
@@ -1334,14 +1335,12 @@ export default class purchaseOrder extends DocBase
                                                         this.customerClear = false
                                                         this.combineControl = true
                                                         this.combineNew = false
-                                                        if(data.length > 0)
+                                                        this.grdPurcOrders.devGrid.beginUpdate()
+                                                        for (let i = 0; i < data.length; i++) 
                                                         {
-                                                            for (let i = 0; i < data.length; i++) 
-                                                            {
-                                                                await this.core.util.waitUntil(100)
-                                                                await this.addItem(data[0],null)
-                                                            }
+                                                            await this.addItem(data[0],null)
                                                         }
+                                                        this.grdPurcOrders.devGrid.endUpdate()
                                                     }
                                                     this.pg_txtItemsCode.show()
                                                     return
@@ -1349,19 +1348,17 @@ export default class purchaseOrder extends DocBase
                                             }
                                             this.pg_txtItemsCode.onClick = async(data) =>
                                             {
-                                                if(data.length > 0)
-                                                {
-                                                    this.customerControl = true
-                                                    this.customerClear = false
-                                                    this.combineControl = true
-                                                    this.combineNew = false
+                                                this.customerControl = true
+                                                this.customerClear = false
+                                                this.combineControl = true
+                                                this.combineNew = false
 
-                                                    for (let i = 0; i < data.length; i++) 
-                                                    {
-                                                        await this.core.util.waitUntil(100)
-                                                        await this.addItem(data[i],null)
-                                                    }
+                                                this.grdPurcOrders.devGrid.beginUpdate()
+                                                for (let i = 0; i < data.length; i++) 
+                                                {
+                                                    await this.addItem(data[i],null)
                                                 }
+                                                this.grdPurcOrders.devGrid.endUpdate()
                                             }
                                             this.pg_txtItemsCode.show()
                                         }

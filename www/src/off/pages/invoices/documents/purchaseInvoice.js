@@ -854,7 +854,6 @@ export default class purchaseInvoice extends DocBase
             App.instance.setState({isExecute:false})
             if(tmpData.result.recordset.length > 0)
             {
-                await this.core.util.waitUntil(100)
                 await this.addItem(tmpData.result.recordset[0],null,pdata[i][tmpShema.QTY],pdata[i][tmpShema.PRICE],pdata[i][tmpShema.DISC],pdata[i][tmpShema.DISC_PER],pdata[i][tmpShema.TVA])
                 tmpCounter = tmpCounter + 1
             }
@@ -1839,10 +1838,6 @@ export default class purchaseInvoice extends DocBase
                                     <Label text={this.t("dtExpDate")} alignment="right" />
                                     <NdDatePicker simple={true}  parent={this} id={"dtExpDate"}
                                     dt={{data:this.docObj.docCustomer.dt('DOC_CUSTOMER'),field:"EXPIRY_DATE"}}
-                                    onValueChanged={(async()=>
-                                    {
-                                        
-                                    }).bind(this)}
                                     >
                                         <Validator validationGroup={"frmDoc"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validDocDate")} />
@@ -1890,7 +1885,6 @@ export default class purchaseInvoice extends DocBase
                                             }
                                             this.pg_txtItemsCode.onClick = async(data) =>
                                             {
-                                                await this.core.util.waitUntil(100)
                                                 this.customerControl = true
                                                 this.customerClear = false
                                                 this.combineControl = true
@@ -1946,7 +1940,6 @@ export default class purchaseInvoice extends DocBase
                                                 }
                                             }
                                            
-                                            await this.core.util.waitUntil(100)
                                            
                                             this.pg_service.onClick = async(data) =>
                                             {
