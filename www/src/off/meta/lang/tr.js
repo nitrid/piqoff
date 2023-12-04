@@ -16931,7 +16931,9 @@ export const langTr =
             clmFamount : "Vergisiz Tutar",
             clmVat : "Vergi Tutarı",
             clmTotal : "Toplam Tutar",
-            clmRestTotal : "Vergisiz Toplam Kar"
+            clmRestTotal : "Vergisiz Toplam Kar",
+            clmQuantity : "Miktar"
+
         },
         grpGrpDetail : 
         {
@@ -18154,7 +18156,8 @@ export const langTr =
             clmFamount : "Vergisiz Tutar",
             clmVat : "Vergi Tutarı",
             clmTotal : "Toplam Tutar",
-            clmRestTotal : "Vergisiz Toplam Kar"
+            clmRestTotal : "Vergisiz Toplam Kar",
+            clmQuantity : "Miktar"
         },
         grpGrpDetail : 
         {
