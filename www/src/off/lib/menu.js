@@ -1367,7 +1367,6 @@ export const menu = (e) =>
                             text: e.t('menuOff.set_02_009'),//'Mail ayarlari',
                             path: 'setting/officialSettings/mailSettings'
                         },
-
                     ]
                 },
                 {
