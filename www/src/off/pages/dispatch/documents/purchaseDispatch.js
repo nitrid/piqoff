@@ -1412,7 +1412,7 @@ export default class purchaseDispatch extends DocBase
                                     >
                                         <Validator validationGroup={"frmPurcDispatch"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validCustomerCode")} />
-                                        </Validator>  
+                                        </Validator>
                                     </NdTextBox>
                                     {/*CARI SECIMI POPUP */}
                                     <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={"#root"}
@@ -1596,7 +1596,6 @@ export default class purchaseDispatch extends DocBase
                                                 this.grdPurcDispatch.devGrid.endUpdate()
                                             }
                                             this.pg_txtItemsCode.setVal(this.txtBarcode.value)
-                                            
                                         }
                                         this.txtBarcode.value = ''
                                     }).bind(this)}
@@ -1677,7 +1676,6 @@ export default class purchaseDispatch extends DocBase
                                      validationGroup={"frmPurcDispatch"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
-                                        console.log(2)
                                         if(e.validationGroup.validate().status == "valid")
                                         {
                                             await this.popMultiItem.show()
@@ -1910,9 +1908,8 @@ export default class purchaseDispatch extends DocBase
                                 <Item>
                                     <Label text={this.t("txtAmount")} alignment="right" />
                                     <NdTextBox id="txtAmount" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"AMOUNT"}}
-                                    maxLength={32}
-                                
-                                    ></NdTextBox>
+                                    maxLength={32}>
+                                    </NdTextBox>
                                 </Item>
                                 <Item>
                                     <Label text={this.t("txtDiscount")} alignment="right" />
@@ -1945,7 +1942,6 @@ export default class purchaseDispatch extends DocBase
                                                         this.txtDiscountPercent3.value  = 0
                                                         this.txtDiscountPrice3.value = 0
                                                     }
-                                                    
                                                 }
                                             },
                                         ]
@@ -1957,8 +1953,8 @@ export default class purchaseDispatch extends DocBase
                                 <Item>
                                     <Label text={this.t("txtSubTotal")} alignment="right" />
                                     <NdTextBox id="txtSubTotal" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"SUBTOTAL"}}
-                                    maxLength={32}
-                                    ></NdTextBox>
+                                    maxLength={32}>
+                                    </NdTextBox>
                                 </Item>
                                 <Item>
                                     <Label text={this.t("txtDocDiscount")} alignment="right" />
@@ -2002,8 +1998,8 @@ export default class purchaseDispatch extends DocBase
                                 <Item>
                                     <Label text={this.t("txtTotalHt")} alignment="right" />
                                     <NdTextBox id="txtTotalHt" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"TOTALHT"}}
-                                    maxLength={32}
-                                    ></NdTextBox>
+                                    maxLength={32}>
+                                    </NdTextBox>
                                 </Item>
                                 <Item>
                                     <Label text={this.t("txtVat")} alignment="right" />
@@ -2027,7 +2023,6 @@ export default class purchaseDispatch extends DocBase
                                                         this.vatRate.push(tmpData)
                                                     }
                                                     await this.grdVatRate.dataRefresh({source:this.vatRate})
-                                                    
                                                 }
                                             },
                                         ]
@@ -2040,8 +2035,8 @@ export default class purchaseDispatch extends DocBase
                                 <Item>
                                     <Label text={this.t("txtTotal")} alignment="right" />
                                     <NdTextBox id="txtTotal" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"TOTAL"}}
-                                    maxLength={32}
-                                    ></NdTextBox>
+                                    maxLength={32}>
+                                    </NdTextBox>
                                 </Item>
                             </Form>
                         </div>
@@ -2135,7 +2130,6 @@ export default class purchaseDispatch extends DocBase
                                             onClick={async (e)=>
                                             {       
                                                 if(e.validationGroup.validate().status == "valid")
-                                                
                                                 {
                                                     let tmpQuery = 
                                                     {
@@ -2143,16 +2137,11 @@ export default class purchaseDispatch extends DocBase
                                                         param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
                                                         value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
                                                     }
-                                                    console.log(tmpQuery)
-                                                    console.log(1)
                                                     App.instance.setState({isExecute:true})
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
                                                     App.instance.setState({isExecute:false})
                                                     this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
                                                     {
-                                                        console.log(tmpData.result.recordset[0].PATH)
-                                                        console.log(pResult.split('|')[0])
-                                                        console.log(tmpData.result.recordset)
                                                         if(pResult.split('|')[0] != 'ERR')
                                                         {
                                                             var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
@@ -2225,8 +2214,7 @@ export default class purchaseDispatch extends DocBase
                                 <Item>
                                 <Label text={this.t("popMailSend.txtSendMail")} alignment="right" />
                                     <NdTextBox id="txtSendMail" parent={this} simple={true}
-                                    maxLength={32}
-                                    >
+                                    maxLength={32}>
                                         <Validator validationGroup={"frmMailsend" + this.tabIndex}>
                                             <RequiredRule message={this.t("validMail")} />
                                         </Validator> 
@@ -2283,7 +2271,6 @@ export default class purchaseDispatch extends DocBase
                                                                 this.txtMailSubject.value = '',
                                                                 this.txtSendMail.value = ''
                                                                 this.popMailSend.hide();  
-
                                                             }
                                                             else
                                                             {
@@ -2294,7 +2281,6 @@ export default class purchaseDispatch extends DocBase
                                                         });
                                                     });
                                                 }
-                                                    
                                             }}/>
                                         </div>
                                         <div className='col-6'>

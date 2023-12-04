@@ -197,7 +197,6 @@ export default class branchSaleDispatch extends DocBase
                     tmpMissCodes.push("'" +this.tagItemCode.value[i] + "'")
                 }
             }
-            
         }
         if(tmpMissCodes.length > 0)
         {
@@ -218,7 +217,6 @@ export default class branchSaleDispatch extends DocBase
         }
     
         await dialog(tmpConfObj);
-
     }
     async multiItemSave()
     {
@@ -290,7 +288,6 @@ export default class branchSaleDispatch extends DocBase
                                     button:[{id:"btn01",caption:this.t("msgItemNotFound.btn01"),location:'after'}],
                                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemNotFound.msg")}</div>)
                                 }
-                    
                                 await dialog(tmpConfObj);
                             }
                         }
@@ -303,7 +300,6 @@ export default class branchSaleDispatch extends DocBase
                             icon:'more',
                             onClick:()  =>
                             {
-                                
                                 this.pg_txtItemsCode.onClick = async(data) =>
                                 {
                                     this.combineControl = true
@@ -410,7 +406,6 @@ export default class branchSaleDispatch extends DocBase
                                 e.data.TOTALHT = Number(((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT)).round(2)
                                 e.data.DISCOUNT_RATE = Number(e.data.AMOUNT).rate2Num(e.data.DISCOUNT,2)
                                 this.calculateTotal()
-                              
                             }
                         },
                     ]
@@ -769,7 +764,6 @@ export default class branchSaleDispatch extends DocBase
                                                 this.init(); 
                                             }
                                         }
-                                        
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
@@ -778,52 +772,41 @@ export default class branchSaleDispatch extends DocBase
                                     {
                                         if(this.docObj.dt()[0].LOCKED == 0)
                                         {
-                                            console.log(1)
                                             this.docObj.dt()[0].LOCKED = 1
                                             if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
                                             {
                                                 await this.grdSlsDispatch.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
                                             }
-                                            console.log(2)
                                             if((await this.docObj.save()) == 0)
                                             {             
-                                                console.log(3)                                       
                                                 let tmpConfObj =
                                                 {
                                                     id:'msgLocked',showTitle:true,title:this.t("msgLocked.title"),showCloseButton:true,width:'500px',height:'200px',
                                                     button:[{id:"btn01",caption:this.t("msgLocked.btn01"),location:'after'}],
                                                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgLocked.msg")}</div>)
                                                 }
-
-                                                console.log(4)
                                                 await dialog(tmpConfObj);
                                                 this.frmDocItems.option('disabled',true)
                                             }
                                             else
                                             {
-                                                console.log(5)
                                                 tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
                                                 await dialog(tmpConfObj1);
                                             }
-                                            
                                         }
                                         else if(this.docObj.dt()[0].LOCKED == 1)
                                         {
-                                            console.log(6)
                                             await this.popPassword.show()
                                             this.txtPassword.value = '';
                                         }
                                         else if(this.docObj.dt()[0].LOCKED == 2)
                                         {
-                                            console.log(7)
                                             let tmpConfObj =
                                             {
                                                 id:'msgLockedType2',showTitle:true,title:this.t("msgLockedType2.title"),showCloseButton:true,width:'500px',height:'200px',
                                                 button:[{id:"btn01",caption:this.t("msgLockedType2.btn01"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgLockedType2.msg")}</div>)
                                             }
-
-                                            console.log(8)
                                             await dialog(tmpConfObj);
                                         }
                                         
@@ -1010,7 +993,6 @@ export default class branchSaleDispatch extends DocBase
                                                 }
                                             }
                                         ]
-                                        
                                     }
                                     >
                                         <Column dataField="REF" caption={this.t("pg_Docs.clmRef")} width={150} />
@@ -1162,9 +1144,9 @@ export default class branchSaleDispatch extends DocBase
                                                             }
                                                             let tmpQuery = 
                                                             {
-                                                        query : "SELECT * FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER = @CUSTOMER",
-                                                        param : ['CUSTOMER:string|50'],
-                                                        value : [ data[0].GUID]
+                                                                query : "SELECT * FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER = @CUSTOMER",
+                                                                param : ['CUSTOMER:string|50'],
+                                                                value : [ data[0].GUID]
                                                             }   
                                                             let tmpAdressData = await this.core.sql.execute(tmpQuery) 
                                                             if(tmpAdressData.result.recordset.length > 1)
@@ -1178,7 +1160,6 @@ export default class branchSaleDispatch extends DocBase
                                                                 }
                                                                 await this.pg_adress.show()
                                                                 await this.pg_adress.setData(tmpAdressData.result.recordset)
-                                                                
                                                             }
                                                         }
                                                     }
@@ -1267,7 +1248,6 @@ export default class branchSaleDispatch extends DocBase
                                                         return
                                                     }
                                                   
-                                                    
                                                     this.pg_txtBarcode.onClick = async(data) =>
                                                     {
                                                         this.txtBarcode.value = ''
@@ -1314,7 +1294,6 @@ export default class branchSaleDispatch extends DocBase
                                         }
                                         else
                                         {
-                                            
                                             this.pg_txtItemsCode.onClick = async(data) =>
                                             {
                                                 this.combineControl = true
@@ -1387,7 +1366,6 @@ export default class branchSaleDispatch extends DocBase
                                                 this.grdSlsDispatch.devGrid.endUpdate()
                                             }
                                             this.pg_txtItemsCode.show()
-                                            
                                         }
                                         else
                                         {
@@ -1492,7 +1470,6 @@ export default class branchSaleDispatch extends DocBase
                                             dialog(tmpConfObj);
                                             e.component.cancelEditData()
                                         }
-                                       
                                     }}
                                     onRowUpdated={async(e)=>{
 
@@ -1621,7 +1598,6 @@ export default class branchSaleDispatch extends DocBase
                                 <Label text={this.t("txtAmount")} alignment="right" />
                                 <NdTextBox id="txtAmount" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"AMOUNT"}}
                                 maxLength={32}
-                            
                                 ></NdTextBox>
                             </Item>
                             <Item>
@@ -1655,7 +1631,6 @@ export default class branchSaleDispatch extends DocBase
                                                     this.txtDiscountPercent3.value  = 0
                                                     this.txtDiscountPrice3.value = 0
                                                 }
-                                                
                                             }
                                         },
                                     ]
@@ -1704,7 +1679,6 @@ export default class branchSaleDispatch extends DocBase
                                                     this.txtDocDiscountPercent3.value  = 0
                                                     this.txtDocDiscountPrice3.value = 0
                                                 }
-                                               
                                             }
                                         },
                                     ]
@@ -1741,7 +1715,6 @@ export default class branchSaleDispatch extends DocBase
                                                     this.vatRate.push(tmpData)
                                                 }
                                                 await this.grdVatRate.dataRefresh({source:this.vatRate})
-                                                
                                             }
                                         },
                                     ]
@@ -1992,7 +1965,6 @@ export default class branchSaleDispatch extends DocBase
                                                                 this.txtMailSubject.value = '',
                                                                 this.txtSendMail.value = ''
                                                                 this.popMailSend.hide();  
-
                                                             }
                                                             else
                                                             {
@@ -2003,7 +1975,6 @@ export default class branchSaleDispatch extends DocBase
                                                         });
                                                     });
                                                 }
-                                                    
                                             }}/>
                                         </div>
                                         <div className='col-6'>
