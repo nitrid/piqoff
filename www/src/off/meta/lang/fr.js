@@ -3723,16 +3723,16 @@ export const langFr =
         },
         grdLegal : 
         {
-            clmSiretID : "Siret No",
+            clmSiretID : "N° Siret",
             clmApeCode : "Code Ape",
             clmTaxOffice : "Impôt",
             clmTaxNo : "Numéro Impôt",
-            clmIntVatNo : "No TVA inter.",
+            clmIntVatNo : "N° TVA inter.",
             clmTaxType : "Type de Taxe",
-            clmSirenID : "Siren No",
+            clmSirenID : "N° Siren",
             clmRcs : "RCS",
             clmCapital : "Capital",
-            clmInsurance : "Assurance No" 
+            clmInsurance : "N° Assurance" 
         },
         grdOffical : 
         {
@@ -3911,13 +3911,13 @@ export const langFr =
         cmbCustomer :"Fournisseur",
         btnGet :"Rechercher",
         txtCustomerCode : "Sélection Client",
-        txtCustomerName : "Nom Client",
+        txtCustomerName : "Nom du Client",
         txtAmount : "Total Points", 
         pg_txtCustomerCode : 
         {
-            title : "Choix Client",
+            title : "Choix du Client",
             clmCode :  "Code Client",
-            clmTitle : "Nom Client",
+            clmTitle : "Nom du Client",
             clmTypeName : "Type",
             clmGenusName : "Genre"
         },
@@ -3958,7 +3958,7 @@ export const langFr =
         {
             title : "Détail Ticket"
         },
-        TicketId :"Ticket No", 
+        TicketId : "N° Ticket ", 
         popLastTotal : 
         {
             title : "Règlement"
@@ -3997,9 +3997,9 @@ export const langFr =
         dtLast : "Date Fin",
         pg_txtCustomerCode : 
         {
-            title : "Choix Fournisseur",
-            clmCode :  "Code Client",
-            clmTitle : "Nom Fournisseur",
+            title : "Choix du Fournisseur",
+            clmCode :  "Code du Client",
+            clmTitle : "Nom du Fournisseur",
             clmTypeName : "Type",
             clmGenusName : "Genre"
         },
@@ -4049,9 +4049,9 @@ export const langFr =
         menu:"Facture de vente",
         pg_txtCustomerCode : 
         {
-            title : "Choix Client",
-            clmCode :  "Code Client",
-            clmTitle : "Nom Client",
+            title : "Choix du Client",
+            clmCode :  "Code du Client",
+            clmTitle : "Nom du Client",
             clmTypeName : "Type",
             clmGenusName : "Genre"
         },
@@ -4063,8 +4063,8 @@ export const langFr =
             clmRef: "Référence",
             clmRefNo: "Ligne",
             clmPrice: "Prix ",
-            clmInputCode : "Sélection Client",
-            clmInputName : "Nom Client",
+            clmInputCode : "Sélection du Client",
+            clmInputName : "Nom du Client",
             clmDate: "Date",
             clmVat : "TVA",
             clmAmount : "Total" ,
@@ -4079,9 +4079,9 @@ export const langFr =
         menu:"Facture retour",
         pg_txtCustomerCode : 
         {
-            title : "Choix Fournisseur",
-            clmCode :  "Code Fournisseur",
-            clmTitle : "Nom Fournisseur",
+            title : "Choix du Fournisseur",
+            clmCode :  "Code du Fournisseur",
+            clmTitle : "Nom du Fournisseur",
             clmTypeName : "Type",
             clmGenusName : "Genre"
         },
@@ -4094,7 +4094,7 @@ export const langFr =
             clmRefNo: "Ligne",
             clmPrice: "Prix ",
             clmInputCode : "Sélection Fournisseur",
-            clmInputName : "Nom fournisseur",
+            clmInputName : "Nom du fournisseur",
             clmDate: "Date",
             clmVat : "TVA",
             clmAmount : "Total" ,
@@ -4108,9 +4108,9 @@ export const langFr =
         menu:"Facture différence de prix",
         pg_txtCustomerCode : 
         {
-            title : "Choix Fournisseur",
-            clmCode :  "Code Fournisseur",
-            clmTitle : "Nom Fournisseur",
+            title : "Choix du Fournisseur",
+            clmCode :  "Code du Fournisseur",
+            clmTitle : "Nom du Fournisseur",
             clmTypeName : "Type",
             clmGenusName : "Genre"
         },
@@ -4123,7 +4123,7 @@ export const langFr =
             clmRefNo: "Ligne",
             clmPrice: "Prix ",
             clmInputCode : "Sélection Fournisseur",
-            clmInputName : "Nom fournisseur",
+            clmInputName : "Nom du fournisseur",
             clmDate: "Date",
             clmVat : "TVA",
             clmAmount : "Total" ,
@@ -4137,9 +4137,9 @@ export const langFr =
         menu:"Liste Facture Vente interne",
         pg_txtCustomerCode : 
         {
-            title : "Choix Magasin",
-            clmCode :  "Code Magasin",
-            clmTitle : "Nom Magasin",
+            title : "Choix du Magasin",
+            clmCode :  "Code du Magasin",
+            clmTitle : "Nom du Magasin",
             clmTypeName : "Mode",
             clmGenusName : "Genre"
         },
@@ -4149,17 +4149,16 @@ export const langFr =
         grdSlsIvcList: 
         {
             clmRef: "Réf.",
-            clmRefNo: "Réf.No:",
+            clmRefNo: "N° Réf.:",
             clmPrice: "Prix",
-            clmInputCode : "Code Magasin",
-            clmInputName : "Nom Magasin",
+            clmInputCode : "Code du Magasin",
+            clmInputName : "Nom du Magasin",
             clmDate: "Date",
             clmVat : "TVA",
             clmAmount : "Total",
             clmTotal : "Total",
             clmOutputName :"Dépôt",
         },
-
     },
     ftr_01_006 : // "Liste des factures retours"  
     {
@@ -4181,8 +4180,8 @@ export const langFr =
             clmRef: "Colonne",
             clmRefNo: "Ligne",
             clmPrice: "Prix",
-            clmOutputCode : "Code client",
-            clmInputCode  : "Code Client",
+            clmOutputCode : "Code du client",
+            clmInputCode  : "Code du Client",
             clmOutputName : "Nom du client",
             clmInputName : "Dépôt",
             clmDate: "Date",
@@ -4212,7 +4211,7 @@ export const langFr =
             clmRef: "Colonne",
             clmRefNo: "Ligne",
             clmPrice: "Prix",
-            clmOutputCode : "Code client",
+            clmOutputCode : "Code du client",
             clmOutputName : "Nom du client",
             clmInputName : "Dépôt",
             clmDate: "Date",
@@ -4224,7 +4223,7 @@ export const langFr =
     },
     ftr_02_001 : //  "Facture d'achat"   
     {
-        txtRefRefno : "Réf.-Réf no:",
+        txtRefRefno : "N° Réf.-Réf",
         cmbDepot: "Réserve",
         txtCustomerCode : "Sélection fournisseur",
         txtCustomerName : "Nom fournisseur",
@@ -4312,15 +4311,15 @@ export const langFr =
             clmDate : "Date",
             clmRef : "Référence",
             clmRefNo : "Numéro",
-            clmOutputName : "Nom Fournisseur",
-            clmOutputCode  : "Code fournisseur",
+            clmOutputName : "Nom du Fournisseur",
+            clmOutputCode  : "Code du fournisseur",
             clmTotal : "Total TTC"
         },
         pg_txtCustomerCode : 
         {
-            title : "Choix Fournisseur",
-            clmCode :  "Code fournisseur",
-            clmTitle : "Nom Fournisseur",
+            title : "Choix du Fournisseur",
+            clmCode :  "Code du fournisseur",
+            clmTitle : "Nom du Fournisseur",
             clmTypeName : "Type",
             clmGenusName : "Genre"
         },
@@ -13384,7 +13383,7 @@ export const langFr =
     },
     irs_02_006 : // Şube Alış İrsaliyesi"
     {
-        txtRefRefno : "Réf.-Réf no:",
+        txtRefRefno : "N° Réf.-Réf :",
         cmbDepot: "Réserve",
         txtCustomerCode : "Sélection Document",
         txtCustomerName : "Nom Magasin",
@@ -13460,7 +13459,7 @@ export const langFr =
             clmMargin :"Marge",
             clmDescription :"Motif",
             clmCuser :"Utilisateur",
-            clmOrder : "Commande No", 
+            clmOrder : "N° Commande", 
             clmVatRate : "TVA %",
             clmBarcode : "Code Barre",
             clmSubQuantity : "Quantité unitaire", 
@@ -13672,7 +13671,7 @@ export const langFr =
             btn01: "Valider",
         },
         validRef :"Saisir Réf ",
-        validRefNo : "Saisir Réf No ",
+        validRefNo : "N° Saisir Réf ",
         validDepot : "Sélectionner Dépôt",
         validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
@@ -13700,13 +13699,13 @@ export const langFr =
         pg_ordersGrid : 
         {
             title : "Sélection de la commande",   
-            clmReferans : "Réf.-Réf No:",   
+            clmReferans : "N° Réf.-Réf :",   
             clmCode : "Code",   
             clmName : "Nom",   
             clmQuantity : "Quantité",   
             clmTotal : "Total",   
             clmPrice : "Prix",   
-            clmlineNo : "No"
+            clmlineNo : "N°"
         },
         msgCustomerSelect:
         {
@@ -13858,7 +13857,7 @@ export const langFr =
     },
     sip_02_001 : // "Alış Sipariş"
     {
-        txtRefRefno : "Réf.-Réf no:",
+        txtRefRefno : "N° Réf.-Réf :",
         cmbDepot: "Réserve",
         txtCustomerCode : "Sélection Document",
         txtCustomerName : "Nom fournisseur",
@@ -13957,7 +13956,7 @@ export const langFr =
             clmBarcode :"Code Barre",
             clmDescription :"Motif",
             clmCuser :"Utilisateur",
-            clmOffer : "Proposition No", 
+            clmOffer : "N° de Proposition", 
             clmVatRate : "TVA %",
             clmSubQuantity : "Qtt. Unitaire",
             clmSubPrice : "Prix Unitaire",
@@ -14162,7 +14161,7 @@ export const langFr =
             btn01: "Valider",
         }, 
         validRef :"Saisir Réf ",
-        validRefNo : "Saisir Réf No ",
+        validRefNo : "Saisir n° Réf ",
         validDepot : "Sélectionner Dépot",
         validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
@@ -14188,7 +14187,7 @@ export const langFr =
         pg_offersGrid : 
         {
             title : "Sélection d'offres",  
-            clmReferans : "Réf.-Réf no:",  
+            clmReferans : "N° Réf.-Réf :",  
             clmCode : "Code",  
             clmName : "Nom",  
             clmQuantity : "Quantité",  
@@ -14254,7 +14253,7 @@ export const langFr =
     },
     sip_02_002 : // "Satış Sipariş"
     {
-        txtRefRefno : "Réf.-Réf no:",
+        txtRefRefno : "N° Réf.-Réf :",
         cmbDepot: "Réserve",
         txtCustomerCode : "Sélection Document",
         txtCustomerName : "Nom Client",
@@ -14544,7 +14543,7 @@ export const langFr =
             btn01: "Valider",
         }, 
         validRef :"Saisir Réf ",
-        validRefNo : "Saisir Réf No ",
+        validRefNo : "Saisir N° Réf ",
         validDepot : "Sélectionner Dépot",
         validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
@@ -14566,7 +14565,7 @@ export const langFr =
         pg_offersGrid : 
         {
             title : "Sélection d'offres",  
-            clmReferans : "Réf.-Réf. No:",  
+            clmReferans : "N° Réf.-Réf. :",  
             clmCode : "Code",  
             clmName : "Nom",  
             clmQuantity : "Quantité",  
@@ -14655,7 +14654,7 @@ export const langFr =
     },
     sip_02_003 : // "Pos Satış Sipariş"
     {
-        txtRefRefno : "Réf.-Réf no:",
+        txtRefRefno : "N° Réf.-Réf:",
         cmbDepot: "Réserve",
         txtCustomerCode : "Sélection Document",
         txtCustomerName : "Nom Client",
