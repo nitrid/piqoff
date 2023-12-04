@@ -5,7 +5,6 @@ import fs from 'fs'
 import rsa from 'jsrsasign'
 import { pem } from '../pem.js'
 import nodemailer from  'nodemailer'
-import mailSettings from '../www/src/off/pages/setting/officialSettings/mailSettings.js'
 
 class mailer
 {
