@@ -86,7 +86,7 @@ export const langFr =
     msgisExecuteClose: 
     {
         title : "Attention",   
-        msg : "Une erreur est survenue lors de la connexion à la base de données.Veuillez vérifier vos dernières opérations.",   
+        msg : "Une erreur est survenue lors de la connexion à la base de données. Veuillez vérifier vos dernières opérations.",   
         btn01 : "OK"   
     },
     popOpenTike :
@@ -96,7 +96,7 @@ export const langFr =
     grdOpenTike: 
     {
         clmUser : "Utilisateur",
-        clmDevice : "Pos No",
+        clmDevice : "N° Pos",
         clmDate : "Date",
         clmTicketId : "Numéro de ticket",
         clmTotal : "Total",
@@ -113,7 +113,7 @@ export const langFr =
     {
         title: "Attention",   
         btn01: "OK",   
-        msg: "Le document doit comporter au minimum une ligne pour enregistrer!Modifications effectués non enregistrées."   
+        msg: "Le document doit comporter au minimum une ligne pour enregistrer! Modifications effectués non enregistrées."   
     },
     popDescbordValidation :
     {
@@ -433,7 +433,7 @@ export const langFr =
         btnPopDeptCreditListSelection : "Choix",
         chkPopDeptCreditList : "Afficher les clos",
         clmRef : "Ref",
-        clmRefNo : "Ref No",
+        clmRefNo : "N° Ref",
         clmTypeName : "Type Doc.",
         clmCustomer : "Nom Client",
         clmDate : "Date",
@@ -591,7 +591,7 @@ export const langFr =
             clmTypeName: "Type",
             clmCustomerPrice : "Prix Fournisseur",
             clmCustomer : "Fournisseur",
-            clmDescription : "Motif",  
+            clmDescription : "Description",  
         },
         grdCustomer: 
         {
@@ -702,12 +702,12 @@ export const langFr =
         grdSalesPrice : 
         {
             clmUser : "Utilisateur",
-            clmDate : "Date Modification",
+            clmDate : "Date de Modification",
             clmPrice : "Prix ",
         },
         grdItemInfo: 
         {
-            cDate: "Date Création",
+            cDate: "Date de Création",
             cUser: "Utilisateur Ayant Créé",
             lDate: "Dernière Date de Modification",
             lUser : "Utilisateur Ayant Modifié",
@@ -803,8 +803,8 @@ export const langFr =
     stk_01_002:  //"Identification des codes-barres" 
     {
         txtBarcode: "Code barre",
-        txtItem: "Référence Produit",
-        txtItemName: "Nom Produit",
+        txtItem: "Référence du Produit",
+        txtItemName: "Nom du Produit",
         cmbBarUnit: "Unité",
         txtBarUnitFactor: "Coefficient",
         cmbPopBarType : "Type",
@@ -814,7 +814,7 @@ export const langFr =
         barcodePlace : "Veuillez ajouter le code barre au produit sélectionné.", 
         pg_txtItem:
         {
-            title: "Sélection Produit",
+            title: "Sélection du Produit",
             clmCode: "Code",
             clmName: "Nom", 
         },
@@ -822,8 +822,8 @@ export const langFr =
         {
             title: "Sélection Code barre",
             clmBarcode: "Code Barre",
-            clmItemName: "Nom Produit", 
-            clmItemCode: "Référence Produit"
+            clmItemName: "Nom du Produit", 
+            clmItemCode: "Référence du Produit"
         },
        
         msgCheckBarcode:
@@ -1327,7 +1327,7 @@ export const langFr =
         },
         popPassword : 
         {
-            title: "Veuillez Saisir MDP Administrateur pour Accéder au Document ",
+            title: "Veuillez Saisir le mot de passe Administrateur pour Accéder au Document ",
             Password : "Mot de passe",
             btnApprove : "Valider" ,
         },
@@ -1406,7 +1406,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez Enregistrer sans Dévérouiller !"
+            msg: "Vous ne Pouvez pas enregistrer sans Dévérouiller !"
         },
         msgItemNotFound:
         {
@@ -1420,10 +1420,10 @@ export const langFr =
             btn01: "Regrouper",
             btn02: "Modifier",
             btn03: "Abandonner",
-            msg: "Produit Existant dans le Document ! Voulez-vous Combiner ?"
+            msg: "Produit existant dans le Document ! Voulez-vous combiner ?"
         },
         validRef :"Saisir Réf ",
-        validRefNo : "Saisir Réf No ",
+        validRefNo : "Saisir n° Réf ",
         validDepot : "Sélectionner Dépôt",
         validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
@@ -1436,9 +1436,9 @@ export const langFr =
         pg_txtBarcode : 
         {
             title : "Sélectionner Code Barre", 
-            clmCode :  "Référence Produit",
-            clmName : "Nom Produit",
-            clmMulticode : "Référence Fournisseur",
+            clmCode :  "Référence du produit",
+            clmName : "Nom du produit",
+            clmMulticode : "Référence du fournisseur",
             clmBarcode : "Code Barre"
         },
         msgCode : 
@@ -1457,7 +1457,7 @@ export const langFr =
         txtBarcode : "Ajouter Code Barre",
         pg_Docs : 
         {
-            title : "Sélection Document",
+            title : "Sélection du document",
             clmDate : "Date",
             clmRef : "Référence",
             clmRefNo : "Numéro",
@@ -1467,9 +1467,9 @@ export const langFr =
         },
         pg_txtItemsCode : 
         {
-            title : "Sélectionner Produit",
-            clmCode :  "Référence Produit",
-            clmName : "Nom Produit",
+            title : "Sélectionner produit",
+            clmCode :  "Référence produit",
+            clmName : "Nom du produit",
         },
         grdTrnsfItems: 
         {
@@ -1482,7 +1482,7 @@ export const langFr =
         },
         popPassword : 
         {
-            title: "Veuillez Saisir MDP Administrateur pour accéder au Document ",
+            title: "Veuillez Saisir mot de passe Administrateur pour accéder au Document ",
             Password : "Mot de passe",
             btnApprove : "Valider"
         },
@@ -1490,7 +1490,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Veuillez saisir les en-tête avant l'achèvement !"
+            msg: "Veuillez saisir les en-tête avant de continuer !"
         },
         msgNotQuantity: 
         {
@@ -1559,7 +1559,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez Enregistrer sans Dévérouiller !"
+            msg: "Vous ne Pouvez pas Enregistrer sans Dévérouiller !"
         },
         msgItemNotFound:
         {
@@ -1578,14 +1578,14 @@ export const langFr =
         {
             title: "Choix du Désign",
             design : "Design" ,
-            lang : "Langue Document" 
+            lang : "Langue du Document" 
         },
         pg_txtBarcode : 
         {
             title : "Sélectionner Code-Barre",
             clmCode :  "Référence Produit",
-            clmName : "Nom Produit",
-            clmMulticode : "Référence Fournisseur",
+            clmName : "Nom du Produit",
+            clmMulticode : "Référence du Fournisseur",
             clmBarcode : "Code-Barre"
         },
         msgQuantity:
@@ -1599,7 +1599,7 @@ export const langFr =
     },
     stk_02_003 : // "Kayıp Ürün Çıkışı"
     {
-        txtRefRefno : "Réf.-Réf no",
+        txtRefRefno : "N° Réf.-Réf",
         cmbOutDepot: "Sortie Dépôt",
         dtDocDate : "Date",
         txtBarcode : "Ajouter Code Barre",
@@ -1619,8 +1619,8 @@ export const langFr =
         pg_txtItemsCode : 
         {
             title : "Sélectionner Produit",
-            clmCode :  "Référence Produit",
-            clmName : "Nom Produit",
+            clmCode :  "Référence du Produit",
+            clmName : "Nom du Produit",
         },
         grdOutwasItems: 
         {
@@ -1644,7 +1644,7 @@ export const langFr =
         },
         popPassword : 
         {
-            title: "Veuillez Saisir MDP Administrateur pour Accéder au Document ",
+            title: "Veuillez Saisir le mot de passe Administrateur pour Accéder au Document ",
             Password : "Mot de passe",
             btnApprove : "Valider"
         },
@@ -1743,14 +1743,14 @@ export const langFr =
             msg: "Produit Existant dans le Document ! Voulez-vous Combiner ?"
         },
         validRef :"Saisir Réf ",
-        validRefNo : "Saisir Réf No ",
+        validRefNo : "Saisir n° Réf ",
         validDepot : "Sélectionner Dépôt",
         validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
         pg_quickDesc : 
         {
             title : "Sélection Touche Rapide" ,
-            clmDesc: "Motif" 
+            clmDesc: "Descriptioon" 
         },
         popQDescAdd : 
         {
@@ -1774,8 +1774,8 @@ export const langFr =
         {
             title : "Sélectionner Code Barre",
             clmCode :  "Référence Produit",
-            clmName : "Nom Produit",
-            clmMulticode : "Référence Fournisseur",
+            clmName : "Nom du Produit",
+            clmMulticode : "Référence du Fournisseur",
             clmBarcode : "Code Barre"
         },
         msgCode : 
@@ -1795,7 +1795,7 @@ export const langFr =
     },
     stk_02_004 : //"Etiket Bas"
     {
-        txtRefRefno : "Réf.-Réf no",
+        txtRefRefno : "N° Réf.-Réf ",
         design : "Design" ,
         txtPage : "Page" ,
         txtFreeLabel : "Champ Vide" ,
@@ -1832,8 +1832,8 @@ export const langFr =
         pg_txtItemsCode : 
         {
             title : "Sélectionner Produit",
-            clmCode :  "Référence Produit",
-            clmName : "Nom Produit",
+            clmCode :  "Référence du Produit",
+            clmName : "Nom du Produit",
         },
         grdLabelQueue: 
         {
@@ -1845,7 +1845,7 @@ export const langFr =
             clmUnderUnit : "Contenu du produit",
             clmUnderUnit : "Contenu du produit",
             clmUnderUnitPrice : "Prix Contenu Unité" ,
-            clmDescription :"Motif",
+            clmDescription :"Description",
             clmOrgins : "Origine",
             clmCuser : "Utilisateur",
         },
@@ -1866,7 +1866,7 @@ export const langFr =
             title: "Attention",
             btn01: "OK",
             btn02: "Abandonner",
-            msg: "Ajout De Produit Selon Vos Critères.Valider-vous ?"
+            msg: "Ajout De Produit Selon Vos Critères. Valider-vous ?"
         },
         msgSave:
         {
@@ -1936,14 +1936,14 @@ export const langFr =
             title: "Attention",
             btn01: "Abandonner",
             btn02: "Nouvel Ajout",
-            msg: "Produit Sélectionné Déjà Existant Dans le Document !Voulez-vous Ajouter une Ligne ? "
+            msg: "Produit Sélectionné Déjà Existant Dans le Document ! Voulez-vous Ajouter une Ligne ? "
         },
         popWizard : 
         {
             title : "Assistant Sélection Produit",
         },
         validRef :"Saisir Réf ",
-        validRefNo : "Saisir Réf No ",
+        validRefNo : "Saisir n° Réf ",
         validDepot : "Sélectionner Dépôt",
         validCustomerCode : "Le code fournisseur-client ne peut être vide",
         validDocDate : "Sélectionner Date" ,
@@ -1964,7 +1964,7 @@ export const langFr =
     },
     stk_02_005 : // "İade Ürünü Toplama"
     {
-        txtRefRefno : "Réf.-Réf no:",
+        txtRefRefno : "N° Réf.-Réf :",
         cmbDepot1: "Sortie Dépôt",
         cmbDepot2: "Retour Dépôt",
         dtDocDate : "Date",
@@ -1983,8 +1983,8 @@ export const langFr =
         pg_txtItemsCode : 
         {
             title : "Sélectionner Produit",
-            clmCode :  "Référence Produit",
-            clmName : "Nom Produit",
+            clmCode :  "Référence du Produit",
+            clmName : "Nom du Produit",
         },
         grdRebItems: 
         {
@@ -1997,7 +1997,7 @@ export const langFr =
         },
         popPassword : 
         {
-            title: "Veuillez Saisir MDP Administrateur pour Accéder au Document ",
+            title: "Veuillez Saisir mot de passe Administrateur pour Accéder au Document ",
             Password : "Mot de passe",
             btnApprove : "Valider"
         },
@@ -2062,7 +2062,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez Enregistrer Sans Dévérouiller !"
+            msg: "Vous ne Pouvez Pas Enregistrer Sans Dévérouiller !"
         },
         msgItemNotFound:
         {
@@ -2078,7 +2078,7 @@ export const langFr =
             msg: "Produit Existant dans Document ! Voulez-vous Combiner ?"
         },
         validRef :"Saisir Réf ",
-        validRefNo : "Saisir Réf No ",
+        validRefNo : "Saisir n° Réf ",
         validDepot : "Sélectionner Dépot",
         validCustomerCode : "Le Code  Produit",
         validDocDate : "Sélectionner Date" ,
@@ -2086,7 +2086,7 @@ export const langFr =
         {
             title: "Choix du Désign",
             design : "Design" ,
-            lang : "Langue Document" 
+            lang : "Langue du Document" 
         },
         msgNotQuantity: 
         {
@@ -2096,10 +2096,10 @@ export const langFr =
         },
         pg_txtBarcode : 
         {
-            title : "Sélectionner Barre",
-            clmCode :  "Référence Produit",
-            clmName : "Nom Produit",
-            clmMulticode : "Référence Fournisseur",
+            title : "Sélectionner Code Barre",
+            clmCode :  "Référence du Produit",
+            clmName : "Nom du Produit",
+            clmMulticode : "Référence du Fournisseur",
             clmBarcode : "Code Barre"
         },
         msgCode : 
@@ -2126,7 +2126,7 @@ export const langFr =
         txtBarcode : "Ajouter Code Barre",
         txtBarcodePlace: "Scanner Code Barre...",
         txtQuantity : "Quantité", 
-        txtRefRefno : "Réf.No:",  
+        txtRefRefno : "N° Réf :",  
         cmbDepot : "Dépôt",  
         dtDocDate : "Date",  
         pg_Docs : 
@@ -2134,19 +2134,19 @@ export const langFr =
             title : "Choix du document",
             clmDate : "Date",
             clmRef : "Réf.",
-            clmRefNo : "Réf. No:",
+            clmRefNo : "N° Réf. :",
         },
         popItemsCode : 
         {
             title : "Choix de stock",
-            clmCode :  "Code",
+            clmCode : "Code",
             clmName : "Nom de stock",
         },
         popItems: 
         {
             title: "Ajouter stock",
             txtPopItemsCode : "Code",
-            txtPopItemsName: "Nom Produit",
+            txtPopItemsName: "Nom du Produit",
             txtPopItemsQuantity : "Quantité",
             dtPopDate : "DLC"
         },
@@ -2169,7 +2169,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "Ok",
-            msg: "Documentation modifiée ! Veuillez Enregistrerou annuler les modifications"
+            msg: "Documentation modifiée ! Veuillez Enregistrer ou annuler les modifications"
         },
         msgAddItems:
         {
@@ -2237,7 +2237,7 @@ export const langFr =
     },
     stk_02_008 : // "Stok Giriş Fişi"
     {
-        txtRefRefno : "Réf.-Réf no:",
+        txtRefRefno : "N° Réf.-Réf :",
         cmbOutDepot: "Entrée Dépot",
         dtDocDate : "Date",
         txtBarcode : "Ajouter Code Barre",
@@ -2251,13 +2251,13 @@ export const langFr =
             clmRefNo : "Numéro",
             clmDocDate : "Date",
             clmInputName : "Entrée",
-            clmOutputName : "Entrée",
+            clmOutputName : "Sortie",
         },
         pg_txtItemsCode : 
         {
             title : "Sélectionner Produit",
-            clmCode :  "Référence Produit",
-            clmName : "Nom Produit",
+            clmCode :  "Référence du Produit",
+            clmName : "Nom du Produit",
         },
         grdOutwasItems: 
         {
@@ -2280,7 +2280,7 @@ export const langFr =
         },
         popPassword : 
         {
-            title: "Veuillez Saisir MDP Administrateur pour Accès au Document ",
+            title: "Veuillez Saisir mot de passe Administrateur pour Accès au Document ",
             Password : "Mot de passe",
             btnApprove : "Valider"
         },
@@ -2294,7 +2294,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez EnregistrerSans Dévérouiller !"
+            msg: "Vous ne Pouvez pas Enregistrer Sans Dévérouiller !"
         },
         msgDocValid:
         {
@@ -2379,14 +2379,14 @@ export const langFr =
             msg: "Produit Existant dans Document ! Voulez-vous Combiner ?"
         },
         validRef :"Saisir Réf ",
-        validRefNo : "Saisir Réf No ",
+        validRefNo : "Saisir n° Réf ",
         validDepot : "Sélectionner Dépot",
         validCustomerCode : "Le code fournisseur-client ne peut être vide" ,
         validDocDate : "Sélectionner Date" ,
         pg_quickDesc : 
         {
             title : "Sélection Touche Rapide" ,
-            clmDesc: "Motif" 
+            clmDesc: "Description" 
         },
         popQDescAdd : 
         {
@@ -2398,7 +2398,7 @@ export const langFr =
         {
             title: "Choix du Design",
             design : "Design" ,
-            lang : "Langue Document" 
+            lang : "Langue du Document" 
         },
         msgNotQuantity: 
         {
@@ -2409,9 +2409,9 @@ export const langFr =
         pg_txtBarcode : 
         {
             title : "Sélectionner Barre",
-            clmCode :  "Référence Produit",
-            clmName : "Nom Produit",
-            clmMulticode : "Référence Fournisseur",
+            clmCode :  "Référence du Produit",
+            clmName : "Nom du Produit",
+            clmMulticode : "Référence du Fournisseur",
             clmBarcode : "Code Barre"
         },
         msgCode : 
@@ -2431,7 +2431,7 @@ export const langFr =
     },
     stk_02_009 : // "Stok Çıkış Fişi"
     {
-        txtRefRefno : "Réf.-Réf no:",
+        txtRefRefno : "N° Réf.-Réf :",
         cmbOutDepot: "Sortie Dépot",
         dtDocDate : "Date",
         txtBarcode : "Ajouter Code Barre",
@@ -2450,8 +2450,8 @@ export const langFr =
         pg_txtItemsCode : 
         {
             title : "Sélectionner Produit",
-            clmCode :  "Référence Produit",
-            clmName : "Nom Produit",
+            clmCode :  "Référence du Produit",
+            clmName : "Nom du Produit",
         },
         grdOutwasItems: 
         {
@@ -2459,7 +2459,7 @@ export const langFr =
             clmItemName: "Nom",
             clmQuantity : "Quantité",
             clmCreateDate: "Date d'Enregistrement",
-            clmDescription :"Motif",
+            clmDescription :"Description",
             clmCostPrice : "Prix de Revient" ,
             clmCuser : "Utilisateur",
         },
@@ -2475,7 +2475,7 @@ export const langFr =
         },
         popPassword : 
         {
-            title: "Veuillez Saisir MDP Administrateur pour Accès au Document ",
+            title: "Veuillez Saisir mot de passe Administrateur pour Accès au Document ",
             Password : "Mot de passe",
             btnApprove : "Valider"
         },
@@ -2489,7 +2489,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez EnregistrerSans Dévérouiller !"
+            msg: "Vous ne Pouvez Enregistrer Sans Dévérouiller !"
         },
         msgDocValid:
         {
@@ -2558,7 +2558,7 @@ export const langFr =
         {
             title: "Attention",
             btn01: "OK",
-            msg: "Vous ne Pouvez EnregistrerSans Dévérouiller !"
+            msg: "Vous ne pas Pouvez Enregistrer Sans Dévérouiller !"
         },
         msgItemNotFound:
         {
@@ -2574,14 +2574,14 @@ export const langFr =
             msg: "Produit Existant dans Document ! Voulez-vous Combiner ?"
         },
         validRef :"Saisir Réf ",
-        validRefNo : "Saisir Réf No ",
+        validRefNo : "Saisir n° Réf ",
         validDepot : "Sélectionner Dépot",
         validCustomerCode : "Le code fournisseur-client ne peut être vide" ,
         validDocDate : "Sélectionner Date" ,
         pg_quickDesc : 
         {
             title : "Sélection Touche Rapide" ,
-            clmDesc: "Motif" 
+            clmDesc: "Description" 
         },
         popQDescAdd : 
         {
@@ -2593,7 +2593,7 @@ export const langFr =
         {
             title: "Choix du Design",
             design : "Design" ,
-            lang : "Langue Document" 
+            lang : "Langue du Document" 
         },
         msgNotQuantity: 
         {
@@ -2604,9 +2604,9 @@ export const langFr =
         pg_txtBarcode : 
         {
             title : "Sélectionner Barre",
-            clmCode :  "Référence Produit",
-            clmName : "Nom Produit",
-            clmMulticode : "Référence Fournisseur",
+            clmCode :  "Référence du Produit",
+            clmName : "Nom du Produit",
+            clmMulticode : "Référence du Fournisseur",
             clmBarcode : "Code Barre"
         },
         msgCode : 
@@ -2629,7 +2629,7 @@ export const langFr =
         txtItemName : "Nom du produit",
         txtBarkod : "Code barre",
         cmbCustomer : "Fournisseur",
-        cmbMainGrp : "Famille produit",
+        cmbMainGrp : "Famille du produit",
         btnCheck : "Actif",
         btnGet :"Rechercher",
         chkMasterBarcode : "Regrouper code-barres ",
@@ -2643,9 +2643,9 @@ export const langFr =
         txtTotalPassive : "Enregistrement Passif",  
         grdListe : 
         {
-            clmCode: "Référence Produit",
+            clmCode: "Référence du Produit",
             clmName : "Nom du produit",
-            clmMainGrp : "Famille produit",
+            clmMainGrp : "Famille du produit",
             clmCustomer : "Fournisseur",
             clmSname : "Nom Court",
             clmMulticode : "FRN.Code",
@@ -2675,11 +2675,11 @@ export const langFr =
         {
             clmCode: "Code",
             clmName : "Nom",
-            clmMainGrp : "Famille produit",
+            clmMainGrp : "Famille du produit",
             clmPrice : "Prix ",
             clmCustomer : "Fournisseur",
             clmQuantity : "Quantité",
-            clmChange : "Date Modification",
+            clmChange : "Date de Modification",
             clmStartDate : "Taxe",
             clmFinishDate : "Origine",
         },
@@ -2688,7 +2688,7 @@ export const langFr =
     {
         cmbCustomer : "Fournisseur",
         txtItemName : "Nom du produit",
-        cmbMainGrp : "Famille produit",
+        cmbMainGrp : "Famille du produit",
         btnCheck : "Actif",
         btnGet :"Rechercher",
         grdListe : 
@@ -2697,7 +2697,7 @@ export const langFr =
             clmName : "Nom",
             clmBarcode : "Code barre",
             clmUnit : "Unité",
-            clmMainGrp : "Famille produit",
+            clmMainGrp : "Famille du produit",
         },
     },
     stk_03_005 : // "Multi Kod Listesi" 
@@ -2710,15 +2710,15 @@ export const langFr =
         btnGet :"Rechercher",
         grdListe : 
         {
-            clmCode: "Référence Produit",
+            clmCode: "Référence du Produit",
             clmName : "Nom du produit",
-            clmMainGrp : "Famille produit",
+            clmMainGrp : "Famille du produit",
             clmCustomer : "Fournisseur",
             clmSname : "Nom Court",
             clmMulticode : "FRN.Code",
             clmUnit : "Unité",
             clmBarcode : "Code barre",
-            clmCostPrice : "Prix achat",
+            clmCostPrice : "Prix d'achat",
             clmVat : "Taxe",
             clmMinPrice : "Prix Min. Vente",
             clmMaxPrice : "Prix Max. Vente",
@@ -2757,16 +2757,16 @@ export const langFr =
         namePlaceHolder :"Saissir le nom complet ou une syllabe du produit",  
         pg_txtCustomerCode : 
         {
-            title : "Choix Fournisseur",
-            clmCode :  "Sélection Document",
-            clmTitle : "Nom Fournisseur",
+            title : "Choix du Fournisseur",
+            clmCode :  "Sélection du Document",
+            clmTitle : "Nom du Fournisseur",
             clmTypeName : "Type",
             clmGenusName : "Genre"
         },
-        cmbItemGroup : "Groupe Produit",
+        cmbItemGroup : "Groupe du Produit",
         btnGet : 'Chercher',
-        txtCode : "Référence Produit",
-        txtName : "Nom Produit",
+        txtCode : "Référence du Produit",
+        txtName : "Nom du Produit",
         grdItemList : 
         {
             clmCode: "Code",
@@ -2774,8 +2774,8 @@ export const langFr =
             clmBarcode : "Code barre",
             clmMulticode : "FRN.Code",
             clmCustomerName : "Fournisseur",
-            clmCustomerPrice : "Prix Fournisseur",
-            clmPriceSale : "Prix Vente",
+            clmCustomerPrice : "Prix du Fournisseur",
+            clmPriceSale : "Prix de Vente",
             clmVat : "Taxe",
             clmOrgins : "Origine",
             clmStatus : "Actif",
@@ -2808,9 +2808,9 @@ export const langFr =
         ItemNamePlaceHolder :"Saissir le nom complet ou une syllabe du produit",
         pg_txtCustomerCode : 
         {
-            title : "Choix Fournisseur",
-            clmCode :  "Code Fournisseur",
-            clmTitle : "Nom Fournisseur",
+            title : "Choix du Fournisseur",
+            clmCode :  "Code du Fournisseur",
+            clmTitle : "Nom du Fournisseur",
             clmTypeName : "Type",
             clmGenusName : "Genre"
         },
@@ -3045,7 +3045,7 @@ export const langFr =
             clmDocDate : "Date",   
             clmRef : "Référence",  
             clmRefNo : "Ligne",   
-            clmDescription : "Déscription"  
+            clmDescription : "Description"  
         },
         txtTotalQuantity : "Quantité totale",  
         txtTotalCost : "Montant de l'inventaire",  
@@ -3094,16 +3094,16 @@ export const langFr =
         },
         grdLegal : 
         {
-            clmSiretID : "Siret No",
+            clmSiretID : "N° de Siret",
             clmApeCode : "Code Ape",
             clmTaxOffice : "Impôt",
             clmTaxNo : "Numéro Impôt",
-            clmIntVatNo : "No TVA inter.",
+            clmIntVatNo : "N° TVA inter.",
             clmTaxType : "Type de Taxe",
-            clmSirenID : "Siren No",
+            clmSirenID : "N° de Siren",
             clmRcs : "RCS",
             clmCapital : "Capital",
-            clmInsurance : "Assurance No" 
+            clmInsurance : "N° d'Assurance" 
         },
         grdOffical : 
         {
