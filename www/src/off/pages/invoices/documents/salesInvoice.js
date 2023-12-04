@@ -175,7 +175,7 @@ export default class salesInvoice extends DocBase
                         {
                             this.combineControl = true
                             this.combineNew = false
-
+                            
                             this.grdSlsInv.devGrid.beginUpdate()
                             for (let i = 0; i < data.length; i++) 
                             {
@@ -390,7 +390,7 @@ export default class salesInvoice extends DocBase
             )
         }
     }
-    async addItem(pData,pIndex,pQuantity,pPrice)
+    addItem(pData,pIndex,pQuantity,pPrice)
     {
         return new Promise(async resolve => 
         {
@@ -477,25 +477,24 @@ export default class salesInvoice extends DocBase
                 let tmpQuantity = await this.core.sql.execute(tmpCheckQuery) 
                 if(tmpQuantity.result.recordset.length > 0)
                 {
-                   if(tmpQuantity.result.recordset[0].QUANTITY < pQuantity)
-                   {
-                        App.instance.setState({isExecute:false})
-                        let tmpConfObj =
-                        {
-                            id:'msgNotQuantity',showTitle:true,title:this.t("msgNotQuantity.title"),showCloseButton:true,width:'500px',height:'200px',
-                            button:[{id:"btn01",caption:this.t("msgNotQuantity.btn01"),location:'after'}],
-                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNotQuantity.msg") + tmpQuantity.result.recordset[0].QUANTITY}</div>)
-                        }
-            
-                        await dialog(tmpConfObj);
-                        await this.grdSlsInv.devGrid.deleteRow(0)
-                        resolve()
-                        return
-                   }
-                   else
-                   {
-                        this.docObj.docItems.dt()[pIndex].DEPOT_QUANTITY = tmpQuantity.result.recordset[0].QUANTITY
-                   }
+                    if(tmpQuantity.result.recordset[0].QUANTITY < pQuantity)
+                    {
+                            let tmpConfObj =
+                            {
+                                id:'msgNotQuantity',showTitle:true,title:this.t("msgNotQuantity.title"),showCloseButton:true,width:'500px',height:'200px',
+                                button:[{id:"btn01",caption:this.t("msgNotQuantity.btn01"),location:'after'}],
+                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNotQuantity.msg") + tmpQuantity.result.recordset[0].QUANTITY}</div>)
+                            }
+                
+                            await dialog(tmpConfObj);
+                            await this.grdSlsInv.devGrid.deleteRow(0)
+                            resolve()
+                            return
+                    }
+                    else
+                    {
+                            this.docObj.docItems.dt()[pIndex].DEPOT_QUANTITY = tmpQuantity.result.recordset[0].QUANTITY
+                    }
                 }
             }
             
@@ -511,7 +510,7 @@ export default class salesInvoice extends DocBase
             this.docObj.docItems.dt()[pIndex].QUANTITY = pQuantity
             this.docObj.docItems.dt()[pIndex].LINE_NO = this.docObj.docItems.dt().max("LINE_NO") + 1
             this.docObj.docItems.dt()[pIndex].SUB_QUANTITY = pQuantity / this.docObj.docItems.dt()[pIndex].SUB_FACTOR
-          
+        
             if(typeof pPrice == 'undefined')
             {
                 let tmpQuery = 
@@ -554,7 +553,7 @@ export default class salesInvoice extends DocBase
             await this.itemRelated(pData.GUID,pQuantity)
             //*****************************************/
             resolve()
-        });
+        })
     }
     async getDispatch()
     {
@@ -628,7 +627,7 @@ export default class salesInvoice extends DocBase
                 {
                     query :"SELECT GUID,CODE,NAME,VAT,1 AS QUANTITY,UNIT," + 
                     "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].INPUT+"'),'') AS MULTICODE"+
-                    " FROM ITEMS_VW_01 WHERE ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].INPUT+"'),'') = @VALUE " ,
+                    " FROM ITEMS_VW_01 WHERE ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].INPUT+"'),'') = @VALUE AND ITEMS_VW_01.STATUS = 1" ,
                     param : ['VALUE:string|50'],
                     value : [this.tagItemCode.value[i]]
                 }
@@ -652,7 +651,7 @@ export default class salesInvoice extends DocBase
                 {
                     query :"SELECT GUID,CODE,NAME,VAT,1 AS QUANTITY,UNIT," + 
                     "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].INPUT+"'),'') AS MULTICODE"+
-                    " FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VALUE) OR UPPER(NAME) LIKE UPPER(@VALUE) " ,
+                    " FROM ITEMS_VW_01 WHERE CODE = @VALUE AND STATUS = 1" ,
                     param : ['VALUE:string|50'],
                     value : [this.tagItemCode.value[i]]
                 }
@@ -1366,13 +1365,13 @@ export default class salesInvoice extends DocBase
                                                             this.customerClear = false
                                                             this.combineControl = true
                                                             this.combineNew = false
-
+        
                                                             this.grdSlsInv.devGrid.beginUpdate()
                                                             for (let i = 0; i < data.length; i++) 
                                                             {
                                                                 await this.addItem(data[i],null)
                                                             }
-                                                            this.grdSlsInv.devGrid.endUpdate()                                                                                                                        
+                                                            this.grdSlsInv.devGrid.endUpdate()
                                                         }
                                                     }
                                                     this.pg_txtBarcode.setVal(this.txtBarcode.value)
@@ -1451,10 +1450,6 @@ export default class salesInvoice extends DocBase
                                     <Label text={this.t("dtExpDate")} alignment="right" />
                                     <NdDatePicker simple={true}  parent={this} id={"dtExpDate"}
                                     dt={{data:this.docObj.docCustomer.dt('DOC_CUSTOMER'),field:"EXPIRY_DATE"}}
-                                    onValueChanged={(async()=>
-                                    {
-                                        
-                                    }).bind(this)}
                                     >
                                         <Validator validationGroup={"frmPurcInv"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validDocDate")} />
@@ -1519,7 +1514,7 @@ export default class salesInvoice extends DocBase
                                                 await this.core.util.waitUntil(100)
                                                 this.combineControl = true
                                                 this.combineNew = false
-
+                                                
                                                 this.grdSlsInv.devGrid.beginUpdate()
                                                 for (let i = 0; i < data.length; i++) 
                                                 {
@@ -1558,7 +1553,7 @@ export default class salesInvoice extends DocBase
                                                         this.customerClear = false
                                                         this.combineControl = true
                                                         this.combineNew = false
-
+                                                        
                                                         this.grdSlsInv.devGrid.beginUpdate()
                                                         for (let i = 0; i < data.length; i++) 
                                                         {

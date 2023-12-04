@@ -137,7 +137,7 @@ export default class priceDifferenceInvoice extends DocBase
         App.instance.setState({isExecute:false})
 
     }
-    async calculateTotal()
+    calculateTotal()
     {
         super.calculateTotal()
 
@@ -160,18 +160,12 @@ export default class priceDifferenceInvoice extends DocBase
                             {
                                 this.combineControl = true
                                 this.combineNew = false
-                                if(data.length == 1)
-                                {
-                                    await this.addItem(data[0],e.rowIndex)
+                                this.grdDiffInv.devGrid.beginUpdate()
+                                for (let i = 0; i < data.length; i++) 
+                                {   
+                                    await this.addItem(data[i],e.rowIndex)
                                 }
-                                else if(data.length > 1)
-                                {
-                                    for (let i = 0; i < data.length; i++) 
-                                    {
-                                        await this.core.util.waitUntil(100)
-                                        await this.addItem(data[i],e.rowIndex)
-                                    }
-                                }
+                                this.grdDiffInv.devGrid.endUpdate()
                             }
                             await this.pg_txtItemsCode.setVal(e.value)
                         }
@@ -222,18 +216,12 @@ export default class priceDifferenceInvoice extends DocBase
                                 {
                                     this.combineControl = true
                                     this.combineNew = false
-                                    if(data.length == 1)
+                                    this.grdDiffInv.devGrid.beginUpdate()
+                                    for (let i = 0; i < data.length; i++) 
                                     {
-                                        await this.addItem(data[0],e.rowIndex)
+                                        await this.addItem(data[i],e.rowIndex)
                                     }
-                                    else if(data.length > 1)
-                                    {
-                                        for (let i = 0; i < data.length; i++) 
-                                        {
-                                            await this.core.util.waitUntil(100)
-                                            await this.addItem(data[i],e.rowIndex)
-                                        }
-                                    }
+                                    this.grdDiffInv.devGrid.endUpdate()
                                 }
                                 this.pg_txtItemsCode.show()
                             }
@@ -382,96 +370,100 @@ export default class priceDifferenceInvoice extends DocBase
             )
         }
     }
-    async addItem(pData,pIndex,pQuantity)
+    addItem(pData,pIndex,pQuantity)
     {
-        App.instance.setState({isExecute:true})
-
-        
-        if(typeof pQuantity == 'undefined')
+        return new Promise(async resolve => 
         {
-            pQuantity = 1
-        }
-        //GRID DE AYNI ÜRÜNDEN OLUP OLMADIĞI KONTROL EDİLİYOR VE KULLANICIYA SORULUYOR,CEVAP A GÖRE SATIR BİRLİŞTERİLİYOR.
-        let tmpMergDt = await this.mergeItem(pData.CODE)
-        if(typeof tmpMergDt != 'undefined' && this.combineNew == false)
-        {
-            tmpMergDt[0].QUANTITY = tmpMergDt[0].QUANTITY + pQuantity
-            tmpMergDt[0].SUB_QUANTITY = tmpMergDt[0].SUB_QUANTITY / tmpMergDt[0].SUB_FACTOR
-            tmpMergDt[0].VAT = Number((tmpMergDt[0].VAT + (tmpMergDt[0].PRICE * (tmpMergDt[0].VAT_RATE / 100) * pQuantity))).round(6)
-            tmpMergDt[0].AMOUNT = Number((tmpMergDt[0].QUANTITY * tmpMergDt[0].PRICE)).round(4)
-            tmpMergDt[0].TOTAL = Number((((tmpMergDt[0].QUANTITY * tmpMergDt[0].PRICE) - tmpMergDt[0].DISCOUNT) + tmpMergDt[0].VAT)).round(2)
-            tmpMergDt[0].TOTALHT =  Number((tmpMergDt[0].AMOUNT - tmpMergDt[0].DISCOUNT)).round(2)
-            this.calculateTotal()
+            App.instance.setState({isExecute:true})
+    
+            if(typeof pQuantity == 'undefined')
+            {
+                pQuantity = 1
+            }
+            //GRID DE AYNI ÜRÜNDEN OLUP OLMADIĞI KONTROL EDİLİYOR VE KULLANICIYA SORULUYOR,CEVAP A GÖRE SATIR BİRLİŞTERİLİYOR.
+            let tmpMergDt = await this.mergeItem(pData.CODE)
+            if(typeof tmpMergDt != 'undefined' && this.combineNew == false)
+            {
+                tmpMergDt[0].QUANTITY = tmpMergDt[0].QUANTITY + pQuantity
+                tmpMergDt[0].SUB_QUANTITY = tmpMergDt[0].SUB_QUANTITY / tmpMergDt[0].SUB_FACTOR
+                tmpMergDt[0].VAT = Number((tmpMergDt[0].VAT + (tmpMergDt[0].PRICE * (tmpMergDt[0].VAT_RATE / 100) * pQuantity))).round(6)
+                tmpMergDt[0].AMOUNT = Number((tmpMergDt[0].QUANTITY * tmpMergDt[0].PRICE)).round(4)
+                tmpMergDt[0].TOTAL = Number((((tmpMergDt[0].QUANTITY * tmpMergDt[0].PRICE) - tmpMergDt[0].DISCOUNT) + tmpMergDt[0].VAT)).round(2)
+                tmpMergDt[0].TOTALHT =  Number((tmpMergDt[0].AMOUNT - tmpMergDt[0].DISCOUNT)).round(2)
+                this.calculateTotal()
+                //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
+                await this.itemRelated(pData.GUID,tmpMergDt[0].QUANTITY)
+                //*****************************************/
+                App.instance.setState({isExecute:false})
+                resolve()
+                return
+            }
+            //******************************************************************************************************************/
+            if(pIndex == null)
+            {
+                let tmpDocItems = {...this.docObj.docItems.empty}
+                tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+                tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+                tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
+                tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
+                tmpDocItems.REF = this.docObj.dt()[0].REF
+                tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+                tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+                tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+                tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
+                this.docObj.docItems.addEmpty(tmpDocItems)
+                pIndex = this.docObj.docItems.dt().length - 1
+            }
+    
+            if(typeof pData.ITEM_TYPE == 'undefined')
+            {
+                let tmpTypeQuery = 
+                {
+                    query :"SELECT TYPE FROM ITEMS WHERE GUID = @GUID ",
+                    param : ['GUID:string|50'],
+                    value : [pData.GUID]
+                }
+                let tmpType = await this.core.sql.execute(tmpTypeQuery) 
+                if(tmpType.result.recordset.length > 0)
+                {
+                    pData.ITEM_TYPE = tmpType.result.recordset[0].TYPE
+                }
+            }
+    
+            this.docObj.docItems.dt()[pIndex].ITEM_CODE = pData.CODE
+            this.docObj.docItems.dt()[pIndex].ITEM = pData.GUID
+            this.docObj.docItems.dt()[pIndex].ITEM_TYPE = pData.ITEM_TYPE
+            this.docObj.docItems.dt()[pIndex].VAT_RATE = pData.VAT
+            this.docObj.docItems.dt()[pIndex].ITEM_NAME = pData.NAME
+            this.docObj.docItems.dt()[pIndex].UNIT = pData.UNIT
+            this.docObj.docItems.dt()[pIndex].DISCOUNT = 0
+            this.docObj.docItems.dt()[pIndex].DISCOUNT_RATE = 0
+            this.docObj.docItems.dt()[pIndex].QUANTITY = pQuantity
+            let tmpQuery = 
+            {
+                query :"SELECT dbo.FN_PRICE_SALE_VAT_EXT(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,NULL,'00000000-0000-0000-0000-000000000000') AS PRICE",
+                param : ['GUID:string|50','QUANTITY:float','CUSTOMER:string|50'],
+                value : [pData.GUID,pQuantity,this.docObj.dt()[0].OUTPUT]
+            }
+            let tmpData = await this.core.sql.execute(tmpQuery) 
+            if(tmpData.result.recordset.length > 0)
+            {
+                this.docObj.docItems.dt()[pIndex].CUSTOMER_PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4))
+                this.docObj.docItems.dt()[pIndex].PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4))
+                this.docObj.docItems.dt()[pIndex].VAT = parseFloat((tmpData.result.recordset[0].PRICE * (this.docObj.docItems.dt()[pIndex].VAT_RATE / 100) * pQuantity).toFixed(6))
+                this.docObj.docItems.dt()[pIndex].AMOUNT = parseFloat((tmpData.result.recordset[0].PRICE  * pQuantity)).round(2)
+                this.docObj.docItems.dt()[pIndex].TOTAL = Number(((tmpData.result.recordset[0].PRICE * pQuantity) + this.docObj.docItems.dt()[pIndex].VAT)).round(2)
+                this.docObj.docItems.dt()[pIndex].TOTALHT = Number((this.docObj.docItems.dt()[pIndex].AMOUNT - this.docObj.docItems.dt()[pIndex].DISCOUNT)).round(2)
+                this.calculateTotal()
+            }
             //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
-            await this.itemRelated(pData.GUID,tmpMergDt[0].QUANTITY)
+            await this.itemRelated(pData.GUID,pQuantity)
             //*****************************************/
             App.instance.setState({isExecute:false})
-            return
-        }
-        //******************************************************************************************************************/
-        if(pIndex == null)
-        {
-            let tmpDocItems = {...this.docObj.docItems.empty}
-            tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
-            tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
-            tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-            tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
-            tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
-            tmpDocItems.REF = this.docObj.dt()[0].REF
-            tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
-            tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
-            tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
-            tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-            tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
-            this.docObj.docItems.addEmpty(tmpDocItems)
-            pIndex = this.docObj.docItems.dt().length - 1
-        }
-
-        if(typeof pData.ITEM_TYPE == 'undefined')
-        {
-            let tmpTypeQuery = 
-            {
-                query :"SELECT TYPE FROM ITEMS WHERE GUID = @GUID ",
-                param : ['GUID:string|50'],
-                value : [pData.GUID]
-            }
-            let tmpType = await this.core.sql.execute(tmpTypeQuery) 
-            if(tmpType.result.recordset.length > 0)
-            {
-                pData.ITEM_TYPE = tmpType.result.recordset[0].TYPE
-            }
-        }
-
-        this.docObj.docItems.dt()[pIndex].ITEM_CODE = pData.CODE
-        this.docObj.docItems.dt()[pIndex].ITEM = pData.GUID
-        this.docObj.docItems.dt()[pIndex].ITEM_TYPE = pData.ITEM_TYPE
-        this.docObj.docItems.dt()[pIndex].VAT_RATE = pData.VAT
-        this.docObj.docItems.dt()[pIndex].ITEM_NAME = pData.NAME
-        this.docObj.docItems.dt()[pIndex].UNIT = pData.UNIT
-        this.docObj.docItems.dt()[pIndex].DISCOUNT = 0
-        this.docObj.docItems.dt()[pIndex].DISCOUNT_RATE = 0
-        this.docObj.docItems.dt()[pIndex].QUANTITY = pQuantity
-        let tmpQuery = 
-        {
-            query :"SELECT dbo.FN_PRICE(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,'00000000-0000-0000-0000-000000000000',1,0,0) AS PRICE",
-            param : ['GUID:string|50','QUANTITY:float','CUSTOMER:string|50'],
-            value : [pData.GUID,pQuantity,this.docObj.dt()[0].OUTPUT]
-        }
-        let tmpData = await this.core.sql.execute(tmpQuery) 
-        if(tmpData.result.recordset.length > 0)
-        {
-            this.docObj.docItems.dt()[pIndex].CUSTOMER_PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4))
-            this.docObj.docItems.dt()[pIndex].PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4))
-            this.docObj.docItems.dt()[pIndex].VAT = parseFloat((tmpData.result.recordset[0].PRICE * (this.docObj.docItems.dt()[pIndex].VAT_RATE / 100) * pQuantity).toFixed(6))
-            this.docObj.docItems.dt()[pIndex].AMOUNT = parseFloat((tmpData.result.recordset[0].PRICE  * pQuantity)).round(2)
-            this.docObj.docItems.dt()[pIndex].TOTAL = Number(((tmpData.result.recordset[0].PRICE * pQuantity) + this.docObj.docItems.dt()[pIndex].VAT)).round(2)
-            this.docObj.docItems.dt()[pIndex].TOTALHT = Number((this.docObj.docItems.dt()[pIndex].AMOUNT - this.docObj.docItems.dt()[pIndex].DISCOUNT)).round(2)
-            this.calculateTotal()
-        }
-        //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
-        await this.itemRelated(pData.GUID,pQuantity)
-        //*****************************************/
-        App.instance.setState({isExecute:false})
+            resolve()
+        })
     }
     async multiItemAdd()
     {
@@ -571,7 +563,6 @@ export default class priceDifferenceInvoice extends DocBase
         this.combineNew = false
         for (let i = 0; i < this.multiItemData.length; i++) 
         {
-            await this.core.util.waitUntil(100)
             await this.addItem(this.multiItemData[i],null,this.multiItemData[i].QUANTITY)
             this.popMultiItem.hide()
         }
@@ -1127,10 +1118,6 @@ export default class priceDifferenceInvoice extends DocBase
                                     <Label text={this.t("dtExpDate")} alignment="right" />
                                     <NdDatePicker simple={true}  parent={this} id={"dtExpDate"}
                                     dt={{data:this.docObj.docCustomer.dt('DOC_CUSTOMER'),field:"EXPIRY_DATE"}}
-                                    onValueChanged={(async()=>
-                                    {
-                                        
-                                    }).bind(this)}
                                     >
                                         <Validator validationGroup={"frmPurcInv"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validDocDate")} />
@@ -1177,18 +1164,12 @@ export default class priceDifferenceInvoice extends DocBase
                                                             this.combineControl = true
                                                             this.combineNew = false
         
-                                                            if(data.length == 1)
+                                                            this.grdDiffInv.devGrid.beginUpdate()
+                                                            for (let i = 0; i < data.length; i++) 
                                                             {
-                                                                await this.addItem(data[0],null)
+                                                                await this.addItem(data[i],null)
                                                             }
-                                                            else if(data.length > 1)
-                                                            {
-                                                                for (let i = 0; i < data.length; i++) 
-                                                                {
-                                                                    await this.core.util.waitUntil(100)
-                                                                    await this.addItem(data[i],null)
-                                                                }
-                                                            }
+                                                            this.grdDiffInv.devGrid.endUpdate()
                                                         }
                                                     }
                                                     await this.pg_txtBarcode.setVal(this.txtBarcode.value)
@@ -1229,23 +1210,14 @@ export default class priceDifferenceInvoice extends DocBase
                                             await this.pg_txtItemsCode.setVal(this.txtBarcode.value)
                                             this.pg_txtItemsCode.onClick = async(data) =>
                                             {
-                                                await this.core.util.waitUntil(100)
                                                 this.combineControl = true
                                                 this.combineNew = false
-                                                if(data.length == 1)
+                                                this.grdDiffInv.devGrid.beginUpdate()
+                                                for (let i = 0; i < data.length; i++) 
                                                 {
-                                                    this.msgQuantity.tmpData = data[0]
-                                                    await this.msgQuantity.show();
-                                                    await this.addItem(data[0],null,this.txtPopQteUnitQuantity.value)
+                                                    await this.addItem(data[i],null)
                                                 }
-                                                else if(data.length > 1)
-                                                {
-                                                    for (let i = 0; i < data.length; i++) 
-                                                    {
-                                                        await this.core.util.waitUntil(100)
-                                                        await this.addItem(data[i],null)
-                                                    }
-                                                }
+                                                this.grdDiffInv.devGrid.endUpdate()
                                             }
                                         }
                                         this.txtBarcode.value = ''
@@ -1283,18 +1255,12 @@ export default class priceDifferenceInvoice extends DocBase
                                                         {
                                                             this.combineControl = true
                                                             this.combineNew = false
-                                                            if(data.length == 1)
+                                                            this.grdDiffInv.devGrid.beginUpdate()
+                                                            for (let i = 0; i < data.length; i++) 
                                                             {
-                                                                await this.addItem(data[0],null)
+                                                                await this.addItem(data[i],null)
                                                             }
-                                                            else if(data.length > 1)
-                                                            {
-                                                                for (let i = 0; i < data.length; i++) 
-                                                                {
-                                                                    await this.core.util.waitUntil(100)
-                                                                    await this.addItem(data[i],null)
-                                                                }
-                                                            }
+                                                            this.grdDiffInv.devGrid.endUpdate()
                                                         }
                                                     }
                                                     this.pg_txtItemsCode.show()
@@ -1304,21 +1270,14 @@ export default class priceDifferenceInvoice extends DocBase
                                             
                                             this.pg_txtItemsCode.onClick = async(data) =>
                                             {
-                                                await this.core.util.waitUntil(100)
                                                 this.combineControl = true
                                                 this.combineNew = false
-                                                if(data.length == 1)
+                                                this.grdDiffInv.devGrid.beginUpdate()
+                                                for (let i = 0; i < data.length; i++) 
                                                 {
-                                                    await this.addItem(data[0],null)
+                                                    await this.addItem(data[i],null)
                                                 }
-                                                else if(data.length > 1)
-                                                {
-                                                    for (let i = 0; i < data.length; i++) 
-                                                    {
-                                                        await this.core.util.waitUntil(100)
-                                                        await this.addItem(data[i],null)
-                                                    }
-                                                }
+                                                this.grdDiffInv.devGrid.endUpdate()
                                             }
                                             this.pg_txtItemsCode.show()
                                         }
@@ -1350,18 +1309,12 @@ export default class priceDifferenceInvoice extends DocBase
                                                         this.customerClear = false
                                                         this.combineControl = true
                                                         this.combineNew = false
-                                                        if(data.length == 1)
+                                                        this.grdDiffInv.devGrid.beginUpdate()
+                                                        for (let i = 0; i < data.length; i++) 
                                                         {
-                                                            await this.addItem(data[0],null)
+                                                            await this.addItem(data[i],null)
                                                         }
-                                                        else if(data.length > 1)
-                                                        {
-                                                            for (let i = 0; i < data.length; i++) 
-                                                            {
-                                                                await this.core.util.waitUntil(100)
-                                                                await this.addItem(data[i],null)
-                                                            }
-                                                        }
+                                                        this.grdDiffInv.devGrid.endUpdate()
                                                     }
                                                     await this.pg_service.show()
                                                     return
@@ -1374,18 +1327,12 @@ export default class priceDifferenceInvoice extends DocBase
                                                 this.customerClear = false
                                                 this.combineControl = true
                                                 this.combineNew = false
-                                                if(data.length == 1)
+                                                this.grdDiffInv.devGrid.beginUpdate()
+                                                for (let i = 0; i < data.length; i++) 
                                                 {
-                                                    await this.addItem(data[0],null)
+                                                    await this.addItem(data[i],null)
                                                 }
-                                                else if(data.length > 1)
-                                                {
-                                                    for (let i = 0; i < data.length; i++) 
-                                                    {
-                                                        await this.core.util.waitUntil(100)
-                                                        await this.addItem(data[i],null)
-                                                    }
-                                                }
+                                                this.grdDiffInv.devGrid.endUpdate()
                                             }
                                             await this.pg_service.show()   
                                         }
@@ -1821,7 +1768,7 @@ export default class priceDifferenceInvoice extends DocBase
                                     </div>
                                     <div className="row py-2">
                                         <div className='col-6'>
-                                            <NdButton text={this.t("btnView")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmPurcOrderPrint" + this.tabIndex}
+                                            <NdButton text={this.t("btnView")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmPrintPop" + this.tabIndex}
                                             onClick={async (e)=>
                                             {       
                                                 if(e.validationGroup.validate().status == "valid")
@@ -1855,7 +1802,7 @@ export default class priceDifferenceInvoice extends DocBase
                                             }}/>
                                         </div>
                                         <div className='col-6'>
-                                                <NdButton text={this.t("btnMailsend")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmPurcOrderPrint" + this.tabIndex}
+                                                <NdButton text={this.t("btnMailsend")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmPrintPop" + this.tabIndex}
                                                 onClick={async (e)=>
                                                 {    
                                                     if(e.validationGroup.validate().status == "valid")
@@ -1893,13 +1840,27 @@ export default class priceDifferenceInvoice extends DocBase
                         showTitle={true}
                         title={this.t("popMailSend.title")}
                         container={"#root"} 
-                        width={'600'}
+                        width={'650'}
                         height={'600'}
                         position={{of:'#root'}}
                         deferRendering={true}
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
+                                    <Label text={"popMailSend.txtMailSubject"} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbMailAddress"
+                                    displayExpr="MAIL_ADDRESS"                       
+                                    valueExpr="GUID"
+                                    value=""
+                                    searchEnabled={true}
+                                    data={{source:{select:{query : "SELECT GUID,MAIL_ADDRESS FROM [dbo].[MAIL_SETTINGS]"},sql:this.core.sql}}}
+                                    param={this.param.filter({ELEMENT:'cmbMailAddress',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'cmbMailAddress',USERS:this.user.CODE})}
+                                    >
+                                    </NdSelectBox>
+                                </Item>
+                                <Item>
+                                        
                                     <Label text={this.t("popMailSend.txtMailSubject")} alignment="right" />
                                     <NdTextBox id="txtMailSubject" parent={this} simple={true}
                                     maxLength={32}
@@ -1940,8 +1901,20 @@ export default class priceDifferenceInvoice extends DocBase
                                                     App.instance.setState({isExecute:true})
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
                                                     App.instance.setState({isExecute:false})
+                                                    console.log(this.cmbMailAddress.value)
+                                                    let tmpMailQuery = 
+                                                    {
+                                                        query: "SELECT * FROM  [dbo].[MAIL_SETTINGS] WHERE GUID = @GUID" ,
+                                                        param:  ['GUID:string|50'],
+                                                        value:  [this.cmbMailAddress.value]
+                                                    }
+                                                    console.log(1)
+                                                    let tmpMailAdress = await this.core.sql.execute(tmpMailQuery) 
+                                                    console.log(tmpMailAdress)
                                                     this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
                                                     {
+                                                    console.log(2)
+                                                    console.log(tmpMailAdress.result.recordset[0].MAIL_SMTP)
                                                         App.instance.setState({isExecute:true})
                                                         let tmpAttach = pResult.split('|')[1]
                                                         let tmpHtml = this.htmlEditor.value
@@ -1952,9 +1925,25 @@ export default class priceDifferenceInvoice extends DocBase
                                                         if(pResult.split('|')[0] != 'ERR')
                                                         {
                                                         }
-                                                        let tmpMailData = {html:tmpHtml,subject:this.txtMailSubject.value,sendMail:this.txtSendMail.value,attachName:"facture.pdf",attachData:tmpAttach,text:""}
+                                                        
+                                                        let tmpMailData = {html:tmpHtml,subject:this.txtMailSubject.value,sendMail:this.txtSendMail.value,attachName:"facture.pdf",attachData:tmpAttach,text:"",
+                                                                        service:tmpMailAdress.result.recordset[0].MAIL_SERVICE,
+                                                                        host:tmpMailAdress.result.recordset[0].MAIL_SMTP,
+                                                                        port:Number(tmpMailAdress.result.recordset[0].MAIL_PORT),
+                                                                        userMail:tmpMailAdress.result.recordset[0].MAIL_ADDRESS,
+                                                                        password:tmpMailAdress.result.recordset[0].MAIL_PASSWORD}
+                                                                        console.log('ggg')
+                                                                        console.log(tmpMailAdress.result.recordset[0].MAIL_SERVICE)
+                                                                        console.log(tmpMailAdress.result.recordset[0].MAIL_SMTP)
+                                                                        console.log(tmpMailAdress.result.recordset[0].MAIL_PORT)
+                                                                        console.log(tmpMailAdress.result.recordset[0].MAIL_ADDRESS)
+                                                                        console.log(tmpMailAdress.result.recordset[0].MAIL_PASSWORD)
+                                                                        console.log(tmpMailData)
+                                                                        console.log('ttt')
                                                         this.core.socket.emit('mailer',tmpMailData,async(pResult1) => 
                                                         {
+                                                         console.log(4)
+
                                                             App.instance.setState({isExecute:false})
                                                             let tmpConfObj1 =
                                                             {

@@ -336,6 +336,7 @@ export default class promotionCard extends React.PureComponent
                                             <Column dataField="CODE" caption={this.t("pg_Grid.clmCode")} width={150} />
                                             <Column dataField="NAME" caption={this.t("pg_Grid.clmName")} width={650} defaultSortOrder="asc" />
                                             <Column dataField="MAIN_GRP_NAME" caption={this.t("pg_Grid.clmGrpName")} width={150}/>
+                                            <Column dataField="COST_PRICE" caption={this.t("pg_Grid.clmCostPrice")} width={100}/>
                                             <Column dataField="PRICE" caption={this.t("pg_Grid.clmPrice")} width={100}/>
                                         </NdPopGrid>
                                         {/* SEÇİM LİSTE POPUP */}
@@ -927,8 +928,8 @@ export default class promotionCard extends React.PureComponent
                                                 }
                                                 else if(this.state["rstType" + pItem.WITHAL] == 5)
                                                 {
-                                                    this["txtRstQuantity" + pItem.WITHAL].value = this["txtDiscAmount" + pItem.WITHAL].value
-                                                    this.appDt.where({WITHAL:pItem.WITHAL})[0].AMOUNT = this["txtDiscAmount" + pItem.WITHAL].value
+                                                    this["txtRstQuantity" + pItem.WITHAL].value = Number(this["txtDiscAmount" + pItem.WITHAL].value)
+                                                    this.appDt.where({WITHAL:pItem.WITHAL})[0].AMOUNT = Number(this["txtDiscAmount" + pItem.WITHAL].value)
                                                 }
 
                                                 

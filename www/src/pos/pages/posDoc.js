@@ -8641,21 +8641,37 @@ export default class posDoc extends React.PureComponent
                     title={this.lang.t("popPasswordChange.title")}
                     container={"#root"} 
                     width={'500'}
-                    height={'300'}
+                    height={'560'}
                     position={{of:'#root'}}
                     >
                         <Form colCount={1} height={'fit-content'}>
                             <Item>
                                 <Label text={this.lang.t("popPasswordChange.NewPassword")} alignment="right" />
                                 <NdTextBox id="txtNewPassword" mode="password" parent={this} simple={true}
-                                        maxLength={32}
-                                ></NdTextBox>
+                                 onFocusIn={()=>
+                                {                                    
+                                    this.keyPassChange.inputName = "txtNewPassword"
+                                    this.keyPassChange.setInput(this.txtNewPassword.value)
+                                }}>
+
+                                </NdTextBox>
                             </Item>
                             <Item>
                                 <Label text={this.lang.t("popPasswordChange.NewPassword2")} alignment="right" />
                                 <NdTextBox id="txtNewPassword2" mode="password" parent={this} simple={true}
-                                        maxLength={32}
-                                ></NdTextBox>
+                                onFocusIn={()=>
+                                {                                    
+                                    this.keyPassChange.inputName = "txtNewPassword2"
+                                    this.keyPassChange.setInput(this.txtNewPassword2.value)
+                                }}>
+                                </NdTextBox>
+                            </Item>
+                            <Item>
+                                <div className="row py-1">
+                                    <div className="col-12">
+                                        <NbKeyboard id={"keyPassChange"} parent={this} inputName={"txtNewPassword"} layoutName={"numbers"}/>
+                                    </div>
+                                </div>
                             </Item>
                             <Item>
                                 <div className='row'>

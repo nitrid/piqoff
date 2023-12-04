@@ -871,6 +871,18 @@ export const langTr =
         NewPassword2 : "Yeni Şifre Tekrar",
         btnApprove : "Onayla"
     },
+    msgPassChange:
+    {
+        title: "Başarılı",
+        btn01: "Tamam",
+        msg: "Şifreniz Değiştirildi !"
+    },
+    msgPasswordWrong:
+    {
+        title: "Başarısız",
+        btn01: "Tamam",
+        msg: "Şifreniz Hatalı !"
+    },
     passChange :"Şifre Değiştir",
     txtNewMail : "E-Mail",
     txtNewPhone : "Telefon",
