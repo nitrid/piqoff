@@ -1291,7 +1291,12 @@ export const langTr =
     {
         txtNo : "No",
         txtName :"Adı",
-        cmbVatType : "Vergi Tip",
+        cmbVatType : 
+        {
+            title : "Vergi Tip",
+            vatInc : "Dahil",
+            vatExt : "Hariç"
+        },
         validCode :"Kodu Boş Geçemezsiniz !",
         pg_txtNo : 
         {
@@ -14984,6 +14989,12 @@ export const langTr =
         txtCustomerCode : "Müşteri Kodu",
         txtCustomerName : "Müşteri Adı",
         btnMailsend : "Mail Gönder",
+        cmbVatType : 
+        {
+            title : "Vergi Tip",
+            vatInc : "Dahil",
+            vatExt : "Hariç"
+        },
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -15174,6 +15185,12 @@ export const langTr =
         txtCustomerName : "Müşteri Adı",
         validItemsCode : "Ürün Seçimi",
         btnMailsend : "Mail Gönder",
+        cmbVatType : 
+        {
+            title : "Vergi Tip",
+            vatInc : "Dahil",
+            vatExt : "Hariç"
+        },
         pg_Docs : 
         {
             title : "Evrak Seçimi",

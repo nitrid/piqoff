@@ -1282,7 +1282,12 @@ export const langDe =
     {
         txtNo: "Nummer",
         txtName: "Name",
-        cmbVatType: "Steuerart",
+        cmbVatType : 
+        {
+            title : "Steuerart",
+            vatInc : "inkl. MwSt.",
+            vatExt : "exkl. MwSt."
+        },
         validCode: "Sie können den Code nicht leer lassen!",
         pg_txtNo:
         {
@@ -14896,6 +14901,12 @@ export const langDe =
         txtCustomerCode: "Kundencode",
         txtCustomerName: "Kundenname",
         btnMailsend: "E-Mail senden",
+        cmbVatType : 
+        {
+            title : "Steuerart",
+            vatInc : "inkl. MwSt.",
+            vatExt : "exkl. MwSt."
+        },
         pg_Docs: 
         {
             title: "Dokumentauswahl",
@@ -15085,6 +15096,12 @@ export const langDe =
         txtCustomerName: "Kundenname",
         validItemsCode: "Artikelauswahl",
         btnMailsend: "E-Mail senden",
+        cmbVatType : 
+        {
+            title : "Steuerart",
+            vatInc : "inkl. MwSt.",
+            vatExt : "exkl. MwSt."
+        },
         pg_Docs:
         {
             title: "Dokumentauswahl",

@@ -468,7 +468,8 @@ export class itemPriceCls
             CUSTOMER_CODE : '',
             CUSTOMER_NAME : '',
             CHANGE_DATE : moment(new Date(0)).format("DD/MM/YYYY HH:mm:ss"),
-            CDATE_FORMAT : ''
+            CDATE_FORMAT : '',
+            CONTRACT_GUID : '00000000-0000-0000-0000-000000000000'
         }
 
         this._initDs();
@@ -488,9 +489,10 @@ export class itemPriceCls
                     "((FINISH_DATE <= @FINISH_DATE) OR (CONVERT(NVARCHAR(10),@FINISH_DATE,112) = '19700101')) AND (FINISH_DATE > GETDATE()-2 OR FINISH_DATE = '19700101') AND" + 
                     "((QUANTITY = @QUANTITY) OR (@QUANTITY = -1)) AND " +
                     "((CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = '')) AND " + 
-                    "((CUSTOMER_GUID = @CUSTOMER_GUID) OR (@CUSTOMER_GUID = '00000000-0000-0000-0000-000000000000')) ORDER BY CDATE DESC",
+                    "((CUSTOMER_GUID = @CUSTOMER_GUID) OR (@CUSTOMER_GUID = '00000000-0000-0000-0000-000000000000')) AND " +
+                    "((CONTRACT_GUID = @CONTRACT_GUID) OR (@CONTRACT_GUID = '00000000-0000-0000-0000-000000000000')) ORDER BY CDATE DESC",
             param : ['ITEM_GUID:string|36','ITEM_CODE:string|25','TYPE:int','DEPOT:string|36','START_DATE:date','FINISH_DATE:date',
-                     'QUANTITY:float','CUSTOMER_CODE:string|25','CUSTOMER_GUID:string|36']
+                     'QUANTITY:float','CUSTOMER_CODE:string|25','CUSTOMER_GUID:string|36','CONTRACT_GUID:string|36']
         }
         tmpDt.insertCmd = 
         {
@@ -505,10 +507,11 @@ export class itemPriceCls
                     "@FINISH_DATE = @PFINISH_DATE, " + 
                     "@PRICE = @PPRICE, " + 
                     "@QUANTITY = @PQUANTITY, " + 
-                    "@CUSTOMER = @PCUSTOMER ", 
+                    "@CUSTOMER = @PCUSTOMER, " +
+                    "@CONTRACT = @PCONTRACT ", 
             param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PLIST_NO:int','PITEM:string|50','PDEPOT:string|50','PSTART_DATE:date','PFINISH_DATE:date',
-                     'PPRICE:float','PQUANTITY:float','PCUSTOMER:string|50'],
-            dataprm : ['GUID','CUSER','TYPE','LIST_NO','ITEM_GUID','DEPOT','START_DATE','FINISH_DATE','PRICE','QUANTITY','CUSTOMER_GUID']
+                     'PPRICE:float','PQUANTITY:float','PCUSTOMER:string|50','PCONTRACT:string|50'],
+            dataprm : ['GUID','CUSER','TYPE','LIST_NO','ITEM_GUID','DEPOT','START_DATE','FINISH_DATE','PRICE','QUANTITY','CUSTOMER_GUID','CONTRACT_GUID']
         } 
         tmpDt.updateCmd = 
         {
@@ -523,10 +526,11 @@ export class itemPriceCls
                     "@FINISH_DATE = @PFINISH_DATE, " + 
                     "@PRICE = @PPRICE, " + 
                     "@QUANTITY = @PQUANTITY, " + 
-                    "@CUSTOMER = @PCUSTOMER ", 
+                    "@CUSTOMER = @PCUSTOMER, " +
+                    "@CONTRACT = @PCONTRACT ",  
             param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PLIST_NO:int','PITEM:string|50','PDEPOT:string|50','PSTART_DATE:date','PFINISH_DATE:date',
-                     'PPRICE:float','PQUANTITY:float','PCUSTOMER:string|50'],
-            dataprm : ['GUID','CUSER','TYPE','LIST_NO','ITEM_GUID','DEPOT','START_DATE','FINISH_DATE','PRICE','QUANTITY','CUSTOMER_GUID']
+                     'PPRICE:float','PQUANTITY:float','PCUSTOMER:string|50','PCONTRACT:string|50'],
+            dataprm : ['GUID','CUSER','TYPE','LIST_NO','ITEM_GUID','DEPOT','START_DATE','FINISH_DATE','PRICE','QUANTITY','CUSTOMER_GUID','CONTRACT_GUID']
         } 
         tmpDt.deleteCmd = 
         {
@@ -592,6 +596,7 @@ export class itemPriceCls
                 QUANTITY : -1,
                 CUSTOMER_CODE : '',
                 CUSTOMER_GUID : '00000000-0000-0000-0000-000000000000',
+                CONTRACT_GUID : '00000000-0000-0000-0000-000000000000',
             }         
 
             if(arguments.length > 0)
@@ -605,6 +610,7 @@ export class itemPriceCls
                 tmpPrm.QUANTITY = typeof arguments[0].QUANTITY == 'undefined' ? -1 : arguments[0].QUANTITY;
                 tmpPrm.CUSTOMER_CODE = typeof arguments[0].CUSTOMER_CODE == 'undefined' ? '' : arguments[0].CUSTOMER_CODE;
                 tmpPrm.CUSTOMER_GUID = typeof arguments[0].CUSTOMER_GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].CUSTOMER_GUID;
+                tmpPrm.CONTRACT_GUID = typeof arguments[0].CONTRACT_GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].CONTRACT_GUID;
             }
             this.ds.get('ITEM_PRICE').selectCmd.value = Object.values(tmpPrm)
 

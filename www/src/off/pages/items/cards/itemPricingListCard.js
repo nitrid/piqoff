@@ -330,11 +330,11 @@ export default class itemPricingListCard extends React.PureComponent
                                 </Item>
                                 {/* cmbVatType */}
                                 <Item>
-                                    <Label text={this.t("cmbVatType")} alignment="right" />
+                                    <Label text={this.t("cmbVatType.title")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbVatType" height='fit-content' dt={{data:this.itemPricingListObj.dt(),field:"VAT_TYPE"}}
                                     displayExpr="NAME"                       
                                     valueExpr="ID"
-                                    data={{source:[{ID:0,NAME:"Dahil"},{ID:1,NAME:"Hariç"}]}}
+                                    data={{source:[{ID:0,NAME:this.t("cmbVatType.vatInc")},{ID:1,NAME:this.t("cmbVatType.vatExt")}]}}
                                     param={this.param.filter({ELEMENT:'cmbVatType',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbVatType',USERS:this.user.CODE})}
                                     />

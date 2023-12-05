@@ -1290,7 +1290,12 @@ export const langFr =
     {
         txtNo: "Numéro",
         txtName: "Nom",
-        cmbVatType: "Type de Taxe",
+        cmbVatType : 
+        {
+            title : "Type de Taxe",
+            vatInc : "TTC",
+            vatExt : "HT"
+        },
         validCode: "Vous ne pouvez pas laisser le code vide !",
         pg_txtNo:
         {
@@ -15399,6 +15404,12 @@ export const langFr =
         btnMailsend : "Envoyer E-Mail",
         validDesign : "Veuillez séléctionner le design.",  
         validDocDate : "Vous devez choisir une date",
+        cmbVatType : 
+        {
+            title : "Type de Taxe",
+            vatInc : "TTC",
+            vatExt : "HT"
+        },
         pg_Docs : 
         {
             title : "Sélection Documents",
@@ -15591,6 +15602,12 @@ export const langFr =
         validItemsCode : "Sélectionner Produit",
         validDesign : "Veuillez sélectionner le design.",  
         btnMailsend : "Envoyer E-Mail",
+        cmbVatType : 
+        {
+            title : "Type de Taxe",
+            vatInc : "TTC",
+            vatExt : "HT"
+        },
         pg_Docs :      
         {     
             title : "Sélection Documents",     

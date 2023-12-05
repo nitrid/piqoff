@@ -81,6 +81,16 @@ export default class purchaseContract extends React.PureComponent
             this.btnSave.setState({disabled:false});
             this.btnDelete.setState({disabled:false});
         })
+
+        let tmpEmpty = {...this.contractObj.empty};
+        tmpEmpty.CUSER = this.core.auth.data.CODE,  
+        tmpEmpty.CUSER_NAME = this.core.auth.data.NAME,
+        tmpEmpty.TYPE = 1,
+        tmpEmpty.CODE = '',
+        tmpEmpty.NAME = '',
+        tmpEmpty.VAT_TYPE = 0
+        this.contractObj.addEmpty(tmpEmpty);
+
         this.cmbDepot.value = ''
         this.txtCustomerCode.value = ''
         this.txtCustomerName.value = ''
@@ -90,7 +100,7 @@ export default class purchaseContract extends React.PureComponent
         this.docDate.value = moment(new Date()).format("YYYY-MM-DD")
         this.startDate.value = moment(new Date(0)).format("YYYY-MM-DD")
         this.finishDate.value = moment(new Date(0)).format("YYYY-MM-DD")
-        await this.grdContracts.dataRefresh({source:this.contractObj.dt('CONTRACT')});
+        await this.grdContracts.dataRefresh({source:this.contractObj.dt('ITEM_PRICE')});
         await this.grdMultiItem.dataRefresh({source:this.multiItemData});
 
         this._getItems()
@@ -116,38 +126,38 @@ export default class purchaseContract extends React.PureComponent
     async addItem(pData)
     {
        
-        let tmpEmpty = {...this.contractObj.empty};
-                                                    
-        tmpEmpty.CUSER = this.core.auth.data.CODE,  
-        tmpEmpty.CUSER_NAME = this.core.auth.data.NAME,
-        tmpEmpty.CODE = this.txtCode.value
-        tmpEmpty.NAME = this.txtName.value
-        tmpEmpty.TYPE = 0,  
-        tmpEmpty.ITEM = pData.GUID
+        let tmpEmpty = {...this.contractObj.itemPrice.empty};
+        
+        tmpEmpty.TYPE = 1,
+        tmpEmpty.LIST_NO = 0,
+        tmpEmpty.ITEM_GUID = pData.GUID
         tmpEmpty.ITEM_CODE = pData.CODE
-        tmpEmpty.ITEM_NAME =pData.NAME
-        tmpEmpty.CUSTOMER = this.txtCustomerCode.GUID
-        tmpEmpty.CUSTOMER_CODE = this.txtCustomerCode.value
-        tmpEmpty.CUSTOMER_NAME = this.txtCustomerName.value
-        tmpEmpty.QUANTITY = 1
-        tmpEmpty.START_DATE = this.startDate.value
-        tmpEmpty.FINISH_DATE = this.finishDate.value
+        tmpEmpty.ITEM_NAME = pData.NAME
         if(this.cmbDepot.value != '')
         {
             tmpEmpty.DEPOT = this.cmbDepot.value 
             tmpEmpty.DEPOT_NAME = this.cmbDepot.displayExpr 
-        }   
+        }
+        
+        tmpEmpty.START_DATE = this.startDate.value
+        tmpEmpty.FINISH_DATE = this.finishDate.value
+        tmpEmpty.CUSTOMER_GUID = this.txtCustomerCode.GUID
+        tmpEmpty.CUSTOMER_CODE = this.txtCustomerCode.value
+        tmpEmpty.CUSTOMER_NAME = this.txtCustomerName.value
+        tmpEmpty.QUANTITY = 1
+        tmpEmpty.CONTRACT_GUID = this.contractObj.dt()[0].GUID
+
         let tmpCheckQuery = 
         {
             query :"SELECT MULTICODE,(SELECT [dbo].[FN_CUSTOMER_PRICE](ITEM_GUID,CUSTOMER_GUID,@QUANTITY,GETDATE())) AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID",
             param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
             value : [pData.CODE,this.txtCustomerCode.GUID,1]
         }
+
         let tmpCheckData = await this.core.sql.execute(tmpCheckQuery) 
         if(tmpCheckData.result.recordset.length > 0)
         {  
-            tmpEmpty.PRICE= tmpCheckData.result.recordset[0].PRICE
-            tmpEmpty.MULTICODE= tmpCheckData.result.recordset[0].MULTICODE
+            tmpEmpty.PRICE = tmpCheckData.result.recordset[0].PRICE
         }
         else
         {
@@ -161,11 +171,10 @@ export default class purchaseContract extends React.PureComponent
             if(tmpData.result.recordset.length > 0)
             {  
                 tmpEmpty.PRICE = tmpData.result.recordset[0].COST_PRICE
-                tmpEmpty.VAT_RATE = tmpData.result.recordset[0].VAT
             }
         }
         
-        this.contractObj.addEmpty(tmpEmpty);
+        this.contractObj.itemPrice.addEmpty(tmpEmpty);
     }
     async multiItemAdd()
     {
@@ -192,9 +201,9 @@ export default class purchaseContract extends React.PureComponent
             {
                 let tmpQuery = 
                 {
-                    query :"SELECT GUID,CODE,NAME,VAT,1 AS QUANTITY," + 
-                    "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.txtCustomerCode.GUID+"'),'') AS MULTICODE"+
-                    " FROM ITEMS_VW_01 WHERE ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.txtCustomerCode.GUID+"'),'') = @VALUE " ,
+                    query : "SELECT GUID,CODE,NAME,VAT,1 AS QUANTITY," + 
+                            "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '" + this.txtCustomerCode.GUID + "'),'') AS MULTICODE "+
+                            "FROM ITEMS_VW_01 WHERE ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '" + this.txtCustomerCode.GUID + "'),'') = @VALUE " ,
                     param : ['VALUE:string|50'],
                     value : [this.tagItemCode.value[i]]
                 }
@@ -216,9 +225,9 @@ export default class purchaseContract extends React.PureComponent
             {
                 let tmpQuery = 
                 {
-                    query :"SELECT GUID,CODE,NAME,VAT,1 AS QUANTITY," + 
-                    "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.txtCustomerCode.GUID+"'),'') AS MULTICODE"+
-                    " FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VALUE) OR UPPER(NAME) LIKE UPPER(@VALUE) " ,
+                    query : "SELECT GUID,CODE,NAME,VAT,1 AS QUANTITY," + 
+                            "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.txtCustomerCode.GUID+"'),'') AS MULTICODE " +
+                            "FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VALUE) OR UPPER(NAME) LIKE UPPER(@VALUE) " ,
                     param : ['VALUE:string|50'],
                     value : [this.tagItemCode.value[i]]
                 }
@@ -257,35 +266,12 @@ export default class purchaseContract extends React.PureComponent
         }
     
          await dialog(tmpConfObj);
-
     }
     async multiItemSave()
     {
-        console.log(this.multiItemData)
         for (let i = 0; i < this.multiItemData.length; i++) 
         {                        
-            let tmpEmpty = {...this.contractObj.empty};
-            
-            tmpEmpty.CUSER = this.core.auth.data.CODE,  
-            tmpEmpty.CODE = this.txtCode.value
-            tmpEmpty.NAME = this.txtName.value
-            tmpEmpty.TYPE = 0,  
-            tmpEmpty.ITEM = this.multiItemData[i].GUID
-            tmpEmpty.ITEM_CODE = this.multiItemData[i].CODE
-            tmpEmpty.ITEM_NAME = this.multiItemData[i].NAME
-            tmpEmpty.CUSTOMER = this.txtCustomerCode.GUID
-            tmpEmpty.CUSTOMER_CODE = this.txtCustomerCode.value
-            tmpEmpty.CUSTOMER_NAME = this.txtCustomerName.value
-            tmpEmpty.QUANTITY = this.multiItemData[i].QUANTITY
-            tmpEmpty.PRICE = this.multiItemData[i].PRICE
-            tmpEmpty.START_DATE = this.startDate.value
-            tmpEmpty.FINISH_DATE = this.finishDate.value
-            if(this.cmbDepot.value != '')
-            {
-                tmpEmpty.DEPOT = this.cmbDepot.value 
-                tmpEmpty.DEPOT_NAME = this.cmbDepot.displayExpr 
-            }   
-            this.contractObj.addEmpty(tmpEmpty);
+            this.addItem(this.multiItemData[i])
         }
         this.popMultiItem.hide()
     }
@@ -303,7 +289,7 @@ export default class purchaseContract extends React.PureComponent
                                     onClick={async()=>
                                     {
                                         await this.contractObj.load({CODE:this.txtCode.value,TYPE:0});
-                                        this.txtCustomerCode.GUID = this.contractObj.dt()[0].CUSTOMER
+                                        this.txtCustomerCode.GUID = this.contractObj.itemPrice.dt()[0].CUSTOMER_GUID
                                         this._getItems()
                                     }}/>
                                 </Item>
@@ -378,7 +364,9 @@ export default class purchaseContract extends React.PureComponent
                                         if(pResult == 'btn01')
                                         {
                                             this.contractObj.dt().removeAll()
+                                            this.contractObj.itemPrice.dt().removeAll()
                                             await this.contractObj.dt().delete();
+                                            await this.contractObj.itemPrice.dt().delete();
                                             this.init(); 
                                         }
                                         
@@ -440,8 +428,8 @@ export default class purchaseContract extends React.PureComponent
                                                     {
                                                         if(data.length > 0)
                                                         {
-                                                            await this.contractObj.load({CODE:data[0].CODE,TYPE:0});
-                                                            this.txtCustomerCode.GUID = this.contractObj.dt()[0].CUSTOMER
+                                                            await this.contractObj.load({CODE:data[0].CODE,TYPE:1});
+                                                            this.txtCustomerCode.GUID = this.contractObj.itemPrice.dt()[0].CUSTOMER_GUID
                                                             this._getItems()
                                                         }
                                                     }
@@ -482,13 +470,12 @@ export default class purchaseContract extends React.PureComponent
                                     width={'90%'}
                                     height={'90%'}
                                     title={this.t("pg_Docs.title")} 
-                                    data={{source:{select:{query : "SELECT CODE,NAME,CUSTOMER,CUSTOMER_CODE,CUSTOMER_NAME FROM CONTRACT_VW_01 WHERE TYPE = 0 GROUP BY CODE,NAME,CUSTOMER,CUSTOMER_CODE,CUSTOMER_NAME"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : "SELECT CODE,NAME,CUSTOMER,CUSTOMER_CODE,CUSTOMER_NAME FROM CONTRACT_VW_01 WHERE TYPE = 1 GROUP BY CODE,NAME,CUSTOMER,CUSTOMER_CODE,CUSTOMER_NAME"},sql:this.core.sql}}}
                                     >
                                         <Column dataField="CODE" caption={this.t("pg_Docs.clmCode")} width={150} defaultSortOrder="asc"/>
                                         <Column dataField="NAME" caption={this.t("pg_Docs.clmName")} width={300} defaultSortOrder="asc" />
                                         <Column dataField="CUSTOMER_NAME" caption={this.t("pg_Docs.clmOutputName")} width={300} defaultSortOrder="asc" />
                                         <Column dataField="CUSTOMER_CODE" caption={this.t("pg_Docs.clmOutputCode")} width={300} defaultSortOrder="asc" />
-                                        
                                     </NdPopGrid>
                                 </Item>
                                 {/* txtName */}
@@ -631,7 +618,6 @@ export default class purchaseContract extends React.PureComponent
                                     <Label text={this.t("startDate")} alignment="right" />
                                     <NdDatePicker simple={true}  parent={this} id={"startDate"}
                                     dt={{data:this.contractObj.dt('CONTRACT'),field:"START_DATE"}}
-                                    readOnly={true}
                                     onValueChanged={(async(e)=>
                                         {
                                             console.log(e)
@@ -655,6 +641,17 @@ export default class purchaseContract extends React.PureComponent
                                         <RequiredRule message={this.t("validDocDate")} />
                                     </Validator> 
                                     </NdDatePicker>
+                                </Item>
+                                {/* cmbVatType */}
+                                <Item>
+                                    <Label text={this.t("cmbVatType.title")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbVatType" height='fit-content' dt={{data:this.contractObj.dt(),field:"VAT_TYPE"}}
+                                    displayExpr="NAME"                       
+                                    valueExpr="ID"
+                                    data={{source:[{ID:0,NAME:this.t("cmbVatType.vatInc")},{ID:1,NAME:this.t("cmbVatType.vatExt")}]}}
+                                    param={this.param.filter({ELEMENT:'cmbVatType',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'cmbVatType',USERS:this.user.CODE})}
+                                    />
                                 </Item>
                             </Form>
                         </div>
@@ -781,36 +778,10 @@ export default class purchaseContract extends React.PureComponent
                                         <Paging defaultPageSize={10} />
                                         <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
                                         <Export fileName={this.lang.t("menu.cnt_02_001")} enabled={true} allowExportSelectedData={true} />
-                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdContracts.clmCreateDate")} width={150} allowEditing={false}/>
-                                        <Column dataField="ITEM_CODE" caption={this.t("grdContracts.clmItemCode")} width={150} allowEditing={false}/>
-                                        <Column dataField="MULTICODE" caption={this.t("grdContracts.clmMulticode")} width={150} allowEditing={false}/>
-                                        <Column dataField="ITEM_NAME" caption={this.t("grdContracts.clmItemName")} width={350} allowEditing={false}/>
-                                        <Column dataField="PRICE" caption={this.t("grdContracts.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}}/>
-                                        <Column dataField="PRICE_VAT_EXT" caption={this.t("grdContracts.clmVatExtPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 2}} />
-                                        <Column dataField="QUANTITY" caption={this.t("grdContracts.clmQuantity")} dataType={'number'}/>
-                                        <Column dataField="START_DATE" caption={this.t("grdContracts.clmStartDate")} dataType={'date'} visible={false}
-                                        editorOptions={{value:null}}
-                                        cellRender={(e) => 
-                                        {
-                                            if(moment(e.value).format("YYYY-MM-DD") != '1970-01-01')
-                                            {
-                                                return e.text
-                                            }
-                                            
-                                            return
-                                        }}/>
-                                        <Column dataField="FINISH_DATE" caption={this.t("grdContracts.clmFinishDate")} dataType={'date'} visible={false}
-                                         editorOptions={{value:null}}
-                                         cellRender={(e) => 
-                                         {
-                                             if(moment(e.value).format("YYYY-MM-DD") != '1970-01-01')
-                                             {
-                                                 return e.text
-                                             }
-                                             
-                                             return
-                                         }}/>
-                                        <Column dataField="DEPOT_NAME" caption={this.t("grdContracts.clmDepotName")} visible={false}/>
+                                        <Column dataField="ITEM_CODE" caption={this.t("grdContracts.clmItemCode")} width={250} allowEditing={false}/>
+                                        <Column dataField="ITEM_NAME" caption={this.t("grdContracts.clmItemName")} width={600} allowEditing={false}/>
+                                        <Column dataField="QUANTITY" caption={this.t("grdContracts.clmQuantity")} width={100} dataType={'number'}/>
+                                        <Column dataField="PRICE" caption={this.t("grdContracts.clmPrice")} dataType={'number'} allowEditing={true} width={100} format={{ style: "currency", currency: "EUR",precision: 2}}/>
                                     </NdGrid>
                                 </Item>
                             </Form>

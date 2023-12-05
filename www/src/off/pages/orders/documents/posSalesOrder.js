@@ -65,7 +65,8 @@ export default class posSalesOrder extends DocBase
                 {
                     select:
                     {
-                        query : "SELECT GUID,CODE,NAME,VAT,COST_PRICE,UNIT,(SELECT [dbo].[FN_PRICE](GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000'," + this.cmbPricingList.value + ",0,0)) AS PRICE, " +
+                        query : "SELECT GUID,CODE,NAME,VAT,COST_PRICE,UNIT, " + 
+                                "(SELECT [dbo].[FN_PRICE](GUID,1,GETDATE(),'" + this.docObj.dt()[0].INPUT +"','" + this.cmbDepot.value +"'," + this.cmbPricingList.value + ",0,0)) AS PRICE, " +
                                 "ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE DELETED = 0 AND ITEM_BARCODE.ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
                         param : ['VAL:string|50']
                     },
@@ -420,9 +421,9 @@ export default class posSalesOrder extends DocBase
             this.docObj.docOrders.dt()[pIndex].SUB_QUANTITY = pQuantity * this.docObj.docOrders.dt()[pIndex].SUB_FACTOR
             let tmpQuery = 
             {
-                query : "SELECT dbo.FN_PRICE(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,'00000000-0000-0000-0000-000000000000',@PRICE_LIST_NO,0,0) AS PRICE",
-                param : ['GUID:string|50','QUANTITY:float','CUSTOMER:string|50','PRICE_LIST_NO:int'],
-                value : [pData.GUID,pQuantity,this.docObj.dt()[0].INPUT,this.cmbPricingList.value]
+                query : "SELECT dbo.FN_PRICE(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,@DEPOT,@PRICE_LIST_NO,0,0) AS PRICE",
+                param : ['GUID:string|50','QUANTITY:float','CUSTOMER:string|50','DEPOT:string|50','PRICE_LIST_NO:int'],
+                value : [pData.GUID,pQuantity,this.docObj.dt()[0].INPUT,this.cmbDepot.value,this.cmbPricingList.value]
             }
             let tmpData = await this.core.sql.execute(tmpQuery) 
             if(tmpData.result.recordset.length > 0)
@@ -1446,9 +1447,9 @@ export default class posSalesOrder extends DocBase
                                                 e.key.SUB_QUANTITY =  e.data.QUANTITY * e.key.SUB_FACTOR
                                                 let tmpQuery = 
                                                 {
-                                                    query :"SELECT [dbo].[FN_PRICE](@ITEM_GUID,@QUANTITY,GETDATE(),@CUSTOMER_GUID,'00000000-0000-0000-0000-000000000000',@PRICE_LIST_NO,0,0) AS PRICE",
-                                                    param : ['ITEM_GUID:string|50','CUSTOMER_GUID:string|50','QUANTITY:float','PRICE_LIST_NO:int'],
-                                                    value : [e.key.ITEM,this.docObj.dt()[0].INPUT,e.data.QUANTITY,this.cmbPricingList.value]
+                                                    query :"SELECT [dbo].[FN_PRICE](@ITEM_GUID,@QUANTITY,GETDATE(),@CUSTOMER_GUID,@DEPOT,@PRICE_LIST_NO,0,0) AS PRICE",
+                                                    param : ['ITEM_GUID:string|50','CUSTOMER_GUID:string|50','QUANTITY:float','DEPOT:string|50','PRICE_LIST_NO:int'],
+                                                    value : [e.key.ITEM,this.docObj.dt()[0].INPUT,e.data.QUANTITY,this.cmbDepot.value,this.cmbPricingList.value]
                                                 }
                                                 let tmpData = await this.core.sql.execute(tmpQuery) 
                                                 if(tmpData.result.recordset.length > 0)
