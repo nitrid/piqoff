@@ -2822,6 +2822,45 @@ export const prm =
             CAPTION : "Eksiye Düşemeye İzin Verme"
         }
     },
+    //autoMailSend
+    {
+        TYPE : 1,
+        ID :"autoMailSend",
+        VALUE : 
+        {
+            value : true
+        },
+        SPECIAL : "",
+        PAGE : "irs_02_004",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Şube Satış İrsaliye",
+            CAPTION : "Otomatik mail gonderme"
+        }
+    },
+    //autoMailSend
+    {
+        TYPE : 1,
+        ID :"autoMailSend",
+        VALUE : 
+        {
+            value : true
+        },
+        SPECIAL : "",
+        PAGE : "ftr_02_005",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Şubeler Arası Satış",
+            CAPTION : "Otomatik mail gonderme"
+        }
+    },
+    
     //#endregion
     //#region Alış Anlaşması
     //cmbDepot

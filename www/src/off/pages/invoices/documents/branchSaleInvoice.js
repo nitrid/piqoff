@@ -644,6 +644,49 @@ export default class branchSaleInvoice extends DocBase
             this.popMultiItem.hide()
         }
     }
+
+    async autoMailSend()
+    {
+        if(this.prmObj.filter({ID:'autoMailSend',USERS:this.user.CODE}).getValue().value == true)
+        {
+            if(this.tmpMailAdress != '')
+            {
+                let tmpMAilQuery = 
+                {
+                    query :"SELECT EMAIL FROM CUSTOMER_OFFICAL WHERE CUSTOMER = @GUID  AND DELETED = 0",
+                    param:  ['GUID:string|50'],
+                    value:  [this.docObj.dt()[0].INPUT]
+                }
+                let tmpMailAdress = await this.core.sql.execute(tmpMAilQuery) 
+                let txtSendMail = tmpMailAdress.result.recordset[0].EMAIL
+                let tmpQuery = 
+                {
+                    query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG)ORDER BY DOC_DATE,LINE_NO " ,
+                    param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
+                    value:  [this.docObj.dt()[0].GUID,'27',this.lang.languages[0].toString().toUpperCase()]
+                }
+                App.instance.setState({isExecute:true})
+                let tmpData = await this.core.sql.execute(tmpQuery) 
+                App.instance.setState({isExecute:false})
+                console.log(tmpData)
+                console.log(txtSendMail)
+                this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
+                {
+                    App.instance.setState({isExecute:true})
+                    let tmpAttach = pResult.split('|')[1]
+                    let  tmpHtml = ''
+                    if(pResult.split('|')[0] != 'ERR')
+                    {
+                    }
+                    let tmpMailData = {html:tmpHtml,subject:"Bon de livraison interne",sendMail:txtSendMail,attachName:"livraison.pdf",attachData:tmpAttach,text:""}
+                    this.core.socket.emit('mailer',tmpMailData,async(pResult1) => 
+                    {
+                        App.instance.setState({isExecute:false})
+                    });
+                });
+            }
+        }
+    }
     render()
     {
         return(
@@ -724,6 +767,8 @@ export default class branchSaleInvoice extends DocBase
                                                     await dialog(tmpConfObj1);
                                                     this.btnSave.setState({disabled:true});
                                                     this.btnNew.setState({disabled:false});
+
+                                                    await this.autoMailSend()
                                                 }
                                                 else
                                                 {
