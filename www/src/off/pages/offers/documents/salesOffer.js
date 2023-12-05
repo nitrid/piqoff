@@ -18,7 +18,7 @@ import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdDialog, { dialog } from '../../../../core/react/devex/dialog.js';
 import NdHtmlEditor from '../../../../core/react/devex/htmlEditor.js';
 
-export default class salesOrder extends DocBase
+export default class salesOffer extends DocBase
 {
     constructor(props)
     {
@@ -30,7 +30,7 @@ export default class salesOrder extends DocBase
 
         this._cellRoleRender = this._cellRoleRender.bind(this)
 
-        this.frmDocOffers = undefined;
+        this.frmDocItems = undefined;
         this.docLocked = false;        
         this.combineControl = true
         this.combineNew = false
@@ -53,7 +53,7 @@ export default class salesOrder extends DocBase
         this.txtRefno.readOnly = false
         this.docLocked = false
         
-        this.frmDocOffers.option('disabled',true)
+        this.frmDocItems.option('disabled',true)
 
         this.pg_txtItemsCode.on('showing',()=>
         {
@@ -63,7 +63,7 @@ export default class salesOrder extends DocBase
                 {
                     select:
                     {
-                        query : "SELECT GUID,CODE,NAME,VAT,COST_PRICE,UNIT,(SELECT [dbo].[FN_PRICE](GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,0)) AS PRICE FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
+                        query : "SELECT GUID,CODE,NAME,VAT,COST_PRICE,UNIT,(SELECT [dbo].[FN_PRICE](GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000'," + this.cmbPricingList.value + ",0,0)) AS PRICE FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
                         param : ['VAL:string|50']
                     },
                     sql:this.core.sql
@@ -95,7 +95,7 @@ export default class salesOrder extends DocBase
                 {
                     select:
                     {
-                        query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
+                        query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,TYPE_NAME,GENUS_NAME,PRICE_LIST_NO FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
                         param : ['VAL:string|50']
                     },
                     sql:this.core.sql
@@ -115,7 +115,7 @@ export default class salesOrder extends DocBase
         this.txtRef.readOnly = true
         this.txtRefno.readOnly = true
 
-        this.frmDocOffers.option('disabled',this.docLocked)        
+        this.frmDocItems.option('disabled',this.docLocked)        
     }
     async calculateTotal()
     {
@@ -418,9 +418,9 @@ export default class salesOrder extends DocBase
             this.docObj.docOffers.dt()[pIndex].QUANTITY = pQuantity
             let tmpQuery = 
             {
-                query :"SELECT dbo.FN_PRICE(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,'00000000-0000-0000-0000-000000000000',1,0,0) AS PRICE",
-                param : ['GUID:string|50','QUANTITY:float','CUSTOMER:string|50'],
-                value : [pData.GUID,pQuantity,this.docObj.dt()[0].INPUT]
+                query :"SELECT dbo.FN_PRICE(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,'00000000-0000-0000-0000-000000000000',@PRICE_LIST_NO,0,0) AS PRICE",
+                param : ['GUID:string|50','QUANTITY:float','CUSTOMER:string|50','PRICE_LIST_NO:int'],
+                value : [pData.GUID,pQuantity,this.docObj.dt()[0].INPUT,this.cmbPricingList.value]
             }
             let tmpData = await this.core.sql.execute(tmpQuery) 
             if(tmpData.result.recordset.length > 0)
@@ -726,7 +726,7 @@ export default class salesOrder extends DocBase
                                                 }
 
                                                 await dialog(tmpConfObj);
-                                                this.frmDocOffers.option('disabled',true)
+                                                this.frmDocItems.option('disabled',true)
                                             }
                                             else
                                             {
@@ -947,7 +947,7 @@ export default class salesOrder extends DocBase
                                         this.checkRow()
                                         if(this.cmbDepot.value != '' && this.docLocked == false)
                                         {
-                                            this.frmDocOffers.option('disabled',false)
+                                            this.frmDocItems.option('disabled',false)
                                         }
                                     }).bind(this)}
                                     data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01 WHERE TYPE IN (0,2) AND STATUS = 1"},sql:this.core.sql}}}
@@ -959,8 +959,21 @@ export default class salesOrder extends DocBase
                                         </Validator> 
                                     </NdSelectBox>
                                 </Item>
-                                {/* Boş */}
-                                <EmptyItem />
+                                {/* cmbPricingList */}
+                                <Item>
+                                    <Label text={this.t("cmbPricingList")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbPricingList" notRefresh={true}
+                                    displayExpr="NAME"
+                                    valueExpr="NO"
+                                    value=""
+                                    searchEnabled={true}
+                                    dt={{data:this.docObj.dt('DOC'),field:"PRICE_LIST_NO"}} 
+                                    data={{source:{select:{query : "SELECT NO,NAME FROM ITEM_PRICE_LIST_VW_01 ORDER BY NO ASC"},sql:this.core.sql}}}
+                                    param={this.param.filter({ELEMENT:'cmbPricingList',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'cmbPricingList',USERS:this.user.CODE})}
+                                    >
+                                    </NdSelectBox>
+                                </Item>
                                 {/* txtCustomerCode */}
                                 <Item>
                                     <Label text={this.t("txtCustomerCode")} alignment="right" />
@@ -976,6 +989,7 @@ export default class salesOrder extends DocBase
                                                 this.docObj.dt()[0].INPUT = data[0].GUID
                                                 this.docObj.dt()[0].INPUT_CODE = data[0].CODE
                                                 this.docObj.dt()[0].INPUT_NAME = data[0].TITLE
+                                                this.docObj.dt()[0].PRICE_LIST_NO = data[0].PRICE_LIST_NO
                                                 let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
                                                 if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                 {
@@ -984,7 +998,7 @@ export default class salesOrder extends DocBase
                                                 }
                                                 if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
                                                 {
-                                                    this.frmDocOffers.option('disabled',false)
+                                                    this.frmDocItems.option('disabled',false)
                                                 }
                                             }
                                         }
@@ -1005,6 +1019,7 @@ export default class salesOrder extends DocBase
                                                             this.docObj.dt()[0].INPUT = data[0].GUID
                                                             this.docObj.dt()[0].INPUT_CODE = data[0].CODE
                                                             this.docObj.dt()[0].INPUT_NAME = data[0].TITLE
+                                                            this.docObj.dt()[0].PRICE_LIST_NO = data[0].PRICE_LIST_NO
                                                             let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
                                                             if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                             {
@@ -1013,7 +1028,7 @@ export default class salesOrder extends DocBase
                                                             }
                                                             if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
                                                             {
-                                                                this.frmDocOffers.option('disabled',false)
+                                                                this.frmDocItems.option('disabled',false)
                                                             }
                                                         }
                                                     }
@@ -1044,7 +1059,7 @@ export default class salesOrder extends DocBase
                                 </Item> 
                                 {/* Boş */}
                                 <EmptyItem />
-                                {/* BARKOD EKLEME */}
+                                {/* txtBarcode */}
                                 <Item>
                                     <Label text={this.t("txtBarcode")} alignment="right" />
                                     <NdTextBox id="txtBarcode" parent={this} simple={true}  placeholder={this.t("txtBarcodePlace")}
@@ -1177,7 +1192,7 @@ export default class salesOrder extends DocBase
                         <div className="col-12">
                             <Form colCount={1} onInitialized={(e)=>
                             {
-                                this.frmDocOffers = e.component
+                                this.frmDocItems = e.component
                             }}>
                                 <Item location="after">
                                     <Button icon="add"
@@ -1350,9 +1365,9 @@ export default class salesOrder extends DocBase
                                         {
                                             let tmpQuery = 
                                             {
-                                                query :"SELECT [dbo].[FN_PRICE](@ITEM_GUID,@QUANTITY,GETDATE(),@CUSTOMER_GUID,'00000000-0000-0000-0000-000000000000',1,0,0) AS PRICE",
-                                                param : ['ITEM_GUID:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
-                                                value : [e.key.ITEM,this.docObj.dt()[0].INPUT,e.data.QUANTITY]
+                                                query :"SELECT [dbo].[FN_PRICE](@ITEM_GUID,@QUANTITY,GETDATE(),@CUSTOMER_GUID,'00000000-0000-0000-0000-000000000000',@PRICE_LIST_NO,0,0) AS PRICE",
+                                                param : ['ITEM_GUID:string|50','CUSTOMER_GUID:string|50','QUANTITY:float','PRICE_LIST_NO:int'],
+                                                value : [e.key.ITEM,this.docObj.dt()[0].INPUT,e.data.QUANTITY,this.cmbPricingList.value]
                                             }
                                             let tmpData = await this.core.sql.execute(tmpQuery) 
                                             console.log(tmpData)

@@ -4942,7 +4942,7 @@ export const langFr =
         txtTotalHt : "Total HT",
         txtDocNo : "Numéro de document", 
         extraCost : "Supplément",
-        cmbPriceContract : "Accord de prix",
+        cmbPricingList : "Liste de prix",
         txtTransport : "Type de transport",
         tabTitleDetail : "Informations détaillées",
         validMail : "Veuillez ne pas laisser ce champ vide.",
@@ -11877,7 +11877,7 @@ export const langFr =
         txtTotalHt : "Total HT",
         txtDocNo : "Numéro de document", 
         extraCost : "Supplément", 
-        cmbPriceContract : "Accord de prix",
+        cmbPricingList : "Liste de prix",
         btnView : "Afficher",
         btnMailsend : "Envoyer un courriel",
         validMail : "Veuillez ne pas laisser ce champ vide.",
@@ -14338,7 +14338,7 @@ export const langFr =
         validMail : "Veuillez ne pas laisser le champs vide.",  
         txtTotalHt : "Total HT",
         txtDocNo : "Numéro de document", 
-        cmbPriceContract : "Accord de prix",
+        cmbPricingList : "Liste de prix",
         LINE_NO: "Numéro de ligne",
         pg_Docs : 
         {
@@ -14739,7 +14739,7 @@ export const langFr =
         validMail : "Veuillez ne pas laisser le champs vide.",  
         txtTotalHt : "Total HT",
         txtDocNo : "Numéro de document", 
-        cmbPriceContract : "Accord de prix",
+        cmbPricingList : "Liste de prix",
         btnView : "Afficher",
         btnMailsend : "Envoyer un courriel",
         validMail : "Veuillez ne pas laisser ce champ vide.",
@@ -18139,7 +18139,8 @@ export const langFr =
         btnMailsend : "Envoyer E-Mail", 
         placeMailHtmlEditor : "Veuillez saisir votre texte .", 
         validDesign : "Veuillez sélectionner le design.",  
-        validMail : "Veuillez ne pas laisser le champs vide.",  
+        validMail : "Veuillez ne pas laisser le champs vide.",
+        cmbPricingList : "Liste de prix",
         isMsgSave :
         {
             title: "Attention",

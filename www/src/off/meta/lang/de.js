@@ -4728,7 +4728,7 @@ export const langDe =
         txtTotalHt : "Rabattierter Betrag",
         txtDocNo : "Dokumentnummer",
         extraCost : "Zusatzkosten",
-        cmbPriceContract : "Preisvereinbarung",
+        cmbPricingList : "Preisliste",
         btnView : "Anzeigen",
         btnMailsend : "E-Mail senden",
         validMail : "Bitte lassen Sie dieses Feld nicht leer.",
@@ -11595,7 +11595,7 @@ export const langDe =
         txtTotalHt: "Rabattierter Betrag",
         txtDocNo: "Dokumentnummer",
         extraCost: "Zusatzkosten",
-        cmbPriceContract: "Preisvereinbarung",
+        cmbPricingList : "Preisliste",
         btnView : "Anzeigen",
         btnMailsend : "E-Mail senden",
         validMail : "Bitte lassen Sie dieses Feld nicht leer.",
@@ -14001,7 +14001,7 @@ export const langDe =
         validMail : "Bitte lassen Sie dieses Feld nicht leer.",
         txtTotalHt : "Rabattierter Gesamtbetrag",
         txtDocNo : "Dokumentnummer",
-        cmbPriceContract : "Preisvereinbarung",
+        cmbPricingList : "Preisliste",
         pg_Docs : 
           {
             title : "Dokumentauswahl",
@@ -14393,7 +14393,7 @@ export const langDe =
         validMail : "Bitte lassen Sie dieses Feld nicht leer.",
         txtTotalHt : "Rabattierter Gesamtbetrag",
         txtDocNo : "Dokumentnummer",
-        cmbPriceContract : "Preisvereinbarung",
+        cmbPricingList : "Preisliste",
         btnView : "Anzeigen",
         btnMailsend : "E-Mail senden",
         validMail : "Bitte lassen Sie dieses Feld nicht leer.",
@@ -17573,6 +17573,7 @@ export const langDe =
         btnMailsend : "E-Mail senden",
         validMail : "Bitte lassen Sie dieses Feld nicht leer.",
         placeMailHtmlEditor : "Sie können eine Beschreibung für Ihre E-Mail eingeben.",
+        cmbPricingList : "Preisliste",
         isMsgSave :
         {
             title: "Achtung",

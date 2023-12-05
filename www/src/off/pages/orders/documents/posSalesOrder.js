@@ -65,7 +65,7 @@ export default class posSalesOrder extends DocBase
                 {
                     select:
                     {
-                        query : "SELECT GUID,CODE,NAME,VAT,COST_PRICE,UNIT,(SELECT [dbo].[FN_PRICE](GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,0)) AS PRICE, " +
+                        query : "SELECT GUID,CODE,NAME,VAT,COST_PRICE,UNIT,(SELECT [dbo].[FN_PRICE](GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000'," + this.cmbPricingList.value + ",0,0)) AS PRICE, " +
                                 "ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE DELETED = 0 AND ITEM_BARCODE.ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
                         param : ['VAL:string|50']
                     },
@@ -98,7 +98,7 @@ export default class posSalesOrder extends DocBase
                 {
                     select:
                     {
-                        query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
+                        query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,TYPE_NAME,GENUS_NAME,PRICE_LIST_NO FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
                         param : ['VAL:string|50']
                     },
                     sql:this.core.sql
@@ -420,9 +420,9 @@ export default class posSalesOrder extends DocBase
             this.docObj.docOrders.dt()[pIndex].SUB_QUANTITY = pQuantity * this.docObj.docOrders.dt()[pIndex].SUB_FACTOR
             let tmpQuery = 
             {
-                query : "SELECT dbo.FN_PRICE(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,'00000000-0000-0000-0000-000000000000',1,0,0) AS PRICE",
-                param : ['GUID:string|50','QUANTITY:float','CUSTOMER:string|50'],
-                value : [pData.GUID,pQuantity,this.docObj.dt()[0].INPUT]
+                query : "SELECT dbo.FN_PRICE(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,'00000000-0000-0000-0000-000000000000',@PRICE_LIST_NO,0,0) AS PRICE",
+                param : ['GUID:string|50','QUANTITY:float','CUSTOMER:string|50','PRICE_LIST_NO:int'],
+                value : [pData.GUID,pQuantity,this.docObj.dt()[0].INPUT,this.cmbPricingList.value]
             }
             let tmpData = await this.core.sql.execute(tmpQuery) 
             if(tmpData.result.recordset.length > 0)
@@ -957,8 +957,21 @@ export default class posSalesOrder extends DocBase
                                         </Validator> 
                                     </NdSelectBox>
                                 </Item>
-                                {/* Boş */}
-                                <EmptyItem />
+                                {/* cmbPricingList */}
+                                <Item>
+                                    <Label text={this.t("cmbPricingList")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbPricingList" notRefresh={true}
+                                    displayExpr="NAME"
+                                    valueExpr="NO"
+                                    value=""
+                                    searchEnabled={true}
+                                    dt={{data:this.docObj.dt('DOC'),field:"PRICE_LIST_NO"}} 
+                                    data={{source:{select:{query : "SELECT NO,NAME FROM ITEM_PRICE_LIST_VW_01 ORDER BY NO ASC"},sql:this.core.sql}}}
+                                    param={this.param.filter({ELEMENT:'cmbPricingList',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'cmbPricingList',USERS:this.user.CODE})}
+                                    >
+                                    </NdSelectBox>
+                                </Item>
                                 {/* txtCustomerCode */}
                                 <Item>
                                     <Label text={this.t("txtCustomerCode")} alignment="right" />
@@ -987,6 +1000,7 @@ export default class posSalesOrder extends DocBase
                                                 this.docObj.dt()[0].INPUT = data[0].GUID
                                                 this.docObj.dt()[0].INPUT_CODE = data[0].CODE
                                                 this.docObj.dt()[0].INPUT_NAME = data[0].TITLE
+                                                this.docObj.dt()[0].PRICE_LIST_NO = data[0].PRICE_LIST_NO
                                                 let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
                                                 if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                 {
@@ -1047,6 +1061,7 @@ export default class posSalesOrder extends DocBase
                                                             this.docObj.dt()[0].INPUT = data[0].GUID
                                                             this.docObj.dt()[0].INPUT_CODE = data[0].CODE
                                                             this.docObj.dt()[0].INPUT_NAME = data[0].TITLE
+                                                            this.docObj.dt()[0].PRICE_LIST_NO = data[0].PRICE_LIST_NO
                                                             let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
                                                             if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                             {
@@ -1106,7 +1121,7 @@ export default class posSalesOrder extends DocBase
                                 </Item> 
                                 {/* Boş */}
                                 <EmptyItem />
-                                {/* BARKOD EKLEME */}
+                                {/* txtBarcode */}
                                 <Item>
                                     <Label text={this.t("txtBarcode")} alignment="right" />
                                     <NdTextBox id="txtBarcode" parent={this} simple={true}  placeholder={this.t("txtBarcodePlace")}
@@ -1247,20 +1262,6 @@ export default class posSalesOrder extends DocBase
                                 </Item>
                                 {/* Boş */}
                                 <EmptyItem />
-                                {/* cmbPriceContract */}
-                                <Item>
-                                    <Label text={this.t("cmbPriceContract")} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbPriceContract" notRefresh={true}
-                                    displayExpr="NAME"
-                                    valueExpr="CODE"
-                                    value=""
-                                    searchEnabled={true}
-                                    data={{source:{select:{query : "SELECT CODE,NAME FROM CONTRACT_VW_01 WHERE CUSTOMER = '00000000-0000-0000-0000-000000000000' GROUP BY CODE,NAME ORDER BY CODE ASC"},sql:this.core.sql}}}
-                                    param={this.param.filter({ELEMENT:'cmbPriceContract',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'cmbPriceContract',USERS:this.user.CODE})}
-                                    >
-                                    </NdSelectBox>
-                                </Item>
                             </Form>
                         </div>
                     </div>
@@ -1445,9 +1446,9 @@ export default class posSalesOrder extends DocBase
                                                 e.key.SUB_QUANTITY =  e.data.QUANTITY * e.key.SUB_FACTOR
                                                 let tmpQuery = 
                                                 {
-                                                    query :"SELECT [dbo].[FN_PRICE](@ITEM_GUID,@QUANTITY,GETDATE(),@CUSTOMER_GUID,'00000000-0000-0000-0000-000000000000',1,0,0) AS PRICE",
-                                                    param : ['ITEM_GUID:string|50','CUSTOMER_GUID:string|50','QUANTITY:float','CONTRACT_CODE:string|25'],
-                                                    value : [e.key.ITEM,this.docObj.dt()[0].INPUT,e.data.QUANTITY,this.cmbPriceContract.value]
+                                                    query :"SELECT [dbo].[FN_PRICE](@ITEM_GUID,@QUANTITY,GETDATE(),@CUSTOMER_GUID,'00000000-0000-0000-0000-000000000000',@PRICE_LIST_NO,0,0) AS PRICE",
+                                                    param : ['ITEM_GUID:string|50','CUSTOMER_GUID:string|50','QUANTITY:float','PRICE_LIST_NO:int'],
+                                                    value : [e.key.ITEM,this.docObj.dt()[0].INPUT,e.data.QUANTITY,this.cmbPricingList.value]
                                                 }
                                                 let tmpData = await this.core.sql.execute(tmpQuery) 
                                                 if(tmpData.result.recordset.length > 0)

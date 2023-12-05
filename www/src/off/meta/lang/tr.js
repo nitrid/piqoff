@@ -4740,7 +4740,7 @@ export const langTr =
         txtTotalHt : "İndirimli Tutar",
         txtDocNo : "Belgo No",
         extraCost : "Ek Maliyet",
-        cmbPriceContract : "Fiyat Anlaşması",
+        cmbPricingList : "Fiyat Listesi",
         btnView : "Görüntüle",
         btnMailsend : "Mail Gönder",
         validMail : "Lütfen Boş Geçmeyin.",
@@ -11648,7 +11648,7 @@ export const langTr =
         txtTotalHt : "İndirimli Tutar",
         txtDocNo : "Belgo No",
         extraCost : "Ek Maliyet",
-        cmbPriceContract : "Fiyat Anlaşması",
+        cmbPricingList : "Fiyat Listesi",
         btnView : "Görüntüle",
         btnMailsend : "Mail Gönder",
         validMail : "Lütfen Boş Geçmeyin.",
@@ -14091,7 +14091,7 @@ export const langTr =
         validMail : "Lütfen Boş Geçmeyin.",
         txtTotalHt : "İndirimli Tutar",
         txtDocNo : "Belgo No",
-        cmbPriceContract : "Fiyat Anlaşması",
+        cmbPricingList : "Fiyat Listesi",
         pg_Docs : 
         {
             title : "Evrak Seçimi",
@@ -14484,7 +14484,7 @@ export const langTr =
         validMail : "Lütfen Boş Geçmeyin.",
         txtTotalHt : "İndirimli Tutar",
         txtDocNo : "Belgo No",
-        cmbPriceContract : "Fiyat Anlaşması",
+        cmbPricingList : "Fiyat Listesi",
         btnView : "Görüntüle",
         btnMailsend : "Mail Gönder",
         validMail : "Lütfen Boş Geçmeyin.",
@@ -17675,6 +17675,7 @@ export const langTr =
         placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.",
         validDesign : "Lütfen Dizayn seçiniz.",
         validMail : "Lütfen Boş Geçmeyin.",
+        cmbPricingList : "Fiyat Listesi",
         isMsgSave :
         {  
             title: "Dikkat",

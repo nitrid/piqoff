@@ -101,7 +101,9 @@ export default class salesInvoice extends DocBase
                 {
                     select:
                     {
-                        query : "SELECT GUID,CODE,NAME,VAT,COST_PRICE,UNIT,STATUS,(SELECT [dbo].[FN_PRICE](GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,0)) AS PRICE FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)" ,
+                        query : "SELECT GUID,CODE,NAME,VAT,COST_PRICE,UNIT,STATUS,(SELECT [dbo].[FN_PRICE] " +
+                                "(GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000'," + this.cmbPricingList.value + ",0,0)) AS PRICE " +
+                                "FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)" ,
                         param : ['VAL:string|50']
                     },
                     sql:this.core.sql
@@ -132,7 +134,7 @@ export default class salesInvoice extends DocBase
                 {
                     select:
                     {
-                        query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME],EXPIRY_DAY,TAX_NO,ISNULL((SELECT TOP 1 ZIPCODE FROM CUSTOMER_ADRESS_VW_01 WHERE ADRESS_NO = 0),'') AS ZIPCODE FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
+                        query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,TYPE_NAME,GENUS_NAME,EXPIRY_DAY,TAX_NO,PRICE_LIST_NO,ISNULL((SELECT TOP 1 ZIPCODE FROM CUSTOMER_ADRESS_VW_01 WHERE ADRESS_NO = 0),'') AS ZIPCODE FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
                         param : ['VAL:string|50']
                     },
                     sql:this.core.sql
@@ -515,9 +517,9 @@ export default class salesInvoice extends DocBase
             {
                 let tmpQuery = 
                 {
-                    query :"SELECT dbo.FN_PRICE(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,'00000000-0000-0000-0000-000000000000',1,0,0) AS PRICE",
-                    param : ['GUID:string|50','QUANTITY:float','CUSTOMER:string|50','CONTRACT_CODE:string|25'],
-                    value : [pData.GUID,pQuantity,this.docObj.dt()[0].INPUT,this.cmbPriceContract.value]
+                    query :"SELECT dbo.FN_PRICE(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,'00000000-0000-0000-0000-000000000000',@PRICE_LIST_NO,0,0) AS PRICE",
+                    param : ['GUID:string|50','QUANTITY:float','CUSTOMER:string|50','PRICE_LIST_NO:int'],
+                    value : [pData.GUID,pQuantity,this.docObj.dt()[0].INPUT,this.cmbPricingList.value]
                 }
                 let tmpData = await this.core.sql.execute(tmpQuery) 
                 if(tmpData.result.recordset.length > 0)
@@ -1172,6 +1174,7 @@ export default class salesInvoice extends DocBase
                                                     this.docObj.dt()[0].INPUT_NAME = data[0].TITLE
                                                     this.docObj.dt()[0].ZIPCODE = data[0].ZIPCODE
                                                     this.docObj.dt()[0].TAX_NO = data[0].TAX_NO
+                                                    this.docObj.dt()[0].PRICE_LIST_NO = data[0].PRICE_LIST_NO
                                                     this.dtExpDate.value = moment(new Date()).add(data[0].EXPIRY_DAY, 'days')
                                                     let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
                                                     if(typeof tmpData != 'undefined' && tmpData.value ==  true)
@@ -1237,6 +1240,8 @@ export default class salesInvoice extends DocBase
                                                             this.docObj.dt()[0].INPUT_NAME = data[0].TITLE
                                                             this.docObj.dt()[0].ZIPCODE = data[0].ZIPCODE
                                                             this.docObj.dt()[0].TAX_NO = data[0].TAX_NO
+                                                            this.docObj.dt()[0].PRICE_LIST_NO = data[0].PRICE_LIST_NO
+                                                            console.log(this.docObj.dt()[0])
                                                             this.dtExpDate.value = moment(new Date()).add(data[0].EXPIRY_DAY, 'days')
                                                             let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
                                                             if(typeof tmpData != 'undefined' && tmpData.value ==  true)
@@ -1292,8 +1297,21 @@ export default class salesInvoice extends DocBase
                                     access={this.access.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
                                     />
                                 </Item> 
-                                {/* Boş */}
-                                <EmptyItem />
+                                {/* cmbPricingList */}
+                                <Item>
+                                    <Label text={this.t("cmbPricingList")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbPricingList" notRefresh={true}
+                                    displayExpr="NAME"
+                                    valueExpr="NO"
+                                    value=""
+                                    searchEnabled={true}
+                                    dt={{data:this.docObj.dt('DOC'),field:"PRICE_LIST_NO"}} 
+                                    data={{source:{select:{query : "SELECT NO,NAME FROM ITEM_PRICE_LIST_VW_01 ORDER BY NO ASC"},sql:this.core.sql}}}
+                                    param={this.param.filter({ELEMENT:'cmbPricingList',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'cmbPricingList',USERS:this.user.CODE})}
+                                    >
+                                    </NdSelectBox>
+                                </Item>
                                 {/* dtDocDate */}
                                 <Item>
                                     <Label text={this.t("dtDocDate")} alignment="right" />
@@ -1327,7 +1345,7 @@ export default class salesInvoice extends DocBase
                                 </Item>
                                 {/* Boş */}
                                 <EmptyItem />
-                                {/* Barkod Ekleme */}
+                                {/* txtBarcode */}
                                 <Item>
                                     <Label text={this.t("txtBarcode")} alignment="right" />
                                     <NdTextBox id="txtBarcode" parent={this} simple={true}  placeholder={this.t("txtBarcodePlace")}
@@ -1456,21 +1474,7 @@ export default class salesInvoice extends DocBase
                                         </Validator> 
                                     </NdDatePicker>
                                 </Item>
-                                <EmptyItem/>
-                                {/* cmbPriceContract */}
-                                <Item>
-                                    <Label text={this.t("cmbPriceContract")} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbPriceContract" notRefresh={true}
-                                    displayExpr="NAME"
-                                    valueExpr="CODE"
-                                    value=""
-                                    searchEnabled={true}
-                                    data={{source:{select:{query : "SELECT CODE,NAME FROM CONTRACT_VW_01 WHERE CUSTOMER = '00000000-0000-0000-0000-000000000000' GROUP BY CODE,NAME ORDER BY CODE ASC"},sql:this.core.sql}}}
-                                    param={this.param.filter({ELEMENT:'cmbPriceContract',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'cmbPriceContract',USERS:this.user.CODE})}
-                                    >
-                                    </NdSelectBox>
-                                </Item>
+                                <EmptyItem/>                                
                             </Form>
                         </div>
                     </div>
@@ -1778,9 +1782,9 @@ export default class salesInvoice extends DocBase
                                                 e.key.SUB_QUANTITY =  e.data.QUANTITY / e.key.SUB_FACTOR
                                                 let tmpQuery = 
                                                 {
-                                                    query :"SELECT [dbo].[FN_PRICE](@ITEM_GUID,@QUANTITY,GETDATE(),@CUSTOMER_GUID,'00000000-0000-0000-0000-000000000000',1,0,0) AS PRICE",
-                                                    param : ['ITEM_GUID:string|50','CUSTOMER_GUID:string|50','QUANTITY:float','CONTRACT_CODE:string|25'],
-                                                    value : [e.key.ITEM,this.docObj.dt()[0].INPUT,e.data.QUANTITY,this.cmbPriceContract.value]
+                                                    query :"SELECT [dbo].[FN_PRICE](@ITEM_GUID,@QUANTITY,GETDATE(),@CUSTOMER_GUID,'00000000-0000-0000-0000-000000000000',@PRICE_LIST_NO,0,0) AS PRICE",
+                                                    param : ['ITEM_GUID:string|50','CUSTOMER_GUID:string|50','QUANTITY:float','PRICE_LIST_NO:int'],
+                                                    value : [e.key.ITEM,this.docObj.dt()[0].INPUT,e.data.QUANTITY,this.cmbPricingList.value]
                                                 }
                                                 let tmpData = await this.core.sql.execute(tmpQuery) 
                                                 if(tmpData.result.recordset.length > 0)

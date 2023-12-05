@@ -75,7 +75,9 @@ export default class salesDispatch extends DocBase
                 {
                     select:
                     {
-                        query : "SELECT GUID,CODE,NAME,VAT,UNIT,STATUS,COST_PRICE,(SELECT [dbo].[FN_PRICE](GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,0)) AS PRICE FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
+                        query : "SELECT GUID,CODE,NAME,VAT,UNIT,STATUS,COST_PRICE, " + 
+                                "(SELECT [dbo].[FN_PRICE](GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000'," + this.cmbPricingList.value + ",0,0)) AS PRICE " + 
+                                "FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
                         param : ['VAL:string|50']
                     },
                     sql:this.core.sql
@@ -106,7 +108,7 @@ export default class salesDispatch extends DocBase
                 {
                     select:
                     {
-                        query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
+                        query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,TYPE_NAME,GENUS_NAME,PRICE_LIST_NO FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
                         param : ['VAL:string|50']
                     },
                     sql:this.core.sql
@@ -619,9 +621,9 @@ export default class salesDispatch extends DocBase
             {
                 let tmpQuery = 
                 {
-                    query :"SELECT dbo.FN_PRICE(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,'00000000-0000-0000-0000-000000000000',1,0,0) AS PRICE",
-                    param : ['GUID:string|50','QUANTITY:float','CUSTOMER:string|50'],
-                    value : [pData.GUID,pQuantity,this.docObj.dt()[0].INPUT]
+                    query :"SELECT dbo.FN_PRICE(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,'00000000-0000-0000-0000-000000000000',@PRICE_LIST_NO,0,0) AS PRICE",
+                    param : ['GUID:string|50','QUANTITY:float','CUSTOMER:string|50','PRICE_LIST_NO:int'],
+                    value : [pData.GUID,pQuantity,this.docObj.dt()[0].INPUT,this.cmbPricingList.value]
                 }
                 let tmpData = await this.core.sql.execute(tmpQuery) 
                 if(tmpData.result.recordset.length > 0)
@@ -1230,60 +1232,61 @@ export default class salesDispatch extends DocBase
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     dt={{data:this.docObj.dt('DOC'),field:"INPUT_CODE"}} 
                                     onEnterKey={(async()=>
+                                    {
+                                        if(this.docObj.docItems.dt().length > 0)
                                         {
-                                            if(this.docObj.docItems.dt().length > 0)
+                                            let tmpConfObj =
                                             {
-                                                let tmpConfObj =
-                                                {
-                                                    id:'msgCustomerLock',showTitle:true,title:this.t("msgCustomerLock.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:this.t("msgCustomerLock.btn01"),location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerLock.msg")}</div>)
-                                                }
-                                                
-                                                await dialog(tmpConfObj);
-                                                return;
+                                                id:'msgCustomerLock',showTitle:true,title:this.t("msgCustomerLock.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgCustomerLock.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerLock.msg")}</div>)
                                             }
                                             
-                                            this.pg_txtCustomerCode.onClick = async(data) =>
+                                            await dialog(tmpConfObj);
+                                            return;
+                                        }
+                                        
+                                        this.pg_txtCustomerCode.onClick = async(data) =>
+                                        {
+                                            if(data.length > 0)
                                             {
-                                                if(data.length > 0)
+                                                this.docObj.dt()[0].INPUT = data[0].GUID
+                                                this.docObj.dt()[0].INPUT_CODE = data[0].CODE
+                                                this.docObj.dt()[0].INPUT_NAME = data[0].TITLE
+                                                this.docObj.dt()[0].PRICE_LIST_NO = data[0].PRICE_LIST_NO
+                                                let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
+                                                if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                 {
-                                                    this.docObj.dt()[0].INPUT = data[0].GUID
-                                                    this.docObj.dt()[0].INPUT_CODE = data[0].CODE
-                                                    this.docObj.dt()[0].INPUT_NAME = data[0].TITLE
-                                                    let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
-                                                    if(typeof tmpData != 'undefined' && tmpData.value ==  true)
+                                                    this.txtRef.value = data[0].CODE;
+                                                    this.txtRef.props.onChange()
+                                                }
+                                                if(this.cmbDepot.value != '' && this.docLocked == false)
+                                                {
+                                                    this.frmDocItems.option('disabled',false)
+                                                }
+                                                    let tmpQuery = 
+                                                {
+                                                    query : "SELECT * FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER = @CUSTOMER",
+                                                    param : ['CUSTOMER:string|50'],
+                                                    value : [ data[0].GUID]
+                                                }
+                                                let tmpAdressData = await this.core.sql.execute(tmpQuery) 
+                                                if(tmpAdressData.result.recordset.length > 1)
+                                                {   
+                                                    this.pg_adress.onClick = async(pdata) =>
                                                     {
-                                                        this.txtRef.value = data[0].CODE;
-                                                        this.txtRef.props.onChange()
-                                                    }
-                                                    if(this.cmbDepot.value != '' && this.docLocked == false)
-                                                    {
-                                                        this.frmDocItems.option('disabled',false)
-                                                    }
-                                                     let tmpQuery = 
-                                                    {
-                                                        query : "SELECT * FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER = @CUSTOMER",
-                                                        param : ['CUSTOMER:string|50'],
-                                                        value : [ data[0].GUID]
-                                                    }
-                                                    let tmpAdressData = await this.core.sql.execute(tmpQuery) 
-                                                    if(tmpAdressData.result.recordset.length > 1)
-                                                    {   
-                                                        this.pg_adress.onClick = async(pdata) =>
+                                                        if(pdata.length > 0)
                                                         {
-                                                            if(pdata.length > 0)
-                                                            {
-                                                                this.docObj.dt()[0].ADDRESS = pdata[0].ADRESS_NO
-                                                            }
+                                                            this.docObj.dt()[0].ADDRESS = pdata[0].ADRESS_NO
                                                         }
-                                                        await this.pg_adress.show()
-                                                        await this.pg_adress.setData(tmpAdressData.result.recordset)
                                                     }
+                                                    await this.pg_adress.show()
+                                                    await this.pg_adress.setData(tmpAdressData.result.recordset)
                                                 }
                                             }
-                                            await this.pg_txtCustomerCode.setVal(this.txtCustomerCode.value)
-                                        }).bind(this)}
+                                        }
+                                        await this.pg_txtCustomerCode.setVal(this.txtCustomerCode.value)
+                                    }).bind(this)}
                                     button=
                                     {
                                         [
@@ -1312,6 +1315,7 @@ export default class salesDispatch extends DocBase
                                                             this.docObj.dt()[0].INPUT = data[0].GUID
                                                             this.docObj.dt()[0].INPUT_CODE = data[0].CODE
                                                             this.docObj.dt()[0].INPUT_NAME = data[0].TITLE
+                                                            this.docObj.dt()[0].PRICE_LIST_NO = data[0].PRICE_LIST_NO
                                                             let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
                                                             if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                             {
@@ -1354,8 +1358,7 @@ export default class salesDispatch extends DocBase
                                         <Validator validationGroup={"frmSalesDis"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validCustomerCode")} />
                                         </Validator>  
-                                    </NdTextBox>
-                                    
+                                    </NdTextBox>                                    
                                 </Item> 
                                 {/* txtCustomerName */}
                                 <Item>
@@ -1369,8 +1372,21 @@ export default class salesDispatch extends DocBase
                                     >
                                     </NdTextBox>
                                 </Item> 
-                                {/* Boş */}
-                                <EmptyItem />
+                                {/* cmbPricingList */}
+                                <Item>
+                                    <Label text={this.t("cmbPricingList")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbPricingList" notRefresh={true}
+                                    displayExpr="NAME"
+                                    valueExpr="NO"
+                                    value=""
+                                    searchEnabled={true}
+                                    dt={{data:this.docObj.dt('DOC'),field:"PRICE_LIST_NO"}} 
+                                    data={{source:{select:{query : "SELECT NO,NAME FROM ITEM_PRICE_LIST_VW_01 ORDER BY NO ASC"},sql:this.core.sql}}}
+                                    param={this.param.filter({ELEMENT:'cmbPricingList',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'cmbPricingList',USERS:this.user.CODE})}
+                                    >
+                                    </NdSelectBox>
+                                </Item>
                                 {/* dtDocDate */}
                                 <Item>
                                     <Label text={this.t("dtDocDate")} alignment="right" />
@@ -1404,8 +1420,8 @@ export default class salesDispatch extends DocBase
                                 </Item>
                                 {/* Boş */}
                                 <EmptyItem />
-                                 {/* BARKOD EKLEME */}
-                                 <Item>
+                                {/* txtBarcode */}
+                                <Item>
                                     <Label text={this.t("txtBarcode")} alignment="right" />
                                     <NdTextBox id="txtBarcode" parent={this} simple={true}  placeholder={this.t("txtBarcodePlace")}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
@@ -1513,20 +1529,6 @@ export default class salesDispatch extends DocBase
                                 </Item>
                                 <EmptyItem/>
                                 <EmptyItem/>
-                                {/* cmbPriceContract */}
-                                <Item>
-                                    <Label text={this.t("cmbPriceContract")} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbPriceContract" notRefresh={true}
-                                    displayExpr="NAME"
-                                    valueExpr="CODE"
-                                    value=""
-                                    searchEnabled={true}
-                                    data={{source:{select:{query : "SELECT CODE,NAME FROM CONTRACT_VW_01 WHERE CUSTOMER = '00000000-0000-0000-0000-000000000000' GROUP BY CODE,NAME ORDER BY CODE ASC"},sql:this.core.sql}}}
-                                    param={this.param.filter({ELEMENT:'cmbPriceContract',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'cmbPriceContract',USERS:this.user.CODE})}
-                                    >
-                                    </NdSelectBox>
-                                </Item>
                             </Form>
                         </div>
                     </div>
@@ -1739,9 +1741,9 @@ export default class salesDispatch extends DocBase
                                             e.key.SUB_QUANTITY =  e.data.QUANTITY * e.key.SUB_FACTOR
                                             let tmpQuery = 
                                             {
-                                                query :"SELECT [dbo].[FN_PRICE](@ITEM_GUID,@QUANTITY,GETDATE(),@CUSTOMER_GUID,'00000000-0000-0000-0000-000000000000',1,0,0) AS PRICE",
-                                                param : ['ITEM_GUID:string|50','CUSTOMER_GUID:string|50','QUANTITY:float','CONTRACT_CODE:string|25'],
-                                                value : [e.key.ITEM,this.docObj.dt()[0].INPUT,e.data.QUANTITY,this.cmbPriceContract.value]
+                                                query :"SELECT [dbo].[FN_PRICE](@ITEM_GUID,@QUANTITY,GETDATE(),@CUSTOMER_GUID,'00000000-0000-0000-0000-000000000000',@PRICE_LIST_NO,0,0) AS PRICE",
+                                                param : ['ITEM_GUID:string|50','CUSTOMER_GUID:string|50','QUANTITY:float','PRICE_LIST_NO:int'],
+                                                value : [e.key.ITEM,this.docObj.dt()[0].INPUT,e.data.QUANTITY,this.cmbPricingList.value]
                                             }
                                             let tmpData = await this.core.sql.execute(tmpQuery) 
                                             if(tmpData.result.recordset.length > 0)
