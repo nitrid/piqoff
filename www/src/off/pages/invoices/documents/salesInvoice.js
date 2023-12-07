@@ -134,7 +134,7 @@ export default class salesInvoice extends DocBase
                 {
                     select:
                     {
-                        query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,TYPE_NAME,GENUS_NAME,EXPIRY_DAY,TAX_NO,PRICE_LIST_NO,ISNULL((SELECT TOP 1 ZIPCODE FROM CUSTOMER_ADRESS_VW_01 WHERE ADRESS_NO = 0),'') AS ZIPCODE FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
+                        query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,TYPE_NAME,GENUS_NAME,EXPIRY_DAY,TAX_NO,PRICE_LIST_NO,ISNULL((SELECT TOP 1 ZIPCODE FROM CUSTOMER_ADRESS_VW_01 WHERE ADRESS_NO = 0),'') AS ZIPCODE FROM CUSTOMER_VW_01 WHERE STATUS = 1  AND ((UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL))) ",
                         param : ['VAL:string|50']
                     },
                     sql:this.core.sql
@@ -534,7 +534,7 @@ export default class salesInvoice extends DocBase
                 }
                 else
                 {
-                    this.docObj.docItems.dt()[pIndex].PRICE =0
+                    this.docObj.docItems.dt()[pIndex].PRICE = 0
                     this.docObj.docItems.dt()[pIndex].VAT = 0
                     this.docObj.docItems.dt()[pIndex].AMOUNT = 0
                     this.docObj.docItems.dt()[pIndex].TOTAL = 0
@@ -671,7 +671,6 @@ export default class salesInvoice extends DocBase
                     tmpMissCodes.push("'" +this.tagItemCode.value[i] + "'")
                 }
             }
-            
         }
         if(tmpMissCodes.length > 0)
         {
@@ -984,7 +983,6 @@ export default class salesInvoice extends DocBase
                                             }
                                             await dialog(tmpConfObj);
                                             return
-
                                         }
                                         else
                                         {
@@ -2125,7 +2123,6 @@ export default class salesInvoice extends DocBase
                                             <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmPrintPop" + this.tabIndex}
                                             onClick={async (e)=>
                                             {       
-
                                                 if(e.validationGroup.validate().status == "valid")
                                                 {
                                                     App.instance.setState({isExecute:true})
@@ -2155,7 +2152,7 @@ export default class salesInvoice extends DocBase
                                                     }
                                                     let tmpData2 = await this.core.sql.execute(tmpQuery2) 
                                                     let tmpObj = {data1:tmpData.result.recordset,data2:tmpData2.result.recordset}
-                                                    this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",async(pResult) => 
+                                                    this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + "C:\\piqsoft\\" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",async(pResult) => 
                                                     {
                                                         if(pResult.split('|')[0] != 'ERR')
                                                         {
@@ -2190,7 +2187,6 @@ export default class salesInvoice extends DocBase
                                             onClick={async (e)=>
                                             {       
                                                 if(e.validationGroup.validate().status == "valid")
-                                                
                                                 {
                                                     let tmpQuery = 
                                                     {
