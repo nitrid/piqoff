@@ -2170,6 +2170,7 @@ export default class purchaseInvoice extends DocBase
                                         }}
                                         onReady={async()=>
                                         {
+                                            console.log(this.docObj.docItems.dt('DOC_ITEMS'))
                                             await this.grdPurcInv.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
                                         }}
                                         >
@@ -2260,14 +2261,23 @@ export default class purchaseInvoice extends DocBase
                                                                         value:  [this.docObj.dt()[0].GUID,]
                                                                     }
                                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                                    console.log( tmpData.result.recordset[0].PATH)
+                                                                    
                                                                     this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
                                                                     {
+                                                                        console.log(1)
+                                                                        console.log(pResult)
+                                                                        console.log(2)
+                                                                        console.log(pResult.split('|')[0]);
+                                                                        console.log(3)
                                                                         if(pResult.split('|')[0] != 'ERR')
                                                                         {
+                                                                            console.log(6)
                                                                             var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");                                                         
-                    
+                                                                            console.log(19)
                                                                             mywindow.onload = function() 
                                                                             {
+                                                                                console.log(20)
                                                                                 mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
                                                                             } 
                                                                             // let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
