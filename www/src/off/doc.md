@@ -25,6 +25,7 @@ DOC_TYPE
 -- 60 - 79 ARASI SİPARİŞLER
 60 - SİPARİŞ
 61- TEKLİF
+62 - Fiyat farkı talebi
 
 -- 100 DEN YUKARISI PROFORMA İÇİN 
 
