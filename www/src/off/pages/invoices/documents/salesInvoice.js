@@ -103,7 +103,7 @@ export default class salesInvoice extends DocBase
                     {
                         query : "SELECT GUID,CODE,NAME,VAT,COST_PRICE,UNIT,STATUS,(SELECT [dbo].[FN_PRICE] " +
                                 "(GUID,1,GETDATE(),'" + this.docObj.dt()[0].INPUT +"','" + this.cmbDepot.value +"'," + this.cmbPricingList.value + ",0,0)) AS PRICE " +
-                                "FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)" ,
+                                "FROM ITEMS_VW_01 WHERE STATUS = 1 AND (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL))" ,
                         param : ['VAL:string|50']
                     },
                     sql:this.core.sql
@@ -119,7 +119,7 @@ export default class salesInvoice extends DocBase
                     select:
                     {   query : "SELECT ITEMS_VW_01.GUID,CODE,NAME,COST_PRICE,ITEMS_VW_01.UNIT,VAT,BARCODE,ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_01.GUID AND ITEM_MULTICODE.CUSTOMER = '" + this.docObj.dt()[0].INPUT + "' AND DELETED = 0 ORDER BY LDATE DESC),'') AS MULTICODE, " + 
                                 "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_MULTICODE_VW_01.ITEM_GUID = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS CUSTOMER_NAME " + 
-                                "FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE  ITEM_BARCODE_VW_01.BARCODE LIKE  '%' + @BARCODE",
+                                "FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE  STATUS = 1 AND (ITEM_BARCODE_VW_01.BARCODE LIKE  '%' + @BARCODE)",
                         param : ['BARCODE:string|50'],
                     },
                     sql:this.core.sql
@@ -134,7 +134,7 @@ export default class salesInvoice extends DocBase
                 {
                     select:
                     {
-                        query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,TYPE_NAME,GENUS_NAME,EXPIRY_DAY,TAX_NO,PRICE_LIST_NO,ISNULL((SELECT TOP 1 ZIPCODE FROM CUSTOMER_ADRESS_VW_01 WHERE ADRESS_NO = 0),'') AS ZIPCODE FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
+                        query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,TYPE_NAME,GENUS_NAME,EXPIRY_DAY,TAX_NO,PRICE_LIST_NO,ISNULL((SELECT TOP 1 ZIPCODE FROM CUSTOMER_ADRESS_VW_01 WHERE ADRESS_NO = 0),'') AS ZIPCODE FROM CUSTOMER_VW_01 WHERE STATUS = 1  AND ((UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL))) ",
                         param : ['VAL:string|50']
                     },
                     sql:this.core.sql
@@ -534,7 +534,7 @@ export default class salesInvoice extends DocBase
                 }
                 else
                 {
-                    this.docObj.docItems.dt()[pIndex].PRICE =0
+                    this.docObj.docItems.dt()[pIndex].PRICE = 0
                     this.docObj.docItems.dt()[pIndex].VAT = 0
                     this.docObj.docItems.dt()[pIndex].AMOUNT = 0
                     this.docObj.docItems.dt()[pIndex].TOTAL = 0
@@ -671,7 +671,6 @@ export default class salesInvoice extends DocBase
                     tmpMissCodes.push("'" +this.tagItemCode.value[i] + "'")
                 }
             }
-            
         }
         if(tmpMissCodes.length > 0)
         {
@@ -984,7 +983,6 @@ export default class salesInvoice extends DocBase
                                             }
                                             await dialog(tmpConfObj);
                                             return
-
                                         }
                                         else
                                         {
@@ -1414,7 +1412,7 @@ export default class salesInvoice extends DocBase
                                         }
                                         let tmpQuery = 
                                         {   
-                                            query :"SELECT GUID,CODE,NAME,COST_PRICE,UNIT_GUID AS UNIT,VAT,MULTICODE,CUSTOMER_NAME,BARCODE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE BARCODE = @CODE OR CODE = @CODE OR (MULTICODE = @CODE AND CUSTOMER_GUID = @CUSTOMER)",
+                                            query :"SELECT GUID,CODE,NAME,COST_PRICE,UNIT_GUID AS UNIT,VAT,MULTICODE,CUSTOMER_NAME,BARCODE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE STATUS = 1 AND (BARCODE = @CODE OR CODE = @CODE OR (MULTICODE = @CODE AND CUSTOMER_GUID = @CUSTOMER))",
                                             param : ['CODE:string|50','CUSTOMER:string|50'],
                                             value : [this.txtBarcode.value,this.docObj.dt()[0].INPUT]
                                         }
@@ -2125,7 +2123,6 @@ export default class salesInvoice extends DocBase
                                             <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmPrintPop" + this.tabIndex}
                                             onClick={async (e)=>
                                             {       
-
                                                 if(e.validationGroup.validate().status == "valid")
                                                 {
                                                     App.instance.setState({isExecute:true})
@@ -2155,7 +2152,7 @@ export default class salesInvoice extends DocBase
                                                     }
                                                     let tmpData2 = await this.core.sql.execute(tmpQuery2) 
                                                     let tmpObj = {data1:tmpData.result.recordset,data2:tmpData2.result.recordset}
-                                                    this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",async(pResult) => 
+                                                    this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + "C:\\piqsoft\\" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",async(pResult) => 
                                                     {
                                                         if(pResult.split('|')[0] != 'ERR')
                                                         {
@@ -2190,7 +2187,6 @@ export default class salesInvoice extends DocBase
                                             onClick={async (e)=>
                                             {       
                                                 if(e.validationGroup.validate().status == "valid")
-                                                
                                                 {
                                                     let tmpQuery = 
                                                     {

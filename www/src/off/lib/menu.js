@@ -438,6 +438,11 @@ export const menu = (e) =>
                                     text: e.t('menuOff.tkf_02_001'),//'Alış Teklif',
                                     path: 'offers/documents/purchaseOffer'
                                 },
+                                {
+                                    id: 'tkf_02_003',
+                                    text: e.t('menuOff.tkf_02_003'),//'Fiyat farkı talebi',
+                                    path: 'offers/documents/priceDiffOffer'
+                                },
                     
                             ]
                         },

@@ -175,10 +175,10 @@ export default class branchSaleInvoice extends DocBase
                             this.pg_txtItemsCode.setVal(e.value)
                         }
                     }}
-                    onValueChanged={(v)=>
-                    {
-                        e.value = v.value
-                    }}
+                onValueChanged={(v)=>
+                {
+                    e.value = v.value
+                }}
                 onChange={(async(r)=>
                     {
                         if(typeof r.event.isTrusted == 'undefined')
@@ -644,6 +644,49 @@ export default class branchSaleInvoice extends DocBase
             this.popMultiItem.hide()
         }
     }
+    async autoMailSend()
+    {
+        if(this.prmObj.filter({ID:'autoMailSend',USERS:this.user.CODE}).getValue().value == true)
+        {
+            if(this.tmpMailAdress != '')
+            {
+                let tmpMAilQuery = 
+                {
+                    query :"SELECT EMAIL FROM CUSTOMER_OFFICAL WHERE CUSTOMER = @GUID  AND DELETED = 0",
+                    param:  ['GUID:string|50'],
+                    value:  [this.docObj.dt()[0].INPUT]
+                }
+                let tmpMailAdress = await this.core.sql.execute(tmpMAilQuery) 
+                let txtSendMail = tmpMailAdress.result.recordset[0].EMAIL
+                let tmpQuery = 
+                {
+                    query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG)ORDER BY DOC_DATE,LINE_NO " ,
+                    param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
+                    value:  [this.docObj.dt()[0].GUID,'22',this.lang.languages[0].toString().toUpperCase()]
+                }
+                App.instance.setState({isExecute:true})
+                let tmpData = await this.core.sql.execute(tmpQuery)
+                App.instance.setState({isExecute:false})
+                console.log(tmpData)
+                console.log(txtSendMail)
+                this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
+                {
+                    App.instance.setState({isExecute:true})
+                    let tmpAttach = pResult.split('|')[1]
+                    let  tmpHtml = ''
+                    if(pResult.split('|')[0] != 'ERR')
+                    {
+                    }
+                    let tmpMailData = {html:tmpHtml,subject:"Bon de livraison interne",sendMail:txtSendMail,attachName:"livraison.pdf",attachData:tmpAttach,text:""}
+                    this.core.socket.emit('mailer',tmpMailData,async(pResult1) => 
+                    {
+                        App.instance.setState({isExecute:false})
+                    });
+                });
+            }
+        }
+    }
+
     render()
     {
         return(
@@ -724,6 +767,8 @@ export default class branchSaleInvoice extends DocBase
                                                     await dialog(tmpConfObj1);
                                                     this.btnSave.setState({disabled:true});
                                                     this.btnNew.setState({disabled:false});
+
+                                                    await this.autoMailSend()
                                                 }
                                                 else
                                                 {
@@ -783,7 +828,6 @@ export default class branchSaleInvoice extends DocBase
                                                 this.init(); 
                                             }
                                         }
-                                        
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
@@ -811,12 +855,10 @@ export default class branchSaleInvoice extends DocBase
                                             {
                                                 await this.grdSlsInv.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
                                             }
-
                                              //***** TICKET İMZALAMA *****/
-                                             let tmpSignedData = await this.nf525.signatureDoc(this.docObj.dt()[0],this.docObj.docItems.dt())                
-                                             this.docObj.dt()[0].SIGNATURE = tmpSignedData.SIGNATURE
-                                             this.docObj.dt()[0].SIGNATURE_SUM = tmpSignedData.SIGNATURE_SUM
-
+                                                let tmpSignedData = await this.nf525.signatureDoc(this.docObj.dt()[0],this.docObj.docItems.dt())                
+                                                this.docObj.dt()[0].SIGNATURE = tmpSignedData.SIGNATURE
+                                                this.docObj.dt()[0].SIGNATURE_SUM = tmpSignedData.SIGNATURE_SUM
                                             if((await this.docObj.save()) == 0)
                                             {                                                    
                                                 let tmpConfObj =
@@ -834,14 +876,12 @@ export default class branchSaleInvoice extends DocBase
                                                 tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
                                                 await dialog(tmpConfObj1);
                                             }
-                                            
                                         }
                                         else
                                         {
                                             await this.popPassword.show()
                                             this.txtPassword.value = ''
                                         }
-                                        
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
@@ -934,7 +974,6 @@ export default class branchSaleInvoice extends DocBase
                                             onValueChanged={(async(e)=>
                                             {
                                                 this.docObj.docCustomer.dt()[0].REF = this.txtRef.value
-                                               
                                             }).bind(this)}
                                             param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
@@ -961,10 +1000,6 @@ export default class branchSaleInvoice extends DocBase
                                                     },
                                                 ]
                                             }
-                                            onChange={(async()=>
-                                            {
-                                               
-                                            }).bind(this)}
                                             param={this.param.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             >
@@ -986,14 +1021,14 @@ export default class branchSaleInvoice extends DocBase
                                     value=""
                                     searchEnabled={true}
                                     onValueChanged={(async()=>
+                                    {
+                                        this.checkRow()
+                                        this.docObj.docCustomer.dt()[0].OUTPUT = this.cmbDepot.value
+                                        if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
                                         {
-                                            this.checkRow()
-                                            this.docObj.docCustomer.dt()[0].OUTPUT = this.cmbDepot.value
-                                            if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
-                                            {
-                                                this.frmDocItems.option('disabled',false)
-                                            }
-                                        }).bind(this)}
+                                            this.frmDocItems.option('disabled',false)
+                                        }
+                                    }).bind(this)}
                                     data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01 WHERE TYPE IN(0,2)"},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
@@ -1279,7 +1314,6 @@ export default class branchSaleInvoice extends DocBase
                                             this.msgQuantity.tmpData = tmpData.result.recordset[0]
                                             await this.msgQuantity.show()
                                             this.addItem(tmpData.result.recordset[0],null,this.txtPopQteUnitQuantity.value)
-                                            
                                         }
                                         else
                                         {
@@ -1426,7 +1460,6 @@ export default class branchSaleInvoice extends DocBase
                                                 }
                                                 this.grdSlsInv.devGrid.endUpdate()
                                             }
-                                              
                                         }
                                         else
                                         {
@@ -1641,7 +1674,6 @@ export default class branchSaleInvoice extends DocBase
                                                     <Label text={this.t("txtAmount")} alignment="right" />
                                                     <NdTextBox id="txtAmount" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"AMOUNT"}}
                                                     maxLength={32}
-                                                
                                                     ></NdTextBox>
                                                 </Item>
                                                 <Item>
@@ -2079,7 +2111,6 @@ export default class branchSaleInvoice extends DocBase
                                                                 this.txtMailSubject.value = '',
                                                                 this.txtSendMail.value = ''
                                                                 this.popMailSend.hide();  
-
                                                             }
                                                             else
                                                             {
@@ -2090,7 +2121,6 @@ export default class branchSaleInvoice extends DocBase
                                                         });
                                                     });
                                                 }
-                                                    
                                             }}/>
                                         </div>
                                         <div className='col-6'>
