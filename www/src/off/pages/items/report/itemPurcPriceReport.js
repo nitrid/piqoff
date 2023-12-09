@@ -91,7 +91,7 @@ export default class itemPurcPriceReport extends React.PureComponent
         {
             query :"SELECT CONVERT(NVARCHAR,CONVERT(datetime,CHANGE_DATE),104) AS CONVERT_DATE, CHANGE_DATE AS DATE, " +
                    "PRICE AS PURC " +
-                   "FROM [dbo].[ITEM_PRICE_LOG_VW_01] WHERE ITEM_GUID = @ITEM_GUID AND TYPE = 1 AND CUSTOMER = @CUSTOMER  " + 
+                   "FROM [dbo].[PRICE_HISTORY_VW_01] WHERE ITEM = @ITEM_GUID AND TYPE = 1 AND CUSTOMER = @CUSTOMER  " + 
                    "UNION ALL " + 
                    "SELECT CONVERT(NVARCHAR,LDATE,104) AS CONVERT_DATE,LDATE AS DATE,PRICE AS PURC FROM ITEM_PRICE_VW_01 WHERE ITEM_GUID = @ITEM_GUID AND TYPE = 1 AND CUSTOMER_GUID = @CUSTOMER ",
             param : ['ITEM_GUID:string|50','CUSTOMER:string|50'],
@@ -102,7 +102,7 @@ export default class itemPurcPriceReport extends React.PureComponent
         {
             query :"SELECT CONVERT(NVARCHAR,CONVERT(datetime,CHANGE_DATE),104) AS CONVERT_DATE, CHANGE_DATE AS DATE, " +
                    "PRICE AS SALE " +
-                   "FROM [dbo].[ITEM_PRICE_LOG_VW_01] WHERE ITEM_GUID = @ITEM_GUID AND TYPE = 0 " + 
+                   "FROM [dbo].[PRICE_HISTORY_VW_01] WHERE ITEM = @ITEM_GUID AND TYPE = 0 " + 
                    "UNION ALL " + 
                    "SELECT CONVERT(NVARCHAR,LDATE,104) AS CONVERT_DATE,LDATE AS DATE,PRICE AS SALE FROM ITEM_PRICE_VW_01 WHERE ITEM_GUID = @ITEM_GUID AND TYPE = 0 ",
             param : ['ITEM_GUID:string|50','CUSTOMER:string|50'],

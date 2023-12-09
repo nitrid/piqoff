@@ -1683,10 +1683,10 @@ export class itemLogPriceCls
     //#region Private
     _initDs()
     {
-        let tmpDt = new datatable('ITEM_PRICE_LOG');            
+        let tmpDt = new datatable('PRICE_HISTORY');            
         tmpDt.selectCmd = 
         {
-            query : "SELECT * FROM [ITEM_PRICE_LOG_VW_01] WHERE ITEM_GUID = @ITEM_GUID AND TYPE = 1 ORDER BY LDATE DESC",
+            query : "SELECT * FROM [PRICE_HISTORY_VW_01] WHERE ITEM = @ITEM_GUID AND TYPE = 1 ORDER BY CDATE DESC",
             param : ['ITEM_GUID:string|50',]
         }
 
@@ -1723,10 +1723,10 @@ export class itemLogPriceCls
             {
                 tmpPrm.ITEM_GUID = typeof arguments[0].ITEM_GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].ITEM_GUID;
             }
-            this.ds.get('ITEM_PRICE_LOG').selectCmd.value = Object.values(tmpPrm)
+            this.ds.get('PRICE_HISTORY').selectCmd.value = Object.values(tmpPrm)
 
-            await this.ds.get('ITEM_PRICE_LOG').refresh();
-            resolve(this.ds.get('ITEM_PRICE_LOG'));    
+            await this.ds.get('PRICE_HISTORY').refresh();
+            resolve(this.ds.get('PRICE_HISTORY'));    
         });
     }
     save()
