@@ -1298,8 +1298,8 @@ export const prm =
             CAPTION : "Müşteri Puan Katsayısı"
         }
     },
-     //Mail Kontrolü
-     {
+    //Mail Kontrolü
+    {
         TYPE : 0,
         ID :"mailControl",
         VALUE : true,
@@ -1312,6 +1312,22 @@ export const prm =
             TYPE : "checkbox",
             PAGE_NAME : "Pos",
             CAPTION : "Mail Kontrolü"
+        }
+    },
+    //Fiyat Listesi
+    {
+        TYPE : 0,
+        ID :"PricingListNo",
+        VALUE : 1,
+        SPECIAL : "",
+        PAGE : "pos",
+        ELEMENT : "",
+        APP : "POS",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Pos",
+            CAPTION : "Fiyat Liste No"
         }
     },
     //#endregion

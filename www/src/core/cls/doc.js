@@ -45,6 +45,7 @@ export class docCls
             DESCRIPTION : '',
             ADDRESS : 0,
             TRANSPORT_TYPE : '',
+            PRICE_LIST_NO : 1,
             LOCKED : 0,
             MARGIN : '',
             PAYMENT_DOC_GUID : '00000000-0000-0000-0000-000000000000',
@@ -70,9 +71,9 @@ export class docCls
         tmpDt.selectCmd =
         {
             query : "SELECT * FROM DOC_VW_01 WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND " + 
-            " ((REF = @REF) OR (@REF = '')) AND ((REF_NO = @REF_NO) OR (@REF_NO = 0)) AND ((TYPE = @TYPE) OR (@TYPE = -1)) AND ((TYPE = @TYPE) OR (@TYPE = -1)) AND" +
-            "((DOC_TYPE = @DOC_TYPE) OR (@DOC_TYPE = -1)) AND " +
-            "((PAYMENT_DOC_GUID = @PAYMENT_DOC_GUID) OR (@PAYMENT_DOC_GUID = '00000000-0000-0000-0000-000000000000')) AND ((DOC_DATE = @DOC_DATE) OR (@DOC_DATE ='19700101'))" ,
+                    "((REF = @REF) OR (@REF = '')) AND ((REF_NO = @REF_NO) OR (@REF_NO = 0)) AND ((TYPE = @TYPE) OR (@TYPE = -1)) AND ((TYPE = @TYPE) OR (@TYPE = -1)) AND" +
+                    "((DOC_TYPE = @DOC_TYPE) OR (@DOC_TYPE = -1)) AND " +
+                    "((PAYMENT_DOC_GUID = @PAYMENT_DOC_GUID) OR (@PAYMENT_DOC_GUID = '00000000-0000-0000-0000-000000000000')) AND ((DOC_DATE = @DOC_DATE) OR (@DOC_DATE ='19700101'))" ,
             param : ['GUID:string|50','REF:string|25','REF_NO:int','TYPE:int','DOC_TYPE:int','PAYMENT_DOC_GUID:string|50','DOC_DATE:date']
         }
         tmpDt.insertCmd = 
@@ -90,26 +91,27 @@ export class docCls
                     "@SHIPMENT_DATE = @PSHIPMENT_DATE, " +
                     "@INPUT = @PINPUT, " +
                     "@OUTPUT = @POUTPUT, " +
-                    "@AMOUNT  = @PAMOUNT, " +
-                    "@DISCOUNT  = @PDISCOUNT, " +
-                    "@DOC_DISCOUNT_1  = @PDOC_DISCOUNT_1, " +
-                    "@DOC_DISCOUNT_2  = @PDOC_DISCOUNT_2, " +
-                    "@DOC_DISCOUNT_3  = @PDOC_DISCOUNT_3, " +
-                    "@INTERFEL  = @PINTERFEL, " +
-                    "@VAT  = @PVAT, " +
-                    "@TOTAL  = @PTOTAL, " +
-                    "@DESCRIPTION  = @PDESCRIPTION, " +
-                    "@ADDRESS  = @PADDRESS, " +
-                    "@TRANSPORT_TYPE  = @PTRANSPORT_TYPE, " +
-                    "@LOCKED  = @PLOCKED, " +
+                    "@AMOUNT = @PAMOUNT, " +
+                    "@DISCOUNT = @PDISCOUNT, " +
+                    "@DOC_DISCOUNT_1 = @PDOC_DISCOUNT_1, " +
+                    "@DOC_DISCOUNT_2 = @PDOC_DISCOUNT_2, " +
+                    "@DOC_DISCOUNT_3 = @PDOC_DISCOUNT_3, " +
+                    "@INTERFEL = @PINTERFEL, " +
+                    "@VAT = @PVAT, " +
+                    "@TOTAL = @PTOTAL, " +
+                    "@DESCRIPTION = @PDESCRIPTION, " +
+                    "@ADDRESS = @PADDRESS, " +
+                    "@TRANSPORT_TYPE = @PTRANSPORT_TYPE, " +
+                    "@PRICE_LIST_NO = @PPRICE_LIST_NO, " +
+                    "@LOCKED = @PLOCKED, " +
                     "@CERTIFICATE = @PCERTIFICATE, " +
                     "@SIGNATURE = @PSIGNATURE, " +
                     "@SIGNATURE_SUM = @PSIGNATURE_SUM ",
             param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PDOC_TYPE:int','PREBATE:int','PREF:string|25','PREF_NO:int','PDOC_NO:string|50','PDOC_DATE:date','PSHIPMENT_DATE:date','PINPUT:string|50',
-                        'POUTPUT:string|50','PAMOUNT:float','PDISCOUNT:float','PDOC_DISCOUNT_1:float','PDOC_DISCOUNT_2:float','PDOC_DISCOUNT_3:float','PINTERFEL:float','PVAT:float','PTOTAL:float','PDESCRIPTION:string|500','PADDRESS:int','PTRANSPORT_TYPE:string|25','PLOCKED:int','PCERTIFICATE:string|250',
-                        'PSIGNATURE:string|max','PSIGNATURE_SUM:string|max'],
-            dataprm : ['GUID','CUSER','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_NO','DOC_DATE','SHIPMENT_DATE','INPUT','OUTPUT','AMOUNT','DISCOUNT','DOC_DISCOUNT_1','DOC_DISCOUNT_2','DOC_DISCOUNT_3','INTERFEL','VAT','TOTAL','DESCRIPTION','ADDRESS','TRANSPORT_TYPE',
-                        'LOCKED','CERTIFICATE','SIGNATURE','SIGNATURE_SUM']
+                    'POUTPUT:string|50','PAMOUNT:float','PDISCOUNT:float','PDOC_DISCOUNT_1:float','PDOC_DISCOUNT_2:float','PDOC_DISCOUNT_3:float','PINTERFEL:float','PVAT:float','PTOTAL:float',
+                    'PDESCRIPTION:string|500','PADDRESS:int','PTRANSPORT_TYPE:string|25','PPRICE_LIST_NO:int','PLOCKED:int','PCERTIFICATE:string|250','PSIGNATURE:string|max','PSIGNATURE_SUM:string|max'],
+            dataprm : ['GUID','CUSER','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_NO','DOC_DATE','SHIPMENT_DATE','INPUT','OUTPUT','AMOUNT','DISCOUNT','DOC_DISCOUNT_1','DOC_DISCOUNT_2',
+                      'DOC_DISCOUNT_3','INTERFEL','VAT','TOTAL','DESCRIPTION','ADDRESS','TRANSPORT_TYPE','PRICE_LIST_NO','LOCKED','CERTIFICATE','SIGNATURE','SIGNATURE_SUM']
         }
         tmpDt.updateCmd = 
         {
@@ -137,14 +139,15 @@ export class docCls
                     "@DESCRIPTION  = @PDESCRIPTION, " +
                     "@ADDRESS  = @PADDRESS, " +
                     "@TRANSPORT_TYPE  = @PTRANSPORT_TYPE, " +
+                    "@PRICE_LIST_NO = @PPRICE_LIST_NO, " +
                     "@LOCKED  = @PLOCKED, " +
                     "@SIGNATURE = @PSIGNATURE, " +
                     "@SIGNATURE_SUM = @PSIGNATURE_SUM ",
             param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PDOC_TYPE:int','PREBATE:int','PREF:string|25','PREF_NO:int','PDOC_NO:string|50','PDOC_DATE:date','PSHIPMENT_DATE:date','PINPUT:string|50',
-                        'POUTPUT:string|50','PAMOUNT:float','PDISCOUNT:float','PDOC_DISCOUNT_1:float','PDOC_DISCOUNT_2:float','PDOC_DISCOUNT_3:float','PINTERFEL:float','PVAT:float','PTOTAL:float','PDESCRIPTION:string|500','PADDRESS:int','PTRANSPORT_TYPE:string|25','PLOCKED:int',
-                        'PSIGNATURE:string|max','PSIGNATURE_SUM:string|max'],
-            dataprm : ['GUID','CUSER','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_NO','DOC_DATE','SHIPMENT_DATE','INPUT','OUTPUT','AMOUNT','DISCOUNT','DOC_DISCOUNT_1','DOC_DISCOUNT_2','DOC_DISCOUNT_3','INTERFEL','VAT','TOTAL','DESCRIPTION','ADDRESS','TRANSPORT_TYPE',
-                        'LOCKED','SIGNATURE','SIGNATURE_SUM']
+                    'POUTPUT:string|50','PAMOUNT:float','PDISCOUNT:float','PDOC_DISCOUNT_1:float','PDOC_DISCOUNT_2:float','PDOC_DISCOUNT_3:float','PINTERFEL:float','PVAT:float','PTOTAL:float',
+                    'PDESCRIPTION:string|500','PADDRESS:int','PTRANSPORT_TYPE:string|25','PPRICE_LIST_NO:int','PLOCKED:int','PSIGNATURE:string|max','PSIGNATURE_SUM:string|max'],
+            dataprm : ['GUID','CUSER','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_NO','DOC_DATE','SHIPMENT_DATE','INPUT','OUTPUT','AMOUNT','DISCOUNT','DOC_DISCOUNT_1','DOC_DISCOUNT_2','DOC_DISCOUNT_3',
+                      'INTERFEL','VAT','TOTAL','DESCRIPTION','ADDRESS','TRANSPORT_TYPE','PRICE_LIST_NO','LOCKED','SIGNATURE','SIGNATURE_SUM']
         }
         tmpDt.deleteCmd = 
         {
@@ -330,12 +333,13 @@ export class docItemsCls
         let tmpDt = new datatable('DOC_ITEMS');
         tmpDt.selectCmd = 
         {  
-            query : "SELECT *,  " +
-            "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ITEMS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_FACTOR,  " +
-            "ISNULL((SELECT TOP 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ITEMS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),'') AS SUB_SYMBOL,  " +
+            query : "SELECT *, " +
+            "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ITEMS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_FACTOR, " +
+            "ISNULL((SELECT TOP 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ITEMS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),'') AS SUB_SYMBOL, " +
             "QUANTITY / ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ITEMS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_QUANTITY, " + 
             "PRICE * ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ITEMS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_PRICE " + 
-            " FROM [dbo].[DOC_ITEMS_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND (((DOC_GUID = @DOC_GUID) OR (INVOICE_DOC_GUID = @DOC_GUID AND DOC_TYPE IN(40,42))) OR (@DOC_GUID = '00000000-0000-0000-0000-000000000000'))  AND ((REF = @REF) OR (@REF = '')) AND ((REF_NO = @REF_NO) OR (@REF_NO = 0))",
+            "FROM [dbo].[DOC_ITEMS_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND (((DOC_GUID = @DOC_GUID) OR (INVOICE_DOC_GUID = @DOC_GUID AND " + 
+            "DOC_TYPE IN(40,42))) OR (@DOC_GUID = '00000000-0000-0000-0000-000000000000'))  AND ((REF = @REF) OR (@REF = '')) AND ((REF_NO = @REF_NO) OR (@REF_NO = 0))",
             param : ['GUID:string|50','DOC_GUID:string|50','REF:string|25','REF_NO:int','SUB_FACTOR:string|50']
         }
         tmpDt.insertCmd = 

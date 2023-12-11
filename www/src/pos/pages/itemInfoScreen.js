@@ -33,6 +33,7 @@ export default class itemInfoScreen extends React.PureComponent
         this.timeout = 30
         // NUMBER İÇİN PARAMETREDEN PARA SEMBOLÜ ATANIYOR.
         Number.money = this.prmObj.filter({ID:'MoneySymbol',TYPE:0}).getValue()
+        this.pricingListNo = this.prmObj.filter({ID:'PricingListNo',TYPE:0}).getValue()
 
         document.addEventListener("keydown", (function(event) 
         {
@@ -89,13 +90,13 @@ export default class itemInfoScreen extends React.PureComponent
                 query : "SELECT TOP 1 " +  
                         "NAME, " +  
                         "UNIT_NAME, " +  
-                        "(SELECT dbo.FN_PRICE_SALE(ITEM.GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000')) AS PRICE, " +  
+                        "ROUND((SELECT dbo.FN_PRICE(ITEM.GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',@LIST_NO,0,1)),2) AS PRICE, " +  
                         "ISNULL((SELECT TOP 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_GUID = ITEM.GUID AND TYPE = 1),'') AS UNDER_UNIT_SYMBOL, " +  
                         "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_GUID = ITEM.GUID AND TYPE = 1),'') AS UNDER_UNIT_FACTOR, " +  
                         "ISNULL((SELECT TOP 1 IMAGE FROM ITEM_IMAGE WHERE ITEM = ITEM.GUID),'') AS IMAGE " +  
                         "FROM ITEMS_POS_VW_01 AS ITEM WHERE CODE = @CODE OR BARCODE = @CODE AND STATUS = 1",
-                param : ['CODE:string|25'],
-                value: [pCode],
+                param : ['CODE:string|25','LIST_NO:int'],
+                value: [pCode,this.pricingListNo],
             }
             await tmpDt.refresh();            
             resolve(tmpDt)

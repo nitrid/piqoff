@@ -20,6 +20,7 @@ export const langTr =
     dtLastMount : "Geçen Ay",
     dtYear : "Bu Yıl",
     dtLastYear : "Geçen Yıl",
+    chkRememberMe : "Beni Hatırla", 
     msgAnotherUserAlert: 
     {
         title : "Dikkat",

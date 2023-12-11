@@ -29,6 +29,7 @@ export class customersCls
             TAX_SUCRE : false,
             DEB : false,
             POINT_PASSIVE : false,
+            PRICE_LIST_NO : 0,
             STATUS :true,
             SECTOR : '00000000-0000-0000-0000-000000000000',
             SECTOR_NAME : '',
@@ -89,6 +90,7 @@ export class customersCls
                     "@EXPIRY_DAY = @PEXPIRY_DAY, " +
                     "@RISK_LIMIT = @PRISK_LIMIT, " +
                     "@POINT_PASSIVE = @PPOINT_PASSIVE, " +
+                    "@PRICE_LIST_NO = @PPRICE_LIST_NO, " +
                     "@STATUS = @PSTATUS, " +
                     "@SECTOR = @PSECTOR, " +
                     "@AREA = @PAREA, " +
@@ -96,10 +98,10 @@ export class customersCls
                     "@SUB_CUSTOMER = @PSUB_CUSTOMER ",
             param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PTITLE:string|50','PCODE:string|50','PGENUS:int','PCUSTOMER_GRP:string|25','PWEB:string|100','PNOTE:string|1500',
                     'PSIRET_ID:string|100','PSIREN_NO:string|100','PRCS:string|100','PAPE_CODE:string|100','PTAX_OFFICE:string|100','PTAX_NO:string|100','PINT_VAT_NO:string|100','PINSURANCE_NO:string|100',
-                    'PTAX_TYPE:int','PCAPITAL:float','PREBATE:bit','PTAX_SUCRE:bit','PDEB:bit','PEXPIRY_DAY:float','PRISK_LIMIT:float','PPOINT_PASSIVE:bit','PSTATUS:bit','PSECTOR:string|50','PAREA:string|50',
-                    'PMAIN_CUSTOMER:string|50','PSUB_CUSTOMER:string|50'],
+                    'PTAX_TYPE:int','PCAPITAL:float','PREBATE:bit','PTAX_SUCRE:bit','PDEB:bit','PEXPIRY_DAY:float','PRISK_LIMIT:float','PPOINT_PASSIVE:bit','PPRICE_LIST_NO:int','PSTATUS:bit','PSECTOR:string|50',
+                    'PAREA:string|50','PMAIN_CUSTOMER:string|50','PSUB_CUSTOMER:string|50'],
             dataprm :['GUID','CUSER','TYPE','TITLE','CODE','GENUS','CUSTOMER_GRP','WEB','NOTE','SIRET_ID','SIREN_NO','RCS','APE_CODE','TAX_OFFICE','TAX_NO','INT_VAT_NO','INSURANCE_NO','TAX_TYPE','CAPITAL',
-                    'REBATE','TAX_SUCRE','DEB','EXPIRY_DAY','RISK_LIMIT','POINT_PASSIVE','STATUS','SECTOR','AREA','MAIN_CUSTOMER','SUB_CUSTOMER']
+                    'REBATE','TAX_SUCRE','DEB','EXPIRY_DAY','RISK_LIMIT','POINT_PASSIVE','PRICE_LIST_NO','STATUS','SECTOR','AREA','MAIN_CUSTOMER','SUB_CUSTOMER']
         }
         tmpDt.updateCmd = 
         {
@@ -129,6 +131,7 @@ export class customersCls
                     "@EXPIRY_DAY = @PEXPIRY_DAY, " +
                     "@RISK_LIMIT = @PRISK_LIMIT, " +
                     "@POINT_PASSIVE = @PPOINT_PASSIVE, " +
+                    "@PRICE_LIST_NO = @PPRICE_LIST_NO, " +
                     "@STATUS = @PSTATUS, " +
                     "@SECTOR = @PSECTOR, " +
                     "@AREA = @PAREA, " +
@@ -136,10 +139,10 @@ export class customersCls
                     "@SUB_CUSTOMER = @PSUB_CUSTOMER ",
             param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PTITLE:string|50','PCODE:string|50','PGENUS:int','PCUSTOMER_GRP:string|25','PWEB:string|100','PNOTE:string|1500',
                     'PSIRET_ID:string|100','PSIREN_NO:string|100','PRCS:string|100','PAPE_CODE:string|100','PTAX_OFFICE:string|100','PTAX_NO:string|100','PINT_VAT_NO:string|100','PINSURANCE_NO:string|100',
-                    'PTAX_TYPE:int','PCAPITAL:float','PREBATE:bit','PTAX_SUCRE:bit','PDEB:bit','PEXPIRY_DAY:float','PRISK_LIMIT:float','PPOINT_PASSIVE:bit','PSTATUS:bit','PSECTOR:string|50','PAREA:string|50',
-                    'PMAIN_CUSTOMER:string|50','PSUB_CUSTOMER:string|50'],
+                    'PTAX_TYPE:int','PCAPITAL:float','PREBATE:bit','PTAX_SUCRE:bit','PDEB:bit','PEXPIRY_DAY:float','PRISK_LIMIT:float','PPOINT_PASSIVE:bit','PPRICE_LIST_NO:int','PSTATUS:bit',
+                    'PSECTOR:string|50','PAREA:string|50','PMAIN_CUSTOMER:string|50','PSUB_CUSTOMER:string|50'],
             dataprm :['GUID','CUSER','TYPE','TITLE','CODE','GENUS','CUSTOMER_GRP','WEB','NOTE','SIRET_ID','SIREN_NO','RCS','APE_CODE','TAX_OFFICE','TAX_NO','INT_VAT_NO','INSURANCE_NO','TAX_TYPE','CAPITAL',
-                    'REBATE','TAX_SUCRE','DEB','EXPIRY_DAY','RISK_LIMIT','POINT_PASSIVE','STATUS','SECTOR','AREA','MAIN_CUSTOMER','SUB_CUSTOMER']
+                    'REBATE','TAX_SUCRE','DEB','EXPIRY_DAY','RISK_LIMIT','POINT_PASSIVE','PRICE_LIST_NO','STATUS','SECTOR','AREA','MAIN_CUSTOMER','SUB_CUSTOMER']
         }
         tmpDt.deleteCmd = 
         {

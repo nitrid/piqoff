@@ -5,7 +5,6 @@ import fs from 'fs'
 import rsa from 'jsrsasign'
 import { pem } from '../pem.js'
 import nodemailer from  'nodemailer'
-
 class mailer
 {
     constructor()
