@@ -18073,11 +18073,28 @@ export const langTr =
         txtTotalQuantity : "Toplam Miktar",
         txtUnitPrice: "Birim Fiyatı",
         btnView : "Görüntüle",
+        LINE_NO: "Satir no",
         btnMailsend : "Mail Gönder",
+        dtExpDate : "Vade Tarihi", 
         placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.",
         validDesign : "Lütfen Dizayn seçiniz.",
+        txtDocNo : "Belgo No",
         validMail : "Lütfen Boş Geçmeyin.",
+        pg_service : 
+        {
+            title : "Hizmetler",
+            clmCode : "Kod",
+            clmName : "Adı"
+        },
         cmbPricingList : "Fiyat Listesi",
+        serviceAdd : "Hizmet Ekle",
+        msgCustomerNotFound:
+        {
+            title: "Dikkat",
+            btn01: "Devam Et",
+            btn02: "Vazgeç",
+            msg: "Seçilen Ürün Müşteriye Tanımlı Değil ! Devam Etmek İstiyormusunuz"
+        },
         isMsgSave :
         {  
             title: "Dikkat",
