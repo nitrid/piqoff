@@ -17,7 +17,7 @@ export const langFr =
     btnNewDoc: "Yeni Evrak",   // BAK
     btnDocDelete: "Evrak Sil",   // BAK
     btnLineDisc: "Satır İndirim",   // BAK
-    chkRememberMe : "Beni Hatırla", // BAK
+    chkRememberMe : "Souviens-toi de moi", // BAK
     msgAnotherUserAlert: 
     {
         title : "Attention",

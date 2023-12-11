@@ -20,7 +20,7 @@ export const langFr =
     dtLastMount : "Mois Dernier",
     dtYear : "Année Courante",
     dtLastYear : "Année Dernière",
-    chkRememberMe : "Beni Hatırla", // BAK
+    chkRememberMe : "Souviens-toi de moi", // BAK
     msgAnotherUserAlert: 
     {
         title : "Attention",
