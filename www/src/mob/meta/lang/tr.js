@@ -17,6 +17,7 @@ export const langTr =
     btnNewDoc: "Yeni Evrak",
     btnDocDelete: "Evrak Sil",
     btnLineDisc: "Satır İndirim",
+    chkRememberMe : "Beni Hatırla", // BAK
     msgAnotherUserAlert: 
     {
         title : "Dikkat",

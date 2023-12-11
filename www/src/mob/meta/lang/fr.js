@@ -12,6 +12,12 @@ export const langFr =
     msgWarning : "Attention",
     msgSqlService1 : "Impossible de se connecter au serveur Sql",
     comingSoon : "Bientôt actif... ", 
+    btnBarcodeEntry: "Barkod Giriş",   // BAK
+    btnProcessLines: "İşlem Satırları",   // BAK
+    btnNewDoc: "Yeni Evrak",   // BAK
+    btnDocDelete: "Evrak Sil",   // BAK
+    btnLineDisc: "Satır İndirim",   // BAK
+    chkRememberMe : "Beni Hatırla", // BAK
     msgAnotherUserAlert: 
     {
         title : "Attention",
