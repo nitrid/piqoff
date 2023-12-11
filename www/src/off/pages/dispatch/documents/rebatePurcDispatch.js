@@ -145,12 +145,12 @@ export default class rebateDispatch extends DocBase
                             this.combineControl = true
                             this.combineNew = false
 
-                            this.grdSlsDispatch.devGrid.beginUpdate()
+                            this.grdRebtDispatch.devGrid.beginUpdate()
                             for (let i = 0; i < data.length; i++) 
                             {
                                 await this.addItem(data[i],e.rowIndex)
                             }
-                            this.grdSlsDispatch.devGrid.endUpdate()
+                            this.grdRebtDispatch.devGrid.endUpdate()
                         }
                         await this.pg_txtItemsCode.setVal(e.value)
                     }
@@ -202,12 +202,12 @@ export default class rebateDispatch extends DocBase
                                     this.combineControl = true
                                     this.combineNew = false
 
-                                    this.grdSlsDispatch.devGrid.beginUpdate()
+                                    this.grdRebtDispatch.devGrid.beginUpdate()
                                     for (let i = 0; i < data.length; i++) 
                                     {
                                         await this.addItem(data[i],e.rowIndex)
                                     }
-                                    this.grdSlsDispatch.devGrid.endUpdate()
+                                    this.grdRebtDispatch.devGrid.endUpdate()
                                 }
                                 this.pg_txtItemsCode.show()
                             }
@@ -1126,12 +1126,12 @@ export default class rebateDispatch extends DocBase
                                                             this.combineControl = true
                                                             this.combineNew = false
         
-                                                            this.grdSlsDispatch.devGrid.beginUpdate()
+                                                            this.grdRebtDispatch.devGrid.beginUpdate()
                                                             for (let i = 0; i < data.length; i++) 
                                                             {
                                                                 await this.addItem(data[i],null)
                                                             }
-                                                            this.grdSlsDispatch.devGrid.endUpdate()
+                                                            this.grdRebtDispatch.devGrid.endUpdate()
                                                         }
                                                     }
                                                     await this.pg_txtBarcode.setVal(this.txtBarcode.value)
@@ -1177,12 +1177,12 @@ export default class rebateDispatch extends DocBase
                                                 this.combineControl = true
                                                 this.combineNew = false
 
-                                                this.grdSlsDispatch.devGrid.beginUpdate()
+                                                this.grdRebtDispatch.devGrid.beginUpdate()
                                                 for (let i = 0; i < data.length; i++) 
                                                 {
                                                     await this.addItem(data[i],null)
                                                 }
-                                                this.grdSlsDispatch.devGrid.endUpdate()
+                                                this.grdRebtDispatch.devGrid.endUpdate()
                                             }
                                             await this.pg_txtItemsCode.setVal(this.txtBarcode.value)
                                         }
@@ -1221,12 +1221,12 @@ export default class rebateDispatch extends DocBase
                                                         this.combineControl = true
                                                         this.combineNew = false
 
-                                                        this.grdSlsDispatch.devGrid.beginUpdate()
+                                                        this.grdRebtDispatch.devGrid.beginUpdate()
                                                         for (let i = 0; i < data.length; i++) 
                                                         {
                                                             await this.addItem(data[i],null)
                                                         }
-                                                        this.grdSlsDispatch.devGrid.endUpdate()
+                                                        this.grdRebtDispatch.devGrid.endUpdate()
                                                     }
                                                     this.pg_txtItemsCode.show()
                                                     return
@@ -1240,12 +1240,12 @@ export default class rebateDispatch extends DocBase
                                                 this.combineControl = true
                                                 this.combineNew = false
 
-                                                this.grdSlsDispatch.devGrid.beginUpdate()
+                                                this.grdRebtDispatch.devGrid.beginUpdate()
                                                 for (let i = 0; i < data.length; i++) 
                                                 {
                                                     await this.addItem(data[i],null)
                                                 }
-                                                this.grdSlsDispatch.devGrid.endUpdate()
+                                                this.grdRebtDispatch.devGrid.endUpdate()
                                             }
                                             this.pg_txtItemsCode.show()
                                         }
