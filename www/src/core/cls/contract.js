@@ -1,5 +1,6 @@
 import { core,dataset,datatable } from "../core.js";
 import moment from 'moment';
+import { itemPriceCls } from "./items";
 
 export class contractCls
 {
@@ -16,33 +17,14 @@ export class contractCls
             LDATE : moment(new Date()).format("YYYY-MM-DD"),
             LUSER : this.core.auth.data.CODE,
             LUSER_NAME : '',
+            TYPE : 0,
             DOC_DATE : moment(new Date()).format("YYYY-MM-DD"),
             CODE : '',
             NAME : '',
-            TYPE : 0,
-            TYPE_NAME : '',
-            START_DATE : moment(new Date(0)).format("YYYY-MM-DD"),
-            FINISH_DATE : moment(new Date(0)).format("YYYY-MM-DD"),
-            CUSTOMER : '00000000-0000-0000-0000-000000000000',
-            CUSTOMER_CODE : '',
-            CUSTOMER_NAME : '',
-            DEPOT : '00000000-0000-0000-0000-000000000000',
-            DEPOT_CODE : '',
-            DEPOT_NAME : '',
-            ITEM : '00000000-0000-0000-0000-000000000000',
-            ITEM_CODE : '',
-            ITEM_NAME : '',
-            MULTICODE : '',
-            QUANTITY : 0,
-            PRICE : 0,
-            UNIT :'00000000-0000-0000-0000-000000000000',
-            UNIT_NAME: '',
-            COST_PRICE : 0,
-            PRICE_VAT_EXT : 0,
-            VAT_RATE : 0, 
-            MAIN_GRP_NAME :'',
-            UNIT_FACTOR : 1
+            VAT_TYPE : 0
         }
+        
+        this.itemPrice = new itemPriceCls();
 
         this._initDs();
     }
@@ -60,42 +42,26 @@ export class contractCls
             query : "EXEC [dbo].[PRD_CONTRACT_INSERT] " + 
                     "@GUID = @PGUID, " +
                     "@CUSER = @PCUSER, " + 
+                    "@TYPE = @PTYPE, " + 
                     "@DOC_DATE = @PDOC_DATE, " + 
                     "@CODE = @PCODE, " + 
                     "@NAME = @PNAME, " + 
-                    "@TYPE = @PTYPE, " + 
-                    "@START_DATE = @PSTART_DATE, " + 
-                    "@FINISH_DATE = @PFINISH_DATE, " + 
-                    "@CUSTOMER = @PCUSTOMER, " + 
-                    "@DEPOT = @PDEPOT, " +
-                    "@ITEM = @PITEM, " +
-                    "@QUANTITY = @PQUANTITY, " +
-                    "@PRICE = @PPRICE, " +
-                    "@UNIT = @PUNIT ",
-            param : ['PGUID:string|50','PCUSER:string|25','PDOC_DATE:date','PCODE:string|25','PNAME:string|250','PTYPE:int','PSTART_DATE:date','PFINISH_DATE:date',
-                     'PCUSTOMER:string|50','PDEPOT:string|50','PITEM:string|50','PQUANTITY:float','PPRICE:float','PUNIT:string|50'],
-            dataprm : ['GUID','CUSER','DOC_DATE','CODE','NAME','TYPE','START_DATE','FINISH_DATE','CUSTOMER','DEPOT','ITEM','QUANTITY','PRICE','UNIT']
+                    "@VAT_TYPE = @PVAT_TYPE ",
+            param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PDOC_DATE:date','PCODE:string|25','PNAME:string|250','PVAT_TYPE:int'],
+            dataprm : ['GUID','CUSER','TYPE','DOC_DATE','CODE','NAME','VAT_TYPE']
         } 
         tmpDt.updateCmd = 
         {
             query : "EXEC [dbo].[PRD_CONTRACT_UPDATE] " + 
                     "@GUID = @PGUID, " +
                     "@CUSER = @PCUSER, " +
+                    "@TYPE = @PTYPE, " + 
                     "@DOC_DATE = @PDOC_DATE, " +
                     "@CODE = @PCODE, " + 
-                    "@NAME = @PNAME, " +  
-                    "@TYPE = @PTYPE, " + 
-                    "@START_DATE = @PSTART_DATE, " + 
-                    "@FINISH_DATE = @PFINISH_DATE, " + 
-                    "@CUSTOMER = @PCUSTOMER, " + 
-                    "@DEPOT = @PDEPOT, " +
-                    "@ITEM = @PITEM, " +
-                    "@QUANTITY = @PQUANTITY, " +
-                    "@PRICE = @PPRICE, " +
-                    "@UNIT = @PUNIT ",
-            param : ['PGUID:string|50','PCUSER:string|25','PDOC_DATE:date','PCODE:string|25','PNAME:string|250','PTYPE:int','PSTART_DATE:date','PFINISH_DATE:date',
-                     'PCUSTOMER:string|50','PDEPOT:string|50','PITEM:string|50','PQUANTITY:float','PPRICE:float','PUNIT:string|50'],
-            dataprm : ['GUID','CUSER','DOC_DATE','CODE','NAME','TYPE','START_DATE','FINISH_DATE','CUSTOMER','DEPOT','ITEM','QUANTITY','PRICE','UNIT']
+                    "@NAME = @PNAME, " +
+                    "@VAT_TYPE = @PVAT_TYPE ",
+            param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PDOC_DATE:date','PCODE:string|25','PNAME:string|250','PVAT_TYPE:int'],
+            dataprm : ['GUID','CUSER','TYPE','DOC_DATE','CODE','NAME','VAT_TYPE']
         } 
         tmpDt.deleteCmd = 
         {
@@ -108,6 +74,7 @@ export class contractCls
         }
 
         this.ds.add(tmpDt);
+        this.ds.add(this.itemPrice.dt())
     }
     //#endregion
     dt()
@@ -167,6 +134,12 @@ export class contractCls
             this.ds.get('CONTRACT').selectCmd.value = Object.values(tmpPrm)
             
             await this.ds.get('CONTRACT').refresh();
+
+            if(this.ds.get('CONTRACT').length > 0)
+            {
+                await this.itemPrice.load({CONTRACT_GUID:this.ds.get('CONTRACT')[0].GUID})
+            }
+
             resolve(this.ds.get('CONTRACT'));    
         });
     }
