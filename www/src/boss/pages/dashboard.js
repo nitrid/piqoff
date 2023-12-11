@@ -365,7 +365,7 @@ export default class Dashboard extends React.PureComponent
                             groupBy : this.groupList,
                             select : 
                             {
-                                query : " SELECT *,(SELECT ITEM_NAME FROM POS_SALE_VW_01 WHERE GUID = POS_EXTRA_VW_01.LINE_GUID),(SELECT PRICE FROM POS_SALE_VW_01 WHERE GUID = POS_EXTRA_VW_01.LINE_GUID) AS LAST_PRICE AS NAME "  + 
+                                query : " SELECT *,(SELECT ITEM_NAME FROM POS_SALE_VW_01 WHERE GUID = POS_EXTRA_VW_01.LINE_GUID)  AS NAME,(SELECT PRICE FROM POS_SALE_VW_01 WHERE GUID = POS_EXTRA_VW_01.LINE_GUID) AS LAST_PRICE "  + 
                                 "FROM POS_EXTRA_VW_01 WHERE TAG = 'PRICE DESC' AND CONVERT(nvarchar,CDATE,110) >= @FISRT_DATE AND CONVERT(nvarchar,CDATE,110) <= @LAST_DATE",
                                 param : ['FISRT_DATE:date','LAST_DATE:date'],
                                 value : [this.dtDate.startDate,this.dtDate.endDate]
