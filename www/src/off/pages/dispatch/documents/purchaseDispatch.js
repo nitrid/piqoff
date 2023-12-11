@@ -75,7 +75,7 @@ export default class purchaseDispatch extends DocBase
                     select:
                     {
                         query : "SELECT GUID,CODE,NAME,VAT,COST_PRICE,UNIT,STATUS, ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_01.GUID AND ITEM_MULTICODE.CUSTOMER = '"+this.docObj.dt()[0].OUTPUT+"' AND DELETED = 0 ORDER BY LDATE DESC),'') AS MULTICODE, "+
-                        "ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE DELETED = 0 AND ITEM_BARCODE.ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
+                        "ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE DELETED = 0 AND ITEM_BARCODE.ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE FROM ITEMS_VW_01 WHERE STATUS = 1 AND (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL))",
                         param : ['VAL:string|50']
                     },
                     sql:this.core.sql
@@ -91,7 +91,7 @@ export default class purchaseDispatch extends DocBase
                 select:
                 {   query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,COST_PRICE,VAT,BARCODE,ITEMS_VW_01.UNIT,ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_01.GUID AND ITEM_MULTICODE.CUSTOMER = '"+this.docObj.dt()[0].OUTPUT+"' AND DELETED = 0 ORDER BY LDATE DESC),'') AS MULTICODE,  " + 
                     "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_MULTICODE_VW_01.ITEM_GUID = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS CUSTOMER_NAME " + 
-                    " FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE  ITEM_BARCODE_VW_01.BARCODE LIKE  '%' +@BARCODE",
+                    " FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE STATUS = 1 AND (ITEM_BARCODE_VW_01.BARCODE LIKE  '%' +@BARCODE)",
                     param : ['BARCODE:string|50'],
                 },
                 sql:this.core.sql
@@ -489,7 +489,7 @@ export default class purchaseDispatch extends DocBase
             {
                 let tmpCheckQuery = 
                 {
-                    query :"SELECT MULTICODE,(SELECT [dbo].[FN_CUSTOMER_PRICE](ITEM_GUID,CUSTOMER_GUID,@QUANTITY,GETDATE())) AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID",
+                    query :"SELECT MULTICODE,(SELECT dbo.FN_PRICE(ITEM_GUID,@QUANTITY,GETDATE(),CUSTOMER_GUID,'00000000-0000-0000-0000-000000000000',0,1,0)) AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID",
                     param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
                     value : [pData.CODE,this.docObj.dt()[0].OUTPUT,pQuantity]
                 }
@@ -544,7 +544,7 @@ export default class purchaseDispatch extends DocBase
     
             let tmpQuery = 
             {
-                query :"SELECT (SELECT [dbo].[FN_CUSTOMER_PRICE](ITEM_GUID,CUSTOMER_GUID,@QUANTITY,GETDATE())) AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID ORDER BY LDATE DESC",
+                query :"SELECT (SELECT dbo.FN_PRICE(ITEM_GUID,@QUANTITY,GETDATE(),CUSTOMER_GUID,'00000000-0000-0000-0000-000000000000',0,1,0)) AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID ORDER BY LDATE DESC",
                 param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
                 value : [pData.CODE,this.docObj.dt()[0].OUTPUT,pQuantity]
             }
@@ -1412,7 +1412,7 @@ export default class purchaseDispatch extends DocBase
                                     >
                                         <Validator validationGroup={"frmPurcDispatch"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validCustomerCode")} />
-                                        </Validator>  
+                                        </Validator>
                                     </NdTextBox>
                                     {/*CARI SECIMI POPUP */}
                                     <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={"#root"}
@@ -1568,7 +1568,7 @@ export default class purchaseDispatch extends DocBase
                                         }
                                         let tmpQuery = 
                                         {  
-                                            query :"SELECT GUID,CODE,NAME,COST_PRICE,UNIT_GUID AS UNIT,VAT,MULTICODE,CUSTOMER_NAME,BARCODE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE BARCODE = @CODE OR CODE = @CODE OR (MULTICODE = @CODE AND CUSTOMER_GUID = @CUSTOMER)",
+                                            query :"SELECT GUID,CODE,NAME,COST_PRICE,UNIT_GUID AS UNIT,VAT,MULTICODE,CUSTOMER_NAME,BARCODE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE STATUS = 1 AND (BARCODE = @CODE OR CODE = @CODE OR (MULTICODE = @CODE AND CUSTOMER_GUID = @CUSTOMER))",
                                             param : ['CODE:string|50','CUSTOMER:string|50'],
                                             value : [this.txtBarcode.value,this.docObj.dt()[0].OUTPUT]
                                         }
@@ -1596,7 +1596,6 @@ export default class purchaseDispatch extends DocBase
                                                 this.grdPurcDispatch.devGrid.endUpdate()
                                             }
                                             this.pg_txtItemsCode.setVal(this.txtBarcode.value)
-                                            
                                         }
                                         this.txtBarcode.value = ''
                                     }).bind(this)}
@@ -1677,7 +1676,6 @@ export default class purchaseDispatch extends DocBase
                                      validationGroup={"frmPurcDispatch"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
-                                        console.log(2)
                                         if(e.validationGroup.validate().status == "valid")
                                         {
                                             await this.popMultiItem.show()
@@ -1910,9 +1908,8 @@ export default class purchaseDispatch extends DocBase
                                 <Item>
                                     <Label text={this.t("txtAmount")} alignment="right" />
                                     <NdTextBox id="txtAmount" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"AMOUNT"}}
-                                    maxLength={32}
-                                
-                                    ></NdTextBox>
+                                    maxLength={32}>
+                                    </NdTextBox>
                                 </Item>
                                 <Item>
                                     <Label text={this.t("txtDiscount")} alignment="right" />
@@ -1945,7 +1942,6 @@ export default class purchaseDispatch extends DocBase
                                                         this.txtDiscountPercent3.value  = 0
                                                         this.txtDiscountPrice3.value = 0
                                                     }
-                                                    
                                                 }
                                             },
                                         ]
@@ -1957,8 +1953,8 @@ export default class purchaseDispatch extends DocBase
                                 <Item>
                                     <Label text={this.t("txtSubTotal")} alignment="right" />
                                     <NdTextBox id="txtSubTotal" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"SUBTOTAL"}}
-                                    maxLength={32}
-                                    ></NdTextBox>
+                                    maxLength={32}>
+                                    </NdTextBox>
                                 </Item>
                                 <Item>
                                     <Label text={this.t("txtDocDiscount")} alignment="right" />
@@ -2002,8 +1998,8 @@ export default class purchaseDispatch extends DocBase
                                 <Item>
                                     <Label text={this.t("txtTotalHt")} alignment="right" />
                                     <NdTextBox id="txtTotalHt" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"TOTALHT"}}
-                                    maxLength={32}
-                                    ></NdTextBox>
+                                    maxLength={32}>
+                                    </NdTextBox>
                                 </Item>
                                 <Item>
                                     <Label text={this.t("txtVat")} alignment="right" />
@@ -2027,7 +2023,6 @@ export default class purchaseDispatch extends DocBase
                                                         this.vatRate.push(tmpData)
                                                     }
                                                     await this.grdVatRate.dataRefresh({source:this.vatRate})
-                                                    
                                                 }
                                             },
                                         ]
@@ -2040,8 +2035,8 @@ export default class purchaseDispatch extends DocBase
                                 <Item>
                                     <Label text={this.t("txtTotal")} alignment="right" />
                                     <NdTextBox id="txtTotal" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"TOTAL"}}
-                                    maxLength={32}
-                                    ></NdTextBox>
+                                    maxLength={32}>
+                                    </NdTextBox>
                                 </Item>
                             </Form>
                         </div>
@@ -2135,7 +2130,6 @@ export default class purchaseDispatch extends DocBase
                                             onClick={async (e)=>
                                             {       
                                                 if(e.validationGroup.validate().status == "valid")
-                                                
                                                 {
                                                     let tmpQuery = 
                                                     {
@@ -2143,16 +2137,11 @@ export default class purchaseDispatch extends DocBase
                                                         param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
                                                         value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
                                                     }
-                                                    console.log(tmpQuery)
-                                                    console.log(1)
                                                     App.instance.setState({isExecute:true})
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
                                                     App.instance.setState({isExecute:false})
                                                     this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
                                                     {
-                                                        console.log(tmpData.result.recordset[0].PATH)
-                                                        console.log(pResult.split('|')[0])
-                                                        console.log(tmpData.result.recordset)
                                                         if(pResult.split('|')[0] != 'ERR')
                                                         {
                                                             var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
@@ -2225,8 +2214,7 @@ export default class purchaseDispatch extends DocBase
                                 <Item>
                                 <Label text={this.t("popMailSend.txtSendMail")} alignment="right" />
                                     <NdTextBox id="txtSendMail" parent={this} simple={true}
-                                    maxLength={32}
-                                    >
+                                    maxLength={32}>
                                         <Validator validationGroup={"frmMailsend" + this.tabIndex}>
                                             <RequiredRule message={this.t("validMail")} />
                                         </Validator> 
@@ -2283,7 +2271,6 @@ export default class purchaseDispatch extends DocBase
                                                                 this.txtMailSubject.value = '',
                                                                 this.txtSendMail.value = ''
                                                                 this.popMailSend.hide();  
-
                                                             }
                                                             else
                                                             {
@@ -2294,7 +2281,6 @@ export default class purchaseDispatch extends DocBase
                                                         });
                                                     });
                                                 }
-                                                    
                                             }}/>
                                         </div>
                                         <div className='col-6'>

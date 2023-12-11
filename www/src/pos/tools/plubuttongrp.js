@@ -288,7 +288,7 @@ export default class NbPluButtonGrp extends NbBase
                             </div>                                            
                         </div>
                         <div style={{position:"absolute",bottom:"0",right:"5px",fontSize:"12px",color:"black",fontWeight:"bold"}}>
-                            {this.state.btnPluImageGrp[i].ORGINS_CODE + " " + this.state.btnPluImageGrp[i].PRICE + "€"}
+                            {this.state.btnPluImageGrp[i].ORGINS_CODE + " " + Number(this.state.btnPluImageGrp[i].PRICE).round(2) + "€"}
                         </div>   
                     </NbButton>
                 </div>

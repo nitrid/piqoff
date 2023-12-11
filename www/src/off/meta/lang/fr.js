@@ -174,6 +174,7 @@ export const langFr =
         stk_01_012 :"Identification du produit lié", 
         stk_01_013 :"Identification de l'image du produit", 
         stk_01_014 : "Identification du type de produit",
+        stk_01_015 : "Définition de la Liste des Prix", //BAK
         stk_02_001: "Document inventaire",
         stk_02_002: "Transfert interne dépôt/magasin",
         stk_02_003: "Sortie perte",
@@ -520,6 +521,7 @@ export const langFr =
         popPrice:
         {
             title: "Ajouter Prix",
+            cmbPopPriListNo: "Numéro de Liste", //BAK
             dtPopPriStartDate: "Date Début",
             dtPopPriEndDate: "Date Fin", 
             cmbPopPriDepot: "Depot",
@@ -556,7 +558,7 @@ export const langFr =
         },
         grdPrice: 
         {
-            clmType: "Type",
+            clmListNo: "No. de Liste", //BAK
             clmDepot: "Réserve",
             clmCustomerName: "Fournisseur",
             clmStartDate: "Date Début",
@@ -1283,6 +1285,58 @@ export const langFr =
             btn02: "D'accord",
             msg : "La caisse que vous avez saisie est enregistrée dans le système!"
         },
+    },
+    stk_01_015: // "Fiyat Listesi Tanımları" //BAK
+    {
+        txtNo: "Numéro",
+        txtName: "Nom",
+        cmbVatType : 
+        {
+            title : "Type de Taxe",
+            vatInc : "TTC",
+            vatExt : "HT"
+        },
+        validCode: "Vous ne pouvez pas laisser le code vide !",
+        pg_txtNo:
+        {
+            title: "Sélection de la Carte de Liste de Prix",
+            clmNo: "NUMÉRO",
+            clmName: "NOM"
+        },
+        msgSave:
+        {
+            title: "Attention",
+            btn01: "OK",
+            btn02: "Abandonner",
+            msg: "Êtes-vous sûr(e) de vouloir enregistrer? "
+        },
+        msgSaveResult:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msgSuccess: "Enregistrement réussi !",
+            msgFailed: "Echec de Votre Enregistrement !"
+        },
+        msgSaveValid:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Veuillez remplir les champs obligatoires !"
+        },
+        msgDelete:
+        {
+            title: "Attention",
+            btn01: "OK",
+            btn02: "Abandonner",
+            msg: "Voulez-vous vraiment supprimer l'enregistrement ?"
+        },
+        msgCode : 
+        {
+            title: "Attention",
+            btn01: "Aller à la carte", //BAK
+            btn02: "OK",
+            msg : "Le numéro de liste que vous avez saisi est déjà enregistré dans le système !"
+        }
     },
     stk_02_001 : // Inventaire"
     {
@@ -3256,6 +3310,13 @@ export const langFr =
             clmCode : "Code",  
             clmName : "Nom", 
         },
+        txtPriceListNo: "Numéro Liste Prix", //BAK
+        pg_priceListNo: //BAK
+        {
+            title: "Sélection de la Liste de Prix",
+            clmNo: "Numéro",
+            clmName: "Nom"
+        },
         popNote : 
         {
             title : "Ajouter une note", 
@@ -4886,7 +4947,7 @@ export const langFr =
         txtTotalHt : "Total HT",
         txtDocNo : "Numéro de document", 
         extraCost : "Supplément",
-        cmbPriceContract : "Accord de prix",
+        cmbPricingList : "Liste de prix",
         txtTransport : "Type de transport",
         tabTitleDetail : "Informations détaillées",
         validMail : "Veuillez ne pas laisser ce champ vide.",
@@ -11821,7 +11882,7 @@ export const langFr =
         txtTotalHt : "Total HT",
         txtDocNo : "Numéro de document", 
         extraCost : "Supplément", 
-        cmbPriceContract : "Accord de prix",
+        cmbPricingList : "Liste de prix",
         btnView : "Afficher",
         btnMailsend : "Envoyer un courriel",
         validMail : "Veuillez ne pas laisser ce champ vide.",
@@ -14282,7 +14343,7 @@ export const langFr =
         validMail : "Veuillez ne pas laisser le champs vide.",  
         txtTotalHt : "Total HT",
         txtDocNo : "Numéro de document", 
-        cmbPriceContract : "Accord de prix",
+        cmbPricingList : "Liste de prix",
         LINE_NO: "Numéro de ligne",
         pg_Docs : 
         {
@@ -14683,7 +14744,7 @@ export const langFr =
         validMail : "Veuillez ne pas laisser le champs vide.",  
         txtTotalHt : "Total HT",
         txtDocNo : "Numéro de document", 
-        cmbPriceContract : "Accord de prix",
+        cmbPricingList : "Liste de prix",
         btnView : "Afficher",
         btnMailsend : "Envoyer un courriel",
         validMail : "Veuillez ne pas laisser ce champ vide.",
@@ -15343,6 +15404,12 @@ export const langFr =
         btnMailsend : "Envoyer E-Mail",
         validDesign : "Veuillez séléctionner le design.",  
         validDocDate : "Vous devez choisir une date",
+        cmbVatType : 
+        {
+            title : "Type de Taxe",
+            vatInc : "TTC",
+            vatExt : "HT"
+        },
         pg_Docs : 
         {
             title : "Sélection Documents",
@@ -15535,6 +15602,12 @@ export const langFr =
         validItemsCode : "Sélectionner Produit",
         validDesign : "Veuillez sélectionner le design.",  
         btnMailsend : "Envoyer E-Mail",
+        cmbVatType : 
+        {
+            title : "Type de Taxe",
+            vatInc : "TTC",
+            vatExt : "HT"
+        },
         pg_Docs :      
         {     
             title : "Sélection Documents",     
@@ -18083,7 +18156,8 @@ export const langFr =
         btnMailsend : "Envoyer E-Mail", 
         placeMailHtmlEditor : "Veuillez saisir votre texte .", 
         validDesign : "Veuillez sélectionner le design.",  
-        validMail : "Veuillez ne pas laisser le champs vide.",  
+        validMail : "Veuillez ne pas laisser le champs vide.",
+        cmbPricingList : "Liste de prix",
         isMsgSave :
         {
             title: "Attention",

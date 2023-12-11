@@ -90,10 +90,9 @@ export default class promotionCard extends React.PureComponent
             this.promo.app.addEmpty();
         }
 
-        console.log(this.promo.cond)
         this.condDt.import(this.promo.cond.dt().groupBy('WITHAL').toArray())
         this.appDt.import(this.promo.app.dt().groupBy('WITHAL').toArray())
-        console.log(this.condDt)
+
         this.setState({discPrice : 0})
         
         await this.core.util.waitUntil(0);
@@ -161,7 +160,7 @@ export default class promotionCard extends React.PureComponent
             
             let tmpQuery = 
             {
-                query : "SELECT dbo.FN_PRICE_SALE(@GUID,1,GETDATE(),@CUSTOMER,'00000000-0000-0000-0000-000000000000') AS PRICE",
+                query : "SELECT (SELECT dbo.FN_PRICE(GUID,1,GETDATE(),@CUSTOMER,'00000000-0000-0000-0000-000000000000',1,0,1)) AS PRICE FROM ITEMS WHERE GUID = @GUID",
                 param : ['GUID:string|50','CUSTOMER:string|50'],
                 value : [pGuid,this.promo.dt()[0].CUSTOMER_GUID]           
             }
@@ -233,7 +232,7 @@ export default class promotionCard extends React.PureComponent
 
         let tmpData = await this.core.sql.execute(tmpQuery) 
         let tmpRows = []
-        console.log(tmpData)
+        
         if(tmpData.result.recordset.length > 0)
         {
             tmpRows = tmpData.result.recordset
@@ -324,10 +323,10 @@ export default class promotionCard extends React.PureComponent
                                             {
                                                 select:
                                                 {
-                                                    query : "SELECT MAX(ITEM_GUID) AS GUID,MAX(BARCODE) AS BARCODE,ITEM_CODE AS CODE,ITEM_NAME AS NAME,MAIN_GRP_NAME AS MAIN_GRP_NAME,(SELECT COST_PRICE FROM ITEMS WHERE ITEMS.GUID = ITEM_BARCODE_VW_01.ITEM_GUID) AS COST_PRICE, " + 
-                                                            "ISNULL((SELECT dbo.FN_PRICE_SALE(ITEM_GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000')),0) AS PRICE " + 
+                                                    query : "SELECT MAX(ITEM_GUID) AS GUID,MAX(BARCODE) AS BARCODE,ITEM_CODE AS CODE,ITEM_NAME AS NAME,MAIN_GRP_NAME AS MAIN_GRP_NAME, " + 
+                                                            "ISNULL(ROUND((SELECT dbo.FN_PRICE(ITEM_GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)),2),0) AS PRICE " + 
                                                             "FROM ITEM_BARCODE_VW_01 WHERE (UPPER(ITEM_CODE) LIKE UPPER(@VAL) OR UPPER(ITEM_NAME) LIKE UPPER(@VAL) OR BARCODE LIKE @VAL) AND STATUS = 1 " + 
-                                                            "GROUP BY ITEM_CODE,ITEM_NAME,MAIN_GRP_NAME,ITEM_GUID",
+                                                            "GROUP BY ITEM_CODE,ITEM_NAME,MAIN_GRP_NAME,ITEM_GUID,VAT",
                                                     param : ['VAL:string|50']
                                                 },
                                                 sql:this.core.sql
@@ -377,8 +376,6 @@ export default class promotionCard extends React.PureComponent
                                                         {
                                                             let tmpData = {...this.promo.cond.empty}
 
-                                                            console.log(this["itemList" + pItem.WITHAL].where({ITEM_GUID:data[i].GUID}))
-                                                            
                                                             tmpData.GUID = datatable.uuidv4();
                                                             tmpData.ITEM_GUID = data[i].GUID;
                                                             tmpData.ITEM_CODE = data[i].CODE;
@@ -967,8 +964,6 @@ export default class promotionCard extends React.PureComponent
                                     <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup={"frmPromo"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
-                                        console.log(this["itemList" + this.condDt[0].WITHAL])
-                                        console.log(this.promo.cond.dt())
                                         if(this.condDt[0].AMOUNT == 0 && this.condDt[0].QUANTITY == 0)
                                         {
                                             let tmpConfObj =
@@ -998,7 +993,6 @@ export default class promotionCard extends React.PureComponent
                                                     button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
                                                 }
                                                 
-                                                console.log(this.condDt)
                                                 this.condDt.forEach((item)=>
                                                 {
                                                     if(item.TYPE == 0)

@@ -40,6 +40,11 @@ export const menu = (e) =>
                         //     path: 'customers/cards/customerCard'
                         // },
                         {
+                            id: 'stk_01_015',
+                            text: e.t('menuOff.stk_01_015'), //'Fiyat Listesi Tanımları',
+                            path: 'items/cards/itemPricingListCard'
+                        },
+                        {
                             id: 'stk_01_006',
                             text: e.t('menuOff.stk_01_006'),//'Depo Tanımları',
                             path: 'items/cards/depotCard'
@@ -432,6 +437,11 @@ export const menu = (e) =>
                                     id: 'tkf_02_001',
                                     text: e.t('menuOff.tkf_02_001'),//'Alış Teklif',
                                     path: 'offers/documents/purchaseOffer'
+                                },
+                                {
+                                    id: 'tkf_02_003',
+                                    text: e.t('menuOff.tkf_02_003'),//'Fiyat farkı talebi',
+                                    path: 'offers/documents/priceDiffOffer'
                                 },
                     
                             ]
@@ -1362,7 +1372,6 @@ export const menu = (e) =>
                             text: e.t('menuOff.set_02_009'),//'Mail ayarlari',
                             path: 'setting/officialSettings/mailSettings'
                         },
-
                     ]
                 },
                 {
