@@ -453,6 +453,7 @@ export class itemPriceCls
             CUSER_NAME : this.core.auth.data == null ? '' : this.core.auth.data.NAME,
             TYPE : 0,
             TYPE_NAME : '',
+            LIST_NO : 0,
             ITEM_GUID : '00000000-0000-0000-0000-000000000000',
             ITEM_CODE : '',
             ITEM_NAME : '',
@@ -467,7 +468,8 @@ export class itemPriceCls
             CUSTOMER_CODE : '',
             CUSTOMER_NAME : '',
             CHANGE_DATE : moment(new Date(0)).format("DD/MM/YYYY HH:mm:ss"),
-            CDATE_FORMAT : ''
+            CDATE_FORMAT : '',
+            CONTRACT_GUID : '00000000-0000-0000-0000-000000000000'
         }
 
         this._initDs();
@@ -487,9 +489,10 @@ export class itemPriceCls
                     "((FINISH_DATE <= @FINISH_DATE) OR (CONVERT(NVARCHAR(10),@FINISH_DATE,112) = '19700101')) AND (FINISH_DATE > GETDATE()-2 OR FINISH_DATE = '19700101') AND" + 
                     "((QUANTITY = @QUANTITY) OR (@QUANTITY = -1)) AND " +
                     "((CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = '')) AND " + 
-                    "((CUSTOMER_GUID = @CUSTOMER_GUID) OR (@CUSTOMER_GUID = '00000000-0000-0000-0000-000000000000')) ORDER BY CDATE DESC",
+                    "((CUSTOMER_GUID = @CUSTOMER_GUID) OR (@CUSTOMER_GUID = '00000000-0000-0000-0000-000000000000')) AND " +
+                    "((CONTRACT_GUID = @CONTRACT_GUID) OR (@CONTRACT_GUID = '00000000-0000-0000-0000-000000000000')) ORDER BY CDATE DESC",
             param : ['ITEM_GUID:string|36','ITEM_CODE:string|25','TYPE:int','DEPOT:string|36','START_DATE:date','FINISH_DATE:date',
-                     'QUANTITY:float','CUSTOMER_CODE:string|25','CUSTOMER_GUID:string|36']
+                     'QUANTITY:float','CUSTOMER_CODE:string|25','CUSTOMER_GUID:string|36','CONTRACT_GUID:string|36']
         }
         tmpDt.insertCmd = 
         {
@@ -497,16 +500,18 @@ export class itemPriceCls
                     "@GUID = @PGUID, " +
                     "@CUSER = @PCUSER, " + 
                     "@TYPE = @PTYPE, " + 
+                    "@LIST_NO = @PLIST_NO, " + 
                     "@ITEM = @PITEM, " + 
                     "@DEPOT = @PDEPOT, " + 
                     "@START_DATE = @PSTART_DATE, " + 
                     "@FINISH_DATE = @PFINISH_DATE, " + 
                     "@PRICE = @PPRICE, " + 
                     "@QUANTITY = @PQUANTITY, " + 
-                    "@CUSTOMER = @PCUSTOMER ", 
-            param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PITEM:string|50','PDEPOT:string|50','PSTART_DATE:date','PFINISH_DATE:date',
-                     'PPRICE:float','PQUANTITY:float','PCUSTOMER:string|50'],
-            dataprm : ['GUID','CUSER','TYPE','ITEM_GUID','DEPOT','START_DATE','FINISH_DATE','PRICE','QUANTITY','CUSTOMER_GUID']
+                    "@CUSTOMER = @PCUSTOMER, " +
+                    "@CONTRACT = @PCONTRACT ", 
+            param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PLIST_NO:int','PITEM:string|50','PDEPOT:string|50','PSTART_DATE:date','PFINISH_DATE:date',
+                     'PPRICE:float','PQUANTITY:float','PCUSTOMER:string|50','PCONTRACT:string|50'],
+            dataprm : ['GUID','CUSER','TYPE','LIST_NO','ITEM_GUID','DEPOT','START_DATE','FINISH_DATE','PRICE','QUANTITY','CUSTOMER_GUID','CONTRACT_GUID']
         } 
         tmpDt.updateCmd = 
         {
@@ -514,16 +519,18 @@ export class itemPriceCls
                     "@GUID = @PGUID, " +
                     "@CUSER = @PCUSER, " + 
                     "@TYPE = @PTYPE, " + 
+                    "@LIST_NO = @PLIST_NO, " + 
                     "@ITEM = @PITEM, " + 
                     "@DEPOT = @PDEPOT, " + 
                     "@START_DATE = @PSTART_DATE, " + 
                     "@FINISH_DATE = @PFINISH_DATE, " + 
                     "@PRICE = @PPRICE, " + 
                     "@QUANTITY = @PQUANTITY, " + 
-                    "@CUSTOMER = @PCUSTOMER ", 
-            param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PITEM:string|50','PDEPOT:string|50','PSTART_DATE:date','PFINISH_DATE:date',
-                     'PPRICE:float','PQUANTITY:float','PCUSTOMER:string|50'],
-            dataprm : ['GUID','CUSER','TYPE','ITEM_GUID','DEPOT','START_DATE','FINISH_DATE','PRICE','QUANTITY','CUSTOMER_GUID']
+                    "@CUSTOMER = @PCUSTOMER, " +
+                    "@CONTRACT = @PCONTRACT ",  
+            param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PLIST_NO:int','PITEM:string|50','PDEPOT:string|50','PSTART_DATE:date','PFINISH_DATE:date',
+                     'PPRICE:float','PQUANTITY:float','PCUSTOMER:string|50','PCONTRACT:string|50'],
+            dataprm : ['GUID','CUSER','TYPE','LIST_NO','ITEM_GUID','DEPOT','START_DATE','FINISH_DATE','PRICE','QUANTITY','CUSTOMER_GUID','CONTRACT_GUID']
         } 
         tmpDt.deleteCmd = 
         {
@@ -589,6 +596,7 @@ export class itemPriceCls
                 QUANTITY : -1,
                 CUSTOMER_CODE : '',
                 CUSTOMER_GUID : '00000000-0000-0000-0000-000000000000',
+                CONTRACT_GUID : '00000000-0000-0000-0000-000000000000',
             }         
 
             if(arguments.length > 0)
@@ -602,11 +610,139 @@ export class itemPriceCls
                 tmpPrm.QUANTITY = typeof arguments[0].QUANTITY == 'undefined' ? -1 : arguments[0].QUANTITY;
                 tmpPrm.CUSTOMER_CODE = typeof arguments[0].CUSTOMER_CODE == 'undefined' ? '' : arguments[0].CUSTOMER_CODE;
                 tmpPrm.CUSTOMER_GUID = typeof arguments[0].CUSTOMER_GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].CUSTOMER_GUID;
+                tmpPrm.CONTRACT_GUID = typeof arguments[0].CONTRACT_GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].CONTRACT_GUID;
             }
             this.ds.get('ITEM_PRICE').selectCmd.value = Object.values(tmpPrm)
 
             await this.ds.get('ITEM_PRICE').refresh();
             resolve(this.ds.get('ITEM_PRICE'));    
+        });
+    }
+    save()
+    {
+        return new Promise(async resolve => 
+        {
+            this.ds.delete()
+            resolve(await this.ds.update()); 
+        });
+    }
+}
+export class itemPricingListCls
+{
+    constructor()
+    {
+        this.core = core.instance;
+        this.ds = new dataset();
+        this.empty = 
+        {
+            GUID : '00000000-0000-0000-0000-000000000000',
+            CUSER : this.core.auth.data == null ? '' : this.core.auth.data.CODE,
+            CUSER_NAME : this.core.auth.data == null ? '' : this.core.auth.data.NAME,
+            NO : 0,
+            NAME : '',
+            VAT_TYPE : 0
+        }
+
+        this._initDs();
+    }
+    //#region Private
+    _initDs()
+    {
+        let tmpDt = new datatable('ITEM_PRICE_LIST');            
+        tmpDt.selectCmd = 
+        {
+            query : "SELECT * FROM [dbo].[ITEM_PRICE_LIST_VW_01] WHERE ((NO = @NO) OR (@NO IS NULL)) AND ((NAME = @NAME) OR (@NAME IS NULL))",
+            param : ['NO:int','NAME:string|100']
+        }
+        tmpDt.insertCmd = 
+        {
+            query : "EXEC [dbo].[PRD_ITEM_PRICE_LIST_INSERT] " + 
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " + 
+                    "@NO = @PNO, " + 
+                    "@NAME = @PNAME, " + 
+                    "@VAT_TYPE = @PVAT_TYPE ", 
+            param : ['PGUID:string|50','PCUSER:string|25','PNO:int','PNAME:string|100','PVAT_TYPE:int'],
+            dataprm : ['GUID','CUSER','NO','NAME','VAT_TYPE']
+        } 
+        tmpDt.updateCmd = 
+        {
+            query : "EXEC [dbo].[PRD_ITEM_PRICE_LIST_UPDATE] " + 
+                    "@GUID = @PGUID, " +
+                    "@CUSER = @PCUSER, " + 
+                    "@NO = @PNO, " + 
+                    "@NAME = @PNAME, " + 
+                    "@VAT_TYPE = @PVAT_TYPE ",
+            param : ['PGUID:string|50','PCUSER:string|25','PNO:int','PNAME:string|100','PVAT_TYPE:int'],
+            dataprm : ['GUID','CUSER','NO','NAME','VAT_TYPE']
+        } 
+        tmpDt.deleteCmd = 
+        {
+            query : "EXEC [dbo].[PRD_ITEM_PRICE_LIST_DELETE] " + 
+                    "@CUSER = @PCUSER, " + 
+                    "@UPDATE = 1, " + 
+                    "@NO = @PNO ", 
+            param : ['PCUSER:string|25','PNO:int'],
+            dataprm : ['CUSER','NO']
+        }
+
+        this.ds.add(tmpDt);
+    }
+    //#endregion
+    dt()
+    {
+        if(arguments.length > 0)
+        {
+            return this.ds.get(arguments[0]);
+        }
+
+        return this.ds.get(0)
+    }
+    addEmpty()
+    {
+        if(typeof this.dt('ITEM_PRICE_LIST') == 'undefined')
+        {
+            return;
+        }
+        let tmp = {}
+        if(arguments.length > 0)
+        {
+            tmp = {...arguments[0]}            
+        }
+        else
+        {
+            tmp = {...this.empty}
+        }
+        tmp.GUID = datatable.uuidv4();
+        this.dt('ITEM_PRICE_LIST').push(tmp)
+    }
+    clearAll()
+    {
+        for (let i = 0; i < this.ds.length; i++) 
+        {
+            this.dt(i).clear()
+        }
+    }
+    load()
+    {
+        //PARAMETRE OLARAK OBJE GÖNDERİLİR YADA PARAMETRE BOŞ İSE TÜMÜ GETİRİLİ.
+        return new Promise(async resolve => 
+        {
+            let tmpPrm = 
+            {
+                NO : null,
+                NAME : null
+            }         
+
+            if(arguments.length > 0)
+            {
+                tmpPrm.NO = typeof arguments[0].NO == 'undefined' ? null : arguments[0].NO;
+                tmpPrm.NAME = typeof arguments[0].NAME == 'undefined' ? null : arguments[0].NAME;
+            }
+            this.ds.get('ITEM_PRICE_LIST').selectCmd.value = Object.values(tmpPrm)
+            
+            await this.ds.get('ITEM_PRICE_LIST').refresh();
+            resolve(this.ds.get('ITEM_PRICE_LIST'));    
         });
     }
     save()
@@ -1547,10 +1683,10 @@ export class itemLogPriceCls
     //#region Private
     _initDs()
     {
-        let tmpDt = new datatable('ITEM_PRICE_LOG');            
+        let tmpDt = new datatable('PRICE_HISTORY');            
         tmpDt.selectCmd = 
         {
-            query : "SELECT * FROM [ITEM_PRICE_LOG_VW_01] WHERE ITEM_GUID = @ITEM_GUID AND TYPE = 1 ORDER BY LDATE DESC",
+            query : "SELECT * FROM [PRICE_HISTORY_VW_01] WHERE ITEM = @ITEM_GUID AND TYPE = 1 ORDER BY CDATE DESC",
             param : ['ITEM_GUID:string|50',]
         }
 
@@ -1587,10 +1723,10 @@ export class itemLogPriceCls
             {
                 tmpPrm.ITEM_GUID = typeof arguments[0].ITEM_GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].ITEM_GUID;
             }
-            this.ds.get('ITEM_PRICE_LOG').selectCmd.value = Object.values(tmpPrm)
+            this.ds.get('PRICE_HISTORY').selectCmd.value = Object.values(tmpPrm)
 
-            await this.ds.get('ITEM_PRICE_LOG').refresh();
-            resolve(this.ds.get('ITEM_PRICE_LOG'));    
+            await this.ds.get('PRICE_HISTORY').refresh();
+            resolve(this.ds.get('PRICE_HISTORY'));    
         });
     }
     save()
