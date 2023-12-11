@@ -1001,7 +1001,7 @@ export default class CustomerCard extends React.PureComponent
                                                         </NdPopGrid>
                                                     </Item>
                                                     {/* txtSubCustomer */}
-                                                    <Item>                                    
+                                                    <Item>
                                                         <Label text={this.t("txtSubCustomer")} alignment="right" />
                                                         <NdTextBox id="txtSubCustomer" parent={this} simple={true} tabIndex={this.tabIndex} dt={{data:this.customerObj.dt('CUSTOMERS'),field:"SUB_CUSTOMER_NAME"}} 
                                                         upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value} readOnly={true}
@@ -1054,6 +1054,53 @@ export default class CustomerCard extends React.PureComponent
                                                             <Column dataField="TITLE" caption={this.t("pg_subCustomer.clmName")} width={'70%'} defaultSortOrder="asc" />
                                                         </NdPopGrid>
                                                     </Item>
+                                                    {/* txtPriceListNo */}
+                                                    <Item>
+                                                        <Label text={this.t("txtPriceListNo")} alignment="right" />
+                                                        <NdTextBox id="txtPriceListNo" parent={this} simple={true} tabIndex={this.tabIndex} dt={{data:this.customerObj.dt('CUSTOMERS'),field:"PRICE_LIST_NO"}} 
+                                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value} readOnly={true}
+                                                        button=
+                                                        {
+                                                            [
+                                                                {
+                                                                    id:'01',
+                                                                    icon:'more',
+                                                                    onClick:()=>
+                                                                    {
+                                                                        this.pg_priceListNo.show()
+                                                                        this.pg_priceListNo.onClick = (data) =>
+                                                                        {
+                                                                            if(data.length > 0)
+                                                                            {
+                                                                                this.customerObj.dt()[0].PRICE_LIST_NO = data[0].NO
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                },
+                                                            ]
+                                                        }
+                                                        selectAll={true}                           
+                                                        >     
+                                                        </NdTextBox>      
+                                                        {/* FİYAT LİSTE POPUP */}
+                                                        <NdPopGrid id={"pg_priceListNo"} parent={this} container={"#root"} 
+                                                        visible={false}
+                                                        position={{of:'#root'}} 
+                                                        showTitle={true} 
+                                                        showBorders={true}
+                                                        width={'90%'}
+                                                        height={'90%'}
+                                                        title={this.t("pg_priceListNo.title")} 
+                                                        selection={{mode:"single"}}
+                                                        data={{source:{select:{query : "SELECT NO,NAME FROM ITEM_PRICE_LIST_VW_01"},sql:this.core.sql}}}
+                                                        >
+                                                            <Column dataField="NO" caption={this.t("pg_priceListNo.clmNo")} width={'20%'} />
+                                                            <Column dataField="NAME" caption={this.t("pg_priceListNo.clmName")} width={'70%'} defaultSortOrder="asc" />
+                                                        </NdPopGrid>
+                                                    </Item>
+                                                    <EmptyItem/>
+                                                    <EmptyItem/>
+                                                    <EmptyItem/>
                                                     {/* chkRebate */}
                                                     <Item>
                                                         <Label text={this.t("chkRebate")} alignment="right" />
@@ -1064,15 +1111,16 @@ export default class CustomerCard extends React.PureComponent
                                                         <Label text={this.t("chkTaxSucre")} alignment="right" />
                                                         <NdCheckBox id="chkTaxSucre" parent={this} value={false}  dt={{data:this.customerObj.dt('CUSTOMERS'),field:"TAX_SUCRE"}} ></NdCheckBox>
                                                     </Item>
+                                                    {/* chkDeb */}
                                                     <Item>
                                                         <Label text={"DEB"} alignment="right" />
                                                         <NdCheckBox id="chkDeb" parent={this} value={false}  dt={{data:this.customerObj.dt('CUSTOMERS'),field:"DEB"}} ></NdCheckBox>
                                                     </Item>
+                                                    {/* chkPointPassive */}
                                                     <Item>
                                                         <Label text={"Point Passive"} alignment="right" />
                                                         <NdCheckBox id="chkPointPassive" parent={this} value={false}  dt={{data:this.customerObj.dt('CUSTOMERS'),field:"POINT_PASSIVE"}} ></NdCheckBox>
                                                     </Item>
-                                                    <EmptyItem/>
                                                </Form>
                                             </div>
                                         </div>

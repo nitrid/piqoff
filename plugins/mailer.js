@@ -17,7 +17,6 @@ class mailer
 
     connEvt(pSocket)
     {
-        console.log(5)
         pSocket.on('mailer',async (pParam,pCallback) =>
         {
             pCallback(await this.mailSend(pParam))
@@ -26,7 +25,6 @@ class mailer
 
     mailSend(pData)
     {
-        console.log(6)
        
         return new Promise(resolve =>
         {
