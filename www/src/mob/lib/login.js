@@ -6,6 +6,7 @@ import Form, { Label,Item } from 'devextreme-react/form';
 import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../core/react/devex/textbox.js'
 import NdSelectBox from '../../core/react/devex/selectbox.js';
 import NdPopGrid from '../../core/react/devex/popgrid.js';
+import NdCheckBox from '../../core/react/devex/checkbox.js';
 import NdPopUp from '../../core/react/devex/popup.js';
 import NdGrid,{Column,Editing,Paging,Scrolling,KeyboardNavigation,Export} from '../../core/react/devex/grid.js';
 import i18n from './i18n.js'
@@ -51,6 +52,15 @@ export default class Login extends React.PureComponent
     async componentDidMount()
     {
         await this.core.util.waitUntil(0)
+
+        if(typeof localStorage.userName != 'undefined' && typeof localStorage.userPwd != 'undefined')
+        {
+           this.chkRememberMe.value = true
+           this.state.kullanici = localStorage.userName 
+           this.state.sifre = localStorage.userPwd
+           this.Kullanici.value = localStorage.userName 
+           this.Sifre.value = localStorage.userPwd
+        }
         this.Kullanici.focus()
     }
     textValueChanged(e) 
@@ -66,11 +76,23 @@ export default class Login extends React.PureComponent
     }
     async onLoginClick(e)
     {
+       
         if(this.state.kullanici == '' && this.state.sifre == '')
         {
             return;
         }
-        
+
+        if(this.chkRememberMe.value == true)
+        {
+            localStorage.userName = this.state.kullanici
+            localStorage.userPwd = this.state.sifre
+        }
+        else
+        {
+            localStorage.userName =''
+            localStorage.userPwd =''
+        }
+
         if((await this.core.auth.login(this.state.kullanici,this.state.sifre,'MOB')))
         {
            
@@ -152,6 +174,11 @@ export default class Login extends React.PureComponent
                                 onEnterKey={this.onLoginClick}
                                 placeholder={this.lang.t("txtPass")}
                                 />
+                            </div>
+                        </div>
+                         <div className="dx-field">
+                            <div className="dx-field-value" style={{position:"fixed"}}>
+                            <NdCheckBox  text={this.lang.t("chkRememberMe")}id="chkRememberMe" parent={this} defaultValue={false} />
                             </div>
                         </div>
                         <div className="row py-1">
