@@ -433,7 +433,7 @@ export default class rebateDispatch extends DocBase
             {
                 let tmpCheckQuery = 
                 {
-                    query :"SELECT MULTICODE,(SELECT dbo.FN_PRICE(ITEM_GUID,@QUANTITY,GETDATE(),CUSTOMER_GUID,'00000000-0000-0000-0000-000000000000',0,0,0)) AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID",
+                    query :"SELECT MULTICODE,(SELECT dbo.FN_PRICE(ITEM_GUID,@QUANTITY,GETDATE(),CUSTOMER_GUID,'00000000-0000-0000-0000-000000000000',0,1,0)) AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID",
                     param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
                     value : [pData.CODE,this.docObj.dt()[0].INPUT,pQuantity]
                 }
@@ -488,13 +488,14 @@ export default class rebateDispatch extends DocBase
             this.docObj.docItems.dt()[pIndex].SUB_QUANTITY = pQuantity * this.docObj.docItems.dt()[pIndex].SUB_FACTOR
             let tmpQuery = 
             {
-                query :"SELECT (SELECT dbo.FN_PRICE(ITEM_GUID,@QUANTITY,GETDATE(),CUSTOMER_GUID,'00000000-0000-0000-0000-000000000000',0,0,0)) AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID ORDER BY LDATE DESC",
+                query :"SELECT (SELECT dbo.FN_PRICE(ITEM_GUID,@QUANTITY,GETDATE(),CUSTOMER_GUID,'00000000-0000-0000-0000-000000000000',0,1,0)) AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID ORDER BY LDATE DESC",
                 param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
                 value : [pData.CODE,this.docObj.dt()[0].INPUT,pQuantity]
             }
             let tmpData = await this.core.sql.execute(tmpQuery) 
             if(tmpData.result.recordset.length > 0)
             {
+                console.log(tmpData.result.recordset)
                 let tmpMargin = tmpData.result.recordset[0].PRICE - this.docObj.docItems.dt()[pIndex].COST_PRICE
                 let tmpMarginRate = ((tmpData.result.recordset[0].PRICE - this.docObj.docItems.dt()[pIndex].COST_PRICE) - tmpData.result.recordset[0].PRICE) * 100
                 this.docObj.docItems.dt()[pIndex].MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
@@ -1233,13 +1234,21 @@ export default class rebateDispatch extends DocBase
                                                 this.customerClear = false
                                                 this.combineControl = true
                                                 this.combineNew = false
-                                                this.grdRebtDispatch.devGrid.beginUpdate()
-                                                
-                                                for (let i = 0; i < data.length; i++) 
+                                                if(data.length == 1)
                                                 {
-                                                    await this.addItem(data[i],null)
+                                                    this.msgQuantity.tmpData = data[0]
+                                                    await this.msgQuantity.show();
+                                                    await this.addItem(data[0],null,this.txtPopQteUnitQuantity.value)
                                                 }
-                                                this.grdRebtDispatch.devGrid.endUpdate()
+                                                else
+                                                {
+                                                    this.grdRebtDispatch.devGrid.beginUpdate()
+                                                    for (let i = 0; i < data.length; i++) 
+                                                    {
+                                                        await this.addItem(data[i],null)
+                                                    }
+                                                    this.grdRebtDispatch.devGrid.endUpdate()
+                                                }
                                             }
                                             await this.pg_txtItemsCode.setVal(this.txtBarcode.value)
                                         }
@@ -1381,7 +1390,7 @@ export default class rebateDispatch extends DocBase
                                             e.key.SUB_QUANTITY =  e.data.QUANTITY * e.key.SUB_FACTOR
                                             let tmpQuery = 
                                             {
-                                                query :"SELECT dbo.FN_PRICE(@ITEM_GUID,@QUANTITY,GETDATE(),@CUSTOMER_GUID,'00000000-0000-0000-0000-000000000000',0,0,0) AS PRICE",
+                                                query :"SELECT dbo.FN_PRICE(@ITEM_GUID,@QUANTITY,GETDATE(),@CUSTOMER_GUID,'00000000-0000-0000-0000-000000000000',0,1,0) AS PRICE",
                                                 param : ['ITEM_GUID:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
                                                 value : [e.key.ITEM,this.docObj.dt()[0].INPUT,e.data.QUANTITY]
                                             }
