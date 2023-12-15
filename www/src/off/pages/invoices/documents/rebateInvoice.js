@@ -1347,15 +1347,21 @@ export default class rebateInvoice extends DocBase
                                                 this.combineControl = true
                                                 this.combineNew = false
                                                 
-                                                this.msgQuantity.tmpData = data[0]
-                                                await this.msgQuantity.show();
-                                                await this.addItem(data[0],null)
-                                                this.grdRebtInv.devGrid.beginUpdate()
-                                                for (let i = 0; i < data.length; i++) 
+                                                if(data.length == 1)
                                                 {
-                                                    await this.addItem(data[i],null)
+                                                    this.msgQuantity.tmpData = data[0]
+                                                    await this.msgQuantity.show();
+                                                    await this.addItem(data[0],null,this.txtPopQteUnitQuantity.value)
                                                 }
-                                                this.grdRebtInv.devGrid.endUpdate()
+                                                else
+                                                {
+                                                    this.grdRebtInv.devGrid.beginUpdate()
+                                                    for (let i = 0; i < data.length; i++) 
+                                                    {
+                                                        await this.addItem(data[i],null)
+                                                    }
+                                                    this.grdRebtInv.devGrid.endUpdate()
+                                                }
                                             }
                                             await this.pg_txtItemsCode.setVal(this.txtBarcode.value)
                                         }
@@ -1398,7 +1404,6 @@ export default class rebateInvoice extends DocBase
                                             {
                                                 if(this.docObj.docItems.dt()[0].ITEM_CODE == '')
                                                 {
-                                                    console.log(3)
                                                     this.pg_txtItemsCode.onClick = async(data) =>
                                                     {
                                                         this.customerControl = true
