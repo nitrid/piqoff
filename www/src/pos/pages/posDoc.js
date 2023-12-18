@@ -56,7 +56,7 @@ export default class posDoc extends React.PureComponent
         this.acsObj = new access(acs);   
         this.nf525 = new nf525Cls();
         this.isFirstOpen = false
-        this.pricingListNo = 0
+        this.pricingListNo = 1
         // NUMBER İÇİN PARAMETREDEN PARA SEMBOLÜ ATANIYOR.
         Number.money = this.prmObj.filter({ID:'MoneySymbol',TYPE:0}).getValue()
         
