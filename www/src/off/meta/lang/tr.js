@@ -46,7 +46,23 @@ export const langTr =
     dtLastYear : "Geçen Yıl",
     txtTotalTicket : "Toplam Fiş Sayısı",
     txtTicketAvg : "Ortalama Fiş Tutarı",
-    passChange :"Şifre Değiştir",
+    passChange : "Şifre Değiştir",
+    popUserList :
+    {
+        title : "Kullanıcı Listesi",
+        clmCode : "Kodu",
+        clmName : "Adı"
+    },
+    acsEdit : 
+    {
+        msgCloseAlert : 
+        {
+            title: "Dikkat",
+            btn01: "Evet",
+            btn02: "Hayır",
+            msg: "Yaptığınız değişiklikleri kayıt etmek istermisiniz ?"
+        },
+    },
     popDbList :
     {
         title : "Database Seçimi",

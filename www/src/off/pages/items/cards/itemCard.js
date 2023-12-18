@@ -23,6 +23,10 @@ import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
 import NdImageUpload from '../../../../core/react/devex/imageupload.js';
 import NdDialog, { dialog } from '../../../../core/react/devex/dialog.js';
 import NdTextArea from '../../../../core/react/devex/textarea.js';
+import NdTabPanel from '../../../../core/react/devex/tabpanel';
+import NdAccessEdit from '../../../tools/NdAccesEdit.js';
+import { NdLayout,NdLayoutItem } from '../../../../core/react/devex/layout';
+
 import { datatable } from '../../../../core/core.js';
 
 export default class itemCard extends React.PureComponent
@@ -828,6 +832,20 @@ export default class itemCard extends React.PureComponent
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
+                                    <NdButton id="btnEdit" parent={this} icon="edit" type="default"
+                                    onClick={async()=>
+                                    {
+                                        if(!this.accesComp.editMode)
+                                        {
+                                            this.accesComp.openEdit()
+                                        }
+                                        else
+                                        {
+                                            this.accesComp.closeEdit()
+                                        }
+                                    }}/>
+                                </Item>
+                                <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnBack" parent={this} icon="revert" type="default"
                                     onClick={async()=>
                                     {
@@ -1460,12 +1478,12 @@ export default class itemCard extends React.PureComponent
                                 {/* txtShortName */}
                                 <Item>
                                     <Label text={this.t("txtShortName")} alignment="right" />
-                                        <NdTextBox id="txtShortName" parent={this} simple={true} dt={{data:this.itemsObj.dt('ITEMS'),field:"SNAME"}}
-                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                        maxLength={32}
-                                        param={this.param.filter({ELEMENT:'txtShortName',USERS:this.user.CODE})}
-                                        access={this.access.filter({ELEMENT:'txtShortName',USERS:this.user.CODE})}
-                                        />
+                                    <NdTextBox id="txtShortName" parent={this} simple={true} dt={{data:this.itemsObj.dt('ITEMS'),field:"SNAME"}}
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                    maxLength={32}
+                                    param={this.param.filter({ELEMENT:'txtShortName',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'txtShortName',USERS:this.user.CODE})}
+                                    />
                                 </Item>
                             </Form>
                         </div>
@@ -1551,8 +1569,9 @@ export default class itemCard extends React.PureComponent
                     </div>
                     <div className='row px-2 pt-2'>
                         <div className='col-12'>
-                            <TabPanel height="100%" onItemRendered={this._onItemRendered}>
-                                <Item title={this.t("tabTitlePrice")}>
+                            <NdTabPanel id={"tabPanel"} parent={this} height="100%" onItemRendered={this._onItemRendered}
+                            access={this.access.filter({ELEMENT:'tabPanel',USERS:this.user.CODE})} editMode={false}>
+                                <Item title={this.t("tabTitlePrice")} text={"tbPrice"}>
                                     {/* FİYAT PANELI */}
                                     <div className='row px-2 py-2'>
                                         <div className='col-1'>
@@ -1716,7 +1735,7 @@ export default class itemCard extends React.PureComponent
                                         </div>
                                     </div>
                                 </Item>
-                                <Item title={this.t("tabTitleUnit")}>
+                                <Item title={this.t("tabTitleUnit")} text={"tbUnit"}>
                                     <div className='row px-2 py-2'>
                                         <div className='col-2'>
                                             <NdTextBox id="txtUnderUnitFiyat" parent={this} title={this.t("underUnitPrice")} titleAlign={"top"}/>
@@ -1783,7 +1802,7 @@ export default class itemCard extends React.PureComponent
                                         </div>
                                     </div>
                                 </Item>
-                                <Item title={this.t("tabTitleBarcode")}>
+                                <Item title={this.t("tabTitleBarcode")} text={"tbBarcode"}>
                                     <div className='row px-2 py-2'>
                                         <div className='col-12'>
                                             <Toolbar>
@@ -1827,7 +1846,7 @@ export default class itemCard extends React.PureComponent
                                         </div>
                                     </div>
                                 </Item>                                
-                                <Item title={this.t("tabTitleCustomer")}>
+                                <Item title={this.t("tabTitleCustomer")} text={"tbCustomer"}>
                                     <div className='row px-2 py-2'>
                                         <div className='col-2'>
                                             <NdTextBox id="txtMinAlisFiyat" parent={this} title={this.t("minBuyPrice")} titleAlign={"top"}/>
@@ -1934,7 +1953,7 @@ export default class itemCard extends React.PureComponent
                                         </div>
                                     </div>
                                 </Item>
-                                <Item title={this.t("tabTitleCustomerPrice")}>
+                                <Item title={this.t("tabTitleCustomerPrice")} text={"tbCustomPrice"}>
                                     <div className='row px-2 py-2'>
                                         <div className='col-12'>
                                             <NdGrid parent={this} id={"grdCustomerPrice"} 
@@ -1957,7 +1976,7 @@ export default class itemCard extends React.PureComponent
                                         </div>
                                     </div>
                                 </Item>
-                                <Item title={this.t("tabTitleSalesPriceHistory")}>
+                                <Item title={this.t("tabTitleSalesPriceHistory")} text={"tbSalePriceHistory"}>
                                     <div className='row px-2 py-2'>
                                         <div className='col-12'>
                                             <NdGrid parent={this} id={"grdSalesPrice"} 
@@ -1977,7 +1996,7 @@ export default class itemCard extends React.PureComponent
                                         </div>
                                     </div>
                                 </Item>
-                                <Item title={this.t("tabTitleSalesContract")}>
+                                <Item title={this.t("tabTitleSalesContract")} text={"tbSaleContract"}>
                                     <div className='row px-2 py-2'>
                                         <div className='col-12'>
                                             <NdGrid parent={this} id={"grdSalesContract"} 
@@ -1998,7 +2017,7 @@ export default class itemCard extends React.PureComponent
                                         </div>
                                     </div>
                                 </Item>
-                                <Item title={this.t("tabExtraCost")}>
+                                <Item title={this.t("tabExtraCost")} text={"tbExtraCost"}>
                                     <div className='row px-2 py-2'>
                                         <div className='col-12'>
                                             <NdGrid parent={this} id={"grdExtraCost"} 
@@ -2021,7 +2040,7 @@ export default class itemCard extends React.PureComponent
                                         </div>
                                     </div>
                                 </Item> 
-                                <Item title={this.t("tabTitleDetail")}>
+                                <Item title={this.t("tabTitleDetail")} text={"tbDetail"}>
                                     <div className='row px-2 py-2'>
                                         <div className='col-12'>
                                         <Form colCount={4} >
@@ -2117,7 +2136,7 @@ export default class itemCard extends React.PureComponent
                                         </div>
                                     </div>
                                 </Item>
-                                <Item title={this.t("tabTitleInfo")}>
+                                <Item title={this.t("tabTitleInfo")} text={"tbInfo"}>
                                     <div className='row px-2 py-2'>
                                         <div className='col-12'>
                                             <NdGrid parent={this} id={"grdItemInfo"} 
@@ -2139,7 +2158,7 @@ export default class itemCard extends React.PureComponent
                                         </div>
                                     </div>
                                 </Item>
-                                <Item title={this.t("tabTitleOtherShop")}>
+                                <Item title={this.t("tabTitleOtherShop")} text={"tbOtherShop"}>
                                 <div className='row px-2 py-2'>
                                         <div className='col-2'>
                                             <NdNumberBox id="txtTabCostPrice" parent={this} title={this.t("txtCostPrice")}  titleAlign={"top"} tabIndex={this.tabIndex}
@@ -2178,7 +2197,7 @@ export default class itemCard extends React.PureComponent
                                         </div>
                                     </div>
                                 </Item>
-                            </TabPanel>
+                            </NdTabPanel>
                         </div>
                     </div>                   
                     {/* FİYAT POPUP */}
@@ -3015,6 +3034,10 @@ export default class itemCard extends React.PureComponent
                                 </Item>    
                             </Form>
                         </NdPopUp>
+                    </div>
+                    {/* ACCESS COMPONENT */}
+                    <div>
+                        <NdAccessEdit id={"accesComp"} parent={this}/>
                     </div>                            
                 </ScrollView>
             </React.Fragment>

@@ -10,10 +10,11 @@ export default class NdBase extends React.PureComponent
     constructor(props)
     {
         super(props)
-        
+
         this.state = 
         {
-            data : typeof props.data == 'undefined' ? undefined : props.data
+            data : typeof props.data == 'undefined' ? undefined : props.data,
+            editMode : false
         }
         // GÖRÜNÜR DURUMU. YETKİLENDİRME.
         if(typeof this.props.access != 'undefined' && typeof this.props.access.getValue().visible != 'undefined')
@@ -205,6 +206,20 @@ export default class NdBase extends React.PureComponent
                 }
             }).bind(this))
         }        
+    }
+    get editMode()
+    {
+        return this.state.editMode
+    }
+    set editMode(pVal)
+    {
+        this.setState({editMode:pVal},()=>
+        {
+            if(typeof this.onEditMode != 'undefined')
+            {
+                this.onEditMode(pVal)
+            }
+        })
     }
     get data()
     {
@@ -503,7 +518,7 @@ export default class NdBase extends React.PureComponent
         });
     }
     validationView()
-    {        
+    {
         let tmpValid = null;
         if(typeof this.props.param != 'undefined')
         {   

@@ -1909,7 +1909,6 @@ export class access extends datatable
                 param : ['PID:string|100','PVALUE:string|max','PSPECIAL:string|150','PUSERS:string|25','PPAGE:string|25','PELEMENT:string|250','PAPP:string|50'],
                 dataprm : ['ID','VALUE','SPECIAL','USERS','PAGE','ELEMENT','APP']
             } 
-
             this.updateCmd = 
             {
                 query : "EXEC [dbo].[PRD_ACCESS_UPDATE] " + 
@@ -1958,7 +1957,14 @@ export class access extends datatable
                     tmpData = tmpData.filter(x => x[tmpKey] === tmpValue)
                 }                
             }
-
+            //META DATANIN İÇERİSİNE USER DEĞERİ EKLENİYOR.BU DATAYI SET EDERKEN İŞİMİZE YARAYACAK.
+            if(typeof Object.keys(arguments[0]).filter(key => key.includes('USERS')) != 'undefined')
+            {
+                for (let i = 0; i < tmpMeta.length; i++) 
+                {
+                    tmpMeta[i].USERS = arguments[0].USERS
+                }
+            }
             let tmpAcs = new access(tmpMeta)
             tmpAcs.import(tmpData)
             return tmpAcs;
@@ -1987,11 +1993,11 @@ export class access extends datatable
                 }
             }                    
         }
-         // DB İÇERİSİNDE KAYIT YOKSA META İÇERİSİNDEKİ DEĞER DÖNDÜRÜLÜYOR.
-         else if(this.length == 0 && this.meta != null && this.meta.length > 0)
-         {
+        // DB İÇERİSİNDE KAYIT YOKSA META İÇERİSİNDEKİ DEĞER DÖNDÜRÜLÜYOR.
+        else if(this.length == 0 && this.meta != null && this.meta.length > 0)
+        {
             return JSON.parse(JSON.stringify(this.meta[0].VALUE))
-         }
+        }
         return '';
     }
     setValue()
@@ -2014,6 +2020,15 @@ export class access extends datatable
                 {
                     console.log('error param.toValue() : ' + error)
                 }
+            }
+        }
+        else
+        {
+            if(this.meta.length == 1)
+            {
+                let tmpData = {...this.meta[0]}
+                tmpData.VALUE = JSON.stringify(arguments[0])
+                this.push(tmpData)
             }
         }
     }

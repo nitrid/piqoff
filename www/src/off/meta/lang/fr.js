@@ -46,6 +46,22 @@ export const langFr =
     dtLastYear : "Année Dernière",
     txtTotalTicket : "Total des tickets de caisses",   
     txtTicketAvg : "Montant moyen des tickets de caisses", 
+    popUserList:
+    {
+        title: "Liste des utilisateurs",
+        clmCode: "Code",
+        clmName: "Nom"
+    },
+    acsEdit:
+    {
+        msgCloseAlert:
+        {
+            title: "Attention",
+            btn01: "Oui",
+            btn02: "Non",
+            msg: "Voulez-vous enregistrer les modifications apportées ?"
+        },
+    },
     popDbList : 
     {
         title : "Choix de la base de donnée", 

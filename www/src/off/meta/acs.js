@@ -540,6 +540,35 @@ export const acs =
             CAPTION : "Son Satış Fiyatı"
         }
     },
+    //tabPanel
+    {
+        TYPE : 2,
+        ID :"tabPanel",
+        VALUE : 
+        {
+            tbPrice : true,
+            tbUnit : true,
+            tbBarcode : true,
+            tbCustomer : true,
+            tbCustomPrice : true,
+            tbSalePriceHistory : true,
+            tbSaleContract : true,
+            tbExtraCost : true,
+            tbDetail : true,
+            tbInfo : true,
+            tbOtherShop : true
+        },
+        SPECIAL : "",
+        PAGE : "stk_01_001",
+        ELEMENT : "tabPanel",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "boolean",
+            PAGE_NAME : "Stok Tanımları",
+            CAPTION : "Son Satış Fiyatı"
+        }
+    },
     //#endregion
     //#region Cari Tanıtım
     //cmbType
