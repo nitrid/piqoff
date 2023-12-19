@@ -1241,7 +1241,7 @@ export const prm =
         VALUE : 
         {
             active : true,
-            tolerans : 0.050
+            tolerans : 0.065
         },
         SPECIAL : "",
         PAGE : "pos",
