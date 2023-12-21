@@ -883,7 +883,7 @@ export class dataset
             let tmpQuerys = [];
 
             for (let i = 0; i < this.length; i++) 
-            {                
+            {
                 let tmp = this.get(i).toCommands();
                 tmp.forEach(e => 
                 {
