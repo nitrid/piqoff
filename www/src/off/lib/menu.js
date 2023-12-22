@@ -441,7 +441,7 @@ export const menu = (e) =>
                                 {
                                     id: 'tkf_02_003',
                                     text: e.t('menuOff.tkf_02_003'),//'Fiyat farkı talebi',
-                                    path: 'offers/documents/priceDiffOffer'
+                                    path: 'offers/documents/priceDiffDemand'
                                 },
                     
                             ]

@@ -2254,36 +2254,13 @@ export default class purchaseInvoice extends DocBase
                                                                 icon:'print',
                                                                 onClick:async ()  =>
                                                                 {
-                                                                    let tmpQuery = 
+                                                                    App.instance.menuClick(
                                                                     {
-                                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = 40),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,'FR')WHERE DIFF_PRICE > 0 ORDER BY LINE_NO " ,
-                                                                        param:  ['DOC_GUID:string|50'],
-                                                                        value:  [this.docObj.dt()[0].GUID,]
-                                                                    }
-                                                                    let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                                    console.log( tmpData.result.recordset[0].PATH)
-                                                                    
-                                                                    this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
-                                                                    {
-                                                                        console.log(1)
-                                                                        console.log(pResult)
-                                                                        console.log(2)
-                                                                        console.log(pResult.split('|')[0]);
-                                                                        console.log(3)
-                                                                        if(pResult.split('|')[0] != 'ERR')
-                                                                        {
-                                                                            console.log(6)
-                                                                            var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");                                                         
-                                                                            console.log(19)
-                                                                            mywindow.onload = function() 
-                                                                            {
-                                                                                console.log(20)
-                                                                                mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
-                                                                            } 
-                                                                            // let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
-                                                                            // mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");  
-                                                                        }
-                                                                    });
+                                                                        id: 'tkf_02_003',
+                                                                        text: this.lang.t('menuOff.tkf_02_003'),
+                                                                        path: 'offers/documents/priceDiffDemand.js',
+                                                                        pagePrm:{GUID:this.docObj.dt()[0].GUID}
+                                                                    })
                                                                 }
                                                             },
                                                         ]

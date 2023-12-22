@@ -757,7 +757,6 @@ export default class purchaseOffer extends DocBase
                                                 this.init(); 
                                             }
                                         }
-                                        
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
@@ -806,7 +805,6 @@ export default class purchaseOffer extends DocBase
 
                                             await dialog(tmpConfObj);
                                         }
-                                        
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
