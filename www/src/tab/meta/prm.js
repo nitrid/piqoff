@@ -17,8 +17,8 @@ export const prm =
             CAPTION : "Sadece Büyük Harf Kullanımı"
         }
     },
-     // Ödeme ve tahsilat için fatura zorunluluğu
-     {
+    // Ödeme ve tahsilat için fatura zorunluluğu
+    {
         TYPE : 0,
         ID :"invoicesForPayment",
         VALUE : 

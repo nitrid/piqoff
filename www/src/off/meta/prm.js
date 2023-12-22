@@ -69,7 +69,7 @@ export const prm =
             CAPTION : "Seri Numarası Rastgele Oluştursun"
         }
     },
-    // Alış Faturasından Fiyat Güncelleme
+    //Alış Faturasından Fiyat Güncelleme
     {
         TYPE : 0,
         ID :"purcInvoıcePriceSave",
@@ -87,7 +87,7 @@ export const prm =
             CAPTION : "Alış Faturasından Alış Fiyatı Güncelleme"
         }
     },
-    // Alış Faturasından Fiyat Güncelleme
+    //Alış Faturasından Fiyat Güncelleme
     {
         TYPE : 0,
         ID :"negativeQuantityForPruchase",
@@ -105,7 +105,7 @@ export const prm =
             CAPTION : "Alış Faturasında Eksi Miktar Girişi"
         }
     },
-    // Ödeme ve tahsilat için fatura zorunluluğu
+    //Ödeme ve tahsilat için fatura zorunluluğu
     {
         TYPE : 0,
         ID :"invoicesForPayment",
@@ -203,7 +203,7 @@ export const prm =
             CAPTION : "Faturadaki Hizmetten Maliyet Ekle"
         }
     },
-    // underMinCostPrice
+    //underMinCostPrice
     {
         TYPE : 0,
         ID :"underMinCostPrice",
@@ -218,7 +218,7 @@ export const prm =
             CAPTION : "Maliyetten Düşük Fiyata Satış Yapabilir"
         }
     },
-    // maxRoundAmount
+    //maxRoundAmount
     {
         TYPE : 0,
         ID :"maxRoundAmount",
@@ -233,7 +233,7 @@ export const prm =
             CAPTION : "En fazla uygulanabilcek yuvarlama tutarı"
         }
     },
-    // maxUnitQuantity
+    //maxUnitQuantity
     {
         TYPE : 0,
         ID :"maxUnitQuantity",
@@ -248,7 +248,7 @@ export const prm =
             CAPTION : "En fazla izin verilen miktar"
         }
     },
-    // maxItemPrice
+    //maxItemPrice
     {
         TYPE : 0,
         ID :"maxItemPrice",
@@ -386,6 +386,25 @@ export const prm =
                     }
                 ]
             }
+        }
+    },
+    //Sabit Birim
+    {
+        TYPE : 0,
+        ID :"cmbUnit",
+        VALUE : 
+        {
+            value : "Colis"
+        },
+        SPECIAL : "",
+        PAGE : "",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Sistem",
+            CAPTION : "Sabit Birim"
         }
     },
     //#endregion

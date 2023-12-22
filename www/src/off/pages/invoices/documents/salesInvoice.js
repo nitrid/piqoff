@@ -1421,7 +1421,7 @@ export default class salesInvoice extends DocBase
                                         {
                                             this.msgQuantity.tmpData = tmpData.result.recordset[0]
                                             await this.msgQuantity.show()
-                                            await this.addItem(tmpData.result.recordset[0],null,this.txtPopQteUnitQuantity.value)
+                                            await this.addItem(tmpData.result.recordset[0],null,this.txtPopQteUnitQuantity.value,this.txtPopQteUnitPrice.value)
                                             this.txtBarcode.focus()
                                         }
                                         else
@@ -1437,7 +1437,7 @@ export default class salesInvoice extends DocBase
                                                     {
                                                         this.msgQuantity.tmpData = data[0]
                                                         await this.msgQuantity.show();
-                                                        await this.addItem(data[0],null,this.txtPopQteUnitQuantity.value)
+                                                        await this.addItem(data[0],null,this.txtPopQteUnitQuantity.value,this.txtPopQteUnitPrice.value)
                                                         this.txtBarcode.focus()
                                                     }
                                                     else if(data.length > 1)
