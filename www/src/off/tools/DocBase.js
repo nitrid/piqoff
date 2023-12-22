@@ -68,6 +68,10 @@ export default class DocBase extends React.PureComponent
         {
             return this.docObj.docOffers
         }
+        else if(this.docType == 63)
+        {
+            return this.docObj.docDemand
+        }
     }
     set docDetailObj(pVal)
     {
@@ -82,6 +86,10 @@ export default class DocBase extends React.PureComponent
         else if(this.docType == 61)
         {
             this.docObj.docOffers = pVal
+        }
+        else if(this.docType == 63)
+        {
+            return this.docObj.docDemand
         }
     }
     init()
