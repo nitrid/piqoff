@@ -444,6 +444,33 @@ export const langTr =
         clmClosed : "KAPANAN",
         clmBalance  : "KALAN",
     },
+    pg_ordersGrid : 
+    {
+        title : "Sipariş Seçimi",
+        clmReferans : "Seri - Sıra",
+        clmCode : "Kodu",
+        clmName : "Adı",
+        clmQuantity : "Adet",
+        clmTotal : "Tutar",
+        clmPrice : "Fiyat",
+        clmlineNo : "No",
+        clmDate : "Tarih",
+        clmPendQuantity : "Bekleyen Miktar"
+    },
+    msgQuantity:
+    {
+        title: "Miktar",
+        btn01: "Ekle",
+        msg: "Miktar Giriniz",
+        txtQuantity :"Miktar",
+        txtUnitFactor : "Birim Katsayısı",
+        txtUnitQuantity : "Birim Miktarı",
+        txtTotalQuantity : "Toplam Miktar",
+        txtUnitPrice: "Birim Fiyatı",
+        txtPopQteDepotQty: "Depo Miktarı",
+        txtPopQteReservQty: "Reserve Miktarı",
+        txtPopQteInputQty: "Gelecek Miktar",
+    },
     stk_01_001:  // "Yeni Ürün Tanımlama"
     {
         txtRef: "Referans",
@@ -4585,18 +4612,6 @@ export const langTr =
             btn01: "Ekle",
             msg: "Miktar Giriniz"
         },
-        pg_ordersGrid : 
-        {
-            title : "Sipariş Seçimi",
-            clmReferans : "Seri - Sıra",
-            clmCode : "Kodu",
-            clmName : "Adı",
-            clmQuantity : "Adet",
-            clmTotal : "Tutar",
-            clmPrice : "Fiyat",
-            clmlineNo : "No",
-            clmDate : "Tarih",
-        },
         cmbPayType : {
             title : "Ödeme Tipi",
             cash : "Nakit",
@@ -5111,18 +5126,6 @@ export const langTr =
             title: "Miktar",
             btn01: "Ekle",
             msg: "Miktar Giriniz"
-        },
-        pg_ordersGrid : 
-        {
-            title : "Sipariş Seçimi",
-            clmReferans : "Seri - Sıra",
-            clmCode : "Kodu",
-            clmName : "Adı",
-            clmQuantity : "Adet",
-            clmTotal : "Tutar",
-            clmPrice : "Fiyat",
-            clmlineNo : "No",
-            clmlDate : "Tarih"
         },
         cmbPayType : {
             title : "Ödeme Tipi",
@@ -6576,17 +6579,6 @@ export const langTr =
             btn01: "Ekle",
             msg: "Miktar Giriniz"
         },
-        pg_ordersGrid : 
-        {
-            title : "Sipariş Seçimi",
-            clmReferans : "Seri - Sıra",
-            clmCode : "Kodu",
-            clmName : "Adı",
-            clmQuantity : "Adet",
-            clmTotal : "Tutar",
-            clmPrice : "Fiyat",
-            clmlineNo : "No"
-        },
         cmbPayType : {
             title : "Ödeme Tipi",
             cash : "Nakit",
@@ -8011,17 +8003,6 @@ export const langTr =
             btn01: "Ekle",
             msg: "Miktar Giriniz"
         },
-        pg_ordersGrid : 
-        {
-            title : "Sipariş Seçimi",
-            clmReferans : "Seri - Sıra",
-            clmCode : "Kodu",
-            clmName : "Adı",
-            clmQuantity : "Adet",
-            clmTotal : "Tutar",
-            clmPrice : "Fiyat",
-            clmlineNo : "No"
-        },
         cmbPayType : {
             title : "Ödeme Tipi",
             cash : "Nakit",
@@ -9361,17 +9342,6 @@ export const langTr =
             btn01: "Ekle",
             msg: "Miktar Giriniz"
         },
-        pg_ordersGrid : 
-        {
-            title : "Sipariş Seçimi",
-            clmReferans : "Seri - Sıra",
-            clmCode : "Kodu",
-            clmName : "Adı",
-            clmQuantity : "Adet",
-            clmTotal : "Tutar",
-            clmPrice : "Fiyat",
-            clmlineNo : "No"
-        },
         cmbPayType : {
             title : "Ödeme Tipi",
             cash : "Nakit",
@@ -9923,17 +9893,6 @@ export const langTr =
             title: "Miktar",
             btn01: "Ekle",
             msg: "Miktar Giriniz"
-        },
-        pg_ordersGrid : 
-        {
-            title : "Sipariş Seçimi",
-            clmReferans : "Seri - Sıra",
-            clmCode : "Kodu",
-            clmName : "Adı",
-            clmQuantity : "Adet",
-            clmTotal : "Tutar",
-            clmPrice : "Fiyat",
-            clmlineNo : "No"
         },
         cmbPayType : {
             title : "Ödeme Tipi",
@@ -10752,17 +10711,6 @@ export const langTr =
             btn01: "Ekle",
             msg: "Miktar Giriniz"
         },
-        pg_ordersGrid : 
-        {
-            title : "Sipariş Seçimi",
-            clmReferans : "Seri - Sıra",
-            clmCode : "Kodu",
-            clmName : "Adı",
-            clmQuantity : "Adet",
-            clmTotal : "Tutar",
-            clmPrice : "Fiyat",
-            clmlineNo : "No"
-        },
         cmbPayType : {
             title : "Ödeme Tipi",
             cash : "Nakit",
@@ -11507,17 +11455,6 @@ export const langTr =
             btn01: "Ekle",
             msg: "Miktar Giriniz"
         },
-        pg_ordersGrid : 
-        {
-            title : "Sipariş Seçimi",
-            clmReferans : "Seri - Sıra",
-            clmCode : "Kodu",
-            clmName : "Adı",
-            clmQuantity : "Adet",
-            clmTotal : "Tutar",
-            clmPrice : "Fiyat",
-            clmlineNo : "No"
-        },
         msgCustomerSelect:
         {
             title: "Dikkat",
@@ -11965,17 +11902,6 @@ export const langTr =
             title: "Miktar",
             btn01: "Ekle",
             msg: "Miktar Giriniz"
-        },
-        pg_ordersGrid : 
-        {
-            title : "Sipariş Seçimi",
-            clmReferans : "Seri - Sıra",
-            clmCode : "Kodu",
-            clmName : "Adı",
-            clmQuantity : "Adet",
-            clmTotal : "Tutar",
-            clmPrice : "Fiyat",
-            clmlineNo : "No"
         },
         msgCustomerSelect:
         {
@@ -12756,17 +12682,6 @@ export const langTr =
             btn01: "Ekle",
             msg: "Miktar Giriniz"
         },
-        pg_ordersGrid : 
-        {
-            title : "Sipariş Seçimi",
-            clmReferans : "Seri - Sıra",
-            clmCode : "Kodu",
-            clmName : "Adı",
-            clmQuantity : "Adet",
-            clmTotal : "Tutar",
-            clmPrice : "Fiyat",
-            clmlineNo : "No"
-        },
         msgCustomerSelect:
         {
             title: "Dikkat",
@@ -13514,17 +13429,6 @@ export const langTr =
             title: "Miktar",
             btn01: "Ekle",
             msg: "Miktar Giriniz"
-        },
-        pg_ordersGrid : 
-        {
-            title : "Sipariş Seçimi",
-            clmReferans : "Seri - Sıra",
-            clmCode : "Kodu",
-            clmName : "Adı",
-            clmQuantity : "Adet",
-            clmTotal : "Tutar",
-            clmPrice : "Fiyat",
-            clmlineNo : "No"
         },
         msgCustomerSelect:
         {
