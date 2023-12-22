@@ -2146,7 +2146,6 @@ export class docDemandCls
         {
             query : "EXEC [dbo].[PRD_DOC_DEMAND_DELETE] " + 
                     "@CUSER = @PCUSER, " + 
-                    "@DELETED = 1, " + 
                     "@GUID = @PGUID, " + 
                     "@DOC_GUID = @PDOC_GUID ", 
             param : ['PCUSER:string|25','PGUID:string|50','PDOC_GUID:string|50'],
@@ -2155,7 +2154,6 @@ export class docDemandCls
 
         this.ds.add(tmpDt);
     }
-    //#region
     //#region
     dt()
     {

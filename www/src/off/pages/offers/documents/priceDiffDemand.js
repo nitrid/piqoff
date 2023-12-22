@@ -469,28 +469,28 @@ export default class priceDiffDemand extends DocBase
                                 }
                                 await this.msgGrdOrigins.show().then(async () =>
                                 {
-                                  e.data.ORIGIN = this.cmbOrigin.value 
-                                  let tmpQuery = 
-                                  {
-                                      query :"UPDATE ITEMS_GRP SET LDATE = GETDATE(),LUSER = @PCUSER,ORGINS = @ORGINS WHERE ITEM = @ITEM ",
-                                      param : ['ITEM:string|50','PCUSER:string|25','ORGINS:string|25'],
-                                      value : [e.data.ITEM,this.user.CODE,e.data.ORIGIN]
-                                  }
-                                  let tmpData = await this.core.sql.execute(tmpQuery) 
-                                  if(typeof tmpData.result.err == 'undefined')
-                                  {
-                                     
-                                  }
-                                  else
-                                  {
-                                    let tmpConfObj1 =
+                                    e.data.ORIGIN = this.cmbOrigin.value 
+                                    let tmpQuery = 
                                     {
-                                        id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
-                                        button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
+                                        query :"UPDATE ITEMS_GRP SET LDATE = GETDATE(),LUSER = @PCUSER,ORGINS = @ORGINS WHERE ITEM = @ITEM ",
+                                        param : ['ITEM:string|50','PCUSER:string|25','ORGINS:string|25'],
+                                        value : [e.data.ITEM,this.user.CODE,e.data.ORIGIN]
                                     }
-                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
-                                    await dialog(tmpConfObj1);
-                                  }
+                                    let tmpData = await this.core.sql.execute(tmpQuery) 
+                                    if(typeof tmpData.result.err == 'undefined')
+                                    {
+                                        
+                                    }
+                                    else
+                                    {
+                                        let tmpConfObj1 =
+                                        {
+                                            id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                            button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
+                                        }
+                                        tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
+                                        await dialog(tmpConfObj1);
+                                    }
                                 });  
                             }
                         },
@@ -907,8 +907,6 @@ export default class priceDiffDemand extends DocBase
                                         {
                                             this.docObj.dt('DOC').removeAt(0)
                                             await this.docObj.dt('DOC').delete();
-                                            this.docObj.dt('DOC_DEMAND').removeAt(0)
-                                            await this.docObj.dt('DOC_DEMAND').delete();
                                             this.init(); 
                                         }
                                     }
