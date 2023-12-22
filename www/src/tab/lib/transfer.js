@@ -56,6 +56,30 @@ export default class transferCls
                         UNIT_FACTOR REAL,
                         MAIN_GRP TEXT,
                         MAIN_GRP_NAME TEXT);`
+            },
+            //ITEM_PRICE_VW_02
+            {
+                name : "ITEM_PRICE_VW_02",
+                query : `CREATE TABLE IF NOT EXISTS ITEM_PRICE_VW_02 (
+                        GUID TEXT PRIMARY KEY,
+                        TYPE INTEGER,
+                        LIST_NO INTEGER,
+                        LIST_NAME TEXT,
+                        LIST_VAT_TYPE INTEGER,
+                        ITEM_GUID TEXT,
+                        ITEM_CODE TEXT,
+                        ITEM_NAME TEXT,
+                        ITEM_VAT REAL,
+                        DEPOT TEXT,
+                        START_DATE DATETIME,
+                        FINISH_DATE DATETIME,
+                        PRICE REAL,
+                        QUANTITY REAL,
+                        CUSTOMER_GUID TEXT,
+                        CONTRACT_GUID TEXT,
+                        CONTRACT_CODE TEXT,
+                        CONTRACT_NAME TEXT,
+                        CONTRACT_VAT_TYPE INTEGER);`
             }
         ]
 
@@ -81,6 +105,27 @@ export default class transferCls
                     values :[{GUID : {map:'GUID'},CODE : {map:'CODE'},NAME : {map:'NAME'},VAT : {map:'VAT'},PRICE : {map:'PRICE'},IMAGE : {map:'IMAGE'},
                             UNIT : {map:'UNIT'},UNIT_NAME : {map:'UNIT_NAME'},UNIT_FACTOR : {map:'UNIT_FACTOR'},MAIN_GRP : {map:'MAIN_GRP'},
                             MAIN_GRP_NAME : {map:'MAIN_GRP_NAME'}}]
+                },
+            },
+            //ITEM_PRICE_VW_02
+            {
+                name : "ITEM_PRICE_VW_02",
+                from : 
+                {
+                    type : "select",
+                    query : `SELECT GUID,TYPE,LIST_NO,LIST_NAME,LIST_VAT_TYPE,ITEM_GUID,ITEM_CODE,ITEM_NAME,ITEM_VAT,DEPOT,START_DATE,
+                            FINISH_DATE,PRICE,QUANTITY,CUSTOMER_GUID,CONTRACT_GUID,CONTRACT_CODE,CONTRACT_NAME,CONTRACT_VAT_TYPE FROM ITEM_PRICE_VW_02`,
+                },
+                to : 
+                {
+                    type : "insert",
+                    query : `INSERT OR REPLACE INTO ITEM_PRICE_VW_02 (GUID, TYPE, LIST_NO, LIST_NAME, LIST_VAT_TYPE, ITEM_GUID, ITEM_CODE, ITEM_NAME, ITEM_VAT, DEPOT, 
+                            START_DATE, FINISH_DATE, PRICE, QUANTITY, CUSTOMER_GUID, CONTRACT_GUID, CONTRACT_CODE, CONTRACT_NAME, CONTRACT_VAT_TYPE) 
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
+                    values :[{GUID : {map:'GUID'},TYPE : {map:'TYPE'},LIST_NO : {map:'LIST_NO'},LIST_NAME : {map:'LIST_NAME'},LIST_VAT_TYPE : {map:'LIST_VAT_TYPE'},ITEM_GUID : {map:'ITEM_GUID'},
+                            ITEM_CODE : {map:'ITEM_CODE'},ITEM_NAME : {map:'ITEM_NAME'},ITEM_VAT : {map:'ITEM_VAT'},DEPOT : {map:'DEPOT'},START_DATE : {map:'START_DATE'},FINISH_DATE : {map:'FINISH_DATE'},
+                            PRICE : {map:'PRICE'},QUANTITY : {map:'QUANTITY'},CUSTOMER_GUID : {map:'CUSTOMER_GUID'},CONTRACT_GUID : {map:'CONTRACT_GUID'},CONTRACT_CODE : {map:'CONTRACT_CODE'},
+                            CONTRACT_NAME : {map:'CONTRACT_NAME'},CONTRACT_VAT_TYPE : {map:'CONTRACT_VAT_TYPE'}}]
                 },
             },
         ]
