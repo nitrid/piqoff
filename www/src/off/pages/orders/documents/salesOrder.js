@@ -139,7 +139,7 @@ export default class salesOrder extends DocBase
                                 this.combineControl = true
                                 this.combineNew = false
                                 this.grdSlsOrder.devGrid.beginUpdate()
-                                for (let i = 0; i < data.length; i++) 
+                                for (let i = 0; i < data.length; i++)
                                 {
                                     await this.addItem(data[i],e.rowIndex)
                                 }
