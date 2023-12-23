@@ -1,8 +1,8 @@
 export const prm =
 [
     //#region Sistem
-     //İkinci Birim
-     {
+    //İkinci Birim
+    {
         TYPE : 0,
         ID :"secondFactor",
         VALUE : 
@@ -167,8 +167,8 @@ export const prm =
             CAPTION : "Daha Düşük Fiyatlı Tedarikçi Uyarısı"
         }
     },
-     //Otomatik Interfel
-     {
+    //Otomatik Interfel
+    {
         TYPE : 1,
         ID :"autoInterfel",
         VALUE : 
@@ -2852,6 +2852,45 @@ export const prm =
             }
         }
     },
+    
+//autoMailSend
+{
+    TYPE : 1,
+    ID :"autoMailSend",
+    VALUE : 
+    {
+        value : true
+    },
+    SPECIAL : "",
+    PAGE : "irs_02_004",
+    ELEMENT : "",
+    APP : "OFF",
+    VIEW : 
+    {
+        TYPE : "checkbox",
+        PAGE_NAME : "Şube Satış İrsaliye",
+        CAPTION : "Otomatik mail gonderme"
+    }
+},
+//autoMailSend
+{
+    TYPE : 1,
+    ID :"autoMailSend",
+    VALUE : 
+    {
+        value : true
+    },
+    SPECIAL : "",
+    PAGE : "ftr_02_005",
+    ELEMENT : "",
+    APP : "OFF",
+    VIEW : 
+    {
+        TYPE : "checkbox",
+        PAGE_NAME : "Şubeler Arası Satış",
+        CAPTION : "Otomatik mail gonderme"
+    }
+},
     //#endregion
     //#region Satış Anlaşması
     //cmbDepot

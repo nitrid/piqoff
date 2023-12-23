@@ -40,7 +40,7 @@ export default class itemCard extends React.PureComponent
         this.salesPriceLogObj = new datatable()
         this.salesPriceLogObj.selectCmd =
         {
-            query :"SELECT * FROM [ITEM_PRICE_LOG_VW_01] WHERE ITEM_GUID = @ITEM_GUID AND TYPE = 0 ORDER BY LDATE DESC ",
+            query :"SELECT * FROM [PRICE_HISTORY_VW_01] WHERE ITEM = @ITEM_GUID AND TYPE = 0 ORDER BY LDATE DESC ",
             param : ['ITEM_GUID:string|50']
         }
         this.salesContractObj = new datatable()
@@ -267,7 +267,7 @@ export default class itemCard extends React.PureComponent
         {
             let tmpQuery = 
             {
-                query :"SELECT [dbo].[FN_PRICE_SALE](@GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000') AS PRICE",
+                query :"SELECT [dbo].[FN_PRICE](@GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1) AS PRICE",
                 param : ['GUID:string|50'],
                 value : [this.itemsObj.dt()[0].GUID]
             }
@@ -483,7 +483,7 @@ export default class itemCard extends React.PureComponent
         {
             let tmpQuery = 
             {
-                query :"SELECT [dbo].[FN_PRICE_SALE](@GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000') AS PRICE",
+                query :"SELECT [dbo].[FN_PRICE](@GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1) AS PRICE",
                 param : ['GUID:string|50'],
                 value : [this.itemsObj.dt()[0].GUID]
             }
@@ -529,7 +529,16 @@ export default class itemCard extends React.PureComponent
             let tmpExVat = this.itemsObj.itemPrice.dt()[i].PRICE / ((this.itemsObj.dt("ITEMS")[0].VAT / 100) + 1)
             let tmpMargin = tmpExVat - this.txtCostPrice.value;
             let tmpMarginRate = ((tmpMargin / this.txtCostPrice.value)) * 100
-            this.itemsObj.itemPrice.dt()[i].VAT_EXT = tmpExVat
+            
+            if(this.itemsObj.itemPrice.dt()[i].LIST_VAT_TYPE == 0)
+            {
+                this.itemsObj.itemPrice.dt()[i].VAT_EXT = tmpExVat
+            }
+            else
+            {
+                this.itemsObj.itemPrice.dt()[i].VAT_EXT = this.itemsObj.itemPrice.dt()[i].PRICE
+            }
+
             this.itemsObj.itemPrice.dt()[i].GROSS_MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2);                 
             this.itemsObj.itemPrice.dt()[i].GROSS_MARGIN_RATE = tmpMarginRate.toFixed(2);     
         }
@@ -1600,11 +1609,12 @@ export default class itemCard extends React.PureComponent
                                                         {   
                                                             await this.popPrice.show();
 
+                                                            this.cmbPopPriListNo.value = 1
                                                             this.dtPopPriStartDate.value = "1970-01-01"
                                                             this.dtPopPriEndDate.value = "1970-01-01"
                                                             this.txtPopPriQuantity.value = 1
                                                             this.txtPopPriPrice.value = 0
-                                                            this.txtPopPriPriceVatExt.value = 0
+                                                            // this.txtPopPriPriceVatExt.value = 0
                                                             this.cmbPopPriDepot.value = "00000000-0000-0000-0000-000000000000"
 
                                                             setTimeout(async () => 
@@ -1660,20 +1670,19 @@ export default class itemCard extends React.PureComponent
                                             }}
                                             onRowUpdated={async(e)=>
                                             {
-
-                                                if(typeof e.data.PRICE != 'undefined')
-                                                {
-                                                    e.key.VAT_EXT = (e.key.PRICE / ((this.cmbTax.value/ 100) + 1))
-                                                }
-                                                if(typeof e.data.VAT_EXT != 'undefined')
-                                                {
-                                                    e.key.PRICE = (e.key.VAT_EXT + ((e.key.VAT_EXT * this.cmbTax.value) / 100))
-                                                }
+                                                // if(typeof e.data.PRICE != 'undefined')
+                                                // {
+                                                //     e.key.VAT_EXT = (e.key.PRICE / ((this.cmbTax.value/ 100) + 1))
+                                                // }
+                                                // if(typeof e.data.VAT_EXT != 'undefined')
+                                                // {
+                                                //     e.key.PRICE = (e.key.VAT_EXT + ((e.key.VAT_EXT * this.cmbTax.value) / 100))
+                                                // }
                                             }}
                                             >
                                                 <Paging defaultPageSize={6} />
                                                 <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
-                                                <Column dataField="TYPE_NAME" caption={this.t("grdPrice.clmType")} allowEditing={false}/>
+                                                <Column dataField="LIST_NO" caption={this.t("grdPrice.clmListNo")} allowEditing={false}/>
                                                 <Column dataField="DEPOT_NAME" caption={this.t("grdPrice.clmDepot")} allowEditing={false}/>
                                                 <Column dataField="CUSTOMER_NAME" caption={this.t("grdPrice.clmCustomerName")} visible={false} allowEditing={false}/>
                                                 <Column dataField="START_DATE" caption={this.t("grdPrice.clmStartDate")} dataType="date" 
@@ -1699,7 +1708,7 @@ export default class itemCard extends React.PureComponent
                                                     return
                                                 }}/>
                                                 <Column dataField="QUANTITY" caption={this.t("grdPrice.clmQuantity")}/>
-                                                <Column dataField="VAT_EXT" caption={this.t("grdPrice.clmVatExt")} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>                                                
+                                                <Column dataField="VAT_EXT" caption={this.t("grdPrice.clmVatExt")} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>                                                
                                                 <Column dataField="PRICE" caption={this.t("grdPrice.clmPrice")} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>
                                                 <Column dataField="GROSS_MARGIN" caption={this.t("grdPrice.clmGrossMargin")} dataType="string" allowEditing={false}/>
                                                 <Column dataField="NET_MARGIN" caption={this.t("grdPrice.clmNetMargin")} dataType="string" format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>
@@ -1941,7 +1950,7 @@ export default class itemCard extends React.PureComponent
                                                 <Column dataField="CUSER_NAME" caption={this.t("grdCustomerPrice.clmUser")} />
                                                 <Column dataField="CUSTOMER_CODE" caption={this.t("grdCustomerPrice.clmCode")} />
                                                 <Column dataField="CUSTOMER_NAME" caption={this.t("grdCustomerPrice.clmName")} />
-                                                <Column dataField="CHANGE_DATE" caption={this.t("grdCustomerPrice.clmDate")} allowEditing={false} dataType="datetime" format={"dd/MM/yyyy - HH:mm:ss"}/>
+                                                <Column dataField="CDATE" caption={this.t("grdCustomerPrice.clmDate")} allowEditing={false} dataType="datetime" format={"dd/MM/yyyy - HH:mm:ss"}/>
                                                 <Column dataField="PRICE" caption={this.t("grdCustomerPrice.clmPrice")} allowEditing={false} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>
                                                 <Column dataField="MULTICODE" caption={this.t("grdCustomerPrice.clmMulticode")} />
                                             </NdGrid>
@@ -1962,7 +1971,7 @@ export default class itemCard extends React.PureComponent
                                                 <Paging defaultPageSize={5} />
                                                 <Editing mode="cell" allowUpdating={false} />
                                                 <Column dataField="CUSER_NAME" caption={this.t("grdSalesPrice.clmUser")} />
-                                                <Column dataField="CHANGE_DATE" caption={this.t("grdSalesPrice.clmDate")} allowEditing={false} dataType="datetime" format={"dd/MM/yyyy - HH:mm:ss"}/>
+                                                <Column dataField="CDATE" caption={this.t("grdSalesPrice.clmDate")} allowEditing={false} dataType="datetime" format={"dd/MM/yyyy - HH:mm:ss"}/>
                                                 <Column dataField="PRICE" caption={this.t("grdSalesPrice.clmPrice")} allowEditing={false} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>
                                             </NdGrid>
                                         </div>
@@ -2186,14 +2195,31 @@ export default class itemCard extends React.PureComponent
                         deferRendering={true}
                         >
                             <Form colCount={1} height={'fit-content'} id={"frmPrice" + this.tabIndex}>
+                                {/* cmbPopPriListNo */}
+                                <Item>
+                                    <Label text={this.t("popPrice.cmbPopPriListNo")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbPopPriListNo" tabIndex={this.tabIndex}
+                                    displayExpr="NAME"                       
+                                    valueExpr="NO"
+                                    value=""
+                                    searchEnabled={true} 
+                                    showClearButton={true}
+                                    pageSize ={50}
+                                    notRefresh={true}
+                                    data={{source:{select:{query : "SELECT NO,NAME FROM ITEM_PRICE_LIST_VW_01"},sql:this.core.sql}}}
+                                    />
+                                </Item>
+                                {/* dtPopPriStartDate */}
                                 <Item>
                                     <Label text={this.t("popPrice.dtPopPriStartDate")} alignment="right" />
                                     <NdDatePicker simple={true}  parent={this} id={"dtPopPriStartDate"}/>
                                 </Item>
+                                {/* dtPopPriEndDate */}
                                 <Item>
                                     <Label text={this.t("popPrice.dtPopPriEndDate")} alignment="right" />
                                     <NdDatePicker simple={true}  parent={this} id={"dtPopPriEndDate"}/>
                                 </Item>
+                                {/* txtPopPriQuantity */}
                                 <Item>
                                     <Label text={this.t("popPrice.txtPopPriQuantity")} alignment="right" />
                                     <NdNumberBox id={"txtPopPriQuantity"} parent={this} simple={true}>
@@ -2216,25 +2242,10 @@ export default class itemCard extends React.PureComponent
                                     data={{source:{select:{query : "SELECT '00000000-0000-0000-0000-000000000000' AS GUID, 'GENERAL' AS NAME UNION ALL SELECT GUID,NAME FROM DEPOT_VW_01 WHERE STATUS = 1 ORDER BY NAME ASC"},sql:this.core.sql}}}
                                     />
                                 </Item>
-                                <Item>
-                                    <Label text={this.t("popPrice.txtPopPriPriceVatExt")} alignment="right" />
-                                    <NdNumberBox id={"txtPopPriPriceVatExt"} parent={this} simple={true} format={"##0.000"}
-                                    onValueChanged={(async(e)=>
-                                    {
-                                        this.txtPopPriPrice.value = (this.txtPopPriPriceVatExt.value + ((this.txtPopPriPriceVatExt.value * this.cmbTax.value) / 100))
-                                    }).bind(this)}
-                                    >
-                                      
-                                    </NdNumberBox>
-                                </Item>
+                                {/* txtPopPriPrice */}
                                 <Item>
                                     <Label text={this.t("popPrice.txtPopPriPrice")} alignment="right" />
-                                    <NdNumberBox id={"txtPopPriPrice"} parent={this} simple={true}  format={"##0.000"}
-                                    onValueChanged={(async(e)=>
-                                    {
-                                        this.txtPopPriPriceVatExt.value = (this.txtPopPriPrice.value / ((this.cmbTax.value/ 100) + 1))
-                                    }).bind(this)}
-                                    >
+                                    <NdNumberBox id={"txtPopPriPrice"} parent={this} simple={true}  format={"##0.000"}>
                                         <Validator validationGroup={"frmPrice" + this.tabIndex}>
                                             <RequiredRule message={this.t("validPrice")}
                                              />
@@ -2257,6 +2268,7 @@ export default class itemCard extends React.PureComponent
                                                     tmpCheckData = tmpCheckData.where({TYPE:0})
                                                     tmpCheckData = tmpCheckData.where({QUANTITY:this.txtPopPriQuantity.value})
                                                     tmpCheckData = tmpCheckData.where({DEPOT:this.cmbPopPriDepot.value})
+                                                    tmpCheckData = tmpCheckData.where({LIST_NO:this.cmbPopPriListNo.value})
                                                     
                                                     if(tmpCheckData.length > 0)
                                                     {
@@ -2286,7 +2298,8 @@ export default class itemCard extends React.PureComponent
                                                     let tmpEmpty = {...this.itemsObj.itemPrice.empty};
                                                 
                                                     tmpEmpty.TYPE = 0
-                                                    tmpEmpty.TYPE_NAME = 'Standart'
+                                                    tmpEmpty.LIST_NO = this.cmbPopPriListNo.value
+                                                    tmpEmpty.TYPE_NAME = 'Satis'
                                                     tmpEmpty.ITEM_GUID = this.itemsObj.dt()[0].GUID 
                                                     tmpEmpty.DEPOT = this.cmbPopPriDepot.value
                                                     tmpEmpty.START_DATE = new Date(moment(this.dtPopPriStartDate.value).format("YYYY-MM-DD")).toISOString()
@@ -2733,7 +2746,7 @@ export default class itemCard extends React.PureComponent
                             </Form>
                         </NdPopUp>
                     </div>      
-                    {/* İstatistik POPUP */}
+                    {/* İSTATİSTİK POPUP */}
                     <div>
                         <NdPopUp parent={this} id={"popAnalysis"} 
                         visible={false}
@@ -2912,7 +2925,7 @@ export default class itemCard extends React.PureComponent
                             </Form>
                         </NdPopUp>
                     </div>    
-                    {/* Birim PopUp */}
+                    {/* BİRİM POPUP */}
                     <div>
                         <NdDialog parent={this} id={"msgUnit"} 
                         visible={false}
@@ -2961,7 +2974,7 @@ export default class itemCard extends React.PureComponent
                             </Form>
                         </NdDialog>
                     </div>     
-                    {/* Açıklama POPUP */}
+                    {/* AÇIKLAMA POPUP */}
                     <div>
                         <NdPopUp parent={this} id={"popDescription"} 
                         visible={false}
