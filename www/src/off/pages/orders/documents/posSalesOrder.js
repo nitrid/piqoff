@@ -480,8 +480,10 @@ export default class posSalesOrder extends DocBase
                 {
                     if(typeof this.multiItemData.where({'CODE':tmpData.result.recordset[0].CODE})[0] == 'undefined')
                     {
+                        console.log(this.multiItemData);
                         this.multiItemData.push(tmpData.result.recordset[0])
                         tmpCounter = tmpCounter + 1
+                        console.log(tmpCounter);
                     }
                 }
                 else
@@ -979,18 +981,18 @@ export default class posSalesOrder extends DocBase
                                     dt={{data:this.docObj.dt('DOC'),field:"INPUT_CODE"}} 
                                     onEnterKey={(async()=>
                                     {
-                                        if(this.docObj.docOrders.dt().length > 0)
-                                        {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgCustomerLock',showTitle:true,title:this.t("msgCustomerLock.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgCustomerLock.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerLock.msg")}</div>)
-                                            }
-                                            
-                                            await dialog(tmpConfObj);
-                                            return;
-                                        }
+                                        // if(this.docObj.docOrders.dt().length > 0)
+                                        // {
+                                        //     let tmpConfObj =
+                                        //     {
+                                        //         id:'msgCustomerLock',showTitle:true,title:this.t("msgCustomerLock.title"),showCloseButton:true,width:'500px',height:'200px',
+                                        //         button:[{id:"btn01",caption:this.t("msgCustomerLock.btn01"),location:'after'}],
+                                        //         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerLock.msg")}</div>)
+                                        //     }
+                                        //
+                                        //     await dialog(tmpConfObj);
+                                        //     return;
+                                        // }
                                         
                                         this.pg_txtCustomerCode.onClick = async(data) =>
                                         {
@@ -1041,18 +1043,18 @@ export default class posSalesOrder extends DocBase
                                                 icon:'more',
                                                 onClick:async()=>
                                                 {
-                                                    if(this.docObj.docOrders.dt().length > 0)
-                                                    {
-                                                        let tmpConfObj =
-                                                        {
-                                                            id:'msgCustomerLock',showTitle:true,title:this.t("msgCustomerLock.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                            button:[{id:"btn01",caption:this.t("msgCustomerLock.btn01"),location:'after'}],
-                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerLock.msg")}</div>)
-                                                        }
-                                                        
-                                                        await dialog(tmpConfObj);
-                                                        return;
-                                                    }
+                                                    // if(this.docObj.docOrders.dt().length > 0)
+                                                    // {
+                                                    //     let tmpConfObj =
+                                                    //     {
+                                                    //         id:'msgCustomerLock',showTitle:true,title:this.t("msgCustomerLock.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    //         button:[{id:"btn01",caption:this.t("msgCustomerLock.btn01"),location:'after'}],
+                                                    //         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerLock.msg")}</div>)
+                                                    //     }
+                                                    //
+                                                    //     await dialog(tmpConfObj);
+                                                    //     return;
+                                                    // }
                                                     this.pg_txtCustomerCode.onClick = async(data) =>
                                                     {
                                                         if(data.length > 0)
