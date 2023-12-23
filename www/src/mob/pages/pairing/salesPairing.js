@@ -34,7 +34,35 @@ export default class salesPairing extends React.PureComponent
 
         this.itemDt.selectCmd = 
         {
-            query : "SELECT * FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE (CODE = @CODE OR BARCODE = @CODE) OR (@CODE = '')",
+            query : "SELECT    "  +
+            "ITEMS.GUID AS GUID,   "  +
+            "ITEMS.TYPE AS TYPE,   "  +
+            "ITEMS.SPECIAL AS SPECIAL,   "  +
+            "ITEMS.CODE AS CODE,   "  +
+            "ITEMS.NAME AS NAME,   "  +
+            "ITEMS.VAT AS VAT,   "  +
+            "ITEMS.COST_PRICE AS COST_PRICE,   "  +
+            "ITEMS.STATUS AS STATUS,   "  +
+            "ITEMS.MAIN_GRP  AS MIAN_GRP,   "  +
+            "ITEMS.MAIN_GRP_NAME AS MAIN_GRP_NAME,   "  +
+            "MAX(BARCODE) AS BARCODE,   "  +
+            "ITEMS.UNIT_FACTOR AS UNIT_FACTOR,   "  +
+            "ORDERS.GUID AS ORDER_LINE_GUID,   "  +
+            "ORDERS.DOC_GUID AS ORDER_DOC_GUID,   "  +
+            "ORDERS.QUANTITY AS QUANTITY,   "  +
+            "(ORDERS.QUANTITY - ORDERS.COMP_QUANTITY) AS PEND_QUANTITY,   "  +
+            "ORDERS.PRICE AS PRICE,   "  +
+            "ORDERS.DISCOUNT_1 AS DISCOUNT_1,   "  +
+            "ORDERS.DISCOUNT_2 AS DISCOUNT_2,   "  +
+            "ORDERS.DISCOUNT_3 AS DISCOUNT_3,   "  +
+            "ORDERS.DOC_DISCOUNT_1 AS DOC_DISCOUNT_1,   "  +
+            "ORDERS.DOC_DISCOUNT_2 AS DOC_DISCOUNT_2,   "  +
+            "ORDERS.DOC_DISCOUNT_3 AS DOC_DISCOUNT_3,   "  +
+            "ORDERS.VAT AS VAT,   "  +
+            "ORDERS.VAT_RATE AS VAT_RATE   "  +
+            "FROM ITEMS_BARCODE_MULTICODE_VW_01 AS ITEMS    "  +
+            "INNER JOIN DOC_ORDERS AS ORDERS ON ITEMS.GUID = ORDERS.ITEM   "  +
+            "WHERE ORDERS.DOC_GUID = @DOC_GUID AND (CODE = @CODE OR BARCODE = @CODE) OR (@CODE = '')",
             param : ['CODE:string|25'],
         }
         this.unitDt.selectCmd = 
@@ -169,7 +197,6 @@ export default class salesPairing extends React.PureComponent
     {
         if(this.txtFactor.value != 0 || this.txtQuantity.value != 0 || this.txtPrice.value != 0)
         {
-            console.log(this.txtDiscount.value)
             let tmpQuantity = this.txtFactor.value * this.txtQuantity.value;
             if((arguments.length > 0 && arguments[0]) || arguments.length == 0)
             {
@@ -349,6 +376,10 @@ export default class salesPairing extends React.PureComponent
         }
 
         this.pageView.activePage('Process')
+    }
+    async onClickOrdersShortcut()
+    {
+        this.pageView.activePage('Orders')
     }
     render()
     {
@@ -598,6 +629,26 @@ export default class salesPairing extends React.PureComponent
                                         <div className='col-3 d-flex justify-content-end align-items-center text-size-12'>{this.t("lblDate")}</div>
                                         <div className='col-9'>
                                             <NdDatePicker simple={true}  parent={this} id={"dtDocDate"} pickerType={"rollers"} dt={{data:this.docObj.dt('DOC'),field:"DOC_DATE"}}/>
+                                        </div>
+                                    </div>
+                                    <div className='row pb-2'>
+                                        <div className='col-6'>
+                                            <NbButton className="form-group btn btn-primary btn-purple btn-block" style={{height:"100%",width:"100%"}} 
+                                            onClick={this.onClickOrdersShortcut.bind(this)}>
+                                                <div className='row py-2'>
+                                                    <div className='col-12'>
+                                                        <i className={"fa-solid fa-list"} style={{color:'#ecf0f1',fontSize:'20px'}}></i>
+                                                    </div>
+                                                </div>
+                                                <div className='row'>
+                                                    <div className='col-12'>
+                                                        <h6 className='overflow-hidden d-flex align-items-center justify-content-center' style={{color:'#ecf0f1',height:'20px'}}>{this.lang.t("btnOrderSelect")}</h6>
+                                                    </div>
+                                                </div>
+                                            </NbButton>
+                                        </div>
+                                        <div className='col-6'>
+                                           
                                         </div>
                                     </div>
                                     <div className='row pb-2'>
@@ -1296,6 +1347,52 @@ export default class salesPairing extends React.PureComponent
                                     </div>
                                 </div>
                             </NdPopUp> 
+                        </PageContent>
+                        <PageContent id={"Orders"}>
+                            <div className='row px-2'>
+                                <div className='col-12'>
+                                    <div className='row pb-2'>
+                                        <div className='col-3 d-flex justify-content-end align-items-center text-size-12'>{this.t("lblDate")}</div>
+                                        <div className='col-9'>
+                                            <NdDatePicker simple={true}  parent={this} id={"dtFirstDate"} pickerType={"rollers"}/>
+                                        </div>
+                                    </div>
+                                    <div className='row pb-2'>
+                                        <div className='col-3 d-flex justify-content-end align-items-center text-size-12'>{this.t("lblDate")}</div>
+                                        <div className='col-9'>
+                                            <NdDatePicker simple={true}  parent={this} id={"dtLastDate"} pickerType={"rollers"}/>
+                                        </div>
+                                    </div>
+                                    <div className='row pb-2'>
+                                        <div className='col-12'>
+                                            <NdGrid parent={this} id={"grdOrderList"} 
+                                            showBorders={true} 
+                                            columnsAutoWidth={true} 
+                                            allowColumnReordering={true} 
+                                            allowColumnResizing={true} 
+                                            headerFilter = {{visible:false}}
+                                            height={'350'} 
+                                            width={'100%'}
+                                            dbApply={false}
+                                            >
+                                                <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
+                                                <Scrolling mode="standart" />
+                                                <Paging defaultPageSize={10} />
+                                                {/* <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} /> */}
+                                                <Editing mode="cell" allowUpdating={false} allowDeleting={false} confirmDelete={false}/>
+                                                <Column dataField="ITEM_NAME" caption={this.t("grdList.clmItemName")} width={150} />
+                                                <Column dataField="QUANTITY" caption={this.t("grdList.clmQuantity")} dataType={'number'} width={40}/>
+                                                <Column dataField="PRICE" caption={this.t("grdList.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}} width={60}/>
+                                                <Column dataField="AMOUNT" caption={this.t("grdList.clmAmount")} allowEditing={false} format={{ style: "currency", currency: "EUR",precision: 3}} width={80}/>
+                                                <Column dataField="DISCOUNT" caption={this.t("grdList.clmDiscount")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}} width={80}/>
+                                                <Column dataField="DISCOUNT_RATE" caption={this.t("grdList.clmDiscountRate")} dataType={'number'} width={80}/>
+                                                <Column dataField="VAT" caption={this.t("grdList.clmVat")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false} width={80}/>
+                                                <Column dataField="TOTAL" caption={this.t("grdList.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false} width={100}/>
+                                            </NdGrid>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </PageContent>
                     </PageView>
                 </div>
