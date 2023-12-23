@@ -1348,6 +1348,52 @@ export default class salesPairing extends React.PureComponent
                                 </div>
                             </NdPopUp> 
                         </PageContent>
+                        <PageContent id={"Orders"}>
+                            <div className='row px-2'>
+                                <div className='col-12'>
+                                    <div className='row pb-2'>
+                                        <div className='col-3 d-flex justify-content-end align-items-center text-size-12'>{this.t("lblDate")}</div>
+                                        <div className='col-9'>
+                                            <NdDatePicker simple={true}  parent={this} id={"dtFirstDate"} pickerType={"rollers"}/>
+                                        </div>
+                                    </div>
+                                    <div className='row pb-2'>
+                                        <div className='col-3 d-flex justify-content-end align-items-center text-size-12'>{this.t("lblDate")}</div>
+                                        <div className='col-9'>
+                                            <NdDatePicker simple={true}  parent={this} id={"dtLastDate"} pickerType={"rollers"}/>
+                                        </div>
+                                    </div>
+                                    <div className='row pb-2'>
+                                        <div className='col-12'>
+                                            <NdGrid parent={this} id={"grdOrderList"} 
+                                            showBorders={true} 
+                                            columnsAutoWidth={true} 
+                                            allowColumnReordering={true} 
+                                            allowColumnResizing={true} 
+                                            headerFilter = {{visible:false}}
+                                            height={'350'} 
+                                            width={'100%'}
+                                            dbApply={false}
+                                            >
+                                                <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
+                                                <Scrolling mode="standart" />
+                                                <Paging defaultPageSize={10} />
+                                                {/* <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} /> */}
+                                                <Editing mode="cell" allowUpdating={false} allowDeleting={false} confirmDelete={false}/>
+                                                <Column dataField="ITEM_NAME" caption={this.t("grdList.clmItemName")} width={150} />
+                                                <Column dataField="QUANTITY" caption={this.t("grdList.clmQuantity")} dataType={'number'} width={40}/>
+                                                <Column dataField="PRICE" caption={this.t("grdList.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}} width={60}/>
+                                                <Column dataField="AMOUNT" caption={this.t("grdList.clmAmount")} allowEditing={false} format={{ style: "currency", currency: "EUR",precision: 3}} width={80}/>
+                                                <Column dataField="DISCOUNT" caption={this.t("grdList.clmDiscount")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}} width={80}/>
+                                                <Column dataField="DISCOUNT_RATE" caption={this.t("grdList.clmDiscountRate")} dataType={'number'} width={80}/>
+                                                <Column dataField="VAT" caption={this.t("grdList.clmVat")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false} width={80}/>
+                                                <Column dataField="TOTAL" caption={this.t("grdList.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false} width={100}/>
+                                            </NdGrid>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </PageContent>
                     </PageView>
                 </div>
             </div>
