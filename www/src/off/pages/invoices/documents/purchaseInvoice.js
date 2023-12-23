@@ -558,9 +558,9 @@ export default class purchaseInvoice extends DocBase
                 {
                     let tmpCheckQuery = 
                     {
-                        query :"SELECT MULTICODE,(SELECT dbo.FN_PRICE(ITEM_GUID,@QUANTITY,GETDATE(),CUSTOMER_GUID,'00000000-0000-0000-0000-000000000000',0,1,0)) AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID",
-                        param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
-                        value : [pData.CODE,this.docObj.dt()[0].OUTPUT,pQuantity]
+                        query :"SELECT CODE AS MULTICODE,(SELECT dbo.FN_PRICE(ITEM,@QUANTITY,GETDATE(),CUSTOMER,'00000000-0000-0000-0000-000000000000',0,1,0)) AS PRICE FROM ITEM_MULTICODE WHERE ITEM = @ITEM AND CUSTOMER = @CUSTOMER_GUID",
+                        param : ['ITEM:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
+                        value : [pData.GUID,this.docObj.dt()[0].OUTPUT,pQuantity]
                     }
                     let tmpCheckData = await this.core.sql.execute(tmpCheckQuery) 
                     if(tmpCheckData.result.recordset.length == 0)
@@ -635,9 +635,9 @@ export default class purchaseInvoice extends DocBase
 
             let tmpQuery = 
             {
-                query :"SELECT (SELECT dbo.FN_PRICE(ITEM_GUID,@QUANTITY,GETDATE(),CUSTOMER_GUID,'00000000-0000-0000-0000-000000000000',0,1,0)) AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID ORDER BY LDATE DESC",
-                param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
-                value : [pData.CODE,this.docObj.dt()[0].OUTPUT,pQuantity]
+                query :"SELECT (SELECT dbo.FN_PRICE(ITEM,@QUANTITY,GETDATE(),CUSTOMER,'00000000-0000-0000-0000-000000000000',0,1,0)) AS PRICE FROM ITEM_MULTICODE WHERE ITEM = @ITEM AND CUSTOMER = @CUSTOMER_GUID ORDER BY LDATE DESC",
+                param : ['ITEM:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
+                value : [pData.GUID,this.docObj.dt()[0].OUTPUT,pQuantity]
             }
             let tmpData = await this.core.sql.execute(tmpQuery) 
             if(typeof pPrice == 'undefined')
@@ -833,6 +833,7 @@ export default class purchaseInvoice extends DocBase
         }
         let tmpMissCodes = []
         let tmpCounter = 0
+        this.grdPurcInv.devGrid.beginUpdate()
         for (let i = 0; i < pdata.length; i++) 
         {
             let tmpQuery = 
@@ -862,6 +863,7 @@ export default class purchaseInvoice extends DocBase
                 tmpMissCodes.push("'"+pdata[i].CODE+"'")
             }
         }
+        this.grdPurcInv.devGrid.endUpdate()
         if(tmpMissCodes.length > 0)
         {
             let tmpConfObj =
