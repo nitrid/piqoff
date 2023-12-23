@@ -913,7 +913,7 @@ export default class promotionCard extends React.PureComponent
                                             }}/>
                                         </Item>
                                         <Item>
-                                            <NdButton id={"btnDiscSave" + pItem.WITHAL} parent={this} text={this.t("popDiscount.btnSave")} type="default" width={'100%'}
+                                            <NdButton id={"btnDiscSave" + pItem.WITHAL} parent={this} text={this.t("popDiscount.btnSave")} type="success" width={'100%'}
                                             onClick={()=>
                                             {
                                                 if(this.state["rstType" + pItem.WITHAL] == 0)
@@ -961,7 +961,7 @@ export default class promotionCard extends React.PureComponent
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup={"frmPromo"  + this.tabIndex}
+                                    <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmPromo"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         if(this.condDt[0].AMOUNT == 0 && this.condDt[0].QUANTITY == 0)
@@ -1158,7 +1158,7 @@ export default class promotionCard extends React.PureComponent
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnDelete" parent={this} icon="trash" type="default"
+                                    <NdButton id="btnDelete" parent={this} icon="trash" type="danger"
                                     onClick={async()=>
                                     {                                        
                                         let tmpConfObj =

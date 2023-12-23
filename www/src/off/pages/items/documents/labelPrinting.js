@@ -778,7 +778,7 @@ export default class labelPrinting extends React.PureComponent
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" 
+                                    <NdButton id="btnSave" parent={this} icon="floppy" type="success" 
                                     onClick={async(e)=>
                                     {
                                         if(this.lblObj.dt()[this.lblObj.dt().length - 1].CODE == '')
@@ -820,7 +820,7 @@ export default class labelPrinting extends React.PureComponent
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnPrint" parent={this} icon="print" type="default" validationGroup={"frmLabelQeueu" + this.tabIndex}
+                                    <NdButton id="btnPrint" parent={this} icon="print" type="danger" validationGroup={"frmLabelQeueu" + this.tabIndex}
                                     onClick={async(e)=>
                                     {
                                         if(e.validationGroup.validate().status == "valid")

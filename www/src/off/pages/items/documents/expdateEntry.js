@@ -155,7 +155,7 @@ export default class expdateEntry extends React.Component
                             }}/>
                         </Item>
                         <Item location="after" locateInMenu="auto">
-                            <NdButton id="btnSave" parent={this} icon="floppy" type="default" 
+                            <NdButton id="btnSave" parent={this} icon="floppy" type="success" 
                             onClick={async(e)=>
                             {
                                 if(this.expObj.dt()[this.expObj.dt().length - 1].CODE == '')
@@ -205,7 +205,7 @@ export default class expdateEntry extends React.Component
                             }}/>
                         </Item>
                         <Item location="after" locateInMenu="auto">
-                            <NdButton id="btnDelete" parent={this} icon="trash" type="default"
+                            <NdButton id="btnDelete" parent={this} icon="trash" type="danger"
                             onClick={async()=>
                             {
                                 
@@ -661,7 +661,7 @@ export default class expdateEntry extends React.Component
                             <Item>
                                 <div className='row'>
                                     <div className='col-6'>
-                                        <NdButton text={this.lang.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"frmPurcContItems"  + this.tabIndex}
+                                        <NdButton text={this.lang.t("btnSave")} type="success" stylingMode="contained" width={'100%'} validationGroup={"frmPurcContItems"  + this.tabIndex}
                                         onClick={async (e)=>
                                         {       
                                             if(e.validationGroup.validate().status == "valid")

@@ -612,7 +612,7 @@ export default class salesOrder extends DocBase
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup={"frmslsDoc" + this.tabIndex}
+                                    <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmslsDoc" + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         if(this.docLocked == true)
@@ -690,7 +690,7 @@ export default class salesOrder extends DocBase
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnDelete" parent={this} icon="trash" type="default"
+                                    <NdButton id="btnDelete" parent={this} icon="trash" type="danger"
                                     onClick={async()=>
                                     {
                                         if(this.docObj.dt()[0].LOCKED != 0)
@@ -1195,7 +1195,7 @@ export default class salesOrder extends DocBase
                                                             this.customerControl = true
                                                             this.customerClear = false
                                                             this.combineControl = true
-                                                            this.combineNew = false
+                                                            this.combineNew = false 
         
                                                             this.grdSlsOrder.devGrid.beginUpdate()
                                                             for (let i = 0; i < data.length; i++) 

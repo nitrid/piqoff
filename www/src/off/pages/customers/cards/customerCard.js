@@ -313,7 +313,7 @@ export default class CustomerCard extends React.PureComponent
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup={"frmCustomers"  + this.tabIndex}
+                                    <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmCustomers"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         if(this.cmbType.value == 1)
@@ -408,7 +408,7 @@ export default class CustomerCard extends React.PureComponent
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnDelete" parent={this} icon="trash" type="default"
+                                    <NdButton id="btnDelete" parent={this} icon="trash" type="danger"
                                     onClick={async()=>
                                     {
                                         
@@ -1292,7 +1292,7 @@ export default class CustomerCard extends React.PureComponent
                                 <Item>
                                     <div className='row'>
                                         <div className='col-6'>
-                                            <NdButton text={this.lang.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} 
+                                            <NdButton text={this.lang.t("btnSave")} type="success" stylingMode="contained" width={'100%'} 
                                             onClick={async ()=>
                                             {
                                                 let tmpEmpty = {...this.customerObj.customerAdress.empty};

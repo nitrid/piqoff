@@ -178,7 +178,7 @@ export default class promotionList extends React.PureComponent
                                     }
                                 }} />
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnDelete" parent={this} icon="trash" type="default"
+                                    <NdButton id="btnDelete" parent={this} icon="trash" type="danger"
                                     onClick={async()=>
                                     {                                        
                                         let tmpConfObj =
