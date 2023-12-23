@@ -33,6 +33,11 @@ export default class itemPricingListCard extends React.PureComponent
         this.prevCode = null;
         this.tabIndex = props.data.tabkey
     }
+    async componentDidMount()
+    {
+        await this.core.util.waitUntil(0)
+        await this.init()
+    }
     async init()
     {
         this.itemPricingListObj.clearAll();

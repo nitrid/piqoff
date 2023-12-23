@@ -370,14 +370,7 @@ export default class salesDispatch extends DocBase
                                 await this.msgUnit.show()
                                 e.key.UNIT = this.cmbUnit.value
                                 e.key.UNIT_FACTOR = this.txtUnitFactor.value
-                                if(this.cm.data2.data1bUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].TYPE == 1)
-                                {
-                                    e.data.PRICE = parseFloat((this.txtUnitPrice.value * this.txtUnitFactor.value).toFixed(4))
-                                }
-                                else
-                                {
-                                    e.data.PRICE = parseFloat((this.txtUnitPrice.value / this.txtUnitFactor.value).toFixed(4))
-                                }
+                                e.data.PRICE = parseFloat((this.txtUnitPrice.value).toFixed(4))
                                 e.data.QUANTITY = this.txtTotalQuantity.value
                                 e.data.VAT = parseFloat(((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) * (e.data.VAT_RATE) / 100)).toFixed(6));
                                 e.data.AMOUNT = parseFloat((e.data.PRICE * e.data.QUANTITY).toFixed(4))
@@ -667,7 +660,7 @@ export default class salesDispatch extends DocBase
     {
         let tmpQuery = 
         {
-            query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ORDERS_VW_01 WHERE INPUT = @INPUT AND SHIPMENT_LINE_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 1 AND DOC_TYPE IN(60)",
+            query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ORDERS_VW_01 WHERE INPUT = @INPUT AND COMP_QUANTITY < QUANTITY AND CLOSED = 0 AND TYPE = 1 AND DOC_TYPE IN(60)",
             param : ['INPUT:string|50'],
             value : [this.docObj.dt()[0].INPUT]
         }
@@ -1498,7 +1491,7 @@ export default class salesDispatch extends DocBase
                                         {
                                             this.msgQuantity.tmpData = tmpData.result.recordset[0]
                                             await this.msgQuantity.show()
-                                            this.addItem(tmpData.result.recordset[0],null,this.txtPopQteUnitQuantity.value)
+                                            this.addItem(tmpData.result.recordset[0],null,this.txtPopQteUnitQuantity.value,this.txtPopQteUnitPrice.value)
                                             this.txtBarcode.focus()
                                         }
                                         else
@@ -1513,7 +1506,7 @@ export default class salesDispatch extends DocBase
                                                 {
                                                     this.msgQuantity.tmpData = tmpData.result.recordset[0]
                                                     await this.msgQuantity.show()
-                                                    await this.addItem(data[0],null,this.txtPopQteUnitQuantity.value)
+                                                    await this.addItem(data[0],null,this.txtPopQteUnitQuantity.value,this.txtPopQteUnitPrice.value)
                                                 };
                                                 this.grdSlsDispatch.devGrid.endUpdate()
                                             }
@@ -1735,7 +1728,8 @@ export default class salesDispatch extends DocBase
                                         }
                                        
                                     }}
-                                    onRowUpdated={async(e)=>{
+                                    onRowUpdated={async(e)=>
+                                    {
                                         if(typeof e.data.QUANTITY != 'undefined')
                                         {
                                             e.key.SUB_QUANTITY =  e.data.QUANTITY * e.key.SUB_FACTOR
