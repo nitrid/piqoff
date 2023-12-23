@@ -3310,7 +3310,7 @@ export const langTr =
         pg_subCustomer : 
         {
             title : "Alt Cari Seçim",
-            clmCode : "KODU",
+            clmCode : "Kodu",
             clmTitle : "Ünvan",
             clmName : "Adı",
             clmLastName  : "Soyadı",
@@ -3319,7 +3319,7 @@ export const langTr =
         pg_mainCustomer : 
         {
             title : "Ana Cari Seçim",
-            clmCode : "KODU",
+            clmCode : "Kodu",
             clmTitle : "Ünvan",
             clmName : "Adı",
             clmLastName  : "Soyadı",
@@ -3329,14 +3329,14 @@ export const langTr =
         {
             title : "Bölge Seçim",
             clmCode : "KODU",
-            clmName : "Adı",
+            clmName : "ADI",
         },
         txtSector : "Sektör",
         pg_SectorCode : 
         {
             title : "Bölge Seçim",
             clmCode : "KODU",
-            clmName : "Adı",
+            clmName : "ADI",
         },
         txtPriceListNo : "Fiyat Liste No",
         pg_priceListNo : 
@@ -3353,7 +3353,14 @@ export const langTr =
         grdNote:
         {
             clmNote : "NOT"
-        }
+        },
+        txtMainGroup : "Ana Grup",
+        pg_MainGroup : 
+        {
+            title : "Ana Grup Seçim",
+            clmCode : "KODU",
+            clmName : "ADI",
+        },
     },
     cri_01_002: // "Adres Tanımları"
     {
@@ -3423,6 +3430,53 @@ export const langTr =
         {
             frmCustomerAddress: "Kodu boş geçemezsiniz !",
         }
+    },
+    cri_01_003 : // "Grup Tanımları"
+    {
+        txtCode : "Kodu",
+        txtName :"Adı",
+        cmbType :"Tip",
+        validCode :"Kodu Boş Geçemezsiniz !",
+        pg_txtCode : 
+        {
+            title : "Grup Seçimi",
+            clmCode : "KODU",
+            clmName : "ADI",
+        },
+        msgSave:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kayıt etmek istediğinize eminmisiniz !"
+        },
+        msgSaveResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Kayıt işleminiz başarılı !",
+            msgFailed: "Kayıt işleminiz başarısız !"
+        },
+        msgSaveValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen gerekli alanları doldurunuz !"
+        },
+        msgDelete:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        },
+        msgCode : 
+        {
+            title: "Dikkat",
+            btn01: "Kasaya Git",
+            btn02: "Tamam",
+            msg : "Girmiş olduğunuz Kasa sistem de kayıtlı !"
+        },
     },
     cri_01_004 : // "Bölge Tanımları"
     {
