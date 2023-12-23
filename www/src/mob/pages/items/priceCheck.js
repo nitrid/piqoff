@@ -26,7 +26,7 @@ export default class priceCheck extends React.PureComponent
 
         this.itemDt.selectCmd = 
         {
-            query : "SELECT * FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE (CODE = @CODE OR BARCODE = @CODE OR MULTICODE = @CODE) OR (@CODE = '')",
+            query : "SELECT * FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE (CODE = @CODE OR BARCODE = @CODE ) OR (@CODE = '')",
             param : ['CODE:string|25'],
         }
         this.customerDt.selectCmd = 
