@@ -443,6 +443,33 @@ export const langFr =
         clmClosed : "Fermé",
         clmBalance  : "Restant",
     },
+    pg_ordersGrid : //BAK
+    {
+        title : "Sélection de la commande",  
+        clmReferans : "Réf.-Réf no:",  
+        clmCode : "Code",  
+        clmName : "Nom",  
+        clmQuantity : "Quantité",  
+        clmTotal : "Total",  
+        clmPrice : "Prix",  
+        clmlineNo : "No",
+        clmDate : "Date",
+        clmPendQuantity : "En attente"
+    },
+    msgQuantity: //BAK
+    {
+        title: "Quantité",
+        btn01: "Ajouter",
+        msg: "Veuillez Entrer la Quantité",
+        txtQuantity : "Quantité", 
+        txtUnitFactor : "Coefficient unitaire",  
+        txtUnitQuantity : "Quantité unitaire",  
+        txtTotalQuantity : "Quantité totale",  
+        txtUnitPrice : "Prix unitaire", 
+        txtPopQteDepotQty: "Quantité d'entrepôt",
+        txtPopQteReservQty: "Quantité réservée",
+        txtPopQteInputQty: "Quantité à venir"
+    },
     stk_01_001:  // "Identification du nouveau stock" 
     {
         txtRef: "Référence",
@@ -4786,18 +4813,6 @@ export const langFr =
             clmCode : "Code",   
             clmName : "Nom"   
         },
-        pg_ordersGrid : 
-        {  
-            title : "Sélection de la commande",  
-            clmReferans : "Réf.-Réf no:",  
-            clmCode : "Code",  
-            clmName : "Nom",  
-            clmQuantity : "Quantité",  
-            clmTotal : "Total",  
-            clmPrice : "Prix",  
-            clmlineNo : "No",
-            clmDate : "Date",
-        },
         cmbPayType : {
             title : "Mode de paiement",   
             cash : "Espèces",   
@@ -5320,19 +5335,8 @@ export const langFr =
             btn01: "Ajouter",
             msg: "Ajouter quantité"
         },
-        pg_ordersGrid : 
+        cmbPayType : 
         {
-            title : "Sélection de la commande",  
-            clmReferans : "Réf.-Réf no:",  
-            clmCode : "Code",  
-            clmName : "Nom",  
-            clmQuantity : "Quantité",  
-            clmTotal : "Total",  
-            clmPrice : "Prix",  
-            clmlineNo : "No",
-            clmDate : "Date"
-        },
-        cmbPayType : {
             title : "Mode de paiement",   
             cash : "Espèce",   
             check : "Chèque",   
@@ -6798,17 +6802,6 @@ export const langFr =
             btn01: "Ajouter",
             msg: "Ajouter quantité"
         },
-        pg_ordersGrid : 
-        {
-            title : "Sélection de la commande",  
-            clmReferans : "Réf.-Réf no:",  
-            clmCode : "Code",  
-            clmName : "Nom",  
-            clmQuantity : "Quantité",  
-            clmTotal : "Total",  
-            clmPrice : "Prix",  
-            clmlineNo : "No"
-        },
         cmbPayType : {
             title : "Mode de paiement",   
             cash : "Espèce",   
@@ -8242,17 +8235,6 @@ export const langFr =
             btn01: "Ajouter",
             msg: "Ajouter quantité"
         },
-        pg_ordersGrid : 
-        {
-            title : "Sélection de la commande",  
-            clmReferans : "Réf.-Réf no:",  
-            clmCode : "Code",  
-            clmName : "Nom",  
-            clmQuantity : "Quantité",  
-            clmTotal : "Total",  
-            clmPrice : "Prix",  
-            clmlineNo : "No"
-        },
         cmbPayType : {
             title : "Mode de paiement",   
             cash : "Espèce",   
@@ -9606,17 +9588,6 @@ export const langFr =
             btn01: "Ajouter",
             msg: "Ajouter quantité"
         },
-        pg_ordersGrid : 
-        {
-            title : "Sélection de la commande",  
-            clmReferans : "Réf.-Réf no:",  
-            clmCode : "Code",  
-            clmName : "Nom",  
-            clmQuantity : "Quantité",  
-            clmTotal : "Total",  
-            clmPrice : "Prix",  
-            clmlineNo : "No"
-        },
         cmbPayType : {
             title : "Mode de paiement",   
             cash : "Espèce",   
@@ -10168,17 +10139,6 @@ export const langFr =
             title : "Prestations de service",   
             clmCode : "Code",   
             clmName : "Nom"   
-        },
-        pg_ordersGrid : 
-        {  
-            title : "Sélection de la commande",  
-            clmReferans : "Réf.-Réf no:",  
-            clmCode : "Code",  
-            clmName : "Nom",  
-            clmQuantity : "Quantité",  
-            clmTotal : "Total",  
-            clmPrice : "Prix", 
-            clmlineNo : "No"
         },
         cmbPayType : {
             title : "Mode de paiement",   
@@ -11005,17 +10965,6 @@ export const langFr =
             btn01: "Ajouter",
             msg: "Ajouter quantité"
         },
-        pg_ordersGrid : 
-        {
-            title : "Sélection de la commande",  
-            clmReferans : "Réf.-Réf no:",  
-            clmCode : "Code",  
-            clmName : "Nom",  
-            clmQuantity : "Quantité",  
-            clmTotal : "Total",  
-            clmPrice : "Prix",  
-            clmlineNo : "No"
-        },
         cmbPayType : {
             title : "Mode de paiement",   
             cash : "Espèce",   
@@ -11736,17 +11685,6 @@ export const langFr =
             btn01: "Ajouter",
             msg: "Ajouter quantité"
         },
-        pg_ordersGrid : 
-        {
-            title : "Sélection de la commande",   
-            clmReferans : "Serie - Sequence",   
-            clmCode : "Code",   
-            clmName : "Nom",   
-            clmQuantity : "Quantité",   
-            clmTotal : "Total",   
-            clmPrice : "Prix", 
-            clmlineNo : "No"
-        },
         msgCustomerSelect:
         {
             title: "Attention",     
@@ -12194,17 +12132,6 @@ export const langFr =
             clmName : "Nom Produit",
             clmMulticode : "Référence Fournisseur",
             clmBarcode : "Code-Barres"
-        },
-        pg_ordersGrid : 
-        {
-            title : "Sélection de la commande",   
-            clmReferans : "Réf.-Réf No:",   
-            clmCode : "Code",   
-            clmName : "Nom",   
-            clmQuantity : "Quantité",   
-            clmTotal : "Total",   
-            clmPrice : "Prix",   
-            clmlineNo : "No"
         },
         msgCustomerSelect:
         {
@@ -12992,17 +12919,6 @@ export const langFr =
             clmMulticode : "Référence Fournisseur",
             clmBarcode : "Code Barre"
         },
-        pg_ordersGrid : 
-        {
-            title : "Sélection de la commande",   
-            clmReferans : "Réf.-Réf No:",   
-            clmCode : "Code",   
-            clmName : "Nom",   
-            clmQuantity : "Quantité",   
-            clmTotal : "Total",   
-            clmPrice : "Prix",   
-            clmlineNo : "No"
-        },
         msgCustomerSelect:
         {
             title: "Attention",  
@@ -13758,17 +13674,6 @@ export const langFr =
             clmName : "Nom Produit",
             clmMulticode : "Référence Fournisseur",
             clmBarcode : "Code Barre"
-        },
-        pg_ordersGrid : 
-        {
-            title : "Sélection de la commande",   
-            clmReferans : "Réf.-Réf No:",   
-            clmCode : "Code",   
-            clmName : "Nom",   
-            clmQuantity : "Quantité",   
-            clmTotal : "Total",   
-            clmPrice : "Prix",   
-            clmlineNo : "No"
         },
         msgCustomerSelect:
         {

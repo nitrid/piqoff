@@ -56,7 +56,7 @@ export default class posDoc extends React.PureComponent
         this.acsObj = new access(acs);   
         this.nf525 = new nf525Cls();
         this.isFirstOpen = false
-        this.pricingListNo = 0
+        this.pricingListNo = 1
         // NUMBER İÇİN PARAMETREDEN PARA SEMBOLÜ ATANIYOR.
         Number.money = this.prmObj.filter({ID:'MoneySymbol',TYPE:0}).getValue()
         
@@ -3707,12 +3707,12 @@ export default class posDoc extends React.PureComponent
                                                 let tmpDt = new datatable(); 
                                                 tmpDt.selectCmd = 
                                                 {
-                                                    query : "SELECT BARCODE,NAME,PRICE_SALE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE BARCODE LIKE '%' + @BARCODE AND STATUS = 1",
+                                                    query : "SELECT BARCODE,NAME,PRICE_SALE AS PRICE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE BARCODE LIKE '%' + @BARCODE AND STATUS = 1",
                                                     param : ['BARCODE:string|25'],
                                                     local : 
                                                     {
                                                         type : "select",
-                                                        query : "SELECT BARCODE, NAME, PRICE_SALE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE BARCODE LIKE '%' || ? AND STATUS = 1;",
+                                                        query : "SELECT BARCODE, NAME, PRICE_SALE  AS PRICE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE BARCODE LIKE '%' || ? AND STATUS = 1;",
                                                         values : [this.txtBarcode.value]                                                        
                                                     }
                                                 }

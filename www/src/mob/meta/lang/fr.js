@@ -12,11 +12,24 @@ export const langFr =
     msgWarning : "Attention",
     msgSqlService1 : "Impossible de se connecter au serveur Sql",
     comingSoon : "Bientôt actif... ", 
+    btnBarcodeEntry: "Barkod Giriş",   // BAK
+    btnProcessLines: "İşlem Satırları",   // BAK
+    btnNewDoc: "Yeni Evrak",   // BAK
+    btnDocDelete: "Evrak Sil",   // BAK
+    btnLineDisc: "Satır İndirim",   // BAK
+    chkRememberMe : "Souviens-toi de moi", // BAK
     msgAnotherUserAlert: 
     {
         title : "Attention",
         msg : "Vous êtes connecté à partir d'un autre appareil avec vos informations d'utilisateur",
         btn01 : "OK"
+    },
+    msgSaveResult:
+    {
+        title: "Attention",
+        btn01: "OK",
+        msgSuccess: "Enregistré avec succès !",
+        msgFailed: "Enregistrement échoué !",
     },
     msgCombineItem:
     {
