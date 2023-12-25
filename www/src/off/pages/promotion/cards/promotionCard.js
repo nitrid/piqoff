@@ -323,7 +323,7 @@ export default class promotionCard extends React.PureComponent
                                             {
                                                 select:
                                                 {
-                                                    query : "SELECT MAX(ITEM_GUID) AS GUID,MAX(BARCODE) AS BARCODE,ITEM_CODE AS CODE,ITEM_NAME AS NAME,MAIN_GRP_NAME AS MAIN_GRP_NAME, " + 
+                                                    query : "SELECT MAX(ITEM_GUID) AS GUID,MAX(BARCODE) AS BARCODE,ITEM_CODE AS CODE,(SELECT TOP 1 COST_PRICE FROM ITEMS WHERE ITEMS.GUID = MAX(ITEM_GUID)) AS COST_PRICE,ITEM_NAME AS NAME,MAIN_GRP_NAME AS MAIN_GRP_NAME, " + 
                                                             "ISNULL(ROUND((SELECT dbo.FN_PRICE(ITEM_GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',1,0,1)),2),0) AS PRICE " + 
                                                             "FROM ITEM_BARCODE_VW_01 WHERE (UPPER(ITEM_CODE) LIKE UPPER(@VAL) OR UPPER(ITEM_NAME) LIKE UPPER(@VAL) OR BARCODE LIKE @VAL) AND STATUS = 1 " + 
                                                             "GROUP BY ITEM_CODE,ITEM_NAME,MAIN_GRP_NAME,ITEM_GUID,VAT",
@@ -913,7 +913,7 @@ export default class promotionCard extends React.PureComponent
                                             }}/>
                                         </Item>
                                         <Item>
-                                            <NdButton id={"btnDiscSave" + pItem.WITHAL} parent={this} text={this.t("popDiscount.btnSave")} type="default" width={'100%'}
+                                            <NdButton id={"btnDiscSave" + pItem.WITHAL} parent={this} text={this.t("popDiscount.btnSave")} type="success" width={'100%'}
                                             onClick={()=>
                                             {
                                                 if(this.state["rstType" + pItem.WITHAL] == 0)
@@ -961,7 +961,7 @@ export default class promotionCard extends React.PureComponent
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup={"frmPromo"  + this.tabIndex}
+                                    <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmPromo"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         if(this.condDt[0].AMOUNT == 0 && this.condDt[0].QUANTITY == 0)
@@ -1158,7 +1158,7 @@ export default class promotionCard extends React.PureComponent
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnDelete" parent={this} icon="trash" type="default"
+                                    <NdButton id="btnDelete" parent={this} icon="trash" type="danger"
                                     onClick={async()=>
                                     {                                        
                                         let tmpConfObj =
