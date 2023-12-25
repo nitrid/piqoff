@@ -24,6 +24,13 @@ export const langFr =
         msg : "Vous êtes connecté à partir d'un autre appareil avec vos informations d'utilisateur",
         btn01 : "OK"
     },
+    msgSaveResult:
+    {
+        title: "Attention",
+        btn01: "OK",
+        msgSuccess: "Enregistré avec succès !",
+        msgFailed: "Enregistrement échoué !",
+    },
     msgCombineItem:
     {
         title: "Attention",

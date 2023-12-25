@@ -296,7 +296,21 @@ export default class purchaseOrder extends React.PureComponent
                 this.docObj.dt()[0].TOTALHT = parseFloat(parseFloat(this.docObj.docOrders.dt().sum("TOTALHT",2)) - parseFloat(this.docObj.docOrders.dt().sum("DOC_DISCOUNT",2))).round(2)
                 this.docObj.dt()[0].TOTAL = Number((parseFloat(this.docObj.dt()[0].TOTALHT)) + parseFloat(this.docObj.dt()[0].VAT)).round(2)
             }
-            await this.docObj.save()
+            let tmpConfObj1 =
+            {
+                id:'msgSaveResult',showTitle:true,title:this.lang.t("msgSave.title"),showCloseButton:true,width:'350px',height:'200px',
+                button:[{id:"btn01",caption:this.lang.t("msgSave.btn01"),location:'after'}],
+            }
+            
+            if((await this.docObj.save()) == 0)
+            {                                                    
+               
+            }
+            else
+            {
+                tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.lang.t("msgSaveResult.msgFailed")}</div>)
+                await dialog(tmpConfObj1);
+            }
             resolve()
         })
     }
@@ -772,7 +786,7 @@ export default class purchaseOrder extends React.PureComponent
                                             <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.t("lblPrice")}</label>                                            
                                         </div>
                                         <div className='col-4'>
-                                            <NdTextBox id="txtPrice" parent={this} simple={true} maxLength={32} onValueChanged={this.calcEntry.bind(this,false)} dt={{data:this.orderDt,field:"PRICE"}} 
+                                            <NdNumberBox id="txtPrice" parent={this} simple={true} maxLength={32} onValueChanged={this.calcEntry.bind(this,false)} dt={{data:this.orderDt,field:"PRICE"}} 
                                             onEnterKey={this.addItem.bind(this)}/>
                                         </div>
                                     </div>

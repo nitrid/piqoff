@@ -1,7 +1,7 @@
 import React from 'react';
 import App from '../../../lib/app.js';
-import { bankCls} from '../../../../core/cls/finance.js';
-import moment from 'moment';
+import { customerGrpCls } from '../../../../core/cls/customers.js';
+
 
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
@@ -22,14 +22,14 @@ import NdImageUpload from '../../../../core/react/devex/imageupload.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
 
-export default class bankCard extends React.PureComponent
+export default class customerGrpCard extends React.PureComponent
 {
     constructor(props)
     {
         super(props)
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
-        this.bankObj = new bankCls();
+        this.customerGrpObj = new customerGrpCls();
         this.prevCode = "";
         this.tabIndex = props.data.tabkey
     }
@@ -40,10 +40,10 @@ export default class bankCard extends React.PureComponent
     }
     async init()
     {
-        this.bankObj.clearAll();
-        this.bankObj.addEmpty();
+        this.customerGrpObj.clearAll();
+        this.customerGrpObj.addEmpty();
 
-        this.bankObj.ds.on('onAddRow',(pTblName,pData) =>
+        this.customerGrpObj.ds.on('onAddRow',(pTblName,pData) =>
         {
             if(pData.stat == 'new')
             {
@@ -60,11 +60,9 @@ export default class bankCard extends React.PureComponent
                 
                 this.btnSave.setState({disabled:false});
                 this.btnDelete.setState({disabled:false});
-                this.btnCopy.setState({disabled:false});
-                this.btnPrint.setState({disabled:false});
             }
         })
-        this.bankObj.ds.on('onEdit',(pTblName,pData) =>
+        this.customerGrpObj.ds.on('onEdit',(pTblName,pData) =>
         {            
             if(pData.rowData.stat == 'edit')
             {
@@ -72,38 +70,32 @@ export default class bankCard extends React.PureComponent
                 this.btnNew.setState({disabled:true});
                 this.btnSave.setState({disabled:false});
                 this.btnDelete.setState({disabled:false});
-                this.btnCopy.setState({disabled:false});
-                this.btnPrint.setState({disabled:false});
 
                 pData.rowData.CUSER = this.user.CODE
             }                 
         })
-        this.bankObj.ds.on('onRefresh',(pTblName) =>
+        this.customerGrpObj.ds.on('onRefresh',(pTblName) =>
         {            
-            this.prevCode = this.bankObj.dt('BANK').length > 0 ? this.bankObj.dt('BANK')[0].CODE : '';
+            this.prevCode = this.customerGrpObj.dt().length > 0 ? this.customerGrpObj.dt()[0].CODE : '';
             this.btnBack.setState({disabled:true});
             this.btnNew.setState({disabled:false});
             this.btnSave.setState({disabled:true});
             this.btnDelete.setState({disabled:false});
-            this.btnCopy.setState({disabled:false});
-            this.btnPrint.setState({disabled:false});          
         })
-        this.bankObj.ds.on('onDelete',(pTblName) =>
+        this.customerGrpObj.ds.on('onDelete',(pTblName) =>
         {            
             this.btnBack.setState({disabled:false});
             this.btnNew.setState({disabled:true});
             this.btnSave.setState({disabled:false});
             this.btnDelete.setState({disabled:false});
-            this.btnCopy.setState({disabled:false});
-            this.btnPrint.setState({disabled:false});
         })
     }
-    async getBank(pCode)
+    async getGroup(pCode)
     {
-        this.bankObj.clearAll()
-        await this.bankObj.load({CODE:pCode});
+        this.customerGrpObj.clearAll()
+        await this.customerGrpObj.load({CODE:pCode});
     }
-    async checkBank(pCode)
+    async checkGroup(pCode)
     {
         return new Promise(async resolve =>
         {
@@ -111,7 +103,7 @@ export default class bankCard extends React.PureComponent
             {
                 let tmpQuery = 
                 {
-                    query :"SELECT * FROM BANK_VW_01 WHERE CODE = @CODE",
+                    query :"SELECT * FROM CUSTOMER_GROUP_VW_01 WHERE CODE = @CODE",
                     param : ['CODE:string|50'],
                     value : [pCode]
                 }
@@ -134,7 +126,7 @@ export default class bankCard extends React.PureComponent
                     let pResult = await dialog(tmpConfObj);
                     if(pResult == 'btn01')
                     {
-                        this.getBank(pCode)
+                        this.getGroup(pCode)
                         resolve(2) //KAYIT VAR
                     }
                     else
@@ -167,7 +159,7 @@ export default class bankCard extends React.PureComponent
                                         {
                                             if(this.prevCode != '')
                                             {
-                                                this.getBank(this.prevCode); 
+                                                this.getGroup(this.prevCode); 
                                             }
                                         }}/>
                                 </Item>
@@ -175,12 +167,11 @@ export default class bankCard extends React.PureComponent
                                     <NdButton id="btnNew" parent={this} icon="file" type="default"
                                     onClick={()=>
                                     {
-                                        console.log(132)
                                         this.init(); 
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmBank"  + this.tabIndex}
+                                    <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmArea"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         if(e.validationGroup.validate().status == "valid")
@@ -201,11 +192,12 @@ export default class bankCard extends React.PureComponent
                                                     button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
                                                 }
                                                 
-                                                if((await this.bankObj.save()) == 0)
-                                                {                                                    
+                                                if((await this.customerGrpObj.save()) == 0)
+                                                {                                      
+                                                    this.btnNew.setState({disabled:false});
+                                                    this.btnSave.setState({disabled:true});              
                                                     tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
                                                     await dialog(tmpConfObj1);
-                                                    this.init()
                                                 }
                                                 else
                                                 {
@@ -231,7 +223,6 @@ export default class bankCard extends React.PureComponent
                                     <NdButton id="btnDelete" parent={this} icon="trash" type="danger"
                                     onClick={async()=>
                                     {
-                                        
                                         let tmpConfObj =
                                         {
                                             id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'200px',
@@ -242,25 +233,11 @@ export default class bankCard extends React.PureComponent
                                         let pResult = await dialog(tmpConfObj);
                                         if(pResult == 'btn01')
                                         {
-                                            this.bankObj.dt('BANK').removeAt(0)
-                                            await this.bankObj.dt('BANK').delete();
+                                            this.customerGrpObj.dt().removeAt(0)
+                                            await this.customerGrpObj.dt().delete();
                                             this.init(); 
                                         }
                                         
-                                    }}/>
-                                </Item>
-                                <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnCopy" parent={this} icon="copy" type="default"
-                                    onClick={()=>
-                                    {
-                                        
-                                    }}/>
-                                </Item>
-                                <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnPrint" parent={this} icon="print" type="default"
-                                    onClick={()=>
-                                    {
-                                        this.popDesign.show()
                                     }}/>
                                 </Item>
                                 <Item location="after"
@@ -293,11 +270,11 @@ export default class bankCard extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={3} id={"frmBank"  + this.tabIndex}>
+                            <Form colCount={3} id="frmArea">
                                  {/* txtCode */}
                                  <Item>
                                     <Label text={this.t("txtCode")} alignment="right" />
-                                    <NdTextBox id="txtCode" parent={this} simple={true} dt={{data:this.bankObj.dt('BANK'),field:"CODE"}}  
+                                    <NdTextBox id="txtCode" parent={this} simple={true} dt={{data:this.customerGrpObj.dt(),field:"CODE"}}  
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     button=
                                     {
@@ -312,7 +289,7 @@ export default class bankCard extends React.PureComponent
                                                     {
                                                         if(data.length > 0)
                                                         {
-                                                            this.getBank(data[0].CODE)
+                                                            this.getGroup(data[0].CODE)
                                                         }
                                                     }
                                                 }
@@ -329,7 +306,7 @@ export default class bankCard extends React.PureComponent
                                     }
                                     onChange={(async()=>
                                     {
-                                        let tmpResult = await this.checkBank(this.txtCode.value)
+                                        let tmpResult = await this.checkGroup(this.txtCode.value)
                                         if(tmpResult == 3)
                                         {
                                             this.txtCode.value = "";
@@ -338,11 +315,11 @@ export default class bankCard extends React.PureComponent
                                     param={this.param.filter({ELEMENT:'txtCode',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtCode',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmBank"  + this.tabIndex}>
+                                        <Validator validationGroup={"frmArea"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validCode")} />
                                         </Validator>  
                                     </NdTextBox>
-                                    {/*KASA SECIMI POPUP */}
+                                    {/* GRUP SECIMI POPUP */}
                                     <NdPopGrid id={"pg_txtCode"} parent={this} container={"#root"}
                                     visible={false}
                                     position={{of:'#root'}} 
@@ -351,122 +328,23 @@ export default class bankCard extends React.PureComponent
                                     width={'90%'}
                                     height={'90%'}
                                     title={this.t("pg_txtCode.title")} //
-                                    data={{source:{select:{query : "SELECT CODE,NAME,IBAN FROM BANK_VW_01"},sql:this.core.sql}}}
-                                    button=
-                                    {
-                                        {
-                                            id:'01',
-                                            icon:'more',
-                                            onClick:()=>
-                                            {
-                                            }
-                                        }
-                                    }
+                                    data={{source:{select:{query : "SELECT CODE,NAME FROM CUSTOMER_GROUP_VW_01"},sql:this.core.sql}}}
                                     >
                                         <Column dataField="CODE" caption={this.t("pg_txtCode.clmCode")} width={150} />
                                         <Column dataField="NAME" caption={this.t("pg_txtCode.clmName")} width={300} defaultSortOrder="asc" />
-                                        <Column dataField="IBAN" caption={this.t("pg_txtCode.clmIban")} width={300} defaultSortOrder="asc" />
                                     </NdPopGrid>
                                 </Item>
                                 {/* txtTitle */}
                                 <Item>
                                     <Label text={this.t("txtName")} alignment="right" />
-                                    <NdTextBox id="txtTitle" parent={this} simple={true} dt={{data:this.bankObj.dt('BANK'),field:"NAME"}}
+                                    <NdTextBox id="txtTitle" parent={this} simple={true} dt={{data:this.customerGrpObj.dt(),field:"NAME"}}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    onChange={(async()=>
-                                    {
-                                      
-                                    }).bind(this)}
                                     param={this.param.filter({ELEMENT:'txtName',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtName',USERS:this.user.CODE})}
                                     >
                                     </NdTextBox>
                                 </Item>
                                 <EmptyItem />
-                               {/* txtIban */}
-                               <Item>
-                                    <Label text={this.t("txtIban")} alignment="right" />
-                                    <NdTextBox id="txtIban" parent={this} simple={true} dt={{data:this.bankObj.dt('BANK'),field:"IBAN"}}
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    onChange={(async()=>
-                                    {
-                                      
-                                    }).bind(this)}
-                                    param={this.param.filter({ELEMENT:'txtIban',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'txtIban',USERS:this.user.CODE})}
-                                    >
-                                         <Validator validationGroup={"frmBank"  + this.tabIndex}>
-                                            <RequiredRule message={this.t("validIban")} />
-                                        </Validator>  
-                                    </NdTextBox>
-                                </Item>
-                                {/* txtSwift */}
-                               <Item>
-                                    <Label text={this.t("txtSwift")} alignment="right" />
-                                    <NdTextBox id="txtSwift" parent={this} simple={true} dt={{data:this.bankObj.dt('BANK'),field:"SWIFT"}}
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    onChange={(async()=>
-                                    {
-                                      
-                                    }).bind(this)}
-                                    >
-                                    </NdTextBox>
-                                </Item>
-                                <EmptyItem />
-                                {/* cmbCurrentyType */}
-                                <Item>
-                                    <Label text={this.t("cmbCurrentyType")} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbCurrentyType" height='fit-content' dt={{data:this.bankObj.dt('BANK'),field:"CURRENCY"}}
-                                    displayExpr="NAME"                       
-                                    valueExpr="CODE"
-                                    data={{source:{select:{query : "SELECT * FROM CURRENCY_TYPE"},sql:this.core.sql}}}
-                                    onValueChanged={(async()=>
-                                            {
-                                               
-                                        }).bind(this)}
-                                    />
-                                </Item>
-                                 {/* txtOffical */}
-                               <Item>
-                                    <Label text={this.t("txtOffical")} alignment="right" />
-                                    <NdTextBox id="txtOffical" parent={this} simple={true} dt={{data:this.bankObj.dt('BANK'),field:"OFFICAL"}}
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    onChange={(async()=>
-                                    {
-                                      
-                                    }).bind(this)}
-                                    >
-                                    </NdTextBox>
-                                </Item>
-                                <EmptyItem />
-                                {/* txtAdress */}
-                                <Item colSpan={2}>
-                                    <Label text={this.t("txtAdress")} alignment="right" />
-                                    <NdTextBox id="txtAdress" parent={this} simple={true} dt={{data:this.bankObj.dt('BANK'),field:"ADRESS"}}
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    onChange={(async()=>
-                                    {
-                                      
-                                    }).bind(this)}
-                                    >
-                                    </NdTextBox>
-                                </Item>
-                                <EmptyItem />
-                                 {/* txtPhone */}
-                               <Item>
-                                    <Label text={this.t("txtPhone")} alignment="right" />
-                                    <NdTextBox id="txtPhone" parent={this} simple={true} dt={{data:this.bankObj.dt('BANK'),field:"PHONE"}}
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    onChange={(async()=>
-                                    {
-                                      
-                                    }).bind(this)}
-                                    >
-                                    </NdTextBox>
-                                </Item>
-                                
-                                  
-                               
                             </Form>
                         </div>
                     </div>

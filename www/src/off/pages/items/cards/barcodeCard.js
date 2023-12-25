@@ -125,7 +125,7 @@ export default class barcodeCard extends React.PureComponent
         await this.cmbBarUnit.data.datatable.refresh()
 
     }
-   render()
+    render()
     {           
         return (
             <div>                
@@ -141,7 +141,7 @@ export default class barcodeCard extends React.PureComponent
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup={"frmBarcode"  + this.tabIndex}
+                                    <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmBarcode"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         if(e.validationGroup.validate().status == "valid")

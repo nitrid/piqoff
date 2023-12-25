@@ -34,8 +34,8 @@ export default class rebateDispatch extends React.PureComponent
 
         this.itemDt.selectCmd = 
         {
-            query : "SELECT * FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE (CODE = @CODE OR BARCODE = @CODE OR MULTICODE = @CODE) OR (@CODE = '')",
-            param : ['CODE:string|25'],
+            query : "SELECT * FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE (CODE = @CODE OR BARCODE = @CODE OR (MULTICODE = @CODE AND CUSTOMER_GUID = @CUSTOMER_GUID)) OR (@CODE = '')",
+            param : ['CODE:string|25','CUSTOMER_GUID:string|50'],
         }
         this.unitDt.selectCmd = 
         {
@@ -121,7 +121,7 @@ export default class rebateDispatch extends React.PureComponent
         {
             this.clearEntry();
             
-            this.itemDt.selectCmd.value = [pCode]
+            this.itemDt.selectCmd.value = [pCode,this.docObj.dt()[0].OUTPUT]
             await this.itemDt.refresh();  
             
             if(this.itemDt.length > 0)
@@ -801,7 +801,7 @@ export default class rebateDispatch extends React.PureComponent
                                             <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.t("lblPrice")}</label>                                            
                                         </div>
                                         <div className='col-4'>
-                                            <NdTextBox id="txtPrice" parent={this} simple={true} maxLength={32} onValueChanged={this.calcEntry.bind(this,false)} dt={{data:this.orderDt,field:"PRICE"}} 
+                                            <NdNumberBox id="txtPrice" parent={this} simple={true} maxLength={32} onValueChanged={this.calcEntry.bind(this,false)} dt={{data:this.orderDt,field:"PRICE"}} 
                                             onEnterKey={this.addItem.bind(this)}/>
                                         </div>
                                     </div>
