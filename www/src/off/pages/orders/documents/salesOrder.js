@@ -120,7 +120,7 @@ export default class salesOrder extends DocBase
         this.txtRef.readOnly = true
         this.txtRefno.readOnly = true
         
-        this.frmDocItems.option('disabled',this.docLocked)
+        this.frmDocItems.option('disabled', this.docLocked)
     }
     _cellRoleRender(e)
     {
@@ -182,7 +182,7 @@ export default class salesOrder extends DocBase
                             }
                         }
                     }).bind(this)}
-                button=
+                button =
                 {
                     [
                         {
@@ -498,9 +498,16 @@ export default class salesOrder extends DocBase
             {
                 let tmpQuery = 
                 {
-                    query :"SELECT GUID,CODE,NAME,VAT,1 AS QUANTITY,UNIT," + 
-                    "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].INPUT+"'),'') AS MULTICODE"+
-                    " FROM ITEMS_VW_01 WHERE ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].INPUT+"'),'') = @VALUE " ,
+                    query : "SELECT ITEMS.GUID,ITEMS.CODE,ITEMS.NAME,ITEMS.VAT,1 AS QUANTITY, " +
+                            "CASE WHEN UNIT.GUID IS NULL THEN ITEMS.UNIT ELSE UNIT.GUID END AS UNIT, " +
+                            "CASE WHEN UNIT.NAME IS NULL THEN ITEMS.UNIT_NAME ELSE UNIT.NAME END AS UNIT_NAME, " +
+                            "CASE WHEN UNIT.SYMBOL IS NULL THEN ITEMS.UNIT_SHORT ELSE UNIT.SYMBOL END AS UNIT_SHORT, " +
+                            "CASE WHEN UNIT.FACTOR IS NULL THEN ITEMS.UNIT_FACTOR ELSE UNIT.FACTOR END AS UNIT_FACTOR, " + 
+                            "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS.GUID AND CUSTOMER_GUID = '" + this.docObj.dt()[0].INPUT + "'),'') AS MULTICODE " +
+                            "FROM ITEMS_VW_01 AS ITEMS " + 
+                            "LEFT OUTER JOIN ITEM_UNIT_VW_01 AS UNIT ON " +
+                            "ITEMS.GUID = UNIT.ITEM_GUID AND UNIT.TYPE = 2 AND UNIT.NAME = '" + this.sysParam.filter({ID:'cmbUnit',USERS:this.user.CODE}).getValue().value + "' " +
+                            "WHERE ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS.GUID AND CUSTOMER_GUID = '" + this.docObj.dt()[0].INPUT + "'),'') = @VALUE AND ITEMS.STATUS = 1" ,
                     param : ['VALUE:string|50'],
                     value : [this.tagItemCode.value[i]]
                 }
@@ -522,9 +529,16 @@ export default class salesOrder extends DocBase
             {
                 let tmpQuery = 
                 {
-                    query :"SELECT GUID,CODE,NAME,VAT,1 AS QUANTITY,UNIT," + 
-                    "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].INPUT+"'),'') AS MULTICODE"+
-                    " FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VALUE) OR UPPER(NAME) LIKE UPPER(@VALUE) " ,
+                    query : "SELECT ITEMS.GUID,ITEMS.CODE,ITEMS.NAME,ITEMS.VAT,1 AS QUANTITY, " +
+                            "CASE WHEN UNIT.GUID IS NULL THEN ITEMS.UNIT ELSE UNIT.GUID END AS UNIT, " +
+                            "CASE WHEN UNIT.NAME IS NULL THEN ITEMS.UNIT_NAME ELSE UNIT.NAME END AS UNIT_NAME, " +
+                            "CASE WHEN UNIT.SYMBOL IS NULL THEN ITEMS.UNIT_SHORT ELSE UNIT.SYMBOL END AS UNIT_SHORT, " +
+                            "CASE WHEN UNIT.FACTOR IS NULL THEN ITEMS.UNIT_FACTOR ELSE UNIT.FACTOR END AS UNIT_FACTOR, " + 
+                            "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS.GUID AND CUSTOMER_GUID = '" + this.docObj.dt()[0].INPUT + "'),'') AS MULTICODE " +
+                            "FROM ITEMS_VW_01 AS ITEMS " +
+                            "LEFT OUTER JOIN ITEM_UNIT_VW_01 AS UNIT ON " +
+                            "ITEMS.GUID = UNIT.ITEM_GUID AND UNIT.TYPE = 2 AND UNIT.NAME = '" + this.sysParam.filter({ID:'cmbUnit',USERS:this.user.CODE}).getValue().value + "' " +
+                            "WHERE ITEMS.CODE = @VALUE AND ITEMS.STATUS = 1" ,
                     param : ['VALUE:string|50'],
                     value : [this.tagItemCode.value[i]]
                 }
@@ -573,7 +587,7 @@ export default class salesOrder extends DocBase
         this.grdSlsOrder.devGrid.beginUpdate()
         for (let i = 0; i < this.multiItemData.length; i++) 
         {
-            await this.addItem(this.multiItemData[i],null,this.multiItemData[i].QUANTITY)
+            await this.addItem(this.multiItemData[i],null,Number(this.multiItemData[i].QUANTITY * this.multiItemData[i].UNIT_FACTOR).round(3))
             this.popMultiItem.hide()
         }
         this.grdSlsOrder.devGrid.endUpdate()
@@ -612,7 +626,7 @@ export default class salesOrder extends DocBase
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup={"frmslsDoc" + this.tabIndex}
+                                    <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmslsDoc" + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         if(this.docLocked == true)
@@ -690,7 +704,7 @@ export default class salesOrder extends DocBase
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnDelete" parent={this} icon="trash" type="default"
+                                    <NdButton id="btnDelete" parent={this} icon="trash" type="danger"
                                     onClick={async()=>
                                     {
                                         if(this.docObj.dt()[0].LOCKED != 0)
@@ -979,7 +993,7 @@ export default class salesOrder extends DocBase
                                     dt={{data:this.docObj.dt('DOC'),field:"OUTPUT"}}  
                                     displayExpr="NAME"                       
                                     valueExpr="GUID"
-                                    value=""
+                                    value = ""
                                     searchEnabled={true}
                                     onValueChanged={(async()=>
                                     {
@@ -989,9 +1003,9 @@ export default class salesOrder extends DocBase
                                             this.frmDocItems.option('disabled',false)
                                         }
                                     }).bind(this)}
-                                    data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01 WHERE TYPE IN(0,2)"},sql:this.core.sql}}}
-                                    param={this.param.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
+                                    data = {{source:{select:{query : "SELECT * FROM DEPOT_VW_01 WHERE TYPE IN(0,2)"},sql:this.core.sql}}}
+                                    param = {this.param.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
+                                    access = {this.access.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     >
                                         <Validator validationGroup={"frmslsDoc" + this.tabIndex}>
                                             <RequiredRule message={this.t("validDepot")} />
@@ -1002,14 +1016,14 @@ export default class salesOrder extends DocBase
                                 <Item>
                                     <Label text={this.t("cmbPricingList")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbPricingList" notRefresh={true}
-                                    displayExpr="NAME"
-                                    valueExpr="NO"
-                                    value=""
-                                    searchEnabled={true}
-                                    dt={{data:this.docObj.dt('DOC'),field:"PRICE_LIST_NO"}} 
-                                    data={{source:{select:{query : "SELECT NO,NAME FROM ITEM_PRICE_LIST_VW_01 ORDER BY NO ASC"},sql:this.core.sql}}}
-                                    param={this.param.filter({ELEMENT:'cmbPricingList',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'cmbPricingList',USERS:this.user.CODE})}
+                                    displayExpr = "NAME"
+                                    valueExpr = "NO"
+                                    value = ""
+                                    searchEnabled = {true}
+                                    dt = {{data:this.docObj.dt('DOC'),field:"PRICE_LIST_NO"}} 
+                                    data = {{source:{select:{query : "SELECT NO,NAME FROM ITEM_PRICE_LIST_VW_01 ORDER BY NO ASC"},sql:this.core.sql}}}
+                                    param = {this.param.filter({ELEMENT:'cmbPricingList',USERS:this.user.CODE})}
+                                    access = {this.access.filter({ELEMENT:'cmbPricingList',USERS:this.user.CODE})}
                                     >
                                     </NdSelectBox>
                                 </Item>
@@ -1017,22 +1031,22 @@ export default class salesOrder extends DocBase
                                 <Item>
                                     <Label text={this.t("txtCustomerCode")} alignment="right" />
                                     <NdTextBox id="txtCustomerCode" parent={this} simple={true}  
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    dt={{data:this.docObj.dt('DOC'),field:"INPUT_CODE"}} 
-                                    onEnterKey={(async()=>
+                                    upper = {this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                    dt = {{data:this.docObj.dt('DOC'),field:"INPUT_CODE"}} 
+                                    onEnterKey = {(async()=>
                                     {
-                                        if(this.docObj.docOrders.dt().length > 0)
-                                        {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgCustomerLock',showTitle:true,title:this.t("msgCustomerLock.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgCustomerLock.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerLock.msg")}</div>)
-                                            }
-                                            
-                                            await dialog(tmpConfObj);
-                                            return;
-                                        }
+                                        // if(this.docObj.docOrders.dt().length > 0)
+                                        // {
+                                        //     let tmpConfObj =
+                                        //     {
+                                        //         id:'msgCustomerLock',showTitle:true,title:this.t("msgCustomerLock.title"),showCloseButton:true,width:'500px',height:'200px',
+                                        //         button:[{id:"btn01",caption:this.t("msgCustomerLock.btn01"),location:'after'}],
+                                        //         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerLock.msg")}</div>)
+                                        //     }
+                                        //
+                                        //     await dialog(tmpConfObj);
+                                        //     return;
+                                        // }
                                         this.pg_txtCustomerCode.onClick = async(data) =>
                                         {
                                             if(data.length > 0)
@@ -1074,26 +1088,26 @@ export default class salesOrder extends DocBase
                                         }
                                         this.pg_txtCustomerCode.setVal(this.txtCustomerCode.value)
                                     }).bind(this)}
-                                    button=
+                                    button =
                                     {
                                         [
                                             {
                                                 id:'01',
                                                 icon:'more',
-                                                onClick:async()=>
+                                                onClick:async () =>
                                                 {
-                                                    if(this.docObj.docOrders.dt().length > 0)
-                                                    {
-                                                        let tmpConfObj =
-                                                        {
-                                                            id:'msgCustomerLock',showTitle:true,title:this.t("msgCustomerLock.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                            button:[{id:"btn01",caption:this.t("msgCustomerLock.btn01"),location:'after'}],
-                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerLock.msg")}</div>)
-                                                        }
-                                                        
-                                                        await dialog(tmpConfObj);
-                                                        return;
-                                                    }
+                                                    // if(this.docObj.docOrders.dt().length > 0)
+                                                    // {
+                                                    //     let tmpConfObj =
+                                                    //     {
+                                                    //         id:'msgCustomerLock',showTitle:true,title:this.t("msgCustomerLock.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    //         button:[{id:"btn01",caption:this.t("msgCustomerLock.btn01"),location:'after'}],
+                                                    //         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerLock.msg")}</div>)
+                                                    //     }
+                                                    //
+                                                    //     await dialog(tmpConfObj);
+                                                    //     return;
+                                                    // }
                                                     this.pg_txtCustomerCode.onClick = async(data) =>
                                                     {
                                                         if(data.length > 0)
@@ -1139,8 +1153,8 @@ export default class salesOrder extends DocBase
                                             },
                                         ]
                                     }
-                                    param={this.param.filter({ELEMENT:'txtCustomerCode',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'txtCustomerCode',USERS:this.user.CODE})}
+                                    param = {this.param.filter({ELEMENT:'txtCustomerCode',USERS:this.user.CODE})}
+                                    access = {this.access.filter({ELEMENT:'txtCustomerCode',USERS:this.user.CODE})}
                                     >
                                         <Validator validationGroup={"frmslsDoc" + this.tabIndex}>
                                             <RequiredRule message={this.t("validCustomerCode")} />
@@ -1149,13 +1163,13 @@ export default class salesOrder extends DocBase
                                 </Item> 
                                 {/* txtCustomerName */}
                                 <Item>
-                                    <Label text={this.t("txtCustomerName")} alignment="right" />
-                                    <NdTextBox id="txtCustomerName" parent={this} simple={true}  
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    dt={{data:this.docObj.dt('DOC'),field:"INPUT_NAME"}} 
-                                    readOnly={true}
-                                    param={this.param.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
+                                    <Label text = {this.t("txtCustomerName")} alignment="right" />
+                                    <NdTextBox id = "txtCustomerName" parent={this} simple={true}  
+                                    upper = {this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                    dt = {{data:this.docObj.dt('DOC'),field:"INPUT_NAME"}} 
+                                    readOnly = {true}
+                                    param = {this.param.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
+                                    access = {this.access.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
                                     >
                                     </NdTextBox>
                                 </Item> 
@@ -1163,10 +1177,10 @@ export default class salesOrder extends DocBase
                                 <EmptyItem />
                                 {/* txtBarcode */}
                                 <Item>
-                                    <Label text={this.t("txtBarcode")} alignment="right" />
-                                    <NdTextBox id="txtBarcode" parent={this} simple={true}  placeholder={this.t("txtBarcodePlace")}
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    validationGroup={"frmslsDoc" + this.tabIndex}
+                                    <Label text = {this.t("txtBarcode")} alignment="right" />
+                                    <NdTextBox id = "txtBarcode" parent={this} simple={true}  placeholder={this.t("txtBarcodePlace")}
+                                    upper = {this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                    validationGroup = {"frmslsDoc" + this.tabIndex}
                                     button=
                                     {
                                         [
@@ -1175,6 +1189,10 @@ export default class salesOrder extends DocBase
                                                 icon:"fa-solid fa-barcode",
                                                 onClick:async(e)=>
                                                 {
+                                                    if(this.txtBarcode.value == '')
+                                                    {
+                                                        return
+                                                    }
                                                     if(this.cmbDepot.value == '' || this.txtCustomerCode.value == '')
                                                     {
                                                         let tmpConfObj =
@@ -1195,7 +1213,7 @@ export default class salesOrder extends DocBase
                                                             this.customerControl = true
                                                             this.customerClear = false
                                                             this.combineControl = true
-                                                            this.combineNew = false
+                                                            this.combineNew = false 
         
                                                             this.grdSlsOrder.devGrid.beginUpdate()
                                                             for (let i = 0; i < data.length; i++) 
@@ -1222,6 +1240,10 @@ export default class salesOrder extends DocBase
                                     }
                                     onEnterKey={(async(e)=>
                                     {
+                                        if(this.txtBarcode.value == '')
+                                        {
+                                            return
+                                        }
                                         if(this.cmbDepot.value == '' || this.txtCustomerCode.value == '')
                                         {
                                             let tmpConfObj =
@@ -1361,8 +1383,8 @@ export default class salesOrder extends DocBase
                                         }
                                     }}/>
                                     <Button icon="increaseindent" text={this.lang.t("collectiveItemAdd")}
-                                     validationGroup={"frmslsDoc" + this.tabIndex}
-                                    onClick={async (e)=>
+                                        validationGroup={"frmslsDoc" + this.tabIndex}
+                                        onClick={async (e)=>
                                     {
                                         if(e.validationGroup.validate().status == "valid")
                                         {
@@ -1535,7 +1557,7 @@ export default class salesOrder extends DocBase
                                                 {
                                                     id:'msgDiscount',showTitle:true,title:this.t("msgDiscount.title"),showCloseButton:true,width:'500px',height:'200px',
                                                     button:[{id:"btn01",caption:this.t("msgDiscount.btn01"),location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscount.msg")}</div>)
+                                                    content:(<div style = {{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscount.msg")}</div>)
                                                 }
                                             
                                                 dialog(tmpConfObj);
@@ -1561,7 +1583,7 @@ export default class salesOrder extends DocBase
                                             }
                                             this.calculateTotal()
                                         }}
-                                        onRowRemoved={async (e)=>
+                                        onRowRemoved={async ()=>
                                         {
                                             this.calculateTotal()
                                         }}
@@ -1621,7 +1643,6 @@ export default class salesOrder extends DocBase
                                     <Label text={this.t("txtAmount")} alignment="right" />
                                     <NdTextBox id="txtAmount" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"AMOUNT"}}
                                     maxLength={32}
-                                
                                     ></NdTextBox>
                                 </Item>
                                 <Item>
@@ -1686,9 +1707,9 @@ export default class salesOrder extends DocBase
                                                     {
                                                         this.txtDocDiscountPercent1.value  = Number(this.docObj.dt()[0].SUBTOTAL).rate2Num(this.docObj.dt()[0].DOC_DISCOUNT_1,5)
                                                         this.txtDocDiscountPrice1.value = this.docObj.dt()[0].DOC_DISCOUNT_1
-                                                        this.txtDocDiscountPercent2.value  = Number(this.docObj.dt()[0].SUBTOTAL-parseFloat(this.docObj.dt()[0].DOC_DISCOUNT_1)).rate2Num(this.docObj.dt()[0].DOC_DISCOUNT_2,5)
+                                                        this.txtDocDiscountPercent2.value  = Number(this.docObj.dt()[0].SUBTOTAL - parseFloat(this.docObj.dt()[0].DOC_DISCOUNT_1)).rate2Num(this.docObj.dt()[0].DOC_DISCOUNT_2,5)
                                                         this.txtDocDiscountPrice2.value = this.docObj.dt()[0].DOC_DISCOUNT_2
-                                                        this.txtDocDiscountPercent3.value  = Number(this.docObj.dt()[0].SUBTOTAL-(parseFloat(this.docObj.dt()[0].DOC_DISCOUNT_1)+parseFloat(this.docObj.dt()[0].DOC_DISCOUNT_2))).rate2Num(this.docObj.dt()[0].DOC_DISCOUNT_3,5)
+                                                        this.txtDocDiscountPercent3.value  = Number(this.docObj.dt()[0].SUBTOTAL - (parseFloat(this.docObj.dt()[0].DOC_DISCOUNT_1)+parseFloat(this.docObj.dt()[0].DOC_DISCOUNT_2))).rate2Num(this.docObj.dt()[0].DOC_DISCOUNT_3,5)
                                                         this.txtDocDiscountPrice3.value = this.docObj.dt()[0].DOC_DISCOUNT_3
                                                     }
                                                     else

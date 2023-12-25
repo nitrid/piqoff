@@ -24,6 +24,13 @@ export const langTr =
         msg : "Sizin kullanıcı bilgileriniz ile başka bir cihazdan giriş yapıldı",
         btn01 : "Tamam"
     },
+    msgSaveResult:
+    {
+        title: "Dikkat",
+        btn01: "Tamam",
+        msgSuccess: "Kayıt işleminiz başarılı !",
+        msgFailed: "Kayıt işleminiz başarısız !"
+    },
     msgCombineItem:
     {
         title: "Dikkat",

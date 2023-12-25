@@ -494,8 +494,8 @@ export default class posSalesOrder extends DocBase
                 let tmpQuery = 
                 {
                     query :"SELECT GUID,CODE,NAME,VAT,1 AS QUANTITY,UNIT," + 
-                    "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].INPUT+"'),'') AS MULTICODE"+
-                    " FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VALUE) OR UPPER(NAME) LIKE UPPER(@VALUE) " ,
+                            "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].INPUT+"'),'') AS MULTICODE"+
+                            " FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VALUE) OR UPPER(NAME) LIKE UPPER(@VALUE) " ,
                     param : ['VALUE:string|50'],
                     value : [this.tagItemCode.value[i]]
                 }
@@ -570,7 +570,7 @@ export default class posSalesOrder extends DocBase
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup={"frmslsDoc" + this.tabIndex}
+                                    <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmslsDoc" + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         if(this.docLocked == true)
@@ -648,7 +648,7 @@ export default class posSalesOrder extends DocBase
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnDelete" parent={this} icon="trash" type="default"
+                                    <NdButton id="btnDelete" parent={this} icon="trash" type="danger"
                                     onClick={async()=>
                                     {
                                         if(this.docObj.dt()[0].LOCKED != 0)
@@ -979,18 +979,18 @@ export default class posSalesOrder extends DocBase
                                     dt={{data:this.docObj.dt('DOC'),field:"INPUT_CODE"}} 
                                     onEnterKey={(async()=>
                                     {
-                                        if(this.docObj.docOrders.dt().length > 0)
-                                        {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgCustomerLock',showTitle:true,title:this.t("msgCustomerLock.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgCustomerLock.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerLock.msg")}</div>)
-                                            }
-                                            
-                                            await dialog(tmpConfObj);
-                                            return;
-                                        }
+                                        // if(this.docObj.docOrders.dt().length > 0)
+                                        // {
+                                        //     let tmpConfObj =
+                                        //     {
+                                        //         id:'msgCustomerLock',showTitle:true,title:this.t("msgCustomerLock.title"),showCloseButton:true,width:'500px',height:'200px',
+                                        //         button:[{id:"btn01",caption:this.t("msgCustomerLock.btn01"),location:'after'}],
+                                        //         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerLock.msg")}</div>)
+                                        //     }
+                                        //
+                                        //     await dialog(tmpConfObj);
+                                        //     return;
+                                        // }
                                         
                                         this.pg_txtCustomerCode.onClick = async(data) =>
                                         {
@@ -1041,18 +1041,18 @@ export default class posSalesOrder extends DocBase
                                                 icon:'more',
                                                 onClick:async()=>
                                                 {
-                                                    if(this.docObj.docOrders.dt().length > 0)
-                                                    {
-                                                        let tmpConfObj =
-                                                        {
-                                                            id:'msgCustomerLock',showTitle:true,title:this.t("msgCustomerLock.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                            button:[{id:"btn01",caption:this.t("msgCustomerLock.btn01"),location:'after'}],
-                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerLock.msg")}</div>)
-                                                        }
-                                                        
-                                                        await dialog(tmpConfObj);
-                                                        return;
-                                                    }
+                                                    // if(this.docObj.docOrders.dt().length > 0)
+                                                    // {
+                                                    //     let tmpConfObj =
+                                                    //     {
+                                                    //         id:'msgCustomerLock',showTitle:true,title:this.t("msgCustomerLock.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    //         button:[{id:"btn01",caption:this.t("msgCustomerLock.btn01"),location:'after'}],
+                                                    //         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerLock.msg")}</div>)
+                                                    //     }
+                                                    //
+                                                    //     await dialog(tmpConfObj);
+                                                    //     return;
+                                                    // }
                                                     this.pg_txtCustomerCode.onClick = async(data) =>
                                                     {
                                                         if(data.length > 0)

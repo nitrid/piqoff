@@ -558,9 +558,9 @@ export default class purchaseInvoice extends DocBase
                 {
                     let tmpCheckQuery = 
                     {
-                        query :"SELECT MULTICODE,(SELECT dbo.FN_PRICE(ITEM_GUID,@QUANTITY,GETDATE(),CUSTOMER_GUID,'00000000-0000-0000-0000-000000000000',0,1,0)) AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID",
-                        param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
-                        value : [pData.CODE,this.docObj.dt()[0].OUTPUT,pQuantity]
+                        query :"SELECT CODE AS MULTICODE,(SELECT dbo.FN_PRICE(ITEM,@QUANTITY,GETDATE(),CUSTOMER,'00000000-0000-0000-0000-000000000000',0,1,0)) AS PRICE FROM ITEM_MULTICODE WHERE ITEM = @ITEM AND CUSTOMER = @CUSTOMER_GUID",
+                        param : ['ITEM:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
+                        value : [pData.GUID,this.docObj.dt()[0].OUTPUT,pQuantity]
                     }
                     let tmpCheckData = await this.core.sql.execute(tmpCheckQuery) 
                     if(tmpCheckData.result.recordset.length == 0)
@@ -635,9 +635,9 @@ export default class purchaseInvoice extends DocBase
 
             let tmpQuery = 
             {
-                query :"SELECT (SELECT dbo.FN_PRICE(ITEM_GUID,@QUANTITY,GETDATE(),CUSTOMER_GUID,'00000000-0000-0000-0000-000000000000',0,1,0)) AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID ORDER BY LDATE DESC",
-                param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
-                value : [pData.CODE,this.docObj.dt()[0].OUTPUT,pQuantity]
+                query :"SELECT (SELECT dbo.FN_PRICE(ITEM,@QUANTITY,GETDATE(),CUSTOMER,'00000000-0000-0000-0000-000000000000',0,1,0)) AS PRICE FROM ITEM_MULTICODE WHERE ITEM = @ITEM AND CUSTOMER = @CUSTOMER_GUID ORDER BY LDATE DESC",
+                param : ['ITEM:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
+                value : [pData.GUID,this.docObj.dt()[0].OUTPUT,pQuantity]
             }
             let tmpData = await this.core.sql.execute(tmpQuery) 
             if(typeof pPrice == 'undefined')
@@ -760,9 +760,16 @@ export default class purchaseInvoice extends DocBase
             {
                 let tmpQuery = 
                 {
-                    query :"SELECT GUID,CODE,NAME,VAT,ITEMS_VW_01.UNIT,1 AS QUANTITY,0 AS ITEM_TYPE,COST_PRICE," + 
-                    "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_01.GUID AND CUSTOMER = '"+this.docObj.dt()[0].OUTPUT+"' AND DELETED = 0),'') AS MULTICODE"+
-                    " FROM ITEMS_VW_01 WHERE ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_01.GUID AND CUSTOMER = '"+this.docObj.dt()[0].OUTPUT+"' AND DELETED = 0),'') = @VALUE AND ITEMS_VW_01.STATUS = 1" ,
+                    query : "SELECT ITEMS.GUID,ITEMS.CODE,ITEMS.NAME,ITEMS.VAT,1 AS QUANTITY, " +
+                            "CASE WHEN UNIT.GUID IS NULL THEN ITEMS.UNIT ELSE UNIT.GUID END AS UNIT, " +
+                            "CASE WHEN UNIT.NAME IS NULL THEN ITEMS.UNIT_NAME ELSE UNIT.NAME END AS UNIT_NAME, " +
+                            "CASE WHEN UNIT.SYMBOL IS NULL THEN ITEMS.UNIT_SHORT ELSE UNIT.SYMBOL END AS UNIT_SHORT, " +
+                            "CASE WHEN UNIT.FACTOR IS NULL THEN ITEMS.UNIT_FACTOR ELSE UNIT.FACTOR END AS UNIT_FACTOR, " + 
+                            "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS.GUID AND CUSTOMER_GUID = '" + this.docObj.dt()[0].OUTPUT + "'),'') AS MULTICODE " +
+                            "FROM ITEMS_VW_01 AS ITEMS " + 
+                            "LEFT OUTER JOIN ITEM_UNIT_VW_01 AS UNIT ON " +
+                            "ITEMS.GUID = UNIT.ITEM_GUID AND UNIT.TYPE = 2 AND UNIT.NAME = '" + this.sysParam.filter({ID:'cmbUnit',USERS:this.user.CODE}).getValue().value + "' " +
+                            "WHERE ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS.GUID AND CUSTOMER_GUID = '" + this.docObj.dt()[0].OUTPUT + "'),'') = @VALUE AND ITEMS.STATUS = 1" ,
                     param : ['VALUE:string|50'],
                     value : [this.tagItemCode.value[i]]
                 }
@@ -784,9 +791,16 @@ export default class purchaseInvoice extends DocBase
             {
                 let tmpQuery = 
                 {
-                    query :"SELECT GUID,CODE,NAME,VAT,UNIT,1 AS QUANTITY,0 AS ITEM_TYPE," + 
-                    "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].OUTPUT+"'),'') AS MULTICODE"+
-                    " FROM ITEMS_VW_01 WHERE CODE = @VALUE AND STATUS = 1" ,
+                    query : "SELECT ITEMS.GUID,ITEMS.CODE,ITEMS.NAME,ITEMS.VAT,1 AS QUANTITY, " +
+                            "CASE WHEN UNIT.GUID IS NULL THEN ITEMS.UNIT ELSE UNIT.GUID END AS UNIT, " +
+                            "CASE WHEN UNIT.NAME IS NULL THEN ITEMS.UNIT_NAME ELSE UNIT.NAME END AS UNIT_NAME, " +
+                            "CASE WHEN UNIT.SYMBOL IS NULL THEN ITEMS.UNIT_SHORT ELSE UNIT.SYMBOL END AS UNIT_SHORT, " +
+                            "CASE WHEN UNIT.FACTOR IS NULL THEN ITEMS.UNIT_FACTOR ELSE UNIT.FACTOR END AS UNIT_FACTOR, " + 
+                            "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS.GUID AND CUSTOMER_GUID = '" + this.docObj.dt()[0].OUTPUT + "'),'') AS MULTICODE " +
+                            "FROM ITEMS_VW_01 AS ITEMS " +
+                            "LEFT OUTER JOIN ITEM_UNIT_VW_01 AS UNIT ON " +
+                            "ITEMS.GUID = UNIT.ITEM_GUID AND UNIT.TYPE = 2 AND UNIT.NAME = '" + this.sysParam.filter({ID:'cmbUnit',USERS:this.user.CODE}).getValue().value + "' " +
+                            "WHERE ITEMS.CODE = @VALUE AND ITEMS.STATUS = 1" ,
                     param : ['VALUE:string|50'],
                     value : [this.tagItemCode.value[i]]
                 }
@@ -833,6 +847,7 @@ export default class purchaseInvoice extends DocBase
         }
         let tmpMissCodes = []
         let tmpCounter = 0
+        this.grdPurcInv.devGrid.beginUpdate()
         for (let i = 0; i < pdata.length; i++) 
         {
             let tmpQuery = 
@@ -862,6 +877,7 @@ export default class purchaseInvoice extends DocBase
                 tmpMissCodes.push("'"+pdata[i].CODE+"'")
             }
         }
+        this.grdPurcInv.devGrid.endUpdate()
         if(tmpMissCodes.length > 0)
         {
             let tmpConfObj =
@@ -892,7 +908,7 @@ export default class purchaseInvoice extends DocBase
         this.grdPurcInv.devGrid.beginUpdate()
         for (let i = 0; i < this.multiItemData.length; i++) 
         {
-            await this.addItem(this.multiItemData[i],null,this.multiItemData[i].QUANTITY)
+            await this.addItem(this.multiItemData[i],null,Number(this.multiItemData[i].QUANTITY * this.multiItemData[i].UNIT_FACTOR).round(3))
         }
         this.popMultiItem.hide()
         this.grdPurcInv.devGrid.endUpdate()
@@ -1189,7 +1205,7 @@ export default class purchaseInvoice extends DocBase
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup={"frmDoc"  + this.tabIndex}
+                                    <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmDoc"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         if(this.docLocked == true)
@@ -1239,7 +1255,7 @@ export default class purchaseInvoice extends DocBase
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnDelete" parent={this} icon="trash" type="default"
+                                    <NdButton id="btnDelete" parent={this} icon="trash" type="danger"
                                     onClick={async()=>
                                     {
                                         if(this.docObj.dt()[0].LOCKED != 0)
@@ -1508,14 +1524,14 @@ export default class purchaseInvoice extends DocBase
                                         value=""
                                         searchEnabled={true}
                                         onValueChanged={(async()=>
+                                        {
+                                            this.docObj.docCustomer.dt()[0].INPUT = this.cmbDepot.value
+                                            this.checkRow()
+                                            if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
                                             {
-                                                this.docObj.docCustomer.dt()[0].INPUT = this.cmbDepot.value
-                                                this.checkRow()
-                                                if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
-                                                {
-                                                    this.frmDocItems.option('disabled',false)
-                                                }
-                                            }).bind(this)}
+                                                this.frmDocItems.option('disabled',false)
+                                            }
+                                        }).bind(this)}
                                         data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01 WHERE TYPE IN(0,2)"},sql:this.core.sql}}}
                                         param={this.param.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                         access={this.access.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
@@ -1558,6 +1574,7 @@ export default class purchaseInvoice extends DocBase
                                             await dialog(tmpConfObj);
                                             return;
                                         }
+                                        console.log(this.pg_txtCustomerCode)
                                         this.pg_txtCustomerCode.setVal(this.txtCustomerCode.value)
                                         this.pg_txtCustomerCode.onClick = async(data) =>
                                         {
@@ -1716,7 +1733,7 @@ export default class purchaseInvoice extends DocBase
                                 </Item>
                                 {/* Boş */}
                                 <EmptyItem />
-                                {/* Barkod Ekleme */}
+                                {/* txtBarcode */}
                                 <Item>
                                     <Label text={this.t("txtBarcode")} alignment="right" />
                                     <NdTextBox id="txtBarcode" parent={this} simple={true}  placeholder={this.t("txtBarcodePlace")}
@@ -1729,6 +1746,10 @@ export default class purchaseInvoice extends DocBase
                                                 icon:"fa-solid fa-barcode",
                                                 onClick:async(e)=>
                                                 {
+                                                    if(this.txtBarcode.value == '')
+                                                    {
+                                                        return
+                                                    }
                                                     if(this.cmbDepot.value == '' || this.txtCustomerCode.value == '')
                                                     {
                                                         let tmpConfObj =
@@ -1770,6 +1791,10 @@ export default class purchaseInvoice extends DocBase
                                     }
                                     onEnterKey={(async(e)=>
                                     {
+                                        if(this.txtBarcode.value == '')
+                                        {
+                                            return
+                                        }
                                         if(this.cmbDepot.value == '')
                                         {
                                             let tmpConfObj =

@@ -3342,7 +3342,14 @@ export const langDe =
         {
             clmNote : "NOT", // BAK
             clmName : "Name",
-        }
+        },
+        txtMainGroup : "Ana Grup",// BAK
+        pg_MainGroup : // BAK
+        {
+            title : "Ana Grup Seçim",
+            clmCode : "KODU",
+            clmName : "ADI",
+        },
     },
     cri_01_002: // "Adressdefinitionen"
     {
@@ -3412,6 +3419,54 @@ export const langDe =
         {
             frmCustomerAddress: "Sie können das Feld 'Code' nicht leer lassen!",
         }
+    },
+    cri_01_003 : // "Grup Tanımları"    /// Komple BAK
+    {
+        txtCode : "Kodu",
+        txtName :"Adı",
+        cmbType :"Tip",
+        validCode :"Kodu Boş Geçemezsiniz !",
+        pg_txtCode : 
+        {
+            title : "Grup Seçimi",
+            clmCode : "KODU",
+            clmName : "ADI",
+            clmType : "TİPİ",
+        },
+        msgSave:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kayıt etmek istediğinize eminmisiniz !"
+        },
+        msgSaveResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Kayıt işleminiz başarılı !",
+            msgFailed: "Kayıt işleminiz başarısız !"
+        },
+        msgSaveValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen gerekli alanları doldurunuz !"
+        },
+        msgDelete:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        },
+        msgCode : 
+        {
+            title: "Dikkat",
+            btn01: "Kasaya Git",
+            btn02: "Tamam",
+            msg : "Girmiş olduğunuz Kasa sistem de kayıtlı !"
+        },
     },
     cri_01_004 : // "Bölge Tanımları"    /// Komple BAK
     {
