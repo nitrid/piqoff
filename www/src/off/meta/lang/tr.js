@@ -3582,6 +3582,7 @@ export const langTr =
         cmbGenus :"Cinsi",
         menu: "Müşteri Tanımları",
         btnGet : "Getir",
+        cmbMainGrp : "Grup",
         grdListe : 
         {
             clmCode: "Müşteri Kodu",
