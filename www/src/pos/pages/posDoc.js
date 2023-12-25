@@ -8431,7 +8431,7 @@ export default class posDoc extends React.PureComponent
                                         {font:"a",style:"b",size : [1,1],align:"ct",data:""},
                                         {font:"a",style:"b",size : [1,1],align:"ct",data: "INFO"},
                                         {font:"a",style:"b",size : [1,1],align:"ct",data:""},
-                                        {font:"a",align:"lt",data:moment(new Date().toISOString()).utcOffset(0,false).locale('fr').format('dddd DD.MM.YYYY HH:mm:ss')},
+                                        {font:"a",align:"lt",data:moment(new Date().toISOString()).format('dddd DD.MM.YYYY HH:mm:ss')},
                                         {font:"a",align:"lt",pdf:{fontSize:11},data:("Caissier: " + this.user.CODE).space(25,'e') + ("Caisse: " + window.localStorage.getItem('device')).space(23,'s')},
                                         {font:"a",style:"b",align:"lt",data:" ".space(48)},
                                         {font:"a",align:"lt",data:this.lang.t("abtCertificate")},
@@ -8439,6 +8439,7 @@ export default class posDoc extends React.PureComponent
                                         {font:"a",align:"lt",data:this.lang.t("abtLicence")},
                                         {font:"a",align:"lt",data:this.lang.t("abtVersion")},
                                     ]
+                                    
                                     await this.posDevice.escPrinter(tmpArr)
                                 }}>
                                 </NdButton>
