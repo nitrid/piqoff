@@ -3583,6 +3583,7 @@ export const langFr =
         cmbGenus :"Genre",
         menu: "Fournisseur-Client saisie",
         btnGet : "Rechercher",
+        cmbMainGrp : "Groupe",
         grdListe : 
         {
             clmCode: "Code",
