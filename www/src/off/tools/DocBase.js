@@ -265,7 +265,7 @@ export default class DocBase extends React.PureComponent
                     if(this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].TYPE == 1)
                     {
                         this.txtUnitQuantity.value = this.msgUnit.tmpData.QUANTITY * this.txtUnitFactor.value                        
-                        this.txtUnitPrice.value = Number(this.msgUnit.tmpData.PRICE / this.txtUnitFactor.value).round(2)
+                        this.txtUnitPrice.value = Number(this.msgUnit.tmpData.PRICE).round(2)
                     }
                     else
                     {
@@ -1671,7 +1671,7 @@ export default class DocBase extends React.PureComponent
                                     <Column dataField="CODE" caption={this.t("grdMultiItem.clmCode")} width={150} allowEditing={false} />
                                     <Column dataField="MULTICODE" caption={this.t("grdMultiItem.clmMulticode")} width={150} allowEditing={false} />
                                     <Column dataField="NAME" caption={this.t("grdMultiItem.clmName")} width={300}  headerFilter={{visible:true}} allowEditing={false} />
-                                    <Column dataField="QUANTITY" caption={this.t("grdMultiItem.clmQuantity")} dataType={'number'} width={100} headerFilter={{visible:true}}/>
+                                    <Column dataField="QUANTITY" caption={this.t("grdMultiItem.clmQuantity")} dataType={'number'} width={100} headerFilter={{visible:true}} cellRender={(e)=>{return e.value + " / " + e.data.UNIT_SHORT}}/>
                                 </NdGrid>
                             </Item>
                             <EmptyItem />   
