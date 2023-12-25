@@ -436,6 +436,33 @@ export const langDe =
         clmClosed : "GESCHLOSSEN",
         clmBalance : "AUSSTEHEND",
     },
+    pg_ordersGrid : 
+    {
+        title : "Bestellauswahl",
+        clmReferans : "Seriennummer - Reihenfolge",
+        clmCode : "Code",
+        clmName : "Name",
+        clmQuantity : "Menge",
+        clmTotal : "Gesamtsumme",
+        clmPrice : "Preis",
+        clmlDate : "Datum",
+        clmPendQuantity : "Offene Menge"
+    },
+    msgQuantity:
+    {
+        title: "Achtung",
+        btn01: "Hinzufügen",
+        btn02: "Abbrechen",
+        msg: "Bitte Menge eingeben!",
+        txtQuantity :"Menge",
+        txtUnitFactor : "Einheitsfaktor",
+        txtUnitQuantity : "Einheitsmenge",
+        txtTotalQuantity : "Gesamtmenge",
+        txtUnitPrice : "Einheitspreis",
+        txtPopQteDepotQty : "Lagermenge",
+        txtPopQteReservQty : "Reservierte Menge",
+        txtPopQteInputQty : "Kommende Menge"
+    },
     stk_01_001:  // "Neue Lagerdefinition"
     {
         txtRef: "Referenz",
@@ -3315,7 +3342,14 @@ export const langDe =
         {
             clmNote : "NOT", // BAK
             clmName : "Name",
-        }
+        },
+        txtMainGroup : "Ana Grup",// BAK
+        pg_MainGroup : // BAK
+        {
+            title : "Ana Grup Seçim",
+            clmCode : "KODU",
+            clmName : "ADI",
+        },
     },
     cri_01_002: // "Adressdefinitionen"
     {
@@ -3385,6 +3419,54 @@ export const langDe =
         {
             frmCustomerAddress: "Sie können das Feld 'Code' nicht leer lassen!",
         }
+    },
+    cri_01_003 : // "Grup Tanımları"    /// Komple BAK
+    {
+        txtCode : "Kodu",
+        txtName :"Adı",
+        cmbType :"Tip",
+        validCode :"Kodu Boş Geçemezsiniz !",
+        pg_txtCode : 
+        {
+            title : "Grup Seçimi",
+            clmCode : "KODU",
+            clmName : "ADI",
+            clmType : "TİPİ",
+        },
+        msgSave:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kayıt etmek istediğinize eminmisiniz !"
+        },
+        msgSaveResult:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msgSuccess: "Kayıt işleminiz başarılı !",
+            msgFailed: "Kayıt işleminiz başarısız !"
+        },
+        msgSaveValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen gerekli alanları doldurunuz !"
+        },
+        msgDelete:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            btn02: "Vazgeç",
+            msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        },
+        msgCode : 
+        {
+            title: "Dikkat",
+            btn01: "Kasaya Git",
+            btn02: "Tamam",
+            msg : "Girmiş olduğunuz Kasa sistem de kayıtlı !"
+        },
     },
     cri_01_004 : // "Bölge Tanımları"    /// Komple BAK
     {
@@ -4574,17 +4656,6 @@ export const langDe =
             btn01: "Hinzufügen",
             msg: "Bitte geben Sie die Menge ein"
         },
-        pg_ordersGrid : 
-        {
-            title : "Bestellauswahl",
-            clmReferans : "Seriennummer - Reihenfolge",
-            clmCode : "Code",
-            clmName : "Name",
-            clmQuantity : "Menge",
-            clmTotal : "Gesamtsumme",
-            clmPrice : "Preis",
-            clmlDate : "Datum"
-        },
         cmbPayType : {
             title : "Zahlungsmethode",
             cash : "Bargeld",
@@ -5097,17 +5168,6 @@ export const langDe =
             title: "Menge",
             btn01: "Hinzufügen",
             msg: "Bitte geben Sie die Menge ein."
-        },
-        pg_ordersGrid:
-        {
-            title: "Bestellauswahl",
-            clmReferans: "Seriennummer - Laufnummer",
-            clmCode: "Code",
-            clmName: "Name",
-            clmQuantity: "Menge",
-            clmTotal: "Gesamtbetrag",
-            clmPrice: "Preis",
-            clmlDate : "Datum"
         },
         cmbPayType: {
             title: "Zahlungsart",
@@ -6542,16 +6602,6 @@ export const langDe =
             btn01: "Hinzufügen",
             msg: "Bitte geben Sie die Menge ein"
         },
-        pg_ordersGrid:
-        {
-            title: "Bestellauswahl",
-            clmReferans: "Seriennummer - Reihenfolge",
-            clmCode: "Code",
-            clmName: "Name",
-            clmQuantity: "Menge",
-            clmTotal: "Gesamtbetrag",
-            clmPrice: "Preis",
-        },
         cmbPayType:
         {
             title: "Zahlungstyp",
@@ -7983,16 +8033,6 @@ export const langDe =
             btn01: "Hinzufügen",
             msg: "Bitte geben Sie die Menge ein"
         },
-        pg_ordersGrid : 
-        {
-            title : "Bestellungs Auswahl",
-            clmReferans : "Serie - Nummer",
-            clmCode : "Code",
-            clmName : "Name",
-            clmQuantity : "Menge",
-            clmTotal : "Gesamtsumme",
-            clmPrice : "Preis",
-        },
         cmbPayType : 
         {
             title : "Zahlungsart",
@@ -9332,16 +9372,6 @@ export const langDe =
             btn01: "Hinzufügen",
             msg: "Bitte geben Sie die Menge ein"
         },
-        pg_ordersGrid: 
-        {
-            title: "Bestellauswahl",
-            clmReferans: "Seriennummer - Reihennummer",
-            clmCode: "Code",
-            clmName: "Name",
-            clmQuantity: "Menge",
-            clmTotal: "Gesamtbetrag",
-            clmPrice: "Preis",
-        },
         cmbPayType: {
             title: "Zahlungstyp",
             cash: "Bar",
@@ -9891,16 +9921,6 @@ export const langDe =
           title: "Menge",
           btn01: "Hinzufügen",
           msg: "Geben Sie die Menge ein"
-        },
-        pg_ordersGrid: 
-        {
-          title: "Bestellauswahl",
-          clmReferans: "Serie - Nummer",
-          clmCode: "Code",
-          clmName: "Name",
-          clmQuantity: "Anzahl",
-          clmTotal: "Betrag",
-          clmPrice: "Preis",
         },
         cmbPayType: {
           title: "Zahlungstyp",
@@ -10718,16 +10738,6 @@ export const langDe =
             btn01: "Hinzufügen",
             msg: "Bitte Menge eingeben"
         },
-        pg_ordersGrid : 
-        {
-            title : "Bestellauswahl",
-            clmReferans : "Seriennummer - Reihenfolge",
-            clmCode : "Code",
-            clmName : "Name",
-            clmQuantity : "Menge",
-            clmTotal : "Betrag",
-            clmPrice : "Preis",
-        },
         cmbPayType : {
             title : "Zahlungsart",
             cash : "Bar",
@@ -11454,16 +11464,6 @@ export const langDe =
             btn01: "Hinzufügen",
             msg: "Bitte die Menge angeben!"
         },
-        pg_ordersGrid : 
-        {
-            title : "Auftragsauswahl",
-            clmReferans : "Serie - Nummer",
-            clmCode : "Code",
-            clmName : "Name",
-            clmQuantity : "Menge",
-            clmTotal : "Summe",
-            clmPrice : "Preis",
-        },
         msgCustomerSelect:
         {
             title: "Achtung!",
@@ -11910,16 +11910,6 @@ export const langDe =
             title: "Menge",
             btn01: "Hinzufügen",
             msg: "Bitte geben Sie die Menge ein"
-        },
-        pg_ordersGrid :
-        {
-            title : "Bestellauswahl",
-            clmReferans : "Serie - Reihennummer",
-            clmCode : "Code",
-            clmName : "Name",
-            clmQuantity : "Menge",
-            clmTotal : "Gesamtbetrag",
-            clmPrice : "Preis",
         },
         msgCustomerSelect:
         {
@@ -12697,16 +12687,6 @@ export const langDe =
             btn01: "Hinzufügen",
             msg: "Bitte geben Sie die Menge ein"
         },
-        pg_ordersGrid:
-        {
-            title: "Bestellauswahl",
-            clmReferans: "Seriennummer - Reihenfolge",
-            clmCode: "Code",
-            clmName: "Name",
-            clmQuantity: "Menge",
-            clmTotal: "Betrag",
-            clmPrice: "Preis",
-        },
         msgCustomerSelect:
         {
             title: "Achtung",
@@ -13426,16 +13406,6 @@ export const langDe =
             title: "Menge",
             btn01: "Hinzufügen",
             msg: "Geben Sie die Menge ein"
-        },
-        pg_ordersGrid : 
-        {
-            title : "Bestellauswahl",
-            clmReferans : "Seriennummer - Reihennummer",
-            clmCode : "Code",
-            clmName : "Name",
-            clmQuantity : "Menge",
-            clmTotal : "Gesamtbetrag",
-            clmPrice : "Preis",
         },
         msgCustomerSelect:
         {

@@ -172,7 +172,7 @@ export const menu = (e) =>
                     id: 'kar_01',
                     text : e.t('menu.kar_01'), //'Sipariş Eşleştirme'
                     icon : "fa-paste",
-                    path : "empty.js",
+                    path: "pairing/salesPairing.js"
                 },
                 {
                     id: 'kar_02',

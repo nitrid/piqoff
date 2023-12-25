@@ -624,7 +624,7 @@ export default class labelPrint extends React.PureComponent
                                             <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.t("lblPrice")}</label>                                            
                                         </div>
                                         <div className='col-4'>
-                                            <NdTextBox id="txtPrice" parent={this} simple={true} maxLength={32} 
+                                            <NdNumberBox id="txtPrice" parent={this} simple={true} maxLength={32} 
                                             onEnterKey={this.addItem.bind(this)}/>
                                         </div>
                                     </div>
