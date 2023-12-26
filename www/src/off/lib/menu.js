@@ -266,7 +266,7 @@ export const menu = (e) =>
                         {
                             id: 'cri_01_003',
                             text: e.t('menuOff.cri_01_003'),//'Grup Tanımları',
-                            path: 'customers/cards/customerCard'
+                            path: 'customers/cards/customerGrpCard'
                         },
                         {
                             id: 'cri_01_004',
