@@ -40,7 +40,7 @@ export default class itemCard extends React.PureComponent
         this.salesPriceLogObj = new datatable()
         this.salesPriceLogObj.selectCmd =
         {
-            query :"SELECT * FROM [PRICE_HISTORY_VW_01] WHERE ITEM = @ITEM_GUID AND TYPE = 0 ORDER BY LDATE DESC ",
+            query :"SELECT * FROM [PRICE_HISTORY_VW_01] WHERE ITEM = @ITEM_GUID AND TYPE = 0 ORDER BY CDATE DESC ",
             param : ['ITEM_GUID:string|50']
         }
         this.salesContractObj = new datatable()
@@ -85,7 +85,11 @@ export default class itemCard extends React.PureComponent
         if(typeof this.pagePrm != 'undefined')
         {
             await this.init(); 
-            this.getItem(this.pagePrm.CODE)
+            //ELECTRONJS DE BURASI PROBLEM OLUYOR. STOK LISTESINDEN ÜRÜNE ÇİFT TIKLAYIP STOK KARTINI AÇMAYA ÇALIŞTIĞINDA ÜRÜN AD BOŞ GELİYOR. ONUN İÇİN SETTIMEOUT EKLEDİK.(AQ)
+            setTimeout(() => 
+            {
+                this.getItem(this.pagePrm.CODE)    
+            }, 1000);
         }
         else
         {
