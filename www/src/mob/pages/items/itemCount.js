@@ -105,8 +105,9 @@ export default class itemCount extends React.PureComponent
     {
         return new Promise(async resolve => 
         {
-            if(pCode == '')
+            if(pCode.replace(/^\s+/, '').replace(/\s+$/, '') == '')
             {
+                this.txtBarcode.value = ''
                 resolve();
                 return
             }
