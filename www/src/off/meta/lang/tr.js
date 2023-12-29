@@ -3154,6 +3154,7 @@ export const langTr =
         tabTitleFinanceDetail : "Finans Bilgileri",
         txtLegal :"Yasal Bilgiler",
         chkRebate :"İade Alır",
+        chkCustomerForeign: "Vergisiz",
         txtExpiryDay : "Vade",
         txtRiskLimit : "Risk Limiti",
         expDay : "(Gün)",

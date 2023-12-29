@@ -285,7 +285,6 @@ export default class CustomerCard extends React.PureComponent
                 </NdSelectBox>
             )
         }
-      
     }
     render()
     {
@@ -1121,7 +1120,11 @@ export default class CustomerCard extends React.PureComponent
                                                         </NdPopGrid>
                                                     </Item>
                                                     <EmptyItem/>
-                                                    <EmptyItem/>
+                                                     {/* chkIsForeign */}
+                                                     <Item>
+                                                        <Label text={this.t("chkCustomerForeign")} alignment="right" />
+                                                        <NdCheckBox id="chkCustomerForeign" parent={this} value={false}  dt={{data:this.customerObj.dt('CUSTOMERS'),field:"VAT_ZERO"}} ></NdCheckBox>
+                                                    </Item>
                                                     {/* chkRebate */}
                                                     <Item>
                                                         <Label text={this.t("chkRebate")} alignment="right" />

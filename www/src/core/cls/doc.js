@@ -19,6 +19,7 @@ export class docCls
             CUSER : this.core.auth.data.CODE,
             TYPE: -1,
             DOC_TYPE : -1,
+            VAT_ZERO : 0,
             REBATE : 0,
             REF : '',
             REF_NO : 0,
@@ -84,6 +85,7 @@ export class docCls
                     "@CUSER = @PCUSER, " +
                     "@TYPE = @PTYPE, " +
                     "@DOC_TYPE = @PDOC_TYPE, " +
+                    "@VAT_ZERO = @PVAT_ZERO," +
                     "@REBATE = @PREBATE, " +
                     "@REF = @PREF, " +
                     "@REF_NO = @PREF_NO, " +
@@ -108,10 +110,10 @@ export class docCls
                     "@CERTIFICATE = @PCERTIFICATE, " +
                     "@SIGNATURE = @PSIGNATURE, " +
                     "@SIGNATURE_SUM = @PSIGNATURE_SUM ",
-            param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PDOC_TYPE:int','PREBATE:int','PREF:string|25','PREF_NO:int','PDOC_NO:string|50','PDOC_DATE:date','PSHIPMENT_DATE:date','PINPUT:string|50',
+            param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PDOC_TYPE:int','PVAT_ZERO:int','PREBATE:int','PREF:string|25','PREF_NO:int','PDOC_NO:string|50','PDOC_DATE:date','PSHIPMENT_DATE:date','PINPUT:string|50',
                     'POUTPUT:string|50','PAMOUNT:float','PDISCOUNT:float','PDOC_DISCOUNT_1:float','PDOC_DISCOUNT_2:float','PDOC_DISCOUNT_3:float','PINTERFEL:float','PVAT:float','PTOTAL:float',
                     'PDESCRIPTION:string|500','PADDRESS:int','PTRANSPORT_TYPE:string|25','PPRICE_LIST_NO:int','PLOCKED:int','PCERTIFICATE:string|250','PSIGNATURE:string|max','PSIGNATURE_SUM:string|max'],
-            dataprm : ['GUID','CUSER','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_NO','DOC_DATE','SHIPMENT_DATE','INPUT','OUTPUT','AMOUNT','DISCOUNT','DOC_DISCOUNT_1','DOC_DISCOUNT_2',
+            dataprm : ['GUID','CUSER','TYPE','DOC_TYPE','VAT_ZERO','REBATE','REF','REF_NO','DOC_NO','DOC_DATE','SHIPMENT_DATE','INPUT','OUTPUT','AMOUNT','DISCOUNT','DOC_DISCOUNT_1','DOC_DISCOUNT_2',
                       'DOC_DISCOUNT_3','INTERFEL','VAT','TOTAL','DESCRIPTION','ADDRESS','TRANSPORT_TYPE','PRICE_LIST_NO','LOCKED','CERTIFICATE','SIGNATURE','SIGNATURE_SUM']
         }
         tmpDt.updateCmd = 
@@ -121,6 +123,7 @@ export class docCls
                     "@CUSER = @PCUSER, " +
                     "@TYPE = @PTYPE, " +
                     "@DOC_TYPE = @PDOC_TYPE, " +
+                    "@VAT_ZERO = @PVAT_ZERO," +
                     "@REBATE = @PREBATE, " +
                     "@REF = @PREF, " +
                     "@REF_NO = @PREF_NO, " +
@@ -144,10 +147,10 @@ export class docCls
                     "@LOCKED  = @PLOCKED, " +
                     "@SIGNATURE = @PSIGNATURE, " +
                     "@SIGNATURE_SUM = @PSIGNATURE_SUM ",
-            param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PDOC_TYPE:int','PREBATE:int','PREF:string|25','PREF_NO:int','PDOC_NO:string|50','PDOC_DATE:date','PSHIPMENT_DATE:date','PINPUT:string|50',
+            param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PDOC_TYPE:int','PVAT_ZERO:int','PREBATE:int','PREF:string|25','PREF_NO:int','PDOC_NO:string|50','PDOC_DATE:date','PSHIPMENT_DATE:date','PINPUT:string|50',
                     'POUTPUT:string|50','PAMOUNT:float','PDISCOUNT:float','PDOC_DISCOUNT_1:float','PDOC_DISCOUNT_2:float','PDOC_DISCOUNT_3:float','PINTERFEL:float','PVAT:float','PTOTAL:float',
                     'PDESCRIPTION:string|500','PADDRESS:int','PTRANSPORT_TYPE:string|25','PPRICE_LIST_NO:int','PLOCKED:int','PSIGNATURE:string|max','PSIGNATURE_SUM:string|max'],
-            dataprm : ['GUID','CUSER','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_NO','DOC_DATE','SHIPMENT_DATE','INPUT','OUTPUT','AMOUNT','DISCOUNT','DOC_DISCOUNT_1','DOC_DISCOUNT_2','DOC_DISCOUNT_3',
+            dataprm : ['GUID','CUSER','TYPE','DOC_TYPE','VAT_ZERO','REBATE','REF','REF_NO','DOC_NO','DOC_DATE','SHIPMENT_DATE','INPUT','OUTPUT','AMOUNT','DISCOUNT','DOC_DISCOUNT_1','DOC_DISCOUNT_2','DOC_DISCOUNT_3',
                       'INTERFEL','VAT','TOTAL','DESCRIPTION','ADDRESS','TRANSPORT_TYPE','PRICE_LIST_NO','LOCKED','SIGNATURE','SIGNATURE_SUM']
         }
         tmpDt.deleteCmd = 

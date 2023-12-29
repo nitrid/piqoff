@@ -3144,6 +3144,7 @@ export const langDe =
         tabTitleFinanceDetail : "Finanzliche Informationen",
         txtLegal :"Rechtliche Informationen",
         chkRebate :"Rabatt gewähren",
+        chkIsForeign : "Kunde ohne MwSt",
         txtExpiryDay : "Zahlungsziel",
         txtRiskLimit : "Kreditlimit",
         expDay : "(Tage)",
