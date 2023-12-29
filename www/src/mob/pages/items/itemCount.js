@@ -86,6 +86,7 @@ export default class itemCount extends React.PureComponent
 
         this.lblItemName.value = ""
         this.lblDepotQuantity.value = 0
+        this.txtQuantity.value = 0
         this.cmbUnit.setData([])
     }
     async getDoc(pGuid,pRef,pRefno)
@@ -104,38 +105,47 @@ export default class itemCount extends React.PureComponent
     {
         return new Promise(async resolve => 
         {
-            this.clearEntry();
-            
-            this.itemDt.selectCmd.value = [pCode]
-            await this.itemDt.refresh();  
-            
-            if(this.itemDt.length > 0)
+            if(pCode == '')
             {
-                this.lblItemName.value = this.itemDt[0].NAME
-
-                this.unitDt.selectCmd.value = [this.itemDt[0].GUID]
-                await this.unitDt.refresh()
-                this.cmbUnit.setData(this.unitDt)
-
-                if(this.unitDt.length > 0)
-                {
-                    this.cmbUnit.value = this.unitDt.where({TYPE:0})[0].GUID
-                    this.txtFactor.value = this.unitDt.where({TYPE:0})[0].FACTOR
-                    this.txtFactor.props.onValueChanged()
-                }
-
-                this.txtBarcode.value = ""
-                this.txtQuantity.focus();
+                resolve();
+                return
             }
             else
-            {                               
-                document.getElementById("Sound").play(); 
-                this.alertContent.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAlert.msgBarcodeNotFound")}</div>)
-                await dialog(this.alertContent);
-                this.txtBarcode.value = ""
-                this.txtBarcode.focus();
+            {
+                this.clearEntry();
+            
+                this.itemDt.selectCmd.value = [pCode]
+                await this.itemDt.refresh();  
+                
+                if(this.itemDt.length > 0)
+                {
+                    this.lblItemName.value = this.itemDt[0].NAME
+    
+                    this.unitDt.selectCmd.value = [this.itemDt[0].GUID]
+                    await this.unitDt.refresh()
+                    this.cmbUnit.setData(this.unitDt)
+    
+                    if(this.unitDt.length > 0)
+                    {
+                        this.cmbUnit.value = this.unitDt.where({TYPE:0})[0].GUID
+                        this.txtFactor.value = this.unitDt.where({TYPE:0})[0].FACTOR
+                        this.txtFactor.props.onValueChanged()
+                    }
+    
+                    this.txtBarcode.value = ""
+                    this.txtQuantity.focus();
+                }
+                else
+                {                               
+                    document.getElementById("Sound").play(); 
+                    this.alertContent.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAlert.msgBarcodeNotFound")}</div>)
+                    await dialog(this.alertContent);
+                    this.txtBarcode.value = ""
+                    this.txtBarcode.focus();
+                }
+                resolve();
             }
-            resolve();
+           
         });
     }
     async calcEntry()
