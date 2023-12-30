@@ -777,6 +777,19 @@ export const menu = (e) =>
                             ]
                         },
                         {
+                            id: 'salesorder_04',
+                            text : e.t('menuOff.salesorder_04'),//'Operasyonlar',
+                            expanded: false,
+                            items: 
+                            [
+                                {
+                                    id: 'sip_04_002',
+                                    text: e.t('menuOff.sip_04_002'),//'Satış Siparişi Dağıtım Operasyonu',
+                                    path: 'orders/operations/salesOrderDistributionOperation'
+                                },
+                            ]
+                        },
+                        {
                             id: 'salesorder_03',
                             text : e.t('menuOff.salesorder_03'),//'Raporlar',
                             expanded: false,

@@ -260,6 +260,7 @@ export const langDe =
         sip_02_002: "Verkaufsbestellung",
         sip_02_003: "POS Verkaufsbestellung",
         sip_04_001: "Massenbestellungsauflösung",
+        sip_04_002 : "Vertriebsoperation für Verkaufsaufträge", //BAK
         cnt: "Vereinbarungen",
         cnt_01: "Listen",
         cnt_01_001: "Einkaufsvereinbarungsliste",
@@ -379,6 +380,7 @@ export const langDe =
         salesorder_01: "Dokumente",
         salesorder_02: "Listen",
         salesorder_03: "Berichte",
+        salesorder_04 : "Operationen",
         salesDispatch: "Lieferschein",
         salesDispatch_01: "Dokumente",
         salesDispatch_02: "Listen",
@@ -14809,6 +14811,44 @@ export const langDe =
             btn01: "OK",
             msg: "Artikel ohne Kundenzuordnung können nicht ausgewählt werden. Bitte weisen Sie einen Kunden zu."
         }
+    },
+    sip_04_002 : // "Satış Siparişi Dağıtım Operasyonu"
+    {
+        cmbCustomer :"Kunde",
+        btnGet :"Abrufen",
+        dtFirst : "Erstes Datum",
+        dtLast : "Letztes Datum",
+        cmbDepot : "Lager",
+        menu:"Verkaufsbestellung",
+        pg_txtCustomerCode : 
+        {
+            title : "Kundenauswahl",
+            clmCode :  "KUNDENCODE",
+            clmTitle : "KUNDENNAME",
+            clmTypeName : "TYP",
+            clmGenusName : "ART"
+        },
+        grdSlsOrdList: 
+        {
+            clmRef: "Seriennummer",
+            clmRefNo: "Reihennummer",
+            clmPrice: "Preis",
+            clmInputCode : "Kundennummer",
+            clmInputName : "Kundenname",
+            clmDate: "Datum",
+            clmVat : "MwSt.",
+            clmAmount : "Betrag",
+            clmTotal : "Gesamt",
+            clmOutputName :"Lager",
+        },
+        popDesign : 
+        {
+            title: "Designauswahl",
+            design : "Design",
+            lang : "Sprache des Dokuments"
+        },
+        btnView : "Anzeigen",
+        btnMailsend : "E-Mail senden",
     },
     cnt_01_001: 
     {
