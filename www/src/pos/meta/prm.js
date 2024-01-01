@@ -455,23 +455,23 @@ export const prm =
                 },
                 {
                     id:"btn07",
-                    title:"Vu l’étiquette jaune.",
-                    text:"La caissière n’a pas vu l’étiquette jaune sur le produit ."
+                    title:"Viande gros volumes.",
+                    text:"Viande gros volumes, les sachets sont dans le chariot ."
                 },
                 {
                     id:"btn08",
-                    title:"Produit cher.",
-                    text:"Le client ne veut pas le produit car produit cher."
+                    title:"BARRE DE SÉPARATION.",
+                    text:"BARRE DE SÉPARATION MANQUANTE ENTRE DEUX CLIENTS."
                 },
                 {
                     id:"btn09",
-                    title:"Mauvaise étiquette jaune.",
-                    text:"Mauvaise étiquette jaune sur le produit ."
+                    title:"Rôtisserie : retrait de Poulet.",
+                    text:"Rôtisserie : retrait de Poulet ."
                 },
                 {
                     id:"btn10",
-                    title:"La boucherie trompée.",
-                    text:"La boucherie s’est trompée d’étiquette."
+                    title:"Oubli car reprise.",
+                    text:"Oubli car reprise d’une attente existante."
                 },
                 {
                     id:"btn11",
