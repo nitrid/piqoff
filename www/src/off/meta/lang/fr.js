@@ -268,6 +268,7 @@ export const langFr =
         sip_02_002: "Saisie Commande Vente  ",
         sip_02_003: "Saisie Commande Vente Pos",
         sip_04_001 : "Détacher les Commandes Saisies", 
+        sip_04_002 : "Opération de Distribution des Commandes de Vente", //BAK
         cnt : "Accords commerciaux ",
         cnt_01 : "Listes",
         cnt_01_001: "Liste accord d'achat ",
@@ -386,6 +387,7 @@ export const langFr =
         salesorder_01 : "Document",
         salesorder_02 : "Listes",
         salesorder_03 : "Rapports",
+        salesorder_04 : "Les opérations",
         salesDispatch : "Bon de livraison",
         salesDispatch_01 : "Document",
         salesDispatch_02 : "Listes",
@@ -14950,6 +14952,44 @@ export const langFr =
             btn01 : "OK",
             msg : "Les produits dont le fournisseur n'est pas défini ne peuvent pas être sélectionnés. Veuillez définir le fournisseur"
         }
+    },
+    sip_04_002 : // "Satış Siparişi Dağıtım Operasyonu"
+    {
+        cmbCustomer :"Client",
+        btnGet :"Rechercher",
+        dtFirst : "Date Début",
+        dtLast : "Date Fin",
+        cmbDepot : "Depot",
+        menu:"Liste de vente  ",
+        pg_txtCustomerCode : 
+        {
+            title : "Choix Client",
+            clmCode :  "Code Client",
+            clmTitle : "Nom Client",
+            clmTypeName : "Type",
+            clmGenusName : "Genre"
+        },
+        grdSlsOrdList: 
+        {
+            clmRef: "Référence",
+            clmRefNo: "Ligne",
+            clmPrice: "Prix ",
+            clmInputCode : "Sélection Document",
+            clmInputName : "Nom Client",
+            clmDate: "Date",
+            clmVat : "TVA",
+            clmAmount : "Total" ,
+            clmTotal : "Total",
+            clmOutputName :"Réserve",
+        },
+        popDesign : 
+        {
+            title: "Choix du Design",
+            design : "Design" ,
+            lang : "Langue Document" 
+        },
+        btnView : "Aperçu", 
+        btnMailsend : "Envoyer E-Mail", 
     },
     cnt_01_001 : // "Alış Anlaşmaları Listesi"
     {

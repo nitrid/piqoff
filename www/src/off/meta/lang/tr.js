@@ -268,6 +268,7 @@ export const langTr =
         sip_02_002: "Satış Sipariş",
         sip_02_003 : "Pos Satış Sipariş",
         sip_04_001 : "Toplu Sipariş Ayrıştırma",
+        sip_04_002 : "Satış Siparişi Dağıtım Operasyonu",
         cnt : "Anlaşmalar",
         cnt_01 : "Listeler",
         cnt_01_001: "Alış Anlaşmaları Listesi",
@@ -387,6 +388,7 @@ export const langTr =
         salesorder_01 : "Evraklar",
         salesorder_02 : "Listeler",
         salesorder_03 : "Raporlar",
+        salesorder_04 : "Operasyonlar",
         salesDispatch : "İrsaliye",
         salesDispatch_01 : "Evraklar",
         salesDispatch_02 : "Listeler",
@@ -14887,6 +14889,44 @@ export const langTr =
             btn01 : "Tamam",
             msg : "Müşterisi Tanımlanmamış Ürünler Seçilemez. Lütfen Müşteri Tanımlayın"
         }
+    },
+    sip_04_002 : // "Satış Siparişi Dağıtım Operasyonu"
+    {
+        cmbCustomer :"Müşteri",
+        btnGet :"Getir",
+        dtFirst : "İlk Tarih",
+        dtLast : "Son Tarih",
+        cmbDepot : "Depo",
+        menu:"Satış Sipariş",
+        pg_txtCustomerCode : 
+        {
+            title : "Müşteri Seçimi",
+            clmCode :  "CARİ KODU",
+            clmTitle : "CARİ ADI",
+            clmTypeName : "TİPİ",
+            clmGenusName : "CİNSİ"
+        },
+        grdSlsOrdList: 
+        {
+            clmRef: "Seri",
+            clmRefNo: "Sıra",
+            clmPrice: "Fiyat",
+            clmInputCode : "Müşteri Kodu",
+            clmInputName : "Müşteri Adı",
+            clmDate: "Tarih",
+            clmVat : "KDV",
+            clmAmount : "Tutar",
+            clmTotal : "Toplam",
+            clmOutputName :"Depo",
+        },
+        popDesign : 
+        {
+            title: "Dizayn seçimi",
+            design : "Dizayn",
+            lang : "Evrak Dili"
+        },
+        btnView : "Görüntüle",
+        btnMailsend : "Mail Gönder",
     },
     cnt_01_001 : // "Alış Anlaşmaları Listesi"
     {
