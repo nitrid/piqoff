@@ -70,8 +70,9 @@ export default class customerItemSaleReport extends React.PureComponent
             {
                 select : 
                 {
-                    query : "SELECT CUSER_NAME,LUSER_NAME,DEVICE,REF,DOC_DATE,ITEM_CODE,ITEM_NAME,ITEM_GRP_NAME,BARCODE,QUANTITY,UNIT_SHORT,PRICE,FAMOUNT,AMOUNT,DISCOUNT, " +
-                            "LOYALTY,VAT,VAT_RATE,TOTAL FROM POS_SALE_VW_01 WHERE CUSTOMER_GUID = @CUSTOMER_GUID AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE" ,
+                    query : "SELECT CUSER_NAME,LUSER_NAME,DEVICE,REF,DOC_DATE,ITEM_CODE,ITEM_NAME,ITEM_GRP_NAME,BARCODE,QUANTITY,UNIT_SHORT,PRICE,CASE WHEN TYPE = 1 THEN FAMOUNT * -1 ELSE FAMOUNT END AS FAMOUNT, " +
+                            " CASE WHEN TYPE = 1 THEN AMOUNT * -1 ELSE AMOUNT END AS AMOUNT,DISCOUNT, " +
+                            "LOYALTY,CASE WHEN TYPE = 1 THEN VAT * -1 ELSE VAT END AS VAT,VAT_RATE,CASE WHEN TYPE = 1 THEN TOTAL * -1 ELSE TOTAL END AS TOTAL FROM POS_SALE_VW_01 WHERE CUSTOMER_GUID = @CUSTOMER_GUID AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE" ,
                     param : ['FIRST_DATE:date','LAST_DATE:date','CUSTOMER_GUID:string|50'],
                     value : [this.dtDate.startDate,this.dtDate.endDate,this.txtCustomer.GUID]
                 },
