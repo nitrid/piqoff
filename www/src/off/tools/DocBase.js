@@ -483,10 +483,6 @@ export default class DocBase extends React.PureComponent
             {
                 tmpVat = tmpVat + parseFloat(this.docDetailObj.dt().where({'VAT_RATE':this.docDetailObj.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("VAT",2))
             }
-            else
-            {
-                e.key.VAT = 0
-            }
         }
         this.docObj.dt()[0].AMOUNT = this.docDetailObj.dt().sum("AMOUNT",2)
         this.docObj.dt()[0].DISCOUNT = Number(parseFloat(this.docDetailObj.dt().sum("AMOUNT",2)) - parseFloat(this.docDetailObj.dt().sum("TOTALHT",2))).round(2)
