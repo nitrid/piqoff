@@ -1770,42 +1770,41 @@ export default class priceDifferenceInvoice extends DocBase
                                                 else
                                                 {                                               
                                                     if(e.validationGroup.validate().status == "valid")
-                                                {
-                                                    App.instance.setState({isExecute:true})
-                                                    let tmpLastSignature = await this.nf525.signatureDocDuplicate(this.docObj.dt()[0])
-                                                    let tmpExtra = {...this.extraObj.empty}
-                                                    tmpExtra.DOC = this.docObj.dt()[0].GUID
-                                                    tmpExtra.DESCRIPTION = ''
-                                                    tmpExtra.TAG = 'PRINT'
-                                                    tmpExtra.SIGNATURE = tmpLastSignature.SIGNATURE
-                                                    tmpExtra.SIGNATURE_SUM = tmpLastSignature.SIGNATURE_SUM
-                                                    this.extraObj.addEmpty(tmpExtra);
-                                                    await this.extraObj.save()
-                                                    let tmpQuery = 
                                                     {
-                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG)ORDER BY LINE_NO " ,
-                                                        param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
-                                                        value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
-                                                    }
-                                                    App.instance.setState({isExecute:true})
-                                                    let tmpData = await this.core.sql.execute(tmpQuery)
-                                                    App.instance.setState({isExecute:false})
-                                                    let tmpObj = {data1:tmpData.result.recordset,data2:tmpData2.result.recordset}
-                                                    this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
-                                                    {
-                                                        if(pResult.split('|')[0] != 'ERR')
+                                                        App.instance.setState({isExecute:true})
+                                                        let tmpLastSignature = await this.nf525.signatureDocDuplicate(this.docObj.dt()[0])
+                                                        let tmpExtra = {...this.extraObj.empty}
+                                                        tmpExtra.DOC = this.docObj.dt()[0].GUID
+                                                        tmpExtra.DESCRIPTION = ''
+                                                        tmpExtra.TAG = 'PRINT'
+                                                        tmpExtra.SIGNATURE = tmpLastSignature.SIGNATURE
+                                                        tmpExtra.SIGNATURE_SUM = tmpLastSignature.SIGNATURE_SUM
+                                                        this.extraObj.addEmpty(tmpExtra);
+                                                        await this.extraObj.save()
+                                                        let tmpQuery = 
                                                         {
-                                                            var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");                                                         
-    
-                                                            mywindow.onload = function() 
-                                                            {
-                                                                mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
-                                                            } 
-                                                            // let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
-                                                            // mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
+                                                            query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG)ORDER BY LINE_NO " ,
+                                                            param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
+                                                            value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
                                                         }
-                                                    });
-                                                    this.popDesign.hide();  
+                                                        App.instance.setState({isExecute:true})
+                                                        let tmpData = await this.core.sql.execute(tmpQuery)
+                                                        App.instance.setState({isExecute:false})
+                                                        this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
+                                                        {
+                                                            if(pResult.split('|')[0] != 'ERR')
+                                                            {
+                                                                var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");                                                         
+        
+                                                                mywindow.onload = function() 
+                                                                {
+                                                                    mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
+                                                                } 
+                                                                // let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
+                                                                // mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
+                                                            }
+                                                        });
+                                                        this.popDesign.hide();  
                                                     }
                                                 }
                                                    
@@ -1821,7 +1820,7 @@ export default class priceDifferenceInvoice extends DocBase
                                     </div>
                                     <div className="row py-2">
                                         <div className='col-6'>
-                                            <NdButton text={this.t("btnView")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmPurcOrderPrint" + this.tabIndex}
+                                            <NdButton text={this.t("btnView")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmPrintPop" + this.tabIndex}
                                             onClick={async (e)=>
                                             {       
                                                 if(e.validationGroup.validate().status == "valid")
@@ -1855,7 +1854,7 @@ export default class priceDifferenceInvoice extends DocBase
                                             }}/>
                                         </div>
                                         <div className='col-6'>
-                                                <NdButton text={this.t("btnMailsend")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmPurcOrderPrint" + this.tabIndex}
+                                                <NdButton text={this.t("btnMailsend")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmPrintPop" + this.tabIndex}
                                                 onClick={async (e)=>
                                                 {    
                                                     if(e.validationGroup.validate().status == "valid")
