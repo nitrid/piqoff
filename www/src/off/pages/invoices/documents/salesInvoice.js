@@ -59,6 +59,7 @@ export default class salesInvoice extends DocBase
     async init()
     {
         await super.init()
+       
 
         this.docObj.dt()[0].TYPE_NAME = 'FAC'
 
@@ -75,7 +76,7 @@ export default class salesInvoice extends DocBase
         tmpDocCustomer.REBATE = this.docObj.dt()[0].REBATE
         tmpDocCustomer.DOC_DATE = this.docObj.dt()[0].DOC_DATE
         this.docObj.docCustomer.addEmpty(tmpDocCustomer)
-        
+
         this.txtRef.readOnly = false
         this.txtRefno.readOnly = true
         this.docLocked = false
@@ -134,7 +135,7 @@ export default class salesInvoice extends DocBase
                 {
                     select:
                     {
-                        query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,TYPE_NAME,GENUS_NAME,EXPIRY_DAY,TAX_NO,PRICE_LIST_NO,ISNULL((SELECT TOP 1 ZIPCODE FROM CUSTOMER_ADRESS_VW_01 WHERE ADRESS_NO = 0),'') AS ZIPCODE FROM CUSTOMER_VW_01 WHERE STATUS = 1  AND ((UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL))) ",
+                        query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,TYPE_NAME,GENUS_NAME,EXPIRY_DAY,TAX_NO,PRICE_LIST_NO,VAT_ZERO,ISNULL((SELECT TOP 1 ZIPCODE FROM CUSTOMER_ADRESS_VW_01 WHERE ADRESS_NO = 0),'') AS ZIPCODE FROM CUSTOMER_VW_01 WHERE STATUS = 1  AND ((UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL))) ",
                         param : ['VAL:string|50']
                     },
                     sql:this.core.sql
@@ -283,7 +284,14 @@ export default class salesInvoice extends DocBase
                                     e.data.PRICE = parseFloat((this.txtUnitPrice.value / this.txtUnitFactor.value).toFixed(4))
                                 }
                                 e.data.QUANTITY = this.txtTotalQuantity.value
-                                e.data.VAT = Number(((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) * (e.data.VAT_RATE) / 100))).round(6)
+                                if(this.docObj.dt()[0].VAT_ZERO != 1)
+                                {
+                                    e.data.VAT = Number(((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) * (e.data.VAT_RATE) / 100))).round(6)
+                                }
+                                else
+                                {
+                                    e.data.VAT = 0
+                                }
                                 e.data.AMOUNT = Number((e.data.PRICE * e.data.QUANTITY)).round(2)
                                 e.data.TOTALHT = Number(((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT)).round(2)
                                 e.data.TOTAL = Number((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) +e.data.VAT)).round(2)
@@ -545,7 +553,14 @@ export default class salesInvoice extends DocBase
             else
             {
                 this.docObj.docItems.dt()[pIndex].PRICE = parseFloat((pPrice).toFixed(4))
-                this.docObj.docItems.dt()[pIndex].VAT = parseFloat((((pPrice * pQuantity) - this.docObj.docItems.dt()[pIndex].DISCOUNT) * (this.docObj.docItems.dt()[pIndex].VAT_RATE / 100) ).toFixed(6))
+                if(this.docObj.dt()[0].VAT_ZERO != 1)
+                {
+                    this.docObj.docItems.dt()[pIndex].VAT = parseFloat((((pPrice * pQuantity) - this.docObj.docItems.dt()[pIndex].DISCOUNT) * (this.docObj.docItems.dt()[pIndex].VAT_RATE / 100)).toFixed(6))
+                }
+                else
+                {
+                    this.docObj.docItems.dt()[pIndex].VAT = 0
+                }
                 this.docObj.docItems.dt()[pIndex].AMOUNT = parseFloat((pPrice  * pQuantity)).round(2)
                 this.docObj.docItems.dt()[pIndex].TOTALHT = Number(((pPrice  * pQuantity) - this.docObj.docItems.dt()[pIndex].DISCOUNT)).round(2)
                 this.docObj.docItems.dt()[pIndex].TOTAL = Number((this.docObj.docItems.dt()[pIndex].TOTALHT + this.docObj.docItems.dt()[pIndex].VAT)).round(2)
@@ -627,16 +642,9 @@ export default class salesInvoice extends DocBase
             {
                 let tmpQuery = 
                 {
-                    query : "SELECT ITEMS.GUID,ITEMS.CODE,ITEMS.NAME,ITEMS.VAT,1 AS QUANTITY, " +
-                            "CASE WHEN UNIT.GUID IS NULL THEN ITEMS.UNIT ELSE UNIT.GUID END AS UNIT, " +
-                            "CASE WHEN UNIT.NAME IS NULL THEN ITEMS.UNIT_NAME ELSE UNIT.NAME END AS UNIT_NAME, " +
-                            "CASE WHEN UNIT.SYMBOL IS NULL THEN ITEMS.UNIT_SHORT ELSE UNIT.SYMBOL END AS UNIT_SHORT, " +
-                            "CASE WHEN UNIT.FACTOR IS NULL THEN ITEMS.UNIT_FACTOR ELSE UNIT.FACTOR END AS UNIT_FACTOR, " + 
-                            "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS.GUID AND CUSTOMER_GUID = '" + this.docObj.dt()[0].INPUT + "'),'') AS MULTICODE " +
-                            "FROM ITEMS_VW_01 AS ITEMS " + 
-                            "LEFT OUTER JOIN ITEM_UNIT_VW_01 AS UNIT ON " +
-                            "ITEMS.GUID = UNIT.ITEM_GUID AND UNIT.TYPE = 2 AND UNIT.NAME = '" + this.sysParam.filter({ID:'cmbUnit',USERS:this.user.CODE}).getValue().value + "' " +
-                            "WHERE ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS.GUID AND CUSTOMER_GUID = '" + this.docObj.dt()[0].INPUT + "'),'') = @VALUE AND ITEMS.STATUS = 1" ,
+                    query :"SELECT GUID,CODE,NAME,VAT,1 AS QUANTITY,UNIT," + 
+                    "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].INPUT+"'),'') AS MULTICODE"+
+                    " FROM ITEMS_VW_01 WHERE ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].INPUT+"'),'') = @VALUE AND ITEMS_VW_01.STATUS = 1" ,
                     param : ['VALUE:string|50'],
                     value : [this.tagItemCode.value[i]]
                 }
@@ -658,16 +666,9 @@ export default class salesInvoice extends DocBase
             {
                 let tmpQuery = 
                 {
-                    query : "SELECT ITEMS.GUID,ITEMS.CODE,ITEMS.NAME,ITEMS.VAT,1 AS QUANTITY, " +
-                            "CASE WHEN UNIT.GUID IS NULL THEN ITEMS.UNIT ELSE UNIT.GUID END AS UNIT, " +
-                            "CASE WHEN UNIT.NAME IS NULL THEN ITEMS.UNIT_NAME ELSE UNIT.NAME END AS UNIT_NAME, " +
-                            "CASE WHEN UNIT.SYMBOL IS NULL THEN ITEMS.UNIT_SHORT ELSE UNIT.SYMBOL END AS UNIT_SHORT, " +
-                            "CASE WHEN UNIT.FACTOR IS NULL THEN ITEMS.UNIT_FACTOR ELSE UNIT.FACTOR END AS UNIT_FACTOR, " + 
-                            "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS.GUID AND CUSTOMER_GUID = '" + this.docObj.dt()[0].INPUT + "'),'') AS MULTICODE " +
-                            "FROM ITEMS_VW_01 AS ITEMS " +
-                            "LEFT OUTER JOIN ITEM_UNIT_VW_01 AS UNIT ON " +
-                            "ITEMS.GUID = UNIT.ITEM_GUID AND UNIT.TYPE = 2 AND UNIT.NAME = '" + this.sysParam.filter({ID:'cmbUnit',USERS:this.user.CODE}).getValue().value + "' " +
-                            "WHERE ITEMS.CODE = @VALUE AND ITEMS.STATUS = 1" ,
+                    query :"SELECT GUID,CODE,NAME,VAT,1 AS QUANTITY,UNIT," + 
+                    "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].INPUT+"'),'') AS MULTICODE"+
+                    " FROM ITEMS_VW_01 WHERE CODE = @VALUE AND STATUS = 1" ,
                     param : ['VALUE:string|50'],
                     value : [this.tagItemCode.value[i]]
                 }
@@ -715,7 +716,7 @@ export default class salesInvoice extends DocBase
         this.grdSlsInv.devGrid.beginUpdate()
         for (let i = 0; i < this.multiItemData.length; i++) 
         {
-            await this.addItem(this.multiItemData[i],null,Number(this.multiItemData[i].QUANTITY * this.multiItemData[i].UNIT_FACTOR).round(3))
+            await this.addItem(this.multiItemData[i],null,this.multiItemData[i].QUANTITY)
         }
         this.popMultiItem.hide()
         this.grdSlsInv.devGrid.endUpdate()
@@ -771,7 +772,15 @@ export default class salesInvoice extends DocBase
                         if(this.docObj.docItems.dt().where({'ITEM_CODE':'INTERFEL'}).length > 0)
                         {
                             this.docObj.docItems.dt().where({'ITEM_CODE':'INTERFEL'})[0].PRICE = this.docObj.dt()[0].INTERFEL
-                            this.docObj.docItems.dt().where({'ITEM_CODE':'INTERFEL'})[0].VAT = parseFloat((this.docObj.dt()[0].INTERFEL * (20 /100)).toFixed(6));
+                            if(this.docObj.dt()[0].VAT_ZERO != 1)
+                            {
+                                this.docObj.docItems.dt().where({'ITEM_CODE':'INTERFEL'})[0].VAT = parseFloat((this.docObj.dt()[0].INTERFEL * (20 /100)).toFixed(6));
+                            }
+                            else
+                            {
+                                this.docObj.docItems.dt().where({'ITEM_CODE':'INTERFEL'})[0].VAT = 0
+                            }
+                          
                             this.docObj.docItems.dt().where({'ITEM_CODE':'INTERFEL'})[0].AMOUNT = this.docObj.dt()[0].INTERFEL
                             this.docObj.docItems.dt().where({'ITEM_CODE':'INTERFEL'})[0].TOTALHT = this.docObj.dt()[0].INTERFEL
                             this.docObj.docItems.dt().where({'ITEM_CODE':'INTERFEL'})[0].TOTAL = parseFloat((this.docObj.docItems.dt().where({'ITEM_CODE':'INTERFEL'})[0].TOTALHT +  parseFloat(this.docObj.docItems.dt().where({'ITEM_CODE':'INTERFEL'})[0].VAT)).toFixed(2))
@@ -1187,6 +1196,7 @@ export default class salesInvoice extends DocBase
                                                     this.docObj.dt()[0].ZIPCODE = data[0].ZIPCODE
                                                     this.docObj.dt()[0].TAX_NO = data[0].TAX_NO
                                                     this.docObj.dt()[0].PRICE_LIST_NO = data[0].PRICE_LIST_NO
+                                                    this.docObj.dt()[0].VAT_ZERO = data[0].VAT_ZERO
                                                     this.dtExpDate.value = moment(new Date()).add(data[0].EXPIRY_DAY, 'days')
                                                     let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
                                                     if(typeof tmpData != 'undefined' && tmpData.value ==  true)
@@ -1253,7 +1263,7 @@ export default class salesInvoice extends DocBase
                                                             this.docObj.dt()[0].ZIPCODE = data[0].ZIPCODE
                                                             this.docObj.dt()[0].TAX_NO = data[0].TAX_NO
                                                             this.docObj.dt()[0].PRICE_LIST_NO = data[0].PRICE_LIST_NO
-                                                            console.log(this.docObj.dt()[0])
+                                                            this.docObj.dt()[0].VAT_ZERO = data[0].VAT_ZERO
                                                             this.dtExpDate.value = moment(new Date()).add(data[0].EXPIRY_DAY, 'days')
                                                             let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
                                                             if(typeof tmpData != 'undefined' && tmpData.value ==  true)
@@ -1370,10 +1380,6 @@ export default class salesInvoice extends DocBase
                                                 icon:"fa-solid fa-barcode",
                                                 onClick:async(e)=>
                                                 {
-                                                    if(this.txtBarcode.value == '')
-                                                    {
-                                                        return
-                                                    }
                                                     if(this.cmbDepot.value == '' || this.txtCustomerCode.value == '')
                                                     {
                                                         let tmpConfObj =
@@ -1415,11 +1421,6 @@ export default class salesInvoice extends DocBase
                                     }
                                     onEnterKey={(async(e)=>
                                     {
-                                        if(this.txtBarcode.value == '')
-                                        {
-                                            return
-                                        }
-
                                         if(this.cmbDepot.value == '')
                                         {
                                             let tmpConfObj =
@@ -1860,7 +1861,14 @@ export default class salesInvoice extends DocBase
                                             }
 
                                             e.key.TOTALHT = Number(Number(parseFloat((e.key.PRICE * e.key.QUANTITY)) - (parseFloat(e.key.DISCOUNT))).toFixed(3)).round(2)
-                                            e.key.VAT = parseFloat(((((e.key.TOTALHT) - (parseFloat(e.key.DOC_DISCOUNT))) * (e.key.VAT_RATE) / 100))).round(6);
+                                            if(this.docObj.dt()[0].VAT_ZERO != 1)
+                                            {
+                                                e.key.VAT = parseFloat(((((e.key.TOTALHT) - (parseFloat(e.key.DOC_DISCOUNT))) * (e.key.VAT_RATE) / 100))).round(6);
+                                            }
+                                            else
+                                            {
+                                                e.key.VAT = 0
+                                            }
                                             e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3)).round(2)
                                             e.key.TOTAL = Number(((e.key.TOTALHT - e.key.DOC_DISCOUNT) + e.key.VAT)).round(2)
 
@@ -2217,20 +2225,15 @@ export default class salesInvoice extends DocBase
                                                         param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
                                                         value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
                                                     }
-                                                    console.log(tmpQuery)
-                                                    console.log(1)
+                                                   
                                                     App.instance.setState({isExecute:true})
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
                                                     App.instance.setState({isExecute:false})
                                                     this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
                                                     {
-                                                        console.log(tmpData.result.recordset[0].PATH)
-                                                        console.log(pResult.split('|')[0])
-                                                        console.log(tmpData.result.recordset)
                                                         if(pResult.split('|')[0] != 'ERR')
                                                         {
                                                             var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
-                                                            console.log(mywindow)
                                                             mywindow.onload = function() 
                                                             {
                                                                 mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
