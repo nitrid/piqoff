@@ -8060,6 +8060,7 @@ export default class posDoc extends React.PureComponent
                                         {                         
                                             this.customerObj.clearAll()
                                             await this.customerObj.load({CODE:this.txtPopCustomerCode.value});
+                                            console.log(this.customerObj)
                                         }}>
                                             <Validator validationGroup={"frmCustomerAdd"}>
                                                 <RequiredRule message={this.lang.t("popCustomerAdd.validTxtPopCustomerCode")}/>
