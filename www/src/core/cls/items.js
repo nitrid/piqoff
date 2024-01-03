@@ -909,6 +909,7 @@ export class itemBarcodeCls
             resolve(this.ds.get('ITEM_BARCODE'));    
         });
     }
+
     save()
     {
         return new Promise(async resolve => 
@@ -1539,7 +1540,6 @@ export class depotCls
             NAME : '',
             TYPE : 0,
             STATUS : true,
-           
         }
 
         this._initDs();
@@ -1655,6 +1655,7 @@ export class depotCls
         });
     }
 }
+
 export class itemLogPriceCls
 {
     constructor()
