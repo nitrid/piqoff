@@ -332,6 +332,8 @@ export const langFr =
         }
     },
     txtPopLastRefPholder : "Veuillez scanner le code barre présent sur le ticket ... ",
+    txtPopLastRefNoPholder : "Ref No",  // BAK
+    txtPopLastCustomerPholder : "Müşteri Kodu", // BAK
     popLastTotal :  
     {
         title : "Dernier mode de règlement" ,
@@ -673,7 +675,7 @@ export const langFr =
     msgMailPrintAlert:
     {
         title: "Avertissement",
-        msg: "Souhaitez-vous envoyer un e-mail au imprimer ?",
+        msg: "Souhaitez-vous envoyer un e-mail ou imprimer ?",
         btn01: "E-Mail",
         btn02: "Imprimer"
     },

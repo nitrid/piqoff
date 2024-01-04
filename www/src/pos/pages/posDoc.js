@@ -6597,7 +6597,7 @@ export default class posDoc extends React.PureComponent
                                 <NbButton id={"btnPopLastSaleSearch"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"36px",width:"100%"}}
                                 onClick={async()=>
                                 {
-                                    if(this.txtPopLastRef.value == "")
+                                    if(this.txtPopLastRef.value == "" && this.txtPopLastRefNo.value == '')
                                     {
                                         this.lastPosDt.selectCmd = 
                                         {
@@ -6605,9 +6605,9 @@ export default class posDoc extends React.PureComponent
                                                     "SUBSTRING(CONVERT(NVARCHAR(50),GUID),20,36) AS REF_NO " + 
                                                     "FROM POS_" + (this.state.isFormation ? 'FRM_' : '') + "VW_01 WHERE DOC_DATE >= @START_DATE AND DOC_DATE <= @FINISH_DATE AND " +
                                                     "((ISNULL((SELECT TOP 1 1 FROM POS_PAYMENT AS PAY WHERE PAY.POS = POS_" + (this.state.isFormation ? 'FRM_' : '') + "VW_01.GUID AND TYPE = @TYPE AND DELETED = 0),0) = 1) OR (@TYPE = -1)) AND " + 
-                                                    "((LUSER = @USER) OR (@USER = '')) AND STATUS = 1 ORDER BY LDATE DESC",
-                                            param:  ["START_DATE:date","FINISH_DATE:date","TYPE:int","USER:string|25"],
-                                            value:  [this.dtPopLastSaleStartDate.value,this.dtPopLastSaleFinishDate.value,this.cmbPopLastSalePayType.value,this.cmbPopLastSaleUser.value]
+                                                    "((LUSER = @USER) OR (@USER = '')) AND STATUS = 1 AND ((CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = '')) ORDER BY LDATE DESC",
+                                            param:  ["START_DATE:date","FINISH_DATE:date","TYPE:int","USER:string|25","CUSTOMER_CODE:string|50"],
+                                            value:  [this.dtPopLastSaleStartDate.value,this.dtPopLastSaleFinishDate.value,this.cmbPopLastSalePayType.value,this.cmbPopLastSaleUser.value,this.txtPopLastCustomer.value]
                                         }
                                     }
                                     else
@@ -6616,9 +6616,9 @@ export default class posDoc extends React.PureComponent
                                         {
                                             query:  "SELECT *,CONVERT(NVARCHAR,LDATE,104) + '-' + CONVERT(NVARCHAR,LDATE,108) AS CONVERT_DATE, " +
                                                     "SUBSTRING(CONVERT(NVARCHAR(50),GUID),20,36) AS REF_NO " + 
-                                                    "FROM POS_" + (this.state.isFormation ? 'FRM_' : '') + "VW_01 WHERE SUBSTRING(CONVERT(NVARCHAR(50),GUID),20,36) = @REF AND STATUS = 1",
-                                            param:  ["REF:string|25"],
-                                            value:  [this.txtPopLastRef.value]
+                                                    "FROM POS_" + (this.state.isFormation ? 'FRM_' : '') + "VW_01 WHERE (SUBSTRING(CONVERT(NVARCHAR(50),GUID),20,36) = @REF OR REF = @REF_NO)  AND STATUS = 1",
+                                            param:  ["REF:string|25","REF_NO:int"],
+                                            value:  [this.txtPopLastRef.value,this.txtPopLastRefNo.value]
                                         }
                                     }
                                     
@@ -6628,6 +6628,22 @@ export default class posDoc extends React.PureComponent
                                 }}>
                                     <i className="text-white fa-solid fa-magnifying-glass" style={{fontSize: "16px"}} />
                                 </NbButton>
+                            </div>
+                        </div>
+                        <div className="row pb-1">
+                            {/* txtPopLastRefNo */} 
+                            <div className="col-2">
+                                <NdTextBox id="txtPopLastRefNo" parent={this} simple={true} placeholder={this.lang.t("txtPopLastRefNoPholder")}>     
+                                </NdTextBox> 
+                            </div>
+                            {/* txtPopLastCustomer */} 
+                            <div className="col-2">
+                                <NdTextBox id="txtPopLastCustomer" parent={this} simple={true} placeholder={this.lang.t("txtPopLastCustomerPholder")}
+                                 onChange={async(e)=>
+                                {                         
+                                   this.cmbPopLastSaleUser.value = ''
+                                }}>     
+                                </NdTextBox> 
                             </div>
                         </div>
                         {/* grdLastPos */}
@@ -8060,6 +8076,7 @@ export default class posDoc extends React.PureComponent
                                         {                         
                                             this.customerObj.clearAll()
                                             await this.customerObj.load({CODE:this.txtPopCustomerCode.value});
+                                            console.log(this.customerObj)
                                         }}>
                                             <Validator validationGroup={"frmCustomerAdd"}>
                                                 <RequiredRule message={this.lang.t("popCustomerAdd.validTxtPopCustomerCode")}/>
