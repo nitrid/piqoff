@@ -58,6 +58,7 @@ export default class salesInvoice extends DocBase
     }
     async init()
     {
+        console.log(12313)
         await super.init()
 
         this.docObj.dt()[0].TYPE_NAME = 'FAC'
@@ -1101,7 +1102,6 @@ export default class salesInvoice extends DocBase
                                                     this.docObj.docCustomer.dt()[0].REF_NO = this.txtRefno.value
                                                 }
                                             }).bind(this)}
-                                            param={this.param.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             >
                                             <Validator validationGroup={"frmDoc"  + this.tabIndex}>

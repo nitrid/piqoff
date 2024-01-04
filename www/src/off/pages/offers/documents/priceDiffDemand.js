@@ -57,16 +57,18 @@ export default class priceDiffDemand extends DocBase
         };
         let tmpData = await this.core.sql.execute(tmpQuery);
 
+        console.log(tmpData)
         if(tmpData.result.recordset.length > 0) 
         {
-
+            console.log(1212)
             this.getDoc(tmpData.result.recordset.DOC_GUID,tmpData.result.recordset.REF,tmpData.result.recordset.REF_NO)
         }
         else
         { 
+            console.log(1233)
             let tmpQuery = 
             {
-                query: "SELECT * FROM DOC_ITEMS_VW_01 WHERE DOC_GUID = @DOC_GUID",
+                query: "SELECT * FROM DOC_ITEMS_VW_01 WHERE DOC_GUID = @DOC_GUID OR INVOICE_DOC_GUID = @DOC_GUID",
                 param: ['DOC_GUID:string|50'],
                 value: [pGuid]
             };
@@ -89,8 +91,10 @@ export default class priceDiffDemand extends DocBase
                 let tmpRefData = await this.core.sql.execute(tmpRefQuery);
                 this.docObj.dt()[0].REF_NO = tmpRefData.result.recordset[0].REF_NO
                            
+                console.log(tmpData)
                 for (let i = 0; i < tmpData.result.recordset.length; i++) 
                 {
+                    console.log(tmpData.result.recordset[i].DIFF_PRICE)
                     if(tmpData.result.recordset[i].DIFF_PRICE != 0.00 )
                     {
                         let tmpDocDemand = {...this.docObj.docDemand.empty}
