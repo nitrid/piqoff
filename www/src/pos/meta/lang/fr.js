@@ -332,6 +332,8 @@ export const langFr =
         }
     },
     txtPopLastRefPholder : "Veuillez scanner le code barre présent sur le ticket ... ",
+    txtPopLastRefNoPholder : "Ref No",  // BAK
+    txtPopLastCustomerPholder : "Müşteri Kodu", // BAK
     popLastTotal :  
     {
         title : "Dernier mode de règlement" ,
