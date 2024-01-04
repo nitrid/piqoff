@@ -673,7 +673,7 @@ export const langFr =
     msgMailPrintAlert:
     {
         title: "Avertissement",
-        msg: "Souhaitez-vous envoyer un e-mail au imprimer ?",
+        msg: "Souhaitez-vous envoyer un e-mail ou imprimer ?",
         btn01: "E-Mail",
         btn02: "Imprimer"
     },
