@@ -12,12 +12,12 @@ export const langFr =
     msgWarning : "Attention",
     msgSqlService1 : "Impossible de se connecter au serveur Sql",
     comingSoon : "Bientôt actif... ", 
-    btnBarcodeEntry: "Barkod Giriş",   // BAK
-    btnProcessLines: "İşlem Satırları",   // BAK
-    btnNewDoc: "Yeni Evrak",   // BAK
-    btnDocDelete: "Evrak Sil",   // BAK
-    btnLineDisc: "Satır İndirim",   // BAK
-    chkRememberMe : "Souviens-toi de moi", // BAK
+    btnBarcodeEntry: "Entrée du code-barres",   
+    btnProcessLines: "Traiter les lignes",   
+    btnNewDoc: "Nouveau document",   
+    btnDocDelete: "Supprimer le document",   
+    btnLineDisc: "Remise de ligne",       
+    chkRememberMe : "Souviens-toi de moi", 
     msgAnotherUserAlert: 
     {
         title : "Attention",
@@ -272,24 +272,24 @@ export const langFr =
     },
     stk_07 : // "Özel Etiket Bas"  KOMPLE BAK
     {
-        lblPrice : "Fiyat",
-        lblQuantity : "Miktar",
-        lblDescription : "Açıklama",
-        lblAdd : "Ekle",
+        lblPrice : "Prix",
+        lblQuantity : "Quantité",
+        lblDescription : "Description",
+        lblAdd : "Ajouter",
         msgAlert :
         {
-            btn01 : "Tamam",
-            title : "Uyarı",
-            msgProcess : "Henüz girilmiş bir ürün yok !",
-            msgBarcodeNotFound : "Barkod bulunamadı !",
-            msgBarcodeCheck : "Lütfen barkod okutunuz !",
-            msgNotSave : "Kayıt İşlemi Başarısız",
+            btn01 : "OK",
+            title : "Attention",
+            msgProcess : "Aucun produit n'a encore été saisi !",
+            msgBarcodeNotFound : "Code-barres introuvable !",
+            msgBarcodeCheck : "Veuillez scanner le code-barres !",
+            msgNotSave : "Échec de l'enregistrement.",
         },
         grdList : 
         {
-            clmBarcode : "Barkod",
-            clmName :  "Ürün Adı",
-            clmPrice : "Fiyat"
+            clmBarcode : "code-barres",
+            clmName :  "Nom du produit",
+            clmPrice : "Prix"
         },
     },
     stk_08 : // "Transfert dépôt de retour"
