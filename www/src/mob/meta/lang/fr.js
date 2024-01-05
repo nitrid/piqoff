@@ -92,7 +92,7 @@ export const langFr =
         stk_04 : "Groupe de produit",
         stk_05 : "Compter",
         stk_06 : "Imprimer étiquette",
-        stk_07 : "Imprimer étiquette spéciale",
+        stk_07 : "Etiquette spéciale",
         stk_08 : "Retour des Produits",
         dep_01 : "Transfert",
         dep_02 : "Commande dépôt",
@@ -268,6 +268,28 @@ export const langFr =
             title : "Choix du document",
             clmRef :  "Référence",
             clmRefNo : "Numéro de référence",
+        },
+    },
+    stk_07 : // "Özel Etiket Bas"  KOMPLE BAK
+    {
+        lblPrice : "Fiyat",
+        lblQuantity : "Miktar",
+        lblDescription : "Açıklama",
+        lblAdd : "Ekle",
+        msgAlert :
+        {
+            btn01 : "Tamam",
+            title : "Uyarı",
+            msgProcess : "Henüz girilmiş bir ürün yok !",
+            msgBarcodeNotFound : "Barkod bulunamadı !",
+            msgBarcodeCheck : "Lütfen barkod okutunuz !",
+            msgNotSave : "Kayıt İşlemi Başarısız",
+        },
+        grdList : 
+        {
+            clmBarcode : "Barkod",
+            clmName :  "Ürün Adı",
+            clmPrice : "Fiyat"
         },
     },
     stk_08 : // "Transfert dépôt de retour"

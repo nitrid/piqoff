@@ -165,42 +165,42 @@ export default class privatePrinting extends React.PureComponent
                                             if(pResult == 'btn01')
                                             {
                                                 
-                                                    let tmpQuery = 
+                                                let tmpQuery = 
+                                                {
+                                                    query : "SELECT ISNULL(REPLACE(STR(SUBSTRING(MAX(CODE),0,8) + 1, 7), SPACE(1), '0'),'2700001') AS CODE FROM ITEM_UNIQ ",
+                                                }
+                                                let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                if(tmpData.result.recordset.length > 0)
+                                                {   
+                                                    let tmpdefCode = tmpData.result.recordset[0].CODE
+                                                    for (let i = 0; i < this.txtQuantity.value; i++) 
                                                     {
-                                                        query : "SELECT ISNULL(REPLACE(STR(SUBSTRING(MAX(CODE),0,8) + 1, 7), SPACE(1), '0'),'2700001') AS CODE FROM ITEM_UNIQ ",
-                                                    }
-                                                    let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                    if(tmpData.result.recordset.length > 0)
-                                                    {   
-                                                        let tmpdefCode = tmpData.result.recordset[0].CODE
-                                                        for (let i = 0; i < this.txtQuantity.value; i++) 
-                                                        {
-                                                            tmpdefCode = tmpdefCode.toString()
-                                                            let tmpCode = ''
-                                                            let output = []
-                                                            for (var x = 0, len = tmpdefCode.length; x < len; x += 1) {
-                                                                output.push(+tmpdefCode.charAt(x));
-                                                            }
-                                                    
-                                                            var tek=(output[0]+output[2]+output[4]+output[6])*3
-                                                            var cift=output[1]+output[3]+output[5]
-                                                            var say = tek+cift
-                                                            let sonuc = (10 - (say %= 10))
-                                                            if(sonuc == 10)
-                                                            {
-                                                                sonuc = 0
-                                                            }
-                                                            tmpCode = tmpdefCode + sonuc.toString();
-                                                            let tmpEmpty = {...this.prilabelCls.empty};
-                                                            tmpEmpty.CODE = tmpCode
-                                                            tmpEmpty.ITEM = this.txtRef.GUID
-                                                            tmpEmpty.NAME = this.txtItemName.value
-                                                            tmpEmpty.PRICE = this.txtPrice.value
-                                                            tmpEmpty.DESCRIPTION = this.txtDescription.value
-                                                            this.prilabelCls.addEmpty(tmpEmpty);  
-                                                            tmpdefCode = Number(tmpdefCode) + 1
+                                                        tmpdefCode = tmpdefCode.toString()
+                                                        let tmpCode = ''
+                                                        let output = []
+                                                        for (var x = 0, len = tmpdefCode.length; x < len; x += 1) {
+                                                            output.push(+tmpdefCode.charAt(x));
                                                         }
+                                                
+                                                        var tek=(output[0]+output[2]+output[4]+output[6])*3
+                                                        var cift=output[1]+output[3]+output[5]
+                                                        var say = tek+cift
+                                                        let sonuc = (10 - (say %= 10))
+                                                        if(sonuc == 10)
+                                                        {
+                                                            sonuc = 0
+                                                        }
+                                                        tmpCode = tmpdefCode + sonuc.toString();
+                                                        let tmpEmpty = {...this.prilabelCls.empty};
+                                                        tmpEmpty.CODE = tmpCode
+                                                        tmpEmpty.ITEM = this.txtRef.GUID
+                                                        tmpEmpty.NAME = this.txtItemName.value
+                                                        tmpEmpty.PRICE = this.txtPrice.value
+                                                        tmpEmpty.DESCRIPTION = this.txtDescription.value
+                                                        this.prilabelCls.addEmpty(tmpEmpty);  
+                                                        tmpdefCode = Number(tmpdefCode) + 1
                                                     }
+                                                }
                                                 let tmpConfObj1 =
                                                 {
                                                     id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
@@ -208,7 +208,7 @@ export default class privatePrinting extends React.PureComponent
                                                 }
                                                 if((await this.prilabelCls.save()) == 0)
                                                 {                  
-                                                   
+                                                
                                                     let Data = {data:this.prilabelCls.dt().toArray()}                                  
                                                     let tmpLbl = {...this.labelMainObj.empty}
                                                     tmpLbl.REF = 'SPECIAL'

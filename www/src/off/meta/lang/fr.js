@@ -16897,7 +16897,8 @@ export const langFr =
             clmName : "Nom du produit",
             clmQuantity : "Quantité",
             clmPrice : "Prix ",
-            clmTotal : "Total" 
+            clmTotal : "Total" ,
+            clmTime: "Heure",
         },
         grdSaleTicketPays : 
         {
