@@ -18593,6 +18593,17 @@ export const langTr =
             btn01: "Tamam",
             msg: "Ürün Adı Çok Uzun. Lütfen Düzeltip Tekrar Kayıt Edin !"
         },
+        grdUniqList : 
+        {
+            clmName : "Adı",
+            clmPrice : "Fiyat",
+            clmDescription : "Açıklama",
+            clmQuantity : "Miktar"
+        },
+        popUniqCodeList : 
+        {
+            title : "Etiket Listesi"
+        }
     },
     pos_02_003 : // "Pos Satış Raporu"
     {

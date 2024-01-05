@@ -18062,6 +18062,17 @@ export const langDe =
             btn01: "OK",
             msg: "Artikelname ist zu lang. Bitte korrigieren Sie ihn und speichern Sie erneut!"
         },
+        grdUniqList : 
+        { 
+            clmName : "Adı",  // BAK
+            clmPrice : "Fiyat",  // BAK
+            clmDescription : "Açıklama",  // BAK
+            clmQuantity : "Miktar"  // BAK
+        },
+        popUniqCodeList : 
+        {
+            title : "Etiket Listesi"  // BAK
+        }
     },
     pos_02_003 : // "POS-Verkaufsbericht"
     {

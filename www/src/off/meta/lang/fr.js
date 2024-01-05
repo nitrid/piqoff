@@ -18866,6 +18866,17 @@ export const langFr =
             btn01: "OK",
             msg: "Nom du produit trop long. Veuillez le corriger et le réssaisir !"
         },
+        grdUniqList : 
+        { 
+            clmName : "Adı",  // BAK
+            clmPrice : "Fiyat",  // BAK
+            clmDescription : "Açıklama",  // BAK
+            clmQuantity : "Miktar"  // BAK
+        },
+        popUniqCodeList : 
+        {
+            title : "Etiket Listesi"  // BAK
+        }
     },
     pos_02_003 : // "Pos Satış Raporu"
     {

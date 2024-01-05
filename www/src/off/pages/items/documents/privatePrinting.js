@@ -34,6 +34,7 @@ export default class privatePrinting extends React.PureComponent
         this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
         this.prilabelCls = new priLabelObj();
         this.labelMainObj = new labelMainCls();
+        this._btnGrdPrint = this._btnGrdPrint.bind(this)
 
         this.tabIndex = props.data.tabkey
     }
@@ -88,6 +89,33 @@ export default class privatePrinting extends React.PureComponent
         this.txtPrice.readOnly = false
         this.txtDescription.readOnly = false
         this.txtQuantity.readOnly = false
+    }
+    async _btnGrdPrint(e)
+    {
+        let tmpQuery = 
+        {
+            query:  "SELECT *, " +
+                    "ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE PAGE = @PAGE),'') AS PATH " +
+                    "FROM  ITEM_LABEL_QUEUE_VW_01 WHERE GUID  = @GUID" ,
+            param:  ['GUID:string|50','PAGE:string|25'],
+            value:  [e.row.data.GUID,'02']
+        }
+        App.instance.setState({isExecute:true})
+        let tmpData = await this.core.sql.execute(tmpQuery) 
+        App.instance.setState({isExecute:false})
+        this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" +  JSON.stringify(tmpData.result.recordset)+ "}",(pResult) => 
+        {
+            if(pResult.split('|')[0] != 'ERR')
+            {
+                var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
+                mywindow.onload = function() 
+                {
+                    mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
+                } 
+                // let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
+                // mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
+            }
+        });
     }
     render()
     {
@@ -275,6 +303,28 @@ export default class privatePrinting extends React.PureComponent
                                                 // mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
                                             }
                                         });
+                                    }}/>
+                                </Item>
+                                <Item location="after" locateInMenu="auto">
+                                    <NdButton id="btnList" parent={this} icon="bulletlist" type="default"
+                                    onClick={async()=>
+                                    {
+                                        let tmpSource =
+                                        {
+                                            source : 
+                                            {
+                                                groupBy : this.groupList,
+                                                select : 
+                                                {
+                                                    query : "SELECT GUID,NAME,PRICE,DESCRIPTION,MAX(QUANTITY) AS QUANTITY from ITEM_LABEL_QUEUE_VW_01 WHERE REF = 'SPECIAL' AND (SELECT STATUS FROM LABEL_QUEUE WHERE LABEL_QUEUE.GUID = ITEM_LABEL_QUEUE_VW_01.GUID) = 0 GROUP BY GUID,NAME,PRICE,DESCRIPTION "
+                                                },
+                                                sql : this.core.sql
+                                            }
+                                        }
+                                        App.instance.setState({isExecute:true})
+                                        await this.grdUniqList.dataRefresh(tmpSource)
+                                        App.instance.setState({isExecute:false})
+                                       this.popUniqCodeList.show()
                                     }}/>
                                 </Item>
                                 <Item location="after"
@@ -471,6 +521,42 @@ export default class privatePrinting extends React.PureComponent
                                 </Item>
                             </Form>
                         </div>
+                         {/* UNIQ CODE PopUp */}
+                        <div>
+                            <NdPopUp parent={this} id={"popUniqCodeList"} 
+                            visible={false}
+                            showCloseButton={true}
+                            showTitle={true}
+                            title={this.t("popUniqCodeList.title")}
+                            container={"#root"} 
+                            width={'800'}
+                            height={'800'}
+                            position={{of:'#root'}}
+                            >
+                                <Form colCount={1} height={'fit-content'}>
+                                <NdGrid parent={this} id={"grdUniqList"} 
+                                    filterRow={{visible:true}} 
+                                    height={'700'} 
+                                    width={'100%'}
+                                    dbApply={false}
+                                    loadPanel={{enabled:true}}
+                                    >
+                                        <Paging defaultPageSize={10} />
+                                        <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
+                                        <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
+                                        <Scrolling mode="standart"/>
+                                        <Editing mode="cell" allowUpdating={false} allowDeleting={false} confirmDelete={false}/>
+                                        <Column dataField="NAME" caption={this.t("grdUniqList.clmName")} visible={false} width={200} dataType={'number'} defaultSortOrder="desc"/>
+                                        <Column dataField="PRICE" caption={this.t("grdUniqList.clmPrice")} width={70} allowEditing={false}/>
+                                        <Column dataField="DESCRIPTION" caption={this.t("grdUniqList.clmDescription")} width={150} allowEditing={false}/>
+                                        <Column dataField="QUANTITY" caption={this.t("grdUniqList.clmQuantity")} dataType={'number'} width={50}/>
+                                        <Column type="buttons" width={70}>
+                                            <Button hint="Clone" icon="print" onClick={this._btnGrdPrint} />
+                                        </Column>
+                                    </NdGrid>
+                                </Form>
+                            </NdPopUp>
+                        </div>  
                     </div>
                 </ScrollView>                
             </div>
