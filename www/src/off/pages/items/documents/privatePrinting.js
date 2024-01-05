@@ -7,7 +7,6 @@ import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
 import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
 import TabPanel from 'devextreme-react/tab-panel';
-import { Button } from 'devextreme-react/button';
 
 import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
 import NdNumberBox from '../../../../core/react/devex/numberbox.js';
@@ -15,7 +14,7 @@ import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
-import NdGrid,{Column,Editing,Paging,Scrolling,KeyboardNavigation,Export} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Button,Editing,Paging,Scrolling,KeyboardNavigation,Export,Pager} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdImageUpload from '../../../../core/react/devex/imageupload.js';
@@ -116,6 +115,15 @@ export default class privatePrinting extends React.PureComponent
                 // mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
             }
         });
+        let tmpUpdateQuery = 
+        {
+            query:  "UPDATE LABEL_QUEUE SET STATUS = 1 WHERE GUID = @GUID",
+            param:  ['GUID:string|50'],
+            value:  [e.row.data.GUID]
+        }
+        await this.core.sql.execute(tmpUpdateQuery) 
+        this.popUniqCodeList.hide()
+        this.btnList.props.onClick()
     }
     render()
     {
@@ -303,6 +311,12 @@ export default class privatePrinting extends React.PureComponent
                                                 // mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
                                             }
                                         });
+                                        let tmpUpdateQuery = 
+                                        {
+                                            query:  "UPDATE LABEL_QUEUE SET STATUS = 1 WHERE GUID = @GUID",
+                                            param:  ['GUID:string|50'],
+                                            value:  [this.labelMainObj.dt()[0].GUID]
+                                        }
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
@@ -534,26 +548,28 @@ export default class privatePrinting extends React.PureComponent
                             position={{of:'#root'}}
                             >
                                 <Form colCount={1} height={'fit-content'}>
-                                <NdGrid parent={this} id={"grdUniqList"} 
-                                    filterRow={{visible:true}} 
-                                    height={'700'} 
-                                    width={'100%'}
-                                    dbApply={false}
-                                    loadPanel={{enabled:true}}
-                                    >
-                                        <Paging defaultPageSize={10} />
-                                        <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
-                                        <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
-                                        <Scrolling mode="standart"/>
-                                        <Editing mode="cell" allowUpdating={false} allowDeleting={false} confirmDelete={false}/>
-                                        <Column dataField="NAME" caption={this.t("grdUniqList.clmName")} visible={false} width={200} dataType={'number'} defaultSortOrder="desc"/>
-                                        <Column dataField="PRICE" caption={this.t("grdUniqList.clmPrice")} width={70} allowEditing={false}/>
-                                        <Column dataField="DESCRIPTION" caption={this.t("grdUniqList.clmDescription")} width={150} allowEditing={false}/>
-                                        <Column dataField="QUANTITY" caption={this.t("grdUniqList.clmQuantity")} dataType={'number'} width={50}/>
-                                        <Column type="buttons" width={70}>
-                                            <Button hint="Clone" icon="print" onClick={this._btnGrdPrint} />
-                                        </Column>
-                                    </NdGrid>
+                                    <Item>
+                                        <NdGrid parent={this} id={"grdUniqList"} 
+                                        filterRow={{visible:true}} 
+                                        height={'700'} 
+                                        width={'100%'}
+                                        dbApply={false}
+                                        loadPanel={{enabled:true}}
+                                        >
+                                            <Paging defaultPageSize={18} />
+                                            <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
+                                            <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
+                                            <Scrolling mode="standart"/>
+                                            <Editing mode="cell" allowUpdating={false} allowDeleting={false} confirmDelete={false}/>
+                                            <Column dataField="NAME" caption={this.t("grdUniqList.clmName")} width={250} dataType={'number'} defaultSortOrder="desc"/>
+                                            <Column dataField="PRICE" caption={this.t("grdUniqList.clmPrice")} width={70} allowEditing={false}/>
+                                            <Column dataField="DESCRIPTION" caption={this.t("grdUniqList.clmDescription")} width={200} allowEditing={false}/>
+                                            <Column dataField="QUANTITY" caption={this.t("grdUniqList.clmQuantity")} dataType={'number'} width={50}/>
+                                            <Column type="buttons" width={70}>
+                                                <Button hint="Clone" icon="print" onClick={this._btnGrdPrint} />
+                                            </Column>
+                                        </NdGrid>
+                                    </Item>
                                 </Form>
                             </NdPopUp>
                         </div>  

@@ -712,7 +712,7 @@ export default class branchSaleInvoice extends DocBase
                 {
                     query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG)ORDER BY DOC_DATE,LINE_NO " ,
                     param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
-                    value:  [this.docObj.dt()[0].GUID,'22',this.lang.languages[0].toString().toUpperCase()]
+                    value:  [this.docObj.dt()[0].GUID,'35',this.lang.languages[0].toString().toUpperCase()]
                 }
                 App.instance.setState({isExecute:true})
                 let tmpData = await this.core.sql.execute(tmpQuery)
