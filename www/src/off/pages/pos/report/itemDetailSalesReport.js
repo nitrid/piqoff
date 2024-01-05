@@ -17,7 +17,7 @@ import NdButton from '../../../../core/react/devex/button.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 
-export default class itemSalesReport extends React.PureComponent
+export default class itemDetailSalesReport extends React.PureComponent
 {
     constructor(props)
     {

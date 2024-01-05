@@ -479,7 +479,10 @@ export default class DocBase extends React.PureComponent
         let tmpVat = 0
         for (let i = 0; i < this.docDetailObj.dt().groupBy('VAT_RATE').length; i++) 
         {
-            tmpVat = tmpVat + parseFloat(this.docDetailObj.dt().where({'VAT_RATE':this.docDetailObj.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("VAT",2))
+            if(this.docObj.dt()[0].VAT_ZERO != 1)
+            {
+                tmpVat = tmpVat + parseFloat(this.docDetailObj.dt().where({'VAT_RATE':this.docDetailObj.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("VAT",2))
+            }
         }
         this.docObj.dt()[0].AMOUNT = this.docDetailObj.dt().sum("AMOUNT",2)
         this.docObj.dt()[0].DISCOUNT = Number(parseFloat(this.docDetailObj.dt().sum("AMOUNT",2)) - parseFloat(this.docDetailObj.dt().sum("TOTALHT",2))).round(2)
@@ -576,8 +579,16 @@ export default class DocBase extends React.PureComponent
                         
                         if(tmpRelatedQt > 0)
                         {
+                            if(this.docObj.dt()[0].VAT_ZERO != 1)
+                            {
+                                this.docDetailObj.dt()[x].VAT = parseFloat((this.docDetailObj.dt()[x].VAT + (this.docDetailObj.dt()[x].PRICE * (this.docDetailObj.dt()[x].VAT_RATE / 100) * pQuantity)).toFixed(6))
+                            }
+                            else
+                            {
+                                this.docDetailObj.dt()[x].VAT = 0
+                            }
                             this.docDetailObj.dt()[x].QUANTITY = tmpRelatedQt
-                            this.docDetailObj.dt()[x].VAT = parseFloat((this.docDetailObj.dt()[x].VAT + (this.docDetailObj.dt()[x].PRICE * (this.docDetailObj.dt()[x].VAT_RATE / 100) * pQuantity)).toFixed(6))
+                            
                             this.docDetailObj.dt()[x].AMOUNT = parseFloat((this.docDetailObj.dt()[x].QUANTITY * this.docDetailObj.dt()[x].PRICE)).round(2)
                             this.docDetailObj.dt()[x].TOTAL = parseFloat((((this.docDetailObj.dt()[x].QUANTITY * this.docDetailObj.dt()[x].PRICE) - this.docDetailObj.dt()[x].DISCOUNT) + this.docDetailObj.dt()[x].VAT)).round(2)
                             this.docDetailObj.dt()[x].TOTALHT =  parseFloat((this.docDetailObj.dt()[x].AMOUNT - this.docDetailObj.dt()[x].DISCOUNT)).round(2)
@@ -1206,7 +1217,14 @@ export default class DocBase extends React.PureComponent
                                                 
                                                 if(tmpDocData.VAT > 0)
                                                 {
-                                                    tmpDocData.VAT = parseFloat(((tmpDocData.TOTALHT - tmpDocData.DOC_DISCOUNT) * (tmpDocData.VAT_RATE / 100)).toFixed(6))
+                                                    if(this.docObj.dt()[0].VAT_ZERO != 1)
+                                                    {
+                                                        tmpDocData.VAT = parseFloat(((tmpDocData.TOTALHT - tmpDocData.DOC_DISCOUNT) * (tmpDocData.VAT_RATE / 100)).toFixed(6))
+                                                    }
+                                                    else
+                                                    {
+                                                        tmpDocData.VAT = 0
+                                                    }
                                                 }
                                                 tmpDocData.TOTAL = parseFloat(((tmpDocData.TOTALHT - tmpDocData.DOC_DISCOUNT) + tmpDocData.VAT)).round(2)
                                                 tmpDocData.DISCOUNT_RATE = Number((tmpDocData.PRICE * tmpDocData.QUANTITY)).rate2Num((tmpDocData.DISCOUNT_1 + tmpDocData.DISCOUNT_2 + tmpDocData.DISCOUNT_3),2)
@@ -1406,7 +1424,14 @@ export default class DocBase extends React.PureComponent
                                                 
                                                 if(tmpDocData.VAT > 0)
                                                 {
-                                                    tmpDocData.VAT = parseFloat(((tmpDocData.TOTALHT - tmpDocData.DOC_DISCOUNT) * (tmpDocData.VAT_RATE / 100)).toFixed(6))
+                                                    if(this.docObj.dt()[0].VAT_ZERO != 1)
+                                                    {
+                                                        tmpDocData.VAT = parseFloat(((tmpDocData.TOTALHT - tmpDocData.DOC_DISCOUNT) * (tmpDocData.VAT_RATE / 100)).toFixed(6))
+                                                    }
+                                                    else
+                                                    {
+                                                        tmpDocData.VAT = 0
+                                                    }
                                                 }
                                                 tmpDocData.TOTAL = parseFloat(((tmpDocData.TOTALHT - tmpDocData.DOC_DISCOUNT) + tmpDocData.VAT)).round(2)
                                                 tmpDocData.DISCOUNT_RATE = Number((tmpDocData.PRICE * tmpDocData.QUANTITY)).rate2Num((tmpDocData.DISCOUNT_1 + tmpDocData.DISCOUNT_2 + tmpDocData.DISCOUNT_3),2)
@@ -1603,7 +1628,7 @@ export default class DocBase extends React.PureComponent
                     title={this.t("popMultiItem.title")}
                     container={"#root"} 
                     width={'1100'}
-                    height={'900'}
+                    height={'750'}
                     position={{of:'#root'}}
                     deferRendering={true}
                     onHiding={()=>

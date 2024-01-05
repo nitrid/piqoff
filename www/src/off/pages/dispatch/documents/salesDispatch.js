@@ -108,7 +108,7 @@ export default class salesDispatch extends DocBase
                 {
                     select:
                     {
-                        query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,TYPE_NAME,GENUS_NAME,PRICE_LIST_NO FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
+                        query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,TYPE_NAME,GENUS_NAME,VAT_ZERO,PRICE_LIST_NO FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
                         param : ['VAL:string|50']
                     },
                     sql:this.core.sql
@@ -386,7 +386,15 @@ export default class salesDispatch extends DocBase
                                 e.key.UNIT_FACTOR = this.txtUnitFactor.value
                                 e.data.PRICE = parseFloat((this.txtUnitPrice.value).toFixed(4))
                                 e.data.QUANTITY = this.txtTotalQuantity.value
-                                e.data.VAT = parseFloat(((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) * (e.data.VAT_RATE) / 100)).toFixed(6));
+                                if(this.docObj.dt()[0].VAT_ZERO != 1)
+                                {
+                                    e.data.VAT = parseFloat(((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) * (e.data.VAT_RATE) / 100)).toFixed(6));
+                                }
+                                else
+                                {
+                                    e.data.VAT = 0
+                                    e.data.VAT_RATE = 0
+                                }
                                 e.data.AMOUNT = parseFloat((e.data.PRICE * e.data.QUANTITY).toFixed(4))
                                 e.data.TOTALHT = parseFloat(((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT).toFixed(4))
                                 e.data.TOTAL = parseFloat((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) +e.data.VAT).toFixed(4))
@@ -434,7 +442,16 @@ export default class salesDispatch extends DocBase
                                     e.data.DISCOUNT_2 = this.txtDiscount2.value
                                     e.data.DISCOUNT_3 = this.txtDiscount3.value
                                     e.data.DISCOUNT = (parseFloat(this.txtDiscount1.value) + parseFloat(this.txtDiscount2.value) + parseFloat(this.txtDiscount3.value))
-                                    e.data.VAT = parseFloat(((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) * (e.data.VAT_RATE) / 100)).toFixed(6));
+                                    if(this.docObj.dt()[0].VAT_ZERO != 1)
+                                    {
+                                        e.data.VAT = parseFloat(((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) * (e.data.VAT_RATE) / 100)).toFixed(6));
+                                    }
+                                    else
+                                    {
+                                        e.data.VAT = 0
+                                        e.data.VAT_RATE = 0
+                                    }
+                                    
                                     e.data.AMOUNT = parseFloat((e.data.PRICE * e.data.QUANTITY).toFixed(3))
                                     e.data.TOTAL = parseFloat((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) +e.data.VAT).toFixed(3))
                                     e.data.TOTALHT = parseFloat(((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT).toFixed(4))
@@ -479,7 +496,16 @@ export default class salesDispatch extends DocBase
                                 e.data.DISCOUNT_2 = Number(e.data.AMOUNT-e.data.DISCOUNT_1).rateInc(this.txtDiscountPer2.value,4) 
                                 e.data.DISCOUNT_3 = Number(e.data.AMOUNT-e.data.DISCOUNT_1-e.data.DISCOUNT_2).rateInc(this.txtDiscountPer3.value,4) 
                                 e.data.DISCOUNT = (e.data.DISCOUNT_1 + e.data.DISCOUNT_2 + e.data.DISCOUNT_3)
-                                e.data.VAT = parseFloat(((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) * (e.data.VAT_RATE) / 100)).toFixed(6));
+                                if(this.docObj.dt()[0].VAT_ZERO != 1)
+                                {
+                                    e.data.VAT = parseFloat(((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) * (e.data.VAT_RATE) / 100)).toFixed(6));
+                                }
+                                else
+                                {
+                                    e.data.VAT = 0
+                                    e.data.VAT_RATE = 0
+                                }
+                               
                                 e.data.AMOUNT = parseFloat((e.data.PRICE * e.data.QUANTITY).toFixed(4))
                                 e.data.TOTALHT = parseFloat(((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT).toFixed(4))
                                 e.data.TOTAL = parseFloat((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) +e.data.VAT).toFixed(4))
@@ -517,7 +543,16 @@ export default class salesDispatch extends DocBase
                 {
                     tmpMergDt[0].QUANTITY = tmpMergDt[0].QUANTITY + pQuantity
                     tmpMergDt[0].SUB_QUANTITY = tmpMergDt[0].SUB_QUANTITY / tmpMergDt[0].SUB_FACTOR
-                    tmpMergDt[0].VAT = Number((tmpMergDt[0].VAT + (tmpMergDt[0].PRICE * (tmpMergDt[0].VAT_RATE / 100) * pQuantity))).round(6)
+                    if(this.docObj.dt()[0].VAT_ZERO != 1)
+                    {
+                        tmpMergDt[0].VAT = Number((tmpMergDt[0].VAT + (tmpMergDt[0].PRICE * (tmpMergDt[0].VAT_RATE / 100) * pQuantity))).round(6)
+                    }
+                    else
+                    {
+                        tmpMergDt[0].VAT = 0
+                        tmpMergDt[0].VAT_RATE = 0
+                    }
+                    
                     tmpMergDt[0].AMOUNT = Number((tmpMergDt[0].QUANTITY * tmpMergDt[0].PRICE)).round(4)
                     tmpMergDt[0].TOTAL = Number((((tmpMergDt[0].QUANTITY * tmpMergDt[0].PRICE) - tmpMergDt[0].DISCOUNT) + tmpMergDt[0].VAT)).round(2)
                     tmpMergDt[0].TOTALHT =  Number((tmpMergDt[0].AMOUNT - tmpMergDt[0].DISCOUNT)).round(2)
@@ -663,6 +698,11 @@ export default class salesDispatch extends DocBase
                 this.docObj.docItems.dt()[pIndex].TOTAL = Number((this.docObj.docItems.dt()[pIndex].TOTALHT + this.docObj.docItems.dt()[pIndex].VAT)).round(2)
                 this.calculateTotal()
             }
+            if(this.docObj.dt()[0].VAT_ZERO == 1)
+            {
+                this.docObj.docItems.dt()[pIndex].VAT = 0
+                this.docObj.docItems.dt()[pIndex].VAT_RATE = 0
+            }
             //BAĞLI ÜRÜN İÇİN YAPILDI ******************
             await this.itemRelated(pData.GUID,pQuantity)
             //*****************************************/
@@ -736,7 +776,16 @@ export default class salesDispatch extends DocBase
                         if(this.docObj.docItems.dt().where({'ITEM_CODE':'INTERFEL'}).length > 0)
                         {
                             this.docObj.docItems.dt().where({'ITEM_CODE':'INTERFEL'})[0].PRICE = this.docObj.dt()[0].INTERFEL
-                            this.docObj.docItems.dt().where({'ITEM_CODE':'INTERFEL'})[0].VAT = parseFloat((this.docObj.dt()[0].INTERFEL * (20 /100)).toFixed(6));
+                            if(this.docObj.dt()[0].VAT_ZERO != 1)
+                            {
+                                this.docObj.docItems.dt().where({'ITEM_CODE':'INTERFEL'})[0].VAT = parseFloat((this.docObj.dt()[0].INTERFEL * (20 /100)).toFixed(6));
+                            }
+                            else
+                            {
+                                this.docObj.docItems.dt().where({'ITEM_CODE':'INTERFEL'})[0].VAT = 0
+                                this.docObj.docItems.dt().where({'ITEM_CODE':'INTERFEL'})[0].VAT_RATE = 0
+                            }
+                            
                             this.docObj.docItems.dt().where({'ITEM_CODE':'INTERFEL'})[0].AMOUNT = this.docObj.dt()[0].INTERFEL
                             this.docObj.docItems.dt().where({'ITEM_CODE':'INTERFEL'})[0].TOTALHT = this.docObj.dt()[0].INTERFEL
                             this.docObj.docItems.dt().where({'ITEM_CODE':'INTERFEL'})[0].TOTAL = parseFloat((this.docObj.dt()[0].INTERFEL -  parseFloat((this.docObj.dt()[0].INTERFEL * (20 /100)).toFixed(4))).toFixed(2))
@@ -1261,6 +1310,7 @@ export default class salesDispatch extends DocBase
                                                 this.docObj.dt()[0].INPUT_CODE = data[0].CODE
                                                 this.docObj.dt()[0].INPUT_NAME = data[0].TITLE
                                                 this.docObj.dt()[0].PRICE_LIST_NO = data[0].PRICE_LIST_NO
+                                                this.docObj.dt()[0].VAT_ZERO = data[0].VAT_ZERO
                                                 let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
                                                 if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                 {
@@ -1322,6 +1372,7 @@ export default class salesDispatch extends DocBase
                                                             this.docObj.dt()[0].INPUT = data[0].GUID
                                                             this.docObj.dt()[0].INPUT_CODE = data[0].CODE
                                                             this.docObj.dt()[0].INPUT_NAME = data[0].TITLE
+                                                            this.docObj.dt()[0].VAT_ZERO = data[0].VAT_ZERO
                                                             this.docObj.dt()[0].PRICE_LIST_NO = data[0].PRICE_LIST_NO
                                                             let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
                                                             if(typeof tmpData != 'undefined' && tmpData.value ==  true)
@@ -1526,9 +1577,10 @@ export default class salesDispatch extends DocBase
                                                 this.grdSlsDispatch.devGrid.beginUpdate()
                                                 for (let i = 0; i < data.length; i++) 
                                                 {
-                                                    this.msgQuantity.tmpData = tmpData.result.recordset[0]
+
+                                                    this.msgQuantity.tmpData = data[i]
                                                     await this.msgQuantity.show()
-                                                    await this.addItem(data[0],null,this.txtPopQteUnitQuantity.value,this.txtPopQteUnitPrice.value)
+                                                    await this.addItem(data[i],null,this.txtPopQteUnitQuantity.value,this.txtPopQteUnitPrice.value)
                                                 };
                                                 this.grdSlsDispatch.devGrid.endUpdate()
                                             }
@@ -1813,7 +1865,15 @@ export default class salesDispatch extends DocBase
                                         }
 
                                         e.key.TOTALHT = Number(Number(parseFloat((e.key.PRICE * e.key.QUANTITY)) - (parseFloat(e.key.DISCOUNT))).toFixed(3)).round(2)
-                                        e.key.VAT = parseFloat(((((e.key.TOTALHT) - (parseFloat(e.key.DOC_DISCOUNT))) * (e.key.VAT_RATE) / 100))).round(6);
+                                        if(this.docObj.dt()[0].VAT_ZERO != 1)
+                                        {
+                                            e.key.VAT = parseFloat(((((e.key.TOTALHT) - (parseFloat(e.key.DOC_DISCOUNT))) * (e.key.VAT_RATE) / 100))).round(6);
+                                        }
+                                        else
+                                        {
+                                            e.key.VAT = 0
+                                            e.key.VAT_RATE = 0
+                                        }
                                         e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3)).round(2)
                                         e.key.TOTAL = Number(((e.key.TOTALHT - e.key.DOC_DISCOUNT) + e.key.VAT)).round(2)
 

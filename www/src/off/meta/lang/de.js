@@ -3145,6 +3145,7 @@ export const langDe =
         tabTitleFinanceDetail : "Finanzliche Informationen",
         txtLegal :"Rechtliche Informationen",
         chkRebate :"Rabatt gewähren",
+        chkVatZero : "Ohne MwSt", 
         txtExpiryDay : "Zahlungsziel",
         txtRiskLimit : "Kreditlimit",
         expDay : "(Tage)",
@@ -16887,6 +16888,7 @@ export const langDe =
             title: "Artikelauswahl",
             clmCode: "CODE",
             clmName: "NAME",
+            clmBarcode : "BARCODE",
             clmStatus: "STATUS"
         },
         Abbrechen: "Abbrechen",
