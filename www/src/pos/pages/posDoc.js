@@ -6245,8 +6245,27 @@ export default class posDoc extends React.PureComponent
                                     <div className="col-2 p-1">
                                     
                                     </div>
+                                    {/* btnLastSaleRebate */}
                                     <div className="col-2 p-1">
+                                    <NbButton id={"btnLastSaleRebate"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"50px",width:"100%"}}
+                                        onClick={async()=>
+                                        {
+                                            let tmpAcsVal = this.acsObj.filter({ID:'btnReturnEntry',TYPE:2,USERS:this.user.CODE})
                                         
+                                            if(typeof tmpAcsVal.getValue().dialog != 'undefined' && tmpAcsVal.getValue().dialog.type != -1)
+                                            {   
+                                                let tmpResult = await acsDialog({id:"AcsDialog",parent:this,type:tmpAcsVal.getValue().dialog.type})
+                                                if(!tmpResult)
+                                                {
+                                                    return
+                                                }
+                                            }
+
+                                            this.ticketCheck(this.grdLastPos.devGrid.getSelectedRowKeys()[0].REF_NO)
+                                            this.popLastSaleList.hide();
+                                        }}>
+                                            <i className="text-white fa-solid fa-retweet" style={{fontSize: "16px"}} />
+                                        </NbButton>
                                     </div>
                                     {/* btnLastSaleSendMail */}
                                     <div className="col-2 p-1">
