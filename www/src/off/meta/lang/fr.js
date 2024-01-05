@@ -3156,6 +3156,7 @@ export const langFr =
         tabTitleFinanceDetail : "Informations Financières", 
         txtLegal :"Données Légales",
         chkRebate :"Retour-Reprise",
+        chkVatZero :"Sans TVA",
         txtExpiryDay : "Echéance",  
         txtRiskLimit : "Limite de Risque",  
         expDay : "(Jour)", 
@@ -17241,7 +17242,8 @@ export const langFr =
         {
             title: "Choix Produit",   
             clmCode: "Code",   
-            clmName: "NOM",    
+            clmName: "nom",    
+            clmBarcode: "Barcode", 
             clmStatus : "Statut" 
         },
         cancel : "Abandonner", 

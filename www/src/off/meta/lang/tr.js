@@ -3156,6 +3156,7 @@ export const langTr =
         tabTitleFinanceDetail : "Finans Bilgileri",
         txtLegal :"Yasal Bilgiler",
         chkRebate :"İade Alır",
+        chkVatZero :"Vergisiz",
         txtExpiryDay : "Vade",
         txtRiskLimit : "Risk Limiti",
         expDay : "(Gün)",
@@ -16973,6 +16974,7 @@ export const langTr =
             title: "Ürün Seçim",
             clmCode: "KODU",
             clmName: "ADI", 
+            clmBarcode: "BARKOD", 
             clmStatus : "DURUM"
         },
         cancel : "Vazgeç",
