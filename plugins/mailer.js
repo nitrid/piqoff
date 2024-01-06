@@ -51,13 +51,13 @@ class mailer
                 secure: true,
                 auth: 
                 {
-                  user: "vente.esseylesnancy@ppsupermarche.fr",
-                  pass: "24Prodorplus69*/"
+                  user: "",
+                  pass: ""
                 },
                 //tls : { rejectUnauthorized: false }
               });
               var mailOptions = {
-                from: "vente.esseylesnancy@ppsupermarche.fr",
+                from: "",
                 to: pData.sendMail,
                 subject: pData.subject,
                 html:pData.html,
