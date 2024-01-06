@@ -2219,6 +2219,8 @@ export default class purchaseInvoice extends DocBase
                                             {
                                                 e.key.VAT = 0
                                                 e.key.VAT_RATE = 0
+                                            }
+                                            
                                             e.key.TOTAL = Number(((e.key.TOTALHT - e.key.DOC_DISCOUNT) + e.key.VAT)).round(2)
                                             e.key.DIFF_PRICE = e.key.PRICE - e.key.CUSTOMER_PRICE
                                             if(e.key.DISCOUNT == 0)
