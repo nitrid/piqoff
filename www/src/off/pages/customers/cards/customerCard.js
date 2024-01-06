@@ -379,6 +379,7 @@ export default class CustomerCard extends React.PureComponent
                                                     button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
                                                 }
                                                 
+                                                console.log(this.customerObj.dt()[0])
                                                 if((await this.customerObj.save()) == 0)
                                                 {                                                    
                                                     tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
@@ -1120,10 +1121,10 @@ export default class CustomerCard extends React.PureComponent
                                                         </NdPopGrid>
                                                     </Item>
                                                     <EmptyItem/>
-                                                     {/* chkIsForeign */}
-                                                     <Item>
-                                                        <Label text={this.t("chkCustomerForeign")} alignment="right" />
-                                                        <NdCheckBox id="chkCustomerForeign" parent={this} value={false}  dt={{data:this.customerObj.dt('CUSTOMERS'),field:"VAT_ZERO"}} ></NdCheckBox>
+                                                    {/* chkVatZero */}
+                                                    <Item>
+                                                        <Label text={this.t("chkVatZero")} alignment="right" />
+                                                        <NdCheckBox id="chkVatZero" parent={this} value={false}  dt={{data:this.customerObj.dt('CUSTOMERS'),field:"VAT_ZERO"}} ></NdCheckBox>
                                                     </Item>
                                                     {/* chkRebate */}
                                                     <Item>

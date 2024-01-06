@@ -777,6 +777,19 @@ export const menu = (e) =>
                             ]
                         },
                         {
+                            id: 'salesorder_04',
+                            text : e.t('menuOff.salesorder_04'),//'Operasyonlar',
+                            expanded: false,
+                            items: 
+                            [
+                                {
+                                    id: 'sip_04_002',
+                                    text: e.t('menuOff.sip_04_002'),//'Satış Siparişi Dağıtım Operasyonu',
+                                    path: 'orders/operations/salesOrderDistributionOperation'
+                                },
+                            ]
+                        },
+                        {
                             id: 'salesorder_03',
                             text : e.t('menuOff.salesorder_03'),//'Raporlar',
                             expanded: false,
@@ -1207,13 +1220,13 @@ export const menu = (e) =>
                             text: e.t('menuOff.pos_02_009'),
                             path: 'pos/report/itemGrpSalesReport'
                         },
-                        //Ürün Grup Satış Raporu
+                        //Ürün Detaylı Satış Raporu
                         {
                             id: 'pos_02_010',
                             text: e.t('menuOff.pos_02_010'),
-                            path: 'pos/report/itemSalesReport'
+                            path: 'pos/report/itemDetailSalesReport'
                         },
-                        //Ürün Grup Satış Raporu
+                        //Ürün Karşılaştırma Raporu
                         {
                             id: 'pos_02_011',
                             text: e.t('menuOff.pos_02_011'),
@@ -1231,7 +1244,7 @@ export const menu = (e) =>
                             text: e.t('menuOff.pos_02_012'),
                             path: 'pos/report/loyaltyReport'
                         },
-                        //Loyalty 
+                        //Discount 
                         {
                             id: 'pos_02_013',
                             text: e.t('menuOff.pos_02_013'),

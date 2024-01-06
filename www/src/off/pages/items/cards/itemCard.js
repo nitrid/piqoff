@@ -40,7 +40,7 @@ export default class itemCard extends React.PureComponent
         this.salesPriceLogObj = new datatable()
         this.salesPriceLogObj.selectCmd =
         {
-            query :"SELECT * FROM [PRICE_HISTORY_VW_01] WHERE ITEM = @ITEM_GUID AND TYPE = 0 ORDER BY LDATE DESC ",
+            query :"SELECT * FROM [PRICE_HISTORY_VW_01] WHERE ITEM = @ITEM_GUID AND TYPE = 0 AND FISRT_PRICE <> 0 ORDER BY CDATE DESC ",
             param : ['ITEM_GUID:string|50']
         }
         this.salesContractObj = new datatable()
@@ -85,7 +85,11 @@ export default class itemCard extends React.PureComponent
         if(typeof this.pagePrm != 'undefined')
         {
             await this.init(); 
-            this.getItem(this.pagePrm.CODE)
+            //ELECTRONJS DE BURASI PROBLEM OLUYOR. STOK LISTESINDEN ÜRÜNE ÇİFT TIKLAYIP STOK KARTINI AÇMAYA ÇALIŞTIĞINDA ÜRÜN AD BOŞ GELİYOR. ONUN İÇİN SETTIMEOUT EKLEDİK.(AQ)
+            setTimeout(() => 
+            {
+                this.getItem(this.pagePrm.CODE)    
+            }, 1000);
         }
         else
         {
@@ -1951,7 +1955,7 @@ export default class itemCard extends React.PureComponent
                                                 <Column dataField="CUSTOMER_CODE" caption={this.t("grdCustomerPrice.clmCode")} />
                                                 <Column dataField="CUSTOMER_NAME" caption={this.t("grdCustomerPrice.clmName")} />
                                                 <Column dataField="CDATE" caption={this.t("grdCustomerPrice.clmDate")} allowEditing={false} dataType="datetime" format={"dd/MM/yyyy - HH:mm:ss"}/>
-                                                <Column dataField="PRICE" caption={this.t("grdCustomerPrice.clmPrice")} allowEditing={false} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>
+                                                <Column dataField="FISRT_PRICE" caption={this.t("grdCustomerPrice.clmPrice")} allowEditing={false} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>
                                                 <Column dataField="MULTICODE" caption={this.t("grdCustomerPrice.clmMulticode")} />
                                             </NdGrid>
                                         </div>
@@ -1972,7 +1976,7 @@ export default class itemCard extends React.PureComponent
                                                 <Editing mode="cell" allowUpdating={false} />
                                                 <Column dataField="CUSER_NAME" caption={this.t("grdSalesPrice.clmUser")} />
                                                 <Column dataField="CDATE" caption={this.t("grdSalesPrice.clmDate")} allowEditing={false} dataType="datetime" format={"dd/MM/yyyy - HH:mm:ss"}/>
-                                                <Column dataField="PRICE" caption={this.t("grdSalesPrice.clmPrice")} allowEditing={false} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>
+                                                <Column dataField="FISRT_PRICE" caption={this.t("grdSalesPrice.clmPrice")} allowEditing={false} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>
                                             </NdGrid>
                                         </div>
                                     </div>
@@ -2355,7 +2359,7 @@ export default class itemCard extends React.PureComponent
                                     displayExpr="VALUE"                       
                                     valueExpr="ID"
                                     value="2"
-                                    data={{source:[{ID:"2",VALUE:"Üst Birim"}]}}
+                                    data={{source:[{ID:"2",VALUE:"Condition"}]}}
                                     />
                                 </Item>
                                 <Item>

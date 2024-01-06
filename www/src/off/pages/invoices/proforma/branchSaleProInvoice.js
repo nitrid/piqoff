@@ -124,7 +124,7 @@ export default class branchSaleInvoice extends DocBase
                 {
                     select:
                     {
-                        query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME],VAT_ZERO FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND GENUS = 3",
+                        query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],VAT_ZERO,[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND GENUS = 3",
                         param : ['VAL:string|50']
                     },
                     sql:this.core.sql
@@ -312,11 +312,14 @@ export default class branchSaleInvoice extends DocBase
             if(this.docObj.dt()[0].VAT_ZERO != 1)
             {
                 tmpMergDt[0].VAT = Number((tmpMergDt[0].VAT + (tmpMergDt[0].PRICE * (tmpMergDt[0].VAT_RATE / 100) * pQuantity))).round(6)
+
             }
             else
             {
-                e.key.VAT = 0
+                tmpMergDt[0].VAT = 0
+                tmpMergDt[0].VAT_RATE = 0
             }
+            
             tmpMergDt[0].AMOUNT = Number((tmpMergDt[0].QUANTITY * tmpMergDt[0].PRICE)).round(4)
             tmpMergDt[0].TOTAL = Number((((tmpMergDt[0].QUANTITY * tmpMergDt[0].PRICE) - tmpMergDt[0].DISCOUNT) + tmpMergDt[0].VAT)).round(2)
             tmpMergDt[0].TOTALHT =  Number((tmpMergDt[0].AMOUNT - tmpMergDt[0].DISCOUNT)).round(2)
@@ -401,6 +404,11 @@ export default class branchSaleInvoice extends DocBase
             this.docObj.docItems.dt()[pIndex].AMOUNT = parseFloat((tmpData.result.recordset[0].PRICE * pQuantity ).toFixed(3))
             this.docObj.docItems.dt()[pIndex].TOTAL =  parseFloat(((tmpData.result.recordset[0].PRICE * pQuantity) + this.docObj.docItems.dt()[pIndex].VAT).toFixed(2))
             this.calculateTotal()
+        }
+        if(this.docObj.dt()[0].VAT_ZERO == 1)
+        {
+            this.docObj.docItems.dt()[pIndex].VAT = 0
+            this.docObj.docItems.dt()[pIndex].VAT_RATE = 0
         }
         //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
         await this.itemRelated(pData.GUID,pQuantity)
@@ -1416,13 +1424,16 @@ export default class branchSaleInvoice extends DocBase
                                                 e.key.DISCOUNT = 0 
                                                 return
                                             }
+                                            
                                             if(this.docObj.dt()[0].VAT_ZERO != 1)
                                             {
                                                 e.key.VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) * (e.key.VAT_RATE) / 100)).toFixed(3));
+
                                             }
                                             else
                                             {
                                                 e.key.VAT = 0
+                                                e.key.VAT_RATE = 0
                                             }
                                             e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3))
                                             e.key.TOTAL = parseFloat((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) +e.key.VAT).toFixed(3))

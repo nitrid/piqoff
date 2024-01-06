@@ -73,6 +73,7 @@ export default class salesInvoice extends DocBase
         tmpDocCustomer.DOC_GUID = this.docObj.dt()[0].GUID
         tmpDocCustomer.TYPE = this.docObj.dt()[0].TYPE
         tmpDocCustomer.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+        tmpDocCustomer.VAT_ZERO = this.docObj.dt()[0].VAT_ZERO
         tmpDocCustomer.REBATE = this.docObj.dt()[0].REBATE
         tmpDocCustomer.DOC_DATE = this.docObj.dt()[0].DOC_DATE
         this.docObj.docCustomer.addEmpty(tmpDocCustomer)
@@ -291,6 +292,7 @@ export default class salesInvoice extends DocBase
                                 else
                                 {
                                     e.data.VAT = 0
+                                    e.data.VAT_RATE = 0
                                 }
                                 e.data.AMOUNT = Number((e.data.PRICE * e.data.QUANTITY)).round(2)
                                 e.data.TOTALHT = Number(((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT)).round(2)
@@ -340,7 +342,16 @@ export default class salesInvoice extends DocBase
                                 e.data.DISCOUNT_2 = this.txtDiscount2.value
                                 e.data.DISCOUNT_3 = this.txtDiscount3.value
                                 e.data.DISCOUNT = (parseFloat(this.txtDiscount1.value) + parseFloat(this.txtDiscount2.value) + parseFloat(this.txtDiscount3.value))
-                                e.data.VAT = parseFloat(((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) * (e.data.VAT_RATE) / 100)).toFixed(6));
+                                if(this.docObj.dt()[0].VAT_ZERO != 1)
+                                {
+                                    e.data.VAT = parseFloat(((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) * (e.data.VAT_RATE) / 100)).toFixed(6));
+                                }
+                                else
+                                {
+                                    e.data.VAT = 0
+                                    e.data.VAT_RATE = 0
+                                }
+                               
                                 e.data.AMOUNT = parseFloat((e.data.PRICE * e.data.QUANTITY).toFixed(4))
                                 e.data.TOTALHT = parseFloat(((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT).toFixed(4))
                                 e.data.TOTAL = parseFloat((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) +e.data.VAT)).round(2)
@@ -385,7 +396,16 @@ export default class salesInvoice extends DocBase
                                 e.data.DISCOUNT_2 = Number(e.data.AMOUNT-e.data.DISCOUNT_1).rateInc(this.txtDiscountPer2.value,4) 
                                 e.data.DISCOUNT_3 = Number(e.data.AMOUNT-e.data.DISCOUNT_1-e.data.DISCOUNT_2).rateInc(this.txtDiscountPer3.value,4) 
                                 e.data.DISCOUNT = (e.data.DISCOUNT_1 + e.data.DISCOUNT_2 + e.data.DISCOUNT_3)
-                                e.data.VAT = parseFloat(((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) * (e.data.VAT_RATE) / 100)).toFixed(6));
+                                if(this.docObj.dt()[0].VAT_ZERO != 1)
+                                {
+                                    e.data.VAT = parseFloat(((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) * (e.data.VAT_RATE) / 100)).toFixed(6));
+                                }
+                                else
+                                {
+                                    e.data.VAT = 0
+                                    e.data.VAT_RATE = 0
+                                }
+                                
                                 e.data.AMOUNT = parseFloat((e.data.PRICE * e.data.QUANTITY)).round(2)
                                 e.data.TOTALHT = parseFloat(((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT).toFixed(4))
                                 e.data.TOTAL = parseFloat((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) +e.data.VAT)).round(2)
@@ -417,7 +437,15 @@ export default class salesInvoice extends DocBase
             {
                 tmpMergDt[0].QUANTITY = tmpMergDt[0].QUANTITY + pQuantity
                 tmpMergDt[0].SUB_QUANTITY = tmpMergDt[0].SUB_QUANTITY / tmpMergDt[0].SUB_FACTOR
-                tmpMergDt[0].VAT = Number((tmpMergDt[0].VAT + (tmpMergDt[0].PRICE * (tmpMergDt[0].VAT_RATE / 100) * pQuantity))).round(6)
+                if(this.docObj.dt()[0].VAT_ZERO != 1)
+                {
+                    tmpMergDt[0].VAT = Number((tmpMergDt[0].VAT + (tmpMergDt[0].PRICE * (tmpMergDt[0].VAT_RATE / 100) * pQuantity))).round(6)
+                }
+                else
+                {
+                    tmpMergDt[0].VAT = 0
+                    tmpMergDt[0].VAT_RATE = 0
+                }
                 tmpMergDt[0].AMOUNT = Number((tmpMergDt[0].QUANTITY * tmpMergDt[0].PRICE)).round(4)
                 tmpMergDt[0].TOTAL = Number((((tmpMergDt[0].QUANTITY * tmpMergDt[0].PRICE) - tmpMergDt[0].DISCOUNT) + tmpMergDt[0].VAT)).round(2)
                 tmpMergDt[0].TOTALHT =  Number((tmpMergDt[0].AMOUNT - tmpMergDt[0].DISCOUNT)).round(2)
@@ -503,7 +531,7 @@ export default class salesInvoice extends DocBase
                     }
                     else
                     {
-                            this.docObj.docItems.dt()[pIndex].DEPOT_QUANTITY = tmpQuantity.result.recordset[0].QUANTITY
+                        this.docObj.docItems.dt()[pIndex].DEPOT_QUANTITY = tmpQuantity.result.recordset[0].QUANTITY
                     }
                 }
             }
@@ -540,31 +568,20 @@ export default class salesInvoice extends DocBase
                     this.docObj.docItems.dt()[pIndex].SUB_PRICE = Number(parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4)) / this.docObj.docItems.dt()[pIndex].SUB_FACTOR).round(2)
                     this.calculateTotal()
                 }
-                else
-                {
-                    this.docObj.docItems.dt()[pIndex].PRICE = 0
-                    this.docObj.docItems.dt()[pIndex].VAT = 0
-                    this.docObj.docItems.dt()[pIndex].AMOUNT = 0
-                    this.docObj.docItems.dt()[pIndex].TOTAL = 0
-                    this.docObj.docItems.dt()[pIndex].TOTALHT = 0
-                    this.calculateTotal()
-                }
             }
             else
             {
                 this.docObj.docItems.dt()[pIndex].PRICE = parseFloat((pPrice).toFixed(4))
-                if(this.docObj.dt()[0].VAT_ZERO != 1)
-                {
-                    this.docObj.docItems.dt()[pIndex].VAT = parseFloat((((pPrice * pQuantity) - this.docObj.docItems.dt()[pIndex].DISCOUNT) * (this.docObj.docItems.dt()[pIndex].VAT_RATE / 100)).toFixed(6))
-                }
-                else
-                {
-                    this.docObj.docItems.dt()[pIndex].VAT = 0
-                }
+                this.docObj.docItems.dt()[pIndex].VAT = parseFloat((((pPrice * pQuantity) - this.docObj.docItems.dt()[pIndex].DISCOUNT) * (this.docObj.docItems.dt()[pIndex].VAT_RATE / 100)).toFixed(6))
                 this.docObj.docItems.dt()[pIndex].AMOUNT = parseFloat((pPrice  * pQuantity)).round(2)
                 this.docObj.docItems.dt()[pIndex].TOTALHT = Number(((pPrice  * pQuantity) - this.docObj.docItems.dt()[pIndex].DISCOUNT)).round(2)
                 this.docObj.docItems.dt()[pIndex].TOTAL = Number((this.docObj.docItems.dt()[pIndex].TOTALHT + this.docObj.docItems.dt()[pIndex].VAT)).round(2)
                 this.calculateTotal()
+            }
+            if(this.docObj.dt()[0].VAT_ZERO == 1)
+            {
+                this.docObj.docItems.dt()[pIndex].VAT = 0
+                this.docObj.docItems.dt()[pIndex].VAT_RATE = 0
             }
             //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
             await this.itemRelated(pData.GUID,pQuantity)
@@ -1264,7 +1281,6 @@ export default class salesInvoice extends DocBase
                                                             this.docObj.dt()[0].TAX_NO = data[0].TAX_NO
                                                             this.docObj.dt()[0].PRICE_LIST_NO = data[0].PRICE_LIST_NO
                                                             this.docObj.dt()[0].VAT_ZERO = data[0].VAT_ZERO
-                                                            console.log(this.docObj.dt()[0])
                                                             this.dtExpDate.value = moment(new Date()).add(data[0].EXPIRY_DAY, 'days')
                                                             let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
                                                             if(typeof tmpData != 'undefined' && tmpData.value ==  true)
@@ -1869,6 +1885,7 @@ export default class salesInvoice extends DocBase
                                             else
                                             {
                                                 e.key.VAT = 0
+                                                e.key.VAT_RATE = 0
                                             }
                                             e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3)).round(2)
                                             e.key.TOTAL = Number(((e.key.TOTALHT - e.key.DOC_DISCOUNT) + e.key.VAT)).round(2)
@@ -2190,8 +2207,8 @@ export default class salesInvoice extends DocBase
                                                         value:  [this.docObj.dt()[0].INPUT]
                                                     }
                                                     let tmpData2 = await this.core.sql.execute(tmpQuery2) 
-                                                    let tmpObj = {DATA:tmpData.result.recordset,DATA1:tmpData2.result.recordset}
-                                                    this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpObj) + "}",async(pResult) => 
+                                                    let tmpObj = {data1:tmpData.result.recordset,data2:tmpData2.result.recordset}
+                                                    this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
                                                     {
                                                         if(pResult.split('|')[0] != 'ERR')
                                                         {
@@ -2233,20 +2250,15 @@ export default class salesInvoice extends DocBase
                                                         param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
                                                         value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
                                                     }
-                                                    console.log(tmpQuery)
-                                                    console.log(1)
+                                                   
                                                     App.instance.setState({isExecute:true})
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
                                                     App.instance.setState({isExecute:false})
                                                     this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
                                                     {
-                                                        console.log(tmpData.result.recordset[0].PATH)
-                                                        console.log(pResult.split('|')[0])
-                                                        console.log(tmpData.result.recordset)
                                                         if(pResult.split('|')[0] != 'ERR')
                                                         {
                                                             var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
-                                                            console.log(mywindow)
                                                             mywindow.onload = function() 
                                                             {
                                                                 mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      

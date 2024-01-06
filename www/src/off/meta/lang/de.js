@@ -260,6 +260,7 @@ export const langDe =
         sip_02_002: "Verkaufsbestellung",
         sip_02_003: "POS Verkaufsbestellung",
         sip_04_001: "Massenbestellungsauflösung",
+        sip_04_002 : "Vertriebsoperation für Verkaufsaufträge", //BAK
         cnt: "Vereinbarungen",
         cnt_01: "Listen",
         cnt_01_001: "Einkaufsvereinbarungsliste",
@@ -380,6 +381,7 @@ export const langDe =
         salesorder_01: "Dokumente",
         salesorder_02: "Listen",
         salesorder_03: "Berichte",
+        salesorder_04 : "Operationen",
         salesDispatch: "Lieferschein",
         salesDispatch_01: "Dokumente",
         salesDispatch_02: "Listen",
@@ -3144,7 +3146,7 @@ export const langDe =
         tabTitleFinanceDetail : "Finanzliche Informationen",
         txtLegal :"Rechtliche Informationen",
         chkRebate :"Rabatt gewähren",
-        chkIsForeign : "Kunde ohne MwSt",
+        chkVatZero : "Ohne MwSt", 
         txtExpiryDay : "Zahlungsziel",
         txtRiskLimit : "Kreditlimit",
         expDay : "(Tage)",
@@ -14812,6 +14814,44 @@ export const langDe =
             msg: "Artikel ohne Kundenzuordnung können nicht ausgewählt werden. Bitte weisen Sie einen Kunden zu."
         }
     },
+    sip_04_002 : // "Satış Siparişi Dağıtım Operasyonu"
+    {
+        cmbCustomer :"Kunde",
+        btnGet :"Abrufen",
+        dtFirst : "Erstes Datum",
+        dtLast : "Letztes Datum",
+        cmbDepot : "Lager",
+        menu:"Verkaufsbestellung",
+        pg_txtCustomerCode : 
+        {
+            title : "Kundenauswahl",
+            clmCode :  "KUNDENCODE",
+            clmTitle : "KUNDENNAME",
+            clmTypeName : "TYP",
+            clmGenusName : "ART"
+        },
+        grdSlsOrdList: 
+        {
+            clmRef: "Seriennummer",
+            clmRefNo: "Reihennummer",
+            clmPrice: "Preis",
+            clmInputCode : "Kundennummer",
+            clmInputName : "Kundenname",
+            clmDate: "Datum",
+            clmVat : "MwSt.",
+            clmAmount : "Betrag",
+            clmTotal : "Gesamt",
+            clmOutputName :"Lager",
+        },
+        popDesign : 
+        {
+            title: "Designauswahl",
+            design : "Design",
+            lang : "Sprache des Dokuments"
+        },
+        btnView : "Anzeigen",
+        btnMailsend : "E-Mail senden",
+    },
     cnt_01_001: 
     {
         txtCustomerCode: "Kunde",
@@ -16849,6 +16889,7 @@ export const langDe =
             title: "Artikelauswahl",
             clmCode: "CODE",
             clmName: "NAME",
+            clmBarcode : "BARCODE",
             clmStatus: "STATUS"
         },
         Abbrechen: "Abbrechen",
@@ -18458,6 +18499,17 @@ export const langDe =
             btn01: "OK",
             msg: "Artikelname ist zu lang. Bitte korrigieren Sie ihn und speichern Sie erneut!"
         },
+        grdUniqList : 
+        { 
+            clmName : "Adı",  // BAK
+            clmPrice : "Fiyat",  // BAK
+            clmDescription : "Açıklama",  // BAK
+            clmQuantity : "Miktar"  // BAK
+        },
+        popUniqCodeList : 
+        {
+            title : "Etiket Listesi"  // BAK
+        }
     },
     pos_02_003 : // "POS-Verkaufsbericht"
     {

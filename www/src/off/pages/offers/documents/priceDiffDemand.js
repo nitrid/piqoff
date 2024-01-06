@@ -182,7 +182,7 @@ export default class priceDiffDemand extends DocBase
                 {
                     select:
                     {
-                        query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME],VAT_ZERO FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
+                        query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],VAT_ZERO,[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
                         param : ['VAL:string|50']
                     },
                     sql:this.core.sql
@@ -344,7 +344,8 @@ export default class priceDiffDemand extends DocBase
                                 }
                                 else
                                 {
-                                    e.key.VAT = 0
+                                    e.data.VAT = 0
+                                    e.data.VAT_RATE = 0
                                 }
                                 e.data.AMOUNT = parseFloat((e.data.PRICE * e.data.QUANTITY)).round(2)
                                 e.data.TOTALHT = Number(((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT)).round(2)
@@ -400,8 +401,10 @@ export default class priceDiffDemand extends DocBase
                                 }
                                 else
                                 {
-                                    e.key.VAT = 0
+                                    e.data.VAT = 0
+                                    e.data.VAT_RATE = 0
                                 }
+                                
                                 e.data.AMOUNT = parseFloat((e.data.PRICE * e.data.QUANTITY)).round(2)
                                 e.data.TOTALHT = Number(((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT)).round(2)
                                 e.data.TOTAL = Number((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) + e.data.VAT)).round(2)
@@ -452,8 +455,10 @@ export default class priceDiffDemand extends DocBase
                                 }
                                 else
                                 {
-                                    e.key.VAT = 0
+                                    e.data.VAT = 0
+                                    e.data.VAT_RATE = 0
                                 }
+                                
                                 e.data.AMOUNT = parseFloat((e.data.PRICE * e.data.QUANTITY)).round(2)
                                 e.data.TOTALHT = Number(((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT)).round(2)
                                 e.data.TOTAL = Number((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) +e.data.VAT)).round(2)
@@ -540,8 +545,10 @@ export default class priceDiffDemand extends DocBase
                 }
                 else
                 {
-                    e.key.VAT = 0
+                    tmpMergDt[0].VAT = 0
+                    tmpMergDt[0].VAT_RATE = 0
                 }
+                
                 tmpMergDt[0].AMOUNT = Number((tmpMergDt[0].QUANTITY * tmpMergDt[0].PRICE)).round(4)
                 tmpMergDt[0].TOTAL = Number((((tmpMergDt[0].QUANTITY * tmpMergDt[0].PRICE) - tmpMergDt[0].DISCOUNT) + tmpMergDt[0].VAT)).round(2)
                 tmpMergDt[0].TOTALHT =  Number((tmpMergDt[0].AMOUNT - tmpMergDt[0].DISCOUNT)).round(2)
@@ -701,6 +708,11 @@ export default class priceDiffDemand extends DocBase
             {
                 this.docObj.docDemand.dt()[pIndex].CUSTOMER_PRICE = tmpData.result.recordset[0].PRICE
                 this.docObj.docDemand.dt()[pIndex].DIFF_PRICE = this.docObj.docDemand.dt()[pIndex].PRICE - this.docObj.docDemand.dt()[pIndex].CUSTOMER_PRICE
+            }
+            if(this.docObj.dt()[0].VAT_ZERO == 1)
+            {
+                this.docObj.docDemand.dt()[pIndex].VAT = 0
+                this.docObj.docDemand.dt()[pIndex].VAT_RATE = 0
             }
             //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
             await this.itemRelated(pData.GUID,pQuantity)
@@ -1227,6 +1239,8 @@ export default class priceDiffDemand extends DocBase
                                                     {
                                                         this.docObj.dt()[0].ADDRESS = pdata[0].ADRESS_NO
                                                         this.docObj.dt()[0].ZIPCODE = pdata[0].ZIPCODE
+                                                        this.docObj.dt()[0].VAT_ZERO = data[0].VAT_ZERO
+
                                                     }
                                                 }
                                                 await this.pg_adress.show()
@@ -1435,7 +1449,7 @@ export default class priceDiffDemand extends DocBase
                                     {
                                         this.msgQuantity.tmpData = tmpData.result.recordset[0]
                                         await this.msgQuantity.show()
-                                        await this.addItem(tmpData.result.recordset[0],null,this.txtPopQteUnitQuantity.value)
+                                        await this.addItem(tmpData.result.recordset[0],null,this.txtPopQteUnitQuantity.value,this.txtPopQteUnitPrice.value)
                                         this.txtBarcode.focus()
                                     }
                                     else
@@ -1452,7 +1466,7 @@ export default class priceDiffDemand extends DocBase
                                                 {
                                                     this.msgQuantity.tmpData = data[0]
                                                     await this.msgQuantity.show()
-                                                    await this.addItem(data[0],null,this.txtPopQteUnitQuantity.value)
+                                                    await this.addItem(data[0],null,this.txtPopQteUnitQuantity.value,this.txtPopQteUnitPrice.value)
                                                     this.txtBarcode.focus()
                                                 }
                                                 else if(data.length > 1)
@@ -1690,6 +1704,7 @@ export default class priceDiffDemand extends DocBase
                                         else
                                         {
                                             e.key.VAT = 0
+                                            e.key.VAT_RATE = 0
                                         }
                                         e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3)).round(2)
                                         e.key.TOTAL = Number(((e.key.TOTALHT - e.key.DOC_DISCOUNT) + e.key.VAT)).round(2)

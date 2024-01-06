@@ -270,6 +270,28 @@ export const langTr =
             clmRefNo : "Ref No",
         },
     },
+    stk_07 : // "Özel Etiket Bas"
+    {
+        lblPrice : "Fiyat",
+        lblQuantity : "Miktar",
+        lblDescription : "Açıklama",
+        lblAdd : "Ekle",
+        msgAlert :
+        {
+            btn01 : "Tamam",
+            title : "Uyarı",
+            msgProcess : "Henüz girilmiş bir ürün yok !",
+            msgBarcodeNotFound : "Barkod bulunamadı !",
+            msgBarcodeCheck : "Lütfen barkod okutunuz !",
+            msgNotSave : "Kayıt İşlemi Başarısız",
+        },
+        grdList : 
+        {
+            clmBarcode : "Barkod",
+            clmName :  "Ürün Adı",
+            clmPrice : "Fiyat"
+        },
+    },
     stk_08 : // "İade Deposu Sevk"
     {
         lblRef : "Seri - Sıra :",
