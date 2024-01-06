@@ -44,6 +44,7 @@ export const langFr =
             cmbDepot : "Dépôt",
             dtDocDate : "Date",
             txtDescription : "Information",
+            cmbPricingList : "Numéro de tarif"
         },
         itemPopup : 
         {

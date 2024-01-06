@@ -44,7 +44,8 @@ export const langTr =
             txtTotal : "Genel Toplam",
             cmbDepot : "Depo",
             dtDocDate : "Tarih",
-            txtDescription : "Açıklama"
+            txtDescription : "Açıklama",
+            cmbPricingList : "Fiyat Liste No"
         },
         itemPopup : 
         {
