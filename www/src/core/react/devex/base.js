@@ -192,8 +192,9 @@ export default class NdBase extends React.PureComponent
 
         if(typeof this.props.parent != 'undefined' && typeof this.props.parent.on != 'undefined')
         {
-            this.props.parent.on('onInit',(function()
+            this.props.parent.on('onInit',(async() =>
             {
+                await core.instance.util.waitUntil(0)
                 //PARAMETRE DEĞERİ SET EDİLİYOR.
                 if(typeof props.param != 'undefined')
                 {   

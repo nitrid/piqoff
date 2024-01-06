@@ -167,7 +167,7 @@ export default class vatCard extends React.PureComponent
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup={"frmMainGrp"  + this.tabIndex}
+                                    <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmMainGrp"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         if(e.validationGroup.validate().status == "valid")

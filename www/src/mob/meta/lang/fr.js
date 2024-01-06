@@ -12,11 +12,24 @@ export const langFr =
     msgWarning : "Attention",
     msgSqlService1 : "Impossible de se connecter au serveur Sql",
     comingSoon : "Bientôt actif... ", 
+    btnBarcodeEntry: "Entrée du code-barres",   
+    btnProcessLines: "Traiter les lignes",   
+    btnNewDoc: "Nouveau document",   
+    btnDocDelete: "Supprimer le document",   
+    btnLineDisc: "Remise de ligne",       
+    chkRememberMe : "Souviens-toi de moi", 
     msgAnotherUserAlert: 
     {
         title : "Attention",
         msg : "Vous êtes connecté à partir d'un autre appareil avec vos informations d'utilisateur",
         btn01 : "OK"
+    },
+    msgSaveResult:
+    {
+        title: "Attention",
+        btn01: "OK",
+        msgSuccess: "Enregistré avec succès !",
+        msgFailed: "Enregistrement échoué !",
     },
     msgCombineItem:
     {
@@ -79,7 +92,7 @@ export const langFr =
         stk_04 : "Groupe de produit",
         stk_05 : "Compter",
         stk_06 : "Imprimer étiquette",
-        stk_07 : "Imprimer étiquette spéciale",
+        stk_07 : "Etiquette spéciale",
         stk_08 : "Retour des Produits",
         dep_01 : "Transfert",
         dep_02 : "Commande dépôt",
@@ -255,6 +268,28 @@ export const langFr =
             title : "Choix du document",
             clmRef :  "Référence",
             clmRefNo : "Numéro de référence",
+        },
+    },
+    stk_07 : // "Özel Etiket Bas"  KOMPLE BAK
+    {
+        lblPrice : "Prix",
+        lblQuantity : "Quantité",
+        lblDescription : "Description",
+        lblAdd : "Ajouter",
+        msgAlert :
+        {
+            btn01 : "OK",
+            title : "Attention",
+            msgProcess : "Aucun produit n'a encore été saisi !",
+            msgBarcodeNotFound : "Code-barres introuvable !",
+            msgBarcodeCheck : "Veuillez scanner le code-barres !",
+            msgNotSave : "Échec de l'enregistrement.",
+        },
+        grdList : 
+        {
+            clmBarcode : "code-barres",
+            clmName :  "Nom du produit",
+            clmPrice : "Prix"
         },
     },
     stk_08 : // "Transfert dépôt de retour"

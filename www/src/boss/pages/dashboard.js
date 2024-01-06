@@ -40,7 +40,7 @@ export default class Dashboard extends React.PureComponent
       purchasePriceDown : { query : "SELECT COUNT(*) AS PURCHASE_PRICE_DOWN FROM PRICE_HISTORY AS PRICE WHERE PRICE.FISRT_PRICE > PRICE.LAST_PRICE AND CONVERT(nvarchar,CDATE,110) >= @FISRT_DATE AND CONVERT(nvarchar,CDATE,110) <= @LAST_DATE AND PRICE.TYPE = 1 ",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },   
       purchasePriceUp : { query : "SELECT COUNT(*) AS PURCHASE_PRICE_UP FROM PRICE_HISTORY AS PRICE WHERE PRICE.FISRT_PRICE < PRICE.LAST_PRICE AND CONVERT(nvarchar,CDATE,110) >= @FISRT_DATE AND CONVERT(nvarchar,CDATE,110) <= @LAST_DATE AND PRICE.TYPE = 1 ",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },   
       salePriceDown : { query : "SELECT COUNT(*) AS SALE_PRICE_DOWN FROM PRICE_HISTORY AS PRICE WHERE PRICE.FISRT_PRICE > PRICE.LAST_PRICE AND CONVERT(nvarchar,CDATE,110) >= @FISRT_DATE AND CONVERT(nvarchar,CDATE,110) <= @LAST_DATE AND PRICE.TYPE = 0 ",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },   
-      salePriceUp : { query : "SELECT COUNT(*) AS SALE_PRICE_UP FROM PRICE_HISTORY AS PRICE WHERE CONVERT(nvarchar,CDATE,110) >= @FISRT_DATE AND CONVERT(nvarchar,CDATE,110) <= @LAST_DATE AND PRICE.TYPE = 0 ",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },   
+      salePriceUp : { query : "SELECT COUNT(*) AS SALE_PRICE_UP FROM PRICE_HISTORY AS PRICE WHERE PRICE.FISRT_PRICE < PRICE.LAST_PRICE AND CONVERT(nvarchar,CDATE,110) >= @FISRT_DATE AND CONVERT(nvarchar,CDATE,110) <= @LAST_DATE AND PRICE.TYPE = 0 ",  param : ['FISRT_DATE:date','LAST_DATE:date'],value : [this.date,this.date] },   
     }
   }
   async componentDidMount()
@@ -365,7 +365,7 @@ export default class Dashboard extends React.PureComponent
                             groupBy : this.groupList,
                             select : 
                             {
-                                query : " SELECT *,(SELECT ITEM_NAME FROM POS_SALE_VW_01 WHERE GUID = POS_EXTRA_VW_01.LINE_GUID),(SELECT PRICE FROM POS_SALE_VW_01 WHERE GUID = POS_EXTRA_VW_01.LINE_GUID) AS LAST_PRICE AS NAME "  + 
+                                query : " SELECT *,(SELECT ITEM_NAME FROM POS_SALE_VW_01 WHERE GUID = POS_EXTRA_VW_01.LINE_GUID)  AS NAME,(SELECT PRICE FROM POS_SALE_VW_01 WHERE GUID = POS_EXTRA_VW_01.LINE_GUID) AS LAST_PRICE "  + 
                                 "FROM POS_EXTRA_VW_01 WHERE TAG = 'PRICE DESC' AND CONVERT(nvarchar,CDATE,110) >= @FISRT_DATE AND CONVERT(nvarchar,CDATE,110) <= @LAST_DATE",
                                 param : ['FISRT_DATE:date','LAST_DATE:date'],
                                 value : [this.dtDate.startDate,this.dtDate.endDate]

@@ -9,9 +9,8 @@ import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
 import ContextMenu from 'devextreme-react/context-menu';
 import { Button } from 'devextreme-react/button';
 
-import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule} from '../../../../core/react/devex/textbox.js'
+import NdTextBox, { Validator, RequiredRule} from '../../../../core/react/devex/textbox.js'
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
-import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
 import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export,ColumnChooser,StateStoring} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
@@ -107,7 +106,7 @@ export default class purchaseOrder extends DocBase
                 {
                     select:
                     {
-                        query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
+                        query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],VAT_ZERO,[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
                         param : ['VAL:string|50']
                     },
                     sql:this.core.sql
@@ -241,7 +240,16 @@ export default class purchaseOrder extends DocBase
                                 e.data.PRICE = parseFloat((this.txtUnitPrice.value * this.txtUnitFactor.value).toFixed(4))
                                 e.data.PRICE = parseFloat((this.txtUnitPrice.value / this.txtUnitFactor.value).toFixed(4))
                                 e.data.QUANTITY = this.txtTotalQuantity.value
-                                e.data.VAT = parseFloat(((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) * (e.data.VAT_RATE) / 100)).toFixed(6));
+                                if(this.docObj.dt()[0].VAT_ZERO != 1)
+                                {
+                                    e.data.VAT = parseFloat(((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) * (e.data.VAT_RATE) / 100)).toFixed(6));
+                                }
+                                else
+                                {
+                                    e.data.VAT = 0
+                                    e.data.VAT_RATE = 0
+                                }
+                                
                                 e.data.AMOUNT = parseFloat((e.data.PRICE * e.data.QUANTITY).toFixed(4))
                                 e.data.TOTALHT = (((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT)).round(2)
                                 e.data.TOTAL = ((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) +e.data.VAT)).round(2)
@@ -289,7 +297,16 @@ export default class purchaseOrder extends DocBase
                                 e.data.DISCOUNT_2 = this.txtDiscount2.value
                                 e.data.DISCOUNT_3 = this.txtDiscount3.value
                                 e.data.DISCOUNT = (parseFloat(this.txtDiscount1.value) + parseFloat(this.txtDiscount2.value) + parseFloat(this.txtDiscount3.value))
-                                e.data.VAT = parseFloat(((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) * (e.data.VAT_RATE) / 100)).toFixed(6));
+                                if(this.docObj.dt()[0].VAT_ZERO != 1)
+                                {
+                                    e.data.VAT = parseFloat(((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) * (e.data.VAT_RATE) / 100)).toFixed(6));
+                                }
+                                else
+                                {
+                                    e.data.VAT = 0
+                                    e.data.VAT_RATE = 0
+                                }
+                               
                                 e.data.AMOUNT = parseFloat((e.data.PRICE * e.data.QUANTITY)).round(2)
                                 e.data.TOTALHT = Number(((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT)).round(2)
                                 e.data.TOTAL = Number((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) +e.data.VAT)).round(2)
@@ -350,7 +367,7 @@ export default class purchaseOrder extends DocBase
             )
         }
     }
-    addItem(pData,pIndex,pQuantity)
+    addItem(pData,pIndex,pQuantity,pPrice)
     {
         return new Promise(async resolve => 
         {
@@ -368,7 +385,16 @@ export default class purchaseOrder extends DocBase
             {
                 tmpMergDt[0].QUANTITY = tmpMergDt[0].QUANTITY + pQuantity
                 tmpMergDt[0].SUB_QUANTITY = tmpMergDt[0].SUB_QUANTITY / tmpMergDt[0].SUB_FACTOR
-                tmpMergDt[0].VAT = Number((tmpMergDt[0].VAT + (tmpMergDt[0].PRICE * (tmpMergDt[0].VAT_RATE / 100) * pQuantity))).round(6)
+                if(this.docObj.dt()[0].VAT_ZERO != 1)
+                {
+                    tmpMergDt[0].VAT = Number((tmpMergDt[0].VAT + (tmpMergDt[0].PRICE * (tmpMergDt[0].VAT_RATE / 100) * pQuantity))).round(6)
+                }
+                else
+                {
+                    tmpMergDt[0].VAT = 0
+                    tmpMergDt[0].VAT_RATE = 0
+                }
+                
                 tmpMergDt[0].AMOUNT = Number((tmpMergDt[0].QUANTITY * tmpMergDt[0].PRICE)).round(4)
                 tmpMergDt[0].TOTAL = Number((((tmpMergDt[0].QUANTITY * tmpMergDt[0].PRICE) - tmpMergDt[0].DISCOUNT) + tmpMergDt[0].VAT)).round(2)
                 tmpMergDt[0].TOTALHT =  Number((tmpMergDt[0].AMOUNT - tmpMergDt[0].DISCOUNT)).round(2)
@@ -472,24 +498,41 @@ export default class purchaseOrder extends DocBase
             this.docObj.docOrders.dt()[pIndex].QUANTITY = pQuantity
             this.docObj.docOrders.dt()[pIndex].SUB_QUANTITY = pQuantity * this.docObj.docOrders.dt()[pIndex].SUB_FACTOR
     
-            let tmpQuery = 
+            if(typeof pPrice == 'undefined')
             {
-                query :"SELECT (SELECT dbo.FN_PRICE(ITEM_GUID,@QUANTITY,GETDATE(),CUSTOMER_GUID,'00000000-0000-0000-0000-000000000000',0,1,0)) AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID ORDER BY LDATE DESC",
-                param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
-                value : [pData.CODE,this.docObj.dt()[0].OUTPUT,pQuantity]
+                let tmpQuery = 
+                {
+                    query :"SELECT (SELECT dbo.FN_PRICE(ITEM_GUID,@QUANTITY,GETDATE(),CUSTOMER_GUID,'00000000-0000-0000-0000-000000000000',0,1,0)) AS PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_CODE = @ITEM_CODE AND CUSTOMER_GUID = @CUSTOMER_GUID ORDER BY LDATE DESC",
+                    param : ['ITEM_CODE:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
+                    value : [pData.CODE,this.docObj.dt()[0].OUTPUT,pQuantity]
+                }
+                let tmpData = await this.core.sql.execute(tmpQuery) 
+        
+                if(tmpData.result.recordset.length > 0)
+                {
+                    this.docObj.docOrders.dt()[pIndex].PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4))
+                    this.docObj.docOrders.dt()[pIndex].VAT = parseFloat((tmpData.result.recordset[0].PRICE * (pData.VAT / 100) * pQuantity).toFixed(6))
+                    this.docObj.docOrders.dt()[pIndex].AMOUNT = parseFloat((tmpData.result.recordset[0].PRICE * pQuantity).toFixed(4))
+                    this.docObj.docOrders.dt()[pIndex].TOTAL = Number(((tmpData.result.recordset[0].PRICE * pQuantity)+ this.docObj.docOrders.dt()[pIndex].VAT)).round(2)
+                    this.docObj.docOrders.dt()[pIndex].TOTALHT = Number((this.docObj.docOrders.dt()[pIndex].AMOUNT - this.docObj.docOrders.dt()[pIndex].DISCOUNT)).round(2)
+                    this.docObj.docOrders.dt()[pIndex].SUB_PRICE = Number(parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4)) / this.docObj.docOrders.dt()[pIndex].SUB_FACTOR).round(2)
+        
+                    this.calculateTotal()
+                }
             }
-            let tmpData = await this.core.sql.execute(tmpQuery) 
-    
-            if(tmpData.result.recordset.length > 0)
+            else
             {
-                this.docObj.docOrders.dt()[pIndex].PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4))
-                this.docObj.docOrders.dt()[pIndex].VAT = parseFloat((tmpData.result.recordset[0].PRICE * (pData.VAT / 100) * pQuantity).toFixed(6))
-                this.docObj.docOrders.dt()[pIndex].AMOUNT = parseFloat((tmpData.result.recordset[0].PRICE * pQuantity).toFixed(4))
-                this.docObj.docOrders.dt()[pIndex].TOTAL = Number(((tmpData.result.recordset[0].PRICE * pQuantity)+ this.docObj.docOrders.dt()[pIndex].VAT)).round(2)
-                this.docObj.docOrders.dt()[pIndex].TOTALHT = Number((this.docObj.docOrders.dt()[pIndex].AMOUNT - this.docObj.docOrders.dt()[pIndex].DISCOUNT)).round(2)
-                this.docObj.docOrders.dt()[pIndex].SUB_PRICE = Number(parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4)) / this.docObj.docOrders.dt()[pIndex].SUB_FACTOR).round(2)
-    
+                this.docObj.docOrders.dt()[pIndex].PRICE = parseFloat((pPrice).toFixed(4))
+                this.docObj.docOrders.dt()[pIndex].VAT = parseFloat((((pPrice * pQuantity) - this.docObj.docOrders.dt()[pIndex].DISCOUNT) * (this.docObj.docOrders.dt()[pIndex].VAT_RATE / 100)).toFixed(6))
+                this.docObj.docOrders.dt()[pIndex].AMOUNT = parseFloat((pPrice  * pQuantity)).round(2)
+                this.docObj.docOrders.dt()[pIndex].TOTALHT = Number(((pPrice  * pQuantity) - this.docObj.docOrders.dt()[pIndex].DISCOUNT)).round(2)
+                this.docObj.docOrders.dt()[pIndex].TOTAL = Number((this.docObj.docOrders.dt()[pIndex].TOTALHT + this.docObj.docOrders.dt()[pIndex].VAT)).round(2)
                 this.calculateTotal()
+            }
+            if(this.docObj.dt()[0].VAT_ZERO == 1)
+            {
+                this.docObj.docOrders.dt()[pIndex].VAT = 0
+                this.docObj.docOrders.dt()[pIndex].VAT_RATE = 0
             }
             //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
             await this.itemRelated(pData.GUID,pQuantity)
@@ -524,12 +567,20 @@ export default class purchaseOrder extends DocBase
             {
                 let tmpQuery = 
                 {
-                    query :"SELECT GUID,CODE,NAME,VAT,1 AS QUANTITY,UNIT," + 
-                    "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].OUTPUT+"'),'') AS MULTICODE"+
-                    " FROM ITEMS_VW_01 WHERE ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].OUTPUT+"'),'') = @VALUE " ,
+                    query : "SELECT ITEMS.GUID,ITEMS.CODE,ITEMS.NAME,ITEMS.VAT,1 AS QUANTITY, " +
+                            "CASE WHEN UNIT.GUID IS NULL THEN ITEMS.UNIT ELSE UNIT.GUID END AS UNIT, " +
+                            "CASE WHEN UNIT.NAME IS NULL THEN ITEMS.UNIT_NAME ELSE UNIT.NAME END AS UNIT_NAME, " +
+                            "CASE WHEN UNIT.SYMBOL IS NULL THEN ITEMS.UNIT_SHORT ELSE UNIT.SYMBOL END AS UNIT_SHORT, " +
+                            "CASE WHEN UNIT.FACTOR IS NULL THEN ITEMS.UNIT_FACTOR ELSE UNIT.FACTOR END AS UNIT_FACTOR, " + 
+                            "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS.GUID AND CUSTOMER_GUID = '" + this.docObj.dt()[0].OUTPUT + "'),'') AS MULTICODE " +
+                            "FROM ITEMS_VW_01 AS ITEMS " + 
+                            "LEFT OUTER JOIN ITEM_UNIT_VW_01 AS UNIT ON " +
+                            "ITEMS.GUID = UNIT.ITEM_GUID AND UNIT.TYPE = 2 AND UNIT.NAME = '" + this.sysParam.filter({ID:'cmbUnit',USERS:this.user.CODE}).getValue().value + "' " +
+                            "WHERE ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS.GUID AND CUSTOMER_GUID = '" + this.docObj.dt()[0].OUTPUT + "'),'') = @VALUE AND ITEMS.STATUS = 1" ,
                     param : ['VALUE:string|50'],
                     value : [this.tagItemCode.value[i]]
                 }
+                
                 let tmpData = await this.core.sql.execute(tmpQuery) 
 
                 if(tmpData.result.recordset.length > 0)
@@ -549,9 +600,16 @@ export default class purchaseOrder extends DocBase
             {
                 let tmpQuery = 
                 {
-                    query :"SELECT GUID,CODE,NAME,VAT,1 AS QUANTITY,UNIT," + 
-                    "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].OUTPUT+"'),'') AS MULTICODE"+
-                    " FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VALUE) OR UPPER(NAME) LIKE UPPER(@VALUE) " ,
+                    query : "SELECT ITEMS.GUID,ITEMS.CODE,ITEMS.NAME,ITEMS.VAT,1 AS QUANTITY, " +
+                            "CASE WHEN UNIT.GUID IS NULL THEN ITEMS.UNIT ELSE UNIT.GUID END AS UNIT, " +
+                            "CASE WHEN UNIT.NAME IS NULL THEN ITEMS.UNIT_NAME ELSE UNIT.NAME END AS UNIT_NAME, " +
+                            "CASE WHEN UNIT.SYMBOL IS NULL THEN ITEMS.UNIT_SHORT ELSE UNIT.SYMBOL END AS UNIT_SHORT, " +
+                            "CASE WHEN UNIT.FACTOR IS NULL THEN ITEMS.UNIT_FACTOR ELSE UNIT.FACTOR END AS UNIT_FACTOR, " + 
+                            "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS.GUID AND CUSTOMER_GUID = '" + this.docObj.dt()[0].OUTPUT + "'),'') AS MULTICODE " +
+                            "FROM ITEMS_VW_01 AS ITEMS " +
+                            "LEFT OUTER JOIN ITEM_UNIT_VW_01 AS UNIT ON " +
+                            "ITEMS.GUID = UNIT.ITEM_GUID AND UNIT.TYPE = 2 AND UNIT.NAME = '" + this.sysParam.filter({ID:'cmbUnit',USERS:this.user.CODE}).getValue().value + "' " +
+                            "WHERE ITEMS.CODE = @VALUE AND ITEMS.STATUS = 1" ,
                     param : ['VALUE:string|50'],
                     value : [this.tagItemCode.value[i]]
                 }
@@ -598,7 +656,7 @@ export default class purchaseOrder extends DocBase
 
         for (let i = 0; i < this.multiItemData.length; i++) 
         {
-            await this.addItem(this.multiItemData[i],null,this.multiItemData[i].QUANTITY)
+            await this.addItem(this.multiItemData[i],null,Number(this.multiItemData[i].QUANTITY * this.multiItemData[i].UNIT_FACTOR).round(3))
             this.popMultiItem.hide()
         }
     }
@@ -636,7 +694,7 @@ export default class purchaseOrder extends DocBase
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup={"frmPurcOrder"  + this.tabIndex}
+                                    <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmPurcOrder"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         if(this.docLocked == true)
@@ -740,7 +798,7 @@ export default class purchaseOrder extends DocBase
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnDelete" parent={this} icon="trash" type="default"
+                                    <NdButton id="btnDelete" parent={this} icon="trash" type="danger"
                                     onClick={async()=>
                                     {
                                         if(this.docObj.dt()[0].LOCKED != 0)
@@ -1026,18 +1084,18 @@ export default class purchaseOrder extends DocBase
                                     dt={{data:this.docObj.dt('DOC'),field:"OUTPUT_CODE"}} 
                                     onEnterKey={(async()=>
                                     {
-                                        if(this.docObj.docOrders.dt().length > 0)
-                                        {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgCustomerLock',showTitle:true,title:this.t("msgCustomerLock.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgCustomerLock.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerLock.msg")}</div>)
-                                            }
-                                            
-                                            await dialog(tmpConfObj);
-                                            return;
-                                        }
+                                        // if(this.docObj.docOrders.dt().length > 0)
+                                        // {
+                                        //     let tmpConfObj =
+                                        //     {
+                                        //         id:'msgCustomerLock',showTitle:true,title:this.t("msgCustomerLock.title"),showCloseButton:true,width:'500px',height:'200px',
+                                        //         button:[{id:"btn01",caption:this.t("msgCustomerLock.btn01"),location:'after'}],
+                                        //         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerLock.msg")}</div>)
+                                        //     }
+                                        // 
+                                        //     await dialog(tmpConfObj);
+                                        //     return;
+                                        // }
                                         this.pg_txtCustomerCode.onClick = async(data) =>
                                         { 
                                             if(data.length > 0)
@@ -1045,6 +1103,7 @@ export default class purchaseOrder extends DocBase
                                                 this.docObj.dt()[0].OUTPUT = data[0].GUID
                                                 this.docObj.dt()[0].OUTPUT_CODE = data[0].CODE
                                                 this.docObj.dt()[0].OUTPUT_NAME = data[0].TITLE
+                                                this.docObj.dt()[0].VAT_ZERO = data[0].VAT_ZERO
                                                 
                                                 let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
                                                 
@@ -1088,17 +1147,17 @@ export default class purchaseOrder extends DocBase
                                                 icon:'more',
                                                 onClick:async()=>
                                                 {
-                                                    if(this.docObj.docOrders.dt().length > 0)
-                                                    {
-                                                        let tmpConfObj =
-                                                        {
-                                                            id:'msgCustomerLock',showTitle:true,title:this.t("msgCustomerLock.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                            button:[{id:"btn01",caption:this.t("msgCustomerLock.btn01"),location:'after'}],
-                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerLock.msg")}</div>)
-                                                        }
-                                                        await dialog(tmpConfObj);
-                                                        return;
-                                                    }
+                                                    // if(this.docObj.docOrders.dt().length > 0)
+                                                    // {
+                                                    //     let tmpConfObj =
+                                                    //     {
+                                                    //         id:'msgCustomerLock',showTitle:true,title:this.t("msgCustomerLock.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    //         button:[{id:"btn01",caption:this.t("msgCustomerLock.btn01"),location:'after'}],
+                                                    //         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerLock.msg")}</div>)
+                                                    //     }
+                                                    //     await dialog(tmpConfObj);
+                                                    //     return;
+                                                    // }
                                                    
                                                     this.pg_txtCustomerCode.onClick = async(data) =>
                                                     {
@@ -1107,6 +1166,7 @@ export default class purchaseOrder extends DocBase
                                                             this.docObj.dt()[0].OUTPUT = data[0].GUID
                                                             this.docObj.dt()[0].OUTPUT_CODE = data[0].CODE
                                                             this.docObj.dt()[0].OUTPUT_NAME = data[0].TITLE
+                                                            this.docObj.dt()[0].VAT_ZERO = data[0].VAT_ZERO
                                                             
                                                             let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
                                                             
@@ -1167,7 +1227,7 @@ export default class purchaseOrder extends DocBase
                                 </Item> 
                                 {/* Boş */}
                                 <EmptyItem />
-                                 {/* BARKOD EKLEME */}
+                                 {/* txtBarcode */}
                                  <Item>
                                     <Label text={this.t("txtBarcode")} alignment="right" />
                                     <NdTextBox id="txtBarcode" parent={this} simple={true}  placeholder={this.t("txtBarcodePlace")}
@@ -1181,6 +1241,10 @@ export default class purchaseOrder extends DocBase
                                                 icon:"fa-solid fa-barcode",
                                                 onClick:async(e)=>
                                                 {
+                                                    if(this.txtBarcode.value == '')
+                                                    {
+                                                        return
+                                                    }
                                                     if(this.cmbDepot.value == '' || this.txtCustomerCode.value == '')
                                                     {
                                                         let tmpConfObj =
@@ -1227,6 +1291,10 @@ export default class purchaseOrder extends DocBase
                                     }
                                     onEnterKey={(async(e)=>
                                     {
+                                        if(this.txtBarcode.value == '')
+                                        {
+                                            return
+                                        }
                                         if(this.cmbDepot.value == '')
                                         {
                                             let tmpConfObj =
@@ -1252,7 +1320,7 @@ export default class purchaseOrder extends DocBase
                                         {
                                             this.msgQuantity.tmpData = tmpData.result.recordset[0]
                                             await this.msgQuantity.show()
-                                            this.addItem(tmpData.result.recordset[0],null,this.txtPopQteUnitQuantity.value)
+                                            this.addItem(tmpData.result.recordset[0],null,this.txtPopQteUnitQuantity.value,this.txtPopQteUnitPrice.value)
                                             this.txtBarcode.focus()   
                                         }
                                         else
@@ -1269,7 +1337,7 @@ export default class purchaseOrder extends DocBase
                                                     {
                                                         this.msgQuantity.tmpData = data[0]
                                                         await this.msgQuantity.show()
-                                                        await this.addItem(data[0],null)
+                                                        await this.addItem(data[0],null,this.txtPopQteUnitQuantity.value,this.txtPopQteUnitPrice.value)
                                                         this.txtBarcode.focus()
                                                     }
                                                     else if(data.length > 1)
@@ -1518,7 +1586,16 @@ export default class purchaseOrder extends DocBase
                                             return
                                         }
                                         e.key.TOTALHT = Number((parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3)) - (parseFloat(e.key.DISCOUNT)))).round(2)
-                                        e.key.VAT = parseFloat(((((e.key.TOTALHT) - (parseFloat(e.key.DOC_DISCOUNT))) * (e.key.VAT_RATE) / 100))).round(6);
+                                        if(this.docObj.dt()[0].VAT_ZERO != 1)
+                                        {
+                                            e.key.VAT = parseFloat(((((e.key.TOTALHT) - (parseFloat(e.key.DOC_DISCOUNT))) * (e.key.VAT_RATE) / 100))).round(6);
+                                        }
+                                        else
+                                        {
+                                            e.key.VAT = 0
+                                            e.key.VAT_RATE = 0
+                                        }
+                                        
                                         e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3)).round(2)
                                         e.key.TOTAL = Number(((e.key.TOTALHT - e.key.DOC_DISCOUNT) + e.key.VAT)).round(2)
 

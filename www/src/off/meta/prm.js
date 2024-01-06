@@ -69,7 +69,7 @@ export const prm =
             CAPTION : "Seri Numarası Rastgele Oluştursun"
         }
     },
-    // Alış Faturasından Fiyat Güncelleme
+    //Alış Faturasından Fiyat Güncelleme
     {
         TYPE : 0,
         ID :"purcInvoıcePriceSave",
@@ -87,7 +87,7 @@ export const prm =
             CAPTION : "Alış Faturasından Alış Fiyatı Güncelleme"
         }
     },
-    // Alış Faturasından Fiyat Güncelleme
+    //Alış Faturasından Fiyat Güncelleme
     {
         TYPE : 0,
         ID :"negativeQuantityForPruchase",
@@ -105,7 +105,7 @@ export const prm =
             CAPTION : "Alış Faturasında Eksi Miktar Girişi"
         }
     },
-    // Ödeme ve tahsilat için fatura zorunluluğu
+    //Ödeme ve tahsilat için fatura zorunluluğu
     {
         TYPE : 0,
         ID :"invoicesForPayment",
@@ -203,7 +203,7 @@ export const prm =
             CAPTION : "Faturadaki Hizmetten Maliyet Ekle"
         }
     },
-    // underMinCostPrice
+    //underMinCostPrice
     {
         TYPE : 0,
         ID :"underMinCostPrice",
@@ -218,7 +218,7 @@ export const prm =
             CAPTION : "Maliyetten Düşük Fiyata Satış Yapabilir"
         }
     },
-    // maxRoundAmount
+    //maxRoundAmount
     {
         TYPE : 0,
         ID :"maxRoundAmount",
@@ -233,7 +233,7 @@ export const prm =
             CAPTION : "En fazla uygulanabilcek yuvarlama tutarı"
         }
     },
-    // maxUnitQuantity
+    //maxUnitQuantity
     {
         TYPE : 0,
         ID :"maxUnitQuantity",
@@ -248,7 +248,7 @@ export const prm =
             CAPTION : "En fazla izin verilen miktar"
         }
     },
-    // maxItemPrice
+    //maxItemPrice
     {
         TYPE : 0,
         ID :"maxItemPrice",
@@ -386,6 +386,25 @@ export const prm =
                     }
                 ]
             }
+        }
+    },
+    //Sabit Birim
+    {
+        TYPE : 0,
+        ID :"cmbUnit",
+        VALUE : 
+        {
+            value : "Colis"
+        },
+        SPECIAL : "",
+        PAGE : "",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Sistem",
+            CAPTION : "Sabit Birim"
         }
     },
     //#endregion
@@ -1660,7 +1679,7 @@ export const prm =
         ID :"cmbDepot",
         VALUE : 
         {
-            value : ""
+            value : "EEB85132-6BCB-4C18-B6FA-46A1E0C1C813"
         },
         SPECIAL : "",
         PAGE : "ftr_02_002",
@@ -2138,7 +2157,7 @@ export const prm =
         ID :"cmbDepot",
         VALUE : 
         {
-            value : ""
+            value : "EEB85132-6BCB-4C18-B6FA-46A1E0C1C813"
         },
         SPECIAL : "",
         PAGE : "ftr_02_001",
@@ -2782,7 +2801,7 @@ export const prm =
     },
     //#endregion
     //#region Satış İrsaliye
-    // negativeQuantity
+    //negativeQuantity
     {
         TYPE : 1,
         ID :"negativeQuantity",
@@ -2799,6 +2818,25 @@ export const prm =
             TYPE : "checkbox",
             PAGE_NAME : "Satış İrsaliye",
             CAPTION : "Eksiye Düşemeye İzin Verme"
+        }
+    },
+    //cmbDepot
+    {
+        TYPE : 2,
+        ID :"cmbDepot",
+        VALUE : 
+        {
+            value : "EEB85132-6BCB-4C18-B6FA-46A1E0C1C813"
+        },
+        SPECIAL : "",
+        PAGE : "irs_02_002",
+        ELEMENT : "cmbDepot",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Satış İrsaliye",
+            CAPTION : "Depo"
         }
     },
     //#endregion
@@ -3055,8 +3093,8 @@ export const prm =
             }
         },
     //#endregion
-    //#region Satış İrsaliye
-    // negativeQuantity
+    //#region Satış Sipariş
+    //negativeQuantity
     {
         TYPE : 1,
         ID :"closedOrder",
@@ -3075,5 +3113,66 @@ export const prm =
             CAPTION : "Kapanmış Sipaişleri Gösterme"
         }
     },
+    //cmbDepot
+    {
+        TYPE : 2,
+        ID :"cmbDepot",
+        VALUE : 
+        {
+            value : "EEB85132-6BCB-4C18-B6FA-46A1E0C1C813"
+        },
+        SPECIAL : "",
+        PAGE : "sip_02_002",
+        ELEMENT : "cmbDepot",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Satış Sipariş",
+            CAPTION : "Depo"
+        }
+    },
     //#endregion
+    //#region Alış Sipariş
+    //cmbDepot
+    {
+        TYPE : 2,
+        ID :"cmbDepot",
+        VALUE : 
+        {
+            value : "EEB85132-6BCB-4C18-B6FA-46A1E0C1C813"
+        },
+        SPECIAL : "",
+        PAGE : "sip_02_001",
+        ELEMENT : "cmbDepot",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Alış Sipariş",
+            CAPTION : "Depo"
+        }
+    },
+    //#endregion
+    //#region Alış İrsaliye
+    //cmbDepot
+    {
+        TYPE : 2,
+        ID :"cmbDepot",
+        VALUE : 
+        {
+            value : "EEB85132-6BCB-4C18-B6FA-46A1E0C1C813"
+        },
+        SPECIAL : "",
+        PAGE : "irs_02_001",
+        ELEMENT : "cmbDepot",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Alış İrsaliye",
+            CAPTION : "Depo"
+        }
+    },
+    //#endregion    
 ]

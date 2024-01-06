@@ -5,7 +5,6 @@ import fs from 'fs'
 import rsa from 'jsrsasign'
 import { pem } from '../pem.js'
 import nodemailer from  'nodemailer'
-
 class mailer
 {
     constructor()
@@ -18,7 +17,6 @@ class mailer
 
     connEvt(pSocket)
     {
-        console.log(5)
         pSocket.on('mailer',async (pParam,pCallback) =>
         {
             pCallback(await this.mailSend(pParam))
@@ -27,7 +25,6 @@ class mailer
 
     mailSend(pData)
     {
-        console.log(6)
        
         return new Promise(resolve =>
         {
@@ -48,30 +45,27 @@ class mailer
             let transporter = nodemailer.createTransport(
             {
 
-                //service: pData.service,
-                host:  pData.host,
-                port: pData.port,
+                //service: 'imap.ionos.fr',
+                host: 'smtp.ionos.fr',
+                port: 465,
                 secure: true,
                 auth: 
                 {
-                    user:  pData.userMail,
-                    pass: pData.password,
+                  user: "vente.esseylesnancy@ppsupermarche.fr",
+                  pass: "24Prodorplus69*/"
                 },
                 //tls : { rejectUnauthorized: false }
-            });
-            var mailOptions =
-            {
-                from: pData.userMail,
+              });
+              var mailOptions = {
+                from: "vente.esseylesnancy@ppsupermarche.fr",
                 to: pData.sendMail,
                 subject: pData.subject,
                 html:pData.html,
                 text:pData.text,
                 attachments: tmpAttach
-            };
-            transporter.sendMail(mailOptions, function(error, info)
-            {
-                if (error)
-                {
+              };
+              transporter.sendMail(mailOptions, function(error, info){
+                if (error) {
                     console.log(error)
                     resolve(error);
                 }

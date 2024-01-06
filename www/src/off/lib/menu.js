@@ -266,7 +266,7 @@ export const menu = (e) =>
                         {
                             id: 'cri_01_003',
                             text: e.t('menuOff.cri_01_003'),//'Grup Tanımları',
-                            path: 'customers/cards/customerCard'
+                            path: 'customers/cards/customerGrpCard'
                         },
                         {
                             id: 'cri_01_004',
@@ -437,6 +437,11 @@ export const menu = (e) =>
                                     id: 'tkf_02_001',
                                     text: e.t('menuOff.tkf_02_001'),//'Alış Teklif',
                                     path: 'offers/documents/purchaseOffer'
+                                },
+                                {
+                                    id: 'tkf_02_003',
+                                    text: e.t('menuOff.tkf_02_003'),//'Fiyat farkı talebi',
+                                    path: 'offers/documents/priceDiffDemand'
                                 },
                     
                             ]
@@ -768,6 +773,19 @@ export const menu = (e) =>
                                     id: 'sip_01_002',
                                     text: e.t('menuOff.sip_01_002'),//'Satış Sipariş Listesi',
                                     path: 'orders/lists/salesOrdList'
+                                },
+                            ]
+                        },
+                        {
+                            id: 'salesorder_04',
+                            text : e.t('menuOff.salesorder_04'),//'Operasyonlar',
+                            expanded: false,
+                            items: 
+                            [
+                                {
+                                    id: 'sip_04_002',
+                                    text: e.t('menuOff.sip_04_002'),//'Satış Siparişi Dağıtım Operasyonu',
+                                    path: 'orders/operations/salesOrderDistributionOperation'
                                 },
                             ]
                         },
@@ -1202,13 +1220,13 @@ export const menu = (e) =>
                             text: e.t('menuOff.pos_02_009'),
                             path: 'pos/report/itemGrpSalesReport'
                         },
-                        //Ürün Grup Satış Raporu
+                        //Ürün Detaylı Satış Raporu
                         {
                             id: 'pos_02_010',
                             text: e.t('menuOff.pos_02_010'),
-                            path: 'pos/report/itemSalesReport'
+                            path: 'pos/report/itemDetailSalesReport'
                         },
-                        //Ürün Grup Satış Raporu
+                        //Ürün Karşılaştırma Raporu
                         {
                             id: 'pos_02_011',
                             text: e.t('menuOff.pos_02_011'),
@@ -1226,7 +1244,7 @@ export const menu = (e) =>
                             text: e.t('menuOff.pos_02_012'),
                             path: 'pos/report/loyaltyReport'
                         },
-                        //Loyalty 
+                        //Discount 
                         {
                             id: 'pos_02_013',
                             text: e.t('menuOff.pos_02_013'),

@@ -332,6 +332,8 @@ export const langTr =
         }
     },
     txtPopLastRefPholder : "Lütfen ticket üzerindeki barkodu okutunuz...",
+    txtPopLastRefNoPholder : "Ref No",
+    txtPopLastCustomerPholder : "Müşteri Kodu",
     popLastTotal : 
     {
         title : "Son Satış Tahsilat"

@@ -55,11 +55,12 @@ export const menu = (e) =>
                     icon : "fa-tag",
                     path : "items/labelPrint.js",
                 },
-                // {
-                //     id: 'stk_07',
-                //     text : e.t('menu.stk_07'), //'Özel Etiket Basımı'
-                //     icon : "fa-tags",
-                // },
+                {
+                    id: 'stk_07',
+                    text : e.t('menu.stk_07'), //'Özel Etiket Basımı'
+                    icon : "fa-tags",
+                    path : "items/privatePrinting.js",
+                },
                 {
                     id: 'stk_08',
                     text : e.t('menu.stk_08'), //'İade Ürünü Toplama'
@@ -172,7 +173,7 @@ export const menu = (e) =>
                     id: 'kar_01',
                     text : e.t('menu.kar_01'), //'Sipariş Eşleştirme'
                     icon : "fa-paste",
-                    path : "empty.js",
+                    path: "pairing/salesPairing.js"
                 },
                 {
                     id: 'kar_02',

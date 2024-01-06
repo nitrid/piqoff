@@ -23,7 +23,7 @@ rl.on('line', (input) =>
         {
             
         });
-    } 
+    }
     else
     {
         socket.emit('terminal',input);   

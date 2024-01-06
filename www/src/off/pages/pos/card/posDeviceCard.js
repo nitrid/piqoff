@@ -175,7 +175,7 @@ export default class posDeviceCard extends React.PureComponent
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup={"frmDevice"  + this.tabIndex}
+                                    <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmDevice"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         if(e.validationGroup.validate().status == "valid")
@@ -222,7 +222,7 @@ export default class posDeviceCard extends React.PureComponent
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnDelete" parent={this} icon="trash" type="default"
+                                    <NdButton id="btnDelete" parent={this} icon="trash" type="danger"
                                     onClick={async()=>
                                     {
                                         

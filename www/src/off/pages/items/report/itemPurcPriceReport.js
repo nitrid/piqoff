@@ -65,7 +65,7 @@ export default class itemPurcPriceReport extends React.PureComponent
                             "PRICE.LAST_PRICE AS PURC_PRICE,    " +
                             "ITEMS.VAT AS VAT,   " +
                             "PRICE.FISRT_PRICE AS FISRT_PRICE,   " +
-                            "ISNULL((SELECT [dbo].[FN_PRICE](ITEMS.GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',0,1,0)),0) AS PRICE_SALE," +
+                            "ISNULL((SELECT [dbo].[FN_PRICE](ITEMS.GUID,1,GETDATE(),'00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000',0,0,1)),0) AS PRICE_SALE," +
                             "ISNULL((SELECT  TITLE FROM CUSTOMER_VW_02 WHERE GUID = PRICE.CUSTOMER),'')AS CUSTOMER_NAME,   " +
                             "PRICE.CUSTOMER AS CUSTOMER,    " +
                             "PRICE.CDATE AS LDATE   " +
@@ -91,7 +91,7 @@ export default class itemPurcPriceReport extends React.PureComponent
         {
             query :"SELECT CONVERT(NVARCHAR,CONVERT(datetime,CHANGE_DATE),104) AS CONVERT_DATE, CHANGE_DATE AS DATE, " +
                    "PRICE AS PURC " +
-                   "FROM [dbo].[ITEM_PRICE_LOG_VW_01] WHERE ITEM_GUID = @ITEM_GUID AND TYPE = 1 AND CUSTOMER = @CUSTOMER  " + 
+                   "FROM [dbo].[PRICE_HISTORY_VW_01] WHERE ITEM = @ITEM_GUID AND TYPE = 1 AND CUSTOMER = @CUSTOMER  " + 
                    "UNION ALL " + 
                    "SELECT CONVERT(NVARCHAR,LDATE,104) AS CONVERT_DATE,LDATE AS DATE,PRICE AS PURC FROM ITEM_PRICE_VW_01 WHERE ITEM_GUID = @ITEM_GUID AND TYPE = 1 AND CUSTOMER_GUID = @CUSTOMER ",
             param : ['ITEM_GUID:string|50','CUSTOMER:string|50'],
@@ -102,7 +102,7 @@ export default class itemPurcPriceReport extends React.PureComponent
         {
             query :"SELECT CONVERT(NVARCHAR,CONVERT(datetime,CHANGE_DATE),104) AS CONVERT_DATE, CHANGE_DATE AS DATE, " +
                    "PRICE AS SALE " +
-                   "FROM [dbo].[ITEM_PRICE_LOG_VW_01] WHERE ITEM_GUID = @ITEM_GUID AND TYPE = 0 " + 
+                   "FROM [dbo].[PRICE_HISTORY_VW_01] WHERE ITEM = @ITEM_GUID AND TYPE = 0 " + 
                    "UNION ALL " + 
                    "SELECT CONVERT(NVARCHAR,LDATE,104) AS CONVERT_DATE,LDATE AS DATE,PRICE AS SALE FROM ITEM_PRICE_VW_01 WHERE ITEM_GUID = @ITEM_GUID AND TYPE = 0 ",
             param : ['ITEM_GUID:string|50','CUSTOMER:string|50'],

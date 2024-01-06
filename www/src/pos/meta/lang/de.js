@@ -334,6 +334,8 @@ export const langDe =
         }
     },
     txtPopLastRefPholder: "Bitte den Barcode auf dem Ticket scannen.",
+    txtPopLastRefNoPholder : "Ref No",  // BAK
+    txtPopLastCustomerPholder : "Müşteri Kodu", // BAK
     popLastTotal: 
     {
         title: "Letzte Zahlung"

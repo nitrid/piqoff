@@ -17,11 +17,19 @@ export const langTr =
     btnNewDoc: "Yeni Evrak",
     btnDocDelete: "Evrak Sil",
     btnLineDisc: "Satır İndirim",
+    chkRememberMe : "Beni Hatırla", // BAK
     msgAnotherUserAlert: 
     {
         title : "Dikkat",
         msg : "Sizin kullanıcı bilgileriniz ile başka bir cihazdan giriş yapıldı",
         btn01 : "Tamam"
+    },
+    msgSaveResult:
+    {
+        title: "Dikkat",
+        btn01: "Tamam",
+        msgSuccess: "Kayıt işleminiz başarılı !",
+        msgFailed: "Kayıt işleminiz başarısız !"
     },
     msgCombineItem:
     {
@@ -260,6 +268,28 @@ export const langTr =
             title : "Evrak Seçim",
             clmRef :  "Ref",
             clmRefNo : "Ref No",
+        },
+    },
+    stk_07 : // "Özel Etiket Bas"
+    {
+        lblPrice : "Fiyat",
+        lblQuantity : "Miktar",
+        lblDescription : "Açıklama",
+        lblAdd : "Ekle",
+        msgAlert :
+        {
+            btn01 : "Tamam",
+            title : "Uyarı",
+            msgProcess : "Henüz girilmiş bir ürün yok !",
+            msgBarcodeNotFound : "Barkod bulunamadı !",
+            msgBarcodeCheck : "Lütfen barkod okutunuz !",
+            msgNotSave : "Kayıt İşlemi Başarısız",
+        },
+        grdList : 
+        {
+            clmBarcode : "Barkod",
+            clmName :  "Ürün Adı",
+            clmPrice : "Fiyat"
         },
     },
     stk_08 : // "İade Deposu Sevk"

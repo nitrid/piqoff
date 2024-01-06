@@ -1,21 +1,20 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import DocBase from '../../../tools/DocBase.js';
-import moment from 'moment';
 
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
 import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
 import { Button } from 'devextreme-react/button';
 
-import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
+import NdTextBox, { Validator, RequiredRule } from '../../../../core/react/devex/textbox.js'
 import NdNumberBox from '../../../../core/react/devex/numberbox.js';
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
 import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
-import NdDialog, { dialog } from '../../../../core/react/devex/dialog.js';
+import { dialog } from '../../../../core/react/devex/dialog.js';
 import NdHtmlEditor from '../../../../core/react/devex/htmlEditor.js';
 
 export default class salesOffer extends DocBase
@@ -97,7 +96,7 @@ export default class salesOffer extends DocBase
                 {
                     select:
                     {
-                        query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,TYPE_NAME,GENUS_NAME,PRICE_LIST_NO FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
+                        query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,TYPE_NAME,VAT_ZERO,GENUS_NAME,PRICE_LIST_NO FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
                         param : ['VAL:string|50']
                     },
                     sql:this.core.sql
@@ -253,7 +252,15 @@ export default class salesOffer extends DocBase
                                 }
                                 e.data.DIFF_PRICE = parseFloat((e.data.PRICE - e.data.CUSTOMER_PRICE).toFixed(3))
                                 e.data.QUANTITY = this.txtTotalQuantity.value
-                                e.data.VAT = parseFloat(((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) * (e.data.VAT_RATE) / 100)).toFixed(6));
+                                if(this.docObj.dt()[0].VAT_ZERO != 1)
+                                {
+                                    e.data.VAT = parseFloat(((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) * (e.data.VAT_RATE) / 100)).toFixed(6));
+                                }
+                                else
+                                {
+                                    e.data.VAT = 0
+                                    e.data.VAT_RATE = 0
+                                }
                                 e.data.AMOUNT = parseFloat((e.data.PRICE * e.data.QUANTITY)).round(2)
                                 e.data.TOTALHT = Number(((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT)).round(2)
                                 e.data.TOTAL = Number((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) +e.data.VAT)).round(2)
@@ -302,7 +309,15 @@ export default class salesOffer extends DocBase
                                 e.data.DISCOUNT_2 = this.txtDiscount2.value
                                 e.data.DISCOUNT_3 = this.txtDiscount3.value
                                 e.data.DISCOUNT = (parseFloat(this.txtDiscount1.value) + parseFloat(this.txtDiscount2.value) + parseFloat(this.txtDiscount3.value))
-                                e.data.VAT = parseFloat(((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) * (e.data.VAT_RATE) / 100)).toFixed(6));
+                                if(this.docObj.dt()[0].VAT_ZERO != 1)
+                                {
+                                    e.data.VAT = parseFloat(((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) * (e.data.VAT_RATE) / 100)).toFixed(6));
+                                }
+                                else
+                                {
+                                    e.data.VAT = 0
+                                    e.data.VAT_RATE = 0
+                                }
                                 e.data.AMOUNT = parseFloat((e.data.PRICE * e.data.QUANTITY)).round(2)
                                 e.data.TOTALHT = Number(((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT)).round(2)
                                 e.data.TOTAL = Number((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) +e.data.VAT)).round(2)
@@ -347,7 +362,16 @@ export default class salesOffer extends DocBase
                                 e.data.DISCOUNT_2 = Number(e.data.AMOUNT-e.data.DISCOUNT_1).rateInc(this.txtDiscountPer2.value,4) 
                                 e.data.DISCOUNT_3 = Number(e.data.AMOUNT-e.data.DISCOUNT_1-e.data.DISCOUNT_2).rateInc(this.txtDiscountPer3.value,4) 
                                 e.data.DISCOUNT = (e.data.DISCOUNT_1 + e.data.DISCOUNT_2 + e.data.DISCOUNT_3)
-                                e.data.VAT = parseFloat(((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) * (e.data.VAT_RATE) / 100)).toFixed(6));
+                                if(this.docObj.dt()[0].VAT_ZERO != 1)
+                                {
+                                    e.data.VAT = parseFloat(((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) * (e.data.VAT_RATE) / 100)).toFixed(6));
+                                }
+                                else
+                                {
+                                    e.data.VAT = 0
+                                    e.data.VAT_RATE = 0
+                                }
+                                
                                 e.data.AMOUNT = parseFloat((e.data.PRICE * e.data.QUANTITY)).round(2)
                                 e.data.TOTALHT = Number(((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT)).round(2)
                                 e.data.TOTAL = Number((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) +e.data.VAT)).round(2)
@@ -362,7 +386,7 @@ export default class salesOffer extends DocBase
             )
         }
     }
-    addItem(pData,pIndex,pQuantity)
+    addItem(pData,pIndex,pQuantity,pPrice)
     {
         return new Promise(async resolve =>{
             App.instance.setState({isExecute:true})
@@ -380,7 +404,16 @@ export default class salesOffer extends DocBase
             {
                 tmpMergDt[0].QUANTITY = tmpMergDt[0].QUANTITY + pQuantity
                 tmpMergDt[0].SUB_QUANTITY = tmpMergDt[0].SUB_QUANTITY / tmpMergDt[0].SUB_FACTOR
-                tmpMergDt[0].VAT = Number((tmpMergDt[0].VAT + (tmpMergDt[0].PRICE * (tmpMergDt[0].VAT_RATE / 100) * pQuantity))).round(6)
+                if(this.docObj.dt()[0].VAT_ZERO != 1)
+                {
+                    tmpMergDt[0].VAT = Number((tmpMergDt[0].VAT + (tmpMergDt[0].PRICE * (tmpMergDt[0].VAT_RATE / 100) * pQuantity))).round(6)
+                }
+                else
+                {
+                    tmpMergDt[0].VAT = 0
+                    tmpMergDt[0].VAT_RATE = 0
+                }
+                
                 tmpMergDt[0].AMOUNT = Number((tmpMergDt[0].QUANTITY * tmpMergDt[0].PRICE)).round(4)
                 tmpMergDt[0].TOTAL = Number((((tmpMergDt[0].QUANTITY * tmpMergDt[0].PRICE) - tmpMergDt[0].DISCOUNT) + tmpMergDt[0].VAT)).round(2)
                 tmpMergDt[0].TOTALHT =  Number((tmpMergDt[0].AMOUNT - tmpMergDt[0].DISCOUNT)).round(2)
@@ -418,24 +451,41 @@ export default class salesOffer extends DocBase
             this.docObj.docOffers.dt()[pIndex].DISCOUNT = 0
             this.docObj.docOffers.dt()[pIndex].DISCOUNT_RATE = 0
             this.docObj.docOffers.dt()[pIndex].QUANTITY = pQuantity
-            let tmpQuery = 
+            if(typeof pPrice == 'undefined')
             {
-                query :"SELECT dbo.FN_PRICE(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,@DEPOT,@PRICE_LIST_NO,0,0) AS PRICE",
-                param : ['GUID:string|50','QUANTITY:float','CUSTOMER:string|50','DEPOT:string|50','PRICE_LIST_NO:int'],
-                value : [pData.GUID,pQuantity,this.docObj.dt()[0].INPUT,this.cmbDepot.value,this.cmbPricingList.value]
+                let tmpQuery = 
+                {
+                    query :"SELECT dbo.FN_PRICE(@GUID,@QUANTITY,GETDATE(),@CUSTOMER,@DEPOT,@PRICE_LIST_NO,0,0) AS PRICE",
+                    param : ['GUID:string|50','QUANTITY:float','CUSTOMER:string|50','DEPOT:string|50','PRICE_LIST_NO:int'],
+                    value : [pData.GUID,pQuantity,this.docObj.dt()[0].INPUT,this.cmbDepot.value,this.cmbPricingList.value]
+                }
+                let tmpData = await this.core.sql.execute(tmpQuery) 
+                if(tmpData.result.recordset.length > 0)
+                {
+                    let tmpMargin = tmpData.result.recordset[0].PRICE - this.docObj.docOffers.dt()[pIndex].COST_PRICE
+                    let tmpMarginRate = ((tmpData.result.recordset[0].PRICE - this.docObj.docOffers.dt()[pIndex].COST_PRICE) - tmpData.result.recordset[0].PRICE) * 100
+                    this.docObj.docOffers.dt()[pIndex].MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
+                    this.docObj.docOffers.dt()[pIndex].PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4))
+                    this.docObj.docOffers.dt()[pIndex].VAT = Number((tmpData.result.recordset[0].PRICE * (this.docObj.docOffers.dt()[pIndex].VAT_RATE / 100) * pQuantity)).round(6)
+                    this.docObj.docOffers.dt()[pIndex].AMOUNT = Number(tmpData.result.recordset[0].PRICE  * pQuantity).round(2)
+                    this.docObj.docOffers.dt()[pIndex].TOTAL = Number(((tmpData.result.recordset[0].PRICE * pQuantity) + this.docObj.docOffers.dt()[pIndex].VAT)).round(2)
+                    this.docObj.docOffers.dt()[pIndex].TOTALHT = Number((this.docObj.docOffers.dt()[pIndex].AMOUNT - this.docObj.docOffers.dt()[pIndex].DISCOUNT)).round(2)
+                    this.calculateTotal()
+                }
             }
-            let tmpData = await this.core.sql.execute(tmpQuery) 
-            if(tmpData.result.recordset.length > 0)
+            else
             {
-                let tmpMargin = tmpData.result.recordset[0].PRICE - this.docObj.docOffers.dt()[pIndex].COST_PRICE
-                let tmpMarginRate = ((tmpData.result.recordset[0].PRICE - this.docObj.docOffers.dt()[pIndex].COST_PRICE) - tmpData.result.recordset[0].PRICE) * 100
-                this.docObj.docOffers.dt()[pIndex].MARGIN = tmpMargin.toFixed(2) + "€ / %" +  tmpMarginRate.toFixed(2)
-                this.docObj.docOffers.dt()[pIndex].PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4))
-                this.docObj.docOffers.dt()[pIndex].VAT = Number((tmpData.result.recordset[0].PRICE * (this.docObj.docOffers.dt()[pIndex].VAT_RATE / 100) * pQuantity)).round(6)
-                this.docObj.docOffers.dt()[pIndex].AMOUNT = Number(tmpData.result.recordset[0].PRICE  * pQuantity).round(2)
-                this.docObj.docOffers.dt()[pIndex].TOTAL = Number(((tmpData.result.recordset[0].PRICE * pQuantity) + this.docObj.docOffers.dt()[pIndex].VAT)).round(2)
-                this.docObj.docOffers.dt()[pIndex].TOTALHT = Number((this.docObj.docOffers.dt()[pIndex].AMOUNT - this.docObj.docOffers.dt()[pIndex].DISCOUNT)).round(2)
+                this.docObj.docOffers.dt()[pIndex].PRICE = parseFloat((pPrice).toFixed(4))
+                this.docObj.docOffers.dt()[pIndex].VAT = parseFloat((((pPrice * pQuantity) - this.docObj.docOffers.dt()[pIndex].DISCOUNT) * (this.docObj.docOffers.dt()[pIndex].VAT_RATE / 100)).toFixed(6))
+                this.docObj.docOffers.dt()[pIndex].AMOUNT = parseFloat((pPrice  * pQuantity)).round(2)
+                this.docObj.docOffers.dt()[pIndex].TOTALHT = Number(((pPrice  * pQuantity) - this.docObj.docOffers.dt()[pIndex].DISCOUNT)).round(2)
+                this.docObj.docOffers.dt()[pIndex].TOTAL = Number((this.docObj.docOffers.dt()[pIndex].TOTALHT + this.docObj.docOffers.dt()[pIndex].VAT)).round(2)
                 this.calculateTotal()
+            }
+            if(this.docObj.dt()[0].VAT_ZERO == 1)
+            {
+                this.docObj.docOffers.dt()[pIndex].VAT = 0
+                this.docObj.docOffers.dt()[pIndex].VAT_RATE = 0
             }
             App.instance.setState({isExecute:false})
             //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
@@ -572,7 +622,7 @@ export default class salesOffer extends DocBase
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup={"frmslsDoc" + this.tabIndex}
+                                    <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmslsDoc" + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         console.log(this.docObj.docOffers.dt()[0])
@@ -651,7 +701,7 @@ export default class salesOffer extends DocBase
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnDelete" parent={this} icon="trash" type="default"
+                                    <NdButton id="btnDelete" parent={this} icon="trash" type="danger"
                                     onClick={async()=>
                                     {
                                      
@@ -992,6 +1042,7 @@ export default class salesOffer extends DocBase
                                                 this.docObj.dt()[0].INPUT_CODE = data[0].CODE
                                                 this.docObj.dt()[0].INPUT_NAME = data[0].TITLE
                                                 this.docObj.dt()[0].PRICE_LIST_NO = data[0].PRICE_LIST_NO
+                                                this.docObj.dt()[0].VAT_ZERO = data[0].VAT_ZERO
                                                 let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
                                                 if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                 {
@@ -1022,6 +1073,8 @@ export default class salesOffer extends DocBase
                                                             this.docObj.dt()[0].INPUT_CODE = data[0].CODE
                                                             this.docObj.dt()[0].INPUT_NAME = data[0].TITLE
                                                             this.docObj.dt()[0].PRICE_LIST_NO = data[0].PRICE_LIST_NO
+                                                            this.docObj.dt()[0].VAT_ZERO = data[0].VAT_ZERO
+
                                                             let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
                                                             if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                             {
@@ -1145,7 +1198,7 @@ export default class salesOffer extends DocBase
                                         {
                                             this.msgQuantity.tmpData = tmpData.result.recordset[0]
                                             await this.msgQuantity.show()
-                                            this.addItem(tmpData.result.recordset[0],null,this.txtPopQuantity.value)
+                                            this.addItem(tmpData.result.recordset[0],null,this.txtPopQuantity.value,this.txtPopQteUnitPrice.value)
                                         }
                                         else
                                         {
@@ -1413,7 +1466,15 @@ export default class salesOffer extends DocBase
                                         }
 
                                         e.key.TOTALHT = Number((parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3)) - (parseFloat(e.key.DISCOUNT)))).round(2)
-                                        e.key.VAT = parseFloat(((((e.key.TOTALHT) - (parseFloat(e.key.DOC_DISCOUNT))) * (e.key.VAT_RATE) / 100))).round(6);
+                                        if(this.docObj.dt()[0].VAT_ZERO != 1)
+                                        {
+                                            e.key.VAT = parseFloat(((((e.key.TOTALHT) - (parseFloat(e.key.DOC_DISCOUNT))) * (e.key.VAT_RATE) / 100))).round(6);
+                                        }
+                                        else
+                                        {
+                                            e.key.VAT = 0
+                                            e.key.VAT_RATE = 0
+                                        }
                                         e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3)).round(2)
                                         e.key.TOTAL = Number(((e.key.TOTALHT - e.key.DOC_DISCOUNT) + e.key.VAT)).round(2)
 

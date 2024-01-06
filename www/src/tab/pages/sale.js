@@ -1,6 +1,7 @@
 import React from 'react';
 import App from '../lib/app.js';
 import { nf525Cls } from '../../core/cls/nf525.js';
+import moment from 'moment';
 
 import ScrollView from 'devextreme-react/scroll-view';
 import RadioGroup from 'devextreme-react/radio-group';
@@ -42,6 +43,7 @@ export default class Sale extends React.PureComponent
         this.tmpStartPage = 0
         this.tmpEndPage = 0
         this.bufferId = ''
+
         this.state = 
         {
             isExecute : false
@@ -69,6 +71,9 @@ export default class Sale extends React.PureComponent
         this.cmbGroup.value = ''
         this.docType = 0
         this.docLocked = false;
+
+        this.docObj.dt()[0].OUTPUT = this.param.filter({TYPE:1,USERS:this.user.CODE,ID:'cmbDepot'}).getValue().value
+        this.docObj.dt()[0].PRICE_LIST_NO = this.param.filter({TYPE:1,USERS:this.user.CODE,ID:'PricingListNo'}).getValue()
 
         if(localStorage.getItem("data") != null)
         {
@@ -118,10 +123,11 @@ export default class Sale extends React.PureComponent
 
             if(typeof tmpBuf.result.err == 'undefined')
             {
-                console.log(tmpBuf.result.recordset)
                 for (let i = 0; i < tmpBuf.result.recordset.length; i++) 
                 {
-                    this.itemView.items.push(tmpBuf.result.recordset[i])
+                    let tmpItemObj = tmpBuf.result.recordset[i]
+                    tmpItemObj.PRICE = (await this.getPrice(tmpItemObj.GUID,1,moment(new Date()).format('YYYY-MM-DD'),this.docObj.dt()[0].INPUT,this.docObj.dt()[0].OUTPUT,this.docObj.dt()[0].PRICE_LIST_NO,0,false))
+                    this.itemView.items.push(tmpItemObj)
                 }
                 this.itemView.items = this.itemView.items
                 this.tmpStartPage = this.tmpStartPage + this.tmpPageLimit
@@ -147,7 +153,7 @@ export default class Sale extends React.PureComponent
                 this.bufferId = tmpBuf.result.bufferId
                 this.tmpEndPage = this.tmpStartPage + this.tmpPageLimit
                 let tmpItems = await this.core.sql.buffer({start : this.tmpStartPage,end : this.tmpEndPage,bufferId : this.bufferId})  
-                console.log(...tmpItems.result.recordset)
+                
                 for (let i = 0; i < tmpItems.result.recordset.length; i++) 
                 {
                     this.itemView.items.push(tmpItems.result.recordset[i])
@@ -180,7 +186,9 @@ export default class Sale extends React.PureComponent
             {
                 for (let i = 0; i < tmpBuf.result.recordset.length; i++) 
                 {
-                    this.itemView.items.push(tmpBuf.result.recordset[i])
+                    let tmpItemObj = tmpBuf.result.recordset[i]
+                    tmpItemObj.PRICE = (await this.getPrice(tmpItemObj.GUID,1,moment(new Date()).format('YYYY-MM-DD'),this.docObj.dt()[0].INPUT,this.docObj.dt()[0].OUTPUT,this.docObj.dt()[0].PRICE_LIST_NO,0,false))
+                    this.itemView.items.push(tmpItemObj)
                 }
                 this.itemView.items = this.itemView.items
                 this.tmpStartPage = this.tmpStartPage + this.tmpPageLimit
@@ -203,6 +211,65 @@ export default class Sale extends React.PureComponent
         
         this.setState({isExecute:false})
     }
+    async getPrice(pItem,pQty,pDate,pCustomer,pDepot,pListNo,pType,pAddVat)
+    {
+        let tmpPrice = 0
+        let tmpQuery = 
+        {
+            query : `SELECT PRICE, ITEM_VAT, LIST_NO, LIST_VAT_TYPE, CONTRACT_VAT_TYPE 
+                    FROM ITEM_PRICE_VW_02 
+                    WHERE 
+                        ITEM_GUID = ? AND 
+                        TYPE = ? AND 
+                        QUANTITY BETWEEN 0 AND ? AND 
+                        (
+                            (datetime(START_DATE) <= strftime('%Y-%m-%d', ?) AND datetime(FINISH_DATE) >= strftime('%Y-%m-%d', ?)) OR 
+                            (START_DATE = '1970-01-01T00:00:00.000Z')
+                        ) AND
+                        (
+                            (DEPOT = ?) OR 
+                            (DEPOT = '00000000-0000-0000-0000-000000000000')
+                        ) AND 
+                        (LIST_NO = ? OR LIST_NO = 0) AND
+                        (
+                            (CUSTOMER_GUID = ?) OR 
+                            (CUSTOMER_GUID = '00000000-0000-0000-0000-000000000000')
+                        )
+                    ORDER BY DEPOT DESC, QUANTITY DESC, CONTRACT_GUID DESC, START_DATE DESC, FINISH_DATE DESC
+                    LIMIT 1;`,
+            values : [pItem,pType,pQty,pDate,pDate,pDepot == '' ? '00000000-0000-0000-0000-000000000000' : pDepot,pListNo,pCustomer == '' ? '00000000-0000-0000-0000-000000000000' : pCustomer],
+        }
+        
+        let tmpData = await this.core.local.select(tmpQuery) 
+
+        if(typeof tmpData.result.err == 'undefined' && tmpData.result.recordset.length > 0)
+        {
+            let tmpVatType = 0
+            tmpPrice = tmpData.result.recordset[0].PRICE
+            
+            if(pType == 0)
+            {
+                if(tmpData.result.recordset[0].LIST_NO != 0)
+                {
+                    tmpVatType = tmpData.result.recordset[0].LIST_VAT_TYPE
+                }
+                else
+                {
+                    tmpVatType = tmpData.result.recordset[0].CONTRACT_VAT_TYPE
+                }
+                if(tmpVatType == 0)
+                {
+                    tmpPrice = tmpPrice / ((tmpData.result.recordset[0].ITEM_VAT / 100) + 1)
+                }
+            }
+
+            if(pAddVat)
+            {
+                tmpPrice = tmpPrice * ((tmpData.result.recordset[0].ITEM_VAT / 100) + 1)
+            }
+        }
+        return Number(tmpPrice).round(2)
+    }
     async _customerSearch()
     {
         let tmpSource =
@@ -212,7 +279,7 @@ export default class Sale extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_02 WHERE (UPPER(CODE) LIKE UPPER('%' + @VAL + '%') OR UPPER(TITLE) LIKE UPPER('%' + @VAL + '%')) AND STATUS = 1",
+                    query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME],[PRICE_LIST_NO] FROM CUSTOMER_VW_02 WHERE (UPPER(CODE) LIKE UPPER('%' + @VAL + '%') OR UPPER(TITLE) LIKE UPPER('%' + @VAL + '%')) AND STATUS = 1",
                     param : ['VAL:string|50'],
                     value : [this.txtCustomerSearch.value]
                 },
@@ -880,7 +947,7 @@ export default class Sale extends React.PureComponent
                                     <div className='row pt-2'>
                                         <div className='col-12'>
                                             <Form colCount={1} > 
-                                                {/* MUSTERI */}
+                                                {/* txtCustomer */}
                                                 <Item>
                                                     <Label text={this.t("popCart.txtCustomer")} alignment="right" />
                                                     <NdTextBox id="txtCustomer" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"INPUT_NAME"}}
@@ -901,7 +968,7 @@ export default class Sale extends React.PureComponent
                                                     >     
                                                     </NdTextBox>
                                                 </Item>
-                                                {/* Depo */}
+                                                {/* cmbDepot */}
                                                 <Item>
                                                     <Label text={this.t("popCart.cmbDepot")} alignment="right" />
                                                     <NdSelectBox simple={true} parent={this} id="cmbDepot"
@@ -932,6 +999,19 @@ export default class Sale extends React.PureComponent
                                                     >
                                                     </NdDatePicker>
                                                 </Item>
+                                                {/* cmbPricingList */}
+                                                <Item>
+                                                    <Label text={this.t("popCart.cmbPricingList")} alignment="right" />
+                                                    <NdSelectBox simple={true} parent={this} id="cmbPricingList"
+                                                    displayExpr="NAME"
+                                                    valueExpr="NO"
+                                                    value=""
+                                                    dt={{data:this.docObj.dt('DOC'),field:"PRICE_LIST_NO"}} 
+                                                    data={{source:{select:{query : "SELECT NO,NAME FROM ITEM_PRICE_LIST_VW_01 ORDER BY NO ASC"},sql:this.core.sql}}}
+                                                    >
+                                                    </NdSelectBox>
+                                                </Item>
+                                                {/* txtDescription */}
                                                 <Item>
                                                     <Label text={this.t("popCart.txtDescription")} alignment="right" />
                                                     <NdTextBox id="txtDescription" parent={this} simple={true} upper={true} dt={{data:this.docObj.dt('DOC'),field:"DESCRIPTION"}}
@@ -1216,6 +1296,7 @@ export default class Sale extends React.PureComponent
                                                 this.docObj.dt()[0].INPUT_NAME =  this.grdCustomer.getSelectedData()[0].TITLE
                                                 this.docObj.dt()[0].INPUT_CODE =  this.grdCustomer.getSelectedData()[0].CODE
                                                 this.docObj.dt()[0].REF = this.grdCustomer.getSelectedData()[0].CODE
+                                                this.docObj.dt()[0].PRICE_LIST_NO = this.grdCustomer.getSelectedData()[0].PRICE_LIST_NO
                                                 this.popCustomer.hide();
                                             }).bind(this)}>
                                                 {this.t('popCustomer.btn02')}

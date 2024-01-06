@@ -17,8 +17,8 @@ export const prm =
             CAPTION : "Sadece Büyük Harf Kullanımı"
         }
     },
-     // Ödeme ve tahsilat için fatura zorunluluğu
-     {
+    // Ödeme ve tahsilat için fatura zorunluluğu
+    {
         TYPE : 0,
         ID :"invoicesForPayment",
         VALUE : 
@@ -54,6 +54,50 @@ export const prm =
             TYPE : "text",
             PAGE_NAME : "Satış",
             CAPTION : "Sabit Birim"
+        }
+    },
+    //cmbDepot
+    {
+        TYPE : 1,
+        ID :"cmbDepot",
+        VALUE : 
+        {
+            value : "1A428DFC-48A9-4AC6-AF20-4D0A4D33F316"
+        },
+        SPECIAL : "",
+        PAGE : "sale.js",
+        ELEMENT : "cmbDepot",
+        APP : "TAB",
+        VIEW : 
+        {
+            TYPE : "combobox",
+            PAGE_NAME : "Satış",
+            CAPTION : "Depo",
+            DISPLAY : "NAME",
+            FIELD : "GUID",
+            DATA :
+            {
+                select:
+                {
+                    query : "SELECT GUID,CODE,NAME FROM DEPOT WHERE STATUS = 1 AND DELETED = 0 ORDER BY CODE ASC"
+                },
+            }
+        }
+    },
+    //Fiyat Listesi
+    {
+        TYPE : 1,
+        ID :"PricingListNo",
+        VALUE : 1,
+        SPECIAL : "",
+        PAGE : "sale.js",
+        ELEMENT : "",
+        APP : "TAB",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Satış",
+            CAPTION : "Fiyat Liste No"
         }
     },
     //#endregion
