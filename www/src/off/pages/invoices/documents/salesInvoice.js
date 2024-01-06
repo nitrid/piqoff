@@ -2207,8 +2207,8 @@ export default class salesInvoice extends DocBase
                                                         value:  [this.docObj.dt()[0].INPUT]
                                                     }
                                                     let tmpData2 = await this.core.sql.execute(tmpQuery2) 
-                                                    let tmpObj = {data1:tmpData.result.recordset,data2:tmpData2.result.recordset}
-                                                    this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpData.result.recordset) + "}",(pResult) => 
+                                                    let tmpObj = {DATA:tmpData.result.recordset,DATA1:tmpData2.result.recordset}
+                                                    this.core.socket.emit('devprint',"{TYPE:'REVIEW',PATH:'" + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + "',DATA:" + JSON.stringify(tmpObj) + "}",async(pResult) => 
                                                     {
                                                         if(pResult.split('|')[0] != 'ERR')
                                                         {
