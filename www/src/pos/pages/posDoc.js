@@ -2,7 +2,7 @@ import React from "react";
 import App from "../lib/app.js";
 import moment from 'moment';
 
-import Form, { Label,Item } from "devextreme-react/form";
+import Form, { Label,Item, EmptyItem } from "devextreme-react/form";
 import { ButtonGroup } from "devextreme-react/button-group";
 import { Button } from "react-bootstrap";
 import { LoadPanel } from 'devextreme-react/load-panel';
@@ -7236,6 +7236,7 @@ export default class posDoc extends React.PureComponent
                             let tmpResult = await this.popNumber.show(this.lang.t("price"),this.grdList.devGrid.getSelectedRowKeys()[0].PRICE)                                            
                             if(typeof tmpResult != 'undefined' && tmpResult != '')
                             {
+                                this.sendJet({CODE:"323",NAME:"Prix de l'article modifie .",DESCRIPTION:e}) 
                                 await this.descSave("PRICE DESC",e,this.grdList.devGrid.getSelectedRowKeys()[0].GUID,this.grdList.devGrid.getSelectedRowKeys()[0].PRICE)                                
                                 if((await this.priceCheck(this.grdList.devGrid.getSelectedRowKeys()[0],tmpResult)))
                                 {
@@ -7281,7 +7282,7 @@ export default class posDoc extends React.PureComponent
                     param={this.prmObj.filter({ID:'DocRowDelDescription',TYPE:0})}
                     onClick={async (e)=>
                     {
-                        this.sendJet({CODE:"323",NAME:"Ligne supprimé sur ticket en attente.",DESCRIPTION:e})  //// Beklemedeki fiş satırı silindi.
+                        this.sendJet({CODE:"323",NAME:"Ligne de article supprimé.",DESCRIPTION:e})  //// Beklemedeki fiş satırı silindi.
                         if(typeof e != 'undefined')
                         {
                             await this.descSave("ROW DELETE",e,this.grdList.devGrid.getSelectedRowKeys()[0].GUID)
@@ -8062,8 +8063,20 @@ export default class posDoc extends React.PureComponent
                         <div className="row pb-1">
                             <div className="col-12">
                                 <Form colCount={2} height={'fit-content'} id={"frmCustomerAdd"}>
+                                     {/* cmbType */}
+                                    <Item>
+                                        <Label text={this.lang.t("cmbType")} alignment="right" />
+                                        <NdSelectBox simple={true} parent={this} id="cmbType" height='fit-content' dt={{data:this.customerObj.dt('CUSTOMERS'),field:"TYPE"}}
+                                        displayExpr="VALUE"                       
+                                        valueExpr="ID"
+                                        data={{source:[{ID:0,VALUE:this.lang.t("cmbTypeData.individual")},{ID:1,VALUE:this.lang.t("cmbTypeData.company")},{ID:2,VALUE:this.lang.t("cmbTypeData.association")}]}}
+                                        
+                                        />
+                                    </Item>       
+                                    <EmptyItem/>
                                     {/* txtPopCustomerCode */}
                                     <Item>
+                                        
                                         <Label text={this.lang.t("popCustomerAdd.txtPopCustomerCode")} alignment="right" />
                                         <NdTextBox id={"txtPopCustomerCode"} parent={this} simple={true} valueChangeEvent="keyup" 
                                         dt={{data:this.customerObj.dt('CUSTOMERS'),field:"CODE"}}
@@ -8095,7 +8108,6 @@ export default class posDoc extends React.PureComponent
                                         {                         
                                             this.customerObj.clearAll()
                                             await this.customerObj.load({CODE:this.txtPopCustomerCode.value});
-                                            console.log(this.customerObj)
                                         }}>
                                             <Validator validationGroup={"frmCustomerAdd"}>
                                                 <RequiredRule message={this.lang.t("popCustomerAdd.validTxtPopCustomerCode")}/>
@@ -8132,7 +8144,11 @@ export default class posDoc extends React.PureComponent
                                         {                                    
                                             this.keyPopCustomerAdd.inputName = "txtPopCustomerSurname"
                                             this.keyPopCustomerAdd.setInput(this.txtPopCustomerSurname.value)
-                                        }}/>
+                                        }}>
+                                            <Validator validationGroup={"frmCustomerAdd"}>
+                                                <RequiredRule message={this.lang.t("popCustomerAdd.validTxtPopCustomerCode")}/>
+                                            </Validator>
+                                        </NdTextBox>
                                     </Item>
                                     {/* txtPopCustomerAddress */}
                                     <Item>
@@ -8143,7 +8159,11 @@ export default class posDoc extends React.PureComponent
                                         {                                    
                                             this.keyPopCustomerAdd.inputName = "txtPopCustomerAddress"
                                             this.keyPopCustomerAdd.setInput(this.txtPopCustomerAddress.value)
-                                        }}/>
+                                        }}>
+                                            <Validator validationGroup={"frmCustomerAdd"}>
+                                                <RequiredRule message={this.lang.t("popCustomerAdd.validTxtPopCustomerCode")}/>
+                                            </Validator>
+                                        </NdTextBox>
                                     </Item>
                                     {/* txtPopCustomerCountry */}
                                     <Item>
@@ -8165,7 +8185,11 @@ export default class posDoc extends React.PureComponent
                                         {                                    
                                             this.keyPopCustomerAdd.inputName = "txtPopSettingsLcd"
                                             this.keyPopCustomerAdd.setInput(this.txtPopSettingsLcd.value)
-                                        }}/>
+                                        }}>
+                                            <Validator validationGroup={"frmCustomerAdd"}>
+                                                <RequiredRule message={this.lang.t("popCustomerAdd.validTxtPopCustomerCode")}/>
+                                            </Validator>
+                                        </NdTextBox>
                                     </Item>
                                     {/* txtPopCustomerCity */}            
                                     <Item>
@@ -8187,7 +8211,11 @@ export default class posDoc extends React.PureComponent
                                         {                                    
                                             this.keyPopCustomerAdd.inputName = "txtPopCustomerCity"
                                             this.keyPopCustomerAdd.setInput(this.txtPopCustomerCity.value)
-                                        }}/>
+                                        }}>
+                                            <Validator validationGroup={"frmCustomerAdd"}>
+                                                <RequiredRule message={this.lang.t("popCustomerAdd.validTxtPopCustomerCode")}/>
+                                            </Validator>
+                                        </NdTextBox>
                                     </Item>
                                     {/* txtPopCustomerZipCode */}
                                     <Item>
@@ -8209,7 +8237,11 @@ export default class posDoc extends React.PureComponent
                                         {                                    
                                             this.keyPopCustomerAdd.inputName = "txtPopCustomerZipCode"
                                             this.keyPopCustomerAdd.setInput(this.txtPopCustomerZipCode.value)
-                                        }}/>
+                                        }}>
+                                            <Validator validationGroup={"frmCustomerAdd"}>
+                                                <RequiredRule message={this.lang.t("popCustomerAdd.validTxtPopCustomerCode")}/>
+                                            </Validator>
+                                        </NdTextBox>
                                     </Item>
                                     {/* <Item>
                                         <Label text={"Doğum Tarihi"} alignment="right" />
@@ -8237,6 +8269,28 @@ export default class posDoc extends React.PureComponent
                                             this.keyPopCustomerAdd.setInput(this.txtPopCustomerTel.value)
                                         }}/>
                                     </Item>
+                                    {/* txtPopCustomerTel */}
+                                    <Item>
+                                        <Label text={this.lang.t("popCustomerAdd.txtPopCustomerTva")} alignment="right" />
+                                        <NdTextBox id={"txtPopCustomerTva"} parent={this} simple={true} valueChangeEvent="keyup" 
+                                        dt={{data:this.customerObj.dt('CUSTOMERS'),field:"TAX_NO"}}
+                                        onFocusIn={()=>
+                                        {                                    
+                                            this.keyPopCustomerAdd.inputName = "txtPopCustomerTva"
+                                            this.keyPopCustomerAdd.setInput(this.txtPopCustomerTva.value)
+                                        }}/>
+                                    </Item>
+                                    {/* txtPopCustomerTel */}
+                                    <Item>
+                                        <Label text={this.lang.t("popCustomerAdd.txtPopCustomerSiret")} alignment="right" />
+                                        <NdTextBox id={"txtPopCustomerSiret"} parent={this} simple={true} valueChangeEvent="keyup" 
+                                        dt={{data:this.customerObj.dt('CUSTOMERS'),field:"SIRET"}}
+                                        onFocusIn={()=>
+                                        {                                    
+                                            this.keyPopCustomerAdd.inputName = "txtPopCustomerSiret"
+                                            this.keyPopCustomerAdd.setInput(this.txtPopCustomerSiret.value)
+                                        }}/>
+                                    </Item>
                                 </Form>
                             </div>
                         </div>
@@ -8247,9 +8301,20 @@ export default class posDoc extends React.PureComponent
                                 {
                                     if(e.validationGroup.validate().status == "valid")
                                     {
+                                        if(this.cmbType.value == 1 && (this.txtPopCustomerTva.value == '' || this.txtPopCustomerSiret.value == ''))
+                                        {
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgFirmSaveValid',showTitle:true,title:this.lang.t("popCustomerAdd.msgFirmSaveValid.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.lang.t("popCustomerAdd.msgFirmSaveValid.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("popCustomerAdd.msgFirmSaveValid.msg")}</div>)
+                                            }
+                                            
+                                            await dialog(tmpConfObj);
+                                            return
+                                        }
                                         this.customerObj.customerAdress.dt()[0].CUSTOMER = this.customerObj.dt()[0].GUID
                                         this.customerObj.customerOffical.dt()[0].CUSTOMER = this.customerObj.dt()[0].GUID
-    
                                         if(this.txtPopCustomerFirmName.value != '')
                                         {
                                             this.customerObj.dt()[0].TYPE = 1
@@ -8262,7 +8327,7 @@ export default class posDoc extends React.PureComponent
                                             button:[{id:"btn01",caption:this.lang.t("popCustomerAdd.msgCustomerSaveResult.btn01"),location:'after'}],
                                         }
                                         if((await this.customerObj.save()) == 0)
-                                        {                                                    
+                                        {                                  
                                             tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.lang.t("popCustomerAdd.msgCustomerSaveResult.msgSuccess")}</div>)
                                             await dialog(tmpConfObj1);
                                         }
