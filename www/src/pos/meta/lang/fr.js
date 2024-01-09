@@ -760,6 +760,8 @@ export const langFr =
         txtPopCustomerZipCode : "Code Postal",
         txtPopCustomerEmail : "Email",
         txtPopCustomerTel : "Téléphone",
+        txtPopCustomerTva : "No TVA",
+        txtPopCustomerSiret  :"Siret No",
         validTxtPopCustomerCode : "Ne pas laisser les champs vide.", 
         msgCustomerSaveResult:
         {
@@ -774,7 +776,20 @@ export const langFr =
             btn01: "OK",
             msg: "Veuillez saisir les zones nécessaire !"
         },
+        msgFirmSaveValid:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Veuillez saisir le NR SIRET et le NR TVA !"
+        },
     },
+    cmbTypeData : 
+    {
+        individual :  "Particulier",
+        company :  "Entreprise",
+        association : "Association"
+    },
+    cmbType :"Type",
     popCustomerAddList :
     {
         title : "Recherche Client",

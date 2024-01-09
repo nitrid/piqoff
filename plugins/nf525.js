@@ -176,7 +176,8 @@ class nf525
                 await this.factureNf203SignatureVerify()
                 await this.dupFactureNf203SignatureVerify()
                 await this.dupPosNf525SignatureVerify()
-                //await this.jetSignatureVerify()
+                await this.jetSignatureVerify()
+                await this.archiveFileVerify()
                 core.instance.log.msg("Signature verify completed","Nf525");
 
                 resolve()
@@ -430,6 +431,41 @@ class nf525
                 }
             }
 
+            resolve()
+        })
+    }
+    async archiveFileVerify()
+    {
+        return new Promise(async resolve =>
+        {
+            for (let i = -60; i < 0; i++) 
+            {
+                let tmpFileName = moment().add(i,'day').format("YYYYMMDD") + "_archivej"
+
+                if(fs.existsSync(this.core.root_path + '/archiveFiscal/' + tmpFileName + '.zip') && fs.existsSync(this.core.root_path + '/archiveFiscal/' + tmpFileName + '.txt'))
+                {
+                    let tmpTxtSign = fs.readFileSync(this.core.root_path + '/archiveFiscal/' + tmpFileName + '.txt')
+                    tmpTxtSign = tmpTxtSign.toString()
+                    tmpTxtSign = tmpTxtSign.substring(tmpTxtSign.indexOf('-') + 2,tmpTxtSign.length)
+                    let buff = fs.readFileSync(this.core.root_path + '/archiveFiscal/' + tmpFileName + '.zip');
+                    let hash = createHash("sha256").update(buff).digest("hex")
+
+                    let tmpVerify = this.verify(hash,tmpTxtSign)
+                    if(!tmpVerify)
+                    {
+                        await this.insertJet(
+                        {
+                            CUSER:'System Auto',            
+                            DEVICE:'',
+                            CODE:'90',
+                            NAME:"Erreur integrite.",
+                            DESCRIPTION:'Archive file verify - filename : ' + tmpFileName,
+                            APP_VERSION:this.appInfo.version
+                        })
+                    }
+                }
+            }
+            
             resolve()
         })
     }
