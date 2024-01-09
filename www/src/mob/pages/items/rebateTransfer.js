@@ -171,26 +171,38 @@ export default class rebateTrasfer extends React.PureComponent
             resolve(0)
         });
     }
-    async calcEntry()
-    {
-        if(this.txtFactor.value != 0 || this.txtQuantity.value != 0 || this.txtPrice.value != 0)
-        {
-            console.log(this.txtDiscount.value)
+    async calcEntry() {
+        // Vérifie si l'une des propriétés a une valeur différente de zéro
+        if (this.txtFactor.value !== 0 || this.txtQuantity.value !== 0 || this.txtPrice.value !== 0) {
+            
+            // Calcule la quantité temporaire en multipliant txtFactor par txtQuantity
             let tmpQuantity = this.txtFactor.value * this.txtQuantity.value;
-            if(tmpQuantity > 99)
-            {
-                this.alertContent.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAlert.msgLimitQuantityCheck")}</div>)
+
+            // Vérifie si la quantité temporaire dépasse 9 999
+            if (tmpQuantity > 9_999) {
+                // Affiche un message d'alerte et limite la valeur de txtQuantity à 9 999
+                this.alertContent.content = (
+                    <div style={{ textAlign: "center", fontSize: "20px" }}>
+                        {this.t("msgAlert.msgLimitQuantityCheck")}
+                    </div>
+                );
                 await dialog(this.alertContent);
-                this.txtQuantity.value = 0
-                return
+                this.txtQuantity.value = 9_999;
+                console.log(this.txtQuantity.value)
+                return; // Sort de la fonction si la quantité est limitée
             }
-            if((arguments.length > 0 && arguments[0]) || arguments.length == 0)
-            {
-                this.txtPrice.value = Number((await this.getPrice(this.itemDt[0].GUID,tmpQuantity,'00000000-0000-0000-0000-000000000000'))).round(2)
+
+            // Si des arguments sont passés ou si aucun argument n'est passé, met à jour la valeur de txtPrice en appelant une fonction asynchrone getPrice
+            if ((arguments.length > 0 && arguments[0]) || arguments.length === 0) {
+                this.txtPrice.value = Number(
+                    (await this.getPrice(this.itemDt[0].GUID, tmpQuantity, '00000000-0000-0000-0000-000000000000'))
+                ).round(2);
             }
-            this.txtAmount.value = Number(this.txtPrice.value * tmpQuantity).round(2)
-            this.txtVat.value = Number(this.txtAmount.value - this.txtDiscount.value).rateInc(this.itemDt[0].VAT,2)
-            this.txtSumAmount.value = Number(this.txtAmount.value - this.txtDiscount.value).rateExc(this.itemDt[0].VAT,2)
+
+            // Calcule les autres valeurs en fonction de txtPrice et de la quantité temporaire
+            this.txtAmount.value = Number(this.txtPrice.value * tmpQuantity).round(2);
+            this.txtVat.value = Number(this.txtAmount.value - this.txtDiscount.value).rateInc(this.itemDt[0].VAT, 2);
+            this.txtSumAmount.value = Number(this.txtAmount.value - this.txtDiscount.value).rateExc(this.itemDt[0].VAT, 2);
         }
     }
     async addItem()
