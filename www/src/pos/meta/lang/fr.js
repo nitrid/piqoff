@@ -332,6 +332,8 @@ export const langFr =
         }
     },
     txtPopLastRefPholder : "Veuillez scanner le code barre présent sur le ticket ... ",
+    txtPopLastRefNoPholder : "Ref No",  // BAK
+    txtPopLastCustomerPholder : "Müşteri Kodu", // BAK
     popLastTotal :  
     {
         title : "Dernier mode de règlement" ,
@@ -389,6 +391,7 @@ export const langFr =
         msg :"Veuillez scanner le ticket pour le remboursement ! ",
         btn01 : "OK",
         btn02 : "Annuler",
+        btn03 : "Choix le Ticket" // BAK
     },
     msgItemReturnType: 
     {
@@ -757,6 +760,8 @@ export const langFr =
         txtPopCustomerZipCode : "Code Postal",
         txtPopCustomerEmail : "Email",
         txtPopCustomerTel : "Téléphone",
+        txtPopCustomerTva : "No TVA",
+        txtPopCustomerSiret  :"Siret No",
         validTxtPopCustomerCode : "Ne pas laisser les champs vide.", 
         msgCustomerSaveResult:
         {
@@ -771,7 +776,20 @@ export const langFr =
             btn01: "OK",
             msg: "Veuillez saisir les zones nécessaire !"
         },
+        msgFirmSaveValid:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Veuillez saisir le NR SIRET et le NR TVA !"
+        },
     },
+    cmbTypeData : 
+    {
+        individual :  "Particulier",
+        company :  "Entreprise",
+        association : "Association"
+    },
+    cmbType :"Type",
     popCustomerAddList :
     {
         title : "Recherche Client",

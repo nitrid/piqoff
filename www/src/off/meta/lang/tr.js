@@ -3157,6 +3157,7 @@ export const langTr =
         tabTitleFinanceDetail : "Finans Bilgileri",
         txtLegal :"Yasal Bilgiler",
         chkRebate :"İade Alır",
+        chkVatZero :"Vergisiz",
         txtExpiryDay : "Vade",
         txtRiskLimit : "Risk Limiti",
         expDay : "(Gün)",
@@ -11638,6 +11639,7 @@ export const langTr =
         txtBarcodePlace: "Barkod Okutunuz",
         txtQuantity :"Miktar",
         getOrders : "Sipariş Getir",
+        getOffers : "Teklif Getir",
         txtUnitFactor : "Birim Katsayısı",
         txtUnitQuantity : "Birim Miktarı",
         txtTotalQuantity : "Toplam Miktar",
@@ -16975,6 +16977,7 @@ export const langTr =
             title: "Ürün Seçim",
             clmCode: "KODU",
             clmName: "ADI", 
+            clmBarcode: "BARKOD", 
             clmStatus : "DURUM"
         },
         cancel : "Vazgeç",
@@ -18594,6 +18597,17 @@ export const langTr =
             btn01: "Tamam",
             msg: "Ürün Adı Çok Uzun. Lütfen Düzeltip Tekrar Kayıt Edin !"
         },
+        grdUniqList : 
+        {
+            clmName : "Adı",
+            clmPrice : "Fiyat",
+            clmDescription : "Açıklama",
+            clmQuantity : "Miktar"
+        },
+        popUniqCodeList : 
+        {
+            title : "Etiket Listesi"
+        }
     },
     pos_02_003 : // "Pos Satış Raporu"
     {
