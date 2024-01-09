@@ -74,7 +74,7 @@ export default class posDoc extends React.PureComponent
         this.customerObj = new customersCls();
         this.rebatePosSaleDt = new datatable()
         this.rebatePosPayDt = new datatable()
-
+        this.rebatePosDt = new datatable()
         
         this.promoObj = new promoCls();
         this.posPromoObj = new posPromoCls();
@@ -8834,7 +8834,7 @@ export default class posDoc extends React.PureComponent
                                             this.ticketCheck(this.grdRebatePos.devGrid.getSelectedRowKeys()[0].REF_NO)
                                             this.rebateTicketPopup.hide();
                                         }}>
-                                            <i className="text-white fa-solid fa-retweet" style={{fontSize: "16px"}} />
+                                            <i className="text-white fa-solid fa-check" style={{fontSize: "16px"}} />
                                         </NbButton>
                                     </div>
                                 </div>
