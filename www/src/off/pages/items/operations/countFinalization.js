@@ -217,7 +217,7 @@ export default class countFinalization extends React.PureComponent
                         "[dbo].[FN_DEPOT_QUANTITY](GUID,@DEPOT,GETDATE()) AS DEPOT_QUANTITY, " +
                         "NAME AS ITEM_NAME, " +
                         "CODE AS ITEM_CODE, " +
-                        "ISNULL((SELECT SUM(QUANTITY) FROM ITEM_COUNT WHERE ITEM_COUNT.ITEM = ITEMS.GUID AND (REF+CONVERT(NVARCHAR,REF_NO)) IN("+tmpRefRefNo+")),0) AS QUANTITY, " +
+                        "ISNULL((SELECT SUM(QUANTITY) FROM ITEM_COUNT_VW_01 WHERE ITEM_COUNT_VW_01.ITEM = ITEMS.GUID AND (REF+CONVERT(NVARCHAR,REF_NO)) IN("+tmpRefRefNo+")),0) AS QUANTITY, " +
                         "@DEPOT AS DEPOT "+
                         "FROM  " +
                         "ITEMS ",
@@ -231,9 +231,7 @@ export default class countFinalization extends React.PureComponent
             await this.grdCountItems.dataRefresh(tmpSource)
             App.instance.setState({isExecute:false})
         }
-        
         this.popCount.show()
-
     }
     render()
     {
