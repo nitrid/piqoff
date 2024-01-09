@@ -788,7 +788,7 @@ export default class purchaseOrder extends React.PureComponent
                                             <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>{this.t("lblPrice")}</label>                                            
                                         </div>
                                         <div className='col-4'>
-                                            <NdNumberBox id="txtPrice" parent={this} simple={true} maxLength={32}  onValueChanged={this.calcEntry.bind(this,false)} dt={{data:this.orderDt,field:"PRICE"}} 
+                                            <NdNumberBox id="txtPrice" parent={this} simple={true} maxLength={32} readOnly={true}  onValueChanged={this.calcEntry.bind(this,false)} dt={{data:this.orderDt,field:"PRICE"}} 
                                             onEnterKey={this.addItem.bind(this)}/>
                                         </div>
                                     </div>
