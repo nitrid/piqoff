@@ -210,6 +210,13 @@ export default class purchaseOrder extends React.PureComponent
         {
             console.log(this.txtDiscount.value)
             let tmpQuantity = this.txtFactor.value * this.txtQuantity.value;
+            if(tmpQuantity > 99)
+            {
+                this.alertContent.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAlert.msgLimitQuantityCheck")}</div>)
+                await dialog(this.alertContent);
+                this.txtQuantity.value = 0
+                return
+            }
             if((arguments.length > 0 && arguments[0]) || arguments.length == 0)
             {
                 this.txtPrice.value = Number((await this.getPrice(this.itemDt[0].GUID,tmpQuantity,this.docObj.dt()[0].INPUT))).round(2)

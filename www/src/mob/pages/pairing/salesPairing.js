@@ -219,6 +219,13 @@ export default class salesPairing extends React.PureComponent
     {
         if(this.txtFactor.value != 0 || this.txtQuantity.value != 0 || this.txtPrice.value != 0)
         {
+            if(tmpQuantity > 99)
+            {
+                this.alertContent.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAlert.msgLimitQuantityCheck")}</div>)
+                await dialog(this.alertContent);
+                this.txtQuantity.value = 0
+                return
+            }
             let tmpQuantity = this.txtFactor.value * this.txtQuantity.value;
             if((arguments.length > 0 && arguments[0]) || arguments.length == 0)
             {

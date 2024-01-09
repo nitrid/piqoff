@@ -177,7 +177,14 @@ export default class purchaseOrder extends React.PureComponent
         if(this.txtFactor.value != 0 || this.txtQuantity.value != 0 || this.txtPrice.value != 0)
         {
             console.log(this.txtDiscount.value)
-            let tmpQuantity = this.txtFactor.value * this.txtQuantity.value;
+            let tmpQuantity = this.txtFactor.value  *  this.txtQuantity.value
+            if(tmpQuantity > 99)
+            {
+                this.alertContent.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAlert.msgLimitQuantityCheck")}</div>)
+                await dialog(this.alertContent);
+                this.txtQuantity.value = 0
+                return
+            }
             if((arguments.length > 0 && arguments[0]) || arguments.length == 0)
             {
                 this.txtPrice.value = Number((await this.getPrice(this.itemDt[0].GUID,tmpQuantity,'00000000-0000-0000-0000-000000000000'))).round(2)
@@ -719,7 +726,12 @@ export default class purchaseOrder extends React.PureComponent
                                             <label className='text-purple-light' style={{fontSize:'14px',fontWeight:'bold'}}>X</label>                                            
                                         </div>
                                         <div className='col-4'>
-                                            <NdNumberBox id="txtQuantity" parent={this} simple={true} maxLength={32} onValueChanged={this.calcEntry.bind(this)} dt={{data:this.orderDt,field:"QUANTITY"}}
+                                            <NdNumberBox id="txtQuantity" parent={this} simple={true} maxLength={32}
+                                            onValueChanged=
+                                            {
+                                                this.calcEntry.bind(this)
+                                            } 
+                                            dt={{data:this.orderDt,field:"QUANTITY"}}
                                             onEnterKey={this.addItem.bind(this)}/>
                                         </div>
                                     </div>
