@@ -11674,6 +11674,7 @@ export const langFr =
         txtBarcodePlace: "Scanner Code Barre...",
         txtQuantity : "Quantité", 
         getOrders : "Sélection Commande", 
+        getOffers : "Recherche Proposition", 
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  

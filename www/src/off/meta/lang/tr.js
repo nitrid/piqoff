@@ -11637,6 +11637,7 @@ export const langTr =
         txtBarcodePlace: "Barkod Okutunuz",
         txtQuantity :"Miktar",
         getOrders : "Sipariş Getir",
+        getOffers : "Teklif Getir",
         txtUnitFactor : "Birim Katsayısı",
         txtUnitQuantity : "Birim Miktarı",
         txtTotalQuantity : "Toplam Miktar",
