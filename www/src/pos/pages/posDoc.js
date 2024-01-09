@@ -72,6 +72,9 @@ export default class posDoc extends React.PureComponent
         this.lastPosPromoDt = new datatable();  
         this.firm = new datatable();
         this.customerObj = new customersCls();
+        this.rebatePosSaleDt = new datatable()
+        this.rebatePosPayDt = new datatable()
+
         
         this.promoObj = new promoCls();
         this.posPromoObj = new posPromoCls();
@@ -4442,6 +4445,13 @@ export default class posDoc extends React.PureComponent
                                                     {
                                                         this.ticketCheck(this.txtItemReturnTicket.value)
                                                     }
+                                                    else if(e == 'btn03')
+                                                    {
+                                                        this.dtpopRebateTicletStartDate.value = moment(new Date()).format("YYYY-MM-DD")
+                                                        this.dtpopRebateTicletFinishDate.value = moment(new Date()).format("YYYY-MM-DD")
+                                                        this.cmbpopRebateTicletUser.value = this.core.auth.data.CODE
+                                                        this.rebateTicketPopup.show()
+                                                    }
                                                 })                                                
                                             }
                                         }}>
@@ -6245,27 +6255,8 @@ export default class posDoc extends React.PureComponent
                                     <div className="col-2 p-1">
                                     
                                     </div>
-                                    {/* btnLastSaleRebate */}
                                     <div className="col-2 p-1">
-                                    <NbButton id={"btnLastSaleRebate"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"50px",width:"100%"}}
-                                        onClick={async()=>
-                                        {
-                                            let tmpAcsVal = this.acsObj.filter({ID:'btnReturnEntry',TYPE:2,USERS:this.user.CODE})
-                                        
-                                            if(typeof tmpAcsVal.getValue().dialog != 'undefined' && tmpAcsVal.getValue().dialog.type != -1)
-                                            {   
-                                                let tmpResult = await acsDialog({id:"AcsDialog",parent:this,type:tmpAcsVal.getValue().dialog.type})
-                                                if(!tmpResult)
-                                                {
-                                                    return
-                                                }
-                                            }
-
-                                            this.ticketCheck(this.grdLastPos.devGrid.getSelectedRowKeys()[0].REF_NO)
-                                            this.popLastSaleList.hide();
-                                        }}>
-                                            <i className="text-white fa-solid fa-retweet" style={{fontSize: "16px"}} />
-                                        </NbButton>
+                                    
                                     </div>
                                     {/* btnLastSaleSendMail */}
                                     <div className="col-2 p-1">
@@ -7352,7 +7343,7 @@ export default class posDoc extends React.PureComponent
                         showCloseButton={false}
                         width={"500px"}
                         height={"250px"}
-                        button={[{id:"btn01",caption:this.lang.t("msgItemReturnTicket.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgItemReturnTicket.btn02"),location:'after'}]}
+                        button={[{id:"btn01",caption:this.lang.t("msgItemReturnTicket.btn01"),location:'before'},{id:"btn03",caption:this.lang.t("msgItemReturnTicket.btn03"),location:'before'},{id:"btn02",caption:this.lang.t("msgItemReturnTicket.btn02"),location:'after'}]}
                         onShowed={()=>
                         {
                             this.txtItemReturnTicket.value = ""
@@ -8760,6 +8751,256 @@ export default class posDoc extends React.PureComponent
                         </Form>
                     </NdPopUp>
                 </div> 
+                  {/* Last Sale List Popup */} 
+                  <div>
+                    <NdPopUp id="rebateTicketPopup" parent={this} title={this.lang.t("rebateTicketPopup.title")} width={"100%"} height={"100%"}
+                    showCloseButton={true}
+                    showTitle={true}
+                    >
+                        {/* Tool Button Group */} 
+                        <div className="row pb-1">
+                            <div className="offset-8 col-4">
+                                <div className="row px-2">
+                                    {/* btnLastSaleRebate */}
+                                    <div className="col-12 p-1">
+                                    <NbButton id={"btnLastSaleRebate"} title={'Seç'} parent={this} className="form-group btn btn-primary btn-block" style={{height:"50px",width:"100%"}}
+                                        onClick={async()=>
+                                        {
+                                            this.ticketCheck(this.grdRebatePos.devGrid.getSelectedRowKeys()[0].REF_NO)
+                                            this.rebateTicketPopup.hide();
+                                        }}>
+                                            <i className="text-white fa-solid fa-retweet" style={{fontSize: "16px"}} />
+                                        </NbButton>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {/* Filter */}
+                        <div className="row py-1">
+                            {/* dtpopRebateTicletStartDate */} 
+                            <div className="col-2">
+                                <NdDatePicker simple={true} parent={this} id={"dtpopRebateTicletStartDate"}/>
+                            </div>
+                            {/* dtpopRebateTicletFinishDate */} 
+                            <div className="col-2">
+                                <NdDatePicker simple={true} parent={this} id={"dtpopRebateTicletFinishDate"}/>
+                            </div>
+                            {/* cmbpopRebateTicletPayType */} 
+                            <div className="col-2">
+                                <NdSelectBox simple={true} parent={this} id="cmbpopRebateTicletPayType" displayExpr={'NAME'} valueExpr={'ID'} value={-1}
+                                data={{source : 
+                                [
+                                    {ID:-1,NAME:this.lang.t("popLastSaleList.cmbPopLastSalePayType.optionAll")},
+                                    {ID:0,NAME:this.lang.t("popLastSaleList.cmbPopLastSalePayType.optionEspece")},
+                                    {ID:1,NAME:this.lang.t("popLastSaleList.cmbPopLastSalePayType.optionTPE")},
+                                    {ID:2,NAME:this.lang.t("popLastSaleList.cmbPopLastSalePayType.optionCheque1")},
+                                    {ID:3,NAME:this.lang.t("popLastSaleList.cmbPopLastSalePayType.optionCheque2")},
+                                    {ID:4,NAME:this.lang.t("popLastSaleList.cmbPopLastSalePayType.optionAvoir")}
+                                ]}}/>
+                            </div>
+                            {/* cmbpopRebateTicletUser */} 
+                            <div className="col-2">
+                                <NdSelectBox simple={true} parent={this} id="cmbpopRebateTicletUser" displayExpr={'NAME'} valueExpr={'CODE'}
+                                data={{source:{select:{query : "SELECT '' AS CODE,'ALL' AS NAME UNION ALL SELECT CODE,NAME FROM USERS WHERE STATUS = 1",local:{type : "select",query:"SELECT '' AS CODE,'ALL' AS NAME UNION ALL SELECT CODE,NAME FROM USERS;"}},sql:this.core.sql}}}/>
+                            </div>
+                            {/* txtPopLastRef */} 
+                            <div className="col-2">
+                                <NdTextBox id="txtPopRebateRef" parent={this} simple={true} placeholder={this.lang.t("txtPopLastRefPholder")}
+                                onKeyUp={(e)=>
+                                {
+                                    if(e.event.key == 'Enter')
+                                    {
+                                        this.btnpopRebateTicletSearch._onClick()
+                                    }
+                                }}>     
+                                </NdTextBox> 
+                            </div>
+                            {/* btnpopRebateTicletSearch */} 
+                            <div className="col-2">
+                                <NbButton id={"btnpopRebateTicletSearch"} parent={this} className="form-group btn btn-primary btn-block" style={{height:"36px",width:"100%"}}
+                                onClick={async()=>
+                                {
+                                    if(this.txtPopRebateRefNo.value == "" && this.txtPopRebateRef.value == '')
+                                    {
+                                        this.rebatePosDt.selectCmd = 
+                                        {
+                                            query:  "SELECT *,CONVERT(NVARCHAR,LDATE,104) + '-' + CONVERT(NVARCHAR,LDATE,108) AS CONVERT_DATE, " +
+                                                    "SUBSTRING(CONVERT(NVARCHAR(50),GUID),20,36) AS REF_NO " + 
+                                                    "FROM POS_" + (this.state.isFormation ? 'FRM_' : '') + "VW_01 WHERE DOC_DATE >= @START_DATE AND DOC_DATE <= @FINISH_DATE AND " +
+                                                    "((ISNULL((SELECT TOP 1 1 FROM POS_PAYMENT AS PAY WHERE PAY.POS = POS_" + (this.state.isFormation ? 'FRM_' : '') + "VW_01.GUID AND TYPE = @TYPE AND DELETED = 0),0) = 1) OR (@TYPE = -1)) AND " + 
+                                                    "((LUSER = @USER) OR (@USER = '')) AND STATUS = 1 AND ((CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = '')) ORDER BY LDATE DESC",
+                                            param:  ["START_DATE:date","FINISH_DATE:date","TYPE:int","USER:string|25","CUSTOMER_CODE:string|50"],
+                                            value:  [this.dtpopRebateTicletStartDate.value,this.dtpopRebateTicletFinishDate.value,this.cmbpopRebateTicletPayType.value,this.cmbpopRebateTicletUser.value,this.txtPopRebateCustomer.value]
+                                        }
+                                    }
+                                    else
+                                    {
+                                        this.rebatePosDt.selectCmd = 
+                                        {
+                                            query:  "SELECT *,CONVERT(NVARCHAR,LDATE,104) + '-' + CONVERT(NVARCHAR,LDATE,108) AS CONVERT_DATE, " +
+                                                    "SUBSTRING(CONVERT(NVARCHAR(50),GUID),20,36) AS REF_NO " + 
+                                                    "FROM POS_" + (this.state.isFormation ? 'FRM_' : '') + "VW_01 WHERE (SUBSTRING(CONVERT(NVARCHAR(50),GUID),20,36) = @REF OR REF = @REF_NO)  AND STATUS = 1",
+                                            param:  ["REF:string|25","REF_NO:int"],
+                                            value:  [this.txtPopRebateRef.value,this.txtPopRebateRefNo.value]
+                                        }
+                                    }
+                                    
+                                    await this.rebatePosDt.refresh()
+                                    await this.grdRebatePos.dataRefresh({source:this.rebatePosDt});   
+                                    this.txtPopLastRef.value = ""                                 
+                                }}>
+                                    <i className="text-white fa-solid fa-magnifying-glass" style={{fontSize: "16px"}} />
+                                </NbButton>
+                            </div>
+                        </div>
+                        <div className="row pb-1">
+                            {/* txtPopLastRefNo */} 
+                            <div className="col-2">
+                                <NdTextBox id="txtPopRebateRefNo" parent={this} simple={true} placeholder={this.lang.t("txtPopLastRefNoPholder")}>     
+                                </NdTextBox> 
+                            </div>
+                            {/* txtPopLastCustomer */} 
+                            <div className="col-2">
+                                <NdTextBox id="txtPopRebateCustomer" parent={this} simple={true} placeholder={this.lang.t("txtPopLastCustomerPholder")}
+                                 onChange={async(e)=>
+                                {                         
+                                   this.cmbpopRebateTicletUser.value = ''
+                                   this.dtpopRebateTicletStartDate.value = '19700101'
+                                }}>     
+                                </NdTextBox> 
+                            </div>
+                        </div>
+                        {/* grdLastPos */}
+                        <div className="row py-1">
+                            <div className="col-12">
+                                <NdGrid parent={this} id={"grdRebatePos"} 
+                                showBorders={true} 
+                                columnsAutoWidth={true} 
+                                allowColumnReordering={true} 
+                                allowColumnResizing={true} 
+                                showRowLines={true}
+                                sorting={{ mode: 'single' }}
+                                showColumnLines={true}
+                                height={"250px"} 
+                                width={"100%"}
+                                dbApply={false}
+                                selection={{mode:"single"}}
+                                onRowPrepared={(e)=>
+                                {
+                                    if(e.rowType == "header")
+                                    {
+                                        e.rowElement.style.fontWeight = "bold";    
+                                    }
+                                    e.rowElement.style.fontSize = "13px";
+                                }}
+                                onCellPrepared={(e)=>
+                                {
+                                    e.cellElement.style.padding = "4px"
+                                }}
+                                onSelectionChanged={async(e)=>
+                                {
+                                    if(e.selectedRowKeys.length > 0)
+                                    {
+                                        this.rebatePosSaleDt.selectCmd = 
+                                        {
+                                            query:  "SELECT * FROM POS_SALE_VW_01 WHERE POS_GUID = @GUID ORDER BY LDATE DESC",
+                                            param:  ["GUID:string|50"],
+                                            value:  [e.selectedRowKeys[0].GUID]
+                                        }
+                                        
+                                        await this.rebatePosSaleDt.refresh()
+                                        await this.grdRebateSale.dataRefresh({source:this.rebatePosSaleDt});
+
+                                        this.rebatePosPayDt.selectCmd = 
+                                        {
+                                            query:  "SELECT * FROM POS_PAYMENT_VW_01 WHERE POS_GUID = @GUID ORDER BY LDATE DESC",
+                                            param:  ["GUID:string|50"],
+                                            value:  [e.selectedRowKeys[0].GUID]
+                                        }
+                                    
+                                        await this.rebatePosPayDt.refresh()
+                                        await this.grdRebatePay.dataRefresh({source:this.rebatePosPayDt});                                   
+                                    }
+                                }}
+                                >
+                                    <Column dataField="CONVERT_DATE" caption={this.lang.t("grdLastPos.LDATE")} width={150} alignment={"center"}  />
+                                    <Column dataField="DEVICE" caption={this.lang.t("grdLastPos.DEVICE")} width={60}/>
+                                    <Column dataField="REF_NO" caption={this.lang.t("grdLastPos.REF")} width={150}/>
+                                    <Column dataField="CUSTOMER_NAME" caption={this.lang.t("grdLastPos.CUSTOMER_NAME")} width={200}/> 
+                                    <Column dataField="CUSER_NAME" caption={this.lang.t("grdLastPos.CUSER_NAME")} width={100}/>
+                                    <Column dataField="DISCOUNT" caption={this.lang.t("grdLastPos.DISCOUNT")} width={100} format={"#,##0.00" + Number.money.sign}/> 
+                                    <Column dataField="LOYALTY" caption={this.lang.t("grdLastPos.LOYALTY")} width={100} format={"#,##0.00" + Number.money.sign}/>
+                                    <Column dataField="TOTAL" caption={this.lang.t("grdLastPos.AMOUNT")} width={100} format={"#,##0.00" + Number.money.sign}/>                                             
+                                </NdGrid>
+                            </div>
+                        </div>
+                        <div className="row py-1">
+                            {/* grdRebateSale */}
+                            <div className="col-7">
+                                <NdGrid parent={this} id={"grdRebateSale"} 
+                                showBorders={true} 
+                                columnsAutoWidth={true} 
+                                allowColumnReordering={true} 
+                                allowColumnResizing={true} 
+                                showRowLines={true}
+                                showColumnLines={true}
+                                height={"250px"} 
+                                width={"100%"}
+                                dbApply={false}
+                                onRowPrepared={(e)=>
+                                {
+                                    if(e.rowType == "header")
+                                    {
+                                        e.rowElement.style.fontWeight = "bold";    
+                                    }
+                                    e.rowElement.style.fontSize = "13px";
+                                }}
+                                onCellPrepared={(e)=>
+                                {
+                                    e.cellElement.style.padding = "4px"
+                                }}
+                                >
+                                    <Column dataField="BARCODE" caption={this.lang.t("grdLastSale.BARCODE")} width={120}/>
+                                    <Column dataField="ITEM_NAME" caption={this.lang.t("grdLastSale.ITEM_NAME")} width={200}/>    
+                                    <Column dataField="QUANTITY" caption={this.lang.t("grdLastSale.QUANTITY")} width={50}/>
+                                    <Column dataField="PRICE" caption={this.lang.t("grdLastSale.PRICE")} width={50} format={"#,##0.00" + Number.money.sign}/> 
+                                    <Column dataField="AMOUNT" caption={this.lang.t("grdLastSale.AMOUNT")} width={100} format={"#,##0.00" + Number.money.sign}/>
+                                </NdGrid>
+                            </div>
+                            {/* grdRebatePay */}
+                            <div className="col-5">
+                                <NdGrid parent={this} id={"grdRebatePay"} 
+                                showBorders={true} 
+                                columnsAutoWidth={true} 
+                                allowColumnReordering={true} 
+                                allowColumnResizing={true} 
+                                showRowLines={true}
+                                showColumnLines={true}
+                                height={"250px"} 
+                                width={"100%"}
+                                dbApply={false}
+                                selection={{mode:"single"}}                          
+                                onRowPrepared={(e)=>
+                                {
+                                    if(e.rowType == "header")
+                                    {
+                                        e.rowElement.style.fontWeight = "bold";    
+                                    }
+                                    e.rowElement.style.fontSize = "13px";
+                                }}
+                                onCellPrepared={(e)=>
+                                {
+                                    e.cellElement.style.padding = "4px"
+                                }}
+                                >
+                                    <Column dataField="PAY_TYPE_NAME" caption={this.lang.t("grdLastPay.PAY_TYPE_NAME")} width={150}/>
+                                    <Column dataField="AMOUNT" caption={this.lang.t("grdLastPay.AMOUNT")} width={100} format={"#,##0.00" + Number.money.sign}/>    
+                                    <Column dataField="CHANGE" caption={this.lang.t("grdLastPay.CHANGE")} width={100} format={"#,##0.00" + Number.money.sign}/>
+                                </NdGrid>
+                            </div>
+                        </div>
+                    </NdPopUp>
+                </div>
             </div>
         )
     }

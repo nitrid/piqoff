@@ -391,6 +391,7 @@ export const langTr =
         msg :"İade Alınan Ticketı Okutunuz !",
         btn01 : "Tamam",
         btn02 : "İptal",
+        btn03 : "Fiş Seçimi" // BAK
     },
     msgItemReturnType: 
     {

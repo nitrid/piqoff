@@ -391,6 +391,7 @@ export const langFr =
         msg :"Veuillez scanner le ticket pour le remboursement ! ",
         btn01 : "OK",
         btn02 : "Annuler",
+        btn03 : "Choix le Ticket" // BAK
     },
     msgItemReturnType: 
     {
