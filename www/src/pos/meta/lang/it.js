@@ -334,6 +334,8 @@ export const langIt =
         }
     },
     txtPopLastRefPholder: "Leggi il codice a barre sulla ricevuta...",
+    txtPopLastRefNoPholder : "Ref No",  // BAK
+    txtPopLastCustomerPholder : "Müşteri Kodu", // BAK
     popLastTotal:
     {
         title: "Ultimo Totale Vendite"

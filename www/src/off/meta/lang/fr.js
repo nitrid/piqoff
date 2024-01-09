@@ -3156,6 +3156,7 @@ export const langFr =
         tabTitleFinanceDetail : "Informations Financières", 
         txtLegal :"Données Légales",
         chkRebate :"Retour-Reprise",
+        chkVatZero :"Sans TVA",
         txtExpiryDay : "Echéance",  
         txtRiskLimit : "Limite de Risque",  
         expDay : "(Jour)", 
@@ -4085,7 +4086,8 @@ export const langFr =
     },
     ftr_01_005 : // "Şube Satış Fatura Listesi"
     {
-        txtCustomerCode : "Magasin",
+        txtCustomerCode : "Code du Client",
+        txtCustomerName : "Nom Client",
         menu:"Liste Facture Vente interne",
         pg_txtCustomerCode : 
         {
@@ -4178,7 +4180,7 @@ export const langFr =
     {
         txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
-        txtCustomerCode : "Sélection fournisseur",
+        txtCustomerCode : "Code du fournisseur",
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
         txtAmount : "Total" ,
@@ -4776,7 +4778,7 @@ export const langFr =
     {
         txtRefRefno : "Réf.-Réf no",
         cmbDepot: "Réserve",
-        txtCustomerCode : "Sélection Client",
+        txtCustomerCode : "Code du Client",
         txtCustomerName : "Nom Client",
         dtDocDate : "Date",
         txtAmount : "Total" ,
@@ -5345,7 +5347,7 @@ export const langFr =
     {
         txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
-        txtCustomerCode : "Sélection Document",
+        txtCustomerCode : "Code du fournisseur",
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
         txtAmount : "Total" ,
@@ -5828,7 +5830,7 @@ export const langFr =
     {
         txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
-        txtCustomerCode : "Sélection Document",
+        txtCustomerCode : "Code du fournisseur",
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
         txtAmount : "Total" ,
@@ -6286,7 +6288,7 @@ export const langFr =
     {
         txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
-        txtCustomerCode : "Sélection Document",
+        txtCustomerCode : "Code du Client",
         txtCustomerName : "Nom Client",
         dtDocDate : "Date",
         txtAmount : "Total" ,
@@ -6781,8 +6783,8 @@ export const langFr =
     {
         txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
-        txtCustomerCode : "Sélection Document",
-        txtCustomerName : "Nom fournisseur",
+        txtCustomerCode : "Code du Client",
+        txtCustomerName : "Nom Client",
         dtDocDate : "Date",
         txtAmount : "Total" ,
         txtDiscount : "Remise sur les lignes",    
@@ -7226,8 +7228,8 @@ export const langFr =
     {
         txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
-        txtCustomerCode : "Sélection Document",
-        txtCustomerName : "Nom fournisseur",
+        txtCustomerCode : "Code du Client",
+        txtCustomerName : "Nom Client",
         dtDocDate : "Date",
         txtAmount : "Total" ,
         txtDiscount : "Remise sur les lignes",    
@@ -7715,7 +7717,7 @@ export const langFr =
     {
         txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
-        txtCustomerCode : "Sélection Document",
+        txtCustomerCode : "Code du fournisseur",
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
         txtAmount : "Total" ,
@@ -8206,8 +8208,8 @@ export const langFr =
     {
         txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
-        txtCustomerCode : "Sélection Document",
-        txtCustomerName : "Nom fournisseur",
+        txtCustomerCode : "Code du Client",
+        txtCustomerName : "Nom Client",
         dtDocDate : "Date",
         txtAmount : "Total" ,
         txtDiscount : "Remise sur les lignes",    
@@ -8699,8 +8701,8 @@ export const langFr =
     {
         txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Dépot",
-        txtCustomerCode : "Code Fournisseur",
-        txtCustomerName : "Nom Fournisseur",
+        txtCustomerCode : "Code du fournisseur",
+        txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
         txtAmount : "Total",
         txtDiscount : "Remise sur les lignes",    
@@ -9079,7 +9081,7 @@ export const langFr =
     {
         txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
-        txtCustomerCode : "Sélection Document",
+        txtCustomerCode : "Code du Client",
         txtCustomerName : "Nom Client",
         dtDocDate : "Date",
         txtAmount : "Total" ,
@@ -9519,7 +9521,7 @@ export const langFr =
     {
         txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
-        txtCustomerCode : "Sélection Document",
+        txtCustomerCode : "Code du fournisseur",
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
         txtAmount : "Total" ,
@@ -10054,7 +10056,7 @@ export const langFr =
     {
         txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
-        txtCustomerCode : "Sélection Document",
+        txtCustomerCode : "Code du fournisseur",
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
         txtAmount : "Total" ,
@@ -10449,7 +10451,7 @@ export const langFr =
     {
         txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
-        txtCustomerCode : "Sélection Document",
+        txtCustomerCode : "Code du Client",
         txtCustomerName : "Nom Client",
         dtDocDate : "Date",
         txtAmount : "Total" ,
@@ -11187,11 +11189,11 @@ export const langFr =
     },
     irs_01_004 : //" Şube Satış İrsaliye Listesi" 
     {
-        cmbCustomer :"Magasin",
+        cmbCustomer :"Client",
         btnGet :"Recherche",
         dtFirst : "Date Début",
         dtLast : "Date Fin",
-        txtCustomerCode : "Magasin",
+        txtCustomerCode : "Code du Client",
         menu:"Saisie Bon de livraison interne",
         pg_txtCustomerCode : 
         {
@@ -11219,7 +11221,7 @@ export const langFr =
     {
         txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
-        txtCustomerCode : "Sélection fournisseur",
+        txtCustomerCode : "Code du fournisseur",
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
         txtAmount : "Total" ,
@@ -11657,7 +11659,7 @@ export const langFr =
     {
         txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
-        txtCustomerCode : "Sélection Client",
+        txtCustomerCode : "Code du Client",
         txtCustomerName : "Nom Client",
         dtDocDate : "Date",
         txtAmount : "Total" ,
@@ -11672,6 +11674,7 @@ export const langFr =
         txtBarcodePlace: "Scanner Code Barre...",
         txtQuantity : "Quantité", 
         getOrders : "Sélection Commande", 
+        getOffers : "Recherche Proposition", 
         txtUnitFactor : "Coefficient unitaire",  
         txtUnitQuantity : "Quantité unitaire",  
         txtTotalQuantity : "Quantité totale",  
@@ -12091,8 +12094,7 @@ export const langFr =
         getRebate : "Cherche dépôt retour",
         txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
-        txtCustomerCode : "Sélection Document",
-        txtDocNo : "Numéro de document", 
+        txtCustomerCode : "Code du fournisseur",
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
         txtAmount : "Total" ,
@@ -12453,8 +12455,8 @@ export const langFr =
     {
         txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
-        txtCustomerCode : "Sélection Document",
-        txtCustomerName : "Nom Magasin",
+        txtCustomerCode : "Code du Client",
+        txtCustomerName : "Nom Client",
         dtDocDate : "Date",
         txtAmount : "Total" ,
         txtDiscount : "Remise sur les lignes",  
@@ -12864,8 +12866,8 @@ export const langFr =
         txtRefRefno : "Réf.-Réf no:",
         validDesign : "Veuillez sélectionner le design.",  
         cmbDepot: "Réserve",
-        txtCustomerCode : "Sélection Document",
-        txtCustomerName : "Nom fournisseur",
+        txtCustomerCode : "Code du Client",
+        txtCustomerName : "Nom Client",
         LINE_NO: "Numéro de ligne",
         txtDocNo : "Numéro de document", 
         dtDocDate : "Date",
@@ -13227,8 +13229,8 @@ export const langFr =
     {
         txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
-        txtCustomerCode : "Sélection Document",
-        txtCustomerName : "Nom Magasin",
+        txtCustomerCode : "Code du fournisseur",
+        txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
         txtAmount : "Total" ,
         txtDiscount : "Remise sur les lignes",   
@@ -13690,7 +13692,7 @@ export const langFr =
     {
         txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
-        txtCustomerCode : "Sélection fournisseur",
+        txtCustomerCode : "Code du fournisseur",
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
         txtAmount : "Total" ,
@@ -14086,7 +14088,7 @@ export const langFr =
     {
         txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
-        txtCustomerCode : "Sélection Client",
+        txtCustomerCode : "Code du Client",
         txtCustomerName : "Nom Client",
         dtDocDate : "Date",
         txtAmount : "Total" ,
@@ -14487,7 +14489,7 @@ export const langFr =
     {
         txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
-        txtCustomerCode : "Sélection Document",
+        txtCustomerCode : "Code du Client",
         txtCustomerName : "Nom Client",
         dtDocDate : "Date",
         txtAmount : "Total" ,
@@ -16897,7 +16899,8 @@ export const langFr =
             clmName : "Nom du produit",
             clmQuantity : "Quantité",
             clmPrice : "Prix ",
-            clmTotal : "Total" 
+            clmTotal : "Total" ,
+            clmTime: "Heure",
         },
         grdSaleTicketPays : 
         {
@@ -17240,7 +17243,8 @@ export const langFr =
         {
             title: "Choix Produit",   
             clmCode: "Code",   
-            clmName: "NOM",    
+            clmName: "nom",    
+            clmBarcode: "code-barres", 
             clmStatus : "Statut" 
         },
         cancel : "Abandonner", 
@@ -17591,7 +17595,7 @@ export const langFr =
     {
         txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
-        txtCustomerCode : "Sélection Document",
+        txtCustomerCode : "Code du fournisseur",
         txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
         validDesign : "Veuillez sélectionner le design.",  
@@ -17941,7 +17945,7 @@ export const langFr =
     {
         txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
-        txtCustomerCode : "Sélection Document:",
+        txtCustomerCode : "Code du Client",
         txtCustomerName : "Nom Client",
         dtDocDate : "Date",
         txtAmount : "Total" ,
@@ -18324,8 +18328,8 @@ export const langFr =
     {
         txtRefRefno : "Série-Numéro",
         cmbDepot: "Entrepôt",
-        txtCustomerCode : "Code Client",
-        txtCustomerName : "Nom Client",
+        txtCustomerCode : "Code du fournisseur",
+        txtCustomerName : "Nom fournisseur",
         dtDocDate : "Date",
         txtAmount : "Montant",
         txtDiscount : "Remise par Ligne",
@@ -18865,6 +18869,17 @@ export const langFr =
             btn01: "OK",
             msg: "Nom du produit trop long. Veuillez le corriger et le réssaisir !"
         },
+        grdUniqList : 
+        { 
+            clmName : "Nom",  
+            clmPrice : "Prix",  
+            clmDescription : "Description", 
+            clmQuantity : "Quantité"  
+        },
+        popUniqCodeList : 
+        {
+            title : "Liste des tickets "  
+        }
     },
     pos_02_003 : // "Pos Satış Raporu"
     {
@@ -18966,7 +18981,7 @@ export const langFr =
     slsRpt_01_003 : // "Tarih sıralı satış raporu"
     {
         chkZeroBalance : "Afficher Soldes O",    
-        txtCustomerCode : "Fournisseur ou Client", 
+        txtCustomerCode : "Client", 
         btnCheck : "Actif",  
         btnGet :"Rechercher", 
         grdListe :    
@@ -18985,7 +19000,7 @@ export const langFr =
     slsRpt_01_004 : // "Tarih sıralı satış raporu"
     {
         chkZeroBalance : "Afficher Soldes 0",
-        txtCustomerCode : "Fournisseur ou Client", 
+        txtCustomerCode : "Client", 
         btnCheck : "Actif", 
         btnGet :"Rechercher", 
         grdListe :  
