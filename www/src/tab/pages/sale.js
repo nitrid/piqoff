@@ -43,7 +43,6 @@ export default class Sale extends React.PureComponent
         this.tmpStartPage = 0
         this.tmpEndPage = 0
         this.bufferId = ''
-        this.ListNo = 0
 
         this.state = 
         {
@@ -74,8 +73,8 @@ export default class Sale extends React.PureComponent
         this.docLocked = false;
 
         this.docObj.dt()[0].OUTPUT = this.param.filter({TYPE:1,USERS:this.user.CODE,ID:'cmbDepot'}).getValue().value
-        this.ListNo = this.param.filter({TYPE:1,USERS:this.user.CODE,ID:'PricingListNo'}).getValue()
-        
+        this.docObj.dt()[0].PRICE_LIST_NO = this.param.filter({TYPE:1,USERS:this.user.CODE,ID:'PricingListNo'}).getValue()
+
         if(localStorage.getItem("data") != null)
         {
             let tmpConfObj1 =
@@ -127,7 +126,7 @@ export default class Sale extends React.PureComponent
                 for (let i = 0; i < tmpBuf.result.recordset.length; i++) 
                 {
                     let tmpItemObj = tmpBuf.result.recordset[i]
-                    tmpItemObj.PRICE = (await this.getPrice(tmpItemObj.GUID,1,moment(new Date()).format('YYYY-MM-DD'),this.docObj.dt()[0].INPUT,this.docObj.dt()[0].OUTPUT,this.ListNo,0,false))
+                    tmpItemObj.PRICE = (await this.getPrice(tmpItemObj.GUID,1,moment(new Date()).format('YYYY-MM-DD'),this.docObj.dt()[0].INPUT,this.docObj.dt()[0].OUTPUT,this.docObj.dt()[0].PRICE_LIST_NO,0,false))
                     this.itemView.items.push(tmpItemObj)
                 }
                 this.itemView.items = this.itemView.items
@@ -188,7 +187,7 @@ export default class Sale extends React.PureComponent
                 for (let i = 0; i < tmpBuf.result.recordset.length; i++) 
                 {
                     let tmpItemObj = tmpBuf.result.recordset[i]
-                    tmpItemObj.PRICE = (await this.getPrice(tmpItemObj.GUID,1,moment(new Date()).format('YYYY-MM-DD'),this.docObj.dt()[0].INPUT,this.docObj.dt()[0].OUTPUT,this.ListNo,0,false))
+                    tmpItemObj.PRICE = (await this.getPrice(tmpItemObj.GUID,1,moment(new Date()).format('YYYY-MM-DD'),this.docObj.dt()[0].INPUT,this.docObj.dt()[0].OUTPUT,this.docObj.dt()[0].PRICE_LIST_NO,0,false))
                     this.itemView.items.push(tmpItemObj)
                 }
                 this.itemView.items = this.itemView.items
@@ -280,7 +279,7 @@ export default class Sale extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_02 WHERE (UPPER(CODE) LIKE UPPER('%' + @VAL + '%') OR UPPER(TITLE) LIKE UPPER('%' + @VAL + '%')) AND STATUS = 1",
+                    query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME],[PRICE_LIST_NO] FROM CUSTOMER_VW_02 WHERE (UPPER(CODE) LIKE UPPER('%' + @VAL + '%') OR UPPER(TITLE) LIKE UPPER('%' + @VAL + '%')) AND STATUS = 1",
                     param : ['VAL:string|50'],
                     value : [this.txtCustomerSearch.value]
                 },
@@ -948,7 +947,7 @@ export default class Sale extends React.PureComponent
                                     <div className='row pt-2'>
                                         <div className='col-12'>
                                             <Form colCount={1} > 
-                                                {/* MUSTERI */}
+                                                {/* txtCustomer */}
                                                 <Item>
                                                     <Label text={this.t("popCart.txtCustomer")} alignment="right" />
                                                     <NdTextBox id="txtCustomer" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"INPUT_NAME"}}
@@ -969,7 +968,7 @@ export default class Sale extends React.PureComponent
                                                     >     
                                                     </NdTextBox>
                                                 </Item>
-                                                {/* Depo */}
+                                                {/* cmbDepot */}
                                                 <Item>
                                                     <Label text={this.t("popCart.cmbDepot")} alignment="right" />
                                                     <NdSelectBox simple={true} parent={this} id="cmbDepot"
@@ -1000,6 +999,19 @@ export default class Sale extends React.PureComponent
                                                     >
                                                     </NdDatePicker>
                                                 </Item>
+                                                {/* cmbPricingList */}
+                                                <Item>
+                                                    <Label text={this.t("popCart.cmbPricingList")} alignment="right" />
+                                                    <NdSelectBox simple={true} parent={this} id="cmbPricingList"
+                                                    displayExpr="NAME"
+                                                    valueExpr="NO"
+                                                    value=""
+                                                    dt={{data:this.docObj.dt('DOC'),field:"PRICE_LIST_NO"}} 
+                                                    data={{source:{select:{query : "SELECT NO,NAME FROM ITEM_PRICE_LIST_VW_01 ORDER BY NO ASC"},sql:this.core.sql}}}
+                                                    >
+                                                    </NdSelectBox>
+                                                </Item>
+                                                {/* txtDescription */}
                                                 <Item>
                                                     <Label text={this.t("popCart.txtDescription")} alignment="right" />
                                                     <NdTextBox id="txtDescription" parent={this} simple={true} upper={true} dt={{data:this.docObj.dt('DOC'),field:"DESCRIPTION"}}
@@ -1284,6 +1296,7 @@ export default class Sale extends React.PureComponent
                                                 this.docObj.dt()[0].INPUT_NAME =  this.grdCustomer.getSelectedData()[0].TITLE
                                                 this.docObj.dt()[0].INPUT_CODE =  this.grdCustomer.getSelectedData()[0].CODE
                                                 this.docObj.dt()[0].REF = this.grdCustomer.getSelectedData()[0].CODE
+                                                this.docObj.dt()[0].PRICE_LIST_NO = this.grdCustomer.getSelectedData()[0].PRICE_LIST_NO
                                                 this.popCustomer.hide();
                                             }).bind(this)}>
                                                 {this.t('popCustomer.btn02')}

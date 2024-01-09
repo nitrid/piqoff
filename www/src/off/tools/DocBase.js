@@ -479,7 +479,10 @@ export default class DocBase extends React.PureComponent
         let tmpVat = 0
         for (let i = 0; i < this.docDetailObj.dt().groupBy('VAT_RATE').length; i++) 
         {
-            tmpVat = tmpVat + parseFloat(this.docDetailObj.dt().where({'VAT_RATE':this.docDetailObj.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("VAT",2))
+            if(this.docObj.dt()[0].VAT_ZERO != 1)
+            {
+                tmpVat = tmpVat + parseFloat(this.docDetailObj.dt().where({'VAT_RATE':this.docDetailObj.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("VAT",2))
+            }
         }
         this.docObj.dt()[0].AMOUNT = this.docDetailObj.dt().sum("AMOUNT",2)
         this.docObj.dt()[0].DISCOUNT = Number(parseFloat(this.docDetailObj.dt().sum("AMOUNT",2)) - parseFloat(this.docDetailObj.dt().sum("TOTALHT",2))).round(2)
@@ -576,8 +579,16 @@ export default class DocBase extends React.PureComponent
                         
                         if(tmpRelatedQt > 0)
                         {
+                            if(this.docObj.dt()[0].VAT_ZERO != 1)
+                            {
+                                this.docDetailObj.dt()[x].VAT = parseFloat((this.docDetailObj.dt()[x].VAT + (this.docDetailObj.dt()[x].PRICE * (this.docDetailObj.dt()[x].VAT_RATE / 100) * pQuantity)).toFixed(6))
+                            }
+                            else
+                            {
+                                this.docDetailObj.dt()[x].VAT = 0
+                            }
                             this.docDetailObj.dt()[x].QUANTITY = tmpRelatedQt
-                            this.docDetailObj.dt()[x].VAT = parseFloat((this.docDetailObj.dt()[x].VAT + (this.docDetailObj.dt()[x].PRICE * (this.docDetailObj.dt()[x].VAT_RATE / 100) * pQuantity)).toFixed(6))
+                            
                             this.docDetailObj.dt()[x].AMOUNT = parseFloat((this.docDetailObj.dt()[x].QUANTITY * this.docDetailObj.dt()[x].PRICE)).round(2)
                             this.docDetailObj.dt()[x].TOTAL = parseFloat((((this.docDetailObj.dt()[x].QUANTITY * this.docDetailObj.dt()[x].PRICE) - this.docDetailObj.dt()[x].DISCOUNT) + this.docDetailObj.dt()[x].VAT)).round(2)
                             this.docDetailObj.dt()[x].TOTALHT =  parseFloat((this.docDetailObj.dt()[x].AMOUNT - this.docDetailObj.dt()[x].DISCOUNT)).round(2)
@@ -775,37 +786,73 @@ export default class DocBase extends React.PureComponent
             App.instance.setState({isExecute:true})
             for (let i = 0; i < data.length; i++) 
             {
-                let tmpDocItems = {...this.docObj.docItems.empty}
-                tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
-                tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
-                tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                tmpDocItems.LINE_NO = data[i].LINE_NO
-                tmpDocItems.REF = this.docObj.dt()[0].REF
-                tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
-                tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
-                tmpDocItems.INPUT_CODE = this.docObj.dt()[0].INPUT_CODE
-                tmpDocItems.INPUT_NAME = this.docObj.dt()[0].INPUT_NAME
-                tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
-                tmpDocItems.OUTPUT_CODE = this.docObj.dt()[0].OUTPUT_CODE
-                tmpDocItems.OUTPUT_NAME = this.docObj.dt()[0].OUTPUT_NAME
-                tmpDocItems.ITEM = data[i].ITEM
-                tmpDocItems.ITEM_CODE = data[i].ITEM_CODE
-                tmpDocItems.ITEM_NAME = data[i].ITEM_NAME
-                tmpDocItems.PRICE = data[i].PRICE
-                tmpDocItems.QUANTITY = data[i].QUANTITY
-                tmpDocItems.VAT = data[i].VAT
-                tmpDocItems.AMOUNT = data[i].AMOUNT
-                tmpDocItems.TOTAL = data[i].TOTAL
-                tmpDocItems.DESCRIPTION = data[i].DESCRIPTION
-                tmpDocItems.VAT_RATE = data[i].VAT_RATE
-                tmpDocItems.DISCOUNT_RATE = data[i].DISCOUNT_RATE
-                tmpDocItems.OFFER_LINE_GUID = data[i].GUID
-                tmpDocItems.OFFER_DOC_GUID = data[i].DOC_GUID
-                tmpDocItems.OLD_VAT = data[i].VAT_RATE
+                if(this.docType == 60)
+                {
+                    let tmpDocItems = {...this.docObj.docOrders.empty}
+                    tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+                    tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+                    tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                    tmpDocItems.LINE_NO = data[i].LINE_NO
+                    tmpDocItems.REF = this.docObj.dt()[0].REF
+                    tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+                    tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                    tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+                    tmpDocItems.INPUT_CODE = this.docObj.dt()[0].INPUT_CODE
+                    tmpDocItems.INPUT_NAME = this.docObj.dt()[0].INPUT_NAME
+                    tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+                    tmpDocItems.OUTPUT_CODE = this.docObj.dt()[0].OUTPUT_CODE
+                    tmpDocItems.OUTPUT_NAME = this.docObj.dt()[0].OUTPUT_NAME
+                    tmpDocItems.ITEM = data[i].ITEM
+                    tmpDocItems.ITEM_CODE = data[i].ITEM_CODE
+                    tmpDocItems.ITEM_NAME = data[i].ITEM_NAME
+                    tmpDocItems.PRICE = data[i].PRICE
+                    tmpDocItems.QUANTITY = data[i].QUANTITY
+                    tmpDocItems.VAT = data[i].VAT
+                    tmpDocItems.AMOUNT = data[i].AMOUNT
+                    tmpDocItems.TOTAL = data[i].TOTAL
+                    tmpDocItems.DESCRIPTION = data[i].DESCRIPTION
+                    tmpDocItems.VAT_RATE = data[i].VAT_RATE
+                    tmpDocItems.DISCOUNT_RATE = data[i].DISCOUNT_RATE
+                    tmpDocItems.OFFER_LINE_GUID = data[i].GUID
+                    tmpDocItems.OFFER_DOC_GUID = data[i].DOC_GUID
+                    await this.docObj.docOrders.addEmpty(tmpDocItems)
+                    await this.core.util.waitUntil(100)
+                }
+                else
+                {
+                    let tmpDocItems = {...this.docObj.docItems.empty}
+                    tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+                    tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+                    tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                    tmpDocItems.LINE_NO = data[i].LINE_NO
+                    tmpDocItems.REF = this.docObj.dt()[0].REF
+                    tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+                    tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                    tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+                    tmpDocItems.INPUT_CODE = this.docObj.dt()[0].INPUT_CODE
+                    tmpDocItems.INPUT_NAME = this.docObj.dt()[0].INPUT_NAME
+                    tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+                    tmpDocItems.OUTPUT_CODE = this.docObj.dt()[0].OUTPUT_CODE
+                    tmpDocItems.OUTPUT_NAME = this.docObj.dt()[0].OUTPUT_NAME
+                    tmpDocItems.ITEM = data[i].ITEM
+                    tmpDocItems.ITEM_CODE = data[i].ITEM_CODE
+                    tmpDocItems.ITEM_NAME = data[i].ITEM_NAME
+                    tmpDocItems.PRICE = data[i].PRICE
+                    tmpDocItems.QUANTITY = data[i].QUANTITY
+                    tmpDocItems.VAT = data[i].VAT
+                    tmpDocItems.AMOUNT = data[i].AMOUNT
+                    tmpDocItems.TOTAL = data[i].TOTAL
+                    tmpDocItems.DESCRIPTION = data[i].DESCRIPTION
+                    tmpDocItems.VAT_RATE = data[i].VAT_RATE
+                    tmpDocItems.DISCOUNT_RATE = data[i].DISCOUNT_RATE
+                    tmpDocItems.OFFER_LINE_GUID = data[i].GUID
+                    tmpDocItems.OFFER_DOC_GUID = data[i].DOC_GUID
+                    tmpDocItems.OLD_VAT = data[i].VAT_RATE
+                    await this.docObj.docItems.addEmpty(tmpDocItems)
+                    await this.core.util.waitUntil(100)
+                }
 
-                await this.docObj.docItems.addEmpty(tmpDocItems)
-                await this.core.util.waitUntil(100)
+                
             }
             this.calculateTotal()
             App.instance.setState({isExecute:false})
@@ -1206,7 +1253,14 @@ export default class DocBase extends React.PureComponent
                                                 
                                                 if(tmpDocData.VAT > 0)
                                                 {
-                                                    tmpDocData.VAT = parseFloat(((tmpDocData.TOTALHT - tmpDocData.DOC_DISCOUNT) * (tmpDocData.VAT_RATE / 100)).toFixed(6))
+                                                    if(this.docObj.dt()[0].VAT_ZERO != 1)
+                                                    {
+                                                        tmpDocData.VAT = parseFloat(((tmpDocData.TOTALHT - tmpDocData.DOC_DISCOUNT) * (tmpDocData.VAT_RATE / 100)).toFixed(6))
+                                                    }
+                                                    else
+                                                    {
+                                                        tmpDocData.VAT = 0
+                                                    }
                                                 }
                                                 tmpDocData.TOTAL = parseFloat(((tmpDocData.TOTALHT - tmpDocData.DOC_DISCOUNT) + tmpDocData.VAT)).round(2)
                                                 tmpDocData.DISCOUNT_RATE = Number((tmpDocData.PRICE * tmpDocData.QUANTITY)).rate2Num((tmpDocData.DISCOUNT_1 + tmpDocData.DISCOUNT_2 + tmpDocData.DISCOUNT_3),2)
@@ -1406,7 +1460,14 @@ export default class DocBase extends React.PureComponent
                                                 
                                                 if(tmpDocData.VAT > 0)
                                                 {
-                                                    tmpDocData.VAT = parseFloat(((tmpDocData.TOTALHT - tmpDocData.DOC_DISCOUNT) * (tmpDocData.VAT_RATE / 100)).toFixed(6))
+                                                    if(this.docObj.dt()[0].VAT_ZERO != 1)
+                                                    {
+                                                        tmpDocData.VAT = parseFloat(((tmpDocData.TOTALHT - tmpDocData.DOC_DISCOUNT) * (tmpDocData.VAT_RATE / 100)).toFixed(6))
+                                                    }
+                                                    else
+                                                    {
+                                                        tmpDocData.VAT = 0
+                                                    }
                                                 }
                                                 tmpDocData.TOTAL = parseFloat(((tmpDocData.TOTALHT - tmpDocData.DOC_DISCOUNT) + tmpDocData.VAT)).round(2)
                                                 tmpDocData.DISCOUNT_RATE = Number((tmpDocData.PRICE * tmpDocData.QUANTITY)).rate2Num((tmpDocData.DISCOUNT_1 + tmpDocData.DISCOUNT_2 + tmpDocData.DISCOUNT_3),2)
@@ -1603,7 +1664,7 @@ export default class DocBase extends React.PureComponent
                     title={this.t("popMultiItem.title")}
                     container={"#root"} 
                     width={'1100'}
-                    height={'900'}
+                    height={'750'}
                     position={{of:'#root'}}
                     deferRendering={true}
                     onHiding={()=>
@@ -1780,6 +1841,7 @@ export default class DocBase extends React.PureComponent
                                                 for (let i = 0; i < this.docDetailObj.dt().length; i++) 
                                                 {
                                                     this.docDetailObj.dt()[i].VAT = 0  
+                                                    this.docDetailObj.dt()[i].VAT_ZERO = 1 
                                                     this.docDetailObj.dt()[i].VAT_RATE = 0  
                                                     this.docDetailObj.dt()[i].TOTAL = (this.docDetailObj.dt()[i].PRICE * this.docDetailObj.dt()[i].QUANTITY) - (this.docDetailObj.dt()[i].DISCOUNT + this.docDetailObj.dt()[i].DOC_DISCOUNT)
                                                     this.calculateTotal()

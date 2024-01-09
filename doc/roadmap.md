@@ -12,3 +12,21 @@
 - E-fatura süreci başlatılacak.
 ## Q4
 - E-fatura testlere başlanacak.
+
+# 2024 
+## Q1
+- Elektronik etiket entegrasyonu.
+- Basit düzey receteden üretim.
+- Parti lot takibi.
+- Yılsonu puan devir sistemi
+- Kullanıcıya göre ekran dizaynı. 
+## Q2
+- Yapay zeka destekli evrak tanıma ve import etme operasyonu.
+- Müşteri ile iletişim ve hata bildirim paneli online yapılacak.
+## Q3
+- E-fatura süreci başlatılacak.
+- Kurulum ve güncelleme aracı.
+- Lisanslama
+## Q4
+- E-fatura testlere başlanacak.
+- Test robotu.
