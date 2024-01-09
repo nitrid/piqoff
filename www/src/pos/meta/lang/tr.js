@@ -758,6 +758,8 @@ export const langTr =
         txtPopCustomerZipCode : "Posta Kodu",
         txtPopCustomerEmail : "Email",
         txtPopCustomerTel : "Telefon",
+        txtPopCustomerTva : "Vergi No",
+        txtPopCustomerSiret  :"Siret No",
         validTxtPopCustomerCode : "Lütfen boş geçmeyiniz.",
         msgCustomerSaveResult:
         {
@@ -772,7 +774,20 @@ export const langTr =
             btn01: "Tamam",
             msg: "Lütfen gerekli alanları doldurunuz !"
         },
+        msgFirmSaveValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen Siret No ve Vergi No Giriniz !"
+        },
     },
+    cmbTypeData : 
+    {
+        individual : "Bireysel",
+        company : "Firma",
+        association : "Dernek"
+    },
+    cmbType: "Tip",
     popCustomerAddList : 
     {
         title : "Müşteri Seçim",
