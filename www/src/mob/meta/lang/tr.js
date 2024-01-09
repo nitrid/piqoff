@@ -123,6 +123,7 @@ export const langTr =
             msgBarcodeNotFound : "Barkod bulunamadı !",
             msgBarcodeCheck : "Lütfen barkod okutunuz !",
             msgLimitQuantityCheck : "Miktar 99 dan büyük olamaz!",
+            
             msgNotSave : "Kayıt İşlemi Başarısız",
         },
         grdPrice : 

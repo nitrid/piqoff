@@ -196,7 +196,6 @@ export default class purchaseDispatch extends React.PureComponent
     {
         if(this.txtFactor.value != 0 || this.txtQuantity.value != 0 || this.txtPrice.value != 0)
         {
-            console.log(this.txtDiscount.value)
             let tmpQuantity = this.txtFactor.value * this.txtQuantity.value;
             if(tmpQuantity > 99)
             {
@@ -303,7 +302,6 @@ export default class purchaseDispatch extends React.PureComponent
         tmpDocItems.TOTALHT = Number(this.orderDt[0].AMOUNT - this.orderDt[0].DISCOUNT).round(2)
         tmpDocItems.TOTAL = this.orderDt[0].SUM_AMOUNT
 
-        console.log(tmpDocItems)
         this.docObj.docItems.addEmpty(tmpDocItems)
         this.clearEntry()
 
@@ -909,10 +907,8 @@ export default class purchaseDispatch extends React.PureComponent
                                     <div className='col-12'>
                                         <NbButton className="form-group btn btn-primary btn-purple btn-block" style={{height:"100%",width:"100%"}} 
                                             onClick={(() =>
-                                            {
-                                                
+                                            {                                             
                                                 this.calcEntry(false)
-                                                console.log(this.popDiscount)
                                                 this.popDiscount.hide()
                                             }).bind(this)
                                         }>{this.t("lblAdd")}
@@ -1065,9 +1061,6 @@ export default class purchaseDispatch extends React.PureComponent
                                                         icon:'more',
                                                         onClick:()  =>
                                                         {
-                                                            console.log(this.docObj.dt()[0].SUBTOTAL)
-                                                            console.log(this.docObj.dt()[0].DOC_DISCOUNT_1)
-                                                            console.log( Number(this.docObj.dt()[0].SUBTOTAL).rate2Num(this.docObj.dt()[0].DOC_DISCOUNT_1,5))
                                                             if(this.docObj.dt()[0].DOC_DISCOUNT > 0 )
                                                             {
                                                                 this.txtDocDiscountPercent1.value  = Number(this.docObj.dt()[0].SUBTOTAL).rate2Num(this.docObj.dt()[0].DOC_DISCOUNT_1,5)
