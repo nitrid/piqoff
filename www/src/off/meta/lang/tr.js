@@ -560,6 +560,12 @@ export const langTr =
             txtPopPriPrice: "Fiyat",
             txtPopPriPriceVatExt: "Vargisiz Fiyat"
         },
+        msgDateInvalid:
+        {
+            title: "Uyari",
+            msg: "Yanlis tarih",
+            btn01: "tamam"
+        },
         popUnit:
         {
             title: "Birim Ekle",
