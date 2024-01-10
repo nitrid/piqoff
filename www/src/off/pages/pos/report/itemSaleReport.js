@@ -192,7 +192,7 @@ export default class itemSaleReport extends React.PureComponent
                                         {
                                             select:
                                             {
-                                                query : "SELECT GUID,CODE,NAME,STATUS FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
+                                                query : "SELECT GUID,CODE,NAME,BARCODE,STATUS FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL) OR BARCODE LIKE @VAL",
                                                 param : ['VAL:string|50']
                                             },
                                             sql:this.core.sql
@@ -213,7 +213,8 @@ export default class itemSaleReport extends React.PureComponent
                                     }
                                     >
                                         <Column dataField="CODE" caption={this.t("pg_txtRef.clmCode")} width={'20%'} />
-                                        <Column dataField="NAME" caption={this.t("pg_txtRef.clmName")} width={'70%'} defaultSortOrder="asc" />
+                                        <Column dataField="NAME" caption={this.t("pg_txtRef.clmName")} width={'50%'} defaultSortOrder="asc" />
+                                        <Column dataField="BARCODE" caption={this.t("pg_txtRef.clmBarcode")} width={'20%'} defaultSortOrder="asc" />
                                         <Column dataField="STATUS" caption={this.t("pg_txtRef.clmStatus")} width={'10%'} />
                                     </NdPopGrid>
                                 </Item>

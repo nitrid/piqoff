@@ -558,7 +558,14 @@ export const langTr =
             cmbPopPriDepot: "Depo",
             txtPopPriQuantity: "Miktar",
             txtPopPriPrice: "Fiyat",
-            txtPopPriPriceVatExt: "Vargisiz Fiyat"
+            txtPopPriHT: "Vargisiz Fiyat",
+            txtPopPriTTC : "Vergili Fiyat"
+        },
+        msgDateInvalid:
+        {
+            title: "Uyari",
+            msg: "Yanlis tarih",
+            btn01: "tamam"
         },
         popUnit:
         {
@@ -595,7 +602,8 @@ export const langTr =
             clmStartDate: "Baş.Tarih",
             clmFinishDate: "Bit.Tarih",
             clmQuantity: "Miktar",
-            clmVatExt: "Vergi Hariç",
+            clmPriceHT: "Vergi Hariç",
+            clmPriceTTC : "Vergili Fiyat",
             clmPrice: "Fiyat",
             clmGrossMargin: "Brüt Marj",
             clmNetMargin: "Net Marj",
@@ -3156,6 +3164,7 @@ export const langTr =
         tabTitleFinanceDetail : "Finans Bilgileri",
         txtLegal :"Yasal Bilgiler",
         chkRebate :"İade Alır",
+        chkVatZero :"Vergisiz",
         txtExpiryDay : "Vade",
         txtRiskLimit : "Risk Limiti",
         expDay : "(Gün)",
@@ -11636,6 +11645,7 @@ export const langTr =
         txtBarcodePlace: "Barkod Okutunuz",
         txtQuantity :"Miktar",
         getOrders : "Sipariş Getir",
+        getOffers : "Teklif Getir",
         txtUnitFactor : "Birim Katsayısı",
         txtUnitQuantity : "Birim Miktarı",
         txtTotalQuantity : "Toplam Miktar",
@@ -16973,6 +16983,7 @@ export const langTr =
             title: "Ürün Seçim",
             clmCode: "KODU",
             clmName: "ADI", 
+            clmBarcode: "BARKOD", 
             clmStatus : "DURUM"
         },
         cancel : "Vazgeç",
@@ -18593,6 +18604,17 @@ export const langTr =
             btn01: "Tamam",
             msg: "Ürün Adı Çok Uzun. Lütfen Düzeltip Tekrar Kayıt Edin !"
         },
+        grdUniqList : 
+        {
+            clmName : "Adı",
+            clmPrice : "Fiyat",
+            clmDescription : "Açıklama",
+            clmQuantity : "Miktar"
+        },
+        popUniqCodeList : 
+        {
+            title : "Etiket Listesi"
+        }
     },
     pos_02_003 : // "Pos Satış Raporu"
     {
