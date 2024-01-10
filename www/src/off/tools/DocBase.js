@@ -1503,7 +1503,7 @@ export default class DocBase extends React.PureComponent
                     title={this.t("popMultiItem.title")}
                     container={"#root"} 
                     width={'1100'}
-                    height={'900'}
+                    height={'750'}
                     position={{of:'#root'}}
                     deferRendering={true}
                     onHiding={()=>

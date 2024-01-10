@@ -11855,8 +11855,8 @@ export const langFr =
     {
         txtRefRefno : "Réf.-Réf no:",
         cmbDepot: "Réserve",
-        txtCustomerCode : "Sélection Document",
-        txtCustomerName : "Nom fournisseur",
+        txtCustomerCode : "Sélection Client",
+        txtCustomerName : "Nom Client",
         dtDocDate : "Date",
         txtAmount : "Total" ,
         txtDiscount : "Remise sur les lignes",  

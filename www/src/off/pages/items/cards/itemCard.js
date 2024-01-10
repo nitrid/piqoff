@@ -2355,7 +2355,7 @@ export default class itemCard extends React.PureComponent
                                     displayExpr="VALUE"                       
                                     valueExpr="ID"
                                     value="2"
-                                    data={{source:[{ID:"2",VALUE:"Üst Birim"}]}}
+                                    data={{source:[{ID:"2",VALUE:"Condition"}]}}
                                     />
                                 </Item>
                                 <Item>
