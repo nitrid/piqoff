@@ -29,7 +29,7 @@ export default class itemCard extends React.PureComponent
 {
     constructor(props)
     {
-        console.log("1 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
+        // console.log("1 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
         super(props)                
         this.state = {underPrice : "",isItemGrpForOrginsValid : false,isItemGrpForMinMaxAccess : false,isTaxSugar : false}
         this.core = App.instance.core;
@@ -95,7 +95,7 @@ export default class itemCard extends React.PureComponent
         {
             this.init(); 
         }
-        console.log("2 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
+        // console.log("2 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
     }    
     async init()
     {  
@@ -1653,6 +1653,44 @@ export default class itemCard extends React.PureComponent
                                             }}
                                             onRowUpdating={async(e)=>
                                             {
+                                                let tmpCancel = false
+                                                
+                                                if(typeof e.newData.FINISH_DATE != 'undefined')
+                                                {
+                                                    let tmpFinish = e.newData.FINISH_DATE
+                                                    let numbersFinish = tmpFinish.match(/[0-9]/g); 
+                                                    if(numbersFinish.length > 17)
+                                                    {
+                                                        tmpCancel = true
+                                                    }
+                                                }
+                                                if(typeof e.newData.START_DATE != 'undefined')
+                                                {
+                                                    let tmpStart = e.newData.START_DATE
+                                                    let numbersStart = tmpStart.match(/[0-9]/g); 
+                                                    if(numbersStart.length > 17)
+                                                    {
+                                                        tmpCancel = true
+                                                    }
+                                                }
+
+                                                if (tmpCancel) 
+                                                {
+                                                    e.cancel = true;
+                                                    e.component.cancelEditData()  
+                                                    let tmpConfObj1 = {
+                                                        id: 'msgDateInvalid',
+                                                        showTitle: true,
+                                                        title: this.t("msgDateInvalid.title"),
+                                                        showCloseButton: true,
+                                                        width: '500px',
+                                                        height: '200px',
+                                                        button: [{id: "btn01", caption: this.t("msgDateInvalid.btn01"), location: 'after'}],
+                                                        content: (<div style={{textAlign: "center", fontSize: "20px"}}>{this.t("msgDateInvalid.msg")}</div>)
+                                                    };
+                                                    
+                                                    await dialog(tmpConfObj1);
+                                                }
                                                 if(typeof e.newData.PRICE != 'undefined')
                                                 {
                                                     //FİYAT GİRERKEN MALİYET FİYAT KONTROLÜ
