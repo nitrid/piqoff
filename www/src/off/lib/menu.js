@@ -40,6 +40,11 @@ export const menu = (e) =>
                         //     path: 'customers/cards/customerCard'
                         // },
                         {
+                            id: 'stk_01_015',
+                            text: e.t('menuOff.stk_01_015'), //'Fiyat Listesi Tanımları',
+                            path: 'items/cards/itemPricingListCard'
+                        },
+                        {
                             id: 'stk_01_006',
                             text: e.t('menuOff.stk_01_006'),//'Depo Tanımları',
                             path: 'items/cards/depotCard'
@@ -261,7 +266,7 @@ export const menu = (e) =>
                         {
                             id: 'cri_01_003',
                             text: e.t('menuOff.cri_01_003'),//'Grup Tanımları',
-                            path: 'customers/cards/customerCard'
+                            path: 'customers/cards/customerGrpCard'
                         },
                         {
                             id: 'cri_01_004',
@@ -327,19 +332,21 @@ export const menu = (e) =>
                             text: e.t('menuOff.cri_04_002'),//'Cari Bakiye Bakiye Raporu',
                             path: 'customers/report/customerBalanceReport'
                         },
-                        // Cari Bakiyeli Extre Raporu
                         {
                             id: 'cri_04_004',
-                            text: e.t('menuOff.cri_04_004'),
+                            text: e.t('menuOff.cri_04_004'),// Cari Bakiyeli Extre Raporu
                             path: 'construction.js',
                         },
-                        //Müşteri Puan Raporu
                         {
                             id: 'cri_04_003',
-                            text: e.t('menuOff.cri_04_003'),
+                            text: e.t('menuOff.cri_04_003'),//Müşteri Puan Raporu
                             path: 'pos/report/customerPointReport'
                         },
-                        
+                        {
+                            id: 'cri_04_005',
+                            text: e.t('menuOff.cri_04_005'),//'Satış Faturası Yaşlandırma Raporu',
+                            path: 'customers/report/saleInvoiceAgingReport'
+                        },
                     ]
                 }
             ]
@@ -430,6 +437,11 @@ export const menu = (e) =>
                                     id: 'tkf_02_001',
                                     text: e.t('menuOff.tkf_02_001'),//'Alış Teklif',
                                     path: 'offers/documents/purchaseOffer'
+                                },
+                                {
+                                    id: 'tkf_02_003',
+                                    text: e.t('menuOff.tkf_02_003'),//'Fiyat farkı talebi',
+                                    path: 'offers/documents/priceDiffDemand'
                                 },
                     
                             ]
@@ -765,6 +777,19 @@ export const menu = (e) =>
                             ]
                         },
                         {
+                            id: 'salesorder_04',
+                            text : e.t('menuOff.salesorder_04'),//'Operasyonlar',
+                            expanded: false,
+                            items: 
+                            [
+                                {
+                                    id: 'sip_04_002',
+                                    text: e.t('menuOff.sip_04_002'),//'Satış Siparişi Dağıtım Operasyonu',
+                                    path: 'orders/operations/salesOrderDistributionOperation'
+                                },
+                            ]
+                        },
+                        {
                             id: 'salesorder_03',
                             text : e.t('menuOff.salesorder_03'),//'Raporlar',
                             expanded: false,
@@ -1082,9 +1107,9 @@ export const menu = (e) =>
                         },
                         {
                             id: 'fns_04_002',
-                            text: e.t('menuOff.cri_04_002'),//'Cari Bakiye Bakiye Raporu',
+                            text: e.t('menuOff.fns_04_002'),//'Cari Bakiye Bakiye Raporu',
                             path: 'customers/report/customerBalanceReport'
-                        },
+                        }
                     ]
                 }
             ]
@@ -1195,13 +1220,13 @@ export const menu = (e) =>
                             text: e.t('menuOff.pos_02_009'),
                             path: 'pos/report/itemGrpSalesReport'
                         },
-                        //Ürün Grup Satış Raporu
+                        //Ürün Detaylı Satış Raporu
                         {
                             id: 'pos_02_010',
                             text: e.t('menuOff.pos_02_010'),
-                            path: 'pos/report/itemSalesReport'
+                            path: 'pos/report/itemDetailSalesReport'
                         },
-                        //Ürün Grup Satış Raporu
+                        //Ürün Karşılaştırma Raporu
                         {
                             id: 'pos_02_011',
                             text: e.t('menuOff.pos_02_011'),
@@ -1219,7 +1244,7 @@ export const menu = (e) =>
                             text: e.t('menuOff.pos_02_012'),
                             path: 'pos/report/loyaltyReport'
                         },
-                        //Loyalty 
+                        //Discount 
                         {
                             id: 'pos_02_013',
                             text: e.t('menuOff.pos_02_013'),
@@ -1355,7 +1380,11 @@ export const menu = (e) =>
                             text: e.t('menuOff.set_02_008'),//'Gümrük Kodu Excel',
                             path: 'setting/officialSettings/customsCodeImport'
                         },
-
+                        {
+                            id: 'set_02_009',
+                            text: e.t('menuOff.set_02_009'),//'Mail ayarlari',
+                            path: 'setting/officialSettings/mailSettings'
+                        },
                     ]
                 },
                 {

@@ -250,9 +250,19 @@ export const langFr =
     },
     msgAddCustomerMail:
     {
+        title: "Veuillez saisir votre adresse e-mail.",
+    },
+    msgPreLottery:
+    {
         title: "Avertissement",
-        msg: "L'e-mail du client est",
-        btn01: "OK",
+        msg: "UNE MINUTE...",
+        btn01: "CONTINUER",
+    },
+    msgPostLottery:
+    {
+        title: "Avertissement",
+        msg: "CE CLIENT A GAGNÉ AU TIRAGE !!!",
+        btn01: "Oui",
     },
     msgCancelCustomerConfirm: 
     {
@@ -322,6 +332,8 @@ export const langFr =
         }
     },
     txtPopLastRefPholder : "Veuillez scanner le code barre présent sur le ticket ... ",
+    txtPopLastRefNoPholder : "Ref No",  // BAK
+    txtPopLastCustomerPholder : "Müşteri Kodu", // BAK
     popLastTotal :  
     {
         title : "Dernier mode de règlement" ,
@@ -379,6 +391,7 @@ export const langFr =
         msg :"Veuillez scanner le ticket pour le remboursement ! ",
         btn01 : "OK",
         btn02 : "Annuler",
+        btn03 : "Choix le Ticket" // BAK
     },
     msgItemReturnType: 
     {
@@ -663,7 +676,7 @@ export const langFr =
     msgMailPrintAlert:
     {
         title: "Avertissement",
-        msg: "Souhaitez-vous envoyer un e-mail au imprimer ?",
+        msg: "Souhaitez-vous envoyer un e-mail ou imprimer ?",
         btn01: "E-Mail",
         btn02: "Imprimer"
     },
@@ -747,6 +760,8 @@ export const langFr =
         txtPopCustomerZipCode : "Code Postal",
         txtPopCustomerEmail : "Email",
         txtPopCustomerTel : "Téléphone",
+        txtPopCustomerTva : "No TVA",
+        txtPopCustomerSiret  :"Siret No",
         validTxtPopCustomerCode : "Ne pas laisser les champs vide.", 
         msgCustomerSaveResult:
         {
@@ -761,7 +776,20 @@ export const langFr =
             btn01: "OK",
             msg: "Veuillez saisir les zones nécessaire !"
         },
+        msgFirmSaveValid:
+        {
+            title: "Attention",
+            btn01: "OK",
+            msg: "Veuillez saisir le NR SIRET et le NR TVA !"
+        },
     },
+    cmbTypeData : 
+    {
+        individual :  "Particulier",
+        company :  "Entreprise",
+        association : "Association"
+    },
+    cmbType :"Type",
     popCustomerAddList :
     {
         title : "Recherche Client",
@@ -816,16 +844,16 @@ export const langFr =
         scannerPort : "Scanner port",
         printerPort: "Printer port"
     },
-    msgNotBarcodeWeighing: //BAK
+    msgNotBarcodeWeighing: 
     {
-        title: "Attention",
-        msg: "The total quantity of the weighed product does not match the scanned barcode!",
-        msgTicket: "Weighed quantity: ",
-        msgBarkod: "Label quantity: ",
-        msgDifference: "Difference: ",
-        msgTotalAmount : "Montant total",
-        btn01: "OK",
-        btn02: "Continue"
+        title : "Attention",
+        msg : "Quantité pesée ne correspond pas avec quantité sur le ticket!",
+        msgTicket :"Quantité pesé : ",
+        msgBarkod : "Quantité étiquette : ",
+        msgDifference : "Différence: ",
+        msgTotalAmount : "Montant Total",
+        btn01 : "Abandonner",
+        btn02 : "Continuer"
     },
     msgBarcodeWeighing: //BAK
     {
@@ -862,6 +890,22 @@ export const langFr =
         NewPassword2: "Répéter le nouveau mot de passe",
         btnApprove: "Enregistrer"
     },
+    msgPassChange:
+    {
+        title: "Réussite",
+        btn01: "OK",
+        msg: "Votre mot de passe a été changé !"
+    },
+    msgPasswordWrong:
+    {
+        title: "Echec",
+        btn01: "OK",
+        msg: "Mot de Passe Erroné"
+    },
     passChange: "Changer le mot de passe",
+    txtNewMail : "E-Mail",
+    txtNewPhone : "Numéro de téléphone",
+    txtNewCustomerLastName : "Nom",
+    txtNewCustomerName : "Prenom"
     
 }

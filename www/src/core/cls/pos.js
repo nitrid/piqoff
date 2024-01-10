@@ -1386,7 +1386,6 @@ export class posDeviceCls
                 {
                     device = new this.escpos.USB();
                 }
-
                 let options = { encoding: "GB18030" /* default */ }
                 let printer = new this.escpos.Printer(device, options);
                 

@@ -5,7 +5,6 @@ import fs from 'fs'
 import rsa from 'jsrsasign'
 import { pem } from '../pem.js'
 import nodemailer from  'nodemailer'
-
 class mailer
 {
     constructor()
@@ -15,6 +14,7 @@ class mailer
         this.connEvt = this.connEvt.bind(this)
         this.core.socket.on('connection',this.connEvt)
     }
+
     connEvt(pSocket)
     {
         pSocket.on('mailer',async (pParam,pCallback) =>
@@ -22,16 +22,19 @@ class mailer
             pCallback(await this.mailSend(pParam))
         })
     }
+
     mailSend(pData)
     {
+       
         return new Promise(resolve =>
         {
+            console.log(pData)
             let tmpAttach = [];
             if(typeof pData.attachName != 'undefined')
             {
                 tmpAttach = 
                 [
-                    {  
+                    {
                         filename: pData.attachName,
                         content: pData.attachData,
                         encoding: 'base64'
@@ -61,8 +64,8 @@ class mailer
                 if (error) {
                     console.log(error)
                     resolve(error);
-                } 
-                else 
+                }
+                else
                 {
                     resolve(0);
                 }
@@ -72,4 +75,3 @@ class mailer
 }
 
 export const _mailer = new mailer()
-

@@ -121,9 +121,9 @@ export default class barcodeList extends React.PureComponent
                 select : 
                 {
                     query : "SELECT * FROM CUSTOMER_VW_02 WHERE (((TITLE like '%' + @CUSTOMER_NAME + '%') OR (@CUSTOMER_NAME = '')) OR ((CODE like '%' + @CUSTOMER_NAME + '%') OR (@CUSTOMER_NAME = '')) ) AND " +
-                            " ((GENUS = @GENUS) OR (@GENUS = -1))  ",
-                    param : ['CUSTOMER_NAME:string|250','GENUS:string|25'],
-                    value : [this.txtCustomerName.value,this.cmbGenus.value]
+                            "((GENUS = @GENUS) OR (@GENUS = -1)) AND ((MAIN_GROUP = @MAIN_GROUP) OR (@MAIN_GROUP = '00000000-0000-0000-0000-000000000000'))",
+                    param : ['CUSTOMER_NAME:string|250','GENUS:string|25','MAIN_GROUP:string|50'],
+                    value : [this.txtCustomerName.value,this.cmbGenus.value,this.cmbMainGrp.value]
                 },
                 sql : this.core.sql
             }
@@ -205,7 +205,15 @@ export default class barcodeList extends React.PureComponent
                                     data={{source:[{ID:-1,VALUE:this.t("cmbGenusData.allGenus")},{ID:0,VALUE:this.t("cmbGenusData.Customer")},{ID:1,VALUE:this.t("cmbGenusData.supplier")},{ID:2,VALUE:this.t("cmbGenusData.both")}]}}
                                     />
                                 </Item>       
-                                <Item> </Item>
+                                <Item>
+                                    <Label text={this.t("cmbMainGrp")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbMainGrp" height='fit-content'
+                                    displayExpr="NAME"                       
+                                    valueExpr="GUID"
+                                    value={"00000000-0000-0000-0000-000000000000"}
+                                    data={{source:{select:{query : "SELECT '00000000-0000-0000-0000-000000000000' AS GUID,'' AS CODE,'" + this.t("cmbGenusData.allGenus") +"' AS NAME UNION ALL SELECT GUID,CODE,NAME FROM CUSTOMER_GROUP_VW_01"},sql:this.core.sql}}}
+                                    />
+                                </Item>
                             </Form>
                         </div>
                     </div>

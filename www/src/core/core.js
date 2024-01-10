@@ -135,7 +135,6 @@ export class sql
             {
                 TmpQuery = arguments[0];
             }
-            
             //LOCALDB İÇİN YAPILDI. ALI KEMAL KARACA 28.02.2022
             if(core.instance.offline)
             {
@@ -883,7 +882,7 @@ export class dataset
             let tmpQuerys = [];
 
             for (let i = 0; i < this.length; i++) 
-            {                
+            {
                 let tmp = this.get(i).toCommands();
                 tmp.forEach(e => 
                 {
@@ -1611,11 +1610,11 @@ export class datatable
         {
             if(typeof pSort != 'undefined' && pSort == 'desc')
             {
-                return this.sort((a, b) => b[pKey] - a[pKey])
+                return this.sort((a, b) => b[pKey].localeCompare(a[pKey]))
             }
             else
             {
-                return this.sort((a, b) => a[pKey] - b[pKey])
+                return this.sort((a, b) => a[pKey].localeCompare(b[pKey]))
             }
         }
         return this

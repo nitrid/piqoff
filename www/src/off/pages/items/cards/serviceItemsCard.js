@@ -172,7 +172,7 @@ export default class DepotCard extends React.PureComponent
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup={"frmService"  + this.tabIndex}
+                                    <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmService"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         let tmpQuery = 
@@ -238,7 +238,7 @@ export default class DepotCard extends React.PureComponent
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnDelete" parent={this} icon="trash" type="default"
+                                    <NdButton id="btnDelete" parent={this} icon="trash" type="danger"
                                     onClick={async()=>
                                     {
                                         let tmpQuery = 

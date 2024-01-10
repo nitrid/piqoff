@@ -229,6 +229,18 @@ export const langEs =
         msg : "¡Por favor, elimine todos los pagos antes de eliminar la línea!",
         btn01 : "Aceptar"
     },
+    msgPreLottery:
+    {
+        title: "Aviso",
+        msg: "UN MINUTO...",
+        btn01: "CONTINUAR",
+    },
+    msgPostLottery:
+    {
+        title: "Aviso",
+        msg: "¡ESTE CLIENTE HA GANADO EL SORTEO!!!",
+        btn01: "Sí",
+    },
     msgDeleteLineSelect: 
     {
         title : "Atención",
@@ -322,6 +334,8 @@ export const langEs =
         }
     },
     txtPopLastRefPholder : "Por favor, lea el código de barras en el ticket...",
+    txtPopLastRefNoPholder : "Ref No",  // BAK
+    txtPopLastCustomerPholder : "Müşteri Kodu", // BAK
     popLastTotal : 
     {
         title : "Último Total de Ventas"

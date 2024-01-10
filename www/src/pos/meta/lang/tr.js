@@ -241,6 +241,18 @@ export const langTr =
         msg : "Lütfen satır seçiniz !",
         btn01 : "Tamam"
     },
+    msgPreLottery: 
+    {
+        title: "Uyarı",
+        msg: "BİR DAKİKA..",
+        btn01: "DEVAM",
+    },
+    msgPostLottery: 
+    {
+        title: "Uyarı",
+        msg: "BU MÜŞTERİ ÇEKİLİŞİ KAZANDI !!!",
+        btn01: "Evet",
+    },    
     msgCustomerMail: 
     {
         title : "Uyarı",
@@ -250,9 +262,7 @@ export const langTr =
     },
     msgAddCustomerMail: 
     {
-        title : "Uyarı",
-        msg : "musterinin mail'i",
-        btn01 : "tamam",
+        title : "Lütfen Mail Adresi Giriniz..",
     },
     msgCancelCustomerConfirm: 
     {
@@ -322,6 +332,8 @@ export const langTr =
         }
     },
     txtPopLastRefPholder : "Lütfen ticket üzerindeki barkodu okutunuz...",
+    txtPopLastRefNoPholder : "Ref No",
+    txtPopLastCustomerPholder : "Müşteri Kodu",
     popLastTotal : 
     {
         title : "Son Satış Tahsilat"
@@ -379,6 +391,7 @@ export const langTr =
         msg :"İade Alınan Ticketı Okutunuz !",
         btn01 : "Tamam",
         btn02 : "İptal",
+        btn03 : "Fiş Seçimi" // BAK
     },
     msgItemReturnType: 
     {
@@ -746,6 +759,8 @@ export const langTr =
         txtPopCustomerZipCode : "Posta Kodu",
         txtPopCustomerEmail : "Email",
         txtPopCustomerTel : "Telefon",
+        txtPopCustomerTva : "Vergi No",
+        txtPopCustomerSiret  :"Siret No",
         validTxtPopCustomerCode : "Lütfen boş geçmeyiniz.",
         msgCustomerSaveResult:
         {
@@ -760,7 +775,20 @@ export const langTr =
             btn01: "Tamam",
             msg: "Lütfen gerekli alanları doldurunuz !"
         },
+        msgFirmSaveValid:
+        {
+            title: "Dikkat",
+            btn01: "Tamam",
+            msg: "Lütfen Siret No ve Vergi No Giriniz !"
+        },
     },
+    cmbTypeData : 
+    {
+        individual : "Bireysel",
+        company : "Firma",
+        association : "Dernek"
+    },
+    cmbType: "Tip",
     popCustomerAddList : 
     {
         title : "Müşteri Seçim",
@@ -861,5 +889,21 @@ export const langTr =
         NewPassword2 : "Yeni Şifre Tekrar",
         btnApprove : "Onayla"
     },
+    msgPassChange:
+    {
+        title: "Başarılı",
+        btn01: "Tamam",
+        msg: "Şifreniz Değiştirildi !"
+    },
+    msgPasswordWrong:
+    {
+        title: "Başarısız",
+        btn01: "Tamam",
+        msg: "Şifreniz Hatalı !"
+    },
     passChange :"Şifre Değiştir",
+    txtNewMail : "E-Mail",
+    txtNewPhone : "Telefon",
+    txtNewCustomerLastName : "Soyisim",
+    txtNewCustomerName : "İsim"
 }
