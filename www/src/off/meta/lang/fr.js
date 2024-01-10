@@ -535,6 +535,13 @@ export const langFr =
             pos: "Pos", 
             invoice : "Facture"
         },
+        msgDateInvalid:
+        {
+            title: "Avertissement",
+            msg: "Mauvaise date",
+            btn01: "Ok"
+        },
+
         pg_txtRef :
         {
             title: "Sélectionner Produit",

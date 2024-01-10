@@ -256,10 +256,11 @@ export const langTr =
     {
         service: "Servis",                
         P0001: "Terminal",
-        P0001_1: "Cihaz Seçimi",
         usr: "Kullanıcı",
         P0002: "Kullanıcılar",
         P0003: " Roller",
+        P0004: "Cihaz Seçimi",
+        P0005: "Arşiv Doğrulaması",
         prm: "Parametre",
         prm_01: "Sistem Parametreleri",
         prm_01_001: "OFF",
@@ -302,6 +303,16 @@ export const langTr =
             clmCode : "Kodu",
             clmName : "Adı"
         }    
+    },
+    P0005 : 
+    {
+        msgVerify :
+        {
+            title : "Dikkat",
+            btn01 : "Tamam",
+            msgSuccess : "Dosya İmzası geçerli",
+            msgFailed : "Dosya imzası geçersiz"
+        }
     },
     menu_01 :
     {
