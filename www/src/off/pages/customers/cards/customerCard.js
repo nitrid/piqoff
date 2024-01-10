@@ -285,7 +285,6 @@ export default class CustomerCard extends React.PureComponent
                 </NdSelectBox>
             )
         }
-      
     }
     render()
     {
@@ -313,7 +312,7 @@ export default class CustomerCard extends React.PureComponent
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnSave" parent={this} icon="floppy" type="default" validationGroup={"frmCustomers"  + this.tabIndex}
+                                    <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmCustomers"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         if(this.cmbType.value == 1)
@@ -380,6 +379,7 @@ export default class CustomerCard extends React.PureComponent
                                                     button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
                                                 }
                                                 
+                                                console.log(this.customerObj.dt()[0])
                                                 if((await this.customerObj.save()) == 0)
                                                 {                                                    
                                                     tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
@@ -408,7 +408,7 @@ export default class CustomerCard extends React.PureComponent
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnDelete" parent={this} icon="trash" type="default"
+                                    <NdButton id="btnDelete" parent={this} icon="trash" type="danger"
                                     onClick={async()=>
                                     {
                                         
@@ -581,8 +581,8 @@ export default class CustomerCard extends React.PureComponent
                                         <Column dataField="STATUS" caption={this.t("pg_txtCode.clmStatus")} width={300} />
                                     </NdPopGrid>
                                 </Item>
-                                 {/* txtTitle */}
-                                 <Item>
+                                {/* txtTitle */}
+                                <Item>
                                     <Label text={this.t("txtTitle")} alignment="right" />
                                     <NdTextBox id="txtTitle" parent={this} simple={true} tabIndex={this.tabIndex} dt={{data:this.customerObj.dt('CUSTOMERS'),field:"TITLE"}}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
@@ -609,68 +609,68 @@ export default class CustomerCard extends React.PureComponent
                                 {/* txtCustomerLastname */}
                                 <Item>
                                     <Label text={this.t("txtCustomerLastname")} alignment="right" />
-                                        <NdTextBox id="txtCustomerLastname" parent={this} simple={true} tabIndex={this.tabIndex} 
-                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                        dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"LAST_NAME",filter:{TYPE:0}}}
-                                        maxLength={32}
-                                        param={this.param.filter({ELEMENT:'txtCustomerLastname',USERS:this.user.CODE})}
-                                        access={this.access.filter({ELEMENT:'txtCustomerLastname',USERS:this.user.CODE})}
-                                        >                                      
+                                    <NdTextBox id="txtCustomerLastname" parent={this} simple={true} tabIndex={this.tabIndex} 
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                    dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"LAST_NAME",filter:{TYPE:0}}}
+                                    maxLength={32}
+                                    param={this.param.filter({ELEMENT:'txtCustomerLastname',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'txtCustomerLastname',USERS:this.user.CODE})}
+                                    >                                      
                                     </NdTextBox>
                                 </Item>
-                                 {/* txtPhone1 */}
-                                 <Item>
+                                {/* txtPhone1 */}
+                                <Item>
                                     <Label text={this.t("txtPhone1")} alignment="right" />
-                                        <NdTextBox id="txtPhone1" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"PHONE1",filter:{TYPE:0}}}
-                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                        maxLength={32}
-                                        access={this.access.filter({ELEMENT:'txtPhone1',USERS:this.user.CODE})}
-                                       />
+                                    <NdTextBox id="txtPhone1" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"PHONE1",filter:{TYPE:0}}}
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                    maxLength={32}
+                                    access={this.access.filter({ELEMENT:'txtPhone1',USERS:this.user.CODE})}
+                                    />
                                 </Item>
-                                 {/* txtPhone2 */}
-                                 <Item>
+                                {/* txtPhone2 */}
+                                <Item>
                                     <Label text={this.t("txtPhone2")} alignment="right" />
-                                        <NdTextBox id="txtPhone2" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"PHONE2",filter:{TYPE:0}}}
-                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                        maxLength={32}
-                                        access={this.access.filter({ELEMENT:'txtPhone2',USERS:this.user.CODE})}
-                                        />
+                                    <NdTextBox id="txtPhone2" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"PHONE2",filter:{TYPE:0}}}
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                    maxLength={32}
+                                    access={this.access.filter({ELEMENT:'txtPhone2',USERS:this.user.CODE})}
+                                    />
                                 </Item>
-                                 {/* txtGsmPhone */}
-                                 <Item>
+                                {/* txtGsmPhone */}
+                                <Item>
                                     <Label text={this.t("txtGsmPhone")} alignment="right" />
-                                        <NdTextBox id="txtGsmPhone" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"GSM_PHONE",filter:{TYPE:0}}}
-                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                        maxLength={32}
-                                         access={this.access.filter({ELEMENT:'txtGsmPhone',USERS:this.user.CODE})}
-                                        />
+                                    <NdTextBox id="txtGsmPhone" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"GSM_PHONE",filter:{TYPE:0}}}
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                    maxLength={32}
+                                        access={this.access.filter({ELEMENT:'txtGsmPhone',USERS:this.user.CODE})}
+                                    />
                                 </Item>
-                                 {/* txtOtherPhone */}
-                                 <Item>
+                                {/* txtOtherPhone */}
+                                <Item>
                                     <Label text={this.t("txtOtherPhone")} alignment="right" />
-                                        <NdTextBox id="txtOtherPhone" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"OTHER_PHONE",filter:{TYPE:0}}}
-                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                        maxLength={32}
-                                         access={this.access.filter({ELEMENT:'txtOtherPhone',USERS:this.user.CODE})}
-                                        />
+                                    <NdTextBox id="txtOtherPhone" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"OTHER_PHONE",filter:{TYPE:0}}}
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                    maxLength={32}
+                                        access={this.access.filter({ELEMENT:'txtOtherPhone',USERS:this.user.CODE})}
+                                    />
                                 </Item>
-                                 {/* txtEmail */}
-                                 <Item>
+                                {/* txtEmail */}
+                                <Item>
                                     <Label text={this.t("txtEmail")} alignment="right" />
-                                        <NdTextBox id="txtEmail" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"EMAIL",filter:{TYPE:0}}}
-                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                        maxLength={100}
-                                         access={this.access.filter({ELEMENT:'txtEmail',USERS:this.user.CODE})}
-                                        />
+                                    <NdTextBox id="txtEmail" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"EMAIL",filter:{TYPE:0}}}
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                    maxLength={100}
+                                        access={this.access.filter({ELEMENT:'txtEmail',USERS:this.user.CODE})}
+                                    />
                                 </Item>
-                                 {/* txtWeb */}
-                                 <Item>
+                                {/* txtWeb */}
+                                <Item>
                                     <Label text={this.t("txtWeb")} alignment="right" />
-                                        <NdTextBox id="txtWeb" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMERS'),field:"WEB"}} 
-                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                        maxLength={32}
-                                         access={this.access.filter({ELEMENT:'txtWeb',USERS:this.user.CODE})}
-                                        />
+                                    <NdTextBox id="txtWeb" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMERS'),field:"WEB"}} 
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                    maxLength={32}
+                                    access={this.access.filter({ELEMENT:'txtWeb',USERS:this.user.CODE})}
+                                    />
                                 </Item>
                                 {/* chkActive */}
                                 <Item>
@@ -919,14 +919,6 @@ export default class CustomerCard extends React.PureComponent
                                                                 },
                                                             ]
                                                         }
-                                                        onChange={(async()=>
-                                                        {
-                                                            let tmpResult = await this.checkItem(this.txtRef.value)
-                                                            if(tmpResult == 3)
-                                                            {
-                                                                this.txtRef.value = "";
-                                                            }
-                                                        }).bind(this)} 
                                                         selectAll={true}                           
                                                         >     
                                                         </NdTextBox>      
@@ -973,14 +965,6 @@ export default class CustomerCard extends React.PureComponent
                                                                 },
                                                             ]
                                                         }
-                                                        onChange={(async()=>
-                                                        {
-                                                            let tmpResult = await this.checkItem(this.txtRef.value)
-                                                            if(tmpResult == 3)
-                                                            {
-                                                                this.txtRef.value = "";
-                                                            }
-                                                        }).bind(this)} 
                                                         selectAll={true}                           
                                                         >     
                                                         </NdTextBox>      
@@ -1027,14 +1011,6 @@ export default class CustomerCard extends React.PureComponent
                                                                 },
                                                             ]
                                                         }
-                                                        onChange={(async()=>
-                                                        {
-                                                            let tmpResult = await this.checkItem(this.txtRef.value)
-                                                            if(tmpResult == 3)
-                                                            {
-                                                                this.txtRef.value = "";
-                                                            }
-                                                        }).bind(this)} 
                                                         selectAll={true}                           
                                                         >     
                                                         </NdTextBox>      
@@ -1098,9 +1074,58 @@ export default class CustomerCard extends React.PureComponent
                                                             <Column dataField="NAME" caption={this.t("pg_priceListNo.clmName")} width={'70%'} defaultSortOrder="asc" />
                                                         </NdPopGrid>
                                                     </Item>
+                                                    {/* txtMainGroup */}
+                                                    <Item>                                    
+                                                        <Label text={this.t("txtMainGroup")} alignment="right" />
+                                                        <NdTextBox id="txtMainGroup" parent={this} simple={true} tabIndex={this.tabIndex} dt={{data:this.customerObj.dt('CUSTOMERS'),field:"MAIN_GROUP_NAME"}} 
+                                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value} readOnly={true}
+                                                        button=
+                                                        {
+                                                            [
+                                                                {
+                                                                    id:'01',
+                                                                    icon:'more',
+                                                                    onClick:()=>
+                                                                    {
+                                                                        this.pg_MainGroup.show()
+                                                                        this.pg_MainGroup.onClick = (data) =>
+                                                                        {
+                                                                            if(data.length > 0)
+                                                                            {
+                                                                                this.customerObj.dt()[0].MAIN_GROUP_CODE = data[0].CODE
+                                                                                this.customerObj.dt()[0].MAIN_GROUP_NAME = data[0].NAME
+                                                                                this.customerObj.dt()[0].MAIN_GROUP = data[0].GUID
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                },
+                                                            ]
+                                                        }
+                                                        selectAll={true}                           
+                                                        >     
+                                                        </NdTextBox>      
+                                                        {/* ANA GRUP POPUP */}
+                                                        <NdPopGrid id={"pg_MainGroup"} parent={this} container={"#root"} 
+                                                        visible={false}
+                                                        position={{of:'#root'}} 
+                                                        showTitle={true} 
+                                                        showBorders={true}
+                                                        width={'90%'}
+                                                        height={'90%'}
+                                                        title={this.t("pg_MainGroup.title")} 
+                                                        selection={{mode:"single"}}
+                                                        data={{source:{select:{query : "SELECT GUID,CODE,NAME FROM CUSTOMER_GROUP_VW_01"},sql:this.core.sql}}}
+                                                        >
+                                                            <Column dataField="CODE" caption={this.t("pg_MainGroup.clmCode")} width={'20%'} />
+                                                            <Column dataField="NAME" caption={this.t("pg_MainGroup.clmName")} width={'70%'} defaultSortOrder="asc" />
+                                                        </NdPopGrid>
+                                                    </Item>
                                                     <EmptyItem/>
-                                                    <EmptyItem/>
-                                                    <EmptyItem/>
+                                                    {/* chkVatZero */}
+                                                    <Item>
+                                                        <Label text={this.t("chkVatZero")} alignment="right" />
+                                                        <NdCheckBox id="chkVatZero" parent={this} value={false}  dt={{data:this.customerObj.dt('CUSTOMERS'),field:"VAT_ZERO"}} ></NdCheckBox>
+                                                    </Item>
                                                     {/* chkRebate */}
                                                     <Item>
                                                         <Label text={this.t("chkRebate")} alignment="right" />
@@ -1292,7 +1317,7 @@ export default class CustomerCard extends React.PureComponent
                                 <Item>
                                     <div className='row'>
                                         <div className='col-6'>
-                                            <NdButton text={this.lang.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} 
+                                            <NdButton text={this.lang.t("btnSave")} type="success" stylingMode="contained" width={'100%'} 
                                             onClick={async ()=>
                                             {
                                                 let tmpEmpty = {...this.customerObj.customerAdress.empty};

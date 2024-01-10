@@ -45,7 +45,7 @@ export default class itemSubGroupCard extends React.PureComponent
                     path: 'terminal'
                 },
                 {
-                    id: 'P0001_1',
+                    id: 'P0004',
                     text: 'Cihaz Seçimi',
                     path: 'deviceChoose'
                 }
