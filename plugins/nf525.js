@@ -44,6 +44,10 @@ class nf525
                 })
             }
         })
+        pSocket.on('nf525ArchiveFileVerify',async(pParam,pCallback)=>
+        {
+            pCallback(await this.archiveFileVerify(pParam))
+        })
     }
     async processRun()
     {
@@ -438,35 +442,46 @@ class nf525
     {
         return new Promise(async resolve =>
         {
-            for (let i = -60; i < 0; i++) 
+            if(arguments.length == 0)
             {
-                let tmpFileName = moment().add(i,'day').format("YYYYMMDD") + "_archivej"
-
-                if(fs.existsSync(this.core.root_path + '/archiveFiscal/' + tmpFileName + '.zip') && fs.existsSync(this.core.root_path + '/archiveFiscal/' + tmpFileName + '.txt'))
+                for (let i = -60; i < 0; i++) 
                 {
-                    let tmpTxtSign = fs.readFileSync(this.core.root_path + '/archiveFiscal/' + tmpFileName + '.txt')
-                    tmpTxtSign = tmpTxtSign.toString()
-                    tmpTxtSign = tmpTxtSign.substring(tmpTxtSign.indexOf('-') + 2,tmpTxtSign.length)
-                    let buff = fs.readFileSync(this.core.root_path + '/archiveFiscal/' + tmpFileName + '.zip');
-                    let hash = createHash("sha256").update(buff).digest("hex")
-
-                    let tmpVerify = this.verify(hash,tmpTxtSign)
-                    if(!tmpVerify)
+                    let tmpFileName = moment().add(i,'day').format("YYYYMMDD") + "_archivej"
+    
+                    if(fs.existsSync(this.core.root_path + '/archiveFiscal/' + tmpFileName + '.zip') && fs.existsSync(this.core.root_path + '/archiveFiscal/' + tmpFileName + '.txt'))
                     {
-                        await this.insertJet(
+                        let tmpTxtSign = fs.readFileSync(this.core.root_path + '/archiveFiscal/' + tmpFileName + '.txt')
+                        tmpTxtSign = tmpTxtSign.toString()
+                        tmpTxtSign = tmpTxtSign.substring(tmpTxtSign.indexOf('-') + 2,tmpTxtSign.length)
+                        let buff = fs.readFileSync(this.core.root_path + '/archiveFiscal/' + tmpFileName + '.zip');
+                        let hash = createHash("sha256").update(buff).digest("hex")
+                        
+                        let tmpVerify = this.verify(hash,tmpTxtSign)
+                        if(!tmpVerify)
                         {
-                            CUSER:'System Auto',            
-                            DEVICE:'',
-                            CODE:'90',
-                            NAME:"Erreur integrite.",
-                            DESCRIPTION:'Archive file verify - filename : ' + tmpFileName,
-                            APP_VERSION:this.appInfo.version
-                        })
+                            await this.insertJet(
+                            {
+                                CUSER:'System Auto',            
+                                DEVICE:'',
+                                CODE:'90',
+                                NAME:"Erreur integrite.",
+                                DESCRIPTION:'Archive file verify - filename : ' + tmpFileName,
+                                APP_VERSION:this.appInfo.version
+                            })
+                        }
                     }
                 }
+
+                resolve()
             }
-            
-            resolve()
+            else
+            {
+                let hash = createHash("sha256").update(arguments[0].buffer).digest("hex")
+                        
+                let tmpVerify = this.verify(hash,arguments[0].sign)
+                resolve(tmpVerify)
+                return
+            }
         })
     }
     async archiveNF203GrandTotal(pType)

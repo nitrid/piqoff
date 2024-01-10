@@ -535,6 +535,13 @@ export const langFr =
             pos: "Pos", 
             invoice : "Facture"
         },
+        msgDateInvalid:
+        {
+            title: "Avertissement",
+            msg: "Mauvaise date",
+            btn01: "Ok"
+        },
+
         pg_txtRef :
         {
             title: "Sélectionner Produit",
@@ -556,8 +563,9 @@ export const langFr =
             dtPopPriEndDate: "Date Fin", 
             cmbPopPriDepot: "Depot",
             txtPopPriQuantity: "Quantité",
-            txtPopPriPrice: "Prix de Vente TTC",
-            txtPopPriPriceVatExt: "Prix de Vente HT"
+            txtPopPriPrice: "Prix de Vente",
+            txtPopPriHT: "Prix de Vente HT",
+            txtPopPriTTC : "Prix de Vente TTC"
         },
         popUnit:
         {
@@ -594,8 +602,9 @@ export const langFr =
             clmStartDate: "Date Début",
             clmFinishDate: "Date Fin",
             clmQuantity: "Quantité",
-            clmVatExt: "Prix HT",
+            clmPriceTTC : "Prix HT",
             clmPrice: "Prix TTC",
+            clmPrice: "Prix",
             clmGrossMargin: "Marge Brute",
             clmNetMargin: "Marge Nette",
         },
