@@ -13,9 +13,14 @@ export const menu = (e) =>
                     path: 'terminal'
                 },
                 {
-                    id: 'P0001_1',
-                    text: e.t('menu.P0001_1'), // Cihaz Seçimi
+                    id: 'P0004',
+                    text: e.t('menu.P0004'), // Cihaz Seçimi
                     path: 'deviceChoose'
+                },
+                {
+                    id: 'P0005',
+                    text: e.t('menu.P0005'), // Arşiv Verify
+                    path: 'archiveVerify'
                 }
             ]
         },
