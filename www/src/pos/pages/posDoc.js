@@ -5062,27 +5062,27 @@ export default class posDoc extends React.PureComponent
                                     </div>
                                     {/* Cash Button Group */}
                                     <div className="col-3">
-                                        {/* 1 € */}
+                                        {/* 1 CHF */}
                                         <div className="row pb-1">
                                             <div className="col-12">
                                                 <NbButton id={"btnPopTotalCash1"} parent={this} className="btn btn-block" 
-                                                style={{height:"60px",width:"100%",backgroundImage:"url(css/img/1€.png)",backgroundRepeat:"no-repeat",backgroundSize:"55% 100%",backgroundPosition: "center",borderColor:"#6c757d"}}
+                                                style={{height:"60px",width:"100%",backgroundImage:"url(css/img/1CHF.png)",backgroundRepeat:"no-repeat",backgroundSize:"55% 100%",backgroundPosition: "center",borderColor:"#6c757d"}}
                                                 onClick={()=>{this.rbtnPayType.value = 0;this.payAdd(0,1)}}/>
                                             </div>
                                         </div>
-                                        {/* 2 € */}
+                                        {/* 2 CHF */}
                                         <div className="row py-1">
                                             <div className="col-12">
                                                 <NbButton id={"btnPopTotalCash2"} parent={this} className="btn btn-block" 
-                                                style={{height:"60px",width:"100%",backgroundImage:"url(css/img/2€.png)",backgroundRepeat:"no-repeat",backgroundSize:"55% 100%",backgroundPosition: "center",borderColor:"#6c757d"}}
+                                                style={{height:"60px",width:"100%",backgroundImage:"url(css/img/2CHF.png)",backgroundRepeat:"no-repeat",backgroundSize:"55% 100%",backgroundPosition: "center",borderColor:"#6c757d"}}
                                                 onClick={()=>{this.rbtnPayType.value = 0;this.payAdd(0,2)}}/>
                                             </div>
                                         </div>
-                                        {/* 5 € */}
+                                        {/* 5 CHF */}
                                         <div className="row py-1">
                                             <div className="col-12">
                                                 <NbButton id={"btnPopTotalCash5"} parent={this} className="btn btn-block" 
-                                                style={{height:"60px",width:"100%",backgroundImage:"url(css/img/5€.jfif)",backgroundSize:"cover",borderColor:"#6c757d"}}
+                                                style={{height:"60px",width:"100%",backgroundImage:"url(css/img/5CHF.jfif)",backgroundSize:"cover",borderColor:"#6c757d"}}
                                                 onClick={()=>{this.rbtnPayType.value = 0;this.payAdd(0,5)}}/>
                                             </div>
                                         </div>
@@ -5124,10 +5124,10 @@ export default class posDoc extends React.PureComponent
                                                     {this.lang.t("trDeatil")}
                                                 </NbButton>
                                             </div>
-                                            {/* 10 € */}
+                                            {/* 10 CHF */}
                                             <div className="col-6">
                                                 <NbButton id={"btnPopTotalCash10"} parent={this} className="btn btn-block" 
-                                                style={{height:"60px",width:"100%",backgroundImage:"url(css/img/10€.jpg)",backgroundSize:"cover",borderColor:"#6c757d"}}
+                                                style={{height:"60px",width:"100%",backgroundImage:"url(css/img/10CHF.jpg)",backgroundSize:"cover",borderColor:"#6c757d"}}
                                                 onClick={()=>{this.rbtnPayType.value = 0;this.payAdd(0,10)}}/>
                                             </div>
                                         </div>
@@ -5145,10 +5145,10 @@ export default class posDoc extends React.PureComponent
                                                    {this.lang.t("lineDelete")}
                                                 </NbButton>
                                             </div>
-                                            {/* 20 € */}
+                                            {/* 20 CHF */}
                                             <div className="col-6">
                                                 <NbButton id={"btnPopTotalCash20"} parent={this} className="btn btn-block" 
-                                                style={{height:"60px",width:"100%",backgroundImage:"url(css/img/20€.jpg)",backgroundSize:"cover",borderColor:"#6c757d"}}
+                                                style={{height:"60px",width:"100%",backgroundImage:"url(css/img/20CHF.jpg)",backgroundSize:"cover",borderColor:"#6c757d"}}
                                                 onClick={()=>{this.rbtnPayType.value = 0;this.payAdd(0,20)}}/>
                                             </div>
                                         </div>
@@ -5160,10 +5160,10 @@ export default class posDoc extends React.PureComponent
                                                     {this.lang.t("cancel")}
                                                 </NbButton>
                                             </div>
-                                            {/* 50 € */}
+                                            {/* 50 CHF */}
                                             <div className="col-6">
                                                 <NbButton id={"btnPopTotalCash50"} parent={this} className="btn btn-block" 
-                                                style={{height:"60px",width:"100%",backgroundImage:"url(css/img/50€.jpg)",backgroundSize:"cover",borderColor:"#6c757d"}}
+                                                style={{height:"60px",width:"100%",backgroundImage:"url(css/img/50CHF.jpg)",backgroundSize:"cover",borderColor:"#6c757d"}}
                                                 onClick={()=>{this.rbtnPayType.value = 0;this.payAdd(0,50)}}/>
                                             </div>
                                         </div>
@@ -5179,10 +5179,10 @@ export default class posDoc extends React.PureComponent
                                                     <i className="text-white fa-solid fa-check" style={{fontSize: "24px"}} />
                                                 </NbButton>
                                             </div>
-                                            {/* 100 € */}
+                                            {/* 100 CHF */}
                                             <div className="col-6">
                                                 <NbButton id={"btnPopTotalCash100"} parent={this} className="btn btn-block" 
-                                                style={{height:"60px",width:"100%",backgroundImage:"url(css/img/100€.jpg)",backgroundSize:"cover",borderColor:"#6c757d"}}
+                                                style={{height:"60px",width:"100%",backgroundImage:"url(css/img/100CHF.jpg)",backgroundSize:"cover",borderColor:"#6c757d"}}
                                                 onClick={()=>{this.rbtnPayType.value = 0;this.payAdd(0,100)}}/>
                                             </div>
                                         </div>
@@ -5290,59 +5290,59 @@ export default class posDoc extends React.PureComponent
                             <div className="col-3">
                                 <div className="row">
                                     <div className="col-12">
-                                        {/* 1 € */}
+                                        {/* 1 CHF */}
                                         <div className="row pb-1">
                                             <div className="col-12">
                                                 <NbButton id={"btnPopCashPay1"} parent={this} className="btn btn-block" 
-                                                style={{height:"60px",width:"100%",backgroundImage:"url(css/img/1€.png)",backgroundRepeat:"no-repeat",backgroundSize:"55% 100%",backgroundPosition: "center",borderColor:"#6c757d"}}
+                                                style={{height:"60px",width:"100%",backgroundImage:"url(css/img/1CHF.png)",backgroundRepeat:"no-repeat",backgroundSize:"55% 100%",backgroundPosition: "center",borderColor:"#6c757d"}}
                                                 onClick={()=>{this.payAdd(0,1)}}/>
                                             </div>
                                         </div>
-                                        {/* 2 € */}
+                                        {/* 2 CHF */}
                                         <div className="row py-1">
                                             <div className="col-12">
                                                 <NbButton id={"btnPopCashPay2"} parent={this} className="btn btn-block" 
-                                                style={{height:"60px",width:"100%",backgroundImage:"url(css/img/2€.png)",backgroundRepeat:"no-repeat",backgroundSize:"55% 100%",backgroundPosition: "center",borderColor:"#6c757d"}}
+                                                style={{height:"60px",width:"100%",backgroundImage:"url(css/img/2CHF.png)",backgroundRepeat:"no-repeat",backgroundSize:"55% 100%",backgroundPosition: "center",borderColor:"#6c757d"}}
                                                 onClick={()=>{this.payAdd(0,2)}}/>
                                             </div>
                                         </div>
-                                        {/* 5 € */}
+                                        {/* 5 CHF */}
                                         <div className="row py-1">
                                             <div className="col-12">
                                                 <NbButton id={"btnPopCashPay5"} parent={this} className="btn btn-block" 
-                                                style={{height:"60px",width:"100%",backgroundImage:"url(css/img/5€.jfif)",backgroundSize:"cover",borderColor:"#6c757d"}}
+                                                style={{height:"60px",width:"100%",backgroundImage:"url(css/img/5CHF.jfif)",backgroundSize:"cover",borderColor:"#6c757d"}}
                                                 onClick={()=>{this.payAdd(0,5)}}/>
                                             </div>
                                         </div>
-                                        {/* 10 € */}
+                                        {/* 10 CHF */}
                                         <div className="row py-1">
                                             <div className="col-12">
                                                 <NbButton id={"btnPopCashPay10"} parent={this} className="btn btn-block" 
-                                                style={{height:"60px",width:"100%",backgroundImage:"url(css/img/10€.jpg)",backgroundSize:"cover",borderColor:"#6c757d"}}
+                                                style={{height:"60px",width:"100%",backgroundImage:"url(css/img/10CHF.jpg)",backgroundSize:"cover",borderColor:"#6c757d"}}
                                                 onClick={()=>{this.payAdd(0,10)}}/>
                                             </div>
                                         </div>
-                                        {/* 20 € */}
+                                        {/* 20 CHF */}
                                         <div className="row py-1">
                                             <div className="col-12">
                                                 <NbButton id={"btnPopCashPay20"} parent={this} className="btn btn-block" 
-                                                style={{height:"60px",width:"100%",backgroundImage:"url(css/img/20€.jpg)",backgroundSize:"cover",borderColor:"#6c757d"}}
+                                                style={{height:"60px",width:"100%",backgroundImage:"url(css/img/20CHF.jpg)",backgroundSize:"cover",borderColor:"#6c757d"}}
                                                 onClick={()=>{this.payAdd(0,20)}}/>
                                             </div>
                                         </div>
-                                        {/* 50 € */}
+                                        {/* 50 CHF */}
                                         <div className="row py-1">
                                             <div className="col-12">
                                                 <NbButton id={"btnPopCashPay50"} parent={this} className="btn btn-block" 
-                                                style={{height:"60px",width:"100%",backgroundImage:"url(css/img/50€.jpg)",backgroundSize:"cover",borderColor:"#6c757d"}}
+                                                style={{height:"60px",width:"100%",backgroundImage:"url(css/img/50CHF.jpg)",backgroundSize:"cover",borderColor:"#6c757d"}}
                                                 onClick={()=>{this.payAdd(0,50)}}/>
                                             </div>
                                         </div>
-                                        {/* 100 € */}
+                                        {/* 100 CHF */}
                                         <div className="row py-1">
                                             <div className="col-12">
                                                 <NbButton id={"btnPopCashPay100"} parent={this} className="btn btn-block" 
-                                                style={{height:"60px",width:"100%",backgroundImage:"url(css/img/100€.jpg)",backgroundSize:"cover",borderColor:"#6c757d"}}
+                                                style={{height:"60px",width:"100%",backgroundImage:"url(css/img/100CHF.jpg)",backgroundSize:"cover",borderColor:"#6c757d"}}
                                                 onClick={()=>{this.payAdd(0,100)}}/>
                                             </div>
                                         </div>
@@ -7438,7 +7438,7 @@ export default class posDoc extends React.PureComponent
                         </div>
                         <div className="row">
                             <div className="col-12" style={{textAlign:"center",fontSize:"20px",color:"red",padding:"10px"}}>
-                                {this.lang.t("msgCardPayment.msgAmount" )} <NbLabel id="txtPaymentPopTotal" parent={this} value={"0.00€"} format={"currency"}/>
+                                {this.lang.t("msgCardPayment.msgAmount" )} <NbLabel id="txtPaymentPopTotal" parent={this} value={"0.00CHF"} format={"currency"}/>
                             </div>
                         </div>
                     </NdDialog>

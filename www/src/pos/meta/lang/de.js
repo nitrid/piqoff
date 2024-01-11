@@ -40,9 +40,9 @@ export const langDe =
     price: "Preis",
     msgDeviceChange : 
     {
-        title : "Dikkat",   // BAK
-        msg : "Getirmek istediğiniz fişde ödeme mevcut işleme ödemenin alındğını kasadan devam edebilirsiniz ! Kasa Kodu : ",   // BAK
-        btn01 : "Tamam",   // BAK
+        title : "Achtung",
+        msg : "Der Beleg, den Sie abrufen möchten, hat eine Zahlung, Sie können die Transaktion an der Kasse fortsetzen, an der die Zahlung eingegangen ist! Kasse Kode : ",
+        btn01: "OK",
     },
     msgCustomerNotFound:
     {
@@ -334,8 +334,8 @@ export const langDe =
         }
     },
     txtPopLastRefPholder: "Bitte den Barcode auf dem Ticket scannen.",
-    txtPopLastRefNoPholder : "Ref No",  // BAK
-    txtPopLastCustomerPholder : "Müşteri Kodu", // BAK
+    txtPopLastRefNoPholder : "Ref Nr",
+    txtPopLastCustomerPholder : "Kundencode",
     popLastTotal: 
     {
         title: "Letzte Zahlung"
@@ -869,10 +869,10 @@ export const langDe =
     },
     popPasswordChange : 
     {
-        title:"Şifre Değiştir",  // BAK
-        NewPassword : "Yeni Şifre",  // BAK
-        NewPassword2 : "Yeni Şifre Tekrar",  // BAK
-        btnApprove : "Onayla"  // BAK
+        title:"Passwort ändern",
+        NewPassword : "Neues Kennwort",
+        NewPassword2 : "Neues Kennwort erneut",
+        btnApprove : "Bestätigen"
     },
-    passChange :"Şifre Değiştir", // BAK
+    passChange :"Kennwort wechseln",
 }
