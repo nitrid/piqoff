@@ -256,10 +256,11 @@ export const langFr =
     {
         service: "Service",                
         P0001: "Terminal",
-        P0001_1: "Sélectionner Appareil",
         usr: "Utilisateur",
         P0002: "Utilisateurs",
         P0003: " Rôles",
+        P0004: "Sélectionner Appareil",
+        P0005: "Vérification d'archive",
         prm: "Paramètre",
         prm_01: "Paramètres Système",
         prm_01_001: "OFF",
@@ -302,6 +303,16 @@ export const langFr =
             clmCode : "Code",
             clmName : "Nom"
         }    
+    },
+    P0005 : 
+    {
+        msgVerify :
+        {
+            title: "Attention",
+            btn01: "D'accord",
+            msgSuccess: "La signature du fichier est valide",
+            msgFailed: "La signature du fichier est invalide"
+        }
     },
     menu_01 :
     {
