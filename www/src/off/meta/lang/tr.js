@@ -558,7 +558,8 @@ export const langTr =
             cmbPopPriDepot: "Depo",
             txtPopPriQuantity: "Miktar",
             txtPopPriPrice: "Fiyat",
-            txtPopPriPriceVatExt: "Vargisiz Fiyat"
+            txtPopPriHT: "Vargisiz Fiyat",
+            txtPopPriTTC : "Vergili Fiyat"
         },
         msgDateInvalid:
         {
@@ -601,7 +602,8 @@ export const langTr =
             clmStartDate: "Baş.Tarih",
             clmFinishDate: "Bit.Tarih",
             clmQuantity: "Miktar",
-            clmVatExt: "Vergi Hariç",
+            clmPriceHT: "Vergi Hariç",
+            clmPriceTTC : "Vergili Fiyat",
             clmPrice: "Fiyat",
             clmGrossMargin: "Brüt Marj",
             clmNetMargin: "Net Marj",
