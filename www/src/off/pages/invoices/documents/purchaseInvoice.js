@@ -2005,7 +2005,6 @@ export default class purchaseInvoice extends DocBase
                                                 }
                                             }
                                            
-                                           
                                             this.pg_service.onClick = async(data) =>
                                             {
                                                 this.customerControl = true
@@ -2014,7 +2013,7 @@ export default class purchaseInvoice extends DocBase
                                                 this.combineNew = false
                                                 
                                                 this.grdPurcInv.devGrid.beginUpdate()
-                                                for (let i = 0; i < data.length; i++) 
+                                                for (let i = 0; i < data.length; i++)
                                                 {
                                                     await this.addItem(data[i],null)
                                                 }
