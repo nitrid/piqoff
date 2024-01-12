@@ -1990,20 +1990,12 @@ export default class priceDifferenceInvoice extends DocBase
                                                         {
                                                         }
                                                         
-                                                        let tmpMailData = {html:tmpHtml,subject:this.txtMailSubject.value,sendMail:this.txtSendMail.value,attachName:"facture.pdf",attachData:tmpAttach,text:"",
+                                                        let tmpMailData = {html:tmpHtml,subject:this.txtMailSubject.value,sendMail:this.txtSendMail.value,attachName:"facture " + this.docObj.dt()[0].REF + "-" + this.docObj.dt()[0].REF_NO + ".pdf",attachData:tmpAttach,text:"",
                                                                         service:tmpMailAdress.result.recordset[0].MAIL_SERVICE,
                                                                         host:tmpMailAdress.result.recordset[0].MAIL_SMTP,
                                                                         port:Number(tmpMailAdress.result.recordset[0].MAIL_PORT),
                                                                         userMail:tmpMailAdress.result.recordset[0].MAIL_ADDRESS,
                                                                         password:tmpMailAdress.result.recordset[0].MAIL_PASSWORD}
-                                                                        console.log('ggg')
-                                                                        console.log(tmpMailAdress.result.recordset[0].MAIL_SERVICE)
-                                                                        console.log(tmpMailAdress.result.recordset[0].MAIL_SMTP)
-                                                                        console.log(tmpMailAdress.result.recordset[0].MAIL_PORT)
-                                                                        console.log(tmpMailAdress.result.recordset[0].MAIL_ADDRESS)
-                                                                        console.log(tmpMailAdress.result.recordset[0].MAIL_PASSWORD)
-                                                                        console.log(tmpMailData)
-                                                                        console.log('ttt')
                                                         this.core.socket.emit('mailer',tmpMailData,async(pResult1) => 
                                                         {
                                                          console.log(4)
