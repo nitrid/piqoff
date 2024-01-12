@@ -393,6 +393,7 @@ export const langDe =
         msg: "Bitte scannen Sie die Rückgabe-Ticketsrestorants ein!",
         btn01: "OK",
         btn02: "Abbrechen",
+        btn03 : "Fiş Seçimi" // BAK
     },
     msgItemReturnType: 
     {

@@ -2005,7 +2005,6 @@ export default class purchaseInvoice extends DocBase
                                                 }
                                             }
                                            
-                                           
                                             this.pg_service.onClick = async(data) =>
                                             {
                                                 this.customerControl = true
@@ -2014,7 +2013,7 @@ export default class purchaseInvoice extends DocBase
                                                 this.combineNew = false
                                                 
                                                 this.grdPurcInv.devGrid.beginUpdate()
-                                                for (let i = 0; i < data.length; i++) 
+                                                for (let i = 0; i < data.length; i++)
                                                 {
                                                     await this.addItem(data[i],null)
                                                 }
@@ -2219,6 +2218,9 @@ export default class purchaseInvoice extends DocBase
                                             {
                                                 e.key.VAT = 0
                                                 e.key.VAT_RATE = 0
+                                            }
+                                            e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3)).round(2)
+                                            
                                             e.key.TOTAL = Number(((e.key.TOTALHT - e.key.DOC_DISCOUNT) + e.key.VAT)).round(2)
                                             e.key.DIFF_PRICE = e.key.PRICE - e.key.CUSTOMER_PRICE
                                             if(e.key.DISCOUNT == 0)

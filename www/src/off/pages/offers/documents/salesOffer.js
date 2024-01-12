@@ -720,7 +720,7 @@ export default class salesOffer extends DocBase
                                         }
                                         for (let i = 0; i < this.docObj.docOffers.dt().length; i++) 
                                         {
-                                          if(this.docObj.docOffers.dt()[i].ORDER_LINE_GUID != '00000000-0000-0000-0000-000000000000')   
+                                          if(this.docObj.docOffers.dt()[i].ORDER_LINE_GUID != '00000000-0000-0000-0000-000000000000' || this.docObj.docOffers.dt()[i].SHIPMENT_LINE_GUID != '00000000-0000-0000-0000-000000000000')   
                                           {
                                             let tmpConfObj =
                                             {
