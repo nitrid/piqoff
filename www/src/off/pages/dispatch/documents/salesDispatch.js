@@ -38,7 +38,7 @@ export default class salesDispatch extends DocBase
         this.combineControl = true
         this.combineNew = false
 
-        this.rightItems = [{ text: this.t("getOrders")}]
+        this.rightItems = [{ text: this.t("getOrders")},{ text: this.t("getOffers")}]
     }
     async componentDidMount()
     {
@@ -719,6 +719,16 @@ export default class salesDispatch extends DocBase
             value : [this.docObj.dt()[0].INPUT]
         }
         super.getOrders(tmpQuery)
+    }
+    async getOffers()
+    {
+        let tmpQuery = 
+        {
+            query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_OFFERS_VW_01 WHERE INPUT = @INPUT AND SHIPMENT_LINE_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 1 AND DOC_TYPE IN (61)",
+            param : ['INPUT:string|50'],
+            value : [this.docObj.dt()[0].INPUT]
+        }
+        super.getOffers(tmpQuery)
     }
     async _calculateInterfel()
     {
@@ -1943,6 +1953,10 @@ export default class salesDispatch extends DocBase
                                         if(e.itemData.text == this.t("getOrders"))
                                         {
                                             this.getOrders()
+                                        }
+                                        else if(e.itemData.text == this.t("getOffers"))
+                                        {
+                                            this.getOffers()
                                         }
                                     }).bind(this)} />
                                  </React.Fragment>

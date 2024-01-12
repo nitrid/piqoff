@@ -50,6 +50,9 @@ export function print()
                 tmpArr.push({font:"a",style:"b",align:"lt",data: data.pos[0].CUSTOMER_ADRESS.toString().substring(0,48)})
                 tmpArr.push({font:"a",style:"b",align:"lt",data: data.pos[0].CUSTOMER_ZIPCODE.toString().substring(0,5) + " - " + data.pos[0].CUSTOMER_CITY.toString().substring(0,48)})
                 tmpArr.push({font:"a",style:"b",align:"lt",data: data.pos[0].CUSTOMER_COUNTRY.toString().substring(0,48)})
+                tmpArr.push({font:"a",style:"b",align:"lt",data:"NO TVA : "+ data.pos[0].CUSTOMER_TAX_NO.toString().substring(0,48)})
+                tmpArr.push({font:"a",style:"b",align:"lt",data:"SIRET : "+ data.pos[0].CUSTOMER_SIRET.toString().substring(0,48)})
+
                 tmpArr.push({font:"a",style:"b",align:"ct",data: " ".space(64)})
             }   
             return tmpArr.length > 0 ? tmpArr : undefined

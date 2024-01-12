@@ -33,7 +33,7 @@ export default class itemCard extends React.PureComponent
 {
     constructor(props)
     {
-        console.log("1 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
+        // console.log("1 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
         super(props)                
         this.state = {underPrice : "",isItemGrpForOrginsValid : false,isItemGrpForMinMaxAccess : false,isTaxSugar : false}
         this.core = App.instance.core;
@@ -99,7 +99,7 @@ export default class itemCard extends React.PureComponent
         {
             this.init(); 
         }
-        console.log("2 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
+        // console.log("2 - " + moment(new Date()).format("YYYY-MM-DD HH:mm:ss SSS"))
     }    
     async init()
     {  
@@ -1637,7 +1637,8 @@ export default class itemCard extends React.PureComponent
                                                             this.dtPopPriEndDate.value = "1970-01-01"
                                                             this.txtPopPriQuantity.value = 1
                                                             this.txtPopPriPrice.value = 0
-                                                            // this.txtPopPriPriceVatExt.value = 0
+                                                            this.txtPopPriHT.value = 0
+                                                            this.txtPopPriTTC.value = 0
                                                             this.cmbPopPriDepot.value = "00000000-0000-0000-0000-000000000000"
 
                                                             setTimeout(async () => 
@@ -1672,6 +1673,44 @@ export default class itemCard extends React.PureComponent
                                             }}
                                             onRowUpdating={async(e)=>
                                             {
+                                                let tmpCancel = false
+                                                
+                                                if(typeof e.newData.FINISH_DATE != 'undefined')
+                                                {
+                                                    let tmpFinish = e.newData.FINISH_DATE
+                                                    let numbersFinish = tmpFinish.match(/[0-9]/g); 
+                                                    if(numbersFinish.length > 17)
+                                                    {
+                                                        tmpCancel = true
+                                                    }
+                                                }
+                                                if(typeof e.newData.START_DATE != 'undefined')
+                                                {
+                                                    let tmpStart = e.newData.START_DATE
+                                                    let numbersStart = tmpStart.match(/[0-9]/g); 
+                                                    if(numbersStart.length > 17)
+                                                    {
+                                                        tmpCancel = true
+                                                    }
+                                                }
+
+                                                if (tmpCancel) 
+                                                {
+                                                    e.cancel = true;
+                                                    e.component.cancelEditData()  
+                                                    let tmpConfObj1 = {
+                                                        id: 'msgDateInvalid',
+                                                        showTitle: true,
+                                                        title: this.t("msgDateInvalid.title"),
+                                                        showCloseButton: true,
+                                                        width: '500px',
+                                                        height: '200px',
+                                                        button: [{id: "btn01", caption: this.t("msgDateInvalid.btn01"), location: 'after'}],
+                                                        content: (<div style={{textAlign: "center", fontSize: "20px"}}>{this.t("msgDateInvalid.msg")}</div>)
+                                                    };
+                                                    
+                                                    await dialog(tmpConfObj1);
+                                                }
                                                 if(typeof e.newData.PRICE != 'undefined')
                                                 {
                                                     //FİYAT GİRERKEN MALİYET FİYAT KONTROLÜ
@@ -1693,14 +1732,20 @@ export default class itemCard extends React.PureComponent
                                             }}
                                             onRowUpdated={async(e)=>
                                             {
-                                                // if(typeof e.data.PRICE != 'undefined')
-                                                // {
-                                                //     e.key.VAT_EXT = (e.key.PRICE / ((this.cmbTax.value/ 100) + 1))
-                                                // }
-                                                // if(typeof e.data.VAT_EXT != 'undefined')
-                                                // {
-                                                //     e.key.PRICE = (e.key.VAT_EXT + ((e.key.VAT_EXT * this.cmbTax.value) / 100))
-                                                // }
+                                                console.log(e)
+                                                if(typeof e.data.PRICE != 'undefined')
+                                                {
+                                                    if(e.key.LIST_VAT_TYPE == 0)
+                                                    {
+                                                        e.key.PRICE_TTC = e.data.PRICE
+                                                        e.key.PRICE_HT = Number(e.data.PRICE).rateInNum(this.itemsObj.dt("ITEMS")[0].VAT,3)
+                                                    }
+                                                    else
+                                                    {
+                                                        e.key.PRICE_HT = e.data.PRICE
+                                                        e.key.PRICE_TTC =  Number(e.data.PRICE).rateExc(this.itemsObj.dt("ITEMS")[0].VAT,3)
+                                                    }
+                                                }
                                             }}
                                             >
                                                 <Paging defaultPageSize={6} />
@@ -1731,8 +1776,9 @@ export default class itemCard extends React.PureComponent
                                                     return
                                                 }}/>
                                                 <Column dataField="QUANTITY" caption={this.t("grdPrice.clmQuantity")}/>
-                                                <Column dataField="VAT_EXT" caption={this.t("grdPrice.clmVatExt")} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>                                                
-                                                <Column dataField="PRICE" caption={this.t("grdPrice.clmPrice")} dataType="number" format={{ style: "currency", currency: "EUR",precision: 2}}/>
+                                                <Column dataField="PRICE" caption={this.t("grdPrice.clmPrice")} dataType="number" format={{ style: "currency", currency: "EUR",precision: 3}}/>
+                                                <Column dataField="PRICE_HT" caption={this.t("grdPrice.clmPriceHT")} dataType="number" format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
+                                                <Column dataField="PRICE_TTC" caption={this.t("grdPrice.clmPriceTTC")} dataType="number" format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false}/>
                                                 <Column dataField="GROSS_MARGIN" caption={this.t("grdPrice.clmGrossMargin")} dataType="string" allowEditing={false}/>
                                                 <Column dataField="NET_MARGIN" caption={this.t("grdPrice.clmNetMargin")} dataType="string" format={{ style: "currency", currency: "EUR",precision: 2}} allowEditing={false}/>
                                             </NdGrid>
@@ -2213,7 +2259,7 @@ export default class itemCard extends React.PureComponent
                         title={this.t("popPrice.title")}
                         container={"#root"} 
                         width={'500'}
-                        height={'420'}
+                        height={'500'}
                         position={{of:'#root'}}
                         deferRendering={true}
                         >
@@ -2229,7 +2275,7 @@ export default class itemCard extends React.PureComponent
                                     showClearButton={true}
                                     pageSize ={50}
                                     notRefresh={true}
-                                    data={{source:{select:{query : "SELECT NO,NAME FROM ITEM_PRICE_LIST_VW_01"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : "SELECT NO,NAME,VAT_TYPE FROM ITEM_PRICE_LIST_VW_01"},sql:this.core.sql}}}
                                     />
                                 </Item>
                                 {/* dtPopPriStartDate */}
@@ -2268,13 +2314,40 @@ export default class itemCard extends React.PureComponent
                                 {/* txtPopPriPrice */}
                                 <Item>
                                     <Label text={this.t("popPrice.txtPopPriPrice")} alignment="right" />
-                                    <NdNumberBox id={"txtPopPriPrice"} parent={this} simple={true}  format={"##0.000"}>
+                                    <NdNumberBox id={"txtPopPriPrice"} parent={this} simple={true}  format={"##0.000"}
+                                      onValueChanged={async (e)=>
+                                        {
+                                            let tmpDt = this.cmbPopPriListNo.data.datatable.where({'NO':this.cmbPopPriListNo.value})
+                                            if(tmpDt[0].VAT_TYPE == 0)
+                                            {
+                                                this.txtPopPriTTC.value = this.txtPopPriPrice.value
+                                                this.txtPopPriHT.value = Number(this.txtPopPriPrice.value).rateInNum(this.itemsObj.dt("ITEMS")[0].VAT,3)
+                                            }
+                                            else
+                                            {
+                                                this.txtPopPriTTC.value = Number(this.txtPopPriPrice.value).rateExc(this.itemsObj.dt("ITEMS")[0].VAT,3)
+                                                this.txtPopPriHT.value = this.txtPopPriPrice.value
+                                            }
+                                        }
+                                        }>
                                         <Validator validationGroup={"frmPrice" + this.tabIndex}>
                                             <RequiredRule message={this.t("validPrice")}
                                              />
                                             <RangeRule min={0.001} message={this.t("validPriceFloat")}
                                              />
                                         </Validator> 
+                                    </NdNumberBox>
+                                </Item>
+                                 {/* txtPopPriHT */}
+                                 <Item>
+                                    <Label text={this.t("popPrice.txtPopPriHT")} alignment="right" />
+                                    <NdNumberBox id={"txtPopPriHT"} parent={this} simple={true} readOnly={true} format={"##0.000"}>
+                                    </NdNumberBox>
+                                </Item>
+                                 {/* txtPopPriTTC */}
+                                 <Item>
+                                    <Label text={this.t("popPrice.txtPopPriTTC")} alignment="right" />
+                                    <NdNumberBox id={"txtPopPriTTC"} parent={this} simple={true} readOnly={true} format={"##0.000"}>
                                     </NdNumberBox>
                                 </Item>
                                 <Item>
@@ -2328,6 +2401,8 @@ export default class itemCard extends React.PureComponent
                                                     tmpEmpty.START_DATE = new Date(moment(this.dtPopPriStartDate.value).format("YYYY-MM-DD")).toISOString()
                                                     tmpEmpty.FINISH_DATE = new Date(moment(this.dtPopPriEndDate.value).format("YYYY-MM-DD")).toISOString()
                                                     tmpEmpty.PRICE = this.txtPopPriPrice.value
+                                                    tmpEmpty.PRICE_TTC = this.txtPopPriTTC.value
+                                                    tmpEmpty.PRICE_HT = this.txtPopPriHT.value
                                                     tmpEmpty.QUANTITY = this.txtPopPriQuantity.value
 
                                                     this.itemsObj.itemPrice.addEmpty(tmpEmpty); 

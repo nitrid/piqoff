@@ -786,37 +786,73 @@ export default class DocBase extends React.PureComponent
             App.instance.setState({isExecute:true})
             for (let i = 0; i < data.length; i++) 
             {
-                let tmpDocItems = {...this.docObj.docItems.empty}
-                tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
-                tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
-                tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                tmpDocItems.LINE_NO = data[i].LINE_NO
-                tmpDocItems.REF = this.docObj.dt()[0].REF
-                tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
-                tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
-                tmpDocItems.INPUT_CODE = this.docObj.dt()[0].INPUT_CODE
-                tmpDocItems.INPUT_NAME = this.docObj.dt()[0].INPUT_NAME
-                tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
-                tmpDocItems.OUTPUT_CODE = this.docObj.dt()[0].OUTPUT_CODE
-                tmpDocItems.OUTPUT_NAME = this.docObj.dt()[0].OUTPUT_NAME
-                tmpDocItems.ITEM = data[i].ITEM
-                tmpDocItems.ITEM_CODE = data[i].ITEM_CODE
-                tmpDocItems.ITEM_NAME = data[i].ITEM_NAME
-                tmpDocItems.PRICE = data[i].PRICE
-                tmpDocItems.QUANTITY = data[i].QUANTITY
-                tmpDocItems.VAT = data[i].VAT
-                tmpDocItems.AMOUNT = data[i].AMOUNT
-                tmpDocItems.TOTAL = data[i].TOTAL
-                tmpDocItems.DESCRIPTION = data[i].DESCRIPTION
-                tmpDocItems.VAT_RATE = data[i].VAT_RATE
-                tmpDocItems.DISCOUNT_RATE = data[i].DISCOUNT_RATE
-                tmpDocItems.OFFER_LINE_GUID = data[i].GUID
-                tmpDocItems.OFFER_DOC_GUID = data[i].DOC_GUID
-                tmpDocItems.OLD_VAT = data[i].VAT_RATE
+                if(this.docType == 60)
+                {
+                    let tmpDocItems = {...this.docObj.docOrders.empty}
+                    tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+                    tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+                    tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                    tmpDocItems.LINE_NO = data[i].LINE_NO
+                    tmpDocItems.REF = this.docObj.dt()[0].REF
+                    tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+                    tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                    tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+                    tmpDocItems.INPUT_CODE = this.docObj.dt()[0].INPUT_CODE
+                    tmpDocItems.INPUT_NAME = this.docObj.dt()[0].INPUT_NAME
+                    tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+                    tmpDocItems.OUTPUT_CODE = this.docObj.dt()[0].OUTPUT_CODE
+                    tmpDocItems.OUTPUT_NAME = this.docObj.dt()[0].OUTPUT_NAME
+                    tmpDocItems.ITEM = data[i].ITEM
+                    tmpDocItems.ITEM_CODE = data[i].ITEM_CODE
+                    tmpDocItems.ITEM_NAME = data[i].ITEM_NAME
+                    tmpDocItems.PRICE = data[i].PRICE
+                    tmpDocItems.QUANTITY = data[i].QUANTITY
+                    tmpDocItems.VAT = data[i].VAT
+                    tmpDocItems.AMOUNT = data[i].AMOUNT
+                    tmpDocItems.TOTAL = data[i].TOTAL
+                    tmpDocItems.DESCRIPTION = data[i].DESCRIPTION
+                    tmpDocItems.VAT_RATE = data[i].VAT_RATE
+                    tmpDocItems.DISCOUNT_RATE = data[i].DISCOUNT_RATE
+                    tmpDocItems.OFFER_LINE_GUID = data[i].GUID
+                    tmpDocItems.OFFER_DOC_GUID = data[i].DOC_GUID
+                    await this.docObj.docOrders.addEmpty(tmpDocItems)
+                    await this.core.util.waitUntil(100)
+                }
+                else
+                {
+                    let tmpDocItems = {...this.docObj.docItems.empty}
+                    tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+                    tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+                    tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                    tmpDocItems.LINE_NO = data[i].LINE_NO
+                    tmpDocItems.REF = this.docObj.dt()[0].REF
+                    tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+                    tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                    tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
+                    tmpDocItems.INPUT_CODE = this.docObj.dt()[0].INPUT_CODE
+                    tmpDocItems.INPUT_NAME = this.docObj.dt()[0].INPUT_NAME
+                    tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+                    tmpDocItems.OUTPUT_CODE = this.docObj.dt()[0].OUTPUT_CODE
+                    tmpDocItems.OUTPUT_NAME = this.docObj.dt()[0].OUTPUT_NAME
+                    tmpDocItems.ITEM = data[i].ITEM
+                    tmpDocItems.ITEM_CODE = data[i].ITEM_CODE
+                    tmpDocItems.ITEM_NAME = data[i].ITEM_NAME
+                    tmpDocItems.PRICE = data[i].PRICE
+                    tmpDocItems.QUANTITY = data[i].QUANTITY
+                    tmpDocItems.VAT = data[i].VAT
+                    tmpDocItems.AMOUNT = data[i].AMOUNT
+                    tmpDocItems.TOTAL = data[i].TOTAL
+                    tmpDocItems.DESCRIPTION = data[i].DESCRIPTION
+                    tmpDocItems.VAT_RATE = data[i].VAT_RATE
+                    tmpDocItems.DISCOUNT_RATE = data[i].DISCOUNT_RATE
+                    tmpDocItems.OFFER_LINE_GUID = data[i].GUID
+                    tmpDocItems.OFFER_DOC_GUID = data[i].DOC_GUID
+                    tmpDocItems.OLD_VAT = data[i].VAT_RATE
+                    await this.docObj.docItems.addEmpty(tmpDocItems)
+                    await this.core.util.waitUntil(100)
+                }
 
-                await this.docObj.docItems.addEmpty(tmpDocItems)
-                await this.core.util.waitUntil(100)
+                
             }
             this.calculateTotal()
             App.instance.setState({isExecute:false})
