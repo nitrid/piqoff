@@ -317,14 +317,14 @@ export default class DocBase extends React.PureComponent
             {
                 tmpQuery = 
                 {
-                    query : "SELECT GUID,REF,REF_NO,OUTPUT_CODE,OUTPUT_NAME,DOC_DATE_CONVERT,TOTAL FROM DOC_VW_01 WHERE TYPE = " + this.type + " AND DOC_TYPE = " + this.docType + " AND REBATE = " + this.rebate + " AND DOC_DATE > GETDATE() - 30 ORDER BY DOC_DATE DESC"
+                    query : "SELECT GUID,REF,REF_NO,OUTPUT_CODE,OUTPUT_NAME,DOC_DATE_CONVERT,TOTAL FROM DOC_VW_01 WHERE TYPE = " + this.type + " AND DOC_TYPE = " + this.docType + " AND REBATE = " + this.rebate + " AND DOC_DATE > GETDATE() - 30 ORDER BY DOC_DATE DESC,REF_NO DESC"
                 }
             }
             else
             {
                 tmpQuery = 
                 {
-                    query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,DOC_DATE_CONVERT,TOTAL FROM DOC_VW_01 WHERE TYPE = " + this.type + " AND DOC_TYPE = " + this.docType + " AND REBATE = " + this.rebate + " AND DOC_DATE > GETDATE() - 30 ORDER BY DOC_DATE DESC"
+                    query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,DOC_DATE_CONVERT,TOTAL FROM DOC_VW_01 WHERE TYPE = " + this.type + " AND DOC_TYPE = " + this.docType + " AND REBATE = " + this.rebate + " AND DOC_DATE > GETDATE() - 30 ORDER BY DOC_DATE DESC,REF_NO DESC"
                 }
             }
         }
@@ -334,14 +334,14 @@ export default class DocBase extends React.PureComponent
             {
                 tmpQuery = 
                 {
-                    query : "SELECT GUID,REF,REF_NO,OUTPUT_CODE,OUTPUT_NAME,DOC_DATE_CONVERT,TOTAL FROM DOC_VW_01 WHERE TYPE = " + this.type + " AND DOC_TYPE = " + this.docType + " AND REBATE = " + this.rebate + " ORDER BY DOC_DATE DESC"
+                    query : "SELECT GUID,REF,REF_NO,OUTPUT_CODE,OUTPUT_NAME,DOC_DATE_CONVERT,TOTAL FROM DOC_VW_01 WHERE TYPE = " + this.type + " AND DOC_TYPE = " + this.docType + " AND REBATE = " + this.rebate + " ORDER BY DOC_DATE DESC,REF_NO DESC"
                 }
             }
             else
             {
                 tmpQuery = 
                 {
-                    query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,DOC_DATE_CONVERT,TOTAL FROM DOC_VW_01 WHERE TYPE = " + this.type + " AND DOC_TYPE = " + this.docType + " AND REBATE = " + this.rebate + " ORDER BY DOC_DATE DESC"
+                    query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,DOC_DATE_CONVERT,TOTAL FROM DOC_VW_01 WHERE TYPE = " + this.type + " AND DOC_TYPE = " + this.docType + " AND REBATE = " + this.rebate + " ORDER BY DOC_DATE DESC,REF_NO DESC"
                 }
             }
         }
