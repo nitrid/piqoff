@@ -6,13 +6,12 @@ import Toolbar,{Item} from 'devextreme-react/toolbar';
 import Form, { Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 
-import NdGrid,{Column,Button, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export} from '../../../../core/react/devex/grid.js';
-import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
+import NdGrid,{Column,Button,Paging,Pager,Export} from '../../../../core/react/devex/grid.js';
+import NdTextBox, { Validator, RequiredRule } from '../../../../core/react/devex/textbox.js'
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
 import NdListBox from '../../../../core/react/devex/listbox.js';
 import NdButton from '../../../../core/react/devex/button.js';
-import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
@@ -136,7 +135,7 @@ export default class salesOrdList extends React.PureComponent
                     query : "SELECT * FROM DOC_VW_01 " +
                             "WHERE ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND "+ 
                             "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))  " +
-                            " AND TYPE = 1 AND DOC_TYPE = 60  AND REBATE = 0 ",
+                            " AND TYPE = 1 AND DOC_TYPE = 60  AND REBATE = 0 ORDER BY DOC_DATE DESC,REF_NO DESC", 
                     param : ['INPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date'],
                     value : [this.txtCustomerCode.CODE,this.dtFirst.value,this.dtLast.value]
                 },
@@ -146,7 +145,6 @@ export default class salesOrdList extends React.PureComponent
         App.instance.setState({isExecute:true})
         await this.grdSlsOrdList.dataRefresh(tmpSource)
         App.instance.setState({isExecute:false})
-
     }
     async _btnGrdPrint(e)
     {
@@ -197,7 +195,6 @@ export default class salesOrdList extends React.PureComponent
                                                 button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                             }
-                                            
                                             let pResult = await dialog(tmpConfObj);
                                             if(pResult == 'btn01')
                                             {
@@ -306,8 +303,7 @@ export default class salesOrdList extends React.PureComponent
                                     <Column dataField="CODE" caption={this.t("pg_txtCustomerCode.clmCode")} width={150} />
                                     <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmTitle")} width={500} defaultSortOrder="asc" />
                                     <Column dataField="TYPE_NAME" caption={this.t("pg_txtCustomerCode.clmTypeName")} width={150} />
-                                    <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150}/>
-                                    
+                                    <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150}/>       
                                 </NdPopGrid>
                                 </Item> 
                             </Form>
@@ -344,15 +340,15 @@ export default class salesOrdList extends React.PureComponent
                             allowColumnReordering={true}
                             allowColumnResizing={true}
                             onRowDblClick={async(e)=>
+                            {
+                                App.instance.menuClick(
                                 {
-                                    App.instance.menuClick(
-                                        {
-                                            id: 'sip_02_002',
-                                            text: this.t('menu'),
-                                            path: 'orders/documents/salesOrder.js',
-                                            pagePrm:{GUID:e.data.GUID}
-                                        })
-                                }}
+                                    id: 'sip_02_002',
+                                    text: this.t('menu'),
+                                    path: 'orders/documents/salesOrder.js',
+                                    pagePrm:{GUID:e.data.GUID}
+                                })
+                            }}
                             >                            
                                 <Paging defaultPageSize={20} />
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
@@ -393,9 +389,6 @@ export default class salesOrdList extends React.PureComponent
                                     valueExpr="TAG"
                                     value=""
                                     searchEnabled={true}
-                                    onValueChanged={(async()=>
-                                        {
-                                        }).bind(this)}
                                     data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '11'"},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
@@ -412,9 +405,6 @@ export default class salesOrdList extends React.PureComponent
                                     valueExpr="ID"
                                     value=""
                                     searchEnabled={true}
-                                    onValueChanged={(async()=>
-                                        {
-                                        }).bind(this)}
                                    data={{source:[{ID:"FR",VALUE:"FR"},{ID:"DE",VALUE:"DE"},{ID:"TR",VALUE:"TR"}]}}
                                     >
                                     </NdSelectBox>

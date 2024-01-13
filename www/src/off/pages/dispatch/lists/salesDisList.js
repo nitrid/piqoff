@@ -6,9 +6,8 @@ import Toolbar,{Item} from 'devextreme-react/toolbar';
 import Form, { Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 
-import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Paging,Pager,Export} from '../../../../core/react/devex/grid.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js'
-import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
 import NdListBox from '../../../../core/react/devex/listbox.js';
 import NdButton from '../../../../core/react/devex/button.js';
@@ -134,7 +133,7 @@ export default class salesDisList extends React.PureComponent
                         query : "SELECT * FROM DOC_VW_01 " +
                                 "WHERE ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND "+ 
                                 "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))  " +
-                                " AND TYPE = 1 AND DOC_TYPE = 40  AND REBATE = 0 ORDER BY DOC_DATE DESC ",
+                                " AND TYPE = 1 AND DOC_TYPE = 40  AND REBATE = 0 ORDER BY DOC_DATE DESC,REF_NO DESC",
                         param : ['INPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date'],
                         value : [this.txtCustomerCode.CODE,this.dtFirst.value,this.dtLast.value]
                     },
@@ -157,7 +156,7 @@ export default class salesDisList extends React.PureComponent
                         query : "SELECT DOC_GUID AS GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,OUTPUT_CODE,OUTPUT_NAME,CONVERT(NVARCHAR,DOC_DATE,104) AS DOC_DATE_CONVERT,SUM(AMOUNT) AS AMOUNT,SUM(VAT) AS VAT, SUM(TOTAL) AS TOTAL FROM DOC_ITEMS_VW_01 " +
                                 "WHERE ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND "+ 
                                 "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))  " +
-                                " AND  TYPE = 1 AND DOC_TYPE = 40  AND REBATE = 0 AND INVOICE_DOC_GUID = '00000000-0000-0000-0000-000000000000' AND ITEM_TYPE IN (0,2) GROUP BY REF,REF_NO,INPUT_CODE,OUTPUT_CODE,OUTPUT_NAME,DOC_GUID,DOC_DATE,INPUT_NAME ORDER BY DOC_DATE ",
+                                " AND  TYPE = 1 AND DOC_TYPE = 40  AND REBATE = 0 AND INVOICE_DOC_GUID = '00000000-0000-0000-0000-000000000000' AND ITEM_TYPE IN (0,2) GROUP BY REF,REF_NO,INPUT_CODE,OUTPUT_CODE,OUTPUT_NAME,DOC_GUID,DOC_DATE,INPUT_NAME ORDER BY DOC_DATE DESC,REF_NO DESC",
                         param : ['INPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date'],
                         value : [this.txtCustomerCode.CODE,this.dtFirst.value,this.dtLast.value]
                     },
