@@ -544,17 +544,32 @@ export function print()
             }
             return tmpArr.length > 0 ? tmpArr : undefined
         },
-        ()=>{return {font:"b",align:"ct",data:"Conservez moi comme preuve d'achat pour les"}},
-        ()=>{return {font:"b",align:"ct",data:"Garanties, Echanges, ou Remboursement "}},
-        ()=>{return {font:"b",align:"ct",data:"Sous 1 semaine en bon d'achat."}},
-        ()=>{return {font:"b",align:"ct",data:"Ne sont ni repris ni échangés les produits suivants :"}},
-        ()=>{return {font:"b",align:"ct",data:"Produits Frais, Viandes, Fromages."}},
-        ()=>{return {font:"b",style:"b",align:"ct",data:"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"}},
-        ()=>{return {font:"b",style:"b",align:"ct",data:"AUCUN REMBOURSEMENT ESPECES NE SERA EFFECTUE"}},
-        ()=>{return {font:"b",style:"b",align:"ct",data:"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"}},
-        ()=>{return {font:"b",style:"b",align:"ct",data:"Grâce à vos achats bénéficiez de réductions."}},
-        ()=>{return {font:"b",style:"b",align:"ct",data:"Pour 1 EURO depensé beneficiez d'1 point fidelité."}},
-        ()=>{return {font:"b",style:"b",align:"ct",data:"Merci de votre fidélité à très bientôt ..."}},
+        ()=>
+        {
+            let tmpArr = [];
+            let tmpDesription = data.pos[0].PRINT_DESCRIPTION.split('\n')
+            for (let i = 0; i < tmpDesription.length; i++) 
+            {
+                tmpArr.push(
+                {
+                    font: "b",
+                    align: "ct",
+                    data: tmpDesription[i]
+                })
+            }
+            return tmpArr.length > 0 ? tmpArr : undefined
+        },
+        // ()=>{return {font:"b",align:"ct",data:"Conservez moi comme preuve d'achat pour les"}},
+        // ()=>{return {font:"b",align:"ct",data:"Garanties, Echanges, ou Remboursement "}},
+        // ()=>{return {font:"b",align:"ct",data:"Sous 1 semaine en bon d'achat."}},
+        // ()=>{return {font:"b",align:"ct",data:"Ne sont ni repris ni échangés les produits suivants :"}},
+        // ()=>{return {font:"b",align:"ct",data:"Produits Frais, Viandes, Fromages."}},
+        // ()=>{return {font:"b",style:"b",align:"ct",data:"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"}},
+        // ()=>{return {font:"b",style:"b",align:"ct",data:"AUCUN REMBOURSEMENT ESPECES NE SERA EFFECTUE"}},
+        // ()=>{return {font:"b",style:"b",align:"ct",data:"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"}},
+        // ()=>{return {font:"b",style:"b",align:"ct",data:"Grâce à vos achats bénéficiez de réductions."}},
+        // ()=>{return {font:"b",style:"b",align:"ct",data:"Pour 1 EURO depensé beneficiez d'1 point fidelité."}},
+        // ()=>{return {font:"b",style:"b",align:"ct",data:"Merci de votre fidélité à très bientôt ..."}},
         ()=>
         {
             if(data.special.type == 'Fatura')
